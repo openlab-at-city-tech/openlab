@@ -21,8 +21,8 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
          *
          * @return string                   $block_content or an empty string when block is hidden
          */
-        public static function checkBlockControls( $block_content, $block ) {
-
+        public static function checkBlockControls( $block_content, $block )
+        {
             if ( Utilities::settingIsEnabled( 'block_controls' )
                 && isset( $block['attrs']['advgbBlockControls'] )
                 && $block['blockName']
@@ -49,6 +49,55 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
         }
 
         /**
+         * Check if block in widgets area is using controls and decide to display or not in frontend,
+         * including its widget HTML wrapper.
+         *
+         * @since 3.1.2
+         *
+         * @param array $instance Widget instance
+         *
+         * @return bool false means block and its widget HTML wrapper is hidden
+         */
+        public static function checkBlockControlsWidget( $instance )
+        {
+            // Exclude REST API
+            if ( strpos( wp_get_raw_referer(), '/wp-admin/widgets.php' )
+                && isset( $_SERVER['REQUEST_URI'] )
+                && false !== strpos( filter_var( wp_unslash( $_SERVER['REQUEST_URI'] ), FILTER_SANITIZE_URL ), '/wp-json/' )
+            ) {
+                return $instance;
+            }
+
+            if( Utilities::settingIsEnabled( 'block_controls' )
+                && ! empty( $instance['content'] )
+                && has_blocks( $instance['content'] )
+            ) {
+
+                $blocks = parse_blocks( $instance['content'] );
+
+                if ( isset( $blocks[0]['attrs']['advgbBlockControls'] ) && $blocks[0]['blockName'] ) {
+
+                    $controls = $blocks[0]['attrs']['advgbBlockControls'];
+
+                    foreach( $controls as $key => $item ){
+                        if ( isset( $item['control'] )
+                            && self::getControlValue( $item['control'], 1 ) === true // Is this control enabled? @TODO Dynamic way to define default value depending the control ; not all will be active (1) by default
+                            && self::isBlockEnabled( $blocks[0]['blockName'] ) // Controls are enabled for this block?
+                            && isset( $item['enabled'] )
+                            && (bool) $item['enabled'] === true
+                        ) {
+                            if( self::displayBlock( $blocks[0], $item['control'], $key ) === false ) {
+                                return false; // This block is hidden
+                            }
+                        }
+                    }
+                }
+            }
+
+            return $instance;
+        }
+
+        /**
          * Check a single control against a block
          *
          * @since 3.1.0
@@ -66,15 +115,34 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                 // Schedule control
                 default:
                 case 'schedule':
-                    $bControl = $block['attrs']['advgbBlockControls'][$key];
-                    $dateFrom = $dateTo = $recurring = null;
+                    $bControl   = $block['attrs']['advgbBlockControls'][$key];
+                    $dateFrom   = $dateTo = $recurring = $timeFrom = $timeTo = null;
+                    $days       = isset( $bControl['days'] ) && is_array( $bControl['days'] ) && count( $bControl['days'] )
+                                    ? $bControl['days'] : [];
+
+                    // Pro - Check if the schedule uses a timezone different to General settings
+                    if( defined( 'ADVANCED_GUTENBERG_PRO' )
+                        && isset( $bControl['timezone'] )
+                        && ! empty( $bControl['timezone'] )
+                        && method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_set_timezone' )
+                    ) {
+                        $timezone = \PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_set_timezone(
+                            esc_html( $bControl['timezone'] )
+                        );
+                    } else {
+                        $timezone = wp_timezone();
+                    }
+
+                    // Start showing
                     if ( ! empty( $bControl['dateFrom'] ) ) {
-                        $dateFrom = \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $bControl['dateFrom'] );
+                        $dateFrom = \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $bControl['dateFrom'], $timezone );
                         // Reset seconds to zero to enable proper comparison
                         $dateFrom->setTime( $dateFrom->format('H'), $dateFrom->format('i'), 0 );
                     }
+
+                    // Stop showing
                     if ( ! empty( $bControl['dateTo'] ) ) {
-                        $dateTo	= \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $bControl['dateTo'] );
+                        $dateTo	= \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $bControl['dateTo'], $timezone );
                         // Reset seconds to zero to enable proper comparison
                         $dateTo->setTime( $dateTo->format('H'), $dateTo->format('i'), 0 );
 
@@ -84,28 +152,64 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                         }
                     }
 
-                    if ( $dateFrom || $dateTo ) {
-                        // Fetch current time keeping in mind the timezone
-                        $now = \DateTime::createFromFormat( 'U', date_i18n( 'U', true ) );
+                    // Days
+                    if( count( $days ) ) {
+                        $days = array_map( 'intval', $days );
+                    }
 
-                        // Reset seconds to zero to enable proper comparison
-                        // as the from and to dates have those as 0
-                        // but do this only for the from comparison
-                        // as we need the block to stop showing at the right time and not 1 minute extra
+                    /*
+                     * Time from and Time to exists and are valid.
+                     * Valid times: "02:00:00", "19:35:00"
+                     * Invalid times: "-06:00:00", "25:00:00"
+                     */
+                    if ( ! empty( $bControl['timeFrom'] )
+                        && ! empty( $bControl['timeTo'] )
+                        && strtotime( $bControl['timeFrom'] ) !== false
+                        && strtotime( $bControl['timeTo'] ) !== false
+                    ) {
+                        // Get current datetime with timezone
+                        $timeNow = new \DateTime( 'now', $timezone );
+                        $timeNow->format( 'Y-m-d\TH:i:s' );
+                        $timeFrom   = clone $timeNow;
+                        $timeTo     = clone $timeNow;
+
+                        // Replace with our time attributes in previously generated datetime
+                        $timeFrom->modify( $bControl['timeFrom'] );
+                        $timeTo->modify( $bControl['timeTo'] );
+                    }
+
+                    if ( $dateFrom || $dateTo || $days || ( $timeFrom && $timeTo ) ) {
+                        // Fetch current time keeping in mind the timezone
+                        $now = new \DateTime( 'now', $timezone );
+                        $now->format( 'Y-m-d\TH:i:s' );
+
+                        /* Reset seconds to zero to enable proper comparison
+                         * as the from and to dates have those as 0
+                         * but do this only for the from comparison
+                         * as we need the block to stop showing at the right time and not 1 minute extra
+                         */
                         $nowFrom = clone $now;
                         $nowFrom->setTime( $now->format('H'), $now->format('i'), 0 );
 
+                        // Decide if block is displayed or not
                         if( $recurring ) {
                             // Make the year same as today's
                             $dateFrom->setDate( $nowFrom->format('Y'), $dateFrom->format('m'), $dateFrom->format('j') );
                             $dateTo->setDate( $nowFrom->format('Y'), $dateTo->format('m'), $dateTo->format('j') );
                         }
 
-                        if ( ! ( ( ! $dateFrom || $dateFrom->getTimestamp() <= $nowFrom->getTimestamp() ) && ( ! $dateTo || $now->getTimestamp() < $dateTo->getTimestamp() ) ) ) {
+                        if ( ! (
+                            ( ! $dateFrom || $dateFrom->getTimestamp() <= $nowFrom->getTimestamp() ) // No "Start showing", or "Start showing" <= Now
+                            && ( ! $dateTo || $now->getTimestamp() < $dateTo->getTimestamp() ) // No "Stop showing", or now < "Stop showing"
+                            && ( ! count( $days ) || in_array( $nowFrom->format('N'), $days ) ) // "These days"
+                            && ( ! $timeFrom || $timeFrom->getTimestamp() <= $nowFrom->getTimestamp() ) // No "Time from", or "Time from" <= Now
+                            && ( ! $timeTo || $now->getTimestamp() < $timeTo->getTimestamp() ) // No "Time to", or now < "Time To"
+                        ) ) {
                             // No visible block
                             return false;
                         }
                     }
+
                 break;
 
                 // User role control
@@ -135,6 +239,10 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                             return true;
                         break;
 
+                        case 'hidden':
+                            return false;
+                        break;
+
                         case 'login':
                             return is_user_logged_in() ? true : false;
                         break;
@@ -144,18 +252,147 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                         break;
 
                         case 'include':
-                            return count( $selected_roles ) && array_intersect( $selected_roles, $user->roles ) ? true: false;
+                            return array_intersect( $selected_roles, $user->roles ) ? true : false;
                         break;
 
                         case 'exclude':
-                            return count( $selected_roles ) && ! array_intersect( $selected_roles, $user->roles ) ? true: false;
+                            return ! array_intersect( $selected_roles, $user->roles ) ? true : false;
                         break;
                     }
 
                 break;
+
+                // Archive control
+                case 'archive':
+                    $bControl       = $block['attrs']['advgbBlockControls'][$key];
+                    $taxonomies     = is_array( $bControl['taxonomies'] ) ?  $bControl['taxonomies'] : [];
+                    $taxQuery       = get_queried_object();
+
+                    if( ! isset( $taxQuery->taxonomy ) ) {
+                        return true;
+                    }
+
+                    $merged_tax     = []; // To store selected taxonomies. e.g. [ 'category', 'post_tag' ]
+                    $merged_terms   = []; // To store selected terms from all taxonomies. e.g. [99,72,51]
+
+                    // Create taxonomies array
+                    if( isset( $taxonomies ) && count( $taxonomies ) ) {
+                        foreach( $taxonomies as $item ) {
+                            $merged_tax[] = sanitize_text_field( $item['tax'] );
+
+                            // Create terms array
+                            if( isset( $item['terms'] ) && count( $item['terms'] ) ) {
+                                foreach( $item['terms'] as $term ) {
+                                    $merged_terms[] = intval( $term );
+                                }
+                            }
+                        }
+                    }
+
+                    if( count( $merged_tax ) ) {
+                        $approach = isset( $bControl['approach'] ) && ! empty( sanitize_text_field( $bControl['approach'] ) )
+                                    ? $bControl['approach'] : 'exclude';
+
+                        switch( $approach ) {
+                            case 'include':
+                                return self::checkTaxonomies( $taxonomies, $merged_terms, $taxQuery ) ? true : false;
+                            break;
+
+                            case 'exclude':
+                                return self::checkTaxonomies( $taxonomies, $merged_terms, $taxQuery ) ? false : true;
+                            break;
+                        }
+                    }
+                break;
+
+                // Pages control
+                case 'page':
+                    $bControl = $block['attrs']['advgbBlockControls'][$key];
+                    $selected = is_array( $bControl['pages'] ) ? $bControl['pages'] : [];
+
+                    if( count( $selected ) ) {
+
+                        $selected = array_map( 'sanitize_text_field', $selected );
+                        $approach = isset( $bControl['approach'] ) && ! empty( sanitize_text_field( $bControl['approach'] ) )
+                                        ? $bControl['approach'] : 'public';
+
+                        switch( $approach ) {
+                            default:
+                            case 'public':
+                                return true;
+                            break;
+
+                            case 'include':
+                                return self::checkPages( $selected ) ? true : false;
+                            break;
+
+                            case 'exclude':
+                                return self::checkPages( $selected ) ? false : true;
+                            break;
+                        }
+                    }
+                break;
             }
 
             return true;
+        }
+
+        /**
+         * Check taxonomies in frontend
+         *
+         * @since 3.1.2
+         *
+         * @param array $taxonomies Array of taxonomies setup e.g. [ ['tax'=>'category', 'terms' => [172,99,3], 'all' => false], ['tax'=>'post_tag', 'terms' => [], 'all' => true] ]
+         * @param array $terms      Array of term ids e.g. [172,99,3]
+         * @param object $taxQuery  WP_Term
+         *
+         * @return bool
+         */
+        public static function checkTaxonomies( $taxonomies, $terms, $taxQuery )
+        {
+            foreach( $taxonomies as $item ) {
+                if( (string) $item['tax'] === $taxQuery->taxonomy && (bool) $item['all'] ) {
+                    // Taxonomy found & all terms
+                    return true;
+                } elseif( in_array( $taxQuery->term_id, $terms ) ) {
+                    // Term found
+                    return true;
+                } else {
+                    // Nothing to do here
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Check pages in frontend
+         *
+         * @since 3.1.1
+         *
+         * @param array $selected Array of pages e.g. ['home', 'search']
+         *
+         * @return bool
+         */
+        public static function checkPages( $selected )
+        {
+            if( in_array( 'home', $selected )
+                && ( ( is_home() && is_front_page() )
+                    || is_front_page()
+                )
+            ) {
+                return true;
+            } elseif( in_array( 'blog', $selected ) && is_home() ) {
+                return true;
+            } elseif( in_array( 'archive', $selected ) && is_archive() ) {
+                return true;
+            } elseif( in_array( 'search', $selected ) && is_search() ) {
+                return true;
+            } elseif( in_array( 'page404', $selected ) && is_404() ) {
+                return true;
+            }
+
+            return false;
         }
 
         /**
@@ -274,8 +511,10 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                 $advgb_block_controls                           = get_option( 'advgb_block_controls' );
                 $advgb_block_controls['controls']['schedule']   = isset( $_POST['schedule_control'] ) ? (bool) 1 : (bool) 0;
                 $advgb_block_controls['controls']['user_role']  = isset( $_POST['user_role_control'] ) ? (bool) 1 : (bool) 0;
+                $advgb_block_controls['controls']['archive']    = isset( $_POST['archive_control'] ) ? (bool) 1 : (bool) 0;
+                $advgb_block_controls['controls']['page']       = isset( $_POST['page_control'] ) ? (bool) 1 : (bool) 0;
 
-                update_option( 'advgb_block_controls', $advgb_block_controls );
+                update_option( 'advgb_block_controls', $advgb_block_controls, false );
 
                 wp_safe_redirect(
                     add_query_arg(
@@ -317,7 +556,7 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                     $block_controls['active_blocks']    = isset( $active_blocks ) ? $active_blocks : '';
                     $block_controls['inactive_blocks']  = isset( $inactive_blocks ) ? $inactive_blocks : '';
 
-                    update_option( 'advgb_block_controls', $block_controls );
+                    update_option( 'advgb_block_controls', $block_controls, false );
 
                     // Redirect with success message
                     wp_safe_redirect(
@@ -367,7 +606,9 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
             $result         = [];
             $controls       = [
                 'schedule',
-                'user_role'
+                'user_role',
+                'archive',
+                'page'
             ];
 
             if( $block_controls ) {
@@ -513,7 +754,9 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
                 [
                     'non_supported' => $non_supported,
                     'controls' => self::getControlsArray(),
-                    'user_roles' => self::getUserRoles()
+                    'user_roles' => self::getUserRoles(),
+                    'taxonomies' => self::getTaxonomies(),
+                    'page' => self::getPages()
                 ]
             );
         }
@@ -587,6 +830,278 @@ if( ! class_exists( '\\PublishPress\\Blocks\\Controls' ) ) {
             }
 
             return $result;
+        }
+
+        /**
+         * Retrieve Taxonomies
+         *
+         * @since 3.1.1
+         *
+         * @return array
+         */
+        public static function getTaxonomies()
+        {
+            $taxonomies = get_taxonomies();
+            $result     = [];
+            $exclude    = [
+                'nav_menu',
+                'link_category',
+                'post_format',
+                'wp_theme',
+                'wp_template_part_area'
+            ];
+
+            foreach( $taxonomies as $item ){
+                $tax = get_taxonomy( $item );
+
+                if( ! in_array( $item, $exclude ) ) {
+                    $result[] = [
+                        'slug' => $item,
+                        'title' => $tax->labels->singular_name
+                    ];
+                }
+            }
+
+            return $result;
+        }
+
+        /**
+         * Retrieve Taxonomies selected in a block
+         *
+         * @since 3.1.1
+         *
+         * @param array $selected Selected taxonomies in the block
+         * @return array
+         */
+        public static function getBlockTaxonomies( $selected )
+        {
+            if( ! is_array( $selected ) || ! count( $selected ) ) {
+                return [];
+            }
+
+            global $wp_taxonomies;
+
+            $result = [];
+            $taxonomies = $selected;
+
+            foreach ( $wp_taxonomies as $key => $value ) {
+                if ( in_array( $key, $taxonomies ) ){
+                    $result[] = [
+                        'slug' => $key,
+                        'name' => $value->labels->singular_name
+                    ];
+                }
+            }
+
+            return $result;
+        }
+
+        /**
+         * Retrieve Terms
+         *
+         * @since 3.1.1
+         *
+         * @param array $data Taxonomy slugs and term ids or search word
+         *
+         * @return array
+         */
+        public static function getTerms( $data )
+        {
+            if( isset( $data['taxonomies'] )
+                && is_array( $data['taxonomies'] )
+                && count( $data['taxonomies'] )
+            ) {
+
+
+                $taxonomies = array_map( 'sanitize_text_field', $data['taxonomies'] );
+                $args['taxonomy'] = $taxonomies;
+
+                // Note: can't use search and include in the same request
+                if( isset( $data['search'] ) && ! empty( $data['search'] ) ) {
+                    $args['search'] = sanitize_text_field( $data['search'] );
+                    $args['number'] = 10;
+                }
+
+                if( isset( $data['ids'] ) && is_array( $data['ids'] ) && count( $data['ids'] ) ) {
+                    $args['include'] = array_map( 'intval', $data['ids'] );
+                }
+
+                $result = [];
+
+                /*/ Include "All <taxonomy> terms" options
+                global $wp_taxonomies;
+                foreach( $taxonomies as $tax ) {
+                    $result[] = [
+                        'slug' => "all__{$tax}",
+                        'title' => sprintf(
+                                __( 'All %s terms', 'advanced-gutenberg' ),
+                                $wp_taxonomies[$tax]->labels->singular_name
+                            ),
+                        'tax' => $tax,
+                    ];
+                }*/
+
+                $term_query = new \WP_Term_Query( $args );
+
+                if ( ! empty( $term_query->terms ) ) {
+                    foreach ( $term_query->terms as $term ) {
+
+                        $taxLabel = $term->taxonomy;
+
+                        // Get human readable taxonomy name
+                        $blockTaxonomies = self::getBlockTaxonomies( $taxonomies );
+                        if( count( $blockTaxonomies ) ) {
+                            foreach( $blockTaxonomies as $tax ) {
+                                if( $tax['slug'] === $term->taxonomy ) {
+                                    $taxLabel = $tax['name'];
+                                    break;
+                                }
+                            }
+                        }
+
+                        $result[] = [
+                            'slug' => $term->term_id,
+                            'title' => $term->name . ' (' . $taxLabel . ')',
+                            'tax' => $term->taxonomy,
+                        ];
+                    }
+                }
+
+                return $result;
+            }
+
+            return [];
+        }
+
+        /**
+         * Retrieve pages
+         *
+         * @since 3.1.1
+         *
+         * @return array
+         */
+        public static function getPages()
+        {
+            return [
+                [
+                    'slug' => 'home',
+                    'title' => __( 'Home', 'advanced-gutenberg' )
+                ],
+                [
+                    'slug' => 'blog',
+                    'title' => __( 'Blog', 'advanced-gutenberg' )
+                ],
+                [
+                    'slug' => 'archive',
+                    'title' => __( 'Archive', 'advanced-gutenberg' )
+                ],
+                [
+                    'slug' => 'search',
+                    'title' => __( 'Search', 'advanced-gutenberg' )
+                ],
+                [
+                    'slug' => 'page404',
+                    'title' => __( '404', 'advanced-gutenberg' )
+                ]
+            ];
+        }
+
+        /**
+         * Register custom REST API routes
+         *
+         * @since 3.1.1
+         *
+         * @return array
+         */
+        public static function registerCustomRoutes()
+        {
+            // Fetch searched terms from all selected taxonomies
+            register_rest_route(
+                'advgb/v1', '/terms',
+                [
+            		'methods' => 'GET',
+            		'callback' => ['PublishPress\Blocks\Controls', 'getTerms'],
+                    'args' => [
+                        'search' => [
+                            'validate_callback' => ['PublishPress\Blocks\Controls', 'validateString'],
+                            'sanitize_callback' => 'sanitize_text_field',
+                            'required' => false,
+                            'type' => 'string'
+                        ],
+                        'ids' => [
+                            'validate_callback' => ['PublishPress\Blocks\Controls', 'validateArray'],
+                            'sanitize_callback' => ['PublishPress\Blocks\Controls', 'sanitizeNumbersArray'],
+                            'required' => false,
+                            'type' => 'array'
+                        ],
+                        'taxonomies' => [
+                            'validate_callback' => ['PublishPress\Blocks\Controls', 'validateArray'],
+                            'sanitize_callback' => ['PublishPress\Blocks\Controls', 'sanitizeStringsArray'],
+                            'required' => true,
+                            'type' => 'array'
+                        ],
+                    ],
+            		'permission_callback' => function () {
+            			return current_user_can( 'edit_others_posts' );
+            		}
+                ]
+           );
+        }
+
+        /**
+         * Check if value is a string
+         *
+         * @since 3.1.1
+         *
+         * @param $value Value to check
+         *
+         * @return array
+         */
+        public static function validateString( $value )
+        {
+            return is_string( $value );
+        }
+
+        /**
+         * Check if value is an array
+         *
+         * @since 3.1.1
+         *
+         * @param $value Value to check
+         *
+         * @return array
+         */
+        public static function validateArray( $value )
+        {
+            return is_array( $value ) && count( $value );
+        }
+
+        /**
+         * Sanitize an array of strings
+         *
+         * @since 3.1.1
+         *
+         * @param $value Value to check
+         *
+         * @return array
+         */
+        public static function sanitizeStringsArray( $value )
+        {
+            return array_map( 'sanitize_key', $value );
+        }
+
+        /**
+         * Sanitize an array of numbers
+         *
+         * @since 3.1.1
+         *
+         * @param $value Value to check
+         *
+         * @return array
+         */
+        public static function sanitizeNumbersArray( $value )
+        {
+            return array_map( 'intval', $value );
         }
     }
 }

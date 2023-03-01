@@ -4,69 +4,123 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - Gutenberg Blocks &#8211; PublishPress Blocks "
 "Gutenberg Editor Plugin - Stable (latest release)\n"
-"POT-Creation-Date: 2022-10-26 12:17-0500\n"
-"PO-Revision-Date: 2022-10-26 12:18-0500\n"
+"POT-Creation-Date: 2023-01-03 14:12-0600\n"
+"PO-Revision-Date: 2023-01-16 12:28-0600\n"
 "Last-Translator: \n"
-"Language-Team: Angelo Giammarresi - info@wocmultimedia.com\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: assets/blocks/block-controls.js:229 assets/blocks/blocks.js:5149
+#: assets/blocks/block-controls.js:300 assets/blocks/blocks.js:5218
 msgid "Change date"
 msgstr "Modifier la date"
 
-#: assets/blocks/block-controls.js:267 assets/blocks/blocks.js:5187
+#: assets/blocks/block-controls.js:338 assets/blocks/block-controls.js:1885
+#: assets/blocks/blocks.js:5256
 msgid "time"
 msgstr "date et heure"
 
-#: assets/blocks/block-controls.js:267 assets/blocks/blocks.js:5187
+#: assets/blocks/block-controls.js:338 assets/blocks/block-controls.js:1885
+#: assets/blocks/blocks.js:5256
 msgid "WordPress settings timezone"
 msgstr "Réglages du fuseau horaire de WordPress"
 
-#: assets/blocks/block-controls.js:624 incl/advanced-gutenberg-main.php:1763
+#: assets/blocks/block-controls.js:351 assets/blocks/blocks.js:5269
+msgctxt "Sunday first letter"
+msgid "S"
+msgstr "D"
+
+#: assets/blocks/block-controls.js:352 assets/blocks/blocks.js:5270
+msgid "M"
+msgstr "L"
+
+#: assets/blocks/block-controls.js:353 assets/blocks/blocks.js:5271
+msgctxt "Tuesday first letter"
+msgid "T"
+msgstr "M"
+
+#: assets/blocks/block-controls.js:354 assets/blocks/blocks.js:5272
+msgid "W"
+msgstr "M"
+
+#: assets/blocks/block-controls.js:355 assets/blocks/blocks.js:5273
+msgctxt "Thursday first letter"
+msgid "T"
+msgstr "J"
+
+#: assets/blocks/block-controls.js:356 assets/blocks/blocks.js:5274
+msgid "F"
+msgstr "V"
+
+#: assets/blocks/block-controls.js:357 assets/blocks/blocks.js:5275
+msgctxt "Saturday first letter"
+msgid "S"
+msgstr "S"
+
+#: assets/blocks/block-controls.js:684 assets/blocks/blocks.js:5602
+msgid "AM"
+msgstr "AM"
+
+#: assets/blocks/block-controls.js:697 assets/blocks/blocks.js:5615
+msgid "PM"
+msgstr "PM"
+
+#: assets/blocks/block-controls.js:1574 assets/blocks/block-controls.js:1617
+#, javascript-format
+msgid "All %s terms"
+msgstr "Tous les termes %s"
+
+#: assets/blocks/block-controls.js:1617
+#, javascript-format
+msgid "Selected %s terms"
+msgstr "Termes %s sélectionnés"
+
+#: assets/blocks/block-controls.js:1754 incl/advanced-gutenberg-main.php:1775
 #: incl/pages/block-controls.php:30 incl/pages/main.php:50
 msgid "Block Controls"
 msgstr "Contrôles des blocs"
 
-#: assets/blocks/block-controls.js:633
-msgid "Enable block schedule"
-msgstr "Activer la planification des blocs"
+#: assets/blocks/block-controls.js:1763
+#: incl/pages/block-controls/controls.php:14
+msgid "Schedule"
+msgstr "Planifier"
 
-#: assets/blocks/block-controls.js:634
+#: assets/blocks/block-controls.js:1764
 msgid "Choose when to start showing and/or stop showing this block."
 msgstr ""
+"Choisissez quand commencer à afficher et/ou arrêter de afficher ce bloc"
 
-#: assets/blocks/block-controls.js:647
+#: assets/blocks/block-controls.js:1777
 msgid "Now"
 msgstr "Maintenant"
 
-#: assets/blocks/block-controls.js:648
+#: assets/blocks/block-controls.js:1778
 msgid "Start showing"
 msgstr "Commencer à montrer"
 
-#: assets/blocks/block-controls.js:659
+#: assets/blocks/block-controls.js:1789
 msgid "Never"
 msgstr "Jamais"
 
-#: assets/blocks/block-controls.js:660
+#: assets/blocks/block-controls.js:1790
 msgid "Stop showing"
 msgstr "Arrêter de montrer"
 
-#: assets/blocks/block-controls.js:686
+#: assets/blocks/block-controls.js:1816
 msgid "\"Stop showing\" date should be after \"Start showing\" date!"
 msgstr ""
 "La date « Arrêter de montrer » devrait être après la date « Commencer à "
 "montrer » !"
 
-#: assets/blocks/block-controls.js:689
+#: assets/blocks/block-controls.js:1819
 msgid "Recurring"
 msgstr "Récurrent"
 
-#: assets/blocks/block-controls.js:694
+#: assets/blocks/block-controls.js:1824
 msgid ""
 "If Recurring is enabled, this block will be displayed every year between the "
 "selected dates."
@@ -74,85 +128,189 @@ msgstr ""
 "Si l’option « Récurrent » est activée, ce bloc sera affiché chaque année "
 "entre les dates sélectionnées."
 
-#: assets/blocks/block-controls.js:703
-msgid "Enable block user roles"
-msgstr "Activer le blocage des rôles des utilisateurs"
+#: assets/blocks/block-controls.js:1827
+msgid "On these days (optional)"
+msgstr "Pendant ces jours (facultatif)"
 
-#: assets/blocks/block-controls.js:704
+#: assets/blocks/block-controls.js:1836
+msgid "Between these times (optional)"
+msgstr "Entre ces heures (facultatif)"
+
+#: assets/blocks/block-controls.js:1839
+msgid "From"
+msgstr "De"
+
+#: assets/blocks/block-controls.js:1849
+msgid "To"
+msgstr "À"
+
+#: assets/blocks/block-controls.js:1867
+msgid "\"To\" time should be after \"From\" time!"
+msgstr "L’heure « À » devrait être postérieure à l’heure « De » !"
+
+#: assets/blocks/block-controls.js:1876
+msgid "Please choose \"From\" time and \"To\" time."
+msgstr "Veuillez choisir l’heure « De » et « À »."
+
+#: assets/blocks/block-controls.js:1894
+#: incl/pages/block-controls/controls.php:33
+msgid "User roles"
+msgstr "Rôles des utilisateur·ice·s"
+
+#: assets/blocks/block-controls.js:1895
 msgid "Choose which users can see this block."
-msgstr ""
+msgstr "Choisissez les utilisateur·ice·s qui peuvent voir ce bloc."
 
-#: assets/blocks/block-controls.js:720
+#: assets/blocks/block-controls.js:1911
 msgid "Show to everyone"
-msgstr "Afficher à tout le monde"
+msgstr "Afficher à tous"
 
-#: assets/blocks/block-controls.js:723
+#: assets/blocks/block-controls.js:1914
+msgid "Hide from everyone"
+msgstr "Masquer à tous"
+
+#: assets/blocks/block-controls.js:1917
 msgid "Show to logged in users"
-msgstr "Afficher aux internautes connectés"
+msgstr "Afficher aux utilisateur·ice·s connectés"
 
-#: assets/blocks/block-controls.js:726
+#: assets/blocks/block-controls.js:1920
 msgid "Show to logged out users"
-msgstr "Afficher aux internautes déconnectés"
+msgstr "Afficher aux utilisateur·ice·s déconnectés"
 
-#: assets/blocks/block-controls.js:729
+#: assets/blocks/block-controls.js:1923
 msgid "Show to the selected user roles"
-msgstr "Afficher aux rôles d’utilisateur et utilisatrice sélectionnés"
+msgstr "Afficher aux rôles utilisateur·ice·s sélectionnés"
 
-#: assets/blocks/block-controls.js:732
-msgid "Hide to the selected user roles"
-msgstr "Masquer aux rôles d’utilisateur et utilisatrice sélectionnés"
+#: assets/blocks/block-controls.js:1926
+msgid "Hide from the selected user roles"
+msgstr "Masquer aux rôles utilisateur·ice·s sélectionnés"
 
-#: assets/blocks/block-controls.js:741
+#: assets/blocks/block-controls.js:1938
 msgid "Select user roles"
-msgstr "Sélectionnez les rôles d’utilisateur et utilisatrice"
+msgstr "Sélectionnez les rôles d’utilisateur·ice"
 
-#: assets/blocks/block-controls.js:742
+#: assets/blocks/block-controls.js:1939 assets/blocks/block-controls.js:2086
+#: incl/block-controls-main.php:988
 msgid "Search"
 msgstr "Rechercher"
 
-#: assets/blocks/blocks.js:5294
+#: assets/blocks/block-controls.js:1956
+msgid "Please select at least one user role."
+msgstr "Veuillez sélectionner au moins un rôle d’utilisateur·ice."
+
+#: assets/blocks/block-controls.js:1970
+msgid ""
+"Term archives & Pages controls are available in Widgets and FSE screens."
+msgstr ""
+"Les archives de termes et les contrôles de pages sont disponibles dans les "
+"écrans Widgets et FSE."
+
+#: assets/blocks/block-controls.js:1981
+#: incl/pages/block-controls/controls.php:52
+msgid "Term archives"
+msgstr "Archives de termes"
+
+#: assets/blocks/block-controls.js:1982
+#: incl/pages/block-controls/controls.php:62
+msgid ""
+"Choose on which taxonomies and terms archive pages your blocks can be "
+"displayed."
+msgstr ""
+"Choisissez sur quelles taxonomies et pages d’archives de termes vos blocs "
+"peuvent être affichés."
+
+#: assets/blocks/block-controls.js:1998
+msgid "Show for selected terms"
+msgstr "Afficher pour les termes sélectionnés"
+
+#: assets/blocks/block-controls.js:2001
+msgid "Hide for selected terms"
+msgstr "Masquer pour les termes sélectionnés"
+
+#: assets/blocks/block-controls.js:2010
+msgid "Select taxonomies"
+msgstr "Sélectionner les taxonomies"
+
+#: assets/blocks/block-controls.js:2011
+msgid "Search taxonomies"
+msgstr "Rechercher les taxonomies"
+
+#: assets/blocks/block-controls.js:2025
+msgid "Filter terms"
+msgstr "Termes du filtre"
+
+#: assets/blocks/block-controls.js:2026
+msgid "Search terms"
+msgstr "Rechercher des termes"
+
+#: assets/blocks/block-controls.js:2047
+msgid "Use this filter to apply only to some terms."
+msgstr "Utilisez ce filtre pour appliquer uniquement à certains termes."
+
+#: assets/blocks/block-controls.js:2056
+#: incl/pages/block-controls/controls.php:71
+msgid "Pages"
+msgstr "Pages"
+
+#: assets/blocks/block-controls.js:2057
+msgid "Choose in which pages this block can be displayed."
+msgstr "Choisissez dans quelles pages ce bloc peut être affiché."
+
+#: assets/blocks/block-controls.js:2073
+msgid "Show on the selected pages"
+msgstr "Afficher sur les pages sélectionnées"
+
+#: assets/blocks/block-controls.js:2076
+msgid "Hide on the selected pages"
+msgstr "Masquer sur les pages sélectionnées"
+
+#: assets/blocks/block-controls.js:2085
+msgid "Select pages"
+msgstr "Sélectionner les pages"
+
+#: assets/blocks/blocks.js:5749
 msgid "Icon List"
 msgstr "Icône de liste"
 
-#: assets/blocks/blocks.js:5342
+#: assets/blocks/blocks.js:5797
 msgid "Search icons"
 msgstr "Icône de recherche"
 
-#: assets/blocks/blocks.js:5349 assets/blocks/blocks.js:24672
-#: assets/blocks/blocks.js:24774
+#: assets/blocks/blocks.js:5804 assets/blocks/blocks.js:25225
+#: assets/blocks/blocks.js:25327
 msgid "Style"
 msgstr "Style"
 
-#: assets/blocks/blocks.js:5352
+#: assets/blocks/blocks.js:5807
 msgid "Filled"
 msgstr "Rempli"
 
-#: assets/blocks/blocks.js:5352 assets/blocks/blocks.js:8226
+#: assets/blocks/blocks.js:5807 assets/blocks/blocks.js:8762
 msgid "Outlined"
 msgstr "Contouré"
 
-#: assets/blocks/blocks.js:5352
+#: assets/blocks/blocks.js:5807
 msgid "Rounded"
 msgstr "Arrondis"
 
-#: assets/blocks/blocks.js:5352
+#: assets/blocks/blocks.js:5807
 msgid "Two-Tone"
 msgstr "Deux tons"
 
-#: assets/blocks/blocks.js:5352
+#: assets/blocks/blocks.js:5807
 msgid "Sharp"
 msgstr "Précis"
 
-#: assets/blocks/blocks.js:5405
+#: assets/blocks/blocks.js:5860
 msgid "Apply"
 msgstr "Appliquer"
 
-#: assets/blocks/blocks.js:5592 assets/blocks/blocks.js:16615
-#: assets/blocks/blocks.js:21503 assets/blocks/blocks.js:23668
+#: assets/blocks/blocks.js:6128 assets/blocks/blocks.js:17168
+#: assets/blocks/blocks.js:22056 assets/blocks/blocks.js:24221
 msgid "Notice"
 msgstr "Avis"
 
-#: assets/blocks/blocks.js:5596
+#: assets/blocks/blocks.js:6132
 msgid ""
 "This accordion block has been replaced by a new and better one.\n"
 "                                 This block will be removed in a future "
@@ -169,17 +327,17 @@ msgstr ""
 "d’éléments en accordéon\n"
 "et faites-le glisser dans le nouveau bloc Accordéon avancé dès que possible."
 
-#: assets/blocks/blocks.js:5601 assets/blocks/blocks.js:6187
-#: assets/blocks/blocks.js:7063 incl/block-settings-main.php:17
+#: assets/blocks/blocks.js:6137 assets/blocks/blocks.js:6723
+#: assets/blocks/blocks.js:7599 incl/block-settings-main.php:17
 msgid "Accordion Settings"
 msgstr "Réglages des accordéons"
 
-#: assets/blocks/blocks.js:5603 assets/blocks/blocks.js:6189
-#: assets/blocks/blocks.js:7065 incl/block-settings-main.php:20
+#: assets/blocks/blocks.js:6139 assets/blocks/blocks.js:6725
+#: assets/blocks/blocks.js:7601 incl/block-settings-main.php:20
 msgid "Bottom spacing"
 msgstr "Espacement inférieur"
 
-#: assets/blocks/blocks.js:5605
+#: assets/blocks/blocks.js:6141
 msgid ""
 "Define space to next block. This will override Block spacing option "
 "(Frontend view only)"
@@ -187,34 +345,34 @@ msgstr ""
 "Définir l’espace au bloc suivant. Ceci remplacera l’option Espacement des "
 "blocs (vue interface publique uniquement)"
 
-#: assets/blocks/blocks.js:5615 assets/blocks/blocks.js:6217
-#: assets/blocks/blocks.js:7086 incl/block-settings-main.php:34
+#: assets/blocks/blocks.js:6151 assets/blocks/blocks.js:6753
+#: assets/blocks/blocks.js:7622 incl/block-settings-main.php:34
 msgid "Header Settings"
 msgstr "Réglages d’en-tête"
 
-#: assets/blocks/blocks.js:5618 assets/blocks/blocks.js:6220
-#: assets/blocks/blocks.js:7089
+#: assets/blocks/blocks.js:6154 assets/blocks/blocks.js:6756
+#: assets/blocks/blocks.js:7625
 msgid "Header Icon Style"
 msgstr "Style d’icône de l’en-tête"
 
-#: assets/blocks/blocks.js:5643 assets/blocks/blocks.js:5695
-#: assets/blocks/blocks.js:6245 assets/blocks/blocks.js:6297
-#: assets/blocks/blocks.js:7114 assets/blocks/blocks.js:7166
-#: assets/blocks/blocks.js:7884 assets/blocks/blocks.js:9518
-#: assets/blocks/blocks.js:11812 assets/blocks/blocks.js:14371
-#: assets/blocks/blocks.js:16742 assets/blocks/blocks.js:17276
-#: assets/blocks/blocks.js:18364 assets/blocks/blocks.js:23804
+#: assets/blocks/blocks.js:6179 assets/blocks/blocks.js:6231
+#: assets/blocks/blocks.js:6781 assets/blocks/blocks.js:6833
+#: assets/blocks/blocks.js:7650 assets/blocks/blocks.js:7702
+#: assets/blocks/blocks.js:8420 assets/blocks/blocks.js:10054
+#: assets/blocks/blocks.js:12348 assets/blocks/blocks.js:14924
+#: assets/blocks/blocks.js:17295 assets/blocks/blocks.js:17829
+#: assets/blocks/blocks.js:18917 assets/blocks/blocks.js:24357
 #: incl/block-settings-main.php:684 incl/block-settings-main.php:1470
 msgid "Color Settings"
 msgstr "Réglages de couleur"
 
-#: assets/blocks/blocks.js:5646 assets/blocks/blocks.js:5670
-#: assets/blocks/blocks.js:6248 assets/blocks/blocks.js:6272
-#: assets/blocks/blocks.js:7117 assets/blocks/blocks.js:7141
-#: assets/blocks/blocks.js:7610 assets/blocks/blocks.js:7741
-#: assets/blocks/blocks.js:11814 assets/blocks/blocks.js:12972
-#: assets/blocks/blocks.js:13001 assets/blocks/blocks.js:28671
-#: assets/blocks/blocks.js:28700 assets/blocks/blocks.js:29595
+#: assets/blocks/blocks.js:6182 assets/blocks/blocks.js:6206
+#: assets/blocks/blocks.js:6784 assets/blocks/blocks.js:6808
+#: assets/blocks/blocks.js:7653 assets/blocks/blocks.js:7677
+#: assets/blocks/blocks.js:8146 assets/blocks/blocks.js:8277
+#: assets/blocks/blocks.js:12350 assets/blocks/blocks.js:13521
+#: assets/blocks/blocks.js:13550 assets/blocks/blocks.js:29267
+#: assets/blocks/blocks.js:29296 assets/blocks/blocks.js:30191
 #: incl/block-settings-main.php:37 incl/block-settings-main.php:92
 #: incl/block-settings-main.php:164 incl/block-settings-main.php:288
 #: incl/block-settings-main.php:986 incl/block-settings-main.php:1001
@@ -225,13 +383,13 @@ msgstr "Réglages de couleur"
 msgid "Background Color"
 msgstr "Couleur de l’arrière plan"
 
-#: assets/blocks/blocks.js:5652 assets/blocks/blocks.js:5676
-#: assets/blocks/blocks.js:6254 assets/blocks/blocks.js:6278
-#: assets/blocks/blocks.js:7123 assets/blocks/blocks.js:7147
-#: assets/blocks/blocks.js:7616 assets/blocks/blocks.js:7748
-#: assets/blocks/blocks.js:11820 assets/blocks/blocks.js:12978
-#: assets/blocks/blocks.js:13007 assets/blocks/blocks.js:18378
-#: assets/blocks/blocks.js:28677 assets/blocks/blocks.js:28706
+#: assets/blocks/blocks.js:6188 assets/blocks/blocks.js:6212
+#: assets/blocks/blocks.js:6790 assets/blocks/blocks.js:6814
+#: assets/blocks/blocks.js:7659 assets/blocks/blocks.js:7683
+#: assets/blocks/blocks.js:8152 assets/blocks/blocks.js:8284
+#: assets/blocks/blocks.js:12356 assets/blocks/blocks.js:13527
+#: assets/blocks/blocks.js:13556 assets/blocks/blocks.js:18931
+#: assets/blocks/blocks.js:29273 assets/blocks/blocks.js:29302
 #: incl/block-settings-main.php:42 incl/block-settings-main.php:97
 #: incl/block-settings-main.php:159 incl/block-settings-main.php:283
 #: incl/block-settings-main.php:991 incl/block-settings-main.php:1006
@@ -240,86 +398,86 @@ msgstr "Couleur de l’arrière plan"
 msgid "Text Color"
 msgstr "Couleur du texte"
 
-#: assets/blocks/blocks.js:5658 assets/blocks/blocks.js:6260
-#: assets/blocks/blocks.js:7129 assets/blocks/blocks.js:7992
-#: assets/blocks/blocks.js:8716 assets/blocks/blocks.js:19526
+#: assets/blocks/blocks.js:6194 assets/blocks/blocks.js:6796
+#: assets/blocks/blocks.js:7665 assets/blocks/blocks.js:8528
+#: assets/blocks/blocks.js:9252 assets/blocks/blocks.js:20079
 #: incl/block-settings-main.php:817 incl/block-settings-main.php:855
 #: incl/block-settings-main.php:893 incl/block-settings-main.php:1855
 msgid "Icon Color"
 msgstr "Couleur de l’icône"
 
-#: assets/blocks/blocks.js:5667 assets/blocks/blocks.js:6269
-#: assets/blocks/blocks.js:7138
+#: assets/blocks/blocks.js:6203 assets/blocks/blocks.js:6805
+#: assets/blocks/blocks.js:7674
 msgid "Body Color Settings"
 msgstr "Réglages de couleur du body"
 
-#: assets/blocks/blocks.js:5685 assets/blocks/blocks.js:6287
-#: assets/blocks/blocks.js:7156 assets/blocks/blocks.js:13016
-#: assets/blocks/blocks.js:16140 assets/blocks/blocks.js:16708
-#: assets/blocks/blocks.js:21351 assets/blocks/blocks.js:23770
-#: assets/blocks/blocks.js:28715 incl/block-settings-main.php:104
+#: assets/blocks/blocks.js:6221 assets/blocks/blocks.js:6823
+#: assets/blocks/blocks.js:7692 assets/blocks/blocks.js:13565
+#: assets/blocks/blocks.js:16693 assets/blocks/blocks.js:17261
+#: assets/blocks/blocks.js:21904 assets/blocks/blocks.js:24323
+#: assets/blocks/blocks.js:29311 incl/block-settings-main.php:104
 #: incl/block-settings-main.php:171 incl/block-settings-main.php:1028
 #: incl/block-settings-main.php:1205 incl/block-settings-main.php:1361
 #: incl/block-settings-main.php:1707
 msgid "Border Settings"
 msgstr "Réglages de bordure"
 
-#: assets/blocks/blocks.js:5687 assets/blocks/blocks.js:6289
-#: assets/blocks/blocks.js:7158 assets/blocks/blocks.js:11850
-#: assets/blocks/blocks.js:13018 assets/blocks/blocks.js:16721
-#: assets/blocks/blocks.js:21364 assets/blocks/blocks.js:23783
-#: assets/blocks/blocks.js:28717 incl/block-settings-main.php:107
+#: assets/blocks/blocks.js:6223 assets/blocks/blocks.js:6825
+#: assets/blocks/blocks.js:7694 assets/blocks/blocks.js:12386
+#: assets/blocks/blocks.js:13567 assets/blocks/blocks.js:17274
+#: assets/blocks/blocks.js:21917 assets/blocks/blocks.js:24336
+#: assets/blocks/blocks.js:29313 incl/block-settings-main.php:107
 #: incl/block-settings-main.php:174 incl/block-settings-main.php:1031
 #: incl/block-settings-main.php:1213 incl/block-settings-main.php:1369
 msgid "Border Style"
 msgstr "Style de bordure"
 
-#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
-#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
-#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
-#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
-#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
-#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:112
+#: assets/blocks/blocks.js:6225 assets/blocks/blocks.js:6827
+#: assets/blocks/blocks.js:7696 assets/blocks/blocks.js:8092
+#: assets/blocks/blocks.js:12388 assets/blocks/blocks.js:13569
+#: assets/blocks/blocks.js:16557 assets/blocks/blocks.js:17276
+#: assets/blocks/blocks.js:21919 assets/blocks/blocks.js:24338
+#: assets/blocks/blocks.js:29315 incl/block-settings-main.php:112
 #: incl/block-settings-main.php:179 incl/block-settings-main.php:1035
 #: incl/block-settings-main.php:1218 incl/block-settings-main.php:1374
 #: incl/block-settings-main.php:1719
 msgid "Solid"
 msgstr "Solide"
 
-#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
-#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
-#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
-#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
-#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
-#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:116
+#: assets/blocks/blocks.js:6225 assets/blocks/blocks.js:6827
+#: assets/blocks/blocks.js:7696 assets/blocks/blocks.js:8092
+#: assets/blocks/blocks.js:12388 assets/blocks/blocks.js:13569
+#: assets/blocks/blocks.js:16557 assets/blocks/blocks.js:17276
+#: assets/blocks/blocks.js:21919 assets/blocks/blocks.js:24338
+#: assets/blocks/blocks.js:29315 incl/block-settings-main.php:116
 #: incl/block-settings-main.php:183 incl/block-settings-main.php:1036
 #: incl/block-settings-main.php:1222 incl/block-settings-main.php:1378
 #: incl/block-settings-main.php:1727
 msgid "Dashed"
 msgstr "Tirets"
 
-#: assets/blocks/blocks.js:5689 assets/blocks/blocks.js:6291
-#: assets/blocks/blocks.js:7160 assets/blocks/blocks.js:7556
-#: assets/blocks/blocks.js:11852 assets/blocks/blocks.js:13020
-#: assets/blocks/blocks.js:16004 assets/blocks/blocks.js:16723
-#: assets/blocks/blocks.js:21366 assets/blocks/blocks.js:23785
-#: assets/blocks/blocks.js:28719 incl/block-settings-main.php:120
+#: assets/blocks/blocks.js:6225 assets/blocks/blocks.js:6827
+#: assets/blocks/blocks.js:7696 assets/blocks/blocks.js:8092
+#: assets/blocks/blocks.js:12388 assets/blocks/blocks.js:13569
+#: assets/blocks/blocks.js:16557 assets/blocks/blocks.js:17276
+#: assets/blocks/blocks.js:21919 assets/blocks/blocks.js:24338
+#: assets/blocks/blocks.js:29315 incl/block-settings-main.php:120
 #: incl/block-settings-main.php:187 incl/block-settings-main.php:1037
 #: incl/block-settings-main.php:1226 incl/block-settings-main.php:1382
 #: incl/block-settings-main.php:1723
 msgid "Dotted"
 msgstr "Pointillés"
 
-#: assets/blocks/blocks.js:5698 assets/blocks/blocks.js:6300
-#: assets/blocks/blocks.js:7169 assets/blocks/blocks.js:7779
-#: assets/blocks/blocks.js:7782 assets/blocks/blocks.js:8737
-#: assets/blocks/blocks.js:11867 assets/blocks/blocks.js:11869
-#: assets/blocks/blocks.js:13026 assets/blocks/blocks.js:13029
-#: assets/blocks/blocks.js:16153 assets/blocks/blocks.js:16156
-#: assets/blocks/blocks.js:16710 assets/blocks/blocks.js:19433
-#: assets/blocks/blocks.js:19549 assets/blocks/blocks.js:21353
-#: assets/blocks/blocks.js:23772 assets/blocks/blocks.js:28725
-#: assets/blocks/blocks.js:28728 assets/blocks/blocks.js:29601
+#: assets/blocks/blocks.js:6234 assets/blocks/blocks.js:6836
+#: assets/blocks/blocks.js:7705 assets/blocks/blocks.js:8315
+#: assets/blocks/blocks.js:8318 assets/blocks/blocks.js:9273
+#: assets/blocks/blocks.js:12403 assets/blocks/blocks.js:12405
+#: assets/blocks/blocks.js:13575 assets/blocks/blocks.js:13578
+#: assets/blocks/blocks.js:16706 assets/blocks/blocks.js:16709
+#: assets/blocks/blocks.js:17263 assets/blocks/blocks.js:19986
+#: assets/blocks/blocks.js:20102 assets/blocks/blocks.js:21906
+#: assets/blocks/blocks.js:24325 assets/blocks/blocks.js:29321
+#: assets/blocks/blocks.js:29324 assets/blocks/blocks.js:30197
 #: incl/block-settings-main.php:126 incl/block-settings-main.php:193
 #: incl/block-settings-main.php:1041 incl/block-settings-main.php:1084
 #: incl/block-settings-main.php:1208 incl/block-settings-main.php:1364
@@ -328,30 +486,30 @@ msgstr "Pointillés"
 msgid "Border Color"
 msgstr "Couleur de la bordure"
 
-#: assets/blocks/blocks.js:5706 assets/blocks/blocks.js:6308
-#: assets/blocks/blocks.js:7177 assets/blocks/blocks.js:7790
-#: assets/blocks/blocks.js:11858 assets/blocks/blocks.js:13037
-#: assets/blocks/blocks.js:16164 assets/blocks/blocks.js:21372
-#: assets/blocks/blocks.js:28736
+#: assets/blocks/blocks.js:6242 assets/blocks/blocks.js:6844
+#: assets/blocks/blocks.js:7713 assets/blocks/blocks.js:8326
+#: assets/blocks/blocks.js:12394 assets/blocks/blocks.js:13586
+#: assets/blocks/blocks.js:16717 assets/blocks/blocks.js:21925
+#: assets/blocks/blocks.js:29332
 msgid "Border width"
 msgstr "Largeur de la bordure"
 
-#: assets/blocks/blocks.js:5715 assets/blocks/blocks.js:6317
-#: assets/blocks/blocks.js:7186 assets/blocks/blocks.js:7759
-#: assets/blocks/blocks.js:13046 assets/blocks/blocks.js:28745
+#: assets/blocks/blocks.js:6251 assets/blocks/blocks.js:6853
+#: assets/blocks/blocks.js:7722 assets/blocks/blocks.js:8295
+#: assets/blocks/blocks.js:13595 assets/blocks/blocks.js:29341
 msgid "Border radius"
 msgstr "Coins arrondis"
 
-#: assets/blocks/blocks.js:5726
+#: assets/blocks/blocks.js:6262
 msgid "Accordions State"
 msgstr "Statut des accordéons"
 
-#: assets/blocks/blocks.js:5728 assets/blocks/blocks.js:6199
-#: assets/blocks/blocks.js:7075 incl/block-settings-main.php:27
+#: assets/blocks/blocks.js:6264 assets/blocks/blocks.js:6735
+#: assets/blocks/blocks.js:7611 incl/block-settings-main.php:27
 msgid "Initial Collapsed"
 msgstr "Effondrement initial"
 
-#: assets/blocks/blocks.js:5729
+#: assets/blocks/blocks.js:6265
 msgid ""
 "Make all accordions collapsed by default, enable this setting to apply to "
 "all accordions."
@@ -359,525 +517,525 @@ msgstr ""
 "Tous les accordéons sont réduits par défaut. Activez ce réglage pour qu’il "
 "s’applique à tous les accordéons."
 
-#: assets/blocks/blocks.js:5771 assets/blocks/blocks.js:6361
-#: assets/blocks/blocks.js:28236
+#: assets/blocks/blocks.js:6307 assets/blocks/blocks.js:6897
+#: assets/blocks/blocks.js:28792
 msgid "Enter header…"
 msgstr "Saisir l’en-tête…"
 
-#: assets/blocks/blocks.js:5862
+#: assets/blocks/blocks.js:6398
 msgid "Accordion (deprecated) - PublishPress"
-msgstr "Accordéon (obsolète) - PublishPress"
+msgstr "Accordion (obsolète) - PublishPress"
 
-#: assets/blocks/blocks.js:5863 assets/blocks/blocks.js:6399
-#: assets/blocks/blocks.js:7285
+#: assets/blocks/blocks.js:6399 assets/blocks/blocks.js:6935
+#: assets/blocks/blocks.js:7821
 msgid "Create a sliding accordion display for your content."
 msgstr "Créez un affichage à accordéon glissant pour votre contenu."
 
-#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
-#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:21744
-#: assets/blocks/blocks.js:27170
+#: assets/blocks/blocks.js:6405 assets/blocks/blocks.js:6942
+#: assets/blocks/blocks.js:7827 assets/blocks/blocks.js:22297
+#: assets/blocks/blocks.js:27723
 msgid "accordion"
 msgstr "accordéon"
 
-#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
-#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:10311
-#: assets/blocks/blocks.js:21744 assets/blocks/blocks.js:27170
-#: assets/blocks/blocks.js:28326
+#: assets/blocks/blocks.js:6405 assets/blocks/blocks.js:6942
+#: assets/blocks/blocks.js:7827 assets/blocks/blocks.js:10847
+#: assets/blocks/blocks.js:22297 assets/blocks/blocks.js:27723
+#: assets/blocks/blocks.js:28922
 msgid "list"
 msgstr "liste"
 
-#: assets/blocks/blocks.js:5869 assets/blocks/blocks.js:6406
-#: assets/blocks/blocks.js:7291 assets/blocks/blocks.js:21744
-#: assets/blocks/blocks.js:27170
+#: assets/blocks/blocks.js:6405 assets/blocks/blocks.js:6942
+#: assets/blocks/blocks.js:7827 assets/blocks/blocks.js:22297
+#: assets/blocks/blocks.js:27723
 msgid "faq"
 msgstr "faq"
 
-#: assets/blocks/blocks.js:6191 assets/blocks/blocks.js:7067
+#: assets/blocks/blocks.js:6727 assets/blocks/blocks.js:7603
 msgid "Define space between each accordion (Frontend view only)"
 msgstr "Définir l’espace entre chaque accordéon (vue publique uniquement)"
 
-#: assets/blocks/blocks.js:6200 assets/blocks/blocks.js:7076
+#: assets/blocks/blocks.js:6736 assets/blocks/blocks.js:7612
 msgid "Make all accordions collapsed by default."
 msgstr "Mettre tous les accordéons réduits par défaut."
 
-#: assets/blocks/blocks.js:6207
+#: assets/blocks/blocks.js:6743
 msgid "Header Tag"
 msgstr "Balise d’en-tête"
 
-#: assets/blocks/blocks.js:6398
+#: assets/blocks/blocks.js:6934
 msgid "Accordion Item - PublishPress"
 msgstr "Élément d’accordéon - PublishPress"
 
-#: assets/blocks/blocks.js:6410
+#: assets/blocks/blocks.js:6946
 msgid "Header text"
 msgstr "Texte d’en-tête"
 
-#: assets/blocks/blocks.js:7040
+#: assets/blocks/blocks.js:7576
 msgid "Advanced Accordion"
 msgstr "Accordéon avancé"
 
-#: assets/blocks/blocks.js:7054 assets/blocks/blocks.js:25426
+#: assets/blocks/blocks.js:7590 assets/blocks/blocks.js:25979
 msgid "Refresh"
 msgstr "Rafraîchir"
 
-#: assets/blocks/blocks.js:7284 incl/pages/block-settings.php:52
+#: assets/blocks/blocks.js:7820 incl/pages/block-settings.php:52
 msgid "Accordion - PublishPress"
 msgstr "Accordéon - PublishPress"
 
-#: assets/blocks/blocks.js:7291
+#: assets/blocks/blocks.js:7827
 msgid "advanced accordion"
 msgstr "Accordéon avancé"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:9434
-#: assets/blocks/blocks.js:10046 assets/blocks/blocks.js:11852
-#: assets/blocks/blocks.js:13020 assets/blocks/blocks.js:14336
-#: assets/blocks/blocks.js:14911 assets/blocks/blocks.js:16004
-#: assets/blocks/blocks.js:18311 assets/blocks/blocks.js:24256
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:9970
+#: assets/blocks/blocks.js:10582 assets/blocks/blocks.js:12388
+#: assets/blocks/blocks.js:13569 assets/blocks/blocks.js:14889
+#: assets/blocks/blocks.js:15464 assets/blocks/blocks.js:16557
+#: assets/blocks/blocks.js:18864 assets/blocks/blocks.js:24809
 #: incl/block-settings-main.php:345 incl/block-settings-main.php:475
 #: incl/block-settings-main.php:1543 incl/block-settings-main.php:1582
 #: incl/block-settings-main.php:1715
 msgid "None"
 msgstr "Aucun"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:16557
 msgid "Double"
 msgstr "Double"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:16557
 msgid "Groove"
 msgstr "Groove"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:16557
 msgid "Ridge"
 msgstr "Ridge"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:16557
 msgid "Inset"
 msgstr "Inset"
 
-#: assets/blocks/blocks.js:7556 assets/blocks/blocks.js:16004
+#: assets/blocks/blocks.js:8092 assets/blocks/blocks.js:16557
 msgid "Outset"
 msgstr "Outset"
 
-#: assets/blocks/blocks.js:7622 incl/block-settings-main.php:293
+#: assets/blocks/blocks.js:8158 incl/block-settings-main.php:293
 msgid "Shadow Color"
 msgstr "Couleur de l’ombre"
 
-#: assets/blocks/blocks.js:7643
+#: assets/blocks/blocks.js:8179
 msgid "Advanced Button"
 msgstr "Bouton avancé"
 
-#: assets/blocks/blocks.js:7661
+#: assets/blocks/blocks.js:8197
 msgid "Add text…"
 msgstr "Ajout de texte…"
 
-#: assets/blocks/blocks.js:7698
+#: assets/blocks/blocks.js:8234
 msgid "Button link"
 msgstr "Lien du bouton"
 
-#: assets/blocks/blocks.js:7702 assets/blocks/blocks.js:9443
+#: assets/blocks/blocks.js:8238 assets/blocks/blocks.js:9979
 msgid "Link URL"
 msgstr "Adresse du lien"
 
-#: assets/blocks/blocks.js:7705 assets/blocks/blocks.js:9446
+#: assets/blocks/blocks.js:8241 assets/blocks/blocks.js:9982
 #: incl/pages/custom-styles.php:111
 msgid "Preview"
 msgstr "Aperçu"
 
-#: assets/blocks/blocks.js:7719
+#: assets/blocks/blocks.js:8255
 msgid "Open in new tab"
 msgstr "Ouvrir dans un nouvel onglet"
 
-#: assets/blocks/blocks.js:7728
+#: assets/blocks/blocks.js:8264
 msgid "Text/Color"
 msgstr "Texte/Couleur"
 
-#: assets/blocks/blocks.js:7730 assets/blocks/blocks.js:10096
+#: assets/blocks/blocks.js:8266 assets/blocks/blocks.js:10632
 msgid "Text size"
 msgstr "Taille du texte"
 
-#: assets/blocks/blocks.js:7757 assets/blocks/blocks.js:8733
-#: assets/blocks/blocks.js:11829
+#: assets/blocks/blocks.js:8293 assets/blocks/blocks.js:9269
+#: assets/blocks/blocks.js:12365
 msgid "Border"
 msgstr "Bordure"
 
-#: assets/blocks/blocks.js:7768 assets/blocks/blocks.js:16142
+#: assets/blocks/blocks.js:8304 assets/blocks/blocks.js:16695
 #: incl/block-settings-main.php:1710
 msgid "Border style"
 msgstr "Style de bordure"
 
-#: assets/blocks/blocks.js:7802 assets/blocks/blocks.js:8845
-#: assets/blocks/blocks.js:10172 assets/blocks/blocks.js:15332
-#: assets/blocks/blocks.js:16241 assets/blocks/blocks.js:19617
-#: assets/blocks/blocks.js:19787 assets/blocks/blocks.js:19949
+#: assets/blocks/blocks.js:8338 assets/blocks/blocks.js:9381
+#: assets/blocks/blocks.js:10708 assets/blocks/blocks.js:15885
+#: assets/blocks/blocks.js:16794 assets/blocks/blocks.js:20170
+#: assets/blocks/blocks.js:20340 assets/blocks/blocks.js:20502
 #: incl/block-settings-main.php:556
 msgid "Margin"
 msgstr "Marge externe"
 
-#: assets/blocks/blocks.js:7804
+#: assets/blocks/blocks.js:8340
 msgid "Margin top"
 msgstr "Marge supérieure"
 
-#: assets/blocks/blocks.js:7813
+#: assets/blocks/blocks.js:8349
 msgid "Margin right"
 msgstr "Marge droite"
 
-#: assets/blocks/blocks.js:7822
+#: assets/blocks/blocks.js:8358
 msgid "Margin bottom"
 msgstr "Marge inférieure"
 
-#: assets/blocks/blocks.js:7831
+#: assets/blocks/blocks.js:8367
 msgid "Margin left"
 msgstr "Marge gauche"
 
-#: assets/blocks/blocks.js:7842 assets/blocks/blocks.js:8800
-#: assets/blocks/blocks.js:10182 assets/blocks/blocks.js:11879
-#: assets/blocks/blocks.js:15290 assets/blocks/blocks.js:16218
-#: assets/blocks/blocks.js:19458 assets/blocks/blocks.js:19574
-#: assets/blocks/blocks.js:19744 assets/blocks/blocks.js:19906
+#: assets/blocks/blocks.js:8378 assets/blocks/blocks.js:9336
+#: assets/blocks/blocks.js:10718 assets/blocks/blocks.js:12415
+#: assets/blocks/blocks.js:15843 assets/blocks/blocks.js:16771
+#: assets/blocks/blocks.js:20011 assets/blocks/blocks.js:20127
+#: assets/blocks/blocks.js:20297 assets/blocks/blocks.js:20459
 #: incl/block-settings-main.php:563
 msgid "Padding"
 msgstr "Marge interne"
 
-#: assets/blocks/blocks.js:7844
+#: assets/blocks/blocks.js:8380
 msgid "Padding top"
 msgstr "Marge interne en haut"
 
-#: assets/blocks/blocks.js:7853
+#: assets/blocks/blocks.js:8389
 msgid "Padding right"
 msgstr "Marge interne droite"
 
-#: assets/blocks/blocks.js:7862
+#: assets/blocks/blocks.js:8398
 msgid "Padding bottom"
 msgstr "Marge interne en bas"
 
-#: assets/blocks/blocks.js:7871
+#: assets/blocks/blocks.js:8407
 msgid "Padding left"
 msgstr "Marge interne gauche"
 
-#: assets/blocks/blocks.js:7882
+#: assets/blocks/blocks.js:8418
 msgid "Hover"
 msgstr "Survol"
 
-#: assets/blocks/blocks.js:7890 assets/blocks/blocks.js:21444
+#: assets/blocks/blocks.js:8426 assets/blocks/blocks.js:21997
 msgid "Shadow"
 msgstr "Ombre"
 
-#: assets/blocks/blocks.js:7892 assets/blocks/blocks.js:21446
-#: assets/blocks/blocks.js:26974
+#: assets/blocks/blocks.js:8428 assets/blocks/blocks.js:21999
+#: assets/blocks/blocks.js:27527
 msgid "Opacity (%)"
 msgstr "Opacité (%)"
 
-#: assets/blocks/blocks.js:7901 assets/blocks/blocks.js:21455
-#: assets/blocks/blocks.js:26983 assets/blocks/blocks.js:29506
+#: assets/blocks/blocks.js:8437 assets/blocks/blocks.js:22008
+#: assets/blocks/blocks.js:27536 assets/blocks/blocks.js:30102
 msgid "Transition speed (ms)"
 msgstr "Vitesse de transition (ms)"
 
-#: assets/blocks/blocks.js:7910 assets/blocks/blocks.js:21464
-#: assets/blocks/blocks.js:26992
+#: assets/blocks/blocks.js:8446 assets/blocks/blocks.js:22017
+#: assets/blocks/blocks.js:27545
 msgid "Shadow H offset"
 msgstr "Décalage horizontal de l’ombre"
 
-#: assets/blocks/blocks.js:7919 assets/blocks/blocks.js:21473
-#: assets/blocks/blocks.js:27001
+#: assets/blocks/blocks.js:8455 assets/blocks/blocks.js:22026
+#: assets/blocks/blocks.js:27554
 msgid "Shadow V offset"
 msgstr "Décalage vertical de l’ombre"
 
-#: assets/blocks/blocks.js:7928 assets/blocks/blocks.js:21482
-#: assets/blocks/blocks.js:27010
+#: assets/blocks/blocks.js:8464 assets/blocks/blocks.js:22035
+#: assets/blocks/blocks.js:27563
 msgid "Shadow blur"
 msgstr "Floutage de l’ombre"
 
-#: assets/blocks/blocks.js:7937 assets/blocks/blocks.js:21491
-#: assets/blocks/blocks.js:27019
+#: assets/blocks/blocks.js:8473 assets/blocks/blocks.js:22044
+#: assets/blocks/blocks.js:27572
 msgid "Shadow spread"
 msgstr "Répartition de l’ombre"
 
-#: assets/blocks/blocks.js:7952 incl/block-settings-main.php:794
+#: assets/blocks/blocks.js:8488 incl/block-settings-main.php:794
 #: incl/block-settings-main.php:832 incl/block-settings-main.php:870
 msgid "Icon"
 msgstr "Icône"
 
-#: assets/blocks/blocks.js:7954
+#: assets/blocks/blocks.js:8490
 msgid "Display icon"
 msgstr "Afficher l’icône"
 
-#: assets/blocks/blocks.js:7967 assets/blocks/blocks.js:8681
-#: assets/blocks/blocks.js:19510
+#: assets/blocks/blocks.js:8503 assets/blocks/blocks.js:9217
+#: assets/blocks/blocks.js:20063
 msgid "Icon Library (Material Icon)"
 msgstr "Bibliothèque d’icône (icône Material)"
 
-#: assets/blocks/blocks.js:7979 assets/blocks/blocks.js:8695
-#: assets/blocks/blocks.js:19522
+#: assets/blocks/blocks.js:8515 assets/blocks/blocks.js:9231
+#: assets/blocks/blocks.js:20075
 msgid "Icon Selection"
 msgstr "Icône de sélection"
 
-#: assets/blocks/blocks.js:7983 assets/blocks/blocks.js:19533
+#: assets/blocks/blocks.js:8519 assets/blocks/blocks.js:20086
 msgid "Icon Size (px)"
 msgstr "Taille de l’icône (px)"
 
-#: assets/blocks/blocks.js:7999
+#: assets/blocks/blocks.js:8535
 msgid "Icon Position"
 msgstr "Position de l’icône"
 
-#: assets/blocks/blocks.js:8001 assets/blocks/blocks.js:9554
-#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18399
-#: assets/blocks/blocks.js:21410 assets/blocks/blocks.js:25051
-#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:437
+#: assets/blocks/blocks.js:8537 assets/blocks/blocks.js:10090
+#: assets/blocks/blocks.js:17323 assets/blocks/blocks.js:18952
+#: assets/blocks/blocks.js:21963 assets/blocks/blocks.js:25604
+#: assets/blocks/blocks.js:30234 incl/block-settings-main.php:437
 #: incl/block-settings-main.php:912 incl/block-settings-main.php:958
 #: incl/block-settings-main.php:1270 incl/block-settings-main.php:1517
 #: incl/block-settings-main.php:1762
 msgid "Left"
 msgstr "Gauche"
 
-#: assets/blocks/blocks.js:8001 assets/blocks/blocks.js:9554
-#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18399
-#: assets/blocks/blocks.js:21410 assets/blocks/blocks.js:25051
+#: assets/blocks/blocks.js:8537 assets/blocks/blocks.js:10090
+#: assets/blocks/blocks.js:17323 assets/blocks/blocks.js:18952
+#: assets/blocks/blocks.js:21963 assets/blocks/blocks.js:25604
 #: incl/block-settings-main.php:445 incl/block-settings-main.php:914
 #: incl/block-settings-main.php:960 incl/block-settings-main.php:1274
 #: incl/block-settings-main.php:1525 incl/block-settings-main.php:1770
 msgid "Right"
 msgstr "Droite"
 
-#: assets/blocks/blocks.js:8007
+#: assets/blocks/blocks.js:8543
 msgid "Icon Spacing (px)"
 msgstr "Espacement de l’icône (px)"
 
-#: assets/blocks/blocks.js:8011
+#: assets/blocks/blocks.js:8547
 msgid "Spacing between icon and text"
 msgstr "Espacement entre l’icône et le texte"
 
-#: assets/blocks/blocks.js:8192 incl/pages/block-settings.php:53
+#: assets/blocks/blocks.js:8728 incl/pages/block-settings.php:53
 msgid "Button - PublishPress"
 msgstr "Bouton - PublishPress"
 
-#: assets/blocks/blocks.js:8193
+#: assets/blocks/blocks.js:8729
 msgid "Button block with more options and styles."
 msgstr "Bloc de boutons avec plus d’options et de styles."
 
-#: assets/blocks/blocks.js:8199
+#: assets/blocks/blocks.js:8735
 msgid "button"
 msgstr "bouton"
 
-#: assets/blocks/blocks.js:8199
+#: assets/blocks/blocks.js:8735
 msgid "advanced button"
 msgstr "Bouton avancé"
 
-#: assets/blocks/blocks.js:8199
+#: assets/blocks/blocks.js:8735
 msgid "link"
 msgstr "lien"
 
-#: assets/blocks/blocks.js:8226 assets/blocks/blocks.js:8701
-#: assets/blocks/blocks.js:12151 assets/blocks/blocks.js:23687
-#: assets/blocks/blocks.js:24674 assets/blocks/blocks.js:24776
-#: assets/blocks/blocks.js:27181 incl/advanced-gutenberg-main.php:3895
+#: assets/blocks/blocks.js:8762 assets/blocks/blocks.js:9237
+#: assets/blocks/blocks.js:12687 assets/blocks/blocks.js:24240
+#: assets/blocks/blocks.js:25227 assets/blocks/blocks.js:25329
+#: assets/blocks/blocks.js:27734 incl/advanced-gutenberg-main.php:3915
 #: incl/pages/settings/general.php:119
 msgid "Default"
 msgstr "Défaut"
 
-#: assets/blocks/blocks.js:8226
+#: assets/blocks/blocks.js:8762
 msgid "Squared"
 msgstr "Carré"
 
-#: assets/blocks/blocks.js:8226
+#: assets/blocks/blocks.js:8762
 msgid "Squared Outline"
 msgstr "Contour carré"
 
-#: assets/blocks/blocks.js:8637
+#: assets/blocks/blocks.js:9173
 msgid "Advanced Icon"
 msgstr "Icône avancée"
 
-#: assets/blocks/blocks.js:8655
+#: assets/blocks/blocks.js:9191
 msgid "Icon Count"
 msgstr "Icône compteur"
 
-#: assets/blocks/blocks.js:8657
+#: assets/blocks/blocks.js:9193
 msgid "Number of Icons"
 msgstr "Nombre d’icônes"
 
-#: assets/blocks/blocks.js:8675
+#: assets/blocks/blocks.js:9211
 msgid "Icon "
 msgstr "Icône "
 
-#: assets/blocks/blocks.js:8699 assets/blocks/blocks.js:14392
+#: assets/blocks/blocks.js:9235 assets/blocks/blocks.js:14945
 msgid "Icon Style"
 msgstr "Style d’icône"
 
-#: assets/blocks/blocks.js:8701 assets/blocks/blocks.js:12934
-#: assets/blocks/blocks.js:14909 assets/blocks/blocks.js:24249
-#: assets/blocks/blocks.js:24252 assets/blocks/blocks.js:24254
+#: assets/blocks/blocks.js:9237 assets/blocks/blocks.js:13483
+#: assets/blocks/blocks.js:15462 assets/blocks/blocks.js:24802
+#: assets/blocks/blocks.js:24805 assets/blocks/blocks.js:24807
 msgid "Stacked"
 msgstr "Empilé"
 
-#: assets/blocks/blocks.js:8707 incl/block-settings-main.php:542
+#: assets/blocks/blocks.js:9243 incl/block-settings-main.php:542
 #: incl/block-settings-main.php:918 incl/block-settings-main.php:1860
 msgid "Icon Size"
 msgstr "Taille de l’icône"
 
-#: assets/blocks/blocks.js:8723
+#: assets/blocks/blocks.js:9259
 msgid "Icon Background"
 msgstr "Arrière-plan de l’icône"
 
-#: assets/blocks/blocks.js:8744
+#: assets/blocks/blocks.js:9280
 msgid "Border Size(px)"
 msgstr "Taille de bordure (px)"
 
-#: assets/blocks/blocks.js:8753
+#: assets/blocks/blocks.js:9289
 msgid "Border Radius(%)"
 msgstr "Rayon de bordure (%)"
 
-#: assets/blocks/blocks.js:8763 assets/blocks/blocks.js:8769
-#: assets/blocks/blocks.js:18505
+#: assets/blocks/blocks.js:9299 assets/blocks/blocks.js:9305
+#: assets/blocks/blocks.js:19058
 msgid "Link"
 msgstr "Lien"
 
-#: assets/blocks/blocks.js:8782
+#: assets/blocks/blocks.js:9318
 msgid "Link Target"
 msgstr "Cible du lien"
 
-#: assets/blocks/blocks.js:8784
+#: assets/blocks/blocks.js:9320
 msgid "Same Window"
 msgstr "Même fenêtre"
 
-#: assets/blocks/blocks.js:8784
+#: assets/blocks/blocks.js:9320
 msgid "New Window"
 msgstr "Nouvelle fenêtre"
 
-#: assets/blocks/blocks.js:8790
+#: assets/blocks/blocks.js:9326
 msgid "Title for Accessibility"
 msgstr "Titre pour l’accessibilité"
 
-#: assets/blocks/blocks.js:8809 assets/blocks/blocks.js:8854
-#: assets/blocks/blocks.js:15299 assets/blocks/blocks.js:15341
-#: assets/blocks/blocks.js:19467 assets/blocks/blocks.js:19583
-#: assets/blocks/blocks.js:19626 assets/blocks/blocks.js:19753
-#: assets/blocks/blocks.js:19796 assets/blocks/blocks.js:19915
-#: assets/blocks/blocks.js:19958
+#: assets/blocks/blocks.js:9345 assets/blocks/blocks.js:9390
+#: assets/blocks/blocks.js:15852 assets/blocks/blocks.js:15894
+#: assets/blocks/blocks.js:20020 assets/blocks/blocks.js:20136
+#: assets/blocks/blocks.js:20179 assets/blocks/blocks.js:20306
+#: assets/blocks/blocks.js:20349 assets/blocks/blocks.js:20468
+#: assets/blocks/blocks.js:20511
 msgid "Unit"
 msgstr "Unité"
 
-#: assets/blocks/blocks.js:9022 incl/pages/block-settings.php:54
+#: assets/blocks/blocks.js:9558 incl/pages/block-settings.php:54
 msgid "Icon - PublishPress"
 msgstr "Icône - PublishPress"
 
-#: assets/blocks/blocks.js:9023 assets/blocks/blocks.js:20342
+#: assets/blocks/blocks.js:9559 assets/blocks/blocks.js:20895
 msgid "Icon block with more options and styles."
 msgstr "Bloc d’icône avec plus d’options et de styles."
 
-#: assets/blocks/blocks.js:9029 assets/blocks/blocks.js:10311
-#: assets/blocks/blocks.js:20348
+#: assets/blocks/blocks.js:9565 assets/blocks/blocks.js:10847
+#: assets/blocks/blocks.js:20901
 msgid "icon"
 msgstr "Icône"
 
-#: assets/blocks/blocks.js:9029
+#: assets/blocks/blocks.js:9565
 msgid "advanced icon"
 msgstr "Icône avancée"
 
-#: assets/blocks/blocks.js:9392 assets/blocks/blocks.js:9430
+#: assets/blocks/blocks.js:9928 assets/blocks/blocks.js:9966
 msgid "Advanced Image"
 msgstr "Image avancée"
 
-#: assets/blocks/blocks.js:9410
+#: assets/blocks/blocks.js:9946
 msgid "Change image"
 msgstr "Changer l’image"
 
-#: assets/blocks/blocks.js:9417 assets/blocks/blocks.js:18569
+#: assets/blocks/blocks.js:9953 assets/blocks/blocks.js:19122
 msgid "Remove image"
 msgstr "Supprimer l’image"
 
-#: assets/blocks/blocks.js:9432 assets/blocks/blocks.js:18309
+#: assets/blocks/blocks.js:9968 assets/blocks/blocks.js:18862
 #: incl/block-settings-main.php:340 incl/block-settings-main.php:1424
 msgid "Action on click"
 msgstr "Action sur clic"
 
-#: assets/blocks/blocks.js:9434 assets/blocks/blocks.js:18311
+#: assets/blocks/blocks.js:9970 assets/blocks/blocks.js:18864
 #: incl/block-settings-main.php:1429
 msgid "Open image in lightbox"
 msgstr "Ouvrir l’image dans une visionneuse"
 
-#: assets/blocks/blocks.js:9434 incl/block-settings-main.php:353
+#: assets/blocks/blocks.js:9970 incl/block-settings-main.php:353
 msgid "Open custom URL"
 msgstr "Ouvrir une URL personnalisée"
 
-#: assets/blocks/blocks.js:9449
+#: assets/blocks/blocks.js:9985
 msgid "Enter URL…"
 msgstr "Entrer une URL"
 
-#: assets/blocks/blocks.js:9455 assets/blocks/blocks.js:25111
+#: assets/blocks/blocks.js:9991 assets/blocks/blocks.js:25664
 msgid "Open link in new tab"
 msgstr "Ouvrir le lien dan une nouvelle table"
 
-#: assets/blocks/blocks.js:9464 incl/block-settings-main.php:366
+#: assets/blocks/blocks.js:10000 incl/block-settings-main.php:366
 msgid "Image Size"
 msgstr "Taille de l’image"
 
-#: assets/blocks/blocks.js:9466 assets/blocks/blocks.js:14343
-#: assets/blocks/blocks.js:18317 assets/blocks/blocks.js:26820
+#: assets/blocks/blocks.js:10002 assets/blocks/blocks.js:14896
+#: assets/blocks/blocks.js:18870 assets/blocks/blocks.js:27373
 #: assets/blocks/post-sidebar.js:129 incl/block-settings-main.php:369
 #: incl/block-settings-main.php:596 incl/block-settings-main.php:1439
 #: incl/pages/settings/general.php:125
 msgid "Full width"
 msgstr "Pleine largeur"
 
-#: assets/blocks/blocks.js:9473 assets/blocks/blocks.js:18340
-#: assets/blocks/blocks.js:23223 incl/block-settings-main.php:374
+#: assets/blocks/blocks.js:10009 assets/blocks/blocks.js:18893
+#: assets/blocks/blocks.js:23776 incl/block-settings-main.php:374
 #: incl/block-settings-main.php:752 incl/block-settings-main.php:1456
 msgid "Height"
 msgstr "Taille"
 
-#: assets/blocks/blocks.js:9482 assets/blocks/blocks.js:18331
-#: assets/blocks/blocks.js:26827 incl/block-settings-main.php:381
+#: assets/blocks/blocks.js:10018 assets/blocks/blocks.js:18884
+#: assets/blocks/blocks.js:27380 incl/block-settings-main.php:381
 #: incl/block-settings-main.php:1449
 msgid "Width"
 msgstr "Largeur"
 
-#: assets/blocks/blocks.js:9491
+#: assets/blocks/blocks.js:10027
 msgid "Focal Point Picker"
 msgstr "Sélecteur de point focal"
 
-#: assets/blocks/blocks.js:9499
+#: assets/blocks/blocks.js:10035
 msgid "Overlay opacity default"
 msgstr "Opacité de la superposition par défaut"
 
-#: assets/blocks/blocks.js:9508
+#: assets/blocks/blocks.js:10044
 msgid "Overlay opacity hover"
 msgstr "Opacité de la superposition au survol"
 
-#: assets/blocks/blocks.js:9521 assets/blocks/blocks.js:18372
+#: assets/blocks/blocks.js:10057 assets/blocks/blocks.js:18925
 #: incl/block-settings-main.php:393 incl/block-settings-main.php:1478
 #: incl/block-settings-main.php:1952
 msgid "Title Color"
 msgstr "Titre du titre"
 
-#: assets/blocks/blocks.js:9527 incl/block-settings-main.php:398
+#: assets/blocks/blocks.js:10063 incl/block-settings-main.php:398
 msgid "Subtitle Color"
 msgstr "Couleur des sous-titres"
 
-#: assets/blocks/blocks.js:9533 assets/blocks/blocks.js:14374
-#: assets/blocks/blocks.js:25075 incl/block-settings-main.php:403
+#: assets/blocks/blocks.js:10069 assets/blocks/blocks.js:14927
+#: assets/blocks/blocks.js:25628 incl/block-settings-main.php:403
 msgid "Overlay Color"
 msgstr "Couleur de superposition"
 
-#: assets/blocks/blocks.js:9542 assets/blocks/blocks.js:11919
-#: assets/blocks/blocks.js:18387 incl/block-settings-main.php:410
+#: assets/blocks/blocks.js:10078 assets/blocks/blocks.js:12455
+#: assets/blocks/blocks.js:18940 incl/block-settings-main.php:410
 #: incl/block-settings-main.php:1490
 msgid "Text Alignment"
 msgstr "Alignement du texte"
 
-#: assets/blocks/blocks.js:9544 assets/blocks/blocks.js:18389
+#: assets/blocks/blocks.js:10080 assets/blocks/blocks.js:18942
 #: incl/block-settings-main.php:413 incl/block-settings-main.php:1493
 msgid "Vertical Alignment"
 msgstr "Alignement vertical"
 
-#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:18391
-#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:418
+#: assets/blocks/blocks.js:10082 assets/blocks/blocks.js:18944
+#: assets/blocks/blocks.js:30234 incl/block-settings-main.php:418
 #: incl/block-settings-main.php:1498 incl/block-settings-main.php:1631
 msgid "Top"
 msgstr "Haut"
 
-#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:9554
-#: assets/blocks/blocks.js:16770 assets/blocks/blocks.js:18391
-#: assets/blocks/blocks.js:18399 assets/blocks/blocks.js:21410
+#: assets/blocks/blocks.js:10082 assets/blocks/blocks.js:10090
+#: assets/blocks/blocks.js:17323 assets/blocks/blocks.js:18944
+#: assets/blocks/blocks.js:18952 assets/blocks/blocks.js:21963
 #: incl/block-settings-main.php:422 incl/block-settings-main.php:441
 #: incl/block-settings-main.php:913 incl/block-settings-main.php:959
 #: incl/block-settings-main.php:1266 incl/block-settings-main.php:1502
@@ -885,218 +1043,218 @@ msgstr "Haut"
 msgid "Center"
 msgstr "Centre"
 
-#: assets/blocks/blocks.js:9546 assets/blocks/blocks.js:18391
-#: assets/blocks/blocks.js:29638 incl/block-settings-main.php:426
+#: assets/blocks/blocks.js:10082 assets/blocks/blocks.js:18944
+#: assets/blocks/blocks.js:30234 incl/block-settings-main.php:426
 #: incl/block-settings-main.php:1506 incl/block-settings-main.php:1639
 #: incl/pages/settings/images.php:53
 msgid "Bottom"
 msgstr "Bas"
 
-#: assets/blocks/blocks.js:9552 assets/blocks/blocks.js:18397
+#: assets/blocks/blocks.js:10088 assets/blocks/blocks.js:18950
 #: incl/block-settings-main.php:432 incl/block-settings-main.php:1512
 msgid "Horizontal Alignment"
 msgstr "Alignement horizontal"
 
-#: assets/blocks/blocks.js:9591
+#: assets/blocks/blocks.js:10127
 msgid "Open media library"
 msgstr "Ouvrir la médiathèque"
 
-#: assets/blocks/blocks.js:9610
+#: assets/blocks/blocks.js:10146
 msgid "Enter title…"
 msgstr "Saisir le titre"
 
-#: assets/blocks/blocks.js:9628
+#: assets/blocks/blocks.js:10164
 msgid "Enter subtitle…"
 msgstr "Saisir le sous-titre"
 
-#: assets/blocks/blocks.js:9742 incl/pages/block-settings.php:55
+#: assets/blocks/blocks.js:10278 incl/pages/block-settings.php:55
 msgid "Image - PublishPress"
 msgstr "Image - PublishPress"
 
-#: assets/blocks/blocks.js:9743
+#: assets/blocks/blocks.js:10279
 msgid "Image/photo block with more options and styles."
 msgstr "Bloc image/photo avec plus d’options et de styles."
 
-#: assets/blocks/blocks.js:9749
+#: assets/blocks/blocks.js:10285
 msgid "image"
 msgstr "Image"
 
-#: assets/blocks/blocks.js:9749
+#: assets/blocks/blocks.js:10285
 msgid "advanced image"
 msgstr "Image avancée"
 
-#: assets/blocks/blocks.js:9749
+#: assets/blocks/blocks.js:10285
 msgid "photo"
 msgstr "photo"
 
-#: assets/blocks/blocks.js:9749 assets/blocks/blocks.js:17069
-#: assets/blocks/blocks.js:20348
+#: assets/blocks/blocks.js:10285 assets/blocks/blocks.js:17622
+#: assets/blocks/blocks.js:20901
 msgid "box"
 msgstr "Boite"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:479
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:479
 msgid "Pushpin"
 msgstr "Punaise"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:483
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:483
 msgid "Configuration"
 msgstr "Configuration"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:487
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:487
 msgid "Flag"
 msgstr "Drapeau"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:491
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:491
 msgid "Star"
 msgstr "Étoile"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:495
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:495
 msgid "Checkmark"
 msgstr "Coche"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Checkmark 2"
 msgstr "Coche 2"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Checkmark 3"
 msgstr "Coche 3"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:499
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:499
 msgid "Minus"
 msgstr "Moins"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Minus 2"
 msgstr "Moins 2"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:52
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:52
 #: incl/block-settings-main.php:503
 msgid "Plus"
 msgstr "Plus"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Plus 2"
 msgstr "Plus 2"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:507
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:507
 msgid "Play"
 msgstr "Jouer"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Arrow right"
 msgstr "Flèche de droite"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Arrow right 2"
 msgstr "Flèche de droite 2"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "X Cross 2"
 msgstr "X Cross 2"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:515
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:515
 msgid "X Cross"
 msgstr "X Cross"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:519
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:519
 msgid "Warning"
 msgstr "Attention"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:523
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:523
 msgid "Help"
 msgstr "Aide"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:527
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:527
 msgid "Info"
 msgstr "Info"
 
-#: assets/blocks/blocks.js:10046
+#: assets/blocks/blocks.js:10582
 msgid "Info 2"
 msgstr "Info 2"
 
-#: assets/blocks/blocks.js:10046 incl/block-settings-main.php:531
+#: assets/blocks/blocks.js:10582 incl/block-settings-main.php:531
 msgid "Circle"
 msgstr "Cercle"
 
-#: assets/blocks/blocks.js:10071
+#: assets/blocks/blocks.js:10607
 msgid "Advanced List"
 msgstr "Liste avancée"
 
-#: assets/blocks/blocks.js:10081
+#: assets/blocks/blocks.js:10617
 msgid "Refresh this list when it conflict with other lists styles"
 msgstr ""
 "Actualiser cette liste en cas de conflit avec d’autres styles de listes"
 
-#: assets/blocks/blocks.js:10094 assets/blocks/blocks.js:19833
+#: assets/blocks/blocks.js:10630 assets/blocks/blocks.js:20386
 #: incl/block-settings-main.php:455 incl/block-settings-main.php:1112
 #: incl/block-settings-main.php:2060
 msgid "Text Settings"
 msgstr "Réglages du texte"
 
-#: assets/blocks/blocks.js:10109 assets/blocks/blocks.js:19504
+#: assets/blocks/blocks.js:10645 assets/blocks/blocks.js:20057
 #: incl/block-settings-main.php:467 incl/block-settings-main.php:1852
 msgid "Icon Settings"
 msgstr "Réglages des icônes"
 
-#: assets/blocks/blocks.js:10112
+#: assets/blocks/blocks.js:10648
 msgid "List icon"
 msgstr "List des icônes"
 
-#: assets/blocks/blocks.js:10139 incl/block-settings-main.php:537
+#: assets/blocks/blocks.js:10675 incl/block-settings-main.php:537
 msgid "Icon color"
 msgstr "Couleur de l’icône"
 
-#: assets/blocks/blocks.js:10152 assets/blocks/blocks.js:27676
+#: assets/blocks/blocks.js:10688 assets/blocks/blocks.js:28229
 msgid "Icon size"
 msgstr "Taille de l’icône"
 
-#: assets/blocks/blocks.js:10162
+#: assets/blocks/blocks.js:10698
 msgid "Line height"
 msgstr "Hauteur de ligne"
 
-#: assets/blocks/blocks.js:10202
+#: assets/blocks/blocks.js:10738
 msgid "Write advanced list…"
 msgstr "Faire une liste avancée…"
 
-#: assets/blocks/blocks.js:10304 incl/pages/block-settings.php:56
+#: assets/blocks/blocks.js:10840 incl/pages/block-settings.php:56
 msgid "List - PublishPress"
 msgstr "Liste - PublishPress"
 
-#: assets/blocks/blocks.js:10305
+#: assets/blocks/blocks.js:10841
 msgid "List block with custom icons and styles."
 msgstr "Bloc de liste avec des icônes et des styles personnalisés."
 
-#: assets/blocks/blocks.js:10311
+#: assets/blocks/blocks.js:10847
 msgid "advanced list"
 msgstr "Liste avancée"
 
-#: assets/blocks/blocks.js:10714
+#: assets/blocks/blocks.js:11250
 msgid "At least 1 row of current section must present."
 msgstr "Au moins 1 rangée de la section actuelle doit être présente."
 
-#: assets/blocks/blocks.js:11331 assets/blocks/blocks.js:11352
+#: assets/blocks/blocks.js:11867 assets/blocks/blocks.js:11888
 msgid "Cannot select multi cells from difference section!"
 msgstr ""
 "Impossible de sélectionner plusieurs cellules dans une section différente !"
 
-#: assets/blocks/blocks.js:11449 assets/blocks/blocks.js:11739
+#: assets/blocks/blocks.js:11985 assets/blocks/blocks.js:12275
 msgid "Advanced Table"
 msgstr "Tableau avancé"
 
-#: assets/blocks/blocks.js:11457
+#: assets/blocks/blocks.js:11993
 msgid "Column Count"
 msgstr "Nombre de colonnes"
 
-#: assets/blocks/blocks.js:11466
+#: assets/blocks/blocks.js:12002
 msgid "Row Count"
 msgstr "Nombre de lignes"
 
-#: assets/blocks/blocks.js:11479
+#: assets/blocks/blocks.js:12015
 msgid "Create"
 msgstr "Créer"
 
-#: assets/blocks/blocks.js:11487
+#: assets/blocks/blocks.js:12023
 msgid ""
 "Hint: Hold CTRL key for multi cells selection. Hold SHIFT key for range "
 "cells selection."
@@ -1105,743 +1263,743 @@ msgstr ""
 "cellules. Maintenez la touche MAJ enfoncée pour sélectionner les cellules de "
 "la plage."
 
-#: assets/blocks/blocks.js:11496
+#: assets/blocks/blocks.js:12032
 msgid "Add Row Before"
 msgstr "Ajouter une ligne avant"
 
-#: assets/blocks/blocks.js:11503
+#: assets/blocks/blocks.js:12039
 msgid "Add Row After"
 msgstr "Ajouter une ligne après"
 
-#: assets/blocks/blocks.js:11510
+#: assets/blocks/blocks.js:12046
 msgid "Delete Row"
 msgstr "Supprimer les lignes"
 
-#: assets/blocks/blocks.js:11517
+#: assets/blocks/blocks.js:12053
 msgid "Add Column Before"
 msgstr "Ajouter une colonne avant"
 
-#: assets/blocks/blocks.js:11524
+#: assets/blocks/blocks.js:12060
 msgid "Add Column After"
 msgstr "Ajouter une colonne après"
 
-#: assets/blocks/blocks.js:11531
+#: assets/blocks/blocks.js:12067
 msgid "Delete Column"
 msgstr "Supprimer les colonnes"
 
-#: assets/blocks/blocks.js:11543
+#: assets/blocks/blocks.js:12079
 msgid "Split Merged Cells"
 msgstr "Fractionner les cellules fusionnées"
 
-#: assets/blocks/blocks.js:11558
+#: assets/blocks/blocks.js:12094
 msgid "Merge Cells"
 msgstr "Fusionner les cellules"
 
-#: assets/blocks/blocks.js:11566
+#: assets/blocks/blocks.js:12102
 msgid "Border Top"
 msgstr "Bordure du haut"
 
-#: assets/blocks/blocks.js:11578
+#: assets/blocks/blocks.js:12114
 msgid "Border Right"
 msgstr "Bordure à droite"
 
-#: assets/blocks/blocks.js:11590
+#: assets/blocks/blocks.js:12126
 msgid "Border Bottom"
 msgstr "Bordure du bas"
 
-#: assets/blocks/blocks.js:11602
+#: assets/blocks/blocks.js:12138
 msgid "Border Left"
 msgstr "Bordure à gauche"
 
-#: assets/blocks/blocks.js:11614
+#: assets/blocks/blocks.js:12150
 msgid "Border All"
 msgstr "Toutes les bordures"
 
-#: assets/blocks/blocks.js:11625
+#: assets/blocks/blocks.js:12161
 msgid "Border None"
 msgstr "Aucune bordure"
 
-#: assets/blocks/blocks.js:11640
+#: assets/blocks/blocks.js:12176
 msgid "Border Vertical"
 msgstr "Bordure verticale"
 
-#: assets/blocks/blocks.js:11652
+#: assets/blocks/blocks.js:12188
 msgid "Border Horizontal"
 msgstr "Bordure horizontale"
 
-#: assets/blocks/blocks.js:11664
+#: assets/blocks/blocks.js:12200
 msgid "Border Inner"
 msgstr "Bordure Intérieure"
 
-#: assets/blocks/blocks.js:11676
+#: assets/blocks/blocks.js:12212
 msgid "Border Outer"
 msgstr "Bordure extérieure"
 
-#: assets/blocks/blocks.js:11694
+#: assets/blocks/blocks.js:12230
 msgid "Align left"
 msgstr "Aligner à gauche"
 
-#: assets/blocks/blocks.js:11698
+#: assets/blocks/blocks.js:12234
 msgid "Align center"
 msgstr "Aligner au centre"
 
-#: assets/blocks/blocks.js:11702
+#: assets/blocks/blocks.js:12238
 msgid "Align right"
 msgstr "Aligner à droite"
 
-#: assets/blocks/blocks.js:11706
+#: assets/blocks/blocks.js:12242
 msgid "Align justify"
 msgstr "Aligner justifié"
 
-#: assets/blocks/blocks.js:11717
+#: assets/blocks/blocks.js:12253
 msgid "Align top"
 msgstr "Aligner en haut"
 
-#: assets/blocks/blocks.js:11726
+#: assets/blocks/blocks.js:12262
 msgid "Align middle"
 msgstr "Aligner au milieu"
 
-#: assets/blocks/blocks.js:11735
+#: assets/blocks/blocks.js:12271
 msgid "Align bottom"
 msgstr "Aligner en bas"
 
-#: assets/blocks/blocks.js:11751
+#: assets/blocks/blocks.js:12287
 msgid "Edit Table"
 msgstr "Modifier la table"
 
-#: assets/blocks/blocks.js:11756
+#: assets/blocks/blocks.js:12292
 msgid "Refresh table (Use this after using undo or redo)"
 msgstr "Actualiser la table (à utiliser après avoir utilisé undo ou redo)"
 
-#: assets/blocks/blocks.js:11768 incl/block-settings-main.php:574
+#: assets/blocks/blocks.js:12304 incl/block-settings-main.php:574
 msgid "Table Settings"
 msgstr "Réglages de la table"
 
-#: assets/blocks/blocks.js:11770
+#: assets/blocks/blocks.js:12306
 msgid "Max width (px)"
 msgstr "Largeur maximale (px)"
 
-#: assets/blocks/blocks.js:11771
+#: assets/blocks/blocks.js:12307
 msgid "Set this to 0 to make max-width is 100%"
 msgstr "Reglez-le sur 0 pour que la largeur maximale soit de 100%"
 
-#: assets/blocks/blocks.js:11780
+#: assets/blocks/blocks.js:12316
 msgid "Fixed width table cells"
 msgstr "Cellules de tableau à largeur fixe"
 
-#: assets/blocks/blocks.js:11787
+#: assets/blocks/blocks.js:12323
 msgid "Table header"
 msgstr "En-tête de tableau"
 
-#: assets/blocks/blocks.js:11794
+#: assets/blocks/blocks.js:12330
 msgid "Table footer"
 msgstr "Pied de page de tableau"
 
-#: assets/blocks/blocks.js:11801
+#: assets/blocks/blocks.js:12337
 msgid "Border collapsed"
 msgstr "Bordure replié"
 
-#: assets/blocks/blocks.js:11810
+#: assets/blocks/blocks.js:12346
 msgid "Cell Settings"
 msgstr "Réglages des cellules"
 
-#: assets/blocks/blocks.js:11881 incl/block-settings-main.php:250
+#: assets/blocks/blocks.js:12417 incl/block-settings-main.php:250
 #: incl/block-settings-main.php:1822 incl/block-settings-main.php:1891
 #: incl/block-settings-main.php:2002 incl/block-settings-main.php:2082
 msgid "Padding Top"
 msgstr "Marge interne du haut"
 
-#: assets/blocks/blocks.js:11890 incl/block-settings-main.php:257
+#: assets/blocks/blocks.js:12426 incl/block-settings-main.php:257
 #: incl/block-settings-main.php:1843 incl/block-settings-main.php:1912
 #: incl/block-settings-main.php:2023 incl/block-settings-main.php:2103
 msgid "Padding Right"
 msgstr "Marge interne Droite"
 
-#: assets/blocks/blocks.js:11899 incl/block-settings-main.php:264
+#: assets/blocks/blocks.js:12435 incl/block-settings-main.php:264
 #: incl/block-settings-main.php:1829 incl/block-settings-main.php:1898
 #: incl/block-settings-main.php:2009 incl/block-settings-main.php:2089
 msgid "Padding Bottom"
 msgstr "Marge interne basse"
 
-#: assets/blocks/blocks.js:11908 incl/block-settings-main.php:271
+#: assets/blocks/blocks.js:12444 incl/block-settings-main.php:271
 #: incl/block-settings-main.php:1836 incl/block-settings-main.php:1905
 #: incl/block-settings-main.php:2016 incl/block-settings-main.php:2096
 msgid "Padding Left"
 msgstr "Marge interne Gauche"
 
-#: assets/blocks/blocks.js:11922
+#: assets/blocks/blocks.js:12458
 msgid "Horizontal Align"
 msgstr "Alignement horizontal"
 
-#: assets/blocks/blocks.js:11938 incl/block-settings-main.php:1626
+#: assets/blocks/blocks.js:12474 incl/block-settings-main.php:1626
 msgid "Vertical Align"
 msgstr "Alignement vertical"
 
-#: assets/blocks/blocks.js:12005 incl/pages/block-settings.php:57
+#: assets/blocks/blocks.js:12541 incl/pages/block-settings.php:57
 msgid "Table - PublishPress"
-msgstr "Table - PublishPress"
+msgstr "Tableau - PublishPress"
 
-#: assets/blocks/blocks.js:12006
+#: assets/blocks/blocks.js:12542
 msgid "Table block with more styles and functions."
-msgstr "Bloc de table avec plus de styles et de fonctions."
+msgstr "Bloc de tableau avec plus de styles et de fonctions."
 
-#: assets/blocks/blocks.js:12012
+#: assets/blocks/blocks.js:12548
 msgid "table"
 msgstr "tableau"
 
-#: assets/blocks/blocks.js:12012
+#: assets/blocks/blocks.js:12548
 msgid "advanced table"
-msgstr "Tableau avancé"
+msgstr "tableau avancé"
 
-#: assets/blocks/blocks.js:12012
+#: assets/blocks/blocks.js:12548
 msgid "cell"
 msgstr "cellule"
 
-#: assets/blocks/blocks.js:12012
+#: assets/blocks/blocks.js:12548
 msgid "data"
 msgstr "données"
 
-#: assets/blocks/blocks.js:12151
+#: assets/blocks/blocks.js:12687
 msgid "Stripes"
 msgstr "Bandes"
 
-#: assets/blocks/blocks.js:12506 incl/block-settings-main.php:976
+#: assets/blocks/blocks.js:13043 incl/block-settings-main.php:976
 msgid "Horizontal"
 msgstr "Horizontale"
 
-#: assets/blocks/blocks.js:12506 incl/block-settings-main.php:980
+#: assets/blocks/blocks.js:13043 incl/block-settings-main.php:980
 msgid "Vertical"
 msgstr "Vertical"
 
-#: assets/blocks/blocks.js:12730 incl/advanced-gutenberg-main.php:1081
+#: assets/blocks/blocks.js:13279 incl/advanced-gutenberg-main.php:1098
 msgid "copy"
 msgstr "Copier"
 
-#: assets/blocks/blocks.js:12750
+#: assets/blocks/blocks.js:13299
 msgid "Tab Header"
 msgstr "En-tête de l’onglet"
 
-#: assets/blocks/blocks.js:12840 assets/blocks/blocks.js:15019
-#: assets/blocks/blocks.js:24543
+#: assets/blocks/blocks.js:13389 assets/blocks/blocks.js:15572
+#: assets/blocks/blocks.js:25096
 msgid "desktop"
 msgstr "Ordinateur de bureau"
 
-#: assets/blocks/blocks.js:12843 assets/blocks/blocks.js:15022
-#: assets/blocks/blocks.js:24546
+#: assets/blocks/blocks.js:13392 assets/blocks/blocks.js:15575
+#: assets/blocks/blocks.js:25099
 msgid "tablet"
 msgstr "Tablette"
 
-#: assets/blocks/blocks.js:12846 assets/blocks/blocks.js:15025
-#: assets/blocks/blocks.js:24549
+#: assets/blocks/blocks.js:13395 assets/blocks/blocks.js:15578
+#: assets/blocks/blocks.js:25102
 msgid "mobile"
 msgstr "Mobile"
 
-#: assets/blocks/blocks.js:12886
+#: assets/blocks/blocks.js:13435
 msgid "Advanced Tabs"
 msgstr "Onglets avancés"
 
-#: assets/blocks/blocks.js:12894 incl/block-settings-main.php:971
+#: assets/blocks/blocks.js:13443 incl/block-settings-main.php:971
 msgid "Tabs Style"
 msgstr "Style des onglets"
 
-#: assets/blocks/blocks.js:12956
+#: assets/blocks/blocks.js:13505
 msgid "Tabs Settings"
 msgstr "Réglages d’onglet"
 
-#: assets/blocks/blocks.js:12958
+#: assets/blocks/blocks.js:13507
 msgid "Initial Open Tab"
 msgstr "Onglet ouvert initial"
 
-#: assets/blocks/blocks.js:12969 assets/blocks/blocks.js:28668
+#: assets/blocks/blocks.js:13518 assets/blocks/blocks.js:29264
 msgid "Tab Colors"
 msgstr "Couleurs des onglets"
 
-#: assets/blocks/blocks.js:12984 assets/blocks/blocks.js:28683
+#: assets/blocks/blocks.js:13533 assets/blocks/blocks.js:29279
 msgid "Active Tab Background Color"
 msgstr "Couleur de l’arrière plan de l’onglet actif"
 
-#: assets/blocks/blocks.js:12990 assets/blocks/blocks.js:28689
+#: assets/blocks/blocks.js:13539 assets/blocks/blocks.js:29285
 msgid "Active Tab Text Color"
 msgstr "Couleur du texte de l’onglet actif"
 
-#: assets/blocks/blocks.js:12998 assets/blocks/blocks.js:28697
+#: assets/blocks/blocks.js:13547 assets/blocks/blocks.js:29293
 msgid "Body Colors"
 msgstr "Couleurs du champ body"
 
-#: assets/blocks/blocks.js:13091 assets/blocks/blocks.js:28789
+#: assets/blocks/blocks.js:13640 assets/blocks/blocks.js:29385
 msgid "Title…"
 msgstr "Titre…"
 
-#: assets/blocks/blocks.js:13098
+#: assets/blocks/blocks.js:13647
 msgid "HTML Anchor"
 msgstr "Ancre HTML"
 
-#: assets/blocks/blocks.js:13108
+#: assets/blocks/blocks.js:13657
 msgid "Move back"
 msgstr "Revenir en arrière"
 
-#: assets/blocks/blocks.js:13122
+#: assets/blocks/blocks.js:13671
 msgid "Move forward"
 msgstr "Avancer"
 
-#: assets/blocks/blocks.js:13136
+#: assets/blocks/blocks.js:13685
 msgid "Duplicate tab"
 msgstr "Onglet Duplicate"
 
-#: assets/blocks/blocks.js:13151 assets/blocks/blocks.js:28794
+#: assets/blocks/blocks.js:13700 assets/blocks/blocks.js:29390
 msgid "Remove tab"
 msgstr "Supprimer l’onglet"
 
-#: assets/blocks/blocks.js:13175 assets/blocks/blocks.js:28822
+#: assets/blocks/blocks.js:13724 assets/blocks/blocks.js:29418
 msgid "Add tab"
 msgstr "Ajouter un onglet"
 
-#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
-#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
-#: assets/blocks/blocks.js:28886
+#: assets/blocks/blocks.js:13778 assets/blocks/blocks.js:14387
+#: assets/blocks/blocks.js:14450 assets/blocks/blocks.js:14502
+#: assets/blocks/blocks.js:29482
 msgid "Tab 1"
 msgstr "Onglet 1"
 
-#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
-#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
-#: assets/blocks/blocks.js:28889
+#: assets/blocks/blocks.js:13778 assets/blocks/blocks.js:14387
+#: assets/blocks/blocks.js:14450 assets/blocks/blocks.js:14502
+#: assets/blocks/blocks.js:29485
 msgid "Tab 2"
 msgstr "Onglet 2"
 
-#: assets/blocks/blocks.js:13229 assets/blocks/blocks.js:13834
-#: assets/blocks/blocks.js:13897 assets/blocks/blocks.js:13949
-#: assets/blocks/blocks.js:28892
+#: assets/blocks/blocks.js:13778 assets/blocks/blocks.js:14387
+#: assets/blocks/blocks.js:14450 assets/blocks/blocks.js:14502
+#: assets/blocks/blocks.js:29488
 msgid "Tab 3"
 msgstr "Onglet 3"
 
-#: assets/blocks/blocks.js:13312 incl/pages/block-settings.php:58
+#: assets/blocks/blocks.js:13861 incl/pages/block-settings.php:58
 msgid "Tabs - PublishPress"
 msgstr "Onglets - PublishPress"
 
-#: assets/blocks/blocks.js:13313 assets/blocks/blocks.js:28942
+#: assets/blocks/blocks.js:13862 assets/blocks/blocks.js:29538
 msgid "Create horizontal or vertical tabs to display your content."
 msgstr ""
 "Créez des onglets horizontaux ou verticaux pour afficher votre contenu."
 
-#: assets/blocks/blocks.js:13319 assets/blocks/blocks.js:28948
+#: assets/blocks/blocks.js:13868 assets/blocks/blocks.js:29544
 msgid "tabs"
 msgstr "onglets"
 
-#: assets/blocks/blocks.js:13319
+#: assets/blocks/blocks.js:13868
 msgid "advanced tabs"
-msgstr "Onglets avancés"
+msgstr "onglets avancés"
 
-#: assets/blocks/blocks.js:13319 assets/blocks/blocks.js:28948
+#: assets/blocks/blocks.js:13868 assets/blocks/blocks.js:29544
 msgid "cards"
 msgstr "cartes"
 
-#: assets/blocks/blocks.js:13803
+#: assets/blocks/blocks.js:14356
 msgid "Tab Item - PublishPress"
-msgstr "Élément de l’onglet - PublishPress"
+msgstr "Élément d’onglet - PublishPress"
 
-#: assets/blocks/blocks.js:13848
+#: assets/blocks/blocks.js:14401
 msgid "tab"
 msgstr "Onglet"
 
-#: assets/blocks/blocks.js:14246
+#: assets/blocks/blocks.js:14799
 msgid "Advanced Video"
 msgstr "Vidéo avancée"
 
-#: assets/blocks/blocks.js:14265
+#: assets/blocks/blocks.js:14818
 msgid "Change image preview"
 msgstr "Changer l’aperçu de l’image"
 
-#: assets/blocks/blocks.js:14273
+#: assets/blocks/blocks.js:14826
 msgid "Remove image preview"
 msgstr "Supprimer l’aperçu de l’image"
 
-#: assets/blocks/blocks.js:14286 incl/block-settings-main.php:588
+#: assets/blocks/blocks.js:14839 incl/block-settings-main.php:588
 msgid "Video Settings"
 msgstr "Réglages vidéo"
 
-#: assets/blocks/blocks.js:14288
+#: assets/blocks/blocks.js:14841
 msgid "Open video in light box"
 msgstr "Ouvrir la vidéo dans la visionneuse"
 
-#: assets/blocks/blocks.js:14289
+#: assets/blocks/blocks.js:14842
 msgid "Lightbox offers additional display options."
 msgstr "La visionneuse offre des options d’affichage supplémentaires."
 
-#: assets/blocks/blocks.js:14299 assets/blocks/blocks.js:24680
+#: assets/blocks/blocks.js:14852 assets/blocks/blocks.js:25233
 msgid "Autoplay"
 msgstr "Lecture automatique"
 
-#: assets/blocks/blocks.js:14306
+#: assets/blocks/blocks.js:14859
 msgid "Loop"
 msgstr "Boucle"
 
-#: assets/blocks/blocks.js:14313
+#: assets/blocks/blocks.js:14866
 msgid "Muted"
 msgstr "En sourdine"
 
-#: assets/blocks/blocks.js:14320
+#: assets/blocks/blocks.js:14873
 msgid "Playback Controls"
 msgstr "Contrôles de lecture"
 
-#: assets/blocks/blocks.js:14327
+#: assets/blocks/blocks.js:14880
 msgid "Play inline"
 msgstr "Jouer en ligne"
 
-#: assets/blocks/blocks.js:14334
+#: assets/blocks/blocks.js:14887
 msgid "Video preloading"
 msgstr "Préchargement de la vidéo"
 
-#: assets/blocks/blocks.js:14336
+#: assets/blocks/blocks.js:14889
 msgid "Auto"
 msgstr "Automatique"
 
-#: assets/blocks/blocks.js:14336
+#: assets/blocks/blocks.js:14889
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: assets/blocks/blocks.js:14350
+#: assets/blocks/blocks.js:14903
 msgid "Video width"
 msgstr "Largeur de la vidéo"
 
-#: assets/blocks/blocks.js:14359
+#: assets/blocks/blocks.js:14912
 msgid "Video height"
 msgstr "Hauteur de la vidéo"
 
-#: assets/blocks/blocks.js:14380
+#: assets/blocks/blocks.js:14933
 msgid "Play Button Color"
 msgstr "Couleur du bouton de lecture"
 
-#: assets/blocks/blocks.js:14389
+#: assets/blocks/blocks.js:14942
 msgid "Play Button"
 msgstr "Bouton Lecture"
 
-#: assets/blocks/blocks.js:14417
+#: assets/blocks/blocks.js:14970
 msgid "Play Button Size"
 msgstr "Taille du bouton de lecture"
 
-#: assets/blocks/blocks.js:14453
+#: assets/blocks/blocks.js:15006
 msgid "Select image preview"
 msgstr "Sélectionner l’aperçu de l’image"
 
-#: assets/blocks/blocks.js:14503
+#: assets/blocks/blocks.js:15056
 msgid "Youtube/Vimeo video URL/ID…"
 msgstr "URL/ID de la vidéo Youtube/Vimeo…"
 
-#: assets/blocks/blocks.js:14517
+#: assets/blocks/blocks.js:15070
 msgid "Fetch video content"
 msgstr "Récupérer du contenu vidéo"
 
-#: assets/blocks/blocks.js:14534
+#: assets/blocks/blocks.js:15087
 msgid "Load local video"
 msgstr "Charger vidéo en local"
 
-#: assets/blocks/blocks.js:14547
+#: assets/blocks/blocks.js:15100
 msgid "Current Video"
 msgstr "Vidéo actuelle"
 
-#: assets/blocks/blocks.js:14570
+#: assets/blocks/blocks.js:15123
 msgid "Wrong video URL/ID. Please try another."
 msgstr "Mauvaise URL/ID de la vidéo. S’il vous plaît essayez-en une autre."
 
-#: assets/blocks/blocks.js:14571
+#: assets/blocks/blocks.js:15124
 msgid "Not selected yet."
 msgstr "Pas encore sélectionné."
 
-#: assets/blocks/blocks.js:14674 incl/pages/block-settings.php:59
+#: assets/blocks/blocks.js:15227 incl/pages/block-settings.php:59
 msgid "Video - PublishPress"
 msgstr "Vidéo - PublishPress"
 
-#: assets/blocks/blocks.js:14675
+#: assets/blocks/blocks.js:15228
 msgid "Add more options and styles for videos in your Media Library."
 msgstr ""
 "Ajoutez davantage d’options et de styles pour les vidéos dans votre "
 "médiathèque."
 
-#: assets/blocks/blocks.js:14681
+#: assets/blocks/blocks.js:15234
 msgid "video"
 msgstr "Vidéos"
 
-#: assets/blocks/blocks.js:14681
+#: assets/blocks/blocks.js:15234
 msgid "advanced video"
-msgstr "Vidéo avancée"
+msgstr "vidéo avancée"
 
-#: assets/blocks/blocks.js:14681
+#: assets/blocks/blocks.js:15234
 msgid "embed"
 msgstr "Contenu embarqué"
 
-#: assets/blocks/blocks.js:14681
+#: assets/blocks/blocks.js:15234
 msgid "media"
 msgstr "média"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "One column"
 msgstr "Une colonne"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "100"
 msgstr "100"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; equal split"
 msgstr "Deux colonnes ; largeur égale"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "50 / 50"
 msgstr "50 / 50"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; two-thirds, one-third split"
 msgstr "Deux colonnes ; en deux tiers, un tiers"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "66 / 33"
 msgstr "66 / 33"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; one-third, two-thirds split"
 msgstr "Deux colonnes ; en un tiers, deux tiers"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "33 / 66"
 msgstr "33 / 66"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; one-quarter, three-quarters split"
 msgstr "Deux colonnes ; en un quart, trois quarts"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "25 / 75"
 msgstr "25 / 75"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; three-quarters, one-quarter split"
 msgstr "Deux colonnes ; trois quarts et un quart"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "75 / 25"
 msgstr "75 / 25"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; one-fifth, four-fifths split"
 msgstr "Deux colonnes ; en un cinquième, quatre cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "20 / 80"
 msgstr "20 / 80"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Two columns; four-fifths, one-fifth split"
 msgstr "Deux colonnes ; en quatre cinquièmes, un cinquième"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "80 / 20"
 msgstr "80 / 20"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; equal split"
 msgstr "Trois colonnes ; largeur égale"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "33 / 33 / 33"
 msgstr "33 / 33 / 33"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider one-half left column"
 msgstr "Trois colonnes ; une demi-colonne gauche plus large"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "50 / 25 / 25"
 msgstr "50 / 25 / 25"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider one-half right column"
 msgstr "Trois colonnes ; une demi-colonne droite plus large"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "25 / 25 / 50"
 msgstr "25 / 25 / 50"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider one-half center column"
 msgstr "Trois colonnes ; une demi-colonne centrale plus large"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "25 / 50 / 25"
 msgstr "25 / 50 / 25"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider three-fifths center column"
 msgstr "Trois colonnes ; colonne centrale plus large aux trois cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "20 / 60 / 20"
 msgstr "20 / 60 / 20"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider three-fifths left column"
 msgstr "Trois colonnes ; colonne de gauche plus large aux trois cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "60 / 20 / 20"
 msgstr "60 / 20 / 20"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider three-fifths right column"
 msgstr "Trois colonnes ; colonne de droite plus large aux trois cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "20 / 20 / 60"
 msgstr "20 / 20 / 60"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Three columns; wider four-sixths center column"
 msgstr "Trois colonnes ; colonne centrale plus large aux quatre sixièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "16.6 / 66.6 / 16.6"
 msgstr "16.6 / 66.6 / 16.6"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Four columns; equal split"
 msgstr "Quatre colonnes ; largeur égale"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "25 / 25 / 25 / 25"
 msgstr "25 / 25 / 25 / 25"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Four columns; wider one-half left column"
 msgstr "Quatre colonnes ; une demi-colonne gauche plus large"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "50 / 16.6 / 16.6 / 16.6"
 msgstr "50 / 16.6 / 16.6 / 16.6"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Four columns; wider one-half right column"
 msgstr "Quatre colonnes ; une demi-colonne droite plus large"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "16.6 / 16.6 / 16.6 / 50"
 msgstr "16.6 / 16.6 / 16.6 / 50"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Four columns; wider two-fifths right column"
 msgstr "Quatre colonnes ; colonne de droite plus large aux deux cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "20 / 20 / 20 / 40"
 msgstr "20 / 20 / 20 / 40"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Four columns; wider two-fifths left column"
 msgstr "Quatre colonne ; colonne de gauche plus large aux deux cinquièmes"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "40 / 20 / 20 / 20"
 msgstr "40 / 20 / 20 / 20"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Five columns; equal split"
 msgstr "Cinq colonnes ; largeur égale"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "20 / 20 / 20 / 20 / 20"
 msgstr "20 / 20 / 20 / 20 / 20"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "Six columns; equal split"
 msgstr "Six colonnes ; partage égal"
 
-#: assets/blocks/blocks.js:14906
+#: assets/blocks/blocks.js:15459
 msgid "16.6 / 16.6 / 16.6 / 16.6 / 16.6 / 16.6"
 msgstr "16.6 / 16.6 / 16.6 / 16.6 / 16.6 / 16.6"
 
-#: assets/blocks/blocks.js:14907
+#: assets/blocks/blocks.js:15460
 msgid "Three: 100 - 1/2 - 1/2"
 msgstr "Trois : 100 - 1/2 - 1/2"
 
-#: assets/blocks/blocks.js:14907
+#: assets/blocks/blocks.js:15460
 msgid "Three: 1/2 - 1/2 - 100"
 msgstr "Trois : 1/2 - 1/2 -100"
 
-#: assets/blocks/blocks.js:14907
+#: assets/blocks/blocks.js:15460
 msgid "Four: Two Columns"
 msgstr "Quatre : Deux colonnes"
 
-#: assets/blocks/blocks.js:14907
+#: assets/blocks/blocks.js:15460
 msgid "Six: Two Columns"
 msgstr "Six : Deux colonnes"
 
-#: assets/blocks/blocks.js:14907
+#: assets/blocks/blocks.js:15460
 msgid "Six: Three Columns"
 msgstr "Six : trois colonnes"
 
-#: assets/blocks/blocks.js:15080
+#: assets/blocks/blocks.js:15633
 msgid "Columns Manager"
 msgstr "Gestionnaire de colonnes"
 
-#: assets/blocks/blocks.js:15086
+#: assets/blocks/blocks.js:15639
 msgid "Choose a columns layout"
 msgstr "Choisir une mise en page de colonnes"
 
-#: assets/blocks/blocks.js:15134
+#: assets/blocks/blocks.js:15687
 msgid "Vertical Align Top"
 msgstr "Alignement vertical en haut"
 
-#: assets/blocks/blocks.js:15146
+#: assets/blocks/blocks.js:15699
 msgid "Vertical Align Middle"
 msgstr "Alignement vertical au milieu"
 
-#: assets/blocks/blocks.js:15158
+#: assets/blocks/blocks.js:15711
 msgid "Vertical Align Bottom"
 msgstr "Alignement vertical en bas"
 
-#: assets/blocks/blocks.js:15170
+#: assets/blocks/blocks.js:15723
 msgid "Inner Columns Full Height"
 msgstr "Colonnes intérieures pleine hauteur"
 
-#: assets/blocks/blocks.js:15182
+#: assets/blocks/blocks.js:15735
 msgid "Columns Manager "
 msgstr "Gestionnaire de colonnes"
 
-#: assets/blocks/blocks.js:15195 incl/block-settings-main.php:1535
+#: assets/blocks/blocks.js:15748 incl/block-settings-main.php:1535
 msgid "Columns Settings"
 msgstr "Réglages des colonnes"
 
-#: assets/blocks/blocks.js:15198
+#: assets/blocks/blocks.js:15751
 msgid "Responsive Settings"
 msgstr "Réglages responsive"
 
-#: assets/blocks/blocks.js:15262
+#: assets/blocks/blocks.js:15815
 msgid "Space between columns"
 msgstr "Espace entre les colonnes"
 
-#: assets/blocks/blocks.js:15273 incl/block-settings-main.php:1577
+#: assets/blocks/blocks.js:15826 incl/block-settings-main.php:1577
 msgid "Vertical space when collapsed"
 msgstr "Espace vertical quand replié"
 
-#: assets/blocks/blocks.js:15281
+#: assets/blocks/blocks.js:15834
 msgid "Collapsed Order RTL"
 msgstr "Sens de repli RTL"
 
-#: assets/blocks/blocks.js:15290 assets/blocks/blocks.js:16218
+#: assets/blocks/blocks.js:15843 assets/blocks/blocks.js:16771
 msgid " Padding"
 msgstr " Marge interne"
 
-#: assets/blocks/blocks.js:15332 assets/blocks/blocks.js:16241
+#: assets/blocks/blocks.js:15885 assets/blocks/blocks.js:16794
 msgid " Margin"
 msgstr " Marge"
 
-#: assets/blocks/blocks.js:15375 incl/block-settings-main.php:1623
+#: assets/blocks/blocks.js:15928 incl/block-settings-main.php:1623
 msgid "Row Settings"
 msgstr "Réglages de la ligne"
 
-#: assets/blocks/blocks.js:15377 incl/block-settings-main.php:1649
+#: assets/blocks/blocks.js:15930 incl/block-settings-main.php:1649
 msgid "Columns Wrapped"
 msgstr "Colonnes réorganisées"
 
-#: assets/blocks/blocks.js:15378
+#: assets/blocks/blocks.js:15931
 msgid ""
 "If your columns overflow they available space, they will be placed on a new "
 "line."
@@ -1849,64 +2007,64 @@ msgstr ""
 "Si vos colonnes débordent de l’espace disponible, elles seront placées sur "
 "une nouvelle ligne."
 
-#: assets/blocks/blocks.js:15385 assets/blocks/blocks.js:17111
+#: assets/blocks/blocks.js:15938 assets/blocks/blocks.js:17664
 #: incl/block-settings-main.php:1654
 msgid "Wrapper Tag"
 msgstr "Étiquette de conteneur"
 
-#: assets/blocks/blocks.js:15393 incl/block-settings-main.php:1689
+#: assets/blocks/blocks.js:15946 incl/block-settings-main.php:1689
 msgid "Content Max Width"
 msgstr "Hauteur max. contenu"
 
-#: assets/blocks/blocks.js:15416 incl/block-settings-main.php:1696
+#: assets/blocks/blocks.js:15969 incl/block-settings-main.php:1696
 msgid "Content Min Height"
 msgstr "Hauteur min. contenu"
 
-#: assets/blocks/blocks.js:15439
+#: assets/blocks/blocks.js:15992
 msgid "Content Max Height"
 msgstr "Hauteur max. du contenu"
 
-#: assets/blocks/blocks.js:15808 incl/pages/block-settings.php:60
+#: assets/blocks/blocks.js:16361 incl/pages/block-settings.php:60
 msgid "Columns - PublishPress"
 msgstr "Colonnes - PublishPress"
 
-#: assets/blocks/blocks.js:15809
+#: assets/blocks/blocks.js:16362
 msgid ""
 "Create flexible layouts for your content with advanced options and styles."
 msgstr ""
 "Créez des mises en page flexibles pour votre contenu grâce à des options et "
 "des styles avancés."
 
-#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
+#: assets/blocks/blocks.js:16368 assets/blocks/blocks.js:16945
 msgid "columns"
 msgstr "colonnes"
 
-#: assets/blocks/blocks.js:15815
+#: assets/blocks/blocks.js:16368
 msgid "columns manager"
-msgstr "Gestionnaire de colonnes"
+msgstr "gestionnaire de colonnes"
 
-#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
-#: assets/blocks/blocks.js:17069
+#: assets/blocks/blocks.js:16368 assets/blocks/blocks.js:16945
+#: assets/blocks/blocks.js:17622
 msgid "row"
 msgstr "lignes"
 
-#: assets/blocks/blocks.js:15815 assets/blocks/blocks.js:16392
+#: assets/blocks/blocks.js:16368 assets/blocks/blocks.js:16945
 msgid "layout"
 msgstr "mise en page"
 
-#: assets/blocks/blocks.js:16123 incl/block-settings-main.php:1754
+#: assets/blocks/blocks.js:16676 incl/block-settings-main.php:1754
 msgid "Column Settings"
 msgstr "Réglages de colonne"
 
-#: assets/blocks/blocks.js:16125
+#: assets/blocks/blocks.js:16678
 msgid "Width (%)"
 msgstr "Largeur (%)"
 
-#: assets/blocks/blocks.js:16128
+#: assets/blocks/blocks.js:16681
 msgid "Available: "
 msgstr "Disponible : "
 
-#: assets/blocks/blocks.js:16130
+#: assets/blocks/blocks.js:16683
 msgid ""
 "Set to 0 = auto. This will override predefine layout styles. Recommend for "
 "experience users!"
@@ -1914,53 +2072,53 @@ msgstr ""
 "Définissez à 0 = auto. Cela remplacera les styles de mise en page "
 "prédéfinis. Recommandé pour les utilisateurs/utilisatrices expérimentés !"
 
-#: assets/blocks/blocks.js:16173 assets/blocks/blocks.js:16729
-#: assets/blocks/blocks.js:23791 assets/blocks/blocks.js:26938
+#: assets/blocks/blocks.js:16726 assets/blocks/blocks.js:17282
+#: assets/blocks/blocks.js:24344 assets/blocks/blocks.js:27491
 msgid "Border radius (px)"
 msgstr "Coins arrondis (px)"
 
-#: assets/blocks/blocks.js:16206
+#: assets/blocks/blocks.js:16759
 msgid " text alignment"
 msgstr " alignement du texte"
 
-#: assets/blocks/blocks.js:16224 assets/blocks/blocks.js:16247
+#: assets/blocks/blocks.js:16777 assets/blocks/blocks.js:16800
 msgid "Unit (px)"
 msgstr "Unité (px)"
 
-#: assets/blocks/blocks.js:16384 incl/pages/block-settings.php:61
+#: assets/blocks/blocks.js:16937 incl/pages/block-settings.php:61
 msgid "Column - PublishPress"
 msgstr "Colonne - PublishPress"
 
-#: assets/blocks/blocks.js:16386
+#: assets/blocks/blocks.js:16939
 msgid "Column in row."
 msgstr "Colonne par ligne."
 
-#: assets/blocks/blocks.js:16604
+#: assets/blocks/blocks.js:17157
 msgid "Contact Form"
 msgstr "Formulaire de contact"
 
-#: assets/blocks/blocks.js:16612 assets/blocks/blocks.js:23683
+#: assets/blocks/blocks.js:17165 assets/blocks/blocks.js:24236
 #: incl/block-settings-main.php:1284
 msgid "Form Settings"
 msgstr "Réglages de formulaires"
 
-#: assets/blocks/blocks.js:16619 assets/blocks/blocks.js:21507
-#: assets/blocks/blocks.js:23672
+#: assets/blocks/blocks.js:17172 assets/blocks/blocks.js:22060
+#: assets/blocks/blocks.js:24225
 msgid "We strongly recommend to enable Google reCAPTCHA to avoid spam."
 msgstr ""
 "Nous vous recommandons vivement d’activer le reCAPTCHA de Google pour éviter "
 "les indésirables."
 
-#: assets/blocks/blocks.js:16624 assets/blocks/blocks.js:21512
-#: assets/blocks/blocks.js:23677
+#: assets/blocks/blocks.js:17177 assets/blocks/blocks.js:22065
+#: assets/blocks/blocks.js:24230
 msgid "You can enable it in Settings"
 msgstr "Vous pouvez l’activer dans les réglages"
 
-#: assets/blocks/blocks.js:16630
+#: assets/blocks/blocks.js:17183
 msgid "Email sender"
 msgstr "E-mail de l’expéditeur"
 
-#: assets/blocks/blocks.js:16634
+#: assets/blocks/blocks.js:17187
 msgid ""
 "An email will be sent to the admin email (by default) whenever a contact "
 "form is submitted. You can change it in "
@@ -1968,171 +2126,171 @@ msgstr ""
 "Un e-mail sera envoyé à l’administrateur (par défaut) à chaque fois qu’un "
 "formulaire de contact est envoyé. Vous pouvez le modifier dans "
 
-#: assets/blocks/blocks.js:16639
+#: assets/blocks/blocks.js:17192
 msgid "settings"
 msgstr "réglages"
 
-#: assets/blocks/blocks.js:16646 assets/blocks/blocks.js:23704
+#: assets/blocks/blocks.js:17199 assets/blocks/blocks.js:24257
 #: incl/block-settings-main.php:1155 incl/block-settings-main.php:1311
 msgid "Text Label"
 msgstr "Libellé de texte"
 
-#: assets/blocks/blocks.js:16648
+#: assets/blocks/blocks.js:17201
 msgid "Name input placeholder"
 msgstr "Espace réservé à la saisie du nom"
 
-#: assets/blocks/blocks.js:16655 assets/blocks/blocks.js:21318
-#: assets/blocks/blocks.js:23724
+#: assets/blocks/blocks.js:17208 assets/blocks/blocks.js:21871
+#: assets/blocks/blocks.js:24277
 msgid "Email input placeholder"
 msgstr "Espace réservé à la saisie d’e-mail"
 
-#: assets/blocks/blocks.js:16662
+#: assets/blocks/blocks.js:17215
 msgid "Message input placeholder"
 msgstr "Espace réservé à la saisie de message"
 
-#: assets/blocks/blocks.js:16669 assets/blocks/blocks.js:23731
+#: assets/blocks/blocks.js:17222 assets/blocks/blocks.js:24284
 msgid "Submit text"
 msgstr "Envoyer un texte"
 
-#: assets/blocks/blocks.js:16676 assets/blocks/blocks.js:23738
+#: assets/blocks/blocks.js:17229 assets/blocks/blocks.js:24291
 msgid "Empty field warning text"
 msgstr "Texte d’avertissement de champ vide"
 
-#: assets/blocks/blocks.js:16683 assets/blocks/blocks.js:23745
+#: assets/blocks/blocks.js:17236 assets/blocks/blocks.js:24298
 msgid "Submit success text"
 msgstr "Envoyer un texte de succès"
 
-#: assets/blocks/blocks.js:16691 assets/blocks/blocks.js:23753
-#: assets/blocks/blocks.js:26886 incl/block-settings-main.php:1190
+#: assets/blocks/blocks.js:17244 assets/blocks/blocks.js:24306
+#: assets/blocks/blocks.js:27439 incl/block-settings-main.php:1190
 #: incl/block-settings-main.php:1346
 msgid "Input Color"
 msgstr "Couleur des champs de saisie de données"
 
-#: assets/blocks/blocks.js:16693 assets/blocks/blocks.js:21423
-#: assets/blocks/blocks.js:23755 assets/blocks/blocks.js:26889
-#: assets/blocks/blocks.js:26924 assets/blocks/blocks.js:26951
+#: assets/blocks/blocks.js:17246 assets/blocks/blocks.js:21976
+#: assets/blocks/blocks.js:24308 assets/blocks/blocks.js:27442
+#: assets/blocks/blocks.js:27477 assets/blocks/blocks.js:27504
 msgid "Background color"
 msgstr "Couleur d’arrière-plan"
 
-#: assets/blocks/blocks.js:16699 assets/blocks/blocks.js:21342
-#: assets/blocks/blocks.js:21429 assets/blocks/blocks.js:23761
-#: assets/blocks/blocks.js:26895 assets/blocks/blocks.js:26931
-#: assets/blocks/blocks.js:26957
+#: assets/blocks/blocks.js:17252 assets/blocks/blocks.js:21895
+#: assets/blocks/blocks.js:21982 assets/blocks/blocks.js:24314
+#: assets/blocks/blocks.js:27448 assets/blocks/blocks.js:27484
+#: assets/blocks/blocks.js:27510
 msgid "Text color"
 msgstr "Couleur du texte"
 
-#: assets/blocks/blocks.js:16713 assets/blocks/blocks.js:21356
-#: assets/blocks/blocks.js:23775
+#: assets/blocks/blocks.js:17266 assets/blocks/blocks.js:21909
+#: assets/blocks/blocks.js:24328
 msgid "Border color"
 msgstr "Couleur de la bordure"
 
-#: assets/blocks/blocks.js:16740 assets/blocks/blocks.js:21383
-#: assets/blocks/blocks.js:23802 incl/block-settings-main.php:1241
+#: assets/blocks/blocks.js:17293 assets/blocks/blocks.js:21936
+#: assets/blocks/blocks.js:24355 incl/block-settings-main.php:1241
 #: incl/block-settings-main.php:1397
 msgid "Submit Button Settings"
 msgstr "Réglages du bouton Envoyer"
 
-#: assets/blocks/blocks.js:16745 assets/blocks/blocks.js:21385
-#: assets/blocks/blocks.js:23807
+#: assets/blocks/blocks.js:17298 assets/blocks/blocks.js:21938
+#: assets/blocks/blocks.js:24360
 msgid "Border and Text"
 msgstr "Bordures et textes"
 
-#: assets/blocks/blocks.js:16751 assets/blocks/blocks.js:19426
-#: assets/blocks/blocks.js:19542 assets/blocks/blocks.js:21392
-#: assets/blocks/blocks.js:23813
+#: assets/blocks/blocks.js:17304 assets/blocks/blocks.js:19979
+#: assets/blocks/blocks.js:20095 assets/blocks/blocks.js:21945
+#: assets/blocks/blocks.js:24366
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: assets/blocks/blocks.js:16759 assets/blocks/blocks.js:21399
-#: assets/blocks/blocks.js:23821
+#: assets/blocks/blocks.js:17312 assets/blocks/blocks.js:21952
+#: assets/blocks/blocks.js:24374
 msgid "Button border radius"
 msgstr "Coins arrondis des boutons"
 
-#: assets/blocks/blocks.js:16768 assets/blocks/blocks.js:21408
+#: assets/blocks/blocks.js:17321 assets/blocks/blocks.js:21961
 msgid "Button position"
 msgstr "Position du bouton"
 
-#: assets/blocks/blocks.js:16910 incl/pages/block-settings.php:62
+#: assets/blocks/blocks.js:17463 incl/pages/block-settings.php:62
 msgid "Contact Form - PublishPress"
-msgstr "Formulaire de contact - de PublishPress"
+msgstr "Formulaire de contact - PublishPress"
 
-#: assets/blocks/blocks.js:16911
+#: assets/blocks/blocks.js:17464
 msgid "Fastest way to create a contact form for your page."
 msgstr ""
 "La façon la plus rapide de créer un formulaire de contact pour votre page."
 
-#: assets/blocks/blocks.js:16917
+#: assets/blocks/blocks.js:17470
 msgid "contact"
 msgstr "contact"
 
-#: assets/blocks/blocks.js:16917 assets/blocks/blocks.js:23953
+#: assets/blocks/blocks.js:17470 assets/blocks/blocks.js:24506
 msgid "form"
 msgstr "Formulaire"
 
-#: assets/blocks/blocks.js:17062
+#: assets/blocks/blocks.js:17615
 msgid "Container - PublishPress"
 msgstr "Conteneur - PublishPress"
 
-#: assets/blocks/blocks.js:17063
+#: assets/blocks/blocks.js:17616
 msgid "Block for containing other blocks."
 msgstr "Bloc pour contenir d’autres blocs."
 
-#: assets/blocks/blocks.js:17069
+#: assets/blocks/blocks.js:17622
 msgid "container"
 msgstr "Conteneur"
 
-#: assets/blocks/blocks.js:17109 assets/blocks/blocks.js:19423
+#: assets/blocks/blocks.js:17662 assets/blocks/blocks.js:19976
 #: incl/block-settings-main.php:1795
 msgid "Container Settings"
 msgstr "Réglages de conteneur"
 
-#: assets/blocks/blocks.js:17266 assets/blocks/pro-ad.js:141
+#: assets/blocks/blocks.js:17819 assets/blocks/pro-ad.js:141
 msgid "Count Up"
 msgstr "Compter jusqu’à"
 
-#: assets/blocks/blocks.js:17274 incl/block-settings-main.php:704
+#: assets/blocks/blocks.js:17827 incl/block-settings-main.php:704
 msgid "Count Up Settings"
 msgstr "Réglages du compteur"
 
-#: assets/blocks/blocks.js:17279 assets/blocks/blocks.js:21281
+#: assets/blocks/blocks.js:17832 assets/blocks/blocks.js:21834
 #: incl/block-settings-main.php:687
 msgid "Header Color"
 msgstr "Couleur d’en-tête"
 
-#: assets/blocks/blocks.js:17285 incl/block-settings-main.php:692
+#: assets/blocks/blocks.js:17838 incl/block-settings-main.php:692
 msgid "Count Up Color"
 msgstr "Compteur de couleur"
 
-#: assets/blocks/blocks.js:17291 assets/blocks/blocks.js:29661
+#: assets/blocks/blocks.js:17844 assets/blocks/blocks.js:30257
 #: incl/block-settings-main.php:697 incl/block-settings-main.php:1125
 msgid "Description Color"
 msgstr "Description Couleur"
 
-#: assets/blocks/blocks.js:17299 assets/blocks/blocks.js:24991
-#: assets/blocks/blocks.js:29435 assets/blocks/blocks.js:30513
+#: assets/blocks/blocks.js:17852 assets/blocks/blocks.js:25544
+#: assets/blocks/blocks.js:30031 assets/blocks/blocks.js:31109
 #: incl/block-settings-main.php:1067 incl/block-settings-main.php:1137
 msgid "Columns"
 msgstr "Colonnes"
 
-#: assets/blocks/blocks.js:17308
+#: assets/blocks/blocks.js:17861
 msgid "Counter Number Size"
 msgstr "Taille du compteur"
 
-#: assets/blocks/blocks.js:17319
+#: assets/blocks/blocks.js:17872
 msgid "Counter Up Symbol"
 msgstr "Symbole de compteur"
 
-#: assets/blocks/blocks.js:17335 assets/blocks/blocks.js:17352
-#: assets/blocks/blocks.js:17369
+#: assets/blocks/blocks.js:17888 assets/blocks/blocks.js:17905
+#: assets/blocks/blocks.js:17922
 msgid "After"
 msgstr "Après"
 
-#: assets/blocks/blocks.js:17335 assets/blocks/blocks.js:17352
-#: assets/blocks/blocks.js:17369
+#: assets/blocks/blocks.js:17888 assets/blocks/blocks.js:17905
+#: assets/blocks/blocks.js:17922
 msgid "Before"
 msgstr "Avant"
 
-#: assets/blocks/blocks.js:17375
+#: assets/blocks/blocks.js:17928
 msgid ""
 "Use toggle buttons above to define symbol placement before/after the number "
 "(toggle on is after)."
@@ -2140,358 +2298,358 @@ msgstr ""
 "Utilisez les boutons ouvrir/fermer ci-dessus pour définir le placement des "
 "symboles avant/après le nombre (ouvrir/femer est après)."
 
-#: assets/blocks/blocks.js:17396 assets/blocks/blocks.js:17447
-#: assets/blocks/blocks.js:17465 assets/blocks/blocks.js:17516
-#: assets/blocks/blocks.js:17534 assets/blocks/blocks.js:17585
-#: assets/blocks/blocks.js:28856
+#: assets/blocks/blocks.js:17949 assets/blocks/blocks.js:18000
+#: assets/blocks/blocks.js:18018 assets/blocks/blocks.js:18069
+#: assets/blocks/blocks.js:18087 assets/blocks/blocks.js:18138
+#: assets/blocks/blocks.js:29452
 msgid "Enter text…"
 msgstr "Saisir du texte…"
 
-#: assets/blocks/blocks.js:17693 incl/pages/block-settings.php:63
+#: assets/blocks/blocks.js:18246 incl/pages/block-settings.php:63
 msgid "Count Up - PublishPress"
-msgstr "Compter jusqu’à - PublishPress"
+msgstr "Compteur - PublishPress"
 
-#: assets/blocks/blocks.js:17694
+#: assets/blocks/blocks.js:18247
 msgid "Create an animated display for important numbers."
 msgstr "Créez un affichage animé pour les numéros importants."
 
-#: assets/blocks/blocks.js:17700
+#: assets/blocks/blocks.js:18253
 msgid "numbers"
 msgstr "nombres"
 
-#: assets/blocks/blocks.js:17700
+#: assets/blocks/blocks.js:18253
 msgid "count"
 msgstr "compte"
 
-#: assets/blocks/blocks.js:17700
+#: assets/blocks/blocks.js:18253
 msgid "increase"
 msgstr "augmenter"
 
-#: assets/blocks/blocks.js:18260 assets/blocks/blocks.js:18299
+#: assets/blocks/blocks.js:18813 assets/blocks/blocks.js:18852
 #: assets/blocks/pro-ad.js:129
 msgid "Images Slider"
 msgstr "Diaporama d’images"
 
-#: assets/blocks/blocks.js:18264
+#: assets/blocks/blocks.js:18817
 msgid "Image Slider Block"
 msgstr "Bloc de diaporama d’images"
 
-#: assets/blocks/blocks.js:18265
+#: assets/blocks/blocks.js:18818
 msgid "No images selected. Adding images to start using this block."
 msgstr ""
 "Aucune image sélectionnée. Ajouter des images pour commencer à utiliser ce "
 "bloc."
 
-#: assets/blocks/blocks.js:18290
+#: assets/blocks/blocks.js:18843
 msgid "Add images"
 msgstr "Ajouter des images"
 
-#: assets/blocks/blocks.js:18307
+#: assets/blocks/blocks.js:18860
 msgid "Image Settings"
 msgstr "Réglages d’image"
 
-#: assets/blocks/blocks.js:18311 incl/block-settings-main.php:1433
+#: assets/blocks/blocks.js:18864 incl/block-settings-main.php:1433
 msgid "Open custom link"
 msgstr "Ouvrir le lien personnalisé"
 
-#: assets/blocks/blocks.js:18324
+#: assets/blocks/blocks.js:18877
 msgid "Auto height"
 msgstr "Hauteur automatique"
 
-#: assets/blocks/blocks.js:18349 incl/block-settings-main.php:1463
+#: assets/blocks/blocks.js:18902 incl/block-settings-main.php:1463
 msgid "Always show overlay"
 msgstr "Toujours afficher la superposition"
 
-#: assets/blocks/blocks.js:18356
+#: assets/blocks/blocks.js:18909
 msgid "Enable RTL"
 msgstr "Autoriser RTL"
 
-#: assets/blocks/blocks.js:18366 incl/block-settings-main.php:1473
+#: assets/blocks/blocks.js:18919 incl/block-settings-main.php:1473
 msgid "Hover Color"
 msgstr "Couleur au survol"
 
-#: assets/blocks/blocks.js:18483
+#: assets/blocks/blocks.js:19036
 msgid "Title"
 msgstr "Titre"
 
-#: assets/blocks/blocks.js:18494
+#: assets/blocks/blocks.js:19047
 msgid "Text"
 msgstr "Texte"
 
-#: assets/blocks/blocks.js:18521
+#: assets/blocks/blocks.js:19074
 msgid "Move Left"
 msgstr "Déplacer vers la gauche"
 
-#: assets/blocks/blocks.js:18541 assets/blocks/pro-ad.js:149
+#: assets/blocks/blocks.js:19094 assets/blocks/pro-ad.js:149
 msgid "Image"
 msgstr "Image"
 
-#: assets/blocks/blocks.js:18549
+#: assets/blocks/blocks.js:19102
 msgid "Move Right"
 msgstr "Déplacer vers la droite"
 
-#: assets/blocks/blocks.js:18605
+#: assets/blocks/blocks.js:19158
 msgid "Add image"
 msgstr "Ajouter une image"
 
-#: assets/blocks/blocks.js:18706 incl/pages/block-settings.php:64
+#: assets/blocks/blocks.js:19259 incl/pages/block-settings.php:64
 msgid "Images Slider - PublishPress"
 msgstr "Diaporama d’images - PublishPress"
 
-#: assets/blocks/blocks.js:18707
+#: assets/blocks/blocks.js:19260
 msgid "Display your images in a slider."
 msgstr "Affichez vos images dans un diaporama."
 
-#: assets/blocks/blocks.js:18713
+#: assets/blocks/blocks.js:19266
 msgid "slide"
 msgstr "Diapositive"
 
-#: assets/blocks/blocks.js:18713
+#: assets/blocks/blocks.js:19266
 msgid "gallery"
 msgstr "galerie"
 
-#: assets/blocks/blocks.js:18713
+#: assets/blocks/blocks.js:19266
 msgid "photos"
 msgstr "photos"
 
-#: assets/blocks/blocks.js:19404
+#: assets/blocks/blocks.js:19957
 msgid "Info Box"
 msgstr "Boîte d’informations"
 
-#: assets/blocks/blocks.js:19440 assets/blocks/blocks.js:19556
+#: assets/blocks/blocks.js:19993 assets/blocks/blocks.js:20109
 msgid "Border Width (px)"
 msgstr "Largeur de la bordure (px)"
 
-#: assets/blocks/blocks.js:19449 assets/blocks/blocks.js:19565
+#: assets/blocks/blocks.js:20002 assets/blocks/blocks.js:20118
 msgid "Border Radius (px)"
 msgstr "Rayon de la bordure (px)"
 
-#: assets/blocks/blocks.js:19663 incl/block-settings-main.php:1949
+#: assets/blocks/blocks.js:20216 incl/block-settings-main.php:1949
 msgid "Title Settings"
 msgstr "Réglages du titre"
 
-#: assets/blocks/blocks.js:19667 assets/blocks/blocks.js:19837
+#: assets/blocks/blocks.js:20220 assets/blocks/blocks.js:20390
 #: incl/block-settings-main.php:390 incl/block-settings-main.php:2063
 msgid "Color"
 msgstr "Couleur"
 
-#: assets/blocks/blocks.js:19695 assets/blocks/blocks.js:19865
+#: assets/blocks/blocks.js:20248 assets/blocks/blocks.js:20418
 msgid "Font Size"
 msgstr "Taille de police"
 
-#: assets/blocks/blocks.js:19726 assets/blocks/blocks.js:19896
+#: assets/blocks/blocks.js:20279 assets/blocks/blocks.js:20449
 #: incl/block-settings-main.php:549
 msgid "Line Height"
 msgstr "Hauteur de la ligne"
 
-#: assets/blocks/blocks.js:19736 incl/block-settings-main.php:1971
+#: assets/blocks/blocks.js:20289 incl/block-settings-main.php:1971
 msgid "HTML Tag"
 msgstr "Balise HTML"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1976
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1976
 msgid "H1"
 msgstr "H1"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1980
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1980
 msgid "H2"
 msgstr "H2"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1984
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1984
 msgid "H3"
 msgstr "H3"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1988
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1988
 msgid "H4"
 msgstr "H4"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1992
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1992
 msgid "H5"
 msgstr "H5"
 
-#: assets/blocks/blocks.js:19738 incl/block-settings-main.php:1996
+#: assets/blocks/blocks.js:20291 incl/block-settings-main.php:1996
 msgid "H6"
 msgstr "H6"
 
-#: assets/blocks/blocks.js:20341 incl/pages/block-settings.php:65
+#: assets/blocks/blocks.js:20894 incl/pages/block-settings.php:65
 msgid "Info Box - PublishPress"
 msgstr "Boîte d’info - PublishPress"
 
-#: assets/blocks/blocks.js:20348
+#: assets/blocks/blocks.js:20901
 msgid "info"
 msgstr "Info"
 
-#: assets/blocks/blocks.js:20684 assets/blocks/blocks.js:20721
+#: assets/blocks/blocks.js:21237 assets/blocks/blocks.js:21274
 msgid "Click to change logo"
 msgstr "Cliquer pour modifier le logo"
 
-#: assets/blocks/blocks.js:20764 assets/blocks/blocks.js:29739
-#: assets/blocks/blocks.js:29754 assets/blocks/blocks.js:29769
+#: assets/blocks/blocks.js:21317 assets/blocks/blocks.js:30335
+#: assets/blocks/blocks.js:30350 assets/blocks/blocks.js:30365
 msgid "Text…"
 msgstr "Texte :"
 
-#: assets/blocks/blocks.js:20782 assets/blocks/blocks.js:21051
-#: assets/blocks/blocks.js:21182
+#: assets/blocks/blocks.js:21335 assets/blocks/blocks.js:21604
+#: assets/blocks/blocks.js:21735
 msgid "Register…"
 msgstr "S’inscrire…"
 
-#: assets/blocks/blocks.js:20802
+#: assets/blocks/blocks.js:21355
 msgid "Welcome text…"
 msgstr "Texte de bienvenue…"
 
-#: assets/blocks/blocks.js:20826 assets/blocks/blocks.js:21075
+#: assets/blocks/blocks.js:21379 assets/blocks/blocks.js:21628
 msgid "Username label…"
 msgstr "Libellé de l’identifiant…"
 
-#: assets/blocks/blocks.js:20875
+#: assets/blocks/blocks.js:21428
 msgid "Password label…"
 msgstr "Libellé du mot de passe…"
 
-#: assets/blocks/blocks.js:20935
+#: assets/blocks/blocks.js:21488
 msgid "Remember me…"
 msgstr "Se souvenir de moi…"
 
-#: assets/blocks/blocks.js:20967
+#: assets/blocks/blocks.js:21520
 msgid "Login…"
 msgstr "Connexion…"
 
-#: assets/blocks/blocks.js:20994
+#: assets/blocks/blocks.js:21547
 msgid "Lost password…"
 msgstr "Mot de passe oublié…"
 
-#: assets/blocks/blocks.js:21030
+#: assets/blocks/blocks.js:21583
 msgid "Back…"
 msgstr "Revenir…"
 
-#: assets/blocks/blocks.js:21124
+#: assets/blocks/blocks.js:21677
 msgid "Email label…"
 msgstr "Libellé de l’e-mail…"
 
-#: assets/blocks/blocks.js:21192
+#: assets/blocks/blocks.js:21745
 msgid "Login/Register Form"
 msgstr "Formulaire de connexion/inscription"
 
-#: assets/blocks/blocks.js:21200
+#: assets/blocks/blocks.js:21753
 msgid "Options"
 msgstr "Options"
 
-#: assets/blocks/blocks.js:21203
+#: assets/blocks/blocks.js:21756
 msgid "Switch View"
 msgstr "Changer de vue"
 
-#: assets/blocks/blocks.js:21215
+#: assets/blocks/blocks.js:21768
 msgid "Form State"
 msgstr "État du formulaire"
 
-#: assets/blocks/blocks.js:21217
+#: assets/blocks/blocks.js:21770
 msgid "Initial Form"
 msgstr "Formulaire initial"
 
-#: assets/blocks/blocks.js:21218
+#: assets/blocks/blocks.js:21771
 msgid "Form that show on load."
 msgstr "Formulaire qui s’affiche au chargement."
 
-#: assets/blocks/blocks.js:21220
+#: assets/blocks/blocks.js:21773
 msgid "Login"
 msgstr "Connexion"
 
-#: assets/blocks/blocks.js:21220
+#: assets/blocks/blocks.js:21773
 msgid "Register"
 msgstr "S’inscrire"
 
-#: assets/blocks/blocks.js:21227
+#: assets/blocks/blocks.js:21780
 msgid "Redirect After Login"
 msgstr "Redirection après connexion"
 
-#: assets/blocks/blocks.js:21229
+#: assets/blocks/blocks.js:21782 incl/block-controls-main.php:976
 msgid "Home"
 msgstr "Accueil"
 
-#: assets/blocks/blocks.js:21229 incl/advanced-gutenberg-main.php:1735
+#: assets/blocks/blocks.js:21782 incl/advanced-gutenberg-main.php:1747
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: assets/blocks/blocks.js:21229 assets/blocks/blocks.js:23302
+#: assets/blocks/blocks.js:21782 assets/blocks/blocks.js:23855
 #: incl/block-settings-main.php:768
 msgid "Custom"
 msgstr "Personnalisation"
 
-#: assets/blocks/blocks.js:21235
+#: assets/blocks/blocks.js:21788
 msgid "Custom redirect link"
 msgstr "Lien de redirection personnalisé"
 
-#: assets/blocks/blocks.js:21242
+#: assets/blocks/blocks.js:21795
 msgid "Form Width (px)"
 msgstr "Largeur du formulaire (px)"
 
-#: assets/blocks/blocks.js:21251
+#: assets/blocks/blocks.js:21804
 msgid "Show Logo"
 msgstr "Afficher le logo"
 
-#: assets/blocks/blocks.js:21258
+#: assets/blocks/blocks.js:21811
 msgid "Logo Width (px)"
 msgstr "Largeur du logo (px)"
 
-#: assets/blocks/blocks.js:21267
+#: assets/blocks/blocks.js:21820
 msgid "Show input field icon"
 msgstr "Afficher l’icône du champ de saisie"
 
-#: assets/blocks/blocks.js:21274
+#: assets/blocks/blocks.js:21827
 msgid "Show register/header link"
 msgstr "Afficher le lien s’inscrire/en-tête"
 
-#: assets/blocks/blocks.js:21284
+#: assets/blocks/blocks.js:21837
 msgid "Header color"
 msgstr "Couleur de l’en-tête"
 
-#: assets/blocks/blocks.js:21292
+#: assets/blocks/blocks.js:21845
 msgid "Show lost password link"
 msgstr "Afficher le lien de mot de passe perdu"
 
-#: assets/blocks/blocks.js:21301
+#: assets/blocks/blocks.js:21854
 msgid "Input placeholder"
 msgstr "Texte indicatif de la saisie"
 
-#: assets/blocks/blocks.js:21303
+#: assets/blocks/blocks.js:21856
 msgid "Login input placeholder"
 msgstr "Texte indicatif de la saisie de l’identifiant de connexion"
 
-#: assets/blocks/blocks.js:21310
+#: assets/blocks/blocks.js:21863
 msgid "Username input placeholder"
 msgstr "Texte indicatif de la saisie de l’identifiant"
 
-#: assets/blocks/blocks.js:21311 assets/blocks/blocks.js:21319
+#: assets/blocks/blocks.js:21864 assets/blocks/blocks.js:21872
 msgid "Use in register form"
 msgstr "Utiliser dans le formulaire d’inscription"
 
-#: assets/blocks/blocks.js:21327
+#: assets/blocks/blocks.js:21880
 msgid "Text/Input Color"
 msgstr "Couleur du texte/saisie"
 
-#: assets/blocks/blocks.js:21330
+#: assets/blocks/blocks.js:21883
 msgid "Input background color"
 msgstr "Couleur d’arrière-plan de la saisie"
 
-#: assets/blocks/blocks.js:21336
+#: assets/blocks/blocks.js:21889
 msgid "Input color"
 msgstr "Couleur de la saisie"
 
-#: assets/blocks/blocks.js:21418
+#: assets/blocks/blocks.js:21971
 msgid "Submit Button Hover"
 msgstr "Survol du bouton envoyer"
 
-#: assets/blocks/blocks.js:21420 assets/blocks/blocks.js:26948
+#: assets/blocks/blocks.js:21973 assets/blocks/blocks.js:27501
 msgid "Hover Colors"
 msgstr "Couleurs au survol"
 
-#: assets/blocks/blocks.js:21435 assets/blocks/blocks.js:26963
+#: assets/blocks/blocks.js:21988 assets/blocks/blocks.js:27516
 msgid "Shadow color"
 msgstr "Couleur de l’ombre"
 
-#: assets/blocks/blocks.js:21522
+#: assets/blocks/blocks.js:22075
 msgid "Registration Form"
 msgstr "Formulaire d’inscription"
 
-#: assets/blocks/blocks.js:21523
+#: assets/blocks/blocks.js:22076
 msgid ""
 "Registration for your website is currently disabled, enable it in WordPress "
 "General settings to use registration form"
@@ -2499,133 +2657,133 @@ msgstr ""
 "L’inscription à votre site web est actuellement désactivée, activez-la dans "
 "les réglages généraux de WordPress pour utiliser le formulaire d’inscription"
 
-#: assets/blocks/blocks.js:21737
+#: assets/blocks/blocks.js:22290
 msgid "Login and Register - PublishPress"
-msgstr "Connexion et s’inscrire - PublishPress"
+msgstr "Connexion et inscription - PublishPress"
 
-#: assets/blocks/blocks.js:21738
+#: assets/blocks/blocks.js:22291
 msgid "Create a login form for your post/page."
 msgstr "Créer un formulaire de connexion pour votre publication/page."
 
-#: assets/blocks/blocks.js:23088
+#: assets/blocks/blocks.js:23641
 msgid "No matching address found!"
 msgstr "Aucune adresse correspondante trouvée !"
 
-#: assets/blocks/blocks.js:23128
+#: assets/blocks/blocks.js:23681
 msgid "Map"
 msgstr "Carte"
 
-#: assets/blocks/blocks.js:23136
+#: assets/blocks/blocks.js:23689
 msgid "Map settings"
 msgstr "Réglages de la carte"
 
-#: assets/blocks/blocks.js:23141
+#: assets/blocks/blocks.js:23694
 msgid "Address"
 msgstr "Adresse"
 
-#: assets/blocks/blocks.js:23149
+#: assets/blocks/blocks.js:23702
 msgid "Use Lat/Lng"
 msgstr "Utiliser Lat/Long"
 
-#: assets/blocks/blocks.js:23152
+#: assets/blocks/blocks.js:23705
 msgid "Enter address…"
 msgstr "Saisir l’adresse…"
 
-#: assets/blocks/blocks.js:23163
+#: assets/blocks/blocks.js:23716
 msgid "Fetch Location"
 msgstr "Chercher la localisation"
 
-#: assets/blocks/blocks.js:23172
+#: assets/blocks/blocks.js:23725
 msgid "Current"
 msgstr "Actuel"
 
-#: assets/blocks/blocks.js:23187
+#: assets/blocks/blocks.js:23740
 msgid "Location"
 msgstr "Localisation"
 
-#: assets/blocks/blocks.js:23195
+#: assets/blocks/blocks.js:23748
 msgid "Use Address"
 msgstr "Utiliser l’adresse"
 
-#: assets/blocks/blocks.js:23198
+#: assets/blocks/blocks.js:23751
 msgid "Enter latitude…"
 msgstr "Saisir la latitude…"
 
-#: assets/blocks/blocks.js:23199 incl/block-settings-main.php:726
+#: assets/blocks/blocks.js:23752 incl/block-settings-main.php:726
 msgid "Latitude"
 msgstr "Latitude"
 
-#: assets/blocks/blocks.js:23206
+#: assets/blocks/blocks.js:23759
 msgid "Enter longitude…"
 msgstr "Saisir la longitude…"
 
-#: assets/blocks/blocks.js:23207 incl/block-settings-main.php:733
+#: assets/blocks/blocks.js:23760 incl/block-settings-main.php:733
 msgid "Longitude"
 msgstr "Longitude"
 
-#: assets/blocks/blocks.js:23214
+#: assets/blocks/blocks.js:23767
 msgid "Zoom level"
 msgstr "Niveau de zoom"
 
-#: assets/blocks/blocks.js:23245
+#: assets/blocks/blocks.js:23798
 msgid "Marker Icon (27x43 px)"
 msgstr "Icône de marqueur (27x43 px)"
 
-#: assets/blocks/blocks.js:23256
+#: assets/blocks/blocks.js:23809
 msgid "Remove"
 msgstr "Supprimer"
 
-#: assets/blocks/blocks.js:23264
+#: assets/blocks/blocks.js:23817
 msgid "Choose icon"
 msgstr "Choisissez l’icône"
 
-#: assets/blocks/blocks.js:23268
+#: assets/blocks/blocks.js:23821
 msgid "Marker icon"
 msgstr "Icône de marqueur"
 
-#: assets/blocks/blocks.js:23273 incl/block-settings-main.php:777
+#: assets/blocks/blocks.js:23826 incl/block-settings-main.php:777
 msgid "Marker Title"
 msgstr "Titre du marqueur"
 
-#: assets/blocks/blocks.js:23275
+#: assets/blocks/blocks.js:23828
 msgid "Enter custom title…"
 msgstr "Entrer un titre personnalisé…"
 
-#: assets/blocks/blocks.js:23281
+#: assets/blocks/blocks.js:23834
 msgid "Marker description"
 msgstr "Description du marqueur"
 
-#: assets/blocks/blocks.js:23283
+#: assets/blocks/blocks.js:23836
 msgid "Enter custom description…"
 msgstr "Saisissez une description personnalisée…"
 
-#: assets/blocks/blocks.js:23289
+#: assets/blocks/blocks.js:23842
 msgid "Open marker tooltip"
 msgstr "Ouvrir l’infobulle du marqueur"
 
-#: assets/blocks/blocks.js:23296
+#: assets/blocks/blocks.js:23849
 msgid "Map styles"
 msgstr "Styles de carte"
 
-#: assets/blocks/blocks.js:23297
+#: assets/blocks/blocks.js:23850
 msgid "Custom map style is recommended for experienced users only."
 msgstr ""
 "Le style de carte personnalisé est recommandé uniquement pour les "
 "utilisateurs expérimentés."
 
-#: assets/blocks/blocks.js:23302
+#: assets/blocks/blocks.js:23855
 msgid "Standard"
 msgstr "Standard"
 
-#: assets/blocks/blocks.js:23305
+#: assets/blocks/blocks.js:23858
 msgid "Custom code"
 msgstr "Code personnalisé"
 
-#: assets/blocks/blocks.js:23310
+#: assets/blocks/blocks.js:23863
 msgid "Invalid JSON"
 msgstr "Json non-valide"
 
-#: assets/blocks/blocks.js:23312
+#: assets/blocks/blocks.js:23865
 msgid ""
 "Paste your custom map styles in json format into the text field. You can "
 "create your own map styles by follow one of these links: "
@@ -2634,15 +2792,15 @@ msgstr ""
 "texte. Vous pouvez créer vos propres styles de cartes en suivant l’un de ces "
 "liens : "
 
-#: assets/blocks/blocks.js:23322
+#: assets/blocks/blocks.js:23875
 msgid "Enter your json code here…"
-msgstr "Saisir votre code json ici…"
+msgstr "Saisissez votre code json ici…"
 
-#: assets/blocks/blocks.js:23337
+#: assets/blocks/blocks.js:23890
 msgid "No API Key Provided!"
 msgstr "Aucune clé API fournie !"
 
-#: assets/blocks/blocks.js:23338
+#: assets/blocks/blocks.js:23891
 msgid ""
 "Opps! Look like you have not configured your Google API Key yet. Add an API "
 "Key and refresh the page to start using Map Block. This is a requirement "
@@ -2650,165 +2808,165 @@ msgid ""
 msgstr ""
 "Opps ! Il semble que vous n’ayez pas encore configuré votre clé API Google. "
 "Ajoutez une clé API et rafraîchissez la page pour commencer à utiliser le "
-"bloc de carte. Il s’agit d’une exigence imposée par Google."
+"bloc de cartes. Il s’agit d’une exigence imposée par Google."
 
-#: assets/blocks/blocks.js:23346
+#: assets/blocks/blocks.js:23899
 msgid "Add Google API Key in Settings"
 msgstr "Ajoutez la clé d’API Google dans les réglages"
 
-#: assets/blocks/blocks.js:23412 incl/pages/block-settings.php:66
+#: assets/blocks/blocks.js:23965 incl/pages/block-settings.php:66
 msgid "Map - PublishPress"
 msgstr "Carte - PublishPress"
 
-#: assets/blocks/blocks.js:23413
+#: assets/blocks/blocks.js:23966
 msgid "Display a location using Google Maps."
 msgstr "Affichez un emplacement à l’aide de Google Maps."
 
-#: assets/blocks/blocks.js:23419
+#: assets/blocks/blocks.js:23972
 msgid "google map"
 msgstr "google map"
 
-#: assets/blocks/blocks.js:23419
+#: assets/blocks/blocks.js:23972
 msgid "location"
 msgstr "Localisation"
 
-#: assets/blocks/blocks.js:23419
+#: assets/blocks/blocks.js:23972
 msgid "address"
 msgstr "adresse"
 
-#: assets/blocks/blocks.js:23657
+#: assets/blocks/blocks.js:24210
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: assets/blocks/blocks.js:23665
+#: assets/blocks/blocks.js:24218
 msgid "Newsletter Settings"
 msgstr "Réglages de la Newsletter"
 
-#: assets/blocks/blocks.js:23685 incl/block-settings-main.php:1287
+#: assets/blocks/blocks.js:24238 incl/block-settings-main.php:1287
 msgid "Form style"
 msgstr "Style du formulaire"
 
-#: assets/blocks/blocks.js:23687 incl/block-settings-main.php:1296
+#: assets/blocks/blocks.js:24240 incl/block-settings-main.php:1296
 msgid "Alternative"
 msgstr "Alternative"
 
-#: assets/blocks/blocks.js:23693
+#: assets/blocks/blocks.js:24246
 msgid "Form width (px)"
 msgstr "Largeur du formulaire (px)"
 
-#: assets/blocks/blocks.js:23709
+#: assets/blocks/blocks.js:24262
 msgid "First Name input placeholder"
 msgstr "Emplacement réservé pour le prénom"
 
-#: assets/blocks/blocks.js:23716
+#: assets/blocks/blocks.js:24269
 msgid "Last Name input placeholder"
 msgstr "Emplacement réservé pour le nom de famille"
 
-#: assets/blocks/blocks.js:23878 assets/blocks/blocks.js:24091
+#: assets/blocks/blocks.js:24431 assets/blocks/blocks.js:24644
 msgid "First Name"
 msgstr "Prénom"
 
-#: assets/blocks/blocks.js:23893 assets/blocks/blocks.js:24106
+#: assets/blocks/blocks.js:24446 assets/blocks/blocks.js:24659
 msgid "Last Name"
 msgstr "Nom de Famille"
 
-#: assets/blocks/blocks.js:23946 incl/pages/block-settings.php:67
+#: assets/blocks/blocks.js:24499 incl/pages/block-settings.php:67
 msgid "Newsletter - PublishPress"
 msgstr "Newsletter - PublishPress"
 
-#: assets/blocks/blocks.js:23947
+#: assets/blocks/blocks.js:24500
 msgid "Fastest way to create a newsletter form for your page."
 msgstr ""
 "Le moyen le plus rapide de créer un formulaire de newsletter pour votre page."
 
-#: assets/blocks/blocks.js:23953
+#: assets/blocks/blocks.js:24506
 msgid "newsletter"
 msgstr "newsletter"
 
-#: assets/blocks/blocks.js:23953
+#: assets/blocks/blocks.js:24506
 msgid "email"
 msgstr "e-mail"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
-#: assets/blocks/blocks.js:24254
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
+#: assets/blocks/blocks.js:24807
 msgid "The leading post on top, the rest in 2 columns below"
 msgstr "La publication principale en haut, le reste sur 2 colonnes en dessous"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "The leading post on top, the rest in 3 columns below"
 msgstr "La publication principale en haut, le reste sur 3 colonnes en dessous"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "The leading post on top, the rest in 4 columns below"
 msgstr "La publication principale en haut, le reste sur 4 colonnes en dessous"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "The leading post on top, the rest in 5 columns below"
 msgstr "La publication principale en haut, le reste sur 5 colonnes en dessous"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
-#: assets/blocks/blocks.js:24254
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
+#: assets/blocks/blocks.js:24807
 msgid "All posts in 2 columns grid"
 msgstr "Toutes les publications dans une grille de 2 colonnes"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "All posts in 3 columns grid"
 msgstr "Toutes les publications dans une grille de 3 colonnes"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "All posts in 4 columns grid"
 msgstr "Toutes les publications dans une grille de 4 colonnes"
 
-#: assets/blocks/blocks.js:24249 assets/blocks/blocks.js:24252
+#: assets/blocks/blocks.js:24802 assets/blocks/blocks.js:24805
 msgid "All posts in 5 columns grid"
 msgstr "Toutes les publications dans une grille de 5 colonnes"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the left, 1 post in the right"
 msgstr "La publication principale à gauche, 1 publication à droite"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the left, 2 posts in the right"
 msgstr "La publication principale à gauche, 2 publications à droite"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the left, 3 posts in the right"
 msgstr "La publication principale à gauche, 3 publications à droite"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the left, 4 posts in the right"
 msgstr "La publication principale à gauche, 4 publications à droite"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the left, 5 posts in the right"
 msgstr "La publication principale à gauche, 5 publications à droite"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the right, 1 post in the left"
 msgstr "La publication principale à droite, 1 publication à gauche"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the right, 2 posts in the left"
 msgstr "La publication principale à droite, 2 publications à gauche"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the right, 3 posts in the left"
 msgstr "La publication principale à droite, 3 publications à gauche"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the right, 4 posts in the left"
 msgstr "La publication principale à droite, 4 publications à gauche"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post in the right, 5 posts in the left"
 msgstr "La publication principale à droite, 5 publications à gauche"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid "The leading post on top, the rest of posts below"
 msgstr ""
 "La publication principale en haut, le reste des publications en dessous"
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid ""
 "The leading post on top, below 2 columns with 1 post in the left and 1 post "
 "in the right"
@@ -2816,7 +2974,7 @@ msgstr ""
 "La publication principale en haut, en dessous 2 colonnes avec 1 publication "
 "à gauche et 1 publications à droite."
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid ""
 "The leading post on top, below 2 columns with 1 post in the left and 2 posts "
 "in the right"
@@ -2824,7 +2982,7 @@ msgstr ""
 "La publication principale en haut, en dessous 2 colonnes avec 1 publication "
 "à gauche et 2 publications à droite."
 
-#: assets/blocks/blocks.js:24258
+#: assets/blocks/blocks.js:24811
 msgid ""
 "The leading post on top, below 2 columns with 1 post in the left and 3 posts "
 "in the right"
@@ -2832,158 +2990,158 @@ msgstr ""
 "La publication principale en haut, en dessous 2 colonnes avec 1 publication "
 "à gauche et 3 publications à droite."
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For all posts"
 msgstr "Pour toutes les publications"
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For the first post"
 msgstr "Pour la première publication"
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For the first 2 posts"
 msgstr "Pour les 2 premières publications"
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For the first 3 posts"
 msgstr "Pour les 3 premières publications"
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For the first 4 posts"
 msgstr "Pour les 4 premières publications"
 
-#: assets/blocks/blocks.js:24262
+#: assets/blocks/blocks.js:24815
 msgid "For the first 5 posts"
 msgstr "Pour les 5 premières publications"
 
-#: assets/blocks/blocks.js:24670
+#: assets/blocks/blocks.js:25223
 msgid "Slider View Settings"
 msgstr "Réglages de vue en diaporama"
 
-#: assets/blocks/blocks.js:24674 assets/blocks/blocks.js:24776
+#: assets/blocks/blocks.js:25227 assets/blocks/blocks.js:25329
 msgid "Headline"
 msgstr "Entête"
 
-#: assets/blocks/blocks.js:24689
+#: assets/blocks/blocks.js:25242
 msgid "Frontpage View Settings"
 msgstr "Réglages de vue de la page d’accueil"
 
-#: assets/blocks/blocks.js:24776
+#: assets/blocks/blocks.js:25329
 msgid "Boxed"
 msgstr "Encadré"
 
-#: assets/blocks/blocks.js:24782 assets/blocks/blocks.js:24826
+#: assets/blocks/blocks.js:25335 assets/blocks/blocks.js:25379
 msgid "Space between columns and rows"
 msgstr "Espace entre les colonnes et les lignes"
 
-#: assets/blocks/blocks.js:24792
+#: assets/blocks/blocks.js:25345
 msgid "Newspaper View Settings"
 msgstr "Réglages de vue journal"
 
-#: assets/blocks/blocks.js:24824
+#: assets/blocks/blocks.js:25377
 msgid "Masonry View Settings"
 msgstr "Réglages de vue masonry"
 
-#: assets/blocks/blocks.js:24836
+#: assets/blocks/blocks.js:25389
 msgid "Post Settings"
 msgstr "Réglages de la publication"
 
-#: assets/blocks/blocks.js:24838
+#: assets/blocks/blocks.js:25391
 msgid "Post Type"
 msgstr "Type de publication"
 
-#: assets/blocks/blocks.js:24860
+#: assets/blocks/blocks.js:25413
 msgid "Filters"
 msgstr "Filtres"
 
-#: assets/blocks/blocks.js:24867
+#: assets/blocks/blocks.js:25420
 msgid "To enable filters, clear Advanced Filters > Display these posts only"
 msgstr ""
 "Pour activer les filtres, désactivez Filtres avancés > Afficher uniquement "
 "ces publications"
 
-#: assets/blocks/blocks.js:24882
+#: assets/blocks/blocks.js:25435
 msgid "Show content with these Categories"
 msgstr "Afficher le contenu avec ces catégories"
 
-#: assets/blocks/blocks.js:24899
+#: assets/blocks/blocks.js:25452
 msgid "Show content with these Tags"
 msgstr "Afficher le contenu avec ces étiquettes"
 
-#: assets/blocks/blocks.js:24900
+#: assets/blocks/blocks.js:25453
 msgid "Type a tag"
 msgstr "Saisissez une étiquette"
 
-#: assets/blocks/blocks.js:24915
+#: assets/blocks/blocks.js:25468
 msgid "Show content with these "
 msgstr "Afficher le contenu avec ces "
 
-#: assets/blocks/blocks.js:24921 assets/blocks/blocks.js:26527
-#: assets/blocks/blocks.js:26530
+#: assets/blocks/blocks.js:25474 assets/blocks/blocks.js:27080
+#: assets/blocks/blocks.js:27083
 msgid "Author"
 msgstr "Auteur"
 
-#: assets/blocks/blocks.js:24922 assets/blocks/blocks.js:26594
-#: assets/blocks/blocks.js:30475 assets/blocks/blocks.js:30483
+#: assets/blocks/blocks.js:25475 assets/blocks/blocks.js:27147
+#: assets/blocks/blocks.js:31071 assets/blocks/blocks.js:31079
 msgid "All"
 msgstr "Tout"
 
-#: assets/blocks/blocks.js:24929
+#: assets/blocks/blocks.js:25482
 msgid "Only shows posts written by the user viewing the block"
 msgstr ""
 "Afficher uniquement les publications écrites par l’utilisateur ou "
 "utilisatrice qui voit le bloc"
 
-#: assets/blocks/blocks.js:24936
+#: assets/blocks/blocks.js:25489
 msgid "Exclude current post"
 msgstr "Exclure la publication actuelle"
 
-#: assets/blocks/blocks.js:24937
+#: assets/blocks/blocks.js:25490
 msgid "If this post is listed in the block, you can exclude it."
 msgstr ""
 "Si cette publication est répertoriée dans le bloc, vous pouvez l’exclure."
 
-#: assets/blocks/blocks.js:24947
+#: assets/blocks/blocks.js:25500
 msgid "Exclude these posts"
 msgstr "Exclure des publications"
 
-#: assets/blocks/blocks.js:24948 assets/blocks/blocks.js:24980
+#: assets/blocks/blocks.js:25501 assets/blocks/blocks.js:25533
 msgid "Search by title"
 msgstr "Rechercher par titre"
 
-#: assets/blocks/blocks.js:24954
+#: assets/blocks/blocks.js:25507
 msgid "Offset the first posts"
 msgstr "Décaler les premières publications"
 
-#: assets/blocks/blocks.js:24970
+#: assets/blocks/blocks.js:25523
 msgid "Advanced Filters"
 msgstr "Filtres avancés"
 
-#: assets/blocks/blocks.js:24979
+#: assets/blocks/blocks.js:25532
 msgid "Display these posts only"
 msgstr "Afficher uniquement ces publications"
 
-#: assets/blocks/blocks.js:24989
+#: assets/blocks/blocks.js:25542
 msgid "Display Settings"
 msgstr "Réglages d’affichage"
 
-#: assets/blocks/blocks.js:25003
+#: assets/blocks/blocks.js:25556
 msgid "Columns (Tablet)"
 msgstr "Colonnes (tablettes)"
 
-#: assets/blocks/blocks.js:25012
+#: assets/blocks/blocks.js:25565
 msgid "Columns (Mobile)"
 msgstr "Colonnes (mobile)"
 
-#: assets/blocks/blocks.js:25022
+#: assets/blocks/blocks.js:25575
 msgid "Display Featured Image"
 msgstr "Afficher l’image mise en avant"
 
-#: assets/blocks/blocks.js:25040
+#: assets/blocks/blocks.js:25593
 msgid "Enable Placeholder Image"
 msgstr "Activer le texte indicatif d’image "
 
-#: assets/blocks/blocks.js:25046
+#: assets/blocks/blocks.js:25599
 msgid ""
 "If a post doesn't have a featured image, the placeholder image will be "
 "displayed instead"
@@ -2991,134 +3149,134 @@ msgstr ""
 "Si une publication n’a pas d’image mise en avant, l’image de texte indicatif "
 "sera affichée à la place"
 
-#: assets/blocks/blocks.js:25049
+#: assets/blocks/blocks.js:25602
 msgid "Position"
 msgstr "Position"
 
-#: assets/blocks/blocks.js:25061
+#: assets/blocks/blocks.js:25614
 msgid "Image opacity"
 msgstr "Opacité de l’image"
 
-#: assets/blocks/blocks.js:25084
+#: assets/blocks/blocks.js:25637
 msgid "Display Caption"
 msgstr "Afficher la légende"
 
-#: assets/blocks/blocks.js:25093
+#: assets/blocks/blocks.js:25646
 msgid "Display Post Author"
 msgstr "Afficher l’auteur/autrice de la publication"
 
-#: assets/blocks/blocks.js:25120
+#: assets/blocks/blocks.js:25673
 msgid "Display Post Date"
 msgstr "Afficher la date de la publication"
 
-#: assets/blocks/blocks.js:25122 assets/blocks/blocks.js:25181
-#: assets/blocks/blocks.js:25197
+#: assets/blocks/blocks.js:25675 assets/blocks/blocks.js:25734
+#: assets/blocks/blocks.js:25750
 msgid "Hide"
 msgstr "Masquer"
 
-#: assets/blocks/blocks.js:25122
+#: assets/blocks/blocks.js:25675
 msgid "Created Date"
 msgstr "Date de création"
 
-#: assets/blocks/blocks.js:25122
+#: assets/blocks/blocks.js:25675
 msgid "Updated Date"
 msgstr "Date de mise à jour"
 
-#: assets/blocks/blocks.js:25139
+#: assets/blocks/blocks.js:25692
 msgid "Post Date Format"
 msgstr "Format de date de publication"
 
-#: assets/blocks/blocks.js:25141
+#: assets/blocks/blocks.js:25694
 msgid "Absolute"
 msgstr "Absolu"
 
-#: assets/blocks/blocks.js:25141
+#: assets/blocks/blocks.js:25694
 msgid "Relative"
 msgstr "Relatif"
 
-#: assets/blocks/blocks.js:25148
+#: assets/blocks/blocks.js:25701
 msgid "Display Post Time"
 msgstr "Afficher l’heure de publication"
 
-#: assets/blocks/blocks.js:25160
+#: assets/blocks/blocks.js:25713
 msgid "Display Comment Counts"
 msgstr "Afficher le nombre de commentaires"
 
-#: assets/blocks/blocks.js:25179
+#: assets/blocks/blocks.js:25732
 msgid "Display Category"
 msgstr "Afficher la catégorie"
 
-#: assets/blocks/blocks.js:25181 assets/blocks/blocks.js:25197
+#: assets/blocks/blocks.js:25734 assets/blocks/blocks.js:25750
 msgid "Show"
 msgstr "Afficher"
 
-#: assets/blocks/blocks.js:25181 assets/blocks/blocks.js:25197
+#: assets/blocks/blocks.js:25734 assets/blocks/blocks.js:25750
 msgid "Show & Link"
 msgstr "Afficher et lier"
 
-#: assets/blocks/blocks.js:25195
+#: assets/blocks/blocks.js:25748
 msgid "Display Tags"
 msgstr "Afficher les étiquettes"
 
-#: assets/blocks/blocks.js:25220
+#: assets/blocks/blocks.js:25773
 msgid "Display these taxonomies"
 msgstr "Afficher ces taxonomies"
 
-#: assets/blocks/blocks.js:25237
+#: assets/blocks/blocks.js:25790
 msgid "Link above taxonomies"
 msgstr "Lien au dessus des taxonomies"
 
-#: assets/blocks/blocks.js:25247
+#: assets/blocks/blocks.js:25800
 msgid "Display Read More Link"
 msgstr "Afficher le lien Lire la suite"
 
-#: assets/blocks/blocks.js:25265
+#: assets/blocks/blocks.js:25818
 msgid "Read more text"
 msgstr "Texte Lire la suite"
 
-#: assets/blocks/blocks.js:25274
+#: assets/blocks/blocks.js:25827
 msgid "Display Post Excerpt"
 msgstr "Afficher l’extrait de la publication"
 
-#: assets/blocks/blocks.js:25292
+#: assets/blocks/blocks.js:25845
 msgid "First Post text as Excerpt"
 msgstr "Premier texte de publication comme extrait"
 
-#: assets/blocks/blocks.js:25293
+#: assets/blocks/blocks.js:25846
 msgid "Display some part of first text found in post as excerpt."
 msgstr ""
 "Afficher une partie du premier texte trouvé dans la publication comme "
 "extrait."
 
-#: assets/blocks/blocks.js:25301
+#: assets/blocks/blocks.js:25854
 msgid "Post Text Excerpt length"
 msgstr "Longueur de l’extrait de texte de la publication"
 
-#: assets/blocks/blocks.js:25312
+#: assets/blocks/blocks.js:25865
 msgid "Text after title"
 msgstr "Texte après le titre"
 
-#: assets/blocks/blocks.js:25313
+#: assets/blocks/blocks.js:25866
 msgid "Include text/HTML after title"
 msgstr "Inclure texte/HTML après le titre"
 
-#: assets/blocks/blocks.js:25320
+#: assets/blocks/blocks.js:25873
 msgid "Text before read more"
 msgstr "Texte avant lire plus"
 
-#: assets/blocks/blocks.js:25321
+#: assets/blocks/blocks.js:25874
 msgid "Include text/HTML before read more"
 msgstr "Inclure texte/HTML avant lire plus"
 
-#: assets/blocks/blocks.js:25333
+#: assets/blocks/blocks.js:25886
 msgid "Reorder Sections"
 msgstr "Réorganiser les sections"
 
-#: assets/blocks/blocks.js:25335
+#: assets/blocks/blocks.js:25888
 msgid "Sections order"
 msgstr "Ordre des sections"
 
-#: assets/blocks/blocks.js:25336
+#: assets/blocks/blocks.js:25889
 msgid ""
 "When the image in desktop floats next to the content, or is displayed as "
 "background, the image order is ignored. Also the image order in mobile can "
@@ -3128,58 +3286,58 @@ msgstr ""
 "arrière-plan, l’ordre des images est ignoré. De même, l’ordre des images sur "
 "mobile peut être ignoré pour certaines vues."
 
-#: assets/blocks/blocks.js:25351 assets/blocks/blocks.js:25413
+#: assets/blocks/blocks.js:25904 assets/blocks/blocks.js:25966
 #: assets/blocks/pro-ad.js:125
 msgid "Content Display"
 msgstr "Affichage du contenu"
 
-#: assets/blocks/blocks.js:25359
+#: assets/blocks/blocks.js:25912
 msgid "Content Display Block"
 msgstr "Bloc d’affichage de contenu"
 
-#: assets/blocks/blocks.js:25361
+#: assets/blocks/blocks.js:25914
 msgid "No posts found! Try to change filters or publish posts."
 msgstr ""
 "Aucun article trouvé ! Essayez de changer de catégorie ou de publier des "
 "articles."
 
-#: assets/blocks/blocks.js:25368
+#: assets/blocks/blocks.js:25921
 msgid "Grid View"
 msgstr "Vue en Grille"
 
-#: assets/blocks/blocks.js:25375
+#: assets/blocks/blocks.js:25928
 msgid "List View"
 msgstr "Vue en liste"
 
-#: assets/blocks/blocks.js:25382 assets/blocks/blocks.js:30447
+#: assets/blocks/blocks.js:25935 assets/blocks/blocks.js:31043
 msgid "Slider View"
 msgstr "Vue diaporama"
 
-#: assets/blocks/blocks.js:25389
+#: assets/blocks/blocks.js:25942
 msgid "Frontpage View"
 msgstr "Vue page d’accueil"
 
-#: assets/blocks/blocks.js:25396
+#: assets/blocks/blocks.js:25949
 msgid "Newspaper View"
 msgstr "Vue journal"
 
-#: assets/blocks/blocks.js:25404
+#: assets/blocks/blocks.js:25957
 msgid "Masonry View"
 msgstr "Vue masonry"
 
-#: assets/blocks/blocks.js:25454 assets/blocks/blocks.js:25483
+#: assets/blocks/blocks.js:26007 assets/blocks/blocks.js:26036
 msgid "Post Image"
 msgstr "Image de publication"
 
-#: assets/blocks/blocks.js:25641 assets/blocks/recent-posts/block.php:413
+#: assets/blocks/blocks.js:26194 assets/blocks/recent-posts/block.php:413
 msgid "Read More"
 msgstr "Lire la suite"
 
-#: assets/blocks/blocks.js:26277
+#: assets/blocks/blocks.js:26830
 msgid "Content Display - PublishPress"
 msgstr "Affichage du contenu - PublishPress"
 
-#: assets/blocks/blocks.js:26278
+#: assets/blocks/blocks.js:26831
 msgid ""
 "Displays your content in grid, list, slider, frontpage, newspaper, and "
 "masonry views with beautiful layouts and styles."
@@ -3187,235 +3345,235 @@ msgstr ""
 "Affiche votre contenu sous forme de grille, liste, diaporama, page "
 "d’accueil, de vues masonry avec de superbes mises en page et styles."
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "recent posts"
 msgstr "Articles récents"
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "latest posts"
 msgstr "Derniers articles"
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "posts slide"
 msgstr "Diapositives des publications"
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "posts grid"
 msgstr "grille d’articles"
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "posts"
 msgstr "articles"
 
-#: assets/blocks/blocks.js:26284
+#: assets/blocks/blocks.js:26837
 msgid "pages"
 msgstr "pages"
 
-#: assets/blocks/blocks.js:26513
+#: assets/blocks/blocks.js:27066
 msgid "Created: Newest to oldest"
 msgstr "Créé : plus récent vers plus ancien"
 
-#: assets/blocks/blocks.js:26516
+#: assets/blocks/blocks.js:27069
 msgid "Created: Oldest to newest"
 msgstr "Créé : plus ancien vers plus récent"
 
 #. translators: label for ordering posts by title in ascending order
-#: assets/blocks/blocks.js:26520 assets/blocks/blocks.js:26527
+#: assets/blocks/blocks.js:27073 assets/blocks/blocks.js:27080
 msgid "A → Z"
 msgstr "A → Z"
 
 #. translators: label for ordering posts by title in descending order
-#: assets/blocks/blocks.js:26524 assets/blocks/blocks.js:26530
+#: assets/blocks/blocks.js:27077 assets/blocks/blocks.js:27083
 msgid "Z → A"
 msgstr "Z → A"
 
-#: assets/blocks/blocks.js:26533
+#: assets/blocks/blocks.js:27086
 msgid "Modified: Newest to oldest"
 msgstr "Modifié : plus récent vers plus ancien"
 
-#: assets/blocks/blocks.js:26536
+#: assets/blocks/blocks.js:27089
 msgid "Modified: Oldest to newest"
 msgstr "Modifié : plus ancien vers plus récent"
 
-#: assets/blocks/blocks.js:26539
+#: assets/blocks/blocks.js:27092
 msgid "Post ID Descending"
 msgstr "ID de publication décroissant"
 
-#: assets/blocks/blocks.js:26542
+#: assets/blocks/blocks.js:27095
 msgid "Post ID Ascending"
 msgstr "ID de publication croissant"
 
-#: assets/blocks/blocks.js:26549
+#: assets/blocks/blocks.js:27102
 msgid "Randomize"
 msgstr "Aléatoire"
 
-#: assets/blocks/blocks.js:26557
+#: assets/blocks/blocks.js:27110
 msgid "Comments, decreasing order"
 msgstr "Commentaires, ordre décroissant"
 
-#: assets/blocks/blocks.js:26560
+#: assets/blocks/blocks.js:27113
 msgid "Comments, increasing order"
 msgstr "Commentaires, ordre croissant"
 
-#: assets/blocks/blocks.js:26567
+#: assets/blocks/blocks.js:27120
 msgid "Series order"
 msgstr "Ordre de la série"
 
-#: assets/blocks/blocks.js:26574
+#: assets/blocks/blocks.js:27127
 msgid "Order by"
 msgstr "Trier par"
 
-#: assets/blocks/blocks.js:26593 assets/blocks/blocks.js:30481
+#: assets/blocks/blocks.js:27146 assets/blocks/blocks.js:31077
 msgid "Category"
 msgstr "Catégorie"
 
-#: assets/blocks/blocks.js:26599 assets/blocks/blocks.js:29435
+#: assets/blocks/blocks.js:27152 assets/blocks/blocks.js:30031
 msgid "Number of items"
 msgstr "Nombre d’éléments"
 
-#: assets/blocks/blocks.js:26810
+#: assets/blocks/blocks.js:27363
 msgid "Search Bar"
 msgstr "Barre de recherche"
 
-#: assets/blocks/blocks.js:26818
+#: assets/blocks/blocks.js:27371
 msgid "Search Bar State"
 msgstr "État de la barre de recherche"
 
-#: assets/blocks/blocks.js:26838
+#: assets/blocks/blocks.js:27391
 msgid "Search Icon Settings"
 msgstr "Réglages d’icône de recherche"
 
-#: assets/blocks/blocks.js:26840
+#: assets/blocks/blocks.js:27393
 msgid "Search icon on the right"
 msgstr "Icône de recherche à droite"
 
-#: assets/blocks/blocks.js:26852
+#: assets/blocks/blocks.js:27405
 msgid "Search icon"
 msgstr "Icône de recherche"
 
-#: assets/blocks/blocks.js:26877
+#: assets/blocks/blocks.js:27430
 msgid "Search Input Settings"
 msgstr "Réglages de la saisie de la recherche"
 
-#: assets/blocks/blocks.js:26879
+#: assets/blocks/blocks.js:27432
 msgid "Search placeholder"
 msgstr "Texte indicatif de la recherche"
 
-#: assets/blocks/blocks.js:26905
+#: assets/blocks/blocks.js:27458
 msgid "Search Button Settings"
 msgstr "Réglages du bouton de recherche"
 
-#: assets/blocks/blocks.js:26907
+#: assets/blocks/blocks.js:27460
 msgid "Show submit button"
 msgstr "Afficher le bouton de recherche"
 
-#: assets/blocks/blocks.js:26914
+#: assets/blocks/blocks.js:27467
 msgid "Search button on the left"
 msgstr "Bouton de recherche à gauche"
 
-#: assets/blocks/blocks.js:26939
+#: assets/blocks/blocks.js:27492
 msgid "Affect both input and button."
 msgstr "Affecte à la fois l’entrée et le bouton."
 
-#: assets/blocks/blocks.js:26972
+#: assets/blocks/blocks.js:27525
 msgid "Hover Shadow"
 msgstr "Ombre au survol"
 
-#: assets/blocks/blocks.js:27163
+#: assets/blocks/blocks.js:27716
 msgid "Search Bar - PublishPress"
 msgstr "Barre de recherche - PublishPress"
 
-#: assets/blocks/blocks.js:27164
+#: assets/blocks/blocks.js:27717
 msgid "Easy to create a search bar for your site."
 msgstr "Créez facilement une barre de recherche pour votre site."
 
-#: assets/blocks/blocks.js:27181
+#: assets/blocks/blocks.js:27734
 msgid "Classic"
 msgstr "Classique"
 
-#: assets/blocks/blocks.js:27529
+#: assets/blocks/blocks.js:28082
 msgid "Social Links"
 msgstr "Liens sociaux"
 
-#: assets/blocks/blocks.js:27541
+#: assets/blocks/blocks.js:28094
 msgid "Add item"
 msgstr "Ajouter un élément"
 
-#: assets/blocks/blocks.js:27549
+#: assets/blocks/blocks.js:28102
 msgid "Remove selected item"
 msgstr "Supprimer l’élément sélectionné"
 
-#: assets/blocks/blocks.js:27575
+#: assets/blocks/blocks.js:28128
 msgid "Preset Icons"
 msgstr "Icônes prédéfinies"
 
-#: assets/blocks/blocks.js:27577
+#: assets/blocks/blocks.js:28130
 msgid "Type here to search…"
 msgstr "Saisissez ici pour faire une recherche…"
 
-#: assets/blocks/blocks.js:27621
+#: assets/blocks/blocks.js:28174
 msgid "Custom icon"
 msgstr "Icône personnalisée"
 
-#: assets/blocks/blocks.js:27646
+#: assets/blocks/blocks.js:28199
 msgid "Upload/Choose"
 msgstr "Téléverser/choisir"
 
-#: assets/blocks/blocks.js:27652 assets/blocks/blocks.js:27655
+#: assets/blocks/blocks.js:28205 assets/blocks/blocks.js:28208
 msgid "Preset Icon Color"
 msgstr "Couleur d’icône prédéfinie"
 
-#: assets/blocks/blocks.js:27674
+#: assets/blocks/blocks.js:28227
 msgid "Icons settings"
 msgstr "Réglages des icônes"
 
-#: assets/blocks/blocks.js:27685
+#: assets/blocks/blocks.js:28238
 msgid "Icon space"
 msgstr "Espace des icônes"
 
-#: assets/blocks/blocks.js:27721 assets/blocks/blocks.js:27840
-#: assets/blocks/blocks.js:27891
+#: assets/blocks/blocks.js:28274 assets/blocks/blocks.js:28393
+#: assets/blocks/blocks.js:28444
 msgid "Social link icon"
 msgstr "Icône de lien social"
 
-#: assets/blocks/blocks.js:27738
+#: assets/blocks/blocks.js:28291
 msgid "Social link:"
 msgstr "Lien social :"
 
-#: assets/blocks/blocks.js:27741
+#: assets/blocks/blocks.js:28294
 msgid "Enter social link…"
 msgstr "Entrez le lien social…"
 
-#: assets/blocks/blocks.js:27788 incl/pages/block-settings.php:68
+#: assets/blocks/blocks.js:28341 incl/pages/block-settings.php:68
 msgid "Social Links - PublishPress"
 msgstr "Liens sociaux - PublishPress"
 
-#: assets/blocks/blocks.js:27789
+#: assets/blocks/blocks.js:28342
 msgid "Create a styling display of links to your social media profiles."
 msgstr ""
 "Créez un affichage stylisé des liens vers vos profils de médias sociaux."
 
-#: assets/blocks/blocks.js:27795
+#: assets/blocks/blocks.js:28348
 msgid "social icons"
 msgstr "Icônes sociales"
 
-#: assets/blocks/blocks.js:27795
+#: assets/blocks/blocks.js:28348
 msgid "shares"
 msgstr "Partages"
 
-#: assets/blocks/blocks.js:27795
+#: assets/blocks/blocks.js:28348
 msgid "icon link"
 msgstr "lien d’icône"
 
-#: assets/blocks/blocks.js:27970 incl/pages/block-settings.php:69
+#: assets/blocks/blocks.js:28523 incl/pages/block-settings.php:69
 msgid "Table of Contents - PublishPress"
 msgstr "Table des matières - PublishPress"
 
-#: assets/blocks/blocks.js:27994
+#: assets/blocks/blocks.js:28547
 msgid "Insert Table of Contents"
 msgstr "Insérer la table des matières"
 
-#: assets/blocks/blocks.js:28024
+#: assets/blocks/blocks.js:28577
 msgid ""
 "After manually changing the anchor, remember to refresh Table of Contents "
 "block to make the links work!"
@@ -3423,11 +3581,11 @@ msgstr ""
 "Après avoir changé manuellement l’ancre, n’oubliez pas d’actualiser le bloc "
 "récapitulatif pour que les liens fonctionnent !"
 
-#: assets/blocks/blocks.js:28155
+#: assets/blocks/blocks.js:28711
 msgid "Table of Contents"
 msgstr "Table des matières"
 
-#: assets/blocks/blocks.js:28160
+#: assets/blocks/blocks.js:28716
 msgid ""
 "Your current post/page has no headings. Try add some headings and update "
 "this block later"
@@ -3435,56 +3593,56 @@ msgstr ""
 "Votre publication actuelle n’a pas d’en-tête. Essayez d’ajouter des en-têtes "
 "et de mettre à jour ce bloc ultérieurement"
 
-#: assets/blocks/blocks.js:28167
+#: assets/blocks/blocks.js:28723
 msgid "Update"
 msgstr "Mise à jour"
 
-#: assets/blocks/blocks.js:28215
+#: assets/blocks/blocks.js:28771
 msgid "Update Table of Contents"
 msgstr "Mettre à jour la table des matières"
 
-#: assets/blocks/blocks.js:28225
+#: assets/blocks/blocks.js:28781
 msgid "Table of Contents settings"
 msgstr "Réglages de la table des matières"
 
-#: assets/blocks/blocks.js:28227 incl/block-settings-main.php:939
+#: assets/blocks/blocks.js:28783 incl/block-settings-main.php:939
 msgid "Load minimized"
 msgstr "Chargement  minimisé"
 
-#: assets/blocks/blocks.js:28234 incl/block-settings-main.php:944
+#: assets/blocks/blocks.js:28790 incl/block-settings-main.php:944
 msgid "Table of Contents header title"
 msgstr "Titre de l’en-tête de la table des matières"
 
-#: assets/blocks/blocks.js:28242 assets/blocks/blocks.js:28245
+#: assets/blocks/blocks.js:28798 assets/blocks/blocks.js:28801
 msgid "Anchor Color"
 msgstr "Couleur de l’ancre"
 
-#: assets/blocks/blocks.js:28320
+#: assets/blocks/blocks.js:28916
 msgid "Show the table of contents of current post/page."
 msgstr "Afficher la table des matières de la publication en cours."
 
-#: assets/blocks/blocks.js:28326
+#: assets/blocks/blocks.js:28922
 msgid "summary"
 msgstr "Sommaire"
 
-#: assets/blocks/blocks.js:28326
+#: assets/blocks/blocks.js:28922
 msgid "table of content"
 msgstr "table des matières"
 
-#: assets/blocks/blocks.js:28326
+#: assets/blocks/blocks.js:28922
 msgid "table of contents"
 msgstr "table des matières"
 
-#: assets/blocks/blocks.js:28827
+#: assets/blocks/blocks.js:29423
 msgid "New Tab"
 msgstr "Nouvel onglet"
 
-#: assets/blocks/blocks.js:28827
+#: assets/blocks/blocks.js:29423
 msgid "Enter your content."
 msgstr "Entrer votre contenu."
 
-#: assets/blocks/blocks.js:28887 assets/blocks/blocks.js:28890
-#: assets/blocks/blocks.js:28893
+#: assets/blocks/blocks.js:29483 assets/blocks/blocks.js:29486
+#: assets/blocks/blocks.js:29489
 msgid ""
 "Filler text (also placeholder text or dummy text) is text that shares some "
 "characteristics of a real written text, but is random or otherwise generated."
@@ -3493,257 +3651,257 @@ msgstr ""
 "qui partage certaines caractéristiques d’un texte écrit réel, mais il est "
 "généré aléatoirement ou autrement."
 
-#: assets/blocks/blocks.js:28941
+#: assets/blocks/blocks.js:29537
 msgid "Tabs (deprecated) - PublishPress"
 msgstr "Onglets (obsolète) - PublishPress"
 
-#: assets/blocks/blocks.js:29418 assets/blocks/pro-ad.js:145
+#: assets/blocks/blocks.js:30014 assets/blocks/pro-ad.js:145
 msgid "Testimonial"
 msgstr "Témoignage"
 
-#: assets/blocks/blocks.js:29426
+#: assets/blocks/blocks.js:30022
 msgid "Testimonial Settings"
 msgstr "Réglages des témoignages"
 
-#: assets/blocks/blocks.js:29428
+#: assets/blocks/blocks.js:30024
 msgid "Slider view"
 msgstr "Vue diaporama"
 
-#: assets/blocks/blocks.js:29436
+#: assets/blocks/blocks.js:30032
 msgid "Range in Normal view is 1-3, and in Slider view is 4-10."
 msgstr ""
 "La plage de colonnes en vue Normal est de 1-3, et en vue Diaporama est de "
 "4-10."
 
-#: assets/blocks/blocks.js:29448
+#: assets/blocks/blocks.js:30044
 msgid "Items to show"
 msgstr "Éléments à afficher"
 
-#: assets/blocks/blocks.js:29457
+#: assets/blocks/blocks.js:30053
 msgid "Items to scroll"
 msgstr "Éléments à faire défiler"
 
-#: assets/blocks/blocks.js:29467
+#: assets/blocks/blocks.js:30063
 msgid "Slider Settings"
 msgstr "Réglages du diaporama"
 
-#: assets/blocks/blocks.js:29469
+#: assets/blocks/blocks.js:30065
 msgid "Center mode"
 msgstr "Mode centré"
 
-#: assets/blocks/blocks.js:29476
+#: assets/blocks/blocks.js:30072
 msgid "Pause on hover"
 msgstr "Pause au survol"
 
-#: assets/blocks/blocks.js:29483
+#: assets/blocks/blocks.js:30079
 msgid "Auto play"
 msgstr "Lecture automatique"
 
-#: assets/blocks/blocks.js:29490
+#: assets/blocks/blocks.js:30086
 msgid "Autoplay speed (ms)"
 msgstr "Vitesse de lecture automatique (ms)"
 
-#: assets/blocks/blocks.js:29499
+#: assets/blocks/blocks.js:30095
 msgid "Infinite Loop"
 msgstr "Boucle infinie"
 
-#: assets/blocks/blocks.js:29515
+#: assets/blocks/blocks.js:30111
 msgid "Show dots"
 msgstr "Afficher les points"
 
-#: assets/blocks/blocks.js:29522
+#: assets/blocks/blocks.js:30118
 msgid "Show arrows"
 msgstr "Afficher les flèches"
 
-#: assets/blocks/blocks.js:29532
+#: assets/blocks/blocks.js:30128
 msgid "Arrow size"
 msgstr "Taille de la flèche"
 
-#: assets/blocks/blocks.js:29541
+#: assets/blocks/blocks.js:30137
 msgid "Arrow border size"
 msgstr "Taille de la bordure de flèche"
 
-#: assets/blocks/blocks.js:29550
+#: assets/blocks/blocks.js:30146
 msgid "Arrow border radius (%)"
 msgstr "Rayon de bordure de flèche (%)"
 
-#: assets/blocks/blocks.js:29561
+#: assets/blocks/blocks.js:30157
 msgid "Slider Colors"
 msgstr "Couleurs du diaporama"
 
-#: assets/blocks/blocks.js:29564
+#: assets/blocks/blocks.js:30160
 msgid "Arrow and Border Color"
 msgstr "Couleur de la flèche et de la bordure"
 
-#: assets/blocks/blocks.js:29570
+#: assets/blocks/blocks.js:30166
 msgid "Dots Color"
 msgstr "Couleur des points"
 
-#: assets/blocks/blocks.js:29580
+#: assets/blocks/blocks.js:30176
 msgid "Avatar"
 msgstr "Avatar"
 
-#: assets/blocks/blocks.js:29582
+#: assets/blocks/blocks.js:30178
 msgid "Display Avatar"
 msgstr "Afficher l’avatar"
 
-#: assets/blocks/blocks.js:29592
+#: assets/blocks/blocks.js:30188
 msgid "Avatar Colors"
 msgstr "Couleurs de l’avatar"
 
-#: assets/blocks/blocks.js:29609 incl/block-settings-main.php:1089
+#: assets/blocks/blocks.js:30205 incl/block-settings-main.php:1089
 msgid "Border Radius (%)"
 msgstr "Coins arrondis (%)"
 
-#: assets/blocks/blocks.js:29618 incl/block-settings-main.php:131
+#: assets/blocks/blocks.js:30214 incl/block-settings-main.php:131
 #: incl/block-settings-main.php:198 incl/block-settings-main.php:1046
 #: incl/block-settings-main.php:1096 incl/block-settings-main.php:1738
 #: incl/block-settings-main.php:1808 incl/block-settings-main.php:1877
 msgid "Border Width"
 msgstr "Largeur de la bordure"
 
-#: assets/blocks/blocks.js:29627 incl/block-settings-main.php:1103
+#: assets/blocks/blocks.js:30223 incl/block-settings-main.php:1103
 msgid "Avatar Size"
 msgstr "Taille de l’avatar"
 
-#: assets/blocks/blocks.js:29636
+#: assets/blocks/blocks.js:30232
 msgid "Avatar Position"
 msgstr "Position de l’avatar"
 
-#: assets/blocks/blocks.js:29638
+#: assets/blocks/blocks.js:30234
 msgid "right"
 msgstr "droite"
 
-#: assets/blocks/blocks.js:29646
+#: assets/blocks/blocks.js:30242
 msgid "Text Colors"
 msgstr "Couleurs du texte"
 
-#: assets/blocks/blocks.js:29649 incl/block-settings-main.php:1115
+#: assets/blocks/blocks.js:30245 incl/block-settings-main.php:1115
 msgid "Name Color"
 msgstr "Nom Couleur"
 
-#: assets/blocks/blocks.js:29655 incl/block-settings-main.php:1120
+#: assets/blocks/blocks.js:30251 incl/block-settings-main.php:1120
 msgid "Position Color"
 msgstr "Couleur de position"
 
-#: assets/blocks/blocks.js:29698
+#: assets/blocks/blocks.js:30294
 msgid "Click to change avatar"
 msgstr "Cliquez pour changer d’avatar"
 
-#: assets/blocks/blocks.js:29714
+#: assets/blocks/blocks.js:30310
 msgid "Show default avatar"
 msgstr "Afficher l’avatar par défaut"
 
-#: assets/blocks/blocks.js:29943 incl/pages/block-settings.php:70
+#: assets/blocks/blocks.js:30539 incl/pages/block-settings.php:70
 msgid "Testimonial - PublishPress"
 msgstr "Témoignage - PublishPress"
 
-#: assets/blocks/blocks.js:29944
+#: assets/blocks/blocks.js:30540
 msgid "Block for creating personal or team/group information."
 msgstr ""
 "Bloc pour la création d’informations personnelles, d’équipe ou de groupe."
 
-#: assets/blocks/blocks.js:29950
+#: assets/blocks/blocks.js:30546
 msgid "testimonial"
 msgstr "Témoignage"
 
-#: assets/blocks/blocks.js:29950
+#: assets/blocks/blocks.js:30546
 msgid "personal"
 msgstr "Personnel"
 
-#: assets/blocks/blocks.js:29950
+#: assets/blocks/blocks.js:30546
 msgid "about"
 msgstr "a-propos"
 
-#: assets/blocks/blocks.js:30440
+#: assets/blocks/blocks.js:31036
 msgid "Normal View"
 msgstr "Vue normale"
 
-#: assets/blocks/blocks.js:30458
+#: assets/blocks/blocks.js:31054
 msgid "Woo Products"
 msgstr "Woo Products"
 
-#: assets/blocks/blocks.js:30471
+#: assets/blocks/blocks.js:31067
 msgid "Products Settings"
 msgstr "Réglages des produits"
 
-#: assets/blocks/blocks.js:30473
+#: assets/blocks/blocks.js:31069
 msgid "Product Status"
 msgstr "État du produit"
 
-#: assets/blocks/blocks.js:30475
+#: assets/blocks/blocks.js:31071
 msgid "Featured"
 msgstr "Mis en avant"
 
-#: assets/blocks/blocks.js:30475
+#: assets/blocks/blocks.js:31071
 msgid "On Sale"
 msgstr "En soldes"
 
-#: assets/blocks/blocks.js:30483
+#: assets/blocks/blocks.js:31079
 msgid "Selected"
 msgstr "Sélectionné"
 
-#: assets/blocks/blocks.js:30511 incl/block-settings-main.php:1134
+#: assets/blocks/blocks.js:31107 incl/block-settings-main.php:1134
 msgid "Layout Settings"
 msgstr "Réglages de mise en page"
 
-#: assets/blocks/blocks.js:30522 incl/block-settings-main.php:1144
+#: assets/blocks/blocks.js:31118 incl/block-settings-main.php:1144
 msgid "Number of Products"
 msgstr "Nombre de produits"
 
-#: assets/blocks/blocks.js:30531
+#: assets/blocks/blocks.js:31127
 msgid "Order"
 msgstr "Classement"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Newest to oldest"
 msgstr "Du plus récent au plus ancien"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Oldest to newest"
 msgstr "Du plus ancien au plus récent"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Price: high to low"
 msgstr "Prix ​​décroissant"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Price: low to high"
 msgstr "Prix ​​croissant"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Highest Rating first"
 msgstr "Note la plus élevée en premier"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Most sale first"
 msgstr "La plupart des ventes en premier"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Title: Alphabetical"
 msgstr "Titre : alphabétique"
 
-#: assets/blocks/blocks.js:30533
+#: assets/blocks/blocks.js:31129
 msgid "Title: Alphabetical reversed"
 msgstr "Titre : alphabétique inversé"
 
-#: assets/blocks/blocks.js:30571
+#: assets/blocks/blocks.js:31167
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
-#: assets/blocks/blocks.js:30580
+#: assets/blocks/blocks.js:31176
 msgid "No products found."
 msgstr "Aucun produit trouvé."
 
-#: assets/blocks/blocks.js:30588
+#: assets/blocks/blocks.js:31184
 msgid "Loading"
 msgstr "Chargement"
 
-#: assets/blocks/blocks.js:30596
+#: assets/blocks/blocks.js:31192
 msgid "Woo Products Block"
 msgstr "Bloc de produits Woo"
 
-#: assets/blocks/blocks.js:30601
+#: assets/blocks/blocks.js:31197
 msgid ""
 "WooCommerce has not been detected, make sure WooCommerce is installed and "
 "activated."
@@ -3751,33 +3909,33 @@ msgstr ""
 "WooCommerce n’a pas été détecté, assurez-vous que WooCommerce est installé "
 "et activé."
 
-#: assets/blocks/blocks.js:30611
+#: assets/blocks/blocks.js:31207
 msgid "Try again"
 msgstr "Réessayer"
 
-#: assets/blocks/blocks.js:30664 incl/pages/block-settings.php:71
+#: assets/blocks/blocks.js:31260 incl/pages/block-settings.php:71
 msgid "Woo Products - PublishPress"
 msgstr "Produits Woo - PublishPress"
 
-#: assets/blocks/blocks.js:30665
+#: assets/blocks/blocks.js:31261
 msgid "Listing your products in a easy way."
 msgstr "Lister vos produits de manière simple."
 
-#: assets/blocks/blocks.js:30671
+#: assets/blocks/blocks.js:31267
 msgid "woo commerce"
 msgstr "woo commerce"
 
-#: assets/blocks/blocks.js:30671
+#: assets/blocks/blocks.js:31267
 msgid "products list"
 msgstr "Liste de produits"
 
-#: assets/blocks/blocks.js:30671
+#: assets/blocks/blocks.js:31267
 msgid "price list"
 msgstr "liste de prix"
 
 #: assets/blocks/custom-styles.js:134
 msgid "Select a block style"
-msgstr "Sélectionnez un style de bloc"
+msgstr "Sélectionner un style de bloc"
 
 #: assets/blocks/custom-styles.js:150
 msgid "Block styles"
@@ -3875,7 +4033,7 @@ msgstr "PublishPress"
 msgid "Want more features in your %s blocks?"
 msgstr "Voulez-vous plus de fonctionnalités dans vos blocs %s ?"
 
-#: assets/blocks/pro-ad.js:172 incl/advanced-gutenberg-main.php:824
+#: assets/blocks/pro-ad.js:172 incl/advanced-gutenberg-main.php:839
 #: incl/pages/main.php:112
 msgid "Upgrade to Pro"
 msgstr "Mettre à niveau vers Pro"
@@ -3926,13 +4084,13 @@ msgid "default config"
 msgstr "Configuration par défaut"
 
 #. Plugin Name of the plugin/theme
-#: incl/advanced-gutenberg-main.php:253 incl/advanced-gutenberg-main.php:1749
+#: incl/advanced-gutenberg-main.php:253 incl/advanced-gutenberg-main.php:1761
 #: incl/pages/block-settings.php:90 incl/pages/main.php:8
 #: incl/pages/main.php:32
 msgid "PublishPress Blocks"
 msgstr "PublishPress Blocks"
 
-#: incl/advanced-gutenberg-main.php:802
+#: incl/advanced-gutenberg-main.php:817
 #, php-format
 msgid ""
 "You're using PublishPress Blocks Free. The Pro version has more features and "
@@ -3941,101 +4099,111 @@ msgstr ""
 "Vous utilisez PublishPress Blocks Free. La version Pro offre plus de "
 "fonctionnalités et de support. %sPasser à la version Pro%s"
 
-#: incl/advanced-gutenberg-main.php:1024 incl/advanced-gutenberg-main.php:1145
-#: incl/advanced-gutenberg-main.php:1201
+#: incl/advanced-gutenberg-main.php:1041 incl/advanced-gutenberg-main.php:1162
+#: incl/advanced-gutenberg-main.php:1218
 msgid "No permission!"
 msgstr "Aucun droit !"
 
-#: incl/advanced-gutenberg-main.php:1030 incl/advanced-gutenberg-main.php:1155
-#: incl/advanced-gutenberg-main.php:1206 incl/advanced-gutenberg-main.php:1266
-#: incl/advanced-gutenberg-main.php:1349
+#: incl/advanced-gutenberg-main.php:1047 incl/advanced-gutenberg-main.php:1172
+#: incl/advanced-gutenberg-main.php:1223 incl/advanced-gutenberg-main.php:1283
+#: incl/advanced-gutenberg-main.php:1366
 msgid "Invalid nonce token!"
 msgstr "Jeton de nonce invalide !"
 
-#: incl/advanced-gutenberg-main.php:1047 incl/pages/custom-styles.php:49
+#: incl/advanced-gutenberg-main.php:1064 incl/pages/custom-styles.php:49
 msgid "Style title"
 msgstr "Titre du style"
 
-#: incl/advanced-gutenberg-main.php:1159
+#: incl/advanced-gutenberg-main.php:1176
 msgid "Error: wrong data"
 msgstr "Erreur : données incorrectes"
 
-#: incl/advanced-gutenberg-main.php:1187
+#: incl/advanced-gutenberg-main.php:1204
 msgid "Error: can't edit this feature"
-msgstr "Erreur : Impossible de modifier cette fonctionnalité"
+msgstr "Erreur : impossible de modifier cette fonctionnalité"
 
-#: incl/advanced-gutenberg-main.php:1271 incl/advanced-gutenberg-main.php:1354
-#: incl/advanced-gutenberg-main.php:1404
+#: incl/advanced-gutenberg-main.php:1288 incl/advanced-gutenberg-main.php:1371
+#: incl/advanced-gutenberg-main.php:1421
 msgid "Bad Request!"
 msgstr "Mauvaise demande !"
 
-#: incl/advanced-gutenberg-main.php:1278 incl/advanced-gutenberg-main.php:1361
-#: incl/advanced-gutenberg-main.php:1411
+#: incl/advanced-gutenberg-main.php:1295 incl/advanced-gutenberg-main.php:1378
+#: incl/advanced-gutenberg-main.php:1428
 msgid "Server error. Try again later!"
 msgstr "Erreur du serveur. Réessayez ultérieurement !"
 
-#: incl/advanced-gutenberg-main.php:1286 incl/advanced-gutenberg-main.php:1369
-#: incl/advanced-gutenberg-main.php:1419
+#: incl/advanced-gutenberg-main.php:1303 incl/advanced-gutenberg-main.php:1386
+#: incl/advanced-gutenberg-main.php:1436
 msgid "Cannot validate captcha"
 msgstr "Impossible de valider le captcha"
 
-#: incl/advanced-gutenberg-main.php:1291 incl/advanced-gutenberg-main.php:1374
-#: incl/advanced-gutenberg-main.php:1424
+#: incl/advanced-gutenberg-main.php:1308 incl/advanced-gutenberg-main.php:1391
+#: incl/advanced-gutenberg-main.php:1441
 msgid "Captcha validation error"
 msgstr "Erreur de validation Captcha"
 
-#: incl/advanced-gutenberg-main.php:1314 incl/pages/settings/forms.php:13
+#: incl/advanced-gutenberg-main.php:1331 incl/pages/settings/forms.php:13
 msgid "Website Contact"
 msgstr "Contact du site"
 
-#: incl/advanced-gutenberg-main.php:1319
+#: incl/advanced-gutenberg-main.php:1336
 msgid "You have received a contact from your website."
 msgstr "Vous avez reçu un contact de votre site Web."
 
-#: incl/advanced-gutenberg-main.php:1321
+#: incl/advanced-gutenberg-main.php:1338
 msgid "Name"
 msgstr "Nom"
 
-#: incl/advanced-gutenberg-main.php:1322 incl/block-settings-main.php:804
+#: incl/advanced-gutenberg-main.php:1339 incl/block-settings-main.php:804
 #: incl/block-settings-main.php:842 incl/block-settings-main.php:880
 msgid "Email"
 msgstr "Email"
 
-#: incl/advanced-gutenberg-main.php:1323
+#: incl/advanced-gutenberg-main.php:1340
 msgid "Date"
 msgstr "Date"
 
-#: incl/advanced-gutenberg-main.php:1324
+#: incl/advanced-gutenberg-main.php:1341
 msgid "Message"
 msgstr "Message"
 
-#: incl/advanced-gutenberg-main.php:1331
+#: incl/advanced-gutenberg-main.php:1348
 msgid "Error while sending the form. Please try again."
 msgstr "Erreur lors de l’envoi du formulaire. Veuillez réessayer."
 
-#: incl/advanced-gutenberg-main.php:1427
+#: incl/advanced-gutenberg-main.php:1444
 msgid "Captcha validated"
 msgstr "CAPTCHA validé"
 
-#: incl/advanced-gutenberg-main.php:1430
+#: incl/advanced-gutenberg-main.php:1447
 msgid "Captcha is empty"
 msgstr "CAPTCHA est vide"
 
-#: incl/advanced-gutenberg-main.php:1742 incl/advanced-gutenberg-main.php:2012
+#: incl/advanced-gutenberg-main.php:1754 incl/advanced-gutenberg-main.php:2024
 #: incl/pages/main.php:23
 msgid "Block Permissions"
 msgstr "Droits de blocs"
 
-#: incl/advanced-gutenberg-main.php:1756 incl/pages/custom-styles.php:19
+#: incl/advanced-gutenberg-main.php:1768 incl/pages/custom-styles.php:19
 #: incl/pages/main.php:41
 msgid "Block Styles"
 msgstr "Styles de blocs"
 
-#: incl/advanced-gutenberg-main.php:1770 incl/pages/settings.php:22
+#: incl/advanced-gutenberg-main.php:1782 incl/pages/settings.php:22
 msgid "Settings"
 msgstr "Réglages"
 
-#: incl/advanced-gutenberg-main.php:2177
+#: incl/advanced-gutenberg-main.php:2001 incl/advanced-gutenberg-main.php:2046
+#: incl/advanced-gutenberg-main.php:2080 incl/advanced-gutenberg-main.php:2126
+#, php-format
+msgid ""
+"This feature is disabled. In order to use, please enable back through "
+"%sDashboard%s."
+msgstr ""
+"Cette fonctionnalité est désactivée. Afin de l’utiliser, veuillez la "
+"réactiver via le %sTableau de bord%s."
+
+#: incl/advanced-gutenberg-main.php:2189
 #, php-format
 msgid ""
 "If you like %sPublishPress Blocks%s please leave us a %s rating. Thank you!"
@@ -4043,93 +4211,105 @@ msgstr ""
 "Si vous aimez %sPublishPress Blocks%s, veuillez nous laisser une note de %s. "
 "Merci !"
 
-#: incl/advanced-gutenberg-main.php:2193
+#: incl/advanced-gutenberg-main.php:2205
 msgid "About PublishPress Blocks"
 msgstr "À propos de PublishPress Blocks"
 
-#: incl/advanced-gutenberg-main.php:2196
+#: incl/advanced-gutenberg-main.php:2208
 msgid "About"
 msgstr "À propos"
 
-#: incl/advanced-gutenberg-main.php:2203 incl/advanced-gutenberg-main.php:2206
+#: incl/advanced-gutenberg-main.php:2215 incl/advanced-gutenberg-main.php:2218
 msgid "Documentation"
 msgstr "Documentation"
 
-#: incl/advanced-gutenberg-main.php:2214
+#: incl/advanced-gutenberg-main.php:2226
 msgid "Contact the PublishPress team"
-msgstr "Contact de l’équipe de PublishPress"
+msgstr "Contactez l’équipe PublishPress"
 
-#: incl/advanced-gutenberg-main.php:2217
+#: incl/advanced-gutenberg-main.php:2229
 msgid "Contact"
 msgstr "Contact"
 
-#: incl/advanced-gutenberg-main.php:2243
+#: incl/advanced-gutenberg-main.php:2255
 msgid "PublishPress Blocks logo"
 msgstr "Logo des blocs PublishPress"
 
-#: incl/advanced-gutenberg-main.php:3047
+#: incl/advanced-gutenberg-main.php:3067
 #, php-format
 msgid "%s saved successfully!"
 msgstr "%s a bien été enregistré !"
 
-#: incl/advanced-gutenberg-main.php:3057
+#: incl/advanced-gutenberg-main.php:3077
 #, php-format
 msgid "%s can't be saved. Please try again."
 msgstr "%s ne peut pas être enregistré. Veuillez réessayer."
 
-#: incl/advanced-gutenberg-main.php:3103
+#: incl/advanced-gutenberg-main.php:3123
 #: incl/pages/block-controls/blocks.php:10 incl/pages/block-settings.php:97
 msgid "Search blocks"
 msgstr "Blocs de recherche"
 
-#: incl/advanced-gutenberg-main.php:3107
+#: incl/advanced-gutenberg-main.php:3127
 msgid "Enable or disable all blocks"
 msgstr "Activer ou désactiver tous les blocs"
 
-#: incl/advanced-gutenberg-main.php:3121 incl/advanced-gutenberg-main.php:3166
+#: incl/advanced-gutenberg-main.php:3141 incl/advanced-gutenberg-main.php:3186
 #: incl/pages/block-controls/blocks.php:28
 #: incl/pages/block-controls/blocks.php:73
 msgid "To save this configuration, enable at least one block."
 msgstr "Pour enregistrer cette configuration, activez au moins un bloc."
 
-#: incl/advanced-gutenberg-main.php:3134 incl/advanced-gutenberg-main.php:3157
+#: incl/advanced-gutenberg-main.php:3154 incl/advanced-gutenberg-main.php:3177
 #, php-format
 msgid "Save %s"
 msgstr "Enregistrer %s"
 
-#: incl/advanced-gutenberg-main.php:3143
+#: incl/advanced-gutenberg-main.php:3163
 #: incl/pages/block-controls/blocks.php:50
 msgid "Loading..."
 msgstr "Chargement…"
 
-#: incl/advanced-gutenberg-main.php:3384 incl/advanced-gutenberg-main.php:3385
+#: incl/advanced-gutenberg-main.php:3404 incl/advanced-gutenberg-main.php:3405
 msgid "Block Config"
 msgstr "Bloquer la configuration"
 
-#: incl/advanced-gutenberg-main.php:3441
+#: incl/advanced-gutenberg-main.php:3461
 msgid "Default configuration for this block is not available."
 msgstr "La configuration par défaut de ce bloc n’est pas disponible."
 
-#: incl/advanced-gutenberg-main.php:3491
+#: incl/advanced-gutenberg-main.php:3511
 #, php-format
 msgid "Page not found. Go to %sDashboard%s"
-msgstr "Page non trouvée. Aller au %sTableau de bord%s"
+msgstr "Page non trouvée. Aller au %sTableau_de_bord%s"
 
-#: incl/advanced-gutenberg-main.php:3909
+#: incl/advanced-gutenberg-main.php:3929
 msgid "Type field not defined"
 msgstr "Champ de type non défini"
 
-#: incl/advanced-gutenberg-main.php:5168
+#: incl/advanced-gutenberg-main.php:4196
 msgid "User registration is currently not allowed."
 msgstr "L’enregistrement des comptes n’est actuellement pas autorisé."
 
-#: incl/advanced-gutenberg-main.php:5169
+#: incl/advanced-gutenberg-main.php:4197
 msgid "Captcha must be checked!"
 msgstr "CAPTCHA doit être vérifié !"
 
-#: incl/advanced-gutenberg-main.php:5170
+#: incl/advanced-gutenberg-main.php:4198
 msgid "Username or password is incorrect!"
 msgstr "L’identifiant ou le mot de passe est incorrect !"
+
+#: incl/block-controls-main.php:980
+msgid "Blog"
+msgstr "Blog"
+
+#: incl/block-controls-main.php:984
+msgid "Archive"
+msgstr "Archive"
+
+#: incl/block-controls-main.php:992
+msgid "404"
+msgstr "404"
 
 #: incl/block-settings-main.php:47
 msgid "Header Icon"
@@ -4647,7 +4827,7 @@ msgstr "Les réglages ont bien été enregistrés !"
 
 #: incl/pages/block-controls.php:37
 msgid "Controls"
-msgstr "Les réglages ont bien été enregistrés !"
+msgstr "Contrôles"
 
 #: incl/pages/block-controls.php:41
 msgid "Blocks"
@@ -4655,30 +4835,27 @@ msgstr "Blocs"
 
 #: incl/pages/block-controls/blocks.php:14
 msgid "Enable or disable controls for all blocks"
-msgstr "Activez ou désactivez les contrôles pour tous les blocs"
+msgstr "Activer ou désactiver les contrôles de blocs"
 
 #: incl/pages/block-controls/blocks.php:41
 #: incl/pages/block-controls/blocks.php:64
 msgid "Save Blocks"
 msgstr "Enregistrer les blocs"
 
-#: incl/pages/block-controls/controls.php:12
-msgid "Schedule control"
-msgstr "Contrôle de la planification"
-
-#: incl/pages/block-controls/controls.php:22
+#: incl/pages/block-controls/controls.php:24
 msgid "Choose when to start showing and/or stop showing your blocks."
 msgstr ""
+"Choisissez quand commencer à afficher et/ou arrêter de afficher vos blocs."
 
-#: incl/pages/block-controls/controls.php:31
-msgid "User roles control"
-msgstr ""
-
-#: incl/pages/block-controls/controls.php:41
+#: incl/pages/block-controls/controls.php:43
 msgid "Choose which users can see your blocks."
-msgstr ""
+msgstr "Choisissez les utilisateur·ice·s qui peuvent voir vos blocs."
 
-#: incl/pages/block-controls/controls.php:55
+#: incl/pages/block-controls/controls.php:81
+msgid "Choose in which pages your blocks can be displayed."
+msgstr "Choisissez dans quelles pages vos blocs peuvent être affichés."
+
+#: incl/pages/block-controls/controls.php:95
 msgid "Save Controls"
 msgstr "Enregistrer les contrôles"
 
@@ -4731,9 +4908,9 @@ msgid ""
 "custom style's background color)"
 msgstr ""
 "Cette option vous aide à identifier des styles personnalisés spécifiques "
-"dans la liste.\n"
-"                                            (généralement définie de la même "
-"manière que la couleur de fond du style personnalisé)"
+"dans la liste\n"
+"                                            (habituellement définie de la "
+"même manière que la couleur d’arrière-plan du style personnalisé)"
 
 #: incl/pages/custom-styles.php:72
 msgid "Identification color"
@@ -4775,7 +4952,7 @@ msgid ""
 "Enable extra blocks including content displays, sliders, buttons, icons, "
 "tabs, accordions, and more."
 msgstr ""
-"Activez des blocs supplémentaires, notamment des affichages de contenu, des "
+"Activez des blocs supplémentaires, y compris des affichages de contenu, des "
 "diaporamas, des boutons, des icônes, des onglets, des accordéons, etc."
 
 #: incl/pages/main.php:43
@@ -4783,26 +4960,29 @@ msgid ""
 "You can add your own CSS styles for your blocks. Anyone editing posts can "
 "quickly add the styles to blocks."
 msgstr ""
-"Activez des blocs supplémentaires, notamment des affichages de contenu, des "
-"diaporamas, des boutons, des icônes, des onglets, des accordéons, etc."
+"Vous pouvez ajouter vos propres styles CSS pour vos blocs. Toute personne "
+"modifiant des publications peut rapidement ajouter les styles aux blocs."
 
 #: incl/pages/main.php:52
 msgid ""
 "This feature adds display controls for blocks. You can schedule when blocks "
 "are shown, and add user role restrictions."
 msgstr ""
+"Cette fonctionnalité ajoute des contrôles pour les blocs. Vous pouvez "
+"planifier quand afficher les blocs, et ajouter des restrictions pour les "
+"rôles utilisateur·ice·s."
 
 #: incl/pages/main.php:60
 #, php-format
 msgid "Extend Supported Blocks %sBeta%s"
-msgstr "Étendre les blocs pris en charge %sBeta%s"
+msgstr "Étendre la prise en charge des blocs %sBêta%s"
 
 #: incl/pages/main.php:65
 msgid ""
 "If some blocks are not listed in Block Permissions, try enabling this "
 "feature."
 msgstr ""
-"Si certains blocs ne figurent pas dans la liste des droits de blocs, essayez "
+"Si certains blocs ne sont pas répertoriés dans les droits des blocs, essayez "
 "d’activer cette fonctionnalité."
 
 #: incl/pages/main.php:73
@@ -4813,8 +4993,8 @@ msgstr "Fonctionnalités des blocs du cœur"
 msgid ""
 "Add Google Fonts support to core blocks including paragraphs and headings."
 msgstr ""
-"Ajout de la prise en charge des polices Google Fonts aux blocs principaux, y "
-"compris les paragraphes et les titres."
+"Ajouter la prise en charge de Google Fonts aux cœur de blocs, y compris les "
+"paragraphes et les titres."
 
 #: incl/pages/main.php:93
 msgid "PublishPress Blocks Pro"
@@ -4826,23 +5006,23 @@ msgstr "Priorité et assistance personnelle"
 
 #: incl/pages/main.php:96
 msgid "Pro features for Accordion block"
-msgstr "Fonctionnalités pro pour le bloc accordéon"
+msgstr "Fonctionnalités pro pour le bloc « Accordéon »"
 
 #: incl/pages/main.php:97
 msgid "Pro features for Tabs block"
-msgstr "Fonctionnalités pro pour le bloc d’onglets"
+msgstr "Fonctionnalités pro pour le bloc « Onglets »"
 
 #: incl/pages/main.php:98
 msgid "Pro features for Content Display block"
-msgstr "Fonctionnalités pro du bloc d’affichage du contenu"
+msgstr "Fonctionnalités pro du bloc « Affichage du contenu »"
 
 #: incl/pages/main.php:99
 msgid "Pro features for Images Slider block"
-msgstr "Fonctionnalités pro pour le bloc du curseur d’images"
+msgstr "Fonctionnalités pro pour le bloc « Diaporama d’images »"
 
 #: incl/pages/main.php:100
 msgid "Pro features for Button block"
-msgstr "Fonctionnalités pro pour le bloc de boutons"
+msgstr "Fonctionnalités pro pour le bloc « Bouton »"
 
 #: incl/pages/main.php:101
 msgid "Pro features for List block"
@@ -4850,19 +5030,19 @@ msgstr "Fonctionnalités pro pour le bloc de listes"
 
 #: incl/pages/main.php:102
 msgid "Pro features for Count Up block"
-msgstr "Fonctionnalités pro pour le bloc de compter jusqu’à"
+msgstr "Fonctionnalités pro pour le bloc « Compte à rebours »"
 
 #: incl/pages/main.php:103
 msgid "Pro features for Testimonial block"
-msgstr "Fonctionnalités pro pour le bloc de témoignages"
+msgstr "Fonctionnalités pro pour le bloc « Témoignages »"
 
 #: incl/pages/main.php:104
 msgid "Pro features for Advanced Image block"
-msgstr "Fonctionnalités pro pour le bloc image avancée"
+msgstr "Fonctionnalités pro pour le bloc « Image avancée »"
 
 #: incl/pages/main.php:105
 msgid "Google Fonts support"
-msgstr "Pris en charge de Google Fonts"
+msgstr "Pris en charge des Google Fonts"
 
 #: incl/pages/main.php:106
 msgid "Countdown block"
@@ -4987,7 +5167,7 @@ msgstr "Couleur de l’icône des blocs"
 
 #: incl/pages/settings/general.php:104
 msgid "Apply in admin to blocks from PublishPress Blocks plugin."
-msgstr "Appliquez dans l’admin des blocs de l’extension PublishPress Blocks."
+msgstr "Appliquez dans l’admin aux blocs de l’extension PublishPress Blocks."
 
 #: incl/pages/settings/general.php:113
 msgid "Gutenberg editor width"
@@ -5003,13 +5183,13 @@ msgstr "Guide visuel pour le bloc colonnes de PublishPress Blocks"
 
 #: incl/pages/settings/general.php:153
 msgid "Remove autop"
-msgstr "Retirer autop"
+msgstr "Retirer l’autop"
 
 #: incl/pages/settings/general.php:164
 msgid ""
 "Autop WordPress function is used to prevent unwanted paragraphs to be added"
 msgstr ""
-"La fonction Autop WordPress est utilisée pour empêcher l’ajout de "
+"La fonction WordPress « Autop » est utilisée pour empêcher l’ajout de "
 "paragraphes non désirés."
 
 #: incl/pages/settings/general.php:178
@@ -5041,8 +5221,8 @@ msgstr "Superposition"
 #: incl/pages/settings/images.php:63
 msgid "Display caption text on images loaded as lightbox in galleries."
 msgstr ""
-"Afficher le texte de la légende sur les images chargées en visionneuse dans "
-"les galeries."
+"Afficher le texte de la légende sur les images chargées comme visionneuse "
+"dans les galeries."
 
 #: incl/pages/settings/images.php:72
 msgid "Default thumbnail"
@@ -5057,8 +5237,8 @@ msgid ""
 "Set the default post thumbnail to use in Content Display blocks for posts "
 "without featured image."
 msgstr ""
-"Définissez la vignette par défaut à utiliser dans les blocs d’affichage du "
-"contenu pour les articles sans image mise en avant."
+"Définissez la miniature de publication par défaut à utiliser dans les blocs "
+"d’affichage du contenu pour les publications sans image mise en avant."
 
 #: incl/pages/settings/images.php:105
 msgid "Save Image Settings"
@@ -5066,7 +5246,7 @@ msgstr "Enregistrer les réglages de l’image"
 
 #: incl/pages/settings/maps.php:12
 msgid "Google API key"
-msgstr "Clé API Google"
+msgstr "Clé d’API Google"
 
 #: incl/pages/settings/maps.php:28
 msgid "How to create a Google API Key"
@@ -5088,9 +5268,9 @@ msgid ""
 "Use the Google reCAPTCHA to avoid spam in PublishPress Blocks forms. Get "
 "credentials for your domain by registering %shere%s."
 msgstr ""
-"Utilisez le reCAPTCHA de Google pour éviter le spam dans les formulaires "
-"PublishPress Blocks. Obtenez des informations d’identification pour votre "
-"domaine en vous enregistrant %sici%s."
+"Utilisez Google reCaptcha pour éviter les indésirables dans les formulaires "
+"de PublishPress Blocks. Obtenez des infos de connexion pour votre domaine en "
+"vous inscrivant %sici%s."
 
 #: incl/pages/settings/recaptcha.php:27
 msgid "Enable reCAPTCHA"
@@ -5118,7 +5298,7 @@ msgstr "Détection automatique"
 
 #: incl/pages/settings/recaptcha.php:88
 msgid "Language codes list"
-msgstr "Liste des codes de langues"
+msgstr "Liste des codes de langue"
 
 #: incl/pages/settings/recaptcha.php:95
 msgid "Theme"
@@ -5172,11 +5352,11 @@ msgstr ""
 #: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:243
 #, php-format
 msgid ""
-"This plugin is not installed in the standard folder. The current path is %s "
-"but it is expected to be %s."
+"This plugin is not installed in the standard folder. The current path is "
+"%1$s but it is expected to be %2$s."
 msgstr ""
 "Cette extension n’est pas installée dans le dossier standard. Le chemin "
-"actuel est %s mais il devrait être %s."
+"actuel est %1$s mais il devrait être %2$s."
 
 #: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:269
 #, php-format
@@ -5189,8 +5369,8 @@ msgstr ""
 
 #: vendor/publishpress/publishpress-instance-protection/core/InstanceChecker.php:289
 #, php-format
-msgid "Please deactivate %s when %s is activated."
-msgstr "Veuillez désactiver %s lorsque %s est activée."
+msgid "Please deactivate %1$s when %2$s is activated."
+msgstr "Veuillez désactiver %1$s lorsque %2$s est activé."
 
 #: vendor/publishpress/wordpress-reviews/ReviewsController.php:332
 #, php-format
@@ -5199,10 +5379,10 @@ msgid ""
 "been useful. Please could you quickly leave a 5-star rating on WordPress."
 "org? It really does help to keep %1$s growing."
 msgstr ""
-"Salut, vous avez utilisé %1$s pour %2$s sur votre site. Nous espérons que "
+"Bonjour, vous avez utilisé %1$s pour %2$s sur votre site. Nous espérons que "
 "l’extension vous a été utile. Pourriez-vous rapidement laisser une note de 5 "
-"étoiles sur WordPress.org ? Cela aide vraiment à maintenir le développement "
-"de %1$s."
+"étoiles sur WordPress.org ? Cela nous aide vraiment à maintenir la "
+"croissance de %1$s."
 
 #: vendor/publishpress/wordpress-reviews/ReviewsController.php:342
 msgid "1 week"
@@ -5231,7 +5411,7 @@ msgstr "Je l’ai déjà fait"
 
 #: vendor/publishpress/wordpress-version-notices/src/Module/MenuLink/Module.php:129
 msgid "Amazing! We are redirecting you to our site..."
-msgstr "Incroyable ! Nous vous redirigeons vers notre site…"
+msgstr "Formidable ! Nous vous redirigeons vers notre site…"
 
 #. Plugin URI of the plugin/theme
 msgid "https://publishpress.com/blocks/"
@@ -5249,304 +5429,14 @@ msgstr ""
 msgid "https://publishpress.com/"
 msgstr "https://publishpress.com/"
 
-#~ msgid "Setup when to start showing and/or stop showing this block"
-#~ msgstr ""
-#~ "Configurer quand commencer à montrer et/ou arrêter de montrer ce bloc"
+#~ msgid "Enable block user roles"
+#~ msgstr "Activer les rôles utilisateur·ice·s pour le bloc"
 
-#~ msgid "Choose which users this block will be visible"
-#~ msgstr "Choisissez quels utilisateurs et utilisatrices ce bloc sera visible"
+#~ msgid "User roles control"
+#~ msgstr "Contrôle des rôles utilisateur·ice·s"
 
-#~ msgid "Save Blocks Settings"
-#~ msgstr "Enregistrer les réglages des blocs"
+#~ msgid "Schedule control"
+#~ msgstr "Contrôle de la planification"
 
-#~ msgid "Every block can have a “Start showing” and/or “Stop showing” option."
-#~ msgstr ""
-#~ "Chaque bloc peut avoir une option « Commencer à afficher » et/ou "
-#~ "« Arrêter d’afficher »."
-
-#~ msgid "User role control"
-#~ msgstr "Contrôle des rôles des utilisateurs"
-
-#~ msgid "Every block can have a “User roles” option."
-#~ msgstr ""
-#~ "Chaque bloc peut avoir une option « Rôles des utilisateurs et "
-#~ "utilisatrices »."
-
-#~ msgid ""
-#~ "Schedule blocks to be published and unpublished. Every block can have a "
-#~ "“Start showing” and/or “Stop showing” option."
-#~ msgstr ""
-#~ "Programmez les blocs à publier et à dépublier. Chaque bloc peut avoir une "
-#~ "option « Commencer à afficher » et/ou « Arrêter d’afficher »."
-
-#~ msgid ""
-#~ "This feature is disabled. In order to use, please enable back through "
-#~ "Dashboard."
-#~ msgstr ""
-#~ "Cette fonctionnalité est désactivée. Pour l’utiliser, veuillez la "
-#~ "réactiver via le tableau de bord."
-
-#~ msgid "All modifications were saved!"
-#~ msgstr "Toutes les modifications ont été enregistrées !"
-
-#~ msgid "Select a custom style"
-#~ msgstr "Sélectionnez un style personnalisé"
-
-#~ msgid ""
-#~ "We strongly recommend to enable Google reCaptcha to avoid spam bot. You "
-#~ "can enable it in Form Recaptcha in"
-#~ msgstr ""
-#~ "Nous recommandons fortement d’activer Google reCaptcha pour éviter les "
-#~ "robots d’indésirables. Vous pouvez l’activer dans le formulaire Recaptcha "
-#~ "dans"
-
-#~ msgid "Add Google API Key"
-#~ msgstr "Ajouter une clé API Google"
-
-#~ msgid "Advanced Video Settings"
-#~ msgstr "Réglages avancés des vidéos"
-
-#~ msgid "Custom styles"
-#~ msgstr "Styles personnalisés"
-
-#~ msgid "Tab Item"
-#~ msgstr "Élément de l’onglet"
-
-#~ msgid "Adv. Column"
-#~ msgstr "Colonne avancée"
-
-#~ msgid "Container"
-#~ msgstr "Conteneur"
-
-#~ msgid "Block Settings"
-#~ msgstr "Réglages des blocs"
-
-#~ msgid "Custom Styles"
-#~ msgstr "Styles personnalisés"
-
-#~ msgid "Blocks Settings"
-#~ msgstr "Réglages des blocs"
-
-#~ msgid "Enable block access"
-#~ msgstr "Activer l’accès au bloc"
-
-#~ msgid "Extend supported blocks (beta)"
-#~ msgstr "Extension des blocs pris en charge (bêta)"
-
-#~ msgid "Enable custom styles"
-#~ msgstr "Activer les styles personnalisés"
-
-#~ msgid "Enable block controls"
-#~ msgstr "Activer les contrôles de blocs"
-
-#~ msgid "Enable core blocks features"
-#~ msgstr "Activer les fonctionnalités des blocs de base"
-
-#~ msgid "Add Pro features to core blocks such as Google Font support"
-#~ msgstr ""
-#~ "Ajouter des fonctionnalités Pro aux blocs de base, comme la prise en "
-#~ "charge de Google Font"
-
-#~ msgid "Enable PublishPress Blocks"
-#~ msgstr "Activer les blocs PublishPress"
-
-#~ msgid ""
-#~ "If some blocks are not listed in Block access, try enabling Extend "
-#~ "supported blocks"
-#~ msgstr ""
-#~ "Si certains blocs ne sont pas listés dans l’accès aux blocs, essayez "
-#~ "d’activer l’option « Étendre les blocs pris en charge »"
-
-#~ msgid "Enable block controls panel to schedule blocks"
-#~ msgstr "Activez le panneau de contrôle des blocs pour planifier les blocs"
-
-#~ msgid "To save this configuration, enable at least one block"
-#~ msgstr "Pour enregistrer cette configuration, activez au moins un bloc"
-
-#~ msgid ""
-#~ "PublishPress Blocks Pro includes new blocks, support and more features "
-#~ "for Tabs, Accordions, Buttons, Image Sliders, Content Display, and more."
-#~ msgstr ""
-#~ "PublishPress Blocks Pro comprend de nouveaux blocs, une prise en charge "
-#~ "et des fonctionnalités supplémentaires pour les onglets, les accordéons, "
-#~ "les boutons, les diaporamas, l’affichage du contenu, etc."
-
-#~ msgid "Display PublishPress logo and links in the footer of the admin pages"
-#~ msgstr ""
-#~ "Afficher le logo PublisPress et les liens dans le pied de page des pages "
-#~ "d’administration"
-
-#~ msgid ""
-#~ "Enable PublishPress Blocks. If disabled, no PublishPress Blocks will be "
-#~ "available"
-#~ msgstr ""
-#~ "Activer les blocs PublishPress. S’ils sont désactivés aucun bloc "
-#~ "PublishPress ne sera disponible"
-
-#~ msgid "Enable custom CSS classes to easily manage and apply to your blocks"
-#~ msgstr ""
-#~ "Activez les classes CSS personnalisées pour les gérer facilement et les "
-#~ "appliquer à vos blocs"
-
-#~ msgid "Enable block access to deactivate blocks by user role"
-#~ msgstr ""
-#~ "Activez l’accès au bloc pour désactiver les blocs par rôle d’utilisateur/"
-#~ "utilisatrice"
-
-#~ msgid "You do not have permission to manage Block Access"
-#~ msgstr "Vous n’avez pas les droits pour gérer l’accès au bloc"
-
-#~ msgid "Blocks Pro"
-#~ msgstr "Blocs Pro"
-
-#~ msgid "Block Access"
-#~ msgstr "Accès aux bloc"
-
-#~ msgid ""
-#~ "You're using PublishPress Blocks Free. The Pro version has more features "
-#~ "and support."
-#~ msgstr ""
-#~ "Vous utilisez PublishPress Blocks Free. La version Pro a plus de "
-#~ "fonctionnalités et de support."
-
-#~ msgid "Enable border to materialize PublishPress Blocks Column block"
-#~ msgstr ""
-#~ "Activer la bordure pour matérialiser le bloc colonne PublishPress Blocks"
-
-#~ msgid ""
-#~ "Set color for blocks icons on admin, only apply to PublishPress Blocks"
-#~ msgstr ""
-#~ "Définir la couleur des icônes de blocs sur l’administration, s’applique "
-#~ "uniquement aux blocs PublishPress"
-
-#~ msgid "Remove Autop"
-#~ msgstr "Retirer Autop"
-
-#~ msgid ""
-#~ "Remove the WordPress function autop, used to prevent unwanted paragraph "
-#~ "to be added in some blocks"
-#~ msgstr ""
-#~ "Retirer la fonction WordPress autop, utilisée pour éviter l’ajout de "
-#~ "paragraphes non désirés dans certains blocs."
-
-#~ msgid "Set the default post thumbnail to use in Content Display blocks."
-#~ msgstr ""
-#~ "Définissez la vignette de publication par défaut à utiliser dans les "
-#~ "blocs de publications récentes."
-
-#~ msgid "Display caption text on images loaded as lightbox in galleries"
-#~ msgstr ""
-#~ "Afficher le texte de légende sur les images chargées comme une "
-#~ "visionneuse dans les galeries"
-
-#~ msgid "reCAPTCHA Theme"
-#~ msgstr "thème reCAPTCHA"
-
-#~ msgid "reCAPTCHA Language"
-#~ msgstr "Langue reCAPTCHA"
-
-#~ msgid "reCAPTCHA Secret Key"
-#~ msgstr "Clé secrète reCAPTCHA"
-
-#~ msgid "reCAPTCHA Site Key"
-#~ msgstr "Clé de site reCAPTCHA"
-
-#~ msgid " here"
-#~ msgstr " ici"
-
-#~ msgid ""
-#~ "Use the Google reCaptcha to avoid spam in PublishPress Blocks forms. Get "
-#~ "credentials for your domain by registering"
-#~ msgstr ""
-#~ "Utilisez Google reCaptcha pour éviter les indésirables dans les "
-#~ "formulaires de contact et lettre d’information. Obtenez des infos de "
-#~ "connexion pour votre domaine en vous inscrivant"
-
-#~ msgid "Contact Form: Receiver Information"
-#~ msgstr "Formulaire de contact : Information sur le destinataire"
-
-#~ msgid "Contact Form: Sender Information"
-#~ msgstr "Formulaire de contact : Information sur l’expéditeur"
-
-#~ msgid "Forms reCaptcha"
-#~ msgstr "Formulaires reCaptcha"
-
-#~ msgid "Error while sending form. Try again!"
-#~ msgstr "Erreur lors de l’envoi du formulaire. Réessayer !"
-
-#~ msgid "separate by comma"
-#~ msgstr "séparé par une virgule"
-
-#~ msgid "Email and Form settings"
-#~ msgstr "Réglages de messagerie et de formulaire"
-
-#~ msgid "Forms data"
-#~ msgstr "Formulaires de données"
-
-#~ msgid "Email settings"
-#~ msgstr "Réglages de messagerie"
-
-#~ msgid "Email & Form"
-#~ msgstr "Email et formulaire"
-
-#~ msgid "Define the admin Gutenberg editor width size"
-#~ msgstr "Définir la taille de l’éditeur Gutenberg"
-
-#~ msgid "Update now"
-#~ msgstr "Mettre à jour maintenant"
-
-#~ msgid "Your current version is"
-#~ msgstr "Votre version actuelle est"
-
-#~ msgid "and above"
-#~ msgstr "et ci-dessus"
-
-#~ msgid "Our plugin works great with Gutenberg version"
-#~ msgstr "Notre extension fonctionne très bien avec la version de Gutenberg"
-
-#~ msgid "You need to activate Gutenberg to use our plugin!"
-#~ msgstr "Vous devez activer Gutenberg pour utiliser notre extension !"
-
-#~ msgid "Search settings"
-#~ msgstr "Réglages des recherches"
-
-#~ msgid "Your styles have been saved"
-#~ msgstr "Vos styles ont été sauvegardés"
-
-#~ msgid "Enable block spacing settings"
-#~ msgstr "Activer les réglages de l’espacement des blocs"
-
-#~ msgid ""
-#~ "Apply a minimal vertical block spacing automatically. Default is None. "
-#~ "Values in pixels"
-#~ msgstr ""
-#~ "Appliquez automatiquement un espacement vertical minimal. La valeur par "
-#~ "défaut est Aucune. Valeurs en pixels"
-
-#~ msgid "Google API Key"
-#~ msgstr "Clé Google API"
-
-#~ msgid ""
-#~ "This option help you identify specific custom styles in the list\n"
-#~ "                                (usually set this same as the custom "
-#~ "style's background color)"
-#~ msgstr ""
-#~ "Cette option vous aide à identifier des styles personnalisés spécifiques "
-#~ "dans la liste.\n"
-#~ "(généralement définie de la même manière que la couleur de l’arrière-plan "
-#~ "du style personnalisé)."
-
-#~ msgid "Style class"
-#~ msgstr "Classe de style"
-
-#~ msgid "Add new class"
-#~ msgstr "Ajouter une nouvelle classe"
-
-#~ msgid "new-class"
-#~ msgstr "nouvelle classe"
-
-#~ msgid "New class"
-#~ msgstr "Nouveau cours"
-
-#~ msgid "Settings saved successfully"
-#~ msgstr "Réglages enregistrés avec succès"
+#~ msgid "Enable block schedule"
+#~ msgstr "Activer la planification des blocs"

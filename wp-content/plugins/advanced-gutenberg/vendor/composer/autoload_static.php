@@ -42,7 +42,6 @@ class ComposerStaticInitcaa25cd4a92d0c39cf3c0119a8c1a373
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Wolfcast\\BrowserDetection' => __DIR__ . '/..' . '/wolfcast/browser-detection/lib/BrowserDetection.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
