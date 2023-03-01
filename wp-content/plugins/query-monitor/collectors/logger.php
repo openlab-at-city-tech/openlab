@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * @extends QM_DataCollector<QM_Data_Logger>
- * @phpstan-type LogMessage WP_Error|Exception|Throwable|string|bool|null
+ * @phpstan-type LogMessage WP_Error|Throwable|string|bool|null
  */
 class QM_Collector_Logger extends QM_DataCollector {
 
@@ -148,7 +148,7 @@ class QM_Collector_Logger extends QM_DataCollector {
 	 */
 	public function log( $level, $message, array $context = array() ) {
 		if ( ! in_array( $level, $this->get_levels(), true ) ) {
-			throw new InvalidArgumentException( __( 'Unsupported log level', 'query-monitor' ) );
+			throw new InvalidArgumentException( 'Unsupported log level' );
 		}
 
 		$this->store( $level, $message, $context );
@@ -177,7 +177,7 @@ class QM_Collector_Logger extends QM_DataCollector {
 			);
 		}
 
-		if ( ( $message instanceof Exception ) || ( $message instanceof Throwable ) ) {
+		if ( $message instanceof Throwable ) {
 			$message = sprintf(
 				'%1$s: %2$s',
 				get_class( $message ),
