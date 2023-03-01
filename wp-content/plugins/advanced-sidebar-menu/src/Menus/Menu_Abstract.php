@@ -140,16 +140,16 @@ abstract class Menu_Abstract {
 			$this->args['widget_id'] .= wp_hash( wp_json_encode( $this->instance ) );
 		}
 
-		if ( \in_array( $this->args['widget_id'], self::$unique_widget_ids, true ) ) {
+		if ( \in_array( $this->args['widget_id'], static::$unique_widget_ids, true ) ) {
 			$suffix = 2;
 			do {
 				$alt_widget_id = $this->args['widget_id'] . "-$suffix";
 				$suffix ++;
-			} while ( \in_array( $alt_widget_id, self::$unique_widget_ids, true ) );
+			} while ( \in_array( $alt_widget_id, static::$unique_widget_ids, true ) );
 			$this->args['widget_id'] = $alt_widget_id;
-			self::$unique_widget_ids[] = $alt_widget_id;
+			static::$unique_widget_ids[] = $alt_widget_id;
 		} else {
-			self::$unique_widget_ids[] = $this->args['widget_id'];
+			static::$unique_widget_ids[] = $this->args['widget_id'];
 		}
 	}
 
@@ -194,7 +194,7 @@ abstract class Menu_Abstract {
 	 * @return bool
 	 */
 	public function display_all() {
-		return $this->checked( self::DISPLAY_ALL );
+		return $this->checked( static::DISPLAY_ALL );
 	}
 
 
@@ -204,7 +204,7 @@ abstract class Menu_Abstract {
 	 * @return bool
 	 */
 	public function include_parent() {
-		return $this->checked( self::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() );
+		return $this->checked( static::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() );
 	}
 
 
@@ -227,10 +227,10 @@ abstract class Menu_Abstract {
 	 * @return array
 	 */
 	public function get_excluded_ids() {
-		if ( empty( $this->instance[ self::EXCLUDE ] ) ) {
+		if ( empty( $this->instance[ static::EXCLUDE ] ) ) {
 			return [];
 		}
-		return \array_map( 'intval', \array_filter( \explode( ',', $this->instance[ self::EXCLUDE ] ), 'is_numeric' ) );
+		return \array_map( 'intval', \array_filter( \explode( ',', $this->instance[ static::EXCLUDE ] ), 'is_numeric' ) );
 	}
 
 
@@ -240,8 +240,8 @@ abstract class Menu_Abstract {
 	 * @return void
 	 */
 	public function title() {
-		if ( ! empty( $this->instance[ self::TITLE ] ) ) {
-			$title = apply_filters( 'widget_title', $this->instance[ self::TITLE ], $this->args, $this->instance );
+		if ( ! empty( $this->instance[ static::TITLE ] ) ) {
+			$title = apply_filters( 'widget_title', $this->instance[ static::TITLE ], $this->args, $this->instance );
 			$title = apply_filters( 'advanced-sidebar-menu/menus/widget-title', esc_html( $title ), $this->args, $this->instance, $this );
 
 			// phpcs:disable
@@ -269,7 +269,7 @@ abstract class Menu_Abstract {
 	 * @return Page|Category|null
 	 */
 	public static function get_current() {
-		return self::$current;
+		return static::$current;
 	}
 
 

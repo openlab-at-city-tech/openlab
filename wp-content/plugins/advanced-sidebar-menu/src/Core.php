@@ -99,7 +99,7 @@ class Core {
 				<!-- advanced-sidebar-menu/core-template -->
 				<?php
 			}
-			$file = ADVANCED_SIDEBAR_DIR . 'views/' . $file_name;
+			$file = ADVANCED_SIDEBAR_MENU_DIR . 'views/' . $file_name;
 		} elseif ( $comments ) {
 			?>
 			<!-- advanced-sidebar-menu/template-override -->

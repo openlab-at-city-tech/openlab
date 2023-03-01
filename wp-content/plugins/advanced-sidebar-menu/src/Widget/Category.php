@@ -56,7 +56,7 @@ class Category extends Widget_Abstract {
 			'width' => wp_is_mobile() ? false : 620,
 		];
 
-		parent::__construct( self::NAME, __( 'Advanced Sidebar - Categories', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
+		parent::__construct( static::NAME, __( 'Advanced Sidebar - Categories', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
 
 		$this->hook();
 	}
@@ -133,7 +133,7 @@ class Category extends Widget_Abstract {
 		?>
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
-				<?php $widget->checkbox( self::INCLUDE_PARENT ); ?>
+				<?php $widget->checkbox( static::INCLUDE_PARENT ); ?>
 				<label>
 					<?php
 					/* translators: Selected taxonomy single label */
@@ -142,7 +142,7 @@ class Category extends Widget_Abstract {
 				</label>
 			</p>
 			<p>
-				<?php $widget->checkbox( self::INCLUDE_CHILDLESS_PARENT ); ?>
+				<?php $widget->checkbox( static::INCLUDE_CHILDLESS_PARENT ); ?>
 				<label>
 					<?php
 					/* translators: Selected taxonomy single label */
@@ -151,7 +151,7 @@ class Category extends Widget_Abstract {
 				</label>
 			</p>
 			<p>
-				<?php $widget->checkbox( self::DISPLAY_ALL, self::LEVELS ); ?>
+				<?php $widget->checkbox( static::DISPLAY_ALL, static::LEVELS ); ?>
 				<label>
 					<?php
 					/* translators: Selected taxonomy plural label */
@@ -159,15 +159,15 @@ class Category extends Widget_Abstract {
 					?>
 				</label>
 			</p>
-			<div <?php $widget->hide_element( self::DISPLAY_ALL, self::LEVELS ); ?>>
+			<div <?php $widget->hide_element( static::DISPLAY_ALL, static::LEVELS ); ?>>
 				<p>
-					<label for="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>">
+					<label for="<?php echo esc_attr( $widget->get_field_id( static::LEVELS ) ); ?>">
 						<?php
 						ob_start();
 						?>
 						<select
-							id="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>"
-							name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>">
+							id="<?php echo esc_attr( $widget->get_field_id( static::LEVELS ) ); ?>"
+							name="<?php echo esc_attr( $widget->get_field_name( static::LEVELS ) ); ?>">
 							<option value="100">
 								<?php esc_html_e( '- All -', 'advanced-sidebar-menu' ); ?>
 							</option>
@@ -175,7 +175,7 @@ class Category extends Widget_Abstract {
 							for ( $i = 1; $i < 6; $i ++ ) {
 								?>
 								<option
-									value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
+									value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ static::LEVELS ] ); ?>>
 									<?php echo (int) $i; ?>
 								</option>
 								<?php
@@ -210,7 +210,7 @@ class Category extends Widget_Abstract {
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
 
-				<?php $widget->checkbox( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>
+				<?php $widget->checkbox( static::DISPLAY_ON_SINGLE, static::EACH_CATEGORY_DISPLAY ); ?>
 				<label>
 					<?php
 					/* translators: Selected taxonomy plural label */
@@ -219,17 +219,17 @@ class Category extends Widget_Abstract {
 				</label>
 			</p>
 
-			<div <?php $widget->hide_element( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>>
+			<div <?php $widget->hide_element( static::DISPLAY_ON_SINGLE, static::EACH_CATEGORY_DISPLAY ); ?>>
 				<p>
-					<label for="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>">
+					<label for="<?php echo esc_attr( $widget->get_field_id( static::EACH_CATEGORY_DISPLAY ) ); ?>">
 						<?php
 						/* translators: Selected taxonomy single label */
 						printf( esc_html__( "Display each single post's %s", 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
 						?>
 					</label>
 					<select
-						id="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>"
-						name="<?php echo esc_attr( $widget->get_field_name( self::EACH_CATEGORY_DISPLAY ) ); ?>"
+						id="<?php echo esc_attr( $widget->get_field_id( static::EACH_CATEGORY_DISPLAY ) ); ?>"
+						name="<?php echo esc_attr( $widget->get_field_name( static::EACH_CATEGORY_DISPLAY ) ); ?>"
 						class="advanced-sidebar-menu-block-field"
 					>
 						<?php
@@ -237,7 +237,7 @@ class Category extends Widget_Abstract {
 							?>
 							<option
 								value="<?php echo esc_attr( $value ); ?>"
-								<?php selected( $value, $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>
+								<?php selected( $value, $instance[ static::EACH_CATEGORY_DISPLAY ] ); ?>
 							>
 								<?php echo esc_html( $label ); ?>
 							</option>
@@ -267,18 +267,18 @@ class Category extends Widget_Abstract {
 		?>
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
-				<label for="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>">
+				<label for="<?php echo esc_attr( $widget->get_field_id( static::EXCLUDE ) ); ?>">
 					<?php
 					/* translators: Selected taxonomy plural label */
 					printf( esc_html__( '%s to exclude (ids, comma separated)', 'advanced-sidebar-menu' ), esc_html( $this->get_taxonomy_label( $instance, false ) ) );
 					?>
 				</label>
 				<input
-					id="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>"
-					name="<?php echo esc_attr( $widget->get_field_name( self::EXCLUDE ) ); ?>"
+					id="<?php echo esc_attr( $widget->get_field_id( static::EXCLUDE ) ); ?>"
+					name="<?php echo esc_attr( $widget->get_field_name( static::EXCLUDE ) ); ?>"
 					type="text"
 					class="widefat advanced-sidebar-menu-block-field"
-					value="<?php echo esc_attr( $instance[ self::EXCLUDE ] ); ?>" />
+					value="<?php echo esc_attr( $instance[ static::EXCLUDE ] ); ?>" />
 			</p>
 
 			<?php
@@ -297,19 +297,19 @@ class Category extends Widget_Abstract {
 	 * @since 7.2.1
 	 */
 	public function form( $instance ) {
-		$instance = $this->set_instance( $instance, self::$defaults );
+		$instance = $this->set_instance( $instance, static::$defaults );
 		do_action( 'advanced-sidebar-menu/widget/category/before-form', $instance, $this );
 		?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( self::TITLE ) ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( static::TITLE ) ); ?>">
 				<?php esc_html_e( 'Title', 'advanced-sidebar-menu' ); ?>:
 			</label>
 			<input
-				id="<?php echo esc_attr( $this->get_field_id( self::TITLE ) ); ?>"
-				name="<?php echo esc_attr( $this->get_field_name( self::TITLE ) ); ?>"
+				id="<?php echo esc_attr( $this->get_field_id( static::TITLE ) ); ?>"
+				name="<?php echo esc_attr( $this->get_field_name( static::TITLE ) ); ?>"
 				class="widefat"
 				type="text"
-				value="<?php echo esc_attr( $instance[ self::TITLE ] ); ?>" />
+				value="<?php echo esc_attr( $instance[ static::TITLE ] ); ?>" />
 		</p>
 		<?php do_action( 'advanced-sidebar-menu/widget/category/before-columns', $instance, $this ); ?>
 		<div class="advanced-sidebar-menu-column">
@@ -352,7 +352,7 @@ class Category extends Widget_Abstract {
 	 * @return void
 	 */
 	public function widget( $args, $instance ) {
-		$instance = $this->set_instance( $instance, self::$defaults );
+		$instance = $this->set_instance( $instance, static::$defaults );
 		$menu = \Advanced_Sidebar_Menu\Menus\Category::factory( $instance, $args );
 
 		do_action( 'advanced-sidebar-menu/widget/before-render', $menu, $this );

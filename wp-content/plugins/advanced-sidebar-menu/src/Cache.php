@@ -30,7 +30,7 @@ class Cache {
 	 * @return void
 	 */
 	public function clear_cache_group() {
-		wp_cache_set( 'last_changed', microtime(), self::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_BASIC_VERSION );
+		wp_cache_set( 'last_changed', microtime(), static::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 	}
 
 
@@ -40,8 +40,8 @@ class Cache {
 	 * @return string
 	 */
 	public function get_cache_group() {
-		$key = wp_cache_get_last_changed( self::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_BASIC_VERSION );
-		return self::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_BASIC_VERSION . ':' . $key;
+		$key = wp_cache_get_last_changed( static::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
+		return static::CACHE_GROUP . ':' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION . ':' . $key;
 	}
 
 
@@ -55,7 +55,7 @@ class Cache {
 	 */
 	public function get_child_pages( $class ) {
 		$key = $this->get_key_from_asm( $class );
-		$all_child_pages = (array) wp_cache_get( self::CHILD_PAGES_KEY, $this->get_cache_group() );
+		$all_child_pages = (array) wp_cache_get( static::CHILD_PAGES_KEY, $this->get_cache_group() );
 		if ( isset( $all_child_pages[ $key ] ) ) {
 			return $all_child_pages[ $key ];
 		}
@@ -74,9 +74,9 @@ class Cache {
 	 */
 	public function add_child_pages( $class, $child_pages ) {
 		$key = $this->get_key_from_asm( $class );
-		$all_child_pages = (array) wp_cache_get( self::CHILD_PAGES_KEY, $this->get_cache_group() );
+		$all_child_pages = (array) wp_cache_get( static::CHILD_PAGES_KEY, $this->get_cache_group() );
 		$all_child_pages[ $key ] = $child_pages;
-		wp_cache_set( self::CHILD_PAGES_KEY, $all_child_pages, $this->get_cache_group() );
+		wp_cache_set( static::CHILD_PAGES_KEY, $all_child_pages, $this->get_cache_group() );
 	}
 
 

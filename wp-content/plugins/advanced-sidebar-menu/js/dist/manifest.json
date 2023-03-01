@@ -5,7 +5,7 @@
   },
   "admin.min.js": {
     "src": "admin.min.js",
-    "integrity": "sha256-YMsVMCIrzCf1vVhr/Blf/rUj5XB6FLLlEZy+fciiiSw= sha384-cBk6rhqge1hzuSAu/8KbLh3L6oN4E6GtEI+PQCQv4irANkxmdRqphsFmYkRRQtfJ sha512-lPfUr4TCvVGT3D+Uuq6VtkdryUAEREDczFPtHP8rHdE2zevZ1waE53gPbxX8Hf1Z2aKa18oLSxi9V58gQWtNnQ=="
+    "integrity": "sha256-b7IDaLyy7Z/f+goeVV5eMkvdZFt+JPmyB+mdQxc1yHo= sha384-hw9Vt4J5w7yvBf6harAV+O7JFyV7YkiDRmQp/CbHgWjaSTSoUQX1wLzESwvrsulP sha512-+gc1062EUBJTWhKTLvpPsIUhmAWeFDHparsseyPRuluU4Ehqy78Y8bzSBFGXf7oRsrX7TSvr0+t5H/T9DztQww=="
   },
   "admin.min.js.LICENSE.txt": {
     "src": "admin.min.js.LICENSE.txt",

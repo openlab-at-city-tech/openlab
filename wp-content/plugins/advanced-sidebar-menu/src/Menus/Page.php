@@ -58,7 +58,7 @@ class Page extends Menu_Abstract {
 	 * @return string
 	 */
 	public function get_order_by() {
-		return apply_filters( 'advanced-sidebar-menu/menus/page/order-by', $this->instance[ self::ORDER_BY ], $this->get_current_post(), $this->args, $this->instance, $this );
+		return apply_filters( 'advanced-sidebar-menu/menus/page/order-by', $this->instance[ static::ORDER_BY ], $this->get_current_post(), $this->args, $this->instance, $this );
 	}
 
 
@@ -108,7 +108,7 @@ class Page extends Menu_Abstract {
 				if ( $this->has_pages() ) {
 					$display = true;
 					// No children + not excluded + include parent +include childless parent.
-				} elseif ( $this->checked( self::INCLUDE_CHILDLESS_PARENT ) && $this->checked( self::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() ) ) {
+				} elseif ( $this->checked( static::INCLUDE_CHILDLESS_PARENT ) && $this->checked( static::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() ) ) {
 					$display = true;
 				}
 			}
@@ -143,7 +143,7 @@ class Page extends Menu_Abstract {
 		$levels = 100;
 		if ( $this->display_all() ) {
 			// Subtract 1 level to account for the first level children.
-			$levels = $this->instance[ self::LEVELS ] - 1;
+			$levels = $this->instance[ static::LEVELS ] - 1;
 		}
 		return apply_filters( 'advanced-sidebar-menu/menus/page/levels', $levels, $this->args, $this->instance, $this );
 	}

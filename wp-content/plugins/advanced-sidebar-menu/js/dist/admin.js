@@ -686,6 +686,14 @@ const Edit = _ref => {
     setAttributes,
     clientId
   };
+  const EXCLUDE_HELP = /*#__PURE__*/React.createElement("span", {
+    dangerouslySetInnerHTML: {
+      //phpcs:ignore
+      __html: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.sprintf)(
+      /* translators: {taxonomy plural label}, {taxonomy single label}, {<a>}, {</a>} */
+      (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('%1$s may also be excluded from all menus via the Advanced Sidebar settings when %3$sediting a %2$s%4$s.', 'advanced-sidebar-menu'), taxonomy?.labels?.name ?? '', taxonomy?.labels?.singular_name.toLowerCase() ?? '', '<a href="https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-menu-pro-widget-docs/#categories" target="_blank">', '</a>')
+    }
+  });
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, null, /*#__PURE__*/React.createElement(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_6__["default"], {
     attributes: attributes,
     block: name
@@ -737,6 +745,7 @@ const Edit = _ref => {
   , {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('%s to exclude (ids, comma separated)', 'advanced-sidebar-menu'), taxonomy?.labels?.name ?? ''),
     value: attributes.exclude,
+    help: _globals_config__WEBPACK_IMPORTED_MODULE_1__.CONFIG.isPro ? EXCLUDE_HELP : '',
     onChange: value => {
       setAttributes({
         exclude: value
@@ -945,6 +954,14 @@ const Edit = _ref => {
     setAttributes,
     clientId
   };
+  const EXCLUDE_HELP = /*#__PURE__*/React.createElement("span", {
+    dangerouslySetInnerHTML: {
+      //phpcs:ignore
+      __html: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.sprintf)(
+      /* translators: {post type plural label}, {post type single label}, {<a>}, {</a>} */
+      (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('%1$s may also be excluded from all menus via the Advanced Sidebar settings when %3$sediting a %2$s%4$s.', 'advanced-sidebar-menu'), postType?.labels?.name ?? '', postType?.labels?.singular_name.toLowerCase() ?? '', '<a href="https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-menu-pro-widget-docs/#pages" target="_blank">', '</a>')
+    }
+  });
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_0__.InspectorControls, null, /*#__PURE__*/React.createElement(_components_ErrorBoundary__WEBPACK_IMPORTED_MODULE_10__["default"], {
     attributes: attributes,
     block: name
@@ -986,6 +1003,7 @@ const Edit = _ref => {
   , {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__.__)('%s to exclude (ids, comma separated)', 'advanced-sidebar-menu'), postType?.labels?.name ?? ''),
     value: attributes.exclude,
+    help: _globals_config__WEBPACK_IMPORTED_MODULE_7__.CONFIG.isPro ? EXCLUDE_HELP : '',
     onChange: value => {
       setAttributes({
         exclude: value
