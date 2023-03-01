@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author singles
  */
-class JsonFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class JsonFileDumper extends FileDumper
 {
     /**
      * {@inheritdoc}

@@ -65,7 +65,7 @@ class JWK
      *
      * @uses createPemFromModulusAndExponent
      */
-    private static function parseKey(array $jwk)
+    public static function parseKey(array $jwk)
     {
         if (empty($jwk)) {
             throw new InvalidArgumentException('JWK must not be empty');
@@ -75,7 +75,7 @@ class JWK
         }
         switch ($jwk['kty']) {
             case 'RSA':
-                if (\array_key_exists('d', $jwk)) {
+                if (!empty($jwk['d'])) {
                     throw new UnexpectedValueException('RSA private keys are not supported');
                 }
                 if (!isset($jwk['n']) || !isset($jwk['e'])) {
@@ -104,8 +104,8 @@ class JWK
      */
     private static function createPemFromModulusAndExponent($n, $e)
     {
-        $modulus = \SimpleCalendar\plugin_deps\Firebase\JWT\JWT::urlsafeB64Decode($n);
-        $publicExponent = \SimpleCalendar\plugin_deps\Firebase\JWT\JWT::urlsafeB64Decode($e);
+        $modulus = JWT::urlsafeB64Decode($n);
+        $publicExponent = JWT::urlsafeB64Decode($e);
         $components = array('modulus' => \pack('Ca*a*', 2, self::encodeLength(\strlen($modulus)), $modulus), 'publicExponent' => \pack('Ca*a*', 2, self::encodeLength(\strlen($publicExponent)), $publicExponent));
         $rsaPublicKey = \pack('Ca*a*a*', 48, self::encodeLength(\strlen($components['modulus']) + \strlen($components['publicExponent'])), $components['modulus'], $components['publicExponent']);
         // sequence(oid(1.2.840.113549.1.1.1), null)) = rsaEncryption.

@@ -58,7 +58,7 @@ final class EasyHandle
      */
     public function createResponse() : void
     {
-        [$ver, $status, $reason, $headers] = \SimpleCalendar\plugin_deps\GuzzleHttp\Handler\HeaderProcessor::parseHeaders($this->headers);
+        [$ver, $status, $reason, $headers] = HeaderProcessor::parseHeaders($this->headers);
         $normalizedKeys = Utils::normalizeHeaderKeys($headers);
         if (!empty($this->options['decode_content']) && isset($normalizedKeys['content-encoding'])) {
             $headers['x-encoded-content-encoding'] = $headers[$normalizedKeys['content-encoding']];

@@ -17,7 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Auth\Middleware;
 
-use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
+use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Query;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 /**
  * SimpleMiddleware is a Guzzle Middleware that implements Google's Simple API
@@ -28,7 +28,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 class SimpleMiddleware
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $config;
     /**
@@ -37,7 +37,7 @@ class SimpleMiddleware
      * The configuration array expects one option
      * - key: required, otherwise InvalidArgumentException is thrown
      *
-     * @param array $config Configuration array
+     * @param array<mixed> $config Configuration array
      */
     public function __construct(array $config)
     {
@@ -76,9 +76,9 @@ class SimpleMiddleware
             if (!isset($options['auth']) || $options['auth'] !== 'simple') {
                 return $handler($request, $options);
             }
-            $query = Psr7\parse_query($request->getUri()->getQuery());
+            $query = Query::parse($request->getUri()->getQuery());
             $params = \array_merge($query, $this->config);
-            $uri = $request->getUri()->withQuery(Psr7\build_query($params));
+            $uri = $request->getUri()->withQuery(Query::build($params));
             $request = $request->withUri($uri);
             return $handler($request, $options);
         };

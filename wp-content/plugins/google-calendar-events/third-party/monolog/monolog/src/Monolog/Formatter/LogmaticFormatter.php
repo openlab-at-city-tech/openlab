@@ -16,7 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  *
  * @author Julien Breux <julien.breux@gmail.com>
  */
-class LogmaticFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\JsonFormatter
+class LogmaticFormatter extends JsonFormatter
 {
     protected const MARKERS = ["sourcecode", "php"];
     /**

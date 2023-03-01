@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\LogicExce
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class IntlFormatter implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\IntlFormatterInterface
+class IntlFormatter implements IntlFormatterInterface
 {
     private $hasMessageFormatter;
     private $cache = [];

@@ -18,23 +18,31 @@ use Throwable;
  * This can be useful to log to databases or remote APIs
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
-class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\NormalizerFormatter
+class JsonFormatter extends NormalizerFormatter
 {
     public const BATCH_MODE_JSON = 1;
     public const BATCH_MODE_NEWLINES = 2;
+    /** @var self::BATCH_MODE_* */
     protected $batchMode;
+    /** @var bool */
     protected $appendNewline;
+    /** @var bool */
     protected $ignoreEmptyContextAndExtra;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $includeStacktraces = \false;
-    public function __construct(int $batchMode = self::BATCH_MODE_JSON, bool $appendNewline = \true, bool $ignoreEmptyContextAndExtra = \false)
+    /**
+     * @param self::BATCH_MODE_* $batchMode
+     */
+    public function __construct(int $batchMode = self::BATCH_MODE_JSON, bool $appendNewline = \true, bool $ignoreEmptyContextAndExtra = \false, bool $includeStacktraces = \false)
     {
         $this->batchMode = $batchMode;
         $this->appendNewline = $appendNewline;
         $this->ignoreEmptyContextAndExtra = $ignoreEmptyContextAndExtra;
+        $this->includeStacktraces = $includeStacktraces;
+        parent::__construct();
     }
     /**
      * The batch mode option configures the formatting style for
@@ -55,7 +63,7 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
         return $this->appendNewline;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function format(array $record) : string
     {
@@ -77,7 +85,7 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
         return $this->toJson($normalized, \true) . ($this->appendNewline ? "\n" : '');
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function formatBatch(array $records) : string
     {
@@ -89,12 +97,18 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
                 return $this->formatBatchJson($records);
         }
     }
-    public function includeStacktraces(bool $include = \true)
+    /**
+     * @return self
+     */
+    public function includeStacktraces(bool $include = \true) : self
     {
         $this->includeStacktraces = $include;
+        return $this;
     }
     /**
      * Return a JSON-encoded array of records.
+     *
+     * @phpstan-param Record[] $records
      */
     protected function formatBatchJson(array $records) : string
     {
@@ -103,6 +117,8 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
     /**
      * Use new lines to separate records instead of a
      * JSON-encoded array.
+     *
+     * @phpstan-param Record[] $records
      */
     protected function formatBatchNewlines(array $records) : string
     {
@@ -139,8 +155,21 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
             }
             return $normalized;
         }
-        if ($data instanceof Throwable) {
-            return $this->normalizeException($data, $depth);
+        if (\is_object($data)) {
+            if ($data instanceof \DateTimeInterface) {
+                return $this->formatDate($data);
+            }
+            if ($data instanceof Throwable) {
+                return $this->normalizeException($data, $depth);
+            }
+            // if the object has specific json serializability we want to make sure we skip the __toString treatment below
+            if ($data instanceof \JsonSerializable) {
+                return $data;
+            }
+            if (\method_exists($data, '__toString')) {
+                return $data->__toString();
+            }
+            return $data;
         }
         if (\is_resource($data)) {
             return parent::normalize($data);
@@ -150,6 +179,8 @@ class JsonFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\Normal
     /**
      * Normalizes given exception with or without its own stack trace based on
      * `includeStacktraces` property.
+     *
+     * {@inheritDoc}
      */
     protected function normalizeException(Throwable $e, int $depth = 0) : array
     {

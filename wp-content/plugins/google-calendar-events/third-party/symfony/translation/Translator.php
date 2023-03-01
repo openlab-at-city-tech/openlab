@@ -23,11 +23,11 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\LoaderInterf
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::class);
+\class_exists(MessageCatalogue::class);
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface, LocaleAwareInterface
+class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
     /**
      * @var MessageCatalogueInterface[]
@@ -38,7 +38,7 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
      */
     private $locale;
     /**
-     * @var array
+     * @var string[]
      */
     private $fallbackLocales = [];
     /**
@@ -113,6 +113,7 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
             $domain = 'messages';
         }
         $this->assertValidLocale($locale);
+        $locale ?: ($locale = \class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
         $this->resources[$locale][] = [$format, $resource, $domain];
         if (\in_array($locale, $this->fallbackLocales)) {
             $this->catalogues = [];
@@ -126,19 +127,19 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
     public function setLocale(string $locale)
     {
         $this->assertValidLocale($locale);
-        $this->locale = $locale ?? (\class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
+        $this->locale = $locale;
     }
     /**
      * {@inheritdoc}
      */
     public function getLocale()
     {
-        return $this->locale;
+        return $this->locale ?: (\class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
     }
     /**
      * Sets the fallback locales.
      *
-     * @param array $locales The fallback locales
+     * @param string[] $locales
      *
      * @throws InvalidArgumentException If a locale contains invalid characters
      */
@@ -181,8 +182,8 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
                 break;
             }
         }
-        $len = \strlen(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX);
-        if ($this->hasIntlFormatter && ($catalogue->defines($id, $domain . \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX) || \strlen($domain) > $len && 0 === \substr_compare($domain, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len))) {
+        $len = \strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX);
+        if ($this->hasIntlFormatter && ($catalogue->defines($id, $domain . MessageCatalogue::INTL_DOMAIN_SUFFIX) || \strlen($domain) > $len && 0 === \substr_compare($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX, -$len, $len))) {
             return $this->formatter->formatIntl($catalogue->get($id, $domain), $locale, $parameters);
         }
         return $this->formatter->format($catalogue->get($id, $domain), $locale, $parameters);
@@ -192,7 +193,7 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
      */
     public function getCatalogue(string $locale = null)
     {
-        if (null === $locale) {
+        if (!$locale) {
             $locale = $this->getLocale();
         } else {
             $this->assertValidLocale($locale);
@@ -203,9 +204,16 @@ class Translator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Sym
         return $this->catalogues[$locale];
     }
     /**
+     * {@inheritdoc}
+     */
+    public function getCatalogues() : array
+    {
+        return \array_values($this->catalogues);
+    }
+    /**
      * Gets the loaders.
      *
-     * @return array LoaderInterface[]
+     * @return LoaderInterface[]
      */
     protected function getLoaders()
     {
@@ -266,7 +274,7 @@ EOF
 , $locale, \var_export($this->getAllMessages($this->catalogues[$locale]), \true), $fallbackContent);
         $cache->write($content, $this->catalogues[$locale]->getResources());
     }
-    private function getFallbackContent(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue $catalogue) : string
+    private function getFallbackContent(MessageCatalogue $catalogue) : string
     {
         $fallbackContent = '';
         $current = '';
@@ -296,7 +304,7 @@ EOF
      */
     protected function doLoadCatalogue(string $locale) : void
     {
-        $this->catalogues[$locale] = new \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue($locale);
+        $this->catalogues[$locale] = new MessageCatalogue($locale);
         if (isset($this->resources[$locale])) {
             foreach ($this->resources[$locale] as $resource) {
                 if (!isset($this->loaders[$resource[0]])) {
@@ -316,7 +324,7 @@ EOF
             if (!isset($this->catalogues[$fallback])) {
                 $this->initializeCatalogue($fallback);
             }
-            $fallbackCatalogue = new \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue($fallback, $this->getAllMessages($this->catalogues[$fallback]));
+            $fallbackCatalogue = new MessageCatalogue($fallback, $this->getAllMessages($this->catalogues[$fallback]));
             foreach ($this->catalogues[$fallback]->getResources() as $resource) {
                 $fallbackCatalogue->addResource($resource);
             }
@@ -329,13 +337,8 @@ EOF
         if (null === $this->parentLocales) {
             $this->parentLocales = \json_decode(\file_get_contents(__DIR__ . '/Resources/data/parents.json'), \true);
         }
+        $originLocale = $locale;
         $locales = [];
-        foreach ($this->fallbackLocales as $fallback) {
-            if ($fallback === $locale) {
-                continue;
-            }
-            $locales[] = $fallback;
-        }
         while ($locale) {
             $parent = $this->parentLocales[$locale] ?? null;
             if ($parent) {
@@ -353,8 +356,14 @@ EOF
                 $locale = null;
             }
             if (null !== $locale) {
-                \array_unshift($locales, $locale);
+                $locales[] = $locale;
             }
+        }
+        foreach ($this->fallbackLocales as $fallback) {
+            if ($fallback === $originLocale) {
+                continue;
+            }
+            $locales[] = $fallback;
         }
         return \array_unique($locales);
     }
@@ -365,7 +374,7 @@ EOF
      */
     protected function assertValidLocale(string $locale)
     {
-        if (1 !== \preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
+        if (!\preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
             throw new InvalidArgumentException(\sprintf('Invalid "%s" locale.', $locale));
         }
     }
@@ -380,12 +389,12 @@ EOF
         }
         return $this->configCacheFactory;
     }
-    private function getAllMessages(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInterface $catalogue) : array
+    private function getAllMessages(MessageCatalogueInterface $catalogue) : array
     {
         $allMessages = [];
         foreach ($catalogue->all() as $domain => $messages) {
-            if ($intlMessages = $catalogue->all($domain . \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
-                $allMessages[$domain . \SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue::INTL_DOMAIN_SUFFIX] = $intlMessages;
+            if ($intlMessages = $catalogue->all($domain . MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
+                $allMessages[$domain . MessageCatalogue::INTL_DOMAIN_SUFFIX] = $intlMessages;
                 $messages = \array_diff_key($messages, $intlMessages);
             }
             if ($messages) {

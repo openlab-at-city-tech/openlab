@@ -21,7 +21,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
-class QtFileLoader implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\LoaderInterface
+class QtFileLoader implements LoaderInterface
 {
     /**
      * {@inheritdoc}

@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_CommentList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_CommentList extends Google_Collection
 {
     protected $collection_key = 'comments';
     protected $commentsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_Comment';
@@ -25,14 +25,14 @@ class Google_Service_Drive_CommentList extends \SimpleCalendar\plugin_deps\Googl
     public $kind;
     public $nextPageToken;
     /**
-     * @param Google_Service_Drive_Comment[]
+     * @param Google_Service_Drive_Comment
      */
     public function setComments($comments)
     {
         $this->comments = $comments;
     }
     /**
-     * @return Google_Service_Drive_Comment[]
+     * @return Google_Service_Drive_Comment
      */
     public function getComments()
     {

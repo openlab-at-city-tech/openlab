@@ -19,7 +19,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author stealth35
  */
-class IcuResFileLoader implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\LoaderInterface
+class IcuResFileLoader implements LoaderInterface
 {
     /**
      * {@inheritdoc}
@@ -64,7 +64,7 @@ class IcuResFileLoader implements \SimpleCalendar\plugin_deps\Symfony\Component\
      * @param array           $messages Used internally for recursive calls
      * @param string          $path     Current path being parsed, used internally for recursive calls
      *
-     * @return array the flattened ResourceBundle
+     * @return array
      */
     protected function flatten(\ResourceBundle $rb, array &$messages = [], string $path = null)
     {

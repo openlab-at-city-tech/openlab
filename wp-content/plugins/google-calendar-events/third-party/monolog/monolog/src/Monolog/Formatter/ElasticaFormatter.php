@@ -16,8 +16,10 @@ use SimpleCalendar\plugin_deps\Elastica\Document;
  * Format a log message into an Elastica Document
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
-class ElasticaFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\NormalizerFormatter
+class ElasticaFormatter extends NormalizerFormatter
 {
     /**
      * @var string Elastic search index name
@@ -39,7 +41,7 @@ class ElasticaFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\No
         $this->type = $type;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function format(array $record)
     {
@@ -55,18 +57,20 @@ class ElasticaFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\No
      */
     public function getType() : string
     {
+        /** @phpstan-ignore-next-line */
         return $this->type;
     }
     /**
      * Convert a log message into an Elastica Document
-     * @param  array    $record
-     * @return Document
+     *
+     * @phpstan-param Record $record
      */
     protected function getDocument(array $record) : Document
     {
         $document = new Document();
         $document->setData($record);
         if (\method_exists($document, 'setType')) {
+            /** @phpstan-ignore-next-line */
             $document->setType($this->type);
         }
         $document->setIndex($this->index);

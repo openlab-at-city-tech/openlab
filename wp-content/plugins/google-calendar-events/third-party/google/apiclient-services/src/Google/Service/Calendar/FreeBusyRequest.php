@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_FreeBusyRequest extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_FreeBusyRequest extends Google_Collection
 {
     protected $collection_key = 'items';
     public $calendarExpansionMax;
@@ -44,14 +44,14 @@ class Google_Service_Calendar_FreeBusyRequest extends \SimpleCalendar\plugin_dep
         return $this->groupExpansionMax;
     }
     /**
-     * @param Google_Service_Calendar_FreeBusyRequestItem[]
+     * @param Google_Service_Calendar_FreeBusyRequestItem
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Calendar_FreeBusyRequestItem[]
+     * @return Google_Service_Calendar_FreeBusyRequestItem
      */
     public function getItems()
     {

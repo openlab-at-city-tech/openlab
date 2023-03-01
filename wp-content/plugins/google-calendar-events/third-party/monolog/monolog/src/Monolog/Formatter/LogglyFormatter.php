@@ -16,7 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  *
  * @author Adam Pancutt <adam@pancutt.com>
  */
-class LogglyFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\JsonFormatter
+class LogglyFormatter extends JsonFormatter
 {
     /**
      * Overrides the default batch mode to new lines for compatibility with the

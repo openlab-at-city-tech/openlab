@@ -17,12 +17,15 @@ use SimpleCalendar\plugin_deps\Monolog\ResettableInterface;
  * Forwards records to multiple handlers
  *
  * @author Lenar Lõhmus <lenar@city.ee>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
-class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler implements \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface, ResettableInterface
+class GroupHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface
 {
     use ProcessableHandlerTrait;
     /** @var HandlerInterface[] */
     protected $handlers;
+    /** @var bool */
     protected $bubble;
     /**
      * @param HandlerInterface[] $handlers Array of Handlers.
@@ -31,7 +34,7 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
     public function __construct(array $handlers, bool $bubble = \true)
     {
         foreach ($handlers as $handler) {
-            if (!$handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface) {
+            if (!$handler instanceof HandlerInterface) {
                 throw new \InvalidArgumentException('The first argument of the GroupHandler must be an array of HandlerInterface instances.');
             }
         }
@@ -39,7 +42,7 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
         $this->bubble = $bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isHandling(array $record) : bool
     {
@@ -51,11 +54,12 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
         return \false;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {
         if ($this->processors) {
+            /** @var Record $record */
             $record = $this->processRecord($record);
         }
         foreach ($this->handlers as $handler) {
@@ -64,7 +68,7 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
         return \false === $this->bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handleBatch(array $records) : void
     {
@@ -73,6 +77,7 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
             foreach ($records as $record) {
                 $processed[] = $this->processRecord($record);
             }
+            /** @var Record[] $records */
             $records = $processed;
         }
         foreach ($this->handlers as $handler) {
@@ -96,12 +101,12 @@ class GroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler i
         }
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
         foreach ($this->handlers as $handler) {
-            if ($handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface) {
+            if ($handler instanceof FormattableHandlerInterface) {
                 $handler->setFormatter($formatter);
             }
         }

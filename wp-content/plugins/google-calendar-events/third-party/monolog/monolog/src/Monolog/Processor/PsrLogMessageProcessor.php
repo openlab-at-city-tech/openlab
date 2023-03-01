@@ -19,7 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class PsrLogMessageProcessor implements \SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface
+class PsrLogMessageProcessor implements ProcessorInterface
 {
     public const SIMPLE_DATE = "Y-m-d\\TH:i:s.uP";
     /** @var string|null */
@@ -36,8 +36,7 @@ class PsrLogMessageProcessor implements \SimpleCalendar\plugin_deps\Monolog\Proc
         $this->removeUsedContextFields = $removeUsedContextFields;
     }
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
     public function __invoke(array $record) : array
     {

@@ -10,11 +10,11 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-use Exception;
 use InvalidArgumentException as BaseInvalidArgumentException;
+use Throwable;
 // This will extends OutOfRangeException instead of InvalidArgumentException since 3.0.0
 // use OutOfRangeException as BaseOutOfRangeException;
-class OutOfRangeException extends BaseInvalidArgumentException implements \SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidArgumentException
+class OutOfRangeException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
      * The unit or name of the value.
@@ -48,9 +48,9 @@ class OutOfRangeException extends BaseInvalidArgumentException implements \Simpl
      * @param mixed          $max
      * @param mixed          $value
      * @param int            $code
-     * @param Exception|null $previous
+     * @param Throwable|null $previous
      */
-    public function __construct($unit, $min, $max, $value, $code = 0, Exception $previous = null)
+    public function __construct($unit, $min, $max, $value, $code = 0, Throwable $previous = null)
     {
         $this->unit = $unit;
         $this->min = $min;

@@ -21,8 +21,10 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *
  * @see https://fleep.io/integrations/webhooks/ Fleep Webhooks Documentation
  * @author Ando Roots <ando@sqroot.eu>
+ *
+ * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class FleepHookHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\SocketHandler
+class FleepHookHandler extends SocketHandler
 {
     protected const FLEEP_HOST = 'fleep.io';
     protected const FLEEP_HOOK_URI = '/hook/';
@@ -37,18 +39,16 @@ class FleepHookHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socke
      * see https://fleep.io/integrations/webhooks/
      *
      * @param  string                    $token  Webhook token
-     * @param  string|int                $level  The minimum logging level at which this handler will be triggered
-     * @param  bool                      $bubble Whether the messages that are handled can bubble up the stack or not
      * @throws MissingExtensionException
      */
-    public function __construct(string $token, $level = Logger::DEBUG, bool $bubble = \true)
+    public function __construct(string $token, $level = Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
         if (!\extension_loaded('openssl')) {
-            throw new \SimpleCalendar\plugin_deps\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the FleepHookHandler');
+            throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FleepHookHandler');
         }
         $this->token = $token;
         $connectionString = 'ssl://' . static::FLEEP_HOST . ':443';
-        parent::__construct($connectionString, $level, $bubble);
+        parent::__construct($connectionString, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
     }
     /**
      * Returns the default formatter to use with this handler
@@ -70,7 +70,7 @@ class FleepHookHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socke
         $this->closeSocket();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function generateDataStream(array $record) : string
     {
@@ -91,6 +91,8 @@ class FleepHookHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socke
     }
     /**
      * Builds the body of API call
+     *
+     * @phpstan-param FormattedRecord $record
      */
     private function buildContent(array $record) : string
     {

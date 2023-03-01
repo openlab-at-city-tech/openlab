@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $acl = $calendarService->acl;
  *  </code>
  */
-class Google_Service_Calendar_Resource_Acl extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
 {
     /**
      * Deletes an access control rule. (acl.delete)
@@ -66,12 +66,9 @@ class Google_Service_Calendar_Resource_Acl extends \SimpleCalendar\plugin_deps\G
      * the currently logged in user, use the "primary" keyword.
      * @param Google_Service_Calendar_AclRule $postBody
      * @param array $optParams Optional parameters.
-     *
-     * @opt_param bool sendNotifications Whether to send notifications about the
-     * calendar sharing change. Optional. The default is True.
      * @return Google_Service_Calendar_AclRule
      */
-    public function insert($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_AclRule $postBody, $optParams = array())
+    public function insert($calendarId, Google_Service_Calendar_AclRule $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -120,13 +117,9 @@ class Google_Service_Calendar_Resource_Acl extends \SimpleCalendar\plugin_deps\G
      * @param string $ruleId ACL rule identifier.
      * @param Google_Service_Calendar_AclRule $postBody
      * @param array $optParams Optional parameters.
-     *
-     * @opt_param bool sendNotifications Whether to send notifications about the
-     * calendar sharing change. Note that there are no notifications on access
-     * removal. Optional. The default is True.
      * @return Google_Service_Calendar_AclRule
      */
-    public function patch($calendarId, $ruleId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_AclRule $postBody, $optParams = array())
+    public function patch($calendarId, $ruleId, Google_Service_Calendar_AclRule $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'ruleId' => $ruleId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -141,13 +134,9 @@ class Google_Service_Calendar_Resource_Acl extends \SimpleCalendar\plugin_deps\G
      * @param string $ruleId ACL rule identifier.
      * @param Google_Service_Calendar_AclRule $postBody
      * @param array $optParams Optional parameters.
-     *
-     * @opt_param bool sendNotifications Whether to send notifications about the
-     * calendar sharing change. Note that there are no notifications on access
-     * removal. Optional. The default is True.
      * @return Google_Service_Calendar_AclRule
      */
-    public function update($calendarId, $ruleId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_AclRule $postBody, $optParams = array())
+    public function update($calendarId, $ruleId, Google_Service_Calendar_AclRule $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'ruleId' => $ruleId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -181,7 +170,7 @@ class Google_Service_Calendar_Resource_Acl extends \SimpleCalendar\plugin_deps\G
      * Optional. The default is to return all entries.
      * @return Google_Service_Calendar_Channel
      */
-    public function watch($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_Channel $postBody, $optParams = array())
+    public function watch($calendarId, Google_Service_Calendar_Channel $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);

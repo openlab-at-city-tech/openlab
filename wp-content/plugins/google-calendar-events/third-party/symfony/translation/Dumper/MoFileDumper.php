@@ -17,7 +17,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Stealth35
  */
-class MoFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class MoFileDumper extends FileDumper
 {
     /**
      * {@inheritdoc}
@@ -29,8 +29,8 @@ class MoFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
         $size = 0;
         foreach ($messages->all($domain) as $source => $target) {
             $offsets[] = \array_map('strlen', [$sources, $source, $targets, $target]);
-            $sources .= "\0" . $source;
-            $targets .= "\0" . $target;
+            $sources .= "\x00" . $source;
+            $targets .= "\x00" . $target;
             ++$size;
         }
         $header = ['magicNumber' => MoFileLoader::MO_LITTLE_ENDIAN_MAGIC, 'formatRevision' => 0, 'count' => $size, 'offsetId' => MoFileLoader::MO_HEADER_SIZE, 'offsetTranslated' => MoFileLoader::MO_HEADER_SIZE + 8 * $size, 'sizeHashes' => 0, 'offsetHashes' => MoFileLoader::MO_HEADER_SIZE + 16 * $size];

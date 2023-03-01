@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Stealth35
  */
-class IcuResFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class IcuResFileDumper extends FileDumper
 {
     /**
      * {@inheritdoc}
@@ -30,13 +30,13 @@ class IcuResFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Tra
         $data = $indexes = $resources = '';
         foreach ($messages->all($domain) as $source => $target) {
             $indexes .= \pack('v', \strlen($data) + 28);
-            $data .= $source . "\0";
+            $data .= $source . "\x00";
         }
         $data .= $this->writePadding($data);
         $keyTop = $this->getPosition($data);
         foreach ($messages->all($domain) as $source => $target) {
             $resources .= \pack('V', $this->getPosition($data));
-            $data .= \pack('V', \strlen($target)) . \mb_convert_encoding($target . "\0", 'UTF-16LE', 'UTF-8') . $this->writePadding($data);
+            $data .= \pack('V', \strlen($target)) . \mb_convert_encoding($target . "\x00", 'UTF-16LE', 'UTF-8') . $this->writePadding($data);
         }
         $resOffset = $this->getPosition($data);
         $data .= \pack('v', \count($messages->all($domain))) . $indexes . $this->writePadding($data) . $resources;
@@ -89,7 +89,7 @@ class IcuResFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Tra
     private function writePadding(string $data) : ?string
     {
         $padding = \strlen($data) % 4;
-        return $padding ? \str_repeat("ª", 4 - $padding) : null;
+        return $padding ? \str_repeat("\xaa", 4 - $padding) : null;
     }
     private function getPosition(string $data)
     {

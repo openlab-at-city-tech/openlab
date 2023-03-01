@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_DriveFileContentHints extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Drive_DriveFileContentHints extends Google_Model
 {
     public $indexableText;
     protected $thumbnailType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileContentHintsThumbnail';
@@ -33,7 +33,7 @@ class Google_Service_Drive_DriveFileContentHints extends \SimpleCalendar\plugin_
     /**
      * @param Google_Service_Drive_DriveFileContentHintsThumbnail
      */
-    public function setThumbnail(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileContentHintsThumbnail $thumbnail)
+    public function setThumbnail(Google_Service_Drive_DriveFileContentHintsThumbnail $thumbnail)
     {
         $this->thumbnail = $thumbnail;
     }

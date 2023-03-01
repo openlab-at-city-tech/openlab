@@ -56,7 +56,7 @@ class AppendStream implements StreamInterface
     }
     public function getContents()
     {
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::copyToString($this);
+        return Utils::copyToString($this);
     }
     /**
      * Closes each attached stream.

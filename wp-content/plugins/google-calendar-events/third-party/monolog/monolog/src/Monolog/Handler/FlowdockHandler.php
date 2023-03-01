@@ -25,31 +25,30 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @author Dominik Liebler <liebler.dominik@gmail.com>
  * @see https://www.flowdock.com/api/push
+ *
+ * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class FlowdockHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\SocketHandler
+class FlowdockHandler extends SocketHandler
 {
     /**
      * @var string
      */
     protected $apiToken;
     /**
-     * @param string|int $level  The minimum logging level at which this handler will be triggered
-     * @param bool       $bubble Whether the messages that are handled can bubble up the stack or not
-     *
      * @throws MissingExtensionException if OpenSSL is missing
      */
-    public function __construct(string $apiToken, $level = Logger::DEBUG, bool $bubble = \true)
+    public function __construct(string $apiToken, $level = Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
         if (!\extension_loaded('openssl')) {
-            throw new \SimpleCalendar\plugin_deps\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
+            throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
         }
-        parent::__construct('ssl://api.flowdock.com:443', $level, $bubble);
+        parent::__construct('ssl://api.flowdock.com:443', $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->apiToken = $apiToken;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
         if (!$formatter instanceof FlowdockFormatter) {
             throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
@@ -64,9 +63,7 @@ class FlowdockHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socket
         throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
     }
     /**
-     * {@inheritdoc}
-     *
-     * @param array $record
+     * {@inheritDoc}
      */
     protected function write(array $record) : void
     {
@@ -74,7 +71,7 @@ class FlowdockHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socket
         $this->closeSocket();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function generateDataStream(array $record) : string
     {
@@ -83,6 +80,8 @@ class FlowdockHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Socket
     }
     /**
      * Builds the body of API call
+     *
+     * @phpstan-param FormattedRecord $record
      */
     private function buildContent(array $record) : string
     {

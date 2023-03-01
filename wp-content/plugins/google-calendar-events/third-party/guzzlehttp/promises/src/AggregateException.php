@@ -5,7 +5,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
 /**
  * Exception thrown when too many errors occur in the some() or any() methods.
  */
-class AggregateException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\RejectionException
+class AggregateException extends RejectionException
 {
     public function __construct($msg, array $reasons)
     {

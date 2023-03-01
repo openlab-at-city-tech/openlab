@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $comments = $driveService->comments;
  *  </code>
  */
-class Google_Service_Drive_Resource_Comments extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Drive_Resource_Comments extends Google_Service_Resource
 {
     /**
      * Creates a new comment on a file. (comments.create)
@@ -35,7 +35,7 @@ class Google_Service_Drive_Resource_Comments extends \SimpleCalendar\plugin_deps
      * @param array $optParams Optional parameters.
      * @return Google_Service_Drive_Comment
      */
-    public function create($fileId, \SimpleCalendar\plugin_deps\Google_Service_Drive_Comment $postBody, $optParams = array())
+    public function create($fileId, Google_Service_Drive_Comment $postBody, $optParams = array())
     {
         $params = array('fileId' => $fileId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -102,7 +102,7 @@ class Google_Service_Drive_Resource_Comments extends \SimpleCalendar\plugin_deps
      * @param array $optParams Optional parameters.
      * @return Google_Service_Drive_Comment
      */
-    public function update($fileId, $commentId, \SimpleCalendar\plugin_deps\Google_Service_Drive_Comment $postBody, $optParams = array())
+    public function update($fileId, $commentId, Google_Service_Drive_Comment $postBody, $optParams = array())
     {
         $params = array('fileId' => $fileId, 'commentId' => $commentId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);

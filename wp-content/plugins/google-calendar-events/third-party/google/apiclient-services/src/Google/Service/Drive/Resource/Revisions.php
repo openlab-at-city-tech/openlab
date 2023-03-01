@@ -25,13 +25,11 @@ namespace SimpleCalendar\plugin_deps;
  *   $revisions = $driveService->revisions;
  *  </code>
  */
-class Google_Service_Drive_Resource_Revisions extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Drive_Resource_Revisions extends Google_Service_Resource
 {
     /**
-     * Permanently deletes a file version. You can only delete revisions for files
-     * with binary content in Google Drive, like images or videos. Revisions for
-     * other files, like Google Docs or Sheets, and the last remaining file version
-     * can't be deleted. (revisions.delete)
+     * Permanently deletes a revision. This method is only applicable to files with
+     * binary content in Drive. (revisions.delete)
      *
      * @param string $fileId The ID of the file.
      * @param string $revisionId The ID of the revision.
@@ -88,7 +86,7 @@ class Google_Service_Drive_Resource_Revisions extends \SimpleCalendar\plugin_dep
      * @param array $optParams Optional parameters.
      * @return Google_Service_Drive_Revision
      */
-    public function update($fileId, $revisionId, \SimpleCalendar\plugin_deps\Google_Service_Drive_Revision $postBody, $optParams = array())
+    public function update($fileId, $revisionId, Google_Service_Drive_Revision $postBody, $optParams = array())
     {
         $params = array('fileId' => $fileId, 'revisionId' => $revisionId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);

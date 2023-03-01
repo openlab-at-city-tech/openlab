@@ -13,5 +13,5 @@ namespace SimpleCalendar\plugin_deps\Carbon;
 use DateTimeInterface;
 interface CarbonConverterInterface
 {
-    public function convertDate(DateTimeInterface $dateTime, bool $negated = \false) : \SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
+    public function convertDate(DateTimeInterface $dateTime, bool $negated = \false) : CarbonInterface;
 }

@@ -8,9 +8,13 @@ namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
 use SimpleCalendar\plugin_deps\Carbon\CarbonImmutable;
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Types\VarDateTimeImmutableType;
-class DateTimeImmutableType extends VarDateTimeImmutableType implements \SimpleCalendar\plugin_deps\Carbon\Doctrine\CarbonDoctrineType
+class DateTimeImmutableType extends VarDateTimeImmutableType implements CarbonDoctrineType
 {
+    /** @use CarbonTypeConverter<CarbonImmutable> */
     use CarbonTypeConverter;
+    /**
+     * @return class-string<CarbonImmutable>
+     */
     protected function getCarbonClassName() : string
     {
         return CarbonImmutable::class;

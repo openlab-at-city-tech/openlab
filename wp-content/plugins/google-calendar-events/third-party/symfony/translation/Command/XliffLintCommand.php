@@ -10,7 +10,10 @@
  */
 namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Command;
 
+use SimpleCalendar\plugin_deps\Symfony\Component\Console\CI\GithubActionReporter;
 use SimpleCalendar\plugin_deps\Symfony\Component\Console\Command\Command;
+use SimpleCalendar\plugin_deps\Symfony\Component\Console\Completion\CompletionInput;
+use SimpleCalendar\plugin_deps\Symfony\Component\Console\Completion\CompletionSuggestions;
 use SimpleCalendar\plugin_deps\Symfony\Component\Console\Exception\RuntimeException;
 use SimpleCalendar\plugin_deps\Symfony\Component\Console\Input\InputArgument;
 use SimpleCalendar\plugin_deps\Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +32,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Util\XliffUtils;
 class XliffLintCommand extends Command
 {
     protected static $defaultName = 'lint:xliff';
+    protected static $defaultDescription = 'Lint an XLIFF file and outputs encountered errors';
     private $format;
     private $displayCorrectFiles;
     private $directoryIteratorProvider;
@@ -46,7 +50,7 @@ class XliffLintCommand extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Lint an XLIFF file and outputs encountered errors')->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')->setHelp(<<<EOF
+        $this->setDescription(self::$defaultDescription)->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format')->setHelp(<<<EOF
 The <info>%command.name%</info> command lints an XLIFF file and outputs to STDOUT
 the first encountered syntax error.
 
@@ -70,7 +74,7 @@ EOF
     {
         $io = new SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
-        $this->format = $input->getOption('format');
+        $this->format = $input->getOption('format') ?? (GithubActionReporter::isGithubActionEnvironment() ? 'github' : 'txt');
         $this->displayCorrectFiles = $output->isVerbose();
         if (['-'] === $filenames) {
             return $this->display($io, [$this->validate(\file_get_contents('php://stdin'))]);
@@ -124,23 +128,30 @@ EOF
                 return $this->displayTxt($io, $files);
             case 'json':
                 return $this->displayJson($io, $files);
+            case 'github':
+                return $this->displayTxt($io, $files, \true);
             default:
                 throw new InvalidArgumentException(\sprintf('The format "%s" is not supported.', $this->format));
         }
     }
-    private function displayTxt(SymfonyStyle $io, array $filesInfo)
+    private function displayTxt(SymfonyStyle $io, array $filesInfo, bool $errorAsGithubAnnotations = \false)
     {
         $countFiles = \count($filesInfo);
         $erroredFiles = 0;
+        $githubReporter = $errorAsGithubAnnotations ? new GithubActionReporter($io) : null;
         foreach ($filesInfo as $info) {
             if ($info['valid'] && $this->displayCorrectFiles) {
                 $io->comment('<info>OK</info>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
             } elseif (!$info['valid']) {
                 ++$erroredFiles;
                 $io->text('<error> ERROR </error>' . ($info['file'] ? \sprintf(' in %s', $info['file']) : ''));
-                $io->listing(\array_map(function ($error) {
+                $io->listing(\array_map(function ($error) use($info, $githubReporter) {
                     // general document errors have a '-1' line number
-                    return -1 === $error['line'] ? $error['message'] : \sprintf('Line %d, Column %d: %s', $error['line'], $error['column'], $error['message']);
+                    $line = -1 === $error['line'] ? null : $error['line'];
+                    if ($githubReporter) {
+                        $githubReporter->error($error['message'], $info['file'], $line, null !== $line ? $error['column'] : null);
+                    }
+                    return null === $line ? $error['message'] : \sprintf('Line %d, Column %d: %s', $line, $error['column'], $error['message']);
                 }, $info['messages']));
             }
         }
@@ -204,5 +215,11 @@ EOF
             }
         }
         return null;
+    }
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    {
+        if ($input->mustSuggestOptionValuesFor('format')) {
+            $suggestions->suggestValues(['txt', 'json', 'github']);
+        }
     }
 }

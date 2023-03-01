@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $channels = $calendarService->channels;
  *  </code>
  */
-class Google_Service_Calendar_Resource_Channels extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_Channels extends Google_Service_Resource
 {
     /**
      * Stop watching resources through this channel (channels.stop)
@@ -33,7 +33,7 @@ class Google_Service_Calendar_Resource_Channels extends \SimpleCalendar\plugin_d
      * @param Google_Service_Calendar_Channel $postBody
      * @param array $optParams Optional parameters.
      */
-    public function stop(\SimpleCalendar\plugin_deps\Google_Service_Calendar_Channel $postBody, $optParams = array())
+    public function stop(Google_Service_Calendar_Channel $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);

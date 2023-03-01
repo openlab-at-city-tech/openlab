@@ -12,6 +12,7 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
 use SimpleCalendar\plugin_deps\Monolog\Logger;
+use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Injects line/file:class/function where the log message came from
  *
@@ -22,15 +23,25 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * triggered the FingersCrossedHandler.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class IntrospectionProcessor implements \SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface
+class IntrospectionProcessor implements ProcessorInterface
 {
+    /** @var int */
     private $level;
+    /** @var string[] */
     private $skipClassesPartials;
+    /** @var int */
     private $skipStackFramesCount;
+    /** @var string[] */
     private $skipFunctions = ['call_user_func', 'call_user_func_array'];
     /**
-     * @param string|int $level The minimum logging level at which this Processor will be triggered
+     * @param string|int $level               The minimum logging level at which this Processor will be triggered
+     * @param string[]   $skipClassesPartials
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $level
      */
     public function __construct($level = Logger::DEBUG, array $skipClassesPartials = [], int $skipStackFramesCount = 0)
     {
@@ -38,6 +49,9 @@ class IntrospectionProcessor implements \SimpleCalendar\plugin_deps\Monolog\Proc
         $this->skipClassesPartials = \array_merge(['Monolog\\'], $skipClassesPartials);
         $this->skipStackFramesCount = $skipStackFramesCount;
     }
+    /**
+     * {@inheritDoc}
+     */
     public function __invoke(array $record) : array
     {
         // return if the level is not high enough
@@ -66,10 +80,13 @@ class IntrospectionProcessor implements \SimpleCalendar\plugin_deps\Monolog\Proc
         }
         $i += $this->skipStackFramesCount;
         // we should have the call source now
-        $record['extra'] = \array_merge($record['extra'], ['file' => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null, 'line' => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null, 'class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : null, 'function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : null]);
+        $record['extra'] = \array_merge($record['extra'], ['file' => isset($trace[$i - 1]['file']) ? $trace[$i - 1]['file'] : null, 'line' => isset($trace[$i - 1]['line']) ? $trace[$i - 1]['line'] : null, 'class' => isset($trace[$i]['class']) ? $trace[$i]['class'] : null, 'callType' => isset($trace[$i]['type']) ? $trace[$i]['type'] : null, 'function' => isset($trace[$i]['function']) ? $trace[$i]['function'] : null]);
         return $record;
     }
-    private function isTraceClassOrSkippedFunction(array $trace, int $index)
+    /**
+     * @param array[] $trace
+     */
+    private function isTraceClassOrSkippedFunction(array $trace, int $index) : bool
     {
         if (!isset($trace[$index])) {
             return \false;

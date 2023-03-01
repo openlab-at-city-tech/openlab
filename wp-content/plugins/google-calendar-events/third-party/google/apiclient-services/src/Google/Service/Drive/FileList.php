@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_FileList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_FileList extends Google_Collection
 {
     protected $collection_key = 'files';
     protected $filesType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFile';
@@ -26,14 +26,14 @@ class Google_Service_Drive_FileList extends \SimpleCalendar\plugin_deps\Google_C
     public $kind;
     public $nextPageToken;
     /**
-     * @param Google_Service_Drive_DriveFile[]
+     * @param Google_Service_Drive_DriveFile
      */
     public function setFiles($files)
     {
         $this->files = $files;
     }
     /**
-     * @return Google_Service_Drive_DriveFile[]
+     * @return Google_Service_Drive_DriveFile
      */
     public function getFiles()
     {

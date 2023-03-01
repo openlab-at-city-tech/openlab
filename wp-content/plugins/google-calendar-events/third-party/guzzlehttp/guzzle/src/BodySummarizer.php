@@ -3,7 +3,7 @@
 namespace SimpleCalendar\plugin_deps\GuzzleHttp;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\MessageInterface;
-final class BodySummarizer implements \SimpleCalendar\plugin_deps\GuzzleHttp\BodySummarizerInterface
+final class BodySummarizer implements BodySummarizerInterface
 {
     /**
      * @var int|null

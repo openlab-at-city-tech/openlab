@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_FreeBusyCalendar extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_FreeBusyCalendar extends Google_Collection
 {
     protected $collection_key = 'errors';
     protected $busyType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_TimePeriod';
@@ -25,28 +25,28 @@ class Google_Service_Calendar_FreeBusyCalendar extends \SimpleCalendar\plugin_de
     protected $errorsType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Error';
     protected $errorsDataType = 'array';
     /**
-     * @param Google_Service_Calendar_TimePeriod[]
+     * @param Google_Service_Calendar_TimePeriod
      */
     public function setBusy($busy)
     {
         $this->busy = $busy;
     }
     /**
-     * @return Google_Service_Calendar_TimePeriod[]
+     * @return Google_Service_Calendar_TimePeriod
      */
     public function getBusy()
     {
         return $this->busy;
     }
     /**
-     * @param Google_Service_Calendar_Error[]
+     * @param Google_Service_Calendar_Error
      */
     public function setErrors($errors)
     {
         $this->errors = $errors;
     }
     /**
-     * @return Google_Service_Calendar_Error[]
+     * @return Google_Service_Calendar_Error
      */
     public function getErrors()
     {

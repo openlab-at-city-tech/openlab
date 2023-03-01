@@ -11,18 +11,34 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use BadMethodCallException as BaseBadMethodCallException;
-use Exception;
-class BadFluentSetterException extends BaseBadMethodCallException implements \SimpleCalendar\plugin_deps\Carbon\Exceptions\BadMethodCallException
+use Throwable;
+class BadFluentSetterException extends BaseBadMethodCallException implements BadMethodCallException
 {
+    /**
+     * The setter.
+     *
+     * @var string
+     */
+    protected $setter;
     /**
      * Constructor.
      *
-     * @param string         $method
+     * @param string         $setter
      * @param int            $code
-     * @param Exception|null $previous
+     * @param Throwable|null $previous
      */
-    public function __construct($method, $code = 0, Exception $previous = null)
+    public function __construct($setter, $code = 0, Throwable $previous = null)
     {
-        parent::__construct(\sprintf("Unknown fluent setter '%s'", $method), $code, $previous);
+        $this->setter = $setter;
+        parent::__construct(\sprintf("Unknown fluent setter '%s'", $setter), $code, $previous);
+    }
+    /**
+     * Get the setter.
+     *
+     * @return string
+     */
+    public function getSetter() : string
+    {
+        return $this->setter;
     }
 }

@@ -12,4 +12,5 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 interface Exception
 {
+    //
 }

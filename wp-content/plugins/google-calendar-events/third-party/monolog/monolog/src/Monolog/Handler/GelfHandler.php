@@ -21,16 +21,14 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * @author Matt Lehner <mlehner@gmail.com>
  * @author Benjamin Zikarsky <benjamin@zikarsky.de>
  */
-class GelfHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class GelfHandler extends AbstractProcessingHandler
 {
     /**
-     * @var PublisherInterface|null the publisher object that sends the message to the server
+     * @var PublisherInterface the publisher object that sends the message to the server
      */
     protected $publisher;
     /**
-     * @param PublisherInterface $publisher a publisher object
-     * @param string|int         $level     The minimum logging level at which this handler will be triggered
-     * @param bool               $bubble    Whether the messages that are handled can bubble up the stack or not
+     * @param PublisherInterface $publisher a gelf publisher object
      */
     public function __construct(PublisherInterface $publisher, $level = Logger::DEBUG, bool $bubble = \true)
     {
@@ -38,7 +36,7 @@ class GelfHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractPr
         $this->publisher = $publisher;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function write(array $record) : void
     {

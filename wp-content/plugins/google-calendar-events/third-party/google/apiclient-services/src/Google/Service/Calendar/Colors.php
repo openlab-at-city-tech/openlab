@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_Colors extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Calendar_Colors extends Google_Model
 {
     protected $calendarType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ColorDefinition';
     protected $calendarDataType = 'map';
@@ -26,28 +26,28 @@ class Google_Service_Calendar_Colors extends \SimpleCalendar\plugin_deps\Google_
     public $kind;
     public $updated;
     /**
-     * @param Google_Service_Calendar_ColorDefinition[]
+     * @param Google_Service_Calendar_ColorDefinition
      */
     public function setCalendar($calendar)
     {
         $this->calendar = $calendar;
     }
     /**
-     * @return Google_Service_Calendar_ColorDefinition[]
+     * @return Google_Service_Calendar_ColorDefinition
      */
     public function getCalendar()
     {
         return $this->calendar;
     }
     /**
-     * @param Google_Service_Calendar_ColorDefinition[]
+     * @param Google_Service_Calendar_ColorDefinition
      */
     public function setEvent($event)
     {
         $this->event = $event;
     }
     /**
-     * @return Google_Service_Calendar_ColorDefinition[]
+     * @return Google_Service_Calendar_ColorDefinition
      */
     public function getEvent()
     {

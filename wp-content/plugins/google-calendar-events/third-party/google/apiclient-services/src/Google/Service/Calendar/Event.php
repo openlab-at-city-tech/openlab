@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_Event extends Google_Collection
 {
     protected $collection_key = 'recurrence';
     public $anyoneCanAddSelf;
@@ -27,8 +27,6 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     protected $attendeesDataType = 'array';
     public $attendeesOmitted;
     public $colorId;
-    protected $conferenceDataType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceData';
-    protected $conferenceDataDataType = '';
     public $created;
     protected $creatorType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventCreator';
     protected $creatorDataType = '';
@@ -37,7 +35,6 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     protected $endDataType = '';
     public $endTimeUnspecified;
     public $etag;
-    public $eventType;
     protected $extendedPropertiesType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventExtendedProperties';
     protected $extendedPropertiesDataType = '';
     protected $gadgetType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventGadget';
@@ -80,28 +77,28 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
         return $this->anyoneCanAddSelf;
     }
     /**
-     * @param Google_Service_Calendar_EventAttachment[]
+     * @param Google_Service_Calendar_EventAttachment
      */
     public function setAttachments($attachments)
     {
         $this->attachments = $attachments;
     }
     /**
-     * @return Google_Service_Calendar_EventAttachment[]
+     * @return Google_Service_Calendar_EventAttachment
      */
     public function getAttachments()
     {
         return $this->attachments;
     }
     /**
-     * @param Google_Service_Calendar_EventAttendee[]
+     * @param Google_Service_Calendar_EventAttendee
      */
     public function setAttendees($attendees)
     {
         $this->attendees = $attendees;
     }
     /**
-     * @return Google_Service_Calendar_EventAttendee[]
+     * @return Google_Service_Calendar_EventAttendee
      */
     public function getAttendees()
     {
@@ -123,20 +120,6 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     {
         return $this->colorId;
     }
-    /**
-     * @param Google_Service_Calendar_ConferenceData
-     */
-    public function setConferenceData(\SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceData $conferenceData)
-    {
-        $this->conferenceData = $conferenceData;
-    }
-    /**
-     * @return Google_Service_Calendar_ConferenceData
-     */
-    public function getConferenceData()
-    {
-        return $this->conferenceData;
-    }
     public function setCreated($created)
     {
         $this->created = $created;
@@ -148,7 +131,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventCreator
      */
-    public function setCreator(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventCreator $creator)
+    public function setCreator(Google_Service_Calendar_EventCreator $creator)
     {
         $this->creator = $creator;
     }
@@ -170,7 +153,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventDateTime
      */
-    public function setEnd(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventDateTime $end)
+    public function setEnd(Google_Service_Calendar_EventDateTime $end)
     {
         $this->end = $end;
     }
@@ -197,18 +180,10 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     {
         return $this->etag;
     }
-    public function setEventType($eventType)
-    {
-        $this->eventType = $eventType;
-    }
-    public function getEventType()
-    {
-        return $this->eventType;
-    }
     /**
      * @param Google_Service_Calendar_EventExtendedProperties
      */
-    public function setExtendedProperties(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventExtendedProperties $extendedProperties)
+    public function setExtendedProperties(Google_Service_Calendar_EventExtendedProperties $extendedProperties)
     {
         $this->extendedProperties = $extendedProperties;
     }
@@ -222,7 +197,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventGadget
      */
-    public function setGadget(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventGadget $gadget)
+    public function setGadget(Google_Service_Calendar_EventGadget $gadget)
     {
         $this->gadget = $gadget;
     }
@@ -316,7 +291,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventOrganizer
      */
-    public function setOrganizer(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventOrganizer $organizer)
+    public function setOrganizer(Google_Service_Calendar_EventOrganizer $organizer)
     {
         $this->organizer = $organizer;
     }
@@ -330,7 +305,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventDateTime
      */
-    public function setOriginalStartTime(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventDateTime $originalStartTime)
+    public function setOriginalStartTime(Google_Service_Calendar_EventDateTime $originalStartTime)
     {
         $this->originalStartTime = $originalStartTime;
     }
@@ -368,7 +343,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventReminders
      */
-    public function setReminders(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventReminders $reminders)
+    public function setReminders(Google_Service_Calendar_EventReminders $reminders)
     {
         $this->reminders = $reminders;
     }
@@ -390,7 +365,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventSource
      */
-    public function setSource(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventSource $source)
+    public function setSource(Google_Service_Calendar_EventSource $source)
     {
         $this->source = $source;
     }
@@ -404,7 +379,7 @@ class Google_Service_Calendar_Event extends \SimpleCalendar\plugin_deps\Google_C
     /**
      * @param Google_Service_Calendar_EventDateTime
      */
-    public function setStart(\SimpleCalendar\plugin_deps\Google_Service_Calendar_EventDateTime $start)
+    public function setStart(Google_Service_Calendar_EventDateTime $start)
     {
         $this->start = $start;
     }

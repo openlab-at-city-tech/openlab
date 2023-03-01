@@ -43,22 +43,30 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements Ge
     protected $auth;
     /**
      * The quota project associated with the JSON credentials
+     *
+     * @var string
      */
     protected $quotaProject;
     /**
+     * @var string
+     */
+    public $projectId;
+    /**
      * Create a new ServiceAccountJwtAccessCredentials.
      *
-     * @param string|array $jsonKey JSON credential file path or JSON credentials
+     * @param string|array<mixed> $jsonKey JSON credential file path or JSON credentials
      *   as an associative array
+     * @param string|string[] $scope the scope of the access request, expressed
+     *   either as an Array or as a space-delimited String.
      */
-    public function __construct($jsonKey)
+    public function __construct($jsonKey, $scope = null)
     {
         if (\is_string($jsonKey)) {
             if (!\file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
             $jsonKeyStream = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode($jsonKeyStream, \true))) {
+            if (!($jsonKey = \json_decode((string) $jsonKeyStream, \true))) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
@@ -71,20 +79,21 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements Ge
         if (\array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
-        $this->auth = new OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key']]);
+        $this->auth = new OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'scope' => $scope]);
         $this->projectId = isset($jsonKey['project_id']) ? $jsonKey['project_id'] : null;
     }
     /**
      * Updates metadata with the authorization token.
      *
-     * @param array $metadata metadata hashmap
+     * @param array<mixed> $metadata metadata hashmap
      * @param string $authUri optional auth uri
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array updated metadata hashmap
+     * @return array<mixed> updated metadata hashmap
      */
     public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
     {
-        if (empty($authUri)) {
+        $scope = $this->auth->getScope();
+        if (empty($authUri) && empty($scope)) {
             return $metadata;
         }
         $this->auth->setAudience($authUri);
@@ -95,20 +104,22 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements Ge
      *
      * @param callable $httpHandler
      *
-     * @return array|void A set of auth related metadata, containing the
-     * following keys:
-     *   - access_token (string)
+     * @return null|array{access_token:string} A set of auth related metadata
      */
     public function fetchAuthToken(callable $httpHandler = null)
     {
         $audience = $this->auth->getAudience();
-        if (empty($audience)) {
+        $scope = $this->auth->getScope();
+        if (empty($audience) && empty($scope)) {
             return null;
+        }
+        if (!empty($audience) && !empty($scope)) {
+            throw new \UnexpectedValueException('Cannot sign both audience and scope in JwtAccess');
         }
         $access_token = $this->auth->toJwt();
         // Set the self-signed access token in OAuth2 for getLastReceivedToken
         $this->auth->setAccessToken($access_token);
-        return array('access_token' => $access_token);
+        return ['access_token' => $access_token];
     }
     /**
      * @return string
@@ -118,7 +129,7 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements Ge
         return $this->auth->getCacheKey();
     }
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getLastReceivedToken()
     {

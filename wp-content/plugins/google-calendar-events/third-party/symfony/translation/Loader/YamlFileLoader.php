@@ -20,13 +20,13 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Yaml\Yaml;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class YamlFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\FileLoader
+class YamlFileLoader extends FileLoader
 {
     private $yamlParser;
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         if (null === $this->yamlParser) {
             if (!\class_exists(\SimpleCalendar\plugin_deps\Symfony\Component\Yaml\Parser::class)) {

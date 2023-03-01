@@ -17,21 +17,21 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_EventReminders extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_EventReminders extends Google_Collection
 {
     protected $collection_key = 'overrides';
     protected $overridesType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventReminder';
     protected $overridesDataType = 'array';
     public $useDefault;
     /**
-     * @param Google_Service_Calendar_EventReminder[]
+     * @param Google_Service_Calendar_EventReminder
      */
     public function setOverrides($overrides)
     {
         $this->overrides = $overrides;
     }
     /**
-     * @return Google_Service_Calendar_EventReminder[]
+     * @return Google_Service_Calendar_EventReminder
      */
     public function getOverrides()
     {

@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_AclRule extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Calendar_AclRule extends Google_Model
 {
     public $etag;
     public $id;
@@ -60,7 +60,7 @@ class Google_Service_Calendar_AclRule extends \SimpleCalendar\plugin_deps\Google
     /**
      * @param Google_Service_Calendar_AclRuleScope
      */
-    public function setScope(\SimpleCalendar\plugin_deps\Google_Service_Calendar_AclRuleScope $scope)
+    public function setScope(Google_Service_Calendar_AclRuleScope $scope)
     {
         $this->scope = $scope;
     }

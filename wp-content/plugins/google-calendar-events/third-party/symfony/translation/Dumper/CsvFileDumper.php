@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Stealth35
  */
-class CsvFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class CsvFileDumper extends FileDumper
 {
     private $delimiter = ';';
     private $enclosure = '"';

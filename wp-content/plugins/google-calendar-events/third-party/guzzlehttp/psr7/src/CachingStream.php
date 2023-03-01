@@ -25,11 +25,15 @@ class CachingStream implements StreamInterface
     public function __construct(StreamInterface $stream, StreamInterface $target = null)
     {
         $this->remoteStream = $stream;
-        $this->stream = $target ?: new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::tryFopen('php://temp', 'r+'));
+        $this->stream = $target ?: new Stream(Utils::tryFopen('php://temp', 'r+'));
     }
     public function getSize()
     {
-        return \max($this->stream->getSize(), $this->remoteStream->getSize());
+        $remoteSize = $this->remoteStream->getSize();
+        if (null === $remoteSize) {
+            return null;
+        }
+        return \max($this->stream->getSize(), $remoteSize);
     }
     public function rewind()
     {
@@ -110,8 +114,8 @@ class CachingStream implements StreamInterface
     }
     private function cacheEntireStream()
     {
-        $target = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\FnStream(['write' => 'strlen']);
-        \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::copyToStream($this, $target);
+        $target = new FnStream(['write' => 'strlen']);
+        Utils::copyToStream($this, $target);
         return $this->tell();
     }
 }

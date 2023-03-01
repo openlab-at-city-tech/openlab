@@ -16,12 +16,12 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
  *
  * @author singles
  */
-class JsonFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\FileLoader
+class JsonFileLoader extends FileLoader
 {
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         $messages = [];
         if ($data = \file_get_contents($resource)) {

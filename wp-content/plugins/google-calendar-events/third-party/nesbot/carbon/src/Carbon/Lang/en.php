@@ -71,7 +71,7 @@ return [
     'weekdays_min' => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
     'ordinal' => function ($number) {
         $lastDigit = $number % 10;
-        return $number . (~~($number % 100 / 10) === 1 ? 'th' : ($lastDigit === 1 ? 'st' : ($lastDigit === 2 ? 'nd' : ($lastDigit === 3 ? 'rd' : 'th'))));
+        return $number . ((int) ($number % 100 / 10) === 1 ? 'th' : ($lastDigit === 1 ? 'st' : ($lastDigit === 2 ? 'nd' : ($lastDigit === 3 ? 'rd' : 'th'))));
     },
     'list' => [', ', ' and '],
     'first_day_of_week' => 0,

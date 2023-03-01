@@ -17,14 +17,12 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_CalendarListEntry extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_CalendarListEntry extends Google_Collection
 {
     protected $collection_key = 'defaultReminders';
     public $accessRole;
     public $backgroundColor;
     public $colorId;
-    protected $conferencePropertiesType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceProperties';
-    protected $conferencePropertiesDataType = '';
     protected $defaultRemindersType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventReminder';
     protected $defaultRemindersDataType = 'array';
     public $deleted;
@@ -67,28 +65,14 @@ class Google_Service_Calendar_CalendarListEntry extends \SimpleCalendar\plugin_d
         return $this->colorId;
     }
     /**
-     * @param Google_Service_Calendar_ConferenceProperties
-     */
-    public function setConferenceProperties(\SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceProperties $conferenceProperties)
-    {
-        $this->conferenceProperties = $conferenceProperties;
-    }
-    /**
-     * @return Google_Service_Calendar_ConferenceProperties
-     */
-    public function getConferenceProperties()
-    {
-        return $this->conferenceProperties;
-    }
-    /**
-     * @param Google_Service_Calendar_EventReminder[]
+     * @param Google_Service_Calendar_EventReminder
      */
     public function setDefaultReminders($defaultReminders)
     {
         $this->defaultReminders = $defaultReminders;
     }
     /**
-     * @return Google_Service_Calendar_EventReminder[]
+     * @return Google_Service_Calendar_EventReminder
      */
     public function getDefaultReminders()
     {
@@ -161,7 +145,7 @@ class Google_Service_Calendar_CalendarListEntry extends \SimpleCalendar\plugin_d
     /**
      * @param Google_Service_Calendar_CalendarListEntryNotificationSettings
      */
-    public function setNotificationSettings(\SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntryNotificationSettings $notificationSettings)
+    public function setNotificationSettings(Google_Service_Calendar_CalendarListEntryNotificationSettings $notificationSettings)
     {
         $this->notificationSettings = $notificationSettings;
     }

@@ -16,7 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  *
  * @author Dominik Liebler <liebler.dominik@gmail.com>
  */
-class FlowdockFormatter implements \SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface
+class FlowdockFormatter implements FormatterInterface
 {
     /**
      * @var string
@@ -32,7 +32,9 @@ class FlowdockFormatter implements \SimpleCalendar\plugin_deps\Monolog\Formatter
         $this->sourceEmail = $sourceEmail;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return mixed[]
      */
     public function format(array $record) : array
     {
@@ -45,7 +47,9 @@ class FlowdockFormatter implements \SimpleCalendar\plugin_deps\Monolog\Formatter
         return $record;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return mixed[][]
      */
     public function formatBatch(array $records) : array
     {

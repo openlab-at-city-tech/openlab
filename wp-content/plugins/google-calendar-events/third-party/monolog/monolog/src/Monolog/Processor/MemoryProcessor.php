@@ -16,7 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  *
  * @author Rob Jensen
  */
-abstract class MemoryProcessor implements \SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface
+abstract class MemoryProcessor implements ProcessorInterface
 {
     /**
      * @var bool If true, get the real size of memory allocated from system. Else, only the memory used by emalloc() is reported.

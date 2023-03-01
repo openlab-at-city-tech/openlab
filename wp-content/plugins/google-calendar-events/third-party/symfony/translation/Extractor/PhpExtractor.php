@@ -17,21 +17,17 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class PhpExtractor extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\AbstractFileExtractor implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\ExtractorInterface
+class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
 {
     public const MESSAGE_TOKEN = 300;
     public const METHOD_ARGUMENTS_TOKEN = 1000;
     public const DOMAIN_TOKEN = 1001;
     /**
      * Prefix for new found message.
-     *
-     * @var string
      */
     private $prefix = '';
     /**
      * The sequence that captures translation messages.
-     *
-     * @var array
      */
     protected $sequences = [['->', 'trans', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['->', 'trans', '(', self::MESSAGE_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN], ['t', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['t', '(', self::MESSAGE_TOKEN]];
     /**
@@ -119,7 +115,7 @@ class PhpExtractor extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
                 case \T_ENCAPSED_AND_WHITESPACE:
                 case \T_CONSTANT_ENCAPSED_STRING:
                     if ('' === $docToken) {
-                        $message .= \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\PhpStringTokenParser::parse($t[1]);
+                        $message .= PhpStringTokenParser::parse($t[1]);
                     } else {
                         $docPart = $t[1];
                     }
@@ -136,7 +132,7 @@ class PhpExtractor extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
                             }
                         }
                     }
-                    $message .= \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\PhpStringTokenParser::parseDocString($docToken, $docPart);
+                    $message .= PhpStringTokenParser::parseDocString($docToken, $docPart);
                     $docToken = '';
                     $docPart = '';
                     break;
@@ -206,6 +202,9 @@ class PhpExtractor extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
      */
     protected function extractFromDirectory($directory)
     {
+        if (!\class_exists(Finder::class)) {
+            throw new \LogicException(\sprintf('You cannot use "%s" as the "symfony/finder" package is not installed. Try running "composer require symfony/finder".', static::class));
+        }
         $finder = new Finder();
         return $finder->files()->name('*.php')->in($directory);
     }

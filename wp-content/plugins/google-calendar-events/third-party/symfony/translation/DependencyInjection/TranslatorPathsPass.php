@@ -25,11 +25,23 @@ class TranslatorPathsPass extends AbstractRecursivePass
     private $updateCommandServiceId;
     private $resolverServiceId;
     private $level = 0;
+    /**
+     * @var array<string, bool>
+     */
     private $paths = [];
+    /**
+     * @var array<int, Definition>
+     */
     private $definitions = [];
+    /**
+     * @var array<string, array<string, bool>>
+     */
     private $controllers = [];
-    public function __construct(string $translatorServiceId = 'translator', string $debugCommandServiceId = 'console.command.translation_debug', string $updateCommandServiceId = 'console.command.translation_update', string $resolverServiceId = 'argument_resolver.service')
+    public function __construct(string $translatorServiceId = 'translator', string $debugCommandServiceId = 'console.command.translation_debug', string $updateCommandServiceId = 'console.command.translation_extract', string $resolverServiceId = 'argument_resolver.service')
     {
+        if (0 < \func_num_args()) {
+            trigger_deprecation('symfony/translation', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
+        }
         $this->translatorServiceId = $translatorServiceId;
         $this->debugCommandServiceId = $debugCommandServiceId;
         $this->updateCommandServiceId = $updateCommandServiceId;
@@ -53,6 +65,9 @@ class TranslatorPathsPass extends AbstractRecursivePass
             foreach ($this->paths as $class => $_) {
                 if (($r = $container->getReflectionClass($class)) && !$r->isInterface()) {
                     $paths[] = $r->getFileName();
+                    foreach ($r->getTraits() as $trait) {
+                        $paths[] = $trait->getFileName();
+                    }
                 }
             }
             if ($paths) {

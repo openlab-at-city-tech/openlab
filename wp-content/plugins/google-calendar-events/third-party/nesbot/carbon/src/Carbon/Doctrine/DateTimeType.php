@@ -6,8 +6,10 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
+use SimpleCalendar\plugin_deps\Carbon\Carbon;
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Types\VarDateTimeType;
-class DateTimeType extends VarDateTimeType implements \SimpleCalendar\plugin_deps\Carbon\Doctrine\CarbonDoctrineType
+class DateTimeType extends VarDateTimeType implements CarbonDoctrineType
 {
+    /** @use CarbonTypeConverter<Carbon> */
     use CarbonTypeConverter;
 }

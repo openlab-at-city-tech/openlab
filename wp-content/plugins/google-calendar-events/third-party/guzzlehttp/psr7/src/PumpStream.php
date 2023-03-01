@@ -42,12 +42,12 @@ class PumpStream implements StreamInterface
         $this->source = $source;
         $this->size = isset($options['size']) ? $options['size'] : null;
         $this->metadata = isset($options['metadata']) ? $options['metadata'] : [];
-        $this->buffer = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\BufferStream();
+        $this->buffer = new BufferStream();
     }
     public function __toString()
     {
         try {
-            return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::copyToString($this);
+            return Utils::copyToString($this);
         } catch (\Exception $e) {
             return '';
         }

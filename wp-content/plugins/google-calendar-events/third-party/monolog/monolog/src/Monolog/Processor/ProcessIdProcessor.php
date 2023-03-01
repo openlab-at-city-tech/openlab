@@ -16,8 +16,11 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  *
  * @author Andreas Hörnicke
  */
-class ProcessIdProcessor implements \SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface
+class ProcessIdProcessor implements ProcessorInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function __invoke(array $record) : array
     {
         $record['extra']['process_id'] = \getmypid();

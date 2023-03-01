@@ -6,7 +6,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
  */
-class FileCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJar
+class FileCookieJar extends CookieJar
 {
     /**
      * @var string filename
@@ -53,7 +53,7 @@ class FileCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\Cookie
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
@@ -83,7 +83,7 @@ class FileCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\Cookie
         $data = Utils::jsonDecode($json, \true);
         if (\is_array($data)) {
             foreach ($data as $cookie) {
-                $this->setCookie(new \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\is_scalar($data) && !empty($data)) {
             throw new \RuntimeException("Invalid cookie file: {$filename}");

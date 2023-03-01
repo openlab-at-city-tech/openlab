@@ -22,7 +22,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
  */
-class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\FetchAuthTokenInterface, \SimpleCalendar\plugin_deps\Google\Auth\GetQuotaProjectInterface, \SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface, \SimpleCalendar\plugin_deps\Google\Auth\ProjectIdProviderInterface, \SimpleCalendar\plugin_deps\Google\Auth\UpdateMetadataInterface
+class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
 {
     use CacheTrait;
     /**
@@ -30,19 +30,15 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      */
     private $fetcher;
     /**
-     * @var array
+     * @var int
      */
-    private $cacheConfig;
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
+    private $eagerRefreshThresholdSeconds = 10;
     /**
      * @param FetchAuthTokenInterface $fetcher A credentials fetcher
-     * @param array $cacheConfig Configuration for the cache
+     * @param array<mixed> $cacheConfig Configuration for the cache
      * @param CacheItemPoolInterface $cache
      */
-    public function __construct(\SimpleCalendar\plugin_deps\Google\Auth\FetchAuthTokenInterface $fetcher, array $cacheConfig = null, CacheItemPoolInterface $cache)
+    public function __construct(FetchAuthTokenInterface $fetcher, array $cacheConfig = null, CacheItemPoolInterface $cache)
     {
         $this->fetcher = $fetcher;
         $this->cache = $cache;
@@ -55,7 +51,7 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      * from the supplied fetcher.
      *
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array the response
+     * @return array<mixed> the response
      * @throws \Exception
      */
     public function fetchAuthToken(callable $httpHandler = null)
@@ -75,7 +71,7 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
         return $this->getFullCacheKey($this->fetcher->getCacheKey());
     }
     /**
-     * @return array|null
+     * @return array<mixed>|null
      */
     public function getLastReceivedToken()
     {
@@ -89,6 +85,9 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      */
     public function getClientName(callable $httpHandler = null)
     {
+        if (!$this->fetcher instanceof SignBlobInterface) {
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+        }
         return $this->fetcher->getClientName($httpHandler);
     }
     /**
@@ -104,8 +103,15 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      */
     public function signBlob($stringToSign, $forceOpenSsl = \false)
     {
-        if (!$this->fetcher instanceof \SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface) {
+        if (!$this->fetcher instanceof SignBlobInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+        }
+        // Pass the access token from cache to GCECredentials for signing a blob.
+        // This saves a call to the metadata server when a cached token exists.
+        if ($this->fetcher instanceof Credentials\GCECredentials) {
+            $cached = $this->fetchAuthTokenFromCache();
+            $accessToken = isset($cached['access_token']) ? $cached['access_token'] : null;
+            return $this->fetcher->signBlob($stringToSign, $forceOpenSsl, $accessToken);
         }
         return $this->fetcher->signBlob($stringToSign, $forceOpenSsl);
     }
@@ -117,9 +123,10 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      */
     public function getQuotaProject()
     {
-        if ($this->fetcher instanceof \SimpleCalendar\plugin_deps\Google\Auth\GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
+        return null;
     }
     /*
      * Get the Project ID from the fetcher.
@@ -131,7 +138,7 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
      */
     public function getProjectId(callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \SimpleCalendar\plugin_deps\Google\Auth\ProjectIdProviderInterface) {
+        if (!$this->fetcher instanceof ProjectIdProviderInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\ProvidesProjectIdInterface');
         }
         return $this->fetcher->getProjectId($httpHandler);
@@ -139,16 +146,16 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
     /**
      * Updates metadata with the authorization token.
      *
-     * @param array $metadata metadata hashmap
+     * @param array<mixed> $metadata metadata hashmap
      * @param string $authUri optional auth uri
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array updated metadata hashmap
+     * @return array<mixed> updated metadata hashmap
      * @throws \RuntimeException If the fetcher does not implement
      *     `Google\Auth\UpdateMetadataInterface`.
      */
     public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
     {
-        if (!$this->fetcher instanceof \SimpleCalendar\plugin_deps\Google\Auth\UpdateMetadataInterface) {
+        if (!$this->fetcher instanceof UpdateMetadataInterface) {
             throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\UpdateMetadataInterface');
         }
         $cached = $this->fetchAuthTokenFromCache($authUri);
@@ -166,6 +173,10 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
         }
         return $newMetadata;
     }
+    /**
+     * @param string|null $authUri
+     * @return array<mixed>|null
+     */
     private function fetchAuthTokenFromCache($authUri = null)
     {
         // Use the cached value if its available.
@@ -183,13 +194,18 @@ class FetchAuthTokenCache implements \SimpleCalendar\plugin_deps\Google\Auth\Fet
                 // (for JwtAccess and ID tokens)
                 return $cached;
             }
-            if (\time() < $cached['expires_at']) {
+            if (\time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
                 // access token is not expired
                 return $cached;
             }
         }
         return null;
     }
+    /**
+     * @param array<mixed> $authToken
+     * @param string|null  $authUri
+     * @return void
+     */
     private function saveAuthTokenInCache($authToken, $authUri = null)
     {
         if (isset($authToken['access_token']) || isset($authToken['id_token'])) {

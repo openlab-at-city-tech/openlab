@@ -29,7 +29,7 @@ class Request implements RequestInterface
     {
         $this->assertMethod($method);
         if (!$uri instanceof UriInterface) {
-            $uri = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Uri($uri);
+            $uri = new Uri($uri);
         }
         $this->method = \strtoupper($method);
         $this->uri = $uri;
@@ -39,7 +39,7 @@ class Request implements RequestInterface
             $this->updateHostFromUri();
         }
         if ($body !== '' && $body !== null) {
-            $this->stream = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::streamFor($body);
+            $this->stream = Utils::streamFor($body);
         }
     }
     public function getRequestTarget()

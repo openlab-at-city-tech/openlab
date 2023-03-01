@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class ChainExtractor implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\ExtractorInterface
+class ChainExtractor implements ExtractorInterface
 {
     /**
      * The extractors.
@@ -26,10 +26,8 @@ class ChainExtractor implements \SimpleCalendar\plugin_deps\Symfony\Component\Tr
     private $extractors = [];
     /**
      * Adds a loader to the translation extractor.
-     *
-     * @param string $format The format of the loader
      */
-    public function addExtractor(string $format, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor\ExtractorInterface $extractor)
+    public function addExtractor(string $format, ExtractorInterface $extractor)
     {
         $this->extractors[$format] = $extractor;
     }

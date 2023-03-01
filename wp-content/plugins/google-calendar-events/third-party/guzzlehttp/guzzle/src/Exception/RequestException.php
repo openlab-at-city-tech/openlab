@@ -11,7 +11,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * HTTP Request exception
  */
-class RequestException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\TransferException implements RequestExceptionInterface
+class RequestException extends TransferException implements RequestExceptionInterface
 {
     /**
      * @var RequestInterface
@@ -37,9 +37,9 @@ class RequestException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\
     /**
      * Wrap non-RequestExceptions with a RequestException
      */
-    public static function wrapException(RequestInterface $request, \Throwable $e) : \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\RequestException
+    public static function wrapException(RequestInterface $request, \Throwable $e) : RequestException
     {
-        return $e instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\RequestException ? $e : new \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\RequestException($e->getMessage(), $request, null, $e);
+        return $e instanceof RequestException ? $e : new RequestException($e->getMessage(), $request, null, $e);
     }
     /**
      * Factory method to create a new exception with a normalized error message
@@ -58,10 +58,10 @@ class RequestException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\
         $level = (int) \floor($response->getStatusCode() / 100);
         if ($level === 4) {
             $label = 'Client error';
-            $className = \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\ClientException::class;
+            $className = ClientException::class;
         } elseif ($level === 5) {
             $label = 'Server error';
-            $className = \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\ServerException::class;
+            $className = ServerException::class;
         } else {
             $label = 'Unsuccessful request';
             $className = __CLASS__;
@@ -70,7 +70,7 @@ class RequestException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\
         $uri = static::obfuscateUri($uri);
         // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
-        $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri, $response->getStatusCode(), $response->getReasonPhrase());
+        $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri->__toString(), $response->getStatusCode(), $response->getReasonPhrase());
         $summary = ($bodySummarizer ?? new BodySummarizer())->summarize($response);
         if ($summary !== null) {
             $message .= ":\n{$summary}\n";

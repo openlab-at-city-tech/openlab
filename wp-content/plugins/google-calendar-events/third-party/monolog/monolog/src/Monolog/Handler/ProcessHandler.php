@@ -23,7 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *
  * @author Kolja Zuelsdorf <koljaz@web.de>
  */
-class ProcessHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class ProcessHandler extends AbstractProcessingHandler
 {
     /**
      * Holds the process to receive data on its STDIN.
@@ -40,11 +40,11 @@ class ProcessHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
      */
     private $cwd;
     /**
-     * @var array
+     * @var resource[]
      */
     private $pipes = [];
     /**
-     * @var array
+     * @var array<int, string[]>
      */
     protected const DESCRIPTOR_SPEC = [
         0 => ['pipe', 'r'],
@@ -56,8 +56,6 @@ class ProcessHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
     /**
      * @param  string                    $command Command for the process to start. Absolute paths are recommended,
      *                                            especially if you do not use the $cwd parameter.
-     * @param  string|int                $level   The minimum logging level at which this handler will be triggered.
-     * @param  bool                      $bubble  Whether the messages that are handled can bubble up the stack or not.
      * @param  string|null               $cwd     "Current working directory" (CWD) for the process to be executed in.
      * @throws \InvalidArgumentException
      */
@@ -143,7 +141,7 @@ class ProcessHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
      */
     protected function readProcessErrors() : string
     {
-        return \stream_get_contents($this->pipes[2]);
+        return (string) \stream_get_contents($this->pipes[2]);
     }
     /**
      * Writes to the input stream of the opened process.
@@ -155,7 +153,7 @@ class ProcessHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
         \fwrite($this->pipes[0], $string);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function close() : void
     {

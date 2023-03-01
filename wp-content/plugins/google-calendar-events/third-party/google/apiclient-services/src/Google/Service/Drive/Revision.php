@@ -17,9 +17,8 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_Revision extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Drive_Revision extends Google_Model
 {
-    public $exportLinks;
     public $id;
     public $keepForever;
     public $kind;
@@ -31,17 +30,8 @@ class Google_Service_Drive_Revision extends \SimpleCalendar\plugin_deps\Google_M
     public $originalFilename;
     public $publishAuto;
     public $published;
-    public $publishedLink;
     public $publishedOutsideDomain;
     public $size;
-    public function setExportLinks($exportLinks)
-    {
-        $this->exportLinks = $exportLinks;
-    }
-    public function getExportLinks()
-    {
-        return $this->exportLinks;
-    }
     public function setId($id)
     {
         $this->id = $id;
@@ -69,7 +59,7 @@ class Google_Service_Drive_Revision extends \SimpleCalendar\plugin_deps\Google_M
     /**
      * @param Google_Service_Drive_User
      */
-    public function setLastModifyingUser(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $lastModifyingUser)
+    public function setLastModifyingUser(Google_Service_Drive_User $lastModifyingUser)
     {
         $this->lastModifyingUser = $lastModifyingUser;
     }
@@ -127,14 +117,6 @@ class Google_Service_Drive_Revision extends \SimpleCalendar\plugin_deps\Google_M
     public function getPublished()
     {
         return $this->published;
-    }
-    public function setPublishedLink($publishedLink)
-    {
-        $this->publishedLink = $publishedLink;
-    }
-    public function getPublishedLink()
-    {
-        return $this->publishedLink;
     }
     public function setPublishedOutsideDomain($publishedOutsideDomain)
     {

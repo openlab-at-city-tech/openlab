@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_PermissionList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_PermissionList extends Google_Collection
 {
     protected $collection_key = 'permissions';
     public $kind;
@@ -41,14 +41,14 @@ class Google_Service_Drive_PermissionList extends \SimpleCalendar\plugin_deps\Go
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_Drive_Permission[]
+     * @param Google_Service_Drive_Permission
      */
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
     }
     /**
-     * @return Google_Service_Drive_Permission[]
+     * @return Google_Service_Drive_Permission
      */
     public function getPermissions()
     {

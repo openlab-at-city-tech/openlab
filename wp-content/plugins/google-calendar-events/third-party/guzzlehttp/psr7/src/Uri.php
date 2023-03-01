@@ -233,7 +233,7 @@ class Uri implements UriInterface
     public static function isSameDocumentReference(UriInterface $uri, UriInterface $base = null)
     {
         if ($base !== null) {
-            $uri = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\UriResolver::resolve($base, $uri);
+            $uri = UriResolver::resolve($base, $uri);
             return $uri->getScheme() === $base->getScheme() && $uri->getAuthority() === $base->getAuthority() && $uri->getPath() === $base->getPath() && $uri->getQuery() === $base->getQuery();
         }
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && $uri->getPath() === '' && $uri->getQuery() === '';
@@ -250,7 +250,7 @@ class Uri implements UriInterface
      */
     public static function removeDotSegments($path)
     {
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\UriResolver::removeDotSegments($path);
+        return UriResolver::removeDotSegments($path);
     }
     /**
      * Converts the relative URI into a new URI that is resolved against the base URI.
@@ -268,7 +268,7 @@ class Uri implements UriInterface
         if (!$rel instanceof UriInterface) {
             $rel = new self($rel);
         }
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\UriResolver::resolve($base, $rel);
+        return UriResolver::resolve($base, $rel);
     }
     /**
      * Creates a new URI with a specific query string value removed.

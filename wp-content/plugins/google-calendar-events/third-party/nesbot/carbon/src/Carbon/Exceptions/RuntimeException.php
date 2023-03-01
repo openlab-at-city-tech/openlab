@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-interface RuntimeException extends \SimpleCalendar\plugin_deps\Carbon\Exceptions\Exception
+interface RuntimeException extends Exception
 {
+    //
 }

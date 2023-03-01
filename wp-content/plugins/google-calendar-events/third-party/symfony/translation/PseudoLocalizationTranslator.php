@@ -22,6 +22,9 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
     private $expansionFactor;
     private $brackets;
     private $parseHTML;
+    /**
+     * @var string[]
+     */
     private $localizableHTMLAttributes;
     /**
      * Available options:
@@ -73,7 +76,7 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
     /**
      * {@inheritdoc}
      */
-    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null) : string
     {
         $trans = '';
         $visibleText = '';
@@ -91,12 +94,16 @@ final class PseudoLocalizationTranslator implements TranslatorInterface
         $this->addBrackets($trans);
         return $trans;
     }
+    public function getLocale() : string
+    {
+        return $this->translator->getLocale();
+    }
     private function getParts(string $originalTrans) : array
     {
         if (!$this->parseHTML) {
             return [[\true, \true, $originalTrans]];
         }
-        $html = \mb_convert_encoding($originalTrans, 'HTML-ENTITIES', \mb_detect_encoding($originalTrans, null, \true) ?: 'UTF-8');
+        $html = \mb_encode_numericentity($originalTrans, [0x80, 0xffff, 0, 0xffff], \mb_detect_encoding($originalTrans, null, \true) ?: 'UTF-8');
         $useInternalErrors = \libxml_use_internal_errors(\true);
         $dom = new \DOMDocument();
         $dom->loadHTML('<trans>' . $html . '</trans>');

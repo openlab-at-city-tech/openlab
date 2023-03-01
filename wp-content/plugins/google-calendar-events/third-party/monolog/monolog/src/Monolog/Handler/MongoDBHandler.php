@@ -30,10 +30,13 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\MongoDBFormatter;
  * The above examples uses the MongoDB PHP library's client class; however, the
  * MongoDB\Driver\Manager class from ext-mongodb is also supported.
  */
-class MongoDBHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class MongoDBHandler extends AbstractProcessingHandler
 {
+    /** @var \MongoDB\Collection */
     private $collection;
+    /** @var Client|Manager */
     private $manager;
+    /** @var string */
     private $namespace;
     /**
      * Constructor.
@@ -41,8 +44,6 @@ class MongoDBHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
      * @param Client|Manager $mongodb    MongoDB library or driver client
      * @param string         $database   Database name
      * @param string         $collection Collection name
-     * @param string|int     $level      The minimum logging level at which this handler will be triggered
-     * @param bool           $bubble     Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($mongodb, string $database, string $collection, $level = Logger::DEBUG, bool $bubble = \true)
     {

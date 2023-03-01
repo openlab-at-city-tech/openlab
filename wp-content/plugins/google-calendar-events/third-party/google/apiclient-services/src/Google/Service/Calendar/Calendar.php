@@ -17,10 +17,8 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_Calendar extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Calendar_Calendar extends Google_Model
 {
-    protected $conferencePropertiesType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceProperties';
-    protected $conferencePropertiesDataType = '';
     public $description;
     public $etag;
     public $id;
@@ -28,20 +26,6 @@ class Google_Service_Calendar_Calendar extends \SimpleCalendar\plugin_deps\Googl
     public $location;
     public $summary;
     public $timeZone;
-    /**
-     * @param Google_Service_Calendar_ConferenceProperties
-     */
-    public function setConferenceProperties(\SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceProperties $conferenceProperties)
-    {
-        $this->conferenceProperties = $conferenceProperties;
-    }
-    /**
-     * @return Google_Service_Calendar_ConferenceProperties
-     */
-    public function getConferenceProperties()
-    {
-        return $this->conferenceProperties;
-    }
     public function setDescription($description)
     {
         $this->description = $description;

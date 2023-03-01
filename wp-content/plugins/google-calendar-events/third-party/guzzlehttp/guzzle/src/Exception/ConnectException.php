@@ -9,7 +9,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  *
  * Note that no response is present for a ConnectException
  */
-class ConnectException extends \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\TransferException implements NetworkExceptionInterface
+class ConnectException extends TransferException implements NetworkExceptionInterface
 {
     /**
      * @var RequestInterface

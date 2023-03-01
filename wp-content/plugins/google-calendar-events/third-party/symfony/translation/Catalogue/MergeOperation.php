@@ -20,7 +20,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class MergeOperation extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Catalogue\AbstractOperation
+class MergeOperation extends AbstractOperation
 {
     /**
      * {@inheritdoc}

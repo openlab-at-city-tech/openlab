@@ -14,7 +14,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
 /**
  * @copyright Copyright (c) 2010, Union of RAD http://union-of-rad.org (http://lithify.me/)
  */
-class MoFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\FileLoader
+class MoFileLoader extends FileLoader
 {
     /**
      * Magic used for validating the format of an MO file as well as
@@ -36,7 +36,7 @@ class MoFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
      *
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         $stream = \fopen($resource, 'r');
         $stat = \fstat($stream);
@@ -73,8 +73,8 @@ class MoFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
             }
             \fseek($stream, $offset);
             $singularId = \fread($stream, $length);
-            if (\false !== \strpos($singularId, "\0")) {
-                [$singularId, $pluralId] = \explode("\0", $singularId);
+            if (\str_contains($singularId, "\x00")) {
+                [$singularId, $pluralId] = \explode("\x00", $singularId);
             }
             \fseek($stream, $offsetTranslated + $i * 8);
             $length = $this->readLong($stream, $isBigEndian);
@@ -84,8 +84,8 @@ class MoFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Transla
             }
             \fseek($stream, $offset);
             $translated = \fread($stream, $length);
-            if (\false !== \strpos($translated, "\0")) {
-                $translated = \explode("\0", $translated);
+            if (\str_contains($translated, "\x00")) {
+                $translated = \explode("\x00", $translated);
             }
             $ids = ['singular' => $singularId, 'plural' => $pluralId];
             $item = \compact('ids', 'translated');

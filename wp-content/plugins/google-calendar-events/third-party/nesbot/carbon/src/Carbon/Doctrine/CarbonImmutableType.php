@@ -1,16 +1,22 @@
 <?php
 
 /**
- * Thanks to https://github.com/flaushi for his suggestion:
- * https://github.com/doctrine/dbal/issues/2873#issuecomment-534956358
+ * This file is part of the Carbon package.
+ *
+ * (c) Brian Nesbitt <brian@nesbot.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Platforms\AbstractPlatform;
-class CarbonImmutableType extends \SimpleCalendar\plugin_deps\Carbon\Doctrine\DateTimeImmutableType implements \SimpleCalendar\plugin_deps\Carbon\Doctrine\CarbonDoctrineType
+class CarbonImmutableType extends DateTimeImmutableType implements CarbonDoctrineType
 {
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function getName()
     {
@@ -18,6 +24,8 @@ class CarbonImmutableType extends \SimpleCalendar\plugin_deps\Carbon\Doctrine\Da
     }
     /**
      * {@inheritdoc}
+     *
+     * @return bool
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {

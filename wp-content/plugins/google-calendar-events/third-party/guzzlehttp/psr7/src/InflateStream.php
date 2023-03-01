@@ -25,10 +25,10 @@ class InflateStream implements StreamInterface
         $header = $stream->read(10);
         $filenameHeaderLength = $this->getLengthOfPossibleFilenameHeader($stream, $header);
         // Skip the header, that is 10 + length of filename + 1 (nil) bytes
-        $stream = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\LimitStream($stream, -1, 10 + $filenameHeaderLength);
-        $resource = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\StreamWrapper::getResource($stream);
+        $stream = new LimitStream($stream, -1, 10 + $filenameHeaderLength);
+        $resource = StreamWrapper::getResource($stream);
         \stream_filter_append($resource, 'zlib.inflate', \STREAM_FILTER_READ);
-        $this->stream = $stream->isSeekable() ? new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream($resource) : new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\NoSeekStream(new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream($resource));
+        $this->stream = $stream->isSeekable() ? new Stream($resource) : new NoSeekStream(new Stream($resource));
     }
     /**
      * @param StreamInterface $stream

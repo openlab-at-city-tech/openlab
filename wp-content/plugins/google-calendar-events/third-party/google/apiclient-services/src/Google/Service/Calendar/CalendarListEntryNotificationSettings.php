@@ -17,20 +17,20 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_CalendarListEntryNotificationSettings extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_CalendarListEntryNotificationSettings extends Google_Collection
 {
     protected $collection_key = 'notifications';
     protected $notificationsType = 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarNotification';
     protected $notificationsDataType = 'array';
     /**
-     * @param Google_Service_Calendar_CalendarNotification[]
+     * @param Google_Service_Calendar_CalendarNotification
      */
     public function setNotifications($notifications)
     {
         $this->notifications = $notifications;
     }
     /**
-     * @return Google_Service_Calendar_CalendarNotification[]
+     * @return Google_Service_Calendar_CalendarNotification
      */
     public function getNotifications()
     {

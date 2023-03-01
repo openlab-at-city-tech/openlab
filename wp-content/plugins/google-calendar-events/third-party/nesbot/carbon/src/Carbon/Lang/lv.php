@@ -2,6 +2,14 @@
 
 namespace SimpleCalendar\plugin_deps;
 
+/**
+ * This file is part of the Carbon package.
+ *
+ * (c) Brian Nesbitt <brian@nesbot.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 /**
  * This file is part of the Carbon package.
@@ -74,4 +82,4 @@ return ['ago' => function ($time) use($transformDiff) {
     return '[' . $daysOfWeekLocativum[$current->dayOfWeek] . '] [plkst.] LT';
 }, 'lastDay' => '[vakar] [plkst.] LT', 'lastWeek' => function (CarbonInterface $current) use($daysOfWeekLocativum) {
     return '[pagājušo] [' . $daysOfWeekLocativum[$current->dayOfWeek] . '] [plkst.] LT';
-}, 'sameElse' => 'L'], 'weekdays' => $daysOfWeek, 'weekdays_short' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'], 'weekdays_min' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'], 'months' => ['janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'], 'months_short' => ['Janv', 'Feb', 'Mar', 'Apr', 'Mai', 'Jūn', 'Jūl', 'Aug', 'Sept', 'Okt', 'Nov', 'Dec'], 'meridiem' => ['priekšpusdiena', 'pēcpusdiena']];
+}, 'sameElse' => 'L'], 'weekdays' => $daysOfWeek, 'weekdays_short' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'], 'weekdays_min' => ['Sv.', 'P.', 'O.', 'T.', 'C.', 'Pk.', 'S.'], 'months' => ['janvāris', 'februāris', 'marts', 'aprīlis', 'maijs', 'jūnijs', 'jūlijs', 'augusts', 'septembris', 'oktobris', 'novembris', 'decembris'], 'months_standalone' => ['janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'], 'months_short' => ['janv.', 'febr.', 'martā', 'apr.', 'maijā', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'], 'meridiem' => ['priekšpusdiena', 'pēcpusdiena']];

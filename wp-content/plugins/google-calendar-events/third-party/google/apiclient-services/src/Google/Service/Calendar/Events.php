@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_Events extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_Events extends Google_Collection
 {
     protected $collection_key = 'items';
     public $accessRole;
@@ -42,14 +42,14 @@ class Google_Service_Calendar_Events extends \SimpleCalendar\plugin_deps\Google_
         return $this->accessRole;
     }
     /**
-     * @param Google_Service_Calendar_EventReminder[]
+     * @param Google_Service_Calendar_EventReminder
      */
     public function setDefaultReminders($defaultReminders)
     {
         $this->defaultReminders = $defaultReminders;
     }
     /**
-     * @return Google_Service_Calendar_EventReminder[]
+     * @return Google_Service_Calendar_EventReminder
      */
     public function getDefaultReminders()
     {
@@ -72,14 +72,14 @@ class Google_Service_Calendar_Events extends \SimpleCalendar\plugin_deps\Google_
         return $this->etag;
     }
     /**
-     * @param Google_Service_Calendar_Event[]
+     * @param Google_Service_Calendar_Event
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Calendar_Event[]
+     * @return Google_Service_Calendar_Event
      */
     public function getItems()
     {

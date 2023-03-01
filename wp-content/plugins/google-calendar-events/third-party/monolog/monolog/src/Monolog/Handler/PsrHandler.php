@@ -23,7 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @author Michael Moussa <michael.moussa@gmail.com>
  */
-class PsrHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractHandler implements \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface
+class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
 {
     /**
      * PSR-3 compliant logger
@@ -37,8 +37,6 @@ class PsrHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractHan
     protected $formatter;
     /**
      * @param LoggerInterface $logger The underlying PSR-3 compliant logger to which messages will be proxied
-     * @param string|int      $level  The minimum logging level at which this handler will be triggered
-     * @param bool            $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct(LoggerInterface $logger, $level = Logger::DEBUG, bool $bubble = \true)
     {
@@ -66,7 +64,7 @@ class PsrHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractHan
      *
      * @param FormatterInterface $formatter
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
         $this->formatter = $formatter;
         return $this;

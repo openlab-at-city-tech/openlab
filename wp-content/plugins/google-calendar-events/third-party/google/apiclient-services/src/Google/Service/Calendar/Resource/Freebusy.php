@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $freebusy = $calendarService->freebusy;
  *  </code>
  */
-class Google_Service_Calendar_Resource_Freebusy extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_Freebusy extends Google_Service_Resource
 {
     /**
      * Returns free/busy information for a set of calendars. (freebusy.query)
@@ -34,7 +34,7 @@ class Google_Service_Calendar_Resource_Freebusy extends \SimpleCalendar\plugin_d
      * @param array $optParams Optional parameters.
      * @return Google_Service_Calendar_FreeBusyResponse
      */
-    public function query(\SimpleCalendar\plugin_deps\Google_Service_Calendar_FreeBusyRequest $postBody, $optParams = array())
+    public function query(Google_Service_Calendar_FreeBusyRequest $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);

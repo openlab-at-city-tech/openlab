@@ -13,18 +13,29 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
 use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Monolog\ResettableInterface;
+use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Base Handler class providing basic level/bubble support
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-abstract class AbstractHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler implements ResettableInterface
+abstract class AbstractHandler extends Handler implements ResettableInterface
 {
+    /**
+     * @var int
+     * @phpstan-var Level
+     */
     protected $level = Logger::DEBUG;
+    /** @var bool */
     protected $bubble = \true;
     /**
      * @param int|string $level  The minimum logging level at which this handler will be triggered
      * @param bool       $bubble Whether the messages that are handled can bubble up the stack or not
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $level
      */
     public function __construct($level = Logger::DEBUG, bool $bubble = \true)
     {
@@ -32,7 +43,7 @@ abstract class AbstractHandler extends \SimpleCalendar\plugin_deps\Monolog\Handl
         $this->bubble = $bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isHandling(array $record) : bool
     {
@@ -41,7 +52,7 @@ abstract class AbstractHandler extends \SimpleCalendar\plugin_deps\Monolog\Handl
     /**
      * Sets minimum logging level at which this handler will be triggered.
      *
-     * @param  int|string $level Level or level name
+     * @param  Level|LevelName|LogLevel::* $level Level or level name
      * @return self
      */
     public function setLevel($level) : self
@@ -53,6 +64,8 @@ abstract class AbstractHandler extends \SimpleCalendar\plugin_deps\Monolog\Handl
      * Gets minimum logging level at which this handler will be triggered.
      *
      * @return int
+     *
+     * @phpstan-return Level
      */
     public function getLevel() : int
     {
@@ -80,6 +93,9 @@ abstract class AbstractHandler extends \SimpleCalendar\plugin_deps\Monolog\Handl
     {
         return $this->bubble;
     }
+    /**
+     * {@inheritDoc}
+     */
     public function reset()
     {
     }

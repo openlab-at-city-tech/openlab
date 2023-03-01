@@ -16,15 +16,18 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * and continuing through to give every handler a chance to succeed.
  *
  * @author Craig D'Amelio <craig@damelio.ca>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
-class WhatFailureGroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\GroupHandler
+class WhatFailureGroupHandler extends GroupHandler
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {
         if ($this->processors) {
+            /** @var Record $record */
             $record = $this->processRecord($record);
         }
         foreach ($this->handlers as $handler) {
@@ -37,7 +40,7 @@ class WhatFailureGroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handle
         return \false === $this->bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handleBatch(array $records) : void
     {
@@ -46,6 +49,7 @@ class WhatFailureGroupHandler extends \SimpleCalendar\plugin_deps\Monolog\Handle
             foreach ($records as $record) {
                 $processed[] = $this->processRecord($record);
             }
+            /** @var Record[] $records */
             $records = $processed;
         }
         foreach ($this->handlers as $handler) {
