@@ -1,2 +1,2 @@
-<img class="mapp-icon" src="{{{poi.icon}}}">
+<img class="mapp-icon" alt="" src="{{{poi.icon}}}">
 <div class="mapp-title">{{{poi.title}}}</div>
