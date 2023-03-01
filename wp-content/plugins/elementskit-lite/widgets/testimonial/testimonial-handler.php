@@ -20,6 +20,10 @@ class ElementsKit_Widget_Testimonial_Handler extends \ElementsKit_Lite\Core\Hand
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'testimonial', 'carousel', 'reviews', 'rating', 'stars'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'testimonial/';
     }

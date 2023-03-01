@@ -36,10 +36,13 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 		return Handler::get_icon();
 	}
 
-
 	public function get_categories() {
 		return Handler::get_categories();
 	}
+
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
 
     public function get_help_url() {
         return 'https://wpmet.com/doc/funfact/';

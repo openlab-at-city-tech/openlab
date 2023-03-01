@@ -23,6 +23,10 @@ class ElementsKit_Widget_Header_Info_Handler extends \ElementsKit_Lite\Core\Hand
         return ['elementskit_headerfooter'];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'header-info', 'info-list', 'info', 'list'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'header-info/';
     }

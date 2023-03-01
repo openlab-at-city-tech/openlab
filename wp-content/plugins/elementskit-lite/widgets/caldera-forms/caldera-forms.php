@@ -26,6 +26,10 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
     public function get_categories() {
         return Handler::get_categories();
     }
+    
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
 
     public function get_help_url() {
         return 'https://wpmet.com/doc/caldera-form/';

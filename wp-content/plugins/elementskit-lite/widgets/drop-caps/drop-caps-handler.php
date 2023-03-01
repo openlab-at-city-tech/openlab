@@ -19,6 +19,10 @@ class ElementsKit_Widget_Drop_Caps_Handler extends \ElementsKit_Lite\Core\Handle
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'drop', 'caps', 'initial', 'versal', 'letter'];
+    }
+    
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'drop-caps/';
     }

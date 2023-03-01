@@ -28,6 +28,10 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/icon-box-4/';
     }
@@ -1816,9 +1820,9 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
         <?php endif;?>
         <div class="box-body">
             <?php if ($settings['ekit_icon_box_title_text'] != '') { ?>
-                <<?php esc_attr_e ($ekit_icon_box_title_size_esc, 'elementskit-lite'); ?> class="elementskit-info-box-title">
+                <<?php echo esc_attr($ekit_icon_box_title_size_esc); ?> class="elementskit-info-box-title">
                     <?php echo esc_html($settings['ekit_icon_box_title_text']); ?>
-                </<?php echo esc_attr ($ekit_icon_box_title_size_esc); ?>>
+                </<?php echo esc_attr($ekit_icon_box_title_size_esc); ?>>
             <?php } ?>
             <?php if($settings['ekit_icon_box_description_text'] != ''): ?>
 		  <p><?php echo wp_kses($settings['ekit_icon_box_description_text'], \ElementsKit_Lite\Utils::get_kses_array()); ?></p>

@@ -20,6 +20,10 @@ class ElementsKit_Widget_Ninja_Forms_Handler extends \ElementsKit_Lite\Core\Hand
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'wpf', 'wpform' , 'weform', 'form', 'contact', 'cf7', 'contact form', 'ninja'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'ninja-forms/';
     }

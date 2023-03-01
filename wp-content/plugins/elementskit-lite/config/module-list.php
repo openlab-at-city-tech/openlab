@@ -104,6 +104,11 @@ class Module_List extends \ElementsKit_Lite\Core\Config_List {
 					'package' => 'pro-disabled',
 					'title'   => 'Masking',
 				),
+				'particles' => array(
+					'slug'    => 'particles',
+					'package' => 'pro-disabled',
+					'title'   => 'Particles',
+				),
 			)
 		);
 	}

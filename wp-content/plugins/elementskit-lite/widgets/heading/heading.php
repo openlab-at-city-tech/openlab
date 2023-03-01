@@ -28,6 +28,10 @@ class ElementsKit_Widget_Heading extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/widget-documentation/';
     }
@@ -706,7 +710,6 @@ class ElementsKit_Widget_Heading extends Widget_Base {
             array(
 				'name'     => 'ekit_heading_focused_title_secondary_bg',
 				'label'		 => esc_html__( 'Focused Title Secondary BG', 'elementskit-lite' ),
-                'default' => '',
 				'selector' => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title > span',
 				'condition' => [
 					'ekit_heading_use_focused_title_bg' => 'yes',
@@ -750,7 +753,6 @@ class ElementsKit_Widget_Heading extends Widget_Base {
             array(
 				'name'     => 'ekit_heading_title_secondary_bg',
 				'label'		 => esc_html__( 'Focused Title Secondary BG', 'elementskit-lite' ),
-                'default' => '',
 				'selector' => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-title.text_fill > span',
 				'condition' => [
 					'ekit_heading_use_title_text_fill' => 'yes',
@@ -838,7 +840,6 @@ class ElementsKit_Widget_Heading extends Widget_Base {
             array(
 				'name'     => 'ekit_heading_sub_title_secondary_bg',
 				'label'		 => esc_html__( 'Sub Title', 'elementskit-lite' ),
-                'default' => '',
 				'selector' => '{{WRAPPER}} .elementskit-section-title-wraper .elementskit-section-subtitle',
 				'condition' => [
 					'ekit_heading_use_sub_title_text_fill' => 'yes',

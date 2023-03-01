@@ -20,6 +20,10 @@ class ElementsKit_Widget_Accordion_Handler extends \ElementsKit_Lite\Core\Handle
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'accordion', 'faq', 'faq schema'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'accordion/';
     }

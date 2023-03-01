@@ -32,6 +32,10 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/how-to-create-testimonials-in-wordpress/';
     }
@@ -496,8 +500,10 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 15,
 					'unit' => 'px',
 				],
+				'render_type' => 'template',
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-testimonial-slider .slick-slide' => 'margin-right: {{SIZE}}{{UNIT}};margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider' => '--ekit_testimonial_left_right_spacing: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -523,6 +529,10 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'max' => 20,
 				'step' => 1,
 				'default' => 1,
+				'render_type' => 'template',
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-testimonial-slider' => '--ekit_testimonial_slidetoshow:  {{SIZE}};',
+				],
 			]
 		);
 

@@ -19,6 +19,10 @@ class ElementsKit_Widget_Icon_Box_Handler extends \ElementsKit_Lite\Core\Handler
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'icon', 'box', 'box icon'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'icon-box/';
     }

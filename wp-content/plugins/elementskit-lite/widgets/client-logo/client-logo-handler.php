@@ -20,6 +20,10 @@ class ElementsKit_Widget_Client_Logo_Handler extends \ElementsKit_Lite\Core\Hand
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'client', 'logo', 'brand', 'partner logo'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'client-logo/';
     }

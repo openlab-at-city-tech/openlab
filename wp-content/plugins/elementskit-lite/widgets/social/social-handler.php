@@ -20,6 +20,10 @@ class ElementsKit_Widget_Social_Handler extends \ElementsKit_Lite\Core\Handler_W
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'social', 'icons', 'media', 'facebook', 'fb', 'twitter', 'linkedin'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'social/';
     }

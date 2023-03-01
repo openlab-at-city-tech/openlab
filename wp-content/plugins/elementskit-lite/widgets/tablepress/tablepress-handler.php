@@ -20,6 +20,10 @@ class ElementsKit_Widget_TablePress_Handler extends \ElementsKit_Lite\Core\Handl
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'table', 'press', 'data table'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'tablepress/';
     }

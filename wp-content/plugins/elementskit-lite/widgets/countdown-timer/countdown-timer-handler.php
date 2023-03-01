@@ -19,6 +19,10 @@ class ElementsKit_Widget_Countdown_Timer_Handler extends \ElementsKit_Lite\Core\
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'countdown', 'deadline', 'timer' ];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'countdown-timer/';
     }

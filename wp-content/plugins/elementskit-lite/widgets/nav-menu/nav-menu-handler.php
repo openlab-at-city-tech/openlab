@@ -19,6 +19,10 @@ class ElementsKit_Widget_Nav_Menu_Handler extends \ElementsKit_Lite\Core\Handler
         return [ 'elementskit_headerfooter' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'menu', 'nav-menu', 'nav', 'navigation', 'navigation-menu', 'mega', 'megamenu', 'mega-menu'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'nav-menu/';
     }

@@ -17,7 +17,7 @@ class ElementsKit_Widget_Category_List_Handler extends \ElementsKit_Lite\Core\Ha
 
 
 	static function get_keywords() {
-		return [ 'list', 'category list', 'category', 'ekit', 'elementskit-lite', 'elementskit category list' ];
+		return ['ekit', 'list', 'category list', 'category', 'post category'];
 	}
 
     static function get_categories() {

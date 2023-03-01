@@ -28,6 +28,10 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/dual-button/';
     }

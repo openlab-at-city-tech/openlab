@@ -19,4 +19,8 @@ class ElementsKit_Widget_Back_To_Top_Handler extends \ElementsKit_Lite\Core\Hand
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'back to top', 'scroll', 'scroll to top', 'back', 'top'];
+    }
+
 }

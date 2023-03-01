@@ -35,6 +35,10 @@ class ElementsKit_Widget_Video extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/video/';
     }
@@ -530,7 +534,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'default'		 => 'center',
                 'selectors' => [
                     '{{WRAPPER}} .video-content' => 'text-align: {{VALUE}};',
-					'{{WRAPPER}} .self_video_wrapper' => 'text-align: {{VALUE}};',
 				],
 			]
 		);
@@ -543,7 +546,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
                 'size_units' => [ 'px' ],
                 'selectors' => [
                     '{{WRAPPER}} .video-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .self_video_wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -554,21 +556,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
                 'name' => 'ekit_video_wrap_border',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'selector' => '{{WRAPPER}} .video-content',
-				'condition' => [
-					'ekit_video_popup_video_type!' => 'self',
-				],
-            ]
-        );
-
-		$this->add_group_control(
-            Group_Control_Border::get_type(),
-            [
-                'name' => 'self_video_wrapper_border',
-                'label' => esc_html__( 'Border', 'elementskit-lite' ),
-                'selector' => '{{WRAPPER}} .self_video_wrapper',
-				'condition' => [
-					'ekit_video_popup_video_type' => 'self',
-				],
             ]
         );
 
@@ -580,11 +567,9 @@ class ElementsKit_Widget_Video extends Widget_Base {
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
                     '{{WRAPPER}} .video-content' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .self_video_wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
-	 //
 
 		$this->end_controls_section();
 
@@ -751,12 +736,34 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'{{WRAPPER}} .ekit-video-popup-btn.glow-btn > i:after' => 'color: {{VALUE}}',
 				],
 				'default' => '#255cff',
+				'separator' => 'before',
 				'condition' => [
 					'ekit_video_popup_video_glow' => 'yes'
 				]
 			]
 		);
 
+		$this->add_responsive_control(
+			'ekit_video_popup_btn_glow_size',
+			[
+				'label' => esc_html__( 'Glow Size (px)', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px'],
+				'range' => [
+					'px' => [
+						'min' => 30,
+						'max' => 200,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit-video-popup-btn' => '--glow-size: {{SIZE}}{{UNIT}};',
+				],
+				'condition' => [
+					'ekit_video_popup_video_glow' => 'yes'
+				]
+			]
+		);
 
 		$this->start_controls_tabs( 'ekit_video_popup_button_style_tabs' );
 
@@ -783,7 +790,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
 				'name'     => 'ekit_video_popup_btn_bg_color',
-				'default' => '',
 				'selector' => '{{WRAPPER}} .ekit-video-popup-btn',
             )
         );
@@ -814,7 +820,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		    Group_Control_Background::get_type(),
 		    array(
 			    'name'     => 'ekit_video_popup_btn_bg_hover_color',
-			    'default' => '',
 			    'selector' => '{{WRAPPER}} .ekit-video-popup-btn:hover',
 		    )
 	    );
@@ -1094,6 +1099,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		// set settings data attributes
 		$video_settings['videoVolume'] = (!empty($ekit_video_player_volume_slider_layout)) ? $ekit_video_player_volume_slider_layout: 'horizontal';
 		$video_settings['startVolume'] = (!empty($ekit_video_player_start_volume['size'])) ? $ekit_video_player_start_volume['size']: 0.8;
+		$video_settings['videoType'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'iframe': 'inline';
+		$video_settings['videoClass'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'mfp-fade': 'ekit_self_video_wrap_content';
 		$poster_image =  !empty($self_poster_image['url']) ? $self_poster_image['url'] : '';
 
 		//generate id
@@ -1121,20 +1128,19 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		if (!empty($ekit_video_popup_video_mute) && $ekit_video_popup_video_mute === '1') {
 			$this->add_render_attribute('player', 'muted', '');
 		}
-
-		if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :?>
-			<div class="video-content">
-				<?php include Handler::get_dir() . 'parts/video-button.php'; ?>	
-			</div>
-		<?php else : ?>
-			<div class="self_video_wrapper" data-video-player="<?php echo esc_attr(json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(json_encode($video_settings)); ?>">
-				<?php include Handler::get_dir() . 'parts/video-button.php'; ?>	
+		?>
+		<div class="video-content" data-video-player="<?php echo esc_attr(json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(json_encode($video_settings)); ?>">
+			<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :
+				include Handler::get_dir() . 'parts/video-button.php';  ?>
+			<?php else : 
+				include Handler::get_dir() . 'parts/video-button.php'; ?>	
 				<div id="<?php echo esc_attr($generate_id); ?>" class="mfp-hide ekit_self_video_wrap">
 					<video class="video_class" <?php $this->print_render_attribute_string('player'); ?> >
 						<source type="video/mp4" src="<?php echo esc_url($ekit_video_self_url == 'yes' ? $ekit_video_self_external_url : $ekit_video_player_self_hosted['url'] ); ?>" />
 					</video>
 				</div>
-			</div>
-		<?php endif;
+			<?php endif;?>
+		</div>
+		<?php
 	}
 }

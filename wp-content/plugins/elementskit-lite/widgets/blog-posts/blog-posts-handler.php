@@ -19,6 +19,10 @@ class ElementsKit_Widget_Blog_Posts_Handler extends \ElementsKit_Lite\Core\Handl
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'blog', 'post', 'grid', 'recent post', 'recent', 'category post', 'category'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'blog-posts/';
     }

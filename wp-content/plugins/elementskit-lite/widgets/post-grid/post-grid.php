@@ -80,6 +80,22 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
                 ],
             ]
         );
+
+		$this->add_control(
+			'ekit_post_grid_title_word_wrap',
+			[
+				'label' => esc_html__( 'Word Wrap', 'elementskit-lite' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_on' => esc_html__( 'Show', 'elementskit-lite' ),
+				'label_off' => esc_html__( 'Hide', 'elementskit-lite' ),
+				'return_value' => 'yes',
+				'default' => 'no',
+				'selectors' => [
+					'{{WRAPPER}} .ekit-post_grid-title' => 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;',
+				],
+			]
+		);
+
         $this->end_controls_section();
 
         // Style
@@ -247,7 +263,7 @@ class ElementsKit_Widget_Post_Grid extends Widget_Base {
                     <?php $xs_query->the_post(); ?>
                     <?php if(has_post_thumbnail()): ?>
                         <div <?php echo $this->get_render_attribute_string('ekit-single-item'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
-                            <a href="<?php echo esc_url(get_the_permalink()); ?>" class="tab__post--header">
+                            <a href="<?php echo esc_url(get_the_permalink()); ?>" class="tab__post--header" aria-label="url">
                                 <?php $img_url = get_the_post_thumbnail_url(get_the_ID(), 'medium'); ?>
                                 <div class="post_grid_img_thumb" style="background-image: url('<?php echo esc_url($img_url); ?>')"></div>
                                 <?php if(get_post_format()  == 'video') : ?>

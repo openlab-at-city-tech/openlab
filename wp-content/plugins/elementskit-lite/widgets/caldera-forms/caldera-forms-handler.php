@@ -20,6 +20,10 @@ class ElementsKit_Widget_Caldera_Forms_Handler extends \ElementsKit_Lite\Core\Ha
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'caldera', 'wpf', 'wpform' , 'weform', 'fluent form', 'form', 'contact', 'cf7', 'contact form', 'ninja'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'caldera-forms/';
     }

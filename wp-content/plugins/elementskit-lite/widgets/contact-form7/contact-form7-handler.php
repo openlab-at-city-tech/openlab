@@ -19,6 +19,10 @@ class ElementsKit_Widget_Contact_Form7_Handler extends \ElementsKit_Lite\Core\Ha
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'wpf', 'wpform' , 'weform', 'form', 'contact', 'cf7', 'contact form'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'contact-form7/';
     }

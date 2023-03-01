@@ -20,6 +20,10 @@ class ElementsKit_Widget_Social_Share_Handler extends \ElementsKit_Lite\Core\Han
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'social', 'share', 'facebook', 'twitter', 'instagram', 'linkedin'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'social-share/';
     }

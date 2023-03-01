@@ -27,6 +27,10 @@ class ElementsKit_Widget_Social extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/social-media-widget/';
     }
@@ -658,6 +662,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
 
 						if ( ! empty( $icon['ekit_socialmedia_link']['url'] ) ) {
 							$this->add_link_attributes( 'button-' . $key, $icon['ekit_socialmedia_link'] );
+							$this->add_render_attribute( 'button-' . $key, 'aria-label', $icon['ekit_socialmedia_label'] );
 						}
 						
 					?>
@@ -701,7 +706,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
 								} else {
 									?>
 									<i class="<?php echo esc_attr($icon['ekit_socialmedia_icon']); ?>" aria-hidden="true"></i>
-									<?php
+									<?php 
 								}
 							?>
 							

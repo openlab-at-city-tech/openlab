@@ -19,6 +19,9 @@ class ElementsKit_Widget_Heading_Handler extends \ElementsKit_Lite\Core\Handler_
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'heading', 'title', 'text'];
+    }
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'heading/';
     }
