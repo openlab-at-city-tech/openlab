@@ -5,7 +5,7 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     3.28.2
+ * Version:     3.28.3
  * Author:      MetaSlider
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
@@ -47,7 +47,7 @@ if (! class_exists('MetaSliderPlugin')) {
          *
          * @var string
          */
-        public $version = '3.28.2';
+        public $version = '3.28.3';
 
         /**
          * Pro installed version number
@@ -1578,13 +1578,13 @@ if (! class_exists('MetaSliderPlugin')) {
                                                                     'class' => 'option nivo',
                                                                     'label' => __("Slice Up Down Left", "ml-slider")
                                                                 ),
-                                                                'fold' => array(
-                                                                    'class' => 'option nivo flex responsive',
-                                                                    'label' => __("Fold", "ml-slider")
-                                                                ),
                                                                 'fade' => array(
-                                                                    'class' => 'option nivo',
+                                                                    'class' => 'option nivo flex responsive',
                                                                     'label' => __("Fade", "ml-slider")
+                                                                ),
+                                                                'fold' => array(
+                                                                    'class' => 'option nivo',
+                                                                    'label' => __("Fold", "ml-slider")
                                                                 ),
                                                                 'slideInRight' => array(
                                                                     'class' => 'option nivo',
