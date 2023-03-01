@@ -134,6 +134,11 @@ class TablePress_Import {
 					return new WP_Error( 'table_import_url_host_blocked', '', $this->import_config['url'] );
 				}
 
+				/**
+				 * Load WP file functions to be sure that `download_url()` exists, in particular during Cron requests.
+				 */
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+
 				// Download URL to local file.
 				$location = download_url( $this->import_config['url'] );
 				if ( is_wp_error( $location ) ) {
@@ -401,6 +406,7 @@ class TablePress_Import {
 
 		// Use the legacy import class, if the requirements for PHPSpreadsheet are not fulfilled.
 		$phpspreadsheet_requirements_fulfilled = PHP_VERSION_ID >= 70200
+			&& extension_loaded( 'mbstring' )
 			&& class_exists( 'ZipArchive', false )
 			&& class_exists( 'DOMDocument', false )
 			&& function_exists( 'simplexml_load_string' )
