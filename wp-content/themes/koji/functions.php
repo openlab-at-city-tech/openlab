@@ -703,7 +703,7 @@ endif;
    FILTER COMMENT TEXT TO OUTPUT "BY POST AUTHOR" TEXT
 ------------------------------------------------------------------------------------------------ */
 
-if ( ! function_exists( 'koji_loading_indicator' ) ) :
+if ( ! function_exists( 'koji_filter_comment_text' ) ) :
 	function koji_filter_comment_text( $comment_text, $comment, $args ) {
 
 		// Make sure we have a valid comment object.

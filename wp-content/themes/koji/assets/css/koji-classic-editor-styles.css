@@ -342,7 +342,7 @@ body#tinymce.wp-editor textarea:focus {
 }
 
 body#tinymce.wp-editor select {
-	background: #fff url( ./assets/svg/chevron-down.svg ) no-repeat;
+	background: #fff url( ./assets/images/icons/chevron-down.svg ) no-repeat;
 	background-position: calc( 100% - 14px ) center;
 	border-radius: 4px;
 	border: 1px solid #e1e1e5;

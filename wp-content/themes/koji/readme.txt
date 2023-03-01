@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2 or later
@@ -75,6 +75,15 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.0.12 (2023-02-17)
+-------------------------
+- Fixed 404 error for the icon in select elements (thanks, @freezhao).
+- Bumped "Tested up to" to 6.1.
+
+Version 2.0.11 (2023-01-16)
+-------------------------
+- Removed height: auto from the iframe element, fixing issues with some embeds.
 
 Version 2.0.10 (2022-05-27)
 -------------------------
