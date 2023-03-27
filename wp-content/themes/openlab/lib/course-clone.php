@@ -317,54 +317,64 @@ function openlab_add_clone_button_to_profile() {
 }
 add_action( 'bp_group_header_actions', 'openlab_add_clone_button_to_profile', 50 );
 
+add_action(
+	'openlab_before_groups_loop',
+	function() {
+		add_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_descendant_of_support_to_group_query' );
+		add_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_ancestor_of_support_to_group_query' );
+	}
+);
+
+add_action(
+	'openlab_after_groups_loop',
+	function() {
+		remove_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_descendant_of_support_to_group_query' );
+		remove_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_ancestor_of_support_to_group_query' );
+	}
+);
+
 /**
  * 'descendant-of' parameter support for group directories.
  */
-add_filter(
-	'bp_before_groups_get_groups_parse_args',
-	function( $args ) {
-		$group_id = openlab_get_current_filter( 'descendant-of' );
-		if ( ! $group_id ) {
-			return $args;
-		}
-
-		$group = groups_get_group( $group_id );
-
-		$exclude_hidden = ! current_user_can( 'bp_moderate' );
-		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
-		if ( ! $descendant_ids ) {
-			$descendant_ids = [ 0 ];
-		}
-
-		$args['include'] = $descendant_ids;
-
+function openlab_add_descendant_of_support_to_group_query( $args ) {
+	$group_id = openlab_get_current_filter( 'descendant-of' );
+	if ( ! $group_id ) {
 		return $args;
 	}
-);
+
+	$group = groups_get_group( $group_id );
+
+	$exclude_hidden = ! current_user_can( 'bp_moderate' );
+	$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
+	if ( ! $descendant_ids ) {
+		$descendant_ids = [ 0 ];
+	}
+
+	$args['include'] = $descendant_ids;
+
+	return $args;
+}
 
 /**
  * 'ancestor-of' parameter support for group directories.
  */
-add_filter(
-	'bp_before_groups_get_groups_parse_args',
-	function( $args ) {
-		$group_id = openlab_get_current_filter( 'ancestor-of' );
-		if ( ! $group_id ) {
-			return $args;
-		}
-
-		$group = groups_get_group( $group_id );
-
-		$clone_history = openlab_get_group_clone_history_data( $group_id );
-		if ( ! $clone_history ) {
-			$ancestor_ids = [ 0 ];
-		}
-
-		$args['include'] = wp_list_pluck( $clone_history, 'group_id' );
-
+function openlab_add_ancestor_of_support_to_group_query( $args ) {
+	$group_id = openlab_get_current_filter( 'ancestor-of' );
+	if ( ! $group_id ) {
 		return $args;
 	}
-);
+
+	$group = groups_get_group( $group_id );
+
+	$clone_history = openlab_get_group_clone_history_data( $group_id );
+	if ( ! $clone_history ) {
+		$ancestor_ids = [ 0 ];
+	}
+
+	$args['include'] = wp_list_pluck( $clone_history, 'group_id' );
+
+	return $args;
+}
 
 /** CLASSES ******************************************************************/
 

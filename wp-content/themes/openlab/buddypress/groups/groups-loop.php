@@ -167,6 +167,9 @@ $private_groups = openlab_get_user_private_membership( $user_id );
 if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 	$group_args['exclude'] = $private_groups;
 }
+
+do_action( 'openlab_before_groups_loop' );
+
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -300,3 +303,7 @@ if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 		</div>
 	</div>
 <?php endif; ?>
+
+<?php
+do_action( 'openlab_after_groups_loop' );
+?>
