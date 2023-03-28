@@ -2187,3 +2187,27 @@ function openlab_docs_comment_form( $args ) {
 	$args['comment_field'] = ob_get_clean();
 	return $args;
 }
+
+/**
+ * Ensure that bp-mpo-activity-filter uses the correct blog_id when filtering activity items.
+ */
+add_filter(
+	'bp_mpo_activity_filter_activity_item_blog_id',
+	function( $blog_id, $activity ) {
+		$activity_types = apply_filters( 'bp_mpo_activity_types', array(
+			'new_blog',
+			'new_blog_post',
+			'new_blog_comment',
+			'new_groupblog_post',
+			'new_groupblog_comment',
+		) );
+
+		if ( ! in_array( $activity->type, $activity_types ) ) {
+			return $blog_id;
+		}
+
+		return openlab_get_site_id_by_group_id( $activity->item_id );
+	},
+	10,
+	2
+);
