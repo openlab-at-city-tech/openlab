@@ -660,11 +660,6 @@ function openlab_group_documents_activity_notification_control( $send_it, $activ
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 
-
-function openlab_get_document_type( $file_name ) {
-	return filter_var( $file_name, FILTER_VALIDATE_URL ) ? 'link' : 'upload';
-}
-
 /**
  * Render external link icon
  *
