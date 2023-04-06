@@ -1,0 +1,47 @@
+/**
+ * Styling for tables on user->reckonging.
+ */
+
+.reckoning-table {
+  border-collapse: collapse;
+  border: 1px solid #bbb;
+  margin-bottom: 1em;
+  width: 80%;
+}
+.reckoning-table tbody tr th {
+  border-bottom: 1px solid #bbb;
+  padding: .5em 1em;
+  text-align: left;
+}
+.reckoning-table tbody tr h3 {
+  margin: 0;
+}
+.reckoning-table tbody tr td {
+  line-height: 1.4;
+  padding: .5em 1em;
+}
+.reckoning-table .reckoning-column-date {
+  text-align: right;
+}
+.reckoning-table .reckoning-row-total td:last-child {
+  text-align: right;
+}
+.reckoning-table tbody tr td:first-child {
+  text-align: left;
+}
+
+.reckoning-table tbody tr:nth-child(4n-1),
+.reckoning-table tbody tr:nth-child(4n-2),
+.reckoning-table-all tbody tr:nth-child(even) {
+  background-color: #ececec;
+}
+
+.reckoning-table tbody tr,
+.reckoning-table-all tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.reckoning-table-all tbody tr:last-child {
+  border-top: 1px solid black;
+  background-color: #abc;
+}
