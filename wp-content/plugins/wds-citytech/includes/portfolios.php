@@ -396,6 +396,17 @@ function openlab_bust_group_portfolios_cache_on_self_remove( $group_id, $user_id
 add_action( 'groups_leave_group', 'openlab_bust_group_portfolios_cache_on_self_remove', 10, 2 );
 
 /**
+ * When deleting a user account, bust the portfolio cache for all linked groups.
+ */
+function openlab_bust_group_portfolios_cache_on_account_deletion( $user_id ) {
+	$group_ids = groups_get_user_groups( $user_id );
+	foreach ( $group_ids['groups'] as $group_id ) {
+		openlab_bust_group_portfolio_cache( $group_id );
+	}
+}
+add_action( 'bp_core_pre_delete_account', 'openlab_bust_group_portfolios_cache_on_account_deletion', 10, 2 );
+
+/**
  * Bust group portfolio cache when membership changes.
  */
 function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
