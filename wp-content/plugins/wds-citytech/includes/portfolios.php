@@ -360,7 +360,7 @@ function openlab_bust_group_portfolio_cache( $group_id = 0 ) {
 }
 
 /**
- * Bust group portfolio cache when membership changes
+ * Bust group portfolio cache when membership changes.
  */
 function openlab_bust_group_portfolios_cache_on_membership_change( $member ) {
 	openlab_bust_group_portfolio_cache( $member->group_id );
@@ -369,37 +369,34 @@ add_action( 'groups_member_after_save', 'openlab_bust_group_portfolios_cache_on_
 
 
 /**
- * Bust group portfolio cache when member leaves group
+ * Bust group portfolio cache when member leaves group.
  */
 function openlab_bust_group_portfolios_cache_on_group_leave( $group_id ) {
 	openlab_bust_group_portfolio_cache( $group_id );
 }
-
 add_action( 'groups_uninvite_user', 'openlab_bust_group_portfolios_cache_on_group_leave' );
 
-/* Bust group portfolio cache when member is removed from group.
+/**
+ * Bust group portfolio cache when member is removed from group.
  *
  * We can't run on 'groups_remove_member' because it runs before the member
  * is removed.
  */
-
 function openlab_bust_group_portfolios_cache_on_group_remove( $user_id, $group_id ) {
 	openlab_bust_group_portfolio_cache( $group_id );
 }
-
 add_action( 'groups_removed_member', 'openlab_bust_group_portfolios_cache_on_group_remove', 10, 2 );
 
-/* Bust group portfolio cache when a member removes themselves from the group
- *
+/**
+ * Bust group portfolio cache when a member removes themselves from the group.
  */
 function openlab_bust_group_portfolios_cache_on_self_remove( $group_id, $user_id ) {
 	openlab_bust_group_portfolio_cache( $group_id );
 }
-
 add_action( 'groups_leave_group', 'openlab_bust_group_portfolios_cache_on_self_remove', 10, 2 );
 
 /**
- * Bust group portfolio cache when membership changes
+ * Bust group portfolio cache when membership changes.
  */
 function openlab_bust_group_portfolios_cache_on_portfolio_event( $group_id ) {
 	if ( ! openlab_is_portfolio( $group_id ) ) {
