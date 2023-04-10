@@ -404,7 +404,7 @@ function openlab_bust_group_portfolios_cache_on_account_deletion( $user_id ) {
 		openlab_bust_group_portfolio_cache( $group_id );
 	}
 }
-add_action( 'bp_core_pre_delete_account', 'openlab_bust_group_portfolios_cache_on_account_deletion', 10, 2 );
+add_action( 'bp_core_pre_delete_account', 'openlab_bust_group_portfolios_cache_on_account_deletion' );
 
 /**
  * Bust group portfolio cache when membership changes.
