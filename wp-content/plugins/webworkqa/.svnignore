@@ -1,0 +1,14 @@
+*.sw*
+node_modules
+vendor
+tests
+bin
+Gruntfile.js
+composer.json
+composer.lock
+notes.txt
+package-lock.json
+package.json
+phpcs.xml.dist
+phpunit.xml
+webpack.config.js

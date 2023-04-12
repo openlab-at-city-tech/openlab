@@ -1,0 +1,1443 @@
+/** General ******************************************************************/
+
+/**
+ * blue: #0044af
+ */
+
+@font-face {
+	font-family: OpenSans;
+	src: url("../../lib/OpenSans/OpenSans-Regular.ttf");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: OpenSans;
+	src: url("../../lib/OpenSans/OpenSans-Semibold.ttf");
+	font-weight: 600;
+}
+
+@font-face {
+	font-family: OpenSans;
+	src: url("../../lib/OpenSans/OpenSans-Bold.ttf");
+	font-weight: bold;
+}
+
+#webwork-app {
+	color: #000;
+	font-family: OpenSans;
+	font-size: 1.5rem;
+}
+
+#webwork-app a {
+	color: #0044af;
+}
+
+#webwork-app a:hover {
+	color: #000;
+}
+
+#webwork-app .screen-reader-text {
+	visibility: hidden;
+}
+
+#webwork-app .button {
+	background: #0044af;
+	border: none;
+	border-radius: 6px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 1.2rem;
+	font-weight: 600;
+	padding: 12px 24px;
+	text-transform: uppercase;
+}
+
+#webwork-app .button:hover,
+#webwork-app .button:disabled {
+	background: #ebebeb;
+	color: #0044af;
+}
+
+#webwork-app .button.button-error {
+	background: #ebebeb;
+	color: #0044af;
+}
+
+#webwork-app .button.button-error:hover {
+	background: #0044af;
+	color: #fff;
+}
+
+#webwork-app .button.edit-save-button {
+  padding: 12px 30px;
+}
+
+#webwork-app textarea,
+#webwork-app input[type="text"] {
+	background-color: #fafafa;
+	border: 1px solid rgb(169, 169, 169);
+}
+
+.ww-main {
+	float: left;
+	margin-right: -100%;
+	width: 65%;
+}
+
+.ww-sidebar {
+	float: left;
+	margin-left: 70%;
+	padding: 0;
+	width: 30%;
+}
+
+.ww-header {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.ww-header.ww-header-lowercase {
+	text-transform: none;
+}
+
+h2.ww-header {
+	font-size: 2.0rem;
+}
+
+h3.ww-header {
+	font-size: 1.4rem;
+}
+
+.app-loading-throbber {
+	display: none;
+}
+
+.app-loading .app-loading-throbber {
+	display: block;
+	width: 200px;
+	height: 75px;
+	font-weight: bold;
+	font-size: 150%;
+	background-color: #ccc;
+	padding-top: 20px;
+	text-align: center;
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	top: 50px;
+	opacity: 50%;
+}
+
+.app-loading .app-content {
+	opacity: .15 !important;
+}
+
+/** Index *********************************************************************/
+
+.index-intro,
+.index-list,
+ul.question-list > a {
+	margin: 0 0 50px 0;
+}
+
+.index-intro > p {
+	line-height: 2rem;
+	font-size: 1.4rem;
+}
+
+ul.question-list > a {
+	display: block;
+	text-decoration: none;
+	margin-bottom: 50px;
+}
+
+.index-list {
+	position: relative;
+}
+
+.question-sort {
+	font-size: 1rem;
+	position: absolute;
+	right: 10px;
+	top: -105px;
+	width: 180px;
+}
+
+.ww-problem .question-sort {
+	top: 5px;
+}
+
+#webwork-app .question-list {
+	list-style-type: none;
+	margin-top: 26px;
+}
+
+.question-list > a {
+	text-decoration: none;
+}
+
+.question-list > a:hover {
+	background: #ccc;
+}
+
+.results-header {
+	height: 4rem;
+}
+
+.results-breadcrumbs {
+	color: #777;
+	font-size: 1.2rem;
+	font-weight: 600;
+	margin: 16px 0 0 0;
+	text-transform: uppercase;
+}
+
+.results-breadcrumbs-label {
+	font-weight: bold;
+}
+
+.question-list p.no-results {
+	padding-top: 4rem;
+}
+
+.question-list-loading-more {
+	opacity: .75;
+	font-weight: bold;
+	font-style: italic;
+}
+
+/** Problem *******************************************************************/
+
+.ww-problem {
+	position: relative;
+}
+
+.problem-topmatter {
+	position: relative;
+}
+
+.problem-questions {
+	position: relative;
+}
+
+.ww-problem > h2 {
+	min-height: 1em;
+}
+
+.ww-problem > .ww-header {
+	text-transform: none;
+}
+
+.item-stats {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	font-size: .8em;
+	border: 1px solid #aaa;
+	padding: 4px 8px;
+	white-space: nowrap;
+}
+
+.item-stats.question-stats {
+	top: auto;
+	bottom: 12px;
+	right: 6px;
+}
+
+/* Can probably remove the absolute positioning stuff once Likes interface is settled */
+.item-stats.problem-stats {
+	border: none;
+	color: #666;
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 16px 0 30px 0;
+	padding: 0;
+	position: relative;
+	text-transform: uppercase;
+	white-space: normal;
+}
+
+.item-stats.problem-stats > div {
+	padding: 0;
+}
+
+.item-stats > div {
+	float: left;
+	padding: 0 6px;
+	border-right: 1px solid #aaa;
+}
+
+.item-stats > div:first-child {
+	padding-left: none;
+}
+
+.item-stats > div:last-child {
+	padding-right: none;
+	border-right: none;
+}
+
+.ww-problem-summary {
+	margin-bottom: 60px;
+}
+
+.ww-problem-summary .formatted-problem,
+.ww-my-problem-content .formatted-problem {
+	background: #ededed;
+	font-size: 1rem;
+	padding: 40px;
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+
+.formatted-problem table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.formatted-problem td {
+	border: 1px solid #000;
+	padding: .5em;
+	text-align: center;
+}
+
+.formatted-problem h3 {
+	font-weight: 700;
+	font-size: 1.2em;
+	text-align: center;
+}
+
+.formatted-problem .section-div h3 {
+	font-size: inherit;
+	text-align: left;
+}
+
+.formatted-problem ul {
+	list-style: disc;
+}
+
+.formatted-problem .question-swapped {
+	font-size: .8rem;
+	font-style: italic;
+}
+
+.geogebra-placeholder {
+	border: 1px solid #aaa;
+	font-size: .9rem;
+	line-height: 1.5rem;
+	margin: .5rem;
+	padding: 8px;
+	text-align: center;
+}
+
+.ww-question-problem-summary {
+	margin: 16px;
+	padding: 8px 16px;
+	overflow: visible;
+	cursor: pointer;
+}
+
+.preserve-whitespace {
+	white-space: pre-line;
+}
+
+.ww-question-problem-summary {
+	border: 1px solid #ebebeb;
+}
+
+.ww-question-problem-summary:hover {
+	border: 1px solid #333;
+}
+
+.ww-my-problem {
+	color: #0044af;
+	font-size: 1.1rem;
+	font-weight: 600;
+	line-height: 1.4rem;
+	margin-left: -8px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.ww-question-problem-summary.problem-summary-collapsed .ww-my-problem-content {
+	display: none;
+}
+
+.ww-question-problem-summary.problem-summary-collapsed:hover {
+	opacity: 1;
+}
+
+.ww-my-problem > * {
+	vertical-align: top;
+}
+
+.accordion-toggle {
+	color: #fff;
+	font-size: 1.5rem;
+	margin-left: 16px;
+}
+
+h3.ww-collapsible-section-header {
+	font-size: 2rem;
+	margin-left: 20px;
+}
+
+.ww-collapsible-section-link .accordion-toggle {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.ww-collapsible-block {
+	border: 2px solid #0044af;
+	border-radius: 3px;
+	margin-top: -4px;
+	padding: 30px;
+}
+
+.form-collapsed .ww-collapsible-block {
+	height: 0;
+	padding-bottom: 0;
+}
+
+.form-collapsed .ww-collapsible-block > * {
+	display: none;
+}
+
+.ww-ask-question-form label {
+	font-size: 1.4rem;
+	font-weight: 600;
+}
+
+.ww-ask-question-form textarea {
+	font-size: 1rem;
+	margin-top: 8px;
+	height: 80px;
+	resize: vertical;
+	min-height: 80px;
+}
+
+.tried-is-empty {
+	font-weight: 700;
+	font-size: 20px;
+	margin-bottom: 20px;
+	color: #0044af;
+	line-height: 1.8rem;
+}
+
+.submit-container {
+	display: flex;
+}
+
+.incomplete-toggle {
+	font-size: .85rem;
+	margin-bottom: 1rem;
+}
+
+.incomplete-toggle input {
+	margin-right: 8px;
+}
+
+.incomplete-toggle label {
+	font-size: 0.9rem;
+	line-height: 1.4rem;
+}
+
+.anonymous-toggle {
+	padding-left: 15px;
+/*	margin-left: 180px; */
+}
+
+#webwork-app .anonymous-question a.ww-question-link {
+	text-decoration: none;
+}
+
+.anonymous-toggle input {
+	width: 13px;
+	height: 13px;
+	padding: 0;
+	margin: 0;
+	position: relative;
+	top: -3px;
+}
+
+.anonymous-toggle input[type="checkbox"] + label,
+.anonymous-toggle label {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 25px);
+	line-height: 1.2rem;
+	padding-left: 8px;
+	font-size: .85rem;
+	font-weight: normal;
+}
+
+.ww-preview {
+	border: 2px solid #ebebeb;
+	display: none;
+	font-size: 1rem;
+	line-height: 1.4rem;
+	margin: 8px 0 20px 0;
+	min-height: 80px;
+	padding: 30px;
+}
+
+.ww-question-form-section {
+	position: relative;
+}
+
+.ww-response.is-editing .ww-question-form-section {
+	padding-top: 20px;
+}
+
+.edit-action-buttons {
+	position: absolute;
+	right: 0;
+	text-align: right;
+	top: 0;
+}
+
+@media (max-width: 1200px) {
+	.edit-action-buttons {
+		position: relative;
+	}
+}
+
+@media (max-width: 500px) {
+	.edit-action-buttons {
+		margin-top: 5px;
+		position: relative;
+	}
+
+	.response-block .edit-action-buttons {
+		margin-top: -10px;
+	}
+}
+
+.edit-action-buttons button {
+	background: none;
+	color: #0044af;
+	cursor: pointer;
+	font-size: 1rem;
+	padding: 3px 5px;
+	text-transform: uppercase;
+}
+
+.edit-action-buttons button:hover {
+	color: #000;
+	background-color: #efefef;
+}
+
+.preview-visible .ww-preview {
+	display: block;
+}
+
+.preview-visible textarea {
+	display: none;
+}
+
+.ww-qr-gloss {
+	margin-top: 30px;
+}
+
+.question-course-data {
+	color: #555;
+	font-weight: 600;
+	font-size: 0.85rem;
+	line-height: 1.1rem;
+	max-width: 60%;
+	text-transform: uppercase;
+	position: absolute;
+	bottom: 0;
+}
+
+.item-metadata {
+	position: relative;
+}
+
+.question-open .item-metadata {
+	margin-top: 30px;
+	height: 60px;
+}
+
+.ww-response .item-metadata {
+	height: auto;
+}
+
+.question-form textarea {
+	margin-bottom: 20px;
+	width: 100%;
+}
+
+.question-form-upload-button {
+	background: transparent;
+	margin-right: 12px;
+}
+
+.ww-ask-question-form {
+	margin: 16px 0 60px;
+	position: relative;
+}
+
+.ww-question-response-form {
+	position: relative;
+}
+
+.ww-question-response-form .ww-header {
+	margin: 20px 0 0 0;
+}
+
+.subscription-dialog {
+
+}
+
+.ww-question,
+.ww-response {
+	overflow: visible;
+	position: relative;
+}
+
+.ww-response {
+	padding-bottom: 20px; /* for vote checkbox */
+}
+
+.ww-question-list > ul > li,
+ul.question-list > li {
+	border: 2px solid #0044af;
+	border-radius: 0 0 4px 4px;
+	border-top: none;
+	position: relative;
+}
+
+.ww-question-list > ul > li.has-responses {
+	border-color: #0040b2;
+}
+
+.ww-question {
+	margin-top: 50px;
+}
+
+.ww-question-list > ul > li,
+ul.question-list > li {
+	border-color: #000;
+}
+
+.ww-question-list > ul > li.has-responses,
+ul.question-list > li.has-responses {
+	border-color: #0040b2;
+}
+
+.ww-question-list > ul > li.has-responses
+ul.question-list > li.has-responses {
+	border-color: #0040b2;
+}
+
+.ww-response {
+	padding-top: 10px;
+	position: relative;
+}
+
+#webwork-app .ww-response-list > ul > li.is-answer {
+	margin-left: 30px; /* 60px - 30px */
+	position: relative;
+	overflow: visible;
+}
+
+li.is-answer:before {
+	content: "";
+	position: absolute;
+	height: 100%;
+	border-left: 30px solid #0044af;
+	left: -30px;
+	top: 0;
+}
+
+.response-user-type {
+	background: #fff;
+	font-size: .9rem;
+	padding: 10px 0 5px;
+	text-align: center;
+	text-transform: uppercase
+}
+
+.ww-response-content {
+	padding-left: 104px;
+	font-size: 1rem;
+	line-height: 1.5rem;
+}
+
+.ww-question-gloss {
+	font-size: 1.1rem;
+	font-style: italic;
+	line-height: 1.6rem;
+	margin-bottom: 40px;
+}
+
+.item-feedback {
+	background: #ebebeb;
+	font-size: 1rem;
+	font-style: italic;
+	line-height: 1.5rem;
+	padding: 15px;
+}
+
+.ww-question-header {
+	color: #fff;
+	font-size: 1.0rem;
+	line-height: 100%;
+	padding: 10px 8px 10px 16px;
+	position: relative;
+}
+
+#webwork-app .ww-question-header a {
+	color: #fff;
+	text-decoration: none;
+	text-transform: uppercase;
+	box-shadow: none;
+	font-weight: bold;
+}
+
+.ww-question-header {
+	background: #000;
+}
+
+.has-responses .ww-question-header {
+	background: #0040b2;
+}
+
+.question-in-progress .ww-question-header {
+	background: #476faf;
+}
+
+.ww-question-header .accordion-toggle {
+	font-size: 20px;
+	position: absolute;
+	right: 12px;
+	top: 8px;
+}
+
+.accordion-content {
+	transition: max-height .25s ease;
+	max-height: 10000px;
+	overflow: hidden;
+}
+
+.accordion-content.accordion-closed {
+	max-height: 0;
+	transition: max-height .25s ease;
+}
+
+.ww-question-wrapper {
+	padding: 20px 15px 15px;
+}
+
+.current-question .ww-question-content .ww-author-name {
+	background: #ffff03;
+	padding: 3px;
+}
+
+.respond-link {
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin: 30px 0 0 104px;
+	text-transform: uppercase;
+}
+
+.ww-question > h3,
+.ww-response > h3 {
+	margin: 8px;
+}
+
+.question-closed {
+	border-bottom: #d7d7d7 solid 2px;
+}
+
+.question-closed .ww-question {
+	padding-bottom: 0;
+}
+
+.question-closed .ww-subtitle {
+	margin-bottom: 26px; /* hack */
+}
+
+.question-closed .hide-when-closed {
+	display: none;
+}
+
+.ww-author-avatar {
+	width: 75px;
+	position: absolute;
+}
+
+#webwork-app a.ww-question-link {
+	color: #0044af;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#webwork-app a.ww-question-link:visited {
+	color: #000;
+}
+
+#webwork-app a.ww-question-link:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+.ww-author-name {
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1.8rem;
+	margin-bottom: .5em;
+	word-wrap: break-word;
+}
+
+.anonymous-tooltip {
+	text-decoration: underline #0043af dotted;
+}
+
+.anonymous-tooltip {
+	text-decoration: underline #000 dotted;
+}
+
+.anonymous-tooltip:hover {
+	text-decoration: none;
+}
+
+.__react_component_tooltip {
+	background-color: #c4c4c4;
+	color: #000;
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 13px;
+}
+
+.__react_component_tooltip.type-info {
+	background-color: #c4c4c4;
+	color: #000;
+}
+
+.__react_component_tooltip.type-info.place-top:after {
+	border-top-color: #c4c4c4;
+}
+
+.ww-subtitle {
+	color: #555;
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.1rem;
+	margin: 0 0 35px 0;
+	text-transform: uppercase;
+}
+
+.is-editing .ww-subtitle {
+	margin-bottom: 10px;
+}
+
+.ww-subtitle-sep {
+	padding: 0 10px;
+}
+
+/* @todo Abstract editable field styles */
+.ww-edit-link i {
+	margin-left: 7px;
+}
+
+#webwork-app a.ww-edit-link-editing {
+	color: #000;
+}
+
+.edit-button-links {
+	display: inline-block;
+	font-size: 1.25rem;
+	margin-left: 16px;
+	position: relative;
+}
+
+.hover-notice {
+	background-color: #fff;
+	border: 1px solid #aaa;
+	display: none;
+	font-size: 1rem;
+	padding: 5px 10px;
+	position: absolute;
+	white-space: nowrap;
+}
+
+.hover-notice-parent:hover .hover-notice {
+	display: block;
+}
+
+.subscription-notice {
+	bottom: -40px;
+	left: 110%;
+	text-transform: none;
+}
+
+.delete-notice {
+	background-color: #f00;
+	bottom: -40px;
+	color: #fff;
+	right: -250px;
+}
+
+.editable-field {
+	margin-bottom: 5px;
+}
+
+.editable-field:last-child {
+	margin-bottom: 0;
+}
+
+.editable-field label {
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin: 20px 0 15px;
+}
+
+.editable-field textarea {
+	font-size: 1rem;
+	height: 80px;
+	margin-top: 8px;
+	width: 100%;
+}
+
+/* Common for Twenty themes */
+.entry-content #webwork-app li {
+	margin-left: 0;
+}
+
+.ww-question-content {
+	/* 80px + 8px*2 padding for avatar + padding */
+	padding-left: 104px;
+}
+
+.ww-question-problem-summary {
+	margin: 30px 0 30px 0;
+	background-color: #ebebeb;
+}
+
+.ww-question-content-section-header {
+	font-size: 1.2rem;
+	font-weight: 600;
+	line-height: 100%;
+	margin: 20px 0 15px;
+	padding-top: 0px;
+}
+
+.ww-question-content-text {
+	font-size: 1rem;
+	line-height: 1.5rem;
+}
+
+.response-form textarea {
+	font-size: 1rem;
+	height: 120px;
+	margin: 8px 0 20px 0;
+	width: 100%;
+	resize: vertical;
+	min-height: 120px;
+}
+
+.response-form .ww-preview {
+	margin-top: 20px;
+}
+
+#webwork-app .ww-response-list > ul > li.response-form-li {
+	background: #fff;
+	border-top: none;
+	padding: 20px;
+}
+
+.ww-response-list {
+	border-top: #d7d7d7 solid 2px;
+	background-color: #f6f6f6;
+}
+
+#webwork-app .ww-response-list > ul > li {
+	border-bottom: #d7d7d7 solid 2px;
+	overflow: hidden;
+	padding: 30px 15px 30px 60px;
+}
+
+.ww-score {
+	bottom: 0;
+	font-size: 0.9rem;
+	position: absolute;
+	right: 0;
+}
+
+.ww-score button {
+	color: #4e4e4e;
+}
+
+.ww-score.cannot-vote.has-votes,
+.ww-score.cannot-vote.has-votes button:disabled {
+	color: #000;
+}
+
+.ww-score.cannot-vote.has-no-votes,
+.ww-score.cannot-vote.has-no-votes button:disabled {
+	color: #4e4e4e;
+}
+
+.ww-score.can-vote.has-votes,
+.ww-score.can-vote.has-votes button:disabled i {
+	content: "\f164"; /* fa-thumbs-up */
+}
+
+.ww-score.can-vote.liked-by-me,
+.ww-score.can-vote.liked-by-me button {
+	color: #0044af;
+}
+
+.ww-score.can-vote.has-votes.liked-by-me:hover,
+.ww-score.can-vote.has-votes.liked-by-me:hover button {
+	color: #666;
+}
+
+.ww-score.can-vote.not-liked-by-me:hover,
+.ww-score.can-vote.not-liked-by-me:hover button {
+	color: #0044af;
+}
+
+.ww-score button {
+	background-color: inherit;
+	cursor: pointer;
+}
+
+.ww-score button:disabled {
+	cursor: inherit;
+}
+
+.ww-score.has-votes i:before {
+	content: "\f164"; /* fa-thumbs-up */
+}
+
+.ww-score.has-no-votes i:before {
+	content: "\f087"; /* fa-thumbs-o-up */
+}
+
+.ww-score.can-vote.has-votes.liked-by-me button:hover i:before {
+	content: "\f087"; /* fa-thumbs-o-up */
+}
+
+.ww-score.can-vote.has-no-votes button:hover i:before {
+	content: "\f164"; /* fa-thumbs-up */
+}
+
+.ww-score-value {
+	padding-right: 5px;
+}
+
+.score-icon {
+	font-size: 20px;
+}
+
+.subscription-dialog {
+	background-color: transparent;
+	bottom: 28px;
+	color: #000;
+	cursor: pointer;
+	font-size: .9rem;
+	position: absolute;
+	right: 20px;
+}
+
+.subscription-dialog.subscribed {
+	color: #0044af;
+}
+
+.subscription-dialog.subscribed:hover {
+	color: inherit;
+}
+
+.subscription-dialog.unsubscribed:hover {
+	background-color: inherit;
+	color: #0044af;
+}
+
+.subscription-dialog {
+	text-transform: uppercase;
+	vertical-align: 2px;
+}
+
+.subscription-dialog i:before {
+	font-family: 'FontAwesome';
+	font-size: 1.25rem;
+	font-style: normal;
+	margin-left: 8px;
+	vertical-align: -2px;
+}
+
+.subscription-dialog.unsubscribed i:before {
+	content: "\f055"; /* plus-circle */
+}
+
+.subscription-dialog.subscribed:hover i:before {
+	content: "\f056"; /* minus-circle */
+}
+
+.subscription-dialog.subscribed i:before {
+	content: "\f058"; /* check-circle */
+}
+
+.problem-library-id {
+	color: #666;
+	margin-top: .5em;
+}
+
+.problem-library-id-icon {
+	font-size: 1.5rem;
+	float: left;
+}
+
+.problem-library-id-text {
+	word-wrap: break-word;
+	font-size: .8rem;
+	padding-left: 2.2rem;
+}
+
+.ww-disabled-input {
+	width: 50px;
+	margin-bottom: 1em;
+}
+
+/** Sidebar ******************************************************************/
+
+.ww-sidebar .ww-header {
+	margin: 0;
+}
+
+.ww-sidebar-widget {
+	background-color: #0044af;
+	color: #fff;
+	font-size: 1rem;
+	margin-top: 8px;
+	padding: 20px 12px;
+}
+
+.ww-sidebar-widget p {
+	line-height: 1.4rem;
+	font-weight: 500;
+	padding: 0 .5rem .5rem .5rem;
+}
+
+#webwork-app .ww-sidebar-widget p a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+#webwork-app .ww-sidebar-widget p a:hover {
+	text-decoration: none;
+}
+
+.ww-question-filters {
+	list-style-type: none;
+	margin: 0;
+}
+
+.ww-question-filters > li {
+	list-style: none;
+	margin: 12px 0 0;
+}
+
+.toggle-enabled {
+	font-weight: bold;
+}
+
+/* Attempt to hide page title */
+body.is-webwork-app h1.entry-title {
+	display: none;
+}
+
+
+/** Select Overrides *********************************************************/
+
+#webwork-app .Select-placeholder,
+#webwork-app .Select-value,
+#webwork-app .Select-option {
+	color: #000;
+	font-weight: 600;
+}
+
+.Select-arrow:before {
+	color: #0044af;
+	content: "\f01a";
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: 20px;
+	text-rendering: auto;
+}
+
+#webwork-app .Select-arrow {
+	border: none;
+}
+
+#webwork-app .Select-arrow-zone {
+	padding-right: 22px;
+}
+
+.Select.is-open .Select-arrow:before {
+	content: "\f0aa";
+}
+
+/** From WeBWorK *************************************************************/
+.section-div > div {padding:0 .5em;}    /* move the contents away from the edges */
+.section-div > h3 > .ui-icon {
+display: inline-block;                /* make the triangle be on the same line as the title */
+margin: 3px 1px;                      /* adjust its position slightly */
+vertical-align: -5px;
+}
+.section-div > h3 {
+color: #212121!important;
+border-color: #AAAAAA!important;
+font-weight: normal!important;
+font-style: normal!important;
+width: 100%;
+height: 100%;
+}
+
+.section-div > h3:focus {
+outline-style:solid;
+outline-color:#aaaa00;
+outline-width:2px;
+}
+
+.section-div > h3.ui-state-default {
+color: #555555!important;
+}
+.section-div > div.ui-accordion-content {
+background: #FAFAFA!important;
+}
+.canopen    {background:yellow!important;}
+.iscorrect  {background:lightgreen!important;}
+.cannotopen {
+background:#EEEEEE!important;
+padding: 3px 0px 3px 16px;        /* leave space that would have been triangle */
+}
+
+/* Local overrides of WW styles */
+.section-div {
+	margin: .5rem 0;
+	cursor: pointer;
+}
+.section-div > h3 {
+	padding: 4px 8px;
+}
+.section-div .ui-accordion-content {
+	padding: 1rem;
+}
+
+.alt-tag-warning {
+	float: right;
+	font-size: 12pt;
+	padding: 20px 10px 0 0;
+}
+
+@media (max-width: 500px) {
+	.alt-tag-warning {
+		float: none;
+	}
+}
+
+label.setting.has-error input {
+	box-shadow:
+		0 0 0 1px #f00,
+		0 0 2px 1px rgba(190, 0, 0, .8);
+	outline: none;
+	color: #124964;
+}
+
+.details a.edit-attachment {
+	display: none;
+}
+
+/** Media queries ************************************************************/
+
+/**
+ * Note: Some of this is handled in the webwork-theme stylesheet.
+ * This needs to be untangled at some point.
+ */
+@media (max-width: 868px) {
+	.problem-questions {
+		margin-top: 80px;
+	}
+
+	.ww-problem .question-sort {
+		top: -40px;
+	}
+}
+
+@media (max-width: 500px) {
+	.app-content {
+		position: relative;
+	}
+
+	.ww-main {
+		float: none;
+		margin-right: 0;
+		position: relative;
+		width: 100%;
+	}
+
+	.ww-sidebar {
+		background: rgba( 255,255,255,1);
+		box-shadow: 0px 3px 10px 5px rgba(0,0,0,0.38);
+		display: none;
+		float: none;
+		margin-left: -10%;
+		margin-top: -7.5%;
+		position: absolute;
+		top: 0;
+		width: 120%;
+		z-index: 10;
+	}
+
+	.ww-sidebar h3.ww-header {
+		font-size: 2.25rem;
+		margin: 2rem 6% 1rem 6%;
+	}
+
+	.ww-sidebar.sidebar-visible {
+		display: block;
+	}
+
+	.ww-sidebar-widget {
+		font-size: 1.5rem;
+		margin: 0 6% 2rem 6%;
+	}
+
+	.ww-sidebar-widget p {
+		font-size: 1.5rem;
+		line-height: 2rem;
+	}
+
+	#webwork-app .button {
+		padding: 4px 8px;
+	}
+
+	.ww-subtitle-sep {
+		padding: 0 5px;
+	}
+
+	.item-stats.problem-stats {
+		font-size: 1rem;
+		margin: 8px 0 20px 0;
+	}
+
+	.ww-my-problem-content .formatted-problem,
+	.ww-problem-summary .formatted-problem {
+		padding: 15px;
+	}
+
+	.problem-library-id-icon {
+		font-size: 1.5rem;
+	}
+
+	.problem-library-id-text {
+		padding-left: 2.5rem;
+	}
+
+	.ww-problem-summary {
+		margin-bottom: 30px;
+	}
+
+	.ww-ask-question-form {
+		margin-bottom: 30px;
+		margin-top: 0;
+	}
+
+	h3.ww-collapsible-section-header {
+		margin-left: 6px;
+	}
+
+	.ww-collapsible-section-link .accordion-toggle {
+		top: .5rem;
+	}
+
+	.accordion-toggle {
+		font-size: 1.25rem;
+	}
+
+	.ww-collapsible-block {
+		font-size: 80%;
+		padding: 20px;
+	}
+
+	.ww-question-header {
+		font-size: 1.3rem;
+	}
+
+	.ww-question-wrapper {
+		padding: 15px 12px 12px;
+	}
+
+	.ww-question-gloss {
+		font-size: 1rem;
+	}
+
+	#webwork-app .ww-main .Select-control,
+  #webwork-app .ww-main .Select-input {
+		height: 22px;
+	}
+
+	#webwork-app .ww-main .Select-placeholder,
+	#webwork-app .ww-main .Select--single > .Select-control .Select-value {
+		line-height: 22px;
+	}
+
+	.question-sort {
+		width: 140px;
+	}
+
+	.ww-qr-gloss {
+		margin-top: 10px;
+	}
+
+	/* Totally and completely awful */
+	.ww-problem .question-sort {
+		left: 0;
+		right: auto;
+		top: 7rem;
+	}
+
+	.ww-author-avatar {
+		display: none;
+	}
+
+	.ww-question-content {
+		padding-left: 0;
+	}
+
+	.ww-subtitle.ww-question-subtitle {
+		margin-bottom: 0;
+	}
+
+	.item-metadata {
+		margin-top: 20px;
+	}
+
+	.ww-score-value {
+		padding-right: 8px;
+	}
+
+	.respond-link {
+		margin-left: 0;
+		font-size: 1.2rem;
+	}
+
+	.ww-response-content {
+		padding-left: 0;
+	}
+
+	.ww-subtitle.ww-response-subtitle {
+		margin-bottom: 20px;
+	}
+
+	.question-course-data {
+		margin-left: 0;
+		max-width: 80%;
+	}
+}
