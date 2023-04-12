@@ -5,7 +5,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Cookie;
 /**
  * Persists cookies in the client session
  */
-class SessionCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJar
+class SessionCookieJar extends CookieJar
 {
     /**
      * @var string session key
@@ -45,7 +45,7 @@ class SessionCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\Coo
         $json = [];
         /** @var SetCookie $cookie */
         foreach ($this as $cookie) {
-            if (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
+            if (CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
@@ -62,7 +62,7 @@ class SessionCookieJar extends \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\Coo
         $data = \json_decode($_SESSION[$this->sessionKey], \true);
         if (\is_array($data)) {
             foreach ($data as $cookie) {
-                $this->setCookie(new \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie($cookie));
+                $this->setCookie(new SetCookie($cookie));
             }
         } elseif (\strlen($data)) {
             throw new \RuntimeException("Invalid cookie data");

@@ -204,12 +204,9 @@ add_filter(
 );
 
 /**
- * Get the info header for a list of docs
+ * Get the info header for a list of docs.
  *
- * Contains things like tag filters
- *
- * @param int $doc_id optional The post_id of the doc
- * @return str Permalink for the group doc
+ * Contains things like tag filters.
  */
 function openlab_bp_docs_info_header() {
 	do_action( 'bp_docs_before_info_header' );

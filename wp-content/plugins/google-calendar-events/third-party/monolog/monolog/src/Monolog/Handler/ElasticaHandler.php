@@ -11,6 +11,7 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
+use SimpleCalendar\plugin_deps\Elastica\Document;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\ElasticaFormatter;
 use SimpleCalendar\plugin_deps\Monolog\Logger;
@@ -32,21 +33,19 @@ use SimpleCalendar\plugin_deps\Elastica\Exception\ExceptionInterface;
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
  */
-class ElasticaHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class ElasticaHandler extends AbstractProcessingHandler
 {
     /**
      * @var Client
      */
     protected $client;
     /**
-     * @var array Handler config options
+     * @var mixed[] Handler config options
      */
     protected $options = [];
     /**
-     * @param Client     $client  Elastica Client object
-     * @param array      $options Handler configuration
-     * @param int|string $level   The minimum logging level at which this handler will be triggered
-     * @param bool       $bubble  Whether the messages that are handled can bubble up the stack or not
+     * @param Client  $client  Elastica Client object
+     * @param mixed[] $options Handler configuration
      */
     public function __construct(Client $client, array $options = [], $level = Logger::DEBUG, bool $bubble = \true)
     {
@@ -68,15 +67,18 @@ class ElasticaHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstra
         $this->bulkSend([$record['formatted']]);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
         if ($formatter instanceof ElasticaFormatter) {
             return parent::setFormatter($formatter);
         }
         throw new \InvalidArgumentException('ElasticaHandler is only compatible with ElasticaFormatter');
     }
+    /**
+     * @return mixed[]
+     */
     public function getOptions() : array
     {
         return $this->options;
@@ -89,7 +91,7 @@ class ElasticaHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstra
         return new ElasticaFormatter($this->options['index'], $this->options['type']);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handleBatch(array $records) : void
     {
@@ -98,6 +100,9 @@ class ElasticaHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstra
     }
     /**
      * Use Elasticsearch bulk API to send list of documents
+     *
+     * @param Document[] $documents
+     *
      * @throws \RuntimeException
      */
     protected function bulkSend(array $documents) : void

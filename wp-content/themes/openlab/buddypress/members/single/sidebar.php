@@ -5,17 +5,20 @@
 if (!$dud = bp_displayed_user_domain()) {
     $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
 }
+
+$is_my_groups_post = ( get_queried_object() instanceof WP_Post ) && 0 === strpos( get_queried_object()->post_name, 'my-' );
+
+// Portfolio links.
+
+if ( ( bp_is_user_activity() || ! bp_current_component() ) && ! $is_my_groups_post ) {
+	$mobile_hide = true;
+	$id = 'portfolio-sidebar-widget';
+} else {
+	$mobile_hide = false;
+	$id = 'portfolio-sidebar-inline-widget';
+}
+
 ?>
-
-<?php /* Portfolio links */ ?>
-
- <?php if ( (bp_is_user_activity() || !bp_current_component()) && !(strpos($post->post_name,'my-') > -1)) :
-        $mobile_hide = true;
-        $id = 'portfolio-sidebar-widget';
-     else:
-         $mobile_hide = false;
-         $id = 'portfolio-sidebar-inline-widget';
-     endif; ?>
 
 <div class="sidebar-widget mol-menu" id="<?php echo $id ?>">
 

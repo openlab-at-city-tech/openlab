@@ -11,7 +11,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  *
  *     GuzzleHttp\Promise\Utils::queue()->run();
  */
-class TaskQueue implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\TaskQueueInterface
+class TaskQueue implements TaskQueueInterface
 {
     private $enableShutdown = \true;
     private $queue = [];

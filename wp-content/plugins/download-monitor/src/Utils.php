@@ -8,6 +8,14 @@
 abstract class DLM_Utils {
 
 	/**
+	 * Defined tables
+	 *
+	 * @var array $tables An array of defined tables.
+	 *
+	 * @since 4.7.75
+	 */
+	private static $tables = array();
+	/**
 	 * Get visitor's IP address
 	 *
 	 * @return string
@@ -171,7 +179,7 @@ abstract class DLM_Utils {
 			$new_path       = implode( DIRECTORY_SEPARATOR, $common_parts );
 			$last_file_path = implode( DIRECTORY_SEPARATOR, $paths[2] );
 
-			if ( false !== strpos( $last_file_path, $new_path ) ) {
+			if ( ! empty( $new_path ) && false !== strpos( $last_file_path, $new_path ) ) {
 				return $new_path;
 			} else {
 				$max = count( $common_parts );
@@ -197,23 +205,29 @@ abstract class DLM_Utils {
 	 * @return bool
 	 */
 	public static function table_checker( $table ) {
-		global $wpdb;
 
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
+		if ( empty( self::$tables ) || ! in_array( $table, self::$tables ) ) {
+			global $wpdb;
+			// If exists, return true.
+			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
 
-			return true;
+				self::$tables[] = $table;
 
+				return true;
+			}
+			// Doesn't exist, return false.
+			return false;
 		}
-
-		return false;
+		// Exists in variable, return true.
+		return true;
 	}
 
 
 	/**
-	 *Check for existing column inside a table
+	 * Check for existing column inside a table
 	 *
 	 * @param string $table_name The table in witch we are checking.
-	 * 
+	 *
 	 * @param string $col_name The column we are checking for.
 	 *
 	 * @return bool
@@ -282,6 +296,19 @@ abstract class DLM_Utils {
 	 */
 	public static function get_visitor_uuid() {
 		return md5( self::get_visitor_ip() );
+	}
+
+	/**
+	 * Fix for WPML setting language for download links. IF the downloads are made trasnlatable this will need to be deleted.
+	 *
+	 * @param string $home_url Home URL made by WPML.
+	 * @param string $url Original URL.
+	 *
+	 * @return string $home_url The correct home URL for Download Monitor.
+	 */
+	public static function wpml_download_link( $home_url, $url ) {
+
+		return $url;
 	}
 
 }

@@ -124,7 +124,7 @@ if (! function_exists('advg_check_legacy_widget_block_init')) {
                         $advgb_blocks_user_roles[$current_user_role]['active_blocks'],
                         'core/legacy-widget'
                     );
-                    update_option( 'advgb_blocks_user_roles', $advgb_blocks_user_roles );
+                    update_option( 'advgb_blocks_user_roles', $advgb_blocks_user_roles, false );
                 }
             }
         }

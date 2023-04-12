@@ -12,6 +12,7 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
 use SimpleCalendar\plugin_deps\Monolog\Logger;
+use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Blackhole
  *
@@ -19,8 +20,11 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * to put on top of an existing stack to override it temporarily.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class NullHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler
+class NullHandler extends Handler
 {
     /**
      * @var int
@@ -28,20 +32,22 @@ class NullHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler
     private $level;
     /**
      * @param string|int $level The minimum logging level at which this handler will be triggered
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $level
      */
     public function __construct($level = Logger::DEBUG)
     {
         $this->level = Logger::toMonologLevel($level);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isHandling(array $record) : bool
     {
         return $record['level'] >= $this->level;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {

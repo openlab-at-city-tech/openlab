@@ -15,6 +15,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class NotFoundResourceException extends \InvalidArgumentException implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\ExceptionInterface
+class NotFoundResourceException extends \InvalidArgumentException implements ExceptionInterface
 {
 }

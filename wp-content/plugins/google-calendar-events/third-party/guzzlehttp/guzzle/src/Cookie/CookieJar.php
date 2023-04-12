@@ -7,7 +7,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * Cookie jar that stores cookies as an array
  */
-class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJarInterface
+class CookieJar implements CookieJarInterface
 {
     /**
      * @var SetCookie[] Loaded cookie data
@@ -28,8 +28,8 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
     {
         $this->strictMode = $strictMode;
         foreach ($cookieArray as $cookie) {
-            if (!$cookie instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie) {
-                $cookie = new \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie($cookie);
+            if (!$cookie instanceof SetCookie) {
+                $cookie = new SetCookie($cookie);
             }
             $this->setCookie($cookie);
         }
@@ -44,7 +44,7 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
     {
         $cookieJar = new self();
         foreach ($cookies as $name => $value) {
-            $cookieJar->setCookie(new \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie(['Domain' => $domain, 'Name' => $name, 'Value' => $value, 'Discard' => \true]));
+            $cookieJar->setCookie(new SetCookie(['Domain' => $domain, 'Name' => $name, 'Value' => $value, 'Discard' => \true]));
         }
         return $cookieJar;
     }
@@ -55,7 +55,7 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
      * @param SetCookie $cookie              Being evaluated.
      * @param bool      $allowSessionCookies If we should persist session cookies
      */
-    public static function shouldPersist(\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie, bool $allowSessionCookies = \false) : bool
+    public static function shouldPersist(SetCookie $cookie, bool $allowSessionCookies = \false) : bool
     {
         if ($cookie->getExpires() || $allowSessionCookies) {
             if (!$cookie->getDiscard()) {
@@ -71,7 +71,7 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
      *
      * @return SetCookie|null cookie that was found or null if not found
      */
-    public function getCookieByName(string $name) : ?\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie
+    public function getCookieByName(string $name) : ?SetCookie
     {
         foreach ($this->cookies as $cookie) {
             if ($cookie->getName() !== null && \strcasecmp($cookie->getName(), $name) === 0) {
@@ -85,7 +85,7 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
      */
     public function toArray() : array
     {
-        return \array_map(static function (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) : array {
+        return \array_map(static function (SetCookie $cookie) : array {
             return $cookie->toArray();
         }, $this->getIterator()->getArrayCopy());
     }
@@ -98,15 +98,15 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
             $this->cookies = [];
             return;
         } elseif (!$path) {
-            $this->cookies = \array_filter($this->cookies, static function (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) use($domain) : bool {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use($domain) : bool {
                 return !$cookie->matchesDomain($domain);
             });
         } elseif (!$name) {
-            $this->cookies = \array_filter($this->cookies, static function (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain) : bool {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use($path, $domain) : bool {
                 return !($cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         } else {
-            $this->cookies = \array_filter($this->cookies, static function (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain, $name) {
+            $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) use($path, $domain, $name) {
                 return !($cookie->getName() == $name && $cookie->matchesPath($path) && $cookie->matchesDomain($domain));
             });
         }
@@ -116,14 +116,14 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
      */
     public function clearSessionCookies() : void
     {
-        $this->cookies = \array_filter($this->cookies, static function (\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) : bool {
+        $this->cookies = \array_filter($this->cookies, static function (SetCookie $cookie) : bool {
             return !$cookie->getDiscard() && $cookie->getExpires();
         });
     }
     /**
      * @inheritDoc
      */
-    public function setCookie(\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) : bool
+    public function setCookie(SetCookie $cookie) : bool
     {
         // If the name string is empty (but not 0), ignore the set-cookie
         // string entirely.
@@ -185,13 +185,18 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
     {
         if ($cookieHeader = $response->getHeader('Set-Cookie')) {
             foreach ($cookieHeader as $cookie) {
-                $sc = \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie::fromString($cookie);
+                $sc = SetCookie::fromString($cookie);
                 if (!$sc->getDomain()) {
                     $sc->setDomain($request->getUri()->getHost());
                 }
                 if (0 !== \strpos($sc->getPath(), '/')) {
                     $sc->setPath($this->getCookiePathFromRequest($request));
                 }
+                if (!$sc->matchesDomain($request->getUri()->getHost())) {
+                    continue;
+                }
+                // Note: At this point `$sc->getDomain()` being a public suffix should
+                // be rejected, but we don't want to pull in the full PSL dependency.
                 $this->setCookie($sc);
             }
         }
@@ -237,7 +242,7 @@ class CookieJar implements \SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\CookieJ
      * If a cookie already exists and the server asks to set it again with a
      * null value, the cookie must be deleted.
      */
-    private function removeCookieIfEmpty(\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) : void
+    private function removeCookieIfEmpty(SetCookie $cookie) : void
     {
         $cookieValue = $cookie->getValue();
         if ($cookieValue === null || $cookieValue === '') {

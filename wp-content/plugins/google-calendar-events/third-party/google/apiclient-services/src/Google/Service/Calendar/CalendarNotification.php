@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_CalendarNotification extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Calendar_CalendarNotification extends Google_Model
 {
     public $method;
     public $type;

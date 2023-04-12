@@ -56,7 +56,6 @@ require_once STYLESHEETPATH . '/lib/plugin-mods/email-funcs.php';
  * @global type $groups_template
  * @param type $user_id
  * @param type $group
- * @return type
  */
 function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 	global $members_template, $groups_template;
@@ -97,7 +96,6 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 
 	wp_enqueue_script( 'openlab-bpges-js', get_stylesheet_directory_uri() . '/js/bpges.js', array( 'jquery' ) );
 }
-
 remove_action( 'bp_group_manage_members_admin_item', 'ass_manage_members_email_status' );
 add_action( 'bp_group_manage_members_admin_item', 'openlab_manage_members_email_status' );
 
@@ -651,7 +649,6 @@ function openlab_refresh_term_cache_after_ordering_update() {
 	if ( is_array( $unserialised_data ) ) {
 		foreach ( $unserialised_data as $key => $values ) {
 			$items = explode( '&', $values );
-			unset( $item );
 			foreach ( $items as $item_key => $item_ ) {
 				$items[ $item_key ] = trim( str_replace( 'item[]=', '', $item_ ) );
 			}

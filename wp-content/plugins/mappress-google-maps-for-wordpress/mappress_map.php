@@ -204,6 +204,9 @@ class Mappress_Map extends Mappress_Obj {
 		if (empty($this->name)) {
 			$this->name = (defined('DOING_AJAX') && DOING_AJAX) ? "mapp" . uniqid() : "mapp$div";
 			$div++;
+		} else {
+			// Sanitize name, could be provided by user in iframe URL
+			$this->name = sanitize_text_field($this->name);
 		}
 
 		// iframe container

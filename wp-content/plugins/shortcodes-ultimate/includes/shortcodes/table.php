@@ -78,10 +78,21 @@ function su_shortcode_table( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	$table = $atts['url']
-		? su_parse_csv( $atts['url'] )
-		: do_shortcode( $content );
+	$table = do_shortcode( $content );
 
-	return '<div class="su-table' . su_get_css_class( $atts ) . '">' . $table . '</div>';
+	if ( $atts['url'] ) {
+		$table = su_shortcode_csv_table(
+			array(
+				'url'        => $atts['url'],
+				'responsive' => $atts['responsive'],
+				'alternate'  => $atts['alternate'],
+				'fixed'      => $atts['fixed'],
+				'class'      => $atts['class'],
+				'delimiter'  => ';',
+			)
+		);
+	}
+
+	return '<div class="su-table' . su_get_css_class( $atts ) . '">' . wp_kses_post( $table ) . '</div>';
 
 }

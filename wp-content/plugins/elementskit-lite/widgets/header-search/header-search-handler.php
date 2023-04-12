@@ -23,6 +23,10 @@ class ElementsKit_Widget_Header_Search_Handler extends \ElementsKit_Lite\Core\Ha
         return ['elementskit_headerfooter'];
     }
 
+    static function get_keywords() {
+        return [ 'ekit', 'header', 'search', 'search box'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'header-search/';
     }

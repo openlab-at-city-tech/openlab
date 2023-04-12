@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_RevisionList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_RevisionList extends Google_Collection
 {
     protected $collection_key = 'revisions';
     public $kind;
@@ -41,14 +41,14 @@ class Google_Service_Drive_RevisionList extends \SimpleCalendar\plugin_deps\Goog
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_Drive_Revision[]
+     * @param Google_Service_Drive_Revision
      */
     public function setRevisions($revisions)
     {
         $this->revisions = $revisions;
     }
     /**
-     * @return Google_Service_Drive_Revision[]
+     * @return Google_Service_Drive_Revision
      */
     public function getRevisions()
     {

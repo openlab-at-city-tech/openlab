@@ -512,7 +512,7 @@ function openlab_group_blog_remove_comment_activity( $comment_id ) {
 		bp_blogs_delete_activity(
 			array(
 				'item_id'           => $group_id,
-				'secondary_item_id' => $post_id,
+				'secondary_item_id' => $comment_id,
 				'component'         => 'groups',
 				'type'              => 'new_blog_comment',
 			)
@@ -530,8 +530,12 @@ add_action( 'spam_comment', 'openlab_group_blog_remove_comment_activity' );
  * Catch 'unlink-site' requests, process, and send back
  */
 function openlab_process_unlink_site() {
-	if ( bp_is_group_admin_page( 'edit-details' ) && bp_is_action_variable( 'unlink-site', 1 ) ) {
+	if ( bp_is_group_admin_page() && bp_is_action_variable( 'unlink-site', 1 ) ) {
 		check_admin_referer( 'unlink-site' );
+
+		if ( ! groups_is_user_admin( get_current_user_id(), bp_get_current_group_id() ) ) {
+			return;
+		}
 
 		$meta_to_delete = array(
 			'external_site_url',
@@ -1171,7 +1175,7 @@ function wds_site_can_be_viewed() {
 			case '-3':
 				if ( is_user_logged_in() ) {
 					$user_capabilities = get_user_meta( $user_ID, 'wp_' . $wds_bp_group_site_id . '_capabilities', true );
-					if ( isset( $user_capabalities['administrator'] ) ) {
+					if ( isset( $user_capabilities['administrator'] ) ) {
 						$blog_public = true;
 					}
 				}
@@ -1321,7 +1325,7 @@ function openlab_get_external_comments_by_group_id( $group_id = 0 ) {
 function openlab_format_rss_items( $feed_url, $num_items = 3 ) {
 	$feed_posts = fetch_feed( $feed_url );
 
-	if ( empty( $feed_posts ) || is_wp_error( $feed_posts ) ) {
+	if ( is_wp_error( $feed_posts ) ) {
 		return;
 	}
 
@@ -1545,6 +1549,7 @@ add_action( 'bp_actions', 'openlab_catch_refresh_feed_requests' );
 function openlab_get_groupblog_template( $user_id, $group_id ) {
 	$group_type = openlab_get_group_type( $group_id );
 
+	$template = '';
 	switch ( $group_type ) {
 		case 'portfolio':
 			$account_type = openlab_get_user_member_type( $user_id );
@@ -1575,6 +1580,10 @@ function openlab_get_groupblog_template( $user_id, $group_id ) {
 			break;
 	}
 
+	if ( ! $template ) {
+		return 0;
+	}
+
 	// Get the ID.
 	$network = get_network();
 
@@ -1595,6 +1604,10 @@ class OpenLab_GroupBlog_Template_Picker {
 	protected $user_id    = 0;
 	protected $template   = null;
 	protected $group_type = 'group';
+
+	protected $student_department;
+	protected $account_type;
+	protected $department_templates;
 
 	public function __construct( $user_id = 0 ) {
 		$user_id = intval( $user_id );

@@ -30,12 +30,13 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *
  * @author Paul Statezny <paulstatezny@gmail.com>
  */
-class RollbarHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class RollbarHandler extends AbstractProcessingHandler
 {
     /**
      * @var RollbarLogger
      */
     protected $rollbarLogger;
+    /** @var string[] */
     protected $levelMap = [Logger::DEBUG => 'debug', Logger::INFO => 'info', Logger::NOTICE => 'info', Logger::WARNING => 'warning', Logger::ERROR => 'error', Logger::CRITICAL => 'critical', Logger::ALERT => 'critical', Logger::EMERGENCY => 'critical'];
     /**
      * Records whether any log records have been added since the last flush of the rollbar notifier
@@ -43,11 +44,10 @@ class RollbarHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
      * @var bool
      */
     private $hasRecords = \false;
+    /** @var bool */
     protected $initialized = \false;
     /**
      * @param RollbarLogger $rollbarLogger RollbarLogger object constructed with valid token
-     * @param string|int    $level         The minimum logging level at which this handler will be triggered
-     * @param bool          $bubble        Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct(RollbarLogger $rollbarLogger, $level = Logger::ERROR, bool $bubble = \true)
     {
@@ -55,7 +55,7 @@ class RollbarHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
         parent::__construct($level, $bubble);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function write(array $record) : void
     {
@@ -73,6 +73,7 @@ class RollbarHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
         } else {
             $toLog = $record['message'];
         }
+        // @phpstan-ignore-next-line
         $this->rollbarLogger->log($context['level'], $toLog, $context);
         $this->hasRecords = \true;
     }
@@ -84,14 +85,14 @@ class RollbarHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstrac
         }
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function close() : void
     {
         $this->flush();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function reset()
     {

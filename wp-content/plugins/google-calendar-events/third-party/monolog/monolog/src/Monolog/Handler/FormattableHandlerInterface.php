@@ -25,7 +25,7 @@ interface FormattableHandlerInterface
      * @param  FormatterInterface $formatter
      * @return HandlerInterface   self
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface;
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface;
     /**
      * Gets the formatter.
      *

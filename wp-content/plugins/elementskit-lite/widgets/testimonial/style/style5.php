@@ -103,7 +103,7 @@
 			<?php endforeach; ?>
 		</div>
 	</div>
-	<ul class="slick-dots swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></ul>
+	<ul aria-describedby="paginations" class="slick-dots swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></ul>
 	<?php if(!empty($settings['ekit_testimonial_show_arrow'])) : ?>
 		<button type="button" class="slick-prev slick-arrow"><i class="<?php echo esc_attr($prevArrowIcon); ?>"></i></button>
 		<button type="button" class="slick-next slick-arrow"><i class="<?php echo esc_attr($nextArrowIcon); ?>"></i></button>

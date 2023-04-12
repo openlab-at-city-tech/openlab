@@ -212,7 +212,7 @@ class Su_Generator {
 			) );
 
 		if ( ! su_fs()->can_use_premium_code() && ! su_has_all_active_addons() ) {
-			$tools[] = '<a href="' . esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', array( 'wp-admin', 'generator', 'badge' ) ) ) . '" target="_blank" title="' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '" class="su-add-ons">&#9733; ' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '</a>';
+			$tools[] = '<a href="' . esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', 'wp-dashboard', 'generator', 'badge' ) ) . '" target="_blank" title="' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '" class="su-add-ons">&#9733; ' . __( 'Upgrade to PRO', 'shortcodes-ultimate' ) . '</a>';
 		}
 ?>
 	<div id="su-generator-wrap" style="display:none">

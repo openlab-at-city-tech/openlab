@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.9.5
 Requires PHP: 5.6
-Tested up to: 6.1
-Stable tag: 2.84.19
+Tested up to: 6.2
+Stable tag: 2.84.21
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -88,6 +88,13 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.84.21 =
+* Changed: update version compatibility
+* Changed: add alt tags to template icons
+
+= 2.84.20 =
+* Fixed: sanitize map name in iframes
 
 = 2.84.19 =
 * Fixed: geolocate parameter not passed through from shortcode

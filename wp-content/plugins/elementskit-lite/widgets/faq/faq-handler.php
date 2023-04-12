@@ -20,6 +20,10 @@ class ElementsKit_Widget_FAQ_Handler extends \ElementsKit_Lite\Core\Handler_Widg
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'faq', 'faq schema'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'faq/';
     }

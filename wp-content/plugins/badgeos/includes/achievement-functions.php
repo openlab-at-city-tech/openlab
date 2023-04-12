@@ -1525,12 +1525,11 @@ function revoke_badge_on_point_loss() {
 		// Get awarded points by achievemet trigger.
 		$last_points_awarded = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM %s 
+				"SELECT * FROM {$points_table_name} 
 				WHERE type = 'Award' 
 				AND user_id = %d 
 				AND achievement_id IN (%s)
 				ORDER BY `dateadded` DESC ",
-				$points_table_name,
 				$user_id,
 				$achievement_ids
 			)

@@ -21,6 +21,9 @@ class ElementsKit_Widget_Mail_Chimp_Handler extends \ElementsKit_Lite\Core\Handl
     static function get_categories() {
         return [ 'elementskit' ];
     }
+    static function get_keywords() {
+        return ['ekit', 'email', 'mail chimp', 'mail', 'subscription'];
+    }
 
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'mail-chimp/';

@@ -16,25 +16,27 @@ use SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface;
  * Interface to describe loggers that have processors
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 interface ProcessableHandlerInterface
 {
     /**
      * Adds a processor in the stack.
      *
-     * @psalm-param ProcessorInterface|callable(array): array $callback
+     * @psalm-param ProcessorInterface|callable(Record): Record $callback
      *
      * @param  ProcessorInterface|callable $callback
      * @return HandlerInterface            self
      */
-    public function pushProcessor(callable $callback) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface;
+    public function pushProcessor(callable $callback) : HandlerInterface;
     /**
      * Removes the processor on top of the stack and returns it.
      *
-     * @psalm-return callable(array): array
+     * @psalm-return ProcessorInterface|callable(Record): Record $callback
      *
-     * @throws \LogicException In case the processor stack is empty
-     * @return callable
+     * @throws \LogicException             In case the processor stack is empty
+     * @return callable|ProcessorInterface
      */
     public function popProcessor() : callable;
 }

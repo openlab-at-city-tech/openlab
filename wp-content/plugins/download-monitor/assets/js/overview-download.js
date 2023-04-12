@@ -26,7 +26,7 @@
 
             // get data
             var featured = ('Yes' == $( '.column-featured', $post_row ).text() );
-            var members_only = ('Yes' == $( '.column-members_only', $post_row ).text() );
+            var members_only = ('Yes' == $( '.column-locked_download span', $post_row ).data('members_only') );
             var redirect_only = ('Yes' == $( '.column-redirect_only', $post_row ).text() );
 
             // populate data
@@ -45,7 +45,15 @@
         dlm_shortcode.trigger("focus");
         dlm_shortcode.trigger("select");
         document.execCommand('copy');
-        navigator.clipboard.writeText(dlm_shortcode.val());
+
+        if ( 'undefined' !== typeof navigator.clipboard ) {
+            navigator.clipboard.writeText(dlm_shortcode.val());
+        }
+
+        if ( 'undefined' !== typeof window.ClipboardJS  ) {
+            window.ClipboardJS.copy(dlm_shortcode.val());
+        }
+
         $(this).next('span').text($(this).data('item') + ' copied');
         $('.copy-dlm-button').not($(this)).parent().find('span').text('');
         dlm_shortcode.trigger("blur");

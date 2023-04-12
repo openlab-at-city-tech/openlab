@@ -24,24 +24,27 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Nehal Patel <nehal@nehalpatel.me>
  */
-class IFTTTHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class IFTTTHandler extends AbstractProcessingHandler
 {
+    /** @var string */
     private $eventName;
+    /** @var string */
     private $secretKey;
     /**
-     * @param string     $eventName The name of the IFTTT Maker event that should be triggered
-     * @param string     $secretKey A valid IFTTT secret key
-     * @param string|int $level     The minimum logging level at which this handler will be triggered
-     * @param bool       $bubble    Whether the messages that are handled can bubble up the stack or not
+     * @param string $eventName The name of the IFTTT Maker event that should be triggered
+     * @param string $secretKey A valid IFTTT secret key
      */
     public function __construct(string $eventName, string $secretKey, $level = Logger::ERROR, bool $bubble = \true)
     {
+        if (!\extension_loaded('curl')) {
+            throw new MissingExtensionException('The curl extension is needed to use the IFTTTHandler');
+        }
         $this->eventName = $eventName;
         $this->secretKey = $secretKey;
         parent::__construct($level, $bubble);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function write(array $record) : void
     {
@@ -53,6 +56,6 @@ class IFTTTHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractP
         \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
         \curl_setopt($ch, \CURLOPT_POSTFIELDS, $postString);
         \curl_setopt($ch, \CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-        \SimpleCalendar\plugin_deps\Monolog\Handler\Curl\Util::execute($ch);
+        Curl\Util::execute($ch);
     }
 }

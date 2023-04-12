@@ -30,85 +30,85 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
  */
-class HandlerWrapper implements \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface, \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface, \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface, ResettableInterface
+class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, FormattableHandlerInterface, ResettableInterface
 {
     /**
      * @var HandlerInterface
      */
     protected $handler;
-    public function __construct(\SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface $handler)
+    public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isHandling(array $record) : bool
     {
         return $this->handler->isHandling($record);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {
         return $this->handler->handle($record);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handleBatch(array $records) : void
     {
         $this->handler->handleBatch($records);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function close() : void
     {
         $this->handler->close();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function pushProcessor(callable $callback) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function pushProcessor(callable $callback) : HandlerInterface
     {
-        if ($this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface) {
+        if ($this->handler instanceof ProcessableHandlerInterface) {
             $this->handler->pushProcessor($callback);
             return $this;
         }
-        throw new \LogicException('The wrapped handler does not implement ' . \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface::class);
+        throw new \LogicException('The wrapped handler does not implement ' . ProcessableHandlerInterface::class);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function popProcessor() : callable
     {
-        if ($this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface) {
+        if ($this->handler instanceof ProcessableHandlerInterface) {
             return $this->handler->popProcessor();
         }
-        throw new \LogicException('The wrapped handler does not implement ' . \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface::class);
+        throw new \LogicException('The wrapped handler does not implement ' . ProcessableHandlerInterface::class);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
-        if ($this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
             return $this;
         }
-        throw new \LogicException('The wrapped handler does not implement ' . \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface::class);
+        throw new \LogicException('The wrapped handler does not implement ' . FormattableHandlerInterface::class);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getFormatter() : FormatterInterface
     {
-        if ($this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             return $this->handler->getFormatter();
         }
-        throw new \LogicException('The wrapped handler does not implement ' . \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface::class);
+        throw new \LogicException('The wrapped handler does not implement ' . FormattableHandlerInterface::class);
     }
     public function reset()
     {

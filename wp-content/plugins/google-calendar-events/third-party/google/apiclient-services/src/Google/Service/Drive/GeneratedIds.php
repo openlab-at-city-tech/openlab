@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_GeneratedIds extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_GeneratedIds extends Google_Collection
 {
     protected $collection_key = 'ids';
     public $ids;

@@ -27,7 +27,6 @@ class ListCategoryPostsWidget extends WP_Widget{
     $includeposts = isset($instance['includeposts']) ? $instance['includeposts'] : 0;
     $offset = (is_numeric($instance['offset'])) ? $instance['offset'] : 0;
     $category_id = $instance['categoryid'];
-    $dateformat = ($instance['dateformat']) ? $instance['dateformat'] : get_option('date_format');
     $showdate = ($instance['show_date'] == 'on') ? 'yes' : 'no';
     $pagination = ($instance['pagination'] == 'on') ? 'yes' : 'no';
     $showmodifieddate = ($instance['show_modified_date'] == 'on') ? 'yes' : 'no';
@@ -52,7 +51,6 @@ class ListCategoryPostsWidget extends WP_Widget{
       'date' => $showdate,
       'date_modified' => $showmodifieddate,
       'author' => $showauthor,
-      'dateformat' => $dateformat,
       'template' => 'default',
       'excerpt' => $showexcerpt,
       'excerpt_size' => $excerptsize,
@@ -118,20 +116,23 @@ class ListCategoryPostsWidget extends WP_Widget{
     $instance['includeposts'] = strip_tags($new_instance['includeposts']);
     $instance['offset'] = strip_tags($new_instance['offset']);
     $instance['categoryid'] = strip_tags($new_instance['categoryid']);
-    $instance['dateformat'] = strip_tags($new_instance['dateformat']);
-    $instance['show_date'] = strip_tags($new_instance['show_date']);
-    $instance['show_modified_date'] = strip_tags($new_instance['show_modified_date']);
-    $instance['show_excerpt'] = strip_tags($new_instance['show_excerpt']);
     $instance['excerpt_size'] = strip_tags($new_instance['excerpt_size']);
-    $instance['show_author'] = strip_tags($new_instance['show_author']);
-    $instance['show_catlink'] = strip_tags($new_instance['show_catlink']);
-    $instance['show_catlink'] = strip_tags($new_instance['show_catlink']);
-    $instance['thumbnail'] = strip_tags($new_instance['thumbnail']);
     $instance['thumbnail_size'] = strip_tags($new_instance['thumbnail_size']);
     $instance['morelink'] = strip_tags($new_instance['morelink']);
     $instance['tags_as_class'] = strip_tags($new_instance['tags_as_class']);
     $instance['template'] = strip_tags($new_instance['template']);
-    $instance['pagination'] = strip_tags($new_instance['pagination']);
+    // Checkboxes do not submit any data when not checked.
+    $checkboxes = [
+      'pagination', 'thumbnail', 'show_date', 'show_modified_date',
+      'show_excerpt', 'show_author', 'show_catlink'
+    ];
+    foreach ($checkboxes as $checkbox) {
+      if (!empty($new_instance[$checkbox])) {
+        $instance[$checkbox] = strip_tags($new_instance[$checkbox]);
+      } else {
+        $instance[$checkbox] = '';
+      }
+    }
 
     return $instance;
   }

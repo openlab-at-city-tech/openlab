@@ -20,6 +20,10 @@ class ElementsKit_Widget_Fluent_Forms_Handler extends \ElementsKit_Lite\Core\Han
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'wpf', 'wpform' , 'weform', 'fluent form', 'form', 'contact'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'fluent-forms/';
     }

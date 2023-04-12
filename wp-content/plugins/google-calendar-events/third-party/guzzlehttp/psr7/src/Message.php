@@ -117,14 +117,14 @@ final class Message
         list($startLine, $rawHeaders) = $headerParts;
         if (\preg_match("/(?:^HTTP\\/|^[A-Z]+ \\S+ HTTP\\/)(\\d+(?:\\.\\d+)?)/i", $startLine, $matches) && $matches[1] === '1.0') {
             // Header folding is deprecated for HTTP/1.1, but allowed in HTTP/1.0
-            $rawHeaders = \preg_replace(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Rfc7230::HEADER_FOLD_REGEX, ' ', $rawHeaders);
+            $rawHeaders = \preg_replace(Rfc7230::HEADER_FOLD_REGEX, ' ', $rawHeaders);
         }
         /** @var array[] $headerLines */
-        $count = \preg_match_all(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Rfc7230::HEADER_REGEX, $rawHeaders, $headerLines, \PREG_SET_ORDER);
+        $count = \preg_match_all(Rfc7230::HEADER_REGEX, $rawHeaders, $headerLines, \PREG_SET_ORDER);
         // If these aren't the same, then one line didn't match and there's an invalid header.
         if ($count !== \substr_count($rawHeaders, "\n")) {
             // Folding is deprecated, see https://tools.ietf.org/html/rfc7230#section-3.2.4
-            if (\preg_match(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Rfc7230::HEADER_FOLD_REGEX, $rawHeaders)) {
+            if (\preg_match(Rfc7230::HEADER_FOLD_REGEX, $rawHeaders)) {
                 throw new \InvalidArgumentException('Invalid header syntax: Obsolete line folding');
             }
             throw new \InvalidArgumentException('Invalid header syntax');
@@ -172,7 +172,7 @@ final class Message
         }
         $parts = \explode(' ', $data['start-line'], 3);
         $version = isset($parts[2]) ? \explode('/', $parts[2])[1] : '1.1';
-        $request = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request($parts[0], $matches[1] === '/' ? self::parseRequestUri($parts[1], $data['headers']) : $parts[1], $data['headers'], $data['body'], $version);
+        $request = new Request($parts[0], $matches[1] === '/' ? self::parseRequestUri($parts[1], $data['headers']) : $parts[1], $data['headers'], $data['body'], $version);
         return $matches[1] === '/' ? $request : $request->withRequestTarget($parts[1]);
     }
     /**
@@ -192,6 +192,6 @@ final class Message
             throw new \InvalidArgumentException('Invalid response string: ' . $data['start-line']);
         }
         $parts = \explode(' ', $data['start-line'], 3);
-        return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Response((int) $parts[1], $data['headers'], $data['body'], \explode('/', $parts[0])[1], isset($parts[2]) ? $parts[2] : null);
+        return new Response((int) $parts[1], $data['headers'], $data['body'], \explode('/', $parts[0])[1], isset($parts[2]) ? $parts[2] : null);
     }
 }

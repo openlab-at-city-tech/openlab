@@ -51,13 +51,15 @@ Dashboard Widget CSS
         padding: 8px;
         display: block;
         font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
 
-      &>div {
+      & > div {
         text-align: left;
-
-
+        overflow:hidden;
 
         &:not(:first-child) {
           flex-grow: 1;
@@ -66,13 +68,18 @@ Dashboard Widget CSS
         }
 
         &:first-child {
-          min-width: 36px;
+          width: 40px;
+        }
+
+        &:nth-child(2) {
+          max-width:calc( 100% - 120px );
         }
 
         &:last-of-type {
           text-align: right;
           font-weight: 500;
-          max-width: 20%;
+          max-width: 75px;
+          width: 75px;
         }
       }
     }

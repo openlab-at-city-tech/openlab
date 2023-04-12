@@ -5,8 +5,8 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 	class MeowCommon_Admin {
 
 		public static $loaded = false;
-		public static $version = "3.7";
-		public static $admin_version = "3.7";
+		public static $version = "4.0";
+		public static $admin_version = "4.0";
 
 		public $prefix; 		// prefix used for actions, filters (mfrh)
 		public $mainfile; 	// plugin main file (media-file-renamer.php)
@@ -19,6 +19,10 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 
 			if ( !MeowCommon_Admin::$loaded ) {
 				if ( is_admin() ) {
+
+					if ( MeowCommon_Helpers::is_asynchronous_request() ) {
+						return;
+					}
 
 					// Check potential issues with this WordPress install, other plugins, etc.
 					new MeowCommon_Issues( $prefix, $mainfile, $domain );
@@ -48,6 +52,7 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
         if ( !$disableReview ) {
           new MeowCommon_Ratings( $prefix, $mainfile, $domain );
         }
+				new MeowCommon_News( $domain );
 			}
 			add_filter( 'plugin_row_meta', array( $this, 'custom_plugin_row_meta' ), 10, 2 );
 			add_filter( 'edd_sl_api_request_verify_ssl', array( $this, 'request_verify_ssl' ), 10, 0 );
@@ -136,8 +141,8 @@ if ( !class_exists( 'MeowCommon_Admin' ) ) {
 		function meowapps_hide_dashboard_callback() {
 			$html = '<input type="checkbox" id="meowapps_hide_meowapps" name="meowapps_hide_meowapps" value="1" ' .
 				checked( 1, get_option( 'meowapps_hide_meowapps' ), false ) . '/>';
-			$html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a cleaner admin. This option will be reset if a new Meow Apps plugin is installed. <b>Once activated, an option will be added in your General settings to display it again.</b></small>', $this->domain );
-			echo wp_kses_post( $html );
+			$html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a cleaner admin. This option will be reset if a new Meow Apps plugin is installed.<br /><b>Once activated, an option will be added in your General settings to display it again.</b></small>', $this->domain );
+			echo MeowCommon_Helpers::wp_kses( $html );
 		}
 
 		function is_registered() {

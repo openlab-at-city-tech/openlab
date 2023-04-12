@@ -19,6 +19,7 @@ use CurlHandle;
  */
 final class Util
 {
+    /** @var array<int> */
     private static $retriableErrorCodes = [\CURLE_COULDNT_RESOLVE_HOST, \CURLE_COULDNT_CONNECT, \CURLE_HTTP_NOT_FOUND, \CURLE_READ_ERROR, \CURLE_OPERATION_TIMEOUTED, \CURLE_HTTP_POST_ERROR, \CURLE_SSL_CONNECT_ERROR];
     /**
      * Executes a CURL request with optional retries and exception on failure

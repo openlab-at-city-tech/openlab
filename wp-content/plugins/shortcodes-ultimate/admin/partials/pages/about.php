@@ -76,7 +76,7 @@
 						</div>
 						<div class="su-admin-about-upgrade-buy-pricing-period"><?php esc_html_e( 'per year', 'shortcodes-ultimate' ); ?></div>
 					</div>
-					<a href="<?php echo esc_attr( esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', array( 'wp-admin', 'about', 'upgrade' ) ) ) ); ?>" class="su-admin-about-upgrade-buy-button su-admin-c-button"><?php esc_html_e( 'Upgrade to PRO', 'shortcodes-ultimate' ); ?> &rarr;</a>
+					<a href="<?php echo esc_attr( esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', 'wp-dashboard', 'admin-menu', 'about-upgrade' ) ) ); ?>" class="su-admin-about-upgrade-buy-button su-admin-c-button"><?php esc_html_e( 'Upgrade to PRO', 'shortcodes-ultimate' ); ?> &rarr;</a>
 				</div>
 			</div>
 

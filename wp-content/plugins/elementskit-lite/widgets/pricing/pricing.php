@@ -27,6 +27,10 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/pricing-table/';
     }
@@ -1602,7 +1606,6 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
 				'name'     => 'ekit_pricing_tag_bg_color',
-				'default' => '',
 				'selector' => '{{WRAPPER}} .elementskit-single-pricing .elementskit-pricing-price-wraper.has-tag .elementskit-pricing-tag',
             )
         );
@@ -1631,7 +1634,6 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 		    Group_Control_Background::get_type(),
 		    array(
 			    'name'     => 'ekit_pricing_tag_bg_hover_color_group',
-			    'default' => '',
 			    'selector' => '{{WRAPPER}}:hover .elementskit-pricing-price-wraper.has-tag .elementskit-pricing-tag',
 		    )
 	    );
@@ -2176,6 +2178,7 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
                 'name'     => 'ekit_pricing_btn_bg_color_group',
+				'exclude' => ['image'],
                 'selector' => '{{WRAPPER}} .elementskit-single-pricing a.elementskit-pricing-btn',
             )
         );
@@ -2195,8 +2198,8 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
                 'label' =>esc_html__( 'Text Color', 'elementskit-lite' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-					'{{WRAPPER}}:hover a.elementskit-pricing-btn' => 'color: {{VALUE}};',
-					'{{WRAPPER}}:hover a.elementskit-pricing-btn svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-pricing a.elementskit-pricing-btn:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-single-pricing a.elementskit-pricing-btn:hover svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
                 ],
             ]
         );
@@ -2205,7 +2208,8 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
                 'name'     => 'ekit_pricing_btn_bg_hover_color_group',
-                'selector' => '{{WRAPPER}}:hover a.elementskit-pricing-btn',
+				'exclude' => ['image'],
+                'selector' => '{{WRAPPER}} .elementskit-single-pricing a.elementskit-pricing-btn:hover',
             )
         );
 

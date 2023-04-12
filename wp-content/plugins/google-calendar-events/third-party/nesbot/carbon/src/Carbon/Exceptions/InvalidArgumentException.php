@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-interface InvalidArgumentException extends \SimpleCalendar\plugin_deps\Carbon\Exceptions\Exception
+interface InvalidArgumentException extends Exception
 {
+    //
 }

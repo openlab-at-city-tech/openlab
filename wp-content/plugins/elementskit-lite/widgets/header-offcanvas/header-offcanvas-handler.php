@@ -23,6 +23,10 @@ class ElementsKit_Widget_Header_Offcanvas_Handler extends \ElementsKit_Lite\Core
         return ['elementskit_headerfooter'];
     }
 
+    static function get_keywords() {
+        return [ 'ekit', 'header', 'offcanvas', 'side menu', 'side info'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'header-offcanvas/';
     }

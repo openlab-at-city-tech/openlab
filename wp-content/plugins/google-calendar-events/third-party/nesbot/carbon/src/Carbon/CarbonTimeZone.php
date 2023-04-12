@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidCastException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidTimeZoneException;
 use DateTimeInterface;
 use DateTimeZone;
+use Throwable;
 class CarbonTimeZone extends DateTimeZone
 {
     public function __construct($timezone = null)
@@ -25,11 +26,11 @@ class CarbonTimeZone extends DateTimeZone
         if ($timezone <= -100 || $timezone >= 100) {
             throw new InvalidTimeZoneException('Absolute timezone offset cannot be greater than 100.');
         }
-        return ($timezone >= 0 ? '+' : '') . $timezone . ':00';
+        return ($timezone >= 0 ? '+' : '') . \ltrim($timezone, '+') . ':00';
     }
     protected static function getDateTimeZoneNameFromMixed($timezone)
     {
-        if (\is_null($timezone)) {
+        if ($timezone === null) {
             return \date_default_timezone_get();
         }
         if (\is_string($timezone)) {
@@ -83,13 +84,13 @@ class CarbonTimeZone extends DateTimeZone
         if (!$tz instanceof DateTimeZone) {
             $tz = static::getDateTimeZoneFromName($object);
         }
-        if ($tz === \false) {
-            if (\SimpleCalendar\plugin_deps\Carbon\Carbon::isStrictModeEnabled()) {
-                throw new InvalidTimeZoneException('Unknown or bad timezone (' . ($objectDump ?: $object) . ')');
-            }
-            return \false;
+        if ($tz !== \false) {
+            return new static($tz->getName());
         }
-        return new static($tz->getName());
+        if (Carbon::isStrictModeEnabled()) {
+            throw new InvalidTimeZoneException('Unknown or bad timezone (' . ($objectDump ?: $object) . ')');
+        }
+        return \false;
     }
     /**
      * Returns abbreviated name of the current timezone according to DST setting.
@@ -132,7 +133,7 @@ class CarbonTimeZone extends DateTimeZone
      */
     public function toOffsetName(DateTimeInterface $date = null)
     {
-        return static::getOffsetNameFromMinuteOffset($this->getOffset($date ?: \SimpleCalendar\plugin_deps\Carbon\Carbon::now($this)) / 60);
+        return static::getOffsetNameFromMinuteOffset($this->getOffset($date ?: Carbon::now($this)) / 60);
     }
     /**
      * Returns a new CarbonTimeZone object using the offset string instead of region string.
@@ -163,12 +164,12 @@ class CarbonTimeZone extends DateTimeZone
         if ($firstChar !== '+' && $firstChar !== '-') {
             return $name;
         }
-        $date = $date ?: \SimpleCalendar\plugin_deps\Carbon\Carbon::now($this);
+        $date = $date ?: Carbon::now($this);
         // Integer construction no longer supported since PHP 8
         // @codeCoverageIgnoreStart
         try {
             $offset = @$this->getOffset($date) ?: 0;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $offset = 0;
         }
         // @codeCoverageIgnoreEnd
@@ -177,7 +178,7 @@ class CarbonTimeZone extends DateTimeZone
             return $name;
         }
         foreach (\timezone_identifiers_list() as $timezone) {
-            if (\SimpleCalendar\plugin_deps\Carbon\Carbon::instance($date)->tz($timezone)->getOffset() === $offset) {
+            if (Carbon::instance($date)->tz($timezone)->getOffset() === $offset) {
                 return $timezone;
             }
         }
@@ -193,13 +194,13 @@ class CarbonTimeZone extends DateTimeZone
     public function toRegionTimeZone(DateTimeInterface $date = null)
     {
         $tz = $this->toRegionName($date);
-        if ($tz === \false) {
-            if (\SimpleCalendar\plugin_deps\Carbon\Carbon::isStrictModeEnabled()) {
-                throw new InvalidTimeZoneException('Unknown timezone for offset ' . $this->getOffset($date ?: \SimpleCalendar\plugin_deps\Carbon\Carbon::now($this)) . ' seconds.');
-            }
-            return \false;
+        if ($tz !== \false) {
+            return new static($tz);
         }
-        return new static($tz);
+        if (Carbon::isStrictModeEnabled()) {
+            throw new InvalidTimeZoneException('Unknown timezone for offset ' . $this->getOffset($date ?: Carbon::now($this)) . ' seconds.');
+        }
+        return \false;
     }
     /**
      * Cast to string (get timezone name).
@@ -209,6 +210,17 @@ class CarbonTimeZone extends DateTimeZone
     public function __toString()
     {
         return $this->getName();
+    }
+    /**
+     * Return the type number:
+     *
+     * Type 1; A UTC offset, such as -0300
+     * Type 2; A timezone abbreviation, such as GMT
+     * Type 3: A timezone identifier, such as Europe/London
+     */
+    public function getType() : int
+    {
+        return \preg_match('/"timezone_type";i:(\\d)/', \serialize($this), $match) ? (int) $match[1] : 3;
     }
     /**
      * Create a CarbonTimeZone from mixed input.
@@ -230,7 +242,7 @@ class CarbonTimeZone extends DateTimeZone
      */
     public static function createFromHourOffset(float $hourOffset)
     {
-        return static::createFromMinuteOffset($hourOffset * \SimpleCalendar\plugin_deps\Carbon\Carbon::MINUTES_PER_HOUR);
+        return static::createFromMinuteOffset($hourOffset * Carbon::MINUTES_PER_HOUR);
     }
     /**
      * Create a CarbonTimeZone from int/float minute offset.

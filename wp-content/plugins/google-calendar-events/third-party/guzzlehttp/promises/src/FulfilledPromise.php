@@ -8,7 +8,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * Thenning off of this promise will invoke the onFulfilled callback
  * immediately and ignore other callbacks.
  */
-class FulfilledPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface
+class FulfilledPromise implements PromiseInterface
 {
     private $value;
     public function __construct($value)
@@ -24,11 +24,11 @@ class FulfilledPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise
         if (!$onFulfilled) {
             return $this;
         }
-        $queue = \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Utils::queue();
-        $p = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $queue = Utils::queue();
+        $p = new Promise([$queue, 'run']);
         $value = $this->value;
         $queue->add(static function () use($p, $value, $onFulfilled) {
-            if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::pending($p)) {
+            if (Is::pending($p)) {
                 try {
                     $p->resolve($onFulfilled($value));
                 } catch (\Throwable $e) {

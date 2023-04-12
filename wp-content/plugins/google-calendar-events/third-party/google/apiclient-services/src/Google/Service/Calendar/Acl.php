@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Calendar_Acl extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Calendar_Acl extends Google_Collection
 {
     protected $collection_key = 'items';
     public $etag;
@@ -35,14 +35,14 @@ class Google_Service_Calendar_Acl extends \SimpleCalendar\plugin_deps\Google_Col
         return $this->etag;
     }
     /**
-     * @param Google_Service_Calendar_AclRule[]
+     * @param Google_Service_Calendar_AclRule
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Calendar_AclRule[]
+     * @return Google_Service_Calendar_AclRule
      */
     public function getItems()
     {

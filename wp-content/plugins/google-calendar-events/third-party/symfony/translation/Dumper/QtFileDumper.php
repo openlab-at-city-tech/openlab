@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
-class QtFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class QtFileDumper extends FileDumper
 {
     /**
      * {@inheritdoc}

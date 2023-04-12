@@ -10,12 +10,12 @@
  */
 namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation;
 
-if (!\function_exists(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\t::class)) {
+if (!\function_exists(t::class)) {
     /**
      * @author Nate Wiebe <nate@northern.co>
      */
-    function t(string $message, array $parameters = [], string $domain = null) : \SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatableMessage
+    function t(string $message, array $parameters = [], string $domain = null) : TranslatableMessage
     {
-        return new \SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatableMessage($message, $parameters, $domain);
+        return new TranslatableMessage($message, $parameters, $domain);
     }
 }

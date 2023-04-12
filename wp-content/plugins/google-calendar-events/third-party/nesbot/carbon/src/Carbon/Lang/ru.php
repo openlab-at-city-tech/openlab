@@ -36,6 +36,7 @@ namespace SimpleCalendar\plugin_deps;
  * - Vladislav UnsealedOne
  * - dima-bzz
  */
+use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 $transformDiff = function ($input) {
     return \strtr($input, ['неделя' => 'неделю', 'секунда' => 'секунду', 'минута' => 'минуту']);
 };
@@ -47,7 +48,7 @@ return ['year' => ':count год|:count года|:count лет', 'y' => ':count 
     return $transformDiff($time) . ' после';
 }, 'before' => function ($time) use($transformDiff) {
     return $transformDiff($time) . ' до';
-}, 'diff_now' => 'только что', 'diff_today' => 'Сегодня,', 'diff_today_regexp' => 'Сегодня,?(?:\\s+в)?', 'diff_yesterday' => 'вчера', 'diff_yesterday_regexp' => 'Вчера,?(?:\\s+в)?', 'diff_tomorrow' => 'завтра', 'diff_tomorrow_regexp' => 'Завтра,?(?:\\s+в)?', 'diff_before_yesterday' => 'позавчера', 'diff_after_tomorrow' => 'послезавтра', 'formats' => ['LT' => 'H:mm', 'LTS' => 'H:mm:ss', 'L' => 'DD.MM.YYYY', 'LL' => 'D MMMM YYYY г.', 'LLL' => 'D MMMM YYYY г., H:mm', 'LLLL' => 'dddd, D MMMM YYYY г., H:mm'], 'calendar' => ['sameDay' => '[Сегодня, в] LT', 'nextDay' => '[Завтра, в] LT', 'nextWeek' => function (\SimpleCalendar\plugin_deps\Carbon\CarbonInterface $current, \SimpleCalendar\plugin_deps\Carbon\CarbonInterface $other) {
+}, 'diff_now' => 'только что', 'diff_today' => 'Сегодня,', 'diff_today_regexp' => 'Сегодня,?(?:\\s+в)?', 'diff_yesterday' => 'вчера', 'diff_yesterday_regexp' => 'Вчера,?(?:\\s+в)?', 'diff_tomorrow' => 'завтра', 'diff_tomorrow_regexp' => 'Завтра,?(?:\\s+в)?', 'diff_before_yesterday' => 'позавчера', 'diff_after_tomorrow' => 'послезавтра', 'formats' => ['LT' => 'H:mm', 'LTS' => 'H:mm:ss', 'L' => 'DD.MM.YYYY', 'LL' => 'D MMMM YYYY г.', 'LLL' => 'D MMMM YYYY г., H:mm', 'LLLL' => 'dddd, D MMMM YYYY г., H:mm'], 'calendar' => ['sameDay' => '[Сегодня, в] LT', 'nextDay' => '[Завтра, в] LT', 'nextWeek' => function (CarbonInterface $current, CarbonInterface $other) {
     if ($current->week !== $other->week) {
         switch ($current->dayOfWeek) {
             case 0:
@@ -66,7 +67,7 @@ return ['year' => ':count год|:count года|:count лет', 'y' => ':count 
         return '[Во] dddd, [в] LT';
     }
     return '[В] dddd, [в] LT';
-}, 'lastDay' => '[Вчера, в] LT', 'lastWeek' => function (\SimpleCalendar\plugin_deps\Carbon\CarbonInterface $current, \SimpleCalendar\plugin_deps\Carbon\CarbonInterface $other) {
+}, 'lastDay' => '[Вчера, в] LT', 'lastWeek' => function (CarbonInterface $current, CarbonInterface $other) {
     if ($current->week !== $other->week) {
         switch ($current->dayOfWeek) {
             case 0:

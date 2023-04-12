@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_Permission extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_Permission extends Google_Collection
 {
     protected $collection_key = 'teamDrivePermissionDetails';
     public $allowFileDiscovery;
@@ -28,14 +28,11 @@ class Google_Service_Drive_Permission extends \SimpleCalendar\plugin_deps\Google
     public $expirationTime;
     public $id;
     public $kind;
-    protected $permissionDetailsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_PermissionPermissionDetails';
-    protected $permissionDetailsDataType = 'array';
     public $photoLink;
     public $role;
     protected $teamDrivePermissionDetailsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_PermissionTeamDrivePermissionDetails';
     protected $teamDrivePermissionDetailsDataType = 'array';
     public $type;
-    public $view;
     public function setAllowFileDiscovery($allowFileDiscovery)
     {
         $this->allowFileDiscovery = $allowFileDiscovery;
@@ -100,20 +97,6 @@ class Google_Service_Drive_Permission extends \SimpleCalendar\plugin_deps\Google
     {
         return $this->kind;
     }
-    /**
-     * @param Google_Service_Drive_PermissionPermissionDetails[]
-     */
-    public function setPermissionDetails($permissionDetails)
-    {
-        $this->permissionDetails = $permissionDetails;
-    }
-    /**
-     * @return Google_Service_Drive_PermissionPermissionDetails[]
-     */
-    public function getPermissionDetails()
-    {
-        return $this->permissionDetails;
-    }
     public function setPhotoLink($photoLink)
     {
         $this->photoLink = $photoLink;
@@ -131,14 +114,14 @@ class Google_Service_Drive_Permission extends \SimpleCalendar\plugin_deps\Google
         return $this->role;
     }
     /**
-     * @param Google_Service_Drive_PermissionTeamDrivePermissionDetails[]
+     * @param Google_Service_Drive_PermissionTeamDrivePermissionDetails
      */
     public function setTeamDrivePermissionDetails($teamDrivePermissionDetails)
     {
         $this->teamDrivePermissionDetails = $teamDrivePermissionDetails;
     }
     /**
-     * @return Google_Service_Drive_PermissionTeamDrivePermissionDetails[]
+     * @return Google_Service_Drive_PermissionTeamDrivePermissionDetails
      */
     public function getTeamDrivePermissionDetails()
     {
@@ -151,13 +134,5 @@ class Google_Service_Drive_Permission extends \SimpleCalendar\plugin_deps\Google
     public function getType()
     {
         return $this->type;
-    }
-    public function setView($view)
-    {
-        $this->view = $view;
-    }
-    public function getView()
-    {
-        return $this->view;
     }
 }

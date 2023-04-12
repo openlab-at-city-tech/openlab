@@ -3,7 +3,7 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://paypal.me/anovladimir
 Tags: shortcode, toggle, columns, button, slider
-Stable tag: 5.12.5
+Stable tag: 5.12.8
 Requires PHP: 5.4
 Requires at least: 5.0
 Tested up to: 6.1
@@ -14,7 +14,7 @@ A comprehensive collection of visual components for your site
 
 ## Description
 
-[Shortcodes Ultimate](https://getshortcodes.com/?utm_campaign=wporg&utm_source=readme&utm_medium=description) is a comprehensive collection of various visual and functional elements, which you can use in the post editor, text widgets or even in template files. Using Shortcodes Ultimate you can easily create tabs, buttons, boxes, sliders and carousels, responsive videos and much, much more.
+[Shortcodes Ultimate](https://getshortcodes.com/?utm_campaign=wporg&utm_medium=readme&utm_source=description) is a comprehensive collection of various visual and functional elements, which you can use in the post editor, text widgets or even in template files. Using Shortcodes Ultimate you can easily create tabs, buttons, boxes, sliders and carousels, responsive videos and much, much more.
 
 
 ### Features
@@ -34,10 +34,11 @@ A comprehensive collection of visual components for your site
 
 ### Links
 
-- [Available Shortcodes](https://getshortcodes.com/docs-category/shortcodes/?utm_campaign=wporg&utm_source=readme&utm_medium=available-shortcodes)
-- [Documentation](https://getshortcodes.com/docs/?utm_campaign=wporg&utm_source=readme&utm_medium=docs)
-- [Support Forum](https://wordpress.org/support/plugin/shortcodes-ultimate)
-- [Premium Support](https://getshortcodes.com/support/?utm_campaign=wporg&utm_source=readme&utm_medium=support)
+- [Available Shortcodes](https://getshortcodes.com/docs-category/shortcodes/?utm_campaign=wporg&utm_medium=readme&utm_source=links-available-shortcodes)
+- [Documentation](https://getshortcodes.com/docs/?utm_campaign=wporg&utm_medium=readme&utm_source=links-docs)
+- [Community Support Forum](https://wordpress.org/support/plugin/shortcodes-ultimate)
+- [Upgrade to Pro](https://getshortcodes.com/pricing/?utm_campaign=wporg&utm_medium=readme&utm_source=links-available-shortcodes)
+- [Pro Support](https://getshortcodes.com/support/open-support-ticket/?utm_campaign=wporg&utm_medium=readme&utm_source=links-support)
 
 
 ### Available Shortcodes
@@ -137,13 +138,14 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 ## Changelog
 
 
-### 5.12.5
+### 5.12.8
 
-* Added Freemius SDK
-* Fixed JS error introduced in the previous update. See [forum topic](https://wordpress.org/support/topic/su-tabs-and-other-shortcodes-no-longer-work-after-recent-update/).
+**Security update**
 
-
+This update features security improvements and is recommended for all users
 
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)
+
+

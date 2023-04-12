@@ -3,7 +3,7 @@ Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
 Requires at least: 5.0
 Tested up to: 6.1.1
-Stable tag: 3.1.1
+Stable tag: 3.1.4
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -263,6 +263,37 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Block Styles: You create custom CSS styles for blocks and make them available to end users.
 
 == Changelog ==
+
+= 3.1.4 - 13 Feb 2022 =
+  * Add: Unique class to Accordions block
+  * Add: Ad "Upgrade to Pro" in Schedule Timezone setting Block control
+  * Fix: Stacked is selected but visually is not indicated in Tabs block
+
+= 3.1.3 - 23 Jan 2022 =
+  * Add: List item block
+  * Add: Reordering items support to List block
+  * Add: Submenu for Reusable blocks
+  * Fix: Transforms for List block
+  * Fix: Selected PublishPress block icon contrast in List view
+  * Fix: Default undefined "width" for single Column block
+  * Fix: Columns width in editor
+  * Fix: Vertical alignment in editor for PublishPress Columns block
+  * Fix: All tabs content displayed at once
+
+= 3.1.2 - 4 Jan 2022 =
+  * Add: Days of the week and time range settings to Schedule control
+  * Add: Term archives and pages control
+  * Add: Bring back map files
+  * Add: Display timezone below dates
+  * Add: Minify compiled JSX files
+  * Add: Support for Accordion items in Table of Contents block for Pro version
+  * Add: Hide from everyone option to User roles control
+  * Add: aria-label to overlay link for Images Slider block
+  * Fix: For User role control, when no role is selected, the block is hidden to everyone
+  * Fix: Hide widgets HTML wrapper when its block is not visible
+  * Fix: Set autoload to 'no' for bigger size options
+  * Fix: Load dashicons in frontend if blocks are using it
+  * Fix: Optimize PublishPress blocks code to enqueue assets
 
 = 3.1.1 - 16 Nov 2022 =
   * Add: Base path constant

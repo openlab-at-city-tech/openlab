@@ -27,6 +27,8 @@ use SimpleCalendar\plugin_deps\Google\Auth\CredentialsLoader;
 use SimpleCalendar\plugin_deps\Google\Auth\ProjectIdProviderInterface;
 use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
 /**
+ * @deprecated
+ *
  * AppIdentityCredentials supports authorization on Google App Engine.
  *
  * It can be used to authorize requests using the AuthTokenMiddleware or
@@ -58,13 +60,13 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
     /**
      * Result of fetchAuthToken.
      *
-     * @var array
+     * @var array<mixed>
      */
     protected $lastReceivedToken;
     /**
      * Array of OAuth2 scopes to be requested.
      *
-     * @var array
+     * @var string[]
      */
     private $scope;
     /**
@@ -72,11 +74,11 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      */
     private $clientName;
     /**
-     * @param array $scope One or more scopes.
+     * @param string|string[] $scope One or more scopes.
      */
-    public function __construct($scope = array())
+    public function __construct($scope = [])
     {
-        $this->scope = $scope;
+        $this->scope = \is_array($scope) ? $scope : \explode(' ', (string) $scope);
     }
     /**
      * Determines if this an App Engine instance, by accessing the
@@ -105,10 +107,12 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      * the GuzzleHttp\ClientInterface instance passed in will not be used.
      *
      * @param callable $httpHandler callback which delivers psr7 request
-     * @return array A set of auth related metadata, containing the following
-     *     keys:
-     *         - access_token (string)
-     *         - expiration_time (string)
+     * @return array<mixed> {
+     *     A set of auth related metadata, containing the following
+     *
+     *     @type string $access_token
+     *     @type string $expiration_time
+     * }
      */
     public function fetchAuthToken(callable $httpHandler = null)
     {
@@ -117,9 +121,8 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
         } catch (\Exception $e) {
             return [];
         }
-        // AppIdentityService expects an array when multiple scopes are supplied
-        $scope = \is_array($this->scope) ? $this->scope : \explode(' ', $this->scope);
-        $token = AppIdentityService::getAccessToken($scope);
+        /** @phpstan-ignore-next-line */
+        $token = AppIdentityService::getAccessToken($this->scope);
         $this->lastReceivedToken = $token;
         return $token;
     }
@@ -135,6 +138,7 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
     public function signBlob($stringToSign, $forceOpenSsl = \false)
     {
         $this->checkAppEngineContext();
+        /** @phpstan-ignore-next-line */
         return \base64_encode(AppIdentityService::signForApp($stringToSign)['signature']);
     }
     /**
@@ -145,13 +149,14 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      * @param callable $httpHandler Not used by this type.
      * @return string|null
      */
-    public function getProjectId(callable $httpHander = null)
+    public function getProjectId(callable $httpHandler = null)
     {
         try {
             $this->checkAppEngineContext();
         } catch (\Exception $e) {
             return null;
         }
+        /** @phpstan-ignore-next-line */
         return AppIdentityService::getApplicationId();
     }
     /**
@@ -167,12 +172,13 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
     {
         $this->checkAppEngineContext();
         if (!$this->clientName) {
+            /** @phpstan-ignore-next-line */
             $this->clientName = AppIdentityService::getServiceAccountName();
         }
         return $this->clientName;
     }
     /**
-     * @return array|null
+     * @return array{access_token:string,expires_at:int}|null
      */
     public function getLastReceivedToken()
     {
@@ -191,6 +197,9 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
     {
         return '';
     }
+    /**
+     * @return void
+     */
     private function checkAppEngineContext()
     {
         if (!self::onAppEngine() || !\class_exists('SimpleCalendar\\plugin_deps\\google\\appengine\\api\\app_identity\\AppIdentityService')) {

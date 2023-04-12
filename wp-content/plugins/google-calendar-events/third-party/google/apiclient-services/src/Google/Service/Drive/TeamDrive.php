@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_TeamDrive extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Drive_TeamDrive extends Google_Model
 {
     protected $backgroundImageFileType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveBackgroundImageFile';
     protected $backgroundImageFileDataType = '';
@@ -25,17 +25,14 @@ class Google_Service_Drive_TeamDrive extends \SimpleCalendar\plugin_deps\Google_
     protected $capabilitiesType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveCapabilities';
     protected $capabilitiesDataType = '';
     public $colorRgb;
-    public $createdTime;
     public $id;
     public $kind;
     public $name;
-    protected $restrictionsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveRestrictions';
-    protected $restrictionsDataType = '';
     public $themeId;
     /**
      * @param Google_Service_Drive_TeamDriveBackgroundImageFile
      */
-    public function setBackgroundImageFile(\SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveBackgroundImageFile $backgroundImageFile)
+    public function setBackgroundImageFile(Google_Service_Drive_TeamDriveBackgroundImageFile $backgroundImageFile)
     {
         $this->backgroundImageFile = $backgroundImageFile;
     }
@@ -57,7 +54,7 @@ class Google_Service_Drive_TeamDrive extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_TeamDriveCapabilities
      */
-    public function setCapabilities(\SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveCapabilities $capabilities)
+    public function setCapabilities(Google_Service_Drive_TeamDriveCapabilities $capabilities)
     {
         $this->capabilities = $capabilities;
     }
@@ -75,14 +72,6 @@ class Google_Service_Drive_TeamDrive extends \SimpleCalendar\plugin_deps\Google_
     public function getColorRgb()
     {
         return $this->colorRgb;
-    }
-    public function setCreatedTime($createdTime)
-    {
-        $this->createdTime = $createdTime;
-    }
-    public function getCreatedTime()
-    {
-        return $this->createdTime;
     }
     public function setId($id)
     {
@@ -107,20 +96,6 @@ class Google_Service_Drive_TeamDrive extends \SimpleCalendar\plugin_deps\Google_
     public function getName()
     {
         return $this->name;
-    }
-    /**
-     * @param Google_Service_Drive_TeamDriveRestrictions
-     */
-    public function setRestrictions(\SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveRestrictions $restrictions)
-    {
-        $this->restrictions = $restrictions;
-    }
-    /**
-     * @return Google_Service_Drive_TeamDriveRestrictions
-     */
-    public function getRestrictions()
-    {
-        return $this->restrictions;
     }
     public function setThemeId($themeId)
     {

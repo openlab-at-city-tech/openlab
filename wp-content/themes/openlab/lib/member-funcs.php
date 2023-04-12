@@ -93,13 +93,11 @@ function openlab_list_members( $view ) {
 			 FROM {$bp->profile->table_name_data}
 			 WHERE field_id NOT IN ({$first_name_field_id}, {$last_name_field_id})";
 
-		if ( ! empty( $search_terms_a ) ) {
-			$match_clauses = array();
-			foreach ( $search_terms_a as $search_term ) {
-				$match_clauses[] = "value LIKE '%" . esc_sql( like_escape( $search_term ) ) . "%'";
-			}
-			$search_query .= ' AND ( ' . implode( ' AND ', $match_clauses ) . ' )';
+		$match_clauses = array();
+		foreach ( $search_terms_a as $search_term ) {
+			$match_clauses[] = "value LIKE '%" . esc_sql( like_escape( $search_term ) ) . "%'";
 		}
+		$search_query .= ' AND ( ' . implode( ' AND ', $match_clauses ) . ' )';
 
 		$search_terms_matches = $wpdb->get_col( $search_query );
 
@@ -110,7 +108,7 @@ function openlab_list_members( $view ) {
 		}
 	}
 
-	if ( $user_school && ! $include_noop ) {
+	if ( ! empty( $user_school ) && ! $include_noop ) {
 		$user_school_matches = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT user_id
@@ -128,7 +126,7 @@ function openlab_list_members( $view ) {
 		}
 	}
 
-	if ( $user_office && ! $include_noop ) {
+	if ( ! empty( $user_office ) && ! $include_noop ) {
 		$user_office_matches = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT user_id
@@ -511,7 +509,7 @@ function openlab_get_groups_of_user( $args = array() ) {
 }
 
 function cuny_student_profile() {
-	global $site_members_template, $user_ID, $bp;
+	global $user_ID, $bp;
 
 	do_action( 'bp_before_member_home_content' );
 	?>
@@ -533,7 +531,7 @@ function cuny_student_profile() {
 		<?php
 		if ( bp_is_active( 'friends' ) ) :
 			if ( ! $friend_ids = wp_cache_get( 'friends_friend_ids_' . $bp->displayed_user->id, 'bp' ) ) {
-				$friend_ids = BP_Friends_Friendship::get_random_friends( $bp->displayed_user->id, 20 );
+				$friend_ids = BP_Friends_Friendship::get_random_friends( (string) $bp->displayed_user->id, 20 );
 				wp_cache_set( 'friends_friend_ids_' . $bp->displayed_user->id, $friend_ids, 'bp' );
 			}
 			?>
@@ -772,9 +770,9 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 }
 
 function cuny_member_profile_header() {
-	global $site_members_template, $user_ID, $bp;
+	global $user_ID, $bp;
 
-	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+	$this_user_id = bp_displayed_user_id();
 
 	$account_type = openlab_get_user_member_type( $this_user_id );
 
@@ -802,7 +800,7 @@ function cuny_member_profile_header() {
 		<?php
 		do_action( 'bp_before_member_header' );
 
-		$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+		$this_user_id = bp_displayed_user_id();
 		do_action( 'bp_before_member_home_content' );
 		?>
 
@@ -885,21 +883,29 @@ function cuny_member_profile_header() {
 							'exclude_groups' => openlab_get_exclude_groups_for_account_type( $account_type ),
 						);
 
-						// This field is shown first for Student, Alumni; after Title for others.
-						$show_dept_field_next = in_array( $account_type, array( 'student', 'alumni' ) );
+						$show_dept_after_title = false;
 
-						// Special case: faculty/staff doesn't have Title data.
-						if ( ! $show_dept_field_next ) {
+						// Students and alumni should show 'department' first thing.
+						if ( in_array( $account_type, [ 'student', 'alumni' ], true ) ) {
+							$show_dept_field_first = true;
+						} else {
+							$show_dept_field_first = false;
+
+							// Other users should show 'department' after 'Title', if it exists.
 							$title_field_id = 'faculty' === $account_type ? 16 : 206;
 							$user_title     = xprofile_get_field_data( $title_field_id, bp_displayed_user_id() );
-							if ( ! $user_title ) {
-								$show_dept_field_next = true;
+							if ( $user_title ) {
+								$show_dept_after_title = true;
+							} else {
+								$show_dept_field_first = true;
 							}
 						}
 
 						$user_units = openlab_get_user_academic_units( bp_displayed_user_id() );
 						$department = openlab_generate_department_name( $user_units );
 						$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
+
+						$field_index = -1;
 
 						?>
 
@@ -915,7 +921,22 @@ function cuny_member_profile_header() {
 									<?php
 									while ( bp_profile_fields() ) :
 										bp_the_profile_field();
+
+										++$field_index;
+
 										?>
+
+										<?php if ( 0 === $field_index && $show_dept_field_first && $department ) : ?>
+											<div class="table-row row">
+												<div class="bold col-sm-7 profile-field-label">
+													<?php echo esc_html( $dept_label ); ?>
+												</div>
+
+												<div class="col-sm-17 profile-field-value">
+													<?php echo esc_html( $department ); ?>
+												</div>
+											</div>
+										<?php endif; ?>
 
 										<?php if ( bp_field_has_data() ) : ?>
 											<?php
@@ -948,20 +969,17 @@ function cuny_member_profile_header() {
 													</div>
 												</div>
 
-												<?php $show_dept_field_next = 'Title' === bp_get_the_profile_field_name(); ?>
 
-												<?php if ( $show_dept_field_next ) : ?>
-													<?php if ( $department ) : ?>
-														<div class="table-row row">
-															<div class="bold col-sm-7 profile-field-label">
-																<?php echo esc_html( $dept_label ); ?>
-															</div>
-
-															<div class="col-sm-17 profile-field-value">
-																<?php echo esc_html( $department ); ?>
-															</div>
+												<?php if ( $show_dept_after_title && $department && 'Title' === bp_get_the_profile_field_name() ) : ?>
+													<div class="table-row row">
+														<div class="bold col-sm-7 profile-field-label">
+															<?php echo esc_html( $dept_label ); ?>
 														</div>
-													<?php endif; ?>
+
+														<div class="col-sm-17 profile-field-value">
+															<?php echo esc_html( $department ); ?>
+														</div>
+													</div>
 												<?php endif; ?>
 
 											<?php endif; ?>
@@ -1028,7 +1046,7 @@ function openlab_custom_add_friend_button( $button ) {
 add_filter( 'bp_get_add_friend_button', 'openlab_custom_add_friend_button' );
 
 function openlab_member_header() {
-	$this_user_id = isset( $site_members_template->member->id ) ? $site_members_template->member->id : bp_displayed_user_id();
+	$this_user_id = bp_displayed_user_id();
 	?>
 	<?php $account_type = openlab_get_user_member_type_label( $this_user_id ); ?>
 
@@ -1063,6 +1081,7 @@ function openlab_messages_pagination() {
 		'mpage' => '%#%',
 	);
 
+	$pagination = '';
 	if ( (int) $messages_template->total_thread_count && (int) $messages_template->pag_num ) {
 		$pagination = paginate_links(
 			array(
@@ -1452,7 +1471,7 @@ function openlab_get_group_id_by_event_id( $activity_id ) {
 
 		if( ! empty( $event_id ) ) {
 			$group_ids = (array) bpeo_get_event_groups( $event_id );
-			
+
 			if( isset( $group_ids[0] ) ) {
 				return $group_ids[0];
 			}

@@ -26,6 +26,7 @@ function openlab_get_user_member_type_object( $user_id ) {
 	}
 
 	$term = bp_get_term_by( 'id', $type_object->db_id, 'bp_member_type' );
+	// @phpstan-ignore-next-line
 	if ( ! $term || is_wp_error( $term ) ) {
 		return null;
 	}

@@ -17,16 +17,12 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Drive_TeamDriveCapabilities extends Google_Model
 {
     public $canAddChildren;
-    public $canChangeCopyRequiresWriterPermissionRestriction;
-    public $canChangeDomainUsersOnlyRestriction;
     public $canChangeTeamDriveBackground;
-    public $canChangeTeamMembersOnlyRestriction;
     public $canComment;
     public $canCopy;
-    public $canDeleteChildren;
     public $canDeleteTeamDrive;
     public $canDownload;
     public $canEdit;
@@ -37,7 +33,6 @@ class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_
     public $canRename;
     public $canRenameTeamDrive;
     public $canShare;
-    public $canTrashChildren;
     public function setCanAddChildren($canAddChildren)
     {
         $this->canAddChildren = $canAddChildren;
@@ -46,22 +41,6 @@ class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_
     {
         return $this->canAddChildren;
     }
-    public function setCanChangeCopyRequiresWriterPermissionRestriction($canChangeCopyRequiresWriterPermissionRestriction)
-    {
-        $this->canChangeCopyRequiresWriterPermissionRestriction = $canChangeCopyRequiresWriterPermissionRestriction;
-    }
-    public function getCanChangeCopyRequiresWriterPermissionRestriction()
-    {
-        return $this->canChangeCopyRequiresWriterPermissionRestriction;
-    }
-    public function setCanChangeDomainUsersOnlyRestriction($canChangeDomainUsersOnlyRestriction)
-    {
-        $this->canChangeDomainUsersOnlyRestriction = $canChangeDomainUsersOnlyRestriction;
-    }
-    public function getCanChangeDomainUsersOnlyRestriction()
-    {
-        return $this->canChangeDomainUsersOnlyRestriction;
-    }
     public function setCanChangeTeamDriveBackground($canChangeTeamDriveBackground)
     {
         $this->canChangeTeamDriveBackground = $canChangeTeamDriveBackground;
@@ -69,14 +48,6 @@ class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_
     public function getCanChangeTeamDriveBackground()
     {
         return $this->canChangeTeamDriveBackground;
-    }
-    public function setCanChangeTeamMembersOnlyRestriction($canChangeTeamMembersOnlyRestriction)
-    {
-        $this->canChangeTeamMembersOnlyRestriction = $canChangeTeamMembersOnlyRestriction;
-    }
-    public function getCanChangeTeamMembersOnlyRestriction()
-    {
-        return $this->canChangeTeamMembersOnlyRestriction;
     }
     public function setCanComment($canComment)
     {
@@ -93,14 +64,6 @@ class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_
     public function getCanCopy()
     {
         return $this->canCopy;
-    }
-    public function setCanDeleteChildren($canDeleteChildren)
-    {
-        $this->canDeleteChildren = $canDeleteChildren;
-    }
-    public function getCanDeleteChildren()
-    {
-        return $this->canDeleteChildren;
     }
     public function setCanDeleteTeamDrive($canDeleteTeamDrive)
     {
@@ -181,13 +144,5 @@ class Google_Service_Drive_TeamDriveCapabilities extends \SimpleCalendar\plugin_
     public function getCanShare()
     {
         return $this->canShare;
-    }
-    public function setCanTrashChildren($canTrashChildren)
-    {
-        $this->canTrashChildren = $canTrashChildren;
-    }
-    public function getCanTrashChildren()
-    {
-        return $this->canTrashChildren;
     }
 }

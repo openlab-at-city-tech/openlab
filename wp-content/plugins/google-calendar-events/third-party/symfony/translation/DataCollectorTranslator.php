@@ -17,22 +17,19 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class DataCollectorTranslator implements TranslatorInterface, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface, LocaleAwareInterface, WarmableInterface
+class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, WarmableInterface
 {
     public const MESSAGE_DEFINED = 0;
     public const MESSAGE_MISSING = 1;
     public const MESSAGE_EQUALS_FALLBACK = 2;
-    /**
-     * @var TranslatorInterface|TranslatorBagInterface
-     */
     private $translator;
     private $messages = [];
     /**
-     * @param TranslatorInterface $translator The translator must implement TranslatorBagInterface
+     * @param TranslatorInterface&TranslatorBagInterface&LocaleAwareInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
-        if (!$translator instanceof \SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
+        if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
             throw new InvalidArgumentException(\sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_debug_type($translator)));
         }
         $this->translator = $translator;
@@ -69,6 +66,13 @@ class DataCollectorTranslator implements TranslatorInterface, \SimpleCalendar\pl
     }
     /**
      * {@inheritdoc}
+     */
+    public function getCatalogues() : array
+    {
+        return $this->translator->getCatalogues();
+    }
+    /**
+     * {@inheritdoc}
      *
      * @return string[]
      */
@@ -82,11 +86,11 @@ class DataCollectorTranslator implements TranslatorInterface, \SimpleCalendar\pl
     /**
      * Gets the fallback locales.
      *
-     * @return array The fallback locales
+     * @return array
      */
     public function getFallbackLocales()
     {
-        if ($this->translator instanceof \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Translator || \method_exists($this->translator, 'getFallbackLocales')) {
+        if ($this->translator instanceof Translator || \method_exists($this->translator, 'getFallbackLocales')) {
             return $this->translator->getFallbackLocales();
         }
         return [];

@@ -19,6 +19,10 @@ class ElementsKit_Widget_Image_Box_Handler extends \ElementsKit_Lite\Core\Handle
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'image', 'image box', 'box'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'image-box/';
     }

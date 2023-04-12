@@ -19,15 +19,16 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class TranslationWriter implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Writer\TranslationWriterInterface
+class TranslationWriter implements TranslationWriterInterface
 {
+    /**
+     * @var array<string, DumperInterface>
+     */
     private $dumpers = [];
     /**
      * Adds a dumper to the writer.
-     *
-     * @param string $format The format of the dumper
      */
-    public function addDumper($format, DumperInterface $dumper)
+    public function addDumper(string $format, DumperInterface $dumper)
     {
         $this->dumpers[$format] = $dumper;
     }

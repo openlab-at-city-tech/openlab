@@ -25,10 +25,10 @@ namespace SimpleCalendar\plugin_deps;
  *   $calendarList = $calendarService->calendarList;
  *  </code>
  */
-class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_CalendarList extends Google_Service_Resource
 {
     /**
-     * Removes a calendar from the user's calendar list. (calendarList.delete)
+     * Deletes an entry on the user's calendar list. (calendarList.delete)
      *
      * @param string $calendarId Calendar identifier. To retrieve calendar IDs call
      * the calendarList.list method. If you want to access the primary calendar of
@@ -42,7 +42,7 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
         return $this->call('delete', array($params));
     }
     /**
-     * Returns a calendar from the user's calendar list. (calendarList.get)
+     * Returns an entry on the user's calendar list. (calendarList.get)
      *
      * @param string $calendarId Calendar identifier. To retrieve calendar IDs call
      * the calendarList.list method. If you want to access the primary calendar of
@@ -57,8 +57,7 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
         return $this->call('get', array($params), "SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry");
     }
     /**
-     * Inserts an existing calendar into the user's calendar list.
-     * (calendarList.insert)
+     * Adds an entry to the user's calendar list. (calendarList.insert)
      *
      * @param Google_Service_Calendar_CalendarListEntry $postBody
      * @param array $optParams Optional parameters.
@@ -69,15 +68,14 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
      * automatically. Optional. The default is False.
      * @return Google_Service_Calendar_CalendarListEntry
      */
-    public function insert(\SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
+    public function insert(Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);
         return $this->call('insert', array($params), "SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry");
     }
     /**
-     * Returns the calendars on the user's calendar list.
-     * (calendarList.listCalendarList)
+     * Returns entries on the user's calendar list. (calendarList.listCalendarList)
      *
      * @param array $optParams Optional parameters.
      *
@@ -113,8 +111,8 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
         return $this->call('list', array($params), "SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarList");
     }
     /**
-     * Updates an existing calendar on the user's calendar list. This method
-     * supports patch semantics. (calendarList.patch)
+     * Updates an entry on the user's calendar list. This method supports patch
+     * semantics. (calendarList.patch)
      *
      * @param string $calendarId Calendar identifier. To retrieve calendar IDs call
      * the calendarList.list method. If you want to access the primary calendar of
@@ -128,15 +126,14 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
      * automatically. Optional. The default is False.
      * @return Google_Service_Calendar_CalendarListEntry
      */
-    public function patch($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
+    public function patch($calendarId, Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
         return $this->call('patch', array($params), "SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry");
     }
     /**
-     * Updates an existing calendar on the user's calendar list.
-     * (calendarList.update)
+     * Updates an entry on the user's calendar list. (calendarList.update)
      *
      * @param string $calendarId Calendar identifier. To retrieve calendar IDs call
      * the calendarList.list method. If you want to access the primary calendar of
@@ -150,7 +147,7 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
      * automatically. Optional. The default is False.
      * @return Google_Service_Calendar_CalendarListEntry
      */
-    public function update($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
+    public function update($calendarId, Google_Service_Calendar_CalendarListEntry $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -187,7 +184,7 @@ class Google_Service_Calendar_Resource_CalendarList extends \SimpleCalendar\plug
      * synchronization. Optional. The default is to return all entries.
      * @return Google_Service_Calendar_Channel
      */
-    public function watch(\SimpleCalendar\plugin_deps\Google_Service_Calendar_Channel $postBody, $optParams = array())
+    public function watch(Google_Service_Calendar_Channel $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);

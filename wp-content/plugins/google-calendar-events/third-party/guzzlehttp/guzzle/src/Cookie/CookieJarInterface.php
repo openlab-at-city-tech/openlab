@@ -42,7 +42,7 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      *
      * @return bool Returns true on success or false on failure
      */
-    public function setCookie(\SimpleCalendar\plugin_deps\GuzzleHttp\Cookie\SetCookie $cookie) : bool;
+    public function setCookie(SetCookie $cookie) : bool;
     /**
      * Remove cookies currently held in the cookie jar.
      *

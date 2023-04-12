@@ -19,7 +19,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author stealth35
  */
-class IcuDatFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\IcuResFileLoader
+class IcuDatFileLoader extends IcuResFileLoader
 {
     /**
      * {@inheritdoc}

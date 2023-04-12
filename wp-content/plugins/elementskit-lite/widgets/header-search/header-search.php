@@ -33,6 +33,10 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/search-2/';
     }
@@ -650,7 +654,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 
         $ekit_search_link = apply_filters( 'ekit_search_link', home_url( '/'.$language_prefix ) );
         ?>
-        <a href="#ekit_modal-popup-<?php echo esc_attr($this->get_id()); ?>" class="ekit_navsearch-button ekit-modal-popup">
+        <a href="#ekit_modal-popup-<?php echo esc_attr($this->get_id()); ?>" class="ekit_navsearch-button ekit-modal-popup" aria-label="navsearch-button">
             <?php
                 // new icon
                 $migrated = isset( $settings['__fa4_migrated']['ekit_search_icons'] );

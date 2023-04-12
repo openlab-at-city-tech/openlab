@@ -14,6 +14,8 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidAr
 /**
  * TranslatorBagInterface.
  *
+ * @method MessageCatalogueInterface[] getCatalogues() Returns all catalogues of the instance
+ *
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
 interface TranslatorBagInterface

@@ -2,6 +2,6 @@
 
 namespace SimpleCalendar\plugin_deps\GuzzleHttp\Exception;
 
-class TransferException extends \RuntimeException implements \SimpleCalendar\plugin_deps\GuzzleHttp\Exception\GuzzleException
+class TransferException extends \RuntimeException implements GuzzleException
 {
 }

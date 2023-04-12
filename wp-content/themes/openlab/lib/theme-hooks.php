@@ -60,10 +60,11 @@ HTML;
 add_filter('the_content', 'openlab_custom_the_content');
 
 /**
- * OpenLab main menu markup
- * @param type $location
+ * OpenLab main menu markup.
+ *
+ * @param string $location
  */
-function openlab_main_menu($location = 'header') {
+function openlab_main_menu( $location = 'header' ) {
     ?>
     <nav class="navbar navbar-default oplb-bs navbar-location-<?php echo $location ?>" role="navigation">
         <?php openlab_sitewide_header($location); ?>
@@ -184,11 +185,12 @@ function openlab_loader_class() {
 add_action('wp_head', 'openlab_loader_class', 999);
 
 /**
- * Custom MCE buttons when needed
- * @param type $buttons
- * @return type
+ * Custom MCE buttons when needed.
+ *
+ * @param array $init TinyMCE initialization data.
+ * @return array
  */
-function openlab_mce_buttons($init, $editor) {
+function openlab_mce_buttons( $init ) {
 
     if (function_exists('bpeo_is_action')) {
         if (bpeo_is_action('new') || bpeo_is_action('edit')) {
@@ -205,8 +207,7 @@ function openlab_mce_buttons($init, $editor) {
 
     return $init;
 }
-
-add_filter('tiny_mce_before_init', 'openlab_mce_buttons', 10, 2);
+add_filter( 'tiny_mce_before_init', 'openlab_mce_buttons' );
 
 function openlab_group_creation_categories() {
     $cats_out = '';
@@ -232,7 +233,7 @@ function openlab_group_creation_categories() {
 
         $categories = bpcgc_get_terms_by_group_type($group_type);
 
-        if ($categories && !empty($categories)) {
+        if ( $categories ) {
 
             ob_start();
             include(locate_template('parts/forms/group-categories.php'));

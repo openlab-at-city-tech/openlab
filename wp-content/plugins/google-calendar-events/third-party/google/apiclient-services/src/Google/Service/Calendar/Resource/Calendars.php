@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $calendars = $calendarService->calendars;
  *  </code>
  */
-class Google_Service_Calendar_Resource_Calendars extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_Calendars extends Google_Service_Resource
 {
     /**
      * Clears a primary calendar. This operation deletes all events associated with
@@ -79,7 +79,7 @@ class Google_Service_Calendar_Resource_Calendars extends \SimpleCalendar\plugin_
      * @param array $optParams Optional parameters.
      * @return Google_Service_Calendar_Calendar
      */
-    public function insert(\SimpleCalendar\plugin_deps\Google_Service_Calendar_Calendar $postBody, $optParams = array())
+    public function insert(Google_Service_Calendar_Calendar $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -96,7 +96,7 @@ class Google_Service_Calendar_Resource_Calendars extends \SimpleCalendar\plugin_
      * @param array $optParams Optional parameters.
      * @return Google_Service_Calendar_Calendar
      */
-    public function patch($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_Calendar $postBody, $optParams = array())
+    public function patch($calendarId, Google_Service_Calendar_Calendar $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);
@@ -112,7 +112,7 @@ class Google_Service_Calendar_Resource_Calendars extends \SimpleCalendar\plugin_
      * @param array $optParams Optional parameters.
      * @return Google_Service_Calendar_Calendar
      */
-    public function update($calendarId, \SimpleCalendar\plugin_deps\Google_Service_Calendar_Calendar $postBody, $optParams = array())
+    public function update($calendarId, Google_Service_Calendar_Calendar $postBody, $optParams = array())
     {
         $params = array('calendarId' => $calendarId, 'postBody' => $postBody);
         $params = \array_merge($params, $optParams);

@@ -34,7 +34,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
  *
  * @final
  */
-class MessageFormatter implements \SimpleCalendar\plugin_deps\GuzzleHttp\MessageFormatterInterface
+class MessageFormatter implements MessageFormatterInterface
 {
     /**
      * Apache Common Log Format.
@@ -75,10 +75,10 @@ class MessageFormatter implements \SimpleCalendar\plugin_deps\GuzzleHttp\Message
             $result = '';
             switch ($matches[1]) {
                 case 'request':
-                    $result = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Message::toString($request);
+                    $result = Psr7\Message::toString($request);
                     break;
                 case 'response':
-                    $result = $response ? \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Message::toString($response) : '';
+                    $result = $response ? Psr7\Message::toString($response) : '';
                     break;
                 case 'req_headers':
                     $result = \trim($request->getMethod() . ' ' . $request->getRequestTarget()) . ' HTTP/' . $request->getProtocolVersion() . "\r\n" . $this->headers($request);
@@ -116,7 +116,7 @@ class MessageFormatter implements \SimpleCalendar\plugin_deps\GuzzleHttp\Message
                     break;
                 case 'uri':
                 case 'url':
-                    $result = $request->getUri();
+                    $result = $request->getUri()->__toString();
                     break;
                 case 'target':
                     $result = $request->getRequestTarget();

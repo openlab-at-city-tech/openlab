@@ -20,6 +20,10 @@ class ElementsKit_Widget_Funfact_Handler extends \ElementsKit_Lite\Core\Handler_
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'fun', 'factor', 'animation', 'info' , 'number', 'animated'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'funfact/';
     }

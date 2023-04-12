@@ -17,12 +17,38 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\JsonFormatter;
 use SimpleCalendar\plugin_deps\PhpAmqpLib\Message\AMQPMessage;
 use SimpleCalendar\plugin_deps\PhpAmqpLib\Channel\AMQPChannel;
 use AMQPExchange;
-class AmqpHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+/**
+ * @phpstan-import-type Record from \Monolog\Logger
+ */
+class AmqpHandler extends AbstractProcessingHandler
 {
     /**
      * @var AMQPExchange|AMQPChannel $exchange
      */
     protected $exchange;
+    /** @var array<string, mixed> */
+    private $extraAttributes = [];
+    /**
+     * @return array<string, mixed>
+     */
+    public function getExtraAttributes() : array
+    {
+        return $this->extraAttributes;
+    }
+    /**
+     * Configure extra attributes to pass to the AMQPExchange (if you are using the amqp extension)
+     *
+     * @param array<string, mixed> $extraAttributes  One of content_type, content_encoding,
+     *                                               message_id, user_id, app_id, delivery_mode,
+     *                                               priority, timestamp, expiration, type
+     *                                               or reply_to, headers.
+     * @return AmqpHandler
+     */
+    public function setExtraAttributes(array $extraAttributes) : self
+    {
+        $this->extraAttributes = $extraAttributes;
+        return $this;
+    }
     /**
      * @var string
      */
@@ -30,8 +56,6 @@ class AmqpHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractPr
     /**
      * @param AMQPExchange|AMQPChannel $exchange     AMQPExchange (php AMQP ext) or PHP AMQP lib channel, ready for use
      * @param string|null              $exchangeName Optional exchange name, for AMQPChannel (PhpAmqpLib) only
-     * @param string|int               $level        The minimum logging level at which this handler will be triggered
-     * @param bool                     $bubble       Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct($exchange, ?string $exchangeName = null, $level = Logger::DEBUG, bool $bubble = \true)
     {
@@ -53,7 +77,11 @@ class AmqpHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractPr
         $data = $record["formatted"];
         $routingKey = $this->getRoutingKey($record);
         if ($this->exchange instanceof AMQPExchange) {
-            $this->exchange->publish($data, $routingKey, 0, ['delivery_mode' => 2, 'content_type' => 'application/json']);
+            $attributes = ['delivery_mode' => 2, 'content_type' => 'application/json'];
+            if ($this->extraAttributes) {
+                $attributes = \array_merge($attributes, $this->extraAttributes);
+            }
+            $this->exchange->publish($data, $routingKey, 0, $attributes);
         } else {
             $this->exchange->basic_publish($this->createAmqpMessage($data), $this->exchangeName, $routingKey);
         }
@@ -71,6 +99,7 @@ class AmqpHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractPr
             if (!$this->isHandling($record)) {
                 continue;
             }
+            /** @var Record $record */
             $record = $this->processRecord($record);
             $data = $this->getFormatter()->format($record);
             $this->exchange->batch_basic_publish($this->createAmqpMessage($data), $this->exchangeName, $this->getRoutingKey($record));
@@ -79,6 +108,8 @@ class AmqpHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractPr
     }
     /**
      * Gets the routing key for the AMQP exchange
+     *
+     * @phpstan-param Record $record
      */
     protected function getRoutingKey(array $record) : string
     {

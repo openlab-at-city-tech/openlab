@@ -33,6 +33,10 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_categories();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/client-logo/';
     }
@@ -214,8 +218,10 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 					'size' => 15,
 					'unit' => 'px',
 				],
+				'render_type' => 'template',
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-clients-slider .slick-slide' => 'margin-right: {{SIZE}}{{UNIT}};margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-clients-slider' => '--ekit_client_logo_left_right_spacing: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -286,6 +292,10 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				'default' => [
 					'size' => 4,
 					'unit' => 'px',
+				],
+				'render_type' => 'template',
+				'selectors' => [
+					'{{WRAPPER}} .ekit-price-card-slider' => '--ekit_client_logo_slidetosho:  {{SIZE}};',
 				],
 			]
         );

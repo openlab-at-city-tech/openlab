@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Custom admin functionality  
+ * Custom admin functionality
  */
 
 /**
@@ -60,8 +60,8 @@ function openlab_process_footer_links() {
 
     $accessibility_info_val = filter_input(INPUT_POST, 'accessibility_info_val');
     $accessibility_info_name = filter_input(INPUT_POST, 'accessibility_info_name');
-    
-    if ($accessibility_info_val && !empty($accessibility_info_val) && $accessibility_info_val !== 0 && !empty($accessibility_info_name)) {
+
+    if ( $accessibility_info_val && !empty( $accessibility_info_name ) ) {
         $accessibility_info_obj = get_post($accessibility_info_val);
         $links_data_out['accessibility_info_id'] = $accessibility_info_val;
         $links_data_out['accessibility_info_title'] = $accessibility_info_obj->post_title;
@@ -74,7 +74,7 @@ function openlab_process_footer_links() {
         $links_data_out['accessibility_info_title'] = '';
 
         update_option('footer_link_accessibility_help_post', 0);
-        
+
         $links_data_out['error_message'] = 'Help post selection for the accessibility info link returned a zero value. This will hide that link in the footer. If this was not your intention, please try again or contact support.';
     }
 

@@ -13,18 +13,18 @@ final class Create
      */
     public static function promiseFor($value)
     {
-        if ($value instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface) {
+        if ($value instanceof PromiseInterface) {
             return $value;
         }
         // Return a Guzzle promise that shadows the given promise.
         if (\is_object($value) && \method_exists($value, 'then')) {
             $wfn = \method_exists($value, 'wait') ? [$value, 'wait'] : null;
             $cfn = \method_exists($value, 'cancel') ? [$value, 'cancel'] : null;
-            $promise = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise($wfn, $cfn);
+            $promise = new Promise($wfn, $cfn);
             $value->then([$promise, 'resolve'], [$promise, 'reject']);
             return $promise;
         }
-        return new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\FulfilledPromise($value);
+        return new FulfilledPromise($value);
     }
     /**
      * Creates a rejected promise for a reason if the reason is not a promise.
@@ -36,10 +36,10 @@ final class Create
      */
     public static function rejectionFor($reason)
     {
-        if ($reason instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface) {
+        if ($reason instanceof PromiseInterface) {
             return $reason;
         }
-        return new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\RejectedPromise($reason);
+        return new RejectedPromise($reason);
     }
     /**
      * Create an exception for a rejected promise value.
@@ -53,7 +53,7 @@ final class Create
         if ($reason instanceof \Exception || $reason instanceof \Throwable) {
             return $reason;
         }
-        return new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\RejectionException($reason);
+        return new RejectionException($reason);
     }
     /**
      * Returns an iterator for the given value.

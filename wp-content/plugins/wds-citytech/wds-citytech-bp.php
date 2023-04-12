@@ -145,7 +145,7 @@ To view this $grouptype log in and follow the link below:
 		return $translation;
 	}
 }
-add_filter( 'gettext', array( 'bpass_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+add_filter( 'gettext', array( 'bpass_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 
 /**
  * Add members to wpms website if attached to bp group and they are a group member
@@ -168,9 +168,11 @@ function wds_add_group_members_2_blog() {
 	if ( $user_ID != 0 && ! empty( $group_id ) && ! empty( $blog_id ) ) {
 		switch_to_blog( $blog_id );
 		if ( ! is_user_member_of_blog( $blog_id ) ) {
-			  $sql = "SELECT user_title FROM {$bp->groups->table_name}_members WHERE group_id = $group_id and user_id=$user_ID AND is_confirmed='1'";
-			  $rs  = $wpdb->get_results( $sql );
+			$sql = "SELECT user_title FROM {$bp->groups->table_name}_members WHERE group_id = $group_id and user_id=$user_ID AND is_confirmed='1'";
+			$rs  = $wpdb->get_results( $sql );
+
 			if ( count( $rs ) > 0 ) {
+				$user_title = '';
 				foreach ( $rs as $r ) {
 					$user_title = $r->user_title;
 				}
@@ -223,7 +225,7 @@ add_filter( 'messages_send_notice', 'openlab_send_notice_email', 10, 2 );
  */
 function openlab_redirect_to_profile_edit_group() {
 	if ( bp_is_user_profile_edit() ) {
-		if ( ! bp_action_variables( 1 ) ) {
+		if ( ! bp_action_variables() ) {
 			 $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
 			if ( $account_type === 'student' ) {
 				$pgroup = '2';
@@ -415,7 +417,7 @@ add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
  * should have these features enabled.
  */
 add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
-add_filter(
+add_action(
 	'groups_created_group',
 	function( $group_id ) {
 		if ( ! openlab_is_portfolio( $group_id ) ) {

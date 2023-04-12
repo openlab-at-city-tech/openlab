@@ -1,3 +1,27 @@
+### 5.12.7
+
+**Security update**
+
+This update features security improvements and is recommended for all users
+
+
+### 5.12.6
+
+* Improved PHP8 compatibility
+* Added missing Opt-Out dialog stylesheet
+* Fixed JS error at the About admin page
+* Minor improvements to the codebase
+* All images have been optimzed reducing the plugin size by 88kB
+* Updated the Block Editor icon. Thanks to [@andreslav](https://wordpress.org/support/topic/feedback-the-icon-is-fuzzy/)
+* Freemius SDK updated to version 2.5.3
+
+
+### 5.12.5
+
+* Added Freemius SDK
+* Fixed JS error introduced in the previous update. See [forum topic](https://wordpress.org/support/topic/su-tabs-and-other-shortcodes-no-longer-work-after-recent-update/).
+
+
 ### 5.12.3
 
 * Tested compatibility with WordPress 6.1

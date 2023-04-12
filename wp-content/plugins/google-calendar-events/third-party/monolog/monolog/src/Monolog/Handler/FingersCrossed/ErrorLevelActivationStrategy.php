@@ -12,19 +12,25 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Handler\FingersCrossed;
 
 use SimpleCalendar\plugin_deps\Monolog\Logger;
+use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Error level based activation strategy.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class ErrorLevelActivationStrategy implements \SimpleCalendar\plugin_deps\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
+class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
     /**
-     * @var int
+     * @var Level
      */
     private $actionLevel;
     /**
      * @param int|string $actionLevel Level or name or value
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $actionLevel
      */
     public function __construct($actionLevel)
     {

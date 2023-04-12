@@ -20,8 +20,9 @@ use SimpleCalendar\plugin_deps\Doctrine\CouchDB\CouchDBClient;
  *
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
  */
-class DoctrineCouchDBHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {
+    /** @var CouchDBClient */
     private $client;
     public function __construct(CouchDBClient $client, $level = Logger::DEBUG, bool $bubble = \true)
     {

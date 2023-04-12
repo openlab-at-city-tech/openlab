@@ -1,7 +1,7 @@
 <?php
-__("MapPress Maps for WordPress");
+__("MapPress Google Maps and Leaflet Maps");
 __("https://www.mappresspro.com");
-__("MapPress makes it easy to add Google and Leaflet Maps to WordPress");
+__("MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress");
 __("Chris Richardson");
 __("Settings");
 __("Maps");

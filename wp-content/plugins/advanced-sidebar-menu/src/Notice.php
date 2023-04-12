@@ -148,9 +148,9 @@ class Notice {
 		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
 			return;
 		}
-		$src = 'pages-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
+		$src = 'pages-widget-min.webp?version=' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION;
 		if ( Category::NAME === $widget->id_base ) {
-			$src = 'category-widget-min.webp?version=' . ADVANCED_SIDEBAR_BASIC_VERSION;
+			$src = 'category-widget-min.webp?version=' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION;
 		}
 		?>
 		<div

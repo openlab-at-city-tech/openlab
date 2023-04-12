@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Stealth35
  */
-class PoFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class PoFileDumper extends FileDumper
 {
     /**
      * {@inheritdoc}
@@ -108,7 +108,7 @@ EOF;
     }
     private function escape(string $str) : string
     {
-        return \addcslashes($str, "\0..\37\"\\");
+        return \addcslashes($str, "\x00..\x1f\"\\");
     }
     private function formatComments($comments, string $prefix = '') : ?string
     {

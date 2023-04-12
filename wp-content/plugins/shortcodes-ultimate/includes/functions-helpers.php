@@ -303,13 +303,13 @@ function su_set_file_extension( $path, $extension ) {
  *
  * @since 5.6.1
  */
-function su_get_utm_link( $url, $utm ) {
+function su_get_utm_link( $url, $utm_campaign, $utm_medium, $utm_source ) {
 
 	return add_query_arg(
 		array(
-			'utm_source'   => $utm[0],
-			'utm_medium'   => $utm[1],
-			'utm_campaign' => $utm[2],
+			'utm_campaign' => $utm_campaign,
+			'utm_medium'   => $utm_medium,
+			'utm_source'   => $utm_source,
 		),
 		$url
 	);
@@ -471,4 +471,16 @@ function su_load_textdomain() {
 
 	load_textdomain( $domain, $mofile );
 
+}
+
+function su_current_user_can_read_post( $post_id ) {
+	if ( post_password_required( $post_id ) ) {
+		return false;
+	}
+
+	if ( 'publish' !== get_post_status( $post_id ) && ! current_user_can( 'read_post', $post_id ) ) {
+		return false;
+	}
+
+	return true;
 }

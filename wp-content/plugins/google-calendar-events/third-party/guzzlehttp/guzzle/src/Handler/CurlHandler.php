@@ -22,13 +22,13 @@ class CurlHandler
     /**
      * Accepts an associative array of options:
      *
-     * - factory: Optional curl factory used to create cURL handles.
+     * - handle_factory: Optional curl factory used to create cURL handles.
      *
-     * @param array $options Array of options to use with the handler
+     * @param array{handle_factory?: ?CurlFactoryInterface} $options Array of options to use with the handler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = $options['handle_factory'] ?? new \SimpleCalendar\plugin_deps\GuzzleHttp\Handler\CurlFactory(3);
+        $this->factory = $options['handle_factory'] ?? new CurlFactory(3);
     }
     public function __invoke(RequestInterface $request, array $options) : PromiseInterface
     {
@@ -38,6 +38,6 @@ class CurlHandler
         $easy = $this->factory->create($request, $options);
         \curl_exec($easy->handle);
         $easy->errno = \curl_errno($easy->handle);
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Handler\CurlFactory::finish($this, $easy, $this->factory);
+        return CurlFactory::finish($this, $easy, $this->factory);
     }
 }

@@ -43,7 +43,7 @@ $reply_title_prefix = ! empty( $reply->comment_parent ) ? 'RE: RE: ' : 'RE: ';
 $reply_title        = $reply_title_prefix . $announcement->post_title;
 
 // See https://buddypress.trac.wordpress.org/ticket/8777, http://redmine.citytech.cuny.edu/issues/3125
-remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
+remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10 );
 $reply_replies = get_comments(
 	[
 		'parent' => (int) $reply_id,

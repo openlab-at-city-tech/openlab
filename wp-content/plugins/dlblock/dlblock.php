@@ -274,6 +274,11 @@ function dlblock_user_has_access( $file ) {
 /** Enabling/disabling protection ********************************************/
 
 function dlblock_update_blog_public( $value, $old_value ) {
+	// Don't ever change for the main site.
+	if ( is_main_site() ) {
+		return $value;
+	}
+
 	// @todo Apache check
 	$uploads = wp_upload_dir();
 

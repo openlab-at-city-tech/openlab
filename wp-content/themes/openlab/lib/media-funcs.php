@@ -59,7 +59,7 @@ add_filter('the_content', 'openlab_remove_thumbnail_dimensions', 10);
 function openlab_activity_user_avatar() {
 	global $activities_template;
 	$current_activity_item = isset($activities_template->activity->current_comment) ? $activities_template->activity->current_comment : $activities_template->activity;
-	$item_id = !empty($user_id) ? $user_id : $current_activity_item->user_id;
+	$item_id = $current_activity_item->user_id;
 	$item_id = apply_filters('bp_get_activity_avatar_item_id', $item_id);
 
 	$alt = bp_core_get_user_displayname( $activities_template->activity->user_id );

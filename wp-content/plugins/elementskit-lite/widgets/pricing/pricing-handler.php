@@ -20,6 +20,10 @@ class ElementsKit_Widget_Pricing_Handler extends \ElementsKit_Lite\Core\Handler_
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'price',  'pricing', 'table', 'package', 'plan'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'pricing/';
     }

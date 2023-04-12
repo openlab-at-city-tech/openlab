@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Monolog\ResettableInterface;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
+use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Simple handler wrapper that filters records based on a list of levels
  *
@@ -21,20 +22,26 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @author Hennadiy Verkh
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler implements \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface, ResettableInterface, \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface
+class FilterHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     /**
      * Handler or factory callable($record, $this)
      *
-     * @var callable|\Monolog\Handler\HandlerInterface
+     * @var callable|HandlerInterface
+     * @phpstan-var callable(?Record, HandlerInterface): HandlerInterface|HandlerInterface
      */
     protected $handler;
     /**
      * Minimum level for logs that are passed to handler
      *
      * @var int[]
+     * @phpstan-var array<Level, int>
      */
     protected $acceptedLevels;
     /**
@@ -44,22 +51,28 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
      */
     protected $bubble;
     /**
-     * @psalm-param HandlerInterface|callable(?array, HandlerInterface): HandlerInterface $handler
+     * @psalm-param HandlerInterface|callable(?Record, HandlerInterface): HandlerInterface $handler
      *
      * @param callable|HandlerInterface $handler        Handler or factory callable($record|null, $filterHandler).
      * @param int|array                 $minLevelOrList A list of levels to accept or a minimum level if maxLevel is provided
      * @param int|string                $maxLevel       Maximum level to accept, only used if $minLevelOrList is not an array
      * @param bool                      $bubble         Whether the messages that are handled can bubble up the stack or not
+     *
+     * @phpstan-param Level|LevelName|LogLevel::*|array<Level|LevelName|LogLevel::*> $minLevelOrList
+     * @phpstan-param Level|LevelName|LogLevel::* $maxLevel
      */
     public function __construct($handler, $minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY, bool $bubble = \true)
     {
         $this->handler = $handler;
         $this->bubble = $bubble;
         $this->setAcceptedLevels($minLevelOrList, $maxLevel);
-        if (!$this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
+        if (!$this->handler instanceof HandlerInterface && !\is_callable($this->handler)) {
             throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
+    /**
+     * @phpstan-return array<int, Level>
+     */
     public function getAcceptedLevels() : array
     {
         return \array_flip($this->acceptedLevels);
@@ -67,6 +80,9 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
     /**
      * @param int|string|array $minLevelOrList A list of levels to accept or a minimum level or level name if maxLevel is provided
      * @param int|string       $maxLevel       Maximum level or level name to accept, only used if $minLevelOrList is not an array
+     *
+     * @phpstan-param Level|LevelName|LogLevel::*|array<Level|LevelName|LogLevel::*> $minLevelOrList
+     * @phpstan-param Level|LevelName|LogLevel::*                                    $maxLevel
      */
     public function setAcceptedLevels($minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY) : self
     {
@@ -83,14 +99,14 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
         return $this;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function isHandling(array $record) : bool
     {
         return isset($this->acceptedLevels[$record['level']]);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {
@@ -98,13 +114,14 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
             return \false;
         }
         if ($this->processors) {
+            /** @var Record $record */
             $record = $this->processRecord($record);
         }
         $this->getHandler($record)->handle($record);
         return \false === $this->bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handleBatch(array $records) : void
     {
@@ -124,36 +141,38 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
      * If the handler was provided as a factory callable, this will trigger the handler's instantiation.
      *
      * @return HandlerInterface
+     *
+     * @phpstan-param Record $record
      */
     public function getHandler(array $record = null)
     {
-        if (!$this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface) {
+        if (!$this->handler instanceof HandlerInterface) {
             $this->handler = ($this->handler)($record, $this);
-            if (!$this->handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface) {
+            if (!$this->handler instanceof HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
         return $this->handler;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : \SimpleCalendar\plugin_deps\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             $handler->setFormatter($formatter);
             return $this;
         }
         throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getFormatter() : FormatterInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             return $handler->getFormatter();
         }
         throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
@@ -161,5 +180,8 @@ class FilterHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Handler 
     public function reset()
     {
         $this->resetProcessors();
+        if ($this->getHandler() instanceof ResettableInterface) {
+            $this->getHandler()->reset();
+        }
     }
 }

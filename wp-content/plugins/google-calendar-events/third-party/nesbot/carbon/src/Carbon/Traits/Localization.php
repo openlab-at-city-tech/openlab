@@ -15,12 +15,13 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidTypeException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\NotLocaleAwareException;
 use SimpleCalendar\plugin_deps\Carbon\Language;
 use SimpleCalendar\plugin_deps\Carbon\Translator;
+use SimpleCalendar\plugin_deps\Carbon\TranslatorStrongTypeInterface;
 use Closure;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
-if (!\interface_exists('SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatorInterface')) {
+if (\interface_exists('SimpleCalendar\\plugin_deps\\Symfony\\Contracts\\Translation\\TranslatorInterface') && !\interface_exists('SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatorInterface')) {
     \class_alias('SimpleCalendar\\plugin_deps\\Symfony\\Contracts\\Translation\\TranslatorInterface', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatorInterface');
 }
 /**
@@ -150,7 +151,7 @@ trait Localization
      *
      * @return string
      */
-    public static function getTranslationMessageWith($translator, string $key, string $locale = null, string $default = null)
+    public static function getTranslationMessageWith($translator, string $key, ?string $locale = null, ?string $default = null)
     {
         if (!($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
             throw new InvalidTypeException('Translator does not implement ' . TranslatorInterface::class . ' and ' . TranslatorBagInterface::class . '. ' . (\is_object($translator) ? \get_class($translator) : \gettype($translator)) . ' has been given.');
@@ -158,7 +159,7 @@ trait Localization
         if (!$locale && $translator instanceof LocaleAwareInterface) {
             $locale = $translator->getLocale();
         }
-        $result = $translator->getCatalogue($locale)->get($key);
+        $result = self::getFromCatalogue($translator, $translator->getCatalogue($locale), $key);
         return $result === $key ? $default : $result;
     }
     /**
@@ -171,7 +172,7 @@ trait Localization
      *
      * @return string
      */
-    public function getTranslationMessage(string $key, string $locale = null, string $default = null, $translator = null)
+    public function getTranslationMessage(string $key, ?string $locale = null, ?string $default = null, $translator = null)
     {
         return static::getTranslationMessageWith($translator ?: $this->getLocalTranslator(), $key, $locale, $default);
     }
@@ -205,14 +206,15 @@ trait Localization
     /**
      * Translate using translation string or callback available.
      *
-     * @param string                                             $key
-     * @param array                                              $parameters
-     * @param null                                               $number
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param string                                                  $key
+     * @param array                                                   $parameters
+     * @param string|int|float|null                                   $number
+     * @param \Symfony\Component\Translation\TranslatorInterface|null $translator
+     * @param bool                                                    $altNumbers
      *
      * @return string
      */
-    public function translate(string $key, array $parameters = [], $number = null, TranslatorInterface $translator = null, bool $altNumbers = \false) : string
+    public function translate(string $key, array $parameters = [], $number = null, ?TranslatorInterface $translator = null, bool $altNumbers = \false) : string
     {
         $translation = static::translateWith($translator ?: $this->getLocalTranslator(), $key, $parameters, $number);
         if ($number !== null && $altNumbers) {
@@ -261,7 +263,7 @@ trait Localization
             }
             return $result;
         }
-        return "{$number}";
+        return (string) $number;
     }
     /**
      * Translate a time string from a locale to an other.
@@ -303,6 +305,9 @@ trait Localization
             $months = $messages['months'] ?? [];
             $weekdays = $messages['weekdays'] ?? [];
             $meridiem = $messages['meridiem'] ?? ['AM', 'PM'];
+            if (isset($messages['ordinal_words'])) {
+                $timeString = self::replaceOrdinalWords($timeString, $key === 'from' ? \array_flip($messages['ordinal_words']) : $messages['ordinal_words']);
+            }
             if ($key === 'from') {
                 foreach (['months', 'weekdays'] as $variable) {
                     $list = $messages[$variable . '_standalone'] ?? null;
@@ -367,7 +372,7 @@ trait Localization
                     }
                 }
             }
-            $this->setLocalTranslator($translator);
+            $this->localTranslator = $translator;
         }
         return $this;
     }
@@ -470,7 +475,7 @@ trait Localization
                 return \false;
             }
             foreach (['ago', 'from_now', 'before', 'after'] as $key) {
-                if ($translator instanceof TranslatorBagInterface && $translator->getCatalogue($newLocale)->get($key) instanceof Closure) {
+                if ($translator instanceof TranslatorBagInterface && self::getFromCatalogue($translator, $translator->getCatalogue($newLocale), $key) instanceof Closure) {
                     continue;
                 }
                 if ($translator->trans($key) === $key) {
@@ -591,8 +596,19 @@ trait Localization
         }
         if ($translator && !($translator instanceof LocaleAwareInterface || \method_exists($translator, 'getLocale'))) {
             throw new NotLocaleAwareException($translator);
+            // @codeCoverageIgnore
         }
         return $translator;
+    }
+    /**
+     * @param mixed                                                    $translator
+     * @param \Symfony\Component\Translation\MessageCatalogueInterface $catalogue
+     *
+     * @return mixed
+     */
+    private static function getFromCatalogue($translator, $catalogue, string $id, string $domain = 'messages')
+    {
+        return $translator instanceof TranslatorStrongTypeInterface ? $translator->getFromCatalogue($catalogue, $id, $domain) : $catalogue->get($id, $domain);
     }
     /**
      * Return the word cleaned from its translation codes.
@@ -625,7 +641,7 @@ trait Localization
                 return '>>DO NOT REPLACE<<';
             }
             $parts = \explode('|', $message);
-            return $key === 'to' ? static::cleanWordFromTranslationString(\end($parts)) : '(?:' . \implode('|', \array_map([static::class, 'cleanWordFromTranslationString'], $parts)) . ')';
+            return $key === 'to' ? self::cleanWordFromTranslationString(\end($parts)) : '(?:' . \implode('|', \array_map([static::class, 'cleanWordFromTranslationString'], $parts)) . ')';
         }, $keys);
     }
     /**
@@ -649,5 +665,11 @@ trait Localization
             $list[] = $translation($date, $timeString, $i) ?? $filler;
         }
         return $list;
+    }
+    private static function replaceOrdinalWords(string $timeString, array $ordinalWords) : string
+    {
+        return \preg_replace_callback('/(?<![a-z])[a-z]+(?![a-z])/i', function (array $match) use($ordinalWords) {
+            return $ordinalWords[\mb_strtolower($match[0])] ?? $match[0];
+        }, $timeString);
     }
 }

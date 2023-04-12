@@ -42,6 +42,8 @@ function bp_mpo_activity_filter( $has_activities, $activities, $template_args ) 
 				$blog_id = $activity->item_id;
 			}
 
+			$blog_id = apply_filters( 'bp_mpo_activity_filter_activity_item_blog_id', $blog_id, $activity );
+
 			$privacy = get_blog_option( $blog_id, 'blog_public' );
 
 			$remove_from_stream = false;

@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_DriveFile extends Google_Collection
 {
     protected $collection_key = 'spaces';
     public $appProperties;
@@ -25,14 +25,9 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     protected $capabilitiesDataType = '';
     protected $contentHintsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileContentHints';
     protected $contentHintsDataType = '';
-    protected $contentRestrictionsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_ContentRestriction';
-    protected $contentRestrictionsDataType = 'array';
-    public $copyRequiresWriterPermission;
     public $createdTime;
     public $description;
-    public $driveId;
     public $explicitlyTrashed;
-    public $exportLinks;
     public $fileExtension;
     public $folderColorRgb;
     public $fullFileExtension;
@@ -58,7 +53,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     protected $ownersType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_User';
     protected $ownersDataType = 'array';
     public $parents;
-    public $permissionIds;
     protected $permissionsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_Permission';
     protected $permissionsDataType = 'array';
     public $properties;
@@ -67,8 +61,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     public $sharedWithMeTime;
     protected $sharingUserType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_User';
     protected $sharingUserDataType = '';
-    protected $shortcutDetailsType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileShortcutDetails';
-    protected $shortcutDetailsDataType = '';
     public $size;
     public $spaces;
     public $starred;
@@ -99,7 +91,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_DriveFileCapabilities
      */
-    public function setCapabilities(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileCapabilities $capabilities)
+    public function setCapabilities(Google_Service_Drive_DriveFileCapabilities $capabilities)
     {
         $this->capabilities = $capabilities;
     }
@@ -113,7 +105,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_DriveFileContentHints
      */
-    public function setContentHints(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileContentHints $contentHints)
+    public function setContentHints(Google_Service_Drive_DriveFileContentHints $contentHints)
     {
         $this->contentHints = $contentHints;
     }
@@ -123,28 +115,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     public function getContentHints()
     {
         return $this->contentHints;
-    }
-    /**
-     * @param Google_Service_Drive_ContentRestriction[]
-     */
-    public function setContentRestrictions($contentRestrictions)
-    {
-        $this->contentRestrictions = $contentRestrictions;
-    }
-    /**
-     * @return Google_Service_Drive_ContentRestriction[]
-     */
-    public function getContentRestrictions()
-    {
-        return $this->contentRestrictions;
-    }
-    public function setCopyRequiresWriterPermission($copyRequiresWriterPermission)
-    {
-        $this->copyRequiresWriterPermission = $copyRequiresWriterPermission;
-    }
-    public function getCopyRequiresWriterPermission()
-    {
-        return $this->copyRequiresWriterPermission;
     }
     public function setCreatedTime($createdTime)
     {
@@ -162,14 +132,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     {
         return $this->description;
     }
-    public function setDriveId($driveId)
-    {
-        $this->driveId = $driveId;
-    }
-    public function getDriveId()
-    {
-        return $this->driveId;
-    }
     public function setExplicitlyTrashed($explicitlyTrashed)
     {
         $this->explicitlyTrashed = $explicitlyTrashed;
@@ -177,14 +139,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     public function getExplicitlyTrashed()
     {
         return $this->explicitlyTrashed;
-    }
-    public function setExportLinks($exportLinks)
-    {
-        $this->exportLinks = $exportLinks;
-    }
-    public function getExportLinks()
-    {
-        return $this->exportLinks;
     }
     public function setFileExtension($fileExtension)
     {
@@ -253,7 +207,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_DriveFileImageMediaMetadata
      */
-    public function setImageMediaMetadata(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileImageMediaMetadata $imageMediaMetadata)
+    public function setImageMediaMetadata(Google_Service_Drive_DriveFileImageMediaMetadata $imageMediaMetadata)
     {
         $this->imageMediaMetadata = $imageMediaMetadata;
     }
@@ -283,7 +237,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_User
      */
-    public function setLastModifyingUser(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $lastModifyingUser)
+    public function setLastModifyingUser(Google_Service_Drive_User $lastModifyingUser)
     {
         $this->lastModifyingUser = $lastModifyingUser;
     }
@@ -359,14 +313,14 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
         return $this->ownedByMe;
     }
     /**
-     * @param Google_Service_Drive_User[]
+     * @param Google_Service_Drive_User
      */
     public function setOwners($owners)
     {
         $this->owners = $owners;
     }
     /**
-     * @return Google_Service_Drive_User[]
+     * @return Google_Service_Drive_User
      */
     public function getOwners()
     {
@@ -380,23 +334,15 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     {
         return $this->parents;
     }
-    public function setPermissionIds($permissionIds)
-    {
-        $this->permissionIds = $permissionIds;
-    }
-    public function getPermissionIds()
-    {
-        return $this->permissionIds;
-    }
     /**
-     * @param Google_Service_Drive_Permission[]
+     * @param Google_Service_Drive_Permission
      */
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
     }
     /**
-     * @return Google_Service_Drive_Permission[]
+     * @return Google_Service_Drive_Permission
      */
     public function getPermissions()
     {
@@ -437,7 +383,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_User
      */
-    public function setSharingUser(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $sharingUser)
+    public function setSharingUser(Google_Service_Drive_User $sharingUser)
     {
         $this->sharingUser = $sharingUser;
     }
@@ -447,20 +393,6 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     public function getSharingUser()
     {
         return $this->sharingUser;
-    }
-    /**
-     * @param Google_Service_Drive_DriveFileShortcutDetails
-     */
-    public function setShortcutDetails(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileShortcutDetails $shortcutDetails)
-    {
-        $this->shortcutDetails = $shortcutDetails;
-    }
-    /**
-     * @return Google_Service_Drive_DriveFileShortcutDetails
-     */
-    public function getShortcutDetails()
-    {
-        return $this->shortcutDetails;
     }
     public function setSize($size)
     {
@@ -529,7 +461,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_User
      */
-    public function setTrashingUser(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $trashingUser)
+    public function setTrashingUser(Google_Service_Drive_User $trashingUser)
     {
         $this->trashingUser = $trashingUser;
     }
@@ -551,7 +483,7 @@ class Google_Service_Drive_DriveFile extends \SimpleCalendar\plugin_deps\Google_
     /**
      * @param Google_Service_Drive_DriveFileVideoMediaMetadata
      */
-    public function setVideoMediaMetadata(\SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileVideoMediaMetadata $videoMediaMetadata)
+    public function setVideoMediaMetadata(Google_Service_Drive_DriveFileVideoMediaMetadata $videoMediaMetadata)
     {
         $this->videoMediaMetadata = $videoMediaMetadata;
     }

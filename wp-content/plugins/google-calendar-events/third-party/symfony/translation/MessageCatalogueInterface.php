@@ -22,13 +22,13 @@ interface MessageCatalogueInterface
     /**
      * Gets the catalogue locale.
      *
-     * @return string The locale
+     * @return string
      */
     public function getLocale();
     /**
      * Gets the domains.
      *
-     * @return array An array of domains
+     * @return array
      */
     public function getDomains();
     /**
@@ -38,7 +38,7 @@ interface MessageCatalogueInterface
      *
      * @param string $domain The domain name
      *
-     * @return array An array of messages
+     * @return array
      */
     public function all(string $domain = null);
     /**
@@ -55,7 +55,7 @@ interface MessageCatalogueInterface
      * @param string $id     The message id
      * @param string $domain The domain name
      *
-     * @return bool true if the message has a translation, false otherwise
+     * @return bool
      */
     public function has(string $id, string $domain = 'messages');
     /**
@@ -64,7 +64,7 @@ interface MessageCatalogueInterface
      * @param string $id     The message id
      * @param string $domain The domain name
      *
-     * @return bool true if the message has a translation, false otherwise
+     * @return bool
      */
     public function defines(string $id, string $domain = 'messages');
     /**
@@ -73,7 +73,7 @@ interface MessageCatalogueInterface
      * @param string $id     The message id
      * @param string $domain The domain name
      *
-     * @return string The message translation
+     * @return string
      */
     public function get(string $id, string $domain = 'messages');
     /**
@@ -106,13 +106,13 @@ interface MessageCatalogueInterface
     /**
      * Gets the fallback catalogue.
      *
-     * @return self|null A MessageCatalogueInterface instance or null when no fallback has been set
+     * @return self|null
      */
     public function getFallbackCatalogue();
     /**
      * Returns an array of resources loaded to build this collection.
      *
-     * @return ResourceInterface[] An array of resources
+     * @return ResourceInterface[]
      */
     public function getResources();
     /**

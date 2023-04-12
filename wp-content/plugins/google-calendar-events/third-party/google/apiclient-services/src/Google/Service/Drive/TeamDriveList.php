@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_TeamDriveList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_TeamDriveList extends Google_Collection
 {
     protected $collection_key = 'teamDrives';
     public $kind;
@@ -41,14 +41,14 @@ class Google_Service_Drive_TeamDriveList extends \SimpleCalendar\plugin_deps\Goo
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_Drive_TeamDrive[]
+     * @param Google_Service_Drive_TeamDrive
      */
     public function setTeamDrives($teamDrives)
     {
         $this->teamDrives = $teamDrives;
     }
     /**
-     * @return Google_Service_Drive_TeamDrive[]
+     * @return Google_Service_Drive_TeamDrive
      */
     public function getTeamDrives()
     {

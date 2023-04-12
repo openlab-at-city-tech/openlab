@@ -25,7 +25,7 @@ namespace SimpleCalendar\plugin_deps;
  *   $settings = $calendarService->settings;
  *  </code>
  */
-class Google_Service_Calendar_Resource_Settings extends \SimpleCalendar\plugin_deps\Google_Service_Resource
+class Google_Service_Calendar_Resource_Settings extends Google_Service_Resource
 {
     /**
      * Returns a single user setting. (settings.get)
@@ -85,7 +85,7 @@ class Google_Service_Calendar_Resource_Settings extends \SimpleCalendar\plugin_d
      * synchronization. Optional. The default is to return all entries.
      * @return Google_Service_Calendar_Channel
      */
-    public function watch(\SimpleCalendar\plugin_deps\Google_Service_Calendar_Channel $postBody, $optParams = array())
+    public function watch(Google_Service_Calendar_Channel $postBody, $optParams = array())
     {
         $params = array('postBody' => $postBody);
         $params = \array_merge($params, $optParams);

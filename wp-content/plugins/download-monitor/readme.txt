@@ -1,18 +1,18 @@
 === Download Monitor ===
 Contributors: wpchill, silkalns, barrykooij, mikejolley
-Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker, sell, shop, ecommerce, paypal
+Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker
 Requires at least: 5.4
 Tested up to: 6.1
-Stable tag: 4.7.70
+Stable tag: 4.7.76
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
 
-Download Monitor is a plugin for selling, uploading and managing downloads, tracking downloads and displaying links.
+Download Monitor is a plugin for uploading and managing downloads, tracking downloads and displaying links.
 
 == Description ==
 
-Download Monitor provides an interface for uploading and managing downloadable files (including support for multiple versions), inserting download links into posts, logging downloads and selling downloads!
+Download Monitor provides an interface for uploading and managing downloadable files (including support for multiple versions), inserting download links into posts and logging downloads!
 
 = Features =
 
@@ -120,6 +120,50 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 4.7.76 - 20.02.2023 =
+Fixed: PHP memory size conversion ( [#1184](https://github.com/WPChill/download-monitor/issues/1184) )
+Fixed: Settings description escaping function ( [#1194](https://github.com/WPChill/download-monitor/issues/1194) )
+Added: Disabled shop functionality for users that didn't currently use it.  ( [#1199](https://github.com/WPChill/download-monitor/issues/1199) )
+Fixed: PHP warning when updating to 8.1 ( [#1205](https://github.com/WPChill/download-monitor/issues/1205) )
+Fixed: Members only checkbox in quick edit is always empty ( [#1211](https://github.com/WPChill/download-monitor/issues/1211) )
+Fixed: Dashboard top downloads widget disproportional hightlight  ( [#1167](https://github.com/WPChill/download-monitor/issues/1167) )
+Fixed: Bug in reports table rest data retreival  ( [#1214](https://github.com/WPChill/download-monitor/issues/1214) )
+Fixed: Duplicate no access XHR message  ( [#1217](https://github.com/WPChill/download-monitor/issues/1217) )
+Fixed: Optimized data queries ( [#1209](https://github.com/WPChill/download-monitor/issues/1209) )
+Changed: Custom HTTP/HTTPS headers now start with X- ( [#1202](https://github.com/WPChill/download-monitor/issues/1202) )
+
+= 4.7.75 - 16.02.2023 =
+Changed: Optimised to request chunked user_data for reports table ( [#1192](https://github.com/WPChill/download-monitor/issues/1192) )
+Changed: Optimised the number of queries for dlm db tabless check ( [#1206](https://github.com/WPChill/download-monitor/issues/1206) )
+Fixed: Downloads not working if the "/" in front of the file path is missing ( [#1207](https://github.com/WPChill/download-monitor/issues/1207) )
+Added: Filter to no check for file extensions if the source is remote ( [#1208](https://github.com/WPChill/download-monitor/issues/1208) )
+Fixed: Sanitize file name on download ( [#1187](https://github.com/WPChill/download-monitor/issues/1187) )
+
+= 4.7.74 - 01.02.2023 =
+Fixed: Encoded commas in file name ( [#1187](https://github.com/WPChill/download-monitor/issues/1187) )
+Fixed: iThemes security and reports REST api ( [#1185](https://github.com/WPChill/download-monitor/issues/1185) )
+Fixed: End js code execution after window.location.href ( [#1203](https://github.com/WPChill/download-monitor/issues/1203) )
+Changed: File size is now displayed as a value with 2 decimals ( [#1204](https://github.com/WPChill/download-monitor/issues/1204) )
+
+= 4.7.73 - 17.01.2023 =
+Fixed: XHR error on <a> tags without href attribute ( [#1188](https://github.com/WPChill/download-monitor/issues/1188) )
+Fixed: Click to copy shortcode from admin list view ( [#1072](https://github.com/WPChill/download-monitor/issues/1072) )
+
+= 4.7.72 - 09.01.2023 =
+Changed: Enqueue welcome banner assets only on the welcome page ( [#1153](https://github.com/WPChill/download-monitor/issues/1153) )
+Fixed: Issue preventing the display of texts according to the user language ( [#961](https://github.com/WPChill/download-monitor/issues/961) )
+Added: Empty downloads display ( [#882](https://github.com/WPChill/download-monitor/issues/882) )
+Added: Delete files when Version or Download is deleted ( [#1034](https://github.com/WPChill/download-monitor/issues/1034) )
+Changed: Global XHR for download links, not depending on class anylonger ( [#1157](https://github.com/WPChill/download-monitor/issues/1157) )
+Fixed: Error when PayPal payment if product price bigger than 1000 ( [#1155](https://github.com/WPChill/download-monitor/issues/1155) )
+Fixed: URLencode only for server hosted files ( [#1158](https://github.com/WPChill/download-monitor/issues/1158) )
+Fixed: Fatal error if product contains deleted download ( [#1160](https://github.com/WPChill/download-monitor/issues/1160) )
+Fixed: Dashboard top downloads widget bugged ( [#1170](https://github.com/WPChill/download-monitor/issues/1170) [#1167](https://github.com/WPChill/download-monitor/issues/1167) )
+Changed: Download progress animation ( [#1177](https://github.com/WPChill/download-monitor/issues/1177) )
+
+= 4.7.71 - 05.01.2022 =
+Fixed: Reports page not working ( [#1171](https://github.com/WPChill/download-monitor/issues/1171) )
+
 = 4.7.70 - 12.12.2022 =
 Fixed: Aditional CSS classes for gutenberg blocks ( [#1146](https://github.com/WPChill/download-monitor/issues/1146) )
 Changed: Removed test paymant gateway as PayPal gateway already has a test solution ( [#666](https://github.com/WPChill/download-monitor/issues/666) )

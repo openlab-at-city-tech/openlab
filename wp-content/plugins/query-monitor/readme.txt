@@ -1,12 +1,12 @@
 # Query Monitor
 Contributors: johnbillion
-Tags: debug, debug-bar, debugging, development, developer, performance, profiler, queries, query monitor, rest-api
+Tags: debug, debug-bar, development, performance, query monitor, rest-api
 Requires at least: 4.9
 Tested up to: 6.1
-Stable tag: 3.11.0
+Stable tag: 3.11.2
 License: GPLv2 or later
 Requires PHP: 7.2
-Donate link: https://johnblackbourn.com/donations/
+Donate link: https://github.com/sponsors/johnbillion
 
 Query Monitor is the developer tools panel for WordPress.
 
@@ -140,6 +140,19 @@ Yes. You can enable this on the Settings panel.
 In addition, if you like the plugin then I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about it too!
 
 ## Changelog ##
+
+### 3.11.2 ###
+
+* Implements various accessibility improvements
+* Fixes an issue where not all admin area footer scripts were shown in the Scripts panel
+* Improves output when the SQLite feature in the Performance Labs plugin is in use
+* Removes QM output altogether from the Customizer
+* Ensures `wp-content/db.php` from another plugin doesn't get removed when deactivating QM
+
+
+### 3.11.1 ###
+
+* Avoids a fatal error in PHP 8 when `posix_getpwuid()` or `posix_getgrgid()` doesn't return an expected value.
 
 ### 3.11.0 ###
 
@@ -387,33 +400,4 @@ In addition, if you like the plugin then I'd love for you to [leave a review](ht
   * Improve the accuracy of the `ver` parameter for enqueued scripts and styles.
   * Separate and simplify the output for the object cache and opcode cache statuses. Fixes #413.
   * Better formatting when no object cache stats are available.
-
-
-### 3.3.1 ###
-
-* Move the hook processing into its own class and out of the collector, so it can be re-used even if the Hooks collector isn't in use. Fixes #399.
-* Increase the sidebar layout to 100% height when there's no admin toolbar.
-* Update the QM element ID in the "worst case scenario" JS. Fixes #398.
-* Improve the layout of the Settings panel.
-* Force the `Core` and `Non-Core` filter items to the bottom of the list, so plugins and themes takes precedence.
-* Add an entry for the Settings screen to the narrow view nav menu.
-* Add the admin notice hooks to the list of concerned actions for the Admin Screen panel.
-
-### 3.3.0 ###
-
-New features! Read about them here: https://querymonitor.com/blog/2019/02/new-features-in-query-monitor-3-3/
-
-* Introduce sub-menus for displaying Hooks in Use for each panel.
-* Output the call stack and responsible component when `wp_die()` is called.
-* Support for JavaScript (Jed) translations in WordPress 5.0+.
-* Add render timing for blocks using the new hooks introduced in WordPress 5.1.
-* Introduce a toggle to display QM on the side of the window.
-* Allow non-string values to be used in the logger message. They'll be presented as JSON formatted strings.
-* Allow boolean values to be used in log message contexts.
-* Add some margin to the Close button so it doesn't get covered up so much by scroll bars.
-* Prefix QM's cookie name with `wp-` to ensure interoperability with caches and proxies.
-* Separate the Scripts and Styles collector and outputter so they're actually two separate panels.
-* Add support for opcode cache detection separate from the object cache detection.
-* Rename the main QM container to get around the fact that its name clashes with the plugin rows in older versions of WordPress.
-* Avoid using `wp_parse_url()` as it was only introduced in WP 4.4.
 

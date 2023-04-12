@@ -33,7 +33,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Andrius Putna <fordnox@gmail.com>
  */
-class FluentdFormatter implements \SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface
+class FluentdFormatter implements FormatterInterface
 {
     /**
      * @var bool $levelTag should message level be a part of the fluentd tag

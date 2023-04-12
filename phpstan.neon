@@ -1,0 +1,49 @@
+parameters:
+  level: 1
+  paths:
+    - wp-content/mu-plugins
+    - wp-content/plugins/wds-citytech
+    - wp-content/themes/openlab
+  excludePaths:
+    - wp-content/mu-plugins/bbg-mail-debug.php
+    - wp-content/plugins/wds-citytech/node_modules
+  scanDirectories:
+    - wp-content/plugins/ambrosite-nextprevious-post-link-plus
+    - wp-content/plugins/bbpress
+    - wp-content/plugins/bp-customizable-group-categories
+    - wp-content/plugins/bp-event-organiser
+    - wp-content/plugins/buddypress-docs
+    - wp-content/plugins/buddypress-group-documents
+    - wp-content/plugins/buddypress-group-email-subscription
+    - wp-content/plugins/buddypress
+    - wp-content/plugins/cac-non-cuny-signup
+    - wp-content/plugins/contact-form-7
+    - wp-content/plugins/easy-table-of-contents
+    - wp-content/plugins/enable-jquery-migrate-helper
+    - wp-content/plugins/event-organiser
+    - wp-content/plugins/gravityperks
+    - wp-content/plugins/invite-anyone
+    - wp-content/plugins/openlab-badges
+    - wp-content/plugins/openlab-favorites
+    - wp-content/plugins/papercite
+    - wp-content/themes/genesis
+  ignoreErrors:
+    - # Template files have some variables included in parent scope.
+      message: '#Variable \$[a-zA-Z0-9\\_]+ might not be defined.$#'
+      paths:
+        - ./wp-content/themes/openlab/parts
+        - ./wp-content/themes/openlab/cac-featured-content
+        - ./wp-content/mu-plugins/parts
+
+    - # PHPStan doesn't know how to handle constants in most cases.
+      message: '#Constant [\$[a-zA-Z0-9\\_]+ not found#'
+
+    - # The $args variable is passed from get_template_part().
+      message: '#Variable \$args might not be defined.$#'
+      paths:
+        - ./wp-content/themes/openlab/buddypress/groups/single/announcements
+        - ./wp-content/themes/openlab/buddypress/assets/emails/parts
+
+    - # The $data variable is passed by the openlab-portfolio plugin.
+      message: '#Variable \$data might not be defined.$#'
+      path: ./wp-content/plugins/wds-citytech/views/portfolio

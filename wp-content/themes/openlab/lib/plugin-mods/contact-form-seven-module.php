@@ -119,9 +119,9 @@ function openlab_wpcf7_checkbox_accessible_form_tag_handler($tag) {
         }
 
         $radio_id = sanitize_title_with_dashes(sanitize_title($label));
-        
+
         $basetype = 'checkbox';
-        
+
         if($tag->basetype === 'radio_accessible'){
             $basetype = 'radio';
         }
@@ -280,6 +280,7 @@ function openlab_wpcf7_tag_generator_checkbox_accessible($contact_form, $args = 
         $type = 'checkbox_accessible';
     }
 
+	$description = '';
     if ('checkbox_accessible' == $type) {
         $description = __("Generate a form-tag for a group of checkboxes. For more details, see %s.", 'contact-form-7');
     } elseif ('radio_accessible' == $type) {

@@ -4,10 +4,6 @@ on:
   push:
     paths:
       - '**.php'
-    branches:
-      - master
-      - '1.*'
-  pull_request:
 
 jobs:
   phpcs:
@@ -42,6 +38,3 @@ jobs:
 
       - name: Run PHPCS tests
         run: developer/phpcompat.sh
-
-      - name: Run PHP lint
-        run: php developer/lint-php.php

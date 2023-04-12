@@ -270,7 +270,7 @@ class DLM_Download_Version {
 	 * Get a formatted filesize
 	 */
 	public function get_filesize_formatted() {
-		return size_format( $this->get_filesize() );
+		return size_format( $this->get_filesize(), 2 );
 	}
 
 	/**
@@ -412,5 +412,40 @@ class DLM_Download_Version {
 	 */
 	public function get_crc32() {
 		return $this->get_crc32b();
+	}
+
+	/**
+	 * Delete files contained in version.
+	 *
+	 * @return void
+	 * @since 4.7.72
+	 */
+	public function delete_files() {
+
+		if ( ! empty( $this->mirrors ) ) {
+			foreach ( $this->mirrors as $mirror ) {
+				list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( $mirror, true );
+				if ( $remote_file || $restriction || ! $file_path ) {
+					continue;
+				}
+				// Now, let's check if this is an attachment.
+				global $wpdb;
+				$attachments = $wpdb->get_results( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE %s;", '%' . $wpdb->esc_like( $file_path ) ) );
+				// If it's an attachment, delete it.
+				if ( ! empty( $attachments ) ) {
+					foreach ( $attachments as $attachment ) {
+						wp_delete_attachment( $attachment->ID, true );
+					}
+				} else {
+					// We need absolute path to the file in order to delete it.
+					list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( $mirror );
+
+					// If it's not an attachment, search for the file and delete it.
+					if ( file_exists( $file_path ) ) {
+						wp_delete_file( $file_path );
+					}
+				}
+			}
+		}
 	}
 }

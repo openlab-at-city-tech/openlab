@@ -72,6 +72,10 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'miro', '#https?://(?:[a-z]{2}\.)?miro\.com/#i', 'openlab_embed_handler_miro' );
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
+	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
+
+	// Register oEmbed provider for Yuja
+	wp_oembed_add_provider( 'https://citytech.yuja.com/V/*', 'https://citytech.yuja.com/services/oembed', false );
 }
 add_action( 'init', 'openlab_register_embed_handlers' );
 
@@ -230,4 +234,13 @@ function openlab_embed_handler_geogebra( $matches, $attr, $url ) {
 	);
 
 	return $embed;
+}
+
+/**
+ * Yuja.com embed callback
+ */
+function openlab_embed_handler_yuja( $matches, $attr, $url ) {
+	$url = str_replace( 'Watch?', 'Video?', $url);
+
+	return wp_oembed_get($url);
 }

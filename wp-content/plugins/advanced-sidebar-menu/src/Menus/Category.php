@@ -69,19 +69,19 @@ class Category extends Menu_Abstract {
 		}
 
 		switch ( $level ) {
-			case self::LEVEL_PARENT:
+			case static::LEVEL_PARENT:
 				$args['hide_empty'] = 0;
 				$args['include'] = trim( (string) $this->get_top_parent_id() );
 				break;
-			case self::LEVEL_DISPLAY_ALL:
+			case static::LEVEL_DISPLAY_ALL:
 				$args['child_of'] = $this->get_top_parent_id();
 				$args['depth'] = $this->get_levels_to_display();
 				break;
-			case self::LEVEL_CHILD:
+			case static::LEVEL_CHILD:
 				$args['include'] = $term->term_id;
 				$args['depth'] = 1;
 				break;
-			case self::LEVEL_GRANDCHILD:
+			case static::LEVEL_GRANDCHILD:
 				$args['child_of'] = $term->term_id;
 				$args['depth'] = $this->get_levels_to_display();
 				break;
@@ -165,7 +165,7 @@ class Category extends Menu_Abstract {
 	public function get_levels_to_display() {
 		$depth = 3;
 		if ( $this->display_all() ) {
-			$depth = $this->instance[ self::LEVELS ];
+			$depth = $this->instance[ static::LEVELS ];
 		}
 
 		return apply_filters( 'advanced-sidebar-menu/menus/category/levels', $depth, $this->args, $this->instance, $this );
@@ -278,7 +278,7 @@ class Category extends Menu_Abstract {
 	public function is_displayed() {
 		$display = false;
 		if ( is_singular() ) {
-			if ( $this->checked( self::DISPLAY_ON_SINGLE ) ) {
+			if ( $this->checked( static::DISPLAY_ON_SINGLE ) ) {
 				$display = true;
 			}
 		} elseif ( $this->is_tax() ) {
@@ -303,7 +303,7 @@ class Category extends Menu_Abstract {
 	 */
 	public function is_term_displayed( $term ) {
 		if ( ! $this->has_children( $term ) ) {
-			if ( ! $this->checked( self::INCLUDE_PARENT ) || ! $this->checked( self::INCLUDE_CHILDLESS_PARENT ) ) {
+			if ( ! $this->checked( static::INCLUDE_PARENT ) || ! $this->checked( static::INCLUDE_CHILDLESS_PARENT ) ) {
 				return false;
 			}
 			if ( $this->is_excluded( $this->get_top_parent_id() ) ) {
@@ -547,7 +547,7 @@ class Category extends Menu_Abstract {
 				continue;
 			}
 
-			if ( ! $menu_open || ( static::EACH_WIDGET === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) ) {
+			if ( ! $menu_open || ( static::EACH_WIDGET === $this->instance[ static::EACH_CATEGORY_DISPLAY ] ) ) {
 				echo $this->args['before_widget']; //phpcs:ignore
 
 				do_action( 'advanced-sidebar-menu/menus/category/render', $this );
@@ -558,7 +558,7 @@ class Category extends Menu_Abstract {
 
 					$menu_open = true;
 					$close_menu = true;
-					if ( static::EACH_LIST === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
+					if ( static::EACH_LIST === $this->instance[ static::EACH_CATEGORY_DISPLAY ] ) {
 						$close_menu = false;
 					}
 				}

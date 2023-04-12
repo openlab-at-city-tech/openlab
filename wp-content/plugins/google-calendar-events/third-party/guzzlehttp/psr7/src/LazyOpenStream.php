@@ -32,6 +32,6 @@ class LazyOpenStream implements StreamInterface
      */
     protected function createStream()
     {
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::streamFor(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::tryFopen($this->filename, $this->mode));
+        return Utils::streamFor(Utils::tryFopen($this->filename, $this->mode));
     }
 }

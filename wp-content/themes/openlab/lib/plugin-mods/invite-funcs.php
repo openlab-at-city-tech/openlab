@@ -18,7 +18,6 @@ add_action('wp_print_styles', 'openlab_dequeue_invite_anyone_styles', 999);
 /**
  * Invite new members custom
  * @global type $bp
- * @return type
  */
 function openlab_invite_anyone_screen_one_content() {
 
@@ -117,7 +116,9 @@ function openlab_invite_anyone_screen_one_content() {
                     if (!isset($sent_invites)) {
                         $sent_invites = invite_anyone_get_invitations_by_inviter_id(bp_loggedin_user_id());
                         $sent_invites_count = $sent_invites->post_count;
-                    }
+                    } else {
+						$sent_invites_count = 0;
+					}
 
                     $limit_invite_count = (int) $iaoptions['limit_invites_per_user'] - (int) $sent_invites_count;
 
@@ -229,10 +230,11 @@ function openlab_invite_anyone_screen_one_content() {
 }
 
 /**
- * Custom invite anyone email textarea
- * @param type $returned_emails
+ * Custom invite anyone email textarea.
+ *
+ * @param string|array $returned_emails
  */
-function openlab_invite_anyone_email_fields($returned_emails = false) {
+function openlab_invite_anyone_email_fields( $returned_emails = '' ) {
     if (is_array($returned_emails))
         $returned_emails = implode("\n", $returned_emails);
     ?>
@@ -449,12 +451,10 @@ add_action(
 			}
 
 			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu' ];
-			if ( is_array( $email_domains ) && ! empty( $email_domains ) ) {
-				$emaildomain = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
-				if ( ! in_array( $emaildomain, $email_domains, true ) ) {
-					$status['illegal_address'][] = $email;
-					continue;
-				}
+			$emaildomain   = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
+			if ( ! in_array( $emaildomain, $email_domains, true ) ) {
+				$status['illegal_address'][] = $email;
+				continue;
 			}
 
 			if ( is_email_address_unsafe( $email ) ) {
@@ -550,12 +550,14 @@ add_action(
 			return;
 		}
 
-		if ( $emails ) {
-			buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
-		}
+		if ( isset( buddypress()->invite_anyone ) ) {
+			if ( $emails ) {
+				buddypress()->invite_anyone->returned_data['error_emails'] = $emails;
+			}
 
-		if ( $group_id ) {
-			buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+			if ( $group_id ) {
+				buddypress()->invite_anyone->returned_data['groups'] = [ $group_id ];
+			}
 		}
 	},
 	8 // after IA

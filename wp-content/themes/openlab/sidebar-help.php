@@ -46,7 +46,10 @@ wp_nav_menu($args);
 
 	if ( $my_posts ) {
 		$post_id = $my_posts[0]->ID;
+	} else {
+		$post_id = 0;
 	}
+
 	$args = array(
 		'post_type' => 'attachment',
 		'numberposts' => -1,

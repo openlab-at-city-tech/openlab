@@ -317,54 +317,64 @@ function openlab_add_clone_button_to_profile() {
 }
 add_action( 'bp_group_header_actions', 'openlab_add_clone_button_to_profile', 50 );
 
+add_action(
+	'openlab_before_groups_loop',
+	function() {
+		add_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_descendant_of_support_to_group_query' );
+		add_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_ancestor_of_support_to_group_query' );
+	}
+);
+
+add_action(
+	'openlab_after_groups_loop',
+	function() {
+		remove_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_descendant_of_support_to_group_query' );
+		remove_action( 'bp_before_groups_get_groups_parse_args', 'openlab_add_ancestor_of_support_to_group_query' );
+	}
+);
+
 /**
  * 'descendant-of' parameter support for group directories.
  */
-add_filter(
-	'bp_before_groups_get_groups_parse_args',
-	function( $args ) {
-		$group_id = openlab_get_current_filter( 'descendant-of' );
-		if ( ! $group_id ) {
-			return $args;
-		}
-
-		$group = groups_get_group( $group_id );
-
-		$exclude_hidden = ! current_user_can( 'bp_moderate' );
-		$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
-		if ( ! $descendant_ids ) {
-			$descendant_ids = [ 0 ];
-		}
-
-		$args['include'] = $descendant_ids;
-
+function openlab_add_descendant_of_support_to_group_query( $args ) {
+	$group_id = openlab_get_current_filter( 'descendant-of' );
+	if ( ! $group_id ) {
 		return $args;
 	}
-);
+
+	$group = groups_get_group( $group_id );
+
+	$exclude_hidden = ! current_user_can( 'bp_moderate' );
+	$descendant_ids = openlab_get_clone_descendants_of_group( $group_id, [], $exclude_hidden );
+	if ( ! $descendant_ids ) {
+		$descendant_ids = [ 0 ];
+	}
+
+	$args['include'] = $descendant_ids;
+
+	return $args;
+}
 
 /**
  * 'ancestor-of' parameter support for group directories.
  */
-add_filter(
-	'bp_before_groups_get_groups_parse_args',
-	function( $args ) {
-		$group_id = openlab_get_current_filter( 'ancestor-of' );
-		if ( ! $group_id ) {
-			return $args;
-		}
-
-		$group = groups_get_group( $group_id );
-
-		$clone_history = openlab_get_group_clone_history_data( $group_id );
-		if ( ! $clone_history ) {
-			$ancestor_ids = [ 0 ];
-		}
-
-		$args['include'] = wp_list_pluck( $clone_history, 'group_id' );
-
+function openlab_add_ancestor_of_support_to_group_query( $args ) {
+	$group_id = openlab_get_current_filter( 'ancestor-of' );
+	if ( ! $group_id ) {
 		return $args;
 	}
-);
+
+	$group = groups_get_group( $group_id );
+
+	$clone_history = openlab_get_group_clone_history_data( $group_id );
+	if ( ! $clone_history ) {
+		$ancestor_ids = [ 0 ];
+	}
+
+	$args['include'] = wp_list_pluck( $clone_history, 'group_id' );
+
+	return $args;
+}
 
 /** CLASSES ******************************************************************/
 
@@ -729,10 +739,10 @@ class Openlab_Clone_Course_Site {
 
 		remove_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
 
-		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10, 3);
-		remove_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);
+		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10 );
+		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10 );
 
-		remove_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+		remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
 
 		switch_to_blog( $this->site_id );
 		$eo_is_active = is_plugin_active( 'event-organiser/event-organiser.php' );
@@ -749,7 +759,7 @@ class Openlab_Clone_Course_Site {
 		remove_action( 'delete_post', '_update_posts_count_on_delete' );
 		remove_action( 'delete_post', '_wp_delete_post_menu_item' );
 		remove_action( 'delete_attachment', '_delete_attachment_theme_mod' );
-		remove_action( 'publish_post', '_publish_post_hook', 5, 1 );
+		remove_action( 'publish_post', '_publish_post_hook', 5 );
 
 		$this->create_site();
 
@@ -798,7 +808,7 @@ class Openlab_Clone_Course_Site {
 		);
 
 		// We take care of this ourselves later on
-		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10, 6 );
+		remove_action( 'wpmu_new_blog', 'st_wpmu_new_blog', 10 );
 
 		$site_id = wpmu_create_blog(
 			$domain,

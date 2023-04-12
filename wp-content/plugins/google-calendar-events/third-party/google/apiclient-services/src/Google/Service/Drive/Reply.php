@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_Reply extends \SimpleCalendar\plugin_deps\Google_Model
+class Google_Service_Drive_Reply extends Google_Model
 {
     public $action;
     protected $authorType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_User';
@@ -40,7 +40,7 @@ class Google_Service_Drive_Reply extends \SimpleCalendar\plugin_deps\Google_Mode
     /**
      * @param Google_Service_Drive_User
      */
-    public function setAuthor(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $author)
+    public function setAuthor(Google_Service_Drive_User $author)
     {
         $this->author = $author;
     }

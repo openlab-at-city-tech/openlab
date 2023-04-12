@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_Comment extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_Comment extends Google_Collection
 {
     protected $collection_key = 'replies';
     public $anchor;
@@ -46,7 +46,7 @@ class Google_Service_Drive_Comment extends \SimpleCalendar\plugin_deps\Google_Co
     /**
      * @param Google_Service_Drive_User
      */
-    public function setAuthor(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $author)
+    public function setAuthor(Google_Service_Drive_User $author)
     {
         $this->author = $author;
     }
@@ -116,7 +116,7 @@ class Google_Service_Drive_Comment extends \SimpleCalendar\plugin_deps\Google_Co
     /**
      * @param Google_Service_Drive_CommentQuotedFileContent
      */
-    public function setQuotedFileContent(\SimpleCalendar\plugin_deps\Google_Service_Drive_CommentQuotedFileContent $quotedFileContent)
+    public function setQuotedFileContent(Google_Service_Drive_CommentQuotedFileContent $quotedFileContent)
     {
         $this->quotedFileContent = $quotedFileContent;
     }
@@ -128,14 +128,14 @@ class Google_Service_Drive_Comment extends \SimpleCalendar\plugin_deps\Google_Co
         return $this->quotedFileContent;
     }
     /**
-     * @param Google_Service_Drive_Reply[]
+     * @param Google_Service_Drive_Reply
      */
     public function setReplies($replies)
     {
         $this->replies = $replies;
     }
     /**
-     * @return Google_Service_Drive_Reply[]
+     * @return Google_Service_Drive_Reply
      */
     public function getReplies()
     {

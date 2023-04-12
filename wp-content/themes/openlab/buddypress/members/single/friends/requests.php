@@ -10,7 +10,7 @@
                 <div class="group-item-wrapper">
                     <div class="row info-row">
                         <div class="item-avatar col-sm-9 col-xs-7">
-                            <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo $group->name; ?>"/></a>
+                            <a href="<?php bp_member_permalink() ?>"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_member_user_id(), 'object' => 'member', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo esc_attr( sprintf( 'Profile photo of %s', bp_get_member_name() ) ); ?>"/></a>
                         </div>
 
                         <div class="item col-sm-15 col-xs-17">

@@ -56,7 +56,7 @@ class QM_Activation extends QM_Plugin {
 		}
 
 		# Only delete db.php if it belongs to Query Monitor
-		if ( file_exists( WP_CONTENT_DIR . '/db.php' ) && class_exists( 'QM_DB' ) ) {
+		if ( file_exists( WP_CONTENT_DIR . '/db.php' ) && class_exists( 'QM_DB', false ) ) {
 			unlink( WP_CONTENT_DIR . '/db.php' ); // phpcs:ignore
 		}
 
@@ -119,7 +119,7 @@ class QM_Activation extends QM_Plugin {
 	 * @param string $file
 	 * @return self
 	 */
-	public static function init( $file = null ) {
+	public static function init( $file ) {
 
 		static $instance = null;
 

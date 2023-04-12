@@ -120,14 +120,14 @@ class Color
                 $var_2 = $L + $S - $S * $L;
             }
             $var_1 = 2 * $L - $var_2;
-            $r = \round(255 * self::hueToRgb($var_1, $var_2, $H + 1 / 3));
-            $g = \round(255 * self::hueToRgb($var_1, $var_2, $H));
-            $b = \round(255 * self::hueToRgb($var_1, $var_2, $H - 1 / 3));
+            $r = 255 * self::hueToRgb($var_1, $var_2, $H + 1 / 3);
+            $g = 255 * self::hueToRgb($var_1, $var_2, $H);
+            $b = 255 * self::hueToRgb($var_1, $var_2, $H - 1 / 3);
         }
         // Convert to hex
-        $r = \dechex($r);
-        $g = \dechex($g);
-        $b = \dechex($b);
+        $r = \dechex(\round($r));
+        $g = \dechex(\round($g));
+        $b = \dechex(\round($b));
         // Make sure we get 2 digits for decimals
         $r = \strlen("" . $r) === 1 ? "0" . $r : $r;
         $g = \strlen("" . $g) === 1 ? "0" . $g : $g;
@@ -167,9 +167,9 @@ class Color
         }
         // https://github.com/mexitek/phpColors/issues/25#issuecomment-88354815
         // Convert RGB to HEX
-        $hex[0] = \str_pad(\dechex($rgb['R']), 2, '0', \STR_PAD_LEFT);
-        $hex[1] = \str_pad(\dechex($rgb['G']), 2, '0', \STR_PAD_LEFT);
-        $hex[2] = \str_pad(\dechex($rgb['B']), 2, '0', \STR_PAD_LEFT);
+        $hex[0] = \str_pad(\dechex((int) $rgb['R']), 2, '0', \STR_PAD_LEFT);
+        $hex[1] = \str_pad(\dechex((int) $rgb['G']), 2, '0', \STR_PAD_LEFT);
+        $hex[2] = \str_pad(\dechex((int) $rgb['B']), 2, '0', \STR_PAD_LEFT);
         // Make sure that 2 digits are allocated to each color.
         $hex[0] = \strlen($hex[0]) === 1 ? '0' . $hex[0] : $hex[0];
         $hex[1] = \strlen($hex[1]) === 1 ? '0' . $hex[1] : $hex[1];

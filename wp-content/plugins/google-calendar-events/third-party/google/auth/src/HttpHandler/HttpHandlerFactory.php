@@ -17,8 +17,11 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Auth\HttpHandler;
 
+use SimpleCalendar\plugin_deps\GuzzleHttp\BodySummarizer;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
+use SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack;
+use SimpleCalendar\plugin_deps\GuzzleHttp\Middleware;
 class HttpHandlerFactory
 {
     /**
@@ -30,7 +33,17 @@ class HttpHandlerFactory
      */
     public static function build(ClientInterface $client = null)
     {
-        $client = $client ?: new Client();
+        if (\is_null($client)) {
+            $stack = null;
+            if (\class_exists(BodySummarizer::class)) {
+                // double the # of characters before truncation by default
+                $bodySummarizer = new BodySummarizer(240);
+                $stack = HandlerStack::create();
+                $stack->remove('http_errors');
+                $stack->unshift(Middleware::httpErrors($bodySummarizer), 'http_errors');
+            }
+            $client = new Client(['handler' => $stack]);
+        }
         $version = null;
         if (\defined('SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
             $version = ClientInterface::MAJOR_VERSION;
@@ -39,11 +52,11 @@ class HttpHandlerFactory
         }
         switch ($version) {
             case 5:
-                return new \SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\Guzzle5HttpHandler($client);
+                return new Guzzle5HttpHandler($client);
             case 6:
-                return new \SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\Guzzle6HttpHandler($client);
+                return new Guzzle6HttpHandler($client);
             case 7:
-                return new \SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\Guzzle7HttpHandler($client);
+                return new Guzzle7HttpHandler($client);
             default:
                 throw new \Exception('Version not supported');
         }

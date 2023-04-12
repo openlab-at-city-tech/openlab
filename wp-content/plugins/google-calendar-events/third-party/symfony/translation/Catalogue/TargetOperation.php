@@ -21,7 +21,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
  *
  * @author Michael Lee <michael.lee@zerustech.com>
  */
-class TargetOperation extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Catalogue\AbstractOperation
+class TargetOperation extends AbstractOperation
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class TargetOperation extends \SimpleCalendar\plugin_deps\Symfony\Component\Tran
         foreach ($this->source->all($domain) as $id => $message) {
             if ($this->target->has($id, $domain)) {
                 $this->messages[$domain]['all'][$id] = $message;
-                $d = $this->target->defines($id, $intlDomain) ? $intlDomain : $domain;
+                $d = $this->source->defines($id, $intlDomain) ? $intlDomain : $domain;
                 $this->result->add([$id => $message], $d);
                 if (null !== ($keyMetadata = $this->source->getMetadata($id, $d))) {
                     $this->result->setMetadata($id, $keyMetadata, $d);

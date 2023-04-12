@@ -108,7 +108,7 @@ function save( $user_id ) {
 	$new_is_suspended = ! empty( $_POST['is-suspended'] );
 	$old_is_suspended = is_suspended( $user_id );
 
-	if ( $new_is_suspended === $old_new_is_suspended ) {
+	if ( $new_is_suspended === $old_is_suspended ) {
 		return;
 	}
 

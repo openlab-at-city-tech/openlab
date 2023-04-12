@@ -15,6 +15,11 @@ class ElementsKit_Pro_Extend_Onepage_Scroll {
 		 * Pro Section Controls
 		 */
 		add_action( 'elementor/element/section/ekit_onepagescroll_section/before_section_end', array( $this, 'pro_section_controls' ) );
+
+		/**
+		 * Flexbox Container Support
+		 */
+		add_action( 'elementor/element/container/ekit_onepagescroll_section/before_section_end', array( $this, 'pro_section_controls' ) );
 	}
 
 

@@ -478,6 +478,8 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 		?>
 		<p>Displays any acknowledgements that appear on your <?php echo $group_type; ?> Profile.</p>
 		<?php
+
+		return '';
 	}
 
 	/**
@@ -581,6 +583,7 @@ class OpenLab_Shareable_Content_Widget extends WP_Widget {
 		?>
 		<p>Provides a link for others to clone your <?php echo $group_type; ?>.</p>
 		<?php
+		return '';
 	}
 
 	/**

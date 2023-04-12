@@ -21,13 +21,13 @@ final class Utils
      *
      * @return TaskQueueInterface
      */
-    public static function queue(\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\TaskQueueInterface $assign = null)
+    public static function queue(TaskQueueInterface $assign = null)
     {
         static $queue;
         if ($assign) {
             $queue = $assign;
         } elseif (!$queue) {
-            $queue = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\TaskQueue();
+            $queue = new TaskQueue();
         }
         return $queue;
     }
@@ -42,10 +42,12 @@ final class Utils
     public static function task(callable $task)
     {
         $queue = self::queue();
-        $promise = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $promise = new Promise([$queue, 'run']);
         $queue->add(function () use($task, $promise) {
             try {
-                $promise->resolve($task());
+                if (Is::pending($promise)) {
+                    $promise->resolve($task());
+                }
             } catch (\Throwable $e) {
                 $promise->reject($e);
             } catch (\Exception $e) {
@@ -68,16 +70,16 @@ final class Utils
      *
      * @return array
      */
-    public static function inspect(\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface $promise)
+    public static function inspect(PromiseInterface $promise)
     {
         try {
-            return ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::FULFILLED, 'value' => $promise->wait()];
-        } catch (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\RejectionException $e) {
-            return ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::REJECTED, 'reason' => $e->getReason()];
+            return ['state' => PromiseInterface::FULFILLED, 'value' => $promise->wait()];
+        } catch (RejectionException $e) {
+            return ['state' => PromiseInterface::REJECTED, 'reason' => $e->getReason()];
         } catch (\Throwable $e) {
-            return ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::REJECTED, 'reason' => $e];
+            return ['state' => PromiseInterface::REJECTED, 'reason' => $e];
         } catch (\Exception $e) {
-            return ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::REJECTED, 'reason' => $e];
+            return ['state' => PromiseInterface::REJECTED, 'reason' => $e];
         }
     }
     /**
@@ -138,9 +140,9 @@ final class Utils
     public static function all($promises, $recursive = \false)
     {
         $results = [];
-        $promise = \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Each::of($promises, function ($value, $idx) use(&$results) {
+        $promise = Each::of($promises, function ($value, $idx) use(&$results) {
             $results[$idx] = $value;
-        }, function ($reason, $idx, \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise $aggregate) {
+        }, function ($reason, $idx, Promise $aggregate) {
             $aggregate->reject($reason);
         })->then(function () use(&$results) {
             \ksort($results);
@@ -149,7 +151,7 @@ final class Utils
         if (\true === $recursive) {
             $promise = $promise->then(function ($results) use($recursive, &$promises) {
                 foreach ($promises as $promise) {
-                    if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::pending($promise)) {
+                    if (Is::pending($promise)) {
                         return self::all($promises, $recursive);
                     }
                 }
@@ -178,8 +180,8 @@ final class Utils
     {
         $results = [];
         $rejections = [];
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Each::of($promises, function ($value, $idx, \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface $p) use(&$results, $count) {
-            if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::settled($p)) {
+        return Each::of($promises, function ($value, $idx, PromiseInterface $p) use(&$results, $count) {
+            if (Is::settled($p)) {
                 return;
             }
             $results[$idx] = $value;
@@ -190,7 +192,7 @@ final class Utils
             $rejections[] = $reason;
         })->then(function () use(&$results, &$rejections, $count) {
             if (\count($results) !== $count) {
-                throw new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\AggregateException('Not enough promises to fulfill count', $rejections);
+                throw new AggregateException('Not enough promises to fulfill count', $rejections);
             }
             \ksort($results);
             return \array_values($results);
@@ -225,10 +227,10 @@ final class Utils
     public static function settle($promises)
     {
         $results = [];
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Each::of($promises, function ($value, $idx) use(&$results) {
-            $results[$idx] = ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::FULFILLED, 'value' => $value];
+        return Each::of($promises, function ($value, $idx) use(&$results) {
+            $results[$idx] = ['state' => PromiseInterface::FULFILLED, 'value' => $value];
         }, function ($reason, $idx) use(&$results) {
-            $results[$idx] = ['state' => \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface::REJECTED, 'reason' => $reason];
+            $results[$idx] = ['state' => PromiseInterface::REJECTED, 'reason' => $reason];
         })->then(function () use(&$results) {
             \ksort($results);
             return $results;

@@ -90,7 +90,7 @@ function su_shortcode_csv_table( $atts = null, $content = null ) {
 		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
 	}
 
-	$response = wp_remote_get( $atts['url'] );
+	$response = wp_safe_remote_get( $atts['url'] );
 
 	if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
@@ -117,6 +117,6 @@ function su_shortcode_csv_table( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-table su-csv-table' . su_get_css_class( $atts ) . '">' . $html . '</div>';
+	return '<div class="su-table su-csv-table' . su_get_css_class( $atts ) . '">' . wp_kses_post( $html ) . '</div>';
 
 }

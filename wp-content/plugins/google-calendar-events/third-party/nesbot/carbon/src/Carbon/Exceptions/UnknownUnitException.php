@@ -10,18 +10,34 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-use Exception;
-class UnknownUnitException extends \SimpleCalendar\plugin_deps\Carbon\Exceptions\UnitException
+use Throwable;
+class UnknownUnitException extends UnitException
 {
+    /**
+     * The unit.
+     *
+     * @var string
+     */
+    protected $unit;
     /**
      * Constructor.
      *
      * @param string         $unit
      * @param int            $code
-     * @param Exception|null $previous
+     * @param Throwable|null $previous
      */
-    public function __construct($unit, $code = 0, Exception $previous = null)
+    public function __construct($unit, $code = 0, Throwable $previous = null)
     {
+        $this->unit = $unit;
         parent::__construct("Unknown unit '{$unit}'.", $code, $previous);
+    }
+    /**
+     * Get the unit.
+     *
+     * @return string
+     */
+    public function getUnit() : string
+    {
+        return $this->unit;
     }
 }

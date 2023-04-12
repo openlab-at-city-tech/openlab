@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_ReplyList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_ReplyList extends Google_Collection
 {
     protected $collection_key = 'replies';
     public $kind;
@@ -41,14 +41,14 @@ class Google_Service_Drive_ReplyList extends \SimpleCalendar\plugin_deps\Google_
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_Drive_Reply[]
+     * @param Google_Service_Drive_Reply
      */
     public function setReplies($replies)
     {
         $this->replies = $replies;
     }
     /**
-     * @return Google_Service_Drive_Reply[]
+     * @return Google_Service_Drive_Reply
      */
     public function getReplies()
     {

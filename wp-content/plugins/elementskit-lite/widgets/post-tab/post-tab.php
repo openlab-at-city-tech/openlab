@@ -553,7 +553,7 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
                                 <?php if(has_post_thumbnail()): ?>
                                     <div <?php echo $this->get_render_attribute_string('ekit-single-item'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
                                         <div class="tab__post__single--inner">
-                                            <a href="<?php echo esc_url(get_the_permalink()); ?>" class="tab__post--header">
+                                            <a href="<?php echo esc_url(get_the_permalink()); ?>" class="tab__post--header" aria-label="url">
                                                 <?php the_post_thumbnail(); ?>
                                             </a>
                                             <h3 class="tab__post--title"><a href="<?php echo esc_url(get_the_permalink()); ?>"><?php the_title(); ?></a></h3>

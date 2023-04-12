@@ -52,7 +52,7 @@ class Page extends Widget_Abstract {
 			'width' => wp_is_mobile() ? false : 620,
 		];
 
-		parent::__construct( self::NAME, __( 'Advanced Sidebar - Pages', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
+		parent::__construct( static::NAME, __( 'Advanced Sidebar - Pages', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
 
 		$this->hook();
 	}
@@ -132,7 +132,7 @@ class Page extends Widget_Abstract {
 		?>
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
-				<?php $widget->checkbox( self::INCLUDE_PARENT ); ?>
+				<?php $widget->checkbox( static::INCLUDE_PARENT ); ?>
 				<label>
 					<?php
 					/* translators: Selected post type single label */
@@ -143,7 +143,7 @@ class Page extends Widget_Abstract {
 
 
 			<p>
-				<?php $widget->checkbox( self::INCLUDE_CHILDLESS_PARENT ); ?>
+				<?php $widget->checkbox( static::INCLUDE_CHILDLESS_PARENT ); ?>
 				<label>
 					<?php
 					/* translators: Selected post type single label */
@@ -153,7 +153,7 @@ class Page extends Widget_Abstract {
 			</p>
 
 			<p>
-				<?php $widget->checkbox( self::DISPLAY_ALL, self::LEVELS ); ?>
+				<?php $widget->checkbox( static::DISPLAY_ALL, static::LEVELS ); ?>
 				<label>
 					<?php
 					/* translators: Selected post type plural label */
@@ -165,25 +165,25 @@ class Page extends Widget_Abstract {
 			<div
 				<?php
 				if ( apply_filters( 'advanced-sidebar-menu/widget/page/hide-levels-field', true ) ) {
-					$widget->hide_element( self::DISPLAY_ALL, self::LEVELS );
+					$widget->hide_element( static::DISPLAY_ALL, static::LEVELS );
 				}
 				?>
 			>
 				<p>
-					<label for="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>">
+					<label for="<?php echo esc_attr( $widget->get_field_id( static::LEVELS ) ); ?>">
 						<?php
 						ob_start();
 						?>
 						<select
-							id="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>"
-							name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>">
+							id="<?php echo esc_attr( $widget->get_field_id( static::LEVELS ) ); ?>"
+							name="<?php echo esc_attr( $widget->get_field_name( static::LEVELS ) ); ?>">
 							<option value="100">
 								<?php esc_html_e( '- All -', 'advanced-sidebar-menu' ); ?>
 							</option>
 							<?php
 							for ( $i = 1; $i < 10; $i ++ ) {
 								?>
-								<option value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ self::LEVELS ] ); ?>>
+								<option value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ static::LEVELS ] ); ?>>
 									<?php echo (int) $i; ?>
 								</option>
 								<?php
@@ -217,16 +217,16 @@ class Page extends Widget_Abstract {
 		?>
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
-				<label for="<?php echo esc_attr( $widget->get_field_id( self::ORDER_BY ) ); ?>">
+				<label for="<?php echo esc_attr( $widget->get_field_id( static::ORDER_BY ) ); ?>">
 					<?php esc_html_e( 'Order by', 'advanced-sidebar-menu' ); ?>
 				</label>
 				<select
-					id="<?php echo esc_attr( $widget->get_field_id( self::ORDER_BY ) ); ?>"
-					name="<?php echo esc_attr( $widget->get_field_name( self::ORDER_BY ) ); ?>"
+					id="<?php echo esc_attr( $widget->get_field_id( static::ORDER_BY ) ); ?>"
+					name="<?php echo esc_attr( $widget->get_field_name( static::ORDER_BY ) ); ?>"
 				>
 					<?php
 					foreach ( static::get_order_by_options() as $key => $order ) {
-						printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $instance[ self::ORDER_BY ], $key, false ), esc_html( $order ) );
+						printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $instance[ static::ORDER_BY ], $key, false ), esc_html( $order ) );
 					}
 					?>
 				</select>
@@ -249,18 +249,18 @@ class Page extends Widget_Abstract {
 		?>
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
-				<label for="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>">
+				<label for="<?php echo esc_attr( $widget->get_field_id( static::EXCLUDE ) ); ?>">
 					<?php
 					/* translators: Selected post type plural label */
 					printf( esc_html__( '%s to exclude (ids, comma separated)', 'advanced-sidebar-menu' ), esc_html( $this->get_post_type_label( $instance, false ) ) );
 					?>
 				</label>
 				<input
-					id="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>"
-					name="<?php echo esc_attr( $widget->get_field_name( self::EXCLUDE ) ); ?>"
+					id="<?php echo esc_attr( $widget->get_field_id( static::EXCLUDE ) ); ?>"
+					name="<?php echo esc_attr( $widget->get_field_name( static::EXCLUDE ) ); ?>"
 					class="widefat advanced-sidebar-menu-block-field"
 					type="text"
-					value="<?php echo esc_attr( $instance[ self::EXCLUDE ] ); ?>" />
+					value="<?php echo esc_attr( $instance[ static::EXCLUDE ] ); ?>" />
 				<?php
 				do_action( 'advanced-sidebar-menu/widget/page/exclude-box', $instance, $widget );
 				?>
@@ -278,19 +278,19 @@ class Page extends Widget_Abstract {
 	 * @since 7.2.1
 	 */
 	public function form( $instance ) {
-		$instance = $this->set_instance( $instance, self::$defaults );
+		$instance = $this->set_instance( $instance, static::$defaults );
 		do_action( 'advanced-sidebar-menu/widget/page/before-form', $instance, $this );
 		?>
 		<p xmlns="http://www.w3.org/1999/html">
-			<label for="<?php echo esc_attr( $this->get_field_id( self::TITLE ) ); ?>">
+			<label for="<?php echo esc_attr( $this->get_field_id( static::TITLE ) ); ?>">
 				<?php esc_html_e( 'Title', 'advanced-sidebar-menu' ); ?>:
 			</label>
 			<input
-				id="<?php echo esc_attr( $this->get_field_id( self::TITLE ) ); ?>"
-				name="<?php echo esc_attr( $this->get_field_name( self::TITLE ) ); ?>"
+				id="<?php echo esc_attr( $this->get_field_id( static::TITLE ) ); ?>"
+				name="<?php echo esc_attr( $this->get_field_name( static::TITLE ) ); ?>"
 				class="widefat"
 				type="text"
-				value="<?php echo esc_attr( $instance[ self::TITLE ] ); ?>" />
+				value="<?php echo esc_attr( $instance[ static::TITLE ] ); ?>" />
 		</p>
 		<?php do_action( 'advanced-sidebar-menu/widget/page/before-columns', $instance, $this ); ?>
 		<div class="advanced-sidebar-menu-column advanced-sidebar-menu-column-left">
@@ -337,7 +337,7 @@ class Page extends Widget_Abstract {
 	 * @return void
 	 */
 	public function widget( $args, $instance ) {
-		$instance = (array) wp_parse_args( $instance, self::$defaults );
+		$instance = (array) wp_parse_args( $instance, static::$defaults );
 		$menu = \Advanced_Sidebar_Menu\Menus\Page::factory( $instance, $args );
 
 		do_action( 'advanced-sidebar-menu/widget/before-render', $menu, $this );

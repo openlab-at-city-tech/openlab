@@ -69,24 +69,24 @@ class Scripts {
 		$js_dir = apply_filters( 'advanced-sidebar-menu/js-dir', ADVANCED_SIDEBAR_MENU_URL . 'js/dist/' );
 		$file = $this->is_script_debug_enabled() ? 'admin' : 'admin.min';
 
-		wp_register_script( self::GUTENBERG_HANDLE, "{$js_dir}{$file}.js", [
+		wp_register_script( static::GUTENBERG_HANDLE, "{$js_dir}{$file}.js", [
 			'jquery',
 			'react',
 			'react-dom',
 			'wp-url',
-		], ADVANCED_SIDEBAR_BASIC_VERSION, true );
+		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, true );
 
 		// Must register here because used as a dependency of the Gutenberg styles.
-		wp_register_style( self::ADMIN_STYLE, trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/css/advanced-sidebar-menu.css', [], ADVANCED_SIDEBAR_BASIC_VERSION );
+		wp_register_style( static::ADMIN_STYLE, trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/css/advanced-sidebar-menu.css', [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 
 		if ( ! $this->is_webpack_enabled() ) {
-			wp_register_style( self::GUTENBERG_CSS_HANDLE, "{$js_dir}{$file}.css", [
-				self::ADMIN_STYLE,
+			wp_register_style( static::GUTENBERG_CSS_HANDLE, "{$js_dir}{$file}.css", [
+				static::ADMIN_STYLE,
 				'dashicons',
-			], ADVANCED_SIDEBAR_BASIC_VERSION );
+			], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 		}
 
-		wp_set_script_translations( self::GUTENBERG_HANDLE, 'advanced-sidebar-menu', ADVANCED_SIDEBAR_DIR . 'languages' );
+		wp_set_script_translations( static::GUTENBERG_HANDLE, 'advanced-sidebar-menu', ADVANCED_SIDEBAR_MENU_DIR . 'languages' );
 
 		/**
 		 * Load separately because `$this->js_config()` is heavy, and
@@ -108,14 +108,14 @@ class Scripts {
 	 */
 	public function admin_scripts() {
 		wp_enqueue_script(
-			self::ADMIN_SCRIPT,
+			static::ADMIN_SCRIPT,
 			trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/js/advanced-sidebar-menu.js',
 			[ 'jquery' ],
-			ADVANCED_SIDEBAR_BASIC_VERSION,
+			ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
 			false
 		);
 
-		wp_enqueue_style( self::ADMIN_STYLE );
+		wp_enqueue_style( static::ADMIN_STYLE );
 	}
 
 

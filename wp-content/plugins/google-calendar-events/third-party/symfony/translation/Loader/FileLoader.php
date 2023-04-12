@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\NotFoundR
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-abstract class FileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\ArrayLoader
+abstract class FileLoader extends ArrayLoader
 {
     /**
      * {@inheritdoc}
@@ -45,11 +45,9 @@ abstract class FileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\
         return $catalogue;
     }
     /**
-     * @param string $resource
-     *
      * @return array
      *
      * @throws InvalidResourceException if stream content has an invalid format
      */
-    protected abstract function loadResource($resource);
+    protected abstract function loadResource(string $resource);
 }

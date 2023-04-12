@@ -25,6 +25,9 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Promise\RejectedPromise;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Response;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
+/**
+ * @deprecated
+ */
 class Guzzle5HttpHandler
 {
     /**

@@ -260,13 +260,13 @@ function openlab_tablepress_stylesheet( $atts ) {
 }
 add_filter( 'tablepress_shortcode_table_default_shortcode_atts', 'openlab_tablepress_stylesheet' );
 
-/**Jetpack**/
+/** Jetpack **/
 
 /**
  * Remove entire modules from Jetpack
  *
  * @param  mixed $modules
- * @return void
+ * @return array
  */
 function openlab_jetpack_module_management( $modules ) {
 	//remove Jetpack notes
@@ -280,7 +280,6 @@ function openlab_jetpack_module_management( $modules ) {
 
 	return $modules;
 }
-
 add_filter( 'jetpack_get_available_modules', 'openlab_jetpack_module_management' );
 
 /**

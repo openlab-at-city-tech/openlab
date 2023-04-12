@@ -93,7 +93,7 @@ add_action('admin_enqueue_scripts', 'openlab_mu_enqueue');
 function openlab_script_additional_attributes($good_protocol_url, $original_url, $_context) {
 
     if (false !== strpos($original_url, 'plusone.js')) {
-        remove_filter('clean_url', 'openlab_script_additional_attributes', 10, 3);
+        remove_filter( 'clean_url', 'openlab_script_additional_attributes', 10 );
         $url_parts = parse_url($good_protocol_url);
         return $url_parts['scheme'] . '://' . $url_parts['host'] . $url_parts['path'] . "' async defer='defer";
     }

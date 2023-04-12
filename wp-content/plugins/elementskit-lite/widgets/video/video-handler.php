@@ -20,6 +20,10 @@ class ElementsKit_Widget_Video_Handler extends \ElementsKit_Lite\Core\Handler_Wi
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'video', 'player', 'embed', 'youtube', 'vimeo', 'dailymotion'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'video/';
     }

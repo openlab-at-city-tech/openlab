@@ -27,6 +27,10 @@ class ElementsKit_Widget_Tab extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/tab/';
     }
@@ -97,33 +101,33 @@ class ElementsKit_Widget_Tab extends Widget_Base {
                 'options' => [
                     'elementskit_tab_border_bottm' => [
                         'title' => esc_html__( 'image style 1', 'elementskit-lite' ),
-                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/1.png',
-                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/1.png',
-                        'width' => '100%',
+                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/tab-01.png',
+                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/tab-01.png',
+                        'width' => '33.333333333333333%',
                     ],
                     'elementskit_tooltip_style' => [
                         'title' => esc_html__( 'image style 2', 'elementskit-lite' ),
-                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/3.png',
-                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/3.png',
-                        'width' => '100%',
+                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/tab-02.png',
+                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/tab-02.png',
+                        'width' => '33.333333333333333%',
                     ],
                     'elementskit_heartbit_style' => [
                         'title' => esc_html__( 'image style 3', 'elementskit-lite' ),
-                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/5.png',
-                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/5.png',
-                        'width' => '100%',
+                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/tab-03.png',
+                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/tab-03.png',
+                        'width' => '33.333333333333333%',
                     ],
                     'elementskit_pregress_style' => [
                         'title' => esc_html__( 'image style 4', 'elementskit-lite' ),
-                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/6.png',
-                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/6.png',
-                        'width' => '100%',
+                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/tab-04.png',
+                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/tab-04.png',
+                        'width' => '33.333333333333333%',
                     ],
                     'elementskit_ribbon_style' => [
                         'title' => esc_html__( 'image style 5', 'elementskit-lite' ),
-                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/7.png',
-                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/7.png',
-                        'width' => '100%',
+                        'imagelarge' => Handler::get_url() . 'assets/imagechoose/tab-05.png',
+                        'imagesmall' => Handler::get_url() . 'assets/imagechoose/tab-05.png',
+                        'width' => '33.333333333333333%',
                     ],
                 ],
                 'condition' => [
@@ -498,7 +502,6 @@ class ElementsKit_Widget_Tab extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
                 'name'     => 'ekit_tab_wrapper_bg_group',
-                'default' => '',
                 'selector' => '{{WRAPPER}} .elementkit-tab-wraper',
             )
         );
@@ -2012,7 +2015,6 @@ class ElementsKit_Widget_Tab extends Widget_Base {
             Group_Control_Background::get_type(),
             array(
                 'name'     => 'ekit_tab_body_bg_group',
-                'default' => '',
                 'selector' => '{{WRAPPER}} .tab-content .tab-pane',
             )
         );
@@ -2091,7 +2093,7 @@ class ElementsKit_Widget_Tab extends Widget_Base {
 
         ?>
         <div class="elementkit-tab-wraper <?php echo esc_attr($ekit_tab_style == 'vertical' ? 'vertical' : ''); ?> <?php if ($ekit_tab_fill_full_width != 'yes') : ?> elementskit-fitcontent-tab <?php endif; ?>">
-            <ul class="<?php echo esc_attr($nav_wrapper_class); ?>" role="tablist">
+            <ul class="<?php echo esc_attr($nav_wrapper_class); ?>">
                 <?php foreach ($ekit_tab_items as $i=>$tab) :
                     $is_active = ($tab['ekit_tab_title_is_active'] == 'yes') ? ' active show' : '';
                     $is_active = ($has_user_defined_active_tab == false && $i == 0) ? ' active show' : $is_active;
@@ -2124,7 +2126,7 @@ class ElementsKit_Widget_Tab extends Widget_Base {
                     <li class="elementkit-nav-item elementor-repeater-item-<?php echo esc_attr( $tab[ '_id' ] ); ?>">
                         <a class="elementkit-nav-link <?php echo esc_attr($is_active);?> <?php echo esc_attr($ekit_tab_header_icon_pos_style); ?>" id="content-<?php echo esc_attr($tab['_id'].$tab_id); ?>-tab" data-ekit-handler-id="<?php echo esc_html( $handler_id ); ?>" data-ekit-toggle="tab" data-target="#content-<?php echo esc_attr($tab['_id'].$tab_id); ?>" href="#Content-<?php echo esc_attr($tab['_id'].$tab_id); ?>"
                             data-ekit-toggle-trigger="<?php echo esc_attr( $ekit_tab_trigger_type ); ?>"
-                            role="tab" aria-controls="Content-<?php echo esc_attr($tab['_id'].$tab_id); ?>" aria-selected="true">
+                            aria-describedby="Content-<?php echo esc_attr($tab['_id'].$tab_id); ?>">
                             <?php echo wp_kses($icon_html.$img_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
                             <span class="elementskit-tab-title"><?php echo esc_html($tab['ekit_tab_title']); ?></span>
                         </a>

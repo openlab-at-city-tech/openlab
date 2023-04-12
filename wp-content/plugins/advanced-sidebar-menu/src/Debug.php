@@ -77,7 +77,7 @@ class Debug {
 	 */
 	public function get_site_info() {
 		$data = [
-			'basic'       => ADVANCED_SIDEBAR_BASIC_VERSION,
+			'basic'       => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
 			'php'         => PHP_VERSION,
 			'pro'         => false,
 			'scriptDebug' => Scripts::instance()->is_script_debug_enabled(),
@@ -102,11 +102,11 @@ class Debug {
 	public function print_instance( $menu, $widget ) {
 		$data = apply_filters( 'advanced-sidebar-menu/debug/print-instance', $this->get_site_info(), $menu, $widget );
 		?>
-		<script name="<?php echo esc_attr( self::DEBUG_PARAM ); ?>">
-			if ( 'undefined' === typeof ( <?php echo esc_attr( self::DEBUG_PARAM ); ?> ) ) {
-				var <?php echo esc_attr( self::DEBUG_PARAM ); ?> = <?php echo wp_json_encode( $data ); ?>;
+		<script name="<?php echo esc_attr( static::DEBUG_PARAM ); ?>">
+			if ( 'undefined' === typeof ( <?php echo esc_attr( static::DEBUG_PARAM ); ?> ) ) {
+				var <?php echo esc_attr( static::DEBUG_PARAM ); ?> = <?php echo wp_json_encode( $data ); ?>;
 			}
-				<?php echo esc_attr( self::DEBUG_PARAM ); ?>[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
+				<?php echo esc_attr( static::DEBUG_PARAM ); ?>[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
 		</script>
 		<?php
 	}

@@ -180,13 +180,13 @@ final class Utils
             $uri = $uri->withQuery($changes['query']);
         }
         if ($request instanceof ServerRequestInterface) {
-            $new = (new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\ServerRequest(isset($changes['method']) ? $changes['method'] : $request->getMethod(), $uri, $headers, isset($changes['body']) ? $changes['body'] : $request->getBody(), isset($changes['version']) ? $changes['version'] : $request->getProtocolVersion(), $request->getServerParams()))->withParsedBody($request->getParsedBody())->withQueryParams($request->getQueryParams())->withCookieParams($request->getCookieParams())->withUploadedFiles($request->getUploadedFiles());
+            $new = (new ServerRequest(isset($changes['method']) ? $changes['method'] : $request->getMethod(), $uri, $headers, isset($changes['body']) ? $changes['body'] : $request->getBody(), isset($changes['version']) ? $changes['version'] : $request->getProtocolVersion(), $request->getServerParams()))->withParsedBody($request->getParsedBody())->withQueryParams($request->getQueryParams())->withCookieParams($request->getCookieParams())->withUploadedFiles($request->getUploadedFiles());
             foreach ($request->getAttributes() as $key => $value) {
                 $new = $new->withAttribute($key, $value);
             }
             return $new;
         }
-        return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request(isset($changes['method']) ? $changes['method'] : $request->getMethod(), $uri, $headers, isset($changes['body']) ? $changes['body'] : $request->getBody(), isset($changes['version']) ? $changes['version'] : $request->getProtocolVersion());
+        return new Request(isset($changes['method']) ? $changes['method'] : $request->getMethod(), $uri, $headers, isset($changes['body']) ? $changes['body'] : $request->getBody(), isset($changes['version']) ? $changes['version'] : $request->getProtocolVersion());
     }
     /**
      * Read a line from the stream up to the maximum allowed buffer length.
@@ -257,7 +257,7 @@ final class Utils
                 \fwrite($stream, $resource);
                 \fseek($stream, 0);
             }
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream($stream, $options);
+            return new Stream($stream, $options);
         }
         switch (\gettype($resource)) {
             case 'resource':
@@ -265,18 +265,19 @@ final class Utils
                  * The 'php://input' is a special stream with quirks and inconsistencies.
                  * We avoid using that stream by reading it into php://temp
                  */
-                if (\stream_get_meta_data($resource)['uri'] === 'php://input') {
+                $metaData = \stream_get_meta_data($resource);
+                if (isset($metaData['uri']) && $metaData['uri'] === 'php://input') {
                     $stream = self::tryFopen('php://temp', 'w+');
                     \fwrite($stream, \stream_get_contents($resource));
                     \fseek($stream, 0);
                     $resource = $stream;
                 }
-                return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream($resource, $options);
+                return new Stream($resource, $options);
             case 'object':
                 if ($resource instanceof StreamInterface) {
                     return $resource;
                 } elseif ($resource instanceof \Iterator) {
-                    return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\PumpStream(function () use($resource) {
+                    return new PumpStream(function () use($resource) {
                         if (!$resource->valid()) {
                             return \false;
                         }
@@ -285,14 +286,14 @@ final class Utils
                         return $result;
                     }, $options);
                 } elseif (\method_exists($resource, '__toString')) {
-                    return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::streamFor((string) $resource, $options);
+                    return Utils::streamFor((string) $resource, $options);
                 }
                 break;
             case 'NULL':
-                return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Stream(self::tryFopen('php://temp', 'r+'), $options);
+                return new Stream(self::tryFopen('php://temp', 'r+'), $options);
         }
         if (\is_callable($resource)) {
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\PumpStream($resource, $options);
+            return new PumpStream($resource, $options);
         }
         throw new \InvalidArgumentException('Invalid resource type: ' . \gettype($resource));
     }
@@ -347,7 +348,7 @@ final class Utils
             return $uri;
         }
         if (\is_string($uri)) {
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Uri($uri);
+            return new Uri($uri);
         }
         throw new \InvalidArgumentException('URI must be a string or UriInterface');
     }

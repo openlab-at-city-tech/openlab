@@ -19,7 +19,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Yaml\Yaml;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class YamlFileDumper extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\FileDumper
+class YamlFileDumper extends FileDumper
 {
     private $extension;
     public function __construct(string $extension = 'yml')

@@ -13,9 +13,14 @@
 ?>
 
 <div class="su-posts su-posts-teaser-loop <?php echo esc_attr( $atts['class'] ); ?>">
+
 	<?php if ( $posts->have_posts() ) : ?>
 		<?php while ( $posts->have_posts() ) : ?>
 			<?php $posts->the_post(); ?>
+
+			<?php if ( ! su_current_user_can_read_post( get_the_ID() ) ) : ?>
+				<?php continue; ?>
+			<?php endif; ?>
 
 			<div id="su-post-<?php the_ID(); ?>" class="su-post <?php echo esc_attr( $atts['class_single'] ); ?>">
 				<?php if ( has_post_thumbnail() ) : ?>
@@ -26,6 +31,9 @@
 
 		<?php endwhile; ?>
 	<?php else : ?>
+
 		<p class="su-posts-not-found"><?php esc_html_e( 'Posts not found', 'shortcodes-ultimate' ); ?></p>
+
 	<?php endif; ?>
+
 </div>

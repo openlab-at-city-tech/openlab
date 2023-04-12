@@ -1,9 +1,3 @@
-[submodule "wp-content/plugins/webwork"]
-	path = wp-content/plugins/webwork
-	url = git://github.com/openlab-at-city-tech/webwork-for-wordpress
-[submodule "bpep"]
-	path = wp-content/plugins/elasticpress-buddypress
-	url = https://github.com/hard-g/elasticpress-buddypress
 [submodule "wp-content/plugins/openlab-badges"]
 	path = wp-content/plugins/openlab-badges
 	url = https://github.com/openlab-at-city-tech/openlab-badges.git

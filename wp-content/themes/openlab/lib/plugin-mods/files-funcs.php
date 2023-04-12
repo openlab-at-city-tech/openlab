@@ -496,6 +496,7 @@ add_action(
 			return;
 		}
 
+		$result = null;
 		if( $document->id ) {
 			global $wpdb, $bp;
 
@@ -610,9 +611,9 @@ function openlab_get_files_count() {
  * Buddypress Group Documents is very secretive about it's pagination, so we'll
  * have to do this with some str_replace fun.
  *
- * @param type $template
+ * @param BP_Group_Documents_Template $template BP_Group_Documents_Template template object.
  */
-function openlab_bp_group_documents_custom_pagination_links( $template ) {
+function openlab_bp_group_documents_custom_pagination_links( BP_Group_Documents_Template $template ) {
 
 	//dump the echoed legacy pagination into a string
 	ob_start();
@@ -659,24 +660,19 @@ function openlab_group_documents_activity_notification_control( $send_it, $activ
 add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_group_documents_activity_notification_control', 100, 4 );
 
-
-function openlab_get_document_type( $file_name ) {
-	return filter_var( $file_name, FILTER_VALIDATE_URL ) ? 'link' : 'upload';
-}
-
 /**
  * Render external link icon
  *
  */
 function openlab_external_link_icon( $url ) {
-	$url = parse_url( $url );
+	$url_parts = parse_url( $url );
 
-	if( ! isset( $url['host'] ) ) {
+	if( ! isset( $url_parts['host'] ) ) {
 		return;
 	}
 	?>
-	<a role="presentation" class="group-documents-icon" href="<?php echo $file_name; ?>" target="_blank">
-		<img class="bp-group-documents-icon" src="<?php echo get_template_directory_uri(); ?>/images/doc-icons/<?php echo openlab_get_service_from_url( $url['host'] ); ?>.png" alt="">
+	<a role="presentation" class="group-documents-icon" href="<?php echo esc_url( $url ); ?>" target="_blank">
+		<img class="bp-group-documents-icon" src="<?php echo get_template_directory_uri(); ?>/images/doc-icons/<?php echo openlab_get_service_from_url( $url_parts['host'] ); ?>.png" alt="">
 		<span class="sr-only">View document</span>
 	</a>
 	<?php

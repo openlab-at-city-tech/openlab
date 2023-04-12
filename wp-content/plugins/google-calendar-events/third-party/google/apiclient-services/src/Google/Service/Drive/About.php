@@ -17,14 +17,10 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_About extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_About extends Google_Collection
 {
     protected $collection_key = 'teamDriveThemes';
     public $appInstalled;
-    public $canCreateDrives;
-    public $canCreateTeamDrives;
-    protected $driveThemesType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_AboutDriveThemes';
-    protected $driveThemesDataType = 'array';
     public $exportFormats;
     public $folderColorPalette;
     public $importFormats;
@@ -44,36 +40,6 @@ class Google_Service_Drive_About extends \SimpleCalendar\plugin_deps\Google_Coll
     public function getAppInstalled()
     {
         return $this->appInstalled;
-    }
-    public function setCanCreateDrives($canCreateDrives)
-    {
-        $this->canCreateDrives = $canCreateDrives;
-    }
-    public function getCanCreateDrives()
-    {
-        return $this->canCreateDrives;
-    }
-    public function setCanCreateTeamDrives($canCreateTeamDrives)
-    {
-        $this->canCreateTeamDrives = $canCreateTeamDrives;
-    }
-    public function getCanCreateTeamDrives()
-    {
-        return $this->canCreateTeamDrives;
-    }
-    /**
-     * @param Google_Service_Drive_AboutDriveThemes[]
-     */
-    public function setDriveThemes($driveThemes)
-    {
-        $this->driveThemes = $driveThemes;
-    }
-    /**
-     * @return Google_Service_Drive_AboutDriveThemes[]
-     */
-    public function getDriveThemes()
-    {
-        return $this->driveThemes;
     }
     public function setExportFormats($exportFormats)
     {
@@ -126,7 +92,7 @@ class Google_Service_Drive_About extends \SimpleCalendar\plugin_deps\Google_Coll
     /**
      * @param Google_Service_Drive_AboutStorageQuota
      */
-    public function setStorageQuota(\SimpleCalendar\plugin_deps\Google_Service_Drive_AboutStorageQuota $storageQuota)
+    public function setStorageQuota(Google_Service_Drive_AboutStorageQuota $storageQuota)
     {
         $this->storageQuota = $storageQuota;
     }
@@ -138,14 +104,14 @@ class Google_Service_Drive_About extends \SimpleCalendar\plugin_deps\Google_Coll
         return $this->storageQuota;
     }
     /**
-     * @param Google_Service_Drive_AboutTeamDriveThemes[]
+     * @param Google_Service_Drive_AboutTeamDriveThemes
      */
     public function setTeamDriveThemes($teamDriveThemes)
     {
         $this->teamDriveThemes = $teamDriveThemes;
     }
     /**
-     * @return Google_Service_Drive_AboutTeamDriveThemes[]
+     * @return Google_Service_Drive_AboutTeamDriveThemes
      */
     public function getTeamDriveThemes()
     {
@@ -154,7 +120,7 @@ class Google_Service_Drive_About extends \SimpleCalendar\plugin_deps\Google_Coll
     /**
      * @param Google_Service_Drive_User
      */
-    public function setUser(\SimpleCalendar\plugin_deps\Google_Service_Drive_User $user)
+    public function setUser(Google_Service_Drive_User $user)
     {
         $this->user = $user;
     }

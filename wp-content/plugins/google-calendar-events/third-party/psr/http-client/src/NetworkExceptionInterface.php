@@ -10,7 +10,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  *
  * Example: the target host name can not be resolved or the connection failed.
  */
-interface NetworkExceptionInterface extends \SimpleCalendar\plugin_deps\Psr\Http\Client\ClientExceptionInterface
+interface NetworkExceptionInterface extends ClientExceptionInterface
 {
     /**
      * Returns the request.

@@ -4,7 +4,7 @@
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
 	Tested up to: 6.1.1
-	Stable tag: 1.5.32
+	Stable tag: 1.5.35
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,15 @@ use this short-code any where to display breadcrumb
 
 == Changelog ==
 
+
+	= 1.5.35 =
+    * 2022-01-17  - add - Category ancestor for post added
+
+	= 1.5.34 =
+    * 2022-01-10  - fix - Post type label name issue fixed
+
+	= 1.5.33 =
+    * 2022-01-10  - fix - Escape issue fixed.
 
 	= 1.5.32 =
     * 2022-01-03  - add - Product Category ancestors element added for WooCommerce

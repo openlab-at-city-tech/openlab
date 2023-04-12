@@ -18,13 +18,18 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
+ *
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @phpstan-type FormattedRecord array{message: string, context: mixed[], level: Level, level_name: LevelName, channel: string, datetime: \DateTimeImmutable, extra: mixed[], formatted: mixed}
  */
-abstract class AbstractProcessingHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractHandler implements \SimpleCalendar\plugin_deps\Monolog\Handler\ProcessableHandlerInterface, \SimpleCalendar\plugin_deps\Monolog\Handler\FormattableHandlerInterface
+abstract class AbstractProcessingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     use FormattableHandlerTrait;
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function handle(array $record) : bool
     {
@@ -32,6 +37,7 @@ abstract class AbstractProcessingHandler extends \SimpleCalendar\plugin_deps\Mon
             return \false;
         }
         if ($this->processors) {
+            /** @var Record $record */
             $record = $this->processRecord($record);
         }
         $record['formatted'] = $this->getFormatter()->format($record);
@@ -40,8 +46,13 @@ abstract class AbstractProcessingHandler extends \SimpleCalendar\plugin_deps\Mon
     }
     /**
      * Writes the record down to the log of the implementing handler
+     *
+     * @phpstan-param FormattedRecord $record
      */
     protected abstract function write(array $record) : void;
+    /**
+     * @return void
+     */
     public function reset()
     {
         parent::reset();

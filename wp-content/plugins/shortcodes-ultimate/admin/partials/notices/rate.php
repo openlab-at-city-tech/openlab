@@ -1,4 +1,4 @@
-<?php defined( 'ABSPATH' ) or exit; ?>
+<?php defined( 'ABSPATH' ) || exit; ?>
 
 <div class="notice notice-info shortcodes-ultimate-notice-rate">
 
@@ -7,15 +7,15 @@
 	<div class="shortcodes-ultimate-notice-rate-content">
 
 		<div class="shortcodes-ultimate-notice-rate-content-text">
-			<p><?php _e( 'Hello', 'shortcodes-ultimate' ); ?>,</p>
-			<p><?php _e( 'my name is Vladimir Anokhin. I am the developer of the Shortcodes Ultimate plugin.<br>If you like this plugin, please write a few words about it at wordpress.org or twitter. Your opinion will help other people.', 'shortcodes-ultimate' ); ?></p>
-			<p><?php _e( 'Thank you!', 'shortcodes-ultimate' ); ?></p>
+			<p><?php esc_html_e( 'Hello', 'shortcodes-ultimate' ); ?>,</p>
+			<p><?php esc_html_e( 'my name is Vova Anokhin. I am the developer of the Shortcodes Ultimate plugin.<br>If you like this plugin, please write a few words about it at wordpress.org or twitter. Your opinion will help other people.', 'shortcodes-ultimate' ); ?></p>
+			<p><?php esc_html_e( 'Thank you!', 'shortcodes-ultimate' ); ?></p>
 		</div>
 
 		<p class="shortcodes-ultimate-notice-rate-actions">
-			<a href="<?php echo $this->get_dismiss_link(); ?>" class="button button-primary" onclick="window.open('https://wordpress.org/support/plugin/shortcodes-ultimate/reviews/?rate=5&filter=5#new-post');"><?php _e( 'Rate plugin', 'shortcodes-ultimate' ); ?></a>
-			<a href="<?php echo $this->get_dismiss_link( true ); ?>"><?php _e( 'Remind me later', 'shortcodes-ultimate' ); ?></a>
-			<a href="<?php echo $this->get_dismiss_link(); ?>" class="shortcodes-ultimate-notice-rate-dismiss"><?php _e( 'Dismiss', 'shortcodes-ultimate' ); ?></a>
+			<a href="<?php echo esc_attr( $this->get_dismiss_link() ); ?>" class="button button-primary" onclick="window.open('https://wordpress.org/support/plugin/shortcodes-ultimate/reviews/?rate=5&filter=5#new-post');"><?php esc_html_e( 'Rate plugin', 'shortcodes-ultimate' ); ?></a>
+			<a href="<?php echo esc_attr( $this->get_dismiss_link( true ) ); ?>"><?php esc_html_e( 'Remind me later', 'shortcodes-ultimate' ); ?></a>
+			<a href="<?php echo esc_attr( $this->get_dismiss_link() ); ?>" class="shortcodes-ultimate-notice-rate-dismiss"><?php esc_html_e( 'Dismiss', 'shortcodes-ultimate' ); ?></a>
 		</p>
 
 	</div>

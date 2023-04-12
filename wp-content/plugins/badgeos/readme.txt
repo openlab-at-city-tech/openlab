@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, gamification, learningtimes, OBI, mozilla, open badges, achievement, points, ranks, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 6.1
-Stable tag: 3.7.1.5
+Tested up to: 6.1.1
+Stable tag: 3.7.1.6
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -199,6 +199,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 11. Ranks data
 
 == Changelog ==
+
+= 3.7.1.6 =
+* Fix: Minor issues.
+* Fix: Compatibility issues with PHP 8.
 
 = 3.7.1.5 =
 * New: Shortcode/block to show BadgeOS user dashboard.

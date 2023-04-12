@@ -27,6 +27,7 @@ class DLM_Welcome_Page {
 		add_action( 'dlm_after_install_setup', array( $this, 'dlm_on_activation' ), 15 );
 		add_filter( 'dlm_page_header', array( $this, 'welcome_header' ), 15 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'welcome_scripts' ) );
+		add_action( 'admin_footer', array( $this, 'welcome_style' ), 15 );
 	}
 
 
@@ -110,14 +111,25 @@ class DLM_Welcome_Page {
 		}
 	}
 
+	/**
+	 *  Register admin Wellcome style
+	 *
+	 * @since 4.7.72
+	 */
+	public function welcome_style() {
+		if ( isset( $_GET['post_type'] ) && 'dlm_download' === sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) ) {
+			wp_register_style( 'dlm-welcome-style', plugins_url( '/assets/css/welcome.css', DLM_PLUGIN_FILE ), null, DLM_VERSION );
+		}
+	}
 
 	/**
+	 *  Display About page
+	 *
 	 * @since 4.5.9
-	 * Display About page
 	 */
 	public function about_page() {
 
-		// WPChill Welcome Class
+		// WPChill Welcome Class.
 		require_once plugin_dir_path( DLM_PLUGIN_FILE ) . '/includes/submodules/banner/class-wpchill-welcome.php';
 
 		if ( ! class_exists( 'WPChill_Welcome' ) ) {
@@ -125,6 +137,9 @@ class DLM_Welcome_Page {
 		}
 
 		$welcome = WPChill_Welcome::get_instance();
+
+		wp_enqueue_style( 'dlm-welcome-style' );
+
 		/** @var \DLM_Settings_Helper $settings */
 		$settings = download_monitor()->service( 'settings' );
 		/**

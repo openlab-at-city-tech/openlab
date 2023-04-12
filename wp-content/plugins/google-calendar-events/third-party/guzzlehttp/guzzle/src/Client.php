@@ -13,7 +13,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * @final
  */
-class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Client\ClientInterface
+class Client implements ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Client\ClientInterface
 {
     use ClientTrait;
     /**
@@ -54,13 +54,13 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
     public function __construct(array $config = [])
     {
         if (!isset($config['handler'])) {
-            $config['handler'] = \SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack::create();
+            $config['handler'] = HandlerStack::create();
         } elseif (!\is_callable($config['handler'])) {
             throw new InvalidArgumentException('handler must be a callable');
         }
         // Convert the base_uri to a UriInterface
         if (isset($config['base_uri'])) {
-            $config['base_uri'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::uriFor($config['base_uri']);
+            $config['base_uri'] = Psr7\Utils::uriFor($config['base_uri']);
         }
         $this->configureDefaults($config);
     }
@@ -103,7 +103,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
      */
     public function send(RequestInterface $request, array $options = []) : ResponseInterface
     {
-        $options[\SimpleCalendar\plugin_deps\GuzzleHttp\RequestOptions::SYNCHRONOUS] = \true;
+        $options[RequestOptions::SYNCHRONOUS] = \true;
         return $this->sendAsync($request, $options)->wait();
     }
     /**
@@ -113,9 +113,9 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
      */
     public function sendRequest(RequestInterface $request) : ResponseInterface
     {
-        $options[\SimpleCalendar\plugin_deps\GuzzleHttp\RequestOptions::SYNCHRONOUS] = \true;
-        $options[\SimpleCalendar\plugin_deps\GuzzleHttp\RequestOptions::ALLOW_REDIRECTS] = \false;
-        $options[\SimpleCalendar\plugin_deps\GuzzleHttp\RequestOptions::HTTP_ERRORS] = \false;
+        $options[RequestOptions::SYNCHRONOUS] = \true;
+        $options[RequestOptions::ALLOW_REDIRECTS] = \false;
+        $options[RequestOptions::HTTP_ERRORS] = \false;
         return $this->sendAsync($request, $options)->wait();
     }
     /**
@@ -138,11 +138,11 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
         $body = $options['body'] ?? null;
         $version = $options['version'] ?? '1.1';
         // Merge the URI into the base URI.
-        $uri = $this->buildUri(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::uriFor($uri), $options);
+        $uri = $this->buildUri(Psr7\Utils::uriFor($uri), $options);
         if (\is_array($body)) {
             throw $this->invalidBody();
         }
-        $request = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request($method, $uri, $headers, $body, $version);
+        $request = new Psr7\Request($method, $uri, $headers, $body, $version);
         // Remove the option so that they are not doubly-applied.
         unset($options['headers'], $options['body'], $options['version']);
         return $this->transfer($request, $options);
@@ -162,7 +162,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
      */
     public function request(string $method, $uri = '', array $options = []) : ResponseInterface
     {
-        $options[\SimpleCalendar\plugin_deps\GuzzleHttp\RequestOptions::SYNCHRONOUS] = \true;
+        $options[RequestOptions::SYNCHRONOUS] = \true;
         return $this->requestAsync($method, $uri, $options)->wait();
     }
     /**
@@ -185,11 +185,11 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
     private function buildUri(UriInterface $uri, array $config) : UriInterface
     {
         if (isset($config['base_uri'])) {
-            $uri = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\UriResolver::resolve(\SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::uriFor($config['base_uri']), $uri);
+            $uri = Psr7\UriResolver::resolve(Psr7\Utils::uriFor($config['base_uri']), $uri);
         }
         if (isset($config['idn_conversion']) && $config['idn_conversion'] !== \false) {
             $idnOptions = $config['idn_conversion'] === \true ? \IDNA_DEFAULT : $config['idn_conversion'];
-            $uri = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::idnUriConvert($uri, $idnOptions);
+            $uri = Utils::idnUriConvert($uri, $idnOptions);
         }
         return $uri->getScheme() === '' && $uri->getHost() !== '' ? $uri->withScheme('http') : $uri;
     }
@@ -198,18 +198,18 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
      */
     private function configureDefaults(array $config) : void
     {
-        $defaults = ['allow_redirects' => \SimpleCalendar\plugin_deps\GuzzleHttp\RedirectMiddleware::$defaultSettings, 'http_errors' => \true, 'decode_content' => \true, 'verify' => \true, 'cookies' => \false, 'idn_conversion' => \false];
+        $defaults = ['allow_redirects' => RedirectMiddleware::$defaultSettings, 'http_errors' => \true, 'decode_content' => \true, 'verify' => \true, 'cookies' => \false, 'idn_conversion' => \false];
         // Use the standard Linux HTTP_PROXY and HTTPS_PROXY if set.
         // We can only trust the HTTP_PROXY environment variable in a CLI
         // process due to the fact that PHP has no reliable mechanism to
         // get environment variables that start with "HTTP_".
-        if (\PHP_SAPI === 'cli' && ($proxy = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::getenv('HTTP_PROXY'))) {
+        if (\PHP_SAPI === 'cli' && ($proxy = Utils::getenv('HTTP_PROXY'))) {
             $defaults['proxy']['http'] = $proxy;
         }
-        if ($proxy = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::getenv('HTTPS_PROXY')) {
+        if ($proxy = Utils::getenv('HTTPS_PROXY')) {
             $defaults['proxy']['https'] = $proxy;
         }
-        if ($noProxy = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::getenv('NO_PROXY')) {
+        if ($noProxy = Utils::getenv('NO_PROXY')) {
             $cleanedNoProxy = \str_replace(' ', '', $noProxy);
             $defaults['proxy']['no'] = \explode(',', $cleanedNoProxy);
         }
@@ -219,7 +219,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
         }
         // Add the default user-agent header.
         if (!isset($this->config['headers'])) {
-            $this->config['headers'] = ['User-Agent' => \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::defaultUserAgent()];
+            $this->config['headers'] = ['User-Agent' => Utils::defaultUserAgent()];
         } else {
             // Add the User-Agent header if one was not already set.
             foreach (\array_keys($this->config['headers']) as $name) {
@@ -227,7 +227,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
                     return;
                 }
             }
-            $this->config['headers']['User-Agent'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::defaultUserAgent();
+            $this->config['headers']['User-Agent'] = Utils::defaultUserAgent();
         }
     }
     /**
@@ -290,6 +290,9 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
     {
         $modify = ['set_headers' => []];
         if (isset($options['headers'])) {
+            if (\array_keys($options['headers']) === \range(0, \count($options['headers']) - 1)) {
+                throw new InvalidArgumentException('The headers array must have header name as keys.');
+            }
             $modify['set_headers'] = $options['headers'];
             unset($options['headers']);
         }
@@ -300,30 +303,30 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
             $options['body'] = \http_build_query($options['form_params'], '', '&');
             unset($options['form_params']);
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
             $options['_conditional']['Content-Type'] = 'application/x-www-form-urlencoded';
         }
         if (isset($options['multipart'])) {
-            $options['body'] = new \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\MultipartStream($options['multipart']);
+            $options['body'] = new Psr7\MultipartStream($options['multipart']);
             unset($options['multipart']);
         }
         if (isset($options['json'])) {
-            $options['body'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Utils::jsonEncode($options['json']);
+            $options['body'] = Utils::jsonEncode($options['json']);
             unset($options['json']);
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
             $options['_conditional']['Content-Type'] = 'application/json';
         }
         if (!empty($options['decode_content']) && $options['decode_content'] !== \true) {
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::caselessRemove(['Accept-Encoding'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Accept-Encoding'], $options['_conditional']);
             $modify['set_headers']['Accept-Encoding'] = $options['decode_content'];
         }
         if (isset($options['body'])) {
             if (\is_array($options['body'])) {
                 throw $this->invalidBody();
             }
-            $modify['body'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::streamFor($options['body']);
+            $modify['body'] = Psr7\Utils::streamFor($options['body']);
             unset($options['body']);
         }
         if (!empty($options['auth']) && \is_array($options['auth'])) {
@@ -332,7 +335,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
             switch ($type) {
                 case 'basic':
                     // Ensure that we don't have the header in different case and set the new value.
-                    $modify['set_headers'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::caselessRemove(['Authorization'], $modify['set_headers']);
+                    $modify['set_headers'] = Psr7\Utils::caselessRemove(['Authorization'], $modify['set_headers']);
                     $modify['set_headers']['Authorization'] = 'Basic ' . \base64_encode("{$value[0]}:{$value[1]}");
                     break;
                 case 'digest':
@@ -364,11 +367,11 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
                 throw new InvalidArgumentException('sink must not be a boolean');
             }
         }
-        $request = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
-        if ($request->getBody() instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\MultipartStream) {
+        $request = Psr7\Utils::modifyRequest($request, $modify);
+        if ($request->getBody() instanceof Psr7\MultipartStream) {
             // Use a multipart/form-data POST if a Content-Type is not set.
             // Ensure that we don't have the header in different case and set the new value.
-            $options['_conditional'] = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
+            $options['_conditional'] = Psr7\Utils::caselessRemove(['Content-Type'], $options['_conditional']);
             $options['_conditional']['Content-Type'] = 'multipart/form-data; boundary=' . $request->getBody()->getBoundary();
         }
         // Merge in conditional headers if they are not present.
@@ -380,7 +383,7 @@ class Client implements \SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface, 
                     $modify['set_headers'][$k] = $v;
                 }
             }
-            $request = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
+            $request = Psr7\Utils::modifyRequest($request, $modify);
             // Don't pass this internal value along to middleware/handlers.
             unset($options['_conditional']);
         }

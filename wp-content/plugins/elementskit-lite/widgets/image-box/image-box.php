@@ -28,6 +28,10 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
         return Handler::get_categories();
     }
 
+    public function get_keywords() {
+        return Handler::get_keywords();
+    }
+
     public function get_help_url() {
         return 'https://wpmet.com/doc/image-box-2/';
     }
@@ -1090,7 +1094,7 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 		$this->add_control(
 			'ekit_imagebox_genaral_border_heading_title',
 			[
-				'label' => esc_html__( 'Genaral', 'elementskit-lite' ),
+				'label' => esc_html__( 'General', 'elementskit-lite' ),
 				'type' => Controls_Manager::HEADING,
 			]
 		);

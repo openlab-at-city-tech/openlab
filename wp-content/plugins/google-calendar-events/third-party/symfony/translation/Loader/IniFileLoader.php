@@ -15,12 +15,12 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
  *
  * @author stealth35
  */
-class IniFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\FileLoader
+class IniFileLoader extends FileLoader
 {
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         return \parse_ini_file($resource, \true);
     }

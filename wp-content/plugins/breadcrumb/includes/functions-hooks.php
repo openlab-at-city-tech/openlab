@@ -762,16 +762,23 @@ function breadcrumb_permalink_product_cat($breadcrumb_items)
 
 add_filter('breadcrumb_permalink_category_ancestors', 'breadcrumb_permalink_category_ancestors');
 
-function breadcrumb_permalink_category_ancestors($breadcrumb_items)
+function breadcrumb_permalink_category_ancestors($args)
 {
 
-    $category_string = get_query_var('product_cat');
+//echo '<pre>'.var_export($args,).'</pre>';
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : '';
+    $taxonomy = isset($permalink['taxonomy']) ? $permalink['taxonomy'] : '';
+
+
+
+
+    $category_string = get_query_var($taxonomy);
     $category_arr = array();
     $breadcrumb_items = array();
+            $breadcrumb_items_new = array();
 
 
-
-    $taxonomy = 'product_cat';
     $array_list = array();
 
     if (!empty($category_string)) {
@@ -780,7 +787,6 @@ function breadcrumb_permalink_category_ancestors($breadcrumb_items)
             $category_arr = explode('/', $category_string);
             $category_count = count($category_arr);
             $last_cat = $category_arr[($category_count - 1)];
-            $breadcrumb_items_new = array();
             $term_data = get_term_by('slug', $last_cat, $taxonomy);
 
             $term_id = $term_data->term_id;
@@ -815,7 +821,7 @@ function breadcrumb_permalink_category_ancestors($breadcrumb_items)
             $term_data = get_term_by('slug', $category_string, $taxonomy);
             $breadcrumb_items_new = array();
 
-            //var_dump($category_string);
+           // var_dump($category_string);
 
             $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
             $term_name = isset($term_data->name) ? $term_data->name : '';
@@ -849,16 +855,19 @@ function breadcrumb_permalink_category_ancestors($breadcrumb_items)
             $parents_id = array_reverse($parents_id);
 
 
-            foreach ($parents_id as $id) {
+            if(!empty($parents_id)){
+                foreach ($parents_id as $id) {
 
-                $parent_term_link = get_term_link($id, $taxonomy);
-                $paren_term_name = get_term_by('id', $id, $taxonomy);
+                    $parent_term_link = get_term_link($id, $taxonomy);
+                    $paren_term_name = get_term_by('id', $id, $taxonomy);
 
-                $breadcrumb_items_new[] = array(
-                    'link' => $parent_term_link,
-                    'title' => $paren_term_name->name,
-                );
+                    $breadcrumb_items_new[] = array(
+                        'link' => $parent_term_link,
+                        'title' => $paren_term_name->name,
+                    );
+                }
             }
+           
 
 
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);

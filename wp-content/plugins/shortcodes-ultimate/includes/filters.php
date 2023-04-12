@@ -51,14 +51,3 @@ function su_filter_custom_formatting( $content ) {
 	return strtr( $content, $replacements );
 
 }
-
-/**
- * Simple filter to apply the_content filters.
- *
- * @since 5.8.1
- * @param  string $content Raw content
- * @return string          Parsed content
- */
-function su_filter_the_content( $content ) {
-	return apply_filters( 'the_content', $content );
-}

@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\NotFoundR
  *
  * @author Saša Stamenković <umpirsky@gmail.com>
  */
-class CsvFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\FileLoader
+class CsvFileLoader extends FileLoader
 {
     private $delimiter = ';';
     private $enclosure = '"';
@@ -24,7 +24,7 @@ class CsvFileLoader extends \SimpleCalendar\plugin_deps\Symfony\Component\Transl
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource(string $resource)
     {
         $messages = [];
         try {

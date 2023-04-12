@@ -10,11 +10,11 @@ function cuny_local_env_flag() {
 	}
 
     if (defined('IS_LOCAL_ENV') && IS_LOCAL_ENV) {
-        $env_type = 'local';
+        $env_type   = 'local';
+		$git_branch = '';
         if (defined('ENV_TYPE')) {
             $env_type = ENV_TYPE;
 
-			$git_branch = '';
 			$git_head_path = ABSPATH . '/.git/HEAD';
 			if ( is_readable( $git_head_path ) ) {
 				$git_head = file( ABSPATH . '/.git/HEAD' );

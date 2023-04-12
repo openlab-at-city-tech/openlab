@@ -18,12 +18,12 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-class TranslationReader implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Reader\TranslationReaderInterface
+class TranslationReader implements TranslationReaderInterface
 {
     /**
      * Loaders used for import.
      *
-     * @var array
+     * @var array<string, LoaderInterface>
      */
     private $loaders = [];
     /**

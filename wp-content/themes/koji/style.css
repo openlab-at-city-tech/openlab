@@ -2,7 +2,7 @@
 
 	Theme Name: Koji
     Text Domain: koji
-	Version: 2.0.10
+	Version: 2.0.12
 	Description: Koji is a clean and lightweight theme for bloggers. It features a masonry grid on the archive pages, a beautiful and minimal design, Block Editor/Gutenberg support, widget areas in the sidebar and the footer, infinite scroll loading that can be set to load more posts on button click or when the visitor reaches the bottom of the page, settings for what post meta to display on archive pages and on single posts, icon links to social media pages, custom logo support, a search overlay that can be accessed from any page, and much more. Demo: https://andersnoren.se/themes/koji/
 	Tags: two-columns, left-sidebar, grid-layout, custom-background, custom-logo, editor-style, featured-images, sticky-post, theme-options, threaded-comments, translation-ready, blog, photography, portfolio, footer-widgets, accessibility-ready, block-styles, wide-blocks
 	Author: Anders Norén
@@ -11,7 +11,7 @@
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	Theme URI: https://andersnoren.se/teman/koji-wordpress-theme/
 	Requires PHP: 5.4
-	Tested up to: 6.0
+	Tested up to: 6.1
 	
 	All files, unless otherwise stated, are released under the GNU General Public License
 	version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
@@ -413,9 +413,12 @@ img {
 svg,
 img,
 embed,
-iframe,
 object {
 	height: auto;
+	max-width: 100%;
+}
+
+iframe {
 	max-width: 100%;
 }
 
@@ -615,7 +618,7 @@ input[type="url"]:focus {
 }
 
 select {
-	background: #fff url( ./assets/svg/chevron-down.svg ) no-repeat;
+	background: #fff url( ./assets/images/icons/chevron-down.svg ) no-repeat;
 	background-position: calc( 100% - 1.4rem ) center;
 	border-radius: .2rem;
 	border: .1rem solid #e1e1e5;

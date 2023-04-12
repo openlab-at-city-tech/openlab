@@ -38,6 +38,8 @@ class OpenLab_Help_Widget extends WP_Widget {
 			<input type="text" class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" value="<?php echo esc_attr( $r['title'] ); ?>" />
 		</p>
 		<?php
+
+		return '';
 	}
 
 	public function update( $new_instance, $old_instance ) {

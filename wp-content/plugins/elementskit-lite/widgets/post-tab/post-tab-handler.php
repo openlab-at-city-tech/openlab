@@ -17,7 +17,7 @@ class ElementsKit_Widget_Post_Tab_Handler extends \ElementsKit_Lite\Core\Handler
     }
 
     static function get_keywords() {
-        return [ 'tab', 'post tab', 'post', 'ekit', 'elementskit post tab' ];
+        return ['ekit', 'tab', 'post tab', 'post', 'elementskit post tab'];
     }
 
     static function get_categories() {

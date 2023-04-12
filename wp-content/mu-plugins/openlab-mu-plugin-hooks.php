@@ -41,9 +41,9 @@ function openlab_oplb_gradebook_show_user_widget($status) {
     if(!$group_id){
         return false;
     }
-    
+
     $current_user = wp_get_current_user();
-    
+
     if (!groups_is_user_member($current_user->ID, $group_id) && !groups_is_user_admin($current_user->ID, $group_id) && !groups_is_user_mod($current_user->ID, $group_id)) {
         return false;
     }
@@ -69,7 +69,7 @@ function openlab_oplb_gradebook_gradebook_init_placeholder($placeholder){
         )
     );
 
-    if(!empty($this_group) && isset($this_group->name)){
+    if ( ! empty( $this_group->name ) ) {
         return $this_group->name;
     }
 
@@ -114,7 +114,7 @@ function openlab_oplb_gradebook_students_list($students, $blog_id){
 
         endwhile;
 
-    else: 
+    else:
 
         //if there's an error set, return the error
         if(isset($students['error'])){

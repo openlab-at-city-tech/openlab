@@ -48,7 +48,7 @@ trait StreamDecoratorTrait
     }
     public function getContents()
     {
-        return \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::copyToString($this);
+        return Utils::copyToString($this);
     }
     /**
      * Allow decorators to implement custom methods

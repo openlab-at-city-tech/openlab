@@ -122,7 +122,12 @@ class Shortcodes_Ultimate_Admin_Pro_Features
             // translators: please keep the original markup with <nobr> tags
             __( 'Get more styles for this shortcode with the <nobr>PRO version</nobr>', 'shortcodes-ultimate' ),
             __( 'Upgrade to PRO', 'shortcodes-ultimate' ),
-            esc_attr( su_get_utm_link( 'https://getshortcodes.com/pricing/', array( 'wp-admin', 'generator', 'style' ) ) )
+            esc_attr( su_get_utm_link(
+                'https://getshortcodes.com/pricing/',
+                'wp-dashboard',
+                'generator',
+                'style'
+            ) )
         );
         foreach ( array(
             'heading',

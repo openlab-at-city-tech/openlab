@@ -334,7 +334,7 @@ function openlab_delete_group() {
  *        the dropdown.
  */
 function openlab_return_course_list( $school, $department ) {
-	$list = '<option value="dept_all" ' . selected( '', $department ) . ' >All Departments</option>';
+	$list = '<option value="dept_all" ' . selected( '', $department, false ) . ' >All Departments</option>';
 
 	// Sanitize. If no value is found, don't return any
 	// courses
@@ -349,23 +349,6 @@ function openlab_return_course_list( $school, $department ) {
 	}
 
 	return $list;
-}
-
-function openlab_group_post_count($filters, $group_args) {
-
-    $post_count = 0;
-
-    $meta_filter = new BP_Groups_Meta_Filter($filters);
-    if (bp_has_groups($group_args)) :
-
-        while (bp_groups()) : bp_the_group();
-            $post_count++;
-        endwhile;
-
-    endif;
-    $meta_filter->remove_filters();
-
-    return $post_count;
 }
 
 //a variation on bp_groups_pagination_count() to match design
@@ -794,6 +777,7 @@ function openlab_group_profile_activity_list() {
 										$forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
 
 										// Get the first forum ID
+										$forum_id = 0;
 										if (!empty($forum_ids)) {
 											$forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
 										}
@@ -811,7 +795,8 @@ function openlab_group_profile_activity_list() {
 														$last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
 														// Oh, bbPress.
-														$last_reply = get_post($last_reply_id);
+														$last_reply         = get_post($last_reply_id);
+														$last_topic_content = '';
 														if (!empty($last_reply->post_content)) {
 															$last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
 														}
@@ -1281,6 +1266,8 @@ function openlab_show_site_posts_and_comments() {
     $posts = array();
     $comments = array();
 
+	$site_url = '';
+
     add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
@@ -1341,7 +1328,7 @@ function openlab_show_site_posts_and_comments() {
 			$comment_args['main_site'] = true;
 
 			// See https://buddypress.trac.wordpress.org/ticket/8777, http://redmine.citytech.cuny.edu/issues/3125
-			remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
+			remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10 );
 			$wp_comments = get_comments( $comment_args );
 			add_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
 
@@ -1592,6 +1579,10 @@ function openlab_get_group_site_settings($group_id) {
     // Set up data. Look for local site first. Fall back on external site.
     $site_id = openlab_get_site_id_by_group_id($group_id);
 
+	$site_url   = groups_get_groupmeta($group_id, 'external_site_url');
+	$is_local   = false;
+	$is_visible = true;
+
     if ($site_id) {
         $site_url = get_blog_option($site_id, 'siteurl');
         $is_local = true;
@@ -1617,10 +1608,6 @@ function openlab_get_group_site_settings($group_id) {
                 $is_visible = isset($caps['administrator']);
                 break;
         }
-    } else {
-        $site_url = groups_get_groupmeta($group_id, 'external_site_url');
-        $is_local = false;
-        $is_visible = true;
     }
 
     $group_site_settings = array(
@@ -2200,3 +2187,27 @@ function openlab_docs_comment_form( $args ) {
 	$args['comment_field'] = ob_get_clean();
 	return $args;
 }
+
+/**
+ * Ensure that bp-mpo-activity-filter uses the correct blog_id when filtering activity items.
+ */
+add_filter(
+	'bp_mpo_activity_filter_activity_item_blog_id',
+	function( $blog_id, $activity ) {
+		$activity_types = apply_filters( 'bp_mpo_activity_types', array(
+			'new_blog',
+			'new_blog_post',
+			'new_blog_comment',
+			'new_groupblog_post',
+			'new_groupblog_comment',
+		) );
+
+		if ( ! in_array( $activity->type, $activity_types ) ) {
+			return $blog_id;
+		}
+
+		return openlab_get_site_id_by_group_id( $activity->item_id );
+	},
+	10,
+	2
+);

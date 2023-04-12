@@ -14,8 +14,8 @@
 function openlab_help_404_handler($redirect_url, $requested_url) {
     if (is_404() && strpos($requested_url, 'help')) {
         $redirect_url = site_url('blog/help/openlab-help');
-        return $redirect_url;
     }
+	return $redirect_url;
 }
 
 add_filter('redirect_canonical', 'openlab_help_404_handler', 10, 2);
@@ -32,6 +32,8 @@ function openlab_help_loop() {
         $post_id   = $post->ID;
         $help_cats = get_the_terms( $post_id, 'help_category' );
 
+		$parent_cat_name = '';
+		$parent_cat      = null;
         if (!empty($help_cats)) {
 
             sort($help_cats);
@@ -103,12 +105,12 @@ function openlab_help_loop() {
             </div>
 
         <?php elseif ($post->post_name == "openlab-help"): ?>
-            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php the_title(); ?></span>
                 <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
             <div id="help-title"><h2 class="page-title"><?php _e('Do you have a question? You\'re in the right place!', 'buddypress') ?></h2></div>
         <?php else: ?>
-            <h1 class="entry-title"><span class="profile-name hyphenate"><?php echo the_title(); ?></span>
+            <h1 class="entry-title"><span class="profile-name hyphenate"><?php the_title(); ?></span>
                 <?php echo openlab_toggle_button('#sidebar-menu-wrapper', true); ?>
             </h1>
         <?php endif; ?>
@@ -318,7 +320,7 @@ function openlab_help_cats_loop() {
                         ?>
                         <li>
                             <h3 class="help-title no-margin no-margin-bottom"><a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a></h3>
-                            <div class="help-tags">Tags: <?php echo get_the_term_list($post_id, 'help_tags', '', ', ', ''); ?></div>
+                            <div class="help-tags">Tags: <?php echo get_the_term_list( get_the_ID(), 'help_tags', '', ', ', '' ); ?></div>
                         </li>
                         <?php
                     endwhile; // end of the loop.

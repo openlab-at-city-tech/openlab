@@ -20,6 +20,10 @@ class ElementsKit_Widget_Progressbar_Handler extends \ElementsKit_Lite\Core\Hand
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'progress bar', 'skill bar', 'skills bar', 'percentage bar', 'bar chart'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'progressbar/';
     }

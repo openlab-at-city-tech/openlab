@@ -6,7 +6,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * Represents a promise that iterates over many promises and invokes
  * side-effect functions in the process.
  */
-class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromisorInterface
+class EachPromise implements PromisorInterface
 {
     private $pending = [];
     private $nextPendingIndex = 0;
@@ -45,7 +45,7 @@ class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Prom
      */
     public function __construct($iterable, array $config = [])
     {
-        $this->iterable = \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Create::iterFor($iterable);
+        $this->iterable = Create::iterFor($iterable);
         if (isset($config['concurrency'])) {
             $this->concurrency = $config['concurrency'];
         }
@@ -66,20 +66,10 @@ class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Prom
             $this->createPromise();
             /** @psalm-assert Promise $this->aggregate */
             $this->iterable->rewind();
-            if (!$this->checkIfFinished()) {
-                $this->refillPending();
-            }
+            $this->refillPending();
         } catch (\Throwable $e) {
-            /**
-             * @psalm-suppress NullReference
-             * @phpstan-ignore-next-line
-             */
             $this->aggregate->reject($e);
         } catch (\Exception $e) {
-            /**
-             * @psalm-suppress NullReference
-             * @phpstan-ignore-next-line
-             */
             $this->aggregate->reject($e);
         }
         /**
@@ -91,14 +81,17 @@ class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Prom
     private function createPromise()
     {
         $this->mutex = \false;
-        $this->aggregate = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise(function () {
+        $this->aggregate = new Promise(function () {
+            if ($this->checkIfFinished()) {
+                return;
+            }
             \reset($this->pending);
             // Consume a potentially fluctuating list of promises while
             // ensuring that indexes are maintained (precluding array_shift).
             while ($promise = \current($this->pending)) {
                 \next($this->pending);
                 $promise->wait();
-                if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+                if (Is::settled($this->aggregate)) {
                     return;
                 }
             }
@@ -140,7 +133,7 @@ class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Prom
         if (!$this->iterable || !$this->iterable->valid()) {
             return \false;
         }
-        $promise = \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Create::promiseFor($this->iterable->current());
+        $promise = Create::promiseFor($this->iterable->current());
         $key = $this->iterable->key();
         // Iterable keys may not be unique, so we use a counter to
         // guarantee uniqueness
@@ -183,7 +176,7 @@ class EachPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Prom
     private function step($idx)
     {
         // If the promise was already resolved, then ignore this step.
-        if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::settled($this->aggregate)) {
+        if (Is::settled($this->aggregate)) {
             return;
         }
         unset($this->pending[$idx]);

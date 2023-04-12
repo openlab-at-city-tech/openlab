@@ -60,7 +60,6 @@ add_filter(
 function openlab_load_custom_bp_functions() {
 	require( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
 	require( dirname( __FILE__ ) . '/includes/email.php' );
-	require( dirname( __FILE__ ) . '/includes/groupmeta-query.php' );
 	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require( dirname( __FILE__ ) . '/includes/group-types.php' );
 	require( dirname( __FILE__ ) . '/includes/group-activity.php' );
@@ -69,6 +68,7 @@ function openlab_load_custom_bp_functions() {
 	require( dirname( __FILE__ ) . '/includes/related-links.php' );
 	require( dirname( __FILE__ ) . '/includes/search.php' );
 	require( dirname( __FILE__ ) . '/includes/nav-menus.php' );
+	require( dirname( __FILE__ ) . '/includes/files.php' );
 }
 
 add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
@@ -80,15 +80,6 @@ add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
 
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
-
-function wds_default_signup_avatar( $img ) {
-	if ( false !== strpos( $img, 'mystery-man' ) ) {
-		$img = "<img src='" . wds_add_default_member_avatar() . "' width='200' height='200'>";
-	}
-
-	return $img;
-}
-add_filter( 'bp_get_signup_avatar', 'wds_default_signup_avatar' );
 
 /**
  * Get the stylesheet directory for the main site.
@@ -108,7 +99,7 @@ function openlab_get_default_avatar_uri() {
 	$uri = openlab_get_stylesheet_dir_uri() . '/images/default-avatar.jpg';
 	return str_replace( 'http://openlabdev.org', 'https://openlab.citytech.cuny.edu', $uri );
 }
-add_filter( 'bp_core_mysteryman_src', 'openlab_get_default_avatar_uri', 2, 7 );
+add_filter( 'bp_core_mysteryman_src', 'openlab_get_default_avatar_uri', 2 );
 
 /**
  * Custom default avatar
@@ -252,7 +243,7 @@ function wds_default_theme() {
 		}
 		$theme = get_option( 'template' );
 		if ( 'bp-default' === $theme ) {
-			switch_theme( 'twentyten', 'twentyten' );
+			switch_theme( 'twentyten' );
 			wp_redirect( home_url() );
 			exit();
 		}
@@ -296,34 +287,6 @@ function wds_load_account_type() {
 }
 add_action( 'wp_ajax_wds_load_account_type', 'wds_load_account_type' );
 add_action( 'wp_ajax_nopriv_wds_load_account_type', 'wds_load_account_type' );
-
-function wds_bp_profile_group_tabs() {
-	global $bp, $group_name;
-
-	$groups = wp_cache_group( 'xprofile_groups_inc_empty', 'bp' );
-	if ( false === $groups ) {
-		$groups = BP_XProfile_Group::get( array( 'fetch_fields' => true ) );
-		wp_cache_set( 'xprofile_groups_inc_empty', $groups, 'bp' );
-	}
-
-	if ( empty( $group_name ) ) {
-		$group_name = bp_profile_group_name( false );
-	}
-
-	for ( $i = 0; $i < count( $groups ); $i++ ) {
-		if ( $group_name == $groups[ $i ]->name ) {
-			$selected = ' class="current"';
-		} else {
-			$selected = '';
-		}
-
-		if ( $groups[ $i ]->fields ) {
-			echo '<li' . $selected . '><a href="' . $bp->displayed_user->domain . $bp->profile->slug . '/edit/group/' . $groups[ $i ]->id . '">' . esc_attr( $groups[ $i ]->name ) . '</a></li>';
-		}
-	}
-
-	do_action( 'xprofile_profile_group_tabs' );
-}
 
 function wds_load_group_departments() {
 	global $wpdb, $bp;
@@ -378,7 +341,7 @@ function wds_load_group_departments() {
 	}
 	sort( $departments );
 
-	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create ) {
+	if ( 'portfolio' == strtolower( $group_type ) && $is_group_create && isset( $dept_field ) ) {
 		$wds_departments = (array) bp_get_profile_field_data(
 			array(
 				'field'   => $dept_field,
@@ -805,9 +768,10 @@ function wds_load_group_type( $group_type ) {
 
 	$return = '';
 
+	$do_echo = false;
 	if ( $group_type ) {
-		$echo   = true;
-		$return = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
+		$do_echo = true;
+		$return  = '<input type="hidden" name="group_type" value="' . ucfirst( $group_type ) . '">';
 	} else {
 		$group_type = $_POST['group_type'];
 	}
@@ -967,7 +931,7 @@ function wds_load_group_type( $group_type ) {
 		$return .= '</table></div></div><!--.panel-->';
 	}
 
-	if ( $echo ) {
+	if ( $do_echo ) {
 		return $return;
 	} else {
 		$return = str_replace( "'", "\'", $return );
@@ -1349,7 +1313,7 @@ function ra_copy_blog_page( $group_id ) {
 						}
 
 						// copy media
-						OpenLab_Clone_Course_Site::copyr( $src_upload_dir['basedir'], str_replace( $src_id, $new_id, $src_upload_dir['basedir'] ) );
+						Openlab_Clone_Course_Site::copyr( $src_upload_dir['basedir'], str_replace( $src_id, $new_id, $src_upload_dir['basedir'] ) );
 
 						// update options
 						$skip_options = array(
@@ -1418,7 +1382,7 @@ function ra_copy_blog_page( $group_id ) {
 							 * on the cloned site, and so the t.term_order clause will
 							 * always trigger an error.
 							 */
-							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
 							OpenLab\NavMenus\add_group_menu_item( $group_id );
 							OpenLab\NavMenus\add_home_menu_item();
 							add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
@@ -1595,7 +1559,7 @@ add_filter(
 add_action(
 	'bp_screens',
 	function() {
-		remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9, 2 );
+		remove_filter( 'bp_get_the_profile_field_value', 'xprofile_filter_link_profile_data', 9 );
 	}
 );
 
@@ -1673,8 +1637,8 @@ class Buddypress_Translation_Mangler {
 }
 
 function openlab_launch_translator() {
-	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
-	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Translation_Mangler', 'filter_gettext' ), 10, 3 );
+	add_filter( 'gettext', array( 'bbPress_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 	add_filter( 'gettext_with_context', 'openlab_gettext_with_context', 10, 4 );
 }
 
@@ -1731,7 +1695,7 @@ class Buddypress_Ajax_Translation_Mangler {
 }
 
 function openlab_launch_ajax_translator() {
-	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 4 );
+	add_filter( 'gettext', array( 'Buddypress_Ajax_Translation_Mangler', 'filter_gettext' ), 10, 3 );
 }
 
 add_action( 'bp_setup_globals', 'openlab_launch_ajax_translator' );
@@ -2172,7 +2136,7 @@ add_action( 'wp', 'openlab_swap_private_blog_message' );
 function openlab_private_blog_message() {
 	global $ds_more_privacy_options;
 
-	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && is_main_site()) return;		
+	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && is_main_site()) return;
 	if( strpos($_SERVER['PHP_SELF'], 'wp-activate.php') && !is_main_site()) {
 		$destination = network_home_url('wp-activate.php');
 		wp_redirect( $destination );
@@ -2354,6 +2318,7 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 					</p>
 
 		<?php
+		return '';
 	}
 
 	protected function enqueue_scripts() {
@@ -2532,7 +2497,7 @@ function openlab_bp_email_add_link_color_to_template( $value, $property_name, $t
 
 	return $value;
 }
-remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6, 3 );
+remove_filter( 'bp_email_get_property', 'bp_email_add_link_color_to_template', 6 );
 add_filter( 'bp_email_get_property', 'openlab_bp_email_add_link_color_to_template', 6, 3 );
 
 /**
@@ -2609,7 +2574,7 @@ add_filter( 'option_wpa_toolbar', '__return_empty_string' );
 add_filter(
 	'image_send_to_editor',
 	function( $retval ) {
-		remove_filter( 'image_send_to_editor', 'wpa_alt_attribute', 10, 8 );
+		remove_filter( 'image_send_to_editor', 'wpa_alt_attribute', 10 );
 		return $retval;
 	},
 	0
@@ -2825,8 +2790,8 @@ function openlab_secondary_mime( $check, $filetype, $filename, $mimes ) {
 
 		foreach ( $secondary_mimes as $secondary_mime ) {
 			// Run another check, but only for our secondary mime and not on core mime types.
-			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
-			$check = wp_check_filetype_and_ext( $file, $filename, $secondary_mime );
+			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99 );
+			$check = wp_check_filetype_and_ext( $filetype, $filename, $secondary_mime );
 			add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
 
 			if ( ! empty( $check['ext'] ) || ! empty( $check['type'] ) ) {
@@ -2870,7 +2835,7 @@ add_filter(
 		return array( 'do_not_allow' );
 	},
 	10,
-	4
+	3
 );
 
 /**

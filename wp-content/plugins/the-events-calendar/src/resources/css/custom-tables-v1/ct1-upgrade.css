@@ -28,7 +28,7 @@
 
 	.tec-ct1-upgrade button,
 	.tec-ct1-upgrade .tec-ct1-upgrade__button {
-		background: #334aff;
+		background: var(--tec-color-button-primary);
 		border: 0;
 		border-radius: 0.25rem;
 		box-shadow: 0 2px black;
@@ -118,10 +118,6 @@
 		width: 100%;
 	}
 
-	.tec-ct1-upgrade progress.focus-visible {
-			outline-color: var(--_progress);
-		}
-
 	.tec-ct1-upgrade progress:focus-visible {
 			outline-color: var(--_progress);
 		}
@@ -155,10 +151,7 @@
 			background-size: var(--_indeterminate-track-size);
 			border-radius: 4px;
 			content: "";
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
+			inset: 0;
 			position: absolute;
 		}
 
@@ -184,28 +177,6 @@
 
 	/*  complete  */
 
-	[dir="ltr"] .tec-ct1-upgrade progress:not([max])[value="1"]:before,[dir="ltr"] 
-		.tec-ct1-upgrade progress[max="100"][value="100"]:before {
-			left: auto;
-			right: 0;
-}
-
-	[dir="rtl"] .tec-ct1-upgrade progress:not([max])[value="1"]:before,[dir="rtl"] 
-		.tec-ct1-upgrade progress[max="100"][value="100"]:before {
-			right: auto;
-			left: 0;
-}
-
-	[dir="ltr"] .tec-ct1-upgrade progress:not([max])[value="1"]:before,[dir="ltr"] 
-		.tec-ct1-upgrade progress[max="100"][value="100"]:before {
-			padding-right: max(calc(var(--_track-size)/4), 3px);
-}
-
-	[dir="rtl"] .tec-ct1-upgrade progress:not([max])[value="1"]:before,[dir="rtl"] 
-		.tec-ct1-upgrade progress[max="100"][value="100"]:before {
-			padding-left: max(calc(var(--_track-size)/4), 3px);
-}
-
 	.tec-ct1-upgrade progress:not([max])[value="1"]:before,
 		.tec-ct1-upgrade progress[max="100"][value="100"]:before {
 			align-items: center;
@@ -213,8 +184,9 @@
 			content: "✓";
 			display: flex;
 			font-size: calc(var(--_track-size)/1.25);
-			top: 0;
-			bottom: 0;
+			inset-block: 0;
+			inset-inline: auto 0;
+			padding-inline-end: max(calc(var(--_track-size)/4), 3px);
 			position: absolute;
 		}
 
@@ -239,7 +211,7 @@
 }
 
 .tec-ct1-upgrade__row .content-container > span {
-	color: #334aff;
+	color: var(--tec-color-accent-primary);
 }
 
 .clear + .tec-ct1-upgrade {
@@ -387,7 +359,7 @@
 }
 
 .tribe-common.tec-ct1-dialog-wrapper--v2-disable-dialog .tribe-dialog__overlay {
-	background-color: var(--tribe-modal-overlay-color);
+	background-color: var(--tec-modal-overlay-color);
 }
 
 .tribe-common.tec-ct1-dialog-wrapper--v2-disable-dialog .tribe-dialog__close-button {

@@ -13,28 +13,7 @@ su_add_shortcode(
 		'atts'     => array(
 			'field'     => array(
 				'type'    => 'select',
-				'values'  => array(
-					'ID'                => __( 'Post ID', 'shortcodes-ultimate' ),
-					'post_author'       => __( 'Post author', 'shortcodes-ultimate' ),
-					'post_date'         => __( 'Post date', 'shortcodes-ultimate' ),
-					'post_date_gmt'     => __( 'Post date', 'shortcodes-ultimate' ) . ' GMT',
-					'post_content'      => __( 'Post content (Raw)', 'shortcodes-ultimate' ),
-					'the_content'       => __( 'Post content (Filtered)', 'shortcodes-ultimate' ),
-					'post_title'        => __( 'Post title', 'shortcodes-ultimate' ),
-					'post_excerpt'      => __( 'Post excerpt', 'shortcodes-ultimate' ),
-					'post_status'       => __( 'Post status', 'shortcodes-ultimate' ),
-					'comment_status'    => __( 'Comment status', 'shortcodes-ultimate' ),
-					'ping_status'       => __( 'Ping status', 'shortcodes-ultimate' ),
-					'post_name'         => __( 'Post name', 'shortcodes-ultimate' ),
-					'post_modified'     => __( 'Post modified', 'shortcodes-ultimate' ),
-					'post_modified_gmt' => __( 'Post modified', 'shortcodes-ultimate' ) . ' GMT',
-					'post_parent'       => __( 'Post parent', 'shortcodes-ultimate' ),
-					'guid'              => __( 'GUID', 'shortcodes-ultimate' ),
-					'menu_order'        => __( 'Menu order', 'shortcodes-ultimate' ),
-					'post_type'         => __( 'Post type', 'shortcodes-ultimate' ),
-					'post_mime_type'    => __( 'Post mime type', 'shortcodes-ultimate' ),
-					'comment_count'     => __( 'Comment count', 'shortcodes-ultimate' ),
-				),
+				'values'  => su_get_config( 'post-fields' ),
 				'default' => 'post_title',
 				'name'    => __( 'Field', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Post data field name', 'shortcodes-ultimate' ),
@@ -75,31 +54,37 @@ su_add_shortcode(
 );
 
 function su_shortcode_post( $atts = null, $content = null ) {
-
 	$atts = su_parse_shortcode_atts(
 		'post',
 		$atts,
 		array( 'filter_content' => 'no' )
 	);
 
+	if ( ! in_array( $atts['field'], array_keys( su_get_config( 'post-fields' ) ), true ) ) {
+		return su_error_message(
+			'Post',
+			sprintf(
+				'%s. <a href="https://getshortcodes.com/docs/post-data/#post-field-is-not-allowed">%s</a>',
+				__( 'field is not allowed', 'shortcodes-ultimate' ),
+				__( 'Learn more', 'shortcodes-ultimate' )
+			)
+		);
+	}
+
 	if ( ! $atts['post_id'] ) {
 		$atts['post_id'] = get_the_ID();
 	}
 
 	if ( ! $atts['post_id'] ) {
-
 		return su_error_message(
 			'Post',
 			__( 'invalid post ID', 'shortcodes-ultimate' )
 		);
-
 	}
 
 	if ( 'the_content' === $atts['field'] ) {
-
 		$atts['field']          = 'post_content';
 		$atts['filter_content'] = 'yes';
-
 	}
 
 	$data = '';
@@ -107,12 +92,19 @@ function su_shortcode_post( $atts = null, $content = null ) {
 		? get_post( $atts['post_id'] )
 		: get_page_by_path( $atts['post_id'], OBJECT, $atts['post_type'] );
 
+	if ( is_a( $post, 'WP_Post' ) && ! su_current_user_can_read_post( $post->ID ) ) {
+		return su_error_message(
+			'Post',
+			__( 'unable to display data, check the post status and password', 'shortcodes-ultimate' )
+		);
+	}
+
 	if ( isset( $post->{$atts['field']} ) ) {
 		$data = $post->{$atts['field']};
 	}
 
 	if ( 'yes' === $atts['filter_content'] ) {
-		$data = su_filter_the_content( $data );
+		$data = apply_filters( 'the_content', $data );
 	}
 
 	$data = su_safely_apply_user_filter( $atts['filter'], $data );
@@ -122,5 +114,4 @@ function su_shortcode_post( $atts = null, $content = null ) {
 	}
 
 	return $data ? $atts['before'] . $data . $atts['after'] : '';
-
 }

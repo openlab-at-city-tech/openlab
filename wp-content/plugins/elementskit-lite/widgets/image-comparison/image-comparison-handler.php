@@ -19,6 +19,10 @@ class ElementsKit_Widget_Image_Comparison_Handler extends \ElementsKit_Lite\Core
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['compare', 'image', 'before image', 'after image', 'comparison'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'image-comparison/';
     }

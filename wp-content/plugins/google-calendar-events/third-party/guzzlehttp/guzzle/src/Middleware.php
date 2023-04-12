@@ -48,7 +48,7 @@ final class Middleware
      *
      * @return callable(callable): callable Returns a function that accepts the next handler.
      */
-    public static function httpErrors(\SimpleCalendar\plugin_deps\GuzzleHttp\BodySummarizerInterface $bodySummarizer = null) : callable
+    public static function httpErrors(BodySummarizerInterface $bodySummarizer = null) : callable
     {
         return static function (callable $handler) use($bodySummarizer) : callable {
             return static function ($request, array $options) use($handler, $bodySummarizer) {
@@ -127,7 +127,7 @@ final class Middleware
     public static function redirect() : callable
     {
         return static function (callable $handler) : RedirectMiddleware {
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\RedirectMiddleware($handler);
+            return new RedirectMiddleware($handler);
         };
     }
     /**
@@ -148,7 +148,7 @@ final class Middleware
     public static function retry(callable $decider, callable $delay = null) : callable
     {
         return static function (callable $handler) use($decider, $delay) : RetryMiddleware {
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\RetryMiddleware($decider, $handler, $delay);
+            return new RetryMiddleware($decider, $handler, $delay);
         };
     }
     /**
@@ -166,8 +166,8 @@ final class Middleware
     public static function log(LoggerInterface $logger, $formatter, string $logLevel = 'info') : callable
     {
         // To be compatible with Guzzle 7.1.x we need to allow users to pass a MessageFormatter
-        if (!$formatter instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\MessageFormatter && !$formatter instanceof \SimpleCalendar\plugin_deps\GuzzleHttp\MessageFormatterInterface) {
-            throw new \LogicException(\sprintf('Argument 2 to %s::log() must be of type %s', self::class, \SimpleCalendar\plugin_deps\GuzzleHttp\MessageFormatterInterface::class));
+        if (!$formatter instanceof MessageFormatter && !$formatter instanceof MessageFormatterInterface) {
+            throw new \LogicException(\sprintf('Argument 2 to %s::log() must be of type %s', self::class, MessageFormatterInterface::class));
         }
         return static function (callable $handler) use($logger, $formatter, $logLevel) : callable {
             return static function (RequestInterface $request, array $options = []) use($handler, $logger, $formatter, $logLevel) {
@@ -191,7 +191,7 @@ final class Middleware
     public static function prepareBody() : callable
     {
         return static function (callable $handler) : PrepareBodyMiddleware {
-            return new \SimpleCalendar\plugin_deps\GuzzleHttp\PrepareBodyMiddleware($handler);
+            return new PrepareBodyMiddleware($handler);
         };
     }
     /**

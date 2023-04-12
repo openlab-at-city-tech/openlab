@@ -7,13 +7,15 @@
 
 namespace OpenLab;
 
+use \stdClass;
+
 /**
  * Abstract WP_Background_Process class.
  *
  * @abstract
  * @extends WP_Async_Request
  */
-abstract class WP_Background_Process extends WP_Async_Request {
+abstract class WP_Background_Process extends \WP_Async_Request {
 
 	/**
 	 * Action
@@ -280,7 +282,7 @@ abstract class WP_Background_Process extends WP_Async_Request {
 		LIMIT 1
 	", $key ) );
 
-		$batch       = new stdClass();
+		$batch       = new \stdClass();
 		$batch->key  = $query->$column;
 		$batch->data = maybe_unserialize( $query->$value_column );
 

@@ -18,11 +18,15 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  * @author Christophe Coevoet <stof@notk.org>
  * @author Kirill chEbba Chebunin <iam@chebba.org>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
  */
-class WildfireFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\NormalizerFormatter
+class WildfireFormatter extends NormalizerFormatter
 {
     /**
      * Translates Monolog log levels to Wildfire levels.
+     *
+     * @var array<Level, string>
      */
     private $logLevels = [Logger::DEBUG => 'LOG', Logger::INFO => 'INFO', Logger::NOTICE => 'INFO', Logger::WARNING => 'WARN', Logger::ERROR => 'ERROR', Logger::CRITICAL => 'ERROR', Logger::ALERT => 'ERROR', Logger::EMERGENCY => 'ERROR'];
     /**
@@ -35,7 +39,9 @@ class WildfireFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\No
         $this->removeJsonEncodeOption(\JSON_UNESCAPED_UNICODE);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return string
      */
     public function format(array $record) : string
     {
@@ -49,6 +55,7 @@ class WildfireFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\No
             $line = $record['extra']['line'];
             unset($record['extra']['line']);
         }
+        /** @var mixed[] $record */
         $record = $this->normalize($record);
         $message = ['message' => $record['message']];
         $handleError = \false;
@@ -77,15 +84,18 @@ class WildfireFormatter extends \SimpleCalendar\plugin_deps\Monolog\Formatter\No
         return \sprintf('%d|%s|', \strlen($json), $json);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @phpstan-return never
      */
     public function formatBatch(array $records)
     {
         throw new \BadMethodCallException('Batch formatting does not make sense for the WildfireFormatter');
     }
     /**
-     * {@inheritdoc}
-     * @return int|bool|string|null|array|object
+     * {@inheritDoc}
+     *
+     * @return null|scalar|array<array|scalar|null>|object
      */
     protected function normalize($data, int $depth = 0)
     {

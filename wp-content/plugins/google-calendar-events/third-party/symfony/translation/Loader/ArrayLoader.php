@@ -16,7 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ArrayLoader implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\LoaderInterface
+class ArrayLoader implements LoaderInterface
 {
     /**
      * {@inheritdoc}

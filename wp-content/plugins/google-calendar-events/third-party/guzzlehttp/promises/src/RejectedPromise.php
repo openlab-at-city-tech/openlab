@@ -8,7 +8,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * Thenning off of this promise will invoke the onRejected callback
  * immediately and ignore other callbacks.
  */
-class RejectedPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\PromiseInterface
+class RejectedPromise implements PromiseInterface
 {
     private $reason;
     public function __construct($reason)
@@ -24,11 +24,11 @@ class RejectedPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\
         if (!$onRejected) {
             return $this;
         }
-        $queue = \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Utils::queue();
+        $queue = Utils::queue();
         $reason = $this->reason;
-        $p = new \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $p = new Promise([$queue, 'run']);
         $queue->add(static function () use($p, $reason, $onRejected) {
-            if (\SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Is::pending($p)) {
+            if (Is::pending($p)) {
                 try {
                     // Return a resolved promise if onRejected does not throw.
                     $p->resolve($onRejected($reason));
@@ -50,7 +50,7 @@ class RejectedPromise implements \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\
     public function wait($unwrap = \true, $defaultDelivery = null)
     {
         if ($unwrap) {
-            throw \SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Create::exceptionFor($this->reason);
+            throw Create::exceptionFor($this->reason);
         }
         return null;
     }

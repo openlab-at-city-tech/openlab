@@ -47,7 +47,7 @@ class ElementsKit_Widget_Post_List_Handler extends \ElementsKit_Lite\Core\Handle
 	}
 
 	static function get_keywords() {
-	    return [ 'list', 'post list', 'post', 'ekit', 'elementskit post list' ];
+	    return ['ekit', 'list', 'post list', 'post', 'elementskit post list'];
 	}
 
     static function get_categories() {

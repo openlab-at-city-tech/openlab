@@ -1,21 +1,21 @@
-=== ElementsKit Elementor addons (Header Footer Builder, Mega Menu Builder, Free Elementor Widgets & Templates Library) ===
+=== ElementsKit Elementor addons ===
 Contributors: xpeedstudio, Ataurr, emranio
 Tags: Elementor addons, mega menu builder, header footer builder, Elementor widgets, Accordion tab, Elementor modules, page builder addons, addons
 Requires at least: 5.0
 Tested up to: 6.1
 Requires PHP: 7.1
-Stable tag: 2.8.0
+Stable tag: 2.8.5
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Elementor Addons come with Header Footer Builder, Mega Menu Builder, Templates Library, Pricing table, Team member, testimonial Widgets, Etc under the hood. It has 80+ custom widgets to create any site with on the fly.
+Elementor Addons come with Header Footer Builder, Mega Menu Builder, Free Elementor Widgets, Templates Library Pricing table, Team member, testimonial Widgets, Etc under the hood. It has 80+ custom widgets to create any site with on the fly.
 
 
 == Description ==
 
-ElementsKit is an ultimate and all-in-one addons for Elementor Page Builder. It includes the most comprehensive modules, such as **Header Footer Builder, Mega Menu Builder, Layout template Library**, etc under the one hood. It has **80+ custom widgets** such as an Advanced accordion, Pricing table, Team member, testimonial, Accordion, tab, Countdown Timer, etc to create any site with ease. 
+ElementsKit Elementor addons is an ultimate and all-in-one addons for Elementor Page Builder. It includes the most comprehensive modules, such as **Header Footer Builder, Mega Menu Builder, Layout template Library**, etc under the one hood. It has **80+ custom elementor widgets** such as an Advanced accordion, Pricing table, Team member, testimonial, Accordion, tab, Countdown Timer, etc to create any site with ease. 
 
-It has some unique and powerful custom controls, such as Image Picker, Ajax Select2, Advanced Widgets, and many more. Why do you need multiple add ons? Where is everything under the one hood?
+It has unique and powerful custom controls, such as Image Picker, Ajax Select2, Advanced Widgets, and many more. Why do you need multiple elementor addons? Where is everything under the one hood?
 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VhBl3dHT5SY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -43,7 +43,7 @@ WordPress 4.9+
 == = KEY FEATURES == ==
 
 - Header Footer Builder
-- Widget Builder
+- Elementor Widget Builder
 - Mega Menu Builder
 - Vertical Mega Menu
 - 74+ Free and Premium Widgets
@@ -607,6 +607,23 @@ Visit  [wpmet](https://wpmet.com/)  to learn more about how to get the best of W
 
 
 == Changelog ==
+Version: 2.8.5 (2023-02-28)
+Fixed: Swiper column break on initial load
+Improved: Tab Widget layout choose style
+Improved: Post Grid Widget title controls
+Improved: Accessibility for widgets and modules
+Improved: Pricing Table Widget button hover
+Improved: Layout Library responsiveness and category filter
+Tweaked: Video Widget glow effect control
+
+Version: 2.8.1 (2023-01-16)
+Added: Flex container support
+Improved: Widgets searching keywords for editor panel
+Fixed: Icon animation not working for svg in Team Widget
+Fixed: Header Footer builder module on/off issue
+Fixed: Video Widget Popup does not Open editor mode
+Fixed: Swiper slider initial loading breaks columns
+
 Version: 2.8.0 (2022-12-12)
 Added: New animation style odometer in Funfact widget
 Added: Video Widget self hosted video feature

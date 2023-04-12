@@ -10,6 +10,9 @@ namespace SimpleCalendar\plugin_deps;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+if ('cli' !== \PHP_SAPI) {
+    throw new \Exception('This script must be run from the command line.');
+}
 $usageInstructions = <<<END
 
   Usage instructions
@@ -20,13 +23,16 @@ $usageInstructions = <<<END
   # show the translation status of all locales
   \$ php translation-status.php
 
-  # show the translation status of all locales and all their missing translations
+  # only show the translation status of incomplete or erroneous locales
+  \$ php translation-status.php --incomplete
+
+  # show the translation status of all locales, all their missing translations and mismatches between trans-unit id and source
   \$ php translation-status.php -v
 
   # show the status of a single locale
   \$ php translation-status.php fr
 
-  # show the status of a single locale and all its missing translations
+  # show the status of a single locale, missing translations and mismatches between trans-unit id and source
   \$ php translation-status.php fr -v
 
 END;
@@ -35,16 +41,22 @@ $config = [
     'verbose_output' => \false,
     // NULL = analyze all locales
     'locale_to_analyze' => null,
+    // append --incomplete to only show incomplete languages
+    'include_completed_languages' => \true,
     // the reference files all the other translations are compared to
     'original_files' => ['src/Symfony/Component/Form/Resources/translations/validators.en.xlf', 'src/Symfony/Component/Security/Core/Resources/translations/security.en.xlf', 'src/Symfony/Component/Validator/Resources/translations/validators.en.xlf'],
 ];
 $argc = $_SERVER['argc'];
 $argv = $_SERVER['argv'];
-if ($argc > 3) {
+if ($argc > 4) {
     echo \str_replace('translation-status.php', $argv[0], $usageInstructions);
     exit(1);
 }
 foreach (\array_slice($argv, 1) as $argumentOrOption) {
+    if ('--incomplete' === $argumentOrOption) {
+        $config['include_completed_languages'] = \false;
+        continue;
+    }
     if (0 === \strpos($argumentOrOption, '-')) {
         $config['verbose_output'] = \true;
     } else {
@@ -58,15 +70,19 @@ foreach ($config['original_files'] as $originalFilePath) {
     }
 }
 $totalMissingTranslations = 0;
+$totalTranslationMismatches = 0;
 foreach ($config['original_files'] as $originalFilePath) {
-    $translationFilePaths = \SimpleCalendar\plugin_deps\findTranslationFiles($originalFilePath, $config['locale_to_analyze']);
-    $translationStatus = \SimpleCalendar\plugin_deps\calculateTranslationStatus($originalFilePath, $translationFilePaths);
+    $translationFilePaths = findTranslationFiles($originalFilePath, $config['locale_to_analyze']);
+    $translationStatus = calculateTranslationStatus($originalFilePath, $translationFilePaths);
     $totalMissingTranslations += \array_sum(\array_map(function ($translation) {
         return \count($translation['missingKeys']);
     }, \array_values($translationStatus)));
-    \SimpleCalendar\plugin_deps\printTranslationStatus($originalFilePath, $translationStatus, $config['verbose_output']);
+    $totalTranslationMismatches += \array_sum(\array_map(function ($translation) {
+        return \count($translation['mismatches']);
+    }, \array_values($translationStatus)));
+    printTranslationStatus($originalFilePath, $translationStatus, $config['verbose_output'], $config['include_completed_languages']);
 }
-exit($totalMissingTranslations > 0 ? 1 : 0);
+exit($totalTranslationMismatches > 0 ? 1 : 0);
 function findTranslationFiles($originalFilePath, $localeToAnalyze)
 {
     $translations = [];
@@ -76,7 +92,7 @@ function findTranslationFiles($originalFilePath, $localeToAnalyze)
     $translationFiles = \glob($translationsDir . '/' . $translationFileNamePattern, \GLOB_NOSORT);
     \sort($translationFiles);
     foreach ($translationFiles as $filePath) {
-        $locale = \SimpleCalendar\plugin_deps\extractLocaleFromFilePath($filePath);
+        $locale = extractLocaleFromFilePath($filePath);
         if (null !== $localeToAnalyze && $locale !== $localeToAnalyze) {
             continue;
         }
@@ -87,18 +103,24 @@ function findTranslationFiles($originalFilePath, $localeToAnalyze)
 function calculateTranslationStatus($originalFilePath, $translationFilePaths)
 {
     $translationStatus = [];
-    $allTranslationKeys = \SimpleCalendar\plugin_deps\extractTranslationKeys($originalFilePath);
+    $allTranslationKeys = extractTranslationKeys($originalFilePath);
     foreach ($translationFilePaths as $locale => $translationPath) {
-        $translatedKeys = \SimpleCalendar\plugin_deps\extractTranslationKeys($translationPath);
+        $translatedKeys = extractTranslationKeys($translationPath);
         $missingKeys = \array_diff_key($allTranslationKeys, $translatedKeys);
-        $translationStatus[$locale] = ['total' => \count($allTranslationKeys), 'translated' => \count($translatedKeys), 'missingKeys' => $missingKeys];
+        $mismatches = findTransUnitMismatches($allTranslationKeys, $translatedKeys);
+        $translationStatus[$locale] = ['total' => \count($allTranslationKeys), 'translated' => \count($translatedKeys), 'missingKeys' => $missingKeys, 'mismatches' => $mismatches];
+        $translationStatus[$locale]['is_completed'] = isTranslationCompleted($translationStatus[$locale]);
     }
     return $translationStatus;
 }
-function printTranslationStatus($originalFilePath, $translationStatus, $verboseOutput)
+function isTranslationCompleted(array $translationStatus) : bool
 {
-    \SimpleCalendar\plugin_deps\printTitle($originalFilePath);
-    \SimpleCalendar\plugin_deps\printTable($translationStatus, $verboseOutput);
+    return $translationStatus['total'] === $translationStatus['translated'] && 0 === \count($translationStatus['mismatches']);
+}
+function printTranslationStatus($originalFilePath, $translationStatus, $verboseOutput, $includeCompletedLanguages)
+{
+    printTitle($originalFilePath);
+    printTable($translationStatus, $verboseOutput, $includeCompletedLanguages);
     echo \PHP_EOL . \PHP_EOL;
 }
 function extractLocaleFromFilePath($filePath)
@@ -117,12 +139,28 @@ function extractTranslationKeys($filePath)
     }
     return $translationKeys;
 }
+/**
+ * Check whether the trans-unit id and source match with the base translation.
+ */
+function findTransUnitMismatches(array $baseTranslationKeys, array $translatedKeys) : array
+{
+    $mismatches = [];
+    foreach ($baseTranslationKeys as $translationId => $translationKey) {
+        if (!isset($translatedKeys[$translationId])) {
+            continue;
+        }
+        if ($translatedKeys[$translationId] !== $translationKey) {
+            $mismatches[$translationId] = ['found' => $translatedKeys[$translationId], 'expected' => $translationKey];
+        }
+    }
+    return $mismatches;
+}
 function printTitle($title)
 {
     echo $title . \PHP_EOL;
     echo \str_repeat('=', \strlen($title)) . \PHP_EOL . \PHP_EOL;
 }
-function printTable($translations, $verboseOutput)
+function printTable($translations, $verboseOutput, bool $includeCompletedLanguages)
 {
     if (0 === \count($translations)) {
         echo 'No translations found';
@@ -130,32 +168,48 @@ function printTable($translations, $verboseOutput)
     }
     $longestLocaleNameLength = \max(\array_map('strlen', \array_keys($translations)));
     foreach ($translations as $locale => $translation) {
-        if ($translation['translated'] > $translation['total']) {
-            \SimpleCalendar\plugin_deps\textColorRed();
-        } elseif ($translation['translated'] === $translation['total']) {
-            \SimpleCalendar\plugin_deps\textColorGreen();
+        if (!$includeCompletedLanguages && $translation['is_completed']) {
+            continue;
         }
-        echo \sprintf('| Locale: %-' . $longestLocaleNameLength . 's | Translated: %d/%d', $locale, $translation['translated'], $translation['total']) . \PHP_EOL;
-        \SimpleCalendar\plugin_deps\textColorNormal();
+        if ($translation['translated'] > $translation['total']) {
+            textColorRed();
+        } elseif (\count($translation['mismatches']) > 0) {
+            textColorRed();
+        } elseif ($translation['is_completed']) {
+            textColorGreen();
+        }
+        echo \sprintf('|  Locale: %-' . $longestLocaleNameLength . 's  |  Translated: %2d/%2d  |  Mismatches: %d  |', $locale, $translation['translated'], $translation['total'], \count($translation['mismatches'])) . \PHP_EOL;
+        textColorNormal();
+        $shouldBeClosed = \false;
         if (\true === $verboseOutput && \count($translation['missingKeys']) > 0) {
-            echo \str_repeat('-', 80) . \PHP_EOL;
-            echo '| Missing Translations:' . \PHP_EOL;
+            echo '|    Missing Translations:' . \PHP_EOL;
             foreach ($translation['missingKeys'] as $id => $content) {
-                echo \sprintf('|   (id=%s) %s', $id, $content) . \PHP_EOL;
+                echo \sprintf('|      (id=%s) %s', $id, $content) . \PHP_EOL;
             }
+            $shouldBeClosed = \true;
+        }
+        if (\true === $verboseOutput && \count($translation['mismatches']) > 0) {
+            echo '|    Mismatches between trans-unit id and source:' . \PHP_EOL;
+            foreach ($translation['mismatches'] as $id => $content) {
+                echo \sprintf('|      (id=%s) Expected: %s', $id, $content['expected']) . \PHP_EOL;
+                echo \sprintf('|              Found:    %s', $content['found']) . \PHP_EOL;
+            }
+            $shouldBeClosed = \true;
+        }
+        if ($shouldBeClosed) {
             echo \str_repeat('-', 80) . \PHP_EOL;
         }
     }
 }
 function textColorGreen()
 {
-    echo "\33[32m";
+    echo "\x1b[32m";
 }
 function textColorRed()
 {
-    echo "\33[31m";
+    echo "\x1b[31m";
 }
 function textColorNormal()
 {
-    echo "\33[0m";
+    echo "\x1b[0m";
 }

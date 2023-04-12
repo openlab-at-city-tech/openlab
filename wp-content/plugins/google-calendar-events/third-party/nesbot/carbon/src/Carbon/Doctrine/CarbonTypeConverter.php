@@ -1,8 +1,12 @@
 <?php
 
 /**
- * Thanks to https://github.com/flaushi for his suggestion:
- * https://github.com/doctrine/dbal/issues/2873#issuecomment-534956358
+ * This file is part of the Carbon package.
+ *
+ * (c) Brian Nesbitt <brian@nesbot.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
@@ -12,20 +16,35 @@ use DateTimeInterface;
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Types\ConversionException;
 use Exception;
+/**
+ * @template T of CarbonInterface
+ */
 trait CarbonTypeConverter
 {
+    /**
+     * @return class-string<T>
+     */
     protected function getCarbonClassName() : string
     {
         return Carbon::class;
     }
+    /**
+     * @return string
+     */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        $precision = ($fieldDeclaration['precision'] ?: 10) === 10 ? \SimpleCalendar\plugin_deps\Carbon\Doctrine\DateTimeDefaultPrecision::get() : $fieldDeclaration['precision'];
+        $precision = $fieldDeclaration['precision'] ?: 10;
+        if ($fieldDeclaration['secondPrecision'] ?? \false) {
+            $precision = 0;
+        }
+        if ($precision === 10) {
+            $precision = DateTimeDefaultPrecision::get();
+        }
         $type = parent::getSQLDeclaration($fieldDeclaration, $platform);
         if (!$precision) {
             return $type;
         }
-        if (\strpos($type, '(') !== \false) {
+        if (\str_contains($type, '(')) {
             return \preg_replace('/\\(\\d+\\)/', "({$precision})", $type);
         }
         [$before, $after] = \explode(' ', "{$type} ");
@@ -33,6 +52,8 @@ trait CarbonTypeConverter
     }
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @return T|null
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -57,13 +78,15 @@ trait CarbonTypeConverter
     }
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @return string|null
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if ($value === null) {
             return $value;
         }
-        if ($value instanceof DateTimeInterface || $value instanceof CarbonInterface) {
+        if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d H:i:s.u');
         }
         throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', 'DateTime', 'Carbon']);

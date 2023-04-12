@@ -23,7 +23,7 @@ use CurlHandle;
  * @author Adam Pancutt <adam@pancutt.com>
  * @author Gregory Barchard <gregory@barchard.net>
  */
-class LogglyHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\AbstractProcessingHandler
+class LogglyHandler extends AbstractProcessingHandler
 {
     protected const HOST = 'logs-01.loggly.com';
     protected const ENDPOINT_SINGLE = 'inputs';
@@ -34,19 +34,19 @@ class LogglyHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstract
      * @var resource[]|CurlHandle[]
      */
     protected $curlHandlers = [];
+    /** @var string */
     protected $token;
+    /** @var string[] */
     protected $tag = [];
     /**
-     * @param string     $token  API token supplied by Loggly
-     * @param string|int $level  The minimum logging level to trigger this handler
-     * @param bool       $bubble Whether or not messages that are handled should bubble up the stack.
+     * @param string $token API token supplied by Loggly
      *
      * @throws MissingExtensionException If the curl extension is missing
      */
     public function __construct(string $token, $level = Logger::DEBUG, bool $bubble = \true)
     {
         if (!\extension_loaded('curl')) {
-            throw new \SimpleCalendar\plugin_deps\Monolog\Handler\MissingExtensionException('The curl extension is needed to use the LogglyHandler');
+            throw new MissingExtensionException('The curl extension is needed to use the LogglyHandler');
         }
         $this->token = $token;
         parent::__construct($level, $bubble);
@@ -124,7 +124,7 @@ class LogglyHandler extends \SimpleCalendar\plugin_deps\Monolog\Handler\Abstract
         }
         \curl_setopt($ch, \CURLOPT_POSTFIELDS, $data);
         \curl_setopt($ch, \CURLOPT_HTTPHEADER, $headers);
-        \SimpleCalendar\plugin_deps\Monolog\Handler\Curl\Util::execute($ch, 5, \false);
+        Curl\Util::execute($ch, 5, \false);
     }
     protected function getDefaultFormatter() : FormatterInterface
     {

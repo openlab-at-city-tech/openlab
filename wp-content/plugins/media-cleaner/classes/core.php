@@ -1258,6 +1258,10 @@ class Meow_WPMC_Core {
 		);
 	}
 
+	function reset_options() {
+		delete_option( $this->option_name );
+	}
+
 	function get_option( $option ) {
 		$options = $this->get_all_options();
 		return $options[$option];

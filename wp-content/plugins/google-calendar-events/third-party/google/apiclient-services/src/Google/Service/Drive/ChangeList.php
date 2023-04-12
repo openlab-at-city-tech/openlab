@@ -17,7 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-class Google_Service_Drive_ChangeList extends \SimpleCalendar\plugin_deps\Google_Collection
+class Google_Service_Drive_ChangeList extends Google_Collection
 {
     protected $collection_key = 'changes';
     protected $changesType = 'SimpleCalendar\plugin_deps\Google_Service_Drive_Change';
@@ -26,14 +26,14 @@ class Google_Service_Drive_ChangeList extends \SimpleCalendar\plugin_deps\Google
     public $newStartPageToken;
     public $nextPageToken;
     /**
-     * @param Google_Service_Drive_Change[]
+     * @param Google_Service_Drive_Change
      */
     public function setChanges($changes)
     {
         $this->changes = $changes;
     }
     /**
-     * @return Google_Service_Drive_Change[]
+     * @return Google_Service_Drive_Change
      */
     public function getChanges()
     {

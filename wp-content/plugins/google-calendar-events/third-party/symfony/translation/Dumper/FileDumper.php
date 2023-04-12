@@ -21,7 +21,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  *
  * @author Michel Salib <michelsalib@hotmail.com>
  */
-abstract class FileDumper implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Dumper\DumperInterface
+abstract class FileDumper implements DumperInterface
 {
     /**
      * A template for the relative paths to files.
@@ -76,13 +76,13 @@ abstract class FileDumper implements \SimpleCalendar\plugin_deps\Symfony\Compone
     /**
      * Transforms a domain of a message catalogue to its string representation.
      *
-     * @return string representation
+     * @return string
      */
     public abstract function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []);
     /**
      * Gets the file extension of the dumper.
      *
-     * @return string file extension
+     * @return string
      */
     protected abstract function getExtension();
     /**

@@ -13,21 +13,21 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\IdentityTranslator;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\IntlFormatter::class);
+\class_exists(IntlFormatter::class);
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class MessageFormatter implements \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\MessageFormatterInterface, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\IntlFormatterInterface
+class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterface
 {
     private $translator;
     private $intlFormatter;
     /**
      * @param TranslatorInterface|null $translator An identity translator to use as selector for pluralization
      */
-    public function __construct(TranslatorInterface $translator = null, \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\IntlFormatterInterface $intlFormatter = null)
+    public function __construct(TranslatorInterface $translator = null, IntlFormatterInterface $intlFormatter = null)
     {
         $this->translator = $translator ?? new IdentityTranslator();
-        $this->intlFormatter = $intlFormatter ?? new \SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\IntlFormatter();
+        $this->intlFormatter = $intlFormatter ?? new IntlFormatter();
     }
     /**
      * {@inheritdoc}

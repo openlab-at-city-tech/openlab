@@ -36,7 +36,7 @@ class Pool implements PromisorInterface
      *                                  - fulfilled: (callable) Function to invoke when a request completes.
      *                                  - rejected: (callable) Function to invoke when a request is rejected.
      */
-    public function __construct(\SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface $client, $requests, array $config = [])
+    public function __construct(ClientInterface $client, $requests, array $config = [])
     {
         if (!isset($config['concurrency'])) {
             $config['concurrency'] = 25;
@@ -86,7 +86,7 @@ class Pool implements PromisorInterface
      *
      * @throws \InvalidArgumentException if the event format is incorrect.
      */
-    public static function batch(\SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface $client, $requests, array $options = []) : array
+    public static function batch(ClientInterface $client, $requests, array $options = []) : array
     {
         $res = [];
         self::cmpCallback($options, 'fulfilled', $res);

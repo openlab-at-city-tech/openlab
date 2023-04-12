@@ -10,19 +10,8 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-use Exception;
 use InvalidArgumentException as BaseInvalidArgumentException;
-class InvalidIntervalException extends BaseInvalidArgumentException implements \SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidArgumentException
+class InvalidIntervalException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
-    /**
-     * Constructor.
-     *
-     * @param string         $message
-     * @param int            $code
-     * @param Exception|null $previous
-     */
-    public function __construct($message, $code = 0, Exception $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
+    //
 }

@@ -539,7 +539,7 @@
 				<field type="Gallery: Filter Label" editor_type="LINE">ekit_gallery_filter_label</field>
 				<field type="Gallery: Tooltrip" editor_type="LINE">map_marker_title</field>
 				<field type="Gallery: Content" editor_type="AREA">map_marker_content</field>
-			</fields-in-item>			
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-hotspot">
 			<conditions>
@@ -548,7 +548,7 @@
 			<fields-in-item items_of="ekit_location_repeater">
 				<field type="Hotspot: Title" editor_type="LINE">ekit_hotspot_title</field>
 				<field type="Hotspot: Description" editor_type="VISUAL">ekit_hotspot_address</field>
-			</fields-in-item>			
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-image-swap">
 			<conditions>
@@ -556,10 +556,10 @@
 			</conditions>
 			<fields>
 				<field type="Image Swap: Link" editor_type="LINK">ekit_img_swap_link>url</field>
-			</fields>			
+			</fields>
 			<fields-in-item items_of="ekit_location_repeater">
 				<field type="Image Swap: Title" editor_type="LINE">ekit_hotspot_title</field>
-			</fields-in-item>			
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-instagram-feed">
 			<conditions>
@@ -568,7 +568,7 @@
 			<fields>
 				<field type="Instagram Feed: Follow Button Text" editor_type="LINE">ekit_instagram_feed_ins_follow_text</field>
 				<field type="Instagram Feed: Follow link" editor_type="LINE">ekit_instagram_feed_ins_follow_link</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-motion-text">
 			<conditions>
@@ -577,7 +577,7 @@
 			<fields>
 				<field type="Motion Text: Title" editor_type="LINE">ekit_motion_text_content_text</field>
 				<field type="Motion Text: Link" editor_type="LINK">ekit_motion_text_sub_title_website_link>url</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-pinterest-feed">
 			<conditions>
@@ -586,7 +586,7 @@
 			<fields>
 				<field type="Pinterest Feed: Username" editor_type="LINE">pinterest_user_name</field>
 				<field type="Pinterest Feed: Board name" editor_type="LINE">pinterest_board_name</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-popup-modal">
 			<conditions>
@@ -598,7 +598,7 @@
 				<field type="Popup Modal: Subtitle Text" editor_type="LINE">popup_subtitle</field>
 				<field type="Popup Modal: Label" editor_type="LINE">footer_cta_text</field>
 				<field type="Popup Modal: Url" editor_type="LINE">footer_cta_url</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-table">
 			<conditions>
@@ -613,11 +613,11 @@
 				<field type="Table: Next Text" editor_type="LINE">ekit_table_navigation_next_text</field>
 				<field type="Table: Info Text" editor_type="LINE">info_text</field>
 				<field type="Table: Entries Text" editor_type="LINE">entries_text</field>
-			</fields>								
+			</fields>
 			<fields-in-item items_of="table_body_content">
 				<field type="Table: Text" editor_type="VISUAL">cell_text</field>
 				<field type="Table: URL" editor_type="LINK">body_cell_url>url</field>
-			</fields-in-item>								
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-timeline">
 			<conditions>
@@ -630,7 +630,7 @@
 				<field type="Timeline: Description" editor_type="AREA">ekit_timeline_line_content</field>
 				<field type="Timeline: Date" editor_type="LINE">ekit_timeline_content_date</field>
 				<field type="Timeline: Address" editor_type="LINE">ekit_timelinehr_content_address</field>
-			</fields-in-item>								
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-twitter-feed">
 			<conditions>
@@ -638,7 +638,7 @@
 			</conditions>
 			<fields>
 				<field type="Twitter Feed: Label" editor_type="LINE">ekit_twitter_follow_btn_text</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-unfold">
 			<conditions>
@@ -649,7 +649,7 @@
 				<field type="Unfold: Content" editor_type="VISUAL">unfold_content</field>
 				<field type="Unfold: Expand Button Text" editor_type="LINE">unfold_expand_btn_text</field>
 				<field type="Unfold: Collapse Button Text" editor_type="LINE">unfold_collapse_btn_text</field>
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="ekit-vertical-menu">
 			<conditions>
@@ -658,7 +658,7 @@
 			<fields>
 				<field type="Vertical menu: Title" editor_type="LINE">elementskit_vertical_menu_toggle_title</field>
 				
-			</fields>								
+			</fields>
 		</widget>
 		<widget name="elementskit-video-gallery">
 			<conditions>
@@ -666,8 +666,8 @@
 			</conditions>
 			<fields-in-item items_of="video_content">
 				<field type="Video Gallery: URL" editor_type="LINK">video_url>url</field>
-				<field type="Video Gallery: Category" editor_type="LINE">video_category</field>				
-			</fields-in-item>								
+				<field type="Video Gallery: Category" editor_type="LINE">video_category</field>
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-whatsapp">
 			<conditions>
@@ -675,46 +675,46 @@
 			</conditions>
 			<fields-in-item items_of="video_content">
 				<field type="WhatsApp: Username" editor_type="LINE">whatsapp_username</field>
-				<field type="WhatsApp: User Text" editor_type="AREA">whatsapp_user_text</field>				
-				<field type="WhatsApp: Asking Text" editor_type="AREA">whatsapp_asking_text</field>				
-				<field type="WhatsApp: Input Placeholder" editor_type="LINE">whatsapp_input_placeholder</field>				
-				<field type="WhatsApp: Whatsapp Number" editor_type="AREA">whatsapp_number</field>				
-			</fields-in-item>								
+				<field type="WhatsApp: User Text" editor_type="AREA">whatsapp_user_text</field>
+				<field type="WhatsApp: Asking Text" editor_type="AREA">whatsapp_asking_text</field>
+				<field type="WhatsApp: Input Placeholder" editor_type="LINE">whatsapp_input_placeholder</field>
+				<field type="WhatsApp: Whatsapp Number" editor_type="AREA">whatsapp_number</field>
+			</fields-in-item>
 		</widget>
 		<widget name="elementskit-woo-category-list">
 			<conditions>
 				<condition key="widgetType">elementskit-woo-category-list</condition>
 			</conditions>
 			<fields>
-				<field type="Woo Category List: URL" editor_type="LINK">ekit_featured_cat_link>url</field>			
-			</fields>								
+				<field type="Woo Category List: URL" editor_type="LINK">ekit_featured_cat_link>url</field>
+			</fields>
 		</widget>
 		<widget name="elementskit-zoom">
 			<conditions>
 				<condition key="widgetType">elementskit-zoom</condition>
 			</conditions>
 			<fields>
-				<field type="Zoom: Meeting Heading Text" editor_type="LINE">ekit_meeting_heading_text</field>			
-				<field type="Zoom: Heading" editor_type="LINE">ekit_protected_heading</field>			
-				<field type="Zoom: Sub Heading" editor_type="LINE">ekit_protected_subheading</field>			
-				<field type="Zoom: Placeholder Text" editor_type="LINE">ekit_protected_placeholder_text</field>			
-				<field type="Zoom: Submit BTN Text" editor_type="LINE">ekit_protected_submit_text</field>			
-				<field type="Zoom: Timer Heading" editor_type="LINE">ekit_zoom_timer_heading</field>			
-				<field type="Zoom: Days Text" editor_type="LINE">ekit_zoom_timer_days_text</field>			
-				<field type="Zoom: Hours Text" editor_type="LINE">ekit_zoom_timer_hours_text</field>			
-				<field type="Zoom: Minutes Text" editor_type="LINE">ekit_zoom_timer_minutes_text</field>			
-				<field type="Zoom: Seconds Text" editor_type="LINE">ekit_zoom_timer_seconds_text</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_id_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_topic_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_status_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_time_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_duration_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_timezone_label</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_url_label</field>			
-				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_start_url_btn_text</field>			
-				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_join_url_label</field>			
-				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_join_url_btn_text</field>			
-			</fields>								
+				<field type="Zoom: Meeting Heading Text" editor_type="LINE">ekit_meeting_heading_text</field>
+				<field type="Zoom: Heading" editor_type="LINE">ekit_protected_heading</field>	
+				<field type="Zoom: Sub Heading" editor_type="LINE">ekit_protected_subheading</field>
+				<field type="Zoom: Placeholder Text" editor_type="LINE">ekit_protected_placeholder_text</field>
+				<field type="Zoom: Submit BTN Text" editor_type="LINE">ekit_protected_submit_text</field>
+				<field type="Zoom: Timer Heading" editor_type="LINE">ekit_zoom_timer_heading</field>
+				<field type="Zoom: Days Text" editor_type="LINE">ekit_zoom_timer_days_text</field>
+				<field type="Zoom: Hours Text" editor_type="LINE">ekit_zoom_timer_hours_text</field>
+				<field type="Zoom: Minutes Text" editor_type="LINE">ekit_zoom_timer_minutes_text</field>
+				<field type="Zoom: Seconds Text" editor_type="LINE">ekit_zoom_timer_seconds_text</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_id_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_topic_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_status_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_time_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_duration_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_timezone_label</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_start_url_label</field>
+				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_start_url_btn_text</field>
+				<field type="Zoom: Title" editor_type="LINE">ekit_meeting_join_url_label</field>
+				<field type="Zoom: Button Text" editor_type="LINE">ekit_meeting_join_url_btn_text</field>
+			</fields>
 		</widget>
 		<widget name="elementskit-image-hover-effect">
 			<conditions>
@@ -728,7 +728,7 @@
 				<field type="Image Hover Effect: Button Link URL" editor_type="LINK">ekit_image_button_link</field>
 			</fields>
 		</widget>
-        <widget name="elementskit-fancy-animated-text">
+		<widget name="elementskit-fancy-animated-text">
 			<conditions>
 				<condition key="widgetType">elementskit-fancy-animated-text</condition>
 			</conditions>
@@ -741,18 +741,45 @@
 			<fields-in-item items_of="ekit_fancy_text_lists">
 				<field type="Fancy Heading: Fancy Text" editor_type="LINE">ekit_fancy_text</field>
 			</fields-in-item>
-        </widget>								
+		</widget>
 		<widget name="elementskit-price-menu">
 			<conditions>
 				<condition key="widgetType">elementskit-price-menu</condition>
 			</conditions>
-			<fields-in-item items_of="ekit_price_list">
+			<fields-in-item items_of="ekit_price_lists">
 				<field type="Price Menu: Title" editor_type="LINE">title</field>
 				<field type="Price Menu: Description" editor_type="AREA">description</field>
 				<field type="Price Menu: Price" editor_type="LINE">price</field>
 				<field type="Price Menu: Link" editor_type="LINK">link>url</field>
 				<field type="Price Menu: Button Text" editor_type="LINE">button_text</field>
 				<field type="Price Menu: Button Link" editor_type="LINK">button_link>url</field>
+			</fields-in-item>
+		</widget>								
+		<widget name="elementskit-flip-box">
+			<conditions>
+				<condition key="widgetType">elementskit-flip-box</condition>
+			</conditions>
+			<fields>
+				<field type="Flip Box: Front Title" editor_type="LINE">ekit_flip_title</field>
+				<field type="Flip Box: Front Sub Title" editor_type="AREA">ekit_flip_sub_title</field>
+				<field type="Flip Box: Front Description" editor_type="AREA">ekit_flip_front_description</field>
+				<field type="Flip Box: Front Button Text" editor_type="LINE">ekit_flip_front_button_text</field>
+				<field type="Flip Box: Back Title" editor_type="LINE">ekit_flip_back_title_tag</field>
+				<field type="Flip Box: Back Sub Title" editor_type="AREA">ekit_flip_back_sub_title</field>
+				<field type="Flip Box: Back Description" editor_type="AREA">ekit_flip_back_description</field>
+				<field type="Flip Box: Back Button Text" editor_type="LINE">ekit_flip_back_button_text</field>
+				<field type="Flip Box: Back Button URL" editor_type="LINK">ekit_flip_back_button_url</field>
+			</fields>
+		</widget>
+		<widget name="elementskit-stylish-list">
+			<conditions>
+				<condition key="widgetType">elementskit-stylish-list</condition>
+			</conditions>
+			<fields-in-item items_of="ekit_stylist_lists">
+				<field type="Stylish List: Title" editor_type="LINE">title</field>
+				<field type="Stylish List: Description" editor_type="AREA">description</field>
+				<field type="Stylish List: Badge Text" editor_type="LINE">badge_title</field>
+				<field type="Stylish List: Link" editor_type="LINK">link>url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-team-slider">
@@ -771,6 +798,19 @@
 				<field type="Team Carousel Slider: " editor_type="LINK">link_2>url</field>
 				<field type="Team Carousel Slider: " editor_type="LINK">link_3>url</field>
 				<field type="Team Carousel Slider: " editor_type="LINK">link_4>url</field>
+			</fields-in-item>
+		</widget>
+		<widget name="elementskit-content-ticker">
+			<conditions>
+				<condition key="widgetType">elementskit-content-ticker</condition>
+			</conditions>
+			<fields>
+				<field type="Content Ticker: Title Text" editor_type="LINE">ekit_content_ticker_title</field>
+			</fields>
+			<fields-in-item items_of="ekit_content_ticker_text_list">
+				<field type="Content Ticker: Content Title" editor_type="LINE">ekit_content_ticker_text</field>
+				<field type="Content Ticker: Content Description" editor_type="AREA">ekit_content_ticker_description</field>
+				<field type="Content Ticker: Link" editor_type="LINK">ekit_content_ticker_text_url>url</field>
 			</fields-in-item>
 		</widget>
 	</elementor-widgets>

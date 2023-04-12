@@ -20,6 +20,10 @@ class ElementsKit_Widget_Piechart_Handler extends \ElementsKit_Lite\Core\Handler
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'chart', 'pie', 'doughnut', 'statistic'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'piechart/';
     }

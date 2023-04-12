@@ -192,7 +192,7 @@ abstract class Block_Abstract {
 			'clientId'           => [
 				'type' => 'string',
 			],
-			self::RENDER_REQUEST => [
+			static::RENDER_REQUEST => [
 				'type' => 'boolean',
 			],
 			'sidebarId'          => [
@@ -263,7 +263,7 @@ abstract class Block_Abstract {
 		 * We spoof the WP_Query as much as required to get the menus to
 		 * display the same way they will on the front-end.
 		 */
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ self::RENDER_REQUEST ] ) ) {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ static::RENDER_REQUEST ] ) ) {
 			if ( ! empty( get_post() ) ) {
 				add_action( 'advanced-sidebar-menu/widget/before-render', function( $menu ) {
 					if ( method_exists( $menu, 'set_current_post' ) ) {

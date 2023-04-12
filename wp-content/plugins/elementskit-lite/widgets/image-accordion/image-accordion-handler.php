@@ -19,6 +19,10 @@ class ElementsKit_Widget_Image_Accordion_Handler extends \ElementsKit_Lite\Core\
         return [ 'elementskit' ];
     }
 
+    static function get_keywords() {
+        return ['ekit', 'image', 'accordion', 'image faq', 'faq'];
+    }
+
     static function get_dir() {
         return \ElementsKit_Lite::widget_dir() . 'image-accordion/';
     }
