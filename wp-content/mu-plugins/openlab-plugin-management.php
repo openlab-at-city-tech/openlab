@@ -70,6 +70,7 @@ function openlab_hide_plugins( $plugins ) {
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
+		'reckoning/reckoning.php',
 		'rederly.php',
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
