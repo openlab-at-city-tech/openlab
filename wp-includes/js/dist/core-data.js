@@ -1987,8 +1987,6 @@ const editEntityRecord = function (kind, name, recordId, edits) {
 /**
  * Action triggered to undo the last edit to
  * an entity record, if any.
- *
- * @return {undefined}
  */
 
 const undo = () => _ref3 => {
@@ -2013,8 +2011,6 @@ const undo = () => _ref3 => {
 /**
  * Action triggered to redo the last undoed
  * edit to an entity record, if any.
- *
- * @return {undefined}
  */
 
 const redo = () => _ref4 => {
@@ -2438,8 +2434,7 @@ const rootEntitiesConfig = [{
   baseURL: '/wp/v2/types',
   baseURLParams: {
     context: 'edit'
-  },
-  rawAttributes: POST_RAW_ATTRIBUTES
+  }
 }, {
   name: 'media',
   kind: 'root',
@@ -4490,7 +4485,7 @@ const getEntityRecord = rememo((state, kind, name, key, query) => {
  */
 
 function __experimentalGetEntityRecordNoResolver(state, kind, name, key) {
-  return selectors_getEntityRecord(state, kind, name, key);
+  return getEntityRecord(state, kind, name, key);
 }
 /**
  * Returns the entity's record object by key,
@@ -4596,7 +4591,7 @@ const __experimentalGetDirtyEntityRecords = rememo(state => {
         primaryKeys.forEach(primaryKey => {
           var _entityConfig$getTitl;
 
-          const entityRecord = selectors_getEditedEntityRecord(state, kind, name, primaryKey);
+          const entityRecord = getEditedEntityRecord(state, kind, name, primaryKey);
           dirtyRecords.push({
             // We avoid using primaryKey because it's transformed into a string
             // when it's used as an object key.

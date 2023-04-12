@@ -3125,11 +3125,6 @@ var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 
 
 /**
- * WordPress dependencies
- */
-
-
-/**
  * Internal dependencies
  */
 

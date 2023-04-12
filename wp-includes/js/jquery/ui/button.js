@@ -240,8 +240,8 @@ $.widget( "ui.button", {
 
 		// Make sure we can't end up with a button that has neither text nor icon
 		if ( key === "showLabel" ) {
-			this._toggleClass( "ui-button-icon-only", null, !value );
-			this._updateTooltip();
+				this._toggleClass( "ui-button-icon-only", null, !value );
+				this._updateTooltip();
 		}
 
 		if ( key === "label" ) {
@@ -306,7 +306,7 @@ if ( $.uiBackCompat !== false ) {
 				this.options.text = this.options.showLabel;
 			}
 			if ( !this.options.icon && ( this.options.icons.primary ||
-				this.options.icons.secondary ) ) {
+					this.options.icons.secondary ) ) {
 				if ( this.options.icons.primary ) {
 					this.options.icon = this.options.icons.primary;
 				} else {

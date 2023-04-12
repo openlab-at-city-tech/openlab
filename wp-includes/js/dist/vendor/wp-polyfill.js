@@ -1875,15 +1875,6 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   };
 }() : undefined);
 
-// `%TypedArray%.prototype.sort` method
-// https://tc39.es/ecma262/#sec-%typedarray%.prototype.sort
-exportTypedArrayMethod('sort', function sort(comparefn) {
-  if (comparefn !== undefined) aCallable(comparefn);
-  if (STABLE_SORT) return un$Sort(this, comparefn);
-
-  return internalSort(aTypedArray(this), getSortCompare(comparefn));
-}, !STABLE_SORT || ACCEPT_INCORRECT_ARGUMENTS);
-
 
 /***/ }),
 /* 78 */
@@ -1899,8 +1890,6 @@ module.exports = function (argument) {
   if (typeof argument == 'object' || isCallable(argument)) return argument;
   throw TypeError("Can't set " + String(argument) + ' as a prototype');
 };
-
-module.exports = mergeSort;
 
 
 /***/ }),

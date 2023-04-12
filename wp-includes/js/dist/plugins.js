@@ -522,7 +522,7 @@ function registerPlugin(name, settings) {
 
   api_plugins[name] = {
     name,
-    icon: plugins["a" /* default */],
+    icon: library_plugins,
     ...settings
   };
   (0,external_wp_hooks_namespaceObject.doAction)('plugins.pluginRegistered', settings, name);

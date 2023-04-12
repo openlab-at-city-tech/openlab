@@ -335,21 +335,6 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 			$response->add_links( $this->prepare_links( $theme ) );
 		}
 
-		if ( $theme->get_stylesheet() === wp_get_theme()->get_stylesheet() ) {
-			// This creates a record for the current theme if not existent.
-			$id = WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
-		} else {
-			$user_cpt = WP_Theme_JSON_Resolver::get_user_data_from_wp_global_styles( $theme );
-			$id       = isset( $user_cpt['ID'] ) ? $user_cpt['ID'] : null;
-		}
-
-		if ( $id ) {
-			$response->add_link(
-				'https://api.w.org/user-global-styles',
-				rest_url( 'wp/v2/global-styles/' . $id )
-			);
-		}
-
 		/**
 		 * Filters theme data returned from the REST API.
 		 *

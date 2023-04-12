@@ -2344,11 +2344,10 @@ const footer = (0,external_wp_element_namespaceObject.createElement)(external_wp
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/sidebar.js
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/footer.js
-var footer = __webpack_require__("//kF");
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/sidebar.js
-var sidebar = __webpack_require__("rvQu");
+/**
+ * WordPress dependencies
+ */
 
 const sidebar = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
@@ -2388,11 +2387,11 @@ const symbolFilled = (0,external_wp_element_namespaceObject.createElement)(exter
 
 function getTemplatePartIcon(iconName) {
   if ('header' === iconName) {
-    return header["a" /* default */];
+    return library_header;
   } else if ('footer' === iconName) {
-    return footer["a" /* default */];
+    return library_footer;
   } else if ('sidebar' === iconName) {
-    return sidebar["a" /* default */];
+    return library_sidebar;
   }
 
   return symbol_filled;
@@ -3348,7 +3347,7 @@ function isPostAutosavingLocked(state) {
  * @return {boolean} Is post lock takeover.
  */
 
-function selectors_isPostLockTakeover(state) {
+function isPostLockTakeover(state) {
   return state.postLock.isTakeover;
 }
 /**
@@ -3359,7 +3358,7 @@ function selectors_isPostLockTakeover(state) {
  * @return {Object} A user object.
  */
 
-function selectors_getPostLockUser(state) {
+function getPostLockUser(state) {
   return state.postLock.user;
 }
 /**
@@ -3370,7 +3369,7 @@ function selectors_getPostLockUser(state) {
  * @return {Object} The lock object.
  */
 
-function selectors_getActivePostLock(state) {
+function getActivePostLock(state) {
   return state.postLock.activePostLock;
 }
 /**
@@ -4817,14 +4816,7 @@ const updateBlockListSettings = getBlockEditorAction('updateBlockListSettings');
 
 
 
-function setDefaultCompleters() {
-  let completers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  // Provide copies so filters may directly modify them.
-  completers.push(Object(external_lodash_["clone"])(autocompleters_user));
-  return completers;
-}
 
-Object(external_wp_hooks_["addFilter"])('editor.Autocomplete.completers', 'editor/autocompleters/set-default-completers', setDefaultCompleters);
 
 /**
  * Post editor data store configuration.
@@ -4840,7 +4832,11 @@ const storeConfig = {
   actions: actions_namespaceObject
 };
 /**
- * Internal dependencies
+ * Store definition for the editor namespace.
+ *
+ * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
+ *
+ * @type {Object}
  */
 
 const store_store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, { ...storeConfig
@@ -5241,7 +5237,6 @@ const TableOfContentsItem = _ref => {
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -6190,11 +6185,6 @@ function EntitiesSavedStates(_ref) {
 
 
 
-/**
- * Internal dependencies
- */
-
-
 
 /**
  * Internal dependencies
@@ -6577,7 +6567,6 @@ function PostTypeSupportCheck(_ref) {
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -9047,7 +9036,6 @@ function usePostVisibilityLabel() {
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/editor/build-module/components/post-schedule/index.js
 
 
-
 /**
  * WordPress dependencies
  */
@@ -9536,7 +9524,6 @@ function FlatTermSelector(_ref) {
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -10602,7 +10589,6 @@ const cloudUpload = (0,external_wp_element_namespaceObject.createElement)(extern
 
 /** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
 
-
 /**
  * Return an SVG icon.
  *
@@ -10960,19 +10946,6 @@ function PostSlugCheck(_ref) {
 
 
 
-/**
- * Internal dependencies
- */
-
-
-
-function PostTrash(_ref) {
-  let {
-    isNew,
-    postId,
-    postType,
-    ...props
-  } = _ref;
 
 
 /**
@@ -11355,7 +11328,6 @@ function PostTextEditor() {
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -12011,7 +11983,6 @@ function CharacterCount() {
 
 
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/editor/build-module/index.js
 /**
  * Internal dependencies
  */

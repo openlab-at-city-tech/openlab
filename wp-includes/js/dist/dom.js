@@ -1615,10 +1615,6 @@ function safeHTML(html) {
  */
 
 /**
- * Internal dependencies
- */
-
-/**
  * Removes any HTML tags from the provided string.
  *
  * @param {string} html The string containing html.

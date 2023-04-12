@@ -952,10 +952,6 @@ body.is-fullscreen-mode .interface-interface-skeleton {
 
 .edit-post-template-top-area__popover .components-popover__content {
   min-width: 280px;
-  padding: 8px;
-}
-.edit-post-template-top-area__popover .edit-post-template-details__description {
-  color: #757575;
 }
 .edit-post-template-top-area__popover .components-popover__content > div {
   padding: 0;

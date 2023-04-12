@@ -2474,34 +2474,6 @@ function wp_global_styles_render_svg_filters() {
 }
 
 /**
- * Render the SVG filters supplied by theme.json.
- *
- * Note that this doesn't render the per-block user-defined
- * filters which are handled by wp_render_duotone_support,
- * but it should be rendered before the filtered content
- * in the body to satisfy Safari's rendering quirks.
- *
- * @since 5.9.1
- */
-function wp_global_styles_render_svg_filters() {
-	/*
-	 * When calling via the in_admin_header action, we only want to render the
-	 * SVGs on block editor pages.
-	 */
-	if (
-		is_admin() &&
-		! get_current_screen()->is_block_editor()
-	) {
-		return;
-	}
-
-	$filters = wp_get_global_styles_svg_filters();
-	if ( ! empty( $filters ) ) {
-		echo $filters;
-	}
-}
-
-/**
  * Checks if the editor scripts and styles for all registered block types
  * should be enqueued on the current screen.
  *
@@ -3730,43 +3702,4 @@ function wp_add_editor_classic_theme_styles( $editor_settings ) {
 	array_unshift( $editor_settings['styles'], $classic_theme_styles_settings );
 
 	return $editor_settings;
-}
-
-/**
- * Function that enqueues the CSS Custom Properties coming from theme.json.
- *
- * @since 5.9.0
- */
-function wp_enqueue_global_styles_css_custom_properties() {
-	wp_register_style( 'global-styles-css-custom-properties', false, array(), true, true );
-	wp_add_inline_style( 'global-styles-css-custom-properties', wp_get_global_stylesheet( array( 'variables' ) ) );
-	wp_enqueue_style( 'global-styles-css-custom-properties' );
-}
-
-/**
- * This function takes care of adding inline styles
- * in the proper place, depending on the theme in use.
- *
- * @since 5.9.1
- *
- * For block themes, it's loaded in the head.
- * For classic ones, it's loaded in the body
- * because the wp_head action happens before
- * the render_block.
- *
- * @link https://core.trac.wordpress.org/ticket/53494.
- *
- * @param string $style String containing the CSS styles to be added.
- */
-function wp_enqueue_block_support_styles( $style ) {
-	$action_hook_name = 'wp_footer';
-	if ( wp_is_block_theme() ) {
-		$action_hook_name = 'wp_head';
-	}
-	add_action(
-		$action_hook_name,
-		static function () use ( $style ) {
-			echo "<style>$style</style>\n";
-		}
-	);
 }

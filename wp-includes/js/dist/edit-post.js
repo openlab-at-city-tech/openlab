@@ -794,8 +794,6 @@ var external_wp_viewport_namespaceObject = window["wp"]["viewport"];
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/close-small.js
 
 
-
-
 /**
  * WordPress dependencies
  */
@@ -2747,7 +2745,6 @@ function isShallowEqual(a, b, fromIndex) {
 
 	return true;
 }
-
 
 /**
  * Returns a memoized selector function. The getDependants function argument is
@@ -7949,14 +7946,6 @@ function MetaBoxes(_ref) {
     location: location
   }));
 }
-/* harmony default export */ var keyboard_shortcuts_help_menu_item = (Object(external_wp_data_["withDispatch"])(dispatch => {
-  const {
-    openModal
-  } = dispatch(store["a" /* store */]);
-  return {
-    openModal
-  };
-})(KeyboardShortcutsHelpMenuItem));
 
 ;// CONCATENATED MODULE: external ["wp","warning"]
 var external_wp_warning_namespaceObject = window["wp"]["warning"];
@@ -7971,23 +7960,15 @@ var external_wp_warning_namespaceObject = window["wp"]["warning"];
  * WordPress dependencies
  */
 
-/* harmony default export */ var tools_more_menu_group = (ToolsMoreMenuGroup);
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/edit-post/build-module/plugins/welcome-guide-menu-item/index.js
 
 
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
 
 
 /**
  * Internal dependencies
  */
+
+
 
 const {
   Fill: plugin_document_setting_panel_Fill,
@@ -8067,9 +8048,6 @@ const PluginDocumentSettingFill = _ref => {
  * @return {WPComponent} The component to be rendered.
  */
 
-    if (!ownerDocument.activeElement.classList.contains('edit-post-visual-editor') && ownerDocument.activeElement !== ownerDocument.body) {
-      return;
-    }
 
 const PluginDocumentSettingPanel = (0,external_wp_compose_namespaceObject.compose)((0,external_wp_plugins_namespaceObject.withPluginContext)((context, ownProps) => {
   if (undefined === ownProps.name) {
@@ -8103,9 +8081,6 @@ PluginDocumentSettingPanel.Slot = plugin_document_setting_panel_Slot;
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/edit-post/build-module/components/sidebar/plugin-sidebar/index.js
 
-/**
- * WordPress dependencies
- */
 
 
 /**
@@ -8115,9 +8090,6 @@ PluginDocumentSettingPanel.Slot = plugin_document_setting_panel_Slot;
 
 
 
-/**
- * Internal dependencies
- */
 
 /**
  * Internal dependencies

@@ -585,66 +585,6 @@ class WP_Theme_JSON {
 	}
 
 	/**
-	 * Enables some opt-in settings if theme declared support.
-	 *
-	 * @since 5.9.0
-	 *
-	 * @param array $theme_json A theme.json structure to modify.
-	 * @return array The modified theme.json structure.
-	 */
-	protected static function maybe_opt_in_into_settings( $theme_json ) {
-		$new_theme_json = $theme_json;
-
-		if (
-			isset( $new_theme_json['settings']['appearanceTools'] ) &&
-			true === $new_theme_json['settings']['appearanceTools']
-		) {
-			static::do_opt_in_into_settings( $new_theme_json['settings'] );
-		}
-
-		if ( isset( $new_theme_json['settings']['blocks'] ) && is_array( $new_theme_json['settings']['blocks'] ) ) {
-			foreach ( $new_theme_json['settings']['blocks'] as &$block ) {
-				if ( isset( $block['appearanceTools'] ) && ( true === $block['appearanceTools'] ) ) {
-					static::do_opt_in_into_settings( $block );
-				}
-			}
-		}
-
-		return $new_theme_json;
-	}
-
-	/**
-	 * Enables some settings.
-	 *
-	 * @since 5.9.0
-	 *
-	 * @param array $context The context to which the settings belong.
-	 */
-	protected static function do_opt_in_into_settings( &$context ) {
-		$to_opt_in = array(
-			array( 'border', 'color' ),
-			array( 'border', 'radius' ),
-			array( 'border', 'style' ),
-			array( 'border', 'width' ),
-			array( 'color', 'link' ),
-			array( 'spacing', 'blockGap' ),
-			array( 'spacing', 'margin' ),
-			array( 'spacing', 'padding' ),
-			array( 'typography', 'lineHeight' ),
-		);
-
-		foreach ( $to_opt_in as $path ) {
-			// Use "unset prop" as a marker instead of "null" because
-			// "null" can be a valid value for some props (e.g. blockGap).
-			if ( 'unset prop' === _wp_array_get( $context, $path, 'unset prop' ) ) {
-				_wp_array_set( $context, $path, true );
-			}
-		}
-
-		unset( $context['appearanceTools'] );
-	}
-
-	/**
 	 * Sanitizes the input according to the schemas.
 	 *
 	 * @since 5.8.0

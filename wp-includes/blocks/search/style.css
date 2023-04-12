@@ -77,9 +77,6 @@
 .wp-block-search__button {
   margin-left: 0.625em;
   word-break: normal;
-  font-size: inherit;
-  font-family: inherit;
-  line-height: inherit;
 }
 .wp-block-search__button.has-icon {
   line-height: 0;

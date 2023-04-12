@@ -240,16 +240,6 @@ if ( ! CUSTOM_TAGS ) {
 				'values'   => array( 'application/pdf' ),
 			),
 		),
-		'object'     => array(
-			'data' => array(
-				'required'       => true,
-				'value_callback' => '_wp_kses_allow_pdf_objects',
-			),
-			'type' => array(
-				'required' => true,
-				'values'   => array( 'application/pdf' ),
-			),
-		),
 		'p'          => array(
 			'align' => true,
 		),

@@ -422,8 +422,5 @@
 				"left": "0px"
 			}
 		}
-	},
-	"styles": {
-		"spacing": { "blockGap": "24px" }
 	}
 }

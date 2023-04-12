@@ -1160,8 +1160,6 @@ function validate (extension, name) {
   return ret;
 }
 
-  return Object(external_wp_data_["select"])(store).getBlockType(name);
-}
 /**
  * Validate extension
  * @param {object} ext
@@ -1197,9 +1195,6 @@ showdown.helper.isString = function (a) {
   return (typeof a === 'string' || a instanceof String);
 };
 
-function setFreeformContentHandlerName(blockName) {
-  Object(external_wp_data_["dispatch"])(store).setFreeformFallbackBlockName(blockName);
-}
 /**
  * Check if var is a function
  * @static
@@ -1212,9 +1207,6 @@ showdown.helper.isFunction = function (a) {
   return a && getType.toString.call(a) === '[object Function]';
 };
 
-function setUnregisteredTypeHandlerName(blockName) {
-  Object(external_wp_data_["dispatch"])(store).setUnregisteredFallbackBlockName(blockName);
-}
 /**
  * isArray helper function
  * @static
@@ -1605,14 +1597,6 @@ showdown.helper.regexes = {
   asteriskDashAndColon: /([*_:~])/g
 };
 
-  return {
-    clientId,
-    name,
-    isValid: true,
-    attributes: sanitizedAttributes,
-    innerBlocks
-  };
-}
 /**
  * EMOJIS LIST
  */
@@ -11913,10 +11897,6 @@ function getNextNonWhitespaceToken(tokens) {
     if (token.type !== 'Chars') {
       return token;
     }
-  } else {
-    throw new Error('obj does not seem to be an array or an iterable object');
-  }
-};
 
     if (!REGEXP_ONLY_WHITESPACE.test(token.chars)) {
       return token;
@@ -12229,7 +12209,6 @@ function getPath(object, path) {
     if (!(segment in object)) {
       return;
     }
-  ];
 
     object = object[segment];
   }
@@ -14253,12 +14232,6 @@ function getSibling(node, which) {
 
 
 
-  function parseInside (txt) {
-    if (options.simplifiedAutoLink) {
-      txt = showdown.subParser('simplifiedAutoLinks')(txt, options, globals);
-    }
-    return '<del>' + txt + '</del>';
-  }
 
 function deprecatedGetPhrasingContentSchema(context) {
   external_wp_deprecated_default()('wp.blocks.getPhrasingContentSchema', {
@@ -14574,12 +14547,6 @@ function imageCorrector(node) {
     for (let i = 0; i < uint8Array.length; i++) {
       uint8Array[i] = decoded.charCodeAt(i);
     }
-  }
-  return txt;
-});
-
-showdown.subParser('makeMarkdown.hr', function () {
-  'use strict';
 
     const name = type.replace('/', '.');
     const file = new File([uint8Array], name, {
@@ -14835,14 +14802,6 @@ function slackParagraphCorrector(node) {
 
 
 
-  var txt = '',
-      tableArray = [[], []],
-      headings   = node.querySelectorAll('thead>tr>th'),
-      rows       = node.querySelectorAll('tbody>tr'),
-      i, ii;
-  for (i = 0; i < headings.length; ++i) {
-    var headContent = showdown.subParser('makeMarkdown.tableCell')(headings[i], globals),
-        allign = '---';
 
 
 
@@ -14850,17 +14809,9 @@ function slackParagraphCorrector(node) {
 
 
 
-  var txt = '';
-  if (!node.hasChildNodes()) {
-    return '';
-  }
-  var children = node.childNodes,
-      childrenLength = children.length;
 
 
 
-  // multiple spaces are collapsed
-  txt = txt.replace(/ +/g, ' ');
 
 
 

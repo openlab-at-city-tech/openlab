@@ -305,10 +305,6 @@
 .wp-block-cover.is-light .wp-block-cover__inner-container {
   color: #000;
 }
-.wp-block-cover-image.is-light .wp-block-cover__inner-container,
-.wp-block-cover.is-light .wp-block-cover__inner-container {
-  color: #000;
-}
 .wp-block-cover-image p:not(.has-text-color),
 .wp-block-cover-image h1:not(.has-text-color),
 .wp-block-cover-image h2:not(.has-text-color),

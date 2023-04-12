@@ -143,7 +143,6 @@ class WP_Theme_JSON_Resolver {
 	 * by its translated strings according to the language set by the user.
 	 *
 	 * @since 5.8.0
-	 * @deprecated 5.9.0
 	 *
 	 * @param array  $theme_json The theme.json to translate.
 	 * @param string $domain     Optional. Text domain. Unique identifier for retrieving translated strings.

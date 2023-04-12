@@ -210,10 +210,10 @@ return $.widget( "ui.selectable", $.ui.mouse, {
 
 			if ( options.tolerance === "touch" ) {
 				hit = ( !( offset.left > x2 || offset.right < x1 || offset.top > y2 ||
-					offset.bottom < y1 ) );
+                    offset.bottom < y1 ) );
 			} else if ( options.tolerance === "fit" ) {
 				hit = ( offset.left > x1 && offset.right < x2 && offset.top > y1 &&
-					offset.bottom < y2 );
+                    offset.bottom < y2 );
 			}
 
 			if ( hit ) {

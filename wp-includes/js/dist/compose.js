@@ -464,7 +464,6 @@ module.exports = closest;
 
 var closest = __nested_webpack_require_15749__(828);
 
-
 /**
  * Delegates event to a selector.
  *
@@ -547,7 +546,6 @@ module.exports = delegate;
 
 /***/ 879:
 /***/ (function(__unused_webpack_module, exports) {
-
 
 /**
  * Check if argument is a HTML element.
@@ -2588,7 +2586,6 @@ var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(exte
  */
 
 
-
 /**
  * Given a component returns the enhanced component augmented with a component
  * only re-rendering when its props/state change
@@ -2639,10 +2636,6 @@ var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external
 /**
  * External dependencies
  */
- // Disable reason: Object and object are distinctly different types in TypeScript and we mean the lowercase object in thise case
-// but eslint wants to force us to use `Object`. See https://stackoverflow.com/questions/49464634/difference-between-object-and-object-in-typescript
-
-/* eslint-disable jsdoc/check-types */
 
 /**
  * Class responsible for orchestrating event handling on the global window,
@@ -2758,10 +2751,6 @@ function withGlobalEvents(eventTypesToHandlers) {
         this.handleEvent = this.handleEvent.bind(this);
         this.handleRef = this.handleRef.bind(this);
       }
-      /** @type {HTMLElement|null} */
-
-
-      let elementToCheck = targetToCheck;
 
       componentDidMount() {
         Object.keys(eventTypesToHandlers).forEach(eventType => {

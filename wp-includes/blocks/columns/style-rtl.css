@@ -136,29 +136,6 @@
   * Individual Column Alignment
   */
 }
-.wp-block-columns.is-not-stacked-on-mobile {
-  flex-wrap: nowrap;
-}
-.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column {
-  flex-basis: 0;
-  flex-grow: 1;
-}
-.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column[style*=flex-basis] {
-  flex-grow: 0;
-}
-.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column:not(:first-child) {
-  margin-right: var(--wp--style--block-gap, 2em);
-}
-
-.wp-block-column {
-  flex-grow: 1;
-  min-width: 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  /**
-  * Individual Column Alignment
-  */
-}
 .wp-block-column.is-vertically-aligned-top {
   align-self: flex-start;
 }

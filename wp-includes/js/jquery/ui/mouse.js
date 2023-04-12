@@ -146,17 +146,17 @@ return $.widget( "ui.mouse", {
 
 			// IE mouseup check - mouseup happened when mouse was out of window
 			if ( $.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
-				!event.button ) {
+					!event.button ) {
 				return this._mouseUp( event );
 
-				// Iframe mouseup check - mouseup occurred in another document
+			// Iframe mouseup check - mouseup occurred in another document
 			} else if ( !event.which ) {
 
 				// Support: Safari <=8 - 9
 				// Safari sets which to 0 if you press any of the following keys
 				// during a drag (#14461)
 				if ( event.originalEvent.altKey || event.originalEvent.ctrlKey ||
-					event.originalEvent.metaKey || event.originalEvent.shiftKey ) {
+						event.originalEvent.metaKey || event.originalEvent.shiftKey ) {
 					this.ignoreMissingWhich = true;
 				} else if ( !this.ignoreMissingWhich ) {
 					return this._mouseUp( event );

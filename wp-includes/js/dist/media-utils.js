@@ -436,7 +436,6 @@ class MediaUpload extends external_wp_element_namespaceObject.Component {
       });
     } // Load the images so they are available in the media modal.
 
-    const attachments = getAttachmentsCollection(Object(external_lodash_["castArray"])(this.props.value)); // Once attachments are loaded, set the current selection.
 
     const attachments = getAttachmentsCollection(valueArray); // Once attachments are loaded, set the current selection.
 

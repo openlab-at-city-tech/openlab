@@ -215,8 +215,7 @@ const STORE_NAME = 'core/reusable-blocks';
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, {
   actions: actions_namespaceObject,
   reducer: reducer,
-  selectors: selectors_namespaceObject,
-  __experimentalUseThunks: true
+  selectors: selectors_namespaceObject
 });
 (0,external_wp_data_namespaceObject.register)(store);
 

@@ -642,8 +642,8 @@ return $.widget( "ui.slider", $.ui.mouse, {
 			valueMin = this._valueMin();
 			valueMax = this._valueMax();
 			valPercent = ( valueMax !== valueMin ) ?
-				( value - valueMin ) / ( valueMax - valueMin ) * 100 :
-				0;
+					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
+					0;
 			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 

@@ -1357,10 +1357,6 @@ function createRegistryControl(registryControl) {
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/data/build-module/controls.js
 /**
- * External dependencies
- */
-
-/**
  * Internal dependencies
  */
 
@@ -1668,10 +1664,6 @@ const onSubKey = actionProperty => reducer => function () {
   let action = arguments.length > 1 ? arguments[1] : undefined;
   // Retrieve subkey from action. Do not track if undefined; useful for cases
   // where reducer is scoped by action shape.
-
-  /** @type {keyof state} */
-
-  /* eslint-enable jsdoc/no-undefined-types */
   const key = action[actionProperty];
 
   if (key === undefined) {
@@ -1717,7 +1709,6 @@ function selectorArgsToStateKey(args) {
 /**
  * External dependencies
  */
-
 
 
 /**
@@ -1871,8 +1862,6 @@ const isResolved = function () {
  * External dependencies
  */
 
-/** @typedef {Record<string, import('./reducer').State>} State */
-
 /**
  * Internal dependencies
  */
@@ -1901,7 +1890,7 @@ function getResolutionState(state, selectorName, args) {
   const map = (0,external_lodash_namespaceObject.get)(state, [selectorName]);
 
   if (!map) {
-    return undefined;
+    return;
   }
 
   return map.get(selectorArgsToStateKey(args));
@@ -3064,14 +3053,6 @@ function createRegistry() {
     Object.values(stores).forEach(store => store.emitter.resume());
   }
 
-  function batch(callback) {
-    emitter.pause();
-    Object(external_lodash_["forEach"])(stores, store => store.emitter.pause());
-    callback();
-    emitter.resume();
-    Object(external_lodash_["forEach"])(stores, store => store.emitter.resume());
-  }
-
   let registry = {
     batch,
     stores,
@@ -3453,11 +3434,6 @@ function areInputsEqual(newInputs, lastInputs) {
   if (newInputs.length !== lastInputs.length) {
     return false;
   }
-}
-/**
- * Deprecated: Remove this function and the code in WordPress Core that calls
- * it once WordPress 6.0 is released.
- */
 
   for (var i = 0; i < newInputs.length; i++) {
     if (newInputs[i] !== lastInputs[i]) {

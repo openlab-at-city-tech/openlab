@@ -409,7 +409,7 @@ $.ui.plugin = {
 		}
 
 		if ( !allowDisconnected && ( !instance.element[ 0 ].parentNode ||
-			instance.element[ 0 ].parentNode.nodeType === 11 ) ) {
+				instance.element[ 0 ].parentNode.nodeType === 11 ) ) {
 			return;
 		}
 
@@ -1232,7 +1232,7 @@ $.widget.extend = function( target ) {
 						// Don't extend strings, arrays, etc. with objects
 						$.widget.extend( {}, value );
 
-					// Copy everything else by reference
+				// Copy everything else by reference
 				} else {
 					target[ key ] = value;
 				}
@@ -1481,8 +1481,8 @@ $.Widget.prototype = {
 		for ( classKey in value ) {
 			currentElements = this.classesElementLookup[ classKey ];
 			if ( value[ classKey ] === this.options.classes[ classKey ] ||
-				!currentElements ||
-				!currentElements.length ) {
+					!currentElements ||
+					!currentElements.length ) {
 				continue;
 			}
 
@@ -1642,7 +1642,7 @@ $.Widget.prototype = {
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
 				if ( !suppressDisabledCheck &&
-					( instance.options.disabled === true ||
+						( instance.options.disabled === true ||
 						$( this ).hasClass( "ui-state-disabled" ) ) ) {
 					return;
 				}

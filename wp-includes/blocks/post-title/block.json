@@ -45,9 +45,6 @@
 			"margin": true,
 			"padding": true
 		},
-		"spacing": {
-			"margin": true
-		},
 		"typography": {
 			"fontSize": true,
 			"lineHeight": true,

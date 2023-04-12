@@ -316,16 +316,6 @@ function render_block_core_page_list( $attributes, $content, $block ) {
 
 	$items_markup = block_core_page_list_render_nested_page_list( $open_submenus_on_click, $show_submenu_icons, $is_navigation_child, $nested_pages, $active_page_ancestor_ids, $colors );
 
-	$is_navigation_child = array_key_exists( 'showSubmenuIcon', $block->context );
-
-	$open_submenus_on_click = array_key_exists( 'openSubmenusOnClick', $block->context ) ? $block->context['openSubmenusOnClick'] : false;
-
-	$show_submenu_icons = array_key_exists( 'showSubmenuIcon', $block->context ) ? $block->context['showSubmenuIcon'] : false;
-
-	$wrapper_markup = '<ul %1$s>%2$s</ul>';
-
-	$items_markup = block_core_page_list_render_nested_page_list( $open_submenus_on_click, $show_submenu_icons, $is_navigation_child, $nested_pages, $active_page_ancestor_ids, $colors );
-
 	$wrapper_attributes = get_block_wrapper_attributes(
 		array(
 			'class' => $css_classes,

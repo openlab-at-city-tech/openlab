@@ -71,13 +71,6 @@ class WP_REST_Templates_Controller extends WP_REST_Controller {
 			$this->namespace,
 			'/' . $this->rest_base . '/lookup',
 			array(
-				'args'   => array(
-					'id' => array(
-						'description'       => __( 'The id of a template' ),
-						'type'              => 'string',
-						'sanitize_callback' => array( $this, '_sanitize_template_id' ),
-					),
-				),
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_template_fallback' ),

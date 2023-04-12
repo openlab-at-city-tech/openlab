@@ -187,7 +187,7 @@ function triggerGuide(tipIds) {
  * @return {Object} Action object.
  */
 
-function actions_dismissTip(id) {
+function dismissTip(id) {
   return {
     type: 'DISMISS_TIP',
     id
@@ -200,7 +200,7 @@ function actions_dismissTip(id) {
  * @return {Object} Action object.
  */
 
-function actions_disableTips() {
+function disableTips() {
   return {
     type: 'DISABLE_TIPS'
   };

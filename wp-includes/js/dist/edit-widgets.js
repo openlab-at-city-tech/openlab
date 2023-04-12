@@ -868,6 +868,7 @@ const ComplementaryAreaHeader = _ref => {
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/interface/build-module/components/action-item/index.js
 
 
+
 /**
  * WordPress dependencies
  */
@@ -1063,15 +1064,6 @@ PinnedItems.Slot = PinnedItemsSlot;
 
 
 
-/**
- * Creates a "stub" widgets post reflecting all available widget areas. The
- * post is meant as a convenient to only exists in runtime and should never be saved. It
- * enables a convenient way of editing the widgets by using a regular post editor.
- *
- * Fetches all widgets from all widgets aras, converts them into blocks, and hydrates a new post with them.
- *
- * @return {Function} An action creator.
- */
 
 
 
@@ -2453,49 +2445,7 @@ var external_wp_mediaUtils_namespaceObject = window["wp"]["mediaUtils"];
  * WordPress dependencies
  */
 
-/**
- * Internal dependencies
- */
 
-
-/**
- * Internal dependencies
- */
-
-
-
-function SecondarySidebar() {
-  const {
-    isInserterOpen,
-    isListViewOpen
-  } = Object(external_wp_data_["useSelect"])(select => {
-    const {
-      isInserterOpened,
-      isListViewOpened
-    } = select(store);
-    return {
-      isInserterOpen: isInserterOpened(),
-      isListViewOpen: isListViewOpened()
-    };
-  }, []);
-
-  if (isInserterOpen) {
-    return Object(external_wp_element_["createElement"])(InserterSidebar, null);
-  }
-
-  if (isListViewOpen) {
-    return Object(external_wp_element_["createElement"])(ListViewSidebar, null);
-  }
-
-  return null;
-}
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/edit-widgets/build-module/components/layout/interface.js
-
-
-/**
- * WordPress dependencies
- */
 
 const replaceMediaUpload = () => external_wp_mediaUtils_namespaceObject.MediaUpload;
 
@@ -2616,7 +2566,6 @@ function WidgetAreaInnerBlocks(_ref) {
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -2851,8 +2800,6 @@ var external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortc
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -3635,58 +3582,6 @@ function Shortcut(_ref2) {
     key: index
   }))));
 }
-/**
- * Returns an action object used in signalling that a feature should be toggled.
- *
- * @param {string} scope       The feature scope (e.g. core/edit-post).
- * @param {string} featureName The feature name.
- */
-
-function actions_toggleFeature(scope, featureName) {
-  return function (_ref) {
-    let {
-      select,
-      dispatch
-    } = _ref;
-    const currentValue = select.isFeatureActive(scope, featureName);
-    dispatch.setFeatureValue(scope, featureName, !currentValue);
-  };
-}
-/**
- * Returns an action object used in signalling that a feature should be set to
- * a true or false value
- *
- * @param {string}  scope       The feature scope (e.g. core/edit-post).
- * @param {string}  featureName The feature name.
- * @param {boolean} value       The value to set.
- *
- * @return {Object} Action object.
- */
-
-function setFeatureValue(scope, featureName, value) {
-  return {
-    type: 'SET_FEATURE_VALUE',
-    scope,
-    featureName,
-    value: !!value
-  };
-}
-/**
- * Returns an action object used in signalling that defaults should be set for features.
- *
- * @param {string}                  scope    The feature scope (e.g. core/edit-post).
- * @param {Object<string, boolean>} defaults A key/value map of feature names to values.
- *
- * @return {Object} Action object.
- */
-
-function setFeatureDefaults(scope, defaults) {
-  return {
-    type: 'SET_FEATURE_DEFAULTS',
-    scope,
-    defaults
-  };
-}
 
 /* harmony default export */ var keyboard_shortcut_help_modal_shortcut = (Shortcut);
 
@@ -3734,24 +3629,6 @@ function DynamicShortcut(_ref) {
     description: description,
     aliases: aliases
   });
-}
-/**
- * Returns a boolean indicating whether a feature is active for a particular
- * scope.
- *
- * @param {Object} state       The store state.
- * @param {string} scope       The scope of the feature (e.g. core/edit-post).
- * @param {string} featureName The name of the feature.
- *
- * @return {boolean} Is the feature enabled?
- */
-
-function isFeatureActive(state, scope, featureName) {
-  var _state$preferences$fe, _state$preferenceDefa;
-
-  const featureValue = (_state$preferences$fe = state.preferences.features[scope]) === null || _state$preferences$fe === void 0 ? void 0 : _state$preferences$fe[featureName];
-  const defaultedFeatureValue = featureValue !== undefined ? featureValue : (_state$preferenceDefa = state.preferenceDefaults.features[scope]) === null || _state$preferenceDefa === void 0 ? void 0 : _state$preferenceDefa[featureName];
-  return !!defaultedFeatureValue;
 }
 
 /* harmony default export */ var dynamic_shortcut = (DynamicShortcut);
@@ -4396,7 +4273,6 @@ function ListViewSidebar() {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/edit-widgets/build-module/components/secondary-sidebar/index.js
-
 
 
 /**
