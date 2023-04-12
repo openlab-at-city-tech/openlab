@@ -1,9 +1,8 @@
 #!/bin/bash
 
 excludes=(
-	'./wp-includes' # Causing false positives in some cases. We trust WP to be OK.
 	'./wp-content/blogs.dir'
-	'./wp-content/uploads'
+	'./wp-content/uploads',
 	'./wp-content/plugins/advanced-gutenberg/vendor/pimple/pimple/ext/pimple/tests' # Test dir not loaded in production
 	'./wp-content/plugins/wp-post-to-pdf' # Plugin is deprecated and throws lots of false positives
   './wp-content/plugins/anthologize/vendor/pear/pear/' # Not loaded because we have zlib.
