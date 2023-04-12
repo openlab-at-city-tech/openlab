@@ -1870,6 +1870,10 @@ form.submitting .wpcf7-spinner {
 	list-style: none;
 }
 
+.wpcf7-reflection > output[hidden] {
+	display: none;
+}
+
 /*
 CSS for the gallery widget
 */
