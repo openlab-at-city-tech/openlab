@@ -7,3 +7,6 @@
 [submodule "wp-content/plugins/cac-network-info"]
 	path = wp-content/plugins/cac-network-info
 	url = git@github.com:cuny-academic-commons/cac-network-info
+[submodule "wp-content/plugins/webwork-problem-embed"]
+	path = wp-content/plugins/webwork-problem-embed
+	url = git@github.com:openlab-at-city-tech/webwork-problem-embed
