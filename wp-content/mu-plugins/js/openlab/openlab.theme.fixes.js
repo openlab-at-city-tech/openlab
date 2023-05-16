@@ -121,7 +121,7 @@ OpenLab.fixes = (function ($) {
 		}
 	);
 
-	$( window ).scroll(
+	$( window ).on( 'scroll',
 		function () {
 
 			if ($( 'body' ).hasClass( 'masthead-fixing' )) {
