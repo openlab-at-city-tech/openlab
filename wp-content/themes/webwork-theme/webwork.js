@@ -27,7 +27,7 @@
 
 		// Professional programming practices.
 		setTimeout( function() {
-			$searchToggle.unbind( 'click' );
+			$searchToggle.off( 'click' );
 			$searchToggle.on( 'click', function() {
 				toggleExplore();
 			} );
