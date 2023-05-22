@@ -88,7 +88,6 @@
 								array(
 									'context'      => 'topic',
 									'editor_class' => 'bbp-the-content bp-suggestions',
-									'tinymce'      => true,
 								)
 							);
 							?>

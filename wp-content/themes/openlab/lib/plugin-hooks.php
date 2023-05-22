@@ -297,6 +297,19 @@ function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
 add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
 
 /**
+ * Ensure that 'tinymce' flag is set for all bbPress interfaces.
+ *
+ * This gives us access to the Visual editor.
+ */
+add_filter(
+	'bbp_before_get_the_content_parse_args',
+	function( $args ) {
+		$args['tinymce'] = true;
+		return $args;
+	}
+);
+
+/**
  * Handle feature toggling for groups.
  */
 function openlab_group_feature_toggle( $group_id ) {
