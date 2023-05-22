@@ -27,10 +27,6 @@ OpenLab.utility = (function ($) {
 				wp.hooks.addFilter( 'eventorganiser.fullcalendar_options', OpenLab.utility.calendarFiltering );
 			}
 
-			//BP EO Editor tweaks
-			//doing this client-side for now
-			OpenLab.utility.BPEOTweaks();
-
 			// Accessibility mods for Settings > Email Notifications
 			OpenLab.utility.EmailSettingsA11y();
 
@@ -340,20 +336,6 @@ OpenLab.utility = (function ($) {
 			document.body.removeChild( scrollDiv );
 
 			return scrollbarWidth;
-
-		},
-		BPEOTweaks: function () {
-
-			var bpeo_metabox = $( '#bp_event_organiser_metabox' );
-
-			if (bpeo_metabox.length) {
-
-				var desc = ' <span class="bold">The event will appear in the OpenLab sitewide calendar unless one or more of the groups selected is private.</span>';
-
-				bpeo_metabox.find( '.inside .bp_event_organiser_desc' ).append( desc );
-				bpeo_metabox.find( '.hndle span' ).text( 'Display' );
-
-			}
 
 		},
 		setUpNewMembersBox: function (resize) {
