@@ -244,3 +244,36 @@ function openlab_embed_handler_yuja( $matches, $attr, $url ) {
 
 	return wp_oembed_get($url);
 }
+
+/**
+ * Padlet embed shortcode.
+ */
+function openlab_padlet_shortcode( $attr = [] ) {
+    global $content_width;
+
+    $r = shortcode_atts(
+        [
+            'key'    => '',
+            'height' => 608,
+
+            // not used at the moment
+            'width'  => ! empty( $content_width ) ? (int) $content_width : 500,
+        ],
+        $attr
+    );
+
+    if ( empty( $r['key'] ) ) {
+        return '';
+    }
+
+    if ( empty( $r['height'] ) || ! is_numeric( $r['height'] ) ) {
+        $r['height'] = 608;
+    }
+
+    return sprintf(
+        '<div class="padlet-embed" style="border:1px solid rgba(0,0,0,0.1);border-radius:2px;box-sizing:border-box;overflow:hidden;position:relative;width:100%%;background:#F4F4F4"><iframe src="https://padlet.com/embed/%1$s" frameborder="0" allow="camera;microphone;geolocation" style="width:100%%;height:%2$dpx;display:block;padding:0;margin:0"></iframe></div>',
+        sanitize_title( $r['key'] ),
+        (int) $r['height']
+    );
+}
+add_shortcode( 'padlet', 'openlab_padlet_shortcode' );
