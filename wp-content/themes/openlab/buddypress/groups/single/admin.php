@@ -106,45 +106,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 				<?php openlab_group_sharing_settings_markup( $group_type ); ?>
 			<?php endif; ?>
 
-			<?php
-			$announcements_enabled = openlab_is_announcements_enabled_for_group();
-			$forum_enabled         = openlab_is_forum_enabled_for_group();
-			$docs_enabled          = openlab_is_docs_enabled_for_group();
-			$files_enabled         = openlab_is_files_enabled_for_group();
-
-			if ( 'portfolio' === $group_type ) {
-				$show_announcement_toggle = false;
-				$heading_text             = 'Discussion, Docs, and File Library Settings';
-				$helper_text              = 'These settings enable or disable Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
-			} else {
-				$show_announcement_toggle = true;
-				$heading_text             = 'Announcements, Discussion, Docs, and File Library Settings';
-				$helper_text              = 'These settings enable or disable Announcements, Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
-			}
-
-			?>
-			<div class="panel panel-default">
-				<div class="panel-heading"><?php echo esc_html( $heading_text ); ?></div>
-				<div class="panel-body">
-					<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
-
-					<?php if ( $show_announcement_toggle ) : ?>
-						<div class="checkbox checkbox-float">
-							<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
-						</div>
-					<?php endif; ?>
-
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
-					</div>
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
-					</div>
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
-					</div>
-				</div>
-			</div>
+			<?php openlab_group_collaboration_tools_settings( $group_type ); ?>
 
 			<?php if ( function_exists( 'eo_get_event_fullcalendar' ) && ! openlab_is_portfolio() ) : ?>
 				<?php

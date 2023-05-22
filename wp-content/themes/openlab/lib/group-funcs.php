@@ -206,6 +206,52 @@ function openlab_group_privacy_membership_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_group_privacy_membership_save' );
 
 /**
+ * Markup for the 'Collaboratio Tools' section on group settings.
+ */
+function openlab_group_collaboration_tools_settings( $group_type = null ) {
+	$group_label_uc = openlab_get_current_group_type( 'case=upper' );
+
+	$announcements_enabled = openlab_is_announcements_enabled_for_group();
+	$forum_enabled         = openlab_is_forum_enabled_for_group();
+	$docs_enabled          = openlab_is_docs_enabled_for_group();
+	$files_enabled         = openlab_is_files_enabled_for_group();
+
+	$helper_text  = 'You can enable or disable any of the following collaboration tools on your ' . $group_label_uc . ' profile. This can be changed any time in ' . $group_label_uc . ' Settings.';
+	if ( 'portfolio' === $group_type ) {
+		$show_announcement_toggle = false;
+	} else {
+		$show_announcement_toggle = true;
+	}
+
+	?>
+	<div class="panel panel-default">
+		<div class="panel-heading">Collaboration Tools</div>
+		<div class="panel-body">
+			<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
+
+			<?php if ( $show_announcement_toggle ) : ?>
+				<div class="checkbox checkbox-float">
+					<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+				</div>
+			<?php endif; ?>
+
+			<div class="checkbox checkbox-float">
+				<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
+			</div>
+			<div class="checkbox checkbox-float">
+				<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
+			</div>
+			<div class="checkbox checkbox-float">
+				<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+			</div>
+		</div>
+
+		<?php wp_nonce_field( 'openlab_collaboration_tools', 'openlab-collaboration-tools-nonce' ); ?>
+	</div>
+	<?php
+}
+
+/**
  * Determines whether public joining is disabled for a public group.
  *
  * To avoid bloat in the database, we're only recording when the default behavior is
@@ -1733,6 +1779,12 @@ add_action( 'bp_after_group_details_creation_step', function() {
 
 	openlab_group_sharing_settings_markup( $group_type );
 }, 4 );
+
+add_action( 'bp_after_group_details_creation_step', function() {
+	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+
+	openlab_group_collaboration_tools_settings( $group_type );
+}, 6 );
 
 /**
  * Save the group S/O/D settings after save.

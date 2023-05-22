@@ -36,9 +36,9 @@ function openlab_is_files_enabled_for_group( $group_id = null ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	// Default to true in case no value is found, except for portfolios.
+	// Default to false in case no value is found.
 	if ( ! $group_id ) {
-		return true;
+		return false;
 	}
 
 	$is_disabled = groups_get_groupmeta( $group_id, 'group_documents_documents_disabled' );
