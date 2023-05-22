@@ -32,23 +32,11 @@ function openlab_wp_menu_customizations($items, $args) {
         $order = count($items);
         $new_items = array();
 
-        //add a mobile verison of the OpenLab Calendar menu item
         //first iterate through the current menu items and figure out where this new mobile menu item will go
         foreach ($items as $key => $item) {
 
             if (false === strpos($item->url, bp_get_root_domain())) {
                 $items[$key]->classes[] = 'external-link';
-            }
-
-            if ($item->title === 'OpenLab Calendar') {
-
-                $items[$key]->classes[] = 'hidden-xs';
-
-                if ($post->post_parent === $calendar_page_obj->ID || $post->post_type === 'event') {
-                    $items[$key]->classes[] = 'current-menu-item';
-                }
-
-                $order = $item->menu_order + 1;
             }
 
             if ($item->menu_order >= $order) {
@@ -58,9 +46,6 @@ function openlab_wp_menu_customizations($items, $args) {
                 $new_items[$key] = $item;
             }
         }
-
-        //then we create the menu item and inject it into the menu items array
-        $new_menu_item = openlab_custom_nav_menu_item('OpenLab Calendar', get_permalink($upcoming_page_obj->ID), $order, 0, array('visible-xs'));
 
         $new_items[$order] = $new_menu_item;
         ksort($new_items);
