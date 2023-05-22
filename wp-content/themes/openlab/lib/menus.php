@@ -47,7 +47,6 @@ function openlab_wp_menu_customizations($items, $args) {
             }
         }
 
-        $new_items[$order] = $new_menu_item;
         ksort($new_items);
         $items = $new_items;
     }
