@@ -17,7 +17,7 @@ jobs:
       - uses: php-actions/composer@v6
 
       - name: PHPStan Static Analysis
-        uses: php-actions/phpstan
+        uses: php-actions/phpstan@master
         with:
           php_version: 8.0
           configuration: phpstan.neon
