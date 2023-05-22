@@ -1,0 +1,255 @@
+<mjml owa="desktop" version="4.10.1">
+  <mj-head>
+    <mj-preview></mj-preview>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" />
+
+    <mj-attributes>
+      <mj-class name="blc-inline-block" display="inline-block" />
+    </mj-attributes>
+
+    <mj-style>
+      .blc-inline-text {
+      width:100%;
+      padding-left: 0px !important;
+      }
+
+      .blc-inline-text,
+      .blc-inline-text div,
+      .blc-inline-text span{
+      display:inline-block !important;
+      vertical-align:top !important;
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#F4F4F4">
+    <mj-section background-repeat="repeat" background-size="auto" text-align="center">
+
+    </mj-section>
+
+
+    <mj-wrapper padding-bottom="0px" padding-top="0px" padding="0px 0" text-align="center">
+      <mj-hero mode="fixed-height" height="100px" background-height="100px" border-radius="24px 24px 0px 0px;" background-color="#00BFA5">
+        <mj-text padding="35px 0px" color="#ffffff" font-family="Roboto, sans-serif" align="center" font-size="20px" line-height="30px" font-weight="700">
+          <img height="30" width="30" src="{{HEADER_LOGO_SOURCE}}" style="border:0;outline:none;text-decoration:none;height:30px;width:30px;font-size:13px;" /> {{TITLE}}
+        </mj-text>
+
+      </mj-hero>
+    </mj-wrapper>
+
+
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding="20px 0px 0px 0px" text-align="center">
+      <mj-column>
+        <mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-weight="500" font-size="13px" padding-bottom="0px" padding-top="0px" padding="0px 25px 0px 25px">
+          <h1 style="text-align:left; margin-top: 10px; margin-bottom: 10px">
+            <span style="font-weight: 700;
+font-size: 25px;line-height: 30px;font-family:Roboto, sans-serif; font-weight:500; color:#1A1A1A;text-align:left;">
+              Broken Link Report for <a color="#286EFA" href="{{SITEURL}}">{{SITENAME}}</a>
+            </span>
+          </h1>
+        </mj-text>
+
+        <mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-size="13px" padding-bottom="0px" padding-left="25px" padding-right="25px" padding-top="0px" padding="0px 25px 0px 25px">
+
+          <p class="text-build-content" data-testid="JiH7lfw73to" style="margin: 10px 0; margin-top: 10px;">
+            <span style="color:#1A1A1A;font-family:Roboto, sans-serif;font-size:18px;line-height:28px;">
+              Hi {{USERNAME}},
+            </span>
+          </p>
+
+
+          <p class="text-build-content" data-testid="JiH7lfw73to" style="margin: 10px 0;">
+            <span style="color:#1A1A1A;font-family:Roboto, sans-serif;font-size:18px;line-height:28px;">
+              Here's your latest broken link summary generated on {{SCANDATE}}.
+            </span>
+          </p>
+
+          <br />
+
+          <h2 style="font-family: Roboto, sans-serif;font-style: normal;font-weight: 700;font-size: 25px;line-height: 29px;color: #1A1A1A;">
+            Summary
+          </h2>
+
+          <p class="text-build-content" data-testid="JiH7lfw73to" style="margin: 10px 0;">
+            <span style="color:#1A1A1A;font-family:Roboto, sans-serif;font-size:13px;line-height:22px;">
+              Here are your latest broken link test results.
+            </span>
+          </p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+
+
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding="0px 0px 20px 0px" text-align="center">
+      <mj-column>
+        <mj-table>
+
+          <tr style="border-bottom: 1px solid #F2F2F2;">
+            <td style="font-family: Roboto, sans-serif;font-weight: 400;padding: 20px 0px;font-size: 15px;line-height: 22px;color: #1A1A1A;">
+              Broken Links
+            </td>
+            <td style="padding: 20px 0;font-family: Roboto, sans-serif;font-weight: 400;font-size: 15px;line-height: 22px;text-align: right;color: #1A1A1A;">
+              <span style="font-family: Roboto, sans-serif;font-style: normal;font-weight: 700;font-size: 22px;line-height: 22px;text-align: right;color: #FF6D6D;">{{BROKEN_LINKS_COUNT}}</span>
+            </td>
+          </tr>
+
+          <tr style="border-bottom: 1px solid #F2F2F2;">
+            <td style="font-family: Roboto, sans-serif;font-weight: 400;padding: 20px 0px;font-size: 15px;line-height: 22px;color: #1A1A1A;">
+              Successful URLs
+            </td>
+            <td style="padding: 20px 0;font-family: Roboto, sans-serif;font-style: normal;font-weight: 400;font-size: 15px;line-height: 22px;text-align: right;color: #1A1A1A;">
+              <span style="font-family: Roboto, sans-serif;font-style: normal;font-weight: 400;font-size: 15px;line-height: 22px;">{{SUCCESSFUL_URLS_COUNT}}</span>
+            </td>
+          </tr>
+
+          <tr style="border-bottom: 1px solid #F2F2F2;">
+            <td style="font-family: Roboto, sans-serif;font-weight: 400;padding: 20px 0px;font-size: 15px;line-height: 22px;color: #1A1A1A;">
+              Unique URLs
+            </td>
+            <td style="padding: 20px 0;font-family: 'Roboto, sans-serif';font-style: normal;font-weight: 400;font-size: 15px;line-height: 22px;text-align: right;color: #1A1A1A;">
+              <span style="font-family: Roboto, sans-serif;font-style: normal;font-weight: 400;font-size: 15px;line-height: 22px;">{{UNIQUE_URLS_COUNT}}</span>
+            </td>
+          </tr>
+
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding="0px 0px 20px 0px" text-align="center">
+      <mj-column>
+        <mj-table>
+
+          <tr style="align-items: flex-start;padding: 0px;width: 550px;height: 32px;">
+            <th style="background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A; text-align:left;border-radius: 4px 0px 0px 0px;">
+              Broken Links
+            </th>
+
+            <th style="background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;">
+              Status
+            </th>
+
+            <th style="background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;">
+              Source URL
+            </th>
+
+          </tr>
+
+          <tr style="border: 1px solid #F2F2F2;">
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; vertical-align:top;">
+              {{BROKEN_LINK_TITLE}}
+            </td>
+
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #1A1A1A; width:33%;  vertical-align:top;">
+              <span style="padding: 4px 8px;width: 36px;height: 22px;background: #FF6D6D;border-radius: 12px;font-weight: 500;font-size: 12px;line-height: 14px;color: #FFFFFF; margin:0 4px 0 0;">{{BROKEN_LINK_STATUS}}</span>
+              {{BROKEN_LINK_STATUS_TITLE}}
+            </td>
+
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; width:33%; vertical-align:top;">
+              {{BROKEN_LINK_URL}}
+            </td>
+
+          </tr>
+
+          <tr style="border: 1px solid #F2F2F2;">
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; vertical-align:top;">
+              {{BROKEN_LINK_TITLE}}
+            </td>
+
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #1A1A1A; width:33%;  vertical-align:top;">
+              <span style="padding: 4px 8px;width: 36px;height: 22px;background: #FF6D6D;border-radius: 12px;font-weight: 500;font-size: 12px;line-height: 14px;color: #FFFFFF; margin:0 4px 0 0;">{{BROKEN_LINK_STATUS}}</span>
+              {{BROKEN_LINK_STATUS_TITLE}}
+            </td>
+
+            <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; width:33%; vertical-align:top;">
+              {{BROKEN_LINK_URL}}
+            </td>
+
+          </tr>
+
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+
+
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding-bottom="0px" padding-top="0px" padding="20px 0" text-align="center">
+      <mj-column>
+        <mj-button align="center" background-color="#286EFA" border-radius="6px" border="none" color="#ffffff" font-family="Roboto, sans-serif" font-size="14px" font-weight="normal" href="{{FULL_REPORT_URL}}" inner-padding="10px 25px 10px 25px" padding-left="25px" padding-right="25px" padding="8px 15px" text-decoration="none" text-transform="none" vertical-align="middle">
+          <span style="color:#284e84;font-family:Roboto;font-size:14px;font-style: normal;font-weight: 500;font-size: 13px;line-height: 24px;color: #FFFFFF;">
+            {{FULL_REPORT_TITLE}}
+          </span>
+        </mj-button>
+
+      </mj-column>
+    </mj-section>
+
+
+
+    <mj-section background-color="#ffffff" background-repeat="repeat" background-size="auto" padding-bottom="0px" padding-top="0px" padding="20px 0" text-align="center">
+      <mj-column>
+
+        <mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-size="10px" padding-bottom="0px" padding-left="25px" padding-right="25px" padding-top="5px" padding="5px 25px 0px 25px">
+          <p class="text-build-content" style="text-align: left; margin-top: 10px;font-family: 'Roboto';font-style: normal;font-weight: 700;font-size: 16px;line-height: 28px;color: #1A1A1A;" data-testid="lsPh_hKQM">
+            Broken Link Checker
+            <br />
+            <span class="text-build-content" style="text-align: left;font-family: 'Roboto';font-style: normal;font-weight: 400;font-size: 16px;line-height: 28px;color: #1A1A1A;" data-testid="lsPh_hKQM">
+             {{COMPANY_TITLE}}
+            </span>
+          </p>
+
+
+
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+
+
+
+
+    <mj-section background-color="#E7F1FB" background-repeat="repeat" padding-left="0px" padding-right="0px" padding="20px 0px 20px 0px" text-align="center">
+
+      <mj-column>
+
+
+        <mj-text align="center" css-class="blc-inline-text">
+          <span>
+            <img height="30" width="30" src="{{FOOTER_LOGO_SOURCE}}" style="border:0;outline:none;text-decoration:none;height:30px;width:30px;font-size:13px;" />
+          </span>
+
+          <p style="font-family: Roboto;font-weight: 700;font-size: 14px;display:inline-block; max-width:150px!important;text-align:left;margin-left: 5px; margin-top: 0px;">
+            {{FOOTER_SLOGAN}}
+          </p>
+
+        </mj-text>
+
+      </mj-column>
+
+    </mj-section>
+
+
+	<mj-section text-align="center">
+      <mj-column>
+        <mj-text align="center">
+			{{SOCIAL_LINKS}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+
+
+    <mj-section background-repeat="repeat" padding="0px" text-align="center">
+      <mj-column padding="0">
+        <mj-text align="center" color="#505050" font-family="Roboto, sans-serif" font-size="10px" padding="0px">
+          <p style="margin-top: 0px;">{{COMPANY_ADDRESS}}</p>
+        </mj-text>
+
+        <mj-text align="center" color="#505050" font-family="Roboto, sans-serif" font-size="10px" padding-bottom="0px" padding-top="0px" padding="0px">
+          <p>{{UNSUBSCRIBE}}</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
