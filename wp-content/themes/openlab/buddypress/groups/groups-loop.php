@@ -328,8 +328,8 @@ do_action( 'openlab_before_groups_loop' );
 <?php
 // If this is a my- page, set up the 'inactive' sort.
 if ( openlab_is_my_groups_directory() ) {
-	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
-	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_active_status', 10 );
+	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_active_status', 10 );
 }
 ?>
 
