@@ -181,36 +181,18 @@ function openlab_invite_anyone_screen_one_content() {
 
                     </li>
 
-                    <?php if (invite_anyone_are_groups_running()) : ?>
-                        <?php if ($iaoptions['can_send_group_invites_email'] == 'yes' && bp_has_groups("per_page=10000&type=alphabetical&user_id=" . bp_loggedin_user_id())) : ?>
-                            <li>
-                                <p><?php _e('(optional) Select some groups. Invitees will receive invitations to these groups when they join the site.', 'bp-invite-anyone') ?></p>
-                                <ul id="invite-anyone-group-list" class="inline-element-list row group-list">
-                                    <?php while (bp_groups()) : bp_the_group(); ?>
-                                        <?php
-                                        // Enforce per-group invitation settings
-                                        if (!bp_groups_user_can_send_invites(bp_get_group_id()) || 'anyone' !== invite_anyone_group_invite_access_test(bp_get_group_id())) {
-                                            continue;
-                                        }
-                                        ?>
-                                        <li class="col-md-8 col-sm-12">
-                                            <div class="group-item-wrapper pointer">
-                                                <label for="invite_anyone_groups-<?php bp_group_id() ?>" class="invite-anyone-group-name">
-                                                    <div class="row">
-                                                        <div class="col-xs-2"><input type="checkbox" class="no-margin no-margin-top" name="invite_anyone_groups[]" id="invite_anyone_groups-<?php bp_group_id() ?>" value="<?php bp_group_id() ?>" <?php if ($from_group == bp_get_group_id() || array_search(bp_get_group_id(), $returned_groups)) : ?>checked<?php endif; ?> /></div>
-                                                        <div class="col-xs-8"><img class="img-responsive" src ="<?php echo bp_core_fetch_avatar(array('item_id' => bp_get_group_id(), 'object' => 'group', 'type' => 'full', 'html' => false)) ?>" alt="<?php echo bp_get_group_name(); ?>"/></div>
-                                                        <div class="col-xs-14"><?php bp_group_name() ?></div>
-                                                    </div>
-                                                </label>
-                                            </div>
+					<?php
+					$user_has_groups = (bool) groups_total_groups_for_user( bp_loggedin_user_id() );
+					?>
 
-                                        </li>
-                                    <?php endwhile; ?>
+                    <?php if ( invite_anyone_are_groups_running() && 'yes' === $iaoptions['can_send_group_invites_email'] && $user_has_groups ) : ?>
+						<li>
+							<label for="invite-anyone-group-list-autocomplete"><h4>(optional) Select some groups. Invitees will receive invitations to these groups when they join the site.</h4></label>
 
-                                </ul>
-                            </li>
-                        <?php endif; ?>
+							<input class="form-control" type="text" id="invite-anyone-group-list-autocomplete" placeholder="Begin typing to select from your groups." />
 
+							<ul id="invite-anyone-group-list" class=""></ul>
+						</li>
                     <?php endif; ?>
 
                     <?php wp_nonce_field( 'invite_anyone_send_by_email', 'ia-send-by-email-nonce' ); ?>
@@ -573,3 +555,45 @@ add_filter(
 		return $options;
 	}
 );
+
+/**
+ * AJAX callback for invite-anyone group search.
+ */
+function openlab_search_user_groups_for_invite_anyone() {
+	$user_groups = groups_get_groups(
+		[
+			'user_id'  => bp_loggedin_user_id(),
+			'per_page' => 10000,
+		]
+	);
+
+	$term = sanitize_text_field( wp_unslash( $_REQUEST['term'] ) );
+
+	$matched_groups = array_filter(
+		$user_groups['groups'],
+		function( $group ) use ( $term ) {
+			return (
+				false !== stripos( $group->name, $term ) ||
+				false !== stripos( $group->slug, $term )
+			);
+		}
+	);
+
+	$retval = array_map(
+		function( $group ) {
+			return [
+				'itemId' => $group->id,
+				'value'  => $group->name,
+				'label'  => $group->name,
+				'icon'   => bp_get_group_avatar( [ 'type' => 'thumb' ], $group ),
+			];
+		},
+		$matched_groups
+	);
+
+	// Ensure return value is an array, not a JSON object.
+	$retval = array_values( $retval );
+
+	die( json_encode( $retval ) );
+}
+add_action( 'wp_ajax_openlab_search_user_groups', 'openlab_search_user_groups_for_invite_anyone' );

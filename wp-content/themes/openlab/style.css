@@ -10870,16 +10870,36 @@ a.delete-doc-button {
   float: left;
   margin-right: 5px;
 }
-#invite-anyone-group-list.group-list .group-item-wrapper {
-  height: 83px;
+body.invite-new-members ul.ui-autocomplete {
+  background: #fff;
+  border: 1px solid #333333;
+  list-style-type: none;
+  max-width: 50%;
+  padding: 15px;
 }
-#invite-anyone-group-list.group-list .group-item-wrapper label {
-  width: 100%;
+body.invite-new-members .ui-menu-item-wrapper {
+  padding: 6px;
 }
-@media (max-width: 767px) {
-  #invite-anyone-group-list.group-list .group-item-wrapper {
-    height: auto;
-  }
+body.invite-new-members .ia-autocomplete-hit {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+#invite-anyone-group-list {
+  list-style-type: none;
+  padding: 0;
+}
+#invite-anyone-group-list li {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+#invite-anyone-group-list button.remove-group {
+  background: none;
+  border: none;
+  color: #f00;
+  padding: 0;
 }
 @media (max-width: 767px) {
   .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {

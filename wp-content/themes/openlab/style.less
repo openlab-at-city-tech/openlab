@@ -3781,7 +3781,7 @@ a.delete-doc-button {
         flex-flow: row wrap;
         align-items: flex-end;
 
-        .pagination-links { 
+        .pagination-links {
             .pagination {
                 display: flex;
 
@@ -3878,7 +3878,7 @@ a.delete-doc-button {
                 &:first-child {
                     border-bottom-left-radius: 0;
                     border-top-left-radius: 0;
-                
+
                 }
 
                 &:last-child {
@@ -3983,18 +3983,42 @@ a.delete-doc-button {
         }
     }
 }
+body.invite-new-members {
+	ul.ui-autocomplete {
+		background: #fff;
+		border: 1px solid @80gray;
+		list-style-type: none;
+		max-width: 50%;
+		padding: 15px;
+	}
+
+	.ui-menu-item-wrapper {
+		padding: 6px;
+	}
+
+	.ia-autocomplete-hit {
+		align-items: center;
+		display: flex;
+		gap: 12px;
+	}
+}
 #invite-anyone-group-list{
-    &.group-list{
-        .group-item-wrapper{
-            height: 83px;
-            label{
-                width: 100%;
-            }
-            @media (max-width:@screen-xs-max){
-                height: auto;
-            }
-        }
-    }
+	list-style-type: none;
+	padding: 0;
+
+	li {
+		align-items: center;
+		display: flex;
+		gap: 12px;
+		margin-bottom: 8px;
+	}
+
+	button.remove-group {
+		background: none;
+		border: none;
+		color: #f00;
+		padding: 0;
+	}
 }
 .sent-invites-panel{
     @media (max-width: @screen-xs-max){

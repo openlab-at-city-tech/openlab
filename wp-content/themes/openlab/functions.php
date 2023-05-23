@@ -6,7 +6,7 @@ if (!defined('CSS_DEBUG')) {
 
 function openlab_core_setup() {
 	global $content_width;
-	
+
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'responsive-embeds' );
 
@@ -106,6 +106,10 @@ function openlab_load_scripts() {
 
 	if ( bp_is_group() && bp_is_current_action( 'invite-anyone' ) ) {
 		wp_enqueue_script( 'openlab-invite-anyone', $stylesheet_dir_uri . '/js/invite-anyone.js', [ 'jquery' ] );
+	}
+
+	if ( bp_is_current_action( 'invite-new-members' ) ) {
+		wp_enqueue_script( 'openlab-invite-anyone', $stylesheet_dir_uri . '/js/invite-anyone-by-email.js', [ 'jquery', 'jquery-ui-autocomplete' ] );
 	}
 
     if (bp_is_register_page()) {
