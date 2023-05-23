@@ -8239,6 +8239,9 @@ body .padded-img .group-single-badges .group-badge {
   min-width: 0px;
   padding: 0 4px;
 }
+body .padded-img .group-single-badges .group-badge.group-badge-inactive {
+  background: #f7e700;
+}
 body .padded-img .group-single-badges .group-badge a {
   color: #4f4f4f;
   font-size: 12px;
@@ -8275,6 +8278,15 @@ body a.roll-over-loss:focus {
 body a.roll-over-color:hover,
 body a.roll-over-color:focus {
   color: #333333 !important;
+}
+body .group-active-status-fieldset {
+  margin: 24px 0;
+}
+body .group-active-status-fieldset p {
+  margin-bottom: 8px;
+}
+body .group-active-status-fieldset label {
+  margin-left: 8px;
 }
 body .group-creators-section {
   margin-bottom: 20px;

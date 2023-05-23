@@ -278,6 +278,36 @@ function openlab_private_group_has_disabled_membership_requests( $group_id ) {
 }
 
 /**
+ * Determines whether a group is "active".
+ *
+ * To avoid bloat in the database, we're only recording when a group is inactive.
+ *
+ * @param int $group_id
+ * @return bool
+ */
+function openlab_group_is_active( $group_id ) {
+	return empty( groups_get_groupmeta( $group_id, 'group_is_inactive', true ) );
+}
+
+/**
+ * Filters group query on my- pages to put inactive groups at the end of the list.
+ */
+function openlab_filter_groups_query_for_active_status( $sql, $sql_clauses, $r ) {
+	$bp = buddypress();
+
+	$sql = str_replace( $sql_clauses['from'], $sql_clauses['from'] . " LEFT JOIN {$bp->groups->table_name_groupmeta} gm_active_status ON (g.id = gm_active_status.group_id AND gm_active_status.meta_key = 'group_is_inactive')", $sql );
+
+	// This ORDER BY clause puts inactive items at the end of the list.
+	$sql = str_replace(
+		$sql_clauses['orderby'],
+		str_replace( 'ORDER BY ', "ORDER BY CASE WHEN gm_active_status.meta_key = 'group_is_inactive' THEN 1 ELSE 0 END ASC, ", $sql_clauses['orderby'] ),
+		$sql
+	);
+
+	return $sql;
+}
+
+/**
  * Unhooks group join button if it's disabled for the group.
  */
 add_action(
@@ -1883,6 +1913,32 @@ function openlab_group_add_to_portfolio_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
 
 /**
+ * Saves 'Active' status.
+ *
+ * @param int $group_id ID of the group.
+ */
+function openlab_group_save_active_status_on_group_edit( $group_id ) {
+	if ( ! isset( $_POST['group-active-status-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'group_active_status', 'group-active-status-nonce' );
+
+	if ( empty( $_POST['group-active-status'] ) ) {
+		return;
+	}
+
+	$status = 'inactive' === sanitize_text_field( wp_unslash( $_POST['group-active-status'] ) ) ? 'inactive' : 'active';
+
+	if ( 'inactive' === $status ) {
+		groups_update_groupmeta( $group_id, 'group_is_inactive', '1' );
+	} else {
+		groups_delete_groupmeta( $group_id, 'group_is_inactive', '1' );
+	}
+}
+add_action( 'groups_group_details_edited', 'openlab_group_save_active_status_on_group_edit' );
+
+/**
  * Outputs the badge markup for the group directory.
  *
  * @since 1.2.0
@@ -1949,19 +2005,28 @@ function openlab_group_single_badges() {
  * @return array
  */
 function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
-	// Note that they're applied in reverse order, so 'open' is first.
+	// Note that they're applied in reverse order, so 'Not Active' is first.
 	$faux_badges = [
 		'cloneable' => [
 			'add'        => openlab_group_can_be_cloned( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Cloneable',
 			'short_name' => 'Cloneable',
+			'class'      => 'cloneable',
 		],
 		'open'      => [
 			'add'        => openlab_group_is_open( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Open',
 			'short_name' => 'Open',
+			'class'      => 'open',
+		],
+		'inactive'  => [
+			'add'        => ! openlab_group_is_active( $group_id ),
+			'link'       => '',
+			'name'       => 'Not Currently Active',
+			'short_name' => 'Not Active',
+			'class'      => 'inactive',
 		],
 	];
 
@@ -1990,7 +2055,7 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 			$badge_link_end   = '</span>';
 		}
 
-		$html  = '<div class="group-badge">';
+		$html  = sprintf( '<div class="group-badge group-badge-%s">', $faux_badge['class'] );
 		$html .= $badge_link_start;
 		$html .= esc_html( $faux_badge['short_name'] );
 		$html .= $badge_link_end;

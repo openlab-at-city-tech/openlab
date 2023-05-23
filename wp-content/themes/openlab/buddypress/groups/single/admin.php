@@ -55,6 +55,20 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 					<label for="group-desc"><?php echo $group_label_uc . ' Description'; ?> (required)</label>
 					<textarea class="form-control" name="group-desc" id="group-desc"><?php bp_group_description_editable(); ?></textarea>
 
+					<fieldset class="group-active-status-fieldset">
+						<legend><?php echo esc_html( sprintf( '%s Status', $group_label_uc ) ); ?></legend>
+
+						<p><?php echo esc_html( sprintf( 'You can mark a %s as Not Active when it is no longer being actively used. This status will appear on the Profile and in the %s directory. Membership will be by invitation only, but there will be no changes for current members. It will also appear below currently active %s in My OpenLab. The status can be changed back to Active at any time.', $group_label_uc, $group_label_uc, $group_label_uc ) ); ?></p>
+
+						<div class="group-active-status-radios">
+							<input type="radio" name="group-active-status" id="group-active-status-active" value="active" <?php checked( openlab_group_is_active( bp_get_current_group_id() ) ); ?>> <label for="group-active-status-active"><?php echo esc_html( sprintf( 'This %s is Active', $group_label_uc ) ); ?></label><br />
+							<input type="radio" name="group-active-status" id="group-active-status-inactive" value="inactive" <?php checked( ! openlab_group_is_active( bp_get_current_group_id() ) ); ?>> <label for="group-active-status-inactive"><?php echo esc_html( sprintf( 'This %s is Not Active', $group_label_uc ) ); ?></label>
+						</div>
+
+						<?php wp_nonce_field( 'group_active_status', 'group-active-status-nonce', false ); ?>
+
+					</fieldset>
+
 					<?php do_action( 'groups_custom_group_fields_editable' ); ?>
 
 					<?php if ( ! openlab_is_portfolio() ) : ?>

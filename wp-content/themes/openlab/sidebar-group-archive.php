@@ -74,6 +74,10 @@ if ( bp_is_members_directory() ) {
 					<?php get_template_part( 'parts/sidebar/filter-member-type' ); ?>
 				<?php endif; ?>
 
+				<?php if ( $group_type || $is_search ) : ?>
+					<?php get_template_part( 'parts/sidebar/filter-active-status' ); ?>
+				<?php endif; ?>
+
 				<?php get_template_part( 'parts/sidebar/filter-sort' ); ?>
 
 				<?php if ( ! $is_people ) : ?>

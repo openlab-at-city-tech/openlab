@@ -108,6 +108,21 @@ if ( $is_open ) {
 	$group_args['status'] = 'public';
 }
 
+$active_status = openlab_get_current_filter( 'active-status' );
+if ( $active_status ) {
+	if ( 'active' === $active_status ) {
+		$meta_query['active_status'] = [
+			'key'     => 'group_is_inactive',
+			'compare' => 'NOT EXISTS',
+		];
+	} elseif ( 'inactive' === $active_status ) {
+		$meta_query['active_status'] = [
+			'key'     => 'group_is_inactive',
+			'compare' => 'EXISTS',
+		];
+	}
+}
+
 $group_args['meta_query'] = $meta_query;
 
 $categories   = openlab_get_current_filter( 'cat' );
@@ -166,6 +181,12 @@ $private_groups = openlab_get_user_private_membership( $user_id );
 // Exclude private groups if not current user's profile or don't have moderate access.
 if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
 	$group_args['exclude'] = $private_groups;
+}
+
+// If this is a my- page, set up the 'inactive' sort.
+if ( openlab_is_my_groups_directory() ) {
+	add_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
+	add_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
 }
 
 do_action( 'openlab_before_groups_loop' );
@@ -303,6 +324,14 @@ do_action( 'openlab_before_groups_loop' );
 		</div>
 	</div>
 <?php endif; ?>
+
+<?php
+// If this is a my- page, set up the 'inactive' sort.
+if ( openlab_is_my_groups_directory() ) {
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
+	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_active_status', 10, 3 );
+}
+?>
 
 <?php
 do_action( 'openlab_after_groups_loop' );
