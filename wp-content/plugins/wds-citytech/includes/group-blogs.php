@@ -627,12 +627,13 @@ function wds_bp_group_meta() {
 						} else {
 							$group_site_text    = '';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
+							$show_admin_bar     = false;
 						}
 						?>
 						<p>This <?php echo esc_html( openlab_get_group_type_label() ); ?> is currently associated with the site <?php echo $group_site_text; // WPCS: XSS ok ?></p>
 						<ul id="change-group-site"><li><?php echo $group_site_url_out; ?> <a class="button underline confirm" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
 
-						<?php if ( ! $site_is_external ) : ?>
+						<?php if ( ! openlab_get_external_site_url_by_group_id( $the_group_id ) ) : ?>
 							<div class="show-admin-bar-on-site-setting">
 								<p><input type="checkbox" name="show-admin-bar-on-site" id="show-admin-bar-on-site" <?php checked( $show_admin_bar ); ?>> <label for="show-admin-bar-on-site"><?php esc_html_e( 'Show WordPress admin bar to non-logged-in visitors to my site?', 'commons-in-a-box' ); ?></label></p>
 								<p class="group-setting-note italics note"><?php esc_html_e( 'The admin bar appears at the top of your site. Logged-in visitors will always see it but you can hide it for site visitors who are not logged in.', 'commons-in-a-box' ); ?></p>
