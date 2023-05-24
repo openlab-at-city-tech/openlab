@@ -9,8 +9,9 @@
 	$( document ).ready( function() {
 		toggle_grade_visibility();
 
-		$add_a_grade.on( 'click', function() {
+		$add_a_grade.on( 'click', function( e ) {
 			toggle_grade_visibility();
+			maybe_set_comment_visibility();
 		} );
 
 		$reply_to_com.on( 'click', function() {
@@ -28,6 +29,13 @@
 				toggle_comment_content_required();
 			}
 		);
+
+		$comment_content_input.on(
+			'keyup',
+			function( e ) {
+				maybe_set_comment_visibility()
+			}
+		);
 	} );
 
 	function toggle_grade_visibility() {
@@ -43,6 +51,20 @@
 			$comment_content_input.prop( 'required', false );
 		} else {
 			$comment_content_input.prop( 'required', true );
+		}
+	}
+
+	/**
+	 * Check whether we should set the comment visibility to Private based on the Add A Grade status.
+	 */
+	function maybe_set_comment_visibility() {
+		var comment_has_content = $comment_content_input.val().length > 0;
+
+		if ( $add_a_grade.is( ':checked' ) && ! comment_has_content ) {
+			$private_checkbox.prop( 'disabled', 'disabled' );
+			$private_checkbox.prop( 'checked', true );
+		} else {
+			$private_checkbox.prop( 'disabled', false );
 		}
 	}
 
