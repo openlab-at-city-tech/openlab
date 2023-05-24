@@ -8206,7 +8206,7 @@ body .spaced-list label {
   margin-bottom: 12px;
 }
 body .note {
-  color: #999999;
+  color: #757575;
 }
 body .padded-img {
   border-radius: 4px;
@@ -9436,6 +9436,12 @@ body form .checkbox-list-container {
 }
 .mobile-group-site-links .portfolio-site-link {
   font-size: 1.75rem;
+}
+.show-admin-bar-on-site-setting {
+  margin-top: 25px;
+}
+.group-setting-note {
+  margin-top: -10px;
 }
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {

@@ -4,11 +4,6 @@
  */
 
 /**
- * Ensure that the toolbar always shows
- */
-add_filter( 'show_admin_bar', '__return_true', 999999 );
-
-/**
  * Removing the default WP admin bar styles; a customized version of the default styles can now be found
  * in the mu-plugins folder
  * This is done for two reasons:
