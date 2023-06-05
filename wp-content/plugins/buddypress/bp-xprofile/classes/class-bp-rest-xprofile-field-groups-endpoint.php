@@ -166,6 +166,11 @@ class BP_REST_XProfile_Field_Groups_Endpoint extends WP_REST_Controller {
 			$args['exclude_groups'] = false;
 		}
 
+		$include_groups = $request->get_param( 'include_groups' );
+		if ( $include_groups && ! $args['profile_group_id'] ) {
+			$args['profile_group_id'] = $include_groups;
+		}
+
 		/**
 		 * Filter the query arguments for the request.
 		 *
@@ -656,7 +661,7 @@ class BP_REST_XProfile_Field_Groups_Endpoint extends WP_REST_Controller {
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param array            $links The prepared links of the REST response.
+		 * @param array             $links The prepared links of the REST response.
 		 * @param BP_XProfile_Group $group XProfile field group object.
 		 */
 		return apply_filters( 'bp_rest_xprofile_field_groups_prepare_links', $links, $group );
@@ -861,12 +866,21 @@ class BP_REST_XProfile_Field_Groups_Endpoint extends WP_REST_Controller {
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 
+		$params['include_groups'] = array(
+			'description'       => __( 'Ensure result set inludes specific profile field groups.', 'buddypress' ),
+			'default'           => array(),
+			'type'              => 'array',
+			'items'             => array( 'type' => 'integer' ),
+			'sanitize_callback' => 'wp_parse_id_list',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
 		$params['exclude_groups'] = array(
 			'description'       => __( 'Ensure result set excludes specific profile field groups.', 'buddypress' ),
 			'default'           => array(),
 			'type'              => 'array',
 			'items'             => array( 'type' => 'integer' ),
-			'sanitize_callback' => 'bp_rest_sanitize_string_list',
+			'sanitize_callback' => 'wp_parse_id_list',
 			'validate_callback' => 'rest_validate_request_arg',
 		);
 

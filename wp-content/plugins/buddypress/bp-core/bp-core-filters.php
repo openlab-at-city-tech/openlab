@@ -78,8 +78,43 @@ add_filter( 'bp_get_template_stack', 'bp_add_template_stack_locations' );
 // Turn comments off for BuddyPress pages.
 add_filter( 'comments_open', 'bp_comments_open', 10, 2 );
 
-// Force comments count to be 0 or comments list to be an empty array.
-add_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
+/**
+ * Removes the filter to `comments_pre_query` to restrict `bp_comments_pre_query`
+ * usage to the `core/comments' block.
+ *
+ * @since 10.7.0
+ *
+ * @param string $block_content The rendered block content.
+ * @return string Unchanged rendered block content.
+ */
+function bp_post_render_core_comments_block( $block_content ) {
+	// Stop forcing comments count to be 0 or comments list to be an empty array.
+	remove_filter( 'comments_pre_query', 'bp_comments_pre_query', 10 );
+	remove_filter( 'render_block', 'bp_post_render_core_comments_block' );
+
+	return $block_content;
+}
+
+/**
+ * Checks the current block being rendered is `core/comments` before hooking to
+ * `comments_pre_query`.
+ *
+ * @since 10.7.0
+ *
+ * @param string|null $pre_render   The pre-rendered content. Default null.
+ * @param array       $parsed_block The block being rendered.
+ * @return string|null Unchanged pre-rendered content.
+ */
+function bp_pre_render_core_comments_block( $pre_render, $parsed_block ) {
+	if ( isset( $parsed_block['blockName'] ) && 'core/comments' === $parsed_block['blockName'] ) {
+		// Force comments count to be 0 or comments list to be an empty array.
+		add_filter( 'comments_pre_query', 'bp_comments_pre_query', 10, 2 );
+		add_filter( 'render_block', 'bp_post_render_core_comments_block' );
+	}
+
+	return $pre_render;
+}
+add_filter( 'pre_render_block', 'bp_pre_render_core_comments_block', 10, 2 );
 
 // Prevent DB query for WP's main loop.
 add_filter( 'posts_pre_query', 'bp_core_filter_wp_query', 10, 2 );
@@ -171,7 +206,7 @@ add_filter( 'nav_menu_meta_box_object', 'bp_core_exclude_pages_from_nav_menu_adm
  * @return array
  */
 function bp_core_menu_highlight_parent_page( $retval, $page ) {
-	if ( ! is_buddypress() ) {
+	if ( ! is_buddypress() || ! bp_is_root_blog() ) {
 		return $retval;
 	}
 
@@ -199,7 +234,7 @@ function bp_core_menu_highlight_parent_page( $retval, $page ) {
 	// Duplicate some logic from Walker_Page::start_el() to highlight menu items.
 	if ( ! empty( $page_id ) ) {
 		$_bp_page = get_post( $page_id );
-		if ( in_array( $page->ID, $_bp_page->ancestors, true ) ) {
+		if ( $_bp_page && in_array( $page->ID, $_bp_page->ancestors, true ) ) {
 			$retval[] = 'current_page_ancestor';
 		}
 		if ( $page->ID === $page_id ) {

@@ -1,7 +1,7 @@
 /* global wp, BP_Nouveau, _, Backbone, tinymce, tinyMCE */
 /* jshint devel: true */
 /* @since 3.0.0 */
-/* @version 10.3.0 */
+/* @version 11.2.0 */
 window.wp = window.wp || {};
 window.bp = window.bp || {};
 
@@ -654,6 +654,9 @@ window.bp = window.bp || {};
 				} );
 
 				bp.Nouveau.Messages.displayFeedback( feedback, 'error' );
+				self.model.set( 'sending', false, { silent: true } );
+				$( button ).removeClass( 'disabled' ).prop( 'disabled', false );
+
 				return;
 			}
 
@@ -703,6 +706,7 @@ window.bp = window.bp || {};
 			event.preventDefault();
 
 			this.model.set( this.resetModel );
+			bp.Nouveau.Messages.views.trigger( 'compose:resetForm' );
 		}
 	} );
 
@@ -1353,7 +1357,7 @@ window.bp = window.bp || {};
 		},
 
 		messagesFetched: function( collection, response ) {
-			if ( ! _.isUndefined( response.thread ) ) {
+			if ( response.thread && !! response.thread.id ) {
 				this.options.thread = new Backbone.Model( response.thread );
 			}
 
@@ -1378,14 +1382,20 @@ window.bp = window.bp || {};
 		},
 
 		sendReply: function( event ) {
+			var threadItem;
 			event.preventDefault();
 
 			if ( true === this.reply.get( 'sending' ) ) {
 				return;
 			}
 
+			threadItem = this.options.thread;
+			if ( ! threadItem.id ) {
+				threadItem = this.options.collection.at( 0 );
+			}
+
 			this.reply.set ( {
-				thread_id : this.options.thread.get( 'id' ),
+				thread_id : threadItem.id,
 				content   : tinyMCE.activeEditor.getContent(),
 				sending   : true
 			} );
@@ -1404,11 +1414,18 @@ window.bp = window.bp || {};
 			this.reply.set( 'sending', false );
 
 			this.collection.add( _.first( reply ) );
+
+			// Remove any existing feedback.
+			bp.Nouveau.Messages.removeFeedback();
 		},
 
 		replyError: function( response ) {
 			if ( response.feedback && response.type ) {
 				bp.Nouveau.Messages.displayFeedback( response.feedback, response.type );
+			}
+
+			if ( this.reply.get( 'sending' ) ) {
+				this.reply.set( 'sending', false );
 			}
 		}
 	} );

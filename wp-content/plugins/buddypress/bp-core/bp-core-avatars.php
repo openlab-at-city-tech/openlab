@@ -456,7 +456,9 @@ function bp_core_fetch_avatar( $args = '' ) {
 
 	// Use an alias to leave the param unchanged.
 	$avatar_classes = $params['class'];
-	if ( ! is_array( $avatar_classes ) ) {
+	if ( is_null( $avatar_classes ) ) {
+		$avatar_classes = array();
+	} elseif ( ! is_array( $avatar_classes ) ) {
 		$avatar_classes = explode( ' ', $avatar_classes );
 	}
 
@@ -808,14 +810,12 @@ function bp_core_delete_existing_avatar( $args = '' ) {
 		}
 
 		/** This filter is documented in bp-core/bp-core-avatars.php */
-		$item_id = apply_filters( 'bp_core_avatar_item_id', $args['item_id'], $args['object'] );
+		$item_id = (int) apply_filters( 'bp_core_avatar_item_id', $args['item_id'], $args['object'] );
 	} else {
-		$item_id = $args['item_id'];
+		$item_id = (int) str_replace( '.', '', $args['item_id'] );
 	}
 
-	if ( $item_id && ( ctype_digit( $item_id ) || is_int( $item_id ) ) ) {
-		$item_id = (int) $item_id;
-	} else {
+	if ( ! $item_id ) {
 		return false;
 	}
 

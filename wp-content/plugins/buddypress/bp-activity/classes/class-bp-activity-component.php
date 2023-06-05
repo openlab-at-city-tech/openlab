@@ -65,16 +65,29 @@ class BP_Activity_Component extends BP_Component {
 		}
 
 		// Load Akismet support if Akismet is configured.
-		$akismet_key = bp_get_option( 'wordpress_api_key' );
+		if ( defined( 'AKISMET_VERSION' ) && class_exists( 'Akismet' ) ) {
+			$akismet_key = bp_get_option( 'wordpress_api_key' );
 
-		/** This filter is documented in bp-activity/bp-activity-akismet.php */
-		if ( defined( 'AKISMET_VERSION' ) && class_exists( 'Akismet' ) && ( ! empty( $akismet_key ) || defined( 'WPCOM_API_KEY' ) ) && apply_filters( 'bp_activity_use_akismet', bp_is_akismet_active() ) ) {
-			$includes[] = 'akismet';
+			/** This filter is documented in bp-activity/bp-activity-akismet.php */
+			if ( ( ! empty( $akismet_key ) || defined( 'WPCOM_API_KEY' ) ) && apply_filters( 'bp_activity_use_akismet', bp_is_akismet_active() ) ) {
+				$includes[] = 'akismet';
+			}
 		}
 
 		// Embeds.
 		if ( bp_is_active( $this->id, 'embeds' ) ) {
 			$includes[] = 'embeds';
+		}
+
+		/*
+		 * Activity blocks feature.
+		 *
+		 * By default this feature is inactive. We're including specific block functions
+		 * in version 11.0.0 so these can be used by BuddyPress Add-ons such as BP Attachments
+		 * or BP Activity Block Editor.
+		 */
+		if ( bp_is_active( $this->id, 'blocks' ) ) {
+			$includes[] = 'block-functions';
 		}
 
 		if ( is_admin() ) {

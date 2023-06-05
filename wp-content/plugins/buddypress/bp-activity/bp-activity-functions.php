@@ -1847,6 +1847,8 @@ function bp_activity_get( $args = '' ) {
 			'meta_query'        => false,        // Filter by activity meta. See WP_Meta_Query for format.
 			'date_query'        => false,        // Filter by date. See first parameter of WP_Date_Query for format.
 			'filter_query'      => false,
+			'user_id__in'       => array(),      // Array of user ids to include.
+			'user_id__not_in'   => array(),      // Array of user ids to excluce.
 			'show_hidden'       => false,        // Show activity items that are hidden site-wide?
 			'exclude'           => false,        // Comma-separated list of activity IDs to exclude.
 			'in'                => false,        // Comma-separated list or array of activity IDs to which you want to limit the query.
@@ -1882,6 +1884,8 @@ function bp_activity_get( $args = '' ) {
 			'date_query'        => $r['date_query'],
 			'filter_query'      => $r['filter_query'],
 			'filter'            => $r['filter'],
+			'user_id__in'       => $r['user_id__in'],
+			'user_id__not_in'   => $r['user_id__not_in'],
 			'scope'             => $r['scope'],
 			'display_comments'  => $r['display_comments'],
 			'show_hidden'       => $r['show_hidden'],
@@ -2063,7 +2067,7 @@ function bp_activity_add( $args = '' ) {
 	}
 
 	// If this is an activity comment, rebuild the tree.
-	if ( 'activity_comment' === $activity->type ) {
+	if ( 'activity_comment' === $activity->type && ! empty( $activity->item_id ) ) {
 		// Also clear the comment cache for the parent activity ID.
 		wp_cache_delete( $activity->item_id, 'bp_activity_comments' );
 
@@ -2109,7 +2113,8 @@ function bp_activity_post_update( $args = '' ) {
 			'content'    => false,
 			'user_id'    => bp_loggedin_user_id(),
 			'error_type' => 'bool',
-		)
+		),
+		'activity_post_update'
 	);
 
 	if ( empty( $r['content'] ) || ! strlen( trim( $r['content'] ) ) ) {
@@ -3460,9 +3465,39 @@ function bp_activity_create_summary( $content, $activity ) {
 		'width' => isset( $GLOBALS['content_width'] ) ? (int) $GLOBALS['content_width'] : 'medium',
 	);
 
+	$post_url        = '';
+	$post_title      = '';
+	$bp_excerpt_args = array(
+		'html'              => false,
+		'filter_shortcodes' => true,
+		'strip_tags'        => true,
+		'remove_links'      => true,
+	);
 	// Get the WP_Post object if this activity type is a blog post.
 	if ( $activity['type'] === 'new_blog_post' ) {
-		$content = get_post( $activity['secondary_item_id'] );
+		$content    = get_post( $activity['secondary_item_id'] );
+		$post_url   = $content->guid;
+		$post_title = sprintf(
+			'<strong><a href="%1$s">%2$s</a></strong>',
+			esc_url( $post_url ),
+			esc_html( $content->post_title )
+		);
+
+		$more_text  = sprintf(
+			'<span>%s</span>',
+			trim( __( ' [&hellip;]', 'buddypress' ) )
+		);
+
+		/** This filter is documented in wp-admin/includes/post-template.php */
+		$bp_excerpt_args['ending'] = apply_filters(
+			'the_content_more_link',
+			sprintf(
+				' <a href="%1$s">%2$s</a>',
+				esc_url( $post_url ),
+				$more_text
+			),
+			$more_text
+		);
 	}
 
 	/**
@@ -3490,7 +3525,6 @@ function bp_activity_create_summary( $content, $activity ) {
 	 * @param BP_Media_Extractor $extractor The media extractor object.
 	 */
 	$args = apply_filters( 'bp_activity_create_summary_extractor_args', $args, $content, $activity, $extractor );
-
 
 	// Extract media information from the $content.
 	$media = $extractor->extract( $content, BP_Media_Extractor::ALL, $args );
@@ -3578,21 +3612,34 @@ function bp_activity_create_summary( $content, $activity ) {
 	}
 
 	// Generate a text excerpt for this activity item (and remove any oEmbeds URLs).
-	$summary = bp_create_excerpt( html_entity_decode( $content ), 225, array(
-		'html' => false,
-		'filter_shortcodes' => true,
-		'strip_tags'        => true,
-		'remove_links'      => true
-	) );
+	$summary_parts = array(
+		str_replace(
+			array( "\n", "\r" ),
+			' ',
+			trim( bp_create_excerpt( html_entity_decode( $content ), 225, $bp_excerpt_args ) )
+		),
+	);
 
 	if ( $use_media_type === 'embeds' ) {
-		$summary .= PHP_EOL . PHP_EOL . $extracted_media['url'];
+		$summary_parts[] = PHP_EOL . PHP_EOL . $extracted_media['url'];
 	} elseif ( $use_media_type === 'images' ) {
 		$extracted_media_url = isset( $extracted_media['url'] ) ? $extracted_media['url'] : '';
-		$summary .= sprintf( ' <img src="%s">', esc_url( $extracted_media_url ) );
+		$image_tag           = sprintf( '<img src="%s"> ', esc_url( $extracted_media_url ) );
+
+		if ( $post_url ) {
+			$image_tag = sprintf( '<a href="%1$s" class="activity-post-featured-image">%2$s</a> ', esc_url( $post_url ), trim( $image_tag ) );
+			array_unshift( $summary_parts, $image_tag );
+		}
 	} elseif ( in_array( $use_media_type, array( 'audio', 'videos' ), true ) ) {
-		$summary .= PHP_EOL . PHP_EOL . $extracted_media['original'];  // Full shortcode.
+		$summary_parts[] = PHP_EOL . PHP_EOL . $extracted_media['original'];  // Full shortcode.
 	}
+
+	if ( $post_title ) {
+		array_unshift( $summary_parts, $post_title );
+	}
+
+	// Join summary parts.
+	$summary = implode( '', $summary_parts );
 
 	/**
 	 * Filters the newly-generated summary for the activity item.

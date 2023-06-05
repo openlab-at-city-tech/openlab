@@ -128,8 +128,7 @@ function bp_dtheme_setup() {
 
 		// Group buttons
 		if ( bp_is_active( 'groups' ) ) {
-			add_action( 'bp_group_header_actions',     'bp_group_join_button',           5 );
-			add_action( 'bp_group_header_actions',     'bp_group_new_topic_button',      20 );
+			add_action( 'bp_group_header_actions',     'bp_group_join_button', 5 );
 			add_action( 'bp_directory_groups_actions', 'bp_group_join_button' );
 		}
 

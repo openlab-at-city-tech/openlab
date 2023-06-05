@@ -537,7 +537,7 @@ function bp_core_get_userlink_by_email( $email ) {
 	 *
 	 * @param string|bool $value URL for the user if found, otherwise false.
 	 */
-	return apply_filters( 'bp_core_get_userlink_by_email', bp_core_get_userlink( $user->ID, false, false, true ) );
+	return apply_filters( 'bp_core_get_userlink_by_email', bp_core_get_userlink( $user->ID, false, false ) );
 }
 
 /**
@@ -564,7 +564,7 @@ function bp_core_get_userlink_by_username( $username ) {
 	 *
 	 * @param string|bool $value URL for the user if found, otherwise false.
 	 */
-	return apply_filters( 'bp_core_get_userlink_by_username', bp_core_get_userlink( $user_id, false, false, true ) );
+	return apply_filters( 'bp_core_get_userlink_by_username', bp_core_get_userlink( $user_id, false, false ) );
 }
 
 /**
@@ -3009,7 +3009,7 @@ function bp_get_member_types( $args = array(), $output = 'names', $operator = 'a
 		$types = bp_get_taxonomy_types( bp_get_member_type_tax_name(), $types );
 	}
 
-	$types = wp_filter_object_list( $types, $args, $operator );
+	$types = array_filter( wp_filter_object_list( $types, $args, $operator ) );
 
 	/**
 	 * Filters the array of member type objects.
@@ -3023,9 +3023,9 @@ function bp_get_member_types( $args = array(), $output = 'names', $operator = 'a
 	 * @param array  $args      Array of key=>value arguments for filtering.
 	 * @param string $operator  'or' to match any of $args, 'and' to require all.
 	 */
-	$types = apply_filters( 'bp_get_member_types', $types, $args, $operator );
+	$types = (array) apply_filters( 'bp_get_member_types', $types, $args, $operator );
 
-	if ( 'names' === $output ) {
+	if ( $types && 'names' === $output ) {
 		$types = wp_list_pluck( $types, 'name' );
 	}
 
@@ -3265,6 +3265,11 @@ function bp_get_member_type( $user_id, $single = true, $use_db = true ) {
 function bp_has_member_type( $user_id, $member_type ) {
 	// Bail if no valid member type was passed.
 	if ( empty( $member_type ) || ! bp_get_member_type_object( $member_type ) ) {
+		return false;
+	}
+
+	$user_id = (int) $user_id;
+	if ( ! $user_id ) {
 		return false;
 	}
 
