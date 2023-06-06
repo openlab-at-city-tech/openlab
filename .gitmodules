@@ -16,3 +16,6 @@
 [submodule "wp-content/plugins/openlab-email-embedded-media"]
 	path = wp-content/plugins/openlab-email-embedded-media
 	url = git@github.com:openlab-at-city-tech/openlab-email-embedded-media
+[submodule "wp-content/plugins/openlab-rich-text-comments"]
+	path = wp-content/plugins/openlab-rich-text-comments
+	url = git@github.com:openlab-at-city-tech/openlab-rich-text-comments
