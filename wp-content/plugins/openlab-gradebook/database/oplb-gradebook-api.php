@@ -1024,7 +1024,7 @@ class oplb_gradebook_api
         );
 
         $type_headers = array_merge(
-            array('Assignment Types: ', '', '', 'P, BL, U, SA', 'A,A-,B+,B,B-,C+,C,D,F,WF,WN,*WN,WU'), $assignment_types
+            array('Assignment Types: ', '', '', 'P, N, SA', 'A,A-,B+,B,B-,C+,C,D,F,WF,WN,*WN,WU'), $assignment_types
         );
 
         $cells = array();
@@ -1268,12 +1268,8 @@ class oplb_gradebook_api
                 'value' => 'passing',
             ),
             array(
-                'label' => 'BL',
-                'value' => 'borderline',
-            ),
-            array(
-                'label' => 'U',
-                'value' => 'unsatisfactory',
+                'label' => 'N',
+                'value' => 'needs_improvement',
             ),
             array(
                 'label' => 'SA',
