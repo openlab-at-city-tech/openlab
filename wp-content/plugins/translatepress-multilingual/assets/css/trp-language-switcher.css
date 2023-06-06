@@ -1,0 +1,135 @@
+/*
+ *  Menu Language Switcher
+ */
+
+.menu-item-object-language_switcher .trp-flag-image {
+    display: inline-block;
+    margin: -1px 5px;
+    vertical-align: baseline;
+    padding: 0;
+    border: 0;
+    border-radius:0;
+}
+
+/*
+ *  Shortcode Language Switcher
+ */
+.trp-language-switcher{
+    height: 42px;
+    position: relative;
+    box-sizing: border-box;
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.trp-language-switcher > div {
+    box-sizing: border-box;
+    padding:4px 20px 3px 13px;
+    border: 1.5px solid #949494;
+    border-radius: 2px;
+    background-image: url(../../assets/images/arrow-down-3101.svg);
+    background-repeat: no-repeat;
+
+    background-position:
+            calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 3px) calc(1em + 0px);
+
+    background-size:
+            8px 8px,
+            8px 8px;
+
+    background-repeat: no-repeat;
+
+    background-color: #fff;
+}
+
+.trp-language-switcher > div:hover {
+    background-image: none;
+}
+
+
+.trp-language-switcher > div > a {
+    display: block;
+    padding: 7px 12px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #1E1E1E;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.trp-language-switcher > div > a:hover {
+    background: #F0F0F0;
+    border-radius: 2px;
+}
+.trp-language-switcher > div > a.trp-ls-shortcode-disabled-language {
+    cursor: default;
+}
+.trp-language-switcher > div > a.trp-ls-shortcode-disabled-language:hover {
+    background: none;
+}
+
+.trp-language-switcher > div > a > img{
+    display: inline;
+    margin: 0 3px;
+    width: 18px;
+    height: 12px;
+    border-radius: 0;
+}
+
+.trp-language-switcher .trp-ls-shortcode-current-language{
+    display: inline-block;
+}
+.trp-language-switcher:focus .trp-ls-shortcode-current-language,
+.trp-language-switcher:hover .trp-ls-shortcode-current-language{
+    visibility: hidden;
+}
+
+.trp-language-switcher .trp-ls-shortcode-language{
+    display: inline-block;
+    height: 1px;
+    overflow: hidden;
+    visibility: hidden;
+    z-index: 1;
+
+    max-height: 250px;
+    overflow-y: auto;
+    left: 0;
+    top: 0;
+    min-height: auto;
+}
+
+.trp-language-switcher:focus .trp-ls-shortcode-language,
+.trp-language-switcher:hover .trp-ls-shortcode-language{
+    visibility: visible;
+    max-height: 250px;
+    padding: 4px 13px;
+    height: auto;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block !important;
+    min-height: auto;
+}
+
+/*
+ *  Front-end Admin Bar Icon
+ */
+#wpadminbar #wp-admin-bar-trp_edit_translation .ab-icon:before {
+    content: '\f326';
+    top: 3px;
+}
+
+@media screen and ( max-width: 782px ) {
+    #wpadminbar #wp-admin-bar-trp_edit_translation > .ab-item {
+        text-indent: 0;
+    }
+
+    #wpadminbar li#wp-admin-bar-trp_edit_translation {
+        display: block;
+    }
+}
