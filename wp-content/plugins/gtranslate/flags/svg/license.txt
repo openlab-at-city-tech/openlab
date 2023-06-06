@@ -1,0 +1,5 @@
+SVG files are non-GPL and should not be copied by other plugin developers.
+
+The files can be used by WordPress website owners as a part of GTranslate plugin.
+
+© 2021 GTranslate Inc. All Rights Reserved.
