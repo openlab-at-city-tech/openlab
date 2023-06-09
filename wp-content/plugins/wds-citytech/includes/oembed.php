@@ -73,6 +73,9 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
+	
+	$network_home_url = network_home_url(); // Network home URL 
+	wp_embed_register_handler( 'openlab', "#{$network_home_url}#i", 'openlab_embed_local_uploaded_images' );
 
 	// Register oEmbed provider for Yuja
 	wp_oembed_add_provider( 'https://citytech.yuja.com/V/*', 'https://citytech.yuja.com/services/oembed', false );
@@ -243,6 +246,31 @@ function openlab_embed_handler_yuja( $matches, $attr, $url ) {
 	$url = str_replace( 'Watch?', 'Video?', $url);
 
 	return wp_oembed_get($url);
+}
+
+/**
+ * Locally uploaded images embed callback.
+ */
+function openlab_embed_local_uploaded_images( $matches, $attr, $url ) {
+	// Supported image extensions
+	$supported_images = array(
+		'jpg',
+		'jpeg',
+		'png',
+		'gif'
+	);
+
+	// Get extension from the URL
+	$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+	
+	// If URL doesn't end with supported image extension, return the URL
+	if( ! in_array( $ext, $supported_images ) ) {
+		return $url;
+	}
+
+	$embed = sprintf('<img src="%s" />', esc_url( $url ) );
+
+	return $embed;
 }
 
 /**
