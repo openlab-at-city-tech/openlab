@@ -679,7 +679,7 @@ OpenLab.utility = (function ($) {
 
 			// this add an onclick event to the "New Topic" button while preserving
 			// the original event; this is so "New Topic" can have a "current" class
-			$( '.show-hide-new' ).click(
+			$( '.show-hide-new' ).on( 'click',
 				function () {
 					var origOnClick = $( '.show-hide-new' ).onclick;
 					return function (e) {
@@ -692,7 +692,7 @@ OpenLab.utility = (function ($) {
 			);
 
 			window.new_topic_is_visible = $( '#new-topic-post' ).is( ":visible" );
-			$( '.show-hide-new' ).click(
+			$( '.show-hide-new' ).on( 'click',
 				function () {
 					if (window.new_topic_is_visible) {
 						$( '.single-forum #message' ).slideUp( 300 );
@@ -764,7 +764,7 @@ OpenLab.utility = (function ($) {
 				$( '#groups-notification-settings-request' ).after( public_group_not );
 			}
 
-				$( '#bp-group-documents-folder-delete' ).click(
+				$( '#bp-group-documents-folder-delete' ).on( 'click',
 					function(e){
 						if ( confirm( 'Are you sure you wish to permanently delete this folder? The files associated with this folder will not be deleted.' ) ) {
 							return true;
