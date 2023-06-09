@@ -19,3 +19,6 @@
 [submodule "wp-content/plugins/openlab-rich-text-comments"]
 	path = wp-content/plugins/openlab-rich-text-comments
 	url = git@github.com:openlab-at-city-tech/openlab-rich-text-comments
+[submodule "wp-content/plugins/openlab-modules"]
+	path = wp-content/plugins/openlab-modules
+	url = git@github.com:openlab-at-city-tech/openlab-modules
