@@ -61,23 +61,13 @@ define([
 						type: "display_value"
 					},
 					{
-						label: "BL = Borderline",
-						value: "borderline_display",
+						label: "N = Needs Improvement",
+						value: "needs_improvement_display",
 						type: "display_item"
 					},
 					{
-						label: "BL",
-						value: "borderline",
-						type: "display_value"
-					},
-					{
-						label: "U = Unsatisfactory",
-						value: "unsatisfactory_display",
-						type: "display_item"
-					},
-					{
-						label: "U",
-						value: "unsatisfactory",
+						label: "N",
+						value: "needs_improvement",
 						type: "display_value"
 					},
 					{
@@ -189,7 +179,7 @@ define([
 				this.listenTo(this.gradebook, "change:assignments", this.render);
 			},
 			render: function(pinned, assignments) {
-				
+
 				//give pinned a default
 				if (typeof pinned === "undefined") {
 					pinned = "none";
@@ -212,7 +202,7 @@ define([
 				});
 
 				if(!this.$el.find('.student-tools').length){
-					this.$el.html(compiled);					
+					this.$el.html(compiled);
 				}
 
 				var midGrades = new CellMidFinalView({

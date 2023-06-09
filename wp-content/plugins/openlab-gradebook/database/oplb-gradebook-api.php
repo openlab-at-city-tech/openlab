@@ -1419,6 +1419,7 @@ class oplb_gradebook_api
 
         $conversion_table = array(
             'passing' => 'P',
+			'needs_improvement' => 'N',
             'borderline' => 'BL',
             'unsatisfactory' => 'U',
             'stopped_attending' => 'SA',
