@@ -345,11 +345,6 @@ input[type="submit"]{
             display: inline-block;
         }
     }
-	&.related-links-url {
-        @media(max-width: @screen-xs-max){
-			display: inline-block;
-		}
-	}
 }
 .parsley-errors-list.filled {
     margin: 0;
@@ -520,26 +515,53 @@ input[type="submit"]{
 	border-top: 1px solid #dddddd;
 	padding-top: 15px;
 }
-.related-link-actions {
-	display: inline-block;
-	margin-top: -15px;
-	vertical-align: middle;
-	@media(max-width: @screen-xs-max){
-		margin-top: 0;
+.link-edit-items {
+	&.social-link-edit-items {
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		padding: 10px;
+	}
+
+	.link-actions {
+		display: inline-block;
+		margin-top: -15px;
+		vertical-align: middle;
+		@media(max-width: @screen-xs-max){
+			margin-top: 0;
+		}
+	}
+
+	button.link-action {
+		background: none;
+		border: none;
+		font-size: 20px;
+		height: 32px;
+	}
+
+	button.link-action.link-add {
+		padding: 0;
+		.fa {
+			margin-left: 0;
+		}
+	}
+
+	.link-url {
+        @media(max-width: @screen-xs-max){
+			display: inline-block;
+		}
+	}
+
+	.form-inline.label-combo {
+		label {
+			width: auto;
+		}
+	}
+
+	select {
+		width: 90%;
 	}
 }
-button.related-link-action {
-	background: none;
-	border: none;
-	font-size: 20px;
-	height: 32px;
-}
-button.related-link-action.related-link-add {
-	padding: 0;
-	.fa {
-		margin-left: 0;
-	}
-}
+
 .submenu{
     .submenu-text{
         margin-right: 8px;

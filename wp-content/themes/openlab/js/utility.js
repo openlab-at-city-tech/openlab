@@ -583,15 +583,64 @@ OpenLab.utility = (function ($) {
 					$clicked.closest( '.member-role-definition' ).toggleClass( 'show-definition-text' );
 				}
 			);
+		},
+		setUpItemList: function() {
+			// + button on Related Links List Settings
+			$add_new_link = $( '.link-add' );
+			$add_new_link.on(
+				'click',
+				function ( e ) {
+					OpenLab.utility.createNewLinkField( e.target );
+				}
+			);
+
+			$linkItems = $('.link-edit-items');
+			$linkItems.on(
+				'click',
+				'.link-remove',
+				function(e) {
+					// If this is the only item, just clear the boxes. Otherwise, remove row.
+					var $thisLink = $(e.target).closest('li');
+					if ( $thisLink.siblings( 'li' ).length === 0 ) {
+						$thisLink.find( 'input,select' ).val( '' );
+					} else {
+						$thisLink.remove();
+					}
+				}
+			);
+		},
+		createNewLinkField: function( addNewButton ) {
+			var $thisList = $( addNewButton ).closest( '.link-edit-items' ).find( 'ul' );
+
+			var $cloned_link_fields = $thisList.find('li:first-child').clone();
+
+			// Get count of existing link fields for the iterator
+			var links_count = $thisList.children( 'li' ).length + 1;
+
+			// Swap label:for and input:id attributes
+			$cloned_link_fields.html(
+				function (i, old_html) {
+					return old_html.replace( /(\-links\-)[0-9]+\-(name|url)/g, '$1' + links_count + '-$2' );
+				}
+			);
+
+			// Swap name iterator
+			$cloned_link_fields.html(
+				function (i, old_html) {
+					return old_html.replace( /(\-links\[)[0-9]+(\])/g, '$1' + links_count + '$2' );
+				}
+			);
+
+			$cloned_link_fields.find( 'input,select' ).val( '' );
+
+			// Add new fields to the DOM
+			$thisList.append( $cloned_link_fields );
 		}
 	}
 })( jQuery, OpenLab );
 
 (function ($) {
-	var related_links_count,
-			$add_new_related_link,
-			$relatedLinks,
-			$cloned_related_link_fields;
+	var $linkItems;
 
 	$( document ).ready(
 		function () {
@@ -617,29 +666,7 @@ OpenLab.utility = (function ($) {
 				}
 			}
 
-			// + button on Related Links List Settings
-			$add_new_related_link = $( '#add-new-related-link' );
-			$add_new_related_link.on(
-				'click',
-				function () {
-					create_new_related_link_field();
-				}
-			);
-
-			$relatedLinks = $('.related-links-edit-items');
-			$relatedLinks.on(
-				'click',
-				'.related-link-remove',
-				function(e) {
-					// If this is the only item, just clear the boxes. Otherwise, remove row.
-					var $thisLink = $(e.target).closest('.related-links-edit-items > li');
-					if ( $thisLink.siblings( 'li' ).length === 0 ) {
-						$thisLink.find( 'input' ).val( '' );
-					} else {
-						$thisLink.remove();
-					}
-				}
-			);
+			OpenLab.utility.setUpItemList();
 
 			var contact_us_topic    = document.getElementById( 'contact-us-topic' );
 			$workshop_meeting_items = jQuery( '#workshop-meeting-items' );
@@ -914,36 +941,9 @@ OpenLab.utility = (function ($) {
 				);
 			}
 
+			OpenLab.utility.setUpItemList();
 		}
 	);
-
-	function create_new_related_link_field() {
-		$cloned_related_link_fields = $relatedLinks.find('li:first-child').clone();
-
-		// Get count of existing link fields for the iterator
-		related_links_count = $( '.related-links-edit-items li' ).length + 1;
-
-		// Swap label:for and input:id attributes
-		$cloned_related_link_fields.html(
-			function (i, old_html) {
-				return old_html.replace( /(related\-links\-)[0-9]+\-(name|url)/g, '$1' + related_links_count + '-$2' );
-			}
-		);
-
-		// Swap name iterator
-		$cloned_related_link_fields.html(
-			function (i, old_html) {
-				return old_html.replace( /(related\-links\[)[0-9]+(\])/g, '$1' + related_links_count + '$2' );
-			}
-		);
-
-		// Add new fields to the DOM
-		$( '.related-links-edit-items' ).append( $cloned_related_link_fields );
-
-		// Remove values
-		$( '#related-links-' + related_links_count + '-name' ).val( '' );
-		$( '#related-links-' + related_links_count + '-url' ).val( '' );
-	}
 
 	/*this is for the homepage group list, so that cells in each row all have the same height
 	 - there is a possiblity of doing this template-side, but requires extensive restructuring of the group list function*/

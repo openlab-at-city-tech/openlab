@@ -7589,11 +7589,6 @@ input[type="submit"] {
 .form-control.type-file-wrapper input {
   display: inline-block;
 }
-@media (max-width: 767px) {
-  .form-control.related-links-url {
-    display: inline-block;
-  }
-}
 .parsley-errors-list.filled {
   margin: 0;
   padding: 0;
@@ -7729,27 +7724,43 @@ input[type="submit"] {
   border-top: 1px solid #dddddd;
   padding-top: 15px;
 }
-.related-link-actions {
+.link-edit-items.social-link-edit-items {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+.link-edit-items .link-actions {
   display: inline-block;
   margin-top: -15px;
   vertical-align: middle;
 }
 @media (max-width: 767px) {
-  .related-link-actions {
+  .link-edit-items .link-actions {
     margin-top: 0;
   }
 }
-button.related-link-action {
+.link-edit-items button.link-action {
   background: none;
   border: none;
   font-size: 20px;
   height: 32px;
 }
-button.related-link-action.related-link-add {
+.link-edit-items button.link-action.link-add {
   padding: 0;
 }
-button.related-link-action.related-link-add .fa {
+.link-edit-items button.link-action.link-add .fa {
   margin-left: 0;
+}
+@media (max-width: 767px) {
+  .link-edit-items .link-url {
+    display: inline-block;
+  }
+}
+.link-edit-items .form-inline.label-combo label {
+  width: auto;
+}
+.link-edit-items select {
+  width: 90%;
 }
 .submenu .submenu-text {
   margin-right: 8px;

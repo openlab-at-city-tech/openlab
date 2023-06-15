@@ -191,26 +191,28 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 					</div>
 					<label for="related-links-list-heading">List Heading</label>
 					<input name="related-links-list-heading" id="related-links-list-heading" class="form-control" type="text" value="<?php echo esc_attr( $related_links_list_heading ); ?>" />
-					<ul class="related-links-edit-items inline-element-list">
-						<?php $rli = 1; ?>
-						<?php foreach ( (array) $related_links_list as $rl ) : ?>
-							<li class="form-inline label-combo row">
-								<div class="form-group col-sm-9">
-									<label for="related-links-<?php echo $rli; ?>-name">Name</label> <input name="related-links[<?php echo $rli; ?>][name]" id="related-links-<?php echo $rli; ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ); ?>" />
-								</div>
-								<div class="form-group col-sm-15">
-									<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control related-links-url" value="<?php echo esc_attr( $rl['url'] ); ?>" />
-
-									<div class="related-link-actions">
-										<button type="button" class="related-link-remove related-link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+					<div class="link-edit-items">
+						<ul class="related-links-edit-items inline-element-list">
+							<?php $rli = 1; ?>
+							<?php foreach ( (array) $related_links_list as $rl ) : ?>
+								<li class="form-inline label-combo row">
+									<div class="form-group col-sm-9">
+										<label for="related-links-<?php echo $rli; ?>-name">Name</label> <input name="related-links[<?php echo $rli; ?>][name]" id="related-links-<?php echo $rli; ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ); ?>" />
 									</div>
-								</div>
-							</li>
-							<?php $rli++; ?>
-						<?php endforeach; ?>
-					</ul>
+									<div class="form-group col-sm-15">
+										<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control link-url" value="<?php echo esc_attr( $rl['url'] ); ?>" />
 
-					<button type="button" class="related-link-add related-link-action" id="add-new-related-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
+										<div class="link-actions">
+											<button type="button" class="link-remove link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+										</div>
+									</div>
+								</li>
+								<?php $rli++; ?>
+							<?php endforeach; ?>
+						</ul>
+
+						<button type="button" class="link-add link-action" id="add-new-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
+					</div>
 				</div>
 			</div>
 
