@@ -924,6 +924,11 @@ function cuny_member_profile_header() {
 
 										++$field_index;
 
+										// We skip items legacy social fields.
+										if ( bp_xprofile_get_meta( bp_get_the_profile_field_id(), 'field', 'is_legacy_social_media_field' ) ) {
+											continue;
+										}
+
 										?>
 
 										<?php if ( 0 === $field_index && $show_dept_field_first && $department ) : ?>
@@ -1003,6 +1008,28 @@ function cuny_member_profile_header() {
 								</div>
 							</div>
 						<?php endif; // bp_has_profile() ?>
+
+						<?php /* Social fields are handled separately */ ?>
+						<?php $social_fields = openlab_social_media_fields(); ?>
+						<?php foreach ( $social_fields as $field_slug => $field_data ) : ?>
+							<?php
+
+							$field_value = openlab_get_social_media_field_for_user( bp_displayed_user_id(), $field_slug );
+							if ( ! $field_value ) {
+								continue;
+							}
+
+							?>
+							<div class="table-row row">
+								<div class="bold col-sm-7 profile-field-label">
+									<?php echo esc_html( $field_data['title'] ); ?>
+								</div>
+
+								<div class="col-sm-17 profile-field-value">
+									<?php echo openlab_format_social_media_field( $field_value, $field_slug ); ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
 					</div>
 				</div>
 			</div>
@@ -1789,3 +1816,280 @@ function openlab_update_member_group_privacy() {
 	) );
 	die();
 }
+
+/**
+ * Gets a list of social media fields for the site.
+ *
+ * @return array
+ */
+function openlab_social_media_fields() {
+	global $wpdb, $bp;
+
+	$fields = [
+		'behance' => [
+			'title'    => 'Behance',
+			'field_id' => 0,
+		],
+		'cuny-academic-commons' => [
+			'title'    => 'CUNY Academic Commons',
+			'field_id' => 0,
+		],
+		'cuny-academic-works' => [
+			'title'    => 'CUNY Academic Works',
+			'field_id' => 0,
+		],
+		'facebook' => [
+			'title'    => 'Facebook',
+			'field_id' => 0,
+		],
+		'flickr' => [
+			'title'    => 'Flickr',
+			'field_id' => 0,
+		],
+		'github' => [
+			'title'    => 'GitHub',
+			'field_id' => 0,
+		],
+		'instagram' => [
+			'title'    => 'Instagram',
+			'field_id' => 0,
+		],
+		'linkedin' => [
+			'title'    => 'LinkedIn',
+			'field_id' => 0,
+		],
+		'mastodon' => [
+			'title'    => 'Mastodon',
+			'field_id' => 0,
+		],
+		'tiktok' => [
+			'title'    => 'TikTok',
+			'field_id' => 0,
+		],
+		'twitter' => [
+			'title'    => 'Twitter',
+			'field_id' => 0,
+		],
+		'vimeo' => [
+			'title'    => 'Vimeo',
+			'field_id' => 0,
+		],
+		'youtube' => [
+			'title'    => 'YouTube',
+			'field_id' => 0,
+		],
+	];
+
+	// @todo Caching.
+	$field_meta = $wpdb->get_results( "SELECT object_id, meta_value FROM {$bp->profile->table_name_meta} WHERE meta_key = 'social_media_field_type' AND object_type = 'field'" );
+	foreach ( $field_meta as $fm ) {
+		$field_type = $fm->meta_value;
+
+		if ( isset( $fields[ $field_type ] ) ) {
+			$fields[ $field_type ]['field_id'] = (int) $fm->object_id;
+		}
+	}
+
+	return $fields;
+}
+
+/**
+ * Generates the markup for the Social Links edit interface.
+ *
+ * @param int $user_id ID of the user being edited.
+ */
+function openlab_social_fields_edit_markup( $user_id = 0 ) {
+	$social_fields = openlab_social_media_fields();
+
+	$saved_social_fields = [];
+	foreach ( $social_fields as $social_field_slug => $social_field_data ) {
+		$saved_social_value = openlab_get_social_media_field_for_user( $user_id, $social_field_slug );
+		if ( $saved_social_value ) {
+			$saved_social_fields[ $social_field_slug ] = $saved_social_value;
+		}
+	}
+
+	if ( empty( $saved_social_fields ) ) {
+		$saved_social_fields[0] = '';
+	}
+
+	?>
+
+	<div class="social-fields">
+		<fieldset>
+			<legend>Social Links</legend>
+
+			<div class="link-edit-items social-link-edit-items">
+				<ul class="inline-element-list">
+					<?php $sfi = 1; ?>
+					<?php foreach ( $saved_social_fields as $saved_social_field_slug => $saved_social_field_value ) : ?>
+						<li class="form-inline label-combo row">
+							<div class="form-group col-sm-9">
+								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Service</label>
+
+								<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>">
+									<option value="">- Select a service -</option>
+									<?php foreach ( $social_fields as $social_field_slug => $social_field_data ) : ?>
+										<option value="<?php echo esc_attr( $social_field_slug ); ?>" <?php selected( $social_field_slug, $saved_social_field_slug ); ?>><?php echo esc_html( $social_field_data['title'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+
+							<div class="form-group col-sm-15">
+								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-url">URL or username</label> <input name="social-links[<?php echo esc_attr( $sfi ); ?>][url]" id="social-links-<?php echo esc_attr( $sfi ); ?>-url" class="form-control social-links-url" value="<?php echo esc_attr( $saved_social_field_value ); ?>" />
+
+								<div class="link-actions">
+									<button type="button" class="link-remove link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+								</div>
+							</div>
+						</li>
+						<?php ++$sfi; ?>
+					<?php endforeach; ?>
+				</ul>
+
+				<button type="button" class="link-add link-action" id="add-new-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
+
+				<?php wp_nonce_field( 'openlab_social_links', 'openlab-social-links-nonce', false ); ?>
+			</div>
+		</fieldset>
+	</div>
+	<?php
+}
+
+/**
+ * Gets the value of a social media field for a user.
+ *
+ * @param int    $user_id      ID of the user.
+ * @param string $social_field Slug of the service.
+ * @return string
+ */
+function openlab_get_social_media_field_for_user( $user_id, $social_field ) {
+	$fields = openlab_social_media_fields();
+
+	if ( empty( $fields[ $social_field ]['field_id'] ) ) {
+		return '';
+	}
+
+	return xprofile_get_field_data( $fields[ $social_field ]['field_id'], $user_id );
+}
+
+/**
+ * Sets the value of a social media field for a user.
+ *
+ * @param int    $user_id      ID of the user.
+ * @param string $social_field Slug of the service.
+ * @param string $value        Value.
+ * @return bool
+ */
+function openlab_set_social_media_field_for_user( $user_id, $social_field, $value ) {
+	$fields = openlab_social_media_fields();
+
+	if ( empty( $fields[ $social_field ]['field_id'] ) ) {
+		return false;
+	}
+
+	return xprofile_set_field_data( $fields[ $social_field ]['field_id'], $user_id, $value );
+}
+
+/**
+ * Formats the value of a social media field for display on a profile.
+ *
+ * @param string $value Value.
+ * @param string $slug  Slug of the service.
+ * @return string
+ */
+function openlab_format_social_media_field( $value, $slug ) {
+	$url  = '';
+	$text = $value;
+
+	$sanitize_cb = function( $username ) {
+		$username = trim( $username );
+		$username = ltrim( $username, '@' );
+		return trim( $username );
+	};
+
+	$do_link = false;
+	if ( wp_http_validate_url( $value ) ) {
+		$do_link = true;
+		$url     = $value;
+		$text    = $value;
+	} else {
+		switch ( $slug ) {
+			case 'cuny-academic-commons' :
+				$do_link = true;
+				$url     = 'https://commons.gc.cuny.edu/members/' . $sanitize_cb( $value ) . '/';
+				break;
+
+			case 'github' :
+				$do_link = true;
+				$url     = 'https://github.com/' . $sanitize_cb( $value );
+				break;
+
+			case 'instagram' :
+				$do_link = true;
+				$url     = 'https://instagram.com/' . $sanitize_cb( $value );
+				break;
+
+			case 'tiktok' :
+				$do_link = true;
+				$url     = 'https://tiktok.com/@' . $sanitize_cb( $value );
+				break;
+		}
+	}
+
+	if ( $do_link ) {
+		$formatted = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( $url ),
+			esc_html( $text )
+		);
+	} else {
+		$formatted = esc_html( $text );
+	}
+
+	return $formatted;
+}
+
+/**
+ * Save the member social links after save.
+ *
+ * @param int $user_id
+ */
+function openlab_user_social_links_save( $user_id ) {
+	if ( empty( $_POST['openlab-social-links-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'openlab_social_links', 'openlab-social-links-nonce' );
+
+	if ( empty( $_POST['social-links'] ) ) {
+		return;
+	}
+
+	$all_fields = openlab_social_media_fields();
+
+	$submitted_fields_raw = wp_unslash( $_POST['social-links'] );
+	$submitted_fields     = [];
+	foreach ( $submitted_fields_raw as $submitted_field ) {
+		$service = sanitize_text_field( $submitted_field['service'] );
+		$url     = sanitize_text_field( $submitted_field['url'] );
+
+		$submitted_fields[ $service ] = $url;
+	}
+
+	foreach ( $all_fields as $field_slug => $field_data ) {
+		if ( isset( $submitted_fields[ $field_slug ] ) ) {
+			openlab_set_social_media_field_for_user( $user_id, $field_slug, $submitted_fields[ $field_slug ] );
+		} else {
+			xprofile_delete_field_data( $field_data['field_id'], $user_id );
+		}
+	}
+
+	foreach ( $_POST['social-links'] as $social_link ) {
+		$service = sanitize_text_field( wp_unslash( $social_link['service'] ) );
+		$url     = sanitize_text_field( wp_unslash( $social_link['url'] ) );
+
+		openlab_set_social_media_field_for_user( $user_id, $service, $url );
+	}
+}
+add_action( 'xprofile_updated_profile', 'openlab_user_social_links_save' );
