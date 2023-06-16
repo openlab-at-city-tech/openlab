@@ -11387,6 +11387,11 @@ body.single-event #content .eo-event-venue-map {
 .messages .message-actions .message-unread {
   color: #ff5959;
 }
+.inappropriate-message-notice {
+  border: 2px solid #f7e700;
+  border-radius: 4px;
+  padding: 10px;
+}
 .my-friends .group-list .group-item-wrapper .generic-button.friendship-button {
   margin-top: 8px;
 }
