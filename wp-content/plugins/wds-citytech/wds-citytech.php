@@ -3399,3 +3399,33 @@ function cboxol_maybe_hide_admin_bar_for_anonymous_users() {
 	}
 }
 add_action( 'init', 'cboxol_maybe_hide_admin_bar_for_anonymous_users', 1 );
+
+/**
+ * Default settings for simple-mathjax.
+ */
+add_filter(
+	'default_option_simple_mathjax_options',
+	function( $value ) {
+		return [
+			'custom_mathjax_config' => "MathJax = {
+	tex: {
+		inlineMath: [
+			['$','$'],
+			['\\(','\\)']
+		],
+		displayMath: [
+			['$$', '$$'],
+			['$latex', '$'],
+			['[latex]', '[/latex]']
+		],
+		processEscapes: true
+	},
+	options: {
+		ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'
+	}
+}",
+		];
+
+		return $value;
+	}
+);
