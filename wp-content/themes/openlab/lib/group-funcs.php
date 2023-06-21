@@ -215,6 +215,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 	$forum_enabled         = openlab_is_forum_enabled_for_group();
 	$docs_enabled          = openlab_is_docs_enabled_for_group();
 	$files_enabled         = openlab_is_files_enabled_for_group();
+	$connections_enabled   = openlab_is_connections_enabled_for_group();
 
 	$helper_text  = 'You can enable or disable any of the following collaboration tools on your ' . $group_label_uc . ' profile. This can be changed any time in ' . $group_label_uc . ' Settings.';
 	if ( 'portfolio' === $group_type ) {
@@ -243,6 +244,9 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 			</div>
 			<div class="checkbox checkbox-float">
 				<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+			</div>
+			<div class="checkbox checkbox-float">
+				<label><input type="checkbox" name="openlab-edit-group-connections" id="group-show-connections" value="1"<?php checked( $connections_enabled ); ?> /> Enable Connections</label>
 			</div>
 		</div>
 

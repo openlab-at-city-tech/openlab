@@ -34,6 +34,12 @@ global $bp, $wp_query;
 						<li class="current-menu-item">Announcements</li>
 					</ul>
 
+				<?php elseif ( bp_is_current_action( 'connections' ) ) : ?>
+
+					<ul class="nav nav-inline">
+						<li class="current-menu-item">Connections</li>
+					</ul>
+
                 <?php else: ?>
 
                     <ul class="nav nav-inline">
