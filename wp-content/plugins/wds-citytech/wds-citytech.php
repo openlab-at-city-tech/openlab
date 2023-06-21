@@ -3415,7 +3415,7 @@ add_filter(
 		],
 		displayMath: [
 			['$$', '$$'],
-			['$latex', '$'],
+			['" . '$latex' . "', '$'],
 			['[latex]', '[/latex]']
 		],
 		processEscapes: true
