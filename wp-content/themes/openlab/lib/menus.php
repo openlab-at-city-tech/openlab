@@ -1033,24 +1033,11 @@ function openlab_filter_subnav_forums($subnav_item) {
 }
 add_filter( 'bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums' );
 
+// Disables some nav items.
+add_filter('bp_get_options_nav_nav-invite-anyone', '__return_empty_string');
+add_filter('bp_get_options_nav_nav-notifications', '__return_empty_string');
+add_filter('bp_get_options_nav_request-membership', '__return_empty_string');
 
-add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
-
-function openlab_filter_subnav_nav_invite_anyone($subnav_item) {
-    return "";
-}
-
-add_filter('bp_get_options_nav_nav-notifications', 'openlab_filter_subnav_nav_notifications');
-
-function openlab_filter_subnav_nav_notifications($subnav_item) {
-    return "";
-}
-
-add_filter('bp_get_options_nav_request-membership', 'openlab_filter_subnav_nav_request_membership');
-
-function openlab_filter_subnav_nav_request_membership($subnav_item) {
-    return "";
-}
 
 add_filter('bp_get_options_nav_nav-events', 'openlab_filter_subnav_nav_events');
 add_filter('bp_get_options_nav_nav-events-mobile', 'openlab_filter_subnav_nav_events');
