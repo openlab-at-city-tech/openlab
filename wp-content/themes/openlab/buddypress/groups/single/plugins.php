@@ -36,9 +36,7 @@ global $bp, $wp_query;
 
 				<?php elseif ( bp_is_current_action( 'connections' ) ) : ?>
 
-					<ul class="nav nav-inline">
-						<li class="current-menu-item">Connections</li>
-					</ul>
+                    <?php echo openlab_submenu_markup( 'group-connections' ); ?>
 
                 <?php else: ?>
 

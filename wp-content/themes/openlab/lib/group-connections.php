@@ -42,3 +42,33 @@ add_action(
 		bp_register_group_extension( 'OpenLab_Group_Connections_Extension' );
 	}
 );
+
+/**
+ * Subnav generation for Connections.
+ *
+ * @return string Subnav markup.
+ */
+function openlab_group_connections_submenu() {
+    $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'connections';
+
+    $user_can_manage = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
+
+    $menu_list = [
+        $base_url => 'Connected Groups'
+    ];
+
+    if ( $user_can_manage ) {
+        $menu_list += [
+            $base_url . '/new/'          => 'Make a Connection',
+            $base_url . '/invitations/'  => 'Invitations',
+        ];
+    }
+
+	$current_item    = $base_url;
+	$current_subpage = bp_action_variable( 0 );
+	if ( in_array( $current_subpage, [ 'new', 'invitations' ], true ) ) {
+		$current_item = $base_url . '/' . $current_subpage . '/';
+	}
+
+    return openlab_submenu_gen( $menu_list, false, $current_item );
+}
