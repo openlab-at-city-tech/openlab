@@ -12,13 +12,8 @@ class OpenLab_Group_Connections_Extension extends BP_Group_Extension {
 	public function __construct() {
 		$enabled = bp_is_group() ? openlab_is_connections_enabled_for_group( bp_get_current_group_id() ) : false;
 
-		$access = 'noone';
 		if ( $enabled && bp_is_group() ) {
-			if ( 'public' === groups_get_current_group()->status ) {
-				$access = 'anyone';
-			} else {
-				$access = 'member';
-			}
+			$access = openlab_user_can_initiate_group_connections() ? 'public' : 'noone';
 		}
 
 		parent::init(

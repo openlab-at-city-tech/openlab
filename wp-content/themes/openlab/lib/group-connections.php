@@ -33,6 +33,33 @@ function openlab_is_connections_enabled_for_group( $group_id = null ) {
 }
 
 /**
+ * Checks whether a user can initiate connections for a group.
+ *
+ * @param int $user_id  ID of the user. Defaults to logged-in user.
+ * @param int $group_id ID of the group. Defaults to current group.
+ * @return bool
+ */
+function openlab_user_can_initiate_group_connections( $user_id = null, $group_id = null ) {
+	if ( ! $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	if ( ! $group_id ) {
+		return false;
+	}
+
+    return user_can( $user_id, 'bp_moderate' ) || groups_is_user_admin( $user_id, $group_id );
+}
+
+/**
  * Register the Connections group extension.
  */
 add_action(
@@ -51,18 +78,11 @@ add_action(
 function openlab_group_connections_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'connections';
 
-    $user_can_manage = current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() );
-
     $menu_list = [
-        $base_url => 'Connected Groups'
+        $base_url                    => 'Connected Groups',
+		$base_url . '/new/'          => 'Make a Connection',
+		$base_url . '/invitations/'  => 'Invitations',
     ];
-
-    if ( $user_can_manage ) {
-        $menu_list += [
-            $base_url . '/new/'          => 'Make a Connection',
-            $base_url . '/invitations/'  => 'Invitations',
-        ];
-    }
 
 	$current_item    = $base_url;
 	$current_subpage = bp_action_variable( 0 );
