@@ -69,6 +69,18 @@ a {
         }
     }
 }
+/* Button elements styled like text links. */
+button.link-button {
+	background: none;
+	border: none;
+	color: @link-color;
+	padding: 0;
+    text-decoration: underline;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
 body{
     .darken-for-accessibility{
         color: @darkTeal;
@@ -2786,6 +2798,7 @@ body form{
         margin-bottom: 12px;
         color: @60gray;
 		position: relative;
+
         h1,
         h3,
         h4,
@@ -4026,6 +4039,25 @@ a.delete-doc-button {
             margin-right: 5px;
         }
     }
+}
+body.groups.connections {
+	.group-list {
+		margin-top: 10px;
+		.group-item-wrapper {
+			height: auto;
+		}
+	}
+	ul.ui-autocomplete {
+		background: #fff;
+		border: 1px solid @80gray;
+		list-style-type: none;
+		max-width: 50%;
+		padding: 15px;
+	}
+
+	.ui-menu-item-wrapper {
+		padding: 6px;
+	}
 }
 body.invite-new-members {
 	ul.ui-autocomplete {

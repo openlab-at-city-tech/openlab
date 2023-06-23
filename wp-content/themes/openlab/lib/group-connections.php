@@ -71,6 +71,22 @@ add_action(
 );
 
 /**
+ * Register assets.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		wp_register_script(
+			'openlab-group-connections',
+			get_stylesheet_directory_uri() . '/js/group-connections.js',
+			[ 'jquery', 'jquery-ui-autocomplete', 'wp-backbone' ],
+			OL_VERSION,
+			true
+		);
+	}
+);
+
+/**
  * Subnav generation for Connections.
  *
  * @return string Subnav markup.
@@ -92,3 +108,60 @@ function openlab_group_connections_submenu() {
 
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }
+
+/**
+ * AJAX callback for group search.
+ *
+ * @return void
+ */
+add_action(
+	'wp_ajax_openlab_connection_group_search',
+	function() {
+		global $wpdb;
+
+		if ( ! isset( $_GET['term'] ) ) {
+			echo wp_json_encode( [] );
+			die;
+		}
+
+		$term = wp_unslash( $_GET['term'] );
+
+		$group_format_callback = function( $group ) {
+			return [
+				'groupName'   => $group->name,
+				'groupUrl'    => bp_get_group_permalink( $group ),
+				'groupAvatar' => bp_get_group_avatar( [ 'html' => false ], $group ),
+				'groupId'     => $group->id,
+			];
+		};
+
+		$retval = [];
+		if ( filter_var( $term, FILTER_VALIDATE_URL ) ) {
+			$group_base = bp_get_groups_directory_permalink();
+			if ( str_starts_with( $term, $group_base ) ) {
+				$url_tail   = str_replace( $group_base, '', $term );
+				$tail_parts = explode( '/', $url_tail );
+				$group_slug = $tail_parts[0];
+
+				$group_id = BP_Groups_Group::group_exists( $group_slug );
+				if ( $group_id ) {
+					$group    = groups_get_group( $group_id );
+					$retval[] = $group_format_callback( $group );
+				}
+			}
+		} else {
+			$groups = groups_get_groups(
+				[
+					'search_terms' => $term,
+					'exclude'      => [ bp_get_current_group_id() ],
+				]
+			);
+
+			$retval = array_map( $group_format_callback, $groups['groups'] );
+		}
+
+		echo wp_json_encode( $retval );
+		die;
+
+	}
+);

@@ -35,6 +35,8 @@ class OpenLab_Group_Connections_Extension extends BP_Group_Extension {
 	 * @return void
 	 */
 	public function display( $group_id = null ) {
+		wp_enqueue_script( 'openlab-group-connections' );
+
 		switch ( bp_action_variable( 0 ) ) {
 			case 'new' :
 			case 'invitations' :

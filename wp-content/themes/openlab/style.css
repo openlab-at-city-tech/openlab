@@ -7272,6 +7272,17 @@ a.lighter-hover:hover,
 a.lighter-hover:focus {
   color: #49cabe;
 }
+/* Button elements styled like text links. */
+button.link-button {
+  background: none;
+  border: none;
+  color: #333333;
+  padding: 0;
+  text-decoration: underline;
+}
+button.link-button:hover {
+  text-decoration: none;
+}
 body .darken-for-accessibility {
   color: #3ba49b;
 }
@@ -10898,6 +10909,22 @@ a.delete-doc-button {
 #invite-anyone-invite-list li img {
   float: left;
   margin-right: 5px;
+}
+body.groups.connections .group-list {
+  margin-top: 10px;
+}
+body.groups.connections .group-list .group-item-wrapper {
+  height: auto;
+}
+body.groups.connections ul.ui-autocomplete {
+  background: #fff;
+  border: 1px solid #333333;
+  list-style-type: none;
+  max-width: 50%;
+  padding: 15px;
+}
+body.groups.connections .ui-menu-item-wrapper {
+  padding: 6px;
 }
 body.invite-new-members ul.ui-autocomplete {
   background: #fff;
