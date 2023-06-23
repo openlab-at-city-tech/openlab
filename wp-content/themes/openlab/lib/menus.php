@@ -1089,6 +1089,7 @@ add_filter( 'bp_get_options_nav_group-documents', 'openlab_set_current_menu_item
 add_filter( 'bp_get_options_nav_nav-docs', 'openlab_set_current_menu_item_class_for_subnav_item' );
 add_filter( 'bp_get_options_nav_nav-connections', 'openlab_set_current_menu_item_class_for_subnav_item' );
 add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_home', 'openlab_set_current_menu_item_class_for_subnav_item' );
 /**
  * Filters the 'Announcements' option nav item.
  */
