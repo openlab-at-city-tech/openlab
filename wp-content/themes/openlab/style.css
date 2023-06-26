@@ -10910,6 +10910,9 @@ a.delete-doc-button {
   float: left;
   margin-right: 5px;
 }
+body.groups.connections .bp-template-notice {
+  margin-bottom: 20px;
+}
 body.groups.connections .group-list {
   margin-top: 10px;
 }

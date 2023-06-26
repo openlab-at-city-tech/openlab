@@ -18,9 +18,10 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			<div id="send-invitations" style="display: none;">
 				<p><strong>Send Invitations</strong></p>
 				<p>These groups will be sent an invitation to connect to your <?php echo esc_html( $group_label_uc ); ?>.</p>
-				<div id="send-invitations-list" class="invites group-list item-list row">
+				<div id="send-invitations-list" class="invites group-list item-list row"></div>
 
-				</div>
+				<?php wp_nonce_field( 'openlab-connection-invitations', 'openlab-connection-invitations-nonce' ); ?>
+				<input type="submit" value="Send Invites" class="btn btn-primary btn-margin btn-margin-top" />
 			</div>
 		</form>
 	</div>

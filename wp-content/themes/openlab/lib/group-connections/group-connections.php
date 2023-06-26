@@ -4,6 +4,9 @@
  * Connected Groups functionality.
  */
 
+require __DIR__ . '/class-openlab-group-connection.php';
+require __DIR__ . '/class-openlab-group-connection-invitation.php';
+
 /**
  * Checks whether the Connections feature is enabled for a group.
  *
@@ -198,7 +201,24 @@ add_action(
 				]
 			);
 		}
-		var_Dump( $group_ids ); die;
+
+		foreach ( $retval as $group_id => $status ) {
+			$group = groups_get_group( $group_id );
+
+			if ( $status['success'] ) {
+				bp_core_add_message( sprintf( 'Successfully sent invitation to the group "%s".', $group->name ), 'success' );
+			} else {
+				switch ( $status['status'] ) {
+					case 'invitation_exists' :
+						bp_core_add_message( sprintf( 'An invitation for the group "%s" already exists.', $group->name ), 'warning' );
+						break;
+
+					default :
+						bp_core_add_message( sprintf( 'Could not send invitation to the group "%s".', $group->name ), 'error' );
+						break;
+				}
+			}
+		}
 	}
 );
 
@@ -211,11 +231,38 @@ add_action(
  *   @var int $invitee_group_id ID of the group receiving the invitation.
  *   @var int $inviter_user_id  ID of the user initiating the invitation.
  * }
- * @return bool
+ * @return {
+ *   @var bool   $success Whether the invitation was sent.
+ *   @var string $status  Status code. 'success', 'invitation_exists', 'connection_exists', 'failure'.
+ * }
  */
 function openlab_send_connection_invitation( $args ) {
-	// I can probably use a `BP_Invitation_Manager` extending class so that I don't need to deal with database issues.
-	var_Dump( $args );
+	global $wpdb;
+
+	$retval = [
+		'success' => false,
+		'status'  => 'failure',
+	];
+
+	// First check for an existing invitation.
+	if ( OpenLab_Group_Connection_Invitation::invitation_exists( $args['inviter_group_id'], $args['invitee_group_id'] ) ) {
+		$retval['status'] = 'invitation_exists';
+		return $retval;
+	}
+
+	$invitation = new OpenLab_Group_Connection_Invitation();
+	$invitation->set_inviter_group_id( $args['inviter_group_id'] );
+	$invitation->set_invitee_group_id( $args['invitee_group_id'] );
+	$invitation->set_inviter_user_id( $args['inviter_user_id'] );
+
+	$saved = $invitation->save();
+
+	if ( $saved ) {
+		$retval['success'] = true;
+		$retval['status']  = 'success';
+	}
+
+	return $retval;
 }
 
 /**
@@ -243,7 +290,7 @@ function openlab_create_connection_tables() {
 				invitee_group_id bigint(20) NOT NULL,
 				connection_id bigint(20),
 				date_created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				date_accepted datetime,
+				date_accepted datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 				KEY inviter_user_id (inviter_user_id),
 				KEY inviter_group_id (inviter_group_id),
 				KEY invitee_group_id (invitee_group_id)
