@@ -165,3 +165,113 @@ add_action(
 
 	}
 );
+
+/**
+ * Catches Make a Connection invitation requests.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( empty( $_POST['openlab-connection-invitations-nonce'] ) ) {
+			return;
+		}
+
+		check_admin_referer( 'openlab-connection-invitations', 'openlab-connection-invitations-nonce' );
+
+		if ( ! openlab_is_connections_enabled_for_group() || ! openlab_user_can_initiate_group_connections() ) {
+			return;
+		}
+
+		if ( empty( $_POST['invitation-group-ids'] ) ) {
+			return;
+		}
+
+		$group_ids = array_map( 'intval', $_POST['invitation-group-ids'] );
+
+		$retval = [];
+		foreach ( $group_ids as $group_id ) {
+			$retval[ $group_id ] = openlab_send_connection_invitation(
+				[
+					'inviter_group_id' => bp_get_current_group_id(),
+					'invitee_group_id' => $group_id,
+					'inviter_user_id'  => bp_loggedin_user_id(),
+				]
+			);
+		}
+		var_Dump( $group_ids ); die;
+	}
+);
+
+/**
+ * Sends a connection invitation.
+ *
+ * @param array $args {
+ *   Array of arguments.
+ *   @var int $inviter_group_id ID of the group initiating the invitation.
+ *   @var int $invitee_group_id ID of the group receiving the invitation.
+ *   @var int $inviter_user_id  ID of the user initiating the invitation.
+ * }
+ * @return bool
+ */
+function openlab_send_connection_invitation( $args ) {
+	// I can probably use a `BP_Invitation_Manager` extending class so that I don't need to deal with database issues.
+	var_Dump( $args );
+}
+
+/**
+ * Creates database tables.
+ *
+ * @return string[]
+ */
+function openlab_create_connection_tables() {
+	global $wpdb;
+
+	$sql = array();
+
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$table_prefix = $wpdb->get_blog_prefix( get_main_site_id() );
+
+	$invitation_table_name = "{$table_prefix}openlab_connection_invitations";
+	$connection_table_name = "{$table_prefix}openlab_connections";
+	$metadata_table_name   = "{$table_prefix}openlab_connection_metadata";
+
+	$sql[] = "CREATE TABLE {$invitation_table_name} (
+				invitation_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				inviter_user_id bigint(20) NOT NULL,
+				inviter_group_id bigint(20) NOT NULL,
+				invitee_group_id bigint(20) NOT NULL,
+				connection_id bigint(20),
+				date_created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				date_accepted datetime,
+				KEY inviter_user_id (inviter_user_id),
+				KEY inviter_group_id (inviter_group_id),
+				KEY invitee_group_id (invitee_group_id)
+			) {$charset_collate};";
+
+	$sql[] = "CREATE TABLE {$connection_table_name} (
+				connection_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				group_1_id bigint(20) NOT NULL,
+				group_2_id bigint(20) NOT NULL,
+				date_created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				KEY connection_id (connection_id),
+				KEY group_1_id (group_1_id),
+				KEY group_2_id (group_2_id)
+			) {$charset_collate};";
+
+	$sql[] = "CREATE TABLE {$metadata_table_name} (
+				meta_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				connection_id bigint(20) NOT NULL,
+				group_id bigint(20) NOT NULL,
+				meta_key varchar(255) NOT NULL,
+				meta_value longtext,
+				UNIQUE KEY idx_group_connection (group_id,connection_id),
+				KEY meta_key (meta_key)
+			) {$charset_collate};";
+
+	if ( ! function_exists( 'dbDelta' ) ) {
+		require_once ABSPATH . '/wp-admin/includes/upgrade.php';
+	}
+
+	return dbDelta( $sql );
+}
