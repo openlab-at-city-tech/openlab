@@ -10929,6 +10929,35 @@ body.groups.connections ul.ui-autocomplete {
 body.groups.connections .ui-menu-item-wrapper {
   padding: 6px;
 }
+body.groups.connections .sent-invitations {
+  display: flex;
+  flex-direction: column;
+}
+body.groups.connections .sent-invitation {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+body.groups.connections .sent-invitation-header {
+  font-weight: bold;
+}
+body.groups.connections .actions {
+  flex: 0 0 50px;
+}
+body.groups.connections .group {
+  flex-grow: 1;
+}
+body.groups.connections .sent {
+  flex: 0 0 150px;
+}
+body.groups.connections .delete-invite {
+  color: red;
+  text-decoration: none;
+}
+body.groups.connections .delete-invite:hover {
+  text-decoration: underline;
+}
 body.invite-new-members ul.ui-autocomplete {
   background: #fff;
   border: 1px solid #333333;

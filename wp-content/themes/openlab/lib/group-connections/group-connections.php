@@ -191,34 +191,80 @@ add_action(
 
 		$group_ids = array_map( 'intval', $_POST['invitation-group-ids'] );
 
-		$retval = [];
+		$messages = ''; // Initialize the message string
+
 		foreach ( $group_ids as $group_id ) {
-			$retval[ $group_id ] = openlab_send_connection_invitation(
+			$retval = openlab_send_connection_invitation(
 				[
 					'inviter_group_id' => bp_get_current_group_id(),
 					'invitee_group_id' => $group_id,
 					'inviter_user_id'  => bp_loggedin_user_id(),
 				]
 			);
-		}
 
-		foreach ( $retval as $group_id => $status ) {
 			$group = groups_get_group( $group_id );
 
-			if ( $status['success'] ) {
-				bp_core_add_message( sprintf( 'Successfully sent invitation to the group "%s".', $group->name ), 'success' );
+			if ( $retval['success'] ) {
+				$messages .= sprintf( '- Successfully sent invitation to the group "%s".' . "\n", $group->name );
 			} else {
-				switch ( $status['status'] ) {
+				switch ( $retval['status'] ) {
 					case 'invitation_exists' :
-						bp_core_add_message( sprintf( 'An invitation for the group "%s" already exists.', $group->name ), 'warning' );
+						$messages .= sprintf( '- An invitation for the group "%s" already exists.' . "\n", $group->name );
 						break;
 
 					default :
-						bp_core_add_message( sprintf( 'Could not send invitation to the group "%s".', $group->name ), 'error' );
+						$messages .= sprintf( '- Could not send invitation to the group "%s".' . "\n", $group->name );
 						break;
 				}
 			}
 		}
+
+		if ( ! empty( $messages ) ) {
+			bp_core_add_message( $messages );
+		}
+
+		bp_core_redirect( $_POST['_wp_http_referer'] );
+	}
+);
+
+/**
+ * Catches Delete Invitation requests.
+ */
+add_action(
+	'bp_actions',
+	function() {
+		if ( ! bp_is_group() || ! bp_is_current_action( 'connections' ) || ! bp_is_action_variable( 0, 'new' ) ) {
+			return;
+		}
+
+		if ( ! openlab_is_connections_enabled_for_group() || ! openlab_user_can_initiate_group_connections() ) {
+			return;
+		}
+
+		if ( empty( $_GET['delete-invitation'] ) ) {
+			return;
+		}
+
+		$invitation_id = (int) $_GET['delete-invitation'];
+
+		check_admin_referer( 'delete-invitation-' . $invitation_id );
+
+		$invitation = OpenLab_Group_Connection_Invitation::get_instance( $invitation_id );
+		if ( ! $invitation ) {
+			return;
+		}
+
+		$deleted = $invitation->delete();
+
+		$redirect_url = bp_get_group_permalink( groups_get_current_group() ) . 'connections/new/';
+
+		if ( $deleted ) {
+			bp_core_add_message( 'You have successfully deleted the invitation.', 'success' );
+		} else {
+			bp_core_add_message( 'The invitation could not be deleted.', 'error' );
+		}
+
+		bp_core_redirect( $redirect_url );
 	}
 );
 

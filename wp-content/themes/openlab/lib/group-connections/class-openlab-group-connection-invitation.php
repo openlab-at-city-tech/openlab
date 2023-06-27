@@ -55,6 +55,33 @@ class OpenLab_Group_Connection_Invitation {
 	protected $date_accepted = '0000-00-00 00:00:00';
 
 	/**
+	 * Gets the invitation ID for this invitation.
+	 *
+	 * @return int
+	 */
+	public function get_invitation_id() {
+		return (int) $this->invitation_id;
+	}
+
+	/**
+	 * Gets the invitee group ID for this invitation.
+	 *
+	 * @return int
+	 */
+	public function get_invitee_group_id() {
+		return (int) $this->invitee_group_id;
+	}
+
+	/**
+	 * Gets the date created for this invitation.
+	 *
+	 * @return string
+	 */
+	public function get_date_created() {
+		return $this->date_created;
+	}
+
+	/**
 	 * Sets the invitation ID for this invitation.
 	 *
 	 * @param int $invitation_id Invitation ID.
@@ -157,6 +184,8 @@ class OpenLab_Group_Connection_Invitation {
 
 			$retval = (bool) $updated;
 		} else {
+			$this->set_date_created( current_time( 'mysql' ) );
+
 			$inserted = $wpdb->insert(
 				$table_name,
 				[
@@ -284,13 +313,24 @@ class OpenLab_Group_Connection_Invitation {
 	 *
 	 * @param array $args {
 	 *   Array of optional query arguments.
-	 *   @var int $inviter_group_id Inviter group ID.
-	 *   @var int $invitee_group_id Invitee group ID.
+	 *   @var int  $inviter_group_id Inviter group ID.
+	 *   @var int  $invitee_group_id Invitee group ID.
+	 *   @var bool $pending_only     True to return only the pending records.
 	 * }
 	 * @return array
 	 */
 	public static function get( $args = [] ) {
 		global $wpdb;
+
+		$r = array_merge(
+			[
+				'invitation_id'    => null,
+				'inviter_group_id' => null,
+				'invitee_group_id' => null,
+				'pending_only'     => false,
+			],
+			$args
+		);
 
 		$table_name = self::get_table_name();
 
@@ -301,11 +341,15 @@ class OpenLab_Group_Connection_Invitation {
 
 		$int_fields = [ 'invitation_id', 'inviter_group_id', 'invitee_group_id' ];
 		foreach ( $int_fields as $int_field ) {
-			if ( ! isset( $args[ $int_field ] ) || null === $args[ $int_field ] ) {
+			if ( null === $r[ $int_field ] ) {
 				continue;
 			}
 
-			$sql['where'][ $int_field ] = $wpdb->prepare( '%i = %d', $int_field, $args[ $int_field ] );
+			$sql['where'][ $int_field ] = $wpdb->prepare( '%i = %d', $int_field, $r[ $int_field ] );
+		}
+
+		if ( $r['pending_only'] ) {
+			$sql['where']['pending_only'] = 'date_accepted = "0000-00-00 00:00:00"';
 		}
 
 		$sql_statement = "{$sql['select']} WHERE " . implode( ' AND ', $sql['where'] );

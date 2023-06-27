@@ -4061,6 +4061,42 @@ body.groups.connections {
 	.ui-menu-item-wrapper {
 		padding: 6px;
 	}
+	.sent-invitations {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.sent-invitation {
+		display: flex;
+		align-items: center;
+		padding: 10px;
+		border-bottom: 1px solid #ccc;
+	}
+
+	.sent-invitation-header {
+		font-weight: bold;
+	}
+
+	.actions {
+		flex: 0 0 50px;
+	}
+
+	.group {
+		flex-grow: 1;
+	}
+
+	.sent {
+		flex: 0 0 150px;
+	}
+
+	.delete-invite {
+		color: red;
+		text-decoration: none;
+	}
+
+	.delete-invite:hover {
+		text-decoration: underline;
+	}
 }
 body.invite-new-members {
 	ul.ui-autocomplete {
