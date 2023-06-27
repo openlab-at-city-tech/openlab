@@ -303,10 +303,14 @@ function openlab_send_connection_invitation( $args ) {
 
 	$saved = $invitation->save();
 
-	if ( $saved ) {
-		$retval['success'] = true;
-		$retval['status']  = 'success';
+	if ( ! $saved ) {
+		return $retval;
 	}
+
+	$retval['success'] = true;
+	$retval['status']  = 'success';
+
+	$invitation->send_notifications();
 
 	return $retval;
 }
@@ -367,4 +371,56 @@ function openlab_create_connection_tables() {
 	}
 
 	return dbDelta( $sql );
+}
+
+/**
+ * Creates BP emails for the Connection feature.
+ *
+ * @return void
+ */
+function openlab_create_connection_emails() {
+	$emails = [
+		[
+			'type'      => 'openlab-connection-invitation',
+			'subject'   => 'Your group {{{ol.invitee-group-name}}} has received a connection invitation from {{{ol.inviter-group-name}}}',
+			'content'   => 'Your group <a href="{{{ol.invitee-group-url}}}">{{{ol.invitee-group-name}}}</a> has received a connection invitation from <a href="{{{ol.inviter-group-url}}}">{{{ol.inviter-group-name}}}</a>.
+
+<a href="{{{ol.manage-invites-url}}}">Accept or manage your connection invitations</a>',
+			'plaintext' => 'Your group {{{ol.invitee-group-name}}} has received a connection invitation from {{{ol.inviter-group-name}}} ({{{ol.inviter-group-url}}}).
+
+Accept or manage your connection invitations: {{{ol.manage-invites-url}}}',
+			'desc'      => 'A group is invited to a connection.',
+		]
+	];
+
+	foreach ( $emails as $email ) {
+		$term = get_term_by( 'name', $email['type'] );
+		if ( $term ) {
+			continue;
+		}
+
+		$post_args = [
+			'post_status'  => 'publish',
+			'post_type'    => bp_get_email_post_type(),
+			'post_title'   => $email['subject'],
+			'post_content' => $email['content'],
+			'post_excerpt' => $email['plaintext'],
+		];
+
+		$post_id = wp_insert_post( $post_args );
+
+		if ( $post_id ) {
+			$tt_ids = wp_set_object_terms( $post_id, $email['type'], bp_get_email_tax_type() );
+			if ( ! is_wp_error( $tt_ids ) ) {
+				$term = get_term_by( 'term_taxonomy_id', (int) $tt_ids[0], bp_get_email_tax_type() );
+				wp_update_term(
+					(int) $term->term_id,
+					bp_get_email_tax_type(),
+					[
+						'description' => $email['desc'],
+					]
+				);
+			}
+		}
+	}
 }

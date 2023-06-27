@@ -73,6 +73,15 @@ class OpenLab_Group_Connection_Invitation {
 	}
 
 	/**
+	 * Gets the inviter group ID for this invitation.
+	 *
+	 * @return int
+	 */
+	public function get_inviter_group_id() {
+		return (int) $this->inviter_group_id;
+	}
+
+	/**
 	 * Gets the date created for this invitation.
 	 *
 	 * @return string
@@ -362,5 +371,47 @@ class OpenLab_Group_Connection_Invitation {
 			},
 			$invitation_ids
 		);
+	}
+
+	/**
+	 * Sends notifications to admins of the invited group.
+	 *
+	 * @return int[] IDs of the users who received the invitation notification.
+	 */
+	public function send_notifications() {
+		$admins = groups_get_group_admins( $this->get_invitee_group_id() );
+
+		$invitee_group = groups_get_group( $this->get_invitee_group_id() );
+		$inviter_group = groups_get_group( $this->get_inviter_group_id() );
+
+		$email_args = [
+			'tokens' => array(
+				'ol.invitee-group-name' => stripslashes( $invitee_group->name ),
+				'ol.invitee-group-url'  => bp_get_group_permalink( $invitee_group ),
+				'ol.inviter-group-name' => stripslashes( $inviter_group->name ),
+				'ol.inviter-group-url'  => bp_get_group_permalink( $inviter_group ),
+				'ol.manage-invites-url' => bp_get_group_permalink( $invitee_group ) . 'connections/invitations/',
+			),
+		];
+
+		$retval = [];
+		foreach ( $admins as $admin ) {
+			$admin_data = get_userdata( $admin->user_id );
+			if ( ! $admin_data ) {
+				continue;
+			}
+
+			$sent = bp_send_email(
+				'openlab-connection-invitation',
+				$admin_data->user_email,
+				$email_args
+			);
+
+			if ( $sent && ! is_wp_error( $sent ) ) {
+				$retval[] = $admin->user_id;
+			}
+		}
+
+		return $retval;
 	}
 }
