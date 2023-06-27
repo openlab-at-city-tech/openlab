@@ -12,11 +12,11 @@ $sent_invites = OpenLab_Group_Connection_Invitation::get(
 
 <?php do_action( 'template_notices' ); ?>
 
-<div class="panel panel-default">
-	<div class="panel-heading">Make a Connection</div>
+<form method="post" class="form-panel">
+	<div class="panel panel-default">
+		<div class="panel-heading">Make a Connection</div>
 
-	<div class="panel-body">
-		<form method="post">
+		<div class="panel-body">
 			<p><strong>Search for an OpenLab group</strong></p>
 			<p>Start typing the name of the OpenLab group or copy/paste the group's URL.</p>
 			<label for="new-connection-search" class="sr-only">Type Group Name or Paste URL</label>
@@ -31,49 +31,49 @@ $sent_invites = OpenLab_Group_Connection_Invitation::get(
 				<?php wp_nonce_field( 'openlab-connection-invitations', 'openlab-connection-invitations-nonce' ); ?>
 				<input type="submit" value="Send Invites" class="btn btn-primary btn-margin btn-margin-top" />
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
 
-<div class="panel panel-default">
-	<div class="panel-heading">Pending Invites</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">Pending Invites</div>
 
-	<div class="panel-body">
+		<div class="panel-body">
 
-		<?php if ( $sent_invites ) : ?>
-			<p>You have sent invitations to the following groups:</p>
-				<div class="sent-invitations">
-					<div class="sent-invitation sent-invitation-header">
-						<div class="actions"><span class="sr-only"><?php esc_html_e( 'Delete', 'text-domain' ); ?></span></div>
-						<div class="group"><?php esc_html_e( 'Group', 'text-domain' ); ?></div>
-						<div class="sent"><?php esc_html_e( 'Sent', 'text-domain' ); ?></div>
-					</div>
-
-					<?php foreach ( $sent_invites as $invite ) : ?>
-						<?php
-
-						$group = groups_get_group( $invite->get_invitee_group_id() );
-
-						$date_sent = '0000-00-00 00:00:00' === $invite->get_date_created() ? '' : date_i18n( get_option( 'date_format' ), strtotime( $invite->get_date_created() ) );
-
-						$delete_url = bp_get_group_permalink( groups_get_current_group() ) . 'connections/new/';
-						$delete_url = add_query_arg( 'delete-invitation', $invite->get_invitation_id(), $delete_url );
-						$delete_url = wp_nonce_url( $delete_url, 'delete-invitation-' . $invite->get_invitation_id() );
-
-						?>
-
-						<div class="sent-invitation">
-							<div class="actions"><a href="<?php echo esc_url( $delete_url ); ?>" class="delete-invite" onclick="return confirm('Are you sure you want to delete this invitation?')" data-invitation-id="<?php echo esc_attr( $invite->get_invitation_id() ); ?>">X<span class="sr-only">Delete Invitation</span></a></div>
-							<div class="group"><?php echo esc_html( $group->name ); ?></div>
-							<div class="sent"><?php echo esc_html( $date_sent ); ?></div>
+			<?php if ( $sent_invites ) : ?>
+				<p>You have sent invitations to the following groups:</p>
+					<div class="sent-invitations">
+						<div class="sent-invitation sent-invitation-header">
+							<div class="actions"><span class="sr-only"><?php esc_html_e( 'Delete', 'text-domain' ); ?></span></div>
+							<div class="group"><?php esc_html_e( 'Group', 'text-domain' ); ?></div>
+							<div class="sent"><?php esc_html_e( 'Sent', 'text-domain' ); ?></div>
 						</div>
-					<?php endforeach; ?>
-				</div>
-		<?php else : ?>
-			<p>None of your connection invitations are awaiting a response.</p>
-		<?php endif; ?>
+
+						<?php foreach ( $sent_invites as $invite ) : ?>
+							<?php
+
+							$group = groups_get_group( $invite->get_invitee_group_id() );
+
+							$date_sent = '0000-00-00 00:00:00' === $invite->get_date_created() ? '' : date_i18n( get_option( 'date_format' ), strtotime( $invite->get_date_created() ) );
+
+							$delete_url = bp_get_group_permalink( groups_get_current_group() ) . 'connections/new/';
+							$delete_url = add_query_arg( 'delete-invitation', $invite->get_invitation_id(), $delete_url );
+							$delete_url = wp_nonce_url( $delete_url, 'delete-invitation-' . $invite->get_invitation_id() );
+
+							?>
+
+							<div class="sent-invitation">
+								<div class="actions"><a href="<?php echo esc_url( $delete_url ); ?>" class="delete-invite" onclick="return confirm('Are you sure you want to delete this invitation?')" data-invitation-id="<?php echo esc_attr( $invite->get_invitation_id() ); ?>">X<span class="sr-only">Delete Invitation</span></a></div>
+								<div class="group"><?php echo esc_html( $group->name ); ?></div>
+								<div class="sent"><?php echo esc_html( $date_sent ); ?></div>
+							</div>
+						<?php endforeach; ?>
+					</div>
+			<?php else : ?>
+				<p>None of your connection invitations are awaiting a response.</p>
+			<?php endif; ?>
+		</div>
 	</div>
-</div>
+</form>
 
 <script type="text/html" id="tmpl-openlab-connection-invitation">
 	<div id="connection-invitation-group-{{ data.groupId }}" class="group-item col-xs-12">
