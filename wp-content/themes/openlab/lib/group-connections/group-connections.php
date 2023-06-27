@@ -205,15 +205,15 @@ add_action(
 			$group = groups_get_group( $group_id );
 
 			if ( $retval['success'] ) {
-				$messages .= sprintf( '- Successfully sent invitation to the group "%s".' . "\n", $group->name );
+				$messages .= sprintf( 'Successfully sent invitation to the group "%s".' . "\n", $group->name );
 			} else {
 				switch ( $retval['status'] ) {
 					case 'invitation_exists' :
-						$messages .= sprintf( '- An invitation for the group "%s" already exists.' . "\n", $group->name );
+						$messages .= sprintf( 'An invitation for the group "%s" already exists.' . "\n", $group->name );
 						break;
 
 					default :
-						$messages .= sprintf( '- Could not send invitation to the group "%s".' . "\n", $group->name );
+						$messages .= sprintf( 'Could not send invitation to the group "%s".' . "\n", $group->name );
 						break;
 				}
 			}
