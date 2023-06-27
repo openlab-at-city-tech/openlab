@@ -1,7 +1,7 @@
 <?php
 $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
-$sent_invites = OpenLab_Group_Connection_Invitation::get(
+$sent_invites = \OpenLab\Connections\Invitation::get(
 	[
 		'inviter_group_id' => bp_get_current_group_id(),
 		'pending_only'     => true,

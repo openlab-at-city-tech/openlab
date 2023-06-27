@@ -45,7 +45,7 @@ require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
 require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
-require_once( STYLESHEETPATH . '/lib/group-connections/group-connections.php' );
+require_once( STYLESHEETPATH . '/lib/group-connections.php' );
 
 // Initialize async cloning.
 openlab_clone_async_process();
