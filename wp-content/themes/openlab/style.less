@@ -4061,41 +4061,50 @@ body.groups.connections {
 	.ui-menu-item-wrapper {
 		padding: 6px;
 	}
-	.sent-invitations {
+
+	.connection-invitations {
 		display: flex;
 		flex-direction: column;
+
+		.actions {
+			flex: 0 0 50px;
+
+			a {
+				text-decoration: none;
+			}
+		}
+
+		&.pending-invitations .actions {
+			flex: 1;
+		}
+
+		.group {
+			flex-grow: 1;
+		}
+
+		.sent, .received {
+			flex: 0 0 150px;
+		}
+
+		.delete-invite {
+			color: red;
+			text-decoration: none;
+		}
+
+		.delete-invite:hover {
+			text-decoration: underline;
+		}
 	}
 
-	.sent-invitation {
+	.connection-invitation {
 		display: flex;
 		align-items: center;
 		padding: 10px;
 		border-bottom: 1px solid #ccc;
 	}
 
-	.sent-invitation-header {
+	.connection-invitation-header {
 		font-weight: bold;
-	}
-
-	.actions {
-		flex: 0 0 50px;
-	}
-
-	.group {
-		flex-grow: 1;
-	}
-
-	.sent {
-		flex: 0 0 150px;
-	}
-
-	.delete-invite {
-		color: red;
-		text-decoration: none;
-	}
-
-	.delete-invite:hover {
-		text-decoration: underline;
 	}
 }
 body.invite-new-members {

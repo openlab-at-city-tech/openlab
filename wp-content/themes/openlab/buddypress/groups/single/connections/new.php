@@ -41,8 +41,8 @@ $sent_invites = \OpenLab\Connections\Invitation::get(
 
 			<?php if ( $sent_invites ) : ?>
 				<p>You have sent invitations to the following groups:</p>
-					<div class="sent-invitations">
-						<div class="sent-invitation sent-invitation-header">
+					<div class="sent-invitations connection-invitations">
+						<div class="sent-invitation connection-invitation connection-invitation-header">
 							<div class="actions"><span class="sr-only"><?php esc_html_e( 'Delete', 'text-domain' ); ?></span></div>
 							<div class="group"><?php esc_html_e( 'Group', 'text-domain' ); ?></div>
 							<div class="sent"><?php esc_html_e( 'Sent', 'text-domain' ); ?></div>
@@ -61,7 +61,7 @@ $sent_invites = \OpenLab\Connections\Invitation::get(
 
 							?>
 
-							<div class="sent-invitation">
+							<div class="sent-invitation connection-invitation">
 								<div class="actions"><a href="<?php echo esc_url( $delete_url ); ?>" class="delete-invite" onclick="return confirm('Are you sure you want to delete this invitation?')" data-invitation-id="<?php echo esc_attr( $invite->get_invitation_id() ); ?>">X<span class="sr-only">Delete Invitation</span></a></div>
 								<div class="group"><?php echo esc_html( $group->name ); ?></div>
 								<div class="sent"><?php echo esc_html( $date_sent ); ?></div>

@@ -10929,34 +10929,41 @@ body.groups.connections ul.ui-autocomplete {
 body.groups.connections .ui-menu-item-wrapper {
   padding: 6px;
 }
-body.groups.connections .sent-invitations {
+body.groups.connections .connection-invitations {
   display: flex;
   flex-direction: column;
 }
-body.groups.connections .sent-invitation {
+body.groups.connections .connection-invitations .actions {
+  flex: 0 0 50px;
+}
+body.groups.connections .connection-invitations .actions a {
+  text-decoration: none;
+}
+body.groups.connections .connection-invitations.pending-invitations .actions {
+  flex: 1;
+}
+body.groups.connections .connection-invitations .group {
+  flex-grow: 1;
+}
+body.groups.connections .connection-invitations .sent,
+body.groups.connections .connection-invitations .received {
+  flex: 0 0 150px;
+}
+body.groups.connections .connection-invitations .delete-invite {
+  color: red;
+  text-decoration: none;
+}
+body.groups.connections .connection-invitations .delete-invite:hover {
+  text-decoration: underline;
+}
+body.groups.connections .connection-invitation {
   display: flex;
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ccc;
 }
-body.groups.connections .sent-invitation-header {
+body.groups.connections .connection-invitation-header {
   font-weight: bold;
-}
-body.groups.connections .actions {
-  flex: 0 0 50px;
-}
-body.groups.connections .group {
-  flex-grow: 1;
-}
-body.groups.connections .sent {
-  flex: 0 0 150px;
-}
-body.groups.connections .delete-invite {
-  color: red;
-  text-decoration: none;
-}
-body.groups.connections .delete-invite:hover {
-  text-decoration: underline;
 }
 body.invite-new-members ul.ui-autocomplete {
   background: #fff;
