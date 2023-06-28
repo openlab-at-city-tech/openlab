@@ -716,7 +716,20 @@ HTML;
 		$invites      = groups_get_invites_for_user();
 		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
 
-		$total_count = openlab_admin_bar_counts( $request_count + $invite_count, ' sub-count' );
+		$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
+		if ( $user_groups ) {
+			$connection_invitations = \OpenLab\Connections\Invitation::get(
+				[
+					'invitee_group_id' => array_keys( $user_groups ),
+				]
+			);
+
+			$connection_invitation_count = count( $connection_invitations );
+		} else {
+			$connection_invitation_count = 0;
+		}
+
+		$total_count = openlab_admin_bar_counts( $request_count + $invite_count + $connection_invitation_count, ' sub-count' );
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -866,6 +879,75 @@ HTML;
 					),
 				)
 			);
+		}
+
+		/**
+		 * CONNECTIONS
+		 */
+		if ( defined( 'OPENLAB_CONNECTIONS_PLUGIN_URL' ) ) {
+			if ( $user_groups ) {
+				$title = 'Connections';
+
+				// "Connections" title
+				$wp_admin_bar->add_node(
+					array(
+						'parent' => 'invites',
+						'id'     => 'connections-title',
+						'title'  => $title,
+						'meta'   => array(
+							'class' => 'submenu-title bold',
+						),
+					)
+				);
+
+				if ( $connection_invitations ) {
+					foreach ( $connection_invitations as $connection_invitation ) {
+						$group_avatar = bp_core_fetch_avatar(
+							[
+								'item_id' => $connection_invitation->get_inviter_group_id(),
+								'object'  => 'group',
+								'type'    => 'full',
+								'html'    => false,
+							]
+						);
+
+						$inviter_group = groups_get_group( $connection_invitation->get_inviter_group_id() );
+
+						$invitation_id = $connection_invitation->get_invitation_id();
+
+						// Avatar.
+						$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . esc_url( bp_get_group_permalink( $inviter_group ) ) . '"><img class="img-responsive" src ="' . esc_url( $group_avatar ) . '" alt="Profile picture of ' . stripslashes( $inviter_group->name ) . '"/></a></div></div>';
+
+						// Group name and link.
+						$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $inviter_group ) . '">' . stripslashes( $inviter_group->name ) . '</a></p>';
+
+						// Accept/reject buttons.
+						$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . esc_url( wp_nonce_url( $connection_invitation->get_accept_url(), 'accept-invitation-' . $invitation_id ) ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . esc_url( wp_nonce_url( $connection_invitation->get_reject_url(), 'reject-invitation-' . $invitation_id ) ) . '">' . __( 'Reject', 'buddypress' ) . '</a></p></div></div>';
+
+						$wp_admin_bar->add_node(
+							array(
+								'parent' => 'invites',
+								'id'     => 'invitation-' . $group->id,
+								'title'  => $title,
+								'meta'   => array(
+									'class' => 'nav-content-item nav-invitation',
+								),
+							)
+						);
+					}
+				} else {
+					$wp_admin_bar->add_node(
+						array(
+							'parent' => 'invites',
+							'id'     => 'group-invites-none',
+							'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>' . 'No connection invitations.' . '</p></div></div>',
+							'meta'   => array(
+								'class' => 'nav-no-items nav-content-item',
+							),
+						)
+					);
+				}
+			}
 		}
 	}
 
