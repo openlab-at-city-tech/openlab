@@ -3,7 +3,7 @@
 <?php
 $pending_invites = \OpenLab\Connections\Invitation::get(
 	[
-		'invited_group_id' => bp_get_current_group_id(),
+		'invitee_group_id' => bp_get_current_group_id(),
 		'pending_only'     => true,
 	]
 );

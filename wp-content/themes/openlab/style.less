@@ -4044,6 +4044,63 @@ body.groups.connections {
 	.bp-template-notice {
 		margin-bottom: 20px;
 	}
+
+	.connection-settings {
+		border: 1px solid #ddd;
+		border-radius: @border-radius-base;
+		display: flex;
+		gap: 20px;
+		padding: 20px;
+		position: relative;
+
+		.avatar-column {
+			flex: 0 0 75px;
+
+			.avatar {
+				height: 75px;
+				width: 75px;
+			}
+		}
+
+		.connected-group-link {
+			margin-bottom: 8px;
+			margin-top: 0;
+		}
+
+		.disconnect-button {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+		}
+	}
+
+	.accordion-toggle {
+		display: flex;
+		background: none;
+		align-items: center;
+		width: 100%;
+		padding: 0;
+		border: none;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.accordion-content {
+		display: none;
+		padding: 10px;
+	}
+
+	.accordion-toggle[aria-expanded="true"] .accordion-caret {
+		transform: rotate(90deg);
+	}
+
+	.accordion-caret {
+		display: inline-block;
+		margin-left: auto;
+		margin-right: 10px;
+		font-size: 16px;
+	}
+
 	.group-list {
 		margin-top: 10px;
 		.group-item-wrapper {

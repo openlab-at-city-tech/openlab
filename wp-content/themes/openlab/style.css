@@ -10913,6 +10913,53 @@ a.delete-doc-button {
 body.groups.connections .bp-template-notice {
   margin-bottom: 20px;
 }
+body.groups.connections .connection-settings {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+}
+body.groups.connections .connection-settings .avatar-column {
+  flex: 0 0 75px;
+}
+body.groups.connections .connection-settings .avatar-column .avatar {
+  height: 75px;
+  width: 75px;
+}
+body.groups.connections .connection-settings .connected-group-link {
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+body.groups.connections .connection-settings .disconnect-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+body.groups.connections .accordion-toggle {
+  display: flex;
+  background: none;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+body.groups.connections .accordion-content {
+  display: none;
+  padding: 10px;
+}
+body.groups.connections .accordion-toggle[aria-expanded="true"] .accordion-caret {
+  transform: rotate(90deg);
+}
+body.groups.connections .accordion-caret {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 16px;
+}
 body.groups.connections .group-list {
   margin-top: 10px;
 }
