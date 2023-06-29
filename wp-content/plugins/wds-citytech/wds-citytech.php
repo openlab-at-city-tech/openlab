@@ -3401,31 +3401,63 @@ function cboxol_maybe_hide_admin_bar_for_anonymous_users() {
 add_action( 'init', 'cboxol_maybe_hide_admin_bar_for_anonymous_users', 1 );
 
 /**
- * Default settings for simple-mathjax.
+ * simple-mathjax modifications.
+ *
+ * - If a site has a custom MathJax config, do nothing.
+ * - If a page has the [latexpage] shortcode, enable $..$ delimiters.
+ * - Otherwise load our more conservative MathJax configuration.
+ *
+ * @see http://redmine.citytech.cuny.edu/issues/3200
+ *
+ * @param array|string $value simple-mathjax config options.
+ * @return array
  */
-add_filter(
-	'default_option_simple_mathjax_options',
-	function( $value ) {
-		return [
-			'custom_mathjax_config' => "MathJax = {
-	tex: {
-		inlineMath: [
-			['$','$'],
-			['\\(','\\)']
-		],
-		displayMath: [
-			['$$', '$$'],
-			['" . '$latex' . "', '$'],
-			['[latex]', '[/latex]']
-		],
-		processEscapes: true
-	},
-	options: {
-		ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'
+function openlab_default_mathjax_config( $value ) {
+	if ( ! $value ) {
+		$value = [];
 	}
-}",
-		];
 
-		return $value;
+	$do_dollar_sign_delims = false;
+	if ( empty( $value['custom_mathjax_config'] ) && is_singular() ) {
+		$post = get_queried_object();
+		if ( $post && $post instanceof WP_Post ) {
+			$do_dollar_sign_delims = false !== strpos( $post->post_content, '[latexpage]' );
+		}
 	}
-);
+
+	$inline_math = $do_dollar_sign_delims ? "[ ['$','$'], ['\\\(','\\\)'] ]" : "[ ['\\\(','\\\)'] ]" ;
+
+	$value['custom_mathjax_config'] = "MathJax = {
+tex: {
+	inlineMath: " . $inline_math . ",
+	displayMath: [
+		['$$', '$$'],
+		['" . '$latex' . "', '$'],
+		['[latex]', '[/latex]']
+	],
+	processEscapes: true
+},
+options: {
+	ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'
+}
+}";
+
+	if ( $do_dollar_sign_delims ) {
+		add_filter(
+			'the_content',
+			function( $content ) {
+				// First try to remove entire paragraphs containing only the shortcode.
+				$content = str_replace( '<p>[latexpage]</p>', '', $content );
+
+				// Then remove the shortcode wherever it appears.
+				$content = str_replace( '[latexpage]', '', $content );
+
+				return $content;
+			}
+		);
+	}
+
+	return $value;
+}
+add_filter( 'default_option_simple_mathjax_options', 'openlab_default_mathjax_config' );
+add_filter( 'option_simple_mathjax_options', 'openlab_default_mathjax_config' );
