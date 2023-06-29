@@ -136,4 +136,3 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 <?php else : ?>
 	<p><?php esc_html_e( 'This group does not have any connections.', 'openlab-connections' ); ?></p>
 <?php endif; ?>
-
