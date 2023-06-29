@@ -10921,6 +10921,9 @@ body.groups.connections .connection-settings {
   padding: 20px;
   position: relative;
 }
+body.groups.connections .connection-settings .primary-column {
+  flex: 1;
+}
 body.groups.connections .connection-settings .avatar-column {
   flex: 0 0 75px;
 }
@@ -10937,8 +10940,13 @@ body.groups.connections .connection-settings .disconnect-button {
   top: 20px;
   right: 20px;
 }
+body.groups.connections .connection-settings .connection-setting-checkbox-subsettings {
+  padding-left: 10px;
+}
+body.groups.connections .connection-settings select {
+  width: 80%;
+}
 body.groups.connections .accordion-toggle {
-  display: flex;
   background: none;
   align-items: center;
   width: 100%;
