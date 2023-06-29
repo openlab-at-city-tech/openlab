@@ -806,7 +806,7 @@ function openlab_comment_email_boilerplate( $content ) {
 	return sprintf(
 		'Hello,' . "<br /><br />" .
 		'Please note: You are receiving this message because you are an administrator or author.' . "<br /><br />" .
-		'%s'
+		'%s',
 		$content
 
 	);
