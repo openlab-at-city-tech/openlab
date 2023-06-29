@@ -805,8 +805,8 @@ add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2 );
 function openlab_comment_email_boilerplate( $content ) {
 	return sprintf(
 		'Hello,' . "<br /><br />" .
-		'%s' .  "<br /><br />" .
-		'Please note: You are receiving this message because you are an administrator or author.',
+		'Please note: You are receiving this message because you are an administrator or author.' . "<br /><br />" .
+		'%s'
 		$content
 
 	);
