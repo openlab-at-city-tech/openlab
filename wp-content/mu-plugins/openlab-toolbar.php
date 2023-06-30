@@ -1339,7 +1339,6 @@ HTML;
 			$actions['post-new.php?post_type=page'] = array( $cpts['page']->labels->name_admin_bar, 'new-page' );
 		}
 
-		// @phpstan-ignore-next-line
 		unset( $cpts['post'], $cpts['page'], $cpts['attachment'] );
 
 		// Add any additional custom post types.
