@@ -127,7 +127,7 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 					</div>
 				</div>
 
-				<button class="disconnect-button btn btn-primary" aria-label="<?php esc_attr_e( 'Disconnect', 'openlab-connections' ); ?>"><?php esc_html_e( 'Connected', 'openlab-connections' ); ?></button>
+				<a href="<?php echo esc_url( wp_nonce_url( $connection->get_disconnect_url( bp_get_current_group_id() ), 'disconnect-' . $connection->get_connection_id() ) ); ?>" onclick="return confirm( '<?php echo esc_js( sprintf( __( 'Are you sure you want to disconnect from %s?', 'openlab-connections' ), $connected_group->name ) ); ?>' )" class="disconnect-button no-deco btn btn-primary" aria-label="<?php esc_attr_e( 'Disconnect', 'openlab-connections' ); ?>"><?php esc_html_e( 'Connected', 'openlab-connections' ); ?></a>
 
 				<?php wp_nonce_field( 'connection-settings-' . $connection->get_connection_id(), 'connection-settings-' . $connection->get_connection_id() . '-nonce', false ); ?>
 			</div>
