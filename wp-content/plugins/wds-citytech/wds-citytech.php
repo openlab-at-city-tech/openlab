@@ -3418,10 +3418,23 @@ function openlab_default_mathjax_config( $value ) {
 	}
 
 	$do_dollar_sign_delims = false;
-	if ( empty( $value['custom_mathjax_config'] ) && is_singular() ) {
-		$post = get_queried_object();
-		if ( $post && $post instanceof WP_Post ) {
-			$do_dollar_sign_delims = false !== strpos( $post->post_content, '[latexpage]' );
+	if ( empty( $value['custom_mathjax_config'] ) ) {
+		$posts_to_check = [];
+		if ( is_singular() ) {
+			$posts_to_check = [ get_queried_object() ];
+		} else {
+			global $wp_query;
+
+			if ( isset( $wp_query->posts ) ) {
+				$posts_to_check = $wp_query->posts;
+			}
+		}
+
+		foreach ( $posts_to_check as $post_to_check ) {
+			if ( $post_to_check instanceof WP_Post && false !== strpos( $post_to_check->post_content, '[latexpage]' ) ) {
+				$do_dollar_sign_delims = true;
+				break;
+			}
 		}
 	}
 
