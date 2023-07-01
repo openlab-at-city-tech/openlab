@@ -260,6 +260,31 @@ function wds__bp_after_signup_profile_fields() {
 	<?php
 }
 
+/**
+ * Add Google Analytics 4 GA4 tracking tag.
+ */
+add_action(
+	'wp_head',
+	function() {
+		if ( ! defined( 'OPENLAB_GA4_ID' ) ) {
+			return;
+		}
+
+		?>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( OPENLAB_GA4_ID ); ?>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '<?php echo esc_js( OPENLAB_GA4_ID ); ?>');
+</script>
+		<?php
+	},
+	0
+);
+
 function wds_registration_ajax() {
 	wp_print_scripts( array( 'sack' ) );
 	$sack    = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
