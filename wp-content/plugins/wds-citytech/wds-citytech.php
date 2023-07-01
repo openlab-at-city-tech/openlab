@@ -818,20 +818,33 @@ function wds_load_group_type( $group_type ) {
 	$return .= '<tr class="school-tooltip"><td colspan="2">';
 
 	// associated school/dept tooltip
+	$assoc_tooltip = '';
 	switch ( $group_type ) {
 		case 'course':
-			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			$assoc_tooltip = 'If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.';
 			break;
 		case 'portfolio':
-			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			switch ( $account_type ) {
+				case 'staff' :
+					$assoc_tooltip = 'Please select your school, office, or department, using the checkboxes below.';
+					break;
+				case 'faculty' :
+					$assoc_tooltip = 'Please select your school and department(s), using the checkboxes below.';
+					break;
+				default :
+					$assoc_tooltip = 'Please select the school and department(s) for your ePortfolio, using the checkboxes below.';
+					break;
+			}
 			break;
 		case 'project':
-			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
+			$assoc_tooltip = 'Is your Project associated with one or more of the college\'s schools?';
 			break;
 		case 'club':
-			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
+			$assoc_tooltip = 'Is your Club associated with one or more of the college\'s schools?';
 			break;
 	}
+
+	$return .= '<p class="ol-tooltip">' . esc_html( $assoc_tooltip ) . '</p>';
 
 	$return .= '</td></tr>';
 
