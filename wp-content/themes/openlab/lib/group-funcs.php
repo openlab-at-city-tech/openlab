@@ -1813,6 +1813,10 @@ add_action( 'bp_after_group_details_creation_step', function() {
 add_action( 'bp_after_group_details_creation_step', function() {
 	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
 
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
+
 	openlab_group_collaboration_tools_settings( $group_type );
 }, 6 );
 
