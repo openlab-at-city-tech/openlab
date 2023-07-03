@@ -49,16 +49,24 @@ register_activation_hook( __FILE__, 'olgc_activate' );
  * @since 1.0.0
  */
 function olgc_leave_comment_checkboxes() {
-	if ( ! olgc_is_instructor() ) {
+	$show_private_checkbox = olgc_is_instructor() || (int) get_queried_object()->post_author === get_current_user_id();
+	$show_grade_field      = olgc_is_instructor();
+
+	if ( ! $show_private_checkbox && ! $show_grade_field ) {
 		return;
 	}
 
 	?>
 	<div class="olgc-checkboxes">
-		<label for="olgc-private-comment"><?php _e( 'Make this comment private.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-private-comment" id="olgc-private-comment" value="1" />
-		<br />
-		<label for="olgc-add-a-grade"><?php _e( 'Add a grade.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-add-a-grade" id="olgc-add-a-grade" value="1" />
-		<br />
+		<?php if ( $show_private_checkbox ) : ?>
+			<label for="olgc-private-comment"><?php _e( 'Make this comment private.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-private-comment" id="olgc-private-comment" value="1" />
+			<br />
+		<?php endif; ?>
+
+		<?php if ( $show_grade_field ) : ?>
+			<label for="olgc-add-a-grade"><?php _e( 'Add a grade.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-add-a-grade" id="olgc-add-a-grade" value="1" />
+			<br />
+		<?php endif; ?>
 	</div>
 	<?php
 }
