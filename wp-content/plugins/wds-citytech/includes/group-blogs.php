@@ -1721,7 +1721,7 @@ add_filter( 'olpc_display_notices', '__return_false' );
  */
 function openlab_olgc_is_instructor() {
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	return groups_is_user_admin( get_current_user_id(), $group_id );
+	return (bool) groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 
