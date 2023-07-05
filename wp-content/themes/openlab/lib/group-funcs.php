@@ -257,6 +257,11 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
  * @return void
  */
 function openlab_add_to_my_portfolio_settings( $group_type = null ) {
+	// Portfolio only.
+	if ( openlab_is_portfolio() || ( bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' !== sanitize_text_field( wp_unslash( $_GET['type'] ) ) ) ) {
+		return;
+	}
+
 	if ( bp_is_group_create() ) {
 		$portfolio_sharing = 'yes';
 	} else {
