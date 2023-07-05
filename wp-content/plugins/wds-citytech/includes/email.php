@@ -1034,6 +1034,7 @@ function openlab_wpmu_welcome_user_notification( $user_id, $password, $meta = ar
 
 	$user = get_userdata( $user_id );
 
+	/** @phpstan-ignore-next-line */
 	$switched_locale = switch_to_user_locale( $user_id );
 
 	$welcome_email = __(
