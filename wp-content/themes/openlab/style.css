@@ -10924,11 +10924,8 @@ body.invite-new-members .ia-autocomplete-hit {
   gap: 12px;
   margin-bottom: 8px;
 }
-#invite-anyone-group-list button.remove-group {
-  background: none;
-  border: none;
-  color: #f00;
-  padding: 0;
+#invite-anyone-group-list a.remove-group {
+  cursor: pointer;
 }
 @media (max-width: 767px) {
   .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {
