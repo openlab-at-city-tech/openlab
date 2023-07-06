@@ -826,10 +826,8 @@ function wds_load_group_type( $group_type ) {
 		case 'portfolio':
 			switch ( $account_type ) {
 				case 'staff' :
-					$assoc_tooltip = 'Please select your school, office, or department, using the checkboxes below.';
-					break;
 				case 'faculty' :
-					$assoc_tooltip = 'Please select your school and department(s), using the checkboxes below.';
+					$assoc_tooltip = 'Please select your school, office, or department, using the checkboxes below.';
 					break;
 				default :
 					$assoc_tooltip = 'Please select the school and department(s) for your ePortfolio, using the checkboxes below.';
