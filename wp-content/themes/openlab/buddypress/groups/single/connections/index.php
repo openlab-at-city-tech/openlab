@@ -12,8 +12,6 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 
 <?php do_action( 'template_notices' ); ?>
 
-<p>This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.</p>
-
 <?php if ( $connections ) : ?>
 	<div class="connections-settings" data-group-id="<?php echo esc_attr( bp_get_current_group_id() ); ?>">
 		<?php foreach ( $connections as $connection ) : ?>
@@ -134,5 +132,7 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 		<?php endforeach; ?>
 	</div>
 <?php else : ?>
+	<p><?php esc_html_e( 'This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.', 'openlab-connections' ); ?></p>
+
 	<p><?php esc_html_e( 'This group does not have any connections.', 'openlab-connections' ); ?></p>
 <?php endif; ?>
