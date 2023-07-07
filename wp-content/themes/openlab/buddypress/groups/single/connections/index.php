@@ -132,7 +132,7 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 		<?php endforeach; ?>
 	</div>
 <?php else : ?>
-	<p><?php esc_html_e( 'This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.', 'openlab-connections' ); ?></p>
+	<p><?php echo wp_kses_post( 'This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.', 'openlab-connections' ); ?></p>
 
 	<p><?php esc_html_e( 'This group does not have any connections.', 'openlab-connections' ); ?></p>
 <?php endif; ?>
