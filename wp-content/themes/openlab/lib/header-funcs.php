@@ -56,7 +56,7 @@ function openlab_enqueue_frontend_scripts() {
 	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
 		 ( bp_is_group_create() && bp_is_action_variable( 'invite-anyone', 1 ) ) ||
 			 ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
-		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery', 'parsley', 'openlab-validators' ) );
 		wp_localize_script( 'openlab-group-create', 'OLGroupCreate', array(
 			'groupTypeCanBeCloned' => true, // No need to rewrite JS logic. Just enable for all groups.
 			'schools' => openlab_get_school_list(),

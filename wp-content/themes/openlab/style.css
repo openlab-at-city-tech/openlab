@@ -12176,3 +12176,24 @@ p.private-membership-indicator {
   font-size: 14px;
   color: #333;
 }
+/* Group create form */
+#create-group-form .error-container {
+  font-weight: 400;
+  border-radius: 4px;
+  background: #f7e700;
+  border-color: #f7e700;
+}
+#create-group-form .error-container ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+#create-group-form .error-container ul li {
+  padding: 15px;
+}
+#create-group-form .department-selector .error-container {
+  margin-top: 15px;
+}
+#create-group-form #site-options .error-container {
+  margin-bottom: 15px;
+}
