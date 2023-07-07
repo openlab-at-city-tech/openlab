@@ -603,18 +603,29 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 
 		// Get private groups of the user
 		$private_groups = openlab_get_user_private_membership( bp_displayed_user_id() );
-		$exclude_groups = '';
+
+		$exclude_groups = [];
 
 		// Exclude private groups if not current user's profile or don't have moderate access.
 		if( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
-			$exclude_groups = '&exclude=' . implode(',', $private_groups);
+			$exclude_groups += $private_groups;
 		}
 
-		$groups         = openlab_get_groups_of_user( $get_group_args );
+		$groups = openlab_get_groups_of_user( $get_group_args );
 
-		//echo $ids;
-		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( 'include=' . $groups['group_ids_sql'] . '&per_page=20' . $exclude_groups ) ) :
-			//    if ( bp_has_groups( 'include='.$ids.'&per_page=3&max=3' ) ) :
+		$bp_has_groups_args = [
+			'include'        => $groups['group_ids_sql'],
+			'per_page'       => 20,
+			'exclude_groups' => $exclude_groups,
+			'meta_query'     => [
+				'active_status' => [
+					'key'     => 'group_is_inactive',
+					'compare' => 'NOT EXISTS',
+				],
+			],
+		];
+
+		if ( ! empty( $groups['group_ids_sql'] ) && bp_has_groups( $bp_has_groups_args ) ) :
 			?>
 			<div id="<?php echo $type; ?>-activity-stream" class="<?php echo $type; ?>-list activity-list item-list<?php echo $last; ?> col-sm-8 col-xs-12">
 				<?php
