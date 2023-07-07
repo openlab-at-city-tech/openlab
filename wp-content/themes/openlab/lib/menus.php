@@ -672,9 +672,8 @@ function openlab_group_activity_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'activity';
 
     $current_item = $base_url;
-	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred' ], true ) ) {
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred', 'connections' ], true ) ) {
 		$current_item .= '?type=' . $_GET['type'];
-
 	}
 
     $menu_list = [
@@ -683,6 +682,10 @@ function openlab_group_activity_submenu() {
         $base_url . '?type=mentions'    => '@Mentions',
         $base_url . '?type=starred'     => 'Starred'
     ];
+
+	if ( class_exists( 'OpenLab\Connections\Util' ) && \OpenLab\Connections\Util::is_connections_enabled_for_group( bp_get_current_group_id() ) ) {
+		$menu_list[ $base_url . '?type=connections' ] = 'Connections&nbsp;&nbsp;<i class="fa fa-rss connections-icon"></i>';
+	}
 
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }

@@ -2271,6 +2271,39 @@ function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
                 'scope' => 'favorites'
             ];
             break;
+		case 'connections':
+			if ( class_exists( 'OpenLab\Connections\Util' ) && \OpenLab\Connections\Util::is_connections_enabled_for_group( bp_get_current_group_id() ) ) {
+				$connections = \OpenLab\Connections\Connection::get( [ 'group_id' => bp_get_current_group_id() ] );
+
+				$connected_group_ids = [];
+				foreach ( $connections as $connection ) {
+					$c_group_ids = $connection->get_group_ids();
+					foreach ( $c_group_ids as $c_group_id ) {
+						if ( $c_group_id !== bp_get_current_group_id() && ! in_array( $c_group_id, $connected_group_ids, true ) ) {
+							$connected_group_ids[] = $c_group_id;
+						}
+					}
+				}
+
+				$activity_query = [
+					[
+						'column'  => 'item_id',
+						'value'   => $connected_group_ids,
+						'compare' => 'IN',
+					],
+					[
+						'column' => 'component',
+						'value'  => 'groups',
+					]
+				];
+
+				$args['filter_query'] = $activity_query;
+
+				$args['scope']      = false;
+				$args['primary_id'] = false;
+			}
+
+			break;
     }
 
     return $args;

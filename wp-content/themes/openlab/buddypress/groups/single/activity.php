@@ -40,7 +40,14 @@ $filter_options = [
 		<?php endif; ?>
 
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
-			<?php bp_get_template_part( 'parts/activity/entry-group' ); ?>
+			<?php
+			if ( 'connections' === $type ) {
+				$template = 'activity/entry';
+			} else {
+				$template = 'parts/activity/entry-group';
+			}
+			?>
+			<?php bp_get_template_part( $template ); ?>
 		<?php endwhile; ?>
 
 		<?php echo openlab_activities_pagination_links(); ?>

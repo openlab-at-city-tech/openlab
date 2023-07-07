@@ -11020,6 +11020,9 @@ body.groups.connections .connection-invitation {
 body.groups.connections .connection-invitation-header {
   font-weight: bold;
 }
+.connections-icon {
+  color: #63dfd2;
+}
 body.invite-new-members ul.ui-autocomplete {
   background: #fff;
   border: 1px solid #333333;
