@@ -1862,6 +1862,10 @@ function openlab_social_media_fields() {
 			'title'    => 'Mastodon',
 			'field_id' => 0,
 		],
+		'orcid'    => [
+			'title'    => 'ORCID',
+			'field_id' => 0,
+		],
 		'tiktok' => [
 			'title'    => 'TikTok',
 			'field_id' => 0,
@@ -2028,6 +2032,11 @@ function openlab_format_social_media_field( $value, $slug ) {
 			case 'instagram' :
 				$do_link = true;
 				$url     = 'https://instagram.com/' . $sanitize_cb( $value );
+				break;
+
+			case 'orcid' :
+				$do_link = true;
+				$url     = 'https://orcid.org/' . $sanitize_cb( $value );
 				break;
 
 			case 'tiktok' :
