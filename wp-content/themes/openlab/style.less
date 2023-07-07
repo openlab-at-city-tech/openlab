@@ -333,8 +333,13 @@ input[type="submit"]{
 .img-responsive{
     max-width: 100%;
 }
-.disabled-label,.disabled-checkbox{
+.disabled-label,
+.disabled-checkbox
+{
 	opacity: 0.4;
+}
+input:disabled+label {
+	opacity: .7;
 }
 .form-control{
     margin-bottom: 15px;

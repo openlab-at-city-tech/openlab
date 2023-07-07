@@ -7577,6 +7577,9 @@ input[type="submit"] {
 .disabled-checkbox {
   opacity: 0.4;
 }
+input:disabled + label {
+  opacity: 0.7;
+}
 .form-control,
 .bp-docs #comments .comment-respond .comment-form-comment textarea {
   margin-bottom: 15px;

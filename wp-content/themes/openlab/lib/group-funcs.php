@@ -149,6 +149,8 @@ function openlab_group_privacy_membership_settings() {
 	$allow_joining_public  = ! openlab_public_group_has_disabled_joining( $group_id );
 	$allow_joining_private = ! openlab_private_group_has_disabled_membership_requests( $group_id );
 
+	$group_is_inactive = ! openlab_group_is_active( $group_id );
+
 	?>
 
 	<div class="panel panel-default panel-privacy-membership-settings <?php echo esc_attr( $class ); ?>">
@@ -157,13 +159,21 @@ function openlab_group_privacy_membership_settings() {
 			<div class="privacy-membership-settings-public">
 				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, membership will be by invitation only.</p>
 
-				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
+				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> <?php disabled( $group_is_inactive ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
+
+				<?php if ( $group_is_inactive ) : ?>
+					<p class="italics">This <?php echo esc_html( $group_type_label ); ?> is currently Not Active, which means that the "Join" feature is disabled. Visit <a href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>admin/edit-details/">Edit Details</a> for more details.</p>
+				<?php endif; ?>
 			</div>
 
 			<div class="privacy-membership-settings-private">
 				<p>By default, any OpenLab member can request membership in a private <?php echo esc_html( $group_type_label ); ?>. Uncheck the box below to remove the 'Request Membership' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, <?php echo esc_html( $group_type_label ); ?> membership will be by invitation only.</p>
 
-				<p><input type="checkbox" id="allow-joining-private" name="allow-joining-private" value="1" <?php checked( $allow_joining_private ); ?> /> <label for="allow-joining-private">Allow any OpenLab member to request membership to this private <?php echo esc_html( $group_type_label ); ?></label></p>
+				<p><input type="checkbox" id="allow-joining-private" name="allow-joining-private" value="1" <?php checked( $allow_joining_private ); ?> <?php disabled( $group_is_inactive ); ?> /> <label for="allow-joining-private">Allow any OpenLab member to request membership to this private <?php echo esc_html( $group_type_label ); ?></label></p>
+
+				<?php if ( $group_is_inactive ) : ?>
+					<p class="italics">This <?php echo esc_html( $group_type_label ); ?> is currently Not Active, which means that the "Request Membership" feature is disabled. Visit <a href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>admin/edit-details/">Edit Details</a> for more details.</p>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -308,7 +318,13 @@ add_action( 'bp_after_group_details_creation_step', 'openlab_add_to_my_portfolio
  * @return bool
  */
 function openlab_public_group_has_disabled_joining( $group_id ) {
-	return ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+
+	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
+		$disabled = true;
+	}
+
+	return $disabled;
 }
 
 /**
@@ -321,7 +337,13 @@ function openlab_public_group_has_disabled_joining( $group_id ) {
  * @return bool
  */
 function openlab_private_group_has_disabled_membership_requests( $group_id ) {
-	return ! empty( groups_get_groupmeta( $group_id, 'disable_private_group_membership_requests', true ) );
+	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_private_group_membership_requests', true ) );
+
+	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
+		$disabled = true;
+	}
+
+	return $disabled;
 }
 
 /**
