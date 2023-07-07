@@ -11004,10 +11004,6 @@ body.groups.connections .connection-invitations .sent,
 body.groups.connections .connection-invitations .received {
   flex: 0 0 150px;
 }
-body.groups.connections .connection-invitations .delete-invite {
-  color: red;
-  text-decoration: none;
-}
 body.groups.connections .connection-invitations .delete-invite:hover {
   text-decoration: underline;
 }
