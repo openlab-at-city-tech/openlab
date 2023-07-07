@@ -51,7 +51,7 @@
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
         <div id="openlab-main-content"></div>
 
-        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel" enctype="multipart/form-data">
+        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel" enctype="multipart/form-data" data-parsley-validate>
 
             <?php do_action('bp_before_create_group') ?>
 
@@ -136,42 +136,62 @@
 
 					<?php endif; ?>
 
-                    <?php /* Name/Description */ ?>
+                    <?php /* Name */ ?>
 
                     <div class="panel panel-default">
                         <div class="panel-heading semibold"><label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label></div>
-                            <div class="panel-body">
-                    <?php if ('course' == $group_type) : ?>
-                        <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
-                        <ul class="ol-tooltip" id="clone-course-tooltip-3">
-                            <li>CourseCode CourseName, Semester Year</li>
-                            <li>ARCH3522 NYC Arch, FA2013</li>
-                        </ul>
+                        <div class="panel-body">
+                            <?php if( 'course' == $group_type ) : ?>
+                                <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
+                                <ul class="ol-tooltip" id="clone-course-tooltip-3">
+                                    <li>CourseCode CourseName, Semester Year</li>
+                                    <li>ARCH3522 NYC Arch, FA2013</li>
+                                </ul>
+                            <?php elseif( 'portfolio' == $group_type ) : ?>
+                                <p class="ol-tooltip">The suggested <?php echo $group_label ?> Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.</p>
 
-                        <input class="form-control" size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" placeholder="Course Name" required />
+                                <ul class="ol-tooltip">
+                                    <li>FirstName LastName's <?php echo $group_label ?> </li>
+                                    <li>Jane Smith's <?php echo $group_label ?> (Example)</li>
+                                </ul>
+                            <?php else : ?>
+                                <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
+                            <?php endif; ?>
 
-                    <?php elseif ('portfolio' == $group_type) : ?>
-                        <p class="ol-tooltip">The suggested <?php echo $group_label ?> Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.</p>
-
-                        <ul class="ol-tooltip">
-                            <li>FirstName LastName's <?php echo $group_label ?> </li>
-                            <li>Jane Smith's <?php echo $group_label ?> (Example)</li>
-                        </ul>
-
-                        <input class="form-control" size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" required />
-
-                    <?php else : ?>
-                        <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
-                        <input class="form-control" size="80" type="text" name="group-name" id="group-name" value="<?php bp_new_group_name() ?>" required />
-
-                    <?php endif ?>
-                            </div>
+                            <input 
+                                class="form-control" 
+                                size="80" 
+                                type="text" 
+                                name="group-name" 
+                                id="group-name" 
+                                value="<?php bp_new_group_name() ?>" 
+                                data-parsley-required
+                                data-parsley-error-message="Please fill in a name."
+                                data-parsley-errors-container="#field_name_error"
+                                data-parsley-trigger="blur"
+                            />
+                            <div id="field_name_error" class="error-container"></div>
+                        </div>
                     </div>
 
+                    <?php /* Description */?>
                     <div class="panel panel-default">
-                        <div class="panel-heading semibold"><label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label></div>
+                        <div class="panel-heading semibold">
+                            <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
+                        </div>
                         <div class="panel-body">
-                            <textarea class="form-control" name="group-desc" id="group-desc" required><?php bp_new_group_description() ?></textarea>
+                            <textarea 
+                                class="form-control" 
+                                name="group-desc" 
+                                id="group-desc" 
+                                data-parsley-required
+                                data-parsley-error-message="Please fill in a description."
+                                data-parsley-errors-container="#field_description_error"
+                                data-parsley-trigger="blur"
+                            >
+                                <?php bp_new_group_description() ?>
+                            </textarea>
+                            <div id="field_description_error" class="error-container"></div>
                         </div>
                     </div>
 

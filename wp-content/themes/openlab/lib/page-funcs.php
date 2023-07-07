@@ -515,7 +515,7 @@ function openlab_registration_page() {
 									id="openlab-account-type"
 									data-parsley-required
 									data-parsley-required-message="Account type is required."
-									data-parsley-errors-container="openlab-account-type-error"
+									data-parsley-errors-container="#openlab-account-type-error"
 								/>
 									<option value="">----</option>
 									<?php foreach ( $account_type_options as $account_type_option ) : ?>

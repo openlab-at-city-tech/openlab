@@ -11045,11 +11045,8 @@ body.invite-new-members .ia-autocomplete-hit {
   gap: 12px;
   margin-bottom: 8px;
 }
-#invite-anyone-group-list button.remove-group {
-  background: none;
-  border: none;
-  color: #f00;
-  padding: 0;
+#invite-anyone-group-list a.remove-group {
+  cursor: pointer;
 }
 @media (max-width: 767px) {
   .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {
@@ -12299,4 +12296,25 @@ p.private-membership-indicator {
   margin: 0 0 15px;
   font-size: 14px;
   color: #333;
+}
+/* Group create form */
+#create-group-form .error-container {
+  font-weight: 400;
+  border-radius: 4px;
+  background: #f7e700;
+  border-color: #f7e700;
+}
+#create-group-form .error-container ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+#create-group-form .error-container ul li {
+  padding: 15px;
+}
+#create-group-form .department-selector .error-container {
+  margin-top: 15px;
+}
+#create-group-form #site-options .error-container {
+  margin-bottom: 15px;
 }

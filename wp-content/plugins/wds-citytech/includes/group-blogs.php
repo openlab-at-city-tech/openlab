@@ -732,7 +732,20 @@ function wds_bp_group_meta() {
 												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 											</div>
 											<div class="col-sm-13">
-												<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
+												<input 
+													class="form-control domain-validate" 
+													size="40" 
+													id="clone-destination-path" 
+													name="clone-destination-path" 
+													type="text" 
+													title="Path" 
+													value="" 
+													data-parsley-validate-if-empty="true"
+													data-parsley-new-site-validate="#new_or_old_clone"
+													data-parsley-errors-container="#field_clone_site_error"
+													data-parsley-trigger="blur"
+												/>
+												<div id="field_clone_site_error" class="error-container"></div>
 											</div>
 											<input name="blog-id-to-clone" value="" type="hidden" />
 										</div>
@@ -760,7 +773,20 @@ function wds_bp_group_meta() {
 										</div>
 
 										<div class="col-sm-13">
-											<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
+											<input 
+												id="new-site-domain" 
+												class="form-control domain-validate" 
+												size="40" 
+												name="blog[domain]" 
+												type="text" 
+												title="Domain" 
+												value="<?php echo esc_html( $suggested_path ); ?>"
+												data-parsley-validate-if-empty="true"
+												data-parsley-new-site-validate="#new_or_old_new"
+												data-parsley-errors-container="#field_new_site_error"
+												data-parsley-trigger="blur"
+											/>
+											<div id="field_new_site_error" class="error-container"></div>
 										</div>
 									</div>
 
@@ -1721,7 +1747,7 @@ add_filter( 'olpc_display_notices', '__return_false' );
  */
 function openlab_olgc_is_instructor() {
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	return groups_is_user_admin( get_current_user_id(), $group_id );
+	return (bool) groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 

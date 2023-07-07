@@ -19,7 +19,7 @@
         });
 			},
       select: function( event, ui ) {
-				var newEl = '<li class="ia-group-for-invite" data-groupid="' + ui.item.itemId + '"><button class="remove-group"><span class="screen-reader-text">Remove group invitation</span><i class="fa fa-times"></i></button>' + ui.item.icon + '<span>' + ui.item.label + '</span><input type="hidden" name="invite_anyone_groups[]" value="' + ui.item.itemId + '" /></li>';
+				var newEl = '<li class="ia-group-for-invite" data-groupid="' + ui.item.itemId + '"><a class="remove-group"><span class="screen-reader-text">Remove group invitation</span>x</a>' + ui.item.icon + '<span>' + ui.item.label + '</span><input type="hidden" name="invite_anyone_groups[]" value="' + ui.item.itemId + '" /></li>';
 				$groupList.append( newEl )
 				$acInput.val( '' )
         return false;

@@ -53,8 +53,6 @@ $table_prefix  = 'wp_';
  */
 define( 'WPLANG', 'en_US' );
 
-define( 'WWPE_ENDPOINT_URL', 'http://localhost:3000/render-api' );
-
 define('WP_ALLOW_MULTISITE', true);
 define( 'MULTISITE', true );
 define( 'SUBDOMAIN_INSTALL', false );

@@ -257,6 +257,48 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 }
 
 /**
+ * Markup for the 'Add to My Portfolio' panel.
+ *
+ * @return void
+ */
+function openlab_add_to_my_portfolio_settings( $group_type = null ) {
+	// Portfolio only.
+	$is_portfolio        = openlab_is_portfolio();
+	$is_portfolio_create = bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' === sanitize_text_field( wp_unslash( $_GET['type'] ) );
+
+	if ( ! $is_portfolio && ! $is_portfolio_create ) {
+		return;
+	}
+
+	if ( bp_is_group_create() ) {
+		$portfolio_sharing = 'yes';
+	} else {
+		$portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_portfolio_sharing' );
+	}
+
+	?>
+	<div class="panel panel-default">
+		<div class="panel-heading">Add to My Portfolio</div>
+		<div class="panel-body">
+			<div class="editfield">
+				<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
+
+				<div class="checkbox">
+					<label for="portfolio-sharing">
+						<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
+						Enable "Add to My Portfolio"
+					</label>
+				</div>
+
+				<?php wp_nonce_field( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce', false ); ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+add_action( 'bp_after_group_details_creation_step', 'openlab_add_to_my_portfolio_settings', 100 );
+
+/**
  * Determines whether public joining is disabled for a public group.
  *
  * To avoid bloat in the database, we're only recording when the default behavior is
@@ -1817,6 +1859,10 @@ add_action( 'bp_after_group_details_creation_step', function() {
 
 add_action( 'bp_after_group_details_creation_step', function() {
 	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
 
 	openlab_group_collaboration_tools_settings( $group_type );
 }, 6 );
