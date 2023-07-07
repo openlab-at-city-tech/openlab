@@ -22,3 +22,6 @@
 [submodule "wp-content/plugins/openlab-modules"]
 	path = wp-content/plugins/openlab-modules
 	url = git@github.com:openlab-at-city-tech/openlab-modules
+[submodule "wp-content/plugins/openlab-connections"]
+	path = wp-content/plugins/openlab-connections
+	url = git@github.com:openlab-at-city-tech/openlab-connections

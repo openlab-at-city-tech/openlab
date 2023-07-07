@@ -216,6 +216,8 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 	$docs_enabled          = openlab_is_docs_enabled_for_group();
 	$files_enabled         = openlab_is_files_enabled_for_group();
 
+	$connections_enabled = method_exists( 'OpenLab\Connections\Util', 'is_connections_enabled_for_group' ) ? \OpenLab\Connections\Util::is_connections_enabled_for_group( bp_get_current_group_id() ) : false;
+
 	$helper_text  = 'You can enable or disable any of the following collaboration tools on your ' . $group_label_uc . ' profile. This can be changed any time in ' . $group_label_uc . ' Settings.';
 	if ( 'portfolio' === $group_type ) {
 		$show_announcement_toggle = false;
@@ -243,6 +245,9 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 			</div>
 			<div class="checkbox checkbox-float">
 				<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+			</div>
+			<div class="checkbox checkbox-float">
+				<label><input type="checkbox" name="openlab-edit-group-connections" id="group-show-connections" value="1"<?php checked( $connections_enabled ); ?> /> Enable Connections</label>
 			</div>
 		</div>
 
@@ -2266,6 +2271,39 @@ function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
                 'scope' => 'favorites'
             ];
             break;
+		case 'connections':
+			if ( class_exists( 'OpenLab\Connections\Util' ) && \OpenLab\Connections\Util::is_connections_enabled_for_group( bp_get_current_group_id() ) ) {
+				$connections = \OpenLab\Connections\Connection::get( [ 'group_id' => bp_get_current_group_id() ] );
+
+				$connected_group_ids = [];
+				foreach ( $connections as $connection ) {
+					$c_group_ids = $connection->get_group_ids();
+					foreach ( $c_group_ids as $c_group_id ) {
+						if ( $c_group_id !== bp_get_current_group_id() && ! in_array( $c_group_id, $connected_group_ids, true ) ) {
+							$connected_group_ids[] = $c_group_id;
+						}
+					}
+				}
+
+				$activity_query = [
+					[
+						'column'  => 'item_id',
+						'value'   => $connected_group_ids,
+						'compare' => 'IN',
+					],
+					[
+						'column' => 'component',
+						'value'  => 'groups',
+					]
+				];
+
+				$args['filter_query'] = $activity_query;
+
+				$args['scope']      = false;
+				$args['primary_id'] = false;
+			}
+
+			break;
     }
 
     return $args;

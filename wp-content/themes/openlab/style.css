@@ -7272,6 +7272,17 @@ a.lighter-hover:hover,
 a.lighter-hover:focus {
   color: #49cabe;
 }
+/* Button elements styled like text links. */
+button.link-button {
+  background: none;
+  border: none;
+  color: #333333;
+  padding: 0;
+  text-decoration: underline;
+}
+button.link-button:hover {
+  text-decoration: none;
+}
 body .darken-for-accessibility {
   color: #3ba49b;
 }
@@ -10898,6 +10909,119 @@ a.delete-doc-button {
 #invite-anyone-invite-list li img {
   float: left;
   margin-right: 5px;
+}
+body.groups.connections .bp-template-notice {
+  margin-bottom: 20px;
+}
+body.groups.connections .connection-settings {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+}
+body.groups.connections .connection-settings .primary-column {
+  flex: 1;
+}
+body.groups.connections .connection-settings .avatar-column {
+  flex: 0 0 75px;
+}
+body.groups.connections .connection-settings .avatar-column .avatar {
+  height: 75px;
+  width: 75px;
+}
+body.groups.connections .connection-settings .connected-group-link {
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+body.groups.connections .connection-settings .disconnect-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+body.groups.connections .connection-settings .connection-setting-checkbox-subsettings {
+  padding-left: 10px;
+}
+body.groups.connections .connection-settings select {
+  width: 80%;
+}
+body.groups.connections .accordion-toggle {
+  background: none;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+body.groups.connections .accordion-content {
+  display: none;
+  padding: 10px;
+}
+body.groups.connections .accordion-toggle[aria-expanded="true"] .accordion-caret {
+  transform: rotate(90deg);
+}
+body.groups.connections .accordion-caret {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 16px;
+}
+body.groups.connections .group-list {
+  margin-top: 10px;
+}
+body.groups.connections .group-list .group-item-wrapper {
+  height: auto;
+}
+body.groups.connections ul.ui-autocomplete {
+  background: #fff;
+  border: 1px solid #333333;
+  list-style-type: none;
+  max-width: 50%;
+  padding: 15px;
+}
+body.groups.connections .ui-menu-item-wrapper {
+  padding: 6px;
+}
+body.groups.connections .connection-invitations {
+  display: flex;
+  flex-direction: column;
+}
+body.groups.connections .connection-invitations .actions {
+  flex: 0 0 50px;
+}
+body.groups.connections .connection-invitations .actions a {
+  text-decoration: none;
+}
+body.groups.connections .connection-invitations.pending-invitations .actions {
+  flex: 1;
+}
+body.groups.connections .connection-invitations .group {
+  flex-grow: 1;
+}
+body.groups.connections .connection-invitations .sent,
+body.groups.connections .connection-invitations .received {
+  flex: 0 0 150px;
+}
+body.groups.connections .connection-invitations .delete-invite {
+  color: red;
+  text-decoration: none;
+}
+body.groups.connections .connection-invitations .delete-invite:hover {
+  text-decoration: underline;
+}
+body.groups.connections .connection-invitation {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+body.groups.connections .connection-invitation-header {
+  font-weight: bold;
+}
+.connections-icon {
+  color: #63dfd2;
 }
 body.invite-new-members ul.ui-autocomplete {
   background: #fff;

@@ -364,6 +364,14 @@ function openlab_group_feature_toggle( $group ) {
 	} else {
 		groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
 	}
+
+	// Connections.
+	$enable_calendar = ! empty( $_POST['openlab-edit-group-connections'] );
+	if ( ! $enable_calendar ) {
+		groups_update_groupmeta( $group_id, 'openlab_connections_disabled', '1' );
+	} else {
+		groups_delete_groupmeta( $group_id, 'openlab_connections_disabled' );
+	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_feature_toggle' );
 
