@@ -87,7 +87,7 @@
             return true;
         },
         messages: {
-            en: 'You must provide a site address.'
+            en: 'Please provide a site address.'
         }
     });
 
