@@ -111,6 +111,11 @@ $social_fields = openlab_social_media_fields();
 							continue;
 						}
 
+						// Skip the 'Google Scholar profile' field if it's empty.
+						if ( false !== strpos( bp_get_the_profile_field_name(), 'Google Scholar' ) && ! bp_get_the_profile_field_edit_value() ) {
+							continue;
+						}
+
                         ?>
 
                         <?php if ( $just_did_title ) : ?>
