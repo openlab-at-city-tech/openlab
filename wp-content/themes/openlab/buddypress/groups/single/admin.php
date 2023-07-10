@@ -70,20 +70,8 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 					<?php do_action( 'groups_custom_group_fields_editable' ); ?>
 
-					<?php if ( ! openlab_is_portfolio() ) : ?>
-						<div class="notify-settings">
-							<p class="ol-tooltip notify-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></p>
-							<div class="radio">
-								<label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
-								<label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
-							</div>
-						</div>
+					<input type="hidden" name="group-notify-members" value="0" />
 
-					<?php else : ?>
-
-						<input type="hidden" name="group-notify-members" value="0" />
-
-					<?php endif ?>
 				</div>
 			</div>
 
