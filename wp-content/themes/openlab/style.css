@@ -8311,6 +8311,7 @@ body .group-active-status-fieldset p {
   margin-bottom: 8px;
 }
 body .group-active-status-fieldset label {
+  font-weight: 600;
   margin-left: 8px;
 }
 body .group-creators-section {
