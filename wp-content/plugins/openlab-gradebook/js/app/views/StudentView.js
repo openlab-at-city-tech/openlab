@@ -51,7 +51,7 @@ define([
 						type: "none"
 					},
 					{
-						label: "P = Passing Work",
+						label: "P = Making Satisfactory Progress",
 						value: "passing_display",
 						type: "display_item"
 					},
