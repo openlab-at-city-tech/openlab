@@ -1940,10 +1940,10 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 					<?php foreach ( $saved_social_fields as $saved_social_field_slug => $saved_social_field_value ) : ?>
 						<li class="form-inline label-combo row">
 							<div class="form-group col-sm-9">
-								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Service</label>
+								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Platform</label>
 
 								<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>">
-									<option value="">- Select a service -</option>
+									<option value="">- Select a platform -</option>
 									<?php foreach ( $social_fields as $social_field_slug => $social_field_data ) : ?>
 										<option value="<?php echo esc_attr( $social_field_slug ); ?>" <?php selected( $social_field_slug, $saved_social_field_slug ); ?>><?php echo esc_html( $social_field_data['title'] ); ?></option>
 									<?php endforeach; ?>
