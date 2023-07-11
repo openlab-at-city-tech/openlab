@@ -1,3 +1,37 @@
+### 5.13.0
+
+- Added support for WebP images in `[su_image_carousel]`
+- Minor updates to the codebase
+- Tested compatibility with WordPress 6.2.2
+- Fixed issue with swiper.js ([forum topic](https://wordpress.org/support/topic/theme-compability-3/))
+- Fixed issue with media taxonomies in `[su_custom_gallery]` ([forum topic](https://wordpress.org/support/topic/gallery-shortcode-source-taxonomy-still-not-solved/))
+
+
+### 5.12.11
+
+**Stability release**
+
+This update provides minor improvements to the plugin codebase and bugfixes
+
+
+### 5.12.10
+
+This update provides minor improvements to the plugin codebase and removes connectivity test upon activation
+It also fixes the fatal error introduced in version 5.12.9
+
+
+### 5.12.9
+
+This update provides minor improvements to the plugin codebase and removes connectivity test upon activation
+
+
+### 5.12.8
+
+**Security update**
+
+This update features security improvements and is recommended for all users
+
+
 ### 5.12.7
 
 **Security update**
