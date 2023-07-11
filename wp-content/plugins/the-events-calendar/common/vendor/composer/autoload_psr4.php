@@ -6,14 +6,19 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'lucatume\\DI52\\' => array($vendorDir . '/lucatume/di52/src'),
     'Tribe\\' => array($baseDir . '/src/Tribe'),
     'TEC\\Common\\' => array($baseDir . '/src/Common'),
+    'StellarWP\\Telemetry\\Views_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/views'),
+    'StellarWP\\Telemetry\\Assets_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/resources'),
+    'StellarWP\\Telemetry\\' => array($vendorDir . '/stellarwp/telemetry/src/Telemetry'),
     'StellarWP\\Installer\\Assets_JS\\' => array($vendorDir . '/stellarwp/installer/src/assets/js'),
     'StellarWP\\Installer\\Admin_Views\\' => array($vendorDir . '/stellarwp/installer/src/admin-views'),
     'StellarWP\\Installer\\' => array($vendorDir . '/stellarwp/installer/src/Installer'),
     'StellarWP\\DB\\' => array($vendorDir . '/stellarwp/db/src/DB'),
     'StellarWP\\ContainerContract\\' => array($vendorDir . '/stellarwp/container-contract/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
 );

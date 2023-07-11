@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0
+class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -28,6 +28,8 @@ class ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'TEC\\Events\\Custom_Tables\\V1\\Activation' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Activation.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Max_Recurrence' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Occurrences/Max_Recurrence.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Max_Recurrence_Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Occurrences/Max_Recurrence_Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Occurrences_Generator' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Occurrences/Occurrences_Generator.php',
@@ -36,6 +38,8 @@ class ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0
         'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Feedback/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Full_Activation_Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Full_Activation_Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Health_Check' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Health_Check.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\ACF\\Controller' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/ACF/Controller.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\ACF\\Query_Modifier' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/ACF/Query_Modifier.php',
         'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Phase_View_Renderer' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Phase_View_Renderer.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Progress_Modal' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Progress_Modal.php',
@@ -143,12 +147,25 @@ class ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0
         'TEC\\Events\\Editor\\Full_Site\\Templates' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Templates.php',
         'TEC\\Events\\Installer\\Provider' => __DIR__ . '/../..' . '/src/Events/Installer/Provider.php',
         'TEC\\Events\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Events/Integrations/Integration_Abstract.php',
-        'TEC\\Events\\Integrations\\Plugins\\Plugin_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Plugin_Integration.php',
+        'TEC\\Events\\Integrations\\Plugins\\Colbri_Page_Builder\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Colbri_Page_Builder/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Elementor\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Elementor/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Email\\RSVP' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Email/RSVP.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Email\\Ticket' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Email/Ticket.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Emails' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Emails.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Hooks' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Hooks.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\JSON_LD\\Event_Data' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/JSON_LD/Event_Data.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Template' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Template.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
-        'TEC\\Events\\Integrations\\Themes\\Theme_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Themes/Theme_Integration.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
+        'TEC\\Events\\Site_Health\\Info_Section' => __DIR__ . '/../..' . '/src/Events/Site_Health/Info_Section.php',
+        'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
+        'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
+        'TEC\\Events\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Events/Telemetry/Telemetry.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
         'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
         'Tribe\\Events\\Admin\\Notice\\Install_Event_Tickets' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Install_Event_Tickets.php',
@@ -282,9 +299,9 @@ class ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcd0cd91306ca46f339db5445aa4762d0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$classMap;
 
         }, null, ClassLoader::class);
     }
