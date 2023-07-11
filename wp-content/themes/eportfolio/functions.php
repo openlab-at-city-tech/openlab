@@ -177,8 +177,10 @@ function eportfolio_scripts() {
     wp_localize_script( 'eportfolio-script', 'ePortfolioVal', $args );
 
 	wp_enqueue_style( 'eportfolio-style', get_stylesheet_uri() );
+    wp_style_add_data('eportfolio-style', 'rtl', 'replace');
 
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
