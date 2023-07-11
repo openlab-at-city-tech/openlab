@@ -115,7 +115,9 @@ abstract class GP_Plugin extends GFAddOn {
 
 	public function meets_minimum_requirements() {
 
-		$min = is_callable( 'parent::meets_minimum_requirements' ) ? parent::meets_minimum_requirements() : array();
+		$callable = version_compare( PHP_VERSION, '8.0', '>=' ) ? parent::class . '::meets_minimum_requirements' : 'parent::meets_minimum_requirements';
+
+		$min = is_callable( $callable ) ? parent::meets_minimum_requirements() : array();
 
 		return array_merge_recursive( $min, $this->perk->check_gf_requirements_plugins_array() );
 

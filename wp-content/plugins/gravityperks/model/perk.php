@@ -26,6 +26,13 @@ class GP_Perk {
 	*/
 	protected $slug;
 
+	/**
+	 * ID of the product getting registered.
+	 *
+	 * @var string
+	 */
+	public $product_id;
+
 	function __construct( $perk_file = null, $product_id = null ) {
 
 		if ( ! class_exists( 'GWPerks' ) ) {

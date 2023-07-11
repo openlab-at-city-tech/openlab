@@ -1,6 +1,20 @@
 
 # Changelog
 
+## 2.3.2
+
+	- Fixed an issue where certain security restrictions may block admin access to managing Perks.
+
+## 2.3.1
+
+	- Fixed deprecation notices in PHP 8.2.
+	- Fixed an issue where multiple requests could be sent to the Gravity Wiz API when checking for updates.
+
+## 2.3
+
+	- Added support for legacy version channels.
+	- Fixed a typo in an error message.
+
 ## 2.2.9
 
 	- Improved performance by decreasing the number of calls to `get_plugins()`.
