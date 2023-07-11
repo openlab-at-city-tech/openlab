@@ -9,7 +9,11 @@ $s2_admin = ! empty( $_POST['s2_admin'] ) ? sanitize_key( $_POST['s2_admin'] ) :
 
 // was anything POSTed?
 if ( 'mail' === $s2_admin ) {
-	if ( isset( $_REQUEST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'subscribe2-write_subscribers' . S2VERSION ) ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		die( '<p>' . esc_html__( 'Security error! You are not able to send email.', 'subscribe2' ) . '</p>' );
+	}
+
+	if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'subscribe2-write_subscribers' . S2VERSION ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
@@ -97,9 +101,12 @@ if ( 'mail' === $s2_admin ) {
 		}
 	} else {
 		global $phpmailer;
-		$message = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2' ) . '</p>' . $error_message . $phpmailer->ErrorInfo;
+
+		$mailer_error = ! empty( $phpmailer->ErrorInfo ) ? $phpmailer->ErrorInfo : '';
+		$message      = '<p class="s2_error">' . __( 'Message failed!', 'subscribe2' ) . '</p>' . $error_message . $mailer_error;
 	}
-	echo '<div id="message" class="updated"><strong><p>' . wp_kses_post( $message ) . '</p></strong></div>' . "\r\n";
+
+	echo '<div id="message" class="' . ( $success ? 'updated' : 'error' ) . '"><strong><p>' . wp_kses_post( $message ) . '</p></strong></div>' . "\r\n";
 }
 
 // show our form
@@ -118,7 +125,7 @@ if ( isset( $_POST['subject'] ) ) {
 
 echo '<p>' . esc_html__( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
 echo '<textarea rows="12" cols="75" name="content">' . $body . '</textarea>';
-echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\"></div>\r\n";
+echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\" onChange=\"remove_selected_image()\"></div>\r\n";
 echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
 echo "<br><br>\r\n";
 echo esc_html__( 'Recipients:', 'subscribe2' ) . ' ';
@@ -129,14 +136,56 @@ echo '</form></div>' . "\r\n";
 echo '<div style="clear: both;"><p>&nbsp;</p></div>';
 ?>
 <script type="text/javascript">
-//<![CDATA[
-function add_file_upload() {
-	var div = document.getElementById( 'upload_files' );
-	var field = div.getElementsByTagName( 'input' )[0];
-	div.appendChild( document.createElement( 'br' ) );
-	div.appendChild( field.cloneNode( false ) );
-}
-//]]>
+    //<![CDATA[
+    function add_file_upload() {
+        const fileUploadContainer = document.getElementById('upload_files'),
+            fileNode = document.createElement('input'),
+            spanNode = document.createElement('span'),
+            lineBreak = document.createElement('br');
+
+        // Insert multiple file.
+        if (!Boolean(fileNode.value)) {
+            fileNode.type = 'file';
+            fileNode.name = 'file[]';
+            spanNode.classList.add('dashicons', 'dashicons-no-alt');
+            spanNode.style.marginTop = '4px';
+
+            fileUploadContainer.appendChild(lineBreak);
+            fileUploadContainer.appendChild(fileNode);
+            fileUploadContainer.appendChild(spanNode);
+        }
+
+        // Remove uploaded image if selected otherwise remove field.
+        spanNode.addEventListener('click', function () {
+            if (Boolean(fileNode.value)) {
+                fileNode.value = '';
+                return;
+            }
+
+            fileNode.remove();
+            spanNode.remove();
+            lineBreak.remove();
+        });
+    }
+
+    // Handle first selected image.
+    function remove_selected_image() {
+        const fileUploadContainer = document.getElementById('upload_files'),
+            firstFile = fileUploadContainer.getElementsByTagName('input')[0],
+            spanNode = document.createElement('span');
+
+        if (!Boolean(firstFile.nextSibling)) {
+            spanNode.style.marginTop = '4px';
+            spanNode.classList.add('dashicons', 'dashicons-no-alt');
+            firstFile.after(spanNode);
+        }
+
+        spanNode.addEventListener('click', function () {
+            firstFile.value = '';
+            this.remove();
+        });
+    }
+    //]]>
 </script>
 <?php
 require ABSPATH . 'wp-admin/admin-footer.php';

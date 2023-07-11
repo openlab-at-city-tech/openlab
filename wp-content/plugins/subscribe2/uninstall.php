@@ -8,8 +8,10 @@ if ( is_plugin_active( 'subscribe2_html/subscribe2.php' ) ) {
 	return;
 }
 
+$s2_mu = false;
+
 // Is this WordPressMU or not?
-if ( isset( $wpmu_version ) || strpos( $wp_version, 'wordpress-mu' ) ) {
+if ( isset( $wpmu_version ) || ( isset( $wp_version ) && strpos( $wp_version, 'wordpress-mu' ) ) ) {
 	$s2_mu = true;
 }
 

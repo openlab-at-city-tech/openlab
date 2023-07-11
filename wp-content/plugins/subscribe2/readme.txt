@@ -4,7 +4,7 @@ Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
 Tested up to: 6.1.1
-Stable tag: 10.39
+Stable tag: 10.41
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -71,6 +71,22 @@ This token will automatically be replaced by dynamic subscription information an
 [Visit FAQ site](https://subscribe2.wordpress.com/support/faqs/)
 
 == Changelog ==
+
+= 10.41 (23rd June, 2023) =
+
+* Fix: CSRF, Authorization issues when send an email.
+* Fix: Use built-in sanitize_email instead of manual.
+
+= 10.40 (24th January, 2023) =
+
+* Fix: {UNSUBLINK} tag not working properly when send an email.
+* Fix: subscribe2 emails no longer sending when publish a post.
+* Fix: template entities not working properly in settings page (line breaks, tabs were lost etc.).
+* Fix: subscribe2 notification overridden checkbox not working properly.
+* Fix: debug error when uninstall plugin & use error suppression.
+* Fix: email sending is always selected when multiple choose attachment.
+
+* Enhance: add email attachment removing option from send email.
 
 = 10.39 (23st December, 2022) =
 

@@ -119,7 +119,6 @@ class S2_Ajax {
 			wp_die();
 		}
 
-
 		$data = ! empty( $_POST['data'] ) ? array_map( 'sanitize_text_field', $_POST['data'] ) : array();
 		if ( ! empty( $data['firstname'] ) || ! empty( $data['lastname'] ) || ( isset( $data['uri'] ) && 'http://' !== $data['uri'] ) ) {
 			// Looks like some invisible-to-user fields were changed, falsely report success.
@@ -129,7 +128,7 @@ class S2_Ajax {
 
 		global $s2_frontend, $wpdb;
 
-		$s2_frontend->email = $s2_frontend->sanitize_email( $data['email'] );
+		$s2_frontend->email = sanitize_email( $data['email'] );
 		$s2_frontend->ip    = ! empty( $data['ip'] ) ? sanitize_text_field( $data['ip'] ) : '';
 
 		if ( false === $s2_frontend->validate_email( $s2_frontend->email ) ) {

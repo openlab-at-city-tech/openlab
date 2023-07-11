@@ -308,7 +308,7 @@ class S2_Upgrade {
 		$public_subscribers = array_merge( (array) $confirmed, (array) $unconfirmed );
 
 		foreach ( $public_subscribers as $email ) {
-			$new_email = $mysubscribe2->sanitize_email( $email );
+			$new_email = sanitize_email( $email );
 			if ( $email !== $new_email ) {
 				$wpdb->get_results( $wpdb->prepare( "UPDATE $wpdb->subscribe2 SET email=%s WHERE CAST(email as binary)=%s", $new_email, $email ) );
 			}
