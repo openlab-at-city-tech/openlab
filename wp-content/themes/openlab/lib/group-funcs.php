@@ -216,7 +216,7 @@ function openlab_group_privacy_membership_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_group_privacy_membership_save' );
 
 /**
- * Markup for the 'Collaboratio Tools' section on group settings.
+ * Markup for the 'Collaboration Tools' section on group settings.
  */
 function openlab_group_collaboration_tools_settings( $group_type = null ) {
 	$group_label_uc = openlab_get_current_group_type( 'case=upper' );

@@ -366,11 +366,11 @@ function openlab_group_feature_toggle( $group ) {
 	}
 
 	// Connections.
-	$enable_calendar = ! empty( $_POST['openlab-edit-group-connections'] );
-	if ( ! $enable_calendar ) {
-		groups_update_groupmeta( $group_id, 'openlab_connections_disabled', '1' );
+	$enable_connections = ! empty( $_POST['openlab-edit-group-connections'] );
+	if ( ! $enable_connections ) {
+		groups_delete_groupmeta( $group_id, 'openlab_connections_enabled' );
 	} else {
-		groups_delete_groupmeta( $group_id, 'openlab_connections_disabled' );
+		groups_update_groupmeta( $group_id, 'openlab_connections_enabled', '1' );
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_feature_toggle' );
