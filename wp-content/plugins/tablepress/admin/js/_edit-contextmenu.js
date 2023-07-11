@@ -67,30 +67,55 @@ export default function contextMenu( obj /*, x, y, e */ ) {
 			title: __( 'Cut', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sX', 'keyboard shortcut for Cut', 'tablepress' ), meta_key ),
 			onclick() {
-				obj.copy( true ); // Copy highlighted cells.
-				obj.setValue( obj.highlighted, '' );
+				/* eslint-disable @wordpress/no-global-active-element */
+				if ( 'TEXTAREA' === document.activeElement.tagName && document.activeElement.selectionStart !== document.activeElement.selectionEnd ) {
+					document.execCommand( 'copy' ); // If text is selected in the actively edited cell, only copy that.
+					const cursorPosition = document.activeElement.selectionStart;
+					document.activeElement.value = document.activeElement.value.slice( 0, document.activeElement.selectionStart ) + document.activeElement.value.slice( document.activeElement.selectionEnd ); // Cut the selected content.
+					document.activeElement.selectionEnd = cursorPosition;
+				} else {
+					obj.copy( true ); // Otherwise, copy highlighted cells.
+					obj.setValue( obj.highlighted, '' ); // Make cell content empty.
+				}
+				/* eslint-enable @wordpress/no-global-active-element */
 			},
 		},
 		{
 			title: __( 'Copy', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sC', 'keyboard shortcut for Copy', 'tablepress' ), meta_key ),
 			onclick() {
-				obj.copy( true ); // Copy highlighted cells.
+				if ( 'TEXTAREA' === document.activeElement.tagName && document.activeElement.selectionStart !== document.activeElement.selectionEnd ) { // eslint-disable-line @wordpress/no-global-active-element
+					document.execCommand( 'copy' ); // If text is selected in the actively edited cell, only copy that.
+				} else {
+					obj.copy( true ); // Otherwise, copy highlighted cells.
+				}
 			},
 		},
 		{
 			title: __( 'Paste', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sV', 'keyboard shortcut for Paste', 'tablepress' ), meta_key ),
 			onclick() {
-				if ( obj.selectedCell ) {
+				/* eslint-disable @wordpress/no-global-active-element */
+				if ( 'TEXTAREA' === document.activeElement.tagName ) {
+					window.navigator.clipboard.readText().then( ( text ) => {
+						if ( text ) {
+							const cursorPosition = document.activeElement.selectionStart + text.length;
+							document.activeElement.value = document.activeElement.value.slice( 0, document.activeElement.selectionStart ) + text + document.activeElement.value.slice( document.activeElement.selectionEnd ); // Paste at the selection.
+							document.activeElement.selectionEnd = cursorPosition;
+						}
+					} );
+				} else if ( obj.selectedCell ) {
 					window.navigator.clipboard.readText().then( ( text ) => {
 						if ( text ) {
 							obj.paste( obj.selectedCell[0], obj.selectedCell[1], text );
 						}
 					} );
 				}
+				/* eslint-enable @wordpress/no-global-active-element */
 			},
-			disabled: ! window?.navigator?.clipboard,
+			// Firefox does not offer the readText() method, so "Paste" needs to be disabled.
+			disabled: ! window?.navigator?.clipboard?.readText,
+			tooltip: ! window?.navigator?.clipboard?.readText ? __( 'Your browser does not allow pasting via the context menu. Use the keyboard shortcut instead.', 'tablepress' ) : '',
 		},
 
 		// Insert Link, Insert Image, Open Advanced Editor.
@@ -100,17 +125,17 @@ export default function contextMenu( obj /*, x, y, e */ ) {
 		{
 			title: __( 'Insert Link', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sL', 'keyboard shortcut for Insert Link', 'tablepress' ), meta_key ),
-			onclick: tp.callbacks.insert_link.open_dialog,
+			onclick: tp.callbacks.insert_link.open_dialog.bind( null, ( 'TEXTAREA' === document.activeElement.tagName ) ? document.activeElement : null ), // eslint-disable-line @wordpress/no-global-active-element
 		},
 		{
 			title: __( 'Insert Image', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sI', 'keyboard shortcut for Insert Image', 'tablepress' ), meta_key ),
-			onclick: tp.callbacks.insert_image.open_dialog,
+			onclick: tp.callbacks.insert_image.open_dialog.bind( null, ( 'TEXTAREA' === document.activeElement.tagName ) ? document.activeElement : null ), // eslint-disable-line @wordpress/no-global-active-element
 		},
 		{
 			title: __( 'Advanced Editor', 'tablepress' ),
 			shortcut: sprintf( _x( '%1$sE', 'keyboard shortcut for Advanced Editor', 'tablepress' ), meta_key ),
-			onclick: tp.callbacks.advanced_editor.open_dialog,
+			onclick: tp.callbacks.advanced_editor.open_dialog.bind( null, ( 'TEXTAREA' === document.activeElement.tagName ) ? document.activeElement : null ), // eslint-disable-line @wordpress/no-global-active-element
 		},
 
 		// Duplicate/Insert/Append/Delete.

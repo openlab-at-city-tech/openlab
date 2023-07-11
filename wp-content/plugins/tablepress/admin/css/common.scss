@@ -16,10 +16,16 @@
 #screen-meta-links {
 	position: absolute;
 	right: 0;
+	z-index: 10001; /* Ensure that the tab is always above the arrow of WP feature pointers. */
 }
 
 #tablepress-page {
 	margin: 0 0 0 -20px;
+
+	/* Add space between WP core update nag and header navigation. */
+	.update-nag ~ & {
+		margin-top: 25px;
+	}
 
 	#tablepress-body {
 		padding: 0 20px;
@@ -31,7 +37,7 @@
 		align-items: center;
 		display: flex;
 		flex-wrap: wrap;
-		padding-right: 260px; /* Space for hte screen meta links. */
+		padding-right: 260px; /* Space for the screen meta links. */
 
 		.name {
 			border-right: 1px solid #dedae6;
@@ -41,39 +47,6 @@
 				vertical-align: middle;
 				margin: 0 12px 6px 0;
 				height: 32px;
-			}
-		}
-
-		.buttons {
-			padding: 0 12px;
-
-			.tablepress-button {
-				cursor: pointer;
-				border: 1px solid #ffffff;
-				border-radius: 3px;
-				align-items: center;
-				margin: 10px 12px;
-				padding: 6px 4px 6px 12px;
-				font-size: 14px;
-				line-height: 1;
-				text-decoration: none;
-				transition: color 0.1s, background-color 0.1s, border-color 0.1s;
-				display: inline-flex;
-				color: #ffffff;
-				background-color: #8ab547;
-				border-color: #8ab547;
-
-				&:hover,
-				&:active,
-				&:focus {
-					color: #fff;
-					background-color: #69b547;
-					border-color: #69b547;
-				}
-
-				.dashicons {
-					margin: 0 6px 0 4px;
-				}
 			}
 		}
 	}
@@ -117,6 +90,39 @@
 
 		&.separator {
 			margin-right: 20px;
+		}
+	}
+
+	.buttons {
+		padding: 0 12px;
+
+		.tablepress-button {
+			cursor: pointer;
+			border: 1px solid #ffffff;
+			border-radius: 3px;
+			align-items: center;
+			margin: 10px 12px;
+			padding: 6px 4px 6px 12px;
+			font-size: 14px;
+			line-height: 1;
+			text-decoration: none;
+			transition: color 0.1s, background-color 0.1s, border-color 0.1s;
+			display: inline-flex;
+			color: #ffffff;
+			background-color: #8ab547;
+			border-color: #8ab547;
+
+			&:hover,
+			&:active,
+			&:focus {
+				color: #fff;
+				background-color: #69b547;
+				border-color: #69b547;
+			}
+
+			.dashicons {
+				margin: 0 6px 0 4px;
+			}
 		}
 	}
 
@@ -176,12 +182,6 @@
 	width: 100%;
 }
 
-/* Red border for form fields that have invalid values */
-#tablepress-page form .postbox:not(.no-validation-highlighting) :invalid {
-	border-color: #cc0000 !important;
-	box-shadow: 0 0 0 1px #cc0000;
-}
-
 /* Tables in postboxes (on the "Edit" and "Plugin Options" screens) */
 .tablepress-postbox-table {
 	border-spacing: 0;
@@ -217,25 +217,17 @@
 	vertical-align: top;
 	padding-top: 6px;
 }
-/* Adjust positioning of labels in relation to checkboxes/radio buttons */
-#tablepress_import-import-form .column-2 label {
-	margin-right: 20px; /* some margin on radio buttons */
-}
-/* Make the file upload field look more similar to normal fields */
-#tablepress_import-import-form #tables-import-file-upload {
-	border: 1px solid transparent;
-	border-radius: 4px;
-}
-/* Red color for the "Uninstall TablePress" button on the "Plugin Options" screen */
-#uninstall-tablepress {
-	color: #bc0b0b;
-}
-/* Select dropdown alignment on the "Plugin Options" screen */
+/* Select dropdown alignment */
 #tablepress-page select {
 	vertical-align: baseline;
 }
-/* Proper alignment of elements */
+/* Alignment of textareas and buttons in postboxes */
 #tablepress-page textarea,
 .tablepress-postbox-table .button {
 	margin: 1px;
+}
+
+/* Red color for the "Uninstall TablePress" button on the "Plugin Options" screen */
+#uninstall-tablepress {
+	color: #bc0b0b;
 }

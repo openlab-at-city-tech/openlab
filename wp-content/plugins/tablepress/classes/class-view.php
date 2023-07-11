@@ -164,7 +164,7 @@ abstract class TablePress_View {
 		if ( is_rtl() ) {
 			$this->admin_page->enqueue_style( 'common-rtl', array( 'tablepress-common' ) );
 		}
-		$this->admin_page->enqueue_script( 'common', array( 'postbox' ) );
+		$this->admin_page->enqueue_script( 'common', array( 'jquery-core', 'postbox' ) );
 
 		$this->admin_page->add_admin_footer_text();
 
@@ -434,6 +434,31 @@ abstract class TablePress_View {
 			?>
 			</ul>
 		</nav>
+		<?php
+	}
+
+	/**
+	 * Prints a notification about JavaScript not being activated in the browser.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $data Data for this screen.
+	 * @param array $box  Information about the text box.
+	 */
+	public function textbox_no_javascript( array $data, array $box ) {
+		?>
+		<div class="notice notice-error notice-alt notice-large hide-if-js">
+			<h3><em>
+				<?php _e( 'Attention: Unfortunately, there is a problem!', 'tablepress' ); ?>
+			</em></h3>
+			<p style="font-size:14px">
+				<strong><?php _e( 'This screen requires JavaScript. Please enable JavaScript in your browser settings.', 'tablepress' ); ?></strong><br />
+				<?php _e( 'For help, please follow <a href="https://www.enable-javascript.com/">the instructions on how to enable JavaScript in your browser</a>.', 'tablepress' ); ?>
+			</p>
+			<p>
+				<?php echo '<a href="' . TablePress::url( array( 'action' => 'list' ) ) . '">' . __( 'Back to the List of Tables', 'tablepress' ) . '</a>'; ?>
+			</p>
+		</div>
 		<?php
 	}
 
