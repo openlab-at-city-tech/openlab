@@ -1,9 +1,9 @@
-=== Advanced Editor Tools (previously TinyMCE Advanced) ===
+=== Advanced Editor Tools ===
 Contributors: automattic, azaozz
 Tags: block editor, classic editor, editor, Gutenberg, formatting, tinymce, write
-Requires at least: 5.6
-Tested up to: 5.7
-Stable tag: 5.6.0
+Requires at least: 5.9
+Tested up to: 6.2
+Stable tag: 5.9.0
 Requires PHP: 5.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,9 +43,15 @@ In that terms Advanced Editor Tools does not affect your website's user privacy 
 
 == Installation ==
 
-Best is to install directly from WordPress. If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
+If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 5.9.0 =
+* Updated for WordPress 5.9 and newer.
+* Removed the Inline text color and Inline text background color side-panels as this functionality is now available in the block editor.
+* Removed the side-panel toolbar. The drop-down on the main rich-text toolbar serves the same purpose - to unclutter the toolbar.
+* Fixed some small bugs and compatibility issues.
 
 = 5.6.0 =
 * Updated for WordPress 5.6 and TinyMCE 4.9.11.
