@@ -103,10 +103,16 @@ class M_Third_Party_Compat extends C_Base_Module
         add_filter('ngg_atp_show_display_type', array($this, 'atp_check_pro_albums'), 10, 2);
         add_filter('wpseo_sitemap_urlimages', array($this, 'add_wpseo_xml_sitemap_images'), 10, 2);
         add_filter('ngg_pre_delete_unused_term_id', array($this, 'dont_auto_purge_wpml_terms'));
+        add_filter('rank_math/sitemap/urlimages', [$this, 'add_rankmath_seo_images'], 10, 2);
 
         // Nimble Builder needs special consideration because of our shortcode manager's use of placeholders
         add_action('wp_enqueue_scripts', [$this, 'enqueue_nimble_builder_frontend_resources']);
         add_filter('ngg_shortcode_placeholder', [$this, 'nimble_builder_shortcodes'], 10, 4);
+
+        add_filter('wp_sweep_excluded_taxonomies', function($taxonomies) {
+            $taxonomies[] = 'ngg_tag';
+            return $taxonomies;
+        });
 
         if ($this->is_ngg_page())
             add_action('admin_enqueue_scripts', array(&$this, 'dequeue_spider_calendar_resources'));
@@ -127,6 +133,52 @@ class M_Third_Party_Compat extends C_Base_Module
         }
 
         add_action('the_post', [$this, 'fix_page_parameter']);
+    }
+
+    /**
+     * Adds NextGEN images to RankMath when generating page & post sitemaps
+     *
+     * @param array $images
+     * @param int $post_ID
+     * @return array
+     */
+    public function add_rankmath_seo_images($images, $post_ID)
+    {
+        $post = get_post($post_ID);
+        preg_match_all(
+            '/' . get_shortcode_regex() . '/',
+            $post->post_content,
+            $matches,
+            PREG_SET_ORDER
+        );
+
+        $renderer   = C_Displayed_Gallery_Renderer::get_instance();
+        $storage    = C_Gallery_Storage::get_instance();
+        $shortcodes = C_NextGen_Shortcode_Manager::get_instance()->get_shortcodes();
+        $retval     = [];
+
+        foreach ($matches as $match) {
+            // Only process our shortcodes
+            if (in_array($match[2], $shortcodes))
+                continue;
+            $params = shortcode_parse_atts(trim($match[0], '[]'));
+            if (in_array($params[0], $shortcodes))
+                unset($params[0]);
+
+            $displayed_gallery = $renderer->params_to_displayed_gallery($params);
+
+            if (!$displayed_gallery)
+                continue;
+
+            foreach ($displayed_gallery->get_entities() as $entity) {
+                // Do not start following albums' into their descent into madness.
+                if (isset($entity->galdesc))
+                    continue;
+                $retval[] = ['src' => $storage->get_image_url($entity)];
+            };
+        }
+
+        return array_merge($images, $retval);
     }
 
     /**

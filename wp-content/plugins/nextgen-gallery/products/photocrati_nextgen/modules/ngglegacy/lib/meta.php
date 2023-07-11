@@ -141,8 +141,12 @@ class nggMeta{
                     $meta['shutter_speed']  =($meta['shutter_speed'] > 0.0 and $meta['shutter_speed'] < 1.0) ? ( '1/' . round( 1 / $meta['shutter_speed'], -1) ) : ($meta['shutter_speed']);
                     $meta['shutter_speed'] .=  __(' sec','nggallery');
                 }
-                //Bit 0 indicates the flash firing status
-                if (!empty($exif['Flash']))
+
+                // Bit 0 indicates the flash firing status. On some images taken on older iOS versions, this may be
+                // incorrectly stored as an array.
+                if (is_array($exif['Flash']))
+                    $meta['flash'] = __('Fired', 'nggallery');
+                elseif (!empty($exif['Flash']))
                     $meta['flash'] =  ( $exif['Flash'] & 1 ) ? __('Fired', 'nggallery') : __('Not fired',' nggallery');
             }
 
@@ -430,23 +434,23 @@ class nggMeta{
      * @param string $object
      * @return mixed $value
      */
-	function get_META($object = false) {
+	function get_META($object = FALSE)
+    {
+        if ($value = $this->get_saved_meta($object))
+            return $value;
 
-		// defined order first look into database, then XMP, IPTC and EXIF.
-		if ($value = $this->get_saved_meta($object))
-			return $value;
-		if ($value = $this->get_XMP($object))
-			return $value;
-		if ($object == 'created_timestamp' && ($d = $this->get_IPTC('created_date')) && ($t = $this->get_IPTC('created_time'))) {
-			return $this->exif_date2ts($d . ' '.$t);
-		}
-		if ($value = $this->get_IPTC($object))
-			return $value;
-		if ($value = $this->get_EXIF($object))
-			return $value;
+        if ($object == 'created_timestamp' && ($d = $this->get_IPTC('created_date')) && ($t = $this->get_IPTC('created_time')))
+            return $this->exif_date2ts($d . ' '.$t);
 
-		// nothing found ?
-		return false;
+        $order = apply_filters('ngg_metadata_parse_order', ['XMP', 'IPTC', 'EXIF']);
+
+        foreach ($order as $method) {
+            $method = 'get_' . $method;
+            if (method_exists($this, $method) && $value = $this->$method($object))
+                return $value;
+        }
+
+        return FALSE;
 	}
 
     /**

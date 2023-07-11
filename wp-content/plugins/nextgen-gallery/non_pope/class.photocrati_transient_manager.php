@@ -127,7 +127,8 @@ class C_Photocrati_Transient_Manager
 			$id = $parts[1];
 			if (!isset($this->_tracker[$group]))
 			    $this->_tracker[$group] = array();
-			$this->_tracker[$group][] = $id;
+            if (!in_array($id, $this->_tracker[$group]))
+                $this->_tracker[$group][] = $id;
 		}
 	}
 

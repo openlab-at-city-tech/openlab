@@ -151,14 +151,14 @@ class M_Marketing extends C_Base_Module
 
                 wp_register_script(
                     'jquery-modal',
-                    'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js',
-                    array('jquery'),
+                    C_Router::get_instance()->get_static_url('photocrati-marketing#jquery.modal.min.js'),
+                    ['jquery'],
                     '0.9.1'
                 );
         
                 wp_register_style(
                     'jquery-modal',
-                    'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css',
+                    C_Router::get_instance()->get_static_url('photocrati-marketing#jquery.modal.min.css'),
                     [],
                     '0.9.1'
                 );

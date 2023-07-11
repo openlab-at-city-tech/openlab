@@ -268,7 +268,7 @@ class M_Gallery_Display extends C_Base_Module
 
     static function enqueue_fontawesome()
     {
-        // The official plugin is active, we don't need to do anything outside of the wp-admin
+        // The official plugin is active, we don't need to do anything outside the wp-admin
         if (defined('FONT_AWESOME_OFFICIAL_LOADED') && !is_admin())
             return;
 
@@ -278,8 +278,8 @@ class M_Gallery_Display extends C_Base_Module
 
         wp_register_script(
             'fontawesome_v4_shim',
-            'https://use.fontawesome.com/releases/v5.3.1/js/v4-shims.js',
-            array(),
+            C_Router::get_instance()->get_static_url('photocrati-nextgen_gallery_display#fontawesome/js/v4-shims.min.js'),
+            [],
             '5.3.1'
         );
         if (!wp_script_is('fontawesome', 'registered'))
@@ -287,8 +287,8 @@ class M_Gallery_Display extends C_Base_Module
             add_filter('script_loader_tag', 'M_Gallery_Display::fix_fontawesome_script_tag', 10, 2);
             wp_enqueue_script(
                 'fontawesome',
-                'https://use.fontawesome.com/releases/v5.3.1/js/all.js',
-                array('fontawesome_v4_shim'),
+                C_Router::get_instance()->get_static_url('photocrati-nextgen_gallery_display#fontawesome/js/all.min.js'),
+                ['fontawesome_v4_shim'],
                 '5.3.1'
             );
         }
@@ -297,11 +297,11 @@ class M_Gallery_Display extends C_Base_Module
         {
             wp_enqueue_style(
                 'fontawesome_v4_shim_style',
-                'https://use.fontawesome.com/releases/v5.3.1/css/v4-shims.css'
+                C_Router::get_instance()->get_static_url('photocrati-nextgen_gallery_display#fontawesome/css/v4-shims.min.css')
             );
             wp_enqueue_style(
                 'fontawesome',
-                'https://use.fontawesome.com/releases/v5.3.1/css/all.css'
+                C_Router::get_instance()->get_static_url('photocrati-nextgen_gallery_display#fontawesome/css/all.min.css')
             );
         }
 
@@ -321,7 +321,7 @@ class M_Gallery_Display extends C_Base_Module
         if ('fontawesome' !== $handle)
             return $tag;
 
-        return str_replace(' src', ' defer integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous" data-auto-replace-svg="false" data-keep-original-source="false" data-search-pseudo-elements src', $tag);
+        return str_replace(' src', ' defer data-auto-replace-svg="false" data-keep-original-source="false" data-search-pseudo-elements src', $tag);
     }
 
   static function _render_related_string($sluglist=array(), $maxImages=NULL, $type=NULL)

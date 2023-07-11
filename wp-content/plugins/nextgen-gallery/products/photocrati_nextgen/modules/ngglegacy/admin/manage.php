@@ -928,7 +928,7 @@ class nggManageGallery {
             global $user_ID;
 
             $page['post_type']    = 'page';
-	        $page['post_content'] = apply_filters('ngg_add_page_shortcode', '[nggallery id="' . $this->gid . '"]' );
+	        $page['post_content'] = apply_filters('ngg_add_page_shortcode', '[ngg src="galleries" display="thumbnails" ids="' . $this->gid . '"]' );
             $page['post_parent']  = $parent_id;
             $page['post_author']  = $user_ID;
             $page['post_status']  = 'publish';

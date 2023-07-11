@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 5.5.4
-Stable tag: 3.30
-Tested up to: 6.0.2
+Stable tag: 3.37
+Tested up to: 6.2.2
 License: GPLv3
 Requires PHP: 5.6
 
@@ -62,7 +62,7 @@ Learn more or connect with us:<br>
 == Credits ==
 
 Copyright:<br>
-Imagely 2016-2021
+Imagely 2016-2023
 Photocrati Media 2012-2016<br>
 Alex Rabe 2007-2011
 
@@ -178,6 +178,32 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= V3.37  - 05.05.2023 =
+* Fixed:   A fatal error was thrown when uploading images' whose 'Flash' EXIF field is an array instead of the integer it should be.
+* Fixed:   Correcting a possible error in our RankMath SEO compatibility.
+* Fixed:   Prevent duplicate entries from being added to the photocrati_cache_tracker transient.
+
+= V3.36  - 05.10.2023 =
+* NEW:     Added support for WP-Sweep so that NextGEN's tags will not be automatically removed.
+* NEW:     Added NextGEN Gallery images to RankMath SEO's sitemaps.
+* Fixed:   A JS error could trigger on the Manage Gallery page in some circumstances.
+* Fixed:   In some specific situations NextGEN Gallery could cause an infinite loop on all pages.
+* Fixed:   Manage Gallery's "Add Page" button used the legacy [nggallery] shortcode.
+
+= V3.35  - 02.03.2023 =
+* Fixed:   Sites still using PHP 5.6 experience a fatal error due to an incompatibility with the latest version of Composer.
+
+= V3.34  - 02.02.2023 =
+* Fixed:   FontAwesome could load SVG font files which broke some Pro Lightbox elements.
+
+= V3.33  - 01.18.2023 =
+* Fixed:   FontAwesome icons were broken by 3.32 if not enqueued by another source.
+
+= V3.32  - 01.11.2023 =
+* NEW:     Added the filter 'ngg_metadata_parse_order'
+* Changed: Now including all CSS & JS resources inside the plugin to avoid GDPR issues.
+* Fixed:   Viewing sub-albums could result in a PHP warning regarding array_pop()
 
 = V3.30  - 10.05.2022 =
 * Fixed:   Rotating images was broken for some users after the last release.
