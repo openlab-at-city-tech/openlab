@@ -63,10 +63,10 @@ jQuery(document).on('click', '.b2s-curation-image', function() {
     activateImage();
     return false;
 });
-jQuery(document).on('click', '.b2s-curation-video', function() {
-    activateVideo();
-    return false;
-});
+//jQuery(document).on('click', '.b2s-curation-video', function() {
+//    activateVideo();
+//    return false;
+//});
 
 jQuery(document).on('click', '.b2s-btn-curation-continue', function () {
     jQuery('#b2s-curation-input-url-help').hide();

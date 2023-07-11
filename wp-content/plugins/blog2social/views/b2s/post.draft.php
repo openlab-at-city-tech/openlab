@@ -19,7 +19,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                 <!--Navbar|Start-->
                 <div class="panel panel-default">
                     <div class="panel-body">
-                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                     </div>
                 </div>
                 <!--Navbar|End-->

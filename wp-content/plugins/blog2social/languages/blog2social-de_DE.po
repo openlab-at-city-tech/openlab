@@ -4055,6 +4055,70 @@ msgstr "Beitragsvorlagen"
 msgid "Post Types"
 msgstr "Posttypen"
 
+#: views/b2s/premium.php:77
+msgid "Automatically share posts at the time of publishing or at any scheduled time."
+msgstr "Automatisches Teilen von Beiträgen bei Veröffentlichung oder zu jedem anderen  Zeitpunkt."
+
+#: views/b2s/premium.php:86
+msgid "Create, schedule and share social media posts from any text, link, image, video or RSS feed."
+msgstr "Teile Social-Media-Posts von Website-Posts oder -Seiten oder erstelle Beiträge aus beliebigen Texten, Links, Bildern, Videos oder RSS-Feeds"
+
+#: views/b2s/premium.php:94
+msgid "Publish and share Video files"
+msgstr "Video-Posts"
+
+#: views/b2s/premium.php:95
+msgid "Publish and share your video content straight from your media library."
+msgstr "Veröffentlichen und Teilen von Video-Dateien direkt aus der Mediathek."
+
+#: views/b2s/premium.php:103
+msgid "Best Time Manager"
+msgstr "Beste Zeiten Manager"
+
+#: views/b2s/premium.php:104
+msgid "Schedule your social media posts with pre-defined best-times or at your own time settings for auto-scheduling."
+msgstr "Plane Deine Social Media Posts mit vordefinierten Bestzeiten oder zu Deinen eigenen Zeiteinstellungen für die automatische Planung und Veröffentlichung."
+
+#: views/b2s/premium.php:119
+msgid "Keep track of your scheduled social media posts. Add or edit your posts or change the date per drag & drop."
+msgstr "Überblick über alle geplanten Social Media Posts in den verschieden Netzwerken. Einfache Bearbeitung, Änderung oder Verschiebung per Drag & Drop."
+
+#: views/b2s/premium.php:127
+msgid "Re-share Posts Automatically"
+msgstr "Beiträge automatisch erneut teilen"
+
+#: views/b2s/premium.php:128
+msgid "Repeat your best posts automatically to revive your evergreen content from time to time."
+msgstr "Automatische Wiederholung der besten Beiträge nach selbstdefinierten Filterkriterien und Zeiteinstellungen."
+
+#: views/b2s/premium.php:136
+msgid "Select and edit images"
+msgstr "Bildauswahl und -bearbeitung"
+
+#: views/b2s/premium.php:137
+msgid "Select individual or multiple images. Easily edit, crop, rotate or flip images to adapt the format for selected social platforms."
+msgstr "Teilen individueller Bilder pro Netzwerk oder mehrerer Bilder in einem Post. Einfache Bildbearbeitung per Zuschneiden, Drehen oder Spiegeln."
+
+#: views/b2s/premium.php:146
+msgid "Define a unique post structure to automatically customize your social media posts."
+msgstr "Anpassung von individuellen Beitragsstrukturen pro Netzwerk, für eine automatische Anpassung der Social Media Posts."
+
+#: views/b2s/premium.php:159
+msgid "Premium networks"
+msgstr "Premium-Netzwerke"
+
+#: views/b2s/premium.php:160
+msgid "Share on more social networks, pages, groups, and multiple accounts per network."
+msgstr "Teile in mehr Social Media-Netzwerken, Seiten, Gruppen und mehreren Konten pro Netzwerk."
+
+#: views/b2s/premium.php:169
+msgid "Track the performance of your social media posts with link views, likes, shares and comments."
+msgstr "Überprüfung der Performance der Social-Media-Posts mit Metriken zu Linkaufrufen, Likes, Shares und Kommentaren."
+
+#: views/b2s/premium.php:178
+msgid "Easily organize multiple WordPress users by assigning license keys, social accounts and settings."
+msgstr "Erweiterte Multi-User-Unterstützung für die Organisation und Zusammenarbeit bei Social-Media-Beitägen mit mehreren WordPress-Nutzern"
+
 #: views/b2s/html/header.php:151
 msgid "Post was scheduled successfully on your blog!"
 msgstr "Der Beitrag wurde erfolgreich in Deinem Blog vorgeplant!"

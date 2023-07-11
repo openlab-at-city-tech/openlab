@@ -107,7 +107,7 @@ class B2S_Meta {
 
     private function getCardType() {
         $typeData = array('summary', 'summary_large_image');
-        $type = (isset($this->options['card_default_type']) && !empty($this->options['card_default_type'])) ? $typeData[$this->options['card_default_type']] : 'summary';
+        $type = (isset($this->options['card_default_type']) && !empty($this->options['card_default_type']) && isset($typeData[$this->options['card_default_type']])) ? $typeData[$this->options['card_default_type']] : 'summary';
         if ($this->print) {
             echo '<meta name="twitter:card" content="' . esc_attr(apply_filters('b2s_card_meta_type', $type)) . '">' . "\n";
         } else {
@@ -120,7 +120,7 @@ class B2S_Meta {
             if (isset($this->metaData[$type . '_title']) && !empty($this->metaData[$type . '_title'])) {
                 $title = $this->metaData[$type . '_title'];
             } else {
-                $title = get_the_title();
+                $title = wp_strip_all_tags(get_the_title(),true);
             }
         } else {
             $title = (isset($this->options[$type . '_default_title']) && !empty($this->options[$type . '_default_title'])) ? $this->options[$type . '_default_title'] : get_bloginfo('name');

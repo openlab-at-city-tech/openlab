@@ -4,6 +4,7 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Metrics/Item.php');
+require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
 
 $metrics = new B2S_Metrics_Item();
 $networkCount = $metrics->getNetworkCount();
@@ -11,12 +12,17 @@ $networkCount = $metrics->getNetworkCount();
 require_once (B2S_PLUGIN_DIR . 'includes/Options.php');
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionMetricsStarted = $options->_getOption('metrics_started');
-if($optionMetricsStarted !== false) {
+if ($optionMetricsStarted !== false) {
     $optionMetricsStarted = true;
 }
-if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
+if (isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
     $options->_setOption('metrics_banner', true);
 }
+$optionMetricsFeedback = $options->_getOption('metrics_feedback');
+
+$options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
+$optionPostFilters = $options->_getOption('post_filters');
+$postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostFilters['postsPerPage'] > 0) ? (int) $optionPostFilters['postsPerPage'] : 25;
 ?>
 
 <div class="b2s-container">
@@ -39,7 +45,7 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
                         </div>
                         <div class="b2s-metrics-area" style="display:none">
                             <!--Filter Start-->
-                            <div class="b2s-post">
+                            <div class="">
                                 <div class="grid-body">
                                     <!-- Filter Post Start-->
                                     <form class="b2sSortForm form-inline pull-left" action="#">
@@ -55,9 +61,6 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
                                         <div class="col-md-2 padding-right-0">
                                             <a class="btn btn-success pull-right b2s-metrics-feedback-btn"><?php esc_html_e("Feedback", "blog2social"); ?></a>
                                         </div>
-
-
-
                                     </form>
                                     <!-- Filter Post Ende-->
                                     <br>
@@ -74,12 +77,12 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
                                 <br>
                                 <div class="b2s-metric-sub-area" style="background-color: #ddd; padding: 10px; margin-top: 10px;">
                                     <?php
-                                    foreach($networkCount as $networkId => $networkCount) {
+                                    foreach ($networkCount as $networkId => $networkCount) {
                                         echo '<div style="display: inline-flex; margin-right: 30px;">
-                                                <img style="margin-right: 10px;" alt="'.esc_attr(unserialize(B2S_PLUGIN_NETWORK)[$networkId]).'" src="'.esc_url(plugins_url('/assets/images/portale/'.esc_attr($networkId).'_flat.png', B2S_PLUGIN_FILE)).'">
+                                                <img style="margin-right: 10px;" alt="' . esc_attr(unserialize(B2S_PLUGIN_NETWORK)[$networkId]) . '" src="' . esc_url(plugins_url('/assets/images/portale/' . esc_attr($networkId) . '_flat.png', B2S_PLUGIN_FILE)) . '">
                                                 <div style="text-align: center;">
-                                                    <b>'.esc_html(unserialize(B2S_PLUGIN_NETWORK)[$networkId]).'</b><br>
-                                                    '.esc_html($networkCount).'<br>
+                                                    <b>' . esc_html(unserialize(B2S_PLUGIN_NETWORK)[$networkId]) . '</b><br>
+                                                    ' . esc_html($networkCount) . '<br>
                                                     Accounts
                                                 </div>
                                             </div>';
@@ -147,9 +150,9 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
                                         <br>
                                         <nav class="b2s-sort-pagination-area text-center">
                                             <div class="btn-group btn-group-sm pull-right b2s-post-per-page-area hidden-xs" role="group">
-                                                <button type="button" class="btn btn-primary b2s-post-per-page" data-post-per-page="25">25</button>
-                                                <button type="button" class="btn btn-default b2s-post-per-page" data-post-per-page="50">50</button>
-                                                <button type="button" class="btn btn-default b2s-post-per-page" data-post-per-page="100">100</button>
+                                                <button type="button" class="btn <?php echo ((int) $postsPerPage == 25) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="25">25</button>
+                                                <button type="button" class="btn <?php echo ((int) $postsPerPage == 50) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="50">50</button>
+                                                <button type="button" class="btn <?php echo ((int) $postsPerPage == 100) ? "btn-primary" : "btn-default" ?> b2s-post-per-page" data-post-per-page="100">100</button>
                                             </div>
                                             <div class="b2s-sort-pagination-content"></div>
                                         </nav>
@@ -275,13 +278,17 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
         </div>
     </div>
 </div>
-    
+
 <div class="modal fade b2s-metrics-feedback-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-metrics-feedback-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-metrics-feedback-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><?php esc_html_e('Feedback', 'blog2social'); ?></h4>
+                <div id="b2s-metrics-feedback-checkbox">
+                    <input type="checkbox" id="b2s-metrics-dont-show-again" name="b2s-metrics-dont-show-again" value="0">
+                    <label for="b2s-metrics-dont-show-again"><?php esc_html_e("Don't show this again", "blog2social") ?> </label><br>
+                </div>
             </div>
             <div class="modal-body">
                 <iframe src="<?php echo esc_url(B2S_Tools::getSupportLink('metrics_feedback')); ?>" width="100%" height="500px"></iframe>
@@ -291,6 +298,7 @@ if(isset($_GET['metrics_banner']) && (int) $_GET['metrics_banner'] == 1) {
 </div>
 
 <input type="hidden" id="b2sOptionMetricsStarted" value="<?php echo (($optionMetricsStarted == true) ? '1' : '0') ?>">
+<input type="hidden" id="b2sOptionMetricsFeedback" value="<?php echo (($optionMetricsFeedback == true) ? '1' : '0') ?>">
 
 <input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">

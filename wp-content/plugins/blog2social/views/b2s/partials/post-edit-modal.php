@@ -1,4 +1,4 @@
-<div id="b2s-edit-event-modal-<?php echo esc_attr($item->getB2SId()); ?>" class="modal fade" role="dialog" aria-labelledby="b2s-trial-modal" aria-hidden="true" data-backdrop="false">
+<div id="b2s-edit-event-modal-<?php echo esc_attr($item->getB2SId()); ?>" class="modal fade" role="dialog" aria-labelledby="b2s-edit-event-modal-<?php echo esc_attr($item->getB2SId()); ?>" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -123,6 +123,14 @@
                                     'data-image-count' => array(),
                                     'data-network-count' => array(),
                                     'data-network-auth-id' => array(),
+                                ),
+                                'select' => array(
+                                    'class' => array(),
+                                    'name' => array()
+                                ),
+                                'option' => array(
+                                    'value' => array(),
+                                    'selected' => array()
                                 ),
                             )); ?>
                             <div class="pull-right">

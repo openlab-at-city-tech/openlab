@@ -5,10 +5,6 @@ jQuery(document).on('heartbeat-send', function (e, data) {
 
 jQuery(window).on("load", function () {
 
-    //add Logo
-    jQuery('#b2s-post-meta-box-auto').children('h2').children('span').before('<span style="padding: 10px 0 10px 25px; background: url(' + "'" + jQuery('#b2s-logo-url').val() + "'" + ') no-repeat left center;"></span>');
-    jQuery('#b2s-post-box-calendar-header').children('h2').children('span').before('<span style="padding: 10px 0 10px 25px; background: url(' + "'" + jQuery('#b2s-logo-url').val() + "'" + ') no-repeat left center;"></span>');
-
     //Editor Gutenberg
     //ref https://developer.wordpress.org/block-editor/data/data-core-editor/
     if (wp && wp.data && wp.data.select && wp.data.subscribe && wp.data.select('core/editor') != null) {
@@ -44,7 +40,7 @@ jQuery(window).on("load", function () {
                                     jQuery('.b2s-meta-box-last-post-date').html(data.lastPostDate);
                                 }
                                 if (typeof data.active != 'undefined') {
-                                    if(data.active == true) {
+                                    if (data.active == true) {
                                         jQuery('.b2s-enable-auto-post').prop('checked', true).trigger('change');
                                     } else {
                                         jQuery('.b2s-enable-auto-post').prop('checked', false).trigger('change');
@@ -82,7 +78,7 @@ jQuery(window).on("load", function () {
             jQuery('#b2s-enable-auto-post').prop('checked', false);
         }
     }
-    
+
     //update Twitter Dropdown
     var mandantId = jQuery('#b2s-post-meta-box-profil-dropdown').val();
     var tos = false;
@@ -110,7 +106,7 @@ jQuery(window).on("load", function () {
         jQuery('#b2s-post-meta-box-profil-dropdown-twitter').prop('disabled', 'disabled');
         jQuery('#b2s-post-meta-box-profil-dropdown-twitter').hide();
     }
-    
+
 });
 
 
@@ -124,6 +120,16 @@ jQuery(document).on('click', '.postbox-container', function () {
         }
     }
     return true;
+});
+
+
+//V7.1.0
+jQuery(document).on('click', '#b2s-meta-video-box-btn-customize', function () {
+    var url = jQuery(this).attr('data-url');
+    if (url != "") {
+        window.location.href = url;
+    }
+    return false;
 });
 
 //V5.0.0 compability gutenberg editor

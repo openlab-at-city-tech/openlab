@@ -16,8 +16,13 @@ class B2S_Heartbeat {
         if (isset($data['b2s_heartbeat']) && $data['b2s_heartbeat'] == 'b2s_listener') {
             if (isset($data['b2s_heartbeat_action']) && ($data['b2s_heartbeat_action'] == 'b2s_auto_posting' || $data['b2s_heartbeat_action'] == 'b2s_repost')) {
                 $this->postSchedToServer();
-            } if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_delete_sched_post') {
+            } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_delete_sched_post') {
                 $this->deleteUserSchedPost();
+            } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_metrics') {
+                $this->updateInsights();
+            } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_video_upload') {
+                $this->uploadVideo();
+                $this->getVideoResultfromServer();
             } else {
                 $this->postSchedToServer();
                 $this->deleteUserSchedPost();
@@ -25,8 +30,10 @@ class B2S_Heartbeat {
                 $this->updateUserSchedPost();
                 $this->deleteUserPublishPost();
                 $this->getSchedResultFromServer();
-                $this->updateInsights();
+                $this->uploadVideo();
+                $this->getVideoResultFromServer();
             }
+
             $response['b2s-trigger'] = true;
         }
         return $response;
@@ -304,7 +311,7 @@ class B2S_Heartbeat {
 
     private function deleteUserSchedPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d LIMIT 500";
+        $sql = "SELECT posts.id, posts.v2_id, user.token, posts.post_format, posts.upload_video_token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d LIMIT 500";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 3, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
@@ -328,7 +335,7 @@ class B2S_Heartbeat {
 
     private function deleteUserPublishPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, user.token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 500";
+        $sql = "SELECT posts.id, user.token, posts.sched_details_id, posts.hide FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 500";
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 4, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
@@ -345,6 +352,15 @@ class B2S_Heartbeat {
                     $data = array('hook_action' => '4');
                     $where = array('id' => $id);
                     $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d'), array('%d'));
+
+                //if not failed and delete flag hide = 2 is set, delete completely
+                } else if(isset($value['hide']) && (int) $value['hide'] == 2){
+                    if(isset($value['id']) && (int) $value['id'] > 0){
+                        $wpdb->delete($wpdb->prefix . 'b2s_posts', array('id' => $value['id']), array('%d'));
+                        if( isset($value["sched_details_id"]) && (int) $value["sched_details_id"] > 0){
+                            $wpdb->delete($wpdb->prefix . 'b2s_posts_sched_details', array('id' => $value['sched_details_id']), array('%d'));
+                        }
+                    }
                 }
             }
         }
@@ -356,7 +372,7 @@ class B2S_Heartbeat {
         $sendData = $wpdb->get_results($wpdb->prepare($sql, 1, date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day'))), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             $tempData = array('action' => 'updateInsights', 'data' => $sendData);
-            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $tempData, 90), true);
+            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $tempData, 45), true);
             if (isset($result['data']) && !empty($result['data'])) {
                 foreach ($result['data'] as $k => $value) {
                     $insights = $value;
@@ -490,6 +506,130 @@ class B2S_Heartbeat {
                             $wpdb->update($wpdb->prefix . 'b2s_posts_insights', array('last_update' => date('Y-m-d H:i:s'), 'active' => 0), array('network_post_id' => $insights['extern_post_id']), array('%s', '%d'), array('%s'));
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private function uploadVideo() {
+        global $wpdb;
+        $sql = "SELECT post_id,upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 1";
+        $sendData = $wpdb->get_results($wpdb->prepare($sql, 6), ARRAY_A);
+        if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
+            if (isset($sendData[0]['post_id']) && (int) $sendData[0]['post_id'] > 0 && isset($sendData[0]['upload_video_token']) && $sendData[0]['upload_video_token'] != '') {
+                require_once (B2S_PLUGIN_DIR . '/includes/B2S/Video/Upload.php');
+                $upload = new B2S_Video_Upload();
+                $result = $upload->uploadVideo($sendData[0]['post_id'], $sendData[0]['upload_video_token']);
+                if (is_array($result) && !empty($result) && isset($result['upload'])) {
+                    if ($result['upload'] !== false) {
+                        $data = array('hook_action' => 7);
+                        $where = array('publish_error_code' => '', 'upload_video_token' => $sendData[0]['upload_video_token']);
+                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d'), array('%s', '%s'));
+                    } else {
+                        $data = array('hook_action' => 0, 'publish_error_code' => ((isset($result['error_code']) && !empty($result['error_code'])) ? $result['error_code'] : 'VIDEO_UPLOAD'));
+                        $where = array('publish_error_code' => '', 'upload_video_token' => $sendData[0]['upload_video_token']);
+                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s'), array('%s', '%s'));
+                    }
+                }
+            }
+        }
+    }
+
+    private function getVideoResultfromServer() {
+        global $wpdb;
+        $sql = "SELECT DISTINCT upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 15";
+        $sendData = $wpdb->get_results($wpdb->prepare($sql, 7), ARRAY_A);
+        if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
+            $videoToken = array();
+            foreach ($sendData as $k => $value) {
+                array_push($videoToken, trim($value['upload_video_token']));
+            }
+            if (!empty($videoToken)) {
+                $args = array(
+                    'method' => 'POST',
+                    'body' => array(
+                        'video_token' => $videoToken,
+                    ),
+                    'timeout' => 20,
+                    'redirection' => '5',
+                    'user-agent' => "Blog2Social/" . B2S_PLUGIN_VERSION . " (Wordpress/Plugin)",
+                );
+                $result = wp_remote_retrieve_body(wp_remote_post(B2S_PLUGIN_API_VIDEO_UPLOAD_ENDPOINT . 'video/check', $args));
+                if (!empty($result)) {
+                    $result = json_decode($result, true);
+                    if (is_array($result) && !empty($result)) {
+                        foreach ($result as $token => $resl) {
+                            if (!empty($token) && is_array($resl) && !empty($resl)) {
+                                foreach ($resl as $k => $res) {
+                                    if (isset($res['state']) && (int) $res['state'] == 0) {
+                                        if (isset($res['publish_url']) && isset($res['post_id']) && (int) $res['post_id'] > 0) {
+                                            //Update
+                                            $data = array('hook_action' => 0, 'publish_link' => $res['publish_url'], 'publish_error_code' => '');
+                                            $where = array('id' => (int) $res['post_id'], 'upload_video_token' => $token);
+                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%d', '%s'));
+                                        }
+                                    } else if (isset($res['state']) && (int) $res['state'] == 1) {
+                                        if (isset($res['b2s_error_code']) && isset($res['post_id']) && (int) $res['post_id'] > 0) {
+                                            //Update
+                                            $data = array('hook_action' => 0, 'publish_link' => '', 'publish_error_code' => $res['b2s_error_code']);
+                                            $where = array('id' => (int) $res['post_id'], 'upload_video_token' => $token);
+                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%d', '%s'));
+                                        }
+                                    } else if (!isset($res['state']) && !isset($res['post_id']) && isset($res['b2s_error_code']) && !empty($res['b2s_error_code'])) {
+                                        //Update
+                                        $data = array('hook_action' => 0, 'publish_link' => '', 'publish_error_code' => $res['b2s_error_code']);
+                                        $where = array('publish_error_code' => '', 'publish_link' => '', 'upload_video_token' => $token);
+                                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%s', '%s', '%s'));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private function updateVideoStatus() {
+        global $wpdb;
+        $sql = "SELECT videos.id, videos.hook_action, videos.video_token, sched_details.sched_data FROM {$wpdb->prefix}b2s_posts_videos as videos LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS sched_details on videos.sched_details_id = sched_details.id WHERE hook_action > %d LIMIT 5";
+        $sendData = $wpdb->get_results($wpdb->prepare($sql, 0), ARRAY_A);
+        if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
+            require_once (B2S_PLUGIN_DIR . '/includes/B2S/Video/Post.php');
+            $videoPost = new B2S_Video_Post();
+            foreach ($sendData as $k => $value) {
+                $data = array('hook_action' => '0');
+                $where = array('id' => $value['id']);
+                $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
+                if ($value['hook_action'] == 1) {
+                    //check upload complete
+                    $status = $videoPost->getVideoStatus($value['video_token']);
+                    if ($status !== false && (int) $status == 2) {
+                        //send data to publish
+                        $sched_data = unserialize($value['sched_data']);
+                        $publish = $videoPost->publishVideo($value['video_token'], $sched_data['auth_id'], $sched_data['title'], $sched_data['content']);
+
+                        if ($publish['success'] == true && !empty($publish['link'])) {
+                            $data = array('hook_action' => '0', 'publish_link' => $publish['link'], 'publish_date' => date('Y-m-d H:i:s'));
+                            $where = array('id' => $value['id']);
+                            $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
+                        }
+
+                        $data = array('hook_action' => '2');
+                        $where = array('id' => $value['id']);
+                        $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
+                    } else {
+                        $data = array('hook_action' => '1');
+                        $where = array('id' => $value['id']);
+                        $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
+                    }
+                }
+                if ($value['hook_action'] == 2) {
+                    //get publish status
+
+                    $data = array('hook_action' => '0');
+                    $where = array('id' => $value['id']);
+                    $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
                 }
             }
         }

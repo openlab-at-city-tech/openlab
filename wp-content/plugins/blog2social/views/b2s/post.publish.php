@@ -22,7 +22,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                 <!--Navbar|Start-->
                 <div class="panel panel-default">
                     <div class="panel-body">
-                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                     </div>
                 </div>
                 <!--Navbar|End-->
@@ -124,6 +124,30 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal"><?php esc_html_e('NO', 'blog2social') ?></button>
                 <button class="btn btn-danger b2s-publish-delete-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade b2s-delete-all-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-all-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-delete-all-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Delete all posts older than', 'blog2social') ?></h4>
+            </div>
+            <select name="" id="b2s-delete-all-posts-select" class="form-control b2s-delete-all-posts-select">
+                <option value="0" selected="selected"><?php esc_html_e('1 month', 'blog2social') ?></option>
+                <option value="1"><?php esc_html_e('3 months', 'blog2social') ?></option>
+                <option value="2"><?php esc_html_e('6 months', 'blog2social') ?></option>
+                <option value="3"><?php esc_html_e('12 months', 'blog2social') ?></option>
+                <option value="4"><?php esc_html_e('All posts', 'blog2social') ?></option>
+            </select>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal"><?php esc_html_e('NO', 'blog2social') ?></button>
+                <button class="btn btn-danger b2s-publish-delete-all-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
             </div>
         </div>
     </div>

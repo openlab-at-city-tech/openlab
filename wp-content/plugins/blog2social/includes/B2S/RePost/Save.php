@@ -1,5 +1,4 @@
 <?php
-
 class B2S_RePost_Save {
 
     private $title;
@@ -34,11 +33,11 @@ class B2S_RePost_Save {
         $this->allowHashTag = $allowHashTag;
         $this->b2sUserLang = $b2sUserLang;
         $this->bestTimes = (!empty($bestTimes)) ? $bestTimes : array();
-        $this->setPreFillText = array(0 => array(6 => 300, 8 => 239, 9 => 200, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 21 => 65000), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 239), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239), 20 => 300);
-        $this->setPreFillTextLimit = array(0 => array(6 => 400, 8 => 400, 9 => 200, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535), 1 => array(8 => 1200, 10 => 500, 19 => 400), 2 => array(8 => 400, 10 => 500, 19 => 9000));
+        $this->setPreFillText = array(0 => array(6 => 300, 8 => 239, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 20 => 300, 21 => 65000, 38 => 500, 39 => 2000), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 239), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239));
+        $this->setPreFillTextLimit = array(0 => array(6 => 400, 8 => 400, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535, 38 => 500, 39 => 2000), 1 => array(8 => 1200, 10 => 500, 19 => 400), 2 => array(8 => 400, 10 => 500, 19 => 9000));
         $this->notAllowNetwork = array(4, 11, 14, 16, 18);
         $this->allowHtml = array(4, 11, 14);
-        $this->allowNetworkOnlyImage = array(6, 7, 12, 21);
+        $this->allowNetworkOnlyImage = array(6, 7, 12, 20, 21);
         $this->tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
         $this->linkNoCache = B2S_Tools::getNoCacheData(B2S_PLUGIN_BLOG_USER_ID);
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
@@ -150,12 +149,12 @@ class B2S_RePost_Save {
             } else {
                 $tempOptionPostFormat = $this->optionPostFormat;
             }
-            
+
             //V6.5.5 - Xing Pages => Two diferend kinds
-            if($networkId == 19 && $networkType == 1) {
-                if(!isset($tempOptionPostFormat[$networkId][$networkType]['short_text'][0]['limit'])) {
-                    if(isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) {
-                        if(isset($this->default_template[$networkId][$networkType]['short_text'][4])) {
+            if ($networkId == 19 && $networkType == 1) {
+                if (!isset($tempOptionPostFormat[$networkId][$networkType]['short_text'][0]['limit'])) {
+                    if (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) {
+                        if (isset($this->default_template[$networkId][$networkType]['short_text'][4])) {
                             $tempOptionPostFormat[$networkId][$networkType]['short_text'] = array(0 => $tempOptionPostFormat[$networkId][$networkType]['short_text'], 4 => $this->default_template[$networkId][$networkType]['short_text'][4]);
                         }
                     } else {
@@ -199,7 +198,7 @@ class B2S_RePost_Save {
                     return false;
                 }
                 $hook_filter = new B2S_Hook_Filter();
-                
+
                 $postData['content'] = $tempOptionPostFormat[$networkId][$networkType]['content'];
 
                 $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $content_min, (int) $content_max), "\\$");
@@ -207,7 +206,7 @@ class B2S_RePost_Save {
 
                 $title = sanitize_text_field($this->title);
                 $postData['content'] = preg_replace("/\{TITLE\}/", addcslashes($title, "\\$"), $postData['content']);
-                
+
                 $excerpt = (isset($this->excerpt) && !empty($this->excerpt)) ? addcslashes(B2S_Util::getExcerpt($this->excerpt, (int) $excerpt_min, (int) $excerpt_max), "\\$") : '';
 
                 $postData['content'] = preg_replace("/\{EXCERPT\}/", $excerpt, $postData['content']);
@@ -215,7 +214,7 @@ class B2S_RePost_Save {
                 $hashtagcount = substr_count($postData['content'], '#');
 
                 if (strpos($postData['content'], "{KEYWORDS}") !== false) {
-                    if($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
+                    if ($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
                         $postData['content'] = preg_replace("/\{KEYWORDS\}/", '', $postData['content']);
                     } else {
                         $hashtags = ($this->allowHashTag) ? $this->getHashTagsString("", (($networkId == 12) ? 30 - $hashtagcount : -1), ((isset($tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags']) && $tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags'] == true) ? true : false)) : '';
@@ -230,22 +229,22 @@ class B2S_RePost_Save {
                 } else {
                     $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
                 }
-                
+
                 if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
                     $wc_product = wc_get_product($this->postId);
-                    if($wc_product != false) {
+                    if ($wc_product != false) {
                         $price = $wc_product->get_price();
-                        if($price != false && !empty($price)) {
+                        if ($price != false && !empty($price)) {
                             $postData['content'] = stripslashes(preg_replace("/\{PRICE\}/", addcslashes($price, "\\$"), $postData['content']));
                         }
                     }
                 }
                 $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
-                
+
                 $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
-                if(is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
+                if (is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
                     foreach ($taxonomieReplacements as $taxonomie => $replacement) {
-                        $postData['content'] = preg_replace("/\{".$taxonomie."\}/", $replacement, $postData['content']);
+                        $postData['content'] = preg_replace("/\{" . $taxonomie . "\}/", $replacement, $postData['content']);
                     }
                 }
 
@@ -259,8 +258,11 @@ class B2S_RePost_Save {
                 }
 
                 if (isset($limit) && (int) $limit > 0) {
-                    if(!empty($this->url) && $networkId == 2) {
+                    if (!empty($this->url) && $networkId == 2) {
                         $limit = 254;
+                    }
+                    if (!empty($this->url) && $networkId == 38) {
+                        $limit = 500-strlen($this->url);
                     }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }
@@ -353,6 +355,15 @@ class B2S_RePost_Save {
                         return false;
                     }
                 }
+
+                if ($networkId == 38) {
+                    $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
+                    $postData['custom_title'] = strip_tags($this->title);
+                }
+                if ($networkId == 39) { 
+                    $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
+                    $postData['custom_title'] = strip_tags($this->title);
+                }
             }
 
             return $postData;
@@ -390,7 +401,7 @@ class B2S_RePost_Save {
     }
 
     public function saveShareData($shareData = array(), $network_id = 0, $network_type = 0, $network_auth_id = 0, $shareApprove = 0, $network_display_name = '', $sched_date = '0000-00-00 00:00:00', $sched_date_utc = '0000-00-00 00:00:00') {
-        
+
         global $wpdb;
         if ($this->userVersion >= 3) {
             $sqlGetData = $wpdb->prepare("SELECT `data` FROM `{$wpdb->prefix}b2s_posts_network_details` WHERE `network_auth_id` = %d", (int) $network_auth_id);
@@ -402,7 +413,7 @@ class B2S_RePost_Save {
                 }
             }
         }
-        
+
         if (isset($shareData['image_url']) && !empty($shareData['image_url']) && function_exists('wp_check_filetype') && defined('B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF')) {
             $image_data = wp_check_filetype($shareData['image_url']);
             $not_allow_gif = json_decode(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF, true);

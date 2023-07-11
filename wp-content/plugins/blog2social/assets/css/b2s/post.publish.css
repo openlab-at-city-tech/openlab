@@ -83,3 +83,10 @@
     width: 22px;
     display: inline-block;
 }
+
+.b2s-delete-all-posts-select {
+
+    margin-left: 10px;
+    margin-top:5px;
+    margin-bottom: 5px;
+}

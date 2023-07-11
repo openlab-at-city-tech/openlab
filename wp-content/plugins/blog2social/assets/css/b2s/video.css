@@ -1,0 +1,129 @@
+h3{
+    margin-top: 5px !important;
+}
+.modal-xl {
+    width: 1400px !important;
+}
+.form-inline {
+    width: 100%;
+    margin-top: 20px;
+}
+.form-inline .form-group  {
+    margin-left: 2px;
+}
+
+#b2s-content-wrapper {
+    position: unset !important;
+}
+
+#b2s-sidebar-wrapper {
+    display: inline-block;
+    position: unset !important;
+}
+
+#b2sSortPostAuthor{
+    margin-bottom: 9px !important;
+}
+
+/*Video Area*/
+.b2s-video-upload-file-area{
+    width: 100%;
+    height: 100px;
+    border: 2px solid lightgray;
+    border-radius: 3px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.b2s-video-upload-file-area:hover{
+    cursor: pointer;
+}
+
+.b2s-video-upload-file-area h4{
+    text-align: center;
+    font-weight: normal;
+    font-family: sans-serif;
+    line-height: 50px;
+    color: darkslategray;
+}
+
+#b2s-video-upload-file{
+    display: none;
+}
+.b2s-video-upload-title{
+    margin-top: 27px;
+}
+
+.b2s-video-image{
+    height: 36px;
+}
+.media-nav {
+    width: 100% !important;
+}
+
+.b2s-video-upload-error, .b2s-video-upload-success, .b2s-video-upload-activate-trial-error{
+    display: none;
+}
+
+.b2s-video-upload-list-last-trigger{
+    background:#dff0d8;
+    -moz-animation-name:colorChange;
+    -moz-animation-duration: 4s;
+    -moz-animation-delay:0s;
+    -moz-animation-iteration-count:1;
+    -moz-animation-fill-mode:forwards;
+}
+@-moz-keyframes colorChange {
+    from {background:#dff0d8;}
+    to {background:#fff;}        
+}
+
+
+.checkbox-item{
+    margin: 25px 5px 0 !important;
+}
+.checkbox-all-label{
+    padding-left:25px !important;  
+}
+
+.checkbox-all{
+    margin-top: 2px !important;
+}
+
+.checkbox-all-label-btn{
+    padding-left:25px !important;  
+    margin-left: -20px;
+    position: absolute;
+}
+.checkbox-all-btn{
+    color: #444 !important;
+}
+
+.b2s-loading-area{
+    width: 100% !important;
+}
+.checbox-item-empty{
+    padding: 15px;
+    float:left;
+}
+
+.b2s-video-premium-benefits{
+    border: 0px !important;
+    background-color: transparent !important;
+}
+
+.b2s-text-sm{
+    margin-top: 5px;
+    font-size: 10px;
+
+}
+
+.b2s-video-upload-data-volume-title{
+    margin-left: 20px;
+}
+
+.alert-status{
+    color: #444;
+    background-color: #d4d4d4;
+    border-color: #dedede;
+}

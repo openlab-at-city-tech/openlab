@@ -16,7 +16,7 @@ $autoPostItem = new B2S_AutoPost_Item();
             <!--Navbar|Start-->
             <div class="panel panel-default">
                 <div class="panel-body">
-                     <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                    <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                 </div>
             </div>
             <!--Navbar|End-->
@@ -36,100 +36,102 @@ $autoPostItem = new B2S_AutoPost_Item();
                             <div class="text-center b2s-loader-text"><?php esc_html_e("save...", "blog2social"); ?></div>
                         </div>
                         <div class="row b2s-autopost-area">
-                        <?php echo wp_kses($autoPostItem->getAutoPostingSettingsHtml(), array(
-                            'span' => array(
-                                'class' => array(),
-                                'data-network-count-trigger' => array(),
-                                'data-network-id' => array()
-                            ),
-                            'input' => array(
-                                'id' => array(),
-                                'class' => array(),
-                                'type' => array(),
-                                'value' => array(),
-                                'name' => array(),
-                                'data-size' => array(),
-                                'data-toggle' => array(),
-                                'data-width' => array(),
-                                'data-height' => array(),
-                                'data-onstyle' => array(),
-                                'data-on' => array(),
-                                'data-off' => array(),
-                                'data-area-type' => array(),
-                                'maxlength' => array(),
-                                'max' => array(),
-                                'min' => array(),
-                                'placeholder' => array(),
-                                'data-network-id' => array(),
-                                'checked' => array()
-                            ),
-                            'div' => array(
-                                'class' => array(),
-                                'data-error-reason' => array(),
-                                'style' => array(),
-                                'data-area-type' => array()
-                            ),
-                            'h4' => array(
-                                'class' => array()
-                            ),
-                            'a' => array(
-                                'class' => array(),
-                                'target' => array(),
-                                'href' => array(),
-                                'id' => array()
-                            ),
-                            'p' => array(
-                                'class' => array()
-                            ),
-                            'label' => array(
-                                'class' => array(),
-                                'for' => array()
-                            ),
-                            'small' => array(),
-                            'b' => array(),
-                            'form' => array(
-                                'id' => array(),
-                                'method' => array()
-                            ),
-                            'button' => array(
-                                'class' => array(),
-                                'data-post-type' => array(),
-                                'data-select-toogle-state' => array(),
-                                'data-select-toogle-name' => array(),
-                                'id' => array(),
-                                'type' => array()
-                            ),
-                            'br' => array(),
-                            'hr' => array(),
-                            'select' => array(
-                                'class' => array(),
-                                'name' => array(),
-                                'id' => array(),
-                                'multiple' => array(),
-                                'data-placeholder' => array()
-                            ),
-                            'option' => array(
-                                'value' => array(),
-                                'selected' => array(),
-                                'data-mandant-id' => array()
-                            ),
-                            'li' => array(
-                                'class' => array(),
-                                'data-network-auth-id' => array(),
-                                'data-network-id' => array(),
-                                'data-network-type' => array()
-                            ),
-                            'ul' => array(
-                                'class' => array(),
-                                'data-network-id' => array(),
-                                'data-network-count' => array()
-                            ),
-                            'img' => array(
-                                'class' => array(),
-                                'alt' => array(),
-                                'src' => array(),
-                            )
-                        )); ?>
+                            <?php
+                            echo wp_kses($autoPostItem->getAutoPostingSettingsHtml(), array(
+                                'span' => array(
+                                    'class' => array(),
+                                    'data-network-count-trigger' => array(),
+                                    'data-network-id' => array()
+                                ),
+                                'input' => array(
+                                    'id' => array(),
+                                    'class' => array(),
+                                    'type' => array(),
+                                    'value' => array(),
+                                    'name' => array(),
+                                    'data-size' => array(),
+                                    'data-toggle' => array(),
+                                    'data-width' => array(),
+                                    'data-height' => array(),
+                                    'data-onstyle' => array(),
+                                    'data-on' => array(),
+                                    'data-off' => array(),
+                                    'data-area-type' => array(),
+                                    'maxlength' => array(),
+                                    'max' => array(),
+                                    'min' => array(),
+                                    'placeholder' => array(),
+                                    'data-network-id' => array(),
+                                    'checked' => array()
+                                ),
+                                'div' => array(
+                                    'class' => array(),
+                                    'data-error-reason' => array(),
+                                    'style' => array(),
+                                    'data-area-type' => array()
+                                ),
+                                'h4' => array(
+                                    'class' => array()
+                                ),
+                                'a' => array(
+                                    'class' => array(),
+                                    'target' => array(),
+                                    'href' => array(),
+                                    'id' => array()
+                                ),
+                                'p' => array(
+                                    'class' => array()
+                                ),
+                                'label' => array(
+                                    'class' => array(),
+                                    'for' => array()
+                                ),
+                                'small' => array(),
+                                'b' => array(),
+                                'form' => array(
+                                    'id' => array(),
+                                    'method' => array()
+                                ),
+                                'button' => array(
+                                    'class' => array(),
+                                    'data-post-type' => array(),
+                                    'data-select-toogle-state' => array(),
+                                    'data-select-toogle-name' => array(),
+                                    'id' => array(),
+                                    'type' => array()
+                                ),
+                                'br' => array(),
+                                'hr' => array(),
+                                'select' => array(
+                                    'class' => array(),
+                                    'name' => array(),
+                                    'id' => array(),
+                                    'multiple' => array(),
+                                    'data-placeholder' => array()
+                                ),
+                                'option' => array(
+                                    'value' => array(),
+                                    'selected' => array(),
+                                    'data-mandant-id' => array()
+                                ),
+                                'li' => array(
+                                    'class' => array(),
+                                    'data-network-auth-id' => array(),
+                                    'data-network-id' => array(),
+                                    'data-network-type' => array()
+                                ),
+                                'ul' => array(
+                                    'class' => array(),
+                                    'data-network-id' => array(),
+                                    'data-network-count' => array()
+                                ),
+                                'img' => array(
+                                    'class' => array(),
+                                    'alt' => array(),
+                                    'src' => array(),
+                                )
+                            ));
+                            ?>
                         </div>
                         <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>" />
                         <?php

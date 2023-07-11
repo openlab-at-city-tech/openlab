@@ -138,85 +138,18 @@ jQuery(document).on('click', '.b2s-key-area-btn-submit', function () {
     }
 });
 
-jQuery(document).on('click', '.b2s-trail-show', function () {
-    jQuery('#b2sPreFeatureModal').modal('hide');
-    jQuery('#b2sProFeatureModal').modal('hide');
-    jQuery('#b2s-trial-modal').modal('show');
-});
-jQuery(document).on('click', '.b2s-trial-modal-btn', function() {
-    jQuery('#b2s-trial-modal').modal('show');
-});
-
-jQuery(document).on('click', '.b2s-trail-btn-start', function () {
-    var checkFail = false;
-
-    if (jQuery('#trial_vorname').val() == "") {
-        checkFail = true;
-        jQuery('#trial_vorname').addClass('error');
-    } else {
-        jQuery('#trial_vorname').removeClass('error');
-    }
-
-    if (jQuery('#trial_nachname').val() == "") {
-        checkFail = true;
-        jQuery('#trial_nachname').addClass('error');
-    } else {
-        jQuery('#trial_nachname').removeClass('error');
-    }
-
-    if (!isEmail(jQuery('#trial_email').val())) {
-        checkFail = true;
-        jQuery('#trial_email').addClass('error');
-    } else {
-        jQuery('#trial_email').removeClass('error');
-    }
-
-    if (checkFail == false) {
-        jQuery('.b2s-trail-btn-start').prop('disabled', true);
-        jQuery('.b2s-server-connection-fail').hide();
-        jQuery.ajax({
-            url: ajaxurl,
-            type: "POST",
-            dataType: "json",
-            cache: false,
-            data: {
-                'action': 'b2s_create_trail',
-                'vorname': jQuery('#trial_vorname').val(),
-                'nachname': jQuery('#trial_nachname').val(),
-                'email': jQuery('#trial_email').val(),
-                'url': jQuery('#trial_url').val(),
-                'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
-            },
-            error: function () {
-                jQuery('.b2s-server-connection-fail').show();
-                return false;
-            },
-            success: function (data) {
-                jQuery('.b2s-trail-btn-start').prop('disabled', false);
-                if (data.result == true) {
-                    jQuery('#b2s-trial-modal').modal('hide');
-                    jQuery('.b2s-key-area-success').show();
-                    jQuery('.b2s-trail-tracking').show();
-                    jQuery('#b2s-trail-tracking-src').attr('src', 'https://www.googleadservices.com/pagead/conversion/1072559458/?label=HB4lCM27oHMQ4uq3_wM&amp;guid=ON&amp;script=0');
-                    jQuery('.b2s-key-area-key-name').html(data.lizenzName);
-                    jQuery('.b2s-key-name').html(data.lizenzName);
-                    jQuery('.b2s-trail-premium-info-area').hide();
-                } else {
-                    if(data.error == 'nonce') {
-                        jQuery('.b2s-nonce-check-fail').show();
-                    }
-                    jQuery('.b2s-trail-modal-fail').show();
-                }
-
-            }
-        });
-    }
+//ADDON
+jQuery(document).on('click', '.b2sAddonFeatureModalBtn', function () {
+    jQuery('#b2sAddonFeatureModal').modal('show');
+    jQuery('#b2sAddonFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
+    return false;
 });
 
 //PREMIUM
 jQuery(document).on('click', '.b2sPreFeatureModalBtn', function () {
     jQuery('#b2sPreFeatureModal').modal('show');
     jQuery('#b2sPreFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
+    return false;
 });
 
 //PREMIUM-PRO
@@ -225,6 +158,7 @@ jQuery(document).on('click', '.b2sProFeatureModalBtn', function () {
     jQuery('#b2sProFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
     jQuery('#b2sProFeatureModal').find('.modal-body').hide();
     jQuery('#b2sProFeatureModal').find('.' + jQuery(this).attr('data-type')).show();
+    return false;
 });
 
 //PREMIUM-BUSINESS
@@ -233,6 +167,7 @@ jQuery(document).on('click', '.b2sBusinessFeatureModalBtn', function () {
     jQuery('#b2sBusinessFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
     jQuery('#b2sBusinessFeatureModal').find('.modal-body').hide();
     jQuery('#b2sBusinessFeatureModal').find('.' + jQuery(this).attr('data-type')).show();
+    return false;
 });
 
 jQuery(document).on('heartbeat-send', function (e, data) {

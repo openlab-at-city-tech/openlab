@@ -312,6 +312,52 @@ function b2sSortFormSubmit(sched_dates) {
     });
 }
 
+jQuery(document).on('click', '#b2s-delete-modal-btn', function () {
+    jQuery('.b2s-delete-all-modal').modal('show');
+
+});
+
+jQuery(document).on('click', '.b2s-publish-delete-all-confirm-btn', function () {
+    jQuery('.b2s-delete-all-modal').modal('hide');
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            action: 'b2s_delete_all_posts_older_than',
+            b2s_security_nonce: jQuery('#b2s_security_nonce').val(),
+            timeframe: jQuery('#b2s-delete-all-posts-select').val()
+        },
+        error: function (response) {
+            return false;
+        },
+        success: function (data) {
+
+            var url = window.location.href;
+            if(url[url.length -1] == "#"){
+                url = url.slice(0, url.length - 1)
+            } 
+
+            var origin = "&origin=publish_post";
+            if(data.result){
+                var deletePostStatus = "&deletePostStatus=success";
+            } else {
+                var deletePostStatus = "&deletePostStatus=failure";
+            }
+            var deletedPostsNumber = "&deletedPostsNumber="+data.count;
+
+            url = url +origin + deletePostStatus + deletedPostsNumber;
+            window.location.assign(url);
+            
+            return true;
+        }
+    });
+
+
+});
+
+
 jQuery(document).on('click', '.b2sDetailsSchedPostBtn', function () {
     var postId = jQuery(this).attr('data-post-id');
     var showByDate = jQuery(this).attr('data-search-date');
@@ -400,6 +446,7 @@ jQuery(document).on('click', '.checkbox-post-sched-all-btn', function () {
         jQuery('.b2s-sched-delete-confirm-btn').prop('disabeld', false);
     }
 });
+
 jQuery(document).on('click', '.b2s-post-sched-area-drop-btn', function () {
     jQuery('#b2s-delete-confirm-post-id').val(jQuery(this).attr('data-post-id'));
     jQuery('#b2s-delete-confirm-post-count').html('1');

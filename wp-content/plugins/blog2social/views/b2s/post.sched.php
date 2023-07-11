@@ -33,7 +33,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                 <!--Navbar|Start-->
                 <div class="panel panel-default">
                     <div class="panel-body">
-                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                     </div>
                 </div>
                 <!--Navbar|End-->
@@ -284,6 +284,6 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <script>
     var b2s_has_premium = <?php echo esc_attr(B2S_PLUGIN_USER_VERSION) > 0 ? "true" : "false"; ?>;
     var b2s_plugin_url = '<?php echo esc_url(B2S_PLUGIN_URL); ?>';
-    var b2s_post_formats = <?php echo json_encode(array('post' => array(esc_html__('Link Post', 'blog2social'), esc_html__('Image Post', 'blog2social')), 'image' => array(esc_html__('Image with frame', 'blog2social'), esc_html__('Image cut out','blog2social')))); ?>;
+    var b2s_post_formats = <?php echo json_encode(array('post' => array(esc_html__('Link Post', 'blog2social'), esc_html__('Image Post', 'blog2social')), 'image' => array(esc_html__('Image with frame', 'blog2social'), esc_html__('Image cut out', 'blog2social')))); ?>;
     var b2s_is_calendar = true;
 </script>

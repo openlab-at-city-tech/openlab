@@ -5,12 +5,15 @@ var filterDates = [];
 if (typeof wp.heartbeat !== "undefined") {
     jQuery(document).on('heartbeat-send', function (e, data) {
         data['b2s_heartbeat'] = 'b2s_listener';
+        data['b2s_heartbeat_action'] = 'b2s_metrics';
     });
     wp.heartbeat.connectNow();
 }
 
 jQuery(window).on("load", function () {
-    
+    if(jQuery('#b2sOptionMetricsStarted').val() == '1' && jQuery('#b2sOptionMetricsFeedback').val() == '0') {
+        jQuery('.b2s-metrics-feedback-modal').modal('show');
+    }   
     if(jQuery('#b2sOptionMetricsStarted').val() == '0') {
         jQuery('.b2s-metrics-starting-modal').modal('show');
     }
@@ -367,5 +370,6 @@ jQuery(document).on('click', '.b2s-metrics-legend-info-modal-btn', function () {
 
 jQuery(document).on('click', '.b2s-metrics-feedback-btn', function () {
     jQuery('.b2s-metrics-feedback-modal').modal('show');
+    jQuery('#b2s-metrics-feedback-checkbox').hide();
 });
 

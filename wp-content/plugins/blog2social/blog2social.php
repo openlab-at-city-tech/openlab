@@ -6,12 +6,12 @@
  * Author: Blog2Social, Adenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 6.9.14
+ * Version: 7.1.2
  * Author URI: https://www.blog2social.com
  * License: GPL2+
  */
 
-define('B2S_PLUGIN_VERSION', '699');
+define('B2S_PLUGIN_VERSION', '712');
 define('B2S_PLUGIN_LANGUAGE', serialize(array('de_DE', 'en_US')));
 define('B2S_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('B2S_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -22,6 +22,7 @@ $language = (!in_array(get_locale(), unserialize(B2S_PLUGIN_LANGUAGE))) ? 'en_US
 define('B2S_LANGUAGE', $language);
 define('B2S_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('B2S_PLUGIN_API_ENDPOINT', 'https://developer.blog2social.com/wp/v3/');
+define('B2S_PLUGIN_API_VIDEO_UPLOAD_ENDPOINT', 'https://api-upload.blog2social.com/api/rest/v1.0/');
 define('B2S_PLUGIN_API_ENDPOINT_AUTH', 'https://developer.blog2social.com/wp/v3/network/auth.php');
 define('B2S_PLUGIN_API_ENDPOINT_AUTH_SHORTENER', 'https://developer.blog2social.com/wp/v3/network/shortener.php');
 define('B2S_PLUGIN_PRG_API_ENDPOINT', 'http://developer.pr-gateway.de/wp/v3/');

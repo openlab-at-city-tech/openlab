@@ -67,7 +67,7 @@ class B2S_PostBox {
                 }
             }
             if (isset($optionAutoPost['profile'])) {
-                //default from settings
+//default from settings
                 $defaultProfile = $optionAutoPost['profile'];
                 if (isset($optionAutoPost['twitter']) && (int) $optionAutoPost['twitter'] > 0) {
                     $defaultTwitter = $optionAutoPost['twitter'];
@@ -76,10 +76,28 @@ class B2S_PostBox {
 
             $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
             if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant)) {
+
+
+                /*
+                 * since V7.0 Remove Video Networks
+                 */
+                if (!empty($result->data->auth)) {
+                    $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
+                    foreach ($result->data->auth as $a => $auth) {
+                        foreach ($auth as $u => $item) {
+                            if (in_array($item->networkId, $isVideoNetwork)) {
+                                if (!in_array($item->networkId, array(1, 2, 3, 6, 12, 38, 39))) {
+                                    unset($result->data->auth->{$a[$u]});
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (!empty($result->data->auth)) {
                     $postOptions = get_option('B2S_PLUGIN_POST_OPTIONS_' . $postId);
                     if ($postOptions != false && isset($postOptions['auto_post_manuell']) && !empty($postOptions['auto_post_manuell']) && isset($postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]) && !empty($postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID])) {
-                        //selected at last post
+//selected at last post
                         if (isset($postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]['profile']) && (int) $postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]['profile'] > 0) {
                             $selectedProfileId = $postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]['profile'];
                             if (isset($postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]['twitter']) && (int) $postOptions['auto_post_manuell'][B2S_PLUGIN_BLOG_USER_ID]['twitter'] > 0) {
@@ -88,14 +106,14 @@ class B2S_PostBox {
                         }
                     }
                     if ($selectedProfileId < 0 && $defaultProfile >= 0) {
-                        //default from settings
+//default from settings
                         $selectedProfileId = $defaultProfile;
                         if ((int) $defaultTwitter > 0) {
                             $selectedTwitterId = $defaultTwitter;
                         }
                     }
                     if ($selectedProfileId < 0) {
-                        //old
+//old
                         $profilOption = get_option('B2S_PLUGIN_SAVE_META_BOX_AUTO_SHARE_PROFILE_USER_' . B2S_PLUGIN_BLOG_USER_ID);
                         if ((int) $profilOption > 0) {
                             $selectedProfileId = (int) $profilOption;
@@ -110,7 +128,7 @@ class B2S_PostBox {
                 }
             }
 
-            //Auto-Post-Import - Check Conditions - show notice
+//Auto-Post-Import - Check Conditions - show notice
             $autoPostData = $this->userOption->_getOption('auto_post_import');
             if ($autoPostData !== false && is_array($autoPostData)) {
                 if (isset($autoPostData['active']) && (int) $autoPostData['active'] == 1) {
@@ -139,13 +157,13 @@ class B2S_PostBox {
             }
         }
 
-       $content = '<div class="b2s-post-meta-box">
-                    <div id="b2s-server-connection-fail" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-server-connection-fail" title="close notice"></button>' . esc_html__('The connection to the server failed. Please try again! You can find more information and solutions in the', 'blog2social') . '<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('connection_guide')) . '"> ' . esc_html__('guide for server connection', 'blog2social') . '</a>.</div>
-                    <div id="b2s-heartbeat-fail" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-heartbeat-fail" title="close notice"></button>' . esc_html__('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social!', 'blog2social') . $b2sHeartbeatFaqLink . ' </div>
-                    <div id="b2s-post-meta-box-state-no-publish-future-customize" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future-customize" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
-                    <div id="b2s-post-meta-box-state-no-auth" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-auth" title="close notice"></button>' . esc_html__('There are no social network accounts assigned to your selected network collection. Please assign at least one social network account or select another network collection.', 'blog2social') . '<a href="' . esc_url($this->b2sSiteUrl . 'wp-admin/admin.php?page=blog2social-network') . '" target="_bank">' . esc_html__('Network settings', 'blog2social') . '</a></div>
-                    <div id="b2s-post-meta-box-state-no-publish-future" class="b2s-info-error"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
-                    <div id="b2s-url-valid-warning" class="b2s-info-warning"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-url-valid-warning" title="close notice"></button>' . esc_html__('Notice: Please make sure, that your website address is reachable. The Social Networks do not allow postings from local installations.', 'blog2social') . '</div>
+        $content = '<div class="b2s-post-meta-box">
+                    <div id="b2s-server-connection-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-server-connection-fail" title="close notice"></button>' . esc_html__('The connection to the server failed. Please try again! You can find more information and solutions in the', 'blog2social') . '<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('connection_guide')) . '"> ' . esc_html__('guide for server connection', 'blog2social') . '</a>.</div>
+                    <div id="b2s-heartbeat-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-heartbeat-fail" title="close notice"></button>' . esc_html__('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social!', 'blog2social') . $b2sHeartbeatFaqLink . ' </div>
+                    <div id="b2s-post-meta-box-state-no-publish-future-customize" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future-customize" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
+                    <div id="b2s-post-meta-box-state-no-auth" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-auth" title="close notice"></button>' . esc_html__('There are no social network accounts assigned to your selected network collection. Please assign at least one social network account or select another network collection.', 'blog2social') . '<a href="' . esc_url($this->b2sSiteUrl . 'wp-admin/admin.php?page=blog2social-network') . '" target="_bank">' . esc_html__('Network settings', 'blog2social') . '</a></div>
+                    <div id="b2s-post-meta-box-state-no-publish-future" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
+                    <div id="b2s-url-valid-warning" class="b2s-info-warning b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-url-valid-warning" title="close notice"></button>' . esc_html__('Notice: Please make sure, that your website address is reachable. The Social Networks do not allow postings from local installations.', 'blog2social') . '</div>
                     <input type="hidden" id="b2s-redirect-url-customize" name="b2s-redirect-url-customize" value="' . esc_attr($this->b2sSiteUrl . 'wp-admin/admin.php?page=blog2social-ship&postId=') . '"/>
                     <input type="hidden" id="b2s-user-last-selected-profile-id" name="b2s-user-last-selected-profile-id" value="' . esc_attr(($selectedProfileId !== false ? (int) $selectedProfileId : 0)) . '" />
                     <input type="hidden" id="b2s-home-url" name="b2s-home-url" value="' . esc_attr(get_option('home')) . '"/>
@@ -159,7 +177,6 @@ class B2S_PostBox {
                     <input type="hidden" id="b2s-post-meta-box-version" name="b2s-post-meta-box-version" value="' . esc_attr(B2S_PLUGIN_USER_VERSION) . '"/>
                     <input type="hidden" id="isOgMetaChecked" name="isOgMetaChecked" value="' . esc_attr((isset($metaSettings['og_active']) ? (int) $metaSettings['og_active'] : 0)) . '">
                     <input type="hidden" id="isCardMetaChecked" name="isCardMetaChecked" value="' . esc_attr((isset($metaSettings['card_active']) ? (int) $metaSettings['card_active'] : 0)) . '">
-                    <input type="hidden" id="b2s-logo-url" value="' . esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)) . '">
                     <input type="hidden" id="b2sAutoPostImportIsActive" name="autoPostImportIsActive" value="' . (($autoPostImport) ? 1 : 0) . '">
 
                     <h3 class="b2s-meta-box-headline">' . esc_html__('Custom Sharing & Scheduling', 'blog2social') . ' <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalSched" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
@@ -186,7 +203,6 @@ class B2S_PostBox {
         }
         $content .= '</div>
                     </div>';
-
 
         $content .= ' <div class="b2s-meta-box-modal" id="b2sInfoMetaBoxModalSched" aria-hidden="true" style="display:none;">
                         <div class="b2s-meta-box-modal-dialog">
@@ -273,8 +289,7 @@ class B2S_PostBox {
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Bloglovin') . '" src="' . esc_url(plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE)) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('VKontakte') . '" src="' . esc_url(plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE)) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('XING') . '" src="' . esc_url(plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE)) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Imgur') . '" src="' . esc_url(plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE)) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Google My Business') . '" src="' . esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Google Business Profile') . '" src="' . esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) . '">
                                 </div>
                                 <br>
                                 <p class="b2s-bold">' . sprintf(__('Under <a href="%s">Network Settings</a> you can define which network selection is used. <a href="%s" target="_blank">Create a network selection.</a>', 'blog2social'), 'admin.php?page=blog2social-network', esc_url(B2S_Tools::getSupportLink('network_grouping'))) . '</p>
@@ -293,8 +308,7 @@ class B2S_PostBox {
                                 <span class="b2s-bold">' . esc_html('Bloglovin') . '</span><br>
                                 <span class="b2s-bold">' . esc_html('VKontakte (Profile & Seiten)') . '</span><br>
                                 <span class="b2s-bold">' . esc_html('XING (Profile & Seiten)') . '</span><br>
-                                <span class="b2s-bold">' . esc_html('Imgur') . '</span><br>
-                                <span class="b2s-bold">' . esc_html('Google My Business') . '</span><br>
+                                <span class="b2s-bold">' . esc_html('Google Business Profile') . '</span><br>
                             </div>
                         </div>
                     </div>
@@ -307,7 +321,7 @@ class B2S_PostBox {
         $content .= '</select></div>';
         $content .= $authContent;
 
-        //TOS Twitter 032018 - none multiple Accounts - User select once
+//TOS Twitter 032018 - none multiple Accounts - User select once
         $content .= '<div class="b2s-meta-box-auto-post-twitter-profile"><label for="b2s-post-meta-box-profil-dropdown-twitter">' . esc_html__('Select Twitter profile:', 'blog2social') . '</label> <select class="b2s-w-100" id="b2s-post-meta-box-profil-dropdown-twitter" name="b2s-post-meta-box-profil-dropdown-twitter">';
         foreach ($mandant as $k => $m) {
             if ((isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0]))) {
@@ -320,13 +334,12 @@ class B2S_PostBox {
         }
         $content .= '</select></div>';
 
-
-        //new V5.1.0 Seeding
+//new V5.1.0 Seeding
         $bestTimeType = 0;  //0=default(best time), 1= special per account (seeding), 2= per network (old)
         $myBestTimeSettings = $this->userOption->_getOption('auth_sched_time');
         if (isset($myBestTimeSettings['time'])) {
             $bestTimeType = 1;
-            //old  
+//old  
         } else {
             global $wpdb;
             if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_post_sched_settings'") == $wpdb->prefix . 'b2s_post_sched_settings') {
@@ -334,13 +347,13 @@ class B2S_PostBox {
                 if (is_array($myBestTimeSettings) && !empty($myBestTimeSettings)) {
                     $bestTimeType = 2;
                 } else {
-                    //default
+//default
                     $myBestTimeSettings = B2S_Tools::getRandomBestTimeSettings();
                 }
             }
         }
 
-        //Opt: Best Time Settings
+//Opt: Best Time Settings
         if (!empty($myBestTimeSettings) && is_array($myBestTimeSettings)) {
             $bestTimeSettings = array('type' => $bestTimeType, 'times' => $myBestTimeSettings);
             $content .= '<br>
@@ -355,6 +368,36 @@ class B2S_PostBox {
             $content .= '</div>';
         }
 
+        return $content;
+    }
+
+    public function getVideoBox($postId = 0) {
+        $content = '';
+        $notice = '';
+        $url = '';
+        $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDON_VIDEO)) ? true : false;
+        if (B2S_PLUGIN_USER_VERSION > 0 && $canUseVideoAddon && isset(B2S_PLUGIN_ADDON_VIDEO['volume_open'])) {
+            $enoughVolume = false;
+            $volume = B2S_PLUGIN_ADDON_VIDEO['volume_open'];
+            $videoMeta = wp_read_video_metadata(get_attached_file((int) $postId));
+            if (isset($videoMeta['filesize']) && is_numeric($videoMeta['filesize'])) {
+                if ($volume >= round($videoMeta['filesize'] / 1024)) {
+                    $enoughVolume = true;
+                }
+            }
+            if (!$enoughVolume) {
+                $notice = esc_html__("You don't have enough data volume left. Please top-up your data to upload your video.", 'blog2social');
+            } else {
+                $url = esc_url("admin.php?page=blog2social-ship&isVideo=1&postId=" . esc_attr($postId));
+            }
+        } else {
+            $notice = esc_html__('Unlock video add-on', 'blog2social');
+        }
+
+        if (!empty($notice)) {
+            $content .= '<div id="b2s-meta-video-box-notice" class="b2s-info-warning"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-meta-video-box-notice" title="close notice"></button>' . $notice . '</div>';
+        }
+        $content .= '<button id="b2s-meta-video-box-btn-customize" data-url="' . $url . '" class="b2s-btn b2s-btn-primary b2s-btn-sm b2s-center-block b2s-btn-margin-bottom-15" ' . (!empty($notice) ? 'disabled' : '') . ' >' . esc_html__('Share on video networks', 'blog2social') . '</button>';
         return $content;
     }
 
