@@ -6,9 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ComposerAutoloaderInitdb48224f916c132e92801ec62bfb5c83' => $vendorDir . '/composer/autoload_real.php',
-    'Composer\\Autoload\\ClassLoader' => $vendorDir . '/composer/ClassLoader.php',
-    'Composer\\Autoload\\ComposerStaticInitdb48224f916c132e92801ec62bfb5c83' => $vendorDir . '/composer/autoload_static.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'SimCal_WP_Requirements' => $baseDir . '/wp-requirements.php',
     'SimpleCalendar\\Abstracts\\Admin_Page' => $baseDir . '/abstracts/admin-page.php',

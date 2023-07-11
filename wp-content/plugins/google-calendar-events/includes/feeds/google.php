@@ -10,7 +10,7 @@ use SimpleCalendar\plugin_deps\Google_Service_Calendar;
 use SimpleCalendar\plugin_deps\Google_Client;
 use SimpleCalendar\plugin_deps\Google_Service_Calendar_Event;
 use SimpleCalendar\plugin_deps\Google_Service_Calendar_Events;
-use SimpleCalendar\plugin_deps\Google\Service\Exception;
+use SimpleCalendar\plugin_deps\Google_Service_Exception;
 
 use SimpleCalendar\plugin_deps\Carbon\Carbon;
 use SimpleCalendar\Abstracts\Calendar;
@@ -161,7 +161,7 @@ class Google extends Feed {
 
 			try {
 				$response = $this->make_request( $this->google_calendar_id );
-			} catch ( Exception $e ) {
+			} catch ( Google_Service_Exception $e ) {
 				$error .= $e->getMessage();
 			}
 
@@ -286,7 +286,7 @@ class Google extends Feed {
 								$end_utc = $google_end_utc->getTimestamp();
 
 								// Count multiple days.
-								$span = $google_start->diffInDays( $google_end );
+								$span = $google_start->diffInDays( $google_end->endOfDay() );
 
 								if ( $span == 0 ) {
 									if ( ( $google_start->toDateString() !== $google_end->toDateString() ) && $google_end->toTimeString() != '00:00:00' ) {

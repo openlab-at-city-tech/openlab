@@ -946,10 +946,10 @@ trait Comparison
         if (\preg_match('/\\d:\\d{1,2}$/', $tester)) {
             return $current->startOfMinute()->eq($other);
         }
-        if (\preg_match('/\\d(h|am|pm)$/', $tester)) {
+        if (\preg_match('/\\d(?:h|am|pm)$/', $tester)) {
             return $current->startOfHour()->eq($other);
         }
-        if (\preg_match('/^(january|february|march|april|may|june|july|august|september|october|november|december)\\s+\\d+$/i', $tester)) {
+        if (\preg_match('/^(?:january|february|march|april|may|june|july|august|september|october|november|december)(?:\\s+\\d+)?$/i', $tester)) {
             return $current->startOfMonth()->eq($other->startOfMonth());
         }
         $units = ['month' => [1, 'year'], 'day' => [1, 'month'], 'hour' => [0, 'day'], 'minute' => [0, 'hour'], 'second' => [0, 'minute'], 'microsecond' => [0, 'second']];

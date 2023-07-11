@@ -201,13 +201,14 @@ class Pages {
 	public function html() {
 
 		global $current_tab;
+		$admin_image_about_path = SIMPLE_CALENDAR_ASSETS . '/images';
 
 		// Get current tab/section
 		$current_tab = empty( $_GET['tab'] ) ? $this->tab : sanitize_title( $_GET['tab'] );
 		$this->tab = $current_tab;
 
 		?>
-		<div class="wrap" id="simcal-settings-page">
+		<div class="wrap simcal-font-poppins semical-<?php echo $current_tab; ?>-tab" id="simcal-settings-page">
 			<form id="simcal-settings-page-form"
 			      method="post"
 			      action="options.php">
@@ -217,7 +218,7 @@ class Pages {
 				$settings_pages = self::get_settings();
 				if ( ! empty( $settings_pages ) && is_array( $settings_pages ) ) {
 
-					echo '<h2 class="nav-tab-wrapper simcal-nav-tab-wrapper">';
+					echo '<h2 class="nav-tab-wrapper simcal-nav-tab-wrapper simcal-flex simcal-space-x-[102px] simcal-bg-sc_blue-100 simcal-text-sc_grey-100 ">';
 
 					// Get tabs for the settings page
 					if ( ! empty( $settings_pages ) && is_array( $settings_pages ) ) {
@@ -228,7 +229,7 @@ class Pages {
 							$tab_label = isset( $settings['label'] ) ? $settings['label'] : '';
 							$tab_link  = admin_url( 'edit.php?post_type=calendar&page=simple-calendar_' . $this->page . '&tab=' . $tab_id );
 
-							echo '<a href="' . $tab_link . '" class="nav-tab ' . ( $current_tab == $tab_id ? 'nav-tab-active' : '' ) . '">' . $tab_label . '</a>';
+							echo '<a href="' . $tab_link . '" class=" sc-link simcal-ml-[5%] simcal-text-base simcal-font-normal' . ( $current_tab == $tab_id ? ' nav-tab-active hover:simcal-bg-inherit simcal-bg-sc_blue-100 simcal-border-b-[3px] simcal-pb-[7px] simcal-pr-[7px] simcal-pl-[7px] simcal-border-b-sc_green-200 ' : '' ) . '">' . $tab_label . '</a>';
 						}
 
 					}
@@ -236,12 +237,17 @@ class Pages {
 					do_action( 'simcal_admin_page_' . $this->page . '_tabs' );
 
 					echo '</h2>';
+					echo '<div class="simcal-max-w-[100%]">';
+					echo '<div class="simcal-bg-sc_blue-100 ">';
+
+					echo '<div class="simcal-flex simcal-pt-[80px] simcal-ml-[5%] ">';
 
 					settings_errors();
 
 					foreach ( $settings_pages as $tab_id => $contents ) {
 
 						if ( $tab_id === $current_tab ) {
+							echo '<div class="simcal-bg-white simcal-p-[2%] simcal-w-[54%] simcal-rounded-[5px] ">';
 
 							echo isset( $contents['description'] ) ? '<p>' . $contents['description'] . '</p>' : '';
 
@@ -254,17 +260,108 @@ class Pages {
 
 							$submit = apply_filters( 'simcal_admin_page_' . $this->page . '_' . $current_tab . '_submit', true );
 							if ( true === $submit ) {
-								submit_button();
+								submit_button();								
 							}
-						}
-					}
+							echo '</div>'; 
+								?>
+								<div class="simcal-w-[38%] simcal-h-[452px] simcal-ml-[2%] simcal-rounded-[5px] simcal-bg-white">
+									<div class="simcal-mt-[15%]">					
+										<img class="simcal-m-auto" src="<?php echo $admin_image_about_path . '/rating.png'; ?>" />							
+									</div>
+									<div class="simcal-mt-[15px] simcal-text-center simcal-font-semibold simcal-text-lg ">
+										<Span><?php _e('Please Rate Us !','google-calendar-events')?></Span>
+									</div>
+									<div class="simcal-mt-[5px] simcal-text-center simcal-font-normal simcal-text-base simcal-text-gray-500">
+										<Span><?php _e('If you like Simple Calendar please Rate Us','google-calendar-events')?> </Span>
+									</div>
+									<div class="simcal-mt-[44px]">
+										<?php
+										// Rating function is used here 
+											sc_rating();
+										?>				
+									</div> 
+									<a href="https://wordpress.org/support/plugin/google-calendar-events/reviews/?filter=5#new-post">
+										<button type="button" class="simcal-mt-[20px] simcal-m-auto simcal-flex simcal-justify-center simcal-items-center simcal-w-[85%] simcal-h-[40px] simcal-bg-sc_green-200 simcal-text-white simcal-text-xl simcal-font-medium simcal-rounded-md">
+										<?php _e('Rate Now','google-calendar-events')?>							
+										</button>
+									</a>
+									<div class="simcal-mt-[25px] simcal-text-center simcal-text-base simcal-underline ">
+										<a class="hover:simcal-text-sc_green-200" href="https://wordpress.org/support/plugin/google-calendar-events/reviews/?filter=5"><?php _e('See All Customers Reviews','google-calendar-events')?></a>
+									</div>
+								</div>
+								<?php
+								echo '</div>'; 
+								}
+							}
+							// It will display when the Pro is activated.				
+							if (! is_plugin_active( 'Simple-Calendar-Google-Calendar-Pro-main/simple-calendar-google-calendar-pro.php' )  )  {		
+							?>
+								<div class="simcal-pt-[41px] simcal-max-w-[100%] simcal-ml-[5%]">
+									<div class="simcal-flex simcal-h-[430px] xl:simcal-h-[450px] ">
+										<div class="simcal-w-[48%] simcal-flex simcal-relative simcal-bg-sc_green-100 simcal-rounded-l-[5px] ">
+											<div class="simcal-pl-[37px] simcal-pt-[20px]">
+												<img src="<?php echo $admin_image_about_path . '/pro-banner.png'; ?>" />
+											</div>
+											<div class="simcal-absolute simcal-right-[-15px] simcal-top-[120px]">
+												<img src="<?php echo $admin_image_about_path . '/arrow.png'; ?>" />
+											</div>	
+										</div>
+										<div class="simcal-w-[46%] simcal-pl-[5%] simcal-bg-sc_green-100 simcal-rounded-r-[5px] ">
+											<div class="simcal-pr-[9%] simcal-mt-[66px]">
+												<div class="simcal-flex">
+													<div>
+														<img src="<?php echo $admin_image_about_path . '/black-tick.png'; ?>" />
+													</div>
+													<div class="simcal-ml-[9px] simcal-text-xl simcal-font-semibold simcal-text-sc_green-200">
+														<span><?php _e('Pro Version','google-calendar-events')?></span>
+													</div>
+												</div>
+												<div class="simcal-mt-3 simcal-text-base simcal-text-gray-400 ">
+													<span><?php _e('Calendars configured to use the','google-calendar-events')?><b class="simcal-text-sc_black-100 hover:simcal-text-sc_green-200"><?php _e(' Google Calendar Pro add-on','google-calendar-events')?></b> <?php _e('use a different method of authorization.','google-calendar-events')?></span>
+												</div>
+												<div class="simcal-flex simcal-items-center simcal-text-gray-400 simcal-mt-[21px]">
+													<div>
+														<img src="<?php echo $admin_image_about_path . '/green-tick.png'; ?>" />
+													</div>
+													<div class="simcal-ml-[9px] simcal-text-base simcal-text-gray-400 simcal-font-normal" >
+														<span><?php _e('Display events from both private and public Google Calendars.','google-calendar-events')?></span>
+													</div>
+												</div>
+												<div class="simcal-flex simcal-items-center simcal-mt-[14px] ">
+													<div>
+														<img src="<?php echo $admin_image_about_path . '/green-tick.png'; ?>" />
+													</div>
+													<div class="simcal-ml-[9px] simcal-text-base simcal-text-gray-400 simcal-font-normal " >
+														<span> <?php _e('Display a list of attachments with links to their original source.','google-calendar-events')?></span>
+													</div>
+												</div>
+												<div class="simcal-flex simcal-items-center simcal-mt-[14px] ">
+													<div>
+														<img src="<?php echo $admin_image_about_path . '/green-tick.png'; ?>" />
+													</div>
+													<div class="simcal-ml-[9px] simcal-text-base simcal-text-gray-400 simcal-font-normal">
+														<span><?php _e('Many More...','google-calendar-events')?></span>
+													</div>
+												</div>
+												<a href="https://simplecalendar.io/addons/?utm_source=inside-plugin&utm_medium=link&utm_campaign=core-plugin&utm_content=settings-link">
+													<button type="button" class="simcal-mt-[45px] simcal-flex simcal-justify-center simcal-items-center simcal-w-[97%] simcal-h-[40px] simcal-bg-sc_green-200 simcal-text-white simcal-text-xl simcal-font-medium simcal-rounded-md">
+														<img class="simcal-p-[8px]" src="<?php echo $admin_image_about_path . '/crown.png'; ?>" />
+														<?php _e('Get Pro Version','google-calendar-events')?>						
+													</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php						
+						}	
+					echo '</div>'; 						
+					echo '</div>'; 						
 				}
-				
 				?>
 			</form>
 		</div>
 		<?php
-
 	}
-
+	
 }

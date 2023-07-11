@@ -15,6 +15,7 @@ return array(
     'a4a119a56e50fbb293281d9a48007e0e' => $vendorDir . '/symfony/polyfill-php80/bootstrap.php',
     'decc78cc4436b1292c6c0d151b19445c' => $vendorDir . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     'a1105708a18b76903365ca1c4aa61b02' => $vendorDir . '/symfony/translation/Resources/functions.php',
+    'a8d3953fd9959404dd22d3dfcd0a79f0' => $vendorDir . '/google/apiclient/src/aliases.php',
     'e39310c052e8b39ed87f09cd01ef75b3' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
     'ea746c05cde3afa2e3246ebe7b958d8c' => $vendorDir . '/guzzlehttp/psr7/src/functions_include.php',
     '86500fcabab09672f75fa2dccc7eddce' => $vendorDir . '/guzzlehttp/promises/src/functions_include.php',

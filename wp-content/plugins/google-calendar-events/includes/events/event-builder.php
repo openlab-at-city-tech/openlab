@@ -8,6 +8,7 @@ namespace SimpleCalendar\Events;
 
 use SimpleCalendar\plugin_deps\Carbon\Carbon;
 use SimpleCalendar\Abstracts\Calendar;
+use SimpleCalendar\plugin_deps\Parsedown;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -473,8 +474,9 @@ return array_merge( array(
 				case 'if-today' :
 				case 'if-not-today' :
 					$start_dt   = $event->start_dt->setTimezone( $calendar->timezone );
-					$startOfDay = $start_dt->startOfDay()->getTimestamp();
-					$endOfDay   = $start_dt->endOfDay()->getTimestamp();
+					/* keynet fix: avoid trashing the event start - use copy */
+					$startOfDay = $start_dt->copy()->startOfDay()->getTimestamp();
+					$endOfDay   = $start_dt->copy()->endOfDay()->getTimestamp();
 
 					$today = ( $startOfDay <= $calendar->now ) && ( $calendar->now <= $endOfDay );
 
@@ -670,7 +672,7 @@ return array_merge( array(
 			if ( $allow_html ) {
 				$description = wp_kses_post( $description );
 			} elseif ( $allow_md ) {
-				$markdown    = new \Parsedown();
+				$markdown    = new Parsedown();
 				$description = $markdown->text( wp_strip_all_tags( $description ) );
 			}
 		} else {
@@ -777,8 +779,8 @@ return array_merge( array(
 
 		return '';
 		}
-		
-			
+
+
 		$event_dt = $event->$dt;
 
 		$attr = array_merge( array(

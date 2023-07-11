@@ -158,7 +158,7 @@ class Verify
             }
         }
         if (!isset($certs['keys'])) {
-            throw new \SimpleCalendar\plugin_deps\Google\AccessToken\InvalidArgumentException('federated sign-on certs expects "keys" to be set');
+            throw new InvalidArgumentException('federated sign-on certs expects "keys" to be set');
         }
         return $certs['keys'];
     }

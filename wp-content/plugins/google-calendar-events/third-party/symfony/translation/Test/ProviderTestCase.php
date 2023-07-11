@@ -31,11 +31,11 @@ abstract class ProviderTestCase extends TestCase
     protected $defaultLocale;
     protected $loader;
     protected $xliffFileDumper;
-    public abstract function createProvider(HttpClientInterface $client, LoaderInterface $loader, LoggerInterface $logger, string $defaultLocale, string $endpoint) : ProviderInterface;
+    public static abstract function createProvider(HttpClientInterface $client, LoaderInterface $loader, LoggerInterface $logger, string $defaultLocale, string $endpoint) : ProviderInterface;
     /**
-     * @return iterable<array{0: string, 1: ProviderInterface}>
+     * @return iterable<array{0: ProviderInterface, 1: string}>
      */
-    public abstract function toStringProvider() : iterable;
+    public static abstract function toStringProvider() : iterable;
     /**
      * @dataProvider toStringProvider
      */

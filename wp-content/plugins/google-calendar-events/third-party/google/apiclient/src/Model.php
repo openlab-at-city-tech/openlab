@@ -170,7 +170,7 @@ class Model implements \ArrayAccess
      */
     private function getSimpleValue($value)
     {
-        if ($value instanceof \SimpleCalendar\plugin_deps\Google\Model) {
+        if ($value instanceof Model) {
             return $value->toSimpleObject();
         } else {
             if (\is_array($value)) {
