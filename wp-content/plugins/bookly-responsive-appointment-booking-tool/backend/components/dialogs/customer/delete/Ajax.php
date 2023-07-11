@@ -58,7 +58,6 @@ class Ajax extends Lib\Base\Ajax
                         ->setRaw( 'internal_note = CONCAT_WS(%s,internal_note,%s)', array( $appointment['internal_note'] == '' ? '' : PHP_EOL, $note ) )
                         ->where( 'id', $appointment['id'] )
                         ->execute();
-                    Lib\Utils\Log::deleteEntity( $ca_list[ $appointment['ca_id'] ], __METHOD__ );
                     $ca_list[ $appointment['ca_id'] ]->delete();
                 }
             }

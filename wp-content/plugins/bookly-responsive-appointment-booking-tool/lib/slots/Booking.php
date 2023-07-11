@@ -3,6 +3,7 @@ namespace Bookly\Lib\Slots;
 
 /**
  * Class Booking
+ *
  * @package Bookly\Lib\Slots
  */
 class Booking
@@ -33,8 +34,8 @@ class Booking
      * @param int $location_id
      * @param int $nop
      * @param int $on_waiting_list
-     * @param string $start  Format Y-m-d H:i[:s]
-     * @param string $end    Format Y-m-d H:i[:s]
+     * @param string $start Format Y-m-d H:i[:s]
+     * @param string $end Format Y-m-d H:i[:s]
      * @param int $padding_left
      * @param int $padding_right
      * @param int $extras_duration
@@ -43,15 +44,15 @@ class Booking
      */
     public function __construct( $location_id, $service_id, $nop, $on_waiting_list, $start, $end, $padding_left, $padding_right, $extras_duration, $one_booking_per_slot, $external )
     {
-        $this->location_id          = (int) $location_id;
-        $this->service_id           = (int) $service_id;
-        $this->nop                  = (int) $nop;
-        $this->on_waiting_list      = (int) $on_waiting_list;
-        $this->range                = Range::fromDates( $start, $end );
-        $this->range_with_padding   = $this->range->transform( - (int) $padding_left, (int) $padding_right );
-        $this->extras_duration      = (int) $extras_duration;
+        $this->location_id = (int) $location_id;
+        $this->service_id = (int) $service_id;
+        $this->nop = (int) $nop;
+        $this->on_waiting_list = (int) $on_waiting_list;
+        $this->range = Range::fromDates( $start, $end );
+        $this->range_with_padding = $this->range->transform( -(int) $padding_left, (int) $padding_right );
+        $this->extras_duration = (int) $extras_duration;
         $this->one_booking_per_slot = (bool) $one_booking_per_slot;
-        $this->external             = (bool) $external;
+        $this->external = (bool) $external;
     }
 
     /**

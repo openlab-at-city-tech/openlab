@@ -29,6 +29,15 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
+     * @param string $key
+     * @return Collection
+     */
+    public function getCollection( $key )
+    {
+        return $this->has( $key ) ? new self( $this->values[ $key ] ) : new self( array() );
+    }
+
+    /**
      * @param string $name
      * @return bool
      */

@@ -3,6 +3,7 @@ namespace Bookly\Lib\Slots;
 
 /**
  * Class Service
+ *
  * @package Bookly\Lib\Slots
  */
 class Service
@@ -13,6 +14,8 @@ class Service
     protected $capacity_min;
     /** @var int */
     protected $capacity_max;
+    /** @var int */
+    protected $waiting_list_capacity;
     /** @var string */
     protected $staff_preference_rule;
     /** @var int */
@@ -24,28 +27,30 @@ class Service
      * Constructor.
      *
      * @param double $price
-     * @param int    $capacity_min
-     * @param int    $capacity_max
+     * @param int $capacity_min
+     * @param int $capacity_max
      * @param string $staff_preference_rule
-     * @param array  $staff_preference_settings
-     * @param int    $staff_preference_order
+     * @param array $staff_preference_settings
+     * @param int $staff_preference_order
      */
     public function __construct(
         $price,
         $capacity_min,
         $capacity_max,
+        $waiting_list_capacity,
         $staff_preference_rule,
         $staff_preference_settings,
         $staff_preference_order
-    )
-    {
-        $this->price        = (double) $price;
+    ) {
+        $this->price = (double) $price;
         $this->capacity_min = (int) $capacity_min;
         $this->capacity_max = (int) $capacity_max;
 
-        $this->staff_preference_rule     = $staff_preference_rule;
+        $this->waiting_list_capacity = $waiting_list_capacity;
+
+        $this->staff_preference_rule = $staff_preference_rule;
         $this->staff_preference_settings = $staff_preference_settings;
-        $this->staff_preference_order    = $staff_preference_order;
+        $this->staff_preference_order = $staff_preference_order;
     }
 
     /**
@@ -106,5 +111,15 @@ class Service
     public function capacityMax()
     {
         return $this->capacity_max;
+    }
+
+    /**
+     * Get waiting list capacity.
+     *
+     * @return int
+     */
+    public function waitingListCapacity()
+    {
+        return $this->waiting_list_capacity;
     }
 }

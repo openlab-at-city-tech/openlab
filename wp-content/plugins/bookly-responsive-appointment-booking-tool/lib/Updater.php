@@ -8,6 +8,79 @@ namespace Bookly\Lib;
  */
 class Updater extends Base\Updater
 {
+    function update_21_8()
+    {
+        global $wpdb;
+
+        $charset_collate = $wpdb->has_cap( 'collation' )
+            ? $wpdb->get_charset_collate()
+            : 'DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci';
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . $this->getTableName( 'bookly_notifications_queue' ) . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `data` TEXT DEFAULT NULL,
+                `sent` TINYINT(1) DEFAULT 0,
+                `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+    }
+
+    function update_21_7()
+    {
+        $this->alterTables( array(
+            'bookly_services' => array(
+                'ALTER TABLE `%s` MODIFY slot_length VARCHAR(32) DEFAULT \'default\' NOT NULL',
+                'ALTER TABLE `%s` MODIFY color VARCHAR(32) DEFAULT \'#FFFFFF\' NOT NULL',
+                'ALTER TABLE `%s` MODIFY deposit VARCHAR(16) DEFAULT \'100%%\' NOT NULL',
+                'ALTER TABLE `%s` MODIFY start_time_info VARCHAR(32) DEFAULT \'\' NULL',
+                'ALTER TABLE `%s` MODIFY end_time_info VARCHAR(32) DEFAULT \'\' NULL',
+                'ALTER TABLE `%s` ADD COLUMN `waiting_list_capacity` INT UNSIGNED DEFAULT NULL AFTER `capacity_max`',
+            ),
+            'bookly_payments' => array(
+                'ALTER TABLE `%s` MODIFY target ENUM (\'appointments\', \'packages\', \'gift_cards\') DEFAULT \'appointments\' NOT NULL',
+            ),
+        ) );
+
+        if ( ! $this->existsColumn( 'bookly_services', 'gateways' ) ) {
+            $this->alterTables( array(
+                'bookly_services' => array(
+                    'ALTER TABLE `%s` ADD COLUMN `gateways` VARCHAR(255) DEFAULT NULL',
+                ),
+            ) );
+        }
+
+        add_option( 'bookly_email_gateway', 'wp' );
+        add_option( 'bookly_smtp_host', '' );
+        add_option( 'bookly_smtp_port', '' );
+        add_option( 'bookly_smtp_user', '' );
+        add_option( 'bookly_smtp_password', '' );
+        add_option( 'bookly_smtp_secure', 'none' );
+    }
+
+    function update_21_6()
+    {
+        add_option( 'bookly_app_show_slots', get_option( 'bookly_app_show_single_slot', false ) ? 'single' : 'all' );
+        delete_option( 'bookly_app_show_single_slot' );
+    }
+
+    function update_21_5()
+    {
+        $this->alterTables( array(
+            'bookly_services' => array(
+                'ALTER TABLE `%s` ADD COLUMN `gateways` VARCHAR(255) DEFAULT NULL',
+            ),
+            'bookly_sessions' => array(
+                'ALTER TABLE `%s` ADD COLUMN `name` VARCHAR(255) DEFAULT NULL AFTER `token`',
+            ),
+            'bookly_notifications' => array(
+                'ALTER TABLE `%s` CHANGE `gateway` `gateway` ENUM("email","sms","voice","whatsapp") NOT NULL DEFAULT "email"',
+            ),
+        ) );
+    }
+
     function update_21_4()
     {
         $this->alterTables( array(
@@ -246,7 +319,7 @@ class Updater extends Base\Updater
     {
         $self = $this;
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function () use ( $self ) {
             $self->alterTables( array(
                 'bookly_staff' => array(
                     'ALTER TABLE `%s` ADD COLUMN `gateways` VARCHAR(255) DEFAULT NULL',
@@ -270,7 +343,7 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function () use ( $self ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -420,7 +493,8 @@ class Updater extends Base\Updater
                     'active' => 1,
                     'to_customer' => 1,
                     'settings' => '[]',
-                ), )
+                ),
+            )
         );
     }
 
@@ -552,7 +626,7 @@ class Updater extends Base\Updater
 
         $self = $this;
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-change-schema', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-change-schema', function () use ( $self ) {
             $self->alterTables( array(
                 'bookly_appointments' => array(
                     'ALTER TABLE `%s` ADD COLUMN `updated_at` DATETIME DEFAULT NULL',
@@ -566,12 +640,12 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-set-updated_at', function() use ( $self, $wpdb ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-set-updated_at', function () use ( $self, $wpdb ) {
             foreach ( array( 'bookly_appointments', 'bookly_customer_appointments', 'bookly_payments' ) as $table ) {
                 $wpdb->query( 'UPDATE `' . $self->getTableName( $table ) . '` SET `updated_at` = `created` WHERE `updated_at` IS null' );
             }
         } );
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-rename', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-rename', function () use ( $self ) {
             $self->alterTables( array(
                 'bookly_appointments' => array(
                     'ALTER TABLE `%s` CHANGE COLUMN `updated_at` `updated_at` DATETIME NOT NULL',
@@ -661,7 +735,7 @@ class Updater extends Base\Updater
     function update_18_3()
     {
         $self = $this;
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function () use ( $self ) {
             $self->alterTables( array(
                 'bookly_payments' => array(
                     'ALTER TABLE `%s` ADD COLUMN `token` VARCHAR(255) DEFAULT NULL AFTER `status`',
@@ -669,7 +743,7 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function() use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function () use ( $self ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -765,7 +839,7 @@ class Updater extends Base\Updater
 
         $payments_table = $this->getTableName( 'bookly_payments' );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-gateway', function() use ( $payments_table ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-gateway', function () use ( $payments_table ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -864,7 +938,7 @@ class Updater extends Base\Updater
         );
 
         // Changes in schema
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-1', function() use ( $self, $wpdb, $notifications_table, $notifications, $default_settings ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-1', function () use ( $self, $wpdb, $notifications_table, $notifications, $default_settings ) {
             $wpdb->query( 'UPDATE `' . $wpdb->usermeta . '` SET meta_key = \'bookly_dismiss_feature_requests_description\' WHERE meta_key = \'bookly_feature_requests_rules_hide\'' );
             if ( ! $self->existsColumn( 'bookly_notifications', 'name' ) ) {
                 $self->alterTables( array(
@@ -955,7 +1029,7 @@ class Updater extends Base\Updater
         } );
 
         // WPML
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-2', function() use ( $self, $wpdb, $notifications_table, $notifications ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-2', function () use ( $self, $wpdb, $notifications_table, $notifications ) {
             $records = $wpdb->get_results( $wpdb->prepare( 'SELECT id, `type`, `gateway` FROM `' . $notifications_table . '` WHERE COALESCE( `settings`, \'[]\' ) = \'[]\' AND `type` IN (' . implode( ', ', array_fill( 0, count( $notifications ), '%s' ) ) . ')', array_keys( $notifications ) ), ARRAY_A );
             $strings = array();
             foreach ( $records as $record ) {
@@ -973,7 +1047,7 @@ class Updater extends Base\Updater
         } );
 
         // Add settings for notifications
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-3', function() use ( $wpdb, $notifications_table, $notifications, $default_settings ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-3', function () use ( $wpdb, $notifications_table, $notifications, $default_settings ) {
             $combined_notifications = get_option( 'bookly_cst_combined_notifications', 'missing' );
             if ( $combined_notifications === 'missing' ) {
                 $combined_notifications = (bool) $wpdb->query( 'SELECT 1 FROM `' . $notifications_table . '` WHERE `type` = \'new_booking_combined\' AND `active` = 1 LIMIT 1' );
@@ -1206,9 +1280,11 @@ class Updater extends Base\Updater
             'bookly_lic_repeat_time' => 'bookly_pr_show_time',
         ) );
 
-        add_option( 'bookly_pr_data', array( 'SW1wb3J0YW50ITxicj5JdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseS4gQW5kIGl0IG1heSBjb250YWluIGEgbWFsaWNpb3VzIGNvZGUsIGEgdHJvamFuIG9yIGEgYmFja2Rvb3Iu',
+        add_option( 'bookly_pr_data', array(
+            'SW1wb3J0YW50ITxicj5JdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseS4gQW5kIGl0IG1heSBjb250YWluIGEgbWFsaWNpb3VzIGNvZGUsIGEgdHJvamFuIG9yIGEgYmFja2Rvb3Iu',
             'Q29uc2lkZXIgc3dpdGNoaW5nIHRvIHRoZSBsZWdhbCBjb3B5IG9mIEJvb2tseSB0aGF0IGluY2x1ZGVzIGFsbCBmZWF0dXJlcywgbGlmZXRpbWUgZnJlZSB1cGRhdGVzLCBhbmQgMjQvNyBzdXBwb3J0Lg==',
-            'WW91IGNhbiBidXkgbGVnYWwgY29weSBhdCBvdXIgd2Vic2l0ZSA8YSBocmVmPSJodHRwczovL3d3dy5ib29raW5nLXdwLXBsdWdpbi5jb20iIHRhcmdldD0iX2JsYW5rIj53d3cuYm9va2luZy13cC1wbHVnaW4uY29tPC9hPiwgb3IgY29udGFjdCBhcyBhdCA8YSBocmVmPSJtYWlsdG86c3VwcG9ydEBsYWRlbGEuY29tIj5zdXBwb3J0QGxhZGVsYS5jb208L2E+IGZvciBhbnkgYXNzaXN0YW5jZS4=', ) );
+            'WW91IGNhbiBidXkgbGVnYWwgY29weSBhdCBvdXIgd2Vic2l0ZSA8YSBocmVmPSJodHRwczovL3d3dy5ib29raW5nLXdwLXBsdWdpbi5jb20iIHRhcmdldD0iX2JsYW5rIj53d3cuYm9va2luZy13cC1wbHVnaW4uY29tPC9hPiwgb3IgY29udGFjdCBhcyBhdCA8YSBocmVmPSJtYWlsdG86c3VwcG9ydEBsYWRlbGEuY29tIj5zdXBwb3J0QGxhZGVsYS5jb208L2E+IGZvciBhbnkgYXNzaXN0YW5jZS4=',
+        ) );
         add_option( 'bookly_cst_required_birthday', '1' );
         add_option( 'bookly_sms_undelivered_count', '0' );
 
@@ -1315,9 +1391,11 @@ class Updater extends Base\Updater
         ) );
 
         add_option( 'bookly_cst_allow_duplicates', '0' );
-        update_option( 'bookly_reminder_data', array( 'SW1wb3J0YW50ISBJdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseSDigJMgaXQgbWF5IGNvbnRhaW4gYSBtYWxpY2lvdXMgY29kZSwgYSB0cm9qYW4gb3IgYSBiYWNrZG9vci4=',
+        update_option( 'bookly_reminder_data', array(
+            'SW1wb3J0YW50ISBJdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseSDigJMgaXQgbWF5IGNvbnRhaW4gYSBtYWxpY2lvdXMgY29kZSwgYSB0cm9qYW4gb3IgYSBiYWNrZG9vci4=',
             'VGhlIGxlZ2FsIGNvcHkgb2YgQm9va2x5IGluY2x1ZGVzIGFsbCBmZWF0dXJlcywgbGlmZXRpbWUgZnJlZSB1cGRhdGVzIHdoaWNoIGludHJvZHVjZSBuZXcgZmVhdHVyZXMgYW5kIGltcG9ydGFudCBzZWN1cml0eSBmaXhlcywgYW5kIDI0Lzcgc3VwcG9ydC4=',
-            'PGEgaHJlZj0iaHR0cHM6Ly93d3cuYm9va2luZy13cC1wbHVnaW4uY29tL2JlY29tZS1sZWdhbC8iIHRhcmdldD0iX2JsYW5rIj5DbGljayBoZXJlIHRvIGxlYXJuIG1vcmUgPj4+PC9hPg' ) );
+            'PGEgaHJlZj0iaHR0cHM6Ly93d3cuYm9va2luZy13cC1wbHVnaW4uY29tL2JlY29tZS1sZWdhbC8iIHRhcmdldD0iX2JsYW5rIj5DbGljayBoZXJlIHRvIGxlYXJuIG1vcmUgPj4+PC9hPg',
+        ) );
     }
 
     function update_14_9()
@@ -1673,9 +1751,11 @@ class Updater extends Base\Updater
         add_option( 'bookly_url_cancel_confirm_page_url', home_url() );
         add_option( 'bookly_ntf_processing_interval', '2' );
         add_option( 'bookly_app_show_notes', '0' );
-        add_option( 'bookly_reminder_data', array( 'SW1wb3J0YW50ISBJdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseSDigJMgaXQgbWF5IGNvbnRhaW4gYSBtYWxpY2lvdXMgY29kZSwgYSB0cm9qYW4gb3IgYSBiYWNrZG9vci4=',
+        add_option( 'bookly_reminder_data', array(
+            'SW1wb3J0YW50ISBJdCBsb29rcyBsaWtlIHlvdSBhcmUgdXNpbmcgYW4gaWxsZWdhbCBjb3B5IG9mIEJvb2tseSDigJMgaXQgbWF5IGNvbnRhaW4gYSBtYWxpY2lvdXMgY29kZSwgYSB0cm9qYW4gb3IgYSBiYWNrZG9vci4=',
             'VGhlIGxlZ2FsIGNvcHkgb2YgQm9va2x5IGluY2x1ZGVzIGFsbCBmZWF0dXJlcywgbGlmZXRpbWUgZnJlZSB1cGRhdGVzLCBhbmQgMjQvNyBzdXBwb3J0LiBCeSBidXlpbmcgYSBsZWdhbCBjb3B5IG9mIEJvb2tseSBhdCBhIHNwZWNpYWwgZGlzY291bnRlZCBwcmljZSwgeW91IG1heSBiZW5lZml0IGZyb20gb3VyIHBhcnRuZXLigJlzIGV4Y2x1c2l2ZSBkaXNjb3VudHMh',
-            'PGEgaHJlZj0iaHR0cHM6Ly93d3cuYm9va2luZy13cC1wbHVnaW4uY29tL2JlY29tZS1sZWdhbC8iIHRhcmdldD0iX2JsYW5rIj5DbGljayBoZXJlIHRvIGxlYXJuIG1vcmUgPj4+PC9hPg' ) );
+            'PGEgaHJlZj0iaHR0cHM6Ly93d3cuYm9va2luZy13cC1wbHVnaW4uY29tL2JlY29tZS1sZWdhbC8iIHRhcmdldD0iX2JsYW5rIj5DbGljayBoZXJlIHRvIGxlYXJuIG1vcmUgPj4+PC9hPg',
+        ) );
         add_option( 'bookly_lic_repeat_time', time() + 7776000 );
         $this->addL10nOptions( array(
             'bookly_l10n_label_notes' => __( 'Notes', 'bookly' ),

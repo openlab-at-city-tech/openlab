@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Frontend\Modules\Stripe;
 
+use Bookly\Frontend\Modules\ModernBookingForm\Proxy;
 use Bookly\Lib;
 
 /**
@@ -58,24 +59,28 @@ class Ajax extends Lib\Base\Ajax
         $payment = new Lib\Entities\Payment();
         $payment->loadBy( array( 'id' => $data['metadata']['payment_id'], 'type' => Lib\Entities\Payment::TYPE_CLOUD_STRIPE ) );
         if ( $payment->getStatus() === Lib\Entities\Payment::STATUS_PENDING ) {
-            if ( strtoupper( $data['currency'] ) == Lib\Config::getCurrency() ) {
+            if ( strtoupper( $data['currency'] ) === Lib\Config::getCurrency() ) {
                 $amount = $payment->getPaid();
                 if ( ! Lib\Config::isZeroDecimalsCurrency() ) {
                     // Amount in cents
                     $amount = (int) ( $amount * 100 );
                 }
-                if ( $stripe_amount == $amount ) {
-                    $payment->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )->save();
-                    if ( $order = Lib\DataHolders\Booking\Order::createFromPayment( $payment ) ) {
-                        current( $order->getItems() )->getCA()->setJustCreated( true );
-                        Lib\Notifications\Cart\Sender::send( $order );
+                if ( $stripe_amount === $amount ) {
+                    if ( $payment->getTarget() === Lib\Entities\Payment::TARGET_GIFT_CARDS ) {
+                        Proxy\Pro::setPaymentCompleted( $payment );
+                    } else {
+                        $payment->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )->save();
+                        if ( $order = Lib\DataHolders\Booking\Order::createFromPayment( $payment ) ) {
+                            current( $order->getItems() )->getCA()->setJustCreated( true );
+                            Lib\Notifications\Cart\Sender::send( $order );
 
-                        foreach ( $order->getFlatItems() as $item ) {
-                            if ( $item->getAppointment()->getGoogleEventId() !== null ) {
-                                Lib\Proxy\Pro::syncGoogleCalendarEvent( $item->getAppointment() );
-                            }
-                            if ( $item->getAppointment()->getOutlookEventId() !== null ) {
-                                Lib\Proxy\OutlookCalendar::syncEvent( $item->getAppointment() );
+                            foreach ( $order->getFlatItems() as $item ) {
+                                if ( $item->getAppointment()->getGoogleEventId() !== null ) {
+                                    Lib\Proxy\Pro::syncGoogleCalendarEvent( $item->getAppointment() );
+                                }
+                                if ( $item->getAppointment()->getOutlookEventId() !== null ) {
+                                    Lib\Proxy\OutlookCalendar::syncEvent( $item->getAppointment() );
+                                }
                             }
                         }
                     }
@@ -93,7 +98,7 @@ class Ajax extends Lib\Base\Ajax
     {
         /** @var Lib\Entities\Payment $payment */
         $payment = Lib\Entities\Payment::query()
-            ->where( 'id', $data['metadata']['payment_id'])
+            ->where( 'id', $data['metadata']['payment_id'] )
             ->where( 'type', Lib\Entities\Payment::TYPE_CLOUD_STRIPE )
             ->whereNot( 'status', Lib\Entities\Payment::STATUS_REFUNDED )
             ->findOne();

@@ -15,23 +15,28 @@ use Bookly\Lib\Utils\Price;
  * @method static bool authorizeNetActive()            Check whether Authorize.Net add-on is active or not.
  * @method static bool cartActive()                    Check whether Cart add-on is active or not.
  * @method static bool chainAppointmentsActive()       Check whether Chain Appointment add-on is active or not.
- * @method static bool compoundServicesActive()        Check whether Compound Services add-on is active or not.
  * @method static bool collaborativeServicesActive()   Check whether Collaborative Services add-on is active or not.
+ * @method static bool compoundServicesActive()        Check whether Compound Services add-on is active or not.
  * @method static bool couponsActive()                 Check whether Coupons add-on is active or not.
- * @method static bool customerGroupsActive()          Check whether Customer Groups add-on is active or not.
- * @method static bool customerInformationActive()     Check whether Customer Information add-on is active or not.
+ * @method static bool customDurationActive()          Check whether Custom Duration add-on is active or not.
  * @method static bool customFieldsActive()            Check whether Custom Fields add-on is active or not.
  * @method static bool customJavaScriptActive()        Check whether Custom JavaScript add-on is active or not.
  * @method static bool customStatusesActive()          Check whether Custom Statuses add-on is active or not.
- * @method static bool discountsActive()               Check whether Discounts add-on is active or not.
+ * @method static bool customerGroupsActive()          Check whether Customer Groups add-on is active or not.
+ * @method static bool customerInformationActive()     Check whether Customer Information add-on is active or not.
  * @method static bool depositPaymentsActive()         Check whether Deposit Payments add-on is active or not.
+ * @method static bool discountsActive()               Check whether Discounts add-on is active or not.
  * @method static bool filesActive()                   Check whether Files add-on is active or not.
+ * @method static bool googleMapsAddressActive()       Check whether Google Maps Address add-on is active or not.
  * @method static bool groupBookingActive()            Check whether Group Booking add-on is active or not.
  * @method static bool invoicesActive()                Check whether Invoices add-on is active or not.
  * @method static bool locationsActive()               Check whether Locations add-on is active or not.
+ * @method static bool mailchimpActive()               Check whether Mailchimp add-on is active or not.
  * @method static bool mollieActive()                  Check whether Mollie add-on is active or not.
  * @method static bool multiplyAppointmentsActive()    Check whether Multiply Appointments add-on is active or not.
  * @method static bool packagesActive()                Check whether Packages add-on is active or not.
+ * @method static bool paypalCheckoutActive()          Check whether PayPal checkout add-on is active or not.
+ * @method static bool paypalPaymentsStandardActive()  Check whether PayPal payments standard add-on is active or not.
  * @method static bool paysonActive()                  Check whether Payson add-on is active or not.
  * @method static bool payuBizActive()                 Check whether PayUbiz add-on is active or not.
  * @method static bool payuLatamActive()               Check whether PayU Latam add-on is active or not.
@@ -47,9 +52,6 @@ use Bookly\Lib\Utils\Price;
  * @method static bool tasksActive()                   Check whether Tasks add-on is active or not.
  * @method static bool taxesActive()                   Check whether Taxes add-on is active or not.
  * @method static bool waitingListActive()             Check whether Waiting List add-on is active or not.
- * @method static bool customDurationActive()          Check whether Custom Duration add-on is active or not.
- * @method static bool googleMapsAddressActive()       Check whether Google Maps Address add-on is active or not.
- * @method static bool mailchimpActive()               Check whether Mailchimp add-on is active or not.
  */
 abstract class Config
 {
@@ -289,7 +291,7 @@ abstract class Config
         $week_days = array_values( $wp_locale->weekday_abbrev );
 
         // Sort days considering start_of_week;
-        uksort( $days, function( $a, $b ) use ( $start_of_week ) {
+        uksort( $days, function ( $a, $b ) use ( $start_of_week ) {
             $a -= $start_of_week;
             $b -= $start_of_week;
             if ( $a < 1 ) {
@@ -374,7 +376,7 @@ abstract class Config
             || ( self::payuBizActive() && get_option( 'bookly_payu_biz_enabled' ) )
             || ( self::payuLatamActive() && get_option( 'bookly_payu_latam_enabled' ) )
             || ( self::stripeActive() && get_option( 'bookly_stripe_enabled' ) )
-            || ( Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_STRIPE ) && get_option( 'bookly_cloud_stripe_enabled' ) )
+            || self::stripeCloudEnabled()
             || self::squareEnabled()
             || self::giftEnabled()
             || self::paypalEnabled()
@@ -426,6 +428,14 @@ abstract class Config
     public static function giftEnabled()
     {
         return self::proActive() && get_option( 'bookly_cloud_gift_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT );
+    }
+
+    /**
+     * @return bool
+     */
+    public static function stripeCloudEnabled()
+    {
+        return get_option( 'bookly_cloud_stripe_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_STRIPE );
     }
 
     /**
@@ -535,13 +545,23 @@ abstract class Config
     }
 
     /**
-     * Whether to show wide time slots in the time step of booking form.
+     * Whether to show single time slot in the time step of booking form.
      *
      * @return bool
      */
     public static function showSingleTimeSlot()
     {
-        return (bool) get_option( 'bookly_app_show_single_slot', false );
+        return get_option( 'bookly_app_show_slots' ) === 'single';
+    }
+
+    /**
+     * Whether to show single time slot per day in the time step of booking form.
+     *
+     * @return bool
+     */
+    public static function showSingleTimeSlotPerDay()
+    {
+        return get_option( 'bookly_app_show_slots' ) === 'single_per_day';
     }
 
     /**

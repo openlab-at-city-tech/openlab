@@ -29,7 +29,7 @@ class Dialog extends Lib\Base\Component
         self::enqueueData( array(
             'extras_list',
             'extras_multiply_nop',
-        ) );
+        ), 'bookly-appointment.js' );
 
         $statuses = array();
         foreach ( CustomerAppointment::getStatuses() as $status ) {

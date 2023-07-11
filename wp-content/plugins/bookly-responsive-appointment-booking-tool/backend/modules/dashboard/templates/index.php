@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components;
 use Bookly\Backend\Components\Dashboard;
 use Bookly\Backend\Modules\Dashboard\Proxy;

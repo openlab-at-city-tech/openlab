@@ -87,7 +87,6 @@ class Ajax extends Lib\Base\Ajax
                     $queue
                 );
             }
-            Lib\Utils\Log::deleteEntity( $ca, __METHOD__ );
             $ca->deleteCascade();
         }
 
@@ -95,12 +94,19 @@ class Ajax extends Lib\Base\Ajax
         foreach ( Lib\Entities\Appointment::query()->whereIn( 'id', $appointments_list )->find() as $appointment ) {
             $ca = $appointment->getCustomerAppointments();
             if ( empty( $ca ) ) {
-                Lib\Utils\Log::deleteEntity( $appointment, __METHOD__ );
                 $appointment->delete();
             }
         }
+        $response = array();
+        if ( $queue ) {
+            $db_queue = new Lib\Entities\NotificationQueue();
+            $db_queue
+                ->setData( json_encode( array( 'all' => $queue ) ) )
+                ->save();
 
-        wp_send_json_success( compact( 'queue' ) );
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue );
+        }
+        wp_send_json_success( $response );
     }
 
     /**

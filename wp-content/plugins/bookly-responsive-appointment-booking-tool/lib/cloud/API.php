@@ -7,6 +7,7 @@ use Bookly\Lib\Plugin;
 
 /**
  * Class API
+ *
  * @package Bookly\Lib\Cloud
  */
 class API extends Cache
@@ -42,6 +43,8 @@ class API extends Cache
     public $square;
     /** @var \BooklyPro\Lib\Cloud\Gift */
     public $gift;
+    /** @var WhatsApp */
+    public $whatsapp;
 
     /**
      * Constructor.
@@ -56,6 +59,8 @@ class API extends Cache
         $this->zapier = new Zapier( $this );
         $this->cron = new Cron( $this );
         $this->voice = new Voice( $this );
+        $this->whatsapp = new WhatsApp( $this );
+
         Proxy\Shared::initApi( $this );
     }
 
@@ -105,7 +110,7 @@ class API extends Cache
      * Send PATCH request.
      *
      * @param string $path
-     * @param array  $data
+     * @param array $data
      * @return array|false
      */
     public function sendPatchRequest( $path, array $data = array() )
@@ -256,15 +261,15 @@ class API extends Cache
      *
      * @param string $method
      * @param string $url
-     * @param array  $data
+     * @param array $data
      * @return string|null
      */
     private function _sendRequest( $method, $url, $data )
     {
         $args = array(
-            'method'    => $method,
+            'method' => $method,
             'sslverify' => false,
-            'timeout'   => $this->timeout,
+            'timeout' => $this->timeout,
         );
 
         if ( ! isset( $data['site_url'] ) ) {
@@ -288,7 +293,6 @@ class API extends Cache
 
         $response = wp_remote_request( $url, $args );
         if ( $response instanceof \WP_Error ) {
-            /** @var \WP_Error $response */
             $this->errors[] = $response->get_error_messages();
 
             return null;
@@ -344,6 +348,6 @@ class API extends Cache
             $error_code = substr( $error_code, 6 );
         }
 
-        return __( ucfirst( strtolower ( str_replace( '_', ' ', $error_code ) ) ), 'bookly' );
+        return __( ucfirst( strtolower( str_replace( '_', ' ', $error_code ) ) ), 'bookly' );
     }
 }

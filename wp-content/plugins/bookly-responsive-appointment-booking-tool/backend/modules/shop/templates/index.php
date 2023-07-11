@@ -1,6 +1,5 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components;
-use Bookly\Lib\Utils\Common;
 use Bookly\Backend\Components\Support;
 
 ?>
@@ -34,7 +33,7 @@ use Bookly\Backend\Components\Support;
 <template id="bookly-shop-template" class="hidden">
     <div class="{{plugin_class}} card mb-4 mr-4 border rounded">
         <div class="card-header p-0">
-            <img class="card-img-top rounded-top" style="height: 250px;object-fit: cover;" loading="lazy" src="{{image}}" alt="{{title}}"/>
+            <img class="card-img-top rounded-top" style="height: 270px;object-fit: cover;" loading="lazy" src="{{image}}" alt="{{title}}"/>
         </div>
         <div class="card-body">
             <div class="d-flex mb-3">

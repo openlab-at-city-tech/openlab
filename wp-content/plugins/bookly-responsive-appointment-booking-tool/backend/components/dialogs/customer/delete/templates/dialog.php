@@ -1,7 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Controls\Inputs;
-
 ?>
 <form id="bookly-delete-dialog" class="bookly-modal bookly-fade" tabindex=-1>
     <div class="modal-dialog">

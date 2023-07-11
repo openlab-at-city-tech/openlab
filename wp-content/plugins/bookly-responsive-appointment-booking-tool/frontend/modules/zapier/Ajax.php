@@ -110,9 +110,12 @@ class Ajax extends Lib\Base\Ajax
             $all_extras[ $item->getId() ] = $item->getTitle();
         }
 
-        return array_map( function ( $appointment ) use ( $all_extras ) {
+        $appointments = $query->fetchArray();
+        foreach ( $appointments as &$appointment ) {
             $custom_fields = array();
             $extras = array();
+            $appointment['custom_fields_'] = null;
+            $appointment['extras_'] = null;
             $app = new Lib\Entities\Appointment();
             $app
                 ->setId( $appointment['id'] )
@@ -129,11 +132,13 @@ class Ajax extends Lib\Base\Ajax
                     $title = $appointment['number_of_persons'] . ' × ' . $title;
                 }
                 $extras[] = $title;
+                $appointment['extras_'][ $extras_id ] = array( 'title' => $all_extras[ $extras_id ], 'quantity' => $quantity );
             }
 
             // Custom fields
-            foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( new Lib\Entities\CustomerAppointment( array( 'custom_fields' => $appointment['custom_fields'] ) ) ) as $cf ) {
+            foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( new Lib\Entities\CustomerAppointment( array( 'id' => $appointment['ca_id'], 'custom_fields' => $appointment['custom_fields'] ) ) ) as $cf ) {
                 $custom_fields[] = $cf['label'] . ': ' . $cf['value'];
+                $appointment['custom_fields_'][ $cf['id'] ] = array( 'label' => $cf['label'], 'value' => $cf['value'] );
             }
 
             if ( $appointment['payment_id'] === null ) {
@@ -171,9 +176,9 @@ class Ajax extends Lib\Base\Ajax
             $appointment['extras']           = implode( '; ', $extras );
 
             unset( $appointment['extras_multiply_nop'], $appointment['extras_multiply_nop'], $appointment['time_zone'], $appointment['time_zone_offset'], $appointment['online_meeting_provider'], $appointment['online_meeting_id'], $appointment['online_meeting_data'], $appointment['ca_id'], $appointment['order_id'] );
+        }
 
-            return $appointment;
-        }, $query->fetchArray() );
+        return $appointments;
     }
 
     /**
@@ -246,9 +251,10 @@ class Ajax extends Lib\Base\Ajax
         ->order( 'DESC' );
 
         if ( Lib\Config::proActive() ) {
-            $query->addSelect( 'c.country AS client_country, c.state AS client_state, c.postcode AS client_postcode, c.city AS client_city, c.street AS client_street, c.street_number AS client_street_number, c.additional_address AS client_additional_address' );
+            $query->addSelect( 'c.country AS client_country, c.state AS client_state, c.postcode AS client_postcode, c.city AS client_city, c.street AS client_street, c.street_number AS client_street_number, c.additional_address AS client_additional_address, gc.code AS gift_card_code' )
+                ->leftJoin( 'GiftCard', 'gc', 'gc.id = p.gift_card_id', '\BooklyPro\Lib\Entities' );
         } else {
-            $query->addSelect( 'null AS client_country, null AS client_state, null AS client_postcode, null AS client_city, null AS client_street, null AS client_street_number, null AS client_additional_address' );
+            $query->addSelect( 'null AS client_country, null AS client_state, null AS client_postcode, null AS client_city, null AS client_street, null AS client_street_number, null AS client_additional_address, null AS gift_card_code' );
         }
 
         if ( Lib\Config::locationsActive() ) {

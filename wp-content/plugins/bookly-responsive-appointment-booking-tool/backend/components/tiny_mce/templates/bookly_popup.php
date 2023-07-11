@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div id="bookly-tinymce-popup" style="display: none">
     <form id="bookly-short-code-form">
         <table>

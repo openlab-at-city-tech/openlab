@@ -124,51 +124,14 @@ class Ajax extends Lib\Base\Ajax
     {
         if ( Lib\Utils\Common::isCurrentUserAdmin() ) {
             $staff_ids = self::parameter( 'staff_ids', array() );
-            if ( self::parameter( 'force_delete', false ) ) {
-                foreach ( $staff_ids as $staff_id ) {
-                    if ( $staff = Lib\Entities\Staff::find( $staff_id ) ) {
-                        foreach ( Lib\Entities\Appointment::query( 'a' )->where( 'a.staff_id', $staff_id )->find() as $appointment ) {
-                            Lib\Utils\Log::deleteEntity( $appointment, __METHOD__, 'Delete staff: ' . $staff->getFullName() );
-                        }
-                        $staff->delete();
-                    }
-                }
-                $total = Lib\Entities\Staff::query()->count();
-
-                wp_send_json_success( compact( 'total' ) );
-            } else {
-                $appointment = Lib\Entities\Appointment::query( 'a' )
-                    ->select( 'a.staff_id, MAX(a.start_date) AS start_date' )
-                    ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
-                    ->whereIn( 'a.staff_id', $staff_ids )
-                    ->whereGt( 'a.start_date', current_time( 'mysql' ) )
-                    ->whereIn( 'ca.status', Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
-                        Lib\Entities\CustomerAppointment::STATUS_PENDING,
-                        Lib\Entities\CustomerAppointment::STATUS_APPROVED,
-                    ) ) )
-                    ->limit( 1 )
-                    ->fetchRow();
-
-                $filter_url  = '';
-                if ( $appointment['start_date'] ) {
-                    $last_month = date_create( $appointment['start_date'] )->modify( 'last day of' )->format( 'Y-m-d' );
-                    $action     = 'show_modal';
-                    $filter_url = sprintf( '%s#staff=%d&appointment-date=%s-%s',
-                        Lib\Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Appointments\Ajax::pageSlug() ),
-                        $appointment['staff_id'],
-                        date_create( current_time( 'mysql' ) )->format( 'Y-m-d' ),
-                        $last_month );
-                    wp_send_json_error( compact( 'action', 'filter_url' ) );
-                }
-                $filter_url = Proxy\Shared::getAffectedAppointmentsFilter( $filter_url, $staff_ids );
-                if ( $filter_url ) {
-                    $action = 'show_modal';
-                    wp_send_json_error( compact( 'action', 'filter_url' ) );
-                } else {
-                    $action = 'confirm';
-                    wp_send_json_error( compact( 'action' ) );
+            foreach ( $staff_ids as $staff_id ) {
+                if ( $staff = Lib\Entities\Staff::find( $staff_id ) ) {
+                    $staff->delete();
                 }
             }
+            $total = Lib\Entities\Staff::query()->count();
+
+            wp_send_json_success( compact( 'total' ) );
         }
 
         wp_send_json_success();

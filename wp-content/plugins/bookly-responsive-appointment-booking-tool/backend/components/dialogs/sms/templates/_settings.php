@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Lib\Utils;

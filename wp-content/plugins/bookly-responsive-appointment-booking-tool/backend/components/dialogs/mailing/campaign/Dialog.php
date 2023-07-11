@@ -64,6 +64,7 @@ class Dialog extends Lib\Base\Component
                 'campaign' => __( 'Campaign', 'bookly' ),
                 'cancel_campaign' => __( 'Cancel campaign', 'bookly' ) . '…',
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
+                'doc_hint' => sprintf( __( 'Start typing "{" to see the available codes. For more information, see the <a href="%s" target="_blank">documentation</a> page', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-sms-campaigns' ),
             ),
         ) );
 

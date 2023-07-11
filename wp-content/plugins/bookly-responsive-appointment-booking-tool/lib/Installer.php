@@ -246,7 +246,7 @@ class Installer extends Base\Installer
             'bookly_app_show_progress_tracker' => '1',
             'bookly_app_align_buttons_left' => '0',
             'bookly_app_staff_name_with_price' => '1',
-            'bookly_app_show_single_slot' => '0',
+            'bookly_app_show_slots' => 'all',
             'bookly_app_show_email_confirm' => '0',
             'bookly_app_show_start_over' => '1',
             'bookly_app_show_category_info' => '0',
@@ -442,6 +442,13 @@ class Installer extends Base\Installer
             'bookly_appointment_cancel_action' => 'cancel',
             // Notices
             'bookly_show_wpml_resave_required_notice' => '0',
+            // SMTP
+            'bookly_email_gateway' => 'wp',
+            'bookly_smtp_host' => '',
+            'bookly_smtp_port' => '',
+            'bookly_smtp_user' => '',
+            'bookly_smtp_password' => '',
+            'bookly_smtp_secure' => 'none',
         );
     }
 
@@ -452,7 +459,7 @@ class Installer extends Base\Installer
     {
         remove_action( 'shutdown', array( 'Bookly\Lib\SessionDB', 'save' ), 20 );
         if ( get_option( 'bookly_gen_delete_data_on_uninstall' ) ) {
-            /** @var \wpdb */
+            /** @var \wpdb $wpdb */
             global $wpdb;
 
             $this->removeData();
@@ -480,6 +487,7 @@ class Installer extends Base\Installer
                 'bookly_dismiss_nps_notice',
                 'bookly_dismiss_powered_by_notice',
                 'bookly_dismiss_subscribe_notice',
+                'bookly_dismiss_zoom_jwt_notice',
                 'bookly_email_notifications_table_settings',
                 'bookly_payments_table_settings',
                 'bookly_show_collecting_stats_notice',
@@ -561,18 +569,19 @@ class Installer extends Base\Installer
                 `title`                        VARCHAR(255) DEFAULT "",
                 `attachment_id`                INT UNSIGNED DEFAULT NULL,
                 `duration`                     INT NOT NULL DEFAULT 900,
-                `slot_length`                  VARCHAR(255) NOT NULL DEFAULT "default",
+                `slot_length`                  VARCHAR(32) NOT NULL DEFAULT "default",
                 `price`                        DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-                `color`                        VARCHAR(255) NOT NULL DEFAULT "#FFFFFF",
-                `deposit`                      VARCHAR(100) NOT NULL DEFAULT "100%",
-                `capacity_min`                 INT NOT NULL DEFAULT 1,
+                `color`                        VARCHAR(32) NOT NULL DEFAULT "#FFFFFF",
+                `deposit`                      VARCHAR(16) NOT NULL DEFAULT "100%",
+                `capacity_min`                 INT NOT NULL DEFAULT 1, 
                 `capacity_max`                 INT NOT NULL DEFAULT 1,
+                `waiting_list_capacity`        INT UNSIGNED DEFAULT NULL,
                 `one_booking_per_slot`         TINYINT(1) NOT NULL DEFAULT 0,
                 `padding_left`                 INT NOT NULL DEFAULT 0,
                 `padding_right`                INT NOT NULL DEFAULT 0,
                 `info`                         TEXT DEFAULT NULL,
-                `start_time_info`              VARCHAR(255) DEFAULT "",
-                `end_time_info`                VARCHAR(255) DEFAULT "",
+                `start_time_info`              VARCHAR(32) DEFAULT "",
+                `end_time_info`                VARCHAR(32) DEFAULT "",
                 `same_staff_for_subservices`   TINYINT(1) NOT NULL DEFAULT 0,
                 `units_min`                    INT UNSIGNED NOT NULL DEFAULT 1,
                 `units_max`                    INT UNSIGNED NOT NULL DEFAULT 1,
@@ -594,6 +603,7 @@ class Installer extends Base\Installer
                 `wc_cart_info`                 TEXT DEFAULT NULL,
                 `min_time_prior_booking`       INT DEFAULT NULL,
                 `min_time_prior_cancel`        INT DEFAULT NULL,
+                `gateways`                     VARCHAR(255) DEFAULT NULL,
                 `visibility`                   ENUM("public","private","group") NOT NULL DEFAULT "public",
                 `position`                     INT NOT NULL DEFAULT 9999,
             CONSTRAINT
@@ -688,7 +698,7 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Notification::getTableName() . '` (
                 `id`             INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `gateway`        ENUM("email","sms","voice") NOT NULL DEFAULT "email",
+                `gateway`        ENUM("email","sms","voice","whatsapp") NOT NULL DEFAULT "email",
                 `type`           VARCHAR(255) NOT NULL DEFAULT "",
                 `active`         TINYINT(1) NOT NULL DEFAULT 0,
                 `name`           VARCHAR(255) NOT NULL DEFAULT "",
@@ -799,7 +809,7 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Payment::getTableName() . '` (
                 `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `target`       ENUM("appointments","packages") NOT NULL DEFAULT "appointments",
+                `target`       ENUM("appointments","packages","gift_cards") NOT NULL DEFAULT "appointments",
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
                 `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square","cloud_gift") NOT NULL DEFAULT "local",
@@ -1027,6 +1037,7 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\Session::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `token` VARCHAR(255) NOT NULL,
+                `name` VARCHAR(255) DEFAULT NULL,
                 `value` TEXT DEFAULT NULL,
                 `expire` DATETIME NOT NULL,
                 INDEX `token` (`token`),
@@ -1034,6 +1045,18 @@ class Installer extends Base\Installer
             ) ENGINE = INNODB
             ' . $charset_collate
         );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\NotificationQueue::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `data` TEXT DEFAULT NULL,
+                `sent` TINYINT(1) DEFAULT 0,
+                `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
     }
 
     /**

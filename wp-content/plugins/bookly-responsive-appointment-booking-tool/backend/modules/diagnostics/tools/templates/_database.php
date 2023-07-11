@@ -1,9 +1,7 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
-
 /** @var array $troubles */
 /** @var bool $fixable */
-
 global $wpdb;
 $charset = $wpdb->charset;
 $collate = $wpdb->collate;

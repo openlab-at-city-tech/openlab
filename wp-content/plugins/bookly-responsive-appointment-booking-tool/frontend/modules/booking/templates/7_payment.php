@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Frontend\Components\Payment\Gateway;
 use Bookly\Frontend\Modules\Booking\Proxy;
 use Bookly\Lib\Entities\Payment;

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Lib\Utils\Common;
 use Bookly\Backend\Components\Controls\Inputs;
@@ -64,9 +64,13 @@ use Bookly\Lib\Utils\Tables;
         </thead>
     </table>
 
-    <div class="text-right my-3">
-        <?php Inputs::renderCsrf() ?>
-        <?php Buttons::renderDelete( 'bookly-js-delete-notifications' ) ?>
+    <div class="form-row my-3">
+        <div class="col-auto">
+            <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly' ), array(), true ) ?>
+        </div>
+        <div class="ml-auto mr-1">
+            <?php Buttons::renderDelete( 'bookly-js-delete-notifications' ) ?>
+        </div>
     </div>
 
     <?php Notices\Cron\Notice::render() ?>

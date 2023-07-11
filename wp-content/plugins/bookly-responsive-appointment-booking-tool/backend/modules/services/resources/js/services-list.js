@@ -186,64 +186,47 @@ jQuery(function($) {
      */
     $checkAllButton.on('change', function() {
         $servicesList.find('tbody input:checkbox').prop('checked', this.checked);
+        $deleteButton.prop('disabled',$servicesList.find('tbody input:checked').length === 0);
     });
 
     /**
      * On appointment select.
      */
     $servicesList.on('change', 'tbody input:checkbox', function() {
-        $checkAllButton.prop('checked', $servicesList.find('tbody input:not(:checked)').length == 0);
+        $checkAllButton.prop('checked', $servicesList.find('tbody input:not(:checked)').length === 0);
+        $deleteButton.prop('disabled',$servicesList.find('tbody input:checked').length === 0);
     });
 
-    $deleteButton.on('click', function(e) {
+    $('.bookly-js-delete', $deleteModal).on('click', function(e) {
         e.preventDefault();
         let data = {
                 action: 'bookly_remove_services',
                 csrf_token: BooklyL10nGlobal.csrf_token,
             },
-            services = [],
-            button = this;
+            ladda = rangeTools.ladda(this),
+            service_ids = [],
+            $checkboxes = $servicesList.find('tbody input:checked');
 
-        var delete_services = function(ajaxurl, data) {
-            var ladda = rangeTools.ladda(button),
-                service_ids = [],
-                $checkboxes = $servicesList.find('tbody input:checked');
+        $checkboxes.each(function() {
+            service_ids.push(dt.row($(this).closest('td')).data().id);
+        });
+        data['service_ids[]'] = service_ids;
 
-            $checkboxes.each(function() {
-                service_ids.push(dt.row($(this).closest('td')).data().id);
-            });
-            data['service_ids[]'] = service_ids;
+        $.post(ajaxurl, data, function() {
+            dt.rows($checkboxes.closest('td')).remove().draw();
+            $(document.body).trigger('service.deleted', [service_ids]);
+            ladda.stop();
+            $deleteModal.booklyModal('hide');
+        });
+    });
 
-            $.post(ajaxurl, data, function(response) {
-                if (!response.success) {
-                    switch (response.data.action) {
-                        case 'show_modal':
-                            $deleteModal
-                                .booklyModal('show');
-                            $('.bookly-js-delete', $deleteModal).off().on('click', function() {
-                                delete_services(ajaxurl, $.extend(data, {force_delete: true}));
-                                $deleteModal.booklyModal('hide');
-                            });
-                            $('.bookly-js-edit', $deleteModal).off().on('click', function() {
-                                rangeTools.ladda(this);
-                                window.location.href = response.data.filter_url;
-                            });
-                            break;
-                        case 'confirm':
-                            if (confirm(BooklyL10n.are_you_sure)) {
-                                delete_services(ajaxurl, $.extend(data, {force_delete: true}));
-                            }
-                            break;
-                    }
-                } else {
-                    dt.rows($checkboxes.closest('td')).remove().draw();
-                    $(document.body).trigger('service.deleted', [service_ids]);
-                }
-                ladda.stop();
-            });
-        };
+    $('.bookly-js-edit', $deleteModal).on('click', function() {
+        rangeTools.ladda(this);
+        window.location.href = BooklyL10n.appointmentsUrl + '#service=' + dt.row($servicesList.find('tbody input:checked')[0].closest('td')).data().id;
+    });
 
-        delete_services(ajaxurl, data);
+    $deleteButton.on('click', function() {
+        $deleteModal.booklyModal('show');
     });
 
     $servicesList.on('click', '[data-action="duplicate"]', function() {

@@ -23,7 +23,7 @@ class Dialog extends Lib\Base\Component
 
         self::enqueueData( array(
             'extras_list',
-        ) );
+        ), 'bookly-customer_details.js' );
 
         $statuses = array();
         foreach ( CustomerAppointment::getStatuses() as $status ) {
@@ -49,6 +49,6 @@ class Dialog extends Lib\Base\Component
             ),
         ) ) );
 
-        static::renderTemplate( 'customer_details' );
+        print '<div id="bookly-customer-details-dialog"></div>';
     }
 }

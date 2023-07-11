@@ -111,6 +111,12 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_gen_prevent_session_locking', (int) self::parameter( 'bookly_gen_prevent_session_locking' ) );
                     update_option( 'bookly_gen_badge_consider_news', (int) self::parameter( 'bookly_gen_badge_consider_news' ) );
                     update_option( 'bookly_gen_session_type', self::parameter( 'bookly_gen_session_type' ) );
+                    update_option( 'bookly_email_gateway', self::parameter( 'bookly_email_gateway' ) );
+                    update_option( 'bookly_smtp_host', self::parameter( 'bookly_smtp_host' ) );
+                    update_option( 'bookly_smtp_port', self::parameter( 'bookly_smtp_port' ) );
+                    update_option( 'bookly_smtp_user', self::parameter( 'bookly_smtp_user' ) );
+                    update_option( 'bookly_smtp_password', self::parameter( 'bookly_smtp_password' ) );
+                    update_option( 'bookly_smtp_secure', self::parameter( 'bookly_smtp_secure' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
                 case 'url': // URL settings form.
@@ -129,7 +135,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_cst_remember_in_cookie', self::parameter( 'bookly_cst_remember_in_cookie' ) );
                     update_option( 'bookly_cst_show_update_details_dialog', self::parameter( 'bookly_cst_show_update_details_dialog' ) );
                     update_option( 'bookly_cst_verify_customer_details', self::parameter( 'bookly_cst_verify_customer_details' ) );
-                    // Update email required option if creating wordpress account for customers
+                    // Update email required option if creating WordPress account for customers
                     $bookly_cst_required_details = get_option( 'bookly_cst_required_details', array() );
                     if ( self::parameter( 'bookly_cst_create_account' ) && ! in_array( 'email', $bookly_cst_required_details ) ) {
                         $bookly_cst_required_details[] = 'email';

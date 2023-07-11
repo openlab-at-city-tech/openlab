@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Components\Dialogs;
@@ -120,8 +120,11 @@ use Bookly\Backend\Modules\Appearance;
                             </div>
                             <div class="col-md-3 my-2">
                                 <div id="bookly-show-single-slot-popover" data-container="#bookly-show-single-slot-popover" data-toggle="bookly-popover" data-placement="bottom" data-content="<?php esc_attr_e( 'Please note that "I\'m available on or after" picker will be hidden', 'bookly' ) ?>">
-                                    <?php Inputs::renderCheckBox( __( 'Show only the nearest timeslot', 'bookly' ), null, get_option( 'bookly_app_show_single_slot' ), array( 'id' => 'bookly-show-single-slot' ) ) ?>
+                                    <?php Inputs::renderCheckBox( __( 'Show only the nearest timeslot', 'bookly' ), null, Lib\Config::showSingleTimeSlot(), array( 'id' => 'bookly-show-single-slot' ) ) ?>
                                 </div>
+                            </div>
+                            <div class="col-md-3 my-2">
+                                <?php Inputs::renderCheckBox( __( 'Show only the first timeslot in each day', 'bookly' ), null, Lib\Config::showSingleTimeSlotPerDay(), array( 'id' => 'bookly-show-single-slot-per-day' ) ) ?>
                             </div>
                             <?php Proxy\Pro::renderTimeZoneSwitcherCheckbox() ?>
                             <?php Proxy\Shared::renderTimeStepSettings() ?>
@@ -173,6 +176,7 @@ use Bookly\Backend\Modules\Appearance;
                     <div class="bookly-js-payment-settings bookly-collapse">
                         <div class="row">
                             <?php Proxy\Coupons::renderShowCoupons() ?>
+                            <?php Proxy\Pro::renderShowGiftCards() ?>
                             <?php Proxy\Pro::renderShowTips() ?>
                         </div>
                         <?php Proxy\Pro::renderBookingStatesSelector() ?>

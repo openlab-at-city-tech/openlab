@@ -5,11 +5,13 @@ use Bookly\Backend\Modules\Settings\Page as SettingsPage;
 use Bookly\Backend\Modules\CloudSMS\Page as CloudSMSPage;
 use Bookly\Backend\Modules\CloudZapier\Page as CloudZapierPage;
 use Bookly\Backend\Modules\CloudVoice\Page as CloudVoicePage;
+use Bookly\Backend\Modules\CloudWhatsapp\Page as CloudWhatsAppPage;
 use Bookly\Lib;
 use Bookly\Lib\Cloud\Account;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\CloudProducts
  */
 class Ajax extends Lib\Base\Ajax
@@ -47,8 +49,8 @@ class Ajax extends Lib\Base\Ajax
         if ( $cloud->sms->changeSmsStatus( $status ) ) {
             wp_send_json_success( array(
                 'redirect_url' => add_query_arg(
-                    array( 'page' => Page::pageSlug() ),
-                    admin_url( 'admin.php' ) ) . '#cloud-product=sms&status=activated'
+                        array( 'page' => Page::pageSlug() ),
+                        admin_url( 'admin.php' ) ) . '#cloud-product=sms&status=activated',
             ) );
         } else {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
@@ -60,28 +62,10 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function cloudRevertCancelSubscription()
     {
-        $cloud = Lib\Cloud\API::getInstance();
-        $product = null;
-        switch ( self::parameter( 'product' ) ) {
-            case Lib\Cloud\Account::PRODUCT_ZAPIER:
-                $product = $cloud->zapier;
-                break;
-            case Lib\Cloud\Account::PRODUCT_CRON:
-                $product = $cloud->cron;
-                break;
-            case Lib\Cloud\Account::PRODUCT_VOICE:
-                $product = $cloud->voice;
-                break;
-            case Lib\Cloud\Account::PRODUCT_SQUARE:
-                $product = $cloud->square;
-                break;
-            case Lib\Cloud\Account::PRODUCT_GIFT:
-                $product = $cloud->gift;
-                break;
-        }
+        $product = self::getProduct( self::parameter( 'product' ) );
 
         if ( isset( $product ) && ! $product->revertCancel() ) {
-            wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
+            wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ) );
         }
         wp_send_json_success();
     }
@@ -91,8 +75,8 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function cloudStripeChangeStatus()
     {
-        $status  = self::parameter( 'status' );
-        $api     = Lib\Cloud\API::getInstance();
+        $status = self::parameter( 'status' );
+        $api = Lib\Cloud\API::getInstance();
         if ( $status ) {
             $redirect_url = $api->stripe->connect();
             if ( $redirect_url !== false ) {
@@ -116,26 +100,12 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function cloudChangeProductStatus()
     {
-        $cloud = Lib\Cloud\API::getInstance();
         $product_slug = self::parameter( 'product' );
-        $product = null;
+        $product = self::getProduct( $product_slug );
         $status = self::parameter( 'status' );
         switch ( $product_slug ) {
-            case Lib\Cloud\Account::PRODUCT_ZAPIER:
-                $product = $cloud->zapier;
-                break;
-            case Lib\Cloud\Account::PRODUCT_CRON:
-                $product = $cloud->cron;
-                break;
             case Lib\Cloud\Account::PRODUCT_VOICE:
                 $status = $status ?: 'now';
-                $product = $cloud->voice;
-                break;
-            case Lib\Cloud\Account::PRODUCT_SQUARE:
-                $product = $cloud->square;
-                break;
-            case Lib\Cloud\Account::PRODUCT_GIFT:
-                $product = $cloud->gift;
                 break;
         }
         if ( $status === '1' ) {
@@ -145,12 +115,12 @@ class Ajax extends Lib\Base\Ajax
                     'redirect_url' => add_query_arg( array( 'page' => Page::pageSlug() ), admin_url( 'admin.php' ) ) . '#cloud-product=' . $product_slug . '&status=activated',
                 ) );
             } else {
-                wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
+                wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ) );
             }
         } elseif ( $product->deactivate( $status ) ) {
             wp_send_json_success();
         } else {
-            wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
+            wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ) );
         }
     }
 
@@ -180,14 +150,20 @@ class Ajax extends Lib\Base\Ajax
                     break;
                 case Account::PRODUCT_STRIPE:
                 case Account::PRODUCT_SQUARE:
-                case Account::PRODUCT_GIFT:
-                    if ( $status == 'activated' ) {
+                    if ( $status === 'activated' ) {
                         $data['button'] = array(
                             'caption' => $texts['button'],
                             'url' => add_query_arg( array( 'page' => SettingsPage::pageSlug(), 'tab' => 'payments' ), admin_url( 'admin.php' ) ),
                         );
                         wp_send_json_success( $data );
                     }
+                    break;
+                case Account::PRODUCT_GIFT:
+                    $data['button'] = array(
+                        'caption' => $texts['button'],
+                        'url' => add_query_arg( array( 'page' => 'bookly-cloud-gift-cards', 'tab' => 'card-types' ), admin_url( 'admin.php' ) ),
+                    );
+                    wp_send_json_success( $data );
                     break;
                 case Account::PRODUCT_ZAPIER:
                     $data['button'] = array(
@@ -203,6 +179,13 @@ class Ajax extends Lib\Base\Ajax
                     );
                     wp_send_json_success( $data );
                     break;
+                case Account::PRODUCT_WHATSAPP:
+                    $data['button'] = array(
+                        'caption' => $texts['button'],
+                        'url' => add_query_arg( array( 'page' => CloudWhatsAppPage::pageSlug() ), admin_url( 'admin.php' ) ),
+                    );
+                    wp_send_json_success( $data );
+                    break;
                 case Account::PRODUCT_CRON:
                 default:
                     wp_send_json_success( $data );
@@ -211,5 +194,30 @@ class Ajax extends Lib\Base\Ajax
         } else {
             wp_send_json_error( array( 'content' => current( $api->getErrors() ) ) );
         }
+    }
+
+    /**
+     * @param string $slug
+     * @return Lib\Cloud\Product|null
+     */
+    protected static function getProduct( $slug )
+    {
+        $cloud = Lib\Cloud\API::getInstance();
+        switch ( $slug ) {
+            case Lib\Cloud\Account::PRODUCT_ZAPIER:
+                return $cloud->zapier;
+            case Lib\Cloud\Account::PRODUCT_CRON:
+                return $cloud->cron;
+            case Lib\Cloud\Account::PRODUCT_VOICE:
+                return $cloud->voice;
+            case Lib\Cloud\Account::PRODUCT_SQUARE:
+                return $cloud->square;
+            case Lib\Cloud\Account::PRODUCT_GIFT:
+                return $cloud->gift;
+            case Lib\Cloud\Account::PRODUCT_WHATSAPP:
+                return $cloud->whatsapp;
+        }
+
+        return null;
     }
 }

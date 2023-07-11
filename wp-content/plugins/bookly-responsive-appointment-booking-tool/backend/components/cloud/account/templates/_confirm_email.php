@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <form id="bookly-confirm-email-modal" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">

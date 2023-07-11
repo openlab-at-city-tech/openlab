@@ -160,7 +160,14 @@
 }
 
 .bookly-form-group > div {
-    margin: 5px 14px 0 0;
+    margin-top: 5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.bookly-form-group:not(:last-child) > div {
+    margin-right: 14px;
 }
 
 /* Buttons */
@@ -432,11 +439,6 @@ span.bookly-round {
 
 .bookly-service-step .bookly-time-range select {
     width: auto !important;
-}
-
-.bookly-mobile-step-1,
-.bookly-details-step {
-    margin: 0 -14px 0 0;
 }
 
 .bookly-mobile-step-1 .bookly-nav-steps {
@@ -1332,6 +1334,10 @@ label.bookly-square {
     position: inherit;
 }
 
+.bookly-form .picker__input {
+    float: none !important;
+}
+
 .bookly-form .picker__nav--next {
     position: inherit;
     float: right;
@@ -1477,6 +1483,7 @@ label.bookly-square {
 .bookly-form .picker__day--disabled {
     color: rgba(255, 255, 255, 0.5) !important;
     background: none !important;
+    pointer-events: none;
 }
 
 .bookly-form .picker__day--disabled:hover {

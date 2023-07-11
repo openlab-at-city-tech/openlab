@@ -29,12 +29,14 @@ use Bookly\Lib;
  * @method static array  prepareNotificationTypes( array $types, string $gateway ) Prepare notification type IDs.
  * @method static array  preparePaymentDetails( array $details, Lib\DataHolders\Booking\Order $order, Lib\CartInfo $cart_info ) Add info about payment
  * @method static array  preparePaymentDetailsItem( array $details, Lib\DataHolders\Booking\Item $item ) Add info about payment item
+ * @method static string preparePaymentImage( string $url, string $gateway ) Prepare payment image.
  * @method static Lib\Query prepareStaffServiceQuery( Lib\Query $query ) Prepare StaffService query for Finder.
  * @method static array  prepareTableColumns( array $columns, $table ) Prepare table columns for given table.
  * @method static array  prepareTableDefaultSettings( array $columns, $table ) Get default settings for hide/show table columns.
  * @method static array  prepareServices( array $result ) Prepare casest services list.
  * @method static string prepareStatement( string $value, string $statement, string $table ) Prepare default value for sql statement.
  * @method static void   renderAdminNotices( bool $bookly_page ) Render admin notices from add-ons.
+ * @method static bool   saveUserBookingData( Lib\UserBookingData $userData ) Save UserBookingData.
  * @method static bool   showPaymentSpecificPrices( bool $show ) Whether to show specific price for each payment system.
  * @method static array  syncOnlineMeeting( array $errors, Lib\Entities\Appointment $appointment, Lib\Entities\Service $service ) Synchronize online meeting data with appointment.
  * @method static mixed  prepareGlobalSetting( $obj, string $token ) Extend BooklyL10Global JavaScript object

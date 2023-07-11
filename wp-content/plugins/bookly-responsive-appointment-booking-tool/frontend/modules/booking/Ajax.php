@@ -88,15 +88,15 @@ class Ajax extends Lib\Base\Ajax
                 'locations' => $locasest,
                 'services' => $casest['services'],
                 'staff' => $casest['staff'],
-                'show_category_info' => (bool) get_option( 'bookly_app_show_category_info' ),
-                'show_service_info' => (bool) get_option( 'bookly_app_show_service_info' ),
-                'show_staff_info' => (bool) get_option( 'bookly_app_show_staff_info' ),
-                'show_ratings' => (bool) get_option( 'bookly_ratings_app_show_on_frontend' ),
-                'service_name_with_duration' => (bool) get_option( 'bookly_app_service_name_with_duration' ),
-                'staff_name_with_price' => (bool) get_option( 'bookly_app_staff_name_with_price' ),
-                'collaborative_hide_staff' => (bool) get_option( 'bookly_collaborative_hide_staff' ),
+                'show_category_info' => (bool)get_option( 'bookly_app_show_category_info' ),
+                'show_service_info' => (bool)get_option( 'bookly_app_show_service_info' ),
+                'show_staff_info' => (bool)get_option( 'bookly_app_show_staff_info' ),
+                'show_ratings' => (bool)get_option( 'bookly_ratings_app_show_on_frontend' ),
+                'service_name_with_duration' => (bool)get_option( 'bookly_app_service_name_with_duration' ),
+                'staff_name_with_price' => (bool)get_option( 'bookly_app_staff_name_with_price' ),
+                'collaborative_hide_staff' => (bool)get_option( 'bookly_collaborative_hide_staff' ),
                 'required' => array(
-                    'staff' => (int) get_option( 'bookly_app_required_employee' ),
+                    'staff' => (int)get_option( 'bookly_app_required_employee' ),
                 ),
                 'l10n' => array(
                     'category_label' => Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_label_category' ),
@@ -214,7 +214,7 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $show_blocked_slots = Lib\Config::showBlockedTimeSlots();
-            $finder = new Lib\Slots\Finder( $userData );
+            $finder = new Lib\Slots\Finder( $userData, null, null, null, array(), null, Lib\Config::showSingleTimeSlotPerDay() );
             $finder->setSelectedDate( Lib\Config::showSingleTimeSlot() ? null : self::parameter( 'selected_date', $userData->getDateFrom() ) );
             $slots_data = array();
             $block_time_slots = false;
@@ -348,7 +348,7 @@ class Ajax extends Lib\Base\Ajax
         $userData = new Lib\UserBookingData( self::parameter( 'form_id' ) );
 
         if ( $userData->load() ) {
-            $finder = new Lib\Slots\Finder( $userData );
+            $finder = new Lib\Slots\Finder( $userData, null, null, null, array(), null, Lib\Config::showSingleTimeSlotPerDay() );
             $finder->setLastFetchedSlot( self::parameter( 'last_slot' ) );
             $finder->prepare()->load();
 
@@ -514,7 +514,7 @@ class Ajax extends Lib\Base\Ajax
             $response = Proxy\Shared::stepOptions( array(
                 'success' => true,
                 'html' => $html,
-                'update_details_dialog' => (int) get_option( 'bookly_cst_show_update_details_dialog' ),
+                'update_details_dialog' => (int)get_option( 'bookly_cst_show_update_details_dialog' ),
                 'intlTelInput' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ? array(
                     'enabled' => 1,
                     'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
@@ -561,13 +561,9 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $cart_info = $userData->cart->getInfo();
-
-            if ( $cart_info->getTotal() <= 0 || $cart_info->getDeposit() <= 0 ) {
-                if ( $cart_info->withDiscount() ) {
-                    $payment_step = 'show-100%-discount';
-                } else {
-                    $payment_step = 'skip';
-                }
+            $balance = $cart_info->getGiftCard() ? $cart_info->getGiftCard()->getBalance() : 0;
+            if ( $cart_info->getPayNowWithoutGiftCard() <= $balance ) {
+                $payment_step = $cart_info->withDiscount() ? 'show-100%-discount' : 'skip';
             }
 
             if ( $payment_step !== 'skip' ) {
@@ -705,7 +701,7 @@ class Ajax extends Lib\Base\Ajax
             if ( $userData->load() ) {
                 $parameters = self::parameters();
                 $errors = $userData->validate( $parameters );
-                if ( empty ( $errors ) ) {
+                if ( empty ( $errors ) || $errors === array( 'group_skip_payment' => true ) ) {
                     if ( self::hasParameter( 'no_extras' ) ) {
                         foreach ( $parameters['chain'] as &$item ) {
                             $item['extras'] = array();
@@ -777,7 +773,15 @@ class Ajax extends Lib\Base\Ajax
                     $payment = null;
                     if ( ! $is_payment_disabled && ! $skip_payment ) {
                         if ( $cart_info->getTotal() <= 0 ) {
-                            if ( $cart_info->withDiscount() ) {
+                            // Check if all items in waiting list.
+                            $waiting_list_only = true;
+                            foreach ( $userData->cart->getItems() as $item ) {
+                                if ( ! $item->toBePutOnWaitingList() ) {
+                                    $waiting_list_only = false;
+                                    break;
+                                }
+                            }
+                            if ( ! $waiting_list_only ) {
                                 $payment = new Lib\Entities\Payment();
                                 $payment
                                     ->setType( Lib\Entities\Payment::TYPE_FREE )
@@ -791,7 +795,6 @@ class Ajax extends Lib\Base\Ajax
                             $payment = new Lib\Entities\Payment();
                             $status = Lib\Entities\Payment::STATUS_PENDING;
                             $type = Lib\Entities\Payment::TYPE_LOCAL;
-                            $paid = 0;
                             foreach ( $gateways as $gateway => $data ) {
                                 if ( $data['pay'] == 0 ) {
                                     $status = Lib\Entities\Payment::STATUS_COMPLETED;
@@ -802,27 +805,13 @@ class Ajax extends Lib\Base\Ajax
                                 }
                             }
 
-                            if ( $status !== Lib\Entities\Payment::STATUS_COMPLETED ) {
-                                $gift_card = $userData->getGiftCard();
-                                if ( $gift_card ) {
-                                    $type = Lib\Entities\Payment::TYPE_CLOUD_GIFT;
-                                    $cart_info->setGateway( $type );
-                                    if ( $gift_card->getBalance() >= $cart_info->getPayNow() ) {
-                                        $status = Lib\Entities\Payment::STATUS_COMPLETED;
-                                        $paid = $cart_info->getPayNow();
-                                        $gift_card->charge( $paid )->save();
-                                        $payment->setGatewayPriceCorrection( $cart_info->getPriceCorrection() );
-                                    }
-                                }
-                            }
-
                             $payment
                                 ->setType( $type )
                                 ->setStatus( $status )
                                 ->setPaidType( Lib\Entities\Payment::PAY_IN_FULL )
                                 ->setTotal( $cart_info->getTotal() )
                                 ->setTax( $cart_info->getTotalTax() )
-                                ->setPaid( $paid )
+                                ->setPaid( 0 )
                                 ->save();
                         }
                     }
@@ -1009,7 +998,7 @@ class Ajax extends Lib\Base\Ajax
         $userData = new Lib\UserBookingData( self::parameter( 'form_id' ) );
 
         if ( $userData->load() ) {
-            add_action( 'set_logged_in_cookie', function( $logged_in_cookie ) {
+            add_action( 'set_logged_in_cookie', function ( $logged_in_cookie ) {
                 $_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
             } );
             /** @var \WP_User $user */
@@ -1307,7 +1296,7 @@ class Ajax extends Lib\Base\Ajax
                         '_cloud_stripe_option',
                         array(
                             'form_id' => self::parameter( 'form_id' ),
-                            'url_cards_image' => plugins_url( 'frontend/resources/images/cards.png', Lib\Plugin::getMainFile() ),
+                            'url_cards_image' => plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() ),
                             'show_price' => Lib\Proxy\Shared::showPaymentSpecificPrices( false ),
                             'cart_info' => $cart_info,
                             'payment_status' => $userData->extractPaymentStatus( $cart_info->getGateway() ),

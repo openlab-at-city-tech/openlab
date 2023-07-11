@@ -1,5 +1,7 @@
 (function ($) {
 
+    let calendar;
+
     let Calendar = function ($container, options) {
         let obj = this;
         jQuery.extend(obj.options, options);
@@ -50,6 +52,7 @@
             eventStartEditable: false,
             eventDurationEditable: false,
             allDaySlot: false,
+            allDayContent: obj.options.l10n.allDay,
 
             slotLabelFormat: function (date) {
                 return moment(date).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
@@ -95,8 +98,15 @@
                 let $event = $(arg.el);
                 if (arg.event.display === 'auto' && arg.view.type !== 'listWeek') {
                     if (!$event.find('.bookly-ec-popover').length) {
-                        let $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
-                        let $arrow = $('<div class="arrow" style="left:8px;">');
+                        let offset = $event.offset();
+                        let $popover, $arrow;
+                        if (offset.left > window.innerWidth / 2) {
+                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover bookly-popover-right">')
+                            $arrow = $('<div class="arrow" style="right: 8px;"></div><div class="bookly-arrow-background"></div>');
+                        } else {
+                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
+                            $arrow = $('<div class="arrow" style="left:8px;"></div><div class="bookly-arrow-background"></div>');
+                        }
                         let $body = $('<div class="popover-body">');
                         let $buttons = existsAppointmentForm ? popoverButtons(arg) : '';
                         $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '200px'});
@@ -201,6 +211,9 @@
                 addAppointmentDialog(arg.view.activeStart, staffId, staffId);
             },
             loading: function (isLoading) {
+                if (!calendar) {
+                    return;
+                }
                 if (isLoading) {
                     if (existsAppointmentForm) {
                         BooklyL10nAppDialog.refreshed = true;
@@ -212,6 +225,15 @@
                     }
                     $('.bookly-ec-loading').show();
                 } else {
+                    let allDay = false;
+                    if (calendar.getEvents().length) {
+                        calendar.getEvents().forEach(function (event) {
+                            if (event.allDay) {
+                                allDay = true;
+                            }
+                        })
+                    }
+                    calendar.setOption('allDaySlot', allDay);
                     $('.bookly-ec-loading').hide();
                     obj.options.refresh();
                 }
@@ -293,12 +315,20 @@
         }
 
         function fixPopoverPosition($popover) {
-            let $event = $popover.closest('.ec-event'),
+            let $event = $popover.closest('.ec-event');
+
+            $popover.css('min-width', (Math.min(400, $event.outerWidth() - 2)) + 'px');
+
+            let
                 offset = $event.offset(),
-                top = Math.max($popover.outerHeight() + 40, Math.max($event.closest('.ec-body').offset().top, offset.top) - $(document).scrollTop());
+                top = Math.max($popover.outerHeight() + 40, Math.max($event.closest('.ec-body').length ? $event.closest('.ec-body').offset().top : $event.closest('.ec-all-day').offset().top, offset.top) - $(document).scrollTop());
 
             $popover.css('top', (top - $popover.outerHeight() - 4) + 'px')
-            $popover.css('left', (offset.left + 2) + 'px')
+            if ($popover.hasClass('bookly-popover-right')) {
+                $popover.css('left', (offset.left + $event.outerWidth() - $popover.outerWidth()) + 'px');
+            } else {
+                $popover.css('left', (offset.left + 2) + 'px');
+            }
         }
 
         function addAppointmentDialog(date, staffId, visibleStaffId) {
@@ -337,7 +367,7 @@
 
         let dateSetFromDatePicker = false;
 
-        let calendar = new window.EventCalendar($container.get(0), $.extend(true, {}, settings, obj.options.calendar));
+        calendar = new window.EventCalendar($container.get(0), $.extend(true, {}, settings, obj.options.calendar));
 
         $('.ec-toolbar .ec-title', $container).on('click', function () {
             let picker = $(this).data('daterangepicker');

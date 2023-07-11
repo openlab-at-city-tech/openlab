@@ -35,7 +35,7 @@ class Dialog extends SmsDialog
             'recurringActive' => (int) Config::recurringAppointmentsActive(),
             'defaultNotification' => self::getDefaultNotification(),
             'codes' => $codes_list,
-            'sms' => true,
+            'gateway' => 'voice',
             'title' => array(
                 'container' => __( 'Voice', 'bookly' ),
                 'new' => __( 'New voice notification', 'bookly' ),

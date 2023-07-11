@@ -27,6 +27,7 @@ class Service extends Lib\Base\Form
             'deposit',
             'capacity_min',
             'capacity_max',
+            'waiting_list_capacity',
             'one_booking_per_slot',
             'padding_left',
             'padding_right',
@@ -63,6 +64,8 @@ class Service extends Lib\Base\Form
             'wc_cart_info',
             'min_time_prior_booking',
             'min_time_prior_cancel',
+            'gateways',
+            'gateways_list',
         );
 
         $this->setFields( $fields );

@@ -26,11 +26,12 @@ abstract class Codes
      * @param array $codes
      * @param bool $bold
      * @param array $exclude
+     * @param bool $escape
      * @return string
      */
-    public static function replace( $text, $codes, $bold = true, $exclude = array() )
+    public static function replace( $text, $codes, $bold = true, $exclude = array(), $escape = false )
     {
-        return self::stringify( self::tokenize( $text ), $codes, $bold, $exclude );
+        return self::stringify( self::tokenize( $text ), $codes, $bold, $exclude, $escape );
     }
 
     /**
@@ -40,9 +41,10 @@ abstract class Codes
      * @param array $codes
      * @param bool $bold
      * @param array $exclude
+     * @param bool $escape
      * @return string
      */
-    public static function stringify( $tokens, $codes, $bold, $exclude = array() )
+    public static function stringify( $tokens, $codes, $bold, $exclude = array(), $escape = false )
     {
         $output = '';
 
@@ -52,8 +54,11 @@ abstract class Codes
                     $output .= $token[1];
                     break;
                 case 'T_CODE':
-                    $data = self::get( $token[1], $codes );
-                    if ( $data !== null ) {
+                    $data = $code = self::get( $token[1], $codes );
+                    if ( $code !== null ) {
+                        if ( $escape ) {
+                            $data = strip_tags( $code, '<br><div>' );
+                        }
                         if ( $bold !== false && ! in_array( $token[1], $exclude ) ) {
                             $output .= '<b>' . $data . '</b>';
                         } else {
@@ -109,7 +114,7 @@ abstract class Codes
                             break;
                     }
                     if ( $if ) {
-                        $output .= self::stringify( $nested_tokens, $codes, $bold );
+                        $output .= self::stringify( $nested_tokens, $codes, $bold, $exclude, $escape );
                     }
                     break;
                 case 'T_EACH':
@@ -120,7 +125,7 @@ abstract class Codes
                     if ( is_array( $data ) ) {
                         $parts = array();
                         foreach ( $data as $context_codes ) {
-                            $parts[] = self::stringify( $nested_tokens, array( $context_code => $context_codes ) + $codes, $bold );
+                            $parts[] = self::stringify( $nested_tokens, array( $context_code => $context_codes ) + $codes, $bold, $exclude, $escape );
                         }
                         $output .= implode( $delimiter, $parts );
                     }
@@ -380,7 +385,7 @@ abstract class Codes
             'amount_paid' => $payment ? Lib\Utils\Price::format( $payment->getPaid() ) : '',
             'appointment_id' => $customer_appointment->getAppointmentId(),
             'appointment_notes' => $customer_appointment->getNotes(),
-            'booking_number' => Lib\Config::groupBookingActive() ? $customer_appointment->getAppointmentId() . '-' . $customer_appointment->getId() : $customer_appointment->getAppointmentId(),
+            'booking_number' => Lib\Config::groupBookingActive() ? $customer_appointment->getAppointmentId() . '-' . $customer_appointment->getId() : $customer_appointment->getId(),
             'cancel_appointment' => sprintf( '<a href="%s" target="_blank">%s</a>', $cancel_appointment_url, __( 'Cancel Appointment', 'bookly' ) ),
             'cancel_appointment_url' => $cancel_appointment_url,
             'client_email' => $customer->getEmail(),
@@ -419,6 +424,10 @@ abstract class Codes
             'client_email' => $customer->getEmail(),
             'client_phone' => $customer->getPhone(),
             'status' => Entities\CustomerAppointment::statusToString( $item->getCA()->getStatus() ),
+            'online_meeting_url' => Lib\Proxy\Shared::buildOnlineMeetingUrl( '', $item->getAppointment(), $customer ),
+            'online_meeting_password' => Lib\Proxy\Shared::buildOnlineMeetingPassword( '', $item->getAppointment() ),
+            'online_meeting_start_url' => Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $item->getAppointment() ),
+            'online_meeting_join_url' => Lib\Proxy\Shared::buildOnlineMeetingJoinUrl( '', $item->getAppointment(), $customer ),
         );
     }
 

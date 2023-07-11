@@ -41,6 +41,7 @@ class Page extends Lib\Base\Component
 
         wp_localize_script( 'bookly-staff-list.js', 'BooklyL10n', array(
             'proRequired' => (int) ! Lib\Config::proActive(),
+            'appointmentsUrl' => Lib\Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Appointments\Ajax::pageSlug() ),
             'areYouSure' => esc_attr__( 'Are you sure?', 'bookly' ),
             'categories' => $categories,
             'uncategorized' => esc_attr__( 'Uncategorized', 'bookly' ),

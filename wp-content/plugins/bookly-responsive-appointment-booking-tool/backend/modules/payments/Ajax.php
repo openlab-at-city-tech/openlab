@@ -26,7 +26,7 @@ class Ajax extends Lib\Base\Ajax
         $filter = self::parameter( 'filter' );
 
         $query = Lib\Entities\Payment::query( 'p' )
-            ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, c.full_name customer, st.full_name provider, s.title service, a.start_date' )
+            ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, p.target, c.full_name customer, st.full_name provider, s.title service, a.start_date' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
             ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
@@ -87,12 +87,12 @@ class Ajax extends Lib\Base\Ajax
                 'type' => Lib\Entities\Payment::typeToString( $payment['type'] ),
                 'multiple' => isset( $details['items'] ) && is_array( $details['items'] ) && count( $details['items'] ) > 1,
                 'customer' => $payment['customer'] ?: $details['customer'],
-                'provider' => ( $payment['provider'] ?: $details['items'][0]['staff_name'] ),
-                'service' => ( $payment['service'] ?: $details['items'][0]['service_name'] ),
-                'start_date' => $payment['start_date'] ?: $details['items'][0]['appointment_date'] ?: __( 'N/A', 'bookly' ),
+                'provider' => $payment['target'] === Lib\Entities\Payment::TARGET_GIFT_CARDS ? __( 'N/A', 'bookly' ) : ( $payment['provider'] ?: $details['items'][0]['staff_name'] ),
+                'service' => $payment['target'] === Lib\Entities\Payment::TARGET_GIFT_CARDS ? __( 'N/A', 'bookly' ) : ( $payment['service'] ?: $details['items'][0]['service_name'] ),
+                'start_date' => $payment['start_date'] ?: ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? $details['items'][0]['appointment_date'] : __( 'N/A', 'bookly' ) ),
                 'start_date_format' => $payment['start_date']
                     ? Lib\Utils\DateTime::formatDateTime( $payment['start_date'] )
-                    : ( $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly' ) ),
+                    : ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly' ) ),
                 'paid' => $paid_title,
                 'status' => Lib\Entities\Payment::statusToString( $payment['status'] ),
             );

@@ -19,7 +19,7 @@ class Notice extends Base\Notice
     {
         return parent::create( $id )
             ->setMessage(
-                __( 'Could you please do me a BIG favor and give it a 5-star rating on WordPress?', 'bookly' ) . '<br>' .
+                __( 'Could you please do me a BIG favor and give it a 5-star rating on WordPress?', 'bookly' ) . PHP_EOL .
                 __( 'Just to help us spread the word and boost our motivation.', 'bookly' )
             )
             ->addMainButton( __( 'Ok, you deserve it', 'bookly' ), 'bookly-js-ok' )

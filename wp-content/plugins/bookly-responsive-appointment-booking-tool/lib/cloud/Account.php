@@ -5,10 +5,10 @@ use Bookly\Backend\Modules;
 use Bookly\Lib\Config;
 use Bookly\Lib\Utils;
 use Bookly\Lib\Slots\DatePoint;
-use Bookly\Lib\Proxy;
 
 /**
  * Class Account
+ *
  * @package Bookly\Lib\Cloud
  */
 class Account extends Base
@@ -35,12 +35,13 @@ class Account extends Base
     const PRODUCTS                       = '/1.0/users/%token%/products';                 //GET
 
     const PRODUCT_SMS_NOTIFICATIONS = 'sms';
-    const PRODUCT_STRIPE  = 'stripe';
-    const PRODUCT_ZAPIER = 'zapier';
-    const PRODUCT_CRON  = 'cron';
-    const PRODUCT_VOICE = 'voice';
-    const PRODUCT_SQUARE = 'square';
-    const PRODUCT_GIFT = 'gift';
+    const PRODUCT_STRIPE            = 'stripe';
+    const PRODUCT_ZAPIER            = 'zapier';
+    const PRODUCT_CRON              = 'cron';
+    const PRODUCT_VOICE             = 'voice';
+    const PRODUCT_SQUARE            = 'square';
+    const PRODUCT_GIFT              = 'gift';
+    const PRODUCT_WHATSAPP          = 'whatsapp';
 
     /** @var string */
     protected $username;
@@ -263,8 +264,8 @@ class Account extends Base
             $response = $this->api->sendPostRequest(
                 self::CREATE_PREAPPROVAL,
                 array(
-                    'recharge'      => $recharge_id,
-                    'enabled_url'   => $url . '#auto-recharge=enabled',
+                    'recharge' => $recharge_id,
+                    'enabled_url' => $url . '#auto-recharge=enabled',
                     'cancelled_url' => $url . '#auto-recharge=cancelled',
                 )
             );
@@ -384,8 +385,8 @@ class Account extends Base
                 compact( 'start_date', 'end_date' )
             );
             if ( $response ) {
-                array_walk( $response['list'], function( &$item ) {
-                    $date_time    = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
+                array_walk( $response['list'], function ( &$item ) {
+                    $date_time = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
                     $item['date'] = Utils\DateTime::formatDate( $date_time );
                     $item['time'] = Utils\DateTime::formatTime( $date_time );
                 } );
@@ -409,10 +410,10 @@ class Account extends Base
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest( self::CREATE_STRIPE_CHECKOUT_SESSION, array(
-                'mode'        => $mode,
-                'recharge'    => $recharge,
+                'mode' => $mode,
+                'recharge' => $recharge,
                 'success_url' => $url . ( $mode == 'setup' ? '#auto-recharge=enabled' : '#payment=accepted' ),
-                'cancel_url'  => $url . ( $mode == 'setup' ? '#auto-recharge=cancelled' : '#payment=cancelled' ),
+                'cancel_url' => $url . ( $mode == 'setup' ? '#auto-recharge=cancelled' : '#payment=cancelled' ),
             ) );
             if ( $response ) {
 
@@ -434,9 +435,9 @@ class Account extends Base
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest( self::CREATE_PAYPAL_ORDER, array(
-                'recharge'    => $recharge,
+                'recharge' => $recharge,
                 'success_url' => $url . '#payment=accepted',
-                'cancel_url'  => $url . '#payment=cancelled',
+                'cancel_url' => $url . '#payment=cancelled',
             ) );
             if ( $response ) {
 
@@ -446,7 +447,6 @@ class Account extends Base
 
         return false;
     }
-
 
     /**
      * Get username.
@@ -592,7 +592,7 @@ class Account extends Base
             self::GET_PRODUCT_ACTIVATION_TEXTS,
             array(
                 '%product%' => $product,
-                'locale'    => Config::getShortLocale(),
+                'locale' => Config::getShortLocale(),
             )
         );
 
@@ -679,21 +679,36 @@ class Account extends Base
     public function translateError( $error_code )
     {
         switch ( $error_code ) {
-            case 'ERROR_EMPTY_PASSWORD': return __( 'Empty password.', 'bookly' );
-            case 'ERROR_INCORRECT_PASSWORD': return __( 'Incorrect password.', 'bookly' );
-            case 'ERROR_INCORRECT_RECOVERY_CODE': return __( 'Incorrect recovery code.', 'bookly' );
-            case 'ERROR_INCORRECT_USERNAME_OR_PASSWORD': return __( 'Incorrect email or password.', 'bookly' );
-            case 'ERROR_INVALID_USERNAME': return __( 'Invalid email.', 'bookly' );
-            case 'ERROR_LOW_BALANCE': return __( 'Low balance.', 'bookly' );
-            case 'ERROR_PENDING_SENDER_ID_ALREADY_EXISTS': return __( 'Pending sender ID already exists.', 'bookly' );
-            case 'ERROR_PRODUCT_NOT_FOUND': return __( 'Product not found.', 'bookly' );
-            case 'ERROR_RECHARGE_NOT_AVAILABLE': return __( 'Recharge not available.', 'bookly' );
-            case 'ERROR_RECOVERY_CODE_EXPIRED': return __( 'Recovery code expired.', 'bookly' );
-            case 'ERROR_SENDING_EMAIL': return __( 'Error sending email.', 'bookly' );
-            case 'ERROR_SUBSCRIPTION_NOT_AVAILABLE': return __( 'Subscription not available.', 'bookly' );
-            case 'ERROR_USER_NOT_FOUND': return __( 'User not found.', 'bookly' );
-            case 'ERROR_USERNAME_ALREADY_EXISTS': return __( 'Email already in use.', 'bookly' );
-            default: return null;
+            case 'ERROR_EMPTY_PASSWORD':
+                return __( 'Empty password.', 'bookly' );
+            case 'ERROR_INCORRECT_PASSWORD':
+                return __( 'Incorrect password.', 'bookly' );
+            case 'ERROR_INCORRECT_RECOVERY_CODE':
+                return __( 'Incorrect recovery code.', 'bookly' );
+            case 'ERROR_INCORRECT_USERNAME_OR_PASSWORD':
+                return __( 'Incorrect email or password.', 'bookly' );
+            case 'ERROR_INVALID_USERNAME':
+                return __( 'Invalid email.', 'bookly' );
+            case 'ERROR_LOW_BALANCE':
+                return __( 'Low balance.', 'bookly' );
+            case 'ERROR_PENDING_SENDER_ID_ALREADY_EXISTS':
+                return __( 'Pending sender ID already exists.', 'bookly' );
+            case 'ERROR_PRODUCT_NOT_FOUND':
+                return __( 'Product not found.', 'bookly' );
+            case 'ERROR_RECHARGE_NOT_AVAILABLE':
+                return __( 'Recharge not available.', 'bookly' );
+            case 'ERROR_RECOVERY_CODE_EXPIRED':
+                return __( 'Recovery code expired.', 'bookly' );
+            case 'ERROR_SENDING_EMAIL':
+                return __( 'Error sending email.', 'bookly' );
+            case 'ERROR_SUBSCRIPTION_NOT_AVAILABLE':
+                return __( 'Subscription not available.', 'bookly' );
+            case 'ERROR_USER_NOT_FOUND':
+                return __( 'User not found.', 'bookly' );
+            case 'ERROR_USERNAME_ALREADY_EXISTS':
+                return __( 'Email already in use.', 'bookly' );
+            default:
+                return null;
         }
     }
 
@@ -786,12 +801,10 @@ class Account extends Base
         if ( get_option( 'bookly_email_send_as' ) == 'html' ) {
             $message = wpautop( $message );
         }
-        $headers = Utils\Common::getEmailHeaders();
         $subject = __( 'Bookly Cloud - Low Balance', 'bookly' );
 
         foreach ( Utils\Common::getAdminEmails() as $email ) {
-            Proxy\Pro::logEmail( $email, $subject, $message, $headers, array(), '-1' );
-            wp_mail( $email, $subject, $message, $headers );
+            Utils\Mail::send( $email, $subject, $message );
         }
     }
 

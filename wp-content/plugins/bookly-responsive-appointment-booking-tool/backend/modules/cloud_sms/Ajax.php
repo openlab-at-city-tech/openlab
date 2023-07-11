@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\CloudSms
  */
 class Ajax extends Lib\Base\Ajax
@@ -15,7 +16,7 @@ class Ajax extends Lib\Base\Ajax
     protected static function permissions()
     {
         return array(
-            'sendQueue'        => array( 'supervisor', 'staff' ),
+            'sendQueue' => array( 'supervisor', 'staff' ),
             'clearAttachments' => array( 'supervisor', 'staff' ),
         );
     }
@@ -27,7 +28,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $dates = explode( ' - ', self::parameter( 'range' ), 2 );
         $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
-        $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        $end = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
 
         wp_send_json( Lib\Cloud\API::getInstance()->sms->getSmsList( $start, $end ) );
     }
@@ -46,12 +47,14 @@ class Ajax extends Lib\Base\Ajax
     public static function sendTestSms()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $response = array( 'success' => $cloud->sms->sendSms(
-            self::parameter( 'phone_number' ),
-            'Bookly test SMS.',
-            'Bookly test SMS.',
-            0
-        ) );
+        $response = array(
+            'success' => $cloud->sms->sendSms(
+                self::parameter( 'phone_number' ),
+                'Bookly test SMS.',
+                'Bookly test SMS.',
+                0
+            ),
+        );
 
         if ( $response['success'] ) {
             $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
@@ -75,7 +78,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function requestSenderId()
     {
-        $cloud  = Lib\Cloud\API::getInstance();
+        $cloud = Lib\Cloud\API::getInstance();
         $result = $cloud->sms->requestSenderId( self::parameter( 'sender_id' ) );
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
@@ -89,7 +92,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function cancelSenderId()
     {
-        $cloud  = Lib\Cloud\API::getInstance();
+        $cloud = Lib\Cloud\API::getInstance();
         $result = $cloud->sms->cancelSenderId();
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
@@ -103,7 +106,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function resetSenderId()
     {
-        $cloud  = Lib\Cloud\API::getInstance();
+        $cloud = Lib\Cloud\API::getInstance();
         $result = $cloud->sms->resetSenderId();
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
@@ -140,7 +143,7 @@ class Ajax extends Lib\Base\Ajax
 
         foreach ( $notifications as &$notification ) {
             $notification['order'] = array_search( $notification['type'], $types );
-            $notification['icon']  = Lib\Entities\Notification::getIcon( $notification['type'] );
+            $notification['icon'] = Lib\Entities\Notification::getIcon( $notification['type'] );
             $notification['title'] = Lib\Entities\Notification::getTitle( $notification['type'] );
         }
 
@@ -182,20 +185,35 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function sendQueue()
     {
-        $queue = self::parameter( 'queue', array() );
-        $cloud = Lib\Cloud\API::getInstance();
-        foreach ( $queue as $notification ) {
-            $gateway = $notification['gateway'];
-            if ( $gateway == 'sms' ) {
-                $cloud->sms->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
-            } elseif ( $gateway === 'email' ) {
-                Lib\Proxy\Pro::logEmail( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array(), $notification['type_id'] );
-                wp_mail( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array() );
-            } elseif ( $gateway === 'voice' ) {
-                $cloud->voice->call( $notification['address'], $notification['message'], $notification['impersonal'] );
+        $notifications = self::parameter( 'notifications', array() );
+        $type = self::parameter( 'type', 'all' );
+        $token = self::parameter( 'token' );
+        /** @var Lib\Entities\NotificationQueue $queue */
+        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $token )->where( 'sent', 0 )->findOne();
+        if ( $queue ) {
+            $queue_data = json_decode( $queue->getData(), true );
+            if ( isset( $queue_data[ $type ] ) ) {
+                $cloud = Lib\Cloud\API::getInstance();
+                foreach ( $notifications as $queue_id ) {
+                    if ( isset( $queue_data[ $type ][ $queue_id ] ) ) {
+                        $notification = $queue_data[ $type ][ $queue_id ];
+                        $gateway = $notification['gateway'];
+                        if ( $gateway === 'sms' ) {
+                            $cloud->sms->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
+                        } elseif ( $gateway === 'email' ) {
+                            Lib\Utils\Mail::send( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array(), $notification['type_id'] );
+                        } elseif ( $gateway === 'voice' ) {
+                            $cloud->voice->call( $notification['address'], $notification['message'], $notification['impersonal'] );
+                        } elseif ( $gateway === 'whatsapp' ) {
+                            $cloud->whatsapp->send( $notification['address'], $notification['message'] );
+                        }
+                    }
+                }
             }
+            self::_deleteAttachmentFiles( $queue_data );
+
+            $queue->setSent( 1 )->save();
         }
-        self::_deleteAttachmentFiles( self::parameter( 'attachments', array() ) );
 
         wp_send_json_success();
     }
@@ -205,7 +223,15 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function clearAttachments()
     {
-        self::_deleteAttachmentFiles( self::parameter( 'attachments', array() ) );
+        $token = self::parameter( 'token' );
+        /** @var Lib\Entities\NotificationQueue $queue */
+        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $token )->where( 'sent', 0 )->findOne();
+        if ( $queue ) {
+            $queue_data = json_decode( $queue->getData(), true );
+            self::_deleteAttachmentFiles( $queue_data );
+
+            $queue->setSent( 1 )->save();
+        }
 
         wp_send_json_success();
     }
@@ -218,11 +244,11 @@ class Ajax extends Lib\Base\Ajax
         global $wpdb;
 
         $columns = self::parameter( 'columns' );
-        $order   = self::parameter( 'order', array() );
-        $filter  = self::parameter( 'filter' );
-        $limits  = array(
+        $order = self::parameter( 'order', array() );
+        $filter = self::parameter( 'filter' );
+        $limits = array(
             'length' => self::parameter( 'length' ),
-            'start'  => self::parameter( 'start' ),
+            'start' => self::parameter( 'start' ),
         );
 
         $query = Lib\Entities\MailingList::query( 'm' )
@@ -283,11 +309,11 @@ class Ajax extends Lib\Base\Ajax
         global $wpdb;
 
         $columns = self::parameter( 'columns' );
-        $order   = self::parameter( 'order', array() );
-        $filter  = self::parameter( 'filter' );
-        $limits  = array(
+        $order = self::parameter( 'order', array() );
+        $filter = self::parameter( 'filter' );
+        $limits = array(
             'length' => self::parameter( 'length' ),
-            'start'  => self::parameter( 'start' ),
+            'start' => self::parameter( 'start' ),
         );
 
         $query = Lib\Entities\MailingListRecipient::query()
@@ -376,11 +402,11 @@ class Ajax extends Lib\Base\Ajax
         global $wpdb;
 
         $columns = self::parameter( 'columns' );
-        $order   = self::parameter( 'order', array() );
-        $filter  = self::parameter( 'filter' );
-        $limits  = array(
+        $order = self::parameter( 'order', array() );
+        $filter = self::parameter( 'filter' );
+        $limits = array(
             'length' => self::parameter( 'length' ),
-            'start'  => self::parameter( 'start' ),
+            'start' => self::parameter( 'start' ),
         );
 
         $query = Lib\Entities\MailingCampaign::query()
@@ -446,14 +472,17 @@ class Ajax extends Lib\Base\Ajax
     /**
      * Delete attachment files
      *
-     * @param $attachments
+     * @param $queue_data
      */
-    private static function _deleteAttachmentFiles( $attachments )
+    private static function _deleteAttachmentFiles( $queue_data )
     {
         $fs = Lib\Utils\Common::getFilesystem();
-
-        foreach ( $attachments as $file ) {
-            $fs->delete( $file, false, 'f' );
+        foreach ( $queue_data as $data ) {
+            foreach ( $data as $message ) {
+                foreach ( $message['attachments'] as $file ) {
+                    $fs->delete( $file, false, 'f' );
+                }
+            }
         }
     }
 }

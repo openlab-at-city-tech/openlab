@@ -21,7 +21,7 @@ class Ajax extends Lib\Base\Ajax
         $notification_ids   = (array) self::parameter( 'notification_ids' );
         $reply_to_customers = self::parameter( 'bookly_email_reply_to_customers' );
 
-        Lib\Notifications\Test\Sender::send( $to_email, $sender_name, $sender_email, $send_as, $reply_to_customers, $notification_ids );
+        Lib\Notifications\Test\Sender::send( $to_email, $sender_name, $sender_email, $send_as, $reply_to_customers, $notification_ids, 'email' );
 
         wp_send_json_success();
     }

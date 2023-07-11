@@ -38,6 +38,8 @@ abstract class Backend
                     Components\Notices\RenewAutoRecharge\Notice::create( 'bookly-js-renew' )->render();
                     // Show WPML re save notice.
                     Components\Notices\Wpml\Notice::render();
+                    // Show Zoom JWT deprecation notice.
+                    Components\Notices\ZoomJwt\Notice::render();
                 }
                 // Let add-ons render admin notices.
                 Lib\Proxy\Shared::renderAdminNotices( $bookly_page );
@@ -53,7 +55,7 @@ abstract class Backend
         }, 10, 1 );
 
         // Disable emoji in IE11
-        if ( $bookly_page && strpos( $_SERVER['HTTP_USER_AGENT'], 'Trident/7.0' ) !== false ) {
+        if ( $bookly_page && array_key_exists( 'HTTP_USER_AGENT', $_SERVER ) && strpos( $_SERVER['HTTP_USER_AGENT'], 'Trident/7.0' ) !== false ) {
             Lib\Utils\Common::disableEmoji();
         }
 
@@ -168,7 +170,6 @@ abstract class Backend
                 add_submenu_page( 'bookly-menu', $appearance, $appearance, $required_capability,
                     Modules\Appearance\Page::pageSlug(), function () { Modules\Appearance\Page::render(); } );
                 Lib\Proxy\Coupons::addBooklyMenuItem();
-                Lib\Proxy\GiftCards::addBooklyMenuItem();
                 Lib\Proxy\CustomFields::addBooklyMenuItem();
                 add_submenu_page(
                     'bookly-menu', $settings, $settings, $required_capability,
@@ -205,6 +206,9 @@ abstract class Backend
                                     break;
                                 case Lib\Cloud\Account::PRODUCT_VOICE:
                                     Modules\CloudVoice\Page::addBooklyCloudMenuItem( $product );
+                                    break;
+                                case Lib\Cloud\Account::PRODUCT_WHATSAPP:
+                                    Modules\CloudWhatsapp\Page::addBooklyCloudMenuItem( $product );
                                     break;
                                 default:
                                     Lib\Cloud\Proxy\Shared::renderCloudMenu( $product );

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Editable\Elements;
 use Bookly\Backend\Modules\Appearance\Codes;
 use Bookly\Backend\Modules\Appearance\Proxy;
@@ -9,6 +9,7 @@ use Bookly\Lib\Config;
     <?php include '_progress_tracker.php' ?>
     <div class="bookly-js-payment-gateways-intersected">
         <?php Proxy\Coupons::renderCouponBlock() ?>
+        <?php Proxy\Pro::renderGiftCards() ?>
         <?php Proxy\Pro::renderTips() ?>
         <?php Proxy\DepositPayments::renderAppearance() ?>
         <div class="bookly-payment-nav">
@@ -43,12 +44,12 @@ use Bookly\Lib\Config;
                                         </label>
                                         <div>
                                             <select class="bookly-card-exp">
-                                                <?php for ( $i = 1; $i <= 12; ++ $i ) : ?>
+                                                <?php for ( $i = 1; $i <= 12; ++$i ) : ?>
                                                     <option value="<?php echo esc_attr( $i ) ?>"><?php printf( '%02d', $i ) ?></option>
                                                 <?php endfor ?>
                                             </select>
                                             <select class="bookly-card-exp">
-                                                <?php for ( $i = date( 'Y' ); $i <= date( 'Y' ) + 10; ++ $i ) : ?>
+                                                <?php for ( $i = date( 'Y' ); $i <= date( 'Y' ) + 10; ++$i ) : ?>
                                                     <option value="<?php echo esc_attr( $i ) ?>"><?php echo esc_html( $i ) ?></option>
                                                 <?php endfor ?>
                                             </select>

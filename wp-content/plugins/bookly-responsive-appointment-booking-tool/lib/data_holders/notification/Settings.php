@@ -3,6 +3,7 @@ namespace Bookly\Lib\DataHolders\Notification;
 
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Entities\Service;
+use Bookly\Lib\Utils\Codes;
 
 /**
  * Class Settings
@@ -86,6 +87,39 @@ class Settings
                 $this->offset_hours = $this->settings['offset_bidirectional_hours'];
                 break;
         }
+    }
+
+    /**
+     * Get a message template for WhatsApp with variables
+     *
+     * @param array $codes
+     * @return array
+     */
+    public function getWhatsAppMessage( $codes )
+    {
+        $data = $this->settings['whatsapp'];
+        $message = array(
+            'name' => $data['template'],
+            'language' => array( 'code' => $data['language'] ),
+            'components' => array(),
+        );
+        foreach ( array( 'header', 'body' ) as $part ) {
+            if ( isset( $data[ $part ] ) ) {
+                $component = array(
+                    'type' => $part,
+                    'parameters' => array(),
+                );
+                foreach ( $data[ $part ] as $value ) {
+                    $component['parameters'][] = array(
+                        'type' => 'text',
+                        'text' => Codes::replace( $value, $codes, false ),
+                    );
+                }
+                $message['components'][] = $component;
+            }
+        }
+
+        return $message;
     }
 
     /**

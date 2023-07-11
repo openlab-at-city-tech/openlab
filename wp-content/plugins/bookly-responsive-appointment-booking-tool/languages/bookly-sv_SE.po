@@ -8,11 +8,11 @@ msgstr ""
 "Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-19 07:55+0000\n"
-"PO-Revision-Date: 2022-07-19 07:55+0000\n"
+"POT-Creation-Date: 2023-02-09 07:24+0000\n"
+"PO-Revision-Date: 2023-02-10 20:03+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Swedish\n"
-"X-Loco-Version: 2.3.1; wp-6.0"
+"X-Loco-Version: 2.3.1; wp-6.1"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr ""
@@ -63,13 +63,6 @@ msgstr ""
 msgid "Download invoice"
 msgstr ""
 
-msgid ""
-"Invoices add-on requires your customers address information. So options "
-"\"Make address field mandatory\" in Settings/Customers and \"Show address "
-"field\" in Appearance/Details are activated automatically and can be "
-"disabled after Invoices add-on is deactivated."
-msgstr ""
-
 msgid "Invoice due days"
 msgstr ""
 
@@ -81,6 +74,15 @@ msgid "Font"
 msgstr ""
 
 msgid "Choose the font for your invoice template"
+msgstr ""
+
+msgid "Invoice file name prefix"
+msgstr ""
+
+msgid ""
+"Set a prefix for the file name that will be used for your invoices. For "
+"example, if the file name prefix is \"myfile_\", your PDF file will be "
+"downloaded with the \"myfile_1.pdf\" name"
 msgstr ""
 
 msgid "Invoice template"
@@ -632,11 +634,18 @@ msgstr ""
 msgid "Fields matching"
 msgstr ""
 
+msgid ""
+"Enter the tags of the fields in your Mailchimp audience settings in "
+"accordance with Bookly data."
+msgstr ""
+
 #, php-format
 msgid ""
-"Enter the names of the fields in your Mailchimp audience settings in "
-"accordance with Bookly data. You can find these names in <b>Audience "
-"settings > Audience fields and %s tags</b> in your Mailchimp account"
+"You can find these tags in <b>Audience settings > Audience fields and %s "
+"tags</b> in your Mailchimp account"
+msgstr ""
+
+msgid "Tag"
 msgstr ""
 
 msgid "Value"
@@ -1123,6 +1132,9 @@ msgstr ""
 msgid "Pages with another time"
 msgstr ""
 
+msgid "Hide times input"
+msgstr ""
+
 msgid "Show Repeat step"
 msgstr ""
 
@@ -1270,6 +1282,9 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
+msgid "Units"
+msgstr ""
+
 msgid "Duplicate dates are not permitted."
 msgstr ""
 
@@ -1302,9 +1317,6 @@ msgstr "Det tidsintervallet är inte ledigt."
 
 msgid "OFF"
 msgstr "AV"
-
-msgid "Uncategorized"
-msgstr "Okategoriserad"
 
 msgid "Compound"
 msgstr ""
@@ -1477,10 +1489,10 @@ msgid "Customer Name"
 msgstr "Kundens namn"
 
 msgid "Customer Phone"
-msgstr "Kundtelefonen"
+msgstr "Kundtelefon"
 
 msgid "Customer Email"
-msgstr "Kunden email"
+msgstr "Kundens E-post"
 
 msgid "Status"
 msgstr "Status"
@@ -1939,6 +1951,13 @@ msgid_plural " and %d more items"
 msgstr[0] " och %d mer objekt"
 msgstr[1] " och %d fler objekt"
 
+msgid "Phone number is empty."
+msgstr "Inget telefonnummer."
+
+#, php-format
+msgid "%d min"
+msgstr "%d min"
+
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr ""
 
@@ -2026,9 +2045,6 @@ msgstr ""
 msgid "Failed to send SMS."
 msgstr "SMS-meddelandet har inte skickats."
 
-msgid "Phone number is empty."
-msgstr "Inget telefonnummer."
-
 msgid "Queued"
 msgstr "Köar"
 
@@ -2040,6 +2056,9 @@ msgstr "För lågt saldo"
 
 msgid "Country out of service"
 msgstr "Landet omfattas inte av tjänsten"
+
+msgid "Blocked"
+msgstr ""
 
 msgid "Sending"
 msgstr "Skickar"
@@ -2344,6 +2363,12 @@ msgstr ""
 msgid "Bookly verification code"
 msgstr ""
 
+msgid "&lt;"
+msgstr ""
+
+msgid "&gt;"
+msgstr ""
+
 msgid "Download ICS"
 msgstr ""
 
@@ -2624,6 +2649,9 @@ msgid ""
 "If you are not redirected automatically, follow the <a href=\"%s\">link</a>."
 msgstr "Om du inte skickas vidare automatiskt, följ <a href=\"%s\">länken</a>."
 
+msgid "Uncategorized"
+msgstr "Okategoriserad"
+
 msgid "Local"
 msgstr "På plats"
 
@@ -2637,6 +2665,9 @@ msgid "Month"
 msgstr "Månad"
 
 msgid "List"
+msgstr ""
+
+msgid "All day"
 msgstr ""
 
 msgid "No appointments for selected period."
@@ -2863,10 +2894,6 @@ msgstr[1] "%d dagar"
 msgid "%d h"
 msgstr "%d h"
 
-#, php-format
-msgid "%d min"
-msgstr "%d min"
-
 msgid "From"
 msgstr "Från"
 
@@ -2883,19 +2910,19 @@ msgid "Yesterday"
 msgstr "Igår"
 
 msgid "Last 7 days"
-msgstr ""
+msgstr "Senaste 7 dagarna"
 
 msgid "Last 30 days"
-msgstr ""
+msgstr "Senaste 30 dagarna"
 
 msgid "Next 7 days"
-msgstr ""
+msgstr "De kommande 7 dagarna"
 
 msgid "Next 30 days"
-msgstr ""
+msgstr "De kommande 30 dagarna"
 
 msgid "This month"
-msgstr ""
+msgstr "Denna månad"
 
 msgid "Next month"
 msgstr "Nästa månad"
@@ -2904,19 +2931,19 @@ msgid "No."
 msgstr "nr."
 
 msgid "Appointment date"
-msgstr ""
+msgstr "Bokningsdatum"
 
 msgid "Customer name"
-msgstr ""
+msgstr "Kundens namn"
 
 msgid "Customer phone"
-msgstr ""
+msgstr "Kundtelefon"
 
 msgid "Customer email"
-msgstr ""
+msgstr "Kundens e-post"
 
 msgid "Created"
-msgstr ""
+msgstr "Skapat"
 
 msgid "Internal note"
 msgstr "Internt meddelande"
@@ -2963,11 +2990,20 @@ msgstr "Avsändar ID"
 msgid "Cost"
 msgstr "Kostnad"
 
+msgid "Template"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
 msgid "Flag"
 msgstr ""
 
 msgid "Code"
 msgstr "Kod"
+
+msgid "Price/Minute"
+msgstr ""
 
 msgid "Regular price"
 msgstr "Vanligt pris"
@@ -3029,6 +3065,11 @@ msgid ""
 "will be permanently deleted"
 msgstr ""
 
+msgid ""
+"To save data, please set \"Don't delete\" in Bookly Settings > General > "
+"Bookly data upon deleting Bookly items"
+msgstr ""
+
 #, php-format
 msgid "%s updated"
 msgstr ""
@@ -3041,6 +3082,9 @@ msgid "No updates available"
 msgstr ""
 
 msgid "Free"
+msgstr ""
+
+msgid "Gift card"
 msgstr ""
 
 msgid "Completed"
@@ -3371,6 +3415,12 @@ msgid ""
 "Select \"Enabled\" if you want Bookly to prevent caching by third-party "
 "caching plugins by adding a DONOTCACHEPAGE constant on pages with booking "
 "form"
+msgstr ""
+
+msgid "Session storage mode"
+msgstr ""
+
+msgid "Select where to store session data"
 msgstr ""
 
 msgid "Prevent PHP session locking"
@@ -3767,6 +3817,9 @@ msgstr ""
 msgid "Last month"
 msgstr ""
 
+msgid "No records for selected period."
+msgstr "Inga poster för valda perioden."
+
 msgid "SMS Notifications"
 msgstr "SMS Påminnelser"
 
@@ -3853,9 +3906,6 @@ msgstr "Begäran om sändarens ID skickas."
 msgid "Sender ID is reset to default."
 msgstr "Avsändar-ID återställs till standard."
 
-msgid "No records for selected period."
-msgstr "Inga poster för valda perioden."
-
 msgid "enable"
 msgstr ""
 
@@ -3870,6 +3920,18 @@ msgstr ""
 
 msgid "SMS has been sent successfully."
 msgstr "SMS-meddelandet har skickats."
+
+msgid "WhatsApp Notifications"
+msgstr ""
+
+msgid "Permanent access token"
+msgstr ""
+
+msgid "Phone number ID "
+msgstr ""
+
+msgid "WhatsApp Business Account ID"
+msgstr ""
 
 msgid "Bookly Cloud Billing"
 msgstr ""
@@ -3977,9 +4039,6 @@ msgstr ""
 msgid "Duplicate"
 msgstr ""
 
-msgid "Simple"
-msgstr ""
-
 #, php-format
 msgid "%d service"
 msgid_plural "%d services"
@@ -3988,9 +4047,6 @@ msgstr[1] "%d tjänster"
 
 #, php-format
 msgid "Copy of %s"
-msgstr ""
-
-msgid "Bookly Cloud Zapier"
 msgstr ""
 
 #, php-format
@@ -4085,6 +4141,9 @@ msgstr ""
 msgid "Deactivation date"
 msgstr ""
 
+msgid "Messages"
+msgstr ""
+
 msgid "Tasks"
 msgstr ""
 
@@ -4098,6 +4157,12 @@ msgid "Diagnostics"
 msgstr ""
 
 msgid "Success"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "End points"
 msgstr ""
 
 msgid "PHP Sessions"
@@ -4121,7 +4186,7 @@ msgid ""
 "Logs and contact Bookly support."
 msgstr ""
 
-msgid "Timezone settings"
+msgid "Time settings"
 msgstr ""
 
 msgid ""
@@ -4196,6 +4261,11 @@ msgstr ""
 msgid "Some Bookly items are outdated. Please update the following items:"
 msgstr ""
 
+msgid ""
+"Please update the following add-ons for correct work of your version of "
+"Bookly:"
+msgstr ""
+
 msgid "All staff"
 msgstr "alla medarbetare"
 
@@ -4268,6 +4338,9 @@ msgstr "Redigera anpassad CSS"
 
 msgid "Set up your custom CSS styles"
 msgstr "Ställ in dina anpassade CSS-stilar"
+
+msgid "Bookly form"
+msgstr ""
 
 msgid "Show form progress tracker"
 msgstr "Visa formulärets framsteg"
@@ -4389,6 +4462,9 @@ msgstr ""
 msgid "Loop over appointments list with delimiter"
 msgstr ""
 
+msgid "Image of category"
+msgstr ""
+
 msgid "Service category info of appointment"
 msgstr ""
 
@@ -4404,13 +4480,19 @@ msgstr ""
 msgid "Service price of appointment"
 msgstr ""
 
+msgid "Image of staff category"
+msgstr ""
+
+msgid "Staff category info of appointment"
+msgstr ""
+
+msgid "Staff category name of appointment"
+msgstr ""
+
 msgid "Staff member full name in appointment"
 msgstr ""
 
 msgid "Total quantity of appointments in cart"
-msgstr ""
-
-msgid "Image of category"
 msgstr ""
 
 msgid "Info of category"
@@ -4438,6 +4520,12 @@ msgid "URL of service image (to use inside img tag)"
 msgstr ""
 
 msgid "URL of category image (to use inside img tag)"
+msgstr ""
+
+msgid "Info of staff category"
+msgstr ""
+
+msgid "Name of staff category"
 msgstr ""
 
 msgid "URL of staff photo (to use inside img tag)"
@@ -4550,6 +4638,9 @@ msgid "Cart information with cancel"
 msgstr ""
 
 msgid "Time zone of client"
+msgstr ""
+
+msgid "Locale of client"
 msgstr ""
 
 msgid "URL of approve appointment link (to use inside <a> tag)"
@@ -4668,6 +4759,25 @@ msgstr ""
 
 msgid "Sent successfully."
 msgstr "Skickats."
+
+msgid "Voice Notifications"
+msgstr ""
+
+msgid "Make a test call"
+msgstr ""
+
+msgid "Select the language of your notifications"
+msgstr ""
+
+msgid "Busy"
+msgstr ""
+
+msgid "No answer"
+msgstr ""
+
+#, php-format
+msgid "Calling %s"
+msgstr ""
 
 msgid "Default value for category select"
 msgstr "Defaultvärde för kategorival"
@@ -4795,7 +4905,7 @@ msgstr ""
 msgid "Thank you for registration."
 msgstr ""
 
-msgid "You're almost ready to get started with Bookly SMS Service."
+msgid "You're almost ready to get started with Bookly Cloud."
 msgstr ""
 
 msgid ""
@@ -5148,6 +5258,9 @@ msgstr ""
 msgid "Complete payment"
 msgstr "Slutföra betalningen"
 
+msgid "Gift card discount"
+msgstr ""
+
 msgid "Manual adjustment"
 msgstr ""
 
@@ -5252,6 +5365,33 @@ msgid ""
 "accordance with your settings."
 msgstr ""
 
+msgid "Header"
+msgstr ""
+
+msgid "Variable"
+msgstr ""
+
+msgid "Message"
+msgstr "Meddelande"
+
+msgid "New WhatsApp notification"
+msgstr ""
+
+msgid "Edit WhatsApp notification"
+msgstr ""
+
+msgid "In appeal"
+msgstr ""
+
+msgid "Pending deletion"
+msgstr ""
+
+msgid "Paused"
+msgstr ""
+
+msgid "Limit exceeded"
+msgstr ""
+
 msgid "Delete customers"
 msgstr "Radera kunder"
 
@@ -5352,9 +5492,9 @@ msgid "Select mailing list"
 msgstr ""
 
 msgid ""
-"You are going to delete item which is involved in upcoming appointments. All "
-"related appointments will be deleted. Please double check and edit "
-"appointments before this item deletion if needed."
+"You are going to delete an item that might be involved in existing "
+"appointments. All related appointments will be deleted. Please double-check "
+"and edit appointments before this item deletion if needed."
 msgstr ""
 
 msgid "Edit appointments"
@@ -5364,6 +5504,15 @@ msgid "All unsaved changes will be lost."
 msgstr ""
 
 msgid "Don't save"
+msgstr ""
+
+msgid "Voice"
+msgstr ""
+
+msgid "New voice notification"
+msgstr ""
+
+msgid "Edit voice notification"
 msgstr ""
 
 msgid "Create service"
@@ -5388,6 +5537,9 @@ msgid ""
 msgstr ""
 
 msgid "Edit service"
+msgstr ""
+
+msgid "Simple"
 msgstr ""
 
 msgid "Adjust the order of services in your booking form"
@@ -5502,23 +5654,61 @@ msgid ""
 "choose any translation, and click the \"Save\" button."
 msgstr ""
 
-msgid "This function is not available in the Bookly."
+msgid "This is a Pro version feature"
 msgstr ""
 
 msgid ""
-"You are using the free version of Bookly, so you can't add more than 5 "
-"services. To remove this limitation, get access to all Bookly features, "
-"lifetime free updates and 24/7 support, please upgrade to the Pro version of "
-"Bookly."
+"To get access to more features, lifetime free updates and 24/7 support, "
+"upgrade to the Pro version of Bookly."
 msgstr ""
 
-msgid "For more information visit"
+msgid "Compatibility with Bookly add-ons"
+msgstr ""
+
+msgid "Unlimited staff members"
+msgstr ""
+
+msgid "Unlimited services"
+msgstr ""
+
+msgid "Modern booking forms"
+msgstr ""
+
+msgid "Online meetings"
+msgstr ""
+
+msgid "WooCommerce compatibility"
+msgstr ""
+
+msgid "Google Calendar integration"
+msgstr "Google Calender länkning"
+
+msgid "Advanced service and staff management"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Migrate your Zoom JWT app to the new app type by June 1, 2023."
 msgstr ""
 
 msgid ""
-"You are using the free version of Bookly, so you can't add more than 1 staff."
-" To remove this limitation, get access to all Bookly features, lifetime free "
-"updates and 24/7 support, please upgrade to the Pro version of Bookly."
+"Zoom JWT app type will be deprecated June 1, 2023. After this date, you will "
+"no longer be able to use your JWT apps."
+msgstr ""
+
+msgid ""
+"We recommend that you create an OAuth app to replace the functionality of a "
+"JWT app in your account."
+msgstr ""
+
+msgid ""
+"To learn more, please visit the <a href=\"https://marketplace.zoom."
+"us/docs/guides/build/jwt-app/jwt-faq/\" target=\"_blank\">official Zoom "
+"page</a> about this change"
+msgstr ""
+
+msgid "Go to Settings"
 msgstr ""
 
 #, php-format
@@ -5724,6 +5914,9 @@ msgstr ""
 
 msgid "Show more"
 msgstr "Visa mer"
+
+msgid "Your session has expired. Please press \"Ok\" to refresh the page"
+msgstr ""
 
 msgid "Session error."
 msgstr "Session error"
@@ -5982,6 +6175,12 @@ msgstr ""
 msgid "Your package has been created."
 msgstr ""
 
+msgid "Show packages only"
+msgstr ""
+
+msgid "Package info"
+msgstr ""
+
 msgid "Creation Date"
 msgstr ""
 
@@ -6114,6 +6313,24 @@ msgstr ""
 "{company_phone}\n"
 "{company_website}"
 
+msgid "Notification to customer about purchased gift card"
+msgstr ""
+
+msgid "Your gift card at"
+msgstr ""
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"This is a confirmation that the following Gift Card {gift_card} has been "
+"purchased at {company_name}.\n"
+"\n"
+"We are waiting for you at {company_address}."
+msgstr ""
+
+msgid "Thank you for choosing our company."
+msgstr ""
+
 msgid ""
 "Hello.\n"
 "An account was created for you at {site_address}\n"
@@ -6147,6 +6364,9 @@ msgstr ""
 msgid "I will pay now with PayPal"
 msgstr "Betala med PayPal"
 
+msgid "I will pay by gift card"
+msgstr ""
+
 msgid ""
 "You are not required to pay for the booked services, click Next to complete "
 "the booking process."
@@ -6174,6 +6394,18 @@ msgstr "Kreditkortsnummer"
 
 msgid "Appointment"
 msgstr "Bokning"
+
+msgid "This gift card has expired"
+msgstr ""
+
+msgid "This gift card cannot be used for the current order"
+msgstr ""
+
+msgid "Gift card balance is not enough"
+msgstr ""
+
+msgid "Gift card not found"
+msgstr ""
 
 msgid "New customer's WordPress user login details"
 msgstr ""
@@ -6215,9 +6447,15 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Please verify Bookly Pro license in the administrative panel. If you do not "
-"verify the license within {days}, access to your bookings will be disabled."
+"Please verify Bookly Pro license in the administrative panel on {site_url}."
 msgstr ""
+
+msgid ""
+"If you do not verify the license within {days}, access to your bookings will "
+"be disabled."
+msgstr ""
+"Om du inte verifiera licensen inom {days} kommer tillgång till dina "
+"bokningar inaktiveras."
 
 msgid "Customer address"
 msgstr ""
@@ -6225,10 +6463,25 @@ msgstr ""
 msgid "Customer birthday"
 msgstr ""
 
-msgid "Online meetings"
+msgid "Balance"
+msgstr ""
+
+msgid "Active from"
+msgstr ""
+
+msgid "Active until"
+msgstr ""
+
+msgid "Min. appointments"
+msgstr ""
+
+msgid "Max. appointments"
 msgstr ""
 
 msgid "New staff's WordPress user login details"
+msgstr ""
+
+msgid "Notification about new gift card creation"
 msgstr ""
 
 msgid "License verification"
@@ -6255,30 +6508,46 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Please contact your website administrator in order to verify the license for "
-"Bookly add-ons. If you do not verify the license within {days}, the "
-"respective add-ons will be disabled."
+"Please contact your website administrator of {site_url} in order to verify "
+"the license for Bookly add-ons."
 msgstr ""
-"Kontakta webbplatsadministratören för att verifiera licensen för Bookly add-"
-"ons. Om du inte verifiera licensen inom {days}, kommer respektive tillägg "
-"inaktiveras."
+
+msgid ""
+"If you do not verify the license within {days}, the respective add-ons will "
+"be disabled."
+msgstr ""
 
 msgid "Contact your admin to verify Bookly add-ons license; {days} remaining."
 msgstr ""
 "Kontakta administratören för att kontrollera Bookly tillägg licens; {days} "
 "återstår."
 
-msgid ""
-"Please verify the license for Bookly add-ons in the administrative panel. If "
-"you do not verify the license within {days}, the respective add-ons will be "
-"disabled."
-msgstr ""
-"Vänligen kontrollera licensen för Bookly tillägg i den administrativa "
-"panelen. Om du inte verifiera licensen inom {days}, kommer respektive "
-"tillägg inaktiveras."
-
 msgid "Please verify Bookly add-ons license; {days} remaining."
 msgstr "Vänligen kontrollera Bookly tillägg licens; {days} återstår."
+
+msgid "Cancellation confirmation"
+msgstr ""
+
+msgid "Search form"
+msgstr ""
+
+msgid "Services form"
+msgstr ""
+
+msgid "Staff form"
+msgstr ""
+
+msgid "A custom block for displaying cancellation confirmation"
+msgstr ""
+
+msgid "A custom block for displaying search form"
+msgstr ""
+
+msgid "A custom block for displaying services form"
+msgstr ""
+
+msgid "A custom block for displaying staff form"
+msgstr ""
 
 msgid "no limit"
 msgstr ""
@@ -6309,6 +6578,91 @@ msgstr ""
 
 msgid "Print"
 msgstr "Skriva ut"
+
+msgid "Gift Cards"
+msgstr ""
+
+msgid "Add gift card series"
+msgstr ""
+
+msgid "Add gift card"
+msgstr ""
+
+msgid "Gift card code"
+msgstr ""
+
+msgid "Show only active"
+msgstr ""
+
+msgid "Export only active gift cards"
+msgstr ""
+
+msgid "New gift cards series"
+msgstr ""
+
+msgid "New gift card"
+msgstr ""
+
+msgid "Edit gift card"
+msgstr ""
+
+msgid "Generate"
+msgstr ""
+
+msgid ""
+"You can enter a mask containing asterisks \"*\" for variables here and click "
+"Generate."
+msgstr ""
+
+msgid "Mask"
+msgstr ""
+
+msgid "Enter a mask containing asterisks \"*\" for variables."
+msgstr ""
+
+msgid "Date limit (from and to)"
+msgstr ""
+
+msgid "No limit"
+msgstr ""
+
+msgid "Clear field"
+msgstr ""
+
+msgid "Limit appointments in cart (min and max)"
+msgstr ""
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr ""
+
+msgid "Create another gift card"
+msgstr ""
+
+msgid "No gift cards found."
+msgstr ""
+
+msgid "Min appointments should be greater than zero."
+msgstr ""
+
+msgid "Max appointments should be greater than zero."
+msgstr ""
+
+msgid "The code already exists"
+msgstr ""
+
+msgid "Please enter a non empty mask."
+msgstr ""
+
+#, php-format
+msgid ""
+"It is not possible to generate %d codes for this mask. Only %d codes "
+"available."
+msgstr ""
+
+msgid "All possible codes have already been generated for this mask."
+msgstr ""
 
 msgid "API Username"
 msgstr "API-användarnamn"
@@ -6381,6 +6735,9 @@ msgstr ""
 "skickas vidare till WooCommerce-kundvagnen istället för det ursprungliga "
 "betalningssteget."
 
+msgid "Booking product"
+msgstr "Boka produkt"
+
 msgid "Create a WooCommerce order from backend"
 msgstr ""
 
@@ -6403,9 +6760,6 @@ msgid ""
 "price. Please note that if the order contains at least one service with a "
 "price other than 0, the WooCommerce order will still be created"
 msgstr ""
-
-msgid "Booking product"
-msgstr "Boka produkt"
 
 msgid "Cart item data"
 msgstr "Kundvagnens artikeldata"
@@ -6553,25 +6907,36 @@ msgstr ""
 msgid "To set up Facebook integration, do the following:"
 msgstr ""
 
-msgid ""
-"Follow the steps at <a href=\"https://developers.facebook."
-"com/docs/apps/register\" target=\"_blank\">https://developers.facebook."
-"com/docs/apps/register</a> to create a Developer Account, register and "
-"configure your <b>Facebook App</b>. Then you'll need to submit your app for "
-"review. Learn more about the review process and what's required to pass "
-"review in the <a href=\"https://developers.facebook.com/docs/facebook-"
-"login/review\" target=\"_blank\">Login Review Guide</a>."
+#, php-format
+msgid "Follow the steps at %s to create a Developer Account."
 msgstr ""
 
 msgid ""
-"Below the App Details Panel click Add Platform button, select Website and "
-"enter your website URL."
+"In \"My apps\" section, press \"Create App\" button, select \"Consumer\" as "
+"the app type and provide the necessary information (App name, App contact "
+"email)."
+msgstr ""
+
+msgid "Then click \"Create App\"."
 msgstr ""
 
 msgid ""
-"Go to your App Dashboard. In the left side navigation panel of the App "
-"Dashboard, click Settings > Basic to view the App Details Panel with your "
-"App ID. Use it in the form below."
+"In \"Add products to your app\" section, find \"Facebook login\" and press "
+"\"Set up\"."
+msgstr ""
+
+msgid "In the sidebar on the left, select \"Settings\"."
+msgstr ""
+
+msgid ""
+"Enable \"Login with the JavaScript SDK\" and enter your site URL in \"Allow "
+"Domains for the JavaScript SDK\". Click \"Save changes\"."
+msgstr ""
+
+msgid "At the top of your screen press on App ID to copy it."
+msgstr ""
+
+msgid "Use it in the form below."
 msgstr ""
 
 msgid "App ID"
@@ -6581,6 +6946,50 @@ msgid "Select who can manage Bookly appointments"
 msgstr ""
 
 msgid "Select who can administrate Bookly"
+msgstr ""
+
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+msgstr ""
+
+msgid "Select an app or create a new one."
+msgstr ""
+
+msgid ""
+"Depending on the mode (Sandbox or Production), look for the <b>Application "
+"ID</b> and <b>Access token</b>."
+msgstr ""
+
+msgid "Use them in the form below on this page."
+msgstr ""
+
+msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
+msgstr ""
+
+#, php-format
+msgid ""
+"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
+"button, enter the following URL as the destination for events %s and select "
+"%s in <b>Events</b>."
+msgstr ""
+
+msgid "Click <b>Save</b>."
+msgstr ""
+
+msgid "In the sidebar on the left, select <b>Locations</b>."
+msgstr ""
+
+msgid "Look for the necessary location and copy <b>Location ID</b>."
+msgstr ""
+
+msgid "Use it in the form below on this page."
+msgstr ""
+
+msgid "Access token"
+msgstr ""
+
+msgid "Location ID"
 msgstr ""
 
 msgid ""
@@ -6789,6 +7198,15 @@ msgstr ""
 msgid "The Secret obtained from command return"
 msgstr ""
 
+msgid "Please select a Booking product"
+msgstr ""
+
+msgid "Extras titles"
+msgstr ""
+
+msgid "Extras total price"
+msgstr ""
+
 msgid "Online meeting password"
 msgstr ""
 
@@ -6920,6 +7338,195 @@ msgstr ""
 msgid "Show QR code"
 msgstr ""
 
+msgid ""
+"Modern, fast, and smooth form that allows your customers to easily find the "
+"right service."
+msgstr ""
+
+msgid ""
+"Catalog view allows you to organize and display the services conveniently "
+"for your customers."
+msgstr ""
+
+msgid ""
+"Catalog view allows you to organize and display the staff conveniently for "
+"your customers."
+msgstr ""
+
+msgid "Step by step form"
+msgstr ""
+
+msgid "Classic booking form with the consequent scheduling process."
+msgstr ""
+
+msgid "Cancellation form"
+msgstr ""
+
+msgid ""
+"Lightweight form that allows your customers to cancel their appointments and "
+"optionally specify the cancellation reason."
+msgstr ""
+
+msgid "Placeholder"
+msgstr ""
+
+msgid "Empty option"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Header height"
+msgstr ""
+
+msgid "Form title"
+msgstr ""
+
+msgid "Slug"
+msgstr ""
+
+msgid "Main color"
+msgstr ""
+
+msgid "Show 'Book more' button"
+msgstr ""
+
+msgid "Show price"
+msgstr ""
+
+msgid "Show summary"
+msgstr ""
+
+msgid "Show QR Code"
+msgstr ""
+
+msgid "Default value"
+msgstr ""
+
+msgid "Categories list"
+msgstr ""
+
+msgid "Services list"
+msgstr ""
+
+msgid "Hide categories step"
+msgstr ""
+
+msgid "Hide services step"
+msgstr ""
+
+msgid "Show cancellation reason"
+msgstr ""
+
+msgid "Staff list"
+msgstr ""
+
+msgid "Hide staff step"
+msgstr ""
+
+msgid "Card content"
+msgstr ""
+
+msgid "Add new form"
+msgstr ""
+
+msgid ""
+"Are you sure you want to change the slug? Changing the slug may lead to "
+"unexpected behavior."
+msgstr ""
+
+msgid "Copy shortcode"
+msgstr ""
+
+msgid "Clone form"
+msgstr ""
+
+msgid "Delete form"
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid "Success appointment booking"
+msgstr ""
+
+msgid "Success package booking"
+msgstr ""
+
+msgid "Custom CSS"
+msgstr ""
+
+msgid "Save the appearance to apply changes."
+msgstr ""
+
+msgid "Changes saved."
+msgstr ""
+
+msgid ""
+"Select the form you want to publish, click on the menu button, and select "
+"'Copy shortcode'. Open the page where you want to add the booking form in a "
+"page edit mode and paste the previously copied shortcode. The form will be "
+"added to the page."
+msgstr ""
+
+msgid "Service title"
+msgstr ""
+
+msgid "Book now"
+msgstr ""
+
+msgid "Buy now"
+msgstr ""
+
+msgid "Book more"
+msgstr ""
+
+msgid "No time slots available"
+msgstr ""
+
+msgid "Slot already booked"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "Thank you!"
+msgstr ""
+
+msgid "Your booking is complete."
+msgstr ""
+
+msgid "Payment has been skipped."
+msgstr ""
+
+msgid "Select the Extras you'd like (Multiple Selection)"
+msgstr ""
+
+msgid "Click on a time slot to proceed with booking"
+msgstr ""
+
+msgid ""
+"Please provide your details in the form below to proceed with the booking"
+msgstr ""
+
+msgid "Please tell us how you would like to pay"
+msgstr ""
+
+msgid "Please select a category"
+msgstr ""
+
+msgid "Please select a staff"
+msgstr ""
+
+msgid "Thank you for being with us"
+msgstr ""
+
+msgid "Confirm cancellation"
+msgstr ""
+
+msgid "Do not cancel"
+msgstr ""
+
 msgid "Import"
 msgstr "Importera"
 
@@ -6961,9 +7568,6 @@ msgstr ""
 msgid "Recipient"
 msgstr ""
 
-msgid "Message"
-msgstr "Meddelande"
-
 msgid "Headers"
 msgstr ""
 
@@ -6973,10 +7577,16 @@ msgstr ""
 msgid "Time zone of staff"
 msgstr ""
 
-msgid "Show cancellation reason"
+msgid "Gift card amount"
 msgstr ""
 
-msgid "Add appointment cancellation confirmation"
+msgid "Gift card valid-from date"
+msgstr ""
+
+msgid "Gift card expiration date"
+msgstr ""
+
+msgid "Appearance form name"
 msgstr ""
 
 #, php-format
@@ -6998,6 +7608,12 @@ msgid "Add Bookly search form"
 msgstr ""
 
 msgid "Add Bookly services form"
+msgstr ""
+
+msgid "Add Bookly staff form"
+msgstr ""
+
+msgid "Add appointment cancellation confirmation"
 msgstr ""
 
 #, php-format
@@ -7026,9 +7642,6 @@ msgstr ""
 
 msgid "This calendar is already connected to another staff member"
 msgstr ""
-
-msgid "Google Calendar integration"
-msgstr "Google Calender länkning"
 
 #, php-format
 msgid "Please configure Google Calendar <a href=\"%s\">settings</a> first"
@@ -7108,6 +7721,10 @@ msgid ""
 msgstr ""
 
 msgid "Create WordPress user"
+msgstr ""
+
+msgid ""
+"This text can be inserted into notifications with {staff_category_info} code"
 msgstr ""
 
 msgid "Create payment"
@@ -7384,13 +8001,6 @@ msgid ""
 "Please contact your website administrator in order to verify the license."
 msgstr "Kontakta webbplatsadministratören för att verifiera licensen."
 
-msgid ""
-"If you do not verify the license within {days}, access to your bookings will "
-"be disabled."
-msgstr ""
-"Om du inte verifiera licensen inom {days} kommer tillgång till dina "
-"bokningar inaktiveras."
-
 msgid "Proceed to Bookly Pro without license verification"
 msgstr ""
 
@@ -7415,24 +8025,6 @@ msgid ""
 "to verify your license by providing a valid purchase code."
 msgstr ""
 
-msgid "Cancellation confirmation"
-msgstr ""
-
-msgid "A custom block for displaying cancellation confirmation"
-msgstr ""
-
-msgid "Services form"
-msgstr ""
-
-msgid "A custom block for displaying services form"
-msgstr ""
-
-msgid "Search form"
-msgstr ""
-
-msgid "A custom block for displaying search form"
-msgstr ""
-
 msgid "A custom block for displaying frontend calendar"
 msgstr ""
 
@@ -7440,36 +8032,6 @@ msgid "Appointments list"
 msgstr ""
 
 msgid "A custom block for displaying appointments list"
-msgstr ""
-
-msgid "Confirm cancellation"
-msgstr ""
-
-msgid "Do not cancel"
-msgstr ""
-
-msgid "Thank you for being with us"
-msgstr ""
-
-msgid "Book now"
-msgstr ""
-
-msgid "Book more"
-msgstr ""
-
-msgid "No time slots available"
-msgstr ""
-
-msgid "No results found"
-msgstr ""
-
-msgid "Thank you!"
-msgstr ""
-
-msgid "Your booking is complete"
-msgstr ""
-
-msgid "Slot already booked"
 msgstr ""
 
 msgid "Invalid token provided"
@@ -7655,18 +8217,6 @@ msgstr "Får utnyttjas"
 msgid "Number of times used"
 msgstr "Utnyttjats antal gånger"
 
-msgid "Active from"
-msgstr ""
-
-msgid "Active until"
-msgstr ""
-
-msgid "Min. appointments"
-msgstr ""
-
-msgid "Max. appointments"
-msgstr ""
-
 msgid "Coupons"
 msgstr "Rabattkuponger"
 
@@ -7677,9 +8227,6 @@ msgid "Add Coupon"
 msgstr "Lägg till rabattkupong"
 
 msgid "Coupon code"
-msgstr ""
-
-msgid "Show only active"
 msgstr ""
 
 msgid "Export only active coupons"
@@ -7694,37 +8241,11 @@ msgstr "Ny kupong."
 msgid "Edit coupon"
 msgstr "Redigera kupong"
 
-msgid "Generate"
-msgstr ""
-
-msgid ""
-"You can enter a mask containing asterisks \"*\" for variables here and click "
-"Generate."
-msgstr ""
-
-msgid "Mask"
-msgstr ""
-
-msgid "Enter a mask containing asterisks \"*\" for variables."
-msgstr ""
-
 msgid "Once per customer"
 msgstr ""
 
 msgid ""
 "Select this option to limit the use of the coupon to 1 time per customer."
-msgstr ""
-
-msgid "Date limit (from and to)"
-msgstr ""
-
-msgid "No limit"
-msgstr ""
-
-msgid "Clear field"
-msgstr ""
-
-msgid "Limit appointments in cart (min and max)"
 msgstr ""
 
 msgid ""
@@ -7750,27 +8271,6 @@ msgstr "Rabatten ska vara mellan 0 och 100."
 msgid "Deduction should be a positive number."
 msgstr "Sänkningen måste vara ett positivt tal."
 
-msgid "Min appointments should be greater than zero."
-msgstr ""
-
-msgid "Max appointments should be greater than zero."
-msgstr ""
-
-msgid "The code already exists"
-msgstr ""
-
-msgid "Please enter a non empty mask."
-msgstr ""
-
-#, php-format
-msgid ""
-"It is not possible to generate %d codes for this mask. Only %d codes "
-"available."
-msgstr ""
-
-msgid "All possible codes have already been generated for this mask."
-msgstr ""
-
 msgid "Default code mask"
 msgstr ""
 
@@ -7778,6 +8278,12 @@ msgid "Enter default mask for auto-generated codes."
 msgstr ""
 
 msgid "Show coupons"
+msgstr ""
+
+msgid "Your coupon code if you have one"
+msgstr ""
+
+msgid "Button"
 msgstr ""
 
 msgid "Group name"
@@ -8072,9 +8578,6 @@ msgstr ""
 msgid "Secret Word"
 msgstr ""
 
-msgid "Select the Extras you'd like (Multiple Selection)"
-msgstr ""
-
 msgid "Multiply extras by number of persons"
 msgstr ""
 
@@ -8096,25 +8599,13 @@ msgstr ""
 msgid "Service Extras"
 msgstr ""
 
-msgid "Extras titles"
-msgstr ""
-
-msgid "Extras total price"
-msgstr ""
-
 msgid "Show title"
-msgstr ""
-
-msgid "Show price"
 msgstr ""
 
 msgid "Show image"
 msgstr ""
 
 msgid "Show duration"
-msgstr ""
-
-msgid "Show summary"
 msgstr ""
 
 msgid "Show Extras step"
@@ -8151,50 +8642,6 @@ msgid "Min quantity should not be greater than max quantity"
 msgstr ""
 
 msgid "Extras tax"
-msgstr ""
-
-#, php-format
-msgid ""
-"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-msgstr ""
-
-msgid "Select an app or create a new one."
-msgstr ""
-
-msgid ""
-"Depending on the mode (Sandbox or Production), look for the <b>Application "
-"ID</b> and <b>Access token</b>."
-msgstr ""
-
-msgid "Use them in the form below on this page."
-msgstr ""
-
-msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
-msgstr ""
-
-#, php-format
-msgid ""
-"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
-"button, enter the following URL as the destination for events %s and select "
-"%s in <b>Events</b>."
-msgstr ""
-
-msgid "Click <b>Save</b>."
-msgstr ""
-
-msgid "In the sidebar on the left, select <b>Locations</b>."
-msgstr ""
-
-msgid "Look for the necessary location and copy <b>Location ID</b>."
-msgstr ""
-
-msgid "Use it in the form below on this page."
-msgstr ""
-
-msgid "Access token"
-msgstr ""
-
-msgid "Location ID"
 msgstr ""
 
 msgid "Book More"
@@ -8235,9 +8682,6 @@ msgid "Edit Status"
 msgstr ""
 
 msgid "Free/busy"
-msgstr ""
-
-msgid "Busy"
 msgstr ""
 
 msgid ""
@@ -8475,9 +8919,6 @@ msgid ""
 "2. In the Dashboard's <a href=\"%s\" target=\"_blank\">Webhooks settings</a> "
 "section, click <b>Add endpoint</b> to reveal a form to add a new endpoint "
 "for receiving events."
-msgstr ""
-
-msgid "Session has expired. Please reload the page and try again"
 msgstr ""
 
 msgid "Condition"

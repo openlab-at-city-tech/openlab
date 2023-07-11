@@ -39,6 +39,7 @@ class Page extends Lib\Base\Ajax
 
         wp_localize_script( 'bookly-services-list.js', 'BooklyL10n', array(
             'are_you_sure' => esc_attr__( 'Are you sure?', 'bookly' ),
+            'appointmentsUrl' => Lib\Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Appointments\Ajax::pageSlug() ),
             'private_warning' => esc_attr__( 'The service will be created with the visibility of Private.', 'bookly' ),
             'edit' => esc_attr__( 'Edit', 'bookly' ),
             'duplicate' => esc_attr__( 'Duplicate', 'bookly' ),

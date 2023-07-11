@@ -49,7 +49,7 @@ class Staff
 
     /**
      * @param Schedule $schedule
-     * @param int      $location_id
+     * @param int $location_id
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ class Staff
     /**
      * Add holiday.
      *
-     * @param string $date  Format Y-m[-d]
+     * @param string $date Format Y-m[-d]
      * @return $this
      */
     public function addHoliday( $date )
@@ -137,14 +137,15 @@ class Staff
     /**
      * Add service.
      *
-     * @param int    $service_id
-     * @param int    $location_id
+     * @param int $service_id
+     * @param int $location_id
      * @param double $price
-     * @param int    $capacity_min
-     * @param int    $capacity_max
+     * @param int $capacity_min
+     * @param int $capacity_max
+     * @param int $waiting_list_capacity
      * @param string $staff_preference_rule
-     * @param array  $staff_preference_settings
-     * @param int    $staff_preference_order
+     * @param array $staff_preference_settings
+     * @param int $staff_preference_order
      * @return $this
      */
     public function addService(
@@ -153,15 +154,16 @@ class Staff
         $price,
         $capacity_min,
         $capacity_max,
+        $waiting_list_capacity,
         $staff_preference_rule,
         $staff_preference_settings,
         $staff_preference_order
-    )
-    {
+    ) {
         $this->services[ $service_id ][ $location_id ] = new Service(
             $price,
             $capacity_min,
             $capacity_max,
+            $waiting_list_capacity,
             $staff_preference_rule,
             $staff_preference_settings,
             $staff_preference_order
@@ -287,10 +289,10 @@ class Staff
      */
     public function morePreferableThan( Staff $staff, Range $slot )
     {
-        $service_id  = $slot->serviceId();
+        $service_id = $slot->serviceId();
         $location_id = Proxy\Locations::servicesPerLocationAllowed() ? $slot->locationId() : 0;
-        $service     = $this->getService( $service_id, $location_id );
-        $settings    = $service->getStaffPreferenceSettings();
+        $service = $this->getService( $service_id, $location_id );
+        $settings = $service->getStaffPreferenceSettings();
 
         switch ( $service->getStaffPreferenceRule() ) {
             case Entities\Service::PREFERRED_ORDER:
@@ -298,24 +300,24 @@ class Staff
                 $value2 = $staff->getService( $service_id, $location_id )->getStaffPreferenceOrder();
                 break;
             case Entities\Service::PREFERRED_LEAST_OCCUPIED:
-                $date   = $slot->start()->value()->format( 'Y-m-d' );
+                $date = $slot->start()->value()->format( 'Y-m-d' );
                 $value1 = $this->getWorkload( $date );
                 $value2 = $staff->getWorkload( $date );
                 break;
             case Entities\Service::PREFERRED_MOST_OCCUPIED:
-                $date   = $slot->start()->value()->format( 'Y-m-d' );
+                $date = $slot->start()->value()->format( 'Y-m-d' );
                 $value1 = $staff->getWorkload( $date );
                 $value2 = $this->getWorkload( $date );
                 break;
             case Entities\Service::PREFERRED_LEAST_OCCUPIED_FOR_PERIOD:
-                $from   = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
-                $to     = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
+                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
+                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
                 $value1 = $this->getWorkloadForPeriod( $from, $to );
                 $value2 = $staff->getWorkloadForPeriod( $from, $to );
                 break;
             case Entities\Service::PREFERRED_MOST_OCCUPIED_FOR_PERIOD:
-                $from   = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
-                $to     = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
+                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
+                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
                 $value1 = $staff->getWorkloadForPeriod( $from, $to );
                 $value2 = $this->getWorkloadForPeriod( $from, $to );
                 break;

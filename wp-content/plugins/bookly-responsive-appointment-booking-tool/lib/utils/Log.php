@@ -82,30 +82,33 @@ abstract class Log
         }
 
         try {
-            $debug_backtrace = debug_backtrace();
-            $key = 0;
-            foreach ( $debug_backtrace as $key => $trace ) {
-                if ( isset( $trace['class'] ) && $trace['class'] === __CLASS__ ) {
-                    break;
+            if ( $entity->isLoggable() ) {
+                $debug_backtrace = debug_backtrace();
+                $key = 0;
+                foreach ( $debug_backtrace as $key => $trace ) {
+                    if ( isset( $trace['class'] ) && $trace['class'] === __CLASS__ ) {
+                        break;
+                    }
                 }
-            }
-            $ref = '';
-            if ( isset( $debug_backtrace[ $key + 2 ] ) ) {
-                $trace = $debug_backtrace[ $key + 2 ];
-                $ref .= ( isset( $trace['class'] ) ? $trace['class'] : '' ) . ( isset( $trace['type'] ) ? $trace['type'] : ' ' ) . ( isset( $trace['function'] ) ? $trace['function'] : '' );
-            }
-
-            $modified = array();
-            if ( $action === self::ACTION_UPDATE ) {
-                $fields = $entity->getFields();
-                foreach ( array_keys( $entity->getModified() ) as $key ) {
-                    $modified[ $key ] = $fields[ $key ];
+                $ref = '';
+                for ( $offset = 3; $offset < 6; $offset ++ ) {
+                    if ( isset( $debug_backtrace[ $key + $offset ] ) && ( $trace = $debug_backtrace[ $key + $offset ] ) && $trace['function'] !== 'call_user_func' ) {
+                        $ref .= ( isset( $trace['class'] ) ? $trace['class'] : '' ) . ( isset( $trace['type'] ) ? $trace['type'] : ' ' ) . ( isset( $trace['function'] ) ? $trace['function'] : '' ) . "\n";
+                    }
                 }
-            } else {
-                $modified = $entity->getFields();
-            }
 
-            self::common( $action, $entity->getTableName(), $entity->getId(), json_encode( $modified ), $ref, $comment );
+                $modified = array();
+                if ( $action === self::ACTION_UPDATE ) {
+                    $fields = $entity->getFields();
+                    foreach ( array_keys( $entity->getModified() ) as $key ) {
+                        $modified[ $key ] = $fields[ $key ];
+                    }
+                } else {
+                    $modified = $entity->getFields();
+                }
+
+                self::common( $action, $entity->getTableName(), $entity->getId(), json_encode( $modified ), $ref, $comment );
+            }
         } catch ( \Exception $e ) {
         }
     }

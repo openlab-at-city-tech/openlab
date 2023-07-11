@@ -66,6 +66,36 @@ abstract class Updater extends Schema
     }
 
     /**
+     * Rename columns
+     *
+     * @param array $tables
+     * @return void
+     */
+    protected function renameTablesColumns( array $tables )
+    {
+        foreach ( $tables as $table => $columns ) {
+            $queries = array();
+            foreach ( $columns as $filed_name => $new_field_name ) {
+                $queries[] = 'ALTER TABLE `%s` RENAME COLUMN ' . $filed_name . ' TO ' . $new_field_name;
+            }
+            $this->alterTables( array( $table => $queries, ) );
+        }
+    }
+
+    /**
+     * Rername tables
+     *
+     * @param array $tables
+     * @return void
+     */
+    protected function renameTables( array $tables )
+    {
+        foreach ( $tables as $table => $new_table_name ) {
+            $this->alterTables( array( $table => array( 'RENAME TABLE `%s` TO ' . $this->getTableName( $new_table_name ) ) ) );
+        }
+    }
+
+    /**
      * Rename options.
      *
      * @param array $options

@@ -65,7 +65,7 @@ jQuery(function($) {
             staffMembers = [];
             this.booklyDropdown('getSelectedExt').forEach(function(item) {
                 ids.push(item.value);
-                staffMembers.push({id: item.value, title: encodeHTML(item.name)});
+                staffMembers.push({id: item.value, titleHTML: encodeHTML(item.name)});
             });
             calendar.ec.setOption('resources', staffMembers);
             setCookie('bookly_cal_st_ids', ids);
@@ -92,7 +92,7 @@ jQuery(function($) {
     }
     // Populate staffMembers.
     $staffFilter.booklyDropdown('getSelectedExt').forEach(function(item) {
-        staffMembers.push({id: item.value, title: encodeHTML(item.name)});
+        staffMembers.push({id: item.value, titleHTML: encodeHTML(item.name)});
         $staffLinks.filter('[data-staff_id=' + item.value + ']').parent().show();
     });
 

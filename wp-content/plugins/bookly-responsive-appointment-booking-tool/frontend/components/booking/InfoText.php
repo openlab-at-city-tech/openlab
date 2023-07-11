@@ -127,8 +127,6 @@ class InfoText
                     $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
                     $data['service_duration'][] = $appointment_data['service_duration'];
 
-                    /** @var Lib\Entities\Staff $staff */
-                    $staff = null;
                     if ( $step == Steps::REPEAT ) {
                         $slot = $userData->getSlots();
                         list ( $slot_service, $slot_staff, $slot_time ) = $slot[ $num ];
@@ -316,7 +314,7 @@ class InfoText
                         : '';
                     // If appointment exists, prepare some additional data.
                     if ( $cart_item->getAppointmentId() ) {
-                        $data['booking_number'][] = $cart_item->getAppointmentId();
+                        $data['booking_number'][] = $cart_item->getBookingNumber();
                         $data['appointment_id'][] = $cart_item->getAppointmentId();
                     }
 

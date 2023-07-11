@@ -105,7 +105,7 @@ class Ajax extends Lib\Base\Ajax
             'bookly_app_show_category_info',
             'bookly_app_show_service_info',
             'bookly_app_show_staff_info',
-            'bookly_app_show_single_slot',
+            'bookly_app_show_slots',
             'bookly_app_show_start_over',
             'bookly_app_show_terms',
             'bookly_app_show_time_zone_switcher',

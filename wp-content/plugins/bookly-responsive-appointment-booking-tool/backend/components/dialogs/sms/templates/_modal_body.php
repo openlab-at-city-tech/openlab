@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Container;
 use Bookly\Backend\Components\Controls\Inputs;
 /** @var string $gateway */
@@ -55,8 +55,8 @@ use Bookly\Backend\Components\Controls\Inputs;
 
     <?php $self::renderTemplate( '_subject' ) ?>
     <?php $self::renderTemplate( '_editor' ) ?>
-    <?php if ( $gateway == 'email' ) : ?>
-        <?php $self::renderTemplate( '_codes' ) ?>
+    <?php if ( $gateway == 'email' || $gateway == 'whatsapp' ) : ?>
+        <?php $self::renderTemplate( '_codes', compact( 'gateway' ) ) ?>
     <?php endif ?>
     <?php Container::renderFooter() ?>
 </div>

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="row bg-light py-3 pl-3 mt-n3 mb-3">
     <button class="btn btn-link bookly-js-back" type="button" ><i class="fas fa-fw fa-chevron-left ml-1"></i><?php esc_html_e( 'Back to the list of amounts', 'bookly' ) ?></button>
 </div>

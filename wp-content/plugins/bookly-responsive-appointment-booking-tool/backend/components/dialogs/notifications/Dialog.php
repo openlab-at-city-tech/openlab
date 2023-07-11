@@ -65,6 +65,7 @@ class Dialog extends SmsDialog
             'recurringActive' => (int) Lib\Config::recurringAppointmentsActive(),
             'defaultNotification' => self::getDefaultNotification(),
             'codes' => $codes_list,
+            'gateway' => 'email',
             'title' => array(
                 'container' => __( 'Email', 'bookly' ),
                 'new' => __( 'New email notification', 'bookly' ),

@@ -61,6 +61,9 @@ export default function stepPayment(params) {
             $apply_coupon_button = $('.bookly-js-apply-coupon', $container),
             $coupon_input = $('input.bookly-user-coupon', $container),
             $coupon_error = $('.bookly-js-coupon-error', $container),
+            $apply_gift_card_button = $('.bookly-js-apply-gift-card', $container),
+            $gift_card_input = $('input.bookly-user-gift', $container),
+            $gift_card_error = $('.bookly-js-gift-card-error', $container),
             $apply_tips_button = $('.bookly-js-apply-tips', $container),
             $applied_tips_button = $('.bookly-js-applied-tips', $container),
             $tips_input = $('input.bookly-user-tips', $container),
@@ -70,7 +73,7 @@ export default function stepPayment(params) {
             $buttons = $('.bookly-gateway-buttons,.bookly-js-details', $container),
             $payment_details
         ;
-        $payments.on('click', function() {
+        $payments.on('click', function () {
             $buttons.hide();
             $('.bookly-gateway-buttons.pay-' + $(this).val(), $container).show();
             if ($(this).data('with-details') == 1) {
@@ -83,7 +86,7 @@ export default function stepPayment(params) {
         });
         $payments.eq(0).trigger('click');
 
-        $deposit_mode.on('change', function() {
+        $deposit_mode.on('change', function () {
             let data = {
                 action: 'bookly_deposit_payments_apply_payment_method',
                 form_id: params.form_id,
@@ -99,7 +102,7 @@ export default function stepPayment(params) {
             });
         });
 
-        $apply_coupon_button.on('click', function(e) {
+        $apply_coupon_button.on('click', function (e) {
             var ladda = laddaStart(this);
             $coupon_error.text('');
             $coupon_input.removeClass('bookly-error');
@@ -113,7 +116,7 @@ export default function stepPayment(params) {
             booklyAjax({
                 type: 'POST',
                 data: data,
-                error: function() {
+                error: function () {
                     ladda.stop();
                 }
             }).then(response => {
@@ -126,12 +129,38 @@ export default function stepPayment(params) {
             }).finally(() => { ladda.stop(); });
         });
 
-        $tips_input.on('keyup', function() {
+        $apply_gift_card_button.on('click', function (e) {
+            var ladda = laddaStart(this);
+            $gift_card_error.text('');
+            $gift_card_input.removeClass('bookly-error');
+
+            let data = {
+                action: 'bookly_pro_apply_gift_card',
+                form_id: params.form_id,
+                gift_card: $gift_card_input.val()
+            };
+
+            booklyAjax({
+                type: 'POST',
+                data: data,
+                error: function () {
+                    ladda.stop();
+                }
+            }).then(response => {
+                stepPayment({form_id: params.form_id});
+            }).catch(response => {
+                $gift_card_error.html(response.error);
+                $gift_card_input.addClass('bookly-error');
+                scrollTo($gift_card_error, params.form_id);
+            }).finally(() => { ladda.stop(); });
+        });
+
+        $tips_input.on('keyup', function () {
             $applied_tips_button.hide();
             $apply_tips_button.css('display', 'inline-block');
         });
 
-        $apply_tips_button.on('click', function(e) {
+        $apply_tips_button.on('click', function (e) {
             var ladda = laddaStart(this);
             $tips_error.text('');
             $tips_input.removeClass('bookly-error');
@@ -145,7 +174,7 @@ export default function stepPayment(params) {
             booklyAjax({
                 type: 'POST',
                 data: data,
-                error: function() {
+                error: function () {
                     ladda.stop();
                 }
             }).then(response => {
@@ -158,7 +187,7 @@ export default function stepPayment(params) {
             });
         });
 
-        $('.bookly-js-next-step', $container).on('click', function(e) {
+        $('.bookly-js-next-step', $container).on('click', function (e) {
             e.stopPropagation();
             e.preventDefault();
             var ladda = laddaStart(this),
@@ -178,22 +207,6 @@ export default function stepPayment(params) {
                 // handle only if was selected local payment !
                 e.preventDefault();
                 save(params.form_id);
-
-            } else if ($('.bookly-payment[value=cloud_gift]', $container).is(':checked')) {
-                booklyAjax({
-                    type: 'POST',
-                    data: {
-                        action: 'bookly_pro_apply_gift_card',
-                        gift_card: $('[name=gift_card]', $container).val(),
-                        form_id: params.form_id
-                    }
-                }).then(response => {
-                    save(params.form_id);
-                }).catch(response => {
-                    ladda.stop();
-                    $('.bookly-js-cloud_gift-error', $container).text(response.error);
-                });
-
             } else if ($('.bookly-payment[value=card]', $container).is(':checked')) {
                 if ($('.bookly-payment[data-form=stripe]', $container).is(':checked')) {
                     booklyAjax({
@@ -210,7 +223,7 @@ export default function stepPayment(params) {
                                     card: stripe_card
                                 }
                             }
-                        ).then(function(result) {
+                        ).then(function (result) {
                             if (result.error) {
                                 booklyAjax({
                                     type: 'POST',
@@ -247,7 +260,7 @@ export default function stepPayment(params) {
                             },
                             form_id: params.form_id
                         },
-                        cardPayment = function(data) {
+                        cardPayment = function (data) {
                             booklyAjax({
                                 type: 'POST',
                                 data: data
@@ -267,7 +280,9 @@ export default function stepPayment(params) {
             } else if ($('.bookly-js-checkout', $container).is(':checked')) {
                 e.preventDefault();
                 $form = $(this).closest('form');
-                if ($form.find('input.bookly-payment-id').length > 0) {
+                let $payment_id = $('input.bookly-payment-id', $form),
+                    $payment_token = $('input.bookly-js-add-payment-token', $form);
+                if ($payment_id.length > 0 || $payment_token.length > 0) {
                     booklyAjax({
                         type: 'POST',
                         data: {
@@ -276,7 +291,12 @@ export default function stepPayment(params) {
                             payment_type: $form.data('gateway')
                         }
                     }).then(response => {
-                        $form.find('input.bookly-payment-id').val(response.payment_id);
+                        $payment_id.val(response.payment.id);
+                        if ($payment_token.length) {
+                            let url = $payment_token.val();
+                            url += (url.indexOf('?') ? '&' : '?') + 'bookly-token=' + response.payment.token;
+                            $payment_token.val(url);
+                        }
                         $form.submit();
                     }).catch(response => {
                         if (response.error == 'cart_item_not_available') {
@@ -301,7 +321,7 @@ export default function stepPayment(params) {
             }
         });
 
-        $('.bookly-js-back-step', $container).on('click', function(e) {
+        $('.bookly-js-back-step', $container).on('click', function (e) {
             e.stopPropagation();
             e.preventDefault();
             laddaStart(this);

@@ -20,6 +20,8 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::DISCOUNTS,
         Lib\Utils\Tables::EMAIL_LOGS,
         Lib\Utils\Tables::EMAIL_NOTIFICATIONS,
+        Lib\Utils\Tables::GIFT_CARDS,
+        Lib\Utils\Tables::GIFT_CARD_TYPES,
         Lib\Utils\Tables::LOCATIONS,
         Lib\Utils\Tables::PACKAGES,
         Lib\Utils\Tables::PAYMENTS,
@@ -36,6 +38,8 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::VOICE_DETAILS,
         Lib\Utils\Tables::VOICE_NOTIFICATIONS,
         Lib\Utils\Tables::VOICE_PRICES,
+        Lib\Utils\Tables::WHATSAPP_DETAILS,
+        Lib\Utils\Tables::WHATSAPP_NOTIFICATIONS,
     );
 
     /**

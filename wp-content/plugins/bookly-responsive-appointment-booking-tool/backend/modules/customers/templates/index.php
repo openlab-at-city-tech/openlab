@@ -1,9 +1,10 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Customers\Proxy;
+use Bookly\Lib\Utils\Common;
 /** @var array $datatable */
 ?>
 <div id="bookly-tbs" class="wrap">
@@ -35,7 +36,7 @@ use Bookly\Backend\Modules\Customers\Proxy;
                         <tr>
                             <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
                                 <?php if ( $show ) : ?>
-                                    <th><?php echo esc_html( $datatable['titles'][ $column ] ) ?></th>
+                                    <th><?php echo Common::html( $datatable['titles'][ $column ] ) ?></th>
                                 <?php endif ?>
                             <?php endforeach ?>
                             <th></th>

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div id="bookly-tbs" class="wrap">
     <div id="bookly-lite-rebranding-notice" class="alert alert-info" data-action="bookly_dismiss_lite_rebranding_notice">
         <button type="button" class="close" data-dismiss="alert">&times;</button>

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <div class="bookly-modal bookly-fade" tabindex="-1" role="dialog" id="bookly-js-disable-auto-recharge-modal">

@@ -59,10 +59,19 @@ class Ajax extends Lib\Base\Ajax
 
         $appointment = Lib\Entities\Appointment::find( $appointment_id );
         if ( $appointment ) {
-            Lib\Utils\Log::deleteEntity( $appointment, __METHOD__ );
             $appointment->delete();
         }
 
-        wp_send_json_success( compact( 'queue' ) );
+        $response = array();
+        if ( $queue ) {
+            $db_queue = new Lib\Entities\NotificationQueue();
+            $db_queue
+                ->setData( json_encode( array( 'all' => $queue ) ) )
+                ->save();
+
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue );
+        }
+
+        wp_send_json_success( $response );
     }
 }

@@ -451,7 +451,11 @@ jQuery(function($) {
                 responsivePriority: 2
             },
             {data: 'comment', responsivePriority: 2},
-            {data: 'ref', className: 'none', responsivePriority: 1},
+            {data: 'ref', className: 'none', responsivePriority: 1,
+                render: function(data, type, row, meta) {
+                    return data && data.replace(/\n/g,"<br>");
+                }
+            },
         ],
         dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
         language: {

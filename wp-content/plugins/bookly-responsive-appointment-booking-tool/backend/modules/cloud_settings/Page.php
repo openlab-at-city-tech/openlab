@@ -29,10 +29,9 @@ class Page extends Lib\Base\Component
             ) );
 
             wp_localize_script( 'bookly-cloud-settings.js', 'BooklyL10n', array(
-                'csrfToken'          => Lib\Utils\Common::getCsrfToken(),
-                'country'            => $cloud->account->getCountry(),
-                'noResults'          => __( 'No records.', 'bookly' ),
-                'settingsSaved'      => __( 'Settings saved.', 'bookly' ),
+                'country' => $cloud->account->getCountry(),
+                'noResults' => __( 'No records.', 'bookly' ),
+                'settingsSaved' => __( 'Settings saved.', 'bookly' ),
                 'passwords_no_match' => __( 'Passwords don\'t match', 'bookly' ),
             ) );
 

@@ -26,11 +26,8 @@ abstract class Sender extends Reminder
             ->where( 'n.type', $type )
             ->where( 'n.active', '1' )
         ;
-        $notifications = array(
-            'sms' => Notification::getTypes( 'sms' ),
-            'email' => Notification::getTypes( 'email' ),
-            'voice' => Notification::getTypes( 'voice' ),
-        );
+
+        $notifications = Notification::getAssociated();
 
         /** @var Notification $notification */
         foreach ( $query->find() as $notification ) {

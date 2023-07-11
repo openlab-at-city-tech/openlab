@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Support;
@@ -102,7 +102,7 @@ use Bookly\Lib\Config;
                 <tr>
                     <?php foreach ( $datatables['appointments']['settings']['columns'] as $column => $show ) : ?>
                         <?php if ( $show ) : ?>
-                            <th><?php echo esc_html( $datatables['appointments']['titles'][ $column ] ) ?></th>
+                            <th><?php echo Common::html( $datatables['appointments']['titles'][ $column ] ) ?></th>
                         <?php endif ?>
                     <?php endforeach ?>
                     <th></th>
