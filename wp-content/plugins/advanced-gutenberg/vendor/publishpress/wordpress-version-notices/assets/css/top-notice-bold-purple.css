@@ -1,5 +1,5 @@
 .pp-version-notice-bold-purple {
-    background: #655897;
+    background: #655997;
     height: auto;
     box-sizing: border-box;
     padding: 18px 7px 20px 7px;
@@ -13,7 +13,7 @@
 }
 
 .pp-version-notice-bold-purple .pp-version-notice-bold-purple-button a {
-    background: #FCB223;
+    background: #FEB123;
     color: #000 !important;
     font-weight: normal;
     text-decoration: none;

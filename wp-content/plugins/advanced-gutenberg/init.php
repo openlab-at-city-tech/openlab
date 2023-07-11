@@ -1,43 +1,6 @@
 <?php
 defined('ABSPATH') || die;
 
-//Check plugin requirements
-if (version_compare(PHP_VERSION, '5.6.20', '<')) {
-    if (! function_exists('advgb_disable_plugin')) {
-        /**
-         * Disable plugin
-         *
-         * @return void
-         */
-        function advgb_disable_plugin()
-        {
-            if (current_user_can('activate_plugins') && is_plugin_active(plugin_basename(__FILE__))) {
-                deactivate_plugins(__FILE__);
-                unset($_GET['activate']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- No action, nonce is not required
-            }
-        }
-    }
-
-    if (! function_exists('advgb_show_error')) {
-        /**
-         * Show error
-         *
-         * @return void
-         */
-        function advgb_show_error()
-        {
-            echo '<div class="error"><p><strong>PublishPress Blocks</strong> needs at least PHP 5.6.20 version, please update php before installing the plugin.</p></div>';
-        }
-    }
-
-    //Add actions
-    add_action('admin_init', 'advgb_disable_plugin');
-    add_action('admin_notices', 'advgb_show_error');
-
-    //Do not load anything more
-    return;
-}
-
 if (!defined('GUTENBERG_VERSION_REQUIRED')) {
     define('GUTENBERG_VERSION_REQUIRED', '5.7.0');
 }
@@ -87,9 +50,12 @@ add_action( 'init', 'advg_language_domain_init' );
 
 if (! function_exists('advg_check_legacy_widget_block_init')) {
     /**
-     * v2.11.0 - Check if core/legacy-widget exists in current user role through advgb_blocks_user_roles option,
+     * Check if widget blocks exists in current user role through advgb_blocks_user_roles option,
      * either in inactive_blocks or active_blocks array.
      * https://github.com/publishpress/PublishPress-Blocks/issues/756#issuecomment-932358037
+     *
+     * @since 2.11.0
+     * @since 3.1.4.2 - Added support for core/widget-group block
      *
      * This function can be used in future to add new blocks not available on widgets.php
      *
@@ -100,6 +66,11 @@ if (! function_exists('advg_check_legacy_widget_block_init')) {
         if(!current_user_can('edit_theme_options')) {
             return false;
         }
+
+        $widget_blocks = [
+            'core/legacy-widget',
+            'core/widget-group'
+        ];
 
         global $wp_version;
         global $pagenow;
@@ -112,19 +83,19 @@ if (! function_exists('advg_check_legacy_widget_block_init')) {
 
             if( count( $advgb_blocks_list ) && count( $advgb_blocks_user_roles ) ) {
 
-                if(
-                    is_array($advgb_blocks_user_roles[$current_user_role]['active_blocks'])
-                    && is_array($advgb_blocks_user_roles[$current_user_role]['inactive_blocks'])
-                    && !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
-                    && !in_array( 'core/legacy-widget', $advgb_blocks_user_roles[$current_user_role]['inactive_blocks'] )
-                    && !empty( $current_user_role )
-                ) {
-
-                    array_push(
-                        $advgb_blocks_user_roles[$current_user_role]['active_blocks'],
-                        'core/legacy-widget'
-                    );
-                    update_option( 'advgb_blocks_user_roles', $advgb_blocks_user_roles, false );
+                foreach( $widget_blocks as $item ) {
+                    if( is_array( $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
+                        && is_array($advgb_blocks_user_roles[$current_user_role]['inactive_blocks'] )
+                        && ! in_array( $item, $advgb_blocks_user_roles[$current_user_role]['active_blocks'] )
+                        && ! in_array( $item, $advgb_blocks_user_roles[$current_user_role]['inactive_blocks'] )
+                        && ! empty( $current_user_role )
+                    ) {
+                        array_push(
+                            $advgb_blocks_user_roles[$current_user_role]['active_blocks'],
+                            $item
+                        );
+                        update_option( 'advgb_blocks_user_roles', $advgb_blocks_user_roles, false );
+                    }
                 }
             }
         }

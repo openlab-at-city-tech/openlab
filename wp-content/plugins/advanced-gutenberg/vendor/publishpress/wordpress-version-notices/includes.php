@@ -27,7 +27,7 @@ use Pimple\Container;
 use PPVersionNotices\ServicesProvider;
 
 if (!defined('PP_VERSION_NOTICES_LOADED')) {
-    define('PP_VERSION_NOTICES_VERSION', '1.1.4');
+    define('PP_VERSION_NOTICES_VERSION', '1.3.1');
     define('PP_VERSION_NOTICES_BASE_PATH', __DIR__);
     define('PP_VERSION_NOTICES_BASE_URL', untrailingslashit(plugin_dir_url(__FILE__)));
     define('PP_VERSION_NOTICES_SRC_PATH', PP_VERSION_NOTICES_BASE_PATH . '/src');
@@ -39,7 +39,7 @@ if (!defined('PP_VERSION_NOTICES_LOADED')) {
          *
          * Make sure to update the class name after running composer update or dump autoload.
          */
-        if (!class_exists('ComposerAutoloaderInit0ff73bab6c34dc502dbc3151d23f7930')) {
+        if (!class_exists('ComposerAutoloaderInit3900ad7530b245ccd1e9acb54887e278')) {
             require_once __DIR__ . '/vendor/autoload.php';
         }
     }

@@ -1,10 +1,10 @@
 === Gutenberg Blocks - PublishPress Blocks Gutenberg Editor Plugin ===
 Contributors: publishpress, stevejburge, htmgarcia
-Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks
+Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks, accordion block, gallery block, slider block, tabs block, maps block, block controls
 Requires at least: 5.0
-Tested up to: 6.1.1
-Stable tag: 3.1.4
-Requires PHP: 5.6
+Tested up to: 6.2.2
+Stable tag: 3.1.4.3
+Requires PHP: 7.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,31 +14,19 @@ PublishPress Blocks include accordions, galleries, sliders, tabs, maps and more.
 
 [PublishPress Blocks](https://publishpress.com/blocks/) has everything you need to build professional websites with the WordPress block editor. The extra blocks include layout options, sliders, buttons, icons, image galleries, maps, tabs, testimonials, accordions, and more.
 
-## 4 powerful block editor features in PublishPress Blocks
+## Powerful block editor features in PublishPress Blocks
 
-1. **Block Permissions**: You can control who can use each block, including default WordPress blocks.
-2. **PublishPress Blocks**: The blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
-3. **Block Styles**: You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks.
-4. **Block Controls**: You can schedule when blocks are shown, and add user role restrictions.
+- **PublishPress Blocks**: The blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
+- **Block Styles**: You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks.
+- **Block Controls**: You can block visibility, including when and where blocks show, plus which user roles can see them.
+- **Reusable Blocks**: You get easy access to manage and edit all the reusable blocks on your site.
 
 ## PublishPress Blocks Pro
 
 > <strong>Upgrade to Blocks Pro</strong><br />
 > This plugin is the free version of PublishPress Blocks. The Pro version comes with faster support and all the features you need to super-charge the WordPress block editor. <a href="https://publishpress.com/blocks"  title="Blocks Pro">Click here to purchase the best premium WordPress blocks plugin now!</a>
 
-## The best Latest News / Content block for WordPress
-
-PublishPress Blocks features **the best content block in WordPress**. You can use the "Content Display" block to create blog layouts, lists of posts by a specific author, or even complete newspaper frontpages.
-
-This block allows you to show posts, pages and other content types in many beautiful layouts. These layout options are *Grid*, *Frontpage*, *List*, *Newspaper*, *Masonry*, and *Slider*.
-
-You also have dozens of different ways to customize your content. You can filter your content by author, category or tag. You can add many types of data to your layouts including posted date, updated date, images, authors, excerpts, intro text, comments and more.
-
-We've already mentioned many features of the Content Display block. So what are you waiting for? **Install PublishPress Blocks and check out the Content Display block**.
-
-This block really is the best way to showcase your posts in the Gutenberg editor.
-
-## Over 20 Extra Gutenberg Blocks
+## Feature 1. Over 20 Extra Gutenberg Blocks
 
 PublishPress Blocks has everything you need to build professional websites with WordPress. Here's an introduction to the blocks available with the PublishPress Blocks plugin:
 
@@ -71,27 +59,48 @@ And there are also three blocks available in PublishPress Blocks Pro:
 - **[Feature List block](https://publishpress.com/knowledge-base/feature-list-block/)**: With the Pro version of the PublishPress Blocks plugin, you can create an Features List block when you need to show a list of all the items available with a product or service.
 - **[Pricing Table block](https://publishpress.com/knowledge-base/pricing-table-block/)**: With the Pro version of the PublishPress Blocks plugin, you can create a Pricing Table block when you need to show people the purchase or subscription options on your site.
 
-## Block Permissions
+PublishPress Blocks features **the best content block in WordPress**. You can use the "Content Display" block to create blog layouts, lists of posts by a specific author, or even complete newspaper frontpages.
 
-PublishPress Blocks allows you to enable or disable Gutenberg blocks for user roles. For example, you can disable the “Classic” block if you don’t want users to rely on the old WordPress editor.
+This block allows you to show posts, pages and other content types in many beautiful layouts. These layout options are *Grid*, *Frontpage*, *List*, *Newspaper*, *Masonry*, and *Slider*.
 
-Using the PublishPress Blocks plugin, you can allow some user roles to use the Gutenberg blocks that you choose. You can select which blocks in the Blocks list will be available to each role.
+You also have dozens of different ways to customize your content. You can filter your content by author, category or tag. You can add many types of data to your layouts including posted date, updated date, images, authors, excerpts, intro text, comments and more.
 
-[Click here to see how to control permissions for Gutenberg blocks](https://publishpress.com/knowledge-base/editor-profiles/).
+We've already mentioned many features of the Content Display block. So what are you waiting for? **Install PublishPress Blocks and check out the Content Display block**. This block really is the best way to showcase your posts in the Gutenberg editor.
 
-## Blocks Styles
+## Feature 2. Blocks Styles
 
 You create custom, reusable CSS styles and make them available to end users. Name the style, and let the content editors use it when they need it. This is a very useful feature that empowers your users to add pre-defined CSS styles to any Gutenberg block.
 
 [Click here to see how to create block styles](https://publishpress.com/knowledge-base/custom-css/).
 
-## Block Controls
+## Feature 3. Block Controls
 
 Using the PublishPress Blocks plugin, you can schedule when blocks are shown, and add user role restrictions.
 
 Block Controls works with almost any block, including blocks from third party plugins.
 
 [Click here to read how to use block controls](https://publishpress.com/knowledge-base/how-to-use-block-controls/)
+
+There are four different kinds of block visiblity control available:
+
+- **Schedule control**: schedule when to start showing and/or stop showing a block.
+- **User roles control**: choose which users can see your blocks.
+- **Term archives control**: choose on which taxonomies and terms archive pages your blocks can be displayed.
+- **Pages control**: choose in which pages this block can be displayed.
+
+PublishPress Blocks also allows you to enable or disable Gutenberg blocks for user roles. For example, you can disable the “Classic” block if you don’t want users to rely on the old WordPress editor.
+
+Using the PublishPress Blocks plugin, you can allow some user roles to use the Gutenberg blocks that you choose. You can select which blocks in the Blocks list will be available to each role.
+
+[Click here to see how to control permissions for Gutenberg blocks](https://publishpress.com/knowledge-base/editor-profiles/).
+
+## Feature 4. Reusable Blocks
+
+When you are using PublishPress Blocks, a submenu for Reusable Blocks is enabled by default. This submenu allows you to reach the “Reusable blocks” page screen that is normally difficult to find in WordPress.
+
+Reusable blocks are an incredibly useful feature in the Gutenberg block editor. They allow you to create content once and use it multiple times inside different posts and pages. In future updates for PublishPress Blocks, we're going to add more features to help you manage reusable blocks.
+
+[Click here to for more on the Reusable Blocks Screen](https://publishpress.com/knowledge-base/how-to-enable-disable-reusable-blocks-submenu/).
 
 ## Page Builder Block Layout Options
 
@@ -103,30 +112,27 @@ PublishPress Blocks allows you to create flexible and beautiful page builder lay
 
 The Pro versions of the PublishPress plugins are well worth your investment. The Pro versions have extra features and faster support. [Click here to join PublishPress](https://publishpress.com/pricing/).
 
-Join PublishPress and you'll get access to these Pro plugins:
+Join PublishPress and you'll get access to these nine Pro plugins:
 
 * [PublishPress Authors Pro](https://publishpress.com/authors) allows you to add multiple authors and guest authors to WordPress posts.
 * [PublishPress Blocks Pro](https://publishpress.com/blocks) has everything you need to build professional websites with the WordPress block editor.
 * [PublishPress Capabilities Pro](https://publishpress.com/capabilities) is the plugin to manage your WordPress user roles, permissions, and capabilities.
 * [PublishPress Checklists Pro](https://publishpress.com/checklists) enables you to define tasks that must be completed before content is published.
+* [PublishPress Future Pro](https://publishpress.com/future) is the plugin for scheduling changes to your posts.
 * [PublishPress Permissions Pro](https://publishpress.com/permissions) is the plugin for advanced WordPress permissions.
-* [PublishPress Pro](https://publishpress.com/publishpress) is the plugin for managing and scheduling WordPress content.
+* [PublishPress Planner Pro](https://publishpress.com/publishpress) is the plugin for managing and scheduling WordPress content.
 * [PublishPress Revisions Pro](https://publishpress.com/revisions) allows you to update your published pages with teamwork and precision.
 * [PublishPress Series Pro](https://publishpress.com/series) enables you to group content together into a series.
 
 Together, these plugins are a suite of powerful publishing tools for WordPress. If you need to create a professional workflow in WordPress, with moderation, revisions, permissions and more... then you should try PublishPress.
 
-=  Bug Reports =
+## Bug Reports ##
 
 Bug reports for PublishPress Blocks are welcome in our [repository on GitHub](https://github.com/publishpress/publishpress-blocks). Please note that GitHub is not a support forum, and that issues that aren't properly qualified as bugs will be closed.
 
-= Follow the PublishPress team =
+## Follow the PublishPress team ##
 
 Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitter](https://www.twitter.com/publishpresscom) and [YouTube](https://www.youtube.com/publishpress).
-
-= Support =
-
-Before leaving a review >> Feel free to ask questions here in the support section, we reply to every question!
 
 == Installation ==
 
@@ -264,12 +270,28 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 
 == Changelog ==
 
-= 3.1.4 - 13 Feb 2022 =
+= 3.1.4.3 - 15 May 2023 =
+  * Add: Support for new dynamic meta_key for Series in Content Display block
+
+= 3.1.4.2 - 12 Apr 2023 =
+  * Fix: Allowed block types for non-saved block types in post edit
+  * Fix: Widget Group block type not saved as active
+  * Add: PHP 7.2.5 as minimum PHP version
+
+= 3.1.4.1 - 29 Mar 2023 =
+  * Fix: Blinking block inserter in WordPress 6.2
+  * Fix: Toggle to open calendar popup in Block controls
+  * Fix: Calendar popup UI in Block controls
+  * Fix: Days of the week and between times UI elements from Schedule's Block controls missing CSS in Customizing > Widgets
+  * Fix: Woo Products columns are incorrect in editor preview
+  * Fix: Slider view in editor for Woo products block
+
+= 3.1.4 - 13 Feb 2023 =
   * Add: Unique class to Accordions block
   * Add: Ad "Upgrade to Pro" in Schedule Timezone setting Block control
   * Fix: Stacked is selected but visually is not indicated in Tabs block
 
-= 3.1.3 - 23 Jan 2022 =
+= 3.1.3 - 23 Jan 2023 =
   * Add: List item block
   * Add: Reordering items support to List block
   * Add: Submenu for Reusable blocks
@@ -280,7 +302,7 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
   * Fix: Vertical alignment in editor for PublishPress Columns block
   * Fix: All tabs content displayed at once
 
-= 3.1.2 - 4 Jan 2022 =
+= 3.1.2 - 4 Jan 2023 =
   * Add: Days of the week and time range settings to Schedule control
   * Add: Term archives and pages control
   * Add: Bring back map files
