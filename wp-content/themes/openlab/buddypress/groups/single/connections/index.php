@@ -79,10 +79,6 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 						</button>
 
 						<div class="accordion-content">
-							<div class="connection-setting-checkbox">
-								<input type="checkbox" <?php checked( $all_is_checked ); ?> class="connection-setting-all" id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-all" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-all"><?php esc_html_e( 'All', 'openlab-connections' ); ?>
-							</div>
-
 							<div class="connection-setting-checkbox connection-setting-checkbox-post">
 								<input type="checkbox" <?php checked( in_array( 'post', $connection_settings['content_types'], true ) ); ?> class="connection-setting-post" id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post" name="connection-settings[content-type][post]" value="1" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post"><?php esc_html_e( 'Posts', 'openlab-connections' ); ?></label>
 
