@@ -3,7 +3,7 @@
 class MC4WP_Admin_Tools {
 
 
-	 /**
+	/**
 	 * @return string
 	 */
 	public function get_plugin_page() {
@@ -47,14 +47,6 @@ class MC4WP_Admin_Tools {
 	 */
 	public function get_required_capability() {
 		$capability = 'manage_options';
-
-		/**
-		 * Filters the required user capability to access the settings pages & dashboard widgets.
-		 *
-		 * @ignore
-		 * @deprecated 3.0
-		 */
-		$capability = apply_filters( 'mc4wp_settings_cap', $capability );
 
 		/**
 		 * Filters the required user capability to access the Mailchimp for WordPress' settings pages, view the dashboard widgets.

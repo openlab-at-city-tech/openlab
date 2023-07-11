@@ -1,6 +1,56 @@
 Changelog
 =========
 
+#### 4.9.5 - Jun 7, 2023
+
+- Fix generated HTML for list/audience choice fields.
+- Fix deprecation warning in includes/admin/class-review-notice.php.
+- Update JavaScript dependencies.
+
+
+#### 4.9.4 - May 2, 2023
+
+- Fallback to default checkbox label if none given. Thanks to [Shojib Khan](https://github.com/kshojib).
+- Improve WooCommerce integration settings page by disabling position field if integration is disabled. Thanks to [Shojib Khan](https://github.com/kshojib).
+- Update JavaScript dependencies.
+
+
+#### 4.9.3 - Mar 31, 2023
+
+- Defend against breaking change in latest WPForms update.
+
+
+#### 4.9.2 - Mar 21, 2023
+
+- Add support for a field named `MARKETING_PERMISSIONS` to enable GDPR fields configured in Mailchimp. A [sample code snippet can be found here](https://github.com/ibericode/mailchimp-for-wordpress/blob/master/sample-code-snippets/forms/gdpr-marketing-permissions.md).
+- Remove Google reCaptcha feature. This was already disabled if you were not already using it.
+
+
+#### 4.9.1 - Feb 7, 2023
+
+- Fix generated value attribute for fields of type choice (dropdown, checkboxes, radio fields).
+- Fix type of `marketing_permissions` field in API requests. Thanks to [George Korakas](https://github.com/gkorakas-eli).
+- Refactor list overview JS to not depend on Mithril.js anymore.
+- Simplify admin footer text asking for a plugin review.
+- When renewing lists, renew cached marketing permissions too.
+
+
+#### 4.9.0 - Jan 13, 2023 
+
+- Removed deprecated filter hook `mc4wp_settings_cap`, use `mc4wp_admin_required_capability` instead.
+- Removed deprecated filter hook `mc4wp_merge_vars`, use `mc4wp_form_data` or `mc4wp_integration_data` instead.
+- Removed deprecated filter hook `mc4wp_form_merge_vars`, use `mc4wp_form_data` instead.
+- Removed deprecated filter hook `mc4wp_integration_merge_vars`, use `mc4wp_integration_data` instead.
+- Removed deprecated filter hook `mc4wp_valid_form_request`, use `mc4wp_form_errors` instead.
+- Removed deprecated function `mc4wp_get_api()` and deprecated class `MC4WP_API`.
+- Removed deprecated function `mc4wp_checkbox()`.
+- Removed deprecated function `mc4wp_form()`, use `mc4wp_show_form()` instead.
+- Added filter `mc4wp_debug_log_message` to modify or disable messages that are written to the debug log.
+- Fix color of invalid Mailchimp API key notice.
+- Sanitize IP address value from `$_SERVER['REMOTE_ADDR']` too.
+- Fetch GDPR marketing permissions via first subscriber on list and show them in lists overview table.
+
+
 #### 4.8.12 - Dec 06, 2022
 
 - Minor performance, memory usage & size optimizations for all JavaScript code bundled with this plugin.
@@ -49,7 +99,7 @@ Thanks to the team over at [pluginvulnerabilities.com](https://www.pluginvulnera
 
 #### 4.8.5 - Jun 1, 2021
 
-Add nonce verification to all URL's using _mc4wp_action query parameter.
+Add nonce verification to all URL's using `_mc4wp_action` query parameter.
 This fixes a CSRF vulnerability where a malicious website could trick a logged-in admin user in performing unwanted actions.
 
 A special thanks to Erwan from [WPScan](https://wpscan.com/) for bringing this issue to our attention.

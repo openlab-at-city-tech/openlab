@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit099509e0407d1d209d074734a4e923c5
+class ComposerStaticInit635f3e67743268dcf58f396ddcf0bc9f
 {
     public static $files = array (
         'fca581ae5268210490253d58378748c5' => __DIR__ . '/../..' . '/includes/functions.php',
@@ -16,7 +16,6 @@ class ComposerStaticInit099509e0407d1d209d074734a4e923c5
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'MC4WP_API' => __DIR__ . '/../..' . '/includes/api/class-api.php',
         'MC4WP_API_Connection_Exception' => __DIR__ . '/../..' . '/includes/api/class-connection-exception.php',
         'MC4WP_API_Exception' => __DIR__ . '/../..' . '/includes/api/class-exception.php',
         'MC4WP_API_Resource_Not_Found_Exception' => __DIR__ . '/../..' . '/includes/api/class-resource-not-found-exception.php',
@@ -55,7 +54,6 @@ class ComposerStaticInit099509e0407d1d209d074734a4e923c5
         'MC4WP_Form_Widget' => __DIR__ . '/../..' . '/includes/forms/class-widget.php',
         'MC4WP_Forms_Admin' => __DIR__ . '/../..' . '/includes/forms/class-admin.php',
         'MC4WP_Give_Integration' => __DIR__ . '/../..' . '/integrations/give/class-give.php',
-        'MC4WP_Google_Recaptcha' => __DIR__ . '/../..' . '/includes/forms/class-google-recaptcha.php',
         'MC4WP_Gravity_Forms_Field' => __DIR__ . '/../..' . '/integrations/gravity-forms/class-field.php',
         'MC4WP_Gravity_Forms_Integration' => __DIR__ . '/../..' . '/integrations/gravity-forms/class-gravity-forms.php',
         'MC4WP_Integration' => __DIR__ . '/../..' . '/includes/integrations/class-integration.php',
@@ -87,7 +85,7 @@ class ComposerStaticInit099509e0407d1d209d074734a4e923c5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit099509e0407d1d209d074734a4e923c5::$classMap;
+            $loader->classMap = ComposerStaticInit635f3e67743268dcf58f396ddcf0bc9f::$classMap;
 
         }, null, ClassLoader::class);
     }

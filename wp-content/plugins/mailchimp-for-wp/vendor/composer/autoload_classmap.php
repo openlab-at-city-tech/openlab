@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'MC4WP_API' => $baseDir . '/includes/api/class-api.php',
     'MC4WP_API_Connection_Exception' => $baseDir . '/includes/api/class-connection-exception.php',
     'MC4WP_API_Exception' => $baseDir . '/includes/api/class-exception.php',
     'MC4WP_API_Resource_Not_Found_Exception' => $baseDir . '/includes/api/class-resource-not-found-exception.php',
@@ -46,7 +45,6 @@ return array(
     'MC4WP_Form_Widget' => $baseDir . '/includes/forms/class-widget.php',
     'MC4WP_Forms_Admin' => $baseDir . '/includes/forms/class-admin.php',
     'MC4WP_Give_Integration' => $baseDir . '/integrations/give/class-give.php',
-    'MC4WP_Google_Recaptcha' => $baseDir . '/includes/forms/class-google-recaptcha.php',
     'MC4WP_Gravity_Forms_Field' => $baseDir . '/integrations/gravity-forms/class-field.php',
     'MC4WP_Gravity_Forms_Integration' => $baseDir . '/integrations/gravity-forms/class-gravity-forms.php',
     'MC4WP_Integration' => $baseDir . '/includes/integrations/class-integration.php',
