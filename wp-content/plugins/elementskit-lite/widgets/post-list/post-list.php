@@ -54,6 +54,7 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 					'recent'           => esc_html__( 'Recent Post', 'elementskit-lite' ),
 					'popular'          => esc_html__( 'Popular Post', 'elementskit-lite' ),
 					'selected'         => esc_html__( 'Selected Post', 'elementskit-lite' ),
+					'category'        => esc_html__( 'Category Post', 'elementskit-lite' ),
 				],
 
             ]
@@ -62,11 +63,25 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 		$this->add_control(
 			'section_recent_post_limit',
 			[
-				'label'   => esc_html__( 'Product Limit', 'elementskit-lite' ),
+				'label'   => esc_html__( 'Post Limit', 'elementskit-lite' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 5,
 				'condition'	=> [
-					'section_layout_options'	=> ['recent', 'popular']
+					'section_layout_options'	=> ['recent', 'popular', 'category']
+				]
+			]
+		);
+
+		$this->add_control(
+			'ekit_blog_posts_category',
+			[
+				'label' => esc_html__('Select Categories', 'elementskit-lite'),
+				'type'      => ElementsKit_Controls_Manager::AJAXSELECT2,
+				'options'   =>'ajaxselect2/category',
+				'label_block' => true,
+				'multiple'  => true,
+				'condition'	=> [
+					'section_layout_options'	=> 'category'
 				]
 			]
 		);
@@ -1407,19 +1422,25 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 				'post_type'			=> 'post',
 				'posts_per_page'	=> esc_html($settings['section_recent_post_limit'])
 			);
+
 			if($settings['section_layout_options'] === 'popular'){
 				$post_args['meta_key']	= 'ekit_post_views_count';
 				$post_args['orderby'] 	= 'meta_value_num';
 				$post_args['order']		= 'DESC';
 			}
+
+			if($settings['section_layout_options'] === 'category') {
+				$post_args['category'] = $settings['ekit_blog_posts_category'];
+			}
+
 			$posts = get_posts($post_args);
 			
-			if($settings['section_layout_options'] === 'recent' || $settings['section_layout_options'] === 'popular'){
+			if(in_array($settings['section_layout_options'], ['recent', 'popular', 'category'])) {
 				if( is_countable($posts) && count($posts) > 0){
 					foreach($posts as $post){
 						echo $this->post_list($post); // phpcs:ignore WordPress.Security.EscapeOutput -- Buffering output line number 1383 
 					}
-				} else {
+				}else {
 					esc_html_e('Opps, No posts were found.', 'elementskit-lite');
 				}
 			} else {
@@ -1428,7 +1449,6 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 					if($post != null){ echo $this->post_list($post, $item);  }; // phpcs:ignore WordPress.Security.EscapeOutput -- Buffering output line number 1383
 				};
 			}
-			
 			?>
 		</ul>
 		<?php

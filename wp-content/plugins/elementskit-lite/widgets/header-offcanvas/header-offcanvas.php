@@ -169,6 +169,19 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
         $this->end_controls_tabs();
         // end tabs
 
+		$this->add_control(
+			'ekit_offcanvas_disable_bodyscroll',
+			[
+				'label' => esc_html__( 'Disable Scroll', 'elementskit-lite' ),
+				'type' => Controls_Manager::SWITCHER,
+				'description' => esc_html__('To disable body scrolling when an offcanvas menu is open', 'elementskit-lite'),
+				'label_on' => esc_html__( 'Yes', 'elementskit-lite' ),
+				'label_off' => esc_html__( 'No', 'elementskit-lite' ),
+				'return_value' => 'yes',
+				'default' => '',
+			]
+		);
+
         $this->end_controls_section();
 
 
@@ -680,6 +693,9 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
     protected function render_raw( ) {
         $settings = $this->get_settings();
 
+		$data_settings = [
+            'disable_bodyscroll' => $settings['ekit_offcanvas_disable_bodyscroll'],
+        ]
 
         ?>
         <div class="ekit-offcanvas-toggle-wraper">
@@ -733,7 +749,7 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
         </div>
         <!-- offset cart strart -->
         <!-- sidebar cart item -->
-        <div class="ekit-sidebar-group info-group">
+        <div class="ekit-sidebar-group info-group" data-settings="<?php echo esc_attr( json_encode($data_settings) ) ?>">
             <div class="ekit-overlay ekit-bg-black"></div>
             <div class="ekit-sidebar-widget">
                 <div class="ekit_sidebar-widget-container">

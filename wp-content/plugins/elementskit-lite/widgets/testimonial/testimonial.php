@@ -13,7 +13,6 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
     
     public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
-		// $this->add_script_depends('ekit-slick'); // deprecated
 	}
 
     public function get_name() {
@@ -502,7 +501,6 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				],
 				'render_type' => 'template',
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-slide' => 'margin-right: {{SIZE}}{{UNIT}};margin-left: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .elementskit-testimonial-slider' => '--ekit_testimonial_left_right_spacing: {{SIZE}}{{UNIT}};',
 				],
 			]
@@ -515,7 +513,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-list' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1870,7 +1868,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => -50,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots' => 'bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination' => 'bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1893,7 +1891,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li button' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1916,7 +1914,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li button' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1926,7 +1924,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_client_dot_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li button',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span',
 			]
 		);
 
@@ -1937,7 +1935,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1960,7 +1958,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 12,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li:not(:last-child)' => 'margin-right: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span:not(:last-child)' => 'margin-right: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1971,7 +1969,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'name' => 'ekit_testimonial_client_dot_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li button',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span',
 			]
 		);
 
@@ -1990,7 +1988,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'name' => 'ekit_testimonial_client_dot_active_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li.slick-active button',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span.swiper-pagination-bullet-active',
 			]
 		);
 
@@ -2012,7 +2010,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li.slick-active button' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span.swiper-pagination-bullet-active' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2035,7 +2033,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 8,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li.slick-active button' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span.swiper-pagination-bullet-active' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2045,7 +2043,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_client_dot_active_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li.slick-active button',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span.swiper-pagination-bullet-active',
 			]
 		);
 
@@ -2067,7 +2065,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 1.2,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-dots li.slick-active button' => 'transform: scale({{SIZE}});',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-pagination span.swiper-pagination-bullet-active' => 'transform: scale({{SIZE}});',
 				],
 			]
 		);
@@ -2104,8 +2102,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 36,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-navigation-button' => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2127,7 +2124,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 0,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev' => 'left: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2149,20 +2146,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 0,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'right: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'ekit_testimonial_nav_border_radius',
-			[
-				'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
-				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next' => 'right: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2185,8 +2169,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 50,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'width: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -2209,15 +2193,16 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 					'size' => 50,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev' => 'height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
+
         $this->add_responsive_control(
             'ekit_testimonial_nav_vertical_align',
             [
-                'label' => esc_html__( 'vertical_align', 'elementskit-lite' ),
+                'label' => esc_html__( 'Vertical Align', 'elementskit-lite' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px','%' ],
                 'range' => [
@@ -2231,11 +2216,10 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-testimonial-slider .slick-arrow' => ' -webkit-transform: translateY({{SIZE}}{{UNIT}}); -ms-transform: translateY({{SIZE}}{{UNIT}}); transform: translateY({{SIZE}}{{UNIT}});',
+                    '{{WRAPPER}} .elementskit-testimonial-slider .swiper-navigation-button' => ' -webkit-transform: translateY({{SIZE}}{{UNIT}}); -ms-transform: translateY({{SIZE}}{{UNIT}}); transform: translateY({{SIZE}}{{UNIT}});',
                 ],
             ]
         );
-
 
         $this->start_controls_tabs(
             'ekit_testimonial_nav_hover_normal_tabs'
@@ -2255,8 +2239,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -2267,7 +2251,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'name' => 'ekit_testimonial_nav_background_normal',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev, {{WRAPPER}} .elementskit-testimonial-slider .slick-next',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next',
 			]
 		);
 
@@ -2276,7 +2260,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_nav_box_shadow_normal',
 				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev, {{WRAPPER}} .elementskit-testimonial-slider .slick-next',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next',
 			]
 		);
 
@@ -2285,7 +2269,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_nav_border_normal',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev, {{WRAPPER}} .elementskit-testimonial-slider .slick-next',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next',
 			]
 		);
 
@@ -2305,8 +2289,8 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-prev:hover' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .elementskit-testimonial-slider .slick-next:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next:hover' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -2317,7 +2301,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'name' => 'ekit_testimonial_nav_background_hover',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .slick-next:hover',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next:hover',
 			]
 		);
 
@@ -2326,7 +2310,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_nav_box_shadow_hover',
 				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .slick-next:hover',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next:hover',
 			]
 		);
 
@@ -2335,13 +2319,39 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'name' => 'ekit_testimonial_nav_border_hover',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .slick-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .slick-next:hover',
+				'selector' => '{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev:hover, {{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next:hover',
 			]
 		);
 
 		$this->end_controls_tab();
 
 		$this->end_controls_tabs();
+
+		$this->add_responsive_control(
+			'ekit_testimonial_nav_border_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-prev' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-button-next' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator' => 'before'
+			]
+		);
+
+		$this->add_responsive_control(
+			'ekit_price_menu_arrow_padding',
+			[
+				'label' => esc_html__( 'Padding', 'elementskit-lite' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-testimonial-slider .swiper-navigation-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 
 		$this->end_controls_section();
 
@@ -2391,15 +2401,18 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			'breakpoints'		=> [
                 320 => [
                     'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_mobile ) ? $ekit_testimonial_slidetoshow_mobile : 1,
-                    'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_mobile ) ? $ekit_testimonial_slidesToScroll_mobile : 1
+                    'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_mobile ) ? $ekit_testimonial_slidesToScroll_mobile : 1,
+                    'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_mobile['size'] ) ? $ekit_testimonial_left_right_spacing_mobile['size'] : 10,
                 ],
                 768 => [
                     'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_tablet ) ? $ekit_testimonial_slidetoshow_tablet : 2,
                     'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_tablet ) ? $ekit_testimonial_slidesToScroll_tablet : 1,
+                    'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_tablet['size'] ) ? $ekit_testimonial_left_right_spacing_tablet['size'] : 10,
                 ],
                 1024 => [
                     'slidesPerView'      =>  $slides_to_show_count,
                     'slidesPerGroup'     =>  $slides_to_scroll_count,
+					'spaceBetween'		=> !empty( $ekit_testimonial_left_right_spacing['size'] ) ? $ekit_testimonial_left_right_spacing['size'] : 15,
                 ]
             ],
 		];
@@ -2409,6 +2422,14 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			'wrapper',
 			[
 				'data-config'	=> wp_json_encode($config),
+			]
+		);
+
+		// Swiper container
+		$this->add_render_attribute(
+			'swiper-container',
+			[
+				'class'	=> \ElementsKit_Lite\Utils::swiper_class(),
 			]
 		);
 		

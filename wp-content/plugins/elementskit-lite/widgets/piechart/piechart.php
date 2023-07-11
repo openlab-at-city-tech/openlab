@@ -80,7 +80,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_percentage',
             [
                 'label' => esc_html__( 'Percentage', 'elementskit-lite' ),
@@ -224,7 +224,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_title_color',
             [
                 'label' => esc_html__( 'Title Color', 'elementskit-lite' ),
@@ -253,7 +253,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
         $this->add_responsive_control(
 			'ekit_piechart_title_margin',
 			[
-				'label' =>esc_html__( 'Ttitle margin', 'elementskit-lite' ),
+				'label' =>esc_html__( 'Title margin', 'elementskit-lite' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'default' => 	[
@@ -284,7 +284,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_content_color',
             [
                 'label' => esc_html__( 'Content Color', 'elementskit-lite' ),
@@ -406,6 +406,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
                 'label' => esc_html__( 'Piechart Size', 'elementskit-lite' ),
                 'type' => Controls_Manager::SLIDER,
                 'size_units' => [ 'px' ],
+				'render_type' => 'template',
                 'range' => [
                     'px' => [
                         'min' => 100,
@@ -416,9 +417,12 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
                 'default' => [
                     'size' => 150,
                 ],
+				'selectors' => [
+					'{{WRAPPER}} .ekit-wid-con .ekit-single-piechart > .piechart canvas' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}};',
+				],
             ]
         );
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_border_size',
             [
                 'label' => esc_html__( 'Border Size', 'elementskit-lite' ),
@@ -451,7 +455,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_line_color',
             [
                 'label' => esc_html__( 'Bar Color', 'elementskit-lite' ),
@@ -462,7 +466,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_bar_color_bg',
             [
                 'label' => esc_html__( 'Bar Background Color', 'elementskit-lite' ),
@@ -470,7 +474,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_gradientColor1',
             [
                 'label' => esc_html__( 'Gradient Color1', 'elementskit-lite' ),
@@ -481,7 +485,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_gradientColor2',
             [
                 'label' => esc_html__( 'Gradient Color2', 'elementskit-lite' ),
@@ -492,7 +496,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_iocn_color',
             [
                 'label'     => esc_html__( ' Icon Color', 'elementskit-lite' ),
@@ -509,7 +513,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             ]
         );
 
-        $this->add_responsive_control(
+        $this->add_control(
             'ekit_piechart_content_color_number',
             [
                 'label' => esc_html__( ' Number Color', 'elementskit-lite' ),
@@ -675,7 +679,6 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
         $this->add_render_attribute( 'pieechartscreen', 'data-size', $piechart_size );
 
         $line_size = $settings['ekit_piechart_border_size']['size'] != '' ? $settings['ekit_piechart_border_size']['size'] : 5;
-
         $this->add_render_attribute( 'pieechartscreen', 'data-linewidth', $line_size );
 
 

@@ -7,7 +7,7 @@ if ( ! class_exists( '\Wpmet\Libs\Banner' ) ) :
 
 	class Banner {
 
-		protected $script_version = '2.1.0';
+		protected $script_version = '2.2.0';
 
 		protected $key = 'wpmet_banner';
 		protected $data;
@@ -55,22 +55,21 @@ if ( ! class_exists( '\Wpmet\Libs\Banner' ) ) :
 					$screen = get_current_screen();
 					if ( $this->is_correct_screen_to_show( $content->screen, $screen->id ) && class_exists( '\Oxaim\Libs\Notice' ) ) {
 		
-						$inline_css       = '';
 						$banner_unique_id = ( ( isset( $content->data->unique_key ) && $content->data->unique_key != '' ) ? $content->data->unique_key : $content->id );
 		
-						if ( ! empty( $content->data->style_css ) ) {
-							$inline_css = ' style="' . $content->data->style_css . '"';
-						}
-
 						$instance = \Oxaim\Libs\Notice::instance( 'wpmet-jhanda', $banner_unique_id )
 						->set_dismiss( 'global', ( 3600 * 24 * 15 ) );
+
+						if(method_exists($instance, 'set_style_css') && ! empty( $content->data->style_css )){
+							$instance->set_style_css( $content->data->style_css);
+						}
 					
 						if ( $content->type == 'banner' ) {
-							$this->init_banner( $content, $instance, $inline_css );
+							$this->init_banner( $content, $instance);
 						}
 
 						if ( $content->type == 'notice' ) {
-							$this->init_notice( $content, $instance, $inline_css );
+							$this->init_notice( $content, $instance);
 						}
 					}
 				}
@@ -78,7 +77,7 @@ if ( ! class_exists( '\Wpmet\Libs\Banner' ) ) :
 		}
 
 	
-		private function init_notice( $content, $instance, $inline_css ) {
+		private function init_notice( $content, $instance) {
 		
 			$instance->set_message( $content->data->notice_body );
 
@@ -98,9 +97,9 @@ if ( ! class_exists( '\Wpmet\Libs\Banner' ) ) :
 			$instance->call();
 		}    
 
-		private function init_banner( $content, $instance, $inline_css ) {
+		private function init_banner( $content, $instance) {
 		
-			$html = '<a target="_blank" ' . $inline_css . ' class="wpmet-jhanda-href" href="' . $content->data->banner_link . '"><img style="display: block;margin: 0 auto;" src="' . $content->data->banner_image . '" /></a>';
+			$html = '<a target="_blank" class="wpmet-jhanda-href" href="' . $content->data->banner_link . '"><img style="display: block;margin: 0 auto;" src="' . $content->data->banner_image . '" /></a>';
 		
 			$instance->set_gutter( false )
 			->set_html( $html )

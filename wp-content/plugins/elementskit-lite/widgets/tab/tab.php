@@ -2128,7 +2128,7 @@ class ElementsKit_Widget_Tab extends Widget_Base {
                             data-ekit-toggle-trigger="<?php echo esc_attr( $ekit_tab_trigger_type ); ?>"
                             aria-describedby="Content-<?php echo esc_attr($tab['_id'].$tab_id); ?>">
                             <?php echo wp_kses($icon_html.$img_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
-                            <span class="elementskit-tab-title"><?php echo esc_html($tab['ekit_tab_title']); ?></span>
+                            <span class="elementskit-tab-title"> <?php $this->print_unescaped_setting( 'ekit_tab_title', 'ekit_tab_items', $i );?></span>
                         </a>
                     </li>
                     <?php endforeach; ?>

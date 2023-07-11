@@ -1,8 +1,7 @@
-<div class="elementskit-testimonial-slider slick-slider arrow_inside <?php echo !empty($settings['ekit_testimonial_show_dot']) ? 'slick-dotted' : '' ?>" <?php echo $this->get_render_attribute_string('wrapper'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
-	<div class="swiper-container">
-		<div class="slick-list swiper-wrapper">
-		<?php
-			foreach ($testimonials as $testimonial):
+<div class="elementskit-testimonial-slider arrow_inside <?php echo !empty($settings['ekit_testimonial_show_dot']) ? 'slider-dotted' : '' ?>" <?php $this->print_render_attribute_string('wrapper'); ?>>
+	<div <?php $this->print_render_attribute_string('swiper-container'); ?>>
+		<div class="swiper-wrapper">
+			<?php foreach ($testimonials as $testimonial):
 				$clientPhoto = '';
 				$wrapTag = 'div';
 				$ratingTag = 'a';
@@ -17,7 +16,7 @@
 				if (isset($testimonial['client_photo']) && !empty($testimonial['client_photo']['url']) &&  sizeof($testimonial['client_photo']) > 0) {
 					$clientPhoto = isset($testimonial['client_photo']['url']) ? $testimonial['client_photo']['url'] : '';  } ?>
 					<div class="swiper-slide">
-						<div class="slick-slide">
+						<div class="swiper-slide-inner">
 							<<?php echo esc_attr( $wrapTag ); ?> class="elementskit-testimonial_card" style="background-image: url(<?php esc_attr_e($clientPhoto, 'elementskit-lite' );?>);" <?php echo $this->get_render_attribute_string( 'link-' . esc_attr($testimonial['_id'] )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
 								<?php if ($ekit_testimonial_rating_enable == 'yes') : ?>
 								<ul class="elementskit-stars">
@@ -55,10 +54,14 @@
 					</div>
 			<?php endforeach; ?>
 		</div>
+
+		<?php if($settings['ekit_testimonial_show_dot'] == 'yes') : ?>
+			<div class="swiper-pagination"></div>
+		<?php endif; ?>
+
+		<?php if(!empty($settings['ekit_testimonial_show_arrow'])) : ?>
+			<div class="swiper-navigation-button swiper-button-prev"><i class="<?php echo esc_attr($prevArrowIcon); ?>"></i></div>
+			<div class="swiper-navigation-button swiper-button-next"><i class="<?php echo esc_attr($nextArrowIcon); ?>"></i></div>
+		<?php endif; ?>
 	</div>
-	<ul aria-describedby="paginations" class="slick-dots swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></ul>
-	<?php if(!empty($settings['ekit_testimonial_show_arrow'])) : ?>
-		<button type="button" class="slick-prev slick-arrow"><i class="<?php echo esc_attr($prevArrowIcon); ?>"></i></button>
-		<button type="button" class="slick-next slick-arrow"><i class="<?php echo esc_attr($nextArrowIcon); ?>"></i></button>
-	<?php endif; ?>
 </div>

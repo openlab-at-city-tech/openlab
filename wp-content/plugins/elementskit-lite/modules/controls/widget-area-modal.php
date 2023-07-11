@@ -45,6 +45,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="dialog-buttons-wrapper dialog-lightbox-buttons-wrapper"></div>
+		<!-- <div class="dialog-buttons-wrapper dialog-lightbox-buttons-wrapper"></div> -->
 	</div>
 </div>
