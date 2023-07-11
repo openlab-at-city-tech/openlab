@@ -57,7 +57,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 					<fieldset class="group-active-status-fieldset">
 						<legend><?php echo esc_html( sprintf( '%s Status', $group_label_uc ) ); ?></legend>
 
-						<p><?php echo esc_html( sprintf( 'You can mark a %s as Not Active when it is no longer being actively used. This status will appear on the Profile and in the %s directory.', $group_label_uc, $group_label_uc ) ); ?></p>
+						<p><?php echo esc_html( sprintf( 'You can mark a %s as Not Active when it is no longer being actively used. This status will appear on the Profile and in the %s directory.', $group_label_uc, $group_label_uc ) ); ?> <a href="https://openlab.citytech.cuny.edu/blog/help/active-status/"><?php echo esc_html( 'Learn more.' ); ?></a></p>
 
 						<div class="group-active-status-radios">
 							<input type="radio" name="group-active-status" id="group-active-status-active" value="active" <?php checked( openlab_group_is_active( bp_get_current_group_id() ) ); ?>> <label for="group-active-status-active"><?php echo esc_html( sprintf( 'This %s is Active', $group_label_uc ) ); ?></label><br />
