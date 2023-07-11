@@ -4,7 +4,7 @@
  *
  * @package     WP to Twitter
  * @author      Joe Dolson
- * @copyright   2012-2018 Joe Dolson
+ * @copyright   2012-2023 Joe Dolson
  * @license     GPL-2.0+
  */
 

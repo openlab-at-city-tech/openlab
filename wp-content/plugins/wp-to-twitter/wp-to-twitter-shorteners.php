@@ -412,7 +412,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 							?>
 						<p>
 							<label for="yourlspath"><?php _e( 'Path to your YOURLS config file', 'wp-to-twitter' ); ?></label><br/>
-							<input type="text" id="yourlspath" name="yourlspath" size="60" value="<?php echo esc_attr( get_option( 'yourlspath' ) ); ?>"/><br/>
+							<input type="text" id="yourlspath" name="yourlspath" class="widefat" value="<?php echo esc_attr( get_option( 'yourlspath' ) ); ?>"/><br/>
 							<small><?php _e( 'Example:', 'wp-to-twitter' ); ?> <code>/home/username/www/www/yourls/user/config.php</code>
 							</small>
 						</p>
@@ -422,7 +422,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 							?>
 						<p>
 							<label for="yourlsurl"><?php _e( 'URI to the YOURLS API', 'wp-to-twitter' ); ?></label><br/>
-							<input type="text" id="yourlsurl" name="yourlsurl" size="60" value="<?php echo esc_attr( get_option( 'yourlsurl' ) ); ?>"/><br/>
+							<input type="text" id="yourlsurl" name="yourlsurl" class="widefat" value="<?php echo esc_attr( get_option( 'yourlsurl' ) ); ?>"/><br/>
 							<small><?php _e( 'Example:', 'wp-to-twitter' ); ?> <code>http://domain.com/yourls-api.php</code>
 							</small>
 						</p>

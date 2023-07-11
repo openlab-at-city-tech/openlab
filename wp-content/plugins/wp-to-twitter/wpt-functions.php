@@ -151,7 +151,7 @@ function wpt_settings_tabs() {
 	$username = get_option( 'wtt_twitter_username' );
 	$default  = ( '' === $username || false === $username ) ? 'connection' : 'basic';
 	$current  = ( isset( $_GET['tab'] ) ) ? sanitize_text_field( $_GET['tab'] ) : $default;
-	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'Get WP Tweets PRO', 'wp-to-twitter' );
+	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'WP Tweets PRO', 'wp-to-twitter' );
 	$pages    = array(
 		'connection' => __( 'Twitter Connection', 'wp-to-twitter' ),
 		'basic'      => __( 'Basic Settings', 'wp-to-twitter' ),
@@ -608,160 +608,173 @@ function wpt_get_support_form() {
 	} else {
 		$valid = '';
 	}
-	$license = 'License Key: ' . $license . $valid;
+	if ( $valid && function_exists( 'wpt_pro_functions' ) ) {
+		$license = 'License Key: ' . $license . $valid;
 
-	$version              = $wpt_version;
-	$wtt_twitter_username = get_option( 'wtt_twitter_username' );
-	// send fields for all plugins.
-	$wp_version = get_bloginfo( 'version' );
-	$home_url   = home_url();
-	$wp_url     = site_url();
-	$language   = get_bloginfo( 'language' );
-	$charset    = get_bloginfo( 'charset' );
-	// server.
-	$php_version = phpversion();
+		$version              = $wpt_version;
+		$wtt_twitter_username = get_option( 'wtt_twitter_username' );
+		// send fields for all plugins.
+		$wp_version = get_bloginfo( 'version' );
+		$home_url   = home_url();
+		$wp_url     = site_url();
+		$language   = get_bloginfo( 'language' );
+		$charset    = get_bloginfo( 'charset' );
+		// server.
+		$php_version = phpversion();
 
-	// theme data.
-	$theme         = wp_get_theme();
-	$theme_name    = $theme->get( 'Name' );
-	$theme_uri     = $theme->get( 'ThemeURI' );
-	$theme_parent  = $theme->get( 'Template' );
-	$theme_version = $theme->get( 'Version' );
+		// theme data.
+		$theme         = wp_get_theme();
+		$theme_name    = $theme->get( 'Name' );
+		$theme_uri     = $theme->get( 'ThemeURI' );
+		$theme_parent  = $theme->get( 'Template' );
+		$theme_version = $theme->get( 'Version' );
 
-	$admin_email = get_option( 'admin_email' );
-	// plugin data.
-	$plugins        = get_plugins();
-	$plugins_string = '';
-	foreach ( array_keys( $plugins ) as $key ) {
-		if ( is_plugin_active( $key ) ) {
-			$plugin          =& $plugins[ $key ];
-			$plugin_name     = $plugin['Name'];
-			$plugin_uri      = $plugin['PluginURI'];
-			$plugin_version  = $plugin['Version'];
-			$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
+		$admin_email = get_option( 'admin_email' );
+		// plugin data.
+		$plugins        = get_plugins();
+		$plugins_string = '';
+		foreach ( array_keys( $plugins ) as $key ) {
+			if ( is_plugin_active( $key ) ) {
+				$plugin          =& $plugins[ $key ];
+				$plugin_name     = $plugin['Name'];
+				$plugin_uri      = $plugin['PluginURI'];
+				$plugin_version  = $plugin['Version'];
+				$plugins_string .= "$plugin_name: $plugin_version; $plugin_uri\n";
+			}
 		}
-	}
 
-	$data = "
-================ Installation Data ====================
-==WP to Twitter==
-Version: $version
-Twitter username: http://twitter.com/$wtt_twitter_username
-$license
+		$data = "
+	================ Installation Data ====================
+	==WP to Twitter==
+	Version: $version
+	Twitter username: http://twitter.com/$wtt_twitter_username
+	$license
 
-==WordPress:==
-Version: $wp_version
-URL: $home_url
-Install: $wp_url
-Language: $language
-Charset: $charset
-User Email: $current_user->user_email
-Admin Email: $admin_email
+	==WordPress:==
+	Version: $wp_version
+	URL: $home_url
+	Install: $wp_url
+	Language: $language
+	Charset: $charset
+	User Email: $current_user->user_email
+	Admin Email: $admin_email
 
-==Extra info:==
-PHP Version: $php_version
-Server Software: $_SERVER[SERVER_SOFTWARE]
-User Agent: $_SERVER[HTTP_USER_AGENT]
+	==Extra info:==
+	PHP Version: $php_version
+	Server Software: $_SERVER[SERVER_SOFTWARE]
+	User Agent: $_SERVER[HTTP_USER_AGENT]
 
-==Theme:==
-Name: $theme_name
-URI: $theme_uri
-Parent: $theme_parent
-Version: $theme_version
+	==Theme:==
+	Name: $theme_name
+	URI: $theme_uri
+	Parent: $theme_parent
+	Version: $theme_version
 
-==Active Plugins:==
-$plugins_string
-";
-	if ( isset( $_POST['wpt_support'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
-			wp_die( 'WP to Twitter: Security check failed' );
-		}
-		$request      = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( sanitize_textarea_field( $_POST['support_request'] ) ) : false;
-		$has_donated  = ( isset( $_POST['has_donated'] ) ) ? 'Donor' : 'No donation';
-		$has_read_faq = ( isset( $_POST['has_read_faq'] ) ) ? 'Read FAQ' : false;
-		if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
-			$pro = ' PRO';
-		} else {
-			$pro = '';
-		}
-		$subject = "WP to Twitter$pro support request. $has_donated";
-		$message = $request . "\n\n" . $data;
-		// Get the site domain and get rid of www. from pluggable.php.
-		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-		if ( 'www.' === substr( $sitename, 0, 4 ) ) {
-			$sitename = substr( $sitename, 4 );
-		}
-		$response_email = ( isset( $_POST['response_email'] ) ) ? sanitize_email( $_POST['response_email'] ) : false;
-		$from_email     = 'wordpress@' . $sitename;
-		$from           = "From: $current_user->display_name <$response_email>\r\nReply-to: $current_user->display_name <$response_email>\r\n";
+	==Active Plugins:==
+	$plugins_string
+	";
+		if ( isset( $_POST['wpt_support'] ) ) {
+			$nonce = $_REQUEST['_wpnonce'];
+			if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
+				wp_die( 'WP to Twitter: Security check failed' );
+			}
+			$request = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( sanitize_textarea_field( $_POST['support_request'] ) ) : false;
+			if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
+				$pro = ' PRO';
+			} else {
+				$pro = '';
+			}
+			$subject        = "WP Tweets $pro support request.";
+			$message        = $request . "\n\n" . $data;
+			$response_email = ( isset( $_POST['response_email'] ) ) ? sanitize_email( $_POST['response_email'] ) : false;
+			$from           = "From: $current_user->display_name <$response_email>\r\nReply-to: $current_user->display_name <$response_email>\r\n";
 
-		if ( ! $has_read_faq ) {
-			echo "<div class='notice error'><p>" . __( 'Please read the FAQ and other Help documents before making a support request.', 'wp-to-twitter' ) . '</p></div>';
-		} elseif ( ! $response_email ) {
-			echo "<div class='notice error'><p>" . __( 'Please supply a valid email where you can receive support responses.', 'wp-to-twitter' ) . '</p></div>';
-		} elseif ( ! $request ) {
-			echo "<div class='notice error'><p>" . __( 'Please describe your problem. I\'m not psychic.', 'wp-to-twitter' ) . '</p></div>';
-		} else {
-			$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
-			if ( $sent ) {
-				if ( 'Donor' === $has_donated ) {
+			if ( ! $response_email ) {
+				echo "<div class='notice error'><p>" . __( 'Please supply a valid email where you can receive support responses.', 'wp-to-twitter' ) . '</p></div>';
+			} elseif ( ! $request ) {
+				echo "<div class='notice error'><p>" . __( 'Please describe your problem. I\'m not psychic.', 'wp-to-twitter' ) . '</p></div>';
+			} else {
+				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
+				if ( $sent ) {
 					// Translators: Email address.
 					echo "<div class='notice updated'><p>" . sprintf( __( 'Thank you for supporting WP to Twitter! I\'ll get back to you as soon as I can. Please make sure you can receive email at <code>%s</code>.', 'wp-to-twitter' ), $response_email ) . '</p></div>';
 				} else {
-					// Translators: Email address.
-					echo "<div class='notice updated'><p>" . sprintf( __( 'Thanks for using WP to Twitter. Please ensure that you can receive email at <code>%s</code>.', 'wp-to-twitter' ), $response_email ) . '</p></div>';
+					// Translators: URL to plugin support form.
+					echo "<div class='notice error'><p>" . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'wp-to-twitter' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead.', 'wp-to-twitter' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
 				}
-			} else {
-				// Translators: URL to plugin support form.
-				echo "<div class='notice error'><p>" . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'wp-to-twitter' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead.', 'wp-to-twitter' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
 			}
 		}
-	}
-	if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
-		$checked = 'checked="checked"';
-	} else {
-		$checked = '';
-	}
-	$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
-	$admin_url = add_query_arg( 'tab', 'support', $admin_url );
+		$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
+		$admin_url = add_query_arg( 'tab', 'support', $admin_url );
+		echo "
+		<form method='post' action='$admin_url'>
+			<div><input type='hidden' name='_wpnonce' value='" . wp_create_nonce( 'wp-to-twitter-nonce' ) . "' /></div>
+			<div>
+			<p>" . __( "If you're having trouble with WP Tweets Pro, please try to answer these questions in your message:", 'wp-to-twitter' ) . '</p>
+			<ul>
+				<li>' . __( 'What were you doing when the problem occurred?', 'wp-to-twitter' ) . '</li>
+				<li>' . __( 'What did you expect to happen?', 'wp-to-twitter' ) . '</li>
+				<li>' . __( 'What happened instead?', 'wp-to-twitter' ) . "</li>
+			</ul>
+			<p>
+			<label for='response_email'>" . __( 'Your Email', 'wp-to-twitter' ) . "</label><br />
+			<input type='email' name='response_email' id='response_email' value='$response_email' class='widefat' required='required' aria-required='true' />
+			</p>
+			<p>
+			<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>";
+		// Translators: Link to plugin FAQ.
+		echo sprintf( __( 'I have read <a href="%1$s">the FAQ for this plug-in</a> <span>(required)</span>', 'wp-to-twitter' ), 'http://www.joedolson.com/wp-to-twitter/support-2/' );
+		echo "</p>
+			<p>
+			<label for='support_request'>" . __( 'Support Request:', 'wp-to-twitter' ) . "</label><br /><textarea class='support-request' name='support_request' id='support_request' cols='80' rows='10' class='widefat'>" . stripslashes( esc_attr( $request ) ) . "</textarea>
+			</p>
+			<p>
+			<input type='submit' value='" . __( 'Send Support Request', 'wp-to-twitter' ) . "' name='wpt_support' class='button-primary' />
+			</p>
+			<p>" .
+			__( 'The following additional information will be sent with your support request:', 'wp-to-twitter' )
+			. '</p>
+			</div>
+		</form>';
 
-	echo "
-	<form method='post' action='$admin_url'>
-		<div><input type='hidden' name='_wpnonce' value='" . wp_create_nonce( 'wp-to-twitter-nonce' ) . "' /></div>
-		<div>
-		<p>" . __( "If you're having trouble with WP to Twitter, please try to answer these questions in your message:", 'wp-to-twitter' ) . '</p>
-		<ul>
-			<li>' . __( 'What were you doing when the problem occurred?', 'wp-to-twitter' ) . '</li>
-			<li>' . __( 'What did you expect to happen?', 'wp-to-twitter' ) . '</li>
-			<li>' . __( 'What happened instead?', 'wp-to-twitter' ) . "</li>
-		</ul>
-		<p>
-		<label for='response_email'>" . __( 'Your Email', 'wp-to-twitter' ) . "</label><br />
-		<input type='email' name='response_email' id='response_email' value='$response_email' class='widefat' required='required' aria-required='true' />
-		</p>
-		<p>
-		<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>";
-	// Translators: Link to plugin FAQ.
-	echo sprintf( __( 'I have read <a href="%1$s">the FAQ for this plug-in</a> <span>(required)</span>', 'wp-to-twitter' ), 'http://www.joedolson.com/wp-to-twitter/support-2/' );
-	echo "</p>
-		<p>
-		<input type='checkbox' name='has_donated' id='has_donated' value='on' $checked /> <label for='has_donated'>" . __( 'I made a donation or purchase to help support this plug-in', 'wp-to-twitter' ) . "</label>
-		</p>
-		<p>
-		<label for='support_request'>" . __( 'Support Request:', 'wp-to-twitter' ) . "</label><br /><textarea class='support-request' name='support_request' id='support_request' cols='80' rows='10' class='widefat'>" . stripslashes( esc_attr( $request ) ) . "</textarea>
-		</p>
-		<p>
-		<input type='submit' value='" . __( 'Send Support Request', 'wp-to-twitter' ) . "' name='wpt_support' class='button-primary' />
-		</p>
-		<p>" .
-		__( 'The following additional information will be sent with your support request:', 'wp-to-twitter' )
-		. "</p>
-		<div class='wpt_support'>
+		echo "<div class='wpt_support'>
 		" . wpautop( $data ) . '
-		</div>
-		</div>
-	</form>';
+		</div>';
+	} else {
+		echo '<p>' . __( 'You need a valid WP Tweets Pro license to receive support.', 'wp-to-twitter' ) . '</p>';
+	}
+	wpt_faq();
+}
+
+/**
+ * FAQ questions.
+ */
+function wpt_faq() {
+	$qs = array(
+		array(
+			'question' => __( 'My app has been suspended by Twitter. What do I do now?', 'wp-to-twitter' ),
+			'answer'   => __( 'Some users have been successful by removing their existing app and creating a new one, following the setup instructions in the Twitter Connection tab. It is unlikely you will make any progress by contesting the suspension.', 'wp-to-twitter' ),
+		),
+		array(
+			'question' => __( "I'm receiving a '401 Unauthorized' error from Twitter, but my credentials haven't changed. What should I do?", 'wp-to-twitter' ),
+			'answer'   => __( 'First, check and see whether your app has been suspended in your Twitter developer account. If it has, see above. If not, this is most likely a temporary problem in the Twitter API; but you can try generating new keys and secrets in your developer account and re-connect your app. Some users have also been successful by changing their account status to the free account. (Older accounts may have a legacy status that is not handled well by Twitter.)', 'wp-to-twitter' ),
+		),
+		array(
+			'question' => __( 'Error code 453: You currently have access to Twitter API v2 endpoints and limited v1.1 endpoints only.', 'wp-to-twitter' ),
+			'answer'   => __( 'This is most likely caused by use of an API endpoint that is not included in the new free API tier. According to Twitter documentation, the Twitter Feed is not an allowed endpoint, although I have not personally had any problems with it yet. Enforcement of API rules appears to be inconsistent, so this is only a guess. You can try removing the Twitter Feed widget from your site.', 'wp-to-twitter' ),
+		),
+		array(
+			'question' => __( 'Is WP to Twitter dead?', 'wp-to-twitter' ),
+			'answer'   => __( 'No, but it is on life support. I will ship security, WordPress compatibility, and PHP compatibility updates, but no new feature development.', 'wp-to-twitter' ),
+		),
+	);
+
+	echo '<h2>' . __( 'Frequently Asked Questions', 'wp-to-twitter' ) . '</h2>';
+	echo '<p>' . __( '<strong>Please note:</strong> These answers are mostly guesswork; user experiences have been inconsistent and the documentation does not always match real behavior.', 'wp-to-twitter' ) . '</p>';
+	foreach ( $qs as $q ) {
+		echo '<h3>' . $q['question'] . '</h3>';
+		echo wpautop( $q['answer'] );
+	}
 }
 
 /**
