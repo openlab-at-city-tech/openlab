@@ -129,7 +129,7 @@ class Plugin extends Ari_Plugin {
         if ( ! $no_header ) {
             $page = Request::get_var( 'page' );
 
-            if ( 0 === strpos( $page, 'ari-fancy-lightbox' ) ) {
+            if ( is_string( $page ) && 0 === strpos( $page, 'ari-fancy-lightbox' ) ) {
                 ob_start();
 
                 add_action( 'admin_page_' . $page , function() {

@@ -3,8 +3,8 @@ Contributors: arisoft
 Donate link: http://wp-quiz.ari-soft.com/plugins/wordpress-fancy-lightbox.html
 Tags: lightbox, fancybox3, popup, video lightbox, fancybox
 Requires at least: 3.4
-Tested up to: 5.9.0
-Stable tag: 1.3.9
+Tested up to: 6.2.2
+Stable tag: 1.3.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,14 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 
 
 == Changelog ==
+
+= 1.3.11 =
+
+* Better PHP 8.1+ support
+
+= 1.3.10 =
+
+* Add YouTube short videos support
 
 = 1.3.9 =
 
@@ -283,6 +291,10 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 
 
 == Upgrade Notice ==
+
+= 1.3.10 =
+
+* Add YouTube short videos support
 
 = 1.3.9 =
 
