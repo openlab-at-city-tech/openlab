@@ -41,13 +41,13 @@
                     $options = get_option('cpto_options');
                     
                     $defaults   = array (
-                                            'show_reorder_interfaces'   =>  array(),
-                                            'autosort'                  =>  1,
-                                            'adminsort'                 =>  1,
-                                            'use_query_ASC_DESC'        =>  '',
-                                            'archive_drag_drop'         =>  1,
-                                            'capability'                =>  'manage_options',
-                                            'navigation_sort_apply'     =>  1,
+                                            'show_reorder_interfaces'           =>  array(),
+                                            'allow_reorder_default_interfaces'  =>  array(),
+                                            'autosort'                          =>  1,
+                                            'adminsort'                         =>  1,
+                                            'use_query_ASC_DESC'                =>  '',
+                                            'capability'                        =>  'manage_options',
+                                            'navigation_sort_apply'             =>  1,
                                             
                                         );
                     $options          = wp_parse_args( $options, $defaults );
@@ -69,7 +69,7 @@
                                        <p><?php esc_html_e('Did you find this plugin useful? Please support our work by purchasing the advanced version or write an article about this plugin in your blog with a link to our site', 'post-types-order') ?> <a href="https://www.nsp-code.com/" target="_blank"><strong>https://www.nsp-code.com/</strong></a>.</p>
                             <h4><?php esc_html_e('Did you know there is available an Advanced version of this plug-in?', 'post-types-order') ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-post-types-order/"><?php _e('Read more', 'post-types-order') ?></a></h4>
                             <p><?php esc_html_e('Check our', 'post-types-order') ?> <a target="_blank" href="https://wordpress.org/plugins/taxonomy-terms-order/">Category Order - Taxonomy Terms Order</a> <?php esc_html_e('plugin which allow to custom sort categories and custom taxonomies terms', 'post-types-order') ?> </p>
-                            <p><span style="color:#CC0000" class="dashicons dashicons-megaphone" alt="f488">&nbsp;</span> <?php esc_html_e('Check out', 'post-types-order') ?> <a href="https://wordpress.org/plugins/wp-hide-security-enhancer/" target="_blank"><b>WP Hide & Security Enhancer</b></a> <?php esc_html_e('the easy way to completely hide your WordPress core files, theme and plugins', 'post-types-order') ?>.</p>
+                            <p><span style="color:#CC0000" class="dashicons dashicons-megaphone" alt="f488">&nbsp;</span> <?php esc_html_e('Check out', 'post-types-order') ?> <a href="https://wordpress.org/plugins/wp-hide-security-enhancer/" target="_blank"><b>WP Hide & Security Enhancer</b></a> <?php esc_html_e('an extra layer of security for your site. The easy way to completely hide your WordPress core files, themes and plugins', 'post-types-order') ?>.</p>
                             
                             <div class="clear"></div>
                         </div>

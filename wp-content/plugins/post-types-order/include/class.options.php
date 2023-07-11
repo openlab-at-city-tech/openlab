@@ -25,15 +25,14 @@
                     if (isset($_POST['form_submit'])    &&  wp_verify_nonce($_POST['cpto_form_nonce'],'cpto_form_submit'))
                         {
                             
-                            $options['show_reorder_interfaces'] = (array) $_POST['show_reorder_interfaces'];
-                            $options['show_reorder_interfaces'] =   array_map( 'sanitize_key', $options['show_reorder_interfaces'] );
+                            $options['show_reorder_interfaces']             =   array_map( 'sanitize_key', (array) $_POST['show_reorder_interfaces'] );
+                            $options['allow_reorder_default_interfaces']    =   array_map( 'sanitize_key', (array) $_POST['allow_reorder_default_interfaces'] );
                                 
                             $options['capability']              = sanitize_key($_POST['capability']);
                             
                             $options['autosort']                = isset($_POST['autosort'])     ? intval($_POST['autosort'])    : '';
                             $options['adminsort']               = isset($_POST['adminsort'])    ? intval($_POST['adminsort'])   : '';
                             $options['use_query_ASC_DESC']      = isset($_POST['use_query_ASC_DESC'])    ? intval($_POST['use_query_ASC_DESC'])   : '';
-                            $options['archive_drag_drop']       = isset($_POST['archive_drag_drop'])    ? intval($_POST['archive_drag_drop'])   : '';
                             
                             $options['navigation_sort_apply']   = isset($_POST['navigation_sort_apply'])    ? intval($_POST['navigation_sort_apply'])   : '';
                                                 
@@ -67,7 +66,7 @@
                            
                             <form id="form_data" name="form" method="post">   
                                 <br />
-                                <h2 class="subtitle"><?php esc_html_e('General', 'post-types-order') ?></h2>                              
+                                <h2><?php esc_html_e('General', 'post-types-order') ?></h2>                              
                                 <table class="form-table">
                                     <tbody>
                                         <tr valign="top">
@@ -104,6 +103,7 @@
                                                 </label><br />&nbsp;</p>
                                                 <?php  } ?>
                                             </td>
+                                             
                                         </tr>
                                         <tr valign="top">
                                             <th scope="row" style="text-align: right;"><label><?php esc_html_e('Minimum Level to use this plugin', 'post-types-order') ?></label></th>
@@ -153,9 +153,39 @@
                                             <th scope="row" style="text-align: right;"><label for="archive_drag_drop"><?php esc_html_e('Archive Drag&Drop ', 'post-types-order') ?></label></th>
                                             <td>
                                                 <p>
-                                                <input type="checkbox" <?php checked( '1', $options['archive_drag_drop'] ); ?> id="archive_drag_drop" value="1" name="archive_drag_drop">
-                                                <?php esc_html_e("Allow sortable drag & drop functionality within default WordPress post type archive. Admin Sort need to be active.", 'post-types-order') ?>.</p>
+                                                <?php esc_html_e("Allow sortable drag & drop functionality within default WordPress post type archive. Admin Sort need to be active.", 'post-types-order') ?></p>
+                                                <br />
+                                                <?php
+                                                
+                                                    $post_types = get_post_types();
+                                                    foreach( $post_types as $post_type_name ) 
+                                                        {
+                                                            //ignore list
+                                                            $ignore_post_types  =   array(
+                                                                                            'reply',
+                                                                                            'topic',
+                                                                                            'report',
+                                                                                            'status'  
+                                                                                            );
+                                                            
+                                                            if( in_array($post_type_name, $ignore_post_types) )
+                                                                continue;
+              
+                                                                
+                                                            $post_type_data = get_post_type_object( $post_type_name );
+                                                            if($post_type_data->show_ui === FALSE)
+                                                                continue;
+                                                ?>
+                                                <p><label>
+                                                    <select name="allow_reorder_default_interfaces[<?php echo esc_attr($post_type_name) ?>]">
+                                                        <option value="no" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'no') {echo ' selected="selected"';} ?>><?php esc_html_e( "No", 'post-types-order' ) ?></option>
+                                                        <option value="yes" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'yes') {echo ' selected="selected"';} ?>><?php esc_html_e( "Yes", 'post-types-order' ) ?></option>
+                                                    </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
+                                                </label><br />&nbsp;</p>
+                                                <?php  } ?>
+                                                
                                             </td>
+                                            
                                         </tr>
                                         
                                         <tr valign="top">

@@ -1,14 +1,13 @@
 <?php
 
-
     /**
-    * Compatibility     : Events Calendar
-    * Introduced at     : 
+    * Compatibility     : Endfold
+    * Introduced at     : 5.6.2
     */
 
     if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     
-    class PTO_Events_calendar
+    class PTO_Enfold
         {
                         
             function __construct()
@@ -28,9 +27,8 @@
                                     $query_post_types[] =   $_post_type;
                                 }
                             
-                            if  ( in_array("tribe_events", $query_post_types ) )
+                            if  ( in_array("avia_framework_post", $query_post_types ) )
                                 $ignore =   TRUE; 
-                            
                         }
                     
                     return $ignore;
@@ -38,8 +36,7 @@
                                 
         }
         
-    new PTO_Events_calendar();
-
+    new PTO_Enfold();
 
 
 ?>
