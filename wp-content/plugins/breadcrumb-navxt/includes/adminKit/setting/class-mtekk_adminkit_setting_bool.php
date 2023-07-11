@@ -19,7 +19,7 @@
 namespace mtekk\adminKit\setting;
 require_once( __DIR__ . '/../../block_direct_access.php');
 //Include setting base class
-if(!class_exists('mtekk_adminKit_setting_base'))
+if(!class_exists('setting_base'))
 {
 	require_once( __DIR__ . '/class-mtekk_adminkit_setting_base.php');
 }
@@ -44,6 +44,15 @@ class setting_bool extends setting_base
 	public function validate($new_value)
 	{
 		return (bool) $new_value;
+	}
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @see \mtekk\adminKit\setting\setting_base::jsonSerialize()
+	 */
+	public function jsonSerialize(): bool
+	{
+		return $this->value;
 	}
 	/**
 	 * 
