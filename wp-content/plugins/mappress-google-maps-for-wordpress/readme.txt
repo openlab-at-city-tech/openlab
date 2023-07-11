@@ -1,11 +1,11 @@
 === MapPress Maps for WordPress ===
 Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
-Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
+Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, gpx, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.9.5
-Requires PHP: 5.6
-Tested up to: 6.2
-Stable tag: 2.84.21
+Requires PHP: 7.0
+Tested up to: 6.3
+Stable tag: 2.87.2
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -42,6 +42,7 @@ Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more featur
 * Directions from Google Maps
 * Geocoders from Google, Nominatim, and Mapbox
 * KML map overlays
+* GPX tracks
 * Draw polygons, circles, and lines
 * Generate maps using PHP
 * WPML compatible
@@ -60,7 +61,7 @@ Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more featur
 * Advanced Custom Fields (ACF) integration
 
 = Localization =
-Please [Contact me](https://mappresspro.com/chris-contact) if you'd like to provide a translation or an update.  Many thanks to all the folks who have created and udpated translations.
+Please [Contact me](https://mappresspro.com/contact) to provide a translation.  Many thanks to all the folks who have created and udpated translations.
 
 == Installation ==
 
@@ -88,6 +89,150 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.87.2 =
+* Fixed: search not working for some geocoders
+* Fixed: mapbox key not working if defined in wp-config.php
+
+= 2.87.1 =
+* Changed: POI modal is now displayed inside mapp-dialog component
+* Changed: close 'X' added for dialog component
+* Fixed: warning if all sizes deleted
+
+= 2.87 = 
+* Added: POI list can now be sorted by distance 
+* Added: POI distance can be included templates for popups and POI list
+* Added: enable custom map tiles for Leaflet
+* Changed: removed dependency on underscore library
+* Fixed: web component too small when displayed in iframe
+* Fixed: POI drag and drop sorting not working in map editor
+* Fixed: Google warning for deprecated bounds in places calls
+* Fixed: console warning when mousing over user location blue dot
+
+= 2.86.15 =
+* Fixed: ACF mashup not working with custom meta query
+
+= 2.86.14 =
+* Fixed: mapbox custom styles not saving
+
+= 2.86.13 =
+* Changed: resurrect html/visual tabs for poi editor
+
+= 2.86.12 =
+* Fixed: don't display fullscreen control on unsupported (iOS) devices
+* Fixed: warning when map center is a string
+
+= 2.86.11 = 
+* Fixed: PHP 8.2 warning message for trim()
+
+= 2.86.10 =
+* Fixed: warning message with PHP 8.1 and 8.2
+* Fixed: typo in wp-config setting for mapbox token
+* Fixed: compatibility fix for latest Gutenberg modal
+
+= 2.86.9 =
+* Changed: switched deregister to options
+* Fixed: map picker not working if latest Gutenberg plugin is active
+* Fixed: fix missing user maps caused by WP 6.0+ user query change
+
+= 2.86.8 =
+* Fixed: Leaflet GPX files not centering properly
+
+= 2.86.7 =
+* Fixed: gutenberg plugin interferes with modal editor display
+* Fixed: Leaflet can now load GPX files (and so can Google).  Just enter the URL in the map editor's search bar.
+
+= 2.86.6 =
+* Fixed: missing add new button in standalone map library
+
+= 2.86.5 =
+* Fixed: when pois are clicked inside iframe, open in the parent window instead of the iframe
+* Fixed: missing alt tags on some images
+
+= 2.86.4 =
+* Fixed: new filters defaulting to single checkbox instead of multiple checkboxes
+* Fixed: filters CSS position wrong when rendering in web component
+
+= 2.86.3 =
+* Fixed: filters deleted on save
+
+= 2.86.2 =
+* Fixed: syntax error
+
+= 2.86.1 =
+* Fixed: media uploader not opening above map editor dialog
+* Fixed: link inserter not opening above poi editor dialog
+* Changed: improved updater performance
+
+= 2.86 =
+* Added: 'POI Fields' setting: enables POI field data entry, filtering and display
+* Added: filtering for individual maps based on POI data fields
+* Added: option for setting search placeholder
+* Added: setting to render maps as web components
+* Added: compatibility with React 18 (faster rendering, etc.)
+* Added: fullscreen control for Leaflet and Google
+* Added: search for maps by multiple keywords
+* Changed: replaced Gutenberg dialog component with standard html dialog element
+* Changed: removed locutus
+* Changed: added poi field data to default map popup template
+* Changed: removed 'classname' and 'embed' map attributes
+* Fixed: dragging not working for polygons
+* Fixed: mashup filters not retaining checked selections
+* Fixed: it was possible to save new maps multiple times
+* Fixed: map list scrolling to bottom after move to trash (to focus on snackbar)
+* Fixed: complianz blocking Leaflet maps if marker clustering is disabled
+
+= 2.85.9 =
+* Fixed: "geocode users" button hidden in settings
+
+= 2.85.8 =
+* Fixed: error when loading custom mappress.css inside iframes
+* Fixed: WPML language switcher delayed for mashup queries
+
+= 2.85.7 =
+* Fixed: error if tinyMCE is disabled in user profile
+
+= 2.85.6 =
+* Fixed: trailing comma in API affects early PHP 7.x
+
+= 2.85.5 =
+* Changed: PHP version bumped to 7.0
+* Fixed: PHP error in 7.2 with trailing commas
+* Fixed: additional sanitization for arguments in rest API
+* Fixed: sizes settings defaults to first size
+
+= 2.85.4 =
+* Fixed: translations not working
+
+= 2.85.3 =
+* Fixed: editor centering on POI after edits
+
+= 2.85.2 =
+* Fixed: drag/drop not working for options lists
+* Fixed: whitespace trimmed from sizes
+* Fixed: Gutenberg plugin makes map editor too small
+* Fixed: error on settings screen for ACF help field
+
+= 2.85.1 =
+* Fixed: lat/lng editing not working for leaflet
+
+= 2.85 =
+* Added: New settings screen and index sidebar
+* Added: updated REST API to include schema
+* Added: tabbed POI editor with lat/lng and address fields
+* Added: setting to limit POI list to viewport without search
+* Changed: updated controls for color picker, style picker, filters, and poi editor
+* Changed: new combobox for field mapping settings
+* Fixed: Google API callback parameter is now mandatory
+* Fixed: shortcode geolocate parameter ignored
+* Fixed: drag and drop improved for both settings and POIs
+* Fixed: error when setting map center before it has been moved
+* Fixed: editor zooming in on polygons and shapes
+* Fixed: some strings not included in translation POT file
+
+= 2.84.22 =
+* Fixed: missing pagination text in POT file
+* Changed: improved processing for empty ACF map fields
 
 = 2.84.21 =
 * Changed: update version compatibility

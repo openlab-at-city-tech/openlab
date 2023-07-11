@@ -2,12 +2,11 @@
 class Mappress_Map extends Mappress_Obj {
 	var $alignment,
 		$center,
-		$classname,
-		$embed,
+		$class,     
+		$filter,
 		$geolocate,
 		$height,
 		$hideEmpty,
-		$initialOpenDirections,
 		$initialOpenInfo,
 		$layers,
 		$layout,
@@ -25,12 +24,28 @@ class Mappress_Map extends Mappress_Obj {
 		$query,
 		$search,
 		$status,
+		$style, 
 		$title,
 		$width,
 		$zoom
 		;
 
 	var $pois = array();
+
+	function to_html() {
+		// Exclude a few fields that don't need to be in the web component (pois are determined later)
+		$vars = array_diff_key(get_object_vars($this), array('otitle' => '', 'pois' => '', 'status' => '', 'title' => ''));
+
+		// Convert center from object to string for display in attributes
+		$vars['center'] = (isset($this->center) && is_object($this->center)) ? $this->center->lat . ',' . $this->center->lng : '';
+
+		// Force left layout
+		$vars['layout'] = 'left';
+
+		$atts = Mappress::to_atts($vars);
+		$pois = join('', array_map(function($poi) { return $poi->to_html(); }, $this->pois));
+		return "\r\n<mappress-map {$atts}>$pois\r\n</mappress-map>\r\n";
+	}
 
 	function to_json() {
 		$json_pois = array();
@@ -42,6 +57,7 @@ class Mappress_Map extends Mappress_Obj {
 			'otype' => $this->otype,
 			'oid' => $this->oid,
 			'center' => $this->center,
+			'filter' => $this->filter,
 			'height' => $this->height,
 			'mapTypeId' => $this->mapTypeId,
 			'metaKey' => $this->metaKey,
@@ -209,15 +225,18 @@ class Mappress_Map extends Mappress_Obj {
 			$this->name = sanitize_text_field($this->name);
 		}
 
+		if (Mappress::$options->webComponent)
+			return $this->display_web_component(null, $in_iframe);
+
 		// iframe container
 		if (Mappress::$options->iframes && !$in_iframe) {
 			// Convert booleans to strings
 			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
 
 			// Query or mapid - no POIs in iframe URL
-			if ($this->query || $this->mapid)
+			if ($this->query || $this->mapid) {
 				unset($args['pois']);
-			else {
+			} else {
 				// Programmatic - URL contains only transient id
 				$transient = 'mapp-iframe-' . md5(json_encode($this));
 				set_transient($transient, $this, 30);
@@ -246,9 +265,90 @@ class Mappress_Map extends Mappress_Obj {
 		if ($in_iframe) {
 			return "<div id='{$this->name}' class='mapp-content'></div>". $script;
 		} else {
-			Mappress::scripts_enqueue();
+				Mappress::scripts_enqueue();
 			return $this->get_layout() . $script;
 		}
+	}
+
+	/**
+	* Display a map web component
+	*
+	* @param mixed $atts - override attributes.  Attributes applied from options -> map -> $atts
+	*/
+	function display_web_component($atts = null, $in_iframe = false) {
+		$alignment = ($this->alignment) ? $this->alignment : Mappress::$options->alignment;
+		$alignment_class = ($alignment) ? ' align' . $alignment. ' mapp-align-' . $alignment : '';
+
+		$dims = $this->get_dims();
+		$style = sprintf("width: %s;", ($this->alignment == 'full') ? "auto" : $dims->width);
+		$style .= (stristr($dims->height, '%')) ? sprintf("height: auto; aspect-ratio: 100/%d;", (int) $dims->height)  : "height: {$dims->height};";
+		
+		// iframe container
+		if (Mappress::$options->iframes && !$in_iframe) {
+			// Convert booleans to strings for iframe atts
+			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
+
+			// Query or mapid - no POIs in iframe URL
+			if ($this->query || $this->mapid) {
+				unset($args['pois']);
+			} else {
+				// Programmatic - URL contains only transient id
+				$transient = 'mapp-iframe-' . md5(json_encode($this));
+				set_transient($transient, $this, 30);
+				$args = array('transient' => $transient);
+			}
+
+			$url = get_home_url() . '?mappress=embed&' . http_build_query($args);
+			
+			// Note that width + height attributes are required for Google AMP
+			$layout_atts = Mappress::to_atts($atts);
+			
+			// Iframes don't size like divs, so require a wrapper div			
+			$wrapper_class = 'mapp-layout mapp-has-iframe' . $alignment_class;
+			return "<div id='{$this->name}' class='$wrapper_class' style='$style'>"
+				. "<iframe class='mapp-iframe ' src='$url' scrolling='no' loading='lazy'></iframe>"
+				. "</div>";
+		} else {       
+			// Prepare POIs
+			$this->prepare();
+			
+			if ($in_iframe) {
+				// For Component inside iframe, alignment class and style (height/width) are applied to wrapper, not component
+				$this->class = 'mapp-layout';
+				$this->style = 'height: 100%';
+			} else {
+				$this->class = 'mapp-layout ' . $alignment_class;
+				$this->style = $style;
+			}
+			
+			// Last chance to alter map before display
+			do_action('mappress_map_display', $this);
+
+			Mappress::scripts_enqueue();
+			return $this->to_html();
+		}
+	}
+
+	static function display_user_map($user) {
+		$error = get_user_meta($user->ID, 'mappress_error', true);
+		if ($error)
+			echo "<div class='mapp-help-error'>" . sprintf(__('Geocoding error: %s', 'mappress-google-maps-for-wordpress'), $error) . "</div>";
+
+		$maps = Mappress_Map::get_list('user', $user->ID);
+		if (empty($maps))
+			return;
+
+		echo "<h2>" . __('Location', 'mappress-google-maps-for-wordpress') . "</h2><table class='form-table'><tbody>";
+
+		foreach($maps as $map) {
+			if ($map->status == 'trashed')
+				continue;
+			$map->poiList = false;
+			$map->width = '80%';
+			$map->height = '350px';
+			echo "<tr><th></th><td>" . $map->display() . "</td></tr>";
+		}
+		echo "</tbody></table>";
 	}
 
 	function get_dims() {
@@ -280,29 +380,6 @@ class Mappress_Map extends Mappress_Obj {
 
 		return "<div id='{$this->name}' class='$layoutClass' style='$layoutStyle'><div class='$wrapperClass' style='$wrapperStyle'>$content</div></div>";
 	}
-
-	static function display_user_map($user) {
-		$error = get_user_meta($user->ID, 'mappress_error', true);
-		if ($error)
-			echo "<div class='mapp-help-error'>" . sprintf(__('Geocoding error: %s', 'mappress-google-maps-for-wordpress'), $error) . "</div>";
-
-		$maps = Mappress_Map::get_list('user', $user->ID);
-		if (empty($maps))
-			return;
-
-		echo "<h2>" . __('Location', 'mappress-google-maps-for-wordpress') . "</h2><table class='form-table'><tbody>";
-
-		foreach($maps as $map) {
-			if ($map->status == 'trashed')
-				continue;
-			$map->poiList = false;
-			$map->width = '80%';
-			$map->height = '350px';
-			echo "<tr><th></th><td>" . $map->display() . "</td></tr>";
-		}
-		echo "</tbody></table>";
-	}
-
 
 	/**
 	* Get a map.  Output is 'raw' or 'object'
@@ -428,8 +505,8 @@ class Mappress_Map extends Mappress_Obj {
 		if ($this->otype == 'post')
 			$this->autoicons();
 
-		if (Mappress::$options->sort && !isset($this->query['orderby']))
-			$this->sort_pois();
+		if (!Mappress::$options->sort && !isset($this->query['orderby']))
+			do_action('mappress_sort_pois', $this);
 	}
 
 	function save() {
@@ -439,6 +516,17 @@ class Mappress_Map extends Mappress_Obj {
 		// Apply wpautop to POI bodies
 		foreach($this->pois as &$poi)
 			$poi->body = wpautop($poi->body);
+
+		// Filter out poi field data that is no longer present in settings
+		foreach($this->pois as &$poi) {
+			if (Mappress::$options->poiFields) {
+				$keys = array_map(function($entry) { return $entry['key']; }, Mappress::$options->poiFields);
+				$data = (array) $poi->data;
+				$poi->data = (object) array_intersect_key($data, array_combine($keys, $keys));
+			} else {
+				$poi->data = null;
+			}
+		}
 
 		$obj = json_encode($this->to_json());
 
@@ -460,19 +548,6 @@ class Mappress_Map extends Mappress_Obj {
 		$wpdb->query("COMMIT");
 		do_action('mappress_map_save', $this); 	// Use for your own developments
 		return true;
-	}
-
-	/**
-	* Default action to sort the map
-	* Titles are compared with HTML stripped
-	*
-	* @param mixed $map
-	*/
-	function sort_pois() {
-		usort($this->pois, function($a, $b) {
-			return strcasecmp(strip_tags($a->title), strip_tags($b->title));
-		});
-		do_action('mappress_sort_pois', $this);
 	}
 
 	/**

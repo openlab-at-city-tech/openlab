@@ -1,5 +1,5 @@
 <?php
-class Mappress_Api {
+class Mappress_Api extends WP_REST_Controller {
 	public $namespace = 'mapp/v1';
 
 	public function __construct() {
@@ -9,16 +9,15 @@ class Mappress_Api {
 	public function counts($otype = 'post', $oid = null) {
 		global $wpdb;
 		$maps_table = $wpdb->prefix . 'mapp_maps';
-		$otype = $otype == 'user' ? 'user' : 'post';
-		$where = ($otype) ? " AND otype = '$otype' " : '';
+		$otype = ($otype == 'user') ? 'user' : 'post';
 
 		$counts = (object) array(
-			'all' => $wpdb->get_var("SELECT count(*) FROM $maps_table WHERE status != 'trashed' AND otype = '$otype' "),
-			'trashed' => $wpdb->get_var("SELECT count(*) FROM $maps_table WHERE status = 'trashed' AND otype = '$otype' "),
+			'all' => $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $maps_table WHERE status != 'trashed' AND otype = %s ", $otype)),
+			'trashed' => $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $maps_table WHERE status = 'trashed' AND otype = %s ", $otype)),
 		);
 
 		if ($oid)
-			$counts->object = $wpdb->get_var("SELECT count(*) FROM $maps_table WHERE status != 'trashed' AND otype = '$otype' AND oid = '$oid' ");
+			$counts->object = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM $maps_table WHERE status != 'trashed' AND otype = %s AND oid = %d ", $otype, $oid));
 		return $counts;
 	}
 
@@ -26,13 +25,13 @@ class Mappress_Api {
 		$mapdata = $request->get_json_params();
 
 		if (!$mapdata)
-			return new WP_Error('update_map', 'Map save data missing');
+			return new WP_Error('create_map', 'Map save data missing');
 
 		$map = new Mappress_Map($mapdata);
 		$result = $map->save();
 
 		if (!$result)
-			return new WP_Error('update_map', 'Internal error, your data has not been saved!');
+			return new WP_Error('create_map', 'Internal error, your data has not been saved!');
 
 		return $this->rest_response($map->mapid);
 	}
@@ -91,57 +90,135 @@ class Mappress_Api {
 		return $this->rest_response($map);
 	}
 
+	public function get_map_schema() {
+		$schema = array(
+			'$schema' => 'http://json-schema.org/draft-04/schema#',
+			'title' => 'map',
+			'type' => 'object',
+			'properties' => array(
+				'mapid' => array(
+					'description' => esc_html('Unique identifier for the map.'),
+					'type' => 'integer',
+					'context' => array('view', 'edit'),
+					'readonly' => true,
+				),
+				'center' => array(
+					'description' => esc_html("Map center.  May be null for automatic center, or a string of lat,lng to force the center."),
+					'type' => 'integer',
+				),
+				'mapTypeId' => array(
+					'description' => esc_html('Map type.  May be null, a default type (roadmap, satellite or hybrid) or the name of a custom style.'),
+					'type' => 'string',
+				),
+				'oid' => array(
+					'description' => esc_html('Object the map is linked to.  May be null, a post ID, or a user ID.'),
+					'type' => 'string',
+				),
+				'otype' => array(
+					'description' => esc_html('Object type the map is linked to, may be post or user.'),
+					'type' => 'string',
+					'enum' => array('post', 'user')
+				),
+				'pois' => array(
+					'description' => esc_html('Array of map markers (POIs) to display on the map.'),
+					'type' => 'array',
+					'items' => array(
+						'type' => 'object',
+						'properties' => array(
+							'address' => array(
+								'description' => esc_html('POI street address.'),
+								'type' => 'string',
+							),
+							'body' => array(
+								'description' => esc_html('POI body.'),
+								'type' => 'string',
+							),
+							'iconid' => array(
+								'description' => esc_html('POI iconid, use short names like yellow for standard icons.  Custom icons must be defined in MapPress settings and include an extension like myicon.png.'),
+								'type' => 'string',
+							),
+							'point' => array(
+								'description' => esc_html('POI location.'),
+								'type' => 'object',
+								'properties' => array(
+									'lat' => array(
+										'description' => esc_html('Latitude.'),
+										'type' => 'number',
+									),
+									'lng' => array(
+										'description' => esc_html('Longitude.'),
+										'type' => 'number',
+									),
+								),
+							),
+							'title' => array(
+								'description' => esc_html('POI title.'),
+								'type' => 'string',
+							)
+						)
+					)
+				),
+				'title' => array(
+					'description'  => esc_html('Title for the map in the map editor.'),
+					'type'         => 'string',
+				),
+				'zoom' => array(
+					'description'  => esc_html('Map zoom.  May be null for automatic zoom, or a number from 1-18.' ),
+					'type'         => 'integer',
+				),
+			),
+		);
+
+		return $schema;
+	}
+
 	public function get_maps($request) {
 		global $wpdb;
 		$maps_table = $wpdb->prefix . 'mapp_maps';
 
 		ob_start();
-		$defaults = array(
-			'filter' => 'all',
-			'oid' => null,
-			'otype' => 'post',
-			'page' => 1,
-			'page_size' => 10,
-			'search' => null,
-			'sort_by' => 'mapid',
-			'sort_asc' => true
-		);
 
-		foreach($defaults as $arg => $default) {
-			$value = $request->get_param($arg);
-			$$arg = ($value) ? $value : $default;
-		}
+		// Allowed args are already limited and sanitized in rest_api_init
+		foreach(array('filter', 'oid', 'otype', 'page', 'page_size', 'search_text', 'sort_by', 'sort_asc') as $arg)
+			$$arg = $request->get_param($arg);
+			
+		$where = " WHERE 1=1 ";
 
 		if ($otype == 'post') {
 			$fields = "SELECT $maps_table.mapid, $maps_table.otype, $maps_table.oid, $maps_table.status, $maps_table.title, $wpdb->posts.post_title as otitle ";
 			$from = " FROM $maps_table ";
-			$join = " LEFT OUTER JOIN $wpdb->posts ON ( $wpdb->posts.ID = $maps_table.oid AND $maps_table.otype = 'post' "
+			$join = " LEFT OUTER JOIN $wpdb->posts ON ( $wpdb->posts.ID = $maps_table.oid "
 				. " AND $wpdb->posts.post_status != 'auto-draft' AND $wpdb->posts.post_status != 'inherit' )";
+			$where .= " AND $maps_table.otype = 'post' ";
 		} else {
+			// User maps, not currently displayed in picker
 			$fields = "SELECT $maps_table.mapid, $maps_table.otype, $maps_table.oid, $maps_table.status, $maps_table.title, $wpdb->users.nicename as otitle ";
 			$from = " FROM $maps_table ";
-			$join = " LEFT OUTER JOIN $wpdb->users ON ($wpdb->users.ID = $maps_table.oid AND $maps_table.otype = 'user') ";
+			$join = " LEFT OUTER JOIN $wpdb->users ON ($wpdb->users.ID = $maps_table.oid) ";
+			$where .= " AND $maps_table.otype = 'post' ";
 		}
-
-		$where = ($filter == 'trashed') ? " WHERE $maps_table.status = 'trashed' " : " WHERE $maps_table.status != 'trashed' ";
+  
+		$where .= ($filter == 'trashed') ? " AND $maps_table.status = 'trashed' " : " AND $maps_table.status != 'trashed' ";
 		if ($filter == 'object' && $oid)
-			$where .= " AND $maps_table.oid = $oid ";
+			$where .= $wpdb->prepare(" AND $maps_table.oid = %d ", $oid);
 
-		if ($search) {
+		if ($search_text) {
 			// Can't use column alias in where
 			$otitle = ($otype == 'post') ? "$wpdb->posts.post_title" : "$wpdb->users.nicename";
-			$where .= $wpdb->prepare(" AND ($maps_table.mapid = %s OR INSTR($maps_table.title, %s) OR INSTR($otitle, %s)) ", $search, $search, $search);
+			$where .= $wpdb->prepare(" AND ($maps_table.mapid = %s OR $maps_table.title like '%%%s%%' OR $otitle like '%%%s%%') ", $search_text, $search_text, $search_text);
 		}
 
 		$orderby = '';
-		if ($sort_by) {
-			$orderby = " ORDER BY $sort_by " . ( ($sort_asc == 'true') ? "ASC" : "DESC" );
+
+		// Note that sort_by should be ;already sanitized by wpdb->prepare
+		if ($sort_by == 'mapid') {
+			$orderby = $wpdb->prepare(" ORDER BY %1s ", $sort_by) . ( ($sort_asc == 'true') ? "ASC" : "DESC" );
 			if ($sort_by != 'mapid')
 				$orderby .= ", mapid";
 		}
 
 		if ($page_size > 0)
-			$limit = sprintf(" LIMIT %d, %d", ($page-1) * $page_size, $page_size);
+			$limit = $wpdb->prepare(" LIMIT %d, %d", ($page-1) * $page_size, $page_size);
 
 		// Run query, then check if more results exist
 		$results = $wpdb->get_results($fields . $from . $join . $where . $orderby . $limit);
@@ -209,6 +286,17 @@ class Mappress_Api {
 					'permission_callback' => function() {
 						return current_user_can('edit_posts');
 					},
+					'args' => array(
+						'filter' => array('sanitize_callback' => 'sanitize_title', 'default' => 'all'),
+						'oid' => array('sanitize_callback' => 'sanitize_title', 'default' => null),
+						'otype' => array('sanitize_callback' => 'sanitize_title', 'default' => 'post'),
+						'page' => array('sanitize_callback' => 'absint', 'default' => 1),
+						'page_size' => array('sanitize_callback' => 'absint', 'default' => 10),
+						'search' => array('sanitize_callback' => 'sanitize_title', 'default' => ''),
+						'sort_by' => array('sanitize_callback' => 'sanitize_title', 'default' => 'mapid'),
+						'sort_asc' => array('sanitize_callback' => 'rest_sanitize_boolean', 'default' => true),
+					),
+
 				),
 				array(
 					'methods' => 'POST',
@@ -217,6 +305,7 @@ class Mappress_Api {
 						return current_user_can('edit_posts');
 					},
 				),
+				'schema' => array($this, 'get_map_schema')
 			)
 		);
 
@@ -252,7 +341,8 @@ class Mappress_Api {
 					'permission_callback' => function() {
 						return current_user_can('edit_posts');
 					},
-				)
+				),
+				'schema' => array($this, 'get_map_schema'),
 			)
 		);
 
@@ -265,6 +355,7 @@ class Mappress_Api {
 				'permission_callback' => function() {
 					return current_user_can('edit_posts');
 				},
+				'schema' => array($this, 'get_map_schema'),
 			)
 		);
 
@@ -277,6 +368,11 @@ class Mappress_Api {
 				'permission_callback' => function() {
 					return current_user_can('edit_posts');
 				},
+				'args' => array(
+					'otype' => array('sanitize_callback' => 'sanitize_title'),
+					'oid' => array('sanitize_callback' => 'absint'),
+				)
+
 			)
 		);
 

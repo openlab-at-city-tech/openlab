@@ -2,6 +2,7 @@
 class Mappress_Poi extends Mappress_Obj {
 	var $address,
 		$body = '',
+		$data,
 		$email,
 		$iconid,
 		$images,
@@ -17,10 +18,20 @@ class Mappress_Poi extends Mappress_Obj {
 		$url,
 		$viewport;              // array('sw' => array('lat' => 0, 'lng' => 0), 'ne' => array('lat' => 0, 'lng' => 0))
 
+	function to_html() {
+		$vars = (object) array_diff_key(get_object_vars($this), array('body' => ''));
+		$vars->point = (isset($this->point)) ? $this->point->lat . ',' . $this->point->lng : '';
+		$vars->viewport = (isset($this->viewport)) ? sprintf("%s,%s,%s,%s", $this->viewport->sw->lat, $this->viewport->sw->lng, $this->viewport->ne->lat, $this->viewport->ne->lng) : '';
+		$atts = Mappress::to_atts($vars);
+		$body = str_replace(array("\r", "\n"), '', $this->body);
+		return (($body) ? "\r\n\t<poi $atts>\r\n\t\t$body\r\n\t</poi>" : "\r\n\t<poi $atts></poi>");
+	}
+
 	function to_json() {
 		return array(
 			'address' => $this->address,
 			'body' => $this->body,
+			'data' => $this->data,
 			'iconid' => $this->iconid,
 			'images' => $this->images,
 			'kml' => $this-> kml,
