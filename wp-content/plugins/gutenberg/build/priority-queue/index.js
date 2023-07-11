@@ -1,8 +1,8 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 3159:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, exports, __webpack_require__) => {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (factory) {
 	if (true) {
@@ -248,19 +248,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
 /******/ 			if (typeof globalThis === 'object') return globalThis;
 /******/ 			try {
@@ -269,35 +269,35 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /******/ 				if (typeof window === 'object') return window;
 /******/ 			}
 /******/ 		})();
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "createQueue": function() { return /* binding */ createQueue; }
+  "createQueue": () => (/* binding */ createQueue)
 });
 
 // EXTERNAL MODULE: ./node_modules/requestidlecallback/index.js
@@ -324,7 +324,7 @@ function createRequestIdleCallback() {
 
   return window.requestIdleCallback;
 }
-/* harmony default export */ var request_idle_callback = (createRequestIdleCallback());
+/* harmony default export */ const request_idle_callback = (createRequestIdleCallback());
 
 ;// CONCATENATED MODULE: ./packages/priority-queue/build-module/index.js
 /**
@@ -396,45 +396,50 @@ function createRequestIdleCallback() {
  */
 
 const createQueue = () => {
-  /** @type {WPPriorityQueueContext[]} */
-  let waitingList = [];
-  /** @type {WeakMap<WPPriorityQueueContext,WPPriorityQueueCallback>} */
-
-  let elementsMap = new WeakMap();
+  /** @type {Map<WPPriorityQueueContext, WPPriorityQueueCallback>} */
+  const waitingList = new Map();
   let isRunning = false;
   /**
    * Callback to process as much queue as time permits.
+   *
+   * Map Iteration follows the original insertion order. This means that here
+   * we can iterate the queue and know that the first contexts which were
+   * added will be run first. On the other hand, if anyone adds a new callback
+   * for an existing context it will supplant the previously-set callback for
+   * that context because we reassigned that map key's value.
+   *
+   * In the case that a callback adds a new callback to its own context then
+   * the callback it adds will appear at the end of the iteration and will be
+   * run only after all other existing contexts have finished executing.
    *
    * @param {IdleDeadline|number} deadline Idle callback deadline object, or
    *                                       animation frame timestamp.
    */
 
   const runWaitingList = deadline => {
-    const hasTimeRemaining = typeof deadline === 'number' ? () => false : () => deadline.timeRemaining() > 0;
-
-    do {
-      if (waitingList.length === 0) {
-        isRunning = false;
-        return;
-      }
-
-      const nextElement =
-      /** @type {WPPriorityQueueContext} */
-      waitingList.shift();
-      const callback =
-      /** @type {WPPriorityQueueCallback} */
-      elementsMap.get(nextElement); // If errors with undefined callbacks are encountered double check that all of your useSelect calls
-      // have all dependecies set correctly in second parameter. Missing dependencies can cause unexpected
-      // loops and race conditions in the queue.
-
+    for (const [nextElement, callback] of waitingList) {
+      waitingList.delete(nextElement);
       callback();
-      elementsMap.delete(nextElement);
-    } while (hasTimeRemaining());
+
+      if ('number' === typeof deadline || deadline.timeRemaining() <= 0) {
+        break;
+      }
+    }
+
+    if (waitingList.size === 0) {
+      isRunning = false;
+      return;
+    }
 
     request_idle_callback(runWaitingList);
   };
   /**
    * Add a callback to the queue for a given context.
+   *
+   * If errors with undefined callbacks are encountered double check that
+   * all of your useSelect calls have the right dependencies set correctly
+   * in their second parameter. Missing dependencies can cause unexpected
+   * loops and race conditions in the queue.
    *
    * @type {WPPriorityQueueAdd}
    *
@@ -444,11 +449,7 @@ const createQueue = () => {
 
 
   const add = (element, item) => {
-    if (!elementsMap.has(element)) {
-      waitingList.push(element);
-    }
-
-    elementsMap.set(element, item);
+    waitingList.set(element, item);
 
     if (!isRunning) {
       isRunning = true;
@@ -468,16 +469,13 @@ const createQueue = () => {
 
 
   const flush = element => {
-    if (!elementsMap.has(element)) {
+    const callback = waitingList.get(element);
+
+    if (undefined === callback) {
       return false;
     }
 
-    const index = waitingList.indexOf(element);
-    waitingList.splice(index, 1);
-    const callback =
-    /** @type {WPPriorityQueueCallback} */
-    elementsMap.get(element);
-    elementsMap.delete(element);
+    waitingList.delete(element);
     callback();
     return true;
   };
@@ -495,14 +493,7 @@ const createQueue = () => {
 
 
   const cancel = element => {
-    if (!elementsMap.has(element)) {
-      return false;
-    }
-
-    const index = waitingList.indexOf(element);
-    waitingList.splice(index, 1);
-    elementsMap.delete(element);
-    return true;
+    return waitingList.delete(element);
   };
   /**
    * Reset the queue without running the pending callbacks.
@@ -512,8 +503,7 @@ const createQueue = () => {
 
 
   const reset = () => {
-    waitingList = [];
-    elementsMap = new WeakMap();
+    waitingList.clear();
     isRunning = false;
   };
 
@@ -525,7 +515,8 @@ const createQueue = () => {
   };
 };
 
-}();
+})();
+
 (window.wp = window.wp || {}).priorityQueue = __webpack_exports__;
 /******/ })()
 ;

@@ -1,83 +1,140 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	// The require scope
-/******/ 	var __webpack_require__ = {};
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 4470:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+var m = __webpack_require__(1850);
+if (true) {
+  exports.s = m.createRoot;
+  exports.a = m.hydrateRoot;
+} else { var i; }
+
+
+/***/ }),
+
+/***/ 1850:
+/***/ ((module) => {
+
+module.exports = window["ReactDOM"];
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "Children": function() { return /* reexport */ external_React_namespaceObject.Children; },
-  "Component": function() { return /* reexport */ external_React_namespaceObject.Component; },
-  "Fragment": function() { return /* reexport */ external_React_namespaceObject.Fragment; },
-  "Platform": function() { return /* reexport */ platform; },
-  "RawHTML": function() { return /* reexport */ RawHTML; },
-  "StrictMode": function() { return /* reexport */ external_React_namespaceObject.StrictMode; },
-  "Suspense": function() { return /* reexport */ external_React_namespaceObject.Suspense; },
-  "cloneElement": function() { return /* reexport */ external_React_namespaceObject.cloneElement; },
-  "concatChildren": function() { return /* reexport */ concatChildren; },
-  "createContext": function() { return /* reexport */ external_React_namespaceObject.createContext; },
-  "createElement": function() { return /* reexport */ external_React_namespaceObject.createElement; },
-  "createInterpolateElement": function() { return /* reexport */ create_interpolate_element; },
-  "createPortal": function() { return /* reexport */ external_ReactDOM_namespaceObject.createPortal; },
-  "createRef": function() { return /* reexport */ external_React_namespaceObject.createRef; },
-  "findDOMNode": function() { return /* reexport */ external_ReactDOM_namespaceObject.findDOMNode; },
-  "forwardRef": function() { return /* reexport */ external_React_namespaceObject.forwardRef; },
-  "hydrate": function() { return /* reexport */ external_ReactDOM_namespaceObject.hydrate; },
-  "isEmptyElement": function() { return /* reexport */ isEmptyElement; },
-  "isValidElement": function() { return /* reexport */ external_React_namespaceObject.isValidElement; },
-  "lazy": function() { return /* reexport */ external_React_namespaceObject.lazy; },
-  "memo": function() { return /* reexport */ external_React_namespaceObject.memo; },
-  "render": function() { return /* reexport */ external_ReactDOM_namespaceObject.render; },
-  "renderToString": function() { return /* reexport */ serialize; },
-  "switchChildrenNodeName": function() { return /* reexport */ switchChildrenNodeName; },
-  "unmountComponentAtNode": function() { return /* reexport */ external_ReactDOM_namespaceObject.unmountComponentAtNode; },
-  "useCallback": function() { return /* reexport */ external_React_namespaceObject.useCallback; },
-  "useContext": function() { return /* reexport */ external_React_namespaceObject.useContext; },
-  "useDebugValue": function() { return /* reexport */ external_React_namespaceObject.useDebugValue; },
-  "useEffect": function() { return /* reexport */ external_React_namespaceObject.useEffect; },
-  "useImperativeHandle": function() { return /* reexport */ external_React_namespaceObject.useImperativeHandle; },
-  "useLayoutEffect": function() { return /* reexport */ external_React_namespaceObject.useLayoutEffect; },
-  "useMemo": function() { return /* reexport */ external_React_namespaceObject.useMemo; },
-  "useReducer": function() { return /* reexport */ external_React_namespaceObject.useReducer; },
-  "useRef": function() { return /* reexport */ external_React_namespaceObject.useRef; },
-  "useState": function() { return /* reexport */ external_React_namespaceObject.useState; }
+  "Children": () => (/* reexport */ external_React_namespaceObject.Children),
+  "Component": () => (/* reexport */ external_React_namespaceObject.Component),
+  "Fragment": () => (/* reexport */ external_React_namespaceObject.Fragment),
+  "Platform": () => (/* reexport */ platform),
+  "RawHTML": () => (/* reexport */ RawHTML),
+  "StrictMode": () => (/* reexport */ external_React_namespaceObject.StrictMode),
+  "Suspense": () => (/* reexport */ external_React_namespaceObject.Suspense),
+  "cloneElement": () => (/* reexport */ external_React_namespaceObject.cloneElement),
+  "concatChildren": () => (/* reexport */ concatChildren),
+  "createContext": () => (/* reexport */ external_React_namespaceObject.createContext),
+  "createElement": () => (/* reexport */ external_React_namespaceObject.createElement),
+  "createInterpolateElement": () => (/* reexport */ create_interpolate_element),
+  "createPortal": () => (/* reexport */ external_ReactDOM_.createPortal),
+  "createRef": () => (/* reexport */ external_React_namespaceObject.createRef),
+  "createRoot": () => (/* reexport */ client/* createRoot */.s),
+  "findDOMNode": () => (/* reexport */ external_ReactDOM_.findDOMNode),
+  "flushSync": () => (/* reexport */ external_ReactDOM_.flushSync),
+  "forwardRef": () => (/* reexport */ external_React_namespaceObject.forwardRef),
+  "hydrate": () => (/* reexport */ external_ReactDOM_.hydrate),
+  "hydrateRoot": () => (/* reexport */ client/* hydrateRoot */.a),
+  "isEmptyElement": () => (/* reexport */ isEmptyElement),
+  "isValidElement": () => (/* reexport */ external_React_namespaceObject.isValidElement),
+  "lazy": () => (/* reexport */ external_React_namespaceObject.lazy),
+  "memo": () => (/* reexport */ external_React_namespaceObject.memo),
+  "render": () => (/* reexport */ external_ReactDOM_.render),
+  "renderToString": () => (/* reexport */ serialize),
+  "startTransition": () => (/* reexport */ external_React_namespaceObject.startTransition),
+  "switchChildrenNodeName": () => (/* reexport */ switchChildrenNodeName),
+  "unmountComponentAtNode": () => (/* reexport */ external_ReactDOM_.unmountComponentAtNode),
+  "useCallback": () => (/* reexport */ external_React_namespaceObject.useCallback),
+  "useContext": () => (/* reexport */ external_React_namespaceObject.useContext),
+  "useDebugValue": () => (/* reexport */ external_React_namespaceObject.useDebugValue),
+  "useDeferredValue": () => (/* reexport */ external_React_namespaceObject.useDeferredValue),
+  "useEffect": () => (/* reexport */ external_React_namespaceObject.useEffect),
+  "useId": () => (/* reexport */ external_React_namespaceObject.useId),
+  "useImperativeHandle": () => (/* reexport */ external_React_namespaceObject.useImperativeHandle),
+  "useInsertionEffect": () => (/* reexport */ external_React_namespaceObject.useInsertionEffect),
+  "useLayoutEffect": () => (/* reexport */ external_React_namespaceObject.useLayoutEffect),
+  "useMemo": () => (/* reexport */ external_React_namespaceObject.useMemo),
+  "useReducer": () => (/* reexport */ external_React_namespaceObject.useReducer),
+  "useRef": () => (/* reexport */ external_React_namespaceObject.useRef),
+  "useState": () => (/* reexport */ external_React_namespaceObject.useState),
+  "useSyncExternalStore": () => (/* reexport */ external_React_namespaceObject.useSyncExternalStore),
+  "useTransition": () => (/* reexport */ external_React_namespaceObject.useTransition)
 });
 
 ;// CONCATENATED MODULE: external "React"
-var external_React_namespaceObject = window["React"];
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./packages/element/build-module/create-interpolate-element.js
 /**
  * Internal dependencies
@@ -174,9 +231,9 @@ function createFrame(element, tokenStart, tokenLength, prevOffset, leadingTextSt
  * }
  * ```
  *
- * @param {string} interpolatedString The interpolation string to be parsed.
- * @param {Object} conversionMap      The map used to convert the string to
- *                                    a react element.
+ * @param {string}                    interpolatedString The interpolation string to be parsed.
+ * @param {Record<string, WPElement>} conversionMap      The map used to convert the string to
+ *                                                       a react element.
  * @throws {TypeError}
  * @return {WPElement}  A wp element.
  */
@@ -410,7 +467,7 @@ function closeOuterElement(endOffset) {
   output.push((0,external_React_namespaceObject.cloneElement)(element, null, ...children));
 }
 
-/* harmony default export */ var create_interpolate_element = (createInterpolateElement);
+/* harmony default export */ const create_interpolate_element = (createInterpolateElement);
 
 ;// CONCATENATED MODULE: ./packages/element/build-module/react.js
 /**
@@ -434,6 +491,13 @@ function closeOuterElement(endOffset) {
  * Object containing a React synthetic event.
  *
  * @typedef {import('react').SyntheticEvent} WPSyntheticEvent
+ */
+
+/**
+ * Object containing a React synthetic event.
+ *
+ * @template T
+ * @typedef {import('react').RefObject<T>} RefObject<T>
  */
 
 /**
@@ -541,12 +605,27 @@ function closeOuterElement(endOffset) {
 
 
 /**
+ * @see https://reactjs.org/docs/hooks-reference.html#usedeferredvalue
+ */
+
+
+/**
  * @see https://reactjs.org/docs/hooks-reference.html#useeffect
  */
 
 
 /**
+ * @see https://reactjs.org/docs/hooks-reference.html#useid
+ */
+
+
+/**
  * @see https://reactjs.org/docs/hooks-reference.html#useimperativehandle
+ */
+
+
+/**
+ * @see https://reactjs.org/docs/hooks-reference.html#useinsertioneffect
  */
 
 
@@ -576,6 +655,21 @@ function closeOuterElement(endOffset) {
 
 
 /**
+ * @see https://reactjs.org/docs/hooks-reference.html#usesyncexternalstore
+ */
+
+
+/**
+ * @see https://reactjs.org/docs/hooks-reference.html#usetransition
+ */
+
+
+/**
+ * @see https://reactjs.org/docs/react-api.html#starttransition
+ */
+
+
+/**
  * @see https://reactjs.org/docs/react-api.html#reactlazy
  */
 
@@ -593,11 +687,7 @@ function closeOuterElement(endOffset) {
  * @return {Array} The concatenated value.
  */
 
-function concatChildren() {
-  for (var _len = arguments.length, childrenArguments = new Array(_len), _key = 0; _key < _len; _key++) {
-    childrenArguments[_key] = arguments[_key];
-  }
-
+function concatChildren(...childrenArguments) {
   return childrenArguments.reduce((accumulator, children, i) => {
     external_React_namespaceObject.Children.forEach(children, (child, j) => {
       if (child && 'string' !== typeof child) {
@@ -622,7 +712,7 @@ function concatChildren() {
 
 function switchChildrenNodeName(children, nodeName) {
   return children && external_React_namespaceObject.Children.map(children, (elt, index) => {
-    if (typeof (elt === null || elt === void 0 ? void 0 : elt.valueOf()) === 'string') {
+    if (typeof elt?.valueOf() === 'string') {
       return (0,external_React_namespaceObject.createElement)(nodeName, {
         key: index
       }, elt);
@@ -639,12 +729,15 @@ function switchChildrenNodeName(children, nodeName) {
   });
 }
 
-;// CONCATENATED MODULE: external "ReactDOM"
-var external_ReactDOM_namespaceObject = window["ReactDOM"];
+// EXTERNAL MODULE: external "ReactDOM"
+var external_ReactDOM_ = __webpack_require__(1850);
+// EXTERNAL MODULE: ./node_modules/react-dom/client.js
+var client = __webpack_require__(4470);
 ;// CONCATENATED MODULE: ./packages/element/build-module/react-platform.js
 /**
  * External dependencies
  */
+
 
 /**
  * Creates a portal into which a component can be rendered.
@@ -665,25 +758,49 @@ var external_ReactDOM_namespaceObject = window["ReactDOM"];
 
 
 /**
+ * Forces React to flush any updates inside the provided callback synchronously.
+ *
+ * @param {Function} callback Callback to run synchronously.
+ */
+
+
+/**
  * Renders a given element into the target DOM node.
  *
- * @param {import('./react').WPElement} element Element to render.
- * @param {HTMLElement}                 target  DOM node into which element should be rendered.
+ * @deprecated since WordPress 6.2.0. Use `createRoot` instead.
+ * @see https://react.dev/reference/react-dom/render
  */
 
 
 /**
  * Hydrates a given element into the target DOM node.
  *
- * @param {import('./react').WPElement} element Element to hydrate.
- * @param {HTMLElement}                 target  DOM node into which element should be hydrated.
+ * @deprecated since WordPress 6.2.0. Use `hydrateRoot` instead.
+ * @see https://react.dev/reference/react-dom/hydrate
+ */
+
+
+/**
+ * Creates a new React root for the target DOM node.
+ *
+ * @since 6.2.0 Introduced in WordPress core.
+ * @see https://react.dev/reference/react-dom/client/createRoot
+ */
+
+
+/**
+ * Creates a new React root for the target DOM node and hydrates it with a pre-generated markup.
+ *
+ * @since 6.2.0 Introduced in WordPress core.
+ * @see https://react.dev/reference/react-dom/client/hydrateRoot
  */
 
 
 /**
  * Removes any mounted element from the target DOM node.
  *
- * @param {Element} target DOM node in which element is to be removed
+ * @deprecated since WordPress 6.2.0. Use `root.unmount()` instead.
+ * @see https://react.dev/reference/react-dom/unmountComponentAtNode
  */
 
 
@@ -700,7 +817,7 @@ const isEmptyElement = element => {
     return false;
   }
 
-  if (typeof (element === null || element === void 0 ? void 0 : element.valueOf()) === 'string' || Array.isArray(element)) {
+  if (typeof element?.valueOf() === 'string' || Array.isArray(element)) {
     return !element.length;
   }
 
@@ -741,7 +858,7 @@ const Platform = {
  * ```
  */
 
-/* harmony default export */ var platform = (Platform);
+/* harmony default export */ const platform = (Platform);
 
 ;// CONCATENATED MODULE: ./node_modules/is-plain-object/dist/is-plain-object.mjs
 /*!
@@ -1118,12 +1235,11 @@ function paramCase(input, options) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","escapeHtml"]
-var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
+const external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 ;// CONCATENATED MODULE: ./packages/element/build-module/raw-html.js
 /**
  * Internal dependencies
  */
- // Disable reason: JSDoc linter doesn't seem to parse the union (`&`) correctly.
 
 /** @typedef {{children: string} & import('react').ComponentPropsWithoutRef<'div'>} RawHTMLProps */
 
@@ -1140,11 +1256,10 @@ var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
  * @return {JSX.Element} Dangerously-rendering component.
  */
 
-function RawHTML(_ref) {
-  let {
-    children,
-    ...props
-  } = _ref;
+function RawHTML({
+  children,
+  ...props
+}) {
   let rawHtml = ''; // Cast children as an array, and concatenate each element if it is a string.
 
   external_React_namespaceObject.Children.toArray(children).forEach(child => {
@@ -1447,9 +1562,7 @@ function getNormalStylePropertyValue(property, value) {
  */
 
 
-function renderElement(element, context) {
-  let legacyContext = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
+function renderElement(element, context, legacyContext = {}) {
   if (null === element || undefined === element || false === element) {
     return '';
   }
@@ -1527,8 +1640,7 @@ function renderElement(element, context) {
  * @return {string} Serialized element.
  */
 
-function renderNativeComponent(type, props, context) {
-  let legacyContext = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+function renderNativeComponent(type, props, context, legacyContext = {}) {
   let content = '';
 
   if (type === 'textarea' && props.hasOwnProperty('value')) {
@@ -1573,8 +1685,7 @@ function renderNativeComponent(type, props, context) {
  * @return {string} Serialized element
  */
 
-function renderComponent(Component, props, context) {
-  let legacyContext = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+function renderComponent(Component, props, context, legacyContext = {}) {
   const instance = new
   /** @type {import('react').ComponentClass} */
   Component(props, legacyContext);
@@ -1602,8 +1713,7 @@ function renderComponent(Component, props, context) {
  * @return {string} Serialized children.
  */
 
-function renderChildren(children, context) {
-  let legacyContext = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function renderChildren(children, context, legacyContext = {}) {
   let result = '';
   children = Array.isArray(children) ? children : [children];
 
@@ -1708,7 +1818,7 @@ function renderStyle(style) {
 
   return result;
 }
-/* harmony default export */ var serialize = (renderElement);
+/* harmony default export */ const serialize = (renderElement);
 
 ;// CONCATENATED MODULE: ./packages/element/build-module/index.js
 
@@ -1718,6 +1828,8 @@ function renderStyle(style) {
 
 
 
+
+})();
 
 (window.wp = window.wp || {}).element = __webpack_exports__;
 /******/ })()

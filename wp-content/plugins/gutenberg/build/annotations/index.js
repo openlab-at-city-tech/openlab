@@ -1,36 +1,36 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,33 +39,33 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "store": function() { return /* reexport */ store; }
+  "store": () => (/* reexport */ store)
 });
 
 // NAMESPACE OBJECT: ./packages/annotations/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "__experimentalGetAllAnnotationsForBlock": function() { return __experimentalGetAllAnnotationsForBlock; },
-  "__experimentalGetAnnotations": function() { return __experimentalGetAnnotations; },
-  "__experimentalGetAnnotationsForBlock": function() { return __experimentalGetAnnotationsForBlock; },
-  "__experimentalGetAnnotationsForRichText": function() { return __experimentalGetAnnotationsForRichText; }
+  "__experimentalGetAllAnnotationsForBlock": () => (__experimentalGetAllAnnotationsForBlock),
+  "__experimentalGetAnnotations": () => (__experimentalGetAnnotations),
+  "__experimentalGetAnnotationsForBlock": () => (__experimentalGetAnnotationsForBlock),
+  "__experimentalGetAnnotationsForRichText": () => (__experimentalGetAnnotationsForRichText)
 });
 
 // NAMESPACE OBJECT: ./packages/annotations/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "__experimentalAddAnnotation": function() { return __experimentalAddAnnotation; },
-  "__experimentalRemoveAnnotation": function() { return __experimentalRemoveAnnotation; },
-  "__experimentalRemoveAnnotationsBySource": function() { return __experimentalRemoveAnnotationsBySource; },
-  "__experimentalUpdateAnnotationRange": function() { return __experimentalUpdateAnnotationRange; }
+  "__experimentalAddAnnotation": () => (__experimentalAddAnnotation),
+  "__experimentalRemoveAnnotation": () => (__experimentalRemoveAnnotation),
+  "__experimentalRemoveAnnotationsBySource": () => (__experimentalRemoveAnnotationsBySource),
+  "__experimentalUpdateAnnotationRange": () => (__experimentalUpdateAnnotationRange)
 });
 
 ;// CONCATENATED MODULE: external ["wp","richText"]
-var external_wp_richText_namespaceObject = window["wp"]["richText"];
+const external_wp_richText_namespaceObject = window["wp"]["richText"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: ./packages/annotations/build-module/store/constants.js
 /**
  * The identifier for the data store.
@@ -95,8 +95,7 @@ const ANNOTATION_ATTRIBUTE_PREFIX = 'annotation-text-';
  * @return {Object} A record with the annotations applied.
  */
 
-function applyAnnotations(record) {
-  let annotations = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+function applyAnnotations(record, annotations = []) {
   annotations.forEach(annotation => {
     let {
       start,
@@ -176,11 +175,10 @@ function retrieveAnnotationPositions(formats) {
  */
 
 
-function updateAnnotationsWithPositions(annotations, positions, _ref) {
-  let {
-    removeAnnotation,
-    updateAnnotationRange
-  } = _ref;
+function updateAnnotationsWithPositions(annotations, positions, {
+  removeAnnotation,
+  updateAnnotationRange
+}) {
   annotations.forEach(currentAnnotation => {
     const position = positions[currentAnnotation.id]; // If we cannot find an annotation, delete it.
 
@@ -216,20 +214,18 @@ const annotation = {
     return null;
   },
 
-  __experimentalGetPropsForEditableTreePreparation(select, _ref2) {
-    let {
-      richTextIdentifier,
-      blockClientId
-    } = _ref2;
+  __experimentalGetPropsForEditableTreePreparation(select, {
+    richTextIdentifier,
+    blockClientId
+  }) {
     return {
       annotations: select(STORE_NAME).__experimentalGetAnnotationsForRichText(blockClientId, richTextIdentifier)
     };
   },
 
-  __experimentalCreatePrepareEditableTree(_ref3) {
-    let {
-      annotations
-    } = _ref3;
+  __experimentalCreatePrepareEditableTree({
+    annotations
+  }) {
     return (formats, text) => {
       if (annotations.length === 0) {
         return formats;
@@ -285,9 +281,9 @@ const {
 (0,external_wp_richText_namespaceObject.registerFormatType)(format_name, settings);
 
 ;// CONCATENATED MODULE: external ["wp","hooks"]
-var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
+const external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 ;// CONCATENATED MODULE: external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
+const external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: ./packages/annotations/build-module/block/index.js
 /**
  * WordPress dependencies
@@ -307,12 +303,10 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
  */
 
 const addAnnotationClassName = OriginalComponent => {
-  return (0,external_wp_data_namespaceObject.withSelect)((select, _ref) => {
-    let {
-      clientId,
-      className
-    } = _ref;
-
+  return (0,external_wp_data_namespaceObject.withSelect)((select, {
+    clientId,
+    className
+  }) => {
     const annotations = select(STORE_NAME).__experimentalGetAnnotationsForBlock(clientId);
 
     return {
@@ -349,12 +343,9 @@ function filterWithReference(collection, predicate) {
  */
 
 
-const mapValues = (obj, callback) => Object.entries(obj).reduce((acc, _ref) => {
-  let [key, value] = _ref;
-  return { ...acc,
-    [key]: callback(value)
-  };
-}, {});
+const mapValues = (obj, callback) => Object.entries(obj).reduce((acc, [key, value]) => ({ ...acc,
+  [key]: callback(value)
+}), {});
 /**
  * Verifies whether the given annotations is a valid annotation.
  *
@@ -376,11 +367,8 @@ function isValidAnnotationRange(annotation) {
  */
 
 
-function annotations() {
+function annotations(state = {}, action) {
   var _state$blockClientId;
-
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
     case 'ANNOTATION_ADD':
@@ -398,7 +386,7 @@ function annotations() {
         return state;
       }
 
-      const previousAnnotationsForBlock = (_state$blockClientId = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId !== void 0 ? _state$blockClientId : [];
+      const previousAnnotationsForBlock = (_state$blockClientId = state?.[blockClientId]) !== null && _state$blockClientId !== void 0 ? _state$blockClientId : [];
       return { ...state,
         [blockClientId]: [...previousAnnotationsForBlock, newAnnotation]
       };
@@ -439,9 +427,9 @@ function annotations() {
 
   return state;
 }
-/* harmony default export */ var reducer = (annotations);
+/* harmony default export */ const reducer = (annotations);
 
-;// CONCATENATED MODULE: ./node_modules/rememo/es/rememo.js
+;// CONCATENATED MODULE: ./node_modules/rememo/rememo.js
 
 
 /** @typedef {(...args: any[]) => *[]} GetDependants */
@@ -767,18 +755,18 @@ const EMPTY_ARRAY = [];
 const __experimentalGetAnnotationsForBlock = rememo((state, blockClientId) => {
   var _state$blockClientId;
 
-  return ((_state$blockClientId = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId !== void 0 ? _state$blockClientId : []).filter(annotation => {
+  return ((_state$blockClientId = state?.[blockClientId]) !== null && _state$blockClientId !== void 0 ? _state$blockClientId : []).filter(annotation => {
     return annotation.selector === 'block';
   });
 }, (state, blockClientId) => {
   var _state$blockClientId2;
 
-  return [(_state$blockClientId2 = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId2 !== void 0 ? _state$blockClientId2 : EMPTY_ARRAY];
+  return [(_state$blockClientId2 = state?.[blockClientId]) !== null && _state$blockClientId2 !== void 0 ? _state$blockClientId2 : EMPTY_ARRAY];
 });
 function __experimentalGetAllAnnotationsForBlock(state, blockClientId) {
   var _state$blockClientId3;
 
-  return (_state$blockClientId3 = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId3 !== void 0 ? _state$blockClientId3 : EMPTY_ARRAY;
+  return (_state$blockClientId3 = state?.[blockClientId]) !== null && _state$blockClientId3 !== void 0 ? _state$blockClientId3 : EMPTY_ARRAY;
 }
 /**
  * Returns the annotations that apply to the given RichText instance.
@@ -796,7 +784,7 @@ function __experimentalGetAllAnnotationsForBlock(state, blockClientId) {
 const __experimentalGetAnnotationsForRichText = rememo((state, blockClientId, richTextIdentifier) => {
   var _state$blockClientId4;
 
-  return ((_state$blockClientId4 = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId4 !== void 0 ? _state$blockClientId4 : []).filter(annotation => {
+  return ((_state$blockClientId4 = state?.[blockClientId]) !== null && _state$blockClientId4 !== void 0 ? _state$blockClientId4 : []).filter(annotation => {
     return annotation.selector === 'range' && richTextIdentifier === annotation.richTextIdentifier;
   }).map(annotation => {
     const {
@@ -810,7 +798,7 @@ const __experimentalGetAnnotationsForRichText = rememo((state, blockClientId, ri
 }, (state, blockClientId) => {
   var _state$blockClientId5;
 
-  return [(_state$blockClientId5 = state === null || state === void 0 ? void 0 : state[blockClientId]) !== null && _state$blockClientId5 !== void 0 ? _state$blockClientId5 : EMPTY_ARRAY];
+  return [(_state$blockClientId5 = state?.[blockClientId]) !== null && _state$blockClientId5 !== void 0 ? _state$blockClientId5 : EMPTY_ARRAY];
 });
 /**
  * Returns all annotations in the editor state.
@@ -839,7 +827,7 @@ function rng() {
   return getRandomValues(rnds8);
 }
 ;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/regex.js
-/* harmony default export */ var regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+/* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
 ;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/validate.js
 
 
@@ -847,7 +835,7 @@ function validate(uuid) {
   return typeof uuid === 'string' && regex.test(uuid);
 }
 
-/* harmony default export */ var esm_browser_validate = (validate);
+/* harmony default export */ const esm_browser_validate = (validate);
 ;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
@@ -878,7 +866,7 @@ function stringify(arr) {
   return uuid;
 }
 
-/* harmony default export */ var esm_browser_stringify = (stringify);
+/* harmony default export */ const esm_browser_stringify = (stringify);
 ;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/v4.js
 
 
@@ -903,7 +891,7 @@ function v4(options, buf, offset) {
   return esm_browser_stringify(rnds);
 }
 
-/* harmony default export */ var esm_browser_v4 = (v4);
+/* harmony default export */ const esm_browser_v4 = (v4);
 ;// CONCATENATED MODULE: ./packages/annotations/build-module/store/actions.js
 /**
  * External dependencies
@@ -937,15 +925,14 @@ function v4(options, buf, offset) {
  * @return {Object} Action object.
  */
 
-function __experimentalAddAnnotation(_ref) {
-  let {
-    blockClientId,
-    richTextIdentifier = null,
-    range = null,
-    selector = 'range',
-    source = 'default',
-    id = esm_browser_v4()
-  } = _ref;
+function __experimentalAddAnnotation({
+  blockClientId,
+  richTextIdentifier = null,
+  range = null,
+  selector = 'range',
+  source = 'default',
+  id = esm_browser_v4()
+}) {
   const action = {
     type: 'ANNOTATION_ADD',
     id,

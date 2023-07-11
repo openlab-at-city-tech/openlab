@@ -1,30 +1,30 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ TokenList; }
+/* harmony export */   "default": () => (/* binding */ TokenList)
 /* harmony export */ });
 /**
  * A set of tokens.
@@ -37,8 +37,7 @@ class TokenList {
    *
    * @param {string} initialValue Initial value to assign.
    */
-  constructor() {
-    let initialValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  constructor(initialValue = '') {
     this.value = initialValue; // Disable reason: These are type hints on the class.
 
     /* eslint-disable no-unused-expressions */
@@ -56,32 +55,32 @@ class TokenList {
    */
 
 
-  entries() {
-    return this._valueAsArray.entries(...arguments);
+  entries(...args) {
+    return this._valueAsArray.entries(...args);
   }
   /**
    * @param {Parameters<Array<string>['forEach']>} args
    */
 
 
-  forEach() {
-    return this._valueAsArray.forEach(...arguments);
+  forEach(...args) {
+    return this._valueAsArray.forEach(...args);
   }
   /**
    * @param {Parameters<Array<string>['keys']>} args
    */
 
 
-  keys() {
-    return this._valueAsArray.keys(...arguments);
+  keys(...args) {
+    return this._valueAsArray.keys(...args);
   }
   /**
    * @param {Parameters<Array<string>['values']>} args
    */
 
 
-  values() {
-    return this._valueAsArray.values(...arguments);
+  values(...args) {
+    return this._valueAsArray.values(...args);
   }
   /**
    * Returns the associated set as string.
@@ -183,11 +182,7 @@ class TokenList {
    */
 
 
-  add() {
-    for (var _len = arguments.length, items = new Array(_len), _key = 0; _key < _len; _key++) {
-      items[_key] = arguments[_key];
-    }
-
+  add(...items) {
     this.value += ' ' + items.join(' ');
   }
   /**
@@ -199,11 +194,7 @@ class TokenList {
    */
 
 
-  remove() {
-    for (var _len2 = arguments.length, items = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      items[_key2] = arguments[_key2];
-    }
-
+  remove(...items) {
     this.value = this._valueAsArray.filter(val => !items.includes(val)).join(' ');
   }
   /**
