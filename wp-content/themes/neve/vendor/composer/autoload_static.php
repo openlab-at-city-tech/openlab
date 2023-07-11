@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46
+class ComposerStaticInit15cec379f502dacce8bc2db1b2340e89
 {
     public static $files = array (
         'c730ac5ba4946398dd12db7e8d42d1c8' => __DIR__ . '/..' . '/codeinwp/themeisle-sdk/load.php',
@@ -31,6 +31,7 @@ class ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46
         'HFG\\Core\\Builder\\Header' => __DIR__ . '/../..' . '/header-footer-grid/Core/Builder/Header.php',
         'HFG\\Core\\Components\\Abstract_Component' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Abstract_Component.php',
         'HFG\\Core\\Components\\Abstract_FooterWidget' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Abstract_FooterWidget.php',
+        'HFG\\Core\\Components\\Abstract_SearchComponent' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Abstract_SearchComponent.php',
         'HFG\\Core\\Components\\Button' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Button.php',
         'HFG\\Core\\Components\\CartIcon' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/CartIcon.php',
         'HFG\\Core\\Components\\CustomHtml' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/CustomHtml.php',
@@ -47,6 +48,7 @@ class ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46
         'HFG\\Core\\Components\\Search' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Search.php',
         'HFG\\Core\\Components\\SearchResponsive' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/SearchResponsive.php',
         'HFG\\Core\\Components\\SecondNav' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/SecondNav.php',
+        'HFG\\Core\\Components\\Utility\\SearchIconButton' => __DIR__ . '/../..' . '/header-footer-grid/Core/Components/Utility/SearchIconButton.php',
         'HFG\\Core\\Css_Generator' => __DIR__ . '/../..' . '/header-footer-grid/Core/Css_Generator.php',
         'HFG\\Core\\Customizer' => __DIR__ . '/../..' . '/header-footer-grid/Core/Customizer.php',
         'HFG\\Core\\Interfaces\\Builder' => __DIR__ . '/../..' . '/header-footer-grid/Core/Interfaces/Builder.php',
@@ -63,9 +65,9 @@ class ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7e1f952a8876aa969b65221c7fa41d46::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit15cec379f502dacce8bc2db1b2340e89::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit15cec379f502dacce8bc2db1b2340e89::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit15cec379f502dacce8bc2db1b2340e89::$classMap;
 
         }, null, ClassLoader::class);
     }

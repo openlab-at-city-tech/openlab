@@ -175,7 +175,7 @@ class CartIcon extends Abstract_Component {
 				'transport'             => 'postMessage',
 				'sanitize_callback'     => 'neve_sanitize_colors',
 				'label'                 => __( 'Color', 'neve' ),
-				'type'                  => 'neve_color_control',
+				'type'                  => '\Neve\Customizer\Controls\React\Color',
 				'section'               => $this->section,
 				'live_refresh_selector' => true,
 				'live_refresh_css_prop' => [
@@ -194,6 +194,7 @@ class CartIcon extends Abstract_Component {
 						'fallback' => 'inherit',
 					],
 				],
+				'conditional_header'    => true,
 			]
 		);
 
@@ -205,7 +206,7 @@ class CartIcon extends Abstract_Component {
 				'transport'             => 'postMessage',
 				'sanitize_callback'     => 'neve_sanitize_colors',
 				'label'                 => __( 'Hover Color', 'neve' ),
-				'type'                  => 'neve_color_control',
+				'type'                  => '\Neve\Customizer\Controls\React\Color',
 				'section'               => $this->section,
 				'live_refresh_selector' => true,
 				'live_refresh_css_prop' => [
@@ -224,79 +225,9 @@ class CartIcon extends Abstract_Component {
 						'fallback' => 'inherit',
 					],
 				],
+				'conditional_header'    => true,
 			]
 		);
-	}
-
-	/**
-	 * Add legacy style.
-	 *
-	 * @param array $css_array css array.
-	 *
-	 * @return array
-	 */
-	private function add_legacy_style( $css_array ) {
-		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $this->default_selector . ' span.nv-icon.nv-cart svg',
-			Dynamic_Selector::KEY_RULES    => [
-				\Neve\Core\Settings\Config::CSS_PROP_WIDTH => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::SIZE_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::SIZE_ID ),
-				],
-				\Neve\Core\Settings\Config::CSS_PROP_HEIGHT => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::SIZE_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::SIZE_ID ),
-				],
-				\Neve\Core\Settings\Config::CSS_PROP_FILL_COLOR => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::COLOR_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::COLOR_ID ),
-				],
-			],
-		];
-
-		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $this->default_selector . ' .cart-icon-label',
-			Dynamic_Selector::KEY_RULES    => [
-				\Neve\Core\Settings\Config::CSS_PROP_COLOR => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::COLOR_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::COLOR_ID ),
-				],
-			],
-		];
-
-		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $this->default_selector . ':hover span.nv-icon.nv-cart svg',
-			Dynamic_Selector::KEY_RULES    => [
-				\Neve\Core\Settings\Config::CSS_PROP_FILL_COLOR => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::HOVER_COLOR_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::HOVER_COLOR_ID ),
-				],
-			],
-		];
-
-		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $this->default_selector . ':hover .cart-icon-label',
-			Dynamic_Selector::KEY_RULES    => [
-				\Neve\Core\Settings\Config::CSS_PROP_COLOR => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::HOVER_COLOR_ID,
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::HOVER_COLOR_ID ),
-				],
-			],
-		];
-
-
-		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $this->default_selector . ' .cart-icon-label',
-			Dynamic_Selector::KEY_RULES    => [
-				\Neve\Core\Settings\Config::CSS_PROP_FONT_SIZE => [
-					Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::LABEL_SIZE_ID,
-					Dynamic_Selector::META_SUFFIX  => 'px',
-					Dynamic_Selector::META_DEFAULT => SettingsManager::get_instance()->get_default( $this->get_id() . '_' . self::LABEL_SIZE_ID ),
-				],
-			],
-		];
-
-		return parent::add_style( $css_array );
 	}
 
 	/**
@@ -309,9 +240,6 @@ class CartIcon extends Abstract_Component {
 	 * @access  public
 	 */
 	public function add_style( array $css_array = array() ) {
-		if ( ! neve_is_new_skin() ) {
-			return $this->add_legacy_style( $css_array );
-		}
 
 		$rules = [
 			'--iconsize'   => [

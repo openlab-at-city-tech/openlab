@@ -53,8 +53,6 @@ final class Manager {
 		 */
 		add_action( 'init', array( $this, 'neve_register_meta' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'meta_sidebar_script_enqueue' ) );
-
-		add_action( 'save_post', array( $this, 'set_page_width' ), 10, 2 );
 	}
 
 	/**
@@ -201,23 +199,21 @@ final class Manager {
 
 	/**
 	 * Enqueue scripts and styles.
-	 *
-	 * @return bool
 	 */
 	public function enqueue() {
 
 		if ( $this->is_gutenberg_active() ) {
-			return false;
+			return;
 		}
 
 		$screen = get_current_screen();
 
 		if ( ! is_object( $screen ) ) {
-			return false;
+			return;
 		}
 
 		if ( $screen->base !== 'post' ) {
-			return false;
+			return;
 		}
 
 		wp_register_script( 'neve-metabox', NEVE_ASSETS_URL . 'js/build/all/metabox.js', array( 'jquery' ), NEVE_VERSION, true );
@@ -225,8 +221,6 @@ final class Manager {
 		wp_localize_script( 'neve-metabox', 'neveMetabox', $this->get_localization() );
 
 		wp_enqueue_script( 'neve-metabox' );
-
-		return true;
 	}
 
 	/**
@@ -354,7 +348,7 @@ final class Manager {
 		$container    = $post_type === 'post' ? Mods::get( Config::MODS_SINGLE_POST_CONTAINER_STYLE, 'contained' ) : Mods::get( Config::MODS_DEFAULT_CONTAINER_STYLE, 'contained' );
 		$editor_width = Mods::get( Config::MODS_CONTAINER_WIDTH );
 
-		$advanced_layout = Mods::get( Config::MODS_ADVANCED_LAYOUT_OPTIONS, neve_is_new_skin() );
+		$advanced_layout = Mods::get( Config::MODS_ADVANCED_LAYOUT_OPTIONS, true );
 
 		$single_width  = $post_type === 'post' ?
 			Mods::get( Config::MODS_SINGLE_CONTENT_WIDTH, $this->sidebar_layout_width_default( Config::MODS_SINGLE_CONTENT_WIDTH ) ) :
@@ -367,6 +361,7 @@ final class Manager {
 
 		$post_elements_default_order = $this->get_post_elements_default_order();
 		$show_avatar                 = $this->get_author_avatar_state();
+		$reading_time                = $this->get_reading_time_state();
 
 		$post_type_details = get_post_type_object( $post_type );
 		$post_type_label   = esc_html( $post_type_details->labels->singular_name );
@@ -374,17 +369,18 @@ final class Manager {
 		$localized_data = apply_filters(
 			'neve_meta_sidebar_localize_filter',
 			array(
-				'actions'              => array(
+				'actions'                 => array(
 					'neve_meta_content_width' => array(
 						'container' => $container,
 						'editor'    => $editor_width,
 						'content'   => $content_width,
 					),
 				),
-				'elementsDefaultOrder' => $post_elements_default_order,
-				'avatarDefaultState'   => $show_avatar,
-				'postTypeLabel'        => $post_type_label,
-				'isCoverLayout'        => Layout_Single_Post::is_cover_layout(),
+				'elementsDefaultOrder'    => $post_elements_default_order,
+				'avatarDefaultState'      => $show_avatar,
+				'readingTimeDefaultState' => $reading_time,
+				'postTypeLabel'           => $post_type_label,
+				'isCoverLayout'           => Layout_Single_Post::is_cover_layout(),
 			)
 		);
 		wp_localize_script(
@@ -440,37 +436,29 @@ final class Manager {
 	}
 
 	/**
-	 * Set page width to 100% if it's a new page.
+	 * Get the value of Reading Time visibility from customizer.
 	 *
-	 * @param int      $post_id Post id.
-	 * @param \WP_Post $post Post object.
+	 * @return bool
 	 */
-	public function set_page_width( $post_id, $post ) {
-		if ( neve_is_new_skin() ) {
-			return;
+	private function get_reading_time_state() {
+		$meta_fields = get_theme_mod( 'neve_single_post_meta_fields', self::get_default_single_post_meta_fields() );
+
+		if ( is_string( $meta_fields ) ) {
+			$meta_fields = json_decode( $meta_fields, true );
 		}
 
-		$parent_id = wp_is_post_revision( $post_id );
-		if ( $parent_id ) {
-			$post_id = $parent_id;
+		if ( ! is_array( $meta_fields ) ) {
+			return false;
 		}
 
-		// Only set for post_type = page!
-		if ( 'page' !== $post->post_type ) {
-			return;
-		}
-
-		$checkout_was_updated = get_post_meta( $post_id, 'neve_checkout_updated', true );
-		// assign default value
-		$checkout_was_updated = ( $checkout_was_updated !== '' ) ? $checkout_was_updated : 'no';
-
-		if ( Main::is_new_page() || ( Main::is_checkout() && $checkout_was_updated === 'no' ) ) {
-			update_post_meta( $post_id, 'neve_meta_sidebar', 'full-width' );
-			update_post_meta( $post_id, 'neve_meta_enable_content_width', 'on' );
-			update_post_meta( $post_id, 'neve_meta_content_width', 100 );
-			if ( Main::is_checkout() ) {
-				update_post_meta( $post_id, 'neve_checkout_updated', 'yes' );
+		foreach ( $meta_fields as $args ) {
+			if ( ! array_key_exists( 'slug', $args ) || ! array_key_exists( 'visibility', $args ) || $args['slug'] !== 'reading' ) {
+				continue;
 			}
+
+			return $args['visibility'] === 'yes';
 		}
+
+		return false;
 	}
 }

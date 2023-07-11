@@ -34,6 +34,7 @@ class Core_Loader {
 	public function __construct() {
 		add_action( 'after_switch_theme', [ $this, 'check_new_user' ] );
 		add_action( 'themeisle_ob_after_xml_import', [ $this, 'update_content_import_flag' ] );
+
 		$this->define_hooks();
 		$this->define_modules();
 		$this->load_modules();
@@ -48,13 +49,11 @@ class Core_Loader {
 
 	/**
 	 * Checks that the user is new.
-	 *
-	 * @return bool
 	 */
 	public function check_new_user() {
 		$new = get_option( 'neve_new_user' );
 		if ( $new === 'yes' ) {
-			return true;
+			return;
 		}
 
 		$install_time = get_option( 'neve_install' );
@@ -65,72 +64,79 @@ class Core_Loader {
 			update_option( 'neve_user_check_time', $now );
 		}
 
-		if ( empty( $install_time ) || empty( $now ) ) {
-			return false;
+		if ( empty( $install_time ) ) {
+			return;
 		}
 
 		if ( ( $now - $install_time ) <= 60 ) {
 			update_option( 'neve_new_user', 'yes' );
-			return true;
+
+			return;
 		}
 
 		update_option( 'neve_new_user', 'no' );
-		return false;
 	}
 
 	/**
 	 * Define the features that will be loaded.
 	 */
 	private function define_modules() {
-		$this->features = apply_filters(
-			'neve_filter_main_modules',
-			array(
-				'Customizer\Loader',
-				'Views\Tweaks',
-				'Views\Font_Manager',
-				'Views\Top_Bar',
-				'Views\Header',
-				'Views\Template_Parts',
-				'Views\Page_Header',
-				'Views\Post_Layout',
-				'Views\Page_Layout',
-				'Views\Cover_Header',
-				'Views\Product_Layout',
-				'Views\Content_None',
-				'Views\Content_404',
-				'Views\Breadcrumbs',
 
-				'Views\Layouts\Layout_Container',
-				'Views\Layouts\Layout_Sidebar',
+		$features = array(
+			'Customizer\Loader',
+			'Views\Tweaks',
+			'Views\Font_Manager',
+			'Views\Top_Bar',
+			'Views\Header',
+			'Views\Template_Parts',
+			'Views\Page_Header',
+			'Views\Post_Layout',
+			'Views\Page_Layout',
+			'Views\Cover_Header',
+			'Views\Product_Layout',
+			'Views\Content_None',
+			'Views\Content_404',
+			'Views\Breadcrumbs',
 
-				'Views\Partials\Post_Meta',
-				'Views\Partials\Excerpt',
-				'Views\Partials\Comments',
+			'Views\Layouts\Layout_Container',
+			'Views\Layouts\Layout_Sidebar',
 
-				'Views\Pluggable\Pagination',
-				'Views\Pluggable\Masonry',
-				'Views\Pluggable\Metabox_Settings',
+			'Views\Partials\Post_Meta',
+			'Views\Partials\Excerpt',
+			'Views\Partials\Comments',
 
-				'Core\Dynamic_Css',
+			'Views\Pluggable\Pagination',
+			'Views\Pluggable\Masonry',
+			'Views\Pluggable\Metabox_Settings',
 
-				'Compatibility\Generic',
-				'Compatibility\WooCommerce',
-				'Compatibility\Elementor',
-				'Compatibility\Header_Footer_Elementor',
-				'Compatibility\Amp',
-				'Compatibility\Header_Footer_Beaver',
-				'Compatibility\Beaver',
-				'Compatibility\Lifter',
-				'Compatibility\Patterns',
-				'Compatibility\PWA',
-				'Compatibility\Web_Stories',
-				'Compatibility\Easy_Digital_Downloads',
+			'Core\Dynamic_Css',
 
-				'Admin\Metabox\Manager',
-				'Admin\Troubleshoot\Main',
-				'Admin\Dashboard\Main',
-			)
+			'Compatibility\Generic',
+			'Compatibility\WooCommerce',
+			'Compatibility\Elementor',
+			'Compatibility\Header_Footer_Elementor',
+			'Compatibility\Amp',
+			'Compatibility\Header_Footer_Beaver',
+			'Compatibility\Beaver',
+			'Compatibility\Lifter',
+			'Compatibility\Patterns',
+			'Compatibility\PWA',
+			'Compatibility\PPOM',
+			'Compatibility\Web_Stories',
+			'Compatibility\Easy_Digital_Downloads',
+			'Compatibility\WPML',
+
+			'Admin\Metabox\Manager',
+			'Admin\Troubleshoot\Main',
+			'Admin\Dashboard\Main',
+			'Admin\Hooks_Upsells',
 		);
+
+		if ( $this->is_fse_child_theme() ) {
+			$features[] = 'Compatibility\Fse';
+		}
+
+		$this->features = apply_filters( 'neve_filter_main_modules', $features );
 	}
 
 	/**
@@ -170,5 +176,32 @@ class Core_Loader {
 		add_action( 'wp_enqueue_scripts', array( $front_end, 'enqueue_scripts' ) );
 		add_action( 'after_setup_theme', array( $front_end, 'setup_theme' ) );
 		add_action( 'widgets_init', array( $front_end, 'register_sidebars' ) );
+	}
+
+	/**
+	 * Check if we're on a child theme, and it enables FSE.
+	 *
+	 * @return bool
+	 */
+	private function is_fse_child_theme() {
+		if ( ! is_child_theme() ) {
+			return false;
+		}
+
+		$theme_json = get_stylesheet_directory() . '/theme.json';
+
+		if ( ! file_exists( $theme_json ) ) {
+			return false;
+		}
+
+		if ( ! defined( 'NEVE_FSE_MODE' ) ) {
+			return false;
+		}
+
+		if ( NEVE_FSE_MODE !== true ) {
+			return false;
+		}
+
+		return true;
 	}
 }

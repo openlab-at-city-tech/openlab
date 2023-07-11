@@ -146,7 +146,7 @@ class Layout_Blog extends Base_Customizer {
 			)
 		);
 
-		$grid_layout_default = neve_is_new_skin() ? '{"desktop":3,"tablet":2,"mobile":1}' : '{"desktop":1,"tablet":1,"mobile":1}';
+		$grid_layout_default = '{"desktop":3,"tablet":2,"mobile":1}';
 
 		$this->add_control(
 			new Control(
@@ -191,14 +191,10 @@ class Layout_Blog extends Base_Customizer {
 					},
 					'live_refresh_selector' => true,
 					'live_refresh_css_prop' => [
-						'cssVar'   => [
+						'cssVar' => [
 							'vars'     => '--color',
-							'selector' => '.cover-post',
+							'selector' => '.neve-main',
 						],
-						'template' =>
-							'.cover-post .inner, .cover-post .inner a:not(.button), .cover-post .inner a:not(.button):hover, .cover-post .inner a:not(.button):focus, .cover-post .inner li {
-							color: {{value}};
-						}',
 					],
 				),
 				'Neve\Customizer\Controls\React\Color'
@@ -238,7 +234,12 @@ class Layout_Blog extends Base_Customizer {
 					'section'         => $this->section,
 					'label'           => esc_html__( 'Alternating layout', 'neve' ),
 					'active_callback' => function () {
-						return get_theme_mod( $this->section ) === 'default';
+						$is_list_layout = get_theme_mod( $this->section ) === 'default';
+						$has_image      = true;
+						if ( $is_list_layout && defined( 'NEVE_PRO_VERSION' ) ) {
+							$has_image = get_theme_mod( 'neve_blog_list_image_position', 'left' ) !== 'no';
+						}
+						return $is_list_layout && $has_image;
 					},
 				)
 			)

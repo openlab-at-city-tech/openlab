@@ -308,6 +308,18 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 					// Get the filename.
 					$filename  = basename( wp_parse_url( $url, PHP_URL_PATH ) );
 					$font_path = $folder_path . '/' . $filename;
+					/**
+					 * In Typekit, the filename will always be the same. We also need to check for query vars in their URLs.
+					 * They provide this font variation description that we can use https://github.com/typekit/fvd
+					 */
+					$queries = parse_url( $url, PHP_URL_QUERY );
+					if ( ! empty( $queries ) ) {
+						$query_args = array();
+						parse_str( $queries, $query_args );
+						if ( array_key_exists( 'fvd', $query_args ) ) {
+							$font_path .= $query_args['fvd'];
+						}
+					}
 
 					// Check if the file already exists.
 					if ( file_exists( $font_path ) ) {
@@ -431,6 +443,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 				// We're using array_flip here instead of array_unique for improved performance.
 				$result[ $font_family ] = array_flip( array_flip( $result[ $font_family ] ) );
 			}
+
 			return $result;
 		}
 

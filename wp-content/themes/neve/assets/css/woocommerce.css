@@ -532,7 +532,7 @@ a.added_to_cart:hover,
 }
 
 .woocommerce-Tabs-panel h2 {
-  font-size: var(--h4fontsize);
+  font-size: var(--h2fontsize);
 }
 
 .woocommerce #reviews {

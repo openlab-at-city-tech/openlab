@@ -16,6 +16,7 @@ use Neve\Customizer\Base_Customizer;
 use Neve\Customizer\Controls\React\Typography_Extra_Section;
 use Neve\Customizer\Types\Control;
 use Neve\Customizer\Types\Section;
+use Neve\Core\Traits\Theme_Mods;
 
 /**
  * Class Typography
@@ -23,11 +24,16 @@ use Neve\Customizer\Types\Section;
  * @package Neve\Customizer\Options
  */
 class Typography extends Base_Customizer {
+	use Theme_Mods;
+
+	const HEADINGS_FONT_FAMILY_SELECTORS = 'h1:not(.site-title), .single h1.entry-title, h2, h3, .woocommerce-checkout h3, h4, h5, h6';
+
 	/**
 	 * Add controls
 	 */
 	public function add_controls() {
 		$this->sections_typography();
+		$this->controls_font_pairs();
 		$this->controls_typography_general();
 		$this->controls_typography_headings();
 		$this->controls_typography_blog();
@@ -35,19 +41,67 @@ class Typography extends Base_Customizer {
 	}
 
 	/**
+	 * Add controls for font pair section
+	 *
+	 * @return void
+	 */
+	private function controls_font_pairs() {
+		/**
+		 * Filters the font pairs that are available inside Customizer.
+		 *
+		 * @param array $pairs The font pairs array.
+		 *
+		 * @since 3.5.0
+		 */
+		$pairs = apply_filters( 'neve_font_pairings', Mods::get( Config::MODS_TPOGRAPHY_FONT_PAIRS, Config::$typography_default_pairs ) );
+
+		/**
+		 * Font Pairs Control
+		 */
+		$this->add_control(
+			new Control(
+				Config::MODS_TPOGRAPHY_FONT_PAIRS,
+				[
+					'transport'         => $this->selective_refresh,
+					'sanitize_callback' => 'sanitize_text_field',
+					'default'           => $pairs,
+				],
+				array(
+					'input_attrs' => array(
+						'pairs'       => $pairs,
+						'description' => array(
+							'text' => __( 'Choose Font family presets for your Headings and Text.', 'neve' ),
+							'link' => apply_filters( 'neve_external_link', 'https://docs.themeisle.com/article/1340-neve-typography', esc_html__( 'Learn more', 'neve' ) ),
+						),
+					),
+					'label'       => esc_html__( 'Font presets', 'neve' ),
+					'section'     => 'typography_font_pair_section',
+					'priority'    => 10,
+					'type'        => 'neve_font_pairings_control',
+				),
+				'\Neve\Customizer\Controls\React\Font_Pairings'
+			)
+		);
+	}
+
+	/**
 	 * Add the customizer section.
 	 */
 	private function sections_typography() {
 		$typography_sections = array(
-			'neve_typography_general'  => array(
+			'typography_font_pair_section' => array(
+				'title'    => __( 'Font presets', 'neve' ),
+				'priority' => 15,
+			),
+			'neve_typography_general'      => array(
 				'title'    => __( 'General', 'neve' ),
 				'priority' => 25,
 			),
-			'neve_typography_headings' => array(
+			'neve_typography_headings'     => array(
 				'title'    => __( 'Headings', 'neve' ),
 				'priority' => 35,
 			),
-			'neve_typography_blog'     => array(
+			'neve_typography_blog'         => array(
 				'title'    => __( 'Blog', 'neve' ),
 				'priority' => 45,
 			),
@@ -130,7 +184,7 @@ class Typography extends Base_Customizer {
 					'priority'              => 11,
 					'section'               => 'neve_typography_general',
 					'input_attrs'           => array(
-						'size_units'             => [ 'px' ],
+						'size_units'             => [ 'px', 'em', 'rem' ],
 						'weight_default'         => 400,
 						'size_default'           => $defaults['fontSize'],
 						'line_height_default'    => $defaults['lineHeight'],
@@ -190,7 +244,7 @@ class Typography extends Base_Customizer {
 							'new_tab' => true,
 						],
 					],
-					'live_refresh_selector' => neve_is_new_skin(),
+					'live_refresh_selector' => true,
 					'live_refresh_css_prop' => [
 						'cssVar' => [
 							'vars'     => '--nv-fallback-ff',
@@ -222,11 +276,12 @@ class Typography extends Base_Customizer {
 					'section'               => 'neve_typography_headings',
 					'priority'              => 10,
 					'type'                  => 'neve_font_family_control',
-					'live_refresh_selector' => apply_filters( 'neve_headings_font_family_selectors', 'h1:not(.site-title), .single h1.entry-title, h2, h3, .woocommerce-checkout h3, h4, h5, h6' ),
+					'live_refresh_selector' => apply_filters( 'neve_headings_font_family_selectors', self::HEADINGS_FONT_FAMILY_SELECTORS ),
 					'live_refresh_css_prop' => [
 						'cssVar' => [
 							'vars'     => '--headingsfontfamily',
 							'selector' => 'body',
+							'fallback' => 'var(--bodyfontfamily, var(--nv-fallback-ff))',
 						],
 						'type'   => 'svg-icon-size',
 					],
@@ -254,10 +309,43 @@ class Typography extends Base_Customizer {
 						'priority'         => $priority += 1,
 						'class'            => esc_attr( 'advanced-sidebar-accordion-' . $heading_id ),
 						'accordion'        => true,
-						'controls_to_wrap' => 1,
+						'controls_to_wrap' => 2,
 						'expanded'         => false,
 					),
 					'Neve\Customizer\Controls\React\Heading'
+				)
+			);
+
+			$mod_key_font_family = $this->get_mod_key_heading_fontfamily( $heading_id );
+
+			/**
+			 * Headings font family
+			 */
+			$this->add_control(
+				new Control(
+					$mod_key_font_family,
+					array(
+						'transport'         => $this->selective_refresh,
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					array(
+						'section'               => 'neve_typography_headings',
+						'priority'              => $priority += 1,
+						'type'                  => 'neve_font_family_control',
+						'live_refresh_selector' => apply_filters( $mod_key_font_family . '_selectors', self::HEADINGS_FONT_FAMILY_SELECTORS ),
+						'live_refresh_css_prop' => [
+							'cssVar' => [
+								'vars'     => '--' . $heading_id . 'fontfamily',
+								'selector' => 'body',
+								'fallback' => 'var(--headingsfontfamily, var(--bodyfontfamily))',
+							],
+							'type'   => 'svg-icon-size',
+						],
+						'input_attrs'           => [
+							'default_is_inherit' => true,
+						],
+					),
+					'\Neve\Customizer\Controls\React\Font_Family'
 				)
 			);
 
@@ -271,17 +359,17 @@ class Typography extends Base_Customizer {
 						'default'   => $default_values,
 					],
 					[
-						'priority'              => $priority += 1,
+						'priority'              => $priority += 2,
 						'section'               => 'neve_typography_headings',
 						'input_attrs'           => array(
-							'size_units'             => [ 'em', 'px' ],
+							'size_units'             => [ 'em', 'px', 'rem' ],
 							'weight_default'         => $default_values['fontWeight'],
 							'size_default'           => $default_values['fontSize'],
 							'line_height_default'    => $default_values['lineHeight'],
 							'letter_spacing_default' => $default_values['letterSpacing'],
 						),
 						'type'                  => 'neve_typeface_control',
-						'font_family_control'   => 'neve_headings_font_family',
+						'font_family_control'   => $mod_key_font_family,
 						'live_refresh_selector' => $selectors[ $heading_id ],
 						'live_refresh_css_prop' => [
 							'cssVar' => [
@@ -394,7 +482,7 @@ class Typography extends Base_Customizer {
 						'section'               => 'neve_typography_blog',
 						'type'                  => 'neve_typeface_control',
 						'font_family_control'   => $control_settings['font_family_control'],
-						'live_refresh_selector' => neve_is_new_skin() ? true : $control_settings['live_refresh_selector'],
+						'live_refresh_selector' => true,
 						'live_refresh_css_prop' => [
 							'cssVar' => [
 								'vars'     => [
@@ -420,7 +508,7 @@ class Typography extends Base_Customizer {
 						'refresh_on_reset'      => true,
 						'input_attrs'           => array(
 							'default_is_empty'       => true,
-							'size_units'             => [ 'em', 'px' ],
+							'size_units'             => [ 'em', 'px', 'rem' ],
 							'weight_default'         => 'none',
 							'size_default'           => array(
 								'suffix'  => array(

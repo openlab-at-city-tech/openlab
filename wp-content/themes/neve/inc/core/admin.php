@@ -12,6 +12,7 @@ namespace Neve\Core;
 
 use Neve\Admin\Dashboard\Plugin_Helper;
 use Neve\Core\Settings\Mods_Migrator;
+use Neve\Core\Theme_Info;
 
 /**
  * Class Admin
@@ -19,6 +20,7 @@ use Neve\Core\Settings\Mods_Migrator;
  * @package Neve\Core
  */
 class Admin {
+	use Theme_Info;
 
 	/**
 	 * Dismiss notice key.
@@ -26,12 +28,6 @@ class Admin {
 	 * @var string
 	 */
 	private $dismiss_notice_key = 'neve_notice_dismissed';
-	/**
-	 * Current theme name
-	 *
-	 * @var string $theme_name Theme name.
-	 */
-	private $theme_name;
 
 	/**
 	 * Theme Details
@@ -65,19 +61,53 @@ class Admin {
 			add_action( 'wp_ajax_neve_dismiss_welcome_notice', [ $this, 'remove_notice' ] );
 		}
 
+		// load upsell dismiss only if neve pro is not active or license is invalid.
+		if ( ! $this->has_valid_addons() ) {
+			add_action(
+				'wp_ajax_neve_dismiss_customizer_upsell_notice',
+				[
+					'Neve\Customizer\Options\Upsells',
+					'remove_customizer_upsell_notice',
+				]
+			);
+		}
+
 		add_action( 'admin_menu', [ $this, 'remove_background_submenu' ], 110 );
 		add_action( 'after_switch_theme', [ $this, 'get_previous_theme' ] );
 
 		add_filter( 'all_plugins', array( $this, 'change_plugin_names' ) );
 
-		add_action( 'after_switch_theme', array( $this, 'migrate_options' ) );
+		$this->auto_update_skin_and_builder();
 
-		$this->run_skin_and_builder_switches();
+		add_action( 'after_switch_theme', array( $this, 'migrate_options' ) );
 
 		add_filter( 'ti_tpc_theme_mods_pre_import', [ $this, 'migrate_theme_mods_for_new_skin' ] );
 
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 		add_filter( 'neve_pro_react_controls_localization', [ $this, 'adapt_conditional_headers' ] );
+	}
+
+	/**
+	 * Automatic upgrade from legacy builder and skin on init.
+	 *
+	 * @return void
+	 */
+	private function auto_update_skin_and_builder() {
+		// If already on new skin bail.
+		if ( get_theme_mod( 'neve_new_skin' ) === 'new' || neve_was_auto_migrated_to_new() ) {
+			return;
+		}
+		set_theme_mod( 'neve_auto_migrated_to_new_skin', true );
+
+		$this->run_skin_and_builder_switches();
+
+		$migrator = new Builder_Migrator();
+		$response = $migrator->run();
+
+		if ( $response === true ) {
+			set_theme_mod( 'neve_migrated_builders', true );
+			set_theme_mod( 'neve_new_skin', 'new' );
+		}
 	}
 
 	/**
@@ -88,6 +118,7 @@ class Admin {
 	private function get_tpc_plugin_data() {
 		$plugin_helper = new Plugin_Helper();
 		$slug          = 'templates-patterns-collection';
+		$tpc_version   = $plugin_helper->get_plugin_version( $slug, false );
 
 		$tpc_plugin_data['nonce']      = wp_create_nonce( 'wp_rest' );
 		$tpc_plugin_data['slug']       = $slug;
@@ -95,8 +126,8 @@ class Admin {
 		$tpc_plugin_data['path']       = $plugin_helper->get_plugin_path( $slug );
 		$tpc_plugin_data['activate']   = $plugin_helper->get_plugin_action_link( $slug );
 		$tpc_plugin_data['deactivate'] = $plugin_helper->get_plugin_action_link( $slug, 'deactivate' );
-		$tpc_plugin_data['version']    = ! empty( $tpc_plugin_data['version'] ) ? $plugin_helper->get_plugin_version( $slug, $tpc_plugin_data['version'] ) : '';
-		$tpc_plugin_data['adminURL']   = admin_url( 'themes.php?page=tiob-starter-sites' );
+		$tpc_plugin_data['version']    = $tpc_version !== false ? $tpc_version : '';
+		$tpc_plugin_data['adminURL']   = admin_url( 'admin.php?page=tiob-starter-sites' );
 		$tpc_plugin_data['pluginsURL'] = esc_url( admin_url( 'plugins.php' ) );
 		$tpc_plugin_data['ajaxURL']    = esc_url( admin_url( 'admin-ajax.php' ) );
 		$tpc_plugin_data['ajaxNonce']  = esc_attr( wp_create_nonce( 'remove_notice_confirmation' ) );
@@ -117,7 +148,7 @@ class Admin {
 		if ( empty( $screen ) ) {
 			return;
 		}
-		if ( $screen->id !== 'dashboard' ) {
+		if ( ! in_array( $screen->id, [ 'dashboard', 'themes' ], true ) ) {
 			return;
 		}
 
@@ -256,6 +287,23 @@ class Admin {
 				},
 			)
 		);
+
+		register_rest_route(
+			'nv/v1/dashboard',
+			'/plugin-state/(?P<slug>[a-z0-9-]+)',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'get_plugin_state' ],
+				'permission_callback' => function() {
+					return ( current_user_can( 'install_plugins' ) && current_user_can( 'activate_plugins' ) );
+				},
+				'args'                => [
+					'slug' => [
+						'sanitize_callback' => 'sanitize_key',
+					],
+				],
+			]
+		);
 	}
 
 	/**
@@ -292,6 +340,25 @@ class Admin {
 		}
 
 		return new \WP_REST_Response( [ 'success' => $response ], 200 );
+	}
+
+	/**
+	 * Get any plugin's state.
+	 *
+	 * @param  \WP_REST_Request $request Request details.
+	 * @return \WP_REST_Request|\WP_Error
+	 */
+	public function get_plugin_state( \WP_REST_Request $request ) {
+		$slug = $request->get_param( 'slug' );
+
+		$state = ( new Plugin_Helper() )->get_plugin_state( $slug );
+
+		return rest_ensure_response(
+			[
+				'slug'  => $slug,
+				'state' => $state,
+			]
+		);
 	}
 
 	/**
@@ -463,7 +530,7 @@ class Admin {
 				$name
 			)
 		);
-		$ob_btn_link = admin_url( defined( 'TIOB_PATH' ) ? 'themes.php?page=tiob-starter-sites&onboarding=yes' : 'themes.php?page=' . $theme_page . '&onboarding=yes#starter-sites' );
+		$ob_btn_link = admin_url( defined( 'TIOB_PATH' ) ? 'admin.php?page=tiob-starter-sites&onboarding=yes' : 'admin.php?page=' . $theme_page . '&onboarding=yes#starter-sites' );
 		$ob_btn      = sprintf(
 		/* translators: 1 - onboarding url, 2 - button text */
 			'<a href="%1$s" class="button button-primary button-hero install-now" >%2$s</a>',
@@ -478,7 +545,7 @@ class Admin {
 		$options_page_btn = sprintf(
 		/* translators: 1 - options page url, 2 - button text */
 			'<a href="%1$s" class="options-page-btn">%2$s</a>',
-			esc_url( admin_url( 'themes.php?page=' . $theme_page ) ),
+			esc_url( admin_url( 'admin.php?page=' . $theme_page ) ),
 			esc_html__( 'or go to the theme settings', 'neve' )
 		);
 		$notice_picture    = sprintf(
@@ -644,7 +711,7 @@ class Admin {
 			true
 		);
 
-		$path = neve_is_new_skin() ? 'gutenberg-editor-style' : 'gutenberg-editor-legacy-style';
+		$path = 'gutenberg-editor-style';
 
 		wp_enqueue_style( 'neve-gutenberg-style', NEVE_ASSETS_URL . 'css/' . $path . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), NEVE_VERSION );
 	}
@@ -656,7 +723,7 @@ class Admin {
 		?>
 		<script type="text/javascript">
 			function handleNoticeActions($) {
-				var actions = $('.nv-welcome-notice').find('.notice-dismiss,  .ti-return-dashboard, .install-now, .options-page-btn')
+				var actions = $('.nv-welcome-notice').find('.notice-dismiss, .ti-return-dashboard, .options-page-btn')
 				$.each(actions, function (index, actionButton) {
 					$(actionButton).on('click', function (e) {
 						e.preventDefault()

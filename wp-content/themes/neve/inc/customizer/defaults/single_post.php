@@ -121,6 +121,8 @@ trait Single_Post {
 		 * Filters the list of available post types to use as context for custom post type meta settings.
 		 *
 		 * @param string[] $allowed_context An array of allowed post types for context. E.g. [ 'post', 'page' ].
+		 * @param int $priority The priority of the filter. Default 10.
+		 * @param int $accepted_args The number of arguments the filter accepts. Default 1.
 		 *
 		 * @since 3.1.0
 		 */
@@ -142,10 +144,6 @@ trait Single_Post {
 	 * @return boolean
 	 */
 	public function is_valid_context( $context ) {
-		if ( ! neve_is_new_skin() ) {
-			return false;
-		}
-
 		return is_singular( $context ) || is_single();
 	}
 
@@ -222,5 +220,25 @@ trait Single_Post {
 		}
 
 		return 'neve_' . $context . '_' . $meta;
+	}
+
+	/**
+	 * Returns default values for "neve_single_post_meta_fields" theme mod.
+	 *
+	 * @return string
+	 */
+	public static function get_default_single_post_meta_fields() {
+		/**
+		 * We replaced the old ordering control neve_post_meta_ordering with a repeater control named neve_single_post_meta_fields.
+		 * Because of that, we need to add some transformations:
+		 */
+
+		$default = wp_json_encode( [ 'author', 'date', 'comments' ] );
+
+		// Take the old control value and bring it to a form that can be used in a repeater.
+		$default_value = neve_get_default_meta_value( 'neve_post_meta_ordering', $default );
+
+		// We need to get the value of the meta on blogs.
+		return get_theme_mod( 'neve_blog_post_meta_fields', wp_json_encode( $default_value ) );
 	}
 }
