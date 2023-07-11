@@ -2,9 +2,10 @@
 Contributors: takayukister
 Donate link: https://contactform7.com/donate/
 Tags: captcha
-Requires at least: 5.5
-Tested up to: 5.7
-Stable tag: 2.1
+Requires at least: 6.1
+Tested up to: 6.2
+Stable tag: trunk
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,19 +92,13 @@ If you have any further questions, please submit them [to the support forum](htt
 
 == Changelog ==
 
+= 2.2 =
+
+* Bumps up the minimum required WordPress version to 6.1.
+* Bumps up the minimum required PHP version to 7.4.
+* Replaces `ReallySimpleCaptcha::normalize_path()` with `wp_normalize_path()`.
+* Updates Apache directives.
+
 = 2.1 =
 
 * Uses `hash_equals()` to compare strings.
-
-= 2.0.2 =
-
-* "Stable tag" refers to trunk.
-
-= 2.0.1 =
-
-* Does a file existence check before attempting to remove the file.
-
-= 2.0 =
-
-* Did some rewrite of the code following the coding standard.
-* Updated the license file; added a section for bundled font files.
