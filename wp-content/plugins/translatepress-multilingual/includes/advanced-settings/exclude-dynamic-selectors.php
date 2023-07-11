@@ -4,12 +4,13 @@ add_filter( 'trp_register_advanced_settings', 'trp_register_skip_dynamic_selecto
 function trp_register_skip_dynamic_selectors( $settings_array ){
 	$settings_array[] = array(
 		'name'          => 'skip_dynamic_selectors',
-		'type'          => 'list',
+		'type'          => 'list_input',
 		'columns'       => array(
 			'selector' => __('Selector', 'translatepress-multilingual' ),
 		),
 		'label'         => esc_html__( 'Exclude from dynamic translation', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'Do not dynamically translate strings that are found in html nodes matching these selectors.<br>Excludes all the children of HTML nodes matching these selectors from being translated using JavaScript.<br/>These strings will still be translated on the server side if possible.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
+        'id'            =>'exclude_strings',
 	);
 	return $settings_array;
 }

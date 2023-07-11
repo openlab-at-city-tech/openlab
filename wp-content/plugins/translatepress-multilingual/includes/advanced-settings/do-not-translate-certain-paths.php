@@ -9,6 +9,7 @@ function trp_register_do_not_translate_certain_paths( $settings_array ){
         'rows'        => array( 'option' => 'radio', 'paths' => 'textarea' ),
         'label'       => esc_html__( 'Do not translate certain paths', 'translatepress-multilingual' ),
         'description' => wp_kses(  __( 'Choose what paths can be translated. Supports wildcard at the end of the path.<br>For example, to exclude https://example.com/some/path you can either use the rule /some/path/ or /some/*.<br>Enter each rule on it\'s own line. To exclude the home page use {{home}}.', 'translatepress-multilingual' ), array( 'br' => array() )),
+        'id'            =>'exclude_strings',
     );
 
 	return $settings_array;
@@ -21,9 +22,10 @@ function trp_output_do_not_translate_certain_paths( $setting ){
     $trp_settings = ( new TRP_Settings() )->get_settings();
 
     ?>
-    <tr id="trp-adv-translate-certain-paths">
-        <th scope="row"><?php echo esc_html( $setting['label'] ); ?></th>
-        <td>
+        <div class='advanced_settings_class <?php echo esc_html($setting['id']);  ?>'>
+    <div id="trp-adv-translate-certain-paths" class="trp_advanced_flex_box">
+        <div class="trp_advanced_option_name" style="padding-bottom: 15px"><?php echo esc_html( $setting['label'] ); ?></div>
+        <div class='trp_advanced_settings_align'>
             <div class="trp-adv-holder">
                 <label>
                     <input type='radio' id='$setting_name' name="trp_advanced_settings[<?php echo esc_attr( $setting['name'] ); ?>][option]" value="exclude" <?php echo isset( $trp_settings['trp_advanced_settings'][$setting['name']]['option'] ) && $trp_settings['trp_advanced_settings'][$setting['name']]['option'] == 'exclude' ? 'checked' : ''; ?>>
@@ -39,9 +41,10 @@ function trp_output_do_not_translate_certain_paths( $setting ){
             <textarea class="trp-adv-big-textarea" name="trp_advanced_settings[<?php echo esc_attr( $setting['name'] ); ?>][paths]"><?php echo isset( $trp_settings['trp_advanced_settings'][$setting['name']]['paths'] ) ? esc_textarea( $trp_settings['trp_advanced_settings'][$setting['name']]['paths'] ) : ''; ?></textarea>
 
             <p class="description"><?php echo wp_kses_post( $setting['description'] ); ?></p>
-        </td>
-    </tr>
-
+        </div>
+    </div>
+</div>
+    </div>
 
     <?php
     return;

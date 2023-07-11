@@ -32,6 +32,7 @@ function trp_register_custom_language($settings_array){
 		'label'         => esc_html__( 'Custom language', 'translatepress-multilingual' ),
         /* phpcs:ignore */
         'description'   => $text,
+        'id'            => 'custom_language',
 
     );
 

@@ -84,8 +84,35 @@ class TRP_Gettext_Insert_Update extends TRP_Query {
 	 * @param $new_strings
 	 *
 	 * @return array|object|null
-	 */
-	public function gettext_original_strings_sync( $new_strings ) {
+     *
+     *      * How to call this function?
+     * You should create an array of arrays that have id, original, domain and possible context:
+     *
+     * $gettext_with_null_original_id_array[] = array(
+    'original' => $current_language_string['tt_original'],
+    'id' => $current_language_string['id'],
+    'domain' => $current_language_string['tt_domain'],
+    'context' => $current_language_string['tt_context'], //optional
+    );
+     *
+     * than:
+     *
+     * foreach ($gettext_with_null_original_id_array as $item) {
+    $original_ids_null_context_false[] = $item;
+    }
+     *
+     * if the context is null call the function like this:
+     * $original_ids_null = $gettext_insert_update->gettext_original_strings_sync($original_ids_null_context_false, false);
+     *
+     * else call it without the second argument (or with the second argument true):
+     *
+     * $original_ids_null = $gettext_insert_update->gettext_original_strings_sync($original_ids_null_context_false);
+     *
+     * or:
+     *
+     * $original_ids_null = $gettext_insert_update->gettext_original_strings_sync($original_ids_null_context_false, true);
+     */
+	public function gettext_original_strings_sync( $new_strings, $use_context = true ) {
 		if ( count( $new_strings ) === 0 ) {
 			return array();
 		}
@@ -106,12 +133,17 @@ class TRP_Gettext_Insert_Update extends TRP_Query {
 			foreach ( $new_strings as $key => $new_string ) {
 				foreach ( $existing_strings as $existing_string ) {
 					if ( $existing_string['original'] === $new_string['original'] &&
-					     $existing_string['domain'] === $new_string['domain'] &&
-					     $existing_string['context'] === $new_string['context']
-					) {
-						$new_strings_in_dictionary_with_original_id[ $key ] = $existing_string['id'];
-						break;
-					}
+                        $existing_string['domain'] === $new_string['domain']){
+                        if ($use_context) {
+                            if ($existing_string['context'] === $new_string['context']) {
+                                $new_strings_in_dictionary_with_original_id[$key] = $existing_string['id'];
+                                break;
+                            }
+                        }else {
+                            $new_strings_in_dictionary_with_original_id[$key] = $existing_string['id'];
+                            break;
+                        }
+                    }
 				}
 				if ( ! isset( $new_strings_in_dictionary_with_original_id[ $key ] ) ) {
 					$insert_strings[] = $new_string;
@@ -159,6 +191,19 @@ class TRP_Gettext_Insert_Update extends TRP_Query {
 	 * @param $columns_to_update array Only update specified columns
 	 *
 	 * @return void
+     *
+     *
+     * How to call this functions?
+     * The id and original need to be in the call as arguments, after them you can add any values you want to update:
+     * $gettext_insert_update->update_gettext_strings( array(
+         array(
+            'id'             => $gettext_with_null_original_id_array[$key]['id'], //id
+            'original'       => $gettext_with_null_original_id_array[$key]['original'], //original
+            'original_id'          => $value,  // any argument you want to update in the gettext table
+            )
+        ), $current_language,  //a var that contains the language of the gettext table you want to update
+     *  array('id', 'original', 'original_id') ); // an array where you write the values you passed as arguments, possible arguments:
+     * 'id','original','translated','domain','status','original_id','plural_form'
 	 */
 	public function update_gettext_strings( $updated_strings, $language_code, $columns_to_update = array('id','original','translated','domain','status','plural_form')) {
 		if ( count( $updated_strings ) == 0 ) {
@@ -171,6 +216,7 @@ class TRP_Gettext_Insert_Update extends TRP_Query {
 			'translated'  => '%s',
 			'domain'      => '%s',
 			'status'      => '%d',
+            'original_id' => '%d',
 			'plural_form' => '%d'
 		);
 		$columns_query_part        = '';

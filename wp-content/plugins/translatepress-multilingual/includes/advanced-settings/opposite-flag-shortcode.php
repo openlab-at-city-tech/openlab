@@ -7,6 +7,7 @@ function trp_show_opposite_flag_language_switcher_shortcode( $settings_array ){
         'type'          => 'checkbox',
         'label'         => esc_html__( 'Show opposite language in the language switcher', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Transforms the language switcher into a button showing the other available language, not the current one.<br> Only works when there are exactly two languages, the default one and a translation one.<br>This will affect the shortcode language switcher and floating language switcher as well.<br> To achieve this in menu language switcher go to Appearance->Menus->Language Switcher and select Opposite Language.', 'translatepress-multilingual' ), array( 'br' => array()) ),
+        'id'            => 'miscellaneous_options',
     );
     return $settings_array;
 }

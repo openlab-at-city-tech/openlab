@@ -240,6 +240,14 @@ class TRP_Upgrade {
                     'message_initial'   => '',
                     'message_processing'=> __('Cleaning original meta table for language %s...', 'translatepress-multilingual' )
                 ),
+                'replace_original_id_null' => array(
+                    'version'           => '0', // independent of tp version, available only on demand
+                    'option_name'       => 'trp_replace_original_id_null',
+                    'callback'          => array( $this,'trp_replace_original_id_null'),
+                    'batch_size'        => 100,
+                    'message_initial'   => '',
+                    'message_processing'=> __('Replacing original id NULL with value for language %s...', 'translatepress-multilingual' )
+                ),
                 'gettext_original_id_insert' => array(
                     'version'           => '2.3.8',
                     'option_name'       => 'trp_updated_database_gettext_original_id_insert',
@@ -653,6 +661,11 @@ class TRP_Upgrade {
             $redirect = true;
         }
 
+        if ( isset( $_GET['trp_replace_original_id_null'] ) ){
+            update_option('trp_replace_original_id_null', 'no');
+            $redirect = true;
+        }
+
         if ( $redirect ) {
             $url = add_query_arg( array( 'page' => 'trp_update_database' ), site_url( 'wp-admin/admin.php' ) );
             wp_safe_redirect( $url );
@@ -958,6 +971,74 @@ class TRP_Upgrade {
                 break;
             }
         }
+    }
+
+    /**
+    * There is a very unfortunate error where the original_id is NULL for some gettext strings
+    * We have to check is this is the case and create arrays that would help the editor to not get stuck and complete the original_id field.
+    * We do this by getting the id from the wp_trp_gettext_original_strings and updating the wp_trp_gettext_current_language table with the original ids.
+    */
+
+    public function trp_replace_original_id_null($language_code, $inferior_limit, $batch_size){
+        global $wpdb;
+        $db       = $wpdb;
+
+        $dictionary = array();
+        $gettext_with_null_original_id_array= array();
+        $original_id_get_ids_sync = array();
+        $insert_gettext_original_id = array();
+
+        if ( ! $this->trp_query ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            /* @var TRP_Query */
+            $this->trp_query = $trp->get_component( 'query' );
+        }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name( $language_code ) );
+
+        while ( $last_id > $inferior_limit ) {
+            $dictionary = $this->trp_query->get_all_gettext_strings($language_code, $inferior_limit, $batch_size);
+            $inferior_limit = $inferior_limit + $batch_size;
+
+
+            if (!empty($dictionary)) {
+                foreach ($dictionary as $current_language_string) {
+                    if ($current_language_string['tt_original_id'] == NULL || $current_language_string['tt_original_id'] == 0) {
+                        $gettext_with_null_original_id_array[] = array(
+                            'original' => $current_language_string['tt_original'],
+                            'id' => $current_language_string['id'],
+                            'domain' => $current_language_string['tt_domain'],
+                        );
+                    }
+                }
+
+                $gettext_insert_update = $this->trp_query->get_query_component('gettext_insert_update');
+
+                if (count($gettext_with_null_original_id_array) > 0) {
+                    foreach ($gettext_with_null_original_id_array as $item) {
+                        $original_id_get_ids_sync[] = $item;
+                    }
+                }
+                $original_ids_null = $gettext_insert_update->gettext_original_strings_sync($original_id_get_ids_sync, false);
+                if (count($original_ids_null) > 0) {
+                    foreach ($original_ids_null as $key => $value) {
+                        $insert_gettext_original_id[] = array(
+                            'id' => $gettext_with_null_original_id_array[$key]['id'],
+                            'original' => $gettext_with_null_original_id_array[$key]['original'],
+                            'original_id' => $value,
+                        );
+                    }
+                    $gettext_insert_update->update_gettext_strings($insert_gettext_original_id, $language_code, array('id', 'original', 'original_id'));
+                }
+            }
+
+
+            $original_id_get_ids_sync = array();
+            $gettext_with_null_original_id_array =array();
+
+        }
+
+        return true;
     }
 
 }

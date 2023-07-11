@@ -11,6 +11,7 @@ function trp_register_exclude_gettext_strings( $settings_array ){
 							),
 		'label'         => esc_html__( 'Exclude Gettext Strings', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'Exclude these strings from being translated as Gettext strings by TranslatePress. Leave the domain empty to take into account any Gettext string.<br/>Can still be translated through po/mo files.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
+        'id'            =>'exclude_strings',
 	);
 	return $settings_array;
 }

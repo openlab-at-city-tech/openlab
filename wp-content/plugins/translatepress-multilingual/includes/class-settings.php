@@ -479,7 +479,11 @@ class TRP_Settings{
             $all_language_codes = $this->trp_languages->get_all_language_codes();
             $iso_codes          = $this->trp_languages->get_iso_codes( $all_language_codes, false );
 
+            $tp_data = get_option('trp_db_stored_data', array() );
+            $languages_that_support_formality = isset( $tp_data['trp_mt_supported_languages']['deepl'] ) ? $tp_data['trp_mt_supported_languages']['deepl']['formality-supported-languages'] : '' ;
+
             wp_localize_script( 'trp-settings-script', 'trp_url_slugs_info', array( 'iso_codes'                         => $iso_codes,
+                                                                                                      'languages_that_support_formality'  => $languages_that_support_formality,
                                                                                                       'error_message_duplicate_slugs'     => __( 'Error! Duplicate URL slug values.', 'translatepress-multilingual' ),
                                                                                                       'error_message_formality'           => wp_kses( __( 'You cannot select two languages that have the same <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">iso code</a> but different formalities because doing so will lead to duplicate <a href="https://developers.google.com/search/docs/specialty/international/localized-versions" target="_blank">hreflang tags</a>.', 'translatepress-multilingual'), [ 'a' => [ 'href' => [], 'class' => [], 'rel' => [], 'target' => [] ] ] ),
                                                                                                       'error_message_duplicate_languages' => wp_kses( __( 'Duplicate language detected.<br>Each language can only be added once to ensure accurate translation management.<br> Please change the duplicate language entry and try again. ', 'translatepress-multilingual'), [ 'br' => [] ] )

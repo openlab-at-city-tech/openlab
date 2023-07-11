@@ -1846,6 +1846,31 @@ function trp_et_divi_maybe_change_frontend_locale( $locale ) {
 }
 add_filter( 'locale', 'trp_et_divi_maybe_change_frontend_locale' );
 
+/*
+ * Register old advanced settings if they are checked
+ */
+add_action('admin_init', 'trp_register_old_advanced_settings');
+
+function trp_register_old_advanced_settings( $bool )
+{
+
+    $option = get_option('trp_advanced_settings', true);
+    if (isset($option['fix_broken_html']) && $option['fix_broken_html'] === 'yes') {
+
+        add_filter('trp_register_advanced_settings', 'trp_register_fix_broken_html', 50);
+    }
+}
+
+add_filter('trp_ald_popup_options_array', 'trp_keep_no_popup_setting_for_redirect_directly', 10, 1);
+
+function trp_keep_no_popup_setting_for_redirect_directly($array_popup_options){
+    $option_ald = get_option('trp_ald_settings', true);
+    if (isset($option_ald['popup_option']) && $option_ald['popup_option'] !== 'no_popup' && version_compare(TRP_IN_ALD_PLUGIN_VERSION, '1.1', '>=') ) {
+        unset($array_popup_options['no_popup']);
+    }
+    return $array_popup_options;
+}
+
 /**
  * Prevent trp-sortable-languages.js script from running
  *
@@ -1859,3 +1884,19 @@ function trpc_prevent_sortable_script_from_loading( $trp_loader ){
         $trp_loader->remove_hook( 'admin_enqueue_scripts', 'enqueue_sortable_language_script' );
     }
 }
+
+add_filter('trp_advanced_tab_add_element', 'trp_compatibility_for_adl_127_version', 20);
+function trp_compatibility_for_adl_127_version( $settings ){
+    foreach ( $settings as $key => $setting ) {
+        if ( $setting['name'] === 'automatic_user_language_detection' && !isset( $setting['id'] ) ) {
+            $settings[$key]['id'] = 'ald_settings';
+        }
+    }
+    return $settings;
+}
+
+add_action( 'before_woocommerce_init', function() {
+    if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', TRP_PLUGIN_DIR . 'index.php', true );
+    }
+} );

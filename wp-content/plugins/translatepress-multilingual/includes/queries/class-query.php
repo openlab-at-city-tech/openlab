@@ -627,7 +627,8 @@ class TRP_Query{
 	 * @param array $update_strings                 Array of strings to update
 	 * @param string $language_code                 Language code
 	 * @param array $columns_to_update              Array with the name of columns to update id, original, translated, status, block_type, original_id
-	 */
+     */
+
 	public function update_strings( $update_strings, $language_code, $columns_to_update = array('id','original', 'translated', 'status', 'block_type', 'original_id') ) {
 		if ( count( $update_strings ) == 0 ) {
 			return;
@@ -889,8 +890,12 @@ class TRP_Query{
         return 'post_parent_id';
     }
 
-    public function get_all_gettext_strings(  $language_code ){
-        $dictionary = $this->db->get_results( "SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field( $this->get_gettext_table_name( $language_code ) ) . "` AS tt LEFT JOIN `" . sanitize_text_field( $this->get_table_name_for_gettext_original_strings() ) . "` AS ot ON tt.original_id = ot.id", ARRAY_A );
+    public function get_all_gettext_strings(  $language_code, $inferior_limit = null, $batch_size = null ){
+        if ($inferior_limit == null && $batch_size ==null) {
+            $dictionary = $this->db->get_results("SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field($this->get_gettext_table_name($language_code)) . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id", ARRAY_A);
+        }else{
+            $dictionary = $this->db->get_results("SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field($this->get_gettext_table_name($language_code)) . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id LIMIT " . $inferior_limit . ", " . ($inferior_limit + $batch_size), ARRAY_A);
+        }
         $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running get_all_gettext_strings()' ) );
         if ( is_array( $dictionary ) && count( $dictionary ) === 0 && !$this->table_exists($this->get_gettext_table_name( $language_code )) ){
             // if table is missing then last_error is empty

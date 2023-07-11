@@ -1,4 +1,23 @@
 /*
+    String editor container
+*/
+
+.trp-editor-action-hover-container{
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    top: -2px; /* value is the outline of .trp-highlight */
+    right:0;
+    width: 130px;
+    height: 50px;
+    padding-right: 8px;
+}
+
+trp-span{
+    position: relative;
+}
+
+/*
     String editor button
 */
 
@@ -7,8 +26,6 @@
     width: 50px !important;
     height: 50px !important;
     display: none;
-    position: absolute !important;
-    margin-left: -60px !important;
     cursor: pointer !important;
     pointer-events: auto;
     min-width: 30px !important;
@@ -32,6 +49,9 @@
     letter-spacing: normal !important;
 }
 
+.trp-icon:not(.trp-icon:last-child){
+    border-right: 0px !important;
+}
 .trp-icon:hover {
     background: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='25px' height='25px' fill='%23008ec2' %3E%3Cpath d='M20.1 5.1L16.9 2 6.2 12.7l-1.3 4.4 4.5-1.3L20.1 5.1zM4 20.8h8v-1.5H4v1.5z'/%3E%3C/svg%3E") no-repeat center;
     background-color: #FFFFFF;
@@ -107,7 +127,6 @@ translate-press{
     display: none;
     width: 50px !important;
     height: 50px !important;
-    margin-left: -109px !important;
     background-color: #FFFFFF!important;
     padding: 8px !important;
 }
@@ -131,7 +150,6 @@ translate-press{
     display: none;
     width: 50px !important;
     height: 50px !important;
-    margin-left: -109px !important;
     background-color: #FFFFFF;
     padding: 8px !important;
 }

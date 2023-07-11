@@ -10,6 +10,7 @@ function trp_register_exclude_words_from_auto_translate( $settings_array ){
         ),
         'label'         => esc_html__( 'Exclude strings from automatic translation', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Do not automatically translate these strings (ex. names, technical words...)<br>Paragraphs containing these strings will still be translated except for the specified part.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
+        'id'            =>'exclude_strings',
     );
     return $settings_array;
 }

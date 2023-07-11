@@ -177,6 +177,14 @@ input.trp-translation-published{
     border-top: 1px solid #d9d9d9;
 }
 
+.trp-translation-language-formality.trp-formality-disabled{
+    background: rgba(255,255,255,.5);
+    border-color: rgba(220,220,222,.75);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
+    color: rgba(44,51,56,.5);
+    pointer-events: none;
+}
+
 /* License Page */
 .trp-active-license{
     line-height: 29px;
@@ -189,6 +197,15 @@ input.trp-translation-published{
 }
 
 /* Advanced Settings Page */
+
+p.submit{
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+}
+
+#wpbody-content{
+    padding-bottom: 0px !important;
+}
 
 table.trp-adst-list-option{
     width: 1px;
@@ -203,10 +220,15 @@ table.trp-adst-list-option th{
     text-align: center;
 }
 .trp-adst-list-option textarea{
+    width: 250px !important;
+}
+
+.trp-adst-list-option input[type=text]{
     width: 250px;
 }
+
 .trp_narrow_input {
-    width: 135px;
+    width: 135px !important;
 }
 .trp-adst-remove-element{
     color: #a00;
@@ -221,8 +243,46 @@ table.trp-adst-list-option th{
 }
 
 #trp_advanced_tab_content_table{
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+
+    list-style: none;
+    margin:  4px 0 20px 0 !important;
+    padding-bottom: 20px;
+    font-size: 13px;
+    float: left;
+    color: #646970;
+}
+
+#trp_advanced_tab_content_table > li > a{
     margin-top: 40px;
-    font-size: 15px;
+    text-decoration: none;
+
+    color: #2271b1;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+#trp_advanced_tab_content_table > li > a:hover{
+
+    color: #949494;
+}
+
+#trp_advanced_tab_content_table > li > a:active, #trp_advanced_tab_content_table > li > a:focus{
+
+    box-shadow: none;
+    outline: 0;
+    border: none;
+}
+
+#trp_advanced_tab_content_table .active a{
+
+    border-bottom: 4px solid #2271b1;
+    padding-bottom: 19px;
+    font-weight: bold;
+    color: #000000;
+
 }
 
 .trp_display_on_hover{
@@ -234,7 +294,7 @@ table.trp-adst-list-option th{
     border-right-color: #0f0f0f;
 }
 
-.trp_lang_code{
+#trp-cuslang-table .trp_lang_code{
     border-right-style: solid;
     border-right-color: #0f0f0f;
 }
@@ -246,9 +306,75 @@ table.trp-adst-list-option th{
     justify-content: start;
 }
 
+#trp-input-array-setting-div{
+    padding-left: 30px !important;
+    padding-bottom: 15px !important;
+    display: inline-flex !important;
+}
+
+#trp-input-array-setting-div-language-name{
+    padding-bottom: 12px;
+    margin-top: 3px;
+    margin-right: 14px;
+    min-width: 65px;
+}
+
+#trp-form-table-div{
+    width:10rem;
+    margin-left:-2rem;
+    margin-top:-1rem;
+}
+
+#trp-add-to-input-setting-div{
+    display: flex;
+    flex-direction:row;
+    margin-right: 50px;
+    padding-bottom: 15px;
+}
+
+#trp-add-to-input-setting-div-entry{
+    display: flex;
+    flex-direction:row;
+    padding-right: 10px;
+    padding-bottom:15px;
+}
+
 .trp-add-ons-plugins-column{
     padding-right: 40px;
     width: 50%;
+}
+
+#trp-adst-list-option-div{
+    display: flex;
+    flex-direction:row;
+    margin-right: 50px;
+    padding-bottom: 15px;
+}
+
+#trp-adst-list-option-div-columns{
+    padding-right: 175px;
+    padding-bottom: 15px;
+}
+
+#trp-adst-list-option-div-list-entry{
+    display: flex;
+    flex-direction:row;
+    padding-right: 10px;
+    padding-bottom:15px
+}
+
+#trp-adst-remove-element-list-entry{
+    margin-left: 10px; margin-top: 7px;
+}
+
+#trp-add-list-entry-new-entry{
+    display: flex;
+    margin-bottom: 18px;
+}
+
+#trp-add-list-entry-new-entry-button{
+    margin-left: 10px;
+    margin-top: 0px;
 }
 
 a.trp-recommended-learn-more{
@@ -406,9 +532,10 @@ a.trp-recommended-learn-more{
     }
 }
 
-/**
+
+/******************
 Setting Menu Responsive
- */
+ ********************/
 
 @media only screen and (max-width: 783px) {
 
@@ -448,8 +575,181 @@ Setting Menu Responsive
         padding-left: 0;
         padding-right: 0;
     }
+
 }
 
+/***********************
+Advanced Setting Page
+************************/
+
+.trp_advanced_flex_box{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 40px;
+    align-content: space-around;
+    font-size: 14px;
+    font-weight: bold;
+    /*position:absolute;*/
+}
+
+.trp_advanced_option_name{
+    width: 15%;
+}
+
+.trp-add-list-entry{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+
+.trp_advanced_settings_align{
+
+    margin-left: 20px;
+    font-weight: normal;
+}
+
+#trp-cuslang-table thead th{
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#trp-cuslang-table tr td{
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#wpfooter {
+    position: static;
+}
+
+#trp-cuslang-table{
+    margin-left: 300px;
+    margin-top:-11px;
+}
+
+#trp-cuslang-table tr{
+
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+
+}
+.description_table{
+    margin-left: 300px;
+}
+
+
+.trp-add-list-entry tr{
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+@media only screen and (max-width: 783px) {
+    body{
+        min-width: 783px;
+        overflow-x: auto;
+
+    }
+
+    .trp_advanced_settings_align{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .trp_advanced_option_name{
+        min-width: 40%;
+    }
+
+    .trp_advanced_flex_box {
+        display: flex;
+        flex-direction: initial;
+    }
+
+    .trp-adst-radio label{
+        margin-bottom: 12px;
+    }
+
+    .trp-add-list-entry {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .trp-adv-holder {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .trp-adv-big-textarea {
+        width: 100%;
+    }
+
+    .trp-adst-list-option div {
+        display: flex;
+        flex-direction: inherit;
+    }
+
+    #trp-ald-detection-method {
+        max-width: 90%;
+    }
+
+    #trp-popup-textarea {
+        max-width: 90%;
+        max-height: 80px;
+    }
+
+    #trp-popup-textarea_button {
+        max-width: 90%;
+        max-height: 80px;
+    }
+
+    #trp-popup-textarea_close_button {
+        max-width: 90%;
+        max-height: 80px;
+    }
+
+    #trp-cuslang-table {
+        margin-left: 20px;
+        min-width: 783px;
+        overflow-x: scroll;
+    }
+
+
+    .description_table {
+        margin-left: 20px;
+    }
+
+    .trp-language-code {
+        text-align: left;
+    }
+
+    .trp-adv-holder {
+        display: inline-flex;
+        flex-direction: inherit;
+    }
+
+    #trp-adv-translate-certain-paths .trp-adv-holder label:not(:last-child){
+        margin-bottom: 12px;
+    }
+
+    .trp-adv-big-textarea {
+        max-width: 90%;
+    }
+
+    #trp_advanced_tab_content_table{
+        min-width: 835px;
+    }
+
+    .trp-input-setting-div{
+        display: flex;
+        flex-direction: initial;
+    }
+
+    .redirect_directly_option{
+        display: flex;
+        flex-direction: initial;
+    }
+}
 /* plugin optin */
 .trp-optin-page {
     display: flex;

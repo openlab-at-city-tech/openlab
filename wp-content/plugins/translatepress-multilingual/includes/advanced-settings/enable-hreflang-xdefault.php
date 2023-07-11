@@ -8,6 +8,7 @@ function trp_register_enable_hreflang_xdefault( $settings_array ){
         'label'         => esc_html__( 'Enable the hreflang x-default tag for language:', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Enables the hreflang="x-default" for an entire language. See documentation for more details.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
         'options'       => trp_get_lang_for_xdefault(),
+        'id'            => 'miscellaneous_options',
     );
     return $settings_array;
 }

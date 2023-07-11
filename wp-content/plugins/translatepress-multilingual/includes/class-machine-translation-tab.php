@@ -242,7 +242,7 @@ class TRP_Machine_Translation_Tab {
                     <ul class="trp-unsupported-languages">
                         <?php
                         foreach ( $this->settings['translation-languages'] as $language_code ) {
-                            if ( isset($languages_that_support_formality[$language_code]) && $languages_that_support_formality[$language_code] == "false") {
+                            if ( isset($languages_that_support_formality[$language_code]) && $languages_that_support_formality[$language_code] == "false" || !array_key_exists( $language_code, $languages_that_support_formality ) ) {
                                 echo '<li>' . esc_html( $language_names[$language_code] ) . '</li>';
                             }
                         }

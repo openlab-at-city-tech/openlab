@@ -257,7 +257,7 @@ add_action(
                                                 }
                                                 ?>
                                                         ],
-                                                onChange: ( value ) => { console.log('changed'); props.setAttributes( { display_setting: value } ); },
+                                                onChange: ( value ) => { props.setAttributes( { display_setting: value } ); },
                                             }
                                         )
                                     ]

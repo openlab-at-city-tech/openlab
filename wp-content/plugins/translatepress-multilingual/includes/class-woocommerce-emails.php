@@ -65,15 +65,15 @@ class TRP_Woocommerce_Emails{
 
             if (!empty($always_use_this_language) && $always_use_this_language == 'yes' && !empty($user_preferred_language) ){
                 update_user_meta( $user_id, 'trp_language', $user_preferred_language );
-                update_post_meta( $order_id, 'trp_language', $user_preferred_language );
+                trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $user_preferred_language, 'update' );
 
             }else {
                 update_user_meta( $user_id, 'trp_language', $TRP_LANGUAGE );
-                update_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE );
+                trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE, 'update' );
             }
         }
         else{
-            update_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE );
+            trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE, 'update' );
         }
     }
 
@@ -154,7 +154,7 @@ class TRP_Woocommerce_Emails{
                 if ( $user_id > 0 ) {
                     $language = get_user_meta( $user_id, 'trp_language', true );
                 } else {
-                    $language = get_post_meta( $TRP_EMAIL_ORDER, 'trp_language', true );
+                    $language = trp_woo_hpos_get_post_meta( $TRP_EMAIL_ORDER, 'trp_language', true );
                 }
             }
         }

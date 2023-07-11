@@ -8,6 +8,7 @@ function trp_register_enable_numerals_translation($settings_array)
         'type' => 'checkbox',
         'label' => esc_html__('Translate numbers and numerals', 'translatepress-multilingual'),
         'description' => esc_html__('Enable translation of numbers ( e.g. phone numbers)', 'translatepress-multilingual'),
+        'id'            => 'miscellaneous_options',
     );
     return $settings_array;
 }

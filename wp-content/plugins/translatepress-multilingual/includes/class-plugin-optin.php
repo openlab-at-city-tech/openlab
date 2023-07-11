@@ -133,56 +133,6 @@ class TRP_Plugin_Optin {
 
     }
 
-    public function process_plugin_activation(){
-
-        $optin = get_option( 'trp_plugin_optin', false );
-
-        if( $optin !== 'yes' )
-            return;
-
-        $optin_email = get_option( 'trp_plugin_optin_email', false );
-
-        if( $optin_email === false )
-            return;
-
-        // Call the API and set the current user to the Active group
-        $args = array(
-            'method' => 'POST',
-            'body'   => [
-                'email'    => $optin_email,
-                'interest' => 'Active',
-            ],
-        );
-
-        $request = wp_remote_post( self::$base_url . 'pluginOptinUpdateInterests/', $args );
-
-    }
-
-    public function process_plugin_deactivation(){
-
-        $optin = get_option( 'trp_plugin_optin', false );
-
-        if( $optin !== 'yes' )
-            return;
-
-        $optin_email = get_option( 'trp_plugin_optin_email', false );
-
-        if( $optin_email === false )
-            return;
-
-        // Call the API and set the current user to the Inactive group
-        $args = array(
-            'method' => 'POST',
-            'body'   => [
-                'email'    => $optin_email,
-                'interest' => 'Inactive',
-            ],
-        );
-
-        $request = wp_remote_post( self::$base_url . 'pluginOptinUpdateInterests/', $args );
-
-    }
-
     // Update tags when a paid version is activated
     public function process_paid_plugin_activation( $plugin ){
 
@@ -256,7 +206,8 @@ class TRP_Plugin_Optin {
             'type'          => 'checkbox',
             'label'         => esc_html__( 'Marketing optin', 'translatepress-multilingual' ),
             'description'   => esc_html__( 'Opt in to our security and feature updates notifications, and non-sensitive diagnostic tracking.', 'translatepress-multilingual' ),
-        );
+            'id'            => 'miscellaneous_options',
+            );
 
         return $settings_array;
 

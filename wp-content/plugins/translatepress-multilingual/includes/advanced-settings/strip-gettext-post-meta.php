@@ -7,6 +7,7 @@ function trp_register_strip_gettext_post_meta( $settings_array ){
 		'type'          => 'checkbox',
 		'label'         => esc_html__( 'Filter Gettext wrapping from post meta', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'Filters gettext wrapping such as #!trpst#trp-gettext from all updated post meta. Does not affect previous post meta. <br/><strong>Database backup is recommended before switching on.</strong>', 'translatepress-multilingual' ), array( 'br' => array(), 'strong' => array()) ),
+        'id'            =>'troubleshooting',
 	);
 	return $settings_array;
 }

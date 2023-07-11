@@ -817,3 +817,48 @@ function trp_restore_language(){
 function trp_get_user_language( $user_id ){
     return trp_validate_language( get_user_meta( $user_id, 'trp_language', true ) );
 }
+/**
+ * Wrapper function for WooCommerce HPOS add, delete and update operations
+ * Falls back to the traditional post_meta operations
+ *
+ * @param $order_id         int     Post ID
+ * @param $meta_key         string  Metadata key
+ * @param $meta_value       mixed   Metadata value
+ * @param $operation_type   string  Parameter used to determine the type of operation that needs to be performed.
+ *                                  Accepts: add / delete / update
+ */
+function trp_woo_hpos_manipulate_post_meta( $order_id, $meta_key, $meta_value, $operation_type ){
+
+    if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled() ) {
+        $order    = wc_get_order( $order_id );
+        $function = $operation_type . '_meta_data';
+
+        $order->$function( $meta_key, $meta_value );
+        $order->save();
+
+        return;
+    }
+
+    $function = $operation_type . '_post_meta';
+
+    $function( $order_id, $meta_key, $meta_value );
+}
+
+/**
+ * Wrapper function for WooCommerce HPOS get operation
+ * Falls back to the traditional post_meta operation
+ *
+ * @param  $order_id       int     Post ID
+ * @param  $meta_key       string  Metadata key
+ * @param  $single         bool    Whether to return a single value or not. Default: false
+ * @return                 mixed   An array of values if `$single` is false. The value of the meta field if `$single` is true. False for an invalid `$post_id` (non-numeric, zero, or negative value). An empty string if a valid but non-existing post ID is passed.
+ */
+function trp_woo_hpos_get_post_meta( $order_id, $meta_key, $single = false ){
+    if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled() ) {
+        $order = wc_get_order( $order_id );
+
+        return $order->get_meta( $meta_key, $single );
+    }
+
+    return get_post_meta( $order_id, $meta_key, $single );
+}
