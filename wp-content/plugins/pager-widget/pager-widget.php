@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/uhm-coe/pager-widget
  * Description: Widget that provides "Parent | Previous | Next" buttons to navigate between pages at the same hierarchy level (and up to the parent page). You can modify the settings to choose which words you want to use. To enable, first activate the plugin, then add the widget to a sidebar in the Widgets settings page.
  * Requires at least: 2.8
- * Version: 1.8.2
+ * Version: 1.8.3
  * Author: Paul Ryan
  * Author URI: http://www.linkedin.com/in/paulrryan/
  * License: GPL3
@@ -45,7 +45,7 @@ class PagerWidget extends WP_Widget {
 		$labelNext                   = esc_attr( $instance['labelNext'] );
 		$pageDepth                   = intval( $instance['pageDepth'] );
 		$isStoryMode                 = intval( $instance['isStoryMode'] );
-		$sortStoryModeAlphabetically = intval( $instance['sortStoryModeAlphabetically'] );
+		$sortStoryModeAlphabetically = isset( $instance['sortStoryModeAlphabetically'] ) ? intval( $instance['sortStoryModeAlphabetically'] ) : 0;
 
 		echo $before_widget;
 

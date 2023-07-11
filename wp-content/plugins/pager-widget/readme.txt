@@ -1,7 +1,7 @@
 === Pager Widget ===
 Contributors: figureone
 Tags: pager, navigation, next, back, previous, menu, widget
-Tested up to: 5.8.1
+Tested up to: 6.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,6 +29,10 @@ View or contribute to the plugin source on github: [https://github.com/uhm-coe/p
 1. The Pager Widget added to the page bottom widget area.
 
 == Changelog ==
+
+= 1.8.3 =
+* Fix log warnings about undefined sortStoryModeAlphabetically.
+* Tested up to WordPress 6.2.2.
 
 = 1.8.2 =
 * Don’t render widget on non-hierarchical post types.
