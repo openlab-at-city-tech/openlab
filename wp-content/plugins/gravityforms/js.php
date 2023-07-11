@@ -680,6 +680,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 				if (!field.choices)
 					field.choices = new Array(new Choice(<?php echo json_encode( esc_html__( 'First Choice', 'gravityforms' ) ); ?>), new Choice(<?php echo json_encode( esc_html__( 'Second Choice', 'gravityforms' ) ); ?>), new Choice(<?php echo json_encode( esc_html__( 'Third Choice', 'gravityforms' ) ); ?>));
 
+				field.validateState = true;
 				field.inputs = new Array();
 				for (var i = 1; i <= field.choices.length; i++) {
 					field.inputs.push(new Input(field.id + (i / 10), field.choices[i - 1].text));
@@ -703,6 +704,10 @@ if ( ! class_exists( 'GFForms' ) ) {
 			case "select" :
 				if (!field.label)
 					field.label = <?php echo json_encode( esc_html__( 'Untitled', 'gravityforms' ) ); ?>;
+
+				if (inputType === 'select') {
+					field.validateState = true;
+				}
 
 				field.inputs = null;
 				if (!field.choices) {
@@ -789,7 +794,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 				field.inputs = null;
 				if (!field.label)
 					field.label = <?php echo json_encode( esc_html__( 'Phone', 'gravityforms' ) ); ?>;
-				field.phoneFormat = "standard";
+				field.phoneFormat = "international"; 
 				field.autocompleteAttribute = "tel";
 				break;
 			case "date" :
@@ -1532,18 +1537,17 @@ if ( ! class_exists( 'GFForms' ) ) {
 			fieldSetting = 'label_setting';
 		}
 
-		var warningDiv = '<div class="gform-alert gform-alert--accessibility gform-alert--inline">';
+		var warningDiv = '<div class="gform-alert gform-alert--accessibility gform-alert--inline" data-field-setting="' + fieldSetting + '">';
 			warningDiv += '<span class="gform-alert__icon gform-icon gform-icon--accessibility" aria-hidden="true"></span>';
 			warningDiv += '<div class="gform-alert__message-wrap">' + message + '</div>';
 			warningDiv += '</div>';
 
-		var fieldSetting = jQuery( '.' + fieldSetting );
+		var fieldSettingContainer = jQuery( '.' + fieldSetting );
+		jQuery( '.gform-alert--accessibility[data-field-setting="' + fieldSetting + '"]' ).remove();
 		if ( position === 'above' ) {
-			fieldSetting.prevAll( '.accessibility_warning' ).remove();
-			fieldSetting.before( warningDiv );
+			fieldSettingContainer.before( warningDiv );
 		} else {
-			fieldSetting.nextAll( '.accessibility_warning' ).remove();
-			fieldSetting.after( warningDiv );
+			fieldSettingContainer.after( warningDiv );
 		}
 	}
 

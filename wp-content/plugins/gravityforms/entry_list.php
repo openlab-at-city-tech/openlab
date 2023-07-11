@@ -741,7 +741,8 @@ final class GF_Entry_List_Table extends WP_List_Table {
 			$sort_field_meta = GFAPI::get_field( $form_id, $sort_field );
 
 			if ( $sort_field_meta instanceof GF_Field ) {
-				$is_numeric = $sort_field_meta->get_input_type() == 'number';
+				$numeric_fields = array( 'number', 'total', 'calculation', 'price', 'quantity', 'shipping', 'singleshipping', 'product', 'singleproduct' );
+				$is_numeric = in_array( $sort_field_meta->get_input_type(), $numeric_fields );
 			} else {
 				$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 				$is_numeric = rgars( $entry_meta, $sort_field . '/is_numeric' );
@@ -945,13 +946,13 @@ final class GF_Entry_List_Table extends WP_List_Table {
 	 * @param $primary
 	 */
 	function _column_is_starred( $entry, $classes, $data, $primary ) {
-		echo '<th scope="row" class="manage-column column-is_starred">';
+		echo '<td class="manage-column column-is_starred">';
 		if ( $this->filter !== 'trash' ) {
 			?>
-			<img id="star_image_<?php echo esc_attr( $entry['id'] ) ?>" src="<?php echo GFCommon::get_base_url() ?>/images/star<?php echo intval( $entry['is_starred'] ) ?>.svg" onclick="ToggleStar(this, '<?php echo esc_js( $entry['id'] ); ?>','<?php echo esc_js( $this->filter ); ?>');" />
+			<img role="presentation" id="star_image_<?php echo esc_attr( $entry['id'] ) ?>" src="<?php echo GFCommon::get_base_url() ?>/images/star<?php echo intval( $entry['is_starred'] ) ?>.svg" onclick="ToggleStar(this, '<?php echo esc_js( $entry['id'] ); ?>','<?php echo esc_js( $this->filter ); ?>');" />
 			<?php
 		}
-		echo '</th>';
+		echo '</td>';
 	}
 
 	/**
@@ -1006,19 +1007,40 @@ final class GF_Entry_List_Table extends WP_List_Table {
 			default:
 				if ( $field !== null ) {
 					$value = $field->get_value_entry_list( $value, $entry, $field_id, $columns, $form );
-				} else {
+				} else if ( ! is_array( $value ) ) {
 					$value = esc_html( $value );
 				}
 		}
 
 		$value = apply_filters( 'gform_entries_field_value', $value, $form_id, $field_id, $entry );
 
+		if ( is_array( $value ) ) {
+			$value = esc_html( implode( ', ', $value ) );
+		}
+
 		$primary      = $this->get_primary_column_name();
 		$query_string = $this->get_detail_query_string( $entry );
 
 		if ( $column_id == $primary ) {
 			$edit_url = $this->get_detail_url( $entry );
-			echo '<a aria-label="' . esc_attr__( 'View this entry', 'gravityforms' ) . '" href="' . $edit_url .'">' . $value . '</a>';
+			$column_value = '<a aria-label="' . esc_attr__( 'View this entry', 'gravityforms' ) . '" href="' . $edit_url . '">' . $value . '</a>';
+
+			/**
+			 * Used to inject markup and replace the value of any primary/first column in the entry list grid.
+			 *
+			 * @param string     $column_value The column value to be filtered. Contains the field value wrapped in a link/a tag.
+			 * @param int        $form_id      The ID of the current form.
+			 * @param int|string $field_id     The ID of the field or the name of an entry column (i.e. date_created).
+			 * @param array      $entry        The Entry object.
+			 * @param string     $query_string The current page's query string.
+			 * @param string     $edit_url     The url to the entry edit page.
+			 * @param string     $value        The value of the field.
+			 */
+			$column_value = apply_filters( 'gform_entries_primary_column_filter', $column_value, $form_id, $field_id, $entry, $query_string, $edit_url, $value );
+
+			// Warning ignored becuase output is expected to be escaped higher up in the chain.
+			// phpcs:ignore
+			echo $column_value;
 		} else {
 
 			/**
@@ -1926,13 +1948,13 @@ final class GF_Entry_List_Table extends WP_List_Table {
 			function getSelectAllText() {
 				var count;
 				count = jQuery("#the-list tr.entry_row:visible:not('#gform-select-all-message')").length;
-				return gformStrings.allEntriesOnPageAreSelected.format(count) + " <a href='javascript:void(0)' onclick='selectAllEntriesOnAllPages();'>" + gformStrings.selectAll.format(gformVars.countAllEntries) + "</a>";
+				return gformStrings.allEntriesOnPageAreSelected.gformFormat(count) + " <a href='javascript:void(0)' onclick='selectAllEntriesOnAllPages();'>" + gformStrings.selectAll.gformFormat(gformVars.countAllEntries) + "</a>";
 			}
 
 			function getSelectAllTr() {
 				var t = getSelectAllText();
 				var colspan = jQuery("#the-list").find("tr:first td").length + 2;
-				return "<tr id='gform-select-all-message' class='no-items' style='display:none;background-color:lightyellow;text-align:center;'><td colspan='{0}'>{1}</td></tr>".format(colspan, t);
+				return "<tr id='gform-select-all-message' class='no-items' style='display:none;background-color:lightyellow;text-align:center;'><td colspan='{0}'>{1}</td></tr>".gformFormat(colspan, t);
 			}
 			function toggleSelectAll(visible) {
 				if (gformVars.countAllEntries <= gformVars.perPage) {
@@ -1959,7 +1981,7 @@ final class GF_Entry_List_Table extends WP_List_Table {
 
 			function selectAllEntriesOnAllPages() {
 				var trHtmlClearSelection;
-				trHtmlClearSelection = gformStrings.allEntriesSelected.format(gformVars.countAllEntries) + " <a href='javascript:void(0);' onclick='clearSelectAllEntries();'>" + gformStrings.clearSelection + "</a>";
+				trHtmlClearSelection = gformStrings.allEntriesSelected.gformFormat(gformVars.countAllEntries) + " <a href='javascript:void(0);' onclick='clearSelectAllEntries();'>" + gformStrings.clearSelection + "</a>";
 				jQuery("#all_entries").val("1");
 				jQuery("#gform-select-all-message td").html(trHtmlClearSelection);
 			}
@@ -1985,11 +2007,22 @@ final class GF_Entry_List_Table extends WP_List_Table {
 				});
 			}
 
-			String.prototype.format = function () {
+			if ( ! String.prototype.gformFormat ) {
+				String.prototype.gformFormat = function() {
+					var args = arguments;
+					return this.replace( /{(\d+)}/g, function( match, number ) {
+						return typeof args[ number ] != 'undefined' ? args[ number ] : match;
+					} );
+				};
+			}
+
+			// deprecated. remove in 2.8
+			String.prototype.format = function() {
 				var args = arguments;
-				return this.replace(/{(\d+)}/g, function (match, number) {
-					return typeof args[number] != 'undefined' ? args[number] : match;
-				});
+				console.warn( 'String.format will be replaced with String.gformFormat in Gravity Forms version 2.8.' );
+				return this.replace( /{(\d+)}/g, function( match, number ) {
+					return typeof args[ number ] != 'undefined' ? args[ number ] : match;
+				} );
 			};
 
 			// end Select All

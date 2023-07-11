@@ -6,6 +6,8 @@ if ( ! class_exists( 'GFForms' ) ) {
 use \Gravity_Forms\Gravity_Forms\Messages\Dismissable_Messages;
 use \Gravity_Forms\Gravity_Forms\Orders\Factories\GF_Order_Factory;
 use \Gravity_Forms\Gravity_Forms\Orders\Summaries\GF_Order_Summary;
+use \Gravity_Forms\Gravity_Forms\Setup_Wizard\GF_Setup_Wizard_Service_Provider;
+use \Gravity_Forms\Gravity_Forms\Setup_Wizard\Endpoints\GF_Setup_Wizard_Endpoint_Save_Prefs;
 
 
 /**
@@ -17,6 +19,15 @@ class GFCommon {
 
 	private static $plugins;
 	private static $license_info;
+
+	/**
+	 * An array of event start times set by GFCommon::timer_start().
+	 *
+	 * @since 2.7.1
+	 *
+	 * @var float[]
+	 */
+	private static $start_times = array();
 
 	// deprecated; set to GFForms::$version in GFForms::init() for backwards compat
 	public static $version = null;
@@ -68,6 +79,32 @@ class GFCommon {
 
 		}
 	}
+
+	/**
+	 * Determines if the current page is the block editor.
+	 *
+	 * @since 2.7
+	 *
+	 * @return bool Returns true if the current page is the block editor. Returns false otherwise.
+	 */
+	public static function is_block_editor_page() {
+		if ( function_exists( 'is_gutenberg_page' ) && is_gutenberg_page() ) {
+			return true;
+		}
+
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$current_screen = get_current_screen();
+
+		if ( is_callable( array( $current_screen, 'is_block_editor' ) ) && $current_screen->is_block_editor() ) {
+			return true;
+		}
+
+		return false;
+	}
+
 
 	/**
 	 * Removes the currency symbol from the supplied value.
@@ -1107,13 +1144,15 @@ class GFCommon {
 			return $text;
 		}
 
-		// Replacing conditional merge tag variables: [gravityforms action="conditional" merge_tag="{Other Services:4}" ....
-		preg_match_all( '/merge_tag\s*=\s*["|\']({[^{]*?:(\d+(\.\d+)?)(:(.*?))?})["|\']/mi', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$input_id = $match[2];
+		if ( false !== strpos( $text, 'merge_tag' ) ) {
+			// Replacing conditional merge tag variables: [gravityforms action="conditional" merge_tag="{Other Services:4}" ....
+			preg_match_all( '/merge_tag\s*=\s*["|\']({[^{]*?:(\d+(\.\d+)?)(:(.*?))?})["|\']/mi', $text, $matches, PREG_SET_ORDER );
+			if ( is_array( $matches ) ) {
+				foreach ( $matches as $match ) {
+					$input_id = $match[2];
 
-				$text = self::replace_field_variable( $text, $form, $lead, $url_encode, $esc_html, $nl2br, $format, $input_id, $match, true );
+					$text = self::replace_field_variable( $text, $form, $lead, $url_encode, $esc_html, $nl2br, $format, $input_id, $match, true );
+				}
 			}
 		}
 
@@ -1204,39 +1243,53 @@ class GFCommon {
 		// Entry ID.
 		$text = str_replace( '{entry_id}', $url_encode ? urlencode( rgar( $lead, 'id' ) ) : rgar( $lead, 'id' ), $text );
 
-		// Entry URL.
-		$entry_url = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=gf_entries&view=entry&id=' . rgar( $form, 'id' ) . '&lid=' . rgar( $lead, 'id' );
+		if ( false !== strpos( $text, '{entry_url}' ) ) {
+			// Entry URL.
+			$entry_url = get_bloginfo( 'wpurl' ) . '/wp-admin/admin.php?page=gf_entries&view=entry&id=' . rgar( $form, 'id' ) . '&lid=' . rgar( $lead, 'id' );
 
-		/**
-		 * Filter the entry URL
-		 *
-		 * Allows for the filtering of the entry_url placeholder to handle situation in which the wpurl might not agree with the admin_url.
-		 *
-		 * @since 2.2.3.14
-		 *
-		 * @param string $entry_url The Entry URL to filter.
-		 * @param array  $form      The current Form object.
-		 * @param array  $lead      The current Entry object.
-		 */
-		$entry_url      = esc_url( apply_filters( 'gform_entry_detail_url', $entry_url, $form, $lead ) );
-		$text           = str_replace( '{entry_url}', $url_encode ? urlencode( $entry_url ) : $entry_url, $text );
+			/**
+			 * Filter the entry URL
+			 *
+			 * Allows for the filtering of the entry_url placeholder to handle situation in which the wpurl might not agree with the admin_url.
+			 *
+			 * @since 2.2.3.14
+			 *
+			 * @param string $entry_url The Entry URL to filter.
+			 * @param array $form The current Form object.
+			 * @param array $lead The current Entry object.
+			 */
+			$entry_url = esc_url( apply_filters( 'gform_entry_detail_url', $entry_url, $form, $lead ) );
+			$text      = str_replace( '{entry_url}', $url_encode ? urlencode( $entry_url ) : $entry_url, $text );
+		}
 
 		// Post ID.
 		$text = str_replace( '{post_id}', $url_encode ? urlencode( rgar( $lead, 'post_id' ) ) : rgar( $lead, 'post_id' ), $text );
 
 		// Admin email.
-		$wp_email = get_bloginfo( 'admin_email' );
-		$text     = str_replace( '{admin_email}', $url_encode ? urlencode( $wp_email ) : $wp_email, $text );
+		if ( false !== strpos( $text, '{admin_email}' ) ) {
+			$wp_email = get_bloginfo( 'admin_email' );
+			$text     = str_replace( '{admin_email}', $url_encode ? urlencode( $wp_email ) : $wp_email, $text );
+		}
 
 		// Admin URL.
-		$text = str_replace( '{admin_url}', $url_encode ? urlencode( admin_url() ) : admin_url(), $text );
+		if ( false !== strpos( $text, '{admin_url}' ) ) {
+			static $admin_url;
+			$admin_url = isset( $admin_url ) ? $admin_url : admin_url();
+			$text = str_replace( '{admin_url}', $url_encode ? urlencode( $admin_url ) : $admin_url, $text );
+		}
 
 		// Logout URL.
-		$text = str_replace( '{logout_url}', $url_encode ? urlencode( wp_logout_url() ) : wp_logout_url(), $text );
+		if ( false !== strpos( $text, '{logout_url}' ) ) {
+			static $wp_logout_url;
+			$wp_logout_url = isset( $wp_logout_url ) ? $wp_logout_url : wp_logout_url();
+			$text = str_replace( '{logout_url}', $url_encode ? urlencode( $wp_logout_url ) : $wp_logout_url, $text );
+		}
 
 		// Post edit URL.
-		$post_url = get_bloginfo( 'wpurl' ) . '/wp-admin/post.php?action=edit&post=' . rgar( $lead, 'post_id' );
-		$text     = str_replace( '{post_edit_url}', $url_encode ? urlencode( $post_url ) : $post_url, $text );
+		if ( false !== strpos( $text, '{post_edit_url}' ) ) {
+			$post_url = get_bloginfo( 'wpurl' ) . '/wp-admin/post.php?action=edit&post=' . rgar( $lead, 'post_id' );
+			$text     = str_replace( '{post_edit_url}', $url_encode ? urlencode( $post_url ) : $post_url, $text );
+		}
 
 		$text = self::replace_variables_prepopulate( $text, $url_encode, $lead, $esc_html, $form, $nl2br, $format );
 
@@ -2055,6 +2108,7 @@ class GFCommon {
 			return;
 		}
 
+		GFCommon::timer_start( __METHOD__ );
 		GFCommon::log_debug( __METHOD__ . "(): Processing notifications for {$event} event for entry #{$entry_id}: " . print_r( $notification_ids, true ) . "\n(only active/applicable notifications are sent)" );
 
 		foreach ( $notification_ids as $notification_id ) {
@@ -2090,6 +2144,7 @@ class GFCommon {
 			self::send_notification( $notification, $form, $lead, $data );
 		}
 
+		GFCommon::log_debug( __METHOD__ . sprintf( '(): Sending notifications for entry (#%d) completed in %F seconds.', $entry_id, GFCommon::timer_end( __METHOD__ ) ) );
 	}
 
 	public static function send_form_submission_notifications( $form, $lead ) {
@@ -2794,7 +2849,9 @@ Content-Type: text/html;
 	 * @return string Returns the support URL.
 	 */
 	public static function get_support_url() {
-		return self::get_environment_setting( 'support_url' );
+		$env_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Environment_Config\GF_Environment_Config_Service_Provider::GF_ENVIRONMENT_CONFIG_HANDLER );
+
+		return $env_handler->get_support_url();
 	}
 
 	/**
@@ -2804,7 +2861,7 @@ Content-Type: text/html;
 	 *
 	 * @param string $name The env variable name (without the "gf_env_" prefix. i.e. support_url).
 	 *
-	 * @return string Returns the environmentment variable.
+	 * @return string Returns the environment variable.
 	 */
 	public static function get_environment_setting( $name ) {
 		$env_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Environment_Config\GF_Environment_Config_Service_Provider::GF_ENVIRONMENT_CONFIG_HANDLER );
@@ -3010,8 +3067,27 @@ Content-Type: text/html;
 			'emeta'   => $meta_counts['meta'],
 			'ed'      => $meta_counts['details'],
 			'en'      => $meta_counts['notes'],
-			'lang'    => $lang
+			'lang'    => $lang,
 		);
+
+		$installation_telemetry = array(
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_AUTO_UPDATE,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_CURRENCY,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_DATA_COLLECTION,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_EMAIL,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_FORM_TYPES,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_FORM_TYPES_OTHER,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_HIDE_LICENSE,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_ORGANIZATION,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_ORGANIZATION_OTHER,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_SERVICES,
+			GF_Setup_Wizard_Endpoint_Save_Prefs::PARAM_SERVICES_OTHER,
+		);
+
+		$wizard_endpoint = GFForms::get_service_container()->get( GF_Setup_Wizard_Service_Provider::SAVE_PREFS_ENDPOINT );
+		foreach ( $installation_telemetry as $telem ) {
+			$post[ $telem ] = $wizard_endpoint->get_value( $telem );
+		}
 
 		return $post;
 	}
@@ -3823,7 +3899,7 @@ Content-Type: text/html;
 
 	public static function is_preview() {
 		$url_info  = parse_url( RGFormsModel::get_current_page_url() );
-		$file_name = basename( $url_info['path'] );
+		$file_name = basename( rgar( $url_info, 'path' ) );
 
 		return $file_name == 'preview.php' || rgget( 'gf_page', $_GET ) == 'preview';
 	}
@@ -4376,15 +4452,19 @@ Content-Type: text/html;
 			}
 		}
 
+		self::timer_start( __METHOD__ );
 		$is_spam = false;
 
 		if ( self::akismet_enabled( $form_id ) ) {
 			$is_spam = self::is_akismet_spam( $form, $entry );
 			self::log_debug( __METHOD__ . '(): Result from Akismet: ' . json_encode( $is_spam ) );
+
+			self::set_spam_filter( $form_id, __( 'Akismet Spam Filter', 'gravityforms' ), '' );
 		}
 
-		if ( has_filter( 'gform_entry_is_spam' ) || has_filter( "gform_entry_is_spam_{$form_id}" ) ) {
-
+		$gform_entry_is_spam_args = array( 'gform_entry_is_spam', $form_id );
+		if ( gf_has_filter( $gform_entry_is_spam_args ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): Executing functions hooked to gform_entry_is_spam.' );
 			/**
 			 * Allows submissions to be flagged as spam by custom methods.
 			 *
@@ -4395,20 +4475,44 @@ Content-Type: text/html;
 			 * @param array $form    The form currently being processed.
 			 * @param array $entry   The entry currently being processed.
 			 */
-			$is_spam = gf_apply_filters( array( 'gform_entry_is_spam', $form_id ), $is_spam, $form, $entry );
+			$is_spam = gf_apply_filters( $gform_entry_is_spam_args, $is_spam, $form, $entry );
 			self::log_debug( __METHOD__ . '(): Result from gform_entry_is_spam filter: ' . json_encode( $is_spam ) );
-
 		}
-
-		$log_is_spam = $is_spam ? 'Yes' : 'No';
-		self::log_debug( __METHOD__ . "(): Is submission considered spam? {$log_is_spam}." );
 
 		if ( $use_cache ) {
 			GFFormDisplay::$submission[ $form_id ]['is_spam'] = $is_spam;
 		}
 
+		GFCommon::log_debug( __METHOD__ . sprintf( '(): Spam checks completed in %F seconds. Is submission considered spam? %s.', GFCommon::timer_end( __METHOD__ ), $is_spam ? 'Yes' : 'No' ) );
+
 		return $is_spam;
 	}
+
+	/**
+	 * Sets the name of the spam filter that flagged entry as spam during a form submission.
+	 *
+	 * @since 2.7
+	 *
+	 * @param int    $form_id Current form id.
+	 * @param string $filter Name of spam filter that marked entry as spam. (i.e. Akismet or Honeypot ).
+	 * @param string $reason The reason this entry was flagged as spam.
+	 */
+	public static function set_spam_filter( $form_id, $filter, $reason ) {
+
+		if ( ! class_exists( 'GFFormDisplay' ) ) {
+			return;
+		}
+
+		if ( ! isset( GFFormDisplay::$submission[ $form_id ] ) ) {
+			GFFormDisplay::$submission[ $form_id ] = array();
+		}
+
+		// Only save the first spam reason.
+		if ( ! isset( GFFormDisplay::$submission[ $form_id ]['spam_filter'] ) ) {
+			GFFormDisplay::$submission[ $form_id ]['spam_filter'] = array( 'filter' => $filter, 'reason' => $reason );
+		}
+	}
+
 
 	public static function spam_enabled( $form_id ) {
 		$spam_enabled = self::akismet_enabled( $form_id ) || has_filter( 'gform_entry_is_spam' ) || has_filter( "gform_entry_is_spam_{$form_id}" );
@@ -5216,6 +5320,7 @@ Content-Type: text/html;
 		$gf_global['base_url']           = GFCommon::get_base_url();
 		$gf_global['number_formats']     = array();
 		$gf_global['spinnerUrl']         = GFCommon::get_base_url() . '/images/spinner.svg';
+		$gf_global['version_hash']       = wp_hash( GFForms::$version );
 
 		$gf_global['strings'] = array(
 			'newRowAdded' => __( 'New row added.', 'gravityforms' ),
@@ -7088,17 +7193,30 @@ Content-Type: text/html;
 	 * Determines if a form has legacy markup enabled.
 	 *
 	 * @since 2.5
+	 * @since 2.7 Added caching.
 	 *
-	 * @param int|array $form_or_id  Form ID or form array.
+	 * @param int|array $form_or_id Form ID or form array.
 	 *
 	 * @return bool
 	 */
 	public static function is_legacy_markup_enabled( $form_or_id ) {
-
 		if ( is_numeric( $form_or_id ) ) {
-			$form = GFAPI::get_form( $form_or_id );
+			$form_id = absint( $form_or_id );
+			$form    = null;
 		} else {
-			$form = $form_or_id;
+			$form_id = absint( rgar( $form_or_id, 'id' ) );
+			$form    = $form_or_id;
+		}
+
+		$key        = __METHOD__ . $form_id;
+		$is_enabled = GFCache::get( $key, $found );
+
+		if ( $found ) {
+			return $is_enabled;
+		}
+
+		if ( is_null( $form ) ) {
+			$form = GFAPI::get_form( $form_id );
 		}
 
 		$markup_version = rgar( $form, 'markupVersion' );
@@ -7114,7 +7232,9 @@ Content-Type: text/html;
 		 * @param bool  $is_enabled Indicates if legacy markup is enabled for the current form. Default is false for forms created with Gravity Forms 2.5 and greater.
 		 * @param array $form       The form object.
 		 */
-		$is_enabled = gf_apply_filters( array( 'gform_enable_legacy_markup', rgar( $form, 'id' ) ), $is_enabled, $form );
+		$is_enabled = (bool) gf_apply_filters( array( 'gform_enable_legacy_markup', $form_id ), $is_enabled, $form );
+
+		GFCache::set( $key, $is_enabled );
 
 		return $is_enabled;
 	}
@@ -7241,27 +7361,48 @@ Content-Type: text/html;
 	 * @return string
 	 */
 	public static function get_db_version() {
-		global $wpdb;
+		static $version;
 
-		$ver = $wpdb->get_var( 'SELECT version();' );
+		if ( empty( $version ) ) {
+			$version = preg_replace( '/[^0-9.].*/', '', self::get_dbms_version() );
+		}
 
-		return preg_replace( '/[^0-9.].*/', '', $ver );
+		return $version;
 	}
 
 	/**
-	 * Return current database management system
+	 * Return current database management system.
 	 *
 	 * @since 2.5
 	 *
 	 * @return string either MySQL or MariaDB
 	 */
 	public static function get_dbms_type() {
-		global $wpdb;
+		static $type;
 
-		$ver = $wpdb->get_var( 'SELECT version();' );
+		if ( empty( $type ) ) {
+			$type = strpos( strtolower( self::get_dbms_version() ), 'mariadb' ) ? 'MariaDB' : 'MySQL';
+		}
 
-		return strpos( strtolower( $ver ), 'mariadb' ) ? 'MariaDB' : 'MySQL';
+		return $type;
+	}
 
+	/**
+	 * Returns the raw value from a SELECT version() db query.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @return string The version number or the version number and system type.
+	 */
+	public static function get_dbms_version() {
+		static $value;
+
+		if ( empty( $value ) ) {
+			global $wpdb;
+			$value = $wpdb->get_var( 'SELECT version();' );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -7335,6 +7476,207 @@ Content-Type: text/html;
 		return $default;
 	}
 
+	/**
+	 * Output an SVG as markup, referenced by the key (which is the filename, minus extension).
+	 *
+	 * @since 2.7
+	 *
+	 * @param $key
+	 *
+	 * @return string
+	 */
+	public static function output_svg( $key ) {
+		$svgs = GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Assets\GF_Asset_Service_Provider::SVG_OPTIONS );
+
+		if ( ! isset( $svgs[ $key ] ) ) {
+			return;
+		}
+
+		echo $svgs[ $key ];
+	}
+
+	/**
+	 * Darken a given color string by a specific amount.
+	 *
+	 * @since 2.7
+	 *
+	 * @param string $color         The color string to modify, as a hex code (either 3 or 6 digits).
+	 * @param float  $darken_amount The amount by which to modify the color, in steps.
+	 * @param string $format        The format in which to return the color (hex or rgb)
+	 *
+	 * @return mixed
+	 */
+	public static function darken_color( $color, $darken_amount, $format = 'hex' ) {
+		$color_modifier = GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Util\GF_Util_Service_Provider::GF_COLORS );
+
+		if ( $darken_amount > 0 ) {
+			$darken_amount *= -1;
+		}
+
+		return $color_modifier->modify( $color, $darken_amount, $format );
+	}
+
+	/**
+	 * Lighten a given color by a specific amount.
+	 *
+	 * @since 2.7
+	 *
+	 * @param string $color          The color string to modify, as a hex code (either 3 or 6 digits).
+	 * @param float  $lighten_amount The amount by which to modify the color, in steps.
+	 * @param string $format        The format in which to return the color (hex or rgb)
+	 *
+	 * @return mixed
+	 */
+	public static function lighten_color( $color, $lighten_amount, $format = 'hex' ) {
+		$color_modifier = GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Util\GF_Util_Service_Provider::GF_COLORS );
+
+		if ( $lighten_amount < 0 ) {
+			$lighten_amount *= -1;
+		}
+
+		return $color_modifier->modify( $color, $lighten_amount, $format );
+	}
+
+	/**
+	 * Detect if a color is dark against a passed threshold. Default is set at 465 in the range of 1 - 765.
+	 *
+	 * @since 2.7
+	 *
+	 * @param string $color     The color string to test, as a hex code (either 3 or 6 digits).
+	 * @param float  $threshold The threshold to return true at in a range of 1 - 765.
+	 *
+	 * @return bool
+	 */
+    public static function is_dark_color( $color = '', $threshold = 465 ) {
+	    $color_modifier = GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Util\GF_Util_Service_Provider::GF_COLORS );
+	    $hex_color      = $color_modifier->sanitize_color_string( $color );
+
+	    return hexdec( substr( $hex_color, 0, 2 ) ) + hexdec( substr( $hex_color, 2, 2 ) ) + hexdec( substr( $hex_color, 4, 2 ) ) < $threshold;
+    }
+
+	/**
+	 * Generate a color palette based on the block styles available for the Forms Block. Generally used in
+	 * various locations where CSS props are generated from the block styles.
+	 *
+	 * @since 2.7
+	 *
+	 * @param $block_settings
+	 *
+	 * @return array[]
+	 */
+	public static function generate_block_styles_palette( $block_settings ) {
+		$default_settings = \GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Form_Display\GF_Form_Display_Service_Provider::BLOCK_STYLES_DEFAULTS );
+		$applied_settings = wp_parse_args( $block_settings, $default_settings );
+
+		return array(
+			'primary'               => array(
+				'color'              => $applied_settings['buttonPrimaryBackgroundColor'],
+				'color-rgb'          => self::darken_color( $applied_settings['buttonPrimaryBackgroundColor'], 0, 'rgb' ),
+				'color-contrast'     => $applied_settings['buttonPrimaryColor'],
+				'color-contrast-rgb' => self::darken_color( $applied_settings['buttonPrimaryColor'], 0, 'rgb' ),
+				'color-darker'       => self::darken_color( $applied_settings['buttonPrimaryBackgroundColor'], 10 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['buttonPrimaryBackgroundColor'], 10 ),
+			),
+			'secondary'             => array(
+				'color'              => $applied_settings['inputBackgroundColor'],
+				'color-rgb'          => self::darken_color( $applied_settings['inputBackgroundColor'], 0, 'rgb' ),
+				'color-contrast'     => $applied_settings['inputColor'],
+				'color-contrast-rgb' => self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ),
+				'color-darker'       => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'outside-control-light' => array(
+				'color'         => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ) ) . ', 0.1)',
+				'color-rgb'     => self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ),
+				'color-darker'  => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputBorderColor'], 0, 'rgb' ) ) . ', 0.35)',
+				'color-lighter' => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'outside-control-dark'  => array(
+				'color'         => $applied_settings['descriptionColor'],
+				'color-rgb'     => self::darken_color( $applied_settings['descriptionColor'], 0, 'rgb' ),
+				'color-darker'  => $applied_settings['inputColor'],
+				'color-lighter' => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ) ) . ', 0.65)',
+			),
+			'inside-control'        => array(
+				'color'              => $applied_settings['inputBackgroundColor'],
+				'color-rgb'          => self::darken_color( $applied_settings['inputBackgroundColor'], 0, 'rgb' ),
+				'color-contrast'     => $applied_settings['inputColor'],
+				'color-contrast-rgb' => self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ),
+				'color-darker'       => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'inside-control-light'  => array(
+				'color'         => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ) ) . ', 0.1)',
+				'color-rgb'     => self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ),
+				'color-darker'  => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputBorderColor'], 0, 'rgb' ) ) . ', 0.35)',
+				'color-lighter' => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'inside-control-dark'   => array(
+				'color'         => $applied_settings['descriptionColor'],
+				'color-rgb'     => self::darken_color( $applied_settings['descriptionColor'], 0, 'rgb' ),
+				'color-darker'  => $applied_settings['inputColor'],
+				'color-lighter' => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ) ) . ', 0.65)',
+			),
+		);
+	}
+
+	/**
+	 * Stashes the start time of the specified event.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param string $event The event being timed.
+	 *
+	 * @return void
+	 */
+	public static function timer_start( $event ) {
+		self::$start_times[ $event ] = microtime( true );
+	}
+
+	/**
+	 * Returns the number of seconds that have elapsed since the start time was stashed for the specified event.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param string $event The event being timed.
+	 *
+	 * @return int|float
+	 */
+	public static function timer_end( $event ) {
+		if ( empty( self::$start_times[ $event ] ) ) {
+			return 0;
+		}
+
+		return ( microtime( true ) - self::$start_times[ $event ] );
+	}
+
+	/**
+	 * Maintains a semipersistent record of the 3 most recent events for the specified hook.
+	 *
+	 * @since 2.7.1
+	 *
+	 * @param string $hook The cron hook name.
+	 */
+	public static function record_cron_event( $hook ) {
+		if ( ! defined( 'DOING_CRON' ) || ! DOING_CRON ) {
+			return;
+		}
+
+		$events = GFCache::get( GFCache::KEY_CRON_EVENTS );
+		if ( ! is_array( $events ) ) {
+			$events = array();
+		}
+
+		if ( empty( $events[ $hook ] ) || ! is_array( $events[ $hook ] ) ) {
+			$events[ $hook ] = array( time() );
+		} else {
+			array_unshift( $events[ $hook ], time() );
+			array_splice( $events[ $hook ], 3 );
+		}
+
+		GFCache::set( GFCache::KEY_CRON_EVENTS, $events, true );
+	}
+
 }
 
 class GFCategoryWalker extends Walker {
@@ -7392,6 +7734,9 @@ class GFCategoryWalker extends Walker {
  *
  */
 class GFCache {
+
+	const KEY_CRON_EVENTS = 'cron_events_log';
+
 	private static $_transient_prefix = 'GFCache_';
 	private static $_cache = array();
 

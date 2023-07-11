@@ -43,13 +43,8 @@ class GF_Upgrade {
 	public function maybe_display_wizard() {
 
 		$result = false;
-		if ( $this->requires_install_wizard() ) {
 
-			require_once( GFCommon::get_base_path() . '/includes/wizard/class-gf-installation-wizard.php' );
-			$wizard = new GF_Installation_Wizard;
-			$result = $wizard->display();
-
-		} elseif ( $this->requires_upgrade_wizard() ) {
+		if ( $this->requires_upgrade_wizard() ) {
 
 			require_once( GFCommon::get_base_path() . '/includes/wizard/class-gf-upgrade-wizard.php' );
 			$wizard = new GF_Upgrade_Wizard;
@@ -70,7 +65,6 @@ class GF_Upgrade {
 		$versions = $this->get_versions();
 
 		if ( $this->requires_install() ) {
-			// First time install
 			$this->install();
 
 			// Show installation wizard for all new installations as long as the key wasn't already set e.g. by the CLI.
@@ -161,12 +155,31 @@ class GF_Upgrade {
 
 		$this->test_auto_increment();
 
+		$this->sync_auto_updates( $from_db_version );
+
 		// Start upgrade routine
 		if ( $force_upgrade || ! ( defined( 'GFORM_AUTO_DB_MIGRATION_DISABLED' ) && GFORM_AUTO_DB_MIGRATION_DISABLED ) ) {
 			$this->post_upgrade_schema( $from_db_version, $force_upgrade );
 		}
 
 		return true;
+	}
+
+	/**
+	 * Updates the WP auto_update_plugins option to match the background updates setting.
+	 *
+	 * @since 2.7.2
+	 *
+	 * @param string $previous_version The previous version.
+	 *
+	 * @return void
+	 */
+	public function sync_auto_updates( $previous_version ) {
+		if ( ! version_compare( $previous_version, '2.7.1.1', '<' ) ) {
+			return;
+		}
+
+		GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Updates\GF_Auto_Updates_Service_Provider::GF_AUTO_UPDATES_HANDLER )->activation_sync();
 	}
 
 	/**
