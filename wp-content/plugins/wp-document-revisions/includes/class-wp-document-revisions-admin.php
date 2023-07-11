@@ -116,7 +116,7 @@ class WP_Document_Revisions_Admin {
 		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_from_media_grid' ) );
 
 		// cleanup.
-		add_action( 'delete_post', array( &$this, 'delete_attachments_with_document' ), 10, 1 );
+		add_action( 'delete_post', array( &$this, 'delete_attachments_with_document' ) );
 
 		// edit flow or publishpress support.
 		add_action( 'init', array( &$this, 'disable_workflow_states' ), 1901 );  // After main class called.
@@ -181,7 +181,7 @@ class WP_Document_Revisions_Admin {
 			// translators: %s is the download link.
 			8  => sprintf( __( 'Document submitted. <a target="_blank" href="%s">Download document</a>', 'wp-document-revisions' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_id ) ) ) ),
 			// translators: %1$s is the date, %2$s is the preview link.
-			9  => sprintf( __( 'Document scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview document</a>', 'wp-document-revisions' ), date_i18n( sprintf( _x( '%1$s @ %2$s', '%1$s: date; %2$s: time', 'wp-document-revision' ), get_option( 'date_format' ), get_option( 'time_format' ) ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_id ) ) ),
+			9  => sprintf( __( 'Document scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview document</a>', 'wp-document-revisions' ), date_i18n( sprintf( _x( '%1$s @ %2$s', '%1$s: date; %2$s: time', 'wp-document-revisions' ), get_option( 'date_format' ), get_option( 'time_format' ) ), strtotime( $post->post_date ) ), esc_url( get_permalink( $post_id ) ) ),
 			// translators: %s is the link to download the document.
 			10 => sprintf( __( 'Document draft updated. <a target="_blank" href="%s">Download document</a>', 'wp-document-revisions' ), esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_id ) ) ) ),
 		);
@@ -258,7 +258,7 @@ class WP_Document_Revisions_Admin {
 		);
 
 		// if we don't have any help text for this screen, just kick.
-		if ( ! isset( $help[ $screen->id ] ) ) {
+		if ( ! $screen instanceof WP_Screen || ! isset( $help[ $screen->id ] ) ) {
 			return array();
 		}
 
@@ -288,7 +288,7 @@ class WP_Document_Revisions_Admin {
 		add_meta_box( 'revision-summary', __( 'Revision Summary', 'wp-document-revisions' ), array( &$this, 'revision_summary_cb' ), 'document', 'normal', 'default' );
 		add_meta_box( 'document', __( 'Document', 'wp-document-revisions' ), array( &$this, 'document_metabox' ), 'document', 'normal', 'high' );
 
-		if ( '' !== $post->post_content ) {
+		if ( ! empty( $post->post_content ) ) {
 			add_meta_box( 'revision-log', __( 'Revision Log', 'wp-document-revisions' ), array( &$this, 'revision_metabox' ), 'document', 'normal', 'low' );
 		}
 
@@ -538,7 +538,7 @@ class WP_Document_Revisions_Admin {
 			$mod_date = $latest_version->post_modified;
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 			// translators: %1$s is the post modified date in words, %2$s is the post modified date in time format, %3$s is how long ago the post was modified, %4$s is the author's name.
-			printf( __( 'Checked in <abbr class="timestamp" title="%1$s" id="%2$s">%3$s</abbr> ago by %4$s', 'wp-document-revisions' ), $mod_date, strtotime( $mod_date ), human_time_diff( (int) get_post_modified_time( 'U', true, $post->ID ), time() ), get_the_author_meta( 'display_name', $latest_version->post_author ) );
+			printf( __( 'Checked in <abbr class="timestamp" title="%1$s" id="A%2$s">%3$s</abbr> ago by %4$s', 'wp-document-revisions' ), $mod_date, strtotime( $mod_date ), human_time_diff( (int) get_post_modified_time( 'U', true, $post->ID ), time() ), get_the_author_meta( 'display_name', $latest_version->post_author ) );
 			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 			</em>
@@ -575,6 +575,7 @@ class WP_Document_Revisions_Admin {
 		$key          = $this->get_feed_key();
 		?>
 		<table id="document-revisions">
+			<thead>
 			<tr class="header">
 				<th><?php esc_html_e( 'Modified', 'wp-document-revisions' ); ?></th>
 				<th><?php esc_html_e( 'User', 'wp-document-revisions' ); ?></th>
@@ -585,6 +586,8 @@ class WP_Document_Revisions_Admin {
 					<th><?php esc_html_e( 'Actions', 'wp-document-revisions' ); ?></th>
 				<?php } ?>
 			</tr>
+			</thead>
+			<tbody>
 		<?php
 
 		$i = 0;
@@ -610,7 +613,7 @@ class WP_Document_Revisions_Admin {
 			}
 			?>
 			<tr>
-				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_modified ); ?>" class="timestamp" id="<?php echo esc_attr( strtotime( $revision->post_modified ) ); ?>"><?php echo esc_html( human_time_diff( strtotime( $revision->post_modified_gmt ), time() ) ); ?></a></td>
+				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_modified ); ?>" class="timestamp"><?php echo esc_html( human_time_diff( strtotime( $revision->post_modified_gmt ), time() ) ); ?></a></td>
 				<td><?php echo esc_html( get_the_author_meta( 'display_name', $revision->post_author ) ); ?></td>
 				<td><?php echo esc_html( $revision->post_excerpt ); ?></td>
 				<?php if ( $can_edit_doc && $post->ID !== $revision->ID && $i > 2 ) { ?>
@@ -635,6 +638,7 @@ class WP_Document_Revisions_Admin {
 			<?php
 		}
 		?>
+		</tbody>
 		</table>
 		<p style="padding-top: 10px;"><a href="<?php echo esc_url( add_query_arg( 'key', $key, get_post_comments_feed_link( $post->ID ) ) ); ?>"><?php esc_html_e( 'RSS Feed', 'wp-document-revisions' ); ?></a></p>
 		<?php
@@ -688,6 +692,21 @@ class WP_Document_Revisions_Admin {
 		register_setting( 'media', 'document_slug', array( &$this, 'sanitize_document_slug' ) );
 		add_settings_field( 'document_upload_directory', __( 'Document Upload Directory', 'wp-document-revisions' ), array( &$this, 'upload_location_cb' ), 'media', 'uploads' );
 		add_settings_field( 'document_slug', __( 'Document Slug', 'wp-document-revisions' ), array( &$this, 'document_slug_cb' ), 'media', 'uploads' );
+		register_setting(
+			'media',
+			'document_link_date',
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( &$this, 'sanitize_link_date' ),
+			)
+		);
+		add_settings_field(
+			'document_link_date',
+			__( 'Document Date in Permalink', 'wp-document-revisions' ),
+			array( &$this, 'link_date_cb' ),
+			'media',
+			'uploads'
+		);
 	}
 
 
@@ -717,15 +736,24 @@ class WP_Document_Revisions_Admin {
 
 		// don't fire more than once.
 		if ( ! get_settings_errors( 'document_upload_directory' ) ) {
+			if ( ! is_multisite() ) {
+				// does directory exist.
+				if ( ! is_dir( $dir ) ) {
+					add_settings_error( 'document_upload_directory', 'document-upload-dir-exists', __( 'Document directory does not appear to exist. Please review value.', 'wp-document-revisions' ), 'updated' );
+				} elseif ( ! is_writable( $dir ) ) {
+					add_settings_error( 'document_upload_directory', 'document-upload-dir-write', __( 'Document directory is not writable. Please check permissions.', 'wp-document-revisions' ), 'updated' );
+				}
+			}
 			// dir changed, throw warning.
 			add_settings_error( 'document_upload_directory', 'document-upload-dir-change', __( 'Document upload directory changed, but existing uploads may need to be moved to the new folder to ensure they remain accessible.', 'wp-document-revisions' ), 'updated' );
 		}
 
-		// clear cache so that it can be repopulated with new value.
-		$this->clear_document_dir_cache();
+		// update plugin cache with new value.
+		global $wpdr;
+		$wpdr::$wpdr_document_dir = trailingslashit( trim( $dir ) );
 
 		// trim and return.
-		return rtrim( $dir, '/' );
+		return $wpdr::$wpdr_document_dir;
 	}
 
 
@@ -750,6 +778,19 @@ class WP_Document_Revisions_Admin {
 		add_settings_error( 'document_slug', 'document-slug-change', __( 'Document slug changed, but some previously published URLs may now be broken.', 'wp-document-revisions' ), 'updated' );
 
 		return $slug;
+	}
+
+
+	/**
+	 * Sanitize link_date option prior to saving.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @param string $link_date value to represent whether to add the year/month into the permalink.
+	 * @return string sanitized value
+	 */
+	public function sanitize_link_date( $link_date ) {
+		return (bool) $link_date;
 	}
 
 
@@ -782,6 +823,24 @@ class WP_Document_Revisions_Admin {
 
 
 	/**
+	 * Adds link_date option to permalink page.
+	 *
+	 * @since 3.5.0
+	 */
+	public function link_date_cb() {
+		?>
+		<label for="document_link_date">
+		<input name="document_link_date" type="checkbox" id="document_link_date" value="1" <?php checked( '1', get_option( 'document_link_date' ) ); ?> />
+		<?php esc_html_e( 'Remove the year and month element /yyyy/mm from the document permalink.', 'wp-document-revisions' ); ?></label><br />
+		<span class="description">
+		<?php esc_html_e( 'By default the document permalink will contain the post year and month.', 'wp-document-revisions' ); ?><br />
+		<?php esc_html_e( 'The delivered rewrite rules support both formats.', 'wp-document-revisions' ); ?>
+		</span>
+		<?php
+	}
+
+
+	/**
 	 * Callback to validate and save the network upload directory.
 	 *
 	 * @since 1.0
@@ -808,7 +867,9 @@ class WP_Document_Revisions_Admin {
 		// if the dir is valid, save it.
 		if ( $dir ) {
 			update_site_option( 'document_upload_directory', $dir );
-			$this->clear_document_dir_cache();
+			// update plugin cache with new value.
+			global $wpdr;
+			$wpdr::$wpdr_document_dir = trailingslashit( trim( $dir ) );
 		}
 	}
 
@@ -903,15 +964,16 @@ class WP_Document_Revisions_Admin {
 	 * Callback to create the document slug settings field
 	 */
 	public function document_slug_cb() {
+		// phpcs:ignore
+		$year_month = ( get_option( 'document_link_date' ) ? '' : '/' . date( 'Y' ) . '/' . date( 'm' ) );
 		?>
-	<code><?php echo esc_html( trailingslashit( home_url() ) ); ?><input name="document_slug" type="text" id="document_slug" value="<?php echo esc_attr( $this->document_slug() ); ?>" class="medium-text" />/<?php echo esc_html( gmdate( 'Y' ) ); ?>/<?php echo esc_html( gmdate( 'm' ) ); ?>/<?php esc_html_e( 'example-document-title', 'wp-document-revisions' ); ?>.txt</code><br />
-	<span class="description">
+		<code><?php echo esc_html( trailingslashit( home_url() ) ); ?><input name="document_slug" type="text" id="document_slug" value="<?php echo esc_attr( $this->document_slug() ); ?>" class="medium-text" /><?php echo esc_html( $year_month ); ?>/<?php esc_html_e( 'example-document-title', 'wp-document-revisions' ); ?>.txt</code><br />
+		<span class="description">
 		<?php
 		// phpcs:ignore WordPress.Security.EscapeOutput.UnsafePrintingFunction
 		_e( '"Slug" with which to prefix all URLs for documents (and the document archive). Default is <code>documents</code>.', 'wp-document-revisions' );
-		?>
-	</span>
-		<?php
+		echo '<br />';
+		echo '</span>';
 	}
 
 
@@ -1146,7 +1208,7 @@ class WP_Document_Revisions_Admin {
 					'taxonomy'        => $tax_slug,
 					'hide_empty'      => false,
 					'value_field'     => 'slug',
-					'selected'        => filter_input( INPUT_GET, 'workflow_state', FILTER_SANITIZE_STRING ),
+					'selected'        => filter_input( INPUT_GET, 'workflow_state', FILTER_SANITIZE_SPECIAL_CHARS ),
 				);
 				wp_dropdown_categories( $args );
 			}
@@ -1156,7 +1218,7 @@ class WP_Document_Revisions_Admin {
 				'name'            => 'author',
 				'show_option_all' => __( 'All owners', 'wp-document-revisions' ),
 				'value_field'     => 'slug',
-				'selected'        => filter_input( INPUT_GET, 'author', FILTER_SANITIZE_STRING ),
+				'selected'        => filter_input( INPUT_GET, 'author', FILTER_SANITIZE_SPECIAL_CHARS ),
 				'orderby'         => 'name',
 				'order'           => 'ASC',
 			);
@@ -1263,9 +1325,10 @@ class WP_Document_Revisions_Admin {
 			<option value="<?php echo esc_attr( $state->slug ); ?>"
 				<?php
 				if ( $current_state ) {
-					selected( $current_state[0]->slug, $state->slug );}
+					selected( $current_state[0]->slug, $state->slug );
+				}
 				?>
-><?php echo esc_html( $state->name ); ?></option>
+				><?php echo esc_html( $state->name ); ?></option>
 			<?php } ?>
 		</select>
 		<?php
@@ -1368,6 +1431,7 @@ class WP_Document_Revisions_Admin {
 			$res        = $wpdb->query( $sql );
 			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 			wp_cache_delete( $thumb, 'posts' );
+			clean_post_cache( $thumb );
 		}
 
 		// find the attachment id now (as content might be cached) and we might delete the cache.
@@ -1382,6 +1446,23 @@ class WP_Document_Revisions_Admin {
 
 		// Save it.
 		wp_set_post_terms( $doc_id, array( $ws ), 'workflow_state' );
+
+		// is the permalink useful.
+		$doc_post = get_post( $doc_id );
+		$new_guid = self::$parent->permalink( $doc_post->guid, $doc_post, false, '' );
+		if ( $new_guid !== $doc_post->guid ) {
+			global $wpdb;
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+			$post_table = "{$wpdb->prefix}posts";
+			$sql        = $wpdb->prepare(
+				"UPDATE `$post_table` SET `guid` = %s WHERE `id` = %d AND `post_parent` = 0 ",
+				$new_guid,
+				$doc_id
+			);
+			$res        = $wpdb->query( $sql );
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
+			clean_post_cache( $doc_id );
+		}
 
 		// can we merge the revisions.
 		if ( is_null( self::$last_revn ) || is_null( self::$last_but_one_revn ) ) {
@@ -1403,6 +1484,8 @@ class WP_Document_Revisions_Admin {
 			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery	
 			wp_cache_delete( self::$last_revn, 'posts' );
 			wp_cache_delete( $doc_id, 'posts' );
+			clean_post_cache( self::$last_revn_excerpt );
+			clean_post_cache( self::$last_revn );
 		}
 
 		/**
@@ -1497,11 +1580,13 @@ class WP_Document_Revisions_Admin {
 
 		// Enqueue JS.
 		$suffix = ( WP_DEBUG ) ? '.dev' : '';
+		$path   = '/js/wp-document-revisions' . $suffix . '.js';
+		$vers   = ( WP_DEBUG ) ? filemtime( dirname( __DIR__ ) . $path ) : $wpdr->version;
 		wp_enqueue_script(
 			'wp_document_revisions',
-			plugins_url( '/js/wp-document-revisions' . $suffix . '.js', __DIR__ ),
+			plugins_url( $path, __DIR__ ),
 			array( 'jquery' ),
-			$wpdr->version,
+			$vers,
 			false
 		);
 		wp_localize_script( 'wp_document_revisions', 'wp_document_revisions', $data );
@@ -1623,7 +1708,8 @@ class WP_Document_Revisions_Admin {
 		if ( $post->post_title !== $last_revision->post_title || $post->post_author !== $last_revision->post_author ) {
 			return true;
 		}
-		if ( self::$parent->extract_document_id( $post->post_content ) !== self::$parent->extract_document_id( $last_revision->post_content ) ) {
+		global $wpdr;
+		if ( $wpdr->extract_document_id( $post->post_content ) !== $wpdr->extract_document_id( $last_revision->post_content ) ) {
 			return true;
 		}
 
@@ -1673,45 +1759,45 @@ class WP_Document_Revisions_Admin {
 		}
 
 		$attach = $this->get_document( $post_id );
-		if ( $attach ) {
-			// make sure that the attachment is not refered to by another post (ignore autosave).
-			global $wpdb;
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery
-			$doc_link = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(1) FROM $wpdb->posts WHERE %d IN (post_parent, id) AND (post_content = %d OR post_content LIKE %s ) AND post_name != %s ",
-					$document->post_parent,
-					$attach->ID,
-					$this->format_doc_id( $attach->ID ) . '%',
-					strval( $document->post_parent ) . '-autosave-v1'
-				)
-			);
-			// phpcs:enable WordPress.DB.DirectDatabaseQuery
+		if ( ! $attach ) {
+			// no attachment.
+			return;
+		}
 
-			if ( '1' === $doc_link ) {
-				// look for attachment meta (before deleting attachment).
-				$meta = get_post_meta( $attach->ID, '_wp_attachment_metadata', true );
-				$file = get_attached_file( $attach->ID );
-				wp_delete_attachment( $attach->ID, true );
+		// make sure that the attachment is not refered to by another post (ignore autosave).
+		global $wpdb;
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$doc_link = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(1) FROM $wpdb->posts WHERE %d IN (post_parent, id) AND (post_content = %d OR post_content LIKE %s ) AND post_name != %s ",
+				$document->post_parent,
+				$attach->ID,
+				$this->format_doc_id( $attach->ID ) . '%',
+				strval( $document->post_parent ) . '-autosave-v1'
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
 
-				// belt and braces in case above 'deleted' file from media and not document directory.
-				$wpdr    = self::$parent;
-				$std_dir = $wpdr::$wp_default_dir['basedir'];
-				$doc_dir = $this->document_upload_dir();
-				if ( $std_dir !== $doc_dir ) {
-					$file = str_replace( $std_dir, $doc_dir, $file );
-				}
-				wp_delete_file_from_directory( $file, $doc_dir );
+		if ( '1' === $doc_link ) {
+			// have to access the document upload directory, so add it.
+			add_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
 
-				// delete any metadata images.
-				if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
-					$file_dir = trailingslashit( dirname( $file ) );
-					foreach ( $meta['sizes'] as $size => $sizeinfo ) {
-						wp_delete_file_from_directory( $file_dir . $sizeinfo['file'], $file_dir );
-					}
+			// look for attachment meta (before deleting attachment).
+			$meta = get_post_meta( $attach->ID, '_wp_attachment_metadata', true );
+			wp_delete_attachment( $attach->ID, true );
+
+			// delete any remaining metadata images.
+			global $wpdr;
+			$file_dir = trailingslashit( $wpdr::$wpdr_document_dir );
+			if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+				foreach ( $meta['sizes'] as $size => $sizeinfo ) {
+					wp_delete_file_from_directory( $file_dir . $sizeinfo['file'], $file_dir );
 				}
 			}
 		}
+
+		// have looked for the upload directory, so remove it.
+		remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
 	}
 
 	/**
@@ -1806,7 +1892,7 @@ class WP_Document_Revisions_Admin {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<ul>';
 
-		foreach ( $documents as $document ) :
+		foreach ( $documents as $document ) {
 			$link = ( current_user_can( 'edit_document', $document->ID ) ) ? add_query_arg(
 				array(
 					'post'   => $document->ID,
@@ -1829,7 +1915,7 @@ class WP_Document_Revisions_Admin {
 				?>
 			</li>
 			<?php
-		endforeach;
+		}
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</ul>';
