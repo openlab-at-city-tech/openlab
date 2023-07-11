@@ -16,9 +16,5 @@
   margin-left: -6px;
   margin-top: -6px;
 }
-.elementor-control-convert_to_container .elementor-button[disabled] {
-  background-color: #d5dadf;
-  pointer-events: none;
-}
 
 /*# sourceMappingURL=editor.css.map */

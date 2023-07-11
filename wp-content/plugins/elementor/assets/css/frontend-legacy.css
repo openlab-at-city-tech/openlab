@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 .elementor-bc-flex-widget .elementor-section-content-top > .elementor-container > .elementor-row > .elementor-column > .elementor-column-wrap {
   align-items: flex-start;
 }
@@ -25,7 +25,7 @@
   padding: 30px;
 }
 
-@media (min-width: -1px) {
+@media (min-width: -1) {
   .elementor-reverse-widescreen > .elementor-container > .elementor-row > :nth-child(1) {
     order: 10;
   }
@@ -57,7 +57,7 @@
     order: 1;
   }
 }
-@media (min-width: 1025px) and (max-width: -1px) {
+@media (min-width: 1025px) and (max-width: -1) {
   .elementor-reverse-laptop > .elementor-container > .elementor-row > :nth-child(1) {
     order: 10;
   }
@@ -89,7 +89,7 @@
     order: 1;
   }
 }
-@media (min-width: -1px) and (max-width: -1px) {
+@media (min-width: -1) and (max-width: -1) {
   .elementor-reverse-laptop > .elementor-container > .elementor-row > :nth-child(1) {
     order: 10;
   }
@@ -121,7 +121,7 @@
     order: 1;
   }
 }
-@media (min-width: 1025px) and (max-width: -1px) {
+@media (min-width: 1025px) and (max-width: -1) {
   .elementor-reverse-laptop > .elementor-container > .elementor-row > :nth-child(1) {
     order: initial;
   }
@@ -215,7 +215,7 @@
     order: 1;
   }
 }
-@media (min-width: -1px) and (max-width: 1024px) {
+@media (min-width: -1) and (max-width: 1024px) {
   .elementor-reverse-tablet > .elementor-container > .elementor-row > :nth-child(1) {
     order: 10;
   }
@@ -247,7 +247,7 @@
     order: 1;
   }
 }
-@media (min-width: 768px) and (max-width: -1px) {
+@media (min-width: 768px) and (max-width: -1) {
   .elementor-reverse-tablet > .elementor-container > .elementor-row > :nth-child(1) {
     order: initial;
   }

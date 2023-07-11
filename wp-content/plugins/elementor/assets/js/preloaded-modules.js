@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["preloaded-modules"],{
 
 /***/ "../assets/dev/js/frontend/handlers/accordion.js":
@@ -329,149 +329,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
+class ImageCarousel extends elementorModules.frontend.handlers.CarouselBase {
   getDefaultSettings() {
-    return {
-      selectors: {
-        carousel: '.elementor-image-carousel-wrapper',
-        slideContent: '.swiper-slide'
-      }
-    };
-  }
-  getDefaultElements() {
-    const selectors = this.getSettings('selectors');
-    const elements = {
-      $swiperContainer: this.$element.find(selectors.carousel)
-    };
-    elements.$slides = elements.$swiperContainer.find(selectors.slideContent);
-    return elements;
-  }
-  getSwiperSettings() {
-    const elementSettings = this.getElementSettings(),
-      slidesToShow = +elementSettings.slides_to_show || 3,
-      isSingleSlide = 1 === slidesToShow,
-      elementorBreakpoints = elementorFrontend.config.responsive.activeBreakpoints,
-      defaultSlidesToShowMap = {
-        mobile: 1,
-        tablet: isSingleSlide ? 1 : 2
-      };
-    const swiperOptions = {
-      slidesPerView: slidesToShow,
-      loop: 'yes' === elementSettings.infinite,
-      speed: elementSettings.speed,
-      handleElementorBreakpoints: true
-    };
-    swiperOptions.breakpoints = {};
-    let lastBreakpointSlidesToShowValue = slidesToShow;
-    Object.keys(elementorBreakpoints).reverse().forEach(breakpointName => {
-      // Tablet has a specific default `slides_to_show`.
-      const defaultSlidesToShow = defaultSlidesToShowMap[breakpointName] ? defaultSlidesToShowMap[breakpointName] : lastBreakpointSlidesToShowValue;
-      swiperOptions.breakpoints[elementorBreakpoints[breakpointName].value] = {
-        slidesPerView: +elementSettings['slides_to_show_' + breakpointName] || defaultSlidesToShow,
-        slidesPerGroup: +elementSettings['slides_to_scroll_' + breakpointName] || 1
-      };
-      lastBreakpointSlidesToShowValue = +elementSettings['slides_to_show_' + breakpointName] || defaultSlidesToShow;
-    });
-    if ('yes' === elementSettings.autoplay) {
-      swiperOptions.autoplay = {
-        delay: elementSettings.autoplay_speed,
-        disableOnInteraction: 'yes' === elementSettings.pause_on_interaction
-      };
-    }
-    if (isSingleSlide) {
-      swiperOptions.effect = elementSettings.effect;
-      if ('fade' === elementSettings.effect) {
-        swiperOptions.fadeEffect = {
-          crossFade: true
-        };
-      }
-    } else {
-      swiperOptions.slidesPerGroup = +elementSettings.slides_to_scroll || 1;
-    }
-    if (elementSettings.image_spacing_custom) {
-      swiperOptions.spaceBetween = elementSettings.image_spacing_custom.size;
-    }
-    const showArrows = 'arrows' === elementSettings.navigation || 'both' === elementSettings.navigation,
-      showDots = 'dots' === elementSettings.navigation || 'both' === elementSettings.navigation;
-    if (showArrows) {
-      swiperOptions.navigation = {
-        prevEl: '.elementor-swiper-button-prev',
-        nextEl: '.elementor-swiper-button-next'
-      };
-    }
-    if (showDots) {
-      swiperOptions.pagination = {
-        el: '.swiper-pagination',
-        type: 'bullets',
-        clickable: true
-      };
-    }
-    if ('yes' === elementSettings.lazyload) {
-      swiperOptions.lazy = {
-        loadPrevNext: true,
-        loadPrevNextAmount: 1
-      };
-    }
-    return swiperOptions;
-  }
-  async onInit() {
-    super.onInit(...arguments);
-    if (!this.elements.$swiperContainer.length || 2 > this.elements.$slides.length) {
-      return;
-    }
-    const Swiper = elementorFrontend.utils.swiper;
-    this.swiper = await new Swiper(this.elements.$swiperContainer, this.getSwiperSettings());
-
-    // Expose the swiper instance in the frontend
-    this.elements.$swiperContainer.data('swiper', this.swiper);
-    const elementSettings = this.getElementSettings();
-    if ('yes' === elementSettings.pause_on_hover) {
-      this.togglePauseOnHover(true);
-    }
-  }
-  updateSwiperOption(propertyName) {
-    const elementSettings = this.getElementSettings(),
-      newSettingValue = elementSettings[propertyName],
-      params = this.swiper.params;
-
-    // Handle special cases where the value to update is not the value that the Swiper library accepts.
-    switch (propertyName) {
-      case 'image_spacing_custom':
-        params.spaceBetween = newSettingValue.size || 0;
-        break;
-      case 'autoplay_speed':
-        params.autoplay.delay = newSettingValue;
-        break;
-      case 'speed':
-        params.speed = newSettingValue;
-        break;
-    }
-    this.swiper.update();
-  }
-  getChangeableProperties() {
-    return {
-      pause_on_hover: 'pauseOnHover',
-      autoplay_speed: 'delay',
-      speed: 'speed',
-      image_spacing_custom: 'spaceBetween'
-    };
-  }
-  onElementChange(propertyName) {
-    const changeableProperties = this.getChangeableProperties();
-    if (changeableProperties[propertyName]) {
-      // 'pause_on_hover' is implemented by the handler with event listeners, not the Swiper library.
-      if ('pause_on_hover' === propertyName) {
-        const newSettingValue = this.getElementSettings('pause_on_hover');
-        this.togglePauseOnHover('yes' === newSettingValue);
-      } else {
-        this.updateSwiperOption(propertyName);
-      }
-    }
-  }
-  onEditSettingsChange(propertyName) {
-    if ('activeItemIndex' === propertyName) {
-      this.swiper.slideToLoop(this.getEditSettings('activeItemIndex') - 1);
-    }
+    const settings = super.getDefaultSettings();
+    settings.selectors.carousel = '.elementor-image-carousel-wrapper';
+    return settings;
   }
 }
 exports["default"] = ImageCarousel;
@@ -879,6 +741,8 @@ var _toggle = _interopRequireDefault(__webpack_require__(/*! ./handlers/toggle *
 var _video = _interopRequireDefault(__webpack_require__(/*! ./handlers/video */ "../assets/dev/js/frontend/handlers/video.js"));
 var _imageCarousel = _interopRequireDefault(__webpack_require__(/*! ./handlers/image-carousel */ "../assets/dev/js/frontend/handlers/image-carousel.js"));
 var _textEditor = _interopRequireDefault(__webpack_require__(/*! ./handlers/text-editor */ "../assets/dev/js/frontend/handlers/text-editor.js"));
+var _nestedTabs = _interopRequireDefault(__webpack_require__(/*! elementor/modules/nested-tabs/assets/js/frontend/handlers/nested-tabs */ "../modules/nested-tabs/assets/js/frontend/handlers/nested-tabs.js"));
+var _nestedAccordion = _interopRequireDefault(__webpack_require__(/*! elementor/modules/nested-accordion/assets/js/frontend/handlers/nested-accordion */ "../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion.js"));
 var _lightbox = _interopRequireDefault(__webpack_require__(/*! elementor-frontend/utils/lightbox/lightbox */ "../assets/dev/js/frontend/utils/lightbox/lightbox.js"));
 elementorFrontend.elements.$window.on('elementor/frontend/init', () => {
   elementorFrontend.elementsHandler.elementsHandlers = {
@@ -887,6 +751,8 @@ elementorFrontend.elements.$window.on('elementor/frontend/init', () => {
     'counter.default': _counter.default,
     'progress.default': _progress.default,
     'tabs.default': _tabs.default,
+    'nested-tabs.default': _nestedTabs.default,
+    'nested-accordion.default': _nestedAccordion.default,
     'toggle.default': _toggle.default,
     'video.default': _video.default,
     'image-carousel.default': _imageCarousel.default,
@@ -1208,7 +1074,7 @@ module.exports = elementorModules.ViewModule.extend({
         invisible: 'elementor-invisible',
         preventClose: 'elementor-lightbox-prevent-close',
         slideshow: {
-          container: 'swiper-container',
+          container: elementorFrontend.config.swiperClass,
           slidesWrapper: 'swiper-wrapper',
           prevButton: 'elementor-swiper-button elementor-swiper-button-prev',
           nextButton: 'elementor-swiper-button elementor-swiper-button-next',
@@ -1273,8 +1139,8 @@ module.exports = elementorModules.ViewModule.extend({
       closeButtonOptions: {
         ...closeIcon,
         attributes: {
-          tabindex: 0,
           role: 'button',
+          tabindex: 0,
           'aria-label': elementorFrontend.config.i18n.close + ' (Esc)'
         }
       },
@@ -1360,7 +1226,7 @@ module.exports = elementorModules.ViewModule.extend({
         type: 'image',
         id: slideshowID,
         url: element.href,
-        hash: element.getAttribute('e-action-hash'),
+        hash: element.getAttribute('data-e-action-hash'),
         title: element.dataset.elementorLightboxTitle,
         description: element.dataset.elementorLightboxDescription,
         modalOptions: {
@@ -1374,7 +1240,7 @@ module.exports = elementorModules.ViewModule.extend({
   },
   setHTMLContent(html) {
     if (window.elementorCommon) {
-      elementorDevTools.deprecation.deprecated('elementorFrontend.utils.lightbox.setHTMLContent', '3.1.4');
+      elementorDevTools.deprecation.deprecated('elementorFrontend.utils.lightbox.setHTMLContent()', '3.1.4');
     }
     this.getModal().setMessage(html);
   },
@@ -1457,11 +1323,12 @@ module.exports = elementorModules.ViewModule.extend({
     $.each(socialNetworks, (key, data) => {
       const networkLabel = data.label,
         $link = $('<a>', {
-          href: this.createShareLink(key, itemUrl, $activeSlide.attr('e-action-hash')),
+          href: this.createShareLink(key, itemUrl, $activeSlide.attr('data-e-action-hash')),
           target: '_blank'
         }).text(networkLabel),
         $socialNetworkIconElement = this.isFontIconSvgExperiment ? $(data.iconElement.element) : $('<i>', {
-          class: 'eicon-' + key
+          class: 'eicon-' + key,
+          'aria-hidden': 'true'
         });
       $link.prepend($socialNetworkIconElement);
       $linkList.append($link);
@@ -1511,6 +1378,7 @@ module.exports = elementorModules.ViewModule.extend({
       elements.$iconShare = $(iconElement, {
         class: slideshowClasses.iconShare,
         role: 'button',
+        tabindex: 0,
         'aria-label': i18n.share,
         'aria-expanded': false
       }).append($('<span>'));
@@ -1530,6 +1398,7 @@ module.exports = elementorModules.ViewModule.extend({
         showZoomElements = [],
         showZoomAttrs = {
           role: 'switch',
+          tabindex: 0,
           'aria-checked': false,
           'aria-label': i18n.zoom
         },
@@ -1553,6 +1422,7 @@ module.exports = elementorModules.ViewModule.extend({
         fullScreenElements = [],
         fullScreenAttrs = {
           role: 'switch',
+          tabindex: 0,
           'aria-checked': false,
           'aria-label': i18n.fullscreen
         },
@@ -1748,7 +1618,7 @@ module.exports = elementorModules.ViewModule.extend({
         $slide.append($zoomContainer);
       }
       if (slide.hash) {
-        $slide.attr('e-action-hash', slide.hash);
+        $slide.attr('data-e-action-hash', slide.hash);
       }
       $slidesWrapper.append($slide);
     });
@@ -1757,19 +1627,25 @@ module.exports = elementorModules.ViewModule.extend({
     $container.prepend(this.elements.$header).append($slidesWrapper);
     if (!isSingleSlide) {
       const $prevButtonIcon = this.isFontIconSvgExperiment ? $(_eIcons.chevronLeft.element) : $('<i>', {
-          class: slideshowClasses.prevButtonIcon
+          class: slideshowClasses.prevButtonIcon,
+          'aria-hidden': 'true'
         }),
         $nextButtonIcon = this.isFontIconSvgExperiment ? $(_eIcons.chevronRight.element) : $('<i>', {
-          class: slideshowClasses.nextButtonIcon
-        });
+          class: slideshowClasses.nextButtonIcon,
+          'aria-hidden': 'true'
+        }),
+        $prevButtonLabel = $('<span>', {
+          class: 'screen-reader-text'
+        }).html(i18n.previous),
+        $nextButtonLabel = $('<span>', {
+          class: 'screen-reader-text'
+        }).html(i18n.next);
       $prevButton = $('<div>', {
-        class: slideshowClasses.prevButton + ' ' + classes.preventClose,
-        'aria-label': i18n.previous
-      }).html($prevButtonIcon);
+        class: slideshowClasses.prevButton + ' ' + classes.preventClose
+      }).append($prevButtonIcon, $prevButtonLabel);
       $nextButton = $('<div>', {
-        class: slideshowClasses.nextButton + ' ' + classes.preventClose,
-        'aria-label': i18n.next
-      }).html($nextButtonIcon);
+        class: slideshowClasses.nextButton + ' ' + classes.preventClose
+      }).append($nextButtonIcon, $nextButtonLabel);
       $container.append($nextButton, $prevButton);
       this.$buttons = this.$buttons.add($nextButton).add($prevButton);
     }
@@ -1805,8 +1681,8 @@ module.exports = elementorModules.ViewModule.extend({
       };
       if (!isSingleSlide) {
         swiperOptions.navigation = {
-          prevEl: $prevButton,
-          nextEl: $nextButton
+          prevEl: $prevButton[0],
+          nextEl: $nextButton[0]
         };
       }
       if (options.swiper) {
@@ -2020,7 +1896,7 @@ module.exports = elementorModules.ViewModule.extend({
         index: slideIndex,
         title: this.dataset.elementorLightboxTitle,
         description: this.dataset.elementorLightboxDescription,
-        hash: this.getAttribute('e-action-hash')
+        hash: this.getAttribute('data-e-action-hash')
       };
       if (slideVideo) {
         slideData.video = slideVideo;
@@ -2185,9 +2061,11 @@ module.exports = elementorModules.ViewModule.extend({
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
   \****************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -2201,6 +2079,62 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/typeof.js":
+/*!********************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/typeof.js ***!
+  \********************************************************/
+/***/ ((module) => {
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
+}
+module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
 

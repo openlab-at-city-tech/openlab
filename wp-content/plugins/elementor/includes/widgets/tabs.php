@@ -74,6 +74,10 @@ class Widget_Tabs extends Widget_Base {
 		return [ 'tabs', 'accordion', 'toggle' ];
 	}
 
+	public function show_in_panel(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'nested-elements' );
+	}
+
 	/**
 	 * Register tabs widget controls.
 	 *
@@ -95,7 +99,7 @@ class Widget_Tabs extends Widget_Base {
 		$repeater->add_control(
 			'tab_title',
 			[
-				'label' => esc_html__( 'Title & Description', 'elementor' ),
+				'label' => esc_html__( 'Title', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Tab Title', 'elementor' ),
 				'placeholder' => esc_html__( 'Tab Title', 'elementor' ),
@@ -113,9 +117,21 @@ class Widget_Tabs extends Widget_Base {
 				'default' => esc_html__( 'Tab Content', 'elementor' ),
 				'placeholder' => esc_html__( 'Tab Content', 'elementor' ),
 				'type' => Controls_Manager::WYSIWYG,
-				'show_label' => false,
 			]
 		);
+
+		$is_nested_tabs_active = Plugin::$instance->widgets_manager->get_widget_types( 'nested-tabs' );
+
+		if ( $is_nested_tabs_active ) {
+			$this->add_deprecation_message(
+				'3.8.0',
+				esc_html__(
+					'You are currently editing a Tabs Widget in its old version. Any new tabs widget dragged into the canvas will be the new Tab widget, with the improved Nested capabilities.',
+					'elementor'
+				),
+				'nested-tabs'
+			);
+		}
 
 		$this->add_control(
 			'tabs',
@@ -259,9 +275,8 @@ class Widget_Tabs extends Widget_Base {
 			[
 				'label' => esc_html__( 'Border Width', 'elementor' ),
 				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'default' => [
-					'unit' => 'px',
 					'size' => 1,
 				],
 				'range' => [
