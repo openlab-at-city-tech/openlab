@@ -27,7 +27,7 @@ new WPCOM_JSON_API_Edit_Media_v1_2_Endpoint(
 			'alt'         => '(string) Alternative text for image files.',
 			'artist'      => '(string) Audio Only. Artist metadata for the audio track.',
 			'album'       => '(string) Audio Only. Album metadata for the audio track.',
-			'media'       => '(object) An object file to attach to the post. To upload media, ' .
+			'media'       => '(media) An object file to attach to the post. To upload media, ' .
 							'the entire request should be multipart/form-data encoded. ' .
 							'Multiple media items will be displayed in a gallery. Accepts ' .
 							'jpg, jpeg, png, gif, pdf, doc, ppt, odt, pptx, docx, pps, ppsx, xls, xlsx, key. ' .
@@ -117,7 +117,8 @@ class WPCOM_JSON_API_Edit_Media_v1_2_Endpoint extends WPCOM_JSON_API_Update_Medi
 	 * @param  {Object} $attrs - `attrs` parameter sent from the client in the request body.
 	 */
 	private function update_by_attrs_parameter( $media_id, $attrs ) {
-		$insert = array();
+		$post_update_action = null;
+		$insert             = array();
 
 		// Attributes: Title, Caption, Description.
 		if ( isset( $attrs['title'] ) ) {
@@ -199,16 +200,11 @@ class WPCOM_JSON_API_Edit_Media_v1_2_Endpoint extends WPCOM_JSON_API_Update_Medi
 	 * Try to remove the temporal file from the given file array.
 	 *
 	 * @param  {Array} $file_array - Array with data about the temporal file.
-	 * @return {Boolean} `true` if the file has been removed.
-	 *                   `false` either the file doesn't exist or it couldn't be removed.
 	 */
 	private function remove_tmp_file( $file_array ) {
-		if ( ! file_exists( $file_array['tmp_name'] ) ) {
-			return false;
+		if ( file_exists( $file_array['tmp_name'] ) ) {
+			wp_delete_file( $file_array['tmp_name'] );
 		}
-		// @todo - see if we can more permanently fix this NoSilencedError.
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		return @unlink( $file_array['tmp_name'] );
 	}
 
 	/**
@@ -236,9 +232,7 @@ class WPCOM_JSON_API_Edit_Media_v1_2_Endpoint extends WPCOM_JSON_API_Update_Medi
 			! $this->is_file_supported_for_sideloading( $tmp_filename ) &&
 			! file_is_displayable_image( $tmp_filename )
 		) {
-			// @todo - see if we can more permanently fix this NoSilencedError.
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			@unlink( $tmp_filename );
+			wp_delete_file( $tmp_filename );
 			return new WP_Error( 'invalid_input', 'Invalid file type.', 403 );
 		}
 		remove_filter( 'jetpack_supported_media_sideload_types', $mime_type_static_filter );

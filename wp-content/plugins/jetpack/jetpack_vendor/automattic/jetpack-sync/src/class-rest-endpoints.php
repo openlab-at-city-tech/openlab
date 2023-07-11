@@ -327,7 +327,6 @@ class REST_Endpoints {
 				'permission_callback' => __CLASS__ . '::verify_default_permissions',
 			)
 		);
-
 	}
 
 	/**
@@ -354,7 +353,7 @@ class REST_Endpoints {
 				$modules['users'] = 'initial';
 			} elseif ( is_array( $request->get_param( $module_name ) ) ) {
 				$ids = $request->get_param( $module_name );
-				if ( count( $ids ) > 0 ) {
+				if ( array() !== $ids ) {
 					$modules[ $module_name ] = $ids;
 				}
 			}
@@ -701,11 +700,9 @@ class REST_Endpoints {
 			if ( in_array( $queue_name, array( 'full_sync', 'immediate' ), true ) ) {
 				// Send Full Sync Actions.
 				Sender::get_instance()->do_full_sync();
-			} else {
+			} elseif ( $queue->has_any_items() ) {
 				// Send Incremental Sync Actions.
-				if ( $queue->has_any_items() ) {
-					Sender::get_instance()->do_sync();
-				}
+				Sender::get_instance()->do_sync();
 			}
 		}
 

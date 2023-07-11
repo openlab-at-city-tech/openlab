@@ -13,6 +13,7 @@ use Automattic\Jetpack\Connection\Client as Client;
 use Automattic\Jetpack\Connection\Initial_State as Connection_Initial_State;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Rest_Authentication as Connection_Rest_Authentication;
+use Automattic\Jetpack\Constants as Jetpack_Constants;
 use Automattic\Jetpack\JITMS\JITM as JITM;
 use Automattic\Jetpack\Licensing;
 use Automattic\Jetpack\Plugins_Installer;
@@ -30,10 +31,10 @@ class Initializer {
 	 *
 	 * @var string
 	 */
-	const PACKAGE_VERSION = '2.5.0.1';
+	const PACKAGE_VERSION = '3.0.0';
 
 	/**
-	 * Initialize My Jetapack
+	 * Initialize My Jetpack
 	 *
 	 * @return void
 	 */
@@ -165,6 +166,7 @@ class Initializer {
 				'topJetpackMenuItemUrl' => Admin_Menu::get_top_level_menu_item_url(),
 				'siteSuffix'            => ( new Status() )->get_site_suffix(),
 				'myJetpackVersion'      => self::PACKAGE_VERSION,
+				'myJetpackFlags'        => self::get_my_jetpack_flags(),
 				'fileSystemWriteAccess' => self::has_file_system_write_access(),
 				'loadAddLicenseScreen'  => self::is_licensing_ui_enabled(),
 				'adminUrl'              => esc_url( admin_url() ),
@@ -190,6 +192,20 @@ class Initializer {
 	}
 
 	/**
+	 *  Build flags for My Jetpack UI
+	 *
+	 *  @return array
+	 */
+	public static function get_my_jetpack_flags() {
+		$flags = array(
+			'videoPressStats' => Jetpack_Constants::is_true( 'JETPACK_MY_JETPACK_VIDEOPRESS_STATS_ENABLED' ),
+			'jetpackStats'    => Jetpack_Constants::is_true( 'JETPACK_MY_JETPACK_STATS_ENABLED' ),
+		);
+
+		return $flags;
+	}
+
+	/**
 	 * Echoes the admin page content.
 	 *
 	 * @return void
@@ -206,6 +222,7 @@ class Initializer {
 	public static function register_rest_endpoints() {
 		new REST_Products();
 		new REST_Purchases();
+		new REST_Zendesk_Chat();
 
 		register_rest_route(
 			'my-jetpack/v1',
