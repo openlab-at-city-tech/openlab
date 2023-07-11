@@ -209,6 +209,8 @@ class WCP_Folders
 
         // check for default folders
         add_filter('pre_get_posts', [$this, 'check_for_default_folders']);
+        add_filter('folders_count_where_query', [$this, 'folders_count_where_query']);
+        add_filter('folders_count_join_query', [$this, 'folders_count_join_query']);
 
         add_action("wp_ajax_folder_update_status", [$this, 'folder_update_status']);
 
@@ -246,7 +248,92 @@ class WCP_Folders
 
         add_action("manage_posts_extra_tablenav", [$this, "manage_posts_extra_fields"]);
 
+        /* Mailpoet Whitelist JS/CSS */
+        add_filter("mailpoet_conflict_resolver_whitelist_style", [$this, 'mailpoet_conflict_whitelist_style']);
+        add_filter("mailpoet_conflict_resolver_whitelist_script", [$this, 'mailpoet_conflict_whitelist_script']);
+
     }//end __construct()
+
+    /**
+     * Add folders script to mailpoet's conflict list
+     *
+     * @since  2.8.7
+     * @access public
+     * @return $scripts
+     */
+    public function mailpoet_conflict_whitelist_script($scripts) {
+        $scripts[] = "folders";
+        $scripts[] = "folders-pro";
+        return $scripts;
+    }
+
+
+    /**
+     * Add folders styles to mailpoet's conflict list
+     *
+     * @since  2.8.7
+     * @access public
+     * @return $styles
+     */
+    public function mailpoet_conflict_whitelist_style($styles) {
+        $styles[] = "folders";
+        $styles[] = "folders-pro";
+        return $styles;
+    }
+
+    /**
+     * Update User Profile fields
+     *
+     * @since  2.8.5
+     * @access public
+     */
+    function save_extra_user_profile_fields( $user_id ) {
+        if ( empty( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'update-user_' . $user_id ) ) {
+            return;
+        }
+
+        if (!current_user_can( 'edit_user', $user_id ) ) {
+            return;
+        }
+
+        if(isset($_POST['folders_access_role'])) {
+            $setting = get_user_meta($user_id, "folders_access_role", true);
+            if($setting === false) {
+                add_user_meta($user_id, "folders_access_role", sanitize_text_field($_POST['folders_access_role']));
+            } else {
+                update_user_meta($user_id, "folders_access_role", sanitize_text_field($_POST['folders_access_role']));
+            }
+        }
+    }
+
+    /**
+     * Fetch User Profile fields
+     *
+     * @since  2.8.5
+     * @access public
+     */
+    function extra_user_profile_fields($user) {
+        $userRoles = $this->get_user_roles();
+        $userRole = get_user_meta($user->ID, "folders_access_role", true);
+        if($userRole === false || empty($userRole)) {
+            $userRole = "default";
+        }
+        ?>
+        <h3><?php esc_html_e("Folders", "folders"); ?></h3>
+
+        <table class="form-table">
+            <tr>
+                <th><label for="folders_access_role"><?php esc_html_e("Folder Access"); ?></label></th>
+                <td>
+                    <select class="regular-text" id="folders_access_role" name="folders_access_role">
+                        <?php foreach($userRoles as $key=>$role) { ?>
+                            <option <?php selected($userRole, $key) ?> value="<?php echo esc_attr($key) ?>"><?php echo esc_attr($role) ?></option>
+                        <?php } ?>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    <?php }
 
     /**
      * Add extra params in search
@@ -720,8 +807,7 @@ class WCP_Folders
      * @since  1.0.0
      * @access public
      */
-    public function get_terms_filter_without_trash($terms, $taxonomies, $args)
-    {
+    public function get_terms_filter_without_trash($terms, $taxonomies, $args) {
         $isForFolders = 0;
         if(!empty($taxonomies) && is_array($taxonomies) && count($taxonomies)){
             foreach ($taxonomies as $taxonomy) {
@@ -761,40 +847,41 @@ class WCP_Folders
             foreach ($terms as $key => $term) {
                 if (isset($term->term_id) && isset($term->taxonomy) && !empty($term->taxonomy) && in_array($term->taxonomy, $option_array)) {
                     $trash_count = null;
-                    if (isset($trash_folders[$term->term_taxonomy_id])) {
-                        $trash_count = $trash_folders[$term->term_taxonomy_id];
-                    } else {
-                        if (has_filter("premio_folder_item_in_taxonomy")) {
-                            $post_type = "";
-                            $taxonomy = $term->taxonomy;
+                    if (has_filter("premio_folder_item_in_taxonomy")) {
+                        $post_type = "";
+                        $taxonomy = $term->taxonomy;
 
-                            if ($taxonomy == "post_folder") {
-                                $post_type = "post";
-                            } else if ($taxonomy == "folder") {
-                                $post_type = "page";
-                            } else if ($taxonomy == "media_folder") {
-                                $post_type = "attachment";
-                            } else {
-                                $post_type = trim($taxonomy, "'_folder'");
-                            }
-                            $arg = array(
-                                'post_type' => $post_type,
-                                'taxonomy' => $taxonomy,
-                            );
-                            $trash_count = apply_filters("premio_folder_item_in_taxonomy", $term->term_id, $arg);
+                        if ($taxonomy == "post_folder") {
+                            $post_type = "post";
+                        } else if ($taxonomy == "folder") {
+                            $post_type = "page";
+                        } else if ($taxonomy == "media_folder") {
+                            $post_type = "attachment";
+                        } else {
+                            $post_type = trim($taxonomy, "'_folder'");
                         }
+                        $arg = array(
+                            'post_type' => $post_type,
+                            'taxonomy' => $taxonomy,
+                        );
+                        $trash_count = apply_filters("premio_folder_item_in_taxonomy", $term->term_id, $arg);
+                    } else {
+                        if ($trash_count == null && isset($trash_folders[$term->term_taxonomy_id])) {
+                            $trash_count = $trash_folders[$term->term_taxonomy_id];
+                        } else if ($trash_count == null) {
 
-                        if ($trash_count === null) {
-                            //$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
-                            $query = "SELECT COUNT(DISTINCT(p.ID)) 
-                        FROM {$post_table} p 
-                            JOIN {$term_table} rl ON p.ID = rl.object_id 
-                            WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1";
-                            $result = $wpdb->get_var($query);
-                            if (intval($result) > 0) {
-                                $trash_count = intval($result);
-                            } else {
-                                $trash_count = 0;
+                            if ($trash_count === null) {
+                                //$result = $wpdb->get_var("SELECT COUNT(*) FROM {$post_table} p JOIN {$term_table} rl ON p.ID = rl.object_id WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1");
+                                $query = "SELECT COUNT(DISTINCT(p.ID)) 
+                                    FROM {$post_table} p 
+                                        JOIN {$term_table} rl ON p.ID = rl.object_id 
+                                        WHERE rl.term_taxonomy_id = '{$term->term_taxonomy_id}' AND p.post_status != 'trash' LIMIT 1";
+                                $result = $wpdb->get_var($query);
+                                if (intval($result) > 0) {
+                                    $trash_count = intval($result);
+                                } else {
+                                    $trash_count = 0;
+                                }
                             }
                         }
                     }
@@ -812,7 +899,6 @@ class WCP_Folders
             }
         }
         return $terms;
-
     }//end get_terms_filter_without_trash()
 
 
@@ -1612,16 +1698,25 @@ class WCP_Folders
                                 )
                              ) AND {$post_table}.post_type = '%s' AND (({$post_table}.post_status = 'publish' OR {$post_table}.post_status = 'future' OR {$post_table}.post_status = 'draft' OR {$post_table}.post_status = 'private' OR {$post_table}.post_status = 'pending'))";
                 } else {
-                    $query = "SELECT COUNT(DISTINCT({$post_table}.ID)) AS total_records FROM {$post_table} WHERE 1=1  AND (
-                                NOT EXISTS (
+                    $select = "SELECT COUNT(DISTINCT(P.ID)) AS total_records FROM {$post_table} AS P";
+                    $where = ["post_type = 'attachment' "];
+                    $where[] = "(post_status = 'inherit' OR post_status = 'private')";
+                    $where[] = "(NOT EXISTS (
                                         SELECT 1
                                         FROM {$term_table}
                                         INNER JOIN {$term_taxonomy_table}
                                         ON {$term_taxonomy_table}.term_taxonomy_id = {$term_table}.term_taxonomy_id
                                         WHERE {$term_taxonomy_table}.taxonomy = '%s'
-                                        AND {$term_table}.object_id = {$post_table}.ID
+                                        AND {$term_table}.object_id = P.ID
                                     )
-                                ) AND {$post_table}.post_type = '%s' AND {$post_table}.post_status = 'inherit'";
+                                )";
+
+                    $join = apply_filters( 'folders_count_join_query', "" );
+                    $where = apply_filters( 'folders_count_where_query', $where );
+
+                    $query = $select . $join . " WHERE ".implode( ' AND ', $where );
+
+                    $query = $wpdb->prepare($query, $taxonomy);
                 }
             } else {
                 if ($post_type != "attachment") {
@@ -1638,7 +1733,10 @@ class WCP_Folders
                                 )
                              ) AND {$post_table}.post_type = '%s' AND (({$post_table}.post_status = 'publish' OR {$post_table}.post_status = 'future' OR {$post_table}.post_status = 'draft' OR {$post_table}.post_status = 'private' OR {$post_table}.post_status = 'pending'))";
                 } else {
-                    $query = "SELECT COUNT(DISTINCT({$post_table}.ID)) AS total_records FROM {$post_table} WHERE 1=1  AND (
+                    $select = "SELECT COUNT(DISTINCT(P.ID)) AS total_records FROM {$post_table} AS P";
+                    $where = ["post_type = 'attachment' "];
+                    $where[] = "(post_status = 'inherit' OR post_status = 'private')";
+                    $where[] = "(
                                 NOT EXISTS (
                                         SELECT 1
                                         FROM {$term_table}
@@ -1647,9 +1745,16 @@ class WCP_Folders
                                         INNER JOIN {$term_meta}
                                         ON {$term_meta}.term_id = {$term_table}.term_taxonomy_id AND {$term_meta}.meta_key = 'created_by' AND {$term_meta}.meta_value = {$user_id}
                                         WHERE {$term_taxonomy_table}.taxonomy = '%s'
-                                        AND {$term_table}.object_id = {$post_table}.ID
+                                        AND {$term_table}.object_id = P.ID
                                     )
-                                ) AND {$post_table}.post_type = '%s' AND {$post_table}.post_status = 'inherit'";
+                                )";
+
+                    $join = apply_filters( 'folders_count_join_query', "" );
+                    $where = apply_filters( 'folders_count_where_query', $where );
+
+                    $query = $select . $join . " WHERE ".implode( ' AND ', $where );
+
+                    $query = $wpdb->prepare($query, $taxonomy);
                 }
             }
 
@@ -2209,7 +2314,7 @@ class WCP_Folders
      * @access public
      * @return $folders
      */
-    public function output_list_table_filters($post_type, $view_name)
+    public function output_list_table_filters($post_type, $view_name = "")
     {
         if ($post_type != 'attachment') {
             return;
@@ -3971,7 +4076,7 @@ class WCP_Folders
         $response['message2'] = "";
         $postData     = filter_input_array(INPUT_POST);
         $errorCounter = 0;
-        $error        = "";
+        $error        = esc_html__("Your request is not valid", 'folders');
         if (!current_user_can("manage_categories")) {
             $error = esc_html__("You have not permission to add folder", 'folders');
             $errorCounter++;
@@ -3996,148 +4101,150 @@ class WCP_Folders
 
         if ($errorCounter == 0) {
             $parent      = isset($postData['parent_id']) && !empty($postData['parent_id']) ? $postData['parent_id'] : 0;
-            $parent_menu = isset($postData['parent_menu']) && !empty($postData['parent_menu']) ? $postData['parent_menu'] : 0;
-            $parent_ids  = isset($postData['parent_ids']) && !empty($postData['parent_ids']) ? $postData['parent_ids'] : 0;
             $parent      = self::sanitize_options($parent);
             $type        = self::sanitize_options($postData['type']);
             $folder_type = self::get_custom_post_type($type);
             $term_name   = self::sanitize_options($postData['name']);
             $term        = term_exists($term_name, $folder_type, $parent);
-            $term_id     = 0;
-            if (!(0 !== $term && null !== $term)) {
-                $folders      = $postData['name'];
-                $folders      = explode(",", $folders);
-                $foldersArray = [];
-                $order        = isset($postData['order']) ? $postData['order'] : 0;
-                $order        = self::sanitize_options($order);
+            $user_id     = get_current_user_id();
+            if (!empty($term) && isset($term['term_id']) && !empty($term['term_id'])) {
+                $term_user = get_term_meta($term['term_id'], "created_by", true);
+                if ($term_user == $user_id) {
+                    $response['error']   = 1;
+                    $response['message'] = esc_html__("Folder name already exists", 'folders');
+                    echo json_encode($response);
+                    wp_die();
+                }
+            }
 
-                $is_active     = 1;
-                $total_folders = -1;
+            $folders      = $postData['name'];
+            $folders      = explode(",", $folders);
+            $foldersArray = [];
+            //$order        = isset($postData['order']) ? $postData['order'] : 0;
+            //$order        = self::sanitize_options($order);
 
-                if (!$is_active) {
-                    if (($total_folders + count($folders)) > 10) {
-                        $response['status'] = -1;
-                        echo json_encode($response);
-                        wp_die();
+            $is_active       = 1;
+            $created_folders = 0;
+
+            foreach ($folders as $key => $folder) {
+                $term = term_exists($folder, $folder_type, $parent);
+                if (!empty($term) && isset($term['term_id']) && !empty($term['term_id'])) {
+                    $term_user = get_term_meta($term['term_id'], "created_by", true);
+                    if ($term_user == $user_id) {
+                        continue;
                     }
                 }
 
-                foreach ($folders as $key => $folder) {
-                    $folder = trim($folder);
-                    $slug   = self::create_slug_from_string($folder)."-".time();
+                $folder = trim($folder);
+                $slug   = self::create_slug_from_string($folder)."-".time()."-".$user_id;
 
-                    $result = wp_insert_term(
-                        urldecode($folder),
-                        // the term
-                        $folder_type,
-                        // the taxonomy
-                        [
-                            'parent' => $parent,
-                            'slug'   => $slug,
-                        ]
-                    );
-                    if (!empty($result)) {
-                        $term_id = $result['term_id'];
-                        $total_folders++;
-                        $response['id']     = $result['term_id'];
-                        $response['status'] = 1;
-                        $term       = get_term($result['term_id'], $folder_type);
-                        $order      = ($order + $key);
-                        $term_nonce = wp_create_nonce('wcp_folder_term_'.$term->term_id);
+                $result = wp_insert_term(
+                    urldecode($folder),
+                    // the term
+                    $folder_type,
+                    // the taxonomy
+                    [
+                        'parent' => $parent,
+                        'slug'   => $slug,
+                    ]
+                );
 
-                        $folder_item = [];
-                        $folder_item['parent_id'] = $parent;
-                        $folder_item['slug']      = $term->slug;
-                        $folder_item['nonce']     = $term_nonce;
-                        $folder_item['term_id']   = $result['term_id'];
-                        $folder_item['title']     = $folder;
-                        $folder_item['parent_id'] = empty($postData['parent_id']) ? "0" : $postData['parent_id'];
-                        $folder_item['is_sticky'] = 0;
-                        $folder_item['is_high']   = 0;
+                if (!empty($result)) {
+                    $created_folders++;
+                    $response['id']     = $result['term_id'];
+                    $response['status'] = 1;
+                    $term       = get_term($result['term_id'], $folder_type);
+                    $order      = $key+1;
+                    $term_nonce = wp_create_nonce('wcp_folder_term_'.$term->term_id);
 
-                        update_term_meta($result['term_id'], "wcp_custom_order", $order);
-                        if ($parent != 0) {
-                            update_term_meta($parent, "is_active", 1);
-                        }
+                    $folder_item = [];
+                    $folder_item['parent_id']    = $parent;
+                    $folder_item['slug']         = $term->slug;
+                    $folder_item['nonce']        = $term_nonce;
+                    $folder_item['term_id']      = $result['term_id'];
+                    $folder_item['title']        = $folder;
+                    $folder_item['parent_id']    = empty($postData['parent_id']) ? "0" : $postData['parent_id'];
+                    $folder_item['is_sticky']    = 0;
+                    $folder_item['is_high']      = 0;
+                    $folder_item['is_locked']    = 0;
+                    $folder_item['folder_count'] = 0;
 
-                        if (isset($postData['is_duplicate']) && $postData['is_duplicate'] == true) {
-                            if (isset($postData['duplicate_from']) && !empty($postData['duplicate_from'])) {
-                                $term_id = $postData['duplicate_from'];
+                    add_term_meta($result['term_id'], "created_by", $user_id);
 
-                                $term_data = get_term($term_id, $folder_type);
-                                if (!empty($term_data)) {
-                                    $is_sticky = get_term_meta($term_id, "is_folder_sticky", true);
+                    update_term_meta($result['term_id'], "wcp_custom_order", $order);
+                    if ($parent != 0) {
+                        update_term_meta($parent, "is_active", 1);
+                    }
 
-                                    if ($is_sticky == 1) {
-                                        add_term_meta($term->term_id, "is_folder_sticky", 1);
-                                        $folder_item['is_sticky'] = 1;
-                                    }
+                    if (isset($postData['is_duplicate']) && $postData['is_duplicate'] == true) {
+                        if (isset($postData['duplicate_from']) && !empty($postData['duplicate_from'])) {
+                            $term_id = $postData['duplicate_from'];
 
-                                    $status = get_term_meta($term_id, "is_highlighted", true);
-                                    if ($status == 1) {
-                                        add_term_meta($term->term_id, "is_highlighted", 1);
-                                        $folder_item['is_high'] = 1;
-                                    }
+                            $term_data = get_term($term_id, $folder_type);
+                            if (!empty($term_data)) {
+                                $is_sticky = get_term_meta($term_id, "is_folder_sticky", true);
 
-                                    $postArray = get_posts(
-                                        [
-                                            'posts_per_page' => -1,
-                                            'post_type'      => $type,
-                                            'tax_query'      => [
-                                                [
-                                                    'taxonomy' => $folder_type,
-                                                    'field'    => 'term_id',
-                                                    'terms'    => $term_id,
-                                                ],
+                                if ($is_sticky == 1) {
+                                    add_term_meta($term->term_id, "is_folder_sticky", 1);
+                                    $folder_item['is_sticky'] = 1;
+                                }
+
+                                $is_locked = get_term_meta($term_id, "is_locked", true);
+                                if ($is_locked == 1) {
+                                    add_term_meta($term->term_id, "is_locked", 1);
+                                    $folder_item['is_locked'] = 1;
+                                }
+
+                                $status = get_term_meta($term_id, "is_highlighted", true);
+                                if ($status == 1) {
+                                    add_term_meta($term->term_id, "is_highlighted", 1);
+                                    $folder_item['is_high'] = 1;
+                                }
+
+                                $postArray = get_posts(
+                                    [
+                                        'posts_per_page' => -1,
+                                        'post_type'      => $type,
+                                        'tax_query'      => [
+                                            [
+                                                'taxonomy' => $folder_type,
+                                                'field'    => 'term_id',
+                                                'terms'    => $term_id,
                                             ],
-                                        ]
-                                    );
-                                    if (!empty($postArray)) {
-                                        foreach ($postArray as $p) {
-                                            wp_set_post_terms($p->ID, $term->term_id, $folder_type, true);
-                                        }
+                                        ],
+                                    ]
+                                );
+                                if (!empty($postArray)) {
+                                    foreach ($postArray as $p) {
+                                        wp_set_post_terms($p->ID, $term->term_id, $folder_type, true);
                                     }
-                                }//end if
+
+                                    $folder_item['folder_count'] = count($postArray);
+                                }
                             }//end if
                         }//end if
-
-                        if ($parent_menu && !empty($parent_ids)) {
-                            $order        = isset($postData['order']) ? $postData['order'] : 0;
-                            $parent_ids   = trim($parent_ids, ",");
-                            $parent_ids   = explode(",", $parent_ids);
-                            $folder_order = 0;
-                            $parents      = "";
-                            if (is_array($parent_ids) && count($parent_ids) > 0) {
-                                foreach ($parent_ids as $key => $value) {
-                                    if ($value != "#") {
-                                        delete_term_meta($value, "wcp_custom_order");
-                                        add_term_meta($value, "wcp_custom_order", $folder_order);
-                                    } else if (!empty($term_id)) {
-                                        delete_term_meta($term_id, "wcp_custom_order");
-                                        add_term_meta($term_id, "wcp_custom_order", $folder_order);
-                                    }
-
-                                    $folder_order++;
-                                }
-                            }
-                        }
-
-                        $foldersArray[] = $folder_item;
                     }//end if
 
-                    if (!empty($foldersArray)) {
-                        $response['is_key_active'] = $is_active;
-                        $response['folders']       = $total_folders;
-                        $response['parent_id']     = empty($parent) ? "#" : $parent;
+                    $foldersArray[] = $folder_item;
+                }//end if
 
-                        $response['status'] = 1;
-                        $response['data']   = $foldersArray;
+                $folders = $postData['folders'];
+                if(is_array($folders) && count($folders) > 0) {
+                    foreach($folders as $folder) {
+                        $order++;
+                        update_term_meta($folder, "wcp_custom_order", $order);
                     }
-                }//end foreach
-            } else {
-                $response['error']   = 1;
-                $response['message'] = esc_html__("Folder name already exists", 'folders');
-            }//end if
+                }
+
+                if (!empty($foldersArray)) {
+                    $response['is_key_active'] = $is_active;
+                    $response['folders']       = $created_folders;
+                    $response['parent_id']     = empty($parent) ? "#" : $parent;
+
+                    $response['status'] = 1;
+                    $response['data']   = $foldersArray;
+                }
+            }//end foreach
         } else {
             $response['error']   = 1;
             $response['message'] = $error;
@@ -4306,7 +4413,19 @@ class WCP_Folders
         }
         if($item_count === null) {
             if ($post_type == "attachment") {
-                $item_count = wp_count_posts($post_type)->inherit;
+                global $wpdb;
+
+                $select = "SELECT COUNT(ID) FROM ".$wpdb->posts." as P ";
+
+                $where = ["post_type = 'attachment' "];
+                $where[] = "(post_status = 'inherit' OR post_status = 'private')";
+
+                $join = apply_filters( 'folders_count_join_query', "" );
+                $where = apply_filters( 'folders_count_where_query', $where );
+
+                $query = $select . $join . " WHERE ".implode( ' AND ', $where );
+
+                $item_count = $wpdb->get_var($query);
             } else {
                 $item_count = wp_count_posts($post_type)->publish + wp_count_posts($post_type)->draft + wp_count_posts($post_type)->future + wp_count_posts($post_type)->private + wp_count_posts($post_type)->pending;
             }
@@ -4314,6 +4433,86 @@ class WCP_Folders
         return $item_count;
     }//end get_ttlpst()
 
+    /**
+     * Condition for Media hooks for Elementor, BuddyPress
+     *
+     * @since  2.9
+     * @access public
+     */
+    public function folders_count_where_query($where) {
+        global $wpdb;
+        if(class_exists( 'Better_Messages' )) {
+            $where[] = " BMPM.post_id IS NULL ";
+        }
+        if(class_exists( 'buddypress' )) {
+            $where[] = " bb_mt1.post_id IS NULL ";
+            $where[] = " bb_mt2.post_id IS NULL ";
+            $where[] = " bb_mt3.post_id IS NULL ";
+        }
+        if ( function_exists( '_is_elementor_installed' ) ) {
+            $where[] = " ELPM.post_id IS NULL ";
+        }
+        if(class_exists("Web_Stories_Compatibility")) {
+            $query = "SELECT t.term_id
+                FROM ".$wpdb->terms." AS t
+                INNER JOIN ".$wpdb->term_taxonomy." AS tt
+                ON t.term_id = tt.term_id
+                WHERE tt.taxonomy IN ('web_story_media_source')
+                AND t.slug IN ('poster-generation', 'source-video', 'source-image', 'page-template')";
+            $results = $wpdb->get_results($query);
+            if(!empty($results)) {
+                $termsIds = [];
+                foreach($results as $result) {
+                    if(isset($result->term_id) && !empty($result->term_id)) {
+                        $termsIds[] = $result->term_id;
+                    }
+                }
+
+                if(!empty($termsIds)) {
+                    $termsIds = implode(",", $termsIds);
+                    $where[] = "(P.ID NOT IN (SELECT object_id
+                                    FROM ".$wpdb->term_relationships."
+                                    WHERE term_taxonomy_id IN ($termsIds)))";
+                }
+            }
+        }
+        return $where;
+    }
+
+    /**
+     * Folders Query for Media
+     *
+     * @since  2.9
+     * @access public
+     */
+    public function folders_count_join_query($join) {
+        global $wpdb;
+        if(class_exists( 'Better_Messages' )) {
+            $join .= " LEFT JOIN " . $wpdb->postmeta . " AS BMPM
+                        ON ( P.ID = BMPM.post_id
+                        AND BMPM.meta_key = 'bp-better-messages-attachment') ";
+        }
+        if(class_exists( 'buddypress' )) {
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS bb_mt1
+                        ON (P.ID = bb_mt1.post_id
+                        AND bb_mt1.meta_key = 'bp_media_upload' ) ";
+
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS bb_mt2
+                        ON (P.ID = bb_mt2.post_id
+                        AND bb_mt2.meta_key = 'bp_document_upload' ) ";
+
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS bb_mt3
+                        ON (P.ID = bb_mt3.post_id
+                        AND bb_mt3.meta_key = 'bp_video_upload' ) ";
+
+        }
+        if ( function_exists( '_is_elementor_installed' ) ) {
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS ELPM
+                        ON ( P.ID = ELPM.post_id
+                        AND ELPM.meta_key = '_elementor_is_screenshot') ";
+        }
+        return $join;
+    }
 
     /**
      * Autoload folders librarires
@@ -4639,13 +4838,20 @@ class WCP_Folders
      */
     function folders_admin_styles($page)
     {
-        if ($page == "toplevel_page_wcp_folders_settings" || $page == "settings_page_wcp_folders_settings") {
+//        echo $page; die;
+        if($page == "folders-settings_page_folders-upgrade-to-pro" || ($page == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == 'upgrade-to-pro')) {
+            wp_enqueue_style('folder-pricing-table', plugin_dir_url(dirname(__FILE__)).'assets/css/pricing-table.css', [], WCP_FOLDER_VERSION);
+            $queryArgs = [
+                'family' => 'Poppins:wght@400;500;600;700&display=swap',
+                'subset' => 'latin,latin-ext',
+            ];
+            wp_enqueue_style('google-poppins-fonts', add_query_arg($queryArgs, "//fonts.googleapis.com/css2"), [], null);
+        } else if ($page == "toplevel_page_wcp_folders_settings" || $page == "settings_page_wcp_folders_settings") {
             wp_enqueue_style('folder-settings', plugin_dir_url(dirname(__FILE__)).'assets/css/settings.css', [], WCP_FOLDER_VERSION);
+
             wp_enqueue_style('folders-icon', plugin_dir_url(dirname(__FILE__)).'assets/css/folder-icon.css', [], WCP_FOLDER_VERSION);
             wp_enqueue_style('folders-spectrum', plugin_dir_url(dirname(__FILE__)).'assets/css/spectrum.min.css', [], WCP_FOLDER_VERSION);
-        }
-
-        if ($page == "folders-settings_page_folders-upgrade-to-pro" || $page == "toplevel_page_wcp_folders_settings" || $page == "settings_page_wcp_folders_settings" || ($page == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == "upgrade-to-pro")) {
+        } else if ($page == "folders-settings_page_folders-upgrade-to-pro" || $page == "toplevel_page_wcp_folders_settings" || $page == "settings_page_wcp_folders_settings" || ($page == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == "upgrade-to-pro")) {
             wp_enqueue_style('wcp-select2', plugin_dir_url(dirname(__FILE__)).'assets/css/select2.min.css', [], WCP_FOLDER_VERSION);
             if ($page == "folders-settings_page_folders-upgrade-to-pro" || ($page == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == "upgrade-to-pro")) {
                 wp_enqueue_style('wcp-admin-setting', plugin_dir_url(dirname(__FILE__)).'assets/css/admin-setting.css', [], WCP_FOLDER_VERSION);
@@ -4835,6 +5041,10 @@ class WCP_Folders
 
         if ($hook == "folders-settings_page_folders-upgrade-to-pro" || $hook == "toplevel_page_wcp_folders_settings" || $hook == "settings_page_wcp_folders_settings" || ($hook == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == "upgrade-to-pro")) {
             wp_enqueue_script('folders-select2', plugin_dir_url(dirname(__FILE__)).'assets/js/select2.min.js', ['jquery'], WCP_FOLDER_VERSION);
+        }
+
+        if ($hook == "folders-settings_page_folders-upgrade-to-pro" || ($hook == "settings_page_wcp_folders_settings" && isset($_GET['setting_page']) && $_GET['setting_page'] == "upgrade-to-pro")) {
+            wp_enqueue_script('folders-slick', plugin_dir_url(dirname(__FILE__)).'assets/js/slick.min.js', ['jquery'], WCP_FOLDER_VERSION);
         }
 
         if (self::is_active_for_screen()) {
@@ -5615,40 +5825,45 @@ class WCP_Folders
         if ($is_shown === false) {
             include_once dirname(dirname(__FILE__))."/templates/admin/update.php";
         } else {
-            $options    = get_option('folders_settings');
-            $options    = (empty($options) || !is_array($options)) ? [] : $options;
-            $post_types = get_post_types(['public' => true], 'objects');
-            $terms_data = [];
-            foreach ($post_types as $post_type) {
-                if (in_array($post_type->name, $options)) {
-                    $term       = $post_type->name;
-                    $term       = self::get_custom_post_type($term);
-                    $categories = self::get_terms_hierarchical($term);
-                    $terms_data[$post_type->name] = $categories;
-                } else {
-                    $terms_data[$post_type->name] = [];
-                }
-            }
-
-            $fonts = self::get_font_list();
-
-            $plugins          = new WCP_Folder_Plugins();
-            $plugin_info      = $plugins->get_plugin_information();
-            $is_plugin_exists = $plugins->isExists;
-            $settingURL       = $this->getFolderSettingsURL();
-            $setting_page     = filter_input(INPUT_GET, 'setting_page');
+            $setting_page = filter_input(INPUT_GET, 'setting_page');
             if (empty($setting_page)) {
                 $setting_page = "folder-settings";
             }
+            if($setting_page == "upgrade-to-pro") {
+                $hasBackButton = true;
+                include_once dirname(dirname(__FILE__)) . "/templates/admin/upgrade-to-pro.php";
+            } else {
+                $options = get_option('folders_settings');
+                $options = (empty($options) || !is_array($options)) ? [] : $options;
+                $post_types = get_post_types(['public' => true], 'objects');
+                $terms_data = [];
+                foreach ($post_types as $post_type) {
+                    if (in_array($post_type->name, $options)) {
+                        $term = $post_type->name;
+                        $term = self::get_custom_post_type($term);
+                        $categories = self::get_terms_hierarchical($term);
+                        $terms_data[$post_type->name] = $categories;
+                    } else {
+                        $terms_data[$post_type->name] = [];
+                    }
+                }
 
-            $setting_page = in_array($setting_page, ["folder-settings", "customize-folders", "folders-import", "upgrade-to-pro", "folders-by-user"]) ? $setting_page : "folder-settings";
-            $isInSettings = $this->isFoldersInSettings();
+                $fonts = self::get_font_list();
 
-            include_once dirname(dirname(__FILE__))."/templates/admin/general-settings.php";
+                $plugins = new WCP_Folder_Plugins();
+                $plugin_info = $plugins->get_plugin_information();
+                $is_plugin_exists = $plugins->is_exists;
+                $settingURL = $this->getFolderSettingsURL();
 
-            $option = get_option("folder_intro_box");
-            if ($option == "show") {
-                include_once dirname(dirname(__FILE__))."/templates/admin/folder-popup.php";
+                $setting_page = in_array($setting_page, ["folder-settings", "customize-folders", "folders-import", "upgrade-to-pro", "folders-by-user"]) ? $setting_page : "folder-settings";
+                $isInSettings = $this->isFoldersInSettings();
+
+                include_once dirname(dirname(__FILE__)) . "/templates/admin/general-settings.php";
+
+                $option = get_option("folder_intro_box");
+                if ($option == "show") {
+                    include_once dirname(dirname(__FILE__)) . "/templates/admin/folder-popup.php";
+                }
             }
         }//end if
 

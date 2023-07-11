@@ -35,7 +35,7 @@ class WCP_Tree
     public static function get_full_tree_data($postType, $orderBy="", $order="")
     {
         $isAjax = (defined('DOING_AJAX') && DOING_AJAX) ? 1 : 0;
-        $type   = filter_input(INPUT_GET, $postType, FILTER_SANITIZE_STRING);
+        $type   = filter_input(INPUT_GET, $postType);
         if ((isset($type) && !empty($type)) || ! $isAjax) {
             update_option("selected_".$postType."_folder", "");
         }
@@ -90,7 +90,7 @@ class WCP_Tree
 
                 $status = get_term_meta($term->term_id, "is_active", true);
                 $return = self::get_folder_category_data($postType, $term->term_id, $status, $orderBy, $order);
-                $type   = filter_input(INPUT_GET, $postType, FILTER_SANITIZE_STRING);
+                $type   = filter_input(INPUT_GET, $postType);
                 if ($postType == "attachment") {
                     if (isset($type) && $type == $term->slug) {
                         update_option("selected_".$postType."_folder", $term->term_id);
@@ -194,9 +194,11 @@ class WCP_Tree
         $string = "";
         if (!empty($terms)) {
             foreach ($terms as $term) {
-                $selected = ($selected_term == $term->term_id) ? "selected" : "";
-                $string  .= "<option ".esc_attr($selected)." value='".esc_attr($term->term_id)."'>".esc_attr($space).esc_attr($term->name)."</option>";
-                $string  .= self::get_folder_option_data($postType, $term->term_id, trim($space)."- ");
+                if(isset($term->term_id) && isset($term->name)) {
+                    $selected = ($selected_term == $term->term_id) ? "selected" : "";
+                    $string .= "<option " . esc_attr($selected) . " value='" . esc_attr($term->term_id) . "'>" . esc_attr($space) . esc_attr($term->name) . "</option>";
+                    $string .= self::get_folder_option_data($postType, $term->term_id, trim($space) . "- ");
+                }
             }
         }
 
