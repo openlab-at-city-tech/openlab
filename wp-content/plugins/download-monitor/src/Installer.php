@@ -220,6 +220,7 @@ class DLM_Installer {
 	 * @return void
 	 */
 	private function install_tables() {
+		
 		global $wpdb;
 
 		$wpdb->hide_errors();
@@ -242,28 +243,30 @@ class DLM_Installer {
 			download_status varchar(200) DEFAULT NULL,
 			download_status_message varchar(200) DEFAULT NULL,
 			download_location varchar(200) DEFAULT NULL,
-			download_category varchar(200) DEFAULT NULL,
+			download_category longtext DEFAULT NULL,
 			meta_data longtext DEFAULT NULL,
 			PRIMARY KEY  (ID),
 			KEY attribute_name (download_id)
 		) $collate;
 		";
 
-		$dlm_reports = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dlm_reports_log` (
-			`date` DATE NOT NULL,
-			`download_ids` longtext NULL,
-			`revenue` longtext NULL,
-			`refunds` longtext NULL,
-			PRIMARY KEY (`date`)) $collate;";
+		$dlm_reports = "CREATE TABLE `{$wpdb->prefix}dlm_reports_log` (
+			date DATE NOT NULL,
+			download_ids longtext NULL,
+			revenue longtext NULL,
+			refunds longtext NULL,
+			PRIMARY KEY  (date),
+			KEY attribute_name (date)
+            ) $collate;";
 
-		$dlm_downloads = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dlm_downloads` (
+		$dlm_downloads = "CREATE TABLE `{$wpdb->prefix}dlm_downloads` (
 					    ID bigint(20) NOT NULL auto_increment,
 						download_id bigint(20) NOT NULL,
 						download_count bigint(20) NOT NULL,
 						download_versions varchar(200) NOT NULL,
-		 				PRIMARY KEY (`ID`))
-						ENGINE = InnoDB $collate;";
-
+		 				PRIMARY KEY  (ID),
+		 				KEY attribute_name (download_id)
+		 				) $collate;";
 
 		dbDelta( $dlm_log );
 		dbDelta( $dlm_reports );
@@ -317,5 +320,4 @@ class DLM_Installer {
 			}
 		}
 	}
-
 }

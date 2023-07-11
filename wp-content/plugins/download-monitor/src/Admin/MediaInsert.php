@@ -63,8 +63,13 @@ class DLM_Admin_Media_Insert {
 		?>
 		<h2 class="nav-tab-wrapper">
 			<a href="#insert-shortcode"
-			   class="nav-tab nav-tab-active"><?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?></a><a
-				href="#quick-add" class="nav-tab"><?php echo esc_html__( 'Quick-add download', 'download-monitor' ); ?></a>
+			   class="nav-tab nav-tab-active"><?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?></a>
+			<?php
+			if ( current_user_can( 'manage_downloads' ) ) { ?>
+				<a
+					href="#quick-add"
+					class="nav-tab"><?php echo esc_html__( 'Quick-add download', 'download-monitor' ); ?></a>
+			<?php } ?>
 		</h2>
 		<?php
 
@@ -304,7 +309,7 @@ class DLM_Admin_Media_Insert {
 						'url'                 => admin_url( 'admin-ajax.php' ),
 						'flash_swf_url'       => includes_url( 'js/plupload/plupload.flash.swf' ),
 						'silverlight_xap_url' => includes_url( 'js/plupload/plupload.silverlight.xap' ),
-						'filters'             => array( array( 'title' => __( 'Allowed Files' ), 'extensions' => '*' ) ),
+						'filters'             => array( array( 'title' => __( 'Allowed Files', 'download-monitor' ), 'extensions' => '*' ) ),
 						'multipart'           => true,
 						'urlstream_upload'    => true,
 

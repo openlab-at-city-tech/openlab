@@ -95,9 +95,10 @@ class DLM_Backwards_Compatibility {
 
 			$meta_counts = $wpdb->get_var(
 				"
-                SELECT SUM( meta_value ) FROM $wpdb->postmeta
-                LEFT JOIN $wpdb->posts on $wpdb->postmeta.post_id = $wpdb->posts.ID
-                WHERE meta_key = '_download_count'
+               SELECT SUM( meta_value ) FROM 
+                ( SELECT post_id, meta_value, meta_key FROM $wpdb->postmeta WHERE meta_key = '_download_count' GROUP BY post_id ) PM
+                LEFT JOIN $wpdb->posts on PM.post_id = $wpdb->posts.ID
+                WHERE PM.meta_key = '_download_count'
                 AND post_type = 'dlm_download'
                 AND post_status = 'publish'
             "
@@ -130,8 +131,12 @@ class DLM_Backwards_Compatibility {
 		if ( apply_filters( 'dlm_backwards_compatibility_orderby_meta', false ) ) {
 			add_filter( 'dlm_admin_sort_columns', array( $this, 'no_log_query_args_compatibility' ), 15, 1 );
 			add_filter( 'dlm_query_args_filter', array( $this, 'no_log_query_args_compatibility' ), 15, 1 );
+
 			return;
 		}
+
+		add_filter( 'posts_fields', array( $this, 'select_download_count_compatibility' ) );
+		add_filter( 'posts_join', array( $this, 'join_download_count_compatibility' ) );
 
 		if ( ! DLM_Utils::table_checker( $wpdb->download_log ) || ! DLM_Logging::is_logging_enabled() ) {
 			return;
@@ -157,13 +162,13 @@ class DLM_Backwards_Compatibility {
 		}
 
 		$this->filters = $filters;
-		add_filter( 'dlm_admin_sort_columns', array( $this, 'query_args_download_count_compatibility' ), 60 );
-		add_filter( 'dlm_query_args_filter', array( $this, 'query_args_download_count_compatibility' ), 60 );
-		add_filter( 'posts_join', array( $this, 'join_download_count_compatibility' ) );
+	// @todo: Think the below filters are not useful anymore as we changed the SQL query.
+	//	add_filter( 'dlm_admin_sort_columns', array( $this, 'query_args_download_count_compatibility' ), 60 );
+	//	add_filter( 'dlm_query_args_filter', array( $this, 'query_args_download_count_compatibility' ), 60 );
+	
 		// @todo: delete this filter and function after feedback, as version 4.7.0 doesn't need it.
 		// add_filter( 'posts_where', array( $this, 'where_download_count_compatibility' ) );
 		add_filter( 'posts_groupby', array( $this, 'groupby_download_count_compatibility' ) );
-		add_filter( 'posts_fields', array( $this, 'select_download_count_compatibility' ) );
 		add_filter( 'posts_orderby', array( $this, 'orderby_download_count_compatibility' ) );
 
 	}
@@ -179,7 +184,13 @@ class DLM_Backwards_Compatibility {
 	public function join_download_count_compatibility( $join ) {
 		global $wpdb;
 
-		$join .= " LEFT JOIN {$wpdb->dlm_downloads} ON ({$wpdb->posts}.ID = {$wpdb->dlm_downloads}.download_id) LEFT JOIN ( SELECT {$wpdb->postmeta}.meta_value, {$wpdb->postmeta}.post_id FROM {$wpdb->postmeta} WHERE {$wpdb->postmeta}.meta_key = '_download_count') as meta_downloads  ON ( meta_downloads.post_id = {$wpdb->posts}.ID )";
+		if ( ! DLM_Utils::table_checker( $wpdb->dlm_downloads ) ) {
+			return $join;
+		}
+
+		$join .= " LEFT JOIN {$wpdb->dlm_downloads} ON ({$wpdb->posts}.ID = {$wpdb->dlm_downloads}.download_id) LEFT JOIN 
+		( SELECT {$wpdb->postmeta}.meta_value, {$wpdb->postmeta}.post_id FROM {$wpdb->postmeta} WHERE 
+		{$wpdb->postmeta}.meta_key = '_download_count' GROUP BY {$wpdb->postmeta}.post_id ) as meta_downloads  ON ( meta_downloads.post_id = {$wpdb->posts}.ID )";
 
 		return $join;
 	}
@@ -211,10 +222,17 @@ class DLM_Backwards_Compatibility {
 	public function select_download_count_compatibility( $fields ) {
 
 		global $wpdb;
+
+		if ( ! DLM_Utils::table_checker( $wpdb->dlm_downloads ) ) {
+			return $fields;
+		}
+
 		if ( apply_filters( 'dlm_count_meta_downloads', true ) ) {
-			$fields .= ", {$wpdb->dlm_downloads}.download_count, (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) +   IFNULL( meta_downloads.meta_value, 0 ) ) total_downloads";
+			$fields .= ", {$wpdb->dlm_downloads}.download_count, (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) + 
+			IFNULL( meta_downloads.meta_value, 0 ) ) total_downloads, {$wpdb->dlm_downloads}.download_versions as download_versions ";
 		} else {
-			$fields .= ", {$wpdb->dlm_downloads}.download_count, (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) ) total_downloads";
+			$fields .= ", {$wpdb->dlm_downloads}.download_count, (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) ) 
+			total_downloads, {$wpdb->dlm_downloads}.download_versions as download_versions";
 		}
 
 		return $fields;
@@ -246,6 +264,10 @@ class DLM_Backwards_Compatibility {
 	 */
 	public function orderby_download_count_compatibility( $orderby ) {
 
+		global $wpdb;
+		if ( ! DLM_Utils::table_checker( $wpdb->dlm_downloads ) ) {
+			return $orderby;
+		}
 		$order = 'DESC';
 
 		if ( isset( $this->filters['order'] ) ) {
