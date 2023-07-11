@@ -65,7 +65,7 @@
         slideClassPrefix = namespaceIdx + "_s",
 
         // Pager
-        $pager = $("<ul class='" + namespace + "_tabs " + namespaceIdx + "_tabs' />"),
+        $pager = $("<ul class='" + namespace + "_tabs " + namespaceIdx + "_tabs' role='group' aria-label='Slide controls' />"),
 
         // Styles for visible and hidden slides
         visible = {"float": "left", "position": "relative", "opacity": 1, "zIndex": 2},
@@ -185,7 +185,7 @@
             var n = i + 1;
             tabMarkup +=
               "<li>" +
-              "<a href='#' class='" + slideClassPrefix + n + "'>" + n + "</a>" +
+              "<a href='#' class='" + slideClassPrefix + n + "' aria-label='Show slide " + n + " of " + $slide.length + "'>" + n + "</a>" +
               "</li>";
           });
           $pager.append(tabMarkup);
@@ -308,8 +308,8 @@
         // Navigation
         if (settings.nav) {
           var navMarkup =
-            "<a href='#' class='" + navClass + " prev'>" + settings.prevText + "</a>" +
-            "<a href='#' class='" + navClass + " next'>" + settings.nextText + "</a>";
+            "<a href='#' class='" + navClass + " prev' aria-label='Previous Slide'>" + settings.prevText + "</a>" +
+            "<a href='#' class='" + navClass + " next' aria-label='Next Slide'>" + settings.nextText + "</a>";
 
           // Inject navigation
           if (options.navContainer) {

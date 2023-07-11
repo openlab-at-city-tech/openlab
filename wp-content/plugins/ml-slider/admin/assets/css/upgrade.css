@@ -112,6 +112,83 @@ img.addons {
 }
 
 
+/* Pro Slider Ads */
+.ms-panel-container-ad {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+.ms-panel-container-ad > * {
+    flex-grow: 1;
+}
+.ms-panel-container-ad img {
+    width: 100%;
+}
+.ms-panel-container-ad h2 {
+    margin-top: 25px;
+    font-size: 28px;
+    line-height: 1.2;
+    color: #29375b;
+}
+.ms-panel-container-ad p {
+    font-size: 16px;
+}
+.ms-panel-container-ad .probutton {
+    color: #fff;
+    background: #dd6923;
+    padding: 12px 30px !important;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    font-size: 17px !important;
+    margin-top: 15px;
+    min-height: 46px !important;
+    line-height: 1.8 !important;
+    white-space: unset;
+}
+.ms-panel-container-ad .probutton:hover,
+.ms-panel-container-ad .probutton:focus,
+.ms-panel-container-ad .probutton:active {
+    background-color: #29375b;
+    border: none;
+}
+.ms-panel-container-ad .dashicons-external {
+    vertical-align: middle;
+    margin-left: 3px;
+    margin-top: -5px;
+}
+
+@media (min-width: 1025px) {
+    /* Pro Slider Ads */
+    .ms-panel-container-ad {
+        padding: 30px 60px 30px 0;
+    }
+    .ms-panel-container-ad > * {
+        flex-basis: 0;
+    }
+    .ms-panel-container-ad .left {
+        max-width: 850px;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Pro Slider Ads */
+    .ms-panel-container-ad {
+        padding: 30px 0;
+    }
+    .ms-panel-container-ad > div {
+       text-align: center;
+    }
+    .ms-panel-container-ad > div:not(.left) {
+        padding: 0 40px;
+    }
+    .ms-panel-container-ad > div h2 {
+        margin-top: 0;
+    } 
+}
+
 @media screen and (max-width: 768px) {
     #wpcontent {
         padding: 0 10px;

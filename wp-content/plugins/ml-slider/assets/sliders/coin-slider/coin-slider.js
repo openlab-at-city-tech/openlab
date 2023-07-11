@@ -204,8 +204,8 @@
 					$('#cs-navigation-' + el.id).hide();
 				}
 
-				$('#cs-navigation-' + el.id).append("<a href='#' id='cs-prev-" + el.id + "' class='cs-prev'>"+params[el.id].prevText+"</a>");
-				$('#cs-navigation-' + el.id).append("<a href='#' id='cs-next-" + el.id + "' class='cs-next'>"+params[el.id].nextText+"</a>");
+				$('#cs-navigation-' + el.id).append("<a href='#' id='cs-prev-" + el.id + "' class='cs-prev' aria-label='Previous Slide'>"+params[el.id].prevText+"</a>");
+				$('#cs-navigation-' + el.id).append("<a href='#' id='cs-next-" + el.id + "' class='cs-next' aria-label='Next Slide'>"+params[el.id].nextText+"</a>");
 				$('#cs-prev-' + el.id).css({
 					'position'		: 'absolute',
 					'top'			: params[el.id].height / 2 - 15,
@@ -242,11 +242,11 @@
 
 			// image buttons
 			if (params[el.id].showNavigationButtons) {
-				$("<div id='cs-buttons-" + el.id + "' class='cs-buttons'></div>").appendTo($('#coin-slider-' + el.id));
+				$("<div id='cs-buttons-" + el.id + "' class='cs-buttons' role='group' aria-label='Slide controls'></div>").appendTo($('#coin-slider-' + el.id));
 
 				var k;
 				for (k = 1; k < images[el.id].length + 1; k++){
-					$('#cs-buttons-' + el.id).append("<a href='#' class='cs-button-" + el.id + "' id='cs-button-" + el.id + "-" + k + "'>" + k + "</a>");
+					$('#cs-buttons-' + el.id).append("<a href='#' class='cs-button-" + el.id + "' id='cs-button-" + el.id + "-" + k + "' aria-label='Show slide " + k + " of " + images[el.id].length + "'>" + k + "</a>");
 				}
 
 				$.each($('.cs-button-' + el.id), function(i,item){

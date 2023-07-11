@@ -143,6 +143,7 @@ class MetaFlexSlider extends MetaSlider
             'animationSpeed' => 'animationSpeed',
             'hoverPause' => 'pauseOnHover',
             'reverse' => 'reverse',
+            'keyboard' => 'keyboard',
             'navigation' => 'controlNav',
             'links' => 'directionNav',
             'carouselMode' => 'carouselMode',

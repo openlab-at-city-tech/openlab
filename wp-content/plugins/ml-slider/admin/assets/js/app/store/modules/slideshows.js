@@ -1,4 +1,6 @@
 import slideshow from '../../api/Slideshow'
+import { Axios } from '../../api'
+import QS from 'qs'
 
 // initial state
 const state = {
@@ -137,7 +139,6 @@ const mutations = {
             // Check if the slideshow already exists in the store
             const index = state.all.findIndex(slideshow => (slideshow.id === slideshows[key].id))
             if (index > -1) {
-
                 // If the two objects are not identical, replace with the new one
                 if (JSON.stringify(state.all[index]) !== JSON.stringify(slideshows[key])) {
                     Object.assign(state.all[index], slideshows[key])
@@ -145,34 +146,37 @@ const mutations = {
                 }
             } else {
 
-                // It's new, so push to the store
-                state.all.push(slideshows[key])
-            }
-        })
-    },
-    addSlides(state, slides) {
-        slides && Object.keys(slides).forEach(key => {
-            // If the two objects are not identical, replace with the new one
-            if (JSON.stringify(state.slides[slides[key].id]) !== JSON.stringify(slides[key])) {
-                state.slides[slides[key].id] = slides[key]
-                console.log('MetaSlider:', 'Updated slide id #' + slides[key].id + ' in local storage.')
-            }
-        })
-    },
-    updateTheme(state, theme) {
-        const index = state.all.findIndex(slideshow => (slideshow.id === state.currentId))
-        state.all[index]['theme'] = theme
-    },
-    updateTitle(state, title) {
-        const index = state.all.findIndex(slideshow => (slideshow.id === state.currentId))
-        state.all[index]['title'] = title
-    },
-    setLocked(state, locked) {
-        state.locked = locked
-    },
-    setFetchingAll(state, status) {
-        state.fetchingAll = status
-    }
+				// It's new, so push to the store
+				state.all.push(slideshows[key])
+
+				// Add sample images to the new slideshow
+				if(window.location.href.indexOf('metaslider_add_sample_slides') > -1) {
+					Axios.post('import/images', QS.stringify({
+						action: 'ms_import_images',
+						slideshow_id: slideshows[key].id,
+					})).then(response => {
+					    window.location.reload(true)
+					}).catch(error => {
+						console.log(error)
+					})
+				}
+			}
+		})
+	},
+	updateTheme(state, theme) {
+		const index = state.all.findIndex(slideshow => (slideshow.id === state.currentId))
+		state.all[index]['theme'] = theme
+	},
+	updateTitle(state, title) {
+		const index = state.all.findIndex(slideshow => (slideshow.id === state.currentId))
+		state.all[index]['title'] = title
+	},
+	setLocked(state, locked) {
+		state.locked = locked
+	},
+	setFetchingAll(state, status) {
+		state.fetchingAll = status
+	}
 }
 
 export default {

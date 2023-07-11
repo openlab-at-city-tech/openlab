@@ -12,6 +12,26 @@ class MetaResponsiveSlider extends MetaSlider
     protected $js_function = 'responsiveSlides';
     protected $js_path = 'sliders/responsiveslides/responsiveslides.min.js';
     protected $css_path = 'sliders/responsiveslides/responsiveslides.css';
+    
+    /**
+     * Constructor
+     *
+     * @param integer $id slideshow ID
+     */
+    public function __construct($id, $shortcodeSettings)
+    {
+        parent::__construct($id, $shortcodeSettings);
+        add_filter('metaslider_css_classes', array($this,'addNoTextCss'), 11, 3);
+    }
+
+    public function addNoTextCss($class, $id, $settings)
+    {
+        if (empty($settings["prevText"]) || empty($settings["nextText"])) {
+            return $class .= " no-text";
+        }
+        remove_filter('metaslider_css_classes', array($this, 'addNoTextCss'), 12);
+        return $class;
+    }
 
     /**
      * Detect whether thie slide supports the requested setting,
@@ -50,14 +70,17 @@ class MetaResponsiveSlider extends MetaSlider
         $return_value = "<ul id='" . $this->get_identifier() . "' class='rslides'>";
 
         $first = true;
+        $i = 0;
         foreach ($this->slides as $slide) {
             $style = "";
 
             if (!$first) {
                 $style = " style='display: none;'";
             }
-            $return_value .= "\n            <li{$style}>" . $slide . "</li>";
+
+            $return_value .= "\n            <li{$style} aria-roledescription='slide' aria-labelledby='slide-" . esc_attr($i) . "'>" . $slide . "</li>";
             $first = false;
+            $i++;
         }
 
         $return_value .= "\n        </ul>";

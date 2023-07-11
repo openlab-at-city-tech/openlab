@@ -191,10 +191,9 @@ export default {
 	watch: {
 		selected(photo) {
 			this.upload.caption = photo.user ? this.sprintf(
-				this._x('Photo by %s on %s', 'Photo by NAME on Unsplash', 'ml-slider'),
-				'<a href=\'' + photo.user.links.html + '\'>' + photo.user.name + '</a>',
-				'<a href=\'https://unsplash.com/\'>Unsplash</a>'
-			) : ''
+				this.__('Photo by %s on Unsplash', 'ml-slider'),
+				photo.user.name
+			) : this.__('Photo on Unsplash', 'ml-slider')
 		}
 	},
 	mounted() {

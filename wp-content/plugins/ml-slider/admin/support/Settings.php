@@ -52,15 +52,5 @@ if (! class_exists('MetaSlider_Settings')) {
 
             return $settings[$option_name];
         }
-
-        /**
-         * Return the setting disableExtendify.
-         *
-         * @return bool
-         */
-        public function get_disable_extendify_sdk()
-        {
-            return (bool) $this->get_option('disableExtendify', true);
-        }
     }
 }

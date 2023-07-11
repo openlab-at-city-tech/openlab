@@ -12,7 +12,7 @@
             </div>
         </div>
 		<div v-if="link" class="mt-0 text-sm leading-5">
-			<a :href="link" :target="newTab ? '_blank' : '_self'" class="font-medium text-indigo-600 hover:text-indigo-500 transition ease-in-out duration-150">
+			<a :href="link" :target="newTab ? '_blank' : '_self'" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-sm md:leading-5 bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white">
 				<slot name="link-text"/>
 			</a>
 		</div>

@@ -114,6 +114,7 @@ class MetaSlider
             'theme' => 'default',
             'direction' => 'horizontal',
             'reverse' => false,
+            'keyboard' => false,
             'animationSpeed' => 600,
             'prevText' => __('Previous', 'ml-slider'),
             'nextText' => __('Next', 'ml-slider'),
@@ -240,13 +241,18 @@ class MetaSlider
      */
     public function render_public_slides()
     {
-        $html[] = '<div id="metaslider-id-' . esc_attr($this->id) . '" style="' . esc_attr($this->get_container_style()) . '" class="' . esc_attr($this->get_container_class()) . '">';
+        if (array_key_exists('title', $this->settings)) {
+            $slideshow_title = $this->settings['title'];
+        } else {
+            $slideshow_title = 'Slideshow';
+        }
+        $html[] = '<div id="metaslider-id-' . esc_attr($this->id) . '" style="' . esc_attr($this->get_container_style()) . '" class="' . esc_attr($this->get_container_class()) . '" role="region" aria-roledescription="Slideshow" aria-label="' . esc_attr($slideshow_title) . '">';
         $html[] = '    <div id="' . esc_attr($this->get_container_id()) . '">';
         $html[] = '        ' . $this->get_html();
         $html[] = '        ' . $this->get_html_after();
         $html[] = '    </div>';
         $html[] = '</div>';
-
+        
         $slideshow = implode("\n", $html);
 
         $slideshow = apply_filters('metaslider_slideshow_output', $slideshow, $this->id, $this->settings);
@@ -336,6 +342,9 @@ class MetaSlider
 
         $identifier = $this->get_identifier();
 
+        $type = $this->get_setting('type');
+        $keyboard = $this->get_setting('keyboard');
+
         $script = "var " . $identifier . " = function($) {";
         $script .= $custom_js_before;
         $script .= "\n            $('#" . $identifier . "')." . $this->js_function . "({ ";
@@ -344,6 +353,36 @@ class MetaSlider
         $script .= $custom_js_after;
         $script .= "\n            $(document).trigger('metaslider/initialized', '#$identifier');";
         $script .= "\n        };";
+
+        if($keyboard == "on") {
+            $script .= "\n jQuery(document).ready(function($) {";
+            $script .= "\n $('.metaslider').attr('tabindex', '1');";
+            $script .= "\n $('a').attr('tabindex' , '-1');";
+            $script .= "\n     $(document).on('keyup.slider', function(e) {";
+            if($type == "responsive") {          
+                $script .= "\n      if (e.keyCode == 37) {";
+                $script .= "\n          $('.prev').trigger('click');";
+                $script .= "\n      } else if (e.keyCode == 39) {";
+                $script .= "\n          $('.next').trigger('click');";
+                $script .= "\n      }";
+            } elseif ($type == "nivo") {
+                $script .= "\n      if (e.keyCode == 37) {";
+                $script .= "\n          $('a.nivo-prevNav').click();";
+                $script .= "\n      } else if (e.keyCode == 39) {";
+                $script .= "\n          $('a.nivo-nextNav').click();";
+                $script .= "\n      }";
+            } elseif ($type == "coin") {
+                $script .= "\n      if (e.keyCode == 37) {";
+                $script .= "\n          $('a.cs-prev').trigger('click');";
+                $script .= "\n      } else if (e.keyCode == 39) {";
+                $script .= "\n          $('a.cs-next').trigger('click');";
+                $script .= "\n      }";
+            }
+            $script .= "\n  });"; 
+            $script .= "\n });";
+        }
+
+        
 
         $timer = "\n        var timer_" . $identifier . " = function() {";
         // this would be the sensible way to do it, but WordPress sometimes converts && to &#038;&

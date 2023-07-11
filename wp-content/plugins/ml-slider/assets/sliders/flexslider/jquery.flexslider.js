@@ -231,7 +231,7 @@
               item,
               slide;
 
-          slider.controlNavScaffold = $('<ol class="'+ namespace + 'control-nav ' + namespace + type + '"></ol>');
+          slider.controlNavScaffold = $('<ol class="'+ namespace + 'control-nav ' + namespace + type + '" role="group" aria-label="Slide controls"></ol>');
 
           if (slider.pagingCount > 1) {
             for (var i = 0; i < slider.pagingCount; i++) {
@@ -243,7 +243,7 @@
                 var captn = slide.attr( 'data-thumbcaption' );
                 if ( '' !== captn && undefined !== captn ) { item += '<span class="' + namespace + 'caption">' + captn + '</span>'; }
               }
-              slider.controlNavScaffold.append('<li>' + item + '</li>');
+              slider.controlNavScaffold.append('<li aria-label="Show slide ' + j + ' of ' + slider.pagingCount + '">' + item + '</li>');
               j++;
             }
           }
@@ -932,9 +932,9 @@
 
       if (slider.transitions) {
         if (slider.isFirefox) {
-          target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + (parseInt(target)+'px') + ",0,0)";
+          target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + (parseFloat(target)+'px') + ",0,0)";
         } else {
-          target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + ((slider.vars.rtl?-1:1)*parseInt(target)+'px') + ",0,0)";
+          target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + ((slider.vars.rtl?-1:1)*parseFloat(target)+'px') + ",0,0)";
         }
         dur = (dur !== undefined) ? (dur/1000) + "s" : "0s";
         slider.container.css("-" + slider.pfx + "-transition-duration", dur);

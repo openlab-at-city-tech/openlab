@@ -34,7 +34,6 @@ class MetaSlider_Analytics
         );
 
         // Show notice only if they are not already opt in (pro will override this to show the opt-out notice once)
-        add_action('admin_notices', array($this, 'showOptInNotice'));
         add_action('wp_ajax_handle_optin_action', array($this, 'handleOptinDismiss'));
         add_action('admin_enqueue_scripts', array($this, 'addAdminNonce'));
     }
@@ -53,57 +52,6 @@ class MetaSlider_Analytics
             'metaslider-optin-extra-js',
             "window.metaslider_optin_notice_nonce = '{$nonce}'"
         );
-    }
-
-    /**
-     * Show the dang thing
-     *
-     * @return void
-     */
-    public function showOptInNotice()
-    {
-        if (!get_user_option('extendifysdk_announcement')) {
-            // If they haven't seen the the extendify notice, then hold off on showing this one.
-            return;
-        }
-        if (self::siteIsOptin()) {
-            return;
-        }
-        $current_page = get_current_screen();
-        if ($current_page && in_array($current_page->base, $this->whereToShow)) {
-            if (!get_user_option('metaslider_optin_notice_dismissed') && !get_user_option('wp_metaslider_analytics_onboarding_status')) { ?>
-            <div
-                id="metaslider-optin-notice"
-                class="notice updated"
-                style="display:flex;align-items:stretch;justify-content:space-between;position:relative">
-                <div style="display:flex;align-items:center;position:relative">
-                    <img
-                        src="<?php echo esc_url(METASLIDER_BASE_URL . 'admin/images/metaslider_logo.png'); ?>"
-                        width="60" height="60"
-                        style="margin-right:0.5rem;"
-                        alt="<?php esc_attr_e('MetaSlider Logo', 'ml-slider');?>" />
-                    <div>
-                        <h3 style="margin-bottom:0.25rem;"><?php esc_html_e('Thanks for using MetaSlider', 'ml-slider'); ?></h3>
-                        <p style="max-width:850px;">
-                            <?php printf(esc_html__('We are currently building the next version of MetaSlider. Can you help us out by sharing non-sensitive diagnostic information? We\'d also like to send you infrequent emails with important security and feature updates. See our %s for more details.', 'ml-slider'), '<a target="_blank" href="https://www.metaslider.com/privacy-policy">' . esc_html__('privacy policy', 'ml-slider') . '</a>'); ?>
-                        </p>
-                    </div>
-                </div>
-                <div style="display:flex;flex-direction:column;justify-content: space-between;align-items:flex-end;margin:8px 0 12px;">
-                    <button
-                        style="max-width:15px;border:0;background:0;color: #7b7b7b;white-space:nowrap;cursor: pointer;padding: 0"
-                        title="Dismiss notice"
-                        aria-label="Dismiss MetaSlider activation notice"
-                        onclick="jQuery('#metaslider-optin-notice').remove();jQuery.post(window.ajaxurl, {action: 'handle_optin_action', activate: false, _wpnonce: metaslider_optin_notice_nonce });">
-                        <svg style="width:100%" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <button class="button button-primary" onclick="jQuery('#metaslider-optin-notice').remove();jQuery.post(window.ajaxurl, {action: 'handle_optin_action', activate: true, _wpnonce: metaslider_optin_notice_nonce });"><?php esc_html_e('Agree', 'ml-slider'); ?></button>
-                </div>
-            </div>
-            <?php }
-        }
     }
 
     /**

@@ -1,10 +1,10 @@
 === Slider, Gallery, and Carousel by MetaSlider - Responsive WordPress Slideshows ===
-Contributors: matchalabs, DavidAnderson, dnutbourne, kbat82, andergmartins, htmgarcia
+Contributors: andergmartins, htmgarcia, publishpress, stevejburge, rochdesigns
 Tags: slideshow, slider, image slider, carousel, gallery, flex slider, wordpress slider, nivoslider, rotating banner, image sliders, responsive slideshow, seo slideshow, unsplash, post sliders, video sliders, YouTube sliders, Vimeo sliders, HTML sliders, external URL sliders, layer sliders, best WordPress slider, best slider, best slideshow, best carousel, easy slider, easy slideshow, flex slider, woocommerce slider, woocommerce slideshow, video slider
 Requires at least: 3.5
-Stable tag: 3.28.3
+Stable tag: 3.33.0
 Requires PHP: 5.6
-Tested up to: 6.1
+Tested up to: 6.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,8 +45,8 @@ For users looking to further customize a slider, slideshow, carousel, or gallery
 * **Dynamic Post Feed/Featured Image Slides**: Automatically show your latest blog posts, events or WooCommerce products in your slide show.
 * **Slide scheduling & slide visibility**: Pro customers can now schedule sliders to appear only within specific dates.
 * **Custom Themes – build your own theme**: MetaSlider now has 11 stunning new and free of charge professional slider themes for you to explore.
-* **Thumbnail Navigation**: Give your slideshows a gallery feel with Thumbnail Navigation
-* **Premium Support**
+* **Thumbnail Navigation**: Give your slideshows a gallery feel with Thumbnail Navigation.
+* **Premium Support**: Get fast access to our professional support team.
 
 ### Four Slideshow Types
 
@@ -236,30 +236,10 @@ Find out more at [metaslider.com](https://www.metaslider.com/)
 
 Follow us on Twitter: [@wpmetaslider](https://twitter.com/wpmetaslider)
 
-## Template and Pattern Library
-
-MetaSlider includes access to the Extendify template and pattern library that can be accessed by clicking the "Library" button in the menu bar of the editor. We provide a variety of templates and patterns to serve different use cases and are adding more templates every week.
-
-## Privacy
-
-The Extendify library uses a custom API to fetch block patterns and page layouts from our servers. API requests are only made when a user clicks on the Library button. In order to provide and improve this service, Extendify passes site data along with an API request, including:
-
-* Browser
-* Referring site
-* Category selection
-* WP language
-* Active theme
-* Active plugins
-* Anonymized UUID
-* Anonymized IP address
-
-By accessing the Extendify library, you agree to the Extendify [privacy policy](https://extendify.com/privacy-policy) and [terms of service](https://extendify.com/terms-of-service).
-For more details on our terms of service: [https://extendify.com/terms-of-service](https://extendify.com/terms-of-service)
 
 ### Privacy Policy
 
-MetaSlider uses the Appsero SDK to collect non-sensitive diagnostic data upon a user’s confirmation. This data helps us to troubleshoot problems faster & make product improvements.
-Meta Slider only collects this diagnostic data when a user allows it via a notice in WP Admin or MetaSlider settings. View our [privacy policy](https://www.metaslider.com/privacy-policy).
+MetaSlider uses the Appsero SDK to collect non-sensitive diagnostic data upon a user’s confirmation. This data helps us to troubleshoot problems faster & make product improvements. MetaSlider only collects this diagnostic data when a user allows it via a notice in WP Admin or MetaSlider settings. View our [privacy policy](https://www.metaslider.com/privacy-policy).
 
 == Installation ==
 
@@ -358,17 +338,103 @@ Our official name is MetaSlider. Don't worry - we'll still understand if you cal
 
 == Screenshots ==
 
-1. MetaSlider - for live demos see https://www.metaslider.com/examples/
-2. Gallery example - Create impressive galleries
-3. Includes 11 professional slider themes
-4. Free slider images - Direct from Unsplash.com
-5. Easily preview sliders from the admin
-6. Our sliders integratei directly in Gutenberg
+1. Image slides with MetaSlider
+2. Carousel slides with MetaSlider
+3. YouTube video slides with MetaSlider
+4. Vimeo video slides with MetaSlider
+5. Local video slides with MetaSlider
+6. Layer slides with MetaSlider
+7. Manage and edit all your slideshows from one screen
+8. Easily edit your sliders inside WordPress
+9. You can easily preview sliders from the WordPress admin
 
 == Changelog ==
 
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.33.0] - 05 Jul, 2023 =
+
+* ADDED: Translation updates, #547;
+* FIXED: Quick Start Page translation issues #562;
+* FIXED: Drag and drop container width, #579;
+* FIXED: Missing preview for Local Videos, #568;
+* FIXED: Undefined array key "title", #566;
+
+= [3.32.0] - 28 Jun, 2023 =
+
+* ADDED: Accessibility Improvements, #379, #427;
+* ADDED: Redirect to Quick Start Page on plugin activation, #524;
+* ADDED: Upsell screen for Local Videos, #547;
+* CHANGED: Button style on Help Center #330;
+* CHANGED: Use MetaSlider repository for FlexSlider, #504;
+* FIXED: Uploading images using drag and drop and Media Library on Quick Start Page, #65, #149;
+
+= [3.31.0] - 24 May, 2023 =
+
+* ADDED: Delete permanently slides and slideshows, #512, #496;
+* ADDED: New design for upsell screens, and promote External URL slide type, #259, #517, #518, #519, #520, #521, #522;
+* ADDED: Slideshow bulk delete, #493;
+* ADDED: Default CSS class to slider when no theme is selected, #226;
+* ADDED: Setting to enable/disable Gallery, #140;
+* CHANGED: Update FlexSlider plugin to 2.7.2, #492;
+* FIXED: Campaign link for External URL upsell screen, #514;
+* FIXED: Offset for FlexSlider, #487;
+* FIXED: "Update slide image" button disappears, #448;
+* FIXED: Caption from Unsplash images includes HTML, #486;
+* FIXED: Error "Conflict (409)" while editing an image, #459;
+* FIXED: Center arrow dots in Bubble theme, #479;
+* FIXED: Caption alignment in Bubble theme with NivoSlider, #449;
+* FIXED: Campaign link for External URL upsell screen, #514;
+
+= [3.30.1] - 03 May, 2023 =
+
+* FIXED: Downgrade Sweetalert2 for removing ua-anthem from certain sites, #488;
+
+= [3.30.0] - 20 Apr, 2023 =
+
+* ADDED: Display Slide ID, #375;
+* ADDED: Add a button to the top of the upgrade table, #411;
+* CHANGED: Remove all traces of Extendify, #264;
+* CHANGED: Remove bulk option for slideshows, #374.
+* CHANGED: Change “Add-on” Pack to just “Pro” in terminology, #118';
+* FIXED: Fix export function, #452;
+* FIXED: Fix the logo position on the editing screen, #440;
+* FIXED: Fix fatal error on the slideshow editing screen, #463;
+* FIXED: Fix broken email sign-up / acknowledgement, #464;
+* FIXED: Undefined Variable, #438;
+* FIXED: Creation of dynamic property for a few classes on PHP 8.2, #444;
+* FIXED: "Load" button in Settings & Help/Export is not functioning, #458;
+* FIXED: Missing CSS Button, #454;
+* FIXED: Slideshows screen isn't fully responsive, #410;
+* FIXED: HTML in caption is stripped out, #242;
+* FIXED: Quick Start screen isn't responsive, #412;
+* FIXED: Conflict with "Disable Admin Notices Individually" plugin, #420;
+* FIXED: Should other table headings be clickable?, #415;
+* FIXED: Why does navigation always bounce on the default Flexslider display, #335;
+* FIXED: Word ‘false’ appears on the right and left sides on the slides when fields ‘Previous text’ and ‘Next text’ are empty, #315;
+* FIXED: A slideshow is not displaying in a header (inserting through Gutenberg), #206;
+* FIXED: Remove out-of-date coupon in Schedule tab, #222;
+* FIXED: Fix data sanitization on Caption Field;
+
+= [3.29.1] - 20 Mar, 2023 =
+
+* SECURITY: Fix security issue related to data sanitization, output escaping and nonce verification, #430;
+
+= [3.29.0] - 07 Mar, 2023 =
+
+* ADDED: Add help text for the Easing effect, #344;
+* ADDED: Add new Dashboard menu link, #260;
+* CHANGED: Improve UI for the quick start screen, #125, #370, #371;
+* CHANGED: Remove bulk edit support on slideshows, #386;
+* CHANGED: Show the logo as thumbnail when slideshow is not an image sideshow, #388;
+* CHANGED: Improved some texts in the plugin, #395;
+* FIXED: Fix typo in MetaSlider documentation, #325;
+* FIXED: Fix UI issue for long text in dropdowns, #345;
+* FIXED: Updated Italian translation, #339;
+* FIXED: Fix the "Blank Slideshow" option in the quick start screen, #373;
+* FIXED: Fix background colors for being consistente, #393;
+* FIXED: Fix consistency for logo aligment, #392;
 
 = [3.28.3] - 12 Jan, 2023 =
 

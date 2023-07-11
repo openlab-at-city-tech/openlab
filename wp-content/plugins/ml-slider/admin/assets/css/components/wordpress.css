@@ -10,10 +10,6 @@ div#wpbody-content > .notice {
 	@apply m-6;
 }
 
-div#wpbody-content > * {
-	@apply hidden;
-}
-
 img {
 	@apply border-none;
 }

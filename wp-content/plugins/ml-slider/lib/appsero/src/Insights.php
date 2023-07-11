@@ -246,7 +246,7 @@ class Insights {
 
         // Add Plugins
         if ($this->plugin_data) {
-            
+
             $plugins_data = array();
 
             foreach ($all_plugins['active_plugins'] as $slug => $plugin) {
@@ -264,7 +264,7 @@ class Insights {
             if (array_key_exists($this->client->slug, $plugins_data)) {
                 unset($plugins_data[$this->client->slug]);
             }
-            
+
             $data['plugins'] = $plugins_data;
         }
 
@@ -317,7 +317,7 @@ class Insights {
             'Your name and email address',
         );
 
-        if ($this->plugin_data) { 
+        if ($this->plugin_data) {
             array_splice($data, 4, 0, ["active plugins' name"]);
         }
 
