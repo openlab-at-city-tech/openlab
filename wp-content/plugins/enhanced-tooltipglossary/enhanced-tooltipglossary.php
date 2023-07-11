@@ -3,29 +3,12 @@
 Plugin Name: CM Tooltip Glossary
 Plugin URI: https://www.cminds.com/
 Description: Easily create a Glossary, Encyclopedia or Dictionary of your custom terms. Plugin parses posts and pages searching for defined glossary terms and adds links to the glossary term page. Hovering over the link shows a tooltip with the definition.
-Version: 4.1.6
+Version: 4.2.8
 Text Domain: enchanced-tooltipglossary
 Author: CreativeMindsSolutions
 Author URI: https://www.cminds.com/
 */
 
-try {
-    if ( !ini_get( 'max_execution_time' ) || (ini_get( 'max_execution_time' ) < 300 && ini_get( 'max_execution_time' ) !== 0) ) {
-        /*
-         * Setup the high max_execution_time to avoid timeouts during lenghty operations like importing big glossaries,
-         * or rebuilding related articles index
-         */
-        $disabled = explode( ',', ini_get( 'disable_functions' ) );
-        if ( !in_array( 'set_time_limit', $disabled ) ) {
-            @set_time_limit( 300 );
-        }
-        if ( !in_array( 'ini_set', $disabled ) ) {
-            @ini_set( 'max_execution_time', 300 );
-        }
-    }
-} catch ( Exception $exc ) {
-    //silent all possible warnings
-}
 
 /**
  * Define Plugin Version
@@ -33,7 +16,7 @@ try {
  * @since 1.0
  */
 if ( !defined( 'CMTT_VERSION' ) ) {
-	define( 'CMTT_VERSION', '4.1.6' );
+	define( 'CMTT_VERSION', '4.2.8' );
 }
 
 /**

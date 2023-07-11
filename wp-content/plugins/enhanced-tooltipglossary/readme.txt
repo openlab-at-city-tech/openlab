@@ -1,42 +1,30 @@
-=== CM Tooltip Glossary  - Better SEO and UEX for your WP site ===
+=== CM Tooltip Glossary  ===
 Name: CM Tooltip Glossary
 Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
 Tags: glossary,tooltip,lexicon, dictionary, knowledgebase
 Requires at least: 5.4.0
-Tested up to: 6.1.1
-Stable tag: 4.1.6
+Tested up to: 6.2.1
+Stable tag: 4.2.8
 
-New 2021 Version! Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms.
+Create a glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
+
 
 == Description ==
 
-[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](http://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P)  | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
+[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](https://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P) | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
 
-**Easily create a glossary, encyclopedia or dictionary of your terms and show responsive tooltips when users hover over the terms. New 2021 Version!**
+**With the glossary you can create a comprehensive list of terms and definitions. The feature also enables you to display responsive tooltips that appear when users hover over a term, providing users with quick and convenient access to definitions. New 2023 Version!**
 
-CM Glossary Tooltip is a WordPress plugin that enables you to check posts or pages for defined glossary terms, by adding links to a glossary term page that contains the definition of the term used.
+The CM Glossary Tooltip is a powerful WordPress plugin that allows you to create a glossary of terms and definitions for your website. It works by automatically detecting glossary terms within your posts or pages and adding links to a dedicated glossary page that includes the term's definition.
+
+When users hover over the linked term, a tooltip pops up displaying the definition. The plugin also generates a responsive glossary index that lists all of the terms used throughout your website and provides easy access to their definitions.
 
 [youtube http://www.youtube.com/watch?v=WN3HLZ6ZuBM]
 
-The CM Tooltip Glossary plugin displays a tooltip containing the definition when users hover over the specific term.
 
-The CM Tooltip Glossary plugin also creates a responsive glossary index with all tooltip glossary terms used.
+The Pro editions include even more powerful features, such as: audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for  abbreviations and variations, multiple glossaries support, multiple index templates and much more.
 
-This tooltip plugin allows users to add unlimited tooltips to a site or within a glossary of terms.
-
-The Pro editions of the tooltip plugin for WordPress include even more powerful features, such as: audio and video tooltips, Wikipedia, Google Translate and Merriam-Webster integrations, terms with abbreviations and variations, multiple glossaries, several index templates and much more.
-
-The CM tooltip glossary plugin integrates easily with external data from dictionaries, thesauruses, and Wikipedia.
-
-== Add-Ons & Extensions ==
-
-> * [CM Tooltip Custom Taxonomies ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-custom-taxonomies-add-on-for-wordpress-by-creativeminds/)
-> * [CM Tooltip Search Console ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-search-console-widget-add-on-for-wordpress-by-creativeminds/)
-> * [CM Tooltip Glossary Remote Import](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-remote-import-cm-plugins-store/)
-> * [CM Tooltip Glossary Community Terms](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-community-terms-cm-plugins-store/)
-> * [CM Tooltip Glossary Log & Statistics](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-log-cm-plugins-store/)
-> * [CM Tooltip Glossary Widgets](https://www.cminds.com/wordpress-plugins-library/purchase-cm-tooltip-glossary-widgets-add-wordpress/)
 
 [youtube https://www.youtube.com/watch?v=drumP4tDL5Y]
 
@@ -118,7 +106,8 @@ The CM tooltip glossary plugin integrates easily with external data from diction
 == List of Ecommerce Features ==
 
 > * Includes all features of the Free, Pro and Pro+ Versions.
-> * (NEW) Supports for defining terms in different languages
+> * (NEW) Supports ChatGPT integration
+> * Supports for defining terms in different languages
 > * Supports adding a custom link to the terms
 > * Supports embedding audio in a tooltip.
 > * Supports embedding video in a tooltip.
@@ -134,30 +123,34 @@ The CM tooltip glossary plugin integrates easily with external data from diction
 > * Supports more than one definition for the same term.
 > * Over 300 configuration options in total!
 
+== Add-Ons & Extensions ==
+
+> * [CM Tooltip Custom Taxonomies ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-custom-taxonomies-add-on-for-wordpress-by-creativeminds/)
+> * [CM Tooltip Search Console ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-search-console-widget-add-on-for-wordpress-by-creativeminds/)
+> * [CM Tooltip Glossary Remote Import](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-remote-import-cm-plugins-store/)
+> * [CM Tooltip Glossary Community Terms](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-community-terms-cm-plugins-store/)
+> * [CM Tooltip Glossary Log & Statistics](https://www.cminds.com/wordpress-plugins-library/cm-tooltip-glossary-log-cm-plugins-store/)
+> * [CM Tooltip Glossary Widgets](https://www.cminds.com/wordpress-plugins-library/purchase-cm-tooltip-glossary-widgets-add-wordpress/)
+
+
 == Code and Style Issues ==
 
-The Tooltip is created with JavaScript and is based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) The Tooltip can be customized and styled through the tooltip.css and tooltip.js files.
+The Tooltip is created with JavaScript and is based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
+The Tooltip can be customized and styled through the tooltip.css and tooltip.js files.
 The alphabetical index for the Glossary index is based on [jQuery ListNav Plugin](http://www.ihwy.com/labs/jquery-listnav-plugin.aspx)
 
-== Keywords ==
-
-glossary, tooltip, lexicon, dictionary, knowledgebase, posts, definition, definitions, tooltip, automatic, hints, hint, tip, tool-tip, dictionary, Encyclopaedia, knowledge base, index, keywords, terms, knowledge base, knowledgebase, lexicon, synonyms, plural, singular, descriptions, description, explain, explanation, explanatory dictionary, Tooltips, vocabulary, words, word, expression, expressions, appendix, technical terms, content management, knowledge management, highlight, concordance, language, reference, terminology, jargon, palaver, style, talk, word, wording, thesaurus, word stock, wordbook, wordlist, archive, catalog, directory, index, listing, menu, source, archives, atlas, accent, expression, lingua, slang, bilingual, dialectic, expressed, lexical, literal, term, entry, verbal, verb, literature, book, literature, sourcebook, word list, translate, translation, google translate, merriam-webster, wikipedia, hint, youtube, vimeo, mp3, mp4, ecommerce, tags, amazon, products, products recommendations, recommendations, support, comments, images, page, pages, plugin, post, posts, seo, shortcode, sidebar, social, twitter, widget, widgets, wordpress, video, audio
 
 == Follow Us ==
 
-[Blog](https://www.cminds.com/category/wordpress/) | [Twitter](http://twitter.com/cmplugins)  | [Google+](https://plus.google.com/u/0/+CmindsPlugins/) | [LinkedIn](https://www.linkedin.com/company/creativeminds) | [YouTube](https://www.youtube.com/user/cmindschannel) | [Pinterest](http://www.pinterest.com/cmplugins/) | [Facebook](https://www.facebook.com/cmplugins/)
+[Blog](https://www.cminds.com/category/wordpress/) | [Twitter](http://twitter.com/cmplugins) | [LinkedIn](https://www.linkedin.com/company/creativeminds) | [YouTube](https://www.youtube.com/user/cmindschannel) | [Pinterest](http://www.pinterest.com/cmplugins/) | [Facebook](https://www.facebook.com/cmplugins/)
 
 == Suggested Plugins by CreativeMinds ==
 
-* [CM Ad Changer](https://adchanger.cminds.com/) - Manage, Track and Report Advertising Campaigns Across Sites. Can turn your Turn your WP into an Ad Server
-* [CM Super ToolTip Glossary](https://glossaryplugin.com/) - Easily creates a Glossary, Encyclopaedia or Dictionary of your website's terms and shows them as a tooltip in posts and pages when hovering. With many more powerful features.
 * [CM Download Manager](https://www.downloadmanagerplugin.com/) - Allows users to upload, manage, track and support documents or files in a download directory listing database for others to contribute, use and comment upon.
 * [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!.
-* [CM MicroPayments](http://micropaymentplugin.com/) - Adds the in-site support for your own "virtual currency". The purpose of this plugin is to allow in-site transactions without the necessity of processing the external payments each time (quicker & easier). Developers can use it as a platform to integrate with their own plugins.
-* [CM Restrict Content](http://restrictcontent.com/) - A full-featured, powerful membership solution and content restriction plugin for WordPress. Support access by role to content on your site.
+* [CM Restrict Content](https://restrictcontent.com/) - A full-featured, powerful membership solution and content restriction plugin for WordPress. Support access by role to content on your site.
 * [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and
 the user satisfaction.
-* [CM Booking Calendar](http://bookingcalendarplugin.com/) - Customers can easily schedule appointments and pay for them directly through your website.
 
 == Installation ==
 
@@ -221,6 +214,48 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 13. Import / Export
 
 == Changelog ==
+= 4.2.8 =
+Release Date: 25th May 2023
+* Replaced the option "Avoid parsing protected tags" with "Exclude HTML tags from parsing"
+
+= 4.2.7 =
+Release Date: 17th May 2023
+* Fixed the plugin not highlighting terms on the Astra theme
+
+= 4.2.6 =
+Release Date: 11th May 2023
+* Fixed the conflict between the plugin and the Easy Table of Contents
+
+= 4.2.5 =
+Release Date: 27th April 2023
+* Added option to fix the endless loop error on the Glossary Index page
+
+= 4.2.4 =
+Release Date: 21nd April 2023
+* Fixed issues with the Glossary Index when the alphabetic index is missing
+* Removed the legacy set_timeout code from the main file
+
+= 4.2.3 =
+Release Date: 22nd March 2023
+* Update package info
+
+= 4.2.2 =
+Release Date: 15th March 2023
+* Bug: Small bugfixes
+* Improvement: Improved the performance of the Glossary Index, rewritten the caching system to speed up the sorting
+
+= 4.2.0 =
+Release Date: 25th Feb 2023
+* (ONLY IN Ecommerce version!) New Feature: ChatGPT integration
+* Improvement: Changed the way synonyms/variants/abbreviations are working internally
+* Improvement: Performance related code tweaks (for Glossary Index mostly)
+* Improvement: Editlink in toolitp now opens in the new tab
+* Bug: Fixed the bug that stopped the synonyms from being parsed in correct order
+* Bug: Fixed the bug that caused synonyms to appear in the wrong letter (same as the base term)
+* Bug: Fixed the warning about the "forceHighlight" variable not being defined
+* Bug: Fixed the bug with the underline styles of the parsed terms
+* Bug: Fixed some deprecated warnings for PHP 8.2
+
 = 4.1.6 =
 Release Date: 29th Dec 2022
 * Bug: Fixed the warning about the "forceHighlight" variable not being defined
