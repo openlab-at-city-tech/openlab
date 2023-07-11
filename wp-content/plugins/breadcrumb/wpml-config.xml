@@ -6,6 +6,25 @@
 		<key name="breadcrumb_word_char_end"/>
 		<key name="breadcrumb_home_text"/>
 
+		<key name="breadcrumb_options">
+			<key name="permalinks">
+					<key name="*">
+						<key name="custom_text">
+							<key name="text"/>
+							<key name="link"/>
+						</key>
+						<key name="home">
+							<key name="text"/>
+							<key name="link"/>
+						</key>
+
+					</key>
+			</key>
+
+		</key>
+				
+				
+			
 
 
 	</admin-texts>
