@@ -94,7 +94,7 @@ function emcs_settings_page_html()
     // set encryption key if it's not already done
     $encryption_key = get_option('emcs_encryption_key');
 
-    if(!$encryption_key || empty($encryption_key)) {
+    if (!$encryption_key || empty($encryption_key)) {
         add_option('emcs_encryption_key', bin2hex(openssl_random_pseudo_bytes(10)));
     }
 
@@ -120,40 +120,27 @@ function emcs_settings_page_html()
                     </form>
                 </div>
                 <div class="col-md-3 emcs-promotion-container">
-                    <h3>Like this plugin?</h3>
-                    <p>
-                        If you find this plugin useful, please show your love and support by
-                        rating it
-                        <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                        <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                        <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                        <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                        <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                        on<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank"> WordPress.org </a>
-                        - much appreciated! :-D
-                    </p><br>
+                    <div class="emcs-setting-ratings-section">
+                        <h3>Like this plugin?</h3>
+                        <p>
+                            If you find this plugin useful, please show your love and support by
+                            rating it
+                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
+                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
+                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
+                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
+                            <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
+                            on<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank"> WordPress.org </a>
+                            - much appreciated!
+                        </p><br>
+
+                    </div>
                     <div class="emcs-promotion">
                         <h2>Need Support?</h2>
                         <p>
                             Please use the <a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/" target="_blank"> support forums on WordPress.org </a> to
                             submit a support ticket or report a bug.
                         </p>
-                    </div>
-                    <div class="emcs-promotion">
-                        <h2>Donate</h2>
-                        <p>
-                            Your generous donation will help me keep supporting and improving the plugin. Thank you :)
-                        <ul>
-                            <li><strong>BTC:</strong> 1DbpWbEAcfme2oEs2fTP67sCMqzz8sxktW</li>
-                            <li><strong>Ethereum:</strong> 0xeadc1c4e0103a8239345ab4dee1bea27a81a0b60</li>
-                            <li><strong>USDT:</strong> 0xeadc1c4e0103a8239345ab4dee1bea27a81a0b60</li>
-                        </ul>
-                        </p>
-                        <div class="emcs-text-center">
-                            <a href="https://flutterwave.com/pay/emc-donate" target="_blank">
-                                <img src="<?php echo esc_url(EMCS_URL . 'assets/img/donate.png'); ?>" width="100" alt="Donate" />
-                            </a>
-                        </div>
                     </div>
                     <div class="emcs-thankyou" id="emcs-thankyou">
                         <h3>Thank you for downloading Embed Calendly</h3>
@@ -195,9 +182,8 @@ function emcs_sanitize_input($inputs)
                 $input_value = trim(strip_tags(stripslashes($input_value)));
                 $input_value = sanitize_text_field($input_value);
                 $sanitized_input[$input_key] = emcs_encrypt_key($input_value);
-
             } else {
-                
+
                 $sanitized_input[$input_key] = false;
             }
         }
