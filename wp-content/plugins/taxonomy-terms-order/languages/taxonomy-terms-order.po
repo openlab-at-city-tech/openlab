@@ -2,17 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Category Order and Taxonomy Terms Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-24 11:05+0200\n"
-"PO-Revision-Date: 2022-11-24 11:05+0200\n"
+"POT-Creation-Date: 2023-05-29 10:32+0300\n"
+"PO-Revision-Date: 2023-05-29 10:32+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: nsp-code <electronice_delphi@yahoo.com>\n"
-"Language: en\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;gettext;__;_e\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: include/functions.php:72
@@ -106,39 +107,39 @@ msgstr ""
 msgid "Administrator"
 msgstr ""
 
-#: include/options.php:50
+#: include/options.php:51
 msgid "Auto Sort"
 msgstr ""
 
-#: include/options.php:53 include/options.php:64
+#: include/options.php:54 include/options.php:65
 msgid "OFF"
 msgstr ""
 
-#: include/options.php:54 include/options.php:65
+#: include/options.php:55 include/options.php:66
 msgid "ON"
 msgstr ""
 
-#: include/options.php:56
+#: include/options.php:57
 msgid "global setting"
 msgstr ""
 
-#: include/options.php:56 include/options.php:67
+#: include/options.php:57 include/options.php:68
 msgid "Additional description and details at "
 msgstr ""
 
-#: include/options.php:56 include/options.php:67
+#: include/options.php:57 include/options.php:68
 msgid "Auto Sort Description"
 msgstr ""
 
-#: include/options.php:61
+#: include/options.php:62
 msgid "Admin Sort"
 msgstr ""
 
-#: include/options.php:67
+#: include/options.php:68
 msgid "This will change the order of terms within the admin interface"
 msgstr ""
 
-#: include/options.php:78
+#: include/options.php:79
 msgid "Save Settings"
 msgstr ""
 
