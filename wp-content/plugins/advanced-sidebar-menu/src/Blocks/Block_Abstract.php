@@ -98,25 +98,24 @@ abstract class Block_Abstract {
 	 * Exclude this block from new Legacy Widgets.
 	 *
 	 * Leave existing intact while forcing users to use the block
-	 * instead for new Widgets.
+	 * instead for new widgets.
 	 *
 	 * @param array $blocks - Excluded blocks.
-	 *
-	 * @action
 	 *
 	 * @return array
 	 */
 	public function exclude_from_legacy_widgets( $blocks ) {
+		if ( ! \is_array( $blocks ) ) {
+			return $blocks;
+		}
+
 		/**
-		 * Programmatically opt in to exclude legacy widgets from the Block Inserter
-		 * if legacy widgets a not needed to match a theme's styles.
-		 *
-		 * In the future, this filter will be removed in favor of not allowing new legacy
-		 * widgets in the block inserter.
+		 * Programmatically opt in to legacy widgets from the Block Inserter
+		 * if legacy widgets are needed to match a theme's styles.
 		 *
 		 * @link https://developer.wordpress.org/block-editor/how-to-guides/widgets/legacy-widget-block/#3-hide-the-widget-from-the-legacy-widget-block
 		 */
-		if ( ! apply_filters( 'advanced-sidebar-menu/block-abstract/exclude-legacy-widgets', false, $this->get_widget_class(), $blocks, $this ) ) {
+		if ( ! apply_filters( 'advanced-sidebar-menu/block-abstract/exclude-legacy-widgets', true, $this->get_widget_class(), $blocks, $this ) ) {
 			return $blocks;
 		}
 
@@ -253,17 +252,12 @@ abstract class Block_Abstract {
 	 * @return string
 	 */
 	public function render( $attr ) {
-		// @todo Remove early 2022.
-		if ( ! function_exists( 'get_block_wrapper_attributes' ) ) {
-			return __( 'This block requires WordPress version 5.6!', 'advanced-sidebar-menu' );
-		}
-
 		/**
 		 * Within the Editor ServerSideRender request come in as REST requests.
 		 * We spoof the WP_Query as much as required to get the menus to
 		 * display the same way they will on the front-end.
 		 */
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ static::RENDER_REQUEST ] ) ) {
+		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ static::RENDER_REQUEST ] ) ) {
 			if ( ! empty( get_post() ) ) {
 				add_action( 'advanced-sidebar-menu/widget/before-render', function( $menu ) {
 					if ( method_exists( $menu, 'set_current_post' ) ) {

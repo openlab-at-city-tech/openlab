@@ -70,20 +70,23 @@ class Debug {
 	 * 2. Plugin version.
 	 * 3. WP version.
 	 * 4. PRO version.
+	 * 5. Script debug active.
+	 * 6. Classic widgets enabled.
 	 *
 	 * @since 9.0.2
 	 *
 	 * @return array
 	 */
-	public function get_site_info() {
+	public function get_site_info() : array {
 		$data = [
-			'basic'       => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
-			'php'         => PHP_VERSION,
-			'pro'         => false,
-			'scriptDebug' => Scripts::instance()->is_script_debug_enabled(),
-			'wordpress'   => get_bloginfo( 'version' ),
+			'basic'          => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
+			'classicWidgets' => is_plugin_active( 'classic-widgets/classic-widgets.php' ),
+			'php'            => PHP_VERSION,
+			'pro'            => false,
+			'scriptDebug'    => Scripts::instance()->is_script_debug_enabled(),
+			'wordpress'      => get_bloginfo( 'version' ),
 		];
-		if ( defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
 			$data['pro'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;
 		}
 

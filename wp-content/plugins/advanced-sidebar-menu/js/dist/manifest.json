@@ -1,14 +1,17 @@
 {
   "admin.min.css": {
     "src": "admin.min.css",
-    "integrity": "sha256-Wr7NQv3Tom2oLlg2Xc0kftYisZNQop8CxIRTCZuXAD0= sha384-9tfNkTop/Fd237pCVexAdxq+NuEGjZASkO1u3wlX16xe60XOque8Jvb6Ab5zS0TB sha512-4gsxkk6dnlFYDgG0R2xAvvvk/ZIRKgVeEbaQ75wqxgfaInQHlhCsaXF0Lnp2ieqXyjmi3K0SomAt5EAmAej21w=="
+    "integrity": "sha384-9tfNkTop/Fd237pCVexAdxq+NuEGjZASkO1u3wlX16xe60XOque8Jvb6Ab5zS0TB",
+    "hash": "d9b13c080114bcf25aaf"
   },
   "admin.min.js": {
     "src": "admin.min.js",
-    "integrity": "sha256-b7IDaLyy7Z/f+goeVV5eMkvdZFt+JPmyB+mdQxc1yHo= sha384-hw9Vt4J5w7yvBf6harAV+O7JFyV7YkiDRmQp/CbHgWjaSTSoUQX1wLzESwvrsulP sha512-+gc1062EUBJTWhKTLvpPsIUhmAWeFDHparsseyPRuluU4Ehqy78Y8bzSBFGXf7oRsrX7TSvr0+t5H/T9DztQww=="
+    "integrity": "sha384-8P2+AdMyCnTOnzfFnaIkBNOlVsNr9gYwoE+7+IxxfNiX479S4EYcuXCON9szJMLE",
+    "hash": "bfa40e838b86debdc161"
   },
   "admin.min.js.LICENSE.txt": {
     "src": "admin.min.js.LICENSE.txt",
-    "integrity": "sha256-wyNQxpz4tzoXllsiY73lQh19mmS5APFg+P0PgCwHrZQ= sha384-64Ff8FC2egZ650+D0i8DSccCNoXL3lfp3vXLQBykpicSluEZu85aBCZFUTKTh47+ sha512-S4/moBEwu3mvoTWtH5kA3gt7m1PNpWRAbHb1QVM3466sV7mi3lydKjKfAZtn11PWbONXf1yGEEFmvM8pTtH4jQ=="
+    "integrity": "sha384-so8uANn75zK9Gf6iLvduOC1mQNvUras8giUaiFVo+bskIiT6jg9zKGTQ/a8Qtg+m",
+    "hash": "6a82d915c58c2c3ef29e"
   }
 }

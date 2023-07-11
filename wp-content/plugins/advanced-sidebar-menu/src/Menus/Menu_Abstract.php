@@ -133,10 +133,13 @@ abstract class Menu_Abstract {
 		if ( ! isset( $this->args['widget_id'] ) ) {
 			// Prefix any leading digits or hyphens with '_'.
 			$this->args['widget_id'] = \preg_replace( '/^([\d-])/', '_$1', wp_hash( wp_json_encode( $this->instance ) ) );
-		} elseif ( ! empty( $_POST ) ) { //phpcs:ignore
-			// Page builders send one widget at a time, so we use their settings
-			// to differentiate between multiple widgets of the same type.
-			// Page builders send `POST` when updating preview.
+			//phpcs:ignore -- Not actually using the value of $_POST.
+		} elseif ( ! empty( $_POST['action'] ) && 'elementor_ajax' === $_POST['action'] ) {
+			/**
+			 * Elementor sends widgets one at a time with the same id during the preview.
+			 * Since we can't increment nor is there a unique id, we always
+			 * use the instance for Elementor previews.
+			 */
 			$this->args['widget_id'] .= wp_hash( wp_json_encode( $this->instance ) );
 		}
 

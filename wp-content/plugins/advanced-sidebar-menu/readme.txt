@@ -4,9 +4,9 @@ Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: block, widget, dynamic, hierarchy, menus, sidebar menu, category, pages, parent, child, automatic
 Requires at least: 5.8.0
-Tested up to: 6.1.1
+Tested up to: 6.2.2
 Requires PHP: 7.0.0
-Stable tag: 9.0.5
+Stable tag: 9.0.9
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ Keeps the menu clean and usable. Only related items display, so you don't have t
 
 <strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 9.0.0</a> is now available with Gutenberg blocks!</blockquote>
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 9.1.0</a> is now available with category counts, custom titles and exclusions!</blockquote>
 
 <h3>Features</h3>
 * Page and Category widgets.
@@ -115,7 +115,7 @@ Manual Installation
 1. Page widget options.
 2. Category widget options.
 3. Example of a page menu using the 2017 theme and default styles.
-3. Example of a category menu ordered by title using the 2017 theme and default styles.
+4. Example of a category menu ordered by title using the 2017 theme and default styles.
 
 
 == Frequently Asked Questions ==
@@ -163,8 +163,31 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 
 Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
-
 == Changelog ==
+= 9.0.9 =
+* Fixed conflict with [Stackable WordPress plugin](https://wordpress.org/plugins/stackable-ultimate-gutenberg-blocks/) in the theme customizer.
+* Improved block script reliability.
+* Improved handling of Elementor previews.
+* Improved error boundary informational messages.
+* Removed conflicts with POST method requests.
+
+= 9.0.8 =
+* Disabled legacy widgets by default [see docs]( https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-menu-gutenberg-blocks/#enable-widgets).
+* Update browser list support.
+* Improved the widget/block transformation logic and types.
+* Removed dangling WordPress version < 5.6 requirements.
+* Tested to WordPress core 6.2.2.
+
+= 9.0.7 =
+* Fixed `data-level` on category menus larger than 3 levels.
+* Included classic widgets flag in debug information.
+* Required PRO version 9.1.2+.
+
+= 9.0.6 =
+* Improved extendability by removing all `private` access modifiers.
+* Fully support PHP 8.1.
+* Tested to WordPress Core 6.2.0.
+
 = 9.0.5 =
 * Switched to static uses of class constants to improve extendability.
 * Switched to full namespaced constants.

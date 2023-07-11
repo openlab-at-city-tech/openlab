@@ -49,7 +49,7 @@ class Scripts {
 	 * within the iframes of areas such as FSE.
 	 *
 	 * The actual script/style loading is done via `register_block_type`
-	 * using 'editor_script' and 'editor_style.
+	 * using 'editor_script' and 'editor_style'.
 	 *
 	 * @action init 10 0
 	 *
@@ -57,11 +57,11 @@ class Scripts {
 	 *         called to allow styles to be included in the Site
 	 *         Editor iframe.
 	 *
+	 * @since  9.0.0
+	 *
 	 * @see    Block_Abstract::register()
 	 *
 	 * @link   https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#wpdefinedasset
-	 *
-	 * @since  9.0.0
 	 *
 	 * @return void
 	 */
@@ -73,11 +73,19 @@ class Scripts {
 			'jquery',
 			'react',
 			'react-dom',
+			'wp-block-editor',
+			'wp-blocks',
+			'wp-components',
+			'wp-data',
+			'wp-hooks',
+			'wp-html-entities',
+			'wp-i18n',
+			'wp-server-side-render',
 			'wp-url',
 		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, true );
 
 		// Must register here because used as a dependency of the Gutenberg styles.
-		wp_register_style( static::ADMIN_STYLE, trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/css/advanced-sidebar-menu.css', [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
+		wp_register_style( static::ADMIN_STYLE, ADVANCED_SIDEBAR_MENU_URL . 'resources/css/advanced-sidebar-menu.css', [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 
 		if ( ! $this->is_webpack_enabled() ) {
 			wp_register_style( static::GUTENBERG_CSS_HANDLE, "{$js_dir}{$file}.css", [
@@ -107,13 +115,9 @@ class Scripts {
 	 * @return void
 	 */
 	public function admin_scripts() {
-		wp_enqueue_script(
-			static::ADMIN_SCRIPT,
-			trailingslashit( (string) ADVANCED_SIDEBAR_MENU_URL ) . 'resources/js/advanced-sidebar-menu.js',
-			[ 'jquery' ],
-			ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
-			false
-		);
+		wp_enqueue_script( static::ADMIN_SCRIPT, ADVANCED_SIDEBAR_MENU_URL . 'resources/js/advanced-sidebar-menu.js', [
+			'jquery',
+		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, false );
 
 		wp_enqueue_style( static::ADMIN_STYLE );
 	}

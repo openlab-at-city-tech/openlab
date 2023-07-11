@@ -4,7 +4,7 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 9.0.5
+ * Version: 9.0.9
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
@@ -19,14 +19,10 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.0.5' );
-define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.0.0' );
+define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.0.9' );
+define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.1.2' );
 define( 'ADVANCED_SIDEBAR_MENU_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
-
-// @todo Remove once require PRO version 9.1.2+.
-define( 'ADVANCED_SIDEBAR_BASIC_VERSION', ADVANCED_SIDEBAR_MENU_BASIC_VERSION ); //phpcs:ignore
-define( 'ADVANCED_SIDEBAR_DIR', plugin_dir_path( __FILE__ ) ); //phpcs:ignore
 
 use Advanced_Sidebar_Menu\Blocks\Block_Abstract;
 use Advanced_Sidebar_Menu\Blocks\Categories;
