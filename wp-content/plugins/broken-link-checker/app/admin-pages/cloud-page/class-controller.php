@@ -218,10 +218,10 @@ class Controller extends Admin_Page {
 				'expired_membership'     => boolval( Utilities::membership_expired() ),
 				'use_legacy'             => esc_html( $this->use_legacy ),
 				//'hub_url'            => esc_url( Utilities::hub_connect_url() ),
-				'hub_home_url'           => esc_url( Utilities::hub_home_url() ),
-				'hub_scan_url'           => esc_url( Utilities::hub_scan_url() ),
+				'hub_home_url'           => ! empty(  Utilities::hub_home_url() ) ? esc_url( Utilities::hub_home_url() ) : '',
+				'hub_scan_url'           => ! empty(  Utilities::hub_scan_url() ) ? esc_url( Utilities::hub_scan_url() ) : '',
 				'hub_signup_url'         => $signup_url,
-				'hub_account_url'        => esc_url( Utilities::hub_account_url() ),
+				'hub_account_url'        => ! empty( Utilities::hub_account_url() ) ? esc_url( Utilities::hub_account_url() ) : '',
 				'scan_results'           => $this->escape_array_fixed( Dash_Model::get_scan_results() ),
 				'scan_in_progress'       => Dash_Model::scan_in_progress(),
 				'site_url'               => esc_url_raw( get_site_url() ),
@@ -238,6 +238,7 @@ class Controller extends Admin_Page {
 				'allowedRoles'           => $user_roles,
 				'allowedRolesSlugs'      => wp_list_pluck( $user_roles, 'role_slug' ),
 				'cooldownData'           => $this->escape_array_fixed( Dash_Model::get_cooldown_data() ),
+				'linksProcessStatus'     => Dash_Model::links_process_status(),
 			), // End blc_dashboard/data.
 			'labels' => array(
 				'page_title'     => esc_html( $this->page_title ),

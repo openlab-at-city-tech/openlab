@@ -99,7 +99,8 @@ class Controller extends Mailer {
 					'{{BROKEN_LINKS_LIST}}'        => $broken_links_count > 0 ? View::instance()->broken_links_list_markup() : '',
 					// FOOTER PART
 					'{{FOOTER_TITLE}}'             => esc_html__( 'Broken Link Checker', 'broken-link-checker' ),
-					'{{FOOTER_COMPANY}}'           => 'WPMU DEV', //$site_name,
+					'{{FOOTER_COMPANY}}'           => 'WPMU DEV',
+					//$site_name,
 					'{{FOOTER_CONTENT}}'           => View::instance()->get_footer_content(),
 					'{{FOOTER_LOGO_SOURCE}}'       => Model::footer_logo(),
 					'{{LINK_TO_WPMUDEV_HOME}}'     => esc_html__( 'Link to WPMU DEV Home page', 'broken-link-checker' ),
@@ -109,6 +110,7 @@ class Controller extends Mailer {
 					'{{UNSUBSCRIBE}}'              => esc_html__( 'Unsubscribe', 'broken-link-checker' ),
 					'{{UNSUBSCRIBE_LINK}}'         => '',
 					'{{SOCIAL_LINKS}}'             => View::instance()->get_social_links(),
+					'{{REVIEW_BOX}}'               => '',
 				),
 				$this
 			);
@@ -117,10 +119,26 @@ class Controller extends Mailer {
 			foreach ( $recipients as $recipient ) {
 				$this->body_variables['{{USERNAME}}']         = $recipient['name'] ?? '';
 				$this->body_variables['{{UNSUBSCRIBE_LINK}}'] = $recipient['unsubscribe_link'] ?? '';
+				$this->body_variables['{{REVIEW_BOX}}']       = '';
+				$this->body_variables['{{REVIEW_CONTENT}}']  = '';
+				$this->body_variables['{{REVIEW_ICON}}']  = '';
 				$recipient_collection                         = array(
 					'name'  => $recipient['name'] ?? '',
 					'email' => $recipient['email'] ?? '',
 				);
+
+				if ( ! empty( $recipient[ 'review_link' ] ) ) {
+					$review_content = sprintf(
+					/* translators: 1: opening <a> tag 2: closing </a> tag */
+						esc_html__( 'Are you enjoying the new Broken Link Checker? Share your valuable feedback on wordpress.org to help us further enhance and support our plugin. Give us feedback %shere%s.', 'broken-link-checker' ),
+						'<a href="' . $recipient[ 'review_link' ] .'">',
+						'</a>'
+					);
+					$this->body_variables['{{REVIEW_BOX}}'] = View::instance()->review_box_markup( $review_content );
+					$this->body_variables['{{REVIEW_CONTENT}}'] = $review_content;
+					$this->body_variables['{{REVIEW_ICON}}'] = View::instance()->review_box_icon();
+					//email-review-prompt
+				}
 
 				$recipient_collection    = array_merge( $recipient_collection, $this->body_variables );
 				$recipients_collection[] = $recipient_collection;

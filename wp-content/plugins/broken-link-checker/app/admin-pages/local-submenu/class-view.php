@@ -51,6 +51,11 @@ class View extends Admin_Page {
 	}
 
     public function local_nav() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        do_action( 'wpmudev-blc-local-nav-before' );
         ?>
         <div id="wpmudev-blc-local-nav-wrap" class="_notice">
             <nav class="wpmudev-blc-local-nav">
@@ -59,6 +64,7 @@ class View extends Admin_Page {
             </nav>
         </div>
         <?php
+	    do_action( 'wpmudev-blc-local-nav-after' );
     }
 
     public function local_header() {

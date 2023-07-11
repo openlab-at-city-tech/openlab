@@ -70,6 +70,13 @@ abstract class Webhook extends Base {
 	public $do_not_cache = true;
 
 	/**
+	 * A bool that when is true we can flush the rewrite rules.
+	 *
+	 * @var bool
+	 */
+	private $flush_rewrite_rules_flag = false;
+
+	/**
 	 * Init Webhook
 	 *
 	 * @since 2.0.0
@@ -85,8 +92,8 @@ abstract class Webhook extends Base {
 		add_action( 'init', array( $this, 'set_endpoints' ) );
 		add_filter( 'query_vars', array( $this, 'pass_tag_to_query_vars' ) );
 		add_filter( 'parse_request', array( $this, 'parse_request' ) );
-		add_action( 'wpmudev_blc_plugin_activated', array( $this, 'flush_rewrite_rules' ) );
-		add_action( 'wpmudev_blc_plugin_deactivated', array( $this, 'flush_rewrite_rules' ) );
+		add_action( 'wpmudev_blc_plugin_activated', array( $this, 'flush_rewrite_rules_on_activate' ) );
+		add_action( 'wpmudev_blc_plugin_deactivated', array( $this, 'flush_rewrite_rules_on_deactivate' ) );
 	}
 
 	/**
@@ -102,6 +109,7 @@ abstract class Webhook extends Base {
 	 * @return void
 	 */
 	public function set_endpoints() {
+
 		// http://site.com/[WEBHOOK]/[TAG].
 		$rewrite_args = apply_filters(
 			'wpmudev_blc_rewrite_rule_args',
@@ -190,10 +198,31 @@ abstract class Webhook extends Base {
 	/**
 	 * Flushes rewrite rules. It is an expensive action, so it's good to run on plugin activation/deactivation.
 	 *
+	 * @param bool $force Forces to flush rewrite rules.
+	 *
 	 * @return void
 	 */
-	public function flush_rewrite_rules() {
-		flush_rewrite_rules( false );
+	public function flush_rewrite_rules( bool $force = false ) {
+		if ( $force || $this->flush_rewrite_rules_flag ) {
+			flush_rewrite_rules( false );
+
+			$this->flush_rewrite_rules_flag = false;
+		}
+	}
+
+	public function flush_rewrite_rules_on_activate() {
+		$this->flush_rewrite_rules_flag = true;
+
+		add_action(
+			'wp_loaded',
+			function() {
+				$this->flush_rewrite_rules();
+			}
+		);
+	}
+
+	public function flush_rewrite_rules_on_deactivate() {
+		$this->flush_rewrite_rules( true );
 	}
 
 	/**

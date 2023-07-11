@@ -4,7 +4,7 @@ Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
 Tested up to: 6.2
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -114,6 +114,11 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.2.0 =
+* New: Edit and Unlink broken links in Cloud Engine.
+* Fix: Editor access blocked in Local Engine.
+* Enhance: PHP 8.1 and 8.2 compatibility.
 
 = 2.1.0 =
 * Improved admin menus, so they are separated to Cloud and Local Engine.

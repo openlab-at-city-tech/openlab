@@ -42,9 +42,33 @@ class Unlink_Link extends Base {
 
 						if ( ! empty( $matches[0] ) ) {
 							foreach ( $matches[0] as $key => $markup ) {
-								$content_link = untrailingslashit( trim( $matches[2][ $key ], '\'"' ) );
+								$old_link    = untrailingslashit( trim( $matches[2][ $key ], '\'"' ) );
+								$links_match = false;
 
-								if ( $content_link === $link ) {
+								/**
+								 * If link doesn't have Host part, it is internal link. All internal links are stored as relative urls in Queue.
+								 * If link does have the Host part, then it's an external link.
+								 * For internal links we need to test 3 cases:
+								 * 1. Relative urls (that is how it is stored in Queue)
+								 * 2. Absolute url.
+								 * 3. Absolute url without scheme ( //site.com )
+								 * Engine treats all those types as full urls
+								 */
+								if ( empty( wp_parse_url( $link, PHP_URL_HOST ) ) ) {
+									// Check Relative, Absolute and Absolute without host urls for $old_link.
+									$site_url           = site_url();
+									$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
+									$absolute_link      = $site_url . $link;
+									$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
+									$links_match        = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
+									                      strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
+									                      strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
+								} else {
+									// Check $old_link normally.
+									$links_match = strcasecmp( trailingslashit( $old_link ), trailingslashit( $link ) ) == 0;
+								}
+
+								if ( $links_match ) {
 									$replacements[ $markup ] = $matches[3][ $key ];
 								}
 							}

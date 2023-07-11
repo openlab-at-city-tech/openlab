@@ -135,9 +135,18 @@ class Router extends Base {
 			);
 		}
 
+		$first_link = Queue::instance()->queue_is_empty();
+
 		Queue::instance()->push( $data );
 		// Run schedule in 5 seconds after pushing.
-		Schedule::instance()->setup( 5 );
+		//Schedule::instance()->setup( 5 );
+
+		// If Queue is empty, run first link immediately and schedule the rest links.
+		if ( $first_link ) {
+			Schedule::instance()->process_scheduled_event();
+		} else {
+			Schedule::instance()->setup( 5 );
+		}
 
 		return array(
 			'success'         => true,
@@ -277,6 +286,9 @@ class Router extends Base {
 						);
 					}
 				}
+
+				$params['links'][ $input_link_key ]['link'] = sanitize_url( Utilities::make_link_relative( $input_link['link'] ) );
+
 			}
 		}
 

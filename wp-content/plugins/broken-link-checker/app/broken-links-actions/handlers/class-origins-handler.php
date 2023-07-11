@@ -83,6 +83,10 @@ class Origins_Handler extends Base {
 			foreach ( $origins as $post_url ) {
 				$new_offset ++;
 
+				if ( $this->runtime_passed_limit() ) {
+					break;
+				}
+
 				if ( ! $this->process_instance( null, $post_url ) ) {
 					$notfound_in[] = $post_url;
 				}

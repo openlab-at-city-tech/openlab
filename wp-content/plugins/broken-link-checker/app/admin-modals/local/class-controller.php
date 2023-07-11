@@ -91,7 +91,7 @@ class Controller extends Base {
 		 * Show modal only when Local BLC is active.
 		 */
 		//if ( boolval( self::site_connected() ) || empty( boolval( Settings::instance()->get( 'use_legacy_blc_version' ) ) ) ) {
-		if ( empty( Settings::instance()->get( 'use_legacy_blc_version' ) ) ) {
+		if ( ! current_user_can( 'manage_options' ) || empty( Settings::instance()->get( 'use_legacy_blc_version' ) ) ) {
 			return false;
 		}
 

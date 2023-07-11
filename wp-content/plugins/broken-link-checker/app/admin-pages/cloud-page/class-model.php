@@ -15,6 +15,7 @@ namespace WPMUDEV_BLC\App\Admin_Pages\Cloud_Page;
 
 // Abort if called directly.
 use WPMUDEV_BLC\App\Options\Settings\Model as Settings;
+use WPMUDEV_BLC\App\Options\Links_Queue\Model as Queue;
 use WPMUDEV_BLC\Core\Utils\Utilities;
 
 defined( 'WPINC' ) || die;
@@ -358,6 +359,16 @@ class Model {
 			'cooling_down' => ( 0 < $end_time && 0 < $remaining ),
 			'remaining'    => $remaining,
 		);
+	}
+
+	/**
+	 * Gives the status of links process. If there are links to be processed (edit/unlink/nofollow) returns true, else false.
+	 *
+	 * @return bool
+	 */
+	public static function links_process_status() {
+		// If Queue is empty return false. If Queue is not empty it means there are Links to process so return true.
+		return ! Queue::instance()->queue_is_empty();
 	}
 
 }

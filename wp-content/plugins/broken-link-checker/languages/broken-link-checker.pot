@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Broken Link Checker 2.1.0\n"
+"Project-Id-Version: Broken Link Checker 2.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/broken-link-checker\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-16T06:13:33+00:00\n"
+"POT-Creation-Date: 2023-06-19T05:57:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 
@@ -63,10 +63,18 @@ msgstr ""
 
 #: app/admin-modals/legacy/class-controller.php:196
 #: app/admin-modals/local/class-controller.php:180
-#: app/admin-modals/plugin-activation/class-controller.php:164
 #: app/admin-notices/local/class-controller.php:122
-#: app/admin-pages/cloud-page/class-controller.php:245
+#: app/admin-pages/cloud-page/class-controller.php:246
 msgid "Something went wrong here."
+msgstr ""
+
+#: app/admin-notices/features/class-view.php:40
+#: assets/js/welcome-modal/main.js:1
+msgid "Introducing Edit Link and Unlink features in Broken Link Checker!"
+msgstr ""
+
+#: app/admin-notices/features/class-view.php:41
+msgid "Now you can edit links and unlink broken links directly from the new Cloud version with ease."
 msgstr ""
 
 #: app/admin-notices/legacy/class-view.php:42
@@ -97,21 +105,21 @@ msgstr ""
 msgid "Cloud [new]"
 msgstr ""
 
-#: app/admin-pages/local-submenu/class-controller.php:73
-#: app/admin-pages/local-submenu/class-view.php:71
+#: app/admin-pages/local-submenu/class-controller.php:76
+#: app/admin-pages/local-submenu/class-view.php:77
 msgid "Local Broken Link Checker"
 msgstr ""
 
-#: app/admin-pages/local-submenu/class-controller.php:74
+#: app/admin-pages/local-submenu/class-controller.php:77
 msgid "Local [old]"
 msgstr ""
 
-#: app/admin-pages/local-submenu/class-view.php:77
-#: app/admin-pages/local-submenu/class-view.php:78
+#: app/admin-pages/local-submenu/class-view.php:83
+#: app/admin-pages/local-submenu/class-view.php:84
 msgid "Activate Cloud-based Link Checker"
 msgstr ""
 
-#: app/broken-links-actions/class-link.php:268
+#: app/broken-links-actions/class-link.php:269
 msgid "Missing origins"
 msgstr ""
 
@@ -127,31 +135,31 @@ msgstr ""
 msgid "Empty link"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:167
+#: app/broken-links-actions/class-router.php:176
 msgid "Aborting as there are no links"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:217
+#: app/broken-links-actions/class-router.php:226
 msgid "Missing input conversion params"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:232
+#: app/broken-links-actions/class-router.php:241
 msgid "Invalid input json string"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:252
+#: app/broken-links-actions/class-router.php:261
 msgid "Links params do not follow schema. Key `%1$s` missing"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:271
+#: app/broken-links-actions/class-router.php:280
 msgid "Links param `%1$s` potentially malicious"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:287
+#: app/broken-links-actions/class-router.php:299
 msgid "Invalid sub-site id"
 msgstr ""
 
-#: app/broken-links-actions/handlers/class-full-site-handler.php:263
+#: app/broken-links-actions/handlers/class-full-site-handler.php:268
 msgid "Missing Full Site Target Table"
 msgstr ""
 
@@ -173,22 +181,22 @@ msgid "Confirm Subscription"
 msgstr ""
 
 #: app/emails/recipient-activation/class-controller.php:92
-#: app/emails/scan-report/class-controller.php:105
+#: app/emails/scan-report/class-controller.php:106
 msgid "Link to WPMU DEV Home page"
 msgstr ""
 
 #: app/emails/recipient-activation/class-controller.php:93
-#: app/emails/scan-report/class-controller.php:106
+#: app/emails/scan-report/class-controller.php:107
 msgid "Build A Better WordPress Business"
 msgstr ""
 
 #: app/emails/recipient-activation/class-controller.php:94
-#: app/emails/scan-report/class-controller.php:107
+#: app/emails/scan-report/class-controller.php:108
 msgid "INCSUB PO BOX 163, ALBERT PARK, VICTORIA.3206 AUSTRALIA"
 msgstr ""
 
 #: app/emails/recipient-activation/class-controller.php:96
-#: app/emails/scan-report/class-controller.php:109
+#: app/emails/scan-report/class-controller.php:110
 msgid "Unsubscribe"
 msgstr ""
 
@@ -241,12 +249,17 @@ msgstr ""
 msgid "View Report"
 msgstr ""
 
-#: app/emails/scan-report/class-controller.php:162
+#. translators: 1: opening <a> tag 2: closing </a> tag
+#: app/emails/scan-report/class-controller.php:133
+msgid "Are you enjoying the new Broken Link Checker? Share your valuable feedback on wordpress.org to help us further enhance and support our plugin. Give us feedback %shere%s."
+msgstr ""
+
+#: app/emails/scan-report/class-controller.php:180
 #: app/virtual-posts/recipient-activation/class-controller.php:29
 msgid "Broken links reports"
 msgstr ""
 
-#: app/emails/scan-report/class-model.php:57
+#: app/emails/scan-report/class-model.php:61
 msgid "BLC Report"
 msgstr ""
 
@@ -363,43 +376,43 @@ msgstr ""
 msgid "Schedule event not created. Please refresh page and try once more"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:156
+#: app/rest-endpoints/settings/class-controller.php:168
 msgid "Dashboard plugin is already active. Please wait while refreshing page."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:175
+#: app/rest-endpoints/settings/class-controller.php:187
 msgid "Dashboard plugin has been activated."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:198
+#: app/rest-endpoints/settings/class-controller.php:210
 msgid "Dashboard plugin has been activated.  You should be redirected to sign-in page shortly"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:218
+#: app/rest-endpoints/settings/class-controller.php:230
 msgid "Dashboard plugin could not be activated. You can reload page and try again or contact support."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:235
+#: app/rest-endpoints/settings/class-controller.php:247
 msgid "Dashboard plugin is not installed. You can connect your site for free directly from <a href=\"%s\">Hub<a>."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:249
+#: app/rest-endpoints/settings/class-controller.php:261
 msgid "Settings saved"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:442
+#: app/rest-endpoints/settings/class-controller.php:454
 msgid "Schedule frequency was not set"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:450
+#: app/rest-endpoints/settings/class-controller.php:462
 msgid "Schedule days were not set"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:539
+#: app/rest-endpoints/settings/class-controller.php:551
 msgid "You cannot view settings."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:577
+#: app/rest-endpoints/settings/class-controller.php:589
 msgid "Action forbidden."
 msgstr ""
 
@@ -454,7 +467,7 @@ msgstr ""
 msgid "Hi %1$s. You should stop receiving broken links reports for this site. You can visit site from %2$shere%3$s."
 msgstr ""
 
-#: app/webhooks/recipient-activation/class-controller.php:55
+#: app/webhooks/recipient-activation/class-controller.php:56
 msgid "Activate broken links recipient"
 msgstr ""
 
@@ -462,29 +475,46 @@ msgstr ""
 msgid "Scan results"
 msgstr ""
 
+#: app/webhooks/user-review/class-controller.php:59
+msgid "Review Broken Link Checker plugin"
+msgstr ""
+
+#: app/webhooks/user-review/class-controller.php:75
+msgid "It seems there is some missing input"
+msgstr ""
+
+#: app/webhooks/user-review/class-controller.php:76
+#: app/webhooks/user-review/class-controller.php:85
+msgid "Invalid action"
+msgstr ""
+
+#: app/webhooks/user-review/class-controller.php:84
+msgid "No user found for given input data."
+msgstr ""
+
 #: core/models/class-http-request.php:93
 msgid "Missing url."
 msgstr ""
 
-#: core/utils/class-utilities.php:779
+#: core/utils/class-utilities.php:805
 msgid "%d h "
 msgid_plural "%d h "
 msgstr[0] ""
 msgstr[1] ""
 
-#: core/utils/class-utilities.php:790
+#: core/utils/class-utilities.php:816
 msgid "%d min "
 msgid_plural "%d min "
 msgstr[0] ""
 msgstr[1] ""
 
-#: core/utils/class-utilities.php:800
+#: core/utils/class-utilities.php:826
 msgid "%d s "
 msgid_plural "%d s "
 msgstr[0] ""
 msgstr[1] ""
 
-#: core/utils/class-utilities.php:863
+#: core/utils/class-utilities.php:889
 msgctxt "date time sep"
 msgid " "
 msgstr ""
@@ -1671,7 +1701,7 @@ msgstr ""
 msgid "Use this URL"
 msgstr ""
 
-#: legacy/includes/any-post.php:484
+#: legacy/includes/any-post.php:486
 #: legacy/modules/containers/acf_field.php:248
 #: legacy/modules/containers/blogroll.php:46
 #: legacy/modules/containers/comment.php:159
@@ -1679,115 +1709,115 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: legacy/includes/any-post.php:492
+#: legacy/includes/any-post.php:494
 #: legacy/modules/containers/acf_field.php:252
 #: legacy/modules/containers/custom_field.php:258
 msgid "Move this item to the Trash"
 msgstr ""
 
-#: legacy/includes/any-post.php:494
+#: legacy/includes/any-post.php:496
 #: legacy/modules/containers/acf_field.php:252
 #: legacy/modules/containers/custom_field.php:260
 msgid "Trash"
 msgstr ""
 
-#: legacy/includes/any-post.php:499
+#: legacy/includes/any-post.php:501
 #: legacy/modules/containers/acf_field.php:254
 #: legacy/modules/containers/custom_field.php:265
 msgid "Delete this item permanently"
 msgstr ""
 
-#: legacy/includes/any-post.php:501
+#: legacy/includes/any-post.php:503
 #: legacy/modules/containers/acf_field.php:254
 #: legacy/modules/containers/blogroll.php:47
 #: legacy/modules/containers/custom_field.php:267
 msgid "Delete"
 msgstr ""
 
-#: legacy/includes/any-post.php:514
+#: legacy/includes/any-post.php:516
 msgid "Preview &#8220;%s&#8221;"
 msgstr ""
 
-#: legacy/includes/any-post.php:515
+#: legacy/includes/any-post.php:517
 msgid "Preview"
 msgstr ""
 
-#: legacy/includes/any-post.php:522
+#: legacy/includes/any-post.php:524
 msgid "View &#8220;%s&#8221;"
 msgstr ""
 
-#: legacy/includes/any-post.php:523
+#: legacy/includes/any-post.php:525
 #: legacy/modules/containers/acf_field.php:258
 #: legacy/modules/containers/comment.php:172
 #: legacy/modules/containers/custom_field.php:272
 msgid "View"
 msgstr ""
 
-#: legacy/includes/any-post.php:542
+#: legacy/includes/any-post.php:544
 #: legacy/modules/containers/acf_field.php:248
 #: legacy/modules/containers/custom_field.php:252
 msgid "Edit this item"
 msgstr ""
 
-#: legacy/includes/any-post.php:606
+#: legacy/includes/any-post.php:608
 #: legacy/modules/containers/blogroll.php:83
 #: legacy/modules/containers/comment.php:43
 msgid "Nothing to update"
 msgstr ""
 
-#: legacy/includes/any-post.php:620
+#: legacy/includes/any-post.php:622
 msgid "Updating post %d failed"
 msgstr ""
 
-#: legacy/includes/any-post.php:681
+#: legacy/includes/any-post.php:683
 #: legacy/modules/containers/acf_field.php:327
 #: legacy/modules/containers/custom_field.php:341
 msgid "Failed to delete post \"%1$s\" (%2$d)"
 msgstr ""
 
-#: legacy/includes/any-post.php:700
+#: legacy/includes/any-post.php:702
 #: legacy/modules/containers/acf_field.php:341
 #: legacy/modules/containers/custom_field.php:360
 msgid "Can't move post \"%1$s\" (%2$d) to the trash because the trash feature is disabled"
 msgstr ""
 
-#: legacy/includes/any-post.php:720
+#: legacy/includes/any-post.php:722
 #: legacy/modules/containers/acf_field.php:353
 #: legacy/modules/containers/custom_field.php:379
 msgid "Failed to move post \"%1$s\" (%2$d) to the trash"
 msgstr ""
 
-#: legacy/includes/any-post.php:827
+#: legacy/includes/any-post.php:829
 msgid "%d post deleted."
 msgid_plural "%d posts deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/includes/any-post.php:829
+#: legacy/includes/any-post.php:831
 msgid "%d page deleted."
 msgid_plural "%d pages deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/includes/any-post.php:831
+#: legacy/includes/any-post.php:833
 msgid "%1$d \"%2$s\" deleted."
 msgid_plural "%1$d \"%2$s\" deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/includes/any-post.php:850
+#: legacy/includes/any-post.php:852
 msgid "%d post moved to the Trash."
 msgid_plural "%d posts moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/includes/any-post.php:852
+#: legacy/includes/any-post.php:854
 msgid "%d page moved to the Trash."
 msgid_plural "%d pages moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/includes/any-post.php:854
+#: legacy/includes/any-post.php:856
 msgid "%1$d \"%2$s\" moved to the Trash."
 msgid_plural "%1$d \"%2$s\" moved to the Trash."
 msgstr[0] ""
@@ -2381,24 +2411,7 @@ msgstr ""
 msgid "Image"
 msgstr ""
 
-#: app/admin-modals/plugin-activation/assets/js/main.js:16
-msgid "Welcome to Cloud Broken Link Checker 2.0"
-msgstr ""
-
-#: app/admin-modals/plugin-activation/assets/js/main.js:20
-msgid "We have completely reengineered Broken Link Checker with a new API to work 20x faster, better, and more accurately. What’s more, it’s still completely free (and always will be)."
-msgstr ""
-
-#: app/admin-modals/plugin-activation/assets/js/main.js:70
-msgid "Go to BLC 2.0"
-msgstr ""
-
-#: app/admin-modals/plugin-activation/assets/js/main.js:84
-msgid "Continue with Old version"
-msgstr ""
-
 #: assets/common/js/react/components/modal.js:55
-#: assets/js/activation-popup/main.js:1
 #: assets/js/dashboard/main.js:1
 #: assets/js/local-modal/main.js:1
 msgid "Close this modal"

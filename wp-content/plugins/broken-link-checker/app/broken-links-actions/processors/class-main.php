@@ -325,7 +325,7 @@ class Main extends Base {
 		$type = $this->link->get_type();
 
 		if ( empty( $this->actions_map()[ $type ] ) ) {
-			return new WP_Error(
+			return new \WP_Error(
 				'blc-link-execution-error',
 				esc_html__(
 					'Unmapped action',

@@ -33,6 +33,7 @@ class Model extends Option {
 	 * @var string|array|null $option_keys
 	 */
 	public $default = array(
+		'plugin_version'                => '',
 		/*
 		 * Scan status (scan_status) :
 		 *  none : Never started
@@ -47,6 +48,9 @@ class Model extends Option {
 		'show_multisite_notice'         => true,
 		'installation_timestamp'        => null,
 		'v2_activation_request'         => false,
+		'version_highlights'            => array(
+			'2_2_0' => false,
+		),
 		'schedule'                      => array(
 			'active'                     => false,
 			'recipients'                 => array(),

@@ -16,7 +16,9 @@ namespace WPMUDEV_BLC\App\Emails\Scan_Report;
 // Abort if called directly.
 use WPMUDEV_BLC\App\Options\Settings\Model as Settings;
 use WPMUDEV_BLC\App\Webhooks\Recipient_Activation\Controller as Activation_Webhook;
+use WPMUDEV_BLC\App\Webhooks\User_Review\Controller as Review_Webhook;
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
+use WPMUDEV_BLC\App\Users\Recipients\Model as Recipients;
 use WPMUDEV_BLC\Core\Utils\Utilities;
 
 defined( 'WPINC' ) || die;
@@ -33,6 +35,8 @@ class Model extends Base {
 	 * @var array
 	 */
 	private static $scan_results = array();
+
+	private static $registered_users_recipients = null;
 
 	/**
 	 * Returns the header logo of the email.
@@ -143,10 +147,93 @@ class Model extends Base {
 	 * Returns array recipients email address and names.
 	 */
 	public static function get_recipients() {
-		$user_recipients            = array();
-		$email_recipients           = Settings::instance()->get_scan_active_email_recipients();
-		$schedule                   = Settings::instance()->get( 'schedule' );
-		$registered_recipients_data = ! empty( $schedule[ 'registered_recipients_data' ] ) ? $schedule['registered_recipients_data'] : array();
+		return array_merge( self::get_registered_user_recipients(), self::get_email_recipients() );
+	}
+
+	public static function get_registered_user_recipients() {
+		static $reviewers_ids = array();
+
+		if ( is_null( self::$registered_users_recipients ) ) {
+			self::$registered_users_recipients = array();
+			$schedule                          = Settings::instance()->get( 'schedule' );
+			$registered_recipients_data        = ! empty( $schedule['registered_recipients_data'] ) ? $schedule['registered_recipients_data'] : array();
+			$has_been_reviewed                 = Recipients::has_been_reviewed();
+
+			if ( ! empty( $registered_recipients_data ) ) {
+
+				// Let's check which users will be allowed to review plugin.
+				if ( empty( $reviewers_ids ) && ! $has_been_reviewed ) {
+					$user_ids  = array_keys( $registered_recipients_data );
+					$auth_user = Utilities::get_auth_user( true );
+
+					if ( $auth_user instanceof \WP_User && in_array( $auth_user->ID, $user_ids ) ) {
+						$reviewers_ids[] = $auth_user->ID;
+					} else {
+						$reviewers_ids = array_intersect( Utilities::get_dash_users(), $user_ids );
+					}
+				}
+
+				array_walk(
+					$registered_recipients_data,
+					function ( $user_data, $user_id ) use ( $reviewers_ids, $has_been_reviewed ) {
+						$review_link = '';
+						$token       = base64_encode( md5( $user_data['email'] ) . '_' . $user_data['key'] );
+
+						if ( ! $has_been_reviewed ) {
+
+							// If still there is no reviewer, we can include any of the recipients that have an administrator role.
+							if ( ( ! empty( $reviewers_ids ) && in_array( $user_id, $reviewers_ids ) ) || ( empty( $reviewers_ids ) && user_can( $user_id, 'manage_options' ) ) ) {
+								$review_link = self::review_link( $user_id, $token );
+							}
+						}
+
+						self::$registered_users_recipients[] = array(
+							'name'             => $user_data['name'],
+							'email'            => $user_data['email'],
+							'key'              => $user_data['key'],
+							'unsubscribe_link' => self::unsubscribe_link( $token ),
+							'review_link'      => $review_link,
+						);
+					}
+				);
+			}
+
+		}
+
+		return self::$registered_users_recipients;
+	}
+
+	/**
+	 * Returns a link where user can review. The link does not point directly to wp org.
+	 * Instead, it first links to an endpoint so that we can flag that user has reviewed and then redirect to wp org.
+	 * We need this flag so that we don't annoy user with every email to review.
+	 *
+	 * @param int|null $user_id
+	 * @param string|null $token
+	 *
+	 * @return void|string
+	 */
+	private static function review_link( int $user_id = null, string $token = null ) {
+		return add_query_arg(
+			array(
+				'token' => sanitize_text_field( $token ),
+			),
+			Review_Webhook::instance()->webhook_url()
+		);
+	}
+
+	private static function unsubscribe_link( string $token = '' ) {
+		return add_query_arg(
+			array(
+				'action'          => 'cancel',
+				'activation_code' => sanitize_text_field( $token ),
+			),
+			Activation_Webhook::instance()->webhook_url()
+		);
+	}
+
+	public static function get_email_recipients() {
+		$email_recipients = Settings::instance()->get_scan_active_email_recipients();
 
 		if ( ! empty( $email_recipients ) ) {
 			array_walk(
@@ -158,30 +245,6 @@ class Model extends Base {
 			);
 		}
 
-		if ( ! empty( $registered_recipients_data ) ) {
-			array_walk(
-				$registered_recipients_data,
-				function ( $user_data, $user_id ) use ( &$user_recipients ) {
-					$user_recipients[] = array(
-						'name'             => $user_data['name'],
-						'email'            => $user_data['email'],
-						'key'              => $user_data['key'],
-						'unsubscribe_link' => self::unsubscribe_link( base64_encode( md5( $user_data['email'] ) . '_' . $user_data['key'] ) ),
-					);
-				}
-			);
-		}
-
-		return array_merge( $user_recipients, $email_recipients );
-	}
-
-	private static function unsubscribe_link( string $token = '' ) {
-		return add_query_arg(
-			array(
-				'action'          => 'cancel',
-				'activation_code' => sanitize_text_field( $token ),
-			),
-			Activation_Webhook::instance()->webhook_url()
-		);
+		return $email_recipients;
 	}
 }

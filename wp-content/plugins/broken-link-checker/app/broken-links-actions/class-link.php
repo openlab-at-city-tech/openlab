@@ -114,7 +114,8 @@ class Link extends Base {
 	 */
 	public function __construct( array $props = array() ) {
 		// From Execution_Time trait.
-		$this->start_timer();
+		// Actually we are not using this. Instead, we use https://developer.wordpress.org/reference/functions/timer_stop/.
+		//$this->start_timer();
 
 		if ( ! empty( $props ) ) {
 			$default_props = array(
@@ -151,7 +152,7 @@ class Link extends Base {
 	 * @return true[]
 	 */
 	public function execute_action() {
-		$report       = array();
+		$report = array();
 
 		if ( ! empty( $this->is_full_site() ) ) {
 			// If all tables have been completed for Link, no need to run `execute_full_site()`.

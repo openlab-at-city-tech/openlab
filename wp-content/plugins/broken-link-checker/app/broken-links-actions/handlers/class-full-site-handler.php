@@ -127,7 +127,8 @@ class Full_Site_Handler extends Base {
 
 		// If Link is of type `replace` (or `edit`, sorry for using 2 terms for the same thing here and there),
 		// we should not use OFFSET as previous instances have been replaced already.
-		if ( 'replace' === $this->link_object->get_type() ) {
+		//if ( 'replace' === $this->link_object->get_type() ) {
+		if ( in_array( $this->link_object->get_type(), array( 'replace', 'unlink' ) ) ){
 			$limit = $count ? '' : "LIMIT {$this->limit}";
 		} else {
 			$limit = $count ? '' : "LIMIT {$this->limit} OFFSET {$this->offset}";
@@ -227,7 +228,11 @@ class Full_Site_Handler extends Base {
 			}
 
 			if ( 'posts' === $this->current_table ) {
-				$posts_where = "post_type <> 'revision' AND post_status='publish' ";
+				/*
+				 * WP default status : publish, future, draft, pending, trash, auto-draft, inherit, new
+				 * BLC will search for all statuses except for draft, auto-draft and trash.
+				 */
+				$posts_where = "post_type <> 'revision' AND post_status NOT IN ('draft', 'auto-draft', 'trash') ";
 
 				if ( ! empty( $where_query ) ) {
 					$where_query = "{$posts_where} AND ({$where_query})";

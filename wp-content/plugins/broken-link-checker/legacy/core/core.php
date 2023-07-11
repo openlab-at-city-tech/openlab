@@ -3135,7 +3135,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 					$elapsed_time * 1000,
 					$sleep_time * 1000
 				));*/
-				usleep( $sleep_time * 1000000 );
+				usleep( intval( $sleep_time * 1000000 ) );
 			}
 		}
 

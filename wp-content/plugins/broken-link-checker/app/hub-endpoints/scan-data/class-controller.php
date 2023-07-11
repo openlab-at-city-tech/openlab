@@ -115,10 +115,12 @@ class Controller extends Hub_Endpoint {
 			$next_scan_date          = gmdate( 'Y-m-d H:i:s', $next_scan_timestamp_utc );
 			$next_scan_datetime      = new DateTime( $next_scan_date, new DateTimeZone( 'UTC' ) );
 
-			$next_scan_datetime->setTimezone( new DateTimeZone( Utilities::get_timezone_string( true ) ) );
+			//$next_scan_datetime->setTimezone( new DateTimeZone( Utilities::get_timezone_string( true ) ) );
+			$next_scan_datetime->setTimezone( new DateTimeZone( wp_timezone_string() ) );
 
 			$next_scan_timestamp                     = strtotime( $next_scan_datetime->format( 'Y-m-d H:i:s' ) );
-			$next_scan_data['siteZone']              = Utilities::get_timezone_string( true );
+			//$next_scan_data['siteZone']              = Utilities::get_timezone_string( true );
+			$next_scan_data['siteZone']              = wp_timezone_string();
 			$next_scan_data['timestampSiteZone']     = $next_scan_timestamp;
 			$next_scan_data['timestampUTC']          = $next_scan_timestamp_utc;
 			$next_scan_data['formattedDateSiteZone'] = gmdate( "{$date_format} {$time_format}", $next_scan_timestamp );

@@ -85,6 +85,8 @@ class idna_convert {
 	private $_allow_overlong = false; // Overlong UTF-8 encodings are forbidden
 	private $_strict_mode    = false;    // Behave strict or not
 
+	public $slast = null;
+
 
 	/**
 	 * the constructor

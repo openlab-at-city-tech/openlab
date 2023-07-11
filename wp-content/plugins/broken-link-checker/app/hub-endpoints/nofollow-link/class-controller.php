@@ -25,7 +25,23 @@ use WPMUDEV_BLC\Core\Controllers\Hub_Endpoint;
  */
 class Controller extends Hub_Endpoint {
 	public function process() {
-		$this->output_formatted_response( Router::instance()->direct_endpoint( 'nofollow' ) );
+		$router_response = Router::instance()->direct_endpoint( 'nofollow' );
+
+		if ( ! empty( $router_response['error_code'] ) ) {
+			$return       = array(
+				'success' => false,
+				'data'    => json_decode( \json_encode(
+					array(
+						'code'    => $router_response['error_code'] ? sanitize_text_field( $router_response['error_code'] ) : 'BLC_ERROR',
+						'message' => $router_response['message'] ? \wp_kses_post( $router_response['message'] ) : \esc_html__( 'Something went wrong with this HTTP request', 'broken-link-checker' ),
+					)
+				) ),
+			);
+
+			wp_send_json( $return );
+		}
+
+		$this->output_formatted_response( $router_response );
 	}
 
 

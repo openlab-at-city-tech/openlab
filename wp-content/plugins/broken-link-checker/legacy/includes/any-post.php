@@ -458,6 +458,8 @@ blcPostTypeOverlord::getInstance();
 class blcAnyPostContainer extends blcContainer {
 	var $default_field = 'post_content';
 
+	public $updating_urls = null;
+
 	/**
 	 * Get action links for this post.
 	 *

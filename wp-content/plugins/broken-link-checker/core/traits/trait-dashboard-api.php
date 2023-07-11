@@ -106,4 +106,37 @@ trait Dashboard_API {
 		return null;
 	}
 
+	/**
+	 * Returns an array with WPMUDEV Dashboard users.
+	 *
+	 * @return array|bool
+	 */
+	public static function get_dash_users() {
+		if ( ! class_exists( 'WPMUDEV_Dashboard' ) ) {
+			return array();
+		}
+
+		return \WPMUDEV_Dashboard::$site->get_allowed_users( true );
+	}
+
+	/**
+	 * Returns email or WP user that connected Dash plugin to HUB. If nothing found it returns false.
+	 *
+	 * @param bool $wp_user Defines if method should return the WP_User if found. Else it returns the email.
+	 *
+	 * @return false|string|WP_User
+	 */
+	public static function get_auth_user( bool $wp_user = false ) {
+		if ( ! class_exists( 'WPMUDEV_Dashboard' ) ) {
+			return false;
+		}
+
+		$auth_user = \WPMUDEV_Dashboard::$settings->get( 'auth_user', 'general' );
+
+		if ( $wp_user && ! empty( $auth_user ) ) {
+			return \get_user_by( 'email', $auth_user );
+		}
+
+		return $auth_user;
+	}
 }

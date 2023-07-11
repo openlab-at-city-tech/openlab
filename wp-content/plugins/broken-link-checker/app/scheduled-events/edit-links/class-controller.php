@@ -124,6 +124,8 @@ class Controller extends Base {
 			$result = $link->execute_action();
 		}
 
+		Queue::instance()->set( array( 'batch_end_timestamp' => current_time( 'U' ) ) );
+
 		// Set queue offsets and current link.
 		if ( ! empty( $result ) && ! is_wp_error( $result ) ) {
 			// What to do when link action has been completed.
@@ -141,6 +143,8 @@ class Controller extends Base {
 				// Send an update to HUB API after each link task is completed.
 				HTTP_Request::instance()->send_report( $link );
 			} else {
+				$current_task = Queue::instance()->get_current_task();
+
 				Queue::instance()->set(
 					array(
 						'current_task' => array(
@@ -149,10 +153,10 @@ class Controller extends Base {
 							'rows'          => ! empty( $result['row_count'] ) ? intval( $result['row_count'] ) : intval( $current_task['rows'] ),
 							'link_mode'     => $result['link_mode'],
 							'target_tables' => ! empty( $result['target_tables'] ) ? $result['target_tables'] : array(
-								'posts'    => Queue::instance()->has_table_been_prosseced( 'posts' ),
-								'postmeta' => Queue::instance()->has_table_been_prosseced( 'postmeta' ),
-								'comments' => Queue::instance()->has_table_been_prosseced( 'comments' ),
-								'authors'  => Queue::instance()->has_table_been_prosseced( 'authors' ),
+								'posts'    => ! empty( $current_task['target_tables']['posts'] ) ? boolval( $current_task['target_tables']['posts'] ) : false,
+								'postmeta' => ! empty( $current_task['target_tables']['postmeta'] ) ? boolval( $current_task['target_tables']['postmeta'] ) : false,
+								'comments' => ! empty( $current_task['target_tables']['comments'] ) ? boolval( $current_task['target_tables']['comments'] ) : false,
+								'authors'  => ! empty( $current_task['target_tables']['authors'] ) ? boolval( $current_task['target_tables']['authors'] ) : false,
 							),
 						)
 					)

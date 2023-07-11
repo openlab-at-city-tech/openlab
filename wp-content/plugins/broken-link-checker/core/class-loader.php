@@ -84,7 +84,7 @@ final class Loader extends Base {
 	 * @var float
 	 *
 	 */
-	public $php_version = '5.6';
+	public $php_version = '7.2';
 
 	/**
 	 * Minimum WordPress version.

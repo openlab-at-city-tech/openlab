@@ -31,40 +31,46 @@ class Model extends Option {
 	 * @var string|array|null $option_keys
 	 */
 	public $default = array(
-		'total_links'        => 0,
+		'total_links'         => 0,
 		// int Total number of links (page links and full site links).
-		'remaining_links'    => 0,
+		'remaining_links'     => 0,
 		// int Number of links that have not been processed yet.
-		'links_processed'    => 0,
+		'links_processed'     => 0,
 		// int Number of links processed.
-		'full_site_links'    => array(),
+		'full_site_links'     => array(),
 		// array List of links to be edited in all site's posts.
-		'page_links'         => array(),
+		'page_links'          => array(),
 		// array List of links to be edited on specific posts.
-		'last_run'           => null,
+		'last_run'            => null,
 		// int Timestamp that last edit took place.
-		'link_list_success'  => array(),
+		'link_list_success'   => array(),
 		// array List of links that are successfully edited.
-		'link_list_failed'   => array(),
+		'link_list_failed'    => array(),
 		// array List of links that failed to be edited.
-		'link_list_notfound' => array(),
+		'link_list_notfound'  => array(),
 		// array List of links that were not found.
-		'report'             => array(),
+		'report'              => array(),
 		// array
-		'forced_limit'       => null,
+		'forced_limit'        => null,
 		// null|int When set this limit will be used. Useful when bash gets completed and more than half of the limit has been spent.
-		'current_task'       => array(
-			'link'          => '', // The link last action reached.
-			'offset'        => '', // The offset of posts/urls it scanned.
-			'rows'          => 0, // The number of rows that meet WHERE clause. This is calculated before Links are edited/unlinked.
+		'current_task'        => array(
+			'link'          => '',
+			// The link last action reached.
+			'offset'        => '',
+			// The offset of posts/urls it scanned.
+			'rows'          => 0,
+			// The number of rows that meet WHERE clause. This is calculated before Links are edited/unlinked.
 			'target_tables' => array(
 				'posts'    => false, // True if completed checking posts.
 				'postmeta' => false, // True if completed checking postmeta.
 				'comments' => false, // True if completed checking comments.
 				'authors'  => false, // True if completed checking authors.
 			),
-			'link_mode'     => '', // One of full_site_link or page_link.
+			'link_mode'     => '',
+			// One of full_site_link or page_link.
 		),
+		'batch_end_timestamp' => 0,
+		// Timestamp from when a Link/Batch action was previously completed. Link may not have been completed going through it's origins, but if batch (Limit) is completed, then we keep that timestamp.
 	);
 
 	/**
@@ -396,7 +402,17 @@ class Model extends Option {
 	public function get_current_task_rows() {
 		$current_task = $this->get_current_task();
 
-
 		return  isset( $current_task['rows'] ) && ! empty( $current_task['rows'] ) ? intval( $current_task['rows'] ) : null;
+	}
+
+	/**
+	 * Returns the timestamp that previous batch was completed.
+	 *
+	 * @return int
+	 */
+	public function batch_end_timestamp() {
+		$queue = $this->get_queue_data();
+
+		return ! empty( $queue['batch_end_timestamp'] ) ? intval( $queue['batch_end_timestamp'] ) : 0;
 	}
 }

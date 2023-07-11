@@ -131,7 +131,19 @@ class Controller extends Rest_Api {
 					$this->send_confirmation_links();
 				}
 
-				Activation_Webhook::instance()->reset_rule();
+				//Activation_Webhook::instance()->reset_rule();
+				Activation_Webhook::instance()->flush_rewrite_rules( true );
+				break;
+			case 'save-version-highlights-option' :
+				Settings::instance()->set(
+					array(
+						'version_highlights' => array(
+							'2_2_0' => true,
+						),
+					)
+				);
+
+				Settings::instance()->save();
 				break;
 			case 'save-legacy-modal-option':
 				$saved_response = $this->save_legacy_modal_settings( $request );

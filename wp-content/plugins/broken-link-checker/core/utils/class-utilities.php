@@ -476,6 +476,32 @@ final class Utilities {
 		return apply_filters( 'hub_edit_link_completed', self::wpmudev_base_url() . "api/blc/v1/edit-link-completed" );
 	}
 
+	public static function make_link_relative( string $url = '' ) {
+		$site_url       = site_url();
+		$site_url_parts = wp_parse_url( $site_url );
+		$url_parts      = wp_parse_url( $url );
+
+		if ( ! empty( $url_parts['host'] ) && $site_url_parts['host'] !== $url_parts['host'] ) {
+			return $url;
+		}
+
+		// Check if missing url scheme.
+		// It is not unusual to have urls starting with two slashes.
+		// Relative urls starting with 2 slashes replace everything from the hostname onward.
+		if ( substr( $url, 0, 2 ) === "//" ) {
+			$url = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':' . $url;
+		}
+
+		// If string is internal (starts with same url) we need to get the relative url.
+		$link_substring = substr( $url, 0, strlen( $site_url ) );
+
+		if ( strcasecmp( $link_substring, $site_url ) == 0 ) {
+			return wp_make_link_relative( $url );
+		}
+
+		return $url;
+	}
+
 	/**
 	 * Returns true if given screen(s) is the current admin screen.
 	 *

@@ -44,16 +44,34 @@ class Controller extends Base {
 		$this->settings = new Settings_Model();
 		$this->settings->init();
 
+		add_action( 'init', array( $this, 'initialise' ) );
+
 		add_action( 'wpmudev_blc_plugin_activated', array( $this, 'activation_actions' ), 9 );
 		//add_action( 'wpmudev_blc_plugin_deactivated', array( $this, 'deactivation_actions' ) );
 
 		add_action( 'load-toplevel_page_blc_dash', array( $this, 'blc_pages_init' ) );
-		add_action( 'load-link-checker_page_view-broken-links', array( $this, 'blc_pages_init' ) );
-		add_action( 'load-link-checker_page_link-checker-settings', array( $this, 'blc_pages_init' ) );
-		//add_action( 'load-link-checker_page_blc_local', array( $this, 'blc_pages_init' ) );
+		//add_action( 'load-link-checker_page_view-broken-links', array( $this, 'blc_pages_init' ) );
+		//add_action( 'load-link-checker_page_link-checker-settings', array( $this, 'blc_pages_init' ) );
+		add_action( 'load-link-checker_page_blc_local', array( $this, 'blc_pages_init' ) );
 		//add_action( 'delete_user', array( $this,'adapt_schedule_recipients' ), 10, 2 );
 		add_action( 'deleted_user', array( $this, 'adapt_schedule_recipients' ), 10, 2 );
 		add_action( 'remove_user_from_blog', array( $this, 'remove_user_from_blog' ), 10, 3 );
+	}
+
+
+	public function initialise() {
+		// Check plugin version against version stared in db.
+		// Let's avoid using `upgrader_process_complete` or `update_plugin_complete_actions` as plugins can be updated via ftp.
+		if ( defined( 'WPMUDEV_BLC_VERSION' ) && ! empty( WPMUDEV_BLC_VERSION ) ) {
+			$current_plugin_version = $this->settings->get( 'plugin_version' );
+
+			if ( empty( $current_plugin_version ) || version_compare( WPMUDEV_BLC_VERSION, $current_plugin_version ) >= 1 ) {
+				do_action( 'wpmudev_blc_plugin_updated' );
+				do_action( 'wpmudev_blc_plugin_activated' );
+				$this->settings->set( array( 'plugin_version' => WPMUDEV_BLC_VERSION ) );
+				$this->settings->save();
+			}
+		}
 	}
 
 	/**
@@ -61,6 +79,8 @@ class Controller extends Base {
 	 * @return void
 	 */
 	public function blc_pages_init() {
+		$this->settings->init();
+
 		// Activate V2 if there was a request to activate.
 		// This way we ensure that after site gets connected V2 gets activated when there was a settings request to activate V2 but at the time site was disconnected.
 		if ( $this->settings->get( 'v2_activation_request' ) && Utilities::site_connected() ) {

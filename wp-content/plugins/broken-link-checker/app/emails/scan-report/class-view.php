@@ -129,7 +129,7 @@ class View extends Base {
 						<?php echo $broken_link['url']; ?>
                     </a>
                 </td>
-                <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;
+                <td style="font-family: roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;
                 line-height: 14px;color: #1A1A1A; width:33%;  vertical-align:top; text-align: left;">
 
                     <table>
@@ -146,7 +146,7 @@ class View extends Base {
                     </table>
 
                 </td>
-                <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; width:33%; vertical-align:top; text-align: left;">
+                <td style="font-family: roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; width:33%; vertical-align:top; text-align: left;">
                     <a href="<?php echo $origin_post_edit_url; ?>" target="_blank" style="color: #286EFA;">
 						<?php echo $origin_post_title; ?>
                     </a>
@@ -160,13 +160,13 @@ class View extends Base {
         #font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:22px;table-layout:auto;
         #width:100%;border:none;min-width:400px;\">
         <tr style=\"align-items: flex-start;padding: 0px;width: 550px;height: 32px;\">
-            <th style=\"box-shadow: -1px 0px 0px 0px #f2f2f2; -webkit-box-shadow: -1px 0px 0px 0px #f2f2f2; -moz-box-shadow: -1px 0px 0px 0px #f2f2f2; background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A; text-align:left;border-radius: 4px 0px 0px 0px;min-width: 80px;\">
+            <th style=\"box-shadow: -1px 0px 0px 0px #f2f2f2; -webkit-box-shadow: -1px 0px 0px 0px #f2f2f2; -moz-box-shadow: -1px 0px 0px 0px #f2f2f2; background: #F2F2F2;font-family: roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A; text-align:left;border-radius: 4px 0px 0px 0px;min-width: 80px;\">
                 " . esc_html__( 'Broken Links', 'broken-link-checker' ) . "
             </th>
-            <th style=\"background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;\">
+            <th style=\"background: #F2F2F2;font-family: roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;\">
                 " . esc_html__( 'Status', 'broken-link-checker' ) . "
             </th>
-            <th style=\"background: #F2F2F2;font-family: Roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;border-top-right-radius:4px;min-width: 80px;\">
+            <th style=\"background: #F2F2F2;font-family: roboto, sans-serif;font-weight: 600;padding: 10px 20px;font-size: 12px;line-height: 14px;color: #1A1A1A;text-align:left;border-top-right-radius:4px;min-width: 80px;\">
                 " . esc_html__( 'Source URL', 'broken-link-checker' ) . "
             </th>
           </tr>
@@ -244,4 +244,64 @@ class View extends Base {
 
 		return "<table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"float:none;display:inline-table;\">{$output}</table>";
 	}
+
+
+
+
+	public function review_box_markup( string $review_content = null ) {
+		return '<!--[if mso | IE]></td></tr></table><table align="center" border="0" cellpadding="0" cellspacing="0" class="" role="presentation" style="width:550px;border-radius: 8px" width="550" bgcolor="#FFFFFF" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+    <div style="background:#FFFFFF;background-color:#FFFFFF;margin:0px auto;max-width:600px;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background:#FFFFFF;background-color:#FFFFFF;width:100%;">
+        <tbody>
+          <tr>
+            <td style="border:none;direction:ltr;font-size:0px;padding:20px;text-align:center;">
+                <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="email-review-prompt-outlook" width="550px" ><table align="center" border="0" cellpadding="0" cellspacing="0" class="email-review-prompt-outlook" role="presentation" style="width:550px;" width="550" bgcolor="#DAF4EF" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+                <div class="email-review-prompt" style="background:#DAF4EF; background-color:#DAF4EF; margin:0px auto; border-radius: 8px; max-width:550px; padding:20px 25px 20px 25px; vertical-align: top;">
+                    <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+                        <tr>
+                            <td>
+                                   <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                                        <tr>
+                                            <td style="border:none;direction:ltr;font-size:0px;padding:0px 0px 0px 0px;text-align:left;width:50px; vertical-align: top;">
+                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align="left" style="padding:0px; padding-top:0px; word-break:break-word;vertical-align: top;">
+                                                                <div style="vertical-align: top;">{{REVIEW_ICON}}</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td style="border:none;direction:ltr;font-size:0px;padding:0px 0px 0px 0px;text-align:left;vertical-align: top;">
+                                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="" width="100%">
+                                                        <tbody>
+                                                          <tr>
+                                                            <td align="left" style="font-size:0px;padding:0px 0px 0px 20px;padding-top:0px;word-break:break-word;vertical-align: top;">
+                                                              <div style="font-family:Roboto;font-size:14px;font-weight:400;line-height:1.7;text-align:left;color:#000000;vertical-align: top;">{{REVIEW_CONTENT}}</div>
+                                                            </td>
+                                                          </tr>
+                                                        </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                   </table>
+                            </td>
+                        </tr>
+                    </table>        
+                </div>
+                <!--[if mso | IE]></td></tr></table></td></tr></table><![endif]-->
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>';
+	}
+
+    public function review_box_icon() {
+	    $icon_src = WPMUDEV_BLC_ASSETS_URL . 'images/email-review-prompt-icon.png';
+
+        return '<img height="auto" src="' . $icon_src . '" style="border:0;text-decoration:none;height:auto;width:50px;font-size:13px" width="168">';
+    }
 }

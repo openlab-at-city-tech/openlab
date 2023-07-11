@@ -60,7 +60,11 @@ abstract class Hub_Endpoint extends Base {
 	 *
 	 * @return array
 	 */
-	public function register_endpoints( array $actions = array() ) {
+	public function register_endpoints( array $actions = null ) {
+		if ( ! is_array( $actions ) ) {
+			$actions = array();
+		}
+
 		$endpoint_actions = \is_callable( array( $this, 'get_endpoint_actions' ) ) ? $this->get_endpoint_actions() : array();
 
 		if ( ! empty( $endpoint_actions ) ) {
@@ -88,7 +92,7 @@ abstract class Hub_Endpoint extends Base {
 				\wp_send_json_success( $input, 200 );
 			} else {
 				$input['code']    = $input['code'] ? sanitize_text_field( $input['code'] ) : 'BLC_ERROR';
-				$input['message'] = $input['message'] ? \wp_kses_post( $input['message'] ) : \__esc_html( 'Something went wrong with this HTTP request', 'broken-link-checker' );
+				$input['message'] = $input['message'] ? \wp_kses_post( $input['message'] ) : \esc_html__( 'Something went wrong with this HTTP request', 'broken-link-checker' );
 				$input['data']    = $input['data'] ? $this->sanitize_array( $input['data'] ) : '';
 
 				\wp_send_json_error( new \WP_Error( $input['code'], $input['message'], $input['data'] ) );

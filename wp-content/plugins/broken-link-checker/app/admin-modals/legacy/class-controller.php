@@ -163,7 +163,7 @@ class Controller extends Base {
 	 * @since 2.0.0
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/activation-popup/main.asset.php';
+		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/legacy-modal/main.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',

@@ -17,6 +17,7 @@ namespace WPMUDEV_BLC\App\Webhooks\Recipient_Activation;
 defined( 'WPINC' ) || die;
 
 use WPMUDEV_BLC\App\Options\Settings\Model as Settings;
+use WPMUDEV_BLC\App\Users\Recipients\Model as Recipients;
 use WPMUDEV_BLC\Core\Controllers\Webhook;
 
 /**
@@ -75,7 +76,7 @@ class Controller extends Webhook {
 			return;
 		}
 
-		$this->activated_recipient = $this->get_recipient_by_key( $activation_key );
+		$this->activated_recipient = Recipients::get_recipient_by_key( $activation_key );
 
 		if ( empty( $this->activated_recipient ) ) {
 			return;
@@ -98,81 +99,6 @@ class Controller extends Webhook {
 				}
 				break;
 		}
-	}
-
-	protected function get_recipient_by_key( string $key = '' ) {
-		if ( empty( $key ) ) {
-			return false;
-		}
-
-		$key_parts = explode( '_', base64_decode( $key ) );
-
-		if ( count( $key_parts ) < 2 ) {
-			return array();
-		}
-
-		$hashed_email  = $key_parts[0];
-		$recipient_key = sanitize_text_field( $key_parts[1] );
-		$schedule      = $this->settings['schedule'] ?? array();
-		$recipient     = array();
-
-		//if ( empty( $schedule ) || ( empty( $schedule['emailrecipients'] ) && empty( $schedule['registered_recipients_data'] ) ) ) {
-			//return array();
-		//}
-
-		if ( ! empty( $schedule['emailrecipients'] ) ) {
-			$recipient = array_filter(
-				$schedule['emailrecipients'],
-				function ( $recipient_data ) use ( $recipient_key, $hashed_email ) {
-
-					return isset( $recipient_data['key'] ) &&
-					       $recipient_data['key'] === $recipient_key &&
-					       $hashed_email === md5( $recipient_data['email'] );
-				}
-			);
-		}
-
-		if ( empty( $recipient ) ) {
-			if ( ! empty( $schedule['registered_recipients_data'] ) ) {
-				foreach ( $schedule['registered_recipients_data'] as $user_id => $user_data ) {
-					$user = null;
-
-					if ( md5( $user_data['email'] ) === $hashed_email ) {
-						$user = get_user_by( 'email', sanitize_email( $user_data['email'] ) );
-					}
-
-					if ( $user instanceof \WP_User ) {
-						$recipient = array(
-							'key'     => $user_data['key'],
-							'name'    => $user->display_name,
-							'email'   => $user->user_email,
-							'user_id' => $user->ID,
-						);
-
-						break;
-					}
-				}
-			}
-
-			if ( empty( $recipient ) ) {
-				$user_key_parts = explode( '|', $recipient_key );
-				$user           = ! empty( $user_key_parts[1] ) ? get_userdata( intval( $user_key_parts[1] ) ) : null;
-
-				if ( $user instanceof \WP_User && md5( $user->user_email ) === $hashed_email ) {
-					$recipient = array(
-						'key'     => $recipient_key,
-						'name'    => $user->display_name,
-						'email'   => $user->user_email,
-						'user_id' => $user->ID,
-					);
-				}
-			}
-
-		} else {
-			$recipient = array_values( $recipient )[0];
-		}
-
-		return $recipient;
 	}
 
 	/**
