@@ -9469,6 +9469,12 @@ body form .checkbox-list-container {
 .group-setting-note {
   margin-top: -10px;
 }
+.collaboration-tool-toggle {
+  margin-bottom: 8px;
+}
+.collaboration-tool-toggle .collaboration-tool-gloss {
+  padding-left: 20px;
+}
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {
     width: 95%;

@@ -242,22 +242,45 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 			<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
 
 			<?php if ( $show_announcement_toggle ) : ?>
-				<div class="checkbox checkbox-float">
-					<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+				<div class="collaboration-tool-toggle">
+					<div class="checkbox">
+						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+					</div>
+
+					<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
 				</div>
 			<?php endif; ?>
 
-			<div class="checkbox checkbox-float">
-				<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-connections" id="group-show-connections" value="1"<?php checked( $connections_enabled ); ?> /> Enable Connections</label>
+				</div>
+
+				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
 			</div>
-			<div class="checkbox checkbox-float">
-				<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
+				</div>
+
+				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
 			</div>
-			<div class="checkbox checkbox-float">
-				<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
+				</div>
+
+				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
 			</div>
-			<div class="checkbox checkbox-float">
-				<label><input type="checkbox" name="openlab-edit-group-connections" id="group-show-connections" value="1"<?php checked( $connections_enabled ); ?> /> Enable Connections</label>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+				</div>
+
+				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
 			</div>
 		</div>
 
