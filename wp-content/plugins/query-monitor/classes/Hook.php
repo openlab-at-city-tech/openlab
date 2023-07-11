@@ -9,12 +9,15 @@ class QM_Hook {
 
 	/**
 	 * @param string $name
+	 * @param string $type
 	 * @param array<string, WP_Hook> $wp_filter
 	 * @param bool $hide_qm
 	 * @param bool $hide_core
 	 * @return array<int, array<string, mixed>>
+	 * @phpstan-param 'action'|'filter' $type
 	 * @phpstan-return array{
 	 *   name: string,
+	 *   type: 'action'|'filter',
 	 *   actions: list<array{
 	 *     priority: int,
 	 *     callback: array<string, mixed>,
@@ -23,7 +26,7 @@ class QM_Hook {
 	 *   components: array<string, string>,
 	 * }
 	 */
-	public static function process( $name, array $wp_filter, $hide_qm = false, $hide_core = false ) {
+	public static function process( $name, string $type, array $wp_filter, $hide_qm = false, $hide_core = false ) {
 
 		$actions = array();
 		$components = array();
@@ -50,9 +53,6 @@ class QM_Hook {
 						$components[ $callback['component']->name ] = $callback['component']->name;
 					}
 
-					// This isn't used and takes up a ton of memory:
-					unset( $callback['function'] );
-
 					$actions[] = array(
 						'priority' => $priority,
 						'callback' => $callback,
@@ -66,6 +66,7 @@ class QM_Hook {
 
 		return array(
 			'name' => $name,
+			'type' => $type,
 			'actions' => $actions,
 			'parts' => $parts,
 			'components' => $components,
