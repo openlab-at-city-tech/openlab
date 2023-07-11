@@ -148,7 +148,7 @@ class Meow_WPMC_Rest
 
 	function rest_reset_issues() {
 		$this->core->reset_issues();
-		return new WP_REST_Response( [ 'success' => true, 'message' => 'Issues were reset.' ], 200 );
+		return new WP_REST_Response( [ 'success' => true, 'message' => __( 'Issues were reset.', 'media-cleaner' ) ], 200 );
 	}
 
 	function rest_count( $request ) {
@@ -164,7 +164,7 @@ class Meow_WPMC_Rest
 		else {
 			return new WP_REST_Response( [ 
 				'success' => false, 
-				'message' => 'No source was mentioned while calling count.'
+				'message' => __( 'No source was mentioned while calling count.', 'media-cleaner' ),
 			], 200 );
 		}
 		return new WP_REST_Response( [ 'success' => true, 'data' => $num ], 200 );
@@ -187,7 +187,7 @@ class Meow_WPMC_Rest
 		else {
 			return new WP_REST_Response( [ 
 				'success' => false, 
-				'message' => 'No source was mentioned while calling all_ids.'
+				'message' => __( 'No source was mentioned while calling all_ids.', 'media-cleaner' ),
 			], 200 );
 		}
 		return new WP_REST_Response( [ 'success' => true, 'data' => $ids ], 200 );
@@ -215,7 +215,7 @@ class Meow_WPMC_Rest
 		else {
 			return new WP_REST_Response( [ 
 				'success' => false, 
-				'message' => 'No source was mentioned while calling the extract_references action.'
+				'message' => __( 'No source was mentioned while calling the extract_references action.', 'media-cleaner' ),
 			], 200 );
 		}
 
@@ -370,6 +370,50 @@ class Meow_WPMC_Rest
 		return new WP_REST_Response( [ 'success' => true ], 200 );
 	}
 
+	function rest_reference_entries( $request ) {
+		global $wpdb;
+		$limit = sanitize_text_field( $request->get_param('limit') );
+		$skip = sanitize_text_field( $request->get_param('skip') );
+		$orderBy = sanitize_text_field( $request->get_param('orderBy') );
+		$order = sanitize_text_field( $request->get_param('order') );
+		$search = sanitize_text_field( $request->get_param('search') );
+		$table_ref = $wpdb->prefix . "mclean_refs";
+
+		$total = $this->count_references($search);
+
+		$order_sql = 'ORDER BY id DESC';
+		if ( $orderBy === 'mediaId' ) {
+			$order_sql = 'ORDER BY mediaId ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		} elseif ( $orderBy === 'mediaUrl' ) {
+			$order_sql = 'ORDER BY mediaUrl ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		} elseif ( $orderBy === 'originType' ) {
+			$order_sql = 'ORDER BY originType ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+
+		$entries = [];
+		if ( empty( $search ) ) {
+			$entries = $wpdb->get_results( 
+				$wpdb->prepare( "SELECT *
+					FROM $table_ref
+					$order_sql
+					LIMIT %d, %d", $skip, $limit
+				)
+			);
+		}
+		else {
+			$entries = $wpdb->get_results( 
+				$wpdb->prepare( "SELECT *
+					FROM $table_ref
+					WHERE mediaUrl LIKE %s
+					$order_sql
+					LIMIT %d, %d", ( '%' . $search . '%' ), $skip, $limit
+				)
+			);
+		}
+
+		return new WP_REST_Response( [ 'success' => true, 'data' => $entries, 'total' => $total ], 200 );
+	}
+
 	function rest_entries( $request ) {
 		global $wpdb;
 		$limit = sanitize_text_field( $request->get_param('limit') );
@@ -380,6 +424,10 @@ class Meow_WPMC_Rest
 		$search = sanitize_text_field( $request->get_param('search') );
 		$table_scan = $wpdb->prefix . "mclean_scan";
 		$total = 0;
+
+		if ( $filterBy === 'references' ) {
+			return $this->rest_reference_entries( $request );
+		}
 
 		$whereSql = '';
 		if ( $filterBy == 'issues' ) {
@@ -399,16 +447,16 @@ class Meow_WPMC_Rest
 		}
 
 		$orderSql = 'ORDER BY id DESC';
-		if ($orderBy === 'type') {
+		if ( $orderBy === 'type' ) {
 			$orderSql = 'ORDER BY postId ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 		}
-		else if ($orderBy === 'postId') {
+		else if ( $orderBy === 'postId' ) {
 			$orderSql = 'ORDER BY postId ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 		}
-		else if ($orderBy === 'path') {
+		else if ( $orderBy === 'path' ) {
 			$orderSql = 'ORDER BY path ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 		}
-		else if ($orderBy === 'size') {
+		else if ( $orderBy === 'size' ) {
 			$orderSql = 'ORDER BY size ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 		}
 
@@ -571,25 +619,37 @@ class Meow_WPMC_Rest
 		return (int)$wpdb->get_var( "SELECT COUNT(*) FROM $table_scan WHERE deleted = 1 $whereSql" );
 	}
 
+	function count_references($search) {
+		global $wpdb;
+		$whereSql = empty($search) ? '' : $wpdb->prepare("AND mediaUrl LIKE %s", ( '%' . $search . '%' ));
+		$table_ref = $wpdb->prefix . "mclean_refs";
+		return (int)$wpdb->get_var( "SELECT COUNT(id) FROM $table_ref WHERE 1=1 $whereSql" );
+	}
+
 	function rest_get_stats($request) {
 		$search = sanitize_text_field( $request->get_param('search') );
 
 		global $wpdb;
 		$whereSql = empty($search) ? '' : $wpdb->prepare("AND path LIKE %s", ( '%' . $search . '%' ));
+		$refWhereSql = empty($search) ? '' : $wpdb->prepare("AND mediaUrl LIKE %s", ( '%' . $search . '%' ));
 		$table_scan = $wpdb->prefix . "mclean_scan";
+		$table_ref = $wpdb->prefix . "mclean_refs";
 		$issues = $wpdb->get_row( "SELECT COUNT(*) as entries, SUM(size) as size
 			FROM $table_scan WHERE ignored = 0 AND deleted = 0 $whereSql" );
 		$ignored = (int)$wpdb->get_var( "SELECT COUNT(*) 
 			FROM $table_scan WHERE ignored = 1 $whereSql" );
 		$trash = $wpdb->get_row( "SELECT COUNT(*) as entries, SUM(size) as size
 			FROM $table_scan WHERE deleted = 1 $whereSql" );
+		$references = $wpdb->get_var( "SELECT COUNT(id)
+			FROM $table_ref WHERE 1=1 $refWhereSql" );
 
 		return new WP_REST_Response( [ 'success' => true, 'data' => array(
 			'issues' => $issues->entries,
 			'issues_size' => $issues->size,
 			'ignored' => $ignored,
 			'trash' => $trash->entries,
-			'trash_size' => $trash->size
+			'trash_size' => $trash->size,
+			'references' => $references,
 		) ], 200 );
 	}
 }

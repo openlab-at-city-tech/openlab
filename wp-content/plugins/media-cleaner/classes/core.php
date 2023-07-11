@@ -1116,7 +1116,7 @@ class Meow_WPMC_Core {
 		$countfiles = 0;
 		$check_broken_media = !$this->check_content;
 		$fullpath = get_attached_file( $attachmentId );
-		$is_broken = !file_exists( $fullpath );
+		$is_broken = apply_filters( 'wpmc_is_file_broken', !file_exists( $fullpath ), $attachmentId );
 
 		// It's a broken-only scan
 		if ( $check_broken_media && !$is_broken ) {
