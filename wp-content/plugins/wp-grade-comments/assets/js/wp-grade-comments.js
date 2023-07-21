@@ -58,9 +58,7 @@
 	 * Check whether we should set the comment visibility to Private based on the Add A Grade status.
 	 */
 	function maybe_set_comment_visibility() {
-		var comment_has_content = $comment_content_input.val().length > 0;
-
-		if ( $add_a_grade.is( ':checked' ) && ! comment_has_content ) {
+		if ( $add_a_grade.is( ':checked' ) ) {
 			$private_checkbox.prop( 'disabled', 'disabled' );
 			$private_checkbox.prop( 'checked', true );
 		} else {
