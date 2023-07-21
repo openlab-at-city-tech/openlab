@@ -80,7 +80,7 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 							</div>
 
 							<div class="connection-setting connection-setting-checkbox">
-								<input type="checkbox" <?php checked( $settings['exclude_comments'] ); ?> class="connection-setting-exclude-comments" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments" name="connection-settings[content-type][comment]" value="1" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments"><?php esc_html_e( 'Do not include comments', 'openlab-connections' ); ?>
+								<input type="checkbox" <?php checked( $connection_settings['exclude_comments'] ); ?> class="connection-setting-exclude-comments" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments" name="connection-settings[content-type][comment]" value="1" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments"><?php esc_html_e( 'Do not include comments', 'openlab-connections' ); ?>
 							</div>
 
 							<div class="connection-setting connection-setting-checkbox">
