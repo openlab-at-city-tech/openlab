@@ -247,7 +247,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
 					</div>
 
-					<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
+					<p class="collaboration-tool-gloss italics">Post important announcements on the <?php echo esc_html( $group_label_uc ); ?> Profile. <a href="https://openlab.citytech.cuny.edu/blog/help/announcements-for-courses-projects-and-clubs/">Learn more</a> in OpenLab Help.</p>
 				</div>
 			<?php endif; ?>
 
@@ -256,7 +256,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-connections" id="group-show-connections" value="1"<?php checked( $connections_enabled ); ?> /> Enable Connections</label>
 				</div>
 
-				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
+				<p class="collaboration-tool-gloss italics">Creating a Connection with other Courses, Projects, or Clubs makes it easier to share content across different groups. <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-connections">Learn more</a> in OpenLab Help.</p>
 			</div>
 
 			<div class="collaboration-tool-toggle">
@@ -264,7 +264,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 				</div>
 
-				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
+				<p class="collaboration-tool-gloss italics">Add a discussion forum to the <?php echo esc_html( $group_label_uc ); ?> Profile. <a href="https://openlab.citytech.cuny.edu/blog/help/discussion-forums/">Learn more</a> in OpenLab Help.</p>
 			</div>
 
 			<div class="collaboration-tool-toggle">
@@ -272,7 +272,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
 				</div>
 
-				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
+				<p class="collaboration-tool-gloss italics">Add collaborative docs that <?php echo esc_html( $group_label_uc ); ?> members can create and edit together. <a href="https://openlab.citytech.cuny.edu/blog/help/using-docs/">Learn more</a> in OpenLab Help.</p>
 			</div>
 
 			<div class="collaboration-tool-toggle">
@@ -280,7 +280,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
 				</div>
 
-				<p class="collaboration-tool-gloss italics">Explicabo laboriosam soluta illum ullam saepe rerum ut ab. Magnam qui saepe qui magni non nisi. Qui dolorem voluptate reprehenderit consequatur dolor sit temporibus consequatur.</p>
+				<p class="collaboration-tool-gloss italics">Upload and add links to files on the <?php echo esc_html( $group_label_uc ); ?> Profile. <a href="https://openlab.citytech.cuny.edu/blog/help/using-files/">Learn more</a> in OpenLab Help.</p>
 			</div>
 		</div>
 
