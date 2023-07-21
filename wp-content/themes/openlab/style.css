@@ -10950,8 +10950,15 @@ body.groups.connections .connection-settings .disconnect-button {
   top: 20px;
   right: 20px;
 }
-body.groups.connections .connection-settings .connection-setting-checkbox-subsettings {
+body.groups.connections .connection-settings .connection-setting {
+  margin-bottom: 1em;
   padding-left: 10px;
+}
+body.groups.connections .connection-settings .connection-setting.connection-setting-checkbox {
+  margin-bottom: 0;
+}
+body.groups.connections .connection-settings label {
+  font-weight: normal;
 }
 body.groups.connections .connection-settings select {
   width: 80%;

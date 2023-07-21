@@ -39,23 +39,12 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 
 			$connection_settings = $connection->get_group_settings( bp_get_current_group_id() );
 
-			$all_is_checked = !  array_diff( [ 'post', 'comment' ], $connection_settings['content_types'] ) && ! array_diff( [ 'post_tag' => 'all', 'category' => 'all' ], $connection_settings['post_taxes'] );
-
 			$selected_categories = [];
-			if ( isset( $connection_settings['post_taxes']['category'] ) ) {
-				if ( 'all' === $connection_settings['post_taxes']['category'] ) {
+			if ( isset( $connection_settings['categories'] ) ) {
+				if ( 'all' === $connection_settings['categories'] ) {
 					$selected_categories = 'all';
 				} else {
-					$selected_categories = array_map( 'intval', $connection_settings['post_taxes']['category'] );
-				}
-			}
-
-			$selected_tags = [];
-			if ( isset( $connection_settings['post_taxes']['post_tag'] ) ) {
-				if ( 'all' === $connection_settings['post_taxes']['post_tag'] ) {
-					$selected_tags = 'all';
-				} else {
-					$selected_tags = array_map( 'intval', $connection_settings['post_taxes']['post_tag'] );
+					$selected_categories = array_map( 'intval', $connection_settings['categories'] );
 				}
 			}
 
@@ -79,43 +68,23 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 						</button>
 
 						<div class="accordion-content">
-							<div class="connection-setting-checkbox connection-setting-checkbox-post">
-								<input type="checkbox" <?php checked( in_array( 'post', $connection_settings['content_types'], true ) ); ?> class="connection-setting-post" id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post" name="connection-settings[content-type][post]" value="1" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post"><?php esc_html_e( 'Posts', 'openlab-connections' ); ?></label>
+							<div class="connection-setting">
+								<label for="connection-<?php echo esc_attr( $connection->get_connection_id ); ?>-categories"><?php esc_html_e( 'Include posts and comments from the following categories:', 'openlab-connections' ); ?></label>
+								<select multiple id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-categories" class="connection-tax-term-selector">
+									<option value="_all" <?php selected( 'all' === $selected_categories ); ?>><?php esc_html_e( 'All categories', 'openlab-connections' ); ?></option>
 
-								<div class="connection-setting-checkbox-subsettings">
-									<div>
-										<input type="checkbox" <?php checked( isset( $connection_settings['post_taxes']['category'] ) ); ?> class="connection-setting-post-tax" id="connection-setting-<?php esc_attr( $connection->get_connection_id() ); ?>-post-category" name="connection-settings[post-taxes][category]" value="1" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post-category" class=""><?php esc_html_e( 'Category', 'openlab-connections' ); ?></label>
-
-										<select name="connection-settings[post-tax-terms][category]" multiple id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-category-terms" class="connection-tax-term-selector">
-											<option value="_all" <?php selected( 'all' === $selected_categories ); ?>><?php esc_html_e( 'All categories', 'openlab-connections' ); ?></option>
-
-											<?php foreach ( $site_categories as $site_category ) : ?>
-												<option value="<?php echo esc_attr( $site_category['id'] ); ?>" <?php selected( is_array( $selected_categories ) && in_array( $site_category['id'], $selected_categories, true ) ); ?>><?php echo esc_html( $site_category['name'] ); ?></option>
-											<?php endforeach; ?>
-
-										</select>
-									</div>
-
-									<div>
-										<input type="checkbox" <?php checked( isset( $connection_settings['post_taxes']['post_tag'] ) ); ?> class="connection-setting-post-tax" id="connection-setting-<?php esc_attr( $connection->get_connection_id() ); ?>-post-tag" name="connection-settings[post-taxes][post_tag]" value="1" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-post-tag" class=""><?php esc_html_e( 'Tag', 'openlab-connections' ); ?></label>
-
-										<select name="connection-settings[post-tax-terms][post_tag]" multiple id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-tag-terms" class="connection-tax-term-selector">
-											<option value="_all" <?php selected( 'all' === $selected_tags ); ?>><?php esc_html_e( 'All tags', 'openlab-connections' ); ?></option>
-
-											<?php foreach ( $site_tags as $site_tag ) : ?>
-												<option value="<?php echo esc_attr( $site_tag['id'] ); ?>" <?php selected( is_array( $selected_tags ) && in_array( $site_tag['id'], $selected_tags, true ) ); ?>><?php echo esc_html( $site_tag['name'] ); ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-								</div>
+									<?php foreach ( $site_categories as $site_category ) : ?>
+										<option value="<?php echo esc_attr( $site_category['id'] ); ?>" <?php selected( is_array( $selected_categories ) && in_array( $site_category['id'], $selected_categories, true ) ); ?>><?php echo esc_html( $site_category['name'] ); ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 
-							<div class="connection-setting-checkbox">
-								<input type="checkbox" <?php checked( in_array( 'comment', $connection_settings['content_types'], true ) ); ?> class="connection-setting-comment" id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-comment" name="connection-settings[content-type][comment]" value="1" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-comment"><?php esc_html_e( 'Comments', 'openlab-connections' ); ?>
+							<div class="connection-setting connection-setting-checkbox">
+								<input type="checkbox" <?php checked( $settings['exclude_comments'] ); ?> class="connection-setting-exclude-comments" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments" name="connection-settings[content-type][comment]" value="1" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-exclude-comments"><?php esc_html_e( 'Do not include comments', 'openlab-connections' ); ?>
 							</div>
 
-							<div class="connection-setting-checkbox">
-								<input type="checkbox" <?php checked( empty( $connection_settings['content_types'] ) ); ?> class="connection-setting-none" id="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none" /> <label for="connection-setting-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none"><?php esc_html_e( 'None', 'openlab-connections' ); ?>
+							<div class="connection-setting connection-setting-checkbox">
+								<input type="checkbox" <?php checked( empty( $selected_categories ) ); ?> class="connection-setting-none" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none"><?php esc_html_e( 'Do not share any content with this connection', 'openlab-connections' ); ?>
 							</div>
 						</div>
 					</div>
