@@ -2320,29 +2320,138 @@ function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
 			if ( class_exists( 'OpenLab\Connections\Util' ) && \OpenLab\Connections\Util::is_connections_enabled_for_group( bp_get_current_group_id() ) ) {
 				$connections = \OpenLab\Connections\Connection::get( [ 'group_id' => bp_get_current_group_id() ] );
 
-				$connected_group_ids = [];
-				foreach ( $connections as $connection ) {
-					$c_group_ids = $connection->get_group_ids();
-					foreach ( $c_group_ids as $c_group_id ) {
-						if ( $c_group_id !== bp_get_current_group_id() && ! in_array( $c_group_id, $connected_group_ids, true ) ) {
-							$connected_group_ids[] = $c_group_id;
+				$connected_group_clauses = array_map(
+					function( $connection ) {
+						$c_group_ids        = $connection->get_group_ids();
+						$connected_group_id = null;
+						foreach ( $c_group_ids as $c_group_id ) {
+							if ( $c_group_id !== bp_get_current_group_id() ) {
+								$connected_group_id = $c_group_id;
+								break;
+							}
 						}
-					}
-				}
 
-				$activity_query = [
-					[
-						'column'  => 'item_id',
-						'value'   => $connected_group_ids,
-						'compare' => 'IN',
-					],
-					[
-						'column' => 'component',
-						'value'  => 'groups',
-					]
-				];
+						if ( ! $connected_group_id ) {
+							return [];
+						}
 
-				$args['filter_query'] = $activity_query;
+						$connected_group_settings = $connection->get_group_settings( $connected_group_id );
+
+						if ( empty( $connected_group_settings['categories'] ) ) {
+							return [];
+						}
+
+						$limit_to_posts    = [];
+						$limit_to_comments = [];
+						if ( is_array( $connected_group_settings['categories'] ) ) {
+							$group_site_id = openlab_get_site_id_by_group_id( $connected_group_id );
+							if ( $group_site_id ) {
+								switch_to_blog( $group_site_id );
+
+								// Secondary sites don't run taxonomy-terms-order.
+								remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+
+								$limit_to_posts = get_posts(
+									[
+										'fields'         => 'ids',
+										'posts_per_page' => -1,
+										'tax_query'      => [
+											[
+												'taxonomy' => 'category',
+												'terms'    => $connected_group_settings['categories'],
+												'field'    => 'term_id',
+											]
+										],
+									]
+								);
+
+								if ( ! $limit_to_posts ) {
+									$limit_to_posts = [ 0 ];
+								}
+
+								if ( ! $connected_group_settings['exclude_comments'] && $limit_to_posts ) {
+									$limit_to_comments = get_comments(
+										[
+											'fields'         => 'ids',
+											'posts_per_page' => -1,
+											'post__in'       => $limit_to_posts,
+										]
+									);
+
+									if ( ! $limit_to_comments ) {
+										$limit_to_comments = [ 0 ];
+									}
+								}
+
+								add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+
+								restore_current_blog();
+							}
+						}
+
+						$group_query = [
+							[
+								'column' => 'component',
+								'value'  => 'groups',
+							],
+							[
+								'column'  => 'item_id',
+								'value'   => $connected_group_id,
+								'compare' => 'IN',
+							],
+						];
+
+						if ( $limit_to_posts || $limit_to_comments ) {
+							$type_query = [
+								'relation' => 'OR',
+							];
+
+							$type_query[] = [
+								[
+									'column' => 'type',
+									'value'  => 'new_blog_post',
+								],
+								[
+									'column'  => 'secondary_item_id',
+									'value'   => $limit_to_posts,
+									'compare' => 'IN',
+								]
+							];
+
+							$type_query[] = [
+								[
+									'column' => 'type',
+									'value'  => 'new_blog_comment',
+								],
+								[
+									'column'  => 'secondary_item_id',
+									'value'   => $limit_to_comments,
+									'compare' => 'IN',
+								]
+							];
+
+							$group_query[] = $type_query;
+						} else {
+							$activity_types = [ 'new_blog_post' ];
+							if ( empty( $connected_group_settings['exclude_comments'] ) ) {
+								$activity_types[] = 'new_blog_comment';
+							}
+
+							$group_query[] = [
+								'column'  => 'type',
+								'value'   => $activity_types,
+								'compare' => 'IN',
+							];
+						}
+
+						return $group_query;
+					},
+					$connections
+				);
+
+				$connected_group_clauses['relation'] = 'OR';
+
+				$args['filter_query'] = $connected_group_clauses;
 
 				$args['scope']      = false;
 				$args['primary_id'] = false;
