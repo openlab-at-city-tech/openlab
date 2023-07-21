@@ -49,7 +49,7 @@ register_activation_hook( __FILE__, 'olgc_activate' );
  * @since 1.0.0
  */
 function olgc_leave_comment_checkboxes() {
-	$show_private_checkbox = olgc_is_instructor() || (int) get_queried_object()->post_author === get_current_user_id();
+	$show_private_checkbox = olgc_is_instructor() || olgc_is_author();
 	$show_grade_field      = olgc_is_instructor();
 
 	if ( ! $show_private_checkbox && ! $show_grade_field ) {
@@ -108,7 +108,7 @@ add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 
  */
 function olgc_insert_comment( $comment_id, $comment ) {
 	// Private
-	$is_private = olgc_is_instructor() && ! empty( $_POST['olgc-private-comment'] );
+	$is_private = ( olgc_is_instructor() || olgc_is_author( $comment->comment_post_ID ) ) && ! empty( $_POST['olgc-private-comment'] );
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
 		$is_private = (bool) get_comment_meta( $comment->comment_parent, 'olgc_is_private', true );
 	}
