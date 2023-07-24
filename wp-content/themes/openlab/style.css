@@ -10963,6 +10963,9 @@ body.groups.connections .connection-settings label {
 body.groups.connections .connection-settings select {
   width: 80%;
 }
+body.groups.connections .connection-settings-gloss-title {
+  font-weight: bold;
+}
 body.groups.connections .accordion-toggle {
   background: none;
   align-items: center;
@@ -10972,18 +10975,26 @@ body.groups.connections .accordion-toggle {
   text-align: left;
   cursor: pointer;
 }
+body.groups.connections .accordion-toggle:hover .connection-settings-gloss-title {
+  text-decoration: underline;
+}
+body.groups.connections .accordion-toggle[aria-expanded="true"] .accordion-caret:after {
+  content: "\f146";
+}
 body.groups.connections .accordion-content {
   display: none;
   padding: 10px;
 }
-body.groups.connections .accordion-toggle[aria-expanded="true"] .accordion-caret {
-  transform: rotate(90deg);
-}
 body.groups.connections .accordion-caret {
   display: inline-block;
   margin-left: auto;
-  margin-right: 10px;
+  height: 16px;
+  width: 16px;
   font-size: 16px;
+}
+body.groups.connections .accordion-caret::after {
+  content: "\f0fe";
+  font-family: "FontAwesome";
 }
 body.groups.connections .group-list {
   margin-top: 10px;

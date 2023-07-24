@@ -61,10 +61,10 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 
 					<div class="accordion">
 						<button class="accordion-toggle" aria-expanded="false" aria-controls="accordion-content">
-							<span class="accordion-caret">&gt;</span>
+							<span class="accordion-caret"></span>
 							<span class="sr-only">Expand</span>
 
-							<?php echo wp_kses_post( __( '<strong>Sharing:</strong>&nbsp;Manage the content shared with this connection.', 'openlab-connections' ) ); ?>
+							<?php echo wp_kses_post( __( '<span class="connection-settings-gloss-title">Sharing Preferences:</span>&nbsp;Manage the content shared with this connection.', 'openlab-connections' ) ); ?>
 						</button>
 
 						<div class="accordion-content">

@@ -4108,6 +4108,10 @@ body.groups.connections {
 		}
 	}
 
+	.connection-settings-gloss-title {
+		font-weight: bold;
+	}
+
 	.accordion-toggle {
 		background: none;
 		align-items: center;
@@ -4116,6 +4120,18 @@ body.groups.connections {
 		border: none;
 		text-align: left;
 		cursor: pointer;
+
+		&:hover {
+			.connection-settings-gloss-title {
+				text-decoration: underline;
+			}
+		}
+
+		&[aria-expanded="true"] {
+			.accordion-caret:after {
+				content: "\f146";
+			}
+		}
 	}
 
 	.accordion-content {
@@ -4123,15 +4139,17 @@ body.groups.connections {
 		padding: 10px;
 	}
 
-	.accordion-toggle[aria-expanded="true"] .accordion-caret {
-		transform: rotate(90deg);
-	}
-
 	.accordion-caret {
 		display: inline-block;
 		margin-left: auto;
-		margin-right: 10px;
+		height: 16px;
+		width: 16px;
 		font-size: 16px;
+
+		&::after {
+			content: "\f0fe";
+			font-family: "FontAwesome";
+		}
 	}
 
 	.group-list {
