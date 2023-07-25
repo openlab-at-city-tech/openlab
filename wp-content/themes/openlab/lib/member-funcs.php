@@ -875,6 +875,15 @@ function cuny_member_profile_header() {
 			<div class="profile-fields">
 				<div class="info-panel panel panel-default no-margin no-margin-top">
 					<div class="profile-fields table-div">
+						<div class="table-row row">
+							<div class="bold col-sm-7 profile-field-label">
+								Display Name
+							</div>
+
+							<div class="col-sm-17 profile-field-value">
+								<?php echo esc_html( bp_core_get_user_displayname( bp_displayed_user_id() ) ); ?>
+							</div>
+						</div>
 
 						<?php
 						$exclude_fields = array(
