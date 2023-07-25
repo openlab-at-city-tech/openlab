@@ -2449,9 +2449,14 @@ function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
 					$connections
 				);
 
-				$connected_group_clauses['relation'] = 'OR';
+				$connected_group_clauses = array_filter( $connected_group_clauses );
 
-				$args['filter_query'] = $connected_group_clauses;
+				if ( $connected_group_clauses ) {
+					$connected_group_clauses['relation'] = 'OR';
+					$args['filter_query'] = $connected_group_clauses;
+				} else {
+					$args['in'] = [ 0 ];
+				}
 
 				$args['scope']      = false;
 				$args['primary_id'] = false;
