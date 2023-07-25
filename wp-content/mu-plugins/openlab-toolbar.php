@@ -721,6 +721,7 @@ HTML;
 			$connection_invitations = \OpenLab\Connections\Invitation::get(
 				[
 					'invitee_group_id' => array_keys( $user_groups ),
+					'pending_only'     => true,
 				]
 			);
 
