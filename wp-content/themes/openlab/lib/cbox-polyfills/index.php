@@ -14,6 +14,12 @@ function cbox_get_main_site_id() {
 	return 1;
 }
 
+function cbox_is_main_site() {
+	return get_current_blog_id() === cbox_get_main_site_id();
+}
+
+function cboxol_communication_settings_markup( $settings ) {}
+
 function cboxol_get_group_group_type( $group_id ) {
 	if ( bp_is_group_create() ) {
 		$type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : '';
