@@ -158,13 +158,13 @@
                                 <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                             <?php endif; ?>
 
-                            <input 
-                                class="form-control" 
-                                size="80" 
-                                type="text" 
-                                name="group-name" 
-                                id="group-name" 
-                                value="<?php bp_new_group_name() ?>" 
+                            <input
+                                class="form-control"
+                                size="80"
+                                type="text"
+                                name="group-name"
+                                id="group-name"
+                                value="<?php bp_new_group_name() ?>"
                                 data-parsley-required
                                 data-parsley-error-message="Please fill in a name."
                                 data-parsley-errors-container="#field_name_error"
@@ -180,10 +180,10 @@
                             <label for="group-desc"><?php echo ucfirst($group_type); ?> Description <?php _e('(required)', 'buddypress') ?></label>
                         </div>
                         <div class="panel-body">
-                            <textarea 
-                                class="form-control" 
-                                name="group-desc" 
-                                id="group-desc" 
+                            <textarea
+                                class="form-control"
+                                name="group-desc"
+                                id="group-desc"
                                 data-parsley-required
                                 data-parsley-error-message="Please fill in a description."
                                 data-parsley-errors-container="#field_description_error"

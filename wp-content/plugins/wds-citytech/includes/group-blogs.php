@@ -732,14 +732,14 @@ function wds_bp_group_meta() {
 												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 											</div>
 											<div class="col-sm-13">
-												<input 
-													class="form-control domain-validate" 
-													size="40" 
-													id="clone-destination-path" 
-													name="clone-destination-path" 
-													type="text" 
-													title="Path" 
-													value="" 
+												<input
+													class="form-control domain-validate"
+													size="40"
+													id="clone-destination-path"
+													name="clone-destination-path"
+													type="text"
+													title="Path"
+													value=""
 													data-parsley-validate-if-empty="true"
 													data-parsley-new-site-validate="#new_or_old_clone"
 													data-parsley-errors-container="#field_clone_site_error"
@@ -773,13 +773,13 @@ function wds_bp_group_meta() {
 										</div>
 
 										<div class="col-sm-13">
-											<input 
-												id="new-site-domain" 
-												class="form-control domain-validate" 
-												size="40" 
-												name="blog[domain]" 
-												type="text" 
-												title="Domain" 
+											<input
+												id="new-site-domain"
+												class="form-control domain-validate"
+												size="40"
+												name="blog[domain]"
+												type="text"
+												title="Domain"
 												value="<?php echo esc_html( $suggested_path ); ?>"
 												data-parsley-validate-if-empty="true"
 												data-parsley-new-site-validate="#new_or_old_new"
