@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Quiz Add-On
 Plugin URI: https://gravityforms.com
 Description: Allows you to create custom quizzes quickly using Gravity Forms.
-Version: 4.0
+Version: 4.1
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 defined( 'ABSPATH' ) || die();
 
-define( 'GF_QUIZ_VERSION', '4.0' );
+define( 'GF_QUIZ_VERSION', '4.1' );
 
 add_action( 'gform_loaded', array( 'GF_Quiz_Bootstrap', 'load' ), 5 );
 

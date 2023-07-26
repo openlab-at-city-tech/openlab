@@ -1384,12 +1384,13 @@ class GFQuiz extends GFAddOn {
 		// Clean content from new line characters.
 		$content = str_replace( '&#13;', ' ', $content );
 		$content = trim( preg_replace( '/\s\s+/', ' ', $content ) );
-		$loader  = libxml_disable_entity_loader( true );
+		if (\LIBXML_VERSION < 20900) {
+			libxml_disable_entity_loader(true);
+		}
 		$errors  = libxml_use_internal_errors( true );
 		$dom->loadHTML( $content );
 		libxml_clear_errors();
 		libxml_use_internal_errors( $errors );
-		libxml_disable_entity_loader( $loader );
 
 		$content = $dom->saveXML( $dom->documentElement );
 
@@ -1547,7 +1548,7 @@ class GFQuiz extends GFAddOn {
 				$confirmation = substr( $confirmation, 0, strlen( $confirmation ) - 6 );
 			} //remove the closing div of the message
 			else {
-				$confirmation .= "<div id='gforms_confirmation_message' class='gform_confirmation_message_{$form_id}'>";
+				$confirmation .= "<div id='gforms_confirmation_message' class='gform_confirmation_message_{$form_id} gform_confirmation_message gform_confirmation_message--quiz'>";
 			}
 
 			$results           = $this->get_quiz_results( $form, $lead );
