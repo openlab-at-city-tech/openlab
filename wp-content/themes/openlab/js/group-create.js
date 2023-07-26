@@ -29,6 +29,7 @@ jQuery( document ).ready(
 		$gc_submit     = $( '#group-creation-create' ),
 		$required_fields,
     $setuptoggle   = $( 'input[name="wds_website_check"]' );
+		$setuptoggle_mirror = $( 'input#set-up-site-toggle' );
 
 		if ( $body.hasClass( 'group-admin' ) ) {
 			form_type = 'admin';
@@ -53,6 +54,12 @@ jQuery( document ).ready(
 				$( '#site-options' ).show();
 			} else {
 				$( '#site-options' ).hide();
+			}
+		}
+
+		function maybeShowSiteTemplates() {
+			if ( $setuptoggle.is( ':checked' ) ) {
+				$('.panel-template-picker').removeClass( 'hidden' );
 			}
 		}
 
@@ -438,12 +445,15 @@ jQuery( document ).ready(
 		$setuptoggle.on( 'click', function(){
 			showHideAll();
 			maybeShowSiteFields();
+			$setuptoggle_mirror.trigger( 'click' )
 		} );
 
 		if ( $setuptoggle.is( ':checked' ) ) {
 			showHideAll();
 		};
 		maybeShowSiteFields();
+
+		setTimeout( maybeShowSiteTemplates, 500 )
 
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
 			$setuptoggle.trigger( 'click' );

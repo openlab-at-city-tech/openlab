@@ -857,6 +857,8 @@ function wds_bp_group_meta() {
 		</div>
 	</div>
 	<?php
+
+	do_action( 'openlab_after_group_site_markup' );
 }
 
 add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta' );

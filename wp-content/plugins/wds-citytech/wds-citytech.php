@@ -1216,7 +1216,11 @@ function ra_copy_blog_page( $group_id ) {
 			$where = 'AND d.domain IS NULL ';
 		}
 
-		$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
+		if ( ! empty( $_POST['source_blog'] ) ) {
+			$src_id = (int) $_POST['source_blog'];
+		} else {
+			$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
+		}
 
 		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 		//$domain = str_replace( ".","", $domain );

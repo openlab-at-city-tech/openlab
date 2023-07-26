@@ -1,0 +1,1 @@
+!function(e){const{endpoint:n,nonce:t}=window.SiteTemplatePickerAdmin;e(document).ready((()=>{e("#template-site-id").select2({ajax:{url:n+"?_wpnonce="+t,dataType:"json",data:function(e){return{search:e.term,page:e.page||1}}}})})),e(document).on("select2:open",(()=>{document.querySelector(".select2-search__field").focus()}))}(jQuery);

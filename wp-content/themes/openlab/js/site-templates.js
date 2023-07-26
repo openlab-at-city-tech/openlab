@@ -1,0 +1,1 @@
+/home/bgorges/sites/neh/wp-content/plugins/cbox-openlab-core/build/site-templates.js

@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(()=>{const{defaultCategoryId:e}=window.SiteTemplatesDefaultCategory;if(!e)return;const t=document.querySelector("#in-cboxol_template_category-"+e);t&&(t.checked=!0)}));
