@@ -1,4 +1,7 @@
-### 4.2 | 2021-02-10
+### 4.2.1
+- Added support for async (background) feed processing to improve form submission performance.
+
+### 4.2 | 2022-02-10
 - Added support for Zapier Transfer.
 - API: Updated the `gform_zapier_request_body` filter to be called within GF_Zapier::get_body so that it can be applied both when processing feeds and responding to API requests.
 

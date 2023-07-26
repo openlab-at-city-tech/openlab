@@ -1,17 +1,17 @@
-# Copyright (C) 2022 Gravity Forms
+# Copyright (C) 2023 Gravity Forms
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Zapier Add-On 4.2\n"
+"Project-Id-Version: Gravity Forms Zapier Add-On 4.2.1\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-02-10T20:59:38+00:00\n"
+"POT-Creation-Date: 2023-02-02T08:55:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.5.0\n"
+"X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: gravityformszapier\n"
 
 #. Plugin Name of the plugin
@@ -31,77 +31,77 @@ msgstr ""
 msgid "Gravity Forms"
 msgstr ""
 
-#: class-gf-zapier.php:171
+#: class-gf-zapier.php:180
 msgid "Send feed to Zapier only when payment is received."
 msgstr ""
 
-#: class-gf-zapier.php:395
-#: class-gf-zapier.php:402
-#: class-gf-zapier.php:497
+#: class-gf-zapier.php:404
+#: class-gf-zapier.php:411
+#: class-gf-zapier.php:506
 msgid "Name"
 msgstr ""
 
-#: class-gf-zapier.php:403
+#: class-gf-zapier.php:412
 msgid "This is a friendly name so you know what Zap is run when this form is submitted."
 msgstr ""
 
-#: class-gf-zapier.php:408
-#: class-gf-zapier.php:415
+#: class-gf-zapier.php:417
+#: class-gf-zapier.php:424
 msgid "URL"
 msgstr ""
 
-#: class-gf-zapier.php:416
+#: class-gf-zapier.php:425
 msgid "This is the URL provided by Zapier when you created your Zap on their website. This is the location to which your form data will be submitted to Zapier for additional processing."
 msgstr ""
 
-#: class-gf-zapier.php:421
-#: class-gf-zapier.php:438
+#: class-gf-zapier.php:430
+#: class-gf-zapier.php:447
 msgid "Use Admin Labels"
 msgstr ""
 
-#: class-gf-zapier.php:439
+#: class-gf-zapier.php:448
 msgid "By default the field labels will be sent to Zapier. Enable this option to send the field admin labels when available."
 msgstr ""
 
-#: class-gf-zapier.php:461
-#: class-gf-zapier.php:465
+#: class-gf-zapier.php:470
+#: class-gf-zapier.php:474
 msgid "Conditional Logic"
 msgstr ""
 
-#: class-gf-zapier.php:466
+#: class-gf-zapier.php:475
 msgid "When Conditional Logic is enabled, submissions for this form will only be sent to Zapier when the condition is met. When disabled, all submissions for this form will be sent to Zapier."
 msgstr ""
 
-#: class-gf-zapier.php:498
+#: class-gf-zapier.php:507
 msgid "Zap URL"
 msgstr ""
 
-#: class-gf-zapier.php:590
+#: class-gf-zapier.php:599
 msgid "Form ID"
 msgstr ""
 
-#: class-gf-zapier.php:591
+#: class-gf-zapier.php:600
 msgid "Form Title"
 msgstr ""
 
-#: class-gf-zapier.php:1513
+#: class-gf-zapier.php:1522
 msgid "Advanced Settings"
 msgstr ""
 
-#: class-gf-zapier.php:1518
+#: class-gf-zapier.php:1527
 msgid "Zapier Feeds"
 msgstr ""
 
-#: class-gf-zapier.php:1519
+#: class-gf-zapier.php:1528
 msgid "Show or hide the Zapier feed(s) on the Form > Settings > Zapier Feeds screen. This is intended for advanced users and should only be enabled when instructed by support."
 msgstr ""
 
-#: class-gf-zapier.php:1522
+#: class-gf-zapier.php:1531
 msgid "Display Zapier feeds in the form settings"
 msgstr ""
 
 #. Translators: 1. Opening <a> tag for link to Zapier, 2. Closing <a> tag.
-#: class-gf-zapier.php:1593
+#: class-gf-zapier.php:1602
 msgid "Simply %1$screate a zap%2$s on zapier.com."
 msgstr ""
 
