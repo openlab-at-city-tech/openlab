@@ -192,7 +192,7 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 	 */
 	$text = apply_filters( 'olgc_private_comment_text', $text );
 
-	if ( $is_private ) {
+	if ( $is_private && $text ) {
 		$comment_text = sprintf(
 			'<div class="olgc-grade-display olgc-grade-hidden">' .
 			    '<strong class="olgc-private-notice">%s</strong>&nbsp;' .
