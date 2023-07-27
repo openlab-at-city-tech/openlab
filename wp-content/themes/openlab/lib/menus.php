@@ -335,7 +335,7 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             $menu = openlab_group_docs_submenu();
             break;
         case 'group-connections':
-            $submenu_text = 'Connections<span aria-hidden="true">:</span> ';
+            $submenu_text = 'Connections Settings<span aria-hidden="true">:</span> ';
             $menu = openlab_group_connections_submenu();
             break;
         default:
