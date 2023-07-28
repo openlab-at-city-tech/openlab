@@ -341,6 +341,9 @@ input[type="submit"]{
 input:disabled+label {
 	opacity: .7;
 }
+.is-disabled label {
+	opacity: .7;
+}
 .form-control{
     margin-bottom: 15px;
     &[type='file']{
@@ -4053,166 +4056,25 @@ a.delete-doc-button {
         }
     }
 }
+
 body.groups.connections {
 	.bp-template-notice {
 		margin-bottom: 20px;
 	}
 
-	.connection-settings {
+	.connections-settings {
 		border: 1px solid #ddd;
 		border-radius: @border-radius-base;
 		display: flex;
-		gap: 20px;
-		padding: 20px;
-		position: relative;
-
-		.primary-column {
-			flex: 1;
-		}
-
-		.avatar-column {
-			flex: 0 0 75px;
-
-			.avatar {
-				height: 75px;
-				width: 75px;
-			}
-		}
-
-		.connected-group-link {
-			margin-bottom: 8px;
-			margin-top: 0;
-		}
-
-		.disconnect-button {
-			position: absolute;
-			top: 20px;
-			right: 20px;
-		}
-
-		.connection-setting {
-			margin-bottom: 1em;
-			padding-left: 10px;
-
-			&.connection-setting-checkbox {
-				margin-bottom: 0;
-			}
-		}
-
-		label {
-			font-weight: normal;
-		}
-
-		select {
-			width: 80%;
-		}
-	}
-
-	.connection-settings-gloss-title {
-		font-weight: bold;
-	}
-
-	.accordion-toggle {
-		background: none;
-		align-items: center;
-		width: 100%;
-		padding: 0;
-		border: none;
-		text-align: left;
-		cursor: pointer;
-
-		&:hover {
-			.connection-settings-gloss-title {
-				text-decoration: underline;
-			}
-		}
-
-		&[aria-expanded="true"] {
-			.accordion-caret:after {
-				content: "\f146";
-			}
-		}
-	}
-
-	.accordion-content {
-		display: none;
-		padding: 10px;
-	}
-
-	.accordion-caret {
-		display: inline-block;
-		margin-left: auto;
-		height: 16px;
-		width: 16px;
-		font-size: 16px;
-
-		&::after {
-			content: "\f0fe";
-			font-family: "FontAwesome";
-		}
-	}
-
-	.group-list {
-		margin-top: 10px;
-		.group-item-wrapper {
-			height: auto;
-		}
-	}
-	ul.ui-autocomplete {
-		background: #fff;
-		border: 1px solid @80gray;
-		list-style-type: none;
-		max-width: 50%;
-		padding: 15px;
-	}
-
-	.ui-menu-item-wrapper {
-		padding: 6px;
-	}
-
-	.connection-invitations {
-		display: flex;
 		flex-direction: column;
-
-		.actions {
-			flex: 0 0 50px;
-
-			a {
-				text-decoration: none;
-			}
-		}
-
-		&.pending-invitations .actions {
-			flex: 1;
-		}
-
-		.group {
-			flex-grow: 1;
-		}
-
-		.sent, .received {
-			flex: 0 0 150px;
-		}
-
-		.delete-invite:hover {
-			text-decoration: underline;
-		}
-	}
-
-	.connection-invitation {
-		display: flex;
-		align-items: center;
-		padding: 10px;
-		border-bottom: 1px solid #ccc;
-	}
-
-	.connection-invitation-header {
-		font-weight: bold;
+		gap: 20px;
 	}
 }
+
 .connections-icon {
 	color: @cyan;
 }
+
 body.invite-new-members {
 	ul.ui-autocomplete {
 		background: #fff;
