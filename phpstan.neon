@@ -27,6 +27,7 @@ parameters:
     - wp-content/plugins/openlab-connections
     - wp-content/plugins/openlab-favorites
     - wp-content/plugins/papercite
+    - wp-content/plugins/reckoning
     - wp-content/themes/genesis
   ignoreErrors:
     - # Template files have some variables included in parent scope.
