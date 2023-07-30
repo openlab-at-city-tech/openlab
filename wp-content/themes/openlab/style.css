@@ -10926,12 +10926,12 @@ a.delete-doc-button {
 body.groups.connections .bp-template-notice {
   margin-bottom: 20px;
 }
-body.groups.connections .connections-settings {
+body.groups.connections .connection-settings {
   border: 1px solid #ddd;
   border-radius: 4px;
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 }
 .connections-icon {
   color: #63dfd2;
