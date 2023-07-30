@@ -9,6 +9,14 @@
  * Inject 'Download CSV' button on "Users > User Summary" page.
  */
 add_action( 'in_admin_footer', function() {
+	if ( ! function_exists( 'reckoning_show_grade_column' ) ) {
+		return;
+	}
+
+	if ( empty( $_GET['page'] ) || 'Reckoning' !== wp_unslash( $_GET['page'] ) ) {
+		return;
+	}
+
 	printf( '<div id="reckoning-csv-download"><p>You can also download a CSV of summarized user activity data below:</p><a href="%1$s" class="button-primary">%2$s</a></div>', wp_nonce_url( admin_url( '/users.php?page=Reckoning&view=download' ), 'reckoning-csv', 'csv-nonce' ), 'Download CSV' );
 
 	// Inline JS.
