@@ -58,7 +58,10 @@ jQuery( document ).ready(
 		}
 
 		function maybeShowSiteTemplates() {
-			if ( $setuptoggle.is( ':checked' ) ) {
+			var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
+			var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
+
+			if ( siteIsRequiredForGroupType || $setuptoggle.is( ':checked' ) ) {
 				$('.panel-template-picker').removeClass( 'hidden' );
 			}
 		}
@@ -453,7 +456,7 @@ jQuery( document ).ready(
 		};
 		maybeShowSiteFields();
 
-		setTimeout( maybeShowSiteTemplates, 500 )
+		setTimeout( maybeShowSiteTemplates, 1500 )
 
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
 			$setuptoggle.trigger( 'click' );

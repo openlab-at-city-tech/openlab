@@ -680,6 +680,7 @@ function wds_bp_group_meta() {
 								</div>
 							</div>
 						<?php else : ?>
+							<input type="hidden" id="site-is-required-for-group-type" value="1" />
 							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
