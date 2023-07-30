@@ -1063,14 +1063,10 @@ function openlab_filter_subnav_nav_events($subnav_item) {
     return $subnav_item;
 }
 
-add_filter('bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar');
-
-function openlab_filter_subnav_nav_calendar($subnav_item) {
-    $subnav_item = str_replace('Calendar', 'All Events', $subnav_item);
-
-    return $subnav_item;
+function openlab_filter_subnav_nav_calendar( $subnav_item ) {
+    return str_replace( 'Calendar', 'All Events', $subnav_item );
 }
-add_filter('bp_get_options_nav_upcoming', 'openlab_filter_subnav_nav_upcoming');
+add_filter( 'bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar' );
 
 /**
  * Changes BP's default "current selected" classes to our custom 'current-menu-item' in bp_get_options_nav().
