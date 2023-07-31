@@ -1853,7 +1853,8 @@ function openlab_update_member_group_privacy() {
 
 	$group = groups_get_group( $group_id );
 
-	$query = '';
+	$query        = '';
+	$activity_ids = [];
 	if ( $is_private ) {
 		$activities = bp_activity_get( $activity_args );
 
