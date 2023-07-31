@@ -1812,28 +1812,103 @@ function openlab_update_member_group_privacy() {
 	$group_id = $_POST['group_id'];
 	$is_private = ( $_POST['is_private'] ) ? filter_var($_POST['is_private'], FILTER_VALIDATE_BOOLEAN) : false;
 
+	$retval = array(
+		'success'	=> false,
+		'message'	=> 'Something went wrong'
+	);
+
 	if( $is_private ) {
 		if( $wpdb->insert( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			echo json_encode( array(
+			$retval = array(
 				'success'	=> true,
 				'message'	=> 'User membership is set to private'
-			) );
-			die();
+			);
 		}
+
 	} else {
 		if( $wpdb->delete( $table_name, array( 'user_id' => $user_id, 'group_id' => $group_id ) ) ) {
-			echo json_encode( array(
+			$retval = array(
 				'success'	=> true,
 				'message'	=> 'User membership is set to public.'
-			) );
-			die();
+			);
 		}
 	}
 
-	echo json_encode( array(
-		'success'	=> false,
-		'message'	=> 'Something went wrong'
-	) );
+	/*
+	 * Change hide_sitewide for all associated activity.
+	 *
+	 * For efficiency, we do a single query to update all activity items. This
+	 * requires some cache manipulation. We use BP's API functions to set
+	 * the meta flag, though, due to the complexity of cache invalidation
+	 * with object metadata.
+	 */
+	$activity_args = [
+		'filter'      => [
+			'user_id'    => $user_id,
+			'object'     => 'groups',
+			'primary_id' => $group_id,
+		],
+		'show_hidden' => true,
+	];
+
+	$group = groups_get_group( $group_id );
+
+	$query = '';
+	if ( $is_private ) {
+		$activities = bp_activity_get( $activity_args );
+
+		$activity_ids = array_map(
+			function( $activity ) {
+				return ! $activity->hide_sitewide ? $activity->id : null;
+			},
+			$activities['activities']
+		);
+
+		$activity_ids = array_filter( $activity_ids );
+		$placeholders = implode( ', ', array_fill( 0, count( $activity_ids ), '%d' ) );
+
+		$values = array_merge( [ buddypress()->activity->table_name ], $activity_ids );
+
+		$query = $wpdb->prepare( "UPDATE %i SET `hide_sitewide` = 1 WHERE `id` IN ( $placeholders )", $values );
+
+		foreach ( $activity_ids as $activity_id ) {
+			bp_activity_update_meta( $activity_id, 'openlab_private_membership_activity_toggled', 1 );
+		}
+	} elseif ( 'public' === $group->status ) {
+		// Only switch the items back to hide_sitewide=0 if the group is public.
+		$activity_args['meta_query'] = [
+			[
+				'key' => 'openlab_private_membership_activity_toggled',
+			]
+		];
+
+		$activities = bp_activity_get( $activity_args );
+
+		$activity_ids = array_map(
+			function( $activity ) {
+				return $activity->hide_sitewide ? $activity->id : null;
+			},
+			$activities['activities']
+		);
+
+		$activity_ids = array_filter( $activity_ids );
+		$placeholders = implode( ', ', array_fill( 0, count( $activity_ids ), '%d' ) );
+
+		$values = array_merge( [ buddypress()->activity->table_name ], $activity_ids );
+
+		$query = $wpdb->prepare( "UPDATE %i SET `hide_sitewide` = 0 WHERE `id` IN ( $placeholders )", $values );
+
+		foreach ( $activity_ids as $activity_id ) {
+			bp_activity_delete_meta( $activity_id, 'openlab_private_membership_activity_toggled' );
+		}
+	}
+
+	if ( $query ) {
+		$wpdb->query( $query );
+		bp_activity_clear_cache_for_deleted_activity( $activity_ids );
+	}
+
+	echo wp_json_encode( $retval );
 	die();
 }
 

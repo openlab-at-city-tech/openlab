@@ -42,7 +42,6 @@ if ( bp_group_has_members( $members_args ) ) : ?>
                                             </p>
 				<span class="activity"><?php openlab_member_joined_since() ?></span>
 
-				<?php /*
 				<?php
 				// Show "Hide my membership" checkbox for the logged in user and non-mods only
 				if( ( bp_get_member_user_id() === bp_loggedin_user_id() ) && ! current_user_can( 'bp_moderate' ) ) {
@@ -61,7 +60,6 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 				if( current_user_can( 'bp_moderate' ) && in_array( bp_get_member_user_id(), $private_users, true ) ) { ?>
 				<p class="private-membership-indicator"><span class="fa fa-eye-slash"></span> Membership hidden</p>
 				<?php } ?>
-				*/ ?>
 
 				<?php do_action( 'bp_group_members_list_item' ) ?>
 
