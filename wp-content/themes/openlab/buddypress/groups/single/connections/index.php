@@ -14,7 +14,7 @@ $current_group_site_status = OpenLab\Connections\Util::group_has_public_site( bp
 
 switch ( $current_group_site_status ) {
 	case 'private' :
-		$group_status_text = sprintf( 'Because your %s Site is private, no content can be shared with connected groups.', $current_group_type_label );
+		$group_status_text = sprintf( 'Your %s Site is only visible to its members, so activity will not be shared with Connections.', $current_group_type_label );
 	break;
 
 	default :
@@ -67,7 +67,17 @@ switch ( $current_group_site_status ) {
 					break;
 				}
 
+				$connected_group_type_label = openlab_get_group_type_label(
+					[
+						'group_id' => $connected_group_id,
+						'case'     => 'upper',
+					]
+				);
+
 				$connection_settings = $connection->get_group_settings( bp_get_current_group_id() );
+
+				$connected_group_site_id     = openlab_get_site_id_by_group_id( $connected_group_id );
+				$connected_group_blog_public = (int) get_blog_option( $connected_group_site_id, 'blog_public' );
 
 				$selected_categories = [];
 				if ( isset( $connection_settings['categories'] ) ) {
@@ -122,9 +132,17 @@ switch ( $current_group_site_status ) {
 								<div class="connection-setting connection-setting-checkbox">
 									<input type="checkbox" <?php checked( empty( $selected_categories ) ); ?> class="connection-setting-none" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none"><?php esc_html_e( 'Do not share any content with this connection', 'openlab-connections' ); ?>
 								</div>
+							</div><!-- .accordion-content -->
+
+							<div class="connection-privacy-notices is-hidden">
+								<?php if ( $connected_group_blog_public < -1 ) : ?>
+									<p class="connection-private-group-notice">
+										<?php echo sprintf( 'This connected %s\'s Site is only visible to its members. Activity will not be shared with your %s.', $connected_group_type_label, $current_group_type_label ); ?>
+									</p>
+								<?php endif; ?>
 
 								<?php if ( $group_status_text ) : ?>
-									<p class="connection-private-group-notice is-hidden">
+									<p class="connection-private-group-notice">
 										<?php echo esc_html( $group_status_text ); ?>
 									</p>
 								<?php endif; ?>
