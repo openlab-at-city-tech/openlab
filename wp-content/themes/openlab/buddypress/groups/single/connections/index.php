@@ -29,6 +29,8 @@ switch ( $current_group_site_status ) {
 <div class="openlab-connections">
 	<?php if ( $connections ) : ?>
 		<div class="connections-settings" data-group-id="<?php echo esc_attr( bp_get_current_group_id() ); ?>">
+			<p><?php echo esc_html( sprintf( __( 'Below are all Connections for this %s. You can manage the activity you are sharing with each one.', 'openlab-connections' ), $current_group_type_label ) ); ?></p>
+
 			<input type="hidden" id="current-group-site-status" value="<?php echo esc_attr( $current_group_site_status ); ?>" />
 
 			<?php foreach ( $connections as $connection ) : ?>
