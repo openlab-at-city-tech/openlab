@@ -9478,6 +9478,11 @@ body form .checkbox-list-container {
 .collaboration-tool-toggle .collaboration-tool-gloss {
   padding-left: 20px;
 }
+.collaboration-tool-toggle .collaboration-tool-gloss a::after {
+  content: "\00a0\f08e";
+  font-family: fontawesome;
+  font-style: normal;
+}
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {
     width: 95%;
