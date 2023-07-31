@@ -10,14 +10,7 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 
 $current_group_type_label = openlab_get_group_type_label( [ 'case' => 'upper' ] );
 
-$current_group_site_id     = openlab_get_site_id_by_group_id( bp_get_current_group_id() );
-$current_group_site_status = 'public';
-if ( $current_group_site_id ) {
-	$blog_public = (int) get_blog_option( $current_group_site_id, 'blog_public' );
-	if ( $blog_public < -1 ) {
-		$current_group_site_status = 'private';
-	}
-}
+$current_group_site_status = OpenLab\Connections\Util::group_has_public_site( bp_get_current_group_id() ) ? 'public' : 'private';
 
 switch ( $current_group_site_status ) {
 	case 'private' :
