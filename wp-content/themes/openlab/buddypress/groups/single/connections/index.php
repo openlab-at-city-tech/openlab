@@ -56,6 +56,17 @@ switch ( $current_group_site_status ) {
 					]
 				);
 
+				$connected_group_type = openlab_get_group_type( $connected_group_id );
+				switch ( $connected_group_type ) {
+					case 'portfolio' :
+						$contact_link = bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( $connected_group_id ) );
+					break;
+
+					default :
+						$contact_link = openlab_output_group_contact_line( $connected_group_id );
+					break;
+				}
+
 				$connection_settings = $connection->get_group_settings( bp_get_current_group_id() );
 
 				$selected_categories = [];
@@ -75,7 +86,13 @@ switch ( $current_group_site_status ) {
 
 					<div class="primary-column">
 						<div class="connected-group-link item-title h2">
-							<a class="no-deco" href="<?php echo esc_url( $connected_group_url ); ?>"><?php echo esc_html( $connected_group->name ); ?></a>
+							<a class="no-deco" href="<?php echo esc_url( $connected_group_url ); ?>"><?php echo esc_html( $connected_group->name ); ?></a><br />
+
+							<?php if ( $contact_link ) : ?>
+								<div class="info-line uppercase">
+									<?php echo $contact_link; ?>
+								</div>
+							<?php endif; ?>
 						</div>
 
 						<div class="accordion">
