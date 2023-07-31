@@ -10,15 +10,18 @@ $site_tags       = OpenLab\Connections\Util::fetch_taxonomy_terms_for_site( $gro
 
 $current_group_type_label = openlab_get_group_type_label( [ 'case' => 'upper' ] );
 
-$current_group_status = groups_get_current_group()->status;
+$current_group_site_id     = openlab_get_site_id_by_group_id( bp_get_current_group_id() );
+$current_group_site_status = 'public';
+if ( $current_group_site_id ) {
+	$blog_public = (int) get_blog_option( $current_group_site_id, 'blog_public' );
+	if ( $blog_public < -1 ) {
+		$current_group_site_status = 'private';
+	}
+}
 
-switch ( $current_group_status ) {
+switch ( $current_group_site_status ) {
 	case 'private' :
-		$group_status_text = sprintf( 'Because your %s is private, no content can be shared with connected groups.', $current_group_type_label );
-	break;
-
-	case 'hidden' :
-		$group_status_text = sprintf( 'Because your %s is hidden, no content can be shared with connected groups.', $current_group_type_label );
+		$group_status_text = sprintf( 'Because your %s Site is private, no content can be shared with connected groups.', $current_group_type_label );
 	break;
 
 	default :
@@ -33,7 +36,7 @@ switch ( $current_group_status ) {
 <div class="openlab-connections">
 	<?php if ( $connections ) : ?>
 		<div class="connections-settings" data-group-id="<?php echo esc_attr( bp_get_current_group_id() ); ?>">
-			<input type="hidden" id="current-group-status" value="<?php echo esc_attr( groups_get_current_group()->status ); ?>" />
+			<input type="hidden" id="current-group-site-status" value="<?php echo esc_attr( $current_group_site_status ); ?>" />
 
 			<?php foreach ( $connections as $connection ) : ?>
 				<?php
