@@ -42,7 +42,7 @@
 
             // Setup site is checked AND create new site is checked
             if( $('#wds_website_check').is(':checked') && $(requirement).is(':checked') ) {
-                
+
                 if( value.length == 0 ) {
                     return !!value;
                 }
@@ -52,7 +52,7 @@
                 } else {
                     form  = document.getElementById( 'create-group-form' );
                 }
-        
+
                 $form = $( form );
 
                 $.post(

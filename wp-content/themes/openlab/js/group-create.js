@@ -26,7 +26,6 @@ jQuery( document ).ready(
 		form_validated = false,
 		new_group_type = $( '#new-group-type' ).val(),
 		$body          = $( 'body' ),
-		$gc_submit     = $( '#group-creation-create' ),
 		$required_fields,
     $setuptoggle   = $( 'input[name="wds_website_check"]' );
 		$setuptoggle_mirror = $( 'input#set-up-site-toggle' );
@@ -40,6 +39,8 @@ jQuery( document ).ready(
 		}
 
 		$form = $( form );
+
+		var $gc_submit = $form.find( 'input[type="submit"]' );
 
 		$required_fields = $form.find( 'input:required' );
 

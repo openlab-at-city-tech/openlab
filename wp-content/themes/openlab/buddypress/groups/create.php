@@ -51,7 +51,7 @@
     <div id="single-course-body" class="<?php echo ( 'course' == $group_type ? 'course-create' : '' ); ?>">
         <div id="openlab-main-content"></div>
 
-        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel" enctype="multipart/form-data" data-parsley-validate>
+        <form action="<?php bp_group_creation_form_action() ?>" method="post" id="create-group-form" class="standard-form form-panel group-validate-form" enctype="multipart/form-data" data-parsley-validate>
 
             <?php do_action('bp_before_create_group') ?>
 

@@ -31,7 +31,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 	</div>
 </div>
 
-<form action="<?php bp_group_admin_form_action(); ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
+<form action="<?php bp_group_admin_form_action(); ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel group-validate-form" method="post" enctype="multipart/form-data" data-parsley-validate>
 
 	<?php do_action( 'bp_before_group_admin_content' ); ?>
 
