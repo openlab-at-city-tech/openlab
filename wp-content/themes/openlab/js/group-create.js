@@ -23,10 +23,8 @@ jQuery( document ).ready(
 	function($){
 		var form,
 		form_type,
-		form_validated = false,
 		new_group_type = $( '#new-group-type' ).val(),
 		$body          = $( 'body' ),
-		$required_fields,
     $setuptoggle   = $( 'input[name="wds_website_check"]' );
 		$setuptoggle_mirror = $( 'input#set-up-site-toggle' );
 
@@ -58,6 +56,7 @@ jQuery( document ).ready(
 						inline: 'center'
 					} )
 				}
+				return false;
 			}
 		} )
 
