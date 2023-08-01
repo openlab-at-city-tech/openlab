@@ -83,3 +83,62 @@ function openlab_filter_activity_action_bp_docs( $action, $user_link, $doc_link,
 	);
 }
 add_filter( 'bp_docs_activity_action', 'openlab_filter_activity_action_bp_docs', 10, 5 );
+
+
+/**
+ * Flips an activity to hide_sitewide for private memberships.
+ *
+ * Operates on a single activity item.
+ */
+function openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id ) {
+	$activity = new BP_Activity_Activity( $activity_id );
+	if ( $activity->hide_sitewide ) {
+		return;
+	}
+
+	$activity->hide_sitewide = 1;
+	$saved = $activity->save();
+	_b( $activity );
+
+	bp_activity_update_meta( $activity_id, 'openlab_private_membership_activity_toggled', 1 );
+}
+
+/**
+ * Trigger the toggling of hide_sitewide on activity posting.
+ *
+ * Wrapped here so that we don't have to have a weird function signature
+ * for openlab_toggle-hide_sitewide_For_private_membership_activity().
+ */
+add_action(
+	'bp_activity_add',
+	function( $r, $activity_id ) {
+		openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id );
+	},
+	100,
+	2
+);
+
+/**
+ * Ensure that the "existing activity ID" query in bp_activity_post_type_publish() finds hidden items.
+ *
+ * Otherwise a duplicate activity item is created.
+ */
+add_filter(
+	'bp_before_activity_get_parse_args',
+	function( $args ) {
+		$db        = debug_backtrace();
+		$do_filter = false;
+		foreach ( $db as $_db ) {
+			if ( 'bp_activity_post_type_publish' === $_db['function'] ) {
+				$do_filter = true;
+				break;
+			}
+		}
+
+		if ( $do_filter ) {
+			$args['show_hidden'] = true;
+		}
+
+		return $args;
+	}
+);

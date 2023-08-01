@@ -430,14 +430,7 @@ function openlab_group_blog_activity( $activity ) {
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
 	// prevent infinite loops, but let this function run on later activities ( for unit tests )
-	// @see https://buddypress.trac.wordpress.org/ticket/3980
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	add_action(
-		'bp_activity_after_save',
-		function() {
-			add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-		}
-	);
 
 	return $activity;
 }
