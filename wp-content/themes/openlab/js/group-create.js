@@ -40,8 +40,6 @@ jQuery( document ).ready(
 
 		var $gc_submit = $form.find( 'input[type="submit"]' );
 
-		$required_fields = $form.find( 'input:required' );
-
 		/*
 		 * Ensure proper focus/scroll when form does not validate.
 		 *
