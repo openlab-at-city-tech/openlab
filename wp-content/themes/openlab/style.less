@@ -2463,6 +2463,13 @@ body form{
 		}
 	}
 }
+a.external-link {
+	&::after {
+		content: "\00a0\f08e";
+		font-family: fontawesome;
+		font-style: normal;
+	}
+}
 .sidebar{
     .sidebar-wrapper{
         @media (max-width: @screen-xs-max){

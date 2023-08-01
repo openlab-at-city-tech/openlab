@@ -60,6 +60,17 @@ jQuery( document ).ready(
 			}
 		} )
 
+		/**
+		 * Rather than modifying the template ported from CBOX-OL, we change with JavaScript.
+		 */
+		var $templatePanelPicker = $( '.panel-template-picker' );
+		if ( $templatePanelPicker.length > 0 ) {
+			$templatePanelPicker.find( '.panel-heading' ).html( 'Site Template' );
+
+			const newEl = '<p>Site Templates provide a basic structure and setup to help get you started building your Site. Please select the template that works best for your ' + OLGroupCreate.groupTypeLabel + '. <a href="https://openlab.citytech.cuny.edu/blog/help/site-templates" class="external-link">Learn more</a> in OpenLab Help.</p>';
+			$templatePanelPicker.find( '.panel-body' ).prepend( newEl );
+		}
+
 		function maybeShowSiteFields() {
 			if ( ! $setuptoggle.length && 'portfolio' !== new_group_type ) {
 				return;

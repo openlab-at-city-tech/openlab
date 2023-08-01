@@ -9483,6 +9483,11 @@ body form .checkbox-list-container {
   font-family: fontawesome;
   font-style: normal;
 }
+a.external-link::after {
+  content: "\00a0\f08e";
+  font-family: fontawesome;
+  font-style: normal;
+}
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {
     width: 95%;
