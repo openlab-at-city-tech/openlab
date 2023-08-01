@@ -35,15 +35,6 @@
         }
     });
 
-    window.Parsley.addValidator('atleastonedept', {
-        validateMultiple: function (value) {
-            return value.length !== 0;
-        },
-        messages: {
-            en: 'Please provide a school and department.'
-        }
-    });
-
     window.Parsley.addValidator('newSiteValidate', {
         validateString: function(value, requirement, instance) {
             // Remove errors related to this validation

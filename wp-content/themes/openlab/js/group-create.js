@@ -43,6 +43,23 @@ jQuery( document ).ready(
 
 		$required_fields = $form.find( 'input:required' );
 
+		/*
+		 * Ensure proper focus/scroll when form does not validate.
+		 *
+		 * Parsley.js doesn't do this correctly out of the box with Schools/Departments.
+		 */
+		$gc_submit.on( 'click', function() {
+			if ( ! form.checkValidity() ) {
+				var firstInvalidField = form.querySelector( ':invalid' );
+				if ( firstInvalidField ) {
+					firstInvalidField.scrollIntoView( {
+						block: 'center',
+						inline: 'center'
+					} )
+				}
+			}
+		} )
+
 		function maybeShowSiteFields() {
 			if ( ! $setuptoggle.length && 'portfolio' !== new_group_type ) {
 				return;

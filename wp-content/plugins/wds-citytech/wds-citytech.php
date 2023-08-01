@@ -3020,10 +3020,11 @@ function openlab_academic_unit_selector( $args = array() ) {
 							name="departments[]"
 							type="checkbox"
 							value="<?php echo esc_attr( $dept_slug ); ?>"
-							<?php if( $required ) : ?>
-							data-parsley-atleastonedept
+							data-parsley-error-message="Please provide a school and department."
 							data-parsley-errors-container="#academic-unit-selector-error"
-							data-parsley-validate-if-empty
+							<?php if( $required ) : ?>
+							required
+							data-parsley-mincheck="1"
 							<?php endif; ?>
 						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
 					</li>
