@@ -98,7 +98,6 @@ function openlab_toggle_hide_sitewide_for_private_membership_activity( $activity
 
 	$activity->hide_sitewide = 1;
 	$saved = $activity->save();
-	_b( $activity );
 
 	bp_activity_update_meta( $activity_id, 'openlab_private_membership_activity_toggled', 1 );
 }
