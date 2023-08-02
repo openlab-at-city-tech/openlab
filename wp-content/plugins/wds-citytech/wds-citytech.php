@@ -3023,7 +3023,7 @@ function openlab_academic_unit_selector( $args = array() ) {
 							data-parsley-error-message="Please provide a school and department."
 							data-parsley-errors-container="#academic-unit-selector-error"
 							<?php if( $required ) : ?>
-							required
+							data-parsley-required
 							data-parsley-mincheck="1"
 							<?php endif; ?>
 						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>

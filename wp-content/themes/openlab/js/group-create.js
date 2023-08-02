@@ -40,6 +40,19 @@ jQuery( document ).ready(
 
 		var $gc_submit = $form.find( 'input[type="submit"]' );
 
+		$form.parsley().on( 'form:validate', function( formInstance ) {
+			if ( ! formInstance.isValid() ) {
+				for (var i = 0; i < formInstance.fields.length; i++) {
+					var field = formInstance.fields[i];
+					if (true !== field.validationResult && field.validationResult.length > 0 && 'undefined' === typeof field.options.noFocus) {
+						field.element.closest( '.panel' ).scrollIntoView()
+					}
+				}
+
+				return false;
+			}
+		} )
+
 		/*
 		 * Ensure proper focus/scroll when form does not validate.
 		 *
