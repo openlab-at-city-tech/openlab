@@ -273,6 +273,10 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						placeholder="' . esc_attr( $placeholder ) . '"
 						' . openlab_profile_field_input_attributes() . '
 						/>';
+
+				if ( bp_get_the_profile_field_name() == 'Name' ) {
+					$return .= '<p class="register-field-note">Choose a Display Name to identify yourself publicly on your member profile and whenever you post on the OpenLab. <strong>You don\'t need to use your real name.</strong> Your Display Name can be changed at any time by editing your profile.</p>';
+				}
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
 				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
