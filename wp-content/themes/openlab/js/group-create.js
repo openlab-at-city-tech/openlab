@@ -40,6 +40,11 @@ jQuery( document ).ready(
 
 		var $gc_submit = $form.find( 'input[type="submit"]' );
 
+		/*
+		 * Ensure proper focus/scroll when form does not validate.
+		 *
+		 * Parsley.js doesn't do this correctly out of the box with Schools/Departments.
+		 */
 		$form.parsley().on( 'form:validate', function( formInstance ) {
 			if ( ! formInstance.isValid() ) {
 				for (var i = 0; i < formInstance.fields.length; i++) {
@@ -70,6 +75,16 @@ jQuery( document ).ready(
 				return false;
 			}
 		} )
+
+		$( '#new-site-domain, #clone-destination-path' ).on( 'keyup', function() {
+			console.log(this.dataset.parsleyErrorMessage)
+			if ( this.value.length > 0 ) {
+				this.dataset.parsleyErrorMessage = 'Sorry, that URL is already taken.';
+			} else {
+				this.dataset.parsleyErrorMessage = 'You must provide a URL.';
+			}
+		} );
+
 
 		/**
 		 * Rather than modifying the template ported from CBOX-OL, we change with JavaScript.

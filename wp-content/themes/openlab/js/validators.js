@@ -35,51 +35,16 @@
         }
     });
 
-    window.Parsley.addValidator('newSiteValidate', {
-        validateString: function(value, requirement, instance) {
-            // Remove errors related to this validation
-            instance.removeError('en');
+		window.Parsley.addAsyncValidator(
+			'newSiteValidate',
+			function( xhr ) {
+				if ( ! $( '#wds_website_check' ).is( ':checked' ) ) {
+					return true;
+				}
 
-            // Setup site is checked AND create new site is checked
-            if( $('#wds_website_check').is(':checked') && $(requirement).is(':checked') ) {
-
-                if( value.length == 0 ) {
-                    return !!value;
-                }
-
-                if ( $('body').hasClass( 'group-admin' ) ) {
-                    form  = document.getElementById( 'group-settings-form' );
-                } else {
-                    form  = document.getElementById( 'create-group-form' );
-                }
-
-                $form = $( form );
-
-                $.post(
-                    '/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
-                    {
-                        action: 'openlab_validate_groupblog_url_handler',
-                        'path': value
-                    },
-                    function( response ) {
-                        if ( 'exists' == response ) {
-                            instance.addError('en', { message: 'Sorry, that URL is already taken.'});
-                            return !!value;
-                        } else {
-                            $form.append( '<input name="save" value="1" type="hidden" />' );
-                            return true;
-                        }
-                    }
-                );
-
-                return true;
-            }
-
-            return true;
-        },
-        messages: {
-            en: 'Please provide a site address.'
-        }
-    });
+				return xhr.responseJSON.success;
+			},
+			'/wp-admin/admin-ajax.php?action=openlab_validate_groupblog_url_handler'
+		);
 
 }( window, jQuery ) );

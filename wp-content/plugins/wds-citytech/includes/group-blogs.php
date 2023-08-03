@@ -734,8 +734,8 @@ function wds_bp_group_meta() {
 													type="text"
 													title="Path"
 													value=""
-													data-parsley-validate-if-empty="true"
-													data-parsley-new-site-validate="#new_or_old_clone"
+													data-parsley-remote
+													data-parsley-remote-validator="newSiteValidate"
 													data-parsley-errors-container="#field_clone_site_error"
 													data-parsley-trigger="blur"
 												/>
@@ -776,9 +776,13 @@ function wds_bp_group_meta() {
 												title="Domain"
 												value="<?php echo esc_html( $suggested_path ); ?>"
 												data-parsley-validate-if-empty="true"
-												data-parsley-new-site-validate="#new_or_old_new"
+												data-parsley-remote
+												data-parsley-remote-validator="newSiteValidate"
+												data-parsley-debounce="1000"
 												data-parsley-errors-container="#field_new_site_error"
+												data-parsley-validation-threshold="3"
 												data-parsley-trigger="blur"
+												data-parsley-error-message="You must provide a URL."
 											/>
 											<div id="field_new_site_error" class="error-container"></div>
 										</div>
@@ -1089,13 +1093,18 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
-	$path = isset( $_POST['path'] ) ? $_POST['path'] : '';
-	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
-		$retval = 'exists';
-	} else {
-		$retval = '';
+	$path = '';
+	if ( isset( $_GET['blog']['domain'] ) ) {
+		$path = sanitize_text_field( wp_unslash( $_GET['blog']['domain'] ) );
 	}
-	die( $retval );
+
+	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
+		wp_send_json_error( 'Sorry, that URL is already taken.' );
+	} else {
+		wp_send_json_success();
+	}
+
+	die;
 }
 
 add_action( 'wp_ajax_openlab_validate_groupblog_url_handler', 'openlab_validate_groupblog_url_handler' );
