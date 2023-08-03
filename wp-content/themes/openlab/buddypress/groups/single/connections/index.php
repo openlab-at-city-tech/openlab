@@ -29,7 +29,7 @@ switch ( $current_group_site_status ) {
 <div class="openlab-connections">
 	<?php if ( $connections ) : ?>
 		<div class="connections-settings" data-group-id="<?php echo esc_attr( bp_get_current_group_id() ); ?>">
-			<p><?php echo esc_html( sprintf( __( 'Below are all Connections for this %s. You can manage the activity you are sharing with each one.', 'openlab-connections' ), $current_group_type_label ) ); ?></p>
+			<?php get_template_part( 'buddypress/groups/single/connections/header' ); ?>
 
 			<input type="hidden" id="current-group-site-status" value="<?php echo esc_attr( $current_group_site_status ); ?>" />
 
@@ -159,6 +159,6 @@ switch ( $current_group_site_status ) {
 	<?php else : ?>
 		<p><?php echo wp_kses_post( __( 'This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.', 'openlab-connections' ) ); ?></p>
 
-		<p><?php esc_html_e( 'This group does not have any connections.', 'openlab-connections' ); ?></p>
+		<p><?php esc_html_e( "You haven't made any Connections yet.", 'openlab-connections' ); ?> <a href="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) ); ?>connections/new/"><?php esc_html_e( '+ Make a Connection', 'openlab-connections' ); ?></a>.</p>
 	<?php endif; ?>
 </div>

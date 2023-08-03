@@ -13,6 +13,8 @@ $sent_invites = \OpenLab\Connections\Invitation::get(
 <?php do_action( 'template_notices' ); ?>
 
 <div class="openlab-connections">
+	<?php get_template_part( 'buddypress/groups/single/connections/header' ); ?>
+
 	<form method="post" class="form-panel">
 		<div class="panel panel-default">
 			<div class="panel-heading">Make a Connection</div>

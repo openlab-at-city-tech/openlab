@@ -10,6 +10,8 @@ $pending_invites = \OpenLab\Connections\Invitation::get(
 ?>
 
 <div class="openlab-connections">
+	<?php get_template_part( 'buddypress/groups/single/connections/header' ); ?>
+
 	<form class="form-panel">
 		<div class="panel panel-default">
 			<div class="panel-heading">Invitations</div>
