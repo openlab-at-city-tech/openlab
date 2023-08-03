@@ -74,7 +74,7 @@ if ( bp_is_members_directory() ) {
 					<?php get_template_part( 'parts/sidebar/filter-member-type' ); ?>
 				<?php endif; ?>
 
-				<?php if ( ! $is_people || $is_search ) : ?>
+				<?php if ( 'portfolio' !== $group_type && ( ! $is_people || $is_search ) ) : ?>
 					<?php get_template_part( 'parts/sidebar/filter-active-status' ); ?>
 				<?php endif; ?>
 
