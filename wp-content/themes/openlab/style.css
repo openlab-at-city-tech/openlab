@@ -9475,6 +9475,9 @@ body form .checkbox-list-container {
 .collaboration-tool-toggle {
   margin-bottom: 8px;
 }
+.collaboration-tool-toggle label {
+  font-weight: 700;
+}
 .collaboration-tool-toggle .collaboration-tool-gloss {
   padding-left: 20px;
 }
