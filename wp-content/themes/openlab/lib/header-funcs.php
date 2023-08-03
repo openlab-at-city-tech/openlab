@@ -68,7 +68,7 @@ function openlab_enqueue_frontend_scripts() {
 				if ( 'student' === strtolower( $user_type ) ) {
 					$group_type_label = 'ePortfolio';
 				} else {
-					$group_label_type = 'Portfolio';
+					$group_type_label = 'Portfolio';
 				}
 			} else {
 				$group_type_label = ucwords( $group_type );
