@@ -587,6 +587,10 @@ OpenLab.utility = (function ($) {
 		setUpItemList: function() {
 			// + button on Related Links List Settings
 			$add_new_link = $( '.link-add' );
+
+			// Remove all previous handlers.
+			$add_new_link.off( 'click' );
+
 			$add_new_link.on(
 				'click',
 				function ( e ) {
