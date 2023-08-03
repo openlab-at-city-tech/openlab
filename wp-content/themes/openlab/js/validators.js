@@ -42,6 +42,14 @@
 					return true;
 				}
 
+				// Ignore validation on an unselected field.
+				var siteType = $( 'input[name="new_or_old"]:checked' ).val();
+				if ( 'new' === siteType && 'clone-destination-path' === this.$element.attr( 'id' ) ) {
+					return true;
+				} else if ( 'clone' === siteType && 'new-site-domain' === this.$element.attr( 'id' ) ) {
+					return true;
+				}
+
 				return xhr.responseJSON.success;
 			},
 			'/wp-admin/admin-ajax.php?action=openlab_validate_groupblog_url_handler'

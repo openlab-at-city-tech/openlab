@@ -77,7 +77,6 @@ jQuery( document ).ready(
 		} )
 
 		$( '#new-site-domain, #clone-destination-path' ).on( 'keyup', function() {
-			console.log(this.dataset.parsleyErrorMessage)
 			if ( this.value.length > 0 ) {
 				this.dataset.parsleyErrorMessage = 'Sorry, that URL is already taken.';
 			} else {

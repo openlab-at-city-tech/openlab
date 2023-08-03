@@ -734,10 +734,14 @@ function wds_bp_group_meta() {
 													type="text"
 													title="Path"
 													value=""
+													data-parsley-validate-if-empty="true"
 													data-parsley-remote
 													data-parsley-remote-validator="newSiteValidate"
+													data-parsley-debounce="1000"
 													data-parsley-errors-container="#field_clone_site_error"
+													data-parsley-validation-threshold="3"
 													data-parsley-trigger="blur"
+													data-parsley-error-message="You must provide a URL."
 												/>
 												<div id="field_clone_site_error" class="error-container"></div>
 											</div>
@@ -1094,8 +1098,10 @@ function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
 	$path = '';
-	if ( isset( $_GET['blog']['domain'] ) ) {
+	if ( ! empty( $_GET['blog']['domain'] ) ) {
 		$path = sanitize_text_field( wp_unslash( $_GET['blog']['domain'] ) );
+	} elseif ( ! empty( $_GET['clone-destination-path'] ) ) {
+		$path = sanitize_text_field( wp_unslash( $_GET['clone-destination-path'] ) );
 	}
 
 	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
