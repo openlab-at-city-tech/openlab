@@ -92,7 +92,7 @@ jQuery( document ).ready(
 		if ( $templatePanelPicker.length > 0 ) {
 			$templatePanelPicker.find( '.panel-heading' ).html( 'Site Template' );
 
-			const newEl = '<p>Site Templates provide a basic structure and setup to help get you started building your Site. Please select the template that works best for your ' + OLGroupCreate.groupTypeLabel + '. <a href="https://openlab.citytech.cuny.edu/blog/help/site-templates" class="external-link">Learn more</a> in OpenLab Help.</p>';
+			const newEl = '<p>Site Templates provide a basic structure and setup to make it easier for you to build your Site. Please select the template that works best for your ' + OLGroupCreate.groupTypeLabel + '. <a href="https://openlab.citytech.cuny.edu/blog/help/site-templates" class="external-link">Learn more</a> in OpenLab Help.</p>';
 			$templatePanelPicker.find( '.panel-body' ).prepend( newEl );
 		}
 
