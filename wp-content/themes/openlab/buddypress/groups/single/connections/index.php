@@ -124,7 +124,7 @@ switch ( $current_group_site_status ) {
 								<span class="accordion-caret"></span>
 								<span class="sr-only">Expand</span>
 
-								<?php echo wp_kses_post( __( '<span class="connection-settings-gloss-title">Sharing Preferences:</span>&nbsp;Manage the content you are sharing with this connection.', 'openlab-connections' ) ); ?>
+								<?php echo wp_kses_post( __( 'Manage the content you are sharing with this connection.', 'openlab-connections' ) ); ?>
 							</button>
 
 							<div class="accordion-content">
