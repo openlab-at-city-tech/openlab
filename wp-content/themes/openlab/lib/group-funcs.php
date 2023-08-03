@@ -245,7 +245,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
 					</div>
 
-					<p class="collaboration-tool-gloss">Post important announcements on the <?php echo esc_html( $group_label_uc ); ?> Profile. <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/announcements-for-courses-projects-and-clubs/">Learn more</a> in OpenLab Help.</p>
+					<p class="collaboration-tool-gloss">Post important announcements on the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/announcements-for-courses-projects-and-clubs/">learn more</a>.</p>
 				</div>
 			<?php endif; ?>
 
@@ -254,7 +254,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
 				</div>
 
-				<p class="collaboration-tool-gloss">Add a discussion forum to the <?php echo esc_html( $group_label_uc ); ?> Profile. <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/discussion-forums/">Learn more</a> in OpenLab Help.</p>
+				<p class="collaboration-tool-gloss">Add a discussion forum to the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/discussion-forums/">learn more</a>.</p>
 			</div>
 
 			<div class="collaboration-tool-toggle">
@@ -262,7 +262,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
 				</div>
 
-				<p class="collaboration-tool-gloss">Add collaborative docs that <?php echo esc_html( $group_label_uc ); ?> members can create and edit together. <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-docs/">Learn more</a> in OpenLab Help.</p>
+				<p class="collaboration-tool-gloss">Add collaborative docs that <?php echo esc_html( $group_label_uc ); ?> members can create and edit together. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-docs/">learn more</a>.</p>
 			</div>
 
 			<div class="collaboration-tool-toggle">
@@ -270,7 +270,7 @@ function openlab_group_collaboration_tools_settings( $group_type = null ) {
 					<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
 				</div>
 
-				<p class="collaboration-tool-gloss">Upload and add links to files on the <?php echo esc_html( $group_label_uc ); ?> Profile. <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-files/">Learn more</a> in OpenLab Help.</p>
+				<p class="collaboration-tool-gloss">Upload and add links to files on the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-files/">learn more</a>.</p>
 			</div>
 		</div>
 
