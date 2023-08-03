@@ -105,6 +105,20 @@ switch ( $current_group_site_status ) {
 							<?php endif; ?>
 						</div>
 
+						<div class="connection-privacy-notices is-hidden">
+							<?php if ( $connected_group_blog_public < -1 ) : ?>
+								<p class="connection-private-group-notice">
+									<?php echo sprintf( 'This connected %s\'s Site is only visible to its members. Activity will not be shared with your %s.', $connected_group_type_label, $current_group_type_label ); ?>
+								</p>
+							<?php endif; ?>
+
+							<?php if ( $group_status_text ) : ?>
+								<p class="connection-private-group-notice">
+									<?php echo esc_html( $group_status_text ); ?>
+								</p>
+							<?php endif; ?>
+						</div>
+
 						<div class="accordion">
 							<button class="accordion-toggle" aria-expanded="false" aria-controls="accordion-content">
 								<span class="accordion-caret"></span>
@@ -133,20 +147,6 @@ switch ( $current_group_site_status ) {
 									<input type="checkbox" <?php checked( empty( $selected_categories ) ); ?> class="connection-setting-none" id="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none" /> <label for="connection-<?php echo esc_attr( $connection->get_connection_id() ); ?>-none"><?php esc_html_e( 'Do not share any content with this connection', 'openlab-connections' ); ?>
 								</div>
 							</div><!-- .accordion-content -->
-
-							<div class="connection-privacy-notices is-hidden">
-								<?php if ( $connected_group_blog_public < -1 ) : ?>
-									<p class="connection-private-group-notice">
-										<?php echo sprintf( 'This connected %s\'s Site is only visible to its members. Activity will not be shared with your %s.', $connected_group_type_label, $current_group_type_label ); ?>
-									</p>
-								<?php endif; ?>
-
-								<?php if ( $group_status_text ) : ?>
-									<p class="connection-private-group-notice">
-										<?php echo esc_html( $group_status_text ); ?>
-									</p>
-								<?php endif; ?>
-							</div>
 						</div>
 					</div>
 
