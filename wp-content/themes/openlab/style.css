@@ -9973,6 +9973,10 @@ a.external-link::after {
   margin-right: 4px;
   border-right: none;
 }
+body .site-template-component__category {
+  color: #666;
+  opacity: 1;
+}
 .shared-cloning-authorship-settings label {
   font-weight: normal;
 }
