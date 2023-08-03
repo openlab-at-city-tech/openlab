@@ -166,6 +166,12 @@ function openlab_group_clone_details( $group_id ) {
 		'site_id'         => '',
 		'site_url'        => '',
 		'site_path'       => '',
+		'collaboration'   => [
+			'announcements' => openlab_is_announcements_enabled_for_group( $group_id ),
+			'forum'         => openlab_is_forum_enabled_for_group( $group_id ),
+			'docs'          => openlab_is_docs_enabled_for_group( $group_id ),
+			'files'         => openlab_is_files_enabled_for_group( $group_id ),
+		],
 	);
 
 	if ( $group_id ) {

@@ -343,6 +343,11 @@ jQuery( document ).ready(
 						// Description
 						$( '#group-desc' ).val( r.description );
 
+						// Collaboration Tools
+						for ( var cToolType in r.collaboration ) {
+							document.querySelector( 'input[name="openlab-edit-group-' + cToolType + '"]' ).checked = r.collaboration[ cToolType ]
+						}
+
 						// Schools, Offices, Departments.
 						if ( r.hasOwnProperty( 'schools' ) ) {
 							$( 'input[name="schools[]"]' ).each(
