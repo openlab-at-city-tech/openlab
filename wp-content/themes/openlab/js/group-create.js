@@ -117,6 +117,8 @@ jQuery( document ).ready(
 
 			if ( siteIsRequiredForGroupType || $setuptoggle.is( ':checked' ) ) {
 				$('.panel-template-picker').removeClass( 'hidden' );
+			} else {
+				$('.panel-template-picker').addClass( 'hidden' );
 			}
 		}
 
@@ -271,6 +273,8 @@ jQuery( document ).ready(
 			if ( 'on' == on_or_off ) {
 				// Check "Clone a course" near the top
 				$( '#create-or-clone-clone' ).attr( 'checked', true );
+
+				maybeShowSiteTemplates();
 
 				// Allow a course to be selected from the source dropdown,
 				// and un-grey the associated labels/text
@@ -429,6 +433,7 @@ jQuery( document ).ready(
 							$( '#new_or_old_new' ).trigger( 'click' );
 						}
 
+						maybeShowSiteTemplates();
 					}
 				}
 			);
