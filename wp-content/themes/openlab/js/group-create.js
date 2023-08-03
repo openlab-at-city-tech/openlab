@@ -111,6 +111,12 @@ jQuery( document ).ready(
 		}
 
 		function maybeShowSiteTemplates() {
+			// Always hide if this is a clone.
+			if ( $( '#create-or-clone-clone' ).is( ':checked' ) ) {
+				$('.panel-template-picker').addClass( 'hidden' );
+				return;
+			}
+
 			var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
 			var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
 
