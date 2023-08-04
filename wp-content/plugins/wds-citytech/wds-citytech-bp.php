@@ -412,82 +412,8 @@ add_filter( 'bp_activity_before_save', 'openlab_pre_save_comment_activity', 2 );
 
 /**
  * Feature toggling for new groups.
- *
- * Groups with sites should have Docs, Discussion, Files disabled. Groups without sites
- * should have these features enabled.
  */
 add_filter( 'bp_docs_enable_group_create_step', '__return_false' );
-add_action(
-	'groups_created_group',
-	function( $group_id ) {
-		if ( ! openlab_is_portfolio( $group_id ) ) {
-			// Cloned groups should keep their cloned settings.
-			$clone_source_group_id = groups_get_groupmeta( $group_id, 'clone_source_group_id', true );
-			if ( $clone_source_group_id ) {
-				if ( openlab_is_announcements_enabled_for_group( $clone_source_group_id ) ) {
-					groups_delete_groupmeta( $group_id, 'openlab_disable_announcements' );
-				} else {
-					groups_update_groupmeta( $group_id, 'openlab_disable_announcements', '1' );
-				}
-
-				if ( openlab_is_forum_enabled_for_group( $clone_source_group_id ) ) {
-					groups_delete_groupmeta( $group_id, 'openlab_disable_forum' );
-				} else {
-					groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
-				}
-
-				if ( openlab_is_files_enabled_for_group( $clone_source_group_id ) ) {
-					groups_delete_groupmeta( $group_id, 'group_documents_documents_disabled' );
-				} else {
-					groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
-				}
-
-				$doc_settings = bp_docs_get_group_settings( $clone_source_group_id );
-				groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
-
-				if ( openlab_is_calendar_enabled_for_group( $clone_source_group_id ) ) {
-					groups_update_groupmeta( $group_id, 'calendar_is_disabled', '0' );
-				} else {
-					groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
-				}
-
-				return;
-			}
-		}
-
-		$site_id = openlab_get_site_id_by_group_id( $group_id );
-		if ( $site_id ) {
-			// Announcements.
-			groups_update_groupmeta( $group_id, 'openlab_disable_announcements', '1' );
-
-			// Discussion
-			groups_update_groupmeta( $group_id, 'openlab_disable_forum', '1' );
-
-			// Files
-			groups_update_groupmeta( $group_id, 'group_documents_documents_disabled', '1' );
-
-			$doc_settings = apply_filters(
-				'bp_docs_default_group_settings',
-				array(
-					'group-enable' => 0,
-					'can-create'   => 'member',
-				)
-			);
-
-			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
-		} else {
-			$doc_settings = apply_filters(
-				'bp_docs_default_group_settings',
-				array(
-					'group-enable' => 1,
-					'can-create'   => 'member',
-				)
-			);
-
-			groups_update_groupmeta( $group_id, 'bp-docs', $doc_settings );
-		}
-	}
-);
 
 /**
  * Bust the home page activity transients when new items are posted
