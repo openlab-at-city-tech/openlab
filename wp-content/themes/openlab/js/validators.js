@@ -50,6 +50,10 @@
 					return true;
 				}
 
+				if ( 'new' !== siteType && 'clone' !== siteType ) {
+					return true;
+				}
+
 				return xhr.responseJSON.success;
 			},
 			'/wp-admin/admin-ajax.php?action=openlab_validate_groupblog_url_handler'
