@@ -38,7 +38,10 @@
 		window.Parsley.addAsyncValidator(
 			'newSiteValidate',
 			function( xhr ) {
-				if ( ! $( '#wds_website_check' ).is( ':checked' ) ) {
+				var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
+				var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
+
+				if ( ! siteIsRequiredForGroupType && ! $( '#wds_website_check' ).is( ':checked' ) ) {
 					return true;
 				}
 
