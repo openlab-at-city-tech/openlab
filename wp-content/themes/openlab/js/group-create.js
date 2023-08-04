@@ -351,7 +351,10 @@ jQuery( document ).ready(
 
 						// Collaboration Tools
 						for ( var cToolType in r.collaboration ) {
-							document.querySelector( 'input[name="openlab-edit-group-' + cToolType + '"]' ).checked = r.collaboration[ cToolType ]
+							var cToolInput = document.querySelector( 'input[name="openlab-edit-group-' + cToolType + '"]' );
+							if ( cToolInput ) {
+								cToolInput.checked = r.collaboration[ cToolType ]
+							}
 						}
 
 						// Schools, Offices, Departments.
