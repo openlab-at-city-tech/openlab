@@ -521,6 +521,8 @@ jQuery( document ).ready(
 			showHideAll();
 			maybeShowSiteFields();
 			$setuptoggle_mirror.trigger( 'click' )
+
+			setTimeout( maybeShowSiteTemplates, 1 )
 		} );
 
 		if ( $setuptoggle.is( ':checked' ) ) {
