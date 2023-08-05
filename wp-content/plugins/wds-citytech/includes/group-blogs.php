@@ -767,6 +767,8 @@ function wds_bp_group_meta() {
 											<?php
 											$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 											echo esc_html( $current_site->domain . $current_site->path );
+
+											$default_path_message = $suggested_path ? 'Sorry, that URL is already taken.' : 'You must provide a URL.';
 											?>
 										</div>
 
@@ -786,7 +788,7 @@ function wds_bp_group_meta() {
 												data-parsley-errors-container="#field_new_site_error"
 												data-parsley-validation-threshold="3"
 												data-parsley-trigger="blur"
-												data-parsley-error-message="You must provide a URL."
+												data-parsley-error-message="<?php echo esc_attr( $default_path_message ); ?>"
 											/>
 											<div id="field_new_site_error" class="error-container"></div>
 										</div>
