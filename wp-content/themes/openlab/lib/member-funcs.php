@@ -1787,6 +1787,27 @@ function openlab_get_user_private_membership( $user_id ) {
 }
 
 /**
+ * Get private members of a group.
+ *
+ * @param int $group_id ID of the group.
+ * @return array Array of user IDs.
+ */
+function openlab_get_private_members_of_group( $group_id ) {
+	static $members;
+	global $wpdb;
+
+	if ( null !== $members ) {
+		return $members;
+	}
+
+	$table_name = $wpdb->prefix . 'private_membership';
+	$results    = $wpdb->get_col( $wpdb->prepare( 'SELECT `user_id` FROM %i WHERE `group_id` = %d', $table_name, $group_id ) );
+
+	$members = array_map( 'intval', $results );
+	return $members;
+}
+
+/**
  * Update private membership table with the user's
  * group privacy data.
  */

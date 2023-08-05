@@ -901,6 +901,13 @@ function openlab_group_profile_activity_list() {
 
         $group     = groups_get_current_group();
 		$group_url = bp_get_group_permalink( $group );
+
+		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+			$group_private_members = [];
+		} else {
+			$group_private_members = openlab_get_private_members_of_group( $group->id );
+		}
+
         ?>
 
         <?php if (bp_is_group_home()) { ?>
@@ -939,9 +946,16 @@ function openlab_group_profile_activity_list() {
 										if (!empty($forum_ids)) {
 											$forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
 										}
+
+										$topic_args = [
+											'posts_per_page' => 3,
+											'post_parent'    => $forum_id,
+											'author__not_in' => $group_private_members,
+										];
+
 										?>
 
-										<?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
+										<?php if ( $forum_id && bbp_has_topics( $topic_args ) ) : ?>
 											<?php while (bbp_topics()) : bbp_the_topic(); ?>
 
 
@@ -950,17 +964,28 @@ function openlab_group_profile_activity_list() {
 
 														<?php
 														$topic_id = bbp_get_topic_id();
-														$last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
-														// Oh, bbPress.
-														$last_reply         = get_post($last_reply_id);
-														$last_topic_content = '';
-														if (!empty($last_reply->post_content)) {
-															$last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
+														$topic_replies = get_posts(
+															[
+																'post_type'      => 'reply',
+																'post_parent'    => $topic_id,
+																'author__not_in' => $group_private_members,
+																'posts_per_page' => 1,
+																'orderby'        => [ 'post_date' => 'DESC' ],
+															]
+														);
+
+														if ( $topic_replies ) {
+															$last_reply_content = $topic_replies[0]->post_content;
+														} else {
+															$topic_post         = get_post( $topic_id );
+															$last_reply_content = $topic_post->post_content;
 														}
+
+														$last_reply_content = wds_content_excerpt( strip_tags( $last_reply_content ), 250 );
 														?>
 
-														<?php echo openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
+														<?php echo openlab_get_group_activity_content( bbp_get_topic_title(), $last_reply_content, bbp_get_topic_permalink() ); ?>
 
 													</div></div>                                            <?php endwhile; ?>
 										<?php else: ?>
@@ -980,15 +1005,23 @@ function openlab_group_profile_activity_list() {
 									<div class="recent-posts">
 										<h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
 										<?php
+
 										$docs_query = new BP_Docs_Query(
 											array(
-												'group_id' => bp_get_current_group_id(),
-												'orderby'  => 'created',
-												'order'    => 'DESC',
+												'group_id'       => bp_get_current_group_id(),
+												'orderby'        => 'created',
+												'order'          => 'DESC',
 												'posts_per_page' => 3,
 											)
 										);
-										$query      = $docs_query->get_wp_query();
+
+										$author__not_in_callback = function( $query ) use ( $group_private_members ) {
+											$query->set( 'author__not_in', $group_private_members );
+										};
+
+										add_action( 'pre_get_posts', $author__not_in_callback );
+										$query = $docs_query->get_wp_query();
+										remove_action( 'pre_get_posts', $author__not_in_callback );
 
 										if ( $query->have_posts() ) {
 											while ( $query->have_posts() ) :
@@ -1429,12 +1462,22 @@ function openlab_show_site_posts_and_comments() {
     add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
-            switch_to_blog($site_id);
+			if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+				$group_private_members = [];
+			} else {
+				$group_private_members = openlab_get_private_members_of_group( $group_id );
+			}
 
-            // Set up posts
-            $wp_posts = get_posts(array(
-                'posts_per_page' => 3
-            ));
+			// Don't show posts from users with hidden memberships.
+			switch_to_blog($site_id);
+
+			// Set up posts
+			$wp_posts = get_posts(
+				[
+					'posts_per_page' => 3,
+					'author__not_in' => $group_private_members,
+				]
+			);
 
             foreach ($wp_posts as $wp_post) {
                 $_post = array(
@@ -1452,9 +1495,10 @@ function openlab_show_site_posts_and_comments() {
 
 			// Set up comments
 			$comment_args = [
-				'status'     => 'approve',
-				'number'     => 3,
-				'meta_query' => [
+				'status'         => 'approve',
+				'number'         => 3,
+				'author__not_in' => $group_private_members,
+				'meta_query'     => [
 					'relation' => 'AND',
 					[
 						'relation' => 'OR',
