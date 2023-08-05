@@ -525,6 +525,20 @@ function openlab_portfolio_list_group_display() {
 
 	$portfolio_data = openlab_get_group_member_portfolios();
 
+	// Hide private-member portfolios from non-members.
+	if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		$group_private_members = [];
+	} else {
+		$group_private_members = openlab_get_private_members_of_group( $group->id );
+	}
+
+	$portfolio_data = array_filter(
+		$portfolio_data,
+		function( $portfolio ) use ( $group_private_members ) {
+			return ! in_array( $portfolio['user_id'], $group_private_members, true );
+		}
+	);
+
 	// No member of the group has a portfolio
 	if ( empty( $portfolio_data ) ) {
 		return;
@@ -537,16 +551,16 @@ function openlab_portfolio_list_group_display() {
 			<?php echo esc_html( openlab_portfolio_list_group_heading() ); ?>
 		</h2>
 
-				<div class="sidebar-block">
+		<div class="sidebar-block">
 
-		<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
-		<?php foreach ( $portfolio_data as $pdata ) : ?>
-			<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'faculty', 'staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
-			<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
-		<?php endforeach ?>
-		</ul>
+			<ul class="group-member-portfolio-list sidebar-sublinks inline-element-list group-data-list">
+				<?php foreach ( $portfolio_data as $pdata ) : ?>
+					<?php $display_string = isset( $pdata['user_type'] ) && in_array( $pdata['user_type'], array( 'faculty', 'staff' ) ) ? '%s&#8217;s Portfolio' : '%s&#8217;s ePortfolio'; ?>
+					<li><a href="<?php echo esc_url( $pdata['portfolio_url'] ); ?>"><?php echo esc_html( sprintf( $display_string, $pdata['user_display_name'] ) ); ?></a></li>
+				<?php endforeach ?>
+			</ul>
 
-				</div>
+		</div>
 	</div>
 
 	<?php

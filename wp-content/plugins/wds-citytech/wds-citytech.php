@@ -2281,6 +2281,20 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
+		// Hide private-member portfolios from non-members.
+		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			$group_private_members = [];
+		} else {
+			$group_private_members = openlab_get_private_members_of_group( $group_id );
+		}
+
+		$portfolios = array_filter(
+			$portfolios,
+			function( $portfolio ) use ( $group_private_members ) {
+				return ! in_array( $portfolio['user_id'], $group_private_members, true );
+			}
+		);
+
 		if ( '1' === $instance['display_as_dropdown'] ) {
 			echo '<form action="" method="get">';
 			echo '<select class="portfolio-goto" name="portfolio-goto">';
