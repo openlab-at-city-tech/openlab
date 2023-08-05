@@ -1733,81 +1733,6 @@ function openlab_get_activity_button_link( $activity ) {
 }
 
 /**
- * Check if the membership for the specified group is private
- * for the logged user.
- *
- */
-function openlab_is_my_membership_private( $group_id ) {
-	// Skip if group id is missing
-	if ( empty( $group_id ) ) {
-		return false;
-	}
-
-	global $wpdb;
-
-	// Get private membership table
-	$table_name = $wpdb->prefix . 'private_membership';
-
-	// Get current user id
-	$user_id = bp_loggedin_user_id();
-
-	// Check if the membership is private based on user id and group id
-	$query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE `user_id` = %d AND `group_id` = %d", $user_id, $group_id ) );
-
-	// If there is a record, return true. Otherwise, return false
-	if ( $query ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Get user private membership group
- */
-function openlab_get_user_private_membership( $user_id ) {
-	// Skip if user id is missing
-	if ( empty( $user_id ) ) {
-		return [];
-	}
-
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'private_membership';
-	$query = $wpdb->get_results( $wpdb->prepare( "SELECT `group_id` FROM $table_name WHERE `user_id` = %d", $user_id ), OBJECT_K );
-
-	$private_groups = array();
-
-	if ( $query ) {
-		foreach ( $query as $item ) {
-			$private_groups[] = (int) $item->group_id;
-		}
-	}
-
-	return $private_groups;
-}
-
-/**
- * Get private members of a group.
- *
- * @param int $group_id ID of the group.
- * @return array Array of user IDs.
- */
-function openlab_get_private_members_of_group( $group_id ) {
-	static $members;
-	global $wpdb;
-
-	if ( null !== $members ) {
-		return $members;
-	}
-
-	$table_name = $wpdb->prefix . 'private_membership';
-	$results    = $wpdb->get_col( $wpdb->prepare( 'SELECT `user_id` FROM %i WHERE `group_id` = %d', $table_name, $group_id ) );
-
-	$members = array_map( 'intval', $results );
-	return $members;
-}
-
-/**
  * Update private membership table with the user's
  * group privacy data.
  */
@@ -1816,7 +1741,7 @@ function openlab_update_member_group_privacy() {
 	global $wpdb;
 
 	// Get private membership table
-	$table_name = $wpdb->prefix . 'private_membership';
+	$table_name = $wpdb->base_prefix . 'private_membership';
 
 	// Get current user id
 	$user_id = bp_loggedin_user_id();
