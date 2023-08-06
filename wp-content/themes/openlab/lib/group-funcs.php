@@ -13,7 +13,7 @@ function openlab_mygroups_template_loader($template) {
             case 'my-courses' :
             case 'my-clubs' :
             case 'my-projects' :
-                get_template_part('buddypress/groups/index');
+                $template = locate_template( 'buddypress/groups/index.php' );
                 break;
         }
     }
