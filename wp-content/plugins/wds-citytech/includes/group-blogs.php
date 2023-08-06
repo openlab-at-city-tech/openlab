@@ -737,6 +737,7 @@ function wds_bp_group_meta() {
 													data-parsley-validate-if-empty="true"
 													data-parsley-remote
 													data-parsley-remote-validator="newSiteValidate"
+													data-parsley-alphanumeric-and-dashes
 													data-parsley-debounce="1000"
 													data-parsley-errors-container="#field_clone_site_error"
 													data-parsley-validation-threshold="3"
