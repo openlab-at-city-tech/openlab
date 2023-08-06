@@ -1037,8 +1037,8 @@ function openlab_wpmu_welcome_user_notification( $user_id, $password, $meta = ar
 	/** @phpstan-ignore-next-line */
 	$switched_locale = switch_to_user_locale( $user_id );
 
-	$welcome_email = __(
-		'Dear User,
+	$welcome_email = sprintf(
+		'Dear %s,
 
 Your new account is set up.
 
@@ -1049,13 +1049,14 @@ LOGINLINK
 
 Students: check out the online tutorial <a href="https://openlab.citytech.cuny.edu/openlabforstudents/" title="OpenLab for Students">The OpenLab for Students</a>. Learn how to get started, participate in your OpenLab courses, and more!
 
-Faculty: explore the online self-paced training module, <a href="https://openlab.citytech.cuny.edu/openlabforstudents/" title="OpenLab for Students">The OpenLab for Students</a>.
+Faculty: explore the online self-paced training module, <a href="https://openlab.citytech.cuny.edu/teachingwithopenlab/" title="Teaching with the OpenLab">Teaching with the OpenLab</a>.
 
 Everyone: you can also visit our <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/" title="Help section">Help section</a>, contact us, or come to our <a href="https://openlab.citytech.cuny.edu/openroad/office-hours/" title="Virtual office hours">virtual office hours</a> with any questions – we\'re always happy to provide support!
 
 Thanks!
 
---The Team @ SITE_NAME'
+--The Team @ SITE_NAME',
+		bp_core_get_user_displayname( $user_id )
 	);
 
 	$welcome_email = apply_filters( 'update_welcome_user_email', $welcome_email, $user_id, $password, $meta );
