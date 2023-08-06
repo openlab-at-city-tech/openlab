@@ -881,7 +881,7 @@ function openlab_group_member_role_settings( $group_type ) {
 
 	if ( bp_is_group_create() && groups_get_groupmeta( bp_get_new_group_id(), 'clone_source_group_id' ) ) {
 		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
-		$show_panel  = in_array( 'site', $clone_steps, true );
+		$show_panel  = is_array( $clone_steps ) && in_array( 'site', $clone_steps, true );
 	} else {
 		$site_id    = openlab_get_site_id_by_group_id();
 		$show_panel = ! empty( $site_id );
