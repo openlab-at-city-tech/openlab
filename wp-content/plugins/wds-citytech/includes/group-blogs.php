@@ -783,6 +783,7 @@ function wds_bp_group_meta() {
 												value="<?php echo esc_html( $suggested_path ); ?>"
 												data-parsley-validate-if-empty="true"
 												data-parsley-remote
+												data-parsley-alphanumeric-and-dashes
 												data-parsley-remote-validator="newSiteValidate"
 												data-parsley-debounce="1000"
 												data-parsley-errors-container="#field_new_site_error"

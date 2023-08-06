@@ -84,7 +84,6 @@ jQuery( document ).ready(
 			}
 		} );
 
-
 		/**
 		 * Rather than modifying the template ported from CBOX-OL, we change with JavaScript.
 		 */

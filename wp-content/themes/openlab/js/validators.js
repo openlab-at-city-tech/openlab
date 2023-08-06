@@ -18,6 +18,15 @@
         }
     });
 
+    window.Parsley.addValidator('alphanumericAndDashes', {
+        validateString: function (value) {
+            return !value.match(/[^a-zA-Z0-9\-]/);
+        },
+        messages: {
+            en: 'This field supports alphanumeric characters and hyphens only.'
+        }
+    });
+
     var iffRecursion = false;
     window.Parsley.addValidator('iff', {
         validateString: function (value, requirement, instance) {
