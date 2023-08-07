@@ -111,6 +111,15 @@ function openlab_toggle_hide_sitewide_for_private_membership_activity( $activity
 add_action(
 	'bp_activity_add',
 	function( $r, $activity_id ) {
+		if ( 'groups' !== $r['component'] ) {
+			return;
+		}
+
+		$user_private_memberships = openlab_get_user_private_membership( $r['user_id'] );
+		if ( ! in_array( (int) $r['item_id'], $user_private_memberships, true ) ) {
+			return;
+		}
+
 		openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id );
 	},
 	100,
