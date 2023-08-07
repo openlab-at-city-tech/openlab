@@ -61,6 +61,7 @@ function openlab_hide_plugins( $plugins ) {
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
+		'openlab-modules/openlab-modules.php',
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
