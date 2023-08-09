@@ -1913,7 +1913,7 @@ function openlab_social_media_fields() {
 			'field_id' => 0,
 		],
 		'twitter' => [
-			'title'    => 'Twitter',
+			'title'    => 'X (formerly Twitter)',
 			'field_id' => 0,
 		],
 		'vimeo' => [
