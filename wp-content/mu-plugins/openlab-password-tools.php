@@ -74,7 +74,6 @@ add_filter(
 		}
 
 		$password_error_messages = $errors->get_error_messages( 'incorrect_password' );
-		var_dump( $password_error_messages );
 		if ( ! $password_error_messages ) {
 			return $errors;
 		}
