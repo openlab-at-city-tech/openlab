@@ -3495,7 +3495,9 @@ function openlab_default_mathjax_config( $value ) {
 		}
 	}
 
-	$inline_math = $do_dollar_sign_delims ? "[ ['$','$'], ['\\\(','\\\)'] ]" : "[ ['\\\(','\\\)'] ]" ;
+	$inline_math = $do_dollar_sign_delims
+		? "[ ['$','$'], ['\\\(','\\\)'], ['\\\[','\\\]'] ]"
+		: "[ ['\\\(','\\\)'], ['\\\[','\\\]'] ]" ;
 
 	$value['custom_mathjax_config'] = "MathJax = {
 tex: {
@@ -3503,7 +3505,8 @@ tex: {
 	displayMath: [
 		['$$', '$$'],
 		['" . '$latex' . "', '$'],
-		['[latex]', '[/latex]']
+		['[latex]', '[/latex]'],
+		['\\\[', '\\\]']
 	],
 	processEscapes: true
 },
