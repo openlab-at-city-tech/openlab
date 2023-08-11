@@ -913,17 +913,21 @@ HTML;
 						);
 
 						$inviter_group = groups_get_group( $connection_invitation->get_inviter_group_id() );
+						$invitee_group = groups_get_group( $connection_invitation->get_invitee_group_id() );
 
 						$invitation_id = $connection_invitation->get_invitation_id();
 
 						// Avatar.
 						$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . esc_url( bp_get_group_permalink( $inviter_group ) ) . '"><img class="img-responsive" src ="' . esc_url( $group_avatar ) . '" alt="Profile picture of ' . stripslashes( $inviter_group->name ) . '"/></a></div></div>';
 
-						// Group name and link.
-						$title .= '<div class="col-sm-18"><p class="item-title"><a class="bold" href="' . bp_get_group_permalink( $inviter_group ) . '">' . stripslashes( $inviter_group->name ) . '</a></p>';
-
-						// Accept/reject buttons.
-						$title .= '<p class="actions clearfix"><a class="btn btn-primary link-btn accept" href="' . esc_url( wp_nonce_url( $connection_invitation->get_accept_url(), 'accept-invitation-' . $invitation_id ) ) . '">' . __( 'Accept', 'buddypress' ) . '</a> &nbsp; <a class="btn btn-default link-btn reject" href="' . esc_url( wp_nonce_url( $connection_invitation->get_reject_url(), 'reject-invitation-' . $invitation_id ) ) . '">' . __( 'Reject', 'buddypress' ) . '</a></p></div></div>';
+						$title .= '<div class="col-sm-18"><p>';
+						$title .= sprintf(
+							'%s has sent %s an <a href="%s">invitation to connect.</a>',
+							'<strong>' . esc_html( $inviter_group->name ) . '</strong>',
+							'<strong>' . esc_html( $invitee_group->name ) . '</strong>',
+							esc_url( bp_get_group_permalink( $invitee_group ) . 'connections/invitations/' )
+						);
+						$title .= '</p></div>';
 
 						$wp_admin_bar->add_node(
 							array(
