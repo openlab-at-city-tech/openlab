@@ -29,7 +29,7 @@ $pending_invites = \OpenLab\Connections\Invitation::get(
 						<?php foreach ( $pending_invites as $pending_invite ) : ?>
 							<?php
 
-							$group = groups_get_group( $pending_invite->get_invitee_group_id() );
+							$group = groups_get_group( $pending_invite->get_inviter_group_id() );
 
 							$date_received = '0000-00-00 00:00:00' === $pending_invite->get_date_created() ? '' : date_i18n( get_option( 'date_format' ), strtotime( $pending_invite->get_date_created() ) );
 
