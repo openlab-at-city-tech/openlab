@@ -159,6 +159,6 @@ switch ( $current_group_site_status ) {
 	<?php else : ?>
 		<p><?php echo wp_kses_post( __( 'This feature connects related spaces on the Openlab. It is useful for sharing site activity with cohorts, collaborators, and across course sections. Visit <a href="tk">OpenLab Help</a> for more information.', 'openlab-connections' ) ); ?></p>
 
-		<p><?php esc_html_e( "You haven't made any Connections yet.", 'openlab-connections' ); ?> <a href="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) ); ?>connections/new/"><?php esc_html_e( '+ Make a Connection', 'openlab-connections' ); ?></a>.</p>
+		<p><?php esc_html_e( "You haven't made any Connections yet.", 'openlab-connections' ); ?> <strong><a href="<?php echo esc_url( bp_get_group_permalink( groups_get_current_group() ) ); ?>connections/new/"><?php esc_html_e( 'Make a Connection', 'openlab-connections' ); ?></a></strong>.</p>
 	<?php endif; ?>
 </div>
