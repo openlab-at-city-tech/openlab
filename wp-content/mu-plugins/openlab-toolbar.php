@@ -922,7 +922,7 @@ HTML;
 
 						$title .= '<div class="col-sm-18"><p>';
 						$title .= sprintf(
-							'%s has sent %s an <a href="%s">invitation to connect.</a>',
+							'%s has sent %s an <a href="%s">invitation to connect</a>.',
 							'<strong>' . esc_html( $inviter_group->name ) . '</strong>',
 							'<strong>' . esc_html( $invitee_group->name ) . '</strong>',
 							esc_url( bp_get_group_permalink( $invitee_group ) . 'connections/invitations/' )
