@@ -65,7 +65,7 @@ $sent_invites = \OpenLab\Connections\Invitation::get(
 								?>
 
 								<div class="sent-invitation connection-invitation">
-									<div class="actions"><a href="<?php echo esc_url( $delete_url ); ?>" class="delete-invite" onclick="return confirm('Are you sure you want to delete this invitation?')" data-invitation-id="<?php echo esc_attr( $invite->get_invitation_id() ); ?>">x<span class="sr-only">Delete Invitation</span></a></div>
+									<div class="actions"><a href="<?php echo esc_url( $delete_url ); ?>" class="delete-invite" onclick="return confirm('Are you sure you want to delete this invitation?')" data-invitation-id="<?php echo esc_attr( $invite->get_invitation_id() ); ?>"><span class="sr-only">Delete Invitation</span></a></div>
 									<div class="group"><?php echo esc_html( $group->name ); ?></div>
 									<div class="sent"><?php echo esc_html( $date_sent ); ?></div>
 								</div>
