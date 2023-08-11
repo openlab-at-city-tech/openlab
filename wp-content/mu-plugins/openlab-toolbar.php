@@ -932,7 +932,7 @@ HTML;
 						$wp_admin_bar->add_node(
 							array(
 								'parent' => 'invites',
-								'id'     => 'invitation-' . $inviter_group->id,
+								'id'     => 'invitation-' . $invitation_id,
 								'title'  => $title,
 								'meta'   => array(
 									'class' => 'nav-content-item nav-invitation',
