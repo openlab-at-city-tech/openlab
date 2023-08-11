@@ -944,7 +944,7 @@ HTML;
 					$wp_admin_bar->add_node(
 						array(
 							'parent' => 'invites',
-							'id'     => 'group-invites-none',
+							'id'     => 'connection-invites-none',
 							'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>' . 'No connection invitations.' . '</p></div></div>',
 							'meta'   => array(
 								'class' => 'nav-no-items nav-content-item',
