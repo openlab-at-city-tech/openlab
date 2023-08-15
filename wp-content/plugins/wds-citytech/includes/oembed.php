@@ -73,8 +73,9 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
-	
-	$network_home_url = network_home_url(); // Network home URL 
+	wp_embed_register_handler( 'mathdot', '#https?://mathdev\.citytech\.cuny\.edu/DOT/([^/]*)/?#i', 'openlab_embed_handler_mathdot' );
+
+	$network_home_url = network_home_url(); // Network home URL
 	wp_embed_register_handler( 'openlab', "#{$network_home_url}#i", 'openlab_embed_local_uploaded_images' );
 
 	// Register oEmbed provider for Yuja
@@ -246,6 +247,29 @@ function openlab_embed_handler_yuja( $matches, $attr, $url ) {
 	$url = str_replace( 'Watch?', 'Video?', $url);
 
 	return wp_oembed_get($url);
+}
+
+/**
+ * Callback for math DOT embed game.
+ *
+ * @param array $matches Matches from embed URL regex.
+ * @param array $attr    Attributes from embed URL regex.
+ * @param string $url    URL.
+ * @return string
+ */
+function openlab_embed_handler_mathdot( $matches, $attr, $url ) {
+	$embed = sprintf(
+		'<div class="mathdot-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe
+			scrolling="no"
+			src="%s"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
+		</iframe>
+		</div>',
+		esc_attr( $url )
+	);
+
+	return $embed;
 }
 
 /**
