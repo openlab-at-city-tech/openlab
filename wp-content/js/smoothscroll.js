@@ -3782,7 +3782,7 @@ OpenLab.nav = (function ($) {
 
 			$( "#wp-admin-bar-bp-login" ).append( loginform );
 
-			$( "#wp-admin-bar-bp-login > a" ).click(
+			$( "#wp-admin-bar-bp-login > a" ).on( 'click',
 				function () {
 
 					if ( ! $( this ).hasClass( 'login-click' )) {
@@ -4369,7 +4369,7 @@ OpenLab.fixes = (function ($) {
 		}
 	);
 
-	$( window ).scroll(
+	$( window ).on( 'scroll',
 		function () {
 
 			if ($( 'body' ).hasClass( 'masthead-fixing' )) {
