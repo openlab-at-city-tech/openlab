@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Inputs
+ *
  * @package Bookly\Backend\Components\Settings
  */
 class Inputs
@@ -12,9 +13,9 @@ class Inputs
     /**
      * Render numeric input.
      *
-     * @param string   $option_name
-     * @param string   $label
-     * @param string   $help
+     * @param string $option_name
+     * @param string $label
+     * @param string $help
      * @param int|null $min
      * @param int|null $step
      * @param int|null $max
@@ -24,11 +25,11 @@ class Inputs
         $control = strtr(
             '<input type="number" id="{name}" class="form-control" name="{name}" value="{value}"{min}{max}{step} />',
             array(
-                '{name}'  => esc_attr( $option_name ),
+                '{name}' => esc_attr( $option_name ),
                 '{value}' => esc_attr( get_option( $option_name ) ),
-                '{min}'   => $min !== null ? ' min="' . $min . '"' : '',
-                '{max}'   => $max !== null ? ' max="' . $max . '"' : '',
-                '{step}'  => $step !== null ? ' step="' . $step . '"' : '',
+                '{min}' => $min !== null ? ' min="' . $min . '"' : '',
+                '{max}' => $max !== null ? ' max="' . $max . '"' : '',
+                '{step}' => $step !== null ? ' step="' . $step . '"' : '',
             )
         );
 
@@ -89,9 +90,9 @@ class Inputs
     /**
      * Render row with numeric inputs
      *
-     * @param array      $option_names
-     * @param string     $label
-     * @param string     $help
+     * @param array $option_names
+     * @param string $label
+     * @param string $help
      * @param null|array $min
      * @param null|array $step
      * @param null|array $max
@@ -103,11 +104,11 @@ class Inputs
             $control .= strtr(
                 '<div class="col"><input type="number" id="{name}" class="form-control" name="{name}" value="{value}"{min}{max}{step} /></div>',
                 array(
-                    '{name}'  => esc_attr( $option_name ),
+                    '{name}' => esc_attr( $option_name ),
                     '{value}' => esc_attr( get_option( $option_name ) ),
-                    '{min}'   => $min !== null ? ' min="' . $min[ $index ] . '"' : '',
-                    '{max}'   => $max !== null ? ' max="' . $max[ $index ] . '"' : '',
-                    '{step}'  => $step !== null ? ' step="' . $step[ $index ] . '"' : '',
+                    '{min}' => $min !== null ? ' min="' . $min[ $index ] . '"' : '',
+                    '{max}' => $max !== null ? ' max="' . $max[ $index ] . '"' : '',
+                    '{step}' => $step !== null ? ' step="' . $step[ $index ] . '"' : '',
                 )
             );
         }
@@ -119,8 +120,8 @@ class Inputs
     /**
      * Render text input.
      *
-     * @param string      $option_name
-     * @param string      $label
+     * @param string $option_name
+     * @param string $label
      * @param string|null $help
      */
     public static function renderText( $option_name, $label, $help = null )
@@ -151,21 +152,55 @@ class Inputs
     }
 
     /**
+     * Render password input.
+     *
+     * @param string $option_name
+     * @param string $label
+     * @param string|null $help
+     */
+    public static function renderPassword( $option_name, $label, $help = null )
+    {
+        self::renderPasswordValue( $option_name, get_option( $option_name ), $label, $help );
+    }
+
+    /**
+     * Render password input
+     *
+     * @param string $name
+     * @param string $value
+     * @param string $label
+     * @param string|null $help
+     * @return void
+     */
+    public static function renderPasswordValue( $name, $value, $label, $help = null )
+    {
+        $control = strtr(
+            '<input type="password" id="{name}" class="form-control" name="{name}" value="{value}" />',
+            array(
+                '{name}' => esc_attr( $name ),
+                '{value}' => esc_attr( $value ),
+            )
+        );
+
+        echo self::buildControl( $name, $label, $help, $control );
+    }
+
+    /**
      * Render text area input.
      *
-     * @param string      $option_name
-     * @param string      $label
+     * @param string $option_name
+     * @param string $label
      * @param string|null $help
-     * @param int         $rows
+     * @param int $rows
      */
     public static function renderTextArea( $option_name, $label, $help = null, $rows = 9 )
     {
         $control = strtr(
             '<textarea id="{name}" name="{name}" class="form-control" rows="{rows}" placeholder="{placeholder}">{value}</textarea>',
             array(
-                '{name}'  => esc_attr( $option_name ),
+                '{name}' => esc_attr( $option_name ),
                 '{value}' => esc_textarea( get_option( $option_name ) ),
-                '{rows}'  => $rows,
+                '{rows}' => $rows,
                 '{placeholder}' => esc_attr__( 'Enter a value', 'bookly' ),
             )
         );
@@ -187,8 +222,8 @@ class Inputs
         return strtr(
             '<div class="form-group">{label}{control}{help}</div>',
             array(
-                '{label}'   => $label != '' ? sprintf( '<label for="%s">%s</label>', $option_name, $label ) : '',
-                '{help}'    => $help  != '' ? sprintf( '<small class="form-text text-muted">%s</small>', $help ) : '',
+                '{label}' => $label != '' ? sprintf( '<label for="%s">%s</label>', $option_name, $label ) : '',
+                '{help}' => $help != '' ? sprintf( '<small class="form-text text-muted">%s</small>', $help ) : '',
                 '{control}' => $control_html,
             )
         );
@@ -203,7 +238,7 @@ class Inputs
      */
     public static function renderOptionCopy( $option_name, $label, $help = null )
     {
-        self::renderCopy( $option_name, get_option( $option_name ) , $label, $help );
+        self::renderCopy( $option_name, get_option( $option_name ), $label, $help );
     }
 
     /**
@@ -234,15 +269,15 @@ class Inputs
                 '{name}' => esc_attr( $name ),
                 '{value}' => esc_attr( $value ),
                 '{title}' => esc_attr( __( 'Copy to clipboard', 'bookly' ) ),
-                '{copied}' => esc_attr( __( 'copied', 'bookly' ) )
+                '{copied}' => esc_attr( __( 'copied', 'bookly' ) ),
             )
         );
 
         echo strtr(
             '<div class="form-group bookly-js-copy-to-clipboard">{label}<div class="form-control d-flex align-items-center" readonly style="opacity:1;cursor:default">{control}</div>{help}</div>',
             array(
-                '{label}'   => $label != '' ? sprintf( '<label for="%s">%s</label>', $name, $label ) : '',
-                '{help}'    => $help  != '' ? sprintf( '<small class="form-text text-muted">%s</small>', $help ) : '',
+                '{label}' => $label != '' ? sprintf( '<label for="%s">%s</label>', $name, $label ) : '',
+                '{help}' => $help != '' ? sprintf( '<small class="form-text text-muted">%s</small>', $help ) : '',
                 '{control}' => $control,
             )
         );

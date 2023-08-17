@@ -6,6 +6,7 @@ use Bookly\Backend\Modules;
 
 /**
  * Class ButtonsAjax
+ *
  * @package Bookly\Backend\Components\Support
  */
 class ButtonsAjax extends Lib\Base\Ajax
@@ -23,9 +24,9 @@ class ButtonsAjax extends Lib\Base\Ajax
      */
     public static function sendSupportRequest()
     {
-        $name  = trim( self::parameter( 'name' ) );
+        $name = trim( self::parameter( 'name' ) );
         $email = trim( self::parameter( 'email' ) );
-        $msg   = trim( self::parameter( 'msg' ) );
+        $msg = trim( self::parameter( 'msg' ) );
 
         // Validation.
         if ( $email == '' || $msg == '' ) {
@@ -42,13 +43,16 @@ class ButtonsAjax extends Lib\Base\Ajax
         $cloud_email = $cloud->account->getUserName();
         $plugins = apply_filters( 'bookly_plugins', array() );
         $message = self::renderTemplate( '_email_to_support', compact( 'name', 'email', 'cloud_email', 'msg', 'plugins' ), false );
+
         $headers = array(
-            'Content-Type: text/html; charset=utf-8',
-            'From: ' . get_option( 'bookly_email_sender_name' ) . ' <' . get_option( 'bookly_email_sender' ) . '>',
-            'Reply-To: ' . $name . ' <' . $email . '>',
+            'is_html' => true,
+            'reply_to' => array(
+                'email' => $email,
+                'name' => $name,
+            ),
         );
 
-        if ( wp_mail( 'support@bookly.info', 'Support Request ' . site_url(), $message, $headers ) ) {
+        if ( Lib\Utils\Mail::send( 'support@bookly.info', 'Support Request ' . site_url(), $message, $headers ) ) {
             wp_send_json_success( array( 'message' => __( 'Sent successfully.', 'bookly' ) ) );
         } else {
             wp_send_json_error( array( 'message' => __( 'Error sending support request.', 'bookly' ) ) );

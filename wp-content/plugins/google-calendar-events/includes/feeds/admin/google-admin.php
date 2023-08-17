@@ -6,7 +6,7 @@
  */
 namespace SimpleCalendar\Feeds\Admin;
 
-use SimpleCalendar\plugin_deps\Google\Service\Exception;
+use SimpleCalendar\plugin_deps\Google_Service_Exception;
 
 use SimpleCalendar\Admin\Metaboxes\Settings;
 use SimpleCalendar\Admin\Notice;
@@ -80,21 +80,22 @@ class Google_Admin {
 	 *
 	 * @return array
 	 */
-	public function settings_fields() {
-		return array(
+	public function settings_fields() {		
+		return array(			
 			'name' => $this->feed->name,
-			'description' => __( "To read events from your public Google Calendars you'll need create a Google API key and save it here.", 'google-calendar-events' ) .
-			                 '<br/><br/>' .
+			'description' => '<div class="simcal-text-sm simcal-font-poppins simcal-font-normal simcal-text-sc_grey-100 simcal-mt-[5px]">'.__( "To read events from your public Google Calendars you'll need create a Google API key and save it here.", 'google-calendar-events' ) .
+			                 '</div><br/><br/>' .
 			                 '<em style="font-size: 14px;">' .
-			                 sprintf( __( '<strong>Note:</strong> Calendars configured to use the <strong><a href="%s" target="_blank">Google Calendar Pro add-on</a></strong> use a different method of authorization.', 'google-calendar-events' ),
+			                 sprintf( __( '<strong>Note:</strong> Calendars configured to use the <a href="%s" class=" hover:simcal-text-green-600 simcal-underline" target="_blank">Google Calendar Pro add-on</a> use a different method of authorization.', 'google-calendar-events' ),
 				                 simcal_ga_campaign_url( simcal_get_url( 'addons' ), 'core-plugin', 'settings-link' )
 			                 ) .
-			                 '</em>',
+			                 '</em><section class="simcal-mt-[15px]"><hr></section>',			 
 			'fields' => array(
 				'api_key' => array(
 					'type'       => 'standard',
 					'subtype'    => 'text',
-					'class'      => array( 'simcal-wide-text regular-text', 'ltr' ),
+					'placeholder'=> 'Type here...',
+					'class'      => array( 'simcal-wide-text simcal-text-base sc-btn-input simcal-w-[80%] simcal-h-[40px] simcal-mb-[13px]','ltr' ),
 					'title'      => __( 'Google API Key', 'google-calendar-events' ),
 					'validation' => array( $this, 'check_google_api_key' ),
 				),
@@ -129,11 +130,10 @@ class Google_Admin {
 		}
 
 		$message = '<p class="description">' .
-				   sprintf( __( '<a href="%s" target="_blank">Step-by-step instructions</a> ', 'google-calendar-events' ),
+				   sprintf( __( '<a href="%s" class="simcal-underline hover:simcal-text-green-600 simcal-text-[13px]" target="_blank">Step-by-step instructions</a> ', 'google-calendar-events' ),
 					   simcal_ga_campaign_url( simcal_get_url( 'docs' ) . '/google-api-key/', 'core-plugin', 'settings-link' )
 				   ) .
-				   '<br/>' .
-				   sprintf( __( '<a href="%s" target="_blank">Google Developers Console</a> ', 'google-calendar-events' ),
+				   sprintf( __( '<a href="%s" class="simcal-pl-[20px] simcal-underline hover:simcal-text-green-600 simcal-text-[13px]" target="_blank">Google Developers Console</a> ', 'google-calendar-events' ),
 					   simcal_get_url( 'gdev-console' )
 				   ) .
 				   '</p>';
@@ -295,7 +295,7 @@ class Google_Admin {
 
 				try {
 					$this->feed->make_request( $google_calendar_id );
-				} catch ( Exception $e ) {
+				} catch ( Google_Service_Exception $e ) {
 					$error   = $e->getMessage();
 					$message = ! empty( $error ) ? '<blockquote>' . $error . '</blockquote>' : '';
 				}

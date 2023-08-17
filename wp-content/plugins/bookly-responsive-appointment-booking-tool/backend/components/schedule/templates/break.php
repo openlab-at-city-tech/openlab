@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 /**
  * @var int $id
  * @var string $interval

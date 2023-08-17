@@ -1,7 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-use Bookly\Lib\Base\Cache;
 use Bookly\Lib\Entities;
 
 /**
@@ -11,6 +10,8 @@ use Bookly\Lib\Entities;
  */
 abstract class SessionDB extends Session
 {
+    protected static $affected = array();
+
     public static function initSession()
     {
         static $initialized;
@@ -46,6 +47,7 @@ abstract class SessionDB extends Session
      */
     public static function set( $name, $value )
     {
+        self::touch( $name );
         $session = self::getSession();
         $session[ $name ] = $value;
 
@@ -73,6 +75,7 @@ abstract class SessionDB extends Session
      */
     public static function destroy( $name )
     {
+        self::touch( $name );
         $session = self::getSession();
         unset( $session[ $name ] );
 
@@ -94,8 +97,10 @@ abstract class SessionDB extends Session
 
         $session = self::getSession();
 
-        if ( isset ( $session['forms'][ $form_id ][ $name ] ) ) {
-            $result = $session['forms'][ $form_id ][ $name ];
+        $form_var = self::formVar( $form_id );
+
+        if ( isset ( $session[ $form_var ][ $name ] ) ) {
+            $result = $session[ $form_var ][ $name ];
         }
 
         return $result;
@@ -110,15 +115,15 @@ abstract class SessionDB extends Session
      */
     public static function setFormVar( $form_id, $name, $value )
     {
+        $form_var = self::formVar( $form_id );
+        self::touch( $form_var );
         $session = self::getSession();
-        if ( ! isset( $session['forms'] ) ) {
-            $session['forms'] = array();
-        }
-        if ( ! isset( $session['forms'][ $form_id ] ) ) {
-            $session['forms'][ $form_id ] = array();
+
+        if ( ! isset( $session[ $form_var ] ) ) {
+            $session[ $form_var ] = array();
         }
 
-        $session['forms'][ $form_id ][ $name ] = $value;
+        $session[ $form_var ][ $name ] = $value;
 
         $key = 'bookly-db-session';
         self::putInCache( $key, $session );
@@ -133,9 +138,10 @@ abstract class SessionDB extends Session
      */
     public static function hasFormVar( $form_id, $name )
     {
+        $form_var = self::formVar( $form_id );
         $session = self::getSession();
 
-        return isset ( $session['forms'][ $form_id ][ $name ] );
+        return isset ( $session[ $form_var ][ $name ] );
     }
 
     /**
@@ -147,8 +153,8 @@ abstract class SessionDB extends Session
     {
         $data = array();
         $session = self::getSession();
-        if ( isset ( $session['forms'] ) ) {
-            $data = $session['forms'];
+        foreach ( $session as $key => $value ) {
+            $data[ str_replace( 'form-', '', $key ) ] = $value;
         }
 
         return $data;
@@ -162,9 +168,11 @@ abstract class SessionDB extends Session
      */
     public static function destroyFormVar( $form_id, $name )
     {
+        $form_var = self::formVar( $form_id );
+        self::touch( $form_var );
         $session = self::getSession();
-        if ( isset( $session['forms'][ $form_id ][ $name ] ) ) {
-            unset( $session['forms'][ $form_id ][ $name ] );
+        if ( isset( $session[ $form_var ][ $name ] ) ) {
+            unset( $session[ $form_var ][ $name ] );
             $key = 'bookly-db-session';
             self::putInCache( $key, $session );
         }
@@ -177,9 +185,11 @@ abstract class SessionDB extends Session
      */
     public static function destroyFormData( $form_id )
     {
+        $form_var = self::formVar( $form_id );
+        self::touch( $form_var );
         $session = self::getSession();
-        if ( isset( $session['forms'][ $form_id ] ) ) {
-            unset( $session['forms'][ $form_id ] );
+        if ( isset( $session[ $form_var ] ) ) {
+            unset( $session[ $form_var ] );
             $key = 'bookly-db-session';
             self::putInCache( $key, $session );
         }
@@ -190,9 +200,12 @@ abstract class SessionDB extends Session
         $key = 'bookly-db-session';
 
         if ( ! self::hasInCache( $key ) ) {
-            $result = Entities\Session::query()->where( 'token', self::sessionId() )->whereGte( 'expire', current_time( 'mysql' ) )->fetchVar( 'value' );
+            $session = array();
+            foreach ( Entities\Session::query()->where( 'token', self::sessionId() )->whereGte( 'expire', current_time( 'mysql' ) )->fetchArray() as $record ) {
+                $session[ $record['name'] ] = json_decode( $record['value'], true );
+            }
 
-            self::putInCache( $key, $result ? json_decode( $result, true ) : array() );
+            self::putInCache( $key, $session );
         }
 
         return self::getFromCache( $key );
@@ -200,15 +213,30 @@ abstract class SessionDB extends Session
 
     public static function save()
     {
-        $session = new Entities\Session();
-        $session->loadBy( array( 'token' => self::sessionId() ) );
-        $value = self::getSession();
-        if ( $value || $session->isLoaded() ) {
-            $session
+        $session = self::getSession();
+
+        $db_session = new Entities\Session();
+        foreach ( self::$affected as $name ) {
+            $value = isset( $session[ $name ] ) ? $session[ $name ] : null;
+            $db_session->loadBy( array( 'token' => self::sessionId(), 'name' => $name ) );
+            $db_session
                 ->setToken( self::sessionId() )
-                ->setValue( json_encode( self::getSession() ) )
+                ->setName( $name )
+                ->setValue( json_encode( $value ) )
                 ->setExpire( date_create( current_time( 'mysql' ) )->modify( '+1 day' )->format( 'Y-m-d H:i:s' ) )
                 ->save();
+        }
+    }
+
+    private static function formVar( $form_id )
+    {
+        return 'form-' . $form_id;
+    }
+
+    private static function touch( $name )
+    {
+        if ( ! in_array( $name, self::$affected, true ) ) {
+            self::$affected[] = $name;
         }
     }
 

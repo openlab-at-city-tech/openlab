@@ -56,9 +56,28 @@ function openlab_enqueue_frontend_scripts() {
 	if ( ( bp_is_group_create() && bp_is_action_variable( 'group-details', 1 ) ) ||
 		 ( bp_is_group_create() && bp_is_action_variable( 'invite-anyone', 1 ) ) ||
 			 ( bp_is_group_admin_page() && bp_is_action_variable( 'edit-details', 0 ) ) ) {
-		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery' ) );
+		wp_enqueue_script( 'openlab-group-create', get_stylesheet_directory_uri() . '/js/group-create.js', array( 'jquery', 'parsley', 'openlab-validators' ) );
+
+		$group_type_label = 'Group';
+		if ( bp_is_group() ) {
+			$group_type_label = openlab_get_group_type_label( [ 'case' => 'upper'] );
+		} elseif ( bp_is_group_create() ) {
+			$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'Group';
+			if ( 'portfolio' === $group_type ) {
+				$user_type = openlab_get_user_member_type( get_current_user_id() );
+				if ( 'student' === strtolower( $user_type ) ) {
+					$group_type_label = 'ePortfolio';
+				} else {
+					$group_type_label = 'Portfolio';
+				}
+			} else {
+				$group_type_label = ucwords( $group_type );
+			}
+		}
+
 		wp_localize_script( 'openlab-group-create', 'OLGroupCreate', array(
 			'groupTypeCanBeCloned' => true, // No need to rewrite JS logic. Just enable for all groups.
+			'groupTypeLabel' => $group_type_label,
 			'schools' => openlab_get_school_list(),
 		) );
 	}

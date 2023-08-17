@@ -195,11 +195,6 @@ class DLM_Download_Handler {
 
 		// Check and see if this is an XHR request or a classic request.
 		if ( isset( $_SERVER['HTTP_DLM_XHR_REQUEST'] ) && 'dlm_XMLHttpRequest' === $_SERVER['HTTP_DLM_XHR_REQUEST'] ) {
-
-			if ( ! isset( $_REQUEST['nonce'] ) ) {
-				wp_send_json_error( array( 'error' => 'missing_nonce' ) );
-			}
-			wp_verify_nonce( $_REQUEST['nonce'], 'dlm_ajax_nonce' );
 			define( 'DLM_DOING_XHR', true );
 		}
 
@@ -596,26 +591,16 @@ class DLM_Download_Handler {
 
 		if ( '1' === get_option( 'dlm_xsendfile_enabled' ) ) {
 			if ( function_exists( 'apache_get_modules' ) && in_array( 'mod_xsendfile', apache_get_modules() ) ) {
-				if ( ! $this->check_for_xhr() ) {
-					$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
-				}
-
+				$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
 				header( "X-Sendfile: $file_path" );
 				exit;
-
 			} elseif ( stristr( getenv( 'SERVER_SOFTWARE' ), 'lighttpd' ) ) {
-
-				if ( ! $this->check_for_xhr() ) {
-					$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
-				}
-
+				$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
 				header( "X-LIGHTTPD-send-file: $file_path" );
 				exit;
-
 			} elseif ( stristr( getenv( 'SERVER_SOFTWARE' ), 'nginx' ) || stristr( getenv( 'SERVER_SOFTWARE' ), 'cherokee' ) ) {
-				// Log this way as the js doesn't know who the download_id and version_id is
+				// Log this way as the js doesn't know who the download_id and version_id is.
 				$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
-
 				// At this point the $correct_path should have a value of the file path as the verification was made prior to this check
 				// If there are symbolik links the return of the function will be an URL, so the last replace will not be taken into consideration.
 				$file_path = download_monitor()->service( 'file_manager' )->check_symbolic_links( $file_path, true );
@@ -623,7 +608,30 @@ class DLM_Download_Handler {
 
 				header( "X-Accel-Redirect: /$file_path" );
 				exit;
+			} elseif ( stristr( getenv( 'SERVER_SOFTWARE' ), 'LiteSpeed' ) ) {
+				// Log this way as the js doesn't know who the download_id and version_id is.
+				$this->dlm_logging->log( $download, $version, 'completed', false, $referrer );
+				header( "X-LiteSpeed-Location: $file_path" );
+				exit;
 			}
+		}
+
+		$safe_remote = wp_safe_remote_head( $file_path );
+		$safe        = true;
+		if ( $remote_file && is_wp_error( $safe_remote ) ) {
+			$safe = false;
+		}
+
+		if ( ! $safe ) {
+			if ( $this->check_for_xhr() ) {
+				header( 'X-DLM-Error: ' . esc_html__( 'Something is wrong with the file path.', 'download-monitor' ) );
+				$restriction_type = 'security_error';
+				$this->set_no_access_modal( __( 'Something is wrong with the file path.', 'download-monitor' ), $download, $restriction_type );
+				exit;
+			}
+
+			$this->dlm_logging->log( $download, $version, 'failed', false, $referrer );
+			wp_die( esc_html__( 'Something is wrong with the file path.', 'download-monitor' ) . ' <a href="' . esc_url( home_url() ) . '">' . esc_html__( 'Go to homepage &rarr;', 'download-monitor' ) . '</a>', esc_html__( 'Download Error', 'download-monitor' ), array( 'response' => 404 ) );
 		}
 
 		// multipart-download and download resuming support - http://www.phpgang.com/force-to-download-a-file-in-php_112.html.
@@ -771,6 +779,7 @@ class DLM_Download_Handler {
 		$headers['Content-Type']              = $mime_type;
 		$headers['Content-Description']       = 'File Transfer';
 		$headers['Content-Transfer-Encoding'] = 'binary';
+		$headers['Cache-Control']             = 'no-store, no-cache, must-revalidate, no-transform, max-age=0';
 
 		if ( $remote_file ) {
 			$file = wp_remote_head( $file_path );
@@ -807,6 +816,7 @@ class DLM_Download_Handler {
 
 		$headers['X-DLM-Download-ID'] = $download->get_id();
 		$headers['X-DLM-Version-ID']  = $version->get_id();
+		$headers['X-DLM-Nonce']       = wp_create_nonce( 'dlm_ajax_nonce' );
 
 		foreach ( $headers as $key => $value ) {
 			header( $key . ': ' . $value );

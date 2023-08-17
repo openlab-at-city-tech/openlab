@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Diagnostics\Tests\Test;
@@ -22,7 +22,7 @@ use Bookly\Lib;
                         <div class="d-flex w-100 align-items-center">
                             <div class="flex-fill bookly-collapse-title bookly-js-test-title"><?php echo esc_html( $tool->getTitle() ) ?></div>
                             <?php if ( $tool->hasError() ) : ?>
-                                <button class="btn btn-danger bookly-cursor-default" type="button" disabled>
+                                <button class="btn btn-danger bookly-cursor-default bookly-js-has-error" type="button" disabled>
                                     <?php esc_html_e( 'Error', 'bookly' ) ?>
                                 </button>
                             <?php endif ?>

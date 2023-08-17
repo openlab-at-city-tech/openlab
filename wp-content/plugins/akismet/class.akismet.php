@@ -86,6 +86,23 @@ class Akismet {
 		return apply_filters( 'akismet_get_api_key', defined('WPCOM_API_KEY') ? constant('WPCOM_API_KEY') : get_option('wordpress_api_key') );
 	}
 
+	/**
+	 * Exchange the API key for a token that can only be used to access stats pages.
+	 *
+	 * @return string
+	 */
+	public static function get_access_token() {
+		static $access_token = null;
+
+		if ( is_null( $access_token ) ) {
+			$response = self::http_post( self::build_query( array( 'api_key' => self::get_api_key() ) ), 'token' );
+
+			$access_token = $response[1];
+		}
+
+		return $access_token;
+	}
+
 	public static function check_key_status( $key, $ip = null ) {
 		return self::http_post( Akismet::build_query( array( 'key' => $key, 'blog' => get_option( 'home' ) ) ), 'verify-key', $ip );
 	}
@@ -232,6 +249,25 @@ class Akismet {
 		if ( ! is_null( $post ) ) {
 			// $post can technically be null, although in the past, it's always been an indicator of another plugin interfering.
 			$comment[ 'comment_post_modified_gmt' ] = $post->post_modified_gmt;
+
+			// Tags and categories are important context in which to consider the comment.
+			$comment['comment_context'] = array();
+
+			$tag_names = wp_get_post_tags( $post->ID, array( 'fields' => 'names' ) );
+
+			if ( $tag_names && ! is_wp_error( $tag_names ) ) {
+				foreach ( $tag_names as $tag_name ) {
+					$comment['comment_context'][] = $tag_name;
+				}
+			}
+
+			$category_names = wp_get_post_categories( $post->ID, array( 'fields' => 'names' ) );
+
+			if ( $category_names && ! is_wp_error( $category_names ) ) {
+				foreach ( $category_names as $category_name ) {
+					$comment['comment_context'][] = $category_name;
+				}
+			}
 		}
 
 		$response = self::http_post( Akismet::build_query( $comment ), 'comment-check' );
@@ -432,7 +468,7 @@ class Akismet {
 			}
 
 			// Prepared as strings since comment_id is an unsigned BIGINT, and using %d will constrain the value to the maximum signed BIGINT.
-			$format_string = implode( ", ", array_fill( 0, count( $comment_ids ), '%s' ) );
+			$format_string = implode( ', ', array_fill( 0, is_countable( $comment_ids ) ? count( $comment_ids ) : 0, '%s' ) );
 
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->comments} WHERE comment_id IN ( " . $format_string . " )", $comment_ids ) );
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->commentmeta} WHERE comment_id IN ( " . $format_string . " )", $comment_ids ) );
@@ -443,7 +479,7 @@ class Akismet {
 			}
 
 			clean_comment_cache( $comment_ids );
-			do_action( 'akismet_delete_comment_batch', count( $comment_ids ) );
+			do_action( 'akismet_delete_comment_batch', is_countable( $comment_ids ) ? count( $comment_ids ) : 0 );
 		}
 
 		if ( apply_filters( 'akismet_optimize_table', ( mt_rand(1, 5000) == 11), $wpdb->comments ) ) // lucky number
@@ -473,7 +509,7 @@ class Akismet {
 				do_action( 'akismet_batch_delete_count', __FUNCTION__ );
 			}
 
-			do_action( 'akismet_delete_commentmeta_batch', count( $comment_ids ) );
+			do_action( 'akismet_delete_commentmeta_batch', is_countable( $comment_ids ) ? count( $comment_ids ) : 0 );
 		}
 
 		if ( apply_filters( 'akismet_optimize_table', ( mt_rand(1, 5000) == 11), $wpdb->commentmeta ) ) // lucky number
@@ -1115,6 +1151,7 @@ class Akismet {
 
 	// return a comma-separated list of role names for the given user
 	public static function get_user_roles( $user_id ) {
+		$comment_user = null;
 		$roles = false;
 
 		if ( !class_exists('WP_User') )
@@ -1123,7 +1160,7 @@ class Akismet {
 		if ( $user_id > 0 ) {
 			$comment_user = new WP_User( $user_id );
 			if ( isset( $comment_user->roles ) )
-				$roles = join( ',', $comment_user->roles );
+				$roles = implode( ',', $comment_user->roles );
 		}
 
 		if ( is_multisite() && is_super_admin( $user_id ) ) {
@@ -1131,7 +1168,7 @@ class Akismet {
 				$roles = 'super_admin';
 			} else {
 				$comment_user->roles[] = 'super_admin';
-				$roles = join( ',', $comment_user->roles );
+				$roles = implode( ',', $comment_user->roles );
 			}
 		}
 
@@ -1556,6 +1593,7 @@ p {
 	}
 
 	public static function pre_check_pingback( $method ) {
+		$pingback_args = array();
 		if ( $method !== 'pingback.ping' )
 			return;
 
@@ -1580,7 +1618,7 @@ p {
 
 			if ( 0 === $call_count ) {
 				// Only pass along the number of entries in the multicall the first time we see it.
-				$multicall_count = count( $wp_xmlrpc_server->message->params );
+				$multicall_count = is_countable( $wp_xmlrpc_server->message->params ) ? count( $wp_xmlrpc_server->message->params ) : 0;
 			}
 
 			/*

@@ -379,6 +379,24 @@ class Sender {
 		// Try to disconnect the request as quickly as possible and process things in the background.
 		$this->fastcgi_finish_request();
 
+		/**
+		 * Close the PHP session to free up the server threads to handle other requests while we
+		 * send sync data with Dedicated Sync.
+		 *
+		 * When we spawn Dedicated Sync, we send `$_COOKIES` with the request to help out with any
+		 * firewall and/or caching functionality that might prevent us to ping the site directly.
+		 *
+		 * This will cause Dedicated Sync to reuse the visitor's PHP session and lock it until the
+		 * request finishes, which can take anywhere from 1 to 30+ seconds, depending on the server
+		 * `max_execution_time` configuration.
+		 *
+		 * By closing the session we're freeing up the session, so other requests can acquire the
+		 * lock and proceed with their own tasks.
+		 */
+		if ( session_status() === PHP_SESSION_ACTIVE ) {
+			session_write_close();
+		}
+
 		// Output not used right now. Try to release dedicated sync lock
 		Dedicated_Sender::try_release_lock_spawn_request();
 
@@ -513,7 +531,7 @@ class Sender {
 			}
 			$encoded_item = $this->codec->encode( $item );
 			$upload_size += strlen( $encoded_item );
-			if ( $upload_size > $this->upload_max_bytes && count( $items_to_send ) > 0 ) {
+			if ( $upload_size > $this->upload_max_bytes && array() !== $items_to_send ) {
 				break;
 			}
 			$items_to_send[ $key ] = $encode ? $encoded_item : $item;
@@ -623,11 +641,9 @@ class Sender {
 			} else {
 				// Detect if the last item ID was an error.
 				$had_wp_error = is_wp_error( end( $processed_item_ids ) );
-				if ( $had_wp_error ) {
-					$wp_error = array_pop( $processed_item_ids );
-				}
+				$wp_error     = $had_wp_error ? array_pop( $processed_item_ids ) : null;
 				// Also checkin any items that were skipped.
-				if ( count( $skipped_items_ids ) > 0 ) {
+				if ( array() !== $skipped_items_ids ) {
 					$processed_item_ids = array_merge( $processed_item_ids, $skipped_items_ids );
 				}
 				$processed_items = array_intersect_key( $items, array_flip( $processed_item_ids ) );

@@ -9,7 +9,7 @@ jQuery(window).on("load", function () {
     jQuery(".b2s-re-post-type").chosen();
     jQuery(".b2s-re-post-categories").chosen();
     jQuery(".b2s-re-post-author").chosen();
-    
+
     var dateFormat = "yyyy-mm-dd";
     var language = "en";
     if (jQuery('#b2sUserLang').val() == "de") {
@@ -24,7 +24,7 @@ jQuery(window).on("load", function () {
         calendarWeeks: true,
         autoclose: true
     });
-    
+
     jQuery(".b2s-re-post-date-end").datepicker({
         format: dateFormat,
         language: language,
@@ -33,7 +33,7 @@ jQuery(window).on("load", function () {
         calendarWeeks: true,
         autoclose: true
     });
-    
+
     var showMeridian = true;
     if (jQuery('#b2sUserLang').val() == "de") {
         dateFormat = "dd.mm.yyyy";
@@ -49,15 +49,19 @@ jQuery(window).on("load", function () {
         showMeridian: showMeridian,
         snapToStep: true
     });
-    
+
     jQuery('.b2s-re-post-queue-count').html(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length);
-    if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+    if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
         jQuery('.b2s-re-post-queue-delete-area').hide();
     }
     jQuery('.b2s-re-post-settings-option').trigger('change');
     jQuery('#b2s-re-post-profil-dropdown').trigger('change');
-    
+
     jQuery('.b2s-re-post-delete-checked').hide();
+
+    if (jQuery("#b2sUserVersion").val() == 0) {
+        jQuery('#b2s-re-post-settings :input').prop('disabled', 'disabled');
+    }
 
 });
 
@@ -70,8 +74,8 @@ jQuery(document).ready(function () {
     jQuery(".b2s-loading-area").hide();
 });
 
-jQuery(document).on('click', '.b2s-re-post-settings-header', function() {
-    if(jQuery('.b2s-re-post-settings-area').is(':visible')) {
+jQuery(document).on('click', '.b2s-re-post-settings-header', function () {
+    if (jQuery('.b2s-re-post-settings-area').is(':visible')) {
         jQuery('.b2s-re-post-settings-area').hide();
         jQuery('.b2s-re-post-settings-toggle').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
     } else {
@@ -80,16 +84,16 @@ jQuery(document).on('click', '.b2s-re-post-settings-header', function() {
     }
 });
 
-jQuery(document).on('change', '#b2s-re-post-best-times-active', function() {
-    if(jQuery(this).is(':checked')) {
+jQuery(document).on('change', '#b2s-re-post-best-times-active', function () {
+    if (jQuery(this).is(':checked')) {
         jQuery('.b2s-re-post-input-time').prop('disabled', true);
     } else {
         jQuery('.b2s-re-post-input-time').prop('disabled', false);
     }
 });
 
-jQuery(document).on('change', '.b2s-re-post-settings-option', function() {
-    if(jQuery('.b2s-re-post-settings-option:checked').val() == 1) {
+jQuery(document).on('change', '.b2s-re-post-settings-option', function () {
+    if (jQuery('.b2s-re-post-settings-option:checked').val() == 1) {
         jQuery('.b2s-re-post-settings-customize-area input').prop('disabled', false);
         jQuery(".b2s-re-post-type").prop('disabled', false).trigger("chosen:updated");
         jQuery(".b2s-re-post-categories").prop('disabled', false).trigger("chosen:updated");
@@ -102,12 +106,12 @@ jQuery(document).on('change', '.b2s-re-post-settings-option', function() {
     }
 });
 
-jQuery(document).on('click', '.b2s-re-post-submit-btn', function() {
-    if(jQuery('.b2s-re-post-date-active').is(':checked') && (jQuery('.b2s-re-post-date-start').val() == "" || jQuery('.b2s-re-post-date-end').val() == "") && !(jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "")) {
-        if(jQuery('.b2s-re-post-date-start').val() == "") {
+jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
+    if (jQuery('.b2s-re-post-date-active').is(':checked') && (jQuery('.b2s-re-post-date-start').val() == "" || jQuery('.b2s-re-post-date-end').val() == "") && !(jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "")) {
+        if (jQuery('.b2s-re-post-date-start').val() == "") {
             jQuery('.b2s-re-post-date-start').addClass('error');
         }
-        if(jQuery('.b2s-re-post-date-end').val() == "") {
+        if (jQuery('.b2s-re-post-date-end').val() == "") {
             jQuery('.b2s-re-post-date-end').addClass('error');
         }
         return false;
@@ -135,11 +139,11 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function() {
             jQuery('.b2s-repost-options-area').show();
             jQuery('.b2s-repost-queue-area').show();
             jQuery('.b2s-loading-area').hide();
-            if(data.result == true) {
-                if(data.queue != "") {
+            if (data.result == true) {
+                if (data.queue != "") {
                     jQuery('.b2s-repost-queue-area').html(data.queue);
                     jQuery('.b2s-re-post-queue-count').html(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length);
-                    if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+                    if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
                         jQuery('.b2s-re-post-queue-delete-area').hide();
                     }
                 }
@@ -167,21 +171,21 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function() {
     });
 });
 
-jQuery(document).on('click', '.b2s-re-post-select-all', function() {
+jQuery(document).on('click', '.b2s-re-post-select-all', function () {
     jQuery('.b2s-re-post-queue-checkbox').prop('checked', true);
     jQuery('.b2s-re-post-queue-checkbox').trigger('change');
 });
 
-jQuery(document).on('change', '.b2s-re-post-queue-checkbox', function() {
-    if(jQuery('.b2s-re-post-queue-checkbox:checked').length) {
+jQuery(document).on('change', '.b2s-re-post-queue-checkbox', function () {
+    if (jQuery('.b2s-re-post-queue-checkbox:checked').length) {
         jQuery('.b2s-re-post-delete-checked').show();
     } else {
         jQuery('.b2s-re-post-delete-checked').hide();
     }
 });
 
-jQuery(document).on('change', '.b2s-re-post-limit', function() {
-    if(jQuery(this).children("option:selected").data('limit') == 0) {
+jQuery(document).on('change', '.b2s-re-post-limit', function () {
+    if (jQuery(this).children("option:selected").data('limit') == 0) {
         jQuery(this).children('option:selected').prop('selected', false);
         jQuery(this).children('option[data-limit="1"]:last').prop('selected', 'selected');
         jQuery('.b2s-re-post-limit-info').show();
@@ -218,7 +222,7 @@ jQuery(document).on('change', '#b2s-re-post-profil-dropdown', function () {
     }
 });
 
-jQuery(document).on('click', '.b2s-re-post-delete-checked', function() {
+jQuery(document).on('click', '.b2s-re-post-delete-checked', function () {
     var checkboxes = jQuery('.b2s-re-post-queue-checkbox:checked');
     if (checkboxes.length > 0) {
         var items = [];
@@ -236,7 +240,7 @@ jQuery(document).on('click', '.b2s-re-post-delete-checked', function() {
 });
 
 jQuery(document).on('click', '.b2sDetailsSchedPostTriggerLink', function () {
-    jQuery('.b2sDetailsSchedPostBtn[data-post-id="'+jQuery(this).data('post-id')+'"]').trigger('click');
+    jQuery('.b2sDetailsSchedPostBtn[data-post-id="' + jQuery(this).data('post-id') + '"]').trigger('click');
     return false;
 });
 
@@ -293,12 +297,12 @@ jQuery(document).on('click', '.b2s-post-sched-area-drop-btn', function () {
     return false;
 });
 
-jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function() {
+jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function () {
     jQuery('.b2s-delete-sched-modal').modal('hide');
     jQuery('.b2s-repost-options-area').hide();
     jQuery('.b2s-repost-queue-area').hide();
     jQuery('.b2s-loading-area').show();
-    
+
     jQuery('.b2s-post-remove-fail').hide();
     jQuery('.b2s-post-remove-success').hide();
     jQuery('.b2s-sched-delete-confirm-btn').prop('disabeld', true);
@@ -322,11 +326,11 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function() {
             jQuery('.b2s-repost-queue-area').show();
             jQuery('.b2s-loading-area').hide();
             if (data.result == true) {
-                data.postIds.forEach(function(postId) {
-                    jQuery('.b2s-re-post-queue-checkbox[data-blog-post-id="'+postId+'"]').closest('li').remove();
+                data.postIds.forEach(function (postId) {
+                    jQuery('.b2s-re-post-queue-checkbox[data-blog-post-id="' + postId + '"]').closest('li').remove();
                 });
                 jQuery('.b2s-re-post-queue-count').html(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length);
-                if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+                if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
                     jQuery('.b2s-re-post-queue-delete-area').hide();
                 }
                 jQuery('.b2s-re-post-queue-checkbox').trigger('change');
@@ -348,7 +352,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
     jQuery('.b2s-repost-options-area').hide();
     jQuery('.b2s-repost-queue-area').hide();
     jQuery('.b2s-loading-area').show();
-    
+
     jQuery('.b2s-post-remove-fail').hide();
     jQuery('.b2s-post-remove-success').hide();
     jQuery('.b2s-sched-delete-confirm-btn').prop('disabeld', true);
@@ -382,7 +386,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
                 } else {
                     jQuery('.b2s-post-sched-area-li[data-post-id="' + data.postId[0] + '"]').closest('ul').closest('li').remove();
                     jQuery('.b2s-re-post-queue-count').html(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length);
-                    if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+                    if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
                         jQuery('.b2s-re-post-queue-delete-area').hide();
                     }
                 }
@@ -735,32 +739,32 @@ jQuery(document).on('click', '.b2s-re-post-submit-premium', function () {
     jQuery('#b2sInfoRePosterModal').modal('show');
 });
 
-jQuery(document).on('change', '.b2s-re-post-type', function() {
-    if(jQuery(this).val() == null) {
+jQuery(document).on('change', '.b2s-re-post-type', function () {
+    if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-type-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-type-active').prop('checked', true);
     }
 });
 
-jQuery(document).on('change', '.b2s-re-post-categories', function() {
-    if(jQuery(this).val() == null) {
+jQuery(document).on('change', '.b2s-re-post-categories', function () {
+    if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-categories-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-categories-active').prop('checked', true);
     }
 });
 
-jQuery(document).on('change', '.b2s-re-post-author', function() {
-    if(jQuery(this).val() == null) {
+jQuery(document).on('change', '.b2s-re-post-author', function () {
+    if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-author-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-author-active').prop('checked', true);
     }
 });
 
-jQuery(document).on('change', '.b2s-re-post-date-start', function() {
-    if(jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
+jQuery(document).on('change', '.b2s-re-post-date-start', function () {
+    if (jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
         jQuery('.b2s-re-post-date-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-date-active').prop('checked', true);
@@ -768,8 +772,8 @@ jQuery(document).on('change', '.b2s-re-post-date-start', function() {
     jQuery('.b2s-re-post-date-start').removeClass('error');
 });
 
-jQuery(document).on('change', '.b2s-re-post-date-end', function() {
-    if(jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
+jQuery(document).on('change', '.b2s-re-post-date-end', function () {
+    if (jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
         jQuery('.b2s-re-post-date-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-date-active').prop('checked', true);
@@ -793,7 +797,7 @@ jQuery(document).on('click', '.b2s-re-post-show-calender-btn', function () {
 jQuery(document).on('click', '.b2s-re-post-show-list-btn', function () {
     jQuery('.b2s-re-post-queue-area').show();
     jQuery('.b2s-re-post-calender-area').hide();
-    if(jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
+    if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
         jQuery('.b2s-re-post-queue-delete-area').hide();
     } else {
         jQuery('.b2s-re-post-queue-delete-area').show();

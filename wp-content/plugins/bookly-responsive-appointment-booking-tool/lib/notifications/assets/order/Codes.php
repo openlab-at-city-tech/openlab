@@ -11,6 +11,7 @@ use Bookly\Lib\Utils;
 
 /**
  * Class Codes
+ *
  * @package Bookly\Lib\Notifications\Assets\Order
  */
 class Codes extends Base\Codes
@@ -26,6 +27,7 @@ class Codes extends Base\Codes
     public $client_phone;
     public $client_note;
     public $client_timezone;
+    public $client_locale;
     public $client_birthday;
     public $client_full_birthday;
     public $deposit_value;
@@ -90,12 +92,13 @@ class Codes extends Base\Codes
             'client_last_name' => $this->client_last_name,
             'client_phone' => $this->client_phone,
             'client_timezone' => $this->client_timezone,
+            'client_locale' => $this->client_locale,
             'client_note' => $this->client_note,
             'payment_type' => Entities\Payment::typeToString( $this->payment_type ),
             'payment_status' => Entities\Payment::statusToString( $this->payment_status ),
             'total_price' => Utils\Price::format( $this->total_price ),
             'total_tax' => Utils\Price::format( $this->total_tax ),
-            'total_price_no_tax' => Utils\Price::format( $this->total_price - $this->total_tax )
+            'total_price_no_tax' => Utils\Price::format( $this->total_price - $this->total_tax ),
         );
 
         return Proxy\Shared::prepareReplaceCodes( $replace_codes, $this, $format );
@@ -118,7 +121,7 @@ class Codes extends Base\Codes
                 $datetime = DatePoint::fromStrInTz( $datetime, Config::getWPTimeZone() );
 
                 return date_format( date_timestamp_set( date_create( $time_zone ), $datetime->value()->getTimestamp() ), 'Y-m-d H:i:s' );
-            } else if ( $time_zone_offset !== null ) {
+            } elseif ( $time_zone_offset !== null ) {
                 return Utils\DateTime::applyTimeZoneOffset( $datetime, $time_zone_offset );
             }
         }

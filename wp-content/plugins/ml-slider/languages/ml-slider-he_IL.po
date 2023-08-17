@@ -1,1026 +1,2661 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MetaSlider 2.9\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
+"POT-Creation-Date: 2023-07-03T15:28:28+00:00\n"
+"PO-Revision-Date: \n"
 "Last-Translator: Ahrale <contact@atar4u.com>\n"
 "Language-Team: Ahrale | Atar4U.com <contact@atar4u.com>\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-# </div>
-# <a class='delete-slider alignright button-secondary confirm' href='<?php echo wp_nonce_url( "?page=metaslider&amp;delete={$this->slider->id}", "metaslider_delete_slider" ); ?>'><?php _e( "Delete Slider", "metaslider" ) ?></a>
-# wpml-name: c53c7345fe920960dc551addc8e670e3
-msgid "Delete Slider"
-msgstr "מחיקת מצגת"
-
-# <div class='tab tab-2' style='display: none'>
-# <p><?php _e( "Copy & paste this code into a template file to include the slideshow within your theme.", "metaslider" ); ?></p>
-# <textarea readonly='readonly'>&lt;?php &#13;&#10;    echo do_shortcode("[metaslider id=<?php echo $this->slider->id ?>]"); &#13;&#10;?></textarea></div>
-# wpml-name: 140b2eed05b7049d3571a2e04732b2d8
-msgid "Copy & paste this code into a template file to include the slideshow within your theme."
-msgstr "העתק והדבק את הדוד הזה לתבנית כדי לכלול את המצגת שקופיות בערכת הנושא שלך."
-
-# <div class='tab tab-1'>
-# <p><?php _e( "Copy & paste the shortcode directly into any WordPress post or page.", "metaslider" ); ?></p>
-# <input readonly='readonly' type='text' value='[metaslider id=<?php echo $this->slider->id ?>]' /></div>
-# wpml-name: 55984d708646939f32675c38a35132af
-msgid "Copy & paste the shortcode directly into any WordPress post or page."
-msgstr "העתק והדבק את קיצור הקוד ישירות לדף במקום שתרצה להציג את התמונות."
-
-# <li rel='tab-1' class='selected'><?php _e( "Shortcode", "metaslider" ) ?></li>
-# <li rel='tab-2'><?php _e( "Template Include", "metaslider" ) ?></li>
-# </ul>
-# wpml-name: d1f329f2c4f12ad555a7100ca416536e
-msgid "Template Include"
-msgstr "קוד לשילוב בערכת הנושא"
-
-# <ul class='tabs'>
-# <li rel='tab-1' class='selected'><?php _e( "Shortcode", "metaslider" ) ?></li>
-# <li rel='tab-2'><?php _e( "Template Include", "metaslider" ) ?></li>
-# wpml-name: 6feadb455c64759731e453380c52fbd9
-msgid "Shortcode"
-msgstr "קיצור קוד"
-
-# <div class="ms-postbox shortcode ms-toggle" id="metaslider_usage">
-# <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Usage", "metaslider" ) ?></span></h3>
-# <div class="inside">
-# wpml-name: c64518704ce0c0d5501a45763f464276
-msgid "Usage"
-msgstr "שימוש"
-
-# <div class="ms-postbox ms-toggle closed" id="metaslider_advanced_settings">
-# <div class="handlediv" title="Click to toggle"><br></div><h3 class="hndle"><span><?php _e( "Advanced Settings", "metaslider" ) ?></span></h3>
-# <div class="inside">
-# wpml-name: 9ffc3ccc968a96d902af963c6d7b4e97
-msgid "Advanced Settings"
-msgstr "הגדרות מתקדמות"
-
-# <input class='alignright button button-primary' type='submit' name='save' id='ms-save' value='<?php _e( "Save", "metaslider" ) ?>' />
-# <input class='alignright button button-primary' type='submit' name='preview' id='ms-preview' value='<?php _e( "Save & Preview", "metaslider" ) ?>' data-slider_id='<?php echo $this->slider->id ?>' data-slider_width='<?php echo $this->slider->get_setting( 'width' ) ?>' data-slider_height='<?php echo $this->slider->get_setting( 'height' ) ?>' />
-# <span class="spinner"></span>
-# wpml-name: 0bbe5456abd910bac099c5f18f0d9938
-msgid "Save & Preview"
-msgstr "שמור והצג"
-
-# <?php _e( "Settings", "metaslider" ) ?>
-# <input class='alignright button button-primary' type='submit' name='save' id='ms-save' value='<?php _e( "Save", "metaslider" ) ?>' />
-# <input class='alignright button button-primary' type='submit' name='preview' id='ms-preview' value='<?php _e( "Save & Preview", "metaslider" ) ?>' data-slider_id='<?php echo $this->slider->id ?>' data-slider_width='<?php echo $this->slider->get_setting( 'width' ) ?>' data-slider_height='<?php echo $this->slider->get_setting( 'height' ) ?>' />
-# wpml-name: c9cc8cce247e49bae79f15173ce97354
-msgid "Save"
-msgstr "שמור"
-
-# <h3 class='configuration'>
-# <?php _e( "Settings", "metaslider" ) ?>
-# <input class='alignright button button-primary' type='submit' name='save' id='ms-save' value='<?php _e( "Save", "metaslider" ) ?>' />
-# wpml-name: f4f70727dc34561dfde1a3c529b6205c
-msgid "Settings"
-msgstr "הגדרות"
-
-# <a href='#' class='button alignright add-slide' data-editor='content' title='<?php _e( "Add Slide", "metaslider" ) ?>'>
-# <span class='wp-media-buttons-icon'></span> <?php _e( "Add Slide", "metaslider" ) ?>
-# </a>
-# wpml-name: 02023fc24279454047fd419ecd1db9af
-msgid "Add Slide"
-msgstr "הוספת תמונה"
-
-# <th style="width: 100px;">
-# <h3><?php _e( "Slides", "metaslider" ) ?></h3>
-# </th>
-# wpml-name: a8d90ed8f17c347c8d46e0ef22c85ecb
-msgid "Slides"
-msgstr "תמונות"
-
-# $goPro = "<div style='display: none;' id='screen-options-link-wrap'><a target='_blank' class='show-settings' href='{$link}'>MetaSlider v" . METASLIDER_VERSION . " - " .
-# __( 'Upgrade to Pro $39', "metaslider" ) .
-# "</a></div>";
-# wpml-name: 6cc60379c4000862e626d36dced83abc
-msgid "Upgrade to Pro $39"
-msgstr "שדרוג"
-
-# if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'ml-slider-pro/ml-slider-pro.php' ) ) {
-# $links[] = '<a href="http://www.metaslider.com/upgrade" target="_blank">' . __( "Go Pro", "metaslider" ) . '</a>';
-# }
-# wpml-name: 36bd9507c3eeea242f86124f26baee67
-msgid "Go Pro"
-msgstr "שדרג"
-
-# echo "<select id='metaslider-select'>";
-# echo "<option disabled=disabled>" . __( "Choose slideshow", "metaslider" ) . "</option>";
-# foreach ( $sliders as $slider ) {
-# wpml-name: 558d3a78bbec55fd72dff81d76b4811a
-msgid "Choose slideshow"
-msgstr "בחר מצגת"
-
-# if ( count( $sliders ) ) {
-# echo "<h3 style='margin-bottom: 20px;'>" . __( "Insert MetaSlider", "metaslider" ) . "</h3>";
-# echo "<select id='metaslider-select'>";
-# wpml-name: e43f681fefa2d68c5d924b83d1e478a8
-msgid "Insert MetaSlider"
-msgstr "הוסף מצגת"
-
-# '/metaslider/matchalabs.png); background-repeat: no-repeat; background-position: left bottom;"></span> ' .
-# __( "Add slider", "metaslider" ) . '</a>';
-# }
-# wpml-name: 410e1a1809e86e2b710b5f17f556c967
-msgid "Add slider"
-msgstr "הוספת מצגת"
-
-# $context .= '<a href="#TB_inline?&inlineId=choose-meta-slider" class="thickbox button" title="' .
-# __( "Select slideshow to insert into post", "metaslider" ) .
-# '"><span class="wp-media-buttons-icon" style="background: url(' . METASLIDER_ASSETS_URL .
-# wpml-name: 4246fa8fa9f41c7b6e6c34229c9b304d
-msgid "Select slideshow to insert into post"
-msgstr "בחירת המצגת להוספה לפוסט"
-
-# 'checked' => $this->slider->get_setting( 'noConflict' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Delay adding the flexslider class to the slideshow", "metaslider" )
-# ),
-# wpml-name: c663d541dc787b0ca38f12bf35f65ef0
-msgid "Delay adding the flexslider class to the slideshow"
-msgstr "הוספת השהייה במחלקת מצגת גמישה למצגת השקופיות שלך"
-
-# 'type' => 'checkbox',
-# 'label' => __( "No conflict mode", "metaslider" ),
-# 'class' => 'option flex',
-# wpml-name: 748fa6861517203be3b6a54f435ff761
-msgid "No conflict mode"
-msgstr "מצב ללא קונפליקט"
-
-# 'checked' => $this->slider->get_setting( 'printJs' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Uncheck this is you would like to include your own Javascript", "metaslider" )
-# ),
-# wpml-name: 3f321ca26a89d28ff272590416c80926
-msgid "Uncheck this is you would like to include your own Javascript"
-msgstr "בטל את הסימון כאן אם אתה רוצה לכלול JS משלך"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Print JS", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo useWithCaution',
-# wpml-name: 1d5b39da4834b66e470da633f50eaa5d
-msgid "Print JS"
-msgstr "הדפס JS"
-
-# 'checked' => $this->slider->get_setting( 'printCss' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Uncheck this is you would like to include your own CSS", "metaslider" )
-# ),
-# wpml-name: 977aaa315a40af4d21c2096c1b63b110
-msgid "Uncheck this is you would like to include your own CSS"
-msgstr "בטל את הסימון כאן אם אתה רוצה לכלול עיצוב CSS משלך"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Print CSS", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo useWithCaution',
-# wpml-name: 4ea3c11d0e4efa3c1e2038ccfaa19d10
-msgid "Print CSS"
-msgstr "הדפס CSS"
-
-# 'class' => 'option coin flex responsive nivo',
-# 'helptext' => __( "Specify any custom CSS Classes you would like to be added to the slider wrapper", "metaslider" ),
-# 'value' => $this->slider->get_setting( 'cssClass' ) == 'false' ? '' : $this->slider->get_setting( 'cssClass' )
-# wpml-name: fbf85f65d392f868db9b634f67c4c45e
-msgid "Specify any custom CSS Classes you would like to be added to the slider wrapper"
-msgstr "ציין מחלקות CSS שתרצה להוסיף למעטפת של מצגת השקופיות"
-
-# 'type' => 'text',
-# 'label' => __( "CSS classes", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo',
-# wpml-name: bd4f409b3e6cabcbc96272193a3995bc
-msgid "CSS classes"
-msgstr "מחלקות CSS"
-
-# 'class' => 'option coin flex responsive nivo',
-# 'value' => __( "Developer options", "metaslider" )
-# ),
-# wpml-name: 029a96fd0a76f7476b9210a29a3ca079
-msgid "Developer options"
-msgstr "אפשרויות מפתח"
-
-# 'class' => 'option coin',
-# 'helptext' => __( "Set the fade in speed of the caption", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# wpml-name: a70edb315d34b2700d44d2c8cc55c29d
-msgid "Set the fade in speed of the caption"
-msgstr "קבע את מהירות העמעום בכותרת"
-
-# 'value' => $this->slider->get_setting( 'titleSpeed' ),
-# 'label' => __( "Caption speed", "metaslider" ),
-# 'class' => 'option coin',
-# wpml-name: 7fdd1ef0aba3af19cba08fdd6bfd1114
-msgid "Caption speed"
-msgstr "מהירות כותרת"
-
-# 'class' => 'option coin',
-# 'helptext' => __( "Opacity of title and navigation", "metaslider" ),
-# 'after' => ''
-# wpml-name: 02de44d71bda91c36f54f937a519bf42
-msgid "Opacity of title and navigation"
-msgstr "שקיפות הכותרת והניווט"
-
-# 'value' => $this->slider->get_setting( 'opacity' ),
-# 'label' => __( "Opacity", "metaslider" ),
-# 'class' => 'option coin',
-# wpml-name: bad6a5dd8c28e6b14f8e986615e3dc98
-msgid "Opacity"
-msgstr "שקיפות"
-
-# 'class' => 'option coin',
-# 'helptext' => __( "Delay between squares in ms", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# wpml-name: e28b4bba730132dafa4b11b3c0e47872
-msgid "Delay between squares in ms"
-msgstr "השהייה בין ריבועים באלפיות השניה"
-
-# 'value' => $this->slider->get_setting( 'sDelay' ),
-# 'label' => __( "Square delay", "metaslider" ),
-# 'class' => 'option coin',
-# wpml-name: f198c9903528c20d8c6976b2b514b51e
-msgid "Square delay"
-msgstr "השהית ריבוע"
-
-# 'class' => 'option coin flex responsive nivo',
-# 'helptext' => __( "Set the text for the 'next' direction item", "metaslider" ),
-# 'value' => $this->slider->get_setting( 'nextText' ) == 'false' ? '' : $this->slider->get_setting( 'nextText' )
-# wpml-name: 3c6ffdbec7256c09ce2a616838ef40c6
-msgid "Set the text for the 'next' direction item"
-msgstr "קבע את הטקסט לפריט 'הבא'"
-
-# 'type' => 'text',
-# 'label' => __( "Next text", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo',
-# wpml-name: 6144709c1f98946dbd881cab8edce9ee
-msgid "Next text"
-msgstr "טקסט הבא"
-
-# 'class' => 'option coin flex responsive nivo',
-# 'helptext' => __( "Set the text for the 'previous' direction item", "metaslider" ),
-# 'value' => $this->slider->get_setting( 'prevText' ) == 'false' ? '' : $this->slider->get_setting( 'prevText' )
-# wpml-name: 29fb8343a7fb1ad10df76b6725ba4f0d
-msgid "Set the text for the 'previous' direction item"
-msgstr "קבע את הטקסט לפריט 'הקודם'"
-
-# 'type' => 'text',
-# 'label' => __( "Previous text", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo',
-# wpml-name: c8b4f14b2d395a45f667b1ae5bdc4e21
-msgid "Previous text"
-msgstr "טקסט הקודם"
-
-# 'class' => 'option flex',
-# 'helptext' => __( "Animation easing effect", "metaslider" ),
-# 'value' => $this->slider->get_setting( 'easing' ),
-# wpml-name: dc9930762775ec7084f8af27daca31eb
-msgid "Animation easing effect"
-msgstr "אפקט אנימציית החלקה"
-
-# 'type' => 'select',
-# 'label' => __( "Easing", "metaslider" ),
-# 'class' => 'option flex',
-# wpml-name: 32485d52ad7aea25b3bc80d416e76a3b
-msgid "Easing"
-msgstr "החלקה"
-
-# 'horizontal' => array( 'label' => __( "Horizontal", "metaslider" ), 'class' => '' ),
-# 'vertical' => array( 'label' => __( "Vertical", "metaslider" ), 'class' => '' ),
-# )
-# wpml-name: 06ce2a25e5d12c166a36f654dbea6012
-msgid "Vertical"
-msgstr "אנכית"
-
-# 'options' => array(
-# 'horizontal' => array( 'label' => __( "Horizontal", "metaslider" ), 'class' => '' ),
-# 'vertical' => array( 'label' => __( "Vertical", "metaslider" ), 'class' => '' ),
-# wpml-name: c1b5fa03ecdb95d4a45dd1c40b02527f
-msgid "Horizontal"
-msgstr "אופקית"
-
-# 'class' => 'option flex',
-# 'helptext' => __( "Select the sliding direction", "metaslider" ),
-# 'value' => $this->slider->get_setting( 'direction' ),
-# wpml-name: 06bcc3ecf68266fd45cce80a751c77b8
-msgid "Select the sliding direction"
-msgstr "בחירת כיוון ההחלקה"
-
-# 'type' => 'select',
-# 'label' => __( "Slide direction", "metaslider" ),
-# 'class' => 'option flex',
-# wpml-name: 07ab5159e6aca6c5b4d5e3d09e91e107
-msgid "Slide direction"
-msgstr "כיוון ההחלקה"
-
-# 'class' => 'option nivo',
-# 'helptext' => __( "Number of squares", "metaslider" ),
-# 'after' => ''
-# wpml-name: 4478258f7b8bc55919b181aabde6648a
-msgid "Number of squares"
-msgstr "מספר הריבועים"
-
-# 'class' => 'option nivo',
-# 'helptext' => __( "Number of slices", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# wpml-name: 2d7d42eacbd56efbed9bc4228799949e
-msgid "Number of slices"
-msgstr "מספר הפרוסות"
-
-# 'class' => 'option flex responsive nivo',
-# 'helptext' => __( "Set the speed of animations, in milliseconds", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# wpml-name: e5ce48ad3898e7c402c753c9d4c5186f
-msgid "Set the speed of animations, in milliseconds"
-msgstr "קבע את מהירות האנימציה באלפיות השניה"
-
-# 'value' => $this->slider->get_setting( 'animationSpeed' ),
-# 'label' => __( "Animation speed", "metaslider" ),
-# 'class' => 'option flex responsive nivo',
-# wpml-name: 3a6d2d67d8d3e7c3dbcc3b3982f12a0a
-msgid "Animation speed"
-msgstr "מהירות האנימציה"
-
-# 'helptext' => __( "Set the fade in speed of the caption", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# ),
-# wpml-name: ee33e909372d935d190f4fcb2a92d542
-msgid "ms"
-msgstr "אלפיות שניה"
-
-# 'class' => 'option coin flex responsive nivo',
-# 'helptext' => __( "How long to display each slide, in milliseconds", "metaslider" ),
-# 'after' => __( "ms", "metaslider" )
-# wpml-name: 4bee7955bc85ad871b94a0633f634874
-msgid "How long to display each slide, in milliseconds"
-msgstr "כמה זמן להציג כל שקופית, באלפיות השניה"
-
-# 'value' => $this->slider->get_setting( 'delay' ),
-# 'label' => __( "Slide delay", "metaslider" ),
-# 'class' => 'option coin flex responsive nivo',
-# wpml-name: 78c06e1390fd8f614f6bf259b4abf77a
-msgid "Slide delay"
-msgstr "השהיית שיקופית"
-
-# 'checked' => $this->slider->get_setting( 'reverse' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Reverse the animation direction", "metaslider" )
-# ),
-# wpml-name: 8859daf9db36706f313ca11011981f7f
-msgid "Reverse the animation direction"
-msgstr "הפוך את כיוון האנימציה"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Reverse", "metaslider" ),
-# 'class' => 'option flex',
-# wpml-name: 67f115c1fddc4ce1aeb1c754001585bc
-msgid "Reverse"
-msgstr "אחורה"
-
-# 'checked' => $this->slider->get_setting( 'hoverPause' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Pause the slideshow when hovering over slider, then resume when no longer hovering.", "metaslider" )
-# ),
-# wpml-name: 80f3cd02342ad178980ce0f9c4eeaa55
-msgid "Pause the slideshow when hovering over slider, then resume when no longer hovering."
-msgstr "עצור את הצגת השקופיות בעת ריחוף עכבר והמשך לאחר שכבר לא ירחף."
-
-# 'type' => 'checkbox',
-# 'label' => __( "Hover pause", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: 59b0e59a7173c3928ad65be03a81ef33
-msgid "Hover pause"
-msgstr "הפסקה בריחוף עכבר"
-
-# 'checked' => $this->slider->get_setting( 'random' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Randomise the order of the slides", "metaslider" )
-# ),
-# wpml-name: 146957f13dbc9dbd441ec25314d7c760
-msgid "Randomise the order of the slides"
-msgstr "סדר את התמונות באופן אקראי"
-
-# 'value' => $this->slider->get_setting( 'carouselMargin' ),
-# 'helptext' => __( "Pixel margin between slides in carousel.", "metaslider" ),
-# 'after' => __( "px", "metaslider" )
-# wpml-name: 1652a85b7fa2180c578cd5028286cd32
-msgid "Pixel margin between slides in carousel."
-msgstr "המרווח בפיקסלים בין שקופיות בקרוסלה."
-
-# 'type' => 'number',
-# 'label' => __( "Carousel margin", "metaslider" ),
-# 'class' => 'option flex',
-# wpml-name: b1daae2e60ae1a5a03ffe00b69bade39
-msgid "Carousel margin"
-msgstr "שוליים של קרוסלה"
-
-# 'checked' => $this->slider->get_setting( 'carouselMode' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Display multiple slides at once. Slideshow output will be 100% wide.", "metaslider" )
-# ),
-# wpml-name: 89020e9e411e55e8ccae4eb9f5c96188
-msgid "Display multiple slides at once. Slideshow output will be 100% wide."
-msgstr "הצג מספר שקופיות בו זמנית. פלט מצגת השקופיות יהיה ברוחב של 100%."
-
-# 'type' => 'checkbox',
-# 'label' => __( "Carousel mode", "metaslider" ),
-# 'class' => 'option flex showNextWhenChecked',
-# wpml-name: 050102dc86fe717db5e56e376292c6e5
-msgid "Carousel mode"
-msgstr "מצב קרוסלה"
-
-# 'checked' => $this->slider->get_setting( 'smartCrop' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size", "metaslider" )
-# ),
-# wpml-name: b8485addf0f15be594196bad34dfb15c
-msgid "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size"
-msgstr "חיתוך חכם מבטיח חיתוך של השקופיות למידות שקבעת למצגת."
-
-# 'type' => 'checkbox',
-# 'label' => __( "Smart crop", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: a508f59ff58f265ff6b17e5ce0950068
-msgid "Smart crop"
-msgstr "חיתוך חכם"
-
-# 'checked' => $this->slider->get_setting( 'autoPlay' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Transition between slides automatically", "metaslider" )
-# ),
-# wpml-name: 716e73d0a6305b8fd7726766bd21ee83
-msgid "Transition between slides automatically"
-msgstr "מעבר אוטומטי בין שקופיות"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Auto play", "metaslider" ),
-# 'class' => 'option flex nivo responsive',
-# wpml-name: 1e6a508c037fc42ef6155eeadbb80331
-msgid "Auto play"
-msgstr "הפעל אוטומטית"
-
-# 'checked' => $this->slider->get_setting( 'center' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Center align the slideshow", "metaslider" )
-# ),
-# wpml-name: d96d8a196a551a83f47208ffcee1bca0
-msgid "Center align the slideshow"
-msgstr "מרכז את המצגת"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Center align", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: f52ac7a7f56a4a4ed5d4634f23544926
-msgid "Center align"
-msgstr "מרכוז"
-
-# 'checked' => $this->slider->get_setting( 'fullWidth' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Stretch the slideshow output to fill it's parent container", "metaslider" )
-# ),
-# wpml-name: c104abb04b8fe333aa6d8be8304181c6
-msgid "Stretch the slideshow output to fill it's parent container"
-msgstr "מתח את פלט מצגת השקופיות למילוי מיכל האב."
-
-# 'class' => 'option flex nivo responsive',
-# 'after' => __( "100% wide output", "metaslider" ),
-# 'checked' => $this->slider->get_setting( 'fullWidth' ) == 'true' ? 'checked' : '',
-# wpml-name: 218cf9e245e08df400135649674b63db
-msgid "100% wide output"
-msgstr "פלט ברוחב של 100%"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Stretch", "metaslider" ),
-# 'class' => 'option flex nivo responsive',
-# wpml-name: fbb09a82eafab60150d0996e8fe46560
-msgid "Stretch"
-msgstr "מתיחה"
-
-# 'label' => __( "Title", "metaslider" ),
-# 'helptext' => __( "Slideshow title", "metaslider" )
-# );
-# wpml-name: 5a7d2ea6fe72a9d529afb5de5740147b
-msgid "Slideshow title"
-msgstr "כותרת המצגת"
-
-# 'value' => get_the_title($this->slider->id),
-# 'label' => __( "Title", "metaslider" ),
-# 'helptext' => __( "Slideshow title", "metaslider" )
-# wpml-name: b78a3223503896721cca1303f776159b
-msgid "Title"
-msgstr "כותרת"
-
-# 'true'       => array( 'label' => __( "Dots", "metaslider" ) ),
-# 'thumbnails' => array( 'label' => __( "Thumbnails (Pro)", "metaslider" ) )
-# )
-# wpml-name: 4125af34124e0d58bc252bc1aaf7e4fb
-msgid "Thumbnails (Pro)"
-msgstr "תמונות ממוזערות (רק בגרסה מקצועית)"
-
-# 'false'      => array( 'label' => __( "Hidden", "metaslider" ) ),
-# 'true'       => array( 'label' => __( "Dots", "metaslider" ) ),
-# 'thumbnails' => array( 'label' => __( "Thumbnails (Pro)", "metaslider" ) )
-# wpml-name: 4c72d232d1a1406e6c26251bbf6c3b25
-msgid "Dots"
-msgstr "כדורים"
-
-# 'options' => array(
-# 'false'      => array( 'label' => __( "Hidden", "metaslider" ) ),
-# 'true'       => array( 'label' => __( "Dots", "metaslider" ) ),
-# wpml-name: 7acdf85c69cc3c5305456a293524386e
-msgid "Hidden"
-msgstr "מוסתר"
-
-# 'value' => $this->slider->get_setting( 'navigation' ),
-# 'helptext' => __( "Show the slide navigation bullets", "metaslider" ),
-# 'options' => array(
-# wpml-name: 37128820750ba64a732e248d4b999208
-msgid "Show the slide navigation bullets"
-msgstr "הצג עת הכדורים לניווט המצגת"
-
-# 'type' => 'navigation',
-# 'label' => __( "Navigation", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: 846495f9ceed11accf8879f555936a7d
-msgid "Navigation"
-msgstr "ניווט"
-
-# 'checked' => $this->slider->get_setting( 'links' ) == 'true' ? 'checked' : '',
-# 'helptext' => __( "Show the previous/next arrows", "metaslider" )
-# ),
-# wpml-name: 200b0a06e60a860f325a747533881c32
-msgid "Show the previous/next arrows"
-msgstr "הצג חצים"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Arrows", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: 4e05974b02cc4aa95db4d85baef6b6b4
-msgid "Arrows"
-msgstr "חצים"
-
-# 'light'   => array( 'class' => 'option nivo', 'label' => __( "Light (Nivo)", "metaslider" ) ),
-# 'bar'     => array( 'class' => 'option nivo', 'label' => __( "Bar (Nivo)", "metaslider" ) ),
-# ),
-# wpml-name: 9411661153e32d1799e98f07b814d256
-msgid "Bar (Nivo)"
-msgstr "סרגל (Nivo)"
-
-# 'dark'    => array( 'class' => 'option nivo', 'label' => __( "Dark (Nivo)", "metaslider" ) ),
-# 'light'   => array( 'class' => 'option nivo', 'label' => __( "Light (Nivo)", "metaslider" ) ),
-# 'bar'     => array( 'class' => 'option nivo', 'label' => __( "Bar (Nivo)", "metaslider" ) ),
-# wpml-name: b4226c4f7d0cd033b96f2e83c591c68d
-msgid "Light (Nivo)"
-msgstr "בהיר"
-
-# 'default' => array( 'class' => 'option nivo flex coin responsive' , 'label' => __( "Default", "metaslider" ) ),
-# 'dark'    => array( 'class' => 'option nivo', 'label' => __( "Dark (Nivo)", "metaslider" ) ),
-# 'light'   => array( 'class' => 'option nivo', 'label' => __( "Light (Nivo)", "metaslider" ) ),
-# wpml-name: 264e5ed95ae3dce765bdb602e6c4e3e8
-msgid "Dark (Nivo)"
-msgstr "כהה"
-
-# 'options' => array(
-# 'default' => array( 'class' => 'option nivo flex coin responsive' , 'label' => __( "Default", "metaslider" ) ),
-# 'dark'    => array( 'class' => 'option nivo', 'label' => __( "Dark (Nivo)", "metaslider" ) ),
-# wpml-name: 7a1920d61156abc05a60135aefe8bc67
-msgid "Default"
-msgstr "ברירת מחדל"
-
-# 'class' => 'effect coin flex responsive nivo',
-# 'helptext' => __( "Slideshow theme", "metaslider" ),
-# 'options' => array(
-# wpml-name: f372112b53816df807508937164116c8
-msgid "Slideshow theme"
-msgstr "תבנית המצגת"
-
-# 'value' => $this->slider->get_setting( 'theme' ),
-# 'label' => __( "Theme", "metaslider" ),
-# 'class' => 'effect coin flex responsive nivo',
-# wpml-name: d721757161f7f70c5b0949fdb6ec2c30
-msgid "Theme"
-msgstr "תבנית"
-
-# 'boxRainGrowReverse' => array( 'class' => 'option nivo', 'label' => __( "Box Rain Grow Reverse", "metaslider" ) ),
-# 'slide'              => array( 'class' => 'option flex', 'label' => __( "Slide", "metaslider" ) )
-# ),
-# wpml-name: 6160a53ece50ce6d4f5ef4452549835e
-msgid "Slide"
-msgstr "תמונה"
-
-# 'boxRainReverse'     => array( 'class' => 'option nivo', 'label' => __( "Box Rain Reverse", "metaslider" ) ),
-# 'boxRainGrowReverse' => array( 'class' => 'option nivo', 'label' => __( "Box Rain Grow Reverse", "metaslider" ) ),
-# 'slide'              => array( 'class' => 'option flex', 'label' => __( "Slide", "metaslider" ) )
-# wpml-name: 80a9efd417d9cf0ae140af4cd3708660
-msgid "Box Rain Grow Reverse"
-msgstr "תיבת גשם צמיחה לאחור"
-
-# 'boxRain'            => array( 'class' => 'option nivo', 'label' => __( "Box Rain", "metaslider" ) ),
-# 'boxRainReverse'     => array( 'class' => 'option nivo', 'label' => __( "Box Rain Reverse", "metaslider" ) ),
-# 'boxRainGrowReverse' => array( 'class' => 'option nivo', 'label' => __( "Box Rain Grow Reverse", "metaslider" ) ),
-# wpml-name: 10b1cf70318e29468802755ccb747aa7
-msgid "Box Rain Reverse"
-msgstr "תיבת גשם לאחור"
-
-# 'boxRandom'          => array( 'class' => 'option nivo', 'label' => __( "Box Random", "metaslider" ) ),
-# 'boxRain'            => array( 'class' => 'option nivo', 'label' => __( "Box Rain", "metaslider" ) ),
-# 'boxRainReverse'     => array( 'class' => 'option nivo', 'label' => __( "Box Rain Reverse", "metaslider" ) ),
-# wpml-name: ae34fa10dc0132fc731b703c7d003c4c
-msgid "Box Rain"
-msgstr "תיבת גשם"
-
-# 'slideInLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide In Left", "metaslider" ) ),
-# 'boxRandom'          => array( 'class' => 'option nivo', 'label' => __( "Box Random", "metaslider" ) ),
-# 'boxRain'            => array( 'class' => 'option nivo', 'label' => __( "Box Rain", "metaslider" ) ),
-# wpml-name: 09262a472397c42cf8aa5c7c962056fc
-msgid "Box Random"
-msgstr "תיבה אקראית"
-
-# 'slideInRight'       => array( 'class' => 'option nivo', 'label' => __( "Slide In Right", "metaslider" ) ),
-# 'slideInLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide In Left", "metaslider" ) ),
-# 'boxRandom'          => array( 'class' => 'option nivo', 'label' => __( "Box Random", "metaslider" ) ),
-# wpml-name: 3c9186e424653ebc1a57f7dc6582962d
-msgid "Slide In Left"
-msgstr "החלקה פנימה שמאלה"
-
-# 'fade'               => array( 'class' => 'option nivo flex responsive', 'label' => __( "Fade", "metaslider" ) ),
-# 'slideInRight'       => array( 'class' => 'option nivo', 'label' => __( "Slide In Right", "metaslider" ) ),
-# 'slideInLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide In Left", "metaslider" ) ),
-# wpml-name: a06d5e134358fb45a6031d1171300e19
-msgid "Slide In Right"
-msgstr "החלקה פנימה ימינה"
-
-# 'fold'               => array( 'class' => 'option nivo', 'label' => __( "Fold", "metaslider" ) ),
-# 'fade'               => array( 'class' => 'option nivo flex responsive', 'label' => __( "Fade", "metaslider" ) ),
-# 'slideInRight'       => array( 'class' => 'option nivo', 'label' => __( "Slide In Right", "metaslider" ) ),
-# wpml-name: 04e0385c10aefee8e4681617d2f3ef40
-msgid "Fade"
-msgstr "עמעום"
-
-# 'slideUpDownLeft'    => array( 'class' => 'option nivo', 'label' => __( "Slide Up Down Left", "metaslider" ) ),
-# 'fold'               => array( 'class' => 'option nivo', 'label' => __( "Fold", "metaslider" ) ),
-# 'fade'               => array( 'class' => 'option nivo flex responsive', 'label' => __( "Fade", "metaslider" ) ),
-# wpml-name: 7b0da812abcd107490aeb0aa803c9cfe
-msgid "Fold"
-msgstr "קפל"
-
-# 'sliceUpDown'        => array( 'class' => 'option nivo', 'label' => __( "Slice Up Down", "metaslider" ) ),
-# 'slideUpDownLeft'    => array( 'class' => 'option nivo', 'label' => __( "Slide Up Down Left", "metaslider" ) ),
-# 'fold'               => array( 'class' => 'option nivo', 'label' => __( "Fold", "metaslider" ) ),
-# wpml-name: f769b6ca97e9fe315412acb94aee7d5a
-msgid "Slide Up Down Left"
-msgstr "החלקה למעלה למטה שמאלה"
-
-# 'sliceUpLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide Up Left", "metaslider" ) ),
-# 'sliceUpDown'        => array( 'class' => 'option nivo', 'label' => __( "Slice Up Down", "metaslider" ) ),
-# 'slideUpDownLeft'    => array( 'class' => 'option nivo', 'label' => __( "Slide Up Down Left", "metaslider" ) ),
-# wpml-name: f12bacdf299fca11fcf5713a98a7031c
-msgid "Slice Up Down"
-msgstr "פריסה למעלה ולמטה"
-
-# 'sliceUp'            => array( 'class' => 'option nivo', 'label' => __( "Slice Up", "metaslider" ) ),
-# 'sliceUpLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide Up Left", "metaslider" ) ),
-# 'sliceUpDown'        => array( 'class' => 'option nivo', 'label' => __( "Slice Up Down", "metaslider" ) ),
-# wpml-name: b919feb6829b75d095743c0692f44cc8
-msgid "Slide Up Left"
-msgstr "החלקה שמאלה למעלה"
-
-# 'sliceDown'          => array( 'class' => 'option nivo', 'label' => __( "Slide Down", "metaslider" ) ),
-# 'sliceUp'            => array( 'class' => 'option nivo', 'label' => __( "Slice Up", "metaslider" ) ),
-# 'sliceUpLeft'        => array( 'class' => 'option nivo', 'label' => __( "Slide Up Left", "metaslider" ) ),
-# wpml-name: 37d88796d41fe18dbe85bae98137b395
-msgid "Slice Up"
-msgstr "פריסה מעלה"
-
-# 'straight'           => array( 'class' => 'option coin', 'label' => __( "Straight", "metaslider" ) ),
-# 'sliceDown'          => array( 'class' => 'option nivo', 'label' => __( "Slide Down", "metaslider" ) ),
-# 'sliceUp'            => array( 'class' => 'option nivo', 'label' => __( "Slice Up", "metaslider" ) ),
-# wpml-name: 9a23661bdda8b0a30832f181e11bd2a0
-msgid "Slide Down"
-msgstr "החלקה מטה"
-
-# 'rain'               => array( 'class' => 'option coin', 'label' => __( "Rain", "metaslider" ) ),
-# 'straight'           => array( 'class' => 'option coin', 'label' => __( "Straight", "metaslider" ) ),
-# 'sliceDown'          => array( 'class' => 'option nivo', 'label' => __( "Slide Down", "metaslider" ) ),
-# wpml-name: b6bd418b8879851e86bcaccd553b74db
-msgid "Straight"
-msgstr "ישר"
-
-# 'swirl'              => array( 'class' => 'option coin', 'label' => __( "Swirl", "metaslider" ) ),
-# 'rain'               => array( 'class' => 'option coin', 'label' => __( "Rain", "metaslider" ) ),
-# 'straight'           => array( 'class' => 'option coin', 'label' => __( "Straight", "metaslider" ) ),
-# wpml-name: de4eda51f409f7799a728d8725b340cd
-msgid "Rain"
-msgstr "גשם"
-
-# 'random'             => array( 'class' => 'option coin nivo' , 'label' => __( "Random", "metaslider" ) ),
-# 'swirl'              => array( 'class' => 'option coin', 'label' => __( "Swirl", "metaslider" ) ),
-# 'rain'               => array( 'class' => 'option coin', 'label' => __( "Rain", "metaslider" ) ),
-# wpml-name: 025672a49cc02247965f918c2af894f1
-msgid "Swirl"
-msgstr "סחרור"
-
-# 'type' => 'checkbox',
-# 'label' => __( "Random", "metaslider" ),
-# 'class' => 'option coin flex nivo responsive',
-# wpml-name: 64663f4646781c9c0110838b905daa23
-msgid "Random"
-msgstr "אקראי"
-
-# 'class' => 'effect coin flex responsive nivo',
-# 'helptext' => __( "Slide transition effect", "metaslider" ),
-# 'options' => array(
-# wpml-name: e2f2c260a289384e9bbfa3d3ad2f7b9f
-msgid "Slide transition effect"
-msgstr "אפקט מעבר שקופית"
-
-# 'value' => $this->slider->get_setting( 'effect' ),
-# 'label' => __( "Effect", "metaslider" ),
-# 'class' => 'effect coin flex responsive nivo',
-# wpml-name: a62d22910732d5343689f5117999abfa
-msgid "Effect"
-msgstr "אפקט"
-
-# 'class' => 'coin flex responsive nivo',
-# 'helptext' => __( "Slideshow height", "metaslider" ),
-# 'after' => __( "px", "metaslider" )
-# wpml-name: 4c2e306800ddabf3c1c1ea3f317b8bf8
-msgid "Slideshow height"
-msgstr "גובה מצגת השקופיות"
-
-# 'value' => $this->slider->get_setting( 'sph' ),
-# 'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Height", "metaslider" ) . ")",
-# 'class' => 'option nivo',
-# wpml-name: eec6c4bdbd339edf8cbea68becb85244
-msgid "Height"
-msgstr "גובה"
-
-# 'helptext' => __( "Pixel margin between slides in carousel.", "metaslider" ),
-# 'after' => __( "px", "metaslider" )
-# ),
-# wpml-name: 21de26caa6bcfc936378c4e45d235bd9
-msgid "px"
-msgstr "פיקסלים"
-
-# 'class' => 'coin flex responsive nivo',
-# 'helptext' => __( "Slideshow width", "metaslider" ),
-# 'after' => __( "px", "metaslider" )
-# wpml-name: 2d615fa5349bbe52e29686d1eb707bc6
-msgid "Slideshow width"
-msgstr "רוחב מצגת השקופיות"
-
-# 'value' => $this->slider->get_setting( 'spw' ),
-# 'label' => __( "Number of squares", "metaslider" ) . " (" . __( "Width", "metaslider" ) . ")",
-# 'class' => 'option nivo',
-# wpml-name: 32954654ac8fe66a1d09be19001de2d4
-msgid "Width"
-msgstr "רוחב"
-
-# 'nivo'       => array( 'label' => __( "Nivo Slider", "metaslider" ) ),
-# 'coin'       => array( 'label' => __( "Coin Slider", "metaslider" ) )
-# )
-# wpml-name: a7566652ef1d44b740932f35c79c9664
-msgid "Coin Slider"
-msgstr "nmd, nycgu,"
-
-# 'responsive' => array( 'label' => __( "R. Slides", "metaslider" ) ),
-# 'nivo'       => array( 'label' => __( "Nivo Slider", "metaslider" ) ),
-# 'coin'       => array( 'label' => __( "Coin Slider", "metaslider" ) )
-# wpml-name: a8efa160d8ba01aa8a8294dad5cff7a4
-msgid "Nivo Slider"
-msgstr "מצגת Nivo"
-
-# 'flex'       => array( 'label' => __( "Flex Slider", "metaslider" ) ),
-# 'responsive' => array( 'label' => __( "R. Slides", "metaslider" ) ),
-# 'nivo'       => array( 'label' => __( "Nivo Slider", "metaslider" ) ),
-# wpml-name: a168bab0dea5945b3d4491a80eefefd4
-msgid "R. Slides"
-msgstr "R. Slides"
-
-# 'options' => array(
-# 'flex'       => array( 'label' => __( "Flex Slider", "metaslider" ) ),
-# 'responsive' => array( 'label' => __( "R. Slides", "metaslider" ) ),
-# wpml-name: 0737e13d595af2bd895b465e5f17ab48
-msgid "Flex Slider"
-msgstr "מצגת Flex"
-
-# echo "<a href='{$add_url}' id='create_new_tab' class='nav-tab'>+</a>";
-# echo "<div class='bubble'>" . __( "Create your first slideshow", "metaslider" ) . "</div>";
-# echo "</h3>";
-# wpml-name: 991e6e4d81bf391f305cbb5b3b67da13
-msgid "Create your first slideshow"
-msgstr " צור את מצגת השקופיות הראשונה שלך"
-
-# echo "</select> " . __( 'or', "metaslider" ) . " ";
-# echo "<a href='{$add_url}'>" . __( 'Add New Slideshow', "metaslider" ) . "</a></div>";
-# 
-# wpml-name: 4c4bbefeb12cbf597c473639f9810c5f
-msgid "Add New Slideshow"
-msgstr "הוספת מצגת שקופיות חדשה"
-
-# 
-# echo "</select> " . __( 'or', "metaslider" ) . " ";
-# echo "<a href='{$add_url}'>" . __( 'Add New Slideshow', "metaslider" ) . "</a></div>";
-# wpml-name: e81c4e4f2b7b93b481e13a8553c2ae1b
-msgid "or"
-msgstr "או"
-
-# 
-# echo "<div class='dropdown_container'><label for='select-slider'>" . __("Select Slider", "metaslider") . ": </label>";
-# echo "<select name='select-slider' onchange='if (this.value) window.location.href=this.value'>";
-# wpml-name: ef3e2b375056fe65fd84619df0e86dfd
-msgid "Select Slider"
-msgstr "בחר מצגת"
-
-# 
-# echo "<div style='display: none;' id='screen-options-switch-view-wrap'><a class='switchview dashicons-before dashicons-welcome-view-site' href='?page=metaslider&amp;view=tabs'>" . __("Switch to Tab view", "metaslider") . "</a></div>";
-# wpml-name: f60c2c7c26938cc417e7fbaa198ae882
-msgid "Switch to Tab view"
-msgstr "שנת לתצוגת לשוניות"
-
-# 
-# echo "<div id='message' class='updated'><p>" . __( "New slideshow created. Click 'Add Slide' to get started!", "metaslider" ) . "</p></div>";
-# wpml-name: 40b4de5ac21153f6537fe09908ef2f94
-msgid "New slideshow created. Click 'Add Slide' to get started!"
-msgstr "נוצרה מצגת שקופיות חדשה. לחץ על 'הוספת שקופית' כדי להתחיל!"
-
-# 
-# echo "<div style='display: none;' id='screen-options-switch-view-wrap'><a class='switchview dashicons-before dashicons-welcome-view-site' href='?page=metaslider&amp;view=dropdown'>" . __("Switch to Dropdown view", "metaslider") . "</a></div>";
-# wpml-name: 0dd1966df8e5c573e715c37a47ef11ba
-msgid "Switch to Dropdown view"
-msgstr "שנה לתצוגת רשימה נפתחת"
-
-# $id = wp_insert_post( array(
-# 'post_title' => __( "New Slider", "metaslider" ),
-# 'post_status' => 'publish',
-# wpml-name: eaf1c6c1ed63c0a9dafb31ab5433ad97
-msgid "New Slider"
-msgstr "מצגת חדשה"
-
-# 'youtube' => __( "YouTube", "metaslider" ),
-# 'layer' => __( "Layer Slide", "metaslider" )
-# );
-# wpml-name: 2e0103b662b6e82de486817ac1aa10c8
-msgid "Layer Slide"
-msgstr "שקופית שכבה"
-
-# 'vimeo' => __( "Vimeo", "metaslider" ),
-# 'youtube' => __( "YouTube", "metaslider" ),
-# 'layer' => __( "Layer Slide", "metaslider" )
-# wpml-name: 8dd1bae8da2e2408210d0656fbe6b7d1
-msgid "YouTube"
-msgstr "YouTube"
-
-# 'post_feed' => __( "Post Feed", "metaslider" ),
-# 'vimeo' => __( "Vimeo", "metaslider" ),
-# 'youtube' => __( "YouTube", "metaslider" ),
-# wpml-name: 15db599e0119be476d71bfc1fda72217
-msgid "Vimeo"
-msgstr "Vimeo"
-
-# $newtabs = array(
-# 'post_feed' => __( "Post Feed", "metaslider" ),
-# 'vimeo' => __( "Vimeo", "metaslider" ),
-# wpml-name: 1d271ac5b30f69d02a4ab9f3d433abda
-msgid "Post Feed"
-msgstr "הזנת פוסט"
-
-# $strings['insertMediaTitle'] = __( "Image", "metaslider" );
-# $strings['insertIntoPost'] = __( "Add to slider", "metaslider" );
-# // remove options
-# wpml-name: cda475a986b08e304ad4b1d9dc1ae756
-msgid "Add to slider"
-msgstr "הוסף למצגת"
-
-# if ( ( isset( $_GET['page'] ) && $_GET['page'] == 'metaslider' ) ) {
-# $strings['insertMediaTitle'] = __( "Image", "metaslider" );
-# $strings['insertIntoPost'] = __( "Add to slider", "metaslider" );
-# wpml-name: be53a0541a6d36f6ecb879fa2c584b08
-msgid "Image"
-msgstr "תמונה"
-
-# 'iframeurl' => admin_url( 'admin-post.php?action=metaslider_preview' ),
-# 'useWithCaution' => __( "Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "metaslider" )
-# )
-# wpml-name: ecb44e07ac8b356db551128cad0c8f29
-msgid "Caution: This setting is for advanced developers only. If you're unsure, leave it checked."
-msgstr "זהירות: הגדרה זו היא למפתחים מתקדמים בלבד. אם אינך בטוח, השאר אותה מסומנת."
-
-# 'new_window' => __( "New Window", "metaslider" ),
-# 'confirm' => __( "Are you sure?", "metaslider" ),
-# 'ajaxurl' => admin_url( 'admin-ajax.php' ),
-# wpml-name: 729a51874fe901b092899e9e8b31c97a
-msgid "Are you sure?"
-msgstr "בטוח?"
-
-# 'id'    => 'documentation',
-# 'title' => __( 'Documentation', 'metaslider' ),
-# 'content'   => "<p><a href='http://www.metaslider.com/documentation/' target='blank'>MetaSlider Documentation</a></p>",
-# wpml-name: 5b6cf869265c13af8566f192b4ab3d2a
-msgid "Documentation"
-msgstr "תיעוד"
-
-# $row .= "                <div class='row'><input type='text' size='50' name='attachment[{$this->slide->ID}][title]' value='{$title}' /></div>";
-# $row .= "                <div class='row'><label>" . __( "Image Alt Text", "metaslider" ) . "</label></div>";
-# $row .= "                <div class='row'><input type='text' size='50' name='attachment[{$this->slide->ID}][alt]' value='{$alt}' /></div>";
-# wpml-name: d872fd3a7168255a6dfd4d33814ff5a6
-msgid "Image Alt Text"
-msgstr "טקסט חלופי לתמונה"
-
-# $row .= "            <div class='tab tab-2' style='display: none;'>";
-# $row .= "                <div class='row'><label>" . __( "Image Title Text", "metaslider" ) . "</label></div>";
-# $row .= "                <div class='row'><input type='text' size='50' name='attachment[{$this->slide->ID}][title]' value='{$title}' /></div>";
-# wpml-name: 8ed03053af921e8de058f8c3bac02067
-msgid "Image Title Text"
-msgstr "טקסט כותרת התמונה"
-
-# if ( !$this->is_valid_image() ) {
-# $row .= "<div class='warning'>" . __( "Warning: Image data does not exist. Please re-upload the image.", "metaslider" ) . "</div>";
-# }
-# wpml-name: a4c5b8203e27b86c6f800fb1938f70d8
-msgid "Warning: Image data does not exist. Please re-upload the image."
-msgstr "אזהרה: אין נתוני תמונה. נא להעלות שוב את התמונה."
-
-# $row .= "            <li class='selected' rel='tab-1'>" . __( "General", "metaslider" ) . "</li>";
-# $row .= "            <li rel='tab-2'>" . __( "SEO", "metaslider" ) . "</li>";
-# $row .= "        </ul>";
-# wpml-name: d88946b678e4c2f251d4e292e8142291
-msgid "SEO"
-msgstr "SEO"
-
-# $row .= "        <ul class='tabs'>";
-# $row .= "            <li class='selected' rel='tab-1'>" . __( "General", "metaslider" ) . "</li>";
-# $row .= "            <li rel='tab-2'>" . __( "SEO", "metaslider" ) . "</li>";
-# wpml-name: 0db377921f4ce762c62526131097968f
-msgid "General"
-msgstr "כללי"
-
-# $str_url        = __( "URL", "metaslider" );
-# $str_label      = __( "Image Slide", "metaslider" );
-# 
-# wpml-name: 54bd58d5a1cc195c49f387b6f97607bb
-msgid "Image Slide"
-msgstr "שיקופית תמונה"
-
-# wp_localize_script( 'metaslider-admin-script', 'metaslider', array(
-# 'url' => __( "URL", "metaslider" ),
-# 'caption' => __( "Caption", "metaslider" ),
-# wpml-name: e6b391a8d2c4d45902a23a8b6585703d
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: admin/views/pages/upgrade.php:10 admin/views/pages/upgrade.php:11
+msgid "MetaSlider"
+msgstr "מצגת שקופיות"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.metaslider.com"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Easy to use slideshow plugin. Create SEO optimised responsive slideshows "
+"with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides."
+msgstr ""
+
+#: admin/lib/callout.php:17
+msgid ""
+"Hey there! We just started working on a brand new gallery extension. <a "
+"href=\"%s\">Check it out</a> and let us know what you think!"
+msgstr ""
+
+#: admin/Notices.php:102
+msgctxt "Keep the plugin name \"MetaSlider\" when possible"
+msgid ""
+"Like MetaSlider? Please help us by giving a positive review at WordPress.org"
+msgstr ""
+
+#: admin/Notices.php:112
+msgid ""
+"Spice up your site with animated layers and video slides with MetaSlider Pro"
+msgstr ""
+
+#: admin/Notices.php:123
+msgid ""
+"Increase your revenue and conversion with video slides and many more "
+"MetaSlider Pro features"
+msgstr ""
+
+#: admin/Notices.php:134
+msgid ""
+"Can you translate? Want to improve MetaSlider for speakers of your language?"
+msgstr ""
+
+#: admin/Notices.php:180
+msgctxt ""
+"Keep the phrase \"MetaSlider Add-on Pack\" when possible. Also, \"Black "
+"Friday\" is the name of an event in the United States"
+msgid ""
+"Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until "
+"November 30th!"
+msgstr ""
+
+#: admin/Notices.php:189
+msgctxt "Keep the phrase \"MetaSlider Add-on Pack\" when possible"
+msgid ""
+"Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until "
+"December 25th!"
+msgstr ""
+
+#: admin/Notices.php:198
+msgctxt "Keep the phrase \"MetaSlider Add-on Pack\" when possible"
+msgid ""
+"Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until "
+"January 14th!"
+msgstr ""
+
+#: admin/Notices.php:207
+msgctxt "Keep the phrase \"MetaSlider Add-on Pack\" when possible"
+msgid ""
+"Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until "
+"April 30th!"
+msgstr ""
+
+#: admin/Notices.php:216
+msgctxt "Keep the phrase \"MetaSlider Add-on Pack\" when possible"
+msgid ""
+"Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until "
+"July 31st!"
+msgstr ""
+
+#: admin/Notices.php:436
+msgid "weeks"
+msgstr ""
+
+#: admin/Notices.php:455
+msgid "Let's Start &rarr;"
+msgstr ""
+
+#: admin/Notices.php:456
+msgctxt "Keep the plugin name \"MetaSlider\" when possible"
+msgid "Review MetaSlider &rarr;"
+msgstr ""
+
+#: admin/Notices.php:457
+msgid "Find out more &rarr;"
+msgstr ""
+
+#: admin/Notices.php:458
+msgid "Get MetaSlider Pro &rarr;"
+msgstr ""
+
+#: admin/Notices.php:459
+msgid "Sign up &rarr;"
+msgstr ""
+
+#: admin/Notices.php:460
+msgid "Go there &rarr;"
+msgstr ""
+
+#: admin/Notices.php:462
+msgid "Read more"
+msgstr ""
+
+#: admin/Notices.php:476 admin/support/Analytics.php:66
+#: inc/slide/metaslide.class.php:134 inc/slide/metaslide.image.class.php:123
+#: inc/slide/metaslide.image.class.php:227 ml-slider.php:727 ml-slider.php:809
+#: ml-slider.php:921 ml-slider.php:2894 ml-slider.php:2935
+msgid "The security check failed. Please refresh the page and try again."
+msgstr ""
+
+#: admin/Notices.php:484 inc/slide/metaslide.class.php:142
+#: inc/slide/metaslide.image.class.php:131
+#: inc/slide/metaslide.image.class.php:150
+#: inc/slide/metaslide.image.class.php:235 ml-slider.php:735 ml-slider.php:817
+#: ml-slider.php:929 ml-slider.php:2902 ml-slider.php:2943
+msgid "Access denied"
+msgstr ""
+
+#: admin/Notices.php:492 inc/slide/metaslide.class.php:151
+#: inc/slide/metaslide.image.class.php:140
+#: inc/slide/metaslide.image.class.php:244 ml-slider.php:744 ml-slider.php:826
+#: ml-slider.php:938 ml-slider.php:2911 ml-slider.php:2952
+msgid "Bad request"
+msgstr ""
+
+#: admin/Notices.php:500
+msgid "This item does not exist. Please refresh the page and try again."
+msgstr ""
+
+#: admin/Notices.php:513
+msgid "The option was successfully updated"
+msgstr ""
+
+#: admin/Notices.php:587
+msgid "The requested data does not exist."
+msgstr ""
+
+#: admin/Notices.php:612
+msgid "The attempt to update the option failed."
+msgstr ""
+
+#: admin/Pages.php:73
 msgid "URL"
 msgstr "כתובת URL"
 
-# 'caption' => __( "Caption", "metaslider" ),
-# 'new_window' => __( "New Window", "metaslider" ),
-# 'confirm' => __( "Are you sure?", "metaslider" ),
-# wpml-name: 7a115fe2bd8b94ead1550a2da953cf87
-msgid "New Window"
-msgstr "חלון חדש"
-
-# 'url' => __( "URL", "metaslider" ),
-# 'caption' => __( "Caption", "metaslider" ),
-# 'new_window' => __( "New Window", "metaslider" ),
-# wpml-name: 272ba7d164aa836995be6319a698be84
+#: admin/Pages.php:74 admin/assets/dist/js/app.js:2
 msgid "Caption"
 msgstr "כותרת"
 
-# } else if ( !$this->slide_is_unassigned_or_image_slide( $slider_id, $slide_id ) ) {
-# echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide is not of type 'image'.", 'metaslider' ) . "</td></tr>";
-# }else {
-# wpml-name: ec811230c87040cda934e9e4269e9530
-msgid "Failed to add slide. Slide is not of type 'image'."
-msgstr "העלאת השקופית נכשלה. השקופית אינה מסוג 'תמונה'."
+#: admin/Pages.php:75
+msgid "New Window"
+msgstr "חלון חדש"
 
-# if ( $this->slide_exists_in_slideshow( $slider_id, $slide_id ) ) {
-# echo "<tr><td colspan='2'>ID: {$slide_id} \"" . get_the_title( $slide_id ) . "\" - " . __( "Failed to add slide. Slide already exists in slideshow.", 'metaslider' ) . "</td></tr>";
-# } else if ( !$this->slide_is_unassigned_or_image_slide( $slider_id, $slide_id ) ) {
-# wpml-name: 3ecae64c126f2bbc769b72d225e36bf6
-msgid "Failed to add slide. Slide already exists in slideshow."
-msgstr "העלאת השקופית נכשלה. השקופית כבר קיימת במצגת."
+#: admin/Pages.php:76
+msgid "Please confirm that you would like to delete this slideshow."
+msgstr ""
 
-# if ( !wp_verify_nonce( $_REQUEST['_wpnonce'], 'metaslider_addslide' ) ) {
-# echo "<tr><td colspan='2'>" . __( "Security check failed. Refresh page and try again.", 'metaslider' ) . "</td></tr>";
-# die();
-# wpml-name: c350507a57453a3ffda15f890127a95e
-msgid "Security check failed. Refresh page and try again."
-msgstr "בדיקת האבטחה נכשלה. נא לרענן את הדף ולנסות שוב."
+#: admin/Pages.php:77
+msgid "Undo"
+msgstr ""
 
-# } else {
-# _e( "No slideshows found", "metaslider" );
-# }
-# wpml-name: 55755c54ade3e414446d5778a55c702b
-msgid "No slideshows found"
-msgstr "לא נמצאו מצגות"
+#: admin/Pages.php:78
+msgid "Slide restored"
+msgstr ""
 
-# </p>
-# <label for="<?php echo $this->get_field_id( 'slider_id' ); ?>"><?php _e( 'Select Slider:', 'metaslider' ); ?></label>
-# <select id="<?php echo $this->get_field_id( 'slider_id' ); ?>" name="<?php echo $this->get_field_name( 'slider_id' ); ?>">
-# wpml-name: 2aa138cc82b3b4c0b6440272bb5d6315
-msgid "Select Slider:"
-msgstr "בחירת מצגת:"
+#: admin/Pages.php:79
+msgid "Slide deleted"
+msgstr ""
 
-# <p>
-# <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'metaslider' ); ?></label>
-# <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
-# wpml-name: 51ec9bf4aaeab1b25bb57f9f8d4de557
+#: admin/Pages.php:80 admin/assets/dist/js/app.js:2
+#: admin/assets/js/app/globals.js:105
+msgid "Success"
+msgstr ""
+
+#: admin/Pages.php:81
+msgid "Item was copied to your clipboard"
+msgstr ""
+
+#: admin/Pages.php:82
+msgid "Press to undo"
+msgstr ""
+
+#: admin/Pages.php:84
+msgid "Select replacement image"
+msgstr ""
+
+#: admin/Pages.php:92
+msgid ""
+"Caution: This setting is for advanced developers only. If you're unsure, "
+"leave it checked."
+msgstr ""
+"זהירות: הגדרה זו היא למפתחים מתקדמים בלבד. אם אינך בטוח, השאר אותה מסומנת."
+
+#: admin/routes/api.php:131
+msgid "You do not have access to this resource."
+msgstr ""
+
+#: admin/routes/api.php:373
+msgid "The request format was not valid."
+msgstr ""
+
+#: admin/routes/api.php:381 admin/routes/api.php:503
+msgid "This slideshow is no longer available."
+msgstr ""
+
+#: admin/routes/api.php:468
+msgid "Nothing to import."
+msgstr ""
+
+#: admin/routes/api.php:510
+msgid "This was not a slideshow, so we cannot delete it."
+msgstr ""
+
+#: admin/routes/api.php:653
+msgid "This was not a slideshow, so we cannot update the setting."
+msgstr ""
+
+#: admin/routes/api.php:762
+msgid "The title cannot be empty."
+msgstr ""
+
+#: admin/routes/api.php:766
+msgid "The field (%s) cannot be empty"
+msgstr ""
+
+#: admin/slideshows/Image.php:145
+msgid "We could not find any images to import."
+msgstr ""
+
+#: admin/slideshows/Settings.php:59
+msgid "New Slideshow"
+msgstr ""
+
+#: admin/slideshows/Settings.php:81 inc/slider/metaslider.class.php:119
+msgid "Previous"
+msgstr ""
+
+#: admin/slideshows/Settings.php:82 inc/slider/metaslider.class.php:120
+msgid "Next"
+msgstr ""
+
+#: admin/slideshows/Themes.php:60
+msgid "No themes found."
+msgstr ""
+
+#: admin/slideshows/Themes.php:249
+msgid ""
+"We removed your selected theme as it could not be found. Was the folder "
+"deleted?"
+msgstr ""
+
+#: admin/Table.php:46
+msgid "Published"
+msgstr ""
+
+#: admin/Table.php:50 admin/Table.php:78 admin/Table.php:302
+msgid "Trash"
+msgstr ""
+
+#: admin/Table.php:60 admin/views/pages/parts/toolbar.php:43
+#: admin/assets/dist/js/app.js:2
+msgid "Preview"
+msgstr ""
+
+#: admin/Table.php:61 admin/assets/dist/js/app.js:2
+msgid "Title"
+msgstr "כותרת"
+
+#: admin/Table.php:62
+msgid "Created"
+msgstr ""
+
+#: admin/Table.php:63
+msgid "Shortcode"
+msgstr "קיצור קוד"
+
+#: admin/Table.php:73 admin/Table.php:287 inc/slide/metaslide.class.php:387
+msgid "Restore"
+msgstr ""
+
+#: admin/Table.php:74 admin/Table.php:288 inc/slide/metaslide.class.php:397
+msgid "Delete Permanently"
+msgstr ""
+
+#: admin/Table.php:301
+msgid "Edit"
+msgstr ""
+
+#: admin/views/notices/header-notice.php:8
+msgid "Logo"
+msgstr ""
+
+#: admin/views/notices/header-notice.php:21
+msgid "Dismiss"
+msgstr ""
+
+#: admin/views/pages/dashboard.php:8 admin/assets/dist/js/app.js:2
+msgid "Slideshows"
+msgstr ""
+
+#: admin/views/pages/dashboard.php:8
+msgid "Add New"
+msgstr ""
+
+#: admin/views/pages/dashboard.php:36
+msgid "Search"
+msgstr ""
+
+#: admin/views/pages/parts/ie-warning.php:4
+msgid "Browser upgrade required"
+msgstr ""
+
+#: admin/views/pages/parts/ie-warning.php:8
+msgid ""
+"It looks like you are using %s. While MetaSlider does support %s on the "
+"frontend of the website where users see your slideshows, some of the tools "
+"we provide back here require a modern browser."
+msgstr ""
+
+#: admin/views/pages/parts/ie-warning.php:8
+msgid "Microsoft Internet Explorer 11"
+msgstr ""
+
+#: admin/views/pages/parts/ie-warning.php:8
+msgid "IE11"
+msgstr ""
+
+#: admin/views/pages/parts/ie-warning.php:12
+msgid "Update Internet Explorer"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:11
+msgid "How to Use"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:15
+msgid "Toggle title"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:21
+msgid ""
+"To display your slideshow, add the following shortcode (in orange) to your "
+"page. If adding the slideshow to your theme files, additionally include the "
+"surrounding PHP code (in gray).&lrm;"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:26
+msgid "Click shortcode to copy"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:27
+msgid "Copy all code"
+msgstr ""
+
+#: admin/views/pages/parts/shortcode.php:31 admin/assets/dist/js/app.js:2
+msgid "Copy all"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:28
+msgid "Add Slide"
+msgstr "הוספת תמונה"
+
+#: admin/views/pages/parts/toolbar.php:34
+msgid "Save & open preview"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:34
+msgctxt "This is a keyboard shortcut."
+msgid "(alt + p)"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:59
+msgid "Add a new slideshow"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:63
+msgid "New"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:68
+msgid "Duplicate this slideshow"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:80
+msgid "Duplicate"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:85
+msgid "Add custom CSS"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:85
+msgid "press to learn more"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:89
+msgid "Add CSS"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:99
+msgid "Save slideshow"
+msgstr ""
+
+#: admin/views/pages/parts/toolbar.php:113 admin/assets/dist/js/app.js:2
+msgid "Save"
+msgstr "שמור"
+
+#: admin/views/pages/settings.php:42
+msgid "Settings"
+msgstr "הגדרות"
+
+#: admin/views/pages/settings.php:58 admin/assets/dist/js/app.js:2
+msgid "Help Center"
+msgstr ""
+
+#: admin/views/pages/settings.php:74 admin/assets/dist/js/app.js:2
+msgid "Import"
+msgstr ""
+
+#: admin/views/pages/settings.php:89 admin/assets/dist/js/app.js:2
+msgid "Export"
+msgstr ""
+
+#: admin/views/pages/start.php:6
+msgid "Thanks for using MetaSlider, the WordPress slideshow plugin"
+msgstr ""
+
+#: admin/views/pages/start.php:12
+msgid "Create a slideshow with your images"
+msgstr ""
+
+#: admin/views/pages/start.php:13
+msgid "Choose your own images to start a new slideshow."
+msgstr ""
+
+#: admin/views/pages/start.php:23
+msgid "Open Media Library"
+msgstr ""
+
+#: admin/views/pages/start.php:38
+msgid "Create a slideshow with sample images"
+msgstr ""
+
+#: admin/views/pages/start.php:39
+msgid ""
+"Choose one of our demos with sample images, or a blank slideshow with no "
+"images."
+msgstr ""
+
+#: admin/views/pages/start.php:44
+msgid "Blank Slideshow"
+msgstr ""
+
+#: admin/views/pages/start.php:45
+msgid "Image Slideshow"
+msgstr ""
+
+#: admin/views/pages/start.php:46
+msgid "Carousel Slideshow"
+msgstr ""
+
+#: admin/views/pages/start.php:47
+msgid "Carousel Slideshow with Captions"
+msgstr ""
+
+#: admin/views/pages/start.php:49
+msgid "Create a Slideshow"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:9
+msgid "Comparison Chart"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:10
+msgid "free"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:11
+msgid "pro"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:17 admin/views/pages/upgrade.php:109
+msgid "Installed"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:18 admin/views/pages/upgrade.php:110
+msgid "Upgrade now"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:22
+msgid "Create unlimited slideshows"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:23
+msgid "Create and manage as many slideshows as you need."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:24 admin/views/pages/upgrade.php:25
+#: admin/views/pages/upgrade.php:31 admin/views/pages/upgrade.php:32
+#: admin/views/pages/upgrade.php:38 admin/views/pages/upgrade.php:39
+#: admin/views/pages/upgrade.php:45 admin/views/pages/upgrade.php:46
+#: admin/views/pages/upgrade.php:53 admin/views/pages/upgrade.php:60
+#: admin/views/pages/upgrade.php:67 admin/views/pages/upgrade.php:74
+#: admin/views/pages/upgrade.php:81 admin/views/pages/upgrade.php:88
+#: admin/views/pages/upgrade.php:96 admin/views/pages/upgrade.php:103
+msgid "Yes"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:29
+msgid "Multiple slideshow types"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:30
+msgctxt "\"FlexSlider\" and \"Nivo Slider\" are plugin names."
+msgid "Including FlexSlider, Nivo Slider and we will soon be adding more."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:36
+msgid "Regular updates"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:37
+msgctxt "Keep the plugin name \"MetaSlider\" when possible"
+msgid ""
+"Our word to keep MetaSlider compatible with the latest versions of WordPress."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:43
+msgid "Intelligent image cropping"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:44
+msgctxt "Keep the branding \"Smart Crop\" together when possible"
+msgid ""
+"Unique Smart Crop functionality ensures your slides are perfectly resized."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:50
+msgid "Thumbnail navigation"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:51
+msgid "Easily allow users to navigate your slideshows by thumbnails."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:52 admin/views/pages/upgrade.php:59
+#: admin/views/pages/upgrade.php:66 admin/views/pages/upgrade.php:73
+#: admin/views/pages/upgrade.php:80 admin/views/pages/upgrade.php:87
+#: admin/views/pages/upgrade.php:95 admin/views/pages/upgrade.php:102
+msgid "No"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:57
+msgid "Add video slides"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:58
+msgctxt "\"YouTube\" and \"Vimeo\" are brand names."
+msgid "Easily include responsive high definition YouTube and Vimeo videos."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:64
+msgid "HTML overlay slides"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:65
+msgid "Create completely customized HTML slides using the inline editor."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:71
+msgid "Add slide layers"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:72
+msgid "Add layers to your slides with over 50 available transition effects."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:78
+msgid "Post feed slides"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:79
+msgid "Easily build slides based on your WordPress posts."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:85
+msgid "Schedule your slides"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:86
+msgid "Add a start/end date to individual slides."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:93
+msgid "Toggle your slide's visibility"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:94
+msgid "Allows you to hide any slide, without having to delete them."
+msgstr ""
+
+#: admin/views/pages/upgrade.php:100
+msgid "Premium support"
+msgstr ""
+
+#: admin/views/pages/upgrade.php:101
+msgid "Have your specific queries addressed directly by our experts"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:5
+msgid "Crop Position"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:9
+msgid "Top Left"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:10
+msgid "Top Center"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:11
+msgid "Top Right"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:12
+msgid "Center Left"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:13
+msgid "Center Center"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:14
+msgid "Center Right"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:15
+msgid "Bottom Left"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:16
+msgid "Bottom Center"
+msgstr ""
+
+#: admin/views/slides/tabs/crop.php:17
+msgid "Bottom Right"
+msgstr ""
+
+#: admin/views/slides/tabs/general.php:34
+msgid "Open in a new window"
+msgstr ""
+
+#: admin/views/slides/tabs/schedule.php:6
+msgid ""
+"Update or activate your MetaSlider Pro now to add a start/end date option to "
+"your slides"
+msgstr ""
+
+#: admin/views/slides/tabs/schedule.php:8
+msgid "Get MetaSlider Pro now to add a start/end date option to your slides"
+msgstr ""
+
+#: admin/views/slides/tabs/schedule.php:9
+msgid "Get it now!"
+msgstr ""
+
+#: admin/views/slides/tabs/seo.php:5
+msgid "Image Title Text"
+msgstr "טקסט כותרת התמונה"
+
+#: admin/views/slides/tabs/seo.php:7
+msgid "Enable this to inherit the image title"
+msgstr ""
+
+#: admin/views/slides/tabs/seo.php:8
+msgid "Use the image title"
+msgstr ""
+
+#: admin/views/slides/tabs/seo.php:15
+msgid "Image Alt Text"
+msgstr "טקסט חלופי לתמונה"
+
+#: admin/views/slides/tabs/seo.php:17
+msgid "Enable this to inherit the image alt text"
+msgstr ""
+
+#: admin/views/slides/tabs/seo.php:18
+msgid "Use the image alt text"
+msgstr ""
+
+#: inc/metaslider.systemcheck.class.php:91
+msgid ""
+"Your settings might not be saving properly due to a configuration on your "
+"server. %s is currently set to %s, but we recommend a setting of 4000. "
+"Please see %s for more information. The php.ini file is being loaded from "
+"here: %s"
+msgstr ""
+
+#: inc/metaslider.systemcheck.class.php:94
+msgid "this article"
+msgstr ""
+
+#: inc/metaslider.systemcheck.class.php:208
+msgid "Warning:"
+msgstr ""
+
+#: inc/metaslider.widget.class.php:115
 msgid "Title:"
 msgstr "כותרת:"
 
-# 'MetaSlider', // Name
-# array( 'description' => __( 'MetaSlider', 'metaslider' ) ) // Args
-# );
-# wpml-name: 94a7bae84ef2816494be4af66c577bfc
-msgid "MetaSlider"
-msgstr "מצגת שקופיות"
+#: inc/metaslider.widget.class.php:118
+msgid "Select Slider:"
+msgstr "בחירת מצגת:"
+
+#: inc/metaslider.widget.class.php:128 ml-slider.php:2432
+#: admin/assets/dist/js/app.js:2
+msgid "No slideshows found"
+msgstr "לא נמצאו מצגות"
+
+#: inc/slide/metaslide.class.php:94
+msgid "The requested image does not exist. Please try again."
+msgstr ""
+
+#: inc/slide/metaslide.class.php:112
+msgid "The image was successfully updated."
+msgstr ""
+
+#: inc/slide/metaslide.class.php:120
+msgid "There was an error updating the image. Please try again"
+msgstr ""
+
+#: inc/slide/metaslide.class.php:302
+msgid "There was an error while updating the database. Please try again."
+msgstr ""
+
+#: inc/slide/metaslide.class.php:377
+msgid "Trash slide"
+msgstr ""
+
+#: inc/slide/metaslide.class.php:409 inc/slide/metaslide.image.class.php:343
+msgid "Update slide image"
+msgstr ""
+
+#: inc/slide/metaslide.image.class.php:85
+msgid "Failed to add slide. Slide is not an image."
+msgstr ""
+
+#: inc/slide/metaslide.image.class.php:87
+msgid "This isn't an accepted image. Please try again."
+msgstr ""
+
+#: inc/slide/metaslide.image.class.php:317
+msgid "Image Slide"
+msgstr "שיקופית תמונה"
+
+#: inc/slide/metaslide.image.class.php:397
+msgid "Warning: The image data does not exist. Please re-upload the image."
+msgstr ""
+
+#: inc/slide/metaslide.image.class.php:408
+msgid "General"
+msgstr "כללי"
+
+#: inc/slide/metaslide.image.class.php:412
+msgid "SEO"
+msgstr "SEO"
+
+#: inc/slide/metaslide.image.class.php:429
+msgid "Crop"
+msgstr ""
+
+#: inc/slide/metaslide.image.class.php:441
+msgid "Schedule"
+msgstr ""
+
+#: ml-slider.php:247
+msgid ""
+"MetaSlider Pro is installed but is out of date. You may update it %shere%s. "
+"Learn more about this notice %shere%s"
+msgstr ""
+
+#: ml-slider.php:460
+msgid "Home"
+msgstr ""
+
+#: ml-slider.php:461
+msgid "Quick Start"
+msgstr ""
+
+#: ml-slider.php:462
+msgid "Settings & Help"
+msgstr ""
+
+#: ml-slider.php:465
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: ml-slider.php:588
+msgid "Image"
+msgstr "תמונה"
+
+#: ml-slider.php:589
+msgid "Add to slideshow"
+msgstr ""
+
+#: ml-slider.php:629
+msgid "Post Feed"
+msgstr ""
+
+#: ml-slider.php:630
+msgid "Vimeo"
+msgstr ""
+
+#: ml-slider.php:631
+msgid "YouTube"
+msgstr ""
+
+#: ml-slider.php:632
+msgid "Layer Slide"
+msgstr ""
+
+#: ml-slider.php:633
+msgid "External URL"
+msgstr ""
+
+#: ml-slider.php:634
+msgid "Local Video"
+msgstr ""
+
+#: ml-slider.php:759
+msgid "The slide was successfully restored"
+msgstr ""
+
+#: ml-slider.php:782
+msgid "The attempt to restore the slide failed."
+msgstr ""
+
+#: ml-slider.php:841
+msgid "The slide was successfully trashed"
+msgstr ""
+
+#: ml-slider.php:953
+msgid "The slide was permanently deleted"
+msgstr ""
+
+#: ml-slider.php:1220
+msgid "Get MetaSlider Pro today!"
+msgstr ""
+
+#: ml-slider.php:1221
+msgid "Learn More"
+msgstr ""
+
+#: ml-slider.php:1576
+msgid "Trashed Slides"
+msgstr ""
+
+#: ml-slider.php:1619
+msgid ""
+"You are viewing slides that have been trashed, which will be automatically "
+"deleted in %s days."
+msgstr ""
+
+#: ml-slider.php:1634
+msgid "Return to Published Slides"
+msgstr ""
+
+#: ml-slider.php:1666 ml-slider.php:2108
+msgid "Width"
+msgstr "רוחב"
+
+#: ml-slider.php:1668 admin/assets/js/gutenberg/components/block-edit.js:57
+#: admin/assets/js/gutenberg/components/block-edit.js:82
+msgid "Slideshow width"
+msgstr "רוחב מצגת השקופיות"
+
+#: ml-slider.php:1669 ml-slider.php:1682 ml-slider.php:1978
+msgid "px"
+msgstr "פיקסלים"
+
+#: ml-slider.php:1679 ml-slider.php:2124
+msgid "Height"
+msgstr "גובה"
+
+#: ml-slider.php:1681
+msgid "Slideshow height"
+msgstr "גובה מצגת השקופיות"
+
+#: ml-slider.php:1688
+msgid "Effect"
+msgstr "אפקט"
+
+#: ml-slider.php:1690
+msgid "Slide transition effect"
+msgstr "אפקט מעבר שקופית"
+
+#: ml-slider.php:1694 ml-slider.php:1996
+msgid "Random"
+msgstr "אקראי"
+
+#: ml-slider.php:1698
+msgid "Swirl"
+msgstr "סחרור"
+
+#: ml-slider.php:1702
+msgid "Rain"
+msgstr "גשם"
+
+#: ml-slider.php:1706
+msgid "Straight"
+msgstr "ישר"
+
+#: ml-slider.php:1710
+msgid "Slice Down"
+msgstr ""
+
+#: ml-slider.php:1714
+msgid "Slice Up"
+msgstr "פריסה מעלה"
+
+#: ml-slider.php:1718
+msgid "Slice Up Left"
+msgstr ""
+
+#: ml-slider.php:1722
+msgid "Slide Up Down"
+msgstr ""
+
+#: ml-slider.php:1726
+msgid "Slice Up Down Left"
+msgstr ""
+
+#: ml-slider.php:1730
+msgid "Fade"
+msgstr "עמעום"
+
+#: ml-slider.php:1734
+msgid "Fold"
+msgstr "קפל"
+
+#: ml-slider.php:1738
+msgid "Slide in Right"
+msgstr ""
+
+#: ml-slider.php:1742
+msgid "Slide in Left"
+msgstr ""
+
+#: ml-slider.php:1746
+msgid "Box Random"
+msgstr "תיבה אקראית"
+
+#: ml-slider.php:1750
+msgid "Box Rain"
+msgstr "תיבת גשם"
+
+#: ml-slider.php:1754
+msgid "Box Rain Reverse"
+msgstr "תיבת גשם לאחור"
+
+#: ml-slider.php:1758
+msgid "Box Rain Grow"
+msgstr ""
+
+#: ml-slider.php:1762
+msgid "Box Rain Grow Reverse"
+msgstr "תיבת גשם צמיחה לאחור"
+
+#: ml-slider.php:1766
+msgid "Slide"
+msgstr "תמונה"
+
+#: ml-slider.php:1773
+msgid "Arrows"
+msgstr "חצים"
+
+#: ml-slider.php:1778
+msgid "Show the previous/next arrows"
+msgstr "הצג חצים"
+
+#: ml-slider.php:1786
+msgid "Navigation"
+msgstr "ניווט"
+
+#: ml-slider.php:1789
+msgid "Show the slide navigation bullets"
+msgstr "הצג עת הכדורים לניווט המצגת"
+
+#: ml-slider.php:1794
+msgid "Hidden"
+msgstr "מוסתר"
+
+#: ml-slider.php:1795
+msgid "Dots"
+msgstr "כדורים"
+
+#: ml-slider.php:1797
+msgid "Thumbnail"
+msgstr ""
+
+#: ml-slider.php:1801
+msgid "Filmstrip"
+msgstr ""
+
+#: ml-slider.php:1831
+msgid "View trashed slides"
+msgstr ""
+
+#: ml-slider.php:1865
+msgid "Click to toggle"
+msgstr ""
+
+#: ml-slider.php:1866
+msgid "Advanced Settings"
+msgstr "הגדרות מתקדמות"
+
+#: ml-slider.php:1875
+msgid "100% width"
+msgstr ""
+
+#: ml-slider.php:1880
+msgid "Stretch the slideshow output to fill it's parent container"
+msgstr "מתח את פלט מצגת השקופיות למילוי מיכל האב."
+
+#: ml-slider.php:1888
+msgid "Center align"
+msgstr "מרכוז"
+
+#: ml-slider.php:1893
+msgid "Center align the slideshow"
+msgstr "מרכז את המצגת"
+
+#: ml-slider.php:1901
+msgid "Auto play"
+msgstr "הפעל אוטומטית"
+
+#: ml-slider.php:1906
+msgid "Transition between slides automatically"
+msgstr "מעבר אוטומטי בין שקופיות"
+
+#: ml-slider.php:1914
+msgid "Image Crop"
+msgstr ""
+
+#: ml-slider.php:1919
+msgid "Smart Crop"
+msgstr ""
+
+#: ml-slider.php:1926
+msgid "Standard"
+msgstr ""
+
+#: ml-slider.php:1933
+msgid "Disabled"
+msgstr ""
+
+#: ml-slider.php:1940
+msgid "Disabled (Smart Pad)"
+msgstr ""
+
+#: ml-slider.php:1947
+msgid ""
+"Smart Crop ensures your responsive slides are cropped to a ratio that "
+"results in a consistent slideshow size"
+msgstr "חיתוך חכם מבטיח חיתוך של השקופיות למידות שקבעת למצגת."
+
+#: ml-slider.php:1955
+msgid "Carousel mode"
+msgstr "מצב קרוסלה"
+
+#: ml-slider.php:1960
+msgid "Display multiple slides at once. Slideshow output will be 100% wide."
+msgstr "הצג מספר שקופיות בו זמנית. פלט מצגת השקופיות יהיה ברוחב של 100%."
+
+#: ml-slider.php:1971
+msgid "Carousel margin"
+msgstr "שוליים של קרוסלה"
+
+#: ml-slider.php:1974
+msgid "Pixel margin between slides in carousel."
+msgstr "המרווח בפיקסלים בין שקופיות בקרוסלה."
+
+#: ml-slider.php:1983
+msgid "Fade in"
+msgstr ""
+
+#: ml-slider.php:1988
+msgid "Fade in the first slide"
+msgstr ""
+
+#: ml-slider.php:2001
+msgid "Randomise the order of the slides"
+msgstr "סדר את התמונות באופן אקראי"
+
+#: ml-slider.php:2009
+msgid "Hover pause"
+msgstr "הפסקה בריחוף עכבר"
+
+#: ml-slider.php:2014
+msgid ""
+"Pause the slideshow when hovering over slider, then resume when no longer "
+"hovering."
+msgstr "עצור את הצגת השקופיות בעת ריחוף עכבר והמשך לאחר שכבר לא ירחף."
+
+#: ml-slider.php:2022
+msgid "Reverse"
+msgstr "אחורה"
+
+#: ml-slider.php:2027
+msgid "Reverse the animation direction"
+msgstr "הפוך את כיוון האנימציה"
+
+#: ml-slider.php:2035
+msgid "Keyboard Controls"
+msgstr ""
+
+#: ml-slider.php:2040
+msgid "Use arrow keys to get to the next slide"
+msgstr ""
+
+#: ml-slider.php:2053
+msgid "Slide delay"
+msgstr "השהיית שיקופית"
+
+#: ml-slider.php:2055
+msgid "How long to display each slide, in milliseconds"
+msgstr "כמה זמן להציג כל שקופית, באלפיות השניה"
+
+#: ml-slider.php:2059 ml-slider.php:2079 ml-slider.php:2208 ml-slider.php:2240
+msgctxt "Short for milliseconds"
+msgid "ms"
+msgstr ""
+
+#: ml-slider.php:2073
+msgid "Animation speed"
+msgstr "מהירות האנימציה"
+
+#: ml-slider.php:2075
+msgid "Set the speed of animations, in milliseconds"
+msgstr "קבע את מהירות האנימציה באלפיות השניה"
+
+#: ml-slider.php:2093 ml-slider.php:2095
+msgid "Number of slices"
+msgstr "מספר הפרוסות"
+
+#: ml-slider.php:2105 ml-slider.php:2110 ml-slider.php:2121 ml-slider.php:2126
+msgid "Number of squares"
+msgstr "מספר הריבועים"
+
+#: ml-slider.php:2132
+msgid "Slide direction"
+msgstr "כיוון ההחלקה"
+
+#: ml-slider.php:2134
+msgid "Select the sliding direction"
+msgstr "בחירת כיוון ההחלקה"
+
+#: ml-slider.php:2141
+msgid "Horizontal"
+msgstr "אופקית"
+
+#: ml-slider.php:2148
+msgid "Vertical"
+msgstr "אנכית"
+
+#: ml-slider.php:2159
+msgid "Easing"
+msgstr "החלקה"
+
+#: ml-slider.php:2161
+msgid "Easing is only available with the 'Slide' transition setting"
+msgstr ""
+
+#: ml-slider.php:2171
+msgid "Previous text"
+msgstr "טקסט הקודם"
+
+#: ml-slider.php:2173
+msgid "Set the text for the 'previous' direction item"
+msgstr "קבע את הטקסט לפריט 'הקודם'"
+
+#: ml-slider.php:2184
+msgid "Next text"
+msgstr "טקסט הבא"
+
+#: ml-slider.php:2186
+msgid "Set the text for the 'next' direction item"
+msgstr "קבע את הטקסט לפריט 'הבא'"
+
+#: ml-slider.php:2202
+msgid "Square delay"
+msgstr "השהית ריבוע"
+
+#: ml-slider.php:2204
+msgid "Delay between squares in ms"
+msgstr "השהייה בין ריבועים באלפיות השניה"
+
+#: ml-slider.php:2218
+msgid "Opacity"
+msgstr "שקיפות"
+
+#: ml-slider.php:2220
+msgid "Opacity of title and navigation, between 0 and 1"
+msgstr ""
+
+#: ml-slider.php:2234
+msgid "Caption speed"
+msgstr "מהירות כותרת"
+
+#: ml-slider.php:2236
+msgid "Set the fade in speed of the caption"
+msgstr "קבע את מהירות העמעום בכותרת"
+
+#: ml-slider.php:2250
+msgid "Developer options"
+msgstr "אפשרויות מפתח"
+
+#: ml-slider.php:2255
+msgid "CSS classes"
+msgstr "מחלקות CSS"
+
+#: ml-slider.php:2257
+msgid ""
+"Specify any custom CSS Classes you would like to be added to the slider "
+"wrapper"
+msgstr "ציין מחלקות CSS שתרצה להוסיף למעטפת של מצגת השקופיות"
+
+#: ml-slider.php:2268
+msgid "Print CSS"
+msgstr "הדפס CSS"
+
+#: ml-slider.php:2273
+msgid "Uncheck this is you would like to include your own CSS"
+msgstr "בטל את הסימון כאן אם אתה רוצה לכלול עיצוב CSS משלך"
+
+#: ml-slider.php:2281
+msgid "Print JS"
+msgstr "הדפס JS"
+
+#: ml-slider.php:2286
+msgid "Uncheck this is you would like to include your own Javascript"
+msgstr "בטל את הסימון כאן אם אתה רוצה לכלול JS משלך"
+
+#: ml-slider.php:2294
+msgid "No conflict mode"
+msgstr "מצב ללא קונפליקט"
+
+#: ml-slider.php:2299
+msgid "Delay adding the flexslider class to the slideshow"
+msgstr "הוספת השהייה במחלקת מצגת גמישה למצגת השקופיות שלך"
+
+#: ml-slider.php:2333
+msgid "Delete slideshow"
+msgstr ""
+
+#: ml-slider.php:2380
+msgid "Select slideshow to insert into post"
+msgstr "בחירת המצגת להוספה לפוסט"
+
+#: ml-slider.php:2382
+msgid "Add slideshow"
+msgstr ""
+
+#: ml-slider.php:2411
+msgctxt "Keep the plugin name \"MetaSlider\" when possible"
+msgid "Insert MetaSlider"
+msgstr ""
+
+#: ml-slider.php:2417
+msgid "Choose slideshow"
+msgstr "בחר מצגת"
+
+#: ml-slider.php:2427
+msgid "Insert slideshow"
+msgstr ""
+
+#: ml-slider.php:2462
+msgid "Create slides by adding text, videos and more to your images"
+msgstr ""
+
+#: ml-slider.php:2466
+msgid ""
+"With Layer slides, you can create beautiful, stylish layers of different "
+"elements."
+msgstr ""
+
+#: ml-slider.php:2470
+msgid ""
+"You start with an image and then can add text, video, colors, animations, "
+"more images, and even shortcodes."
+msgstr ""
+
+#: ml-slider.php:2476 ml-slider.php:2517 ml-slider.php:2558 ml-slider.php:2601
+#: ml-slider.php:2654 ml-slider.php:2687
+msgid "Find out more about MetaSlider Pro"
+msgstr ""
+
+#: ml-slider.php:2505
+msgid "Create slideshows with your Vimeo videos"
+msgstr ""
+
+#: ml-slider.php:2509
+msgid ""
+"With Vimeo slides, you can build beautiful slideshows with your Vimeo videos."
+msgstr ""
+
+#: ml-slider.php:2513
+msgid ""
+"Vimeo slides will display your videos with auto play, mute, the ability to "
+"hide controls, and much more."
+msgstr ""
+
+#: ml-slider.php:2546
+msgid "Create slideshows with your YouTube videos"
+msgstr ""
+
+#: ml-slider.php:2550
+msgid ""
+"With YouTube slides, you can build beautiful slideshows with your YouTube "
+"videos."
+msgstr ""
+
+#: ml-slider.php:2554
+msgid ""
+"YouTube slides will display your videos with auto play, mute, lazy load, the "
+"ability to hide controls, and much more."
+msgstr ""
+
+#: ml-slider.php:2587
+msgid "Create slideshows with your posts"
+msgstr ""
+
+#: ml-slider.php:2591
+msgid ""
+"With Post Feed slides, you can build slideshows with your latest posts, "
+"events, or WooCommerce products."
+msgstr ""
+
+#: ml-slider.php:2595
+msgid ""
+"Post Feed slides will automatically display your posts with images, text, "
+"custom fields, and much more."
+msgstr ""
+
+#: ml-slider.php:2640
+msgid "Create slideshows with images stored outside of WordPress"
+msgstr ""
+
+#: ml-slider.php:2644
+msgid ""
+"With External URL slides, you can load images directly from non-WordPress "
+"sources such as CDNs or image hosts."
+msgstr ""
+
+#: ml-slider.php:2648
+msgid ""
+"External URL slides give you all the power of MetaSlider, using images "
+"stored anywhere you want."
+msgstr ""
+
+#: ml-slider.php:2673
+msgid "Create slideshows with videos in your media library"
+msgstr ""
+
+#: ml-slider.php:2677
+msgid ""
+"With Local Video slides, you can build beautiful slideshows with videos in "
+"your WordPress media library."
+msgstr ""
+
+#: ml-slider.php:2681
+msgid ""
+"Local Video slides will display your MP4, WebM, and MOV videos with cover "
+"images, auto play, mute, lazy load, the ability to hide controls, and much "
+"more."
+msgstr ""
+
+#: ml-slider.php:2727
+msgid "Take a tour"
+msgstr ""
+
+#: ml-slider.php:2732
+msgid "Premium Support"
+msgstr ""
+
+#: ml-slider.php:2738
+msgid "Add-ons"
+msgstr ""
+
+#: ml-slider.php:2742
+msgid "Support"
+msgstr ""
+
+#: ml-slider.php:2747
+msgid "Documentation"
+msgstr "תיעוד"
+
+#: ml-slider.php:2751
+msgid "Leave a review"
+msgstr ""
+
+#: themes/manifest.php:16
+msgid "A simple, slick square design that looks good on darker images."
+msgstr ""
+
+#: themes/manifest.php:25
+msgid "A clean, subtle theme that features block arrows and bold design."
+msgstr ""
+
+#: themes/manifest.php:34
+msgid ""
+"A fun, circular design to brighten up your site. This theme works well with "
+"dark images"
+msgstr ""
+
+#: themes/manifest.php:43
+msgid ""
+"A minimalistic, no-frills design that was built to blend in with most themes."
+msgstr ""
+
+#: themes/manifest.php:75
+msgid "This theme places the controls vertically for a unique look."
+msgstr ""
+
+#: themes/manifest.php:84
+msgid "A futuristic and linear design that goes will with a dark background."
+msgstr ""
+
+#: themes/manifest.php:93
+msgid "A simple theme that neatly blends into any existing website."
+msgstr ""
+
+#: themes/manifest.php:102
+msgid ""
+"This theme has a special additional functionality that uses image titles as "
+"the slide navigation. "
+msgstr ""
+
+#: themes/manifest.php:103
+msgid ""
+"If you would like to use the image titles as the navigation, you will need "
+"to use FlexSlider. Additionally, to change the slide navigation label, edit "
+"the image title in the media library or manually on the slide (SEO tab)."
+msgstr ""
+
+#: themes/manifest.php:133
+msgid "This theme has a unique design that gives it a sophisticated look."
+msgstr ""
+
+#: themes/manifest.php:142
+msgid "A bold and clear design that works well on a darker images."
+msgstr ""
+
+#: themes/manifest.php:151
+msgid ""
+"A minimalist theme that gets out of the way so you can showcasing your "
+"beautiful pictures."
+msgstr ""
+
+#: themes/manifest.php:160
+msgid ""
+"The Nivo Light theme included here for legacy purposes. Note: only works "
+"with Nivo Slider"
+msgstr ""
+
+#: themes/manifest.php:168
+msgid ""
+"The Nivo Bar theme included here for legacy purposes. Note: only works with "
+"Nivo Slider"
+msgstr ""
+
+#: themes/manifest.php:176
+msgid ""
+"The Nivo Dark theme included here for legacy purposes. Note: only works with "
+"Nivo Slider"
+msgstr ""
+
+#: themes/simply-dark/v1.0.0/theme.php:24
+msgid "Previous Slide"
+msgstr ""
+
+#: themes/simply-dark/v1.0.0/theme.php:26
+msgid "Next Slide"
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:79
+msgid "Preparing 1 slide..."
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:134
+msgid "1 slide added successfully"
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:175
+msgid "Opening add slide UI..."
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:178
+msgid "Closing add slide UI..."
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:267
+msgid "Updating slide..."
+msgstr ""
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:313
+msgid "Slide updated successfully"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "CSS Manager notice opened"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "CSS Manager notice closed"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "CSS Manager"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Easily add custom CSS to your slideshows to customize and fit your theme "
+"perfectly."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Built-in text editor full of features."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Loads only on the front-end where needed."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Includes recipes to solve common scenarios."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Upgrade to pro now"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Upgrading also includes:"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Layer, video and post type slides."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slide scheduling - decide when slides appear."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Premium support - ask us anyting!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Analytics notice opened"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Analytics notice closed"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"We'd also like to send you infrequent emails with important security and "
+"feature updates. See our %s for more details."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "privacy policy"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Thanks for using MetaSlider"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"We are currently building the next version of MetaSlider. Can you help us "
+"out by sharing non-sensitive diagnostic information?"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Agree and continue"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No thanks"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Duplicating..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "MetaSlider dashboard loaded"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Saving..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Saving %s slides. This may take a few moments."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slideshow saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Duplicated successfully. Reloading..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Settings saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Still working... %s slides remaining..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Tour cancelled successfully"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Tour cancelled unsuccessfully"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Are you sure?"
+msgstr "בטוח?"
+
+#: admin/assets/dist/js/app.js:2
+msgid "You will not be able to undo this."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Delete"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Something went wrong"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "OK"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Preparing slideshow for duplication..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:88
+msgid "Doing something..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:96
+msgid "No error message provided."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:113
+msgid "Undefined error occurred"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:169
+msgid "No error message reported."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Saving theme..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Theme saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slideshow Theme"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"This theme is not officially supported by the slider you chose. Your results "
+"might vary."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Custom theme"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Click the image to edit or update"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Remove theme"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Change the look and feel of your slideshow with one of our custom-built "
+"MetaSlider themes!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Select a custom theme"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Themes"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Theme Details"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Theme Instructions"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Tags"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "How To Use"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Select a theme on the left to use on this slideshow. Click the theme for "
+"more details."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"If no theme is selected we will use the default theme provided by the slider "
+"plugin"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Loading..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Error: No themes were found."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"However, it looks like you have custom themes available. Select \"My Custom "
+"Themes\" from the navigation up top to view your custom themes."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "My Custom Themes"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Get MetaSlider Pro!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Upgrade now to build your own custom themes!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Learn more"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "MetaSlider Pro is installed!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "You can create your own themes with our theme editor"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Get started"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "On the left are themes that you have created in the theme editor."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Preview slideshow"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Select"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Toggle overlay type"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Toggle full width"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Exit preview"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "This feature is not fully supported in this browser."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Media library caption"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Media library description"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Enter manually"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Automatically updates directly from the WP Media Library"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No default was found"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "You may use HTML here"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Filter by type"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "All media items"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Search Unsplash API"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Search unsplash.com..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Load more"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Photo by %s on Unsplash"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Photo on Unsplash"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Opening Unsplash tab..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Unsplash tab closed"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No photots found."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Photo by %s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Deselect"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Attachment Details"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgctxt "1000 by 1000 pixels"
+msgid "%s by %s pixels"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "view original"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Profile"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Portfolio"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Alt Text"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Description"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Quality"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "All photos published on Unsplash can be used for free."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "view license"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Complete!"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Crunching..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Import Slides"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Import slides"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"You currently do not have any slides to preview. If you want, we can import "
+"some image slides for you."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No valid files found"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Drag and drop interface not available."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Drop images here"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Press %s to save or %s to cancel."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgctxt "The ENTER key on a keyboard"
+msgid "Enter"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgctxt "The ESCAPE key on a keyboard"
+msgid "Escape"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Shortcode copied"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Shortcode unable to be copied automatically"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Failed to open utility modal..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Opening utility modal..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Closing utility modal..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No slides"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Current"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgctxt "number of slides, ex \"7 slides\""
+msgid "%s slides"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "last updated: %s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Viewing 1 slideshow"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Viewing %s out of %s slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Search slideshows (Press ctrl + / to focus)‎"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Searching slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "1 slideshow"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Viewing %s out of %s slideshows (%s loaded)"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Indexing %s slideshows into local storage..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "All Slideshows loaded"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Fetching slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Finished"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Indexing slideshows... %s remaining"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"This feature is not fully supported in Internet Explorer 11 and you may "
+"experience slow search result times."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Sort by title"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Sort by modified date"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Filter slideshows‎"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Searching..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Updating..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Load all"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Clear cache"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Load remaining %s slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Press to clear the slideshow cache from your web browser"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Loading slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Browse slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Collapse"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Press to expand"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "All settings saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Here you will find documentation, and two support tiers to choose from. "
+"Additionally, you may supply us with extra information specific to your "
+"website, server, etc."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Documentation 📚"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Check out our documentation page for examples, and more information about "
+"what you can do with MetaSlider."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Visit documentation"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Free Basic Support 🚀"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"For users of the free version of MetaSlider, we offer full free support on "
+"the wordpress.org forums."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Visit wordpress.org"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Paid Premium Support 🌟"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Paid users of the premium plugin can open a ticket on our private support "
+"center to receive personalized support and faster response times."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Visit metaslider.com"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Site Information"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"For your convenience, you can copy the basic site information before to help "
+"us speed up the debugging process. Be sure to verify that no personal "
+"information is included that you might want to keep private."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Change the default title that will be used when creating a new slideshow. "
+"Use %s and it will be replaced by the current slideshow ID."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"If you are a pro member, enter your license key here to receive updates. %s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Upgrade here"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Opt-in to let MetaSlider responsibly collect information about how you use "
+"our plugin. This is disabled by default, but may have been enabled by via a "
+"notification. %s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "View our detailed privacy policy"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slideshow settings saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Global settings saved"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slideshow Defaults"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Update default settings used when creating a new slideshow."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Default Slideshow Title"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Change the default title"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Base Image Width"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Update the default width for the base image. This will be used for the "
+"slideshow dimensions and base image cropping."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Change the default width"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Base Image Height"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Update the default height for the base image. This will be used for the base "
+"image cropping and slideshow dimaneions. If set to 100% width, the height "
+"will scale accordingly."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "100% Width"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"While the width and height defined above will be used for cropping (if "
+"enabled) and the base slideshow dimensions, you may also set the slideshow "
+"to stretch to its container."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Global Settings"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Here you will find general account settings and options related to your "
+"account"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "License Key"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Update license key"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Help Improve MetaSlider"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Enable Gallery (Beta)"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Fast, SEO-focused, fully WCAG accessible and easy to use galleries."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "The data in this file does not appear to be valid."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Found %s slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Image search complete"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "We are still searching for your images. Please wait."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "You have no slideshows to import"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Some images are missing"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"When images are missing you will have to manually update or delete the slide "
+"after the import completes."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Continue"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Importing %s slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Import successful"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Easily import slideshows generated by MetaSlider. This requires a file "
+"generated from the Export tab."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Load slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"If you have an export file, you may upload it here to be processed. "
+"Information about each slideshow will be presented below. You will be able "
+"to confirm before importing."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Importing..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Processing..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Upload file"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Date: %s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Version: v%s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "All images required to import are accounted for."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "The following images were not found:"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No image name provided"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Note: You can still import slideshows that contain missing images. You will "
+"just need to manually update or delete these slides from their individual "
+"slideshow edit pages."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Import %s slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Select the slideshows you wish to import below, then press here to import "
+"them."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Post Feed slide"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "External slide"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Image not found<br>%s"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "No slides found"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Loading %s slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "You have no slideshows to export"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Exporting %s slideshows..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Export successful"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+#: admin/assets/js/gutenberg/components/block-edit.js:114
+msgid "No slideshows found."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Create a new slideshow now"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Press to load available slideshows then choose which slideshows to export. "
+"If you only have a few slideshows we will prepare them automatically."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"You have %s slideshows that can be exported. Information about each "
+"slideshow will be presented below."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Refresh"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Load"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Pressing export will gather and organize all of your slideshows into a "
+"single data file that you can use to restore on another website."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Your images will need to be exported manually and uploaded to the new "
+"website before importing these slideshows. Additionally, image file names "
+"need to match as we will use built in WordPress functions to locate the "
+"image based on its current name."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Learn how"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Please note that content contained in \"Post Type\" slides will not be "
+"exported. Only the slide configurations that refer to the content will be."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Export %s slideshows"
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Select the slideshows you wish to export below, then press here to export "
+"them."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Failed to open the settings page..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Opening settings page..."
+msgstr ""
+
+#: admin/assets/dist/js/app.js:2
+msgid "Page not found: %s"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:12
+msgid "Add a slide"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:13
+msgid ""
+"Thanks for using MetaSlider. To get started, click the \"Add Slide\" button "
+"to create your first slide."
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:19
+msgid "Select images"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:20
+msgid ""
+"You can easily add an image from one of the options here. Additionally we "
+"provide free images from the Unsplash library."
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:29
+msgid "Next step"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:38
+msgid "Search unsplash"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:39
+msgid ""
+"Choose an image from the left, or search for any topic here to bring up more "
+"images."
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:44
+msgid "Hide step"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:53
+msgid "Create your slide"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:54
+msgid "After you have selected an image, press here to create your slide."
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:67
+msgid "Preview Slideshow"
+msgstr ""
+
+#: admin/assets/js/app/tour/main.js:68
+msgid ""
+"Now that you have some slides set, you can preview your slideshow by "
+"pressing here."
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:47
+msgid "Slideshow settings"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:55
+msgid "Edit slideshow"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:72
+msgid "Additional CSS Class"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:93
+msgid "Refresh preview"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:107
+msgid "Loading slideshows list..."
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/block-edit.js:115
+msgid "Create one now!"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/preview.js:171
+msgid "Loading slideshow"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/refresh-button.js:35
+msgid "Update preview"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/slideshow-selector.js:26
+#: admin/assets/js/gutenberg/components/slideshow-selector.js:29
+msgid "Select a slideshow"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/stretch-toolbar.js:15
+msgid "Normal width"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/stretch-toolbar.js:19
+msgid "Wide width"
+msgstr ""
+
+#: admin/assets/js/gutenberg/components/stretch-toolbar.js:23
+msgid "Full width"
+msgstr ""
+
+#: admin/assets/js/gutenberg/editor-block.js:79
+msgid "Use MetaSlider to insert slideshows and sliders in your page"
+msgstr ""
+
+#: admin/assets/js/gutenberg/editor-block.js:82
+msgid "slider"
+msgstr ""
+
+#: admin/assets/js/gutenberg/editor-block.js:82
+msgid "slideshow"
+msgstr ""
+
+#: admin/assets/js/gutenberg/editor-block.js:82
+msgid "gallery"
+msgstr ""

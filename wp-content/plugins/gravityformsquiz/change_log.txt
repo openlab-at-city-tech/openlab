@@ -1,3 +1,8 @@
+### 4.1 | 2023-05-11
+- Added additional html classes to quiz confirmation wrapper to standardize styling across themes.
+- Fixed deprecation notices on quiz fields with randomized choices in PHP 8+.
+
+
 ### 4.0 | 2023-01-10
 - Updated stylesheets for compatibility with Gravity Forms 2.7.
 

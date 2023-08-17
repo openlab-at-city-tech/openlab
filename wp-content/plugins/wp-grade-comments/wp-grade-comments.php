@@ -49,16 +49,28 @@ register_activation_hook( __FILE__, 'olgc_activate' );
  * @since 1.0.0
  */
 function olgc_leave_comment_checkboxes() {
-	if ( ! olgc_is_instructor() ) {
+	$show_private_checkbox = olgc_is_instructor() || olgc_is_author();
+	$show_grade_field      = olgc_is_instructor();
+
+	if ( ! $show_private_checkbox && ! $show_grade_field ) {
 		return;
 	}
 
 	?>
 	<div class="olgc-checkboxes">
-		<label for="olgc-private-comment"><?php _e( 'Make this comment private.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-private-comment" id="olgc-private-comment" value="1" />
-		<br />
-		<label for="olgc-add-a-grade"><?php _e( 'Add a grade.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-add-a-grade" id="olgc-add-a-grade" value="1" />
-		<br />
+		<?php if ( $show_private_checkbox ) : ?>
+			<label for="olgc-private-comment"><?php _e( 'Make this comment private.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-private-comment" id="olgc-private-comment" value="1" />
+
+			<!-- Necessary to ensure that the value is submitted even if the checkbox is disabled -->
+			<input type="hidden" name="olgc-private-comment-fallback" id="olgc-private-comment-fallback" value="" />
+
+			<br />
+		<?php endif; ?>
+
+		<?php if ( $show_grade_field ) : ?>
+			<label for="olgc-add-a-grade"><?php _e( 'Add a grade.', 'wp-grade-comments' ) ?></label> <input type="checkbox" name="olgc-add-a-grade" id="olgc-add-a-grade" value="1" />
+			<br />
+		<?php endif; ?>
 	</div>
 	<?php
 }
@@ -100,7 +112,7 @@ add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 
  */
 function olgc_insert_comment( $comment_id, $comment ) {
 	// Private
-	$is_private = olgc_is_instructor() && ! empty( $_POST['olgc-private-comment'] );
+	$is_private = ( olgc_is_instructor() || olgc_is_author( $comment->comment_post_ID ) ) && ( ! empty( $_POST['olgc-private-comment'] ) || ! empty( $_POST['olgc-private-comment-fallback'] ) );
 	if ( ! $is_private && ! empty( $comment->comment_parent ) ) {
 		$is_private = (bool) get_comment_meta( $comment->comment_parent, 'olgc_is_private', true );
 	}
@@ -180,7 +192,7 @@ function olgc_add_private_info_to_comment_text( $text, $comment ) {
 	 */
 	$text = apply_filters( 'olgc_private_comment_text', $text );
 
-	if ( $is_private ) {
+	if ( $is_private && $text ) {
 		$comment_text = sprintf(
 			'<div class="olgc-grade-display olgc-grade-hidden">' .
 			    '<strong class="olgc-private-notice">%s</strong>&nbsp;' .

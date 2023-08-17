@@ -832,6 +832,27 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 							'include_children' => false
 
 						);
+				} else {
+					if ( !empty( $categorylist_cpt ) ) {
+						$link_query_args['tax_query'][] =
+						array(
+							'taxonomy' => $generaloptions['cattaxonomy'],
+							'field'    => 'term_id',
+							'terms'    => explode( ',', $categorylist_cpt ),
+							'include_children' => false
+						);
+					}		
+					
+					if ( !empty( $excludecategorylist_cpt ) ) {
+						$link_query_args['tax_query'][] =
+						array(
+							'taxonomy' => $generaloptions['cattaxonomy'],
+							'field'    => 'term_id',
+							'terms'    => explode( ',', $excludecategorylist_cpt ),
+							'include_children' => false,
+							'operator' => 'NOT IN'
+						);
+					}
 				}
 
 				if ( !empty( $taglist_cpt ) || ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {

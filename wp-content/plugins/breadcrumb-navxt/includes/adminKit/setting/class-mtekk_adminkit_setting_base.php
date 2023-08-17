@@ -19,7 +19,7 @@
 namespace mtekk\adminKit\setting;
 require_once( __DIR__ . '/../../block_direct_access.php');
 //Include setting interface
-if(!interface_exists('mtekk_adminKit_setting'))
+if(!interface_exists('setting'))
 {
 	require_once( __DIR__ . '/interface-mtekk_adminkit_setting.php');
 }
@@ -63,7 +63,7 @@ abstract class setting_base implements setting,\JsonSerializable
 	{
 		$this->allow_empty = $allow_empty;
 	}
-	public function jsonSerialize()
+	public function jsonSerialize(): mixed
 	{
 		return $this->value;
 	}

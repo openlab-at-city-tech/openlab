@@ -1,3 +1,18 @@
+= 10.41 (28th April, 2023) =
+
+* Fix: CSRF, Authorization issues when send an email.
+
+= 10.40 (24th January, 2023) =
+
+* Fix: {UNSUBLINK} tag not working properly when send an email.
+* Fix: subscribe2 emails no longer sending when publish a post.
+* Fix: template entities not working properly in settings page (line breaks, tabs were lost etc.).
+* Fix: subscribe2 notification overridden checkbox not working properly.
+* Fix: debug error when uninstall plugin & use error suppression.
+* Fix: email sending is always selected when multiple choose attachment.
+
+* Enhance: add email attachment removing option from send email.
+
 = 10.39 (23st December, 2022) =
 
  * Fix classic editor page meta field error.

@@ -248,7 +248,7 @@ class S2_List_Table extends WP_List_Table {
 			return;
 		}
 
-		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-subscribers' ) ) {
+		if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-subscribers' ) ) {
 			echo '<div id="message" class="error"><p><strong>' . __( 'Error: Nonce verification failed.', 'subscribe2' ) . '</strong></p></div>';
 			return;
 		}

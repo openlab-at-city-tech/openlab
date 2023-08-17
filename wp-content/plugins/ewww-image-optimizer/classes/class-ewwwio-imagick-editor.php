@@ -50,9 +50,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 					);
 				}
 			}
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
-			}
 			$saved = parent::_save( $image, $filename, $mime_type );
 			if ( ! is_wp_error( $saved ) ) {
 				if ( ! $filename ) {
@@ -107,9 +104,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 						'mime-type' => $mime_type,
 					);
 				}
-			}
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
 			}
 			$saved = parent::_save( $image, $filename, $mime_type );
 			if ( ! is_wp_error( $saved ) ) {
@@ -167,9 +161,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 					);
 				}
 			}
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
-			}
 			$saved = parent::_save( $image, $filename, $mime_type );
 			if ( ! is_wp_error( $saved ) ) {
 				if ( ! $filename ) {
@@ -193,6 +184,22 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 	 * @see WP_Image_Editor_Imagick
 	 */
 	class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
+
+		/**
+		 * GD Resource.
+		 *
+		 * @access protected
+		 * @var resource|GdImage $ewww_image
+		 */
+		protected $ewww_image;
+
+		/**
+		 * Site (URL) for the plugin to use.
+		 *
+		 * @access protected
+		 * @var string $site_url
+		 */
+		protected $modified = false;
 
 		/**
 		 * Resizes current image.
@@ -220,6 +227,10 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				return new WP_Error( 'error_getting_dimensions', __( 'Could not calculate resized image dimensions' ) );
 			}
 			list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $dims;
+
+			if ( is_callable( 'self::set_imagick_time_limit' ) ) {
+				self::set_imagick_time_limit();
+			}
 
 			$resized = $this->_resize( $dims, $crop );
 
@@ -272,37 +283,50 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				return $this->thumbnail_image( $dst_w, $dst_h );
 			}
 			$return_parent = false; // An indicator for whether we should short-circuit and use the parent thumbnail_image method.
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
+			$ewww_status   = get_transient( 'ewww_image_optimizer_cloud_status' );
+			if ( 'image/gif' === $this->mime_type && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
+				$gifsicle_path = ewwwio()->local->get_path( 'gifsicle' );
 			}
-			$ewww_status = get_transient( 'ewww_image_optimizer_cloud_status' );
-			if ( 'image/gif' === $this->mime_type && function_exists( 'ewww_image_optimizer_path_check' ) && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-				ewww_image_optimizer_path_check( false, false, true, false, false, false, false );
+			// If this is a GIF, and we have no gifsicle, and there's an API key, but the status isn't 'great',
+			// double-check the key to see if the status has changed before bailing.
+			if (
+				'image/gif' === $this->mime_type &&
+				empty( $gifsicle_path ) &&
+				false === strpos( $ewww_status, 'great' ) &&
+				ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) &&
+				! ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) )
+			) {
+				ewwwio_debug_message( 'no gifsicle or API to resize an animated GIF' );
+				$return_parent = true;
 			}
-			if ( 'image/gif' === $this->mime_type && ( ! defined( 'EWWW_IMAGE_OPTIMIZER_GIFSICLE' ) || ! EWWW_IMAGE_OPTIMIZER_GIFSICLE ) ) {
-				if ( false === strpos( $ewww_status, 'great' ) ) {
-					if ( ! ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) ) {
-						ewwwio_debug_message( 'no gifsicle or API to resize an animated GIF' );
-						$return_parent = true;
-					}
-				}
+			// If this is some other image, and there's an API key, but the status isn't 'great',
+			// double-check the key to see if the status has changed before bailing.
+			if (
+				'image/gif' !== $this->mime_type &&
+				false === strpos( $ewww_status, 'great' ) &&
+				ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) &&
+				! ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) )
+			) {
+				ewwwio_debug_message( 'no API to resize the image' );
+				$return_parent = true;
 			}
-			if ( 'image/gif' !== $this->mime_type && false === strpos( $ewww_status, 'great' ) ) {
-				if ( ! ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) ) {
-					ewwwio_debug_message( 'no API to resize the image' );
-					$return_parent = true;
-				}
-			}
+			// If this isn't a GIF, or if the GIF isn't animated, then bail--we don't yet support "better resizing" for non-GIFs.
 			if ( 'image/gif' !== $this->mime_type || ! ewww_image_optimizer_is_animated( $this->file ) ) {
 				ewwwio_debug_message( 'not an animated GIF' );
 				$return_parent = true;
 			}
 			// TODO: Possibly handle crop, rotate, and flip down the road.
-			if ( ! empty( $this->modified ) ) {
+			if ( $this->modified ) {
 				ewwwio_debug_message( 'image already altered, leave it alone' );
 				$return_parent = true;
 			}
-			if ( ! $this->file || ewww_image_optimizer_stream_wrapped( $this->file ) || 0 === strpos( $this->file, 'http' ) || 0 === strpos( $this->file, 'ftp' ) || ! ewwwio_is_file( $this->file ) ) {
+			if (
+				! $this->file ||
+				ewww_image_optimizer_stream_wrapped( $this->file ) ||
+				0 === strpos( $this->file, 'http' ) ||
+				0 === strpos( $this->file, 'ftp' ) ||
+				! ewwwio_is_file( $this->file )
+			) {
 				ewwwio_debug_message( 'could not load original file, or remote path detected' );
 				$return_parent = true;
 			}
@@ -340,7 +364,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 				return new WP_Error( 'image_resize_error', __( 'Image resize failed.' ) );
 			}
 			$this->update_size( $new_size['width'], $new_size['height'] );
-			ewwwio_memory( __FUNCTION__ );
 			return $resize_result;
 		}
 
@@ -698,7 +721,7 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 			ewwwio_debug_message( '<b>wp_image_editor_imagick::' . __FUNCTION__ . '()</b>' );
 			global $ewww_defer;
 			global $ewww_preempt_editor;
-			if ( ! empty( $this->ewww_image ) && empty( $this->modified ) ) {
+			if ( ! empty( $this->ewww_image ) && ! $this->modified ) {
 				return $this->_save_ewwwio_file( $this->ewww_image, $filename, $mime_type );
 			}
 			if ( ! empty( $ewww_preempt_editor ) || ! defined( 'EWWW_IMAGE_OPTIMIZER_ENABLE_EDITOR' ) || ! EWWW_IMAGE_OPTIMIZER_ENABLE_EDITOR ) {
@@ -721,9 +744,6 @@ if ( class_exists( 'WP_Thumb_Image_Editor_Imagick' ) ) {
 						'mime-type' => $mime_type,
 					);
 				}
-			}
-			if ( ! defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD' ) ) {
-				ewww_image_optimizer_cloud_init();
 			}
 			$saved = parent::_save( $image, $filename, $mime_type );
 			if ( ! is_wp_error( $saved ) ) {

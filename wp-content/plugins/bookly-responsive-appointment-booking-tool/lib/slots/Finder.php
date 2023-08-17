@@ -28,6 +28,8 @@ class Finder
     /** @var bool */
     protected $show_blocked_slots;
     /** @var bool */
+    protected $single_slot_per_day;
+    /** @var bool */
     protected $waiting_list_enabled;
     /** @var array */
     protected $ignore_appointments = array();
@@ -71,14 +73,16 @@ class Finder
      * @param bool $waiting_list_enabled
      * @param array $ignore_appointments
      * @param bool $show_blocked_slots
+     * @param bool $single_slot_per_day
      */
-    public function __construct( Lib\UserBookingData $userData, $callback_group = null, $callback_stop = null, $waiting_list_enabled = null, $ignore_appointments = array(), $show_blocked_slots = null )
+    public function __construct( Lib\UserBookingData $userData, $callback_group = null, $callback_stop = null, $waiting_list_enabled = null, $ignore_appointments = array(), $show_blocked_slots = null, $single_slot_per_day = false )
     {
         $this->userData = $userData;
         $this->slot_length = Lib\Config::getTimeSlotLength();
         $this->srv_duration_as_slot_length = Lib\Config::useServiceDurationAsSlotLength();
         $this->show_calendar = Lib\Config::showCalendar();
         $this->show_blocked_slots = $show_blocked_slots === null ? Lib\Config::showBlockedTimeSlots() : $show_blocked_slots;
+        $this->single_slot_per_day = $single_slot_per_day;
         $this->waiting_list_enabled = Lib\Config::showSingleTimeSlot() ? false : ( $waiting_list_enabled === null ? Lib\Config::waitingListActive() && get_option( 'bookly_waiting_list_enabled' ) : $waiting_list_enabled );
         $this->ignore_appointments = $ignore_appointments;
 
@@ -292,14 +296,15 @@ class Finder
                             continue 2;
                     }
                 }
+                if ( ! $this->single_slot_per_day || ! isset ( $this->slots[ $group ] ) ) {
+                    if ( $this->show_blocked_slots || $slot->notFullyBooked() ) {
+                        // Add slot to result.
+                        $this->slots[ $group ][] = $slot;
 
-                if ( $slot->notFullyBooked() || $this->show_blocked_slots ) {
-                    // Add slot to result.
-                    $this->slots[ $group ][] = $slot;
-
-                    ++$slots_count;
-                    if ( $slot->notFullyBooked() ) {
-                        ++$available_slots_count;
+                        ++$slots_count;
+                        if ( $slot->notFullyBooked() ) {
+                            ++$available_slots_count;
+                        }
                     }
                 }
             }
@@ -367,7 +372,7 @@ class Finder
      * @param DatePoint $client_dp
      * @param int $groups_count
      * @param int $slots_count
-     * @return bool
+     * @return int
      */
     private function _stopCalendar( DatePoint $client_dp, $groups_count, $slots_count )
     {
@@ -463,6 +468,9 @@ class Finder
      */
     private function _prepareStaffData()
     {
+        // Reset staff data
+        $this->staff = array();
+
         $custom_service = false;
         // Prepare staff IDs for each service.
         $staff_ids = array();
@@ -509,6 +517,7 @@ class Finder
                         0,
                         0,
                         1,
+                        0,
                         1,
                         Lib\Entities\Service::PREFERRED_MOST_EXPENSIVE,
                         array(),
@@ -518,7 +527,7 @@ class Finder
             }
         }
         $query = Lib\Entities\StaffService::query( 'ss' )
-            ->select( 'ss.service_id, ss.price, ss.staff_id' )
+            ->select( 'ss.service_id, ss.price, ss.staff_id, s.waiting_list_capacity' )
             ->addSelect( sprintf( '%s AS staff_preference, %s AS staff_preference_settings, %s AS capacity_min, %s AS capacity_max',
                 Lib\Proxy\Shared::prepareStatement( '\'' . Lib\Entities\Service::PREFERRED_LEAST_EXPENSIVE . '\'', 's.staff_preference', 'Service' ),
                 Lib\Proxy\Shared::prepareStatement( '\'{}\'', 's.staff_preference_settings', 'Service' ),
@@ -563,6 +572,7 @@ class Finder
                 $row['price'],
                 $row['capacity_min'],
                 $row['capacity_max'],
+                $row['waiting_list_capacity'],
                 $row['staff_preference'],
                 $staff_preference_settings,
                 $row['position']

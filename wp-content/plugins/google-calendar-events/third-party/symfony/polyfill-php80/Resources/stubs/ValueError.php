@@ -1,7 +1,5 @@
 <?php
 
-namespace SimpleCalendar\plugin_deps;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -10,8 +8,9 @@ namespace SimpleCalendar\plugin_deps;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 if (\PHP_VERSION_ID < 80000) {
-    class ValueError extends \Error
+    class ValueError extends Error
     {
     }
 }

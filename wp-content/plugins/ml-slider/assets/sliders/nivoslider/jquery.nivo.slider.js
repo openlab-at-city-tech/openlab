@@ -128,7 +128,7 @@
 
         // Add Direction nav
         if(settings.directionNav){
-            slider.append('<div class="nivo-directionNav"><a class="nivo-prevNav" rel=”nofollow”>'+ settings.prevText +'</a><a class="nivo-nextNav rel=”nofollow”">'+ settings.nextText +'</a></div>');
+            slider.append('<div class="nivo-directionNav"><a class="nivo-prevNav" rel="nofollow" aria-label="Previous Slide">'+ settings.prevText +'</a><a class="nivo-nextNav" rel="nofollow" aria-label="Next Slide">'+ settings.nextText +'</a></div>');
 
             $(slider).on('click', 'a.nivo-prevNav', function(){
                 if(vars.running) { return false; }
@@ -148,7 +148,7 @@
 
         // Add Control nav
         if(settings.controlNav){
-            vars.controlNavEl = $('<div class="nivo-controlNav"></div>');
+            vars.controlNavEl = $('<div class="nivo-controlNav" role="group" aria-label="Slide controls"></div>');
             slider.after(vars.controlNavEl);
             for(var i = 0; i < kids.length; i++){
                 if(settings.controlNavThumbs){
@@ -157,9 +157,9 @@
                     if(!child.is('img')){
                         child = child.find('img:first');
                     }
-                    if(child.attr('data-thumb')) vars.controlNavEl.append('<a class="nivo-control" rels="'+ i +'"><img src="'+ child.attr('data-thumb') +'" alt="" /></a>');
+                    if(child.attr('data-thumb')) vars.controlNavEl.append('<a class="nivo-control" rels="'+ i +'" aria-label="Show slide ' + (i + 1) + ' of ' + kids.length + '"><img src="'+ child.attr('data-thumb') +'" alt="" /></a>');
                 } else {
-                    vars.controlNavEl.append('<a class="nivo-control" rel=”nofollow” rels="'+ i +'">'+ (i + 1) +'</a>');
+                    vars.controlNavEl.append('<a class="nivo-control" rel=”nofollow” rels="'+ i +'" aria-label="Show slide ' + (i + 1) + ' of ' + kids.length + '">'+ (i + 1) +'</a>');
                 }
             }
 

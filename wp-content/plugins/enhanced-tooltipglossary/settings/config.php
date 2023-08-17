@@ -104,7 +104,7 @@ $config = [
         'cmtt_glossaryLimitTooltip'                      => ['value' => 0,], // Limit the tooltip length  ?
         'cmtt_glossaryTermDetailsLink'                   => ['value' => 'Term details',], // Label of the link to term's details
         'cmtt_glossaryExcerptHover'                      => ['value' => 0,], //Search for all occurances in a post or only one?
-        'cmtt_glossaryProtectedTags'                     => ['value' => 1,], //Aviod the use of Glossary in Protected tags?
+        'cmtt_glossaryProtectedTags'                     => ['value' => ['all_h,h1,a,other'],], //Aviod the use of Glossary in Protected tags?
         'cmtt_glossaryCaseSensitive'                     => ['value' => 0,], //Case sensitive?
         'cmtt_glossaryRemoveCommentsTermPage'            => ['value' => 1,], //Remove the comments from term page
         'cmtt_glossaryInNewPage'                         => ['value' => 0,], //In New Page?

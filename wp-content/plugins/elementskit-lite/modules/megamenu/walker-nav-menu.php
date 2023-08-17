@@ -33,7 +33,8 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 	}
 
 	public function is_megamenu( $menu_slug ) {
-		$menu_slug = ( ( ( gettype( $menu_slug ) == 'object' ) && ( isset( $menu_slug->slug ) ) ) ? $menu_slug->slug : $menu_slug );
+		$menu_obj = wp_get_nav_menu_object($menu_slug);
+		$menu_slug = ( ( ( gettype( $menu_obj ) == 'object' ) && ( isset( $menu_obj->slug ) ) ) ? $menu_obj->slug : $menu_slug );
 
 		$cache_key = 'elementskit_megamenu_data_' . $menu_slug;
 		$cached    = wp_cache_get( $cache_key );
@@ -296,10 +297,9 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 		if ( $depth === 0 ) {
 			if ( $this->is_megamenu( $args->menu ) == 1 ) {
 				$item_meta = $this->get_item_meta( $item->ID );
-
 				if ( $item_meta['menu_enable'] == 1 && class_exists( 'Elementor\Plugin' ) ) {
 					$builder_post_title = 'dynamic-content-megamenu-menuitem' . $item->ID;
-					$builder_post       = get_page_by_title( $builder_post_title, OBJECT, 'elementskit_content' );
+					$builder_post       = Utils::get_page_by_title( $builder_post_title, 'elementskit_content' );
 					$output            .= '<div class="elementskit-megamenu-panel">';
 					if ( $builder_post != null ) {
 						$elementor = \Elementor\Plugin::instance();

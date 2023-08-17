@@ -120,14 +120,6 @@ $all_buttons = $this->get_all_buttons();
 // TODO admin || SA
 $this->warn_if_unsupported();
 
-// Add a notice that the plugin was renamed.
-// Remove in the bnext version.
-?>
-<div class="notice notice-warning is-dismissible"><p>
-<?php _e( 'Please note: This plugin was renamed from "TinyMCE Advanced" to "Advanced Editor Tools". The plugin functionality remains the same.', 'tinymce-advanced' ); ?>
-</p></div>
-<?php
-
 if ( isset( $_POST['tadv-save'] ) && empty( $message ) ) {
 	?><div class="updated notice notice-success is-dismissible"><p><?php _e( 'Settings saved.', 'tinymce-advanced' ); ?></p></div><?php
 } else {
@@ -156,267 +148,26 @@ $dashicons_arrow = is_rtl() ? 'dashicons-arrow-left' : 'dashicons-arrow-right';
 </div>
 
 <div id="block-editor">
-<h4><?php _e( 'Toolbars for the Block Editor', 'tinymce-advanced' ); ?></h4>
-<div class="block-toolbars">
-<?php
-	$all_block_buttons = $this->get_all_block_buttons();
-	$all_block_panels = $this->get_all_block_panels();
-
-?>
-
-	<div>
-		<p class="toolbar-block-title">
-			<strong><?php _e( 'Main toolbar', 'tinymce-advanced' ); ?></strong>
-			<br>
-			<span class="tma-help tadv-popout-help-toggle">
-				<span class="dashicons dashicons-editor-help"></span>
-				<?php _e( 'Limitations for the Block Editor toolbar', 'tinymce-advanced' ); ?>
-			</span>
+<h4><?php _e( 'Additional buttons for the Rich-Text toolbar', 'tinymce-advanced' ); ?></h4>
+<div class="block-toolbars yes-no-wrap">
+	<div class="yes-no-text">
+		<p>
+			<?php _e( 'The <b>Mark</b> button will wrap the selected text in a plain &lt;mark&gt; HTML element. The appearance would depend on your theme and usually resembles highlighted text.', 'tinymce-advanced' ); ?>
 		</p>
-
-		<div class="tadv-popout-help hidden">
-			<span class="tadv-popout-help-close dashicons dashicons-no-alt"></span>
-			<ol>
-				<li><?php _e( 'The Align Left, Align Center, Align Right, Bold, Italic, and Link buttons cannot be moved or arranged.', 'tinymce-advanced' ); ?></li>
-				<li><?php _e( 'All other buttons are always shown in a drop-down. The users are not allowed to add any of them to the main toolbar.', 'tinymce-advanced' ); ?></li>
-				<li><?php _e( 'All buttons that are shown in the drop-down are auto-arranged by alphabetical order. The users are not allowed to arrange them.', 'tinymce-advanced' ); ?></li>
-				<li><?php _e( 'The drop-down cannot be empty and the Inline Image and Text Color items cannot be placed in the side toolbar.', 'tinymce-advanced' ); ?>
-			</ol>
-		</div>
-
-		<div class="toolbar-block-wrap toolbar-wrap">
-			<div role="toolbar" aria-orientation="horizontal" class="tma-block-toolbar-wrap editor-block-toolbar" aria-label="Block toolbar example representation">
-
-			<div class="editor-block-switcher block-editor-block-switcher">
-				<div class="components-toolbar">
-					<button type="button" class="components-button components-icon-button editor-block-switcher__toggle block-editor-block-switcher__toggle">
-						<span class="editor-block-icon block-editor-block-icon has-colors">
-							<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false"><path d="M11 5v7H9.5C7.6 12 6 10.4 6 8.5S7.6 5 9.5 5H11m8-2H9.5C6.5 3 4 5.5 4 8.5S6.5 14 9.5 14H11v7h2V5h2v16h2V5h2V3z"></path></svg>
-						</span>
-					</button>
-				</div>
-			</div>
-
-			<div class="components-toolbar">
-				<div>
-					<button type="button" aria-label="Align text left" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-						<span class="dashicons dashicons-editor-alignleft"></span>
-					</button>
-				</div>
-
-				<div>
-					<button type="button" aria-label="Align text center" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-						<span class="dashicons dashicons-editor-aligncenter"></span>
-					</button>
-				</div>
-
-				<div>
-					<button type="button" aria-label="Align text right" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-						<span class="dashicons dashicons-editor-alignright"></span>
-					</button>
-				</div>
-			</div>
-
-			<?php if ( is_rtl() ) : ?>
-			<div class="components-toolbar">
-				<div>
-					<button type="button" aria-label="Left to right" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-						<span class="dashicons dashicons-editor-ltr"></span>
-					</button>
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<div class="editor-format-toolbar block-editor-format-toolbar">
-				<div class="components-toolbar">
-					<div>
-						<button type="button" aria-label="Bold" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-							<span class="dashicons dashicons-editor-bold"></span>
-						</button>
-					</div>
-
-					<div>
-						<button type="button" aria-label="Italic" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-							<span class="dashicons dashicons-editor-italic"></span>
-						</button>
-					</div>
-
-					<div>
-						<button type="button" aria-label="Link" aria-pressed="false" class="components-button components-icon-button components-toolbar__control">
-							<span class="dashicons dashicons-admin-links"></span>
-						</button>
-					</div>
-
-					<div class="components-dropdown-menu">
-						<button type="button" aria-label="More Rich Text Controls" aria-haspopup="true" aria-expanded="false" class="components-button components-icon-button components-dropdown-menu__toggle has-text">
-							<span class="components-dropdown-menu__indicator"></span>
-						</button>
-					</div>
-				</div>
-			</div>
-
-			<div>
-				<div class="components-toolbar">
-					<div>
-						<button type="button" aria-label="More options" aria-expanded="false" class="components-button components-icon-button components-toolbar__control editor-block-settings-menu__toggle block-editor-block-settings-menu__toggle">
-							<svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-ellipsis" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M5 10c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm12-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-7 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path></svg>
-						</button>
-					</div>
-				</div>
-			</div>
-
-			</div><?php // .editor-block-toolbar end ?>
-		</div>
-		<div class="tma-block-dropdown-toolbar-wrap">
-			<div class="tma-block-dropdown-toolbar-arrow"></div>
-			<div class="tma-block-dropdown-toolbar">
-				<div class="tma-block-dropdown-toolbar-inner-wrap">
-					<ul id="toolbar_block" class="toolbar-block-dropdown container-block">
-					<?php
-
-					// Block editor limitation: only the buttons in the overflow drop-down/sub-toolbar can be moved (but not arranged).
-					$excluded_block_buttons = array(
-						'core/bold',
-						'core/italic',
-						'core/link',
-					);
-
-					foreach( $this->toolbar_block as $button_id ) {
-						if ( in_array( $button_id, $excluded_block_buttons, true ) ) {
-							continue;
-						}
-
-						if ( isset( $all_block_buttons[ $button_id ] ) ) {
-							$name = $all_block_buttons[ $button_id ]['name'];
-							$icon = $all_block_buttons[ $button_id ]['icon'];
-							unset( $all_block_buttons[ $button_id ] );
-						} else {
-							continue;
-						}
-
-						?><li class="<?php echo str_replace( '/', '-', $button_id ); ?>">
-							<div type="button" title="<?php echo $name; ?>" aria-pressed="false" class="tma-components-icon-button">
-								<?php echo $icon; ?>
-								<span class="block-button-name"><?php echo $name; ?></span>
-							</div>
-							<input type="hidden" name="toolbar_block[]" value="<?php echo $button_id; ?>">
-						</li><?php
-					}
-
-					?>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-		<p class="toolbar-block-title">
-			<strong><?php _e( 'Alternative side toolbar', 'tinymce-advanced' ); ?></strong>
-			<?php _e( '(shown in the sidebar)', 'tinymce-advanced' ); ?>
+		<p>
+			<?php _e( 'The <b>Clear formatting</b> button will remove text formatting from the selected text, or from the whole paragraph if there is no selection. This includes femoval of most text styling like bold, italic, underline, background and foreground color, etc.', 'tinymce-advanced' ); ?>
 		</p>
-		<div class="toolbar-side-wrap toolbar-wrap">
-			<div class="panel-title">
-				<?php _e( 'Formatting', 'tinymce-advanced' ); ?>
-				<span class="dashicons dashicons-arrow-up-alt2"></span>
-			</div>
-			<ul id="toolbar_block_side" class="tma-components-toolbar block-toolbar-side container-block"><?php
-
-
-			foreach( $this->toolbar_block_side as $button_id ) {
-				if ( isset( $all_block_buttons[ $button_id ] ) ) {
-					$name = $all_block_buttons[ $button_id ]['name'];
-					$icon = $all_block_buttons[ $button_id ]['icon'];
-					unset( $all_block_buttons[ $button_id ] );
-				} else {
-					continue;
-				}
-
-				?><li class="<?php echo str_replace( '/', '-', $button_id ); ?>">
-					<div type="button" title="<?php echo $name; ?>" aria-pressed="false" class="tma-components-icon-button">
-						<?php echo $icon; ?>
-						<span class="block-button-name"><?php echo $name; ?></span>
-					</div>
-					<input type="hidden" name="toolbar_block_side[]" value="<?php echo $button_id; ?>">
-				</li><?php
-			}
-
-			?></ul>
-
-		</div><?php // toolbar-side-wrap end ?>
-
-		<p class="toolbar-block-title">
-			<strong><?php _e( 'Unused buttons for the blocks toolbars', 'tinymce-advanced' ); ?></strong>
-		</p>
-		<div class="toolbar-unused-wrap toolbar-wrap">
-			<ul id="toolbar_block_unused" class="tma-components-toolbar block-toolbar-unused container-block"><?php
-
-			foreach( $all_block_buttons as $button_id => $button ) {
-				$name = $button['name'];
-				$icon = $button['icon'];
-
-				?><li class="<?php echo str_replace( '/', '-', $button_id ); ?>">
-					<div type="button" title="<?php echo $name; ?>" aria-pressed="false" class="tma-components-icon-button">
-						<?php echo $icon; ?>
-						<span class="block-button-name"><?php echo $name; ?></span>
-					</div>
-					<input type="hidden" name="toolbar_block_unused[]" value="<?php echo $button_id; ?>">
-				</li><?php
-			}
-
-			?></ul>
-		</div><?php // toolbar-unused-wrap end ?>
-
-		<?php $colors_preview_src = is_rtl() ? $images_url . '/colors-rtl.png' : $images_url . '/colors.png' ?>
-		<div class="panel-block-colors-wrap">
-			<div class="panel-block-colors">
-				<div class="panel-title">
-					<?php _e( 'Text color', 'tinymce-advanced' ); ?>
-					<span class="dashicons dashicons-arrow-up-alt2"></span>
-				</div>
-				<div class="panel-block-text-color<?php if ( ! $this->check_user_setting( 'selected_text_color' ) ) echo ' disabled'; ?>">
-					<p><?php _e( 'Selected text color', 'tinymce-advanced' ); ?></p>
-					<img width="260" height="100" class="text-color-preview" src="<?php echo $colors_preview_src; ?>">
-				</div>
-				<div class="panel-block-background-color<?php if ( ! $this->check_user_setting( 'selected_text_background_color' ) ) echo ' disabled'; ?>">
-					<p><?php _e( 'Selected text background color', 'tinymce-advanced' ); ?></p>
-					<img width="260" height="100" class="text-color-preview" src="<?php echo $colors_preview_src; ?>">
-				</div>
-			</div>
-
-			<table class="form-table panel-block-colors-settings"><tbody>
-				<tr class="panel-block-colors-settings__text">
-					<th>
-						<?php _e( 'Enable setting of selected text color', 'tinymce-advanced' ); ?>
-						<span class="small-info"><?php _e( '(this will replace the default text color popup in WP 5.4 and newer)', 'tinymce-advanced' ); ?></span>
-					</th>
-					<td>
-						<p>
-							<input type="radio" name="selected_text_color" id="selected_text_color_yes" value="yes"<?php if ( $this->check_user_setting( 'selected_text_color' ) ) echo ' checked'; ?>>
-							<label for="selected_text_color_yes"><?php _e( 'Yes', 'tinymce-advanced' ); ?></label>
-						</p>
-						<p>
-							<input type="radio" name="selected_text_color" id="selected_text_color_no"  value="no"<?php if ( ! $this->check_user_setting( 'selected_text_color' ) ) echo ' checked'; ?>>
-							<label for="selected_text_color_no"><?php _e( 'No', 'tinymce-advanced' ); ?></label>
-						</p>
-					</td>
-				</tr>
-				<tr class="panel-block-colors-settings__background">
-					<th><?php _e( 'Enable setting of selected text background color', 'tinymce-advanced' ); ?></th>
-					<td>
-						<p>
-							<input type="radio" name="selected_text_background_color" id="selected_text_background_color_yes" value="yes"<?php if ( $this->check_user_setting( 'selected_text_background_color' ) ) echo ' checked'; ?>>
-							<label for="selected_text_background_color_yes"><?php _e( 'Yes', 'tinymce-advanced' ); ?></label>
-						</p>
-						<p>
-							<input type="radio" name="selected_text_background_color" id="selected_text_background_color_no" value="no"<?php if ( ! $this->check_user_setting( 'selected_text_background_color' ) ) echo ' checked'; ?>>
-							<label for="selected_text_background_color_no"><?php _e( 'No', 'tinymce-advanced' ); ?></label>
-						</p>
-					</td>
-				</tr>
-			</tbody></table>
-		</div><?php // panel-block-colors-wrap end ?>
-		<br clear="both">
 	</div>
-
+	<div class="yes-no-buttons">
+		<div>
+			<input type="radio" name="richtext_buttons" id="richtext_buttons_yes" value="yes"<?php if ( ! $this->check_user_setting( 'disable_richtext_buttons' ) ) echo ' checked'; ?>>
+			<label for="richtext_buttons_yes"><?php _e( 'Enable', 'tinymce-advanced' ); ?></label>
+		</div>
+		<div>
+			<input type="radio" name="richtext_buttons" id="richtext_buttons_no"  value="no"<?php if ( $this->check_user_setting( 'disable_richtext_buttons' ) ) echo ' checked'; ?>>
+			<label for="richtext_buttons_no"><?php _e( 'Disable', 'tinymce-advanced' ); ?></label>
+		</div>
+	</div>
 </div>
 
 <h4 class="classic-blocks-title-h4"><?php _e( 'Toolbars for the Classic Paragraph and Classic blocks', 'tinymce-advanced' ); ?></h4>
@@ -979,7 +730,14 @@ if ( ! is_multisite() || current_user_can( 'manage_sites' ) ) {
 	<?php
 
 }
+
+
+// Add a notice that the plugin was renamed.
 ?>
+<p>
+	<span class="dashicons dashicons-info" style="color: #777;"></span>
+	<?php _e( 'Please note: This plugin was renamed from "TinyMCE Advanced" to "Advanced Editor Tools". The plugin functionality remains the same.', 'tinymce-advanced' ); ?>
+</p>
 
 <hr>
 

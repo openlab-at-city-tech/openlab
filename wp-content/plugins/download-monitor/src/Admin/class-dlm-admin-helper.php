@@ -151,4 +151,62 @@ class DLM_Admin_Helper {
 
 		return true;
 	}
+
+	/**
+	 * Check the column type.
+	 *
+	 * @param string $table_name The table.
+	 * @param string $col_name   The column.
+	 * @param string $col_type   The type.
+	 *
+	 * @return bool|null
+	 * @since 4.8.0
+	 */
+	public static function check_column_type( $table_name, $col_name, $col_type ) {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Cannot be prepared. Fetches columns for table names.
+		$results = $wpdb->get_results( "DESC $table_name" );
+		if ( empty( $results ) ) {
+			return null;
+		}
+
+		foreach ( $results as $row ) {
+
+			if ( $row->Field === $col_name ) {
+
+				// Got our column, check the params.
+				if ( ( null !== $col_type ) && ( $row->Type !== $col_type ) ) {
+					return false;
+				}
+
+				return true;
+			} // End if found our column.
+		}
+
+		return null;
+	}
+
+	/**
+	 * Check whether the license is valid or not.
+	 *
+	 * @param string $functionality The functionality.
+	 *
+	 * @return bool
+	 *
+	 * @since 3.8.2
+	 */
+	public function check_license_validity( $functionality ) {
+		// Check if license is valid.
+		if ( ! class_exists( 'DLM_Product_License' ) ) {
+			return false;
+		}
+		$license = new DLM_Product_License( $functionality );
+
+		if ( ! $license || ! $license->is_active() ) {
+			return false;
+		}
+
+		return true;
+	}
 }

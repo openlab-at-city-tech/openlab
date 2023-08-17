@@ -16,6 +16,7 @@ use Bookly\Lib\Utils\DateTime;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Components\Dialogs\Appointment\Edit
  */
 class Ajax extends Lib\Base\Ajax
@@ -59,7 +60,7 @@ class Ajax extends Lib\Base\Ajax
         }
 
         $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
-        $max_duration  = 0;
+        $max_duration = 0;
         $has_categories = (bool) Category::query()->findOne();
         $appropriate_time_slots = get_option( 'bookly_appointments_displayed_time_slots', 'all' ) === 'appropriate';
 
@@ -95,6 +96,7 @@ class Ajax extends Lib\Base\Ajax
                                     ),
                                 ),
                                 'online_meetings' => $service->getOnlineMeetings(),
+                                'position' => (int) $service->getPosition(),
                             );
                             $max_duration = max( $max_duration, $service->getUnitsMax() * $service->getDuration() );
                             // Prepare time slots if service has custom time slots length.
@@ -140,7 +142,7 @@ class Ajax extends Lib\Base\Ajax
             $locations = array();
             foreach ( (array) Lib\Proxy\Locations::findByStaffId( $staff_member->getId() ) as $location ) {
                 $locations[] = array(
-                    'id'   => (int) $location->getId(),
+                    'id' => (int) $location->getId(),
                     'name' => $location->getName(),
                 );
             }
@@ -165,10 +167,10 @@ class Ajax extends Lib\Base\Ajax
                 }
 
                 $result['customers'][] = array(
-                    'id'            => (int) $customer->getId(),
-                    'name'          => $name,
-                    'group_id'      => $customer->getGroupId(),
-                    'timezone'      => Lib\Proxy\Pro::getLastCustomerTimezone( $customer->getId() ),
+                    'id' => (int) $customer->getId(),
+                    'name' => $name,
+                    'group_id' => $customer->getGroupId(),
+                    'timezone' => Lib\Proxy\Pro::getLastCustomerTimezone( $customer->getId() ),
                 );
             }
         } else {
@@ -179,7 +181,7 @@ class Ajax extends Lib\Base\Ajax
         // For appropriate time slots use minimal time slot length (5 min)
         $ts_length = $appropriate_time_slots ? 5 * MINUTE_IN_SECONDS : ( $appointments_time_delimiter > 0 ? $appointments_time_delimiter : Lib\Config::getTimeSlotLength() );
         $time_start = 0;
-        $time_end   = max( $max_duration + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
+        $time_end = max( $max_duration + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
 
         // Run the loop.
         while ( $time_start <= $time_end ) {
@@ -197,7 +199,7 @@ class Ajax extends Lib\Base\Ajax
         }
 
         $days_times = Lib\Config::getDaysAndTimes();
-        $weekdays  = array( 1 => 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', );
+        $weekdays = array( 1 => 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', );
         foreach ( $days_times['days'] as $index => $abbrev ) {
             $result['week_days'][] = $weekdays[ $index ];
         }
@@ -280,7 +282,7 @@ class Ajax extends Lib\Base\Ajax
                     c.full_name,
                     c.email,
                     c.phone,
-                    c.group_id')
+                    c.group_id' )
                 ->leftJoin( 'Payment', 'p', 'p.id = ca.payment_id' )
                 ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
                 ->where( 'ca.appointment_id', $appointment->getId() )
@@ -379,22 +381,22 @@ class Ajax extends Lib\Base\Ajax
     public static function saveAppointmentForm()
     {
         $response = array( 'success' => false );
-        $appointment_id       = (int) self::parameter( 'id', 0 );
-        $staff_id             = (int) self::parameter( 'staff_id', 0 );
-        $service_id           = (int) self::parameter( 'service_id', -1 );
-        $custom_service_name  = trim( self::parameter( 'custom_service_name', '' ) );
+        $appointment_id = (int) self::parameter( 'id', 0 );
+        $staff_id = (int) self::parameter( 'staff_id', 0 );
+        $service_id = (int) self::parameter( 'service_id', -1 );
+        $custom_service_name = trim( self::parameter( 'custom_service_name', '' ) );
         $custom_service_price = trim( self::parameter( 'custom_service_price', '' ) );
-        $location_id          = (int) self::parameter( 'location_id', 0 );
-        $skip_date            = self::parameter( 'skip_date', 0 );
-        $start_date           = self::parameter( 'start_date' );
-        $end_date             = self::parameter( 'end_date' );
-        $repeat               = json_decode( self::parameter( 'repeat', '[]' ), true );
-        $schedule             = self::parameter( 'schedule', array() );
-        $reschedule_type      = self::parameter( 'reschedule_type', 'current' );
-        $customers            = json_decode( self::parameter( 'customers', '[]' ), true );
-        $notification         = self::parameter( 'notification', false );
-        $internal_note        = self::parameter( 'internal_note' );
-        $created_from         = self::parameter( 'created_from' );
+        $location_id = (int) self::parameter( 'location_id', 0 );
+        $skip_date = self::parameter( 'skip_date', 0 );
+        $start_date = self::parameter( 'start_date' );
+        $end_date = self::parameter( 'end_date' );
+        $repeat = json_decode( self::parameter( 'repeat', '[]' ), true );
+        $schedule = self::parameter( 'schedule', array() );
+        $reschedule_type = self::parameter( 'reschedule_type', 'current' );
+        $customers = json_decode( self::parameter( 'customers', '[]' ), true );
+        $notification = self::parameter( 'notification', false );
+        $internal_note = self::parameter( 'internal_note' );
+        $created_from = self::parameter( 'created_from' );
 
         if ( ! $service_id ) {
             // Custom service.
@@ -423,7 +425,7 @@ class Ajax extends Lib\Base\Ajax
 
         if ( $service_id == -1 ) {
             $response['errors']['service_required'] = true;
-        } else if ( $service_id === null && $custom_service_name === null ) {
+        } elseif ( $service_id === null && $custom_service_name === null ) {
             $response['errors']['custom_service_name_required'] = true;
         }
 
@@ -436,7 +438,7 @@ class Ajax extends Lib\Base\Ajax
         $extras_consider_duration = (bool) Lib\Proxy\ServiceExtras::considerDuration();
         $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
             CustomerAppointment::STATUS_PENDING,
-            CustomerAppointment::STATUS_APPROVED
+            CustomerAppointment::STATUS_APPROVED,
         ) );
         foreach ( $customers as $i => $customer ) {
             if ( in_array( $customer['status'], $busy_statuses ) ) {
@@ -453,14 +455,14 @@ class Ajax extends Lib\Base\Ajax
         if ( $service_id ) {
             $staff_service = new Lib\Entities\StaffService();
             $staff_service->loadBy( array(
-                'staff_id'    => $staff_id,
-                'service_id'  => $service_id,
+                'staff_id' => $staff_id,
+                'service_id' => $service_id,
                 'location_id' => $location_id ?: null,
             ) );
             if ( ! $staff_service->isLoaded() ) {
                 $staff_service->loadBy( array(
-                    'staff_id'    => $staff_id,
-                    'service_id'  => $service_id,
+                    'staff_id' => $staff_id,
+                    'service_id' => $service_id,
                     'location_id' => null,
                 ) );
             }
@@ -516,9 +518,9 @@ class Ajax extends Lib\Base\Ajax
                         }
 
                         foreach ( $schedule as $i => $slot ) {
-                            $slot       = json_decode( $slot, true );
+                            $slot = json_decode( $slot, true );
                             $start_date = $slot[0][2];
-                            $end_date   = Lib\Slots\DatePoint::fromStr( $start_date )->modify( $duration )->format( 'Y-m-d H:i:s' );
+                            $end_date = Lib\Slots\DatePoint::fromStr( $start_date )->modify( $duration )->format( 'Y-m-d H:i:s' );
                             // Try to find existing appointment
                             /** @var Appointment $appointment */
                             $appointment = Appointment::query( 'a' )
@@ -527,7 +529,7 @@ class Ajax extends Lib\Base\Ajax
                                 ->where( 'a.service_id', $service_id )
                                 ->whereNotIn( 'ca.status', Lib\Proxy\CustomStatuses::prepareFreeStatuses( array(
                                     CustomerAppointment::STATUS_CANCELLED,
-                                    CustomerAppointment::STATUS_REJECTED
+                                    CustomerAppointment::STATUS_REJECTED,
                                 ) ) )
                                 ->where( 'start_date', $start_date )
                                 ->findOne();
@@ -535,14 +537,14 @@ class Ajax extends Lib\Base\Ajax
                             $ca_customers = array();
                             if ( $appointment ) {
                                 foreach ( $appointment->getCustomerAppointments( true ) as $ca ) {
-                                    $ca_customer                  = $ca->getFields();
-                                    $ca_customer['ca_id']         = $ca->getId();
-                                    $ca_customer['extras']        = json_decode( $ca_customer['extras'], true );
+                                    $ca_customer = $ca->getFields();
+                                    $ca_customer['ca_id'] = $ca->getId();
+                                    $ca_customer['extras'] = json_decode( $ca_customer['extras'], true );
                                     $ca_customer['custom_fields'] = json_decode( $ca_customer['custom_fields'], true );
-                                    $ca_customers[]               = $ca_customer;
+                                    $ca_customers[] = $ca_customer;
                                 }
                             } else {
-                                 // Create appointment.
+                                // Create appointment.
                                 $appointment = new Appointment();
                                 $appointment
                                     ->setLocationId( $location_id )
@@ -555,7 +557,6 @@ class Ajax extends Lib\Base\Ajax
                                     ->setInternalNote( $internal_note )
                                     ->setExtrasDuration( $max_extras_duration )
                                     ->save();
-                                Lib\Utils\Log::createEntity( $appointment, __METHOD__ );
                             }
 
                             if ( $appointment->getId() ) {
@@ -595,8 +596,16 @@ class Ajax extends Lib\Base\Ajax
                     }
                 }
                 $response['success'] = true;
-                $response['queue']   = array( 'all' => $queue, 'changed_status' => array() );
-                $response['data']    = array( 'resourceId' => $staff_id );  // make EventCalendar refetch events
+                if ( $queue ) {
+                    $db_queue = new Lib\Entities\NotificationQueue();
+                    $db_queue
+                        ->setData( json_encode( array( 'all' => $queue ) ) )
+                        ->save();
+
+                    $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue, 'changed_status' => array() );
+                }
+
+                $response['data'] = array( 'resourceId' => $staff_id );  // make EventCalendar refetch events
             } else {
                 // Single appointment.
                 $appointment = new Appointment();
@@ -607,10 +616,10 @@ class Ajax extends Lib\Base\Ajax
                         $appointment->setStaffAny( 0 );
                     }
                     if ( $reschedule_type != 'current' ) {
-                        $start_date_timestamp  = strtotime( $start_date );
-                        $days_offset           = floor( $start_date_timestamp / DAY_IN_SECONDS ) - floor( strtotime( $appointment->getStartDate() ) / DAY_IN_SECONDS );
+                        $start_date_timestamp = strtotime( $start_date );
+                        $days_offset = floor( $start_date_timestamp / DAY_IN_SECONDS ) - floor( strtotime( $appointment->getStartDate() ) / DAY_IN_SECONDS );
                         $reschedule_start_time = $start_date_timestamp % DAY_IN_SECONDS;
-                        $current_start_date    = $appointment->getStartDate();
+                        $current_start_date = $appointment->getStartDate();
                     }
                 }
                 $appointment
@@ -624,18 +633,12 @@ class Ajax extends Lib\Base\Ajax
                     ->setInternalNote( $internal_note )
                     ->setExtrasDuration( $max_extras_duration );
 
-                if ( $appointment_id ) {
-                    Lib\Utils\Log::updateEntity( $appointment, __METHOD__ );
-                }
                 $modified = $appointment->getModified();
                 if ( $appointment->save() !== false ) {
 
                     $queue_changed_status = array();
                     $queue = array();
 
-                    if ( ! $appointment_id ) {
-                        Lib\Utils\Log::createEntity( $appointment, __METHOD__ );
-                    }
                     foreach ( $customers as &$customer ) {
                         if ( $customer['payment_action'] === 'create' ) {
                             // Set 'current', the employee can choose 'Create: Payment for the entire series',
@@ -660,15 +663,13 @@ class Ajax extends Lib\Base\Ajax
                             $reschedule_appointments = $query->find();
                             /** @var Appointment $reschedule_appointment */
                             foreach ( $reschedule_appointments as $reschedule_appointment ) {
-                                $start_timestamp     = strtotime( $reschedule_appointment->getStartDate() );
-                                $duration            = strtotime( $reschedule_appointment->getEndDate() ) - $start_timestamp;
+                                $start_timestamp = strtotime( $reschedule_appointment->getStartDate() );
+                                $duration = strtotime( $reschedule_appointment->getEndDate() ) - $start_timestamp;
                                 $new_start_timestamp = ( (int) ( $start_timestamp / DAY_IN_SECONDS ) + $days_offset ) * DAY_IN_SECONDS + $reschedule_start_time;
                                 $reschedule_appointment
                                     ->setStartDate( date( 'Y-m-d H:i:s', $new_start_timestamp ) )
                                     ->setEndDate( date( 'Y-m-d H:i:s', $new_start_timestamp + $duration ) );
                                 $reschedule_modified = $reschedule_appointment->getModified();
-
-                                Lib\Utils\Log::updateEntity( $reschedule_appointment, __METHOD__, 'Reschedule recurring appointment' );
 
                                 $reschedule_appointment->save();
 
@@ -719,7 +720,12 @@ class Ajax extends Lib\Base\Ajax
                     $response['data'] = $skip_date
                         ? array()
                         : self::_getAppointmentForCalendar( $appointment->getId(), $display_tz );
-                    $response['queue'] = array( 'all' => $queue, 'changed_status' => $queue_changed_status );
+                    $db_queue = new Lib\Entities\NotificationQueue();
+                    $db_queue
+                        ->setData( json_encode( array( 'all' => $queue, 'changed_status' => $queue_changed_status ) ) )
+                        ->save();
+
+                    $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue, 'changed_status' => $queue_changed_status );
 
                     self::_deleteSentReminders( $appointment, $modified );
                 } else {
@@ -764,7 +770,7 @@ class Ajax extends Lib\Base\Ajax
             $wp_tz = Lib\Config::getWPTimeZone();
             if ( $display_tz !== $wp_tz ) {
                 $start_date = DateTime::convertTimeZone( $start_date, $display_tz, $wp_tz );
-                $end_date   = DateTime::convertTimeZone( $end_date, $display_tz, $wp_tz );
+                $end_date = DateTime::convertTimeZone( $end_date, $display_tz, $wp_tz );
             }
             // Dates in staff time zone
             $staff_start_date = $start_date;
@@ -791,7 +797,7 @@ class Ajax extends Lib\Base\Ajax
                 $total_end_date = date_create( $end_date )->modify( '+' . $max_extras_duration . ' sec' )->format( 'Y-m-d H:i:s' );
             }
 
-            $result['date_interval_not_available'] = self::_dateIntervalIsIntersectWith( $start_date, $total_end_date, $staff_id, $appointment_id, $busy_statuses ) ?: false;
+            $result['date_interval_not_available'] = self::_dateIntervalIsIntersectWith( $start_date, $total_end_date, $staff_id, $appointment_id ) ?: false;
 
             // Check if selected interval fits into staff schedule
             if ( $staff_id ) {
@@ -820,7 +826,7 @@ class Ajax extends Lib\Base\Ajax
                 $special_days = array();
                 $special_days_location_id = Lib\Proxy\Locations::prepareStaffSpecialDaysLocationId( $location_id, $staff_id ) ?: null;
                 $schedule = Lib\Proxy\SpecialDays::getSchedule( array( $staff_id ), $start, $end ) ?: array();
-                foreach ( $schedule  as $day ) {
+                foreach ( $schedule as $day ) {
                     if ( $special_days_location_id === ( Lib\Proxy\Locations::prepareStaffSpecialDaysLocationId( $day['location_id'], $staff_id ) ?: null ) ) {
                         $special_days[ $day['date'] ][] = $day;
                     }
@@ -1044,20 +1050,17 @@ class Ajax extends Lib\Base\Ajax
      * @param string $end_date
      * @param int $staff_id
      * @param int $appointment_id
-     * @param array $statuses
      * @return array|null
      */
-    private static function _dateIntervalIsIntersectWith( $start_date, $end_date, $staff_id, $appointment_id, $statuses )
+    private static function _dateIntervalIsIntersectWith( $start_date, $end_date, $staff_id, $appointment_id )
     {
         return Appointment::query( 'a' )
             ->select( 'a.id AS appointment_id, COALESCE(s.title, a.custom_service_name) AS service' )
-            ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
             ->leftJoin( 'Service', 's', 's.id = a.service_id' )
             ->whereNot( 'a.id', $appointment_id )
             ->where( 'a.staff_id', $staff_id )
             ->whereLt( 'a.start_date', $end_date )
             ->whereRaw( 'DATE_ADD(a.end_date, INTERVAL a.extras_duration SECOND) > \'%s\'', array( $start_date ) )
-            ->whereIn( 'ca.status', $statuses )
             ->limit( 1 )
             ->fetchRow();
     }
@@ -1073,7 +1076,7 @@ class Ajax extends Lib\Base\Ajax
         // When changed start_date need resend the reminders
         if ( array_key_exists( 'start_date', $modified ) ) {
             $ca_ids = CustomerAppointment::query()
-                ->select( 'id')
+                ->select( 'id' )
                 ->where( 'appointment_id', $appointment->getId() )
                 ->fetchCol( 'id' );
             if ( $ca_ids ) {

@@ -6,6 +6,7 @@ use Bookly\Frontend;
 
 /**
  * Class Plugin
+ *
  * @package Bookly\Lib
  */
 abstract class Plugin extends Base\Plugin
@@ -47,9 +48,11 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dialogs\Staff\Edit\Ajax::init();
         Backend\Components\Dialogs\Staff\Order\Ajax::init();
         Backend\Components\Dialogs\TableSettings\Ajax::init();
+        Backend\Components\Dialogs\VoiceTest\Ajax::init();
+        Backend\Components\Dialogs\Whatsapp\Ajax::init();
         Backend\Components\Editable\Proxy\Shared::init();
-        Backend\Components\Notices\Limitation\Ajax::init();
         Backend\Components\Gutenberg\BooklyForm\Block::init();
+        Backend\Components\Notices\Limitation\Ajax::init();
         Backend\Components\Notices\Lite\Ajax::init();
         Backend\Components\Notices\Nps\Ajax::init();
         Backend\Components\Notices\PoweredBy\Ajax::init();
@@ -59,6 +62,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Statistic\Ajax::init();
         Backend\Components\Notices\Subscribe\Ajax::init();
         Backend\Components\Notices\Wpml\Ajax::init();
+        Backend\Components\Notices\ZoomJwt\Ajax::init();
         Backend\Components\Support\ButtonsAjax::init();
         Backend\Components\TinyMce\Tools::init();
         Backend\Modules\Appearance\Ajax::init();
@@ -69,6 +73,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\CloudSettings\Ajax::init();
         Backend\Modules\CloudSms\Ajax::init();
         Backend\Modules\CloudVoice\Ajax::init();
+        Backend\Modules\CloudWhatsapp\Ajax::init();
         Backend\Modules\CloudZapier\Ajax::init();
         Backend\Modules\Customers\Ajax::init();
         Backend\Modules\Diagnostics\Ajax::init();
@@ -137,9 +142,10 @@ abstract class Plugin extends Base\Plugin
         add_filter( version_compare( $wp_version, '5.8', '>=' ) ? 'block_categories_all' : 'block_categories', function ( $block_categories, $block_editor_context ) {
             return array_merge( array(
                 array(
-                    'slug'  => 'bookly-blocks',
+                    'slug' => 'bookly-blocks',
                     'title' => 'Bookly',
-                ), ),
+                ),
+            ),
                 $block_categories
             );
         }, 10, 2 );

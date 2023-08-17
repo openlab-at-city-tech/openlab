@@ -8,7 +8,7 @@ use Bookly\Lib;
  *
  * @package Bookly\Lib\Utils\Ics
  */
-class Event
+class Event extends Base
 {
     /** @var string */
     protected $start_date;
@@ -44,9 +44,9 @@ class Event
         return sprintf(
             $template,
             $this->escape( $this->start_date . '-' . substr( md5( uniqid( time(), true ) ), 0, 8 ) . '@' . site_url() ),
-            $this->_formatDateTime( $this->start_date ),
-            $this->_formatDateTime( $this->start_date ),
-            $this->_formatDateTime( $this->end_date ),
+            $this->formatDateTime( $this->start_date ),
+            $this->formatDateTime( $this->start_date ),
+            $this->formatDateTime( $this->end_date ),
             $this->escape( $this->summary ),
             $this->escape( $this->description )
         );
@@ -145,53 +145,5 @@ class Event
         $this->location_id = $location_id;
 
         return $this;
-    }
-
-    /**
-     * Escape string.
-     *
-     * @param string $input
-     * @return string
-     */
-    public function escape( $input )
-    {
-        $input = preg_replace( '/([\,;])/', '\\\$1', $input );
-        $input = str_replace( array( "\r\n", "\n" ), "\\n", $input );
-
-        return implode( "\r\n ", $this->_strSplitUnicode( $input, 60 ) );
-    }
-
-    /**
-     * Format date and time.
-     *
-     * @param string $datetime
-     * @return string
-     */
-    protected function _formatDateTime( $datetime )
-    {
-        return date_create( Lib\Utils\DateTime::convertTimeZone( $datetime, Lib\Config::getWPTimeZone(), 'UTC' ) )->format( 'Ymd\THis\Z' );
-    }
-
-    /**
-     * Implementation of mb_str_split
-     *
-     * @param $str
-     * @param int $l
-     * @return array
-     */
-    protected function _strSplitUnicode( $str, $l = 0 )
-    {
-        $mb_str = preg_split( '//u', $str, -1, PREG_SPLIT_NO_EMPTY );
-        if ( $l > 0 ) {
-            $ret = array();
-            $cnt = count( $mb_str );
-            for ( $i = 0; $i < $cnt; $i += $l ) {
-                $ret[] = implode( '', array_slice( $mb_str, $i, $l ) );
-            }
-
-            return $ret;
-        }
-
-        return $mb_str;
     }
 }

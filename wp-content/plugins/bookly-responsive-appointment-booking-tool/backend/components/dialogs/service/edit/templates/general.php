@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib\Entities\Service;
 /**
@@ -114,6 +114,9 @@ $service_id = $service['id'];
             <?php endif ?>
         </div>
     <?php endif ?>
+    <div class="form-group">
+        <?php Proxy\Pro::renderGatewayPreference( $service ) ?>
+    </div>
     <div class="form-group">
         <label for="bookly-service-info"><?php esc_html_e( 'Info', 'bookly' ) ?></label>
         <textarea class="form-control" id="bookly-service-info" name="info" rows="3" type="text"><?php echo esc_textarea( $service['info'] ) ?></textarea>

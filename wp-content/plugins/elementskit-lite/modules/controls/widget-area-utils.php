@@ -61,7 +61,7 @@ class Widget_Area_Utils {
 
 			<?php
 				$builder_post_title = 'dynamic-content-widget-' . $extract_key . '-' . $tab_id;
-				$builder_post       = get_page_by_title( $builder_post_title, OBJECT, 'elementskit_content' );
+				$builder_post       = \ElementsKit_Lite\Utils::get_page_by_title( $builder_post_title, 'elementskit_content' );
 				$elementor          = \Elementor\Plugin::instance();
 
 				/**
@@ -70,7 +70,7 @@ class Widget_Area_Utils {
 				$post_id = isset( $builder_post->ID ) ? $builder_post->ID : null;
 			if ( ! $post_id ) {
 				$builder_post_title = 'dynamic-content-widget-' . $extract_key . '-' . $index;
-				$builder_post       = get_page_by_title( $builder_post_title, OBJECT, 'elementskit_content' );
+				$builder_post       = \ElementsKit_Lite\Utils::get_page_by_title( $builder_post_title, 'elementskit_content' );
 			}
 
 			if ( $isAjax === 'yes' ) {

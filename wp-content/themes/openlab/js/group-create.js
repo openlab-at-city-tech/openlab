@@ -23,12 +23,10 @@ jQuery( document ).ready(
 	function($){
 		var form,
 		form_type,
-		form_validated = false,
 		new_group_type = $( '#new-group-type' ).val(),
 		$body          = $( 'body' ),
-		$gc_submit     = $( '#group-creation-create' ),
-		$required_fields,
     $setuptoggle   = $( 'input[name="wds_website_check"]' );
+		$setuptoggle_mirror = $( 'input#set-up-site-toggle' );
 
 		if ( $body.hasClass( 'group-admin' ) ) {
 			form_type = 'admin';
@@ -40,7 +38,62 @@ jQuery( document ).ready(
 
 		$form = $( form );
 
-		$required_fields = $form.find( 'input:required' );
+		var $gc_submit = $form.find( 'input[type="submit"]' );
+
+		/*
+		 * Ensure proper focus/scroll when form does not validate.
+		 *
+		 * Parsley.js doesn't do this correctly out of the box with Schools/Departments.
+		 */
+		$form.parsley().on( 'form:validate', function( formInstance ) {
+			if ( ! formInstance.isValid() ) {
+				for (var i = 0; i < formInstance.fields.length; i++) {
+					var field = formInstance.fields[i];
+					if (true !== field.validationResult && field.validationResult.length > 0 && 'undefined' === typeof field.options.noFocus) {
+						field.element.closest( '.panel' ).scrollIntoView()
+					}
+				}
+
+				return false;
+			}
+		} )
+
+		/*
+		 * Ensure proper focus/scroll when form does not validate.
+		 *
+		 * Parsley.js doesn't do this correctly out of the box with Schools/Departments.
+		 */
+		$gc_submit.on( 'click', function() {
+			if ( ! form.checkValidity() ) {
+				var firstInvalidField = form.querySelector( ':invalid' );
+				if ( firstInvalidField ) {
+					firstInvalidField.scrollIntoView( {
+						block: 'center',
+						inline: 'center'
+					} )
+				}
+				return false;
+			}
+		} )
+
+		$( '#new-site-domain, #clone-destination-path' ).on( 'keyup', function() {
+			if ( this.value.length > 0 ) {
+				this.dataset.parsleyErrorMessage = 'Sorry, that URL is already taken.';
+			} else {
+				this.dataset.parsleyErrorMessage = 'You must provide a URL.';
+			}
+		} );
+
+		/**
+		 * Rather than modifying the template ported from CBOX-OL, we change with JavaScript.
+		 */
+		var $templatePanelPicker = $( '.panel-template-picker' );
+		if ( $templatePanelPicker.length > 0 ) {
+			$templatePanelPicker.find( '.panel-heading' ).html( 'Site Template' );
+
+			const newEl = '<p>Site Templates provide a basic structure and setup to make it easier for you to build your Site. Please select the template that works best for your ' + OLGroupCreate.groupTypeLabel + '. Visit OpenLab Help to <a href="https://openlab.citytech.cuny.edu/blog/help/site-templates" class="external-link">learn more</a>.</p>';
+			$templatePanelPicker.find( '.panel-body' ).prepend( newEl );
+		}
 
 		function maybeShowSiteFields() {
 			if ( ! $setuptoggle.length && 'portfolio' !== new_group_type ) {
@@ -53,6 +106,23 @@ jQuery( document ).ready(
 				$( '#site-options' ).show();
 			} else {
 				$( '#site-options' ).hide();
+			}
+		}
+
+		function maybeShowSiteTemplates() {
+			// Always hide if this is a clone.
+			if ( $( '#create-or-clone-clone' ).is( ':checked' ) ) {
+				$('.panel-template-picker').addClass( 'hidden' );
+				return;
+			}
+
+			var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
+			var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
+
+			if ( siteIsRequiredForGroupType || $setuptoggle.is( ':checked' ) ) {
+				$('.panel-template-picker').removeClass( 'hidden' );
+			} else {
+				$('.panel-template-picker').addClass( 'hidden' );
 			}
 		}
 
@@ -208,6 +278,8 @@ jQuery( document ).ready(
 				// Check "Clone a course" near the top
 				$( '#create-or-clone-clone' ).attr( 'checked', true );
 
+				maybeShowSiteTemplates();
+
 				// Allow a course to be selected from the source dropdown,
 				// and un-grey the associated labels/text
 				$group_to_clone.removeClass( 'disabled-opt' );
@@ -275,6 +347,14 @@ jQuery( document ).ready(
 
 						// Description
 						$( '#group-desc' ).val( r.description );
+
+						// Collaboration Tools
+						for ( var cToolType in r.collaboration ) {
+							var cToolInput = document.querySelector( 'input[name="openlab-edit-group-' + cToolType + '"]' );
+							if ( cToolInput ) {
+								cToolInput.checked = r.collaboration[ cToolType ]
+							}
+						}
 
 						// Schools, Offices, Departments.
 						if ( r.hasOwnProperty( 'schools' ) ) {
@@ -365,6 +445,7 @@ jQuery( document ).ready(
 							$( '#new_or_old_new' ).trigger( 'click' );
 						}
 
+						maybeShowSiteTemplates();
 					}
 				}
 			);
@@ -438,12 +519,17 @@ jQuery( document ).ready(
 		$setuptoggle.on( 'click', function(){
 			showHideAll();
 			maybeShowSiteFields();
+			$setuptoggle_mirror.trigger( 'click' )
+
+			setTimeout( maybeShowSiteTemplates, 1 )
 		} );
 
 		if ( $setuptoggle.is( ':checked' ) ) {
 			showHideAll();
 		};
 		maybeShowSiteFields();
+
+		setTimeout( maybeShowSiteTemplates, 1500 )
 
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
 			$setuptoggle.trigger( 'click' );
@@ -462,111 +548,6 @@ jQuery( document ).ready(
 					noCache: true
 				}
 			);
-		}
-
-		$( '.domain-validate' ).on(
-			'change',
-			function() {
-				form_validated = false;
-			}
-		);
-
-		// Schools/Departments are required fields for Courses.
-		$gc_submit.on(
-			'mouseover focus',
-			function() {
-				if ( 'course' == new_group_type ) {
-					var school_tech        = document.getElementById( 'school_tech' );
-					var is_school_selected = $( '.school-inputs input:checked' ).length > 0;
-					school_tech.setCustomValidity( is_school_selected ? '' : 'You must select a School.' );
-
-					if ( is_school_selected ) {
-						var is_department_selected = $( '.departments input:checked' ).length > 0;
-						document.getElementsByClassName( 'wds-department' )[0].setCustomValidity( is_department_selected ? '' : 'You must select a Department.' );
-					}
-				}
-			}
-		);
-
-		/**
-		 * Form validation.
-		 *
-		 * - Site URL is validated by AJAX.
-		 * - Name and Description use native validation.
-		 */
-		validate_form = function( event ) {
-			event = ( event ? event : window.event );
-
-			if ( form_validated ) {
-				return true;
-			}
-
-			// If "Set up a site" is not checked, there's no validation to do
-			if ( $setuptoggle.length && ! $setuptoggle.is( ':checked' ) ) {
-				return true;
-			}
-
-			var new_or_old = $( 'input[name=new_or_old]:checked' ).val();
-			var domain, $domain_field;
-
-			// Different fields require different validation.
-			switch ( new_or_old ) {
-				case 'old' :
-
-					// do something
-					break;
-
-				case 'clone' :
-					$domain_field = $( '#clone-destination-path' );
-					break;
-
-				case 'new' :
-					$domain_field = $( '#new-site-domain' );
-					break;
-			}
-
-			if ( 'undefined' === typeof $domain_field ) {
-				return true;
-			}
-
-			event.preventDefault();
-
-			domain = $domain_field.val();
-
-			var warn = $domain_field.siblings( '.ajax-warning' );
-			if ( warn.length > 0 ) {
-				warn.remove();
-			}
-
-			if ( 0 == domain.length ) {
-				$domain_field.after( '<div class="ajax-warning bp-template-notice error">This field cannot be blank.</div>' );
-				return false;
-			}
-
-			$.post(
-				'/wp-admin/admin-ajax.php', // Forward-compatibility with ajaxurl in BP 1.6
-				{
-					action: 'openlab_validate_groupblog_url_handler',
-					'path': domain
-				},
-				function( response ) {
-					if ( 'exists' == response ) {
-						$domain_field.after( '<div class="ajax-warning bp-template-notice error">Sorry, that URL is already taken.</div>' );
-						return false;
-					} else {
-						// We're done validating.
-						form_validated = true;
-						$form.append( '<input name="save" value="1" type="hidden" />' );
-						$form.submit();
-						return true;
-					}
-				}
-			);
-		};
-
-		// Form validation.
-		if (form) {
-			form.onsubmit = validate_form;
 		}
 	},
 	(jQuery)

@@ -85,27 +85,8 @@ function mc4wp_get_api_key() {
  * @return MC4WP_API_V3
  */
 function mc4wp_get_api_v3() {
-	$api_key  = mc4wp_get_api_key();
-	$instance = new MC4WP_API_V3( $api_key );
-	return $instance;
-}
-
-/**
- * Gets the Mailchimp for WP API class and injects it with the API key
- *
- * @deprecated 4.0
- * @use mc4wp_get_api_v3
- *
- * @since 1.0
- * @access public
- *
- * @return MC4WP_API
- */
-function mc4wp_get_api() {
-	_deprecated_function( __FUNCTION__, '4.0', 'mc4wp_get_api_v3' );
-	$api_key  = mc4wp_get_api_key();
-	$instance = new MC4WP_API( $api_key );
-	return $instance;
+	$api_key = mc4wp_get_api_key();
+	return new MC4WP_API_V3( $api_key );
 }
 
 /**
@@ -221,10 +202,10 @@ function mc4wp_get_request_path() {
 function mc4wp_get_request_ip_address() {
 	if ( isset( $_SERVER['X-Forwarded-For'] ) ) {
 		$ip_address = $_SERVER['X-Forwarded-For'];
-	} else if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+	} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 		$ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
-	} else if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-		return $_SERVER['REMOTE_ADDR'];
+	} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
+		$ip_address = $_SERVER['REMOTE_ADDR'];
 	}
 
 	if ( isset( $ip_address ) ) {
@@ -331,7 +312,7 @@ function _mc4wp_update_groupings_data( $data = array() ) {
 
 			// add to interests data
 			if ( ! in_array( $interest_id, $data['INTERESTS'], false ) ) {
-				$migrated++;
+				++$migrated;
 				$data['INTERESTS'][] = $interest_id;
 			}
 		}
@@ -365,7 +346,7 @@ function _mc4wp_update_groupings_data( $data = array() ) {
  *
  * @return array
  */
-function mc4wp_add_name_data( $data = array() ) {
+function mc4wp_add_name_data( $data ) {
 
 	// Guess first and last name
 	if ( ! empty( $data['NAME'] ) && empty( $data['FNAME'] ) && empty( $data['LNAME'] ) ) {
@@ -562,7 +543,7 @@ function mc4wp_kses( $string ) {
 		)
 	);
 
-	$allowed         = array(
+	$allowed = array(
 		'p'        => $always_allowed_attr,
 		'label'    => array_merge( $always_allowed_attr, array( 'for' => true ) ),
 		'input'    => $input_allowed_attr,
@@ -609,4 +590,18 @@ function mc4wp_kses( $string ) {
 	);
 
 	return wp_kses( $string, $allowed );
+}
+
+/**
+ * Helper function for safely deprecating a changed filter hook.
+ *
+ * @param string $old_hook
+ * @param string $new_hook
+ *
+ * @return void
+ */
+function mc4wp_apply_deprecated_filters( $old_hook, $new_hook ) {
+	add_filter( $new_hook, function ( $value, $a = null, $b = null, $c = null ) use ( $new_hook, $old_hook ) {
+		return apply_filters_deprecated( $old_hook, array( $value, $a, $b, $c ), '4.9.0', $new_hook );
+	}, 10, 3 );
 }

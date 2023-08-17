@@ -6,12 +6,15 @@
         <?php } ?>
     </div>
     <div class="pull-right hidden-xs <?php echo isset($noLegend) || isset($noLegendCalender) ? 'hide' : ''; ?>">
-        <small>
-            <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="beitrag">  <?php esc_html_e('Post', 'blog2social') ?> 
-            <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/job-icon.png', B2S_PLUGIN_FILE)); ?>" alt="job"> <?php esc_html_e('Job', 'blog2social') ?>
-            <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/event-icon.png', B2S_PLUGIN_FILE)); ?>" alt="event"> <?php esc_html_e('Event', 'blog2social') ?>
-            <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/product-icon.png', B2S_PLUGIN_FILE)); ?>" alt="product"> <?php esc_html_e('Product', 'blog2social') ?>
-        </small>
+        <?php if ($_GET['page'] != 'blog2social-video') { ?>
+            <small>
+                <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/video-icon.png', B2S_PLUGIN_FILE)); ?>" alt="video">  <?php esc_html_e('Video', 'blog2social') ?> 
+                <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="beitrag">  <?php esc_html_e('Post', 'blog2social') ?> 
+                <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/job-icon.png', B2S_PLUGIN_FILE)); ?>" alt="job"> <?php esc_html_e('Job', 'blog2social') ?>
+                <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/event-icon.png', B2S_PLUGIN_FILE)); ?>" alt="event"> <?php esc_html_e('Event', 'blog2social') ?>
+                <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/product-icon.png', B2S_PLUGIN_FILE)); ?>" alt="product"> <?php esc_html_e('Product', 'blog2social') ?>
+            </small>
+        <?php } ?>
     </div>
 </div>
 <!--Footer Ende-->
@@ -148,63 +151,44 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoFormatModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('Select the preferred custom post format for your posts', 'blog2social') ?></h4>
+                    <h4 class="modal-title"><?php esc_html_e('Select a custom post format for your social media posts (PREMIUM feature)', 'blog2social') ?></h4>
                 </div>
                 <div class="modal-body">        
                     <div class="row">
                         <div class="col-md-12">
-                            <b><?php esc_html_e('Select link post or image post format to define your preferred custom post format for Twitter, LinkedIn, and Facebook.', 'blog2social') ?></b>
+                            <b><?php esc_html_e('Define your preferred post format for sharing your social media content on Twitter, LinkedIn, or Facebook.', 'blog2social') ?></b>
                             <div class="clearfix"></div>
                             <div class="col-md-6">
                                 <br>
                                 <b>1) <?php esc_html_e('Link Post', 'blog2social') ?></b><br>
-                                <?php esc_html_e('The link post format displays posts title, link address and the first one or two sentences of the post. The networks scan this information from your META or OpenGraph.  PLEASE NOTE: If you want your link posts to display the selected image from the Blog2Social preview editor, please make sure you have activated the Social Meta Tags for Facebook and Twitter in your Blog2Social settings. You find these settings in the tab "Social Meta Data". If you don\'t select a specific post image, some networks display the first image detected on your page. The image links to your blog post.', 'blog2social'); ?>
+                                <?php esc_html_e('A link post will display the title of the original post, the link address, the first one or two lines of the article, and the original image linked to the post. Clicking the image will direct the user to the linked website.', 'blog2social'); ?>
                             </div>
                             <div class="col-md-6">
                                 <br>
-                                <b>2) <?php esc_html_e('Photo Post', 'blog2social') ?></b><br>
-                                <?php esc_html_e('A photo or image post displays the selected image in the one-page preview of Blog2Social and your comment above the image. The image links to the image view on your image gallery in the respective network. Blog2Social adds the link to your post in your comment. The main benefit of photo posts is that your image is uploaded to your personal image albums or gallery. In Facebook, you can edit the albums name with a description of your choice.', 'blog2social'); ?>
+                                <b>2) <?php esc_html_e('Image Post', 'blog2social') ?></b><br>
+                                <?php esc_html_e('An image post will display the cover image of the linked website or post and add it to the library of the selected social media networks. Blog2Social will automatically include a link to the website in the text field of the social media post. You can customize the link for each network.', 'blog2social')."<br><br>".esc_html('Selecting an individual post format for your social media posts is only one of Blog2Social’s Premium features. Here are some more things you can do with Blog2Social Premium:', 'blog2social'); ?>
+                                <br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select frames or crop, flip and rotate images', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Create your own custom social media post templates', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-post new and updated blog posts', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Create and share social media posts from any other content', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-schedule your posts with the Best Time Manager', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Publish and share videos to your social media networks', 'blog2social') ?><br>
+                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('and many more!', 'blog2social') ?><br>
+
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-md-12">
-                            <b><?php esc_html_e('For Instagram, you can select "image with frame" or "image cut out" as your preferred custom post format.', 'blog2social') ?></b>
-                            <div class="clearfix"></div>
-                            <div class="col-md-6">
-                                <br>
-                                <b>1) <?php esc_html_e('Image with frame', 'blog2social') ?></b><br>
-                                <?php esc_html_e('Insert white frames to show the whole image in your timeline. All image information will be shown in your timeline.', 'blog2social'); ?>
-                            </div>
-                            <div class="col-md-6">
-                                <br>
-                                <b>2) <?php esc_html_e('Image cut out', 'blog2social') ?></b><br>
-                                <?php esc_html_e('The image preview will be cropped automatically to fit the default Instagram layout for your Instagram timeline. The image will be shown uncropped when opening the preview page for your Instagram post.', 'blog2social'); ?>
-                            </div>
-                        </div>
+                       
 
 
                         <?php if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
                             <div class="col-md-12"> 
-                                <br>
-                                <hr>               
-                                <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
-                                <br>
-                                <br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Share on multiple profiles, pages and groups', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-post and auto-schedule new and updated blog posts', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your posts at the best times on each network', 'blog2social') ?><br>  
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Manager: use predefined best time scheduler to auto-schedule your social media posts', 'blog2social') ?><br>  
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your post for one time, multiple times or recurrently', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule and re-share old posts', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select link format or image format for your posts', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
-                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
-                                <br>
-                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
+                               
+                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART or above ', 'blog2social') ?></a>
                                 <br>
                                 <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
                             </div>

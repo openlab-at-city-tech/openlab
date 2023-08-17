@@ -26,7 +26,7 @@
 <metaslider-settings-page inline-template>
 <div
     id="metaslider-settings-page"
-    class="bg-gray-light border-b border-gray-light flex h-full inset-0 min-w-0 p-0 w-full"
+    class="border-b border-gray-light flex h-full inset-0 min-w-0 p-0 w-full"
     :class="{'absolute': !hasNotice}">
     <div class="flex md:flex-shrink-0">
         <div class="flex flex-col md:w-48 border-r border-gray-lightest pt-5 pb-4 bg-white">

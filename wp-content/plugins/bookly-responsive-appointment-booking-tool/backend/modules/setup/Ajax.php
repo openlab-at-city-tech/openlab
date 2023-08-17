@@ -37,7 +37,7 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
-     * Seve setup form data.
+     * Save setup form data.
      */
     public static function saveSetupForm()
     {
@@ -58,7 +58,7 @@ class Ajax extends Lib\Base\Ajax
                     }
                     $staff
                         ->setFullName( $staff_data['name'] )
-                        ->setPhone( $staff_data['formatted_phone'] ?: $staff_data['phone'] )
+                        ->setPhone( $staff_data['phone_formatted'] ?: $staff_data['phone'] )
                         ->setEmail( $staff_data['email'] )
                         ->save();
                     $existing_staff[] = $staff->getId();

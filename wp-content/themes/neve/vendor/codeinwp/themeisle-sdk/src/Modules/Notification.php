@@ -256,6 +256,7 @@ class Notification extends Abstract_Module {
 		$default              = [
 			'id'      => '',
 			'heading' => '',
+			'img_src' => '',
 			'message' => '',
 			'ctas'    => [
 				'confirm' => [
@@ -267,17 +268,26 @@ class Notification extends Abstract_Module {
 					'text' => '',
 				],
 			],
+			'type'    => 'success',
 		];
 		$notification_details = wp_parse_args( $notification_details, $default );
 		global $pagenow;
+		$type = in_array( $notification_details['type'], [ 'success', 'info', 'warning', 'error' ], true ) ? $notification_details['type'] : 'success';
 		$notification_details['ctas']['cancel']['link'] = wp_nonce_url( add_query_arg( [ 'nid' => $notification_details['id'] ], admin_url( $pagenow ) ), $notification_details['id'], 'tsdk_dismiss_nonce' );
-		$notification_html                              = '<div class="notice notice-success is-dismissible themeisle-sdk-notice" data-notification-id="' . esc_attr( $notification_details['id'] ) . '" id="' . esc_attr( $notification_details['id'] ) . '-notification"> <div class="themeisle-sdk-notification-box">';
+		$notification_html                              = '<div class="notice notice-' . $type . ' is-dismissible themeisle-sdk-notice" data-notification-id="' . esc_attr( $notification_details['id'] ) . '" id="' . esc_attr( $notification_details['id'] ) . '-notification"> <div class="themeisle-sdk-notification-box">';
 
 		if ( ! empty( $notification_details['heading'] ) ) {
 			$notification_html .= sprintf( '<h4>%s</h4>', wp_kses_post( $notification_details['heading'] ) );
 		}
+		if ( ! empty( $notification_details['img_src'] ) ) {
+			$notification_html .= '<div class="wrap-flex">';
+			$notification_html .= sprintf( '<img src="%s" alt="%s" />', esc_attr( $notification_details['img_src'] ), esc_attr( $notification_details['heading'] ) );
+		}
 		if ( ! empty( $notification_details['message'] ) ) {
 			$notification_html .= wp_kses_post( $notification_details['message'] );
+			if ( ! empty( $notification_details['img_src'] ) ) {
+				$notification_html .= '</div>';
+			}
 		}
 		$notification_html .= '<div class="actions">';
 
@@ -315,6 +325,18 @@ class Notification extends Abstract_Module {
 		<style type="text/css">
 			.themeisle-sdk-notification-box {
 				padding: 3px;
+			}
+
+			.themeisle-sdk-notification-box .wrap-flex {
+				display: flex;
+				align-items: center;
+				justify-content: start;
+				gap: 12px;
+			}
+
+			.themeisle-sdk-notification-box .wrap-flex img {
+				width: 42px;
+				object-fit: cover;
 			}
 
 			.themeisle-sdk-notification-box .actions {
@@ -377,6 +399,7 @@ class Notification extends Abstract_Module {
 		if ( empty( $id ) ) {
 			wp_send_json( [] );
 		}
+		self::setup_notifications();
 		$ids = wp_list_pluck( self::$notifications, 'id' );
 		if ( ! in_array( $id, $ids, true ) ) {
 			wp_send_json( [] );

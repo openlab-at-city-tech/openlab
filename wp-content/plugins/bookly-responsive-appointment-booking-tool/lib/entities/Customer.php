@@ -55,6 +55,8 @@ class Customer extends Lib\Base\Entity
 
     protected static $table = 'bookly_customers';
 
+    protected $loggable = true;
+
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'wp_user_id' => array( 'format' => '%d' ),
@@ -150,7 +152,6 @@ class Customer extends Lib\Base\Entity
         return $result;
     }
 
-
     /**
      * @param array $records
      * @return array
@@ -159,7 +160,7 @@ class Customer extends Lib\Base\Entity
     {
         foreach ( $records as &$record ) {
             $record['start_date'] = Lib\Utils\DateTime::applyTimeZone( $record['start_date'], $record['time_zone'], $record['time_zone_offset'] );
-            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : -$record['time_zone_offset'];
+            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : - $record['time_zone_offset'];
             $record['time_zone'] = $record['time_zone'] ?: 'UTC' . ( $time_zone_offset >= 0 ? '+' : '' ) . ( $time_zone_offset / 60 );
         }
 
@@ -175,7 +176,8 @@ class Customer extends Lib\Base\Entity
     {
         return Appointment::query( 'a' )
             ->select(
-                'ca.id AS ca_id,
+                'a.id,
+                ca.id AS ca_id,
                 c.name AS category,
                 COALESCE(s.title, a.custom_service_name) AS service,
                 st.full_name AS staff,

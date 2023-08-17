@@ -44,9 +44,16 @@ class Page extends Lib\Base\Component
                             $product['next_billing_date'] = Lib\Utils\DateTime::formatDate( $subscription['next_billing_date'] );
                             $product['cancel_on_renewal'] = isset( $subscription['cancel_on_renewal'] ) ? $subscription['cancel_on_renewal'] : false;
                             if ( isset( $subscription['usage'] ) ) {
-                                $product['usage'] = $subscription['usage']['limit'] === null
-                                    ? __( 'unlimited in trial', 'bookly' )
-                                    : sprintf( '%d / %d', $subscription['usage']['used'], $subscription['usage']['limit'] );
+                                if ( $product['id'] === 'whatsapp' ) {
+                                    $prefix = __( 'Messages', 'bookly' );
+                                } else {
+                                    $prefix = __( 'Tasks', 'bookly' );
+                                }
+                                if ( $subscription['usage']['limit'] === null ) {
+                                    $product['usage'] = sprintf( '%s: %s', $prefix, __( 'unlimited in trial', 'bookly' ) );
+                                } else {
+                                    $product['usage'] = sprintf( '%s: %d / %d', $prefix, $subscription['usage']['used'], $subscription['usage']['limit'] );
+                                }
                             }
                             break 2;
                         }

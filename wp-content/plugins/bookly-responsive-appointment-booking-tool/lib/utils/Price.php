@@ -26,6 +26,7 @@ abstract class Price
         'BWP' => array( 'symbol' => 'P', 'format' => '{symbol}{price|2}' ),
         'CAD' => array( 'symbol' => 'C$', 'format' => '{symbol}{price|2}' ),
         'CHF' => array( 'symbol' => 'CHF', 'format' => '{price|2} {symbol}' ),
+        'CLF' => array( 'symbol' => 'UF', 'format' => '{symbol}{price|0}' ),
         'CLP' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
         'CNY' => array( 'symbol' => '¥', 'format' => '{price|2} {symbol}' ),
         'COP' => array( 'symbol' => '$', 'format' => '{symbol}{price|0}' ),
@@ -137,10 +138,10 @@ abstract class Price
      */
     public static function format( $price )
     {
-        $price    = (float) $price;
+        $price = (float) $price;
         $currency = Config::getCurrency();
-        $format   = get_option( 'bookly_pmt_price_format' );
-        $symbol   = self::$currencies[ $currency ]['symbol'];
+        $format = get_option( 'bookly_pmt_price_format' );
+        $symbol = self::$currencies[ $currency ]['symbol'];
 
         if ( preg_match( '/{price\|(\d)}/', $format, $match ) ) {
             return strtr( $format, array(
@@ -162,9 +163,9 @@ abstract class Price
     {
         global $wp_locale;
 
-        $format   = get_option( 'bookly_pmt_price_format' );
+        $format = get_option( 'bookly_pmt_price_format' );
         preg_match( '/{price\|(\d)}/', $format, $match );
-        $format   = strtr( $format,  array( $match[0] => '{price}', '{symbol}' => self::$currencies[ Config::getCurrency() ]['symbol'] )  );
+        $format = strtr( $format, array( $match[0] => '{price}', '{symbol}' => self::$currencies[ Config::getCurrency() ]['symbol'] ) );
         $decimals = $match[1];
         if ( $wp_locale ) {
             $decimal_separator = $wp_locale->number_format['decimal_point'];
@@ -205,11 +206,23 @@ abstract class Price
      */
     public static function correction( $price, $discount, $deduction )
     {
-        $price     = (float) $price;
-        $discount  = (float) $discount;
+        $price = (float) $price;
+        $discount = (float) $discount;
         $deduction = (float) $deduction;
         $amount = round( $price * ( 100 - $discount ) / 100 - $deduction, 2 );
 
         return max( $amount, 0 );
+    }
+
+    /**
+     * @param float $price
+     * @param string $gateway
+     * @return float
+     */
+    public static function gatewayPrice( $price, $gateway )
+    {
+        $increase = (float) get_option( 'bookly_' . $gateway . '_increase' );
+        $addition = (float) get_option( 'bookly_' . $gateway . '_addition' );
+        return self::correction( $price, -$increase, -$addition );
     }
 }

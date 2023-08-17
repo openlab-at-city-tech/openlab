@@ -25,9 +25,8 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                 <div class="media-body">
                                     <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LOGO', B2S_PLUGIN_ADMIN)) { ?>
                                         <a href="https://www.blog2social.com" class="b2s-btn-logo" target="_blank"><?php esc_html_e("Blog2Social", "blog2social") ?></a> 
-                                        <span class="b2s-sidebar-version padding-left-5"><?php echo ($b2sLastVersion !== false) ? esc_html__("Version", "blog2social") . ' ' . B2S_Util::getVersion($b2sLastVersion) : ''; ?> </span>
+                                        <div class="b2s-sidebar-version padding-left-5"><?php echo ($b2sLastVersion !== false) ? esc_html__("Version", "blog2social") . ' ' . B2S_Util::getVersion($b2sLastVersion) : ''; ?> </div>
                                     <?php } ?>
-                                    <br>
                                     <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LICENSE', B2S_PLUGIN_ADMIN)) { ?> 
                                         <div class="b2s-sidebar-licence padding-left-5"><?php esc_html_e("License", "blog2social") ?>:
                                             <a href="admin.php?page=blog2social-premium" class="b2s-sidebar-btn-licence b2s-key-name">
@@ -38,7 +37,7 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                                 } else {
                                                     echo esc_html($versionType[B2S_PLUGIN_USER_VERSION]);
                                                 }
-                                                ?><i class="b2s-sidebar-licence-btn-edit glyphicon glyphicon-pencil"></i>
+                                                ?>
                                             </a>
                                             <?php
                                             if (B2S_PLUGIN_USER_VERSION == 0) {
@@ -51,8 +50,13 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                             }
                                             ?>
                                         </div>
-                                    <?php } ?>
-                                </div>
+                                        <?php if(defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDON_VIDEO)){ ?>
+                                        <div class="b2s-sidebar-video-addon padding-left-5">
+                                            <?php esc_html_e("Addon", "blog2social") ?>: <a href="admin.php?page=blog2social-video" class="b2s-sidebar-btn-video-addon"><?php esc_html_e("Video", "blog2social") ?></a>
+                                        </div>
+                                    <?php }
+                                    }?>
+                                </div>                               
                             </div>
                         <?php } ?>           
                     </div>
@@ -89,6 +93,9 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                 <i class="glyphicon glyphicon-random glyphicon-success"></i> <a href="admin.php?page=blog2social-repost" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-repost') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Re-Share Posts", "blog2social") ?></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
+                                <i class="glyphicon glyphicon-film glyphicon-success"></i> <a href="admin.php?page=blog2social-video" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-video') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Share Videos", "blog2social") ?> <span class="label label-success label-sm"><?php esc_html_e("NEW", "blog2social"); ?></span></a> 
+                            </li>
+                            <li class="b2s-list-margin-left-10">
                                 <i class="glyphicon glyphicon-play glyphicon-success"></i> <a href="admin.php?page=blog2social-autopost" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-autopost') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Auto-Post", "blog2social") ?></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
@@ -100,13 +107,13 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                         </ul>
                         <hr>
                         <ul>
-                            <?php if((defined("B2S_PLUGIN_USER_VERSION") && B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) || (defined('B2S_PLUGIN_PERMISSION_INSIGHTS') && B2S_PLUGIN_PERMISSION_INSIGHTS == 1)) { ?>
+                            <?php if ((defined("B2S_PLUGIN_USER_VERSION") && B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) || (defined('B2S_PLUGIN_PERMISSION_INSIGHTS') && B2S_PLUGIN_PERMISSION_INSIGHTS == 1)) { ?>
                                 <li class="b2s-list-margin-left-10">
                                     <i class="glyphicon glyphicon-signal glyphicon-success"></i> <a href="admin.php?page=blog2social-metrics" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-metrics') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Social Media Metrics", "blog2social") ?> <span class="label label-success label-sm"><?php esc_html_e("BETA", "blog2social"); ?></span></a> 
                                 </li>
                             <?php } ?>
                             <li class="b2s-list-margin-left-10">
-                                <i class="glyphicon glyphicon-user glyphicon-success"></i> <a href="admin.php?page=blog2social-network" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-network') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Social Media Networks", "blog2social") ?></a> 
+                                <i class="glyphicon glyphicon-user glyphicon-success"></i> <a href="admin.php?page=blog2social-network" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-network') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Networks", "blog2social") ?></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
                                 <i class="glyphicon glyphicon-cog glyphicon-success"></i> <a href="admin.php?page=blog2social-settings" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-settings') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Settings", "blog2social") ?></a> 
@@ -154,25 +161,27 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                             <div class="b2s-sidebar-head-text">
                                 <span class="glyphicon glyphicon-bullhorn glyphicon-success"></span> <?php esc_html_e("Blog2Social Blog News", "blog2social"); ?> 
                             </div>
-                            <p> <ul><?php echo wp_kses(B2S_Notice::getBlogEntries(substr(B2S_LANGUAGE, 0, 2)), array(
-                                'li' => array(),
-                                'div' => array(
-                                    'class' => array() 
-                                ),
-                                'a' => array(
-                                    'target' => array(),
-                                    'href' => array(),
-                                    'class' => array()
-                                ),
-                                'img' => array(
-                                    'src' => array(),
-                                    'alt' => array(),
-                                    'class' => array()
-                                ),
-                                'span' => array(
-                                    'class' => array()
-                                )
-                            )); ?></ul></p>
+                            <p> <ul><?php
+                                echo wp_kses(B2S_Notice::getBlogEntries(substr(B2S_LANGUAGE, 0, 2)), array(
+                                    'li' => array(),
+                                    'div' => array(
+                                        'class' => array()
+                                    ),
+                                    'a' => array(
+                                        'target' => array(),
+                                        'href' => array(),
+                                        'class' => array()
+                                    ),
+                                    'img' => array(
+                                        'src' => array(),
+                                        'alt' => array(),
+                                        'class' => array()
+                                    ),
+                                    'span' => array(
+                                        'class' => array()
+                                    )
+                                ));
+                                ?></ul></p>
                         </div>
                     </div>
                 </div>

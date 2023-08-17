@@ -1,9 +1,9 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 9025:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -124,7 +124,7 @@ exports["default"] = [promise, fork, join, race, subscribe];
 /***/ }),
 
 /***/ 7961:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -224,7 +224,7 @@ exports["default"] = [error, iterator, array, object, any];
 /***/ }),
 
 /***/ 2165:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -266,7 +266,7 @@ exports["default"] = [call, cps];
 /***/ }),
 
 /***/ 6288:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -351,7 +351,7 @@ exports["default"] = create;
 /***/ }),
 
 /***/ 2290:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -393,7 +393,7 @@ exports.wrapControls = _wrap2.default;
 /***/ }),
 
 /***/ 2451:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -425,7 +425,7 @@ exports["default"] = createDispatcher;
 /***/ }),
 
 /***/ 7783:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -565,7 +565,7 @@ var createChannel = exports.createChannel = function createChannel(callback) {
 /***/ }),
 
 /***/ 9681:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 
@@ -629,7 +629,7 @@ exports["default"] = is;
 /***/ }),
 
 /***/ 9851:
-/***/ (function(__unused_webpack_module, exports) {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 
@@ -679,30 +679,30 @@ exports["default"] = keys;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
+(() => {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": function() { return /* binding */ createMiddleware; }
+  "default": () => (/* binding */ createMiddleware)
 });
 
 ;// CONCATENATED MODULE: ./packages/redux-routine/build-module/is-generator.js
@@ -814,31 +814,26 @@ function isActionOfType(object, expectedType) {
 /**
  * Create a co-routine runtime.
  *
- * @param  controls Object of control handlers.
- * @param  dispatch Unhandled action dispatch.
+ * @param controls Object of control handlers.
+ * @param dispatch Unhandled action dispatch.
  */
 
-function createRuntime() {
-  let controls = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let dispatch = arguments.length > 1 ? arguments[1] : undefined;
-  const rungenControls = Object.entries(controls).map(_ref => {
-    let [actionType, control] = _ref;
-    return (value, next, iterate, yieldNext, yieldError) => {
-      if (!isActionOfType(value, actionType)) {
-        return false;
-      }
+function createRuntime(controls = {}, dispatch) {
+  const rungenControls = Object.entries(controls).map(([actionType, control]) => (value, next, iterate, yieldNext, yieldError) => {
+    if (!isActionOfType(value, actionType)) {
+      return false;
+    }
 
-      const routine = control(value);
+    const routine = control(value);
 
-      if (isPromise(routine)) {
-        // Async control routine awaits resolution.
-        routine.then(yieldNext, yieldError);
-      } else {
-        yieldNext(routine);
-      }
+    if (isPromise(routine)) {
+      // Async control routine awaits resolution.
+      routine.then(yieldNext, yieldError);
+    } else {
+      yieldNext(routine);
+    }
 
-      return true;
-    };
+    return true;
   });
 
   const unhandledActionControl = (value, next) => {
@@ -881,8 +876,7 @@ function createRuntime() {
  * @return {import('redux').Middleware} Co-routine runtime
  */
 
-function createMiddleware() {
-  let controls = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function createMiddleware(controls = {}) {
   return store => {
     const runtime = createRuntime(controls, store.dispatch);
     return next => action => {
@@ -895,7 +889,8 @@ function createMiddleware() {
   };
 }
 
-}();
+})();
+
 (window.wp = window.wp || {}).reduxRoutine = __webpack_exports__["default"];
 /******/ })()
 ;

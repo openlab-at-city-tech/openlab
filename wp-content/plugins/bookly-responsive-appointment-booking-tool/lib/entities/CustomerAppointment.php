@@ -6,6 +6,7 @@ use Bookly\Lib\DataHolders\Booking;
 
 /**
  * Class CustomerAppointment
+ *
  * @package Bookly\Lib\Entities
  */
 class CustomerAppointment extends Lib\Base\Entity
@@ -74,35 +75,37 @@ class CustomerAppointment extends Lib\Base\Entity
 
     protected static $table = 'bookly_customer_appointments';
 
+    protected $loggable = true;
+
     protected static $schema = array(
-        'id'                       => array( 'format' => '%d' ),
-        'series_id'                => array( 'format' => '%d', 'reference' => array( 'entity' => 'Series' ) ),
-        'package_id'               => array( 'format' => '%d', 'reference' => array( 'entity' => 'Package', 'namespace' => '\BooklyPackages\Lib\Entities', 'required' => 'bookly-addon-packages' ) ),
-        'customer_id'              => array( 'format' => '%d', 'reference' => array( 'entity' => 'Customer' ) ),
-        'appointment_id'           => array( 'format' => '%d', 'reference' => array( 'entity' => 'Appointment' ) ),
-        'payment_id'               => array( 'format' => '%d', 'reference' => array( 'entity' => 'Payment' ) ),
-        'order_id'                 => array( 'format' => '%d', 'reference' => array( 'entity' => 'Order' ) ),
-        'number_of_persons'        => array( 'format' => '%d' ),
-        'units'                    => array( 'format' => '%d' ),
-        'notes'                    => array( 'format' => '%s' ),
-        'extras'                   => array( 'format' => '%s' ),
-        'extras_multiply_nop'      => array( 'format' => '%d' ),
-        'custom_fields'            => array( 'format' => '%s' ),
-        'status'                   => array( 'format' => '%s' ),
-        'status_changed_at'        => array( 'format' => '%s' ),
-        'token'                    => array( 'format' => '%s' ),
-        'time_zone'                => array( 'format' => '%s' ),
-        'time_zone_offset'         => array( 'format' => '%d' ),
-        'rating'                   => array( 'format' => '%d' ),
-        'rating_comment'           => array( 'format' => '%s' ),
-        'locale'                   => array( 'format' => '%s' ),
+        'id' => array( 'format' => '%d' ),
+        'series_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Series' ) ),
+        'package_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Package', 'namespace' => '\BooklyPackages\Lib\Entities', 'required' => 'bookly-addon-packages' ) ),
+        'customer_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Customer' ) ),
+        'appointment_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Appointment' ) ),
+        'payment_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Payment' ) ),
+        'order_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Order' ) ),
+        'number_of_persons' => array( 'format' => '%d' ),
+        'units' => array( 'format' => '%d' ),
+        'notes' => array( 'format' => '%s' ),
+        'extras' => array( 'format' => '%s' ),
+        'extras_multiply_nop' => array( 'format' => '%d' ),
+        'custom_fields' => array( 'format' => '%s' ),
+        'status' => array( 'format' => '%s' ),
+        'status_changed_at' => array( 'format' => '%s' ),
+        'token' => array( 'format' => '%s' ),
+        'time_zone' => array( 'format' => '%s' ),
+        'time_zone_offset' => array( 'format' => '%d' ),
+        'rating' => array( 'format' => '%d' ),
+        'rating_comment' => array( 'format' => '%s' ),
+        'locale' => array( 'format' => '%s' ),
         'collaborative_service_id' => array( 'format' => '%d' ),
-        'collaborative_token'      => array( 'format' => '%s' ),
-        'compound_service_id'      => array( 'format' => '%d' ),
-        'compound_token'           => array( 'format' => '%s' ),
-        'created_from'             => array( 'format' => '%s' ),
-        'created_at'               => array( 'format' => '%s' ),
-        'updated_at'               => array( 'format' => '%s' ),
+        'collaborative_token' => array( 'format' => '%s' ),
+        'compound_service_id' => array( 'format' => '%d' ),
+        'compound_token' => array( 'format' => '%s' ),
+        'created_from' => array( 'format' => '%s' ),
+        'created_at' => array( 'format' => '%s' ),
+        'updated_at' => array( 'format' => '%s' ),
     );
 
     /** @var Customer */
@@ -110,7 +113,7 @@ class CustomerAppointment extends Lib\Base\Entity
 
     /** @var  string */
     private $last_status;
-    /** @var bool  */
+    /** @var bool */
     private $just_created = false;
 
     /**
@@ -121,14 +124,12 @@ class CustomerAppointment extends Lib\Base\Entity
     public function deleteCascade( $compound_collaborative = false )
     {
         Lib\Proxy\Shared::deleteCustomerAppointment( $this );
-        Lib\Utils\Log::deleteEntity( $this, __METHOD__ );
         $this->delete();
         $appointment = new Appointment();
         if ( $appointment->load( $this->getAppointmentId() ) ) {
             // Check if there are any customers left.
             if ( self::query()->where( 'appointment_id', $appointment->getId() )->count() == 0 ) {
                 // If no customers then delete the appointment.
-                Lib\Utils\Log::deleteEntity( $appointment, __METHOD__, 'If no customers then delete the appointment' );
                 $appointment->delete();
             } else {
                 // If there are customers then recalculate extras duration.
@@ -188,8 +189,8 @@ class CustomerAppointment extends Lib\Base\Entity
         $appointment = new Lib\Entities\Appointment();
         $minimum_time_prior_cancel = (int) Lib\Proxy\Pro::getMinimumTimePriorCancel( $appointment->getServiceId() );
         if ( $minimum_time_prior_cancel > 0
-             && $appointment->load( $this->getAppointmentId() )
-             && $appointment->getStartDate() !== null
+            && $appointment->load( $this->getAppointmentId() )
+            && $appointment->getStartDate() !== null
         ) {
             $allow_cancel_time = strtotime( $appointment->getStartDate() ) - $minimum_time_prior_cancel;
             if ( current_time( 'timestamp' ) > $allow_cancel_time ) {
@@ -219,11 +220,9 @@ class CustomerAppointment extends Lib\Base\Entity
                 $item->setStatus( self::STATUS_CANCELLED );
                 Lib\Notifications\Booking\Sender::send( $item, array( 'cancellation_reason' => $reason ) );
                 if ( get_option( 'bookly_appointment_cancel_action' ) == 'delete' ) {
-                    Lib\Utils\Log::deleteEntity( $this, __METHOD__ );
                     $this->deleteCascade( true );
                 } else {
                     foreach ( $item->getItems() as $i ) {
-                        Lib\Utils\Log::updateEntity( $i->getCA(), __METHOD__, 'Cancel appointment' );
                         if ( $i->getCA()->save() ) {
                             $appointment = $i->getAppointment();
                             if ( $i->getExtras() != '[]' ) {
@@ -278,27 +277,42 @@ class CustomerAppointment extends Lib\Base\Entity
     public static function statusToString( $status )
     {
         switch ( $status ) {
-            case self::STATUS_PENDING:    return __( 'Pending',   'bookly' );
-            case self::STATUS_APPROVED:   return __( 'Approved',  'bookly' );
-            case self::STATUS_CANCELLED:  return __( 'Cancelled', 'bookly' );
-            case self::STATUS_REJECTED:   return __( 'Rejected',  'bookly' );
-            case self::STATUS_WAITLISTED: return __( 'On waiting list',  'bookly' );
-            case self::STATUS_DONE:       return __( 'Done', 'bookly' );
-            case 'mixed':                 return __( 'Mixed', 'bookly' );
-            default: return Lib\Proxy\CustomStatuses::statusToString( $status );
+            case self::STATUS_PENDING:
+                return __( 'Pending', 'bookly' );
+            case self::STATUS_APPROVED:
+                return __( 'Approved', 'bookly' );
+            case self::STATUS_CANCELLED:
+                return __( 'Cancelled', 'bookly' );
+            case self::STATUS_REJECTED:
+                return __( 'Rejected', 'bookly' );
+            case self::STATUS_WAITLISTED:
+                return __( 'On waiting list', 'bookly' );
+            case self::STATUS_DONE:
+                return __( 'Done', 'bookly' );
+            case 'mixed':
+                return __( 'Mixed', 'bookly' );
+            default:
+                return Lib\Proxy\CustomStatuses::statusToString( $status );
         }
     }
 
     public static function statusToIcon( $status )
     {
         switch ( $status ) {
-            case self::STATUS_PENDING:    return 'far fa-clock';
-            case self::STATUS_APPROVED:   return 'fas fa-check';
-            case self::STATUS_CANCELLED:  return 'fas fa-times';
-            case self::STATUS_REJECTED:   return 'fas fa-ban';
-            case self::STATUS_WAITLISTED: return 'fas fa-list-ol';
-            case self::STATUS_DONE:       return 'far fa-check-square';
-            default: return Lib\Proxy\CustomStatuses::statusToIcon( $status );
+            case self::STATUS_PENDING:
+                return 'far fa-clock';
+            case self::STATUS_APPROVED:
+                return 'fas fa-check';
+            case self::STATUS_CANCELLED:
+                return 'fas fa-times';
+            case self::STATUS_REJECTED:
+                return 'fas fa-ban';
+            case self::STATUS_WAITLISTED:
+                return 'fas fa-list-ol';
+            case self::STATUS_DONE:
+                return 'far fa-check-square';
+            default:
+                return Lib\Proxy\CustomStatuses::statusToIcon( $status );
         }
     }
 
@@ -378,6 +392,7 @@ class CustomerAppointment extends Lib\Base\Entity
 
     /**
      * Sets package
+     *
      * @param \BooklyPackages\Lib\Entities\Package $package
      * @return $this
      */
@@ -411,6 +426,7 @@ class CustomerAppointment extends Lib\Base\Entity
 
     /**
      * Sets customer
+     *
      * @param Customer $customer
      * @return $this
      */
@@ -1013,7 +1029,7 @@ class CustomerAppointment extends Lib\Base\Entity
 
     /**
      * @param array|\stdClass $data
-     * @param bool            $overwrite_loaded_values
+     * @param bool $overwrite_loaded_values
      * @return $this
      */
     public function setFields( $data, $overwrite_loaded_values = false )

@@ -19,6 +19,17 @@
 			}
 		});
 
+		$('#no-custom').change(function(event){
+			if( $(this).is(':checked') ){
+				$('#no-custom-from-custom-label').removeClass('disabled');
+				$('#no-custom-from-custom').removeAttr('disabled');
+			} else {
+				$('#no-custom-from-custom-label').addClass('disabled');
+				$('#no-custom-from-custom').attr('disabled','disabled');
+				$('#no-custom-from-custom').attr('checked', false);
+			}
+		});
+
 		$('#add-link').change(function(event){
 			if( $(this).is(':checked') ){
 				$('#read-more').removeAttr('disabled');

@@ -2,9 +2,9 @@
 **Contributors:** [themeisle](https://profiles.wordpress.org/themeisle)  
 **Tags:** blog,block-patterns, custom-logo, e-commerce, rtl-language-support, grid-layout, one-column, two-columns, custom-background, custom-colors, custom-header, custom-menu, featured-image-header, featured-images, flexible-header, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, accessibility-ready, wide-blocks, block-styles, footer-widgets, portfolio, left-sidebar, right-sidebar  
 **Requires at least:** 4.0  
-**Tested up to:** 6.1  
+**Tested up to:** 6.2  
 **Stable tag:** trunk  
-**Requires PHP:** 5.5.0  
+**Requires PHP:** 7.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -18,6 +18,174 @@ Neve WordPress theme, Copyright 2018 Themeisle
 Neve is distributed under the terms of the GNU GPLv2 or later
 
 ## Changelog ##
+
+##### [Version 3.6.4](https://github.com/Codeinwp/neve/compare/v3.6.3...v3.6.4) (2023-06-16)
+
+- [Fix] reported error for non-admin
+
+
+
+
+##### [Version 3.6.3](https://github.com/Codeinwp/neve/compare/v3.6.2...v3.6.3) (2023-06-15)
+
+- [Fix] Customizer link location
+
+
+
+
+##### [Version 3.6.2](https://github.com/Codeinwp/neve/compare/v3.6.1...v3.6.2) (2023-06-15)
+
+- [Feat] Dedicated Settings page
+- [Fix] Header cart icon color with multiple headers
+- [Fix] Sidebar Gradient
+- [Fix] Toggle the aria-pressed ARIA for the menu caret
+- [Fix] Alignment for mobile nav when set to center
+- Added filter for welcome discount
+- Update Visual Regression base images
+- Update Google Fonts
+
+
+
+
+##### [Version 3.6.1](https://github.com/Codeinwp/neve/compare/v3.6.0...v3.6.1) (2023-05-30)
+
+- [Fix] Solve compatibility check
+- Update SDK
+
+
+
+
+#### [Version 3.6.0](https://github.com/Codeinwp/neve/compare/v3.5.8...v3.6.0) (2023-05-29)
+
+- [Feat] Add relative CSS unit support for font size controls in the customizer
+- [Feat] Granular Heading Font Family Controls
+- [Feat] Manage top and bottom margins for pages and posts 
+- [Fix] Accessibility warning for the site title
+- [Fix] Hover Skin Mode not working for the Footer Menu
+- [Fix] Improve the accessibility of the mobile menu by adding an aria-expanded attribute
+- [Fix] Button padding is different when using the EM unit
+- [Fix] Missing margin between heading and content inside the starter content
+- [Fix] Customizer sidebar flickers when changing the container control to 100%
+- [Fix] Breadcrumbs not available on the frontend
+- [Fix] Highlight the parent menu item when a submenu is active
+- [Fix] Items Hover Color does not apply to the active menu item
+- [Fix] Updated font size for product tabs h2
+- Upsell banners in HFG
+- Improve the E2E test coverage
+- Update Google Fonts
+- Update Cloud Templates and Patterns collection banner image
+
+
+
+
+##### [Version 3.5.8](https://github.com/Codeinwp/neve/compare/v3.5.7...v3.5.8) (2023-04-19)
+
+- [Fix] Tag cloud style when using classic widgets was different than the tag cloud block
+- [Fix] Visual issue for the color picker
+- Update Google Fonts
+- Support chages for Neve Pro
+
+
+
+
+##### [Version 3.5.7](https://github.com/Codeinwp/neve/compare/v3.5.6...v3.5.7) (2023-04-06)
+
+- [Feat] Dynamic Icon Selection and Optional Button for HFG Search Components
+- [Fix] Dot style separator not visible inside the editor
+- [Fix] Improve compatibility with WPML and Neve
+- [Fix] Gradient issue in WordPress 6.2
+- [Fix] Path for the logo inside the dashboard
+- [Fix] Active and hover colors of the secondary menu items
+- [Fix] Hover skin options for the secondary menu
+- Improve the compatibility with PPOM plugin
+
+
+
+
+##### [Version 3.5.6](https://github.com/Codeinwp/neve/compare/v3.5.5...v3.5.6) (2023-03-22)
+
+- [Feat] Add Open in new tab option for HFG button components
+- [Fix] Page title appears twice on WooCommerce pages
+- [Fix] The menu closing icon is duplicated with the slide-down style
+- [Fix] Incompatibility issue with Gutenberg plugin 15.2.0
+- [Fix] Reply button in comments not aligned correctly for short comments
+- Improve the presentation of Neve Pro Custom Layout module
+- Improve the development process
+
+
+
+
+##### [Version 3.5.5](https://github.com/Codeinwp/neve/compare/v3.5.4...v3.5.5) (2023-03-13)
+
+- Removed legacy skin
+
+
+
+
+##### [Version 3.5.4](https://github.com/Codeinwp/neve/compare/v3.5.3...v3.5.4) (2023-03-01)
+
+- [Feat] Allow custom colors to be selected inside the customizer
+- [Fix] Proper indentation for comments
+- [Fix] Inconsistent space between avatar and text in comments
+- [Fix] Add margin-bottom for images with no caption
+- Update Google Fonts
+
+
+
+
+##### [Version 3.5.3](https://github.com/Codeinwp/neve/compare/v3.5.2...v3.5.3) (2023-02-16)
+
+- [Fix] Alternative Layout control not visible inside the customizer
+- [Fix] Menu item not aligned with caret
+- Better inform about the features for WooCommerce available in Neve PRO
+
+
+
+
+##### [Version 3.5.2](https://github.com/Codeinwp/neve/compare/v3.5.1...v3.5.2) (2023-02-15)
+
+- [Feat] Add a filter for the author post meta
+- [Feat] Improve Accessibility. Use the tab switch to submenu items only if the arrow is clicked on focus
+- [Fix] Layout issue with Elementor Pro checkout widget
+- [Fix] PHP 8.2 Support
+- [Fix] Vertical alignment for cover posts
+- [Fix] Missing padding inside the customizer for the button appearance control
+- [Fix] Infinite scroll for translated blogs
+- Update Google Fonts
+- Improve the development process
+- Improve performance by moving the menu sidebar opening behavior to inline styles
+
+
+
+
+##### [Version 3.5.1](https://github.com/Codeinwp/neve/compare/v3.5.0...v3.5.1) (2023-01-30)
+
+- Update the tested up to version for Neve Pro
+
+
+
+
+#### [Version 3.5.0](https://github.com/Codeinwp/neve/compare/v3.4.10...v3.5.0) (2023-01-30)
+
+- [Feat] Custom global colors - [Learn more](https://docs.themeisle.com/article/1314-global-colors-in-neve#custom-color)
+- [Feat] Font pairs inside the typography section - [Learn more](https://docs.themeisle.com/article/1340-neve-typography#font-presets)
+- [Feat] Full Site Editing for Neve - [Learn more](https://docs.themeisle.com/article/1774-neve-fse)
+- [Fix] Display featured post only on the first page
+- [Fix] Issue with specific customizer settings imported
+- [Fix] Color picker issue on small screens
+- Update Google Fonts
+
+
+
+
+##### [Version 3.4.10](https://github.com/Codeinwp/neve/compare/v3.4.9...v3.4.10) (2023-01-09)
+
+- [Fix] Installation of Super Page Cache for Cloudflare recommended plugin not working
+- [Fix] Make body_class hook signature similar to WP core one; props [@mi5t4n](https://github.com/mi5t4n) for contribution
+- [Fix] One click install for Cloud Templates & Patterns collection
+
+
+
 
 ##### [Version 3.4.9](https://github.com/Codeinwp/neve/compare/v3.4.8...v3.4.9) (2022-12-15)
 

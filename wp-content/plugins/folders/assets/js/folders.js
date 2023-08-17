@@ -1416,6 +1416,20 @@
                     folderOrder = $("#js-tree-menu > ul > li.jstree-node[id='"+parentId+"'] > ul.jstree-children > li").length + 1;
                 }
 
+                var foldersList = [];
+                if(parentId == 0) {
+                    if($("#js-tree-menu > .jstree-container-ul > .jstree-node").length) {
+                        $("#js-tree-menu > .jstree-container-ul > .jstree-node").each(function(){
+                            foldersList.push($(this).attr("id"));
+                        });
+                    }
+                } else {
+                    if($("#js-tree-menu .jstree-node[id='"+parentId+"'] > ul> li.jstree-node").length) {
+                        $("#js-tree-menu .jstree-node[id='"+parentId+"'] > ul> li.jstree-node").each(function(){
+                            foldersList.push($(this).attr("id"));
+                        });
+                    }
+                }
                 $.ajax({
                     url: wcp_settings.ajax_url,
                     data: {
@@ -1426,6 +1440,7 @@
                         term_id: parentId,
                         order: folderOrder,
                         name: folderNameDynamic,
+                        folders: foldersList,
                         is_duplicate: isDuplicate,
                         duplicate_from: duplicateFolderId,
                         parent_ids: parentIds,
@@ -1457,23 +1472,27 @@
                                         'is_deleted': 0
                                     };
                                     folderPropertyArray.push(folderProperty);
+                                    var folderTitle = result.data[i]['title'];
+                                    folderTitle = folderTitle.replace(/\\/g, '');
                                     if(!creatingParentMenu) {
                                         $('#js-tree-menu').jstree().create_node(result.parent_id, {
                                             "id": result.data[i]['term_id'],
-                                            "text": " " + result.data[i]['title']
-                                        }, "last", function () {
+                                            "text": " " + folderTitle
+                                        }, i, function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
-                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-parent", result.parent_id);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(result.data[i].folder_count);
                                         });
                                     } else {
-                                        $('#js-tree-menu').jstree().create_node("#", {
+                                        $('#js-tree-menu').jstree().create_node('#', {
                                             "id": result.data[i]['term_id'],
-                                            "text": " " + result.data[i]['title']
-                                        }, (folderOrder), function () {
+                                            "text": " " + folderTitle
+                                        }, i, function () {
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-nonce", result.data[i]['nonce']);
                                             $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-slug", result.data[i]['slug']);
-                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(0);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "']").attr("data-parent", result.parent_id);
+                                            $(".jstree-node[id='" + result.data[i]['term_id'] + "'] > a.jstree-anchor .premio-folder-count").text(result.data[i].folder_count);
                                         });
                                     }
                                     creatingParentMenu = 0;

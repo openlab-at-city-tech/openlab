@@ -1,36 +1,36 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,29 +39,29 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "ifViewportMatches": function() { return /* reexport */ if_viewport_matches; },
-  "store": function() { return /* reexport */ store; },
-  "withViewportMatch": function() { return /* reexport */ with_viewport_match; }
+  "ifViewportMatches": () => (/* reexport */ if_viewport_matches),
+  "store": () => (/* reexport */ store),
+  "withViewportMatch": () => (/* reexport */ with_viewport_match)
 });
 
 // NAMESPACE OBJECT: ./packages/viewport/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "setIsMatching": function() { return setIsMatching; }
+  "setIsMatching": () => (setIsMatching)
 });
 
 // NAMESPACE OBJECT: ./packages/viewport/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "isViewportMatch": function() { return isViewportMatch; }
+  "isViewportMatch": () => (isViewportMatch)
 });
 
 ;// CONCATENATED MODULE: external ["wp","compose"]
-var external_wp_compose_namespaceObject = window["wp"]["compose"];
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
+const external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: ./packages/viewport/build-module/store/reducer.js
 /**
  * Reducer returning the viewport state, as keys of breakpoint queries with
@@ -72,10 +72,7 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
  *
  * @return {Object} Updated state.
  */
-function reducer() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function reducer(state = {}, action) {
   switch (action.type) {
     case 'SET_IS_MATCHING':
       return action.values;
@@ -84,7 +81,7 @@ function reducer() {
   return state;
 }
 
-/* harmony default export */ var store_reducer = (reducer);
+/* harmony default export */ const store_reducer = (reducer);
 
 ;// CONCATENATED MODULE: ./packages/viewport/build-module/store/actions.js
 /**
@@ -191,10 +188,7 @@ const addDimensionsEventListener = (breakpoints, operators) => {
    * maximum of one time per call stack.
    */
   const setIsMatching = (0,external_wp_compose_namespaceObject.debounce)(() => {
-    const values = Object.fromEntries(queries.map(_ref => {
-      let [key, query] = _ref;
-      return [key, query.matches];
-    }));
+    const values = Object.fromEntries(queries.map(([key, query]) => [key, query.matches]));
     (0,external_wp_data_namespaceObject.dispatch)(store).setIsMatching(values);
   }, 0, {
     leading: true
@@ -210,10 +204,8 @@ const addDimensionsEventListener = (breakpoints, operators) => {
    */
 
   const operatorEntries = Object.entries(operators);
-  const queries = Object.entries(breakpoints).flatMap(_ref2 => {
-    let [name, width] = _ref2;
-    return operatorEntries.map(_ref3 => {
-      let [operator, condition] = _ref3;
+  const queries = Object.entries(breakpoints).flatMap(([name, width]) => {
+    return operatorEntries.map(([operator, condition]) => {
       const list = window.matchMedia(`(${condition}: ${width}px)`);
       list.addEventListener('change', setIsMatching);
       return [`${operator} ${name}`, list];
@@ -225,30 +217,11 @@ const addDimensionsEventListener = (breakpoints, operators) => {
   setIsMatching.flush();
 };
 
-/* harmony default export */ var listener = (addDimensionsEventListener);
+/* harmony default export */ const listener = (addDimensionsEventListener);
 
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/viewport/build-module/with-viewport-match.js
-
 
 
 /**
@@ -282,8 +255,7 @@ var external_wp_element_namespaceObject = window["wp"]["element"];
 const withViewportMatch = queries => {
   const queryEntries = Object.entries(queries);
 
-  const useViewPortQueriesResult = () => Object.fromEntries(queryEntries.map(_ref => {
-    let [key, query] = _ref;
+  const useViewPortQueriesResult = () => Object.fromEntries(queryEntries.map(([key, query]) => {
     let [operator, breakpointName] = query.split(' ');
 
     if (breakpointName === undefined) {
@@ -301,12 +273,14 @@ const withViewportMatch = queries => {
   return (0,external_wp_compose_namespaceObject.createHigherOrderComponent)(WrappedComponent => {
     return (0,external_wp_compose_namespaceObject.pure)(props => {
       const queriesResult = useViewPortQueriesResult();
-      return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, _extends({}, props, queriesResult));
+      return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, { ...props,
+        ...queriesResult
+      });
     });
   }, 'withViewportMatch');
 };
 
-/* harmony default export */ var with_viewport_match = (withViewportMatch);
+/* harmony default export */ const with_viewport_match = (withViewportMatch);
 
 ;// CONCATENATED MODULE: ./packages/viewport/build-module/if-viewport-matches.js
 /**
@@ -343,7 +317,7 @@ const ifViewportMatches = query => (0,external_wp_compose_namespaceObject.create
   isViewportMatch: query
 }), (0,external_wp_compose_namespaceObject.ifCondition)(props => props.isViewportMatch)]), 'ifViewportMatches');
 
-/* harmony default export */ var if_viewport_matches = (ifViewportMatches);
+/* harmony default export */ const if_viewport_matches = (ifViewportMatches);
 
 ;// CONCATENATED MODULE: ./packages/viewport/build-module/index.js
 /**

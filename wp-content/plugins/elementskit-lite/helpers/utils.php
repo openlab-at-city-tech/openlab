@@ -358,4 +358,26 @@ class Utils {
 
 		return $html;
 	}
+
+	public static function swiper_class() {
+		$swiper_class = \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_swiper_latest' ) ? 'swiper' : 'swiper-container';
+		return 'ekit-main-swiper ' . $swiper_class;
+	}
+
+	public static function get_page_by_title( $page_title, $post_type = 'page' ) {
+		$query = new \WP_Query(
+			array(
+				'post_type' => $post_type,
+				'title' => $page_title,
+			)
+		);
+
+		if (!empty($query->post)) {
+			$page_got_by_title = $query->post;
+		} else {
+			$page_got_by_title = null;
+		}
+
+		return $page_got_by_title;
+	}
 }

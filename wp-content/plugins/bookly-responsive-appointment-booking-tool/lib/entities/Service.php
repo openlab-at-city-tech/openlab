@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Service
+ *
  * @package Bookly\Lib\Entities
  */
 class Service extends Lib\Base\Entity
@@ -55,6 +56,8 @@ class Service extends Lib\Base\Entity
     protected $capacity_min = 1;
     /** @var  int */
     protected $capacity_max = 1;
+    /** @var  int */
+    protected $waiting_list_capacity;
     /** @var  int */
     protected $one_booking_per_slot = 0;
     /** @var  int */
@@ -109,56 +112,59 @@ class Service extends Lib\Base\Entity
     protected $min_time_prior_booking;
     /** @var  int */
     protected $min_time_prior_cancel;
+    /** @var string */
+    protected $gateways;
     /** @var  string */
     protected $visibility = Service::VISIBILITY_PUBLIC;
     /** @var  int */
     protected $position;
 
-
     protected static $table = 'bookly_services';
 
     protected static $schema = array(
-        'id'                           => array( 'format' => '%d' ),
-        'category_id'                  => array( 'format' => '%d', 'reference' => array( 'entity' => 'Category' ) ),
-        'type'                         => array( 'format' => '%s' ),
-        'title'                        => array( 'format' => '%s' ),
-        'attachment_id'                => array( 'format' => '%d' ),
-        'duration'                     => array( 'format' => '%d' ),
-        'slot_length'                  => array( 'format' => '%s' ),
-        'price'                        => array( 'format' => '%f' ),
-        'color'                        => array( 'format' => '%s' ),
-        'deposit'                      => array( 'format' => '%s' ),
-        'capacity_min'                 => array( 'format' => '%d' ),
-        'capacity_max'                 => array( 'format' => '%d' ),
-        'one_booking_per_slot'         => array( 'format' => '%d' ),
-        'padding_left'                 => array( 'format' => '%d' ),
-        'padding_right'                => array( 'format' => '%d' ),
-        'info'                         => array( 'format' => '%s' ),
-        'start_time_info'              => array( 'format' => '%s' ),
-        'end_time_info'                => array( 'format' => '%s' ),
-        'package_life_time'            => array( 'format' => '%d' ),
-        'package_size'                 => array( 'format' => '%d' ),
-        'package_unassigned'           => array( 'format' => '%d' ),
-        'appointments_limit'           => array( 'format' => '%d' ),
-        'limit_period'                 => array( 'format' => '%s' ),
-        'staff_preference'             => array( 'format' => '%s' ),
-        'staff_preference_settings'    => array( 'format' => '%s' ),
-        'recurrence_enabled'           => array( 'format' => '%d' ),
-        'recurrence_frequencies'       => array( 'format' => '%s' ),
-        'same_staff_for_subservices'   => array( 'format' => '%d' ),
-        'units_min'                    => array( 'format' => '%d' ),
-        'units_max'                    => array( 'format' => '%d' ),
-        'time_requirements'            => array( 'format' => '%s' ),
+        'id' => array( 'format' => '%d' ),
+        'category_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Category' ) ),
+        'type' => array( 'format' => '%s' ),
+        'title' => array( 'format' => '%s' ),
+        'attachment_id' => array( 'format' => '%d' ),
+        'duration' => array( 'format' => '%d' ),
+        'slot_length' => array( 'format' => '%s' ),
+        'price' => array( 'format' => '%f' ),
+        'color' => array( 'format' => '%s' ),
+        'deposit' => array( 'format' => '%s' ),
+        'capacity_min' => array( 'format' => '%d' ),
+        'capacity_max' => array( 'format' => '%d' ),
+        'waiting_list_capacity' => array( 'format' => '%d' ),
+        'one_booking_per_slot' => array( 'format' => '%d' ),
+        'padding_left' => array( 'format' => '%d' ),
+        'padding_right' => array( 'format' => '%d' ),
+        'info' => array( 'format' => '%s' ),
+        'start_time_info' => array( 'format' => '%s' ),
+        'end_time_info' => array( 'format' => '%s' ),
+        'package_life_time' => array( 'format' => '%d' ),
+        'package_size' => array( 'format' => '%d' ),
+        'package_unassigned' => array( 'format' => '%d' ),
+        'appointments_limit' => array( 'format' => '%d' ),
+        'limit_period' => array( 'format' => '%s' ),
+        'staff_preference' => array( 'format' => '%s' ),
+        'staff_preference_settings' => array( 'format' => '%s' ),
+        'recurrence_enabled' => array( 'format' => '%d' ),
+        'recurrence_frequencies' => array( 'format' => '%s' ),
+        'same_staff_for_subservices' => array( 'format' => '%d' ),
+        'units_min' => array( 'format' => '%d' ),
+        'units_max' => array( 'format' => '%d' ),
+        'time_requirements' => array( 'format' => '%s' ),
         'collaborative_equal_duration' => array( 'format' => '%d' ),
-        'online_meetings'              => array( 'format' => '%s' ),
-        'final_step_url'               => array( 'format' => '%s' ),
-        'wc_product_id'                => array( 'format' => '%d' ),
-        'wc_cart_info_name'            => array( 'format' => '%s' ),
-        'wc_cart_info'                 => array( 'format' => '%s' ),
-        'min_time_prior_booking'       => array( 'format' => '%d' ),
-        'min_time_prior_cancel'        => array( 'format' => '%d' ),
-        'visibility'                   => array( 'format' => '%s' ),
-        'position'                     => array( 'format' => '%d', 'sequent' => true ),
+        'online_meetings' => array( 'format' => '%s' ),
+        'final_step_url' => array( 'format' => '%s' ),
+        'wc_product_id' => array( 'format' => '%d' ),
+        'wc_cart_info_name' => array( 'format' => '%s' ),
+        'wc_cart_info' => array( 'format' => '%s' ),
+        'min_time_prior_booking' => array( 'format' => '%d' ),
+        'min_time_prior_cancel' => array( 'format' => '%d' ),
+        'gateways' => array( 'format' => '%s' ),
+        'visibility' => array( 'format' => '%s' ),
+        'position' => array( 'format' => '%d', 'sequent' => true ),
     );
 
     /** @var \BooklyServiceExtras\Lib\Entities\ServiceExtra[] */
@@ -255,7 +261,7 @@ class Service extends Lib\Base\Entity
     /**
      * Check if given customer has reached the appointments limit for this service.
      *
-     * @param int   $customer_id
+     * @param int $customer_id
      * @param array $appointment_dates format( 'Y-m-d H:i:s' )
      * @return bool
      */
@@ -264,21 +270,21 @@ class Service extends Lib\Base\Entity
         if ( Lib\Config::proActive() && $this->getLimitPeriod() != 'off' && $this->getAppointmentsLimit() > 0 ) {
             if ( $this->isCompound() ) {
                 // Compound service.
-                $sub_services             = $this->getSubServices();
-                $compound_service_id      = $this->getId();
+                $sub_services = $this->getSubServices();
+                $compound_service_id = $this->getId();
                 $collaborative_service_id = null;
-                $service_id               = $sub_services[0]->getId();
+                $service_id = $sub_services[0]->getId();
             } elseif ( $this->isCollaborative() ) {
                 // Collaborative service.
-                $sub_services             = $this->getSubServices();
-                $compound_service_id      = null;
+                $sub_services = $this->getSubServices();
+                $compound_service_id = null;
                 $collaborative_service_id = $this->getId();
-                $service_id               = $sub_services[0]->getId();
+                $service_id = $sub_services[0]->getId();
             } else {
                 // Simple service.
-                $compound_service_id      = null;
+                $compound_service_id = null;
                 $collaborative_service_id = null;
-                $service_id               = $this->getId();
+                $service_id = $this->getId();
             }
             $statuses = get_option( 'bookly_cst_limit_statuses', array() );
             switch ( $this->getLimitPeriod() ) {
@@ -302,43 +308,43 @@ class Service extends Lib\Base\Entity
                         switch ( $this->getLimitPeriod() ) {
                             case 'calendar_day':
                                 $bound_start = date_create( $appointment_date )->format( 'Y-m-d 00:00:00' );
-                                $bound_end   = date_create( $appointment_date )->format( 'Y-m-d 23:59:59' );
+                                $bound_end = date_create( $appointment_date )->format( 'Y-m-d 23:59:59' );
                                 break;
                             case 'calendar_week':
-                                $week_day    = date_create( $appointment_date )->format( 'w' );
-                                $start_week  = (int) get_option( 'start_of_week' );
-                                $delta       = $week_day < $start_week ? $start_week + $week_day - 7 : $start_week - $week_day;
-                                $start_date  = date_create( $appointment_date )->modify( $delta . ' day' );
+                                $week_day = date_create( $appointment_date )->format( 'w' );
+                                $start_week = (int) get_option( 'start_of_week' );
+                                $delta = $week_day < $start_week ? $start_week + $week_day - 7 : $start_week - $week_day;
+                                $start_date = date_create( $appointment_date )->modify( $delta . ' day' );
                                 $bound_start = $start_date->format( 'Y-m-d 00:00:00' );
-                                $bound_end   = $start_date->modify( '+6 day' )->format( 'Y-m-d 23:59:59' );
+                                $bound_end = $start_date->modify( '+6 day' )->format( 'Y-m-d 23:59:59' );
                                 break;
                             case 'calendar_month':
                                 $bound_start = date_create( $appointment_date )->modify( 'first day of this month' )->format( 'Y-m-d 00:00:00' );
-                                $bound_end   = date_create( $appointment_date )->modify( 'last day of this month' )->format( 'Y-m-d 23:59:59' );
+                                $bound_end = date_create( $appointment_date )->modify( 'last day of this month' )->format( 'Y-m-d 23:59:59' );
                                 break;
                             case 'calendar_year':
                                 $bound_start = date_create( $appointment_date )->modify( 'first day of January' )->format( 'Y-m-d 00:00:00' );
-                                $bound_end   = date_create( $appointment_date )->modify( 'last day of December' )->format( 'Y-m-d 23:59:59' );
+                                $bound_end = date_create( $appointment_date )->modify( 'last day of December' )->format( 'Y-m-d 23:59:59' );
                                 break;
 
                             case 'day':
                                 $bound_start = date_create( $appointment_date )->modify( '-1 day' )->format( 'Y-m-d H:i:s' );
-                                $bound_end   = $appointment_date;
+                                $bound_end = $appointment_date;
                                 $regarding_appointment = true;
                                 break;
                             case 'week':
                                 $bound_start = date_create( $appointment_date )->modify( '-1 week' )->format( 'Y-m-d H:i:s' );
-                                $bound_end   = $appointment_date;
+                                $bound_end = $appointment_date;
                                 $regarding_appointment = true;
                                 break;
                             case 'month':
                                 $bound_start = date_create( $appointment_date )->modify( '-30 days' )->format( 'Y-m-d H:i:s' );
-                                $bound_end   = $appointment_date;
+                                $bound_end = $appointment_date;
                                 $regarding_appointment = true;
                                 break;
                             case 'year':
                                 $bound_start = date_create( $appointment_date )->modify( '-365 days' )->format( 'Y-m-d H:i:s' );
-                                $bound_end   = $appointment_date;
+                                $bound_end = $appointment_date;
                                 $regarding_appointment = true;
                                 break;
                         }
@@ -360,13 +366,13 @@ class Service extends Lib\Base\Entity
                         }
 
                         $db_count = $query->count();
-                        $cart_count  = 0;
+                        $cart_count = 0;
                         $bound_start = strtotime( $bound_start );
-                        $bound_end   = strtotime( $bound_end );
+                        $bound_end = strtotime( $bound_end );
                         foreach ( $appointment_dates as $date ) {
                             $cur_date = strtotime( $date );
                             if ( $cur_date <= $bound_end && $cur_date >= $bound_start ) {
-                                $cart_count ++;
+                                $cart_count++;
                             }
                         }
                         if ( $db_count + $cart_count > $this->getAppointmentsLimit() ) {
@@ -698,6 +704,29 @@ class Service extends Lib\Base\Entity
     public function setCapacityMax( $capacity_max )
     {
         $this->capacity_max = $capacity_max;
+
+        return $this;
+    }
+
+    /**
+     * Gets waiting_list_capacity
+     *
+     * @return int
+     */
+    public function getWaitingListCapacity()
+    {
+        return $this->waiting_list_capacity;
+    }
+
+    /**
+     * Sets waiting_list_capacity
+     *
+     * @param int $waiting_list_capacity
+     * @return $this
+     */
+    public function setWaitingListCapacity( $waiting_list_capacity )
+    {
+        $this->waiting_list_capacity = $waiting_list_capacity;
 
         return $this;
     }
@@ -1143,7 +1172,7 @@ class Service extends Lib\Base\Entity
      * @param bool $collaborative_equal_duration
      * @return $this
      */
-    public function setCollaborativeEqualDuration( $collaborative_equal_duration)
+    public function setCollaborativeEqualDuration( $collaborative_equal_duration )
     {
         $this->collaborative_equal_duration = $collaborative_equal_duration;
 
@@ -1263,7 +1292,6 @@ class Service extends Lib\Base\Entity
         return $this->wc_cart_info;
     }
 
-
     /**
      * Get translated Cart info
      *
@@ -1300,10 +1328,10 @@ class Service extends Lib\Base\Entity
      * @param $min_time_prior_booking
      * @return $this
      */
-    public function setMinTimePriorBooking($min_time_prior_booking)
+    public function setMinTimePriorBooking( $min_time_prior_booking )
     {
         $this->min_time_prior_booking = $min_time_prior_booking;
-        
+
         return $this;
     }
 
@@ -1319,10 +1347,33 @@ class Service extends Lib\Base\Entity
      * @param $min_time_prior_cancel
      * @return $this
      */
-    public function setMinTimePriorCancel($min_time_prior_cancel)
+    public function setMinTimePriorCancel( $min_time_prior_cancel )
     {
         $this->min_time_prior_cancel = $min_time_prior_cancel;
-        
+
+        return $this;
+    }
+
+    /**
+     * Gets gateways
+     *
+     * @return string
+     */
+    public function getGateways()
+    {
+        return $this->gateways;
+    }
+
+    /**
+     * Sets gateways
+     *
+     * @param string $gateways
+     * @return $this
+     */
+    public function setGateways( $gateways )
+    {
+        $this->gateways = $gateways;
+
         return $this;
     }
 

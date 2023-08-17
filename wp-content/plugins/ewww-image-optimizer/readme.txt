@@ -2,10 +2,10 @@
 Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
 Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, seo, scale
-Requires at least: 5.8
-Tested up to: 6.1
+Requires at least: 5.9
+Tested up to: 6.2
 Requires PHP: 7.2
-Stable tag: 6.9.3
+Stable tag: 7.1.0
 License: GPLv3
 
 Smaller Images, Faster Sites, Happier Visitors. Comprehensive image optimization that doesn't require a degree in rocket science.
@@ -136,6 +136,47 @@ That's not a question, but since I made it up, I'll answer it. See this resource
 
 * Feature requests can be viewed and submitted on our [feedback portal](https://feedback.ewww.io/b/features)
 * If you would like to help translate this plugin in your language, [join the team](https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/)
+
+= 7.1.0 =
+* added: deliver Google Fonts via Easy IO or Bunny Fonts for improved user privacy
+* fixed: PHP error trying to save EXIF data to JPG after resizing
+* fixed: could not disable auto-scaling
+* fixed: prevent errors when using legacy Animated GIF Resizing plugin
+* fixed: prevent WP Offload Media from prematurely re-offloading when using bulk optimizer
+
+= 7.0.2 =
+* fixed: background optimization incorrectly displays as disabled on fresh installs with object caching
+* fixed: Easy IO registration state not detected on multi-site
+* fixed: duplicate queries in wp-admin when used with WP Offload Media
+* fixed: deprecation notices when validating quality settings
+* fixed: error when checking a corrupted PNG for transparency
+
+= 7.0.1 =
+* fixed: Easy IO instructions display incorrect URL when images are on cloud storage (S3, GCS, etc.)
+* fixed: fatal error calling undefined method supports_webp
+
+= 7.0.0 =
+* breaking: namespaced and reorganized several classes, third party integrations should check for compatibility
+* added: allow video files to go through Easy IO CDN (pass through)
+* added: support for WP_Image_Editor_Imagick::set_imagick_time_limit() method added in WP 6.2
+* added: ewwwio_inline_webp_script_attrs filter to add custom data-* attributes to the JS WebP inline scripts
+* added: Easy IO support for BuddyBoss images, video, and documents
+* added: Bulk Optimizer and Scheduled Optimizer include BuddyBoss profile and cover image folders automatically
+* added: backup images post-resize but pre-compression with the ewww_image_optimizer_backup_post_resize filter
+* added: improved support for Hide My WP Ghost in Lazy Load, and WebP rewriting engine 
+* added: update attachment metadata for WPML replicas after image conversion
+* changed: improved Auto Scaling when using full-width layout in Elementor
+* changed: use fread to check mimetype of files for better performance
+* changed: style tag search/regex cleaned up to prevent excess markup
+* fixed: WebP images are added to WP Offload Media queue multiple times
+* fixed: PHP 8.1 deprecation notices from usage of add_submenu_page and add_query_arg
+* fixed: debug notice cannot be dismissed on sub-sites for network-activated installs
+* fixed: PHP notice when cleaning attachment metadata
+* fixed: error when certain options have been stored as strings rather than serialized arrays
+* fixed: tool path and content dir functions don't resolve symlinks
+* fixed: Easy IO image URLs leaking into image gallery block via post editor
+* fixed: JS WebP issues when body tag has script attributes
+* fixed: clearing debug log does not redirect back to settings page in rare cases
 
 = 6.9.3 =
 * changed: improved Brizy Builder compatibility

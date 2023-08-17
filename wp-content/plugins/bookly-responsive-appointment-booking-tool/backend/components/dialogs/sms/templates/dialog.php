@@ -1,6 +1,5 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
-use Bookly\Backend\Components\Controls\Inputs;
 ?>
 <form id="bookly-js-notification-modal" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
     <div class="modal-dialog modal-lg">

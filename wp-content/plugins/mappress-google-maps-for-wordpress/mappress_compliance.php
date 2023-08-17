@@ -46,6 +46,13 @@ class Mappress_Compliance {
 			);
 		} else {
 			// Leaflet
+
+			// Sequence the scripts because WP sequence is ignored.  Alternative is to bundle leaflet/markercluster together
+			if (Mappress::$options->clustering)
+				$dependency = ['leaflet.js' => 'leaflet.markercluster.js', 'leaflet.markercluster.js' => 'index_mappress.js'];
+			else
+				$dependency = ['leaflet.js' => 'index_mappress.js'];
+
 			$tags[] = array(
 				'name' => 'mappress',
 				'category' => 'marketing',
@@ -59,8 +66,7 @@ class Mappress_Compliance {
 				'placeholder' => 'google-maps',
 				'placeholder_class' => 'mapp-wrapper',
 				'enable_dependency' => true,
-				// Sequence the leaflet scripts, this seems to work, alternative is to bundle leaflet/markercluster together
-				'dependency' => ['leaflet.js' => 'leaflet.markercluster.js', 'leaflet.markercluster.js' => 'index_mappress.js']
+				'dependency' => $dependency
 			);
 		}
 		return $tags;

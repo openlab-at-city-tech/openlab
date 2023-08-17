@@ -1,3 +1,174 @@
+### 2.7.10.1
+- Fixed an issue that causes JavaScript errors in the theme if certain script optimization plugins are used.
+- Fixed an issue where honeypot validation was failing on multipage forms if the last page was hidden by conditional logic.
+- Fixed an issue where printing an entry with the nested form field is causing a fatal error.
+- Fixed errors that occur when attempting to install translations and the WordPress filesystem requires credentials.
+- Fixed the "no route found" error when performing an OPTIONS request to the REST API v2 endpoints
+- Fixed an issue where license validation fails when using a non-standard license key.
+- Added a theme framework utility class of `.gform-theme__disable-reset` to disable theme framework reset styles.
+- Added a theme framework utility class of `.gform-theme__disable-framework` to disable theme framework styles.
+- Added a theme framework utility class of `.gform-theme__disable` to disable theme framework and reset styles.
+
+### 2.7.10 | 2023-07-12
+- Added security enhancements.
+- Fixed a PHP fatal error that occurs when the theme or another plugin sets an invalid property value on the $wp_filter global variable.
+- Fixed an issue for the Orbital theme where hidden inputs were receiving focus in Safari during keyboard navigation.
+- Fixed various deprecation notices in PHP 8.1.
+- Fixed the enhanced UI for select and multiselect fields to work within conversational forms.
+- Updated the Orbital theme to support max-height/scroll for the consent field.
+- Updated the thumbnail image in the template library for the eCommerce template.
+- Updated the name of the form block to "Form" to make it easier to find in the block inserter.
+
+### 2.7.9 | 2023-06-22
+- Fixed an issue where an empty Number type Quantity field fails validation with a decimals-related error message.
+- Fixed an issue where the custom validation message is not applied when a Number type Quantity field fails validation.
+- Fixed an issue where the first page of a form gets an incorrect data attribute.
+- Updated the Post Custom Field with List input type to look the same as the normal List field in the Orbital theme.
+- API: Fixed an issue in the color setting component where the selected indicator for custom colors can't be seen on light backgrounds.
+
+### 2.7.8 | 2023-06-08
+- Fixed a bug that prevents dynamic population from working in the block settings.
+
+### 2.7.7 | 2023-05-25
+- Added the ability to display error messages for Drop Downs and Textareas on form editor's field settings panel.
+- Fixed a bug that prevented HTML tags from using theme styles in the Orbital theme.
+- Updated how the form block is rendered so it no longer uses the shortcode.
+- Updated the entry list to support array values for custom entry meta.  Credit: The GravityWiz team.
+
+### 2.7.6 | 2023-05-10
+- Fixed an issue where the HTML field filters out JavaScript.
+- Updated the handling of submit button conditional logic to add a data attribute indicating whether a button is hidden or not.
+- API: Added `gform/conditionalLogic/applyRules/start` and `gform/conditionalLogic/applyRules/end` JS event triggers for conditional logic to accommodate conversational forms.
+
+### 2.7.5 | 2023-05-03
+- Added security enhancements.
+- Fixed an issue where `GF_Field_Consent::is_value_submission_empty()` returns the wrong result when editable fields are validated during progress save on the Gravity Flow User Input step.
+- Fixed an issue where Conversational Forms with similar slug names to a post or page are not rendered.
+- Fixed an issue where turning off Legacy Markup with the `gform_enable_legacy_markup` filter results in a fatal error.
+- Updated the minimum WordPress version on the System Status page to 6.1.
+- Updated the location of our NPM packages.
+- Updated the theme framework reset to inherit site theme typographic styles for form confirmation html.
+- API: Added a new function `GFFormsModel::get_forms_columns()`` to get a list of specified form data. Credit: The GravityKit team.
+- API: Added "date_updated" to the list of form database columns. Credit: The GravityKit team.
+- API: Added the `gform_conditional_logic_is_valid_flyout_click` filter to allow third parties to designate valid conditional logic flyout clicks. Credit: GravityWiz.
+- API: Fixed a bug that prevents developers from overriding the button setting default values. Credit: The GravityKit team.
+
+### 2.7.4 | 2023-04-11
+- Added security enhancements.
+- Fixed an issue that causes block style settings to disappear on a form with validation errors.
+- Fixed PHP warnings on the time field in some versions of PHP.
+- Fixed an issue that blocks the Color Picker Input Border Styles from displaying.
+- Fixed an issue that prevents the honeypot from working if the last section of a form is hidden by conditional logic.
+- Fixed an issue that prevents new installations of Gravity Forms from showing up in the user account page on gravityforms.com.
+- Fixed an issue that causes incorrect "Upgrade" notifications on the form template library for some license types.
+- Updated the link for the "open a support ticket" text on the help page.
+- Updated the textarea in the new form dialog to prevent layout problems and unnecessary scrollbars.
+- Updated the new form dialog for better keyboard accessibility.
+- Updated how conditional logic is handled to add data attributes to hidden and visible fields.
+- API: Added new filter `gform_addon_form_settings_fields` to allow addons to modify the settings fields displayed on a given form settings page.
+- API: Added a new filter `gform_validate_required_file_exists` to allow developers to override the default behavior of the file upload field when validating required files.
+- AF: Fixed a fatal error that occurs when when saving settings that include a setting named "enable" when logging has not been configured for an add-on.
+
+### 2.7.3 | 2023-03-15
+- Fixed an issue that prevents accessing the settings page after failed license validation in the setup wizard.
+- Fixed an issue that prevents the template library stylesheet from loading in no-conflict mode and makes the template library unusable.
+- Fixed a compatibility issue with WordPress 6.2 where forms are not rendered properly in the Block Editor.
+- Fixed an issue where some CSS files are loading when the Output Default CSS setting is turned off.
+- Fixed an error on the widgets page that prevents the Gravity Forms block from working as a widget.
+- Fixed an issue which prevents sorting by number in the total field.
+- Fixed an issue that removes some inputs' sublabels when forms are saved.
+- Removed the about page images from the codebase to reduce the codebase size.
+- API: Added CSS API global custom properties for the contrast color for the theme framework's danger and success colors.
+- API: Added CSS API global custom properties to allow for specifying of the various max border-radius sizes we support.
+- API: Added CSS API global custom properties for the checkbox, date, file, select, and textarea border-radius property.
+- API: Fixed an issue where the Radio and Card settings fields do not render choice IDs.
+
+### 2.7.2 | 2023-03-01
+- Fixed an issue where some Gravity Forms CSS files load in the WordPress admin when they aren't needed.
+- Fixed an issue for sites hosted with WordPress.com where the “Enable auto-updates” spinner on the installed plugins page spins indefinitely.
+- Fixed an issue where the WP-CLI `wp plugin auto-updates` commands aren't compatible with the background updates setting.
+- Fixed deprecation notices in PHP 8.1.
+- API: Updated and simplified the form Theme Framework's global CSS API color system.
+- API: Deprecated some of the form Theme Framework's global CSS API color system.
+- API: Fixed the add/remove buttons on the generic field map field so that they always display horizontally.
+
+### 2.7.1 | 2023-02-14
+- Added "Date Updated" to the list of default exported entry values. Credit: The GravityKit team.
+- Updated the setup wizard to use a placeholder instead of default value of "blog" in the website type dropdown.
+- Updated entry saving to add a note to the entry when batch saving of field values fails.
+- Updated the template library to show the basic contact form before the advanced contact form.
+- Updated the form submission logging statements.
+- Updated the map link in the address field to open in https.
+- Updated the system report to list a few recently run scheduled events (cron jobs).
+- Updated the link and text on the reCAPTCHA button on the settings page.
+- Updated the form template library to account for wordpress.com license type.
+- Fixed an issue which prevents new forms from being saved if the title or description contain double quotes.
+- Fixed an issue where in a multisite installation the setup wizard is displayed for all sites even after it is completed in the main site.
+- Fixed an issue with the file upload field that allows for empty submissions of required multi-file upload fields.
+- Fixed database warnings when a site has forms added before 1.8.
+- Fixed a fatal error that occurs on front-end page load with MySQL versions between 5.7 and 5.7.8 and MariaDB versions up to 10.2.25.
+- Fixed an accessibility issue that causes an empty div instead of the error message to be focused on form submit when the form has validation errors.
+- Fixed an issue that causes the Simplebar JS library to load on the front end.
+- Fixed an accessibility issue that prevents the product quantity screen reader text from rendering on the front end.
+- Fixed the "for" attribute in checkbox inputs with more than 10 checkboxes in the repeater field.
+- Fixed display problems when using an extended consent field in the Orbital theme.
+- Fixed the password strength indicator in the default Gravity Theme to make it use colors to indicate password strength.
+- Fixed an issue where the user can't login with the password they entered during registration when background feed processing is enabled for the User Registration Add-On.
+- Fixed an issue that causes a required number input in a repeater to fail validation if the value is 0.
+- Fixed the filter 'gform_post_select_initial_count' not applying the passed value correctly.
+- Fixed an issue where the file upload field merge tag is returning the direct link to the file when used in the confirmation query string.
+- Fixed an accessibility issue with inline svg files inside focusable elements.
+- Fixed the warning that is thrown when creating a blank form.
+- Fixed an issue that causes confusing image tags in the copied system report.
+- Fixed an issue that prevents checkbox value modifiers from working when there are multiple modifiers.
+- Fixed an issue that causes the subtitle text on the about page to not be readable.
+- Fixed naming collisions with external JavaScript code by deprecating our custom String.prototype.format() function in favor of String.prototype.gformFormat().
+- Removed unused images to downsize the image folder.
+- Removed the inaccurate site registration status item from the copied system report.
+- Removed an extra curly brace from the class-gf-field-name.php file.
+- AF: Fixed an issue with the settings hidden field that prevented custom css classes or custom id attributes from being specified in the field settings.
+- AF: Improved keyboard accessibility of the image radio and card settings field types.
+- AF: Improved form submission performance for sites with multiple payment add-ons active.
+- AF: Updated `GFFeedAddOn::maybe_process_feed()` to call `$this->delay_feed()` when the feed is added to the background processing queue.
+- API: Added the [gform_pre_process_async_notifications](https://docs.gravityforms.com/gform_pre_process_async_notifications/) and [gform_post_process_async_notifications](https://docs.gravityforms.com/gform_post_process_async_notifications/) hooks to the background notifications processor.
+- API: Added the [gform_search_criteria_entry_limit_validation](https://docs.gravityforms.com/gform_search_criteria_entry_limit_validation/) filter.
+- API: Fixed the "no route found" error when performing an OPTIONS request to the REST API v2 endpoints.
+- API: Fixed an issue where feeds can be created for forms that don't exist.
+- API: Fixed an issue where feeds couldn't be created for form ID 0, which is required for feeds that can be used by any form.
+- API: Fixed an issue where resetting one custom select field resets all custom select fields on the page.
+
+### 2.7 | 2023-01-25
+- Added an improved Setup Wizard.
+- Added the Orbital Form Theme, a theme with opinionated styles that is customizable in the block style settings.
+- Added form style settings to the Gravity Forms block to allow users to easily customize the appearance of their forms.
+- Added the Form Template Library to make it easier to create common forms.
+- Added new Honeypot functionality to increase spam protection.
+- Added a new Honeypot form setting to allow entries to be created and marked as spam when the Honeypot catches a form submission.
+- Added the ability to upgrade a license from the settings page.
+- Added performance improvements to form submissions for forms with lots of confirmations.
+- Added performance improvements to form rendering.
+- Added performance improvements to merge tag processing. Credit: The GravityKit team.
+- Added accessibility improvements to the system report page.
+- Added accessibility improvements to the Form, Entry and Feed List tables to improve accessibility.
+- Added "Gravity Forms" to the title of admin pages to improve accessibility.
+- Added underlines to links in the Form Validation Summary for better accessibility.
+- Added security enhancements.
+- Updated the repeater field markup to be compatible with the Theme Framework.
+- Updated the form submit spinner to use new Theme Framework styles.
+- Updated the image in the drag and drop instructions on an empty form.
+- Updated the form preview in the block editor to display the form if it has conditional logic.
+- Updated the default phone format option to be "International" instead of "US/Canada".
+- Fixed a fatal error that can occur in some hosting environments with PHP 8+.
+- Fixed an issue where form revisions are not created when a form contains a Consent field other than the Gravity Forms core Consent field.
+- Fixed a performance issue where the gform_layout_editor script is being localised outside the editor for a form that doesn't exist. Credit: The GravityKit team.
+- Fixed an issue where the Gravity Forms datepicker style is being applied outside of Gravity Forms.
+- API: Added a form Theme Framework and CSS API to make it easier to customize the appearance of forms.
+- API: Added a "block_editor" admin page type to allow add-ons to easily enqueue scripts and styles to the block editor via the scripts() and styles() methods.
+- API: Added [GFAPI::validate_field()](https://docs.gravityforms.com/validating-field-submissions-with-the-gfapi/) to validate the value of a specific field.
+- API: Added a new hook [`gform_entries_primary_column_filter`](https://docs.gravityforms.com/gform_entries_primary_column_filter) to filter the entry list table's first column.
+- API: Added a new filter [`gform_abort_submission_with_confirmation`](https://docs.gravityforms.com/gform_abort_submission_with_confirmation) that can be used to abort form submission and display a confirmation.
+- API: Added a new filter [`gform_search_criteria_export_entries`](https://docs.gravityforms.com/gform_search_criteria_export_entries) to allow entries of different statuses (i.e. trash, abuse) to be exported.
+
 ### 2.6.9 | 2023-01-11
 - Added a new environment variable to hide the background updates setting.
 - Added a new environment variable to control the update message and the unregistered license message.

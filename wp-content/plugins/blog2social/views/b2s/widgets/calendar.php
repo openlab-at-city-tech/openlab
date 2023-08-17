@@ -52,7 +52,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     $filterNetwork = $filter->getNetworkHtml();
     if (!empty($filterNetwork)) {
         ?>
-        <div class="b2s-calendar-filter-network-list">
+        <div class="b2s-calendar-filter-network-list hidden-xs">
             <?php echo wp_kses($filterNetwork, array(
                 'label' => array(),
                 'input' => array(

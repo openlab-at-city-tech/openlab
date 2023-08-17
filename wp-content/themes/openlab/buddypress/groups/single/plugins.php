@@ -34,6 +34,10 @@ global $bp, $wp_query;
 						<li class="current-menu-item">Announcements</li>
 					</ul>
 
+				<?php elseif ( bp_is_current_action( 'connections' ) ) : ?>
+
+                    <?php echo openlab_submenu_markup( 'group-connections' ); ?>
+
                 <?php else: ?>
 
                     <ul class="nav nav-inline">

@@ -80,9 +80,9 @@ class BP_Legacy extends BP_Theme_Compat {
 
 		/** Scripts ***********************************************************/
 
-		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_styles'   ) ); // Enqueue theme CSS
-		add_action( 'bp_enqueue_scripts', array( $this, 'enqueue_scripts'  ) ); // Enqueue theme JS
-		add_filter( 'bp_enqueue_scripts', array( $this, 'localize_scripts' ) ); // Enqueue theme script localization
+		add_action( 'bp_enqueue_community_scripts', array( $this, 'enqueue_styles'   ) ); // Enqueue theme CSS
+		add_action( 'bp_enqueue_community_scripts', array( $this, 'enqueue_scripts'  ) ); // Enqueue theme JS
+		add_action( 'bp_enqueue_community_scripts', array( $this, 'localize_scripts' ) ); // Enqueue theme script localization
 
 		/** Body no-js Class **************************************************/
 
@@ -124,7 +124,7 @@ class BP_Legacy extends BP_Theme_Compat {
 
 		// Only hook the 'sitewide_notices' overlay if the Sitewide
 		// Notices widget is not in use (to avoid duplicate content).
-		if ( bp_is_active( 'messages' ) && ! bp_is_widget_block_active( 'bp/sitewide-notices', 'bp_messages_sitewide_notices_widget', true ) ) {
+		if ( bp_is_active( 'messages' ) && ! bp_is_widget_block_active( 'bp/sitewide-notices', 'bp_messages_sitewide_notices_widget' ) ) {
 			add_action( 'wp_footer', array( $this, 'sitewide_notices' ), 9999 );
 		}
 
@@ -197,7 +197,7 @@ class BP_Legacy extends BP_Theme_Compat {
 		 *
 		 * @since 1.7.0
 		 *
-		 * @param BP_Legacy $this Current BP_Legacy instance.
+		 * @param BP_Legacy $template_pack Current Template Pack instance.
 		 */
 		do_action_ref_array( 'bp_theme_compat_actions', array( &$this ) );
 	}
@@ -763,6 +763,10 @@ function bp_legacy_theme_ajax_querystring( $query_string, $object ) {
 	// To get newest activities.
 	if ( ! empty( $_POST['offset'] ) ) {
 		$qs[] = 'offset=' . intval( $_POST['offset'] );
+	}
+
+	if ( ! empty( $_POST['offset_lower'] ) ) {
+		$qs[] = 'offset_lower=' . intval( $_POST['offset_lower'] );
 	}
 
 	$object_search_text = bp_get_search_default_text( $object );

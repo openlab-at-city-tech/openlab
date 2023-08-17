@@ -12,6 +12,10 @@
 			</span>
 		</p>
 
+		<p class="inappropriate-message-notice">
+			Please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">contact the OpenLab Team</a> if you receive a message you feel is inappropriate or violates the <a href="https://openlab.citytech.cuny.edu/blog/help/community-guidelines/">OpenLab Community Guidelines</a>.
+		</p>
+
 		<?php do_action( 'bp_before_message_thread_list' ) ?>
 
 		<?php while ( bp_thread_messages() ) : bp_thread_the_message(); ?>

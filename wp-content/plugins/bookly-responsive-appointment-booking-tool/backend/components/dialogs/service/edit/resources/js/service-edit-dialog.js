@@ -68,10 +68,12 @@ jQuery(function($) {
                     $prefStaffList = $('.bookly-js-preferred-staff-list', containers.general),
                     $prefPeriod = $('.bookly-js-preferred-period', containers.general),
                     $prefRandom = $('.bookly-js-preferred-random-staff', containers.general),
+                    $gatewaysList = $('#bookly-js-gateways-list', containers.general),
                     staff_data = {}
                 ;
                 // Color picker.
                 $colorPicker.wpColorPicker();
+                $gatewaysList.booklyDropdown();
 
                 if ($serviceType.val() === 'package') {
                     $('#package_service').on('change', function() {
@@ -117,7 +119,18 @@ jQuery(function($) {
                         containers.general.find('[name=attachment_id]').val('').trigger('change');
                         $('.bookly-thumb').removeClass('bookly-thumb-with-image');
                         $('.bookly-thumb-delete').hide();
+                    })
+                    .on('change', '[name="gateways"]', function () {
+                        if (this.value == 'default') {
+                            $gatewaysList.closest('.form-group').hide();
+                        } else {
+                            $gatewaysList.closest('.form-group').show();
+                        }
                     });
+
+                if ($('[name="gateways"][value="default"]', containers.general).prop('checked')) {
+                    $gatewaysList.closest('.form-group').hide();
+                }
 
                 // Visibility.
                 $visibility.off().on('change', function() {

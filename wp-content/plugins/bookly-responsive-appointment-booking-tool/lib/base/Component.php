@@ -106,7 +106,7 @@ abstract class Component extends Cache
         static::_enqueue( 'styles', $sources );
     }
 
-    protected static function enqueueData( array $data )
+    protected static function enqueueData( array $data, $handler = 'bookly-globals' )
     {
         foreach ( $data as $token ) {
             if ( ! in_array( $token, self::$data, true ) ) {
@@ -122,7 +122,7 @@ abstract class Component extends Cache
                         $item = html_entity_decode( (string) $item, ENT_QUOTES, 'UTF-8' );
                     }
 
-                    wp_add_inline_script( 'bookly-globals', 'BooklyL10nGlobal[\'' . $token . '\']=' . wp_json_encode( $item ) . ';', 'before' );
+                    wp_add_inline_script( $handler, 'BooklyL10nGlobal[\'' . $token . '\']=' . wp_json_encode( $item ) . ';', 'before' );
                 }
                 self::$data[] = $token;
             }
@@ -184,10 +184,17 @@ abstract class Component extends Cache
     {
         static $parameters;
         if ( $parameters === null ) {
-            $parameters = new Lib\Utils\Collection(
-                isset( $_REQUEST['json_data'] )
-                    ? array_map( function( $value ) { return $value != '' ? $value : null; }, json_decode( stripslashes_deep( $_REQUEST['json_data'] ), true ) ?: array() )
-                    : stripslashes_deep( $_REQUEST ) );
+            $parameters = isset( $_REQUEST['json_data'] ) ?
+                array_map( function ( $value ) {
+                    return $value !== '' ? $value : null;
+                }, json_decode( stripslashes_deep( $_REQUEST['json_data'] ), true ) ?: array() ) :
+                stripslashes_deep( $_REQUEST );
+            if ( ! current_user_can( 'unfiltered_html' ) ) {
+                $parameters = Lib\Utils\Common::arrayMapRecursive( function ( $value ) {
+                    return is_string( $value ) ? Lib\Utils\Common::stripScripts( $value ) : $value;
+                }, $parameters );
+            }
+            $parameters = new Lib\Utils\Collection( $parameters );
         }
 
         return $parameters;
@@ -240,6 +247,7 @@ abstract class Component extends Cache
                 'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
                 'dateRange' => Lib\Utils\DateTime::dateRangeOptions(),
                 'addons' => array(),
+                'cloud_products' => get_option( 'bookly_cloud_account_products', array() ),
                 'data' => (object) array(),
             ) ) );
         }

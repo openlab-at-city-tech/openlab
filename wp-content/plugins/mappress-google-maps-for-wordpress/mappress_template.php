@@ -36,6 +36,7 @@ class Mappress_Template extends Mappress_Obj {
 		self::$tokens = array(
 			'address' => __('Address', 'mappress-google-maps-for-wordpress'),
 			'body' => __('Body', 'mappress-google-maps-for-wordpress'),
+			'distance' => __('Distance', 'mappress-google-maps-for-wordpress'),
 			'icon' => __('Icon', 'mappress-google-maps-for-wordpress'),
 			'title' => __('Title', 'mappress-google-maps-for-wordpress'),
 			'url' => __('URL', 'mappress-google-maps-for-wordpress'),
@@ -210,7 +211,7 @@ class Mappress_Template extends Mappress_Obj {
 	static function print_template($template_name) {
 		$template = self::get_template($template_name);
 		if ($template)
-			printf("<script type='text/html' id='mapp-tmpl-$template_name'>%s</script>", $template);
+			printf("<script type='text/html' class='mapp-tmpl' id='mapp-tmpl-$template_name'>%s</script>", $template);
 	}
 
 

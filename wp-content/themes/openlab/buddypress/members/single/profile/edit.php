@@ -27,10 +27,11 @@ if (isset($exclude_groups)) {
 
 $display_name_shown = isset($pgroup) && 1 == $pgroup;
 $field_ids = array(1);
+
+$social_fields = openlab_social_media_fields();
+
 ?>
 <?php echo openlab_submenu_markup(); ?>
-
-
 
 <form action="" method="post" id="profile-edit-form" class="standard-form form-panel">
 
@@ -104,6 +105,17 @@ $field_ids = array(1);
                         if ( 'Major Program of Study' === bp_get_the_profile_field_name() || 'Department' === bp_get_the_profile_field_name() ) {
                             continue;
                         }
+
+						// We also skip any items that appear under Social Links.
+						if ( bp_xprofile_get_meta( bp_get_the_profile_field_id(), 'field', 'is_legacy_social_media_field' ) ) {
+							continue;
+						}
+
+						// Skip the 'Google Scholar profile' field if it's empty.
+						if ( false !== strpos( bp_get_the_profile_field_name(), 'Google Scholar' ) && ! bp_get_the_profile_field_edit_value() ) {
+							continue;
+						}
+
                         ?>
 
                         <?php if ( $just_did_title ) : ?>
@@ -231,6 +243,8 @@ $field_ids = array(1);
                     <?php endwhile; ?>
 
                 <?php endwhile; ?>
+
+				<?php openlab_social_fields_edit_markup( $user_ID ); ?>
 
             </div><!--panel-body-->
 		</div>

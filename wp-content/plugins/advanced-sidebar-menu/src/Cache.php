@@ -90,7 +90,7 @@ class Cache {
 	 *
 	 * @return string
 	 */
-	private function get_key_from_asm( $class ) {
+	protected function get_key_from_asm( $class ) {
 		$string = serialize( $class ); //phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
 		return md5( $string );
 	}

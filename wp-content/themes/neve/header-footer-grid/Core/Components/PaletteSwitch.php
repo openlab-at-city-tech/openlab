@@ -177,8 +177,7 @@ class PaletteSwitch extends Abstract_Component {
 		if ( $auto_adjust ) {
 			$default_state = 'window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"';
 		}
-
-		return '!function(){"use strict";const e="data-neve-theme",t="neve_user_theme";function r(){let n=' . $default_state . ',r=localStorage.getItem(t);"dark"===r&&(n="dark"),"light"===r&&(n="light"),document.documentElement.setAttribute(e,n)}r();const a=document.getElementById("neve_body");function n(n){if(n.srcElement&&(n.srcElement.matches("a.palette-icon-wrapper")||n.srcElement.parentElement&&n.srcElement.parentElement.matches("a.palette-icon-wrapper")||n.srcElement.parentElement&&n.srcElement.parentElement.parentElement.matches("a.palette-icon-wrapper")||n.srcElement.parentElement&&n.srcElement.parentElement.parentElement.parentElement.matches("a.palette-icon-wrapper"))){if(n.preventDefault(),"dark"===document.documentElement.getAttribute(e))return localStorage.setItem(t,"light"),void document.documentElement.setAttribute(e,"light");localStorage.setItem(t,"dark"),document.documentElement.setAttribute(e,"dark")}}a&&a.addEventListener("click",n,!1);}();';
+		return '!function(){const e="neve_user_theme",t="data-neve-theme";let n=' . $default_state . ';"dark"===localStorage.getItem(e)&&(n="dark"),document.documentElement.setAttribute(t,n);document.addEventListener("click",(n=>{n.target.matches(".palette-icon-wrapper, .palette-icon-wrapper *")&&(n=>{n.preventDefault();const a="light"===document.documentElement.getAttribute(t)?"dark":"light";document.documentElement.setAttribute(t,a),localStorage.setItem(e,a)})(n)}))}();';
 	}
 
 	/**
@@ -494,36 +493,14 @@ class PaletteSwitch extends Abstract_Component {
 	 * @access  public
 	 */
 	public function add_style( array $css_array = array() ) {
-		if ( neve_is_new_skin() ) {
-			$css_array[] = [
-				Dynamic_Selector::KEY_SELECTOR => '.builder-item--' . $this->get_id(),
-				Dynamic_Selector::KEY_RULES    => [
-					'--iconsize' => [
-						Dynamic_Selector::META_KEY     => $this->get_id() . '_' . self::SIZE_ID,
-						Dynamic_Selector::META_DEFAULT => '{ "mobile": "' . self::DEFAULT_ICON_SIZE . '", "tablet": "' . self::DEFAULT_ICON_SIZE . '", "desktop": "' . self::DEFAULT_ICON_SIZE . '" }',
-						Dynamic_Selector::META_SUFFIX  => 'px',
-						Dynamic_Selector::META_IS_RESPONSIVE => true,
-					],
-				],
-			];
-
-			return parent::add_style( $css_array );
-		}
-
-		$selector = '.builder-item--' . $this->get_id() . ' .toggle-palette a.toggle span.icon';
-
 		$css_array[] = [
-			Dynamic_Selector::KEY_SELECTOR => $selector,
+			Dynamic_Selector::KEY_SELECTOR => '.builder-item--' . $this->get_id(),
 			Dynamic_Selector::KEY_RULES    => [
-				Config::CSS_PROP_WIDTH  => [
-					Dynamic_Selector::META_IS_RESPONSIVE => true,
+				'--iconsize' => [
 					Dynamic_Selector::META_KEY           => $this->get_id() . '_' . self::SIZE_ID,
 					Dynamic_Selector::META_DEFAULT       => '{ "mobile": "' . self::DEFAULT_ICON_SIZE . '", "tablet": "' . self::DEFAULT_ICON_SIZE . '", "desktop": "' . self::DEFAULT_ICON_SIZE . '" }',
-				],
-				Config::CSS_PROP_HEIGHT => [
+					Dynamic_Selector::META_SUFFIX        => 'px',
 					Dynamic_Selector::META_IS_RESPONSIVE => true,
-					Dynamic_Selector::META_KEY           => $this->get_id() . '_' . self::SIZE_ID,
-					Dynamic_Selector::META_DEFAULT       => '{ "mobile": "' . self::DEFAULT_ICON_SIZE . '", "tablet": "' . self::DEFAULT_ICON_SIZE . '", "desktop": "' . self::DEFAULT_ICON_SIZE . '" }',
 				],
 			],
 		];

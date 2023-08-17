@@ -70,116 +70,112 @@
                                 <div class="row">
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/pages-groups.png', B2S_PLUGIN_FILE)); ?>" alt="Pages & Groups">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/automation.png', B2S_PLUGIN_FILE)); ?>" alt="Social Media Calendar">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Pages and groups', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Share your posts on pages and in groups on Facebook, LinkedIn, XING, VK and Medium.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Auto Posting', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Automatically share posts at the time of publishing or at any scheduled time.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/licenses.png', B2S_PLUGIN_FILE)); ?>" alt="Licenses">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/socialmediaposts.png', B2S_PLUGIN_FILE)); ?>" alt="Social Media Posts">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('More users and accounts', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Add multiple users and accounts per network. Define sharing-profiles for selected network bundles.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Social Media Posts', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Create, schedule and share social media posts from any text, link, image, video or RSS feed.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/social-media-calendar.png', B2S_PLUGIN_FILE)); ?>" alt="Social Media Calendar">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/video-function.png', B2S_PLUGIN_FILE)); ?>" alt="Pages & Groups">
+                                        </div>
+                                        <p class="text-center">
+                                            <span class="b2s-text-bold"><?php esc_html_e('Publish and share Video files', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Publish and share your video content straight from your media library.', 'blog2social') ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3 col-hide-padding-left">
+                                        <div class="thumbnail text-center">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/best-time-scheduling.png', B2S_PLUGIN_FILE)); ?>" alt="Best Time Manager">
+                                        </div>
+                                        <p class="text-center">
+                                            <span class="b2s-text-bold"><?php esc_html_e('Best Time Manager', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Schedule your social media posts with pre-defined best-times or at your own time settings for auto-scheduling.', 'blog2social') ?>
+                                        </p>
+                                    </div>
+
+
+                                   
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                    <div class="col-md-3 col-hide-padding-left">
+                                        <div class="thumbnail text-center">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/calendar.png', B2S_PLUGIN_FILE)); ?>" alt="Auto Posting">
                                         </div>
                                         <p class="text-center">
                                             <span class="b2s-text-bold"><?php esc_html_e('Social Media Calendar', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('See your entire schedule at a glance, with team view and network filter. Edit scheduled posts or add new social media posts per drag & drop.', 'blog2social') ?>
+                                            <?php esc_html_e('Keep track of your scheduled social media posts. Add or edit your posts or change the date per drag & drop.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/best-times-manager.png', B2S_PLUGIN_FILE)); ?>" alt="Best Time Manager">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/re-share-posts.png', B2S_PLUGIN_FILE)); ?>" alt="RSS Feed">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Best Times Manager', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Use the Best Times Manager to schedule your posts automatically or define your own best time scheme.', 'blog2social') ?>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <div class="col-md-3 col-hide-padding-left">
-                                        <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/auto-posting.png', B2S_PLUGIN_FILE)); ?>" alt="Auto Posting">
-                                        </div>
-                                        <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Auto-Posting', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Share your posts automatically across your preferred networks at once or at your pre-scheduled time-settings.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Re-share Posts Automatically', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Repeat your best posts automatically to revive your evergreen content from time to time.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/rss-feed.png', B2S_PLUGIN_FILE)); ?>" alt="RSS Feed">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/images-posts-formats.png', B2S_PLUGIN_FILE)); ?>" alt="Content Curation">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('RSS import & auto-post', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Share imported RSS feeds automatically to get more variations for your content.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Select and edit images', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Select individual or multiple images. Easily edit, crop, rotate or flip images to adapt the format for selected social platforms.', 'blog2social') ?>
                                         </p>
                                     </div>
-                                    <div class="col-md-3 col-hide-padding-left">
-                                        <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/gmb-post.png', B2S_PLUGIN_FILE)); ?>" alt="GMB Post">
-                                        </div>
-                                        <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Google My Business', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Schedule and share your blog posts as Google My Business posts to update your business listing and to add fresh content for your company.', 'blog2social') ?>
-                                        </p>
-                                    </div>
-                                    <div class="col-md-3 col-hide-padding-left">
-                                        <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/content-curation.png', B2S_PLUGIN_FILE)); ?>" alt="Content Curation">
-                                        </div>
-                                        <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Schedule curated content', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Schedule and share curated content from any source on your preferred networks.', 'blog2social') ?>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
                                     <div class="col-md-3  col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/media-library.png', B2S_PLUGIN_FILE)); ?>" alt="Media Library">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/post-templates.png', B2S_PLUGIN_FILE)); ?>" alt="Media Library">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Custom image', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Select individual images per post or network and select any image from your media library to create more variations for your posts.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Post Templates', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Define a unique post structure to automatically customize your social media posts.', 'blog2social') ?>
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row">
+                                   
+                                    <div class="col-md-3 col-hide-padding-left">
+                                        <div class="thumbnail text-center">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/premiumnetworks.png', B2S_PLUGIN_FILE)); ?>" alt="Premium Networks">
+                                        </div>
+                                        <p class="text-center">
+                                            <span class="b2s-text-bold"><?php esc_html_e('Premium networks', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Share on more social networks, pages, groups, and multiple accounts per network.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/link-image-post.png', B2S_PLUGIN_FILE)); ?>" alt="Post Format">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/metrics.png', B2S_PLUGIN_FILE)); ?>" alt="Tags">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Custom format', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Select link post or image post per network to choose the optimal format for your post.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Social Media Metrics', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Track the performance of your social media posts with link views, likes, shares and comments.', 'blog2social') ?>
                                         </p>
                                     </div>
                                     <div class="col-md-3 col-hide-padding-left">
                                         <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/tags.png', B2S_PLUGIN_FILE)); ?>" alt="Tags">
+                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/blog2social-team-management.png', B2S_PLUGIN_FILE)); ?>" alt="Support">
                                         </div>
                                         <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Open Graph and Twitter Card Tags', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Add and edit meta tags for Open Graph (Ex. Facebook and LinkedIn) and Twitter Cards to define the look of your link posts.', 'blog2social') ?>
-                                        </p>
-                                    </div>
-                                    <div class="col-md-3 col-hide-padding-left">
-                                        <div class="thumbnail text-center">
-                                            <img class="b2s-feature-img-with-90" src="<?php echo esc_url(plugins_url('/assets/images/features/support.png', B2S_PLUGIN_FILE)); ?>" alt="Support">
-                                        </div>
-                                        <p class="text-center">
-                                            <span class="b2s-text-bold"><?php esc_html_e('Premium support', 'blog2social') ?></span><br>
-                                            <?php esc_html_e('Regular updates and priority support per e-mail and phone.', 'blog2social') ?>
+                                            <span class="b2s-text-bold"><?php esc_html_e('Team-Management', 'blog2social') ?></span><br>
+                                            <?php esc_html_e('Easily organize multiple WordPress users by assigning license keys, social accounts and settings.', 'blog2social') ?>
                                         </p>
                                     </div>
                                 </div>

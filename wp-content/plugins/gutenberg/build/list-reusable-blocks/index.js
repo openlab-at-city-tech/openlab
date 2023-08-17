@@ -1,48 +1,48 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -50,9 +50,9 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -392,7 +392,7 @@ function paramCase(input, options) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
-var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
+const external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/file.js
 /**
@@ -477,12 +477,12 @@ async function exportReusableBlock(id) {
   download(fileName, fileContent, 'application/json');
 }
 
-/* harmony default export */ var utils_export = (exportReusableBlock);
+/* harmony default export */ const utils_export = (exportReusableBlock);
 
 ;// CONCATENATED MODULE: external ["wp","compose"]
-var external_wp_compose_namespaceObject = window["wp"]["compose"];
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","components"]
-var external_wp_components_namespaceObject = window["wp"]["components"];
+const external_wp_components_namespaceObject = window["wp"]["components"];
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/import.js
 /**
  * WordPress dependencies
@@ -529,7 +529,7 @@ async function importReusableBlock(file) {
   return reusableBlock;
 }
 
-/* harmony default export */ var utils_import = (importReusableBlock);
+/* harmony default export */ const utils_import = (importReusableBlock);
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/components/import-form/index.js
 
@@ -547,11 +547,10 @@ async function importReusableBlock(file) {
 
 
 
-function ImportForm(_ref) {
-  let {
-    instanceId,
-    onUpload
-  } = _ref;
+function ImportForm({
+  instanceId,
+  onUpload
+}) {
   const inputId = 'list-reusable-blocks-import-form-' + instanceId;
   const formRef = (0,external_wp_element_namespaceObject.useRef)();
   const [isLoading, setIsLoading] = (0,external_wp_element_namespaceObject.useState)(false);
@@ -632,7 +631,7 @@ function ImportForm(_ref) {
   }, (0,external_wp_i18n_namespaceObject._x)('Import', 'button label')));
 }
 
-/* harmony default export */ var import_form = ((0,external_wp_compose_namespaceObject.withInstanceId)(ImportForm));
+/* harmony default export */ const import_form = ((0,external_wp_compose_namespaceObject.withInstanceId)(ImportForm));
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/components/import-dropdown/index.js
 
@@ -649,36 +648,31 @@ function ImportForm(_ref) {
 
 
 
-function ImportDropdown(_ref) {
-  let {
-    onUpload
-  } = _ref;
+function ImportDropdown({
+  onUpload
+}) {
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Dropdown, {
-    position: "bottom right",
-    contentClassName: "list-reusable-blocks-import-dropdown__content",
-    renderToggle: _ref2 => {
-      let {
-        isOpen,
-        onToggle
-      } = _ref2;
-      return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
-        "aria-expanded": isOpen,
-        onClick: onToggle,
-        variant: "primary"
-      }, (0,external_wp_i18n_namespaceObject.__)('Import from JSON'));
+    popoverProps: {
+      placement: 'bottom-start'
     },
-    renderContent: _ref3 => {
-      let {
-        onClose
-      } = _ref3;
-      return (0,external_wp_element_namespaceObject.createElement)(import_form, {
-        onUpload: (0,external_wp_compose_namespaceObject.pipe)(onClose, onUpload)
-      });
-    }
+    contentClassName: "list-reusable-blocks-import-dropdown__content",
+    renderToggle: ({
+      isOpen,
+      onToggle
+    }) => (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+      "aria-expanded": isOpen,
+      onClick: onToggle,
+      variant: "primary"
+    }, (0,external_wp_i18n_namespaceObject.__)('Import from JSON')),
+    renderContent: ({
+      onClose
+    }) => (0,external_wp_element_namespaceObject.createElement)(import_form, {
+      onUpload: (0,external_wp_compose_namespaceObject.pipe)(onClose, onUpload)
+    })
   });
 }
 
-/* harmony default export */ var import_dropdown = (ImportDropdown);
+/* harmony default export */ const import_dropdown = (ImportDropdown);
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/index.js
 
@@ -727,9 +721,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.createElement('div');
   container.className = 'list-reusable-blocks__container';
   button.parentNode.insertBefore(container, button);
-  (0,external_wp_element_namespaceObject.render)((0,external_wp_element_namespaceObject.createElement)(import_dropdown, {
+  (0,external_wp_element_namespaceObject.createRoot)(container).render((0,external_wp_element_namespaceObject.createElement)(import_dropdown, {
     onUpload: showNotice
-  }), container);
+  }));
 });
 
 (window.wp = window.wp || {}).listReusableBlocks = __webpack_exports__;

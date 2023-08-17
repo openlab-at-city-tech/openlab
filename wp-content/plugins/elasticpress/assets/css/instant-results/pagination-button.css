@@ -1,6 +1,0 @@
-.ep-search-pagination-button {
-
-	&[disabled] {
-		visibility: hidden;
-	}
-}

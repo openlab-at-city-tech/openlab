@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -28,15 +28,13 @@ function loadElementsDefaults() {
 function _loadElementsDefaults() {
   _loadElementsDefaults = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
     return _regenerator.default.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            $e.data.cache.storage.removeItem(NAMESPACE);
-            return _context.abrupt("return", $e.data.get("".concat(NAMESPACE, "/index")));
-          case 2:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          $e.data.cache.storage.removeItem(NAMESPACE);
+          return _context.abrupt("return", $e.data.get("".concat(NAMESPACE, "/index")));
+        case 2:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
@@ -52,22 +50,20 @@ function updateElementDefaults(_x, _x2) {
 function _updateElementDefaults() {
   _updateElementDefaults = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(type, settings) {
     return _regenerator.default.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return $e.data.update("".concat(NAMESPACE, "/index"), {
-              settings: settings
-            }, {
-              type: type
-            });
-          case 2:
-            _context2.next = 4;
-            return loadElementsDefaults();
-          case 4:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return $e.data.update("".concat(NAMESPACE, "/index"), {
+            settings: settings
+          }, {
+            type: type
+          });
+        case 2:
+          _context2.next = 4;
+          return loadElementsDefaults();
+        case 4:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
@@ -79,20 +75,18 @@ function deleteElementDefaults(_x3) {
 function _deleteElementDefaults() {
   _deleteElementDefaults = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3(type) {
     return _regenerator.default.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.next = 2;
-            return $e.data.delete("".concat(NAMESPACE, "/index"), {
-              type: type
-            });
-          case 2:
-            _context3.next = 4;
-            return loadElementsDefaults();
-          case 4:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return $e.data.delete("".concat(NAMESPACE, "/index"), {
+            type: type
+          });
+        case 2:
+          _context3.next = 4;
+          return loadElementsDefaults();
+        case 4:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
@@ -143,31 +137,29 @@ var ConfirmCreation = /*#__PURE__*/function (_$e$modules$editor$Co) {
       var _apply = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
         var container, confirmCreationDialog;
         return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                container = _ref.container;
-                confirmCreationDialog = (0, _confirmCreationDialog.getConfirmCreationDialog)({
-                  onConfirm: function onConfirm() {
-                    return $e.run('kit-elements-defaults/create', {
-                      container: container
-                    });
-                  }
-                });
-                if (!confirmCreationDialog.doNotShowAgain) {
-                  _context.next = 5;
-                  break;
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              container = _ref.container;
+              confirmCreationDialog = (0, _confirmCreationDialog.getConfirmCreationDialog)({
+                onConfirm: function onConfirm() {
+                  return $e.run('kit-elements-defaults/create', {
+                    container: container
+                  });
                 }
-                $e.run('kit-elements-defaults/create', {
-                  container: container
-                });
-                return _context.abrupt("return");
-              case 5:
-                confirmCreationDialog.show();
-              case 6:
-              case "end":
-                return _context.stop();
-            }
+              });
+              if (!confirmCreationDialog.doNotShowAgain) {
+                _context.next = 5;
+                break;
+              }
+              $e.run('kit-elements-defaults/create', {
+                container: container
+              });
+              return _context.abrupt("return");
+            case 5:
+              confirmCreationDialog.show();
+            case 6:
+            case "end":
+              return _context.stop();
           }
         }, _callee);
       }));
@@ -226,38 +218,46 @@ var Create = /*#__PURE__*/function (_$e$modules$editor$Co) {
     key: "apply",
     value: function () {
       var _apply = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
-        var container, settings;
+        var container, type, previousDefaults, newDefaults;
         return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                container = _ref.container;
-                $e.internal('panel/state-loading');
-                settings = (0, _extractContainerSettings.default)(container);
-                _context.prev = 3;
-                _context.next = 6;
-                return (0, _api.updateElementDefaults)((0, _utils.extractElementType)(container.model), settings);
-              case 6:
-                elementor.notifications.showToast({
-                  message: __('Default settings changed.', 'elementor')
-                });
-                _context.next = 13;
-                break;
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context["catch"](3);
-                elementor.notifications.showToast({
-                  message: __('An error occurred.', 'elementor')
-                });
-                throw _context.t0;
-              case 13:
-                _context.prev = 13;
-                $e.internal('panel/state-ready');
-                return _context.finish(13);
-              case 16:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              container = _ref.container;
+              $e.internal('panel/state-loading');
+              type = (0, _utils.extractElementType)(container.model), previousDefaults = (0, _api.getElementDefaults)(type), newDefaults = (0, _extractContainerSettings.default)(container);
+              _context.prev = 3;
+              _context.next = 6;
+              return (0, _api.updateElementDefaults)(type, newDefaults);
+            case 6:
+              elementor.notifications.showToast({
+                message: __('Default settings changed.', 'elementor'),
+                buttons: [{
+                  name: 'undo',
+                  text: __('Undo', 'elementor'),
+                  callback: function callback() {
+                    $e.run('kit-elements-defaults/restore', {
+                      type: type,
+                      settings: previousDefaults
+                    });
+                  }
+                }]
+              });
+              _context.next = 13;
+              break;
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context["catch"](3);
+              elementor.notifications.showToast({
+                message: __('An error occurred.', 'elementor')
+              });
+              throw _context.t0;
+            case 13:
+              _context.prev = 13;
+              $e.internal('panel/state-ready');
+              return _context.finish(13);
+            case 16:
+            case "end":
+              return _context.stop();
           }
         }, _callee, null, [[3, 9, 13, 16]]);
       }));
@@ -311,35 +311,33 @@ var Delete = /*#__PURE__*/function (_$e$modules$CommandBa) {
       var _apply = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
         var type;
         return _regenerator.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                type = _ref.type;
-                $e.internal('panel/state-loading');
-                _context.prev = 2;
-                _context.next = 5;
-                return (0, _api.deleteElementDefaults)(type);
-              case 5:
-                elementor.notifications.showToast({
-                  message: __('Default settings has been reset.', 'elementor')
-                });
-                _context.next = 12;
-                break;
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](2);
-                elementor.notifications.showToast({
-                  message: __('An error occurred.', 'elementor')
-                });
-                throw error;
-              case 12:
-                _context.prev = 12;
-                $e.internal('panel/state-ready');
-                return _context.finish(12);
-              case 15:
-              case "end":
-                return _context.stop();
-            }
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              type = _ref.type;
+              $e.internal('panel/state-loading');
+              _context.prev = 2;
+              _context.next = 5;
+              return (0, _api.deleteElementDefaults)(type);
+            case 5:
+              elementor.notifications.showToast({
+                message: __('Default settings has been reset.', 'elementor')
+              });
+              _context.next = 12;
+              break;
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](2);
+              elementor.notifications.showToast({
+                message: __('An error occurred.', 'elementor')
+              });
+              throw _context.t0;
+            case 12:
+              _context.prev = 12;
+              $e.internal('panel/state-ready');
+              return _context.finish(12);
+            case 15:
+            case "end":
+              return _context.stop();
           }
         }, _callee, null, [[2, 8, 12, 15]]);
       }));
@@ -386,9 +384,96 @@ Object.defineProperty(exports, "Delete", ({
     return _delete.default;
   }
 }));
+Object.defineProperty(exports, "Restore", ({
+  enumerable: true,
+  get: function get() {
+    return _restore.default;
+  }
+}));
 var _confirmCreation = _interopRequireDefault(__webpack_require__(/*! ./confirm-creation */ "../modules/kit-elements-defaults/assets/js/editor/commands/confirm-creation.js"));
 var _create = _interopRequireDefault(__webpack_require__(/*! ./create */ "../modules/kit-elements-defaults/assets/js/editor/commands/create.js"));
 var _delete = _interopRequireDefault(__webpack_require__(/*! ./delete */ "../modules/kit-elements-defaults/assets/js/editor/commands/delete.js"));
+var _restore = _interopRequireDefault(__webpack_require__(/*! ./restore */ "../modules/kit-elements-defaults/assets/js/editor/commands/restore.js"));
+
+/***/ }),
+
+/***/ "../modules/kit-elements-defaults/assets/js/editor/commands/restore.js":
+/*!*****************************************************************************!*\
+  !*** ../modules/kit-elements-defaults/assets/js/editor/commands/restore.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _api = __webpack_require__(/*! ../api */ "../modules/kit-elements-defaults/assets/js/editor/api.js");
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var Restore = /*#__PURE__*/function (_$e$modules$CommandBa) {
+  (0, _inherits2.default)(Restore, _$e$modules$CommandBa);
+  var _super = _createSuper(Restore);
+  function Restore() {
+    (0, _classCallCheck2.default)(this, Restore);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(Restore, [{
+    key: "apply",
+    value: function () {
+      var _apply = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
+        var type, settings;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              type = _ref.type, settings = _ref.settings;
+              $e.internal('panel/state-loading');
+              _context.prev = 2;
+              _context.next = 5;
+              return (0, _api.updateElementDefaults)(type, settings);
+            case 5:
+              elementor.notifications.showToast({
+                message: __('Previous settings restored.', 'elementor')
+              });
+              _context.next = 12;
+              break;
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](2);
+              elementor.notifications.showToast({
+                message: __('An error occurred.', 'elementor')
+              });
+              throw _context.t0;
+            case 12:
+              _context.prev = 12;
+              $e.internal('panel/state-ready');
+              return _context.finish(12);
+            case 15:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, null, [[2, 8, 12, 15]]);
+      }));
+      function apply(_x) {
+        return _apply.apply(this, arguments);
+      }
+      return apply;
+    }()
+  }]);
+  return Restore;
+}($e.modules.CommandBase);
+exports["default"] = Restore;
 
 /***/ }),
 
@@ -831,7 +916,7 @@ function _addContextMenuItem2() {
         }
         group.actions = [].concat((0, _toConsumableArray2.default)(group.actions), [{
           name: 'save-as-default',
-          title: __('Save as Default', 'elementor'),
+          title: __('Save as default', 'elementor'),
           callback: function callback() {
             $e.run('kit-elements-defaults/confirm-creation', {
               container: view.getContainer()
@@ -895,9 +980,7 @@ module.exports = wp.i18n;
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
 }
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -1006,15 +1089,16 @@ module.exports = _classCallCheck, module.exports.__esModule = true, module.expor
 /*!*************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/createClass.js ***!
   \*************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -1033,9 +1117,11 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
   \****************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -1130,28 +1216,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 /***/ ((module) => {
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-  if (_i == null) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _s, _e;
-  try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
     try {
-      if (!_n && _i["return"] != null) _i["return"]();
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
     } finally {
-      if (_d) throw _e;
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
     }
+    return _arr;
   }
-  return _arr;
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -1218,6 +1307,9 @@ function _regeneratorRuntime() {
   var exports = {},
     Op = Object.prototype,
     hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
     $Symbol = "function" == typeof Symbol ? Symbol : {},
     iteratorSymbol = $Symbol.iterator || "@@iterator",
     asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
@@ -1241,40 +1333,9 @@ function _regeneratorRuntime() {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
       generator = Object.create(protoGenerator.prototype),
       context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
   }
   function tryCatch(fn, obj, arg) {
     try {
@@ -1328,24 +1389,55 @@ function _regeneratorRuntime() {
       reject(record.arg);
     }
     var previousPromise;
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
   function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-      return ContinueSentinel;
-    }
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
@@ -1374,9 +1466,7 @@ function _regeneratorRuntime() {
       if (!isNaN(iterable.length)) {
         var i = -1,
           next = function next() {
-            for (; ++i < iterable.length;) {
-              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            }
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
             return next.value = undefined, next.done = !0, next;
           };
         return next.next = next;
@@ -1392,7 +1482,13 @@ function _regeneratorRuntime() {
       done: !0
     };
   }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
     var ctor = "function" == typeof genFun && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
   }, exports.mark = function (genFun) {
@@ -1413,11 +1509,10 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
+    for (var key in object) keys.push(key);
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
@@ -1428,9 +1523,7 @@ function _regeneratorRuntime() {
   }, exports.values = values, Context.prototype = {
     constructor: Context,
     reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
     },
     stop: function stop() {
       this.done = !0;
@@ -1560,6 +1653,43 @@ function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
 }
 module.exports = _toConsumableArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 

@@ -996,29 +996,16 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 
 		// Membership button on groups loop or single group's header
 		} else {
-			/*
-			 * This filter workaround is waiting for a core adaptation
-			 * so that we can directly get the groups button arguments
-			 * instead of the button.
-			 *
-			 * See https://buddypress.trac.wordpress.org/ticket/7126
-			 */
-			add_filter( 'bp_get_group_join_button', 'bp_nouveau_groups_catch_button_args', 100, 1 );
+			$button_args = bp_groups_get_group_join_button_args( $group );
 
-			bp_get_group_join_button( $group );
-
-			remove_filter( 'bp_get_group_join_button', 'bp_nouveau_groups_catch_button_args', 100, 1 );
-
-			if ( isset( bp_nouveau()->groups->button_args ) && bp_nouveau()->groups->button_args ) {
-				$button_args = bp_nouveau()->groups->button_args;
-
-				// If we pass through parent classes merge those into the existing ones
+			if ( $button_args ) {
+				// If we pass through parent classes merge those into the existing ones.
 				if ( $parent_class ) {
 					$parent_class .= ' ' . $button_args['wrapper_class'];
 				}
 
-				// The join or leave group header button should default to 'button'
-				// Reverse the earler button var to set default as 'button' not 'a'
+				// The join or leave group header button should default to 'button'.
+				// Reverse the earlier button var to set default as 'button' not 'a'.
 				if ( empty( $args['button_element'] ) ) {
 					$button_element = 'button';
 				}
@@ -1032,6 +1019,7 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 					'parent_element'    => $parent_element,
 					'button_element'    => $button_element,
 					'link_text'         => $button_args['link_text'],
+					'link_title'        => $button_args['link_title'],
 					'parent_attr'       => array(
 							'id'    => $button_args['wrapper_id'],
 							'class' => $parent_class,
@@ -1044,15 +1032,13 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 					),
 				);
 
-			// If button element set add nonce 'href' link to data-attr attr.
-			if ( 'button' === $button_element ) {
-				$buttons['group_membership']['button_attr']['data-bp-nonce'] = $button_args['link_href'];
-			} else {
-			// Else this is an anchor so use an 'href' attr.
-				$buttons['group_membership']['button_attr']['href'] = $button_args['link_href'];
-			}
-
-				unset( bp_nouveau()->groups->button_args );
+				// If button element set add nonce 'href' link to data-attr attr.
+				if ( 'button' === $button_element ) {
+					$buttons['group_membership']['button_attr']['data-bp-nonce'] = $button_args['link_href'];
+				} else {
+					// Else this is an anchor so use an 'href' attr.
+					$buttons['group_membership']['button_attr']['href'] = $button_args['link_href'];
+				}
 			}
 		}
 

@@ -71,6 +71,12 @@ class Product {
 	 */
 	private $key;
 	/**
+	 * Author URL
+	 *
+	 * @var string $author_url The author url.
+	 */
+	private $author_url;
+	/**
 	 * Product store url.
 	 *
 	 * @var string $store_url The store url.

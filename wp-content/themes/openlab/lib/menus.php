@@ -32,23 +32,11 @@ function openlab_wp_menu_customizations($items, $args) {
         $order = count($items);
         $new_items = array();
 
-        //add a mobile verison of the OpenLab Calendar menu item
         //first iterate through the current menu items and figure out where this new mobile menu item will go
         foreach ($items as $key => $item) {
 
             if (false === strpos($item->url, bp_get_root_domain())) {
                 $items[$key]->classes[] = 'external-link';
-            }
-
-            if ($item->title === 'OpenLab Calendar') {
-
-                $items[$key]->classes[] = 'hidden-xs';
-
-                if ($post->post_parent === $calendar_page_obj->ID || $post->post_type === 'event') {
-                    $items[$key]->classes[] = 'current-menu-item';
-                }
-
-                $order = $item->menu_order + 1;
             }
 
             if ($item->menu_order >= $order) {
@@ -59,10 +47,6 @@ function openlab_wp_menu_customizations($items, $args) {
             }
         }
 
-        //then we create the menu item and inject it into the menu items array
-        $new_menu_item = openlab_custom_nav_menu_item('OpenLab Calendar', get_permalink($upcoming_page_obj->ID), $order, 0, array('visible-xs'));
-
-        $new_items[$order] = $new_menu_item;
         ksort($new_items);
         $items = $new_items;
     }
@@ -349,6 +333,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
         case 'group-docs':
             $submenu_text = 'Docs<span aria-hidden="true">:</span> ';
             $menu = openlab_group_docs_submenu();
+            break;
+        case 'group-connections':
+            $submenu_text = 'Connections Settings<span aria-hidden="true">:</span> ';
+            $menu = openlab_group_connections_submenu();
             break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
@@ -684,9 +672,8 @@ function openlab_group_activity_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'activity';
 
     $current_item = $base_url;
-	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred' ], true ) ) {
+	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'mentions', 'starred', 'connections' ], true ) ) {
 		$current_item .= '?type=' . $_GET['type'];
-
 	}
 
     $menu_list = [
@@ -695,6 +682,8 @@ function openlab_group_activity_submenu() {
         $base_url . '?type=mentions'    => '@Mentions',
         $base_url . '?type=starred'     => 'Starred'
     ];
+
+	$menu_list[ $base_url . '?type=connections' ] = 'Connections&nbsp;&nbsp;<i class="fa fa-rss connections-icon"></i>';
 
     return openlab_submenu_gen( $menu_list, false, $current_item );
 }
@@ -868,9 +857,6 @@ function openlab_filter_subnav_home($subnav_item) {
 
     $new_item = str_replace("Home", $new_label, $subnav_item);
 
-    //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace("current selected", "current-menu-item", $new_item);
-
     //for mobile menu add course site and site dashboard (if available)
     $group_id = bp_get_current_group_id();
 
@@ -993,9 +979,6 @@ function openlab_filter_subnav_docs($subnav_item) {
 		$new_item = $subnav_item;
 	}
 
-    //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $new_item = str_replace( "current selected", "current-menu-item", $new_item );
-
     return $new_item;
 }
 
@@ -1006,9 +989,6 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
     if ( ! openlab_is_files_enabled_for_group( bp_get_current_group_id() ) ) {
         return '';
     }
-
-    //update "current" class to "current-menu-item" to unify site identification of current menu page
-    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
 
     // Add count. @todo Better caching.
     $count = BP_Group_Documents::get_total(bp_get_current_group_id());
@@ -1022,7 +1002,6 @@ function openlab_filter_subnav_nav_group_documents($subnav_item) {
 
     return $subnav_item;
 }
-
 add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_group_documents');
 
 /**
@@ -1030,7 +1009,6 @@ add_filter('bp_get_options_nav_group-documents', 'openlab_filter_subnav_nav_grou
  */
 function openlab_filter_subnav_forums($subnav_item) {
     // update "current" class to "current-menu-item" to unify site identification of current menu page
-    $subnav_item = str_replace('current selected', 'current-menu-item', $subnav_item);
     $subnav_item = str_replace('Forum', 'Discussion', $subnav_item);
 
     // Add count.
@@ -1056,24 +1034,11 @@ function openlab_filter_subnav_forums($subnav_item) {
 }
 add_filter( 'bp_get_options_nav_nav-forum', 'openlab_filter_subnav_forums' );
 
+// Disables some nav items.
+add_filter('bp_get_options_nav_nav-invite-anyone', '__return_empty_string');
+add_filter('bp_get_options_nav_nav-notifications', '__return_empty_string');
+add_filter('bp_get_options_nav_request-membership', '__return_empty_string');
 
-add_filter('bp_get_options_nav_nav-invite-anyone', 'openlab_filter_subnav_nav_invite_anyone');
-
-function openlab_filter_subnav_nav_invite_anyone($subnav_item) {
-    return "";
-}
-
-add_filter('bp_get_options_nav_nav-notifications', 'openlab_filter_subnav_nav_notifications');
-
-function openlab_filter_subnav_nav_notifications($subnav_item) {
-    return "";
-}
-
-add_filter('bp_get_options_nav_request-membership', 'openlab_filter_subnav_nav_request_membership');
-
-function openlab_filter_subnav_nav_request_membership($subnav_item) {
-    return "";
-}
 
 add_filter('bp_get_options_nav_nav-events', 'openlab_filter_subnav_nav_events');
 add_filter('bp_get_options_nav_nav-events-mobile', 'openlab_filter_subnav_nav_events');
@@ -1098,35 +1063,30 @@ function openlab_filter_subnav_nav_events($subnav_item) {
     return $subnav_item;
 }
 
-add_filter('bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar');
-
-function openlab_filter_subnav_nav_calendar($subnav_item) {
-    $subnav_item = str_replace('Calendar', 'All Events', $subnav_item);
-
-    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-
-    return $subnav_item;
+function openlab_filter_subnav_nav_calendar( $subnav_item ) {
+    return str_replace( 'Calendar', 'All Events', $subnav_item );
 }
-
-add_filter('bp_get_options_nav_upcoming', 'openlab_filter_subnav_nav_upcoming');
-
-function openlab_filter_subnav_nav_upcoming($subnav_item) {
-
-    $subnav_item = str_replace("current selected", "current-menu-item", $subnav_item);
-
-    return $subnav_item;
-}
-
-add_filter('bp_get_options_nav_new-event', 'openlab_filter_subnav_nav_new_event');
+add_filter( 'bp_get_options_nav_calendar', 'openlab_filter_subnav_nav_calendar' );
 
 /**
- * Filters the 'Activity' option nav item.
+ * Changes BP's default "current selected" classes to our custom 'current-menu-item' in bp_get_options_nav().
+ *
+ * @param string $subnav_item Nav menu markup.
+ * @return string
  */
-function openlab_filter_subnav_nav_activity( $subnav_item ) {
+function openlab_set_current_menu_item_class_for_subnav_item( $subnav_item ) {
     return str_replace( 'current selected', 'current-menu-item', $subnav_item );
 }
-add_filter( 'bp_get_options_nav_activity', 'openlab_filter_subnav_nav_activity' );
-
+add_filter( 'bp_get_options_nav_admin', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_activity', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_new-event', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_upcoming', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_nav-forum', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_group-documents', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_nav-docs', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_nav-connections', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_set_current_menu_item_class_for_subnav_item' );
+add_filter( 'bp_get_options_nav_home', 'openlab_set_current_menu_item_class_for_subnav_item' );
 /**
  * Filters the 'Announcements' option nav item.
  */
@@ -1153,7 +1113,7 @@ function openlab_filter_subnav_nav_announcements( $subnav_item ) {
         $subnav_item = str_replace('</a>', ' ' . $span . '</a>', $subnav_item);
 	}
 
-    return str_replace( 'current selected', 'current-menu-item', $subnav_item );
+    return $subnav_item;
 }
 add_filter( 'bp_get_options_nav_nav-announcements', 'openlab_filter_subnav_nav_announcements' );
 

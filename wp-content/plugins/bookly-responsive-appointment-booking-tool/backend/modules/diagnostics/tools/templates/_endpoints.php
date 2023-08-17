@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <div id="bookly-endpoint" class="accordion" role="tablist" aria-multiselectable="true">

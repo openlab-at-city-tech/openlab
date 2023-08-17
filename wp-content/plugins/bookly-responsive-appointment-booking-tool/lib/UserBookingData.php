@@ -2,11 +2,12 @@
 namespace Bookly\Lib;
 
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
+use Bookly\Lib\Proxy\Pro;
 
 /**
  * Class UserBookingData
  *
- * @package Bookly\Frontend\Modules\Booking\Lib
+ * @package Bookly\Lib
  */
 class UserBookingData
 {
@@ -75,6 +76,8 @@ class UserBookingData
     protected $coupon_code;
     /** @var string */
     protected $gift_code;
+    /** @var float */
+    protected $gift_card_amount;
     /** @var bool */
     protected $deposit_full = 0;
     /** @var float */
@@ -183,8 +186,8 @@ class UserBookingData
                     $date = explode( '-', $customer->getBirthday() );
                     $this->setBirthday( array(
                         'year' => $date[0],
-                        'month' => isset( $date[1] ) ? (int) $date[1] : 0,
-                        'day' => isset( $date[2] ) ? (int) $date[2] : 0,
+                        'month' => isset( $date[1] ) ? (int)$date[1] : 0,
+                        'day' => isset( $date[2] ) ? (int)$date[2] : 0,
                     ) );
                 }
                 $this
@@ -213,13 +216,13 @@ class UserBookingData
         } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) && isset( $_COOKIE['bookly-cst-full-name'] ) ) {
             $this
                 ->setFullName( $_COOKIE['bookly-cst-full-name'] )
-                ->setInfoFields( (array) json_decode( stripslashes( $_COOKIE['bookly-cst-info-fields'] ), true ) );
+                ->setInfoFields( (array)json_decode( stripslashes( $_COOKIE['bookly-cst-info-fields'] ), true ) );
             if ( isset( $_COOKIE['bookly-cst-birthday'] ) ) {
                 $date = explode( '-', $_COOKIE['bookly-cst-birthday'] );
                 $birthday = array(
                     'year' => $date[0],
-                    'month' => isset( $date[1] ) ? (int) $date[1] : 0,
-                    'day' => isset( $date[2] ) ? (int) $date[2] : 0,
+                    'month' => isset( $date[1] ) ? (int)$date[1] : 0,
+                    'day' => isset( $date[2] ) ? (int)$date[2] : 0,
                 );
                 $this->setBirthday( $birthday );
             }
@@ -609,6 +612,25 @@ class UserBookingData
         if ( $this->getBirthdayYmd() != '' ) {
             $customer->setBirthday( $this->getBirthdayYmd() );
         }
+        // Set address fields.
+        if ( $this->getCountry() !== $customer->getCountry() ||
+            $this->getState() !== $customer->getState() ||
+            $this->getPostcode() !== $customer->getPostcode() ||
+            $this->getCity() !== $customer->getCity() ||
+            $this->getStreet() !== $customer->getStreet() ||
+            $this->getStreetNumber() !== $customer->getStreetNumber() ||
+            $this->getAdditionalAddress() !== $customer->getAdditionalAddress()
+        ) {
+            // Clear all address fields if some field changed.
+            $customer
+                ->setCountry( '' )
+                ->setState( '' )
+                ->setPostcode( '' )
+                ->setCity( '' )
+                ->setStreet( '' )
+                ->setStreetNumber( '' )
+                ->setAdditionalAddress( '' );
+        }
         if ( $this->getCountry() != '' ) {
             $customer->setCountry( $this->getCountry() );
         }
@@ -648,6 +670,7 @@ class UserBookingData
             $order->setPayment( $payment );
             $this->payment_id = $payment->getId();
             $this->setPaymentType( $payment->getType() );
+            Proxy\Shared::saveUserBookingData( $this );
         }
 
         if ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
@@ -783,7 +806,7 @@ class UserBookingData
     {
         if ( $this->gift_card === null ) {
             $gift_card = BookingProxy\Pro::findOneGiftCardByCode( $this->getGiftCode() );
-            if ( $gift_card ) {
+            if ( $gift_card instanceof \BooklyPro\Lib\Entities\GiftCard ) {
                 $this->gift_card = $gift_card;
             } else {
                 $this->gift_card = false;
@@ -838,7 +861,6 @@ class UserBookingData
         if ( $payment->isLoaded() ) {
             /** @var Entities\CustomerAppointment $ca */
             foreach ( Entities\CustomerAppointment::query()->where( 'payment_id', $payment->getId() )->find() as $ca ) {
-                Utils\Log::deleteEntity( $ca, __METHOD__ );
                 $ca->deleteCascade();
             }
             $payment->delete();
@@ -887,9 +909,12 @@ class UserBookingData
      */
     public function applyTimeZone()
     {
-        if ( $this->getTimeZoneOffset() !== null ) {
+        if ( $this->getTimeZone() !== null && date_create( $this->getTimeZone() ) !== false ) {
+            Slots\DatePoint::$client_timezone = $this->getTimeZone();
+            Slots\TimePoint::$client_timezone_offset = Utils\DateTime::timeZoneOffset( Slots\DatePoint::$client_timezone );
+        } elseif ( $this->getTimeZoneOffset() !== null ) {
             Slots\TimePoint::$client_timezone_offset = -$this->getTimeZoneOffset() * MINUTE_IN_SECONDS;
-            $timezone = $this->getTimeZone() ?: Utils\DateTime::formatOffset( Slots\TimePoint::$client_timezone_offset );
+            $timezone = Utils\DateTime::formatOffset( Slots\TimePoint::$client_timezone_offset );
             Slots\DatePoint::$client_timezone = date_create( $timezone ) === false ? null : $timezone;
         }
 
@@ -1528,6 +1553,29 @@ class UserBookingData
     public function setGiftCode( $gift_code )
     {
         $this->gift_code = $gift_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets gift_card_amount
+     *
+     * @return string
+     */
+    public function getGiftCardAmount()
+    {
+        return $this->gift_card_amount;
+    }
+
+    /**
+     * Sets gift_card_amount
+     *
+     * @param string $gift_card_amount
+     * @return $this
+     */
+    public function setGiftCardAmount( $gift_card_amount )
+    {
+        $this->gift_card_amount = $gift_card_amount;
 
         return $this;
     }

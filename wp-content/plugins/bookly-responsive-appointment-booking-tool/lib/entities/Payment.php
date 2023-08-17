@@ -37,7 +37,8 @@ class Payment extends Lib\Base\Entity
     const PAY_IN_FULL = 'in_full';
 
     const TARGET_APPOINTMENTS = 'appointments';
-    const TARGET_PACKAGES     = 'packages';
+    const TARGET_PACKAGES = 'packages';
+    const TARGET_GIFT_CARDS = 'gift_cards';
 
     /** @var int */
     protected $coupon_id;
@@ -71,6 +72,8 @@ class Payment extends Lib\Base\Entity
     protected $updated_at;
 
     protected static $table = 'bookly_payments';
+
+    protected $loggable = true;
 
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
@@ -137,15 +140,40 @@ class Payment extends Lib\Base\Entity
      * Get image for given payment type.
      *
      * @param string $type
-     * @return string
+     * @return array
      */
     public static function typeToImage( $type )
     {
+        $height = '50px';
         switch ( $type ) {
             case self::TYPE_LOCAL:
-                return plugins_url( 'frontend/resources/images/wallet2.svg', Lib\Plugin::getMainFile() );
+                $src = plugins_url( 'frontend/resources/images/wallet2.svg', Lib\Plugin::getMainFile() );
+                break;
+            case self::TYPE_CLOUD_GIFT:
+                $src = plugins_url( 'frontend/resources/images/ticket.svg', Lib\Plugin::getMainFile() );
+                break;
             case self::TYPE_CLOUD_STRIPE:
-                return plugins_url( 'frontend/resources/images/stripe.svg', Lib\Plugin::getMainFile() );
+            case self::TYPE_CLOUD_SQUARE:
+            default:
+                $src = Lib\Proxy\Shared::preparePaymentImage( plugins_url( 'frontend/resources/images/card.svg', Lib\Plugin::getMainFile() ), $type );
+        }
+
+        return compact( 'src', 'height' );
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    public static function typeToProduct( $type )
+    {
+        switch ( $type ) {
+            case self::TYPE_CLOUD_STRIPE:
+                return Lib\Cloud\Account::PRODUCT_STRIPE;
+            case self::TYPE_CLOUD_SQUARE:
+                return Lib\Cloud\Account::PRODUCT_SQUARE;
+            case self::TYPE_CLOUD_GIFT:
+                return Lib\Cloud\Account::PRODUCT_GIFT;
             default:
                 return '';
         }
@@ -329,7 +357,7 @@ class Payment extends Lib\Base\Entity
     {
         $details = json_decode( $this->getDetails(), true );
 
-        $customer = '';
+        $customer = $details['customer'];
         if ( $this->target === self::TARGET_APPOINTMENTS ) {
             $customer = Lib\Entities\Customer::query( 'c' )
                 ->select( 'c.full_name' )
@@ -337,10 +365,35 @@ class Payment extends Lib\Base\Entity
                 ->where( 'ca.payment_id', $this->getId() )
                 ->fetchRow();
             $customer = empty( $customer ) ? $details['customer'] : $customer['full_name'];
-
-        } elseif ( $this->target === self::TARGET_PACKAGES ) {
+        } elseif ( isset( $details['customer_id'] ) ) {
             $customer = Lib\Entities\Customer::find( $details['customer_id'] );
             $customer = $customer ? $customer->getFullName() : $details['customer'];
+        }
+
+        if ( $this->target === self::TARGET_APPOINTMENTS ) {
+            foreach ( $details['items'] as &$item ) {
+                if ( isset( $item['ca_id'] ) ) {
+                    $data = CustomerAppointment::query( 'ca' )
+                        ->select( 'COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id) AS service_id, a.staff_id, s.title, st.full_name' )
+                        ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+                        ->leftJoin( 'Service', 's', 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)' )
+                        ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
+                        ->where( 'ca.id', $item['ca_id'] )
+                        ->fetchRow();
+                    if ( $data ) {
+                        if ( $data['service_id'] ) {
+                            $service = new Service( array( 'id' => $data['service_id'], 'title' => $data['title'] ) );
+                            $item['service_name'] = $service->getTranslatedTitle();
+                        }
+                        if ( $data['staff_id'] ) {
+                            $staff = new Staff( array( 'id' => $data['staff_id'], 'full_name' => $data['full_name'] ) );
+                            $item['staff_name'] = $staff->getTranslatedName();
+                        }
+                    }
+                }
+            }
+        } else {
+            $details = Proxy\Shared::preparePaymentDetails( $details, $this );
         }
 
         return array(
@@ -766,12 +819,10 @@ class Payment extends Lib\Base\Entity
 
     public function save()
     {
-        $created = false;
         if ( $this->getId() === null ) {
             $this
                 ->setCreatedAt( current_time( 'mysql' ) )
                 ->setUpdatedAt( current_time( 'mysql' ) );
-            $created = true;
         } elseif ( $this->getModified() ) {
             $this->setUpdatedAt( current_time( 'mysql' ) );
         }
@@ -780,26 +831,6 @@ class Payment extends Lib\Base\Entity
             $this->setToken( Lib\Utils\Common::generateToken( get_class( $this ), 'token' ) );
         }
 
-        if ( ! $created ) {
-            Lib\Utils\Log::fromBacktrace( $this );
-        }
-
-        $result = parent::save();
-
-        if ( $created ) {
-            Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_CREATE );
-        }
-
-        return $result;
-    }
-
-    /**
-     * Delete payment
-     */
-    public function delete()
-    {
-        Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_DELETE );
-
-        return parent::delete();
+        return parent::save();
     }
 }

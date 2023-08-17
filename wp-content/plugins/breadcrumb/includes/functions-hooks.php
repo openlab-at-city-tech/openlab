@@ -487,15 +487,19 @@ function breadcrumb_permalink_custom_text($args)
 
 add_filter('breadcrumb_permalink_home', 'breadcrumb_permalink_home');
 
-function breadcrumb_permalink_home($breadcrumb_items)
+function breadcrumb_permalink_home($args)
 {
+    $permalink = isset($args['permalink']) ? $args['permalink'] : '';
+    $url = isset($permalink['url']) ? $permalink['url'] : '#';
+    $text = isset($permalink['text']) ? $permalink['text'] : '';
 
     $breadcrumb_home_text = get_option('breadcrumb_home_text', __('Home', 'breadcrumb'));
-    $home_url = get_bloginfo('url');
+    $home_url = !empty($url) ? $url : get_bloginfo('url');
+
 
     return array(
         'link' => $home_url,
-        'title' => $breadcrumb_home_text,
+        'title' => !empty($text) ? $text : $breadcrumb_home_text,
     );
 }
 
@@ -508,7 +512,7 @@ function breadcrumb_permalink_post_title($breadcrumb_items)
 
     return array(
         'link' => get_permalink($post_id),
-        'title' => get_the_title($post_id),
+        'title' => strip_tags(get_the_title($post_id)),
     );
 }
 
@@ -746,7 +750,6 @@ function breadcrumb_permalink_product_cat($breadcrumb_items)
                 );
             endif;
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
-
         }
     }
 
@@ -765,7 +768,7 @@ add_filter('breadcrumb_permalink_category_ancestors', 'breadcrumb_permalink_cate
 function breadcrumb_permalink_category_ancestors($args)
 {
 
-//echo '<pre>'.var_export($args,).'</pre>';
+    //echo '<pre>'.var_export($args,).'</pre>';
 
     $permalink = isset($args['permalink']) ? $args['permalink'] : '';
     $taxonomy = isset($permalink['taxonomy']) ? $permalink['taxonomy'] : '';
@@ -776,7 +779,7 @@ function breadcrumb_permalink_category_ancestors($args)
     $category_string = get_query_var($taxonomy);
     $category_arr = array();
     $breadcrumb_items = array();
-            $breadcrumb_items_new = array();
+    $breadcrumb_items_new = array();
 
 
     $array_list = array();
@@ -821,7 +824,7 @@ function breadcrumb_permalink_category_ancestors($args)
             $term_data = get_term_by('slug', $category_string, $taxonomy);
             $breadcrumb_items_new = array();
 
-           // var_dump($category_string);
+            // var_dump($category_string);
 
             $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
             $term_name = isset($term_data->name) ? $term_data->name : '';
@@ -855,7 +858,7 @@ function breadcrumb_permalink_category_ancestors($args)
             $parents_id = array_reverse($parents_id);
 
 
-            if(!empty($parents_id)){
+            if (!empty($parents_id)) {
                 foreach ($parents_id as $id) {
 
                     $parent_term_link = get_term_link($id, $taxonomy);
@@ -867,11 +870,10 @@ function breadcrumb_permalink_category_ancestors($args)
                     );
                 }
             }
-           
+
 
 
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
-
         }
     }
 
@@ -883,6 +885,115 @@ function breadcrumb_permalink_category_ancestors($args)
 }
 
 
+
+
+add_filter('breadcrumb_permalink_post_term', 'breadcrumb_permalink_post_term');
+
+function breadcrumb_permalink_post_term($args)
+{
+
+    //echo '<pre>'.var_export($args,).'</pre>';
+
+    $permalink = isset($args['permalink']) ? $args['permalink'] : '';
+    $taxonomy = isset($permalink['taxonomy']) ? $permalink['taxonomy'] : '';
+
+
+
+
+    $category_string = get_query_var($taxonomy);
+    $category_arr = array();
+    $breadcrumb_items = array();
+
+    //var_dump($category_string);
+
+
+    $array_list = array();
+
+    if (!empty($category_string)) {
+        if (strpos($category_string, '/')) {
+
+            $category_arr = explode('/', $category_string);
+            $category_count = count($category_arr);
+            $last_cat = $category_arr[($category_count - 1)];
+            $breadcrumb_items_new = array();
+            $term_data = get_term_by('slug', $last_cat, $taxonomy);
+
+            $term_id = $term_data->term_id;
+            $term_name = $term_data->name;
+            $term_link = get_term_link($term_id, $taxonomy);
+
+            $parents_id  = get_ancestors($term_id, $taxonomy);
+            $parents_id = array_reverse($parents_id);
+
+            foreach ($parents_id as $id) {
+
+                $parent_term_link = get_term_link($id, $taxonomy);
+                $paren_term_name = get_term_by('id', $id, $taxonomy);
+
+                $breadcrumb_items_new[] = array(
+                    'link' => $parent_term_link,
+                    'title' => $paren_term_name->name,
+                );
+            }
+
+            $breadcrumb_items_new[] = array(
+                'link' => $term_link,
+                'title' => $term_name,
+            );
+
+
+            $breadcrumb_items = $breadcrumb_items_new;
+        } else {
+
+            $term_data = get_term_by('slug', $category_string, $taxonomy);
+            $breadcrumb_items_new = array();
+
+            //var_dump($category_string);
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if (!empty($term_id)) :
+                $term_link = get_term_link($term_id, $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link' => $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+        }
+    } else {
+
+        if (is_singular()) {
+            $post_id = get_the_ID();
+
+            //$terms = get_terms();
+            $terms = get_the_terms($post_id, $taxonomy);
+            $term_data = isset($terms[0]) ? $terms[0] : '';
+
+            $term_id = isset($term_data->term_id) ? $term_data->term_id : '';
+            $term_name = isset($term_data->name) ? $term_data->name : '';
+
+            if (!empty($term_id)) :
+                $term_link = get_term_link($term_id, $taxonomy);
+
+                $breadcrumb_items_new = array(
+                    'link' => $term_link,
+                    'title' => $term_name,
+                );
+            endif;
+            $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
+        }
+    }
+
+
+
+
+
+    return $breadcrumb_items;
+}
 
 
 
@@ -989,7 +1100,6 @@ function breadcrumb_permalink_product_tag($breadcrumb_items)
                 );
             endif;
             $breadcrumb_items = array_merge($breadcrumb_items, $breadcrumb_items_new);
-
         }
     }
 
@@ -999,6 +1109,23 @@ function breadcrumb_permalink_product_tag($breadcrumb_items)
 
     return $breadcrumb_items;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 add_filter('breadcrumb_permalink_wc_shop', 'breadcrumb_permalink_wc_shop');
 

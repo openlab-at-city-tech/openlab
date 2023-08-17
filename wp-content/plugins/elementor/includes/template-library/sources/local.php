@@ -502,10 +502,21 @@ class Source_Local extends Source_Base {
 		$defaults = [
 			'title' => esc_html__( '(no title)', 'elementor' ),
 			'page_settings' => [],
-			'status' => current_user_can( 'publish_posts' ) ? 'publish' : 'pending',
 		];
 
 		$template_data = wp_parse_args( $template_data, $defaults );
+		$template_data['status'] = current_user_can( 'publish_posts' ) ? 'publish' : 'pending';
+
+		// BC: Allow importing any template type when using CLI
+		// to support users that rely on this mechanism.
+		$should_check_template_type = ! $this->is_wp_cli();
+
+		if (
+				$should_check_template_type &&
+				! $this->is_valid_template_type( $template_data['type'] )
+		) {
+			return new \WP_Error( 'invalid_template_type', esc_html__( 'Invalid template type.', 'elementor' ) );
+		}
 
 		$document = Plugin::$instance->documents->create(
 			$template_data['type'],
@@ -558,6 +569,27 @@ class Source_Local extends Source_Base {
 		do_action( 'elementor/template-library/after_update_template', $template_id, $template_data );
 
 		return $template_id;
+	}
+
+	protected function is_valid_template_type( $type ) {
+		$document_class = Plugin::$instance->documents->get_document_type( $type, false );
+
+		if ( ! $document_class ) {
+			return false;
+		}
+
+		$cpt = $document_class::get_property( 'cpt' );
+
+		if ( ! $cpt || ! is_array( $cpt ) || 1 !== count( $cpt ) ) {
+			return false;
+		}
+
+		return in_array( static::CPT, $cpt, true );
+	}
+
+	// For testing purposes only, in order to be able to mock the `WP_CLI` constant.
+	protected function is_wp_cli() {
+		return Utils::is_wp_cli();
 	}
 
 	/**
@@ -1172,14 +1204,10 @@ class Source_Local extends Source_Base {
 	 * @return array An updated array of available list table views.
 	 */
 	public function admin_print_tabs( $views ) {
-		$current_type = '';
-		$active_class = ' nav-tab-active';
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required to retrieve the value.
+		$current_type = Utils::get_super_global_value( $_REQUEST, self::TAXONOMY_TYPE_SLUG ) ?? '';
+		$active_class = $current_type ? '' : ' nav-tab-active';
 		$current_tabs_group = $this->get_current_tab_group();
-
-		if ( ! empty( $_REQUEST[ self::TAXONOMY_TYPE_SLUG ] ) ) {
-			$current_type = $_REQUEST[ self::TAXONOMY_TYPE_SLUG ];
-			$active_class = '';
-		}
 
 		$url_args = [
 			'post_type' => self::CPT,
@@ -1262,6 +1290,7 @@ class Source_Local extends Source_Base {
 
 		$total_items = $wp_list_table->get_pagination_arg( 'total_items' );
 
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required to retrieve the value.
 		if ( ! empty( $total_items ) || ! empty( $_REQUEST['s'] ) ) {
 			return;
 		}
@@ -1341,7 +1370,7 @@ class Source_Local extends Source_Base {
 					?>
 				</h3>
 				<p><?php echo wp_kses_post( $description ); ?></p>
-				<a id="elementor-template-library-add-new" class="elementor-button elementor-button-success" href="<?php echo esc_url( $href ); ?>">
+				<a id="elementor-template-library-add-new" class="elementor-button e-primary" href="<?php echo esc_url( $href ); ?>">
 					<?php
 					/* translators: %s: Template type label. */
 					printf( esc_html__( 'Add New %s', 'elementor' ), esc_html( $current_type_label ) );
@@ -1357,7 +1386,6 @@ class Source_Local extends Source_Base {
 		}
 
 		$all_items = get_taxonomy( self::TAXONOMY_CATEGORY_SLUG )->labels->all_items;
-
 		$dropdown_options = array(
 			'show_option_all' => $all_items,
 			'show_option_none' => $all_items,
@@ -1368,7 +1396,8 @@ class Source_Local extends Source_Base {
 			'value_field' => 'slug',
 			'taxonomy' => self::TAXONOMY_CATEGORY_SLUG,
 			'name' => self::TAXONOMY_CATEGORY_SLUG,
-			'selected' => empty( $_GET[ self::TAXONOMY_CATEGORY_SLUG ] ) ? '' : $_GET[ self::TAXONOMY_CATEGORY_SLUG ],
+			//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required to retrieve the value.
+			'selected' => Utils::get_super_global_value( $_GET, self::TAXONOMY_CATEGORY_SLUG ) ?? '',
 		);
 		echo '<label class="screen-reader-text" for="cat">' . esc_html_x( 'Filter by category', 'Template Library', 'elementor' ) . '</label>';
 		wp_dropdown_categories( $dropdown_options );
@@ -1423,9 +1452,6 @@ class Source_Local extends Source_Base {
 			'type' => $data['type'],
 			'page_settings' => $page_settings,
 		] );
-
-		// Remove the temporary file, now that we're done with it.
-		Plugin::$instance->uploads_manager->remove_file_or_dir( $file_path );
 
 		if ( is_wp_error( $template_id ) ) {
 			return $template_id;
@@ -1653,17 +1679,17 @@ class Source_Local extends Source_Base {
 	}
 
 	public function get_current_tab_group( $default = '' ) {
-		$current_tabs_group = $default;
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		$current_tabs_group = Utils::get_super_global_value( $_REQUEST, 'tabs_group' ) ?? '';
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		$type_slug = Utils::get_super_global_value( $_REQUEST, self::TAXONOMY_TYPE_SLUG );
 
-		if ( ! empty( $_REQUEST[ self::TAXONOMY_TYPE_SLUG ] ) ) {
-			$doc_type = Plugin::$instance->documents->get_document_type( $_REQUEST[ self::TAXONOMY_TYPE_SLUG ], '' );
+		if ( $type_slug ) {
+			$doc_type = Plugin::$instance->documents->get_document_type( $type_slug, '' );
 			if ( $doc_type ) {
 				$current_tabs_group = $doc_type::get_property( 'admin_tab_group' );
 			}
-		} elseif ( ! empty( $_REQUEST['tabs_group'] ) ) {
-			$current_tabs_group = $_REQUEST['tabs_group'];
 		}
-
 		return $current_tabs_group;
 	}
 

@@ -6,6 +6,7 @@
 
 .neve-mega-menu .sub-menu .sub-menu {
   max-height: none;
+  width: 100%;
 }
 
 .neve-mega-menu .neve-mm-col {
@@ -37,7 +38,7 @@
 }
 
 .neve-mm-heading > span,
-.neve-mm-heading > a {
+.neve-mm-heading > .wrap > a {
   font-weight: 700;
   text-transform: uppercase;
   font-size: 1.1em;
@@ -67,8 +68,7 @@
     pointer-events: none;
   }
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:hover > .sub-menu,
-  .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:focus > .sub-menu,
-  .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:focus-within > .sub-menu {
+  .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu:focus > .sub-menu {
     display: flex;
     opacity: 1;
     visibility: visible;
@@ -91,6 +91,7 @@
   }
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu .neve-mm-col > .sub-menu a {
     white-space: normal;
+    display: flex;
   }
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu .neve-mm-col > .sub-menu li:not(.neve-mm-divider) {
     border: 0;

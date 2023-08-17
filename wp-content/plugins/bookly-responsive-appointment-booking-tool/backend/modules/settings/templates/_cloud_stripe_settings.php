@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Plugin;
@@ -13,7 +13,7 @@ use Bookly\Backend\Modules\Appearance\Codes;
         <a href="#bookly_pmt_cloud_stripe" class="ml-2" role="button" data-toggle="bookly-collapse">
             Stripe Cloud
         </a>
-        <img class="ml-auto" src="<?php echo plugins_url( 'frontend/modules/stripe/resources/images/stripe.png', Plugin::getMainFile() ) ?>"/>
+        <img class="ml-auto" src="<?php echo plugins_url( 'backend/modules/settings/resources/images/stripe.svg', Plugin::getMainFile() ) ?>"/>
     </div>
     <div id="bookly_pmt_cloud_stripe" class="bookly-collapse bookly-show">
         <div class="card-body">

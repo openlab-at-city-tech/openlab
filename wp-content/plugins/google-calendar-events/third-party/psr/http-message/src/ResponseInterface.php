@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Psr\Http\Message;
 
 /**
@@ -48,7 +49,7 @@ interface ResponseInterface extends MessageInterface
      * @return static
      * @throws \InvalidArgumentException For invalid status code arguments.
      */
-    public function withStatus($code, $reasonPhrase = '');
+    public function withStatus(int $code, string $reasonPhrase = '');
     /**
      * Gets the response reason phrase associated with the status code.
      *

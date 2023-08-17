@@ -13,8 +13,9 @@
         $pro = '';
 
         if (function_exists('ez_toc_pro_activation_link')) {
-            $pro = '<a id="eztoc-default" class="eztoc-tablinks ez-toc-pro-settings-link-paid" data-href="no" href="#eztoc-prosettings" onclick="ezTocTabToggle(event, \'general\')">PRO Settings</a>';
-        } ?>
+            $pro = '<a id="eztoc-default" class="eztoc-tablinks ez-toc-pro-settings-link-paid" data-href="no" href="#eztoc-prosettings" onclick="ezTocTabToggle(event, \'general\')">' . esc_html__( 'PRO Settings', 'easy-table-of-contents' ) . '</a>';
+        }
+        ?>
         <?php echo $pro; ?>
 
         <?php
@@ -26,7 +27,7 @@
         <a class="eztoc-tablinks" id="eztoc-technical" href="#technical-support"
            onclick="ezTocTabToggle(event, 'technical')" data-href="no"><?= esc_html_e( 'Help & Support', 'easy-table-of-contents' ) ?></a>
            <?php if (!function_exists('ez_toc_pro_activation_link')) { ?>
-            <a class="eztoc-tablinks" id="eztoc-upgrade" href="https://tocwp.com/pricing/" target="_blank"><?= esc_html( 'UPGRADE to PRO', 'easy-table-of-contents' ) ?></a>
+            <a class="eztoc-tablinks" id="eztoc-upgrade" href="https://tocwp.com/pricing/" target="_blank"><?= esc_html_e( 'UPGRADE to PRO', 'easy-table-of-contents' ) ?></a>
             <?php } ?>
         <?php
 
@@ -36,22 +37,29 @@
             if( !empty( $license_info['pro']['license_key_expires'] ) ) {
                 $license_exp = date( 'Y-m-d', strtotime($license_info['pro']['license_key_expires'] ) );
             }
+
+            ?>
+            <a class="eztoc-tablinks" id="eztoc-license" href="#license"
+               onclick="ezTocTabToggle(event, 'license')"
+               data-href="no"><?= esc_html_e('License', 'easy-table-of-contents') ?>
+            </a>
+            <?php
+
             $today = date('Y-m-d');
             $exp_date = $license_exp;
             $date1 = date_create($today);
-            $date2 = date_create($exp_date);
-            $diff = date_diff($date1, $date2);
-            $days = $diff->format("%a");
-            $days = intval($days); ?>
-            <a class="eztoc-tablinks" id="eztoc-license" href="#license"
-               onclick="ezTocTabToggle(event, 'license')"
-               data-href="no"><?= esc_html_e('License', 'easy-table-of-contents') ?></a>
-            <?php
-            if ($days < 30) {
-                ?>
-                <span class="dashicons dashicons-warning" style="color: #ffb229;position: relative;top:
-                15px;left: -10px;"></span>
-            <?php }
+            if($exp_date){
+                $date2 = date_create($exp_date);
+                $diff = date_diff($date1, $date2);
+                $days = $diff->format("%a");
+                $days = intval($days);
+                if ($days < 30) {
+                    ?>
+                    <span class="dashicons dashicons-warning" style="color: #ffb229;position: relative;top:
+                    15px;left: -10px;"></span>
+                <?php }
+            }                                     
+            
         } ?>
     </div><!-- /.Tab panel -->
     <div class="eztoc_support_div eztoc-tabcontent" id="welcome" style="display: block;">
@@ -206,8 +214,8 @@
                     <div class="eztoc_support_div_form" id="technical-form">
                         <ul>
                             <li>
-                                <label class="support-label"><?= esc_html_e( 'Email', 'easy-table-of-contents' ) ?><span class="star-mark">*</span></label>
-                                <div class="support-input">
+                                <label class="ez-toc-support-label"><?= esc_html_e( 'Email', 'easy-table-of-contents' ) ?><span class="star-mark">*</span></label>
+                                <div class="ez-toc-support-input">
 
                                     <input type="text" id="eztoc_query_email" name="eztoc_query_email"
                                            placeholder="<?= esc_html_e( 'Enter your Email', 'easy-table-of-contents' ) ?>" required/>
@@ -215,9 +223,9 @@
                             </li>
 
                             <li>
-                                <label class="support-label"><?= esc_html_e( 'Query', 'easy-table-of-contents' ) ?><span class="star-mark">*</span></label>
+                                <label class="ez-toc-support-label"><?= esc_html_e( 'Query', 'easy-table-of-contents' ) ?><span class="star-mark">*</span></label>
 
-                                <div class="support-input">
+                                <div class="ez-toc-support-input">
                                     <label for="eztoc_query_message">
                                     <textarea rows="5" cols="50" id="eztoc_query_message"
                                               name="eztoc_query_message"
@@ -230,8 +238,8 @@
 
                             <li>
                                 <div class="eztoc-customer-type">
-                                    <label class="support-label"><?= esc_html_e( 'Type', 'easy-table-of-contents' ) ?></label>
-                                    <div class="support-input">
+                                    <label class="ez-toc-support-label"><?= esc_html_e( 'Type', 'easy-table-of-contents' ) ?></label>
+                                    <div class="ez-toc-support-input">
                                         <select name="eztoc_customer_type" id="eztoc_customer_type">
                                             <option value="select"><?= esc_html_e( 'Select Customer Type', 'easy-table-of-contents' ) ?></option>
                                             <option value="paid"><?= esc_html_e( 'Paid', 'easy-table-of-contents' ) ?><span> <?= esc_html_e( '(Response within 24 hrs)', 'easy-table-of-contents' ) ?></span>
@@ -376,7 +384,7 @@ function addCustomSpan()
                         </div>
                     </section>
                     <p class="eztoc_boxdesk"><?= esc_html_e('Delivering a good user experience means a lot to us, so we try our best to reply each and every question.', 'easy-table-of-contents'); ?></p>
-                    <p class="company-link"><?= esc_html_e('Support the innovation & development by upgrading to PRO ', 'easy-table-of-contents'); ?> <a href="https://tocwp.com/pricing/">I Want To Upgrade!</a></p>
+                    <p class="ez-toc-company-link"><?= esc_html_e('Support the innovation & development by upgrading to PRO ', 'easy-table-of-contents'); ?> <a href="https://tocwp.com/pricing/"><?= esc_html_e('I Want To Upgrade!', 'easy-table-of-contents'); ?></a></p>
                 </div>
             </div>
         </div>

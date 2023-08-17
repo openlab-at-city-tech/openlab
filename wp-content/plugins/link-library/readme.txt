@@ -3,8 +3,8 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 6.1.1
-Stable tag: 7.4.19
+Tested up to: 6.2.1
+Stable tag: 7.5.5
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -49,6 +49,24 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.5.5 =
+* Correction to allow table tags in advanced configuration table
+
+= 7.5.4 =
+* Correction to allow HTML tags in Single Item Layout editor
+
+= 7.5.3 =
+* Link Library now respects categorylistoverride and excludecategoryoverride when displaying results with "Combine all results without categories" option activated
+
+= 7.5.2 =
+* Added query variable to show upgrade tools for legacy 6.0 users migrating to current versions of the plugin
+
+= 7.5.1 =
+* Renamed one of the column of category CSV export to match import template
+
+= 7.5 =
+* Add ability to import list of categories from a CSV file
 
 = 7.4.19 =
 * Translation update

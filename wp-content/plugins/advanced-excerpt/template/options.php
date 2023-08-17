@@ -114,10 +114,22 @@
 							</label>
 						</th>
 						<td>
-							<label for="no-custom">
-							<input name="no_custom" type="checkbox" id="no-custom" value="on" <?php echo ( 1 == $no_custom ) ? 'checked="checked"' : ''; ?> />
-							<?php _e( "Generate excerpts even if a post has a custom excerpt attached.", 'advanced-excerpt' ); ?>
-							</label>
+							<p>
+								<label for="no-custom">
+								<input name="no_custom" type="checkbox" id="no-custom" value="on" <?php echo ( 1 == $no_custom ) ? 'checked="checked"' : ''; ?> />
+								<?php _e( "Generate excerpts even if a post has a custom excerpt attached.", 'advanced-excerpt' ); ?>
+								</label>
+							</p>
+							<p>
+								<ul class="sub-options">
+									<li>
+										<label id="no-custom-from-custom-label" for="no-custom-from-custom" <?php echo ( 1 !== $no_custom ) ? 'class="disabled"' : ''; ?>>
+										<input name="no_custom_from_custom" type="checkbox" id="no-custom-from-custom" value="on" <?php echo ( 1 == $no_custom_from_custom ) ? 'checked="checked"' : ''; ?> <?php echo ( 1 !== $no_custom ) ? 'disabled="disabled"' : ''; ?> />
+										<small><?php _e( "Use the custom excerpt (if disabled the excerpt is generated from the content)", 'advanced-excerpt' ); ?></small>
+										</label>
+									</li>
+								</ul>
+							</p>
 						</td>
 					</tr>
 					<tr valign="top">
@@ -165,7 +177,7 @@
 								<li>
 									<label id="the-content-no-break-label" for="the-content-no-break" <?php echo ( 1 !== $the_content ) ? 'class="disabled"' : ''; ?>>
 									<input name="the_content_no_break" type="checkbox" id="the-content-no-break" value="on" <?php echo ( 1 == $the_content_no_break && 1 == $the_content ) ? 'checked="checked"' : ''; ?> <?php echo ( 1 !== $the_content ) ? 'disabled="disabled"' : ''; ?> />
-									<?php _e( "Only filter <span class='monospaced'>the_content()</span> when there's no break (&lt;!--more--&gt;) tag in the post content", 'advanced-excerpt' ); ?>
+									<small><?php _e( "Only filter <span class='monospaced'>the_content()</span> when there's no break (&lt;!--more--&gt;) tag in the post content", 'advanced-excerpt' ); ?></small>
 									</label>
 								</li>
 							</ul>

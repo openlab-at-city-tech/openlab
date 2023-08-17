@@ -24,8 +24,25 @@
         transform: scale(1);
         opacity: 0; }
 }
+
+.b2s-info-display-none{
+    display:none;   
+}
+
+#b2s-meta-video-box-btn-customize{
+    margin-top: 10px !important;
+    width: 100% !important;
+}
+
+#b2s-meta-video-box-btn-customize[disabled]{
+    cursor: not-allowed;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .65;
+}
+
 .b2s-info-success,.b2s-info-error, .b2s-info-warning {
-    display:none;
     padding: 5px;
     margin-top:5px;
 }
@@ -40,6 +57,13 @@
 .b2s-info-warning{
     border: 1px solid orange;
 }
+
+.b2s-info-warning-video{
+    border: 1px solid orange;
+    padding: 5px;
+    margin-top:5px;
+}
+
 .b2s-meta-box-headline{
     margin: 0.55em 0 !important;
     font-size: 1.08em !important;

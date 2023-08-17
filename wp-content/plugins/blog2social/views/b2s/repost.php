@@ -364,9 +364,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                 <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Reddit') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE)) ?>">
                 <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('VKontakte') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE)) ?>">
                 <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('XING') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE)) ?>">
-                <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Imgur') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE)) ?>">
-
-                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Google My Business') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) ?>">
+                <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Google Business Profile') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) ?>">
                 <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Medium') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE)) ?>">
                 <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Tumblr') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE)) ?>">
                 <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Torial') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE)) ?>">

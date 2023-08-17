@@ -23,7 +23,6 @@ class Dialog extends Lib\Base\Component
         ) );
 
         wp_localize_script( 'bookly-queue-dialog.js', 'BooklyL10nNotificationsQueueDialog', array(
-            'csrf_token' => Lib\Utils\Common::getCsrfToken(),
             'l10n' => array(
                 'title' => __( 'Send notifications', 'bookly' ),
                 'send' => __( 'Send', 'bookly' ),

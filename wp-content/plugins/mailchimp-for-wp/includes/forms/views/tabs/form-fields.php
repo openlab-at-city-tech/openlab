@@ -36,14 +36,14 @@
 
 <?php submit_button(); ?>
 
-<p class="mc4wp-form-usage"><?php printf( esc_html__( 'Use the shortcode %s to display this form inside a post, page or text widget.', 'mailchimp-for-wp' ), '<input type="text" onfocus="this.select();" readonly="readonly" value="' . esc_attr( sprintf( '[mc4wp_form id="%d"]', $form->ID ) ) . '" size="' . ( strlen( $form->ID ) + 18 ) . '">' ); ?></p>
+<p class="mc4wp-form-usage"><?php printf( esc_html__( 'Use the shortcode %s to display this form inside a post, page or text widget.', 'mailchimp-for-wp' ), '<input type="text" onfocus="this.select();" readonly="readonly" value="' . esc_attr( sprintf( '[mc4wp_form id=%d]', $form->ID ) ) . '" size="' . ( strlen( $form->ID ) + 15 ) . '">' ); ?></p>
 
 
 <?php // Content for Thickboxes ?>
 <div id="mc4wp-form-variables" style="display: none;">
-	<?php include __DIR__ . '/../parts/dynamic-content-tags.php'; ?>
+	<?php require __DIR__ . '/../parts/dynamic-content-tags.php'; ?>
 </div>
 
 <div id="mc4wp-add-field-help" style="display: none;">
-	<?php include __DIR__ . '/../parts/add-fields-help.php'; ?>
+	<?php require __DIR__ . '/../parts/add-fields-help.php'; ?>
 </div>

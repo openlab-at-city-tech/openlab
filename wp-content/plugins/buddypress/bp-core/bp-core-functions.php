@@ -71,6 +71,62 @@ function bp_db_version_raw() {
 	}
 
 /**
+ * Output a BuddyPress major version.
+ *
+ * @since 11.0.0
+ *
+ * @param string $version BuddyPress version.
+ */
+function bp_major_version( $version = '' ) {
+	echo bp_get_major_version( $version );
+}
+
+	/**
+	 * Return a BuddyPress major version.
+	 *
+	 * @since 11.0.0
+	 *
+	 * @param string $version BuddyPress version.
+	 * @return string The corresponding BuddyPress major version.
+	 */
+	function bp_get_major_version( $version = '' ) {
+		if ( ! $version ) {
+			$version = bp_get_version();
+		}
+
+		$last_wp_like_major_versions = '2.9';
+		$float_version               = (float) $version;
+
+		if ( 1 !== version_compare( $version, $last_wp_like_major_versions ) ) {
+			$major_version = (string) $float_version;
+		} else {
+			$major_version = (int) $float_version . '.0';
+		}
+
+		return $major_version;
+	}
+
+/**
+ * Output the BuddyPress version used for its first install.
+ *
+ * @since 11.0.0
+ */
+function bp_initial_version() {
+	echo bp_get_initial_version();
+}
+
+	/**
+	 * Return the BuddyPress version used for its first install.
+	 *
+	 * @since 11.0.0
+	 *
+	 * @return string The BuddyPress version used for its first install.
+	 */
+	function bp_get_initial_version() {
+		return bp_get_option( '_bp_initial_major_version', '0' );
+	}
+
+/**
  * Check whether the current version of WP exceeds a given version.
  *
  * @since 7.0.0
@@ -608,6 +664,39 @@ function bp_core_update_directory_page_ids( $blog_page_ids ) {
 }
 
 /**
+ * Get the BP Directory pages allowed stati.
+ *
+ * @since 11.0.0
+ *
+ * @return array The BP Directory pages allowed stati.
+ */
+function bp_core_get_directory_pages_stati() {
+	$default_page_status = array( 'publish' );
+
+	/**
+	 * Filter here to edit the allowed BP Directory pages stati.
+	 *
+	 * @since 11.0.0
+	 *
+	 * @param array $default_page_status The default allowed BP Directory pages stati.
+	 */
+	$page_stati = (array) apply_filters( 'bp_core_get_directory_pages_stati', $default_page_status );
+
+	// Validate the post stati, making sure each status is registered.
+	foreach ( $page_stati as $page_status_key => $page_status ) {
+		if ( ! get_post_status_object( $page_status ) ) {
+			unset( $page_stati[ $page_status_key ] );
+		}
+	}
+
+	if ( ! $page_stati ) {
+		$page_stati = $default_page_status;
+	}
+
+	return $page_stati;
+}
+
+/**
  * Get names and slugs for BuddyPress component directory pages.
  *
  * @since 1.5.0
@@ -627,13 +716,14 @@ function bp_core_get_directory_pages() {
 
 		// Get pages and IDs.
 		$page_ids = bp_core_get_directory_page_ids();
-		if ( !empty( $page_ids ) ) {
+		if ( ! empty( $page_ids ) ) {
 
 			// Always get page data from the root blog, except on multiblog mode, when it comes
 			// from the current blog.
 			$posts_table_name = bp_is_multiblog_mode() ? $wpdb->posts : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'posts';
 			$page_ids_sql     = implode( ',', wp_parse_id_list( $page_ids ) );
-			$page_names       = $wpdb->get_results( "SELECT ID, post_name, post_parent, post_title FROM {$posts_table_name} WHERE ID IN ({$page_ids_sql}) AND post_status = 'publish' " );
+			$page_stati_sql   = '\'' . implode( '\', \'', array_map( 'sanitize_key', bp_core_get_directory_pages_stati() ) ) . '\'';
+			$page_names       = $wpdb->get_results( "SELECT ID, post_name, post_parent, post_title FROM {$posts_table_name} WHERE ID IN ({$page_ids_sql}) AND post_status IN ({$page_stati_sql}) " );
 
 			foreach ( (array) $page_ids as $component_id => $page_id ) {
 				foreach ( (array) $page_names as $page_name ) {
@@ -3357,6 +3447,7 @@ function bp_get_taxonomy_types( $taxonomy = '', $types = array() ) {
 			return $types;
 		}
 
+		$db_types      = array();
 		$type_metadata = array_keys( get_registered_meta_keys( 'term', $taxonomy ) );
 
 		foreach ( $terms as $term ) {
@@ -3971,6 +4062,22 @@ function bp_email_get_schema() {
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_excerpt' => __( "Your membership request for the group \"{{group.name}}\" has been rejected.\n\nTo request membership again, visit: {{{group.url}}}", 'buddypress' ),
 		),
+		'groups-membership-request-accepted-by-admin' => array(
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_title'   => __( '[{{{site.name}}}] Membership request for group "{{group.name}}" accepted', 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_content' => __( "An administrator accepted an invitation to join &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; on your behalf.\n\nIf you disagree with this, you can leave the group at anytime visiting your <a href=\"{{{leave-group.url}}}\">groups memberships page</a>.", 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_excerpt' => __( "An administrator accepted an invitation to join \"{{group.name}}\" on your behalf.\n\nIf you disagree with this, you can leave the group at anytime visiting your groups memberships page: {{{leave-group.url}}}", 'buddypress' ),
+		),
+		'groups-membership-request-rejected-by-admin' => array(
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_title'   => __( '[{{{site.name}}}] Membership request for group "{{group.name}}" rejected', 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_content' => __( "An administrator rejected an invitation to join &quot;<a href=\"{{{group.url}}}\">{{group.name}}</a>&quot; on your behalf.\n\nIf you disagree with this, please contact the site administrator.", 'buddypress' ),
+			/* translators: do not remove {} brackets or translate its contents. */
+			'post_excerpt' => __( "An administrator rejected an invitation to join \"{{group.name}}\" on your behalf.\n\nIf you disagree with this, please contact the site administrator.", 'buddypress' ),
+		),
 		'bp-members-invitation' => array(
 			/* translators: do not remove {} brackets or translate its contents. */
 			'post_title'   => __( '{{inviter.name}} has invited you to join {{site.name}}', 'buddypress' ),
@@ -4152,6 +4259,18 @@ function bp_email_get_type_schema( $field = 'description' ) {
 		),
 	);
 
+	$groups_membership_request_accepted_by_admin = array(
+		'description'	   => __( 'Recipient had requested to join a group, which was accepted by admin.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
+	);
+
+	$groups_membership_request_rejected_by_admin = array(
+		'description'	   => __( 'Recipient had requested to join a group, which was rejected by admin.', 'buddypress' ),
+		'named_salutation' => true,
+		'unsubscribe'	   => false,
+	);
+
 	$core_user_activation = array(
 		'description'	   => __( 'Recipient has successfully activated an account.', 'buddypress' ),
 		'named_salutation' => true,
@@ -4183,26 +4302,28 @@ function bp_email_get_type_schema( $field = 'description' ) {
 	);
 
 	$types = array(
-		'activity-comment'                    => $activity_comment,
-		'activity-comment-author'             => $activity_comment_author,
-		'activity-at-message'                 => $activity_at_message,
-		'groups-at-message'                   => $groups_at_message,
-		'core-user-registration'              => $core_user_registration,
-		'core-user-registration-with-blog'    => $core_user_registration_with_blog,
-		'friends-request'                     => $friends_request,
-		'friends-request-accepted'            => $friends_request_accepted,
-		'groups-details-updated'              => $groups_details_updated,
-		'groups-invitation'                   => $groups_invitation,
-		'groups-member-promoted'              => $groups_member_promoted,
-		'groups-membership-request'           => $groups_membership_request,
-		'messages-unread'                     => $messages_unread,
-		'settings-verify-email-change'        => $settings_verify_email_change,
-		'groups-membership-request-accepted'  => $groups_membership_request_accepted,
-		'groups-membership-request-rejected'  => $groups_membership_request_rejected,
-		'core-user-activation'                => $core_user_activation,
-		'bp-members-invitation'               => $members_invitation,
-		'members-membership-request'          => $members_membership_request,
-		'members-membership-request-rejected' => $members_membership_request_rejected,
+		'activity-comment'                            => $activity_comment,
+		'activity-comment-author'                     => $activity_comment_author,
+		'activity-at-message'                         => $activity_at_message,
+		'groups-at-message'                           => $groups_at_message,
+		'core-user-registration'                      => $core_user_registration,
+		'core-user-registration-with-blog'            => $core_user_registration_with_blog,
+		'friends-request'                             => $friends_request,
+		'friends-request-accepted'                    => $friends_request_accepted,
+		'groups-details-updated'                      => $groups_details_updated,
+		'groups-invitation'                           => $groups_invitation,
+		'groups-member-promoted'                      => $groups_member_promoted,
+		'groups-membership-request'                   => $groups_membership_request,
+		'messages-unread'                             => $messages_unread,
+		'settings-verify-email-change'                => $settings_verify_email_change,
+		'groups-membership-request-accepted'          => $groups_membership_request_accepted,
+		'groups-membership-request-rejected'          => $groups_membership_request_rejected,
+		'core-user-activation'                        => $core_user_activation,
+		'bp-members-invitation'                       => $members_invitation,
+		'members-membership-request'                  => $members_membership_request,
+		'members-membership-request-rejected'         => $members_membership_request_rejected,
+		'groups-membership-request-accepted-by-admin' => $groups_membership_request_accepted_by_admin,
+		'groups-membership-request-rejected-by-admin' => $groups_membership_request_rejected_by_admin,
 	);
 
 	if ( $field !== 'all' ) {
@@ -4643,4 +4764,130 @@ function bp_user_has_opted_out( $email_address = '' ) {
 function bp_delete_optout_by_id( $id = 0 ) {
 	$optout_class = new BP_Optout();
 	return $optout_class::delete_by_id( $id );
+}
+
+/**
+ * Get the list of versions needing their deprecated functions to be loaded.
+ *
+ * @since 11.0.0
+ *
+ * @return array The list of versions needing their deprecated functions to be loaded.
+ */
+function bp_get_deprecated_functions_versions() {
+	$ignore_deprecated = null;
+
+	// Do ignore deprecated => ignore all deprecated code.
+	if ( defined( 'BP_IGNORE_DEPRECATED' ) && BP_IGNORE_DEPRECATED ) {
+		$ignore_deprecated = (bool) BP_IGNORE_DEPRECATED;
+	}
+
+	// Do not ignore deprecated => load all deprecated code.
+	if ( defined( 'BP_LOAD_DEPRECATED' ) && BP_LOAD_DEPRECATED ) {
+		$ignore_deprecated = ! (bool) BP_LOAD_DEPRECATED;
+	}
+
+	/*
+	 * Respect the site owner's choice to ignore deprecated functions.
+	 * Return an empty array to inform no deprecated version files should be loaded.
+	 */
+	if ( true === $ignore_deprecated ) {
+		return array();
+	}
+
+	// List of versions containing deprecated functions.
+	$deprecated_functions_versions = array(
+		'1.2',
+		'1.5',
+		'1.6',
+		'1.7',
+		'1.9',
+		'2.0',
+		'2.1',
+		'2.2',
+		'2.3',
+		'2.4',
+		'2.5',
+		'2.6',
+		'2.7',
+		'2.8',
+		'2.9',
+		'3.0',
+		'4.0',
+		'6.0',
+		'7.0',
+		'8.0',
+		'9.0',
+		'10.0',
+		'11.0',
+	);
+
+	/*
+	 * Respect the site owner's choice to load all deprecated functions.
+	 * Return an empty array to inform no deprecated version files should be loaded.
+	 */
+	if ( false === $ignore_deprecated ) {
+		return $deprecated_functions_versions;
+	}
+
+	/*
+	 * Unless the `BP_IGNORE_DEPRECATED` constant is used & set to false, the development
+	 * version of BuddyPress do not load deprecated functions.
+	 */
+	if ( defined( 'BP_SOURCE_SUBDIRECTORY' ) && BP_SOURCE_SUBDIRECTORY === 'src' ) {
+		return array();
+	}
+
+	/*
+	 * If the constant is not defined, put our logic in place so that only the
+	 * 2 last versions deprecated functions will be loaded for upgraded installs.
+	 */
+	$initial_version        = (float) bp_get_initial_version();
+	$current_version        = (float) bp_get_version();
+	$load_latest_deprecated = $initial_version < $current_version;
+
+	// We don't load deprecated functions for new installs.
+	if ( ! $load_latest_deprecated ) {
+		// Run some additional checks if PHPUnit is running.
+		if ( defined( 'BP_TESTS_DIR' ) ) {
+			$deprecated_files = array_filter(
+				array_map(
+					function( $file ) {
+						if ( false !== strpos( $file, '.php' ) ) {
+							return str_replace( '.php', '', $file );
+						};
+					},
+					scandir( buddypress()->plugin_dir . 'bp-core/deprecated' )
+				)
+			);
+
+			if ( array_diff( $deprecated_files, $deprecated_functions_versions ) ) {
+				return false;
+			}
+		}
+		return array();
+	}
+
+	// Try to get the first major version that was in used when BuddyPress was fist installed.
+	$first_major = '';
+	if ( $initial_version ) {
+		$first_major = bp_get_major_version( $initial_version );
+	}
+
+	$index_first_major = array_search( $first_major, $deprecated_functions_versions, true );
+	if ( false === $index_first_major ) {
+		return array_splice( $deprecated_functions_versions, -2 );
+	}
+
+	$latest_deprecated_functions_versions = array_splice( $deprecated_functions_versions, $index_first_major );
+
+	if ( 2 <= count( $latest_deprecated_functions_versions ) ) {
+		$latest_deprecated_functions_versions = array_splice( $latest_deprecated_functions_versions, -2 );
+	}
+
+	$index_initial_version = array_search( $first_major, $latest_deprecated_functions_versions, true );
+	if ( false !== $index_initial_version ) {
+		unset( $latest_deprecated_functions_versions[ $index_initial_version ] );
+	}
+
+	return $latest_deprecated_functions_versions;
 }

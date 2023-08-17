@@ -1,3 +1,11 @@
+= 1.2.2 - June 14 2023 =
+* Update - 6.2 compatibility
+* Fixed  - Various small fixes.
+
+= 1.2.1 - Mar 01 2023 =
+* Update - RTL support
+* Fixed  - Various small fixes.
+
 = 1.2.0 - Dec 20 2022 =
 * Update - Navigation submenu open on click
 * Update - Customizer option reset to default value on color options

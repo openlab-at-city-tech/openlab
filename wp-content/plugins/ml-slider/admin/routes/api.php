@@ -19,6 +19,16 @@ class MetaSlider_Api
     protected static $instance = null;
 
     /**
+     * @var \MetaSlider_Slideshows
+     */
+    public $slideshows;
+
+    /**
+     * @var \MetaSlider_Themes|object|null
+     */
+    public $themes;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -925,6 +935,7 @@ class MetaSlider_Api
         foreach ($image_ids as $image_id) {
             $slide = new MetaSlider_Slide(absint($data['slideshow_id']), $data['slide_id']);
             $slide->add_image($image_id)->$method();
+
             if (is_wp_error($slide->error)) {
                 array_push($errors, $slide->error);
             }

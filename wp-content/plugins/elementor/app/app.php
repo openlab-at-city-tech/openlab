@@ -90,6 +90,7 @@ class App extends BaseApp {
 		return [
 			'menu_url' => $this->get_base_url() . '#site-editor/promotion',
 			'assets_url' => ELEMENTOR_ASSETS_URL,
+			'pages_url' => admin_url( 'edit.php?post_type=page' ),
 			'return_url' => $referer ? $referer : admin_url(),
 			'hasPro' => Utils::has_pro(),
 			'admin_url' => admin_url(),
@@ -150,19 +151,7 @@ class App extends BaseApp {
 			'4.0.6-rc.1'
 		);
 
-		wp_register_style(
-			'elementor-icons',
-			$this->get_css_assets_url( 'elementor-icons', 'assets/lib/eicons/css/' ),
-			[],
-			Icons_Manager::ELEMENTOR_ICONS_VERSION
-		);
-
-		wp_register_style(
-			'elementor-common',
-			$this->get_css_assets_url( 'common', null, 'default', true ),
-			[],
-			ELEMENTOR_VERSION
-		);
+		Plugin::$instance->common->register_styles();
 
 		wp_register_style(
 			'select2',
@@ -218,9 +207,7 @@ class App extends BaseApp {
 			true
 		);
 
-		if ( ! $this->get_settings( 'disable_dark_theme' ) ) {
-			$this->enqueue_dark_theme_detection_script();
-		}
+		$this->enqueue_dark_theme_detection_script();
 
 		wp_set_script_translations( 'elementor-app-packages', 'elementor' );
 		wp_set_script_translations( 'elementor-app', 'elementor' );
@@ -245,7 +232,7 @@ class App extends BaseApp {
 	public function __construct() {
 		$this->add_component( 'site-editor', new Modules\SiteEditor\Module() );
 
-		if ( current_user_can( 'manage_options' ) && Plugin::$instance->experiments->is_feature_active( 'e_import_export' ) || Utils::is_wp_cli() ) {
+		if ( current_user_can( 'manage_options' ) || Utils::is_wp_cli() ) {
 			$this->add_component( 'import-export', new Modules\ImportExport\Module() );
 
 			// Kit library is depended on import-export

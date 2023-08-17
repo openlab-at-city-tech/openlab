@@ -1,10 +1,9 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Components\Cloud;
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Lib;
-
 /**
  * @var Lib\Cloud\API $cloud
  */
@@ -56,7 +55,7 @@ $invoice = $cloud->account->getInvoiceData();
                                     <input name="invoice[company_address_l2]" type="text" class="form-control" id="bookly_sms_invoice_company_address_l2" value="<?php echo esc_attr( $invoice['company_address_l2'] ) ?>">
                                 </div>
                                 <div class="form-group bookly-js-invoice-country">
-                                    <div class="bookly-js-label">N/A</div>
+                                    <div class="bookly-js-label"><?php esc_html_e( 'N/A', 'bookly' ) ?></div>
                                     <small class="form-text text-muted mb-2"><?php _e( 'You can change the country <a href="#">here</a>', 'bookly' ) ?></small>
                                 </div>
                                 <div class="form-row">
@@ -71,7 +70,7 @@ $invoice = $cloud->account->getInvoiceData();
                                 </div>
                                 <div class="form-group">
                                     <label for="bookly_sms_invoice_company_add_text"><?php esc_html_e( 'Additional text to include in invoice', 'bookly' ) ?></label>
-                                    <textarea name="invoice[company_add_text]" class="form-control" rows="3" id="bookly_sms_invoice_company_add_text"><?php echo esc_textarea( $invoice['company_add_text'] ) ?></textarea>
+                                    <textarea name="invoice[company_add_text]" class="form-control" rows="3" id="bookly_sms_invoice_company_add_text"><?php echo esc_textarea( $invoice['company_add_text'] === null ? '' : $invoice['company_add_text'] ) ?></textarea>
                                 </div>
                                 <div class="form-group border-top pt-2">
                                     <input name="invoice[send]" value="0" class="hidden"/>

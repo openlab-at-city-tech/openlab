@@ -108,7 +108,7 @@ class Info extends Tool
         </style>
         <?php
         $styles = ob_get_clean();
-        $db = $wpdb->get_row( 'SELECT version() AS version', ARRAY_A );
+        $db = $wpdb->get_var( 'SELECT version() AS version' );
 
         return self::renderTemplate( '_info', array( 'db' => $db, 'php_info' => $styles . preg_replace( '/(<(style)\b[^>]*>).*?(<\/\2>)/is', "$1$3", $info ) ), false );
     }

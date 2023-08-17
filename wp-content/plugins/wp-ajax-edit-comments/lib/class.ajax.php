@@ -722,7 +722,7 @@ class AECAjax {
 		Parameters - $commentID, $postID
 		Returns error or response */
 		//public static class.ajax
-		public static function request_deletion($commentID = 0, $postID = 0, $message) {
+		public static function request_deletion($commentID = 0, $postID = 0, $message = '') {
 			$canedit = AECCore::can_edit($commentID, $postID);
 			if (is_string($canedit)) {
 				return 'request_deletion_failed';

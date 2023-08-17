@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ePortfolio\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 09:57+0000\n"
+"POT-Creation-Date: 2023-03-01 11:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Activated"
 msgstr ""
 
-#: functions.php:213
+#: functions.php:215
 msgid "Active"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Custom Widgets"
 msgstr ""
 
-#: functions.php:214 classes/plugin-classes.php:23
+#: functions.php:216 classes/plugin-classes.php:23
 msgid "Deactivate"
 msgstr ""
 
@@ -243,7 +243,7 @@ msgstr ""
 msgid "Demo Import Kit"
 msgstr ""
 
-#: classes/admin-notice.php:92
+#: classes/admin-notice.php:112
 msgid "Dismiss this notice."
 msgstr ""
 
@@ -387,7 +387,7 @@ msgstr ""
 msgid "General Settings"
 msgstr ""
 
-#: classes/admin-notice.php:84 classes/about-render.php:313
+#: classes/about-render.php:313 classes/admin-notice.php:84
 msgid "Getting started"
 msgstr ""
 
@@ -439,7 +439,7 @@ msgstr ""
 msgid "Install & Active"
 msgstr ""
 
-#: classes/admin-notice.php:87
+#: classes/admin-notice.php:93
 msgid "Install and activate recommended plugins"
 msgstr ""
 
@@ -471,7 +471,7 @@ msgstr ""
 msgid "Layout Management"
 msgstr ""
 
-#: inc/single-meta.php:62 classes/about-render.php:101
+#: classes/about-render.php:101 inc/single-meta.php:62
 msgid "Layout Settings"
 msgstr ""
 
@@ -479,6 +479,10 @@ msgstr ""
 #: inc/template-tags.php:76
 #, php-format
 msgid "Leave a Comment<span class=\"screen-reader-text\"> on %s</span>"
+msgstr ""
+
+#: classes/admin-notice.php:109
+msgid "Leave a review"
 msgstr ""
 
 #: classes/about-render.php:160
@@ -912,8 +916,8 @@ msgstr ""
 msgid "Upgrade To Pro"
 msgstr ""
 
-#: classes/admin-notice.php:91 classes/about-render.php:565
-#: classes/about-render.php:572
+#: classes/about-render.php:565 classes/about-render.php:572
+#: classes/admin-notice.php:89
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -926,7 +930,7 @@ msgstr ""
 msgid "View all posts in %s"
 msgstr ""
 
-#: classes/admin-notice.php:90 classes/about-render.php:298
+#: classes/about-render.php:298 classes/admin-notice.php:100
 msgid "View Demo"
 msgstr ""
 

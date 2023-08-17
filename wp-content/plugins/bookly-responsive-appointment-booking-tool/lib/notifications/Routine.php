@@ -471,7 +471,7 @@ abstract class Routine
                         }
 
                         if ( ( $notification->getGateway() == 'email' && $staff_email != '' )
-                            || ( ( $notification->getGateway() == 'sms' || $notification->getGateway() == 'voice' ) && $staff_phone != '' )
+                            || ( ( $notification->getGateway() != 'email' ) && $staff_phone != '' )
                         ) {
                             $codes = new Assets\StaffAgenda\Codes();
                             $codes->agenda_date     = DateTime::formatDate( date( 'Y-m-d', current_time( 'timestamp' ) + abs( $settings->getOffsetHours() * HOUR_IN_SECONDS ) ) );
@@ -610,11 +610,8 @@ abstract class Routine
         $custom_notifications = Notification::query()
             ->where( 'active', 1 )
             ->find();
-        $notifications = array(
-            'sms' => Notification::getTypes( 'sms' ),
-            'email' => Notification::getTypes( 'email' ),
-            'voice' => Notification::getTypes( 'voice' )
-        );
+
+        $notifications = Notification::getAssociated();
 
         /** @var Notification $notification */
         foreach ( $custom_notifications as $notification ) {

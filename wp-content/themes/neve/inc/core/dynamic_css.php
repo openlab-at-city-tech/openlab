@@ -7,6 +7,8 @@ namespace Neve\Core;
 use Neve\Core\Styles\Frontend;
 use Neve\Core\Styles\Generator;
 use Neve\Core\Styles\Gutenberg;
+use Neve\Core\Settings\Mods;
+use Neve\Core\Settings\Config;
 
 class Dynamic_Css {
 	const FRONTEND_HANDLE = 'neve-style';
@@ -103,6 +105,19 @@ class Dynamic_Css {
 		$css = ':root{' . $this->get_css_vars() . '}';
 		$css .= apply_filters( 'neve_after_css_root', $css );
 		wp_add_inline_style( 'nv-css-vars', self::minify_css($css ) );
+
+		/**
+		 * Custom colors needs a separate style to prevent overwriting the main color for the pallets.
+		 */
+		wp_register_style( 'nv-custom-color-vars', false );
+		wp_enqueue_style( 'nv-custom-color-vars' );
+		$custom_colors = self::get_global_custom_colors();
+		$colors_css = '';
+		foreach ( $custom_colors as $slug => $color ) {
+			$colors_css .= '--' . $slug . ':' . $color . ';';
+		}
+		$css = ':root{' . esc_html( $colors_css ) . '}';
+		wp_add_inline_style( 'nv-custom-color-vars', self::minify_css($css ) );
 	}
 
 	/**
@@ -115,6 +130,17 @@ class Dynamic_Css {
 
 		$css .= self::get_css_vars();
 		$css .= self::get_fallback_font();
+
+		/**
+		 * We already have the style in customizer from add_customize_vars_tag method, no need to add it again.
+		 * We do need it on frontend.
+		 */
+		if ( ! is_customize_preview() ) {
+			$custom_colors = self::get_global_custom_colors();
+			foreach ($custom_colors as $slug => $color) {
+				$css .= '--' . $slug . ':' . $color . ';';
+			}
+		}
 
 		$css .= '}';
 
@@ -132,6 +158,21 @@ class Dynamic_Css {
 		$fallback = get_theme_mod( 'neve_fallback_font_family', 'Arial, Helvetica, sans-serif' );
 
 		return '--nv-fallback-ff:' . $fallback . ';';
+	}
+
+	/**
+	 * Get color values of the custom global colors
+	 *
+	 * @return string[] colors values HEX, RGB etc.
+	 */
+	private static function get_global_custom_colors() {
+		$colors = [];
+
+		foreach( Mods::get( Config::MODS_GLOBAL_CUSTOM_COLORS, [] ) as $slug=>$args ) {
+			$colors[$slug] = $args['val'];
+		}
+
+		return $colors;
 	}
 
 	/**

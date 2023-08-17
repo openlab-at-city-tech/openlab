@@ -1,36 +1,36 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,30 +39,32 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "store": function() { return /* reexport */ store; }
+  "store": () => (/* reexport */ store)
 });
 
 // NAMESPACE OBJECT: ./packages/notices/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "createErrorNotice": function() { return createErrorNotice; },
-  "createInfoNotice": function() { return createInfoNotice; },
-  "createNotice": function() { return createNotice; },
-  "createSuccessNotice": function() { return createSuccessNotice; },
-  "createWarningNotice": function() { return createWarningNotice; },
-  "removeNotice": function() { return removeNotice; }
+  "createErrorNotice": () => (createErrorNotice),
+  "createInfoNotice": () => (createInfoNotice),
+  "createNotice": () => (createNotice),
+  "createSuccessNotice": () => (createSuccessNotice),
+  "createWarningNotice": () => (createWarningNotice),
+  "removeAllNotices": () => (removeAllNotices),
+  "removeNotice": () => (removeNotice),
+  "removeNotices": () => (removeNotices)
 });
 
 // NAMESPACE OBJECT: ./packages/notices/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "getNotices": function() { return getNotices; }
+  "getNotices": () => (getNotices)
 });
 
 ;// CONCATENATED MODULE: external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
+const external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: ./packages/notices/build-module/store/utils/on-sub-key.js
 /**
  * Higher-order reducer creator which creates a combined reducer object, keyed
@@ -72,9 +74,7 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
  *
  * @return {Function} Higher-order reducer.
  */
-const onSubKey = actionProperty => reducer => function () {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
+const onSubKey = actionProperty => reducer => (state = {}, action) => {
   // Retrieve subkey from action. Do not track if undefined; useful for cases
   // where reducer is scoped by action shape.
   const key = action[actionProperty];
@@ -95,7 +95,7 @@ const onSubKey = actionProperty => reducer => function () {
     [key]: nextKeyState
   };
 };
-/* harmony default export */ var on_sub_key = (onSubKey);
+/* harmony default export */ const on_sub_key = (onSubKey);
 
 ;// CONCATENATED MODULE: ./packages/notices/build-module/store/reducer.js
 /**
@@ -112,32 +112,33 @@ const onSubKey = actionProperty => reducer => function () {
  * @return {Object} Updated state.
  */
 
-const notices = on_sub_key('context')(function () {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+const notices = on_sub_key('context')((state = [], action) => {
   switch (action.type) {
     case 'CREATE_NOTICE':
       // Avoid duplicates on ID.
-      return [...state.filter(_ref => {
-        let {
-          id
-        } = _ref;
-        return id !== action.notice.id;
-      }), action.notice];
+      return [...state.filter(({
+        id
+      }) => id !== action.notice.id), action.notice];
 
     case 'REMOVE_NOTICE':
-      return state.filter(_ref2 => {
-        let {
-          id
-        } = _ref2;
-        return id !== action.id;
-      });
+      return state.filter(({
+        id
+      }) => id !== action.id);
+
+    case 'REMOVE_NOTICES':
+      return state.filter(({
+        id
+      }) => !action.ids.includes(id));
+
+    case 'REMOVE_ALL_NOTICES':
+      return state.filter(({
+        type
+      }) => type !== action.noticeType);
   }
 
   return state;
 });
-/* harmony default export */ var reducer = (notices);
+/* harmony default export */ const reducer = (notices);
 
 ;// CONCATENATED MODULE: ./packages/notices/build-module/store/constants.js
 /**
@@ -176,7 +177,7 @@ let uniqueId = 0;
 /**
  * Returns an action object used in signalling that a notice is to be created.
  *
- * @param {string}                [status='info']              Notice status.
+ * @param {string|undefined}      status                       Notice status ("info" if undefined is passed).
  * @param {string}                content                      Notice message.
  * @param {Object}                [options]                    Notice options.
  * @param {string}                [options.context='global']   Context under which to
@@ -225,10 +226,7 @@ let uniqueId = 0;
  * @return {Object} Action object.
  */
 
-function createNotice() {
-  let status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATUS;
-  let content = arguments.length > 1 ? arguments[1] : undefined;
-  let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function createNotice(status = DEFAULT_STATUS, content, options = {}) {
   const {
     speak = true,
     isDismissible = true,
@@ -465,11 +463,110 @@ function createWarningNotice(content, options) {
  * @return {Object} Action object.
  */
 
-function removeNotice(id) {
-  let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function removeNotice(id, context = DEFAULT_CONTEXT) {
   return {
     type: 'REMOVE_NOTICE',
     id,
+    context
+  };
+}
+/**
+ * Removes all notices from a given context. Defaults to the default context.
+ *
+ * @param {string} noticeType The context to remove all notices from.
+ * @param {string} context    The context to remove all notices from.
+ *
+ * @example
+ * ```js
+ * import { __ } from '@wordpress/i18n';
+ * import { useDispatch, useSelect } from '@wordpress/data';
+ * import { store as noticesStore } from '@wordpress/notices';
+ * import { Button } from '@wordpress/components';
+ *
+ * export const ExampleComponent = () => {
+ * 	const notices = useSelect( ( select ) =>
+ * 		select( noticesStore ).getNotices()
+ * 	);
+ * 	const { removeNotices } = useDispatch( noticesStore );
+ * 	return (
+ * 		<>
+ * 			<ul>
+ * 				{ notices.map( ( notice ) => (
+ * 					<li key={ notice.id }>{ notice.content }</li>
+ * 				) ) }
+ * 			</ul>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeAllNotices()
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all notices', 'woo-gutenberg-products-block' ) }
+ * 			</Button>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeAllNotices( 'snackbar' )
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all snackbar notices', 'woo-gutenberg-products-block' ) }
+ * 			</Button>
+ * 		</>
+ * 	);
+ * };
+ * ```
+ *
+ * @return {Object} 	   Action object.
+ */
+
+function removeAllNotices(noticeType = 'default', context = DEFAULT_CONTEXT) {
+  return {
+    type: 'REMOVE_ALL_NOTICES',
+    noticeType,
+    context
+  };
+}
+/**
+ * Returns an action object used in signalling that several notices are to be removed.
+ *
+ * @param {string[]} ids                List of unique notice identifiers.
+ * @param {string}   [context='global'] Optional context (grouping) in which the notices are
+ *                                      intended to appear. Defaults to default context.
+ * @example
+ * ```js
+ * import { __ } from '@wordpress/i18n';
+ * import { useDispatch, useSelect } from '@wordpress/data';
+ * import { store as noticesStore } from '@wordpress/notices';
+ * import { Button } from '@wordpress/components';
+ *
+ * const ExampleComponent = () => {
+ * 	const notices = useSelect( ( select ) =>
+ * 		select( noticesStore ).getNotices()
+ * 	);
+ * 	const { removeNotices } = useDispatch( noticesStore );
+ * 	return (
+ * 		<>
+ * 			<ul>
+ * 				{ notices.map( ( notice ) => (
+ * 					<li key={ notice.id }>{ notice.content }</li>
+ * 				) ) }
+ * 			</ul>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeNotices( notices.map( ( { id } ) => id ) )
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all notices' ) }
+ * 			</Button>
+ * 		</>
+ * 	);
+ * };
+ * ```
+ * @return {Object} Action object.
+ */
+
+function removeNotices(ids, context = DEFAULT_CONTEXT) {
+  return {
+    type: 'REMOVE_NOTICES',
+    ids,
     context
   };
 }
@@ -546,8 +643,7 @@ const DEFAULT_NOTICES = [];
  * @return {WPNotice[]} Array of notices.
  */
 
-function getNotices(state) {
-  let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function getNotices(state, context = DEFAULT_CONTEXT) {
   return state[context] || DEFAULT_NOTICES;
 }
 
@@ -567,8 +663,6 @@ function getNotices(state) {
  * Store definition for the notices namespace.
  *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
- *
- * @type {Object}
  */
 
 const store = (0,external_wp_data_namespaceObject.createReduxStore)('core/notices', {

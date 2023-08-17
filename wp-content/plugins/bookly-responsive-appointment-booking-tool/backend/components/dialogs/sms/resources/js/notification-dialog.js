@@ -1,9 +1,9 @@
 jQuery(function ($) {
     window.BooklyNotificationDialog = function () {
-        var $notificationList    = $('#bookly-js-notification-list'),
-            $btnNewNotification  = $('#bookly-js-new-notification'),
-            $modalNotification   = $('#bookly-js-notification-modal'),
-            containers           = {
+        let $notificationList = $('#bookly-js-notification-list'),
+            $btnNewNotification = $('#bookly-js-new-notification'),
+            $modalNotification = $('#bookly-js-notification-modal'),
+            containers = {
                 settings: $('#bookly-js-settings-container', $modalNotification),
                 statuses: $('.bookly-js-statuses-container', $modalNotification),
                 services: $('.bookly-js-services-container', $modalNotification),
@@ -12,26 +12,34 @@ jQuery(function ($) {
                 attach: $('.bookly-js-attach-container', $modalNotification),
                 codes: $('.bookly-js-codes-container', $modalNotification)
             },
-            $offsets             = $('.bookly-js-offset', containers.settings),
-            $notificationType    = $('select[name=\'notification[type]\']', containers.settings),
-            $labelSend           = $('.bookly-js-offset-exists', containers.settings),
+            $offsets = $('.bookly-js-offset', containers.settings),
+            $notificationType = $('select[name=\'notification[type]\']', containers.settings),
+            $labelSend = $('.bookly-js-offset-exists', containers.settings),
             $offsetBidirectional = $('.bookly-js-offset-bidirectional', containers.settings),
-            $offsetBefore        = $('.bookly-js-offset-before', containers.settings),
+            $offsetBefore = $('.bookly-js-offset-before', containers.settings),
             $btnSaveNotification = $('.bookly-js-save', $modalNotification),
-            $helpType            = $('.bookly-js-help-block', containers.settings),
-            $codes               = $('table.bookly-js-codes', $modalNotification),
-            $status              = $("select[name='notification[settings][status]']", containers.settings),
+            $helpType = $('.bookly-js-help-block', containers.settings),
+            $codes = $('table.bookly-js-codes', $modalNotification),
+            $status = $("select[name='notification[settings][status]']", containers.settings),
             $defaultStatuses,
-            useTinyMCE           = !BooklyNotificationDialogL10n.sms && typeof (tinyMCE) !== 'undefined',
-            $textarea            = $('#bookly-js-message', containers.message)
+            useTinyMCE = BooklyNotificationDialogL10n.gateway == 'email' && typeof (tinyMCE) !== 'undefined',
+            notification = {
+                $body: $('#bookly-js-notification-body', containers.message),
+                $subject: $("#bookly-js-notification-subject", containers.message)
+            },
+            useAceEditor = ['email', 'voice', 'sms'].includes(BooklyNotificationDialogL10n.gateway),
+            aceEditor = useAceEditor ? $('#bookly-ace-editor').booklyAceEditor() : null,
+            whatsAppSettings = {}
         ;
 
         function setNotificationText(text) {
-            $textarea.val(text);
+            if (BooklyNotificationDialogL10n.gateway !== 'whatsapp') {
+                notification.$body.val(text);
+            }
             if (useTinyMCE) {
                 tinyMCE.activeEditor.setContent(text);
             }
-            editor.booklyAceEditor('setValue', text);
+            useAceEditor && aceEditor.booklyAceEditor('setValue', text);
         }
 
         function format(option) {
@@ -50,24 +58,19 @@ jQuery(function ($) {
             $('.modal-title', $modalNotification).html(BooklyNotificationDialogL10n.title.edit);
         });
 
-        /**
-         * ACE Editor
-         */
-        let editor = $('#bookly-ace-editor').booklyAceEditor();
-
         if (useTinyMCE) {
             $('a[data-toggle="bookly-tab"]').on('shown.bs.tab', function (e) {
-
                 if ($(e.target).data('ace') !== undefined) {
                     tinyMCE.triggerSave();
-                    editor.booklyAceEditor('setValue', $('[name=notification\\[message\\]]').val());
-                    editor.booklyAceEditor('focus');
+                    aceEditor.booklyAceEditor('setValue', $('[name=notification\\[message\\]]').val());
+                    aceEditor.booklyAceEditor('focus');
                 } else {
-                    tinyMCE.activeEditor.setContent(wpautop(editor.booklyAceEditor('getValue')));
+                    tinyMCE.activeEditor.setContent(wpautop(aceEditor.booklyAceEditor('getValue')));
                     tinyMCE.activeEditor.focus();
                 }
             });
         }
+
         /**
          * Notification
          */
@@ -152,7 +155,7 @@ jQuery(function ($) {
             });
             $codes.hide();
             $codes.filter('.bookly-js-codes-' + notification_type).show();
-            editor.booklyAceEditor('setCodes', BooklyNotificationDialogL10n.codes[notification_type]);
+            useAceEditor && aceEditor.booklyAceEditor('setCodes', BooklyNotificationDialogL10n.codes[notification_type]);
         })
             .booklySelect2({
                 minimumResultsForSearch: -1,
@@ -178,8 +181,8 @@ jQuery(function ($) {
         .on('click', function () {
             if (useTinyMCE && $('a[data-toggle="bookly-tab"][data-tinymce].active').length) {
                 tinyMCE.triggerSave();
-            } else {
-                $('[name=notification\\[message\\]]').val(editor.booklyAceEditor('getValue'));
+            } else if (useAceEditor) {
+                $('[name=notification\\[message\\]]').val(aceEditor.booklyAceEditor('getValue'));
             }
             var data = booklySerialize.form($modalNotification),
                 ladda = Ladda.create(this);
@@ -210,9 +213,31 @@ jQuery(function ($) {
         function showNotificationDialog(id) {
             $('.bookly-js-loading:first-child', $modalNotification).addClass('bookly-loading').removeClass('bookly-collapse');
             $('.bookly-js-loading:last-child', $modalNotification).addClass('bookly-collapse');
-            $modalNotification.booklyModal('show');
+
+            if (BooklyNotificationDialogL10n.gateway === 'whatsapp'
+                && !BooklyNotificationDialogL10n.hasOwnProperty('templates')
+            ) {
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: booklySerialize.buildRequestData('bookly_get_whatsapp_templates'),
+                    dataType: 'json',
+                    async: false,
+                    success: function(response) {
+                        if (response.success) {
+                            BooklyNotificationDialogL10n.templates = response.data.list;
+                        } else {
+                            BooklyNotificationDialogL10n.templates = [];
+                            booklyAlert({error: [response.data.message]});
+                        }
+                        renderTemplatesList();
+                    }
+                });
+            }
+
             if (id === undefined) {
                 setNotificationData(BooklyNotificationDialogL10n.defaultNotification);
+                $modalNotification.booklyModal('show');
             } else {
                 $.ajax({
                     url: ajaxurl,
@@ -225,12 +250,22 @@ jQuery(function ($) {
                     dataType: 'json',
                     success: function (response) {
                         setNotificationData(response.data);
+                        $modalNotification.booklyModal('show');
                     }
                 });
             }
         }
 
         function setNotificationData(data) {
+            if (BooklyNotificationDialogL10n.gateway === 'whatsapp') {
+                if (data.settings.hasOwnProperty('whatsapp')) {
+                    whatsAppSettings = data.settings.whatsapp;
+                }
+                $("select[name='notification[message]']", containers.message)
+                    .val(data.message)
+                    .trigger('change');
+            }
+
             // Notification settings
             $("input[name='notification[id]']", containers.settings).val(data.id);
             $("input[name='notification[name]']", containers.settings).val(data.name);
@@ -295,6 +330,84 @@ jQuery(function ($) {
             $('.bookly-js-loading', $modalNotification).toggleClass('bookly-collapse');
 
             $('a[href="#bookly-wp-editor-pane"]').click();
+        }
+
+        if (BooklyNotificationDialogL10n.gateway === 'whatsapp') {
+            let $whatsapTemplates = $('#bookly-js-templates', containers.message);
+            containers['variables'] = {
+                header: $('#bookly-js-notification-subject-variables',containers.message),
+                body: $('#bookly-js-notification-body-variables',containers.message),
+            }
+
+            function renderTemplatesList() {
+                $whatsapTemplates[0].appendChild(new Option());
+                for (var key in BooklyNotificationDialogL10n.templates) {
+                    let tpl = BooklyNotificationDialogL10n.templates[key],
+                        status = BooklyNotificationDialogL10n.statuses.hasOwnProperty(tpl.status) ? BooklyNotificationDialogL10n.statuses[tpl.status] : (tpl.status.charAt(0) + tpl.status.substring(1).toLowerCase().replaceAll('_', ' '));
+
+                    $whatsapTemplates[0].appendChild(new Option(tpl.name + ' (' + tpl.language + ') - ' + status, key));
+                }
+            }
+
+            /**
+             * @param str
+             * @returns {string[]}
+             */
+            function extractVariables(str) {
+                const regex = /{{\d+}}/gm;
+                let m, variables = [];
+                while ((m = regex.exec(str)) !== null) {
+                    m.forEach(function(match) {
+                        if (variables.indexOf(match) === -1) {
+                            variables.push(match);
+                        }
+                    });
+                }
+                try {
+                    let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+                    variables.sort(collator.compare);
+                } catch (e) {}
+
+                return variables;
+            }
+
+            function renderVariables(target, text) {
+                let $list = $('.bookly-js-variables-list', containers.variables[target]),
+                    variables = extractVariables(text);
+                containers.variables[target].toggle(variables.length > 0);
+                $list.html('');
+                variables.forEach(function(key, position) {
+                    let $input = $('<input>', {class: 'form-control', type: 'text', name: 'notification[settings][whatsapp][' + target + '][]'});
+                    if (whatsAppSettings.hasOwnProperty(target)) {
+                        $input.val(whatsAppSettings[target][position]);
+                    }
+                    $list.append( $('<div>', {class: 'row'})
+                        .append($('<div>', {class: 'col'})
+                            .append($('<div>', {class: 'input-group mb-1'})
+                                .append($('<div>', {class: 'input-group-prepend'})
+                                    .append($('<span>', {class: 'input-group-text', text: key}))
+                                )
+                                .append($input)
+                            )
+                        )
+                    )
+                })
+            }
+
+            $whatsapTemplates
+                .on('change', function() {
+                    let exists = BooklyNotificationDialogL10n.templates.hasOwnProperty(this.value),
+                        tpl;
+                    if (exists) {
+                        tpl = BooklyNotificationDialogL10n.templates[this.value];
+                    }
+                    notification.$body.val(exists ? tpl.body.text : '');
+                    notification.$subject.val(exists && tpl.header ? tpl.header.text : '');
+                    renderVariables('header', exists && tpl.header ? tpl.header.text : '');
+                    renderVariables('body', exists ? tpl.body.text : '');
+                    $('input[name=\'notification[settings][whatsapp][template]\']', containers.message).val(exists ? tpl.name : '');
+                    $('input[name=\'notification[settings][whatsapp][language]\']', containers.message).val(exists ? tpl.language : '');
+                });
         }
 
         $(document)

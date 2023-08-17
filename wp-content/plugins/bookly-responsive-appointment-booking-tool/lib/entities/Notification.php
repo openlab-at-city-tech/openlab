@@ -165,16 +165,29 @@ class Notification extends Lib\Base\Entity
             self::TYPE_NEW_BOOKING,
             self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED,
         );
-        if ( $gateway == 'sms' ||  $gateway == 'voice'  ) {
+        if ( $gateway == 'email' ) {
+            $types[] = self::TYPE_VERIFY_EMAIL;
+        } else {
             $types[] = self::TYPE_APPOINTMENT_REMINDER;
             $types[] = self::TYPE_LAST_CUSTOMER_APPOINTMENT;
             $types[] = self::TYPE_STAFF_DAY_AGENDA;
             $types[] = self::TYPE_VERIFY_PHONE;
-        } else {
-            $types[] = self::TYPE_VERIFY_EMAIL;
         }
 
         return Lib\Proxy\Shared::prepareNotificationTypes( $types, $gateway );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAssociated()
+    {
+        return array(
+            'sms' => self::getTypes( 'sms' ),
+            'email' => self::getTypes( 'email' ),
+            'voice' => self::getTypes( 'voice' ),
+            'whatsapp' => self::getTypes( 'whatsapp' ),
+        );
     }
 
     /**

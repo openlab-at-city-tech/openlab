@@ -362,7 +362,7 @@ class Ajax extends Lib\Base\Ajax
      *
      * @param int $staff_id
      * @param int|null $location_id
-     * @return string|void
+     * @return string
      */
     private static function _getStaffSchedule( $staff_id, $location_id )
     {

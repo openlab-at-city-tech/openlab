@@ -254,7 +254,7 @@ class C_Taxonomy_Controller extends C_MVC_Controller
         global $wp;
         global $wp_query;
         $wp_query_orig = false;
-        if ($wp_query_local != null && $wp_query_local != $wp_query) {
+        if ($wp_query_local !== null && $wp_query_local !== $wp_query) {
             $wp_query_orig = $wp_query;
             $wp_query = $wp_query_local;
         }

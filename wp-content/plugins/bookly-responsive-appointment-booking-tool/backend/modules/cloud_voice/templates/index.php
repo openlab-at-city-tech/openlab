@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Cloud;
@@ -35,4 +35,5 @@ use Bookly\Lib\Utils\Tables;
     </div>
 
     <?php TableSettings\Dialog::render() ?>
+    <?php Dialogs\VoiceTest\Dialog::render() ?>
 </div>

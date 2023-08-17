@@ -7,33 +7,37 @@ use \ElementsKit_Lite\Modules\Controls\Controls_Manager as ElementsKit_Controls_
 if (! defined( 'ABSPATH' ) ) exit;
 
 class ElementsKit_Widget_Back_To_Top extends Widget_Base {
-    use \ElementsKit_Lite\Widgets\Widget_Notice;
+	use \ElementsKit_Lite\Widgets\Widget_Notice;
 
-    public $base;
+	public $base;
 
-    public function get_name() {
-        return Handler::get_name();
-    }
+	public function get_name() {
+		return Handler::get_name();
+	}
 
-    public function get_title() {
-        return Handler::get_title();
-    }
+	public function get_title() {
+		return Handler::get_title();
+	}
 
-    public function get_icon() {
-        return Handler::get_icon();
-    }
+	public function get_icon() {
+		return Handler::get_icon();
+	}
 
-    public function get_categories() {
-        return Handler::get_categories();
-    }
+	public function get_categories() {
+		return Handler::get_categories();
+	}
 
-    public function get_keywords() {
-        return Handler::get_keywords();
-    }
-    
-    public function get_help_url() {
-        return 'https://wpmet.com/doc/back-to-top/';
-    }
+	public function get_keywords() {
+		return Handler::get_keywords();
+	}
+
+	public function get_help_url() {
+		return 'https://wpmet.com/doc/back-to-top/';
+	}
+
+	public function get_script_depends() {
+		return ['animate-circle'];
+	}
 
     protected function register_controls() {
         /* 
@@ -439,47 +443,50 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
         $this->end_controls_section(); // end of back to style tab
    }
 
-   protected function render( ) {
-    echo '<div class="ekit-wid-con" >';
-        $this->render_raw();
-    echo '</div>';
-   }
+	protected function render( ) {
+		echo '<div class="ekit-wid-con" >';
+			$this->render_raw();
+		echo '</div>';
+	}
 
-   protected function render_raw() {
-        $settings = $this->get_settings_for_display();
-        $appearance = $settings['ekit_button_appearance'];
-		  $is_scroll = $settings['ekit_show_button_after_switch'] === 'yes' ? 'yes' : '';
+	protected function render_raw() {
+		$settings = $this->get_settings_for_display();
+		$appearance = $settings['ekit_button_appearance'];
+		$is_scroll = $settings['ekit_show_button_after_switch'] === 'yes' ? 'yes' : '';
 
-        $args = [
-            'offset_top' => $settings['ekit_offset_top'],
-            'show_after' => $settings['ekit_show_button_after'],
-				'show_scroll'=>  $is_scroll, 
-				'style'		 => $appearance,
-				'fg'			 => $settings['ekit_button_prgoress_foreground'],
-				'bg'			 => $settings['ekit_button_prgoress_background']
-        ]
+		$args = [
+			'offset_top' => $settings['ekit_offset_top'],
+			'show_after' => $settings['ekit_show_button_after'],
+				'show_scroll' =>  $is_scroll, 
+				'style' => $appearance,
+				'foreground' => $settings['ekit_button_prgoress_foreground'],
+				'background' => $settings['ekit_button_prgoress_background']
+		]
+		?>
+			<div class="ekit-back-to-top-container ekit-btt <?php echo esc_attr( $appearance ) ?>" data-settings="<?php echo esc_attr( json_encode($args) ) ?>"> 
+				<span class="ekit-btt__button <?php echo esc_attr( $is_scroll ) ?>">
+					<?php // start container
+					switch( $appearance ) {
+						// show icon style by default 
+						case 'icon_only':
+							Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] );
+							break;
+						
+						// show text only style
+						case 'text_only':
+							echo esc_html($settings['ekit_btn_text']);
+							break;
 
-       ?> <div class="ekit-back-to-top-container ekit-btt <?php echo esc_attr( $appearance ) ?>" 
-		 		data-settings="<?php echo esc_attr( json_encode($args) ) ?>"> 
-				<span class="ekit-btt__button <?php echo esc_attr( $is_scroll ) ?>"> <?php // start container
-            switch( $appearance ) { 
-                // show icon style by default 
-                case 'icon_only': Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] );
-                break;
-                
-                // show text only style
-                case 'text_only': echo esc_html($settings['ekit_btn_text']);
-                break;
-                
-                // show progress indicator style (pro feature)
-                case 'progress_indicator': ?>
-                <div class="progress_indicator">
-					 	  <canvas id="canvas"> </canvas>
-                    <span><?php Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] ); ?></span>
-                </div>
-                <?php break;
-            }
-        ?></span> </div> <?php // end container
-   }
-
+						// show progress indicator style (pro feature)
+						case 'progress_indicator': ?>
+							<div class="progress_indicator" >
+								<canvas id="canvas-<?php echo esc_attr( $this->get_id()); ?>" class="canvas" data-canvas="<?php echo esc_attr( $this->get_id()); ?>"></canvas>
+								<span><?php Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] ); ?></span>
+							</div>
+							<?php break;
+					} ?>
+				</span>
+			</div>
+		<?php // end container
+	}
 }

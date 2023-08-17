@@ -116,7 +116,7 @@ class WCP_Folder_WPML
                 $this->tableIclTranslations = $wpdb->prefix.'icl_translations';
             }
 
-            $this->sitepress        = $sitepress;
+            $this->sitepress         = $sitepress;
             $this->post_translations = $sitepress->post_translations();
         }
 
@@ -140,16 +140,21 @@ class WCP_Folder_WPML
     {
         if ($this->isWPMLActive && isset($this->settings[$post_type]) && $this->settings[$post_type]) {
             global $wpdb;
-            $query = "SELECT COUNT(DISTINCT(p.id))
+            $select = "SELECT COUNT(DISTINCT(P.id))
                 FROM {$this->tableIclTranslations} AS wpmlt
-                INNER JOIN {$wpdb->posts} AS p ON p.id = wpmlt.element_id
-                WHERE wpmlt.element_type =  'post_".esc_attr($post_type)."'
-                AND wpmlt.language_code =  '%s'";
+                INNER JOIN {$wpdb->posts} AS P ON P.id = wpmlt.element_id";
+            $where = ["wpmlt.element_type =  'post_".esc_attr($post_type)."'"];
+            $where[] = "wpmlt.language_code =  '%s'";
             if ($post_type == 'attachment') {
-                $query .= " AND (p.post_status = 'inherit' OR p.post_status = 'private')";
+                $where[] = " (P.post_status = 'inherit' OR P.post_status = 'private')";
             } else {
-                $query .= " AND p.post_status != 'trash'";
+                $where[] = " P.post_status != 'trash'";
             }
+
+            $join = apply_filters( 'folders_count_join_query', "" );
+            $where = apply_filters( 'folders_count_where_query', $where );
+
+            $query = $select . $join . " WHERE ".implode( ' AND ', $where );
 
             $query       = $wpdb->prepare($query, [$this->lang]);
             $this->total = (int) $wpdb->get_var($query);
@@ -172,27 +177,34 @@ class WCP_Folder_WPML
         if ($this->isWPMLActive && isset($this->settings[$post_type]) && $this->settings[$post_type]) {
             global $wpdb;
             $term_taxonomy_id = get_term_by('id', (int) $term_id, $taxonomy, OBJECT)->term_taxonomy_id;
-            $query            = "SELECT wpmlt.element_id FROM {$this->tableIclTranslations} AS wpmlt 
-                        INNER JOIN {$wpdb->term_relationships} AS term_rela ON term_rela.object_id = wpmlt.element_id
-                        WHERE wpmlt.element_type =  'post_".esc_attr($post_type)."' 
-                            AND term_rela.term_taxonomy_id = '%s' 
-                            AND wpmlt.language_code =  '%s'";
-            $query            = $wpdb->prepare($query, [$term_taxonomy_id, $this->lang]);
-            $all_ids          = $wpdb->get_col($query);
-            $counter          = 0;
-            if (count($all_ids) > 0) {
-                if ($post_type == 'attachment') {
-                    $query   = "SELECT COUNT(*) FROM {$wpdb->posts} WHERE `ID` IN (%s) AND (post_status = 'inherit' OR post_status = 'private')";
-                    $query   = $wpdb->prepare($query, [implode(',', $all_ids)]);
-                    $counter = $wpdb->get_var($query);
-                } else {
-                    $query   = "SELECT COUNT(*) FROM {$wpdb->posts} WHERE `ID` IN (%s) AND post_status != 'trash'";
-                    $query   = $wpdb->prepare($query, [implode(',', $all_ids)]);
-                    $counter = $wpdb->get_var($query);
-                }
-            }
+            $query            = "SELECT count(wpmlt.element_id) as total_records FROM {$this->tableIclTranslations} AS wpmlt 
+                                    INNER JOIN {$wpdb->term_relationships} AS term_rela ON term_rela.object_id = wpmlt.element_id
+                                    WHERE wpmlt.element_type =  'post_".esc_attr($post_type)."' 
+                                        AND term_rela.term_taxonomy_id = '%s' 
+                                        AND wpmlt.language_code =  '%s'";
 
-            return !empty($counter) ? $counter : 0;
+            $query            = $wpdb->prepare($query, [$term_taxonomy_id, $this->lang]);
+            $all_ids          = $wpdb->get_var($query);
+//            $counter          = 0;
+//            if (count($all_ids) > 0) {
+//                $select = "SELECT COUNT(P.ID) as total_records FROM {$wpdb->posts} AS P";
+//                $where = ["P.ID = (%s)"];
+//
+//                if($post_type == 'attachment') {
+//                    $where[] = " (P.post_status = 'inherit' OR P.post_status = 'private')";
+//                } else {
+//                    $where[] = " P.post_status != 'trash'";
+//                }
+//
+//                $join = apply_filters( 'folders_count_join_query', "" );
+//                $where = apply_filters( 'folders_count_where_query', $where );
+//
+//                $query = $select . $join . " WHERE ".implode( ' AND ', $where );
+////                $query   = $wpdb->prepare($query, [implode(',', $all_ids)]);
+////                $counter = $wpdb->get_var($query);
+//            }
+
+            return !empty($all_ids) ? $all_ids : 0;
         }//end if
 
         return null;
@@ -212,14 +224,28 @@ class WCP_Folder_WPML
 
         if ($this->isWPMLActive && isset($this->settings[$post_type]) && $this->settings[$post_type]) {
             global $wpdb;
-            $query        = "SELECT COUNT(DISTINCT(tmp_table.ID))
-                FROM (SELECT * FROM {$this->tableIclTranslations} as wpmlt
+            $subQuery = "SELECT * FROM {$this->tableIclTranslations} as wpmlt
                         INNER JOIN {$wpdb->posts} as p on p.id = wpmlt.element_id
-                        WHERE wpmlt.element_type = 'post_.".esc_attr($post_type)."'
-                        and wpmlt.language_code = '%s') as tmp_table
-                        JOIN {$wpdb->term_relationships} as term_relationships on tmp_table.element_id = term_relationships.object_id
-                        JOIN {$wpdb->term_taxonomy} as term_taxonomy on term_relationships.term_taxonomy_id = term_taxonomy.term_taxonomy_id 
-                        WHERE taxonomy = '%s'";
+                        WHERE wpmlt.element_type = 'post_".esc_attr($post_type)."'
+                        and wpmlt.language_code = '%s'";
+            $select  = "SELECT COUNT(DISTINCT(tmp_table.ID))
+                             FROM ({$subQuery}) as tmp_table";
+            $join    = " JOIN {$wpdb->term_relationships} as term_relationships on tmp_table.element_id = term_relationships.object_id ";
+            $join   .= " JOIN {$wpdb->term_taxonomy} as term_taxonomy on term_relationships.term_taxonomy_id = term_taxonomy.term_taxonomy_id ";
+            $where   = ["taxonomy = '%s'"];
+
+            if ( $this->sitepress->is_translated_taxonomy( $taxonomy ) ) {
+                $icl_taxonomies = "tax_" . $taxonomy;
+                $join .= " LEFT JOIN {$wpdb->prefix}icl_translations AS icl_t
+                                    ON icl_t.element_id = term_taxonomy.term_taxonomy_id
+                                        AND icl_t.element_type = '{$icl_taxonomies}'";
+
+                $where[] = " ( ( icl_t.element_type = '{$icl_taxonomies}' AND icl_t.language_code = '{$this->lang}' )
+                                    OR icl_t.element_type != '{$icl_taxonomies}' OR icl_t.element_type IS NULL ) ";
+            }
+
+            $query = $select . $join . " WHERE ".implode( ' AND ', $where );
+
             $query        = $wpdb->prepare($query, [$this->lang, $taxonomy]);
             $fileInFolder = (int) $wpdb->get_var($query);
 

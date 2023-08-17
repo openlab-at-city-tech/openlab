@@ -11,8 +11,10 @@
 namespace Neve\Customizer\Options;
 
 use HFG\Traits\Core;
+use Neve\Core\Settings\Config;
 use Neve\Customizer\Defaults\Layout;
 use Neve\Customizer\Types\Control;
+use Neve\Customizer\Defaults\Single_Post;
 
 /**
  * Class Layout_Single_Post
@@ -22,6 +24,7 @@ use Neve\Customizer\Types\Control;
 class Layout_Single_Post extends Base_Layout_Single {
 	use Core;
 	use Layout;
+	use Single_Post;
 
 	/**
 	 * Returns the post type.
@@ -47,14 +50,12 @@ class Layout_Single_Post extends Base_Layout_Single {
 	public function add_controls() {
 		parent::add_controls();
 		$this->control_content_order();
-
-		if ( neve_is_new_skin() ) {
-			$this->add_subsections();
-			$this->header_layout();
-			$this->post_meta();
-			$this->comments();
-			add_action( 'customize_register', [ $this, 'adjust_headings' ], PHP_INT_MAX );
-		}
+		$this->content_vspacing();
+		$this->add_subsections();
+		$this->header_layout();
+		$this->post_meta();
+		$this->comments();
+		add_action( 'customize_register', [ $this, 'adjust_headings' ], PHP_INT_MAX );
 	}
 
 	/**
@@ -66,6 +67,12 @@ class Layout_Single_Post extends Base_Layout_Single {
 			'page_elements'    => [
 				'title'            => esc_html__( 'Page Elements', 'neve' ),
 				'priority'         => 95,
+				'controls_to_wrap' => 2,
+				'expanded'         => false,
+			],
+			'page_settings'    => [
+				'title'            => esc_html__( 'Page', 'neve' ) . ' ' . esc_html__( 'Settings', 'neve' ),
+				'priority'         => 106,
 				'controls_to_wrap' => 2,
 				'expanded'         => false,
 			],
@@ -192,49 +199,117 @@ class Layout_Single_Post extends Base_Layout_Single {
 			)
 		);
 
-		if ( neve_is_new_skin() ) {
-			$this->add_control(
-				new Control(
-					'neve_single_post_elements_spacing',
-					[
-						'sanitize_callback' => 'neve_sanitize_range_value',
-						'transport'         => $this->selective_refresh,
-						'default'           => '{"desktop":60,"tablet":60,"mobile":60}',
-					],
-					[
-						'label'                 => esc_html__( 'Spacing between elements', 'neve' ),
-						'section'               => $this->section,
-						'type'                  => 'neve_responsive_range_control',
-						'input_attrs'           => [
-							'max'        => 500,
-							'units'      => [ 'px', 'em', 'rem' ],
-							'defaultVal' => [
-								'mobile'  => 60,
-								'tablet'  => 60,
-								'desktop' => 60,
-								'suffix'  => [
-									'mobile'  => 'px',
-									'tablet'  => 'px',
-									'desktop' => 'px',
-								],
-							],
-						],
-						'priority'              => 105,
-						'live_refresh_selector' => true,
-						'live_refresh_css_prop' => [
-							'cssVar' => [
-								'responsive' => true,
-								'vars'       => '--spacing',
-								'selector'   => '.nv-single-post-wrap',
-								'suffix'     => 'px',
+		$this->add_control(
+			new Control(
+				'neve_single_post_elements_spacing',
+				[
+					'sanitize_callback' => 'neve_sanitize_range_value',
+					'transport'         => $this->selective_refresh,
+					'default'           => '{"desktop":60,"tablet":60,"mobile":60}',
+				],
+				[
+					'label'                 => esc_html__( 'Spacing between elements', 'neve' ),
+					'section'               => $this->section,
+					'type'                  => 'neve_responsive_range_control',
+					'input_attrs'           => [
+						'max'        => 500,
+						'units'      => [ 'px', 'em', 'rem' ],
+						'defaultVal' => [
+							'mobile'  => 60,
+							'tablet'  => 60,
+							'desktop' => 60,
+							'suffix'  => [
+								'mobile'  => 'px',
+								'tablet'  => 'px',
+								'desktop' => 'px',
 							],
 						],
 					],
-					'\Neve\Customizer\Controls\React\Responsive_Range'
-				)
-			);
+					'priority'              => 105,
+					'live_refresh_selector' => true,
+					'live_refresh_css_prop' => [
+						'cssVar' => [
+							'responsive' => true,
+							'vars'       => '--spacing',
+							'selector'   => '.nv-single-post-wrap',
+							'suffix'     => 'px',
+						],
+					],
+				],
+				'\Neve\Customizer\Controls\React\Responsive_Range'
+			)
+		);
+	}
 
-		}
+	/**
+	 * Add content spacing control.
+	 */
+	private function content_vspacing() {
+		$this->add_control(
+			new Control(
+				Config::MODS_SINGLE_POST_VSPACING_INHERIT,
+				[
+					'sanitize_callback' => 'neve_sanitize_vspace_type',
+					'default'           => 'inherit',
+				],
+				[
+					'label'              => esc_html__( 'Content Vertical Spacing', 'neve' ),
+					'section'            => $this->section,
+					'priority'           => 107,
+					'choices'            => [
+						'inherit'  => [
+							'tooltip' => esc_html__( 'Inherit', 'neve' ),
+							'icon'    => 'text',
+						],
+						'specific' => [
+							'tooltip' => esc_html__( 'Custom', 'neve' ),
+							'icon'    => 'text',
+						],
+					],
+					'footer_description' => [
+						'inherit' => [
+							'template'         => esc_html__( 'Customize the default vertical spacing <ctaButton>here</ctaButton>.', 'neve' ),
+							'control_to_focus' => Config::MODS_CONTENT_VSPACING,
+						],
+					],
+				],
+				'\Neve\Customizer\Controls\React\Radio_Buttons'
+			)
+		);
+
+		$default_value = get_theme_mod( Config::MODS_CONTENT_VSPACING, $this->content_vspacing_default() );
+		$this->add_control(
+			new Control(
+				Config::MODS_SINGLE_POST_CONTENT_VSPACING,
+				[
+					'default'   => $default_value,
+					'transport' => $this->selective_refresh,
+				],
+				[
+					'label'                 => __( 'Custom Value', 'neve' ),
+					'sanitize_callback'     => [ $this, 'sanitize_spacing_array' ],
+					'section'               => $this->section,
+					'input_attrs'           => [
+						'units'     => [ 'px', 'vh' ],
+						'axis'      => 'vertical',
+						'dependsOn' => [ Config::MODS_SINGLE_POST_VSPACING_INHERIT => 'specific' ],
+					],
+					'default'               => $default_value,
+					'priority'              => 107,
+					'live_refresh_selector' => true,
+					'live_refresh_css_prop' => [
+						'cssVar'      => [
+							'vars'       => '--c-vspace',
+							'selector'   => 'body.single:not(.single-product) .neve-main',
+							'responsive' => true,
+							'fallback'   => '',
+						],
+						'directional' => true,
+					],
+				],
+				'\Neve\Customizer\Controls\React\Spacing'
+			)
+		);
 	}
 
 	/**
@@ -242,7 +317,7 @@ class Layout_Single_Post extends Base_Layout_Single {
 	 */
 	private function post_meta() {
 
-		$components    = apply_filters(
+		$components = apply_filters(
 			'neve_meta_filter',
 			[
 				'author'   => __( 'Author', 'neve' ),
@@ -251,10 +326,8 @@ class Layout_Single_Post extends Base_Layout_Single {
 				'comments' => __( 'Comments', 'neve' ),
 			]
 		);
-		$default       = wp_json_encode( [ 'author', 'date', 'comments' ] );
-		$default_value = neve_get_default_meta_value( 'neve_post_meta_ordering', $default );
-		$default_value = get_theme_mod( 'neve_blog_post_meta_fields', wp_json_encode( $default_value ) );
-		$default_value = get_theme_mod( 'neve_single_post_meta_fields', $default_value );
+
+		$default_value = get_theme_mod( 'neve_single_post_meta_fields', self::get_default_single_post_meta_fields() );
 
 		$this->add_control(
 			new Control(
@@ -507,7 +580,7 @@ class Layout_Single_Post extends Base_Layout_Single {
 					return $this->element_is_enabled( 'comments' );
 				},
 				'active_callback'         => function() {
-					return $this->element_is_enabled( 'comments' ) && get_theme_mod( 'neve_comments_form_boxed_layout', neve_is_new_skin() );
+					return $this->element_is_enabled( 'comments' ) && get_theme_mod( 'neve_comments_form_boxed_layout', true );
 				},
 			]
 		);
@@ -585,7 +658,7 @@ class Layout_Single_Post extends Base_Layout_Single {
 	 * @return bool
 	 */
 	public static function is_cover_layout() {
-		return get_theme_mod( 'neve_post_header_layout' ) === 'cover' && neve_is_new_skin();
+		return get_theme_mod( 'neve_post_header_layout' ) === 'cover';
 	}
 
 	/**

@@ -8,10 +8,10 @@
  * Description: A comprehensive collection of visual components for WordPress
  * Text Domain: shortcodes-ultimate
  * License: GPLv3
- * Version: 5.12.8
+ * Version: 5.13.1
  * Requires PHP: 5.4
  * Requires at least: 5.0
- * Tested up to: 6.1
+ * Tested up to: 6.2
  *
  */
 if ( !defined( 'ABSPATH' ) ) {
@@ -34,22 +34,27 @@ if ( function_exists( 'su_fs' ) ) {
                     // Include Freemius SDK.
                     require_once dirname( __FILE__ ) . '/freemius/start.php';
                     $su_fs = fs_dynamic_init( array(
-                        'id'             => '7180',
-                        'slug'           => 'shortcodes-ultimate',
-                        'premium_slug'   => 'shortcodes-ultimate-pro',
-                        'type'           => 'plugin',
-                        'public_key'     => 'pk_c9ecad02df10f17e67880ac6bd8fc',
-                        'is_premium'     => false,
-                        'premium_suffix' => 'Pro',
-                        'has_addons'     => false,
-                        'has_paid_plans' => true,
-                        'menu'           => array(
+                        'id'                => '7180',
+                        'slug'              => 'shortcodes-ultimate',
+                        'premium_slug'      => 'shortcodes-ultimate-pro',
+                        'type'              => 'plugin',
+                        'public_key'        => 'pk_c9ecad02df10f17e67880ac6bd8fc',
+                        'is_premium'        => false,
+                        'premium_suffix'    => 'Pro',
+                        'has_addons'        => false,
+                        'has_paid_plans'    => true,
+                        'menu'              => array(
                         'slug'       => 'shortcodes-ultimate',
                         'first-path' => 'admin.php?page=shortcodes-ultimate',
                         'contact'    => false,
                         'support'    => false,
                     ),
-                        'is_live'        => true,
+                        'opt_in_moderation' => array(
+                        'new'       => 100,
+                        'updates'   => 0,
+                        'localhost' => true,
+                    ),
+                        'is_live'           => true,
                     ) );
                 }
                 
@@ -64,6 +69,6 @@ if ( function_exists( 'su_fs' ) ) {
     
     }
     define( 'SU_PLUGIN_FILE', __FILE__ );
-    define( 'SU_PLUGIN_VERSION', '5.12.8' );
+    define( 'SU_PLUGIN_VERSION', '5.13.1' );
     require_once dirname( __FILE__ ) . '/plugin.php';
 }

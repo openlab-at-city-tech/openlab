@@ -1,0 +1,241 @@
+#ed1 {
+    width: 98%;
+}
+
+#ed1 details {
+    opacity: 0;
+    font-size: .875rem;
+    padding: 0 0 0 .25em;
+    transition: opacity .2s ease-in;
+    background: #1d2327;
+    color: #eee;
+    border-radius: 6px;
+}
+
+#ed1 details[open] {
+    padding: 0 1em 1em .25em;
+}
+
+#ed1-page-wrapper details[open] {
+    min-height: 22em;
+}
+
+#ed1.show details {
+    opacity: 1;
+    overflow: auto;
+    margin-bottom: 1em;
+}
+
+#ed1 summary {
+    font-size: 1.125rem;
+    padding: .5rem;
+    margin: .5rem 0 .5rem 1px;
+    cursor: pointer;
+    width: fit-content;
+  }
+
+#ed1 summary:hover {
+    color: #a7cef3;
+}
+
+#ed1 table {
+    border-spacing: 0;
+    width: 99%;
+    padding: 0 0 3px;
+    margin: 1rem 0 1rem 1%;
+    box-shadow: inset 0 0 0 3px white;
+    min-width: 45em;
+    border-radius: 3px;
+}
+
+#ed1 td {
+    padding: 5px 7px 6px;
+    text-align: left;
+    border: 0;
+}
+
+#ed1 td:first-child, #ed1 th:first-child {
+    padding-left: .75em;
+}
+
+#ed1 th {
+    padding: 0 .5em;
+    text-align: left;
+    border: 0;
+}
+
+#ed1 td[colspan] {
+    font-style: italic;
+}
+
+
+#ed1page td:nth-child(2),
+#ed1dismiss td:nth-child(2),
+#ed1page td:nth-child(3),
+#ed1dismiss td:nth-child(3) {
+    width: 33%;
+}
+#ed1dismiss td:last-child {
+    min-width: 0;
+    width: 5em;
+}
+#ed1dismiss td:last-child {
+    text-align: center;
+}
+#ed1 td:first-child {
+    min-width: 0;
+    text-align: right;
+    width: 3em;
+    padding-right: 2em;
+    padding-left: .5em;
+    font-weight: 500;
+}
+#ed1dismiss td:first-child {
+    text-align: left;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+#ed1 a,
+#ed1 td button {
+    color: #2271b1;
+    text-decoration: underline;
+    font-weight: 500;
+    display: block;
+    padding: .25em 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+    max-height: 9em;
+    overflow: hidden;
+}
+
+#ed1 th button {
+    color: #f0f0f1;
+    padding: .5em 1em .5em 0;
+    position: relative;
+}
+
+#ed1 a:hover,
+#ed1 td button:hover {
+    color: #111;
+}
+
+#ed1 .reset {
+    text-decoration: none;
+    font-size: .9em;
+    display: inline-block;
+    padding: 3px 10px 4px 8px;
+    width: auto;
+    border-radius: 1em;
+    background: #2271b1;
+    color: white;
+    margin-bottom: .5em;
+}
+#ed1 .reset:hover, #ed1 .reset:focus-visible {
+    color: #2271b1;
+    background-color: white;
+    box-shadow: inset 0 0 0 1px #2271b1
+}
+
+#ed1 caption {
+    text-align: left;
+    font-weight: 300;
+    font-size: 1.125rem;
+    padding: .55rem;
+}
+
+#ed1 th {
+    background-color: #33424c;
+    color: #f0f0f1;
+}
+
+#ed1 tr {
+    background-color: #eee;
+    color: #1d2327;
+}
+
+#ed1 tr:nth-child(2n + 1) {
+    background-color: #ddd;
+}
+
+#ed1 .ascending::after,
+#ed1 .descending::after {
+    content: "^";
+    display: inline-block;
+    padding: 0 .25rem;
+    position: absolute;
+}
+#ed1 .ascending::after {
+    transform: translateY(.125em);
+}
+#ed1 .descending::after {
+    transform: rotate(180deg);
+}
+
+#ed1 button {
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+#ed1 button:hover,
+#ed1 button:focus-visible {
+    text-decoration: underline;
+}
+
+#ed1 nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-width: 32em;
+}
+
+#ed1 nav button {
+    margin: 0.25rem 0.25rem;
+    padding: .5rem 1rem;
+    border-radius: .2rem;
+    text-align: center;
+    color: #ccc;
+    background: #444;
+}
+
+#ed1 nav button:hover, #ed1 nav button:focus-visible {
+    box-shadow: inset 0 0 0 2px;
+    text-decoration: none;
+}
+
+#ed1 .pagination-number[aria-current] {
+    color: #fff;
+    background: #2271b1;
+    box-shadow: none;
+}
+
+#ed1 .ellipses:not([hidden]) {
+    display: inline-block;
+    margin: 0 .75em;
+    padding-bottom: .5em;
+    overflow: visible;
+    color: #aaa;
+}
+
+#ed1 .ed11y-export {
+    display: inline-block;
+    padding: .5rem;
+    width: auto;
+    border-radius: 4px;
+    text-decoration: none;
+    border: 1px solid;
+    margin-top: 1.5rem;
+}
+
+#ed1 .visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

@@ -95,11 +95,11 @@ class BP_REST_Components_Endpoint extends WP_REST_Controller {
 		$components = bp_core_get_components( $type );
 
 		// Active components.
-		$active_components = apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
+		$active_components = (array) apply_filters( 'bp_active_components', bp_get_option( 'bp-active-components' ) );
 
 		// Core component is always active.
-		if ( 'optional' !== $type ) {
-			$active_components['core'] = $components['core'];
+		if ( 'optional' !== $type && ! empty( $components['core'] ) ) {
+			$active_components['core'] = '1';
 		}
 
 		// Inactive components.
@@ -108,7 +108,7 @@ class BP_REST_Components_Endpoint extends WP_REST_Controller {
 		$current_components = array();
 		switch ( $args['status'] ) {
 			case 'all':
-				foreach ( $components as $name => $labels ) {
+				foreach ( array_keys( $components ) as $name ) {
 					$current_components[] = $this->get_component_info( $name );
 				}
 				break;
@@ -412,12 +412,17 @@ class BP_REST_Components_Endpoint extends WP_REST_Controller {
 		// Get all components.
 		$components = bp_core_get_components();
 
+		// Init the component's data.
+		$data = array();
+
 		// Get specific component info.
-		$data = $components[ $component ];
+		if ( isset( $components[ $component ] ) ) {
+			$data = (array) $components[ $component ];
+		}
 
 		// Return empty early.
-		if ( empty( $data ) ) {
-			return array();
+		if ( ! $data ) {
+			return $data;
 		}
 
 		// Get BuddyPress main instance.
@@ -449,10 +454,11 @@ class BP_REST_Components_Endpoint extends WP_REST_Controller {
 					break;
 				case 'members':
 					$features = array(
-						'account_deletion' => ! bp_disable_account_deletion(),
-						'avatar'           => $bp->avatar && $bp->avatar->show_avatars,
-						'cover'            => bp_is_active( 'members', 'cover_image' ),
-						'invitations'      => bp_get_members_invitations_allowed(),
+						'account_deletion'    => ! bp_disable_account_deletion(),
+						'avatar'              => $bp->avatar && $bp->avatar->show_avatars,
+						'cover'               => bp_is_active( 'members', 'cover_image' ),
+						'invitations'         => bp_get_members_invitations_allowed(),
+						'membership_requests' => bp_is_active( 'members', 'membership_requests' ) && ! bp_get_signup_allowed() && (bool) bp_get_option( 'bp-enable-membership-requests' ),
 					);
 					break;
 				case 'activity':
@@ -466,7 +472,8 @@ class BP_REST_Components_Endpoint extends WP_REST_Controller {
 					break;
 				case 'blogs':
 					$features = array(
-						'site_icon' => bp_is_active( 'blogs', 'site-icon' ),
+						'site_icon'       => bp_is_active( 'blogs', 'site-icon' ),
+						'sites_directory' => is_multisite(),
 					);
 					break;
 				case 'messages':

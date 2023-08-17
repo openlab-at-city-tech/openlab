@@ -10,9 +10,12 @@
 
 namespace Neve\Core;
 
+use Neve\Compatibility\Elementor;
 use Neve\Compatibility\Starter_Content;
 use Neve\Core\Settings\Config;
 use Neve\Core\Settings\Mods;
+use Neve\Core\Dynamic_Css;
+use Neve\Core\Traits\Theme_Mods;
 
 /**
  * Front end handler class.
@@ -20,6 +23,7 @@ use Neve\Core\Settings\Mods;
  * @package Neve\Core
  */
 class Front_End {
+	use Theme_Mods;
 
 	/**
 	 * Theme setup.
@@ -75,10 +79,9 @@ class Front_End {
 
 		add_image_size( 'neve-blog', 930, 620, true );
 		add_filter( 'wp_nav_menu_args', array( $this, 'nav_walker' ), 1001 );
-		if ( neve_is_new_skin() ) {
-			add_filter( 'theme_mod_background_color', '__return_empty_string' );
-		}
+		add_filter( 'theme_mod_background_color', '__return_empty_string' );
 		$this->add_woo_support();
+		add_filter( 'neve_dynamic_style_output', array( $this, 'css_global_custom_colors' ), PHP_INT_MAX, 2 );
 	}
 
 	/**
@@ -128,6 +131,9 @@ class Front_End {
 			),
 		];
 
+		// Add custom global colors
+		$from_global_colors = array_merge( $from_global_colors, $this->get_global_custom_color_vars() );
+
 		foreach ( $from_global_colors as $slug => $args ) {
 			array_push(
 				$gutenberg_color_palette,
@@ -140,6 +146,23 @@ class Front_End {
 		}
 
 		return array_values( $gutenberg_color_palette );
+	}
+
+	/**
+	 * Returns global custom colors with css vars
+	 *
+	 * @return array[]
+	 */
+	private function get_global_custom_color_vars() {
+		$css_vars = [];
+		foreach ( Mods::get( Config::MODS_GLOBAL_CUSTOM_COLORS, [] ) as $slug => $args ) {
+			$css_vars[ $slug ] = [
+				'label' => $args['label'],
+				'val'   => sprintf( 'var(--%s)', $slug ),
+			];
+		}
+
+		return $css_vars;
 	}
 
 	/**
@@ -292,14 +315,40 @@ class Front_End {
 		$primary_values   = get_theme_mod( Config::MODS_BUTTON_PRIMARY_STYLE, neve_get_button_appearance_default() );
 		$secondary_values = get_theme_mod( Config::MODS_BUTTON_SECONDARY_STYLE, neve_get_button_appearance_default( 'secondary' ) );
 
+		$style = '';
+
 		if (
 			( isset( $primary_values['useShadow'] ) && ! empty( $primary_values['useShadow'] ) ) ||
 			( isset( $primary_values['useShadowHover'] ) && ! empty( $primary_values['useShadowHover'] ) ) ||
 			( isset( $secondary_values['useShadow'] ) && ! empty( $secondary_values['useShadow'] ) ) ||
 			( isset( $secondary_values['useShadowHover'] ) && ! empty( $secondary_values['useShadowHover'] ) )
 		) {
-			wp_add_inline_style( 'neve-style', '.button.button-primary, .is-style-primary .wp-block-button__link {box-shadow: var(--primarybtnshadow, none);} .button.button-primary:hover, .is-style-primary .wp-block-button__link:hover {box-shadow: var(--primarybtnhovershadow, none);} .button.button-secondary, .is-style-secondary .wp-block-button__link {box-shadow: var(--secondarybtnshadow, none);} .button.button-secondary:hover, .is-style-secondary .wp-block-button__link:hover {box-shadow: var(--secondarybtnhovershadow, none);}' );
+			$style .= '.button.button-primary, .is-style-primary .wp-block-button__link {box-shadow: var(--primarybtnshadow, none);} .button.button-primary:hover, .is-style-primary .wp-block-button__link:hover {box-shadow: var(--primarybtnhovershadow, none);} .button.button-secondary, .is-style-secondary .wp-block-button__link {box-shadow: var(--secondarybtnshadow, none);} .button.button-secondary:hover, .is-style-secondary .wp-block-button__link:hover {box-shadow: var(--secondarybtnhovershadow, none);}';
 		}
+
+		foreach ( neve_get_headings_selectors() as $heading_id => $heading_selector ) {
+			$font_family = get_theme_mod( $this->get_mod_key_heading_fontfamily( $heading_id ), '' ); // default value is empty string to be consistent with default customizer control value.
+
+			$css_var = sprintf( '--%1$sfontfamily', $heading_id );
+
+			if ( is_customize_preview() ) {
+				$style .= sprintf( '%s {font-family: var(%s, var(--headingsfontfamily)), var(--nv-fallback-ff);} ', $heading_id, $css_var ); // fallback values for the first page load on the customizer
+				continue;
+			}
+
+			// If font family is inherit, do not add a style for this heading.
+			if ( $font_family === '' ) {
+				continue;
+			}
+
+			$style .= sprintf( '%s {font-family: var(%s);}', $heading_id, $css_var );
+		}
+
+		if ( empty( $style ) ) {
+			return;
+		}
+
+		wp_add_inline_style( 'neve-style', Dynamic_Css::minify_css( $style ) );
 	}
 
 	/**
@@ -307,12 +356,14 @@ class Front_End {
 	 */
 	private function add_styles() {
 		if ( class_exists( 'WooCommerce', false ) ) {
-			$style_path = neve_is_new_skin() ? 'css/woocommerce' : 'css/woocommerce-legacy';
+			$style_path = 'css/woocommerce';
 
 			wp_register_style( 'neve-woocommerce', NEVE_ASSETS_URL . $style_path . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
 			wp_style_add_data( 'neve-woocommerce', 'rtl', 'replace' );
 			wp_style_add_data( 'neve-woocommerce', 'suffix', '.min' );
-			wp_enqueue_style( 'neve-woocommerce' );
+			if ( ! Elementor::is_elementor_checkout() ) {
+				wp_enqueue_style( 'neve-woocommerce' );
+			}
 		}
 
 		if ( class_exists( 'Easy_Digital_Downloads' ) ) {
@@ -326,14 +377,14 @@ class Front_End {
 
 		}
 
-		$style_path = neve_is_new_skin() ? '/style-main-new' : '/assets/css/style-legacy';
+		$style_path = '/style-main-new';
 
 		wp_register_style( 'neve-style', get_template_directory_uri() . $style_path . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
 		wp_style_add_data( 'neve-style', 'rtl', 'replace' );
 		wp_style_add_data( 'neve-style', 'suffix', '.min' );
 		wp_enqueue_style( 'neve-style' );
 
-		$mm_path = neve_is_new_skin() ? 'mega-menu' : 'mega-menu-legacy';
+		$mm_path = 'mega-menu';
 
 		wp_register_style( 'neve-mega-menu', get_template_directory_uri() . '/assets/css/' . $mm_path . ( ( NEVE_DEBUG ) ? '' : '.min' ) . '.css', array(), apply_filters( 'neve_version_filter', NEVE_VERSION ) );
 		wp_style_add_data( 'neve-mega-menu', 'rtl', 'replace' );
@@ -477,6 +528,29 @@ class Front_End {
 			'elem_description'  => esc_html__( 'Leverage the true flexibility of Elementor with powerful addons and templates that you can import with just one click.', 'neve' ),
 			'get_pro_cta'       => esc_html__( 'Get the PRO version!', 'neve' ),
 			'opens_new_tab_des' => esc_html__( '(opens in a new tab)', 'neve' ),
+			'filter'            => __( 'Filter', 'neve' ),
+			/* translators: %s - Theme name */
+			'neve_options'      => __( '%s Options', 'neve' ),
 		];
+	}
+
+	/**
+	 * Adds CSS rules to resolve .has-dynamicslug-color .has-dynamicslug-background-color classes.
+	 *
+	 * @param  string $current_styles Current dynamic style.
+	 * @param  string $context gutenberg|frontend Represents the type of the context.
+	 * @return string dynamic styles has resolving global custom colors
+	 */
+	public function css_global_custom_colors( $current_styles, $context ) {
+		if ( $context !== 'frontend' ) {
+			return $current_styles;
+		}
+
+		foreach ( Mods::get( Config::MODS_GLOBAL_CUSTOM_COLORS, [] ) as $slug => $args ) {
+			$css_var         = sprintf( 'var(--%s) !important', $slug );
+			$current_styles .= Dynamic_CSS::minify_css( sprintf( '.has-%s-color {color:%s} .has-%s-background-color {background-color:%s}', $slug, $css_var, $slug, $css_var ) );
+		}
+
+		return $current_styles;
 	}
 }

@@ -7,7 +7,7 @@ global $wpdb, $current_tab;
 
 // was anything POSTed?
 if ( isset( $_POST['s2_admin'] ) ) {
-	if ( false === wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'subscribe2-options_subscribers' . S2VERSION ) ) {
+	if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'subscribe2-options_subscribers' . S2VERSION ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
@@ -61,7 +61,7 @@ if ( isset( $_POST['s2_admin'] ) ) {
 				}
 			} elseif ( in_array( $key, array( 'notification_subject', 'mailtext', 'confirm_subject', 'confirm_email', 'remind_subject', 'remind_email' ), true ) && ! empty( $_POST[ $key ] ) ) {
 				// Email subject and body templates.
-				$this->subscribe2_options[ $key ] = sanitize_text_field( trim( $_POST[ $key ] ) );
+				$this->subscribe2_options[ $key ] = in_array( $key, array( 'notification_subject', 'confirm_subject', 'remind_subject' ) ) ? sanitize_text_field( trim( $_POST[ $key ] ) ) : sanitize_textarea_field( trim( $_POST[ $key ] ) );
 			} elseif ( in_array( $key, array( 'compulsory', 'exclude', 'format' ), true ) ) {
 				sort( $_POST[ $key ] );
 

@@ -30,10 +30,10 @@ class Service
     private $client;
     public function __construct($clientOrConfig = [])
     {
-        if ($clientOrConfig instanceof \SimpleCalendar\plugin_deps\Google\Client) {
+        if ($clientOrConfig instanceof Client) {
             $this->client = $clientOrConfig;
         } elseif (\is_array($clientOrConfig)) {
-            $this->client = new \SimpleCalendar\plugin_deps\Google\Client($clientOrConfig ?: []);
+            $this->client = new Client($clientOrConfig ?: []);
         } else {
             $errorMessage = 'SimpleCalendar\\plugin_deps\\constructor must be array or instance of Google\\Client';
             if (\class_exists('TypeError')) {

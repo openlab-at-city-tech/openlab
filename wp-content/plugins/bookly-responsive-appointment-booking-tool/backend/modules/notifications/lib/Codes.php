@@ -7,6 +7,7 @@ use Bookly\Backend\Modules\Notifications\Proxy;
 
 /**
  * Class Codes
+ *
  * @package Bookly\Backend\Modules\Notifications\Lib
  */
 class Codes
@@ -64,6 +65,9 @@ class Codes
             ),
             'customer_timezone' => array(
                 'client_timezone' => array( 'description' => __( 'Time zone of client', 'bookly' ), 'if' => true ),
+            ),
+            'customer_locale' => array(
+                'client_locale' => array( 'description' => __( 'Locale of client', 'bookly' ), 'if' => true ),
             ),
             'customer_appointment' => array(
                 'approve_appointment_url' => array( 'description' => __( 'URL of approve appointment link (to use inside <a> tag)', 'bookly' ) ),
@@ -205,17 +209,18 @@ class Codes
                     $this->codes['customer'],
                     $this->codes['customer_appointment'],
                     $this->codes['customer_timezone'],
+                    $this->codes['customer_locale'],
                     $this->codes['payment'],
                     $this->codes['service'],
                     $this->codes['staff']
                 );
                 if ( Lib\Config::invoicesActive() &&
-                     in_array( $notification_type, array(
-                         Notification::TYPE_NEW_BOOKING,
-                         Notification::TYPE_NEW_BOOKING_RECURRING,
-                         Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED,
-                         Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING,
-                     ) )
+                    in_array( $notification_type, array(
+                        Notification::TYPE_NEW_BOOKING,
+                        Notification::TYPE_NEW_BOOKING_RECURRING,
+                        Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED,
+                        Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING,
+                    ) )
                 ) {
                     $codes = array_merge( $codes, $this->codes['invoice'] );
                 }
@@ -245,6 +250,7 @@ class Codes
                     $this->codes['company'],
                     $this->codes['customer'],
                     $this->codes['customer_timezone'],
+                    $this->codes['customer_locale'],
                     $this->codes['payment'],
                     $this->codes['appointments_list']
                 );

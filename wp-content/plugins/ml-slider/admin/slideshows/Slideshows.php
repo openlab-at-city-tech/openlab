@@ -25,6 +25,11 @@ class MetaSlider_Slideshows
     protected static $instance = null;
 
     /**
+     * @var object|null
+     */
+    public $plugin;
+
+    /**
      * Constructor
      */
     public function __construct()

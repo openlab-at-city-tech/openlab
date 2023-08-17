@@ -26,6 +26,15 @@ class GF_Zapier extends GFFeedAddOn {
 	private static $_instance = null;
 
 	/**
+	 * Enable background feed processing.
+	 *
+	 * @since 4.3
+	 *
+	 * @var bool
+	 */
+	protected $_async_feed_processing = true;
+
+	/**
 	 * Defines the version of the Gravity Forms Zapier Add-On Add-On.
 	 *
 	 * @since  4.0

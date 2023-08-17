@@ -25,6 +25,11 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
     private $current_page;
 
     /**
+     * @var \MetaSlider_Notices
+     */
+    protected $notices;
+
+    /**
      * Sets up the notices, security and loads assets for the admin page
      *
      * @param array $plugin Plugin details
@@ -62,8 +67,8 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
         wp_enqueue_media();
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-sortable');
-
-        wp_register_script('metaslider-admin-script', METASLIDER_ADMIN_URL . 'assets/dist/js/admin.js', array('jquery'), METASLIDER_ASSETS_VERSION, true);
+        wp_register_script('metaslider-admin-script', METASLIDER_ADMIN_URL . 'assets/dist/js/admin.js', array('jquery', 'plupload-all'), METASLIDER_ASSETS_VERSION, true);
+        
         wp_localize_script('metaslider-admin-script', 'metaslider', array(
             'url' => esc_html__("URL", "ml-slider"),
             'caption' => esc_html__("Caption", "ml-slider"),
@@ -81,11 +86,12 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'create_slide_nonce' => wp_create_nonce('metaslider_create_slide'),
             'delete_slide_nonce' => wp_create_nonce('metaslider_delete_slide'),
             'undelete_slide_nonce' => wp_create_nonce('metaslider_undelete_slide'),
+            'permanent_delete_slide_nonce' => wp_create_nonce('metaslider_permanent_delete_slide'),
             'update_slide_image_nonce' => wp_create_nonce('metaslider_update_slide_image'),
+            'quickstart_slideshow_nonce' => wp_create_nonce('metaslider_quickstart_slideshow'),
             'useWithCaution' => esc_html__("Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "ml-slider"),
-            'locale' => preg_replace('/([^a-z]|informal)/', '', get_locale()),
+            'locale' => preg_replace('/[^a-z]/', '', get_locale()),
         ));
-
         wp_enqueue_script('metaslider-admin-script');
         do_action('metaslider_register_admin_scripts');
 
@@ -96,8 +102,6 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
         // Check if rest is available
         $is_rest_enabled = $this->is_rest_enabled();
-
-        $extendify_path = defined('EXTENDIFY_PATH') ? basename(EXTENDIFY_PATH) . '/extendify.php' : 'extendify/extendify.php';
 
         wp_localize_script('metaslider-admin-components', 'metaslider_api', array(
             'root' => $is_rest_enabled ? esc_url_raw(rest_url("metaslider/v1/")) : false,
@@ -114,8 +118,6 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'locale' => $this->gutenberg_get_jed_locale_data('ml-slider'),
             'default_locale' => $this->gutenberg_get_jed_locale_data('default'),
             'current_server_time' => current_time('mysql'),
-            'extendify_plugin_active' => is_plugin_active($extendify_path),
-            'deactivate_extendify_url' => wp_nonce_url('plugins.php?s=extendify&amp;plugin_status=all'),
         ));
         wp_enqueue_script('metaslider-admin-components');
     }
@@ -189,7 +191,34 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
      */
     public function render_metaslider_page()
     {
-        parent::render_admin_page();
+        $listtable = new MetaSlider_Admin_Table();
+        $listtable->prepare_items();
+        if (isset($_REQUEST['post_status'])) {
+            include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
+            include METASLIDER_PATH . "admin/views/pages/dashboard.php";
+        } else {
+            if (empty($listtable->check_num_rows())) {
+                include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
+                include METASLIDER_PATH . "admin/views/pages/dashboard.php";
+            } else {
+                if (isset($_REQUEST['id'])) {
+                    parent::render_admin_page();
+                } else {
+                    include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
+                    include METASLIDER_PATH . "admin/views/pages/dashboard.php";
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets up any logic needed for the main page
+     * TODO continue refactoring from here
+     */
+    public function render_metaslider_start_page()
+    {
+        include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
+        include METASLIDER_PATH . "admin/views/pages/start.php";
     }
 
     /**
@@ -206,6 +235,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
      */
     public function render_upgrade_metaslider_page()
     {
+        include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
         include METASLIDER_PATH . "admin/views/pages/upgrade.php";
     }
 

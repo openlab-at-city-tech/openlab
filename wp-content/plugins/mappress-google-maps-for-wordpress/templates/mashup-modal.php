@@ -8,7 +8,7 @@
 	<?php the_post_thumbnail(); ?>
 </div>
 
-<article tabindex="0" class="mapp-modal-article mapp-modal-focus">
+<article tabindex="0" class="mapp-modal-article">
 	<div class="mapp-modal-title">
 		<?php the_title('<h1>', '</h1>' ); ?>
 	</div>

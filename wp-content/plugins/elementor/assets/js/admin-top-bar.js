@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -39,7 +39,9 @@ var matchUserAgent = function matchUserAgent(UserAgentStr) {
   isBlink = matchUserAgent('Chrome') && !!window.CSS,
   // Apple Webkit engine
   isAppleWebkit = matchUserAgent('AppleWebKit') && !isBlink,
+  isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0,
   environment = {
+    isTouchDevice: isTouchDevice,
     appleWebkit: isAppleWebkit,
     blink: isBlink,
     chrome: isChrome,
@@ -102,7 +104,7 @@ function AdminTopBar() {
   var finderAction = function finderAction() {
     $e.route('finder');
   };
-  var controlSign = _environment.default.mac ? '⌘' : '^';
+  var controlSign = _environment.default.mac ? '&#8984;' : '^';
   var finderTooltipText = __('Search or do anything in Elementor', 'elementor') + " ".concat(controlSign, "+E");
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-admin-top-bar"
@@ -166,7 +168,7 @@ function BarButton(props) {
     target: props.target
   }, /*#__PURE__*/_react.default.createElement("i", {
     className: "e-admin-top-bar__bar-button-icon ".concat(props.icon)
-  }), /*#__PURE__*/_react.default.createElement("h1", {
+  }), /*#__PURE__*/_react.default.createElement("span", {
     className: "e-admin-top-bar__bar-button-title"
   }, props.children));
 }
@@ -202,11 +204,11 @@ function BarHeading(props) {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-admin-top-bar__heading"
   }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "e-admin-top-bar__heading-logo"
+    className: "e-logo-wrapper"
   }, /*#__PURE__*/_react.default.createElement("i", {
     className: "eicon-elementor",
     "aria-hidden": "true"
-  })), /*#__PURE__*/_react.default.createElement("h1", {
+  })), /*#__PURE__*/_react.default.createElement("span", {
     className: "e-admin-top-bar__heading-title"
   }, props.children));
 }
@@ -1444,9 +1446,7 @@ module.exports = wp.i18n;
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
 }
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -1488,28 +1488,31 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /***/ ((module) => {
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-  if (_i == null) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _s, _e;
-  try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
     try {
-      if (!_n && _i["return"] != null) _i["return"]();
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
     } finally {
-      if (_d) throw _e;
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
     }
+    return _arr;
   }
-  return _arr;
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 

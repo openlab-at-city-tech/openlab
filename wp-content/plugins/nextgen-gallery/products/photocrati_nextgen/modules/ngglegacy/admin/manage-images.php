@@ -742,10 +742,13 @@ function nggallery_picturelist($controller)
 			// close postboxes that should be closed
 			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 
-			// Some third party plugins alter when postboxes are enqueued, so give this line a second to wait for it to be available
-			setTimeout(function() {
-				postboxes.add_postbox_toggles('ngg-manage-gallery');
-			}, 1000);
+            // Some third party plugins alter when postboxes are enqueued, so wait for window.postboxes to exist
+            const checkTimer = setInterval(() => {
+                if (typeof window.postboxes !== 'undefined') {
+                    clearInterval(checkTimer);
+                    postboxes.add_postbox_toggles('ngg-manage-gallery');
+                }
+            }, 1000);
 
 			$(this).data('ready', true);
 

@@ -1,21 +1,21 @@
-# Copyright (C) 2022 Gravity Wiz
+# Copyright (C) 2023 Gravity Wiz
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Perks 2.2.9\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-NgbaVxewB\n"
+"Project-Id-Version: Gravity Perks 2.3.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-yN_FI1khD\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-11-23T03:19:55+00:00\n"
+"POT-Creation-Date: 2023-07-06T01:50:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: gravityperks\n"
 
 #. Plugin Name of the plugin
-#: gravityperks.php:1661
+#: gravityperks.php:1665
 msgid "Gravity Perks"
 msgstr ""
 
@@ -285,64 +285,64 @@ msgid "No, Return to Manage Perks page"
 msgstr ""
 
 #: gravityperks.php:1071
-msgid "Oops! Your site is having some trouble communicating with the our API."
+msgid "Oops! Your site is having some trouble communicating with our API."
 msgstr ""
 
 #: gravityperks.php:1072
 msgid "Let's get this fixed."
 msgstr ""
 
-#: gravityperks.php:1254
-#: gravityperks.php:1276
-#: gravityperks.php:1729
+#: gravityperks.php:1258
+#: gravityperks.php:1280
 #: gravityperks.php:1733
+#: gravityperks.php:1737
 msgid "Perks"
 msgstr ""
 
-#: gravityperks.php:1300
+#: gravityperks.php:1304
 msgid "Return to Perks Page"
 msgstr ""
 
-#: gravityperks.php:1505
+#: gravityperks.php:1509
 msgid "Welcome to Gravity Perks"
 msgstr ""
 
-#: gravityperks.php:1506
+#: gravityperks.php:1510
 msgid "Ready to get started? Click the <strong>Perks</strong> link (to the left) to take a quick tour."
 msgstr ""
 
-#: gravityperks.php:1592
+#: gravityperks.php:1596
 msgid "Does this page look strange? Your PHP version is out-of-date. <strong>Please upgrade.</strong>"
 msgstr ""
 
-#: model/perk.php:88
+#: model/perk.php:95
 msgid "The file for this perk does not exist."
 msgstr ""
 
-#: model/perk.php:113
+#: model/perk.php:120
 msgid "There is no class for this perk."
 msgstr ""
 
 #. translators: placeholder is required WordPress plugin name
-#: model/perk.php:335
+#: model/perk.php:342
 msgid "Required WordPress plugin is missing: %s."
 msgstr ""
 
 #. translators: placeholder is required WordPress plugin name, second placeholder is required version
-#: model/perk.php:341
+#: model/perk.php:348
 msgid "Required WordPress plugin is missing: %1$s (%2$s)."
 msgstr ""
 
 #. translators: placeholders are plugin name, current plugin version, plugin name, and required version respectively
-#: model/perk.php:349
+#: model/perk.php:356
 msgid "Current %1$s version (%2$s) does not meet minimum %1$s version requirement (%3$s)."
 msgstr ""
 
 #. translators: placeholder is perk name
-#: model/perk.php:411
+#: model/perk.php:418
 msgid "Uh-oh! <strong>%s</strong> needs your attention."
 msgstr ""
 
-#: model/perk.php:792
+#: model/perk.php:799
 msgid "There was an issue deleting this perk. The perk directory was not available."
 msgstr ""

@@ -193,6 +193,13 @@ export default {
 				// Set the new image if we are on a slide
 				if (this.slideId) {
 					document.querySelector('[data-slide-id="' + this.slideId + '"] .thumb').style.backgroundImage = 'url(' + thumbnail.data.data + ')'
+					
+					// Set the new image preview if we are editing a Local video's cover
+					if(this.proUser && this.slideType === 'local_video') {
+						const image_preview = document.querySelector('#slide-' + this.slideId + ' .update-cover-image');
+						image_preview.style.backgroundImage = 'url(' + thumbnail.data.data + ')';
+						image_preview.innerHTML = '';
+					}
 
 					// Update any image data fields as necessary (field does not need to exist)
 					EventManager.$emit('metaslider/image-meta-updated', ['' + this.slideId], this.$refs['external-api'].upload)

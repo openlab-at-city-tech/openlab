@@ -33,14 +33,14 @@ if ( isset( $_POST['s2_admin'] ) ) {
 		$s2_request_category = sanitize_key( $_REQUEST['category'] );
 	}
 
-	if ( false === wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-' . $s2_list_table->_args['plural'] ) ) {
+	if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_wpnonce'] ), 'bulk-' . $s2_list_table->_args['plural'] ) ) {
 		die( '<p>' . esc_html__( 'Security error! Your request cannot be completed.', 'subscribe2' ) . '</p>' );
 	}
 
 	if ( ! empty( $_POST['addresses'] ) ) {
 		$reg_sub_error = $pub_sub_error = $unsub_error = $email_error = $message = '';
 		foreach ( preg_split( '/[\s,]+/', $_POST['addresses'] ) as $email ) {
-			$clean_email = $this->sanitize_email( $email );
+			$clean_email = sanitize_email( $email );
 			if ( false === $this->validate_email( $clean_email ) ) {
 				$email_error .= empty( $email_error ) ? $email : ", $email";
 				continue;

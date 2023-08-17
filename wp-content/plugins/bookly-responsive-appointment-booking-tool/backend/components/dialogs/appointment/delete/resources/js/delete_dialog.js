@@ -50,7 +50,7 @@ jQuery(function ($) {
                 success: function (response) {
                     if (response.success) {
                         $modal.booklyModal('hide');
-                        if (response.data && response.data.queue && response.data.queue.length) {
+                        if (response.data && response.data.queue && response.data.queue.all.length) {
                             BooklyNotificationsQueueDialog.showDialog({queue: response.data.queue});
                         }
                     }

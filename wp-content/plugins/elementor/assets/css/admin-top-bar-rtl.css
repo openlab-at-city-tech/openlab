@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 #e-dashboard-widget-admin-top-bar {
   position: absolute;
   opacity: 0;
@@ -7,13 +7,17 @@
 
 #e-admin-top-bar-root {
   left: 0;
-  background: #ffffff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.0394871);
+  font-family: var(--e-a-font-family);
+  background: var(--e-a-bg-default);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
   display: none;
   position: absolute;
   top: 0;
   width: calc(100% - 160px);
   z-index: 1;
+}
+body.folded #e-admin-top-bar-root {
+  width: calc(100% - 36px);
 }
 #e-admin-top-bar-root .e-admin-top-bar {
   display: flex;
@@ -22,23 +26,22 @@
   padding: 0 16px;
 }
 #e-admin-top-bar-root .page-title-action {
-  background: #f7f7f7;
-  border: 1px solid #0275d8;
-  border-radius: 3px;
-  box-sizing: border-box;
-  color: #0275d8;
-  cursor: pointer;
-  display: inline-block;
-  line-height: 30px;
-  margin: 0 4px;
-  min-height: 30px;
-  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: uppercase;
   text-decoration: none;
+  padding: 8px 16px;
+  outline: none;
+  border: none;
+  border-radius: var(--e-a-border-radius);
+  background-color: var(--e-a-btn-bg);
+  color: var(--e-a-btn-color-invert);
+  transition: var(--e-a-transition-hover);
 }
 #e-admin-top-bar-root .page-title-action:hover {
-  background: #eceeef;
-  border-color: #1b607f;
-  color: #1b607f;
+  background-color: var(--e-a-btn-bg-hover);
+  color: var(--e-a-btn-color-invert);
 }
 #e-admin-top-bar-root .e-admin-top-bar__heading {
   display: inline-flex;
@@ -60,28 +63,16 @@
   align-items: center;
   justify-content: center;
 }
-#e-admin-top-bar-root .e-admin-top-bar__heading-logo {
-  width: 30px;
-}
-#e-admin-top-bar-root .e-admin-top-bar__heading-logo {
-  background: #93003c;
-  border-radius: 15px;
-  color: #ffffff;
-  display: inline-block;
-  font-size: 0.875rem;
-  height: 1.875rem;
-  line-height: 1.875rem;
-  text-align: center;
-  width: 1.875rem;
-}
 #e-admin-top-bar-root .e-admin-top-bar__heading-title {
-  color: #495157;
+  color: var(--e-a-color-txt);
   font-size: 15px;
   font-weight: 700;
-  font-family: "Roboto", Arial, Helvetica, Verdana, sans-serif;
   padding: 0 8px;
   line-height: normal;
-  text-transform: uppercase;
+}
+#e-admin-top-bar-root .e-admin-top-bar__main-area-buttons {
+  display: inline-flex;
+  gap: 5px;
 }
 #e-admin-top-bar-root.e-admin-top-bar--active {
   display: block;
@@ -106,22 +97,18 @@
   justify-content: center;
   margin: 0 10px;
   text-decoration: none;
-  color: #6d7882;
-}
-#e-admin-top-bar-root .e-admin-top-bar__bar-button .e-admin-top-bar__bar-button-title {
-  color: #6d7882;
+  color: var(--e-a-color-txt);
 }
 #e-admin-top-bar-root .e-admin-top-bar__bar-button .e-admin-top-bar__bar-button-icon {
   margin: 0 4px;
 }
 #e-admin-top-bar-root .e-admin-top-bar__bar-button:hover .e-admin-top-bar__bar-button-title,
 #e-admin-top-bar-root .e-admin-top-bar__bar-button:hover .e-admin-top-bar__bar-button-icon {
-  color: #93003c;
+  color: var(--e-a-color-txt-hover);
 }
 #e-admin-top-bar-root .e-admin-top-bar__bar-button-title {
   font-size: 13px;
   font-weight: 500;
-  font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
   margin: 0 4px;
   line-height: normal;
 }

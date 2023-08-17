@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Lib\Notifications\Assets\Base;
 
+use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Utils;
 
 /**
@@ -41,6 +42,17 @@ abstract class Codes
             'personal'   => Utils\Codes::replace( $text, $codes, false ),
             'impersonal' => Utils\Codes::replace( $text, $impersonal_codes, false ),
         );
+    }
+
+    /**
+     * Do replacements for WhatsApp template message.
+     *
+     * @param Notification $notification
+     * @return array
+     */
+    public function replaceForWhatsApp( $notification )
+    {
+        return $notification->getSettingsObject()->getWhatsAppMessage( $this->getReplaceCodes( 'text' ) );
     }
 
     /**

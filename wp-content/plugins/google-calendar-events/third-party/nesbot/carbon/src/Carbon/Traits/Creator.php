@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidFormatException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\OutOfRangeException;
 use SimpleCalendar\plugin_deps\Carbon\Translator;
 use Closure;
+use SimpleCalendar\plugin_deps\DateMalformedStringException;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
@@ -156,7 +157,13 @@ trait Creator
         try {
             return new static($time, $tz);
         } catch (Exception $exception) {
-            $date = @static::now($tz)->change($time);
+            // @codeCoverageIgnoreStart
+            try {
+                $date = @static::now($tz)->change($time);
+            } catch (DateMalformedStringException $ignoredException) {
+                $date = null;
+            }
+            // @codeCoverageIgnoreEnd
             if (!$date) {
                 throw new InvalidFormatException("Could not parse '{$time}': " . $exception->getMessage(), 0, $exception);
             }
@@ -540,6 +547,9 @@ trait Creator
         if (\preg_match('/(?<!\\\\)(?:\\\\{2})*(a|A)/', $format, $aMatches, \PREG_OFFSET_CAPTURE) && \preg_match('/(?<!\\\\)(?:\\\\{2})*(h|g|H|G)/', $format, $hMatches, \PREG_OFFSET_CAPTURE) && $aMatches[1][1] < $hMatches[1][1] && \preg_match('/(am|pm|AM|PM)/', $time)) {
             $format = \preg_replace('/^(.*)(?<!\\\\)((?:\\\\{2})*)(a|A)(.*)$/U', '$1$2$4 $3', $format);
             $time = \preg_replace('/^(.*)(am|pm|AM|PM)(.*)$/U', '$1$3 $2', $time);
+        }
+        if ($tz === \false) {
+            $tz = null;
         }
         // First attempt to create an instance, so that error messages are based on the unmodified format.
         $date = self::createFromFormatAndTimezone($format, $time, $tz);

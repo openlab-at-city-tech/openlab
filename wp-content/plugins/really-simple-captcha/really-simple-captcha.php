@@ -1,15 +1,18 @@
 <?php
 /*
-Plugin Name: Really Simple CAPTCHA
-Plugin URI: https://contactform7.com/captcha/
-Description: Really Simple CAPTCHA is a CAPTCHA module intended to be called from other plugins. It is originally created for my Contact Form 7 plugin.
-Author: Takayuki Miyoshi
-Author URI: https://ideasilo.wordpress.com/
-Text Domain: really-simple-captcha
-Version: 2.1
-*/
+ * Plugin Name: Really Simple CAPTCHA
+ * Plugin URI: https://contactform7.com/captcha/
+ * Description: Really Simple CAPTCHA is a CAPTCHA module intended to be called from other plugins. It is originally created for my Contact Form 7 plugin.
+ * Author: Takayuki Miyoshi
+ * Author URI: https://ideasilo.wordpress.com/
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Version: 2.2
+ * Requires at least: 6.1
+ * Requires PHP: 7.4
+ */
 
-define( 'REALLYSIMPLECAPTCHA_VERSION', '2.1' );
+define( 'REALLYSIMPLECAPTCHA_VERSION', '2.2' );
 
 class ReallySimpleCaptcha {
 
@@ -36,14 +39,14 @@ class ReallySimpleCaptcha {
 
 		/* Array of fonts. Randomly picked up per character */
 		$this->fonts = array(
-			dirname( __FILE__ ) . '/gentium/GenBkBasR.ttf',
-			dirname( __FILE__ ) . '/gentium/GenBkBasI.ttf',
-			dirname( __FILE__ ) . '/gentium/GenBkBasBI.ttf',
-			dirname( __FILE__ ) . '/gentium/GenBkBasB.ttf',
+			path_join( __DIR__, 'gentium/GenBkBasR.ttf' ),
+			path_join( __DIR__, 'gentium/GenBkBasI.ttf' ),
+			path_join( __DIR__, 'gentium/GenBkBasBI.ttf' ),
+			path_join( __DIR__, 'gentium/GenBkBasB.ttf' ),
 		);
 
 		/* Directory temporary keeping CAPTCHA images and corresponding text files */
-		$this->tmp_dir = path_join( dirname( __FILE__ ), 'tmp' );
+		$this->tmp_dir = path_join( __DIR__, 'tmp' );
 
 		/* Array of CAPTCHA image size. Width and height */
 		$this->img_size = array( 72, 24 );
@@ -122,28 +125,31 @@ class ReallySimpleCaptcha {
 
 			for ( $i = 0; $i < strlen( $word ); $i++ ) {
 				$font = $this->fonts[array_rand( $this->fonts )];
-				$font = $this->normalize_path( $font );
+				$font = wp_normalize_path( $font );
 
-				imagettftext( $im, $this->font_size, mt_rand( -12, 12 ), $x,
-					$this->base[1] + mt_rand( -2, 2 ), $fg, $font, $word[$i] );
+				imagettftext(
+					$im, $this->font_size, mt_rand( -12, 12 ), $x,
+					$this->base[1] + mt_rand( -2, 2 ), $fg, $font, $word[$i]
+				);
+
 				$x += $this->font_char_width;
 			}
 
 			switch ( $this->img_type ) {
 				case 'jpeg':
 					$filename = sanitize_file_name( $prefix . '.jpeg' );
-					$file = $this->normalize_path( $dir . $filename );
+					$file = wp_normalize_path( path_join( $dir, $filename ) );
 					imagejpeg( $im, $file );
 					break;
 				case 'gif':
 					$filename = sanitize_file_name( $prefix . '.gif' );
-					$file = $this->normalize_path( $dir . $filename );
+					$file = wp_normalize_path( path_join( $dir, $filename ) );
 					imagegif( $im, $file );
 					break;
 				case 'png':
 				default:
 					$filename = sanitize_file_name( $prefix . '.png' );
-					$file = $this->normalize_path( $dir . $filename );
+					$file = wp_normalize_path( path_join( $dir, $filename ) );
 					imagepng( $im, $file );
 			}
 
@@ -164,10 +170,10 @@ class ReallySimpleCaptcha {
 	 */
 	public function generate_answer_file( $prefix, $word ) {
 		$dir = trailingslashit( $this->tmp_dir );
-		$answer_file = $dir . sanitize_file_name( $prefix . '.txt' );
-		$answer_file = $this->normalize_path( $answer_file );
+		$answer_file = path_join( $dir, sanitize_file_name( $prefix . '.txt' ) );
+		$answer_file = wp_normalize_path( $answer_file );
 
-		if ( $fh = fopen( $answer_file, 'w' ) ) {
+		if ( $fh = @fopen( $answer_file, 'w' ) ) {
 			$word = strtoupper( $word );
 			$salt = wp_generate_password( 64 );
 			$hash = hash_hmac( 'md5', $word, $salt );
@@ -187,7 +193,7 @@ class ReallySimpleCaptcha {
 	 * @return bool Return true if the two match, otherwise return false.
 	 */
 	public function check( $prefix, $response ) {
-		if ( 0 == strlen( $prefix ) ) {
+		if ( 0 === strlen( $prefix ) ) {
 			return false;
 		}
 
@@ -196,7 +202,7 @@ class ReallySimpleCaptcha {
 
 		$dir = trailingslashit( $this->tmp_dir );
 		$filename = sanitize_file_name( $prefix . '.txt' );
-		$file = $this->normalize_path( $dir . $filename );
+		$file = wp_normalize_path( path_join( $dir, $filename ) );
 
 		if ( is_readable( $file )
 		and $code = file_get_contents( $file ) ) {
@@ -223,7 +229,7 @@ class ReallySimpleCaptcha {
 
 		foreach ( $suffixes as $suffix ) {
 			$filename = sanitize_file_name( $prefix . $suffix );
-			$file = $this->normalize_path( $dir . $filename );
+			$file = wp_normalize_path( path_join( $dir, $filename ) );
 
 			if ( is_file( $file ) ) {
 				@unlink( $file );
@@ -239,7 +245,7 @@ class ReallySimpleCaptcha {
 	 */
 	public function cleanup( $minutes = 60, $max = 100 ) {
 		$dir = trailingslashit( $this->tmp_dir );
-		$dir = $this->normalize_path( $dir );
+		$dir = wp_normalize_path( $dir );
 
 		if ( ! is_dir( $dir )
 		or ! is_readable( $dir ) ) {
@@ -260,14 +266,14 @@ class ReallySimpleCaptcha {
 					continue;
 				}
 
-				$file = $this->normalize_path( $dir . $filename );
+				$file = wp_normalize_path( path_join( $dir, $filename ) );
 
 				if ( ! file_exists( $file )
 				or ! $stat = stat( $file ) ) {
 					continue;
 				}
 
-				if ( ( $stat['mtime'] + $minutes * 60 ) < time() ) {
+				if ( ( $stat['mtime'] + $minutes * MINUTE_IN_SECONDS ) < time() ) {
 					if ( ! @unlink( $file ) ) {
 						@chmod( $file, 0644 );
 						@unlink( $file );
@@ -294,42 +300,47 @@ class ReallySimpleCaptcha {
 	 */
 	public function make_tmp_dir() {
 		$dir = trailingslashit( $this->tmp_dir );
-		$dir = $this->normalize_path( $dir );
+		$dir = wp_normalize_path( $dir );
 
 		if ( ! wp_mkdir_p( $dir ) ) {
 			return false;
 		}
 
-		$htaccess_file = $this->normalize_path( $dir . '.htaccess' );
+		$htaccess_file = wp_normalize_path( path_join( $dir, '.htaccess' ) );
 
 		if ( file_exists( $htaccess_file ) ) {
-			return true;
+			list( $first_line_comment ) = (array) file(
+				$htaccess_file,
+				FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
+			);
+
+			if ( '# Apache 2.4+' === $first_line_comment ) {
+				return true;
+			}
 		}
 
-		if ( $handle = fopen( $htaccess_file, 'w' ) ) {
-			fwrite( $handle, 'Order deny,allow' . "\n" );
-			fwrite( $handle, 'Deny from all' . "\n" );
-			fwrite( $handle, '<Files ~ "^[0-9A-Za-z]+\\.(jpeg|gif|png)$">' . "\n" );
-			fwrite( $handle, '    Allow from all' . "\n" );
-			fwrite( $handle, '</Files>' . "\n" );
+		if ( $handle = @fopen( $htaccess_file, 'w' ) ) {
+			fwrite( $handle, "# Apache 2.4+\n" );
+			fwrite( $handle, "<IfModule authz_core_module>\n" );
+			fwrite( $handle, "    Require all denied\n" );
+			fwrite( $handle, '    <FilesMatch "^\w+\.(jpe?g|gif|png)$">' . "\n" );
+			fwrite( $handle, "        Require all granted\n" );
+			fwrite( $handle, "    </FilesMatch>\n" );
+			fwrite( $handle, "</IfModule>\n" );
+			fwrite( $handle, "\n" );
+			fwrite( $handle, "# Apache 2.2\n" );
+			fwrite( $handle, "<IfModule !authz_core_module>\n" );
+			fwrite( $handle, "    Order deny,allow\n" );
+			fwrite( $handle, "    Deny from all\n" );
+			fwrite( $handle, '    <FilesMatch "^\w+\.(jpe?g|gif|png)$">' . "\n" );
+			fwrite( $handle, "        Allow from all\n" );
+			fwrite( $handle, "    </FilesMatch>\n" );
+			fwrite( $handle, "</IfModule>\n" );
+
 			fclose( $handle );
 		}
 
 		return true;
 	}
 
-	/**
-	 * Normalize a filesystem path.
-	 *
-	 * This should be replaced by wp_normalize_path when the plugin's
-	 * minimum requirement becomes WordPress 3.9 or higher.
-	 *
-	 * @param string $path Path to normalize.
-	 * @return string Normalized path.
-	 */
-	private function normalize_path( $path ) {
-		$path = str_replace( '\\', '/', $path );
-		$path = preg_replace( '|/+|', '/', $path );
-		return $path;
-	}
 }

@@ -6,18 +6,6 @@
 function openlab_custom_the_content($content) {
     global $post;
 
-    if ($post->post_name == 'contact-us' && ($post->post_type == 'page' || $post->post_type == 'help')) {
-        $form = do_shortcode('[contact-form-7 id="5555" title="Contact Form 1"]');
-        $content = <<<HTML
-                <div class="panel panel-default">
-                    <div class="panel-heading">Contact Form</div>
-                    <div class="panel-body">
-                        {$form}
-                    </div>
-                </div>
-HTML;
-    }
-
     if ($post->post_type === 'page' && $post->post_name === 'calendar') {
 
         if (function_exists('eo_get_events')) {

@@ -7272,6 +7272,17 @@ a.lighter-hover:hover,
 a.lighter-hover:focus {
   color: #49cabe;
 }
+/* Button elements styled like text links. */
+button.link-button {
+  background: none;
+  border: none;
+  color: #333333;
+  padding: 0;
+  text-decoration: underline;
+}
+button.link-button:hover {
+  text-decoration: none;
+}
 body .darken-for-accessibility {
   color: #3ba49b;
 }
@@ -7566,6 +7577,12 @@ input[type="submit"] {
 .disabled-checkbox {
   opacity: 0.4;
 }
+input:disabled + label {
+  opacity: 0.7;
+}
+.is-disabled label {
+  opacity: 0.7;
+}
 .form-control,
 .bp-docs #comments .comment-respond .comment-form-comment textarea {
   margin-bottom: 15px;
@@ -7588,11 +7605,6 @@ input[type="submit"] {
 }
 .form-control.type-file-wrapper input {
   display: inline-block;
-}
-@media (max-width: 767px) {
-  .form-control.related-links-url {
-    display: inline-block;
-  }
 }
 .parsley-errors-list.filled {
   margin: 0;
@@ -7729,27 +7741,43 @@ input[type="submit"] {
   border-top: 1px solid #dddddd;
   padding-top: 15px;
 }
-.related-link-actions {
+.link-edit-items.social-link-edit-items {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+.link-edit-items .link-actions {
   display: inline-block;
   margin-top: -15px;
   vertical-align: middle;
 }
 @media (max-width: 767px) {
-  .related-link-actions {
+  .link-edit-items .link-actions {
     margin-top: 0;
   }
 }
-button.related-link-action {
+.link-edit-items button.link-action {
   background: none;
   border: none;
   font-size: 20px;
   height: 32px;
 }
-button.related-link-action.related-link-add {
+.link-edit-items button.link-action.link-add {
   padding: 0;
 }
-button.related-link-action.related-link-add .fa {
+.link-edit-items button.link-action.link-add .fa {
   margin-left: 0;
+}
+@media (max-width: 767px) {
+  .link-edit-items .link-url {
+    display: inline-block;
+  }
+}
+.link-edit-items .form-inline.label-combo label {
+  width: auto;
+}
+.link-edit-items select {
+  width: 90%;
 }
 .submenu .submenu-text {
   margin-right: 8px;
@@ -8206,7 +8234,7 @@ body .spaced-list label {
   margin-bottom: 12px;
 }
 body .note {
-  color: #999999;
+  color: #757575;
 }
 body .padded-img {
   border-radius: 4px;
@@ -8238,6 +8266,9 @@ body .padded-img .group-single-badges .group-badge {
   font-weight: normal;
   min-width: 0px;
   padding: 0 4px;
+}
+body .padded-img .group-single-badges .group-badge.group-badge-inactive {
+  background: #f7e700;
 }
 body .padded-img .group-single-badges .group-badge a {
   color: #4f4f4f;
@@ -8275,6 +8306,16 @@ body a.roll-over-loss:focus {
 body a.roll-over-color:hover,
 body a.roll-over-color:focus {
   color: #333333 !important;
+}
+body .group-active-status-fieldset {
+  margin: 24px 0;
+}
+body .group-active-status-fieldset p {
+  margin-bottom: 8px;
+}
+body .group-active-status-fieldset label {
+  font-weight: 600;
+  margin-left: 8px;
 }
 body .group-creators-section {
   margin-bottom: 20px;
@@ -9425,6 +9466,31 @@ body form .checkbox-list-container {
 .mobile-group-site-links .portfolio-site-link {
   font-size: 1.75rem;
 }
+.show-admin-bar-on-site-setting {
+  margin-top: 25px;
+}
+.group-setting-note {
+  margin-top: -10px;
+}
+.collaboration-tool-toggle {
+  margin-bottom: 8px;
+}
+.collaboration-tool-toggle label {
+  font-weight: 700;
+}
+.collaboration-tool-toggle .collaboration-tool-gloss {
+  padding-left: 20px;
+}
+.collaboration-tool-toggle .collaboration-tool-gloss a::after {
+  content: "\00a0\f08e";
+  font-family: fontawesome;
+  font-style: normal;
+}
+a.external-link::after {
+  content: "\00a0\f08e";
+  font-family: fontawesome;
+  font-style: normal;
+}
 @media (max-width: 767px) {
   .sidebar .sidebar-wrapper {
     width: 95%;
@@ -9906,6 +9972,10 @@ body form .checkbox-list-container {
 #content .create-group-submenu .submenu-title {
   margin-right: 4px;
   border-right: none;
+}
+body .site-template-component__category {
+  color: #666;
+  opacity: 1;
 }
 .shared-cloning-authorship-settings label {
   font-weight: normal;
@@ -10870,16 +10940,46 @@ a.delete-doc-button {
   float: left;
   margin-right: 5px;
 }
-#invite-anyone-group-list.group-list .group-item-wrapper {
-  height: 83px;
+body.groups.connections .bp-template-notice {
+  margin-bottom: 20px;
 }
-#invite-anyone-group-list.group-list .group-item-wrapper label {
-  width: 100%;
+body.groups.connections .connection-settings {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
-@media (max-width: 767px) {
-  #invite-anyone-group-list.group-list .group-item-wrapper {
-    height: auto;
-  }
+.connections-icon {
+  color: #63dfd2;
+}
+body.invite-new-members ul.ui-autocomplete {
+  background: #fff;
+  border: 1px solid #333333;
+  list-style-type: none;
+  max-width: 50%;
+  padding: 15px;
+}
+body.invite-new-members .ui-menu-item-wrapper {
+  padding: 6px;
+}
+body.invite-new-members .ia-autocomplete-hit {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+#invite-anyone-group-list {
+  list-style-type: none;
+  padding: 0;
+}
+#invite-anyone-group-list li {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+#invite-anyone-group-list a.remove-group {
+  cursor: pointer;
 }
 @media (max-width: 767px) {
   .sent-invites-panel table.invite-anyone-sent-invites .col-group-invitations {
@@ -11337,6 +11437,11 @@ body.single-event #content .eo-event-venue-map {
 }
 .messages .message-actions .message-unread {
   color: #ff5959;
+}
+.inappropriate-message-notice {
+  border: 2px solid #f7e700;
+  border-radius: 4px;
+  padding: 10px;
 }
 .my-friends .group-list .group-item-wrapper .generic-button.friendship-button {
   margin-top: 8px;
@@ -12124,4 +12229,25 @@ p.private-membership-indicator {
   margin: 0 0 15px;
   font-size: 14px;
   color: #333;
+}
+/* Parsley.js styling for group create/edit forms */
+.group-validate-form .error-container {
+  font-weight: 400;
+  border-radius: 4px;
+  background: #f7e700;
+  border-color: #f7e700;
+}
+.group-validate-form .error-container ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.group-validate-form .error-container ul li {
+  padding: 15px;
+}
+.group-validate-form .department-selector .error-container {
+  margin-top: 15px;
+}
+.group-validate-form #site-options .error-container {
+  margin-bottom: 15px;
 }

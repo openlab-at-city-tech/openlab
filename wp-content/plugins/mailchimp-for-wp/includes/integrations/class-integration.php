@@ -97,11 +97,6 @@ abstract class MC4WP_Integration {
 		$options         = array_merge( $default_options, $options );
 
 		/**
-		 * @deprecated Use mc4wp_integration_{$slug}_options instead
-		 */
-		$options = (array) apply_filters( 'mc4wp_' . $slug . '_integration_options', $options );
-
-		/**
 		 * Filters options for a specific integration
 		 *
 		 * The dynamic portion of the hook, `$slug`, refers to the slug of the ingration.
@@ -156,7 +151,7 @@ abstract class MC4WP_Integration {
 		// replace selector by integration specific selector so the css affects just this checkbox
 		$css = str_ireplace( '__INTEGRATION_SLUG__', $this->slug, $css );
 
-		printf( '<style type="text/css">%s</style>', $css );
+		printf( '<style>%s</style>', $css );
 	}
 
 	/**
@@ -167,6 +162,11 @@ abstract class MC4WP_Integration {
 	public function get_label_text() {
 		$integration = $this;
 		$label       = $this->options['label'];
+
+		if ( empty( $label ) ) {
+			$default_options = $this->get_default_options();
+			$label = $default_options['label'];
+		}
 
 		/**
 		 * Filters the checkbox label
@@ -405,24 +405,6 @@ abstract class MC4WP_Integration {
 		 */
 		$data = apply_filters( "mc4wp_integration_{$slug}_data", $data, $related_object_id );
 
-		/**
-		 * @ignore
-		 * @deprecated 4.0
-		 */
-		$data = apply_filters( 'mc4wp_merge_vars', $data );
-
-		/**
-		 * @deprecated 4.0
-		 * @ignore
-		 */
-		$data = apply_filters( 'mc4wp_integration_merge_vars', $data, $integration );
-
-		/**
-		 * @deprecated 4.0
-		 * @ignore
-		 */
-		$data = apply_filters( "mc4wp_integration_{$slug}_merge_vars", $data, $integration );
-
 		$email_type = mc4wp_get_email_type();
 
 		$mapper = new MC4WP_List_Data_Mapper( $data, $list_ids );
@@ -496,7 +478,7 @@ abstract class MC4WP_Integration {
 		 */
 		do_action( 'mc4wp_integration_subscribed', $integration, $subscriber->email_address, $subscriber->merge_fields, $map, $related_object_id );
 
-		return $result;
+		return true;
 	}
 
 	/**
@@ -554,8 +536,7 @@ abstract class MC4WP_Integration {
 	 * @return array
 	 */
 	public function get_data() {
-		$data = array_merge( (array) $_GET, (array) $_POST );
-		return $data;
+		return array_merge( (array) $_GET, (array) $_POST );
 	}
 
 	/**

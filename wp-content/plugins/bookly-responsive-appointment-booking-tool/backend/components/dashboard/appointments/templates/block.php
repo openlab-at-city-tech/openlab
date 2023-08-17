@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-js-dashboard-appointments">
     <div class="row pb-3">
         <div class="col-md-6 col-lg-3">

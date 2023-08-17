@@ -29,8 +29,6 @@ Vue.mixin({
 		this.themeEditorLink = window.metaslider_api.theme_editor_link
 		this.metasliderPage = window.metaslider_api.metaslider_page
 		this.production = process.env.NODE_ENV === 'production'
-		this.extendifyPluginActive = window.metaslider_api.extendify_plugin_active
-		this.deactivateExtendifyUrl = window.metaslider_api.deactivate_extendify_url
 
 		this.isIE11 = !!window.MSInputMethodContext && !!document.documentMode
 

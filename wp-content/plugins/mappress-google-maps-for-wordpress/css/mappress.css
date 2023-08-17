@@ -1,16 +1,28 @@
+
 /*
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
+mappress-map poi {
+	display: none;
+}
+
 .mapp-layout {
 	border: 1px solid lightgray;
 	box-sizing: border-box;
+	display: block;
 	max-width: none;				/* Some themes limit, e.g. 2020 */
 	min-width: 200px;
 	opacity: 1 !important;			/* Some themes set to 0 */
 	padding: 0px !important;		/* Some themes set */
+}
+
+mappress-map.mapp-layout {
+	display: flex;
+	flex-direction: column;
+	position: relative;             /* Needed for filters with web component */
 }
 
 .mapp-layout * {
@@ -129,40 +141,77 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 /*
 	-----------------------------------------------------------------------------------
-	Geolocate control
+	Controls
+	Leaflet needs the inner div to get size right, so google was done the same way
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-google-geolocate-wrapper {
+.mapp-google-control {
+	background-color: white;
 	box-shadow: rgb(0 0 0 / 30%) 0px 1px 4px -1px;
-	border-radius: 4px;
 	position: absolute;
-	bottom: 120px; right: 10px;
-
 }
 
-.mapp-google-geolocate-wrapper .mapp-geolocate-control {
-	background-color: white;
-	background: white url('../images/geolocate-2x.png') no-repeat center center;
-	background-size: 18px 18px;
+.mapp-google-control > div {
+	background-position: center;
+	background-repeat: no-repeat;
 	height: 40px;
+	opacity: 0.6;
 	width: 40px;
 }
 
-.mapp-leaflet-geolocate-wrapper {
+.mapp-google-control:hover { background-color: #f4f4f4; }
+.mapp-google-control:hover > div { opacity: 1; }
+
+.mapp-leaflet-control {
 	border: 2px solid rgba(0,0,0,0.2);
 	border-radius: 4px;
 	position: absolute;
-	bottom: 120px; right: 10px;
 	z-index: 1000;
 }
 
-.mapp-leaflet-geolocate-wrapper .mapp-geolocate-control {
+.mapp-leaflet-control > div {
 	background-color: white;
-	background: white url('../images/geolocate-2x.png') no-repeat center center;
-	background-size: 18px 18px;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 2px;
 	height: 30px;
+	line-height: 30px;
+	opacity: 1;
 	width: 30px;
+}
+
+.mapp-leaflet-control:hover > div {
+	background-color: #f4f4f4;
+	opacity: 1;
+}
+
+.mapp-google-fullscreen, .mapp-leaflet-fullscreen {
+	top: 10px; right: 10px;
+}
+
+.mapp-google-fullscreen > div, .mapp-leaflet-fullscreen > div {
+	background-image: url('../images/fullscreen.svg');
+	background-size: 18px 18px;
+}
+
+.mapp-google-geolocate, .mapp-leaflet-geolocate {
+	bottom: 120px; right: 10px;
+}
+
+.mapp-mini .mapp-google-geolocate, .mapp-mini .mapp-leaflet-geolocate {
+	bottom: auto;
+	top: 60px;
+}
+
+.mapp-google-geolocate > div {
+	background-image: url('../images/geolocate.svg');
+	background-size: 18px 18px;
+}
+
+.mapp-leaflet-geolocate > div {
+	background-image: url('../images/geolocate.svg');
+	background-size: 14px 14px;
 }
 
 /*
@@ -349,7 +398,10 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-paginate {}
+.mapp-paginate {
+	align-items: center;
+	display: flex;
+}
 
 /* Frontend buttons are divs to prevent theme interference w/styling */
 .mapp-paginate-button {
@@ -511,7 +563,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 .mapp-filter-button {
 	align-items: center;
 	display: flex;
-	height: 35px;
 	justify-content: center;
 }
 
@@ -530,6 +581,10 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	min-width: 100%;
 	overflow: auto;
 	padding: 5px 10px;
+}
+
+.mapp-filter-values .mapp-control {
+	display: block;
 }
 
 .mapp-filter-toolbar {
@@ -679,10 +734,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	z-index: 1005;		/* Needed for Leaflet, above menu icon, below menu */
 }
 
-.mapp-ib-content .mapp-ib-flip {
-	flex-direction: column-reverse;
-}
-
 /* In fullscreen Google sets map z-index very high */
 :fullscreen ~ .mapp-ib-wrapper { z-index: 10000000000; }
 :-webkit-full-screen ~ .mapp-ib-wrapper { z-index: 10000000000; }
@@ -719,78 +770,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	left: -10px;
 	position: relative;
 	width: 0;
-}
-
-.mapp-ib-flip .mapp-ib-tip {
-	transform: rotate(180deg);
-}
-
-/*
-	-----------------------------------------------------------------------------------
-	IB Styles
-	-----------------------------------------------------------------------------------
-*/
-.mapp-ib-dark .mapp-ib {
-	background-color: black;
-	border: 5px solid white;
-	color: white;
-}
-
-.mapp-ib-dark .mapp-ib-tip {
-	height: 10px;
-}
-
-.mapp-ib-dark .mapp-ib-tip:before, .mapp-ib-dark .mapp-ib-tip:after {
-	border: 15px solid transparent;
-}
-
-.mapp-ib-dark .mapp-ib-tip:before {
-	border-top: 15px solid white;
-	border-bottom: none;
-	left: -15px;
-	top: -4px;
-}
-
-.mapp-ib-dark .mapp-ib-tip:after {
-	border: 10px solid transparent;
-	border-top: 10px solid black;
-	border-bottom: none;
-	content: "";
-	left: -10px;
-	position: absolute;
-	top: -6px
-}
-
-.mapp-ib-light .mapp-ib {
-	background-color: white;
-	box-shadow: 10px 10px 0px rgb(0 0 0 / 40%);
-	border: 5px solid black;
-	color: black;
-}
-
-.mapp-ib-light .mapp-ib-tip {
-	height: 10px;
-}
-
-.mapp-ib-light .mapp-ib-tip:before, .mapp-ib-light .mapp-ib-tip:after {
-	border: 15px solid transparent;
-}
-
-.mapp-ib-light .mapp-ib-tip:before {
-	border-top: 15px solid black;
-	border-bottom: none;
-	left: -15px;
-	top: -4px;
-}
-
-.mapp-ib-light .mapp-ib-tip:after {
-	border: 10px solid transparent;
-	border-top: 10px solid white;
-	border-bottom: none;
-	content: "";
-	left: -10px;
-	position: absolute;
-	top: -6px
 }
 
 /*
@@ -884,7 +863,19 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 .mapp-ie .mapp-iw .mapp-body {
 	flex: none;
-	overflow: none;
+}
+
+/* Data table */
+.mapp-iw .mapp-table {
+	margin-top: 10px;
+}
+
+.mapp-iw .mapp-label {
+	font-weight: 500;
+}
+
+.mapp-iw .mapp-cell {
+	padding: 2px 10px;
 }
 
 /*
@@ -1042,11 +1033,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	animation: floatup 0.4s forwards;
 }
 
-.mapp-ib-wrapper.mapp-ib-flip.mapp-ib-float {
-	animation: floatdown 0.4s forwards;
-}
-
-
 /*
 	-----------------------------------------------------------------------------------
 	Mini view
@@ -1075,9 +1061,10 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	height: 100%;
 }
 
-.mapp-view-list, .mapp-view-map {
-	justify-content: center;
+.mapp-button.mapp-view-list, .mapp-button.mapp-view-map {
 	align-items: center;
+	border: none;
+	justify-content: center;
 }
 
 .mapp-view-list img, .mapp-view-map img {
@@ -1203,7 +1190,8 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-menu-toggle {
+/* Extra selectivity because iframe defaults contents to color black */
+.mapp-main .mapp-menu-toggle {
 	background: white url('../images/menu-2x.png') no-repeat center center;
 	background-size: 24px 24px;
 	box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
@@ -1270,54 +1258,108 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 /*
 	-----------------------------------------------------------------------------------
+	Dialog / modal
+	-----------------------------------------------------------------------------------
+*/
+.mapp-dialog {
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow: hidden;
+	padding: 0;
+}
+
+/* Must wait until open, otherwise flash of content */
+.mapp-dialog[open] {
+	display: flex;
+	flex-direction: column;
+}
+
+.mapp-dialog::backdrop {
+	background-color: black;
+	opacity: 0.6;
+}
+
+@media screen and (max-width: 650px) {
+	.mapp-dialog {
+		height: 100vh;
+		max-height: none;
+		max-width: none;
+		width: 100vw;
+	}
+}
+
+.mapp-dialog-title {
+	font-size: 20px;
+	padding: 15px;
+}
+
+.mapp-dialog-content {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	overflow: hidden;
+	padding: 15px;
+}
+
+.mapp-dialog-toolbar {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	padding: 15px;
+	border-top: 1px solid lightgray;
+}
+
+.mapp-dialog-toolbar > div {
+	display: flex;
+	gap: 5px;
+}
+
+.mapp-dialog-nopad .mapp-dialog-title, .mapp-dialog-nopad .mapp-dialog-content, .mapp-dialog-nopad .mapp-dialog-toolbar {
+	padding: 0;
+}
+
+.mapp-dialog-close {
+	color: black;
+	cursor: pointer;
+	display: inline-block;
+	font-family: sans-serif;
+	font-size: 36px;
+	line-height: 36px;
+	position: absolute;
+	text-align: center;
+	top: 10px; right: 10px;
+	z-index: 1;
+}
+
+.mapp-dialog-close:hover {
+	color: rgb(0,124,186);
+}
+
+/*
+	-----------------------------------------------------------------------------------
 	Mashup modal:
-
-	Use these styles with the 'mashup-modal.php' template.
-
-	.mapp-modal
-		.mapp-modal-backdrop
-		.mapp-modal-content
-			.mapp-modal-close
-			.mapp-modal-featured
-			.mapp-modal-article
-				.mapp-modal-body
-				.mapp-modal-meta
-
 	-----------------------------------------------------------------------------------
 */
 
-/* Prevent scrollbars when popup is open */
-body.mapp-modal-noscroll {
-	overflow-y: hidden;
-}
-
-.mapp-modal {
-	position: fixed;
-	top: 0; left: 0; bottom: 0; right: 0;
-	z-index: 100000;		/* WP adminbar is 99999 */
+.mapp-dialog.mapp-modal {
+	height: 80vh;
+	max-height: 900px;
+	max-width: 1024px;
+	width: 80vw;
 }
 
 .mapp-modal-title {
 	margin-bottom: 15px;
 }
 
-.mapp-modal-content {
-	background-color: white;
-	box-shadow: 5px 5px 10px #888;
-	box-sizing: content-box;
-	display: flex;
-	height: 80vh;
-	max-height: 900px;
-	max-width: 1024px;
-	position: fixed;
-	top: 50%; left: 50%;
-	transform: translate(-50%, -50%);
-	width: 80vw;
-	z-index: 1;
+.mapp-modal-title h1 {
+	margin: 0;
+	padding: 0 0 15px 0;
 }
 
 .mapp-modal-template {
 	display: flex;
+	flex: 1;
 	flex-direction: row;
 }
 
@@ -1338,7 +1380,7 @@ body.mapp-modal-noscroll {
 	flex: 1;
 	flex-direction: column;
 	overflow: auto;
-	padding: 30px;
+	padding: 20px;
 }
 
 .mapp-modal-meta {
@@ -1346,36 +1388,6 @@ body.mapp-modal-noscroll {
 	font-size: 12px;
 	justify-content: space-between;
 	margin-top: 50px;
-}
-
-/* Element to receive focus when modal opens (e.g. scrollable post content) */
-.mapp-modal-focus {
-	outline: none;
-}
-
-.mapp-modal-backdrop {
-	background-color: black;
-	opacity: 0.6;
-	height: 100vh;
-	width: 100vw;
-	user-select: none;
-}
-
-.mapp-modal-close {
-	color: white;
-	cursor: pointer;
-	display: inline-block;
-	font-family: sans-serif;
-	font-size: 36px;
-	line-height: 36px;
-	position: absolute;
-	text-align: center;
-	top: 5px; right: -40px;
-	z-index: 1;
-}
-
-.mapp-modal-close:hover {
-	color: black;
 }
 
 .mapp-modal-spinner-wrapper {
@@ -1401,7 +1413,16 @@ body.mapp-modal-noscroll {
 	-----------------------------------------------------------------------------------
 */
 
-/* Size only works with position absolute AND h/w=100%; z-index because 2020 page breaks appear over map */
+/* Newer component iframe doesn't need position absolute because wrapper uses aspect-ratio instead of padding-bottom */
+.mapp-component-iframe {
+	background-color: rgba(221,221,221,1);    /* #ddd */
+	border: none;
+	max-height: none !important;        /* 2021 restricts */
+	overflow: hidden;
+	z-index: 1;
+}
+
+/* Non-component iframe.  Size only works with position absolute AND h/w=100%; z-index because 2020 page breaks appear over map */
 .mapp-iframe {
 	background-color: rgba(221,221,221,1);	/* #ddd */
 	border: none;
@@ -1414,19 +1435,14 @@ body.mapp-modal-noscroll {
 	z-index: 1;
 }
 
-.mapp-iframe-html { height: 100%; }
-
-.mapp-iframe-body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-}
-
-.mapp-iframe-body * {
+.mapp-iframe-html, .mapp-iframe-body { 
 	box-sizing: border-box;
 	color: black;
 	font-family: sans-serif;
 	font-size: 13px;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 
@@ -1507,6 +1523,8 @@ body.mapp-modal-noscroll {
 	height: auto !important;
 }
 
+.mapp-layout.mapp-has-iframe { position: relative; }
+
 .mapp-layout.mapp-has-iframe iframe,
 .mapp-layout.mapp-has-iframe div.cmplz-blocked-content-container,
 .mapp-layout.mapp-has-iframe [data-placeholder_class_index] {
@@ -1532,17 +1550,66 @@ body.mapp-modal-noscroll {
 	table-layout: fixed;
 }
 
-.mapp-table .mapp-row {
-	display: table-row;
+.mapp-table .mapp-row { display: table-row; }
+.mapp-table .mapp-cell { display: table-cell; }
+.mapp-table .mapp-label { display: table-cell; }
+
+/*
+	-----------------------------------------------------------------------------------
+	Generic controls
+	-----------------------------------------------------------------------------------
+*/
+
+div.mapp-control {
+	display: inline-block;
 }
 
-.mapp-table .mapp-cell {
-	display: table-cell;
+.mapp-control > label {
+	align-items:center;
+	display: inline-flex;
 }
 
-.mapp-table .mapp-label {
-	display: table-cell;
-	font-weight: 500;
+.mapp-control > label > span {
+	margin: 0 5px;
+}
+
+.mapp-label-top {
+	margin-bottom: 3px;
+}
+
+/* Nested components (checkboxes & radios) */
+.mapp-control-checkbox label, .mapp-control-radio label {
+	margin-right: 20px;
+}
+
+/* Try to remove some WP styling */
+.mapp-control input[type="radio"], .mapp-control input[type="checkbox"] {
+	margin: 0;
+}
+
+.mapp-help-text {
+	font-style: italic;
+	padding: 5px 0;
+}
+
+.mapp-help-link {
+	display: inline-block;
+	text-decoration: none;
+	vertical-align: baseline;
+}
+
+.mapp-help-warning {
+	border: 1px solid lightgray;
+	border-left: 4px solid #dba617;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.mapp-help-error {
+	border: 1px solid lightgray;
+	border-left: 4px solid #d63638;
+	margin-top: 10px;
+	padding: 10px;
 }
 
 

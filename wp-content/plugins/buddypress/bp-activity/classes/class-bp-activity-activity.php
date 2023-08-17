@@ -255,7 +255,7 @@ class BP_Activity_Activity {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param BP_Activity_Activity $this Current instance of the activity item being saved. Passed by reference.
+		 * @param BP_Activity_Activity $activity Current instance of the activity item being saved. Passed by reference.
 		 */
 		do_action_ref_array( 'bp_activity_before_save', array( &$this ) );
 
@@ -326,7 +326,7 @@ class BP_Activity_Activity {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param BP_Activity_Activity $this Current instance of activity item being saved. Passed by reference.
+		 * @param BP_Activity_Activity $activity Current instance of activity item being saved. Passed by reference.
 		 */
 		do_action_ref_array( 'bp_activity_after_save', array( &$this ) );
 
@@ -342,6 +342,7 @@ class BP_Activity_Activity {
 	 * @since 2.4.0 Introduced the `$fields` parameter.
 	 * @since 2.9.0 Introduced the `$order_by` parameter.
 	 * @since 10.0.0 Introduced the `$count_total_only` parameter.
+	 * @since 11.0.0 Introduced the `$user_id__in` and `$user_id__not_in` parameters.
 	 *
 	 * @see BP_Activity_Activity::get_filter_sql() for a description of the
 	 *      'filter' parameter.
@@ -366,6 +367,10 @@ class BP_Activity_Activity {
 	 *     @type array        $filter_query      Array of advanced query conditions. See BP_Activity_Query::__construct().
 	 *     @type string|array $scope             Pre-determined set of activity arguments.
 	 *     @type array        $filter            See BP_Activity_Activity::get_filter_sql().
+	 *     @type array        $user_id__in       An array of user ids to include. Activity posted by users matching one of these
+	 *                                           user ids will be included in results. Default empty array.
+	 *     @type array        $user_id__not_in   An array of user ids to exclude. Activity posted by users matching one of these
+	 *                                           user ids will not be included in results. Default empty array.
 	 *     @type string       $search_terms      Limit results by a search term. Default: false.
 	 *     @type bool         $display_comments  Whether to include activity comments. Default: false.
 	 *     @type bool         $show_hidden       Whether to show items marked hide_sitewide. Default: false.
@@ -430,6 +435,8 @@ class BP_Activity_Activity {
 				'meta_query'        => false,           // Filter by activitymeta.
 				'date_query'        => false,           // Filter by date.
 				'filter_query'      => false,           // Advanced filtering - see BP_Activity_Query.
+				'user_id__in'       => array(),         // Array of user ids to include.
+				'user_id__not_in'   => array(),         // Array of user ids to excluce.
 				'filter'            => false,           // See self::get_filter_sql().
 				'scope'             => false,           // Preset activity arguments.
 				'search_terms'      => false,           // Terms to search by.
@@ -481,6 +488,50 @@ class BP_Activity_Activity {
 		// Regular filtering.
 		if ( $r['filter'] && $filter_sql = BP_Activity_Activity::get_filter_sql( $r['filter'] ) ) {
 			$where_conditions['filter_sql'] = $filter_sql;
+		}
+
+		// User IDs filtering.
+		$user_ids_clause  = array();
+		$user_ids_filters = array_filter(
+			array_intersect_key(
+				$r,
+				array(
+					'user_id__in'     => true,
+					'user_id__not_in' => true,
+				)
+			)
+		);
+
+		foreach ( $user_ids_filters as $user_ids_filter_key => $user_ids_filter ) {
+			$user_ids_operator = 'IN';
+			if ( 'user_id__not_in' === $user_ids_filter_key ) {
+				$user_ids_operator = 'NOT IN';
+			}
+
+			if ( $user_ids_clause ) {
+				$user_ids_clause[] = array(
+					'column'  => 'user_id',
+					'compare' => $user_ids_operator,
+					'value'   => (array) $user_ids_filter,
+				);
+			} else {
+				$user_ids_clause = array(
+					'relation' => 'AND',
+					array(
+						'column'  => 'user_id',
+						'compare' => $user_ids_operator,
+						'value'   => (array) $user_ids_filter,
+					),
+				);
+			}
+		}
+
+		if ( $user_ids_clause ) {
+			$user_ids_query = new BP_Activity_Query( $user_ids_clause );
+			$user_ids_sql   = $user_ids_query->get_sql();
+			if ( ! empty( $user_ids_sql ) ) {
+				$where_conditions['user_ids_query_sql'] = $user_ids_sql;
+			}
 		}
 
 		// Spam.
@@ -1240,7 +1291,7 @@ class BP_Activity_Activity {
 			)
 		);
 
-		$where_args = false;
+		$where_args = array();
 
 		if ( ! empty( $r['user_id'] ) ) {
 			$where_args[] = $wpdb->prepare( 'user_id = %d', $r['user_id'] );
@@ -1567,15 +1618,16 @@ class BP_Activity_Activity {
 			$top_level_parent_id = $activity_id;
 		}
 
-		$comments = wp_cache_get( $activity_id, 'bp_activity_comments' );
+		$comments       = array();
+		$comments_cache = wp_cache_get( $activity_id, 'bp_activity_comments' );
 
 		// We store the string 'none' to cache the fact that the
 		// activity item has no comments.
-		if ( 'none' === $comments ) {
-			$comments = false;
+		if ( 'none' === $comments_cache ) {
+			return false;
 
 			// A true cache miss.
-		} elseif ( empty( $comments ) ) {
+		} elseif ( empty( $comments_cache ) ) {
 
 			$bp = buddypress();
 
@@ -1689,17 +1741,19 @@ class BP_Activity_Activity {
 				$r->depth = $depth;
 			}
 
-			// If we cache a value of false, it'll count as a cache
+			// If we cache an empty array, it'll count as a cache
 			// miss the next time the activity comments are fetched.
 			// Storing the string 'none' is a hack workaround to
 			// avoid unnecessary queries.
-			if ( false === $comments ) {
+			if ( ! $comments ) {
 				$cache_value = 'none';
 			} else {
 				$cache_value = $comments;
 			}
 
 			wp_cache_set( $activity_id, $cache_value, 'bp_activity_comments' );
+		} else {
+			$comments = (array) $comments_cache;
 		}
 
 		return $comments;
@@ -1868,6 +1922,8 @@ class BP_Activity_Activity {
 	 *                                          'secondary_item_id' column in the database.
 	 *     @type int              $offset       Return only those items with an ID greater
 	 *                                          than the offset value.
+	 *     @type int              $offset_lower Return only those items with an ID lower
+	 *                                          than the offset value.
 	 *     @type string           $since        Return only those items that have a
 	 *                                          date_recorded value greater than a
 	 *                                          given MySQL-formatted date.
@@ -1911,6 +1967,11 @@ class BP_Activity_Activity {
 		if ( ! empty( $filter_array['offset'] ) ) {
 			$sid_sql = absint( $filter_array['offset'] );
 			$filter_sql[] = "a.id >= {$sid_sql}";
+		}
+
+		if ( ! empty( $filter_array['offset_lower'] ) ) {
+			$sid_sql = absint( $filter_array['offset_lower'] );
+			$filter_sql[] = "a.id < {$sid_sql}";
 		}
 
 		if ( ! empty( $filter_array['since'] ) ) {

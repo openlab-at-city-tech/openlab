@@ -5,7 +5,7 @@
  * Description: Easy and simple way to embed Calendly scheduling pages on WordPress.
  * Author: Embed Calendly, Shycoder
  * Author URI: https://embedcalendly.com/
- * Version: 3.2
+ * Version: 3.6
  * License: GPLv2 or later
  */
 
@@ -21,6 +21,7 @@ include_once(EMCS_INCLUDES . 'admin.php');
 include_once(EMCS_INCLUDES . 'shortcode.php');
 include_once(EMCS_EVENT_TYPES . 'event-types-dashboard.php');
 include_once(EMCS_INCLUDES . 'widget-customizer/customizer.php');
+include_once(EMCS_INCLUDES . 'promotions.php');
 
 register_activation_hook(__FILE__, 'EMCS_Admin::on_activation');
 
@@ -38,9 +39,12 @@ function emcs_admin_scripts()
             wp_enqueue_script('emcs_customizer_js',  EMCS_URL . 'assets/js/widget-customizer.js', [], false, true);
         }
     }
+
+    wp_register_style('emcs_style', EMCS_URL . 'assets/css/style.css');
 }
 
 add_action('wp_enqueue_scripts', 'emcs_calendly_scripts');
+add_action('admin_enqueue_scripts', 'emcs_calendly_scripts');
 
 function emcs_calendly_scripts()
 {
@@ -53,5 +57,4 @@ add_action('admin_menu', 'EMCS_Event_Types_Dashboard::init');
 add_action('admin_menu', 'EMCS_Customizer::init');
 include_once(EMCS_INCLUDES . 'settings.php');
 add_action('in_admin_header', 'EMCS_Admin::clear_unwanted_notices', 1000);
-add_action('admin_init', 'EMCS_Admin::display_notices');
-add_action('admin_init', 'EMCS_Admin::dismiss_notice_listener', 5);
+add_action('admin_init', 'EMCS_Promotions::init');

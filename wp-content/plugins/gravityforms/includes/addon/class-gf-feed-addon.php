@@ -353,6 +353,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 							'form_id'  => $form['id'],
 						)
 					);
+					$this->delay_feed( $feed, $entry, $form );
 
 				} else {
 
@@ -1239,7 +1240,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 		if ( $this->is_feed_list_page() ) {
 			$title = $this->form_settings_title();
 			$url = add_query_arg( array( 'fid' => 0 ) );
-			return $title . " <a class='add-new-h2' href='" . esc_html( $url ) . "'>" . esc_html__( 'Add New', 'gravityforms' ) . '</a>';
+			return $title . " <a class='add-new-h2' href='" . esc_url( $url ) . "'>" . esc_html__( 'Add New', 'gravityforms' ) . '</a>';
 		}
 	}
 
@@ -1279,7 +1280,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 
 					// If feed IDs do not match, redirect.
 					if ( $feed_id !== $this->_current_feed_id && $this->_multiple_feeds ) {
-						wp_safe_redirect( add_query_arg( array( 'fid' => $this->_current_feed_id ) ) );
+						wp_safe_redirect( esc_url_raw( add_query_arg( array( 'fid' => $this->_current_feed_id ) ) ) );
 					}
 
 				},
@@ -2457,7 +2458,7 @@ class GFAddOnFeedsTable extends WP_List_Table {
 	function _column_is_active( $item, $classes, $data, $primary ) {
 
 		// Open cell as a table header.
-		echo '<th scope="row" class="manage-column column-is_active">';
+		echo '<td class="manage-column column-is_active">';
 
 		// Display the active/inactive toggle button.
 		if ( rgar( $item, 'is_active' ) ) {
@@ -2469,13 +2470,13 @@ class GFAddOnFeedsTable extends WP_List_Table {
 		}
 		?>
 		<button type="button" class="gform-status-indicator <?php echo esc_attr( $class ); ?>" onclick="gaddon.toggleFeedActive( this, '<?php echo esc_js( $this->_slug ); ?>', '<?php echo esc_js( $item['id'] ); ?>' );" onkeypress="gaddon.toggleFeedActive( this, '<?php echo esc_js( $this->_slug ); ?>', '<?php echo esc_js( $item['id'] ); ?>' );">
-			<svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>
+			<svg role="presentation" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>
 			<span class="gform-status-indicator-status"><?php echo esc_html( $text ); ?></span>
 		</button>
 		<?php
 
 		// Close cell.
-		echo '</th>';
+		echo '</td>';
 
 	}
 	/**

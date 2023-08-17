@@ -78,6 +78,36 @@ class Ajax extends Lib\Base\Ajax
 
         $result = array();
         $schema = new Schema();
+        $ignore = array();
+        foreach ( self::parameter( 'ignore', array() ) as $section ) {
+            switch ( $section ) {
+                case 'appointments':
+                    $ignore[] = 'bookly_appointments';
+                    $ignore[] = 'bookly_customer_appointments';
+                    break;
+                case 'mailing queue':
+                    $ignore[] = 'bookly_mailing_queue';
+                    break;
+                case 'payments':
+                    $ignore[] = 'bookly_payments';
+                    break;
+                case 'sessions':
+                    $ignore[] = 'bookly_sessions';
+                    break;
+                case 'logs':
+                    $ignore[] = 'bookly_log';
+                    $ignore[] = 'bookly_email_log';
+                    break;
+                case 'files':
+                    $ignore[] = 'bookly_files';
+                    $ignore[] = 'bookly_customer_appointment_files';
+                    break;
+            }
+        }
+        foreach ( $ignore as &$i ) {
+            $i = $wpdb->prefix . $i;
+        }
+        unset( $i );
         foreach ( apply_filters( 'bookly_plugins', array() ) as $plugin ) {
             /** @var Lib\Base\Plugin $plugin */
             $installer_class = $plugin::getRootNamespace() . '\Lib\Installer';
@@ -87,10 +117,12 @@ class Ajax extends Lib\Base\Ajax
 
             foreach ( $plugin::getEntityClasses() as $entity_class ) {
                 $table_name = $entity_class::getTableName();
-                $result['entities'][ $entity_class ] = array(
-                    'fields' => array_keys( $schema->getTableStructure( $table_name ) ),
-                    'values' => $wpdb->get_results( 'SELECT * FROM ' . $table_name, ARRAY_N ),
-                );
+                if ( ! in_array( $table_name, $ignore ) ) {
+                    $result['entities'][ $entity_class ] = array(
+                        'fields' => array_keys( $schema->getTableStructure( $table_name ) ),
+                        'values' => $wpdb->get_results( 'SELECT * FROM ' . $table_name, ARRAY_N ),
+                    );
+                }
             }
             $plugin_prefix = $plugin::getPrefix();
             $options_postfix = array( 'data_loaded', 'grace_start', 'db_version', 'installation_time' );
@@ -105,11 +137,12 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        header( 'Content-type: application/json' );
-        header( 'Content-Disposition: attachment; filename=bookly_db_export_' . date( 'YmdHis' ) . '.json' );
-        echo json_encode( $result );
+        if ( self::parameter( 'safe', false ) ) {
+            $result = self::makeSafe( $result );
+        }
 
-        exit ( 0 );
+        header( 'Content-Disposition: attachment; filename=bookly_db_export_' . date( 'Ymd-Hi' ) . '_' . str_replace( '.', '_', parse_url( get_site_url(), PHP_URL_HOST ) ) . '.json' );
+        wp_send_json( $result );
     }
 
     /**
@@ -127,6 +160,9 @@ class Ajax extends Lib\Base\Ajax
                 $wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
 
                 $data = json_decode( $json, true );
+                if ( self::parameter( 'safe', false ) ) {
+                    $data = self::makeSafe( $data );
+                }
                 /** @var Lib\Base\Plugin[] $bookly_plugins */
                 $bookly_plugins = apply_filters( 'bookly_plugins', array() );
                 /** @since Bookly 17.7 */
@@ -208,6 +244,56 @@ class Ajax extends Lib\Base\Ajax
         header( 'Location: ' . admin_url( 'admin.php?page=bookly-diagnostics&debug' ) );
 
         exit ( 0 );
+    }
+
+    /**
+     * Make import/export data 'safe'
+     *
+     * @param $data
+     * @return mixed
+     */
+    protected static function makeSafe( $data )
+    {
+        $unsafe_options = array(
+            'bookly_gc_client_id',
+            'bookly_gc_client_secret',
+            'bookly_oc_app_id',
+            'bookly_oc_app_secret',
+            'bookly_zoom_oauth_client_id',
+            'bookly_zoom_oauth_client_secret',
+            'bookly_zoom_jwt_api_key',
+            'bookly_zoom_jwt_api_secret',
+        );
+
+        $unsafe_entities = array(
+            'Bookly\Lib\Entities\Staff' => array(
+                'google_data' => null,
+                'outlook_data' => null,
+                'zoom_authentication' => 'default',
+                'zoom_jwt_api_key' => null,
+                'zoom_jwt_api_secret' => null,
+                'zoom_oauth_token' => null,
+            ),
+        );
+
+        foreach ( $unsafe_options as $option ) {
+            unset( $data['options'][ $option ] );
+        }
+
+        // Remove unsafe staff settings
+        foreach ( $unsafe_entities as $entity => $entity_unsafe_values ) {
+            if ( isset( $data['entities'][ $entity ] ) ) {
+                foreach ( $entity_unsafe_values as $field => $default ) {
+                    if ( ( $index = array_search( $field, $data['entities'][ $entity ]['fields'], true ) ) !== false ) {
+                        foreach ( $data['entities'][ $entity ]['values'] as &$entity_field ) {
+                            $entity_field[ $index ] = $default;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
     }
 
     protected static function csrfTokenValid( $action = null )

@@ -244,61 +244,9 @@ function wpt_update_settings() {
 				<div class="ui-sortable meta-box-sortables">
 					<div class="postbox">
 						<div class="inside purchase">
-							<h3><strong><?php _e( 'What can WP Tweets PRO do for you?', 'wp-to-twitter' ); ?></strong></h3>
+							<h3><strong><?php _e( 'WP Tweets Pro End-of-life', 'wp-to-twitter' ); ?></strong></h3>
 							<p>
-								<?php _e( 'WP Tweets PRO takes the great Tweeting abilities from WP to Twitter and puts them in high gear.', 'wp-to-twitter' ); ?>
-							</p>
-							<ul>
-								<li><?php _e( 'Publish to unique Twitter accounts for each site author.', 'wp-to-twitter' ); ?></li>
-								<li><?php _e( 'Schedule up to 3 re-posts of Tweets at an interval of your choice.', 'wp-to-twitter' ); ?></li>
-								<li><?php _e( 'With a delay between publishing and Tweeting, verify your tweets before you share online.', 'wp-to-twitter' ); ?></li>
-								<li><?php _e( 'Automatically Tweet your best old posts every few hours, days, or weeks!', 'wp-to-twitter' ); ?></li>
-								<li><?php _e( 'Upload images to Twitter with each Tweet', 'wp-to-twitter' ); ?></li>
-								<li><?php _e( 'Harness the power of video with support for Twitter\'s Player cards', 'wp-to-twitter' ); ?></li>
-								<li>
-								<?php
-								// Translators: Link to sales page.
-								printf( __( 'Take a look at the <a href="%1$s">feature list</a> or <a href="%2$s">read the user guide</a> to get the whole picture!', 'wp-to-twitter' ), 'http://www.wptweetspro.com/wp-tweets-pro/', 'https://www.joedolson.com/wp-content/uploads/wp-tweets-pro-users-guide-current.pdf' );
-								?>
-								</li>
-							</ul>
-							<p>
-								<strong><?php _e( 'Use WP Tweets PRO to keep traffic coming for every post.', 'wp-to-twitter' ); ?></strong>
-							</p>
-							<p class='wpt-button'>
-								<strong class='cta'><a href="http://www.wptweetspro.com/wp-tweets-pro"><?php _e( 'Upgrade to <strong>WP Tweets PRO</strong>!', 'wp-to-twitter' ); ?></a></strong>
-							</p>
-
-							<h3><?php _e( 'What else does WP Tweets PRO do?', 'wp-to-twitter' ); ?></h3>
-
-							<p>
-								<?php _e( 'WP Tweets PRO is packed with features to help you increase engagement with your Twitter followers. Upload images, use Twitter Cards, and automated re-posting of your Tweets are just a few of the features available in the premium add-on to WP to Twitter.', 'wp-to-twitter' ); ?>
-							</p>
-							<p>
-								<?php
-								// Translators: link to GitHub repo of add-ons.
-								printf( __( 'Is there something that WP Tweets PRO <em>doesn\'t already do for you</em>? No problem! Take a look at the extensive <a href="%s">library of plug-in extensions</a> - you can try out or modify any of these code samples to extend and customize WP Tweets PRO.', 'wp-to-twitter' ), 'https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter' );
-								?>
-							</p>
-							<p>
-								<?php
-								// Translators: Link to sales page.
-								printf( __( '<a href="%s">Learn more about WP Tweets PRO</a>!', 'wp-to-twitter' ), 'http://www.wptweetspro.com/wp-tweets-pro?campaign=get-wpt' );
-								?>
-							</p>
-
-							<p class='wpt-button'>
-								<strong class='cta'><a href="http://www.wptweetspro.com/wp-tweets-pro"><?php _e( 'Buy WP Tweets PRO today!', 'wp-to-twitter' ); ?></a></strong>
-							</p>
-							<h3><?php _e( 'Support WP to Twitter', 'wp-to-twitter' ); ?></h3>
-							<p>
-								<?php _e( 'The core WP to Twitter plug-in is free, and has been since 2008. WP Tweets Pro sales help keep this going, but they don\'t cover all the costs of maintaining the plug-in. Purchasing a license helps ensure that I can continue to support this plug-in.', 'wp-to-twitter' ); ?>
-							</p>
-							<p>
-								<?php
-								// Translators: Donation link, review link.
-								sprintf( __( 'I know that not everybody has a use for the features supported by WP Tweets Pro. If you\'re happy with what you\'ve found in WP to Twitter, you can still support me - either by <a href="%1$s">making a donation</a> or by <a href="%2$s">writing a review</a>. If you have the time or money, I\'ll sincerely appreciate anything you can do!', 'wp-to-twitter' ), 'https://www.joedolson.com/donate/', 'https://wordpress.org/support/plugin/wp-to-twitter/reviews/#new-post' );
-								?>
+								<?php _e( 'WP Tweets Pro is no longer available for purchase as of April 2023.', 'wp-to-twitter' ); ?>
 							</p>
 						</div>
 					</div>
@@ -352,13 +300,6 @@ function wpt_update_settings() {
 							} else {
 								?>
 								<div class='wptab wpt_types wpt_<?php echo esc_attr( $slug ); ?>' aria-labelledby='tab_wpt_<?php echo esc_attr( $slug ); ?>' role="tabpanel" id='wpt_<?php echo esc_attr( $slug ); ?>'>
-								<?php
-								// share information about any usage of pre 2.8 category filters.
-								if ( ! function_exists( 'wpt_pro_exists' ) ) {
-									// Translators: Link to sales page.
-									printf( __( '<a href="%s">Upgrade to WP Tweets PRO</a> to filter posts in all custom post types on any taxonomy.', 'wp-to-twitter' ), 'http://www.wptweetspro.com/wp-tweets-pro' );
-								}
-								?>
 								<fieldset>
 									<legend><?php _e( 'Tweet Templates', 'wp-to-twitter' ); ?></legend>
 									<p>
@@ -375,7 +316,7 @@ function wpt_update_settings() {
 										printf( __( 'Template for new %s', 'wp-to-twitter' ), $name );
 										?>
 										</label><br/>
-										<textarea class="wpt-template" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-text]" id="<?php echo esc_attr( $slug ); ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
+										<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-text]" id="<?php echo esc_attr( $slug ); ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
 									</p>
 									<p>
 										<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-update]" id="<?php echo esc_attr( $slug ); ?>-post-edited-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-edited-update' ); ?> />
@@ -390,7 +331,7 @@ function wpt_update_settings() {
 										printf( __( 'Template for %1$s edits', 'wp-to-twitter' ), $name );
 										?>
 										</label><br/>
-										<textarea class="wpt-template" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-text]" id="<?php echo esc_attr( $slug ); ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
+										<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-text]" id="<?php echo esc_attr( $slug ); ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
 									</p>
 								</fieldset>
 								<?php
@@ -410,7 +351,7 @@ function wpt_update_settings() {
 									<input type="checkbox" name="jd_twit_blogroll" id="jd_twit_blogroll" value="1" <?php echo wpt_checkbox( 'jd_twit_blogroll' ); ?> />
 									<label for="jd_twit_blogroll"><strong><?php _e( 'Update Twitter when you post a Blogroll link', 'wp-to-twitter' ); ?></strong></label><br/>
 									<label for="newlink-published-text"><?php _e( 'Text for new link updates:', 'wp-to-twitter' ); ?></label>
-									<input aria-describedby="newlink-published-text-label" type="text" class="wpt-template" name="newlink-published-text" id="newlink-published-text" size="60" maxlength="120" value="<?php echo esc_attr( stripslashes( get_option( 'newlink-published-text' ) ) ); ?>"/><br/><span id="newlink-published-text-label"><?php _e( 'Available shortcodes: <code>#url#</code>, <code>#title#</code>, and <code>#description#</code>.', 'wp-to-twitter' ); ?></span>
+									<input aria-describedby="newlink-published-text-label" type="text" class="wpt-template" name="newlink-published-text" id="newlink-published-text" class="widefat" maxlength="120" value="<?php echo esc_attr( stripslashes( get_option( 'newlink-published-text' ) ) ); ?>"/><br/><span id="newlink-published-text-label"><?php _e( 'Available shortcodes: <code>#url#</code>, <code>#title#</code>, and <code>#description#</code>.', 'wp-to-twitter' ); ?></span>
 								</p>
 							</fieldset>
 						</div>
@@ -769,21 +710,7 @@ function wpt_update_settings() {
 		<h3><span><?php _e( 'Get Plug-in Support', 'wp-to-twitter' ); ?></span></h3>
 
 		<div class="inside">
-		<?php
-		if ( ! function_exists( 'wpt_pro_exists' ) ) {
-			?>
-			<div class='wpt-support-me'>
-				<p>
-				<?php
-				// Translators: Link to sales page.
-				printf( __( 'Please, consider a <a href="%s">purchase</a> to support WP to Twitter!', 'wp-to-twitter' ), 'http://www.wptweetspro.com/wp-tweets-pro' );
-				?>
-				</p>
-			</div>
-			<?php
-		}
-		wpt_get_support_form();
-		?>
+		<?php wpt_get_support_form(); ?>
 		</div>
 	</div>
 		<?php
@@ -819,13 +746,6 @@ function wpt_sidebar() {
 				}
 				?>
 				<div class="inside resources">
-					<?php
-					if ( ! function_exists( 'wpt_pro_exists' ) ) {
-						?>
-					<p class='cta'><?php _e( '<a href="http://www.wptweetspro.com/wp-tweets-pro">Get WP Tweets Pro</a>', 'wp-to-twitter' ); ?></p>
-						<?php
-					}
-					?>
 					<p>
 						<a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow @joedolson</a>
 						<script>!function (d, s, id) {

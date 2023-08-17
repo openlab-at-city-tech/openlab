@@ -24,7 +24,7 @@ jQuery(function ($) {
             url: ajaxurl,
             data: {
                 action: 'bookly_change_country',
-                csrf_token: BooklyL10n.csrfToken,
+                csrf_token: BooklyL10nGlobal.csrf_token,
                 country: country
             },
             dataType: 'json',
@@ -78,7 +78,7 @@ jQuery(function ($) {
             ladda.start();
             const data = $form.serializeArray();
             data.push({name: 'action', value: 'bookly_save_invoice_data'});
-            data.push({name: 'csrf_token', value: BooklyL10n.csrfToken});
+            data.push({name: 'csrf_token', value: BooklyL10nGlobal.csrf_token});
             $.ajax({
                 type: 'POST',
                 url: ajaxurl,
@@ -114,7 +114,7 @@ jQuery(function ($) {
             ajaxurl,
             {
                 action: 'bookly_admin_notify',
-                csrf_token: BooklyL10n.csrfToken,
+                csrf_token: BooklyL10nGlobal.csrf_token,
                 option_name: $checkbox.attr('name'),
                 value: $checkbox.is(':checked') ? 1 : 0
             },
@@ -145,7 +145,7 @@ jQuery(function ($) {
                 ladda.start();
                 const data = $form.serializeArray();
                 data.push({name: 'action', value: 'bookly_change_password'});
-                data.push({name: 'csrf_token', value: BooklyL10n.csrfToken});
+                data.push({name: 'csrf_token', value: BooklyL10nGlobal.csrf_token});
                 $.ajax({
                     type: 'POST',
                     url: ajaxurl,

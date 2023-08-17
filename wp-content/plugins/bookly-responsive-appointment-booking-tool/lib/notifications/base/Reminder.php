@@ -12,6 +12,7 @@ use Bookly\Lib\Utils;
 
 /**
  * Class Reminder
+ *
  * @package Bookly\Lib\Notifications\Base
  */
 abstract class Reminder
@@ -53,16 +54,16 @@ abstract class Reminder
             $result = false;
             foreach ( Utils\Common::getAdminEmails() as $email ) {
                 if ( static::_sendEmailTo(
-                        self::RECIPIENT_ADMINS,
-                        $email,
-                        $notification,
-                        $codes,
-                        $attachments,
-                        $reply_to,
-                        null,
-                        null,
-                        array( 'name' => __( 'Admins', 'bookly' ) ),
-                        $queue
+                    self::RECIPIENT_ADMINS,
+                    $email,
+                    $notification,
+                    $codes,
+                    $attachments,
+                    $reply_to,
+                    null,
+                    null,
+                    array( 'name' => __( 'Admins', 'bookly' ) ),
+                    $queue
                 ) ) {
                     $result = true;
                 }
@@ -78,7 +79,16 @@ abstract class Reminder
                 array( 'name' => __( 'Admins', 'bookly' ) ),
                 $queue
             );
-         }
+        } elseif ( $gateway === 'whatsapp' ) {
+            return static::_sendWhatsAppMessageTo(
+                self::RECIPIENT_ADMINS,
+                get_option( 'bookly_sms_administrator_phone', '' ),
+                $notification,
+                $codes,
+                array( 'name' => __( 'Admins', 'bookly' ) ),
+                $queue
+            );
+        }
     }
 
     /**
@@ -142,7 +152,21 @@ abstract class Reminder
                     $result = true;
                 }
             }
+        } elseif ( $gateway === 'whatsapp' ) {
+            foreach ( array_map( 'trim', array_filter( explode( "\n", $notification->getCustomRecipients() ), 'trim' ) ) as $phone ) {
+                if ( static::_sendWhatsAppMessageTo(
+                    self::RECIPIENT_ADMINS,
+                    $phone,
+                    $notification,
+                    $codes,
+                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    $queue
+                ) ) {
+                    $result = true;
+                }
+            }
         }
+
         return $result;
     }
 
@@ -187,6 +211,15 @@ abstract class Reminder
             );
         } elseif ( $gateway === 'voice' ) {
             return static::_callTo(
+                self::RECIPIENT_CLIENT,
+                $customer->getPhone(),
+                $notification,
+                $codes,
+                array( 'name' => $customer->getFullName() ),
+                $queue
+            );
+        } elseif ( $gateway === 'whatsapp' ) {
+            return static::_sendWhatsAppMessageTo(
                 self::RECIPIENT_CLIENT,
                 $customer->getPhone(),
                 $notification,
@@ -246,6 +279,15 @@ abstract class Reminder
                 array( 'name' => $staff->getFullName() ),
                 $queue
             );
+        } elseif ( $gateway === 'whatsapp' ) {
+            return static::_sendWhatsAppMessageTo(
+                self::RECIPIENT_STAFF,
+                $staff->getPhone(),
+                $notification,
+                $codes,
+                array( 'name' => $staff->getFullName() ),
+                $queue
+            );
         }
     }
 
@@ -255,7 +297,7 @@ abstract class Reminder
      * @param string $recipient
      * @param string|array $to_email
      * @param Notification $notification
-     * @param Codes $codes,
+     * @param Codes $codes ,
      * @param Attachments $attachments
      * @param array $reply_to
      * @param string $force_send_as
@@ -275,15 +317,14 @@ abstract class Reminder
         $force_from = null,
         $queue_data = array(),
         &$queue = false
-    )
-    {
+    ) {
         if ( empty ( $to_email ) ) {
             return false;
         }
 
         $send_as = $force_send_as ?: get_option( 'bookly_email_send_as', self::SEND_AS_HTML );
-        $from    = $force_from    ?: array(
-            'name'  => get_option( 'bookly_email_sender_name' ),
+        $from = $force_from ?: array(
+            'name' => get_option( 'bookly_email_sender_name' ),
             'email' => get_option( 'bookly_email_sender' ),
         );
 
@@ -304,12 +345,10 @@ abstract class Reminder
 
         // Headers.
         $headers = array();
-        $headers[] = strtr( 'Content-Type: content_type; charset=utf-8', array(
-            'content_type' => $send_as == self::SEND_AS_HTML ? 'text/html' : 'text/plain'
-        ) );
-        $headers[] = strtr( 'From: name <email>', $from );
+        $headers['is_html'] = $send_as == self::SEND_AS_HTML;
+        $headers['from'] = $from;
         if ( isset ( $reply_to ) ) {
-            $headers[] = strtr( 'Reply-To: name <email>', $reply_to );
+            $headers['reply_to'] = $reply_to;
         }
 
         // Do send.
@@ -329,9 +368,7 @@ abstract class Reminder
             return true;
         }
 
-        Proxy\Pro::logEmail( $to_email, $subject, $message, $headers, $attachments ? $attachments->createFor( $notification, $recipient ) : array(), $notification->getTypeId() );
-
-        return wp_mail( $to_email, $subject, $message, $headers, $attachments ? $attachments->createFor( $notification, $recipient ) : array() );
+        return Utils\Mail::send( $to_email, $subject, $message, $headers, $attachments ? $attachments->createFor( $notification, $recipient ) : array(), $notification->getTypeId() );
     }
 
     /**
@@ -341,13 +378,13 @@ abstract class Reminder
      * @param string $phone
      * @param Notification $notification
      * @param Codes $codes
-     * @param array $queue_data,
+     * @param array $queue_data ,
      * @param array|bool $queue
      * @return bool
      */
     protected static function _sendSmsTo( $recipient, $phone, $notification, Codes $codes, $queue_data = array(), &$queue = false )
     {
-        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_SMS_NOTIFICATIONS  ) ) {
+        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_SMS_NOTIFICATIONS ) ) {
             return false;
         }
 
@@ -362,13 +399,13 @@ abstract class Reminder
         // Do send.
         if ( $queue !== false ) {
             $queue[] = array(
-                'data'       => $queue_data,
-                'gateway'    => $notification->getGateway(),
-                'name'       => $notification->getName(),
-                'address'    => $phone,
-                'message'    => $message['personal'],
+                'data' => $queue_data,
+                'gateway' => $notification->getGateway(),
+                'name' => $notification->getName(),
+                'address' => $phone,
+                'message' => $message['personal'],
                 'impersonal' => $message['impersonal'],
-                'type_id'    => $notification->getTypeId(),
+                'type_id' => $notification->getTypeId(),
             );
 
             return true;
@@ -384,7 +421,7 @@ abstract class Reminder
      * @param string $phone
      * @param Notification $notification
      * @param Codes $codes
-     * @param array $queue_data,
+     * @param array $queue_data ,
      * @param array|bool $queue
      * @return bool
      */
@@ -405,18 +442,52 @@ abstract class Reminder
         // Do send.
         if ( $queue !== false ) {
             $queue[] = array(
-                'data'       => $queue_data,
-                'gateway'    => $notification->getGateway(),
-                'name'       => $notification->getName(),
-                'address'    => $phone,
-                'message'    => $message['personal'],
+                'data' => $queue_data,
+                'gateway' => $notification->getGateway(),
+                'name' => $notification->getName(),
+                'address' => $phone,
+                'message' => $message['personal'],
                 'impersonal' => $message['impersonal'],
-                'type_id'    => $notification->getTypeId(),
+                'type_id' => $notification->getTypeId(),
             );
 
             return true;
         } else {
             return Cloud\API::getInstance()->voice->call( $phone, $message['personal'], $message['impersonal'] );
+        }
+    }
+
+    /**
+     * Send WhatsApp message.
+     *
+     * @param string $recipient
+     * @param string $phone
+     * @param Notification $notification
+     * @param Codes $codes
+     * @param array $queue_data ,
+     * @param array|bool $queue
+     * @return bool
+     */
+    protected static function _sendWhatsAppMessageTo( $recipient, $phone, $notification, Codes $codes, $queue_data = array(), &$queue = false )
+    {
+        if ( get_option( 'bookly_cloud_token' ) == '' || $phone == '' || ! Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_WHATSAPP ) ) {
+            return false;
+        }
+        $message = $codes->replaceForWhatsApp( $notification );
+        if ( $queue !== false ) {
+            $queue[] = array(
+                'data' => $queue_data,
+                'gateway' => $notification->getGateway(),
+                'name' => $notification->getName(),
+                'address' => $phone,
+                'message' => $message,
+                'impersonal' => null,
+                'type_id' => $notification->getTypeId(),
+            );
+
+            return true;
+        } else {
+            return Cloud\API::getInstance()->whatsapp->send( $phone, $message );
         }
     }
 }

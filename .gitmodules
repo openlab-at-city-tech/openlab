@@ -7,3 +7,21 @@
 [submodule "wp-content/plugins/cac-network-info"]
 	path = wp-content/plugins/cac-network-info
 	url = git@github.com:cuny-academic-commons/cac-network-info
+[submodule "wp-content/plugins/webwork-problem-embed"]
+	path = wp-content/plugins/webwork-problem-embed
+	url = git@github.com:openlab-at-city-tech/webwork-problem-embed
+[submodule "wp-content/plugins/openlab-activity-block"]
+	path = wp-content/plugins/openlab-activity-block
+	url = git@github.com:openlab-at-city-tech/openlab-activity-block
+[submodule "wp-content/plugins/openlab-email-embedded-media"]
+	path = wp-content/plugins/openlab-email-embedded-media
+	url = git@github.com:openlab-at-city-tech/openlab-email-embedded-media
+[submodule "wp-content/plugins/openlab-rich-text-comments"]
+	path = wp-content/plugins/openlab-rich-text-comments
+	url = git@github.com:openlab-at-city-tech/openlab-rich-text-comments
+[submodule "wp-content/plugins/openlab-modules"]
+	path = wp-content/plugins/openlab-modules
+	url = git@github.com:openlab-at-city-tech/openlab-modules
+[submodule "wp-content/plugins/openlab-connections"]
+	path = wp-content/plugins/openlab-connections
+	url = git@github.com:openlab-at-city-tech/openlab-connections

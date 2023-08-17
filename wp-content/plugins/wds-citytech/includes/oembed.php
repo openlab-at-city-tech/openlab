@@ -73,6 +73,10 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'desmos', '#https?://([^\.]+)\.desmos\.com/#i', 'openlab_embed_handler_desmos' );
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
+	wp_embed_register_handler( 'mathdot', '#https?://mathdev\.citytech\.cuny\.edu/DOT/([^/]*)/?#i', 'openlab_embed_handler_mathdot' );
+
+	$network_home_url = network_home_url(); // Network home URL
+	wp_embed_register_handler( 'openlab', "#{$network_home_url}#i", 'openlab_embed_local_uploaded_images' );
 
 	// Register oEmbed provider for Yuja
 	wp_oembed_add_provider( 'https://citytech.yuja.com/V/*', 'https://citytech.yuja.com/services/oembed', false );
@@ -244,3 +248,84 @@ function openlab_embed_handler_yuja( $matches, $attr, $url ) {
 
 	return wp_oembed_get($url);
 }
+
+/**
+ * Callback for math DOT embed game.
+ *
+ * @param array $matches Matches from embed URL regex.
+ * @param array $attr    Attributes from embed URL regex.
+ * @param string $url    URL.
+ * @return string
+ */
+function openlab_embed_handler_mathdot( $matches, $attr, $url ) {
+	$embed = sprintf(
+		'<div class="mathdot-iframe-container" style="position: relative; width: 100%%; height: 0; padding-bottom: 56.25%%;">
+		<iframe
+			scrolling="no"
+			src="%s"
+			style="position: absolute; top: 0; left: 0; width:100%%; height:100%%; border: 0;" allowfullscreen>
+		</iframe>
+		</div>',
+		esc_attr( $url )
+	);
+
+	return $embed;
+}
+
+/**
+ * Locally uploaded images embed callback.
+ */
+function openlab_embed_local_uploaded_images( $matches, $attr, $url ) {
+	// Supported image extensions
+	$supported_images = array(
+		'jpg',
+		'jpeg',
+		'png',
+		'gif'
+	);
+
+	// Get extension from the URL
+	$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+	
+	// If URL doesn't end with supported image extension, return the URL
+	if( ! in_array( $ext, $supported_images ) ) {
+		return $url;
+	}
+
+	$embed = sprintf('<img src="%s" />', esc_url( $url ) );
+
+	return $embed;
+}
+
+/**
+ * Padlet embed shortcode.
+ */
+function openlab_padlet_shortcode( $attr = [] ) {
+    global $content_width;
+
+    $r = shortcode_atts(
+        [
+            'key'    => '',
+            'height' => 608,
+
+            // not used at the moment
+            'width'  => ! empty( $content_width ) ? (int) $content_width : 500,
+        ],
+        $attr
+    );
+
+    if ( empty( $r['key'] ) ) {
+        return '';
+    }
+
+    if ( empty( $r['height'] ) || ! is_numeric( $r['height'] ) ) {
+        $r['height'] = 608;
+    }
+
+    return sprintf(
+        '<div class="padlet-embed" style="border:1px solid rgba(0,0,0,0.1);border-radius:2px;box-sizing:border-box;overflow:hidden;position:relative;width:100%%;background:#F4F4F4"><iframe src="https://padlet.com/embed/%1$s" frameborder="0" allow="camera;microphone;geolocation" style="width:100%%;height:%2$dpx;display:block;padding:0;margin:0"></iframe></div>',
+        sanitize_title( $r['key'] ),
+        (int) $r['height']
+    );
+}
+add_shortcode( 'padlet', 'openlab_padlet_shortcode' );

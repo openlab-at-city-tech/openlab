@@ -3,13 +3,13 @@
 Plugin Name: Advanced Excerpt
 Plugin URI: http://wordpress.org/plugins/advanced-excerpt/
 Description: Control the appearance of WordPress post excerpts
-Version: 4.3.9
+Version: 4.4.0
 Author: WPKube
 Author URI: https://wpkube.com
 Text Domain: advanced-excerpt
 */
 
-$GLOBALS['advanced_excerpt_version'] = '4.3.9';
+$GLOBALS['advanced_excerpt_version'] = '4.4.0';
 
 function advanced_excerpt_load_textdomain() {
 	load_plugin_textdomain( 'advanced-excerpt', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );

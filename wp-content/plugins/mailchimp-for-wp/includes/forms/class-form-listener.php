@@ -85,18 +85,6 @@ class MC4WP_Form_Listener {
 		/** @var MC4WP_MailChimp_Subscriber $subscriber */
 		$subscriber = null;
 
-		/**
-		 * @ignore
-		 * @deprecated 4.0
-		 */
-		$data = apply_filters( 'mc4wp_merge_vars', $data );
-
-		/**
-		 * @ignore
-		 * @deprecated 4.0
-		 */
-		$data = (array) apply_filters( 'mc4wp_form_merge_vars', $data, $form );
-
 		// create a map of all lists with list-specific data
 		$mapper = new MC4WP_List_Data_Mapper( $data, $form->get_lists() );
 
@@ -114,8 +102,9 @@ class MC4WP_Form_Listener {
 			 * Filters subscriber data before it is sent to Mailchimp. Fires for both form & integration requests.
 			 *
 			 * @param MC4WP_MailChimp_Subscriber $subscriber
+			 * @param string $list_id ID of the Mailchimp list this subscriber will be added/updated in
 			 */
-			$subscriber = apply_filters( 'mc4wp_subscriber_data', $subscriber );
+			$subscriber = apply_filters( 'mc4wp_subscriber_data', $subscriber, $list_id );
 			if ( ! $subscriber instanceof MC4WP_MailChimp_Subscriber ) {
 				continue;
 			}
@@ -124,8 +113,9 @@ class MC4WP_Form_Listener {
 			 * Filters subscriber data before it is sent to Mailchimp. Only fires for form requests.
 			 *
 			 * @param MC4WP_MailChimp_Subscriber $subscriber
+			 * @param string $list_id ID of the Mailchimp list this subscriber will be added/updated in
 			 */
-			$subscriber = apply_filters( 'mc4wp_form_subscriber_data', $subscriber );
+			$subscriber = apply_filters( 'mc4wp_form_subscriber_data', $subscriber, $list_id );
 			if ( ! $subscriber instanceof MC4WP_MailChimp_Subscriber ) {
 				continue;
 			}
@@ -183,6 +173,17 @@ class MC4WP_Form_Listener {
 			$form->last_event = 'subscribed';
 			$form->add_notice( $form->messages['subscribed'], 'success' );
 			$log->info( sprintf( 'Form %d > Successfully subscribed %s', $form->ID, $data['EMAIL'] ) );
+
+			/**
+			 * Fires right after a form was used to add a new subscriber.
+			 *
+			 * @since 4.8.13
+			 *
+			 * @param MC4WP_Form $form Instance of the submitted form
+			 * @param string $email
+			 * @param array $data
+			 */
+			do_action( 'mc4wp_form_added_subscriber', $form, $subscriber->email_address, $data );
 		}
 
 		/**

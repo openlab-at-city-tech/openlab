@@ -162,6 +162,8 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		openlab_get_xprofile_field_id( 'Email address (Student)' ),
 	);
 
+	$exclude_fields = array_merge( $exclude_fields, wp_list_pluck( openlab_social_media_fields(), 'field_id' ) );
+
 	$has_profile_args = array(
 		'exclude_groups' => $exclude_groups,
 		'exclude_fields' => $exclude_fields,
@@ -221,6 +223,11 @@ if ( bp_has_profile( $has_profile_args ) ) :
 		while ( bp_profile_fields() ) :
 			bp_the_profile_field();
 
+			// Skip legacy social media fields.
+			if ( bp_xprofile_get_meta( bp_get_the_profile_field_id(), 'field', 'is_legacy_social_media_field' ) ) {
+				continue;
+			}
+
 			$return .= '<div class="editfield form-group">';
 			if ( 'textbox' == bp_get_the_profile_field_type() ) :
 				if ( bp_get_the_profile_field_name() == 'Name' ) {
@@ -266,6 +273,10 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						placeholder="' . esc_attr( $placeholder ) . '"
 						' . openlab_profile_field_input_attributes() . '
 						/>';
+
+				if ( bp_get_the_profile_field_name() == 'Name' ) {
+					$return .= '<p class="register-field-note">Choose a Display Name to identify yourself publicly on your member profile and whenever you post on the OpenLab. <strong>You don\'t need to use your real name.</strong> Your Display Name can be changed at any time by editing your profile.</p>';
+				}
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
 				$return .= '<label for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
@@ -363,6 +374,13 @@ if ( bp_has_profile( $has_profile_args ) ) :
 			$return .= '</div>';
 					endwhile;
 
+			// Only add for AJAX requests that are member-type-specific.
+			if ( 'Base' !== $account_type ) {
+				ob_start();
+				openlab_social_fields_edit_markup();
+				$return .= ob_get_clean();
+			}
+
 		/**
  * Left over from WDS, we need to hardcode 3,7,241 in some cases.
 	 *
@@ -450,7 +468,7 @@ add_action( 'bp_init', 'openlab_unload_activation_key' );
 /**
  * Saves "meta" data on registration.
  *
- * Includes academic units and member type.
+ * Includes academic units, member type, social fields.
  */
 function openlab_save_meta_data_at_registration( $usermeta ) {
 	$to_save = [];
@@ -473,6 +491,8 @@ function openlab_save_meta_data_at_registration( $usermeta ) {
 	}
 
 	$usermeta['account_type'] = $account_type;
+
+	$usermeta['social-links'] = isset( $_POST['social-links'] ) ? wp_unslash( $_POST['social-links'] ) : [];
 
 	return $usermeta;
 }
@@ -504,6 +524,20 @@ function openlab_process_member_type_at_activation( $user_id, $key, $data ) {
 	}
 }
 add_action( 'bp_core_activated_user', 'openlab_process_member_type_at_activation', 10, 3 );
+
+/**
+ * Processes social links on account activation.
+ */
+function openlab_process_social_links_at_activation( $user_id, $key, $data ) {
+	if ( ! isset( $data['meta']['social-links'] ) ) {
+		return;
+	}
+
+	foreach ( $data['meta']['social-links'] as $social_link ) {
+		openlab_set_social_media_field_for_user( $user_id, $social_link['service'], $social_link['url'] );
+	}
+}
+add_action( 'bp_core_activated_user', 'openlab_process_social_links_at_activation', 10, 3 );
 
 /**
  * Send "Office of the Provost" group invites to "Faculty" and "Staff" members.

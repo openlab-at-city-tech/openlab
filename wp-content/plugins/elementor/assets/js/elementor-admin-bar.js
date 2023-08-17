@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -37,15 +37,16 @@ module.exports = _classCallCheck, module.exports.__esModule = true, module.expor
 /*!*************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/createClass.js ***!
   \*************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -200,6 +201,43 @@ module.exports = _superPropBase, module.exports.__esModule = true, module.export
 
 /***/ }),
 
+/***/ "../node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "../node_modules/@babel/runtime/helpers/typeof.js":
 /*!********************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/typeof.js ***!
@@ -338,7 +376,7 @@ var AdminBar = /*#__PURE__*/function (_elementorModules$Vie) {
       if (this.elements.$editMenuItem.length) {
         // This is the normal case, when user visit a preview page of single post.
         this.elements.$editMenuItem.after($items);
-      } else if (this.elements.$newMenuItem) {
+      } else if (this.elements.$newMenuItem.length) {
         // This is another case, when user visit a preview page that cannot be edited e.g: archive page.
         this.elements.$newMenuItem.after($items);
       } else {

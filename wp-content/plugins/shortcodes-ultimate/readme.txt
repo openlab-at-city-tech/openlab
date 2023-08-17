@@ -1,12 +1,12 @@
 # WordPress Shortcodes Plugin — Shortcodes Ultimate
 Contributors: gn_themes
 License: GPLv3
-Donate link: https://paypal.me/anovladimir
-Tags: shortcode, toggle, columns, button, slider
-Stable tag: 5.12.8
+Donate link: https://getshortcodes.com/pricing/
+Tags: posts, carousel, shortcode, toggle, columns
+Stable tag: 5.13.1
 Requires PHP: 5.4
 Requires at least: 5.0
-Tested up to: 6.1
+Tested up to: 6.2
 
 
 A comprehensive collection of visual components for your site
@@ -137,15 +137,10 @@ First, visit the [Help Center](https://getshortcodes.com/support/). If you get s
 
 ## Changelog
 
-
-### 5.12.8
-
-**Security update**
+### 5.13.1
 
 This update features security improvements and is recommended for all users
 
 
 ---
 [Version history →](https://plugins.trac.wordpress.org/browser/shortcodes-ultimate/trunk/changelog.txt)
-
-

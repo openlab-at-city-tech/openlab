@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -381,6 +381,141 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../assets/dev/js/utils/json-upload-warning-message.js":
+/*!*************************************************************!*\
+  !*** ../assets/dev/js/utils/json-upload-warning-message.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.showJsonUploadWarningMessageIfNeeded = showJsonUploadWarningMessageIfNeeded;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
+var genericMessageIntroductionKey = 'upload_json_warning_generic_message';
+/**
+ * @type {import('../utils/introduction').default | null}
+ */
+var genericWarningModal = null;
+function showJsonUploadWarningMessageIfNeeded(_ref) {
+  var introductionMap = _ref.introductionMap,
+    IntroductionClass = _ref.IntroductionClass,
+    _ref$waitForSetViewed = _ref.waitForSetViewed,
+    waitForSetViewed = _ref$waitForSetViewed === void 0 ? false : _ref$waitForSetViewed;
+  if (!genericWarningModal) {
+    genericWarningModal = createGenericWarningModal(IntroductionClass);
+  }
+  genericWarningModal.setIntroductionMap(introductionMap);
+  if (genericWarningModal.introductionViewed) {
+    return Promise.resolve();
+  }
+  var dialog = genericWarningModal.getDialog();
+  return new Promise(function (resolve, reject) {
+    dialog.onHide = function () {
+      // When closing the dialog (esc, click on background, etc.) we need to reject the promise.
+      reject();
+    };
+    dialog.onConfirm = /*#__PURE__*/(0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            if (!dialog.getElements('checkbox-dont-show-again').prop('checked')) {
+              _context.next = 7;
+              break;
+            }
+            if (!waitForSetViewed) {
+              _context.next = 6;
+              break;
+            }
+            _context.next = 4;
+            return genericWarningModal.setViewed();
+          case 4:
+            _context.next = 7;
+            break;
+          case 6:
+            genericWarningModal.setViewed();
+          case 7:
+            // Hack: we need to resolve the promise and then hide it manually, to avoid rejecting the promise.
+            // this because when closing the dialog (esc, click on background, etc.) it does not trigger `onCancel` method.
+            resolve();
+            dialog.hide();
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    dialog.onCancel = function () {
+      dialog.hide();
+    };
+    genericWarningModal.show();
+  });
+}
+
+/**
+ * @param {import('../utils/introduction').default.prototype.constructor} IntroductionClass
+ *
+ * @return {import('../utils/introduction').default}
+ */
+function createGenericWarningModal(IntroductionClass) {
+  var _introduction$getDial, _introduction$getDial2;
+  var dialogId = 'e-generic-warning-modal-for-json-upload';
+  var introduction = new IntroductionClass({
+    introductionKey: genericMessageIntroductionKey,
+    dialogType: 'confirm',
+    dialogOptions: {
+      id: dialogId,
+      headerMessage: __('Warning: JSON files may be unsafe', 'elementor'),
+      message: __('Uploading JSON files from unknown sources can be harmful and put your site at risk. For maximum safety, only install JSON files from trusted sources.', 'elementor'),
+      effects: {
+        show: 'fadeIn',
+        hide: 'fadeOut'
+      },
+      hide: {
+        onBackgroundClick: true,
+        onButtonClick: false
+      },
+      strings: {
+        confirm: __('Continue', 'elementor'),
+        cancel: __('Cancel', 'elementor')
+      }
+    }
+  });
+  var _createCheckboxAndLab = createCheckboxAndLabel(dialogId),
+    checkbox = _createCheckboxAndLab.checkbox,
+    label = _createCheckboxAndLab.label;
+  introduction.getDialog().addElement('checkbox-dont-show-again', checkbox);
+  (_introduction$getDial = introduction.getDialog().getElements('message')) === null || _introduction$getDial === void 0 ? void 0 : (_introduction$getDial2 = _introduction$getDial.append) === null || _introduction$getDial2 === void 0 ? void 0 : _introduction$getDial2.call(_introduction$getDial, label); // `getElements` return JQuery object.
+
+  return introduction;
+}
+function createCheckboxAndLabel(dialogId) {
+  var checkboxId = "".concat(dialogId, "-dont-show-again");
+  var checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.name = checkboxId;
+  checkbox.id = checkboxId;
+  var label = document.createElement('label');
+  label.htmlFor = checkboxId;
+  label.textContent = __('Do not show this message again', 'elementor');
+  label.style.display = 'block';
+  label.style.marginTop = '20px';
+  label.style.marginBottom = '20px';
+  label.prepend(checkbox);
+  return {
+    checkbox: checkbox,
+    label: label
+  };
+}
+
+/***/ }),
+
 /***/ "../core/common/assets/js/utils/environment.js":
 /*!*****************************************************!*\
   !*** ../core/common/assets/js/utils/environment.js ***!
@@ -418,7 +553,9 @@ var matchUserAgent = function matchUserAgent(UserAgentStr) {
   isBlink = matchUserAgent('Chrome') && !!window.CSS,
   // Apple Webkit engine
   isAppleWebkit = matchUserAgent('AppleWebKit') && !isBlink,
+  isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0,
   environment = {
+    isTouchDevice: isTouchDevice,
     appleWebkit: isAppleWebkit,
     blink: isBlink,
     chrome: isChrome,
@@ -435,10 +572,10 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ "../core/experiments/assets/js/admin/behaviors/experiments-dependency.js":
-/*!*******************************************************************************!*\
-  !*** ../core/experiments/assets/js/admin/behaviors/experiments-dependency.js ***!
-  \*******************************************************************************/
+/***/ "../core/experiments/assets/js/admin/behaviors/experiments-messages.js":
+/*!*****************************************************************************!*\
+  !*** ../core/experiments/assets/js/admin/behaviors/experiments-messages.js ***!
+  \*****************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -458,11 +595,11 @@ var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var STATE_ACTIVE = 'active';
 var STATE_INACTIVE = 'inactive';
 var STATE_DEFAULT = 'default';
-var ExperimentsDependency = /*#__PURE__*/function () {
-  function ExperimentsDependency(_ref) {
+var ExperimentsMessages = /*#__PURE__*/function () {
+  function ExperimentsMessages(_ref) {
     var selects = _ref.selects,
       submit = _ref.submit;
-    (0, _classCallCheck2.default)(this, ExperimentsDependency);
+    (0, _classCallCheck2.default)(this, ExperimentsMessages);
     (0, _defineProperty2.default)(this, "elements", {});
     this.elements = {
       /**
@@ -475,7 +612,7 @@ var ExperimentsDependency = /*#__PURE__*/function () {
       submit: submit
     };
   }
-  (0, _createClass2.default)(ExperimentsDependency, [{
+  (0, _createClass2.default)(ExperimentsMessages, [{
     key: "bindEvents",
     value: function bindEvents() {
       var _this = this;
@@ -497,7 +634,11 @@ var ExperimentsDependency = /*#__PURE__*/function () {
           }
           break;
         case STATE_INACTIVE:
-          this.deactivateDependantExperiments(experimentId);
+          if (this.shouldShowDeactivationDialog(experimentId)) {
+            this.showDeactivationDialog(experimentId);
+          } else {
+            this.deactivateDependantExperiments(experimentId);
+          }
           break;
         default:
           break;
@@ -531,7 +672,11 @@ var ExperimentsDependency = /*#__PURE__*/function () {
   }, {
     key: "getExperimentActualState",
     value: function getExperimentActualState(experimentId) {
-      var state = this.getExperimentSelect(experimentId).value;
+      var _this$getExperimentSe;
+      var state = (_this$getExperimentSe = this.getExperimentSelect(experimentId)) === null || _this$getExperimentSe === void 0 ? void 0 : _this$getExperimentSe.value;
+      if (!state) {
+        return this.getExperimentData(experimentId).state;
+      }
       if (state !== STATE_DEFAULT) {
         return state;
       }
@@ -565,8 +710,9 @@ var ExperimentsDependency = /*#__PURE__*/function () {
         var _ref3 = (0, _slicedToArray2.default)(_ref2, 2),
           id = _ref3[0],
           experimentData = _ref3[1];
-        var isDependant = experimentData.dependencies.includes(experimentId);
-        if (isDependant) {
+        var isDependant = experimentData.dependencies.includes(experimentId),
+          isActive = _this4.getExperimentActualState(id) === STATE_ACTIVE;
+        if (isDependant && isActive) {
           _this4.setExperimentState(id, STATE_INACTIVE);
         }
       });
@@ -578,48 +724,41 @@ var ExperimentsDependency = /*#__PURE__*/function () {
       return !this.areAllDependenciesActive(dependencies);
     }
   }, {
-    key: "showDependenciesDialog",
-    value: function showDependenciesDialog(experimentId) {
-      var _this5 = this;
-      var experiment = this.getExperimentData(experimentId),
-        dependencies = this.getExperimentDependencies(experimentId);
-      var dependenciesList = this.joinDepenednciesNames(dependencies.map(function (d) {
-        return d.title;
-      }), ', ', ' & ');
-
-      // Translators: %1$s: Experiment title, %2$s: Experiment dependencies list
-      var message = __('In order to use %1$s, first you need to activate %2$s.', 'elementor').replace('%1$s', "<strong>".concat(experiment.title, "</strong>")).replace('%2$s', "<strong>".concat(dependenciesList, "</strong>"));
-      elementorCommon.dialogsManager.createWidget('confirm', {
-        id: 'e-experiments-dependency-dialog',
-        headerMessage: __('First, activate another experiment.', 'elementor'),
-        message: message,
+    key: "shouldShowDeactivationDialog",
+    value: function shouldShowDeactivationDialog(experimentId) {
+      var getExperimentData = this.getExperimentData(experimentId),
+        isInitialStateActive = getExperimentData.state === STATE_ACTIVE || getExperimentData.state === STATE_DEFAULT && getExperimentData.default === STATE_ACTIVE,
+        hasMessage = !!this.getMessage(experimentId, 'on_deactivate');
+      return hasMessage && isInitialStateActive;
+    }
+  }, {
+    key: "showDialog",
+    value: function showDialog(dialog) {
+      return elementorCommon.dialogsManager.createWidget('confirm', {
+        id: 'e-experiments-messages-dialog',
+        headerMessage: dialog.headerMessage,
+        message: dialog.message,
         position: {
           my: 'center center',
           at: 'center center'
         },
         strings: {
-          confirm: __('Activate', 'elementor'),
-          cancel: __('Cancel', 'elementor')
+          confirm: dialog.strings.confirm,
+          cancel: dialog.strings.cancel
         },
         hide: {
           onOutsideClick: false,
           onBackgroundClick: false,
           onEscKeyPress: false
         },
-        onConfirm: function onConfirm() {
-          dependencies.forEach(function (dependency) {
-            _this5.setExperimentState(dependency.name, STATE_ACTIVE);
-          });
-          _this5.elements.submit.click();
-        },
-        onCancel: function onCancel() {
-          _this5.setExperimentState(experimentId, STATE_INACTIVE);
-        }
+        onConfirm: dialog.onConfirm,
+        onCancel: dialog.onCancel
       }).show();
     }
   }, {
-    key: "joinDepenednciesNames",
-    value: function joinDepenednciesNames(array, glue) {
+    key: "joinDependenciesNames",
+    value: function joinDependenciesNames(array) {
+      var glue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
       var finalGlue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
       if ('' === finalGlue) {
         return array.join(glue);
@@ -634,10 +773,67 @@ var ExperimentsDependency = /*#__PURE__*/function () {
         lastItem = clone.pop();
       return clone.join(glue) + finalGlue + lastItem;
     }
+  }, {
+    key: "showDependenciesDialog",
+    value: function showDependenciesDialog(experimentId) {
+      var _this5 = this;
+      var experiment = this.getExperimentData(experimentId),
+        experimentName = experiment.title,
+        dialogMessage = this.joinDependenciesNames(this.getExperimentDependencies(experimentId).map(function (d) {
+          return d.title;
+        }));
+
+      // Translators: %1$s: Experiment title, %2$s: Comma-separated dependencies list
+      var message = __('In order to use %1$s, first you need to activate %2$s.', 'elementor').replace('%1$s', "<strong>".concat(experimentName, "</strong>")).replace('%2$s', dialogMessage);
+      this.showDialog({
+        message: message,
+        headerMessage: __('First, activate another experiment.', 'elementor'),
+        strings: {
+          confirm: __('Activate', 'elementor'),
+          cancel: __('Cancel', 'elementor')
+        },
+        onConfirm: function onConfirm() {
+          _this5.getExperimentDependencies(experimentId).forEach(function (dependency) {
+            _this5.setExperimentState(dependency.name, STATE_ACTIVE);
+          });
+          _this5.elements.submit.click();
+        },
+        onCancel: function onCancel() {
+          _this5.setExperimentState(experimentId, STATE_INACTIVE);
+        }
+      });
+    }
+  }, {
+    key: "showDeactivationDialog",
+    value: function showDeactivationDialog(experimentId) {
+      var _this6 = this;
+      this.showDialog({
+        message: this.getMessage(experimentId, 'on_deactivate'),
+        headerMessage: __('Are you sure?', 'elementor'),
+        strings: {
+          confirm: __('Deactivate', 'elementor'),
+          cancel: __('Dismiss', 'elementor')
+        },
+        onConfirm: function onConfirm() {
+          _this6.setExperimentState(experimentId, STATE_INACTIVE);
+          _this6.deactivateDependantExperiments(experimentId);
+          _this6.elements.submit.click();
+        },
+        onCancel: function onCancel() {
+          _this6.setExperimentState(experimentId, STATE_ACTIVE);
+        }
+      });
+    }
+  }, {
+    key: "getMessage",
+    value: function getMessage(experimentId, messageId) {
+      var _this$getExperimentDa;
+      return (_this$getExperimentDa = this.getExperimentData(experimentId)) === null || _this$getExperimentDa === void 0 ? void 0 : _this$getExperimentDa.messages[messageId];
+    }
   }]);
-  return ExperimentsDependency;
+  return ExperimentsMessages;
 }();
-exports["default"] = ExperimentsDependency;
+exports["default"] = ExperimentsMessages;
 
 /***/ }),
 
@@ -661,7 +857,7 @@ var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helper
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _experimentsDependency = _interopRequireDefault(__webpack_require__(/*! ./behaviors/experiments-dependency */ "../core/experiments/assets/js/admin/behaviors/experiments-dependency.js"));
+var _experimentsMessages = _interopRequireDefault(__webpack_require__(/*! ./behaviors/experiments-messages */ "../core/experiments/assets/js/admin/behaviors/experiments-messages.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var ExperimentsModule = /*#__PURE__*/function (_elementorModules$Vie) {
@@ -734,7 +930,7 @@ var ExperimentsModule = /*#__PURE__*/function (_elementorModules$Vie) {
     value: function onInit() {
       var _this3 = this;
       (0, _get2.default)((0, _getPrototypeOf2.default)(ExperimentsModule.prototype), "onInit", this).call(this);
-      this.experimentsDependency = new _experimentsDependency.default({
+      this.experimentsDependency = new _experimentsMessages.default({
         selects: this.elements.$experimentSelects.toArray(),
         submit: this.elements.$experimentForm.find('#submit').get(0)
       });
@@ -917,9 +1113,7 @@ module.exports = wp.i18n;
 
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
 }
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -969,6 +1163,46 @@ module.exports = _assertThisInitialized, module.exports.__esModule = true, modul
 
 /***/ }),
 
+/***/ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js":
+/*!******************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
+  \******************************************************************/
+/***/ ((module) => {
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+      args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+      _next(undefined);
+    });
+  };
+}
+module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "../node_modules/@babel/runtime/helpers/classCallCheck.js":
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/classCallCheck.js ***!
@@ -988,15 +1222,16 @@ module.exports = _classCallCheck, module.exports.__esModule = true, module.expor
 /*!*************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/createClass.js ***!
   \*************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -1015,9 +1250,11 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
   \****************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "../node_modules/@babel/runtime/helpers/toPropertyKey.js");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -1139,28 +1376,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 /***/ ((module) => {
 
 function _iterableToArrayLimit(arr, i) {
-  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-  if (_i == null) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _s, _e;
-  try {
-    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
     try {
-      if (!_n && _i["return"] != null) _i["return"]();
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
     } finally {
-      if (_d) throw _e;
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
     }
+    return _arr;
   }
-  return _arr;
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -1209,6 +1449,319 @@ function _possibleConstructorReturn(self, call) {
   return assertThisInitialized(self);
 }
 module.exports = _possibleConstructorReturn, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/regeneratorRuntime.js":
+/*!********************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
+  \********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _regeneratorRuntime() {
+  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+  module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
+    return exports;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports;
+  var exports = {},
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+  function define(obj, key, value) {
+    return Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: !0,
+      configurable: !0,
+      writable: !0
+    }), obj[key];
+  }
+  try {
+    define({}, "");
+  } catch (err) {
+    define = function define(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
+  }
+  function tryCatch(fn, obj, arg) {
+    try {
+      return {
+        type: "normal",
+        arg: fn.call(obj, arg)
+      };
+    } catch (err) {
+      return {
+        type: "throw",
+        arg: err
+      };
+    }
+  }
+  exports.wrap = wrap;
+  var ContinueSentinel = {};
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+  var IteratorPrototype = {};
+  define(IteratorPrototype, iteratorSymbol, function () {
+    return this;
+  });
+  var getProto = Object.getPrototypeOf,
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
+  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function (method) {
+      define(prototype, method, function (arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if ("throw" !== record.type) {
+        var result = record.arg,
+          value = result.value;
+        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
+          invoke("next", value, resolve, reject);
+        }, function (err) {
+          invoke("throw", err, resolve, reject);
+        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
+          result.value = unwrapped, resolve(result);
+        }, function (error) {
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+      reject(record.arg);
+    }
+    var previousPromise;
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+      }
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
+    };
+  }
+  function maybeInvokeDelegate(delegate, context) {
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
+    var record = tryCatch(method, delegate.iterator, context.arg);
+    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
+    var info = record.arg;
+    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  }
+  function pushTryEntry(locs) {
+    var entry = {
+      tryLoc: locs[0]
+    };
+    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+  }
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal", delete record.arg, entry.completion = record;
+  }
+  function Context(tryLocsList) {
+    this.tryEntries = [{
+      tryLoc: "root"
+    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+  }
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) return iteratorMethod.call(iterable);
+      if ("function" == typeof iterable.next) return iterable;
+      if (!isNaN(iterable.length)) {
+        var i = -1,
+          next = function next() {
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            return next.value = undefined, next.done = !0, next;
+          };
+        return next.next = next;
+      }
+    }
+    return {
+      next: doneResult
+    };
+  }
+  function doneResult() {
+    return {
+      value: undefined,
+      done: !0
+    };
+  }
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+    var ctor = "function" == typeof genFun && genFun.constructor;
+    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
+  }, exports.mark = function (genFun) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
+  }, exports.awrap = function (arg) {
+    return {
+      __await: arg
+    };
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+    return this;
+  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    void 0 === PromiseImpl && (PromiseImpl = Promise);
+    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
+    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
+      return result.done ? result.value : iter.next();
+    });
+  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+    return this;
+  }), define(Gp, "toString", function () {
+    return "[object Generator]";
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
+    for (var key in object) keys.push(key);
+    return keys.reverse(), function next() {
+      for (; keys.length;) {
+        var key = keys.pop();
+        if (key in object) return next.value = key, next.done = !1, next;
+      }
+      return next.done = !0, next;
+    };
+  }, exports.values = values, Context.prototype = {
+    constructor: Context,
+    reset: function reset(skipTempReset) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+    },
+    stop: function stop() {
+      this.done = !0;
+      var rootRecord = this.tryEntries[0].completion;
+      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      return this.rval;
+    },
+    dispatchException: function dispatchException(exception) {
+      if (this.done) throw exception;
+      var context = this;
+      function handle(loc, caught) {
+        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+      }
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i],
+          record = entry.completion;
+        if ("root" === entry.tryLoc) return handle("end");
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc"),
+            hasFinally = hasOwn.call(entry, "finallyLoc");
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+          } else {
+            if (!hasFinally) throw new Error("try statement without catch or finally");
+            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+          }
+        }
+      }
+    },
+    abrupt: function abrupt(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
+      var record = finallyEntry ? finallyEntry.completion : {};
+      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+    },
+    complete: function complete(record, afterLoc) {
+      if ("throw" === record.type) throw record.arg;
+      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    },
+    finish: function finish(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+      }
+    },
+    "catch": function _catch(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if ("throw" === record.type) {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+      throw new Error("illegal catch attempt");
+    },
+    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+      return this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+    }
+  }, exports;
+}
+module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -1281,6 +1834,43 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 
 /***/ }),
 
+/***/ "../node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "../node_modules/@babel/runtime/helpers/typeof.js":
 /*!********************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/typeof.js ***!
@@ -1316,6 +1906,31 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return arrayLikeToArray(o, minLen);
 }
 module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/regenerator/index.js":
+/*!***********************************************************!*\
+  !*** ../node_modules/@babel/runtime/regenerator/index.js ***!
+  \***********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+// TODO(Babel 8): Remove this file.
+
+var runtime = __webpack_require__(/*! ../helpers/regeneratorRuntime */ "../node_modules/@babel/runtime/helpers/regeneratorRuntime.js")();
+module.exports = runtime;
+
+// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
+}
+
 
 /***/ })
 
@@ -1357,6 +1972,8 @@ var __webpack_exports__ = {};
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _module = _interopRequireDefault(__webpack_require__(/*! elementor/modules/landing-pages/assets/js/admin/module */ "../modules/landing-pages/assets/js/admin/module.js"));
 var _module2 = _interopRequireDefault(__webpack_require__(/*! elementor/core/experiments/assets/js/admin/module */ "../core/experiments/assets/js/admin/module.js"));
@@ -1364,6 +1981,7 @@ var _environment = _interopRequireDefault(__webpack_require__(/*! ../../../../co
 var _events = _interopRequireDefault(__webpack_require__(/*! elementor-utils/events */ "../assets/dev/js/utils/events.js"));
 var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../editor/utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 var _templateControls = _interopRequireDefault(__webpack_require__(/*! ./new-template/template-controls.js */ "../assets/dev/js/admin/new-template/template-controls.js"));
+var _jsonUploadWarningMessage = __webpack_require__(/*! elementor-utils/json-upload-warning-message */ "../assets/dev/js/utils/json-upload-warning-message.js");
 (function ($) {
   var ElementorAdmin = elementorModules.ViewModule.extend({
     maintenanceMode: null,
@@ -1612,6 +2230,9 @@ var _templateControls = _interopRequireDefault(__webpack_require__(/*! ./new-tem
         $descriptions.hide();
         $descriptions.filter('[data-value="' + $(this).val() + '"]').show();
       }).trigger('change');
+      $('.elementor_google_font select').on('change', function () {
+        $('.elementor_font_display').toggle('1' === $(this).val());
+      }).trigger('change');
     },
     onInit: function onInit() {
       elementorModules.ViewModule.prototype.onInit.apply(this, arguments);
@@ -1672,17 +2293,63 @@ var _templateControls = _interopRequireDefault(__webpack_require__(/*! ./new-tem
       $importButton.on('click', function () {
         $('#elementor-import-template-area').toggle();
       });
-      $importForm.on('submit', function (event) {
-        $importNowButton[0].disabled = true;
-        $importNowButton[0].value = __('Importing...', 'elementor');
-        if ($importFormFileInput[0].files.length && !elementorCommon.config.filesUpload.unfilteredFiles) {
-          event.preventDefault();
-          var enableUnfilteredFilesModal = _filesUploadHandler.default.getUnfilteredFilesNotEnabledImportTemplateDialog(function () {
-            $importForm.trigger('submit');
-          });
-          enableUnfilteredFilesModal.show();
-        }
-      });
+      var messageShown = false;
+      var originalButtonValue = $importNowButton[0].value;
+      $importForm.on('submit', /*#__PURE__*/function () {
+        var _ref4 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(event) {
+          var enableUnfilteredFilesModal;
+          return _regenerator.default.wrap(function _callee$(_context) {
+            while (1) switch (_context.prev = _context.next) {
+              case 0:
+                $importNowButton[0].disabled = true;
+                $importNowButton[0].value = __('Importing...', 'elementor');
+                if (messageShown) {
+                  _context.next = 16;
+                  break;
+                }
+                event.preventDefault();
+                _context.prev = 4;
+                _context.next = 7;
+                return (0, _jsonUploadWarningMessage.showJsonUploadWarningMessageIfNeeded)({
+                  IntroductionClass: window.elementorModules.admin.utils.Introduction,
+                  introductionMap: window.elementorAdmin.config.user.introduction,
+                  waitForSetViewed: true
+                });
+              case 7:
+                messageShown = true;
+                $importForm.trigger('submit');
+                _context.next = 15;
+                break;
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](4);
+                $importNowButton[0].disabled = false;
+                $importNowButton[0].value = originalButtonValue;
+              case 15:
+                return _context.abrupt("return");
+              case 16:
+                if (!($importFormFileInput[0].files.length && !elementorCommon.config.filesUpload.unfilteredFiles)) {
+                  _context.next = 21;
+                  break;
+                }
+                event.preventDefault();
+                enableUnfilteredFilesModal = _filesUploadHandler.default.getUnfilteredFilesNotEnabledImportTemplateDialog(function () {
+                  $importForm.trigger('submit');
+                });
+                enableUnfilteredFilesModal.show();
+                return _context.abrupt("return");
+              case 21:
+                messageShown = false;
+              case 22:
+              case "end":
+                return _context.stop();
+            }
+          }, _callee, null, [[4, 11]]);
+        }));
+        return function (_x) {
+          return _ref4.apply(this, arguments);
+        };
+      }());
     },
     initMaintenanceMode: function initMaintenanceMode() {
       var MaintenanceMode = __webpack_require__(/*! elementor-admin/maintenance-mode */ "../assets/dev/js/admin/maintenance-mode.js");

@@ -32,6 +32,7 @@
                                                                     },
                 
                                                         'items': 'tr',
+                                                        'handle': ".check-column",
                                                         'axis': 'y',
                                                         'update' : function(e, ui) {
                                                            

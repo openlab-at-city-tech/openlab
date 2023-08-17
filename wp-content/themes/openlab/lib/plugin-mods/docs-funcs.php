@@ -15,9 +15,9 @@ function openlab_is_docs_enabled_for_group( $group_id = null ) {
 		$group_id = bp_get_current_group_id();
 	}
 
-	// Default to true in case no value is found.
+	// Default to false in case no value is found.
 	if ( ! $group_id ) {
-		return true;
+		return false;
 	}
 
 	$group_settings = bp_docs_get_group_settings( $group_id );

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-box bookly-table">
     <div class="bookly-form-group" style="width:200px!important">
         <label><?php echo \Bookly\Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_label_ccard_number' ) ?></label>

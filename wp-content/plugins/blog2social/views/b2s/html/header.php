@@ -46,8 +46,9 @@ $hide7DayTrail = $options->_getOption('hide_7_day_trail');
 $hideFinalTrailModal = $options->_getOption('hide_final_trail');    
 
 ?>
+<?php if(isset($_GET['page']) && $_GET['page'] != 'blog2social-video'){ ?>
 <h1><?php echo (!empty($curPageTitle) ? esc_html($curPageTitle) : ((isset($getPages[$_GET['page']]) && !empty($getPages[$_GET['page']])) ? wp_kses($getPages[sanitize_text_field(wp_unslash($_GET['page']))], array('span' => array('class' => array()), 'a' => array('href' => array(),'target' => array(),'class' => array()), 'button' => array('class' => array()))) : '' )); ?></h1> 
-
+<?php } ?>
 <div class="b2s-support-area hidden-md hidden-lg">
     <a href="admin.php?page=blog2social-support" class="btn btn-primary btn-block"> <?php esc_html_e('Help & Support', 'blog2social'); ?></a>
 </div>
@@ -137,6 +138,30 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('This entry was removed successfully.', 'blog2social'); ?>
     </div>
 </div>
+
+<?php if (isset($_GET['origin']) && $_GET['origin'] == 'publish_post' && isset($_GET['deletePostStatus']) && isset($_GET["deletedPostsNumber"])) { ?>
+
+<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-all-posts-delete-success">
+    <div class="panel-body">
+        <?php
+            if ($_GET['deletePostStatus'] == 'success') {
+
+                if($_GET["deletedPostsNumber"] == 0){
+                    echo __('No posts found','blog2social');
+
+                } else {
+                    echo sprintf(__('Deleted %s posts','blog2social'), $_GET["deletedPostsNumber"]);
+                }
+
+            } else {
+                echo esc_html__('Posts could not be deleted.', 'blog2social');
+            }
+            ?>
+    </div>
+</div>
+
+
+<?php } ?>
 <div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-post-edit-success" style="display:none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('This post was edited successfully.', 'blog2social'); ?>
@@ -286,7 +311,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <?php esc_html_e('Check out Blog2Social Premium with more awesome features for scheduling and sharing (e.g. auto-posting, best time scheduling, social media calendar) 30-days for free. The trial is free of charge, without any obligations, no automatic subscription. Basic features of the Free Version are free forever.', 'blog2social'); ?>
                 </p>
                 <p class="b2s-notice-buttons">
-                    <a href="#" class="b2s-text-underline b2s-trial-modal-btn">
+                    <a href="<?php echo esc_url(B2S_Tools::getSupportLink('feature')); ?>" target="_blank" class="b2s-text-underline">
                         <?php esc_html_e('Yes, I want to test Blog2Social Premium 30 days for free', 'blog2social'); ?>
                     </a>
                 </p>
@@ -355,64 +380,6 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
     </div>
 <?php } ?>
 <!--Header-->
-
-<!-- B2S-Trial -->
-<div id="b2s-trial-modal" class="modal fade" role="dialog" aria-labelledby="b2s-trial-modal" aria-hidden="true" data-backdrop="false" style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-trial-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Test Blog2Social PREMIUM 30 days for free', 'blog2social'); ?></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="alert alert-danger b2s-trail-modal-fail" style="display:none;">
-                            <?php esc_html_e('The free trial can not be started. This blog has been already registered for the free trial.', 'blog2social'); ?>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Social Media Auto-Posting', 'blog2social'); ?><br>
-                            <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social'); ?><br>
-                            <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Share on multiple accounts per network', 'blog2social'); ?><br>
-                            <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Scheduler: Schedule once, multiple times or recurringly.', 'blog2social'); ?><br>
-                            <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting with links to all published social media posts', 'blog2social'); ?><br>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label for="trial_email"><?php esc_html_e('E-Mail', 'blog2social'); ?></label>
-                            <input id="trial_email" class="form-control" type="email" value="<?php echo esc_html($wpUserData->user_email); ?>" name="trial_email">
-                        </div>
-                        <div class="form-group col-xs-12  col-md-6">
-                            <label for="trial_vorname"><?php esc_html_e('First Name', 'blog2social'); ?></label>
-                            <input id="trial_vorname" class="form-control" type="text" value="<?php echo esc_html($wpUserData->user_firstname); ?>" name="trial_vorname">
-                        </div>
-                        <div class="form-group col-xs-12  col-md-6">
-                            <label for="trial_nachname"><?php esc_html_e('Last Name', 'blog2social'); ?></label>
-                            <input id="trial_nachname" class="form-control" type="text" value="<?php echo esc_html($wpUserData->user_lastname); ?>" name="trial_nachname">
-                        </div>
-                        <div class="col-xs-12">
-                            <p>
-                                <?php
-                                echo sprintf(__('By creating an account, you agree to Blog2Social\'s <a target="_blank" href="%s">Conditions of Use</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('term')));
-                                echo sprintf(__('and <a target="_blank" href="%s">Privacy Notice</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('privacy_policy')));
-                                ?>
-                            </p>
-                            <br>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="pull-left">
-                                <span class="glyphicon glyphicon-info-sign glyphicon-primary"></span>  <?php esc_html_e('No credit card required', 'blog2social'); ?>
-                            </div>
-                            <div class="pull-right">
-                                <input type="hidden" name="trial_url" id="trial_url" value="<?php echo esc_attr(get_option('home')); ?>" />
-                                <input class="btn btn-success pull-right b2s-trail-btn-start" type="submit" value="<?php esc_html_e('Get Started', 'blog2social'); ?>">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- B2S-Key-Info-->
 <div class="modal fade" id="b2sInfoKeyModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoKeyModal" aria-hidden="true" data-backdrop="false" style="display:none;">

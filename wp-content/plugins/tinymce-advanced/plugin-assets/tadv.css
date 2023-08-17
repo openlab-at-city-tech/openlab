@@ -360,14 +360,35 @@ ul.toolbar-block-dropdown span {
 }
 /* Block editor buttons end */
 
+.yes-no-wrap .yes-no-text {
+
+}
+
+.yes-no-wrap .yes-no-buttons {
+	margin: 1px;
+}
+
+.yes-no-buttons div {
+	padding-right: 1.5em;
+	display: inline-block;
+}
+
+.yes-no-buttons label {
+	vertical-align: top;
+}
+
+/* Set max-width for text blocks for better readability on a large screen */
+.block-toolbars,
+.advanced-options,
+.yes-no-wrap,
+#block-editor p {
+	max-width: 50em;
+}
+
 .classic-blocks-title-h4 {
 	margin: 40px 0 1.1em;
 }
-/*
-.tadv-submit-top {
-	margin: 0 -36px;
-}
-*/
+
 form#tadvadmin {
 	margin-top: 24px;
 }
@@ -711,18 +732,6 @@ div.tadv-error {
 	max-width: 650px;
 }
 
-.tadv-mce-menu.tadv-block-editor.mce-menubar {
-	background-image: url(images/toolbar-actions.png);
-	background-position: right;
-	background-repeat: no-repeat;
-	background-size: 84px 37px;
-}
-
-.rtl .tadv-mce-menu.tadv-block-editor.mce-menubar {
-	background-image: url(images/toolbar-actions-rtl.png);
-	background-position: left;
-}
-
 .tadv-block-editor .mce-menubtn {
 	margin: 7px 0 6px;
 }
@@ -764,15 +773,6 @@ div.tadv-error {
 .tadv-mark .dashicons-editor-textcolor {
 	background-color: #fff9c0;
 	background-clip: content-box;
-}
-
-.tadv-block-editor > div.mce-container-body {
-	margin-right: 80px;
-}
-
-.rtl .tadv-block-editor > div.mce-container-body {
-	margin-right: 0;
-	margin-left: 80px;
 }
 
 .rtl .the-button {

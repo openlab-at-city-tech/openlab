@@ -20,6 +20,7 @@ abstract class Tables
     const EMAIL_LOGS = 'email_logs';
     const EMAIL_NOTIFICATIONS = 'email_notifications';
     const GIFT_CARDS = 'gift_cards';
+    const GIFT_CARD_TYPES = 'gift_card_types';
     const LOCATIONS = 'locations';
     const PACKAGES = 'packages';
     const PAYMENTS = 'payments';
@@ -29,13 +30,15 @@ abstract class Tables
     const SMS_MAILING_LISTS = 'sms_mailing_lists';
     const SMS_MAILING_RECIPIENTS_LIST = 'sms_mailing_recipients_list';
     const SMS_NOTIFICATIONS = 'sms_notifications';
-    const VOICE_NOTIFICATIONS = 'voice_notifications';
-    const VOICE_DETAILS = 'voice_details';
-    const VOICE_PRICES = 'voice_prices';
     const SMS_PRICES = 'sms_prices';
     const SMS_SENDER = 'sms_sender';
     const STAFF_MEMBERS = 'staff_members';
     const TAXES = 'taxes';
+    const VOICE_DETAILS = 'voice_details';
+    const VOICE_NOTIFICATIONS = 'voice_notifications';
+    const VOICE_PRICES = 'voice_prices';
+    const WHATSAPP_DETAILS = 'whatsapp_details';
+    const WHATSAPP_NOTIFICATIONS = 'whatsapp_notifications';
 
     /**
      * Get columns for given table.
@@ -93,6 +96,7 @@ abstract class Tables
             case self::EMAIL_NOTIFICATIONS:
             case self::SMS_NOTIFICATIONS:
             case self::VOICE_NOTIFICATIONS:
+            case self::WHATSAPP_NOTIFICATIONS:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
                     'type' => esc_html__( 'Type', 'bookly' ),
@@ -173,6 +177,18 @@ abstract class Tables
                     'duration' => esc_html__( 'Duration', 'bookly' ),
                     'charge' => esc_html__( 'Cost', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
+                );
+                break;
+            case self::WHATSAPP_DETAILS:
+                $columns = array(
+                    'date' => esc_html__( 'Date', 'bookly' ),
+                    'time' => esc_html__( 'Time', 'bookly' ),
+                    'template' => esc_html__( 'Template', 'bookly' ),
+                    'language' => esc_html__( 'Language', 'bookly' ),
+                    'phone' => esc_html__( 'Phone', 'bookly' ),
+                    'charge' => esc_html__( 'Cost', 'bookly' ),
+                    'status' => esc_html__( 'Status', 'bookly' ),
+                    'info' => esc_html__( 'Info', 'bookly' ),
                 );
                 break;
             case self::VOICE_PRICES:

@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Frontend\Modules\Booking\Proxy;
 use Bookly\Lib\Utils\Common;
 /** @var Bookly\Lib\UserBookingData $userData */

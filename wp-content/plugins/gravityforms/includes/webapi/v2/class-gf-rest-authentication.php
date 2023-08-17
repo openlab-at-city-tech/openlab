@@ -198,13 +198,16 @@ class GF_REST_Authentication {
 	 * @return WP_Error|null|bool
 	 */
 	public function check_authentication_error( $error ) {
-		if ( ! $this->is_request_to_rest_api() ) {
-			// Pass through other errors.
+		if ( ! $this->is_request_to_rest_api() || $_SERVER['REQUEST_METHOD'] === 'OPTIONS' ) {
+			// Pass through OPTIONS requests or those to non-GF endpoints.
 			return $error;
 		}
 
 		$error = $this->get_error();
 		if ( empty( $error ) ) {
+			// rest_handle_options_request() will be called by $this->check_user_permissions().
+			remove_filter( 'rest_pre_dispatch', 'rest_handle_options_request' );
+
 			// Indicate auth succeeded.
 			return true;
 		}
@@ -834,7 +837,7 @@ class GF_REST_Authentication {
 		$this->update_last_access();
 		$this->log_debug( __METHOD__ . '(): Permissions valid.' );
 
-		return null;
+		return rest_handle_options_request( null, $server, $request );
 	}
 
 

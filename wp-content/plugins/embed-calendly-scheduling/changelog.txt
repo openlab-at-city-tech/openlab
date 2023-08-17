@@ -1,0 +1,78 @@
+=== Embed Calendly ===
+Authors: Embed Calendly, Shycoder
+Plugin Page: https://wordpress.org/plugins/embed-calendly-scheduling/
+
+== Changelog ==
+
+= 3.6 - 09-07-2023 =
+
+- Fixed customizer bug on Divi theme
+- Adjusted promotion module
+
+
+= 3.5 - 25-06-2023 =
+
+- Published changelog
+- Added optional promotion
+- Added option to permanently disable all promotion notices
+- Updated readme
+- Added pro version support
+- Updated settings page UI
+- Removed donation section from settings page
+
+
+= 3.4 - 13-05-2023 =
+
+- Removed experimental promotion
+
+
+= 3.3 - 22-04-2023 =
+
+- Added experimental promotion
+
+
+= 3.2 - 14-12-2022 =
+
+- Added internationalization support
+
+
+= 3.1 - 18-10-2022 =
+
+- Enqueue style and script on demand
+- Updated widget script
+- Fixed popup embed error
+
+
+= 3.0 - 08-05-2022 =
+
+- Added support for v2 api key
+- Fixed inline embed mobile responsiveness issue
+- Implemented cookie banner on customizer and other fixes
+- Updated settings page
+
+
+= 2.0 - 06-08-2021 =
+
+- Added embed customizer
+- Fixed v2 activation problem
+
+
+= 1.3 - 16-04-2021 =
+
+- Fixed JS error when embedding calendar iframe
+
+
+= 1.2 - 24-01-2021 =
+
+- Fixed typo in shortcode attributes
+- Fixed styling typo
+
+
+= 1.1 - 10-01-2021 =
+
+- Fixed the issue with adding shortcode
+
+
+= 1.0 - 22-10-2020 =
+
+- Initial release

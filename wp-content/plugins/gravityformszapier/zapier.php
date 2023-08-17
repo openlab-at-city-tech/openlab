@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Zapier Add-On
 Plugin URI: https://gravityforms.com
 Description: Integrates Gravity Forms with Zapier, allowing form submissions to be automatically sent to your configured Zaps.
-Version: 4.2
+Version: 4.2.1
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -31,7 +31,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
 defined( 'ABSPATH' ) || die();
 
 // Defines the current version of the Gravity Forms Zapier Add-On
-define( 'GF_ZAPIER_VERSION', '4.2' );
+define( 'GF_ZAPIER_VERSION', '4.2.1' );
 
 // Defines the minimum version of Gravity Forms required to run this version of the add-on.
 define( 'GF_ZAPIER_MIN_GF_VERSION', '2.4' );

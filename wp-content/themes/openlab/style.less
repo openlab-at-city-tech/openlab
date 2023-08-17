@@ -69,6 +69,18 @@ a {
         }
     }
 }
+/* Button elements styled like text links. */
+button.link-button {
+	background: none;
+	border: none;
+	color: @link-color;
+	padding: 0;
+    text-decoration: underline;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
 body{
     .darken-for-accessibility{
         color: @darkTeal;
@@ -321,8 +333,16 @@ input[type="submit"]{
 .img-responsive{
     max-width: 100%;
 }
-.disabled-label,.disabled-checkbox{
+.disabled-label,
+.disabled-checkbox
+{
 	opacity: 0.4;
+}
+input:disabled+label {
+	opacity: .7;
+}
+.is-disabled label {
+	opacity: .7;
 }
 .form-control{
     margin-bottom: 15px;
@@ -345,11 +365,6 @@ input[type="submit"]{
             display: inline-block;
         }
     }
-	&.related-links-url {
-        @media(max-width: @screen-xs-max){
-			display: inline-block;
-		}
-	}
 }
 .parsley-errors-list.filled {
     margin: 0;
@@ -520,26 +535,53 @@ input[type="submit"]{
 	border-top: 1px solid #dddddd;
 	padding-top: 15px;
 }
-.related-link-actions {
-	display: inline-block;
-	margin-top: -15px;
-	vertical-align: middle;
-	@media(max-width: @screen-xs-max){
-		margin-top: 0;
+.link-edit-items {
+	&.social-link-edit-items {
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		padding: 10px;
+	}
+
+	.link-actions {
+		display: inline-block;
+		margin-top: -15px;
+		vertical-align: middle;
+		@media(max-width: @screen-xs-max){
+			margin-top: 0;
+		}
+	}
+
+	button.link-action {
+		background: none;
+		border: none;
+		font-size: 20px;
+		height: 32px;
+	}
+
+	button.link-action.link-add {
+		padding: 0;
+		.fa {
+			margin-left: 0;
+		}
+	}
+
+	.link-url {
+        @media(max-width: @screen-xs-max){
+			display: inline-block;
+		}
+	}
+
+	.form-inline.label-combo {
+		label {
+			width: auto;
+		}
+	}
+
+	select {
+		width: 90%;
 	}
 }
-button.related-link-action {
-	background: none;
-	border: none;
-	font-size: 20px;
-	height: 32px;
-}
-button.related-link-action.related-link-add {
-	padding: 0;
-	.fa {
-		margin-left: 0;
-	}
-}
+
 .submenu{
     .submenu-text{
         margin-right: 8px;
@@ -1097,7 +1139,7 @@ body{
         }
     }
     .note{
-        color: @40gray;
+        color: #757575;
     }
     .padded-img{
         border-radius: @border-radius-base;
@@ -1130,6 +1172,10 @@ body{
 				font-weight: normal;
 				min-width: 0px;
 				padding: 0 4px;
+
+				&.group-badge-inactive {
+					background: @yellow;
+				}
 
 				a {
 					color: #4f4f4f;
@@ -1178,6 +1224,19 @@ body{
             }
         }
     }
+
+	.group-active-status-fieldset {
+		margin: 24px 0;
+
+		p {
+			margin-bottom: 8px;
+		}
+
+		label {
+			font-weight: 600;
+			margin-left: 8px;
+		}
+	}
 
 	.group-creators-section {
 		margin-bottom: 20px;
@@ -2383,6 +2442,38 @@ body form{
     font-size: 1.75rem;
   }
 }
+.show-admin-bar-on-site-setting {
+	margin-top: 25px;
+}
+.group-setting-note {
+	margin-top: -10px;
+}
+.collaboration-tool-toggle {
+	margin-bottom: 8px;
+
+	label {
+		font-weight: 700;
+	}
+
+	.collaboration-tool-gloss {
+		padding-left: 20px;
+
+		a {
+			&::after {
+				content: "\00a0\f08e";
+				font-family: fontawesome;
+				font-style: normal;
+			}
+		}
+	}
+}
+a.external-link {
+	&::after {
+		content: "\00a0\f08e";
+		font-family: fontawesome;
+		font-style: normal;
+	}
+}
 .sidebar{
     .sidebar-wrapper{
         @media (max-width: @screen-xs-max){
@@ -2742,6 +2833,7 @@ body form{
         margin-bottom: 12px;
         color: @60gray;
 		position: relative;
+
         h1,
         h3,
         h4,
@@ -2802,6 +2894,10 @@ body form{
             border-right: none;
         }
     }
+}
+body .site-template-component__category {
+	color: #666;
+	opacity: 1;
 }
 .shared-cloning-authorship-settings label {
 	font-weight: normal;
@@ -3781,7 +3877,7 @@ a.delete-doc-button {
         flex-flow: row wrap;
         align-items: flex-end;
 
-        .pagination-links { 
+        .pagination-links {
             .pagination {
                 display: flex;
 
@@ -3878,7 +3974,7 @@ a.delete-doc-button {
                 &:first-child {
                     border-bottom-left-radius: 0;
                     border-top-left-radius: 0;
-                
+
                 }
 
                 &:last-child {
@@ -3983,18 +4079,58 @@ a.delete-doc-button {
         }
     }
 }
+
+body.groups.connections {
+	.bp-template-notice {
+		margin-bottom: 20px;
+	}
+
+	.connection-settings {
+		border: 1px solid #ddd;
+		border-radius: @border-radius-base;
+		display: flex;
+		gap: 20px;
+		margin-bottom: 20px;
+	}
+}
+
+.connections-icon {
+	color: @cyan;
+}
+
+body.invite-new-members {
+	ul.ui-autocomplete {
+		background: #fff;
+		border: 1px solid @80gray;
+		list-style-type: none;
+		max-width: 50%;
+		padding: 15px;
+	}
+
+	.ui-menu-item-wrapper {
+		padding: 6px;
+	}
+
+	.ia-autocomplete-hit {
+		align-items: center;
+		display: flex;
+		gap: 12px;
+	}
+}
 #invite-anyone-group-list{
-    &.group-list{
-        .group-item-wrapper{
-            height: 83px;
-            label{
-                width: 100%;
-            }
-            @media (max-width:@screen-xs-max){
-                height: auto;
-            }
-        }
-    }
+	list-style-type: none;
+	padding: 0;
+
+	li {
+		align-items: center;
+		display: flex;
+		gap: 12px;
+		margin-bottom: 8px;
+	}
+
+	a.remove-group {
+		cursor: pointer;
+	}
 }
 .sent-invites-panel{
     @media (max-width: @screen-xs-max){
@@ -4314,6 +4450,11 @@ body{
             color: @magenta;
         }
     }
+}
+.inappropriate-message-notice {
+	border: 2px solid @yellow;
+	border-radius: 4px;
+	padding: 10px;
 }
 .my-friends{
     .group-list{
@@ -5310,6 +5451,38 @@ p.private-membership-indicator {
                     }
                 }
             }
+        }
+    }
+}
+
+/* Parsley.js styling for group create/edit forms */
+.group-validate-form {
+    .error-container {
+        font-weight: 400;
+        border-radius: 4px;
+        background: #f7e700;
+        border-color: #f7e700;
+
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            li {
+                padding: 15px;
+            }
+        }
+    }
+
+    .department-selector {
+        .error-container {
+            margin-top: 15px;
+        }
+    }
+
+    #site-options {
+        .error-container {
+            margin-bottom: 15px;
         }
     }
 }

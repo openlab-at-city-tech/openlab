@@ -12,12 +12,12 @@
 }(function ($, undefined) {
     $(document).ready(function (){
         // Open file selector on div click
-        $(document).on("click", "#upload-file", function(e){
+        $("#upload-file").click(function(){
             $("#media_file").click();
         });
 
         // file selected
-        $(document).on("change", "#media_file", function(e){
+        $("#media_file").change(function(){
             var fd = new FormData();
 
             var files = $('#media_file')[0].files[0];
@@ -27,16 +27,42 @@
             uploadData(this);
         });
 
-        $(document).on("click", ".upgrade-btn-box a", function(e){
-            e.stopPropagation();
-            e.stopImmediatePropagation();
+        $(document).on("change", "input[name='date_options']:checked", function(){
+            if($(this).val() == "custom_date") {
+                $("#custom-date").show();
+            } else {
+                $("#custom-date").hide();
+            }
+            setBoxHeight();
         });
+
+        $(document).on("click", "#replacement_option", function(){
+            if($(this).is(":checked")) {
+                $("#custom-path").show();
+            } else {
+                $("#custom-path").hide();
+            }
+            setBoxHeight();
+        });
+
+        if($("#media_file").length) {
+            new SimpleDropit(document.getElementById('media_file'));
+        }
+
+        setBoxHeight();
     });
+
+    function setBoxHeight() {
+        $(".media-setting").css("height", "auto");
+        if(parseInt($(".media-bottom-box-left .media-setting").height()) > parseInt($(".media-bottom-box-right .media-setting").height())) {
+            $(".media-bottom-box-right .media-setting").height(parseInt($(".media-bottom-box-left .media-setting").height()));
+        } else {
+            $(".media-bottom-box-left .media-setting").height(parseInt($(".media-bottom-box-right .media-setting").height()));
+        }
+    }
 
     function uploadData(input) {
         if($("#media_file").val() != "") {
-            $(".new-image-box .file-size").addClass("hide-it");
-            $("#upload-file").removeClass("active");
 
             var fileName = $("#media_file").val();
             fileName = fileName.toLowerCase();
@@ -54,7 +80,7 @@
                         var image = new Image();
                         image.src = e.target.result;
                         image.onload = function () {
-                            $(".new-image-box img").after('<span class="image-size">Height x Width</span>').show();
+                            $(".new-image-box img").after('<span class="image-size">'+this.width+"x"+this.height+"</span>").show();
                         };
                     }
 
@@ -67,11 +93,8 @@
             setFileSize(input.files[0].size);
 
             $(".replace-message").removeClass("active");
-            if(fileExt != $("#file_ext").val()) {
+            if(fileExt.toLowerCase() != ($("#file_ext").val()).toLowerCase()) {
                 $(".file-type").addClass("active");
-                $("#rename-file").prop("checked", true);
-            } else {
-                $("#replace-file").prop("checked", true);
             }
             $(".button-primary").prop("disabled", false);
         } else {
@@ -88,8 +111,7 @@
         } else {
             fileSize = fileSize+" B";
         }
-        $(".new-image-box .file-size").removeClass("hide-it");
-        $("#upload-file").addClass("active");
+        $(".new-image-box .file-size").html(fileSize);
     }
 
 }));

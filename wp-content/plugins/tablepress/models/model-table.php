@@ -341,9 +341,9 @@ class TablePress_Table_Model extends TablePress_Model {
 		$post = $this->_table_to_post( $table, $post_id );
 		$new_post_id = $this->model_post->update( $post );
 		if ( is_wp_error( $new_post_id ) ) {
-			// Add an error code to the existing WP_Error.
-			$new_post_id->add( 'table_save_post_update', '', $post_id );
-			return $new_post_id;
+			$error = new WP_Error( 'table_save_post_update', '', $post_id );
+			$error->merge_from( $new_post_id );
+			return $error;
 		}
 		if ( $post_id !== $new_post_id ) {
 			return new WP_Error( 'table_save_new_post_id_does_not_match', '', $new_post_id );
@@ -392,9 +392,9 @@ class TablePress_Table_Model extends TablePress_Model {
 		$post = $this->_table_to_post( $table, $post_id );
 		$new_post_id = $this->model_post->insert( $post );
 		if ( is_wp_error( $new_post_id ) ) {
-			// Add an error code to the existing WP_Error.
-			$new_post_id->add( 'table_add_post_insert', '' );
-			return $new_post_id;
+			$error = new WP_Error( 'table_add_post_insert', '' );
+			$error->merge_from( $new_post_id );
+			return $error;
 		}
 
 		$options_saved = $this->_add_table_options( $new_post_id, $table['options'] );
@@ -436,9 +436,9 @@ class TablePress_Table_Model extends TablePress_Model {
 	public function copy( $table_id ) {
 		$table = $this->load( $table_id, true, true );
 		if ( is_wp_error( $table ) ) {
-			// Add an error code to the existing WP_Error.
-			$table->add( 'table_copy_table_load', '', $table_id );
-			return $table;
+			$error = new WP_Error( 'table_copy_table_load', '', $table_id );
+			$error->merge_from( $table );
+			return $error;
 		}
 
 		// Adjust name of copied table.
@@ -450,17 +450,17 @@ class TablePress_Table_Model extends TablePress_Model {
 		// Merge this data into an empty table template.
 		$table = $this->prepare_table( $this->get_table_template(), $table, false );
 		if ( is_wp_error( $table ) ) {
-			// Add an error code to the existing WP_Error.
-			$table->add( 'table_copy_table_prepare', '', $table_id );
-			return $table;
+			$error = new WP_Error( 'table_copy_table_prepare', '', $table_id );
+			$error->merge_from( $table );
+			return $error;
 		}
 
 		// Add the copied table.
 		$new_table_id = $this->add( $table, 'copy' );
 		if ( is_wp_error( $new_table_id ) ) {
-			// Add an error code to the existing WP_Error.
-			$new_table_id->add( 'table_copy_table_add', '', $table_id );
-			return $new_table_id;
+			$error = new WP_Error( 'table_copy_table_add', '', $table_id );
+			$error->merge_from( $new_table_id );
+			return $error;
 		}
 
 		/**
@@ -601,7 +601,7 @@ class TablePress_Table_Model extends TablePress_Model {
 	}
 
 	/**
-	 * Flush the caches of the plugins W3 Total Cache, WP Super Cache, Cachify, and Quick Cache.
+	 * Flush the caches of common caching plugins.
 	 *
 	 * @since 1.0.0
 	 */
@@ -911,10 +911,6 @@ class TablePress_Table_Model extends TablePress_Model {
 				$cell_content = (string) $cell_content;
 			}
 		);
-		// $table['author'] = get_current_user_id(); // We don't want this, as it would override the original author.
-		// $table['created'] = wp_date( 'Y-m-d H:i:s' ); // We don't want this, as it would override the original datetime.
-		$table['last_modified'] = wp_date( 'Y-m-d H:i:s' );
-		$table['options']['last_editor'] = get_current_user_id();
 		// Table Options.
 		if ( isset( $new_table['options'] ) ) { // Options are for example not set for newly added tables.
 			// Specials check for certain options.
@@ -939,6 +935,11 @@ class TablePress_Table_Model extends TablePress_Model {
 		// Table Visibility.
 		$table['visibility']['rows'] = $new_table['visibility']['rows'];
 		$table['visibility']['columns'] = $new_table['visibility']['columns'];
+
+		// $table['author'] = get_current_user_id(); // We don't want this, as it would override the original author.
+		// $table['created'] = wp_date( 'Y-m-d H:i:s' ); // We don't want this, as it would override the original datetime.
+		$table['last_modified'] = wp_date( 'Y-m-d H:i:s' );
+		$table['options']['last_editor'] = get_current_user_id();
 
 		return $table;
 	}

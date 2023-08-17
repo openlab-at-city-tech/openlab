@@ -3,7 +3,7 @@
  * Plugin Name: Gravity Perks
  * Plugin URI: https://gravitywiz.com/
  * Description: Effortlessly install and manage small functionality enhancements (aka "perks") for Gravity Forms.
- * Version: 2.2.9
+ * Version: 2.3.2
  * Author: Gravity Wiz
  * Author URI: https://gravitywiz.com/
  * License: GPL2
@@ -12,7 +12,7 @@
  * Update URI: https://gravitywiz.com/updates/gravityperks
  */
 
-define( 'GRAVITY_PERKS_VERSION', '2.2.9' );
+define( 'GRAVITY_PERKS_VERSION', '2.3.2' );
 
 /**
  * Include the perk model as early as possible to when Perk plugins are loaded, they can safely extend
@@ -215,7 +215,7 @@ class GravityPerks {
 		define( 'GW_URL', GW_PROTOCOL . '://' . GW_DOMAIN );
 
 		if ( ! defined( 'GWAPI_URL' ) ) {
-			define( 'GWAPI_URL', GW_URL . '/gwapi/v2/' ); // @used storefront_api.php
+			define( 'GWAPI_URL', GW_URL . '/gwapi/v3/' ); // @used storefront_api.php
 		}
 
 		define( 'GW_UPGRADE_URL', GW_URL . '/upgrade/' );
@@ -1036,7 +1036,7 @@ class GravityPerks {
 
 	// API & LICENSING //
 	public static function can_manage_license() {
-		return current_user_can( 'install_plugins' );
+		return current_user_can( 'activate_plugins' );
 	}
 
 	public static function load_api() {
@@ -1068,7 +1068,7 @@ class GravityPerks {
 
 	public static function get_api_error_message() {
 
-		$message  = __( 'Oops! Your site is having some trouble communicating with the our API.', 'gravityperks' );
+		$message  = __( 'Oops! Your site is having some trouble communicating with our API.', 'gravityperks' );
 		$message .= sprintf( '&nbsp;<a href="%s" target="_blank">%s</a>', 'https://' . GW_DOMAIN . '/documentation/troubleshooting-licensing-api/', __( 'Let\'s get this fixed.', 'gravityperks' ) );
 
 		return $message;
@@ -1151,13 +1151,17 @@ class GravityPerks {
 
 	public static function flush_license( $hard = false ) {
 		delete_site_transient( 'gwp_license_data' );
+		delete_site_transient( 'gwp_license_data_' . GRAVITY_PERKS_VERSION );
 
 		if ( ! $hard ) {
 			return;
 		}
 
 		delete_site_transient( 'gwapi_get_dashboard_announcements' );
+		delete_site_transient( 'gwapi_get_dashboard_announcements_' . GRAVITY_PERKS_VERSION );
+
 		delete_site_transient( 'gwapi_get_products' );
+		delete_site_transient( 'gwapi_get_products_' . GRAVITY_PERKS_VERSION );
 	}
 
 	public static function get_license_key() {

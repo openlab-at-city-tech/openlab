@@ -17,6 +17,11 @@ class DLM_Product {
 	const ENDPOINT_ACTIVATION = 'wp_plugin_licencing_activation_api';
 
 	/**
+	 * Activation endpoint
+	 */
+	const ENDPOINT_STATUS_CHECK = 'license_wp_api_status_check';
+
+	/**
 	 * Update endpoint
 	 */
 	const ENDPOINT_UPDATE = 'wp_plugin_licencing_update_api';
@@ -162,14 +167,23 @@ class DLM_Product {
 				throw new Exception( 'Please enter the email address associated with your license.' );
 			}
 
+			$action_trigger = isset( $_POST['action_trigger'] ) ? sanitize_text_field( wp_unslash( $_POST['action_trigger'] ) ) : '';
+
 			// Do activate request
-			$request = wp_remote_get( self::STORE_URL . self::ENDPOINT_ACTIVATION . '&' . http_build_query( array(
-					'email'          => $license->get_email(),
-					'licence_key'    => $license->get_key(),
-					'api_product_id' => $this->product_id,
-					'request'        => 'activate',
-					'instance'       => site_url()
-				), '', '&' ) );
+			$request = wp_remote_get(
+				self::STORE_URL . self::ENDPOINT_ACTIVATION . '&' . http_build_query(
+					array(
+						'email'          => $license->get_email(),
+						'licence_key'    => $license->get_key(),
+						'api_product_id' => $this->product_id,
+						'request'        => 'activate',
+						'instance'       => site_url(),
+						'action_trigger' => $action_trigger,
+					),
+					'',
+					'&'
+				)
+			);
 
 			// Check request
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
@@ -179,14 +193,19 @@ class DLM_Product {
 			// Get activation result
 			$activate_results = json_decode( wp_remote_retrieve_body( $request ), true );
 
-			// Check if response is correct
-			if ( ! empty( $activate_results['activated'] ) ) {
+			// Check if response is correct and the product slug is present in the activated extensions.
+			if (
+				! empty( $activate_results ) &&
+				( isset( $activate_results[ $this->get_product_id() ] ) ||
+				  ( isset( $activate_results['success'] ) && isset( $activate_results['activated'] ) && $activate_results['activated'] ) )
+			) {
 
-				// Set local activation status to true
+				// Set local activation status to true.
 				$license->set_status( 'active' );
+				$license->set_license_status( 'active' );
 				$this->set_license( $license );
 
-				// Return Message
+				// Return Message.
 				return array(
 					'result'  => 'success',
 					'message' => esc_html__( 'License successfully activated.', 'download-monitor' )
@@ -197,12 +216,11 @@ class DLM_Product {
 			} elseif ( isset( $activate_results['error_code'] ) ) {
 				throw new Exception( $activate_results['error'] );
 			}
-
-
 		} catch ( Exception $e ) {
 
-			// Set local activation status to false
+			// Set local activation status to false.
 			$license->set_status( 'inactivate' );
+			$license->set_license_status( 'inactive' );
 			$this->set_license( $license );
 
 			// Return error message
@@ -225,13 +243,20 @@ class DLM_Product {
 				throw new Exception( "Can't deactivate license without a license key." );
 			}
 
+			$action_trigger = isset( $_POST['action_trigger'] ) ? sanitize_text_field( wp_unslash( $_POST['action_trigger'] ) ) : '';
+
 			// The Request
-			$request = wp_remote_get( self::STORE_URL . self::ENDPOINT_ACTIVATION . '&' . http_build_query( array(
-					'api_product_id' => $this->product_id,
-					'licence_key'    => $license->get_key(),
-					'request'        => 'deactivate',
-					'instance'       => site_url(),
-				), '', '&' ) );
+			$request = wp_remote_get(
+				self::STORE_URL . self::ENDPOINT_ACTIVATION . '&' . http_build_query(
+					array(
+						'api_product_id' => $this->product_id,
+						'licence_key'    => $license->get_key(),
+						'request'        => 'deactivate',
+						'instance'       => site_url(),
+						'action_trigger' => $action_trigger
+					), '', '&'
+				)
+			);
 
 			// Check request
 			if ( is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) != 200 ) {
@@ -245,6 +270,7 @@ class DLM_Product {
 
 			// Set new license status
 			$license->set_status( 'inactive' );
+			$license->set_license_status( 'inactive' );
 			$this->set_license( $license );
 
 			return array( 'result' => 'success' );
@@ -275,6 +301,7 @@ class DLM_Product {
 			if( 'no_activation' == $error_key ) {
 				// remove local activation if there's no license on API side
 				$this->get_license()->set_status( 'inactive' );
+				$this->get_license()->set_license_status( 'inactive' );
 				$this->get_license()->store();
 			}
 		}
@@ -303,5 +330,4 @@ class DLM_Product {
 
 		return 'https://www.download-monitor.com/pricing?' . $query_string;
 	}
-
 }

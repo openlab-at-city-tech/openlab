@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 5.0
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.0
-Stable tag: 6.5.9
+Stable tag: 6.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,9 +47,17 @@ This plugin is compatible with all media types, including retina and WebP versio
 
 == Changelog ==
 
-= 6.5.9 (2023/02/21) =
-= Fix: Avoid certain errors related to ACF and fields which were created with former versions.
+= 6.6.4 (2023/05/30) =
+* Update: Improved the UI and its elements.
 * Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.6.3 (2023/04/09) =
+* Add: New filter to see the found references. This will improve a lot.
+* Fix: Tiny fixes, retrieved the main dashboard, and lighter bundles.
+* Info: The new version of WordPress (6.2) came with what is seemingly a bug with the $wpdb->prepare. There are workaround, and I fixed an issue I was aware of. If you find any others, please kindly report it [here](https://wordpress.org/support/plugin/media-cleaner/).
+
+= 6.6.0 (2023/02/21) =
+= Fix: Avoid certain errors related to ACF and fields which were created with former versions.
 
 = 6.5.8 (2023/02/09) =
 * Update: Slightly cleaner UI (and it will get better and better).

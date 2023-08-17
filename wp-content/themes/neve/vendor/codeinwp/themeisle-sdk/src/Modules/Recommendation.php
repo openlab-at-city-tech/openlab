@@ -239,49 +239,6 @@ class Recommendation extends Abstract_Module {
 	}
 
 	/**
-	 * Call plugin api
-	 *
-	 * @param string $slug plugin slug.
-	 *
-	 * @return array|mixed|object
-	 */
-	private function call_plugin_api( $slug ) {
-		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-
-		$call_api = get_transient( 'ti_plugin_info_' . $slug );
-
-		if ( false === $call_api ) {
-			$call_api = plugins_api(
-				'plugin_information',
-				array(
-					'slug'   => $slug,
-					'fields' => array(
-						'downloaded'        => false,
-						'rating'            => false,
-						'description'       => false,
-						'short_description' => true,
-						'donate_link'       => false,
-						'tags'              => false,
-						'sections'          => true,
-						'homepage'          => true,
-						'added'             => false,
-						'last_updated'      => false,
-						'compatibility'     => false,
-						'tested'            => false,
-						'requires'          => false,
-						'downloadlink'      => false,
-						'icons'             => true,
-						'banners'           => true,
-					),
-				)
-			);
-			set_transient( 'ti_plugin_info_' . $slug, $call_api, 30 * MINUTE_IN_SECONDS );
-		}
-
-		return $call_api;
-	}
-
-	/**
 	 * Load css and scripts for the plugin recommend page.
 	 */
 	public function enqueue() {

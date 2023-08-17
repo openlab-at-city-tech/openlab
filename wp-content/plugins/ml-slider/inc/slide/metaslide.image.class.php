@@ -153,8 +153,14 @@ class MetaImageSlide extends MetaSlide
             );
         }
 
+        if(empty($_POST['slider_id'])) {
+            $slider_id = MetaSlider_Slideshows::create();
+        } else {
+            $slider_id = absint($_POST['slider_id']);
+        }
+
         $slides = $this->create_slides(
-            absint($_POST['slider_id']),
+            $slider_id,
             array_map(array($this, 'make_image_slide_data'), $_POST['selection']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         );
 
@@ -164,7 +170,13 @@ class MetaImageSlide extends MetaSlide
             ), 409);
         }
 
-        wp_send_json_success($slides, 200);
+        if(empty($_POST['slider_id'])) {
+            $response = $slider_id;
+        } else {
+            $response = $slides;
+        }
+        
+        wp_send_json_success($response, 200);
     }
 
     /**
@@ -316,12 +328,12 @@ class MetaImageSlide extends MetaSlide
         $row  = "<tr id='slide-" . esc_attr($this->slide->ID) . "' class='slide image flex responsive nivo coin' data-attachment-id='" . esc_attr($attachment_id) . "'>
                     <td class='col-1'>
                         <div class='metaslider-ui-controls ui-sortable-handle rtl:pl-0 rtl:pr-3'>
-                        <h4 class='slide-details'>" . esc_html($slide_label) . "</h4>";
+                        <h4 class='slide-details'>" . esc_html($slide_label) . " | ID: ". esc_html($this->slide->ID) ."</h4>";
         if (metaslider_this_is_trash($this->slide)) {
             $row .= '<div class="row-actions trash-btns">';
             $row .= "<span class='untrash'>{$this->get_undelete_button_html()}</span>";
-            // $row .= ' | ';
-            // $row .= "<span class='delete'>{$this->get_perminant_delete_button_html()}</span>";
+            $row .= ' | ';
+            $row .= "<span class='delete'>{$this->get_permanent_delete_button_html()}</span>";
             $row .= '</div>';
         } else {
             $row .= $edit_buttons;
@@ -665,7 +677,9 @@ class MetaImageSlide extends MetaSlide
         $attributes = apply_filters('metaslider_flex_slider_list_item_attributes', array(
                 'data-thumb' => isset($slide['data-thumb']) ? $slide['data-thumb'] : "",
                 'style' => "display: none; width: 100%;",
-                'class' => "slide-{$this->slide->ID} ms-image"
+                'class' => "slide-{$this->slide->ID} ms-image",
+                'aria-roledescription' => "slide",
+                'aria-label' =>"slide-{$this->slide->ID}"
             ), $slide, $this->slider->ID);
 
         $li = "<li";

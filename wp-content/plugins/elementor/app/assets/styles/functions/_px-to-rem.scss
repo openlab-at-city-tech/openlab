@@ -1,3 +1,0 @@
-@function px-to-rem($multiplier, $unit:0.0625rem) {
-	@return $multiplier * $unit;
-}

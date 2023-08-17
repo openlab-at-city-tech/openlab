@@ -95,28 +95,31 @@ class MetaSlide
         }
 
         /*
-        * Updates the thumbnail, assigns it to the slideshow, crops the image
+        * Updates database record and thumbnail if selection changed, assigns it to the slideshow, crops the image
         */
-        if (update_post_meta($slide_id, '_thumbnail_id', $image_id)) {
-            if ($slideshow_id) {
-                $this->set_slider($slideshow_id);
-                // get resized image
-                $imageHelper = new MetaSliderImageHelper(
-                    $slide_id,
-                    $this->settings['width'],
-                    $this->settings['height'],
-                    isset($this->settings['smartCrop']) ? $this->settings['smartCrop'] : 'false'
-                );
-            }
+        update_post_meta( $slide_id, '_thumbnail_id', $image_id );
+        if ( $slideshow_id ) {
+            $this->set_slider( $slideshow_id );
+            // get resized image
+            $imageHelper = new MetaSliderImageHelper(
+                $slide_id,
+                $this->settings['width'],
+                $this->settings['height'],
+                isset($this->settings['smartCrop']) ? $this->settings['smartCrop'] : 'false'
+            );
 
             return array(
-                'message' => __('The image was successfully updated.', 'ml-slider'),
+                'message' => __( 'The image was successfully updated.', 'ml-slider' ),
                 'thumbnail_url' => $thumbnail_url,
-                'img_url' => $imageHelper ? $imageHelper->get_image_url() : wp_get_attachment_image_url($image_id, 'full')
+                'img_url' => $imageHelper ? $imageHelper->get_image_url() : wp_get_attachment_image_url( $image_id, 'full' )
             );
         }
 
-        return new WP_Error('update_failed', __('There was an error updating the image. Please try again', 'ml-slider'), array('status' => 409));
+        return new WP_Error( 
+            'update_failed', 
+            __( 'There was an error updating the image. Please try again', 'ml-slider' ), 
+            array( 'status' => 409 ) 
+        );
     }
 
     /**
@@ -371,7 +374,7 @@ class MetaSlide
      */
     public function get_delete_button_html()
     {
-        return "<button class='toolbar-button delete-slide alignright tipsy-tooltip-top' title='" . esc_attr__("Delete slide", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg></i></button>";
+        return "<button class='toolbar-button delete-slide alignright tipsy-tooltip-top' title='" . esc_attr__("Trash slide", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-x'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg></i></button>";
     }
 
     /**
@@ -389,12 +392,9 @@ class MetaSlide
      *
      * @return string
      */
-    public function get_perminant_delete_button_html()
+    public function get_permanent_delete_button_html()
     {
-
-        // TODO allow for a perminant delete button
-        $url = wp_nonce_url(admin_url("post.php?ml-slide=" . esc_url($this->slide->ID) . "&action=delete"));
-        return "<a href='" . esc_url($url) . "' class='trash-view-perminant-delete' data-slide-id='" . esc_attr($this->slide->ID) . "'>" . esc_html__('Delete Permanently', 'ml-slider') . "</a>";
+        return "<a href='#' onclick='return false;' class='trash-view-permanent' data-slide-id='" . esc_attr($this->slide->ID) . "'>" . esc_html__('Delete Permanently', 'ml-slider') . "</a>";
     }
 
     /**

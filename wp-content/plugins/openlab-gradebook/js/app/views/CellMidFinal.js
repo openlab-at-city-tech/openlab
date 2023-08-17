@@ -22,7 +22,7 @@ define([
 			this.type = options.type;
 			this.model = options.model;
             this.listenTo(this.gradebook.assignments, "change:hover", this.hoverCell);
-            
+
             this.midGrades = new letterGrades([
                 {
                     label: "--",
@@ -30,7 +30,7 @@ define([
                     type: "none"
                 },
                 {
-                    label: "P = Passing Work",
+                    label: "P = Making Satisfactory Progress",
                     value: "passing_display",
                     type: "display_item"
                 },
@@ -40,23 +40,13 @@ define([
                     type: "display_value"
                 },
                 {
-                    label: "BL = Borderline",
-                    value: "borderline_display",
+                    label: "N = Needs Improvement",
+                    value: "needs_improvement_display",
                     type: "display_item"
                 },
                 {
-                    label: "BL",
-                    value: "borderline",
-                    type: "display_value"
-                },
-                {
-                    label: "U = Unsatisfactory",
-                    value: "unsatisfactory_display",
-                    type: "display_item"
-                },
-                {
-                    label: "U",
-                    value: "unsatisfactory",
+                    label: "N",
+                    value: "needs_improvement",
                     type: "display_value"
                 },
                 {
@@ -181,7 +171,7 @@ define([
 				type: this.type
 			});
             this.$el.html(compiled);
-            
+
             var comments = this.model.get('mid_semester_comments');
 
             if(this.type === 'final'){

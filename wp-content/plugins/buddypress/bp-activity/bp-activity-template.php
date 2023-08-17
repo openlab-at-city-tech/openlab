@@ -272,6 +272,7 @@ function bp_has_activities( $args = '' ) {
 			'primary_id'        => $primary_id,  // Object ID to filter on e.g. a group_id or blog_id etc.
 			'secondary_id'      => false,        // Secondary object ID to filter on e.g. a post_id.
 			'offset'            => false,        // Return only items >= this ID.
+			'offset_lower'      => false,        // Return only items < this ID.
 			'since'             => false,        // Return only items recorded since this Y-m-d H:i:s date.
 
 			'meta_query'        => false,        // Filter on activity meta. See WP_Meta_Query for format.
@@ -326,7 +327,7 @@ function bp_has_activities( $args = '' ) {
 		$r['filter'] = array(
 			'object' => $_GET['afilter']
 		);
-	} elseif ( ! empty( $r['user_id'] ) || ! empty( $r['object'] ) || ! empty( $r['action'] ) || ! empty( $r['primary_id'] ) || ! empty( $r['secondary_id'] ) || ! empty( $r['offset'] ) || ! empty( $r['since'] ) ) {
+	} elseif ( ! empty( $r['user_id'] ) || ! empty( $r['object'] ) || ! empty( $r['action'] ) || ! empty( $r['primary_id'] ) || ! empty( $r['secondary_id'] ) || ! empty( $r['offset'] ) || ! empty( $r['offset_lower'] ) || ! empty( $r['since'] ) ) {
 		$r['filter'] = array(
 			'user_id'      => $r['user_id'],
 			'object'       => $r['object'],
@@ -334,6 +335,7 @@ function bp_has_activities( $args = '' ) {
 			'primary_id'   => $r['primary_id'],
 			'secondary_id' => $r['secondary_id'],
 			'offset'       => $r['offset'],
+			'offset_lower' => $r['offset_lower'],
 			'since'        => $r['since']
 		);
 	} else {
@@ -404,14 +406,25 @@ function bp_activity_load_more_link() {
 	 * Get the URL for the Load More link.
 	 *
 	 * @since 2.1.0
+	 * @since 11.0.0 Adds the `offset_lower` query arg to avoid last displayed activity to be duplicated.
 	 *
 	 * @return string $link
 	 */
 	function bp_get_activity_load_more_link() {
 		global $activities_template;
 
-		$url  = bp_get_requested_url();
-		$link = add_query_arg( $activities_template->pag_arg, $activities_template->pag_page + 1, $url );
+		$url            = bp_get_requested_url();
+		$load_more_args = array(
+			$activities_template->pag_arg => $activities_template->pag_page + 1,
+		);
+
+		// Try to include the offset arg.
+		$last_displayed_activity = reset( $activities_template->activities );
+		if ( isset( $last_displayed_activity->id ) && $last_displayed_activity->id ) {
+			$load_more_args['offset_lower'] = (int) $last_displayed_activity->id;
+		}
+
+		$link = add_query_arg( $load_more_args, $url );
 
 		/**
 		 * Filters the Load More link URL.
@@ -1459,6 +1472,12 @@ function bp_activity_has_content() {
 			$generated_content = new stdClass();
 			$activity          = $activities_template->activity;
 			$user_id           = $activity->user_id;
+			$personal_types    = array( 'new_avatar', 'new_member', 'updated_profile' );
+
+			// Do not use generated-content activities when displaying a personal activity stream.
+			if ( (int) $user_id === (int) bp_displayed_user_id() && in_array( $activity_type, $personal_types, true ) ) {
+				return false;
+			}
 
 			// Set generated content properties.
 			if ( 'new_avatar' === $activity_type ) {
@@ -1562,8 +1581,14 @@ function bp_activity_has_content() {
 				}
 			}
 
-			if ( 'created_group' === $activity_type || 'joined_group' === $activity_type ) {
-				$group = bp_get_group( $activity->item_id );
+			if ( bp_is_active( 'groups' ) && ( 'created_group' === $activity_type || 'joined_group' === $activity_type ) ) {
+				$group         = bp_get_group( $activity->item_id );
+				$current_group = groups_get_current_group();
+
+				// Do not use generated-content activities when displaying a group activity stream.
+				if ( isset( $current_group->id ) && (int) $group->id === (int) $current_group->id ) {
+					return false;
+				}
 
 				if ( isset( $bp->avatar->show_avatars ) && $bp->avatar->show_avatars && ! bp_disable_group_avatar_uploads() ) {
 					$generated_content->group_profile_photo = array(
@@ -3482,38 +3507,38 @@ function bp_mentioned_user_display_name( $user_id_or_username = false ) {
  *
  * @since 1.2.0
  *
- * @see bp_get_send_public_message_button() for description of parameters.
+ * @see bp_activity_get_public_message_button_args() for description of parameters.
  *
- * @param array|string $args See {@link bp_get_send_public_message_button()}.
+ * @param array|string $args See {@link bp_activity_get_public_message_button_args()}.
  */
 function bp_send_public_message_button( $args = '' ) {
 	echo bp_get_send_public_message_button( $args );
 }
 
 	/**
-	 * Return button for sending a public message (an @-mention).
+	 * Get the arguments for the public message button.
 	 *
-	 * @since 1.2.0
-	 *
+	 * @since 11.0.0
 	 *
 	 * @param array|string $args {
-	 *     All arguments are optional. See {@link BP_Button} for complete
-	 *     descriptions.
-	 *     @type string $id                Default: 'public_message'.
-	 *     @type string $component         Default: 'activity'.
-	 *     @type bool   $must_be_logged_in Default: true.
-	 *     @type bool   $block_self        Default: true.
-	 *     @type string $wrapper_id        Default: 'post-mention'.
-	 *     @type string $link_href         Default: the public message link for
-	 *                                     the current member in the loop.
-	 *     @type string $link_text         Default: 'Public Message'.
-	 *     @type string $link_class        Default: 'activity-button mention'.
+	 *    All arguments are optional. See {@link BP_Button} for complete
+	 *    descriptions.
+	 *    @type string $id                Default: 'public_message'.
+	 *    @type string $component         Default: 'activity'.
+	 *    @type bool   $must_be_logged_in Default: true.
+	 *    @type bool   $block_self        Default: true.
+	 *    @type string $wrapper_id        Default: 'post-mention'.
+	 *    @type string $link_href         Default: the public message link for
+	 *                                    the current member in the loop.
+	 *    @type string $link_title        Default: 'Send a public message on your
+	 *                                    activity stream.'.
+	 *    @type string $link_text         Default: 'Public Message'.
+	 *    @type string $link_class        Default: 'activity-button mention'.
 	 * }
-	 * @return string The button for sending a public message.
+	 * @return array The arguments for the public message button.
 	 */
-	function bp_get_send_public_message_button( $args = '' ) {
-
-		$r = bp_parse_args(
+	function bp_activity_get_public_message_button_args( $args = '' ) {
+		$button_args = bp_parse_args(
 			$args,
 			array(
 				'id'                => 'public_message',
@@ -3522,6 +3547,7 @@ function bp_send_public_message_button( $args = '' ) {
 				'block_self'        => true,
 				'wrapper_id'        => 'post-mention',
 				'link_href'         => bp_get_send_public_message_link(),
+				'link_title'        => __( 'Send a public message to this member.', 'buddypress' ),
 				'link_text'         => __( 'Public Message', 'buddypress' ),
 				'link_class'        => 'activity-button mention',
 			)
@@ -3532,9 +3558,30 @@ function bp_send_public_message_button( $args = '' ) {
 		 *
 		 * @since 1.2.10
 		 *
-		 * @param array $r Array of arguments for the public message button HTML.
+		 * @param array $button_args Array of arguments for the public message button HTML.
 		 */
-		return bp_get_button( apply_filters( 'bp_get_send_public_message_button', $r ) );
+		return (array) apply_filters( 'bp_get_send_public_message_button', $button_args );
+	}
+
+	/**
+	 * Return button for sending a public message (an @-mention).
+	 *
+	 * @since 1.2.0
+	 * @since 11.0.0 uses `bp_activity_get_public_message_button_args()`.
+	 *
+	 * @see bp_activity_get_public_message_button_args() for description of parameters.
+	 *
+	 * @param array|string $args See {@link bp_activity_get_public_message_button_args()}.
+	 * @return string The button for sending a public message.
+	 */
+	function bp_get_send_public_message_button( $args = '' ) {
+		$button_args = bp_activity_get_public_message_button_args( $args );
+
+		if ( ! array_filter( $button_args ) ) {
+			return '';
+		}
+
+		return bp_get_button( $button_args );
 	}
 
 /**

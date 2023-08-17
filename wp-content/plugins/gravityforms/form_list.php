@@ -37,7 +37,6 @@ class GFFormList {
 		</style>
 
 		<?php if ( GFCommon::current_user_can_any( 'gravityforms_create_form' ) ) { ?>
-
 		<div id="gf_new_form_modal" style="display:none;">
 				<div class="gform-settings__wrapper ">
 					<div class="gform-settings-panel__content">
@@ -178,11 +177,12 @@ class GFFormList {
                 $table = new GF_Form_List_Table();
                 $table->process_action();
 		?>
+
                 <div class="gform-settings-panel__content form-list">
                     <div class="form-list-head">
                     <h2> <?php esc_html_e( 'Forms', 'gravityforms' ); ?> </h2>
                         <?php if ( GFCommon::current_user_can_any( 'gravityforms_create_form' ) ) {
-                            echo '<button class="button gform-add-new-form primary add-new-h2" onclick="return loadNewFormModal();" onkeypress="return loadNewFormModal();">' . esc_html__( 'Add New', 'gravityforms' ) . '</button>';
+                            echo '<button class="button gform-add-new-form primary add-new-h2" data-js="gform-add-new-form">' . esc_html__( 'Add New', 'gravityforms' ) . '</button>';
                         } ?>
                     </div>
                     <div class="form-list-nav">
@@ -247,15 +247,12 @@ class GFFormList {
 
 	public static function output_form_list_script_block() {
 		?>
-
 		<script type="text/javascript">
-
 			jQuery( document ).ready( function( $ ) {
-
 				$( 'body' ).addClass( 'gform_new_form' );
 				// load new form modal on New Form page
 				<?php if ( rgget( 'page' ) == 'gf_new_form' && ! rgget( 'paged' ) ) :    ?>
-				loadNewFormModal();
+					loadNewFormModal();
 				<?php endif; ?>
 
 				// form settings submenu support
@@ -298,6 +295,7 @@ class GFFormList {
 			} );
 
 			function loadNewFormModal() {
+				return;
 				resetNewFormModal();
 				tb_show(<?php echo json_encode( '<div class="tb-title"><div class="tb-title__logo"></div><div class="tb-title__text"><div class="tb-title__main">'.esc_html__( 'Create a New Form', 'gravityforms' ).'</div><div class="tb-title__sub">'.esc_html__('Provide a title and a description for this form', 'gravityforms').'</div></div></div>' ); ?>, '#TB_inline?width=490&amp;height=auto&amp;inlineId=gf_new_form_modal');
 				jQuery('#new_form_title').focus();
@@ -565,7 +563,7 @@ class GF_Form_List_Table extends WP_List_Table {
 			$attributes = "class='$classes' $data";
 
 			if ( 'cb' === $column_name ) {
-				echo '<th scope="row" class="check-column">';
+				echo '<th class="check-column">';
 				echo $this->column_cb( $item );
 				echo '</th>';
 			} elseif ( has_action( 'gform_form_list_column_' . $column_name ) ) {
@@ -601,7 +599,7 @@ class GF_Form_List_Table extends WP_List_Table {
 	}
 
 	function _column_is_active( $form, $classes, $data, $primary ) {
-		echo '<th scope="row" class="manage-column column-is_active">';
+		echo '<td class="manage-column column-is_active">';
 		if ( $this->filter !== 'trash' ) {
 			if ( $form->is_active ) {
 				$class = 'gform-status--active';
@@ -612,12 +610,12 @@ class GF_Form_List_Table extends WP_List_Table {
 			}
 			?>
 			<button type="button" class="gform-status-indicator <?php echo esc_attr( $class ); ?>" onclick="ToggleActive( this, <?php echo absint( $form->id ); ?> );" onkeypress="ToggleActive( this, <?php echo absint( $form->id ); ?> );">
-				<svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>
+				<svg role="presentation" focusable="false" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>
 				<span class="gform-status-indicator-status"><?php echo esc_html( $text ); ?></span>
 			</button>
 			<?php
 		}
-		echo '</th>';
+		echo '</td>';
 	}
 
 	function column_title( $form ) {
@@ -727,7 +725,7 @@ class GF_Form_List_Table extends WP_List_Table {
 		if ( rgget( 's' ) ) {
 			printf(
 				esc_html__( "No forms were found for your search query. %sView all forms%s.", 'gravityforms' ),
-				'<a href="' . remove_query_arg( 's' ) . '">',
+				'<a href="' . esc_url( remove_query_arg( 's' ) ) . '">',
 				'</a>'
 			);
 		} else if ( $this->filter == 'trash' ) {

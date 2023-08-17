@@ -13,7 +13,7 @@ function openlab_mygroups_template_loader($template) {
             case 'my-courses' :
             case 'my-clubs' :
             case 'my-projects' :
-                get_template_part('buddypress/groups/index');
+                $template = locate_template( 'buddypress/groups/index.php' );
                 break;
         }
     }
@@ -149,6 +149,8 @@ function openlab_group_privacy_membership_settings() {
 	$allow_joining_public  = ! openlab_public_group_has_disabled_joining( $group_id );
 	$allow_joining_private = ! openlab_private_group_has_disabled_membership_requests( $group_id );
 
+	$group_is_inactive = ! openlab_group_is_active( $group_id );
+
 	?>
 
 	<div class="panel panel-default panel-privacy-membership-settings <?php echo esc_attr( $class ); ?>">
@@ -157,13 +159,21 @@ function openlab_group_privacy_membership_settings() {
 			<div class="privacy-membership-settings-public">
 				<p>By default, a public <?php echo esc_html( $group_type_label ); ?> may be joined by any OpenLab member. Uncheck the box below to remove the 'Join <?php echo esc_html( $group_type_label ); ?>' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, membership will be by invitation only.</p>
 
-				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
+				<p><input type="checkbox" id="allow-joining-public" name="allow-joining-public" value="1" <?php checked( $allow_joining_public ); ?> <?php disabled( $group_is_inactive ); ?> /> <label for="allow-joining-public">Allow any OpenLab member to join this public <?php echo esc_html( $group_type_label ); ?></label></p>
+
+				<?php if ( $group_is_inactive ) : ?>
+					<p class="italics">This <?php echo esc_html( $group_type_label ); ?> is currently Not Active, which means that the "Join" feature is disabled. Visit <a href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>admin/edit-details/">Edit Details</a> for more details.</p>
+				<?php endif; ?>
 			</div>
 
 			<div class="privacy-membership-settings-private">
 				<p>By default, any OpenLab member can request membership in a private <?php echo esc_html( $group_type_label ); ?>. Uncheck the box below to remove the 'Request Membership' button from the <?php echo esc_html( $group_type_label ); ?> Profile. When the box is unchecked, <?php echo esc_html( $group_type_label ); ?> membership will be by invitation only.</p>
 
-				<p><input type="checkbox" id="allow-joining-private" name="allow-joining-private" value="1" <?php checked( $allow_joining_private ); ?> /> <label for="allow-joining-private">Allow any OpenLab member to request membership to this private <?php echo esc_html( $group_type_label ); ?></label></p>
+				<p><input type="checkbox" id="allow-joining-private" name="allow-joining-private" value="1" <?php checked( $allow_joining_private ); ?> <?php disabled( $group_is_inactive ); ?> /> <label for="allow-joining-private">Allow any OpenLab member to request membership to this private <?php echo esc_html( $group_type_label ); ?></label></p>
+
+				<?php if ( $group_is_inactive ) : ?>
+					<p class="italics">This <?php echo esc_html( $group_type_label ); ?> is currently Not Active, which means that the "Request Membership" feature is disabled. Visit <a href="<?php echo esc_attr( bp_get_group_permalink( groups_get_current_group() ) ); ?>admin/edit-details/">Edit Details</a> for more details.</p>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
@@ -206,6 +216,112 @@ function openlab_group_privacy_membership_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_group_privacy_membership_save' );
 
 /**
+ * Markup for the 'Collaboration Tools' section on group settings.
+ */
+function openlab_group_collaboration_tools_settings( $group_type = null ) {
+	$group_label_uc = openlab_get_current_group_type( 'case=upper' );
+
+	$announcements_enabled = openlab_is_announcements_enabled_for_group();
+	$forum_enabled         = openlab_is_forum_enabled_for_group();
+	$docs_enabled          = openlab_is_docs_enabled_for_group();
+	$files_enabled         = openlab_is_files_enabled_for_group();
+
+	$helper_text  = 'You can enable or disable any of the following collaboration tools on your ' . $group_label_uc . ' profile. This can be changed any time in ' . $group_label_uc . ' Settings.';
+	if ( 'portfolio' === $group_type ) {
+		$show_announcement_toggle = false;
+	} else {
+		$show_announcement_toggle = true;
+	}
+
+	?>
+	<div class="panel panel-default">
+		<div class="panel-heading">Collaboration Tools</div>
+		<div class="panel-body">
+			<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
+
+			<?php if ( $show_announcement_toggle ) : ?>
+				<div class="collaboration-tool-toggle">
+					<div class="checkbox">
+						<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
+					</div>
+
+					<p class="collaboration-tool-gloss">Post important announcements on the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/announcements-for-courses-projects-and-clubs/">learn more</a>.</p>
+				</div>
+			<?php endif; ?>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
+				</div>
+
+				<p class="collaboration-tool-gloss">Add a discussion forum to the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/discussion-forums/">learn more</a>.</p>
+			</div>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
+				</div>
+
+				<p class="collaboration-tool-gloss">Add collaborative docs that <?php echo esc_html( $group_label_uc ); ?> members can create and edit together. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-docs/">learn more</a>.</p>
+			</div>
+
+			<div class="collaboration-tool-toggle">
+				<div class="checkbox">
+					<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
+				</div>
+
+				<p class="collaboration-tool-gloss">Upload and add links to files on the <?php echo esc_html( $group_label_uc ); ?> Profile. Visit OpenLab Help to <a target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/using-files/">learn more</a>.</p>
+			</div>
+		</div>
+
+		<?php wp_nonce_field( 'openlab_collaboration_tools', 'openlab-collaboration-tools-nonce' ); ?>
+	</div>
+	<?php
+}
+
+/**
+ * Markup for the 'Add to My Portfolio' panel.
+ *
+ * @return void
+ */
+function openlab_add_to_my_portfolio_settings( $group_type = null ) {
+	// Portfolio only.
+	$is_portfolio        = openlab_is_portfolio();
+	$is_portfolio_create = bp_is_group_create() && isset( $_GET['type'] ) && 'portfolio' === sanitize_text_field( wp_unslash( $_GET['type'] ) );
+
+	if ( ! $is_portfolio && ! $is_portfolio_create ) {
+		return;
+	}
+
+	if ( bp_is_group_create() ) {
+		$portfolio_sharing = 'yes';
+	} else {
+		$portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_portfolio_sharing' );
+	}
+
+	?>
+	<div class="panel panel-default">
+		<div class="panel-heading">Add to My Portfolio</div>
+		<div class="panel-body">
+			<div class="editfield">
+				<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
+
+				<div class="checkbox">
+					<label for="portfolio-sharing">
+						<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
+						Enable "Add to My Portfolio"
+					</label>
+				</div>
+
+				<?php wp_nonce_field( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce', false ); ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+add_action( 'bp_after_group_details_creation_step', 'openlab_add_to_my_portfolio_settings', 100 );
+
+/**
  * Determines whether public joining is disabled for a public group.
  *
  * To avoid bloat in the database, we're only recording when the default behavior is
@@ -215,7 +331,13 @@ add_action( 'groups_group_after_save', 'openlab_group_privacy_membership_save' )
  * @return bool
  */
 function openlab_public_group_has_disabled_joining( $group_id ) {
-	return ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+
+	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
+		$disabled = true;
+	}
+
+	return $disabled;
 }
 
 /**
@@ -228,7 +350,43 @@ function openlab_public_group_has_disabled_joining( $group_id ) {
  * @return bool
  */
 function openlab_private_group_has_disabled_membership_requests( $group_id ) {
-	return ! empty( groups_get_groupmeta( $group_id, 'disable_private_group_membership_requests', true ) );
+	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_private_group_membership_requests', true ) );
+
+	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
+		$disabled = true;
+	}
+
+	return $disabled;
+}
+
+/**
+ * Determines whether a group is "active".
+ *
+ * To avoid bloat in the database, we're only recording when a group is inactive.
+ *
+ * @param int $group_id
+ * @return bool
+ */
+function openlab_group_is_active( $group_id ) {
+	return empty( groups_get_groupmeta( $group_id, 'group_is_inactive', true ) );
+}
+
+/**
+ * Filters group query on my- pages to put inactive groups at the end of the list.
+ */
+function openlab_filter_groups_query_for_active_status( $sql, $sql_clauses, $r ) {
+	$bp = buddypress();
+
+	$sql = str_replace( $sql_clauses['from'], $sql_clauses['from'] . " LEFT JOIN {$bp->groups->table_name_groupmeta} gm_active_status ON (g.id = gm_active_status.group_id AND gm_active_status.meta_key = 'group_is_inactive')", $sql );
+
+	// This ORDER BY clause puts inactive items at the end of the list.
+	$sql = str_replace(
+		$sql_clauses['orderby'],
+		str_replace( 'ORDER BY ', "ORDER BY CASE WHEN gm_active_status.meta_key = 'group_is_inactive' THEN 1 ELSE 0 END ASC, ", $sql_clauses['orderby'] ),
+		$sql
+	);
+
+	return $sql;
 }
 
 /**
@@ -743,6 +901,13 @@ function openlab_group_profile_activity_list() {
 
         $group     = groups_get_current_group();
 		$group_url = bp_get_group_permalink( $group );
+
+		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+			$group_private_members = [];
+		} else {
+			$group_private_members = openlab_get_private_members_of_group( $group->id );
+		}
+
         ?>
 
         <?php if (bp_is_group_home()) { ?>
@@ -781,9 +946,16 @@ function openlab_group_profile_activity_list() {
 										if (!empty($forum_ids)) {
 											$forum_id = (int) is_array($forum_ids) ? $forum_ids[0] : $forum_ids;
 										}
+
+										$topic_args = [
+											'posts_per_page' => 3,
+											'post_parent'    => $forum_id,
+											'author__not_in' => $group_private_members,
+										];
+
 										?>
 
-										<?php if ($forum_id && bbp_has_topics('posts_per_page=3&post_parent=' . $forum_id)) : ?>
+										<?php if ( $forum_id && bbp_has_topics( $topic_args ) ) : ?>
 											<?php while (bbp_topics()) : bbp_the_topic(); ?>
 
 
@@ -792,17 +964,28 @@ function openlab_group_profile_activity_list() {
 
 														<?php
 														$topic_id = bbp_get_topic_id();
-														$last_reply_id = bbp_get_topic_last_reply_id($topic_id);
 
-														// Oh, bbPress.
-														$last_reply         = get_post($last_reply_id);
-														$last_topic_content = '';
-														if (!empty($last_reply->post_content)) {
-															$last_topic_content = wds_content_excerpt(strip_tags($last_reply->post_content), 250);
+														$topic_replies = get_posts(
+															[
+																'post_type'      => 'reply',
+																'post_parent'    => $topic_id,
+																'author__not_in' => $group_private_members,
+																'posts_per_page' => 1,
+																'orderby'        => [ 'post_date' => 'DESC' ],
+															]
+														);
+
+														if ( $topic_replies ) {
+															$last_reply_content = $topic_replies[0]->post_content;
+														} else {
+															$topic_post         = get_post( $topic_id );
+															$last_reply_content = $topic_post->post_content;
 														}
+
+														$last_reply_content = wds_content_excerpt( strip_tags( $last_reply_content ), 250 );
 														?>
 
-														<?php echo openlab_get_group_activity_content(bbp_get_topic_title(), $last_topic_content, bbp_get_topic_permalink()) ?>
+														<?php echo openlab_get_group_activity_content( bbp_get_topic_title(), $last_reply_content, bbp_get_topic_permalink() ); ?>
 
 													</div></div>                                            <?php endwhile; ?>
 										<?php else: ?>
@@ -822,15 +1005,23 @@ function openlab_group_profile_activity_list() {
 									<div class="recent-posts">
 										<h2 class="title activity-title"><a class="no-deco" href="<?php site_url(); ?>/groups/<?php echo $group_slug; ?>/docs/">Recent Docs<span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></h2>
 										<?php
+
 										$docs_query = new BP_Docs_Query(
 											array(
-												'group_id' => bp_get_current_group_id(),
-												'orderby'  => 'created',
-												'order'    => 'DESC',
+												'group_id'       => bp_get_current_group_id(),
+												'orderby'        => 'created',
+												'order'          => 'DESC',
 												'posts_per_page' => 3,
 											)
 										);
-										$query      = $docs_query->get_wp_query();
+
+										$author__not_in_callback = function( $query ) use ( $group_private_members ) {
+											$query->set( 'author__not_in', $group_private_members );
+										};
+
+										add_action( 'pre_get_posts', $author__not_in_callback );
+										$query = $docs_query->get_wp_query();
+										remove_action( 'pre_get_posts', $author__not_in_callback );
 
 										if ( $query->have_posts() ) {
 											while ( $query->have_posts() ) :
@@ -1271,12 +1462,22 @@ function openlab_show_site_posts_and_comments() {
     add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
-            switch_to_blog($site_id);
+			if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+				$group_private_members = [];
+			} else {
+				$group_private_members = openlab_get_private_members_of_group( $group_id );
+			}
 
-            // Set up posts
-            $wp_posts = get_posts(array(
-                'posts_per_page' => 3
-            ));
+			// Don't show posts from users with hidden memberships.
+			switch_to_blog($site_id);
+
+			// Set up posts
+			$wp_posts = get_posts(
+				[
+					'posts_per_page' => 3,
+					'author__not_in' => $group_private_members,
+				]
+			);
 
             foreach ($wp_posts as $wp_post) {
                 $_post = array(
@@ -1294,9 +1495,10 @@ function openlab_show_site_posts_and_comments() {
 
 			// Set up comments
 			$comment_args = [
-				'status'     => 'approve',
-				'number'     => 3,
-				'meta_query' => [
+				'status'         => 'approve',
+				'number'         => 3,
+				'author__not_in' => $group_private_members,
+				'meta_query'     => [
 					'relation' => 'AND',
 					[
 						'relation' => 'OR',
@@ -1734,6 +1936,16 @@ add_action( 'bp_after_group_details_creation_step', function() {
 	openlab_group_sharing_settings_markup( $group_type );
 }, 4 );
 
+add_action( 'bp_after_group_details_creation_step', function() {
+	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
+
+	openlab_group_collaboration_tools_settings( $group_type );
+}, 6 );
+
 /**
  * Save the group S/O/D settings after save.
  *
@@ -1831,6 +2043,32 @@ function openlab_group_add_to_portfolio_save( $group ) {
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
 
 /**
+ * Saves 'Active' status.
+ *
+ * @param int $group_id ID of the group.
+ */
+function openlab_group_save_active_status_on_group_edit( $group_id ) {
+	if ( ! isset( $_POST['group-active-status-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'group_active_status', 'group-active-status-nonce' );
+
+	if ( empty( $_POST['group-active-status'] ) ) {
+		return;
+	}
+
+	$status = 'inactive' === sanitize_text_field( wp_unslash( $_POST['group-active-status'] ) ) ? 'inactive' : 'active';
+
+	if ( 'inactive' === $status ) {
+		groups_update_groupmeta( $group_id, 'group_is_inactive', '1' );
+	} else {
+		groups_delete_groupmeta( $group_id, 'group_is_inactive', '1' );
+	}
+}
+add_action( 'groups_group_details_edited', 'openlab_group_save_active_status_on_group_edit' );
+
+/**
  * Outputs the badge markup for the group directory.
  *
  * @since 1.2.0
@@ -1897,19 +2135,28 @@ function openlab_group_single_badges() {
  * @return array
  */
 function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
-	// Note that they're applied in reverse order, so 'open' is first.
+	// Note that they're applied in reverse order, so 'Not Active' is first.
 	$faux_badges = [
 		'cloneable' => [
 			'add'        => openlab_group_can_be_cloned( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Cloneable',
 			'short_name' => 'Cloneable',
+			'class'      => 'cloneable',
 		],
 		'open'      => [
 			'add'        => openlab_group_is_open( $group_id ),
 			'link'       => 'https://openlab.citytech.cuny.edu/blog/help/types-of-courses-projects-and-clubs',
 			'name'       => 'Open',
 			'short_name' => 'Open',
+			'class'      => 'open',
+		],
+		'inactive'  => [
+			'add'        => ! openlab_group_is_active( $group_id ),
+			'link'       => '',
+			'name'       => 'Not Currently Active',
+			'short_name' => 'Not Active',
+			'class'      => 'inactive',
 		],
 	];
 
@@ -1938,7 +2185,7 @@ function openlab_filter_badge_links( $badge_links, $group_id, $context ) {
 			$badge_link_end   = '</span>';
 		}
 
-		$html  = '<div class="group-badge">';
+		$html  = sprintf( '<div class="group-badge group-badge-%s">', $faux_badge['class'] );
 		$html .= $badge_link_start;
 		$html .= esc_html( $faux_badge['short_name'] );
 		$html .= $badge_link_end;
@@ -2103,6 +2350,11 @@ function openlab_group_activities_loop_args( $type = '', $filter = '' ) {
                 'scope' => 'favorites'
             ];
             break;
+		case 'connections':
+			$args += [
+				'scope' => 'connected-groups',
+			];
+			break;
     }
 
     return $args;

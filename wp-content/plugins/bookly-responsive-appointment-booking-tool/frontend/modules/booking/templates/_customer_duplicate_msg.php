@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-modal bookly-fade bookly-js-modal bookly-js-cst-duplicate">
     <div class="bookly-modal-dialog">
         <div class="bookly-modal-content bookly-js-modal-content">

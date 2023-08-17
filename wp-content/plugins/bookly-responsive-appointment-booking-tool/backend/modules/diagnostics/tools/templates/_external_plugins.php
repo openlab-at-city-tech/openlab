@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 /** @var array $plugins */
 ?>
 <ul class="list-group" id="bookly-js-booking-forms">

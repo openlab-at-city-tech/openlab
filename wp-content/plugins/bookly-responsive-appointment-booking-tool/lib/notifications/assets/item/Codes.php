@@ -122,14 +122,15 @@ class Codes extends Order\Codes
         $this->appointment_start = $this->tz( $item->getAppointment()->getStartDate() );
         $this->appointment_start_info = $item->getService()->getStartTimeInfo();
         $this->appointment_token = $item->getCA()->getToken();
-        $this->booking_number = Config::groupBookingActive() ? $item->getAppointment()->getId() . '-' . $item->getCA()->getId() : $item->getAppointment()->getId();
+        $this->booking_number = Config::groupBookingActive() ? $item->getAppointment()->getId() . '-' . $item->getCA()->getId() : $item->getCA()->getId();
         $this->category_name = $item->getService()->getTranslatedCategoryName();
         $this->category_info = $category ? $category->getTranslatedInfo() : '';
         $this->category_image = $category ? $category->getImageUrl() : '';
         $this->client_timezone = $item->getCA()->getTimeZone()
             ?: ( $item->getCA()->getTimeZoneOffset() !== null
-                ? 'UTC' . Utils\DateTime::formatOffset( -$item->getCA()->getTimeZoneOffset() * 60 )
+                ? 'UTC' . Utils\DateTime::formatOffset( - $item->getCA()->getTimeZoneOffset() * 60 )
                 : '' );
+        $this->client_locale = $item->getCA()->getLocale() ?: '';
         $this->number_of_persons = $item->getCA()->getNumberOfPersons();
         $this->service_duration = $item->getServiceDuration();
         $this->service_info = $item->getService()->getTranslatedInfo();
@@ -215,17 +216,19 @@ class Codes extends Order\Codes
             'staff_timezone' => $this->staff_timezone,
             'internal_note' => $this->internal_note,
         );
-        $replace_codes['appointments'] = array( array(
-            'appointment_date' => $replace_codes['appointment_date'],
-            'appointment_time' => $replace_codes['appointment_time'],
-            'internal_note' => $replace_codes['internal_note'],
-            'category_name' => $replace_codes['category_name'],
-            'service_name' => $replace_codes['service_name'],
-            'service_price' => $replace_codes['service_price'],
-            'staff_name' => $replace_codes['staff_name'],
-            'staff_phone' => $replace_codes['staff_phone'],
-            'staff_email' => $replace_codes['staff_email'],
-        ) );
+        $replace_codes['appointments'] = array(
+            array(
+                'appointment_date' => $replace_codes['appointment_date'],
+                'appointment_time' => $replace_codes['appointment_time'],
+                'internal_note' => $replace_codes['internal_note'],
+                'category_name' => $replace_codes['category_name'],
+                'service_name' => $replace_codes['service_name'],
+                'service_price' => $replace_codes['service_price'],
+                'staff_name' => $replace_codes['staff_name'],
+                'staff_phone' => $replace_codes['staff_phone'],
+                'staff_email' => $replace_codes['staff_email'],
+            ),
+        );
         $replace_codes['participants'][0]['status'] = CustomerAppointment::statusToString( $this->status );
         $replace_codes['cancel_appointment'] = $format === 'html'
             ? sprintf( '<a href="%1$s">%1$s</a>', $replace_codes['cancel_appointment_url'] )

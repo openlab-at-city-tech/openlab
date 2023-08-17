@@ -48,6 +48,8 @@ class CartItem
     // Step done
     /** @var  int */
     protected $appointment_id;
+    /** @var  string */
+    protected $booking_number;
 
     // Add here the properties that don't need to be returned in getData
 
@@ -315,6 +317,25 @@ class CartItem
     public function setAppointmentId( $appointment_id )
     {
         $this->appointment_id = $appointment_id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBookingNumber()
+    {
+        return $this->booking_number;
+    }
+
+    /**
+     * @param string $booking_number
+     * @return CartItem
+     */
+    public function setBookingNumber( $booking_number )
+    {
+        $this->booking_number = $booking_number;
 
         return $this;
     }

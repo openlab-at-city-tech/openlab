@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Components\Dialogs\Payment
  */
 class Ajax extends Lib\Base\Ajax
@@ -28,7 +29,7 @@ class Ajax extends Lib\Base\Ajax
     public static function getPaymentDetails()
     {
         $payment = new Lib\Entities\Payment();
-        if ( self::parameter( 'target' ) ) {
+        if ( self::hasParameter( 'target' ) ) {
             $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ), 'target' => self::parameter( 'target', Lib\Entities\Payment::TARGET_APPOINTMENTS ) ) );
         } else {
             $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ) ) );
@@ -63,11 +64,11 @@ class Ajax extends Lib\Base\Ajax
 
             switch ( $data['payment']['type'] ) {
                 case Lib\Entities\Payment::TYPE_PAYPAL:
-                    $price_correction =  get_option( 'bookly_paypal_increase' ) != 0
+                    $price_correction = get_option( 'bookly_paypal_increase' ) != 0
                         || get_option( 'bookly_paypal_addition' ) != 0;
                     break;
                 case Lib\Entities\Payment::TYPE_CLOUD_STRIPE:
-                    $price_correction =  get_option( 'bookly_cloud_stripe_increase' ) != 0
+                    $price_correction = get_option( 'bookly_cloud_stripe_increase' ) != 0
                         || get_option( 'bookly_cloud_stripe_addition' ) != 0;
                     break;
                 default:
@@ -96,7 +97,7 @@ class Ajax extends Lib\Base\Ajax
                 if ( isset( $item['units'], $item['duration'] ) && $item['units'] > 1 ) {
                     $item['service_name'] .= ' (' . Lib\Utils\DateTime::secondsToInterval( $item['units'] * $item['duration'] ) . ')';
                 }
-                $item['appointment_date'] = Lib\Utils\DateTime::applyStaffTimeZone( $item['appointment_date'] );
+                $item['appointment_date'] = isset( $item['appointment_date'] ) ? Lib\Utils\DateTime::applyStaffTimeZone( $item['appointment_date'] ) : '';
             }
 
             wp_send_json_success( $data );

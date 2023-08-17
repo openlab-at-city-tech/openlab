@@ -2,8 +2,9 @@
 
 Contributors: benbalter, nwjames
 Tags: documents, uploads, attachments, document management, enterprise, version control, revisions, collaboration, journalism, government, files, revision log, document management, intranet, digital asset management
-Tested up to: 5.8
-Stable tag: 3.4.0
+Requires at least: 4.6
+Tested up to: 6.1.1
+Stable tag: 3.5.0
 
 == Description ==
 
@@ -179,6 +180,17 @@ In: class-wp-document-revisions.php
 
 == Changelog ==
 
+= 3.5.0 =
+
+" SECURITY: Rest media interface may expose document name. 
+* NEW: Site can decide to save permalinks without year/month part.
+* NEW: Permalinks may be updated on the documents screen.
+* FIX: guid field for documents was generally incorrect. Will be stored as a valid value.
+* FIX: Upload directory processing reviewed and simplified.
+* FIX: Document permalink month can be incorrect when saved at month end. (#300).
+* FIX: Valid document may not be found.
+" FIX: Improve notification process when activation user does not have edit_documents capability.
+
 = 3.4.0 =
 
 * SECURITY: WordPress can create images for PDF documents which if used would leak the hidden document name so image name changed.
@@ -193,11 +205,11 @@ In: class-wp-document-revisions.php
 * FIX: jQuery ready verb usage removed. (#262}
 * FIX: Caching strategy reviewed to ensure updates delivered to users. (#261}
 * FIX: Blocks used incorrect, but previously tolerated, parameter for RadioControls rendering them difficult to use.
-* FIX: Blocks are categorised within the Editor differently with WP 5.8
+* FIX: Blocks are categorised within the Editor differently with 5.8
 
 = 3.3.1 =
 
-* FIX: Content-Length header suppressed for HTTP/2 File Serve. (#254)
+* FIX: Content-Length header suppressed for HTTP/2 File Serve. {#254)
 * FIX: MOD_DEFLATE modifies etag, so no caching occurred in this case.
 * FIX: Gzip process invoked for encodings gzip, x-gzip and deflate.
 
@@ -859,11 +871,13 @@ Yes. Just follow the [standard WordPress SSL instructions](https://wordpress.org
 
 = Can I tag my documents? What about categories or some other grouping? =
 
-Yes. You can use the [Simple Taxonomy plugin](https://wordpress.org/plugins/simple-taxonomy/) to add taxonomies, or can share your existing taxonomies (e.g., the ones you use for posts) with documents.
+Yes. You can use the [Simple Taxonomy Refreshed plugin](https://wordpress.org/plugins/simple-taxonomy-refreshed/) to add taxonomies, or can share your existing taxonomies (e.g., the ones you use for posts) with documents.
 
 = Can I put my documents in folders? =
 
-WP Document Revisions doesn't use the traditional folder metaphor to organize files. Instead, the same document can be described multiple ways, or in folder terms, be in multiple folders at once. This gives you more control over your documents and how they are organized. You can add a folder taxonomy with the [Simple Taxonomy Refreshed](https://wordpress.org/plugins/simple-taxonomy-refreshed/). Just add the taxonomy with a post type of "Documents", and as the "Hierarchical" set to True.
+WP Document Revisions doesn't use the traditional folder metaphor to organize files. Instead, the same document can be described multiple ways, or in folder terms, be in multiple folders at once. This gives you more control over your documents and how they are organized. You can add a folder taxonomy with the [Simple Taxonomy Refreshed](https://wordpress.org/plugins/simple-taxonomy-refreshed/) plugin. Just add the taxonomy with a post type of "Documents", and as the "Hierarchical" set to True.
+
+Since a document can have many categories assigned at the same time, this is logically equivalent to being in many folders simultaneously.
 
 = What if I want even more control over my workflow? =
 
@@ -1070,13 +1084,14 @@ It is also possible to add formatting parameters:
 
 = Block Usage =
 
-The block version of the widget called `Latest Documents`can be used on pages or posts. It cannot be converted to or from a shortcode block.
- 
-= Block supports properties =
+The block version of the widget called `Latest Documents` can be used on pages or posts. It cannot be converted to or from a shortcode block as there is no equivalent.
+
+== Block supports properties ==
 
 Additionally, later versions of WordPress provide for blocks to support additional display attributes that will be applied to the block on rendering *if the theme allows it*.
 
 These attributes are align, color, spacing and typography and these attributes have been added to all blocks.
+
 
 == Translations ==
 

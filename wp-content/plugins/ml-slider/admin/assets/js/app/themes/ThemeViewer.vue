@@ -170,7 +170,7 @@
 					id="custom-themes"
 					:title="__('My Custom Themes', 'ml-slider')">
 					<template v-if="!proUser">
-						<h1>{{ __('Get the add-on pack!', 'ml-slider') }}</h1>
+						<h1>{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h1>
 						<p>
 							{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
 							<a :href="hoplink">{{ __('Learn more', 'ml-slider') }}</a>
@@ -180,7 +180,7 @@
                         {{ __('Loading...', 'ml-slider') }}
 					</div>
 					<template v-if="!Object.keys(customThemes).length && proUser && !loadingCustom">
-						<h1>{{ __('The pro add-on pack is installed!', 'ml-slider') }}</h1>
+						<h1>{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h1>
 						<p>
 							{{ __('You can create your own themes with our theme editor', 'ml-slider') }}
 							<a :href="themeEditorLink">{{ __('Get started', 'ml-slider') }}</a>

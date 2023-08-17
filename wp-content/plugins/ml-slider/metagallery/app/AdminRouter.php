@@ -392,11 +392,11 @@ class AdminRouter
         <style>
             @font-face {
               font-family: 'Rubik';
-              src: url('<?php echo METAGALLERY_BASE_URL."resources/fonts/"; ?>Rubik.ttf') format('truetype');
+              src: url('<?php echo esc_url(METAGALLERY_BASE_URL . "resources/fonts/"); ?>Rubik.ttf') format('truetype');
             }
             @font-face {
               font-family: 'IBM Plex Sans';
-              src: url('<?php echo METAGALLERY_BASE_URL."resources/fonts/"; ?>IBMPlexSans-Regular.ttf') format('truetype');
+              src: url('<?php echo esc_url(METAGALLERY_BASE_URL . "resources/fonts/"); ?>IBMPlexSans-Regular.ttf') format('truetype');
             }
             .wp-has-submenu a[href="admin.php?page=metagallery"] {
                 margin-top: 10px !important;

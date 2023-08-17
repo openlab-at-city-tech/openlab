@@ -27,7 +27,9 @@ add_filter(
 	'ez_toc_strip_shortcodes_tagnames',
 	function( $tags_to_remove ) {
 
-		$shortcodes = array (
+		$shortcodes = array (	
+			'basic-user-avatars',		
+			'CARFORM',
 			'connections_form',
 			'cn_multi_category_search',
 			'cn_widget',
@@ -117,13 +119,6 @@ add_filter(
 
 		if ( function_exists( 'vchelper' ) ) {
 
-			//$sourceId = intval( vchelper( "Request" )->input( 'vcv-source-id' ) );
-			//
-			//if ( $sourceId === get_the_ID() ) {
-			//
-			//	$apply = false;
-			//}
-
 			if ( vchelper( 'Frontend' )->isPageEditable() ) {
 
 				$apply = false;
@@ -193,29 +188,6 @@ add_action(
 );
 
 /**
- * Disabled for now as it does not appear to be required.
- *
- * Do not allow `the_content` TOC callback to run when rendering a Divi layout.
- *
- * @since 2.0
- */
-//add_filter(
-//	'ez_toc_maybe_apply_the_content_filter',
-//	function( $apply ) {
-//
-//		global $wp_current_filter;
-//
-//		// Do not execute if root current filter is one of those in the array.
-//		if ( in_array( $wp_current_filter[0], array( 'et_builder_render_layout' ), true ) ) {
-//
-//			$apply = false;
-//		}
-//
-//		return $apply;
-//	}
-//);
-
-/**
  * Callback the for `et_builder_render_layout` filter.
  *
  * Attaches the ezTOC `the_content` filter callback to the Divi layout content filter so the in page anchors will be
@@ -279,7 +251,7 @@ add_action(
 			add_filter(
 				'uncode_single_content',
 				function( $content ) {
-					return ( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) || 'Pale Moon' == ez_toc_get_browser_name() ) ? $content : wptexturize($content);
+					return ( in_array( 'divi-machine/divi-machine.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || 'Fortunato Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) ? $content : wptexturize($content);
 				},
 				10,
 				1
@@ -424,8 +396,6 @@ class ezTOC_Elementor {
 	 */
 	public function __construct() {
 
-		//add_filter( 'elementor/frontend/the_content', array( 'ezTOC', 'the_content' ), 100 );
-
 		// Hack to avoid enqueue post CSS while it's a `the_excerpt` call.
 		add_filter( 'get_the_excerpt', array( $this, 'start_excerpt_flag' ), 1 );
 		add_filter( 'get_the_excerpt', array( $this, 'end_excerpt_flag' ), 20 );
@@ -515,7 +485,6 @@ class ezTOC_Elementor {
 		return $apply;
 	}
 }
-//new ezTOC_Elementor();
 add_action( 'elementor/init', array( 'ezTOC_Elementor', 'start' ) );
 
 
@@ -544,8 +513,7 @@ add_filter(
 		if ( class_exists( 'WooCommerce' ) && FALSE !== stripos( $string, 'woocommerce.php' ) ) {
 
 			/** @noinspection PhpUndefinedFunctionInspection */
-			if ( is_shop() ||
-			     is_product_category() ||
+			if ( is_shop() ||			     
 			     is_product_tag() ||
 			     is_cart() ||
 			     is_checkout() ||
@@ -577,10 +545,6 @@ function flBuilderLayoutDataEZTOC( $data ) {
 		$post = get_post( get_the_ID() );
 		foreach( $data as $nodeKey => $node )
 		{
-//			if( $node->type == 'module' )
-//			{
-////				$node->settings->text = ezTOC::the_content($post->post_content);
-//			}
 			$data[$nodeKey] = $node;
 		}
 	}
@@ -690,3 +654,70 @@ INLINECSSFOODPRO;
     }
 
 }
+
+/**
+ * Poka Theme Compatibility
+ * remove duplicate eztoc containers
+ * in header & footer sections
+ * @since 2.0.46
+ */
+if ( 'PokaTheme' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+    add_action( 'poka_before_main', 'ez_toc_poka_before_main', 4, 0 );
+    function ez_toc_poka_before_main() {
+        remove_action('poka_before_main', 'poka_before_content', 5, 0);
+        remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+        add_action( 'poka_before_main', 'poka_before_content', 5, 0 );
+    }
+    add_action( 'poka_before_main', 'ez_toc_poka_before_main_after', 6, 0 );
+    function ez_toc_poka_before_main_after() {
+        add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+    }
+    add_action( 'poka_after_main', 'ez_toc_poka_after_main', 3, 0 );
+    function ez_toc_poka_after_main() {
+        remove_action( 'poka_after_main', 'poka_banner_footer', 4, 0 );
+        remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+        add_action( 'poka_after_main', 'poka_banner_footer', 4, 0 );
+    }
+    add_action( 'poka_after_main', 'ez_toc_poka_after_main_after', 5, 0 );
+    function ez_toc_poka_after_main_after() {
+        add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+    }
+}
+
+if ( 'MAKE9 Divi zh-tw Child' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+    add_filter('ez_toc_regex_filteration', 'ez_toc_regex_filteration_for_divi_chinese');
+    function ez_toc_regex_filteration_for_divi_chinese( $regEx ) {
+        $regEx = '/(<h([1-6]{1})(?:(?!\bclass="et_pb_slide_title")[^>])*>)(.*)<\/h\2>/msuU';
+    
+        return $regEx;
+    }
+}
+
+if ( in_array( 'lasso/affiliate-plugin.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+    add_filter('ez_toc_regex_filteration', 'ez_toc_regex_filteration_for_lasso_products');
+    function ez_toc_regex_filteration_for_lasso_products( $regEx ) {
+        $regEx = '/(<(?:h|H){1}([1-6]{1})[^>]*>)(.*)<\/(?:h|H){1}\2>/msuU';
+
+        return $regEx;
+    }
+}
+
+/**
+ * Avada Theme with Fusion Core/Builder Plugin Compatibility
+ * remove duplicate eztoc containers
+ * in footer sections
+ * @since 2.0.49
+ */
+if ( 'Avada' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) && in_array( 'fusion-builder/fusion-builder.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+
+    add_action( 'awb_remove_third_party_the_content_changes', 'ez_toc_remove_the_footer_content', 1 );
+    function ez_toc_remove_the_footer_content() {
+        remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+    }
+    add_action( 'awb_readd_third_party_the_content_changes', 'ez_toc_remove_the_footer_content_after', 1 );
+    function ez_toc_remove_the_footer_content_after() {
+        add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
+    }
+    
+}
+

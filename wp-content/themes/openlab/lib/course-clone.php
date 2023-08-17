@@ -166,6 +166,12 @@ function openlab_group_clone_details( $group_id ) {
 		'site_id'         => '',
 		'site_url'        => '',
 		'site_path'       => '',
+		'collaboration'   => [
+			'announcements' => openlab_is_announcements_enabled_for_group( $group_id ),
+			'forum'         => openlab_is_forum_enabled_for_group( $group_id ),
+			'docs'          => openlab_is_docs_enabled_for_group( $group_id ),
+			'files'         => openlab_is_files_enabled_for_group( $group_id ),
+		],
 	);
 
 	if ( $group_id ) {
@@ -756,7 +762,7 @@ class Openlab_Clone_Course_Site {
 			remove_action( 'delete_post', 'eo_delete_event_occurences', 10 );
 		}
 
-		remove_action( 'delete_post', '_update_posts_count_on_delete' );
+		remove_action( 'delete_post', '_update_posts_count_on_delete', 10 );
 		remove_action( 'delete_post', '_wp_delete_post_menu_item' );
 		remove_action( 'delete_attachment', '_delete_attachment_theme_mod' );
 		remove_action( 'publish_post', '_publish_post_hook', 5 );
@@ -779,7 +785,7 @@ class Openlab_Clone_Course_Site {
 			add_action( 'wp_trash_post', '_eventorganiser_delete_calendar_cache' );
 		}
 
-		add_action( 'delete_post', '_update_posts_count_on_delete' );
+		add_action( 'delete_post', '_update_posts_count_on_delete', 10 );
 		add_action( 'delete_post', '_wp_delete_post_menu_item' );
 		add_action( 'delete_attachment', '_delete_attachment_theme_mod' );
 		add_action( 'publish_post', '_publish_post_hook', 5, 1 );

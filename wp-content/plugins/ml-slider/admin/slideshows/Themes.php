@@ -322,7 +322,13 @@ return false;
 
         $theme = (is_null($theme_id)) ? $this->get_current_theme($slideshow_id) : $this->get_theme_object($slideshow_id, $theme_id);
 
+        // No theme for this slideshow? Set a default class
+        if ( false === $theme ) {
+            add_filter( 'metaslider_css_classes', array( $this, 'add_no_theme_class' ), 10, 3 );
+        }
+        
         // 'none' is the default theme to load no theme. 
+        // @TODO - Why we don't seem to get 'none' for slideshows with no theme?
         if ('none' == $theme_id) {
 return false;
         }
@@ -370,6 +376,21 @@ return $theme;
     public function add_theme_class($class, $slideshow_id, $settings)
     {
         $class .= ' ms-theme-' . $this->theme_id;
+        return $class;
+    }
+
+    /**
+     * Add the default class when no theme is selected
+     * 
+     * @since 3.31
+     * 
+     * @param string $class        The slideshow classlist
+     * @param string $slideshow_id The id of the slideshow
+     * @param string $settings     The settings for the slideshow
+     */
+    public function add_no_theme_class( $class, $slideshow_id, $settings )
+    {
+        $class .= ' ms-theme-default';
         return $class;
     }
 }

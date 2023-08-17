@@ -16,11 +16,28 @@ class Enqueue_Scripts {
 
         add_action( 'elementor/preview/enqueue_styles', [ $this, 'enqueue_3rd_party_style' ] );
     }
+
+	public function is_plugin_active($plugin) {
+		return in_array( $plugin, (array) get_option( 'active_plugins', array() ), true ) || $this->is_plugin_active_for_network( $plugin );
+	}
+
+	public function is_plugin_active_for_network($plugin) {
+		if ( ! is_multisite() ) {
+			return false;
+		}
+
+		$plugins = get_site_option( 'active_sitewide_plugins' );
+		if ( isset( $plugins[ $plugin ] ) ) {
+			return true;
+		}
+
+		return false;
+	}
     
     public function elementor_js() {
         // Register Scripts
         // size : 814 biyets ** used for back to top button circle progress bar
-        wp_register_script( 'animate-circle', \ElementsKit_Lite::widget_url() . 'init/assets/js/animate-circle.js', [], \ElementsKit_Lite::version(), true );
+        wp_register_script( 'animate-circle', \ElementsKit_Lite::widget_url() . 'init/assets/js/animate-circle.min.js', [], \ElementsKit_Lite::version(), true );
 
         // Enqueue Scripts
         wp_enqueue_script( 'elementskit-elementor', \ElementsKit_Lite::widget_url() . 'init/assets/js/elementor.js', ['jquery', 'elementor-frontend', 'animate-circle'], \ElementsKit_Lite::version(), true );
@@ -29,17 +46,19 @@ class Enqueue_Scripts {
             'nonce'     => wp_create_nonce( 'ekit_pro' ),
         ] );
 
-        // added swiper js - elementor remove it when "Improved Asset Loading" is active
-        if(defined('ELEMENTOR_ASSETS_URL')) {
-            wp_enqueue_script(
-                'swiper',
-                ELEMENTOR_ASSETS_URL . 'lib/swiper/swiper.min.js',
-                [],
-                \ElementsKit_Lite::version(),
-				true
-            );
+        // compatibility
+        if($this->is_plugin_active('elementskit/elementskit.php') && version_compare(\Elementskit::version(), '3.2.0', '<=')) {
+            // added swiper js - elementor remove it when "Improved Asset Loading" is active
+            if(defined('ELEMENTOR_ASSETS_URL')) {
+                wp_enqueue_script(
+                    'swiper',
+                    ELEMENTOR_ASSETS_URL . 'lib/swiper/swiper.min.js',
+                    [],
+                    \ElementsKit_Lite::version(),
+                    true
+                );
+            }
         }
-        
 
         // added fluent form styles on the editor
         if (in_array('fluentform/fluentform.php', apply_filters('active_plugins', get_option('active_plugins')))) {

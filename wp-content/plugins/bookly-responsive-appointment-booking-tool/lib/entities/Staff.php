@@ -94,32 +94,35 @@ class Staff extends Lib\Base\Entity
      */
     public function getScheduleItems( $location_id = null )
     {
+        $staff_id = $this->getId();
         $start_of_week = (int) get_option( 'start_of_week' );
         // Start of week affects the sorting.
         // If it is 0(Sun) then the result should be 1,2,3,4,5,6,7.
         // If it is 1(Mon) then the result should be 2,3,4,5,6,7,1.
         // If it is 2(Tue) then the result should be 3,4,5,6,7,1,2. Etc.
         $schedule = StaffScheduleItem::query()
-            ->where( 'staff_id', $this->getId() )
+            ->where( 'staff_id', $staff_id )
             ->sortBy( "IF(r.day_index + 10 - {$start_of_week} > 10, r.day_index + 10 - {$start_of_week}, 16 + r.day_index)" )
             ->indexBy( 'day_index' )
             ->where( 'location_id', $location_id )
             ->find();
 
-        if ( $schedule ) {
+        if ( count( $schedule ) === 7 ) {
             return $schedule;
         }
-        $sch_item = new Lib\Entities\StaffScheduleItem();
-        $sch_item
-            ->setStaffId( $this->getId() )
-            ->setLocationId( $location_id );
+
         $week = array( 1 => 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' );
         foreach ( $week as $day_index => $day ) {
-            $item = clone $sch_item;
-            $item->setDayIndex( $day_index )
-                ->setStartTime( get_option( 'bookly_bh_' . $day . '_start' ) ?: null )
-                ->setEndTime( get_option( 'bookly_bh_' . $day . '_end' ) ?: null )
-                ->save();
+            $sch_item = new Lib\Entities\StaffScheduleItem();
+            if ( ! $sch_item->loadBy( compact( 'day_index', 'staff_id', 'location_id' ) ) ) {
+                $sch_item
+                    ->setStaffId( $staff_id )
+                    ->setLocationId( $location_id )
+                    ->setDayIndex( $day_index )
+                    ->setStartTime( get_option( 'bookly_bh_' . $day . '_start' ) ?: null )
+                    ->setEndTime( get_option( 'bookly_bh_' . $day . '_end' ) ?: null )
+                    ->save();
+            }
         }
 
         return $this->getScheduleItems( $location_id );
@@ -145,6 +148,7 @@ class Staff extends Lib\Base\Entity
                     s.color,
                     s.online_meetings,
                     s.slot_length,
+                    s.position,
                     c.name' )
                 ->addSelect( sprintf( '%s AS service_capacity_min, %s AS service_capacity_max, %s AS units_min, %s AS units_max',
                     Lib\Proxy\Shared::prepareStatement( 1, 's.capacity_min', 'Service' ),
@@ -173,6 +177,7 @@ class Staff extends Lib\Base\Entity
                     ->setPrice( $data['service_price'] )
                     ->setUnitsMin( $data['units_min'] )
                     ->setUnitsMax( $data['units_max'] )
+                    ->setPosition( $data['position'] )
                     ->setCapacityMin( $data['service_capacity_min'] )
                     ->setCapacityMax( $data['service_capacity_max'] )
                     ->setOnlineMeetings( $data['online_meetings'] )

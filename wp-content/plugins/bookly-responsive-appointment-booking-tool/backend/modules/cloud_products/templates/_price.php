@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Utils\Common;
 
 /**
@@ -31,6 +31,6 @@ use Bookly\Lib\Utils\Common;
         <div class="mt-2"><?php echo isset ( $product['cancel_on_renewal'] ) && ! $product['cancel_on_renewal'] ? esc_html__( 'Next billing date', 'bookly' ) : esc_html__( 'Deactivation date', 'bookly' ) ?>: <?php echo Common::stripScripts( $product['next_billing_date'] ) ?></div>
     <?php endif ?>
     <?php if ( isset ( $product['usage'] ) ) : ?>
-        <div class="small"><?php esc_html_e( 'Tasks', 'bookly' ) ?>: <?php echo esc_html( $product['usage'] ) ?></div>
+        <div class="small"><?php echo esc_html( $product['usage'] ) ?></div>
     <?php endif ?>
 </div>

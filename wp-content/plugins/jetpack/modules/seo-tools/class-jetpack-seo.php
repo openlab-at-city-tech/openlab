@@ -102,10 +102,8 @@ class Jetpack_SEO {
 
 		if ( is_front_page() && ! empty( $front_page_meta ) ) {
 			$tags['og:description'] = $front_page_meta;
-		} else {
-			if ( ! empty( $post_custom_description ) ) {
-				$tags['og:description'] = $post_custom_description;
-			}
+		} elseif ( ! empty( $post_custom_description ) ) {
+			$tags['og:description'] = $post_custom_description;
 		}
 
 		return $tags;
@@ -117,9 +115,10 @@ class Jetpack_SEO {
 	public function meta_tags() {
 		global $wp_query;
 
-		$period   = '';
-		$template = '';
-		$meta     = array();
+		$post_count = is_countable( $wp_query->posts ) ? count( $wp_query->posts ) : 0;
+		$period     = '';
+		$template   = '';
+		$meta       = array();
 
 		/**
 		 * Can be used to specify a list of themes that set their own meta tags.
@@ -194,7 +193,7 @@ class Jetpack_SEO {
 				$template = _nx(
 					'%1$s post published by %2$l in the year %3$s', // Singular.
 					'%1$s posts published by %2$l in the year %3$s', // Plural.
-					count( $wp_query->posts ), // Number.
+					$post_count, // Number.
 					'10 posts published by John in the year 2012', // Context.
 					'jetpack'
 				);
@@ -205,7 +204,7 @@ class Jetpack_SEO {
 				$template = _nx(
 					'%1$s post published by %2$l during %3$s', // Singular.
 					'%1$s posts published by %2$l during %3$s', // Plural.
-					count( $wp_query->posts ), // Number.
+					$post_count, // Number.
 					'10 posts publishes by John during May 2012', // Context.
 					'jetpack'
 				);
@@ -219,14 +218,14 @@ class Jetpack_SEO {
 				$template = _nx(
 					'%1$s post published by %2$l on %3$s', // Singular.
 					'%1$s posts published by %2$l on %3$s', // Plural.
-					count( $wp_query->posts ), // Number.
+					$post_count, // Number.
 					'10 posts published by John on May 30, 2012', // Context.
 					'jetpack'
 				);
 			}
 
 			$authors             = $this->get_authors();
-			$meta['description'] = wp_sprintf( $template, count( $wp_query->posts ), $authors, $period );
+			$meta['description'] = wp_sprintf( $template, $post_count, $authors, $period );
 		}
 
 		$mark_as_noindex = Jetpack_SEO_Posts::get_post_noindex_setting( get_post() );

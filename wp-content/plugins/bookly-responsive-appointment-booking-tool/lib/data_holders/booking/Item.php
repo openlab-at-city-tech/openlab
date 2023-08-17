@@ -14,6 +14,7 @@ abstract class Item
     const TYPE_COLLABORATIVE = 2;
     const TYPE_COMPOUND      = 3;
     const TYPE_SERIES        = 4;
+    const TYPE_PACKAGE       = 5;
 
     /** @var int */
     protected $type;
@@ -70,6 +71,16 @@ abstract class Item
     public function isSeries()
     {
         return $this->type == self::TYPE_SERIES;
+    }
+
+    /**
+     * Check if item is package.
+     *
+     * @return bool
+     */
+    public function isPackage()
+    {
+        return $this->type == self::TYPE_PACKAGE;
     }
 
     /**

@@ -1,4 +1,4 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
 // Open on click functionality.
 function closeSubmenus(element) {
@@ -53,7 +53,7 @@ window.addEventListener('load', () => {
         const toggle = block.querySelector('[aria-expanded="true"]');
         closeSubmenus(block); // Focus the submenu trigger so focus does not get trapped in the closed submenu.
 
-        toggle === null || toggle === void 0 ? void 0 : toggle.focus();
+        toggle?.focus();
       }
     });
   });

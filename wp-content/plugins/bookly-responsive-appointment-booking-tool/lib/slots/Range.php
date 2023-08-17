@@ -11,7 +11,6 @@ class Range
     const PARTIALLY_BOOKED     = 2;
     const FULLY_BOOKED         = 3;
     const WAITING_LIST_STARTED = 4;
-    const INTERMEDIATE         = 5;  // internal state for multi-day + consecutive/parallel bookings
 
     /** @var IPoint */
     protected $start;
@@ -370,6 +369,16 @@ class Range
     }
 
     /**
+     * Check whether next slot is set.
+     *
+     * @return bool
+     */
+    public function hasNextSlot()
+    {
+        return $this->data->hasNextSlot();
+    }
+
+    /**
      * Get alternative slot.
      *
      * @return self
@@ -387,6 +396,26 @@ class Range
     public function hasAltSlot()
     {
         return $this->data->hasAltSlot();
+    }
+
+    /**
+     * Get previous alternative slot.
+     *
+     * @return self
+     */
+    public function prevAltSlot()
+    {
+        return $this->data->prevAltSlot();
+    }
+
+    /**
+     * Check whether previous alternative slot is set.
+     *
+     * @return bool
+     */
+    public function hasPrevAltSlot()
+    {
+        return $this->data->hasPrevAltSlot();
     }
 
     /**
@@ -454,6 +483,17 @@ class Range
     public function replaceAltSlot( $new_alt_slot )
     {
         return $this->replaceData( $this->data->replaceAltSlot( $new_alt_slot ) );
+    }
+
+    /**
+     * Create a copy of the range with new previous alternative slot in data.
+     *
+     * @param self|null $new_prev_alt_slot
+     * @return self
+     */
+    public function replacePrevAltSlot( $new_prev_alt_slot )
+    {
+        return $this->replaceData( $this->data->replacePrevAltSlot( $new_prev_alt_slot ) );
     }
 
     /**
@@ -537,26 +577,6 @@ class Range
     }
 
     /**
-     * Tells whether range's state is intermediate.
-     *
-     * @return bool
-     */
-    public function intermediate()
-    {
-        return $this->data->state() == self::INTERMEDIATE;
-    }
-
-    /**
-     * Tells whether range's state is not intermediate.
-     *
-     * @return bool
-     */
-    public function notIntermediate()
-    {
-        return $this->data->state() != self::INTERMEDIATE;
-    }
-
-    /**
      * Build slot data.
      *
      * @return array
@@ -626,18 +646,41 @@ class Range
     }
 
     /**
-     * Get staff IDs of all slots including next ones which are done in parallel.
+     * Find such a slot among the current and alternative slots
+     * so that there are only unique staff ids in the entire chain of next slots run in parallel.
      *
-     * @return array
+     * @return Range|null
      */
-    public function allParallelStaffIds()
+    public function mayBeAltSlot( array $staff_ids )
     {
-        $result = array( $this->staffId() );
-
-        if ( $this->data()->hasNextSlot() && $this->data()->nextConnection() == Generator::CONNECTION_PARALLEL ) {
-            $result = array_merge( $result, $this->nextSlot()->allParallelStaffIds() );
+        $slot = $this;
+        while ( $slot->data()->hasPrevAltSlot() ) {
+            // Rewind to the very first slot in the list
+            $slot = $slot->data()->prevAltSlot();
         }
 
-        return $result;
+        do {
+            if ( ! in_array( $slot->data()->staffId(), $staff_ids ) ) {
+                if ( $slot->data()->hasNextSlot() && $slot->data()->nextConnection() == Generator::CONNECTION_PARALLEL ) {
+                    $next_slot = $slot->data()->nextSlot()->mayBeAltSlot( array_merge(
+                        $staff_ids,
+                        array( $slot->data()->staffId() )
+                    ) );
+                    if ( $next_slot ) {
+                        if ( $next_slot !== $slot->data()->nextSlot() ) {
+                            $slot = $slot->replaceNextSlot( $next_slot );
+                        }
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            $slot = $slot->data()->altSlot();
+
+        } while ( $slot );
+
+        return $slot;
     }
 }

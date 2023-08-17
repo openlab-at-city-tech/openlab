@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Appointment
+ *
  * @package Bookly\Lib\Entities
  */
 class Appointment extends Lib\Base\Entity
@@ -54,29 +55,31 @@ class Appointment extends Lib\Base\Entity
 
     protected static $table = 'bookly_appointments';
 
+    protected $loggable = true;
+
     protected static $schema = array(
-        'id'                       => array( 'format' => '%d' ),
-        'location_id'              => array( 'format' => '%d', 'reference' => array( 'entity' => 'Location', 'namespace' => '\BooklyLocations\Lib\Entities', 'required' => 'bookly-addon-locations' ) ),
-        'staff_id'                 => array( 'format' => '%d', 'reference' => array( 'entity' => 'Staff' ) ),
-        'staff_any'                => array( 'format' => '%d' ),
-        'service_id'               => array( 'format' => '%d', 'reference' => array( 'entity' => 'Service' ) ),
-        'custom_service_name'      => array( 'format' => '%s' ),
-        'custom_service_price'     => array( 'format' => '%f' ),
-        'start_date'               => array( 'format' => '%s' ),
-        'end_date'                 => array( 'format' => '%s' ),
-        'extras_duration'          => array( 'format' => '%d' ),
-        'internal_note'            => array( 'format' => '%s' ),
-        'google_event_id'          => array( 'format' => '%s' ),
-        'google_event_etag'        => array( 'format' => '%s' ),
-        'outlook_event_id'         => array( 'format' => '%s' ),
+        'id' => array( 'format' => '%d' ),
+        'location_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Location', 'namespace' => '\BooklyLocations\Lib\Entities', 'required' => 'bookly-addon-locations' ) ),
+        'staff_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Staff' ) ),
+        'staff_any' => array( 'format' => '%d' ),
+        'service_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Service' ) ),
+        'custom_service_name' => array( 'format' => '%s' ),
+        'custom_service_price' => array( 'format' => '%f' ),
+        'start_date' => array( 'format' => '%s' ),
+        'end_date' => array( 'format' => '%s' ),
+        'extras_duration' => array( 'format' => '%d' ),
+        'internal_note' => array( 'format' => '%s' ),
+        'google_event_id' => array( 'format' => '%s' ),
+        'google_event_etag' => array( 'format' => '%s' ),
+        'outlook_event_id' => array( 'format' => '%s' ),
         'outlook_event_change_key' => array( 'format' => '%s' ),
-        'outlook_event_series_id'  => array( 'format' => '%s' ),
-        'online_meeting_provider'  => array( 'format' => '%s' ),
-        'online_meeting_id'        => array( 'format' => '%s' ),
-        'online_meeting_data'      => array( 'format' => '%s' ),
-        'created_from'             => array( 'format' => '%s' ),
-        'created_at'               => array( 'format' => '%s' ),
-        'updated_at'               => array( 'format' => '%s' ),
+        'outlook_event_series_id' => array( 'format' => '%s' ),
+        'online_meeting_provider' => array( 'format' => '%s' ),
+        'online_meeting_id' => array( 'format' => '%s' ),
+        'online_meeting_data' => array( 'format' => '%s' ),
+        'created_from' => array( 'format' => '%s' ),
+        'created_at' => array( 'format' => '%s' ),
+        'updated_at' => array( 'format' => '%s' ),
     );
 
     /**
@@ -118,7 +121,7 @@ class Appointment extends Lib\Base\Entity
             if ( ! $with_cancelled ) {
                 $appointments->whereIn( 'ca.status', Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
                     Lib\Entities\CustomerAppointment::STATUS_PENDING,
-                    Lib\Entities\CustomerAppointment::STATUS_APPROVED
+                    Lib\Entities\CustomerAppointment::STATUS_APPROVED,
                 ) ) );
             }
 
@@ -147,8 +150,8 @@ class Appointment extends Lib\Base\Entity
     /**
      * Set array of customers associated with this appointment.
      *
-     * @param array  $cst_data  Array of customer IDs, custom_fields, number_of_persons, extras and status
-     * @param int    $series_id
+     * @param array $cst_data Array of customer IDs, custom_fields, number_of_persons, extras and status
+     * @param int $series_id
      * @return CustomerAppointment[] Array of customer_appointment with changed status
      */
     public function saveCustomerAppointments( array $cst_data, $series_id = null )
@@ -158,15 +161,17 @@ class Appointment extends Lib\Base\Entity
         foreach ( $cst_data as $item ) {
             if ( isset( $item['ca_id'] ) ) {
                 $ca_id = $item['ca_id'];
-            } else do {
-                // New CustomerAppointment.
-                $ca_id = 'new-' . mt_rand( 1, 999 );
-            } while ( array_key_exists( $ca_id, $ca_data ) === true );
+            } else {
+                do {
+                    // New CustomerAppointment.
+                    $ca_id = 'new-' . mt_rand( 1, 999 );
+                } while ( array_key_exists( $ca_id, $ca_data ) === true );
+            }
             $ca_data[ $ca_id ] = $item;
         }
 
         // Retrieve customer appointments IDs currently associated with this appointment.
-        $current_ids   = array_map( function( CustomerAppointment $ca ) { return $ca->getId(); }, $this->getCustomerAppointments( true ) );
+        $current_ids = array_map( function ( CustomerAppointment $ca ) { return $ca->getId(); }, $this->getCustomerAppointments( true ) );
         $ids_to_delete = array_diff( $current_ids, array_keys( $ca_data ) );
         if ( ! empty ( $ids_to_delete ) ) {
             // Remove redundant customer appointments.
@@ -177,7 +182,7 @@ class Appointment extends Lib\Base\Entity
         }
         // Calculate units for custom duration services
         $service = Lib\Entities\Service::find( $this->getServiceId() );
-        $units   = ( $service && $service->getUnitsMax() > 1 ) ? ceil( Lib\Slots\DatePoint::fromStr( $this->getEndDate() )->diff( Lib\Slots\DatePoint::fromStr( $this->getStartDate() ) ) / $service->getDuration() ) : 1;
+        $units = ( $service && $service->getUnitsMax() > 1 ) ? ceil( Lib\Slots\DatePoint::fromStr( $this->getEndDate() )->diff( Lib\Slots\DatePoint::fromStr( $this->getStartDate() ) ) / $service->getDuration() ) : 1;
 
         // Add new customer appointments.
         foreach ( array_diff( array_keys( $ca_data ), $current_ids ) as $id ) {
@@ -200,7 +205,6 @@ class Appointment extends Lib\Base\Entity
                 ->setTimeZone( is_array( $time_zone ) ? $time_zone['time_zone'] : $time_zone )
                 ->setTimeZoneOffset( is_array( $time_zone ) ? $time_zone['time_zone_offset'] : $time_zone )
                 ->save();
-            Lib\Utils\Log::createEntity( $customer_appointment, __METHOD__ );
             Lib\Proxy\Files::attachFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             Lib\Proxy\Pro::createBackendPayment( $ca_data[ $id ], $customer_appointment );
             $customer_appointment->setJustCreated( true );
@@ -230,7 +234,6 @@ class Appointment extends Lib\Base\Entity
                 ->setExtras( json_encode( $ca_data[ $id ]['extras'] ) )
                 ->setTimeZone( $time_zone['time_zone'] )
                 ->setTimeZoneOffset( $time_zone['time_zone_offset'] );
-            Lib\Utils\Log::updateEntity( $customer_appointment, __METHOD__ );
             $customer_appointment
                 ->save();
             Lib\Proxy\Files::attachFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
@@ -275,7 +278,7 @@ class Appointment extends Lib\Base\Entity
                 ->whereNot( 'extras', '[]' )
                 ->whereIn( 'status', Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
                     CustomerAppointment::STATUS_PENDING,
-                    CustomerAppointment::STATUS_APPROVED
+                    CustomerAppointment::STATUS_APPROVED,
                 ) ) )
                 ->fetchCol( 'extras' );
             foreach ( $records as $extras ) {
@@ -297,8 +300,8 @@ class Appointment extends Lib\Base\Entity
     public function getNopInfo()
     {
         $res = self::query( 'a' )
-           ->select( sprintf(
-               'SUM(IF(ca.status = "%s", ca.number_of_persons, 0)) AS pending,
+            ->select( sprintf(
+                'SUM(IF(ca.status = "%s", ca.number_of_persons, 0)) AS pending,
                 SUM(IF(ca.status IN("%s"), ca.number_of_persons, 0)) AS approved,
                 SUM(IF(ca.status IN("%s"), ca.number_of_persons, 0)) AS cancelled,
                 SUM(IF(ca.status = "%s", ca.number_of_persons, 0)) AS rejected,
@@ -309,13 +312,12 @@ class Appointment extends Lib\Base\Entity
                 implode( '","', Lib\Proxy\CustomStatuses::prepareFreeStatuses( array( CustomerAppointment::STATUS_CANCELLED ) ) ),
                 CustomerAppointment::STATUS_REJECTED,
                 CustomerAppointment::STATUS_WAITLISTED
-           ) )
-           ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
-           ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id' )
-           ->where( 'a.id', $this->getId() )
-           ->groupBy( 'a.id' )
-           ->fetchRow()
-        ;
+            ) )
+            ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
+            ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id' )
+            ->where( 'a.id', $this->getId() )
+            ->groupBy( 'a.id' )
+            ->fetchRow();
 
         $res['total_nop'] = $res['pending'] + $res['approved'];
 
@@ -369,6 +371,7 @@ class Appointment extends Lib\Base\Entity
     {
         return $this->setStaffId( $staff->getId() );
     }
+
     /**
      * Sets staff_id
      *
@@ -708,7 +711,7 @@ class Appointment extends Lib\Base\Entity
      * @param string $online_meeting_provider
      * @return $this
      */
-    public function setOnlineMeetingProvider( $online_meeting_provider)
+    public function setOnlineMeetingProvider( $online_meeting_provider )
     {
         $this->online_meeting_provider = $online_meeting_provider;
 
@@ -856,8 +859,7 @@ class Appointment extends Lib\Base\Entity
                     ->setGoogleEventId( null )
                     ->setGoogleEventETag( null )
                     ->setOutlookEventId( null )
-                    ->setOutlookEventChangeKey( null )
-                ;
+                    ->setOutlookEventChangeKey( null );
             }
         }
 
@@ -886,7 +888,6 @@ class Appointment extends Lib\Base\Entity
             ->find();
         /** @var Lib\Entities\CustomerAppointment $ca */
         foreach ( $ca_list as $ca ) {
-            Lib\Utils\Log::deleteEntity( $ca, __METHOD__, 'Delete customer appointments on delete appointment' );
             $ca->delete();
         }
 

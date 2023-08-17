@@ -1,12 +1,12 @@
 <?php
 namespace Bookly\Backend\Components\Dialogs\Staff\Edit;
 
-use Bookly\Backend\Components\Notices\Limitation;
 use Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
 use Bookly\Lib;
 
 /**
  * Class Dialog
+ *
  * @package Bookly\Backend\Components\Dialogs\Staff\Edit
  */
 class Dialog extends Lib\Base\Component
@@ -26,25 +26,25 @@ class Dialog extends Lib\Base\Component
             'frontend' => get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
                 ? array()
                 : array( 'css/intlTelInput.css' )
-            ,
+        ,
             'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ), ),
         ) );
 
         self::enqueueScripts( array(
-            'frontend' =>  get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
+            'frontend' => get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
                 ? array()
                 : array( 'js/intlTelInput.min.js' => array( 'jquery' ) )
-            ,
-            'backend'  => array(
-                'js/jCal.js'            => array( 'jquery' ),
-                'js/nav-scrollable.js'  => array( 'bookly-backend-globals' ),
-                'js/range-tools.js'     => array( 'bookly-backend-globals' ),
+        ,
+            'backend' => array(
+                'js/jCal.js' => array( 'jquery' ),
+                'js/nav-scrollable.js' => array( 'bookly-backend-globals' ),
+                'js/range-tools.js' => array( 'bookly-backend-globals' ),
             ),
-            'module'   => array(
-                'js/staff-details.js'     => array( 'bookly-range-tools.js', 'wp-color-picker' ),
-                'js/staff-services.js'    => array( 'bookly-staff-details.js' ),
-                'js/staff-schedule.js'    => array( 'bookly-staff-services.js' ),
-                'js/staff-days-off.js'    => array( 'bookly-staff-schedule.js' ),
+            'module' => array(
+                'js/staff-details.js' => array( 'bookly-range-tools.js', 'wp-color-picker' ),
+                'js/staff-services.js' => array( 'bookly-staff-details.js' ),
+                'js/staff-schedule.js' => array( 'bookly-staff-services.js' ),
+                'js/staff-days-off.js' => array( 'bookly-staff-schedule.js' ),
                 'js/staff-edit-dialog.js' => array( 'bookly-staff-days-off.js' ),
             ),
         ) );
@@ -79,6 +79,7 @@ class Dialog extends Lib\Base\Component
                 'capacity_error' => esc_attr__( 'Min capacity should not be greater than max capacity.', 'bookly' ),
                 'hideTip' => get_user_meta( get_current_user_id(), 'bookly_packages_hide_staff_services_tip', true ),
             ),
+            'appointmentsUrl' => Lib\Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Appointments\Ajax::pageSlug() ),
             'areYouSure' => esc_attr__( 'Are you sure?', 'bookly' ),
             'createStaff' => esc_attr__( 'Create staff', 'bookly' ),
             'currentTab' => self::parameter( 'tab', 'details' ),

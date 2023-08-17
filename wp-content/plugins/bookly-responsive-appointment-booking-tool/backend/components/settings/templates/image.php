@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div id="bookly-js-<?php echo esc_attr( $option_name ) ?>">
     <input type="hidden" name="<?php echo esc_attr( $option_name ) ?>" data-default="<?php echo esc_attr( $option_value ) ?>" value="<?php echo esc_attr( $option_value ) ?>">
     <div class="bookly-js-image bookly-thumb <?php echo esc_attr( $class ) ?>" style="<?php echo esc_attr( $img_style ) ?>" data-style="<?php echo esc_attr( $img_style ) ?>">

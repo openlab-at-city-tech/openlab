@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Entity
+ *
  * @package Bookly\Lib\Base
  */
 abstract class Entity extends Cache
@@ -14,6 +15,7 @@ abstract class Entity extends Cache
 
     /**
      * Entity field id
+     *
      * @var   int
      */
     protected $id;
@@ -22,6 +24,7 @@ abstract class Entity extends Cache
 
     /**
      * Reference to global database object.
+     *
      * @var \wpdb
      */
     protected static $wpdb;
@@ -29,6 +32,7 @@ abstract class Entity extends Cache
     /**
      * Name of table in database without WordPress prefix.
      * Must be defined in the child class.
+     *
      * @static
      * @var string
      */
@@ -43,25 +47,32 @@ abstract class Entity extends Cache
      *         'default'   => '[DEFAULT_VALUE]',
      *         'reference' => '[ [entity], [namespace], [required] ]'
      * )
+     *
      * @static
      * @var array
      */
     protected static $schema;
 
+    /**
+     * Is entity operations should be logged.
+     */
+    protected $loggable = false;
+
     // Private properties.
 
     /**
      * Name of table in database with WordPress prefix.
+     *
      * @var string
      */
     private $table_name;
 
     /**
      * Values loaded from the database.
+     *
      * @var boolean
      */
     private $loaded_values;
-
 
     // Public methods.
 
@@ -146,6 +157,16 @@ abstract class Entity extends Cache
     }
 
     /**
+     * Check if the entity operations should be logged.
+     *
+     * @return bool
+     */
+    public function isLoggable()
+    {
+        return $this->loggable === true;
+    }
+
+    /**
      * Set values to fields.
      * The method can be used to update only some fields.
      *
@@ -182,6 +203,7 @@ abstract class Entity extends Cache
         foreach ( static::$schema as $field => $format ) {
             $data[ $field ] = $this->{$field};
         }
+
         return $data;
     }
 
@@ -203,7 +225,7 @@ abstract class Entity extends Cache
     public function save()
     {
         // Prepare query data.
-        $set    = array();
+        $set = array();
         $values = array();
         foreach ( static::$schema as $field => $data ) {
             if ( $field == 'id' ) {
@@ -213,8 +235,8 @@ abstract class Entity extends Cache
             if ( $value === null ) {
                 if ( isset( static::$schema[ $field ]['sequent'] ) && static::$schema[ $field ]['sequent'] ) {
                     // Set greater than max value
-                    $set[]    = sprintf( '`%s` = %s', $field, static::$schema[ $field ]['format'] );
-                    $max      = (int) self::$wpdb->get_var( sprintf( 'SELECT MAX(`%s`) FROM `%s`', $field, $this->table_name ) );
+                    $set[] = sprintf( '`%s` = %s', $field, static::$schema[ $field ]['format'] );
+                    $max = (int) self::$wpdb->get_var( sprintf( 'SELECT MAX(`%s`) FROM `%s`', $field, $this->table_name ) );
                     $values[] = ++ $max;
                 } else {
                     $set[] = sprintf( '`%s` = NULL', $field );
@@ -226,6 +248,7 @@ abstract class Entity extends Cache
         }
         // Run query.
         if ( $this->getId() ) {
+            Lib\Utils\Log::fromBacktrace( $this );
             $res = self::$wpdb->query( self::$wpdb->prepare(
                 sprintf(
                     'UPDATE `%s` SET %s WHERE `id` = %d',
@@ -246,6 +269,7 @@ abstract class Entity extends Cache
             ) );
             if ( $res ) {
                 $this->setId( self::$wpdb->insert_id );
+                Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_CREATE );
             }
         }
 
@@ -265,6 +289,7 @@ abstract class Entity extends Cache
     public function delete()
     {
         if ( $this->getId() ) {
+            Lib\Utils\Log::fromBacktrace( $this, Lib\Utils\Log::ACTION_DELETE );
             static::deleteFromCache( $this->getId() );
 
             return self::$wpdb->delete( $this->table_name, array( 'id' => $this->getId() ), array( '%d' ) );
@@ -324,11 +349,11 @@ abstract class Entity extends Cache
                         }
                     } else {
                         $called_class = get_called_class();
-                        $ref_entity   = substr( $called_class, 0, strrpos( $called_class, '\\' ) ) . '\\' . $ref_entity;
+                        $ref_entity = substr( $called_class, 0, strrpos( $called_class, '\\' ) ) . '\\' . $ref_entity;
                     }
                     $constraints[] = array(
-                        'column_name'            => $field_name,
-                        'referenced_table_name'  => call_user_func( array( $ref_entity, 'getTableName' ) ),
+                        'column_name' => $field_name,
+                        'referenced_table_name' => call_user_func( array( $ref_entity, 'getTableName' ) ),
                         'referenced_column_name' => isset ( $options['reference']['field'] ) ? $options['reference']['field'] : 'id',
                     );
                 }

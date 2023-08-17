@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker
 Requires at least: 5.4
-Tested up to: 6.1
-Stable tag: 4.7.76
+Tested up to: 6.2
+Stable tag: 4.8.6
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
@@ -120,6 +120,62 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 4.8.6 - 03.07.2023 =
+Fixed: Check custom tables for columns ( [#1288](https://github.com/WPChill/download-monitor/issues/1288) )
+Added: Upsells in reports page ( [#1290](https://github.com/WPChill/download-monitor/issues/1290) )
+Fixed: Total downloads shortcode ( [#1292](https://github.com/WPChill/download-monitor/issues/1292) )
+Fixed: Recreate upgrade environment hides downloads ( [#1278](https://github.com/WPChill/download-monitor/issues/1278) )
+Added: CRON to check for license validity ( [#1287](https://github.com/WPChill/download-monitor/issues/1287) )
+Changed: Update about page ( [#1285](https://github.com/WPChill/download-monitor/issues/1285) )
+Fixed: Open link in new doesn't work with no access page ( [#1286](https://github.com/WPChill/download-monitor/issues/1286) )
+Fixed: LiteSpeed X-Sendfile doesn't log downloads ( [#1294](https://github.com/WPChill/download-monitor/issues/1294) )
+
+= 4.8.5 - 09.06.2023 =
+Fixed: External logging download failure ( [#1283](https://github.com/WPChill/download-monitor/issues/1283) )
+Fixed: LiteSpeed server functionality fo X-Accel-Redirect / X-Sendfile option ( [#1282](https://github.com/WPChill/download-monitor/issues/1282) )
+
+= 4.8.4 - 07.06.2023 =
+Fixed: Security issue regarding file uploading ( [#1276](https://github.com/WPChill/download-monitor/issues/1276) )
+Fixed: Cascading downloads ( [#1275](https://github.com/WPChill/download-monitor/issues/1275) )
+Fixed: Duplicate downloads when multiple post meta entries for same download ( [#1279](https://github.com/WPChill/download-monitor/issues/1279) )
+
+= 4.8.3 - 31.05.2023 =
+Fixed: External file checking
+
+= 4.8.2 - 30.05.2023 =
+Fixed: Vulnerability fix
+
+= 4.8.1 - 24.05.2023 =
+Fixed: Error when activating, missing function.
+
+= 4.8.0 - 24.05.2023 =
+Added: Clear optimization plugins cache and minified scripts cache on plugin update/activation ( [#1224](https://github.com/WPChill/download-monitor/issues/1224) )
+Changed: No access modal now takes the no access page content ( [#1234](https://github.com/WPChill/download-monitor/issues/1234) )
+Fixed: Reports not working when permalinks set on plain ( [#1243](https://github.com/WPChill/download-monitor/issues/1243) )
+Fixed: Insert Download - Quick-add download in classic editor now removed if current user can't manage downloads ( [#1164](https://github.com/WPChill/download-monitor/issues/1164) )
+Changed: Data type for download_category column in _download_log table to longtext ( [#1254](https://github.com/WPChill/download-monitor/issues/1254) )
+Changed: Moved 'dlm_query_args' action after filter_query_args() method call. ( [#1263](https://github.com/WPChill/download-monitor/issues/1263) )
+Added: Filter to disable plugin version in meta. ( [#1269](https://github.com/WPChill/download-monitor/issues/1269) )
+Added: A filter on [downloads] shortcode content( [#1246](https://github.com/WPChill/download-monitor/issues/1246) )
+Added: Display Category/Tag ID in admin column ( [#576](https://github.com/WPChill/download-monitor/issues/576) )
+Added: Free extensions page ( [#835](https://github.com/WPChill/download-monitor/issues/835) )
+Added: Force XHR abort functionality ( [#1240](https://github.com/WPChill/download-monitor/issues/1240) )
+Added: Specific non-XHR links to be ignored by the XHR trigger ( [#1241](https://github.com/WPChill/download-monitor/issues/1241) )
+Changed: Optimize retrieval of Downloads ( [#1244](https://github.com/WPChill/download-monitor/issues/1244) )
+Added: Possibility to change server limits when retrieving data for reports ( [#1254](https://github.com/WPChill/download-monitor/issues/1254) )
+Fixed: Filename error when headers not sent ( [#1260](https://github.com/WPChill/download-monitor/issues/1260) )
+Changed: Removed optional feedback sending ( [#1262](https://github.com/WPChill/download-monitor/issues/1262) )
+Added: Show notice if user is not allowed to upload file ( [#1265](https://github.com/WPChill/download-monitor/issues/1265) )
+Added: Warn user if File URLs contain not-allowed paths ( [#1268](https://github.com/WPChill/download-monitor/issues/1268) )
+
+= 4.7.78 - 30.03.2023 =
+Fixed: Nonce error for websites with full cache ( [#1245](https://github.com/WPChill/download-monitor/issues/1245) )
+
+= 4.7.77 - 06.03.2023 =
+Added: Trigger in dlm-xhr.js to manipulate data ( [#1230](https://github.com/WPChill/download-monitor/issues/1230) )
+Fixed: Fatal error when using WPML & Toolset Types ( [#1225](https://github.com/WPChill/download-monitor/issues/1225) ) - thanks to @decodekult
+Fixed: Opening in new tab ( [#1227](https://github.com/WPChill/download-monitor/issues/1227) )
+
 = 4.7.76 - 20.02.2023 =
 Fixed: PHP memory size conversion ( [#1184](https://github.com/WPChill/download-monitor/issues/1184) )
 Fixed: Settings description escaping function ( [#1194](https://github.com/WPChill/download-monitor/issues/1194) )

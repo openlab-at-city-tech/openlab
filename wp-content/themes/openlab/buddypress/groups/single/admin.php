@@ -4,7 +4,6 @@ global $bp;
 $group_type = groups_get_groupmeta( bp_get_current_group_id(), 'wds_group_type' );
 
 $group_label_uc = openlab_get_group_type_label( 'case=upper' );
-$portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_portfolio_sharing' );
 ?>
 
 <?php //the following switches out the membership menu for the regular admin menu on membership-based admin pages ?>
@@ -32,7 +31,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 	</div>
 </div>
 
-<form action="<?php bp_group_admin_form_action(); ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel" method="post" enctype="multipart/form-data">
+<form action="<?php bp_group_admin_form_action(); ?>" name="group-settings-form" id="group-settings-form" class="standard-form form-panel group-validate-form" method="post" enctype="multipart/form-data" data-parsley-validate>
 
 	<?php do_action( 'bp_before_group_admin_content' ); ?>
 
@@ -55,22 +54,24 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 					<label for="group-desc"><?php echo $group_label_uc . ' Description'; ?> (required)</label>
 					<textarea class="form-control" name="group-desc" id="group-desc"><?php bp_group_description_editable(); ?></textarea>
 
-					<?php do_action( 'groups_custom_group_fields_editable' ); ?>
+					<fieldset class="group-active-status-fieldset">
+						<legend><?php echo esc_html( sprintf( '%s Status', $group_label_uc ) ); ?></legend>
 
-					<?php if ( ! openlab_is_portfolio() ) : ?>
-						<div class="notify-settings">
-							<p class="ol-tooltip notify-members"><?php _e( 'Notify group members of changes via email', 'buddypress' ); ?></p>
-							<div class="radio">
-								<label><input type="radio" name="group-notify-members" value="1" /> <?php _e( 'Yes', 'buddypress' ); ?></label>
-								<label><input type="radio" name="group-notify-members" value="0" checked="checked" /> <?php _e( 'No', 'buddypress' ); ?></label>
-							</div>
+						<p><?php echo esc_html( sprintf( 'You can mark a %s as Not Active when it is no longer being actively used. This status will appear on the Profile and in the %s directory.', $group_label_uc, $group_label_uc ) ); ?> <a href="https://openlab.citytech.cuny.edu/blog/help/active-status/"><?php echo esc_html( 'Learn more.' ); ?></a></p>
+
+						<div class="group-active-status-radios">
+							<input type="radio" name="group-active-status" id="group-active-status-active" value="active" <?php checked( openlab_group_is_active( bp_get_current_group_id() ) ); ?>> <label for="group-active-status-active"><?php echo esc_html( sprintf( 'This %s is Active', $group_label_uc ) ); ?></label><br />
+							<input type="radio" name="group-active-status" id="group-active-status-inactive" value="inactive" <?php checked( ! openlab_group_is_active( bp_get_current_group_id() ) ); ?>> <label for="group-active-status-inactive"><?php echo esc_html( sprintf( 'This %s is Not Active', $group_label_uc ) ); ?></label>
 						</div>
 
-					<?php else : ?>
+						<?php wp_nonce_field( 'group_active_status', 'group-active-status-nonce', false ); ?>
 
-						<input type="hidden" name="group-notify-members" value="0" />
+					</fieldset>
 
-					<?php endif ?>
+					<?php do_action( 'groups_custom_group_fields_editable' ); ?>
+
+					<input type="hidden" name="group-notify-members" value="0" />
+
 				</div>
 			</div>
 
@@ -106,45 +107,7 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 				<?php openlab_group_sharing_settings_markup( $group_type ); ?>
 			<?php endif; ?>
 
-			<?php
-			$announcements_enabled = openlab_is_announcements_enabled_for_group();
-			$forum_enabled         = openlab_is_forum_enabled_for_group();
-			$docs_enabled          = openlab_is_docs_enabled_for_group();
-			$files_enabled         = openlab_is_files_enabled_for_group();
-
-			if ( 'portfolio' === $group_type ) {
-				$show_announcement_toggle = false;
-				$heading_text             = 'Discussion, Docs, and File Library Settings';
-				$helper_text              = 'These settings enable or disable Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
-			} else {
-				$show_announcement_toggle = true;
-				$heading_text             = 'Announcements, Discussion, Docs, and File Library Settings';
-				$helper_text              = 'These settings enable or disable Announcements, Discussions, Docs, and File Library on your ' . $group_label_uc . ' profile.';
-			}
-
-			?>
-			<div class="panel panel-default">
-				<div class="panel-heading"><?php echo esc_html( $heading_text ); ?></div>
-				<div class="panel-body">
-					<p id="discussion-settings-tag"><?php echo esc_html( $helper_text ); ?></p>
-
-					<?php if ( $show_announcement_toggle ) : ?>
-						<div class="checkbox checkbox-float">
-							<label><input type="checkbox" name="openlab-edit-group-announcements" id="group-show-announcements" value="1"<?php checked( $announcements_enabled ); ?> /> Enable Announcements</label>
-						</div>
-					<?php endif; ?>
-
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-forum" id="group-show-forum" value="1"<?php checked( $forum_enabled ); ?> /> Enable Discussion</label>
-					</div>
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-docs" id="group-show-docs" value="1"<?php checked( $docs_enabled ); ?> /> Enable Docs</label>
-					</div>
-					<div class="checkbox checkbox-float">
-						<label><input type="checkbox" name="openlab-edit-group-files" id="group-show-files" value="1"<?php checked( $files_enabled ); ?> /> Enable File Library</label>
-					</div>
-				</div>
-			</div>
+			<?php openlab_group_collaboration_tools_settings( $group_type ); ?>
 
 			<?php if ( function_exists( 'eo_get_event_fullcalendar' ) && ! openlab_is_portfolio() ) : ?>
 				<?php
@@ -215,47 +178,33 @@ $portfolio_sharing = groups_get_groupmeta( bp_get_current_group_id(), 'enable_po
 					</div>
 					<label for="related-links-list-heading">List Heading</label>
 					<input name="related-links-list-heading" id="related-links-list-heading" class="form-control" type="text" value="<?php echo esc_attr( $related_links_list_heading ); ?>" />
-					<ul class="related-links-edit-items inline-element-list">
-						<?php $rli = 1; ?>
-						<?php foreach ( (array) $related_links_list as $rl ) : ?>
-							<li class="form-inline label-combo row">
-								<div class="form-group col-sm-9">
-									<label for="related-links-<?php echo $rli; ?>-name">Name</label> <input name="related-links[<?php echo $rli; ?>][name]" id="related-links-<?php echo $rli; ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ); ?>" />
-								</div>
-								<div class="form-group col-sm-15">
-									<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control related-links-url" value="<?php echo esc_attr( $rl['url'] ); ?>" />
-
-									<div class="related-link-actions">
-										<button type="button" class="related-link-remove related-link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+					<div class="link-edit-items">
+						<ul class="related-links-edit-items inline-element-list">
+							<?php $rli = 1; ?>
+							<?php foreach ( (array) $related_links_list as $rl ) : ?>
+								<li class="form-inline label-combo row">
+									<div class="form-group col-sm-9">
+										<label for="related-links-<?php echo $rli; ?>-name">Name</label> <input name="related-links[<?php echo $rli; ?>][name]" id="related-links-<?php echo $rli; ?>-name" class="form-control" value="<?php echo esc_attr( $rl['name'] ); ?>" />
 									</div>
-								</div>
-							</li>
-							<?php $rli++; ?>
-						<?php endforeach; ?>
-					</ul>
+									<div class="form-group col-sm-15">
+										<label for="related-links-<?php echo $rli; ?>-url">URL</label> <input name="related-links[<?php echo $rli; ?>][url]" id="related-links-<?php echo $rli; ?>-url" class="form-control link-url" value="<?php echo esc_attr( $rl['url'] ); ?>" />
 
-					<button type="button" class="related-link-add related-link-action" id="add-new-related-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
+										<div class="link-actions">
+											<button type="button" class="link-remove link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
+										</div>
+									</div>
+								</li>
+								<?php $rli++; ?>
+							<?php endforeach; ?>
+						</ul>
+
+						<button type="button" class="link-add link-action" id="add-new-link"><span class="sr-only">Add new link</span><i class="fa fa-plus-circle" role="presentation"></i></button>
+					</div>
 				</div>
 			</div>
 
 			<?php if ( openlab_is_portfolio() ) : ?>
-				<div class="panel panel-default">
-					<div class="panel-heading">Add to My Portfolio</div>
-					<div class="panel-body">
-						<div class="editfield">
-							<p class="description">The Add to Portfolio feature saves selected posts, pages, and comments that you have authored on Course, Project, and Club sites directly to your Portfolio site. For more information visit <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">OpenLab Help</a>.</p>
-
-							<div class="checkbox">
-								<label for="portfolio-sharing">
-									<input name="portfolio-sharing" type="checkbox" id="portfolio-sharing" value="1" <?php checked( 'yes', $portfolio_sharing ); ?> />
-									Enable "Add to My Portfolio"
-								</label>
-							</div>
-
-							<?php wp_nonce_field( 'add_to_portfolio_toggle', 'add-to-portfolio-toggle-nonce', false ); ?>
-						</div>
-					</div>
-				</div>
+				<?php openlab_add_to_my_portfolio_settings(); ?>
 			<?php endif; ?>
 
 			<?php do_action( 'bp_after_group_settings_admin' ); ?>

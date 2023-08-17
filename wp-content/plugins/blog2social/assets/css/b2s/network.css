@@ -7,6 +7,15 @@
 .list-group-item{
     border: 0px !important;
 }
+
+.nav > li > a{
+    padding: 8px 12px !important;
+}
+
+.b2s-settings-line{
+    margin-top: 5px !important;
+}
+
 @media(max-width: 767px) {
     .form-inline {
         display: none;
@@ -211,22 +220,6 @@ ul.b2s-network-item-auth-list li:last-child{
 .b2s-text-middle{
     vertical-align: middle;
     font: 13px/1 Arial,sans-serif;
-}
-
-.b2s-label-warning-border-left{
-    border-left: 3px solid #FDBF45;
-}
-
-.b2s-label-info-border-left{
-    border-left: 3px solid #31708f;
-}
-
-.b2s-label-danger-border-left{
-    border-left: 3px solid #d9534f;
-}
-
-.b2s-label-success-border-left{
-    border-left: 3px solid #398439;
 }
 
 .b2s-margin-top-8 {
@@ -435,6 +428,77 @@ ul.b2s-network-item-auth-list li:last-child{
     margin-top: 10px;
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
+}
+
+.b2s-edit-template-preview-box-37 {
+    background-color: #000;
+    color: #cccccc;
+}
+
+.b2s-edit-template-preview-title-37{
+    font-size:14pt;
+    font-weight:bold;
+
+}
+
+.b2s-edit-template-preview-tags-37 {
+    color:#ef0000;
+    margin-top:40px;
+}
+
+.b2s-edit-template-preview-38 {
+    background-color: #282c37;
+    color: #fff;
+}
+
+.b2s-edit-template-preview-profile-handle-38 {
+
+    color: #606984;
+}
+
+.b2s-edit-template-preview-content-38 {
+    margin-top:10px;
+}
+
+.b2s-edit-template-preview-like-icons-38 {
+    width:100%;
+}
+
+.b2s-edit-template-preview-link-title-38 {
+    font-weight:bold;
+}
+
+.b2s-edit-template-preview-link-meta-box-38 {
+    border-style:solid;
+    border-width:1px;
+    border-color: #313543;
+    color: #606984;
+    width:100%;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 10px;
+
+
+}
+
+.b2s-edit-template-preview-image-image-39 {
+    background-color: #313338;
+    color: #e0e1e5;
+}
+
+.b2s-edit-template-preview-profile-img-39 {
+    border: 1px solid lightgray;
+    border-radius: 25px;
+    padding: 1px;
+    height: 36px;
+    width: 36px;
+}
+
+.b2s-edit-template-preview-image-image-title-39 {
+    background-color: #2b2d31;
+    color: #e0e1e5;
+    border-left: #1e1f22;
+    border-left-width: 3px;
 }
 
 .b2s-edit-template-preview-link-image-2 {
@@ -738,16 +802,73 @@ ul.b2s-network-item-auth-list li:last-child{
     margin: 15px 0px;
 }
 
+.b2s-edit-template-preview-content-39 {
+    margin: 0px !important;
+    background-color: #313338;
+    color: #e0e1e5;
+}
+
+.b2s-edit-template-preview-box-39 {
+    margin: 0px !important;
+    background-color: #313338;
+    color: #e0e1e5;
+
+}
+
+.b2s-edit-template-preview-box-inner-39 {
+    margin: 0px !important;
+    background-color: #2b2d31;
+    color: #e0e1e5;
+    border-left-color: #1e1f22;
+    border-width: 0px 0px 0px 5px;
+    border-style:solid;
+    padding-left:13px;
+}
+
+.b2s-edit-template-preview-margin-39 {
+    margin-right:15px;
+}
+
+
+.b2s-edit-template-preview-content-title-39 {
+    margin: 0px !important;
+    background-color: #2b2d31;
+    color: #e0e1e5;
+    
+}
+
+.b2s-edit-template-preview-title-39 {
+    margin: 0px !important;
+    padding:0px !important;
+    font-weight:bold;
+    background-color: #2b2d31;
+    color: #00aafc;
+}
+
+.b2s-edit-template-preview-title-account-39 {
+    margin: 0px !important;
+    padding:0px !important;
+    font-weight:bold;
+}
+
+.b2s-edit-template-bot-39 {
+    background-color: #5865f2;
+    border-radius: 3px;
+    text-align:left;
+    margin: 0px !important;
+    padding:0px 0px 0px 2px !important;
+}
+
+.b2s-edit-template-timestamp-39 {
+    font-weight:normal;
+}
+
 .b2s-login-form-label {
     padding-top: 7px;
     margin-top: 0;
     margin-bottom: 0;
     text-align: right;
     font-weight: bold;
-}
-
-#b2s-auth-network-6-location, #b2s-auth-network-6-board {
-    max-width: 100% !important;
 }
 
 .b2s-edit-template-title {
@@ -871,10 +992,6 @@ ul.b2s-network-item-auth-list li:last-child{
     border-left: 3px solid lightblue;
 }
 
-.b2s-auth-network-6-extension-download-area {
-    text-align: center;
-}
-
 .b2s-edit-template-preview-title-4 {
     font-size: 16px;
     padding-top: 10px;
@@ -908,4 +1025,20 @@ ul.b2s-network-item-auth-list li:last-child{
 
 #clr-picker {
     z-index: 9999;
+}
+
+.alert-status{
+    color: #444;
+    background-color: #d4d4d4;
+    border-color: #dedede;
+}
+
+.b2s-network-video-not-supported{
+    display: none;
+}
+
+.b2s-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: default;
 }

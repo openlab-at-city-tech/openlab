@@ -805,8 +805,8 @@ add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2 );
 function openlab_comment_email_boilerplate( $content ) {
 	return sprintf(
 		'Hello,' . "<br /><br />" .
-		'%s' .  "<br /><br />" .
-		'Please note: You are receiving this message because you are an administrator or author.',
+		'Please note: You are receiving this message because you are an administrator or author.' . "<br /><br />" .
+		'%s',
 		$content
 
 	);
@@ -1025,3 +1025,78 @@ add_filter(
 		return $name;
 	}
 );
+
+/**
+ * Update content of the notification email sent to new users.
+ */
+function openlab_wpmu_welcome_user_notification( $user_id, $password, $meta = array() ) {
+	$current_network = get_network();
+
+	$user = get_userdata( $user_id );
+
+	/** @phpstan-ignore-next-line */
+	$switched_locale = switch_to_user_locale( $user_id );
+
+	$welcome_email = sprintf(
+		'Dear %s,
+
+Your new account is set up.
+
+You can log in with the following information:
+Username: USERNAME
+Password: PASSWORD
+LOGINLINK
+
+Students: check out the online tutorial <a href="https://openlab.citytech.cuny.edu/openlabforstudents/" title="OpenLab for Students">The OpenLab for Students</a>. Learn how to get started, participate in your OpenLab courses, and more!
+
+Faculty: explore the online self-paced training module, <a href="https://openlab.citytech.cuny.edu/teachingwithopenlab/" title="Teaching with the OpenLab">Teaching with the OpenLab</a>.
+
+Everyone: you can also visit our <a href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/" title="Help section">Help section</a>, contact us, or come to our <a href="https://openlab.citytech.cuny.edu/openroad/office-hours/" title="Virtual office hours">virtual office hours</a> with any questions – we\'re always happy to provide support!
+
+Thanks!
+
+--The Team @ SITE_NAME',
+		bp_core_get_user_displayname( $user_id )
+	);
+
+	$welcome_email = apply_filters( 'update_welcome_user_email', $welcome_email, $user_id, $password, $meta );
+	$welcome_email = str_replace( 'SITE_NAME', $current_network->site_name, $welcome_email );
+	$welcome_email = str_replace( 'USERNAME', $user->user_login, $welcome_email );
+	$welcome_email = str_replace( 'PASSWORD', $password, $welcome_email );
+	$welcome_email = str_replace( 'LOGINLINK', wp_login_url(), $welcome_email );
+
+	$admin_email = get_site_option( 'admin_email' );
+
+	if ( '' === $admin_email ) {
+		$admin_email = 'support@' . wp_parse_url( network_home_url(), PHP_URL_HOST );
+	}
+
+	$from_name       = ( '' !== get_site_option( 'site_name' ) ) ? esc_html( get_site_option( 'site_name' ) ) : 'WordPress';
+	$message_headers = "From: \"{$from_name}\" <{$admin_email}>\n" . 'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . "\"\n";
+	$message         = $welcome_email;
+
+	if ( empty( $current_network->site_name ) ) {
+		$current_network->site_name = 'WordPress';
+	}
+
+	/* translators: New user notification email subject. 1: Network title, 2: New user login. */
+	$subject = __( 'New %1$s User: %2$s' );
+
+	/**
+	 * Filters the subject of the welcome email after user activation.
+	 *
+	 * @since MU (3.0.0)
+	 *
+	 * @param string $subject Subject of the email.
+	 */
+	$subject = apply_filters( 'update_welcome_user_subject', sprintf( $subject, $current_network->site_name, $user->user_login ) );
+
+	wp_mail( $user->user_email, wp_specialchars_decode( $subject ), $message, $message_headers );
+
+	if ( $switched_locale ) {
+		restore_previous_locale();
+	}
+
+	return false;
+}
+add_filter( 'wpmu_welcome_user_notification', 'openlab_wpmu_welcome_user_notification', 10, 3 );

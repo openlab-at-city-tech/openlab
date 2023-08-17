@@ -11,48 +11,54 @@
 		"ext-fileinfo": "*",
 		"ext-json": "*",
 		"ext-openssl": "*",
-		"automattic/jetpack-a8c-mc-stats": "^1.4.16",
-		"automattic/jetpack-abtest": "^1.10.10",
-		"automattic/jetpack-action-bar": "^0.1.6",
-		"automattic/jetpack-assets": "^1.17.27",
-		"automattic/jetpack-autoloader": "^2.11.12",
-		"automattic/jetpack-backup": "^1.10.4",
-		"automattic/jetpack-blocks": "^1.4.17",
-		"automattic/jetpack-compat": "^1.7.5",
-		"automattic/jetpack-composer-plugin": "^1.1.6",
-		"automattic/jetpack-config": "^1.11.1",
-		"automattic/jetpack-connection": "^1.46.4",
-		"automattic/jetpack-constants": "^1.6.19",
-		"automattic/jetpack-device-detection": "^1.4.21",
-		"automattic/jetpack-error": "^1.3.17",
-		"automattic/jetpack-google-fonts-provider": "^0.3.5",
-		"automattic/jetpack-identity-crisis": "^0.8.32",
-		"automattic/jetpack-jitm": "^2.2.34",
-		"automattic/jetpack-lazy-images": "^2.1.28",
-		"automattic/jetpack-licensing": "^1.7.12",
-		"automattic/jetpack-logo": "^1.5.19",
-		"automattic/jetpack-my-jetpack": "^2.5.0.1",
-		"automattic/jetpack-partner": "^1.7.20",
-		"automattic/jetpack-plugins-installer": "^0.2.1",
-		"automattic/jetpack-post-list": "^0.4.2",
-		"automattic/jetpack-publicize": "^0.18.1",
-		"automattic/jetpack-redirect": "^1.7.20",
-		"automattic/jetpack-roles": "^1.4.18",
-		"automattic/jetpack-search": "^0.31.0",
-		"automattic/jetpack-stats": "^0.3.3",
-		"automattic/jetpack-stats-admin": "^0.1.0",
-		"automattic/jetpack-status": "^1.15.1",
-		"automattic/jetpack-sync": "^1.43.2",
-		"automattic/jetpack-videopress": "^0.8.2",
-		"automattic/jetpack-waf": "^0.6.10",
-		"automattic/jetpack-wordads": "^0.2.25",
+		"automattic/jetpack-a8c-mc-stats": "^1.4.20",
+		"automattic/jetpack-abtest": "^1.10.13",
+		"automattic/jetpack-action-bar": "^0.1.20",
+		"automattic/jetpack-assets": "^1.18.5",
+		"automattic/jetpack-autoloader": "^2.11.21",
+		"automattic/jetpack-backup": "^1.16.1",
+		"automattic/jetpack-blaze": "^0.7.1",
+		"automattic/jetpack-blocks": "^1.4.22",
+		"automattic/jetpack-boost-speed-score": "^0.2.0",
+		"automattic/jetpack-compat": "^1.7.6",
+		"automattic/jetpack-composer-plugin": "^1.1.11",
+		"automattic/jetpack-config": "^1.15.3",
+		"automattic/jetpack-connection": "^1.53.1",
+		"automattic/jetpack-constants": "^1.6.22",
+		"automattic/jetpack-device-detection": "^1.4.26",
+		"automattic/jetpack-error": "^1.3.20",
+		"automattic/jetpack-forms": "^0.19.5",
+		"automattic/jetpack-google-fonts-provider": "^0.5.2",
+		"automattic/jetpack-identity-crisis": "^0.8.49",
+		"automattic/jetpack-image-cdn": "^0.2.3",
+		"automattic/jetpack-import": "^0.7.1",
+		"automattic/jetpack-ip": "^0.1.4",
+		"automattic/jetpack-jitm": "^2.3.10",
+		"automattic/jetpack-lazy-images": "^2.1.40",
+		"automattic/jetpack-licensing": "^1.8.2",
+		"automattic/jetpack-logo": "^1.6.1",
+		"automattic/jetpack-my-jetpack": "^3.0.0",
+		"automattic/jetpack-partner": "^1.7.23",
+		"automattic/jetpack-plugins-installer": "^0.2.4",
+		"automattic/jetpack-post-list": "^0.4.5",
+		"automattic/jetpack-publicize": "^0.30.2",
+		"automattic/jetpack-redirect": "^1.7.25",
+		"automattic/jetpack-roles": "^1.4.23",
+		"automattic/jetpack-search": "^0.37.3",
+		"automattic/jetpack-stats": "^0.6.3",
+		"automattic/jetpack-stats-admin": "^0.11.0",
+		"automattic/jetpack-status": "^1.17.2",
+		"automattic/jetpack-sync": "^1.50.1",
+		"automattic/jetpack-videopress": "^0.14.7",
+		"automattic/jetpack-waf": "^0.11.6",
+		"automattic/jetpack-wordads": "^0.2.44",
 		"nojimage/twitter-text-php": "3.1.2"
 	},
 	"require-dev": {
-		"antecedent/patchwork": "2.1.21",
-		"automattic/jetpack-changelogger": "^3.2.1",
+		"antecedent/patchwork": "2.1.25",
+		"automattic/jetpack-changelogger": "^3.3.5",
 		"johnkary/phpunit-speedtrap": "^4.0.0 || ^2.0.0 || ^1.1.0",
-		"yoast/phpunit-polyfills": "1.0.3"
+		"yoast/phpunit-polyfills": "1.0.4"
 	},
 	"scripts": {
 		"build-production": [
@@ -63,10 +69,6 @@
 		],
 		"phpunit": [
 			"tests/action-phpunit.sh"
-		],
-		"test-coverage": [
-			"@php tools/build-module-headings-translations.php",
-			"tests/action-test-coverage.sh"
 		],
 		"test-js": [
 			"pnpm concurrently 'pnpm:test-adminpage' 'pnpm:test-extensions'"
@@ -93,7 +95,7 @@
 		"platform": {
 			"ext-intl": "0.0.0"
 		},
-		"autoloader-suffix": "f11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_6",
+		"autoloader-suffix": "f11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ12_3",
 		"allow-plugins": {
 			"automattic/jetpack-autoloader": true,
 			"automattic/jetpack-composer-plugin": true
@@ -101,7 +103,11 @@
 	},
 	"extra": {
 		"mirror-repo": "Automattic/jetpack-production",
-		"release-branch-prefix": "jetpack",
+		"release-branch-prefix": [
+			"jetpack",
+			"weekly",
+			"monthly"
+		],
 		"version-constants": {
 			"JETPACK__VERSION": "jetpack.php"
 		},

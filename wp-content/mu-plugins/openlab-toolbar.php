@@ -4,11 +4,6 @@
  */
 
 /**
- * Ensure that the toolbar always shows
- */
-add_filter( 'show_admin_bar', '__return_true', 999999 );
-
-/**
  * Removing the default WP admin bar styles; a customized version of the default styles can now be found
  * in the mu-plugins folder
  * This is done for two reasons:
@@ -721,7 +716,21 @@ HTML;
 		$invites      = groups_get_invites_for_user();
 		$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
 
-		$total_count = openlab_admin_bar_counts( $request_count + $invite_count, ' sub-count' );
+		$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
+		if ( $user_groups ) {
+			$connection_invitations = \OpenLab\Connections\Invitation::get(
+				[
+					'invitee_group_id' => array_keys( $user_groups ),
+					'pending_only'     => true,
+				]
+			);
+
+			$connection_invitation_count = count( $connection_invitations );
+		} else {
+			$connection_invitation_count = 0;
+		}
+
+		$total_count = openlab_admin_bar_counts( $request_count + $invite_count + $connection_invitation_count, ' sub-count' );
 
 		$wp_admin_bar->add_menu(
 			array(
@@ -871,6 +880,79 @@ HTML;
 					),
 				)
 			);
+		}
+
+		/**
+		 * CONNECTIONS
+		 */
+		if ( defined( 'OPENLAB_CONNECTIONS_PLUGIN_URL' ) ) {
+			if ( $user_groups ) {
+				$title = 'Connections';
+
+				// "Connections" title
+				$wp_admin_bar->add_node(
+					array(
+						'parent' => 'invites',
+						'id'     => 'connections-title',
+						'title'  => $title,
+						'meta'   => array(
+							'class' => 'submenu-title bold',
+						),
+					)
+				);
+
+				if ( $connection_invitations ) {
+					foreach ( $connection_invitations as $connection_invitation ) {
+						$group_avatar = bp_core_fetch_avatar(
+							[
+								'item_id' => $connection_invitation->get_inviter_group_id(),
+								'object'  => 'group',
+								'type'    => 'full',
+								'html'    => false,
+							]
+						);
+
+						$inviter_group = groups_get_group( $connection_invitation->get_inviter_group_id() );
+						$invitee_group = groups_get_group( $connection_invitation->get_invitee_group_id() );
+
+						$invitation_id = $connection_invitation->get_invitation_id();
+
+						// Avatar.
+						$title = '<div class="ol-toolbar-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . esc_url( bp_get_group_permalink( $inviter_group ) ) . '"><img class="img-responsive" src ="' . esc_url( $group_avatar ) . '" alt="Profile picture of ' . stripslashes( $inviter_group->name ) . '"/></a></div></div>';
+
+						$title .= '<div class="col-sm-18"><p>';
+						$title .= sprintf(
+							'%s has sent %s an <a href="%s">invitation to connect</a>.',
+							'<strong>' . esc_html( $inviter_group->name ) . '</strong>',
+							'<strong>' . esc_html( $invitee_group->name ) . '</strong>',
+							esc_url( bp_get_group_permalink( $invitee_group ) . 'connections/invitations/' )
+						);
+						$title .= '</p></div>';
+
+						$wp_admin_bar->add_node(
+							array(
+								'parent' => 'invites',
+								'id'     => 'invitation-' . $invitation_id,
+								'title'  => $title,
+								'meta'   => array(
+									'class' => 'nav-content-item nav-invitation',
+								),
+							)
+						);
+					}
+				} else {
+					$wp_admin_bar->add_node(
+						array(
+							'parent' => 'invites',
+							'id'     => 'connection-invites-none',
+							'title'  => '<div class="ol-toolbar-row"><div class="col-sm-24"><p>' . 'No connection invitations.' . '</p></div></div>',
+							'meta'   => array(
+								'class' => 'nav-no-items nav-content-item',
+							),
+						)
+					);
+				}
+			}
 		}
 	}
 

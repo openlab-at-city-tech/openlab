@@ -1,4 +1,4 @@
-/*! elementor - v3.9.2 - 21-12-2022 */
+/*! elementor - v3.14.0 - 26-06-2023 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["frontend"],{
 
 /***/ "../assets/dev/js/frontend/documents-manager.js":
@@ -82,6 +82,8 @@ var _stretchedSection = _interopRequireDefault(__webpack_require__(/*! ./handler
 var _shapes = _interopRequireDefault(__webpack_require__(/*! ./handlers/section/shapes */ "../assets/dev/js/frontend/handlers/section/shapes.js"));
 // Section handlers.
 
+/* global elementorFrontendConfig */
+
 module.exports = function ($) {
   var _this = this;
   const handlersInstances = {};
@@ -97,6 +99,12 @@ module.exports = function ($) {
     'text-editor.default': () => __webpack_require__.e(/*! import() | text-editor */ "text-editor").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/text-editor */ "../assets/dev/js/frontend/handlers/text-editor.js")),
     'wp-widget-media_audio.default': () => __webpack_require__.e(/*! import() | wp-audio */ "wp-audio").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/wp-audio */ "../assets/dev/js/frontend/handlers/wp-audio.js"))
   };
+  if (elementorFrontendConfig.experimentalFeatures['nested-elements']) {
+    this.elementsHandlers['nested-tabs.default'] = () => Promise.resolve(/*! import() */).then(__webpack_require__.bind(__webpack_require__, /*! elementor/modules/nested-tabs/assets/js/frontend/handlers/nested-tabs */ "../modules/nested-tabs/assets/js/frontend/handlers/nested-tabs.js"));
+  }
+  if (elementorFrontendConfig.experimentalFeatures['nested-accordion']) {
+    this.elementsHandlers['nested-accordion.default'] = () => Promise.resolve(/*! import() */).then(__webpack_require__.bind(__webpack_require__, /*! elementor/modules/nested-accordion/assets/js/frontend/handlers/nested-accordion */ "../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion.js"));
+  }
   const addGlobalHandlers = () => elementorFrontend.hooks.addAction('frontend/element_ready/global', _global.default);
   const addElementsHandlers = () => {
     this.elementsHandlers.section = [_stretchedSection.default,
@@ -192,6 +200,11 @@ module.exports = function ($) {
       });
     });
   };
+
+  /**
+   * @param {string} handlerName
+   * @deprecated since 3.1.0, use `elementorFrontend.elementsHandler.getHandler` instead.
+   */
   this.getHandlers = function (handlerName) {
     elementorDevTools.deprecation.deprecated('getHandlers', '3.1.0', 'elementorFrontend.elementsHandler.getHandler');
     if (handlerName) {
@@ -253,6 +266,7 @@ var _assetsLoader = _interopRequireDefault(__webpack_require__(/*! ./utils/asset
 var _breakpoints = _interopRequireDefault(__webpack_require__(/*! elementor-utils/breakpoints */ "../assets/dev/js/utils/breakpoints.js"));
 var _events = _interopRequireDefault(__webpack_require__(/*! elementor-utils/events */ "../assets/dev/js/utils/events.js"));
 var _frontend = _interopRequireDefault(__webpack_require__(/*! elementor/modules/shapes/assets/js/frontend/frontend */ "../modules/shapes/assets/js/frontend/frontend.js"));
+var _controls = _interopRequireDefault(__webpack_require__(/*! ./utils/controls */ "../assets/dev/js/frontend/utils/controls.js"));
 var _utils = __webpack_require__(/*! elementor-frontend/utils/utils */ "../assets/dev/js/frontend/utils/utils.js");
 /* global elementorFrontendConfig */
 
@@ -264,6 +278,9 @@ class Frontend extends elementorModules.ViewModule {
     super(...arguments);
     this.config = elementorFrontendConfig;
     this.config.legacyMode = {
+      /**
+       * @deprecated since 3.1.0, use `elementorFrontend.config.experimentalFeatures.e_dom_optimization` instead.
+       */
       get elementWrappers() {
         if (elementorFrontend.isEditMode()) {
           window.top.elementorDevTools.deprecation.deprecated('elementorFrontend.config.legacyMode.elementWrappers', '3.1.0', 'elementorFrontend.config.experimentalFeatures.e_dom_optimization');
@@ -274,7 +291,9 @@ class Frontend extends elementorModules.ViewModule {
     this.populateActiveBreakpointsConfig();
   }
 
-  // TODO: BC since 2.5.0
+  /**
+   * @deprecated since 2.5.0, use `elementorModules.frontend.handlers.Base` instead.
+   */
   get Module() {
     if (this.isEditMode()) {
       parent.elementorDevTools.deprecation.deprecated('elementorFrontend.Module', '2.5.0', 'elementorModules.frontend.handlers.Base');
@@ -310,7 +329,7 @@ class Frontend extends elementorModules.ViewModule {
 
   /**
    * @param {string} elementName
-   * @deprecated 2.4.0 Use just `this.elements` instead
+   * @deprecated since 2.4.0, use `this.elements` instead.
    */
   getElements(elementName) {
     return this.getItems(this.elements, elementName);
@@ -318,15 +337,20 @@ class Frontend extends elementorModules.ViewModule {
 
   /**
    * @param {string} settingName
-   * @deprecated 2.4.0 This method was never in use
+   * @deprecated since 2.4.0, this method was never in use.
    */
   getPageSettings(settingName) {
     const settingsObject = this.isEditMode() ? elementor.settings.page.model.attributes : this.config.settings.page;
     return this.getItems(settingsObject, settingName);
   }
+
+  /**
+   * @param {string} settingName
+   * @deprecated since 3.0.0, use `getKitSettings()` instead and remove the `elementor_` prefix.
+   */
   getGeneralSettings(settingName) {
     if (this.isEditMode()) {
-      parent.elementorDevTools.deprecation.deprecated('getGeneralSettings', '3.0.0', 'getKitSettings and remove the `elementor_` prefix');
+      parent.elementorDevTools.deprecation.deprecated('getGeneralSettings()', '3.0.0', 'getKitSettings() and remove the `elementor_` prefix');
     }
     return this.getKitSettings(`elementor_${settingName}`);
   }
@@ -406,7 +430,8 @@ class Frontend extends elementorModules.ViewModule {
       environment: _environment.default,
       assetsLoader: new _assetsLoader.default(),
       escapeHTML: _utils.escapeHTML,
-      events: _events.default
+      events: _events.default,
+      controls: new _controls.default()
     };
 
     // TODO: BC since 2.4.0
@@ -580,7 +605,7 @@ class BackgroundSlideshow extends elementorModules.frontend.handlers.SwiperBase 
   getDefaultSettings() {
     return {
       classes: {
-        swiperContainer: 'elementor-background-slideshow swiper-container',
+        swiperContainer: `elementor-background-slideshow ${elementorFrontend.config.swiperClass}`,
         swiperWrapper: 'swiper-wrapper',
         swiperSlide: 'elementor-background-slideshow__slide swiper-slide',
         swiperPreloader: 'swiper-lazy-preloader',
@@ -907,7 +932,9 @@ class BackgroundVideo extends elementorModules.frontend.handlers.Base {
               $backgroundVideoContainer.removeClass('elementor-invisible elementor-loading');
               break;
             case YT.PlayerState.ENDED:
-              this.player.seekTo(elementSettings.background_video_start || 0);
+              if ('function' === typeof this.player.seekTo) {
+                this.player.seekTo(elementSettings.background_video_start || 0);
+              }
               if (elementSettings.background_play_once) {
                 this.player.destroy();
               }
@@ -964,7 +991,7 @@ class BackgroundVideo extends elementorModules.frontend.handlers.Base {
         });
       }
     }
-    elementorFrontend.elements.$window.on('resize', this.changeVideoSize);
+    elementorFrontend.elements.$window.on('resize elementor/bg-video/recalc', this.changeVideoSize);
   }
   deactivate() {
     if ('youtube' === this.videoType && this.player.getIframe() || 'vimeo' === this.videoType) {
@@ -1054,7 +1081,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-var _default = [() => __webpack_require__.e(/*! import() | container */ "container").then(__webpack_require__.bind(__webpack_require__, /*! ./handles-position */ "../assets/dev/js/frontend/handlers/container/handles-position.js")), () => __webpack_require__.e(/*! import() | container */ "container").then(__webpack_require__.bind(__webpack_require__, /*! ./shapes */ "../assets/dev/js/frontend/handlers/container/shapes.js"))];
+var _default = [() => __webpack_require__.e(/*! import() | container */ "container").then(__webpack_require__.bind(__webpack_require__, /*! ./handles-position */ "../assets/dev/js/frontend/handlers/container/handles-position.js")), () => __webpack_require__.e(/*! import() | container */ "container").then(__webpack_require__.bind(__webpack_require__, /*! ./shapes */ "../assets/dev/js/frontend/handlers/container/shapes.js")), () => __webpack_require__.e(/*! import() | container */ "container").then(__webpack_require__.bind(__webpack_require__, /*! ./grid-container */ "../assets/dev/js/frontend/handlers/container/grid-container.js"))];
 exports["default"] = _default;
 
 /***/ }),
@@ -1300,64 +1327,15 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-class StretchedSection extends elementorModules.frontend.handlers.Base {
-  bindEvents() {
-    const handlerID = this.getUniqueHandlerID();
-    elementorFrontend.addListenerOnce(handlerID, 'resize', this.stretch);
-    elementorFrontend.addListenerOnce(handlerID, 'sticky:stick', this.stretch, this.$element);
-    elementorFrontend.addListenerOnce(handlerID, 'sticky:unstick', this.stretch, this.$element);
-    if (elementorFrontend.isEditMode()) {
-      this.onKitChangeStretchContainerChange = this.onKitChangeStretchContainerChange.bind(this);
-      elementor.channels.editor.on('kit:change:stretchContainer', this.onKitChangeStretchContainerChange);
-    }
+class StretchedSection extends elementorModules.frontend.handlers.StretchedElement {
+  getStretchedClass() {
+    return 'elementor-section-stretched';
   }
-  unbindEvents() {
-    elementorFrontend.removeListeners(this.getUniqueHandlerID(), 'resize', this.stretch);
-    if (elementorFrontend.isEditMode()) {
-      elementor.channels.editor.off('kit:change:stretchContainer', this.onKitChangeStretchContainerChange);
-    }
+  getStretchSettingName() {
+    return 'stretch_section';
   }
-  isActive(settings) {
-    return elementorFrontend.isEditMode() || settings.$element.hasClass('elementor-section-stretched');
-  }
-  initStretch() {
-    this.stretch = this.stretch.bind(this);
-    this.stretchElement = new elementorModules.frontend.tools.StretchElement({
-      element: this.$element,
-      selectors: {
-        container: this.getStretchContainer()
-      }
-    });
-  }
-  getStretchContainer() {
-    return elementorFrontend.getKitSettings('stretched_section_container') || window;
-  }
-  stretch() {
-    if (!this.getElementSettings('stretch_section')) {
-      return;
-    }
-    this.stretchElement.stretch();
-  }
-  onInit() {
-    if (!this.isActive(this.getSettings())) {
-      return;
-    }
-    this.initStretch();
-    super.onInit(...arguments);
-    this.stretch();
-  }
-  onElementChange(propertyName) {
-    if ('stretch_section' === propertyName) {
-      if (this.getElementSettings('stretch_section')) {
-        this.stretch();
-      } else {
-        this.stretchElement.reset();
-      }
-    }
-  }
-  onKitChangeStretchContainerChange() {
-    this.stretchElement.setSettings('selectors.container', this.getStretchContainer());
-    this.stretch();
+  getStretchActiveValue() {
+    return 'section-stretched';
   }
 }
 exports["default"] = StretchedSection;
@@ -1489,6 +1467,7 @@ class AssetsLoader {
 }
 exports["default"] = AssetsLoader;
 const fileSuffix = elementorFrontendConfig.environmentMode.isScriptDebug ? '' : '.min';
+const swiperSource = elementorFrontendConfig.experimentalFeatures.e_swiper_latest ? `${elementorFrontendConfig.urls.assets}lib/swiper/v8/swiper${fileSuffix}.js?ver=8.4.5` : `${elementorFrontendConfig.urls.assets}lib/swiper/swiper${fileSuffix}.js?ver=5.3.6`;
 AssetsLoader.assets = {
   script: {
     dialog: {
@@ -1498,11 +1477,104 @@ AssetsLoader.assets = {
       src: `${elementorFrontendConfig.urls.assets}lib/share-link/share-link${fileSuffix}.js?ver=${elementorFrontendConfig.version}`
     },
     swiper: {
-      src: `${elementorFrontendConfig.urls.assets}lib/swiper/swiper${fileSuffix}.js?ver=5.3.6`
+      src: swiperSource
     }
   },
   style: {}
 };
+
+/***/ }),
+
+/***/ "../assets/dev/js/frontend/utils/controls.js":
+/*!***************************************************!*\
+  !*** ../assets/dev/js/frontend/utils/controls.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+class Controls {
+  /**
+   * Get Control Value
+   *
+   * Retrieves a control value.
+   * This function has been copied from `elementor/assets/dev/js/editor/utils/conditions.js`.
+   *
+   * @since 3.11.0
+   *
+   * @param {{}}     controlSettings A settings object (e.g. element settings - keys and values)
+   * @param {string} controlKey      The control key name
+   * @param {string} controlSubKey   A specific property of the control object.
+   * @return {*} Control Value
+   */
+  getControlValue(controlSettings, controlKey, controlSubKey) {
+    let value;
+    if ('object' === typeof controlSettings[controlKey] && controlSubKey) {
+      value = controlSettings[controlKey][controlSubKey];
+    } else {
+      value = controlSettings[controlKey];
+    }
+    return value;
+  }
+
+  /**
+   * Get the value of a responsive control.
+   *
+   * Retrieves the value of a responsive control for the current device or for this first parent device which has a control value.
+   *
+   * @since 3.11.0
+   *
+   * @param {{}}     controlSettings A settings object (e.g. element settings - keys and values)
+   * @param {string} controlKey      The control key name
+   * @param {string} controlSubKey   A specific property of the control object.
+   * @param {string} device          If we want to get a value for a specific device mode.
+   * @return {*} Control Value
+   */
+  getResponsiveControlValue(controlSettings, controlKey) {
+    let controlSubKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+    let device = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    const currentDeviceMode = device || elementorFrontend.getCurrentDeviceMode(),
+      controlValueDesktop = this.getControlValue(controlSettings, controlKey, controlSubKey);
+
+    // Set the control value for the current device mode.
+    // First check the widescreen device mode.
+    if ('widescreen' === currentDeviceMode) {
+      const controlValueWidescreen = this.getControlValue(controlSettings, `${controlKey}_widescreen`, controlSubKey);
+      return !!controlValueWidescreen || 0 === controlValueWidescreen ? controlValueWidescreen : controlValueDesktop;
+    }
+
+    // Loop through all responsive and desktop device modes.
+    const activeBreakpoints = elementorFrontend.breakpoints.getActiveBreakpointsList({
+      withDesktop: true
+    });
+    let parentDeviceMode = currentDeviceMode,
+      deviceIndex = activeBreakpoints.indexOf(currentDeviceMode),
+      controlValue = '';
+    while (deviceIndex <= activeBreakpoints.length) {
+      if ('desktop' === parentDeviceMode) {
+        controlValue = controlValueDesktop;
+        break;
+      }
+      const responsiveControlKey = `${controlKey}_${parentDeviceMode}`,
+        responsiveControlValue = this.getControlValue(controlSettings, responsiveControlKey, controlSubKey);
+      if (!!responsiveControlValue || 0 === responsiveControlValue) {
+        controlValue = responsiveControlValue;
+        break;
+      }
+
+      // If no control value has been set for the current device mode, then check the parent device mode.
+      deviceIndex++;
+      parentDeviceMode = activeBreakpoints[deviceIndex];
+    }
+    return controlValue;
+  }
+}
+exports["default"] = Controls;
 
 /***/ }),
 
@@ -1625,10 +1697,13 @@ class Swiper {
       // The config is passed as a param to allow adjustConfig to be called outside of this wrapper
       this.config = this.adjustConfig(config);
     }
+    if (container instanceof jQuery) {
+      container = container[0];
+    }
 
     // The Swiper will overlap the column width when applying custom margin values on the column.
-    jQuery(container).closest('.elementor-widget-wrap').addClass('e-swiper-container');
-    jQuery(container).closest('.elementor-widget').addClass('e-widget-swiper');
+    container.closest('.elementor-widget-wrap')?.classList.add('e-swiper-container');
+    container.closest('.elementor-widget')?.classList.add('e-widget-swiper');
     return new Promise(resolve => {
       if (!elementorFrontend.config.experimentalFeatures.e_optimized_assets_loading) {
         return resolve(this.createSwiperInstance(container, this.config));
@@ -1765,9 +1840,9 @@ class _default extends elementorModules.ViewModule {
     }
 
     // Only if an element with this action hash exists on the page do we allow running the action.
-    const elementWithHash = document.querySelector(`[e-action-hash="${location.hash}"], a[href*="${location.hash}"]`);
+    const elementWithHash = document.querySelector(`[data-e-action-hash="${location.hash}"], a[href*="${location.hash}"]`);
     if (elementWithHash) {
-      this.runAction(elementWithHash.getAttribute('e-action-hash'));
+      this.runAction(elementWithHash.getAttribute('data-e-action-hash'));
     }
   }
   createActionHash(action, settings) {
@@ -2370,8 +2445,8 @@ var EventManager = function () {
    * Performs an action if it exists. You can pass as many arguments as you want to this function; the only rule is
    * that the first argument must always be the action.
    */
-  function /* Action, arg1, arg2, ... */
-  doAction() {
+  function doAction( /* Action, arg1, arg2, ... */
+  ) {
     var args = slice.call(arguments);
     var action = args.shift();
     if ('string' === typeof action) {
@@ -2413,8 +2488,8 @@ var EventManager = function () {
    * Performs a filter if it exists. You should only ever pass 1 argument to be filtered. The only rule is that
    * the first argument must always be the filter.
    */
-  function /* Filter, filtered arg, arg2, ... */
-  applyFilters() {
+  function applyFilters( /* Filter, filtered arg, arg2, ... */
+  ) {
     var args = slice.call(arguments);
     var filter = args.shift();
     if ('string' === typeof filter) {
@@ -2492,7 +2567,9 @@ const matchUserAgent = UserAgentStr => {
   isBlink = matchUserAgent('Chrome') && !!window.CSS,
   // Apple Webkit engine
   isAppleWebkit = matchUserAgent('AppleWebKit') && !isBlink,
+  isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0,
   environment = {
+    isTouchDevice,
     appleWebkit: isAppleWebkit,
     blink: isBlink,
     chrome: isChrome,

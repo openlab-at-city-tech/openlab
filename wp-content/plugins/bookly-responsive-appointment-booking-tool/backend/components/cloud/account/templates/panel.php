@@ -1,7 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Utils\Common;
 use Bookly\Backend\Components\Cloud\Recharge;
-
 /**
  * @var Bookly\Lib\Cloud\API $cloud
  */

@@ -1,8 +1,8 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 4793:
-/***/ (function(module) {
+/***/ ((module) => {
 
 var characterMap = {
 	"À": "A",
@@ -455,81 +455,82 @@ module.exports.remove = removeAccents;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "addQueryArgs": function() { return /* reexport */ addQueryArgs; },
-  "buildQueryString": function() { return /* reexport */ buildQueryString; },
-  "cleanForSlug": function() { return /* reexport */ cleanForSlug; },
-  "filterURLForDisplay": function() { return /* reexport */ filterURLForDisplay; },
-  "getAuthority": function() { return /* reexport */ getAuthority; },
-  "getFilename": function() { return /* reexport */ getFilename; },
-  "getFragment": function() { return /* reexport */ getFragment; },
-  "getPath": function() { return /* reexport */ getPath; },
-  "getPathAndQueryString": function() { return /* reexport */ getPathAndQueryString; },
-  "getProtocol": function() { return /* reexport */ getProtocol; },
-  "getQueryArg": function() { return /* reexport */ getQueryArg; },
-  "getQueryArgs": function() { return /* reexport */ getQueryArgs; },
-  "getQueryString": function() { return /* reexport */ getQueryString; },
-  "hasQueryArg": function() { return /* reexport */ hasQueryArg; },
-  "isEmail": function() { return /* reexport */ isEmail; },
-  "isURL": function() { return /* reexport */ isURL; },
-  "isValidAuthority": function() { return /* reexport */ isValidAuthority; },
-  "isValidFragment": function() { return /* reexport */ isValidFragment; },
-  "isValidPath": function() { return /* reexport */ isValidPath; },
-  "isValidProtocol": function() { return /* reexport */ isValidProtocol; },
-  "isValidQueryString": function() { return /* reexport */ isValidQueryString; },
-  "normalizePath": function() { return /* reexport */ normalizePath; },
-  "prependHTTP": function() { return /* reexport */ prependHTTP; },
-  "removeQueryArgs": function() { return /* reexport */ removeQueryArgs; },
-  "safeDecodeURI": function() { return /* reexport */ safeDecodeURI; },
-  "safeDecodeURIComponent": function() { return /* reexport */ safeDecodeURIComponent; }
+  "addQueryArgs": () => (/* reexport */ addQueryArgs),
+  "buildQueryString": () => (/* reexport */ buildQueryString),
+  "cleanForSlug": () => (/* reexport */ cleanForSlug),
+  "filterURLForDisplay": () => (/* reexport */ filterURLForDisplay),
+  "getAuthority": () => (/* reexport */ getAuthority),
+  "getFilename": () => (/* reexport */ getFilename),
+  "getFragment": () => (/* reexport */ getFragment),
+  "getPath": () => (/* reexport */ getPath),
+  "getPathAndQueryString": () => (/* reexport */ getPathAndQueryString),
+  "getProtocol": () => (/* reexport */ getProtocol),
+  "getQueryArg": () => (/* reexport */ getQueryArg),
+  "getQueryArgs": () => (/* reexport */ getQueryArgs),
+  "getQueryString": () => (/* reexport */ getQueryString),
+  "hasQueryArg": () => (/* reexport */ hasQueryArg),
+  "isEmail": () => (/* reexport */ isEmail),
+  "isURL": () => (/* reexport */ isURL),
+  "isValidAuthority": () => (/* reexport */ isValidAuthority),
+  "isValidFragment": () => (/* reexport */ isValidFragment),
+  "isValidPath": () => (/* reexport */ isValidPath),
+  "isValidProtocol": () => (/* reexport */ isValidProtocol),
+  "isValidQueryString": () => (/* reexport */ isValidQueryString),
+  "normalizePath": () => (/* reexport */ normalizePath),
+  "prependHTTP": () => (/* reexport */ prependHTTP),
+  "prependHTTPS": () => (/* reexport */ prependHTTPS),
+  "removeQueryArgs": () => (/* reexport */ removeQueryArgs),
+  "safeDecodeURI": () => (/* reexport */ safeDecodeURI),
+  "safeDecodeURIComponent": () => (/* reexport */ safeDecodeURIComponent)
 });
 
 ;// CONCATENATED MODULE: ./packages/url/build-module/is-url.js
@@ -889,10 +890,28 @@ function isValidFragment(fragment) {
   return /^#[^\s#?\/]*$/.test(fragment);
 }
 
+;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri-component.js
+/**
+ * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
+ * `decodeURIComponent` throws an error.
+ *
+ * @param {string} uriComponent URI component to decode.
+ *
+ * @return {string} Decoded URI component if possible.
+ */
+function safeDecodeURIComponent(uriComponent) {
+  try {
+    return decodeURIComponent(uriComponent);
+  } catch (uriComponentError) {
+    return uriComponent;
+  }
+}
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/get-query-args.js
 /**
  * Internal dependencies
  */
+
 
 /** @typedef {import('./get-query-arg').QueryArgParsed} QueryArgParsed */
 
@@ -966,7 +985,7 @@ function getQueryArgs(url) {
   ).replace(/\+/g, '%20').split('&').reduce((accumulator, keyValue) => {
     const [key, value = ''] = keyValue.split('=') // Filtering avoids decoding as `undefined` for value, where
     // default is restored in destructuring assignment.
-    .filter(Boolean).map(decodeURIComponent);
+    .filter(Boolean).map(safeDecodeURIComponent);
 
     if (key) {
       const segments = key.replace(/\]/g, '').split('[');
@@ -1000,10 +1019,7 @@ function getQueryArgs(url) {
  * @return {string} URL with arguments applied.
  */
 
-function addQueryArgs() {
-  let url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  let args = arguments.length > 1 ? arguments[1] : undefined;
-
+function addQueryArgs(url = '', args) {
   // If no arguments are to be appended, return original URL.
   if (!args || !Object.keys(args).length) {
     return url;
@@ -1097,7 +1113,7 @@ function hasQueryArg(url, arg) {
  * @return {string} Updated URL.
  */
 
-function removeQueryArgs(url) {
+function removeQueryArgs(url, ...args) {
   const queryStringIndex = url.indexOf('?');
 
   if (queryStringIndex === -1) {
@@ -1106,11 +1122,6 @@ function removeQueryArgs(url) {
 
   const query = getQueryArgs(url);
   const baseURL = url.substr(0, queryStringIndex);
-
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
   args.forEach(arg => delete query[arg]);
   const queryString = buildQueryString(query);
   return queryString ? baseURL + '?' + queryString : baseURL;
@@ -1171,23 +1182,6 @@ function safeDecodeURI(uri) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri-component.js
-/**
- * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
- * `decodeURIComponent` throws an error.
- *
- * @param {string} uriComponent URI component to decode.
- *
- * @return {string} Decoded URI component if possible.
- */
-function safeDecodeURIComponent(uriComponent) {
-  try {
-    return decodeURIComponent(uriComponent);
-  } catch (uriComponentError) {
-    return uriComponent;
-  }
-}
-
 ;// CONCATENATED MODULE: ./packages/url/build-module/filter-url-for-display.js
 /**
  * Returns a URL for display.
@@ -1203,8 +1197,7 @@ function safeDecodeURIComponent(uriComponent) {
  *
  * @return {string} Displayed URL.
  */
-function filterURLForDisplay(url) {
-  let maxLength = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+function filterURLForDisplay(url, maxLength = null) {
   // Remove protocol and www prefixes.
   let filteredURL = url.replace(/^(?:https?:)\/\/(?:www\.)?/, ''); // Ends with / and only has that single slash, strip it.
 
@@ -1328,6 +1321,40 @@ function normalizePath(path) {
   .join('&');
 }
 
+;// CONCATENATED MODULE: ./packages/url/build-module/prepend-https.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Prepends "https://" to a url, if it looks like something that is meant to be a TLD.
+ *
+ * Note: this will not replace "http://" with "https://".
+ *
+ * @param {string} url The URL to test.
+ *
+ * @example
+ * ```js
+ * const actualURL = prependHTTPS( 'wordpress.org' ); // https://wordpress.org
+ * ```
+ *
+ * @return {string} The updated URL.
+ */
+
+function prependHTTPS(url) {
+  if (!url) {
+    return url;
+  } // If url starts with http://, return it as is.
+
+
+  if (url.startsWith('http://')) {
+    return url;
+  }
+
+  url = prependHTTP(url);
+  return url.replace(/^http:/, 'https:');
+}
+
 ;// CONCATENATED MODULE: ./packages/url/build-module/index.js
 
 
@@ -1356,7 +1383,9 @@ function normalizePath(path) {
 
 
 
-}();
+
+})();
+
 (window.wp = window.wp || {}).url = __webpack_exports__;
 /******/ })()
 ;

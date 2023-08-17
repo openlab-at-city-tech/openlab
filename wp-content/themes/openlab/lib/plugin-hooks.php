@@ -297,10 +297,29 @@ function openlab_bbp_force_site_public_to_1( $public, $site_id ) {
 add_filter( 'bbp_is_site_public', 'openlab_bbp_force_site_public_to_1', 10, 2 );
 
 /**
+ * Ensure that 'tinymce' flag is set for all bbPress interfaces.
+ *
+ * This gives us access to the Visual editor.
+ */
+add_filter(
+	'bbp_before_get_the_content_parse_args',
+	function( $args ) {
+		$args['tinymce'] = true;
+		return $args;
+	}
+);
+
+/**
  * Handle feature toggling for groups.
  */
-function openlab_group_feature_toggle( $group_id ) {
-	$group = groups_get_group( $group_id );
+function openlab_group_feature_toggle( $group ) {
+	$group_id = $group->id;
+
+	if ( ! isset( $_POST['openlab-collaboration-tools-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'openlab_collaboration_tools', 'openlab-collaboration-tools-nonce' );
 
 	// Announcements.
 	$enable_announcements = ! empty( $_POST['openlab-edit-group-announcements'] );
@@ -313,6 +332,9 @@ function openlab_group_feature_toggle( $group_id ) {
 	// Discussion.
 	$enable_forum        = ! empty( $_POST['openlab-edit-group-forum'] );
 	$group->enable_forum = $enable_forum;
+
+	// Prevent loops.
+	remove_action( 'groups_group_after_save', __FUNCTION__ );
 	$group->save();
 
 	if ( $enable_forum ) {
@@ -342,8 +364,16 @@ function openlab_group_feature_toggle( $group_id ) {
 	} else {
 		groups_update_groupmeta( $group_id, 'calendar_is_disabled', '1' );
 	}
+
+	// Connections.
+	$enable_connections = ! empty( $_POST['openlab-edit-group-connections'] );
+	if ( ! $enable_connections ) {
+		groups_delete_groupmeta( $group_id, 'openlab_connections_enabled' );
+	} else {
+		groups_update_groupmeta( $group_id, 'openlab_connections_enabled', '1' );
+	}
 }
-add_action( 'groups_settings_updated', 'openlab_group_feature_toggle' );
+add_action( 'groups_group_after_save', 'openlab_group_feature_toggle' );
 
 /**
  * Failsafe method for determining whether forums should be enabled for a group.

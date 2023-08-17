@@ -94,22 +94,21 @@
                       :key="slide.id"
                       class="relative -ml-3 z-30 inline-block h-12 w-12 text-white border border-gray-light shadow-solid rounded-full">
                     <div
-                        v-if="slidesList[slide.id].meta && 'post_feed' === slidesList[slide.id].meta['ml-slider_type']"
+                        v-if="'post_feed' === slide.meta['ml-slider_type']"
                         class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
                         :original-title="__('Post Feed slide', 'ml-slider')"
                         :title="__('Post Feed slide', 'ml-slider')">
                       P
                     </div>
                     <div
-                        v-else-if="slidesList[slide.id].meta && 'external' === slidesList[slide.id].meta['ml-slider_type']"
+                        v-else-if="'external' === slide.meta['ml-slider_type']"
                         class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
                         :original-title="__('External slide', 'ml-slider')"
                         :title="__('External slide', 'ml-slider')">
                       E
                     </div>
                     <img
-                        v-if="slidesList[slide.id]"
-                        :src="slidesList[slide.id].thumbnail"
+                        v-else :src="slide.thumbnail"
                         class="gradient border border-white rounded-full h-full inline-block"
                         alt="">
                   </div>
@@ -149,7 +148,6 @@ export default {
   computed: {
     ...mapState({
       slideshows: state => state.slideshows.all,
-      slidesList: state => state.slideshows.slides,
       totalSlideshows: state => state.slideshows.totalSlideshows
     }),
     loading() {
@@ -184,7 +182,6 @@ export default {
   data() {
     return {
       slideshowsList: {},
-      slides: {},
       processing: false,
       exporting: false,
     }

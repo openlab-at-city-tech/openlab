@@ -4,14 +4,14 @@ jQuery(window).on("load", function () {
     if (jQuery('#b2sUserLang').val() == 'de') {
         showMeridian = false;
     }
-    
+
     jQuery(".b2s-import-auto-post-type").chosen();
     jQuery(".b2s-import-auto-post-categories").chosen();
     jQuery(".b2s-import-auto-post-taxonomies").chosen();
     jQuery(".b2s-auto-post-assign-user").chosen();
 
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {
-        jQuery('.b2s-network-auth-count-current[data-network-id="' + jQuery(this).attr("data-network-id") + '"').text(jQuery(this).children('li').length);
+        jQuery('.b2s-network-auth-count-current[data-network-id="' + jQuery(this).attr("data-network-id") + '"]').text(jQuery(this).children('li').length);
     });
 
     var length = jQuery('.b2s-post-type-item-update').filter(':checked').length;
@@ -21,8 +21,8 @@ jQuery(window).on("load", function () {
 
     //TOS Twitter 032018 - none multiple Accounts - User select once
     checkNetworkTos(2);
-    
-    
+
+
     //Twitter Dropdown anpassen
     var mandantId = jQuery('#b2s-auto-post-profil-dropdown').val();
     jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').hide();
@@ -48,6 +48,10 @@ jQuery(window).on("load", function () {
         jQuery('.b2s-auto-post-twitter-profile').hide();
         jQuery('#b2s-auto-post-profil-dropdown-twitter').prop('disabled', 'disabled');
         jQuery('#b2s-auto-post-profil-dropdown-twitter').hide();
+    }
+
+    if (jQuery("#b2s_user_version").val() == 0) {
+        jQuery('#b2s-user-network-settings-auto-post-own :input').prop('disabled', 'disabled');
     }
 
 });
@@ -113,7 +117,7 @@ jQuery('#b2s-user-network-settings-auto-post-own').validate({
                 if (data.result == true) {
                     jQuery('.b2s-settings-user-success').show();
                 } else {
-                    if(data.error == 'nonce') {
+                    if (data.error == 'nonce') {
                         jQuery('.b2s-nonce-check-fail').show();
                     }
                     jQuery('.b2s-settings-user-error').show();
@@ -161,23 +165,23 @@ jQuery(document).on('click', '.b2sAutoPostBestTimesInfoModalBtn', function () {
     jQuery('#b2sAutoPostBestTimesInfoModal').modal('show');
 });
 
-jQuery(document).on('change', '.b2s-auto-post-area-toggle', function() {
-    if(jQuery(this).is(':checked')) {
-        jQuery('.b2s-auto-post-area[data-area-type="'+jQuery(this).data('area-type')+'"]').show();
-        if(jQuery(this).data('area-type') == 'manuell') {
-            if(jQuery('.b2s-autopost-m-show-modal').val() == '1') {
+jQuery(document).on('change', '.b2s-auto-post-area-toggle', function () {
+    if (jQuery(this).is(':checked')) {
+        jQuery('.b2s-auto-post-area[data-area-type="' + jQuery(this).data('area-type') + '"]').show();
+        if (jQuery(this).data('area-type') == 'manuell') {
+            if (jQuery('.b2s-autopost-m-show-modal').val() == '1') {
                 jQuery('#b2sAutoPostMInfoModal').modal('show');
                 jQuery('.b2s-autopost-m-show-modal').val('0');
             }
         }
-        if(jQuery(this).data('area-type') == 'import') {
-            if(jQuery('.b2s-autopost-a-show-modal').val() == '1') {
+        if (jQuery(this).data('area-type') == 'import') {
+            if (jQuery('.b2s-autopost-a-show-modal').val() == '1') {
                 jQuery('#b2sAutoPostAInfoModal').modal('show');
                 jQuery('.b2s-autopost-a-show-modal').val('0');
             }
         }
     } else {
-        jQuery('.b2s-auto-post-area[data-area-type="'+jQuery(this).data('area-type')+'"]').hide();
+        jQuery('.b2s-auto-post-area[data-area-type="' + jQuery(this).data('area-type') + '"]').hide();
     }
 });
 
@@ -209,53 +213,53 @@ jQuery(document).on('change', '#b2s-auto-post-profil-dropdown', function () {
     }
 });
 
-jQuery(document).on('click', '#b2s-auto-post-settings-btn', function() {
+jQuery(document).on('click', '#b2s-auto-post-settings-btn', function () {
     var submit = true;
-    if(jQuery('.b2s-auto-post-area-toggle[data-area-type="manuell"]').is(':checked')) {
+    if (jQuery('.b2s-auto-post-area-toggle[data-area-type="manuell"]').is(':checked')) {
         var publish = jQuery('.b2s-post-type-item-publish').is(':checked');
         var update = jQuery('.b2s-post-type-item-update').is(':checked');
-        if(publish == false && update == false) {
+        if (publish == false && update == false) {
             submit = false;
             jQuery('.b2s-auto-post-error[data-error-reason="no-post-type"]').show();
             jQuery('.b2s-post-type-item-publish').css('border-color', 'red');
             jQuery('.b2s-post-type-item-update').css('border-color', 'red');
         }
-        if(jQuery('#b2s-auto-post-profil-data-'+jQuery('#b2s-auto-post-profil-dropdown').val()).val() == "") {
+        if (jQuery('#b2s-auto-post-profil-data-' + jQuery('#b2s-auto-post-profil-dropdown').val()).val() == "") {
             submit = false;
             jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').show();
         }
     }
-    
-    if(jQuery('.b2s-auto-post-area-toggle[data-area-type="import"]').is(':checked')) {
-        if(jQuery('.b2s-network-tos-check').is(':checked') == false) {
+
+    if (jQuery('.b2s-auto-post-area-toggle[data-area-type="import"]').is(':checked')) {
+        if (jQuery('.b2s-network-tos-check').is(':checked') == false) {
             submit = false;
             jQuery('.b2s-auto-post-error[data-error-reason="import-no-auth"]').show();
             jQuery('.b2s-network-tos-check').css('border-color', 'red');
         }
     }
-    
-    if(submit) {
+
+    if (submit) {
         jQuery('#b2s-user-network-settings-auto-post-own').submit();
     }
 });
 
-jQuery(document).on('change', '.b2s-post-type-item-publish', function() {
+jQuery(document).on('change', '.b2s-post-type-item-publish', function () {
     jQuery('.b2s-auto-post-error[data-error-reason="no-post-type"]').hide();
     jQuery('.b2s-post-type-item-publish').css('border-color', '');
     jQuery('.b2s-post-type-item-update').css('border-color', '');
 });
-jQuery(document).on('change', '.b2s-post-type-item-update', function() {
+jQuery(document).on('change', '.b2s-post-type-item-update', function () {
     jQuery('.b2s-auto-post-error[data-error-reason="no-post-type"]').hide();
     jQuery('.b2s-post-type-item-publish').css('border-color', '');
     jQuery('.b2s-post-type-item-update').css('border-color', '');
 });
 
-jQuery(document).on('change', '.b2s-network-tos-check', function() {
+jQuery(document).on('change', '.b2s-network-tos-check', function () {
     jQuery('.b2s-auto-post-error[data-error-reason="import-no-auth"]').hide();
     jQuery('.b2s-network-tos-check').css('border-color', '');
 });
 
-jQuery(document).on('click', '#b2s-auto-post-assign-by-disconnect', function() {
+jQuery(document).on('click', '#b2s-auto-post-assign-by-disconnect', function () {
     jQuery(".b2s-loading-area").show();
     jQuery(".b2s-autopost-area").hide();
     jQuery.ajax({
@@ -277,7 +281,7 @@ jQuery(document).on('click', '#b2s-auto-post-assign-by-disconnect', function() {
             if (data.result == true) {
                 location.reload();
             } else {
-                if(data.error == 'nonce') {
+                if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }
                 jQuery('.b2s-settings-user-error').show();

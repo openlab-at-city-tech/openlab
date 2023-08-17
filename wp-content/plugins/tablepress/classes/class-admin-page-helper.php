@@ -126,36 +126,55 @@ class TablePress_Admin_Page {
 		if ( empty( $pointer_id ) || empty( $selector ) || empty( $args['content'] ) ) {
 			return;
 		}
+
+		/*
+		 * Print JS code for the feature pointers, extened with event handling for opened/closed "Screen Options", so that pointers can
+		 * be repositioned. 210 ms is slightly slower than jQuery's "fast" value, to allow all elements to reach their original position.
+		 */
 		?>
-		<script>
-		( function( $ ) {
-			let options = <?php echo wp_json_encode( $args, TABLEPRESS_JSON_OPTIONS ); ?>;
+<script>
+( function( $ ) {
+	let options = <?php echo wp_json_encode( $args, TABLEPRESS_JSON_OPTIONS ); ?>;
 
-			if ( ! options ) {
-				return;
-			}
+	if ( ! options ) {
+		return;
+	}
 
-			options = $.extend( options, {
-				close: function() {
-					$.post( ajaxurl, {
-						pointer: '<?php echo $pointer_id; ?>',
-						action: 'dismiss-wp-pointer'
-					} );
-				}
+	options = $.extend( options, {
+		close: function() {
+			$.post( ajaxurl, {
+				pointer: '<?php echo $pointer_id; ?>',
+				action: 'dismiss-wp-pointer'
 			} );
+			$( this ).pointer( { 'disabled': true } );
+		}
+	} );
 
-			const setup = function() {
-				$( '<?php echo $selector; ?>' ).pointer( options ).pointer( 'open' );
-			};
+	$( function () {
+		$( '<?php echo $selector; ?>' ).pointer( options ).pointer( 'open' );
+	} );
 
-			if ( options.position && options.position.defer_loading ) {
-				$( window ).on( 'load.wp-pointers', setup );
-			} else {
-				$( setup );
-			}
-		} )( jQuery );
-		</script>
+	$( document ).on( 'screen:options:open screen:options:close', function () {
+		setTimeout( function () { $( '<?php echo $selector; ?>' ).pointer( 'reposition' ); }, 210 );
+	} );
+} )( jQuery );
+</script>
 		<?php
+	}
+
+	/**
+	 * Returns a safe JSON representation of a variable for printing inside of JavaScript code.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param mixed $data Variable to convert to JSON.
+	 * @return string Safe JSON representation of a variable for printing inside of JavaScript code.
+	 */
+	public function convert_to_json_parse_output( $data ) {
+		$json = wp_json_encode( $data, TABLEPRESS_JSON_OPTIONS );
+		// Print them inside a `JSON.parse()` call in JS for speed gains, with necessary escaping of `</script>`, `'`, and `\`.
+		$json = str_replace( array( '</script>', '\\', "'" ), array( '<\/script>', '\\\\', "\'" ), $json );
+		return "JSON.parse( '{$json}' )";
 	}
 
 } // class TablePress_Admin_Page

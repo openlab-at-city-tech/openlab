@@ -4,7 +4,7 @@
  *
  * @package     WP to Twitter
  * @author      Joe Dolson
- * @copyright   2008-2022 Joe Dolson
+ * @copyright   2008-2023 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     3.6.2
+ * Version:     3.7.0
  */
 
 /*
-	Copyright 2008-2022  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2008-2023  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ require_once( plugin_dir_path( __FILE__ ) . 'wpt-widget.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php' );
 
 global $wpt_version;
-$wpt_version = '3.6.2';
+$wpt_version = '3.7.0';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**
@@ -532,18 +532,6 @@ function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false 
 				}
 				$_POST['_jd_wp_twitter'] = $jwt;
 				update_post_meta( $id, '_jd_wp_twitter', $jwt );
-				if ( ! function_exists( 'wpt_pro_exists' ) ) {
-					// schedule a one-time promotional box for 4 weeks after first successful Tweet.
-					if ( false === get_option( 'wpt_promotion_scheduled', false ) ) {
-						wp_schedule_single_event( time() + ( 60 * 60 * 24 * 7 * 4 ), 'wpt_schedule_promotion_action' );
-						update_option( 'wpt_promotion_scheduled', 1 );
-					}
-					if ( '3' === get_option( 'wpt_promotion_scheduled', '' ) ) {
-						// Schedule an additional promotion for 12 weeks after a successful Tweet following dismissal.
-						wp_schedule_single_event( time() + ( 60 * 60 * 24 * 7 * 12 ), 'wpt_schedule_promotion_action' );
-						update_option( 'wpt_promotion_scheduled', 1 );
-					}
-				}
 			}
 			if ( ! $return ) {
 				/**
@@ -1104,7 +1092,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
  */
 function wpt_twit_link( $link_id ) {
 	wpt_check_version();
-	$thislinkprivate = $_POST['link_visible'];
+	$thislinkprivate = sanitize_text_field( $_POST['link_visible'] );
 	if ( 'N' !== $thislinkprivate ) {
 		$thislinkname        = stripslashes( sanitize_text_field( $_POST['link_name'] ) );
 		$thispostlink        = sanitize_text_field( $_POST['link_url'] );
@@ -1365,7 +1353,7 @@ function wpt_add_twitter_inner_box( $post ) {
 			?>
 			<p class='jtw'>
 				<label for="wpt_custom_tweet"><?php _e( 'Custom Twitter Post', 'wp-to-twitter' ); ?></label><br/>
-				<textarea class="wpt_tweet_box" name="_jd_twitter" id="wpt_custom_tweet" rows="2" cols="60"><?php echo esc_attr( $tweet ); ?></textarea>
+				<textarea class="wpt_tweet_box widefat" name="_jd_twitter" id="wpt_custom_tweet" rows="2" cols="60"><?php echo esc_attr( $tweet ); ?></textarea>
 				<?php echo apply_filters( 'wpt_custom_box', '', $tweet, $post_id ); ?>
 			</p>
 			<p class='wpt-template'>
@@ -1432,11 +1420,6 @@ function wpt_add_twitter_inner_box( $post ) {
 						}
 					}
 				}
-			} else {
-				if ( ! function_exists( 'wpt_pro_exists' ) ) {
-					// Translators: premium sales link.
-					echo '<p>' . sprintf( __( 'Upgrade to WP Tweets PRO to configure options and select multiple accounts! <a href="%s">Upgrade now!</a>', 'wp-to-twitter' ), 'http://www.wptweetspro.com/wp-tweets-pro/' ) . '</p>';
-				}
 			}
 			// WPT PRO.
 			if ( ! current_user_can( 'wpt_twitter_custom' ) && ! current_user_can( 'manage_options' ) ) {
@@ -1462,11 +1445,7 @@ function wpt_add_twitter_inner_box( $post ) {
 		<?php wpt_show_tweets( $post_id ); ?>
 		<p class="wpt-support">
 		<?php
-		if ( ! function_exists( 'wpt_pro_exists' ) ) {
-			?>
-			<strong><a href="http://www.wptweetspro.com/wp-tweets-pro"><?php _e( 'Go Premium', 'wp-to-twitter' ); ?></a></strong> &raquo;
-			<?php
-		} else {
+		if ( function_exists( 'wpt_pro_exists' ) ) {
 			?>
 			<a href="<?php echo esc_url( add_query_arg( 'tab', 'support', admin_url( 'admin.php?page=wp-tweets-pro' ) ) ); ?>#get-support"><?php _e( 'Get Support', 'wp-to-twitter' ); ?></a> &raquo;
 			<?php
@@ -1808,9 +1787,6 @@ function wpt_plugin_action( $links, $file ) {
 	if ( plugin_basename( dirname( __FILE__ ) . '/wp-to-twitter.php' ) === $file ) {
 		$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
 		$links[]   = "<a href='$admin_url'>" . __( 'WP to Twitter Settings', 'wp-to-twitter' ) . '</a>';
-		if ( ! function_exists( 'wpt_pro_exists' ) ) {
-			$links[] = "<a href='http://www.wptweetspro.com/wp-tweets-pro'>" . __( 'Go Premium', 'wp-to-twitter' ) . '</a>';
-		}
 	}
 
 	return $links;
@@ -2023,27 +1999,6 @@ function wpt_twit_xmlrpc( $id ) {
 	return $id;
 }
 
-add_action( 'wpt_schedule_promotion_action', 'wpt_schedule_promotion' );
-/**
- * Set an option indicating that a job has been scheduled for promoting WP Tweets PRO.
- */
-function wpt_schedule_promotion() {
-	if ( ! function_exists( 'wpt_pro_exists' ) && '1' === get_option( 'wpt_promotion_scheduled' ) ) {
-		update_option( 'wpt_promotion_scheduled', 2 );
-	}
-}
-
-/**
- * Dismiss promotion notice.
- */
-function wpt_dismiss_promotion() {
-	if ( isset( $_GET['dismiss'] ) && 'promotion' === $_GET['dismiss'] ) {
-		update_option( 'wpt_promotion_scheduled', 3 );
-	}
-}
-
-add_action( 'admin_notices', 'wpt_dismiss_promotion', 5 );
-add_action( 'admin_notices', 'wpt_promotion_notice', 10 );
 add_action( 'admin_notices', 'wpt_debugging_enabled', 10 );
 /**
  * Show notice is Twitter debugging is enabled.
@@ -2051,18 +2006,6 @@ add_action( 'admin_notices', 'wpt_debugging_enabled', 10 );
 function wpt_debugging_enabled() {
 	if ( current_user_can( 'manage_options' ) && WPT_DEBUG ) {
 		echo "<div class='notice error important'><p>" . __( '<strong>WP to Twitter</strong> debugging is enabled. Remember to disable debugging when you are finished.', 'wp-to-twitter' ) . '</p></div>';
-	}
-}
-
-/**
- * Display promotion notice to admin users who have not donated or purchased WP Tweets PRO.
- */
-function wpt_promotion_notice() {
-	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'wpt_promotion_scheduled' ) ) {
-		$upgrade = 'http://www.wptweetspro.com/wp-tweets-pro/';
-		$dismiss = admin_url( 'admin.php?page=wp-tweets-pro&dismiss=promotion' );
-		// Translators: URL to upgrade.
-		echo "<div class='notice'><p>" . sprintf( __( 'I hope you\'ve enjoyed <strong>WP to Twitter</strong>! Take a look at <a href=\'%1$s\'>upgrading to WP Tweets PRO</a> for advanced Tweeting with WordPress! <a href=\'%2$s\'>Dismiss</a>', 'wp-to-twitter' ), $upgrade, $dismiss ) . '</p></div>';
 	}
 }
 

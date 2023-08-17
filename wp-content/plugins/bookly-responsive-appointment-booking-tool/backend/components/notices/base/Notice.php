@@ -64,7 +64,7 @@ class Notice extends Lib\Base\Component
     }
 
     /**
-     * Set notece message.
+     * Set notice message.
      *
      * @param string $message
      * @return $this

@@ -430,14 +430,7 @@ function openlab_group_blog_activity( $activity ) {
 	groups_update_groupmeta( $group_id, 'last_activity', bp_core_current_time() );
 
 	// prevent infinite loops, but let this function run on later activities ( for unit tests )
-	// @see https://buddypress.trac.wordpress.org/ticket/3980
 	remove_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-	add_action(
-		'bp_activity_after_save',
-		function() {
-			add_action( 'bp_activity_before_save', 'openlab_group_blog_activity' );
-		}
-	);
 
 	return $activity;
 }
@@ -623,13 +616,23 @@ function wds_bp_group_meta() {
 							$group_site_name    = get_blog_option( $maybe_site_id, 'blogname' );
 							$group_site_text    = '<strong>' . $group_site_name . '</strong>';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
+							$show_admin_bar     = cboxol_show_admin_bar_for_anonymous_users( $maybe_site_id );
 						} else {
 							$group_site_text    = '';
 							$group_site_url_out = '<a class="bold" href="' . $group_site_url . '">' . $group_site_url . '</a>';
+							$show_admin_bar     = false;
 						}
 						?>
 						<p>This <?php echo esc_html( openlab_get_group_type_label() ); ?> is currently associated with the site <?php echo $group_site_text; // WPCS: XSS ok ?></p>
 						<ul id="change-group-site"><li><?php echo $group_site_url_out; ?> <a class="button underline confirm" href="<?php echo esc_attr( wp_nonce_url( bp_get_group_permalink( groups_get_current_group() ) . 'admin/edit-details/unlink-site/', 'unlink-site' ) ); ?>" id="change-group-site-toggle">Unlink</a></li></ul>
+
+						<?php if ( ! openlab_get_external_site_url_by_group_id( $the_group_id ) ) : ?>
+							<div class="show-admin-bar-on-site-setting">
+								<p><input type="checkbox" name="show-admin-bar-on-site" id="show-admin-bar-on-site" <?php checked( $show_admin_bar ); ?>> <label for="show-admin-bar-on-site"><?php esc_html_e( 'Show WordPress admin bar to non-logged-in visitors to my site?', 'commons-in-a-box' ); ?></label></p>
+								<p class="group-setting-note italics note"><?php esc_html_e( 'The admin bar appears at the top of your site. Logged-in visitors will always see it but you can hide it for site visitors who are not logged in.', 'commons-in-a-box' ); ?></p>
+								<?php wp_nonce_field( 'openlab_site_admin_bar_settings', 'openlab-site-admin-bar-settings-nonce', false ); ?>
+							</div>
+						<?php endif; ?>
 
 					</div>
 
@@ -670,6 +673,7 @@ function wds_bp_group_meta() {
 								</div>
 							</div>
 						<?php else : ?>
+							<input type="hidden" id="site-is-required-for-group-type" value="1" />
 							<?php $show_website = 'auto'; ?>
 						<?php endif ?>
 
@@ -722,7 +726,25 @@ function wds_bp_group_meta() {
 												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 											</div>
 											<div class="col-sm-13">
-												<input class="form-control domain-validate" size="40" id="clone-destination-path" name="clone-destination-path" type="text" title="Path" value="" />
+												<input
+													class="form-control domain-validate"
+													size="40"
+													id="clone-destination-path"
+													name="clone-destination-path"
+													type="text"
+													title="Path"
+													value=""
+													data-parsley-validate-if-empty="true"
+													data-parsley-remote
+													data-parsley-remote-validator="newSiteValidate"
+													data-parsley-alphanumeric-and-dashes
+													data-parsley-debounce="1000"
+													data-parsley-errors-container="#field_clone_site_error"
+													data-parsley-validation-threshold="3"
+													data-parsley-trigger="blur"
+													data-parsley-error-message="You must provide a URL."
+												/>
+												<div id="field_clone_site_error" class="error-container"></div>
 											</div>
 											<input name="blog-id-to-clone" value="" type="hidden" />
 										</div>
@@ -746,11 +768,31 @@ function wds_bp_group_meta() {
 											<?php
 											$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 											echo esc_html( $current_site->domain . $current_site->path );
+
+											$default_path_message = $suggested_path ? 'Sorry, that URL is already taken.' : 'You must provide a URL.';
 											?>
 										</div>
 
 										<div class="col-sm-13">
-											<input id="new-site-domain" class="form-control domain-validate" size="40" name="blog[domain]" type="text" title="Domain" value="<?php echo esc_html( $suggested_path ); ?>" />
+											<input
+												id="new-site-domain"
+												class="form-control domain-validate"
+												size="40"
+												name="blog[domain]"
+												type="text"
+												title="Domain"
+												value="<?php echo esc_html( $suggested_path ); ?>"
+												data-parsley-validate-if-empty="true"
+												data-parsley-remote
+												data-parsley-alphanumeric-and-dashes
+												data-parsley-remote-validator="newSiteValidate"
+												data-parsley-debounce="1000"
+												data-parsley-errors-container="#field_new_site_error"
+												data-parsley-validation-threshold="3"
+												data-parsley-trigger="blur"
+												data-parsley-error-message="<?php echo esc_attr( $default_path_message ); ?>"
+											/>
+											<div id="field_new_site_error" class="error-container"></div>
 										</div>
 									</div>
 
@@ -821,6 +863,8 @@ function wds_bp_group_meta() {
 		</div>
 	</div>
 	<?php
+
+	do_action( 'openlab_after_group_site_markup' );
 }
 
 add_action( 'bp_after_group_details_creation_step', 'wds_bp_group_meta' );
@@ -837,7 +881,7 @@ function openlab_group_member_role_settings( $group_type ) {
 
 	if ( bp_is_group_create() && groups_get_groupmeta( bp_get_new_group_id(), 'clone_source_group_id' ) ) {
 		$clone_steps = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
-		$show_panel  = in_array( 'site', $clone_steps, true );
+		$show_panel  = is_array( $clone_steps ) && in_array( 'site', $clone_steps, true );
 	} else {
 		$site_id    = openlab_get_site_id_by_group_id();
 		$show_panel = ! empty( $site_id );
@@ -1057,13 +1101,20 @@ add_action( 'bp_actions', 'openlab_validate_groupblog_selection', 1 );
 function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
-	$path = isset( $_POST['path'] ) ? $_POST['path'] : '';
-	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
-		$retval = 'exists';
-	} else {
-		$retval = '';
+	$path = '';
+	if ( ! empty( $_GET['blog']['domain'] ) ) {
+		$path = sanitize_text_field( wp_unslash( $_GET['blog']['domain'] ) );
+	} elseif ( ! empty( $_GET['clone-destination-path'] ) ) {
+		$path = sanitize_text_field( wp_unslash( $_GET['clone-destination-path'] ) );
 	}
-	die( $retval );
+
+	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
+		wp_send_json_error( 'Sorry, that URL is already taken.' );
+	} else {
+		wp_send_json_success();
+	}
+
+	die;
 }
 
 add_action( 'wp_ajax_openlab_validate_groupblog_url_handler', 'openlab_validate_groupblog_url_handler' );
@@ -1711,7 +1762,7 @@ add_filter( 'olpc_display_notices', '__return_false' );
  */
 function openlab_olgc_is_instructor() {
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	return groups_is_user_admin( get_current_user_id(), $group_id );
+	return (bool) groups_is_user_admin( get_current_user_id(), $group_id );
 }
 add_filter( 'olgc_is_instructor', 'openlab_olgc_is_instructor' );
 
@@ -1998,6 +2049,33 @@ function openlab_catch_cloned_course_notice_dismissals() {
 	update_option( 'openlab-clone-notice-dismissed', 1 );
 }
 add_action( 'admin_init', 'openlab_catch_cloned_course_notice_dismissals' );
+
+/**
+ * Catches and processes admin-bar settings.
+ */
+function openlab_save_group_site_admin_bar_settings() {
+	if ( ! isset( $_POST['openlab-site-admin-bar-settings-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'openlab_site_admin_bar_settings', 'openlab-site-admin-bar-settings-nonce' );
+
+	$group = groups_get_current_group();
+
+	$site_id = openlab_get_site_id_by_group_id( $group->id );
+	if ( ! $site_id ) {
+		return;
+	}
+
+	$show_admin_bar = ! empty( $_POST['show-admin-bar-on-site'] );
+
+	if ( $show_admin_bar ) {
+		delete_blog_option( $site_id, 'cboxol_hide_admin_bar_for_anonymous_users' );
+	} else {
+		update_blog_option( $site_id, 'cboxol_hide_admin_bar_for_anonymous_users', 1 );
+	}
+}
+add_action( 'bp_actions', 'openlab_save_group_site_admin_bar_settings', 1 );
 
 /** "Display Name" column on users.php ***************************************/
 

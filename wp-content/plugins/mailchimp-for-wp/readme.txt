@@ -3,21 +3,19 @@ Contributors: Ibericode, DvanKooten, hchouhan, lapzor
 Donate link: https://www.mc4wp.com/contribute/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=donate-link
 Tags: mailchimp, mc4wp, email, marketing, newsletter, subscribe, widget, mc4wp, contact form 7, woocommerce, buddypress, ibericode, mailchimp form
 Requires at least: 4.6
-Tested up to: 6.1
-Stable tag: 4.8.12
-License: GPLv2 or later
+Tested up to: 6.2
+Stable tag: 4.9.5
+License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.3
 
-Mailchimp for WordPress, the #1 unofficial Mailchimp plugin.
+The #1 (unofficial) Mailchimp plugin. Allows you to add various sign-up methods to your WordPress site.
 
 == Description ==
 
-#### Mailchimp for WordPress
-
 *Allowing your visitors to subscribe to your newsletter should be easy. With this plugin, it finally is.*
 
-This plugin helps you grow your Mailchimp lists and write better newsletters through various methods. You can create good looking opt-in forms or integrate with any existing form on your site, like your comment, contact or checkout form.
+This plugins helps you grow your email list in Mailchimp. You can use it to create good looking and accessible sign-up forms or integrate with any other existing form on your WordPress site, like your contact, comment or checkout form.
 
 [youtube https://www.youtube.com/watch?v=fZCYPnFybqU]
 
@@ -25,55 +23,44 @@ This plugin helps you grow your Mailchimp lists and write better newsletters thr
 
 - Connect with your Mailchimp account in seconds.
 
-- Sign-up forms which are good looking, user-friendly and mobile optimized. You have complete control over the form fields and can send anything you like to Mailchimp.
+- Sign-up forms which are good looking, user-friendly and mobile optimized. You have complete control over the form fields and can build your forms using native HTML.
 
 - Seamless integration with the following plugins:
-	- Default WordPress Comment Form
-	- Default WordPress Registration Form
-	- Contact Form 7
-	- WooCommerce
-	- Gravity Forms
-	- Ninja Forms 3
-	- WPForms
-	- BuddyPress
+    - Default WordPress Comment Form
+    - Default WordPress Registration Form
+    - Contact Form 7
+    - WooCommerce
+    - Gravity Forms
+    - Ninja Forms 3
+    - WPForms
+    - BuddyPress
     - MemberPress
-	- Events Manager
-	- Easy Digital Downloads
-	- Give
-	- UltimateMember
+    - Events Manager
+    - Easy Digital Downloads
+    - Give
+    - UltimateMember
+    - HTML Forms
+    - AffiliateWP
+
+- Is the plugin you want to integrate with not listed above? You can probably still use our [custom integration](https://www.mc4wp.com/kb/add-subscribe-checkbox-custom-form/) feature. Alternatively, the plugin comes with a PHP API to programmatically add a new subscriber to Mailchimp.
+
+- Send your WooCommerce orders to Mailchimp so you can see exactly what each subscriber purchased and how much revenue your email campaigns are generating.
 
 - A multitude of available add-on plugins and integrations:
 	- [Mailchimp for WordPress Premium](https://www.mc4wp.com/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=add-on-list)
 	- [Mailchimp Top Bar](https://wordpress.org/plugins/mailchimp-top-bar/)
-	- [Mailchimp Activity](https://wordpress.org/plugins/mc4wp-activity/)
 	- [Boxzilla Pop-ups](https://wordpress.org/plugins/boxzilla/)
-	- [Google reCAPTCHA](https://www.google.com/recaptcha/)
 	- [WPBruiser anti-spam](https://wordpress.org/plugins/goodbye-captcha/)
 
-- Well documented. Our [knowledge base](https://www.mc4wp.com/kb/) is updated daily.
+- Well documented through our [knowledge base](https://www.mc4wp.com/kb/).
 
-- Developer friendly. For inspiration, check out our [repository of example code snippets](https://github.com/ibericode/mc4wp-snippets).
-
-<blockquote>
-<h4>Become a Premium user</h4>
-<p>Mailchimp for WordPress has a Premium add-on which comes with several additional benefits.</p>
-<ul>
-<li>Multiple forms</li>
-<li>Advanced e-commerce integration for WooCommerce</li>
-<li>Email notifications</li>
-<li>An easy way to style your forms</li>
-<li>Detailed reports & statistics</li>
-</ul>
-<p><a href="https://www.mc4wp.com/features/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=after-features-link">View more Premium features</a></p>
-</blockquote>
+- Developer friendly. For some inspiration, check out our [repository of example code snippets](https://github.com/ibericode/mailchimp-for-wordpress/tree/master/sample-code-snippets).
 
 #### What is Mailchimp?
 
-Mailchimp is a newsletter service that allows you to send out email campaigns to a list of email subscribers. It is free for lists up to 2000 subscribers, which is why it is the newsletter-service of choice for thousands of businesses.
+Mailchimp is a newsletter service that allows you to send out email campaigns to a list of email subscribers. It is free for lists with up to 500 email subscribers, which is why it is the newsletter-service of choice for thousands of small businesses across the globe.
 
-This plugin allows you to tightly integrate your WordPress site with your Mailchimp account.
-
-If you are not yet using Mailchimp, [creating an account is 100% free and only takes you about 30 seconds](http://mailchimp.com/monkey-rewards/?utm_source=freemium_newsletter&utm_medium=email&utm_campaign=monkey_rewards&aid=a2d08947dcd3683512ce174c5&afl=1).
+If you are not yet using Mailchimp, [creating an account is 100% free and only takes you about 30 seconds](http://eepurl.com/igOGeX).
 
 == Installation ==
 
@@ -87,36 +74,25 @@ If you are not yet using Mailchimp, [creating an account is 100% free and only t
 1. Go to *Mailchimp for WP > Forms*
 2. Select at least one list to subscribe people to.
 3. *(Optional)* Add more fields to your form.
-4. Embed a sign-up form in pages or posts using the `[mc4wp_form]` shortcode.
+4. Embed a sign-up form in pages or posts using the `[mc4wp_form]` shortcode or Gutenberg block.
 5. Show a sign-up form in your widget areas using the "Mailchimp Sign-Up Form" widget.
-6. Show a sign-up form from your theme files by using the following PHP function.
-
-`
-<?php
-
-if( function_exists( 'mc4wp_show_form' ) ) {
-	mc4wp_show_form();
-}
-`
+6. Show a sign-up form from your theme files by using the `mc4wp_show_form()` PHP function.
 
 #### Need help?
-Please take a look at the [Mailchimp for WordPress knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=installation-instructions-link) first.
+Please take a look at the [MC4WP knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=installation-instructions-link) first.
 
 If you can't find an answer there, please look through the [plugin support forums](https://wordpress.org/support/plugin/mailchimp-for-wp) or start your own topic.
 
 == Frequently Asked Questions ==
 
-#### More documentation
-More detailed documentation can be found in the [Mailchimp for WordPress knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=faq).
+#### Where can I find my Mailchimp API key?
+You can [find your API key here](http://kb.mailchimp.com/accounts/management/about-api-keys#Find-or-Generate-Your-API-Key)
 
 #### How to display a form in posts or pages?
-Use the `[mc4wp_form]` shortcode.
+Use the `[mc4wp_form]` shortcode or the Gutenberg block.
 
 #### How to display a form in widget areas like the sidebar or footer?
 Go to **Appearance > Widgets** and use the **Mailchimp for WP Form** widget that comes with the plugin.
-
-#### Where can I find my API key to connect to Mailchimp?
-[You can find your API key here](http://kb.mailchimp.com/accounts/management/about-api-keys#Find-or-Generate-Your-API-Key)
 
 #### How to add a sign-up checkbox to my Contact Form 7 form?
 Use the following shortcode in your CF7 form to display a newsletter sign-up checkbox.
@@ -125,8 +101,10 @@ Use the following shortcode in your CF7 form to display a newsletter sign-up che
 [mc4wp_checkbox "Subscribe to our newsletter?"]
 `
 
+Our knowledge base has more information on [connecting Contact Form 7 and Mailchimp](https://www.mc4wp.com/kb/connecting-contact-form-7-and-mailchimp/).
+
 #### The form shows a success message but subscribers are not added to my list(s)?
-If the form shows a success message, there is no doubt that the sign-up request succeeded. Mailchimp could have a slight delay sending the confirmation email though, please just be patient and make sure to check your SPAM folder.
+If the form shows a success message, there is no doubt that the sign-up request succeeded. Mailchimp could have a slight delay sending the confirmation email though. Please check again in a few minutes (sometimes hours) and don't forget to check your junk folder too.
 
 When you have double opt-in disabled, new subscribers will be seen as *imports* by Mailchimp. They will not show up in your daily digest emails or statistics. [We always recommend leaving double opt-in enabled](http://blog.mailchimp.com/double-opt-in-vs-single-opt-in-stats/).
 
@@ -147,35 +125,45 @@ You can use custom CSS to style the sign-up form if you do not like the themes t
 
 You can add your custom CSS to your theme stylesheet or (easier) by using a plugin like [Simple Custom CSS](https://wordpress.org/plugins/simple-custom-css/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=after-css-link)
 
-#### I'm getting an "HTTP Error" when trying to connect to Mailchimp
-
-If you're getting an `HTTP Error` after entering your API key, please contact your webhost and ask them if they have PHP CURL installed and updated to the latest version (7.58.x). Make sure requests to `https://api.mailchimp.com/` are allowed as well.
-
 #### How do I show a sign-up form in a pop-up?
 
 We recommend the [Boxzilla pop-up plugin](https://wordpress.org/plugins/boxzilla/) for this. You can use the form shortcode in your pop-up box to show a sign-up form.
 
-#### My question is not listed
+### How do I subscribe from my WooCommerce checkout form?
 
-Please head over to the [Mailchimp for WordPress knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=faq) for more detailed documentation.
+You can use our WooCommerce integration for that. [How to subscribe to Mailchimp from the WooCommerce checkout form](https://www.mc4wp.com/kb/connect-woocommerce-store-mailchimp/).
+
+### How to connect my WooCommerce store with Mailchimp?
+
+You can find instructions for [connecting your WooCommerce store with Mailchimp](https://www.mc4wp.com/kb/connect-woocommerce-store-mailchimp/) on our website.
+
+#### I'm getting an "HTTP Error" when trying to connect to Mailchimp.
+
+the "HTTP Error" type is usually because of a firewall configuration issue or outdated software on your web server.
+
+Please contact your webhost and ask them to check the following:
+
+- Whether remote HTTP requests to `https://api.mailchimp.com` are allowed.
+- Whether cURL and the PHP-cURL extension are installed and updated to a recent version.
+
+#### My question is not listed here.
+
+Please search through our [knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=faq).
+
 
 == Other Notes ==
 
 #### Support
 
-Use the [WordPress.org plugin forums](https://wordpress.org/support/plugin/mailchimp-for-wp) for community support where we try to help all of our users. If you found a bug, please create an issue on Github where we can act upon them more efficiently.
+If you need some help in setting up the plugin, you have various options:
 
-If you're a premium user, please use the email address inside the plugin for support as that will guarantee a faster response time.
-
-Please take a look at the [Mailchimp for WordPress knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=description) as well.
-
-#### Add-on plugins
-
-There are several [add-on plugins](https://www.mc4wp.com/add-ons/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=description) available, which help you get even more out of your site.
+- Search through our [knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=description).
+- Open a topic in the [WordPress.org plugin support forums](https://wordpress.org/support/plugin/mailchimp-for-wp)
+- If you're a premium user, send am email to the email address listed inside the plugin.
 
 #### Translations
 
-You can [help translate Mailchimp for WordPress into your language](https://translate.wordpress.org/projects/wp-plugins/mailchimp-for-wp/stable/) using your WordPress.org account.
+You can [help translate this plugin into your language](https://translate.wordpress.org/projects/wp-plugins/mailchimp-for-wp/stable/) using your WordPress.org account.
 
 #### Development
 
@@ -183,18 +171,70 @@ This plugin is being developed on GitHub. If you want to collaborate, please loo
 
 #### Customizing the plugin
 
-The plugin provides various filter & action hooks that allow you to modify or extend default behavior. We're also maintaining a [collection of sample code snippets](https://github.com/ibericode/mc4wp-snippets).
+The plugin provides various filter and action hooks that allow you to modify or extend the default behavior. We're also maintaining a [collection of sample code snippets](https://github.com/ibericode/mailchimp-for-wordpress/tree/master/sample-code-snippets).
 
 == Screenshots ==
 
-1. Create beautiful sign-up forms that blend in with your theme.
-2. Integrate with any other plugin out there.
-3. Add a highly converting top bar form to your site.
-4. Style your form with our Styles Builder (premium feature).
-5. Integrate your WooCommerce store with Mailchimp (premium feature).
-6. Dive into detailed sign-up statistics (premium feature).
+1. Example sign-up form in the TwentyTwenty theme.
+2. Example sign-up integration with a contact form.
+3. Settings page to connect with your Mailchimp account.
+4. Overview of sign-up integrations.
+5. Overview of sign-up forms.
+6. Settings page to configure an integration.
+7. Page where you edit your sign-up forms.
+8. Page where you modify your form messages.
 
 == Changelog ==
+
+
+#### 4.9.5 - Jun 7, 2023
+
+- Fix generated HTML for list/audience choice fields.
+- Fix deprecation warning in includes/admin/class-review-notice.php.
+- Update JavaScript dependencies.
+
+
+#### 4.9.4 - May 2, 2023
+
+- Fallback to default checkbox label if none given. Thanks to [Shojib Khan](https://github.com/kshojib).
+- Improve WooCommerce integration settings page by disabling position field if integration is disabled. Thanks to [Shojib Khan](https://github.com/kshojib).
+- Update JavaScript dependencies.
+
+
+#### 4.9.3 - Mar 31, 2023
+
+- Defend against breaking change in latest WPForms update.
+
+
+#### 4.9.2 - Mar 21, 2023
+
+- Add support for a field named `MARKETING_PERMISSIONS` to enable GDPR fields configured in Mailchimp. A [sample code snippet can be found here](https://github.com/ibericode/mailchimp-for-wordpress/blob/master/sample-code-snippets/forms/gdpr-marketing-permissions.md).
+- Remove Google reCaptcha feature. This was already disabled if you were not already using it.
+
+
+#### 4.9.1 - Feb 7, 2023
+
+- Fix generated value attribute for fields of type choice (dropdown, checkboxes, radio fields).
+- Fix type of `marketing_permissions` field in API requests. Thanks to [George Korakas](https://github.com/gkorakas-eli).
+- Refactor list overview JS to not depend on Mithril.js anymore.
+- Simplify admin footer text asking for a plugin review.
+- When renewing lists, renew cached marketing permissions too.
+
+
+#### 4.9.0 - Jan 13, 2023 
+
+- Removed deprecated filter hook `mc4wp_settings_cap`, use `mc4wp_admin_required_capability` instead.
+- Removed deprecated filter hook `mc4wp_merge_vars`, use `mc4wp_form_data` or `mc4wp_integration_data` instead.
+- Removed deprecated filter hook `mc4wp_form_merge_vars`, use `mc4wp_form_data` instead.
+- Removed deprecated filter hook `mc4wp_integration_merge_vars`, use `mc4wp_integration_data` instead.
+- Removed deprecated filter hook `mc4wp_valid_form_request`, use `mc4wp_form_errors` instead.
+- Removed deprecated function `mc4wp_get_api()` and deprecated class `MC4WP_API`.
+- Removed deprecated function `mc4wp_checkbox()`.
+- Removed deprecated function `mc4wp_form()`, use `mc4wp_show_form()` instead.
+- Added filter `mc4wp_debug_log_message` to modify or disable messages that are written to the debug log.
+- Fix color of invalid Mailchimp API key notice.
+- Sanitize IP address value from `$_SERVER['REMOTE_ADDR']` too.
+- Fetch GDPR marketing permissions via first subscriber on list and show them in lists overview table.
 
 
 #### 4.8.12 - Dec 06, 2022
@@ -245,7 +285,7 @@ Thanks to the team over at [pluginvulnerabilities.com](https://www.pluginvulnera
 
 #### 4.8.5 - Jun 1, 2021
 
-Add nonce verification to all URL's using _mc4wp_action query parameter.
+Add nonce verification to all URL's using `_mc4wp_action` query parameter.
 This fixes a CSRF vulnerability where a malicious website could trick a logged-in admin user in performing unwanted actions.
 
 A special thanks to Erwan from [WPScan](https://wpscan.com/) for bringing this issue to our attention.

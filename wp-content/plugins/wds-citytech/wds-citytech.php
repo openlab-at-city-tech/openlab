@@ -260,6 +260,31 @@ function wds__bp_after_signup_profile_fields() {
 	<?php
 }
 
+/**
+ * Add Google Analytics 4 GA4 tracking tag.
+ */
+add_action(
+	'wp_head',
+	function() {
+		if ( ! defined( 'OPENLAB_GA4_ID' ) ) {
+			return;
+		}
+
+		?>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( OPENLAB_GA4_ID ); ?>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '<?php echo esc_js( OPENLAB_GA4_ID ); ?>');
+</script>
+		<?php
+	},
+	0
+);
+
 function wds_registration_ajax() {
 	wp_print_scripts( array( 'sack' ) );
 	$sack    = 'var isack = new sack( "' . get_bloginfo( 'wpurl' ) . '/wp-admin/admin-ajax.php" );';
@@ -793,20 +818,31 @@ function wds_load_group_type( $group_type ) {
 	$return .= '<tr class="school-tooltip"><td colspan="2">';
 
 	// associated school/dept tooltip
+	$assoc_tooltip = '';
 	switch ( $group_type ) {
 		case 'course':
-			$return .= '<p class="ol-tooltip">If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			$assoc_tooltip = 'If your course is associated with one or more of the college’s schools or departments, please select from the checkboxes below.';
 			break;
 		case 'portfolio':
-			$return .= '<p class="ol-tooltip">If your ' . openlab_get_portfolio_label() . ' is associated with one or more of the college’s schools or departments, please select from the checkboxes below.</p>';
+			switch ( $account_type ) {
+				case 'staff' :
+				case 'faculty' :
+					$assoc_tooltip = 'Please select your school, office, or department, using the checkboxes below.';
+					break;
+				default :
+					$assoc_tooltip = 'Please select the school and department(s) for your ePortfolio, using the checkboxes below.';
+					break;
+			}
 			break;
 		case 'project':
-			$return .= '<p class="ol-tooltip">Is your Project associated with one or more of the college\'s schools?</p>';
+			$assoc_tooltip = 'Is your Project associated with one or more of the college\'s schools?';
 			break;
 		case 'club':
-			$return .= '<p class="ol-tooltip">Is your Club associated with one or more of the college\'s schools?</p>';
+			$assoc_tooltip = 'Is your Club associated with one or more of the college\'s schools?';
 			break;
 	}
+
+	$return .= '<p class="ol-tooltip">' . esc_html( $assoc_tooltip ) . '</p>';
 
 	$return .= '</td></tr>';
 
@@ -1180,7 +1216,11 @@ function ra_copy_blog_page( $group_id ) {
 			$where = 'AND d.domain IS NULL ';
 		}
 
-		$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
+		if ( ! empty( $_POST['source_blog'] ) ) {
+			$src_id = (int) $_POST['source_blog'];
+		} else {
+			$src_id = openlab_get_groupblog_template( bp_loggedin_user_id(), $group_id );
+		}
 
 		//$domain = sanitize_user( str_replace( '/', '', $blog[ 'domain' ] ) );
 		//$domain = str_replace( ".","", $domain );
@@ -2241,6 +2281,20 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
+		// Hide private-member portfolios from non-members.
+		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			$group_private_members = [];
+		} else {
+			$group_private_members = openlab_get_private_members_of_group( $group_id );
+		}
+
+		$portfolios = array_filter(
+			$portfolios,
+			function( $portfolio ) use ( $group_private_members ) {
+				return ! in_array( $portfolio['user_id'], $group_private_members, true );
+			}
+		);
+
 		if ( '1' === $instance['display_as_dropdown'] ) {
 			echo '<form action="" method="get">';
 			echo '<select class="portfolio-goto" name="portfolio-goto">';
@@ -2961,7 +3015,6 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	<fieldset class="department-selector">
 		<legend>Departments <?php echo esc_html( $required_gloss ); ?></legend>
-		<div class="error-container" id="academic-unit-selector-error"></div>
 		<div class="checkbox-list-container department-list-container">
 			<div class="cboxol-units-of-type">
 				<ul>
@@ -2981,15 +3034,19 @@ function openlab_academic_unit_selector( $args = array() ) {
 							name="departments[]"
 							type="checkbox"
 							value="<?php echo esc_attr( $dept_slug ); ?>"
-							data-parsley-atleastonedept
+							data-parsley-error-message="Please provide a school and department."
 							data-parsley-errors-container="#academic-unit-selector-error"
-							data-parsley-validate-if-empty
+							<?php if( $required ) : ?>
+							data-parsley-required
+							data-parsley-mincheck="1"
+							<?php endif; ?>
 						/> <label class="passive" for="<?php echo esc_attr( $id_attr ); ?>"><?php echo esc_html( $dept['label'] ); ?>
 					</li>
 				<?php endforeach; ?>
 				</ul>
 			</div>
 		</div>
+		<div class="error-container" id="academic-unit-selector-error"></div>
 	</fieldset>
 
 	<?php wp_nonce_field( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' ); ?>
@@ -3362,3 +3419,118 @@ add_filter(
 		return $option;
 	}
 );
+
+/**
+ * Indicates whether the specified site should display the WP toolbar to logged-out users.
+ *
+ * @since 1.3.0
+ *
+ * @param int $site_id ID of the site.
+ * @return bool
+ */
+function cboxol_show_admin_bar_for_anonymous_users( $site_id ) {
+	// Flip the logic for better defaults.
+	return ! (bool) get_blog_option( $site_id, 'cboxol_hide_admin_bar_for_anonymous_users' );
+}
+
+/**
+ * Hides the admin bar for anonymous users, based on admin-configured setting.
+ *
+ * @since 1.3.0
+ */
+function cboxol_maybe_hide_admin_bar_for_anonymous_users() {
+	if ( bp_is_root_blog() ) {
+		show_admin_bar( true );
+		return;
+	}
+
+	if ( is_user_logged_in() ) {
+		show_admin_bar( true );
+		return;
+	}
+
+	if ( cboxol_show_admin_bar_for_anonymous_users( get_current_blog_id() ) ) {
+		show_admin_bar( true );
+	} else {
+		show_admin_bar( false );
+	}
+}
+add_action( 'init', 'cboxol_maybe_hide_admin_bar_for_anonymous_users', 1 );
+
+/**
+ * simple-mathjax modifications.
+ *
+ * - If a site has a custom MathJax config, do nothing.
+ * - If a page has the [latexpage] shortcode, enable $..$ delimiters.
+ * - Otherwise load our more conservative MathJax configuration.
+ *
+ * @see http://redmine.citytech.cuny.edu/issues/3200
+ *
+ * @param array|string $value simple-mathjax config options.
+ * @return array
+ */
+function openlab_default_mathjax_config( $value ) {
+	if ( ! $value ) {
+		$value = [];
+	}
+
+	$do_dollar_sign_delims = false;
+	if ( empty( $value['custom_mathjax_config'] ) ) {
+		$posts_to_check = [];
+		if ( is_singular() ) {
+			$posts_to_check = [ get_queried_object() ];
+		} else {
+			global $wp_query;
+
+			if ( isset( $wp_query->posts ) ) {
+				$posts_to_check = $wp_query->posts;
+			}
+		}
+
+		foreach ( $posts_to_check as $post_to_check ) {
+			if ( $post_to_check instanceof WP_Post && false !== strpos( $post_to_check->post_content, '[latexpage]' ) ) {
+				$do_dollar_sign_delims = true;
+				break;
+			}
+		}
+	}
+
+	$inline_math = $do_dollar_sign_delims
+		? "[ ['$','$'], ['\\\(','\\\)'], ['\\\[','\\\]'] ]"
+		: "[ ['\\\(','\\\)'], ['\\\[','\\\]'] ]" ;
+
+	$value['custom_mathjax_config'] = "MathJax = {
+tex: {
+	inlineMath: " . $inline_math . ",
+	displayMath: [
+		['$$', '$$'],
+		['" . '$latex' . "', '$'],
+		['[latex]', '[/latex]'],
+		['\\\[', '\\\]']
+	],
+	processEscapes: true
+},
+options: {
+	ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'
+}
+}";
+
+	if ( $do_dollar_sign_delims ) {
+		add_filter(
+			'the_content',
+			function( $content ) {
+				// First try to remove entire paragraphs containing only the shortcode.
+				$content = str_replace( '<p>[latexpage]</p>', '', $content );
+
+				// Then remove the shortcode wherever it appears.
+				$content = str_replace( '[latexpage]', '', $content );
+
+				return $content;
+			}
+		);
+	}
+
+	return $value;
+}
+add_filter( 'default_option_simple_mathjax_options', 'openlab_default_mathjax_config' );
+add_filter( 'option_simple_mathjax_options', 'openlab_default_mathjax_config' );

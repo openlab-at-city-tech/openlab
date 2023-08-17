@@ -66,6 +66,8 @@ class Dialog extends Lib\Base\Component
                 'reason' => __( 'Reason', 'bookly' ),
                 'service' => __( 'Service', 'bookly' ),
                 'package' => __( 'Package', 'bookly' ),
+                'gift_card_code' => __( 'Gift card code', 'bookly' ),
+                'gift_card_type' => __( 'Gift card type', 'bookly' ),
                 'status' => __( 'Status', 'bookly' ),
                 'subtotal' => __( 'Subtotal', 'bookly' ),
                 'tax' => __( 'Tax', 'bookly' ),

@@ -1,0 +1,4 @@
+#form_data td {vertical-align: top; padding-top: 20px}
+#cpto #cpt_info_box {padding: 0 10px; border: 1px dashed #6aadcc; background-color: #FFF; margin-top: 10px;-webkit-box-shadow: 1px 1px 7px rgba(50, 50, 50, 0.17);-moz-box-shadow:    1px 1px 7px rgba(50, 50, 50, 0.17);box-shadow:         1px 1px 7px rgba(50, 50, 50, 0.17);}
+#cpto #cpt_info_box a {text-decoration: none}
+#cpto #cpt_info_box #donate_form { padding: 20px 0 17px;    text-align: center;    width: 100%;}

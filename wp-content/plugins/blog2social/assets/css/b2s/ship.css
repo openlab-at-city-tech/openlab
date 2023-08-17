@@ -80,16 +80,16 @@
     margin-top: 5px;
 }
 
-.b2s-select, .b2s-select-area{
-    margin-top: 6px;
-}
-
 .b2s-post-item-details-release-input-date-select{
     margin-top: 0px !important;
 }
 
 .network-icon{
     margin-top:5px;
+}
+
+.b2s-select-area-label{
+    font-weight:600;
 }
 
 
@@ -256,6 +256,12 @@
     text-transform: uppercase;
     margin-top:3px;
     margin-bottom: 5px;
+}
+
+.b2s-google-image-auth{
+    margin-bottom:3px;
+    margin-right:5px;
+    width:15px;
 }
 
 .b2s-network-list p {
@@ -511,7 +517,7 @@ input[type="checkbox"], input[type="radio"] {
     margin: 0 !important;
 }
 
-.b2s-network-status-img,.b2s-network-status-no-img,.b2s-network-status-expiredDate{
+.b2s-network-status-img,.b2s-network-status-no-img,.b2s-network-status-expiredDate,.b2s-network-status-invalid-video{
     font-size:25px;
     margin: 5px;
 }
@@ -833,10 +839,6 @@ input[type="number"]{
     max-width: 100% !important;
 }
 
-#b2s-auth-network-6-location, #b2s-auth-network-6-board {
-    max-width: 100% !important;
-}
-
 .b2s-post-item-details-item-message-area {
     display: inline-block;
     position: relative;
@@ -869,10 +871,6 @@ input[type="number"]{
     display: none;
 }
 
-.b2s-auth-network-6-extension-download-area {
-    text-align: center;
-}
-
 .b2s-bold {
     font-weight: 600;
 }
@@ -901,7 +899,7 @@ input[type="number"]{
     color: white !important;
     opacity: 1 !important;
     right: 5px !important
-    top: 5px !important;
+        top: 5px !important;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
 }
 
@@ -910,4 +908,51 @@ input[type="number"]{
     top: -5px;
     left: 0px;
     font-weight: 700 !important;
+}
+
+
+#b2s-network-cut-image{
+    z-index:9000!important;
+    height: 700px;
+   
+}
+#cropsubmit
+{
+    margin-left: auto; 
+    margin-right: 0;
+}
+#cropperoptions
+{
+    margin-top: 20px;
+    padding: 8px;
+    display:flex; 
+    flex-wrap: wrap;
+}
+#cutcontainer
+{
+    width: 600px;
+    height: 400px;
+    display: inline-block;
+}
+#cut-image-in-modal
+{
+    max-width: 100%;
+    max-height: 100%;
+}
+#cut-modal-body
+{
+    text-align: center;
+}
+.cropper-open
+{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#b2s-network-editor-image-option-area{
+    margin: 15px;
+}
+
+#b2s-network-editor-error-not-save{
+    display: none;
 }

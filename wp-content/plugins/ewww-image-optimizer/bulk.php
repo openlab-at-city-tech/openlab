@@ -2086,11 +2086,13 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 
 		// Do metadata update after full-size is processed, usually because of conversion or resizing.
 		if ( 'full' === $image->resize && $image->attachment_id ) {
+			ewwwio_debug_message( 'saving meta for ' . $image->attachment_id );
 			if ( ! empty( $meta ) && is_array( $meta ) ) {
 				clearstatcache();
 				if ( ! empty( $image->file ) && is_file( $image->file ) ) {
 					$meta['filesize'] = filesize( $image->file );
 				}
+				add_filter( 'as3cf_pre_update_attachment_metadata', '__return_true' );
 				$meta_saved = wp_update_attachment_metadata( $image->attachment_id, $meta );
 				if ( ! $meta_saved ) {
 					ewwwio_debug_message( 'failed to save meta' );
@@ -2105,6 +2107,7 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 		// The call to wp_get_attachment_metadata() will be done in a separate AJAX request for better reliability, giving it the full request time to complete.
 		if ( $attachment && (int) $attachment !== (int) $next_image->attachment_id ) {
 			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				remove_all_filters( 'as3cf_pre_update_attachment_metadata' );
 				ewwwio_debug_message( 'saving attachment meta' );
 				$meta = wp_get_attachment_metadata( $image->attachment_id );
 				if ( ewww_image_optimizer_s3_uploads_enabled() ) {
@@ -2250,8 +2253,14 @@ function ewww_image_optimizer_bulk_cleanup() {
 	ewwwio_ob_clean();
 	die(
 		'<p><b>' . esc_html__( 'Finished', 'ewww-image-optimizer' ) . '</b> - ' .
+		( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ?
 		'<a target="_blank" href="https://wordpress.org/support/plugin/ewww-image-optimizer/reviews/#new-post">' .
-		esc_html__( 'Write a Review', 'ewww-image-optimizer' ) . '</a></p>'
+		esc_html__( 'Write a Review', 'ewww-image-optimizer' ) :
+		esc_html__( 'Want more compression?', 'ewww-image-optimizer' ) . ' ' .
+		'<a target="_blank" href="https://ewww.io/trial/">' .
+		esc_html__( 'Get 5x more with a free trial', 'ewww-image-optimizer' )
+		) .
+		'</a></p>'
 	);
 }
 
@@ -2265,4 +2274,3 @@ add_action( 'wp_ajax_ewww_bulk_update_meta', 'ewww_image_optimizer_bulk_update_m
 add_action( 'wp_ajax_bulk_cleanup', 'ewww_image_optimizer_bulk_cleanup' );
 add_action( 'wp_ajax_bulk_quota_update', 'ewww_image_optimizer_bulk_quota_update' );
 add_filter( 'ewww_image_optimizer_count_optimized_queries', 'ewww_image_optimizer_reduce_query_count' );
-?>

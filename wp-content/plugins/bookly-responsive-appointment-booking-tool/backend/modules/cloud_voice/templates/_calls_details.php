@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Lib\Utils\Tables;

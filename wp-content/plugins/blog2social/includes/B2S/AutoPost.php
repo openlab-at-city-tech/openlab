@@ -35,8 +35,8 @@ class B2S_AutoPost {
         $this->keywords = $keywords;
         $this->optionPostFormat = $optionPostFormat;
         $this->allowHashTag = $allowHashTag;
-        $this->setPreFillText = array(0 => array(6 => 300, 8 => 239, 9 => 200, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 21 => 65000), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 239), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239), 20 => 300);
-        $this->setPreFillTextLimit = array(0 => array(6 => 400, 8 => 400, 9 => 200, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535), 1 => array(8 => 1200, 10 => 500, 19 => 400), 2 => array(8 => 400, 10 => 500, 19 => 9000));
+        $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000), 1 => array(6 => 300, 17 => 442, 19 => 239), 2 => array(17 => 442, 19 => 239), 20 => 300);
+        $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000), 1 => array(6 => 400, 19 => 400), 2 => array(19 => 9000));
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
     }
 
@@ -113,7 +113,7 @@ class B2S_AutoPost {
                 $hashtagcount = substr_count($postData['content'], '#');
                 if (strpos($postData['content'], "{KEYWORDS}") !== false) {
                     if($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
-                        $postData['content'] = preg_replace("/\{KEYWORDS\}/", '', $postData['content']);
+                        $postData['content'] = preg_replace("/\{KEYWORDS\}/",'', $postData['content']);
                     } else {
                         $hashtags = ($this->allowHashTag) ? $this->getHashTagsString("", (($networkId == 12) ? 30 - $hashtagcount : -1), ((isset($tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags']) && $tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags'] == true) ? true : false)) : '';
                         $postData['content'] = preg_replace("/\{KEYWORDS\}/", addcslashes($hashtags, "\\$"), $postData['content']);
@@ -125,7 +125,7 @@ class B2S_AutoPost {
                     $author_name = $hook_filter->get_wp_user_post_author_display_name((int) $authorId);
                     $postData['content'] = stripslashes(preg_replace("/\{AUTHOR\}/", addcslashes($author_name, "\\$"), $postData['content']));
                 } else {
-                    $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
+                    $postData['content'] = preg_replace("/\{AUTHOR\}/","", $postData['content']);
                 }
                 
                 if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
@@ -137,7 +137,7 @@ class B2S_AutoPost {
                         }
                     }
                 }
-                $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
+                $postData['content'] = preg_replace("/\{PRICE\}/","", $postData['content']);
                 
                 $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
                 if(is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
@@ -159,6 +159,9 @@ class B2S_AutoPost {
                     if(!empty($this->url) && $networkId == 2) {
                         $limit = 254;
                     }
+                    if (!empty($this->url) && $networkId == 38) {
+                        $limit = 500-strlen($this->url);
+                    }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }
             } else {
@@ -174,7 +177,7 @@ class B2S_AutoPost {
                     }
                 }
 
-                if ($networkId == 6 || $networkId == 20) {
+                if ($networkId == 6) {
                     if ($this->imageUrl !== false) {
                         $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (int) $this->setPreFillTextLimit[$networkType][$networkId]) : $this->content;
                         if ($this->allowHashTag) {
@@ -249,6 +252,16 @@ class B2S_AutoPost {
                     } else {
                         return false;
                     }
+                }
+
+                if ($networkId == 38) {
+                    $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
+                    $postData['custom_title'] = strip_tags($this->title);
+                }
+
+                if ($networkId == 39) {
+                    $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
+                    $postData['custom_title'] = strip_tags($this->title);
                 }
             }
 

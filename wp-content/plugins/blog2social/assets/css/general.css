@@ -6967,7 +6967,7 @@ p {
 .b2s-select,.b2s-input,.b2s-select-area{
     height:  30px !important;
     margin-bottom: 8px !important;
-    padding: 0 19px 0 1px !important;
+    padding: 0 -1px 0 1px !important;
 }
 
 .b2s-btn-logo{
@@ -6981,7 +6981,7 @@ p {
 }
 
 .b2s-img-logo{
-    min-width: 2.5em;
+    min-width: 2.85em;
 }
 
 .b2s-sidebar{
@@ -6989,31 +6989,31 @@ p {
 }
 
 .b2s-sidebar-version{
-    font-size: 12px !important;
+    font-size: 10px !important;
     white-space:nowrap;
 }
 
-.b2s-sidebar-btn-licence{
-    font-size: 14px !important;   
+.b2s-sidebar-btn-licence, .b2s-sidebar-btn-video-addon{
+    font-size: 13px !important;   
 }
 
-.b2s-sidebar-btn-licence{
+.b2s-sidebar-btn-licence, .b2s-sidebar-btn-video-addon{
     text-decoration: underline;
 }
 
-.b2s-sidebar-licence{
-    font-size: 14px !important;
+.b2s-sidebar-licence, .b2s-sidebar-video-addon{
+    font-size: 13px !important;
     padding-top: 5px;
     font-weight: 600;
 }
 
-.b2s-sidebar-licence-btn-edit{
+.b2s-sidebar-licence-btn-edit, .b2s-sidebar-video-addon-btn-edit{
     padding-left: 5px;
     color: #adadad;
 }
 
 @media(max-width:1150px){
-    .b2s-sidebar-licence-btn-edit{
+    .b2s-sidebar-licence-btn-edit, .b2s-sidebar-video-addon-btn-edit{
         display: none;
     }
 }
@@ -7145,6 +7145,7 @@ h4{
 .post-img-5{
     margin-top: 5px;
 }
+
 .img-width-9{
     max-width: 9%;
 }
@@ -7700,12 +7701,12 @@ CSS CheckBOX
     color: #fff;
 }
 
-.btn-pinterest {
+.btn-pinterest,.btn-pinterestbusiness {
     background-color:  #CB2027 !important;
     border-color:  #CB2027 !important;
     color: #fff;
 }
-.btn-pinterest:hover {
+.btn-pinterest:hover ,.btn-pinterestbusiness:hover {
     color: #fff;
 }
 
@@ -7781,12 +7782,12 @@ CSS CheckBOX
     color: #fff;
 }
 
-.btn-googlemybusiness {
+.btn-googlebusinessprofile {
     background-color:  #4285f4 !important;
     border-color:  #4285f4 !important;
     color: #fff;
 }
-.btn-googlemybusiness:hover {
+.btn-googlebusinessprofile:hover {
     color: #fff;
 }
 
@@ -7835,6 +7836,59 @@ CSS CheckBOX
     color: #fff;
 }
 
+.btn-youtube {
+    background-color:  #ff0000   !important;
+    border-color:  #ff0000   !important;
+    color: #fff;
+}
+.btn-youtube:hover {
+    color: #fff;
+}
+
+.btn-vimeo {
+    background-color:  #41b1db   !important;
+    border-color:  #41b1db   !important;
+    color: #fff;
+}
+.btn-vimeo:hover {
+    color: #fff;
+}
+
+.btn-tiktok {
+    background-color:  #010101   !important;
+    border-color:  #010101   !important;
+    color: #fff;
+}
+.btn-tiktok:hover {
+    color: #fff;
+}
+
+.btn-discord {
+    background-color: #5865f2 !important;
+    border-color: #5865f2 !important;
+    color: #fff;
+}
+.btn-discord:hover {
+    color: #fff;
+}
+
+.btn-skyrock {
+    background-color: #08aaff !important;
+    border-color: #08aaff !important;
+    color: #fff;
+
+}
+
+.btn-mastodon {
+    background-color: #5b49de !important;
+    border-color: #5b49de !important;
+    color: #fff;
+}
+
+.btn-skyrock:hover {
+    color: #fff;
+}
+
 .btn-outline-dark {
     color: #343a40;
     background-color: transparent;
@@ -7858,6 +7912,10 @@ CSS CheckBOX
     font-weight: 600;
 }
 
+.b2s-delete-post-btn {
+    margin-top: 5px;
+}
+
 .padding-lr-40 {
     padding: 0px 40px !important;
 }
@@ -7868,4 +7926,39 @@ CSS CheckBOX
 
 .b2s-text-black {
     color: black;
+}
+
+
+.b2s-label-warning-border-left{
+    border-left: 3px solid #FDBF45;
+}
+
+.b2s-label-info-border-left{
+    border-left: 3px solid #31708f;
+}
+
+.b2s-label-danger-border-left{
+    border-left: 3px solid #d9534f;
+}
+
+.b2s-label-success-border-left{
+    border-left: 3px solid #398439;
+}
+
+.b2s-attachment-details-video-share-btn {
+    color: #fff !important;
+    background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
 }

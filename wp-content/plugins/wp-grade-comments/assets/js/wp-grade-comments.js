@@ -3,14 +3,16 @@
 		$grade_entry = $( '.olgc-grade-entry' ),
 		$grade_input = $( '#olgc-grade' ),
 		$private_checkbox = $( '#olgc-private-comment' ),
+		$private_fallback = $( '#olgc-private-comment-fallback' ),
 		$comment_content_input = $( '#comment' ),
 		$reply_to_com = $( '.comment-reply-link' );
 
 	$( document ).ready( function() {
 		toggle_grade_visibility();
 
-		$add_a_grade.on( 'click', function() {
+		$add_a_grade.on( 'click', function( e ) {
 			toggle_grade_visibility();
+			maybe_set_comment_visibility();
 		} );
 
 		$reply_to_com.on( 'click', function() {
@@ -28,7 +30,27 @@
 				toggle_comment_content_required();
 			}
 		);
+
+		$comment_content_input.on(
+			'keyup',
+			function( e ) {
+				maybe_set_comment_visibility()
+			}
+		);
+
+		$private_checkbox.on(
+			'change',
+			toggle_private_fallback
+		);
 	} );
+
+	function toggle_private_fallback() {
+		if ( $private_checkbox.is( ':checked' ) ) {
+			$private_fallback.val( '1' );
+		} else {
+			$private_fallback.val( '' );
+		}
+	}
 
 	function toggle_grade_visibility() {
 		if ( $add_a_grade.is( ':checked' ) ) {
@@ -47,6 +69,20 @@
 	}
 
 	/**
+	 * Check whether we should set the comment visibility to Private based on the Add A Grade status.
+	 */
+	function maybe_set_comment_visibility() {
+		if ( $add_a_grade.is( ':checked' ) ) {
+			$private_checkbox.prop( 'disabled', 'disabled' );
+			$private_checkbox.prop( 'checked', true );
+		} else {
+			$private_checkbox.prop( 'disabled', false );
+		}
+
+		toggle_private_fallback();
+	}
+
+	/**
 	 * When responding to a private comment, comment privacy should be enforced.
 	 */
 	function set_comment_visibility( $crlink ) {
@@ -58,6 +94,8 @@
 			$private_checkbox.prop( 'checked', false );
 			$private_checkbox.prop( 'disabled', false );
 		}
+
+		toggle_private_fallback();
 	}
 
 	/**

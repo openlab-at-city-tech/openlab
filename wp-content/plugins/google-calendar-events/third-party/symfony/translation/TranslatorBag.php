@@ -57,7 +57,7 @@ final class TranslatorBag implements TranslatorBagInterface
             $operation = new TargetOperation($diffCatalogue, $catalogue);
             $operation->moveMessagesToIntlDomainsIfPossible(AbstractOperation::NEW_BATCH);
             $newCatalogue = new MessageCatalogue($locale);
-            foreach ($operation->getDomains() as $domain) {
+            foreach ($catalogue->getDomains() as $domain) {
                 $newCatalogue->add($operation->getNewMessages($domain), $domain);
             }
             $diff->addCatalogue($newCatalogue);

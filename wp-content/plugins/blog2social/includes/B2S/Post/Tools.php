@@ -76,7 +76,7 @@ class B2S_Post_Tools {
 
     public static function getAllRelayByPrimaryPostId($primary_post_id = 0) {
         global $wpdb;
-        $sqlData = $wpdb->prepare("SELECT `id` FROM `{$wpdb->prefix}b2s_posts` WHERE `hide` = 0 AND `sched_type` = 4  AND `{$wpdb->prefix}b2s_posts`.`publish_date` = '0000-00-00 00:00:00' AND `relay_primary_post_id` = %d ", $primary_post_id);
+        $sqlData = $wpdb->prepare("SELECT `id`,`relay_delay_min` FROM `{$wpdb->prefix}b2s_posts` WHERE `hide` = 0 AND `sched_type` = 4  AND `{$wpdb->prefix}b2s_posts`.`publish_date` = '0000-00-00 00:00:00' AND `relay_primary_post_id` = %d ", $primary_post_id);
         return $wpdb->get_results($sqlData);
     }
 

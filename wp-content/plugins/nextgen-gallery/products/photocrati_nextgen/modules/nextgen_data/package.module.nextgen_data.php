@@ -194,7 +194,8 @@ class C_Album_Mapper extends C_CustomTable_DataMapper_Driver
      */
     public function get_by_slug($slug)
     {
-        return array_pop($this->object->select()->where(['slug = %s', sanitize_title($slug)])->limit(1)->run_query());
+        $results = $this->object->select()->where(['slug = %s', sanitize_title($slug)])->limit(1)->run_query();
+        return array_pop($results);
     }
 }
 /**
@@ -4186,8 +4187,11 @@ class C_NextGen_Metadata extends C_Component
                     $meta['shutter_speed'] = ($meta['shutter_speed'] > 0.0 and $meta['shutter_speed'] < 1.0) ? '1/' . round(1 / $meta['shutter_speed'], -1) : $meta['shutter_speed'];
                     $meta['shutter_speed'] .= __(' sec', 'nggallery');
                 }
-                //Bit 0 indicates the flash firing status
-                if (!empty($exif['Flash'])) {
+                // Bit 0 indicates the flash firing status. On some images taken on older iOS versions, this may be
+                // incorrectly stored as an array.
+                if (is_array($exif['Flash'])) {
+                    $meta['flash'] = __('Fired', 'nggallery');
+                } elseif (!empty($exif['Flash'])) {
                     $meta['flash'] = $exif['Flash'] & 1 ? __('Fired', 'nggallery') : __('Not fired', ' nggallery');
                 }
             }
@@ -4435,26 +4439,22 @@ class C_NextGen_Metadata extends C_Component
      * @param string $object
      * @return mixed $value
      */
-    function get_META($object = false)
+    function get_META($object = FALSE)
     {
-        // defined order first look into database, then XMP, IPTC and EXIF.
         if ($value = $this->get_saved_meta($object)) {
-            return $value;
-        }
-        if ($value = $this->get_XMP($object)) {
             return $value;
         }
         if ($object == 'created_timestamp' && ($d = $this->get_IPTC('created_date')) && ($t = $this->get_IPTC('created_time'))) {
             return $this->exif_date2ts($d . ' ' . $t);
         }
-        if ($value = $this->get_IPTC($object)) {
-            return $value;
+        $order = apply_filters('ngg_metadata_parse_order', ['XMP', 'IPTC', 'EXIF']);
+        foreach ($order as $method) {
+            $method = 'get_' . $method;
+            if (method_exists($this, $method) && ($value = $this->{$method}($object))) {
+                return $value;
+            }
         }
-        if ($value = $this->get_EXIF($object)) {
-            return $value;
-        }
-        // nothing found ?
-        return false;
+        return FALSE;
     }
     /**
      * nggMeta::i8n_name() -  localize the tag name

@@ -51,3 +51,7 @@ body .thumbnail{
         padding-left: 0px;
     }
 }
+
+.b2s-feature-img-with-90{
+    max-width: 90px !important;
+}

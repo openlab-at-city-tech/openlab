@@ -180,7 +180,8 @@ class GF_Query {
 				$field = GFAPI::get_field( $form_id, $sort_field );
 
 				if ( $field instanceof GF_Field ) {
-					$force_order_numeric = $field->get_input_type() == 'number';
+					$numeric_fields = array( 'number', 'total', 'calculation', 'price', 'quantity', 'shipping', 'singleshipping', 'product', 'singleproduct' );
+					$force_order_numeric = in_array( $field->get_input_type(), $numeric_fields );
 				} else {
 					$entry_meta          = GFFormsModel::get_entry_meta( $form_id );
 					$force_order_numeric = rgars( $entry_meta, $sort_field . '/is_numeric' );
@@ -208,10 +209,23 @@ class GF_Query {
 		$filters = array();
 
 		if ( isset( $search_criteria['status'] ) ) {
+
+			if ( is_array( $search_criteria['status'] ) ) {
+				$statuses = array();
+				foreach ( $search_criteria['status'] as $status ) {
+					$statuses[] = new GF_Query_Literal( $status );
+				}
+				$condition_value    = new GF_Query_Series( $statuses );
+				$condition_operator = GF_Query_Condition::IN;
+			} else {
+				$condition_value    = new GF_Query_Literal( $search_criteria['status'] );
+				$condition_operator = GF_Query_Condition::EQ;
+			}
+
 			$property_conditions[] = new GF_Query_Condition(
 				new GF_Query_Column( 'status' ),
-				GF_Query_Condition::EQ,
-				new GF_Query_Literal( $search_criteria['status'] )
+				$condition_operator,
+				$condition_value
 			);
 		}
 
@@ -328,7 +342,8 @@ class GF_Query {
 
 				$form = GFFormsModel::get_form_meta( $form_id );
 				$field = GFFormsModel::get_field( $form, $key );
-				if ( $field && $operator != GF_Query_Condition::LIKE && ( $field->get_input_type() == 'number' || rgar( $filter, 'is_numeric' ) ) ) {
+				$is_numeric_filter = ( $field && $field->get_input_type() == 'number' ) || rgar( $filter, 'is_numeric' );
+				if ( $operator != GF_Query_Condition::LIKE && $is_numeric_filter ) {
 					if ( ! is_numeric( $value ) ) {
 						$value = floatval( $value );
 					}

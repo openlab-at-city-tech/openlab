@@ -11,6 +11,7 @@ class Advanced_Excerpt {
 		'length' => 40,
 		'length_type' => 'words',
 		'no_custom' => 1,
+		'no_custom_from_custom' => 0,
 		'link_excerpt' => 0,
 		'no_shortcode' => 1,
 		'finish' => 'exact',
@@ -257,10 +258,12 @@ class Advanced_Excerpt {
 
 		// Avoid custom excerpts
 		if ( !empty( $content ) && !$no_custom ) {
-			if ( $link_on_custom_excerpt ) {
-				return $this->text_add_more( $content, '', ( $add_link ) ? $read_more : false, ( $link_new_tab ) ? true : false, ( $link_screen_reader ) ? true : false );
-			}	
-			return $content; 
+			if ( ! $no_custom_from_custom ) {
+				if ( $link_on_custom_excerpt ) {
+					return $this->text_add_more( $content, '', ( $add_link ) ? $read_more : false, ( $link_new_tab ) ? true : false, ( $link_screen_reader ) ? true : false );
+				}	
+				return $content; 
+			}
 		}
 
 		// prevent recursion on 'the_content' hook
@@ -271,6 +274,11 @@ class Advanced_Excerpt {
 		}
 
 		$text = get_the_content( '' );
+
+		// generate excerpt from the "custom excerpt" (only if there is a "custom excerpt" )
+		if ( $no_custom && $no_custom_from_custom && ! empty( trim( $post->post_excerpt ) ) ) {
+			$text = $post->post_excerpt;
+		}
 
 		// remove shortcodes
 		if ( $no_shortcode ) {
@@ -427,7 +435,7 @@ class Advanced_Excerpt {
 		$_POST = stripslashes_deep( $_POST );
 		$this->options['length'] = (int) $_POST['length'];
 
-		$checkbox_options = array( 'no_custom', 'no_shortcode', 'add_link', 'link_new_tab', 'link_screen_reader', 'link_exclude_length', 'link_on_custom_excerpt', 'the_excerpt', 'the_content', 'the_content_no_break', 'link_excerpt' );
+		$checkbox_options = array( 'no_custom', 'no_custom_from_custom', 'no_shortcode', 'add_link', 'link_new_tab', 'link_screen_reader', 'link_exclude_length', 'link_on_custom_excerpt', 'the_excerpt', 'the_content', 'the_content_no_break', 'link_excerpt' );
 
 		foreach ( $checkbox_options as $checkbox_option ) {
 			$this->options[$checkbox_option] = ( isset( $_POST[$checkbox_option] ) ) ? 1 : 0;

@@ -1012,7 +1012,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 			$this->add_render_attribute( 'list_item', 'class', 'elementor-inline-item' );
 		}
 		?>
-		<div <?php echo ($this->get_render_attribute_string( 'icon_list' )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
+		<div <?php $this->print_render_attribute_string( 'icon_list' ); ?>>
 			<?php
 			foreach ( $settings['icon_list'] as $index => $item ) :
 				$post = '';
@@ -1022,69 +1022,58 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 					$post = $item['ekit_page_list_website_link']['url'];
 				}
 
-				$href = '';
-				if ($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
-					$href = !empty($post) ? get_the_permalink($post->ID) : '';
-				} else {
-					$href = $post;
-				}
-
-				$target = ' target="_self"';
-				if ($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
-					$target = '_blank' === $settings['ekit_href_target'] ? ' target=_blank' : ' target=_self';
-					
-				} else {
-					$target = (isset($item['ekit_page_list_website_link']['is_external']) && $item['ekit_page_list_website_link']['is_external'] !='') ? ' target=_blank' : ' target=_self';
-				}
-				
-				$rel = '';
-				if ($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
-					$rel = $settings['ekit_href_rel'] == 'yes' ? 'nofollow' : '';
-					$rel = !empty($item['ekit_page_list_website_link']['nofollow']) ? 'nofollow' : '';
-				}
-
-                if($post != null):
+				if($post != null) :
 					$text = empty($item['text']) ? $post->post_title : $item['text'];
-				?>
-				<div class="elementor-icon-list-item <?php echo esc_attr($grid_d); ?> <?php echo esc_attr($grid_t); ?> <?php echo esc_attr($grid_m); ?>" >
-					<a <?php echo esc_attr($target); ?> rel="<?php echo esc_attr($rel);?>"  href="<?php echo esc_url($href); ?>" class="elementor-repeater-item-<?php echo esc_attr( $item[ '_id' ] ); ?> <?php echo  esc_attr( $settings['ekit_menu_list_label_align'] ); ?>">
-						<div class="ekit_page_list_content">
-							<?php if ( ! empty( $item['icons'] ) && $item['ekit_page_list_show_icon'] == 'yes') : ?>
-								<span class="elementor-icon-list-icon">
-									<?php
-										// new icon
-										$migrated = isset( $item['__fa4_migrated']['icons'] );
-										// Check if its a new widget without previously selected icon using the old Icon control
-										$is_new = empty( $item['icon'] );
-										if ( $is_new || $migrated ) {
+					if($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
+						$options = [
+							'url'			=> !empty($post) ? get_the_permalink($post->ID) : '',
+							'is_external'	=> ($settings['ekit_href_target'] === '_blank') ? true : false,
+							'nofollow'		=> ($settings['ekit_href_rel'] === 'yes') ? true : false,
+						];
+						$this->add_link_attributes( 'link_' .$index, $options );
+					} else {
+						if (!empty($item['ekit_page_list_website_link']['url'])) {
+							$this->add_link_attributes( 'link_' . $index, $item['ekit_page_list_website_link'] );
+						}
+					}
+					?>
+					<div class="elementor-icon-list-item <?php echo esc_attr($grid_d); ?> <?php echo esc_attr($grid_t); ?> <?php echo esc_attr($grid_m); ?>">
+						<a class="elementor-repeater-item-<?php echo esc_attr( $item[ '_id' ] ); ?> <?php echo  esc_attr( $settings['ekit_menu_list_label_align'] ); ?>" <?php $this->print_render_attribute_string( 'link_' . $index ); ?>>
+							<div class="ekit_page_list_content">
+								<?php if ( ! empty( $item['icons'] ) && $item['ekit_page_list_show_icon'] == 'yes') : ?>
+									<span class="elementor-icon-list-icon">
+										<?php
 											// new icon
-											Icons_Manager::render_icon( $item['icons'], [ 'aria-hidden' => 'true' ] );
-										} else {
-											?>
-											<i class="<?php echo esc_attr($item['icon']); ?>" aria-hidden="true"></i>
-											<?php
-										}
-									?>
+											$migrated = isset( $item['__fa4_migrated']['icons'] );
+											// Check if its a new widget without previously selected icon using the old Icon control
+											$is_new = empty( $item['icon'] );
+											if ( $is_new || $migrated ) {
+												// new icon
+												Icons_Manager::render_icon( $item['icons'], [ 'aria-hidden' => 'true' ] );
+											} else {
+												?>
+												<i class="<?php echo esc_attr($item['icon']); ?>" aria-hidden="true"></i>
+												<?php
+											}
+										?>
+									</span>
+								<?php endif; ?>
+								<span class="elementor-icon-list-text">
+									<span class="ekit_page_list_title_title"><?php echo esc_html( $text ); ?></span>
+									<?php if ($item['ekit_menu_widget_sub_title'] != '') : ?>
+										<span class="ekit_menu_subtitle"><?php echo esc_html($item['ekit_menu_widget_sub_title']); ?></span>
+									<?php endif; ?>
+								</span>
+							</div>
+							<?php if ( ! empty( $item['ekit_menu_list_label_title'] ) && $item['ekit_menu_list_show_label'] == 'yes') : ?>
+								<span class="ekit_menu_label">
+									<?php echo esc_html( $item['ekit_menu_list_label_title'] ); ?>
 								</span>
 							<?php endif; ?>
-							<span class="elementor-icon-list-text">
-								<span class="ekit_page_list_title_title"><?php echo esc_html( $text ); ?></span>
-								<?php if ($item['ekit_menu_widget_sub_title'] != '') : ?>
-								<span class="ekit_menu_subtitle"><?php echo esc_html($item['ekit_menu_widget_sub_title']); ?></span>
-								<?php endif; ?>
-							</span>
-						</div>
-						<?php if ( ! empty( $item['ekit_menu_list_label_title'] ) && $item['ekit_menu_list_show_label'] == 'yes') : ?>
-						    <span class="ekit_menu_label">
-                                <?php echo esc_html( $item['ekit_menu_list_label_title'] ); ?>
-						    </span>
-						<?php endif; ?>
-					</a>
-				</div>
-				<?php
-                endif;
-			endforeach;
-			?>
+						</a>
+					</div>
+				<?php endif;
+			endforeach; ?>
 		</div>
 		<?php
 	}

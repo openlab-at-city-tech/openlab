@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div id="bookly-tbs" class="wrap">
     <div id="bookly-wpml-resave-notice" class="alert alert-warning" data-action="bookly_dismiss_wpml_resave_notice">
         <button type="button" class="close" data-dismiss="alert">&times;</button>

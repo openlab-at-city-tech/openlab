@@ -70,7 +70,7 @@ if (\false) {
     class Google_Task_Exception extends \SimpleCalendar\plugin_deps\Google\Task\Exception
     {
     }
-    class Google_Task_Retryable extends \SimpleCalendar\plugin_deps\Google\Task\Retryable
+    interface Google_Task_Retryable extends \SimpleCalendar\plugin_deps\Google\Task\Retryable
     {
     }
     class Google_Task_Runner extends \SimpleCalendar\plugin_deps\Google\Task\Runner

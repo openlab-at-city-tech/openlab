@@ -11,6 +11,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Messages endpoints.
  *
+ * /messages/
+ * /messages/{id}
+ * /messages/{thread_id}
+ *
  * @since 5.0.0
  */
 class BP_REST_Messages_Endpoint extends WP_REST_Controller {
@@ -868,10 +872,16 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 	 * @return array                     The recipient data for the REST response.
 	 */
 	public function prepare_recipient_for_response( $recipient, $request ) {
-		$data = array(
-			'id'        => (int) $recipient->id,
-			'user_id'   => (int) $recipient->user_id,
-			'user_link' => esc_url( bp_core_get_user_domain( $recipient->user_id ) ),
+		$user_info = get_userdata( (int) $recipient->user_id );
+		$data      = array(
+			'id'           => (int) $recipient->id,
+			'is_deleted'   => (int) $recipient->is_deleted,
+			'name'         => (string) $user_info->display_name,
+			'sender_only'  => (int) $recipient->sender_only,
+			'thread_id'    => (int) $recipient->thread_id,
+			'unread_count' => (int) $recipient->unread_count,
+			'user_id'      => (int) $recipient->user_id,
+			'user_link'    => esc_url( bp_core_get_user_domain( $recipient->user_id ) ),
 		);
 
 		// Fetch the user avatar urls (Full & thumb).
@@ -886,16 +896,6 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 				);
 			}
 		}
-
-		$data = array_merge(
-			$data,
-			array(
-				'thread_id'    => (int) $recipient->thread_id,
-				'unread_count' => (int) $recipient->unread_count,
-				'sender_only'  => (int) $recipient->sender_only,
-				'is_deleted'   => (int) $recipient->is_deleted,
-			)
-		);
 
 		/**
 		 * Filter a recipient value returned from the API.
@@ -955,7 +955,7 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 
 		// Loop through recipients to prepare them for the response.
 		foreach ( $thread->recipients as $recipient ) {
-			$data['recipients'][ $recipient->user_id ] = $this->prepare_recipient_for_response( $recipient, $request );
+			$data['recipients'][] = $this->prepare_recipient_for_response( $recipient, $request );
 		}
 
 		// Pluck starred message ids.
@@ -987,7 +987,7 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 *
 	 * @param BP_Messages_Thread $thread  Thread object.
-	 * @return array Links for the given thread.
+	 * @return array
 	 */
 	protected function prepare_links( $thread ) {
 		$base = sprintf( '/%s/%s/', $this->namespace, $this->rest_base );
@@ -1003,7 +1003,7 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 		);
 
 		// Add star links for each message of the thread.
-		if ( bp_is_active( 'messages', 'star' ) ) {
+		if ( is_user_logged_in() && bp_is_active( 'messages', 'star' ) ) {
 			$starred_base = $base . bp_get_messages_starred_slug() . '/';
 
 			foreach ( $thread->messages as $message ) {

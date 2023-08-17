@@ -45,6 +45,13 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
     }
     /**
+     * @return FetchAuthTokenInterface
+     */
+    public function getFetcher()
+    {
+        return $this->fetcher;
+    }
+    /**
      * Implements FetchAuthTokenInterface#fetchAuthToken.
      *
      * Checks the cache for a valid auth token and fetches the auth tokens

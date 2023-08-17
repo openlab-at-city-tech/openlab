@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * Class Ajax
+ *
  * @package Bookly\Backend\Modules\Settings
  */
 class Ajax extends Page
@@ -15,11 +16,11 @@ class Ajax extends Page
     public static function settingsHoliday()
     {
         $interval = self::parameter( 'range', array() );
-        $range    = new Lib\Slots\Range( Lib\Slots\DatePoint::fromStr( $interval[0] ), Lib\Slots\DatePoint::fromStr( $interval[1] )->modify( 1 ) );
+        $range = new Lib\Slots\Range( Lib\Slots\DatePoint::fromStr( $interval[0] ), Lib\Slots\DatePoint::fromStr( $interval[1] )->modify( 1 ) );
         if ( self::parameter( 'holiday' ) == 'true' ) {
-            $repeat    = (int) ( self::parameter( 'repeat' ) == 'true' );
+            $repeat = (int) ( self::parameter( 'repeat' ) == 'true' );
             $employees = Lib\Entities\Staff::query()->whereNot( 'visibility', 'archive' )->fetchArray();
-            $holidays  = Lib\Entities\Holiday::query()
+            $holidays = Lib\Entities\Holiday::query()
                 ->whereBetween( 'date', $range->start()->value()->format( 'Y-m-d' ), $range->end()->value()->format( 'Y-m-d' ) )
                 ->where( 'staff_id', null )
                 ->indexBy( 'date' )
@@ -79,7 +80,7 @@ class Ajax extends Page
     {
         global $wpdb;
 
-        $filter  = self::parameter( 'filter' );
+        $filter = self::parameter( 'filter' );
         $columns = self::parameter( 'columns' );
         $order = self::parameter( 'order', array() );
 
@@ -131,5 +132,32 @@ class Ajax extends Page
             ->execute();
 
         wp_send_json_success();
+    }
+
+    public static function sendSmtpTest()
+    {
+        ob_start();
+        $status = Lib\Utils\Mail::sendSmtp(
+            self::parameter( 'to' ),
+            'Test subject',
+            'Test message',
+            array(
+                'is_html' => Lib\Config::sendEmailAsHtml(),
+                'from' => array(
+                    'email' => get_option( 'bookly_email_sender' ),
+                    'name' => get_option( 'bookly_email_sender_name' ),
+                ),
+            ),
+            array(),
+            self::parameter( 'host' ),
+            self::parameter( 'port' ),
+            self::parameter( 'user' ),
+            self::parameter( 'password' ),
+            self::parameter( 'secure' ),
+            4
+        );
+        $result = ob_get_clean();
+
+        wp_send_json_success( array( 'result' => $result, 'status' => $status ) );
     }
 }

@@ -1,0 +1,53 @@
+
+          <mjml>
+          <mj-head>
+
+    <mj-html-attributes>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="text-color" text-color="#000000"></mj-html-attribute>
+<mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-family" font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif"></mj-html-attribute>
+<mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-size" font-size="14px"></mj-html-attribute>
+<mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="line-height" line-height="1.7"></mj-html-attribute>
+<mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-weight" font-weight="400"></mj-html-attribute>
+<mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="responsive" responsive="true"></mj-html-attribute>
+
+    </mj-html-attributes>
+
+
+              <mj-style >.blc-inline-text {
+      width:100%;
+      padding-left: 0px !important;
+      }
+
+      .blc-inline-text,
+      .blc-inline-text div,
+      .blc-inline-text span{
+      display:inline-block !important;
+      vertical-align:top !important;
+      }</mj-style>
+
+              <mj-breakpoint width="480px" />
+
+              <mj-font name="Roboto" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" />
+            <mj-attributes>
+              <mj-class name="blc-inline-block" display="inline-block" />
+<mj-text font-size="14px" />
+<mj-text line-height="1.7" />
+<mj-text font-weight="400" />
+              <mj-all font-family="-apple-system, BlinkMacSystemFont, &#x27;Segoe UI&#x27;, &#x27;Roboto&#x27;, &#x27;Oxygen&#x27;, &#x27;Ubuntu&#x27;, &#x27;Cantarell&#x27;, &#x27;Fira Sans&#x27;, &#x27;Droid Sans&#x27;,&#x27;Helvetica Neue&#x27;, sans-serif" />
+              <mj-text font-size="14px" />
+              <mj-text color="#000000" />
+        <mj-text line-height="1.7" />
+        <mj-text font-weight="400" />
+
+
+            </mj-attributes>
+          </mj-head>
+          <mj-body background-color="#F4F4F4" width="600px" ><mj-section padding="20px 0px 20px 0px" border="none" direction="ltr" text-align="center" background-repeat="repeat" background-size="auto" background-position="top center" ></mj-section><mj-wrapper border="none" direction="ltr" text-align="center" padding="0px 0px 0px 0px" ><mj-hero background-color="#00BFA5" background-position="center center" mode="fixed-height" vertical-align="top" height="100px" background-height="100px" border-radius="24px 24px 0px 0px;" padding="0px 0px 0px 0px" ><mj-text align="center" color="#ffffff" font-family="Roboto, sans-serif" font-size="20px" line-height="30px" font-weight="700" padding="35px 0px 35px 0px" ><img height="30" width="30" src="{{HEADER_LOGO_SOURCE}}" style="border:0;outline:none;text-decoration:none;height:30px;width:30px;font-size:13px;">&nbsp;Broken Links Notification</mj-text></mj-hero></mj-wrapper><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" background-color="#ffffff" padding="20px 0px 0px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-weight="500" font-size="13px" padding="0px 25px 0px 25px" ><h1 style="text-align:left; margin-top: 10px; margin-bottom: 10px">
+            <span style="font-weight: 700;
+font-size: 25px;line-height: 30px;font-family:Roboto, sans-serif; font-weight:500; color:#1A1A1A;text-align:left;">
+              Subscribe to Broken Links notification</span></h1></mj-text><mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-size="13px" padding="0px 25px 0px 25px" ><p class="text-build-content" data-testid="JiH7lfw73to" style="margin: 10px 0; margin-top: 10px;">
+            <span style="color:#1A1A1A;font-family:Roboto, sans-serif;font-size:18px;line-height:28px;">
+              Hi {{USERNAME}},<br></span><span style="word-spacing: normal; color: rgb(26, 26, 26); font-size: 18px;"><br>An administrator from <a href="{{SITE_URL}}" target="_blank" style="color: inherit; text-decoration: underline;">{{SITENAME}}</a> has subscribed {{EMAIL_ADDRESS}} to </span><b style="word-spacing: normal; color: rgb(26, 26, 26); font-size: 18px;">Broken Links notification</b><span style="word-spacing: normal; color: rgb(26, 26, 26); font-size: 18px;">. To confirm your subscription, click on Confirm Subscription below.</span></p></mj-text></mj-column></mj-section><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" background-color="#ffffff" padding="0px 0px 0px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-button align="center" background-color="#286EFA" color="#ffffff" font-weight="normal" border-radius="6px" line-height="120%" target="_blank" vertical-align="middle" border="none" text-align="center" href="{{ACTIVATION_LINK}}" font-family="Roboto, sans-serif" font-size="14px" text-decoration="none" text-transform="none" padding="30px 25px 20px 25px" inner-padding="10px 25px 10px 25px" >{{CONFIRM_BTN_LABEL}}</mj-button></mj-column></mj-section><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" background-color="#ffffff" padding="0px 0px 0px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-text align="left" color="#000000" font-family="Roboto, sans-serif" font-size="10px" padding="5px 25px 0px 25px" ><p class="text-build-content" style="text-align: left; margin-top: 10px; font-family: Roboto; font-style: normal; font-size: 16px; line-height: 28px; color: rgb(26, 26, 26);" data-testid="lsPh_hKQM"><b>
+            Broken Link Checker
+            </b><br>The WPMU DEV Team.</p></mj-text></mj-column></mj-section><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" background-color="#E7F1FB" padding="20px 0px 20px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-text align="center" css-class="blc-inline-text" padding="10px 25px 10px 25px" ><span>
+            <img height="30" width="30" src="{{FOOTER_LOGO_SOURCE}}" style="border:0;outline:none;text-decoration:none;height:30px;width:30px;font-size:13px;"></span></mj-text></mj-column></mj-section><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" padding="20px 0px 20px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-text align="center" padding="10px 25px 10px 25px" >{{SOCIAL_LINKS}}</mj-text></mj-column></mj-section><mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" padding="0px 0px 0px 0px" ><mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px" ><mj-text align="center" color="#505050" font-family="Roboto, sans-serif" font-size="10px" padding="0px 0px 0px 0px" ><p style="margin-top: 0px;">{{COMPANY_ADDRESS}}</p></mj-text><mj-text align="center" color="#505050" font-family="Roboto, sans-serif" font-size="10px" padding="0px 0px 0px 0px" ><p><a href="{{UNSUBSCRIBE_LINK}}" target="_blank" style="color: inherit; text-decoration: underline;">{{UNSUBSCRIBE}}</a></p></mj-text></mj-column></mj-section></mj-body></mjml >

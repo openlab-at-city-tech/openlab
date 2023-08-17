@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Services\Proxy;
@@ -64,7 +64,7 @@ use Bookly\Backend\Components\Dialogs;
             </table>
 
             <div class="text-right mt-3">
-                <?php Controls\Buttons::renderDelete() ?>
+                <?php Controls\Buttons::renderDelete( 'bookly-delete', null, null, array( 'disabled' => 'disabled' ) ) ?>
             </div>
         </div>
     </div>

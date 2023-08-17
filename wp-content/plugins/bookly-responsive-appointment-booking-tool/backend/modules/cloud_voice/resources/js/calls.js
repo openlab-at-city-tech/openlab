@@ -260,6 +260,9 @@ jQuery(function($) {
         });
     }
 
+    $('#bookly-js-test-voice-notifications').on('click', function() {
+        BooklyTestingVoiceDialog.showDialog();
+    });
 
     if (hash.length > 1) {
         switch (hash[1]) {

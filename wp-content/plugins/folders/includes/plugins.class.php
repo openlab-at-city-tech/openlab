@@ -35,11 +35,11 @@ class WCP_Folder_Plugins
     /**
      * Check is there any data to import
      *
-     * @var    integer    $isExists    0/1
+     * @var    integer    $is_exists    0/1
      * @since  1.0.0
      * @access public
      */
-    public $isExists = 0;
+    public $is_exists = 0;
 
 
     /**

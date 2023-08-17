@@ -27,7 +27,7 @@
 		elseif ( bp_is_user_profile() ) :
 			bp_get_template_part( 'members/single/profile'  );
 
-		elseif ( bp_is_user_forums() ) :
+		elseif ( function_exists( 'bp_is_user_forums' ) && bp_is_user_forums() ) :
 			bp_get_template_part( 'members/single/forums'   );
 
 		elseif ( bp_is_user_notifications() ) :
@@ -35,14 +35,14 @@
 
 		elseif ( bp_is_user_settings() ) :
 			bp_get_template_part( 'members/single/settings' );
-                
+
                 elseif (bp_current_action() == 'invite-new-members' || bp_current_action() == 'sent-invites') :
                     bp_get_template_part( 'members/single/invite-anyone' );
-                
+
 		// If nothing sticks, load a generic template
 		else :
 			bp_get_template_part( 'members/single/plugins'  );
-                
+
 		endif;
 
 		do_action( 'bp_after_member_body' ); ?>
@@ -50,5 +50,5 @@
     </div>
 
 <?php do_action( 'bp_after_member_home_content' ); ?>
-    
+
 <?php openlab_bp_sidebar('members'); ?>

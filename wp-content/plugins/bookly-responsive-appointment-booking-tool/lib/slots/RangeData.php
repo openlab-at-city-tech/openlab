@@ -25,6 +25,8 @@ class RangeData
     protected $next_slot;
     /** @var Range */
     protected $alt_slot;
+    /** @var Range */
+    protected $prev_alt_slot;  // for creating doubly linked list
     /** @var int */
     protected $next_connection;
 
@@ -40,6 +42,7 @@ class RangeData
      * @param int $nop
      * @param Range|null $next_slot
      * @param Range|null $alt_slot
+     * @param Range|null $prev_alt_slot
      * @param int $next_connection
      */
     public function __construct(
@@ -52,6 +55,7 @@ class RangeData
         $nop = 0,
         $next_slot = null,
         $alt_slot = null,
+        $prev_alt_slot = null,
         $next_connection = Generator::CONNECTION_CONSECUTIVE
     )
     {
@@ -64,6 +68,7 @@ class RangeData
         $this->nop             = $nop;
         $this->next_slot       = $next_slot;
         $this->alt_slot        = $alt_slot;
+        $this->prev_alt_slot   = $prev_alt_slot;
         $this->next_connection = $next_connection;
     }
 
@@ -158,6 +163,16 @@ class RangeData
     }
 
     /**
+     * Get previous alternative slot.
+     *
+     * @return Range
+     */
+    public function prevAltSlot()
+    {
+        return $this->prev_alt_slot;
+    }
+
+    /**
      * Get connection type with the next slot (CONSECUTIVE or PARALLEL).
      *
      * @return int
@@ -188,6 +203,16 @@ class RangeData
     }
 
     /**
+     * Check whether previous alternative slot is set.
+     *
+     * @return bool
+     */
+    public function hasPrevAltSlot()
+    {
+        return $this->prev_alt_slot != null;
+    }
+
+    /**
      * Create a copy of the data with new staff ID.
      *
      * @param int $new_staff_id
@@ -195,7 +220,7 @@ class RangeData
      */
     public function replaceStaffId( $new_staff_id )
     {
-        return new static( $this->service_id, $new_staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->next_connection );
+        return new static( $this->service_id, $new_staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->prev_alt_slot, $this->next_connection );
     }
 
     /**
@@ -206,7 +231,7 @@ class RangeData
      */
     public function replaceState( $new_state )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $new_state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $new_state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->prev_alt_slot, $this->next_connection );
     }
 
     /**
@@ -217,7 +242,7 @@ class RangeData
      */
     public function replaceOnWaitingList( $new_on_waiting_list )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $new_on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $new_on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->prev_alt_slot, $this->next_connection );
     }
 
     /**
@@ -228,7 +253,7 @@ class RangeData
      */
     public function replaceCapacity( $new_capacity )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $new_capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $new_capacity, $this->nop, $this->next_slot, $this->alt_slot, $this->prev_alt_slot, $this->next_connection );
     }
 
     /**
@@ -239,7 +264,7 @@ class RangeData
      */
     public function replaceNop( $new_nop )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $new_nop, $this->next_slot, $this->alt_slot, $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $new_nop, $this->next_slot, $this->alt_slot, $this->prev_alt_slot, $this->next_connection );
     }
 
     /**
@@ -251,7 +276,7 @@ class RangeData
      */
     public function replaceNextSlot( $new_next_slot, $next_connection = null )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $new_next_slot, $this->alt_slot, $next_connection ?: $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $new_next_slot, $this->alt_slot, $this->prev_alt_slot, $next_connection ?: $this->next_connection );
     }
 
     /**
@@ -262,6 +287,17 @@ class RangeData
      */
     public function replaceAltSlot( $new_alt_slot )
     {
-        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $new_alt_slot, $this->next_connection );
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $new_alt_slot, $this->prev_alt_slot, $this->next_connection );
+    }
+
+    /**
+     * Create a copy of the data with new previous alternative slot.
+     *
+     * @param Range|null $new_prev_alt_slot
+     * @return static
+     */
+    public function replacePrevAltSlot( $new_prev_alt_slot )
+    {
+        return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $new_prev_alt_slot, $this->next_connection );
     }
 }

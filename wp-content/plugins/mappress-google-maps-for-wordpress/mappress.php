@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.84.21
+Version: 2.87.2
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.84.21';
+	const VERSION = '2.87.2';
 
 	static
 		$api,
@@ -189,7 +189,6 @@ class Mappress {
 	static function admin_menu() {
 		$upgrade = Mappress_Db::upgrade_check();
 		$parent = ($upgrade) ? null : 'mappress';
-		$upgrade_parent = ($upgrade) ? 'mappress' : null;
 
 		self::$pages['main'] = add_menu_page('MapPress', 'MapPress', 'manage_options', 'mappress', array('Mappress_Settings', 'options_page'), 'dashicons-location');
 		self::$pages['settings'] = add_submenu_page($parent, __('Settings', 'mappress-google-maps-for-wordpress'), __('Settings', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress', array('Mappress_Settings', 'options_page'));
@@ -197,7 +196,9 @@ class Mappress {
 		if (self::$pro)
 			self::$pages['import'] = add_submenu_page($parent, __('Import', 'mappress-google-maps-for-wordpress'), __('Import', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_import', array('Mappress_Import', 'import_page'));
 		self::$pages['support'] = add_submenu_page($parent, __('Support', 'mappress-google-maps-for-wordpress'), __('Support', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_support', array('Mappress_Settings', 'support_page'));
-		self::$pages['upgrade'] = add_submenu_page($upgrade_parent, __('Upgrade', 'mappress-google-maps-for-wordpress'), __('Upgrade', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_db', array('Mappress_Db', 'upgrade_page'));
+		
+		if ($upgrade)
+			self::$pages['upgrade'] = add_submenu_page('mappress', __('Upgrade', 'mappress-google-maps-for-wordpress'), __('Upgrade', 'mappress-google-maps-for-wordpress'), 'manage_options', 'mappress_db', array('Mappress_Db', 'upgrade_page'));
 	}
 
 	static function admin_notices() {
@@ -307,6 +308,10 @@ class Mappress {
 		if (!$reason || $reason == 'private' || $reason == 'temporary')
 			return;
 
+		// Don't bother if there's no reason text
+		if (empty($reason_text))
+			return;
+
 		// Call API (static functions can't use api_call())
 		$args = array(
 			'api_action' => 'feedback',
@@ -321,18 +326,6 @@ class Mappress {
 
 	static function debugging() {
 		global $wpdb;
-
-		if (isset($_GET['mp_info_old'])) {
-			$maps_table = $wpdb->prefix . 'mappress_maps';
-			$posts_table = $wpdb->prefix . 'mappress_posts';
-			$results = $wpdb->get_results("SELECT * from $posts_table");
-			foreach($results as $result)
-				echo "<div>mapid: " . $result->mapid . " - postid: " . $result->postid . "</div>";
-			$results = $wpdb->get_results("SELECT * FROM $maps_table");
-			foreach($results as $result)
-				echo "<div>mapid: " . $result->mapid . " obj: " . esc_html($result->obj) . "</div><hr>";
-			die();
-		}
 
 		if (isset($_GET['mp_info'])) {
 			echo "<b>Plugin</b> " . self::$version;
@@ -352,8 +345,8 @@ class Mappress {
 
 		if (isset($_REQUEST['mp_debug']))
 			self::$debug = max(1, (int) $_REQUEST['mp_debug']);
-		else if (defined('MAPPRESS_DEBUG'))
-			self::$debug = MAPPRESS_DEBUG;
+		else if (defined('MAPPRESS_DEBUG') && MAPPRESS_DEBUG)
+			self::$debug = true;
 
 		if (self::$debug) {
 			error_reporting(E_ALL);
@@ -370,17 +363,19 @@ class Mappress {
 		if (empty($results->server) && defined('MAPPRESS_APIKEY_SERVER'))
 			$results->server = MAPPRESS_APIKEY_SERVER;
 		if (empty($results->mapbox) && defined('MAPPRESS_APIKEY_MAPBOX'))
-			$result->mapbox = MAPPRESS_APIKEY_MAPBOX;
+			$results->mapbox = MAPPRESS_APIKEY_MAPBOX;
 		return $results;
 	}
 
-	static function get_iframe($content = '') {
+	static function get_iframe($map) {
 		$styles = new WP_Styles();
 		$scripts = new WP_Scripts();
 		self::scripts_register($scripts);
 		self::scripts_enqueue('frontend', $scripts);
 		self::styles_register($styles);
 		self::styles_enqueue('frontend', $styles);
+
+		$content = $map->display(null, true);
 
 		ob_start();
 		?>
@@ -389,7 +384,7 @@ class Mappress {
 		<head>
 			<title>MapPress</title>
 			<?php Mappress::wp_head(); ?>
-			<?php $styles->do_items('mappress'); ?>
+			<?php $styles->do_items(array('mappress', 'mappress-custom')); ?>
 		</head>
 		<body class='mapp-iframe-body'>
 			<?php echo $content; ?>
@@ -429,7 +424,7 @@ class Mappress {
 	*/
 	static function get_mashup($atts) {
 		global $wp_query;
-
+													
 		$mashup = new Mappress_Map($atts);
 		$mashup->otype = (isset($atts['otype']) && $atts['otype'] == 'user') ? 'user' : 'post';
 		$mashup->query = Mappress_Query::parse_query($atts);
@@ -536,7 +531,7 @@ class Mappress {
 		}
 
 		// Missing license
-		if (self::$pro && !trim(self::$options->license) && (!is_multisite() || (is_super_admin() && is_main_site())))
+		if (self::$pro && empty(self::$options->license) && (!is_multisite() || (is_super_admin() && is_main_site())))
 			self::$notices['nolicense'] = array('warning', __('Please enter your MapPress license key to enable plugin updates', 'mappress-google-maps-for-wordpress'));
 
 		if (self::VERSION >= '2.55' && version_compare(get_bloginfo('version'),'5.3', '<') )
@@ -605,6 +600,21 @@ class Mappress {
 			// 2.84 - copy mashupbody setting => mashupthumbs (poi | post)
 			if (version_compare($current_version, '2.84', '<'))
 				self::$options->mashupThumbs = self::$options->mashupBody;
+
+			// 2.85 - rename filters type checkbox=>checkboxes and radio=>radios
+			if (version_compare($current_version, '2.85', '<')) {
+				foreach(['post', 'user'] as $type) {
+					$filters = self::$options->filters[$type] ?? [];
+					foreach($filters as &$filter) {
+						if ($filter['format'] == 'radio')
+							$filter['format'] = 'radios';
+						else if ($filter['format'] == 'checkbox')
+							$filter['format'] = 'checkboxes';
+					}
+					self::$options->filters[$type] = $filters;
+				}
+				self::$options->save();
+			}
 		}
 
 		update_option('mappress_version', self::VERSION);
@@ -688,6 +698,20 @@ class Mappress {
 			'version' => self::$version
 		);
 
+		// Tile providers
+		$l10n['options']['tileProviders'] = array(
+			'mapbox' => array(
+				'accessToken' => self::get_api_keys()->mapbox,
+				'attribution' => ['<a href="https://www.mapbox.com/about/maps" target="_blank">&copy; Mapbox</a>', '<a href="https://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap</a>' ],
+				'url' => 'https://api.mapbox.com/styles/v1/{user}/{mapboxid}/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}&fresh=true',
+				'zoomOffset' => 0
+			),
+			'osm' => array(
+				'attribution' => ['<a href="https://openstreetmap.org" target="_blank">&copy; OpenStreetMap</a>'],
+				'url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+			)
+		);
+		
 		// Default styles
 		if (Mappress::$options->engine == 'leaflet') {
 			if (Mappress::get_api_keys()->mapbox) {
@@ -716,11 +740,12 @@ class Mappress {
 		$l10n['options']['standardStyles'] = $styles;
 
 		// Global settings
-		$options = array('alignment', 'clustering', 'clusteringOptions', 'country', 'defaultIcon', 'directions', 'directionsList',
+		$options = array('alignment', 'betaPoiFields', 'clustering', 'clusteringOptions', 'country', 'defaultIcon', 'directions', 'directionsList',
 		'directionsPopup', 'directionsServer', 'engine', 'filters', 'filtersPos', 'geocoder', 'geolocate',
 		'highlight', 'highlightIcon', 'iconScale', 'initialOpenInfo', 'layout', 'lines', 'lineOpts',
-		'mashupClick', 'mini', 'poiList', 'poiListOpen', 'poiListPageSize', 'poiZoom', 'radius', 'scrollWheel', 'search',
-		'searchBox', 'size', 'sizes', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 'tooltips', 'userLocation');
+		'mashupClick', 'mini', 'poiFields', 'poiList', 'poiListOpen', 'poiListPageSize', 'poiListViewport', 'poiZoom', 'radius', 'scrollWheel', 'search',
+		'searchBox', 'searchPlaceholder', 'size', 'sizes', 'sort', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 'tooltips', 
+		'units', 'userLocation', 'webComponent');
 
 		foreach($options as $option) {
 			if (isset(self::$options->$option)) {
@@ -767,7 +792,7 @@ class Mappress {
 
 	static function script_loader_tag($tag, $handle, $src) {
 		// Deregister
-		if (self::$options->engine == 'google' && self::$loaded && ($handle != 'mappress-google' && (stripos($src, 'maps.googleapis.com') !== false || stripos($src, 'maps.google.com'))))
+		if (self::$options->engine == 'google' && self::$options->deregister && self::$loaded && ($handle != 'mappress-google' && (stripos($src, 'maps.googleapis.com') !== false || stripos($src, 'maps.google.com'))))
 			return '';
 		// Re-register
 		else if ($handle == 'mappress-google' && empty($tag))
@@ -822,7 +847,7 @@ class Mappress {
 		$js = ($dev) ? "https://localhost/$dev/wp-content/plugins/mappress-google-maps-for-wordpress/build" : self::$baseurl . '/build';
 
 		// Dependencies
-		$deps = array('underscore', 'wp-element', 'wp-i18n');
+		$deps = array('wp-element', 'wp-i18n');
 		if (self::$options->engine == 'leaflet')
 			$deps = array_merge(array('mappress-leaflet', 'mappress-leaflet-omnivore'), $deps);
 		if (self::$options->engine != 'leaflet' || self::$options->geocoder == 'google')
@@ -865,10 +890,10 @@ class Mappress {
 		$dev = self::is_dev();
 		$language = self::get_language();
 		$language = ($language) ? "&language=$language" : '';
-		$apiversion = ($dev) ? 'v=beta' : 'v=3';
+		$apiversion = ($dev) ? '&v=beta' : '&v=3';
 		$apikey = "&key=" . self::get_api_keys()->browser;
 		$libs = '&libraries=places,drawing';
-		return "https://maps.googleapis.com/maps/api/js?{$apiversion}{$language}{$libs}{$apikey}";
+		return "https://maps.googleapis.com/maps/api/js?callback=Function.prototype{$apiversion}{$language}{$libs}{$apikey}";
 	}
 
 	/**
@@ -917,17 +942,6 @@ class Mappress {
 		}
 
 		return $atts;
-	}
-
-	/**
-	* Switch WPML language during AJAX calls
-	*/
-	static function set_language() {
-		global $sitepress;
-		if ($sitepress && method_exists($sitepress, 'switch_lang')) {
-			$language = self::get_language();
-			$sitepress->switch_lang($language);
-		}
 	}
 
 	/**
@@ -1022,21 +1036,20 @@ class Mappress {
 			}
 		}
 
-		// Mappress CSS from theme directory
+		// Frontend
+		$styles->add('mappress', self::$baseurl . '/css/mappress.css', $deps, self::$version);
+
+		// Admin CSS
+		$styles->add('mappress-admin', self::$baseurl . '/css/mappress_admin.css', array('mappress', 'wp-edit-blocks'), self::$version);
+
+		 // Mappress CSS from theme directory
 		if ( @file_exists( get_stylesheet_directory() . '/mappress.css' ) )
 			$file = get_stylesheet_directory_uri() . '/mappress.css';
 		elseif ( @file_exists( get_template_directory() . '/mappress.css' ) )
 			$file = get_template_directory_uri() . '/mappress.css';
 		if (isset($file)) {
 			$styles->add('mappress-custom', $file, array('mappress'), self::$version);
-			$deps[] = 'mappress-custom';
 		}
-
-		// Frontend
-		$styles->add('mappress', self::$baseurl . '/css/mappress.css', $deps, self::$version);
-
-		// Admin CSS
-		$styles->add('mappress-admin', self::$baseurl . '/css/mappress_admin.css', array('mappress', 'wp-edit-blocks'), self::$version);
 	}
 
 	static function template_redirect() {
@@ -1067,7 +1080,7 @@ class Mappress {
 			$map->pois = $result->pois;
 		}
 
-		echo self::get_iframe($map->display(null, true));
+		echo self::get_iframe($map);
 		die();
 	}
 
@@ -1126,6 +1139,23 @@ class Mappress {
 			return $shortcodes . $content;
 		else
 			return $content . $shortcodes;
+	}
+
+	static function to_atts($vars) {
+		$vars = is_object($vars) ? $vars : (object) $vars;
+		$results = array();
+		foreach($vars as $name => $value) {
+			if ($value === null || $value === '')
+				continue;
+
+			$lcname = strtolower($name);        // Only lowercase is allowed
+
+			if (is_object($value) || is_array($value))
+				$results[] = sprintf("%s='%s'", $lcname, json_encode($value, JSON_HEX_APOS));
+			else
+				$results[] = "$lcname='" . str_replace('&quot;', '"', $value) . "'";
+		}
+		return join(' ', $results);
 	}
 
 	static function unpkg($package, $filename) {

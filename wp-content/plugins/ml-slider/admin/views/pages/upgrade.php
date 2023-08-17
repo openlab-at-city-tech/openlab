@@ -3,14 +3,12 @@
 } ?>
 
 <div id="metaslider-ui" class="flex p-6 mb-16">
-    <div class="metaslider_col">
-        <h2 class="font-light text-xl mb-2">MetaSlider <?php esc_html_e("Comparison Chart", 'ml-slider');?></h2>
         <table class="metaslider_feat_table shadow">
             <thead>
                 <tr>
-                    <th></th>
-                    <th><img src="<?php echo esc_url(METASLIDER_ADMIN_URL . 'images/notices/metaslider_logo.png');?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80">MetaSlider<br><span><?php esc_html_e('free', 'ml-slider');?></span></th>
-                    <th><img src="<?php echo esc_url(METASLIDER_ADMIN_URL . 'images/notices/metaslider_logo.png');?>" alt="<?php esc_attr_e('MetaSlider logo', 'ml-slider');?>" width="80" height="80"><?php esc_html_e('MetaSlider', 'ml-slider'); ?><br><span><?php esc_html_e('pro', 'ml-slider'); ?></span></th>
+                    <th class="p-3"><h2 class="font-light text-xl mb-2">MetaSlider <?php esc_html_e("Comparison Chart", 'ml-slider');?></h2></th>
+                    <th class="p-3"><?php esc_html_e('MetaSlider', 'ml-slider'); ?><br><span><?php esc_html_e('free', 'ml-slider');?></span></th>
+                    <th class="p-3"><?php esc_html_e('MetaSlider', 'ml-slider'); ?><br><span><?php esc_html_e('pro', 'ml-slider'); ?></span></th>
                 </tr>
             </thead>
             <tbody>
@@ -113,5 +111,4 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
 </div>

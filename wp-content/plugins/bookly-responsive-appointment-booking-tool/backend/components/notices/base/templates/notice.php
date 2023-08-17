@@ -1,4 +1,4 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <div id="bookly-tbs" class="wrap">
@@ -11,7 +11,7 @@ use Bookly\Backend\Components\Controls\Buttons;
                 <div class="row">
                     <div class="col-12">
                         <div><b class="bookly-js-alert-title"><?php echo esc_html( $title ) ?></b> <?php echo esc_html( $sub_title ) ?></div>
-                        <div class="font-weight-bold mt-1"><?php echo esc_html( $message ) ?></div>
+                        <div class="font-weight-bold mt-1"><?php echo nl2br( esc_html( $message ) ) ?></div>
                         <small class="text-muted">Daniel Williams, PO at Bookly</small>
                     </div>
                     <div class="col-12 mt-2">

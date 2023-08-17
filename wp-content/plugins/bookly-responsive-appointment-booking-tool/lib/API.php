@@ -94,7 +94,7 @@ abstract class API
      */
     public static function sendStats()
     {
-        /** @global \wpdb */
+        /** @global \wpdb $wpdb*/
         global $wpdb;
 
         $today = substr( current_time( 'mysql' ), 0, 10 );

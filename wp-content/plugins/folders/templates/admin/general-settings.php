@@ -220,6 +220,13 @@ if (! defined('ABSPATH')) {
             $(document).on("click", "#import-folder-button", function(e){
                 importPluginData();
             });
+            $(document).on("click", "#folders_by_user_roles", function(e){
+                if($(this).is(":checked")) {
+                    $(".folder-user-settings").addClass("active");
+                } else {
+                    $(".folder-user-settings").removeClass("active");
+                }
+            });
             $(document).on("click", ".remove-folder-data", function(e){
                 selectedItem = $(this).closest("tr").data("plugin");
                 var pluginName = $(this).closest("tr").find(".plugin-name").html();
@@ -1406,63 +1413,9 @@ if ($wp_status == "yes") {
                     $folders_by_users = !isset($customize_folders['folders_by_users']) ? "off" : $customize_folders['folders_by_users'];
                     $dynamic_folders_for_admin_only = !isset($customize_folders['dynamic_folders_for_admin_only']) ? "off" : $customize_folders['dynamic_folders_for_admin_only'];
                     ?>
-                    <?php if ($setting_page == "folders-by-user") { ?>
-                        <div class="folders-by-user">
-                            <div class="send-user-to-pro">
-                                <div class="normal-box">
-                                    <table class="import-export-table">
-                                        <tr>
-                                            <td>
-                                                <span class="danger-info"><?php esc_html_e("Restrict users to their folders only", "folders"); ?></span>
-                                                <span class="danger-data"><?php esc_html_e("Users will only be able to access their folders and media. Only Admin users will be able to view all folders", "folders"); ?>
-                                            </td>
-                                            <td class="last-td" >
-                                                <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span>
-                                                        <label class="folder-switch send-user-to-pro" for="dynamic_folders_for_admin_only">
-                                                            <input type="hidden">
-                                                            <div class="folder-slider round"></div>
-                                                        </label>
-                                                    </span>
-                                                    <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                    <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
-                                </a>
-                            </div>
-                            <div class="send-user-to-pro">
-                                <div class="normal-box">
-                                    <table class="import-export-table">
-                                        <tr>
-                                            <td>
-                                                <span class="danger-info"><?php esc_html_e("Restrict access to dynamic folders", "folders"); ?></span>
-                                                <span class="danger-data"><?php esc_html_e("Regular users will not access dynamic folders.", "folders"); ?></span>
-                                                <span class="danger-data"><?php esc_html_e("Only Admin users will be able to view dynamic folders.", "folders"); ?></span>
-                                            </td>
-                                            <td class="last-td" >
-                                                <a class="upgrade-box-link" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                                    <span>
-                                                        <label class="folder-switch send-user-to-pro" for="folders_by_users">
-                                                            <input type="hidden">
-                                                            <div class="folder-slider round"></div>
-                                                        </label>
-                                                    </span>
-                                                    <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders') ?></button>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <a class="upgrade-box" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" >
-                                    <button type="button"><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
-                                </a>
-                            </div>
-                        </div>
-                    <?php }//end if
+                    <?php if ($setting_page == "folders-by-user") {
+                        include "folder-user-settings.php";
+                    }//end if
                     ?>
                 </div>
 
