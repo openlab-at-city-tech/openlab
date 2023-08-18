@@ -3534,3 +3534,14 @@ options: {
 }
 add_filter( 'default_option_simple_mathjax_options', 'openlab_default_mathjax_config' );
 add_filter( 'option_simple_mathjax_options', 'openlab_default_mathjax_config' );
+
+/**
+ * Ensure that bp-mpo-activity-filter uses the correct blog ID for the OpenLab setup.
+ *
+ * @param int $blog_id Blog ID from bp-mpo-activity-filter.
+ * @return int
+ */
+function openlab_bp_mpo_activity_filter_blog_id( $blog_id ) {
+	return openlab_get_site_id_by_group_id( $blog_id );
+}
+add_filter( 'bp_mpo_activity_filter_activity_item_blog_id', 'openlab_bp_mpo_activity_filter_blog_id' );
