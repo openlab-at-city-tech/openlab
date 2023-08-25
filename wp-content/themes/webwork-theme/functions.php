@@ -42,3 +42,12 @@ function webwork_disable_emojis() {
 	//add_filter( 'wp_resource_hints', 'disable_emojis_remove_dns_prefetch', 10, 2 );
 }
 add_action( 'init', 'webwork_disable_emojis' );
+
+/**
+ * Stub for multisite_over_quota_message(), which is not present outside of wp-admin.
+ */
+if ( ! function_exists( 'multisite_over_quota_message' ) ) {
+	function multisite_over_quota_message() {
+		return;
+	}
+}
