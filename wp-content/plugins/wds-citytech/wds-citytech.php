@@ -3545,3 +3545,23 @@ function openlab_bp_mpo_activity_filter_blog_id( $blog_id ) {
 	return openlab_get_site_id_by_group_id( $blog_id );
 }
 add_filter( 'bp_mpo_activity_filter_activity_item_blog_id', 'openlab_bp_mpo_activity_filter_blog_id' );
+
+/**
+ * Sets a flag to enable captions on video embeds.
+ *
+ * @param string $html The video embed HTML.
+ * @return string
+ */
+function openlab_enable_captions_on_video_embeds( $html ) {
+	// If the iframe src is from youtube.com, append the cc_load_policy=1 parameter.
+	$html = preg_replace(
+		'/src="(.+?)youtube\.com\/embed\/([^?]+)\?(.*?)"/',
+		'src="$1youtube.com/embed/$2?cc_load_policy=1&$3',
+		$html
+	);
+
+	_b( $html );
+
+	return $html;
+}
+add_filter( 'oembed_result', 'openlab_enable_captions_on_video_embeds' );
