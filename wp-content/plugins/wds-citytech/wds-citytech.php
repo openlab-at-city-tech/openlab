@@ -3560,8 +3560,6 @@ function openlab_enable_captions_on_video_embeds( $html ) {
 		$html
 	);
 
-	_b( $html );
-
 	return $html;
 }
 add_filter( 'oembed_result', 'openlab_enable_captions_on_video_embeds' );
