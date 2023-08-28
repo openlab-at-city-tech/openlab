@@ -399,6 +399,23 @@ function cuny_home_square( $type ) {
 }
 
 /**
+ * Busts the transient HTML cache for home page squares.
+ *
+ * Called when a group is created, deleted, or updated, or when the avatar is updated.
+ */
+function openlab_bust_home_square_cache() {
+	delete_transient( 'openlab_home_square_project' );
+	delete_transient( 'openlab_home_square_course' );
+	delete_transient( 'openlab_home_square_club' );
+	delete_transient( 'openlab_home_square_portfolio' );
+}
+add_action( 'groups_created_group', 'openlab_bust_home_square_cache' );
+add_action( 'groups_delete_group', 'openlab_bust_home_square_cache' );
+add_action( 'groups_group_after_save', 'openlab_bust_home_square_cache' );
+add_action( 'bp_core_delete_existing_avatar', 'openlab_bust_home_square_cache' );
+add_action( 'groups_avatar_uploaded', 'openlab_bust_home_square_cache' );
+
+/**
  *  openlab_groups_filter_clause()
  *
  */
