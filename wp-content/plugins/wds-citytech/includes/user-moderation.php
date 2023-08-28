@@ -58,7 +58,7 @@ function prevent_login( $member = null ) {
 	// If the user is blocked, set the wp-login.php error message.
 	if ( is_suspended( $member_id ) ) {
 		// Set the default message.
-		$message = __( '<strong>ERROR</strong>: This account has been suspended. Please contact the site administrator.', 'bp-toolkit' );
+		$message = 'This account is not active. If you have questions, please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">contact us</a>.';
 		// Set an error object to short-circuit the authentication process.
 		$member = new \WP_Error( 'bptk_suspended_user', $message );
 	}
