@@ -119,7 +119,9 @@ jQuery( document ).ready(
 			var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
 			var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
 
-			if ( siteIsRequiredForGroupType || $setuptoggle.is( ':checked' ) ) {
+			var templateComponents = document.querySelectorAll( '.site-template-component' );
+
+			if ( templateComponents.length > 1 && ( siteIsRequiredForGroupType || $setuptoggle.is( ':checked' ) ) ) {
 				$('.panel-template-picker').removeClass( 'hidden' );
 			} else {
 				$('.panel-template-picker').addClass( 'hidden' );
