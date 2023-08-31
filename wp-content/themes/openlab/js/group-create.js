@@ -453,7 +453,7 @@ jQuery( document ).ready(
 			);
 		}
 
-		$( '.noo_radio' ).click(
+		$( '.noo_radio' ).on( 'click',
 			function(el){
 				var whichid = $( el.target ).prop( 'id' ).split( '_' ).pop();
 				new_old_switch( whichid );

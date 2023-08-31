@@ -9,7 +9,7 @@ openlab.academicUnits = (function($){
             this.academicUnits = $('.academic-unit');
             this.academicUnitCheckboxes = $('.academic-unit-checkbox');
             this.validateAcademicTypeSelector();
-            this.academicUnitCheckboxes.change( this.validateAcademicTypeSelector );
+            this.academicUnitCheckboxes.on( 'change', this.validateAcademicTypeSelector );
 
             var au = this
             $('.cboxol-academic-unit-selector').closest('form').on('submit', function(e) {
