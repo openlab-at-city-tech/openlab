@@ -38,7 +38,48 @@ jQuery( document ).ready(
 
 		$form = $( form );
 
+		// Set up form validation related to Site Details.
+		setTimeout(
+			() => { validateSiteDetails( form ) },
+			500
+		);
+
+		$setuptoggle.on( 'click', function( e ) {
+			validateSiteDetails( form );
+		} );
+
+		$( '.noo_radio' ).on( 'click', function( e ) {
+			validateSiteDetails( form );
+		} );
+
+		var validateSiteTimer;
+		$( '#new-site-domain, #clone-destination-path' ).on( 'keyup', function( e ) {
+			if ( validateSiteTimer ) {
+				clearTimeout( validateSiteTimer );
+			}
+
+			validateSiteTimer = setTimeout( async () => {
+				validateSiteTimer = null;
+				await validateSiteDetails( form );
+			}, 500 );
+		} );
+
 		var $gc_submit = $form.find( 'input[type="submit"]' );
+
+		var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
+		var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
+
+
+		// Site validation errors are only shown after the user has attempted to submit the form,
+		// or if the user has focused on the one of the "site path" inputs since loading the page.
+		var showSiteValidationErrors = siteIsRequiredForGroupType;
+		$( '#new-site-domain, #clone-destination-path' ).on( 'focus', function( e ) {
+			showSiteValidationErrors = true;
+		} );
+
+		$gc_submit.on( 'hover focus', function( e ) {
+			showSiteValidationErrors = true;
+		} );
 
 		/*
 		 * Ensure proper focus/scroll when form does not validate.
@@ -115,9 +156,6 @@ jQuery( document ).ready(
 				$('.panel-template-picker').addClass( 'hidden' );
 				return;
 			}
-
-			var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
-			var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
 
 			var templateComponents = document.querySelectorAll( '.site-template-component' );
 
@@ -197,6 +235,84 @@ jQuery( document ).ready(
 		function disable_gc_form() {
 			$gc_submit.attr( 'disabled', 'disabled' );
 			$gc_submit.fadeTo( 500, 0.2 );
+		}
+
+		function validateSiteDetails( form ) {
+			$siteToggle = $( 'input[name="wds_website_check"]' );
+
+			// We only need to check the path fields if the site toggle is checked, or
+			// if this is a group type that always requires a site, such as Portfolios.
+			var checkSitePaths = false;
+			if ( $siteToggle.length > 0 ) {
+				checkSitePaths = $siteToggle.is( ':checked' );
+			} else {
+				var siteIsRequiredForGroupTypeEl = document.getElementById( 'site-is-required-for-group-type' )
+				var siteIsRequiredForGroupType = siteIsRequiredForGroupTypeEl && '1' === siteIsRequiredForGroupTypeEl.value
+
+				checkSitePaths = siteIsRequiredForGroupType
+			}
+
+			if ( ! checkSitePaths ) {
+				setFormStatus( form, 'valid' );
+				return;
+			}
+
+			var sitePathEl;
+			if ( checkSitePaths ) {
+				// Determine which .noo_radio radio button is checked.
+				var siteType = $( '.noo_radio:checked' ).val();
+
+				if ( 'new' === siteType ) {
+					sitePathEl = document.getElementById( 'new-site-domain' );
+				} else if ( 'clone' === siteType ) {
+					sitePathEl = document.getElementById( 'clone-destination-path' );
+				}
+			}
+
+			if ( ! sitePathEl ) {
+				setFormStatus( form, 'valid' );
+				return;
+			}
+
+			// Check for valid character count.
+			if ( sitePathEl.value.length < 4 || sitePathEl.value.length > 30 ) {
+				setFormStatus( form, 'invalid', 'Site URL must be between 4 and 30 characters.', sitePathEl );
+				return;
+			}
+
+			// Check for valid characters.
+			if ( ! /^[a-z0-9-]+$/.test( sitePathEl.value ) ) {
+				setFormStatus( form, 'invalid', 'Site URL can only contain lowercase letters, numbers, and hyphens.', sitePathEl );
+				return;
+			}
+
+			$.ajax( {
+				url: ajaxurl + '?action=openlab_validate_groupblog_url_handler&path=' + sitePathEl.value,
+				success: function( response ) {
+					if ( ! response.success ) {
+						setFormStatus( form, 'invalid', response.data, sitePathEl );
+					} else {
+						setFormStatus( form, 'valid' );
+					}
+				}
+			} )
+		}
+
+		function setFormStatus( form, formStatus, message, sitePathEl ) {
+			$( '.site-error-container' ).remove();
+
+			if ( 'valid' === formStatus ) {
+				$( form ).find( 'input[type="submit"]' ).prop( 'disabled', false );
+			} else {
+				// Only add the error message if the user has focused on the sitePathEl since
+				// loading the page, or if the user has attempted to submit the form.
+				if ( showSiteValidationErrors ) {
+					var error = '<div class="error-container site-error-container"><ul class="parsley-errors-list filled" id="error-' + sitePathEl.id + '" aria-hidden="false"><li class="parsley-custom-error-message">' + message +  '</li></ul></div>'
+					$( sitePathEl ).after( error );
+				}
+
+				$( form ).find( 'input[type="submit"]' ).prop( 'disabled', true );
+			}
 		}
 
 		function enable_gc_form() {

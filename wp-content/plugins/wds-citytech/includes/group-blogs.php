@@ -734,15 +734,6 @@ function wds_bp_group_meta() {
 													type="text"
 													title="Path"
 													value=""
-													data-parsley-validate-if-empty="true"
-													data-parsley-remote
-													data-parsley-remote-validator="newSiteValidate"
-													data-parsley-alphanumeric-and-dashes
-													data-parsley-debounce="1000"
-													data-parsley-errors-container="#field_clone_site_error"
-													data-parsley-validation-threshold="3"
-													data-parsley-trigger="blur"
-													data-parsley-error-message="You must provide a URL."
 												/>
 												<div id="field_clone_site_error" class="error-container"></div>
 											</div>
@@ -782,15 +773,6 @@ function wds_bp_group_meta() {
 												type="text"
 												title="Domain"
 												value="<?php echo esc_html( $suggested_path ); ?>"
-												data-parsley-validate-if-empty="true"
-												data-parsley-remote
-												data-parsley-alphanumeric-and-dashes
-												data-parsley-remote-validator="newSiteValidate"
-												data-parsley-debounce="1000"
-												data-parsley-errors-container="#field_new_site_error"
-												data-parsley-validation-threshold="3"
-												data-parsley-trigger="blur"
-												data-parsley-error-message="<?php echo esc_attr( $default_path_message ); ?>"
 											/>
 											<div id="field_new_site_error" class="error-container"></div>
 										</div>
@@ -1102,11 +1084,15 @@ function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
 	$path = '';
+	/*
 	if ( ! empty( $_GET['blog']['domain'] ) ) {
 		$path = sanitize_text_field( wp_unslash( $_GET['blog']['domain'] ) );
 	} elseif ( ! empty( $_GET['clone-destination-path'] ) ) {
 		$path = sanitize_text_field( wp_unslash( $_GET['clone-destination-path'] ) );
 	}
+	*/
+
+	$path = sanitize_text_field( $_GET['path'] );
 
 	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
 		wp_send_json_error( 'Sorry, that URL is already taken.' );
