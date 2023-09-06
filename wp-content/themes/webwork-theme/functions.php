@@ -46,7 +46,7 @@ add_action( 'init', 'webwork_disable_emojis' );
 /**
  * Stub for multisite_over_quota_message(), which is not present outside of wp-admin.
  */
-if ( ! function_exists( 'multisite_over_quota_message' ) ) {
+if ( ! is_admin() && ! function_exists( 'multisite_over_quota_message' ) ) {
 	function multisite_over_quota_message() {
 		return;
 	}
