@@ -101,6 +101,15 @@
 	color: #a8a8a8;
 }
 
+.post-nav-type-label {
+	color: #595959;
+	font-size: .7em;
+	font-weight: 700;
+	letter-spacing: 1px;
+	margin: 0 0 7px;
+	text-transform: uppercase;
+}
+
 /**contrast error fixing**/
 body .tagcloud a{
 	background: #595959;

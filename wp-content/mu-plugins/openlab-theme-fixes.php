@@ -80,6 +80,7 @@ add_action(
 			// All of the below require only jQuery.
 			case 'education-pro' :
 			case 'hamilton':
+			case 'hemingway' :
 			case 'koji' :
 			case 'lingonberry' :
 				$subdir = $t;
