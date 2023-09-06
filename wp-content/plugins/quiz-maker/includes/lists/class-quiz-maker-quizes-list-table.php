@@ -19,6 +19,7 @@ class Quizes_List_Table extends WP_List_Table{
             'ajax'     => false //does this table support ajax?
         ) );
         add_action( 'admin_notices', array( $this, 'quiz_notices' ) );
+        add_filter( 'default_hidden_columns', array( $this, 'get_hidden_columns'), 10, 2 );
 
     }
 
@@ -49,7 +50,7 @@ class Quizes_List_Table extends WP_List_Table{
      */
     public function extra_tablenav($which) {
         global $wpdb;
-        $titles_sql = "SELECT {$wpdb->prefix}aysquiz_quizcategories.title,{$wpdb->prefix}aysquiz_quizcategories.id FROM {$wpdb->prefix}aysquiz_quizcategories";
+        $titles_sql = "SELECT {$wpdb->prefix}aysquiz_quizcategories.title,{$wpdb->prefix}aysquiz_quizcategories.id FROM {$wpdb->prefix}aysquiz_quizcategories ORDER BY {$wpdb->prefix}aysquiz_quizcategories.title ASC";
         $cat_titles = $wpdb->get_results($titles_sql);
         $cat_id = null;
         if( isset( $_GET['filterby'] )){
@@ -65,10 +66,52 @@ class Quizes_List_Table extends WP_List_Table{
             $categories_select[$cat_title->id]['selected'] = $selected;
             $categories_select[$cat_title->id]['id'] = $cat_title->id;
         }
-        sort($categories_select);
+        // sort($categories_select);
+
+        $filter_author_html = "";
+        $users = array();
+
+        $user_id = null;
+        if( isset( $_GET['filterbyuser'] )){
+            $user_id = intval( sanitize_text_field( $_GET['filterbyuser'] ) );
+        }
+        if( $this->current_user_can_edit ){
+
+            $author_sql = "SELECT DISTINCT `author_id` FROM `{$wpdb->prefix}aysquiz_quizes`";
+            $author_ids_arr = $wpdb->get_col($author_sql);
+
+            if( isset( $author_ids_arr ) && !empty( $author_ids_arr ) ){
+
+                $users_table = esc_sql( $wpdb->prefix . 'users' );
+
+                $quiz_user_ids = implode( ",", $author_ids_arr );
+
+                $sql_users = "SELECT ID,display_name FROM {$users_table} WHERE ID IN (". $quiz_user_ids .")";
+
+                $users = $wpdb->get_results($sql_users, "ARRAY_A");
+            }
+
+            $filter_author_html = array();
+
+            $filter_author_html[] = '<select name="filterbyuser-'. esc_attr( $which ) .'" id="bulk-action-filterbyuser-selector-'. esc_attr( $which ) .'">';
+                $filter_author_html[] = '<option value="">'. __('Select author',$this->plugin_name) .'</option>';
+                foreach($users as $key => $value){
+                    $selected2 = "";
+                    if($user_id === intval($value['ID'])){
+                        $selected2 = "selected";
+                    }
+                    $filter_author_html[] = "<option ".$selected2." value='".$value['ID']."'>".$value['display_name']."</option>";
+                }
+            $filter_author_html[] = '</select>';
+
+            // $filter_author_html[] = '<input type="button" id="filterbyuser-doaction-'. esc_attr( $which ).'" class="user-filter-apply-'. esc_attr( $which ) .' button" value="'. __( "Filter", $this->plugin_name ) .'">';
+
+            $filter_author_html = implode( '', $filter_author_html);
+        }
+
         ?>
         <div id="category-filter-div-quizlist" class="alignleft actions bulkactions">
-            <select name="filterby-<?php echo $which; ?>" id="bulk-action-category-selector-<?php echo $which; ?>">
+            <select name="filterby-<?php echo esc_attr( $which ); ?>" id="bulk-action-category-selector-<?php echo esc_attr( $which ); ?>">
                 <option value=""><?php echo __('Select Category',$this->plugin_name)?></option>
                 <?php
                     foreach($categories_select as $key => $cat_title){
@@ -76,20 +119,23 @@ class Quizes_List_Table extends WP_List_Table{
                     }
                 ?>
             </select>
-            <input type="button" id="doaction-<?php echo $which; ?>" class="cat-filter-apply-<?php echo $which; ?> button" value="Filter">
+            <?php echo $filter_author_html; ?>
+            <input type="button" id="doaction-<?php echo esc_attr( $which ); ?>" class="ays-quiz-question-tab-all-filter-button-<?php echo esc_attr( $which ); ?> button" value="<?php echo __( "Filter", $this->plugin_name ); ?>">
         </div>
         
-        <a style="margin: 0px 8px 0 0;" href="?page=<?php echo $_REQUEST['page'] ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
+        <a style="margin: 0px 8px 0 0;" href="?page=<?php echo sanitize_text_field( $_REQUEST['page'] ); ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         <?php
     }
     
     protected function get_views() {
         $published_count = $this->published_quizzes_count();
         $unpublished_count = $this->unpublished_quizzes_count();
+        $trash_count = $this->trash_questions_count();
         $all_count = $this->all_record_count();
         $selected_all = "";
         $selected_0 = "";
         $selected_1 = "";
+        $selected_2 = "";
         if(isset($_GET['fstatus'])){
             switch($_GET['fstatus']){
                 case "0":
@@ -98,6 +144,9 @@ class Quizes_List_Table extends WP_List_Table{
                 case "1":
                     $selected_1 = " style='font-weight:bold;' ";
                     break;
+                case "2":
+                    $selected_2 = " style='font-weight:bold;' ";
+                    break;
                 default:
                     $selected_all = " style='font-weight:bold;' ";
                     break;
@@ -105,11 +154,37 @@ class Quizes_List_Table extends WP_List_Table{
         }else{
             $selected_all = " style='font-weight:bold;' ";
         }
+
+        $admin_url = get_admin_url( null, 'admin.php' );
+        $get_properties = http_build_query($_GET);
+
+        $status_links_url = $admin_url . "?" . $get_properties;
+        $publish_url = esc_url( add_query_arg('fstatus', 1, $status_links_url) );
+        $unpublish_url = esc_url( add_query_arg('fstatus', 0, $status_links_url) );
+
+
         $status_links = array(
             "all" => "<a ".$selected_all." href='?page=".esc_attr( $_REQUEST['page'] )."'>". __( 'All', $this->plugin_name )." (".$all_count.")</a>",
-            "published" => "<a ".$selected_1." href='?page=".esc_attr( $_REQUEST['page'] )."&fstatus=1'>". __( 'Published', $this->plugin_name )." (".$published_count.")</a>",
-            "unpublished"   => "<a ".$selected_0." href='?page=".esc_attr( $_REQUEST['page'] )."&fstatus=0'>". __( 'Unpublished', $this->plugin_name )." (".$unpublished_count.")</a>"
+            "published" => "<a ".$selected_1." href='". $publish_url ."'>". __( 'Published', $this->plugin_name )." (".$published_count.")</a>",
+            "unpublished"   => "<a ".$selected_0." href='". $unpublish_url ."'>". __( 'Unpublished', $this->plugin_name )." (".$unpublished_count.")</a>"
         );
+
+        $query_str = Quiz_Maker_Admin::ays_query_string(array("status", "fstatus"));
+
+        $status_links = array(
+            "all" => "<a ".$selected_all." href='?page=".esc_attr( $_REQUEST['page'] )."'>" . __( "All", $this->plugin_name ) . " (".$all_count.")</a>",
+        );
+
+        if( intval( $published_count ) > 0 ){
+            $status_links["published"] = "<a ".$selected_1." href='?".esc_attr( $query_str )."&fstatus=1'>". __( 'Published', $this->plugin_name )." (".$published_count.")</a>";
+        }
+        if( intval( $unpublished_count ) > 0 ){
+            $status_links["draft"] = "<a ".$selected_0." href='?".esc_attr( $query_str )."&fstatus=0'>". __( 'Unpublished', $this->plugin_name )." (".$unpublished_count.")</a>";
+        }
+        if( intval( $trash_count ) > 0 ){
+            $status_links["trashed"] = "<a ".$selected_2." href='?".esc_attr( $query_str )."&fstatus=2'>". __( 'Trash', $this->plugin_name )." (".$trash_count.")</a>";
+        }
+
         return $status_links;
     }
 
@@ -143,11 +218,18 @@ class Quizes_List_Table extends WP_List_Table{
             if($fstatus !== null){
                 $where[] = " published = ".$fstatus." ";
             }
+        }else{
+            $where[] = " published != 2 ";
         }
 
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
             $current_user = get_current_user_id();
             $where[] = " author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $where[] = ' author_id = '.$author_id.'';
+            }
         }
 
         if( ! empty($where) ){
@@ -155,8 +237,16 @@ class Quizes_List_Table extends WP_List_Table{
         }
 
         if ( ! empty( $_REQUEST['orderby'] ) ) {
-            $sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' DESC';
+            $order_by  = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'ordering';
+            $order_by .= ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
+
+            $sql_orderby = sanitize_sql_orderby($order_by);
+
+            if ( $sql_orderby ) {
+                $sql .= ' ORDER BY ' . $sql_orderby;
+            } else {
+                $sql .= ' ORDER BY ordering DESC';
+            }
         }else{
             $sql .= ' ORDER BY ordering DESC';
         }
@@ -171,10 +261,14 @@ class Quizes_List_Table extends WP_List_Table{
 
     public function get_published_questions(){
         global $wpdb;
-        $sql = "SELECT q.*, c.`title`
+        $sql = "SELECT q.*, c.`title`,
+                    ( SELECT GROUP_CONCAT( `title` SEPARATOR ', ' )
+                      FROM `{$wpdb->prefix}aysquiz_question_tags`
+                      WHERE FIND_IN_SET( `id`, q.`tag_id` ) AND `status` = 'published'
+                    ) AS tag_title
                 FROM `{$wpdb->prefix}aysquiz_questions` AS q
                 JOIN `{$wpdb->prefix}aysquiz_categories` AS c
-                ON q.`category_id` = c.`id`
+                    ON q.`category_id` = c.`id`
                 WHERE q.`published` = 1
                 ORDER BY q.`id` DESC;";
 
@@ -234,7 +328,6 @@ class Quizes_List_Table extends WP_List_Table{
         $results = $wpdb->get_row( $sql, 'ARRAY_A' );
 
         return $results;
-
     }
 
     public static function get_quiz_by_id( $id ){
@@ -274,9 +367,18 @@ class Quizes_List_Table extends WP_List_Table{
             $description                = stripslashes(( $data['ays_quiz_description'] ));
             $quiz_category_id           = absint( intval( $data['ays_quiz_category'] ) );
             $question_ids               = sanitize_text_field( $data['ays_added_questions'] );
+
+            if( !empty( $question_ids ) ){
+                $new_arr_questions = Quiz_Maker_Data::get_published_questions_id_arr($question_ids);
+                $question_ids = implode( ",", $new_arr_questions );
+            }
+            
             $published                  = absint( intval( $data['ays_publish'] ) );
             $ordering                   = ( $max_id != NULL ) ? ( $max_id + 1 ) : 1;
-            $image                      = $data['ays_quiz_image'];
+            $image                      = sanitize_url($data['ays_quiz_image']);
+
+            // Quiz URL
+            $main_quiz_url = (isset($_POST['ays_main_quiz_url']) && sanitize_url( $_POST['ays_main_quiz_url'] ) != "") ? sanitize_url( $_POST['ays_main_quiz_url'] ) : "";
             
             if(isset($data['ays_enable_restriction_pass']) && $data['ays_enable_restriction_pass'] == "on"){
                 $ays_enable_logged_users = "on";
@@ -317,7 +419,7 @@ class Quizes_List_Table extends WP_List_Table{
             $enable_arrows                      = !isset($data['ays_enable_arrows']) ? "off" : $data['ays_enable_arrows'];
             $quiz_theme                         = !isset($data['ays_quiz_theme']) ? null : $data['ays_quiz_theme'];
             $social_buttons                     = !isset($data['ays_social_buttons']) ? "off" : $data['ays_social_buttons'];
-            $enable_logged_users_mas            = !isset($data['ays_enable_logged_users_message']) ? "" : stripslashes($data['ays_enable_logged_users_message']);
+            $enable_logged_users_mas            = !isset($data['ays_enable_logged_users_message']) ? "" : wp_kses_post(stripslashes($data['ays_enable_logged_users_message']));
             $enable_pass_count                  = !isset($data['ays_enable_pass_count']) ? "off" : $data['ays_enable_pass_count'];
             $hide_score                         = !isset($data['ays_hide_score']) ? "off" : $data['ays_hide_score'];
             $enable_smtp                        = !isset($data['ays_enable_smtp']) ? "off" : $data['ays_enable_smtp'];
@@ -339,6 +441,9 @@ class Quizes_List_Table extends WP_List_Table{
             $stripe_amount = (isset($data['ays_stripe_amount'])) ? $data['ays_stripe_amount'] : '';
             $stripe_currency = (isset($data['ays_stripe_currency'])) ? $data['ays_stripe_currency'] : '';
             $stripe_message = (isset($data['ays_stripe_message'])) ? $data['ays_stripe_message'] : __('You need to pay to pass this quiz.', $this->plugin_name);
+
+            // Paypal And Stripe Paymant type
+            $payment_type = (isset($_POST['ays_payment_type']) && sanitize_text_field( $_POST['ays_payment_type'] ) != '') ? sanitize_text_field( $_POST['ays_payment_type'] ) : "prepay";
 
             // MailChimp
             $mailchimp_res = (Quiz_Maker_Settings_Actions::ays_get_setting('mailchimp') === false) ? json_encode(array()) : Quiz_Maker_Settings_Actions::ays_get_setting('mailchimp');
@@ -473,15 +578,31 @@ class Quizes_List_Table extends WP_List_Table{
             
             $quiz_loader                = !isset($data['ays_quiz_loader'])?'':$data['ays_quiz_loader'];
             
-            $quiz_create_date           = !isset($data['ays_quiz_ctrate_date']) ? '0000-00-00 00:00:00' : $data['ays_quiz_ctrate_date'];
+            // $quiz_create_date           = !isset($data['ays_quiz_ctrate_date']) ? '0000-00-00 00:00:00' : $data['ays_quiz_ctrate_date'];
+
+            // Change current quiz creation date
+            $quiz_create_date           = (isset($_POST['ays_quiz_change_creation_date']) && $_POST['ays_quiz_change_creation_date'] != '') ? sanitize_text_field($_POST['ays_quiz_change_creation_date']) : current_time( 'mysql' ) ;
+
             $quest_animation            = !isset($data['ays_quest_animation']) ? 'shake' : $data['ays_quest_animation'];
             $author_id                  = isset($data['ays_quiz_author']) ? intval($data['ays_quiz_author']) : 0;
+
+            // Change the author of the current quiz
+            $quiz_create_author = ( isset($_POST['ays_quiz_create_author']) && $_POST['ays_quiz_create_author'] != "" ) ? absint( sanitize_text_field( $_POST['ays_quiz_create_author'] ) ) : '';
+
+            if ( $quiz_create_author != "" && $quiz_create_author > 0 ) {
+                $user = get_userdata($quiz_create_author);
+                if ( ! is_null( $user ) && $user ) {
+                    $author_id = $quiz_create_author;
+                } else {
+                    $author_id = $author_id;
+                }
+            }
             
             $enable_bg_music            = (isset($data['ays_enable_bg_music']) && $data['ays_enable_bg_music'] == "on") ? "on" : "off";
             $quiz_bg_music              = (isset($data['ays_quiz_bg_music']) && $data['ays_quiz_bg_music'] != "") ? $data['ays_quiz_bg_music'] : "";
             $limit_user_roles           = !isset($data['ays_users_roles']) ? array() : $data['ays_users_roles'];
             $ays_users_search           = !isset($data['ays_users_search']) ? array() : $data['ays_users_search'];
-            $answers_font_size          = (isset($data['ays_answers_font_size']) && $data['ays_answers_font_size'] != "") ? $data['ays_answers_font_size'] : "";
+            $answers_font_size          = (isset($_POST['ays_answers_font_size']) && sanitize_text_field( $_POST['ays_answers_font_size'] ) != "" && absint( sanitize_text_field( $_POST['ays_answers_font_size'] ) ) > 0) ? absint( sanitize_text_field( $_POST['ays_answers_font_size'] ) ) : "15";
             
             $checkbox_score_by          = (isset($data['ays_checkbox_score_by']) && $data['ays_checkbox_score_by'] == "on") ? "on" : "off";
 
@@ -530,16 +651,15 @@ class Quizes_List_Table extends WP_List_Table{
             // Calculate the score
             $calculate_score = isset($data['ays_calculate_score']) ? $data['ays_calculate_score'] : 'by_correctness';
             
-        //    if($calculate_score == 'by_points'){
-        //        $enable_correction = 'off';
-        //        $enable_questions_result = 'off';
-        //    }
+            // if($calculate_score == 'by_points'){
+            //    $enable_correction = 'off';
+            //    $enable_questions_result = 'off';
+            // }
             
             // Redirect after submit
             $redirect_after_submit = ( isset( $data['ays_redirect_after_submit'] ) && $data['ays_redirect_after_submit'] == 'on' ) ? 'on' : 'off';
             $submit_redirect_url = !isset($data['ays_submit_redirect_url']) ? '' : $data['ays_submit_redirect_url'];
-            $submit_redirect_delay = !isset($data['ays_submit_redirect_delay']) ? '' : $data['ays_submit_redirect_delay'];
-
+            $submit_redirect_delay = !isset($_POST['ays_submit_redirect_delay']) ? '' : sanitize_text_field( absint( $_POST['ays_submit_redirect_delay'] ) );
             // Progress bar
             $progress_bar_style = (isset($data['ays_progress_bar_style']) && $data['ays_progress_bar_style'] != "") ? $data['ays_progress_bar_style'] : 'first';
 
@@ -559,21 +679,31 @@ class Quizes_List_Table extends WP_List_Table{
             // Social Media links
             $enable_social_links = (isset($data['ays_enable_social_links']) && $data['ays_enable_social_links'] == "on") ? 'on' : 'off';
             $ays_social_links = (isset($data['ays_social_links'])) ? $data['ays_social_links'] : array(
-                'linkedin_link' => '',
-                'facebook_link' => '',
-                'twitter_link' => '',
+                'linkedin_link'  => '',
+                'facebook_link'  => '',
+                'twitter_link'   => '',
                 'vkontakte_link' => '',
+                'instagram_link' => '',
+                'youtube_link'   => '',
+                'behance_link' => '',
             );
             
             $linkedin_link = isset($ays_social_links['ays_linkedin_link']) && $ays_social_links['ays_linkedin_link'] != '' ? $ays_social_links['ays_linkedin_link'] : '';
             $facebook_link = isset($ays_social_links['ays_facebook_link']) && $ays_social_links['ays_facebook_link'] != '' ? $ays_social_links['ays_facebook_link'] : '';
             $twitter_link = isset($ays_social_links['ays_twitter_link']) && $ays_social_links['ays_twitter_link'] != '' ? $ays_social_links['ays_twitter_link'] : '';
             $vkontakte_link = isset($ays_social_links['ays_vkontakte_link']) && $ays_social_links['ays_vkontakte_link'] != '' ? $ays_social_links['ays_vkontakte_link'] : '';
+            $instagram_link = isset($ays_social_links['ays_instagram_link']) && sanitize_text_field( $ays_social_links['ays_instagram_link'] ) != '' ? sanitize_text_field( $ays_social_links['ays_instagram_link'] ) : '';
+            $youtube_link = isset($ays_social_links['ays_youtube_link']) && sanitize_text_field( $ays_social_links['ays_youtube_link'] ) != '' ? sanitize_text_field( $ays_social_links['ays_youtube_link'] ) : '';
+            $behance_link = isset($ays_social_links['ays_behance_link']) && sanitize_text_field( $ays_social_links['ays_behance_link'] ) != '' ? sanitize_text_field( $ays_social_links['ays_behance_link'] ) : '';
+
             $social_links = array(
-                'linkedin_link' => $linkedin_link,
-                'facebook_link' => $facebook_link,
-                'twitter_link' => $twitter_link,
+                'linkedin_link'  => $linkedin_link,
+                'facebook_link'  => $facebook_link,
+                'twitter_link'   => $twitter_link,
                 'vkontakte_link' => $vkontakte_link,
+                'instagram_link' => $instagram_link,
+                'youtube_link'   => $youtube_link,
+                'behance_link'   => $behance_link,
             );
 
             // Show quiz head information. Quiz title and description            
@@ -649,6 +779,9 @@ class Quizes_List_Table extends WP_List_Table{
 
             // Show interval message
             $show_interval_message = (isset($data['ays_show_interval_message']) && $data['ays_show_interval_message'] == 'on') ? 'on' : 'off';
+
+            // Apply points to keywords
+            $apply_points_to_keywords = (isset($data['ays_apply_points_to_keywords']) && $data['ays_apply_points_to_keywords'] == 'on') ? 'on' : 'off';
 
             // Display score option
             $display_score = (isset($data['ays_display_score']) && $data['ays_display_score'] != "") ? $data['ays_display_score'] : 'by_percentage';
@@ -778,7 +911,7 @@ class Quizes_List_Table extends WP_List_Table{
             $quiz_max_pass_count = (isset($data['ays_quiz_max_pass_count']) && $data['ays_quiz_max_pass_count'] != "") ? absint(intval($data['ays_quiz_max_pass_count'])) : 1;
 
             // Question Font Size
-            $question_font_size = (isset($data['ays_question_font_size']) && $data['ays_question_font_size'] != '') ? absint(intval($data['ays_question_font_size'])) : '16';
+            $question_font_size = (isset($_POST['ays_question_font_size']) && $_POST['ays_question_font_size'] != '' && absint(sanitize_text_field($_POST['ays_question_font_size'])) > 0) ? absint(sanitize_text_field($_POST['ays_question_font_size'])) : '16';
 
             // Quiz Width by percentage or pixels
             $quiz_width_by_percentage_px = (isset($data['ays_quiz_width_by_percentage_px']) && $data['ays_quiz_width_by_percentage_px'] != '') ? $data['ays_quiz_width_by_percentage_px'] : 'pixels';
@@ -809,10 +942,10 @@ class Quizes_List_Table extends WP_List_Table{
             $enable_early_finsh_comfirm_box = (isset($data['ays_enable_early_finsh_comfirm_box']) && $data['ays_enable_early_finsh_comfirm_box'] == "on") ? 'on' : 'off';
 
             // Enable Negative Mark
-//            $enable_negative_mark = (isset($data['ays_enable_negative_mark']) && $data['ays_enable_negative_mark'] == "on") ? 'on' : 'off';
+            // $enable_negative_mark = (isset($data['ays_enable_negative_mark']) && $data['ays_enable_negative_mark'] == "on") ? 'on' : 'off';
 
             // Negative Mark Point
-//            $negative_mark_point = (isset($data['ays_negative_mark_point']) && $data['ays_negative_mark_point'] != '') ? abs($data['ays_negative_mark_point']) : 0;
+            // $negative_mark_point = (isset($data['ays_negative_mark_point']) && $data['ays_negative_mark_point'] != '') ? abs($data['ays_negative_mark_point']) : 0;
 
             $progress_live_bar_style = (isset($data['ays_progress_live_bar_style']) && $data['ays_progress_live_bar_style'] != "") ? $data['ays_progress_live_bar_style'] : 'default';
 
@@ -838,6 +971,9 @@ class Quizes_List_Table extends WP_List_Table{
             $enable_send_mail_to_admin_by_pass_score = (isset($data['ays_enable_send_mail_to_admin_by_pass_score']) && sanitize_text_field( $data['ays_enable_send_mail_to_admin_by_pass_score'] ) == 'on') ? 'on' : 'off';
 
             // Show questions numbering
+            $show_questions_numbering = (isset($data['ays_show_questions_numbering']) && $data['ays_show_questions_numbering'] != '') ? $data['ays_show_questions_numbering'] : 'none';
+
+            // Show answers numbering
             $show_answers_numbering = (isset($data['ays_show_answers_numbering']) && $data['ays_show_answers_numbering'] != '') ? $data['ays_show_answers_numbering'] : 'none';
 
             // Quiz loader text value
@@ -869,9 +1005,9 @@ class Quizes_List_Table extends WP_List_Table{
             $quiz_bg_img_on_start_page = (isset($_POST['ays_quiz_bg_img_on_start_page']) && sanitize_text_field( $_POST['ays_quiz_bg_img_on_start_page'] ) == 'on') ? 'on' : 'off';
 
             if( function_exists( 'sanitize_textarea_field' ) ){
-                $custom_css = sanitize_textarea_field( $_POST['ays_custom_css'] );
+                $custom_css = stripslashes( sanitize_textarea_field( $_POST['ays_custom_css'] ) );
             }else{
-                $custom_css = sanitize_text_field( $_POST['ays_custom_css'] );
+                $custom_css = stripslashes( sanitize_text_field( $_POST['ays_custom_css'] ) );
             }
 
             // Box Shadow X offset
@@ -895,240 +1031,623 @@ class Quizes_List_Table extends WP_List_Table{
             //Enable full screen mode
             $enable_full_screen_mode = (isset($_POST['ays_enable_full_screen_mode']) && $_POST['ays_enable_full_screen_mode'] == 'on') ? 'on' : 'off';
 
+            //Enable navigation bar
+            $enable_navigation_bar = (isset($_POST['ays_enable_navigation_bar']) && $_POST['ays_enable_navigation_bar'] == 'on') ? 'on' : 'off';
+
+            // Display all questions on one page
+            $quiz_display_all_questions = (isset($_POST['ays_quiz_display_all_questions']) && sanitize_text_field( $_POST['ays_quiz_display_all_questions'] ) == 'on') ? 'on' : 'off';
+
+            // Turn red warning
+            $quiz_timer_red_warning = (isset($_POST['ays_quiz_timer_red_warning']) && sanitize_text_field( $_POST['ays_quiz_timer_red_warning'] ) == 'on') ? 'on' : 'off';
+
+            // Timezone | Schedule the quiz | Start
+            $quiz_schedule_timezone = (isset($_POST['ays_quiz_schedule_timezone']) && $_POST['ays_quiz_schedule_timezone'] != '') ? sanitize_text_field( $_POST['ays_quiz_schedule_timezone'] ) : get_option( 'timezone_string' );
+
+            // Remove old Etc mappings. Fallback to gmt_offset.
+            if ( strpos( $quiz_schedule_timezone, 'Etc/GMT' ) !== false ) {
+                $quiz_schedule_timezone = '';
+            }
+
+            $current_offset = get_option( 'gmt_offset' );
+            if ( empty( $quiz_schedule_timezone ) ) { // Create a UTC+- zone if no timezone string exists.
+
+                if ( 0 == $current_offset ) {
+                    $quiz_schedule_timezone = 'UTC+0';
+                } elseif ( $current_offset < 0 ) {
+                    $quiz_schedule_timezone = 'UTC' . $current_offset;
+                } else {
+                    $quiz_schedule_timezone = 'UTC+' . $current_offset;
+                }
+            }
+
+            // Timezone | Schedule the quiz | End
+
+            // Hint icon | Button | Text Value
+            $questions_hint_button_value = (isset($_POST['ays_questions_hint_button_value']) && sanitize_text_field( $_POST['ays_questions_hint_button_value']) != '') ? stripcslashes( sanitize_text_field( $_POST['ays_questions_hint_button_value'] ) ) : '';
+
+            // Quiz takers message
+            $quiz_tackers_message = ( isset($_POST['ays_quiz_tackers_message']) && $_POST['ays_quiz_tackers_message'] != '' ) ? wp_kses_post( $_POST['ays_quiz_tackers_message'] ) : __( "This quiz is expired!", $this->plugin_name );
+
+            // Enable Linkedin button
+            $quiz_enable_linkedin_share_button = (isset($_POST['ays_quiz_enable_linkedin_share_button']) && sanitize_text_field( $_POST['ays_quiz_enable_linkedin_share_button'] ) == 'on') ? 'on' : 'off';
+
+            // Enable Facebook button
+            $quiz_enable_facebook_share_button = (isset($_POST['ays_quiz_enable_facebook_share_button']) && sanitize_text_field( $_POST['ays_quiz_enable_facebook_share_button'] ) == 'on') ? 'on' : 'off';
+
+            // Enable Twitter button
+            $quiz_enable_twitter_share_button = (isset($_POST['ays_quiz_enable_twitter_share_button']) && sanitize_text_field( $_POST['ays_quiz_enable_twitter_share_button'] ) == 'on') ? 'on' : 'off';
+
+            // Enable VKontakte button
+            $quiz_enable_vkontakte_share_button = (isset($_POST['ays_quiz_enable_vkontakte_share_button']) && sanitize_text_field( $_POST['ays_quiz_enable_vkontakte_share_button'] ) == 'on') ? 'on' : 'off';
+
+            // Turn on extra security check
+            $turn_on_extra_security_check = (isset($_POST['ays_turn_on_extra_security_check']) && sanitize_text_field( $_POST['ays_turn_on_extra_security_check'] ) == 'on') ? 'on' : 'off';
+
+            // Hide attempts limitation notice
+            $hide_limit_attempts_notice = (isset($_POST['ays_hide_limit_attempts_notice']) && sanitize_text_field( $_POST['ays_hide_limit_attempts_notice'] ) == 'on') ? 'on' : 'off';
+
+            $ays_enable_top_keywords = (isset($data['ays_enable_top_keywords']) && $data['ays_enable_top_keywords'] == "on") ? 'on' : 'off';
+
+            $assign_top_keyword = (isset($data['assign_top_keyword']) && !empty($data['assign_top_keyword'])) ? array_map( 'sanitize_text_field', $data['assign_top_keyword'] ) : array();
+
+            $assign_top_keyword_text = (isset($data['assign_top_keyword_text']) && !empty($data['assign_top_keyword_text'])) ?  array_map( 'wp_kses_post', $data['assign_top_keyword_text'] )  : array();
+
+            $assign_keywords = array();
+
+
+            foreach ($assign_top_keyword as $key => $top_keyword) {
+                $assign_top_keyword_test_val = isset($assign_top_keyword_text[$key]) && $assign_top_keyword_text[$key] != '' ? $assign_top_keyword_text[$key] : "";
+                $assign_keywords[$key] = array(
+                    'assign_top_keyword'        => $top_keyword,
+                    'assign_top_keyword_text'   => $assign_top_keyword_test_val,
+                );
+            }
+
+            // Make responses anonymous
+            $quiz_make_responses_anonymous = (isset($_POST['ays_quiz_make_responses_anonymous']) && sanitize_text_field( $_POST['ays_quiz_make_responses_anonymous'] ) == 'on') ? 'on' : 'off';
+
+            // Add all reviews link
+            $quiz_make_all_review_link = (isset($_POST['ays_quiz_make_all_review_link']) && sanitize_text_field( $_POST['ays_quiz_make_all_review_link'] ) == 'on') ? 'on' : 'off';
+
+            // Enable Bulk Coupon
+            $quiz_enable_coupon = (isset($_POST['ays_quiz_enable_coupon']) && sanitize_text_field( $_POST['ays_quiz_enable_coupon'] ) == 'on') ? 'on' : 'off';
+
+            // Active/Inactive Coupons
+            $quiz_active_copupons = (isset($_POST['ays_quiz_coupons_active']) && $_POST['ays_quiz_coupons_active'] != '') ? $_POST['ays_quiz_coupons_active'] : array();
+
+            $quiz_inactive_coupons = (isset($_POST['ays_quiz_coupons_inactive']) && !empty($_POST['ays_quiz_coupons_inactive'])) ? $_POST['ays_quiz_coupons_inactive']: array();
+
+            $quiz_coupons_array = array(
+                'quiz_active_coupons'   => $quiz_active_copupons,
+                'quiz_inactive_coupons' => $quiz_inactive_coupons,
+            );
+
+            // Show questions numbering
+            $quiz_message_before_timer = (isset($_POST['ays_quiz_message_before_timer']) && $_POST['ays_quiz_message_before_timer'] != '') ? stripcslashes( sanitize_text_field( $_POST['ays_quiz_message_before_timer'] ) ) : '';
+
+            // Use subject for the admin email
+            $use_subject_for_admin_email = (isset($_POST['ays_use_subject_for_admin_email']) && sanitize_text_field( $_POST['ays_use_subject_for_admin_email'] ) == 'on') ? 'on' : 'off';
+
+            // Password for passing quiz | Message
+            $quiz_password_message = ( isset($_POST['ays_quiz_password_message']) && $_POST['ays_quiz_password_message'] != '' ) ? wp_kses_post( $_POST['ays_quiz_password_message'] ) : '';
+
+            // Enable confirmation box for the See Result button
+            $enable_see_result_confirm_box = ( isset($_POST['ays_enable_see_result_confirm_box']) && sanitize_text_field( $_POST['ays_enable_see_result_confirm_box'] ) == 'on' ) ? 'on' : 'off';
+
+            // Display form fields labels
+            $display_fields_labels = ( isset($_POST['ays_display_fields_labels']) && sanitize_text_field( $_POST['ays_display_fields_labels'] ) == 'on' ) ? 'on' : 'off';
+
+            // Enable toggle password visibility
+            $quiz_enable_password_visibility = (isset($_POST['ays_quiz_enable_password_visibility']) && $_POST['ays_quiz_enable_password_visibility'] == 'on') ? 'on' : 'off';
+
+            // Question font size | On mobile
+            $question_mobile_font_size = ( isset($_POST['ays_question_mobile_font_size']) && $_POST['ays_question_mobile_font_size'] != "" && absint( sanitize_text_field( $_POST['ays_question_mobile_font_size'] ) ) > 0) ? absint( sanitize_text_field( $_POST['ays_question_mobile_font_size'] ) ) : 16;
+
+            // Answer font size | On mobile
+            $answers_mobile_font_size = ( isset($_POST['ays_answers_mobile_font_size']) && $_POST['ays_answers_mobile_font_size'] != "" && absint( sanitize_text_field( $_POST['ays_answers_mobile_font_size'] ) ) > 0 ) ? absint( sanitize_text_field( $_POST['ays_answers_mobile_font_size'] ) ) : 15;
+
+            // Heading for social buttons
+            $social_buttons_heading = (isset($_POST['ays_social_buttons_heading']) && $_POST['ays_social_buttons_heading'] != '') ? wp_kses_post( $_POST['ays_social_buttons_heading'] ) : "";
+
+            // Limit attempts count by user role
+            $limit_attempts_count_by_user_role = (isset($_POST['ays_limit_count_by_user_role']) && $_POST['ays_limit_count_by_user_role'] != "") ? absint(intval($_POST['ays_limit_count_by_user_role'])) : '';
+
+            // Enable autostart
+            $enable_autostart = (isset($_POST['ays_enable_autostart']) && $_POST['ays_enable_autostart'] == 'on') ? 'on' : 'off';
+
+            // Heading for social media links
+            $social_links_heading = (isset($_POST['ays_social_links_heading']) && $_POST['ays_social_links_heading'] != '') ? wp_kses_post( $_POST['ays_social_links_heading'] ) : "";
+
+            // Show question category description
+            $quiz_enable_question_category_description = ( isset($_POST['ays_quiz_enable_question_category_description']) && sanitize_text_field( $_POST['ays_quiz_enable_question_category_description'] ) == 'on' ) ? 'on' : 'off';
+
+            // Answers margin option
+            $answers_margin = ( isset($_POST['ays_answers_margin']) && sanitize_text_field( $_POST['ays_answers_margin'] ) != '' ) ? absint( sanitize_text_field( $_POST['ays_answers_margin'] ) ) : '10';
+
+            // Show questions numbering
+            $quiz_message_before_redirect_timer = (isset($_POST['ays_quiz_message_before_redirect_timer']) && $_POST['ays_quiz_message_before_redirect_timer'] != '') ? stripcslashes( sanitize_text_field( $_POST['ays_quiz_message_before_redirect_timer'] ) ) : '';
+
+            // Button font-size (px) | Mobile
+            $buttons_mobile_font_size = ( isset($_POST['ays_buttons_mobile_font_size']) && sanitize_text_field( $_POST['ays_buttons_mobile_font_size'] ) != '' ) ? absint( sanitize_text_field( $_POST['ays_buttons_mobile_font_size'] ) ) : 17;
+
+            // Answer Box Shadow X offset
+            $quiz_answer_box_shadow_x_offset = (isset($_POST['ays_quiz_answer_box_shadow_x_offset']) && sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_x_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_x_offset'] ) ) : 0;
+
+            // Answer Box Shadow Y offset
+            $quiz_answer_box_shadow_y_offset = (isset($_POST['ays_quiz_answer_box_shadow_y_offset']) && sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_y_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_y_offset'] ) ) : 0;
+
+            // Answer Box Shadow Z offset
+            $quiz_answer_box_shadow_z_offset = (isset($_POST['ays_quiz_answer_box_shadow_z_offset']) && sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_z_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_answer_box_shadow_z_offset'] ) ) : 10;
+
+            // Answers box shadow
+            $quiz_enable_title_text_shadow = (isset($_POST['ays_quiz_enable_title_text_shadow']) && sanitize_text_field($_POST['ays_quiz_enable_title_text_shadow']) == 'on') ? 'on' : 'off';
+
+            // Answer box-shadow color
+            $quiz_title_text_shadow_color = (isset($_POST['ays_quiz_title_text_shadow_color']) && sanitize_text_field($_POST['ays_quiz_title_text_shadow_color']) != '') ? sanitize_text_field($_POST['ays_quiz_title_text_shadow_color']) : '#333';
+
+            // Font size for the right answer
+            $right_answers_font_size = (isset($data['ays_right_answers_font_size']) && $data['ays_right_answers_font_size'] != '') ? absint(sanitize_text_field($data['ays_right_answers_font_size'])) : '16';
+
+            // Font size for the wrong answer
+            $wrong_answers_font_size = (isset($data['ays_wrong_answers_font_size']) && $data['ays_wrong_answers_font_size'] != '') ? absint(sanitize_text_field($data['ays_wrong_answers_font_size'])) : '16';
+
+            // Font size for the question explanation
+            $quest_explanation_font_size = (isset($data['ays_quest_explanation_font_size']) && $data['ays_quest_explanation_font_size'] != '') ? absint(sanitize_text_field($data['ays_quest_explanation_font_size'])) : '16';
+
+            // Waiting Time
+            $quiz_waiting_time = ( isset($_POST['ays_quiz_waiting_time']) && sanitize_text_field( $_POST['ays_quiz_waiting_time'] ) == 'on' ) ? 'on' : 'off';
+
+            // Quiz Title Text Shadow X offset
+            $quiz_title_text_shadow_x_offset = (isset($_POST['ays_quiz_title_text_shadow_x_offset']) && sanitize_text_field( $_POST['ays_quiz_title_text_shadow_x_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_title_text_shadow_x_offset'] ) ) : 2;
+
+            // Quiz Title Text Shadow Y offset
+            $quiz_title_text_shadow_y_offset = (isset($_POST['ays_quiz_title_text_shadow_y_offset']) && sanitize_text_field( $_POST['ays_quiz_title_text_shadow_y_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_title_text_shadow_y_offset'] ) ) : 2;
+
+            // Quiz Title Text Shadow Z offset
+            $quiz_title_text_shadow_z_offset = (isset($_POST['ays_quiz_title_text_shadow_z_offset']) && sanitize_text_field( $_POST['ays_quiz_title_text_shadow_z_offset'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_title_text_shadow_z_offset'] ) ) : 2;
+
+            // Show only wrong answers
+            $quiz_show_only_wrong_answers = (isset($_POST['ays_quiz_show_only_wrong_answers']) && sanitize_text_field($_POST['ays_quiz_show_only_wrong_answers']) == 'on') ? 'on' : 'off';
+
+            // Quiz Title font size
+            $quiz_title_font_size = (isset($_POST['ays_quiz_title_font_size']) && sanitize_text_field( $_POST['ays_quiz_title_font_size'] ) != '') ? intval( sanitize_text_field( $_POST['ays_quiz_title_font_size'] ) ) : 21;
+
+            // Quiz title font size | On mobile
+            $quiz_title_mobile_font_size = ( isset($_POST['ays_quiz_title_mobile_font_size']) && sanitize_text_field( $_POST['ays_quiz_title_mobile_font_size'] ) != '' ) ? absint( sanitize_text_field( $_POST['ays_quiz_title_mobile_font_size'] ) ) : 21;
+
+            // Quiz password width
+            $quiz_password_width = ( isset($_POST['ays_quiz_password_width']) && sanitize_text_field( $_POST['ays_quiz_password_width'] ) != '' && sanitize_text_field( $_POST['ays_quiz_password_width'] ) != 0) ? absint( sanitize_text_field( $_POST['ays_quiz_password_width'] ) ) : "";
+
+            // Enable quiz assessment | Placeholder text
+            $quiz_review_placeholder_text = (isset($_POST['ays_quiz_review_placeholder_text']) && $_POST['ays_quiz_review_placeholder_text'] != '') ? stripcslashes( sanitize_text_field( $_POST['ays_quiz_review_placeholder_text'] ) ) : '';
+
+            // Make review required
+            $quiz_make_review_required = (isset($_POST['ays_quiz_make_review_required']) && sanitize_text_field($_POST['ays_quiz_make_review_required']) == 'on') ? 'on' : 'off';
+
+            // Enable the Show/Hide toggle
+            $quiz_enable_results_toggle = (isset($_POST['ays_quiz_enable_results_toggle']) && sanitize_text_field($_POST['ays_quiz_enable_results_toggle']) == 'on') ? 'on' : 'off';
+
+            // Thank you message | Review
+            $quiz_review_thank_you_message = (isset($_POST['ays_quiz_review_thank_you_message']) && $_POST['ays_quiz_review_thank_you_message'] != '') ? wp_kses_post( $_POST['ays_quiz_review_thank_you_message'] ) : "";
+
+            // Enable Comment Field
+            $quiz_review_enable_comment_field = (isset($_POST['ays_quiz_review_enable_comment_field']) && sanitize_text_field($_POST['ays_quiz_review_enable_comment_field']) == 'on') ? 'on' : 'off';
+
+            // Font size for the question explanation | PC
+            $quest_explanation_mobile_font_size = (isset($_POST['ays_quest_explanation_mobile_font_size']) && $_POST['ays_quest_explanation_mobile_font_size'] != '') ? absint(sanitize_text_field($_POST['ays_quest_explanation_mobile_font_size'])) : '16';
+
+            // Font size for the wrong answer | Mobile
+            $wrong_answers_mobile_font_size = (isset($_POST['ays_wrong_answers_mobile_font_size']) && $_POST['ays_wrong_answers_mobile_font_size'] != '') ? absint(sanitize_text_field($_POST['ays_wrong_answers_mobile_font_size'])) : '16';
+
+            //Enable keyboard navigation
+            $quiz_enable_keyboard_navigation = (isset($_POST['ays_quiz_enable_keyboard_navigation']) && $_POST['ays_quiz_enable_keyboard_navigation'] == 'on') ? 'on' : 'off';
+
+            // Question Image Zoom
+            $quiz_enable_question_image_zoom = ( isset($_POST['ays_quiz_enable_question_image_zoom']) && sanitize_text_field( $_POST['ays_quiz_enable_question_image_zoom'] ) == 'on' ) ? 'on' : 'off';
+
+            // Font size for the right answer | Mobile
+            $right_answers_mobile_font_size = (isset($_POST['ays_right_answers_mobile_font_size']) && $_POST['ays_right_answers_mobile_font_size'] != '') ? absint(sanitize_text_field($_POST['ays_right_answers_mobile_font_size'])) : '16';
+
+            // Display Messages before the buttons
+            $quiz_display_messages_before_buttons = ( isset($_POST['ays_quiz_display_messages_before_buttons']) && sanitize_text_field( $_POST['ays_quiz_display_messages_before_buttons'] ) == 'on' ) ? 'on' : 'off';
+
+            // Question per page type
+            $question_count_per_page_type = (isset($_POST['ays_question_count_per_page_type']) && $_POST['ays_question_count_per_page_type'] != '') ? sanitize_text_field($_POST['ays_question_count_per_page_type']) : 'general';
+
+            $question_count_per_page_custom_order = (isset($_POST['ays_question_count_per_page_custom_order']) && $_POST['ays_question_count_per_page_custom_order'] != "" ) ? sanitize_text_field($_POST['ays_question_count_per_page_custom_order']) : '';
+
+            if( !empty( $question_count_per_page_custom_order ) ){
+                $question_count_per_page_custom_order_arr = explode(',', $question_count_per_page_custom_order);
+
+                if ( !empty( $question_count_per_page_custom_order_arr ) ) {
+                    $question_count_per_page_custom_order_arr_new = array();
+                    foreach ($question_count_per_page_custom_order_arr as $per_page_key => $per_page_value) {
+                        if( is_numeric( $per_page_value ) && $per_page_value != "" && $per_page_value != 0 ){
+                            $question_count_per_page_custom_order_arr_new[] = absint($per_page_value);
+                        }
+                    }
+                    $question_count_per_page_custom_order = implode( "," , $question_count_per_page_custom_order_arr_new);
+                }
+            }
+
+            // Timer type
+            $quiz_timer_type = (isset($_POST['ays_quiz_timer_type']) && $_POST['ays_quiz_timer_type'] != '') ? sanitize_text_field( $_POST['ays_quiz_timer_type'] ) : 'quiz_timer';
+
+            // Allow exporting quizzes
+            $allow_exporting_quizzes      = (isset($_POST['ays_allow_exporting_quizzes']) && sanitize_text_field($_POST['ays_allow_exporting_quizzes']) == 'on') ? 'on' : 'off';
+
+            $ays_users_to_export_search  = !isset($_POST['ays_users_to_export_search']) ? array() : array_map( 'sanitize_text_field', $_POST['ays_users_to_export_search'] );
+
+            // Quiz Pass Score type
+            $quiz_pass_score_type = (isset($_POST['ays_quiz_pass_score_type']) && $_POST['ays_quiz_pass_score_type'] != '') ? sanitize_text_field( $_POST['ays_quiz_pass_score_type'] ) : 'percentage'; 
+
+            // Certifacte Quiz Pass Score type
+            $quiz_certificate_pass_score_type = (isset($_POST['ays_quiz_certificate_pass_score_type']) && $_POST['ays_quiz_certificate_pass_score_type'] != '') ? sanitize_text_field( $_POST['ays_quiz_certificate_pass_score_type'] ) : 'percentage';
+
+            // Equal keywords text
+            $quiz_equal_keywords_text = (isset($_POST['ays_quiz_equal_keywords_text']) && $_POST['ays_quiz_equal_keywords_text'] != '') ? wp_kses_post( $_POST['ays_quiz_equal_keywords_text'] ) : "";
+
+            //Enable navigation bar marked questions
+            $enable_navigation_bar_marked_questions = (isset($_POST['ays_enable_navigation_bar_marked_questions']) && $_POST['ays_enable_navigation_bar_marked_questions'] == 'on') ? 'on' : 'off';
+
+            // Enable question reporting
+            $enable_question_reporting = (isset($data['ays_enable_questions_reporting']) && $data['ays_enable_questions_reporting'] == 'on') ? 'on' : 'off';
+
+            // Send email about report to admin
+            $quiz_enable_question_reporting_mail = ( isset($data['ays_quiz_enable_questions_reporting_mail']) && $data['ays_quiz_enable_questions_reporting_mail'] == 'on' ) ? 'on' : 'off';
+
+            // Enable users' anonymous assessment
+            $quiz_enable_user_cհoosing_anonymous_assessment = ( isset($_POST['ays_quiz_enable_user_cհoosing_anonymous_assessment']) && sanitize_text_field( $_POST['ays_quiz_enable_user_cհoosing_anonymous_assessment'] ) == 'on' ) ? 'on' : 'off';
+
+            // Font size for the Note text | PC
+            $note_text_font_size = (isset($_POST['ays_note_text_font_size']) && $_POST['ays_note_text_font_size'] != '') ? absint(sanitize_text_field($_POST['ays_note_text_font_size'])) : '14';
+
+            // Font size for the Note text | Mobile
+            $note_text_mobile_font_size = (isset($_POST['ays_note_text_mobile_font_size']) && $_POST['ays_note_text_mobile_font_size'] != '') ? absint(sanitize_text_field($_POST['ays_note_text_mobile_font_size'])) : '14';
+
+            // Enable users' anonymous assessment
+            $quiz_questions_numbering_by_category = ( isset($_POST['ays_quiz_questions_numbering_by_category']) && sanitize_text_field( $_POST['ays_quiz_questions_numbering_by_category'] ) == 'on' ) ? 'on' : 'off';
+
+            // Questions text to speech enable
+            $quiz_question_text_to_speech = (isset( $_POST[ 'ays_quiz_question_text_to_speech' ] ) && $_POST[ 'ays_quiz_question_text_to_speech' ] == 'on') ? 'on' : 'off';
+
+            // Questions text to speech enable
+            $quiz_disable_input_focusing = (isset( $_POST[ 'ays_quiz_disable_input_focusing' ] ) && $_POST[ 'ays_quiz_disable_input_focusing' ] == 'on') ? 'on' : 'off';
+
+            // Password Import type
+            $quiz_password_import_type = (isset($_POST['ays_quiz_password_import_type']) && sanitize_text_field($_POST['ays_quiz_password_import_type']) != '') ? sanitize_text_field($_POST['ays_quiz_password_import_type']) : 'default';
+
+            // Show all conditions results
+            $quiz_condition_show_all_results = (isset( $_POST[ 'ays_quiz_condition_show_all_results' ] ) && $_POST[ 'ays_quiz_condition_show_all_results' ] == 'on') ? 'on' : 'off';
+
+            // Condition calculation type
+            $quiz_condition_calculation_type = (isset($_POST['ays_quiz_condition_calculation_type']) && $_POST['ays_quiz_condition_calculation_type'] != '') ? sanitize_text_field( $_POST['ays_quiz_condition_calculation_type'] ) : 'default';
 
             $options = array(
-                'quiz_version'                  => AYS_QUIZ_VERSION,
-                'color'                         => sanitize_text_field( $data['ays_quiz_color'] ),
-                'bg_color'                      => sanitize_text_field( $data['ays_quiz_bg_color'] ),
-                'text_color'                    => sanitize_text_field( $data['ays_quiz_text_color'] ),
-                'height'                        => absint( intval( $data['ays_quiz_height'] ) ),
-                'width'                         => absint( intval( $data['ays_quiz_width'] ) ),
-                'enable_logged_users'           => $ays_enable_logged_users,
-                'information_form'              => $ays_information_form,
-                'form_name'                     => $ays_form_name,
-                'form_email'                    => $ays_form_email,
-                'form_phone'                    => $ays_form_phone,
-                'image_width'                   => $image_width,
-                'image_height'                  => $data['ays_image_height'],
-                'enable_correction'             => $enable_correction,
-                'enable_progress_bar'           => $enable_progressbar,
-                'enable_questions_result'       => $enable_questions_result,
-                'randomize_questions'           => $enable_random_questions,
-                'randomize_answers'             => $enable_random_answers,
-                'enable_questions_counter'      => $enable_questions_counter,
-                'enable_restriction_pass'       => $enable_restriction_pass,
-                'enable_restriction_pass_users' => $enable_restriction_pass_users,
-                'restriction_pass_message'      => $data['restriction_pass_message'],
-                'restriction_pass_users_message'=> $data['restriction_pass_users_message'],
-                'user_role'                     => $limit_user_roles,
-                'ays_users_search'              => $ays_users_search,
-                'custom_css'                    => $custom_css,
-                'limit_users'                   => $limit_users,
-                'limitation_message'            => $data['ays_limitation_message'],
-                'redirect_url'                  => $data['ays_redirect_url'],
-                'redirection_delay'             => intval($data['ays_redirection_delay']),
-                'answers_view'                  => $data['ays_answers_view'],
-                'enable_rtl_direction'          => $enable_rtl,
-                'enable_logged_users_message'   => $enable_logged_users_mas,
-                'questions_count'               => $data['ays_questions_count'],
-                'enable_question_bank'          => $question_bank,
-                'enable_live_progress_bar'      => $live_progressbar,
-                'enable_percent_view'           => $percent_view,
-                'enable_average_statistical'    => $avarage_statistical,
-                'enable_next_button'            => $next_button,
-                'enable_previous_button'        => $prev_button,
-                'enable_arrows'                 => $enable_arrows,
-                'timer_text'                    => $data['ays_timer_text'],
-                'quiz_theme'                    => $quiz_theme,
-                'enable_social_buttons'         => $social_buttons,
-                'final_result_text'             => stripslashes($data['ays_final_result_text']),
-                'enable_pass_count'             => $enable_pass_count,
-                'hide_score'                    => $hide_score,
-                'rate_form_title'               => $rate_form_title,
-                'box_shadow_color'              => $quiz_box_shadow_color,
-                'quiz_border_radius'            => $quiz_border_radius,
-                'quiz_bg_image'                 => $quiz_bg_image,
-                'quiz_border_width'             => $quiz_border_width,
-                'quiz_border_style'             => $quiz_border_style,
-                'quiz_border_color'             => $quiz_border_color,
-                'quiz_loader'                   => $quiz_loader,
-                'quest_animation'               => $quest_animation,
-                'enable_bg_music'               => $enable_bg_music,
-                'quiz_bg_music'                 => $quiz_bg_music,
-                'answers_font_size'             => $answers_font_size,
-                'show_create_date'              => $show_create_date,
-                'show_author'                   => $show_author,
-                'enable_early_finish'           => $enable_early_finish,
-                'answers_rw_texts'              => $answers_rw_texts,
-                'disable_store_data'            => $disable_store_data,
-                'enable_background_gradient'    => $enable_background_gradient,
-                'background_gradient_color_1'   => $quiz_background_gradient_color_1,
-                'background_gradient_color_2'   => $quiz_background_gradient_color_2,
-                'quiz_gradient_direction'       => $quiz_gradient_direction,
-                'redirect_after_submit'         => $redirect_after_submit,
-                'submit_redirect_url'           => $submit_redirect_url,
-                'submit_redirect_delay'         => $submit_redirect_delay,
-                'progress_bar_style'            => $progress_bar_style,
-                'enable_exit_button'            => $enable_exit_button,
-                'exit_redirect_url'             => $exit_redirect_url,
-                'image_sizing'                  => $image_sizing,
-                'quiz_bg_image_position'        => $quiz_bg_image_position,
-                'custom_class'                  => $custom_class,
-                'enable_social_links'           => $enable_social_links,
-                'social_links'                  => $social_links,
-                'show_quiz_title'               => $show_quiz_title,
-                'show_quiz_desc'                => $show_quiz_desc,
-                'show_login_form'               => $show_login_form,
-                'mobile_max_width'              => $mobile_max_width,
-                'limit_users_by'                => $limit_users_by,
-				'explanation_time'              => $explanation_time,
-				'enable_clear_answer'           => $enable_clear_answer,
-				'show_category'                 => $show_category,
-				'show_question_category'        => $show_question_category,
-                'answers_padding'               => $answers_padding,
-                'answers_border'                => $answers_border,
-                'answers_border_width'          => $answers_border_width,
-                'answers_border_style'          => $answers_border_style,
-                'answers_border_color'          => $answers_border_color,
-                'ans_img_height'                => $ans_img_height,
-                'ans_img_caption_style'         => $ans_img_caption_style,
-                'ans_img_caption_position'      => $ans_img_caption_position,
-                'answers_box_shadow'            => $answers_box_shadow,
-                'answers_box_shadow_color'      => $answers_box_shadow_color,
-                'show_answers_caption'          => $show_answers_caption,
-                'answers_margin'                => $answers_margin,
-                'ans_right_wrong_icon'          => $ans_right_wrong_icon,
-                'display_score'                 => $display_score,
-                'enable_rw_asnwers_sounds'      => $enable_rw_asnwers_sounds,
-                'quiz_bg_img_in_finish_page'    => $quiz_bg_img_in_finish_page,
-                'finish_after_wrong_answer'     => $finish_after_wrong_answer,
-                'after_timer_text'              => $after_timer_text,
-                'enable_enter_key'              => $enable_enter_key,
-                'show_rate_after_rate'          => $show_rate_after_rate,
-                'buttons_text_color'            => $buttons_text_color,
-                'buttons_position'              => $buttons_position,
-                'buttons_size'                  => $buttons_size,
-                'buttons_font_size'             => $buttons_font_size,
-                'buttons_width'                 => $buttons_width,
-                'buttons_left_right_padding'    => $buttons_left_right_padding,
-                'buttons_top_bottom_padding'    => $buttons_top_bottom_padding,
-                'buttons_border_radius'         => $buttons_border_radius,
-                'enable_audio_autoplay'         => $enable_audio_autoplay,
-                'enable_leave_page'             => $enable_leave_page,
-                'show_only_wrong_answer'        => $show_only_wrong_answer,
-                'pass_score'                    => $pass_score,
-                'pass_score_message'            => $pass_score_message,
-                'fail_score_message'            => $fail_score_message,
-                'answers_object_fit'            => $answers_object_fit,
-                'quiz_max_pass_count'           => $quiz_max_pass_count,
-                'question_font_size'            => $question_font_size,
-                'quiz_width_by_percentage_px'   => $quiz_width_by_percentage_px,
-                'questions_hint_icon_or_text'   => $questions_hint_icon_or_text,
-                'questions_hint_value'          => $questions_hint_value,
-                'enable_early_finsh_comfirm_box'=> $enable_early_finsh_comfirm_box,
-                'hide_correct_answers'          => $hide_correct_answers,
-                'quiz_loader_text_value'        => $quiz_loader_text_value,
-                'show_information_form'         => $show_information_form,
-                'show_questions_explanation'    => $show_questions_explanation,
-                'enable_questions_ordering_by_cat'=> $enable_questions_ordering_by_cat,
-                'enable_send_mail_to_user_by_pass_score' => $enable_send_mail_to_user_by_pass_score,
-                'enable_send_mail_to_admin_by_pass_score'=> $enable_send_mail_to_admin_by_pass_score,
-                'show_answers_numbering'        => $show_answers_numbering,
-                'quiz_loader_custom_gif'        => $quiz_loader_custom_gif,
-                'disable_hover_effect'          => $disable_hover_effect,
-                'quiz_loader_custom_gif_width'  => $quiz_loader_custom_gif_width,
-                'quiz_title_transformation'     => $quiz_title_transformation,
-                'quiz_image_width_by_percentage_px' => $quiz_image_width_by_percentage_px,
-                'quiz_image_height'             => $quiz_image_height,
-                'quiz_bg_img_on_start_page'     => $quiz_bg_img_on_start_page,
-                'quiz_box_shadow_x_offset'      => $quiz_box_shadow_x_offset,
-                'quiz_box_shadow_y_offset'      => $quiz_box_shadow_y_offset,
-                'quiz_box_shadow_z_offset'      => $quiz_box_shadow_z_offset,
-                'quiz_question_text_alignment'  => $quiz_question_text_alignment,
-                'quiz_arrow_type'               => $quiz_arrow_type,
-                'quiz_show_wrong_answers_first' => $quiz_show_wrong_answers_first,
+                'quiz_version'                                      => AYS_QUIZ_VERSION,
+                'core_version'                                      => get_bloginfo( 'version' ),
+                'php_version'                                       => phpversion(),
+                'color'                                             => sanitize_text_field( $data['ays_quiz_color'] ),
+                'bg_color'                                          => sanitize_text_field( $data['ays_quiz_bg_color'] ),
+                'text_color'                                        => sanitize_text_field( $data['ays_quiz_text_color'] ),
+                'height'                                            => absint( intval( $data['ays_quiz_height'] ) ),
+                'width'                                             => absint( intval( $data['ays_quiz_width'] ) ),
+                'enable_logged_users'                               => $ays_enable_logged_users,
+                'information_form'                                  => $ays_information_form,
+                'form_name'                                         => $ays_form_name,
+                'form_email'                                        => $ays_form_email,
+                'form_phone'                                        => $ays_form_phone,
+                'image_width'                                       => $image_width,
+                'image_height'                                      => $data['ays_image_height'],
+                'enable_correction'                                 => $enable_correction,
+                'enable_progress_bar'                               => $enable_progressbar,
+                'enable_questions_result'                           => $enable_questions_result,
+                'randomize_questions'                               => $enable_random_questions,
+                'randomize_answers'                                 => $enable_random_answers,
+                'enable_questions_counter'                          => $enable_questions_counter,
+                'enable_restriction_pass'                           => $enable_restriction_pass,
+                'enable_restriction_pass_users'                     => $enable_restriction_pass_users,
+                'restriction_pass_message'                          => $data['restriction_pass_message'],
+                'restriction_pass_users_message'                    => $data['restriction_pass_users_message'],
+                'user_role'                                         => $limit_user_roles,
+                'ays_users_search'                                  => $ays_users_search,
+                'custom_css'                                        => $custom_css,
+                'limit_users'                                       => $limit_users,
+                'limitation_message'                                => $data['ays_limitation_message'],
+                'redirect_url'                                      => $data['ays_redirect_url'],
+                'redirection_delay'                                 => intval($data['ays_redirection_delay']),
+                'answers_view'                                      => $data['ays_answers_view'],
+                'enable_rtl_direction'                              => $enable_rtl,
+                'enable_logged_users_message'                       => $enable_logged_users_mas,
+                'questions_count'                                   => $data['ays_questions_count'],
+                'enable_question_bank'                              => $question_bank,
+                'enable_live_progress_bar'                          => $live_progressbar,
+                'enable_percent_view'                               => $percent_view,
+                'enable_average_statistical'                        => $avarage_statistical,
+                'enable_next_button'                                => $next_button,
+                'enable_previous_button'                            => $prev_button,
+                'enable_arrows'                                     => $enable_arrows,
+                'timer_text'                                        => $data['ays_timer_text'],
+                'quiz_theme'                                        => $quiz_theme,
+                'enable_social_buttons'                             => $social_buttons,
+                'final_result_text'                                 => stripslashes($data['ays_final_result_text']),
+                'enable_pass_count'                                 => $enable_pass_count,
+                'hide_score'                                        => $hide_score,
+                'rate_form_title'                                   => $rate_form_title,
+                'box_shadow_color'                                  => $quiz_box_shadow_color,
+                'quiz_border_radius'                                => $quiz_border_radius,
+                'quiz_bg_image'                                     => $quiz_bg_image,
+                'quiz_border_width'                                 => $quiz_border_width,
+                'quiz_border_style'                                 => $quiz_border_style,
+                'quiz_border_color'                                 => $quiz_border_color,
+                'quiz_loader'                                       => $quiz_loader,
+                'quest_animation'                                   => $quest_animation,
+                'enable_bg_music'                                   => $enable_bg_music,
+                'quiz_bg_music'                                     => $quiz_bg_music,
+                'answers_font_size'                                 => $answers_font_size,
+                'show_create_date'                                  => $show_create_date,
+                'show_author'                                       => $show_author,
+                'enable_early_finish'                               => $enable_early_finish,
+                'answers_rw_texts'                                  => $answers_rw_texts,
+                'disable_store_data'                                => $disable_store_data,
+                'enable_background_gradient'                        => $enable_background_gradient,
+                'background_gradient_color_1'                       => $quiz_background_gradient_color_1,
+                'background_gradient_color_2'                       => $quiz_background_gradient_color_2,
+                'quiz_gradient_direction'                           => $quiz_gradient_direction,
+                'redirect_after_submit'                             => $redirect_after_submit,
+                'submit_redirect_url'                               => $submit_redirect_url,
+                'submit_redirect_delay'                             => $submit_redirect_delay,
+                'progress_bar_style'                                => $progress_bar_style,
+                'enable_exit_button'                                => $enable_exit_button,
+                'exit_redirect_url'                                 => $exit_redirect_url,
+                'image_sizing'                                      => $image_sizing,
+                'quiz_bg_image_position'                            => $quiz_bg_image_position,
+                'custom_class'                                      => $custom_class,
+                'enable_social_links'                               => $enable_social_links,
+                'social_links'                                      => $social_links,
+                'show_quiz_title'                                   => $show_quiz_title,
+                'show_quiz_desc'                                    => $show_quiz_desc,
+                'show_login_form'                                   => $show_login_form,
+                'mobile_max_width'                                  => $mobile_max_width,
+                'limit_users_by'                                    => $limit_users_by,
+				'explanation_time'                                  => $explanation_time,
+				'enable_clear_answer'                               => $enable_clear_answer,
+				'show_category'                                     => $show_category,
+				'show_question_category'                            => $show_question_category,
+                'answers_padding'                                   => $answers_padding,
+                'answers_border'                                    => $answers_border,
+                'answers_border_width'                              => $answers_border_width,
+                'answers_border_style'                              => $answers_border_style,
+                'answers_border_color'                              => $answers_border_color,
+                'ans_img_height'                                    => $ans_img_height,
+                'ans_img_caption_style'                             => $ans_img_caption_style,
+                'ans_img_caption_position'                          => $ans_img_caption_position,
+                'answers_box_shadow'                                => $answers_box_shadow,
+                'answers_box_shadow_color'                          => $answers_box_shadow_color,
+                'show_answers_caption'                              => $show_answers_caption,
+                'answers_margin'                                    => $answers_margin,
+                'ans_right_wrong_icon'                              => $ans_right_wrong_icon,
+                'display_score'                                     => $display_score,
+                'enable_rw_asnwers_sounds'                          => $enable_rw_asnwers_sounds,
+                'quiz_bg_img_in_finish_page'                        => $quiz_bg_img_in_finish_page,
+                'finish_after_wrong_answer'                         => $finish_after_wrong_answer,
+                'after_timer_text'                                  => $after_timer_text,
+                'enable_enter_key'                                  => $enable_enter_key,
+                'show_rate_after_rate'                              => $show_rate_after_rate,
+                'buttons_text_color'                                => $buttons_text_color,
+                'buttons_position'                                  => $buttons_position,
+                'buttons_size'                                      => $buttons_size,
+                'buttons_font_size'                                 => $buttons_font_size,
+                'buttons_width'                                     => $buttons_width,
+                'buttons_left_right_padding'                        => $buttons_left_right_padding,
+                'buttons_top_bottom_padding'                        => $buttons_top_bottom_padding,
+                'buttons_border_radius'                             => $buttons_border_radius,
+                'enable_audio_autoplay'                             => $enable_audio_autoplay,
+                'enable_leave_page'                                 => $enable_leave_page,
+                'show_only_wrong_answer'                            => $show_only_wrong_answer,
+                'pass_score'                                        => $pass_score,
+                'pass_score_message'                                => $pass_score_message,
+                'fail_score_message'                                => $fail_score_message,
+                'answers_object_fit'                                => $answers_object_fit,
+                'quiz_max_pass_count'                               => $quiz_max_pass_count,
+                'question_font_size'                                => $question_font_size,
+                'quiz_width_by_percentage_px'                       => $quiz_width_by_percentage_px,
+                'questions_hint_icon_or_text'                       => $questions_hint_icon_or_text,
+                'questions_hint_value'                              => $questions_hint_value,
+                'enable_early_finsh_comfirm_box'                    => $enable_early_finsh_comfirm_box,
+                'hide_correct_answers'                              => $hide_correct_answers,
+                'quiz_loader_text_value'                            => $quiz_loader_text_value,
+                'show_information_form'                             => $show_information_form,
+                'show_questions_explanation'                        => $show_questions_explanation,
+                'enable_questions_ordering_by_cat'                  => $enable_questions_ordering_by_cat,
+                'enable_send_mail_to_user_by_pass_score'            => $enable_send_mail_to_user_by_pass_score,
+                'enable_send_mail_to_admin_by_pass_score'           => $enable_send_mail_to_admin_by_pass_score,
+                'show_questions_numbering'                          => $show_questions_numbering,
+                'show_answers_numbering'                            => $show_answers_numbering,
+                'quiz_loader_custom_gif'                            => $quiz_loader_custom_gif,
+                'disable_hover_effect'                              => $disable_hover_effect,
+                'quiz_loader_custom_gif_width'                      => $quiz_loader_custom_gif_width,
+                'quiz_title_transformation'                         => $quiz_title_transformation,
+                'quiz_image_width_by_percentage_px'                 => $quiz_image_width_by_percentage_px,
+                'quiz_image_height'                                 => $quiz_image_height,
+                'quiz_bg_img_on_start_page'                         => $quiz_bg_img_on_start_page,
+                'quiz_box_shadow_x_offset'                          => $quiz_box_shadow_x_offset,
+                'quiz_box_shadow_y_offset'                          => $quiz_box_shadow_y_offset,
+                'quiz_box_shadow_z_offset'                          => $quiz_box_shadow_z_offset,
+                'quiz_question_text_alignment'                      => $quiz_question_text_alignment,
+                'quiz_arrow_type'                                   => $quiz_arrow_type,
+                'quiz_show_wrong_answers_first'                     => $quiz_show_wrong_answers_first,
+                'quiz_display_all_questions'                        => $quiz_display_all_questions,
+                'quiz_timer_red_warning'                            => $quiz_timer_red_warning,
+                'quiz_schedule_timezone'                            => $quiz_schedule_timezone,
+                'questions_hint_button_value'                       => $questions_hint_button_value,
+                'quiz_tackers_message'                              => $quiz_tackers_message,
+                'quiz_enable_linkedin_share_button'                 => $quiz_enable_linkedin_share_button,
+                'quiz_enable_facebook_share_button'                 => $quiz_enable_facebook_share_button,
+                'quiz_enable_twitter_share_button'                  => $quiz_enable_twitter_share_button,
+                'quiz_enable_vkontakte_share_button'                => $quiz_enable_vkontakte_share_button,
+                'quiz_make_responses_anonymous'                     => $quiz_make_responses_anonymous,
+                'quiz_make_all_review_link'                         => $quiz_make_all_review_link,
+                'quiz_message_before_timer'                         => $quiz_message_before_timer,
+                'quiz_password_message'                             => $quiz_password_message,
+                'enable_see_result_confirm_box'                     => $enable_see_result_confirm_box,
+                'display_fields_labels'                             => $display_fields_labels,
+                'quiz_enable_password_visibility'                   => $quiz_enable_password_visibility,
+                'question_mobile_font_size'                         => $question_mobile_font_size,
+                'answers_mobile_font_size'                          => $answers_mobile_font_size,
+                'social_buttons_heading'                            => $social_buttons_heading,
+                'social_links_heading'                              => $social_links_heading,
+                'quiz_enable_question_category_description'         => $quiz_enable_question_category_description,
+                'answers_margin'                                    => $answers_margin,
+                'quiz_message_before_redirect_timer'                => $quiz_message_before_redirect_timer,
+                'buttons_mobile_font_size'                          => $buttons_mobile_font_size,
+                'answers_box_shadow'                                => $answers_box_shadow,
+                'answers_box_shadow_color'                          => $answers_box_shadow_color,
+                'quiz_answer_box_shadow_x_offset'                   => $quiz_answer_box_shadow_x_offset,
+                'quiz_answer_box_shadow_y_offset'                   => $quiz_answer_box_shadow_y_offset,
+                'quiz_answer_box_shadow_z_offset'                   => $quiz_answer_box_shadow_z_offset,
+                'quiz_enable_title_text_shadow'                     => $quiz_enable_title_text_shadow,
+                'quiz_title_text_shadow_color'                      => $quiz_title_text_shadow_color,
+                'right_answers_font_size'                           => $right_answers_font_size,
+                'wrong_answers_font_size'                           => $wrong_answers_font_size,
+                'quest_explanation_font_size'                       => $quest_explanation_font_size,
+                'quiz_waiting_time'                                 => $quiz_waiting_time,
+                'quiz_title_text_shadow_x_offset'                   => $quiz_title_text_shadow_x_offset,
+                'quiz_title_text_shadow_y_offset'                   => $quiz_title_text_shadow_y_offset,
+                'quiz_title_text_shadow_z_offset'                   => $quiz_title_text_shadow_z_offset,
+                'quiz_show_only_wrong_answers'                      => $quiz_show_only_wrong_answers,
+                'quiz_title_font_size'                              => $quiz_title_font_size,
+                'quiz_title_mobile_font_size'                       => $quiz_title_mobile_font_size,
+                'quiz_password_width'                               => $quiz_password_width,
+                'quiz_review_placeholder_text'                      => $quiz_review_placeholder_text,
+                'quiz_make_review_required'                         => $quiz_make_review_required,
+                'quiz_enable_results_toggle'                        => $quiz_enable_results_toggle,
+                'quiz_review_thank_you_message'                     => $quiz_review_thank_you_message,
+                'quiz_review_enable_comment_field'                  => $quiz_review_enable_comment_field,
+                'quest_explanation_mobile_font_size'                => $quest_explanation_mobile_font_size,
+                'wrong_answers_mobile_font_size'                    => $wrong_answers_mobile_font_size,
+                'quiz_enable_question_image_zoom'                   => $quiz_enable_question_image_zoom,
+                'right_answers_mobile_font_size'                    => $right_answers_mobile_font_size,
+                'quiz_display_messages_before_buttons'              => $quiz_display_messages_before_buttons,
+                'enable_questions_reporting'                        => $enable_question_reporting,
+                'quiz_enable_questions_reporting_mail'              => $quiz_enable_question_reporting_mail,
+                'quiz_enable_user_cհoosing_anonymous_assessment'    => $quiz_enable_user_cհoosing_anonymous_assessment,
+                'note_text_font_size'                               => $note_text_font_size,
+                'note_text_mobile_font_size'                        => $note_text_mobile_font_size,
+                'quiz_questions_numbering_by_category'              => $quiz_questions_numbering_by_category,
 
-                'question_count_per_page'       => $question_count_per_page,
-                'question_count_per_page_number'=> $data['ays_question_count_per_page_number'],
-                'mail_message'                  => $data['ays_mail_message'],
-                'enable_certificate'            => $enable_certificate,
-                'enable_certificate_without_send' => $enable_certificate_without_send,
-                'certificate_pass'              => $data['ays_certificate_pass'],
-                // 'enable_smtp'                   => $enable_smtp,
-                // 'smtp_username'                 => $data['ays_smtp_username'],
-                // 'smtp_password'                 => $data['ays_smtp_password'],
-                // 'smtp_host'                     => $data['ays_smtp_host'],
-                // 'smtp_secure'                   => $data['ays_smtp_secure'],
-                // 'smtp_port'                     => $data['ays_smtp_port'],
-                'additional_emails'             => $additional_emails,
-                'email_config_from_email'       => $email_config_from_email,
-                'email_config_from_name'        => $email_config_from_name,
-                'email_config_from_subject'     => $email_config_from_subject,
-                'email_config_replyto_email'    => $email_config_replyto_email,
-                'email_config_replyto_name'     => $email_config_replyto_name,
-                'form_title'                    => stripslashes($data['ays_form_title']),
-                'certificate_title'             => stripslashes($data['ays_certificate_title']),
-                'certificate_body'              => stripslashes($data['ays_certificate_body']),
-                'mailchimp_list'                => $mailchimp_list,
-                'enable_mailchimp'              => $enable_mailchimp,
-                'enable_double_opt_in'          => $enable_double_opt_in,
-				'active_date_check'             => $active_date_check,
-				'activeInterval'                => $activeInterval,
-				'deactiveInterval'              => $deactiveInterval,
-				'active_date_message'           => $active_date_message,
-                'active_date_pre_start_message' => $active_date_pre_start_message,
-                'checkbox_score_by'             => $checkbox_score_by,
-                'calculate_score'               => $calculate_score,
-				'send_results_user'             => $send_results_user,
-				'send_interval_msg'             => $send_interval_msg,
-                'question_bank_type'            => $question_bank_type,
-                'questions_bank_cat_count'      => $questions_bank_cat_count,
-                'enable_tackers_count'          => $enable_tackers_count,
-                'tackers_count'                 => $tackers_count,
-                'send_results_admin'            => $send_results_admin,
-                'send_interval_msg_to_admin'    => $send_interval_msg_to_admin,
-                'show_interval_message'         => $show_interval_message,
-                'allow_collecting_logged_in_users_data' => $allow_collecting_logged_in_users_data,
-                'quiz_pass_score'               => $quiz_pass_score,
-                'send_certificate_to_admin'     => $send_certificate_to_admin,
-                'certificate_image'             => $certificate_image,
-                'certificate_frame'             => $certificate_frame,
-                'certificate_orientation'       => $certificate_orientation,
-                'make_questions_required'       => $make_questions_required,
-                'enable_password'               => $enable_password,
-                'password_quiz'                 => $password_quiz,
-                'mail_message_admin'            => $mail_message_admin,
-                'send_mail_to_site_admin'       => $send_mail_to_site_admin,
-                'generate_password'             => $ays_passwords_quiz,
-                'generated_passwords'           => $generated_passwords,
-                'display_score_by'              => $display_score_by,
-                'show_schedule_timer'           => $show_schedule_timer,
-                'show_timer_type'               => $ays_show_timer_type,
-//                'enable_negative_mark'          => $enable_negative_mark,
-//                'negative_mark_point'           => $negative_mark_point,
-                'progress_live_bar_style'       => $progress_live_bar_style,
-                'enable_full_screen_mode'       => $enable_full_screen_mode,
-                
-                'paypal_amount'                 => $paypal_amount,
-                'paypal_currency'               => $paypal_currency,
-                'paypal_message'                => $paypal_message,
+                'question_count_per_page'                           => $question_count_per_page,
+                'question_count_per_page_number'                    => $data['ays_question_count_per_page_number'],
+                'mail_message'                                      => $data['ays_mail_message'],
+                'enable_certificate'                                => $enable_certificate,
+                'enable_certificate_without_send'                   => $enable_certificate_without_send,
+                'certificate_pass'                                  => $data['ays_certificate_pass'],
+                // 'enable_smtp'                                    => $enable_smtp,
+                // 'smtp_username'                                  => $data['ays_smtp_username'],
+                // 'smtp_password'                                  => $data['ays_smtp_password'],
+                // 'smtp_host'                                      => $data['ays_smtp_host'],
+                // 'smtp_secure'                                    => $data['ays_smtp_secure'],
+                // 'smtp_port'                                      => $data['ays_smtp_port'],
+                'additional_emails'                                 => $additional_emails,
+                'email_config_from_email'                           => $email_config_from_email,
+                'email_config_from_name'                            => $email_config_from_name,
+                'email_config_from_subject'                         => $email_config_from_subject,
+                'email_config_replyto_email'                        => $email_config_replyto_email,
+                'email_config_replyto_name'                         => $email_config_replyto_name,
+                'form_title'                                        => stripslashes($data['ays_form_title']),
+                'certificate_title'                                 => stripslashes($data['ays_certificate_title']),
+                'certificate_body'                                  => stripslashes($data['ays_certificate_body']),
+                'mailchimp_list'                                    => $mailchimp_list,
+                'enable_mailchimp'                                  => $enable_mailchimp,
+                'enable_double_opt_in'                              => $enable_double_opt_in,
+				'active_date_check'                                 => $active_date_check,
+				'activeInterval'                                    => $activeInterval,
+				'deactiveInterval'                                  => $deactiveInterval,
+				'active_date_message'                               => $active_date_message,
+                'active_date_pre_start_message'                     => $active_date_pre_start_message,
+                'checkbox_score_by'                                 => $checkbox_score_by,
+                'calculate_score'                                   => $calculate_score,
+				'send_results_user'                                 => $send_results_user,
+				'send_interval_msg'                                 => $send_interval_msg,
+                'question_bank_type'                                => $question_bank_type,
+                'questions_bank_cat_count'                          => $questions_bank_cat_count,
+                'enable_tackers_count'                              => $enable_tackers_count,
+                'tackers_count'                                     => $tackers_count,
+                'send_results_admin'                                => $send_results_admin,
+                'send_interval_msg_to_admin'                        => $send_interval_msg_to_admin,
+                'show_interval_message'                             => $show_interval_message,
+                'allow_collecting_logged_in_users_data'             => $allow_collecting_logged_in_users_data,
+                'quiz_pass_score'                                   => $quiz_pass_score,
+                'send_certificate_to_admin'                         => $send_certificate_to_admin,
+                'certificate_image'                                 => $certificate_image,
+                'certificate_frame'                                 => $certificate_frame,
+                'certificate_orientation'                           => $certificate_orientation,
+                'make_questions_required'                           => $make_questions_required,
+                'enable_password'                                   => $enable_password,
+                'password_quiz'                                     => $password_quiz,
+                'mail_message_admin'                                => $mail_message_admin,
+                'send_mail_to_site_admin'                           => $send_mail_to_site_admin,
+                'generate_password'                                 => $ays_passwords_quiz,
+                'generated_passwords'                               => $generated_passwords,
+                'display_score_by'                                  => $display_score_by,
+                'show_schedule_timer'                               => $show_schedule_timer,
+                'show_timer_type'                                   => $ays_show_timer_type,
+                // 'enable_negative_mark'                           => $enable_negative_mark,
+                // 'negative_mark_point'                            => $negative_mark_point,
+                'progress_live_bar_style'                           => $progress_live_bar_style,
+                'enable_full_screen_mode'                           => $enable_full_screen_mode,
+                'enable_navigation_bar'                             => $enable_navigation_bar,
+                'hide_limit_attempts_notice'                        => $hide_limit_attempts_notice,
+                'turn_on_extra_security_check'                      => $turn_on_extra_security_check,
+                'enable_top_keywords'                               => $ays_enable_top_keywords,
+                'assign_keywords'                                   => $assign_keywords,
+                'quiz_enable_coupon'                                => $quiz_enable_coupon,
+                'quiz_coupons_array'                                => $quiz_coupons_array,
+				'use_subject_for_admin_email'                       => $use_subject_for_admin_email,
+                'apply_points_to_keywords'                          => $apply_points_to_keywords,
+                'limit_attempts_count_by_user_role'                 => $limit_attempts_count_by_user_role,
+                'enable_autostart'                                  => $enable_autostart,
+                'quiz_enable_keyboard_navigation'                   => $quiz_enable_keyboard_navigation,
+                'question_count_per_page_type'                      => $question_count_per_page_type,
+                'question_count_per_page_custom_order'              => $question_count_per_page_custom_order,
+                'quiz_timer_type'                                   => $quiz_timer_type,
+                'ays_allow_exporting_quizzes'                       => $allow_exporting_quizzes,
+                'ays_users_to_export_search'                        => $ays_users_to_export_search,
+                'quiz_timer_type'                                   => $quiz_timer_type,
+                'quiz_pass_score_type'                              => $quiz_pass_score_type,
+                'quiz_certificate_pass_score_type'                  => $quiz_certificate_pass_score_type,
+                'quiz_equal_keywords_text'                          => $quiz_equal_keywords_text,
+                'enable_navigation_bar_marked_questions'            => $enable_navigation_bar_marked_questions,
+                'quiz_question_text_to_speech'                      => $quiz_question_text_to_speech,
+                'quiz_disable_input_focusing'                       => $quiz_disable_input_focusing,
+                'quiz_password_import_type'                         => $quiz_password_import_type,
 
-                'enable_stripe'                 => $enable_stripe,
-                'stripe_amount'                 => $stripe_amount,
-                'stripe_currency'               => $stripe_currency,
-                'stripe_message'                => $stripe_message,
 
-                'enable_monitor'                => $enable_monitor,
-				'monitor_list'                  => $monitor_list,
-				'active_camp_list'              => $active_camp_list,
-				'enable_slack'                  => $enable_slack,
-				'slack_conversation'            => $slack_conversation,
-				'active_camp_automation'        => $active_camp_automation,
-				'enable_active_camp'            => $enable_active_camp,
-				'enable_zapier'                 => $enable_zapier,
-                'enable_google_sheets'          => $enable_google_sheets,
-				'spreadsheet_id'                => $spreadsheet_id,
-				'google_sheet_custom_fields'    => $google_sheet_custom_fields_old,
+                'paypal_amount'                                     => $paypal_amount,
+                'paypal_currency'                                   => $paypal_currency,
+                'paypal_message'                                    => $paypal_message,
+
+                'enable_stripe'                                     => $enable_stripe,
+                'stripe_amount'                                     => $stripe_amount,
+                'stripe_currency'                                   => $stripe_currency,
+                'stripe_message'                                    => $stripe_message,
+
+                'payment_type'                                      => $payment_type,
+
+                'enable_monitor'                                    => $enable_monitor,
+				'monitor_list'                                      => $monitor_list,
+				'active_camp_list'                                  => $active_camp_list,
+				'enable_slack'                                      => $enable_slack,
+				'slack_conversation'                                => $slack_conversation,
+				'active_camp_automation'                            => $active_camp_automation,
+				'enable_active_camp'                                => $enable_active_camp,
+				'enable_zapier'                                     => $enable_zapier,
+                'enable_google_sheets'                              => $enable_google_sheets,
+				'spreadsheet_id'                                    => $spreadsheet_id,
+				'google_sheet_custom_fields'                        => $google_sheet_custom_fields_old,
+
+                'quiz_condition_show_all_results'                   => $quiz_condition_show_all_results,
+                'quiz_condition_calculation_type'                   => $quiz_condition_calculation_type,
             );
 
             $options['quiz_attributes'] = $data['ays_quiz_attributes'];
@@ -1231,21 +1750,27 @@ class Quizes_List_Table extends WP_List_Table{
             $interval_images = $data['interval_image'];
 			$interval_wproduct = $data['interval_wproduct'];
             $intervals_keywords = $data['interval_keyword'];
+            $intervals_redirect_url = $data['interval_redirect_url'];
+            $intervals_redirect_delay = $data['interval_redirect_delay'];
             $intervals = array();
-            for($i = 0; $i < count($intervals_max); $i++){
-                $intervals[$i] = array();
-                $intervals[$i]['interval_min'] = $intervals_min[$i];
-                $intervals[$i]['interval_max'] = $intervals_max[$i];
-                $intervals[$i]['interval_text'] = stripslashes($intervals_texts[$i]);
-                $intervals[$i]['interval_image'] = $interval_images[$i];
+            if( isset( $intervals_max ) && !is_null( $intervals_max ) && !empty( $intervals_max ) ){
+                for($i = 0; $i < count($intervals_max); $i++){
+                    $intervals[$i] = array();
+                    $intervals[$i]['interval_min'] = $intervals_min[$i];
+                    $intervals[$i]['interval_max'] = $intervals_max[$i];
+                    $intervals[$i]['interval_text'] = stripslashes($intervals_texts[$i]);
+                    $intervals[$i]['interval_image'] = $interval_images[$i];
+                    $intervals[$i]['interval_redirect_url'] = $intervals_redirect_url[$i];
+                    $intervals[$i]['interval_redirect_delay'] = $intervals_redirect_delay[$i];
 
-                if(isset($interval_wproduct[$i])){
-                    $intervals[$i]['interval_wproduct'] = implode(',' , $interval_wproduct[$i]);
-                }else{
-                    $intervals[$i]['interval_wproduct'] = '';
+                    if(isset($interval_wproduct[$i])){
+                        $intervals[$i]['interval_wproduct'] = implode(',' , $interval_wproduct[$i]);
+                    }else{
+                        $intervals[$i]['interval_wproduct'] = '';
+                    }
+
+                    $intervals[$i]['interval_keyword'] = $intervals_keywords[$i];
                 }
-
-                $intervals[$i]['interval_keyword'] = $intervals_keywords[$i];
             }
             $quiz_intervals = json_encode($intervals);
 
@@ -1262,6 +1787,7 @@ class Quizes_List_Table extends WP_List_Table{
                         'author_id'         => $author_id,
                         'create_date'       => $quiz_create_date,
                         'ordering'          => $ordering,
+                        'quiz_url'          => $main_quiz_url,
                         'options'           => json_encode($options),
                         'intervals'         => $quiz_intervals
                     ),
@@ -1275,6 +1801,7 @@ class Quizes_List_Table extends WP_List_Table{
                         '%d', // author_id
                         '%s', // create_date
                         '%d', // ordering
+                        '%s', // quiz_url
                         '%s', // options
                         '%s'  // intervals
                     )
@@ -1293,6 +1820,7 @@ class Quizes_List_Table extends WP_List_Table{
                         'published'         => $published,
                         'author_id'         => $author_id,
                         'create_date'       => $quiz_create_date,
+                        'quiz_url'          => $main_quiz_url,
                         'options'           => json_encode($options),
                         'intervals'         => $quiz_intervals
                     ),
@@ -1306,6 +1834,7 @@ class Quizes_List_Table extends WP_List_Table{
                         '%d', // published
                         '%d', // author_id
                         '%s', // create_date
+                        '%s', // quiz_url
                         '%s', // options
                         '%s'  // intervals
                     ),
@@ -1335,7 +1864,7 @@ class Quizes_List_Table extends WP_List_Table{
 
                     if ( Quiz_Maker_Admin::is_active_gutenberg() ) {
                         $post_content = '<!-- wp:quiz-maker/quiz {"metaFieldValue":'.$quiz_id.',"shortcode":"[ays_quiz id='.$quiz_id.']"} -->
-                        <div class="ays-quiz-gutenberg" class="wp-block-quiz-maker-quiz">[ays_quiz id="'.$quiz_id.'"]</div>
+                        <div class="wp-block-quiz-maker-quiz">[ays_quiz id="'.$quiz_id.'"]</div>
                         <!-- /wp:quiz-maker/quiz -->';
                     }
 
@@ -1440,6 +1969,70 @@ class Quizes_List_Table extends WP_List_Table{
         );
     }
 
+    /**
+     * Move to trash a customer record.
+     *
+     * @param int $id customer ID
+     */
+    public static function trash_items( $id ) {
+        global $wpdb;
+
+        $wpdb->update(
+            "{$wpdb->prefix}aysquiz_quizes",
+            array( 'published' => 2 ),
+            array( 'id' => absint( $id ) ),
+            array( '%d' ),
+            array( '%d' )
+        );
+    }
+
+    /**
+     * Restore a customer record.
+     *
+     * @param int $id customer ID
+     */
+    public static function restore_items( $id ) {
+        global $wpdb;
+
+        $wpdb->update(
+            "{$wpdb->prefix}aysquiz_quizes",
+            array( 'published' => 1 ),
+            array( 'id' => absint( $id ) ),
+            array( '%d' ),
+            array( '%d' )
+        );
+    }
+
+    public static function ays_quiz_published_unpublished_quiz( $id, $status = 'published' ) {
+        global $wpdb;
+        $quizzes_table = esc_sql( $wpdb->prefix . "aysquiz_quizes" );
+
+        switch ( $status ) {
+            case 'published':
+                $published = 1;
+                break;
+            case 'unpublished':
+                $published = 0;
+                break;
+            default:
+                $published = 1;
+                break;
+        }
+
+        $quiz_result = $wpdb->update(
+            $quizzes_table,
+            array(
+                'published' => $published,
+
+            ),
+            array( 'id' => absint( $id ) ),
+            array(
+                '%d'
+            ),
+            array( '%d' )
+        );
+    }
+
 
     /**
      * Returns the count of records in the database.
@@ -1454,6 +2047,11 @@ class Quizes_List_Table extends WP_List_Table{
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
             $current_user = get_current_user_id();
             $filter[] = " author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $filter[] = ' author_id = '.$author_id.'';
+            }
         }
 
         if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
@@ -1465,11 +2063,13 @@ class Quizes_List_Table extends WP_List_Table{
             if($fstatus !== null){
                 $filter[] = " published = ".$fstatus." ";
             }
+        }else{
+            $filter[] = " published != 2 ";
         }
         
         $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
         if( $search ){
-            $filter[] = sprintf(" title LIKE '%%%s%%' ", $search );
+            $filter[] = sprintf(" title LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
         }
 
         if(count($filter) !== 0){
@@ -1482,11 +2082,16 @@ class Quizes_List_Table extends WP_List_Table{
     public static function all_record_count() {
         global $wpdb;
 
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizes WHERE 1=1";
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizes WHERE 1=1 AND published != 2";
 
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
             $current_user = get_current_user_id();
             $sql .= " AND author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $sql .= ' AND author_id = '.$author_id.'';
+            }
         }
 
         if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
@@ -1495,6 +2100,60 @@ class Quizes_List_Table extends WP_List_Table{
         }
 
         return $wpdb->get_var( $sql );
+    }
+
+    /**
+     * Returns the count of records in the database.
+     *
+     * @return null|string
+     */
+    public static function quiz_not_finished_count( $quiz_id ) {
+        global $wpdb;
+
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports";
+
+        $where = array();
+        $sql_where_condition = '';
+
+        // if(isset( $_REQUEST['fstatus'] )){
+        //     $fstatus = intval($_REQUEST['fstatus']);
+        //     switch($fstatus){
+        //         case 0:
+        //             $where[] = ' `read` = 0 ';
+        //             break;
+        //         case 1:
+        //             $where[] = ' `read` = 1 ';
+        //             break;
+        //     }
+        // }
+
+        // if(! empty( $_REQUEST['filterby'] ) && $_REQUEST['filterby'] > 0){
+        //     $cat_id = intval($_REQUEST['filterby']);
+        //     $where[] = ' `quiz_id` = '.$cat_id.' ';
+        // }
+
+        // if( isset( $_REQUEST['wpuser'] ) ){
+        //     $user_id = intval($_REQUEST['wpuser']);
+        //     $where[] = ' `user_id` = '.$user_id.' ';
+        // }
+
+        if( isset( $quiz_id ) && $quiz_id > 0 ){
+            $where[] = ' `quiz_id` = '.$quiz_id.' AND `status` = "started" ';
+        }
+
+        if( ! empty($where) ){
+            $sql_where_condition = " WHERE " . implode( " AND ", $where );
+        }
+
+        $sql .= $sql_where_condition;
+
+        $result = $wpdb->get_var( $sql );
+
+        if ( is_null( $result ) || empty( $result ) ) {
+            $result = 0;
+        }
+
+        return $result;
     }
 
     public static function published_questions_record_count() {
@@ -1513,6 +2172,11 @@ class Quizes_List_Table extends WP_List_Table{
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
             $current_user = get_current_user_id();
             $sql .= " AND author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $sql .= ' AND author_id = '.$author_id.'';
+            }
         }
 
         if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
@@ -1531,8 +2195,36 @@ class Quizes_List_Table extends WP_List_Table{
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
             $current_user = get_current_user_id();
             $sql .= " AND author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $sql .= ' AND author_id = '.$author_id.'';
+            }
         }
         
+        if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
+            $cat_id = intval($_GET['filterby']);
+            $sql .= ' AND quiz_category_id = '.$cat_id.' ';
+        }
+
+        return $wpdb->get_var( $sql );
+    }
+
+    public static function trash_questions_count() {
+        global $wpdb;
+
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizes WHERE published=2";
+
+        if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
+            $current_user = get_current_user_id();
+            $sql .= " AND author_id = ".$current_user." ";
+        } elseif ( Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ) {
+            if(! empty( $_REQUEST['filterbyuser'] ) && $_REQUEST['filterbyuser'] > 0){
+                $author_id = intval( sanitize_text_field( $_REQUEST['filterbyuser'] ) );
+                $sql .= ' AND author_id = '.$author_id.'';
+            }
+        }
+
         if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
             $cat_id = intval($_GET['filterby']);
             $sql .= ' AND quiz_category_id = '.$cat_id.' ';
@@ -1563,11 +2255,13 @@ class Quizes_List_Table extends WP_List_Table{
         $options = json_decode($quiz['options'], true);
         
         $quiz_create_date = current_time( 'mysql' );
+
+        $main_quiz_url = (isset( $quiz['quiz_url'] ) && sanitize_url( $quiz['quiz_url'] ) != "") ? sanitize_url( $quiz['quiz_url'] ) : "";
         
         $result = $wpdb->insert(
             $quizzes_table,            
             array(
-                'title'             => "Copy - ".$quiz['title'],
+                'title'             => "Copy - ". stripslashes( $quiz['title'] ),
                 'description'       => $quiz['description'],
                 'quiz_image'        => $quiz['quiz_image'],
                 'quiz_category_id'  => intval($quiz['quiz_category_id']),
@@ -1575,6 +2269,7 @@ class Quizes_List_Table extends WP_List_Table{
                 'ordering'          => $ordering,
                 'author_id'         => $author->ID,
                 'create_date'       => $quiz_create_date,
+                'quiz_url'          => $main_quiz_url,
                 'published'         => intval($quiz['published']),
                 'options'           => json_encode($options),
                 'intervals'         => $quiz['intervals']
@@ -1599,13 +2294,19 @@ class Quizes_List_Table extends WP_List_Table{
             $url = esc_url_raw( remove_query_arg(array('action', 'question')  ) ) . '&status=' . $message;
             wp_redirect( $url );
         }
-        
     }
 
 
     /** Text displayed when no customer data is available */
     public function no_items() {
-        echo __( 'There are no quizzes yet.', $this->plugin_name );
+        if( isset( $_GET['status'] ) && ($_GET['status'] == 'deleted' || $_GET['status'] == 'restored')){
+            $url = remove_query_arg( array('fstatus', 'status', '_wpnonce') );
+            $url = esc_url_raw( $url );
+            wp_redirect( $url );
+        }
+        else{
+            echo __( 'There are no quizzes yet.', $this->plugin_name );
+        }
     }
 
 
@@ -1620,6 +2321,7 @@ class Quizes_List_Table extends WP_List_Table{
     public function column_default( $item, $column_name ) {
         switch ( $column_name ) {
             case 'title':
+            case 'quiz_image':
             case 'quiz_category_id':
             case 'shortcode':
             case 'code_include':
@@ -1657,10 +2359,18 @@ class Quizes_List_Table extends WP_List_Table{
      * @return string
      */
     function column_title( $item ) {
-        $delete_nonce = wp_create_nonce( $this->plugin_name . '-delete-quiz' );
+        $delete_nonce  = wp_create_nonce( $this->plugin_name . '-delete-quiz' );
+        $trash_nonce   = wp_create_nonce( $this->plugin_name . '-trash-quiz' );
+        $restore_nonce = wp_create_nonce( $this->plugin_name . '-restore-quiz' );
+
+        $fstatus = '';
+        if( isset( $_GET['fstatus'] ) && $_GET['fstatus'] != '' ){
+            $fstatus = '&fstatus=' . sanitize_text_field( $_GET['fstatus'] );
+        }
+
         $current_user = get_current_user_id();
         $author_id = intval( $item['author_id'] );
-        $quiz_title = stripcslashes($item['title']);
+        $quiz_title = esc_attr( stripcslashes($item['title']) );
 
         $q = esc_attr( $quiz_title );
         $quizzes_title_length = intval( $this->title_length );
@@ -1679,31 +2389,59 @@ class Quizes_List_Table extends WP_List_Table{
         $title = sprintf( '<a href="?page=%s&action=%s&quiz=%d" title="%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ), $q, $restitle);
 
         $actions = array();
-        
-        if( $owner ){
-            $actions['edit'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">'. __('Edit', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
-        }else{
-            $actions['edit'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">'. __('View', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
-        }
 
-        $actions['results'] = sprintf( '<a href="?page=%s&quiz=%d&%s">'. __('View Results', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ) . '-each-result', absint( $item['id'] ) , "ays_result_tab=poststuff" );
-        $actions['duplicate'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">'. __('Duplicate', $this->plugin_name) .'</a>', esc_attr( $_REQUEST['page'] ), 'duplicate', absint( $item['id'] ) );
-        
-        if( $owner ){
-            $actions['delete'] = sprintf( '<a class="ays_confirm_del" data-message="%s" href="?page=%s&action=%s&quiz=%s&_wpnonce=%s">'. __('Delete', $this->plugin_name) .'</a>', $restitle, esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce );
+        if( $item['published'] == 2 ) {
+            $title              = sprintf( '<strong><a title="%s">%s</a></strong>', $q, $restitle );
+            $actions['restore'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d&_wpnonce=%s' . $fstatus . '">' . __( 'Restore', $this->plugin_name ) . '</a>', esc_attr( $_REQUEST['page'] ), 'restore', absint( $item['id'] ), $restore_nonce );
+            $actions['delete']  = sprintf( '<a class="ays_confirm_del" data-message="%s" href="?page=%s&action=%s&quiz=%s&_wpnonce=%s' . $fstatus . '">' . __( 'Delete Permanently', $this->plugin_name ) . '</a>', $restitle, esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce );
+        } else {
+            if ( $owner ) {
+                $actions['edit'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">' . __( 'Edit', $this->plugin_name ) . '</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
+            } else {
+                $actions['edit'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">' . __( 'View', $this->plugin_name ) . '</a>', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
+            }
+
+            $actions['results']   = sprintf( '<a href="?page=%s&quiz=%d&%s">' . __( 'View Results', $this->plugin_name ) . '</a>', esc_attr( $_REQUEST['page'] ) . '-each-result', absint( $item['id'] ), "ays_result_tab=poststuff" );
+            $actions['duplicate'] = sprintf( '<a href="?page=%s&action=%s&quiz=%d">' . __( 'Duplicate', $this->plugin_name ) . '</a>', esc_attr( $_REQUEST['page'] ), 'duplicate', absint( $item['id'] ) );
+
+            if ( $owner ) {
+                $url = remove_query_arg( array('status') );
+                $url_args['page']   = esc_attr( $_REQUEST['page'] );
+                $url_args['quiz']   = absint( $item['id'] );
+                $url_args['action']   = "trash";
+                $url_args['_wpnonce'] = $trash_nonce;
+                $url                  = add_query_arg( $url_args, $url );
+                $actions['trash']     = sprintf( '<a href="%s">' . __( 'Move to trash', $this->plugin_name ) . '</a>', $url );
+            }
         }
-        
 
         return $title . $this->row_actions( $actions );
     }
 
     function column_quiz_category_id( $item ) {
         global $wpdb;
-        $sql = "SELECT * FROM {$wpdb->prefix}aysquiz_quizcategories WHERE id=" . absint( intval( $item['quiz_category_id'] ) );
+
+        $quiz_categories_table = esc_sql( $wpdb->prefix . "aysquiz_quizcategories" );
+
+        $quiz_category_id = ( isset( $item['quiz_category_id'] ) && $item['quiz_category_id'] != "" ) ? absint( sanitize_text_field( $item['quiz_category_id'] ) ) : 0;
+
+        $sql = "SELECT * FROM {$quiz_categories_table} WHERE id=" . $quiz_category_id;
 
         $result = $wpdb->get_row($sql, 'ARRAY_A');
 
-        return $result['title'];
+        $results = "";
+        if($result !== null){
+
+            $category_title = ( isset( $result['title'] ) && $result['title'] != "" ) ? sanitize_text_field( $result['title'] ) : "";
+
+            if ( $category_title != "" ) {
+                $results = sprintf( '<a href="?page=%s&action=edit&quiz_category=%d" target="_blank">%s</a>', esc_attr( $_REQUEST['page'] ) . '-quiz-categories', $quiz_category_id, $category_title);
+            }
+        }else{
+            $results = "";
+        }
+
+        return $results;
     }
 
     function column_code_include( $item ) {
@@ -1711,15 +2449,23 @@ class Quizes_List_Table extends WP_List_Table{
         return sprintf('<input type="text" onClick="this.setSelectionRange(0, this.value.length)" readonly value="<?php echo do_shortcode('.$shortcode.'); ?>" style="max-width:100%%;" />', $item["id"]);
     }
 
-    function scolumn_published( $item ) {
-        switch( $item['published'] ) {
-            case "1":
-                return '<span class="ays-publish-status"><i class="ays_fa ays_fa_check_square_o" aria-hidden="true"></i> '. __('Published',$this->plugin_name) . '</span>';
+    function column_published( $item ) {
+        $status = (isset( $item['published'] ) && $item['published'] != '') ? absint( sanitize_text_field( $item['published'] ) ) : '';
+
+        $status_html = '';
+        switch( $status ) {
+            case 1:
+                $status_html = '<span class="ays-publish-status"><i class="ays_fa ays_fa_check_square_o" aria-hidden="true"></i>'. __('Published',$this->plugin_name) . '</span>';
                 break;
-            case "0":
-                return '<span class="ays-publish-status"><i class="ays_fa ays_fa_square_o" aria-hidden="true"></i> '. __('Unpublished',$this->plugin_name) . '</span>';
+            case 0:
+                $status_html = '<span class="ays-publish-status"><i class="ays_fa ays_fa_square_o" aria-hidden="true"></i>'. __('Unpublished',$this->plugin_name) . '</span>';
+                break;
+            default:
+                $status_html = '<span class="ays-publish-status"><i class="ays_fa ays_fa_square_o" aria-hidden="true"></i>'. __('Unpublished',$this->plugin_name) . '</span>';
                 break;
         }
+
+        return $status_html;
     }
 
     function column_shortcode( $item ) {
@@ -1748,7 +2494,7 @@ class Quizes_List_Table extends WP_List_Table{
         }
         
         $text = "";
-        if( $author !== null ){
+        if( $author && $author !== null && !empty( $author ) ){
             $text .= $author->data->display_name;
         }
         return $text;
@@ -1757,7 +2503,19 @@ class Quizes_List_Table extends WP_List_Table{
     function column_completed_count( $item ) {
         $id = $item['id'];
         $passed_count = $this->get_quiz_pass_count($id);
-        $text = "<p style='text-align:center;font-size:14px;'>".$passed_count."</p>";
+        $not_finished_count = self::quiz_not_finished_count($id);
+
+        if ( $passed_count != 0 ) {
+
+            $passed_count = sprintf( '<a href="?page=%s&quiz=%d" target="_blank">%s</a>', esc_attr( $_REQUEST['page'] ) . '-each-result', absint( sanitize_text_field( $item['id'] ) ), $passed_count );
+        }
+
+        if ( $not_finished_count != 0 ) {
+
+            $not_finished_count = sprintf( '<a href="?page=%s&quiz=%d" target="_blank">%s</a>', esc_attr( $_REQUEST['page'] ) . '-not-finished-results', absint( sanitize_text_field( $item['id'] ) ), $not_finished_count );
+        }
+
+        $text = "<p style='font-size:14px;'>".$passed_count." / ".$not_finished_count."</p>";
         return $text;
     }
 
@@ -1772,6 +2530,45 @@ class Quizes_List_Table extends WP_List_Table{
         return "<p style='text-align:center;font-size:14px;'>" . $count . "</p>";
     }
 
+    function column_quiz_image( $item ) {
+        global $wpdb;
+        $quiz_image = (isset( $item['quiz_image'] ) && $item['quiz_image'] != '') ? esc_url( $item['quiz_image'] ) : '';
+
+        $image_html     = array();
+        $edit_page_url  = '';
+
+        if($quiz_image != ''){
+
+            if ( isset( $item['id'] ) && absint( $item['id'] ) > 0 ) {
+                $edit_page_url = sprintf( 'href="?page=%s&action=%s&quiz=%d"', esc_attr( $_REQUEST['page'] ), 'edit', absint( $item['id'] ) );
+            }
+
+            $quiz_image_url = $quiz_image;
+            $this_site_path = trim( get_site_url(), "https:" );
+            if( strpos( trim( $quiz_image_url, "https:" ), $this_site_path ) !== false ){
+                $query = "SELECT * FROM `" . $wpdb->prefix . "posts` WHERE `post_type` = 'attachment' AND `guid` = '" . $quiz_image_url . "'";
+                $result_img =  $wpdb->get_results( $query, "ARRAY_A" );
+
+                if( ! empty( $result_img ) ){
+                    $url_img = wp_get_attachment_image_src( $result_img[0]['ID'], 'thumbnail' );
+                    if( $url_img !== false ){
+                        $quiz_image_url = $url_img[0];
+                    }
+                }
+            }
+
+            $image_html[] = '<div class="ays-quiz-image-list-table-column">';
+                $image_html[] = '<a '. $edit_page_url .' class="ays-quiz-image-list-table-link-column">';
+                    $image_html[] = '<img src="'. $quiz_image_url .'" class="ays-quiz-image-list-table-img-column">';
+                $image_html[] = '</a>';
+            $image_html[] = '</div>';
+        }
+
+        $image_html = implode('', $image_html);
+
+        return $image_html;
+    }
+
     /**
      *  Associative array of columns
      *
@@ -1779,17 +2576,33 @@ class Quizes_List_Table extends WP_List_Table{
      */
     function get_columns() {
         $columns = array(
-            'cb'                => '<input type="checkbox" />',
-            'title'             => __( 'Title', $this->plugin_name ),
-            'quiz_category_id'  => __( 'Category', $this->plugin_name ),
-            'shortcode'         => __( 'Shortcode', $this->plugin_name ),
-            'code_include'      => __( 'Code include', $this->plugin_name ),
-            'items_count'       => __( 'Count', $this->plugin_name ),
-            'create_date'       => __( 'Created', $this->plugin_name ),
-            'author_id'         => __( 'Author', $this->plugin_name ),
-            'completed_count'   => __( 'Completed count', $this->plugin_name ),
-            'id'                => __( 'ID', $this->plugin_name ),
+            'cb'     => '<input type="checkbox" />',
+            'title'  => __( 'Title', $this->plugin_name )
         );
+
+        $fstatus = isset( $_REQUEST['fstatus'] ) ? absint( sanitize_text_field( $_REQUEST['fstatus'] ) ) : null;
+
+        $columns['quiz_image']       = __( 'Image', $this->plugin_name );
+        $columns['quiz_category_id'] = __( 'Category', $this->plugin_name );
+        $columns['shortcode']        = __( 'Shortcode', $this->plugin_name );
+        $columns['code_include']     = __( 'Code include', $this->plugin_name );
+        $columns['items_count']      = __( 'Count', $this->plugin_name );
+        $columns['create_date']      = __( 'Created', $this->plugin_name );
+
+        if( $this->current_user_can_edit ){
+            $columns['author_id'] = __( 'Author', $this->plugin_name );
+        }
+
+        if( $fstatus !== 2 ) {
+            $columns['completed_count'] = __( 'Completed / Not finished', $this->plugin_name );
+        }
+
+        $columns['published']        = __( 'Status', $this->plugin_name );
+        $columns['id'] = __( 'ID', $this->plugin_name );
+
+        if( isset( $_GET['action'] ) && ( $_GET['action'] == 'add' || $_GET['action'] == 'edit' ) ){
+            return array();
+        }
 
         return $columns;
     }
@@ -1802,16 +2615,31 @@ class Quizes_List_Table extends WP_List_Table{
      */
     public function get_sortable_columns() {
         $sortable_columns = array(
-            'title'         => array( 'title', true ),
-            'author_id'      => array( 'author_id', true ),
-            'create_date'      => array( 'create_date', true ),
-            'quiz_category_id'   => array( 'quiz_category_id', true ),
-//            'published'     => array( 'published', true ),
-            'id'            => array( 'id', true ),
+            'title'             => array( 'title', true ),
+            'author_id'         => array( 'author_id', true ),
+            'create_date'       => array( 'create_date', true ),
+            'quiz_category_id'  => array( 'quiz_category_id', true ),
+            'published'         => array( 'published', true ),
+            'id'                => array( 'id', true ),
         );
 
         return $sortable_columns;
     }
+
+    /**
+     * Columns to make sortable.
+     *
+     * @return array
+     */
+    public function get_hidden_columns() {
+        $sortable_columns = array(
+            'code_include',
+            'published',
+        );
+
+        return $sortable_columns;
+    }
+
 
     /**
      * Returns an associative array containing the bulk action
@@ -1819,9 +2647,17 @@ class Quizes_List_Table extends WP_List_Table{
      * @return array
      */
     public function get_bulk_actions() {
-        $actions = array(
-            'bulk-delete' => __('Delete', $this->plugin_name)
-        );
+        $actions = array();
+
+        $fstatus = isset( $_REQUEST['fstatus'] ) ? absint( sanitize_text_field( $_REQUEST['fstatus'] ) ) : null;
+        if( $fstatus === 2 ){
+            $actions['bulk-restore'] = __('Restore', $this->plugin_name);
+            $actions['bulk-delete']  = __('Delete Permanently', $this->plugin_name);
+        }else{
+            $actions['bulk-published']   = __('Publish', $this->plugin_name);
+            $actions['bulk-unpublished'] = __('Unpublish', $this->plugin_name);
+            $actions['bulk-trash']       = __('Move to trash', $this->plugin_name);
+        }
 
         return $actions;
     }
@@ -1832,6 +2668,7 @@ class Quizes_List_Table extends WP_List_Table{
      * Handles data query and filter, sorting, and pagination.
      */
     public function prepare_items() {
+        global $wpdb;
 
         $this->_column_headers = $this->get_column_info();
 
@@ -1850,7 +2687,7 @@ class Quizes_List_Table extends WP_List_Table{
 
         $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
 
-        $do_search = ( $search ) ? sprintf(" title LIKE '%%%s%%' ", $search ) : '';
+        $do_search = ( $search ) ? sprintf(" title LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) ) : '';
 
         $this->items = self::get_quizes( $per_page, $current_page, $do_search );
     }
@@ -1878,12 +2715,66 @@ class Quizes_List_Table extends WP_List_Table{
 
         }
 
+        //Detect when a bulk action is being triggered...
+        if ( 'trash' === $this->current_action() ) {
+
+            // In our file that handles the request, verify the nonce.
+            $nonce = esc_attr( $_REQUEST['_wpnonce'] );
+
+            if ( ! wp_verify_nonce( $nonce, $this->plugin_name . '-trash-quiz' ) ) {
+                die( 'Go get a life script kiddies' );
+            }
+            else {
+                self::trash_items( absint( $_GET['quiz'] ) );
+
+                // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+                // add_query_arg() return the current url
+
+                $add_query_args = array(
+                    "status" => 'trashed'
+                );
+                if( isset( $_GET['fstatus'] ) && $_GET['fstatus'] != '' ){
+                    $add_query_args['fstatus'] = sanitize_text_field( $_GET['fstatus'] );
+                }
+                $url = remove_query_arg( array('action', 'quiz', '_wpnonce') );
+                $url = esc_url_raw( add_query_arg( $add_query_args, $url ) );
+                wp_redirect( $url );
+            }
+        }
+
+        //Detect when a bulk action is being triggered...
+        if ( 'restore' === $this->current_action() ) {
+
+            // In our file that handles the request, verify the nonce.
+            $nonce = esc_attr( $_REQUEST['_wpnonce'] );
+
+            if ( ! wp_verify_nonce( $nonce, $this->plugin_name . '-restore-quiz' ) ) {
+                die( 'Go get a life script kiddies' );
+            }
+            else {
+                self::restore_items( absint( $_GET['quiz'] ) );
+
+                // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+                // add_query_arg() return the current url
+
+                $add_query_args = array(
+                    "status" => 'restored'
+                );
+                if( isset( $_GET['fstatus'] ) && $_GET['fstatus'] != '' ){
+                    $add_query_args['fstatus'] = sanitize_text_field( $_GET['fstatus'] );
+                }
+                $url = remove_query_arg( array('action', 'quiz', '_wpnonce') );
+                $url = esc_url_raw( add_query_arg( $add_query_args, $url ) );
+                wp_redirect( $url );
+            }
+        }
+
         // If the delete bulk action is triggered
         if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-delete' )
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -1895,6 +2786,84 @@ class Quizes_List_Table extends WP_List_Table{
             // add_query_arg() return the current url
 
             $url = esc_url_raw( remove_query_arg(array('action', 'quiz', '_wpnonce')  ) ) . '&status=' . $message;
+            wp_redirect( $url );
+        } elseif ((isset($_POST['action']) && $_POST['action'] == 'bulk-published')
+                  || (isset($_POST['action2']) && $_POST['action2'] == 'bulk-published')
+        ) {
+
+            $published_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
+
+            // loop over the array of record IDs and mark as read them
+
+            foreach ( $published_ids as $id ) {
+                self::ays_quiz_published_unpublished_quiz( $id , 'published' );
+            }
+
+            // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+            // add_query_arg() return the current url
+            $url = esc_url_raw( remove_query_arg(array('action', 'quiz', '_wpnonce')  ) ) . '&status=published';
+            wp_redirect( $url );
+        } elseif ((isset($_POST['action']) && $_POST['action'] == 'bulk-unpublished')
+                  || (isset($_POST['action2']) && $_POST['action2'] == 'bulk-unpublished')
+        ) {
+
+            $unpublished_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
+
+            // loop over the array of record IDs and mark as read them
+
+            foreach ( $unpublished_ids as $id ) {
+                self::ays_quiz_published_unpublished_quiz( $id , 'unpublished' );
+            }
+
+            // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+            // add_query_arg() return the current url
+            $url = esc_url_raw( remove_query_arg(array('action', 'quiz', '_wpnonce')  ) ) . '&status=unpublished';
+            wp_redirect( $url );
+        }
+
+        // If the delete bulk action is triggered
+        if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-trash' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-trash' ) ) {
+
+            $trash_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
+
+            // loop over the array of record IDs and delete them
+            foreach ( $trash_ids as $id ) {
+                self::trash_items( $id );
+            }
+
+            // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+            // add_query_arg() return the current url
+            $add_query_args = array(
+                "status" => 'all-trashed'
+            );
+            if( isset( $_GET['fstatus'] ) && $_GET['fstatus'] != '' ){
+                $add_query_args['fstatus'] = sanitize_text_field( $_GET['fstatus'] );
+            }
+            $url = remove_query_arg( array('action', 'quiz', '_wpnonce') );
+            $url = esc_url_raw( add_query_arg( $add_query_args, $url ) );
+            wp_redirect( $url );
+        }
+
+        // If the delete bulk action is triggered
+        if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'bulk-restore' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-restore' ) ) {
+
+            $restore_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
+
+            // loop over the array of record IDs and delete them
+            foreach ( $restore_ids as $id ) {
+                self::restore_items( $id );
+            }
+
+            // esc_url_raw() is used to prevent converting ampersand in url to "#038;"
+            // add_query_arg() return the current url
+            $add_query_args = array(
+                "status" => 'all-restored'
+            );
+            if( isset( $_GET['fstatus'] ) && $_GET['fstatus'] != '' ){
+                $add_query_args['fstatus'] = sanitize_text_field( $_GET['fstatus'] );
+            }
+            $url = remove_query_arg( array('action', 'quiz', '_wpnonce') );
+            $url = esc_url_raw( add_query_arg( $add_query_args, $url ) );
             wp_redirect( $url );
         }
     }
@@ -1913,6 +2882,10 @@ class Quizes_List_Table extends WP_List_Table{
             $updated_message = esc_html( __( 'Quiz duplicated.', $this->plugin_name ) );
         elseif ( 'deleted' == $status )
             $updated_message = esc_html( __( 'Quiz deleted.', $this->plugin_name ) );
+        elseif ( 'published' == $status )
+            $updated_message = esc_html( __( 'Quiz(s) published.', $this->plugin_name ) );
+        elseif ( 'unpublished' == $status )
+            $updated_message = esc_html( __( 'Quiz(s) unpublished.', $this->plugin_name ) );
 
         if ( empty( $updated_message ) )
             return;

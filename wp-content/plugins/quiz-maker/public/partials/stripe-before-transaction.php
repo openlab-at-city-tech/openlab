@@ -65,32 +65,38 @@ try {
     // create customer subscription with credit card and plan
     $s = new Stripe();
 
-    $options = isset( $json_obj->stripeOptions ) && $json_obj->stripeOptions != '' ? $json_obj->stripeOptions : base64_encode(json_encode(array()));
-    $options = json_decode( base64_decode( $options ), true );
+    $options = isset( $json_obj->stripeOptions ) && $json_obj->stripeOptions != '' ? $json_obj->stripeOptions : (object)array();
 
     $secret_key = isset( $json_obj->secretKey ) && $json_obj->secretKey != '' ? $json_obj->secretKey : '';
 
     $s->headers[] = 'Authorization: Bearer ' . $secret_key;
+    $s->headers[] = 'Content-Type: application/json';
 
-    $currency = isset( $options['currency'] ) && $options['currency'] != '' ? $options['currency'] : '';
-    $amount = isset( $options['amount'] ) && $options['amount'] != '' ? floatval( $options['amount'] ) : 0;
+    $currency = isset( $options->currency ) && $options->currency != '' ? $options->currency : '';
+    $amount = isset( $options->amount ) && $options->amount != '' ? floatval( $options->amount ) : 0;
     $amount = calculateAmount( $amount, $currency );
 
-    $s->fields = array();
-    $s->fields['amount'] = $amount;
-    $s->fields['currency'] = $currency;
+    if( $amount > 1 ){
+        $s->fields = array();
+        $s->fields['amount'] = $amount;
+        $s->fields['currency'] = $currency;
 
-    $s->method = "POST";
+        $s->method = "POST";
 
-    $s->url .= 'payment_intents' . '?' . http_build_query($s->fields);
+        $s->url .= 'payment_intents' . '?' . http_build_query($s->fields);
 
-    $s->fields = "";
+        $s->fields = "";
 
-    $subscription = $s->call();
+        $subscription = $s->call();
 
-    $output = array(
-        'clientSecret' => $subscription['client_secret'],
-    );
+        $output = array(
+            'clientSecret' => $subscription['client_secret'],
+        );
+    }else{
+        $output = array(
+            'clientSecret' => '',
+        );
+    }
 
     echo json_encode($output);
 } catch (Error $e) {

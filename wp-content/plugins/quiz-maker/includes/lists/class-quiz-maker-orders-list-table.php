@@ -41,12 +41,25 @@ class Quiz_Orders_List_Table extends WP_List_Table {
         }
 
         if ( ! empty( $_REQUEST['orderby'] ) ) {
-            if( ! $current_user_can_edit ){
-                $sql .= ' ORDER BY o.' . esc_sql( $_REQUEST['orderby'] );
-            }else{
-                $sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
+
+            $order_by = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'id';
+            $order_by .= ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
+
+            $sql_orderby = sanitize_sql_orderby($order_by);
+
+            if ( $sql_orderby ) {
+                if( ! $current_user_can_edit ){
+                    $sql .= ' ORDER BY o.' . $sql_orderby;
+                }else{
+                    $sql .= ' ORDER BY ' . $sql_orderby;
+                }
+            } else {
+                if( ! $current_user_can_edit ){
+                    $sql .= ' ORDER BY o.id DESC';
+                }else{
+                    $sql .= ' ORDER BY id DESC';
+                }
             }
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' ';
         }else{
             if( ! $current_user_can_edit ){
                 $sql .= ' ORDER BY o.id DESC';
@@ -126,6 +139,7 @@ class Quiz_Orders_List_Table extends WP_List_Table {
             case 'amount':
             case 'payment_date':
             case 'payment_method':
+            case 'payment_type':
             case 'id':
                 return $item[ $column_name ];
                 break;
@@ -162,7 +176,9 @@ class Quiz_Orders_List_Table extends WP_List_Table {
 
         $result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}aysquiz_quizes WHERE id={$item['quiz_id']}", "ARRAY_A");
 
-        $title = Quiz_Maker_Admin::ays_restriction_string("word",stripcslashes($result['title']), 5);
+        $result_title = (  isset( $result ) && isset( $result['title'] ) && esc_attr( $result['title'] ) != "") ? stripcslashes( esc_attr( $result['title'] ) ) : "";
+
+        $title = Quiz_Maker_Admin::ays_restriction_string("word",$result_title, 5);
         
         return $title;
     }
@@ -180,7 +196,12 @@ class Quiz_Orders_List_Table extends WP_List_Table {
             $title = __( "Guest", $this->plugin_name );
         }else{
             $user = get_userdata($item['user_id']);
-            $title = $user->data->display_name;
+            if($user !== false){
+                $title = $user->data->display_name;
+            }else{
+                $title = '-';
+            }
+
         }
         
         return $title;
@@ -224,6 +245,10 @@ class Quiz_Orders_List_Table extends WP_List_Table {
         return $title;
     }
 
+    function column_payment_type( $item ) {
+        return ucfirst( $item['payment_type'] );
+    }
+
 
     /**
      *  Associative array of columns
@@ -241,6 +266,7 @@ class Quiz_Orders_List_Table extends WP_List_Table {
             'amount'                => __( 'Amount', $this->plugin_name ),
             'payment_date'          => __( 'Payment date', $this->plugin_name ),
             'payment_method'        => __( 'Payment Method', $this->plugin_name ),
+            'payment_type'          => __( 'Payment type', $this->plugin_name ),
             'id'                    => __( 'ID', $this->plugin_name ),
         );
 
@@ -258,8 +284,11 @@ class Quiz_Orders_List_Table extends WP_List_Table {
             'quiz_id'           => array( 'quiz_id', true ),
             'user_id'           => array( 'user_id', true ),
             'order_full_name'   => array( 'order_full_name', true ),
+            'order_email'       => array( 'order_email', true ),
+            'amount'            => array( 'amount', true ),
             'payment_date'      => array( 'payment_date', true ),
             'payment_method'    => array( 'type', true ),
+            'payment_type'      => array( 'payment_type', true ),
             'id'                => array( 'id', true ),
         );
 
@@ -273,7 +302,7 @@ class Quiz_Orders_List_Table extends WP_List_Table {
      */
     public function get_bulk_actions() {
         $actions = array(
-            'bulk-delete' => 'Delete'
+            'bulk-delete' => __( 'Delete', $this->plugin_name )
         );
 
         return $actions;
@@ -330,7 +359,7 @@ class Quiz_Orders_List_Table extends WP_List_Table {
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {

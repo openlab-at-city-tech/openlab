@@ -6,6 +6,7 @@
         $this->quizes_obj->duplicate_quizzes($id);
     }
     $max_id = $this->get_max_id('questions');
+    $quiz_max_id = $this->get_max_id('quizes');
     $user_id = get_current_user_id();
 
     $gen_options = ($this->settings_obj->ays_get_setting('options') === false) ? array() : json_decode( stripcslashes( $this->settings_obj->ays_get_setting('options') ), true);
@@ -38,15 +39,15 @@
 
 ?>
 
-<div class="wrap ays_quizzes_list_table">
-    <button style="width:50px;height:50px;" class="ays-pulse-button ays-quizzes-table-quick-start" id="ays_quick_start" title="Quick quiz" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="<?php echo __('Build your quiz in a few minutes',$this->plugin_name)?>"></button>
+<div class="wrap ays-quiz-list-table ays_quizzes_list_table">
+    <button style="width:50px;height:50px;" class="ays-pulse-button ays-quizzes-table-quick-start" id="ays_quick_start" title="<?php echo __( "Quick quiz", $this->plugin_name ); ?>" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="left" data-content="<?php echo __('Build your quiz in a few minutes',$this->plugin_name)?>" data-original-title="<?php echo __( "Quick quiz", $this->plugin_name ); ?>"></button>
     <h1 class="wp-heading-inline">
         <?php
             echo __(esc_html(get_admin_page_title()),$this->plugin_name);
-            echo sprintf( '<a href="?page=%s&action=%s" class="page-title-action">' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add');
+            echo sprintf( '<a href="?page=%s&action=%s" class="page-title-action button-primary ays-quiz-add-new-button">' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add');
         ?>
     </h1>
-    <?php if($max_id <= 6): ?>
+    <?php if($max_id <= 3): ?>
     <div class="notice notice-success is-dismissible">
         <p style="font-size:14px;">
             <strong>
@@ -62,6 +63,15 @@
                 </em>
             </strong>
         </p>
+    </div>
+    <?php endif; ?>
+    <?php if($quiz_max_id <= 3): ?>
+    <div class="ays-quiz-heading-box ays-quiz-unset-float">
+        <div class="ays-quiz-wordpress-user-manual-box">
+            <a href="https://www.youtube.com/watch?v=gKjzOsn_yDo" target="_blank">
+                <?php echo __("Gettings started with Quiz Maker plugin - video", $this->plugin_name); ?>
+            </a>
+        </div>
     </div>
     <?php endif; ?>
     <div id="poststuff" style="margin-top:20px;">
@@ -84,6 +94,29 @@
         </div>
         <br class="clear">
     </div>
+    <?php if($quiz_max_id <= 3): ?>
+    <div class="ays-quiz-create-survey-video-box" style="margin: 80px auto 30px;">
+        <div class="ays-quiz-create-survey-title">
+            <h4><?php echo __( "Create quiz with Quiz Maker plugin in One Minute", $this->plugin_name ); ?></h4>
+        </div>
+        <div class="ays-quiz-create-survey-youtube-video">
+            <iframe width="560" height="315" class="ays-quiz-responsive-with-for-iframe" src="https://www.youtube.com/embed/AUHZrVcBrMU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="ays-quiz-create-survey-youtube-video-button-box">
+            <?php echo sprintf( '<a href="?page=%s&action=%s" class="ays-quiz-add-new-button-video">' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add');?>
+        </div>
+    </div>
+    <?php else: ?>
+    <div class="ays-quiz-create-survey-video-box ays-quiz-create-survey-video-box-only-link" style="margin: auto;">
+        <div class="ays-quiz-create-survey-title">
+            <a href="https://www.youtube.com/watch?v=AUHZrVcBrMU" target="_blank" title="YouTube video player"><?php echo __("How to create a quiz in one minute?", $this->plugin_name); ?></a>
+        </div>
+        <div class="ays-quiz-create-survey-youtube-video-button-box">
+            <?php echo sprintf( '<a href="?page=%s&action=%s" class="ays-quiz-add-new-button-video">' . __('Add New', $this->plugin_name) . '</a>', esc_attr( $_REQUEST['page'] ), 'add');?>
+        </div>
+    </div>
+    <?php endif; ?>
+
     <div id="ays-quick-modal" tabindex="-1" class="ays-modal">
         <!-- Modal content -->
         <div class="ays-modal-content fadeInDown" id="ays-quick-modal-content">
@@ -103,6 +136,14 @@
                             </div>
                             <div class="col-sm-10">
                                 <input type="text" class="ays-text-input" id='ays-quiz-title' name='ays_quiz_title' value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2">
+                                <label class='ays-label ays_quick_quiz_description' for='ays-quick-quiz-description'><?php echo __('Quiz Description', $this->plugin_name); ?></label>
+                            </div>
+                            <div class="col-sm-10">
+                                <textarea class="ays-text-input ays-textarea-height-100" id='ays-quick-quiz-description' name='ays_quick_quiz_description'></textarea>
                             </div>
                         </div>
                     </div>
@@ -129,12 +170,18 @@
                     <div class="ays-quick-questions-container">
                         <div class="ays-modal-flexbox">
                             <p class="ays_questions_title"><?php echo __('Questions',$this->plugin_name)?></p>
-                            <a href="javascript:void(0)" class="ays_add_question">
+                            <!-- <a href="javascript:void(0)" class="ays_add_question">
                                 <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>
-                            </a>
+                            </a> -->
+                            <div>
+                                <a href="javascript:void(0)" class="ays_add_question ays-quick-quiz-add-question">
+                                    <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>
+                                    <?php echo __('Add question', 'quiz-maker'); ?>
+                                </a>
+                            </div>
                         </div>
                         <hr/>
-                        <div tabindex="0" class="ays_modal_element ays_modal_question active_question_border" id="ays_question_id_1">
+                        <div tabindex="0" class="ays_modal_element ays_modal_question active_question_border" data-id="1" id="ays_question_id_1">
                             <div class="form-group row">
                                 <div class="col-sm-8">
                                     <input type="text" value="<?php echo __( 'Question Default Title' , $this->plugin_name); ?>" class="ays_question_input">
@@ -143,8 +190,12 @@
                                     <select class="ays_quick_question_type" name="ays_quick_question_type[]" style="width: 200px;">
                                         <option value="radio"><?php echo __("Radio", $this->plugin_name); ?></option>
                                         <option value="checkbox"><?php echo __("Checkbox", $this->plugin_name); ?></option>
-                                        <option value="select"><?php echo __("Dropdawn", $this->plugin_name); ?></option>
+                                        <option value="select"><?php echo __("Dropdown", $this->plugin_name); ?></option>
                                         <option value="text"><?php echo __("Text", $this->plugin_name); ?></option>
+                                        <option value="short_text"><?php echo __("Short Text", $this->plugin_name); ?></option>
+                                        <option value="number"><?php echo __("Number", $this->plugin_name); ?></option>
+                                        <option value="true_or_false"><?php echo __("True/False", $this->plugin_name); ?></option>
+                                        <option value="date"><?php echo __("Date", $this->plugin_name); ?></option>
                                     </select>
                                 </div>
                             </div>
@@ -203,7 +254,7 @@
                                             <i class="ays_fa ays_fa_times" aria-hidden="true"></i>
                                         </td>
                                     </tr>
-                                    <tr class="show_add_answer">
+                                    <tr class="ays_quiz_add_answer_box show_add_answer">
                                         <td colspan="3">
                                             <a href="javascript:void(0)" class="ays_add_answer">
                                                 <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>
@@ -211,15 +262,15 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <table class="ays_quick_quiz_text_type_table display_none" id="ays_quick_quiz_text_type_table">
+                                <table class="ays_quick_quiz_text_type_table display_none">
                                     <tr>
                                         <td>
                                             <input style="display:none;" class="ays-correct-answer" type="checkbox" name="ays-correct-answer[]" value="1" checked/>
-                                            <textarea type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value" placeholder="<?php echo __( 'Answer text', $this->plugin_name ); ?>"></textarea>
+                                            <textarea type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value ays-text-question-type-value" placeholder="<?php echo __( 'Answer text', $this->plugin_name ); ?>"></textarea>
                                         </td>
                                     </tr>
                                 </table>
-                                <div>
+                                <div class="ays-quick-quiz-icons-box">
                                     <a href="javascript:void(0)" class="ays_question_clone_icon">
                                         <i class="ays_fa ays_fa_clone" aria-hidden="true"></i>
                                     </a>
@@ -231,9 +282,13 @@
                         </div>
                     </div>
                     <hr/>
-                    <div class="ays-modal-flexbox" style="justify-content: flex-end;">
-                        <a href="javascript:void(0)" class="ays_add_question">
+                    <div class="ays-modal-flexbox">
+                        <!-- <a href="javascript:void(0)" class="ays_add_question">
                             <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>
+                        </a> -->
+                        <a href="javascript:void(0)" class="ays_add_question ays-quick-quiz-add-question">
+                            <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>
+                            <?php echo __('Add question', 'quiz-maker'); ?>
                         </a>
                     </div>
                     <input type="button" class="btn btn-primary ays_submit_button" id="ays_quick_submit_button" value="<?php echo __('Submit',$this->plugin_name)?>"/>

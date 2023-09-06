@@ -101,7 +101,8 @@ class Quiz_Maker_Recent_Quizes
         $content .= implode( '', $quizzes );
 
         $content .= '</div>';
-
+        $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
+        
         // echo $content;
         return str_replace(array("\r\n", "\n", "\r"), "\n", $content);
     }

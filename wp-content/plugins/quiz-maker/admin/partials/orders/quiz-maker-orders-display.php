@@ -1,4 +1,9 @@
 <div class="wrap">
+    <div class="ays-quiz-heading-box">
+        <div class="ays-quiz-wordpress-user-manual-box">
+            <a href="https://ays-pro.com/wordpress-quiz-maker-user-manual" target="_blank"><?php echo __("View Documentation", $this->plugin_name); ?></a>
+        </div>
+    </div>
     <h1 class="wp-heading-inline">
         <?php echo __(esc_html(get_admin_page_title()),$this->plugin_name); ?>
         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('History of the users’ payments for passing the quiz.',$this->plugin_name)?>">

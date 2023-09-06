@@ -16,11 +16,13 @@ namespace Matrix;
  * @return    Matrix           The new matrix
  * @throws    Exception        If argument isn't a valid matrix or array.
  */
-function adjoint($matrix)
-{
-    if (!is_object($matrix) || !($matrix instanceof Matrix)) {
-        $matrix = new Matrix($matrix);
-    }
+if( !function_exists('adjoint') ){
+    function adjoint($matrix)
+    {
+        if (!is_object($matrix) || !($matrix instanceof Matrix)) {
+            $matrix = new Matrix($matrix);
+        }
 
-    return Functions::adjoint($matrix);
+        return Functions::adjoint($matrix);
+    }
 }

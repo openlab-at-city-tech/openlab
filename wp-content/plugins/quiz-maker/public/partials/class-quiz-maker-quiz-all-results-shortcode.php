@@ -109,7 +109,7 @@ class Quiz_Maker_Quiz_All_Results
 
         $reports_table = $wpdb->prefix . "aysquiz_reports";
         $quizes_table = $wpdb->prefix . "aysquiz_quizes";
-        $sql = "SELECT q.title, r.start_date, r.end_date, r.duration, r.score, r.id, r.user_name, r.user_id,
+        $sql = "SELECT q.title, r.options, r.start_date, r.end_date, r.duration, r.score, r.id, r.user_name, r.user_id,
                        TIMESTAMPDIFF(second, r.start_date, r.end_date) AS duration_2
                 FROM $reports_table AS r
                 LEFT JOIN $quizes_table AS q
@@ -138,6 +138,11 @@ class Quiz_Maker_Quiz_All_Results
 
         $results = $this->get_user_reports_info( $quiz_id, $quiz_all_results_show_publicly );
 
+        $custom_fields = Quiz_Maker_Data::get_custom_fields_for_shortcodes();
+
+        //Quiz results
+        $quiz_results_custom_fields = isset($custom_fields['quiz_results']) && !empty($custom_fields['quiz_results']) ? $custom_fields['quiz_results'] : array();
+
         $default_quiz_all_results_columns = array(
             'user_name'  => 'user_name',
             'start_date' => 'start_date',
@@ -145,6 +150,12 @@ class Quiz_Maker_Quiz_All_Results
             'duration'   => 'duration',
             'score'      => 'score',
         );
+
+        if( !empty($quiz_results_custom_fields) ){
+            foreach ($quiz_results_custom_fields as $custom_field_key => $custom_field) {
+                $default_quiz_all_results_columns[$custom_field_key] = $custom_field_key;
+            }
+        }
 
         $quiz_all_results_columns = (isset( $quiz_set_option['quiz_all_results_columns'] ) && !empty($quiz_set_option['quiz_all_results_columns']) ) ? $quiz_set_option['quiz_all_results_columns'] : $default_quiz_all_results_columns;
         $quiz_all_results_columns_order = (isset( $quiz_set_option['quiz_all_results_columns_order'] ) && !empty($quiz_set_option['quiz_all_results_columns_order']) ) ? $quiz_set_option['quiz_all_results_columns_order'] : $default_quiz_all_results_columns;
@@ -156,6 +167,13 @@ class Quiz_Maker_Quiz_All_Results
             "duration"      => "<th style='width:13%;'>" . __( "Duration", $this->plugin_name ) . "</th>",
             "score"         => "<th style='width:13%;'>" . __( "Score", $this->plugin_name ) . "</th>",
         );
+
+        if( !empty($quiz_results_custom_fields) ){
+            foreach ($quiz_results_custom_fields as $custom_field_key => $custom_field_value) {
+                $ays_default_header_value[$custom_field_key] = "<th style='width:10%;'>" .$custom_field_value. "</th>";
+            }
+        }
+
         if($results === null){
             $all_results_html = "<p style='text-align: center;font-style:italic;'>" . __( "You must log in to see your results.", $this->plugin_name ) . "</p>";
             return $all_results_html;
@@ -172,7 +190,7 @@ class Quiz_Maker_Quiz_All_Results
         <tr>";
 
         foreach ($quiz_all_results_columns_order as $key => $value) {
-            if (isset($quiz_all_results_columns[$value])) {
+            if (isset($quiz_all_results_columns[$value]) && isset( $ays_default_header_value[$value] )) {
                 $all_results_html .= $ays_default_header_value[$value];
             }
         }
@@ -219,9 +237,26 @@ class Quiz_Maker_Quiz_All_Results
                 "score" => "<td class='ays-quiz-score-column'>$score%</td>",
             );
 
+            $attribute_options = (isset($result['options']) && $result['options'] != '') ? json_decode( $result['options'], true ) : '';
+
+            $attribute_info = array();
+            if($attribute_options != ''){
+                $attribute_info = (isset($attribute_options['attributes_information']) && !empty( $attribute_options['attributes_information'] )) ? $attribute_options['attributes_information'] : array();
+            }
+
+            if( !empty($quiz_results_custom_fields) ){
+                foreach ($quiz_results_custom_fields as $custom_field_key => $custom_field_value) {
+                    if(isset( $attribute_info[$custom_field_value] ) && $attribute_info[$custom_field_value] != ''){
+                        $ays_default_html_order[$custom_field_key] = "<td style='width:10%;'>" .$attribute_info[$custom_field_value]. "</td>";
+                    }else{
+                        $ays_default_html_order[$custom_field_key] = "<td style='width:10%;'></td>";
+                    }
+                }
+            }
+
             $all_results_html .= "<tr>";
             foreach ($quiz_all_results_columns_order as $key => $value) {
-                if (isset($quiz_all_results_columns[$value])) {
+                if (isset($quiz_all_results_columns[$value]) && isset( $ays_default_html_order[$value] )) {
                     $all_results_html .= $ays_default_html_order[$value];
                 }
             }
@@ -242,10 +277,18 @@ class Quiz_Maker_Quiz_All_Results
             return str_replace(array("\r\n", "\n", "\r"), '', $content);
         }
 
+        $if_quiz_trashed = Quiz_Maker_Data::ays_quiz_if_quiz_trashed($id);
+        
+        if ( !empty($if_quiz_trashed) ) {
+            $content = "<p class='wrong_shortcode_text' style='color:red;'>" . __('Trashed quiz', $this->plugin_name) . "</p>";
+            return str_replace(array("\r\n", "\n", "\r"), '', $content);
+        }
+
         $this->enqueue_styles();
         $this->enqueue_scripts();
         $quiz_all_results_html = $this->ays_quiz_all_results_html( $id );
-
+        $quiz_all_results_html = Quiz_Maker_Data::ays_quiz_translate_content( $quiz_all_results_html );
+        
         // echo $quiz_all_results_html;
         return str_replace(array("\r\n", "\n", "\r"), '', $quiz_all_results_html);
     }

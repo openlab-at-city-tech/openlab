@@ -19,6 +19,7 @@
     // Add question into quiz from popup window
     $(document).find('form#ays_add_question_rows').on( 'submit', function(e) {
         $(document).find('div.ays-quiz-preloader').css('display', 'flex');
+        var questionsModalBox = $(document).find('div.ays-questions-modal');
         
         if(window.aysQuestNewSelected.length > 0){
             $(document).find('td.empty_quiz_td').parent().remove();
@@ -69,10 +70,25 @@
                     var questions_count = response.ids.length;
 
                     var table_rows = $('table#ays-questions-table tbody tr');
+
+                    var questions_count_val = questions_count;
+                    if ( table_rows.length > 0 && table_rows.length > questions_count ) {
+                        questions_count_val = table_rows.length;
+                    }
+                    
                     $(document).find('.questions_count_number').html(table_rows.length);
 
                     $(document).find('.ays_refresh_qbank_categories').removeClass('display_none');
                     window.aysQuestNewSelected = [];
+                },
+                error: function() {
+                    swal.fire({
+                        type: 'info',
+                        html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h6>"+ quizLangObj.somethingWentWrong +"</h6>"
+                    }).then(function(res){
+                        $(document).find('.ays-modal').aysModal('hide');
+                        $(document).find('div.ays-quiz-preloader').css('display', 'none');
+                    });
                 }
             });
         }else{
@@ -122,6 +138,21 @@
         e.preventDefault();
     });
 
+    $(document).find('#export_results_guests').on('change', function(e) {
+        $('#ays_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).find('#export_results_only_guests').on('change', function(e) {
+        if( $(this).prop('checked') === true ){
+            $(this).parents('#ays_export_filter').find('.filter-row-overlay').removeClass('display_none');
+        }else{
+            $(this).parents('#ays_export_filter').find('.filter-row-overlay').addClass('display_none');
+        }
+        $('#ays_export_filter').submit();
+        e.preventDefault();
+    });
+
     $(document).on('change.select2', '#user_id-filter', function(e) {
         $('#ays_export_filter').submit();
         e.preventDefault();
@@ -140,6 +171,8 @@
         var quiz_id = $('#quiz_id-filter').val();
         var date_from = $('#start-date-filter').val() || $('#start-date-filter').attr('min');
         var date_to = $('#end-date-filter').val() || $('#end-date-filter').attr('max');
+        var export_guests = $('#export_results_guests').prop('checked');
+        var export_answers_only_guests = $('#export_results_only_guests').prop('checked');
         $this.find('div.ays-quiz-preloader').css('display', 'flex');
         $.ajax({
             url: quiz_maker_ajax.ajax_url,
@@ -150,11 +183,17 @@
                 user_id: user_id,
                 quiz_id: quiz_id,
                 date_from: date_from,
-                date_to: date_to
+                date_to: date_to,
+                with_guests: ! export_guests,
+                only_guests: export_answers_only_guests
             },
             success: function(response) {
                 $this.find('div.ays-quiz-preloader').css('display', 'none');
-                $this.find(".export_results_count span").text(response.qanak);
+                if( response && response.qanak ){
+                    $this.find(".export_results_count span").text( response.qanak );
+                }else{
+                    $this.find(".export_results_count span").text( 0 );
+                }
             }
         });
     });
@@ -171,7 +210,8 @@
             url: quiz_maker_ajax.ajax_url,
             dataType: 'json',
             data: {
-                action: action
+                action: action,
+                with_guests: true
             },
             success: function(res) {
                 $this.find('div.ays-quiz-preloader').css('display', '');
@@ -215,7 +255,7 @@
             error: function() {
                 swal.fire({
                     type: 'info',
-                    html: "<h2>Can't load resource.</h2><br><h6>Maybe something went wrong.</h6>"
+                    html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h6>"+ quizLangObj.somethingWentWrong +"</h6>"
                 }).then(function(res){
                     $(document).find('#export-filters div.ays-quiz-preloader').css('display', 'none');                    
                     $this.aysModal('hide');
@@ -234,6 +274,21 @@
         e.preventDefault();
     });
 
+    $(document).find('#export_answers_guests').on('change', function(e) {
+        $('#ays_export_answers_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).find('#export_answers_only_guests').on('change', function(e) {
+        if( $(this).prop('checked') === true ){
+            $(this).parents('#ays_export_answers_filter').find('.filter-row-overlay').removeClass('display_none');
+        }else{
+            $(this).parents('#ays_export_answers_filter').find('.filter-row-overlay').addClass('display_none');
+        }
+        $('#ays_export_answers_filter').submit();
+        e.preventDefault();
+    });
+
     $(document).on('change.select2', '#user_id-answers-filter', function(e) {
         $('#ays_export_answers_filter').submit();
         e.preventDefault();
@@ -247,6 +302,8 @@
         var quiz_id = $('#quiz_id-answers-filter').val();
         var date_from = $('#start-date-answers-filter').val();
         var date_to = $('#end-date-answers-filter').val();
+        var export_guests = $('#export_answers_guests').prop('checked');
+        var export_answers_only_guests = $('#export_answers_only_guests').prop('checked');
         $this.find('div.ays-quiz-preloader').css('display', 'flex');
         $.ajax({
             url: quiz_maker_ajax.ajax_url,
@@ -258,7 +315,8 @@
                 quiz_id: quiz_id,
                 date_from: date_from,
                 date_to: date_to,
-                flag: true
+                flag: ! export_guests,
+                only_guests: export_answers_only_guests
             },
             success: function(response) {
                 $this.find('div.ays-quiz-preloader').css('display', 'none');
@@ -308,7 +366,7 @@
             error: function() {
                 swal.fire({
                     type: 'info',
-                    html: "<h2>Can't load resource.</h2><br><h6>Maybe something went wrong.</h6>"
+                    html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h6>"+ quizLangObj.somethingWentWrong +"</h6>"
                 }).then(function(res){
                     $(document).find('#export-answers-filters div.ays-quiz-preloader').css('display', 'none');
                     $this.aysModal('hide');
@@ -327,6 +385,148 @@
         return false;
     });
 
+    $(document).find('#question-start-date-filter').on('change', function(e) {
+        $('#ays_questions_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).find('#question-end-date-filter').on('change', function(e) {
+        $('#ays_questions_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).on('change.select2', '#author_id-filter', function(e) {
+        $('#ays_questions_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).on('change.select2', '#category_id-filter', function(e) {
+        $('#ays_questions_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).on('change.select2', '#tag_id-filter', function(e) {
+        $('#ays_questions_export_filter').submit();
+        e.preventDefault();
+    });
+
+    $(document).find('#ays_questions_export_filter').on('submit', function(e) {
+        e.preventDefault();
+        var $this = $('#questions-export-filters');
+        var action = 'ays_questions_export_filter';
+        var author_id = $('#author_id-filter').val();
+        var category_id = $('#category_id-filter').val();
+        var tag_id = $('#tag_id-filter').val();
+        var date_from = $('#question-start-date-filter').val() || $('#question-start-date-filter').attr('min');
+        var date_to = $('#question-end-date-filter').val() || $('#question-end-date-filter').attr('max');
+        $this.find('div.ays-quiz-preloader').css('display', 'flex');
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: {
+                action: action,
+                author_id: author_id,
+                category_id: category_id,
+                tag_id: tag_id,
+                date_from: date_from,
+                date_to: date_to
+            },
+            success: function(response) {
+                $this.find('div.ays-quiz-preloader').css('display', 'none');
+                $this.find(".export_results_count span").text(response.count);
+            }
+        });
+    });
+
+    // Export Questions filters
+    var authorSel2, catSel2, tagSel2;
+    $(document).find('.ays-export-questions-filters').on('click', function(e) {
+        var $this = $('#questions-export-filters');
+        $this.find('div.ays-quiz-preloader').css('display', 'flex');
+        $this.aysModal('show');
+        e.preventDefault();
+        var action = 'ays_show_questions_filters';
+        $.post({
+            url: quiz_maker_ajax.ajax_url,
+            dataType: 'json',
+            data: {
+                action: action
+            },
+            success: function(res) {
+                $this.find('div.ays-quiz-preloader').css('display', '');
+                var newAuthorSelect = "";
+                var newCategorySelect = "";
+                var newTagSelect = "";
+                for (var u in res.authors) {
+                    newAuthorSelect += '<option value="'+ res.authors[u].author_id +'">'+ res.authors[u].display_name +'</option>';
+                }
+                for (var q in res.categories) {
+                    newCategorySelect += '<option value="'+ res.categories[q].category_id +'">'+ res.categories[q].title +'</option>';
+                }
+                for (var q in res.tags) {
+                    newTagSelect += '<option value="'+ res.tags[q].id +'">'+ res.tags[q].title +'</option>';
+                }
+
+                $this.find('#author_id-filter').html(newAuthorSelect);
+                var authorSel = $this.find('#author_id-filter');
+                authorSel2 = authorSel.select2({
+                    dropdownParent: authorSel.parent(),
+                    closeOnSelect: true,
+                    allowClear: false
+                });
+
+                $this.find('#category_id-filter').html(newCategorySelect);
+                var catSel = $this.find('#category_id-filter');
+                catSel2 = catSel.select2({
+                    dropdownParent: catSel.parent(),
+                    closeOnSelect: true,
+                    allowClear: false
+                });
+
+                $this.find('#tag_id-filter').html(newTagSelect);
+                var tagSel = $this.find('#tag_id-filter');
+                tagSel2 = tagSel.select2({
+                    dropdownParent: tagSel.parent(),
+                    closeOnSelect: true,
+                    allowClear: false
+                });
+                // $this.find('input[type="date"]').attr({
+                //     min: res.date_min,
+                //     max: res.date_max
+                // });
+
+                $(document).on('click', '.select2-selection__choice__remove', function(){
+                    authorSel2.select2("close");
+                    catSel2.select2("close");
+                    tagSel2.select2("close");
+                });
+
+                $this.find(".export_results_count span").text(res.count);
+                $this.find('.ays-modal-body').show();
+            },
+            error: function() {
+                swal.fire({
+                    type: 'info',
+                    html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h6>"+ quizLangObj.somethingWentWrong +"</h6>"
+                }).then(function(res){
+                    $(document).find('#questions-export-filters div.ays-quiz-preloader').css('display', 'none');
+                    $this.aysModal('hide');
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.ays_catid_clear', function(){
+        catSel2.val(null).trigger('change');
+        return false;
+    });
+
+    $(document).on('click', '.ays_authorid_clear', function(){
+        authorSel2.val(null).trigger('change');
+        return false;
+    });
+
     $(document).find('.export-action').on('click', function(e) {
         e.preventDefault();
         var $this = $('#export-filters');
@@ -337,6 +537,8 @@
         var type = $(this).data('type');
         var date_from = $('#start-date-filter').val() || $('#start-date-filter').attr('min');
         var date_to = $('#end-date-filter').val() || $('#end-date-filter').attr('max');
+        var export_guests = $('#export_results_guests').prop('checked');
+        var export_answers_only_guests = $('#export_results_only_guests').prop('checked');
         $.post({
             url: quiz_maker_ajax.ajax_url,
             dataType: 'json',
@@ -346,7 +548,9 @@
                 user_id: user_id, 
                 quiz_id: quiz_id, 
                 date_from: date_from, 
-                date_to: date_to 
+                date_to: date_to,
+                with_guests: ! export_guests,
+                only_guests: export_answers_only_guests
             },
             success: function(response) {
                 if (response.status) {
@@ -483,7 +687,7 @@
                 }else{
                     swal.fire({
                         type: 'info',
-                        html: "<h2>Can't load resource.</h2><br><h4>Maybe the data has been deleted.</h4>",
+                        html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h4>"+ quizLangObj.dataDeleted +"</h4>"
                     })
                 }
                 $this.parents('.ays-modal').find('div.ays-quiz-preloader').css('display', 'none');
@@ -506,6 +710,8 @@
         var user_id    = $('#user_id-answers-filter').val();
         var date_from  = $('#start-date-answers-filter').val();
         var date_to    = $('#end-date-answers-filter').val();
+        var export_guests = $('#export_answers_guests').prop('checked');
+        var export_answers_only_guests = $('#export_answers_only_guests').prop('checked');
         $this.find('div.ays-quiz-preloader').css('display', 'flex');
         $.post({
             url: quiz_maker_ajax.ajax_url,
@@ -516,7 +722,9 @@
                 user_id: user_id,
                 quiz_id: quiz_id,
                 date_from: date_from,
-                date_to: date_to
+                date_to: date_to,
+                flag: ! export_guests,
+                only_guests: export_answers_only_guests
             },
             success: function (response) {
                 _this.removeClass('disabled');
@@ -534,8 +742,7 @@
                 }else{
                     swal.fire({
                         type: 'info',
-                        html: "<h2>Can't load resource.</h2><br><h4>Maybe the data has been deleted.</h4>",
-
+                        html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h4>"+ quizLangObj.dataDeleted +"</h4>"
                     }).then(function(response) {
                         $this.find('div.ays-quiz-preloader').css('display', 'none');
                     });
@@ -546,37 +753,45 @@
 
     // Export questions filters
     $(document).find('.ays-questions-export').on('click', function (e) {
-        $('.ays-export-dropdown .ays-wp-loading').removeClass('d-none');
-        $('.export-download-progress-bar').removeClass('display_none');
-        $('.ays-export-dropdown>.dropdown-toggle').addClass('disabled');
+//        $('.ays-export-dropdown .ays-wp-loading').removeClass('d-none');
+//        $('.export-download-progress-bar').removeClass('display_none');
+//        $('.ays-export-dropdown>.dropdown-toggle').addClass('disabled');
+        var $this = $('#questions-export-filters');
+        $this.find('div.ays-quiz-preloader').css('display', 'flex');
+        var author_id = $('#author_id-filter').val();
+        var category_id = $('#category_id-filter').val();
+        var tag_id = $('#tag_id-filter').val();
+        var date_from = $('#question-start-date-filter').val() || $('#question-start-date-filter').attr('min');
+        var date_to = $('#question-end-date-filter').val() || $('#question-end-date-filter').attr('max');
+
         var type = $(this).attr('data-type');
         var action = 'ays_questions_export';
-        var time1;
-        var timeout = setTimeout(function(){
-            var width = 0;
-            time1 = setInterval(function(){
-                width++;
-                $('.ays-progress-bar').css({
-                    width: width + '%'
-                });
-                $('.ays-progress-value').text(width + '%');
-                if(width >= 64){
-                    clearInterval(time1);
-                }
-            }, 30);
-        }, 500);
-
-        var width = 0;
-        var time = setInterval(function(){
-            width++;
-            $('.ays-progress-bar').css({
-                width: width + '%'
-            });
-            $('.ays-progress-value').text(width + '%');
-            if(width >= 42){
-                clearInterval(time);
-            }
-        }, 30);
+//        var time1;
+//        var timeout = setTimeout(function(){
+//            var width = 0;
+//            time1 = setInterval(function(){
+//                width++;
+//                $('.ays-progress-bar').css({
+//                    width: width + '%'
+//                });
+//                $('.ays-progress-value').text(width + '%');
+//                if(width >= 64){
+//                    clearInterval(time1);
+//                }
+//            }, 30);
+//        }, 500);
+//
+//        var width = 0;
+//        var time = setInterval(function(){
+//            width++;
+//            $('.ays-progress-bar').css({
+//                width: width + '%'
+//            });
+//            $('.ays-progress-value').text(width + '%');
+//            if(width >= 42){
+//                clearInterval(time);
+//            }
+//        }, 30);
         
         $.ajax({
             url: quiz_maker_ajax.ajax_url,
@@ -584,12 +799,17 @@
             dataType: 'json',
             data: {
                 action: action,
-                type: type
+                type: type,
+                author_id: author_id,
+                category_id: category_id,
+                tag_id: tag_id,
+                date_from: date_from,
+                date_to: date_to
             },
             success: function (response) {
-                clearInterval(time);
-                clearInterval(time1);
-                clearTimeout(timeout);
+//                clearInterval(time);
+//                clearInterval(time1);
+//                clearTimeout(timeout);
                 if (response.status) {
                     switch (response.type) {
                         case 'xlsx':
@@ -624,14 +844,15 @@
                             break;
                     }
                 }
-                $('.ays-progress-bar').css({
-                    width: 100 + '%',
-                    transition: '.2s ease'
-                });
-                $('.ays-progress-value').text(100 + '%');
-                $('.export-download-progress-bar').addClass('display_none');
-                $('.ays-export-dropdown .ays-wp-loading').addClass('d-none');
-                $('.ays-export-dropdown>.dropdown-toggle').removeClass('disabled');
+//                $('.ays-progress-bar').css({
+//                    width: 100 + '%',
+//                    transition: '.2s ease'
+//                });
+//                $('.ays-progress-value').text(100 + '%');
+//                $('.export-download-progress-bar').addClass('display_none');
+//                $('.ays-export-dropdown .ays-wp-loading').addClass('d-none');
+//                $('.ays-export-dropdown>.dropdown-toggle').removeClass('disabled');
+                $this.find('div.ays-quiz-preloader').css('display', 'none');
             }
         });
         e.preventDefault();
@@ -675,7 +896,7 @@
                     }else{
                         swal.fire({
                             type: 'info',
-                            html: "<h2>Can't load resource.</h2><br><h4>Maybe the data has been deleted.</h4>",
+                            html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h4>"+ quizLangObj.dataDeleted +"</h4>"
 
                         }).then(function(res) {
                             $(document).find('div.ays-quiz-preloader').css('display', 'none');
@@ -692,7 +913,7 @@
                 error: function(){
                     swal.fire({
                         type: 'info',
-                        html: "<h2>Can't load resource.</h2><br><h6>Maybe the data has been deleted.</h46>"
+                        html: "<h2>"+ quizLangObj.loadResource +"</h2><br><h4>"+ quizLangObj.dataDeleted +"</h4>"
                     }).then(function(res) {
                         $(document).find('div.ays-quiz-preloader').css('display', 'none');
                         if($(this_element).parents('tr').hasClass('ays_read_result')){
@@ -716,7 +937,7 @@
         if($(e.target).parents('#ays-quick-modal-content').find('#ays-quiz-title').val() == ''){            
             swal.fire({
                 type: 'error',
-                text: "Quiz title can't be empty"
+                text: quizLangObj.quizTitleNotEmpty
             });
             $(document).find('div.ays-quiz-preloader').css('display', 'none');
             return false;
@@ -728,7 +949,14 @@
             var questionType = parent.find('.ays_quick_question_type').val();
 
             if ( questionType == 'text' ) {
-                var answerVal = parent.find('textarea.ays-correct-answer-value').val();
+                var answerVal = parent.find('textarea.ays-correct-answer-value.ays-text-question-type-value').val();
+
+                if(answerVal == ''){
+                    emptyAnswers++;
+                    break;
+                }
+            } else if( questionType == 'short_text' || questionType == 'number' || questionType == 'date' ) {
+                var answerVal = parent.find('input.ays-correct-answer-value.ays-text-question-type-value').val();
 
                 if(answerVal == ''){
                     emptyAnswers++;
@@ -744,14 +972,14 @@
         if(emptyAnswers > 0){
             swal.fire({
                 type: 'error',
-                text: "You must fill all answers"
+                text: quizLangObj.mustFillAllAnswers
             });
             $(document).find('div.ays-quiz-preloader').css('display', 'none');
             return false;
         }
         
         for(var i=0;i<questions.length;i++){
-            var question_text = questions.eq(i).find('.ays_question_input').val();
+            var question_text = aysEscapeHtml( questions.eq(i).find('.ays_question_input').val() );
             var question_type = questions.eq(i).find('.ays_quick_question_type').val();
 
             questions.eq(i).find('.ays_question_input').after('<input type="hidden" name="ays_quick_question[]" value="'+question_text+'">');
@@ -759,8 +987,13 @@
             if ( question_type == 'text' ) {
                 var question_answers = questions.eq(i).find('.ays-correct-answer-value');
 
-                question_answers.append('<input type="hidden" name="ays_quick_answer['+i+'][]" value="'+question_answers.val()+'">');
+                question_answers.append('<input type="hidden" name="ays_quick_answer['+i+'][]" value="'+ aysEscapeHtml( question_answers.val() ) +'">');
                 question_answers.append('<input type="hidden" name="ays_quick_answer_correct['+i+'][]" value="true">');
+            } else if( question_type == 'short_text' || question_type == 'number' || question_type == 'date' ){
+                var question_answers = questions.eq(i).find('input.ays-correct-answer-value.ays-text-question-type-value');
+
+                question_answers.after('<input type="hidden" name="ays_quick_answer['+i+'][]" value="'+ aysEscapeHtml( question_answers.val() ) +'">');
+                question_answers.after('<input type="hidden" name="ays_quick_answer_correct['+i+'][]" value="true">');
             } else {
                 var question_answers = questions.eq(i).find('.ays_answer');
                 var question_answers_correct = questions.eq(i).find('input.ays_answer_unique_id');
@@ -779,7 +1012,6 @@
 
         var data = $('#ays_quick_popup').serializeFormJSON();
         data.action = 'ays_quick_start';
-
         $.ajax({
             url: quiz_maker_ajax.ajax_url,
             method: 'post',
@@ -792,14 +1024,13 @@
                     $(document).find('#ays-quick-modal .ays-modal-content').addClass('animated bounceOutRight');
                     $(document).find('#ays-quick-modal').modal('hide');
                     swal({
-                        title: '<strong>Great job</strong>',
+                        title: '<strong>'+ quizLangObj.greatJob +'</strong>',
                         type: 'success',
-                        html: '<p>You can use this shortcode to show your quiz.</p><input type="text" id="quick_quiz_shortcode" onClick="this.setSelectionRange(0, this.value.length)" readonly value="[ays_quiz id=&quot;' + response.quiz_id + '&quot;]" /><p style="margin-top:1rem;">For more advanced configuration visit <a href="admin.php?page=quiz-maker&action=edit&quiz=' + response.quiz_id + '">edit quiz page</a>.</p>',
+                        html: '<p>'+ quizLangObj.useThisShortcode +'</p><input type="text" id="quick_quiz_shortcode" onClick="this.setSelectionRange(0, this.value.length)" readonly value="[ays_quiz id=&quot;' + response.quiz_id + '&quot;]" /><p style="margin-top:1rem;">'+ quizLangObj.advancedconfiguration +' <a href="admin.php?page=quiz-maker&action=edit&quiz=' + response.quiz_id + '">'+ quizLangObj.editQuizPage +'</a></p>',
                         showCloseButton: true,
                         focusConfirm: false,
-                        confirmButtonText:
-                          '<i class="ays_fa ays_fa_thumbs_up"></i> Great!',
-                        confirmButtonAriaLabel: 'Thumbs up, great!',
+                        confirmButtonText: '<i class="ays_fa ays_fa_thumbs_up"></i> '+ quizLangObj.great,
+                        confirmButtonAriaLabel: quizLangObj.thumbsUpGreat,
                         onAfterClose: function() {
                             $(document).find('#ays-quick-modal').removeClass('animated bounceOutRight');
                             $(document).find('#ays-quick-modal').css('display', 'none');
@@ -1032,6 +1263,17 @@
         placeholder: 'Select users',
         minimumInputLength: 1,
         allowClear: true,
+        language: {
+            // You can find all of the options in the language files provided in the
+            // build. They all must be functions that return the string that should be
+            // displayed.
+            searching: function() {
+                return quizLangObj.searching;
+            },
+            inputTooShort: function () {
+                return quizLangObj.pleaseEnterMore;
+            }
+        },
         ajax: {
             url: quiz_maker_ajax.ajax_url,
             dataType: 'json',
@@ -1162,6 +1404,358 @@
         });
     });
 
+    //Import Coupons
+    $(document).on('click', '.ays-quiz-coupon-csv-import-action', function(e){
+        e.preventDefault();
+
+        var $_this = $(this);
+
+        var formData = new FormData();
+        var couponData = $('#ays_quiz_coupon_csv_import_file').prop('files')[0];
+        var action = 'ays_generate_coupons';
+        if(typeof(couponData) != "undefined"){
+            formData.append('coupon_data', couponData);
+            formData.append('action', action);
+        }
+
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.status) {
+                    var content = '';
+                    var couponsArray = response.coupons_ready_data;
+
+                    for (var index = 1; index < couponsArray.length; index++) {
+                        content += '<li class="ays-quiz-copy-active-coupon">';
+                            content += couponsArray[index];
+                            content += '<input type="hidden" value="'+couponsArray[index]+'" name="ays_quiz_coupons_active[]"/>';
+                            content += '<a class="ays-quiz-copy-active-coupon">'
+                            content +='</a>';
+                        content += '</li>';
+                    }
+
+                    var coupon_active_list = $(document).find('#ays_quiz_coupons_active');
+                        coupon_active_list.append(content);
+                }
+            }
+        });
+    });
+
+    // Admin Notes
+    $(document).on('click', '.ays-quiz-admin-note-save > button.ays-quiz-save-note', function(){
+        var $this = $(this);
+
+        var noteTextTexrarea = $this.parents('.ays-quiz-admin-note-textarea').find('div.ays-quiz-admin-note-text > textarea');
+        var admiNoteTd = $this.parents('tr.ays_result_element').parent().find("td.ays_quiz_admin_note_td");
+        var preloader = $this.parents('div.ays-quiz-admin-note').find('div.ays-quiz-preloader-note');
+
+        var noteText = noteTextTexrarea.val();
+        var resultID = noteTextTexrarea.attr('data-result') ;
+
+        var action = 'get_admin_notes';
+        var data = {};
+
+        preloader.css( "display", "flex" );
+
+        data.action = action;
+        data.note_text = noteText;
+        data.result_id = resultID;
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: data,
+            success: function(response) {
+                if (response.status) {
+                    preloader.css( "display", "none" );
+                    $this.parents('div.ays-quiz-admin-note-textarea').hide(250);
+                    if( response.result_id && response.result_id != '' ){
+                        $(document).find('.ays-admin-note-text-list-table-' + response.result_id).html(response.note_text);
+                    }
+                    admiNoteTd.html(response.note_text);
+                }else{
+                    swal.fire({
+                        type: 'info',
+                        html: "<h6>"+ response.message +"</h6>"
+                    }).then(function(res){
+                        preloader.css('display', 'none');
+                    });
+                }
+            }
+        });
+
+    });
+
+    $(document).on('click', '.ays-quiz-update-database', function(e){
+        e.preventDefault();
+
+        var _this = $(this);
+        var message = _this.data('message');
+        var confirm = window.confirm(message);
+        if(confirm === true){
+            var action = 'ays_quiz_update_database_tables';
+            var data = {};
+            data.action = action;
+            data.status = true;
+            $.ajax({
+                url: quiz_maker_ajax.ajax_url,
+                method: 'post',
+                dataType: 'json',
+                data: data,
+                success: function(response) {
+                    if (response.status) {
+                        window.location.reload();
+                    }else{
+                        swal.fire({
+                            type: 'info',
+                            html: "<h6>"+ response.message +"</h6>"
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    $(document).find('#ays_quiz_create_author').select2({
+        placeholder: quiz_maker_ajax.selectUser,
+        minimumInputLength: 1,
+        allowClear: true,
+        language: {
+            // You can find all of the options in the language files provided in the
+            // build. They all must be functions that return the string that should be
+            // displayed.
+            searching: function() {
+                return quiz_maker_ajax.searching;
+            },
+            inputTooShort: function () {
+                return quiz_maker_ajax.pleaseEnterMore;
+            }
+        },
+        ajax: {
+            url: quiz_maker_ajax.ajax_url,
+            dataType: 'json',
+            data: function (response) {
+                var checkedUsers = $(document).find('#ays_quiz_create_author').val();
+                return {
+                    action: 'ays_quiz_author_user_search',
+                    search: response.term,
+                    val: checkedUsers,
+                };
+            },
+        }
+    });
+
+    //Allow selected users exporting quizzes
+    $(document).find('#ays_quiz_users_to_export').select2({
+        allowClear: true,
+        placeholder: quiz_maker_ajax.selectUser,
+        minimumInputLength: 1,
+        language: {
+            // You can find all of the options in the language files provided in the
+            // build. They all must be functions that return the string that should be
+            // displayed.
+            searching: function() {
+                return quiz_maker_ajax.searching;
+            },
+            inputTooShort: function () {
+                return quiz_maker_ajax.pleaseEnterMore;
+            }
+        },
+        ajax: {
+            url: quiz_maker_ajax.ajax_url,
+            dataType: 'json',
+            data: function (params) {
+                var checkedUsers = $(document).find('#ays_quiz_users_to_export').val();
+                return {
+                    action: 'ays_quiz_users_search',
+                    q: params.term,
+                    val: checkedUsers,
+                    page: params.page
+                };
+            },
+        }
+    });
+
+    $(document).on("click", ".ays-quiz-cards-block .ays-quiz-card__footer button.status-missing", function(e){
+        var $this = $(this);
+        var thisParent = $this.parents(".ays-quiz-cards-block");
+
+        $this.prop('disabled', true);
+        $this.addClass('disabled');
+
+        var loader_html = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+
+        $this.html(loader_html);
+
+        var attr_plugin = $this.attr('data-plugin');
+        var wp_nonce = thisParent.find('#ays_quiz_ajax_install_plugin_nonce').val();
+
+        var data = {
+            action: 'ays_quiz_install_plugin',
+            _ajax_nonce: wp_nonce,
+            plugin: attr_plugin,
+            type: 'plugin'
+        };
+
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    swal.fire({
+                        type: 'success',
+                        html: "<h4>"+ response['data']['msg'] +"</h4>"
+                    }).then( function(res) {
+                        if ( $this.hasClass('status-missing') ) {
+                            $this.removeClass('status-missing');
+                        }
+                        $this.text(quiz_maker_ajax.activated);
+                        $this.addClass('status-active');
+                    });
+                }
+                else {
+                    swal.fire({
+                        type: 'info',
+                        html: "<h4>"+ response['data'][0]['message'] +"</h4>"
+                    }).then( function(res) {
+                        $this.text(quiz_maker_ajax.errorMsg);
+                    });
+                }
+            },
+            error: function(){
+                swal.fire({
+                    type: 'info',
+                    html: "<h2>"+ quiz_maker_ajax.loadResource +"</h2><br><h6>"+ quiz_maker_ajax.somethingWentWrong +"</h6>"
+                }).then( function(res) {
+                    $this.text(quiz_maker_ajax.errorMsg);
+                });
+                // $this.prop('disabled', false);
+                // if ( $this.hasClass('disabled') ) {
+                //     $this.removeClass('disabled');
+                // }
+            }
+        });
+    });
+
+    $(document).on("click", ".ays-quiz-cards-block .ays-quiz-card__footer button.status-installed", function(e){
+        var $this = $(this);
+        var thisParent = $this.parents(".ays-quiz-cards-block");
+
+        $this.prop('disabled', true);
+        $this.addClass('disabled');
+
+        var loader_html = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>';
+
+        $this.html(loader_html);
+
+        var attr_plugin = $this.attr('data-plugin');
+        var wp_nonce = thisParent.find('#ays_quiz_ajax_install_plugin_nonce').val();
+
+        var data = {
+            action: 'ays_quiz_activate_plugin',
+            _ajax_nonce: wp_nonce,
+            plugin: attr_plugin,
+            type: 'plugin'
+        };
+
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: data,
+            success: function (response) {
+                if( response.success ){
+                    swal.fire({
+                        type: 'success',
+                        html: "<h4>"+ response['data'] +"</h4>"
+                    }).then( function(res) {
+                        if ( $this.hasClass('status-installed') ) {
+                            $this.removeClass('status-installed');
+                        }
+                        $this.text(quiz_maker_ajax.activated);
+                        $this.addClass('status-active disabled');
+                    });
+                } else {
+                    swal.fire({
+                        type: 'info',
+                        html: "<h4>"+ response['data'][0]['message'] +"</h4>"
+                    });
+                }
+            },
+            error: function(){
+                swal.fire({
+                    type: 'info',
+                    html: "<h2>"+ quiz_maker_ajax.loadResource +"</h2><br><h6>"+ quiz_maker_ajax.somethingWentWrong +"</h6>"
+                }).then( function(res) {
+                    $this.text(quiz_maker_ajax.errorMsg);
+                });;
+                // $this.prop('disabled', false);
+                // if ( $this.hasClass('disabled') ) {
+                //     $this.removeClass('disabled');
+                // }
+            }
+        });
+    });
+
+    //Import Passwords | CSV | TXT
+    $(document).on('click', '.ays-quiz-password-csv-txt-import-action', function(e){
+        e.preventDefault();
+
+        var formData = new FormData();
+        var passwordData = $(document).find('#ays_quiz_password_csv_txt_import_file').prop('files')[0];
+        var errorMsgBox = $(document).find('.ays-quiz-password-csv-txt-import-error-message');
+        var action = 'ays_generate_passwords_via_import';
+        if(typeof(passwordData) != "undefined"){
+            formData.append('password_data', passwordData);
+            formData.append('action', action);
+        }
+
+        $.ajax({
+            url: quiz_maker_ajax.ajax_url,
+            method: 'post',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response.status) {
+                    var content = '';
+                    var passwordsArray = response.passwords_ready_data;
+
+                    for (var index = 0; index < passwordsArray.length; index++) {
+                        content += '<li>';
+                            content += '<span class="created_psw">'+ passwordsArray[index] +'</span>';
+                            content += '<a class="ays_gen_psw_move_to_used"><i class="fa fa-clipboard" aria-hidden="true"></i></a>';
+                            content += '<input type="hidden" value="'+passwordsArray[index]+'" name="ays_active_gen_psw[]" class="ays_active_gen_psw"/>';
+                        content += '</li>';
+                    }
+
+                    var coupon_active_list = $(document).find('#ays_generated_password ul.ays_active');
+                        coupon_active_list.append(content);
+                } else {
+                    errorMsgBox.text(response.message);
+                    setTimeout( function(){
+                        errorMsgBox.text('');
+                    }, 5000);
+                }
+            },
+            error: function(){
+                swal.fire({
+                    type: 'info',
+                    html: "<h2>"+ quizLangObj.somethingWentWrong +"</h2>"
+                }).then(function(res) {
+                    errorMsgBox.text('');
+                });
+            }
+        });
+    });
 
 })( jQuery );
 
@@ -1177,5 +1771,10 @@ function aysEscapeHtml(text) {
         '"': '&quot;',
         "'": '&#039;'
     };
-    return text.replace(/[&<>\"']/g, function(m) { return map[m]; });
+
+    if ( typeof text !== 'undefined' ) {
+        return text.replace(/[&<>\"']/g, function(m) { return map[m]; });
+    }else{
+        return '';
+    }
 }

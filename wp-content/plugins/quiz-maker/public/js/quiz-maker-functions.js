@@ -300,6 +300,48 @@ function aysEscapeHtml(text) {
     return text.replace(/[&<>\"']/g, function(m) { return map[m]; });
 }
 
+/**
+ * @return {string}
+ */
+var aysEscapeHtmlDecode = (function() {
+    // this prevents any overhead from creating the object each time
+    var element = document.createElement('div');
+
+    function decodeHTMLEntities (str) {
+        if(str && typeof str === 'string') {
+            // strip script/html tags
+            str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+            str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+        }
+
+        return str;
+    }
+
+    return decodeHTMLEntities;
+})();
+
+String.prototype.aysStripSlashes = function(){
+    return this.replace(/\\(.)/mg, "$1");
+}
+
+function getObjectKey(object, value, type) {
+    if ( ! type ) {
+        type = 'string';
+    }
+
+    for ( var key in object ) {
+        if( type === 'number' ) {
+            if ( Number( object[key] ) === Number( value ) ) return key;
+        } else if ( type === 'bool' ) {
+            if ( Boolean( object[key] ) === Boolean( value ) ) return key;
+        } else {
+            if ( object[key] === value ) return key;
+        }
+    }
+}
 
 function audioVolumeIn(q){
     if(q.volume){
@@ -392,7 +434,7 @@ function checkQuizPassword(e, myOptions, isAlert){
 }
 
 
-function ays_countdown_datetime(sec, showMessage) {
+function ays_countdown_datetime(sec, showMessage, quizId) {
     var distance = sec*1000;
     var x_int;
 
@@ -436,7 +478,7 @@ function ays_countdown_datetime(sec, showMessage) {
 
         text += seconds + " " + quizLangObj.seconds;
 
-        document.getElementById("show_timer_countdown").innerHTML = text;
+        jQuery(document).find("#"+ quizId +" .show_timer_countdown").html(text);
 
         // If the count down is over, write some text
         if (distance > 0) {
@@ -444,11 +486,7 @@ function ays_countdown_datetime(sec, showMessage) {
         }
         if (distance <= 0) {
             clearInterval(x_int);
-            if(showMessage){
-                document.getElementById("show_timer_countdown").innerHTML = quizLangObj.expiredMessage;
-            }else{
-                document.getElementById("show_timer_countdown").innerHTML = '';
-            }
+            jQuery(document).find("#"+ quizId +" .show_timer_countdown").html('');
         }
         if(distance == 0){
             location.reload();
@@ -461,14 +499,27 @@ function ays_quiz_is_question_required( requiredQuestions ){
 
      if ( requiredQuestions.length !== 0) {
          var empty_inputs = 0;
-         var errorMessage;
+         var errorMessage, ays_quiz_container;
          requiredQuestions.removeClass('ays-has-error');
+
+         for (var i = 0; i < requiredQuestions.length; i++) {
+            var item = requiredQuestions.eq(i);
+            ays_quiz_container = item.parents(".ays-quiz-container");
+            break;
+         }
+
+         ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question").removeClass('ays-has-error');
+
          for (var i = 0; i < requiredQuestions.length; i++) {
              var item = requiredQuestions.eq(i);
+             var questionId = item.attr('data-question-id');
+
              if( item.data('type') == 'text' || item.data('type') == 'short_text' || item.data('type') == 'number' ){
                  if( item.find( '.ays-text-field .ays-text-input' ).val() == '' ){
                      errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
                      errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
 
                      item.addClass('ays-has-error');
                      item.find('.ays-quiz-question-validation-error').html(errorMessage);
@@ -491,6 +542,9 @@ function ays_quiz_is_question_required( requiredQuestions ){
                  if( errorFlag ){
                      errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
                      errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
+
                      item.addClass('ays-has-error');
                      item.find('.ays-quiz-question-validation-error').html(errorMessage);
                      goToTop( item );
@@ -505,6 +559,60 @@ function ays_quiz_is_question_required( requiredQuestions ){
                  if( item.find('.ays-select-field .ays-select-field-value').val() == '' ){
                      errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
                      errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
+
+                     item.addClass('ays-has-error');
+                     item.find('.ays-quiz-question-validation-error').html(errorMessage);
+                     goToTop( item );
+                     empty_inputs++;
+                     break;
+                 }else{
+                     continue;
+                 }
+             }
+
+             if ( item.data('type') == 'matching' ) {
+                 var filledCount = 0;
+                 item.find('.ays-field .ays-select-field-value').each( function ( i, item ) {
+                    var __this = jQuery(item)
+                     if( __this.val() == '' ) {
+                         filledCount++;
+                     }
+                 });
+
+                 if( filledCount !== item.find('.ays-select-field .ays-select-field-value').length ) {
+                     errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
+                     errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
+
+                     item.addClass('ays-has-error');
+                     item.find('.ays-quiz-question-validation-error').html(errorMessage);
+                     goToTop( item );
+                     empty_inputs++;
+                     break;
+                 }else{
+                     continue;
+                 }
+             }
+
+             if ( item.data('type') == 'fill_in_blank' ) {
+                 var fillInBlankCount = 0;
+                 item.find('.ays_quiz_question .ays-quiz-fill-in-blank-input').each( function ( i, item ) {
+                    var __this = jQuery(item);
+
+                    if( __this.val() == '' ) {
+                        fillInBlankCount++;
+                    }
+                 });
+
+                 if( fillInBlankCount > 0 ) {
+                     errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
+                     errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
+
                      item.addClass('ays-has-error');
                      item.find('.ays-quiz-question-validation-error').html(errorMessage);
                      goToTop( item );
@@ -517,6 +625,131 @@ function ays_quiz_is_question_required( requiredQuestions ){
 
              if ( item.data('type') == 'date' ) {
                  if( item.find('input[type="date"]').val() == '' ){
+                     errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
+                     errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
+
+                     ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays_questions_nav_question[data-id='"+ questionId +"']").addClass('ays-has-error shake ays_animated_x5ms');
+
+                     item.addClass('ays-has-error');
+                     item.find('.ays-quiz-question-validation-error').html(errorMessage);
+                     goToTop( item );
+                     empty_inputs++;
+                     break;
+                 }else{
+                     continue;
+                 }
+             }
+         }
+
+         if (empty_inputs !== 0) {
+             var errorFields = ays_quiz_container.find(".ays-quiz-questions-nav-wrap .ays-has-error");
+             requiredQuestions.parents('.ays-quiz-container').addClass('ays-quiz-has-error');
+             if ( errorFields.length !== 0 ) {
+                 setTimeout(function(){
+                    errorFields.each(function(){
+                        jQuery(this).removeClass('shake ays_animated_x5ms');
+                    });
+                 }, 500);
+             }
+             return false;
+         }else{
+             requiredQuestions.parents('.ays-quiz-container').removeClass('ays-quiz-has-error');
+             return true;
+         }
+     }
+     return true;
+}
+
+function ays_quiz_is_question_empty( questions ){
+    animating = false;
+
+    if ( questions.length !== 0) {
+        var empty_inputs = 0;
+        var errorMessage;
+        for (var i = 0; i < questions.length; i++) {
+            var item = questions.eq(i);
+            if( item.data('type') == 'text' || item.data('type') == 'short_text' || item.data('type') == 'number' ){
+                if( item.find( '.ays-text-field .ays-text-input' ).val() == '' ){
+                    empty_inputs++;
+                    break;
+                }else{
+                    continue;
+                }
+            }
+
+            var errorFlag = false;
+            if ( item.data('type') == 'radio' || item.data('type') == 'checkbox' ) {
+
+                if( item.find('input[name^="ays_questions"]:checked').length == 0 ){
+                    errorFlag = true;
+                }
+
+                if( errorFlag ){
+                    empty_inputs++;
+                    break;
+                }else{
+                    continue;
+                }
+            }
+
+            if ( item.data('type') == 'select' ) {
+                if( item.find('.ays-select-field .ays-select-field-value').val() == '' ){
+                    empty_inputs++;
+                    break;
+                }else{
+                    continue;
+                }
+            }
+
+            if ( item.data('type') == 'matching' ) {
+                var filledCount = 0;
+                item.find('.ays-select-field .ays-select-field-value').each( function ( i, item ) {
+                    if( item.find('.ays-select-field .ays-select-field-value').val() == '' ) {
+                        filledCount++;
+                    }
+                });
+
+                if( filledCount !== item.find('.ays-select-field .ays-select-field-value').length ) {
+                    empty_inputs++;
+                    break;
+                }else{
+                    continue;
+                }
+            }
+
+            if ( item.data('type') == 'date' ) {
+                if( item.find('input[type="date"]').val() == '' ){
+                    empty_inputs++;
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+
+        if (empty_inputs !== 0) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+    return true;
+}
+
+function ays_quiz_is_question_min_count( requiredQuestions, isAllow ){
+     animating = false;
+
+     if ( requiredQuestions.length !== 0) {
+         var empty_inputs = 0;
+         var errorMessage;
+         requiredQuestions.removeClass('ays-has-error');
+         for (var i = 0; i < requiredQuestions.length; i++) {
+             var item = requiredQuestions.eq(i);
+
+             var errorFlag = false;
+             if ( item.data('type') == 'checkbox' ) {
+
+                 if( isAllow ){
                      errorMessage = '<img src="' + quiz_maker_ajax_public.warningIcon + '" alt="error">';
                      errorMessage += '<span>' + quizLangObj.requiredError + '</span>';
                      item.addClass('ays-has-error');
@@ -541,9 +774,242 @@ function ays_quiz_is_question_required( requiredQuestions ){
      return true;
 }
 
+function aysCheckMinimumCountCheckbox( question, myQuizOptions ){
+
+    var questionId = question.attr('data-question-id');
+    questionId = parseInt( questionId );
+    if( question.find('.ays-quiz-answers').hasClass('enable_min_selection_number') ){
+        var checkedCount = question.find('.ays-field input[type="checkbox"]:checked').length;
+
+        if (questionId !== null && questionId != '' && typeof myQuizOptions[questionId] != 'undefined') {
+
+            // Minimum length of a text field
+            var enable_min_selection_number = (myQuizOptions[questionId].enable_min_selection_number && myQuizOptions[questionId].enable_min_selection_number != "") ? myQuizOptions[questionId].enable_min_selection_number : false;
+
+            // Length
+            var min_selection_number = (myQuizOptions[questionId].min_selection_number && myQuizOptions[questionId].min_selection_number != "") ? parseInt(myQuizOptions[questionId].min_selection_number) : '';
+
+            if( enable_min_selection_number === true && min_selection_number != '' ){
+
+                if( min_selection_number <= checkedCount ){
+                    return true;
+                }
+            }
+        }
+    } else {
+        return true;
+    }
+    return false;
+}
+
 function goToTop( el ) {
     el.get(0).scrollIntoView({
         block: "center",
         behavior: "smooth"
     });
+}
+
+function countdownTimeForShow( parentStep, countDownDate ) {
+    var timeForShow = "";
+    var waitingTimeBox = parentStep.find('.ays-quiz-question-waiting-time-box');
+
+    var now = new Date().getTime();
+
+    var distance = countDownDate - Math.ceil(now/1000)*1000;
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    var sec = seconds;
+    var min = minutes;
+    var hour = hours;
+
+    if(hours <= 0){
+        hours = null;
+    }else if (hours < 10) {
+        hours = '0' + hours;
+    }
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+
+    timeForShow =  ((hours==null)? "" : (hours + ":")) + minutes + ":" + seconds;
+
+    if (distance <= 1) {
+        clearInterval(window.countdownTimeForShowInterval);
+        waitingTimeBox.html("");
+    } else {
+        waitingTimeBox.html(timeForShow);
+    }
+
+    return timeForShow;
+}
+
+Date.prototype.aysCustomFormat = function(formatString){
+    var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhhh,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
+    YY = ((YYYY=this.getFullYear())+"").slice(-2);
+    MM = (M=this.getMonth()+1)<10?('0'+M):M;
+    MMM = (MMMM=["January","February","March","April","May","June","July","August","September","October","November","December"][M-1]).substring(0,3);
+    DD = (D=this.getDate())<10?('0'+D):D;
+    DDD = (DDDD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][this.getDay()]).substring(0,3);
+    th=(D>=10&&D<=20)?'th':((dMod=D%10)==1)?'st':(dMod==2)?'nd':(dMod==3)?'rd':'th';
+    formatString = formatString.replace("#YYYY#",YYYY).replace("#YY#",YY).replace("#MMMM#",MMMM).replace("#MMM#",MMM).replace("#MM#",MM).replace("#M#",M).replace("#DDDD#",DDDD).replace("#DDD#",DDD).replace("#DD#",DD).replace("#D#",D).replace("#th#",th);
+    h=(hhh=this.getHours());
+    if (h==0) h=24;
+    if (h>12) h-=12;
+    hh = h<10?('0'+h):h;
+    hhhh = hhh<10?('0'+hhh):hhh;
+    AMPM=(ampm=hhh<12?'am':'pm').toUpperCase();
+    mm=(m=this.getMinutes())<10?('0'+m):m;
+    ss=(s=this.getSeconds())<10?('0'+s):s;
+
+    return formatString.replace("#hhhh#",hhhh).replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
+    // token:     description:             example:
+    // #YYYY#     4-digit year             1999
+    // #YY#       2-digit year             99
+    // #MMMM#     full month name          February
+    // #MMM#      3-letter month name      Feb
+    // #MM#       2-digit month number     02
+    // #M#        month number             2
+    // #DDDD#     full weekday name        Wednesday
+    // #DDD#      3-letter weekday name    Wed
+    // #DD#       2-digit day number       09
+    // #D#        day number               9
+    // #th#       day ordinal suffix       nd
+    // #hhhh#     2-digit 24-based hour    17
+    // #hhh#      military/24-based hour   17
+    // #hh#       2-digit hour             05
+    // #h#        hour                     5
+    // #mm#       2-digit minute           07
+    // #m#        minute                   7
+    // #ss#       2-digit second           09
+    // #s#        second                   9
+    // #ampm#     "am" or "pm"             pm
+    // #AMPM#     "AM" or "PM"             PM
+};
+
+function aysResizeiFrame(){
+    window.parent.postMessage({
+        sentinel: "amp",
+        type: "embed-size",
+        height: document.body.scrollHeight + 40,
+    }, "*");
+
+    if( jQuery(window.parent.document.body).hasClass('amp-mode-mouse') ){
+        jQuery(document.body).css('background-color', '#fff');
+    }
+}
+
+
+function toggleFullscreen(elem) {
+    elem = elem || document.documentElement;
+    if (!document.fullscreenElement && !document.mozFullScreenElement &&
+        !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        aysQuizFullScreenActivate( elem );
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        }else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        }else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    }else{
+        aysQuizFullScreenDeactivate( elem );
+        if(document.exitFullscreen) {
+            document.exitFullscreen();
+        }else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        }else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
+}
+
+function aysQuizFullScreenActivate( elem ){
+    jQuery(elem).find('.ays-quiz-full-screen-container > .ays-quiz-close-full-screen').css({'display':'block'});
+    jQuery(elem).find('.ays-quiz-full-screen-container > .ays-quiz-open-full-screen').css('display','none');
+    //jQuery(elem).find('.step:not(:first-of-type,.ays_thank_you_fs)').css({'height':'100vh'});
+    jQuery(elem).css({'overflow':'auto'});
+
+    if( jQuery(elem).find('.ays_quiz_reports').length > 0 ){
+        jQuery(elem).find('.ays_quiz_reports').css({
+            'position': 'fixed',
+            'z-index': '1',
+        });
+    }else{
+        if( jQuery(elem).find('.ays_quiz_rete_avg').length > 0 ){
+            jQuery(elem).find('.ays_quiz_rete_avg').css({
+                'position': 'fixed',
+                'z-index': '1',
+            });
+        }
+
+        if( jQuery(elem).find('.ays_quizn_ancnoxneri_qanak').length > 0 ){
+            jQuery(elem).find('.ays_quizn_ancnoxneri_qanak').css({
+                'position': 'fixed',
+                'z-index': '1',
+            });
+        }
+    }
+}
+
+function aysQuizFullScreenDeactivate( elem ){
+    jQuery(elem).find('.ays-quiz-full-screen-container > svg.ays-quiz-open-full-screen').css({'display':'block'});
+    jQuery(elem).find('.ays-quiz-full-screen-container > svg.ays-quiz-close-full-screen').css('display','none');
+    //jQuery(elem).find('.step:not(:first-of-type)').css({'height':'auto'});
+    jQuery(elem).css({'overflow':'initial'});
+
+    if( jQuery(elem).find('.ays_quiz_reports').length > 0 ){
+        jQuery(elem).find('.ays_quiz_reports').css({
+            'position': 'absolute',
+            'z-index': '1',
+        });
+    }else{
+        if( jQuery(elem).find('.ays_quiz_rete_avg').length > 0 ){
+            jQuery(elem).find('.ays_quiz_rete_avg').css({
+                'position': 'absolute',
+                'z-index': '1',
+            });
+        }
+
+        if( jQuery(elem).find('.ays_quizn_ancnoxneri_qanak').length > 0 ){
+            jQuery(elem).find('.ays_quizn_ancnoxneri_qanak').css({
+                'position': 'absolute',
+                'z-index': '1',
+            });
+        }
+    }
+}
+
+function quizGetVoices() {
+    var voices = speechSynthesis.getVoices();
+    if(!voices.length){
+      var utterance = new SpeechSynthesisUtterance("");
+      speechSynthesis.speak(utterance);
+      voices = speechSynthesis.getVoices();          
+    }
+    return voices;
+}
+
+function listenQuestionText( text, voice, rate, pitch, volume, action ){
+    if(action == 'play'){
+        let speakData = new SpeechSynthesisUtterance();
+        speakData.volume = volume; // From 0 to 1
+        speakData.rate = rate; // From 0.1 to 10
+        speakData.pitch = pitch; // From 0 to 2
+        speakData.text = text;
+        speakData.lang = 'en';
+        speakData.voice = voice;
+        speechSynthesis.speak(speakData);
+    }
+    else if (action == 'cancel'){
+        speechSynthesis.cancel();
+    }
 }

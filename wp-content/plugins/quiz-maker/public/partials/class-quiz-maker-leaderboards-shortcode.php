@@ -62,15 +62,90 @@ class Quiz_Maker_Leaderboards_Shortcode
         $this->settings = new Quiz_Maker_Settings_Actions($this->plugin_name);
     }
 
+    /**
+     * Register the stylesheets for the public-facing side of the site.
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_styles(){
+
+        /**
+         * This function is provided for demonstration purposes only.
+         *
+         * An instance of this class should be passed to the run() function
+         * defined in Quiz_Maker_Loader as all of the hooks are defined
+         * in that particular class.
+         *
+         * The Quiz_Maker_Loader will then create the relationship
+         * between the defined hooks and the functions defined in this
+         * class.
+         */
+
+        wp_enqueue_style($this->plugin_name . '-dataTable-min', AYS_QUIZ_PUBLIC_URL . '/css/quiz-maker-dataTables.min.css', array(), $this->version, 'all');
+    }
+
+    /**
+     * Register the JavaScript for the public-facing side of the site.
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_scripts() {
+
+        /**
+         * This function is provided for demonstration purposes only.
+         *
+         * An instance of this class should be passed to the run() function
+         * defined in Quiz_Maker_Loader as all of the hooks are defined
+         * in that particular class.
+         *
+         * The Quiz_Maker_Loader will then create the relationship
+         * between the defined hooks and the functions defined in this
+         * class.
+         */
+
+        wp_enqueue_script( $this->plugin_name . '-datatable-min', AYS_QUIZ_PUBLIC_URL . '/js/quiz-maker-datatable.min.js', array('jquery'), $this->version, true);
+        wp_enqueue_script( $this->plugin_name . '-leaderboards-public', AYS_QUIZ_PUBLIC_URL . '/js/partials/quiz-maker-leaderboards-public.js', array('jquery'), $this->version, true);
+        wp_localize_script( $this->plugin_name . '-datatable-min', 'quizLangLeaderboardDataTableObj', array(
+            "sEmptyTable"           => __( "No data available in table", $this->plugin_name ),
+            "sInfo"                 => __( "Showing _START_ to _END_ of _TOTAL_ entries", $this->plugin_name ),
+            "sInfoEmpty"            => __( "Showing 0 to 0 of 0 entries", $this->plugin_name ),
+            "sInfoFiltered"         => __( "(filtered from _MAX_ total entries)", $this->plugin_name ),
+            // "sInfoPostFix":          => __( "", $this->plugin_name ),
+            // "sInfoThousands":        => __( ",", $this->plugin_name ),
+            "sLengthMenu"           => __( "Show _MENU_ entries", $this->plugin_name ),
+            "sLoadingRecords"       => __( "Loading...", $this->plugin_name ),
+            "sProcessing"           => __( "Processing...", $this->plugin_name ),
+            "sSearch"               => __( "Search:", $this->plugin_name ),
+            // "sUrl":                  => __( "", $this->plugin_name ),
+            "sZeroRecords"          => __( "No matching records found", $this->plugin_name ),
+            "sFirst"                => __( "First", $this->plugin_name ),
+            "sLast"                 => __( "Last", $this->plugin_name ),
+            "sNext"                 => __( "Next", $this->plugin_name ),
+            "sPrevious"             => __( "Previous", $this->plugin_name ),
+            "sSortAscending"        => __( ": activate to sort column ascending", $this->plugin_name ),
+            "sSortDescending"       => __( ": activate to sort column descending", $this->plugin_name ),
+
+            "all"                   => __( "All", $this->plugin_name ),
+        ) );
+    }
+
     // Leaderboard shortcode
     public function ays_generate_leaderboard_list($attr){
         // AV Leaderboard
         // ob_start();
         global $wpdb;
 
+        $this->enqueue_styles();
+        $this->enqueue_scripts();
+
         $quiz_settings = $this->settings;
         $leadboard_res = ($quiz_settings->ays_get_setting('leaderboard') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('leaderboard');
         $quiz_settings_options = ($quiz_settings->ays_get_setting('options') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('options');
+
+        $custom_fields = Quiz_Maker_Data::get_custom_fields_for_shortcodes();
+
+        // Individual Leaderboard
+        $individual_leaderboard_custom_fields = isset($custom_fields['individual_leaderboard']) && !empty($custom_fields['individual_leaderboard']) ? $custom_fields['individual_leaderboard'] : array();
 
         $leadboard = json_decode($leadboard_res, true);
 
@@ -96,19 +171,54 @@ class Quiz_Maker_Leaderboards_Shortcode
             'point'      => '',
         );
 
+        if( !empty($individual_leaderboard_custom_fields) ){
+            foreach ($individual_leaderboard_custom_fields as $custom_field_key => $custom_field) {
+                $default_ind_leadboard_columns[$custom_field_key] = $custom_field_key;
+            }
+        }
+
         $leadboard['individual']['ind_leadboard_columns'] = ! isset( $leadboard['individual']['ind_leadboard_columns'] ) ? $default_ind_leadboard_columns : $leadboard['individual']['ind_leadboard_columns'];
         $ind_leadboard_columns = (isset( $leadboard['individual']['ind_leadboard_columns'] ) && !empty($leadboard['individual']['ind_leadboard_columns']) ) ? $leadboard['individual']['ind_leadboard_columns'] : array();
         $ind_leadboard_columns_order = (isset( $leadboard['individual']['ind_leadboard_columns_order'] ) && !empty($leadboard['individual']['ind_leadboard_columns_order']) ) ? $leadboard['individual']['ind_leadboard_columns_order'] : $default_ind_leadboard_columns;
 
+        // Enable pagination
+        $leadboard['individual']['leadboard_enable_pagination'] = isset($leadboard['individual']['leadboard_enable_pagination']) ? sanitize_text_field( $leadboard['individual']['leadboard_enable_pagination'] ) : 'on';
+        $leadboard_enable_pagination = (isset($leadboard['individual']['leadboard_enable_pagination']) && sanitize_text_field( $leadboard['individual']['leadboard_enable_pagination'] ) == "on") ? true : false;
+
+        // Enable User Avatar
+        $leadboard['individual']['leadboard_enable_user_avatar'] = isset($leadboard['individual']['leadboard_enable_user_avatar']) ? sanitize_text_field( $leadboard['individual']['leadboard_enable_user_avatar'] ) : 'off';
+        $leadboard_enable_user_avatar = (isset($leadboard['individual']['leadboard_enable_user_avatar']) && sanitize_text_field( $leadboard['individual']['leadboard_enable_user_avatar'] ) == "on") ? true : false;
+
+        $enable_pagination_class = '';
+        if ( $leadboard_enable_pagination ) {
+            $enable_pagination_class = 'ays-quiz-individual-leaderboard-pagination';
+        }
+
         $default_ind_leadboard_header_value = array(
-            "pos"        => "<div class='ays_lb_pos'>" . __( "Pos.", $this->plugin_name ) . "</div>",
-            "name"       => "<div class='ays_lb_user'>" . __( "Name", $this->plugin_name ) . "</div>",
-            "score"      => "<div class='ays_lb_score'>" . __( "Score", $this->plugin_name ) . "</div>",
-            "duration"   => "<div class='ays_lb_duration'>" . __( "Duration", $this->plugin_name ) . "</div>",
-            "points"     => "<div class='ays_lb_points'>" . __( "Points", $this->plugin_name ) . "</div>",
+            "pos"        => "<th class='ays_lb_pos'>" . __( "Pos.", $this->plugin_name ) . "</th>",
+            "name"       => "<th class='ays_lb_user'>" . __( "Name", $this->plugin_name ) . "</th>",
+            "score"      => "<th class='ays_lb_score'>" . __( "Score", $this->plugin_name ) . "</th>",
+            "duration"   => "<th class='ays_lb_duration'>" . __( "Duration", $this->plugin_name ) . "</th>",
+            "points"     => "<th class='ays_lb_points'>" . __( "Points", $this->plugin_name ) . "</th>",
         );
 
+        if( !empty($individual_leaderboard_custom_fields) ){
+            foreach ($individual_leaderboard_custom_fields as $custom_field_key => $custom_field_value) {
+                $default_ind_leadboard_header_value[$custom_field_key] = "<th class='ays_lb_custom_fields'>" .$custom_field_value. "</th>";
+            }
+        }
+
         $id = (isset($attr['id'])) ? absint(intval($attr['id'])) : null;
+
+        $date_from = (isset($attr['from'])) ? $attr['from'] : '';
+        $date_to   = (isset($attr['to'])) ? $attr['to'] : '';
+
+        $lb_date_attr = '';
+        if( Quiz_Maker_Admin::validateDate($date_from, 'Y-m-d H:i:s') &&
+                Quiz_Maker_Admin::validateDate($date_to, 'Y-m-d H:i:s') ){
+            $lb_date_attr = " AND start_date BETWEEN '{$date_from}' AND '{$date_to}'";
+        }
+
         $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizes WHERE id =".$id;
         $x = intval($wpdb->get_var($sql));
         $duration_avg = $ind_leadboard_sort == 'avg' ? strtoupper($ind_leadboard_sort) : '';
@@ -123,9 +233,17 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 ".$duration_avg."(CAST(duration AS DECIMAL(10))) AS dur_avg,
                                 ".strtoupper($ind_leadboard_sort)."(CAST(score AS DECIMAL(10))) AS avg_score,
                                 ".strtoupper($ind_leadboard_sort)."(CAST(points AS DECIMAL(10))) AS avg_points,
-                                MAX(CAST(max_points AS DECIMAL(10))) AS max_points
+                                MAX(CAST(max_points AS DECIMAL(10))) AS max_points,
+                                (SELECT options
+                                    FROM {$wpdb->prefix}aysquiz_reports
+                                    WHERE quiz_id = {$id} AND user_id != 0
+                                    {$lb_date_attr}
+                                    ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                    LIMIT 1
+                                ) AS options
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE quiz_id = {$id} AND user_id != 0
+                            {$lb_date_attr}
                             GROUP BY user_id
                             ORDER BY avg_score DESC, dur_avg
                             LIMIT ".$ind_leadboard_count;
@@ -135,6 +253,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     SELECT user_id as ue, ".strtoupper($ind_leadboard_sort)."(CAST(`score` AS DECIMAL(10,0))) AS new_score
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE quiz_id = {$id} AND user_id != 0
+                                    {$lb_date_attr}
                                     GROUP BY ue
                                  ) AS e
                             JOIN (
@@ -148,6 +267,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                         options
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE quiz_id = {$id} AND user_id != 0
+                                    {$lb_date_attr}
                                  ) AS a
                             ON e.ue = a.user_id AND e.new_score = a.score
                             GROUP BY a.user_id
@@ -159,12 +279,15 @@ class Quiz_Maker_Leaderboards_Shortcode
                     $sql = "SELECT
                                 user_id,
                                 user_name,
+                                user_email,
                                 ".$duration_avg."(CAST(duration AS DECIMAL(10))) AS dur_avg,
                                 ".strtoupper($ind_leadboard_sort)."(CAST(score AS DECIMAL(10))) AS avg_score,
                                 ".strtoupper($ind_leadboard_sort)."(CAST(points AS DECIMAL(10))) AS avg_points,
-                                MAX(CAST(max_points AS DECIMAL(10))) AS max_points
+                                MAX(CAST(max_points AS DECIMAL(10))) AS max_points,
+                                options
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE quiz_id = {$id} AND !(user_email='' OR user_email IS NULL)
+                            {$lb_date_attr}
                             GROUP BY user_email
                             ORDER BY avg_score DESC, dur_avg
                             LIMIT ".$ind_leadboard_count;
@@ -175,6 +298,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE quiz_id = {$id} AND !(user_email='' OR user_email IS NULL)
                                     GROUP BY ue
+                                    {$lb_date_attr}
                                  ) AS e
                             JOIN (
                                     SELECT
@@ -188,12 +312,30 @@ class Quiz_Maker_Leaderboards_Shortcode
                                         options
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE quiz_id = {$id}
+                                    {$lb_date_attr}
                                  ) AS a
                             ON e.ue = a.user_email AND e.new_score = a.score
                             GROUP BY a.user_email
                             ORDER BY e.new_score DESC, dur_avg
                             LIMIT ".$ind_leadboard_count;
                 }
+            }elseif($ind_leadboard_orderby == 'no_grouping'){
+                // if($ind_leadboard_sort == 'no_grouping'){
+
+                    $sql = "SELECT
+                                user_id,
+                                user_name,
+                                CAST(duration AS DECIMAL(10)) AS dur_avg,
+                                CAST(score AS DECIMAL(10)) AS avg_score,
+                                CAST(points AS DECIMAL(10)) AS avg_points,
+                                CAST(max_points AS DECIMAL(10)) AS max_points,
+                                options
+                            FROM {$wpdb->prefix}aysquiz_reports
+                            WHERE quiz_id = {$id}
+                            {$lb_date_attr}
+                            ORDER BY avg_score DESC, dur_avg
+                            LIMIT ".$ind_leadboard_count;
+                // }
             }
 
             $result = $wpdb->get_results($sql, 'ARRAY_A');
@@ -206,25 +348,34 @@ class Quiz_Maker_Leaderboards_Shortcode
                     '. $ind_leadboard_suctom_css .'
                 </style>';
 
-                $content .= "<div class='ays_lb_container'>
-                <ul class='ays_lb_ul' style='width: ".$ind_leadboard_width.";'>
-                    <li class='ays_lb_li' style='background: ".$ind_leadboard_color.";'>";
+                $content .= "<div class='ays_lb_container ays-leaderboard-main-container'>
+                <table class='ays_lb_ul ". $enable_pagination_class ."' style='width: ".$ind_leadboard_width.";'>
+                    <thead>
+                        <tr class='ays_lb_li' style='background: ".$ind_leadboard_color.";'>";
 
                 foreach ($ind_leadboard_columns_order as $key => $value) {
                      if (isset($ind_leadboard_columns[$value])) {
                         if ($value == '') {
                             continue;
                         }
+                        if ( ! isset( $default_ind_leadboard_header_value[$value] ) ) {
+                            continue;
+                        }
+
                         $content .= $default_ind_leadboard_header_value[$value];
                     }
                 }
 
-                $content .= "</li>";
+                $content .=
+                        "</tr>
+                    </thead>
+                    <tbody>";
 
                 foreach ($result as $val) {
                     $score = round($val['avg_score'], 2);
                     $user_id = intval($val['user_id']);
                     $duration = (isset($val['dur_avg']) && $val['dur_avg'] != '') ? round(floatval($val['dur_avg']), 2) : '0';
+                    $user_avatar = "";
 
                     switch ( $ind_leadboard_points_display ) {
                         case 'with_max_point':
@@ -250,37 +401,117 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 continue;
                             }
                         }
+
+                        if ( $leadboard_enable_user_avatar && !is_null( $user_id ) && $user_id > 0 ) {
+                            $user_avatar_arg = array(
+                                'size' => 20
+                            );
+
+                            $user_avatar_url = get_avatar_url( $user_id, $user_avatar_arg );
+                            if ( !is_null( $user_avatar_url ) && !empty( $user_avatar_url ) ) {
+                                $user_avatar = '<img src="'. $user_avatar_url .'" class="ays-lb-user-avatar">';
+                            }
+                        }
+                    }
+
+                    $duration_for_ordering = $duration;
+                    $duration = Quiz_Maker_Data::secondsToWords($duration);
+                    if ($duration == '') {
+                        $duration = '0 ' . __( 'second' , $this->plugin_name );
                     }
 
                     $ays_default_html_order = array(
-                        "pos"        => "<div class='ays_lb_pos'>$c</div>",
-                        "name"       => "<div class='ays_lb_user'>$user_name</div>",
-                        "score"      => "<div class='ays_lb_score'>$score %</div>",
-                        "duration"   => "<div class='ays_lb_duration'>$duration s</div>",
-                        "points"     => "<div class='ays_lb_points'>$points</div>",
+                        "pos"        => "<td class='ays_lb_pos'>$c</td>",
+                        "name"       => "<td class='ays_lb_user'><span class='ays-lb-user-avatar-row'>$user_avatar</span><span>$user_name</span></td>",
+                        "score"      => "<td class='ays_lb_score'>$score %</td>",
+                        "duration"   => "<td class='ays_lb_duration' data-order='". $duration_for_ordering ."'>$duration</td>",
+                        "points"     => "<td class='ays_lb_points'>$points</td>",
                     );
 
-                    $content .= "<li class='ays_lb_li'>";
+                    $attribute_options = (isset($val['options']) && $val['options'] != '') ? json_decode( $val['options'], true ) : '';
+
+                    if($ind_leadboard_orderby == 'email'){
+                        if($ind_leadboard_sort == 'avg'){
+
+                            $custom_fields_user_email = (isset($val['user_email']) && $val['user_email'] != '') ? sanitize_email( $val['user_email'] ) : '';
+
+                            if ( $custom_fields_user_email != "" ) {
+                                $sql2 = "SELECT options
+                                        FROM {$wpdb->prefix}aysquiz_reports
+                                        WHERE quiz_id = {$id} AND user_email = '{$custom_fields_user_email}'
+                                        {$lb_date_attr}
+                                        ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                        LIMIT 1";
+                                $result2 = $wpdb->get_row($sql2, "ARRAY_A");
+
+                                $attribute_options = (isset($result2['options']) && $result2['options'] != '') ? json_decode( $result2['options'], true ) : '';
+                            }
+                        }
+                    } 
+                    elseif ( $ind_leadboard_orderby == 'id' ) {
+                        if($ind_leadboard_sort == 'avg'){
+
+                            if ( isset( $user_id ) && $user_id > 0 ) {
+                                $sql2 = "SELECT options
+                                        FROM {$wpdb->prefix}aysquiz_reports
+                                        WHERE user_id = {$user_id} AND quiz_id = {$id}
+                                        {$lb_date_attr}
+                                        ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                        LIMIT 1";
+                                $result2 = $wpdb->get_row($sql2, "ARRAY_A");
+
+                                $attribute_options = (isset($result2['options']) && $result2['options'] != '') ? json_decode( $result2['options'], true ) : '';
+                            }
+                        }
+                    }
+
+
+                    $attribute_info = array();
+                    if($attribute_options != ''){
+                        $attribute_info = (isset($attribute_options['attributes_information']) && !empty( $attribute_options['attributes_information'] )) ? $attribute_options['attributes_information'] : array();
+                    }
+
+                    if( !empty($individual_leaderboard_custom_fields) ){
+                        foreach ($individual_leaderboard_custom_fields as $custom_field_key => $custom_field_value) {
+                            if(isset( $attribute_info[$custom_field_value] ) && $attribute_info[$custom_field_value] != ''){
+                                $ays_default_html_order[$custom_field_key] = "<td class='ays_lb_custom_fields'>" .$attribute_info[$custom_field_value]. "</td>";
+                            }else{
+                                $ays_default_html_order[$custom_field_key] = "<td class='ays_lb_custom_fields'></td>";
+                            }
+                        }
+                    }
+
+                    $content .= "<tr class='ays_lb_li'>";
                     foreach ($ind_leadboard_columns_order as $key => $value) {
                         if (isset($ind_leadboard_columns[$value])) {
                             if ($value == '') {
                                 continue;
                             }
+                            if ( ! isset( $ays_default_html_order[$value] ) ) {
+                                continue;
+                            }
+
                             $content .= $ays_default_html_order[$value];
                         }
                     }
 
-                    $content .= "</li>";
+                    $content .= "</tr>";
                     $c++;
                 }
-                $content .= "</ul>
+                $content .= "</tbody>
+                    </table>
                 </div>";
+                $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
                 // echo $content;
+
                 return str_replace(array("\r\n", "\n", "\r"), '', $content);
             }else{
-                $content = "<div class='ays_lb_container'>
-                    <ul class='ays_lb_ul' style='width: ".$ind_leadboard_width."px;'>
-                        <li class='ays_lb_li' style='background: ".$ind_leadboard_color.";'>";
+                $content = "
+                <div class='ays_lb_container ays-leaderboard-main-container'>
+                    <table class='ays_lb_ul' style='width: ".$ind_leadboard_width."px;'>
+                        <table class='ays_lb_ul' style='width: ".$ind_leadboard_width."px;'>
+                            <tr class='ays_lb_li' style='background: ".$ind_leadboard_color.";'>";
+
                 foreach ($ind_leadboard_columns_order as $key => $value) {
                     if (isset($ind_leadboard_columns[$value])) {
                         if ($value == '') {
@@ -289,22 +520,39 @@ class Quiz_Maker_Leaderboards_Shortcode
                         $content .= $default_ind_leadboard_header_value[$value];
                     }
                 }
-                $content .= "</li>";
+                $content .= "</tr>";
 
-                $content .= "<li class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</li>
-                    </ul>
+                $content .= "<tr>";
+                    $content .= "<td class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</td>";
+                $content .= "</tr>
+                    </table>
                 </div>";
+                $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
                 // echo $content;
+
                 return str_replace(array("\r\n", "\n", "\r"), '', $content);
             }
         }
         // echo $content;
+        $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
+
         return str_replace(array("\r\n", "\n", "\r"), '', $content);
     }
 
     public function ays_generate_gleaderboard_list($attr){
         // ob_start();
         global $wpdb;
+
+        $this->enqueue_styles();
+        $this->enqueue_scripts();
+
+        $current_user_id = get_current_user_id();
+        $current_user = get_userdata( $current_user_id );
+        $current_user_email = '';
+        if( $current_user ){
+            $current_user_email = $current_user->data->user_email ? $current_user->data->user_email : '';
+        }
+
         $quiz_settings = $this->settings;
         $leadboard_res = ($quiz_settings->ays_get_setting('leaderboard') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('leaderboard');
         $quiz_settings_options = ($quiz_settings->ays_get_setting('options') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('options');
@@ -333,13 +581,37 @@ class Quiz_Maker_Leaderboards_Shortcode
         $glob_leadboard_columns = (isset( $leadboard['global']['glob_leadboard_columns'] ) && !empty($leadboard['global']['glob_leadboard_columns']) ) ? $leadboard['global']['glob_leadboard_columns'] : array();
         $glob_leadboard_columns_order = (isset( $leadboard['global']['glob_leadboard_columns_order'] ) && !empty($leadboard['global']['glob_leadboard_columns_order']) ) ? $leadboard['global']['glob_leadboard_columns_order'] : $default_glob_leadboard_columns;
 
+        // Enable pagination
+        $glob_leadboard['global']['leadboard_enable_pagination'] = isset($leadboard['global']['leadboard_enable_pagination']) ? sanitize_text_field( $leadboard['global']['leadboard_enable_pagination'] ) : 'on';
+        $glob_leadboard_enable_pagination = (isset($leadboard['global']['leadboard_enable_pagination']) && sanitize_text_field( $leadboard['global']['leadboard_enable_pagination'] ) == "on") ? true : false;
+
+        // Enable User Avatar
+        $leadboard['global']['leadboard_enable_user_avatar'] = isset($leadboard['global']['leadboard_enable_user_avatar']) ? sanitize_text_field( $leadboard['global']['leadboard_enable_user_avatar'] ) : 'off';
+        $glob_leadboard_enable_user_avatar = (isset($leadboard['global']['leadboard_enable_user_avatar']) && sanitize_text_field( $leadboard['global']['leadboard_enable_user_avatar'] ) == "on") ? true : false;
+
+        $enable_pagination_class = '';
+        if ( $glob_leadboard_enable_pagination ) {
+            $enable_pagination_class = 'ays-quiz-global-leaderboard-pagination';
+        }
+
         $default_glob_leadboard_header_value = array(
-            "pos"        => "<div class='ays_lb_pos ays_glb_pos'>" . __( "Pos.", $this->plugin_name ) . "</div>",
-            "name"       => "<div class='ays_lb_user ays_glb_user'>" . __( "Name", $this->plugin_name ) . "</div>",
-            "score"      => "<div class='ays_lb_score ays_glb_score'>" . __( "Score", $this->plugin_name ) . "</div>",
-            "duration"   => "<div class='ays_lb_duration ays_glb_duration'>" . __( "Duration", $this->plugin_name ) . "</div>",
-            "points"     => "<div class='ays_lb_points ays_glb_points'>" . __( "Points", $this->plugin_name ) . "</div>",
+            "pos"        => "<th class='ays_lb_pos ays_glb_pos'>" . __( "Pos.", $this->plugin_name ) . "</th>",
+            "name"       => "<th class='ays_lb_user ays_glb_user'>" . __( "Name", $this->plugin_name ) . "</th>",
+            "score"      => "<th class='ays_lb_score ays_glb_score'>" . __( "Score", $this->plugin_name ) . "</th>",
+            "duration"   => "<th class='ays_lb_duration ays_glb_duration'>" . __( "Duration", $this->plugin_name ) . "</th>",
+            "points"     => "<th class='ays_lb_points ays_glb_points'>" . __( "Points", $this->plugin_name ) . "</th>",
         );
+
+        $date_from = (isset($attr['from'])) ? $attr['from'] : '';
+        $date_to   = (isset($attr['to'])) ? $attr['to'] : '';
+
+        $lb_date_attr = '';
+        $lb_where_date_attr = '';
+        if( Quiz_Maker_Admin::validateDate($date_from, 'Y-m-d H:i:s') &&
+                Quiz_Maker_Admin::validateDate($date_to, 'Y-m-d H:i:s') ){
+            $lb_date_attr = " AND start_date BETWEEN '{$date_from}' AND '{$date_to}'";
+            $lb_where_date_attr = " WHERE start_date BETWEEN '{$date_from}' AND '{$date_to}'";
+        }
 
         if($glob_leadboard_orderby == 'id'){
             if($glob_leadboard_sort == 'avg'){
@@ -351,6 +623,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                             ".strtoupper($glob_leadboard_sort)."(CAST(points AS DECIMAL(10))) AS avg_points
                         FROM {$wpdb->prefix}aysquiz_reports
                         WHERE user_id != 0
+                        {$lb_date_attr}
                         GROUP BY user_id
                         ORDER BY avg_score DESC, dur_avg
                         LIMIT ".$glob_leadboard_count;
@@ -363,6 +636,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                             ".strtoupper($glob_leadboard_sort)."(points) AS sum_points
                         FROM {$wpdb->prefix}aysquiz_reports
                         WHERE user_id != 0
+                        {$lb_date_attr}
                         GROUP BY user_id
                         ORDER BY sum_points DESC, dur_sum
                         LIMIT ".$glob_leadboard_count;
@@ -373,6 +647,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 SELECT user_id as ue, ".strtoupper($glob_leadboard_sort)."(CAST(`score` AS DECIMAL(10,0))) AS new_score
                                 FROM {$wpdb->prefix}aysquiz_reports
                                 WHERE user_id != 0
+                                {$lb_date_attr}
                                 GROUP BY ue
                              ) AS e
                         JOIN (
@@ -384,6 +659,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     CAST(`points` AS DECIMAL(10)) AS points,
                                     options
                                 FROM {$wpdb->prefix}aysquiz_reports
+                                {$lb_where_date_attr}
                              ) AS a
                         ON e.ue = a.user_id AND e.new_score = a.score
                         GROUP BY a.user_id
@@ -402,6 +678,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                             options
                         FROM {$wpdb->prefix}aysquiz_reports
                         WHERE !(user_email='' OR user_email IS NULL)
+                        {$lb_date_attr}
                         GROUP BY user_email
                         ORDER BY avg_score DESC, dur_avg
                         LIMIT ".$glob_leadboard_count;
@@ -416,6 +693,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                             options
                         FROM {$wpdb->prefix}aysquiz_reports
                         WHERE !(user_email='' OR user_email IS NULL)
+                        {$lb_date_attr}
                         GROUP BY user_email
                         ORDER BY sum_points DESC, dur_sum
                         LIMIT ".$glob_leadboard_count;
@@ -437,6 +715,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     CAST(`points` AS DECIMAL(10)) AS points,
                                     options
                                 FROM {$wpdb->prefix}aysquiz_reports
+                                {$lb_where_date_attr}
                              ) AS a
                         ON e.ue = a.user_email AND e.new_score = a.score
                         GROUP BY a.user_email
@@ -447,17 +726,27 @@ class Quiz_Maker_Leaderboards_Shortcode
 
         $result = $wpdb->get_results($sql, 'ARRAY_A');
 
+        if ( empty( $result ) ) {
+            $enable_pagination_class = '';
+        }
+
         $c = 1;
         $content = '';
 
         $content .= '
         <style>
+            .ays_glb_container table.ays_glb_ul tr.ays_glb_li th {
+                color: '. $this->color_inverse( $glob_leadboard_color ) .';
+            }
+
             '. $glob_leadboard_suctom_css .'
         </style>';
 
-        $content .= "<div class='ays_lb_container ays_glb_container'>
-        <ul class='ays_lb_ul ays_glb_ul' style='width: ".$glob_leadboard_width.";'>
-            <li class='ays_lb_li ays_glb_li' style='background: ".$glob_leadboard_color.";'>";
+        $content .= "<div class='ays_lb_container ays_glb_container ays-leaderboard-main-container'>
+        <table class='ays_lb_ul ays_glb_ul ". $enable_pagination_class ."' style='width: ".$glob_leadboard_width.";'>
+            <thead>
+                <tr class='ays_lb_li ays_glb_li' style='background: ".$glob_leadboard_color.";'>";
+
         foreach ($glob_leadboard_columns_order as $key => $value) {
              if (isset($glob_leadboard_columns[$value])) {
                 if ($value == '') {
@@ -467,7 +756,10 @@ class Quiz_Maker_Leaderboards_Shortcode
             }
         }
 
-        $content .="</li>";
+        $content .=
+                "</tr>
+            </thead>
+            <tbody>";
 
         $dur = 'dur_avg';
         $point = 'avg_points';
@@ -484,6 +776,12 @@ class Quiz_Maker_Leaderboards_Shortcode
                 $user_id = intval($val['user_id']);
                 $duration = (isset($val[$dur]) && $val[$dur] != '') ? round(floatval($val[$dur]), 2) : '0';
                 $points = (isset($val[$point]) && $val[$point] != '') ? round(floatval($val[$point]), 2) : '0';
+                $user_avatar = "";
+
+                $user_email = '';
+                if( isset( $val['user_email'] ) && $val['user_email'] != '' ){
+                    $user_email = $val['user_email'];
+                }
 
                 if ($user_id == 0) {
                     $user_name = (isset($val['user_name']) && $val['user_name'] != '') ? $val['user_name'] : __('Guest', $this->plugin_name);
@@ -497,17 +795,48 @@ class Quiz_Maker_Leaderboards_Shortcode
                             continue;
                         }
                     }
+
+                    if ( $glob_leadboard_enable_user_avatar && !is_null( $user_id ) && $user_id > 0 ) {
+                        $user_avatar_arg = array(
+                            'size' => 20
+                        );
+
+                        $user_avatar_url = get_avatar_url( $user_id, $user_avatar_arg );
+                        if ( !is_null( $user_avatar_url ) && !empty( $user_avatar_url ) ) {
+                            $user_avatar = '<img src="'. $user_avatar_url .'" class="ays-lb-user-avatar">';
+                        }
+                    }
+                }
+
+                $duration_for_ordering = $duration;
+                $duration = Quiz_Maker_Data::secondsToWords($duration);
+                if ($duration == '') {
+                    $duration = '0 ' . __( 'second' , $this->plugin_name );
+                }
+
+                if( $glob_leadboard_orderby == 'id' ){
+                    if($current_user_id == $user_id){
+                        $user_position_color = 'background:'.$glob_leadboard_color.'; opacity: 0.5; color:'. $this->color_inverse( $glob_leadboard_color ) .';';
+                    }else{
+                        $user_position_color = '';
+                    }
+                }elseif($glob_leadboard_orderby == 'email'){
+                    if($current_user_email == $user_email){
+                        $user_position_color = 'background:'.$glob_leadboard_color.'; opacity: 0.5; color:'. $this->color_inverse( $glob_leadboard_color ) .';';
+                    }else{
+                        $user_position_color = '';
+                    }
                 }
 
                 $ays_default_html_order = array(
-                    "pos"        => "<div class='ays_lb_pos ays_glb_pos'>$c</div>",
-                    "name"       => "<div class='ays_lb_user ays_glb_user'>$user_name</div>",
-                    "score"      => "<div class='ays_lb_score ays_glb_score'>$score %</div>",
-                    "duration"   => "<div class='ays_lb_duration ays_glb_duration'>$duration s</div>",
-                    "points"     => "<div class='ays_lb_points ays_glb_points'>$points</div>",
+                    "pos"        => "<td class='ays_lb_pos ays_glb_pos'>$c</td>",
+                    "name"       => "<td class='ays_lb_user ays_glb_user'><span class='ays-lb-user-avatar-row'>$user_avatar</span><span>$user_name</span></td>",
+                    "score"      => "<td class='ays_lb_score ays_glb_score'>$score %</td>",
+                    "duration"   => "<td class='ays_lb_duration ays_glb_duration' data-order='". $duration_for_ordering ."'>$duration</td>",
+                    "points"     => "<td class='ays_lb_points ays_glb_points'>$points</td>",
                 );
 
-                $content .= "<li class='ays_lb_li'>";
+                $content .= "<tr class='ays_lb_li' style='".$user_position_color."'>";
                 foreach ($glob_leadboard_columns_order as $key => $value) {
                     if (isset($glob_leadboard_columns[$value])) {
                         if ($value == '') {
@@ -517,17 +846,21 @@ class Quiz_Maker_Leaderboards_Shortcode
                     }
                 }
 
-                $content .= "</li>";
+                $content .= "</tr>";
                 $c++;
             }
         }else{
-            $content .= "<li class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</li>";
+            $content .= "<tr>";
+                $content .= "<td class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</td>";
+            $content .= "</tr>";
         }
 
-        $content .= "</ul>
+        $content .= "</tbody>
+            </table>
         </div>";
 
         // echo $content;
+        $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
 
         return str_replace(array("\r\n", "\n", "\r"), '', $content);
     }
@@ -535,9 +868,18 @@ class Quiz_Maker_Leaderboards_Shortcode
     public function ays_generate_global_quiz_cat_leaderboard_list($attr){
         // ob_start();
         global $wpdb;
+
+        $this->enqueue_styles();
+        $this->enqueue_scripts();
+
         $quiz_settings = $this->settings;
         $leadboard_res = ($quiz_settings->ays_get_setting('leaderboard') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('leaderboard');
         $quiz_settings_options = ($quiz_settings->ays_get_setting('options') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('options');
+
+        $custom_fields = Quiz_Maker_Data::get_custom_fields_for_shortcodes();
+
+        // Leaderboard By Quiz Category
+        $leaderboard_by_quiz_cat = isset($custom_fields['leaderboard_by_quiz_cat']) && !empty($custom_fields['leaderboard_by_quiz_cat']) ? $custom_fields['leaderboard_by_quiz_cat'] : array();
 
         $leadboard = json_decode($leadboard_res, true);
 
@@ -559,19 +901,56 @@ class Quiz_Maker_Leaderboards_Shortcode
             'points'      => '',
         );
 
+        if( !empty($leaderboard_by_quiz_cat) ){
+            foreach ($leaderboard_by_quiz_cat as $custom_field_key => $custom_field) {
+                $default_glob_leadboard_columns[$custom_field_key] = $custom_field_key;
+            }
+        }
+
         $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] = ! isset( $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] ) ? $default_glob_leadboard_columns : $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'];
         $glob_quiz_cat_leadboard_columns = (isset( $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] ) && !empty($leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns']) ) ? $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] : array();
         $glob_quiz_cat_leadboard_columns_order = (isset( $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] ) && !empty($leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns']) ) ? $leadboard['global_quiz_cat']['glob_quiz_cat_leadboard_columns'] : $default_glob_leadboard_columns;
 
+        // Enable pagination
+        $leadboard['global_quiz_cat']['leadboard_enable_pagination'] = isset($leadboard['global_quiz_cat']['leadboard_enable_pagination']) ? sanitize_text_field( $leadboard['global_quiz_cat']['leadboard_enable_pagination'] ) : 'on';
+        $glob_quiz_cat_leadboard_enable_pagination = (isset($leadboard['global_quiz_cat']['leadboard_enable_pagination']) && sanitize_text_field( $leadboard['global_quiz_cat']['leadboard_enable_pagination'] ) == "on") ? true : false;
+
+        // Enable User Avatar
+        $leadboard['global_quiz_cat']['leadboard_enable_user_avatar'] = isset($leadboard['global_quiz_cat']['leadboard_enable_user_avatar']) ? sanitize_text_field( $leadboard['global_quiz_cat']['leadboard_enable_user_avatar'] ) : 'off';
+        $glob_quiz_cat_leadboard_enable_user_avatar = (isset($leadboard['global_quiz_cat']['leadboard_enable_user_avatar']) && sanitize_text_field( $leadboard['global_quiz_cat']['leadboard_enable_user_avatar'] ) == "on") ? true : false;
+
+        $enable_pagination_class = '';
+        if ( $glob_quiz_cat_leadboard_enable_pagination ) {
+            $enable_pagination_class = 'ays-quiz-global-quiz-category-leaderboard-pagination';
+        }
+
         $default_glob_quiz_cat_leadboard_header_value = array(
-            "pos"        => "<div class='ays_lb_pos ays_glb_pos'>" . __( "Pos.", $this->plugin_name ) . "</div>",
-            "name"       => "<div class='ays_lb_user ays_glb_user'>" . __( "Name", $this->plugin_name ) . "</div>",
-            "score"      => "<div class='ays_lb_score ays_glb_score'>" . __( "Score", $this->plugin_name ) . "</div>",
-            "duration"   => "<div class='ays_lb_duration ays_glb_duration'>" . __( "Duration", $this->plugin_name ) . "</div>",
-            "points"     => "<div class='ays_lb_points ays_glb_points'>" . __( "Points", $this->plugin_name ) . "</div>",
+            "pos"        => "<th class='ays_lb_pos ays_glb_pos'>" . __( "Pos.", $this->plugin_name ) . "</th>",
+            "name"       => "<th class='ays_lb_user ays_glb_user'>" . __( "Name", $this->plugin_name ) . "</th>",
+            "score"      => "<th class='ays_lb_score ays_glb_score'>" . __( "Score", $this->plugin_name ) . "</th>",
+            "duration"   => "<th class='ays_lb_duration ays_glb_duration'>" . __( "Duration", $this->plugin_name ) . "</th>",
+            "points"     => "<th class='ays_lb_points ays_glb_points'>" . __( "Points", $this->plugin_name ) . "</th>",
         );
 
+        if( !empty($leaderboard_by_quiz_cat) ){
+            foreach ($leaderboard_by_quiz_cat as $custom_field_key => $custom_field_value) {
+                $default_glob_quiz_cat_leadboard_header_value[$custom_field_key] = "<th class='ays_lb_custom_fields ays_glb_custom_fields'>" .$custom_field_value. "</th>";
+            }
+        }
+
         $id = (isset($attr['id'])) ? absint(intval($attr['id'])) : null;
+
+        $date_from = (isset($attr['from'])) ? $attr['from'] : '';
+        $date_to   = (isset($attr['to'])) ? $attr['to'] : '';
+
+        $lb_date_attr = '';
+        $lb_where_date_attr = '';
+        if( Quiz_Maker_Admin::validateDate($date_from, 'Y-m-d H:i:s') &&
+                Quiz_Maker_Admin::validateDate($date_to, 'Y-m-d H:i:s') ){
+            $lb_date_attr       = " AND start_date BETWEEN '{$date_from}' AND '{$date_to}'";
+            $lb_where_date_attr = " WHERE start_date BETWEEN '{$date_from}' AND '{$date_to}'";
+        }
+
         $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_quizcategories WHERE id =".$id;
         $x = intval($wpdb->get_var($sql));
 
@@ -593,9 +972,17 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 user_id,
                                 ".$duration_avg."(CAST(duration AS DECIMAL(10))) AS dur_avg,
                                 ".strtoupper($glob_quiz_cat_leadboard_sort)."(CAST(`score` AS DECIMAL(10))) AS avg_score,
-                                ".strtoupper($glob_quiz_cat_leadboard_sort)."(CAST(points AS DECIMAL(10))) AS avg_points
+                                ".strtoupper($glob_quiz_cat_leadboard_sort)."(CAST(points AS DECIMAL(10))) AS avg_points,
+                                (SELECT options
+                                    FROM {$wpdb->prefix}aysquiz_reports
+                                    WHERE quiz_id IN({$quiz_ids}) AND user_id != 0
+                                    {$lb_date_attr}
+                                    ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                    LIMIT 1
+                                ) AS options
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE user_id != 0 AND quiz_id IN({$quiz_ids})
+                            {$lb_date_attr}
                             GROUP BY user_id
                             ORDER BY avg_score DESC, dur_avg
                             LIMIT ".$glob_quiz_cat_leadboard_count;
@@ -608,6 +995,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 ".strtoupper($glob_quiz_cat_leadboard_sort)."(points) AS sum_points
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE user_id != 0 AND quiz_id  IN({$quiz_ids})
+                            {$lb_date_attr}
                             GROUP BY user_id
                             ORDER BY sum_points DESC, dur_sum
                             LIMIT ".$glob_quiz_cat_leadboard_count;
@@ -618,6 +1006,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     SELECT user_id as ue, ".strtoupper($glob_quiz_cat_leadboard_sort)."(CAST(`score` AS DECIMAL(10,0))) AS new_score
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE user_id != 0 AND quiz_id IN({$quiz_ids})
+                                    {$lb_date_attr}
                                     GROUP BY ue
                                  ) AS e
                             JOIN (
@@ -629,6 +1018,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                         CAST(`points` AS DECIMAL(10)) AS points,
                                         options
                                     FROM {$wpdb->prefix}aysquiz_reports
+                                    {$lb_where_date_attr}
                                  ) AS a
                             ON e.ue = a.user_id AND e.new_score = a.score
                             GROUP BY a.user_id
@@ -647,6 +1037,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 options
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE !(user_email='' OR user_email IS NULL) AND quiz_id IN({$quiz_ids})
+                            {$lb_date_attr}
                             GROUP BY user_email
                             ORDER BY avg_score DESC, dur_avg
                             LIMIT ".$glob_quiz_cat_leadboard_count;
@@ -661,6 +1052,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 options
                             FROM {$wpdb->prefix}aysquiz_reports
                             WHERE !(user_email='' OR user_email IS NULL) AND quiz_id IN({$quiz_ids})
+                            {$lb_date_attr}
                             GROUP BY user_email
                             ORDER BY sum_points DESC, dur_sum
                             LIMIT ".$glob_quiz_cat_leadboard_count;
@@ -670,6 +1062,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                     SELECT user_email as ue, ".strtoupper($glob_quiz_cat_leadboard_sort)."(CAST(`score` AS DECIMAL(10,0))) AS new_score
                                     FROM {$wpdb->prefix}aysquiz_reports
                                     WHERE !(user_email='' OR user_email IS NULL) AND quiz_id IN({$quiz_ids})
+                                    {$lb_date_attr}
                                     GROUP BY ue
                                  ) AS e
                             JOIN (
@@ -682,6 +1075,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                                         CAST(`points` AS DECIMAL(10)) AS points,
                                         options
                                     FROM {$wpdb->prefix}aysquiz_reports
+                                    {$lb_where_date_attr}
                                  ) AS a
                             ON e.ue = a.user_email AND e.new_score = a.score
                             GROUP BY a.user_email
@@ -692,6 +1086,10 @@ class Quiz_Maker_Leaderboards_Shortcode
 
             $result = $wpdb->get_results($sql, 'ARRAY_A');
 
+            if ( empty( $result ) ) {
+                $enable_pagination_class = '';
+            }
+
             $c = 1;
             $content = '';
 
@@ -700,19 +1098,28 @@ class Quiz_Maker_Leaderboards_Shortcode
                 '. $glob_quiz_cat_leadboard_cuctom_css .'
             </style>';
 
-            $content .= "<div class='ays_lb_container ays_glb_container'>
-            <ul class='ays_lb_ul ays_glb_ul' style='width: ".$glob_quiz_cat_leadboard_width.";'>
-                <li class='ays_lb_li ays_glb_li' style='background: ".$glob_quiz_cat_leadboard_color.";'>";
+            $content .= "<div class='ays_lb_container ays_glb_container ays-leaderboard-main-container'>
+            <table class='ays_lb_ul ays_glb_ul ". $enable_pagination_class ."' style='width: ".$glob_quiz_cat_leadboard_width.";'>
+                <thead>
+                    <tr class='ays_lb_li ays_glb_li' style='background: ".$glob_quiz_cat_leadboard_color.";'>";
+
             foreach ($glob_quiz_cat_leadboard_columns_order as $key => $value) {
                  if (isset($glob_quiz_cat_leadboard_columns[$value])) {
                     if ($value == '') {
                         continue;
                     }
+                    if ( ! isset( $default_glob_quiz_cat_leadboard_header_value[$value] ) ) {
+                        continue;
+                    }
+
                     $content .= $default_glob_quiz_cat_leadboard_header_value[$value];
                 }
             }
 
-            $content .= "</li>";
+            $content .=
+                    "</tr>
+                </thead>
+                <tbody>";
 
             $dur = 'dur_avg';
             $point = 'avg_points';
@@ -729,6 +1136,7 @@ class Quiz_Maker_Leaderboards_Shortcode
                     $user_id = intval($val['user_id']);
                     $duration = (isset($val[$dur]) && $val[$dur] != '') ? round(floatval($val[$dur]), 2) : '0';
                     $points = (isset($val[$point]) && $val[$point] != '') ? round(floatval($val[$point]), 2) : '0';
+                    $user_avatar = "";
 
                     if ($user_id == 0) {
                         $user_name = (isset($val['user_name']) && $val['user_name'] != '') ? $val['user_name'] : __('Guest', $this->plugin_name);
@@ -742,40 +1150,127 @@ class Quiz_Maker_Leaderboards_Shortcode
                                 continue;
                             }
                         }
+
+                        if ( $glob_quiz_cat_leadboard_enable_user_avatar && !is_null( $user_id ) && $user_id > 0 ) {
+                            $user_avatar_arg = array(
+                                'size' => 20
+                            );
+
+                            $user_avatar_url = get_avatar_url( $user_id, $user_avatar_arg );
+                            if ( !is_null( $user_avatar_url ) && !empty( $user_avatar_url ) ) {
+                                $user_avatar = '<img src="'. $user_avatar_url .'" class="ays-lb-user-avatar">';
+                            }
+                        }
+                    }
+
+                    $duration_for_ordering = $duration;
+                    $duration = Quiz_Maker_Data::secondsToWords($duration);
+                    if ($duration == '') {
+                        $duration = '0 ' . __( 'second' , $this->plugin_name );
                     }
 
                     $ays_default_html_order = array(
-                        "pos"        => "<div class='ays_lb_pos ays_glb_pos'>$c</div>",
-                        "name"       => "<div class='ays_lb_user ays_glb_user'>$user_name</div>",
-                        "score"      => "<div class='ays_lb_score ays_glb_score'>$score %</div>",
-                        "duration"   => "<div class='ays_lb_duration ays_glb_duration'>$duration s</div>",
-                        "points"     => "<div class='ays_lb_points ays_glb_points'>$points</div>",
+                        "pos"        => "<td class='ays_lb_pos ays_glb_pos'>$c</td>",
+                        "name"       => "<td class='ays_lb_user ays_glb_user'><span class='ays-lb-user-avatar-row'>$user_avatar</span><span>$user_name</span></td>",
+                        "score"      => "<td class='ays_lb_score ays_glb_score'>$score %</td>",
+                        "duration"   => "<td class='ays_lb_duration ays_glb_duration' data-order='". $duration_for_ordering ."'>$duration</td>",
+                        "points"     => "<td class='ays_lb_points ays_glb_points'>$points</td>",
                     );
 
-                    $content .= "<li class='ays_lb_li'>";
+                    $attribute_options = (isset($val['options']) && $val['options'] != '') ? json_decode( $val['options'], true ) : '';
+
+                    if($glob_quiz_cat_leadboard_orderby == 'email'){
+                        if($glob_quiz_cat_leadboard_sort == 'avg' || $glob_quiz_cat_leadboard_sort == 'sum'){
+
+                            $custom_fields_user_email = (isset($val['user_email']) && $val['user_email'] != '') ? sanitize_email( $val['user_email'] ) : '';
+
+                            if ( $custom_fields_user_email != "" ) {
+                                $sql2 = "SELECT options
+                                        FROM {$wpdb->prefix}aysquiz_reports
+                                        WHERE quiz_id IN({$quiz_ids}) AND user_email = '{$custom_fields_user_email}'
+                                        {$lb_date_attr}
+                                        ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                        LIMIT 1";
+                                $result2 = $wpdb->get_row($sql2, "ARRAY_A");
+
+                                $attribute_options = (isset($result2['options']) && $result2['options'] != '') ? json_decode( $result2['options'], true ) : '';
+                            }
+                        }
+                    } elseif ( $glob_quiz_cat_leadboard_orderby == 'id' ) {
+                        if($glob_quiz_cat_leadboard_sort == 'avg' || $glob_quiz_cat_leadboard_sort == 'sum'){
+
+                            if ( isset( $user_id ) && $user_id > 0 ) {
+                                $sql2 = "SELECT options
+                                        FROM {$wpdb->prefix}aysquiz_reports
+                                        WHERE user_id = {$user_id} AND quiz_id IN({$quiz_ids})
+                                        {$lb_date_attr}
+                                        ORDER BY {$wpdb->prefix}aysquiz_reports.id DESC
+                                        LIMIT 1";
+                                $result2 = $wpdb->get_row($sql2, "ARRAY_A");
+
+                                $attribute_options = (isset($result2['options']) && $result2['options'] != '') ? json_decode( $result2['options'], true ) : '';
+                            }
+                        }
+                    }
+
+                    $attribute_info = array();
+                    if($attribute_options != ''){
+                        $attribute_info = (isset($attribute_options['attributes_information']) && !empty( $attribute_options['attributes_information'] )) ? $attribute_options['attributes_information'] : array();
+                    }
+
+                    if( !empty($leaderboard_by_quiz_cat) ){
+                        foreach ($leaderboard_by_quiz_cat as $custom_field_key => $custom_field_value) {
+                            if(isset( $attribute_info[$custom_field_value] ) && $attribute_info[$custom_field_value] != ''){
+                                $ays_default_html_order[$custom_field_key] = "<td class='ays_glb_custom_fields ays_lb_custom_fields'>" .$attribute_info[$custom_field_value]. "</td>";
+                            }else{
+                                $ays_default_html_order[$custom_field_key] = "<td class='ays_glb_custom_fields ays_lb_custom_fields'></td>";
+                            }
+                        }
+                    }
+
+                    $content .= "<tr class='ays_lb_li'>";
                     foreach ($glob_quiz_cat_leadboard_columns_order as $key => $value) {
                         if (isset($glob_quiz_cat_leadboard_columns_order[$value])) {
                             if ($value == '') {
                                 continue;
                             }
+                            if ( ! isset( $ays_default_html_order[$value] ) ) {
+                                continue;
+                            }
+                            
                             $content .= $ays_default_html_order[$value];
                         }
                     }
 
-                    $content .= "</li>";
+                    $content .= "</tr>";
                     $c++;
                 }
             }else{
-                $content .= "<li class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</li>";
+                $content .= "<tr>";
+                    $content .= "<td class='ays_not_data'>" . __("There is no data yet", $this->plugin_name) . "</td>";
+                $content .= "</tr>";
             }
 
-            $content .= "</ul>
+            $content .= "</tbody>
+                </table>
             </div>";
 
             // echo $content;
+            $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
 
             return str_replace(array("\r\n", "\n", "\r"), '', $content);
         }
     }
 
+    public function color_inverse($color){
+        $color = str_replace('#', '', $color);
+        if (strlen($color) != 6){ return '000000'; }
+        $rgb = '';
+        for ($x=0; $x < 3; $x++){
+            $c = 255 - hexdec(substr($color,(2*$x),2));
+            $c = ($c < 0) ? 0 : dechex($c);
+            $rgb .= (strlen($c) < 2) ? '0'.$c : $c;
+        }
+        return '#'.$rgb;
+    }
 }

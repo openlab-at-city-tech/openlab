@@ -1,6 +1,6 @@
 <?php
 global $ays_quiz_db_version;
-$ays_quiz_db_version = '21.0.3';
+$ays_quiz_db_version = '21.1.0';
 /**
  * Fired during plugin activation
  *
@@ -40,6 +40,7 @@ class Quiz_Maker_Activator {
         $quizes_table               = $wpdb->prefix . 'aysquiz_quizes';
         $questions_table            = $wpdb->prefix . 'aysquiz_questions';
         $question_categories_table  = $wpdb->prefix . 'aysquiz_categories';
+        $question_tags_table        = $wpdb->prefix . 'aysquiz_question_tags';
         $answers_table              = $wpdb->prefix . 'aysquiz_answers';
         $reports_table              = $wpdb->prefix . 'aysquiz_reports';
         $rates_table                = $wpdb->prefix . 'aysquiz_rates';
@@ -47,11 +48,13 @@ class Quiz_Maker_Activator {
         $orders_table               = $wpdb->prefix . 'aysquiz_orders';
         $attributes_table           = $wpdb->prefix . 'aysquiz_attributes';
         $settings_table             = $wpdb->prefix . 'aysquiz_settings';
+        $question_reports_table     = $wpdb->prefix . 'aysquiz_question_reports';
         $charset_collate = $wpdb->get_charset_collate();
 
         if($installed_ver != $ays_quiz_db_version)  {
             $sql="CREATE TABLE `".$quiz_categories_table."` (
                 `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `author_id` INT(16) UNSIGNED NOT NULL DEFAULT '0',
                 `title` VARCHAR(256) NOT NULL,
                 `description` TEXT  NOT NULL,
                 `published` TINYINT(1) UNSIGNED NOT NULL,
@@ -81,6 +84,7 @@ class Quiz_Maker_Activator {
                 `ordering` INT(16) NOT NULL,
                 `published` TINYINT UNSIGNED NOT NULL,
                 `create_date` DATETIME DEFAULT NULL,
+                `quiz_url` TEXT DEFAULT NULL,
                 `options` TEXT NULL DEFAULT NULL,
                 `intervals` TEXT NULL DEFAULT NULL,
                 PRIMARY KEY (`id`)
@@ -100,6 +104,7 @@ class Quiz_Maker_Activator {
                 `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `author_id` INT(16) UNSIGNED NOT NULL DEFAULT '0',
                 `category_id` INT(16) UNSIGNED NOT NULL,
+                `tag_id` TEXT DEFAULT NULL,
                 `question` TEXT NOT NULL,
                 `question_title` TEXT NOT NULL,
                 `question_image` TEXT NULL DEFAULT NULL,
@@ -113,6 +118,7 @@ class Quiz_Maker_Activator {
                 `create_date` DATETIME DEFAULT NULL,
                 `not_influence_to_score` TEXT DEFAULT NULL,
                 `weight` DOUBLE DEFAULT 1,
+                `answers_weight` DOUBLE DEFAULT 0,
                 `options` TEXT DEFAULT NULL,
                 PRIMARY KEY (`id`)
             )$charset_collate;";
@@ -129,6 +135,7 @@ class Quiz_Maker_Activator {
 
             $sql="CREATE TABLE `".$question_categories_table."` (
                 `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `author_id` INT(16) UNSIGNED NOT NULL DEFAULT '0',
                 `title` VARCHAR(256) NOT NULL,
                 `description` TEXT NOT NULL,
                 `published` TINYINT UNSIGNED NOT NULL,
@@ -145,13 +152,35 @@ class Quiz_Maker_Activator {
                 dbDelta( $sql );
             }
 
+            $sql="CREATE TABLE `".$question_tags_table."` (
+                `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `author_id` INT(16) UNSIGNED NOT NULL DEFAULT '0',
+                `title` VARCHAR(256) NOT NULL,
+                `description` TEXT NOT NULL,
+                `status` VARCHAR(256) DEFAULT 'published',
+                `options` TEXT DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            )$charset_collate;";
+
+            $sql_schema = "SELECT * FROM INFORMATION_SCHEMA.TABLES
+                           WHERE table_schema = '".DB_NAME."' AND table_name = '".$question_tags_table."' ";
+            $results = $wpdb->get_results($sql_schema);
+
+            if(empty($results)){
+                $wpdb->query( $sql );
+            }else{
+                dbDelta( $sql );
+            }
+
             $sql="CREATE TABLE `".$attributes_table."` (
                 `id` INT(16) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `author_id` INT(16) UNSIGNED NOT NULL DEFAULT '0',
                 `name` VARCHAR(256) NOT NULL,
                 `type` VARCHAR(256) NOT NULL,
                 `slug` VARCHAR(256) NOT NULL,
                 `options` TEXT DEFAULT NULL,
                 `published` TINYINT UNSIGNED NOT NULL,
+                `attr_options` TEXT NULL DEFAULT NULL,
                 PRIMARY KEY (`id`)
             )$charset_collate;";
 
@@ -175,6 +204,8 @@ class Quiz_Maker_Activator {
                 `weight` DOUBLE DEFAULT 0,
                 `keyword` VARCHAR(256) DEFAULT NULL,
                 `placeholder` TEXT DEFAULT NULL,
+                `slug` VARCHAR(256) DEFAULT NULL,
+                `options` TEXT DEFAULT NULL,
                 PRIMARY KEY (`id`)
             )$charset_collate;";
 
@@ -209,6 +240,8 @@ class Quiz_Maker_Activator {
                 `options` TEXT NOT NULL,
                 `read` tinyint(3) NOT NULL DEFAULT 0,
                 `status` VARCHAR(256) DEFAULT 'finished',
+                `paid` tinyint(3) NOT NULL DEFAULT 0,
+                `unique_id` TEXT NOT NULL DEFAULT '',
                 PRIMARY KEY (`id`)
             )$charset_collate;";
 
@@ -257,7 +290,9 @@ class Quiz_Maker_Activator {
                 `order_email` TEXT NULL DEFAULT NULL,
                 `amount` TEXT NOT NULL,
                 `payment_date` DATETIME NOT NULL,
+                `payment_type` TEXT DEFAULT NULL,
                 `type` TEXT DEFAULT NULL,
+                `status` TEXT DEFAULT NULL,
                 `options` TEXT DEFAULT NULL,
                 PRIMARY KEY (`id`)
             )$charset_collate;";
@@ -326,6 +361,26 @@ class Quiz_Maker_Activator {
                 dbDelta( $sql );
             }
 
+            $sql="CREATE TABLE `".$question_reports_table."`(
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `question_id` INT(11) NOT NULL,
+                `report_text` TEXT NOT NULL,
+                `resolved` TINYINT(1) NOT NULL DEFAULT 0,
+                `create_date` DATETIME DEFAULT NULL,
+                `resolve_date` DATETIME DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            )$charset_collate;";
+
+            $sql_schema = "SELECT * FROM INFORMATION_SCHEMA.TABLES
+                           WHERE table_schema = '".DB_NAME."' AND table_name = '".$question_reports_table."' ";
+            $results = $wpdb->get_results($sql_schema);
+
+            if(empty($results)){
+                $wpdb->query( $sql );
+            }else{
+                dbDelta( $sql );
+            }
+
             $sql = "SELECT * FROM INFORMATION_SCHEMA.STATISTICS 
                     WHERE TABLE_NAME = '".$quizes_table."'
                     AND INDEX_NAME = 'FK_quiz_category' 
@@ -365,7 +420,7 @@ class Quiz_Maker_Activator {
                 $wpdb->query($sql);
             }
             
-            update_option( 'ays_quiz_db_version', $ays_quiz_db_version );
+            update_site_option( 'ays_quiz_db_version', $ays_quiz_db_version );
             
             $quiz_categories = $wpdb->get_var( "SELECT COUNT(*) FROM " . $quiz_categories_table );            
             if( intval($quiz_categories) == 0 ){
@@ -542,9 +597,11 @@ class Quiz_Maker_Activator {
             "mad_mimi",
             "convertKit",
             "get_response",
+            "recaptcha",
             "leaderboard",
             "buttons_texts",
             "quiz_default_options",
+            "fields_placeholders",
             "options"
         );
         

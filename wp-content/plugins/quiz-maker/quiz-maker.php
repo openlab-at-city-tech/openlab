@@ -15,8 +15,8 @@ ob_start();
  * @wordpress-plugin
  * Plugin Name:       Quiz Maker
  * Plugin URI:        http://ays-pro.com/index.php/wordpress/quiz-maker
- * Description:       This plugin allows you make unlimited number of quizes.
- * Version:           21.6.9
+ * Description:       Create powerful and engaging quizzes, tests, and exams in minutes. Build an unlimited number of quizzes and questions.
+ * Version:           21.7.7
  * Author:            Quiz Maker team
  * Author URI:        http://ays-pro.com/
  * License:           GPL-2.0+
@@ -36,8 +36,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AYS_QUIZ_NAME_VERSION', '21.6.9' );
-define( 'AYS_QUIZ_VERSION', '21.6.9' );
+define( 'AYS_QUIZ_NAME_VERSION', '21.7.7' );
+define( 'AYS_QUIZ_VERSION', '21.7.7' );
 define( 'AYS_QUIZ_NAME', 'quiz-maker' );
 
 if( ! defined( 'AYS_QUIZ_BASENAME' ) )
@@ -120,8 +120,8 @@ require plugin_dir_path( __FILE__ ) . 'quiz/quiz-maker-block.php';
  * @since    1.0.0
  */
 function run_quiz_maker() {
-    add_action( 'activated_plugin', 'quiz_maker_activation_redirect_method' );
-    add_action( 'admin_notices', 'general_admin_notice' );
+    // add_action( 'activated_plugin', 'quiz_maker_activation_redirect_method' );
+    add_action( 'admin_notices', 'quiz_maker_general_admin_notice' );
 	$plugin = new Quiz_Maker();
 	$plugin->run();
 
@@ -133,39 +133,41 @@ function quiz_maker_activation_redirect_method( $plugin ) {
     }
 }
 
-function general_admin_notice(){
+function quiz_maker_general_admin_notice(){
     global $wpdb;
     if ( isset($_GET['page']) && strpos($_GET['page'], AYS_QUIZ_NAME) !== false ) {
         ?>
          <div class="ays-notice-banner">
             <div class="navigation-bar">
                 <div id="navigation-container">
-                    <a class="logo-container" href="https://ays-pro.com/" target="_blank">
-                        <img class="logo" src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/ays_pro.png'; ?>" alt="AYS Pro logo" title="AYS Pro logo"/>
-                    </a>
+                    <div class="logo-container">
+                        <a href="https://ays-pro.com/wordpress/quiz-maker" target="_blank" style="display: inline-block;box-shadow: none;">
+                            <img  class="quiz-logo" src="<?php echo plugin_dir_url( __FILE__ ) . 'admin/images/icons/quiz-maker-logo.png'; ?>" alt="<?php echo __( "Quiz Maker", AYS_QUIZ_NAME ); ?>" title="<?php echo __( "Quiz Maker", AYS_QUIZ_NAME ); ?>"/>
+                        </a>
+                    </div>
                     <ul id="menu">
-                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://ays-pro.com/wordpress-quiz-maker-user-manual" target="_blank">Documentation</a></li>
-                        <li class="modile-ddmenu-xs"><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/reviews/" target="_blank">Rate Us</a></li>
-                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank">Demo</a></li>
-                        <li class="modile-ddmenu-xs take_survay"><a class="ays-btn" href="http://bit.ly/2tLbooO" target="_blank">Take a survey</a></li>
-                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/" target="_blank">Contact us</a></li>
+                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank"><?php echo __( "Demo", AYS_QUIZ_NAME ); ?></a></li>
+                        <li><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/" target="_blank"><?php echo __( "Support Forum", AYS_QUIZ_NAME ); ?></a></li>
+<!--                        <li class="modile-ddmenu-xs take_survay"><a class="ays-btn" href="http://bit.ly/2tLbooO" target="_blank">Take a survey</a></li>-->
+                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://quiz-plugin.com/upcoming-quiz-maker-features" target="_blank"><?php echo __( "Upcoming Features", AYS_QUIZ_NAME ); ?></a></li>
+                        <li class="modile-ddmenu-xs take_survay"><a class="ays-btn" href="https://ays-demo.com/questionnaire-about-quiz-maker-plugin/" target="_blank"><?php echo __( "Grab your GIFT", AYS_QUIZ_NAME ); ?></a></li>
+                        <li class="modile-ddmenu-lg"><a class="ays-btn" href="https://ays-pro.com/contact" target="_blank"><?php echo __( "Contact us", AYS_QUIZ_NAME ); ?></a></li>
                         <li class="modile-ddmenu-md">
                             <a class="toggle_ddmenu" href="javascript:void(0);"><i class="ays_fa ays_fa_ellipsis_h"></i></a>
                             <ul class="ddmenu" data-expanded="false">
-                                <li><a class="ays-btn" href="https://ays-pro.com/wordpress-quiz-maker-user-manual" target="_blank">Documentation</a></li>
-                                <li><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/reviews/" target="_blank">Rate Us</a></li>
-                                <li><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank">Demo</a></li>
-                                <li><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/" target="_blank">Contact us</a></li>
+                                <li><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank"><?php echo __( "Demo", AYS_QUIZ_NAME ); ?></a></li>
+                                 <li><a class="ays-btn" href="https://quiz-plugin.com/upcoming-quiz-maker-features" target="_blank"><?php echo __( "Upcoming Features", AYS_QUIZ_NAME ); ?></a></li>
+                                <li><a class="ays-btn" href="https://ays-pro.com/contact" target="_blank"><?php echo __( "Contact us", AYS_QUIZ_NAME ); ?></a></li>
                             </ul>
                         </li>
                         <li class="modile-ddmenu-sm">
                             <a class="toggle_ddmenu" href="javascript:void(0);"><i class="ays_fa ays_fa_ellipsis_h"></i></a>
                             <ul class="ddmenu" data-expanded="false">
-                                <li><a class="ays-btn" href="https://ays-pro.com/wordpress-quiz-maker-user-manual" target="_blank">Documentation</a></li>
-                                <li><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/reviews/" target="_blank">Rate Us</a></li>
-                                <li><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank">Demo</a></li>
-                                <li class="take_survay"><a class="ays-btn" href="http://bit.ly/2tLbooO" target="_blank">Take a survey</a></li>
-                                <li><a class="ays-btn" href="https://wordpress.org/support/plugin/quiz-maker/" target="_blank">Contact us</a></li>
+                                <li><a class="ays-btn" href="https://quiz-plugin.com/wordpress-quiz-plugin-pro-demo/" target="_blank"><?php echo __( "Demo", AYS_QUIZ_NAME ); ?></a></li>
+<!--                                <li class="take_survay"><a class="ays-btn" href="http://bit.ly/2tLbooO" target="_blank">Take a survey</a></li>-->
+                                <li><a class="ays-btn" href="https://quiz-plugin.com/upcoming-quiz-maker-features" target="_blank"><?php echo __( "Upcoming Features", AYS_QUIZ_NAME ); ?></a></li>
+                                <li class="take_survay"><a class="ays-btn" href="https://ays-demo.com/questionnaire-about-quiz-maker-plugin/" target="_blank"><?php echo __( "Grab your GIFT", AYS_QUIZ_NAME ); ?></a></li>
+                                <li><a class="ays-btn" href="https://ays-pro.com/contact" target="_blank"><?php echo __( "Contact us", AYS_QUIZ_NAME ); ?></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -176,18 +178,20 @@ function general_admin_notice(){
             $ays_quiz_rate = intval(get_option('ays_quiz_rate_state'));
             $sql = "SELECT COUNT(*) AS res_count FROM {$wpdb->prefix}aysquiz_reports";
             $results = $wpdb->get_row($sql, 'ARRAY_A');
-            if(($results['res_count'] >= 5000) && ($ays_quiz_rate < 4)){
-                update_option('ays_quiz_rate_state', 4);
-                ays_quiz_rate_message(5000);
-            }elseif(($results['res_count'] >= 1000) && ($ays_quiz_rate < 3)){                
-                update_option('ays_quiz_rate_state', 3);
-                ays_quiz_rate_message(1000);
-            }elseif(($results['res_count'] >= 500) && ($ays_quiz_rate < 2)){                
-                update_option('ays_quiz_rate_state', 2);
-                ays_quiz_rate_message(500);
-            }elseif(($results['res_count'] >= 100) && ($ays_quiz_rate < 1)){                
-                update_option('ays_quiz_rate_state', 1);
-                ays_quiz_rate_message(100);
+            if (!is_null($results) && !empty($results)) {
+                if(($results['res_count'] >= 5000) && ($ays_quiz_rate < 4)){
+                    update_option('ays_quiz_rate_state', 4);
+                    ays_quiz_rate_message(5000);
+                }elseif(($results['res_count'] >= 1000) && ($ays_quiz_rate < 3)){                
+                    update_option('ays_quiz_rate_state', 3);
+                    ays_quiz_rate_message(1000);
+                }elseif(($results['res_count'] >= 500) && ($ays_quiz_rate < 2)){                
+                    update_option('ays_quiz_rate_state', 2);
+                    ays_quiz_rate_message(500);
+                }elseif(($results['res_count'] >= 100) && ($ays_quiz_rate < 1)){                
+                    update_option('ays_quiz_rate_state', 1);
+                    ays_quiz_rate_message(100);
+                }
             }
     }
 }

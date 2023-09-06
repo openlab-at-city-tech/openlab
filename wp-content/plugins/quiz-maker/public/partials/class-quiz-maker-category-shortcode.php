@@ -40,6 +40,12 @@ class Quiz_Maker_Quiz_Category
      */
     private $version;
 
+    private $html_class_prefix = 'ays-quiz-category-';
+    private $html_name_prefix = 'ays-quiz-';
+    private $name_prefix = 'ays_quiz_';
+    private $unique_id;
+    private $unique_id_in_class;
+
     /**
      * Initialize the class and set its properties.
      *
@@ -53,6 +59,8 @@ class Quiz_Maker_Quiz_Category
         $this->version = $version;
 
         add_shortcode('ays_quiz_cat', array($this, 'ays_generate_quiz_categories_method'));
+        add_shortcode('ays_quiz_cat_title', array($this, 'ays_generate_quiz_categories_title_method'));
+        add_shortcode('ays_quiz_cat_description', array($this, 'ays_generate_quiz_categories_description_method'));
     }
 
     // Categories shortcode
@@ -103,9 +111,11 @@ class Quiz_Maker_Quiz_Category
             $conteiner_flex_class = 'ays-quiz-category-container-flex';
         }
 
+        $category_title = (isset($category['title']) && $category['title'] != '') ? stripslashes($category['title']) : "";
+
         $content .= "<h2 class='ays-quiz-category-title' style='text-align:center;'>
             <span style='font-size:3rem;'>". __( "Category", $this->plugin_name) .":</span>
-            <em>". stripslashes($category['title']) ."</em>
+            <em>". $category_title ."</em>
         </h2>";
 
         if(isset($category['description']) && $category['description'] != ''){
@@ -120,8 +130,125 @@ class Quiz_Maker_Quiz_Category
             $content .= "</div>";
         }
         $content .= "</div>";
+        $content = Quiz_Maker_Data::ays_quiz_translate_content( $content );
         // echo $content;
+
         return str_replace(array("\r\n", "\n", "\r"), "\n", $content);
     }
 
+    /*
+    ==========================================
+        Show quiz category title | Start
+    ==========================================
+    */
+
+    public function ays_generate_quiz_categories_title_method( $attr ) {
+
+        $id = (isset($attr['id']) && $attr['id'] != '') ? absint( sanitize_text_field($attr['id']) ) : null;
+
+        if (is_null($id) || $id == 0 ) {
+            $quiz_category_title = "";
+            return str_replace(array("\r\n", "\n", "\r"), "\n", $quiz_category_title);
+        }
+
+        $unique_id = uniqid();
+        $this->unique_id = $unique_id;
+        $this->unique_id_in_class = $unique_id;
+
+        $quiz_category_title = $this->ays_generate_cat_title_html( $id );
+        $quiz_category_title = Quiz_Maker_Data::ays_quiz_translate_content( $quiz_category_title );
+
+        return str_replace(array("\r\n", "\n", "\r"), "\n", $quiz_category_title);
+    }
+
+    public function ays_generate_cat_title_html( $id ) {
+
+        $results = Quiz_Maker_Data::get_quiz_category_by_id($id);
+
+        $content_html = array();
+        
+        if( is_null( $results ) || empty( $results ) ){
+            $content_html = "";
+            return $content_html;
+        }
+
+        $category_title = (isset($results['title']) && $results['title'] != '') ? sanitize_text_field($results['title']) : "";
+
+        if ( $category_title == "" ) {
+            $content_html = "";
+            return $content_html;
+        }
+
+        $content_html[] = "<span class='". $this->html_name_prefix ."category-title' id='". $this->html_name_prefix ."category-title-". $this->unique_id_in_class ."' data-id='". $this->unique_id ."'>";
+            $content_html[] = $category_title;
+        $content_html[] = "</span>";
+
+        $content_html = implode( '' , $content_html);
+
+        return $content_html;
+    }
+
+    /*
+    ==========================================
+        Show quiz category title | End
+    ==========================================
+    */
+
+    /*
+    ==========================================
+        Show quiz category description | Start
+    ==========================================
+    */
+
+    public function ays_generate_quiz_categories_description_method( $attr ) {
+
+        $id = (isset($attr['id']) && $attr['id'] != '') ? absint( sanitize_text_field($attr['id']) ) : null;
+
+        if (is_null($id) || $id == 0 ) {
+            $quiz_category_description = "";
+            return str_replace(array("\r\n", "\n", "\r"), "\n", $quiz_category_description);
+        }
+
+        $unique_id = uniqid();
+        $this->unique_id = $unique_id;
+        $this->unique_id_in_class = $unique_id;
+
+        $quiz_category_description = $this->ays_generate_cat_description_html( $id );
+        $quiz_category_description = Quiz_Maker_Data::ays_quiz_translate_content( $quiz_category_description );
+
+        return str_replace(array("\r\n", "\n", "\r"), "\n", $quiz_category_description);
+    }
+
+    public function ays_generate_cat_description_html( $id ) {
+
+        $results = Quiz_Maker_Data::get_quiz_category_by_id($id);
+
+        $content_html = array();
+        
+        if( is_null( $results ) || empty( $results ) ){
+            $content_html = "";
+            return $content_html;
+        }
+
+        $category_description = (isset($results['description']) && $results['description'] != '') ? Quiz_Maker_Data::ays_autoembed($results['description']) : "";
+
+        if ( $category_description == "" ) {
+            $content_html = "";
+            return $content_html;
+        }
+
+        $content_html[] = "<div class='". $this->html_name_prefix ."category-description' id='". $this->html_name_prefix ."category-description-". $this->unique_id_in_class ."' data-id='". $this->unique_id ."'>";
+            $content_html[] = $category_description;
+        $content_html[] = "</div>";
+
+        $content_html = implode( '' , $content_html);
+
+        return $content_html;
+    }
+
+    /*
+    ==========================================
+        Show quiz category description | End
+    ==========================================
+    */
 }

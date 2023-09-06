@@ -1,7 +1,7 @@
 <div id="tab6" class="ays-quiz-tab-content <?php echo ($ays_quiz_tab == 'tab6') ? 'ays-quiz-tab-content-active' : ''; ?>">
     <p class="ays-subtitle"><?php echo __('User Information',$this->plugin_name)?></p>
     <hr/>
-    <div class="form-group row">
+    <div class="form-group row ays-quiz-result-message-vars-parent">
         <div class="col-sm-4">
             <label for="ays_form_title">
                 <?php echo __('Information Form title',$this->plugin_name)?>
@@ -12,6 +12,7 @@
         </div>
         <div class="col-sm-8" style="border-left: 1px solid #ccc">
             <?php
+            echo $quiz_message_vars_information_form_html;
             $content = wpautop(stripslashes((isset($options['form_title'])) ? $options['form_title'] : ''));
             $editor_id = 'ays_form_title';
             $settings = array('editor_height' => $quiz_wp_editor_height, 'textarea_name' => 'ays_form_title', 'editor_class' => 'ays-textarea', 'media_elements' => false);
@@ -55,6 +56,11 @@
         </div>
         <div class="col-sm-8 ays_divider_left ays_toggle_target <?php echo (!isset($options['information_form']) || $options['information_form'] == "disable") ? 'display_none' : ''; ?>">
             <p class="ays_required_field_title"><?php echo __('Form Fields',$this->plugin_name)?></p>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <blockquote><?php echo __( 'Double-click on the Information Form fields to drop them to the Active Fields and vice versa (from Active Fields back to Available Fields), Or you can drag and drop the fields from the Available Fields to the Active Fields.', $this->plugin_name ); ?></blockquote>
+                </div>
+            </div>
             <hr>
             <div class="checkbox_carousel">
                 <div class="form_fields_wrap">
@@ -69,6 +75,11 @@
                             if(in_array($slug, $default_attributes)){
                                 $attr_name = $slug;
                                 $attr_value = "off";
+                            }
+
+                            if ( $attr_name == "ays_form_name" || $attr_name == "ays_form_email" || $attr_name == "ays_form_phone" ) {
+                                // $attribute['name'] .= " " . __( "(Default)", $this->plugin_name );
+                                $attribute['name'] .= "<p class='ays_quiz_small_hint_text_for_message_variables' style='margin:0;'>" . __( "(Default)", $this->plugin_name ) . "</p>";
                             }
                             ?>
                             <li class="checkbox_ays ui-state-default">
@@ -104,6 +115,10 @@
                             if(in_array($slug, $default_attributes)){
                                 $attr_name = $slug;
                                 $attr_value = "on";
+                            }
+                            
+                            if ( $attr_name == "ays_form_name" || $attr_name == "ays_form_email" || $attr_name == "ays_form_phone" ) {
+                                $attribute['name'] .= "<p class='ays_quiz_small_hint_text_for_message_variables' style='margin:0;'>" . __( "(Default)", $this->plugin_name ) . "</p>";
                             }
                             ?>
                             <li class="checkbox_ays ui-state-highlight">
@@ -180,4 +195,20 @@
             </div>
         </div>
     </div> <!-- Autofill logged in user data -->
+    <hr>
+    <div class="form-group row">
+        <div class="col-sm-4">
+            <label for="ays_display_fields_labels">
+                <?php echo __('Display form fields with labels',$this->plugin_name); ?>
+                <a class="ays_help" data-toggle="tooltip" title="<?php echo esc_attr( __('Show labels of form fields on the top of each field. Texts of labels will be taken from the "Fields placeholder" section on the General setting page.',$this->plugin_name) ); ?>">
+                    <i class="ays_fa ays_fa_info_circle"></i>
+                </a>
+            </label>
+        </div>
+        <div class="col-sm-8">
+            <div class="information_form_settings">
+                <input type="checkbox" id="ays_display_fields_labels" name="ays_display_fields_labels" value="on" <?php echo $display_fields_labels ? "checked" : ""; ?>>
+            </div>
+        </div>
+    </div>
 </div>

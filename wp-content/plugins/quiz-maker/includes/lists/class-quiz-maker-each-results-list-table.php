@@ -36,6 +36,13 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
 
     public function extra_tablenav( $which ){
         global $wpdb;
+        global $wp_version;
+
+        $version1 = $wp_version;
+        $operator = '<=';
+        $version2 = '5.0';
+        $versionCompare = Quiz_Maker_Data::ays_version_compare($version1, $operator, $version2);
+
         $users_sql = "SELECT {$wpdb->prefix}aysquiz_reports.user_id
                       FROM {$wpdb->prefix}aysquiz_reports 
                       WHERE quiz_id = " . $_GET['quiz'] . "
@@ -79,9 +86,10 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
                     }
                 ?>
             </select>
-            <input type="button" id="doaction-<?php echo $which; ?>" class="user-filter-apply-<?php echo $which; ?> button" value="Filter">
+            <input type="button" id="doaction-<?php echo $which; ?>" class="user-filter-apply-<?php echo $which; ?> button" value="<?php echo __( "Filter", $this->plugin_name ); ?>">
+            
+            <a style="margin: <?php echo ( $versionCompare ? '3px' : '0px' ); ?> 8px 0 0;" href="<?php echo $clear_url; ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         </div>
-        <a style="margin: 3px 8px 0 0;display:inline-block;" href="<?php echo $clear_url; ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         <?php
     }
     
@@ -107,11 +115,19 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         }else{
             $selected_all = " style='font-weight:bold;' ";
         }
+
+        $admin_url = get_admin_url( null, 'admin.php' );
+        $get_properties = http_build_query($_GET);
+
+        $status_links_url = $admin_url . "?" . $get_properties;
+        $read_url = esc_url( add_query_arg('fstatus', 1, $status_links_url) );
+        $unread_url = esc_url( add_query_arg('fstatus', 0, $status_links_url) );
+        
         $link = "?page=" . esc_attr( $_REQUEST['page'] ) . "&quiz=" . $_REQUEST['quiz'];
         $status_links = array(
             "all" => "<a ".$selected_all." href='".$link."'>". __("All", $this->plugin_name) ." (".$all_count.")</a>",
-            "readed" => "<a ".$selected_1." href='".$link."&fstatus=1'>". __("Read", $this->plugin_name) ." (".$published_count.")</a>",
-            "unreaded"   => "<a ".$selected_0." href='".$link."&fstatus=0'>". __("Unread", $this->plugin_name) . " (".$unpublished_count.")</a>"
+            "readed" => "<a ".$selected_1." href='". $read_url ."'>". __("Read", $this->plugin_name) ." (".$published_count.")</a>",
+            "unreaded"   => "<a ".$selected_0." href='". $unread_url ."'>". __("Unread", $this->plugin_name) . " (".$unpublished_count.")</a>"
         );
         return $status_links;
     }
@@ -129,15 +145,25 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         global $wpdb;
         $sql = "SELECT * FROM {$wpdb->prefix}aysquiz_reports";
 
-        $sql .= self::get_where_condition();
+        $sql .= self::get_where_condition( null, true );
         
         if ( ! empty( $_REQUEST['orderby'] )) {
-            $order_by = esc_sql( $_REQUEST['orderby'] );
+
+            $order_by = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'id';
+            $order_by_order = ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
             if($order_by == 'score'){
                 $order_by = 'CAST(score as UNSIGNED)';
+                $order_by .= $order_by_order;
+                $sql .= ' ORDER BY ' . $order_by;
+            }else{
+                $sql_orderby = sanitize_sql_orderby($order_by);
+
+                if ( $sql_orderby ) {
+                    $sql .= ' ORDER BY ' . $sql_orderby;
+                } else {
+                    $sql .= ' ORDER BY id DESC';
+                }
             }
-            $sql .= ' ORDER BY ' . $order_by;
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' DESC';
         }
         else{
             $sql .= ' ORDER BY id DESC';
@@ -149,27 +175,40 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         return $result;
     }
 
-    public static function get_where_condition(){
+    public static function get_where_condition( $filter_val, $flag = true ){
+        global $wpdb;
+
         $where = array();
         $sql = '';
 
         $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
         if( $search ){
             $s = array();
-            $s[] = ' `user_name` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `user_email` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `user_phone` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `score` LIKE \'%'.$search.'%\' ';
+            $s[] = ' `user_name` LIKE \'%'. esc_sql( $wpdb->esc_like( $search ) ) .'%\' ';
+            $s[] = ' `user_email` LIKE \'%'. esc_sql( $wpdb->esc_like( $search ) ) .'%\' ';
+            $s[] = ' `unique_code` LIKE \'%'. esc_sql( $wpdb->esc_like( $search ) ) .'%\' ';
+            $s[] = ' `user_phone` LIKE \'%'. esc_sql( $wpdb->esc_like( $search ) ) .'%\' ';
+            $s[] = ' `score` LIKE \'%'. esc_sql( $wpdb->esc_like( $search ) ) .'%\' ';
             $where[ 's' ] = ' ( ' . implode(' OR ', $s) . ' ) ';
         }
 
-        if(isset( $_REQUEST['fstatus'] )){            
+        if( $flag && isset( $_REQUEST['fstatus'] ) && is_numeric( $_REQUEST['fstatus'] ) && ! is_null( sanitize_text_field( $_REQUEST['fstatus'] ) )){            
             $fstatus = intval($_REQUEST['fstatus']);
             switch($fstatus){
                 case 0:
                     $where[] = ' `read` = 0 ';
                     break;
                 case 1:                    
+                    $where[] = ' `read` = 1 ';
+                    break;
+            }
+        } elseif ( isset( $filter_val ) && $filter_val != "" ) {
+            $fstatus = intval($filter_val);
+            switch($fstatus){
+                case 2:
+                    $where[] = ' `read` = 0 ';
+                    break;
+                case 3:                    
                     $where[] = ' `read` = 1 ';
                     break;
             }
@@ -234,16 +273,15 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         global $wpdb;
 
         $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports";
-        $sql .= self::get_where_condition();
+        $sql .= self::get_where_condition( null, true );
         return $wpdb->get_var( $sql );
     }
     
     public static function all_record_count() {
         global $wpdb;
 
-        $quiz_id = intval($_REQUEST['quiz']);
-        $quiz_id = ' WHERE `quiz_id` = '.$quiz_id.' AND `status` = "finished" ';
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports".$quiz_id;
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports";
+        $sql .= self::get_where_condition( null, false );
 
         return $wpdb->get_var( $sql );
     }
@@ -251,9 +289,9 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
     public static function unread_records_count() {
         global $wpdb;
 
-        $quiz_id = intval($_REQUEST['quiz']);
-        $quiz_id = ' AND `quiz_id` = '.$quiz_id.' AND `status` = "finished" ';
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports WHERE `read` = 0".$quiz_id;
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports ";
+
+        $sql .= self::get_where_condition( 2, false );
 
         return $wpdb->get_var( $sql );
     }
@@ -261,9 +299,9 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
     public function readed_records_count() {
         global $wpdb;
 
-        $quiz_id = intval($_REQUEST['quiz']);
-        $quiz_id = ' AND `quiz_id` = '.$quiz_id.' AND `status` = "finished" ';
-        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports WHERE `read` = 1".$quiz_id;
+        $sql = "SELECT COUNT(*) FROM {$wpdb->prefix}aysquiz_reports ";
+
+        $sql .= self::get_where_condition( 3, false );
 
         return $wpdb->get_var( $sql );
     }
@@ -339,7 +377,7 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         if(! empty($report)){
             foreach ($report as $key){
                 $report = json_decode($key["options"]);
-                $questions = $report->correctness;
+                $questions = isset( $report->correctness ) ? $report->correctness : array();
                 foreach ($questions as $i => $v){
                     $q = (int) substr($i ,12);
                     if(isset($questions_ids[$q])) {
@@ -412,10 +450,11 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             foreach($results as $res){
                 $score = intval($res->score);
                 if($score >= intval($inter->interval_min) && $score <= intval($inter->interval_max)){
+                    $intervalner[$inter_key] = array();
                     $intervalner[$inter_key][] = intval($res->count);
                 }
             }
-            $intervalner[$inter_key] = !isset($intervalner[$inter_key]) ? 0 : array_sum($intervalner[$inter_key]);
+            $intervalner[$inter_key] = isset($intervalner[$inter_key]) && is_array( $intervalner[$inter_key] ) && !empty( $intervalner[$inter_key] ) ? array_sum($intervalner[$inter_key]) : 0;
         }
         
         $intervals = array();
@@ -431,6 +470,93 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             'scores' => $results
         );
     }
+
+    public static function ays_quiz_get_users_keywords_statistics( $quiz_id = "" ) {
+        global $wpdb;
+
+        $id = (isset( $quiz_id ) && $quiz_id != "") ? intval(sanitize_text_field($quiz_id)) : intval(sanitize_text_field($_GET['quiz']));
+
+        $sql = "SELECT options
+                FROM `{$wpdb->prefix}aysquiz_reports`
+                WHERE `{$wpdb->prefix}aysquiz_reports`.`quiz_id` = ". $id ." AND `status` = 'finished'
+                ORDER BY id ASC";
+        $results = $wpdb->get_results( $sql, "ARRAY_A" );
+
+        $keywords = array();
+        $keyword_percentage = array();
+        $res_keyword = array();
+        $keywords_text_arr = array();
+        if( !is_null( $results ) && !empty($results) ){
+
+            foreach ($results as $_key => $encode_options) {
+                if( !isset( $encode_options['options'] ) || is_null( $encode_options['options'] ) || $encode_options['options'] == "" ){
+                    continue;
+                }
+                $options = json_decode($encode_options['options'], true);
+
+                $answers_keyword_counts = (isset( $options['answers_keyword_counts'] ) && $options['answers_keyword_counts'] != "") ? $options['answers_keyword_counts'] : array();
+
+                if(isset( $answers_keyword_counts) &&  !empty($answers_keyword_counts)){
+                    foreach ($answers_keyword_counts as $keyword => $value) {
+                        $mv_keyword_percentage = 0;
+                        if( isset($keywords[$keyword]) && !empty( $keywords[$keyword] )  ){
+                            $keywords[$keyword] += $value;
+                        } else {
+                            $keywords[$keyword] = $value;
+                        }
+                    }
+                }
+            }
+            
+            if( !empty( $keywords ) ){
+                $total_keywords_count = array_sum($keywords);
+
+                $sql = "SELECT intervals
+                        FROM `{$wpdb->prefix}aysquiz_quizes`
+                        WHERE `id` = ". $id;
+                $quiz_results = $wpdb->get_row( $sql, "ARRAY_A" );
+
+                if( !is_null( $quiz_results ) && !empty($quiz_results) ){
+                    $quiz_results_arr = isset( $quiz_results['intervals'] ) && $quiz_results['intervals'] != "" ? json_decode($quiz_results['intervals'], true) : array();
+
+                    if( !empty( $quiz_results_arr ) ){
+                        foreach ($quiz_results_arr as $k_key => $k_value) {
+                            $interval_text = (isset( $k_value['interval_text'] ) && $k_value['interval_text'] != "") ? $k_value['interval_text'] : "";
+                            $interval_keyword = (isset( $k_value['interval_keyword'] ) && $k_value['interval_keyword'] != "") ? $k_value['interval_keyword'] : "";
+                            if( !empty($interval_keyword) ){
+
+                                $keywords_text_arr[ $interval_keyword ] = $interval_text;
+                            }
+                        }
+                    }
+                }                
+
+
+                ksort($keywords);
+                foreach ($keywords as $__key => $__value) {
+                    $mv_keyword_percentage = 0;
+                    if($total_keywords_count > 0){
+                        $mv_keyword_percentage_val = ( $__value / $total_keywords_count ) * 100;
+                        $mv_keyword_percentage = round($mv_keyword_percentage_val,2);
+                    }
+                    $keyword_percentage[$__key] = $mv_keyword_percentage;
+
+                    $keyword_text = (isset( $keywords_text_arr[$__key] ) && $keywords_text_arr[$__key] != "") ? $keywords_text_arr[$__key] : "";
+
+                    $res_keyword[] = array(
+                        'keyword' => $keyword_text . " (" .$__key . " - " . $mv_keyword_percentage . '%)',
+                        'count' => $__value,
+                    );
+                }
+            }
+        }
+
+        return array(
+            'keywords' => $res_keyword,
+            'keyword_percentage' => $keyword_percentage
+        );
+    }
+    
 
     /** Text displayed when no customer data is available */
     public function no_items() {
@@ -459,6 +585,8 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             case 'unique_code':
             case 'certificate':
             case 'status':
+            case 'note_text':
+            case 'paid':
             case 'id':
                 return $item[$column_name];
                 break;
@@ -534,12 +662,12 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             if($rate_id !== null){
                 $margin_of_icon = "style='margin-left: 5px;'";
                 $result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}aysquiz_rates WHERE id={$rate_id}", "ARRAY_A");
-                $review = $result['review'];
+                $review = (isset( $result['review'] ) && $result['review'] != "") ? $result['review'] : "";
                 $reason = esc_attr(stripslashes(wpautop($review)));
                 if($reason == ''){
                     $reason = __("No review provided", $this->plugin_name);
                 }
-                $score = $result['score'];
+                $score = (isset( $result['score'] ) && $result['score'] != "") ? $result['score'] : "";
                 $title = "<span href='javascript:void(0)' data-result='".absint( $item['id'] )."' class='ays-show-rate-avg'>
                             $score
                             <a class='ays_help' $margin_of_icon data-template='<div class=\"rate_tooltip tooltip\" role=\"tooltip\"><div class=\"arrow\"></div><div class=\"rate-tooltip-inner tooltip-inner\"></div></div>' data-toggle='tooltip' data-html='true' title='$reason'><i class='ays_fa ays_fa_info_circle'></i></a>
@@ -626,7 +754,19 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         $quiz_options = $wpdb->get_var( $sql );
         $quiz_options = $quiz_options != '' ? json_decode( $quiz_options, true ) : array();
         $pass_score = isset( $quiz_options['pass_score'] ) && $quiz_options['pass_score'] != '' ? absint( $quiz_options['pass_score'] ) : 0;
-        $score = absint( $item['score'] );
+        // Quiz Pass Score type
+        $quiz_pass_score_type = (isset($quiz_options['quiz_pass_score_type']) && $quiz_options['quiz_pass_score_type'] != '') ? sanitize_text_field( $quiz_options['quiz_pass_score_type'] ) : 'percentage';
+        
+        switch ( $quiz_pass_score_type ) {
+            case 'point':
+                $score = absint( $item['points'] );
+                break;
+            
+            case 'percentage':
+            default:
+                $score = absint( $item['score'] );
+                break;
+        }
 
         $status = '';
         if( $pass_score != 0 ){
@@ -638,6 +778,24 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         }
 
         return $status;
+    }
+
+    public function column_note_text( $item ) {
+        $options = json_decode($item['options']);
+
+        $note_text = ( isset($options->note_text) && $options->note_text != '' ) ? sanitize_text_field(stripslashes($options->note_text)) : '';
+        $note_text = "<div class='ays-admin-note-text-list-table-". $item['id'] ."'>" . $note_text . "</div>";
+
+        return $note_text;
+    }
+
+    public function column_paid( $item ) {
+        global $wpdb;
+        $payed = __( "Unpaid", $this->plugin_name );
+        if( isset( $item['paid'] ) && $item['paid'] == 1){
+            $payed = __( "Paid", $this->plugin_name );
+        }
+        return $payed;
     }
 
     /**
@@ -662,6 +820,8 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             'unique_code'   => __( 'Unique Code', $this->plugin_name ),
             'certificate'   => __( 'Certificate', $this->plugin_name ),
             'status'        => __( 'Status', $this->plugin_name ),
+            'note_text'     => __( 'Admin Note', $this->plugin_name ),
+            'paid'          => __( 'Paid', $this->plugin_name ),
             'id'            => __( 'ID', $this->plugin_name ),
             );
         return $columns;
@@ -718,6 +878,7 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             'duraiton'      => array( 'duraiton', true ),
             'score'         => array( 'score', true ),
             'unique_code'   => array( 'unique_code', true ),
+            'paid'          => array( 'paid', true ),
         );
 
         return $sortable_columns;
@@ -812,7 +973,7 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         // If the mark-as-read bulk action is triggered
         if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'mark-as-read' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'mark-as-read' ) ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -834,7 +995,7 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
         // If the mark-as-unread bulk action is triggered
         if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'mark-as-unread' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'mark-as-unread' ) ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -859,7 +1020,7 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -1015,13 +1176,16 @@ class Quiz_Each_Results_List_Table extends WP_List_Table{
             $get_question = $wpdb->get_row( "SELECT question FROM {$wpdb->prefix}aysquiz_questions WHERE id=".$id, 'ARRAY_A' );
             $persent = $answer_count > 0 ? round(($right_count*100)/$answer_count) : 0;
 //           $question = strlen(strip_tags($get_question[0]['question'])) > 35 ? substr(strip_tags($get_question[0]['question']),0,35)."..." : strip_tags($get_question[0]['question']);
-            $question = Quiz_Maker_Admin::ays_restriction_string("word", strip_tags($get_question['question']), 4);
-            $question = html_entity_decode(stripslashes($question), ENT_COMPAT);
-            array_push($data_array,array(
-                'question' => $question,
-                'count' => "$persent",
-                'fill' => "100"
-            ));
+
+            if ( !is_null( $get_question ) && !empty( $get_question ) ) {
+                $question = Quiz_Maker_Admin::ays_restriction_string("word", strip_tags($get_question['question']), 4);
+                $question = html_entity_decode(stripslashes($question), ENT_COMPAT);
+                array_push($data_array,array(
+                    'question' => $question,
+                    'count' => "$persent",
+                    'fill' => "100"
+                ));
+            }
         }
 
         return $data_array;

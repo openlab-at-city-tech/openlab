@@ -3,7 +3,7 @@ am4core.useTheme(am4themes_animated);
 if(document.getElementById("chart1_div")){
     var chart = am4core.create("chart1_div", am4charts.XYChart);
 
-    chart.data = chart1_data;
+    chart.data = ( typeof chart1_data != "undefined" ) ? chart1_data : {};
 
     chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
 
@@ -58,7 +58,7 @@ if(document.getElementById("chart1_div")){
 if(document.getElementById("chart2_div")){
     var chart2 = am4core.create("chart2_div", am4charts.RadarChart);
     // Add data
-    chart2.data = chart2_data;
+    chart2.data = ( typeof chart2_data != "undefined" ) ? chart2_data : {};
 
     // Make chart not full circle
     chart2.startAngle = -90;
@@ -133,7 +133,7 @@ function aysQuizzesChart(chartData){
     var series = chart.series.push(new am4charts.LineSeries());
     series.dataFields.dateX = "date";
     series.dataFields.valueY = "visits";
-    series.tooltipText = "Completes: [bold]{valueY}[/]";
+    series.tooltipText = AysQuizQuestionChartObj.completes + ": [bold]{valueY}[/]";
     series.fillOpacity = 0.3;
 
 
@@ -148,9 +148,38 @@ function aysQuizzesChart(chartData){
     });
 }
 
-if(document.getElementById("chart_quizzes_div")){
-    aysQuizzesChart(chartQuizzesData);
-}
+(function($){
+    $(document).ready(function(){
+        if(document.getElementById("chart_quizzes_div")){
+            var quiz_id = 0;
+            var action = 'get_current_quiz_statistic';
+            var $this = $(document).find('#quiz_stat_select');
+            $this.parent().find('img.loader').removeClass('display_none');
+            $.ajax({
+                type: "POST",
+                url: quiz_maker_ajax.ajax_url,
+                data: {
+                    quiz_id: quiz_id,
+                    action: action
+                },
+                dataType: "json",
+                success: function (response) {
+                    $("#ays_quiz_stat").remove();
+                    $("#chart-container").append('<canvas id="ays_quiz_stat" width="400" height="400"></canvas>');
+                    var dates = response.dates;
+                    var dates_values = response.dates_values;
+                    var ctx = $("#ays_quiz_stat");
+                    dates_values.push(Math.max.apply(Math,dates_values)+Math.round(Math.max.apply(Math,dates_values)/5));
+                    aysQuizzesChart({dates: dates, values: dates_values});
+                    $('.ays-collection').children().not(':first').remove();
+                    $('.ays-collection').append(response.charts);
+
+                    $this.parent().find('img.loader').addClass('display_none');
+                }
+            });
+        }
+    });
+})(jQuery);
 
 
 function generateChartData(chartDatas) {
@@ -174,17 +203,17 @@ if(document.getElementById("chart_quiz_div")){
     var types = [];
 
     // Add data
-    if(parseInt(chart3_data.guests) !== 0){
+    if( typeof chart3_data != "undefined" && parseInt(chart3_data.guests) !== 0){
         types.push({
-            type: "Guest",
+            type: AysQuizQuestionChartObj.guest,
             percent: chart3_data.guests,
             color: chart.colors.getIndex(4),
         });
     }
         
-    if(parseInt(chart3_data.loggedIn) !== 0){
+    if( typeof chart3_data != "undefined" && parseInt(chart3_data.loggedIn) !== 0){
         types.push({
-            type: "Logged in user",
+            type: AysQuizQuestionChartObj.loggedInUsers,
             percent: chart3_data.loggedIn,
             color: chart.colors.getIndex(1),
             subs: chart3_data.userRoles
@@ -269,8 +298,7 @@ if(document.getElementById("chart3_div")){
     var chart3 = am4core.create("chart3_div", am4charts.XYChart);
 
     // Add data
-//    console.log(chart4_data)
-    chart3.data = chart4_data.scores;
+    chart3.data = ( typeof chart4_data != "undefined" ) ? chart4_data.scores : {};
     
     // Create axes
     var categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
@@ -293,8 +321,8 @@ if(document.getElementById("chart3_div")){
     var series = chart3.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "count";
     series.dataFields.categoryX = "score";
-    series.name = "Users";
-    series.columns.template.tooltipText = "Count: [bold]{valueY}[/]";
+    series.name = AysQuizQuestionChartObj.users;
+    series.columns.template.tooltipText = AysQuizQuestionChartObj.count + ": [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
 
     var columnTemplate = series.columns.template;
@@ -308,7 +336,7 @@ if(document.getElementById("chart4_div")){
     var chart4 = am4core.create("chart4_div", am4charts.PieChart);
     chart4.hiddenState.properties.opacity = 0; // this creates initial fade-in
     
-    chart4.data = chart4_data.intervals;
+    chart4.data = ( typeof chart4_data != "undefined" ) ? chart4_data.intervals : {};
 
     // Add and configure Series
     var pieSeries = chart4.series.push(new am4charts.PieSeries());
@@ -322,7 +350,7 @@ if(document.getElementById("chart4_div")){
     pieSeries.slices.template.stroke = am4core.color("#fff");
     pieSeries.slices.template.strokeWidth = 2;
     pieSeries.slices.template.strokeOpacity = 1;
-    pieSeries.slices.template.tooltipText = "Interval: [bold]{interval}[/]\nUsers: [bold]{count}[/]";
+    pieSeries.slices.template.tooltipText = AysQuizQuestionChartObj.interval + ": [bold]{interval}[/]\n"+ AysQuizQuestionChartObj.users +": [bold]{count}[/]";
     pieSeries.slices.template
       // change the cursor on hover to make it apparent the object can be interacted with
       .cursorOverStyle = [
@@ -334,7 +362,7 @@ if(document.getElementById("chart4_div")){
 
     pieSeries.alignLabels = true;
     pieSeries.labels.template.bent = true;
-    pieSeries.labels.template.text = "[bold]{interval}[/]: {count} users";
+    pieSeries.labels.template.text = "[bold]{interval}[/]: {count} "+ AysQuizQuestionChartObj.users2;
     pieSeries.labels.template.radius = 3;
     pieSeries.labels.template.padding(0,0,0,0);
 
@@ -359,7 +387,7 @@ if(document.getElementById("chart5_div")){
     var chart5 = am4core.create("chart5_div", am4charts.PieChart);
     chart5.hiddenState.properties.opacity = 0; // this creates initial fade-in
 
-    chart5.data = chart5_data;
+    chart5.data = ( typeof chart5_data != "undefined" ) ? chart5_data : {};
 
     // Add and configure Series
     var pieSeries = chart5.series.push(new am4charts.PieSeries());
@@ -367,13 +395,13 @@ if(document.getElementById("chart5_div")){
     pieSeries.dataFields.category = "cat_name";
 
     // Let's cut a hole in our Pie chart the size of 30% the radius
-    chart4.innerRadius = am4core.percent(30);
+    // chart4.innerRadius = am4core.percent(30);
 
     // Put a thick white border around each Slice
     pieSeries.slices.template.stroke = am4core.color("#fff");
     pieSeries.slices.template.strokeWidth = 2;
     pieSeries.slices.template.strokeOpacity = 1;
-    pieSeries.slices.template.tooltipText = "Category: [bold]{cat_name}[/]\nPercent: [bold]{percent}[/]";
+    pieSeries.slices.template.tooltipText = AysQuizQuestionChartObj.category + ": [bold]{cat_name}[/]\n"+ AysQuizQuestionChartObj.percent +": [bold]{percent}[/]";
     pieSeries.slices.template
       // change the cursor on hover to make it apparent the object can be interacted with
       .cursorOverStyle = [
@@ -404,3 +432,58 @@ if(document.getElementById("chart5_div")){
     hoverShadow.blur = 5;
 
 }
+
+if(document.getElementById("chart6_div")){
+
+    // Create chart
+    var chart6 = am4core.create("chart6_div", am4charts.PieChart);
+    chart6.hiddenState.properties.opacity = 0; // this creates initial fade-in
+    
+    chart6.data = ( typeof chart6_data != "undefined" ) ? chart6_data.keywords : {};
+    var data_percentage = ( typeof chart6_data != "undefined" ) ? chart6_data.keyword_percentage : {};
+
+    // Add and configure Series
+    var pieSeries = chart6.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "count";
+    pieSeries.dataFields.category = "keyword";
+
+    // Let's cut a hole in our Pie chart the size of 30% the radius
+    chart6.innerRadius = am4core.percent(30);
+
+    // Put a thick white border around each Slice
+    pieSeries.slices.template.stroke = am4core.color("#fff");
+    pieSeries.slices.template.strokeWidth = 2;
+    pieSeries.slices.template.strokeOpacity = 1;
+    pieSeries.slices.template.tooltipText = AysQuizQuestionChartObj.keyword + ": [bold]{keyword}[/]\n"+ AysQuizQuestionChartObj.count +": [bold]{count}[/]";
+    pieSeries.slices.template
+      // change the cursor on hover to make it apparent the object can be interacted with
+      .cursorOverStyle = [
+        {
+          "property": "cursor",
+          "value": "pointer"
+        }
+      ];
+
+    pieSeries.alignLabels = true;
+    pieSeries.labels.template.bent = true;
+    // pieSeries.labels.template.text = "[bold]{keyword}[/]: {count} "+ AysQuizQuestionChartObj.users2;
+    pieSeries.labels.template.text = "[bold]{keyword}[/]: {count} ";
+    pieSeries.labels.template.radius = 3;
+    pieSeries.labels.template.padding(0,0,0,0);
+
+    pieSeries.ticks.template.disabled = false;
+
+    // Create a base filter effect (as if it's not there) for the hover to return to
+    var shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter);
+    shadow.opacity = 0;
+
+    // Create hover state
+    var hoverState = pieSeries.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+    // Slightly shift the shadow and make it more prominent on hover
+    var hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter);
+    hoverShadow.opacity = 0.7;
+    hoverShadow.blur = 5;
+
+}
+

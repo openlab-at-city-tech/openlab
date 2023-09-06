@@ -150,7 +150,8 @@
 
 
 /* Quiz circle */
-.ays-quiz-container .lds-circle {
+.ays-quiz-container .lds-circle,
+.ays-modal-reports .lds-circle {
   display: inline-block;
   width: 52px;
   height: 52px;

@@ -13,6 +13,11 @@ class Quiz_Maker_Settings_Actions {
             $success = 0;
             $paypal_client_id = isset($data['ays_paypal_client_id']) ? $data['ays_paypal_client_id'] : '';
             $paypal_payment_terms = isset($data['ays_paypal_payment_terms']) ? $data['ays_paypal_payment_terms'] : '';
+            $paypal_extra_check = isset($data['ays_paypal_extra_check']) && $data['ays_paypal_extra_check'] == 'on' ? 'on' : 'off';
+            $paypal_subscribtion_duration = isset($_REQUEST['ays-subscribtion-duration']) && $_REQUEST['ays-subscribtion-duration'] != '' ? absint( sanitize_text_field( $_REQUEST['ays-subscribtion-duration'] ) ) : '';
+            $paypal_subscribtion_duration_by = isset($_REQUEST['ays-subscribtion-duration-by']) && $_REQUEST['ays-subscribtion-duration-by'] != '' ? sanitize_text_field( $_REQUEST['ays-subscribtion-duration-by'] ) : 'day';
+
+
             $roles = (isset($data['ays_user_roles']) && !empty($data['ays_user_roles'])) ? $data['ays_user_roles'] : array('administrator');
             $mailchimp_username = isset($data['ays_mailchimp_username']) ? $data['ays_mailchimp_username'] : '';
             $mailchimp_api_key = isset($data['ays_mailchimp_api_key']) ? $data['ays_mailchimp_api_key'] : '';
@@ -61,6 +66,9 @@ class Quiz_Maker_Settings_Actions {
             $paypal_options = array(
                 "paypal_client_id" => $paypal_client_id,
                 "payment_terms"    => $paypal_payment_terms,
+                "extra_check"      => $paypal_extra_check,
+                "subscribtion_duration" => $paypal_subscribtion_duration,
+                "subscribtion_duration_by" => $paypal_subscribtion_duration_by,
             );
             
             $ays_leadboard_count      = isset($data['ays_leadboard_count']) ? $data['ays_leadboard_count'] : '5';
@@ -75,6 +83,11 @@ class Quiz_Maker_Settings_Actions {
             $ind_leadboard_columns = (isset( $data['ays_ind_leadboard_columns'] ) && !empty($data['ays_ind_leadboard_columns'])) ? $data['ays_ind_leadboard_columns'] : array();
             $ind_leadboard_columns_order = (isset( $data['ays_ind_leadboard_columns_order'] ) && !empty($data['ays_ind_leadboard_columns_order'])) ? $data['ays_ind_leadboard_columns_order'] : array();
 
+            // Enable pagination
+            $ind_leadboard_enable_pagination = (isset($data['ays_leadboard_enable_pagination']) && $data['ays_leadboard_enable_pagination'] == "on") ? "on" : "off";
+
+            // Enable User Avatar
+            $ind_leadboard_enable_user_avatar = (isset($data['ays_leadboard_enable_user_avatar']) && $data['ays_leadboard_enable_user_avatar'] == "on") ? "on" : "off";
 
             $ays_gleadboard_count     = isset($data['ays_gleadboard_count']) ? $data['ays_gleadboard_count'] : '5';
             $ays_gleadboard_width     = isset($data['ays_gleadboard_width']) ? $data['ays_gleadboard_width'] : '0';
@@ -87,6 +100,12 @@ class Quiz_Maker_Settings_Actions {
             $glob_leadboard_columns = (isset( $data['ays_glob_leadboard_columns'] ) && !empty($data['ays_glob_leadboard_columns'])) ? $data['ays_glob_leadboard_columns'] : array();
             $glob_leadboard_columns_order = (isset( $data['ays_glob_leadboard_columns_order'] ) && !empty($data['ays_glob_leadboard_columns_order'])) ? $data['ays_glob_leadboard_columns_order'] : array();
 
+            // Enable pagination
+            $glob_leadboard_enable_pagination = (isset($data['ays_gleadboard_enable_pagination']) && $data['ays_gleadboard_enable_pagination'] == "on") ? "on" : "off";
+
+            // Enable User Avatar
+            $glob_leadboard_enable_user_avatar = (isset($data['ays_gleadboard_enable_user_avatar']) && $data['ays_gleadboard_enable_user_avatar'] == "on") ? "on" : "off";
+
             $ays_gleadboard_quiz_cat_count     = isset($data['ays_gleadboard_quiz_cat_count']) ? $data['ays_gleadboard_quiz_cat_count'] : '5';
             $ays_gleadboard_quiz_cat_width     = isset($data['ays_gleadboard_quiz_cat_width']) ? $data['ays_gleadboard_quiz_cat_width'] : '0';
             $ays_gleadboard_quiz_cat_orderby   = isset($data['ays_gleadboard_quiz_cat_orderby']) ? $data['ays_gleadboard_quiz_cat_orderby'] : 'id';
@@ -98,6 +117,11 @@ class Quiz_Maker_Settings_Actions {
             $glob_quiz_cat_leadboard_columns = (isset( $data['ays_glob_quiz_cat_leadboard_columns'] ) && !empty($data['ays_glob_quiz_cat_leadboard_columns'])) ? $data['ays_glob_quiz_cat_leadboard_columns'] : array();
             $glob_quiz_cat_leadboard_columns_order = (isset( $data['ays_glob_quiz_cat_leadboard_columns_order'] ) && !empty($data['ays_glob_quiz_cat_leadboard_columns_order'])) ? $data['ays_glob_quiz_cat_leadboard_columns_order'] : array();
 
+            // Enable pagination
+            $glob_quiz_cat_leadboard_enable_pagination = (isset($data['ays_gleadboard_quiz_cat_enable_pagination']) && $data['ays_gleadboard_quiz_cat_enable_pagination'] == "on") ? "on" : "off";
+
+            // Enable User Avatar
+            $glob_quiz_cat_leadboard_enable_user_avatar = (isset($data['ays_gleadboard_quiz_cat_enable_user_avatar']) && $data['ays_gleadboard_quiz_cat_enable_user_avatar'] == "on") ? "on" : "off";
 
             $leaderboard = array(                
                 'individual' => array(
@@ -110,8 +134,10 @@ class Quiz_Maker_Settings_Actions {
                     'leadboard_points_display' => $ays_leadboard_points_display,
 
                     // Individual leadboard shortcode
-                    "ind_leadboard_columns" => $ind_leadboard_columns,
-                    "ind_leadboard_columns_order" => $ind_leadboard_columns_order,
+                    "ind_leadboard_columns"         => $ind_leadboard_columns,
+                    "ind_leadboard_columns_order"   => $ind_leadboard_columns_order,
+                    "leadboard_enable_pagination"   => $ind_leadboard_enable_pagination,
+                    "leadboard_enable_user_avatar"  => $ind_leadboard_enable_user_avatar,
                 ),
                 'global' => array(
                     'count' => $ays_gleadboard_count,
@@ -122,8 +148,10 @@ class Quiz_Maker_Settings_Actions {
                     'gleadboard_custom_css' => $ays_gleadboard_custom_css,
 
                     // Global leadboard shortcode
-                    "glob_leadboard_columns" => $glob_leadboard_columns,
-                    "glob_leadboard_columns_order" => $glob_leadboard_columns_order,
+                    "glob_leadboard_columns"        => $glob_leadboard_columns,
+                    "glob_leadboard_columns_order"  => $glob_leadboard_columns_order,
+                    "leadboard_enable_pagination"   => $glob_leadboard_enable_pagination,
+                    "leadboard_enable_user_avatar"  => $glob_leadboard_enable_user_avatar,
                 ),
                 'global_quiz_cat' => array(
                     'count' => $ays_gleadboard_quiz_cat_count,
@@ -134,8 +162,10 @@ class Quiz_Maker_Settings_Actions {
                     'gleadboard_custom_css' => $ays_gleadboard_quiz_cat_custom_css,
 
                     // Global Quiz Cat leadboard shortcode
-                    "glob_quiz_cat_leadboard_columns" => $glob_quiz_cat_leadboard_columns,
+                    "glob_quiz_cat_leadboard_columns"       => $glob_quiz_cat_leadboard_columns,
                     "glob_quiz_cat_leadboard_columns_order" => $glob_quiz_cat_leadboard_columns_order,
+                    "leadboard_enable_pagination"           => $glob_quiz_cat_leadboard_enable_pagination,
+                    "leadboard_enable_user_avatar"          => $glob_quiz_cat_leadboard_enable_user_avatar,
                 )
             );
 
@@ -167,6 +197,26 @@ class Quiz_Maker_Settings_Actions {
                 'login_button'          => $login_button,
             );
 
+            $quiz_fields_placeholder_name  = (isset($_REQUEST['ays_quiz_fields_placeholder_name']) && $_REQUEST['ays_quiz_fields_placeholder_name'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_placeholder_name'] ) ) : 'Name' ;
+
+            $quiz_fields_placeholder_eamil = (isset($_REQUEST['ays_quiz_fields_placeholder_eamil']) && $_REQUEST['ays_quiz_fields_placeholder_eamil'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_placeholder_eamil'] ) ) : 'Email' ;
+
+            $quiz_fields_placeholder_phone = (isset($_REQUEST['ays_quiz_fields_placeholder_phone']) && $_REQUEST['ays_quiz_fields_placeholder_phone'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_placeholder_phone'] ) ) : 'Phone Number' ;
+
+            $quiz_fields_label_name  = (isset($_REQUEST['ays_quiz_fields_label_name']) && $_REQUEST['ays_quiz_fields_label_name'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_label_name'] ) ) : 'Name' ;
+
+            $quiz_fields_label_eamil = (isset($_REQUEST['ays_quiz_fields_label_eamil']) && $_REQUEST['ays_quiz_fields_label_eamil'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_label_eamil'] ) ) : 'Email' ;
+
+            $quiz_fields_label_phone = (isset($_REQUEST['ays_quiz_fields_label_phone']) && $_REQUEST['ays_quiz_fields_label_phone'] != '') ? stripslashes( sanitize_text_field( $_REQUEST['ays_quiz_fields_label_phone'] ) ) : 'Phone Number' ;
+
+            $fields_placeholders = array(
+                'quiz_fields_placeholder_name'   => $quiz_fields_placeholder_name,
+                'quiz_fields_placeholder_eamil'  => $quiz_fields_placeholder_eamil,
+                'quiz_fields_placeholder_phone'  => $quiz_fields_placeholder_phone,
+                'quiz_fields_label_name'         => $quiz_fields_label_name,
+                'quiz_fields_label_eamil'        => $quiz_fields_label_eamil,
+                'quiz_fields_label_phone'        => $quiz_fields_label_phone,
+            );
                         
             $question_default_type = isset($data['ays_question_default_type']) ? $data['ays_question_default_type'] : '';
             $question_default_cat = isset($data['ays_questions_default_cat']) ? $data['ays_questions_default_cat'] : '';
@@ -201,6 +251,18 @@ class Quiz_Maker_Settings_Actions {
                 $results_title_length = 5;
             }
 
+            // Question categories title length
+            $question_categories_title_length = (isset($_REQUEST['ays_question_categories_title_length']) && intval($_REQUEST['ays_question_categories_title_length']) != 0) ? absint(sanitize_text_field($_REQUEST['ays_question_categories_title_length'])) : 5;
+            if($question_categories_title_length == 0){
+                $question_categories_title_length = 5;
+            }
+
+            // Quiz categories title length
+            $quiz_categories_title_length = (isset($_REQUEST['ays_quiz_categories_title_length']) && intval($_REQUEST['ays_quiz_categories_title_length']) != 0) ? absint(sanitize_text_field($_REQUEST['ays_quiz_categories_title_length'])) : 5;
+
+            // Reviews title length
+            $quiz_reviews_title_length = (isset($_REQUEST['ays_quiz_reviews_title_length']) && intval($_REQUEST['ays_quiz_reviews_title_length']) != 0) ? absint(sanitize_text_field($_REQUEST['ays_quiz_reviews_title_length'])) : 5;
+
             // Do not store IP adressess
             $disable_user_ip = (isset( $data['ays_disable_user_ip'] ) && $data['ays_disable_user_ip'] == 'on') ? 'on' : 'off';
 
@@ -215,6 +277,7 @@ class Quiz_Maker_Settings_Actions {
 
             // Animation Top
             $quiz_animation_top = (isset($data['ays_quiz_animation_top']) && $data['ays_quiz_animation_top'] != '') ? absint(intval($data['ays_quiz_animation_top'])) : 100;
+            $quiz_enable_animation_top = (isset( $_REQUEST['ays_quiz_enable_animation_top'] ) && sanitize_text_field( $_REQUEST['ays_quiz_enable_animation_top'] ) == 'on') ? 'on' : 'off';
 
             // Quiz All results column
             $quiz_all_results_columns = (isset($data['ays_quiz_all_results_columns']) && !empty($data['ays_quiz_all_results_columns'])) ? $data['ays_quiz_all_results_columns'] : array();
@@ -238,45 +301,165 @@ class Quiz_Maker_Settings_Actions {
             // User roles to change quiz
             $user_roles_to_change_quiz = (isset($_REQUEST['ays_user_roles_to_change_quiz']) && !empty( $_REQUEST['ays_user_roles_to_change_quiz'] ) ) ? array_map( 'sanitize_text_field', $_REQUEST['ays_user_roles_to_change_quiz'] ) : array('administrator');
 
+            // Show quiz button to Admins only
+            $quiz_show_quiz_button_to_admin_only = (isset( $_REQUEST['ays_quiz_show_quiz_button_to_admin_only'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_quiz_button_to_admin_only'] ) == 'on') ? 'on' : 'off';
+
+            // Flash Card Width
+            $quiz_flash_card_width = (isset( $_REQUEST['ays_quiz_flash_card_width'] ) && $_REQUEST['ays_quiz_flash_card_width'] != '') ? sanitize_text_field( $_REQUEST['ays_quiz_flash_card_width'] ) : '';
+
+            // Flash Card Color
+            $quiz_flash_card_color = (isset( $_REQUEST['ays_quiz_flash_card_color'] ) && $_REQUEST['ays_quiz_flash_card_color'] != '') ? sanitize_text_field( $_REQUEST['ays_quiz_flash_card_color'] ) : '#ffffff';
+
+            // Flash Card Randomize
+            $quiz_flash_card_randomize = (isset( $_REQUEST['ays_quiz_flash_card_randomize'] ) && $_REQUEST['ays_quiz_flash_card_randomize'] == 'on') ? sanitize_text_field( $_REQUEST['ays_quiz_flash_card_randomize'] ) : 'off';
+
+            //Flash Card Introduction Page
+            $quiz_flash_card_enable_introduction = (isset( $_REQUEST['ays_enable_fc_introduction'] ) && $_REQUEST['ays_enable_fc_introduction'] == 'on') ? 'on' : 'off';
+            $quiz_flash_card_introduction = (isset( $_REQUEST['ays_quiz_flash_card_introduction']) && $_REQUEST['ays_quiz_flash_card_introduction'] != '') ? htmlspecialchars( wp_unslash( $_REQUEST['ays_quiz_flash_card_introduction'] ) ) : '';
+
+            /*
+            ==========================================
+            Result settings start
+            ==========================================
+            */
+
+            // Store all not finished results
+            $store_all_not_finished_results = (isset( $_REQUEST['ays_store_all_not_finished_results'] ) && $_REQUEST['ays_store_all_not_finished_results'] == 'on') ? sanitize_text_field( $_REQUEST['ays_store_all_not_finished_results'] ) : 'off';
+            
+            // Show information form only once
+            $quiz_show_information_form_only_once = (isset( $_REQUEST['ays_quiz_show_information_form_only_once'] ) && $_REQUEST['ays_quiz_show_information_form_only_once'] == 'on') ? sanitize_text_field( $_REQUEST['ays_quiz_show_information_form_only_once'] ) : 'off';
+
+            // Show Result Information
+            $ays_quiz_show_result_info_user_ip = (isset( $_REQUEST['ays_quiz_show_result_info_user_ip'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_user_ip'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_user_id = (isset( $_REQUEST['ays_quiz_show_result_info_user_id'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_user_id'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_user = (isset( $_REQUEST['ays_quiz_show_result_info_user'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_user'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_admin_note = (isset( $_REQUEST['ays_quiz_show_result_info_admin_note'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_admin_note'] ) == 'on') ? 'on' : 'off';
+
+            $ays_quiz_show_result_info_start_date = (isset( $_REQUEST['ays_quiz_show_result_info_start_date'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_start_date'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_duration = (isset( $_REQUEST['ays_quiz_show_result_info_duration'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_duration'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_score = (isset( $_REQUEST['ays_quiz_show_result_info_score'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_score'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_rate = (isset( $_REQUEST['ays_quiz_show_result_info_rate'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_rate'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_unique_code = (isset( $_REQUEST['ays_quiz_show_result_info_unique_code'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_unique_code'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_keywords = (isset( $_REQUEST['ays_quiz_show_result_info_keywords'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_keywords'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_res_by_cats = (isset( $_REQUEST['ays_quiz_show_result_info_res_by_cats'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_res_by_cats'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_coupon = (isset( $_REQUEST['ays_quiz_show_result_info_coupon'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_coupon'] ) == 'on') ? 'on' : 'off';
+            $ays_quiz_show_result_info_certificate = (isset( $_REQUEST['ays_quiz_show_result_info_certificate'] ) && sanitize_text_field( $_REQUEST['ays_quiz_show_result_info_certificate'] ) == 'on') ? 'on' : 'off';
+
+            /*
+            ==========================================
+            Result settings end
+            ==========================================
+            */
+
+            // General CSS File
+            $quiz_exclude_general_css = (isset( $_REQUEST['ays_quiz_exclude_general_css'] ) && sanitize_text_field( $_REQUEST['ays_quiz_exclude_general_css'] ) == 'on') ? 'on' : 'off';
+
+            // Enable question answers
+            $quiz_enable_question_answers = (isset( $_REQUEST['ays_quiz_enable_question_answers'] ) && sanitize_text_field( $_REQUEST['ays_quiz_enable_question_answers'] ) == 'on') ? 'on' : 'off';
+
+            // Quiz All orders column
+            $quiz_all_orders_columns = (isset($_REQUEST['ays_quiz_all_orders_columns']) && !empty($_REQUEST['ays_quiz_all_orders_columns'])) ? $_REQUEST['ays_quiz_all_orders_columns'] : array();
+            $quiz_all_orders_columns_order = (isset($_REQUEST['ays_quiz_all_orders_columns_order']) && !empty($_REQUEST['ays_quiz_all_orders_columns_order'])) ? $_REQUEST['ays_quiz_all_orders_columns_order'] : array();
+
+            // Enable lazy loading attribute for images
+            $quiz_enable_lazy_loading = (isset( $_REQUEST['ays_quiz_enable_lazy_loading'] ) && sanitize_text_field( $_REQUEST['ays_quiz_enable_lazy_loading'] ) == 'on') ? 'on' : 'off';
+
+            // Disable Quiz maker menu item notification
+            $quiz_disable_quiz_menu_notification = (isset( $_REQUEST['ays_quiz_disable_quiz_menu_notification'] ) && sanitize_text_field( $_REQUEST['ays_quiz_disable_quiz_menu_notification'] ) == 'on') ? 'on' : 'off';
+
+            // Disable Results menu item notification
+            $quiz_disable_results_menu_notification = (isset( $_REQUEST['ays_quiz_disable_results_menu_notification'] ) && sanitize_text_field( $_REQUEST['ays_quiz_disable_results_menu_notification'] ) == 'on') ? 'on' : 'off';
+
+            // Enable custom login form redirect if user fail
+            $quiz_enable_custom_login_form_redirect = (isset( $_REQUEST['ays_quiz_enable_custom_login_form_redirect'] ) && sanitize_text_field( $_REQUEST['ays_quiz_enable_custom_login_form_redirect'] ) == 'on') ? 'on' : 'off';
+
+            // Custom login form link
+            $quiz_custom_login_form_redirect_link = (isset( $_REQUEST['ays_quiz_custom_login_form_redirect_link'] ) && $_REQUEST['ays_quiz_custom_login_form_redirect_link'] != '') ? sanitize_url( $_REQUEST['ays_quiz_custom_login_form_redirect_link'] ) : '';
 
             $options = array(
-                "question_default_type"         => $question_default_type,
-                "question_default_cat"          => $question_default_cat,
-                "ays_answer_default_count"      => $ays_answer_default_count,
-                "right_answer_sound"            => $right_answer_sound,
-                "wrong_answer_sound"            => $wrong_answer_sound,
-                "question_title_length"         => $question_title_length,
-                "quizzes_title_length"          => $quizzes_title_length,
-                "results_title_length"          => $results_title_length,
-                "disable_user_ip"               => $disable_user_ip,
+                "question_default_type"                 => $question_default_type,
+                "question_default_cat"                  => $question_default_cat,
+                "ays_answer_default_count"              => $ays_answer_default_count,
+                "right_answer_sound"                    => $right_answer_sound,
+                "wrong_answer_sound"                    => $wrong_answer_sound,
+                "question_title_length"                 => $question_title_length,
+                "quizzes_title_length"                  => $quizzes_title_length,
+                "results_title_length"                  => $results_title_length,
+                "disable_user_ip"                       => $disable_user_ip,
 
                 // User page shortcode
-                "ays_show_result_report"        => $show_result_report,
-                "user_page_columns"             => $user_page_columns,
-                "user_page_columns_order"       => $user_page_columns_order,
-                "user_page_hide_answer"         => $hide_correct_answer,
+                "ays_show_result_report"                => $show_result_report,
+                "user_page_columns"                     => $user_page_columns,
+                "user_page_columns_order"               => $user_page_columns_order,
+                "user_page_hide_answer"                 => $hide_correct_answer,
                 
                 // All results
-                "all_results_columns"           => $all_results_columns,
-                "all_results_columns_order"     => $all_results_columns_order,
-                "all_results_show_publicly"     => $all_results_show_publicly,
-                "quiz_all_results_show_publicly" => $quiz_all_results_show_publicly,
+                "all_results_columns"                   => $all_results_columns,
+                "all_results_columns_order"             => $all_results_columns_order,
+                "all_results_show_publicly"             => $all_results_show_publicly,
+                "quiz_all_results_show_publicly"        => $quiz_all_results_show_publicly,
 
                 // Quiz All results
-                "quiz_all_results_columns"       => $quiz_all_results_columns,
-                "quiz_all_results_columns_order" => $quiz_all_results_columns_order,
+                "quiz_all_results_columns"              => $quiz_all_results_columns,
+                "quiz_all_results_columns_order"        => $quiz_all_results_columns_order,
 
 
-                "keyword_default_max_value"     => $keyword_default_max_value,
-                "quiz_animation_top"            => $quiz_animation_top,
+                "keyword_default_max_value"             => $keyword_default_max_value,
+                "quiz_animation_top"                    => $quiz_animation_top,
+                "quiz_enable_animation_top"             => $quiz_enable_animation_top,
 
-                "quiz_enable_question_allow_html" => $quiz_enable_question_allow_html,
-                "enable_start_button_loader"      => $enable_start_button_loader,
-                "quiz_wp_editor_height"           => $quiz_wp_editor_height,
-                "quiz_textarea_height"            => $quiz_textarea_height,
+                "quiz_enable_question_allow_html"       => $quiz_enable_question_allow_html,
+                "enable_start_button_loader"            => $enable_start_button_loader,
+                "quiz_wp_editor_height"                 => $quiz_wp_editor_height,
+                "quiz_textarea_height"                  => $quiz_textarea_height,
+
+                "quiz_show_quiz_button_to_admin_only"   => $quiz_show_quiz_button_to_admin_only,
+                "question_categories_title_length"      => $question_categories_title_length,
+                "quiz_categories_title_length"          => $quiz_categories_title_length,
+                "quiz_reviews_title_length"             => $quiz_reviews_title_length,
 
                 // User roles options
-                "user_roles_to_change_quiz" => $user_roles_to_change_quiz,
+                "user_roles_to_change_quiz"             => $user_roles_to_change_quiz,
+
+                //Flash Cards
+                "quiz_flash_card_width"                 => $quiz_flash_card_width,
+                "quiz_flash_card_randomize"             => $quiz_flash_card_randomize,
+                "quiz_flash_card_color"                 => $quiz_flash_card_color,
+                "quiz_flash_card_enable_introduction"   => $quiz_flash_card_enable_introduction,
+                "quiz_flash_card_introduction"          => $quiz_flash_card_introduction,
+
+                // Result settings
+                "store_all_not_finished_results"        => $store_all_not_finished_results,
+                "quiz_show_information_form_only_once"  => $quiz_show_information_form_only_once,
+
+                "quiz_exclude_general_css"              => $quiz_exclude_general_css,
+                "quiz_enable_question_answers"          => $quiz_enable_question_answers,
+                "quiz_enable_lazy_loading"              => $quiz_enable_lazy_loading,
+                "quiz_disable_quiz_menu_notification"   => $quiz_disable_quiz_menu_notification,
+                "quiz_disable_results_menu_notification" => $quiz_disable_results_menu_notification,
+
+                // Quiz All orders
+                "quiz_all_orders_columns"               => $quiz_all_orders_columns,
+                "quiz_all_orders_columns_order"         => $quiz_all_orders_columns_order,
+
+                // Show Result Information
+                'ays_quiz_show_result_info_user_ip'     => $ays_quiz_show_result_info_user_ip,
+                'ays_quiz_show_result_info_user_id'     => $ays_quiz_show_result_info_user_id,
+                'ays_quiz_show_result_info_user'        => $ays_quiz_show_result_info_user,
+                'ays_quiz_show_result_info_admin_note'  => $ays_quiz_show_result_info_admin_note,
+
+                'ays_quiz_show_result_info_start_date'  => $ays_quiz_show_result_info_start_date,
+                'ays_quiz_show_result_info_duration'    => $ays_quiz_show_result_info_duration,
+                'ays_quiz_show_result_info_score'       => $ays_quiz_show_result_info_score,
+                'ays_quiz_show_result_info_rate'        => $ays_quiz_show_result_info_rate,
+                'ays_quiz_show_result_info_unique_code' => $ays_quiz_show_result_info_unique_code,
+                'ays_quiz_show_result_info_keywords'    => $ays_quiz_show_result_info_keywords,
+                'ays_quiz_show_result_info_res_by_cats' => $ays_quiz_show_result_info_res_by_cats,
+                'ays_quiz_show_result_info_coupon'      => $ays_quiz_show_result_info_coupon,
+                'ays_quiz_show_result_info_certificate' => $ays_quiz_show_result_info_certificate,
+
+                'quiz_enable_custom_login_form_redirect'    => $quiz_enable_custom_login_form_redirect,
+                'quiz_custom_login_form_redirect_link'      => $quiz_custom_login_form_redirect_link,
             );
             
 //            $month_count = 10;
@@ -327,9 +510,18 @@ class Quiz_Maker_Settings_Actions {
             $fields['stripe'] = json_encode( $stripe );
             $fields['leaderboard'] = json_encode( $leaderboard );
             $fields['buttons_texts'] = json_encode( $buttons_texts, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
-            $fields['options'] = json_encode( $options );
+            $fields['fields_placeholders'] = json_encode( $fields_placeholders, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
+            $fields['options'] = json_encode( $options, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES );
 
             $fields = apply_filters( 'ays_qm_settings_page_integrations_saves', $fields, $data );
+            foreach ($fields as $key => $value) {
+                $result = $this->ays_update_setting( $key, $value );
+                if($result){
+                    $success++;
+                }
+            }
+
+            $fields = apply_filters( 'ays_qm_settings_page_extra_shortcodes_saves', $fields, $data );
             foreach ($fields as $key => $value) {
                 $result = $this->ays_update_setting( $key, $value );
                 if($result){
@@ -345,7 +537,6 @@ class Quiz_Maker_Settings_Actions {
                     $tab = "&ays_quiz_tab=".$data['ays_quiz_tab'];
                 }
                 $url = admin_url('admin.php') . "?page=quiz-maker-settings" . $tab . '&status=' . $message . $del_stat;
-//                var_dump($url);
                 wp_redirect( $url );
             }
         }

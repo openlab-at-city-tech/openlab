@@ -12,6 +12,7 @@
         createBlock = wp.blocks.createBlock,
         select = wp.data.select,
         dispatch = wp.data.dispatch;
+
     var iconEl = el(
         'svg', 
         { 
@@ -30,6 +31,10 @@
             } 
         )
     );
+
+    if( wp.blocks && wp.blocks.updateCategory ){
+        wp.blocks.updateCategory( 'quiz-maker', { icon: iconEl } );
+    }
 
 //    var quizMakerMapSelectToProps = function( select ) {
 //        if(select( 'core/blocks' ).getBlockType( 'quiz-maker/quiz' ).attributes.idner &&
@@ -120,9 +125,14 @@
 
     registerBlockType( 'quiz-maker/quiz', {
         title: __('Quiz Maker'),
-        category: 'common',
+        category: 'quiz-maker',
         icon: iconEl,
         supports: supports,
+        example: {
+            attributes: {
+                cover: ays_quiz_block_ajax.quiz_preview,
+            }
+        },
         edit: withSelect( function( select ) {
             if(select( 'core/blocks' ).getBlockType( 'quiz-maker/quiz' ).attributes.idner &&
                (select( 'core/blocks' ).getBlockType( 'quiz-maker/quiz' ).attributes.idner != undefined ||
@@ -152,7 +162,7 @@
                 status = 1;
             }
             var quizner = [];
-            quizner.push({ label: __("-Select Quiz-"), value: ''});
+            quizner.push({ label: __("-Select Quiz-"), value: '0'});
             for(var i in props.quizzes){
                 var quizData = {
                         value: props.quizzes[i].id,
@@ -199,11 +209,11 @@
                     },
                     options: quizner
                 },
-                el(ServerSideRender, {
-                    key: "editable",
-                    block: "quiz-maker/quiz",
-                    attributes:  props.attributes
-                })
+                // el(ServerSideRender, {
+                //     key: "editable",
+                //     block: "quiz-maker/quiz",
+                //     attributes:  props.attributes
+                // })
             );
             var res = el(
                 wp.element.Fragment,
@@ -228,12 +238,20 @@
                         )
                     )
                 ),
-                aysElement2,
+                // aysElement2,
                 el(ServerSideRender, {
                     key: "editable",
                     block: "quiz-maker/quiz",
                     attributes:  props.attributes
-                })
+                }),
+                el(
+                    "div",
+                    {
+                        className: 'ays_quiz_maker_block_select_quiz',
+                        key: "inspector",
+                    },
+                    aysElement2
+                )
             );
             var res2 = el(
                 wp.element.Fragment,
