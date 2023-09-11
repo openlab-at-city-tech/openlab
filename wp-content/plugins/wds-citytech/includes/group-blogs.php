@@ -1830,7 +1830,7 @@ Comment URL: %s',
 		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
-	$message = openlab_comment_email_boilerplate( $message );
+	$message = openlab_comment_email_boilerplate( $message, $comment_id );
 
 	wp_mail( $author_user->user_email, $subject, $message );
 }
@@ -1884,7 +1884,7 @@ Comment URL: %s',
 		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
-	$message = openlab_comment_email_boilerplate( $message );
+	$message = openlab_comment_email_boilerplate( $message, $comment_id );
 
 	$comment_user = get_userdata( $comment->user_id );
 
@@ -1956,7 +1956,7 @@ Comment URL: %s',
 		sprintf( '<a href="%s">%s</a>', $comment_link, $comment_link )
 	);
 
-	$message = openlab_comment_email_boilerplate( $message );
+	$message = openlab_comment_email_boilerplate( $message, $comment_id );
 
 	wp_mail( $recipient->user_email, $subject, $message );
 }
