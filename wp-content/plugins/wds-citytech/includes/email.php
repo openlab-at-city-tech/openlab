@@ -801,18 +801,24 @@ add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2 );
 
 /**
  * Adds 'Hello' and footer 'note' to comment-related emails.
+ *
+ * Also makes the post URL a link.
  */
-function openlab_comment_email_boilerplate( $content ) {
+function openlab_comment_email_boilerplate( $content, $comment_id ) {
+	$post_id  = get_comment( $comment_id )->comment_post_ID;
+	$post_url = get_permalink( $post_id );
+
+	$content = str_replace( '<br />' . $post_url, '<br /><a href="' . $post_url . '">' . $post_url . '</a>', $content );
+
 	return sprintf(
 		'Hello,' . "<br /><br />" .
 		'Please note: You are receiving this message because you are an administrator or author.' . "<br /><br />" .
 		'%s',
 		$content
-
 	);
 }
-add_filter( 'comment_moderation_text', 'openlab_comment_email_boilerplate', 20 );
-add_filter( 'comment_notification_text', 'openlab_comment_email_boilerplate', 20 );
+add_filter( 'comment_moderation_text', 'openlab_comment_email_boilerplate', 20, 2 );
+add_filter( 'comment_notification_text', 'openlab_comment_email_boilerplate', 20, 2 );
 
 /**
  * Adds custom OL tokens to outgoing emails.
