@@ -6,9 +6,9 @@
  * 1. Copy the following files:
  *   a. includes/site-template.php -> lib/site-template.php
  *   b. build/site-templates.css -> css/site-templates.css
- *   c. build/site-templates.js -> css/site-templates.js
- *   d. build/site-templates-admin.js -> css/site-templates-admin.js
- *   e. build/site-templates-default-category.js -> css/site-templates-default-category.js
+ *   c. build/site-templates.js -> js/site-templates.js
+ *   d. build/site-templates-admin.js -> js/site-templates-admin.js
+ *   e. build/site-templates-default-category.js -> js/site-templates-default-category.js
  *   f. views/site-template/ -> parts/site-template/
  *   g. classes/API/Sites.php -> lib/cbox-polyfills/class-cbox-sites-endpoint.php
  *
