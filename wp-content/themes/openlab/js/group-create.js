@@ -280,6 +280,12 @@ jQuery( document ).ready(
 				return;
 			}
 
+			// Convert uppercase to lowercase.
+			sitePathEl.value = sitePathEl.value.toLowerCase();
+
+			// Convert spaces to hyphens.
+			sitePathEl.value = sitePathEl.value.replace( /\s+/g, '-' );
+
 			// Check for valid characters.
 			if ( ! /^[a-z0-9-]+$/.test( sitePathEl.value ) ) {
 				setFormStatus( form, 'invalid', 'Site URL can only contain lowercase letters, numbers, and hyphens.', sitePathEl );
