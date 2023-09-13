@@ -802,13 +802,15 @@ add_filter( 'comment_moderation_text', 'ol_comment_moderation_text', 10, 2 );
 /**
  * Adds 'Hello' and footer 'note' to comment-related emails.
  *
- * Also makes the post URL a link.
+ * Also makes the post title a link.
  */
 function openlab_comment_email_boilerplate( $content, $comment_id ) {
-	$post_id  = get_comment( $comment_id )->comment_post_ID;
-	$post_url = get_permalink( $post_id );
+	$post_id    = get_comment( $comment_id )->comment_post_ID;
+	$post_url   = get_permalink( $post_id );
+	$post_title = get_the_title( $post_id );
 
-	$content = str_replace( '<br />' . $post_url, '<br /><a href="' . $post_url . '">' . $post_url . '</a>', $content );
+	$content = str_replace( '<br />' . $post_url, '', $content );
+	$content = str_replace( '"' . $post_title . '"', '<a href="' . $post_url . '">' . $post_title . '</a>', $content );
 
 	return sprintf(
 		'Hello,' . "<br /><br />" .
