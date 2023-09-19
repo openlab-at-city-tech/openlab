@@ -100,18 +100,6 @@ function wds_email_validate() {
 		return;
 	}
 
-	// Check code sigups first.
-	if ( isset( $_POST['signup_validation_code'] ) ) {
-		$is_valid = cac_ncs_validate_code( $_POST['signup_validation_code'] );
-
-		if ( ! $is_valid ) {
-			$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
-		}
-
-		return;
-	}
-
-
 	$email        = $_POST['signup_email'];
 	$email_parts  = explode( '@', $email );
 	$domain       = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ): '';
