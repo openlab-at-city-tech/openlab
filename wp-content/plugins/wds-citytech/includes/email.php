@@ -717,7 +717,7 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 	switch ( $comment->comment_type ) {
 		case 'trackback':
 			/* translators: %s: Post title. */
-			$notify_message  = sprintf( __( 'A new trackback on the post "%s" is waiting for your approval' ), $post->post_title ) . "<br />";
+			$notify_message  = sprintf( __( 'A new trackback on the post "%s" is waiting for your approval' ), $post->post_title ) . ".<br />";
 			$notify_message .= get_permalink( $comment->comment_post_ID ) . "<br /><br />";
 			/* translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname. */
 			$notify_message .= sprintf( __( 'Website: %1$s (IP address: %2$s, %3$s)' ), $comment->comment_author, $comment->comment_author_IP, $comment_author_domain ) . "<br />";
@@ -728,7 +728,7 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 
 		case 'pingback':
 			/* translators: %s: Post title. */
-			$notify_message  = sprintf( __( 'A new pingback on the post "%s" is waiting for your approval' ), $post->post_title ) . "<br />";
+			$notify_message  = sprintf( __( 'A new pingback on the post "%s" is waiting for your approval' ), $post->post_title ) . ".<br />";
 			$notify_message .= get_permalink( $comment->comment_post_ID ) . "<br /><br />";
 			/* translators: 1: Trackback/pingback website name, 2: Website IP address, 3: Website hostname. */
 			$notify_message .= sprintf( __( 'Website: %1$s (IP address: %2$s, %3$s)' ), $comment->comment_author, $comment->comment_author_IP, $comment_author_domain ) . "<br />";
@@ -739,7 +739,7 @@ function ol_comment_moderation_text( $notify_message, $comment_id ) {
 
 		default: // Comments.
 			/* translators: %s: Post title. */
-			$notify_message  = sprintf( __( 'A new comment on the post "%s" is waiting for your approval' ), $post->post_title ) . "<br />";
+			$notify_message  = sprintf( __( 'A new comment on the post "%s" is waiting for your approval' ), $post->post_title ) . ".<br />";
 			$notify_message .= get_permalink( $comment->comment_post_ID ) . "<br /><br />";
 			/* translators: 1: Comment author's name, 2: Comment author's IP address, 3: Comment author's hostname. */
 			$notify_message .= sprintf( __( 'Author: %1$s (IP address: %2$s, %3$s)' ), $comment->comment_author, $comment->comment_author_IP, $comment_author_domain ) . "<br />";
