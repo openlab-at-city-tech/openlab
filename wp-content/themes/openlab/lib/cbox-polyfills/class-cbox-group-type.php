@@ -41,21 +41,25 @@ class CBOX_Group_Type {
 		if ( isset( $site_template_ids[ $this->get_slug() ] ) ) {
 			$site_template_id = $site_template_ids[ $this->get_slug() ];
 
-			$site_template_categories = wp_get_post_terms(
-				$site_template_id,
-				'cboxol_template_category',
-				[
-					'fields' => 'ids',
-				]
-			);
+			// Valid site templates must be published.
+			$site_template_post = get_post( $site_template_id );
+			if ( $site_template_post && 'publish' === $site_template_post->post_status ) {
+				$site_template_categories = wp_get_post_terms(
+					$site_template_id,
+					'cboxol_template_category',
+					[
+						'fields' => 'ids',
+					]
+				);
 
-			$group_type_template_categories   = $this->get_site_template_categories();
-			$group_type_template_category_ids = wp_list_pluck( $group_type_template_categories, 'term_id' );
+				$group_type_template_categories   = $this->get_site_template_categories();
+				$group_type_template_category_ids = wp_list_pluck( $group_type_template_categories, 'term_id' );
 
-			foreach ( $site_template_categories as $site_template_category ) {
-				if ( in_array( $site_template_category, $group_type_template_category_ids, true ) ) {
-					$saved_site_template_is_valid = true;
-					break;
+				foreach ( $site_template_categories as $site_template_category ) {
+					if ( in_array( $site_template_category, $group_type_template_category_ids, true ) ) {
+						$saved_site_template_is_valid = true;
+						break;
+					}
 				}
 			}
 		}
