@@ -12,6 +12,11 @@ function openlab_group_search_breakup( $sql, $s, $r ) {
 		return $sql;
 	}
 
+	// Don't process on AJAX requests coming from openlab-connections.
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_GET['action'] ) && 'openlab_connection_group_search' === $_GET['action'] ) {
+		return $sql;
+	}
+
 	// Split based either on "quoted phrases" or spaces.
 	preg_match_all( '/"(?:\\\\.|[^\\\\"])*"|\S+/', $r['search_terms'], $matches );
 
