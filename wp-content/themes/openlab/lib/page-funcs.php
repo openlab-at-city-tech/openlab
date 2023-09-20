@@ -10,10 +10,10 @@
  */
 function cuny_home_login() {
 
-	if ( is_user_logged_in() ) :
+	if ( is_user_logged_in() ) {
 
 		echo '<div id="open-lab-login" class="log-box links-lighter-hover">';
-		echo '<h1 class="title inline-element semibold hyphenate truncate-on-the-fly" data-basewidth="60" data-basevalue="60">Welcome, ' . esc_html( bp_core_get_user_displayname( bp_loggedin_user_id() ) ) . '</h1>';
+		echo '<h2 class="title inline-element semibold hyphenate truncate-on-the-fly" data-basewidth="60" data-basevalue="60">Welcome, ' . esc_html( bp_core_get_user_displayname( bp_loggedin_user_id() ) ) . '</h2>';
 		do_action( 'bp_before_sidebar_me' )
 		?>
 
@@ -54,10 +54,14 @@ function cuny_home_login() {
 			<h4 class="title">Need Help?</h4>
 			<p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo esc_attr( site_url() ); ?>/blog/help/openlab-help/">Help section</a> or <a class="roll-over-loss" href='<?php echo esc_attr( site_url() ); ?>/about/contact-us/'>contact us</a> with a question.</p>
 		</div><!--login-help-->
+		<?php
 
-	<?php else : ?>
+	} else {
+
+		?>
+
 		<?php echo '<div id="open-lab-join" class="log-box links-lighter-hover">'; ?>
-		<?php echo '<h1 class="title"><span class="fa fa-plus-circle flush-left"></span> Join the OpenLab</h1>'; ?>
+		<?php echo '<h2 class="title"><span class="fa fa-plus-circle flush-left"></span> Join the OpenLab</h2>'; ?>
 		<?php echo '<p><a class="btn btn-default btn-primary link-btn pull-right semibold" href="' . esc_attr( site_url() ) . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>'; ?>
 		<?php echo '</div>'; ?>
 
@@ -91,7 +95,7 @@ function cuny_home_login() {
 			</form>
 		</div>
 	<?php
-	endif;
+	}
 }
 
 /**
