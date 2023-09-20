@@ -357,10 +357,10 @@ function cuny_home_square( $type ) {
 						<a href="<?php bp_group_permalink(); ?>"><img class="img-responsive" src="<?php echo esc_attr( $avatar_url ); ?>" alt="<?php echo esc_attr( $group->name ); ?>"/></a>
 					</div>
 					<div class="item-content-wrapper">
-						<h4 class="group-title overflow-hidden">
+						<h3 class="group-title overflow-hidden">
 							<a class="no-deco truncate-on-the-fly hyphenate" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?php echo esc_html( bp_get_group_name() ); ?></a>
 							<span class="original-copy hidden"><?php echo esc_html( bp_get_group_name() ); ?></span>
-						</h4>
+						</h3>
 
 						<p class="hyphenate overflow-hidden">
 							<?php

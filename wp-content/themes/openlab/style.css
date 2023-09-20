@@ -9316,6 +9316,7 @@ body form .checkbox-list-container {
   padding: 5px;
   margin-bottom: 15px;
 }
+.home-page .activity-list .activity-wrapper .activity-item h3,
 .home-page .activity-list .activity-wrapper .activity-item h4 {
   margin: 12px auto 5px;
   font-size: 14px;
