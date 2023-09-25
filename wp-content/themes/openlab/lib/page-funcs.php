@@ -51,7 +51,7 @@ function cuny_home_login() {
 		<?php echo '</div>'; ?>
 
 		<div id="login-help" class="log-box">
-			<h4 class="title">Need Help?</h4>
+			<h2 class="title">Need Help?</h2>
 			<p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo esc_attr( site_url() ); ?>/blog/help/openlab-help/">Help section</a> or <a class="roll-over-loss" href='<?php echo esc_attr( site_url() ); ?>/about/contact-us/'>contact us</a> with a question.</p>
 		</div><!--login-help-->
 		<?php
