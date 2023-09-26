@@ -30,6 +30,9 @@ class CBOX_Group_Type {
 	 */
 	public function get_site_template_id() {
 		$site_template_ids = get_option( 'openlab_group_type_default_site_template_ids' );
+		if ( ! is_array( $site_template_ids ) ) {
+			$site_template_ids = [];
+		}
 		$site_template_ids = array_map( 'intval', $site_template_ids );
 
 		$saved_site_template_is_valid = false;
