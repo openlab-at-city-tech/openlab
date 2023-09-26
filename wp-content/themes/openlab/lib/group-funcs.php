@@ -1940,6 +1940,8 @@ add_action( 'bp_after_group_details_creation_step', function() {
 	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
 
 	if ( 'portfolio' === $group_type ) {
+		// Necessary to ensure that the nulled collaboration tools settings are saved.
+		wp_nonce_field( 'openlab_collaboration_tools', 'openlab-collaboration-tools-nonce' );
 		return;
 	}
 
