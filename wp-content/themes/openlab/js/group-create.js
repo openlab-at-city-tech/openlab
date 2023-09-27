@@ -276,7 +276,7 @@ jQuery( document ).ready(
 
 			// Check for valid character count.
 			if ( sitePathEl.value.length < 2 || sitePathEl.value.length > 50 ) {
-				setFormStatus( form, 'invalid', 'Site URL must be between 4 and 50 characters.', sitePathEl );
+				setFormStatus( form, 'invalid', 'Site URL must be between 2 and 50 characters.', sitePathEl );
 				return;
 			}
 
