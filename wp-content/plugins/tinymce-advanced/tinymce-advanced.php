@@ -3,7 +3,7 @@
 Plugin Name: Advanced Editor Tools
 Plugin URI: https://wordpress.org/plugins/tinymce-advanced/
 Description: Extends and enhances the block editor (Gutenberg) and the classic editor (TinyMCE).
-Version: 5.9.0
+Version: 5.9.2
 Requires at least: 5.9
 Requires PHP: 5.6
 Author: Automattic
@@ -60,7 +60,9 @@ class Advanced_Editor_Tools {
 	private $used_buttons = array();
 	private $all_buttons = array();
 	private $buttons_filter = array();
+	private $toolbar_classic_block = array();
 	private $fontsize_formats = '8px 10px 12px 14px 16px 20px 24px 28px 32px 36px 48px 60px 72px 96px';
+	
 	private $required_menubar_plugins = array(
 		'anchor',
 		'code',
