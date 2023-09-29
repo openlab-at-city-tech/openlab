@@ -315,8 +315,12 @@ function breadcrumb_settings_tabs_content_builder()
                     } else {
                         tag_options_html = breadcrumb_tag_options[tag_id];
                         var res = tag_options_html.replaceAll("{input_name}", input_name);
+                        var res2 = res.replaceAll("[0]", "[" + Date.now() + "]");
 
-                        $(this).parent().parent().children('.elements').append(res);
+                        console.log(res2);
+
+
+                        $(this).parent().parent().children('.elements').append(res2);
                     }
 
 
@@ -377,13 +381,20 @@ function breadcrumb_settings_tabs_content_builder()
                             $post_permalinks = isset($permalinks[$postType]) ? $permalinks[$postType] : array();
                             $args = array('input_name' => 'breadcrumb_options[permalinks]' . '[' . $postType . ']');
 
+                            //echo '<pre>' . var_export($post_permalinks, true) . '</pre>';
+
+
                             if (!empty($post_permalinks)) :
-                                foreach ($post_permalinks as $permalink_tag => $permalink) {
+                                foreach ($post_permalinks as $permalinkIndex => $permalink) {
 
-                                    //var_dump($permalink);
+                                    $elementId = isset($permalink['elementId']) ? $permalink['elementId'] : '';
+
+
+                                    //var_dump($permalinkIndex);
                                     $args['options'] = $permalink;
+                                    $args['index'] = $permalinkIndex;
 
-                                    do_action('breadcrumb_tag_options_' . $permalink_tag, $args);
+                                    do_action('breadcrumb_tag_options_' . $elementId, $args);
                                 }
                             else :
                             ?>
