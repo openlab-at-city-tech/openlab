@@ -23,6 +23,7 @@ if (! defined('ABSPATH')) {
 
     $width = ($width - 40);
     $customize_folders = get_option('customize_folders');
+    $customize_folders = (empty($customize_folders)||!is_array($customize_folders))?[]:$customize_folders;
     ?>
 </style>
 <style>
@@ -510,6 +511,103 @@ $horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customiz
         </div>
     </div>
 
+    <?php
+    $upgrade_popup_status = get_option("show_folder_upgrade_popup");
+    if($upgrade_popup_status != "hide") { ?>
+    <div class="folder-popup-form" id="upgrade-modal-popup">
+        <div class="popup-form-content upgrade-modal">
+            <div class="popup-content" style="position: relative;">
+                <div class="close-popup-button">
+                    <a class="upgrade-model-button" href="javascript:;"><span></span></a>
+                </div>
+                <img style="width: auto; margin: 0 auto" src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/upgrade-image.png") ?>">
+                <div class="upgrade-title"><?php esc_html_e("Great job! 🎉", "folders"); ?></div>
+                <div class="upgrade-desc"><?php esc_html_e("You've successfully organized your files into folders for the first time.", "folders"); ?></div>
+                <div class="upgrade-content">
+                    <div class="upgrade-content-title"><?php esc_html_e("Upgrade to Pro today", "folders"); ?></div>
+                    <ul>
+                        <li><?php esc_html_e("⚙️ Create Unlimited folders and subfolders", "folders"); ?></li>
+                        <li><?php esc_html_e("🗂️ Automatically filter posts, pages, media files based on author, date, type and more", "folders"); ?></li>
+                        <li><?php esc_html_e("🛠 Upload folders directly and download them as ZIP", "folders"); ?></li>
+                        <li><?php esc_html_e("🔒 Restrict users within their own folders", "folders"); ?></li>
+                    </ul>
+                </div>
+                <div class="upgrade-footer">
+                    <div>
+                        <a class="upgrade-button" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank"><?php esc_html_e("Upgrade to Pro", "folders"); ?></a>
+                    </div>
+                    <a class="hide-upgrade-popup" href="#"><?php esc_html_e("Close", "folders"); ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+
+    <?php
+    $page_views = intval(get_option("get_folders_page_views"));
+    if($page_views >= 2) {
+    ?>
+    <div class="folder-popup-form" id="rating-modal-popup" >
+        <div class="popup-form-content upgrade-modal rating-modal">
+            <div class="popup-content" style="position: relative;">
+                <div class="close-popup-button">
+                    <a class="hide-upgrade-modal" href="javascript:;" ><span></span></a>
+                </div>
+                <img class="rating-logo" style="width: auto; margin: 0 auto" src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folder-icon.png") ?>">
+                <div class="rating-modal-steps active" id="step-1">
+                    <div class="upgrade-title"><?php esc_html_e("Seems like Folders is bringing you value 🥳", "folders"); ?></div>
+                    <div class="upgrade-desc"><?php esc_html_e("Can you please show us some love and rate Folders? It'll really help us spread the word", "folders"); ?></div>
+                    <div class="upgrade-rating">
+                        <div id="folder-rating"></div>
+                    </div>
+                    <div class="upgrade-user-rating"><span>0/5</span> <?php esc_html_e("rating", "folders"); ?></div>
+                </div>
+                <div class="rating-modal-steps" id="step-2">
+                    <div class="upgrade-title"><?php esc_html_e("Share Your Experience", "folders"); ?></div>
+                    <div class="upgrade-rating">
+                        <div id="folder-rated-rating" class="folder-rated-rating"></div>
+                    </div>
+                    <div class="upgrade-user-rating"><span>0/5</span> <?php esc_html_e("rating", "folders"); ?></div>
+                    <div class="upgrade-review-textarea">
+                        <label for="upgrade-review-comment"><?php esc_html_e("Review (optional)", "folders"); ?><span>1000</span></label>
+                        <textarea id="upgrade-review-comment" placeholder="<?php esc_html_e("Please write your review here", "folders"); ?>"></textarea>
+                    </div>
+                    <div class="upgrade-modal-button">
+                        <button type="button" id="upgrade-review-button" class="upgrade-review-button"><?php esc_html_e("Submit", "folders"); ?></button>
+                    </div>
+                </div>
+                <div class="rating-modal-steps" id="step-3">
+                    <div class="upgrade-title"><?php esc_html_e("Would you like to be reminded in the future?", "folders"); ?></div>
+                    <div class="upgrade-review-textarea">
+                        <label for="upgrade-review-reminder"><?php esc_html_e("Remind me after", "folders"); ?></label>
+                        <select id="upgrade-review-reminder" class="upgrade-review-reminder">
+                            <option value="7"><?php esc_html_e("7 Days", "folders"); ?></option>
+                            <option value="14"><?php esc_html_e("14 Days", "folders"); ?></option>
+                            <option value="-1"><?php esc_html_e("Don't remind me", "folders"); ?></option>
+                        </select>
+                    </div>
+                    <div class="upgrade-modal-button">
+                        <button type="button" id="update-review-time" class="upgrade-review-button"><?php esc_html_e("Submit", "folders"); ?></button>
+                    </div>
+                </div>
+                <div class="rating-modal-steps" id="step-4">
+                    <div class="upgrade-title">
+                        <?php esc_html_e("Five Stars!", "folders"); ?>
+                        <div class="folder-rated-rating">
+                            <div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>
+                            <div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>
+                            <div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>
+                            <div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>
+                            <div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>
+                        </div>
+                    </div>
+                    <div class="upgrade-desc"><?php esc_html_e("Feel free to connect for questions and suggestions. Thank you for choosing us!", "folders"); ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+
     <div class="folder-popup-form" id="keyboard-shortcut">
         <div class="popup-form-content">
             <div class="popup-content" style="position: relative;">
@@ -521,7 +619,7 @@ $horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customiz
                     <table class="keyboard-shortcut">
                         <tr>
                             <th><?php esc_html_e("Create New Folder", "folders") ?></th>
-                            <td><span class="key-button">Shift</span><span class="plus-button">+</span><span class="key-button">N</span> </td>
+                            <td><span class="key-button">Alt</span><span class="plus-button">+</span><span class="key-button">N</span> </td>
                         </tr>
                         <tr>
                             <th><?php esc_html_e("Rename Folder", "folders") ?></th>

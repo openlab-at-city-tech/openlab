@@ -46,7 +46,7 @@
         });
 
         if($("#media_file").length) {
-            new SimpleDropit(document.getElementById('media_file'));
+            //new SimpleDropit(document.getElementById('media_file'));
         }
 
         setBoxHeight();
@@ -62,35 +62,41 @@
     }
 
     function uploadData(input) {
+        console.log(234132);
+        //$(".image-preview .img-overlay").html("");
         if($("#media_file").val() != "") {
-
+            $("#image-preview").addClass("has-item");
             var fileName = $("#media_file").val();
             fileName = fileName.toLowerCase();
             fileName = fileName.split(".");
             var fileExt = fileName[fileName.length - 1];
-            $(".new-image-box .image-size").remove();
-            if(fileExt == "jpg" || fileExt == "png" || fileExt == "jpeg" || fileExt == "gif") {
+            $(".pre-image, .file-icon-preview").remove();
+            $("#img-overlay > div").hide();
+            if(fileExt == "jpg" || fileExt == "png" || fileExt == "jpeg" || fileExt == "gif" || fileExt == "svg") {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
 
                     reader.onload = function (e) {
-                        $(".drag-and-drop-title").html("<img class='pre-image' id='pre-image' >");
+                        $(".image-preview").append("<img class='pre-image' id='pre-image' >");
                         $('#pre-image').attr('src', e.target.result);
 
                         var image = new Image();
                         image.src = e.target.result;
                         image.onload = function () {
-                            $(".new-image-box img").after('<span class="image-size">'+this.width+"x"+this.height+"</span>").show();
+                            $("#file-dimension").html("<span class='file-size'>Dimension: "+this.width+" x "+this.height+"</span>").show();
                         };
                     }
 
                     reader.readAsDataURL(input.files[0]); // convert to base64 string
                 }
             } else {
-                $(".drag-and-drop-title").html('<span class="dashicons dashicons-media-document"></span>');
+                $(".image-preview").append('<div class="file-icon-preview"><span class="dashicons dashicons-media-document"></span></div>');
             }
 
             setFileSize(input.files[0].size);
+
+            $("#file-name").html("Name: "+input.files[0].name).show();
+            $("#file-type").html("Name: "+input.files[0].type).show();
 
             $(".replace-message").removeClass("active");
             if(fileExt.toLowerCase() != ($("#file_ext").val()).toLowerCase()) {
@@ -111,7 +117,7 @@
         } else {
             fileSize = fileSize+" B";
         }
-        $(".new-image-box .file-size").html(fileSize);
+        $("#file-size").html("<span class='file-size'>Size: "+fileSize+"</span>").show();
     }
 
 }));

@@ -54,7 +54,6 @@ class WCP_Folder_PolyLang
     {
         $this->active = false;
         $this->total  = 0;
-        $this->delete_process_id = null;
         add_action("admin_init", [$this, 'init']);
 
     }//end __construct()
@@ -69,8 +68,8 @@ class WCP_Folder_PolyLang
      */
     public function init()
     {
-        global $wpdb, $polylang;
-        $this->active = function_exists("pll_get_post_translations");
+        global $wpdb, $polylang, $typenow;
+        $this->active = function_exists("pll_get_post_translations") && function_exists("pll_is_translated_post_type");
 
         if ($this->active) {
             if (isset($polylang->curlang) && is_object($polylang->curlang)) {

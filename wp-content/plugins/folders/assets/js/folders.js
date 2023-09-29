@@ -429,10 +429,25 @@
             $("#sub-folder-popup").show();
         });
 
-        $(document).on("click", ".close-popup-button a", function(){
+        $(document).on("click", ".close-popup-button a:not(.hide-upgrade-modal)", function(){
             $(".folder-popup-form").hide();
             if($(".jstree-node[id='"+fileFolderID+"']").length) {
                 $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
+            }
+            if($(this).hasClass("upgrade-model-button")) {
+                $("#upgrade-modal-popup").remove();
+            }
+        });
+
+        $(document).on("click", ".close-popup-button a.hide-upgrade-modal", function(){
+            if($(".rating-modal-steps#step-4").hasClass("active")) {
+                set_review_reminder(-1);
+                $(".rating-modal-popup").remove();
+            } else if($(".rating-modal-steps#step-3").hasClass("active")) {
+                set_review_reminder(14);
+            } else {
+                $(".rating-modal-steps").removeClass("active");
+                $(".rating-modal-steps#step-3").addClass("active");
             }
         });
 
@@ -617,7 +632,6 @@
                         nonce = getSettingForPost(folderID, 'nonce');
                         $.ajax({
                             url: wcp_settings.ajax_url,
-                            //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID+"&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                             data: {
                                 post_ids: chkStr,
                                 type: wcp_settings.post_type,
@@ -634,6 +648,7 @@
                                 if(res.status == "1") {
                                     resetMediaAndPosts();
                                     checkForUndoFunctionality();
+                                    $("#upgrade-modal-popup").show();
                                 } else {
                                     $(".folder-popup-form").hide();
                                     $(".folder-popup-form").removeClass("disabled");
@@ -654,7 +669,6 @@
                     });
                     $.ajax({
                         url: wcp_settings.ajax_url,
-                        //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID+"&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                         method: 'post',
                         data: {
                             post_ids: chkStr,
@@ -672,6 +686,7 @@
                                 // window.location.reload();
                                 resetMediaAndPosts();
                                 checkForUndoFunctionality();
+                                $("#upgrade-modal-popup").show();
                             } else {
                                 $(".folder-popup-form").hide();
                                 $(".folder-popup-form").removeClass("disabled");
@@ -705,6 +720,7 @@
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
+                            $("#upgrade-modal-popup").show();
                             resetMediaAndPosts();
                             checkForUndoFunctionality();
                         }
@@ -794,7 +810,6 @@
                         });
                         $.ajax({
                             url: wcp_settings.ajax_url,
-                            //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID + "&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                             method: 'post',
                             data: {
                                 post_ids: chkStr,
@@ -825,7 +840,6 @@
                     });
                     $.ajax({
                         url: wcp_settings.ajax_url,
-                        //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID + "&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                         method: 'post',
                         data: {
                             post_ids: chkStr,
@@ -895,7 +909,6 @@
                         $.ajax({
                             url: wcp_settings.ajax_url,
                             method: 'post',
-                            //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID+"&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                             data: {
                                 post_ids: chkStr,
                                 type: wcp_settings.post_type,
@@ -933,7 +946,6 @@
                     $.ajax({
                         url: wcp_settings.ajax_url,
                         method: 'post',
-                        //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID+"&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                         data: {
                             post_ids: chkStr,
                             type: wcp_settings.post_type,
@@ -971,7 +983,6 @@
                     folderIDs = chkStr;
                     $.ajax({
                         url: wcp_settings.ajax_url,
-                        //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID + "&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                         data: {
                             post_ids: chkStr,
                             type: wcp_settings.post_type,
@@ -982,7 +993,6 @@
                             taxonomy: activeRecordID,
                             post_status: wcp_settings.post_status
                         },
-                        //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + folderID + "&nonce="+nonce+"&status="+wcp_settings.taxonomy_status+"&taxonomy="+activeRecordID,
                         method: 'post',
                         success: function (res) {
                             // window.location.reload();
@@ -1582,12 +1592,93 @@
             }
         });
 
+        if($("#folder-rating").length && typeof(pr_rating_settings) == "object") {
+            $("#rating-modal-popup").show();
+            $("#folder-rating").starRating({
+                initialRating   : 0,
+                useFullStars    : true,
+                strokeColor     : '#FDB10C',
+                ratedColor      : '#FDB10C',
+                activeColor     : '#FDB10C',
+                strokeWidth     : 0,
+                minRating       : 1,
+                starSize        : 32,
+                useGradient     : 0,
+                onLeave: function() {
+                    $(".upgrade-user-rating span").text("0/5");
+                },
+                onHover: function(currentRate) {
+                    $(".upgrade-user-rating span").text(currentRate+"/5");
+                },
+                callback: function(currentRate) {
+                    if( currentRate !== 5 ) {
+                        $(".rating-modal-steps").removeClass("active");
+                        $(".rating-modal-steps#step-2").addClass("active");
+                        $("#folder-rated-rating").html("");
+                        for(i=0; i<parseInt(currentRate); i++) {
+                            var ratingStar = '<div class="jq-star"><svg shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="305px" height="305px" viewBox="60 -62 309 309" style="enable-background:new 64 -59 305 305; stroke-width:0px;" xml:space="preserve"> <polygon data-side="center" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 212.9,181.1 213.9,181 306.5,241 " style="fill: transparent; stroke: #ffa83e;"></polygon> <polygon data-side="left" className="svg-empty-28" points="281.1,129.8 364,55.7 255.5,46.8 214,-59 172.5,46.8 64,55.4 146.8,129.7 121.1,241 213.9,181.1 213.9,181 306.5,241 " style="stroke-opacity: 0;"></polygon> <polygon data-side="right" className="svg-empty-28" points="364,55.7 255.5,46.8 214,-59 213.9,181 306.5,241 281.1,129.8 " style="stroke-opacity: 0;"></polygon> </svg></div>';
+                            $("#folder-rated-rating").append(ratingStar);
+                        }
+                    } else {
+                        window.open("https://wordpress.org/support/plugin/folders/reviews/#new-post", '_blank');
+                        $(".rating-logo").remove();
+                        $(".rating-modal-steps").removeClass("active");
+                        $(".rating-modal-steps#step-4").addClass("active");
+                    }
+                }
+            })
+        }
+
+        $(document).on("keyup", "#upgrade-review-comment", function(){
+            var commentLength = 1000 - parseInt($.trim($(this).val()).length);
+            if(commentLength < 0) {
+                var userComment = $.trim($(this).val());
+                userComment = userComment.slice(0, 1000);
+                $(".upgrade-review-textarea label span").text(0);
+                $(this).val(userComment);
+            } else {
+                $(".upgrade-review-textarea label span").text(commentLength);
+            }
+        });
+
+        $(document).on("change", "#upgrade-review-comment", function(){
+            var commentLength = 1000 - parseInt($.trim($(this).val()).length);
+            if(commentLength < 0) {
+                var userComment = $.trim($(this).val());
+                userComment = userComment.slice(0, 1000);
+                $(".upgrade-review-textarea label span").text(0);
+                $(this).val(userComment);
+            } else {
+                $(".upgrade-review-textarea label span").text(commentLength);
+            }
+        });
+
+        $(document).on("click", ".hide-upgrade-popup", function(e){
+            e.preventDefault();
+            $("#upgrade-modal-popup").remove();
+        });
+
+        $(document).on("click", ".upgrade-footer .upgrade-button", function(e){
+            $("#upgrade-modal-popup").remove();
+        });
+
         $(document).on("click", ".folder-popup-form", function (e) {
             $(".folder-popup-form").hide();
             if($(".jstree-node[id='"+fileFolderID+"']").length) {
                 $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
             } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {
                 $("#js-tree-menu .jstree-anchor.jstree-clicked").trigger("focus");
+            }
+            if($(this).attr("id") == "rating-modal-popup") {
+                if($(".rating-modal-steps#step-4").hasClass("active")) {
+                    set_review_reminder(-1);
+                    $(".rating-modal-popup").remove();
+                } else {
+                    set_review_reminder(14);
+                }
+            }
+            if($(this).attr("id") == "upgrade-modal-popup") {
+                $("#upgrade-modal-popup").remove();
             }
         });
 
@@ -1655,7 +1746,41 @@
             }
             return false;
         });
+
+        $(document).on("click", "#upgrade-review-button", function(){
+            $("#rating-modal-popup").hide();
+            $.ajax({
+                url: wcp_settings.ajax_url,
+                data: {
+                    action: "folders_review_box_message",
+                    rating: $("#folder-rated-rating .jq-star").length,
+                    nonce: wcp_settings.review_box_nonce,
+                    message: $.trim($("#upgrade-review-comment").val())
+                },
+                type: "post",
+                success: function() {
+                    set_review_reminder(-1);
+                }
+            });
+        });
+
+        $(document).on("click", "#update-review-time", function(){
+            set_review_reminder($("#upgrade-review-reminder").val());
+        });
     });
+
+    function set_review_reminder(noOfDays) {
+        $.ajax({
+            url: wcp_settings.ajax_url,
+            data: {
+                action: "folders_review_box",
+                days: noOfDays,
+                nonce: wcp_settings.review_nonce
+            },
+            type: "post",
+        });
+        $("#rating-modal-popup").remove();
+    }
 
     function updateFolder() {
         folderName = $.trim($("#js-tree-menu").jstree(true).get_node(fileFolderID).text);
@@ -1691,24 +1816,12 @@
 
         $(document).on("click","#menu-checkbox",function(){
             if($(this).is(":checked")) {
-                $("#js-tree-menu").addClass("show-folder-checkbox");
+                $(".js-tree-data").addClass("show-folder-checkbox");
                 $("#menu-checkbox").prop("checked", true);
             } else {
                 $("#js-tree-menu input.checkbox").attr("checked", false);
-                $("#js-tree-menu").removeClass("show-folder-checkbox");
+                $(".js-tree-data").removeClass("show-folder-checkbox");
                 $("#menu-checkbox").prop("checked", false);
-            }
-        });
-
-
-        $(document).on("click", "#menu-checkbox", function(){
-            if($(this).is(":checked")) {
-                $("#menu-checkbox").prop("checked", true);
-                $("#js-tree-menu").addClass("show-folder-checkbox");
-            } else {
-                $("#menu-checkbox").prop("checked", false);
-                $("#js-tree-menu input.checkbox").attr("checked", false);
-                $("#js-tree-menu").removeClass("show-folder-checkbox");
             }
         });
 
@@ -2654,7 +2767,6 @@
                         nonce = getSettingForPost($("#bulk-select").val(), 'nonce');
                         $.ajax({
                             url: wcp_settings.ajax_url,
-                            //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + $("#bulk-select").val() + "&nonce=" + nonce + "&status=" + wcp_settings.taxonomy_status + "&taxonomy=" + activeRecordID,
                             data: {
                                 post_ids: chkStr,
                                 type: wcp_settings.post_type,
@@ -2665,7 +2777,6 @@
                                 taxonomy: activeRecordID,
                                 post_status: wcp_settings.post_status
                             },
-                            //data: "post_ids=" + chkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + $("#bulk-select").val() + "&nonce=" + nonce + "&status=" + wcp_settings.taxonomy_status + "&taxonomy=" + activeRecordID,
                             method: 'post',
                             success: function (res) {
                                 res = $.parseJSON(res);
@@ -3015,7 +3126,6 @@
                         nonce = getSettingForPost($(this).val(), 'nonce');
                         $.ajax({
                             url: wcp_settings.ajax_url,
-                            //data: "post_ids=" + checkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + $(this).val() + "&nonce=" + nonce + "&status=" + wcp_settings.taxonomy_status + "&taxonomy=" + activeRecordID,
                             data: {
                                 post_ids: chkStr,
                                 type: wcp_settings.post_type,
@@ -3026,7 +3136,6 @@
                                 taxonomy: activeRecordID,
                                 post_status: wcp_settings.post_status
                             },
-                            //data: "post_ids=" + checkStr + "&type=" + wcp_settings.post_type + "&action=wcp_change_multiple_post_folder&folder_id=" + $(this).val() + "&nonce=" + nonce + "&status=" + wcp_settings.taxonomy_status + "&taxonomy=" + activeRecordID,
                             method: 'post',
                             success: function (res) {
                                 res = $.parseJSON(res);
@@ -3061,9 +3170,9 @@
             $(document).keydown(function (e) {
                 var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
 
-                // Shift + N : New Folder
+                // Alt + N : New Folder
                 if(!($("input").is(":focus") || $("textarea").is(":focus"))) {
-                    if (e.shiftKey && (e.keyCode == 78 || e.which == 78)) {
+                    if (e.altKey && (e.keyCode == 78 || e.which == 78)) {
                         e.preventDefault();
                         $("#add-new-folder").trigger("click");
                     }
@@ -3079,7 +3188,7 @@
 
                 // Ctrl+C/CMD+C: Copy Folder
                 if(isCtrlPressed && (e.keyCode == 67 || e.which == 67)) {
-                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($("#js-tree-menu .jstree-anchor").is(":focus")) {
                         isFolderCopy = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         CPCAction = "copy";
                         $(".folders-undo-notification").removeClass("active");
@@ -3088,12 +3197,12 @@
                             $("#copy-message").removeClass("active");
                         }, 5000);
                         checkForCopyPaste();
-                    }
+                    }*/
                 }
 
                 // Ctrl+X/CMD+X: Cut Folder
                 if(isCtrlPressed && (e.keyCode == 88 || e.which == 88)) {
-                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($("#js-tree-menu .jstree-anchor").is(":focus")) {
                         e.preventDefault();
                         isFolderCopy = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         CPCAction = "cut";
@@ -3103,12 +3212,12 @@
                             $("#cut-message").removeClass("active");
                         }, 5000);
                         checkForCopyPaste();
-                    }
+                    }*/
                 }
 
                 // Ctrl+V: Paste Folder
                 if(isCtrlPressed && (e.keyCode == 86 || e.which == 86)) {
-                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($("#js-tree-menu .jstree-anchor").is(":focus")) {
                         e.preventDefault();
                         activeRecordID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         if(activeRecordID == "" || isNaN(activeRecordID)) {
@@ -3139,7 +3248,7 @@
                             CPCAction = "";
                             isFolderCopy = 0;
                         }
-                    }
+                    }*/
                 }
 
                 if(isCtrlPressed && (e.keyCode == 75 || e.which == 75)) {
@@ -3148,7 +3257,9 @@
 
                 // delete action
                 if((e.keyCode == 46 || e.which == 46) || (e.keyCode == 8 || e.which == 8)) {
-                    if($("#js-tree-menu .jstree-anchor").is(":focus")) {
+                    if ($("#menu-checkbox").is(":checked") && $("#js-tree-menu input.checkbox:checked").length > 0) {
+                        $(".delete-folder-action").trigger("click");
+                    } else if($("#js-tree-menu .jstree-anchor").is(":focus")) {
                         if(!$("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").hasClass("is-locked")) {
                             fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                             removeFolderFromID(0);
@@ -3205,7 +3316,7 @@
 
                 // esc key
                 if(e.keyCode == 27 || e.which == 27) {
-                    $(".folder-popup-form").hide();
+                    $(".folder-popup-form:not(#rating-modal-popup)").hide();
                     if($(".jstree-node[id='"+fileFolderID+"']").length) {
                         $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
                     } else if($("#js-tree-menu .jstree-anchor.jstree-clicked").length) {

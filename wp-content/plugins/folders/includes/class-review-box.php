@@ -80,21 +80,32 @@ class Folders_Free_Review_Box
             }
         }
 
-//	    $this->reviewStatus = true;
+	    //$this->reviewStatus = true;
+        $page_views = intval(get_option("get_folders_page_views"));
         if($this->reviewStatus) {
             add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
             add_action('admin_notices', [$this, 'admin_notices']);
+        } else {
+            if($page_views == 1 || $page_views == 2) {
+                add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
+            }
         }
         add_action("wp_ajax_".$this->pluginSlug."_review_box", [$this, "form_review_box"]);
         add_action("wp_ajax_".$this->pluginSlug."_review_box_message", [$this, "form_review_box_message"]);
 
-
     }//end __construct()
+
 
     public function enqueue_scripts() {
         if (current_user_can('manage_options')) {
             wp_enqueue_style($this->pluginSlug."-star-rating-svg", plugins_url('../assets/css/star-rating-svg.css', __FILE__), [], WCP_FOLDER_VERSION);
             wp_enqueue_script($this->pluginSlug."-star-rating-svg", plugins_url('../assets/js/jquery.star-rating-svg.min.js', __FILE__), ['jquery'], WCP_FOLDER_VERSION);
+            wp_localize_script(
+                $this->pluginSlug."-star-rating-svg",
+                'pr_rating_settings',
+                ['has_settings' => 1]
+            );
+
         }
     }
 
@@ -103,7 +114,7 @@ class Folders_Free_Review_Box
      *
      * @since  1.0.0
      * @access public
-     * @return status
+     * @return $status
      */
     public function form_review_box_message()
     {
@@ -112,6 +123,7 @@ class Folders_Free_Review_Box
 
             if (!empty($nonce) && wp_verify_nonce($nonce, $this->pluginSlug."_review_box_message")) {
                 add_option($this->pluginSlug."_hide_review_box", "1");
+                update_option("get_folders_page_views", -1);
                 $rating  = filter_input(INPUT_POST, 'rating');
                 $message = filter_input(INPUT_POST, 'message');
 
@@ -173,16 +185,17 @@ class Folders_Free_Review_Box
             $nonce = filter_input(INPUT_POST, 'nonce');
             $days  = filter_input(INPUT_POST, 'days');
             if (!empty($nonce) && wp_verify_nonce($nonce, $this->pluginSlug."_review_box")) {
+                update_option("get_folders_page_views", 4);
                 if ($days == -1) {
                     add_option($this->pluginSlug."_hide_review_box", "1");
+                    update_option("get_folders_page_views", -1);
                 } else {
-                    $date = date("Y-m-d", strtotime("+".$days." days"));
+                    echo $date = date("Y-m-d", strtotime("+".$days." days"));
                     update_option($this->pluginSlug."_show_review_box_after", $date);
                 }
             }
             die;
         }
-
     }//end form_review_box()
 
 
@@ -666,9 +679,7 @@ class Folders_Free_Review_Box
 
                 FoldersFreeReview.prototype.feedbackToggle = function( action = true ) {
                     const elements = this.getElements();
-                    console.log(action);
                     if( action ) {
-                        console.log(elements.$feedbackPopup);
                         elements.$feedbackPopup.fadeIn(200, function(){
                             $(this).addClass('open')
                         });

@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap);
+
 #custom-scroll-menu a, #custom-scroll-menu a:hover, #custom-scroll-menu a:focus {
     text-decoration: none;
     color: #333;
@@ -75,10 +77,10 @@ a.jstree-anchor:hover span.folder-inline-edit {
 #js-tree-menu .folder-checkbox {
     display: none;
 }
-#js-tree-menu.show-folder-checkbox .folder-checkbox {
+.show-folder-checkbox #js-tree-menu .folder-checkbox {
     display: inline-block;
 }
-#js-tree-menu.show-folder-checkbox .pfolder-folder-close {
+.show-folder-checkbox #js-tree-menu .pfolder-folder-close {
     display: none;
 }
 li.jstree-node.is-high > a .star-icon {
@@ -677,4 +679,190 @@ span.dashicons.dashicons-cloud-upload {
 }
 .custom-scroll-menu.hor-scroll .horizontal-scroll-menu .folder-actions {
 
+}
+.popup-form-content {
+    font-family: Roboto, sans-serif
+}
+.upgrade-title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 36px;
+    text-align: center;
+    padding: 10px 0 5px;
+}
+.upgrade-desc {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+}
+.upgrade-content {
+    background: rgba(248, 247, 255, 1);
+    padding: 15px;
+    border-bottom: 4px;
+    margin: 15px 0;
+    text-align: left;
+    font-size: 14px;
+}
+.upgrade-content-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 26px;
+    text-align: left;
+}
+.upgrade-content li + li {
+    padding-top: 5px;
+}
+.upgrade-content ul {
+    padding: 0;
+    margin: 15px 0 0;
+}
+.upgrade-footer {
+    padding: 15px 0 0;
+}
+.upgrade-footer a.upgrade-button {
+    background: rgba(101, 107, 232, 1);
+    box-shadow: 0px 12px 12px -6px rgba(101, 107, 232, 0.25);
+    padding: 10px 40px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 0 10px;
+}
+.upgrade-footer .hide-upgrade-popup {
+    color: rgba(101, 107, 232, 1);
+    text-decoration: none;
+    font-size: 14px;
+}
+.rating-modal-steps {
+    display: none;
+    width: 400px;
+    margin: 0 auto;
+    max-width: 100%;
+}
+.rating-modal-steps.active {
+    display: block;
+}
+.rating-modal.popup-form-content {
+     background: #ffffff url("../images/rating-top.png") top left no-repeat;
+}
+.rating-modal.popup-form-content:after {
+    content: "";
+    background: transparent url("../images/rating-bottom.png") bottom right no-repeat;
+    width: 100%;
+    display: block;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+.rating-modal.popup-form-content .popup-content {
+}
+.rating-modal.popup-form-content .popup-content .upgrade-title {
+    color: #49687E;
+    line-height: 30px;
+}
+.rating-modal.popup-form-content .popup-content .upgrade-desc {
+    color: #49687E;
+    padding: 10px 0 0;
+}
+.upgrade-rating {
+    padding: 25px 0 15px;
+}
+.upgrade-rating .jq-star {
+    margin: 0 5px;
+}
+.upgrade-rating .jq-star svg {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    stroke-width: 0px !important;
+}
+.upgrade-user-rating {
+    font-size: 14px;
+    color: rgba(73, 104, 126, 1);
+}
+.upgrade-user-rating span {
+    font-weight: 500;
+}
+.upgrade-review-textarea {
+    padding: 15px 0;
+    text-align: left;
+}
+.upgrade-review-textarea label {
+    color: #83A1B7;
+    font-size: 12px;
+    display: flex;
+    text-align: left;
+    justify-content: space-between;
+    padding: 0 0 5px 0;
+}
+.folder-rated-rating svg {
+    fill: #FDB10C;
+}
+.folder-rated-rating .jq-star {
+    width: 32px;
+    height: 32px;
+}
+.folder-rated-rating .jq-star svg {
+    width: 100%;
+    height: 100%;
+}
+#step-4 .folder-rated-rating {
+    display: inline-block;
+    vertical-align: middle;
+}
+div#step-4 {
+    padding: 50px 0;
+}
+.upgrade-review-textarea textarea {
+    border: solid 1px #EAEFF2;
+    width: 100%;
+    height: 71px;
+    padding: 4px 8px;
+    font-size: 16px;
+    line-height: 20px;
+    outline: none;
+    box-shadow: none;
+}
+.upgrade-review-textarea textarea:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: rgba(183, 141, 235, 1);
+}
+.upgrade-review-textarea textarea::placeholder {
+    color: #83A1B7;
+    font-size: 14px;
+}
+.upgrade-review-button {
+    box-shadow: 0px 12px 12px -6px rgba(183, 141, 235, 0.52);
+    background: rgba(183, 141, 235, 1);
+    border: none;
+    color: #fff;
+    padding: 0 50px;
+    line-height: 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.upgrade-modal-button {
+    padding: 0 0 25px;
+}
+select.upgrade-review-reminder {
+    border: solid 1px #9fbbcb;
+    width: 100%;
+    padding: 4px 15px;
+    margin-bottom: 15px;
+}
+select.upgrade-review-reminder:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: rgba(183, 141, 235, 1);
 }
