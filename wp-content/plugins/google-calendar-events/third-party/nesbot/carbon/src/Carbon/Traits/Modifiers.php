@@ -387,7 +387,7 @@ trait Modifiers
      *
      * @return static|false
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function modify($modify)
     {
         return parent::modify((string) $modify);

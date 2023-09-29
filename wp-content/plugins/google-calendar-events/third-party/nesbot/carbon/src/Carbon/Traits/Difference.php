@@ -106,7 +106,7 @@ trait Difference
      *
      * @return DateInterval
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function diff($date = null, $absolute = \false)
     {
         $other = $this->resolveCarbon($date);
@@ -264,9 +264,9 @@ trait Difference
      */
     public function diffInWeekdays($date = null, $absolute = \true)
     {
-        return $this->diffInDaysFiltered(function (CarbonInterface $date) {
+        return $this->diffInDaysFiltered(static function (CarbonInterface $date) {
             return $date->isWeekday();
-        }, $date, $absolute);
+        }, $this->resolveCarbon($date)->avoidMutation()->modify($this->format('H:i:s.u')), $absolute);
     }
     /**
      * Get the difference in weekend days using a filter rounded down.
@@ -278,9 +278,9 @@ trait Difference
      */
     public function diffInWeekendDays($date = null, $absolute = \true)
     {
-        return $this->diffInDaysFiltered(function (CarbonInterface $date) {
+        return $this->diffInDaysFiltered(static function (CarbonInterface $date) {
             return $date->isWeekend();
-        }, $date, $absolute);
+        }, $this->resolveCarbon($date)->avoidMutation()->modify($this->format('H:i:s.u')), $absolute);
     }
     /**
      * Get the difference in hours rounded down.

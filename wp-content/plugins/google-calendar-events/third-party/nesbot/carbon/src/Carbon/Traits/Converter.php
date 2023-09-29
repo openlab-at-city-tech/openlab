@@ -43,7 +43,7 @@ trait Converter
      *
      * @return string
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function format($format)
     {
         $function = $this->localFormatFunction ?: static::$formatFunction;

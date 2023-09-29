@@ -10,12 +10,16 @@ namespace SimpleCalendar\plugin_deps\Google;
 class Collection extends Model implements \Iterator, \Countable
 {
     protected $collection_key = 'items';
+    /** @return void */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         if (isset($this->{$this->collection_key}) && \is_array($this->{$this->collection_key})) {
             \reset($this->{$this->collection_key});
         }
     }
+    /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->coerceType($this->key());
@@ -23,21 +27,29 @@ class Collection extends Model implements \Iterator, \Countable
             return \current($this->{$this->collection_key});
         }
     }
+    /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         if (isset($this->{$this->collection_key}) && \is_array($this->{$this->collection_key})) {
             return \key($this->{$this->collection_key});
         }
     }
+    /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return \next($this->{$this->collection_key});
     }
+    /** @return bool */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $key = $this->key();
         return $key !== null && $key !== \false;
     }
+    /** @return int */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         if (!isset($this->{$this->collection_key})) {
@@ -45,6 +57,8 @@ class Collection extends Model implements \Iterator, \Countable
         }
         return \count($this->{$this->collection_key});
     }
+    /** @return bool */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (!\is_numeric($offset)) {
@@ -52,6 +66,7 @@ class Collection extends Model implements \Iterator, \Countable
         }
         return isset($this->{$this->collection_key}[$offset]);
     }
+    /** @return mixed */
     public function offsetGet($offset)
     {
         if (!\is_numeric($offset)) {
@@ -60,17 +75,21 @@ class Collection extends Model implements \Iterator, \Countable
         $this->coerceType($offset);
         return $this->{$this->collection_key}[$offset];
     }
+    /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (!\is_numeric($offset)) {
-            return parent::offsetSet($offset, $value);
+            parent::offsetSet($offset, $value);
         }
         $this->{$this->collection_key}[$offset] = $value;
     }
+    /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (!\is_numeric($offset)) {
-            return parent::offsetUnset($offset);
+            parent::offsetUnset($offset);
         }
         unset($this->{$this->collection_key}[$offset]);
     }

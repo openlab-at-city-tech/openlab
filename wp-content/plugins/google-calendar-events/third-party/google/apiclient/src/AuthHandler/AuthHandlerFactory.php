@@ -17,9 +17,8 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\AuthHandler;
 
-use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
-use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use Exception;
+use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 class AuthHandlerFactory
 {
     /**
@@ -31,9 +30,9 @@ class AuthHandlerFactory
     public static function build($cache = null, array $cacheConfig = [])
     {
         $guzzleVersion = null;
-        if (\defined('\\SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
+        if (\defined('SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
             $guzzleVersion = ClientInterface::MAJOR_VERSION;
-        } elseif (\defined('\\SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::VERSION')) {
+        } elseif (\defined('SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::VERSION')) {
             $guzzleVersion = (int) \substr(ClientInterface::VERSION, 0, 1);
         }
         switch ($guzzleVersion) {

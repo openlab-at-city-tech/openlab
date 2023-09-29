@@ -3,8 +3,8 @@
 namespace SimpleCalendar\plugin_deps\Google\AuthHandler;
 
 use SimpleCalendar\plugin_deps\Google\Auth\CredentialsLoader;
-use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
 use SimpleCalendar\plugin_deps\Google\Auth\FetchAuthTokenCache;
+use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
 use SimpleCalendar\plugin_deps\Google\Auth\Middleware\AuthTokenMiddleware;
 use SimpleCalendar\plugin_deps\Google\Auth\Middleware\ScopedAccessTokenMiddleware;
 use SimpleCalendar\plugin_deps\Google\Auth\Middleware\SimpleMiddleware;
@@ -12,8 +12,8 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
-* This supports Guzzle 6
-*/
+ * This supports Guzzle 6
+ */
 class Guzzle6AuthHandler
 {
     protected $cache;
@@ -71,6 +71,6 @@ class Guzzle6AuthHandler
     }
     private function createAuthHttp(ClientInterface $http)
     {
-        return new Client(['base_uri' => $http->getConfig('base_uri'), 'http_errors' => \true, 'verify' => $http->getConfig('verify'), 'proxy' => $http->getConfig('proxy')]);
+        return new Client(['http_errors' => \true] + $http->getConfig());
     }
 }

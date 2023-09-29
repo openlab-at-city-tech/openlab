@@ -91,7 +91,7 @@ trait Serialization
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public static function __set_state($dump)
     {
         if (\is_string($dump)) {
@@ -150,7 +150,7 @@ trait Serialization
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function __wakeup()
     {
         if (parent::class && \method_exists(parent::class, '__wakeup')) {
@@ -209,7 +209,7 @@ trait Serialization
      *
      * @return array|string
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $serializer = $this->localSerializer ?? static::$serializer;

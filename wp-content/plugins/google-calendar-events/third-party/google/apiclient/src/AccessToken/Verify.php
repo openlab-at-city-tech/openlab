@@ -17,23 +17,23 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\AccessToken;
 
-use SimpleCalendar\plugin_deps\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
-use SimpleCalendar\plugin_deps\Firebase\JWT\SignatureInvalidException;
-use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
-use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
-use SimpleCalendar\plugin_deps\phpseclib3\Crypt\PublicKeyLoader;
-use SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA\PublicKey;
-use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
-use SimpleCalendar\plugin_deps\Google\Auth\Cache\MemoryCacheItemPool;
-use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
-use SimpleCalendar\plugin_deps\Stash\Driver\FileSystem;
-use SimpleCalendar\plugin_deps\Stash\Pool;
 use DateTime;
 use DomainException;
 use Exception;
 use SimpleCalendar\plugin_deps\ExpiredException;
-// Firebase v2
+use SimpleCalendar\plugin_deps\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use SimpleCalendar\plugin_deps\Firebase\JWT\Key;
+use SimpleCalendar\plugin_deps\Firebase\JWT\SignatureInvalidException;
+use SimpleCalendar\plugin_deps\Google\Auth\Cache\MemoryCacheItemPool;
+use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
+use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
+use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
+use InvalidArgumentException;
 use LogicException;
+use SimpleCalendar\plugin_deps\phpseclib3\Crypt\PublicKeyLoader;
+use SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA\PublicKey;
+// Firebase v2
+use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
  *
@@ -51,6 +51,10 @@ class Verify
      * @var CacheItemPoolInterface cache class
      */
     private $cache;
+    /**
+     * @var \Firebase\JWT\JWT
+     */
+    public $jwt;
     /**
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
@@ -75,7 +79,7 @@ class Verify
      *
      * @param string $idToken the ID token in JWT format
      * @param string $audience Optional. The audience to verify against JWt "aud"
-     * @return array the token payload, if successful
+     * @return array|false the token payload, if successful
      */
     public function verifyIdToken($idToken, $audience = null)
     {
@@ -88,7 +92,15 @@ class Verify
         $certs = $this->getFederatedSignOnCerts();
         foreach ($certs as $cert) {
             try {
-                $payload = $this->jwt->decode($idToken, $this->getPublicKey($cert), array('RS256'));
+                $args = [$idToken];
+                $publicKey = $this->getPublicKey($cert);
+                if (\class_exists(Key::class)) {
+                    $args[] = new Key($publicKey, 'RS256');
+                } else {
+                    $args[] = $publicKey;
+                    $args[] = ['RS256'];
+                }
+                $payload = \call_user_func_array([$this->jwt, 'decode'], $args);
                 if (\property_exists($payload, 'aud')) {
                     if ($audience && $payload->aud != $audience) {
                         return \false;
@@ -96,12 +108,13 @@ class Verify
                 }
                 // support HTTP and HTTPS issuers
                 // @see https://developers.google.com/identity/sign-in/web/backend-auth
-                $issuers = array(self::OAUTH2_ISSUER, self::OAUTH2_ISSUER_HTTPS);
+                $issuers = [self::OAUTH2_ISSUER, self::OAUTH2_ISSUER_HTTPS];
                 if (!isset($payload->iss) || !\in_array($payload->iss, $issuers)) {
                     return \false;
                 }
                 return (array) $payload;
             } catch (ExpiredException $e) {
+                // @phpstan-ignore-line
                 return \false;
             } catch (ExpiredExceptionV3 $e) {
                 return \false;
@@ -120,7 +133,7 @@ class Verify
     /**
      * Retrieve and cache a certificates file.
      *
-     * @param $url string location
+     * @param string $url location
      * @throws \Google\Exception
      * @return array certificates
      */
@@ -133,6 +146,7 @@ class Verify
             }
             return \json_decode($file, \true);
         }
+        // @phpstan-ignore-next-line
         $response = $this->http->get($url);
         if ($response->getStatusCode() == 200) {
             return \json_decode((string) $response->getBody(), \true);
@@ -173,6 +187,7 @@ class Verify
             // @see https://github.com/google/google-api-php-client/issues/827
             $jwtClass::$leeway = 1;
         }
+        // @phpstan-ignore-next-line
         return new $jwtClass();
     }
     private function getPublicKey($cert)
@@ -180,7 +195,7 @@ class Verify
         $bigIntClass = $this->getBigIntClass();
         $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
         $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
-        $component = array('n' => $modulus, 'e' => $exponent);
+        $component = ['n' => $modulus, 'e' => $exponent];
         if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\RSA\\PublicKey')) {
             /** @var PublicKey $loader */
             $loader = PublicKeyLoader::load($component);
@@ -214,10 +229,10 @@ class Verify
     private function getOpenSslConstant()
     {
         if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\AES')) {
-            return 'phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
+            return 'SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
         }
         if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA')) {
-            return 'phpseclib\\Crypt\\RSA::MODE_OPENSSL';
+            return 'SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA::MODE_OPENSSL';
         }
         if (\class_exists('SimpleCalendar\\plugin_deps\\Crypt_RSA')) {
             return 'CRYPT_RSA_MODE_OPENSSL';
@@ -235,11 +250,11 @@ class Verify
     private function setPhpsecConstants()
     {
         if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
-            if (!\defined('SimpleCalendar\\plugin_deps\\MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-                \define('SimpleCalendar\\plugin_deps\\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
+            if (!\defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
+                \define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
-            if (!\defined('SimpleCalendar\\plugin_deps\\CRYPT_RSA_MODE')) {
-                \define('SimpleCalendar\\plugin_deps\\CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
+            if (!\defined('CRYPT_RSA_MODE')) {
+                \define('CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
             }
         }
     }

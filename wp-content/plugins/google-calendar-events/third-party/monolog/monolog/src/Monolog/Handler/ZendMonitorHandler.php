@@ -39,7 +39,7 @@ class ZendMonitorHandler extends AbstractProcessingHandler
             throw new MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
         }
         //zend monitor constants are not defined if zend monitor is not enabled.
-        $this->levelMap = [Logger::DEBUG => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::INFO => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::NOTICE => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::WARNING => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_WARNING, Logger::ERROR => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::CRITICAL => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::ALERT => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::EMERGENCY => \SimpleCalendar\plugin_deps\ZEND_MONITOR_EVENT_SEVERITY_ERROR];
+        $this->levelMap = [Logger::DEBUG => \ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::INFO => \ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::NOTICE => \ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::WARNING => \ZEND_MONITOR_EVENT_SEVERITY_WARNING, Logger::ERROR => \ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::CRITICAL => \ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::ALERT => \ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::EMERGENCY => \ZEND_MONITOR_EVENT_SEVERITY_ERROR];
         parent::__construct($level, $bubble);
     }
     /**

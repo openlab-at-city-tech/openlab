@@ -49,43 +49,43 @@ use RuntimeException;
  * @property-read CarbonInterface $end Period end date.
  * @property-read CarbonInterval $interval Underlying date interval instance. Always present, one day by default.
  *
- * @method static CarbonPeriod start($date, $inclusive = null) Create instance specifying start date or modify the start date if called on an instance.
- * @method static CarbonPeriod since($date, $inclusive = null) Alias for start().
- * @method static CarbonPeriod sinceNow($inclusive = null) Create instance with start date set to now or set the start date to now if called on an instance.
- * @method static CarbonPeriod end($date = null, $inclusive = null) Create instance specifying end date or modify the end date if called on an instance.
- * @method static CarbonPeriod until($date = null, $inclusive = null) Alias for end().
- * @method static CarbonPeriod untilNow($inclusive = null) Create instance with end date set to now or set the end date to now if called on an instance.
- * @method static CarbonPeriod dates($start, $end = null) Create instance with start and end dates or modify the start and end dates if called on an instance.
- * @method static CarbonPeriod between($start, $end = null) Create instance with start and end dates or modify the start and end dates if called on an instance.
- * @method static CarbonPeriod recurrences($recurrences = null) Create instance with maximum number of recurrences or modify the number of recurrences if called on an instance.
- * @method static CarbonPeriod times($recurrences = null) Alias for recurrences().
- * @method static CarbonPeriod options($options = null) Create instance with options or modify the options if called on an instance.
- * @method static CarbonPeriod toggle($options, $state = null) Create instance with options toggled on or off, or toggle options if called on an instance.
- * @method static CarbonPeriod filter($callback, $name = null) Create instance with filter added to the stack or append a filter if called on an instance.
- * @method static CarbonPeriod push($callback, $name = null) Alias for filter().
- * @method static CarbonPeriod prepend($callback, $name = null) Create instance with filter prepended to the stack or prepend a filter if called on an instance.
- * @method static CarbonPeriod filters(array $filters = []) Create instance with filters stack or replace the whole filters stack if called on an instance.
- * @method static CarbonPeriod interval($interval) Create instance with given date interval or modify the interval if called on an instance.
- * @method static CarbonPeriod each($interval) Create instance with given date interval or modify the interval if called on an instance.
- * @method static CarbonPeriod every($interval) Create instance with given date interval or modify the interval if called on an instance.
- * @method static CarbonPeriod step($interval) Create instance with given date interval or modify the interval if called on an instance.
- * @method static CarbonPeriod stepBy($interval) Create instance with given date interval or modify the interval if called on an instance.
- * @method static CarbonPeriod invert() Create instance with inverted date interval or invert the interval if called on an instance.
- * @method static CarbonPeriod years($years = 1) Create instance specifying a number of years for date interval or replace the interval by the given a number of years if called on an instance.
- * @method static CarbonPeriod year($years = 1) Alias for years().
- * @method static CarbonPeriod months($months = 1) Create instance specifying a number of months for date interval or replace the interval by the given a number of months if called on an instance.
- * @method static CarbonPeriod month($months = 1) Alias for months().
- * @method static CarbonPeriod weeks($weeks = 1) Create instance specifying a number of weeks for date interval or replace the interval by the given a number of weeks if called on an instance.
- * @method static CarbonPeriod week($weeks = 1) Alias for weeks().
- * @method static CarbonPeriod days($days = 1) Create instance specifying a number of days for date interval or replace the interval by the given a number of days if called on an instance.
- * @method static CarbonPeriod dayz($days = 1) Alias for days().
- * @method static CarbonPeriod day($days = 1) Alias for days().
- * @method static CarbonPeriod hours($hours = 1) Create instance specifying a number of hours for date interval or replace the interval by the given a number of hours if called on an instance.
- * @method static CarbonPeriod hour($hours = 1) Alias for hours().
- * @method static CarbonPeriod minutes($minutes = 1) Create instance specifying a number of minutes for date interval or replace the interval by the given a number of minutes if called on an instance.
- * @method static CarbonPeriod minute($minutes = 1) Alias for minutes().
- * @method static CarbonPeriod seconds($seconds = 1) Create instance specifying a number of seconds for date interval or replace the interval by the given a number of seconds if called on an instance.
- * @method static CarbonPeriod second($seconds = 1) Alias for seconds().
+ * @method static static start($date, $inclusive = null) Create instance specifying start date or modify the start date if called on an instance.
+ * @method static static since($date, $inclusive = null) Alias for start().
+ * @method static static sinceNow($inclusive = null) Create instance with start date set to now or set the start date to now if called on an instance.
+ * @method static static end($date = null, $inclusive = null) Create instance specifying end date or modify the end date if called on an instance.
+ * @method static static until($date = null, $inclusive = null) Alias for end().
+ * @method static static untilNow($inclusive = null) Create instance with end date set to now or set the end date to now if called on an instance.
+ * @method static static dates($start, $end = null) Create instance with start and end dates or modify the start and end dates if called on an instance.
+ * @method static static between($start, $end = null) Create instance with start and end dates or modify the start and end dates if called on an instance.
+ * @method static static recurrences($recurrences = null) Create instance with maximum number of recurrences or modify the number of recurrences if called on an instance.
+ * @method static static times($recurrences = null) Alias for recurrences().
+ * @method static static options($options = null) Create instance with options or modify the options if called on an instance.
+ * @method static static toggle($options, $state = null) Create instance with options toggled on or off, or toggle options if called on an instance.
+ * @method static static filter($callback, $name = null) Create instance with filter added to the stack or append a filter if called on an instance.
+ * @method static static push($callback, $name = null) Alias for filter().
+ * @method static static prepend($callback, $name = null) Create instance with filter prepended to the stack or prepend a filter if called on an instance.
+ * @method static static filters(array $filters = []) Create instance with filters stack or replace the whole filters stack if called on an instance.
+ * @method static static interval($interval) Create instance with given date interval or modify the interval if called on an instance.
+ * @method static static each($interval) Create instance with given date interval or modify the interval if called on an instance.
+ * @method static static every($interval) Create instance with given date interval or modify the interval if called on an instance.
+ * @method static static step($interval) Create instance with given date interval or modify the interval if called on an instance.
+ * @method static static stepBy($interval) Create instance with given date interval or modify the interval if called on an instance.
+ * @method static static invert() Create instance with inverted date interval or invert the interval if called on an instance.
+ * @method static static years($years = 1) Create instance specifying a number of years for date interval or replace the interval by the given a number of years if called on an instance.
+ * @method static static year($years = 1) Alias for years().
+ * @method static static months($months = 1) Create instance specifying a number of months for date interval or replace the interval by the given a number of months if called on an instance.
+ * @method static static month($months = 1) Alias for months().
+ * @method static static weeks($weeks = 1) Create instance specifying a number of weeks for date interval or replace the interval by the given a number of weeks if called on an instance.
+ * @method static static week($weeks = 1) Alias for weeks().
+ * @method static static days($days = 1) Create instance specifying a number of days for date interval or replace the interval by the given a number of days if called on an instance.
+ * @method static static dayz($days = 1) Alias for days().
+ * @method static static day($days = 1) Alias for days().
+ * @method static static hours($hours = 1) Create instance specifying a number of hours for date interval or replace the interval by the given a number of hours if called on an instance.
+ * @method static static hour($hours = 1) Alias for hours().
+ * @method static static minutes($minutes = 1) Create instance specifying a number of minutes for date interval or replace the interval by the given a number of minutes if called on an instance.
+ * @method static static minute($minutes = 1) Alias for minutes().
+ * @method static static seconds($seconds = 1) Create instance specifying a number of seconds for date interval or replace the interval by the given a number of seconds if called on an instance.
+ * @method static static second($seconds = 1) Alias for seconds().
  * @method $this roundYear(float $precision = 1, string $function = "round") Round the current instance year with given precision using the given function.
  * @method $this roundYears(float $precision = 1, string $function = "round") Round the current instance year with given precision using the given function.
  * @method $this floorYear(float $precision = 1) Truncate the current instance year with given precision.
@@ -561,6 +561,9 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      */
     public function __construct(...$arguments)
     {
+        if (\is_a($this->dateClass, DateTimeImmutable::class, \true)) {
+            $this->options = static::IMMUTABLE;
+        }
         // Parse and assign arguments one by one. First argument may be an ISO 8601 spec,
         // which will be first parsed into parts and then processed the same way.
         $argumentsCount = \count($arguments);
@@ -1149,7 +1152,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return $this->validateCurrentDate() === \true;
@@ -1159,7 +1162,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return int|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->valid() ? $this->key : null;
@@ -1169,7 +1172,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return CarbonInterface|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->valid() ? $this->prepareForReturn($this->current) : null;
@@ -1181,7 +1184,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next()
     {
         if ($this->current === null) {
@@ -1205,7 +1208,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         $this->key = 0;
@@ -1368,7 +1371,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return int
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return \count($this->toArray());
@@ -1938,7 +1941,7 @@ class CarbonPeriod implements Iterator, Countable, JsonSerializable
      *
      * @return CarbonInterface[]
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toArray();

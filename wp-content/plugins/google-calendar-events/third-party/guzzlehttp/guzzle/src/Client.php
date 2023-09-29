@@ -109,7 +109,7 @@ class Client implements ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Cl
     /**
      * The HttpClient PSR (PSR-18) specify this method.
      *
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function sendRequest(RequestInterface $request) : ResponseInterface
     {
@@ -178,7 +178,7 @@ class Client implements ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Cl
      *
      * @deprecated Client::getConfig will be removed in guzzlehttp/guzzle:8.0.
      */
-    public function getConfig(?string $option = null)
+    public function getConfig(string $option = null)
     {
         return $option === null ? $this->config : $this->config[$option] ?? null;
     }
@@ -366,6 +366,9 @@ class Client implements ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Cl
             if (\is_bool($options['sink'])) {
                 throw new InvalidArgumentException('sink must not be a boolean');
             }
+        }
+        if (isset($options['version'])) {
+            $modify['version'] = $options['version'];
         }
         $request = Psr7\Utils::modifyRequest($request, $modify);
         if ($request->getBody() instanceof Psr7\MultipartStream) {
