@@ -471,13 +471,13 @@ class link_library_plugin_admin {
 
 	function admin_header() {
 		global $pagenow;
-		if ( ( $pagenow == 'link.php' && $_GET['action'] == 'edit' ) || ( $pagenow == 'link-add.php' ) ) {
+		if ( ( $pagenow == 'link.php' && isset( $_GET['action'] ) && $_GET['action'] == 'edit' ) || ( $pagenow == 'link-add.php' ) ) {
 			if ( function_exists( 'wp_enqueue_media' ) ) {
 				wp_enqueue_media();
 			}
 		}
 
-		if ( $pagenow == 'post-new.php' && $_GET['post_type'] == 'link_library_links' ) {
+		if ( $pagenow == 'post-new.php' && isset( $_GET['post_type'] ) && $_GET['post_type'] == 'link_library_links' ) {
 			wp_enqueue_style( 'LibraryLibraryAdminStyle', plugins_url( 'link-library-admin.css', __FILE__ ) );
 		}
 

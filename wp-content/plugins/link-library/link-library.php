@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.5.5
+Version: 7.5.9
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
@@ -1397,7 +1397,7 @@ class link_library_plugin {
 			}
 		}
 
-		if ( !empty( $excludecategoryoverride ) ) {
+		if ( !empty( $excludetagoverride ) ) {
 			$options['excludetaglist_cpt'] = $excludetagoverride;
 
 			$update_list = false;
@@ -1415,7 +1415,7 @@ class link_library_plugin {
 				}
 			}
 			if ( $update_list ) {
-				$options['excludetaglist_cpt'] = implode( ',', $exclude_category_list_array );
+				$options['excludetaglist_cpt'] = implode( ',', $exclude_tag_list_array );
 			}
 		}
 
@@ -2405,6 +2405,9 @@ class link_library_plugin {
 				$content = str_replace( '[link_category]', $link_terms_list, $content );
 			}
 		}
+
+		global $wp_embed;
+		$content = $wp_embed->run_shortcode( $content );
 
 		$content = do_shortcode( $content );
 
