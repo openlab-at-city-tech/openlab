@@ -31,6 +31,7 @@ class DLM_Reports {
 	perPage         = dlmReportsPerPage;
 	downloads = [];
 	topDownloadsOrder = 'count';
+	weekstart       = dlmWeekStart;
 
 	/**
 	 * The constructor for our class
@@ -1063,6 +1064,7 @@ class DLM_Reports {
 			showShortcuts  : true,
 			shortcuts      : null,
 			customShortcuts: datepickerShortcuts,
+			startOfWeek    : dlmReportsInstance.weekstart, // sunday or monday
 		};
 
 		element.dateRangePicker(configObject).on('datepicker-change', (event, obj) => {
@@ -1284,6 +1286,7 @@ class DLM_Reports {
 			wrapperParent.find('.downloads-block-navigation button').addClass('hidden');
 		}
 		dlmReportsInstance.stopSpinner(jQuery('#total_downloads_table_wrapper2'));
+		jQuery(document).trigger( 'dlm_reports_top_downloads_table_rendered', [wrapperParent, wrapper, dlmReportsInstance, dataResponse] );
 	}
 
 	/**
@@ -1395,6 +1398,7 @@ class DLM_Reports {
 			}else{
 				jQuery('.dlm-reports').addClass('general_info' );
 			}
+			jQuery(document).trigger('dlm_reports_tab_change_' + listClicked.attr('id'), [listClicked, navLists, contentTarget, contentWrappers]);
 		});
 	}
 
@@ -1816,6 +1820,7 @@ class DLM_Reports {
 		} else {
 			wrapperParent.find('.user-downloads-block-navigation button').addClass('hidden');
 		}
+		jQuery(document).trigger( 'dlm_reports_user_logs_table_rendered', [dlmReportsInstance, wrapperParent, wrapper, dataResponse] );
 	}
 
 	/**
@@ -1830,15 +1835,24 @@ class DLM_Reports {
 		}
 
 		dlmReportsInstance.currentFilters.forEach((filter) => {
-
-			dlmReportsInstance.tempDownloads = dlmReportsInstance.tempDownloads.filter((element) => {
-				let currFilter = filter.on;
-				if ( 'redirected' === filter.on ) {
-					return filter.on === element[filter.type] || 'redirect' === element[filter.type];
-				}
-				return filter.on === element[filter.type];
-
-			});
+			switch (filter.type) {
+				case 'download_status':
+					dlmReportsInstance.tempDownloads = dlmReportsInstance.tempDownloads.filter((element) => {
+						if ('redirected' === filter.on) {
+							return filter.on === element[filter.type] || 'redirect' === element[filter.type];
+						}
+						return filter.on === element[filter.type];
+					});
+					break;
+				case 'user_id':
+					dlmReportsInstance.tempDownloads = dlmReportsInstance.tempDownloads.filter((element) => {
+						return filter.on === element[filter.type];
+					});
+					break;
+				default:
+					jQuery(document).trigger('dlm_reports_filter_downloads_' + filter.type, [dlmReportsInstance, filter, dlmReportsInstance.tempDownloads]);
+					break;
+			}
 		});
 		dlmReportsInstance.setUserDownloads();
 	}
