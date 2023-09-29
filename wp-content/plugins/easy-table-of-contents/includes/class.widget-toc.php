@@ -303,9 +303,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 				do_action( 'ez_toc_after_widget_container' );
 
 				echo $after_widget;
-
-				// Enqueue the script.
-				wp_enqueue_script( 'ez-toc-js' );
+								
 			}
 		}
 
@@ -350,7 +348,7 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 			$defaults = array(
 				'affix' => '0',
 				'highlight_color' => '#ededed',
-				'title' => 'Table of Contents',
+				'title' => __('Table of Contents', 'easy-table-of-contents' ),
 			);
 
 			$instance = wp_parse_args( (array) $instance, $defaults );

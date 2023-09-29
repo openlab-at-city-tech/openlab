@@ -345,22 +345,6 @@ add_filter(
 );
 
 /**
- * Remove the Create by Mediavine node from the post content before extracting headings.
- *
- * @link https://wordpress.org/plugins/mediavine-create/
- * @since 2.0.8
- */
-add_filter(
-	'ez_toc_exclude_by_selector',
-	function( $selectors ) {
-
-		$selectors['mediavine-create'] = '.mv-create-card';
-
-		return $selectors;
-	}
-);
-
-/**
  * Remove the Contextual Related Posts node from the post content before extracting headings.
  *
  * @link https://wordpress.org/plugins/contextual-related-posts/
@@ -721,3 +705,216 @@ if ( 'Avada' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) 
     
 }
 
+
+/**
+ * Grow, Social Pro by Mediavine plugin compatibility
+ * Anchors were not being generated for special char like inverted comma.
+ * @since 2.0.52
+ */
+add_filter('ez_toc_extract_headings_content', 'ez_toc_social_pro_by_mediavine_com',10,1);
+
+function ez_toc_social_pro_by_mediavine_com($content){
+	
+	if(class_exists( '\Mediavine\Grow\Shortcodes' ) && ezTOC_Option::get('mediavine-create') == 1){
+
+		$settings = Mediavine\Grow\Settings::get_setting( 'dpsp_pinterest_share_images_setting', [] );		
+		if ( !empty( $settings['share_image_page_builder_compatibility'] ) || ! empty( $settings['share_image_lazy_load_compatibility'] )  ) {
+			$content = mb_convert_encoding( html_entity_decode($content), 'HTML-ENTITIES', 'UTF-8' );	
+		}
+						
+	}
+		
+	return $content;
+}
+
+/**
+ * Parse Gutenberg reusable block
+ * @since 2.0.53
+ */
+add_filter('ez_toc_modify_process_page_content', 'ez_toc_parse_gutenberg_reusable_block',10,1);
+
+function ez_toc_parse_gutenberg_reusable_block($content){
+	
+	if(function_exists('do_blocks')){
+		$content = do_blocks($content);
+	}
+	return $content;
+}
+
+/**
+ * Create by Mediavine plugin compatibility
+ * shortcode were not being parse for custom post type mv_create added by this plugin inside post content
+ * @since 2.0.52
+ */
+add_filter('ez_toc_modify_process_page_content', 'ez_toc_parse_mv_create_shortcode',10,1);
+
+function ez_toc_parse_mv_create_shortcode($content){
+	
+	if ( in_array( 'mediavine-create/mediavine-create.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) && ezTOC_Option::get('mediavine-create') == 1) {
+		if ( has_shortcode( $content, 'mv_create' )) {
+			$content = do_shortcode($content);		
+		}		
+	}			
+	return $content;
+}
+/**
+ * Remove the Create by Mediavine node from the post content before extracting headings.
+ *
+ * @link https://wordpress.org/plugins/mediavine-create/
+ * @since 2.0.8
+ * Modifyed in 2.0.52
+ */
+add_filter(
+	'ez_toc_exclude_by_selector',
+	function( $selectors ) {
+		if(ezTOC_Option::get('mediavine-create') != 1){
+			$selectors['mediavine-create'] = '.mv-create-card';
+		}	
+		return $selectors;
+	}
+);
+
+
+/**
+ * UpSolution Core compatibility
+ * @link https://help.us-themes.com/impreza/us-core/
+ * @since 2.0.54
+ */
+
+ add_filter('ez_toc_sidebar_has_toc_filter', 'ez_toc_sidebar_has_toc_status_us_core', 10,1);
+
+ function ez_toc_sidebar_has_toc_status_us_core($status){
+ 
+	if(function_exists('us_get_page_area_id')){
+		$content_template_id = us_get_page_area_id( 'content' );
+		$content_template    = get_post( (int) $content_template_id );
+		if(isset($content_template->post_content)){
+			if ( has_shortcode( $content_template->post_content, 'toc' ) || has_shortcode( $content_template->post_content, 'ez-toc' ) ) {
+				$status = true;				
+			}
+		}
+	}
+
+	 return $status;
+}
+
+/**
+ * Custom Field Suite plugin sidebar compatibility
+ *
+ * @link https://wordpress.org/plugins/custom-field-suite/
+ * @since 2.0.52
+ *
+ */
+
+add_filter('ez_toc_sidebar_has_toc_filter', 'ez_toc_sidebar_has_toc_status_cfs', 10,1);
+
+function ez_toc_sidebar_has_toc_status_cfs($status){
+
+	global $post;
+	if(function_exists('CFS')){
+		$fields = CFS()->get(false, $post->ID);
+		if(isset($fields['use_ez_toc']) &&  $fields['use_ez_toc'] == true){
+			$status = true;
+		}
+
+	}
+	
+	return $status;
+}
+
+/** 
+ * If Chamomile theme is active then remove hamburger div from content
+ * @since 2.0.53
+ * */
+if('Chamomile' == apply_filters( 'current_theme', get_option( 'current_theme' ) )){
+	add_action('wp_footer', 'ez_toc_add_custom_script');
+	function ez_toc_add_custom_script()
+	{
+		?>
+		<script type="text/javascript">
+			jQuery(document).ready(function($){
+				$('#ez-toc-container').find('.hamburger').remove();
+			});
+		</script>
+		<?php
+	}
+}
+
+/**
+ * Block Editor Template
+ *
+ * @link https://developer.wordpress.org/block-editor/
+ * @since 2.0.54
+ *
+ */
+
+ if(function_exists('wp_is_block_theme') && wp_is_block_theme()){
+	add_filter('ez_toc_sidebar_has_toc_filter', 'ez_toc_guttenberg_has_toc', 10,1);
+ }
+
+ function ez_toc_guttenberg_has_toc($status){
+
+	$block_post_template = get_block_template(get_stylesheet() . '//' .'single');
+	$block_page_template = get_block_template(get_stylesheet() . '//' .'page');
+	if(is_single() && (has_shortcode($block_post_template->content,'toc') || has_shortcode($block_post_template->content,'ez-toc')))
+	{
+		$status=true;
+	}
+	if(is_page() && (has_shortcode($block_page_template->content,'toc') || has_shortcode($block_page_template->content,'ez-toc')))
+	{
+		$status=true;
+	}
+	return $status;
+ }
+
+ if(function_exists('init_goodlayers_core_system') && ezTOC_Option::get('goodlayers-core') == 1){
+
+// function to get combined content of goodlayers builder
+function ezTOC_gdlr_core()
+{
+   $postID =  get_the_ID(); 
+   $gdlr_core_builder  = get_post_meta( $postID ,'gdlr-core-page-builder' , false );
+   $gdlr_core_builder = isset($gdlr_core_builder[0])?$gdlr_core_builder[0]:$gdlr_core_builder;
+   $content="";
+   if(!empty($gdlr_core_builder) && is_array($gdlr_core_builder))
+   {
+     foreach($gdlr_core_builder as $element)
+     {
+        if(isset($element['value']['content'])){
+            $content= $content . $element['value']['content'];
+        }
+     }
+   }
+   return $content;
+} 
+
+// Adding Goodlayers Content  to create combined toc
+add_filter( 'ez_toc_modify_process_page_content', 'ez_toc_gdlr_core_process_page_content', 10, 1 );
+function ez_toc_gdlr_core_process_page_content( $content )
+{
+
+    if (function_exists( 'ezTOC_gdlr_core' ) )
+    {
+        $eztoc_gdlr_core_content = ezTOC_gdlr_core( get_the_ID() );
+        $content = $content . $eztoc_gdlr_core_content;
+    }
+    return $content;
+}
+
+// Modifying  Goodlayers content  to create heading link for toc
+add_action('gdlr_core_the_content', 'ez_toc_gdlr_core_the_content', 999);
+function ez_toc_gdlr_core_the_content($content){
+        $post     = ezTOC::get( get_the_ID() );
+        if($post){
+			$find    = $post->getHeadings();	
+            $replace = $post->getHeadingsWithAnchors();
+            if ( !is_array($content ) && !empty( $find ) && !empty( $replace ) && !empty( $content ) ) 
+            {
+                return Easy_Plugins\Table_Of_Contents\Cord\mb_find_replace( $find, $replace, $content );
+            }
+        } 
+		
+		return $content;
+}
+
+}
