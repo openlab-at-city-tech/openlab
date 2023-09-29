@@ -3,7 +3,7 @@
 Plugin Name: GTranslate
 Plugin URI: https://gtranslate.io/?xyz=998
 Description: Translate your website and make it multilingual. For support visit <a href="https://wordpress.org/support/plugin/gtranslate">GTranslate Support Forum</a>.
-Version: 3.0.3
+Version: 3.0.4
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
 Text Domain: gtranslate
@@ -651,7 +651,12 @@ function RefreshDoWidgetCode() {
     }
 
     if(widget_look == 'dropdown' || widget_look == 'lang_names' || widget_look == 'lang_codes' || widget_look == 'globe') {
-        jQuery('#flag_size_option,#flag_style_option').hide();
+        jQuery('#flag_style_option').hide();
+
+        if(widget_look == 'globe')
+            jQuery('#flag_size_option').show();
+        else
+            jQuery('#flag_size_option').hide();
     } else {
         jQuery('#flag_style_option').show();
 
@@ -1511,9 +1516,9 @@ EOT;
         $data['flag_style'] = isset($_POST['flag_style']) ? sanitize_text_field($_POST['flag_style']) : '2d';
         $data['globe_size'] = isset($_POST['globe_size']) ? intval($_POST['globe_size']) : 60;
         $data['globe_color'] = isset($_POST['globe_color']) ? sanitize_hex_color($_POST['globe_color']) : '#66aaff';
-        $data['incl_langs'] = (isset($_POST['incl_langs']) and is_array($_POST['incl_langs'])) ? $_POST['incl_langs'] : array($data['default_language']);
-        $data['fincl_langs'] = (isset($_POST['fincl_langs']) and is_array($_POST['fincl_langs'])) ? $_POST['fincl_langs'] : array($data['default_language']);
-        $data['alt_flags'] = (isset($_POST['alt_flags']) and is_array($_POST['alt_flags'])) ? $_POST['alt_flags'] : array();
+        $data['incl_langs'] = (isset($_POST['incl_langs']) and is_array($_POST['incl_langs'])) ? array_map('sanitize_text_field', $_POST['incl_langs']) : array($data['default_language']);
+        $data['fincl_langs'] = (isset($_POST['fincl_langs']) and is_array($_POST['fincl_langs'])) ? array_map('sanitize_text_field', $_POST['fincl_langs']) : array($data['default_language']);
+        $data['alt_flags'] = (isset($_POST['alt_flags']) and is_array($_POST['alt_flags'])) ? array_map('sanitize_text_field', $_POST['alt_flags']) : array();
         $data['select_language_label'] = isset($_POST['select_language_label']) ? sanitize_text_field($_POST['select_language_label']) : 'Select Language';
 
         $data['custom_css'] = isset($_POST['custom_css']) ? wp_kses_post($_POST['custom_css']) : '';
