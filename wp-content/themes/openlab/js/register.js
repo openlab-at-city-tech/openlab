@@ -119,7 +119,6 @@
 		});
 
 		var initValidation = false;
-		var asyncValidation = false;
 		var asyncLoaded = false;
 		formValidation($signup_form);
 
@@ -127,8 +126,11 @@
 					var emailInput = $(this);
 					var inputHasAutocomplete = false;
 
-					emailInput.on('keyup',function(){
+					emailInput.on('keyup change',function(){
 						validateEmail( this );
+
+						// Remove the .error sibling, which will be regenerated if needed.
+						$(this).siblings('.error').remove();
 
 						var selectedAccountType = $account_type_field.val();
 
