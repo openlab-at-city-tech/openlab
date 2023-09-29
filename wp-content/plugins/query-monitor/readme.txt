@@ -3,7 +3,7 @@ Contributors: johnbillion
 Tags: debug, debug-bar, development, performance, query monitor, rest-api
 Requires at least: 5.3
 Tested up to: 6.3
-Stable tag: 3.13.0
+Stable tag: 3.13.1
 License: GPLv2 or later
 Requires PHP: 7.4
 Donate link: https://github.com/sponsors/johnbillion
@@ -141,6 +141,12 @@ Yes. You can enable this on the Settings panel.
 In addition, if you like the plugin then I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about it too!
 
 ## Changelog ##
+
+### 3.13.1 ###
+
+* Avoid a fatal error if a deprecated warning is triggered early on during the bootstrap process
+* Avoid a PHP warning that can be triggered during certain HTTP API requests when Curl is not in use
+* Don't load QM during the plugin update process
 
 ### 3.13.0 ###
 
@@ -397,12 +403,4 @@ In addition, if you like the plugin then I'd love for you to [leave a review](ht
 * More style resetting for compatibility with Twenty Twenty.
 * Avoid a division by zero when cache hits is 0.
 * Switch to (mostly) CSS for the child menu item marker.
-
-
-### 3.3.7 ###
-
-* Expose instances where a requested template part was not loaded.
-* Update the docs for multiple `wpdb` instances.
-* Various accessibility improvements.
-* Remove the RDBMS info as it's not at all reliable.
 
