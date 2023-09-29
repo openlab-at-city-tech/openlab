@@ -70,18 +70,21 @@ class Shortcodes_Ultimate
     public  $top_level_menu ;
     public  $shortcodes_menu ;
     public  $settings_menu ;
+    public  $about_menu ;
     /**
      * Notices classes instances.
      *
      * @since  5.1.0
      */
     public  $rate_notice ;
+    public  $unsafe_features_notice ;
     /**
-     * Suggest Pro features.
+     * Other stuff
      *
      * @since  5.6.0
      */
     public  $admin_pro_features ;
+    public  $widget ;
     /**
      * Get class instance.
      *
