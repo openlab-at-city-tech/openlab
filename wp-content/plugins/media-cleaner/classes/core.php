@@ -99,6 +99,7 @@ class Meow_WPMC_Core {
 
 	private $start_time;
 	private $time_elapsed = 0;
+	private $time_remaining = 0;
 	private $item_scan_avg_time = 0;
 	private $wordpress_init_time = 0.5;
 	private $max_execution_time;
@@ -550,7 +551,7 @@ class Meow_WPMC_Core {
 	 */
 
 	function is_multilingual() {
-		return function_exists( 'icl_object_id' );
+		return function_exists( 'icl_get_languages' );
 	}
 
 	function get_languages() {
@@ -607,6 +608,11 @@ class Meow_WPMC_Core {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $this->get_issue( $id );
+
+		if ( empty( $issue ) ) {
+			$this->log( "🚫 Issue #{$id} does not exist. Cannot recover this." );
+			return false;
+		}
 
 		// Files
 		if ( $issue->type === 0 ) {
@@ -682,6 +688,12 @@ class Meow_WPMC_Core {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $this->get_issue( $id );
+
+		if ( empty( $issue ) ) {
+			$this->log( "🚫 Issue #{$id} does not exist. Cannot ignore this." );
+			return false;
+		}
+
 		if ( !$ignore ) {
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 0 WHERE id = %d", $id ) );
 		}
@@ -720,6 +732,9 @@ class Meow_WPMC_Core {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
+		if ( empty( $issue ) ) {
+			return false;
+		}
 		$issue->id = (int)$issue->id;
 		$issue->postId = (int)$issue->postId;
 		$issue->type = (int)$issue->type;
@@ -734,8 +749,8 @@ class Meow_WPMC_Core {
 		$table_name = $wpdb->prefix . "mclean_scan";
 		$issue = $this->get_issue( $id );
 
-		if ( !isset( $issue ) ) {
-			$this->log( "🚫 Issue {$id} could not be found." );
+		if ( empty( $issue ) ) {
+			$this->log( "🚫 Issue #{$id} does not exist. Cannot delete this." );
 			return false;
 		}
 
@@ -794,6 +809,7 @@ class Meow_WPMC_Core {
 					if ( !$this->trash_file( $path ) ) {
 						$this->log( "🚫 Could not trash $path." );
 						error_log( "Media Cleaner: Could not trash $path." );
+						return false;
 					}
 				}
 				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'wmpc-trash' ) );
@@ -855,6 +871,50 @@ class Meow_WPMC_Core {
 
 	private $cached_ids = array();
 	private $cached_urls = array();
+
+	// Returns the reference with the type, origin, related to a Media ID it is referenced
+	public function get_reference_for_media_id( $id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_refs";
+		$refs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE mediaId = %d", $id ), OBJECT );
+		if ( empty( $refs ) ) {
+			return false;
+		}
+		$ref = $refs[0];
+		$ref->id = (int)$ref->id;
+		$ref->mediaId = (int)$ref->mediaId;
+		$ref->originType = (int)$ref->originType;
+		$ref->origin = stripslashes( $ref->origin );
+		return $ref;
+	}
+
+	// Return the references related to a Post ID
+	public function get_references_for_post_id( $id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_refs";
+		$refs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $table_name WHERE originType LIKE %s", "%[$id]" ), OBJECT );
+		if ( empty( $refs ) ) {
+			return [];
+		}
+		$fresh_refs = array();
+		foreach ( $refs as $ref ) {
+			$mediaId = (int)$ref->mediaId > 0 ? (int)$ref->mediaId : null;
+			if ( !$mediaId && !empty( $ref->mediaUrl ) ) {
+				$mediaId = $this->find_media_id_from_file( $ref->mediaUrl, false );
+				$mediaId = !empty( $mediaId ) ? (int)$mediaId : null;
+			}
+			if ( !$mediaId ) {
+				continue;
+			}
+			array_push( $fresh_refs, [
+				'id' => (int)$ref->id,
+				'mediaId' => $mediaId,
+				'mediaUrl' => $ref->mediaUrl,
+				'originType' => $ref->originType
+			] );
+		}
+		return $fresh_refs;
+	}
 
 	// The references are actually not being added directly in the DB, they are being pushed
 	// into a cache ($this->refcache).
