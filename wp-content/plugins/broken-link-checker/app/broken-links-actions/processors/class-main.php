@@ -40,6 +40,13 @@ class Main extends Base {
 	 */
 	protected $link = null;
 
+	/**
+	 * A Store array to store data in order to avoid repetitive queries.
+	 *
+	 * @var array
+	 */
+	protected $temp_store = array();
+
 	public function __construct( Link $link = null ) {
 		$this->link = $link;
 	}
@@ -66,7 +73,10 @@ class Main extends Base {
 		//Execute link in post comments.
 		$completed_in_comments = $this->execute_in_post_comments( $post_id );
 
-		return $completed_in_posts || $completed_in_meta || $completed_in_comments;
+		// Execute link reusable blocks.
+		$completed_in_reusable_blocks = $this->execute_in_post_reusable_blocks( $post_id );
+
+		return $completed_in_posts || $completed_in_meta || $completed_in_comments || $completed_in_reusable_blocks;
 	}
 
 	public function execute_in_post_content( int $post_id = null, string $content = null ) {
@@ -74,10 +84,17 @@ class Main extends Base {
 			return false;
 		}
 
-		$post_content = empty( $content ) ? get_post_field( 'post_content', $post_id ) : $content;
-		$new_content  = $this->get_processor()->execute( $post_content, $this->link->get_link(), $this->link->get_new_link() );
+		if ( empty( $content ) ) {
+			if ( empty( $this->temp_store['posts'][ $post_id ]['content'] ) ) {
+				$this->temp_store['posts'][ $post_id ]['content'] = get_post_field( 'post_content', $post_id );
+			}
 
-		if ( $post_content !== $new_content ) {
+			$content = $this->temp_store['posts'][ $post_id ]['content'];
+		}
+
+		$new_content = $this->get_processor()->execute( $content, $this->link->get_link(), $this->link->get_new_link() );
+
+		if ( $content !== $new_content ) {
 			// At first, we are creating a new post revision.
 			wp_save_post_revision( $post_id );
 
@@ -120,7 +137,7 @@ class Main extends Base {
 			$metas = $wpdb->get_results( $query );
 
 			if ( ! empty( $metas ) ) {
-				foreach( $metas as $meta ) {
+				foreach ( $metas as $meta ) {
 					$new_content = $this->get_processor()->execute( $meta->content, $this->link->get_link(), $this->link->get_new_link() );
 
 					if ( $new_content !== $meta->content ) {
@@ -183,6 +200,66 @@ class Main extends Base {
 		return false;
 	}
 
+
+	public function execute_in_post_reusable_blocks( int $post_id = null ) {
+		if ( ! function_exists( 'register_block_type' ) ) {
+			return false;
+		}
+
+		if ( empty( $post_id ) ) {
+			return false;
+		}
+
+		$result = false;
+
+		if ( empty( $this->temp_store['posts'][ $post_id ]['content'] ) ) {
+			$this->temp_store['posts'][ $post_id ]['content'] = get_post_field( 'post_content', $post_id );
+		}
+
+		$content         = $this->temp_store['posts'][ $post_id ]['content'];
+		$reusable_blocks = $this->get_reusable_blocks_from_content( $content );
+
+		if ( ! empty( $reusable_blocks ) ) {
+			foreach ( $reusable_blocks as $block_post_id ) {
+				if ( $this->execute_in_post_content( $block_post_id ) ) {
+					$result = true;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	public function get_reusable_blocks_from_content( string $content = null ) {
+		if ( empty( $content ) ) {
+			return array();
+		}
+
+		$reusable_blocks = get_posts(
+			array(
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'post_type'      => 'wp_block',
+			)
+		);
+
+		if ( ! empty( $reusable_blocks ) ) {
+			foreach ( $reusable_blocks as $block_key => $block_id ) {
+				$block_name = '<!-- wp:block {"ref":' . $block_id . '} /-->';
+
+				if ( strpos( $content, $block_name ) === false ) {
+					unset( $reusable_blocks[ $block_key ] );
+				}
+			}
+		}
+
+		return $reusable_blocks;
+	}
+
+	public function get_site_blocks() {
+
+	}
+
 	/**
 	 * Executes in users meta table by user id.
 	 *
@@ -216,7 +293,7 @@ class Main extends Base {
 		if ( empty( $content ) ) {
 			$comment = get_comment( $id );
 
-			if ( $comment instanceof  WP_Comment || $comment instanceof  \WP_Comment ) {
+			if ( $comment instanceof WP_Comment || $comment instanceof \WP_Comment ) {
 				$content = $comment->comment_content;
 			}
 
@@ -248,21 +325,21 @@ class Main extends Base {
 	 */
 	public function execute_in_postmeta( int $meta_id = null, string $content = null ) {
 		/*
-		if ( empty( $content ) ) {
-			$meta = get_post_meta_by_id( $id );
-			$content = $meta->meta_value;
-		}
+			  if ( empty( $content ) ) {
+				  $meta = get_post_meta_by_id( $id );
+				  $content = $meta->meta_value;
+			  }
 
-		if ( ! empty( $content ) ) {
-			$new_content = $this->get_processor()->execute( $content, $this->link->get_link(), $this->link->get_new_link() );
+			  if ( ! empty( $content ) ) {
+				  $new_content = $this->get_processor()->execute( $content, $this->link->get_link(), $this->link->get_new_link() );
 
-			if ( $new_content !== $content ) {
-				return update_meta( $id, $meta->meta_key, $new_content );
-			}
-		}
+				  if ( $new_content !== $content ) {
+					  return update_meta( $id, $meta->meta_key, $new_content );
+				  }
+			  }
 
-		return false;
-		*/
+			  return false;
+			  */
 
 		return $this->execute_in_meta_table( 'post', $meta_id, $content );
 	}
@@ -275,21 +352,21 @@ class Main extends Base {
 	 *
 	 * @return false
 	 */
-	public function execute_in_usermeta( int $meta_id = null,  string $content = null ) {
+	public function execute_in_usermeta( int $meta_id = null, string $content = null ) {
 		/*
-		if ( empty( $content ) ) {
-			$meta = get_metadata_by_mid( 'user', $meta_id );
-			$content = property_exists( $meta, 'meta_value' ) ? $meta->meta_value : null;
-		}
+			  if ( empty( $content ) ) {
+				  $meta = get_metadata_by_mid( 'user', $meta_id );
+				  $content = property_exists( $meta, 'meta_value' ) ? $meta->meta_value : null;
+			  }
 
-		if ( empty( $content ) ) {
-			return false;
-		}
+			  if ( empty( $content ) ) {
+				  return false;
+			  }
 
-		$new_content = $this->get_processor()->execute( $content, $this->link->get_link(), $this->link->get_new_link() );
+			  $new_content = $this->get_processor()->execute( $content, $this->link->get_link(), $this->link->get_new_link() );
 
-		return update_metadata_by_mid( 'user', $meta_id, $new_content );
-		*/
+			  return update_metadata_by_mid( 'user', $meta_id, $new_content );
+			  */
 
 		return $this->execute_in_meta_table( 'user', $meta_id, $content );
 	}
@@ -300,7 +377,7 @@ class Main extends Base {
 		}
 
 		if ( empty( $content ) ) {
-			$meta = get_metadata_by_mid( $type, $meta_id );
+			$meta    = get_metadata_by_mid( $type, $meta_id );
 			$content = property_exists( $meta, 'meta_value' ) ? $meta->meta_value : null;
 		}
 

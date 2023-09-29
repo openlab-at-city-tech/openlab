@@ -161,6 +161,8 @@ class blcContainer {
 
 	var $wrapped_object = null;
 
+	public $updating_urls;
+
 	/**
 	 * Constructor
 	 *

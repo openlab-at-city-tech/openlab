@@ -11,7 +11,7 @@
 	<form name="save-search-query" id="custom-filter-form" action="<?php echo admin_url( 'admin.php?page=blc_local' ); ?>" method="post" class="blc-inline-form">
 		<?php wp_nonce_field( 'create-custom-filter' ); ?>
 		<input type="hidden" name="name" id="blc-custom-filter-name" value="" />
-		<input type="hidden" name="params" id="blc-custom-filter-params" value="<?php echo http_build_query( $search_params, null, '&' ); ?>" />
+		<input type="hidden" name="params" id="blc-custom-filter-params" value="<?php echo http_build_query( $search_params, '', '&' ); ?>" />
 		<input type="hidden" name="action" value="create-custom-filter" />
 		<input type="button" value="<?php esc_attr_e( 'Save This Search As a Filter', 'broken-link-checker' ); ?>" id="blc-create-filter" class="button" />
 	</form>

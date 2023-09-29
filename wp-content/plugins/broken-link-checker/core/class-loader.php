@@ -193,6 +193,7 @@ final class Loader extends Base {
 					'Scheduled_Events',
 					'Hub_Endpoints',
 					'Options',
+					'Hooks',
 				)
 			)
 		);

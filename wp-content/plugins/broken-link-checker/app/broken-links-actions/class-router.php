@@ -44,7 +44,11 @@ class Router extends Base {
 	public function direct_endpoint( string $action = null ) {
 		if ( ! empty( Settings::instance()->get( 'use_legacy_blc_version' ) ) ) {
 			$response['error_code'] = 'blc_local_mode';
-			$response['message']    = esc_html__( 'BLC is set to local. Can not perform Cloud actions', 'broken-link-checker' );
+			$response['message']    = sprintf( 
+				esc_html__( 'BLC plugin is set to Local Engine and can not perform any Cloud Engine action. Please make sure plugin is set to %1$sCloud Engine%2$s', 'broken-link-checker' ) ,
+				'<a href="' .  admin_url( 'admin.php?page=blc_dash' ) . '">',
+				'</a>'
+			);
 
 			return $response;
 		}

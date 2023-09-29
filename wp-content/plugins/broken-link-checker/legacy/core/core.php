@@ -83,6 +83,8 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 * @param blcConfigurationManager $conf An instance of the configuration manager.
 		 */
 		public function __construct( $loader, blcConfigurationManager $conf ) {
+			static $method_called = false;
+			
 			$this->db_version = BLC_DATABASE_VERSION;
 
 			$this->conf        = $conf;
@@ -104,6 +106,12 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 					return;
 				}
 			}
+
+			if ( $method_called ) {
+				return;
+			}
+
+			$method_called = true;
 
 			// Load jQuery on Dashboard pages (probably redundant as WP already does that).
 			// add_action( 'admin_print_scripts', array( $this, 'admin_print_scripts' ) );.
@@ -1304,13 +1312,11 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
                                         <th scope="row"><?php _e( 'Exclusion list', 'broken-link-checker' ); ?></th>
                                         <td><?php _e( "Don't check links where the URL contains any of these words (one per line) :", 'broken-link-checker' ); ?>
                                             <br/>
-                                            <textarea name="exclusion_list" id="exclusion_list" cols='45' rows='4'>
-			<?php
-			if ( isset( $this->conf->options['exclusion_list'] ) ) {
-				echo esc_textarea( implode( "\n", $this->conf->options['exclusion_list'] ) );
-			}
-			?>
-		</textarea>
+                                            <textarea name="exclusion_list" id="exclusion_list" cols='45' rows='4'><?php
+											if ( isset( $this->conf->options['exclusion_list'] ) ) {
+												echo esc_textarea( implode( "\n", $this->conf->options['exclusion_list'] ) );
+											}
+											?></textarea>
 
                                         </td>
                                     </tr>

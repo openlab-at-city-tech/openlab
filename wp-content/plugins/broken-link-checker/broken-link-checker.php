@@ -10,7 +10,7 @@
  * Plugin Name:       Broken Link Checker
  * Plugin URI:        https://wordpress.org/plugins/broken-link-checker/
  * Description:       Checks your blog for broken links and missing images and notifies you on the dashboard if any are found.
- * Version:           2.2.0
+ * Version:           2.2.2
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            WPMU DEV
@@ -42,7 +42,7 @@ defined( 'WPINC' ) || die;
 
 // Plugin version.
 if ( ! defined( 'WPMUDEV_BLC_VERSION' ) ) {
-	define( 'WPMUDEV_BLC_VERSION', '2.2.0' );
+	define( 'WPMUDEV_BLC_VERSION', '2.2.2' );
 }
 
 // Define WPMUDEV_BLC_PLUGIN_FILE.
@@ -71,7 +71,7 @@ if ( ! defined( 'WPMUDEV_BLC_ASSETS_URL' ) ) {
 
 // Scripts version.
 if ( ! defined( 'WPMUDEV_BLC_SCIPTS_VERSION' ) ) {
-	define( 'WPMUDEV_BLC_SCIPTS_VERSION', '2.2.0' );
+	define( 'WPMUDEV_BLC_SCIPTS_VERSION', '2.2.1' );
 }
 
 // SUI version number used in BLC_SHARED_UI_VERSION and enqueues.

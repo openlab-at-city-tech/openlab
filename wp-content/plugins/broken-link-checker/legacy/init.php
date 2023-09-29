@@ -11,7 +11,7 @@ if ( empty( WPMUDEV_BLC\App\Options\Settings\Model::instance()->get( 'use_legacy
 		}
 	}
 } else if ( ! empty( $_GET['page'] ) && WPMUDEV_BLC\App\Admin_Pages\Local_Submenu\Controller::instance()->get_menu_slug() !== $_GET['page'] ) {
-	if ( ! WPMUDEV_BLC\Core\Utils\Utilities::is_subsite() ) {
+	if ( WPMUDEV_BLC\Core\Utils\Utilities::is_subsite() ) {
 		return;
 	}
 }

@@ -1,29 +1,48 @@
 <?php
 
+if ( ! function_exists( 'wpmudev_blc_local_get_charset_collate' ) ) {
+	function wpmudev_blc_local_get_charset_collate() {
+		global $wpdb;
+
+		// Let's make sure that new tables collate will match with the one set in posts table (and specifically post_status, since upon synch there's a join with that column).
+		// Reason for this is to avoid getting the `Illegal mix of collations` error.
+		// Root of this issue is that older WP versions (prior to 4.6) had different default collation ( utf8mb4_unicode_ci ) and versions from 4.6 and after use `utf8mb4_unicode_520_ci`.
+		// For reference :
+		// v4.5: https://github.com/WordPress/WordPress/blob/4.5-branch/wp-includes/wp-db.php#L761
+		// v4.6: https://github.com/WordPress/WordPress/blob/4.6-branch/wp-includes/wp-db.php#L798
+		$collate         = WPMUDEV_BLC\Core\Utils\Utilities::get_table_col_collation( $wpdb->posts, 'post_type' );
+		$charset         = WPMUDEV_BLC\Core\Utils\Utilities::get_table_col_charset( $wpdb->posts, 'post_type' );
+		$charset_collate = '';
+
+		if ( ! empty( $collate ) && ! empty( $charset ) ) {
+			$charset_collate = "DEFAULT CHARACTER SET {$charset} COLLATE {$collate}";
+		} else {
+			if ( ! empty( $wpdb->charset ) ) {
+
+				//Some German installs use "utf-8" (invalid) instead of "utf8" (valid). None of
+				//the charset ids supported by MySQL contain dashes, so we can safely strip them.
+				//See http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html
+				$charset = str_replace( '-', '', $wpdb->charset );
+	
+				//set charset
+				$charset_collate = "DEFAULT CHARACTER SET {$charset}";
+			}
+	
+			if ( ! empty( $wpdb->collate ) ) {
+				$charset_collate .= " COLLATE {$wpdb->collate}";
+			}
+		}
+
+		return $charset_collate;
+	}
+}
+
 if ( ! function_exists( 'blc_get_db_schema' ) ) {
 
 	function blc_get_db_schema() {
 		global $wpdb;
 
-		//Use the character set and collation that's configured for WP tables
-		$charset_collate = '';
-		if ( ! empty( $wpdb->charset ) ) {
-
-			//Some German installs use "utf-8" (invalid) instead of "utf8" (valid). None of
-			//the charset ids supported by MySQL contain dashes, so we can safely strip them.
-			//See http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html
-			$charset = str_replace( '-', '', $wpdb->charset );
-
-			//set charset
-			$charset_collate = "DEFAULT CHARACTER SET {$charset}";
-		}
-
-		if ( ! empty( $wpdb->collate ) ) {
-			$charset_collate .= " COLLATE {$wpdb->collate}";
-		}
-
-		// To try and fix the wrong collation issue.
-		//$collate = $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
+		$charset_collate = wpmudev_blc_local_get_charset_collate();
 
 		$blc_db_schema = <<<EOM
 
