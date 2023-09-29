@@ -12,7 +12,7 @@ class Priority_Queue implements Countable, IteratorAggregate {
         $this->queue = new SplPriorityQueue;
     }
 
-    public function count() {
+    public function count(): int {
         return count( $this->queue );
     }
 
@@ -20,7 +20,7 @@ class Priority_Queue implements Countable, IteratorAggregate {
         $this->queue->insert( $data, $priority );
     }
 
-    public function getIterator() {
+    public function getIterator(): \Traversable {
         return clone $this->queue;
     }
 }
