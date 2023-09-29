@@ -1,0 +1,600 @@
+# Copyright (C) 2023 Rodney Blevins, Marius Ooms, Boone Gorges
+# This file is distributed under the (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html).
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Groupblog 1.9.3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-groupblog\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-07-28T12:52:09-05:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: bp-groupblog\n"
+
+#. Plugin Name of the plugin
+msgid "BP Groupblog"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/bp-groupblog/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Automates and links WPMU blogs groups controlled by the group creator."
+msgstr ""
+
+#. Author of the plugin
+msgid "Rodney Blevins, Marius Ooms, Boone Gorges"
+msgstr ""
+
+#: bp-groupblog-admin.php:86
+#: bp-groupblog-admin.php:244
+msgid "<p><strong>This page has been created automatically by the BuddyPress GroupBlog plugin.</strong></p><p>Please contact the site admin if you see this message instead of your blog posts. Possible solution: please advise your site admin to create the <a href=\"https://wordpress.org/support/article/pages/\">page template</a> needed for the BuddyPress GroupBlog plugin.<p>"
+msgstr ""
+
+#: bp-groupblog-admin.php:165
+#: bp-groupblog.php:142
+msgid "Blog"
+msgstr ""
+
+#: bp-groupblog-admin.php:338
+#: bp-groupblog-admin.php:339
+msgid "GroupBlog Setup"
+msgstr ""
+
+#: bp-groupblog-admin.php:365
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: bp-groupblog-admin.php:382
+msgid "Options saved."
+msgstr ""
+
+#: bp-groupblog-admin.php:387
+msgid "BuddyPress GroupBlog Settings"
+msgstr ""
+
+#: bp-groupblog-admin.php:393
+msgid "Theme"
+msgstr ""
+
+#: bp-groupblog-admin.php:394
+msgid "Redirect"
+msgstr ""
+
+#: bp-groupblog-admin.php:395
+msgid "Layout"
+msgstr ""
+
+#: bp-groupblog-admin.php:396
+msgid "Defaults"
+msgstr ""
+
+#: bp-groupblog-admin.php:397
+msgid "Validation"
+msgstr ""
+
+#: bp-groupblog-admin.php:398
+msgid "About"
+msgstr ""
+
+#: bp-groupblog-admin.php:466
+msgid "Default Theme"
+msgstr ""
+
+#: bp-groupblog-admin.php:469
+msgid "Select the default theme for new groupblogs:"
+msgstr ""
+
+#: bp-groupblog-admin.php:471
+msgid "GroupBlog Themes:"
+msgstr ""
+
+#: bp-groupblog-admin.php:495
+msgid "No groupblog-enabled themes available"
+msgstr ""
+
+#: bp-groupblog-admin.php:500
+msgid "Regular Themes:"
+msgstr ""
+
+#: bp-groupblog-admin.php:524
+msgid "No regular themes available"
+msgstr ""
+
+#: bp-groupblog-admin.php:530
+msgid "- None selected -"
+msgstr ""
+
+#: bp-groupblog-admin.php:569
+msgid "Current theme preview"
+msgstr ""
+
+#. translators: 1: theme title, 2: theme version, 3: theme author
+#: bp-groupblog-admin.php:576
+msgid "%1$s %2$s by %3$s"
+msgstr ""
+
+#: bp-groupblog-admin.php:590
+msgid "Default Landing Page"
+msgstr ""
+
+#: bp-groupblog-admin.php:592
+msgid "The page that is linked to from the \"Blog\" tab of the Group navigation. Selecting \"Disabled\" will use the buddypress template included in the plugin, no redirect will take place. The \"Home Page\" setting will create a redirect to the blog front page. The \"Template Page\" setting will create a redirect to the blog template page, additionally when using this setting you can choose a specific page template layout in the next tab."
+msgstr ""
+
+#: bp-groupblog-admin.php:596
+msgid "Redirect Enabled to:"
+msgstr ""
+
+#: bp-groupblog-admin.php:598
+msgid "Disabled"
+msgstr ""
+
+#: bp-groupblog-admin.php:604
+msgid "Home Page"
+msgstr ""
+
+#: bp-groupblog-admin.php:609
+msgid "Page Template Title: "
+msgstr ""
+
+#: bp-groupblog-admin.php:611
+msgid "All existing Group Blogs will be automatically updated on each change."
+msgstr ""
+
+#: bp-groupblog-admin.php:612
+msgid "The \"Template Page\" option will create a page on group blogs and links to a template file within your theme. Don't worry about the name you choose, we'll make sure your page finds it way to the template file. For custom themes make sure to <a href=\"https://wordpress.org/support/article/pages/\">create</a> this template file manually."
+msgstr ""
+
+#: bp-groupblog-admin.php:617
+msgid "Redirect Group Home:"
+msgstr ""
+
+#: bp-groupblog-admin.php:619
+msgid "Yes, redirect Group Home to Blog Home"
+msgstr ""
+
+#: bp-groupblog-admin.php:619
+msgid "This option will take control of the GROUP home page and redirects it to the BLOG home page. This will enable posting from the group Home using P2 instead of the BuddyPress form."
+msgstr ""
+
+#: bp-groupblog-admin.php:629
+#: bp-groupblog-admin.php:665
+msgid "Template Page Layout"
+msgstr ""
+
+#: bp-groupblog-admin.php:631
+msgid "Please select the option \"Template Page\" on the Redirect tab in order to choose a layout."
+msgstr ""
+
+#: bp-groupblog-admin.php:633
+msgid "Please select a Layout which you would like to use for your Group Blog. Additionally, incombination with \"Redirect Group Home\" setting you can set this as your Group Home page."
+msgstr ""
+
+#: bp-groupblog-admin.php:641
+#: bp-groupblog.php:1088
+msgid "Magazine"
+msgstr ""
+
+#: bp-groupblog-admin.php:642
+#: bp-groupblog.php:1089
+msgid "Balanced template for groups with diverse postings."
+msgstr ""
+
+#: bp-groupblog-admin.php:647
+#: bp-groupblog.php:1094
+msgid "Microblog"
+msgstr ""
+
+#: bp-groupblog-admin.php:648
+#: bp-groupblog.php:1095
+msgid "Great for simple listing of posts in a chronological order."
+msgstr ""
+
+#: bp-groupblog-admin.php:657
+msgid "Group admin layout control:"
+msgstr ""
+
+#: bp-groupblog-admin.php:659
+msgid "Allow group admins to select the layout for their group themselves."
+msgstr ""
+
+#: bp-groupblog-admin.php:667
+msgid "Layout options are only available for the \"P2 BuddyPress\" Theme. Please select the \"P2 Buddypress\" theme on the \"Theme\" tab in order to choose a layout. Additionally the Redirect option needs to be set to \"Template Page\"."
+msgstr ""
+
+#: bp-groupblog-admin.php:672
+msgid "Default Blog Settings"
+msgstr ""
+
+#: bp-groupblog-admin.php:677
+msgid "Default Post Category:"
+msgstr ""
+
+#: bp-groupblog-admin.php:679
+msgid "(Overwrites \"Uncategorized\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:683
+msgid "Default Link Category:"
+msgstr ""
+
+#: bp-groupblog-admin.php:685
+msgid "(Overwrites \"Blogroll\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:689
+msgid "Set First Post to Draft"
+msgstr ""
+
+#: bp-groupblog-admin.php:692
+#: bp-groupblog-admin.php:700
+#: bp-groupblog-admin.php:708
+msgid "Yes"
+msgstr ""
+
+#: bp-groupblog-admin.php:692
+msgid "(Default Post \"Hello World\")"
+msgstr ""
+
+#: bp-groupblog-admin.php:697
+msgid "Delete Initial Comment"
+msgstr ""
+
+#: bp-groupblog-admin.php:705
+msgid "Delete Blogroll Links"
+msgstr ""
+
+#: bp-groupblog-admin.php:718
+msgid "Validation Settings"
+msgstr ""
+
+#: bp-groupblog-admin.php:720
+msgid "Change the default WordPress blog validation settings."
+msgstr ""
+
+#: bp-groupblog-admin.php:724
+msgid "Allow:"
+msgstr ""
+
+#: bp-groupblog-admin.php:727
+msgid "Dashes"
+msgstr ""
+
+#: bp-groupblog-admin.php:727
+#: bp-groupblog-admin.php:735
+#: bp-groupblog-admin.php:743
+msgid "(Default: Not Allowed)"
+msgstr ""
+
+#: bp-groupblog-admin.php:735
+msgid "Underscores"
+msgstr ""
+
+#: bp-groupblog-admin.php:743
+msgid "All Numeric Names"
+msgstr ""
+
+#: bp-groupblog-admin.php:748
+msgid "Minimum Length:"
+msgstr ""
+
+#: bp-groupblog-admin.php:750
+msgid "(Default: 4 Characters)"
+msgstr ""
+
+#: bp-groupblog-admin.php:759
+msgid "About This Plugin"
+msgstr ""
+
+#: bp-groupblog-admin.php:762
+msgid "Authors"
+msgstr ""
+
+#: bp-groupblog-admin.php:766
+msgid "Donate"
+msgstr ""
+
+#: bp-groupblog-admin.php:767
+msgid "PayPal"
+msgstr ""
+
+#: bp-groupblog-admin.php:770
+msgid "Support"
+msgstr ""
+
+#: bp-groupblog-admin.php:771
+msgid "BuddyPress Forums"
+msgstr ""
+
+#: bp-groupblog-admin.php:772
+msgid "WordPress Forums"
+msgstr ""
+
+#: bp-groupblog-admin.php:775
+msgid "Trac"
+msgstr ""
+
+#: bp-groupblog-admin.php:776
+msgid "Revision Log"
+msgstr ""
+
+#: bp-groupblog-admin.php:776
+msgid "Trac Browser"
+msgstr ""
+
+#: bp-groupblog-admin.php:779
+msgid "Rate"
+msgstr ""
+
+#: bp-groupblog-admin.php:780
+msgid "Let everyone know! Only if you like it :)"
+msgstr ""
+
+#: bp-groupblog-admin.php:784
+msgid "Acknowledgement"
+msgstr ""
+
+#: bp-groupblog-admin.php:785
+msgid "Thanks goes out to the following people:"
+msgstr ""
+
+#: bp-groupblog-admin.php:802
+msgid "Save Changes"
+msgstr ""
+
+#: bp-groupblog-classes.php:25
+#: bp-groupblog.php:988
+msgid "Group Blog"
+msgstr ""
+
+#: bp-groupblog.php:193
+#: bp-groupblog.php:600
+msgid "Please choose one of your blogs from the drop-down menu."
+msgstr ""
+
+#: bp-groupblog.php:225
+#: bp-groupblog.php:609
+msgid "There was an error creating your group blog, please try again."
+msgstr ""
+
+#: bp-groupblog.php:227
+msgid "Group details were successfully updated."
+msgstr ""
+
+#: bp-groupblog.php:640
+#: bp-groupblog.php:709
+msgid "Blog Title:"
+msgstr ""
+
+#: bp-groupblog.php:650
+#: bp-groupblog.php:730
+msgid "Blog Address:"
+msgstr ""
+
+#. translators: 1. Site name; 2. Group name.
+#: bp-groupblog.php:661
+msgid "Uncouple the blog \"%1$s\" from the group \"%2$s\":"
+msgstr ""
+
+#. translators: Link to Users panel.
+#: bp-groupblog.php:664
+msgid "<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href=\"%1$s\">the Users panel</a> if you&#8217;d like to remove users from the blog."
+msgstr ""
+
+#: bp-groupblog.php:666
+msgid "Uncouple"
+msgstr ""
+
+#: bp-groupblog.php:680
+msgid "Choose either one of your existing blogs or create a new one all together with the details displayed below."
+msgstr ""
+
+#: bp-groupblog.php:680
+msgid "Take care as you can only choose once. Later you may still disable or enable the blog, but your choice is set."
+msgstr ""
+
+#: bp-groupblog.php:683
+msgid "Use one of your own available blogs:"
+msgstr ""
+
+#: bp-groupblog.php:688
+msgid "choose a blog"
+msgstr ""
+
+#: bp-groupblog.php:704
+msgid "Or, create a new blog"
+msgstr ""
+
+#: bp-groupblog.php:833
+msgid "Only lowercase letters and numbers allowed."
+msgstr ""
+
+#. translators: %d: The minimum number of characters for a blog name.
+#: bp-groupblog.php:844
+msgid "Blog name must be at least %d characters."
+msgstr ""
+
+#. translators: %d: The minimum number of characters for a Site name.
+#: bp-groupblog.php:861
+msgid "Sorry, blog names may not contain the character %s!"
+msgstr ""
+
+#: bp-groupblog.php:870
+msgid "Sorry, blog names must have letters too!"
+msgstr ""
+
+#: bp-groupblog.php:929
+msgid "You must be a group admin to perform this action."
+msgstr ""
+
+#: bp-groupblog.php:941
+msgid "Blog uncoupled."
+msgstr ""
+
+#: bp-groupblog.php:995
+msgid "Enable group blog"
+msgstr ""
+
+#: bp-groupblog.php:1004
+msgid "Member Options"
+msgstr ""
+
+#: bp-groupblog.php:1006
+msgid "Enable blog posting to allow adding of group members to the blog with the roles set below."
+msgstr ""
+
+#: bp-groupblog.php:1006
+msgid "When disabled, all members will temporarily be set to subscribers, disabling posting."
+msgstr ""
+
+#: bp-groupblog.php:1009
+msgid "Enable member blog posting"
+msgstr ""
+
+#: bp-groupblog.php:1031
+msgid "Default Administrator Role:"
+msgstr ""
+
+#: bp-groupblog.php:1032
+#: bp-groupblog.php:1039
+#: bp-groupblog.php:1046
+#: bp-groupblog.php:1055
+msgid "Administrator"
+msgstr ""
+
+#: bp-groupblog.php:1033
+#: bp-groupblog.php:1040
+#: bp-groupblog.php:1047
+#: bp-groupblog.php:1056
+msgid "Editor"
+msgstr ""
+
+#: bp-groupblog.php:1034
+#: bp-groupblog.php:1041
+#: bp-groupblog.php:1048
+#: bp-groupblog.php:1057
+msgid "Author"
+msgstr ""
+
+#: bp-groupblog.php:1035
+#: bp-groupblog.php:1042
+#: bp-groupblog.php:1049
+#: bp-groupblog.php:1058
+msgid "Contributor"
+msgstr ""
+
+#: bp-groupblog.php:1036
+#: bp-groupblog.php:1043
+#: bp-groupblog.php:1050
+#: bp-groupblog.php:1059
+msgid "Subscriber"
+msgstr ""
+
+#: bp-groupblog.php:1038
+msgid "Default Moderator Role:"
+msgstr ""
+
+#: bp-groupblog.php:1045
+msgid "Default Member Role:"
+msgstr ""
+
+#: bp-groupblog.php:1053
+msgid "A bit about WordPress member roles:"
+msgstr ""
+
+#: bp-groupblog.php:1055
+msgid "Somebody who has access to all the administration features."
+msgstr ""
+
+#: bp-groupblog.php:1056
+msgid "Somebody who can publish posts, manage posts as well as manage other people's posts, etc."
+msgstr ""
+
+#: bp-groupblog.php:1057
+msgid "Somebody who can publish and manage their own posts."
+msgstr ""
+
+#: bp-groupblog.php:1058
+msgid "Somebody who can write and manage their posts but not publish posts."
+msgstr ""
+
+#: bp-groupblog.php:1059
+msgid "Somebody who can read comments/comment/receive news letters, etc."
+msgstr ""
+
+#: bp-groupblog.php:1078
+msgid "Select Layout"
+msgstr ""
+
+#: bp-groupblog.php:1080
+msgid "Please select a Layout which you would like to use for your Group Blog."
+msgstr ""
+
+#: bp-groupblog.php:1109
+msgid "Save Changes &raquo;"
+msgstr ""
+
+#: bp-groupblog.php:1143
+msgid " We suggest adjusting the blog address below, in accordance with the following requirements:"
+msgstr ""
+
+#: bp-groupblog.php:1145
+msgid " &raquo; Only letters and numbers allowed."
+msgstr ""
+
+#. translators: Character count.
+#: bp-groupblog.php:1148
+msgid " &raquo; Must be at least %s characters."
+msgstr ""
+
+#: bp-groupblog.php:1150
+msgid " &raquo; Has to contain letters as well."
+msgstr ""
+
+#. translators: 1. User link; 2. Post link; 3. Group link.
+#: bp-groupblog.php:1337
+msgid "%1$s edited the blog post %2$s in the group %3$s:"
+msgstr ""
+
+#. translators: 1. User link; 2. Post link; 3. Group link.
+#: bp-groupblog.php:1342
+msgid "%1$s wrote a new blog post %2$s in the group %3$s:"
+msgstr ""
+
+#: bp-groupblog.php:1512
+msgid "New groupblog comment"
+msgstr ""
+
+#: bp-groupblog.php:1514
+msgid "Groupblog Comments"
+msgstr ""
+
+#: bp-groupblog.php:1514
+msgid "Blog Comments"
+msgstr ""
+
+#: bp-groupblog.php:1583
+msgid "Anonymous user"
+msgstr ""
+
+#. translators: 1. User link; 2. Post link; 3. Site lin.
+#: bp-groupblog.php:1588
+msgid "%1$s commented on the post, %2$s, on the groupblog %3$s"
+msgstr ""
+
+#: bp-groupblog.php:1869
+msgid "Blog Posts"
+msgstr ""
+
+#: groupblog/inc/activity.php:3
+msgid "Blog Activity"
+msgstr ""
+
+#: groupblog/inc/activity.php:29
+msgid "Sorry, there was no blog activity found."
+msgstr ""

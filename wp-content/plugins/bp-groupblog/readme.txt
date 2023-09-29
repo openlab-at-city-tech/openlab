@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 5.5
-Stable tag: 1.9.2
+Tested up to: 6.2
+Stable tag: 1.9.3
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -50,6 +50,15 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.3 =
+* When a user leaves the group, remove them altogether from the group blog.
+* Fix cache invalidation problem that caused a failed attempt to fetch a deleted group.
+* Internal improvements to reduce direct database queries.
+* Improved compatibility with PHP 8+.
+* Improved compatibility with latest versions of WordPress.
+* Improved translator comments.
+* Improvements to inline documentation.
 
 = 1.9.2 =
 * Use group avatar on Site Directory for groupblogs, rather than creator user avatar.
@@ -241,4 +250,4 @@ Updated language files
 * Initial release.
 
 = The changelog can also be found here: =
-http://plugins.trac.wordpress.org/log/bp-groupblog?verbose=on
+https://plugins.trac.wordpress.org/log/bp-groupblog?verbose=on

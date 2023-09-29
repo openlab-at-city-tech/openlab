@@ -1,6 +1,6 @@
 <div class="activity single-group">
 
-	<h3><?php _e( 'Blog Activity', 'groupblog' ) ?></h3>
+	<h3><?php _e( 'Blog Activity', 'bp-groupblog' ) ?></h3>
 
 	<?php if ( bp_has_activities( 'per_page=5&object=blogs&count_total=1&primary_id=' . get_groupblog_blog_id ( bp_get_group_id() ) ) ) : ?>
 
@@ -26,7 +26,7 @@
 	<?php else : ?>
 
 		<div id="message" class="info">
-			<p><?php _e( 'Sorry, there was no blog activity found.', 'buddypress' ) ?></p>
+			<p><?php _e( 'Sorry, there was no blog activity found.', 'bp-groupblog' ) ?></p>
 		</div>
 
 	<?php endif; ?>
