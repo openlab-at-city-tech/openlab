@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Perks 2.3.2\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-yN_FI1khD\n"
+"Project-Id-Version: Gravity Perks 2.3.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-FYY72kPQD\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-06T01:50:15+00:00\n"
+"POT-Creation-Date: 2023-08-24T16:12:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: gravityperks\n"
@@ -30,6 +30,18 @@ msgstr ""
 
 #. Author of the plugin
 msgid "Gravity Wiz"
+msgstr ""
+
+#: admin/manage_perks.php:137
+#: admin/manage_perks.php:876
+#: gravityperks.php:200
+#: gravityperks.php:768
+msgid "Manage Perks"
+msgstr ""
+
+#: admin/manage_perks.php:139
+#: admin/manage_perks.php:882
+msgid "Install Perks"
 msgstr ""
 
 #: admin/manage_perks.php:162
@@ -94,6 +106,7 @@ msgid "Docs"
 msgstr ""
 
 #: admin/manage_perks.php:412
+#: admin/manage_perks.php:699
 msgid "Deactivate"
 msgstr ""
 
@@ -150,8 +163,28 @@ msgstr ""
 msgid "You do not have sufficient permissions to delete plugins for this site."
 msgstr ""
 
+#: admin/manage_perks.php:699
+msgid "Are you sure you wish to deactivate your Gravity Perks license on this site?"
+msgstr ""
+
+#: admin/manage_perks.php:702
+msgid "Upgrade"
+msgstr ""
+
+#: admin/manage_perks.php:705
+msgid "Manage"
+msgstr ""
+
+#: admin/manage_perks.php:714
+msgid "Refresh"
+msgstr ""
+
 #: admin/manage_perks.php:727
 msgid "Get Support"
+msgstr ""
+
+#: admin/manage_perks.php:736
+msgid "Register License"
 msgstr ""
 
 #: admin/manage_perks.php:770
@@ -186,18 +219,8 @@ msgstr ""
 msgid "License successfully refreshed."
 msgstr ""
 
-#: admin/manage_perks.php:876
-#: gravityperks.php:200
-#: gravityperks.php:768
-msgid "Manage Perks"
-msgstr ""
-
 #: admin/manage_perks.php:877
 msgid "Welcome to the <strong>Manage Perks</strong> page. Here you can activate/deactivate installed perks, view documentation, modify a perk\\'s global settings and also delete unwanted perks."
-msgstr ""
-
-#: admin/manage_perks.php:882
-msgid "Install Perks"
 msgstr ""
 
 #: admin/manage_perks.php:883
