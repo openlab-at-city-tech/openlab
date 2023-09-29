@@ -421,5 +421,4 @@ class Editoria11y_Api_Results extends WP_REST_Controller {
 	public function update_item_permissions_check( $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClass
 		return current_user_can( 'edit_posts' );
 	}
-
 }

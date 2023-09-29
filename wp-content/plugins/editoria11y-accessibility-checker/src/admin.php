@@ -196,7 +196,7 @@ function ed11y_setting_sections_fields() {
 	// Add link text ignore field.
 	add_settings_field(
 		'ed11y_checkvisibility',
-		esc_html__( 'Check if elements are visible whan using panel navigation buttons', 'editoria11y' ),
+		esc_html__( 'Check if elements are visible when using panel navigation buttons', 'editoria11y' ),
 		'ed11y_checkvisibility_field',
 		'ed11y',
 		'ed11y_compatibility_settings',
@@ -290,9 +290,15 @@ function ed11y_check_roots_field() {
 		aria-describedby="target_description" />
 	<p id="target_description">
 		<?php
-			echo wp_kses( __( 'Editoria11y works best when it only checks content editors can...edit.
+			echo wp_kses(
+				__(
+					'Editoria11y works best when it only checks content editors can...edit.
 			If it is flagging issues in your header or footer, put CSS selectors here for the elements 
-			that contain your editable content, e.g. <code>#content, footer</code>', 'editoria11y' ), ed11y_allowed_html() );
+			that contain your editable content, e.g. <code>#content, footer</code>',
+					'editoria11y'
+				),
+				ed11y_allowed_html()
+			);
 		?>
 	</p>
 	<p>
@@ -319,8 +325,13 @@ function ed11y_ignore_elements_field() {
 	rows="3" cols="45"><?php echo esc_attr( $settings ); ?></textarea>
 	<p id="exclusions_description">
 		<?php
-			echo wp_kses( __( 'If Editoria11y is flagging things editors cannot fix, e.g., theme-generated "read more" links or social media widgets,
-			provide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>' ), ed11y_allowed_html() );
+			echo wp_kses(
+				__(
+					'If Editoria11y is flagging things editors cannot fix, e.g., theme-generated "read more" links or social media widgets,
+			provide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>'
+				),
+				ed11y_allowed_html()
+			);
 		?>
 	</p>
 	<p>
