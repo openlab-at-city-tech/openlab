@@ -21,17 +21,19 @@
                         <?php if ( bp_activity_can_favorite() ) : ?>
 							<?php if ( !bp_get_activity_is_favorite() ) : ?>
 								<a href="<?php bp_activity_favorite_link(); ?>" title="Star activity" class="button fav bp-secondary-action" data-activity_id="<?php echo bp_get_activity_id(); ?>">
+									<span class="sr-only">Star activity</span>
                                     <span class="fa fa-star-o"></span>
 								</a>
 							<?php else : ?>
 								<a href="<?php bp_activity_unfavorite_link(); ?>" title="Unstar activity" class="button unfav bp-secondary-action" data-activity_id="<?php echo bp_get_activity_id(); ?>">
+									<span class="sr-only">Unstar activity</span>
                                     <span class="fa fa-star"></span>
 								</a>
 							<?php endif; ?>
 						<?php endif; ?>
                     </div>
                     <?php endif; ?>
-                </div>				
+                </div>
 			</div>
 		</div>
 	</div>

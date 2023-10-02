@@ -11844,8 +11844,8 @@ body.single-help .entry-content h6 {
   font-size: 20px;
   transition: all 350ms ease-in-out;
 }
-.activity-list .activity-header-meta .fav span,
-.activity-list .activity-header-meta .unfav span {
+.activity-list .activity-header-meta .fav span.fa,
+.activity-list .activity-header-meta .unfav span.fa {
   color: #444;
 }
 .activity-list .activity-header-meta .fav:focus,
@@ -11854,13 +11854,13 @@ body.single-help .entry-content h6 {
 .activity-list .activity-header-meta .unfav:active {
   outline: none;
 }
-.activity-list .activity-header-meta .fav span:before {
+.activity-list .activity-header-meta .fav span.fa:before {
   content: "\f006";
 }
-.activity-list .activity-header-meta .fav:hover span:before {
+.activity-list .activity-header-meta .fav:hover span.fa:before {
   content: "\f005";
 }
-.activity-list .activity-header-meta .unfav span:before {
+.activity-list .activity-header-meta .unfav span.fa:before {
   content: "\f005";
 }
 .activity-list .activity-body p {
@@ -11936,8 +11936,8 @@ body.single-help .entry-content h6 {
   font-size: 20px;
   transition: all 350ms ease-in-out;
 }
-.group-activity-content .activity-action .fav span,
-.group-activity-content .activity-action .unfav span {
+.group-activity-content .activity-action .fav span.fa,
+.group-activity-content .activity-action .unfav span.fa {
   color: #444;
 }
 .group-activity-content .activity-action .fav:focus,
@@ -11946,13 +11946,13 @@ body.single-help .entry-content h6 {
 .group-activity-content .activity-action .unfav:active {
   outline: none;
 }
-.group-activity-content .activity-action .fav span:before {
+.group-activity-content .activity-action .fav span.fa:before {
   content: "\f006";
 }
-.group-activity-content .activity-action .fav:hover span:before {
+.group-activity-content .activity-action .fav:hover span.fa:before {
   content: "\f005";
 }
-.group-activity-content .activity-action .unfav span:before {
+.group-activity-content .activity-action .unfav span.fa:before {
   content: "\f005";
 }
 /**Custom media query items**/
