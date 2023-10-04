@@ -557,3 +557,15 @@ function openlab_user_activated_send_group_invites( $user_id ) {
 	groups_send_invites( $inviter_id, $group_id );
 }
 add_action( 'bp_core_activated_user', 'openlab_user_activated_send_group_invites', 11 );
+
+/**
+ * Add a specific class to server-side validation errors.
+ *
+ * This allows us to remove them easily using client-side validation.
+ */
+add_filter(
+	'bp_members_signup_error_message',
+	function( $message ) {
+		return str_replace( 'class="error"', 'class="error submitted-form-validation-error"', $message );
+	}
+);

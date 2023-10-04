@@ -127,10 +127,10 @@
 					var inputHasAutocomplete = false;
 
 					emailInput.on('keyup change',function(){
-						validateEmail( this );
+						// Remove siblings with the .submitted-form-validation-error class.
+						$( this ).siblings( '.submitted-form-validation-error' ).remove();
 
-						// Remove the .error sibling, which will be regenerated if needed.
-						$(this).siblings('.error').remove();
+						validateEmail( this );
 
 						var selectedAccountType = $account_type_field.val();
 
