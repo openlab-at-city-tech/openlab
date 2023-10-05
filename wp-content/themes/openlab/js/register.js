@@ -189,9 +189,9 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			if (0 <= email.indexOf('mail.citytech.cuny.edu')) {
+			if (0 <= email.indexOf('@mail.citytech.cuny.edu')) {
 				emailtype = 'student';
-			} else if (0 <= email.indexOf('citytech.cuny.edu')) {
+			} else if (0 <= email.indexOf('@citytech.cuny.edu')) {
 				emailtype = 'fs';
 			} else {
 				emailtype = 'nonct';
