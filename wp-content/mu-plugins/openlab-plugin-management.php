@@ -75,7 +75,6 @@ function openlab_hide_plugins( $plugins ) {
 		'post-gallery-widget/post-gallery.php',
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
-		'reckoning/reckoning.php',
 		'rederly.php',
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
