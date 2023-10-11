@@ -3,8 +3,8 @@
 	Donate link: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 6.2
-	Stable tag: 1.5.38
+	Tested up to: 6.3
+	Stable tag: 1.5.43
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@
 
 == Description ==
 
-Breadcrumb is easy and light-weight plugin to display breadcrumb navigation to your WordPress site, easy to customize and change style for breadcrumb. You can use filter hook and action hook to rewrite the plugin without editing the plugin code. This plugin almost working on all WordPress pages like archive, category, tags, custom taxonomies, custom post types, defult post, date, year, month, author and search page to display breadcrumb dynamically.
+Breadcrumb is easy and light-weight plugin to display breadcrumb navigation to your WordPress site, easy to customize and change style for breadcrumb. You can use filter hook and action hook to rewrite the plugin without editing the plugin code. This plugin almost working on all WordPress pages like archive, category, tags, custom taxonomies, custom post types, defult post, date, year, month, author and search page to display breadcrumb dynamically. ###
 
 ### Breadcrumb by http://pickplugins.com
 * [Buy Premium &raquo;](https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org)
@@ -122,6 +122,21 @@ use this short-code any where to display breadcrumb
 
 == Changelog ==
 
+
+
+	= 1.5.43 =
+    * 2023-08-26  - update - WP-ML issue fixed.
+    * 2023-08-26  - update - Breadcumbin blog - posts pages issue fixed
+
+
+	= 1.5.42 =
+    * 2023-08-22  - update - Error when Category ancestors, Post Term taxonomies not exist.
+
+	= 1.5.41 =
+    * 2023-08-20  - update - Display custom text as label on breadcrumb builder elements
+
+	= 1.5.39 =
+    * 2023-08-19  - update - Multi item support added on breadcrumb builder
 
 	= 1.5.38 =
     * 2023-05-17  - update - Translation support for Home text.

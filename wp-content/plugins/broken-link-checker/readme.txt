@@ -3,8 +3,8 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
-Tested up to: 6.2
-Stable tag: 2.2.0
+Tested up to: 6.3
+Stable tag: 2.2.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -114,6 +114,18 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.2.2 =
+* Fix: Exclusions list spacing in Local settings.
+* Fix: Database error Illegal mix of collations.
+* Enhance: Use WP_HTML_Tag_Processor and DOMDocument instead of regex in Cloud Edit/Unlink.
+
+= 2.2.1 =
+* Fix: Youtube playlist show as not found (Local engine).
+* Fix: In Scheduled scan, users can be added twice in list.
+* Fix: PHP8 Deprecation messages.
+* Fix: Callback missing from Local cron jobs.
+* Enhance: Added BLC bot UA in Defender's bot allowlist.
 
 = 2.2.0 =
 * New: Edit and Unlink broken links in Cloud Engine.

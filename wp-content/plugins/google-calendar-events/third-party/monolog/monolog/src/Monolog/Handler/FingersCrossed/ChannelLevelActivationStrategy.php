@@ -57,7 +57,7 @@ class ChannelLevelActivationStrategy implements ActivationStrategyInterface
     public function __construct($defaultActionLevel, array $channelToActionLevel = [])
     {
         $this->defaultActionLevel = Logger::toMonologLevel($defaultActionLevel);
-        $this->channelToActionLevel = \array_map('Monolog\\Logger::toMonologLevel', $channelToActionLevel);
+        $this->channelToActionLevel = \array_map('SimpleCalendar\\plugin_deps\\Monolog\\Logger::toMonologLevel', $channelToActionLevel);
     }
     /**
      * @phpstan-param Record $record

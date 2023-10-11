@@ -34,34 +34,50 @@
         });
 
         $(document).on('click', '.active_remove_answer', function () {
-            if($(this).parents('.ays_answers_table').find('.ays_answer_td').length == 2){
+            var rowCount = $(this).parents('.ays_answers_table').find('.ays_answer_td').length;
+
+            if (rowCount > 2) {
+                var confirm = window.confirm( quizLangObj.deleteAnswer);
+                if(confirm){
+                    var item = $(this).parents().eq(0);
+                    $(this).parents().eq(0).addClass('animated fadeOutLeft');
+                    item.remove();
+                }
+            } else {
                 swal.fire({
                     type: 'warning',
-                    text:'Sorry minimum count of answers should be 2'
+                    text: quizLangObj.minimumCountAnswerShouldBe + " 2"
                 });
-                return false;
             }
-            var item = $(this).parents().eq(0);
-            $(this).parents().eq(0).addClass('animated fadeOutLeft');
-            setTimeout(function () {
-                item.remove();
-            }, 400);
+//            var item = $(this).parents().eq(0);
+//            $(this).parents().eq(0).addClass('animated fadeOutLeft');
+//            setTimeout(function () {
+//                item.remove();
+//            }, 400);
         });
 
         $(document).on('click', '.ays_trash_icon', function () {
             if ($(document).find('.ays_modal_question').length == 1) {
                 swal.fire({
                     type: 'warning',
-                    text:'Sorry minimum count of questions should be 1'
+                    text: quizLangObj.minimumCountQuestionShouldBe + " 1"
                 });
                 return false;
             }
-//            var item = $(this).parent('.ays-modal-flexbox.flex-end').parent('.ays_modal_element.ays_modal_question');
-            var item = $(this).parents('.ays_modal_element.ays_modal_question');
-            item.addClass('animated fadeOutLeft');
-            setTimeout(function () {
-                item.remove();
-            }, 400);
+
+            var confirm = window.confirm(quizLangObj.deleteQuestion);
+            if (confirm) {
+                var question_max_inp_id = $(document).find('#ays_quick_question_max_id');
+                // var item = $(this).parent('.ays-modal-flexbox.flex-end').parent('.ays_modal_element.ays_modal_question');
+                var items = $(this).parents('.ays-quick-questions-container').find('.ays_modal_element.ays_modal_question');
+                var item = $(this).parents('.ays_modal_element.ays_modal_question');
+
+                question_max_inp_id.val( items.length - 1 );
+                item.addClass('animated fadeOutLeft');
+                setTimeout(function () {
+                    item.remove();
+                }, 400);
+            }
 
         });
 
@@ -105,7 +121,7 @@
             cloneElem.find('.ays_quick_question_type option[value='+ questionType +']').prop('selected', true);
             cloneElem.find('.ays_quick_question_cat option[value='+ questionCat +']').prop('selected', true);
 
-            cloneElem.find('.ays_answer_unique_id').attr('name','ays_answer_radio['+ays_answer_radio_id+']');
+            cloneElem.find('.ays_answer_unique_id').attr('name', 'ays_answer_radio['+ays_answer_radio_id+']');
 
             var checkedRadio = cloneElem.find('.checkedElement:first-of-type');
             checkedRadio.attr('checked', 'checked');
@@ -120,15 +136,23 @@
 
         // Change Question Type
         $(document).on('change', '.ays_quick_question_type', function (e) {
-            var $this   = $(this);
-            var parent  = $this.parents('.ays_modal_question');
+            var $this = $(this);
+            var parent = $this.parents('.ays_modal_question');
+            var parentID = parent.attr('id');
+            var questionID = parent.attr('data-id');
 
             var questionType = $this.val();
 
             var answersTable    = parent.find('.ays_answers_table');
             var answerUniqueID  = answersTable.find('.ays_answer_unique_id');
-            var textTypeTable   = parent.find('table#ays_quick_quiz_text_type_table');
+            var textTypeTable   = parent.find('table.ays_quick_quiz_text_type_table');
 
+            var question_max_inp_id = $(document).find('#ays_quick_question_max_id');
+            var question_max_id = parseInt(question_max_inp_id.val());
+            if (isNaN(question_max_id)) {
+                question_max_id = 1;
+            }
+            var ays_answer_radio_id = question_max_id;
 
             switch (questionType) {
                 case 'radio':
@@ -141,6 +165,38 @@
                     answerUniqueID.attr('type','radio');
                     break;
                 case 'text':
+                    var textHTML = '<tr><td><input style="display:none;" class="ays-correct-answer ays_answer_unique_id" type="checkbox" name="ays_answer_radio['+ ays_answer_radio_id +']" value="1" checked/><textarea type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value" placeholder="'+ quizLangObj.answerText +'"></textarea></td></tr>';
+
+                    var textTypeElementTd    = textTypeTable.find( 'tbody' );
+                    var shortTextTypeElement = textTypeElementTd.find( 'input.ays-correct-answer-value.ays-text-question-type-value' );
+
+                    if ( shortTextTypeElement.length > 0 ) {
+                        shortTextTypeElement.remove();
+                    }
+
+                    textTypeElementTd.html( textHTML );
+
+                    if ( textTypeTable.hasClass('display_none') ) {
+
+                        textTypeTable.removeClass('display_none');
+                    }
+
+                    if ( ! answersTable.hasClass('display_none') ) {
+                        answersTable.addClass('display_none')
+                    }
+                    break;
+                case 'short_text':
+                    var shortTextHTML = '<tr><td><input style="display:none;" class="ays-correct-answer ays_answer_unique_id" type="checkbox" name="ays_answer_radio['+ ays_answer_radio_id +']" value="1" checked/><input type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value ays-text-question-type-value" placeholder="'+ quizLangObj.answerText +'" value=""/></td></tr>';
+
+                    var textTypeElementTd    = textTypeTable.find( 'tr td' );
+                    var textTypeElement      = textTypeElementTd.find( 'textarea.ays-correct-answer-value.ays-text-question-type-value' );
+
+                    if ( textTypeElement.length > 0 ) {
+                        textTypeElement.remove();
+                    }
+
+                    textTypeElementTd.html( shortTextHTML );
+
                     if ( textTypeTable.hasClass('display_none') ) {
                         textTypeTable.removeClass('display_none');
                     }
@@ -149,12 +205,91 @@
                         answersTable.addClass('display_none')
                     }
                     break;
+                case 'number':
+                    var numberHTML = '<tr><td><input style="display:none;" class="ays-correct-answer ays_answer_unique_id" type="checkbox" name="ays_answer_radio['+ ays_answer_radio_id +']" value="1" checked/><input type="number" name="ays-correct-answer-value[]" class="ays-correct-answer-value ays-text-question-type-value" placeholder="'+ quizLangObj.answerText +'" value=""/></td></tr>';
+
+                    var textTypeElementTd    = textTypeTable.find( 'tr td' );
+                    var textTypeElement      = textTypeElementTd.find( 'textarea.ays-correct-answer-value.ays-text-question-type-value' );
+
+                    if ( textTypeElement.length > 0 ) {
+                        textTypeElement.remove();
+                    }
+
+                    textTypeElementTd.html( numberHTML );
+
+                    if ( textTypeTable.hasClass('display_none') ) {
+                        textTypeTable.removeClass('display_none');
+                    }
+
+                    if ( ! answersTable.hasClass('display_none') ) {
+                        answersTable.addClass('display_none')
+                    }
+                    break;
+                case 'date':
+
+                    var dateHTML = '<tr><td><input style="display:none;" class="ays-correct-answer ays_answer_unique_id" type="checkbox" name="ays_answer_radio['+ ays_answer_radio_id +']" value="1" checked/><input type="date" name="ays-correct-answer-value[]" class="ays-correct-answer-value ays-text-question-type-value" placeholder="'+ quizLangObj.currentTime +'" value=""/></td></tr>';
+
+                    var textTypeElementTd    = textTypeTable.find( 'tbody' );
+                    var textTypeElement      = textTypeElementTd.find( 'textarea.ays-correct-answer-value.ays-text-question-type-value' );
+
+                    if ( textTypeElement.length > 0 ) {
+                        textTypeElement.remove();
+                    }
+
+                    textTypeElementTd.html( dateHTML );
+
+                    if ( textTypeTable.hasClass('display_none') ) {
+                        textTypeTable.removeClass('display_none');
+                    }
+
+                    if ( ! answersTable.hasClass('display_none') ) {
+                        answersTable.addClass('display_none')
+                    }
+                    break;
+                case 'true_or_false':
+                    var trueOrFalseHTML =
+                    '<tr>'+
+                    '    <td>'+
+                    '        <input class="ays_answer_unique_id" type="radio" name="ays_answer_radio['+ ays_answer_radio_id +']" checked>'+
+                    '    </td>'+
+                    '    <td class="ays_answer_td">'+
+                    '        <p class="ays_answer">'+ quizLangObj.true +'</p>'+
+                    '        <p>Answer</p>'+
+                    '    </td>'+
+                    '    <td class="show_remove_answer">'+
+                    '        <i class="ays_fa ays_fa_times" aria-hidden="true"></i>'+
+                    '    </td>'+
+                    '</tr>'+
+                    '<tr>'+
+                    '    <td>'+
+                    '        <input class="ays_answer_unique_id" type="radio" name="ays_answer_radio['+ ays_answer_radio_id +']">'+
+                    '    </td>'+
+                    '    <td class="ays_answer_td">'+
+                    '        <p class="ays_answer">'+ quizLangObj.false +'</p>'+
+                    '        <p>Answer</p>'+
+                    '    </td>'+
+                    '    <td class="show_remove_answer">'+
+                    '        <i class="ays_fa ays_fa_times" aria-hidden="true"></i>'+
+                    '    </td>'+
+                    '</tr>'+
+                    '<tr class="ays_quiz_add_answer_box show_add_answer">'+
+                    '    <td colspan="3">'+
+                    '        <a href="javascript:void(0)" class="ays_add_answer">'+
+                    '            <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>'+
+                    '        </a>'+
+                    '    </td>'+
+                    '</tr>';
+
+                    answersTable.find('tbody').html( trueOrFalseHTML );
+                    activate_question(parent);
+
+                    break;
                 default:
                     answerUniqueID.attr('type','radio');
                     break;
             }
 
-            if ( questionType != 'text' ) {
+            if ( questionType != 'text' && questionType != 'short_text' && questionType != 'number' && questionType != 'date' ) {
                 if ( answersTable.hasClass('display_none') ) {
                     answersTable.removeClass('display_none')
                 }
@@ -176,7 +311,7 @@
 
             var ays_quiz_catObj = aysQuizCatObj.category;
             var appendAble =
-                '<div class="ays_modal_element ays_modal_question active_question active_question_border" id="ays_question_id_'+ays_answer_radio_id+'">'+
+                '<div class="ays_modal_element ays_modal_question active_question active_question_border" data-id="'+ays_answer_radio_id+'" id="ays_question_id_'+ays_answer_radio_id+'">'+
                 '    <div class="form-group row">' +
                 '        <div class="col-sm-8">' +
                 '            <input type="text" value="'+quizLangObj.questionTitle+'" class="ays_question_input">' +
@@ -187,6 +322,10 @@
                 '                <option value="checkbox">'+quizLangObj.checkbox+'</option>' +
                 '                <option value="select">'+quizLangObj.dropdawn+'</option>' +
                 '                <option value="text">'+ quizLangObj.textType +'</option>'+
+                '                <option value="short_text">'+ quizLangObj.shortTextType +'</option>'+
+                '                <option value="number">'+ quizLangObj.number +'</option>'+
+                '                <option value="true_or_false">'+ quizLangObj.trueOrFalse +'</option>'+
+                '                <option value="date">'+ quizLangObj.date +'</option>'+
                 '            </select>' +
                 '        </div>' +
                 '    </div>' +
@@ -239,7 +378,7 @@
                 '                    <i class="ays_fa ays_fa_times" aria-hidden="true"></i>' +
                 '                </td>' +
                 '            </tr>' +
-                '            <tr class="show_add_answer">' +
+                '            <tr class="ays_quiz_add_answer_box show_add_answer">' +
                 '                <td colspan="3">' +
                 '                    <a href="javascript:void(0)" class="ays_add_answer">' +
                 '                        <i class="ays_fa ays_fa_plus_square" aria-hidden="true"></i>' +
@@ -247,15 +386,15 @@
                 '                </td>' +
                 '            </tr>' +
                 '        </table>' +
-                '        <table class="ays_quick_quiz_text_type_table display_none" id="ays_quick_quiz_text_type_table">'+
+                '        <table class="ays_quick_quiz_text_type_table display_none">'+
                 '            <tr>'+
                 '                <td>'+
                 '                    <input style="display:none;" class="ays-correct-answer ays_answer_unique_id" type="checkbox" name="ays_answer_radio['+ ays_answer_radio_id +']" value="1" checked/>'+
-                '                    <textarea type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value" placeholder="'+ quizLangObj.answerText +'"></textarea>'+
+                '                    <textarea type="text" name="ays-correct-answer-value[]" class="ays-correct-answer-value ays-text-question-type-value" placeholder="'+ quizLangObj.answerText +'"></textarea>'+
                 '                </td>'+
                 '            </tr>'+
                 '        </table>'+
-                '        <div>' +
+                '        <div class="ays-quick-quiz-icons-box">' +
                 '            <a href="javascript:void(0)" class="ays_question_clone_icon">' +
                 '                <i class="ays_fa ays_fa_clone" aria-hidden="true"></i>' +
                 '            </a>' +
@@ -301,7 +440,80 @@
 //            $(this).parents().eq(1).before('<tr><td><input type="radio" name="ays_answer_radio[' + (++question_id) + ']"></td><td class="ays_answer_td"><input type="text" placeholder="Empty Answer" class="ays_answer"></td><td class="active_remove_answer"><i class="ays_fa ays_fa_times" aria-hidden="true"></i></td></tr>');
         });
         
-        
+        $(document).on("keydown" , "#ays_quick_popup .ays_answer" , function(e) {
+            var $this = $(this);
+            var $thisValue = $this.val();
+            var parent = $this.parents('table.ays_answers_table');
+
+            var lastAnswer = parent.find(".ays_answer").last();
+
+            if ( lastAnswer.is(":focus") ) {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+
+                    var addButton = parent.find(".ays_add_answer");
+                    addButton.trigger("click");
+
+                    var addedLastAnswer = parent.find(".ays_answer").last();
+                    addedLastAnswer.focus();
+                }
+            } else {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+
+                    var parentTr = $this.parents('tr');
+                    var nextElement = parentTr.next().find(".ays_answer");
+                    if (nextElement.length > 0) {
+                        var nextElementVal = nextElement.val();
+                        nextElement.val('');
+                        nextElement.val( nextElementVal );
+
+                        nextElement.focus();
+                    }
+                }
+            }
+
+            if(e.keyCode == 38 && !e.ctrlKey && !e.shiftKey ){
+                var parentTr = $this.parents('tr');
+                if( parentTr.prev().length > 0 ){
+                    parentTr.prev().find(".ays_answer").trigger('focus');
+                }else{
+                    return false;
+                }
+            }
+
+            if(e.keyCode === 40 && !e.ctrlKey && !e.shiftKey ){
+                var parentTr = $this.parents('tr');
+                var next_element = parentTr.next();
+
+                if( ! next_element.hasClass('ays_quiz_add_answer_box') ){
+                    parentTr.next().find(".ays_answer").trigger('focus');
+                }else{
+
+                    var addButton = parent.find(".ays_add_answer");
+                    addButton.trigger("click");
+
+                    var addedLastAnswer = parent.find(".ays_answer").last();
+                    addedLastAnswer.focus();
+                }
+            }
+
+            if(e.keyCode === 8  && $thisValue == ""){
+                e.preventDefault();
+
+                var deleteButton = $this.parents('tr').find(".active_remove_answer");
+                var prevParentTr = $this.parents('tr').prev();
+
+                deleteButton.trigger("click");
+
+                var addedLastAnswer = prevParentTr.find(".ays_answer");
+                var lastAnswerVal = addedLastAnswer.val();
+                addedLastAnswer.val('');
+                addedLastAnswer.val( lastAnswerVal );
+
+                addedLastAnswer.focus();
+            }
+        });
         
     });
 })(jQuery);

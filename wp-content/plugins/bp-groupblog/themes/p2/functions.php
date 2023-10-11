@@ -22,7 +22,7 @@ $content_width = '632';
 
 if ( function_exists( 'register_sidebar' ) ) {
 	register_sidebar( array(
-		'name' => __( 'Sidebar', 'p2' ),		
+		'name' => __( 'Sidebar', 'p2' ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</div>',
 		'before_title'  => '<h3 class="widgettitle">',
@@ -547,11 +547,11 @@ function prologue_comment_depth( $comment_id ) {
 function prologue_poweredby_link() {
 		return apply_filters( 'prologue_poweredby_link',
 				sprintf( __( '<strong>%1$s</strong> is proudly powered by %2$s.', 'p2' ),
-				get_bloginfo( 'name' ), '<a href="http://wordpress.org/" rel="generator">WordPress</a>' ) );
+				get_bloginfo( 'name' ), '<a href="https://wordpress.org/" rel="generator">WordPress</a>' ) );
 }
 
 if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
-		add_filter( 'prologue_poweredby_link', returner( '<a href="http://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a>' ) );
+		add_filter( 'prologue_poweredby_link', returner( '<a href="https://wordpress.com/" rel="generator">Get a free blog at WordPress.com</a>' ) );
 }
 
 /* Custom Header Code */

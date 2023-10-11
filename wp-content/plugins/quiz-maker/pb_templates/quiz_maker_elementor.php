@@ -10,12 +10,12 @@ class Widget_Quiz_Maker_Elementor extends Widget_Base {
     }
     public function get_icon() {
         // Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
-        return 'fa fa-power-off ays_fa_power_off_quiz';
+        return 'ays_fa_power_off_quiz';//'fa fa-power-off ays_fa_power_off_quiz';
     }
 	public function get_categories() {
 		return array( 'general' );
 	}
-    protected function _register_controls() {
+    protected function register_controls() {
         $this->start_controls_section(
             'section_quiz_maker',
             array(
@@ -64,17 +64,19 @@ class Widget_Quiz_Maker_Elementor extends Widget_Base {
         echo do_shortcode("[ays_quiz id={$settings['quiz_selector']}]");
 
         $inline_elementor_js = '(function($){
-            var blockLoaded = false;
-            var blockLoadedInterval = setInterval(function() {
-                if ($(document).find(".for_quiz_rate_avg.ui.rating").length > 0) {
-                    blockLoaded = true;
-                }
+            $(document).ready(function ($) {
+                var blockLoaded = false;
+                var blockLoadedInterval = setInterval(function() {
+                    if ($(document).find(".for_quiz_rate_avg.ui.rating").length > 0) {
+                        blockLoaded = true;
+                    }
 
-                if ( blockLoaded ) {
-                    clearInterval( blockLoadedInterval );
-                    $(document).find(".for_quiz_rate_avg.ui.rating").rating("disable");
-                }
-            }, 500);
+                    if ( blockLoaded ) {
+                        clearInterval( blockLoadedInterval );
+                        $(document).find(".for_quiz_rate_avg.ui.rating").rating("disable");
+                    }
+                }, 500);
+            });    
         })(jQuery)';
 
         echo '<script type="text/javascript">';
@@ -103,9 +105,9 @@ class Widget_Quiz_Maker_Elementor extends Widget_Base {
         $current_user = get_current_user_id();
         $quizes_table = $wpdb->prefix . 'aysquiz_quizes';
         $sql = "SELECT id FROM {$quizes_table} WHERE published=1 ";
-        if( ! \Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
-            $sql .= " AND author_id = ".$current_user." ";
-        }
+        // if( ! \Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
+        //     $sql .= " AND author_id = ".$current_user." ";
+        // }
         $sql .= " LIMIT 1;";
         $id = $wpdb->get_var( $sql );
 

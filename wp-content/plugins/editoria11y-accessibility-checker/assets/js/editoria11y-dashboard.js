@@ -9,7 +9,7 @@ class Ed1 {
     Ed1.params = function () {
       let queryString = window.location.search;
       let urlParams = new URLSearchParams(queryString);
-      Ed1.url = 'https://' + window.location.host + window.location.pathname + '?';
+      Ed1.url = '//' + window.location.host + window.location.pathname + '?';
       if (urlParams.get('page')) {
         Ed1.url += 'page=' + urlParams.get('page') + '&';
       }

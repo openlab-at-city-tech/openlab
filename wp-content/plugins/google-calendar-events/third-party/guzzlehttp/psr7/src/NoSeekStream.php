@@ -1,21 +1,22 @@
 <?php
 
+declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator that prevents a stream from being seeked.
- *
- * @final
  */
-class NoSeekStream implements StreamInterface
+final class NoSeekStream implements StreamInterface
 {
     use StreamDecoratorTrait;
-    public function seek($offset, $whence = \SEEK_SET)
+    /** @var StreamInterface */
+    private $stream;
+    public function seek($offset, $whence = \SEEK_SET) : void
     {
         throw new \RuntimeException('Cannot seek a NoSeekStream');
     }
-    public function isSeekable()
+    public function isSeekable() : bool
     {
         return \false;
     }

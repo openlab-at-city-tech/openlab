@@ -303,7 +303,7 @@ class Quiz_Maker_Integrations
                     $mad_mimi_api_key   = isset($mad_mimi['api_key']) ? $mad_mimi['api_key'] : '' ;
 
                     $mad_mimi_email  = (isset($_REQUEST['ays_user_email']) && $_REQUEST['ays_user_email'] != "") ? sanitize_email( $_REQUEST['ays_user_email'] ) : "";
-                    $user_name       = explode(" ", sanitize_text_field( $_REQUEST['ays_user_name'] ) );
+                    $user_name       = isset($_REQUEST['ays_user_name']) && $_REQUEST['ays_user_name'] != "" ? explode(" ", stripslashes( sanitize_text_field( $_REQUEST['ays_user_name'] ) ) ) : array();
                     $mad_mimi_fname  = (isset($user_name[0]) && $user_name[0] != "") ? $user_name[0] : "";
                     $mad_mimi_lname  = (isset($user_name[1]) && $user_name[1] != "") ? $user_name[1] : "";
 
@@ -511,7 +511,7 @@ class Quiz_Maker_Integrations
                     $convertKit_data     = array();
 
                     $covertKit_email = (isset($_REQUEST['ays_user_email']) && $_REQUEST['ays_user_email'] != "") ? sanitize_email( $_REQUEST['ays_user_email'] ) : "";
-                    $covertKit_name  = isset($_REQUEST['ays_user_name']) && $_REQUEST['ays_user_name'] != "" ? explode(" ", sanitize_text_field( $_REQUEST['ays_user_name'] ) ) : array();
+                    $covertKit_name  = isset($_REQUEST['ays_user_name']) && $_REQUEST['ays_user_name'] != "" ? explode(" ", stripslashes( sanitize_text_field( $_REQUEST['ays_user_name'] ) ) ) : array();
                     $covertKit_fname = (isset($covertKit_name[0]) && $covertKit_name[0] != "") ? $covertKit_name[0] : "";
                     $covertKit_lname = (isset($covertKit_name[1]) && $covertKit_name[1] != "") ? $covertKit_name[1] : "";
 
@@ -721,7 +721,7 @@ class Quiz_Maker_Integrations
 
                     $getResponse_api_key    = isset($getResponse['api_key']) ? $getResponse['api_key'] : '';
                     $getResponse_new_email  = (isset($_REQUEST['ays_user_email']) && $_REQUEST['ays_user_email'] != "") ? sanitize_email($_REQUEST['ays_user_email']) : "";
-                    $getResponse_user_name  = isset($_REQUEST['ays_user_name']) ? explode(" ", $_REQUEST['ays_user_name']) : array();
+                    $getResponse_user_name  = isset($_REQUEST['ays_user_name']) && $_REQUEST['ays_user_name'] != "" ? explode(" ", stripslashes( sanitize_text_field( $_REQUEST['ays_user_name'] ) ) ) : array();
                     $getResponse_fname      = (isset($getResponse_user_name[0]) && $getResponse_user_name[0] != "") ? $getResponse_user_name[0] : "";
                     $getResponse_lname      = (isset($getResponse_user_name[1]) && $getResponse_user_name[1] != "") ? $getResponse_user_name[1] : "";
                     $getResponse_data = array(
@@ -964,4 +964,265 @@ class Quiz_Maker_Integrations
 
 
     // ===== Front end calls end =====
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    //====================================================================================//
+    ////////////////////////////////////////////////////////////////////////////////////////
+
+    // ===== reCAPTCHA start =====
+
+        // reCAPTCHA integration
+
+        // reCAPTCHA integration in quiz page content
+        public function ays_quiz_page_recaptcha_content( $integrations, $args ){
+
+            $quiz_settings = $this->settings_obj;
+            // reCAPTCHA
+            $recaptcha_res  = ($quiz_settings->ays_get_setting('recaptcha') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('recaptcha');
+            $recaptcha      = json_decode($recaptcha_res, true);
+            $recaptcha_site_key = isset($recaptcha['site_key']) && $recaptcha['site_key'] != "" ? esc_attr($recaptcha['site_key']) : '';
+            $recaptcha_secret_key = isset($recaptcha['secret_key']) && $recaptcha['secret_key'] != "" ? esc_attr($recaptcha['secret_key']) : '';
+
+            $enable_recaptcha = $args['enable_recaptcha'];
+
+            $icon = AYS_QUIZ_ADMIN_URL .'/images/integrations/recaptcha_logo.png';
+            $title = __('reCAPTCHA Settings',$this->plugin_name);
+
+            $content = '';
+            if(count($recaptcha) > 0){
+                if($recaptcha_site_key == "" || $recaptcha_secret_key == ""){
+                    $content .= $this->blockquote_content;
+                }else{
+                    $disabled = ($recaptcha_site_key == "" || $recaptcha_secret_key == "") ? "disabled" : '';
+                    $checked = ($enable_recaptcha == true) ? "checked" : '';
+
+                    $content .= '<div class="form-group row">
+                            <div class="col-sm-4">
+                                <label for="ays_quiz_enable_recaptcha">'. __('Enable reCAPTCHA', $this->plugin_name) .'</label>
+                            </div>
+                            <div class="col-sm-1">
+                                <input type="checkbox" class="ays-enable-timer1" id="ays_quiz_enable_recaptcha" name="ays_quiz_enable_recaptcha" value="on" '.$checked.' '.$disabled.'/>
+                            </div>
+                        </div>';
+                }
+            }else{
+                $content .= $this->blockquote_content;
+            }
+
+            $integrations['recaptcha'] = array(
+                'content' => $content,
+                'icon' => $icon,
+                'title' => $title,
+            );
+
+            return $integrations;
+        }
+
+        // reCAPTCHA integration in quiz page options
+        public function ays_quiz_page_recaptcha_options( $args, $options ){
+
+            // reCAPTCHA
+            $args['enable_recaptcha'] = (isset($options['enable_recaptcha']) && $options['enable_recaptcha'] == 'on') ? true : false;
+
+            return $args;
+        }
+
+        // reCAPTCHA integration in quiz page data saver
+        public function ays_quiz_page_recaptcha_save( $options, $data ){
+
+            $options['enable_recaptcha'] = ( isset( $data['ays_quiz_enable_recaptcha'] ) && $data['ays_quiz_enable_recaptcha'] == 'on' ) ? 'on' : 'off';
+
+            return $options;
+        }
+
+        // reCAPTCHA integration / settings page
+
+        // reCAPTCHA integration in General settings page content
+        public function ays_settings_page_recaptcha_content( $integrations, $args ){
+
+            $actions = $this->settings_obj;
+
+            // reCAPTCHA
+            $recaptcha_options = ($actions->ays_get_setting('recaptcha') === false) ? json_encode(array()) : $actions->ays_get_setting('recaptcha');
+            $recaptcha_options = json_decode($recaptcha_options, true);
+            $recaptcha_site_key = isset($recaptcha_options['site_key']) && $recaptcha_options['site_key'] != "" ? esc_attr($recaptcha_options['site_key']) : '';
+            $recaptcha_secret_key = isset($recaptcha_options['secret_key']) && $recaptcha_options['secret_key'] != "" ? esc_attr($recaptcha_options['secret_key']) : '';
+            $recaptcha_language = isset($recaptcha_options['language']) && $recaptcha_options['language'] != "" ? esc_attr($recaptcha_options['language']) : '';
+            $recaptcha_theme = isset($recaptcha_options['theme']) && $recaptcha_options['theme'] != "" ? esc_attr($recaptcha_options['theme']) : 'light';
+
+            $icon  = AYS_QUIZ_ADMIN_URL . '/images/integrations/recaptcha_logo.png';
+            $title = __( 'reCAPTCHA', $this->plugin_name );
+
+            $content = '';
+            $content .= '
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="ays_quiz_recaptcha_site_key">'. __('reCAPTCHA v2 Site Key', $this->plugin_name) .'</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" class="ays-text-input" id="ays_quiz_recaptcha_site_key" name="ays_quiz_recaptcha_site_key" value="'. $recaptcha_site_key .'" >
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="ays_quiz_recaptcha_secret_key">'. __('reCAPTCHA v2 Secret Key', $this->plugin_name) .'</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" class="ays-text-input" id="ays_quiz_recaptcha_secret_key" name="ays_quiz_recaptcha_secret_key" value="'. $recaptcha_secret_key .'" >
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="ays_quiz_recaptcha_language">'. __('reCAPTCHA Language', $this->plugin_name) .'</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text" class="ays-text-input" id="ays_quiz_recaptcha_language" name="ays_quiz_recaptcha_language" value="'. $recaptcha_language .'" >
+                                    <span class="ays_quiz_small_hint_text">
+                                        <span>' . sprintf(
+                                            __( "e.g. en, de - Language used by reCAPTCHA. To get the code for your language click %s here %s", $this->plugin_name ),
+                                            '<a href="https://developers.google.com/recaptcha/docs/language" target="_blank">',
+                                            "</a>"
+                                        ) . '</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="ays_quiz_recaptcha_theme">'. __('reCAPTCHA Theme', $this->plugin_name) .'</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <select class="ays-text-input" id="ays_quiz_recaptcha_theme" name="ays_quiz_recaptcha_theme" >
+                                        <option value="light" '. ( $recaptcha_theme == 'light' ? 'selected' : '' ) .'>'. __('Light', $this->plugin_name) .'</option>
+                                        <option value="dark" '. ( $recaptcha_theme == 'dark' ? 'selected' : '' ) .'>'. __('Dark', $this->plugin_name) .'</option>
+                                    </select>
+                                </div>
+                            </div>
+                            ';
+            $content .= '<blockquote>';
+            $content .= sprintf( __( "You need to set up reCAPTCHA in your Google account to generate the required keys and get them by %s Google's reCAPTCHA admin console %s.", $this->plugin_name ), "<a href='https://www.google.com/recaptcha/admin/create' target='_blank'>", "</a>");
+            $content .= '</blockquote>';
+            $content .= '
+                    </div>
+                </div>';
+
+            $integrations['recaptcha'] = array(
+                'content' => $content,
+                'icon' => $icon,
+                'title' => $title,
+            );
+
+            return $integrations;
+        }
+
+        // reCAPTCHA integration in General settings page data saver
+        public function ays_settings_page_recaptcha_save( $fields, $data ){
+
+            $recaptcha_site_key = isset($data['ays_quiz_recaptcha_site_key']) && $data['ays_quiz_recaptcha_site_key'] != "" ? sanitize_text_field($data['ays_quiz_recaptcha_site_key']) : '';
+            $recaptcha_secret_key = isset($data['ays_quiz_recaptcha_secret_key']) && $data['ays_quiz_recaptcha_secret_key'] != "" ? sanitize_text_field($data['ays_quiz_recaptcha_secret_key']) : '';
+            $recaptcha_language = isset($data['ays_quiz_recaptcha_language']) && $data['ays_quiz_recaptcha_language'] != "" ? sanitize_text_field($data['ays_quiz_recaptcha_language']) : '';
+            $recaptcha_theme = isset($data['ays_quiz_recaptcha_theme']) && $data['ays_quiz_recaptcha_theme'] != "" ? sanitize_text_field($data['ays_quiz_recaptcha_theme']) : '';
+
+            $recaptcha_options = array(
+                "site_key" => $recaptcha_site_key,
+                "secret_key" => $recaptcha_secret_key,
+                "language" => $recaptcha_language,
+                "theme" => $recaptcha_theme,
+            );
+
+            $fields['recaptcha'] = json_encode( $recaptcha_options );
+
+            return $fields;
+        }
+
+        // reCAPTCHA integration / front-end
+
+        // reCAPTCHA integration in front-end functional
+        public function ays_front_end_recaptcha_functional( $arguments, $options, $data ){
+            if( $options['enable_recaptcha'] ){
+
+                $quiz_settings = $this->settings_obj;
+
+                // reCAPTCHA
+                $recaptcha_options = ($quiz_settings->ays_get_setting('recaptcha') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('recaptcha');
+                $recaptcha_options = json_decode($recaptcha_options, true);
+                $recaptcha_site_key = isset($recaptcha_options['site_key']) && $recaptcha_options['site_key'] != "" ? esc_attr($recaptcha_options['site_key']) : '';
+                $recaptcha_secret_key = isset($recaptcha_options['secret_key']) && $recaptcha_options['secret_key'] != "" ? esc_attr($recaptcha_options['secret_key']) : '';
+                $recaptcha_language = isset($recaptcha_options['language']) && $recaptcha_options['language'] != "" ? esc_attr($recaptcha_options['language']) : '';
+                $recaptcha_theme = isset($recaptcha_options['theme']) && $recaptcha_options['theme'] != "" ? esc_attr($recaptcha_options['theme']) : '';
+
+                if( $recaptcha_language != '' ){
+                    $hl = "&hl=".$recaptcha_language;
+                }
+
+                wp_enqueue_script(
+                    $this->plugin_name . '-grecaptcha',
+                    // 'https://www.google.com/recaptcha/api.js?onload=wpformsRecaptchaLoad&render=explicit',
+                    'https://www.google.com/recaptcha/api.js?render=explicit' . $hl,
+                    array('jquery'),
+                    null,
+                    true
+                );
+
+                wp_enqueue_script(
+                    $this->plugin_name . '-grecaptcha-js',
+                    AYS_QUIZ_PUBLIC_URL . '/js/partials/grecaptcha.js',
+                    array('jquery'),
+                    $this->version,
+                    true
+                );
+
+                $unique_key = uniqid();
+
+                $options = array(
+                    'uniqueKey' => $unique_key,
+                    'siteKey' => $recaptcha_site_key,
+                    'secretKey' => $recaptcha_secret_key,
+                    'language' => $recaptcha_language,
+                    'theme' => $recaptcha_theme,
+                );
+
+                $inline_js = "
+                    if(typeof aysQuizRecaptchaObj === 'undefined'){
+                        var aysQuizRecaptchaObj = [];
+                    }
+                    aysQuizRecaptchaObj['" . $unique_key . "']  = '" . base64_encode( json_encode( $options ) ) . "';
+                ";
+                wp_add_inline_script( $this->plugin_name . '-grecaptcha', $inline_js, 'before' );
+
+                $data_content = '';
+                $data_content .= '<div class="ays-quiz-section ays-quiz-recaptcha-section">';
+                    $data_content .= '<div class="ays-quiz-section-header">';
+                        $data_content .= '<div class="ays-quiz-recaptcha-wrap">';
+                            $data_content .= '<div class="ays-quiz-g-recaptcha" data-unique-key="'. $unique_key .'"></div>';
+                            $data_content .= '<div class="ays-quiz-g-recaptcha-hidden-error ays-quiz-question-validation-error">'. __( "reCAPTCHA field is required please complete!", $this->plugin_name ) .'</div>';
+                        $data_content .= '</div>';
+                    $data_content .= '</div>';
+                $data_content .= '</div>';
+    
+                $arguments[] = $data_content;
+            }
+
+            return $arguments;
+        }
+
+        // reCAPTCHA integration in front-end options
+        public function ays_front_end_recaptcha_options( $args, $setting ){
+            $options = $setting;
+            // reCAPTCHA
+            $args['enable_recaptcha'] = ( isset( $options['enable_recaptcha'] ) && $options['enable_recaptcha'] == 'on') ? true : false;
+
+            return $args;
+        }
+
+    // ===== reCAPTCHA end =====
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    //====================================================================================//
+    ////////////////////////////////////////////////////////////////////////////////////////
 }

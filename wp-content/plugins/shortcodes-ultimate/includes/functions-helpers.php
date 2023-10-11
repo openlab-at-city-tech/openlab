@@ -96,7 +96,7 @@ function su_error_message( $title = '', $message = '', $echo = false ) {
 	}
 
 	if ( $title ) {
-		$title = "<strong>${title}:</strong> ";
+		$title = "<strong>{$title}:</strong> ";
 	}
 
 	$output = sprintf(

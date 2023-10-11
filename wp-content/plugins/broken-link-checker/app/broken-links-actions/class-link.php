@@ -197,7 +197,7 @@ class Link extends Base {
 	/**
 	 * Executes Link action in full site.
 	 *
-	 * @return void
+	 * @return void|array
 	 */
 	public function execute_full_site() {
 

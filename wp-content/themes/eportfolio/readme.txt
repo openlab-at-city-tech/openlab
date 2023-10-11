@@ -1,9 +1,9 @@
 === ePortfolio ===
 Contributors: themeinwp
 Requires at least: 5.3
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,10 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+
+= 1.2.3 =
+* Update - 6.3 compatibility
+* Update - Twitter Logo
 
 = 1.2.2 - June 14 2023 =
 * Update - 6.2 compatibility

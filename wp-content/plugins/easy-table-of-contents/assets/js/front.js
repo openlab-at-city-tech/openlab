@@ -58,12 +58,15 @@ jQuery( function( $ ) {
 			var toggles = $( '.ez-toc-toggle:not(.ez-toc-loaded),.ez-toc-widget-sticky-toggle:not(.ez-toc-loaded)' ); 
 
 			var invert = ezTOC.visibility_hide_by_default;
+
                         $.each(toggles, function(i, obj) {
                             
                             var toggle = $(this);
                             $(toggle).addClass('ez-toc-loaded'); // Attach loaded class.
                             var toc = $( toggle ).parents('#ez-toc-container,#ez-toc-widget-container,#ez-toc-widget-sticky-container').find( 'ul.ez-toc-list,ul.ez-toc-widget-sticky-list' );
-                            
+                            if($(toc).hasClass('eztoc-toggle-hide-by-default')){
+                                invert = 1;
+                            }                                
                             if ( Cookies ) {
 
                                     Cookies.get( 'ezTOC_hidetoc-' + i ) == 1 ? $(toggle).data( 'visible', false ) : $(toggle).data( 'visible', true );
@@ -239,10 +242,11 @@ jQuery( function( $ ) {
 
         function addListElementBackgroundColorHeightStyleToHead( listElementHeight ) {
             // Remove existing
-            $( '#ez-toc-active-height' ).remove();
+            //$( '#ez-toc-active-height' ).remove();
             // jQuery(..).css(..) doesn't work, because ::before is a pseudo element and not part of the DOM
             // Workaround is to add it to head
-            $( '<style id="ez-toc-active-height">.ez-toc-widget-container ul.ez-toc-list li.active {height:' + listElementHeight + 'px;' + '} </style>' ).appendTo( 'head' );
+           // $( '<style id="ez-toc-active-height">.ez-toc-widget-container ul.ez-toc-list li.active {height:' + listElementHeight + 'px;' + '} </style>' ).appendTo( 'head' );
+		   $( '.ez-toc-widget-container ul.ez-toc-list li.active' ).css( 'height',listElementHeight + 'px' );
         }
 
         function setStyleForActiveListElementElement( activeListElementLink ) {

@@ -1,30 +1,62 @@
 (function($){
     $(document).ready(function(){        
-        let questCategoryFilter = $(document).find('#add_quest_category_filter').select2({
-            placeholder: 'Select Category',
+
+        var emptyArr = new Array();
+        var changeDataTableDefaultValue = new Array( 0, "desc");
+        emptyArr.push(changeDataTableDefaultValue);     
+        $.extend(true, $.fn.dataTable.defaults, {
+            aaSorting: emptyArr,
+        });
+
+        var questCategoryFilter = $(document).find('#add_quest_category_filter').select2({
+            placeholder: quizLangDataTableObj.selectCategory,
 //            dropdownAdapter: $.fn.select2.amd.require('select2/selectAllAdapter'),
             multiple: true,
             matcher: searchForPage,
             dropdownParent: $(document).find('#quest_cat_container')
+        });
+        var questTagFilter = $(document).find('#add_quest_tag_filter').select2({
+            placeholder: quizLangDataTableObj.selectTags,
+            //dropdownAdapter: $.fn.select2.amd.require('select2/selectAllAdapter'),
+            multiple: true,
+            matcher: searchForPage,
+            dropdownParent: $(document).find('#quest_tag_container')
         });
         
         $(document).find('.ays_filter_cat_clear').on('click', function(){
             questCategoryFilter.val(null).trigger('change');
             qatable.draw();
         });
+        $(document).find('.ays_filter_tag_clear').on('click', function(){
+            questTagFilter.val(null).trigger('change');
+            qatable.draw();
+        });
+
         window.aysQuestSelected = [];
         window.aysQuestNewSelected = [];
-        let selectedRows = $(document).find('#ays-question-table-add tbody tr.selected');
-        for(let i=0; i < selectedRows.length; i++){
-            window.aysQuestSelected.push(selectedRows.eq(i).data('id'));
+        // var selectedRows = $(document).find('#ays-questions-table tbody tr.ays-question-selected');
+        // for(var i=0; i < selectedRows.length; i++){
+        //     window.aysQuestSelected.push(selectedRows.eq(i).data('id'));
+        // }
+
+        var questionIdsVal = $(document).find('#ays_already_added_questions').val();
+        if( typeof questionIdsVal != "undefined" && questionIdsVal != "" ){
+            var questionIds = questionIdsVal.split(',');
+            var questionIds_new = new Array();
+
+            for (var i = 0; i < questionIds.length; i++) {
+                questionIds_new.push( parseInt( questionIds[i] ) );
+            }
+            window.aysQuestSelected = questionIds_new;
         }
+
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
                 let questionCat = $(document).find('.cat_filter').val();
                 if(questionCat == null || questionCat.length == 0){
                     return true;
                 }
-                for(let i=0; i<questionCat.length; i++){
+                for(var i=0; i<questionCat.length; i++){
                     if (data[4] == questionCat[i]){
                         return true;
                     }
@@ -32,9 +64,95 @@
                 return false;
             }
         );
-        let qatable = $('#ays-question-table-add').DataTable({
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var questionTag = $(document).find('.tag_filter').val();
+
+                if(questionTag == null || questionTag == 0){
+                    return true;
+                }
+
+                var splitData = data[5].split(", ");
+                for(var j=0; j<questionTag.length; j++){
+                    if(splitData.includes(questionTag[j])){
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        );
+
+        var qatable = $('#ays-question-table-add').DataTable({
             paging: 5,
-            "lengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, "All"]],
+            "processing": true, 
+            "serverSide": true,
+            "responsive": true,
+            "bDestroy": true,
+            "ajax": {
+                "url": quiz_maker_ajax.ajax_url,
+                "method": "POST",
+                "data": function ( d ) {
+                    d.action = 'get_published_questions_ajax';
+                    var quizId = $(document).find('#ays-question-table-add').data('quizId');
+                    d.quiz_id = quizId;
+                    var catFilter = $(document).find('.cat_filter').val();
+                    if(catFilter != null){
+                        d.cats = catFilter;
+                    }
+                    var tagFilter = $(document).find('.tag_filter').val();
+                    if(tagFilter != null){
+                        d.tags = tagFilter;
+                    }
+                },
+            },
+            columns: [{ 
+                data: "first_column"
+            },{ 
+                data: "question",
+                className: "ays-modal-td-question"
+            },{ 
+                data: "type"
+            },{ 
+                data: "create_date"
+            },{ 
+                data: "title",
+                className: "ays-modal-td-category" 
+            },{ 
+                data: "tag_data",
+                className: "ays-modal-td-tag" 
+            },{ 
+                data: "used",
+                className: "ays-modal-td-used" 
+            },{ 
+                data: "id"
+            }],
+            "lengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, quizLangDataTableObj.all]],
+            "language": {
+                "sEmptyTable":     quizLangDataTableObj.sEmptyTable,
+                "sInfo":           quizLangDataTableObj.sInfo,
+                "sInfoEmpty":      quizLangDataTableObj.sInfoEmpty,
+                "sInfoFiltered":   quizLangDataTableObj.sInfoFiltered,
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ",",
+                "sLengthMenu":     quizLangDataTableObj.sLengthMenu,
+                "sLoadingRecords": quizLangDataTableObj.sLoadingRecords,
+                "sProcessing":     quizLangDataTableObj.sProcessing,
+                "sSearch":         quizLangDataTableObj.sSearch,
+                "sUrl":            "",
+                "sZeroRecords":    quizLangDataTableObj.sZeroRecords,
+                "oPaginate": {
+                    "sFirst":    quizLangDataTableObj.sFirst,
+                    "sLast":     quizLangDataTableObj.sLast,
+                    "sNext":     quizLangDataTableObj.sNext,
+                    "sPrevious": quizLangDataTableObj.sPrevious,
+                },
+                "oAria": {
+                    "sSortAscending":  quizLangDataTableObj.sSortAscending,
+                    "sSortDescending": quizLangDataTableObj.sSortDescending
+                }
+            },
             "infoCallback": function(){
                 let qaTableSelectAll =  $(document).find('#ays-question-table-add tbody tr.ays_quest_row');
                 let qaTableSelected =  0;
@@ -46,23 +164,45 @@
                 if(qaTableSelected > 0){
                     if($(document).find('.select_all').hasClass('deselect')){
                         $(document).find('.select_all').removeClass('deselect');
-                        $(document).find('.select_all').text('Select All');
+                        $(document).find('.select_all').text(quizLangObj.selectAll);
                     }
                 }else{
                     $(document).find('.select_all').addClass('deselect');
-                    $(document).find('.select_all').text('Deselect All');
+                    $(document).find('.select_all').text(quizLangObj.deselectAll);
                 }
             },
             "drawCallback": function( settings ) {
-                let qaTableRows =  $(document).find('#ays-question-table-add tbody tr.ays_quest_row');                
-                qaTableRows.each(function(){                    
-                    if($.inArray(parseInt($(this).data('id')), window.aysQuestSelected) == -1){
+                var qaTableRows =  $(document).find('#ays-question-table-add tbody tr.ays_quest_row');
+                qaTableRows.each(function(){
+                    if($.inArray(parseInt($(this).attr('data-id')), window.aysQuestSelected) == -1){
                         $(this).removeClass('selected');
                         $(this).find('.ays-select-single')
                             .removeClass('ays_fa_check_square_o')
                             .addClass('ays_fa_square_o');
+                    } else {
+                        $(this).addClass('selected');
+                        $(this).find('.ays-select-single')
+                            .addClass('ays_fa_check_square_o')
+                            .removeClass('ays_fa_square_o');
                     }
                 });
+            },
+            "rowCallback": function( row, data ) {
+                $(row).attr('data-id', data['id']);
+                $(row).addClass('ays_quest_row');
+                if(data['selected'] == 'selected'){
+                    $(row).addClass(data['selected']);
+                }
+            },
+            "initComplete": function( settings, json ) {
+                let selectedRows = $(document).find('#ays-question-table-add tbody tr.selected');
+                for(let i=0; i < selectedRows.length; i++){
+                    if($.inArray(selectedRows.eq(i).data('id'), window.aysQuestSelected) == -1){
+                        window.aysQuestSelected.push(selectedRows.eq(i).data('id'));
+                    }
+                }
+                var proccessing = "<div class='dataTables_processing_loader'><span class='dtable_loader'><img src='"+json.loader+"'></span><span>"+json.loaderText+"</span></div>";
+                $(document).find('.dataTables_processing').html(proccessing);
             }
         });
         
@@ -76,7 +216,19 @@
         $(document).find('.cat_filter').on('select2:unselecting', function() {
             questCategoryFilter.select2("close");
         });
-        $(document).find('#ays-question-table-add_info,#ays-question-table-add_length').append('<button class="button select_all" type="button" style="margin-left:10px;">Select All</button>');
+
+        $(document).find('.tag_filter').on('select2:select', function() {
+            qatable.draw();
+        });
+        $(document).find('.tag_filter').on('select2:unselect', function() {
+            qatable.draw();
+            questTagFilter.select2("close");
+        });
+        $(document).find('.tag_filter').on('select2:unselecting', function() {
+            questTagFilter.select2("close");
+        });
+
+        $(document).find('#ays-question-table-add_info,#ays-question-table-add_length').append('<button class="button select_all" type="button" style="margin-left:10px;">'+ quizLangObj.selectAll +'</button>');
         $(document).on('click', '.select_all', function(e){
             var $this = $(document).find('.select_all');
             var qaTableSelectAll = $(document).find('#ays-question-table-add tbody tr.ays_quest_row');
@@ -98,7 +250,7 @@
                     $(this).find('.ays-select-single').removeClass('ays_fa_check_square_o').addClass('ays_fa_square_o');
                 });
                 $this.removeClass('deselect');
-                $this.text('Select All');
+                $this.text(quizLangObj.selectAll);
             }else{
                 qaTableSelectAll.each(function(){
                     var id = $(this).data('id');
@@ -117,7 +269,7 @@
                     $(this).find('.ays-select-single').removeClass('ays_fa_square_o').addClass('ays_fa_check_square_o');
                 });
                 $this.addClass('deselect');
-                $this.text('Deselect All');
+                $this.text(quizLangObj.deselectAll);
             }
         });
         
@@ -156,6 +308,7 @@
 //            pages.eq(0).addClass('active'); // assigning to first page element active
 //            show_hide_rows(page); // show count of rows
             $(document).find('#ays-questions-modal').aysModal('show');
+            qatable.draw();
         });
 
         $(document).on('click', '.ays-delete-question', function () {
@@ -311,6 +464,10 @@
                 qatable.draw();                
             }, 500);
             $(document).find('.ays_bulk_del_questions').prop('disabled', true);
+            $(document).find('.ays-quiz-select-all-button').addClass("ays_select_all");
+            if ( $(document).find('.ays-quiz-select-all-button').hasClass("ays_clear_select_all") ) {
+                $(document).find('.ays-quiz-select-all-button').removeClass("ays_clear_select_all")
+            }
 		});
         
         // Question bank by category
@@ -331,6 +488,28 @@
             } else if ($(this).val() == 'by_category') {
                 $('.question_bank_general').hide(250);
                 $('.question_bank_by_category').show(250);
+            }
+
+        });
+
+        $(document).find('input[name="ays_question_count_per_page_type"]').on('change', function () {
+            if ($(this).val() == 'general') {
+                $(document).find('.question_count_per_page_general').show(250);
+                $(document).find('.question_count_per_page_custom').hide(250);
+            } else if ($(this).val() == 'custom') {
+                $(document).find('.question_count_per_page_general').hide(250);
+                $(document).find('.question_count_per_page_custom').show(250);
+            }
+
+        });
+
+        $('input[name="ays_quiz_timer_type"]').on('change', function () {
+            if ($(this).val() == 'quiz_timer') {
+                $('.hide-on-question-timer').show(250);
+                $('.show-on-question-timer').hide(250);
+            } else if ($(this).val() == 'question_timer') {
+                $('.hide-on-question-timer').hide(250);
+                $('.show-on-question-timer').show(250);
             }
 
         });

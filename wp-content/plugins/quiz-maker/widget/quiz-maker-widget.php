@@ -26,7 +26,7 @@ class Quiz_Maker_Widget extends WP_Widget {
                 <?php
                 foreach ($quizes as $quiz) {?>
                     <option value="<?php echo $quiz['id'];?>" <?php echo $quiz['id'] == $quiz_id ? "selected" : "";?> >
-                        <?php echo $quiz['title'];?>
+                        <?php echo stripslashes( $quiz['title'] ); ?>
                     </option>
                 <?php }
                 ?>

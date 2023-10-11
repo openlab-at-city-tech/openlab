@@ -83,7 +83,7 @@ if ( ! class_exists( 'WPChill_Welcome' ) ) {
 			if ( '' != $icon ) {
 				echo '<img src="' . esc_attr( $icon ) . '">';
 			}
-			echo '<h5>' . esc_html( $title ) . ( ( $pro ) ? '<div style="background-color:' . esc_attr( $pro_color ) . '" class="pro-label">PRO</div>' : '' ) . '</h5>';
+			echo '<h5>' . esc_html( $title ) . ( ( $pro ) ? '<div style="background-color:' . esc_attr( $pro_color ) . '" class="pro-label">PREMIUM</div>' : '' ) . '</h5>';
 			echo '</div>';
 			echo '<p>' . wp_kses_post( $description ) . '</p>';
 			echo $extension_name ? '<a href="https://www.download-monitor.com/pricing/?utm_source=plugin&utm_medium=extension-block&utm_campaign=' . esc_attr( $extension_name ) . '">' . esc_html__( 'Upgrade to unlock', 'download-monitor' ) . '</a>' : '';

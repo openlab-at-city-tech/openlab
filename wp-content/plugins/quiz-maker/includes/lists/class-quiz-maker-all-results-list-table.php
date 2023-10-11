@@ -12,7 +12,7 @@ class All_Results_List_Table extends WP_List_Table{
             'ajax'     => false //does this table support ajax?
         ) );
         add_action( 'admin_notices', array( $this, 'results_notices' ) );
-        add_filter( 'hidden_columns', array( $this, 'get_hidden_columns'), 10, 2 );
+        add_filter( 'default_hidden_columns', array( $this, 'get_hidden_columns'), 10, 2 );
 
     }
 
@@ -39,12 +39,13 @@ class All_Results_List_Table extends WP_List_Table{
     public function extra_tablenav( $which ){
         global $wpdb;
         $titles_sql = "SELECT title, id
-                       FROM {$wpdb->prefix}aysquiz_quizes";
+                       FROM {$wpdb->prefix}aysquiz_quizes WHERE published = 1 ";
 
         if( ! $this->current_user_can_edit ){
             $current_user = get_current_user_id();
-            $titles_sql .= " WHERE author_id = ".$current_user." ";
+            $titles_sql .= " AND author_id = ".$current_user." ";
         }
+        $titles_sql .= " ORDER BY title ASC ";
 
         $quiz_titles = $wpdb->get_results($titles_sql);
 
@@ -68,9 +69,20 @@ class All_Results_List_Table extends WP_List_Table{
         foreach( $users as $u ){
             $user_ids[] = $u->user_id;
         }
-        $users = get_users(array(
-            'include' => $user_ids
-        ));
+
+        $users = array();
+        if( isset( $user_ids ) && !empty( $user_ids ) ){
+
+            $users_table = esc_sql( $wpdb->prefix . 'users' );
+
+            $quiz_user_ids = implode( ",", $user_ids );
+
+            $sql_users = "SELECT ID,display_name FROM {$users_table} WHERE ID IN (". $quiz_user_ids .")";
+
+            $users = $wpdb->get_results($sql_users, "ARRAY_A");
+
+        }
+        
         $quiz_id = null;
         $user_id = null;
         if( isset( $_GET['filterby'] )){
@@ -80,8 +92,8 @@ class All_Results_List_Table extends WP_List_Table{
             $user_id = intval($_GET['filterbyuser']);
         }
         ?>
-        <div id="quiz-filter-div-<?php echo $which; ?>" class="alignleft actions bulkactions">
-            <select name="filterby-<?php echo $which; ?>" id="bulk-action-selector-<?php echo $which; ?>">
+        <div id="quiz-filter-div-<?php echo esc_attr( $which ); ?>" class="alignleft actions bulkactions">
+            <select name="filterby-<?php echo esc_attr( $which ); ?>" id="bulk-action-selector-<?php echo esc_attr( $which ); ?>">
                 <option value=""><?php echo __('Select Quiz',$this->plugin_name)?></option>
                 <?php
                     foreach($quiz_titles as $key => $q_title){
@@ -93,23 +105,22 @@ class All_Results_List_Table extends WP_List_Table{
                     }
                 ?>
             </select>
-            <select name="filterbyuser-<?php echo $which; ?>" class="ays-search-users-select" id="bulk-action-select2-<?php echo $which ?>" >
+            <select name="filterbyuser-<?php echo esc_attr( $which ); ?>" class="ays-search-users-select" id="bulk-action-select2-<?php echo esc_attr( $which ) ?>" >
                 <option value=""><?php echo __('Select User',$this->plugin_name)?></option>
                 <?php
                     foreach($users as $key => $value){
                         $selected2 = "";
-                        if($user_id === intval($value->data->ID)){
+                        if($user_id === intval($value['ID'])){
                             $selected2 = "selected";
                         }
-                        echo "<option ".$selected2." value='".$value->data->ID."'>".$value->data->display_name."</option>";
+                        echo "<option ".$selected2." value='".$value['ID']."'>".$value['display_name']."</option>";
                     }
                 ?>
             </select>
-            <input type="button" id="doaction-<?php echo $which; ?>" class="all-results-filter-apply-<?php echo $which; ?> button" value="Filter">
-
-<!--            <input type="button" id="doaction" class="cat-filter-apply button" value="Filter">-->
+            <input type="button" id="doaction-<?php echo esc_attr( $which ); ?>" class="all-results-filter-apply-<?php echo esc_attr( $which ); ?> button" value="<?php echo __( "Filter", $this->plugin_name ); ?>">
+            
+            <a style="display:inline-block;" href="?page=<?php echo sanitize_text_field( $_REQUEST['page'] ); ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         </div>
-        <a style="display:inline-block;" href="?page=<?php echo $_REQUEST['page'] ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         <?php
     }
 
@@ -136,10 +147,17 @@ class All_Results_List_Table extends WP_List_Table{
             $selected_all = " style='font-weight:bold;' ";
         }
 
+        $admin_url = get_admin_url( null, 'admin.php' );
+        $get_properties = http_build_query($_GET);
+
+        $status_links_url = $admin_url . "?" . $get_properties;
+        $publish_url = esc_url( add_query_arg('fstatus', 1, $status_links_url) );
+        $unpublish_url = esc_url( add_query_arg('fstatus', 0, $status_links_url) );
+
         $status_links = array(
             "all" => "<a ".$selected_all." href='?page=".esc_attr( $_REQUEST['page'] )."'>". __( 'All', $this->plugin_name )." (".$all_count.")</a>",
-            "readed" => "<a ".$selected_1." href='?page=".esc_attr( $_REQUEST['page'] )."&fstatus=1'>". __( 'Readed', $this->plugin_name )." (".$published_count.")</a>",
-            "unreaded"   => "<a ".$selected_0." href='?page=".esc_attr( $_REQUEST['page'] )."&fstatus=0'>". __( 'Unreaded', $this->plugin_name )." (".$unpublished_count.")</a>"
+            "readed" => "<a ".$selected_1." href='". $publish_url ."'>". __( 'Read', $this->plugin_name )." (".$published_count.")</a>",
+            "unreaded"   => "<a ".$selected_0." href='". $unpublish_url ."'>". __( 'Unread', $this->plugin_name )." (".$unpublished_count.")</a>"
         );
         return $status_links;
     }
@@ -165,8 +183,16 @@ class All_Results_List_Table extends WP_List_Table{
         }
 
         if ( ! empty( $_REQUEST['orderby'] ) ) {
-            $sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' DESC';
+            $order_by  = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'id';
+            $order_by .= ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
+
+            $sql_orderby = sanitize_sql_orderby($order_by);
+
+            if ( $sql_orderby ) {
+                $sql .= ' ORDER BY ' . $sql_orderby;
+            } else {
+                $sql .= ' ORDER BY id DESC';
+            }
         }
         else{
             $sql .= ' ORDER BY end_date DESC';
@@ -182,35 +208,38 @@ class All_Results_List_Table extends WP_List_Table{
     }
 
     public static function get_where_condition(){
+        global $wpdb;
+
         $where = array();
         $sql = '';
 
-        $search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : false;
-        if( $search ){
+        $search = isset( $_POST['s'] ) ? sanitize_text_field( $_POST['s'] ) : false;
+        if( $search !== null || $search !== false ){
             $s = array();
-            $s[] = ' `user_name` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `user_email` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `user_phone` LIKE \'%'.$search.'%\' ';
-            $s[] = ' `score` LIKE \'%'.$search.'%\' ';
+            $s[] = sprintf( " `user_name` LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
+            $s[] = sprintf( " `user_email` LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
+            $s[] = sprintf( " `unique_code` LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
+            $s[] = sprintf( " `user_phone` LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
+            $s[] = sprintf( " `score` LIKE '%%%s%%' ", esc_sql( $wpdb->esc_like( $search ) ) );
 
-            $args = 'search=';
-            if($search !== null){
-                $args .= $search;
-                $args .= '*';
-            }
+            // $args = 'search=';
+            // if($search !== null){
+            //     $args .= $search;
+            //     $args .= '*';
+            // }
 
-            $users = get_users($args);
-            $user_ids_arr = array();
+            // $users = get_users($args);
+            // $user_ids_arr = array();
 
-            foreach ($users as $key => $value) {
-                $user_ids_arr[] = $value->ID;
-            }
+            // foreach ($users as $key => $value) {
+            //     $user_ids_arr[] = $value->ID;
+            // }
 
-            if (! empty($user_ids_arr)) {
-                $user_ids = implode(',', $user_ids_arr);
+            // if (! empty($user_ids_arr)) {
+            //     $user_ids = implode(',', $user_ids_arr);
 
-                $s[] = ' `user_id` in ('. $user_ids .')';
-            }
+            //     $s[] = ' `user_id` in ('. $user_ids .')';
+            // }
 
             $where[] = ' ( ' . implode(' OR ', $s) . ' ) ';
         }
@@ -465,7 +494,10 @@ class All_Results_List_Table extends WP_List_Table{
             case 'start_date':
             case 'end_date':
             case 'duration':
+            case 'points':
+            case 'unique_code':
             case 'status':
+            case 'note_text':
             case 'id':
                 return $item[ $column_name ];
                 break;
@@ -509,16 +541,16 @@ class All_Results_List_Table extends WP_List_Table{
         }else{
             $result_read = "";
         }
-        $restitle = Quiz_Maker_Admin::ays_restriction_string("word",stripcslashes($result['title']), 5);
         if($result == null){
             $title = __( 'Quiz has been deleted', $this->plugin_name );
         }else{
+            $restitle = Quiz_Maker_Admin::ays_restriction_string("word",stripcslashes($result['title']), 5);
             $title = sprintf( '<a href="javascript:void(0)" data-result="%d" class="%s" '.$result_read.'>%s</a><input type="hidden" value="%d" class="ays_result_read">', absint( $item['id'] ), 'ays-show-results', $restitle,  $item['read']);
         }
         $quiz_id =  isset($result['quiz_id']) ? $result['quiz_id'] : 0;
         $actions = array(
-            'view-details' => sprintf( '<a href="javascript:void(0);" data-result="%d" class="%s">%s</a>', absint( $item['id'] ), 'ays-show-results', 'View details'),
-            'delete' => sprintf( '<a class="ays_confirm_del" data-message="this report" href="?page=%s&action=%s&result=%s&_wpnonce=%s">Delete</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce )
+            'view-details' => sprintf( '<a href="javascript:void(0);" data-result="%d" class="%s">%s</a>', absint( $item['id'] ), 'ays-show-results', __( 'View details', $this->plugin_name ) ),
+            'delete' => sprintf( '<a class="ays_confirm_del" data-message="this report" href="?page=%s&action=%s&result=%s&_wpnonce=%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce, __( "Delete", $this->plugin_name ) )
         );
 
         return $title . $this->row_actions( $actions );
@@ -548,19 +580,20 @@ class All_Results_List_Table extends WP_List_Table{
         if($rate_id !== null){
             $margin_of_icon = "style='margin-left: 5px;'";
             $result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}aysquiz_rates WHERE id={$rate_id}", "ARRAY_A");
-            if($this->isJSON($result['options'])){
+            $result['options'] = NULL;
+            if( isset( $result['options'] ) && $this->isJSON($result['options'])){
                 $review_json = json_decode($result['options'], true);
-                $review = $review_json['reason'];
+                $review = (isset( $review_json['reason'] ) && $review_json['reason'] != "") ? $review_json['reason'] : "";
             }elseif($result['options'] != ''){
-                $review = $result['options'];
+                $review = (isset( $result['options'] ) && $result['options'] != "") ? $result['options'] : "";
             }else{
-                $review = $result['review'];
+                $review = (isset( $result['review'] ) && $result['review'] != "") ? $result['review'] : "";
             }
             $reason = htmlentities(stripslashes(wpautop($review)));
             if($reason == ''){
                 $reason = __("No review provided", $this->plugin_name);
             }
-            $score = $result['score'];
+            $score = (isset( $result['score'] ) && $result['score'] != "") ? $result['score'] : "";
             $title = "<span data-result='".absint( $item['id'] )."' class='ays-show-rate-avg'>
                         $score
                         <a class='ays_help' $margin_of_icon data-template='<div class=\"rate_tooltip tooltip\" role=\"tooltip\"><div class=\"arrow\"></div><div class=\"rate-tooltip-inner tooltip-inner\"></div></div>' data-toggle='tooltip' data-html='true' title='$reason'><i class='ays_fa ays_fa_info_circle'></i></a>
@@ -599,7 +632,19 @@ class All_Results_List_Table extends WP_List_Table{
         $quiz_options = $wpdb->get_var( $sql );
         $quiz_options = $quiz_options != '' ? json_decode( $quiz_options, true ) : array();
         $pass_score = isset( $quiz_options['pass_score'] ) && $quiz_options['pass_score'] != '' ? absint( $quiz_options['pass_score'] ) : 0;
-        $score = absint( $item['score'] );
+        // Quiz Pass Score type
+        $quiz_pass_score_type = (isset($quiz_options['quiz_pass_score_type']) && $quiz_options['quiz_pass_score_type'] != '') ? sanitize_text_field( $quiz_options['quiz_pass_score_type'] ) : 'percentage';
+
+        switch ( $quiz_pass_score_type ) {
+            case 'point':
+                $score = absint( $item['points'] );
+                break;
+            
+            case 'percentage':
+            default:
+                $score = absint( $item['score'] );
+                break;
+        }
 
         $status = '';
         if( $pass_score != 0 ){
@@ -611,6 +656,42 @@ class All_Results_List_Table extends WP_List_Table{
         }
 
         return $status;
+    }
+
+    public function column_points( $item ) {
+        global $wpdb;
+        $score = "-";
+        if(isset($item['points']) && isset($item['max_points'])){
+            if(!empty($item['points']) && !empty($item['max_points'])){
+                $score = "<p>" . round( $item['points'], 2 ) . "/" . round( $item['max_points'], 2 ) . "</p>";
+            }
+        }else{
+            $options = json_decode($item['options'], true);
+            $points = isset($options['user_points']) ? $options['user_points'] : false;
+            $max_points = isset($options['max_points']) ? $options['max_points'] : false;
+            if($points !== false && $max_points !== false){
+                if(!empty($points) && !empty($max_points)){
+                    $score = "<p>" . round( $points, 2 ) . "/" . round( $max_points, 2 ) . "</p>";
+                }
+            }
+        }
+        return $score;
+    }
+
+    public function column_unique_code( $item ) {
+        global $wpdb;
+        $unique_code = isset($item['unique_code']) && $item['unique_code'] != '' ? $item['unique_code'] : '<p style="text-align:center;">-</p>';
+        $unique_code_html = "<strong style='text-transform:uppercase!important;white-space:nowrap;'>" . $unique_code . "</strong>";
+        return $unique_code_html;
+    }
+
+    public function column_note_text( $item ) {
+        $options = json_decode($item['options']);
+
+        $note_text = ( isset($options->note_text) && $options->note_text != '' ) ? sanitize_text_field(stripslashes($options->note_text)) : '';
+        $note_text = "<div class='ays-admin-note-text-list-table-". $item['id'] ."'>" . $note_text . "</div>";
+
+        return $note_text;
     }
 
     function isJSON($string){
@@ -644,7 +725,10 @@ class All_Results_List_Table extends WP_List_Table{
             'end_date'              => __( 'End', $this->plugin_name ),
             'duration'              => __( 'Duration', $this->plugin_name ),
             'score'                 => __( 'Score', $this->plugin_name ),
+            'points'                => __( 'Points', $this->plugin_name ),
+            'unique_code'           => __( 'Unique Code', $this->plugin_name ),
             'status'                => __( 'Status', $this->plugin_name ),
+            'note_text'             => __( 'Admin Note', $this->plugin_name ),
             'id'                    => __( 'ID', $this->plugin_name ),
         );
 
@@ -664,6 +748,7 @@ class All_Results_List_Table extends WP_List_Table{
             'user_ip'       => array( 'user_ip', true ),
             'start_date'    => array( 'start_date', true ),
             'score'         => array( 'score', true ),
+            'unique_code'   => array( 'unique_code', true ),
             'user_name'     => array( 'user_name', true ),
             'user_email'    => array( 'user_email', true ),
             'user_phone'    => array( 'user_phone', true ),
@@ -683,6 +768,7 @@ class All_Results_List_Table extends WP_List_Table{
         $sortable_columns = array(
             'user_phone',
             'end_date',
+            'unique_code',
             'status',
             'id'
         );
@@ -699,7 +785,7 @@ class All_Results_List_Table extends WP_List_Table{
         $actions = array(
             'mark-as-read' => __( 'Mark as read', $this->plugin_name),
             'mark-as-unread' => __( 'Mark as unread', $this->plugin_name),
-            'bulk-delete' => 'Delete'
+            'bulk-delete' => __( 'Delete', $this->plugin_name),
         );
 
         return $actions;
@@ -757,7 +843,7 @@ class All_Results_List_Table extends WP_List_Table{
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -775,7 +861,7 @@ class All_Results_List_Table extends WP_List_Table{
         // If the mark-as-read bulk action is triggered
         if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'mark-as-read' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'mark-as-read' ) ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {
@@ -797,7 +883,7 @@ class All_Results_List_Table extends WP_List_Table{
         // If the mark-as-unread bulk action is triggered
         if ( ( isset( $_POST['action'] ) && $_POST['action'] == 'mark-as-unread' ) || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'mark-as-unread' ) ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {

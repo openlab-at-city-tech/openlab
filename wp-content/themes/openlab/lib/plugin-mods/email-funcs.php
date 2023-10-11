@@ -245,7 +245,16 @@ add_filter(
 		// Add a timestamp and trailing colon to the activity action.
 		$add_timestamp = ! in_array( $args['activity']->type, [ 'bpeo_create_event', 'bpeo_edit_evint' ], true );
 		if ( $add_timestamp ) {
-			$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . date( 'g:ia, F j, Y', strtotime( $args['activity']->date_recorded ) );
+			// Convert timestamp to America/New_York before formatting.
+			$timestamp = strtotime( $args['activity']->date_recorded );
+			$timezone  = new DateTimeZone( 'America/New_York' );
+			$datetime  = new DateTime();
+			$datetime->setTimestamp( (int) $timestamp );
+			$datetime->setTimeZone( $timezone );
+
+			$timestamp_formatted = $datetime->format( 'g:ia, F j, Y' );
+
+			$action_with_timestamp = $args['tokens']['ges.action'] . ' at ' . $timestamp_formatted;
 
 			$has_trailing_colon = ! empty( $args['activity']->content );
 			if ( $has_trailing_colon ) {

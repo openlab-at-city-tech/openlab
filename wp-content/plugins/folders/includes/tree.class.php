@@ -113,9 +113,19 @@ class WCP_Tree
 
                 // Free/Pro URL Change
                 $nonce     = wp_create_nonce('wcp_folder_term_'.$term->term_id);
-                $is_sticky = get_term_meta($term->term_id, "is_folder_sticky", true);
-                $status    = get_term_meta($term->term_id, "is_highlighted", true);
-                $is_active = get_term_meta($term->term_id, "is_active", true);
+
+                $folder_info    = get_term_meta($term->term_id, "folder_info", true);
+                $folder_info = shortcode_atts([
+                    'is_sticky' => 0,
+                    'is_high'   => 0,
+                    'is_locked' => 0,
+                    'is_active' => 0,
+                ], $folder_info);
+
+                $status = intval($folder_info['is_high']);
+                $is_active = intval($folder_info['is_active']);
+                $is_sticky = intval($folder_info['is_sticky']);
+
                 $class     = "";
                 if ($is_sticky == 1) {
                     $class .= " is-sticky";

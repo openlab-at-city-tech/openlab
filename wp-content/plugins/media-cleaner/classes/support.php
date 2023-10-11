@@ -180,6 +180,10 @@ class Meow_WPMC_Support {
 			array_push( $unsupported, 'Uncode' );
 		}
 
+    if ( defined( 'MAILPOET_MINIMUM_REQUIRED_WP_VERSION' ) ) {
+      array_push( $unsupported, 'Mailpoet' );
+		}
+
     return $unsupported;
   }
 }

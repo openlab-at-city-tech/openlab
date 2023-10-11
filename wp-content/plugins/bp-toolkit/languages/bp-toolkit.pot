@@ -1,0 +1,2189 @@
+# Copyright (C) 2022 Bouncingsprout Studio
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Block, Suspend, Report for BuddyPress 3.5.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-toolkit\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-08-03T11:26:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.6.0\n"
+"X-Domain: bp-toolkit\n"
+
+#. Plugin Name of the plugin
+#: admin/class-bp-toolkit-admin.php:148
+#: admin/class-bp-toolkit-admin.php:159
+#: admin/class-bp-toolkit-admin.php:170
+#: admin/class-bp-toolkit-admin.php:179
+#: admin/class-bp-toolkit-admin.php:188
+#: admin/class-bp-toolkit-admin.php:679
+#: admin/class-bp-toolkit-admin.php:1482
+msgid "Block, Suspend, Report for BuddyPress"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.bouncingsprout.com/plugins/block-suspend-report-for-buddypress/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Block, Suspend, Report for BuddyPress provides enhanced moderation for your BuddyPress site."
+msgstr ""
+
+#. Author of the plugin
+msgid "Bouncingsprout Studio"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.bouncingsprout.com"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:160
+msgid "Dashboard"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:171
+#: includes/class-bp-toolkit-block.php:218
+#: includes/class-bp-toolkit-block.php:221
+#: includes/class-bp-toolkit-block.php:246
+#: includes/class-bp-toolkit-block.php:251
+#: includes/class-bp-toolkit-block.php:257
+#: includes/class-bp-toolkit-block.php:276
+#: includes/class-bp-toolkit-block.php:279
+#: includes/class-bp-toolkit-block.php:298
+#: templates/blocking.php:46
+msgid "Block"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:180
+#: includes/class-bp-toolkit-suspend.php:113
+#: includes/class-bp-toolkit-suspend.php:119
+#: includes/class-bp-toolkit-suspend.php:158
+#: includes/class-bp-toolkit-suspend.php:165
+#: includes/class-bp-toolkit-suspend.php:182
+#: includes/class-bp-toolkit-suspend.php:185
+#: includes/class-bp-toolkit-suspend.php:239
+msgid "Suspend"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:189
+#: admin/class-bp-toolkit-admin.php:250
+#: admin/class-bp-toolkit-admin.php:251
+#: admin/class-bp-toolkit-admin.php:289
+#: includes/class-bp-toolkit-report.php:343
+#: includes/class-bp-toolkit-report.php:357
+#: includes/class-bp-toolkit-report.php:360
+#: includes/class-bp-toolkit-report.php:385
+#: includes/class-bp-toolkit-report.php:393
+#: includes/class-bp-toolkit-report.php:412
+#: includes/class-bp-toolkit-report.php:420
+#: includes/class-bp-toolkit-report.php:456
+#: includes/class-bp-toolkit-report.php:473
+#: includes/class-bp-toolkit-report.php:500
+#: includes/class-bp-toolkit-report.php:504
+#: includes/class-bp-toolkit-report.php:514
+#: includes/class-bp-toolkit-report.php:519
+#: includes/class-bp-toolkit-report.php:522
+#: includes/class-bp-toolkit-report.php:589
+#: includes/class-bp-toolkit-report.php:599
+#: includes/class-bp-toolkit-report.php:609
+#: includes/class-bp-toolkit-report.php:616
+#: includes/class-bp-toolkit-report.php:622
+#: includes/class-bp-toolkit-report.php:726
+#: includes/class-bp-toolkit-report.php:729
+#: includes/class-bp-toolkit-report.php:757
+#: includes/class-bp-toolkit-report.php:760
+#: includes/class-bp-toolkit-report.php:791
+#: includes/class-bp-toolkit-report.php:797
+#: includes/class-bp-toolkit-report.php:1099
+msgid "Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:199
+#: admin/class-bp-toolkit-admin.php:200
+#: templates/single-report.php:44
+msgid "Report Types"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:207
+#: admin/class-bp-toolkit-admin.php:208
+#: admin/class-bp-toolkit-admin.php:891
+msgid "Moderation Queue"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:225
+msgctxt "taxonomy general name"
+msgid "Report types"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:226
+msgctxt "taxonomy singular name"
+msgid "Report type"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:227
+msgid "Search Report types"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:228
+msgid "All Report types"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:229
+msgid "Edit Report type"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:230
+msgid "Update Report type"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:231
+msgid "Add New Report type"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:232
+msgid "New Report type Name"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:233
+msgid "No Report types found"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:234
+msgid "No Reports types found in Trash"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:235
+msgid "Report types"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:248
+msgctxt "Post Type General Name"
+msgid "Reports"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:249
+msgctxt "Post Type Singular Name"
+msgid "Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:252
+msgid "Item Archives"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:253
+msgid "Item Attributes"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:254
+msgid "Parent Item:"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:255
+#: includes/class-bp-toolkit-moderators.php:391
+msgid "All Reports"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:256
+#: admin/class-bp-toolkit-admin.php:257
+msgid "Add New Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:258
+#: includes/class-bp-toolkit-report.php:815
+msgid "New Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:259
+msgid "Edit Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:260
+msgid "Update Report"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:261
+msgid "View Item"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:262
+msgid "View Items"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:263
+msgid "Search Item"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:264
+msgid "No Reports found"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:265
+msgid "No Reports found in Trash"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:266
+msgid "Featured Image"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:267
+msgid "Set featured image"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:268
+msgid "Remove featured image"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:269
+msgid "Use as featured image"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:271
+msgid "Uploaded to this item"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:272
+msgid "Items list"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:273
+msgid "Items list navigation"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:274
+msgid "Filter items list"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:334
+#: admin/class-bp-toolkit-admin.php:361
+#: includes/class-bp-toolkit-activator.php:85
+msgid "Site Moderator"
+msgstr ""
+
+#. translators: %s: Number of times the item was reported
+#: admin/class-bp-toolkit-admin.php:489
+msgid "This is the %s time this item has been reported."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:683
+msgid "Documentation"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:684
+msgid "Get Support"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:770
+msgid "No one is currently blocked."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:781
+msgid "%1$s features in <span>%2$s</span> block lists."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:822
+msgid "No reports submitted."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:835
+msgctxt "%s = human-readable time difference"
+msgid "%s ago"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:957
+msgid "Upgrade now"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:957
+msgid " to the Professional Edition to create your own report types, or to edit the default types above."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1022
+#: admin/class-bp-toolkit-admin.php:1023
+msgid "Rebuild Blocks"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1024
+msgid "Rebuild"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1025
+msgid "Use of this button should be unnecessary."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1109
+#: admin/class-bp-toolkit-admin.php:1110
+#: admin/class-bp-toolkit-report-settings.php:512
+msgid "Paid Memberships Pro Integration"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1112
+msgid " All Users"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1121
+msgid "Select any membership levels that can block other users."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1139
+#: admin/class-bp-toolkit-admin.php:1140
+msgid "Disable Block Button"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1142
+#: admin/class-bp-toolkit-admin.php:1266
+msgid " User Profiles"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1143
+#: admin/class-bp-toolkit-admin.php:1267
+msgid " Members Directory"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1145
+msgid "Choose to switch OFF the block button on the user profile page, or the member directory."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1157
+#: admin/class-bp-toolkit-admin.php:1158
+msgid "Cancel friendships"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1162
+msgid "When a user blocks another, cancel any friendships they might have."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1263
+#: admin/class-bp-toolkit-admin.php:1264
+msgid "Disable Suspend Button"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1269
+msgid "Choose to switch OFF the suspend button on the user profile page, or the member directory. If these are disabled, you will not see who is currently suspended. So please use with caution."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1284
+#: admin/class-bp-toolkit-admin.php:1285
+msgid "Disable Login Blocking"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1289
+msgid "By default, suspending a user destroys their session and prevents login. This disables that behaviour."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1308
+#: admin/class-bp-toolkit-admin.php:1309
+msgid "Role assigned on suspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1311
+msgid "No role"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1318
+msgid "Assign a role to a suspended user. When unsuspended, the role is removed."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1335
+#: admin/class-bp-toolkit-admin.php:1336
+msgid "Login Error Message"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1338
+msgid "Enter the message to display to suspended users when they attempt to log in."
+msgstr ""
+
+#. translators: %s: Link to 5 star rating
+#: admin/class-bp-toolkit-admin.php:1436
+msgid "If you like <strong>Block, Suspend, Report for BuddyPress</strong> please leave us a %s rating. It takes a minute and helps a lot. Thanks in advance!"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1437
+msgid "Thanks :)"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1583
+msgid "Reports Status"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1595
+msgid "You have %s unread report waiting"
+msgid_plural "You have %s unread reports waiting"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-bp-toolkit-admin.php:1608
+msgid "You have no reports requiring your attention"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1616
+#: admin/partials/dashboard.php:162
+msgid "Latest News"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1633
+msgid "Useful Links:"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1634
+msgid "Homepage"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1638
+#: admin/partials/dashboard.php:273
+msgid "Premium Support"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1642
+msgid "Free Support"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1645
+msgid "<a href=\"%s\">Upgrade</a>"
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1683
+msgid "No news found."
+msgstr ""
+
+#: admin/class-bp-toolkit-admin.php:1689
+msgid "Posted %s"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:129
+msgid "Nothing currently held for moderation."
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:140
+msgid "Description"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:141
+msgid "Content"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:142
+msgid "Component"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:165
+#: admin/class-bp-toolkit-moderation-queue.php:198
+#: includes/class-bp-toolkit-moderate.php:78
+#: includes/class-bp-toolkit-moderate.php:97
+msgid "Approve"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:170
+msgid "View"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:175
+msgid "Author"
+msgstr ""
+
+#: admin/class-bp-toolkit-moderation-queue.php:183
+#: admin/class-bp-toolkit-moderation-queue.php:199
+msgid "Delete"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:60
+#: admin/class-bp-toolkit-report-settings.php:69
+#: admin/class-bp-toolkit-report-settings.php:79
+#: admin/class-bp-toolkit-report-settings.php:88
+#: admin/class-bp-toolkit-report-settings.php:97
+#: admin/class-bp-toolkit-report-settings.php:106
+#: admin/class-bp-toolkit-report-settings.php:115
+#: admin/class-bp-toolkit-report-settings.php:124
+#: admin/class-bp-toolkit-report-settings.php:133
+#: admin/class-bp-toolkit-report-settings.php:142
+#: admin/class-bp-toolkit-report-settings.php:151
+#: admin/class-bp-toolkit-report-settings.php:161
+#: admin/class-bp-toolkit-report-settings.php:172
+#: admin/class-bp-toolkit-report-settings.php:880
+msgid "Report Settings"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:61
+msgid "General"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:70
+#: admin/partials/dashboard.php:178
+#: includes/class-bp-toolkit-block.php:449
+msgid "User"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:80
+#: admin/class-bp-toolkit-report-settings.php:787
+msgid "Comments"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:89
+msgid "Activities"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:98
+#: admin/class-bp-toolkit-report-settings.php:789
+msgid "Activity Comments"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:107
+#: admin/class-bp-toolkit-report-settings.php:790
+#: admin/partials/dashboard.php:266
+msgid "Groups"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:116
+#: admin/partials/dashboard.php:265
+msgid "Messages"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:125
+msgid "Topics"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:134
+#: admin/class-bp-toolkit-report-settings.php:793
+msgid "Forum Replies"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:143
+#: admin/partials/dashboard.php:185
+msgid "rtMedia"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:152
+msgid "Integrations"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:162
+msgid "Advanced"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:173
+msgid "Emails"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:192
+msgid "Upgrade Now - to enable premium features such as reporting of activities, auto-moderation, temporary restrictions and whitelisting."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:204
+msgid "Select Reportable Content"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:205
+msgid "The type of content that can been reported."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:215
+msgid "Turn Off Unique Reporting"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:216
+msgid "Users can only report the same item once. Check to switch this behaviour off. We recommend you leave unique reporting on, to prevent the same user triggering auto-moderation."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:226
+msgid "Auto-Suspend Users?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:227
+msgid "Check this box to auto-suspend users."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:236
+msgid "Auto-Suspension Threshold"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:237
+msgid "Set the threshold for number of reports before auto-suspension is activated."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:251
+msgid "Whitelisted Roles"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:252
+msgid "Choose any roles that cannot be made subject to reports. It is standard practice that adminstrators cannot have reports made about them or their activities."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:263
+msgid "Blacklisted Users"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:264
+msgid "Enter the ID of any user you want to prevent from making reports."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:273
+msgid "Reset All Moderated Activities"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:274
+msgid "Unmoderate All"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:275
+msgid "<span style=\"color: red;\">Warning: clicking this button will unmoderate all activities, except for members. This means that all hidden activities will reappear. Please use with caution.</span>"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:285
+msgid "Auto-Moderate Comments?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:286
+msgid "Check this box to auto-moderate comments."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:295
+#: admin/class-bp-toolkit-report-settings.php:317
+#: admin/class-bp-toolkit-report-settings.php:359
+#: admin/class-bp-toolkit-report-settings.php:381
+#: admin/class-bp-toolkit-report-settings.php:403
+#: admin/class-bp-toolkit-report-settings.php:425
+#: admin/class-bp-toolkit-report-settings.php:447
+#: admin/class-bp-toolkit-report-settings.php:469
+msgid "Auto-Moderation Threshold"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:296
+#: admin/class-bp-toolkit-report-settings.php:318
+#: admin/class-bp-toolkit-report-settings.php:360
+#: admin/class-bp-toolkit-report-settings.php:382
+#: admin/class-bp-toolkit-report-settings.php:404
+#: admin/class-bp-toolkit-report-settings.php:426
+#: admin/class-bp-toolkit-report-settings.php:448
+#: admin/class-bp-toolkit-report-settings.php:470
+msgid "Set the threshold for number of reports before auto-moderation is activated."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:307
+msgid "Auto-Moderate Activities?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:308
+msgid "Check this box to auto-moderate activities."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:329
+msgid "Show 'Report' Text?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:330
+msgid "If your theme uses icons instead of text labels this will keep the text hidden."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:339
+msgid "Require approval?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:340
+msgid "Check this box to require activities to be pre-approved before they are shown."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:349
+msgid "Auto-Moderate Activity Replies?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:350
+msgid "Check this box to auto-moderate activity replies."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:371
+msgid "Auto-Moderate Groups?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:372
+msgid "Check this box to auto-moderate groups."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:393
+msgid "Auto-Moderate Messages?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:394
+msgid "Check this box to auto-moderate private messages."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:415
+msgid "Auto-Moderate Forum Topics?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:416
+msgid "Check this box to auto-moderate forum topics."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:437
+msgid "Auto-Moderate Forum Replies?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:438
+msgid "Check this box to auto-moderate forum replies."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:459
+msgid "Auto-Moderate rtMedia uploads?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:460
+msgid "Check this box to auto-moderate rtMedia uploads."
+msgstr ""
+
+#. translators: 1: GLOBAL link to plugin support page
+#: admin/class-bp-toolkit-report-settings.php:480
+msgid "It looks like you don't have any plugins or themes that integrate with Block, Suspend, Report for BuddyPress. To find out more about integrations, see our <a href=\"%1$s\">documentation</a>."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:501
+msgid "Paid Memberships Pro integration can be found under the 'General' tab."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:513
+msgid "Select any membership levels that can report content."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:526
+msgid "<h4>Messages Section</h4><p>To send automated messages to users, please ensure the Messages Component is activated in your BuddyPress settings. You will also need to select a default administrator or moderator to send messages from, using the dropdown below.</p>"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:536
+msgid "Send email on new messages?"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:537
+msgid "Disabled by default, as the plugin sends custom emails for most activities anyway. This would lead to duplication."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:547
+msgid "Select a Sender"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:548
+msgid "Choose which administrator or site moderator system messages will be sent from. This is required as BuddyPress does not allow a non-human system user to send messages. Please see the documentation for a thorough explanation."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:559
+msgid "Select a Gatekeeper"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:560
+msgid "Choose which administrator or site moderator will receive meesages for new or auto-moderated reports. If you choose an administrator, they can also assign reports to other moderators."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:571
+msgid "Notify Admin/Moderator of Assignment"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:572
+msgid "Check this box to send an message to an administrator or moderator when they are assigned a report."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:582
+#: admin/class-bp-toolkit-report-settings.php:719
+msgid "Notify Admin on New Reports"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:583
+msgid "Check this box to send a message to the administrator when a new report is received."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:593
+#: admin/class-bp-toolkit-report-settings.php:646
+msgid "Notify Admin on Auto-moderation"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:594
+msgid "Check this box to send a message to the administrator when an activity is auto-moderated."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:604
+#: admin/class-bp-toolkit-report-settings.php:649
+msgid "Notify Author/User on Moderation"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:605
+msgid "Check this box to send a message to the author/user when an activity is hidden via automatic or manual moderation."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:615
+#: admin/class-bp-toolkit-report-settings.php:652
+msgid "Notify Author/User on Restoration"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:616
+msgid "Check this box to send a message to the author/user when an activity has been restored."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:626
+#: admin/class-bp-toolkit-report-settings.php:655
+msgid "Notify Reporter on Moderation"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:627
+msgid "Sends a message to the person who reported the content that it has been removed."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:637
+#: admin/class-bp-toolkit-report-settings.php:658
+msgid "Notify Reporter on Restoration"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:638
+msgid "Sends a message to the person who reported the content that it has been restored."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:647
+msgid "Check this box to send an email to the administrator when an activity is auto-moderated."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:650
+msgid "Check this box to send an email to the author/user when an activity is hidden via automatic or manual moderation."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:653
+msgid "Check this box to send an email to the author/user when an activity has been restored."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:656
+msgid "Sends an email to the person who reported the content that it has been removed."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:659
+msgid "Sends an email to the person who reported the content that it has been restored."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:664
+msgid "Notify Admin on Auto-Suspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:665
+msgid "Check this box to send an email to the administrator when a user is auto-suspended."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:667
+msgid "Notify User on Suspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:668
+msgid "Check this box to send an email to the user when they are suspended via automatic or manual moderation."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:670
+msgid "Notify User on Unsuspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:671
+msgid "Check this box to send an email to the user when they are unsuspended."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:672
+msgid "Notify Reporter on Suspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:673
+msgid "Sends an email to the person who reported the user that they have been suspended."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:675
+msgid "Notify Reporter on Unsuspension"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:676
+msgid "Sends an email to the person who reported the user that they have been unsuspended."
+msgstr ""
+
+#. translators: 1: GLOBAL link to plugin support page
+#: admin/class-bp-toolkit-report-settings.php:683
+msgid "Use this page to enable a range of different emails that can be sent, based on different events. To find out more about these emails, see our <a href=\"%1$s\">documentation</a>."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:697
+msgid "Enter an email address to send administrator emails to, or leave blank to send to the default site administrator. This is useful where a particular administrator or other site user handles your reports and moderation. Separate multiple addresses with a comma"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:700
+msgid "Enter an email address to send administrator emails to, or leave blank to send to the default site administrator. This is useful where a particular administrator or other site user handles your reports and moderation. <span style=\"color: red;\">Upgrade to send to multiple addresses.</span>"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:709
+msgid "Admin email Addresses"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:720
+msgid "Check this box to send an email to the administrator when a new report is received."
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:786
+#: admin/class-bp-toolkit-report-settings.php:798
+msgid "Members"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:788
+msgid "Activity Updates"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:791
+msgid "Private Messages"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:792
+#: admin/partials/dashboard.php:262
+msgid "Forum Topics"
+msgstr ""
+
+#: admin/class-bp-toolkit-report-settings.php:794
+msgid "rtMedia Uploads"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:77
+msgid "Reporter"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:78
+msgid "Item"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:79
+msgid "Subject"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:80
+msgid "Author or User Reported"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:81
+msgid "Details"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:82
+msgid "Total Reports"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:189
+msgid "Mark as Read"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:190
+msgid "Mark as Unread"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:257
+msgid "Mark read"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:262
+msgid "Mark this entry as unread"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:263
+msgid "Mark unread"
+msgstr ""
+
+#: admin/class-bp-toolkit-reports-screen.php:346
+msgctxt "unread reports"
+msgid "Unread %s"
+msgstr ""
+
+#: admin/partials/blank-slate.php:17
+msgid "Block, Suspend, Report Logo"
+msgstr ""
+
+#: admin/partials/blank-slate.php:18
+msgid "Fantastic! No one has submitted a report yet."
+msgstr ""
+
+#: admin/partials/blank-slate.php:22
+msgid "You can also create reports using the button below."
+msgstr ""
+
+#: admin/partials/blank-slate.php:24
+msgid "Create Report"
+msgstr ""
+
+#: admin/partials/blank-slate.php:27
+msgid "In the Pro Edition, site administrators can also submit their own reports."
+msgstr ""
+
+#: admin/partials/blank-slate.php:29
+msgid "Upgrade Now"
+msgstr ""
+
+#: admin/partials/blank-slate.php:33
+msgid "Need help? Get started at our "
+msgstr ""
+
+#: admin/partials/blank-slate.php:34
+msgid "support page"
+msgstr ""
+
+#: admin/partials/block.php:16
+msgid "Block Settings"
+msgstr ""
+
+#: admin/partials/block.php:35
+msgid "Need Help? See docs on \"Block Settings\""
+msgstr ""
+
+#: admin/partials/dashboard.php:16
+msgid "Welcome to Block, Suspend, Report"
+msgstr ""
+
+#: admin/partials/dashboard.php:22
+msgid "Initial Setup"
+msgstr ""
+
+#: admin/partials/dashboard.php:28
+msgid " Block Settings"
+msgstr ""
+
+#: admin/partials/dashboard.php:40
+msgid " Suspend Settings"
+msgstr ""
+
+#: admin/partials/dashboard.php:52
+msgid " Report Settings"
+msgstr ""
+
+#: admin/partials/dashboard.php:60
+#: includes/class-bp-toolkit-moderators.php:344
+#: includes/class-bp-toolkit-moderators.php:386
+#: templates/archive-report.php:18
+msgid "Reports"
+msgstr ""
+
+#: admin/partials/dashboard.php:65
+msgid " View Reports"
+msgstr ""
+
+#: admin/partials/dashboard.php:77
+msgid " Add New Report Types"
+msgstr ""
+
+#: admin/partials/dashboard.php:89
+msgid " Add New Report Types <span>- Pro Feature</span>"
+msgstr ""
+
+#: admin/partials/dashboard.php:103
+msgid "For guidance as your begin these steps, <a href=\"%s\" target=\"_blank\">view the Initial Setup Documentation</a>."
+msgstr ""
+
+#: admin/partials/dashboard.php:120
+msgid "Professional Edition License"
+msgstr ""
+
+#: admin/partials/dashboard.php:124
+msgid "<strong>Thank you!</strong> A valid license key has been used to activate the Professional Edition."
+msgstr ""
+
+#: admin/partials/dashboard.php:132
+msgid "No license key found."
+msgstr ""
+
+#: admin/partials/dashboard.php:135
+msgid "<a href=\"%s\">Upgrade here &raquo;</a>"
+msgstr ""
+
+#: admin/partials/dashboard.php:144
+msgid "The Professional Edition adds heaps of extras and smart functions to Block, Suspend, Report for BuddyPress."
+msgstr ""
+
+#: admin/partials/dashboard.php:152
+msgid "View all pro features &raquo;"
+msgstr ""
+
+#: admin/partials/dashboard.php:159
+msgid "Upgrade"
+msgstr ""
+
+#: admin/partials/dashboard.php:166
+msgid "Quick Moderation Tool"
+msgstr ""
+
+#: admin/partials/dashboard.php:170
+msgid "Choose what type of activity you require, and enter the activity ID"
+msgstr ""
+
+#: admin/partials/dashboard.php:179
+msgid "Activity"
+msgstr ""
+
+#: admin/partials/dashboard.php:180
+msgid "Activity Comment"
+msgstr ""
+
+#: admin/partials/dashboard.php:181
+msgid "Group"
+msgstr ""
+
+#: admin/partials/dashboard.php:182
+msgid "Private Message"
+msgstr ""
+
+#: admin/partials/dashboard.php:183
+msgid "Forum Topic"
+msgstr ""
+
+#: admin/partials/dashboard.php:184
+msgid "Forum Reply"
+msgstr ""
+
+#: admin/partials/dashboard.php:195
+msgid "Get Involved"
+msgstr ""
+
+#: admin/partials/dashboard.php:198
+msgid "There are many ways you can help support Block, Suspend, Report for BuddyPress."
+msgstr ""
+
+#: admin/partials/dashboard.php:207
+msgid "Share an honest review at WordPress.org."
+msgstr ""
+
+#: admin/partials/dashboard.php:216
+msgid "Suggest a new feature."
+msgstr ""
+
+#: admin/partials/dashboard.php:225
+msgid "Help translate Block, Suspend, Report for BuddyPress into your language."
+msgstr ""
+
+#: admin/partials/dashboard.php:233
+msgid "Translation Dashboard"
+msgstr ""
+
+#: admin/partials/dashboard.php:247
+msgid "Why Upgrade?"
+msgstr ""
+
+#: admin/partials/dashboard.php:250
+msgid "Professional Edition"
+msgstr ""
+
+#: admin/partials/dashboard.php:253
+msgid "If you want to show you listen to  your user's concerns, you need the Professional Version."
+msgstr ""
+
+#: admin/partials/dashboard.php:259
+msgid "Let your users report different activities:"
+msgstr ""
+
+#: admin/partials/dashboard.php:261
+msgid "Individual posts"
+msgstr ""
+
+#: admin/partials/dashboard.php:263
+msgid "Forum Posts"
+msgstr ""
+
+#: admin/partials/dashboard.php:264
+msgid "Media Uploads"
+msgstr ""
+
+#: admin/partials/dashboard.php:267
+msgid "Post Comments"
+msgstr ""
+
+#: admin/partials/dashboard.php:269
+msgid "Send emails to multiple administrators"
+msgstr ""
+
+#: admin/partials/dashboard.php:270
+msgid "Quickly moderate activity from this dashboard"
+msgstr ""
+
+#: admin/partials/dashboard.php:271
+msgid "Integration with other plugins"
+msgstr ""
+
+#: admin/partials/dashboard.php:272
+msgid "All your moderation information on the dashboard"
+msgstr ""
+
+#: admin/partials/dashboard.php:274
+msgid "Hooks and custom CSS to extend the plugin further"
+msgstr ""
+
+#: admin/partials/dashboard.php:275
+msgid "Handle malicious complainers by removing their ability to report items"
+msgstr ""
+
+#: admin/partials/dashboard.php:276
+msgid "Create your own report categories"
+msgstr ""
+
+#: admin/partials/dashboard.php:279
+msgid "Enterprise Edition"
+msgstr ""
+
+#: admin/partials/dashboard.php:282
+msgid "Once your community has grown to hundreds, use the Enterprise Edition to save you time."
+msgstr ""
+
+#: admin/partials/dashboard.php:289
+msgid "Create Site Moderators"
+msgstr ""
+
+#: admin/partials/dashboard.php:291
+msgid "Give them access to an easy to use frontend dashboard"
+msgstr ""
+
+#: admin/partials/dashboard.php:292
+msgid "No access to your backend"
+msgstr ""
+
+#: admin/partials/dashboard.php:293
+msgid "Can suspend users"
+msgstr ""
+
+#: admin/partials/dashboard.php:294
+msgid "Can delete posts"
+msgstr ""
+
+#: admin/partials/dashboard.php:295
+msgid "Can hold posts for moderation"
+msgstr ""
+
+#: admin/partials/dashboard.php:296
+msgid "Can process and respond to reports"
+msgstr ""
+
+#: admin/partials/dashboard.php:297
+msgid "Take some or all of the moderation workload from you, so you can go back to managing your community"
+msgstr ""
+
+#: admin/partials/dashboard.php:299
+msgid "Add notes to reports"
+msgstr ""
+
+#: admin/partials/dashboard.php:300
+msgid "Assign reports to specific moderators"
+msgstr ""
+
+#: admin/partials/dashboard.php:301
+msgid "Full moderation actions logging and audit trail"
+msgstr ""
+
+#: admin/partials/dashboard.php:302
+msgid "Send messages to your users and moderators about reports and moderation issues"
+msgstr ""
+
+#: admin/partials/dashboard.php:315
+msgid "Custom Styling Box"
+msgstr ""
+
+#: admin/partials/dashboard.php:319
+msgid "Use this box to add custom CSS and change how your Block, Suspend, Report buttons and links look on your site. If you have asked us for support, cut and paste any custom code we write for you here."
+msgstr ""
+
+#: admin/partials/dashboard.php:336
+#: admin/partials/dashboard.php:352
+#: admin/partials/dashboard.php:369
+msgid "Need Help? See docs on \"The Dashboard\""
+msgstr ""
+
+#: admin/partials/dashboard.php:344
+msgid "Latest Reports"
+msgstr ""
+
+#: admin/partials/dashboard.php:361
+msgid "Most Blocked"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:44
+#: admin/partials/report-cpt-main-metabox.php:45
+msgid "Member Reported"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:65
+msgid "The member who has been reported. Go to this member's <a href=\"%s\">profile page</a>."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:77
+#: admin/partials/report-cpt-main-metabox.php:78
+msgid "Reported By"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:104
+msgid "The member who made the report. Go to this member's <a href=\"%s\">profile page</a>."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:119
+#: admin/partials/report-cpt-main-metabox.php:120
+#: templates/single-report.php:162
+msgid "Link to Reported Content"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:123
+msgid "Click the link to be taken to the content that has been reported."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:129
+#: admin/partials/report-cpt-main-metabox.php:130
+#: templates/single-report.php:169
+msgid "Reported Content"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:136
+msgid "The content that this report relates to."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:144
+#: admin/partials/report-cpt-main-metabox.php:145
+#: templates/single-report.php:156
+msgid "Content Type"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:156
+msgid "This report was created by an administrator, without a specific item."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:196
+msgid "The type of content that has been reported."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:200
+msgid "In the free edition, only members themselves can be reported. Please <a href=\"%s\">upgrade now</a> to the Pro Edition to report specific activities, including comments, private messages, activity updates and groups."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:213
+#: admin/partials/report-cpt-main-metabox.php:214
+msgid "Details of Report"
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:221
+msgid "Members can explain why they made the report. In some cases, this is not necessary, such as when reporting an image."
+msgstr ""
+
+#: admin/partials/report-cpt-main-metabox.php:229
+msgid "Need Help? See docs on \"The Reports Screen\""
+msgstr ""
+
+#: admin/partials/suspend.php:16
+msgid "Suspend Settings"
+msgstr ""
+
+#: admin/partials/suspend.php:19
+msgid "With the suspend service, you can use the suspend button on your member's profile pages to prevent them from logging in. If they are currently using your site, the plugin will detect that and end their session. You can also choose the error message they receive when they try to log in. As well as the suspend buttons, users can also be suspended via the reporting system, either automatically when a set number of reports are received, or when an administrator suspends them via an individual report page. If you want to notify the user that they have been suspended (and unsuspended), you can use the Emails tab under report settings."
+msgstr ""
+
+#: admin/partials/suspend.php:30
+msgid "Need Help? See docs on \"Suspend Settings\""
+msgstr ""
+
+#: bp-toolkit.php:180
+msgid "Block, Suspend, Report for BuddyPress requires BuddyPress or BuddyBoss to run. Please ensure it is activated."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:21
+msgid "Notify admin when a new item is reported."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:22
+msgid "Notify user when their item is hidden."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:23
+msgid "Notify user when they have been suspended."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:24
+msgid "Notify user when their item is restored."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:25
+msgid "Notify admin when a new item is auto-moderated."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:26
+msgid "Notify reporter when their reported item is hidden."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:27
+msgid "Notify reporter when their reported item is restored."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:61
+msgid "[{{{site.name}}}] New {{bptk_report.item_type}} reported"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:63
+msgid ""
+"A new {{bptk_report.item_type}} has been reported :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"<a href=\"{{{bptk_report.reports_screen}}}\">View Reports Screen</a> to take the appropriate action."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:66
+msgid ""
+"A new {{bptk_report.item_type}} has been reported :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"Go to the reports screen to view it and take any required action: {{{bptk_report.reports_screen}}}"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:71
+msgid "[{{{site.name}}}] New {{bptk_report.item_type}} hidden"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:73
+msgid ""
+"A new {{bptk_report.item_type}} has been subject to auto-moderation as it met the currently set threshold :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"<a href=\"{{{bptk_report.reports_screen}}}\">View Reports Screen</a> to take the appropriate action."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:76
+msgid ""
+"A new {{bptk_report.item_type}} has been subject to auto-moderation :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"Go to the reports screen to view it and take any required action: {{{bptk_report.reports_screen}}}"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:81
+msgid "[{{{site.name}}}] Your {{bptk_report.item_type}} has been moderated"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:83
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"Your {{bptk_report.item_type}} has been reported and has been hidden :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"This action may have been automatic, where too many reports from other members were received, or manually by an administrator.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:86
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"Your {{bptk_report.item_type}} has been reported and has been hidden :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"This action may have been automatic, where too many reports from other members were received, or manually by an administrator.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:91
+msgid "[{{{site.name}}}] You have been suspended"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:93
+#: includes/bp-toolkit-email-functions.php:96
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"You have been suspended.\n"
+"\n"
+"This action may have been automatic, where too many reports from other members were received, or manually by an administrator.\n"
+"\n"
+"If you are currently logged in, you will be logged out. You will not be able to log back in again, until the suspension is lifted.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:101
+msgid "[{{{site.name}}}] Your {{bptk_report.item_type}} has been restored"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:103
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"Your {{bptk_report.item_type}} has been restored :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:106
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"Your {{bptk_report.item_type}} has been restored :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:111
+msgid "[{{{site.name}}}] Your reported {{bptk_report.item_type}} has been moderated"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:114
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"The {{bptk_report.item_type}} you reported has been hidden :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"This action may have been automatic, where too many reports from other members were received, or manually by an administrator.\n"
+"\n"
+"Thank you for helping our community to be safer.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:117
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"The {{bptk_report.item_type}} you reported has been hidden :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"This action may have been automatic, where too many reports from other members were received, or manually by an administrator.\n"
+"\n"
+"Thank you for helping our community to be safer.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:122
+msgid "[{{{site.name}}}] Your reported {{bptk_report.item_type}} has been restored"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:125
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"The {{bptk_report.item_type}} you reported has been restored :\n"
+"\n"
+"<blockquote>&quot;{{bptk_report.item_content}}&quot;</blockquote>\n"
+"\n"
+"This normally happens when an administrator or moderator has reviewed your report, but has considered that it is no longer necessary to keep the content hidden.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/bp-toolkit-email-functions.php:128
+msgid ""
+"{{recipient.name}},\n"
+"\n"
+"The {{bptk_report.item_type}} you reported has been restored :\n"
+"\n"
+"\"{{bptk_report.item_content}}\"\n"
+"\n"
+"This normally happens when an administrator or moderator has reviewed your report, but has considered that it is no longer necessary to keep the content hidden.\n"
+"\n"
+"If you have any questions, please contact a site administrator."
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:171
+msgid "user profile"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:191
+msgid "activity or comment"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:203
+msgid "group"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:215
+msgid "private message"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:224
+msgid "forum topic"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:233
+msgid "forum reply"
+msgstr ""
+
+#: includes/bp-toolkit-email-functions.php:242
+msgid "rtMedia upload"
+msgstr ""
+
+#: includes/bp-toolkit-general-functions.php:201
+#: includes/class-bp-toolkit-suspend.php:334
+msgid "User successfully suspended"
+msgstr ""
+
+#: includes/bp-toolkit-general-functions.php:257
+#: includes/class-bp-toolkit-suspend.php:342
+msgid "User successfully unsuspended"
+msgstr ""
+
+#: includes/bp-toolkit-general-functions.php:300
+msgid "You cannot block administrators or moderators"
+msgstr ""
+
+#: includes/bp-toolkit-general-functions.php:336
+msgid "User successfully blocked."
+msgstr ""
+
+#: includes/bp-toolkit-general-functions.php:384
+msgid "User successfully unblocked."
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:213
+msgid "Block User"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:298
+msgid "Block this member"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:353
+#: includes/class-bp-toolkit-block.php:379
+msgid "Blocked Members"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:421
+msgid "Members this user blocks"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:423
+msgid "Members you currently block"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:450
+msgid "Actions"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:460
+msgid "No users found"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:475
+#: templates/blocked.php:46
+msgid "Unblock"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:1192
+msgid "This reply is currently unavailable"
+msgstr ""
+
+#: includes/class-bp-toolkit-block.php:1255
+#: includes/class-bp-toolkit-suspend.php:778
+msgid "This comment is currently unavailable"
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:68
+msgid "Please select an administrator or moderator using the 'Select a Sender' dropdown in the Report Settings > Advanced tab. This is to ensure the plugin messaging service will work."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:125
+msgid "You have been assigned a report"
+msgstr ""
+
+#. translators: 1: The post ID 2: An html link to the user's reports archive
+#: includes/class-bp-toolkit-messages.php:128
+msgid "You have been assigned report %1$s. Click %2$s to access it."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:163
+msgid "A new report has been submitted"
+msgstr ""
+
+#. translators: 1: The post ID 2: An html link to the user's reports archive
+#: includes/class-bp-toolkit-messages.php:166
+msgid "A new report (%1$s) has been submitted by a user. Click %2$s to see all unread reports."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:201
+msgid "An auto-moderation has been triggered"
+msgstr ""
+
+#. translators: 1: The post ID 2: An html link to the user's reports archive
+#: includes/class-bp-toolkit-messages.php:204
+msgid "A report (%1$s) has triggered auto-moderation. Click %2$s to see all reports."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:240
+msgid "Your activity has been hidden"
+msgstr ""
+
+#. translators: 1: The item ID
+#: includes/class-bp-toolkit-messages.php:243
+msgid "Your activity (%1$s) has been hidden. To learn more, please speak to an administrator."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:278
+msgid "Your activity has been restored"
+msgstr ""
+
+#. translators: 1: The item ID
+#: includes/class-bp-toolkit-messages.php:281
+msgid "Your activity (%1$s) has been restored. To learn more, please speak to an administrator."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:311
+msgid "An activity you reported has been hidden"
+msgstr ""
+
+#. translators: 1: The item ID
+#: includes/class-bp-toolkit-messages.php:314
+msgid "An activity (%1$s) you reported has been hidden. To learn more, please speak to an administrator."
+msgstr ""
+
+#: includes/class-bp-toolkit-messages.php:344
+msgid "An activity you reported has been restored"
+msgstr ""
+
+#. translators: 1: The item ID
+#: includes/class-bp-toolkit-messages.php:347
+msgid "An activity (%1$s) you reported has been restored. To learn more, please speak to an administrator."
+msgstr ""
+
+#: includes/class-bp-toolkit-moderate.php:152
+#: includes/class-bp-toolkit-report.php:1070
+msgid "Something went wrong."
+msgstr ""
+
+#: includes/class-bp-toolkit-moderate.php:163
+msgid "Activity approved"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:81
+msgid "Remove Moderator Status"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:82
+msgid "Click to revoke this user's Site Moderator status"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:85
+msgid "Grant Moderator Status"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:86
+msgid "Click to make this user a Site Moderator"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:95
+msgid "Moderation Status"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:353
+#: includes/class-bp-toolkit-moderators.php:396
+msgid "Unread Reports"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:361
+#: includes/class-bp-toolkit-moderators.php:401
+msgid "Assigned to me"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:452
+msgid "It looks like there are no unread reports at the moment. Good Job!"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:474
+msgid "You don't have any reports assigned to you by an administrator yet."
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:488
+msgid "There are no reports on the system yet."
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:508
+msgid "New"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:685
+msgid "Mark Not Upheld"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:685
+msgid "Mark Upheld"
+msgstr ""
+
+#. translators: %s: reported user
+#: includes/class-bp-toolkit-moderators.php:696
+msgid "Unsuspend %s"
+msgstr ""
+
+#. translators: %s: reported user
+#: includes/class-bp-toolkit-moderators.php:705
+msgid "Suspend %s"
+msgstr ""
+
+#. translators: %s: reported user
+#: includes/class-bp-toolkit-moderators.php:719
+msgid "Let %s Make Reports"
+msgstr ""
+
+#. translators: %s: reported user
+#: includes/class-bp-toolkit-moderators.php:728
+msgid "Blacklist %s"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:740
+msgid "Unmoderate Activity"
+msgstr ""
+
+#: includes/class-bp-toolkit-moderators.php:740
+msgid "Moderate Activity"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:99
+msgid "Add a Note to this Report"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:133
+msgid "Report Notes"
+msgstr ""
+
+#. translators: %1$s: note date %2$s: note time
+#: includes/class-bp-toolkit-notes.php:181
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:199
+msgid "There are no notes yet."
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:207
+msgid "Add note"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:207
+msgid "Add a note for your reference, add a reporter note (the user who made the report will be notified), or add a reported note (the user who this report is about will be notified)."
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:211
+msgid "Note type"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:213
+msgid "Admin note"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:214
+msgid "Note to Reporter"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:215
+msgid "Note to Reported"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:217
+msgid "Add"
+msgstr ""
+
+#. translators: $1: Date created, $2 Time created
+#: includes/class-bp-toolkit-notes.php:262
+msgid "added on %1$s at %2$s"
+msgstr ""
+
+#. translators: %s: note author
+#: includes/class-bp-toolkit-notes.php:270
+msgid "by %s"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:273
+msgid "Delete note"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:322
+msgid "BSR System"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:323
+msgid "wordpress"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:390
+msgid "Report was set as upheld"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:393
+msgid "Report was set as not upheld"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:408
+msgid "Report triggered an auto-moderation"
+msgstr ""
+
+#. translators: 1: Assigned User display name
+#: includes/class-bp-toolkit-notes.php:426
+msgid "Report assigned to %s"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:446
+msgid "Report item was moderated (via this report)"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:449
+msgid "Report item was unmoderated (via this report)"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:543
+msgid "Send user contents of a note about their report."
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:544
+msgid "Send user contents of a note about their reported item."
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/class-bp-toolkit-notes.php:578
+#: includes/class-bp-toolkit-notes.php:586
+msgid "[{{{site.name}}}] Report update"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/class-bp-toolkit-notes.php:580
+#: includes/class-bp-toolkit-notes.php:582
+msgid ""
+"Hello {{recipient.name}},\n"
+"\n"
+"There has been an update on the report you submitted:\n"
+"\n"
+"{{{bptk_report.note_content}}}"
+msgstr ""
+
+#. translators: do not remove {} brackets or translate its contents.
+#: includes/class-bp-toolkit-notes.php:588
+#: includes/class-bp-toolkit-notes.php:590
+msgid ""
+"Hello {{recipient.name}},\n"
+"\n"
+"There has been an update on the report you are named in:\n"
+"\n"
+"{{{bptk_report.note_content}}}"
+msgstr ""
+
+#: includes/class-bp-toolkit-notes.php:621
+msgid "BSR"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:342
+#: includes/class-bp-toolkit-report.php:384
+#: includes/class-bp-toolkit-report.php:411
+#: includes/class-bp-toolkit-report.php:499
+msgid "You cannot make multiple reports about the same thing"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:353
+msgid "Report User"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:503
+#: includes/class-bp-toolkit-report.php:547
+#: includes/class-bp-toolkit-report.php:588
+#: includes/class-bp-toolkit-report.php:598
+#: includes/class-bp-toolkit-report.php:615
+#: includes/class-bp-toolkit-report.php:649
+#: includes/class-bp-toolkit-report.php:690
+#: includes/class-bp-toolkit-report.php:725
+#: includes/class-bp-toolkit-report.php:756
+#: includes/class-bp-toolkit-report.php:790
+#: includes/class-bp-toolkit-report.php:1108
+msgid "You cannot make multiple reports"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:548
+#: includes/class-bp-toolkit-report.php:556
+#: includes/class-bp-toolkit-report.php:559
+#: includes/class-bp-toolkit-report.php:562
+msgid "Report Group"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:605
+msgid "This report relates to an initial message in a thread that reads: "
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:650
+#: includes/class-bp-toolkit-report.php:658
+#: includes/class-bp-toolkit-report.php:662
+#: includes/class-bp-toolkit-report.php:691
+#: includes/class-bp-toolkit-report.php:697
+msgid "Report Topic"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:816
+msgid "Close"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:827
+msgid "What type of report is this?"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:838
+msgid "Please give as much detail as possible"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:842
+msgid "Send"
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:937
+msgid "Your report was successfully submitted."
+msgstr ""
+
+#: includes/class-bp-toolkit-report.php:1080
+msgid "This comment does not exist."
+msgstr ""
+
+#: includes/class-bp-toolkit-suspend.php:101
+#: includes/class-bp-toolkit-suspend.php:116
+msgid "Suspend User"
+msgstr ""
+
+#: includes/class-bp-toolkit-suspend.php:104
+#: includes/class-bp-toolkit-suspend.php:127
+msgid "Unsuspend User"
+msgstr ""
+
+#: includes/class-bp-toolkit-suspend.php:124
+#: includes/class-bp-toolkit-suspend.php:130
+#: includes/class-bp-toolkit-suspend.php:168
+#: includes/class-bp-toolkit-suspend.php:190
+#: includes/class-bp-toolkit-suspend.php:193
+#: includes/class-bp-toolkit-suspend.php:236
+msgid "Unsuspend"
+msgstr ""
+
+#: includes/class-bp-toolkit-suspend.php:373
+msgid "This account has been suspended. Please contact an administrator."
+msgstr ""
+
+#: includes/class-bp-toolkit-suspend.php:418
+msgctxt "suspended users"
+msgid "Suspended %s"
+msgstr ""
+
+#: includes/class-bp-toolkit-wp-osa.php:796
+msgid "Need Help? See docs on \""
+msgstr ""
+
+#: public/class-bp-toolkit-public.php:104
+msgid "Sorry, something went wrong. Please try again or refresh the page."
+msgstr ""
+
+#: public/class-bp-toolkit-public.php:286
+#: public/class-bp-toolkit-public.php:306
+msgid "This comment is pending review"
+msgstr ""
+
+#: public/class-bp-toolkit-public.php:361
+msgid "This media is pending review"
+msgstr ""
+
+#: templates/archive-report.php:37
+msgid "Report by: %s"
+msgstr ""
+
+#: templates/archive-report.php:41
+#: templates/single-report.php:121
+msgid "Reported on:"
+msgstr ""
+
+#: templates/archive-report.php:47
+msgid "Details: "
+msgstr ""
+
+#: templates/blocked.php:36
+msgid "You have blocked this member."
+msgstr ""
+
+#: templates/blocked.php:38
+msgid "You cannot see their profile, or any of their activity. Click below to unblock them."
+msgstr ""
+
+#: templates/blocked.php:48
+#: templates/blocking.php:48
+msgid "See all the users you are currently blocking"
+msgstr ""
+
+#: templates/blocked.php:48
+#: templates/blocking.php:48
+msgid "here"
+msgstr ""
+
+#: templates/blocking.php:36
+msgid "This member has blocked you."
+msgstr ""
+
+#: templates/blocking.php:38
+msgid "You cannot see their profile, or any of their activity. Click below to block them."
+msgstr ""
+
+#: templates/single-report.php:55
+msgid "Members Involved"
+msgstr ""
+
+#: templates/single-report.php:62
+msgid "Reporter:"
+msgstr ""
+
+#: templates/single-report.php:73
+#: templates/single-report.php:93
+msgid "Go to <a href=\"%s\">profile</a>"
+msgstr ""
+
+#: templates/single-report.php:82
+msgid "Member reported:"
+msgstr ""
+
+#: templates/single-report.php:109
+msgid "Report Actions"
+msgstr ""
+
+#: templates/single-report.php:117
+msgid "Report Data"
+msgstr ""
+
+#: templates/single-report.php:122
+msgid "Reported on"
+msgstr ""
+
+#: templates/single-report.php:155
+msgid "Content Type:"
+msgstr ""
+
+#: templates/single-report.php:161
+msgid "Link to Reported Content:"
+msgstr ""
+
+#: templates/single-report.php:168
+msgid "Reported Content:"
+msgstr ""
+
+#: templates/single-report.php:186
+msgid "Continue reading"
+msgstr ""

@@ -119,7 +119,6 @@
 		});
 
 		var initValidation = false;
-		var asyncValidation = false;
 		var asyncLoaded = false;
 		formValidation($signup_form);
 
@@ -127,7 +126,10 @@
 					var emailInput = $(this);
 					var inputHasAutocomplete = false;
 
-					emailInput.on('keyup',function(){
+					emailInput.on('keyup change',function(){
+						// Remove siblings with the .submitted-form-validation-error class.
+						$( this ).siblings( '.submitted-form-validation-error' ).remove();
+
 						validateEmail( this );
 
 						var selectedAccountType = $account_type_field.val();
@@ -187,9 +189,9 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			if (0 <= email.indexOf('mail.citytech.cuny.edu')) {
+			if (0 <= email.indexOf('@mail.citytech.cuny.edu')) {
 				emailtype = 'student';
-			} else if (0 <= email.indexOf('citytech.cuny.edu')) {
+			} else if (0 <= email.indexOf('@citytech.cuny.edu')) {
 				emailtype = 'fs';
 			} else {
 				emailtype = 'nonct';

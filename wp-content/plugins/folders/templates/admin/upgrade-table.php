@@ -143,9 +143,10 @@ $plans = [
         ]
     ]
 ];
+
 $features = [
     [
-        'title' => esc_html__("Organize pages, posts, and media files", "folders"),
+        'title' => esc_html__("Organize pages, media files, posts, plugins and custom post types", "folders"),
         'tooltip' => ""
     ],
     [
@@ -157,40 +158,44 @@ $features = [
         'tooltip' => esc_html__("Automatically filter posts/pages/custom posts/media files based on author, date, file types & more ", "folders")."<img src='".WCP_FOLDER_URL."assets/images/dynamic-folders.gif' alt='".esc_html__("Dynamic Folders", "folders")."' />"
     ],
     [
-        'title' => esc_html__("Create folders for each post type. I.e. WooCommerce, Elementor", "folders"),
+        'title' => esc_html__("Create folders for various custom post types. I.e. WooCommerce, Elementor", "folders"),
         'tooltip' => esc_html__("Use folders with other plugins that have custom post type (e.g. Elementor templates, WooCommerce & more)", "folders")
+    ],
+    [
+        'title' => esc_html__("User access restriction", "folders"),
+        'tooltip' => esc_html__("Restrict users within their own folders only (restrict Dynamic Folder access as well)", "folders")
     ],
     [
         'title' => esc_html__("Folders access management", "folders"),
         'tooltip' => esc_html__("Advanced access management for your team with roles that restrict their access to view and edit your folders.", "folders")."<img src='".WCP_FOLDER_URL."assets/images/user-access.jpg' alt='".esc_html__("Metadata details on Media Library hover", "folders")."' />"
     ],
     [
-        'title' => esc_html__("Metadata details on Media Library hover", "folders"),
-        'tooltip' => esc_html__("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders")."<img src='".WCP_FOLDER_URL."assets/images/folders-media.gif' alt='".esc_html__("Metadata details on Media Library hover", "folders")."' />"
-    ],
-    [
         'title' => esc_html__("Clean unused media files from your Media Library", "folders"),
         'tooltip' => esc_html__("Media Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them", "folders")
     ],
     [
-        'title' => esc_html__("Directly upload folders with all its content", "folders"),
+        'title' => esc_html__("Directly upload folder or folder structures with their content", "folders"),
         'tooltip' => esc_html__("Upload a folder (all its content within the folder) directly", "folders")
     ],
     [
-        'title' => esc_html__("Sort folders based on the date", "folders"),
-        'tooltip' => esc_html__("Sort folders based on the creation date of the folders", "folders")
+        'title' => esc_html__("Download folders as ZIP", "folders"),
+        'tooltip' => esc_html__("Download all contents of a media folder as a ZIP", "folders")
     ],
     [
         'title' => esc_html__("Replace media for all file types and update file names from WordPress titles", "folders"),
         'tooltip' => esc_html__("Replace all types of media files including PDF/SVG/ZIP/DOCX/XSLX & more. While replacing compare the two files side by side", "folders")
     ],
     [
+        'title' => esc_html__("Sort folders based on the date", "folders"),
+        'tooltip' => esc_html__("Sort folders based on the creation date of the folders", "folders")
+    ],
+    [
         'title' => esc_html__("Advanced Media Replacements", "folders"),
         'tooltip' => esc_html__("Replace media files when uploading and update all references in the database, change dates, organize by newer date & more without hurting your SEO", "folders")
     ],
     [
-        'title' => esc_html__("User access restriction", "folders"),
-        'tooltip' => esc_html__("Restrict users within their own folders only (restrict Dynamic Folder access as well)", "folders")
+        'title' => esc_html__("Metadata details on Media Library hover", "folders"),
+        'tooltip' => esc_html__("Show useful metadata including title, size, type, date, dimension & more on hover.", "folders")."<img src='".WCP_FOLDER_URL."assets/images/folders-media.gif' alt='".esc_html__("Metadata details on Media Library hover", "folders")."' />"
     ],
     [
         'title' => esc_html__("Bookmark, lock & duplicate folders", "folders"),
@@ -203,10 +208,6 @@ $features = [
     [
         'title' => esc_html__("Customize folder styles with fonts, custom colors & more", "folders"),
         'tooltip' => esc_html__("Customize folders with your preferred colors, font size, font family & more", "folders")
-    ],
-    [
-        'title' => esc_html__("Download folders as ZIP", "folders"),
-        'tooltip' => esc_html__("Download all contents of a folder as a ZIP", "folders")
     ],
 ];
 ?>

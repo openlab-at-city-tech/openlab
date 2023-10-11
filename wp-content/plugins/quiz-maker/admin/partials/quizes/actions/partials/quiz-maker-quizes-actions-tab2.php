@@ -12,37 +12,37 @@
         </div>
         <div class="col-sm-10">
             <div class="form-group row ays_themes_images_main_div">
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'elegant_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'elegant_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_elegant_dark" class="ays-quiz-theme-item">
                         <p><?php echo __('Elegant Dark',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/elegant_dark.JPG' ?>" alt="Elegant Dark">
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'elegant_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'elegant_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_elegant_light" class="ays-quiz-theme-item">
                         <p><?php echo __('Elegant Light',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/elegant_light.JPG' ?>" alt="Elegant Light">
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'classic_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'classic_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_classic_dark" class="ays-quiz-theme-item">
                         <p><?php echo __('Classic Dark',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/classic_dark.jpg' ?>" alt="Classic Dark">
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'classic_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'classic_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_classic_light" class="ays-quiz-theme-item">
                         <p><?php echo __('Classic Light',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/classic_light.jpg' ?>" alt="Classic Light">
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'rect_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'rect_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_rect_dark" class="ays-quiz-theme-item">
                         <p><?php echo __('Rect Dark',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/rect_dark.JPG' ?>" alt="Rect Dark" >
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'rect_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'rect_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_rect_light" class="ays-quiz-theme-item">
                         <p><?php echo __('Rect Light',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/rect_light.JPG' ?>" alt="Rect Light" >
@@ -51,27 +51,29 @@
             </div>
             <hr>
             <div class="form-group row ays_themes_images_main_div">
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'modern_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'modern_light') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_modern_light" class="ays-quiz-theme-item">
                         <p><?php echo __('Modern Light',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/modern_light.jpg' ?>" alt="Modern Light" >
                     </label>
                 </div>
-                <div class="ays_theme_image_div col-sm-2 <?php echo ($quiz_theme == 'modern_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
+                <div class="ays_theme_image_div display_flex_theme col-sm-2 <?php echo ($quiz_theme == 'modern_dark') ? 'ays_active_theme_image' : '' ?>" style="padding:0;">
                     <label for="theme_modern_dark" class="ays-quiz-theme-item">
                         <p><?php echo __('Modern Dark',$this->plugin_name)?></p>
                         <img src="<?php echo AYS_QUIZ_ADMIN_URL . '/images/themes/modern_dark.jpg' ?>" alt="Modern Dark" >
                     </label>
                 </div>
             </div>
-            <input type="checkbox" id="theme_elegant_dark" name="ays_quiz_theme" value="elegant_dark" <?php echo ($quiz_theme == 'elegant_dark') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_elegant_light" name="ays_quiz_theme" value="elegant_light" <?php echo ($quiz_theme == 'elegant_light') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_classic_dark" name="ays_quiz_theme" value="classic_dark" <?php echo ($quiz_theme == 'classic_dark') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_classic_light" name="ays_quiz_theme" value="classic_light" <?php echo ($quiz_theme == 'classic_light') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_rect_dark" name="ays_quiz_theme" value="rect_dark" <?php echo ($quiz_theme == 'rect_dark') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_rect_light" name="ays_quiz_theme" value="rect_light" <?php echo ($quiz_theme == 'rect_light') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_modern_light" name="ays_quiz_theme" value="modern_light" <?php echo ($quiz_theme == 'modern_light') ? 'checked' : '' ?>>
-            <input type="checkbox" id="theme_modern_dark" name="ays_quiz_theme" value="modern_dark" <?php echo ($quiz_theme == 'modern_dark') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_elegant_dark" name="ays_quiz_theme" value="elegant_dark" <?php echo ($quiz_theme == 'elegant_dark') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_elegant_light" name="ays_quiz_theme" value="elegant_light" <?php echo ($quiz_theme == 'elegant_light') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_classic_dark" name="ays_quiz_theme" value="classic_dark" <?php echo ($quiz_theme == 'classic_dark') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_classic_light" name="ays_quiz_theme" value="classic_light" <?php echo ($quiz_theme == 'classic_light') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_rect_dark" name="ays_quiz_theme" value="rect_dark" <?php echo ($quiz_theme == 'rect_dark') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_rect_light" name="ays_quiz_theme" value="rect_light" <?php echo ($quiz_theme == 'rect_light') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_modern_light" name="ays_quiz_theme" value="modern_light" <?php echo ($quiz_theme == 'modern_light') ? 'checked' : '' ?>>
+            <input type="radio" id="theme_modern_dark" name="ays_quiz_theme" value="modern_dark" <?php echo ($quiz_theme == 'modern_dark') ? 'checked' : '' ?>>
+
+            <input type="hidden" id="ays-quiz-theme-type" value="">
 
         </div>
     </div> <!-- Quiz Theme -->
@@ -110,7 +112,7 @@
                 </div>
                 <div class="col-sm-7 ays_divider_left">
                     <input type="text" class="ays-text-input" id='ays-quiz-color' name='ays_quiz_color' data-alpha="true"
-                           value="<?php echo (isset($options['color'])) ? $options['color'] : ''; ?>"/>
+                           value="<?php echo (isset($options['color'])) ? esc_attr( stripslashes($options['color']) ) : ''; ?>"/>
                 </div>
             </div> <!-- Quiz Color -->
             <hr/>
@@ -126,7 +128,7 @@
                 <div class="col-sm-7 ays_divider_left">
                     <input type="text" class="ays-text-input" id='ays-quiz-bg-color' data-alpha="true"
                            name='ays_quiz_bg_color'
-                           value="<?php echo (isset($options['bg_color'])) ? $options['bg_color'] : ''; ?>"/>
+                           value="<?php echo (isset($options['bg_color'])) ? esc_attr( stripslashes($options['bg_color']) ) : ''; ?>"/>
                 </div>
             </div> <!-- Quiz Background Color -->
             <hr/>
@@ -142,7 +144,7 @@
                 <div class="col-sm-7 ays_divider_left">
                     <input type="text" class="ays-text-input" id='ays-quiz-text-color' data-alpha="true"
                            name='ays_quiz_text_color'
-                           value="<?php echo (isset($options['text_color'])) ? $options['text_color'] : ''; ?>"/>
+                           value="<?php echo (isset($options['text_color'])) ? esc_attr( stripslashes($options['text_color']) ) : ''; ?>"/>
                 </div>
             </div> <!-- Text Color -->
             <hr/>
@@ -172,17 +174,19 @@
                     </label>
                 </div>
                 <div class="col-sm-6 ays_divider_left ays-display-flex">
-                    <div>
-                        <input type="number" class="ays-text-input ays-text-input-short" id='ays-quiz-width'
-                               name='ays_quiz_width'
-                               value="<?php echo (isset($options['width'])) ? $options['width'] : ''; ?>"/>
-                        <span style="display:block;" class="ays_quiz_small_hint_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
-                    </div>
-                    <div>
-                        <select id="ays_quiz_width_by_percentage_px" name="ays_quiz_width_by_percentage_px" class="ays-text-input ays-text-input-short" style="display:inline-block; width: 60px;">
-                            <option value="pixels" <?php echo $quiz_width_by_percentage_px == "pixels" ? "selected" : ""; ?>><?php echo __( "px", $this->plugin_name ); ?></option>
-                            <option value="percentage" <?php echo $quiz_width_by_percentage_px == "percentage" ? "selected" : ""; ?>><?php echo __( "%", $this->plugin_name ); ?></option>
-                        </select>
+                    <div class="ays_quiz_display_flex_width">
+                        <div>
+                            <input type="number" class="ays-text-input ays-text-input-short" id='ays-quiz-width'
+                                   name='ays_quiz_width'
+                                   value="<?php echo (isset($options['width'])) ? $options['width'] : ''; ?>"/>
+                            <span style="display:block;" class="ays_quiz_small_hint_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
+                        </div>
+                        <div class="ays_quiz_dropdown_max_width">
+                            <select id="ays_quiz_width_by_percentage_px" name="ays_quiz_width_by_percentage_px" class="ays-text-input ays-text-input-short" style="display:inline-block; width: 60px;">
+                                <option value="pixels" <?php echo $quiz_width_by_percentage_px == "pixels" ? "selected" : ""; ?>><?php echo __( "px", $this->plugin_name ); ?></option>
+                                <option value="percentage" <?php echo $quiz_width_by_percentage_px == "percentage" ? "selected" : ""; ?>><?php echo __( "%", $this->plugin_name ); ?></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div> <!-- Quiz width -->
@@ -196,11 +200,16 @@
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_mobile_max_width'
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_mobile_max_width'
                            name='ays_mobile_max_width' style="display:inline-block;"
-                           value="<?php echo $mobile_max_width; ?>"/> %
+                           value="<?php echo $mobile_max_width; ?>"/>
                            <span style="display:block;" class="ays_quiz_small_hint_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width">
+                        <input type="text" value="%" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Quiz max-width for mobile -->
             <hr/>
@@ -213,11 +222,17 @@
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short"
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short"
                            id='ays-quiz-height'
                            name='ays_quiz_height'
                            value="<?php echo (isset($options['height'])) ? $options['height'] : ''; ?>"/>
+                           </div>
+                    <div class="ays_quiz_dropdown_max_width">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
+
                 </div>
             </div> <!-- Quiz min height -->
             <hr/>
@@ -249,6 +264,101 @@
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-5">
+                    <label for='ays_quiz_title_font_size'>
+                        <?php echo __('Quiz title font size', $this->plugin_name); ?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Set your preferred text size for the Quiz Title. The default size is 21px.',$this->plugin_name); ?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_answers_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input ays-text-input-short" id='ays_quiz_title_font_size' name='ays_quiz_title_font_size' value="<?php echo $quiz_title_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_quiz_title_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input ays-text-input-short" id='ays_quiz_title_mobile_font_size' name='ays_quiz_title_mobile_font_size' value="<?php echo $quiz_title_mobile_font_size; ?>"/>
+                                </div>
+                            <div class="ays_quiz_dropdown_max_width">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_quiz_enable_title_text_shadow">
+                        <?php echo __('Quiz title text shadow',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Specify the text shadow of the quiz title.',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <input type="checkbox" class="ays_toggle ays_toggle_slide" id="ays_quiz_enable_title_text_shadow" name="ays_quiz_enable_title_text_shadow" <?php echo ($quiz_enable_title_text_shadow == 'on') ? 'checked' : ''; ?>/>
+                    <label for="ays_quiz_enable_title_text_shadow" class="ays_switch_toggle">Toggle</label>
+                    <div class="col-sm-12 ays_toggle_target ays_divider_top <?php echo ($quiz_enable_title_text_shadow == 'on') ? '' : 'display_none'; ?>" style="margin-top: 10px; padding-top: 10px;">
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <label for="ays_quiz_title_text_shadow_color">
+                                    <?php echo __('Text shadow color',$this->plugin_name)?>
+                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The color of the text shadow of the quiz title.',$this->plugin_name ); ?>">
+                                        <i class="ays_fa ays_fa_info_circle"></i>
+                                    </a>
+                                 </label>
+                                <input type="text" class="ays-text-input" id='ays_quiz_title_text_shadow_color' name='ays_quiz_title_text_shadow_color' data-alpha="true" data-default-color="#333" value="<?php echo $quiz_title_text_shadow_color; ?>"/>
+                           </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-3" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('X', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_title_text_shadow_x_offset' name='ays_quiz_title_text_shadow_x_offset' value="<?php echo $quiz_title_text_shadow_x_offset; ?>" />
+                                </div>
+                                <div class="col-sm-3 ays_divider_left" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('Y', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_title_text_shadow_y_offset' name='ays_quiz_title_text_shadow_y_offset' value="<?php echo $quiz_title_text_shadow_y_offset; ?>" />
+                                </div>
+                                <div class="col-sm-3 ays_divider_left" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('Z', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_title_text_shadow_z_offset' name='ays_quiz_title_text_shadow_z_offset' value="<?php echo $quiz_title_text_shadow_z_offset; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Quiz title text shadow -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
                     <label for='ays_quiz_image_height'>
                         <?php echo __('Quiz image height', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Set quiz image height in pixels. It accepts only number values.',$this->plugin_name); ?>">
@@ -256,8 +366,13 @@
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_quiz_image_height' name='ays_quiz_image_height' value="<?php echo $quiz_image_height; ?>"/>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_quiz_image_height' name='ays_quiz_image_height' value="<?php echo $quiz_image_height; ?>"/>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div>
             <hr/>
@@ -272,33 +387,40 @@
                 </div>
                 <div class="col-sm-7 ays_divider_left">
                     <div class="form-group row">
-                        <div class="col-sm-7">
-                            <label for="ays_image_width">
-                                <?php echo __('Image Width',$this->plugin_name)?>(px)
-                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Question image width in pixels. Set it 0 or leave it blank for making it 100%. It accepts only numeric values.',$this->plugin_name)?>">
-                                    <i class="ays_fa ays_fa_info_circle"></i>
-                                </a>
-                            </label>
-                            <input type="number" class="ays-text-input ays-text-input-short" id="ays_image_width" name="ays_image_width" value="<?php echo $image_width; ?>"/>
-                            <span class="ays_quiz_small_hint_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
-                        </div>
-                        <div class="col-sm-5 ays-display-flex" style="align-items: center;">
-                            <select id="ays_quiz_image_width_by_percentage_px" name="ays_quiz_image_width_by_percentage_px" class="ays-text-input ays-text-input-short" style="display:inline-block; width: 60px; margin-top: .5rem;">
-                                <option value="pixels" <?php echo $quiz_image_width_by_percentage_px == "pixels" ? "selected" : ""; ?>><?php echo __( "px", $this->plugin_name ); ?></option>
-                                <option value="percentage" <?php echo $quiz_image_width_by_percentage_px == "percentage" ? "selected" : ""; ?>><?php echo __( "%", $this->plugin_name ); ?></option>
-                            </select>
+                        <div class="col-sm-12 ays_quiz_display_flex_width">
+                            <div>
+                                <label for="ays_image_width">
+                                    <?php echo __('Image Width',$this->plugin_name)?>
+                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Question image width in pixels. Set it 0 or leave it blank for making it 100%. It accepts only numeric values.',$this->plugin_name)?>">
+                                        <i class="ays_fa ays_fa_info_circle"></i>
+                                    </a>
+                                </label>
+                                <input type="number" class="ays-text-input ays-text-input-short" id="ays_image_width" name="ays_image_width" value="<?php echo $image_width; ?>"/>
+                                <span class="ays_quiz_small_hint_text"><?php echo __("For 100% leave blank", $this->plugin_name);?></span>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: center;">
+                                <select id="ays_quiz_image_width_by_percentage_px" name="ays_quiz_image_width_by_percentage_px" class="ays-text-input ays-text-input-short" style="display:inline-block; width: 60px; margin-top: .5rem;">
+                                    <option value="pixels" <?php echo $quiz_image_width_by_percentage_px == "pixels" ? "selected" : ""; ?>><?php echo __( "px", $this->plugin_name ); ?></option>
+                                    <option value="percentage" <?php echo $quiz_image_width_by_percentage_px == "percentage" ? "selected" : ""; ?>><?php echo __( "%", $this->plugin_name ); ?></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <hr/>
                     <div class="form-group row">
-                        <div class="col-sm-12">
-                            <label for="ays_image_height">
-                                <?php echo __('Image Height',$this->plugin_name)?>(px)
-                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Question image height in pixels. It accepts only number values.',$this->plugin_name)?>">
-                                    <i class="ays_fa ays_fa_info_circle"></i>
-                                </a>
-                            </label>
-                            <input type="number" class="ays-text-input ays-text-input-short" id="ays_image_height" name="ays_image_height" value="<?php echo (isset($options['image_height']) && $options['image_height'] != '') ? $options['image_height'] : ''; ?>"/>
+                        <div class="col-sm-12 ays_quiz_display_flex_width">
+                            <div>
+                                <label for="ays_image_height">
+                                    <?php echo __('Image Height',$this->plugin_name)?>
+                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Question image height in pixels. It accepts only number values.',$this->plugin_name)?>">
+                                        <i class="ays_fa ays_fa_info_circle"></i>
+                                    </a>
+                                </label>
+                                <input type="number" class="ays-text-input ays-text-input-short" id="ays_image_height" name="ays_image_height" value="<?php echo (isset($options['image_height']) && $options['image_height'] != '') ? $options['image_height'] : ''; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
                         </div>
                     </div>
                     <hr/>
@@ -306,7 +428,7 @@
                         <div class="col-sm-12">
                             <label for="ays_image_sizing">
                                 <?php echo __('Image sizing', $this->plugin_name ); ?>
-                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('It helps to configure the scale of the images inside the quiz in case of differences between the sizes',$this->plugin_name)?>">
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('It helps to configure the scale of the images inside the quiz in case of differences between the sizes.',$this->plugin_name)?>">
                                     <i class="ays_fa ays_fa_info_circle"></i>
                                 </a>
                             </label>
@@ -338,15 +460,22 @@
                            <?php echo ($enable_border) ? 'checked' : ''; ?>/>
                     <label for="ays_enable_border" class="ays_switch_toggle">Toggle</label>
                     <div class="col-sm-12 ays_toggle_target ays_divider_top" style="margin-top: 10px; padding-top: 10px; <?php echo ($enable_border) ? '' : 'display:none;' ?>">
-                        <label for="ays_quiz_border_width">
-                            <?php echo __('Border width',$this->plugin_name)?> (px)
-                            <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The width of quiz container border',$this->plugin_name)?>">
-                                <i class="ays_fa ays_fa_info_circle"></i>
-                            </a>
-                         </label>
-                        <input type="number" class="ays-text-input" id='ays_quiz_border_width'
-                               name='ays_quiz_border_width'
-                               value="<?php echo $quiz_border_width; ?>"/>
+                       <div class="ays_quiz_display_flex_width">
+                            <div>
+                                <label for="ays_quiz_border_width">
+                                    <?php echo __('Border width',$this->plugin_name)?>
+                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The width of quiz container border',$this->plugin_name)?>">
+                                        <i class="ays_fa ays_fa_info_circle"></i>
+                                    </a>
+                                 </label>
+                                <input type="number" class="ays-text-input ays-text-input-short" id='ays_quiz_border_width'
+                                   name='ays_quiz_border_width'
+                                   value="<?php echo $quiz_border_width; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-12 ays_toggle_target ays_divider_top" style="margin-top: 10px; padding-top: 10px; <?php echo ($enable_border) ? '' : 'display:none;' ?>">
                         <label for="ays_quiz_border_style">
@@ -386,17 +515,22 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for="ays_quiz_border_radius">
-                        <?php echo __('Border radius', $this->plugin_name); ?> (px)
+                        <?php echo __('Border radius', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Quiz container border-radius in pixels. It accepts only numeric values.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short"
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short"
                            id="ays_quiz_border_radius"
                            name="ays_quiz_border_radius"
                            value="<?php echo $quiz_border_radius; ?>"/>
+                   </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Quiz border radius -->
             <hr/>
@@ -565,7 +699,7 @@
                                     <i class="ays_fa ays_fa_info_circle"></i>
                                 </a>
                             </label>
-                            <select id="ays_quiz_gradient_direction" name="ays_quiz_gradient_direction" class="ays-text-input">
+                            <select id="ays_quiz_gradient_direction" name="ays_quiz_gradient_direction" class="ays-text-input ays-text-input-short">
                                 <option <?php echo ($quiz_gradient_direction == 'vertical') ? 'selected' : ''; ?> value="vertical"><?php echo __( 'Vertical', $this->plugin_name); ?></option>
                                 <option <?php echo ($quiz_gradient_direction == 'horizontal') ? 'selected' : ''; ?> value="horizontal"><?php echo __( 'Horizontal', $this->plugin_name); ?></option>
                                 <option <?php echo ($quiz_gradient_direction == 'diagonal_left_to_right') ? 'selected' : ''; ?> value="diagonal_left_to_right"><?php echo __( 'Diagonal left to right', $this->plugin_name); ?></option>
@@ -750,14 +884,50 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for='ays_answers_font_size'>
-                        <?php echo __('Answer font size', $this->plugin_name); ?> (px)
+                        <?php echo __('Answer font size', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The font size of the answers in pixels in the quiz. It accepts only numeric values.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
                 <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_answers_font_size'name='ays_answers_font_size' value="<?php echo $answers_font_size; ?>"/>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_answers_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_answers_font_size'name='ays_answers_font_size' value="<?php echo $answers_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_answers_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_answers_mobile_font_size'name='ays_answers_mobile_font_size' value="<?php echo $answers_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div> <!-- Answers font size -->
             <!-- ================= -->
@@ -765,16 +935,252 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for='ays_answers_font_size'>
-                        <?php echo __('Question font size', $this->plugin_name); ?> (px)
-                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Specify the font size of the questions( only for <p> tag ). It accepts only numerical values.',$this->plugin_name)?>">
+                        <?php echo __('Question font size', $this->plugin_name); ?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The font size of the questions in pixels in the quiz (only for <p> tag). It accepts only numeric values.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
                 <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_question_font_size'name='ays_question_font_size' value="<?php echo $question_font_size; ?>"/>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_question_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_question_font_size'name='ays_question_font_size' value="<?php echo $question_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_question_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_question_mobile_font_size'name='ays_question_mobile_font_size' value="<?php echo $question_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div> <!-- Question font size -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_right_answers_font_size">
+                        <?php echo __('Font size for the right answer',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Choose the Font Size for the Message displayed for the right answer( only for <p> tag ).',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_right_answers_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_right_answers_font_size' name='ays_right_answers_font_size' value="<?php echo $right_answers_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_right_answers_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_right_answers_mobile_font_size' name='ays_right_answers_mobile_font_size' value="<?php echo $right_answers_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Font size for the right answer -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_wrong_answers_font_size">
+                        <?php echo __('Font size for the wrong answer',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Choose the Font Size for the Message displayed for the wrong answer( only for <p> tag ).',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_question_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_wrong_answers_font_size' name='ays_wrong_answers_font_size' value="<?php echo $wrong_answers_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_wrong_answers_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_wrong_answers_mobile_font_size' name='ays_wrong_answers_mobile_font_size' value="<?php echo $wrong_answers_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Font size for the wrong answer -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_quest_explanation_font_size">
+                        <?php echo __('Font size for the question explanation',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Choose the Font Size for the question explanation text( only for <p> tag ).',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_quest_explanation_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_quest_explanation_font_size' name='ays_quest_explanation_font_size' value="<?php echo $quest_explanation_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_quest_explanation_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_quest_explanation_mobile_font_size' name='ays_quest_explanation_mobile_font_size' value="<?php echo $quest_explanation_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Font size for the question explanation -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_note_text_font_size">
+                        <?php echo __('Font size for the note text',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Choose the Font Size for the Message displayed for the note text( only for <p> tag ).',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_note_text_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_note_text_font_size' name='ays_note_text_font_size' value="<?php echo $note_text_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_note_text_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_note_text_mobile_font_size' name='ays_note_text_mobile_font_size' value="<?php echo $note_text_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Font size for the wrong answer -->
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-5">
@@ -872,28 +1278,38 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for="ays_answers_padding">
-                        <?php echo __('Answer padding',$this->plugin_name)?> (px)
+                        <?php echo __('Answer padding',$this->plugin_name)?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Padding of answers.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_answers_padding' name='ays_answers_padding' value="<?php echo $answers_padding; ?>"/>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_answers_padding' name='ays_answers_padding' value="<?php echo $answers_padding; ?>"/>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Answers padding -->
             <hr/>
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for="ays_answers_margin">
-                        <?php echo __('Answer gap',$this->plugin_name)?> (px)
+                        <?php echo __('Answer gap',$this->plugin_name)?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Gap between answers.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_answers_margin' name='ays_answers_margin' value="<?php echo $answers_margin; ?>"/>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_answers_margin' name='ays_answers_margin' value="<?php echo $answers_margin; ?>"/>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Answers gap -->
             <hr/>
@@ -911,14 +1327,21 @@
                            <?php echo ($answers_border) ? 'checked' : ''; ?>/>
                     <label for="ays_answers_border" class="ays_switch_toggle">Toggle</label>
                     <div class="col-sm-12 ays_toggle_target ays_divider_top" style="margin-top: 10px; padding-top: 10px; <?php echo ($answers_border) ? '' : 'display:none;' ?>">
-                        <label for="ays_answers_border_width">
-                            <?php echo __('Border width',$this->plugin_name)?> (px)
-                            <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The width of answers border',$this->plugin_name)?>">
-                                <i class="ays_fa ays_fa_info_circle"></i>
-                            </a>
-                         </label>
-                        <input type="number" class="ays-text-input" id='ays_answers_border_width' name='ays_answers_border_width'
-                               value="<?php echo $answers_border_width; ?>"/>
+                        <div class="ays_quiz_display_flex_width">
+                            <div>
+                                <label for="ays_answers_border_width">
+                                    <?php echo __('Border width',$this->plugin_name)?>
+                                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The width of answers border',$this->plugin_name)?>">
+                                        <i class="ays_fa ays_fa_info_circle"></i>
+                                    </a>
+                                 </label>
+                                <input type="number" class="ays-text-input" id='ays_answers_border_width' name='ays_answers_border_width'
+                                       value="<?php echo $answers_border_width; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-12 ays_toggle_target ays_divider_top" style="margin-top: 10px; padding-top: 10px; <?php echo ($answers_border) ? '' : 'display:none;' ?>">
                         <label for="ays_answers_border_style">
@@ -967,15 +1390,34 @@
                            <?php echo ($answers_box_shadow) ? 'checked' : ''; ?>/>
                     <label for="ays_answers_box_shadow" class="ays_switch_toggle">Toggle</label>
                     <div class="col-sm-12 ays_toggle_target ays_divider_top" style="margin-top: 10px; padding-top: 10px; <?php echo ($answers_box_shadow) ? '' : 'display:none;' ?>">
-                        <label for="ays_answers_box_shadow_color">
-                            <?php echo __('Answer box-shadow color',$this->plugin_name)?>
-                            <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The shadow color of answers container',$this->plugin_name)?>">
-                                <i class="ays_fa ays_fa_info_circle"></i>
-                            </a>
-                         </label>
-                        <input type="text" class="ays-text-input" id='ays_answers_box_shadow_color'
-                               name='ays_answers_box_shadow_color' data-alpha="true" data-default-color="#000000"
-                               value="<?php echo $answers_box_shadow_color; ?>"/>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                            <label for="ays_answers_box_shadow_color">
+                                <?php echo __('Answer box-shadow color',$this->plugin_name)?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The shadow color of answers container',$this->plugin_name)?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                             </label>
+                            <input type="text" class="ays-text-input" id='ays_answers_box_shadow_color' name='ays_answers_box_shadow_color' data-alpha="true" data-default-color="#000000" value="<?php echo $answers_box_shadow_color; ?>"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('X', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_answer_box_shadow_x_offset' name='ays_quiz_answer_box_shadow_x_offset' value="<?php echo $quiz_answer_box_shadow_x_offset; ?>" />
+                                </div>
+                                <div class="col-sm-4 ays_divider_left" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('Y', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_answer_box_shadow_y_offset' name='ays_quiz_answer_box_shadow_y_offset' value="<?php echo $quiz_answer_box_shadow_y_offset; ?>" />
+                                </div>
+                                <div class="col-sm-3 ays_divider_left" style="display: inline-block;">
+                                    <span class="ays_quiz_small_hint_text"><?php echo __('Z', $this->plugin_name); ?></span>
+                                    <input type="number" class="ays-text-input ays-text-input-90-width" id='ays_quiz_answer_box_shadow_z_offset' name='ays_quiz_answer_box_shadow_z_offset' value="<?php echo $quiz_answer_box_shadow_z_offset; ?>" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div> <!-- Answers box shadow -->
@@ -983,14 +1425,19 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for="ays_ans_img_height">
-                        <?php echo __('Answer image height',$this->plugin_name)?> (px)
+                        <?php echo __('Answer image height',$this->plugin_name)?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Height of answers images.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_ans_img_height' name='ays_ans_img_height' value="<?php echo $ans_img_height; ?>"/>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_ans_img_height' name='ays_ans_img_height' value="<?php echo $ans_img_height; ?>"/>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Answers image height -->
             <hr/>
@@ -1080,6 +1527,12 @@
                     <?php
                         endfor;
                     ?>
+                    <label class="ays_quiz_rw_icon">
+                        <input name="ays_ans_right_wrong_icon" type="radio" value="none" <?php echo $ans_right_wrong_icon == 'none' ? 'checked' : ''; ?>>
+                        <?php echo __("None", $this->plugin_name); ?>
+                        <!-- <img class="right_icon" src="<?php echo AYS_QUIZ_PUBLIC_URL; ?>/images/correct.png">
+                        <img class="wrong_icon" src="<?php echo AYS_QUIZ_PUBLIC_URL; ?>/images/wrong.png"> -->
+                    </label>
                 </div>
             </div> <!-- Right/wrong answers icons -->
         </div>
@@ -1199,67 +1652,113 @@
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for='ays_buttons_font_size'>
-                        <?php echo __('Button font-size', $this->plugin_name); ?> (px)
+                        <?php echo __('Button font-size', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('The font size of the buttons in pixels in the quiz. It accepts only numeric values.',$this->plugin_name)?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
                 <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_buttons_font_size'name='ays_buttons_font_size' value="<?php echo $buttons_font_size; ?>"/>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_buttons_font_size'>
+                                <?php echo __('On PC', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for PC devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_buttons_font_size'name='ays_buttons_font_size' value="<?php echo $buttons_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for='ays_buttons_mobile_font_size'>
+                                <?php echo __('On mobile', $this->plugin_name); ?>
+                                <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Define the font size for mobile devices.',$this->plugin_name); ?>">
+                                    <i class="ays_fa ays_fa_info_circle"></i>
+                                </a>
+                            </label>
+                        </div>
+                        <div class="col-sm-7 ays_quiz_display_flex_width">
+                            <div>
+                                <input type="number" class="ays-text-input" id='ays_buttons_mobile_font_size'name='ays_buttons_mobile_font_size' value="<?php echo $buttons_mobile_font_size; ?>"/>
+                            </div>
+                            <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: end;">
+                                <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div> <!-- Buttons font size -->
             <hr>
             <div class="form-group row">
                 <div class="col-sm-5">
                     <label for='ays_buttons_width'>
-                        <?php echo __('Button width', $this->plugin_name); ?> (px)
+                        <?php echo __('Button width', $this->plugin_name); ?>
                         <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Set the button width in pixels. For an initial width, leave the field blank.', $this->plugin_name); ?>">
                             <i class="ays_fa ays_fa_info_circle"></i>
                         </a>
                     </label>
                 </div>
-                <div class="col-sm-7 ays_divider_left">
-                    <input type="number" class="ays-text-input ays-text-input-short" id='ays_buttons_width'name='ays_buttons_width' value="<?php echo $buttons_width; ?>"/>
-                    <span style="display:block;" class="ays_quiz_small_hint_text"><?php echo __('For an initial width, leave the field blank.', $this->plugin_name); ?></span>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id='ays_buttons_width'name='ays_buttons_width' value="<?php echo $buttons_width; ?>"/>
+                        <span style="display:block;" class="ays_quiz_small_hint_text"><?php echo __('For an initial width, leave the field blank.', $this->plugin_name); ?></span>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: flex-start;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
                 </div>
             </div> <!-- Buttons font size -->
             <hr>
             <div class="form-group row">
-            <div class="col-sm-5">
-                <label for="ays_buttons_padding">
-                    <?php echo __('Button padding',$this->plugin_name)?> (px)
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Padding of buttons.',$this->plugin_name)?>">
-                        <i class="ays_fa ays_fa_info_circle"></i>
-                    </a>
-                </label>
-            </div>
-            <div class="col-sm-7 ays_divider_left">
-                <div class="col-sm-5" style="display: inline-block; padding-left: 0;">
-                    <span class="ays_quiz_small_hint_text"><?php echo __('Left / Right',$this->plugin_name)?></span>
-                    <input type="number" class="ays-text-input" id='ays_buttons_left_right_padding' name='ays_buttons_left_right_padding' value="<?php echo $buttons_left_right_padding; ?>" style="width: 100px;" />
+                <div class="col-sm-5">
+                    <label for="ays_buttons_padding">
+                        <?php echo __('Button padding',$this->plugin_name)?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Padding of buttons.',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
                 </div>
-                <div class="col-sm-5 ays_divider_left" style="display: inline-block;">
-                    <span class="ays_quiz_small_hint_text"><?php echo __('Top / Bottom',$this->plugin_name)?></span>
-                    <input type="number" class="ays-text-input" id='ays_buttons_top_bottom_padding' name='ays_buttons_top_bottom_padding' value="<?php echo $buttons_top_bottom_padding; ?>" style="width: 100px;" />
+                <div class="col-sm-7 ays_divider_left">
+                    <div class="col-sm-5" style="display: inline-block; padding-left: 0;">
+                        <span class="ays_quiz_small_hint_text"><?php echo __('Left / Right',$this->plugin_name)?></span>
+                        <input type="number" class="ays-text-input" id='ays_buttons_left_right_padding' name='ays_buttons_left_right_padding' value="<?php echo $buttons_left_right_padding; ?>" style="width: 100px;" />
+                    </div>
+                    <div class="col-sm-5 ays_divider_left ays-buttons-top-bottom-padding-box" style="display: inline-block;">
+                        <span class="ays_quiz_small_hint_text"><?php echo __('Top / Bottom',$this->plugin_name)?></span>
+                        <input type="number" class="ays-text-input" id='ays_buttons_top_bottom_padding' name='ays_buttons_top_bottom_padding' value="<?php echo $buttons_top_bottom_padding; ?>" style="width: 100px;" />
+                    </div>
                 </div>
-            </div>
-        </div> <!-- Buttons padding -->
-        <hr/>
-        <div class="form-group row">
-            <div class="col-sm-5">
-                <label for="ays_buttons_border_radius">
-                    <?php echo __('Button border-radius', $this->plugin_name); ?> (px)
-                    <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Quiz buttons border-radius in pixels. It accepts only numeric values.',$this->plugin_name)?>">
-                        <i class="ays_fa ays_fa_info_circle"></i>
-                    </a>
-                </label>
-            </div>
-            <div class="col-sm-7 ays_divider_left">
-                <input type="number" class="ays-text-input ays-text-input-short" id="ays_buttons_border_radius" name="ays_buttons_border_radius" value="<?php echo $buttons_border_radius; ?>"/>
-            </div>
-        </div> <!-- Buttons border radius -->
-        <hr/>
+            </div> <!-- Buttons padding -->
+            <hr/>
+            <div class="form-group row">
+                <div class="col-sm-5">
+                    <label for="ays_buttons_border_radius">
+                        <?php echo __('Button border-radius', $this->plugin_name); ?>
+                        <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Quiz buttons border-radius in pixels. It accepts only numeric values.',$this->plugin_name)?>">
+                            <i class="ays_fa ays_fa_info_circle"></i>
+                        </a>
+                    </label>
+                </div>
+                <div class="col-sm-7 ays_divider_left ays_quiz_display_flex_width">
+                    <div>
+                        <input type="number" class="ays-text-input ays-text-input-short" id="ays_buttons_border_radius" name="ays_buttons_border_radius" value="<?php echo $buttons_border_radius; ?>"/>
+                    </div>
+                    <div class="ays_quiz_dropdown_max_width ays-display-flex" style="align-items: flex-start;">
+                        <input type="text" value="px" class='ays-quiz-form-hint-for-size' disabled>
+                    </div>
+                </div>
+            </div> <!-- Buttons border radius -->
+            <hr/>
         </div>
         <div class="col-lg-5 col-sm-12 ays_divider_left" style="position:relative;">
             <div id="ays_buttons_styles_tab" style="position:sticky;top:50px; margin:auto;">
@@ -1279,8 +1778,7 @@
             </label>
         </div>
         <div class="col-sm-9">
-        <textarea class="ays-textarea" id="ays_custom_css" name="ays_custom_css" cols="30"
-                  rows="10"><?php echo (isset($options['custom_css']) && $options['custom_css'] != '') ? $options['custom_css'] : '' ?></textarea>
+            <textarea class="ays-textarea" id="ays_custom_css" name="ays_custom_css" cols="30" rows="10"><?php echo $ays_quiz_custom_css; ?></textarea>
         </div>
     </div> <!-- Custom CSS -->
 </div>

@@ -34,7 +34,8 @@ ul.ays-wp-notice-answers{
     transition: .3s ease-in-out;
 }
 #adminmenu li.toplevel_page_quiz-maker ul.wp-submenu.wp-submenu-wrap li a[href*="feature"] {
-    color: #f50057;
+    color: #68A615;
+    font-weight: bold;
 }
 .ays_quiz_deactivation_button{
     background: transparent;
@@ -143,7 +144,7 @@ ul.ays-wp-notice-answers{
     margin-right: 5px;
 }
 
-.ays_fa_power_off_quiz::before {
+/*.ays_fa_power_off_quiz::before {
   font-size: 40px;
 }
 .ays_fa_power_off_quiz {
@@ -152,4 +153,24 @@ ul.ays-wp-notice-answers{
     -ms-transform: rotate(135deg);
     transform: rotate(135deg);
     color: #e85011;
+}*/
+
+.ays_fa_power_off_quiz-wrap .ays_fa_power_off_quiz::before,
+.ays_fa_power_off_quiz::before {
+    /*font-size: 40px;*/
+
+    content: "";
+    background-image: url(../images/icons/icon-128x128.png);
+    height: 30px;
+    display: block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.ays_fa_power_off_quiz {
+    /*-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    color: #e85011;*/
 }

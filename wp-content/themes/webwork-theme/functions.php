@@ -38,7 +38,16 @@ function webwork_disable_emojis() {
 	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
 	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
 	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-	add_filter( 'tiny_mce_plugins', 'disable_emojis_tinymce' );
+	//add_filter( 'tiny_mce_plugins', 'disable_emojis_tinymce' );
 	//add_filter( 'wp_resource_hints', 'disable_emojis_remove_dns_prefetch', 10, 2 );
 }
 add_action( 'init', 'webwork_disable_emojis' );
+
+/**
+ * Stub for multisite_over_quota_message(), which is not present outside of wp-admin.
+ */
+if ( ! is_admin() && ! function_exists( 'multisite_over_quota_message' ) ) {
+	function multisite_over_quota_message() {
+		return;
+	}
+}

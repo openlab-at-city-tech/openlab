@@ -1,6 +1,8 @@
 <?php
 
 class Meow_WPMC_Engine {
+	private $core;
+	private $admin;
 
 	function __construct( $core, $admin ) {
 		$this->core = $core;

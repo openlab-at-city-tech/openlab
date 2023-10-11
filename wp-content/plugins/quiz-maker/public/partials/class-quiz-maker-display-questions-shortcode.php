@@ -41,6 +41,9 @@ class Quiz_Maker_Display_Questions
      */
     private $version;
 
+
+    protected $settings;
+
     /**
      * Initialize the class and set its properties.
      *
@@ -54,6 +57,8 @@ class Quiz_Maker_Display_Questions
         $this->version = $version;
 
         add_shortcode('ays_display_questions', array($this, 'ays_generate_display_questions_method'));
+
+        $this->settings = new Quiz_Maker_Settings_Actions($this->plugin_name);
     }
 
     public function ays_get_questions_by_quiz_id( $attr ){
@@ -61,12 +66,16 @@ class Quiz_Maker_Display_Questions
 
         $quizes_table    = esc_sql( $wpdb->prefix . "aysquiz_quizes" );
         $questions_table = esc_sql( $wpdb->prefix . "aysquiz_questions" );
+        $answers_table   = esc_sql( $wpdb->prefix . "aysquiz_answers" );
 
-        $results      = array();
-        $question_ids = '';
-        $display_questions = 'quiz';
+        $results            = array();
+        $data               = array();
+        $question_ids       = '';
+        $display_questions  = 'quiz';
 
-        $id = (isset($attr['id']) && sanitize_text_field( $attr['id'] ) != '') ? absint( sanitize_text_field( $attr['id'] ) ) : null;
+        $id = (isset($attr['id']) && sanitize_text_field( $attr['id'] ) != '') ? absint( intval( sanitize_text_field($attr['id']) ) ) : null;
+
+        $quiz_enable_question_answers = (isset($attr['quiz_enable_question_answers']) && $attr['quiz_enable_question_answers'] !== false) ? $attr['quiz_enable_question_answers'] : false;
 
         $display_questions_by = (isset($attr['by']) && sanitize_text_field( $attr['by'] ) != '') ? stripcslashes( sanitize_text_field( $attr['by'] ) ) : 'quiz';
 
@@ -89,8 +98,8 @@ class Quiz_Maker_Display_Questions
         }
 
         if ( $display_questions == 'quiz' ) {
-            $sql = "SELECT question_ids FROM {$quizes_table} WHERE id = " . $id;
-            $question_ids = $wpdb->get_var( $sql );
+            $sql = "SELECT question_ids FROM {$quizes_table} WHERE published = 1 AND id = " . $id;
+            $question_ids = $wpdb->get_var( esc_sql($sql) );
         } elseif ( $display_questions == 'category' ) {
             $sql = "SELECT id FROM {$questions_table} WHERE category_id = " . $id;
             $question_ids_arr = $wpdb->get_col( esc_sql($sql) );
@@ -117,20 +126,66 @@ class Quiz_Maker_Display_Questions
             case 'default':
                 $questions_orderby = " ORDER BY FIELD(id, ". $question_ids .")";
                 break;
+            case 'random':
+                $questions_orderby = " ORDER BY id DESC";
+                break;
             default:
                 $questions_orderby = " ORDER BY id ASC";
                 break;
         }
 
-        $sql = "SELECT question FROM {$questions_table} WHERE id IN (". $question_ids .") AND published = 1" . $questions_orderby;
+        $sql = "SELECT question,id FROM {$questions_table} WHERE id IN (". $question_ids .") AND published = 1" . $questions_orderby;
 
-        $results = $wpdb->get_results( ($sql), 'ARRAY_A');
+        $results = $wpdb->get_results( esc_sql($sql), 'ARRAY_A');
 
         if ( empty( $results ) || is_null( $results ) ) {
             return null;
+        } else {
+            foreach ($results as $key => $value) {
+                $question_id = (isset( $value['id'] ) && $value['id'] != "") ? $value['id'] : "";
+
+                if ( $question_id == "" ) {
+                    continue;
+                }
+                $question_text = (isset( $value['question'] ) && $value['question'] != "") ? $value['question'] : "";
+
+                if ( !in_array( $question_id, $data ) ) {
+                    if ( $question_text != "" ) {
+                        $data[$question_id]['question'] = $question_text;
+                    }
+                }
+
+            }
         }
 
-        return $results;
+        if ( $quiz_enable_question_answers ) {
+            $sql = "SELECT answer, question_id FROM {$answers_table} WHERE question_id IN (". $question_ids .")";
+            $answers_data = $wpdb->get_results( esc_sql($sql), 'ARRAY_A');
+
+            if ( !is_null( $answers_data ) && !empty( $answers_data ) ) {
+                foreach ($answers_data as $key => $answer) {
+                    $question_id = (isset( $answer['question_id'] ) && $answer['question_id'] != "") ? $answer['question_id'] : "";
+
+                    if ( $question_id == "" ) {
+                        continue;
+                    }
+                    $answer_text = (isset( $answer['answer'] ) && $answer['answer'] != "") ? $answer['answer'] : "";
+
+                    if ( !in_array( $question_id, $data ) ) {
+                        if ( $answer_text != "" ) {
+                            $data[$question_id]['answers'][] = $answer_text;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        if ( $display_questions_orderby == "random" ) {
+            shuffle( $data );
+        }
+
+        return $data;
 
     }
 
@@ -138,25 +193,65 @@ class Quiz_Maker_Display_Questions
 
         $display_questions_html = array();
 
+        $quiz_settings = $this->settings;
+        $quiz_settings_options = ($quiz_settings->ays_get_setting('options') === false) ? json_encode(array()) : $quiz_settings->ays_get_setting('options');
+        $options = json_decode(stripcslashes($quiz_settings_options), true);
+
+        // Enable question answers
+        $options['quiz_enable_question_answers'] = isset($options['quiz_enable_question_answers']) ? esc_attr( $options['quiz_enable_question_answers'] ) : 'off';
+        $quiz_enable_question_answers = (isset($options['quiz_enable_question_answers']) && esc_attr( $options['quiz_enable_question_answers'] ) == "on") ? true : false;
+        
+        $attr['quiz_enable_question_answers'] = $quiz_enable_question_answers;
+
         $results = $this->ays_get_questions_by_quiz_id( $attr );
 
         if( $results === null ){
             $display_questions_html = "<p style='text-align: center;font-style:italic;'>" . __( "There are no questions atteched yet.", $this->plugin_name ) . "</p>";
             return $display_questions_html;
         }
-
+        
         $display_questions_html[] = "<div class='ays-quiz-display-questions-container'>";
-
-        foreach ($results as $key => $question) {
-            if ( isset($question['question']) && $question['question'] != '' ) {
+        
+        foreach ($results as $question_id => $data) {
+            if ( isset($data['question']) && $data['question'] != '' ) {
 
                 $display_questions_html[] = "<div class='ays-quiz-display-question-box'>";
-                    $display_questions_html[] = Quiz_Maker_Data::ays_autoembed( $question['question'] );
-                $display_questions_html[] = "</div>";
+                    $display_questions_html[] = "<div class='ays-quiz-display-question-row'>";
+                        $display_questions_html[] = Quiz_Maker_Data::ays_autoembed( $data['question'] );
+                    $display_questions_html[] = "</div>";
 
+                if ( $quiz_enable_question_answers && isset($data['answers']) && !empty($data['answers']) ) {
+                    $display_questions_html[] = "<div class='ays-quiz-display-answer-row'>";
+
+                    foreach ($data['answers'] as $key => $answer) {
+
+                        if (strpos($answer, "%%%") !== false) {
+                            $answer_arr = explode("%%%", $answer);
+                            $answer = (isset( $answer_arr[0] ) && $answer_arr[0] != "") ? $answer_arr[0] : $answer;
+                        }
+
+                        $display_questions_html[] = "<div class='ays-quiz-display-answer'>";
+                            $display_questions_html[] = stripcslashes($answer);
+                        $display_questions_html[] = "</div>";
+                    }
+
+                    $display_questions_html[] = "</div>";
+                }
+
+                $display_questions_html[] = "</div>";
+                
             }
         }
+        
+        $display_questions_html[] = "<style>";
+        $display_questions_html[] = "
+            .ays-quiz-display-questions-container .ays-quiz-display-answer-row {
+                padding-left: 20px;
+            }
 
+        ";
+
+        $display_questions_html[] = "</style>";
         $display_questions_html[] = "</div>";
 
         $display_questions_html = implode( '', $display_questions_html );
@@ -169,13 +264,13 @@ class Quiz_Maker_Display_Questions
         $id = (isset($attr['id']) && $attr['id'] != '') ? absint(intval($attr['id'])) : null;
 
         if (is_null($id)) {
-            $content = "<p class='wrong_shortcode_text' style='color:red;'>" . __('Wrong shortcode initialized', $this->plugin_name) . "</p>";
-            return str_replace(array("\r\n", "\n", "\r"), '', $content);
+            $display_questions_html = "<p class='wrong_shortcode_text' style='color:red;'>" . __('Wrong shortcode initialized', $this->plugin_name) . "</p>";
+            return str_replace(array("\r\n", "\n", "\r"), '', $display_questions_html);
         }
 
         $display_questions_html = $this->ays_display_questions_html( $attr );
-        // echo $display_questions_html;
+        $display_questions_html = Quiz_Maker_Data::ays_quiz_translate_content( $display_questions_html );
 
-        return str_replace(array("\r\n", "\n", "\r"), "\n", $display_questions_html);
+        return str_replace(array("\r\n", "\n", "\r"), '', $display_questions_html);
     }
 }

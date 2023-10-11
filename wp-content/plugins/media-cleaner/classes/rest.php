@@ -3,6 +3,8 @@
 class Meow_WPMC_Rest
 {
 	private $core = null;
+	private $admin = null;
+	private $engine = null;
 	private $namespace = 'media-cleaner/v1';
 
 	public function __construct( $core, $admin ) {

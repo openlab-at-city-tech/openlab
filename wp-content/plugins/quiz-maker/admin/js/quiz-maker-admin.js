@@ -238,6 +238,52 @@
 //            $(document).find('#ays_enable_logged_users').removeAttr('disabled');
 //        }
 
+        $(document).on('click', '.ays_toggle_questions_hint_radio', function (e) {
+            var _this  = $(this);
+            var parent = _this.parents('.ays_toggle_parent');
+
+            var dataFlag = _this.attr('data-flag');
+            var dataType = _this.attr('data-type');
+
+            var state = false;
+            if (dataFlag == 'true') {
+                state = true;
+            }
+
+            switch (state) {
+                case true:
+                    switch( dataType ){
+                        case 'text':
+                            parent.find('.ays_toggle_target[data-type="'+ dataType +'"]').show(250);
+                            parent.find('.ays_toggle_target[data-type="button"]').hide(250);
+                        break;
+                        case 'button':
+                            parent.find('.ays_toggle_target[data-type="'+ dataType +'"]').show(250);
+                            parent.find('.ays_toggle_target[data-type="text"]').hide(250);
+                        break;
+                        default:
+                            parent.find('.ays_toggle_target').show(250);
+                        break;
+                    }
+                    break;
+                case false:
+                    switch( dataType ){
+                        case 'text':
+                            parent.find('.ays_toggle_target[data-type="'+ dataType +'"]').hide(250);
+                        break;
+                        case 'button':
+                            parent.find('.ays_toggle_target[data-type="'+ dataType +'"]').hide(250);
+                        break;
+                        default:
+                            parent.find('.ays_toggle_target').hide(250);
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         $(document).on('click', '.ays_toggle_loader_radio', function (e) {
             var dataFlag = $(this).attr('data-flag');
             var dataType = $(this).attr('data-type');
@@ -303,18 +349,22 @@
                 switch (state) {
                     case true:
                         parent.find('.ays_toggle_target').slideDown(250);
+                        parent.find('.ays_toggle_target_inverse').slideDown(250);
                         break;
                     case false:
                         parent.find('.ays_toggle_target').slideUp(250);
+                        parent.find('.ays_toggle_target_inverse').slideUp(250);
                         break;
                 }
             }else{
                 switch (state) {
                     case true:
                         parent.find('.ays_toggle_target').show(250);
+                        parent.find('.ays_toggle_target_inverse').hide(250);
                         break;
                     case false:
                         parent.find('.ays_toggle_target').hide(250);
+                        parent.find('.ays_toggle_target_inverse').show(250);
                         break;
                 }
             }
@@ -346,32 +396,62 @@
 
         $(document).on('click', '.ays_toggle_radio', function (e) {
             var dataFlag = $(this).attr('data-flag');
+            var dataTarget = $(this).attr('data-toggle-class');
+
+
+            if( ! dataTarget ){
+                dataTarget = 'ays_toggle_target';
+            }
+
             var state = false;
             if (dataFlag == 'true') {
                 state = true;
             }
+
             var parent = $(this).parents('.ays_toggle_parent');
             if($(this).hasClass('ays_toggle_slide')){
+                parent.find('[class^="ays_toggle_target"]').slideUp(250);
                 switch (state) {
                     case true:
-                        parent.find('.ays_toggle_target').slideDown(250);
+                        parent.find('.' + dataTarget).slideDown(250);
                         break;
                     case false:
-                        parent.find('.ays_toggle_target').slideUp(250);
+                        parent.find('.' + dataTarget).slideUp(250);
                         break;
                 }
             }else{
+                parent.find('[class^="ays_toggle_target"]').hide(250);
                 switch (state) {
                     case true:
-                        parent.find('.ays_toggle_target').show(250);
+                        parent.find('.' + dataTarget).show(250);
                         break;
                     case false:
-                        parent.find('.ays_toggle_target').hide(250);
+                        parent.find('.' + dataTarget).hide(250);
                         break;
                 }
             }
         });
 
+        $(document).on('click', '.ays_intervals_display_by', function (e) {
+            var _this  = $(this);
+            var parent = _this.parents('.ays_toggle_parent');
+
+            var dataFlag = _this.attr('data-flag');
+
+            var state = false;
+            if (dataFlag == 'true') {
+                state = true;
+            }
+
+            switch (state) {
+                case true:
+                    parent.find('.ays_toggle_target').show(250);
+                    break;
+                case false:
+                    parent.find('.ays_toggle_target').hide(250);
+                    break;
+            }
+        });
 //        var minMaxInps = $(document).find('.interval_max,.interval_min');
 //        if(minMaxInps.hasClass("ays_point_by")){
 //            minMaxInps.prop("type" , "text");
@@ -494,6 +574,39 @@
             }
         });
 
+        $(document).on("dblclick" , "#form_available_fields > li", function () {
+            var item = $(this);
+            var $default_attributes = ["ays_form_name","ays_form_email","ays_form_phone"];
+            item.find('.custom_field_required').removeClass('display_none');
+            item.find('input[name="ays_quiz_attributes_passive[]"]').attr('name', 'ays_quiz_attributes[]');
+            item.find('input[name="ays_quiz_attributes_passive_order[]"]').attr('name', 'ays_quiz_attributes_active_order[]');
+            for(var i=0; i < $default_attributes.length; i++){
+                item.find('input[name="'+$default_attributes[i]+'"]').val('on');
+            }
+
+            var itemHHTML = '<li class="checkbox_ays ui-state-highlight ui-sortable-handle">' + item.html() + '</li>';
+
+            $(document).find('#form_fields').append( itemHHTML );
+            item.remove();
+        });
+
+        $(document).on("dblclick", '#form_fields > li', function () {
+            var item = $(this);
+            var $default_attributes = ["ays_form_name","ays_form_email","ays_form_phone"];
+            item.find('.custom_field_required').addClass('display_none');
+            item.find('input[name="ays_quiz_attributes[]"]').attr('name', 'ays_quiz_attributes_passive[]');
+            item.find('input[name="ays_quiz_attributes_active_order[]"]').attr('name', 'ays_quiz_attributes_passive_order[]');
+            for(var i=0; i < $default_attributes.length; i++){
+                item.find('input[name="'+$default_attributes[i]+'"]').val('off');
+            }
+
+            var itemHHTML = '<li class="checkbox_ays ui-state-default ui-sortable-handle">' + item.html() + '</li>';
+
+            $(document).find('#form_available_fields').append( itemHHTML );
+            item.remove();
+        });
+        
+
         var ays_results = $(document).find('.ays_result_read, .ays_quiz_results_unreads');
         for (var i in ays_results) {
             if (typeof ays_results.eq(i).val() != 'undefined') {
@@ -518,6 +631,8 @@
         $(document).find('#ays_user_roles_to_change_quiz').select2({
             placeholder: 'Select role'
         });
+
+        $(document).find('#ays_quiz_schedule_timezone').select2();
 
         
 //        $(document).find('.interval_wproduct').select2({
@@ -557,10 +672,16 @@
 
         // Initialize sortable
         $(document).find('table.ays-answers-table tbody').sortable({
-            handle: '.ays_fa_arrows',
+            handle: '.ays-quiz-question-answer-ordering-row',//'.ays_fa_arrows',
             cursor: 'move',
-			opacity: 0.8,
-			placeholder: 'clone',
+            opacity: 0.8,
+            axis: 'y',
+            placeholder: 'clone',
+            tolerance: "pointer",
+            helper: "clone",
+            revert: true,
+            forcePlaceholderSize: true,
+            forceHelperSize: true,
             update: function (event, ui) {
                 var className = ui.item.attr('class').split(' ')[0];
                 $('table.ays-answers-table tbody').find('tr.'+className).each(function (index) {
@@ -579,7 +700,13 @@
             handle: 'td.ays-sort',
             cursor: 'move',
 			opacity: 0.8,
+            axis: 'y',
 			placeholder: 'clone',
+            tolerance: "pointer",
+            helper: "clone",
+            revert: true,
+            forcePlaceholderSize: true,
+            forceHelperSize: true,
             update: function (event, ui) {
                 var className = ui.item.attr('class').split(' ')[0];
                 var sorting_ids = [];
@@ -595,13 +722,33 @@
             }
         });
 
-        $(document).find('table.ays-intervals-table tbody').sortable({
+        $(document).find('table.ays-intervals-table').sortable({
             handle: 'td.ays-sort',
             cursor: 'move',
 			opacity: 0.8,
 			placeholder: 'clone',
             update: function (event, ui) {
-                var className = ui.item.attr('class').split(' ')[0];
+                var className = ui.item.find('.ays-interval-row').attr('class').split(' ')[0];
+                $(document).find('tr.' + className).each(function (index) {
+                    var classEven = (((index + 1) % 2) === 0) ? 'even' : '';
+                    if ($(this).hasClass('even')) {
+                        $(this).removeClass('even');
+                        $(this).parents('tbody').find('.ays-interval-hidden-row').removeClass('even');
+                    }
+                    $(this).addClass(classEven);
+                    $(this).parents('tbody').find('.ays-interval-hidden-row').addClass(classEven);
+                });
+                wProdCounter_x();
+            }
+        });
+
+        $(document).find('table.ays-top-keywords-table').sortable({
+            handle: 'td.ays-top-keywords-sort',
+            cursor: 'move',
+            opacity: 0.8,
+            placeholder: 'clone',
+            update: function (event, ui) {
+                var className = ui.item.find('.ays-top-keyword-row').attr('class').split(' ')[0];
                 $(document).find('tr.' + className).each(function (index) {
                     var classEven = (((index + 1) % 2) === 0) ? 'even' : '';
                     if ($(this).hasClass('even')) {
@@ -609,7 +756,6 @@
                     }
                     $(this).addClass(classEven);
                 });
-                wProdCounter_x();
             }
         });
 
@@ -628,14 +774,14 @@
 
         $('.interval_max').on('input', function () {
             var this_max = $(this);
-            var next_min_input = $(this).parents().eq(1).next().find('.interval_min');
+            var next_min_input = $(this).parents('tbody').next().find('.ays-interval-row').find('.interval_min');
             if (next_min_input) next_min_input.val(parseInt(this_max.val()) + 1);
         });
         
         $('.interval_max,.interval_min').on('change', function () {
             var this_value = parseInt($(this).val());
-            var prev_min_input = parseInt($(this).parents().eq(1).prev().find('.interval_min').val());
-            var prev_max_input = parseInt($(this).parents().eq(1).prev().find('.interval_max').val());
+            var prev_min_input = parseInt($(this).parents('tbody').prev().find('.ays-interval-row').find('.interval_min').val());
+            var prev_max_input = parseInt($(this).parents('tbody').prev().find('.ays-interval-row').find('.interval_max').val());
 
             if (this_value <= prev_min_input || this_value <= prev_max_input) {
                 alert('Your value must be bigger than ' + prev_min_input + ' or ' + prev_max_input);
@@ -683,7 +829,14 @@
                     "</select>" +
                 "</td>";
             }
-            intervals_table.append("<tr class=\"ays-interval-row ui-state-default " + className + " \">\n" +
+
+            var interval_redirect_count_val = $(document).find("input#ays_quiz_interval_redirect_count").val();
+            var interval_redirect_count = 1;
+            if ( interval_redirect_count_val > 0 ) {
+                interval_redirect_count = parseInt( interval_redirect_count_val ) + 1;
+            }
+
+            intervals_table.append("<tbody><tr class=\"ays-interval-row ui-state-default " + className + " \">\n" +
                 "   <td class=\"ays-sort\"><i class=\"ays_fa ays_fa_arrows\" aria-hidden=\"true\"></i></td>\n" +
                 intervalsHTML +
                 "   <td><textarea name=\"interval_text[]\" class=\"interval_text\"></textarea></td>\n" +
@@ -696,12 +849,45 @@
                 "           <input type=\"hidden\" name=\"interval_image[]\" class=\"ays-answer-image\" value=\"\"/>\n" +
                 "       </div>\n" +
                 "   </td>\n" +
-                "   <td>\n" +
+                "   <td class=\"ays_actions_row\">\n" +
+                "       <a href=\"javascript:void(0)\" class=\"ays-more-interval\">\n" +
+                "           <i class=\"ays_fa ays_fa_angle_down\" aria-hidden=\"true\"></i>\n" +
+                "       </a>\n" +
+                "       <a href=\"javascript:void(0)\" class=\"ays-more-interval\">\n" +
+                "           <i class=\"ays_fa ays_fa_angle_up\" aria-hidden=\"true\"></i>\n" +
+                "       </a>\n" +
                 "       <a href=\"javascript:void(0)\" class=\"ays-delete-interval\">\n" +
                 "           <i class=\"ays_fa ays_fa_minus_square\" aria-hidden=\"true\"></i>\n" +
                 "       </a>\n" +
                 "   </td>\n" +
-                "</tr>");
+                "</tr>\n" +
+                "<tr class=\"ays-interval-hidden-row\" data-expanded=\"false\">\n" +
+                "   <td colspan=\"8\" class=\"hiddenRow ays_interval_redirect_td\">\n" +
+                "       <p class=\"ays-subtitle\">" + quizLangObj.redirect + "</p>\n" +
+                "       <hr>\n" +
+                "       <div class=\"form-group row ays_interval_redirect_url_container\">\n" +
+                "           <div class=\"col-sm-3\">\n" +
+                "               <label for='ays_interval_redirect_url_"+ interval_redirect_count +"'>" + quizLangObj.redirectUrl + "</label>\n" +
+                "           </div>\n" +
+                "           <div class=\"col-sm-9\">\n" +
+                "               <input type=\"text\" name=\"interval_redirect_url[]\" id=\"ays_interval_redirect_url_"+ interval_redirect_count +"\" value=\"\"/>\n" +
+                "           </div>\n" +
+                "       </div>\n" +
+                "       <hr>\n" +
+                "       <div class=\"form-group row ays_interval_redirect_delay_container\">\n" +
+                "           <div class=\"col-sm-3\">\n" +
+                "               <label for='ays_interval_redirect_url_"+ interval_redirect_count +"'>" + quizLangObj.redirectDelay + "</label>\n" +
+                "           </div>\n" +
+                "           <div class=\"col-sm-9\">\n" +
+                "               <input type=\"number\" name=\"interval_redirect_delay[]\" id=\"ays_interval_redirect_delay_"+ interval_redirect_count +"\" value=\"\"/>\n" +
+                "           </div>\n" +
+                "       </div>\n" +
+                "   </td>\n" +
+                "</tr>\n" +
+                "</tbody>");
+
+            $(document).find("input#ays_quiz_interval_redirect_count").val( interval_redirect_count );
+
             intervals_table.find('.interval_wproduct').select2({
                 allowClear: false,
                 placeholder: 'Select products',
@@ -727,6 +913,44 @@
             wProdCounter_x();
         });
 
+        $('.ays-add-top-keyword').on('click', function () {
+            var top_keywords_table = $('.ays-top-keywords-table'),
+                row_count = top_keywords_table.children('tbody').children('tr').length,
+                className = ((row_count % 2) === 0) ? "" : "even";
+
+            var simbolsArr = typeof window.aysQuizKewordsArray !== 'undefined' ? window.aysQuizKewordsArray : aysGenCharArray( "A", "Z" );
+            var topKeywordsOptionHTML = $(document).find('td.ays_top_keywords_row').eq(0).html();
+            if (typeof topKeywordsOptionHTML === 'undefined') {
+                topKeywordsOptionHTML = '';
+
+                topKeywordsOptionHTML += '<select name="assign_top_keyword[]" class="ays_quiz_keywords">';
+                for (var i = 0; i < simbolsArr.length; i++) {
+                        topKeywordsOptionHTML += '<option value="'+ simbolsArr[i] +'">'+ simbolsArr[i] +'</option>';
+                }
+                topKeywordsOptionHTML += '</select>';
+            }
+
+            var topKeywordsHTML = '';
+            topKeywordsHTML +=
+                "<td class='ays_top_keywords_row '>" +
+                    topKeywordsOptionHTML +
+                "</td>";
+
+
+            top_keywords_table.append("<tbody><tr class=\"ays-top-keyword-row ui-state-default " + className + " \">\n" +
+                "   <td class=\"ays-sort\"><i class=\"ays_fa ays_fa_arrows\" aria-hidden=\"true\"></i></td>\n" +
+                topKeywordsHTML +
+                "   <td><textarea name=\"assign_top_keyword_text[]\" class=\"top_keyword_text\"></textarea></td>\n" +
+                "   <td>\n" +
+                "       <a href=\"javascript:void(0)\" class=\"ays-delete-top-keyword\">\n" +
+                "           <i class=\"ays_fa ays_fa_minus_square\" aria-hidden=\"true\"></i>\n" +
+                "       </a>\n" +
+                "   </td>\n" +
+                "</tr>\n" +
+                "</tbody>");
+
+        });
+
         $(document).on('click', '.ays-remove-answer-img', function () {
             $(this).parent().fadeOut();
             var ays_remove_answer_img = $(this);
@@ -739,8 +963,25 @@
             }
         });
 
-        $(document).on('click', '.ays-delete-interval', function () {
-            $(this).parent('td').parent('tr.ays-interval-row').remove();
+        $(document).on('click', '.ays-delete-interval', function (e) {
+            e.preventDefault();
+            var confirm = window.confirm(quizLangObj.youWantToDelete);
+            if(confirm === true){
+                $(this).parents('tbody').remove();
+                $(document).find('tr.ays-interval-row').each(function (r, el) {
+                    if ($(this).hasClass('even')) {
+                        $(this).removeClass('even');
+                    }
+                    var index = r+1;
+                    var className = ((index % 2) === 0) ? 'even' : '';
+                    $(this).addClass(className);
+                });
+                wProdCounter_x();
+            }
+        });
+        
+        $(document).on('click', '.ays-delete-top-keyword', function () {
+            $(this).parents('tbody').remove();
             $(document).find('tr.ays-interval-row').each(function (r, el) {
                 if ($(this).hasClass('even')) {
                     $(this).removeClass('even');
@@ -751,7 +992,35 @@
             });
             wProdCounter_x();
         });
-        
+
+        $(document).on('click','.ays-more-interval',function(){
+            let intervalMoreSection = $(this).parents('.ays-interval-row').next();
+            let state = intervalMoreSection.attr('data-expanded');
+
+            switch (state) {
+                case 'true':
+                    intervalMoreSection.css({display: 'none'});
+                    $(this).parent().find('.ays_fa_angle_up').css({
+                        display: 'none'
+                    });
+                    $(this).parent().find('.ays_fa_angle_down').css({
+                        display: 'inline-block'
+                    });
+                    intervalMoreSection.attr('data-expanded', 'false');
+                    break;
+                case 'false':
+                   intervalMoreSection.css({display: 'table-row'});
+                    $(this).parent().find('.ays_fa_angle_down').css({
+                        display: 'none'
+                    });
+                    $(this).parent().find('.ays_fa_angle_up').css({
+                        display: 'inline-block'
+                    });
+                    intervalMoreSection.attr('data-expanded', 'true');
+                    break;
+            }
+        });
+
         function wProdCounter_x() {
             $(document).find(".interval_wproduct").each(function (index) {
                 $(this).attr("name", "interval_wproduct[" + index + "][]");
@@ -759,7 +1028,7 @@
         }
 
 
-        $(document).find('strong.ays-quiz-shortcode-box').on('mouseleave', function(){
+        $(document).find('strong.ays-quiz-shortcode-box, .ays-quiz-copy-embed-code').on('mouseleave', function(){
             var _this = $(this);
 
             _this.attr( 'data-original-title', quizLangObj.clickForCopy );
@@ -779,6 +1048,21 @@
             }
         });
 
+        var wp_editor_height = $(document).find('.quiz_wp_editor_height');
+
+        if ( wp_editor_height.length > 0 ) {
+            var wp_editor_height_val = wp_editor_height.val();
+            if ( wp_editor_height_val != '' && wp_editor_height_val != 0 ) {
+                var ays_quiz = setInterval( function() {
+                    if (document.readyState === 'complete') {
+                        $(document).find('.wp-editor-wrap .wp-editor-container iframe , .wp-editor-container textarea.wp-editor-area').css({
+                            "height": wp_editor_height_val + 'px'
+                        });
+                        clearInterval(ays_quiz);
+                    }
+                } , 500);
+            }
+        }
             
 
         // Quiz questions table
@@ -855,6 +1139,7 @@
             $(this).parent().fadeOut();
             $(document).find('.ays-field a.add-quiz-image').text(quizLangObj.addImage);
             var ays_quiz_theme = $(document).find('input[name="ays_quiz_theme"]:checked').val();
+            var _live_preview_container = $(document).find('.ays-quiz-live-container');
             switch (ays_quiz_theme) {
                 case 'elegant_dark':
                 case 'elegant_light':
@@ -862,12 +1147,12 @@
                 case 'rect_dark':
                 case 'classic_dark':
                 case 'classic_light':
-                    $(document).find('#ays-quiz-live-image').css({'display': 'none'});
+                    _live_preview_container.find('.ays-quiz-live-image').css({'display': 'none'});
                     break;
                 case 'modern_light':
                 case 'modern_dark':
-                    $(document).find('.ays-quiz-live-container').css({'background-image':'none'});
-                    $(document).find('#ays-quiz-live-image').css({'display': 'none'});
+                    _live_preview_container.css({'background-image':'none'});
+                    _live_preview_container.find('.ays-quiz-live-image').css({'display': 'none'});
                     break;
             }
         });
@@ -948,6 +1233,10 @@
         $('#ays_users_roles').select2();        
         $('#ays_add_postcat_for_quiz').select2();
         $(document).find('#ays_quiz_users').select2();
+        $(document).find('#ays_quiz_question_tags').select2();
+        $(document).find('#bulk-action-question-tag-selector-top, #bulk-action-question-tag-selector-bottom').select2({
+            placeholder: quizLangObj.selectQuestionTags
+        });
         
         
         $(document).find('#ays_enable_restriction_pass').on('click', function () {
@@ -1137,6 +1426,7 @@
         $(document).find("#slackInstructionsPopOver").popover({
             content: $(document).find("#slackInstructions").html(),
             html: true,
+            placement: 'auto'
 //            trigger: "focus"
         });
         
@@ -1193,6 +1483,28 @@
         });
 
         $(document).find('.user-filter-apply-bottom').on('click', function(e){
+            e.preventDefault();
+            var catFilter = $(document).find('select[name="filterbyuser-bottom"]').val();
+            var link = location.href;
+            var newLink = catFilterForListTable(link, {
+                what: 'filterbyuser',
+                value: catFilter
+            });
+            document.location.href = newLink;
+        });
+
+        $(document).find('.category-filter-apply-top').on('click', function(e){
+            e.preventDefault();
+            var catFilter = $(document).find('select[name="filterbyuser-top"]').val();
+            var link = location.href;
+            var newLink = catFilterForListTable(link, {
+                what: 'filterbyuser',
+                value: catFilter
+            });
+            document.location.href = newLink;
+        });
+
+        $(document).find('.category-filter-apply-bottom').on('click', function(e){
             e.preventDefault();
             var catFilter = $(document).find('select[name="filterbyuser-bottom"]').val();
             var link = location.href;
@@ -1325,6 +1637,9 @@
                 var linkModifiedStart = link.split('?')[0];
                 var linkModified = link.split('?')[1].split('&');
                 for(var i = 0; i < linkModified.length; i++){
+                    if ( linkModified[i].split("=")[0] == "ays_result_tab" ) {
+                        linkModified.splice(i, 1, "ays_result_tab=poststuff");
+                    }
                     if(linkModified[i].split("=")[0] == options.what){
                         linkModified.splice(i, 1);
                     }
@@ -1344,11 +1659,88 @@
             }
         }
 
-        $(document).find('#ays-deactive, #ays-active').datetimepicker({
+        $(document).find('.ays-quiz-question-tab-all-filter-button-top, .ays-quiz-question-tab-all-filter-button-bottom').on('click', function(e){
+            e.preventDefault();
+            var $this = $(this);
+            var parent = $this.parents('.tablenav');
+
+            var html_name = '';
+            var top_or_bottom = 'top';
+
+            if ( parent.hasClass('bottom') ) {
+                top_or_bottom = 'bottom';
+            }
+
+            var catFilter = $(document).find('select[name="filterby-'+ top_or_bottom +'"]').val();
+            var userFilter = $(document).find('select[name="filterbyuser-'+ top_or_bottom +'"]').val();
+            var tagFilter = $(document).find('select[name="filterbytags-'+ top_or_bottom +'"]').val();
+            var typeFilter = $(document).find('select[name="type-'+ top_or_bottom +'"]').val();
+            var reviewFilter = $(document).find('select[name="filterbyreview-'+ top_or_bottom +'"]').val();
+            var reviewCommentFilter = $(document).find('select[name="filterbycomment-'+ top_or_bottom +'"]').val();
+            var filterbycategoryFilter = $(document).find('select[name="filterbycategory-'+ top_or_bottom +'"]').val();
+            var filterbyDescriptionFilter = $(document).find('select[name="filterbyDescription-'+ top_or_bottom +'"]').val();
+            var link = location.href;
+
+            if(typeof catFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterby',
+                    value: catFilter
+                });
+            }
+            if(typeof userFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbyuser',
+                    value: userFilter
+                });
+            }
+            if(typeof tagFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbytags',
+                    value: tagFilter
+                });
+            }
+            if(typeof typeFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'type',
+                    value: typeFilter
+                });
+            }
+            if(typeof reviewFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbyreview',
+                    value: reviewFilter
+                });
+            }
+            if(typeof reviewCommentFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbycomment',
+                    value: reviewCommentFilter
+                });
+            }
+            if(typeof filterbycategoryFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbycategory',
+                    value: filterbycategoryFilter
+                });
+            }
+            if(typeof filterbyDescriptionFilter != "undefined"){
+                link = catFilterForListTable(link, {
+                    what: 'filterbyDescription',
+                    value: filterbyDescriptionFilter
+                });
+            }
+            document.location.href = link;
+        });
+
+        $(document).find('#ays-deactive, #ays-active, #ays_quiz_change_creation_date').datetimepicker({
             controlType: 'select',
             oneLine: true,
             dateFormat: "yy-mm-dd",
-            timeFormat: "HH:mm:ss"
+            timeFormat: "HH:mm:ss",
+            afterInject: function(){
+                $(document).find('.ui-datepicker-buttonpane button.ui-state-default').addClass('button');
+                $(document).find('.ui-datepicker-buttonpane button.ui-state-default.ui-priority-primary').addClass('button-primary').css('float', 'right');
+            }
         });
         
         
@@ -1418,13 +1810,19 @@
             }
         });
 
-        // // Create and Delete rows in Answers table
+        // Create and Delete rows in Answers table
         $(document).on("keydown" , "input[name='ays-correct-answer-value[]']" , function(e) {
             var $this = $(this);
             var $thisValue = $this.val();
             var parent = $this.parents('table#ays-answers-table');
 
             var lastAnswer = parent.find("input[name='ays-correct-answer-value[]']").last();
+
+            var questionType = $(document).find("select[name='ays_question_type']").val();
+
+            if( questionType == 'number' ){
+                return;
+            }
 
             if ( lastAnswer.is(":focus") ) {
                 if (e.keyCode === 13) {
@@ -1452,7 +1850,30 @@
                 }
             }
 
-            if(e.keyCode === 8  && $thisValue == ""){
+            if(e.keyCode == 38 && !e.ctrlKey && !e.shiftKey ){
+                var parentTr = $this.parents('tr.ays-answer-row');
+                if( parentTr.prev().length > 0 ){
+                    parentTr.prev().find("input[name='ays-correct-answer-value[]']").trigger('focus');
+                }else{
+                    return false;
+                }
+            }
+
+            if(e.keyCode === 40 && !e.ctrlKey && !e.shiftKey ){
+                var parentTr = $this.parents('tr.ays-answer-row');
+                if( parentTr.next().length > 0 ){
+                    parentTr.next().find("input[name='ays-correct-answer-value[]']").trigger('focus');
+                }else{;
+
+                    var addButton = $(document).find("label.ays-add-answer-first-label .ays-add-answer");
+                    addButton.trigger("click");
+
+                    var addedLastAnswer = parent.find("input[name='ays-correct-answer-value[]']").last();
+                    addedLastAnswer.focus();
+                }
+            }
+
+            if(e.keyCode === 8 && $thisValue == ""){
                 e.preventDefault();
 
                 var deleteButton = $this.parents('tr.ays-answer-row').find(".ays-delete-answer");
@@ -1491,6 +1912,17 @@
             }
         });
 
+        $(document).on('click', '#ays-question-next-button, #ays-question-prev-button, .ays-quiz-next-button-class, .ays-quiz-category-next-button-class', function(e){
+            e.preventDefault();
+            var $this = $(this);
+            var message = $this.data('message');
+            var confirm = window.confirm( message );
+            if(confirm === true){
+                submitOnce($this);
+                window.location.replace($this.attr('href'));
+            }
+        });
+
         //generate password
         $(document).find("#ays_psw_quiz").on('click', function(){
             $('#ays_generate_psw_content_quiz').hide(150);
@@ -1504,7 +1936,7 @@
         $(document).on('click','.ays_genreted_password_count',function(){
             var count_passwords = $(document).find('#ays_password_count_quiz').val();
             var generated_table = $(document).find('.ays_created');
-            var psw_symbols     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$_+?%^&)";
+            var psw_symbols     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var psw_count       = 8;
             var password        = "";
             var content         = "";
@@ -1567,6 +1999,18 @@
         $(document).find("#googleInstructionsPopOver").popover({
             content: $(document).find("#googleInstructions").html(),
             html: true,
+            // selector: "ays-quiz-google-sheet-popover-container",
+            placement: 'auto'
+        }).on('shown.bs.popover', function () {
+          // do something…
+            var popupID = $(this).attr('aria-describedby');
+            var popupContainer = $(document).find("#" + popupID);
+
+            if ( !popupContainer.hasClass('ays-quiz-google-sheet-popover-container') ) {
+
+                popupContainer.addClass('ays-quiz-google-sheet-popover-container');
+            }
+
         });
         var currentVal = $(document).find("#ays_google_client").val();
         $('#ays_google_client').on('input', function () {
@@ -1592,6 +2036,299 @@
         $(document).find('.ays-quiz-loader-banner').on('click', function () {
             var $this = $(this);
             submitOnce($this);
+        });
+
+        //Import Coupon
+        $(document).find("#ays_quiz_coupon_csv_import_file").on("change" , function(){
+            if($(this).val() != ''){
+                $(this).parents("#ays_quiz_import_coupon_csv_form").find(".ays-quiz-coupon-csv-import-action").prop("disabled" , false)
+            }else{
+
+                $(this).parents("#ays_quiz_import_coupon_csv_form").find(".ays-quiz-coupon-csv-import-action").prop("disabled" , true)
+            }
+        });
+
+        //Admin Note
+        $(document).on('click', '.ays-quiz-click-for-admin-note > button', function(){
+            $(this).parents("div.ays-quiz-admin-note").find("div.ays-quiz-admin-note-textarea").show(250);
+        });
+
+        $(document).on('click', 'button.ays-quiz-close-note', function(){
+            $(this).parents("div.ays-quiz-admin-note").find("div.ays-quiz-admin-note-textarea").hide(250);
+        });
+
+        /**
+         * Initializes the help tabs in the help panel.
+         *
+         * @param {Event} e The event object.
+         *
+         * @return {void}
+         */
+        $(document).find('.contextual-help-tabs').on( 'click', 'a', function(e) {
+            var link = $(this),
+                panel;
+
+            e.preventDefault();
+
+            // Don't do anything if the click is for the tab already showing.
+            if ( link.is('.active a') )
+                return false;
+
+            // Links.
+            $(document).find('.contextual-help-tabs .active').removeClass('active');
+            link.parent('li').addClass('active');
+
+            panel = $(document).find( link.attr('href') );
+
+            // Panels.
+            $(document).find('.help-tab-content').not( panel ).removeClass('active').hide();
+            panel.addClass('active').show();
+        });
+
+        $(document).on('change', '#ays_show_questions_toggle', function(){           
+            if ($(this).prop('checked')) {
+                $(document).find('.quest-toggle-all').css('color','#2277CC');
+                $(document).find('.ays_result_element.tr_success').show();
+            }else{
+                $(document).find('.ays_result_element.tr_success').hide();
+                $(document).find('.quest-toggle-all').css('color','#212529');                
+            }
+        });
+
+        $(document).find('.ays-quiz-open-quizzes-list').on('click', function(e){
+            $(this).parents(".ays-quiz-subtitle-main-box").find(".ays-quiz-quizzes-data").toggle('fast');
+        });
+        
+        $(document).on( "click" , function(e){
+
+            if($(e.target).closest('.ays-quiz-subtitle-main-box').length != 0){
+                
+            } 
+            else{
+                $(document).find(".ays-quiz-subtitle-main-box .ays-quiz-quizzes-data").hide('fast');
+            }
+         });
+
+        $(document).find(".ays-quiz-go-to-quizzes").on("click" , function(e){
+            e.preventDefault();
+            
+            var confirmRedirect = window.confirm(quizLangObj.areYouSureButton);
+            if(confirmRedirect){
+                window.location = $(this).attr("href");
+            }
+        });
+
+        // Select message vars quizzes page | Start
+        $(document).find('.ays-quiz-message-vars-icon').on('click', function(e){
+            $(this).parents(".ays-quiz-message-vars-box").find(".ays-quiz-message-vars-data").toggle('fast');
+        });
+        
+        $(document).on( "click" , function(e){
+            if($(e.target).closest('.ays-quiz-message-vars-box').length != 0){
+            } 
+            else{
+                $(document).find(".ays-quiz-message-vars-box .ays-quiz-message-vars-data").hide('fast');
+            }
+        });
+
+        $(document).find('.ays-quiz-message-vars-each-data').on('click', function(e){
+            var _this  = $(this);
+            var parent = _this.parents('.ays-quiz-result-message-vars-parent');
+
+            var textarea   = parent.find('textarea.ays-textarea');
+            var textareaID = textarea.attr('id');
+
+            var messageVar = _this.find(".ays-quiz-message-vars-each-var").val();
+            
+            if ( parent.find("#wp-"+ textareaID +"-wrap").hasClass("tmce-active") ){
+                window.tinyMCE.get(textareaID).setContent( window.tinyMCE.get(textareaID).getContent() + messageVar + " " );
+            }else{
+                $(document).find('#'+textareaID).append( " " + messageVar + " ");
+            }
+        });
+
+        /* Select message vars quizzes page | End */
+
+        $(document).find('.ays-quiz-copy-embed-code').on('click', function(e){
+            copyEmbedCodeContents(this);
+        });
+
+        var aysQuizListTables = $(document).find('#wpcontent #wpbody div.wrap.ays-quiz-list-table');
+
+        if ( aysQuizListTables.length > 0) {
+            var listTableClass = "";
+            var searchBox = "";
+            if ( aysQuizListTables.hasClass('ays_questions_list_table') ) {
+                listTableClass = 'ays_questions_list_table';
+                searchBox = 'quiz-maker-search-input';
+            } 
+            else if( aysQuizListTables.hasClass('ays_quizzes_list_table') ){
+                listTableClass = 'ays_quizzes_list_table';
+                searchBox = 'quiz-maker-search-input';
+            } 
+            else if( aysQuizListTables.hasClass('ays_quiz_categories_list_table') ){
+                listTableClass = 'ays_quiz_categories_list_table';
+                searchBox = 'quiz-maker-search-input';
+            } 
+            else if( aysQuizListTables.hasClass('ays_results_table') ){
+                listTableClass = 'ays_results_table';
+                searchBox = 'quiz-maker-search-input';
+            } 
+            else if( aysQuizListTables.hasClass('ays_each_results_table') ){
+                listTableClass = 'ays_each_results_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+            else if( aysQuizListTables.hasClass('ays_quiz_attributes_list_table') ){
+                listTableClass = 'ays_quiz_attributes_list_table';
+                searchBox = 'quiz-maker-search-input';
+            } 
+            else if( aysQuizListTables.hasClass('ays_quiz_question_categories_list_table') ){
+                listTableClass = 'ays_quiz_question_categories_list_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+            else if( aysQuizListTables.hasClass('ays_quiz_question_tags_list_table') ){
+                listTableClass = 'ays_quiz_question_tags_list_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+            else if( aysQuizListTables.hasClass('ays_quiz_question_reports_list_table') ){
+                listTableClass = 'ays_quiz_question_reports_list_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+            else if( aysQuizListTables.hasClass('ays_results_list_table') ){
+                listTableClass = 'ays_results_list_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+            else if( aysQuizListTables.hasClass('ays_reviews_table') ){
+                listTableClass = 'ays_reviews_table';
+                searchBox = 'quiz-maker-search-input';
+            }
+
+            if( listTableClass != "" && searchBox != "" ){
+                ays_quiz_search_box_pagination(listTableClass, searchBox);
+            }
+        }
+
+        $(document).find("input#quiz-maker-search-input + input#search-submit").on("click", function (e) {
+            var _this  = $(this);
+            var parent = _this.parents('form');
+            
+            var search_input = parent.find('input#quiz-maker-search-input');
+            var input_value  = search_input.val();
+
+            var field = 's';
+            var flag = false;
+            var url = window.location.href;
+            if(url.indexOf('?' + field + '=') != -1){
+                flag = true;
+            }
+            else if(url.indexOf('&' + field + '=') != -1){
+                flag = true;
+            }
+
+            if (flag) {
+                if (typeof input_value != 'undefined' && input_value != "") {
+                    e.preventDefault();
+                    location.href=location.href.replace(/&s=([^&]$|[^&]*)/i, "&s="+input_value);
+                }
+            }
+        });
+
+        $(document).find('#ays_quiz_password_expiration').on('change', function() {
+            var checked = $(this).prop('checked');
+
+            if(checked){
+                $(this).parent().next().show(250);
+                $(this).parent().next().css('display','block');
+            }else{
+                $(this).parent().next().hide(250);
+            }
+        });
+
+        $(document).find('.ays_generate_password_quiz_class').on('change', function() {
+            var _this = $(this);
+            var value = _this.val();
+
+            var box = $(document).find('.ays_psw_quiz_import_type_box');
+
+            if(value == 'general'){
+                box.find('input').prop('disabled', true);
+            }else{
+                box.find('input').prop('disabled', false);
+            }
+        });
+
+        $(document).find('.ays_generate_password_quiz_class_import_type').on('change', function() {
+            var _this = $(this);
+            var value = _this.val();
+
+            var boxes = $(document).find('.ays_quiz_generate_password_type_box');
+            if (boxes.hasClass('ays-display-flex-important')) {
+                boxes.removeClass('ays-display-flex-important');
+            }
+
+            var hide_box = $(document).find('.ays_quiz_generate_password_type_box:not([data-type="'+ value +'"])').hide();
+            $(document).find('.ays_quiz_generate_password_type_box[data-type="'+ value +'"]').addClass('ays-display-flex-important');
+            var show_box = $(document).find('.ays_quiz_generate_password_type_box[data-type="'+ value +'"]').show();
+
+        });
+
+        //Import Generate Password
+        $(document).find("#ays_quiz_password_csv_txt_import_file").on("change" , function(){
+            if($(this).val() != ''){
+                $(document).find(".ays-quiz-password-csv-txt-import-action").prop("disabled" , false);
+            }else{
+                $(document).find(".ays-quiz-password-csv-txt-import-action").prop("disabled" , true);
+            }
+        });
+
+        $(document).on('click','.ays_quiz_generate_password_type_clipboard_textarea_button',function(){
+
+            var _this = $(this);
+            var textarea = $(document).find('#ays_quiz_generate_password_type_clipboard_textarea');
+            var value = textarea.val();
+            var new_ready_data = new Array();
+            var content = "";
+
+            if (value != ""){
+                var line_arr = value.split('\n');
+                for(var i = 0;i < line_arr.length;i++){
+                    if (line_arr[i].trim() != "") {
+                        new_ready_data.push(line_arr[i]);
+                    }
+                }
+
+                if ( new_ready_data.length > 0 ) {
+                    for (var index = 0; index < new_ready_data.length; index++) {
+                        content += '<li>';
+                            content += '<span class="created_psw">'+ new_ready_data[index] +'</span>';
+                            content += '<a class="ays_gen_psw_move_to_used"><i class="fa fa-clipboard" aria-hidden="true"></i></a>';
+                            content += '<input type="hidden" value="'+new_ready_data[index]+'" name="ays_active_gen_psw[]" class="ays_active_gen_psw"/>';
+                        content += '</li>';
+                    }
+                    var coupon_active_list = $(document).find('#ays_generated_password ul.ays_active');
+                        coupon_active_list.append(content);
+
+                    textarea.val("");   
+                }
+            }
+        });
+
+        $(document).on('click','.ays_gen_psw_move_to_used',function(){
+            var $this = $(this);
+            var parent = $( $this.parents('li')[0] );
+
+            var generated_psw_parent  = $this.parents('#ays_generated_password').find('ul.ays_used');
+            var copied_psw_value      = parent.find('.created_psw').html();
+            var $temp                 = $("<input type='text'>");
+
+            var content = '';
+            content += '<li>';
+                content += '<span class="created_psw">'+ copied_psw_value+'</span>';
+                content += '<input type="hidden" name="ays_used_psw[]" value="'+ copied_psw_value +'" class="ays_used_psw">';
+            content += '</li>';
+
+            generated_psw_parent.append(content);
+            $this.parent().remove();
         });
 
     });

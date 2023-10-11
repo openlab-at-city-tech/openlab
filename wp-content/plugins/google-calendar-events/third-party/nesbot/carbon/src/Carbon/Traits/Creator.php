@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\OutOfRangeException;
 use SimpleCalendar\plugin_deps\Carbon\Translator;
 use Closure;
 use SimpleCalendar\plugin_deps\DateMalformedStringException;
+use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
@@ -98,7 +99,7 @@ trait Creator
         if ($tz !== null) {
             $safeTz = static::safeCreateDateTimeZone($tz);
             if ($safeTz) {
-                return $date->setTimezone($safeTz);
+                return ($date instanceof DateTimeImmutable ? $date : clone $date)->setTimezone($safeTz);
             }
             return $date;
         }
@@ -564,11 +565,12 @@ trait Creator
             if ($tz === null && !\preg_match("/{$nonEscaped}[eOPT]/", $nonIgnored)) {
                 $tz = clone $mock->getTimezone();
             }
-            // Set microseconds to zero to match behavior of DateTime::createFromFormat()
-            // See https://bugs.php.net/bug.php?id=74332
-            $mock = $mock->copy()->microsecond(0);
+            $mock = $mock->copy();
             // Prepend mock datetime only if the format does not contain non escaped unix epoch reset flag.
             if (!\preg_match("/{$nonEscaped}[!|]/", $format)) {
+                if (\preg_match('/[HhGgisvuB]/', $format)) {
+                    $mock = $mock->setTime(0, 0);
+                }
                 $format = static::MOCK_DATETIME_FORMAT . ' ' . $format;
                 $time = ($mock instanceof self ? $mock->rawFormat(static::MOCK_DATETIME_FORMAT) : $mock->format(static::MOCK_DATETIME_FORMAT)) . ' ' . $time;
             }
@@ -596,7 +598,7 @@ trait Creator
      *
      * @return static|false
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public static function createFromFormat($format, $time, $tz = null)
     {
         $function = static::$createFromFormatFunction;
@@ -730,7 +732,7 @@ trait Creator
      *
      * @return array
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public static function getLastErrors()
     {
         return static::$lastErrors;

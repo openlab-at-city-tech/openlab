@@ -178,6 +178,14 @@ class GWAPI {
 
 		if ( $plugin_file ) {
 			$product_version = $this->get_local_product_version( $plugin_file );
+
+			/*
+			* If the plugin name starts with anything outside of "gw" or "gp-" and is not "gravityperks"
+			* bail as we do not want to conflict with GSPC or anything else.
+			*/
+			if ( ! preg_match( '/^(gw|gp-)/', $plugin_file ) && $plugin_file !== 'gravityperks/gravityperks.php' ) {
+				return $options;
+			}
 		}
 
 		$license = GravityPerks::get_license_data();

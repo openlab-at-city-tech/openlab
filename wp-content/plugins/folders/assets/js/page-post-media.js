@@ -2270,9 +2270,9 @@
             $(document).keydown(function (e) {
                 var isCtrlPressed = (e.ctrlKey || e.metaKey) ? true : false;
 
-                // Shift + N : New Folder
+                // Alt + N : New Folder
                 if(!($("input").is(":focus") || $("textarea").is(":focus"))) {
-                    if (e.shiftKey && (e.keyCode == 78 || e.which == 78) && !$(".block-editor-block-list__block").is(":focus") && $(".folder-modal").length) {
+                    if (e.altKey && (e.keyCode == 78 || e.which == 78) && !$(".block-editor-block-list__block").is(":focus") && $(".folder-modal").length) {
                         e.preventDefault();
                         $("#add-new-folder").trigger("click");
                     }
@@ -2280,8 +2280,7 @@
                 // F2 Rename Folder
                 if(e.keyCode == 113 || e.which == 113) {
                     if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
-                        fileFolderID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
-                        console.log("fileFolderID: " + fileFolderID);
+                        fileFolderID = $("#js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         updateFolder();
                         $(".dynamic-menu").remove();
                     }
@@ -2289,7 +2288,7 @@
 
                 // Ctrl+C/CMD+C: Copy Folder
                 if(isCtrlPressed && (e.keyCode == 67 || e.which == 67)) {
-                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
                         isFolderCopy = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         CPCAction = "copy";
                         $(".folders-undo-notification").removeClass("active");
@@ -2298,12 +2297,12 @@
                             $("#copy-message").removeClass("active");
                         }, 5000);
                         checkForCopyPaste();
-                    }
+                    }*/
                 }
 
                 // Ctrl+X/CMD+X: Cut Folder
                 if(isCtrlPressed && (e.keyCode == 88 || e.which == 88)) {
-                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
                         e.preventDefault();
                         isFolderCopy = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         CPCAction = "cut";
@@ -2313,12 +2312,12 @@
                             $("#cut-message").removeClass("active");
                         }, 5000);
                         checkForCopyPaste();
-                    }
+                    }*/
                 }
 
                 // Ctrl+V: Paste Folder
                 if(isCtrlPressed && (e.keyCode == 86 || e.which == 86)) {
-                    if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
+                    /*if($(".folder-modal #js-tree-menu .jstree-anchor").is(":focus")) {
                         e.preventDefault();
                         activeRecordID = $(".folder-modal #js-tree-menu .jstree-anchor:focus").closest("li.jstree-node").attr("id");
                         if(activeRecordID == "" || isNaN(activeRecordID)) {
@@ -2349,7 +2348,7 @@
                             CPCAction = "";
                             isFolderCopy = 0;
                         }
-                    }
+                    }*/
                 }
 
                 if(isCtrlPressed && (e.keyCode == 75 || e.which == 75)) {

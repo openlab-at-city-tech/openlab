@@ -36,6 +36,13 @@ class Quiz_Not_Finished_Results_List_Table extends WP_List_Table{
 
     public function extra_tablenav( $which ){
         global $wpdb;
+        global $wp_version;
+
+        $version1 = $wp_version;
+        $operator = '<=';
+        $version2 = '5.0';
+        $versionCompare = Quiz_Maker_Data::ays_version_compare($version1, $operator, $version2);
+
         $users_sql = "SELECT {$wpdb->prefix}aysquiz_reports.user_id
                       FROM {$wpdb->prefix}aysquiz_reports
                       WHERE quiz_id = " . $_GET['quiz'] . "
@@ -79,9 +86,10 @@ class Quiz_Not_Finished_Results_List_Table extends WP_List_Table{
                     }
                 ?>
             </select>
-            <input type="button" id="doaction-<?php echo $which; ?>" class="user-filter-apply-<?php echo $which; ?> button" value="Filter">
+            <input type="button" id="doaction-<?php echo $which; ?>" class="user-filter-apply-<?php echo $which; ?> button" value="<?php echo __( "Filter", $this->plugin_name ); ?>">
+            
+            <a style="margin: <?php echo ( $versionCompare ? '3px' : '1px' ); ?> 8px 0 0;display:inline-block;" href="<?php echo $clear_url; ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         </div>
-        <a style="margin: 3px 8px 0 0;display:inline-block;" href="<?php echo $clear_url; ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
         <?php
     }
 
@@ -105,8 +113,16 @@ class Quiz_Not_Finished_Results_List_Table extends WP_List_Table{
             if($order_by == 'score'){
                 $order_by = 'CAST(score as UNSIGNED)';
             }
-            $sql .= ' ORDER BY ' . $order_by;
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' DESC';
+            $order_by  = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'id';
+            $order_by .= ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
+
+            $sql_orderby = sanitize_sql_orderby($order_by);
+
+            if ( $sql_orderby ) {
+                $sql .= ' ORDER BY ' . $sql_orderby;
+            } else {
+                $sql .= ' ORDER BY id DESC';
+            }
         }
         else{
             $sql .= ' ORDER BY id DESC';
@@ -355,7 +371,7 @@ class Quiz_Not_Finished_Results_List_Table extends WP_List_Table{
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {

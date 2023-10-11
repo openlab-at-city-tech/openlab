@@ -31,10 +31,10 @@ wp_nav_menu($args);
 </div>
 </div>
 
-<h2 class="sidebar-help-title support-team-title">Community Team</h2>
+<h2 class="sidebar-help-title support-team-title">OpenLab Support</h2>
 <div class="sidebar-block padded-block">
 <div id="support-team">
-    <div class="help-tags-copy"><p>The Community Team is here to answer all your OpenLab questions.</p></div>
+    <div class="help-tags-copy"><p>We're here to answer all your OpenLab questions.</p></div>
     <?php
 	$args = array(
 		'name' => 'contact-us',

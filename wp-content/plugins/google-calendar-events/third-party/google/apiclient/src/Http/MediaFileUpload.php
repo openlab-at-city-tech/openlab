@@ -18,7 +18,6 @@
 namespace SimpleCalendar\plugin_deps\Google\Http;
 
 use SimpleCalendar\plugin_deps\Google\Client;
-use SimpleCalendar\plugin_deps\Google\Http\REST;
 use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
@@ -53,6 +52,7 @@ class MediaFileUpload
     private $request;
     /** @var string */
     private $boundary;
+    // @phpstan-ignore-line
     /**
      * Result code from last HTTP call
      * @var int
@@ -64,10 +64,10 @@ class MediaFileUpload
      * @param string $mimeType
      * @param string $data The bytes you want to upload.
      * @param bool $resumable
-     * @param bool $chunkSize File will be uploaded in chunks of this many bytes.
+     * @param int $chunkSize File will be uploaded in chunks of this many bytes.
      * only used if resumable=True
      */
-    public function __construct(Client $client, RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = \false)
+    public function __construct(Client $client, RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = 0)
     {
         $this->client = $client;
         $this->request = $request;
@@ -80,7 +80,7 @@ class MediaFileUpload
     }
     /**
      * Set the size of the file that is being uploaded.
-     * @param $size - int file size in bytes
+     * @param int $size - int file size in bytes
      */
     public function setFileSize($size)
     {
@@ -106,8 +106,8 @@ class MediaFileUpload
             $chunk = \substr($this->data, $this->progress, $this->chunkSize);
         }
         $lastBytePos = $this->progress + \strlen($chunk) - 1;
-        $headers = array('content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => \strlen($chunk), 'expect' => '');
-        $request = new Request('PUT', $resumeUri, $headers, Psr7\stream_for($chunk));
+        $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) \strlen($chunk), 'expect' => ''];
+        $request = new Request('PUT', $resumeUri, $headers, Psr7\Utils::streamFor($chunk));
         return $this->makePutRequest($request);
     }
     /**
@@ -136,7 +136,7 @@ class MediaFileUpload
             $range = $response->getHeaderLine('range');
             if ($range) {
                 $range_array = \explode('-', $range);
-                $this->progress = $range_array[1] + 1;
+                $this->progress = (int) $range_array[1] + 1;
             }
             // Allow for changing upload URLs.
             $location = $response->getHeaderLine('location');
@@ -150,12 +150,12 @@ class MediaFileUpload
     }
     /**
      * Resume a previously unfinished upload
-     * @param $resumeUri the resume-URI of the unfinished, resumable upload.
+     * @param string $resumeUri the resume-URI of the unfinished, resumable upload.
      */
     public function resume($resumeUri)
     {
         $this->resumeUri = $resumeUri;
-        $headers = array('content-range' => "bytes */{$this->size}", 'content-length' => 0);
+        $headers = ['content-range' => "bytes */{$this->size}", 'content-length' => '0'];
         $httpRequest = new Request('PUT', $this->resumeUri, $headers);
         return $this->makePutRequest($httpRequest);
     }
@@ -169,38 +169,33 @@ class MediaFileUpload
         $request = $this->request;
         $postBody = '';
         $contentType = \false;
-        $meta = (string) $request->getBody();
-        $meta = \is_string($meta) ? \json_decode($meta, \true) : $meta;
+        $meta = \json_decode((string) $request->getBody(), \true);
         $uploadType = $this->getUploadType($meta);
         $request = $request->withUri(Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
         $mimeType = $this->mimeType ?: $request->getHeaderLine('content-type');
         if (self::UPLOAD_RESUMABLE_TYPE == $uploadType) {
             $contentType = $mimeType;
             $postBody = \is_string($meta) ? $meta : \json_encode($meta);
-        } else {
-            if (self::UPLOAD_MEDIA_TYPE == $uploadType) {
-                $contentType = $mimeType;
-                $postBody = $this->data;
-            } else {
-                if (self::UPLOAD_MULTIPART_TYPE == $uploadType) {
-                    // This is a multipart/related upload.
-                    $boundary = $this->boundary ?: \mt_rand();
-                    $boundary = \str_replace('"', '', $boundary);
-                    $contentType = 'multipart/related; boundary=' . $boundary;
-                    $related = "--{$boundary}\r\n";
-                    $related .= "Content-Type: application/json; charset=UTF-8\r\n";
-                    $related .= "\r\n" . \json_encode($meta) . "\r\n";
-                    $related .= "--{$boundary}\r\n";
-                    $related .= "Content-Type: {$mimeType}\r\n";
-                    $related .= "Content-Transfer-Encoding: base64\r\n";
-                    $related .= "\r\n" . \base64_encode($this->data) . "\r\n";
-                    $related .= "--{$boundary}--";
-                    $postBody = $related;
-                }
-            }
+        } elseif (self::UPLOAD_MEDIA_TYPE == $uploadType) {
+            $contentType = $mimeType;
+            $postBody = $this->data;
+        } elseif (self::UPLOAD_MULTIPART_TYPE == $uploadType) {
+            // This is a multipart/related upload.
+            $boundary = $this->boundary ?: \mt_rand();
+            $boundary = \str_replace('"', '', $boundary);
+            $contentType = 'multipart/related; boundary=' . $boundary;
+            $related = "--{$boundary}\r\n";
+            $related .= "Content-Type: application/json; charset=UTF-8\r\n";
+            $related .= "\r\n" . \json_encode($meta) . "\r\n";
+            $related .= "--{$boundary}\r\n";
+            $related .= "Content-Type: {$mimeType}\r\n";
+            $related .= "Content-Transfer-Encoding: base64\r\n";
+            $related .= "\r\n" . \base64_encode($this->data) . "\r\n";
+            $related .= "--{$boundary}--";
+            $postBody = $related;
         }
-        $request = $request->withBody(Psr7\stream_for($postBody));
-        if (isset($contentType) && $contentType) {
+        $request = $request->withBody(Psr7\Utils::streamFor($postBody));
+        if ($contentType) {
             $request = $request->withHeader('content-type', $contentType);
         }
         return $this->request = $request;
@@ -210,7 +205,7 @@ class MediaFileUpload
      * - resumable (UPLOAD_RESUMABLE_TYPE)
      * - media (UPLOAD_MEDIA_TYPE)
      * - multipart (UPLOAD_MULTIPART_TYPE)
-     * @param $meta
+     * @param string|false $meta
      * @return string
      * @visible for testing
      */
@@ -234,11 +229,9 @@ class MediaFileUpload
     private function fetchResumeUri()
     {
         $body = $this->request->getBody();
-        if ($body) {
-            $headers = array('content-type' => 'application/json; charset=UTF-8', 'content-length' => $body->getSize(), 'x-upload-content-type' => $this->mimeType, 'x-upload-content-length' => $this->size, 'expect' => '');
-            foreach ($headers as $key => $value) {
-                $this->request = $this->request->withHeader($key, $value);
-            }
+        $headers = ['content-type' => 'application/json; charset=UTF-8', 'content-length' => $body->getSize(), 'x-upload-content-type' => $this->mimeType, 'x-upload-content-length' => $this->size, 'expect' => ''];
+        foreach ($headers as $key => $value) {
+            $this->request = $this->request->withHeader($key, $value);
         }
         $response = $this->client->execute($this->request, \false);
         $location = $response->getHeaderLine('location');

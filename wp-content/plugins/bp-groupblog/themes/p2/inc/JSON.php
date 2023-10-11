@@ -153,7 +153,7 @@ class Services_JSON
             return mb_convert_encoding($utf16, 'UTF-8', 'UTF-16');
         }
 
-        $bytes = (ord($utf16[ 0 ]) << 8) | ord($utf16[ 1 ]);
+        $bytes = (ord($utf16[0]) << 8) | ord($utf16[1]);
 
         switch(true) {
             case ((0x7F & $bytes) == $bytes):
@@ -213,10 +213,10 @@ class Services_JSON
             case 3:
                 // return a UTF-16 character from a 3-byte UTF-8 char
                 // see: http://www.cl.cam.ac.uk/~mgk25/unicode.html#utf-8
-                return chr((0xF0 & (ord($utf8[0]) << 4))
-                         | (0x0F & (ord($utf8[1]) >> 2)))
-                     . chr((0xC0 & (ord($utf8[1]) << 6))
-                         | (0x7F & ord($utf8[2])));
+                return chr((0xF0 & (ord($utf8[ 0 ]) << 4))
+                         | (0x0F & (ord($utf8[ 1 ]) >> 2)))
+                     . chr((0xC0 & (ord($utf8[ 1 ]) << 6))
+                         | (0x7F & ord($utf8[ 2 ])));
         }
 
         // ignoring UTF-32 for now, sorry
@@ -666,7 +666,7 @@ class Services_JSON
                                 // element in an associative array,
                                 // for now
                                 $parts = array();
-                                
+
                                 if (preg_match('/^\s*(["\'].*[^\\\]["\'])\s*:\s*(\S.*),?$/Uis', $slice, $parts)) {
                                     // "name":value pair
                                     $key = $this->decode($parts[1]);

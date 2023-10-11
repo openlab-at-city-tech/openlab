@@ -908,3 +908,16 @@ class Parsedown
     protected $voidElements = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source');
     protected $textLevelElements = array('a', 'br', 'bdo', 'abbr', 'blink', 'nextid', 'acronym', 'basefont', 'b', 'em', 'big', 'cite', 'small', 'spacer', 'listing', 'i', 'rp', 'del', 'code', 'strike', 'marquee', 'q', 'rt', 'ins', 'font', 'strong', 's', 'tt', 'kbd', 'mark', 'u', 'xm', 'sub', 'nobr', 'sup', 'ruby', 'var', 'span', 'wbr', 'time');
 }
+#
+#
+# Parsedown
+# http://parsedown.org
+#
+# (c) Emanuil Rusev
+# http://erusev.com
+#
+# For the full license information, view the LICENSE file that was distributed
+# with this source code.
+#
+#
+\class_alias('SimpleCalendar\\plugin_deps\\Parsedown', 'Parsedown', \false);

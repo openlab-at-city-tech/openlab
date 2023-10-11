@@ -3,9 +3,9 @@ Contributors: magazine3
 Donate link: https://tocwp.com/
 Tags: table of contents, toc
 Requires at least: 5.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.6.20
-Stable tag: 2.0.51.1
+Stable tag: 2.0.55
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,7 @@ A user friendly, featured focused [Easy Table of Contents](https://tocwp.com/) p
 * The widgets supports being affixed or stuck on the page so it is always visible as you scroll down the page. NOTE: this is an advanced option since every theme is different, you might need support from your theme developer to learn what the correct item selector to use in the settings to enable this feature.
 * The widget auto highlights the sections currently visible on the page. The highlight color is configurable.
 * Developer friendly with many action hooks and filters available. More can be added by request on [Github](https://github.com/shazahm1/Easy-Table-of-Contents). Pull requests are welcomed.
+* An option to show toc based on dynamic paragraph count.
 
 = TAKE IT A STEP FURTHER WITH EASY TABLE OF CONTENTS PRO =
 With [EASY TABLE OF CONTENTS PRO](https://tocwp.com/pricing/) You will get access to more professional Settings, options and positions to really push your TOC to the next level.
@@ -101,6 +102,53 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.55 04/09/2023 =
+* New: Option to set position for sticky TOC toggle. #576
+* New: Compatibility with TravelTour theme builder. #574
+* BUG: CLS issue due to TOC #572
+* BUG: Double Border Display Issue on TOC for Pages #573
+
+= 2.0.54.1 30/08/2023 =
+* BUG: E_PARSE error in PHP 7.2 after recent update  #579
+* BUG: Links Not Working issue  #579
+* BUG: Alignment top Issue with TOC Title Height #571
+
+= 2.0.54 29/08/2023 =
+* TWEAK: The sticky toggle TOC is not showing as the primary TOC. #538
+* BUG: Headings miss their anchor If a title contains an apostrophe #529
+* New: Added option for Initial View in Sticky. Toggle #537
+* New: Added option for select title tag in TOC #514
+* BUG: Sticky TOC is visible on post/page without heading #555
+* BUG: An issue has occured in the update with the theme Kadence #562
+* BUG: If the alignment is set to a specific position, the margin becomes 0 #558
+* BUG: Heading links does not work if added using a shortcode in a template of usSolution core plugin by impreza theme #567
+* BUG: ID is not getting added to headings using Guttenberg templates #570
+* BUG: SEO score issue fix for sticky toggle #575
+
+= 2.0.53 08/08/2023 =
+* BUG: The TOC Toogle button issue with the Chamomile theme #531
+* BUG: Limit path option is not working #532
+* BUG: Not seeing Re-usuable H2 blocks #540
+* BUG: Fixed Alignment issue after recent update #545
+* BUG: If the option Inline CSS is enabled then custom theme options are not working anymore #546
+* TWEAK: Added compatibility with the Big Spark Theme  #548
+* BUG: Fixed TOC issue on IOS #550
+
+= 2.0.52 07/24/2023 =
+* BUG: ez-toc shortcode not working to hide the initial view on a page/post #378
+* NEW: Add an option to place show toc based on paragraph count (TOC Positioning) #507
+* BUG: Alignment is not working properly #515
+* BUG: While using shortcode, TOC not working #523
+* BUG: Header no longer showing in Pure CSS mode #524
+* NEW: Need to create an option to import/export the settings #525
+* BUG: ACF compatibility fatal error #526
+* BUG: When we select Inline CSS option, Counter does not display #527
+* BUG: Limit path option is not working #532
+* BUG: When the Pure CSS option is enabled, then the TOC heading and Toogle are not shown in the line #533
+* BUG: Conflict with social pro by mediavine plugin #534
+* BUG: Create By Mediavine plugin recipe shortcode is not being parsed inside toc generation #535
+* BUG: JS Conflict with User Activity Log Plugin #539
 
 = 2.0.51.1 07/05/2023 =
 * BUG: Issue after last update (version - 2.0.51) #521

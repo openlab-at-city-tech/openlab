@@ -29,7 +29,7 @@ final class Middleware
                 if (empty($options['cookies'])) {
                     return $handler($request, $options);
                 } elseif (!$options['cookies'] instanceof CookieJarInterface) {
-                    throw new \InvalidArgumentException('SimpleCalendar\\plugin_deps\\cookies must be an instance of GuzzleHttp\\Cookie\\CookieJarInterface');
+                    throw new \InvalidArgumentException('cookies must be an instance of GuzzleHttp\\Cookie\\CookieJarInterface');
                 }
                 $cookieJar = $options['cookies'];
                 $request = $cookieJar->withCookieHeader($request);

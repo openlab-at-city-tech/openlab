@@ -6,7 +6,7 @@
 
 if ( !function_exists( 'bp_core_admin_hook' ) ) :
 	function bp_core_admin_hook() {
-		// Groupblog requires multisite, so we don't need any more logic
+		// Groupblog requires multisite, so we don't need any more logic.
 		return apply_filters( 'bp_core_admin_hook', 'network_admin_menu' );
 	}
 endif;

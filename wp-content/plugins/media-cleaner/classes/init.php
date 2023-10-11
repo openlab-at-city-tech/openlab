@@ -35,8 +35,8 @@ spl_autoload_register(function ( $class ) {
 
 // In admin or Rest API request (REQUEST URI begins with '/wp-json/')
 if ( is_admin() || MeowCommon_Helpers::is_rest() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
-	global $mfrh_core;
-	$mfrh_core = new Meow_WPMC_Core();
+	global $wpmc_core;
+	$wpmc_core = new Meow_WPMC_Core();
 }
 
 ?>

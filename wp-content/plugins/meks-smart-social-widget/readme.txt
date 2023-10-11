@@ -3,8 +3,8 @@ Contributors: mekshq
 Donate link: https://mekshq.com/
 Tags: social, icons, widget, linkedin, reddit, vimeo, dribble, instagram, pinterest
 Requires at least: 3.0
-Tested up to: 6.0
-Stable tag: 1.6
+Tested up to: 6.3
+Stable tag: 1.6.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -46,6 +46,17 @@ For any questions, error reports and suggestions please visit https://mekshq.com
 4. Widget in action - example 3
 
 == Changelog ==
+
+= 1.6.3 =
+* Added: Twitter is now rebranded to X
+
+= 1.6.2 =
+* WP 6.3 compatibility tested
+* Added: TikTok icon
+
+= 1.6.1 =
+
+* Modified: Minor CSRF vulnerability resolved
 
 = 1.6 =
 

@@ -48,17 +48,15 @@ class blcTokenBucketList {
 	 */
 	//phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 	private function waitForToken( $name ) {
-		$now = microtime( true );
-
+		$now                = microtime( true );
 		$timeSinceLastToken = $now - $this->buckets[ $name ]['lastTokenTakenAt'];
 		$intervalWait       = max( $this->minTakeInterval - $timeSinceLastToken, 0 );
+		$requiredTokens     = max( 1 - $this->buckets[ $name ]['tokens'], 0 );
+		$refillWait         = $requiredTokens / $this->getFillRate();
+		$totalWait          = round( max( $intervalWait, $refillWait ) * self::MICROSECONDS_PER_SECOND, 0 );
 
-		$requiredTokens = max( 1 - $this->buckets[ $name ]['tokens'], 0 );
-		$refillWait     = $requiredTokens / $this->getFillRate();
-
-		$totalWait = max( $intervalWait, $refillWait );
 		if ( $totalWait > 0 ) {
-			usleep( $totalWait * self::MICROSECONDS_PER_SECOND );
+			usleep( intval( $totalWait ) );
 		}
 
 		$this->refillBucket( $name );

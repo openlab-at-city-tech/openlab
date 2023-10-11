@@ -4,7 +4,7 @@
 		<?php do_action( 'bp_before_footer' ) ?>
 
 		<div id="footer">
-	    	<p><?php printf( __( '%s is proudly powered by <a href="http://wordpress.org">WordPress</a> and <a href="http://buddypress.org">BuddyPress</a>', 'buddypress' ), bloginfo('name') ); ?></p>
+	    	<p><?php printf( __( '%s is proudly powered by <a href="https://wordpress.org">WordPress</a> and <a href="https://buddypress.org">BuddyPress</a>', 'buddypress' ), bloginfo('name') ); ?></p>
 
 			<?php do_action( 'bp_footer' ) ?>
 		</div><!-- #footer -->
@@ -12,7 +12,7 @@
 		<?php do_action( 'bp_after_footer' ) ?>
 
 		<div id="notify"></div>
-		
+
 		<div id="help">
 			<dl class="directions">
 				<dt>c</dt><dd><?php _e('compose new post', 'p2'); ?></dd>
@@ -27,7 +27,7 @@
 				<dt>esc</dt> <dd><?php _e('cancel', 'p2'); ?></dd>
 			</dl>
 		</div>
-		
+
 		<?php wp_footer(); ?>
 
 	</body>

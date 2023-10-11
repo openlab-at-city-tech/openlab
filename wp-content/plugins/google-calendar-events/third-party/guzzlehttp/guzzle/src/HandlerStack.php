@@ -40,7 +40,7 @@ class HandlerStack
      *                                                                            handler is provided, the best handler for your
      *                                                                            system will be utilized.
      */
-    public static function create(?callable $handler = null) : self
+    public static function create(callable $handler = null) : self
     {
         $stack = new self($handler ?: Utils::chooseHandler());
         $stack->push(Middleware::httpErrors(), 'http_errors');
@@ -76,13 +76,13 @@ class HandlerStack
         $depth = 0;
         $stack = [];
         if ($this->handler !== null) {
-            $stack[] = "0) Handler: " . $this->debugCallable($this->handler);
+            $stack[] = '0) Handler: ' . $this->debugCallable($this->handler);
         }
         $result = '';
         foreach (\array_reverse($this->stack) as $tuple) {
-            $depth++;
+            ++$depth;
             $str = "{$depth}) Name: '{$tuple[1]}', ";
-            $str .= "Function: " . $this->debugCallable($tuple[0]);
+            $str .= 'Function: ' . $this->debugCallable($tuple[0]);
             $result = "> {$str}\n{$result}";
             $stack[] = $str;
         }
@@ -115,7 +115,7 @@ class HandlerStack
      * @param callable(callable): callable $middleware Middleware function
      * @param string                       $name       Name to register for this middleware.
      */
-    public function unshift(callable $middleware, ?string $name = null) : void
+    public function unshift(callable $middleware, string $name = null) : void
     {
         \array_unshift($this->stack, [$middleware, $name]);
         $this->cached = null;

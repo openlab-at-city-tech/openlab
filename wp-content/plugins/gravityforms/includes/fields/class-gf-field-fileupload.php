@@ -346,7 +346,7 @@ class GF_Field_FileUpload extends GF_Field {
 			$upload             = "<div id='{$container_id}' data-settings='{$plupload_init_json}' class='gform_fileupload_multifile'>
 										<div id='{$drag_drop_id}' class='gform_drop_area gform-theme-field-control'>
 											<span class='gform_drop_instructions'>{$drop_files_here_text} </span>
-											<button type='button' id='{$browse_button_id}' class='button gform_button_select_files' {$describedby} {$tabindex} >{$select_files_text}</button>
+											<button type='button' id='{$browse_button_id}' class='button gform_button_select_files gform-theme-button gform-theme-button--control' {$describedby} {$tabindex} >{$select_files_text}</button>
 										</div>
 									</div>";
 
@@ -582,9 +582,11 @@ class GF_Field_FileUpload extends GF_Field {
 					if ( ! isset( $file_info['temp_filename'] ) ) {
 						$existing_file = $this->check_existing_entry( $entry_id, $input_name, $file_info );
 
-						$uploaded_path = GFFormsModel::get_file_upload_path( $form_id, $file_info['uploaded_filename'], false );
-						if ( $existing_file ) {
-							$uploaded_files[ $i ] = $uploaded_path['url'];
+						// We already have the file path in $existing_file, however it's good to check that the file path in the entry meta matches.
+						$uploaded_path = gform_get_meta( $entry_id, self::get_file_upload_path_meta_key_hash( $existing_file ) );
+
+						if ( $uploaded_path ) {
+							$uploaded_files[ $i ] = $uploaded_path['url'] . $uploaded_path['file_name'];
 						}
 						continue;
 					}

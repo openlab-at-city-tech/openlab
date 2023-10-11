@@ -2,10 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*
-Plugin Name: Ultimate Responsive Image Slider - 3.5.10
+Plugin Name: Ultimate Responsive Image Slider - 3.5.11
 Plugin URI: https://wordpress.org/plugins/ultimate-responsive-image-slider/
 Description: Add unlimited image slides using Ultimate Responsive Image Slider in any Page and Post content to give an attractive mode to represent contents.
-Version: 3.5.10
+Version: 3.5.11
 Author: FARAZFRANK
 Author URI: http://wpfrank.com/
 Text Domain: ultimate-responsive-image-slider
@@ -27,7 +27,7 @@ along with Ultimate Responsive Image Slider. If not, see http://www.gnu.org/lice
 
 //Constant Variable
 define("URIS_PLUGIN_URL", plugin_dir_url(__FILE__));
-define("URIS_PLUGIN_VER", '3.5.10');
+define("URIS_PLUGIN_VER", '3.5.11');
 
 // Apply default settings on activation
 register_activation_hook( __FILE__, 'WRIS_DefaultSettingsPro' );

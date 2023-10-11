@@ -40,42 +40,6 @@ class folders_replace_media {
     public $upgradeLink;
 
     /**
-     * Old file path
-     *
-     * @var    string    $oldFilePath    Old File Path
-     * @since  1.0.0
-     * @access public
-     */
-    public $oldFilePath;
-
-    /**
-     * Old file URL
-     *
-     * @var    string    $oldFilePath    Old File URL
-     * @since  1.0.0
-     * @access public
-     */
-    public $oldFileURL;
-
-    /**
-     * New file Path
-     *
-     * @var    string    $newFilePath    New File Path
-     * @since  1.0.0
-     * @access public
-     */
-    public $newFilePath;
-
-    /**
-     * New file URL
-     *
-     * @var    string    $newFilePath    New File URL
-     * @since  1.0.0
-     * @access public
-     */
-    public $newFileURL;
-
-    /**
      * Mode for file Replacement
      *
      * @var    string    $mode    New File URL
@@ -85,49 +49,13 @@ class folders_replace_media {
     public $mode = "rename-file";
 
     /**
-     * Old image Meta Array
+     * file title for Replacement
      *
-     * @var    array    $oldImageMeta    Old image Meta Array
+     * @var    string    $replace_media_title    New File Title
      * @since  1.0.0
      * @access public
      */
-    public $oldImageMeta;
-
-    /**
-     * New image Meta Array
-     *
-     * @var    array    $newImageMeta    New image Meta Array
-     * @since  1.0.0
-     * @access public
-     */
-    public $newImageMeta;
-
-    /**
-     * WordPress Upload Dir Path
-     *
-     * @var    string    $uploadDir    WordPress Upload Dir Path
-     * @since  1.0.0
-     * @access public
-     */
-    public $uploadDir;
-
-    /**
-     * Check if old file is image
-     *
-     * @var    string    $isOldImage    Old file status
-     * @since  1.0.0
-     * @access public
-     */
-    public $isOldImage = 0;
-
-    /**
-     * Check if uploaded file is image
-     *
-     * @var    string    $isNewImage    New file status
-     * @since  1.0.0
-     * @access public
-     */
-    public $isNewImage = 0;
+    public $replace_media_title = "";
 
     /**
      * Attachment ID for Replacement file
@@ -137,15 +65,6 @@ class folders_replace_media {
      * @access public
      */
     public $attachment_id;
-
-    /**
-     * Collection of Replacement Items
-     *
-     * @var    array    $replaceItems    Replacement Items
-     * @since  1.0.0
-     * @access public
-     */
-    public $replaceItems = [];
 
     /**
      * Old File Path
@@ -261,7 +180,7 @@ class folders_replace_media {
         if($this->isEnabled) {
 
             add_action('admin_menu', array($this, 'admin_menu'));
-//
+
             add_filter('media_row_actions', array($this, 'add_media_action'), 10, 2);
 
             add_action('add_meta_boxes', function () {
@@ -1047,7 +966,6 @@ class folders_replace_media {
 
             wp_enqueue_script('folders-simpledropit', plugin_dir_url(dirname(__FILE__)) . 'assets/js/simpledropit.min.js', array(), WCP_FOLDER_VERSION);
             wp_enqueue_script('folders-replace-media', plugin_dir_url(dirname(__FILE__)) . 'assets/js/replace-media.js', array(), WCP_FOLDER_VERSION);
-
             $maxUploadSize = ini_get("upload_max_filesize");
             $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " TB", " PB"], $maxUploadSize);
             $maxSize = sprintf(esc_html__("Maximum file size %s", "folders"), $maxUploadSize);
@@ -1057,7 +975,7 @@ class folders_replace_media {
                 'file_size' => esc_html__("Size", 'folders'),
                 'file_type' => esc_html__("Type", 'folders'),
                 'dimension' => esc_html__("Dimension", 'folders'),
-                'drag_file' => esc_html__("Drag and drop files here", 'folders'),
+                'drag_file' => esc_html__("Drag and drop files here", 'folders')
             ]);
 //            wp_enqueue_script('jquery-ui-datepicker');
         }
@@ -1344,6 +1262,29 @@ class folders_replace_media {
                 $file_name = $file['name'];
                 $file_ext = explode(".", $file_name);
                 $file_ext = array_pop($file_ext);
+                $ext = strtolower($file_ext);
+
+                $wpmime = wp_get_mime_types();
+
+                if(!isset($wpmime[$ext]) && !in_array($file['type'], $wpmime)) {
+                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                }
+
+                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif'])) {
+                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                }
+
+                $ext = strtolower($file_ext);
+
+                $wpmime = wp_get_mime_types();
+
+                if(!isset($wpmime[$ext]) && !in_array($file['type'], $wpmime)) {
+                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                }
+
+                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif'])) {
+                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                }
 
                 if (wp_attachment_is('image', $attachment_id)) {
                     $this->is_old_image = 1;

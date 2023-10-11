@@ -134,9 +134,9 @@ class GWPerksPage {
 
 			<div class="icon32" id="icon-themes"><br></div>
 			<h2 class="nav-tab-wrapper">
-				<a class="nav-tab <?php echo ! $is_install ? 'nav-tab-active' : ''; ?>" href="#manage">Manage Perks</a>
+				<a class="nav-tab <?php echo ! $is_install ? 'nav-tab-active' : ''; ?>" href="#manage"><?php esc_html_e( 'Manage Perks', 'gravityperks' ); ?></a>
 				<?php if ( current_user_can( 'install_plugins' ) ) : ?>
-					<a class="nav-tab <?php echo $is_install ? 'nav-tab-active' : ''; ?>" href="#install">Install Perks</a>
+					<a class="nav-tab <?php echo $is_install ? 'nav-tab-active' : ''; ?>" href="#install"><?php esc_html_e( 'Install Perks', 'gravityperks' ); ?></a>
 				<?php endif; ?>
 			</h2>
 
@@ -696,13 +696,13 @@ href="' . $documentation . '" class="documentation">' . __( 'Docs', 'gravityperk
 					), admin_url( 'admin.php' ) ), 'gwp_deactivate_license' ) );
 					?>
 								"
-							onClick="return confirm('<?php _e( 'Are you sure you wish to deactivate your Gravity Perks license on this site?' ); ?>');">Deactivate</a>
+							onClick="return confirm('<?php _e( 'Are you sure you wish to deactivate your Gravity Perks license on this site?', 'gravityperks' ); ?>');"><?php esc_html_e( 'Deactivate', 'gravityperks' ); ?></a>
 				<?php endif; ?>
 				<?php if ( $license_data['price_id'] != GW_PRICE_ID_PRO && $license_data['price_id'] != GW_PRICE_ID_LEGACY_UNLIMITED ) : ?>
-				| <a href="<?php echo GWPerks::get_license_upgrade_url(); ?>" target="_blank">Upgrade</a>
+				| <a href="<?php echo GWPerks::get_license_upgrade_url(); ?>" target="_blank"><?php esc_html_e( 'Upgrade', 'gravityperks' ); ?></a>
 				<?php endif; ?>
 
-				| <a href="<?php echo GW_ACCOUNT_URL; ?>" target="_blank">Manage</a>
+				| <a href="<?php echo GW_ACCOUNT_URL; ?>" target="_blank"><?php esc_html_e( 'Manage', 'gravityperks' ); ?></a>
 
 				| <a href="
 				<?php
@@ -711,7 +711,7 @@ href="' . $documentation . '" class="documentation">' . __( 'Docs', 'gravityperk
 					'gwp_flush_license' => 1,
 				), admin_url( 'admin.php' ) ), 'gwp_flush_license' ) );
 				?>
-							">Refresh</a>
+							"><?php esc_html_e( 'Refresh', 'gravityperks' ); ?></a>
 
 				| <a href="https://gravitywiz.com/documentation/license-faq/" style="text-decoration: none;" target="_blank"><span class="dashicons dashicons-editor-help"></span></a>
 			<?php else : ?>
@@ -719,7 +719,7 @@ href="' . $documentation . '" class="documentation">' . __( 'Docs', 'gravityperk
 					<?php wp_nonce_field( 'update', 'gwp_license' ); ?>
 
 					<input type="text" name="gwp_license_key" id="gwp_license_key" autocomplete="off"
-						placeholder="Enter your Gravity Perks license..."/>
+						placeholder=""/>
 
 					<?php if ( GWPerks::has_valid_license() ) : ?>
 
@@ -733,7 +733,7 @@ href="' . $documentation . '" class="documentation">' . __( 'Docs', 'gravityperk
 
 					<?php endif; ?>
 
-					<input type="submit" value="Register License" name="gwp_license_submit" id="gwp_license_submit"
+					<input type="submit" value="<?php esc_attr_e( 'Register License', 'gravityperks' ); ?>" name="gwp_license_submit" id="gwp_license_submit"
 						class="button button-primary"/>
 
 				</form>

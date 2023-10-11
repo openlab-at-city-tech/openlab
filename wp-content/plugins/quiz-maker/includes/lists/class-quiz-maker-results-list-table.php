@@ -38,12 +38,41 @@ class Results_List_Table extends WP_List_Table{
         <?php
     }
     
-    public function extra_tablenav( $which ){
+    public function extra_tablenav( $which ) {
         global $wpdb;
-        
+        $titles_sql = "SELECT {$wpdb->prefix}aysquiz_quizcategories.title,{$wpdb->prefix}aysquiz_quizcategories.id FROM {$wpdb->prefix}aysquiz_quizcategories ORDER BY {$wpdb->prefix}aysquiz_quizcategories.title ASC";
+        $cat_titles = $wpdb->get_results($titles_sql);
+        $cat_id = null;
+        if( isset( $_GET['filterby'] )){
+            $cat_id = intval($_GET['filterby']);
+        }
+        $categories_select = array();
+        foreach($cat_titles as $key => $cat_title){
+            $selected = "";
+            if($cat_id === intval($cat_title->id)){
+                $selected = "selected";
+            }
+            $categories_select[$cat_title->id]['title'] = $cat_title->title;
+            $categories_select[$cat_title->id]['selected'] = $selected;
+            $categories_select[$cat_title->id]['id'] = $cat_title->id;
+        }
+        // sort($categories_select);
         ?>
+        <div id="category-filter-div-quizlist" class="alignleft actions bulkactions">
+            <select name="filterby-<?php echo esc_attr( $which ); ?>" id="bulk-action-category-selector-<?php echo esc_attr( $which ); ?>">
+                <option value=""><?php echo __('Select Category',$this->plugin_name)?></option>
+                <?php
+                    foreach($categories_select as $key => $cat_title){
+                        echo "<option ".$cat_title['selected']." value='".$cat_title['id']."'>".$cat_title['title']."</option>";
+                    }
+                ?>
+            </select>
+            <input type="button" id="doaction-<?php echo esc_attr( $which ); ?>" class="cat-filter-apply-<?php echo esc_attr( $which ); ?> button" value="<?php echo __( "Filter", $this->plugin_name ); ?>">
+            
+            <a style="margin: 0px 8px 0 0;" href="?page=<?php echo sanitize_text_field( $_REQUEST['page'] ); ?>" class="button"><?php echo __( "Clear filters", $this->plugin_name ); ?></a>
+        </div>
 
-    <?php
+        <?php
     }
 
     
@@ -67,10 +96,11 @@ class Results_List_Table extends WP_List_Table{
         //     $where[] = $search;
         // }
 
-        // if(! empty( $_REQUEST['filterby'] ) && $_REQUEST['filterby'] > 0){
-        //     $cat_id = intval($_REQUEST['filterby']);
-        //     $where[] = ' quiz_category_id = '.$cat_id.'';
-        // }
+
+        if(! empty( $_REQUEST['filterby'] ) && $_REQUEST['filterby'] > 0){
+            $cat_id = intval($_REQUEST['filterby']);
+            $where[] = ' quiz_category_id = '.$cat_id.'';
+        }
 
         // if( isset( $_REQUEST['fstatus'] ) ){
         //     $fstatus = $_REQUEST['fstatus'];
@@ -85,14 +115,24 @@ class Results_List_Table extends WP_List_Table{
             $where[] = " author_id = ".$current_user." ";
         }
 
+        $where[] = " published = 1 ";
+
         if( ! empty($where) ){
             $sql .= " WHERE " . implode( " AND ", $where );
         }
 
 
         if ( ! empty( $_REQUEST['orderby'] ) ) {
-            $sql .= ' ORDER BY ' . esc_sql( $_REQUEST['orderby'] );
-            $sql .= ! empty( $_REQUEST['order'] ) ? ' ' . esc_sql( $_REQUEST['order'] ) : ' DESC';
+            $order_by  = ( isset( $_REQUEST['orderby'] ) && sanitize_text_field( $_REQUEST['orderby'] ) != '' ) ? sanitize_text_field( $_REQUEST['orderby'] ) : 'id';
+            $order_by .= ( ! empty( $_REQUEST['order'] ) && strtolower( $_REQUEST['order'] ) == 'asc' ) ? ' ASC' : ' DESC';
+
+            $sql_orderby = sanitize_sql_orderby($order_by);
+
+            if ( $sql_orderby ) {
+                $sql .= ' ORDER BY ' . $sql_orderby;
+            } else {
+                $sql .= ' ORDER BY id DESC';
+            }
         } else {
             $sql .= ' ORDER BY id DESC';
         }
@@ -131,10 +171,10 @@ class Results_List_Table extends WP_List_Table{
 
         $author_id = get_current_user_id();
 
-        $sql = "SELECT id, title FROM {$wpdb->prefix}aysquiz_quizes";
+        $sql = "SELECT id, title FROM {$wpdb->prefix}aysquiz_quizes WHERE published = 1 ";
         
         if( ! $this->current_user_can_edit ){
-            $sql .= " WHERE author_id = ". $author_id;
+            $sql .= " AND author_id = ". $author_id;
         }
 
         $result = $wpdb->get_results($sql, 'ARRAY_A');
@@ -234,9 +274,20 @@ class Results_List_Table extends WP_List_Table{
             $sql = "SELECT DISTINCT COUNT(id) FROM {$wpdb->prefix}aysquiz_quizes";
         }
 
+        $filter = array();
+
+        if( isset( $_GET['filterby'] ) && intval($_GET['filterby']) > 0){
+            $cat_id = intval($_GET['filterby']);
+            $filter[] = ' quiz_category_id = '.$cat_id.' ';
+        }
+
         $current_user = get_current_user_id();
         if( ! Quiz_Maker_Data::quiz_maker_capabilities_for_editing() ){
-            $sql .= " WHERE author_id = ".$current_user." ";
+            $filter[] = " author_id = ".$current_user." ";
+        }
+
+        if(count($filter) !== 0){
+            $sql .= " WHERE ".implode(" AND ", $filter);
         }
         
         return $wpdb->get_var( $sql );
@@ -293,6 +344,7 @@ class Results_List_Table extends WP_List_Table{
     public function column_default( $item, $column_name ) {
         switch ( $column_name ) {
             case 'quiz_title':
+            case 'quiz_category_id':
             case 'quiz_rate':
             case 'score':
             case 'user_count':
@@ -353,7 +405,7 @@ class Results_List_Table extends WP_List_Table{
 
         $result = $wpdb->get_row("SELECT * FROM {$wpdb->prefix}aysquiz_quizes WHERE id={$item['id']}", "ARRAY_A");
 
-        $result_title = stripcslashes( $result['title'] );
+        $result_title = esc_attr( stripcslashes( $result['title'] ) );
 
         $q = esc_attr($result_title);
         $results_title_length = intval( $this->title_length );
@@ -363,20 +415,28 @@ class Results_List_Table extends WP_List_Table{
             $title = __( "Quiz has been deleted", $this->plugin_name);
 
             $actions = array(                
-                'delete' => sprintf( '<a class="ays_confirm_del" data-message="these reports" href="?page=%s&action=%s&result=%s&_wpnonce=%s">Delete</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce )
+                'delete' => sprintf( '<a class="ays_confirm_del" data-message="these reports" href="?page=%s&action=%s&result=%s&_wpnonce=%s">%s</a>', esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce, __( "Delete", $this->plugin_name ) )
             );
         }else{
             $title = sprintf( '<a href="?page=%s&quiz=%d&ays_result_tab=poststuff" title="%s">%s</a><input type="hidden" value="%d" class="ays_result_read">', $this->plugin_name."-each-result", absint( $item['id'] ), $q, $restitle, absint( $item['id'] ));
 
             $actions = array(
                 'view_details' => sprintf( '<a href="?page=%s&quiz=%d">%s</a>', $this->plugin_name."-each-result", absint( $item['id'] ), __('View details', $this->plugin_name)),
-                'delete' => sprintf( '<a class="ays_confirm_del" data-message="%s" href="?page=%s&action=%s&result=%s&_wpnonce=%s">Delete</a>', $restitle."'s reports", esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce )
+                'delete' => sprintf( '<a class="ays_confirm_del" data-message="%s" href="?page=%s&action=%s&result=%s&_wpnonce=%s">%s</a>', $restitle."'s reports", esc_attr( $_REQUEST['page'] ), 'delete', absint( $item['id'] ), $delete_nonce, __( "Delete", $this->plugin_name ) )
             );
         }
 
         return $title . $this->row_actions( $actions );
     }
 
+    function column_quiz_category_id( $item ) {
+        global $wpdb;
+        $sql = "SELECT * FROM {$wpdb->prefix}aysquiz_quizcategories WHERE id=" . absint( intval( $item['quiz_category_id'] ) );
+
+        $result = $wpdb->get_row($sql, 'ARRAY_A');
+
+        return $result['title'];
+    }
 
     function column_quiz_rate( $item ) {
         global $wpdb;
@@ -455,6 +515,7 @@ class Results_List_Table extends WP_List_Table{
         $columns = array(
             'cb'            => '<input type="checkbox" />',
             'quiz_title'    => __( 'Quiz', $this->plugin_name ),
+            'quiz_category_id'  => __( 'Category', $this->plugin_name ),
             'quiz_rate'     => __( 'Average Rate', $this->plugin_name ),
             'score'         => __( 'Average Score', $this->plugin_name ),
             'user_count'    => __( 'Passed Users Count', $this->plugin_name ),
@@ -488,7 +549,7 @@ class Results_List_Table extends WP_List_Table{
      */
     public function get_bulk_actions() {
         $actions = array(
-            'bulk-delete' => 'Delete',
+            'bulk-delete' => __( "Delete", $this->plugin_name ),
         );
 
         return $actions;
@@ -639,7 +700,7 @@ class Results_List_Table extends WP_List_Table{
             || ( isset( $_POST['action2'] ) && $_POST['action2'] == 'bulk-delete' )
         ) {
 
-            $delete_ids = esc_sql( $_POST['bulk-delete'] );
+            $delete_ids = ( isset( $_POST['bulk-delete'] ) && ! empty( $_POST['bulk-delete'] ) ) ? esc_sql( $_POST['bulk-delete'] ) : array();
 
             // loop over the array of record IDs and delete them
             foreach ( $delete_ids as $id ) {

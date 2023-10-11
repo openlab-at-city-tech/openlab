@@ -64,10 +64,12 @@ class XmlScanner
     private function disableEntityLoaderCheck()
     {
         if (Settings::getLibXmlDisableEntityLoader()) {
-            $libxmlDisableEntityLoaderValue = libxml_disable_entity_loader(true);
+            if (\PHP_VERSION_ID < 80000) {
+                $libxmlDisableEntityLoaderValue = libxml_disable_entity_loader(true);
 
-            if (self::$libxmlDisableEntityLoaderValue === null) {
-                self::$libxmlDisableEntityLoaderValue = $libxmlDisableEntityLoaderValue;
+                if (self::$libxmlDisableEntityLoaderValue === null) {
+                    self::$libxmlDisableEntityLoaderValue = $libxmlDisableEntityLoaderValue;
+                }
             }
         }
     }
@@ -75,7 +77,9 @@ class XmlScanner
     private function shutdown()
     {
         if (self::$libxmlDisableEntityLoaderValue !== null) {
-            libxml_disable_entity_loader(self::$libxmlDisableEntityLoaderValue);
+            if (\PHP_VERSION_ID < 80000) {
+                libxml_disable_entity_loader(self::$libxmlDisableEntityLoaderValue);
+            }
         }
     }
 

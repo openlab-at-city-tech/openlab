@@ -4,7 +4,12 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : '1';
 $tab_url = "?page=".$this->plugin_name."-results&tab=";
 
 ?>
-<div class="wrap ays_results_table">
+<div class="wrap ays-quiz-list-table ays_results_table">
+    <div class="ays-quiz-heading-box">
+        <div class="ays-quiz-wordpress-user-manual-box">
+            <a href="https://ays-pro.com/wordpress-quiz-maker-user-manual" target="_blank"><?php echo __("View Documentation", $this->plugin_name); ?></a>
+        </div>
+    </div>
     <h1 class="wp-heading-inline">
         <?php
         echo __(esc_html(get_admin_page_title()),$this->plugin_name);
@@ -15,8 +20,8 @@ $tab_url = "?page=".$this->plugin_name."-results&tab=";
     </div>
     <div class="nav-tab-wrapper">
         <a href="<?php echo $tab_url . "1"; ?>" class="no-js nav-tab"><?php echo __('Quizzes',$this->plugin_name)?></a>
-        <a href="<?php echo $tab_url . "2"; ?>" class="no-js nav-tab"><?php echo __('Global Statistics',$this->plugin_name)?></a>
-        <a href="<?php echo $tab_url . "3"; ?>" class="no-js nav-tab"><?php echo __('Global Leaderboard',$this->plugin_name)?></a>
+        <a href="<?php echo "?page=".$this->plugin_name."-results-global-statistics"; ?>" class="no-js nav-tab"><?php echo __('Global Statistics',$this->plugin_name)?></a>
+        <a href="<?php echo "?page=".$this->plugin_name."-results-global-leaderboard"; ?>" class="no-js nav-tab"><?php echo __('Global Leaderboard',$this->plugin_name)?></a>
         <a href="<?php echo "?page=".$this->plugin_name."-all-results&tab=" . "4"; ?>" class="no-js nav-tab nav-tab-active"><?php echo __('All Results',$this->plugin_name)?></a>
     </div>
     <style>
@@ -45,7 +50,8 @@ $tab_url = "?page=".$this->plugin_name."-results&tab=";
                         <form method="post">
                             <?php
                             $this->all_results_obj->prepare_items();
-                            $this->all_results_obj->search_box('Search', $this->plugin_name);
+                            $search = __( "Search", $this->plugin_name );
+                            $this->all_results_obj->search_box($search, $this->plugin_name);
                             $this->all_results_obj->display();
                             ?>
                         </form>
@@ -84,17 +90,32 @@ $tab_url = "?page=".$this->plugin_name."-results&tab=";
           <!-- Modal body -->
             <div class="ays-modal-body">
                 <form method="post" id="ays_export_filter">
-                    <div class="filter-col">
-                        <label for="user_id-filter"><?=__("Users", $this->plugin_name)?></label>
-                        <button type="button" class="ays_userid_clear button button-small wp-picker-default"><?=__("Clear", $this->plugin_name)?></button>
-                        <select name="user_id-select[]" id="user_id-filter" multiple="multiple"></select>
+                    <div class="filter-row">
+                        <div class="filter-row-overlay display_none"></div>
+                        <div class="filter-col">
+                            <label for="user_id-filter"><?=__("Users", $this->plugin_name)?></label>
+                            <button type="button" class="ays_userid_clear button button-small wp-picker-default"><?=__("Clear", $this->plugin_name)?></button>
+                            <select name="user_id-select[]" id="user_id-filter" multiple="multiple"></select>
+                        </div>
+                        <hr>
+                        <div class="filter-col">
+                            <label for="quiz_id-filter"><?=__("Quizzes", $this->plugin_name)?></label>
+                            <button type="button" class="ays_quizid_clear button button-small wp-picker-default"><?=__("Clear", $this->plugin_name)?></button>
+                            <select name="quiz_id-select[]" id="quiz_id-filter" multiple="multiple"></select>
+                        </div>
+                        <hr>
+                        <div class="filter-col">
+                           <div style="padding: 10px;line-height:1;">
+                                <input type="checkbox" name="export_results_guests" id="export_results_guests" value="on">
+                                <label for="export_results_guests">
+                                    <span><?php echo __( "Include guests who do not have any personal data", $this->plugin_name ); ?></span>
+                                </label>
+                                <br>
+                                <span style="font-style: italic; font-size:14px;"><?php echo __( "Include those not logged in users who have not inserted any personal data such as name and email.", $this->plugin_name ); ?></span>
+                           </div>
+                        </div>
                     </div>
                     <hr>
-                    <div class="filter-col">
-                        <label for="quiz_id-filter"><?=__("Quizzes", $this->plugin_name)?></label>
-                        <button type="button" class="ays_quizid_clear button button-small wp-picker-default"><?=__("Clear", $this->plugin_name)?></button>
-                        <select name="quiz_id-select[]" id="quiz_id-filter" multiple="multiple"></select>
-                    </div>
                     <div class="filter-block">
                         <div class="filter-block filter-col">
                             <label for="start-date-filter"><?=__("Start Date from", $this->plugin_name)?></label>
@@ -105,13 +126,24 @@ $tab_url = "?page=".$this->plugin_name."-results&tab=";
                             <input type="date" name="end-date-filter" id="end-date-filter">
                         </div>
                     </div>
+                    <hr>
+                    <div class="filter-col">
+                       <div style="padding: 10px;line-height:1;">
+                            <input type="checkbox" name="export_results_only_guests" id="export_results_only_guests" value="on">
+                            <label for="export_results_only_guests">
+                                <span><?php echo __( "Export only guests results", $this->plugin_name ); ?></span>
+                            </label>
+                            <br>
+                            <span style="font-style: italic; font-size:14px;"><?php echo __( "Please note that if this checkbox is ticked, the above filters (except dates) will not be applied.", $this->plugin_name ); ?></span>
+                       </div>
+                    </div>
                 </form>
             </div>
 
           <!-- Modal footer -->
             <div class="ays-modal-footer">
                 <div class="export_results_count">
-                    <p>Matched <span></span> results</p>
+                    <p><?php echo __( "Matched", $this->plugin_name ); ?> <span></span> <?php echo __( "results", $this->plugin_name ); ?></p>
                 </div>
                 <span><?php echo __('Export to', $this->plugin_name); ?></span>
                 <button type="button" class="button button-primary export-action" data-type="csv"><?=__('CSV', $this->plugin_name)?></button>

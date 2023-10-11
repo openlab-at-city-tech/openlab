@@ -25,6 +25,7 @@ class Service
     public $rootUrl;
     public $version;
     public $servicePath;
+    public $serviceName;
     public $availableScopes;
     public $resource;
     private $client;
@@ -35,7 +36,7 @@ class Service
         } elseif (\is_array($clientOrConfig)) {
             $this->client = new Client($clientOrConfig ?: []);
         } else {
-            $errorMessage = 'SimpleCalendar\\plugin_deps\\constructor must be array or instance of Google\\Client';
+            $errorMessage = 'constructor must be array or instance of Google\\Client';
             if (\class_exists('TypeError')) {
                 throw new TypeError($errorMessage);
             }

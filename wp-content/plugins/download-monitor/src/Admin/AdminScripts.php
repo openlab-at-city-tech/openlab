@@ -57,6 +57,7 @@ class DLM_Admin_Scripts {
 			DLM_VERSION
 		);
 
+		wp_add_inline_script( 'dlm_insert_download', 'const dlm_ajax_nonce = "' . wp_create_nonce( 'dlm_ajax_nonce' ) . '";', 'before' );
 		// Notices JS
 		wp_enqueue_script(
 			'dlm_notices',
@@ -94,7 +95,7 @@ class DLM_Admin_Scripts {
 
 				// Make JavaScript strings translatable.
 				wp_localize_script( 'dlm_edit_download', 'dlm_ed_strings', $this->get_strings( 'edit-download' ) );
-				wp_add_inline_script( 'dlm_edit_download', 'var dlmUploaderInstance = {}; var dlmEditInstance = {}; let downloadable_files_field; const max_file_size = ' . wp_max_upload_size() . ';', 'before' );
+				wp_add_inline_script( 'dlm_edit_download', 'var dlmUploaderInstance = {}; var dlmEditInstance = {}; let downloadable_files_field; const max_file_size = ' . absint( wp_max_upload_size() ) . ';', 'before' );
 			}
 
 			// Enqueue Downloadable Files Metabox JS
@@ -208,7 +209,7 @@ class DLM_Admin_Scripts {
 			// Make JavaScript strings translatable
 			wp_localize_script( 'dlm_reports', 'dlm_rs', $this->get_strings( 'reports' ) );
 			$per_page = ( $item = get_option('dlm-reports-per-page') ) ? $item : 10;
-			wp_add_inline_script( 'dlm_reports', 'const dlmReportsPerPage = ' . absint($per_page) . ';const dlmReportsNonce = "' . wp_create_nonce( 'dlm_reports_nonce' ) . '"; const dlmAdminUrl = "' . get_admin_url() . '";', 'before' );
+			wp_add_inline_script( 'dlm_reports', 'const dlmReportsPerPage = ' . absint($per_page) . ';const dlmReportsNonce = "' . wp_create_nonce( 'dlm_reports_nonce' ) . '"; const dlmAdminUrl = "' . get_admin_url() . '"; const dlmWeekStart = "' . DLM_Admin_Helper::get_wp_weekstart() . '";', 'before' );
 
 		}
 

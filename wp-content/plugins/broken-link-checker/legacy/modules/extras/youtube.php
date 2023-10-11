@@ -246,17 +246,14 @@ class blcYouTubeChecker extends blcChecker {
 	}
 
 	protected function get_playlist_resource_url( $playlist_id ) {
-		if ( strpos( $playlist_id, 'PL' ) === 0 ) {
-			$playlist_id = substr( $playlist_id, 2 );
-		}
 		$params = array(
 			'key'        => $this->get_youtube_api_key(),
-			'playlistId' => $playlist_id,
+			'id'         => $playlist_id,
 			'part'       => 'snippet,status',
 			'maxResults' => 10, //Playlists can be big. Lets just check the first few videos.
 		);
 		$query  = build_query( array_map( 'urlencode', $params ) );
-		return 'https://www.googleapis.com/youtube/v3/playlistItems?' . $query;
+		return 'https://youtube.googleapis.com/youtube/v3/playlists?' . $query;
 	}
 
 	protected function format_api_error( $response, $api ) {

@@ -69,7 +69,7 @@ div.ez-toc-widget-container li {
     z-index: 1;
 }
 
-#ez-toc-container p.ez-toc-title {
+#ez-toc-container .ez-toc-title {
     text-align: left;
     line-height: 1.45;
     margin: 0;
@@ -97,13 +97,17 @@ div.ez-toc-widget-container li {
 }
 
 .ez-toc-wrap-left {
+    margin: 0px auto 1em 0px !important;
+}
+.ez-toc-wrap-left-text {
     float: left;
-    margin-right: 10px;
 }
 
 .ez-toc-wrap-right {
+    margin: 0px 0px 1em auto !important;
+}
+.ez-toc-wrap-right-text {
     float: right;
-    margin-left: 10px;
 }
 
 #ez-toc-container a {
@@ -312,17 +316,13 @@ div.ez-toc-widget-container li {
     border: none;
     display: none;
 }
-
-#ez-toc-container nav ul.eztoc-visibility-hide-by-default, #ez-toc-widget-container nav ul.eztoc-visibility-hide-by-default {
-    display: none;
-}
-
 #ez-toc-container label {    
     position: relative;            
     cursor: pointer;    
+    display: initial;
 }
 
-#ez-toc-container .ez-toc-toggle label, #ez-toc-container label.cssicon, #ez-toc-widget-container label.cssicon  {
+#ez-toc-container .ez-toc-toggle label  {
     float: right;
     position: relative;
     font-size: 16px;
@@ -334,15 +334,15 @@ div.ez-toc-widget-container li {
     width: 35px;
 }
 
-div#ez-toc-container p.ez-toc-title {
-    display: contents;
+div#ez-toc-container .ez-toc-title {
+    display: initial;
 }
 
 div#ez-toc-container {
     padding-right: 20px;
 }
 .ez-toc-wrap-center {
-    margin: 0 auto;
+    margin: 0 auto 1em auto !important;
 }
 
 #ez-toc-container a.ez-toc-toggle {
@@ -372,7 +372,7 @@ label.cssiconcheckbox {
     flex-wrap: nowrap;
 }
 
-.ez-toc-widget-container ul.ez-toc-list li.active {
+.ez-toc-widget-container ul.ez-toc-list li {
     height: auto !important;
 }
 .ez-toc-cssicon{
@@ -393,4 +393,7 @@ label.cssiconcheckbox {
     height: 30px;
     justify-content: center;
     direction:ltr;
+}
+#ez-toc-container .eztoc-toggle-hide-by-default{
+    display:none;
 }

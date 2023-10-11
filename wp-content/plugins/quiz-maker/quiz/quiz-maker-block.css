@@ -37,3 +37,23 @@ div.ays_quiz_maker_block_select select.components-select-control__input {
     max-width: 100%;
     padding: 0;
 }
+
+.ays_quiz_maker_block_select_quiz .ays_quiz_maker_block_select {
+    width: 350px !important;
+}
+
+.ays_quiz_maker_block_select_quiz {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 200px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border: 1px solid;
+    background-image: url("../admin/images/icons/quiz-maker-logo.png");
+    background-repeat: no-repeat;
+    background-position: 50% 20%;
+    background-size: 100px;
+}

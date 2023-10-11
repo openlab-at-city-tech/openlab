@@ -80,6 +80,27 @@
         }
     </style>
     <style type="text/css">
+        .report_btn_wrap,
+        .report_btn{
+            background-color: #0059FF !important;
+        }
+
+        .report_btn_wrap:hover,
+        .report_btn:hover,
+        .report_btn_text:hover {
+            background-color: #0C33A9 !important;
+        }
+
+        .site-title-wrap,
+        .site-title-link {
+            color: #0059FF !important;
+        }
+
+        .site-title-wrap:hover,
+        .site-title-link:hover {
+            color: #0C33A9 !important;
+        }
+
     </style>
 </head>
 
@@ -141,7 +162,7 @@
                                                     <p style="line-height: 30px; margin: 10px 0; text-align: center; color:#151e23; font-size:30p; font-family:Georgia,Helvetica,Arial,sans-serif"></p>
                                                     <div style="text-align: left;">
                                                         <font face="Roboto">{{HEADING_START}}<br>
-                                                            <font color="#286efa"><a href="{{SITEURL}}" target="_blank" style="color: inherit; text-decoration: underline;">{{SITENAME}}</a></font>
+                                                            <font color="#0059FF" class="site-title-wrap"><a href="{{SITEURL}}" class="site-title-link" target="_blank" style="color: inherit; text-decoration: underline;">{{SITENAME}}</a></font>
                                                         </font>
                                                     </div>
                                                     <p></p>
@@ -444,9 +465,11 @@
                                                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
                                                     <tbody>
                                                     <tr>
-                                                        <td align="center" bgcolor="#286EFA" role="presentation" style="border:none;border-radius:6px;cursor:auto;mso-padding-alt:10px 25px 10px 25px;text-align:center;background:#286EFA;" valign="middle">
-                                                            <a href="{{REPORT_BTN_URL}}" style="display:inline-block;background:#286EFA;color:#ffffff;font-family:Roboto;font-size:13px;font-weight:500;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px 10px 25px;mso-padding-alt:0px;border-radius:6px;" target="_blank">
-                                                                {{REPORT_BTN_TITLE}}
+                                                        <td align="center" class="report_btn_wrap" role="presentation" style="border:none;border-radius:6px;cursor:auto;mso-padding-alt:10px 25px 10px 25px;text-align:center;" valign="middle">
+                                                            <a href="{{REPORT_BTN_URL}}" class="report_btn" style="display:inline-block;background-color:#0059FF;color:#ffffff;font-family:Roboto;font-size:13px;font-weight:500;line-height:24px;margin:0;text-decoration:none;text-transform:none;padding:10px 25px 10px 25px;mso-padding-alt:0px;border-radius:6px;" target="_blank">
+                                                                <span class="report_btn_text" style="width:100%;">
+                                                                    {{REPORT_BTN_TITLE}}
+                                                                </span>
                                                             </a>
                                                         </td>
                                                     </tr>

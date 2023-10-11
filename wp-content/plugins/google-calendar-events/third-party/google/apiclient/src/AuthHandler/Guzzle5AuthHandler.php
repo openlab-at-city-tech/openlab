@@ -3,8 +3,8 @@
 namespace SimpleCalendar\plugin_deps\Google\AuthHandler;
 
 use SimpleCalendar\plugin_deps\Google\Auth\CredentialsLoader;
-use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
 use SimpleCalendar\plugin_deps\Google\Auth\FetchAuthTokenCache;
+use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
 use SimpleCalendar\plugin_deps\Google\Auth\Subscriber\AuthTokenSubscriber;
 use SimpleCalendar\plugin_deps\Google\Auth\Subscriber\ScopedAccessTokenSubscriber;
 use SimpleCalendar\plugin_deps\Google\Auth\Subscriber\SimpleSubscriber;
@@ -12,8 +12,8 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
-*
-*/
+ * This supports Guzzle 5
+ */
 class Guzzle5AuthHandler
 {
     protected $cache;

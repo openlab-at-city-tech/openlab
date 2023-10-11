@@ -79,6 +79,7 @@ class Quiz_Maker {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->define_integrations_hooks();
+		$this->define_iframe_hooks();
 
 	}
 
@@ -165,6 +166,10 @@ class Quiz_Maker {
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/class-quiz-maker-not-finished-results-list-table.php';
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/class-quiz-maker-questions-tags-list-table.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/lists/class-quiz-maker-questions-reports-list-table.php';
+
         /**
 		 * The class responsible for defining all functions for getting all quiz integrations data
 		 */
@@ -182,6 +187,8 @@ class Quiz_Maker {
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-leaderboards-shortcode.php';
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-user-position-shortcode.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-category-shortcode.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-all-results-shortcode.php';
@@ -194,8 +201,19 @@ class Quiz_Maker {
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-recent-quizes-shortcode.php';
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-extra-shortcode.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-most-popular-shortcode.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-other-shortcode.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-intervals-chart-shortcode.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/class-quiz-maker-show-all-orders-shortcode.php';	
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-quiz-maker-pdfapi.php';
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-quiz-maker-iframe.php';
         
 		$this->loader = new Quiz_Maker_Loader();
 
@@ -244,6 +262,7 @@ class Quiz_Maker {
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_results_submenu', 120 );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_dashboard_submenu', 132 );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_general_settings_submenu', 130 );
+        $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_affiliate_submenu', 133 );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_featured_plugins_submenu', 135 );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_addons_submenu', 140 );
 
@@ -311,10 +330,52 @@ class Quiz_Maker {
 		$this->loader->add_action( 'wp_ajax_ays_results_export_filter', $plugin_admin, 'ays_results_export_filter' );
         $this->loader->add_action( 'wp_ajax_nopriv_ays_results_export_filter', $plugin_admin, 'ays_results_export_filter' );
         
+        // Questions EXPORT FILTERS
+		$this->loader->add_action( 'wp_ajax_ays_show_questions_filters', $plugin_admin, 'ays_show_questions_filters' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_show_questions_filters', $plugin_admin, 'ays_show_questions_filters' );
+
+        $this->loader->add_action( 'wp_ajax_ays_questions_export_filter', $plugin_admin, 'ays_questions_export_filter' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_questions_export_filter', $plugin_admin, 'ays_questions_export_filter' );
+
         // SEND TEST MAIL
 		$this->loader->add_action( 'wp_ajax_ays_send_testing_mail', $plugin_admin, 'ays_send_testing_mail' );
         $this->loader->add_action( 'wp_ajax_nopriv_ays_send_testing_mail', $plugin_admin, 'ays_send_testing_mail' );
 
+        // Generate Coupons
+		$this->loader->add_action( 'wp_ajax_ays_generate_coupons', $plugin_admin, 'ays_generate_coupons' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_generate_coupons', $plugin_admin, 'ays_generate_coupons' );
+
+		// Copied Coupons
+		$this->loader->add_action( 'wp_ajax_ays_copied_coupons', $plugin_admin, 'ays_copied_coupons' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_copied_coupons', $plugin_admin, 'ays_copied_coupons' );
+
+        // Admin Notes
+		$this->loader->add_action( 'wp_ajax_get_admin_notes', $plugin_admin, 'get_admin_notes' );
+        $this->loader->add_action( 'wp_ajax_nopriv_get_admin_notes', $plugin_admin, 'get_admin_notes' );
+
+        // Update database tables
+		$this->loader->add_action( 'wp_ajax_ays_quiz_update_database_tables', $plugin_admin, 'ays_quiz_update_database_tables' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_update_database_tables', $plugin_admin, 'ays_quiz_update_database_tables' );
+
+        $this->loader->add_action( 'wp_ajax_get_published_questions_ajax', $plugin_admin, 'get_published_questions_ajax' );
+        $this->loader->add_action( 'wp_ajax_nopriv_get_published_questions_ajax', $plugin_admin, 'get_published_questions_ajax' );
+
+        $this->loader->add_action( 'wp_ajax_ays_quiz_author_user_search', $plugin_admin, 'ays_quiz_author_user_search' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_author_user_search', $plugin_admin, 'ays_quiz_author_user_search' );
+
+        $this->loader->add_action( 'wp_ajax_ays_quiz_install_plugin', $plugin_admin, 'ays_quiz_install_plugin' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_install_plugin', $plugin_admin, 'ays_quiz_install_plugin' );
+
+        $this->loader->add_action( 'wp_ajax_ays_quiz_activate_plugin', $plugin_admin, 'ays_quiz_activate_plugin' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_activate_plugin', $plugin_admin, 'ays_quiz_activate_plugin' );
+
+        $this->loader->add_action( 'wp_ajax_get_quiz_question_html', $plugin_admin, 'get_quiz_question_html' );
+        $this->loader->add_action( 'wp_ajax_nopriv_get_quiz_question_html', $plugin_admin, 'get_quiz_question_html' );
+
+        // Generate password via import CSV | TXT
+		$this->loader->add_action( 'wp_ajax_ays_generate_passwords_via_import', $plugin_admin, 'ays_generate_passwords_via_import' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_generate_passwords_via_import', $plugin_admin, 'ays_generate_passwords_via_import' );
+        
         // Add Settings link to the plugin
         $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
         $this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
@@ -322,7 +383,11 @@ class Quiz_Maker {
         // Before VC Init
         $this->loader->add_action( 'vc_before_init', $plugin_admin, 'vc_before_init_actions' );
 
-        $this->loader->add_action( 'elementor/widgets/widgets_registered', $plugin_admin, 'quiz_maker_el_widgets_registered' );        
+        if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION, '3.5.0', '>=' ) ) {
+        	$this->loader->add_action( 'elementor/widgets/register', $plugin_admin, 'quiz_maker_el_widgets_registered' );
+        } else {
+        	$this->loader->add_action( 'elementor/widgets/widgets_registered', $plugin_admin, 'quiz_maker_el_widgets_registered' );
+        }
         
         //Widget
         $this->loader->add_action( 'widgets_init', $plugin_admin, 'load_quiz_maker_widget' );        
@@ -350,12 +415,18 @@ class Quiz_Maker {
 		$plugin_public = new Quiz_Maker_Public( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_user_page = new Quiz_Maker_User_Page( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_leaderboards = new Quiz_Maker_Leaderboards_Shortcode( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_user_position_leaderboard = new Quiz_Maker_Leaderboard_Position_Shortcode( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_quiz_category = new Quiz_Maker_Quiz_Category( $this->get_plugin_name(), $this->get_version() );
 		$plugin_public_results_page = new Quiz_Maker_All_Results( $this->get_plugin_name(), $this->get_version() );
         $plugin_public_quiz_all_results_page = new Quiz_Maker_Quiz_All_Results( $this->get_plugin_name(), $this->get_version() );
         $plugin_public_display_questions = new Quiz_Maker_Display_Questions( $this->get_plugin_name(), $this->get_version() );
         $plugin_public_quiz_flash_cards_page = new Quiz_Maker_Flash_Cards( $this->get_plugin_name(), $this->get_version() );
         $plugin_public_recent_quizes_page = new Quiz_Maker_Recent_Quizes( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_extra_shortcodes = new Ays_Quiz_Maker_Extra_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_most_popular_shortcodes = new Ays_Quiz_Maker_Most_Popular_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_other_shortcodes = new Ays_Quiz_Maker_Other_Shortcodes( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_all_orders = new Quiz_Maker_All_Orders( $this->get_plugin_name(), $this->get_version() );
+        $plugin_public_intervals_chart_shortcodes = new Ays_Quiz_Maker_Intervals_Chart_Shortcodes_Public( $this->get_plugin_name(), $this->get_version() );
                 
         $this->loader->add_action( 'wp_ajax_ays_finish_quiz', $plugin_public, 'ays_finish_quiz' );
         $this->loader->add_action( 'wp_ajax_nopriv_ays_finish_quiz', $plugin_public, 'ays_finish_quiz' );
@@ -377,6 +448,9 @@ class Quiz_Maker {
 
         $this->loader->add_action( 'wp_ajax_ays_quiz_check_user_started', $plugin_public, 'ays_quiz_check_user_started' );
         $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_check_user_started', $plugin_public, 'ays_quiz_check_user_started' );
+
+        $this->loader->add_action( 'wp_ajax_ays_quiz_check_user_started_for_paypal', $plugin_public, 'ays_quiz_check_user_started_for_paypal' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_check_user_started_for_paypal', $plugin_public, 'ays_quiz_check_user_started_for_paypal' );
  
 //		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 //		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -388,7 +462,37 @@ class Quiz_Maker {
         $this->loader->add_action( 'wp_ajax_user_export_result_pdf', $plugin_public_user_page, 'user_export_result_pdf' );
         $this->loader->add_action( 'wp_ajax_nopriv_user_export_result_pdf', $plugin_public_user_page, 'user_export_result_pdf' );
 
+        $this->loader->add_action( 'wp_ajax_ays_store_result_payed', $plugin_public, 'ays_store_result_payed' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_store_result_payed', $plugin_public, 'ays_store_result_payed' );
+
+        $this->loader->add_action( 'wp_ajax_user_export_quiz_questions_pdf', $plugin_public, 'user_export_quiz_questions_pdf' );
+        $this->loader->add_action( 'wp_ajax_nopriv_user_export_quiz_questions_pdf', $plugin_public, 'user_export_quiz_questions_pdf' );
+
+        $this->loader->add_action( 'wp_ajax_ays_quiz_send_question_report', $plugin_public, 'ays_quiz_send_question_report' );
+        $this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_send_question_report', $plugin_public, 'ays_quiz_send_question_report' );
+
+        $this->loader->add_filter( 'ays_quiz_get_submission_results', $plugin_public, 'ays_quiz_get_submission_results_by_unique_code' );
+
         $this->loader->add_filter( 'script_loader_tag', $plugin_public, 'ays_quiz_add_data_attribute', 10, 2);
+
+
+        $settings_obj = new Quiz_Maker_Settings_Actions($this->plugin_name);
+        $settings_options = $settings_obj->ays_get_setting('options');
+        if($settings_options){
+            $settings_options = json_decode(stripcslashes($settings_options), true);
+        }else{
+            $settings_options = array();
+        }
+
+        // Enable custom login form redirect if user fail
+        $settings_options['quiz_enable_custom_login_form_redirect'] = (isset( $settings_options['quiz_enable_custom_login_form_redirect'] ) && $settings_options['quiz_enable_custom_login_form_redirect'] == 'on') ? sanitize_text_field( $settings_options['quiz_enable_custom_login_form_redirect'] ) : 'off';
+        $quiz_enable_custom_login_form_redirect = (isset( $settings_options['quiz_enable_custom_login_form_redirect'] ) && $settings_options['quiz_enable_custom_login_form_redirect'] == 'on') ? true : false;
+
+        if( $quiz_enable_custom_login_form_redirect ){
+	        // WP Login redirect
+	        $this->loader->add_action( 'wp_login_failed', $plugin_public, 'ays_quiz_front_end_login_fail');
+	        $this->loader->add_filter( 'authenticate', $plugin_public, 'ays_quiz_authenticate_login', 99, 3);
+        }
 	}
 
 
@@ -456,7 +560,44 @@ class Quiz_Maker {
 		$this->loader->add_filter( 'ays_qm_front_end_integrations_options', $plugin_integrations, 'ays_front_end_get_response_options', 1, 2 );
 		$this->loader->add_action( 'ays_qm_front_end_integrations', $plugin_integrations, 'ays_front_end_get_response_functional', 1, 3 );
 
+		// ===== reCAPTCHA integration ====
+		// reCAPTCHA integration / settings page
+		$this->loader->add_filter( 'ays_qm_settings_page_integrations_contents', $plugin_integrations, 'ays_settings_page_recaptcha_content', 15, 2 );
+		$this->loader->add_filter( 'ays_qm_settings_page_integrations_saves', $plugin_integrations, 'ays_settings_page_recaptcha_save', 1, 2 );
+
+		// reCAPTCHA integration / quiz page
+		$this->loader->add_filter( 'ays_qm_quiz_page_integrations_contents', $plugin_integrations, 'ays_quiz_page_recaptcha_content', 15, 2 );
+		$this->loader->add_filter( 'ays_qm_quiz_page_integrations_options', $plugin_integrations, 'ays_quiz_page_recaptcha_options', 1, 2 );
+		$this->loader->add_filter( 'ays_qm_quiz_page_integrations_saves', $plugin_integrations, 'ays_quiz_page_recaptcha_save', 1, 2 );
+
+		// reCAPTCHA integration / front-end
+		$this->loader->add_filter( 'ays_qm_front_end_integrations_options', $plugin_integrations, 'ays_front_end_recaptcha_options', 1, 2 );
+		$this->loader->add_filter( 'ays_qm_front_end_recaptcha', $plugin_integrations, 'ays_front_end_recaptcha_functional', 1, 3 );
+		// ===== reCAPTCHA integration ====
+
 	}
+
+	/**
+	 * Register all of the hooks related to the iframe functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_iframe_hooks() {
+		$plugin_iframe = new Quiz_Maker_iFrame( $this->get_plugin_name(), $this->get_version() );
+
+		/**
+		 * Action for opening quiz in iframe
+		 */
+		$this->loader->add_action( 'wp_ajax_ays_quiz_iframe_shortcode', $plugin_iframe, 'iframe_shortcode' );
+		$this->loader->add_action( 'wp_ajax_nopriv_ays_quiz_iframe_shortcode', $plugin_iframe, 'iframe_shortcode' );
+
+		$this->loader->add_action( 'init', $plugin_iframe, 'add_rewrite_endpoint' );
+		$this->loader->add_action( 'template_redirect', $plugin_iframe, 'add_template_redirect' );
+		$this->loader->add_filter( 'request', $plugin_iframe, 'add_request_check' );
+	}
+
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 *

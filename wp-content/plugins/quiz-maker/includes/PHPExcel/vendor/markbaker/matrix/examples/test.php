@@ -15,5 +15,3 @@ $grid2 = [
 $matrix = new Matrix\Matrix($grid1);
 
 $new = $matrix->directsum(new Matrix\Matrix($grid2));
-
-var_dump($new);

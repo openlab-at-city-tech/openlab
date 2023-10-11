@@ -262,5 +262,4 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 	public function delete_item_permissions_check( $request ) { // phpcs:ignore
 		return current_user_can( 'edit_others_posts' );
 	}
-
 }

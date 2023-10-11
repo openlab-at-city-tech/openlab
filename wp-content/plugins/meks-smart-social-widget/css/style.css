@@ -1296,11 +1296,11 @@ ul.mks_social_widget_ul .socicon-twitch:before {
 }
 
 ul.mks_social_widget_ul .socicon-twitter {
-	background: #4da7de;
+	background: #222222;
 }
 
 ul.mks_social_widget_ul .socicon-twitter:before {
-	content: "\e08d"
+	content: "\e959"
 }
 
 ul.mks_social_widget_ul .socicon-uber {
@@ -2229,4 +2229,12 @@ ul.mks_social_widget_ul .socicon-internet {
 
 ul.mks_social_widget_ul .socicon-internet:before {
 	content: "\e957"
+}
+
+ul.mks_social_widget_ul .socicon-tiktok {
+	background: #00f2ea;
+}
+
+ul.mks_social_widget_ul .socicon-tiktok:before {
+	content: "\e958"
 }

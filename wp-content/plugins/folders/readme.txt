@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 6.2
-Stable tag: 2.9.2
+Tested up to: 6.3
+Stable tag: 2.9.8
 Plugin URI: https://premio.io/downloads/folders/
 
 🔥 With the Folders WordPress plugin create unlimited folders, organize & manage your Media Library files, Pages & Posts in folders 📁
@@ -73,8 +73,9 @@ It’s rather simple really – once you install the plugin, you can begin using
 = 🚀 FOLDERS PLUGIN PRO FEATURES =
 * <a href="https://premio.io/downloads/folders?utm_source=wporg" target="_blank" title="Folders pro plans"><strong>Upgrade to pro</strong></a> to get unlimited sub-folders :)
 * Create folders for each post type - use folders with other plugins that have custom post types (e.g. Elementor templates, WooCommerce & more)
-* Dynamic Folders - automatically filter posts, pages, custom posts, and media library files based on author, date, file types & more
-* Delete unused media library files - using the Folders plugin, you can now search for unused media files that take up unnecessary space on your server, and clean them with just a few clicks. You'll see your unused media library sorted from the biggest files to the smallest media library files.
+* Dynamic Folders - automatically filter posts, pages, custom posts, and media library files based on author, date, file types, WooCommerce products & more
+* Delete unused media library files - using the Folders plugin, you can now search for unused media files that take up unnecessary space on your server, and clean them with just a few clicks. You'll see your unused media library sorted from the biggest files to the smallest media library files
+* NEW! Organize your Plugins using Folders - you can create Folders for your plugins and organize them in seconds
 * Download any media library folder as a ZIP: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally
 * Sticky folders - you can pin your folders to the upper part of the folders navigation area. Use the sticky folders feature to make your most important folders accessible at all times
 * Add stars to important directories
@@ -233,6 +234,28 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 2.9.8=
+Thrive Themes bug fixed
+
+= 2.9.7 =
+Changed shortcut for creating a new folder (Gutenberg conflict resolved)
+
+= 2.9.6 =
+Folders default color set bug fixed
+
+= 2.9.5 =
+Bug fixed
+
+= 2.9.4 =
+Infrastructure improvements - Folders works faster now 🚀
+Added Folders support for Plugins in the Pro version
+WooCommerce product support for Dynamic Folders
+Added support for LMS LearnPress plugin in the Pro version
+Bugs fixed
+
+= 2.9.3 =
+Security fix
 
 = 2.9.2 =
 MailPoet bug fixed

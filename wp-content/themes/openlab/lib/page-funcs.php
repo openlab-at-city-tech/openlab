@@ -10,10 +10,10 @@
  */
 function cuny_home_login() {
 
-	if ( is_user_logged_in() ) :
+	if ( is_user_logged_in() ) {
 
 		echo '<div id="open-lab-login" class="log-box links-lighter-hover">';
-		echo '<h1 class="title inline-element semibold hyphenate truncate-on-the-fly" data-basewidth="60" data-basevalue="60">Welcome, ' . esc_html( bp_core_get_user_displayname( bp_loggedin_user_id() ) ) . '</h1>';
+		echo '<h2 class="title inline-element semibold hyphenate truncate-on-the-fly" data-basewidth="60" data-basevalue="60">Welcome, ' . esc_html( bp_core_get_user_displayname( bp_loggedin_user_id() ) ) . '</h2>';
 		do_action( 'bp_before_sidebar_me' )
 		?>
 
@@ -51,13 +51,17 @@ function cuny_home_login() {
 		<?php echo '</div>'; ?>
 
 		<div id="login-help" class="log-box">
-			<h4 class="title">Need Help?</h4>
+			<h2 class="title">Need Help?</h2>
 			<p class="font-size font-14">Visit the <a class="roll-over-loss" href="<?php echo esc_attr( site_url() ); ?>/blog/help/openlab-help/">Help section</a> or <a class="roll-over-loss" href='<?php echo esc_attr( site_url() ); ?>/about/contact-us/'>contact us</a> with a question.</p>
 		</div><!--login-help-->
+		<?php
 
-	<?php else : ?>
+	} else {
+
+		?>
+
 		<?php echo '<div id="open-lab-join" class="log-box links-lighter-hover">'; ?>
-		<?php echo '<h1 class="title"><span class="fa fa-plus-circle flush-left"></span> Join the OpenLab</h1>'; ?>
+		<?php echo '<h2 class="title"><span class="fa fa-plus-circle flush-left"></span> Join the OpenLab</h2>'; ?>
 		<?php echo '<p><a class="btn btn-default btn-primary link-btn pull-right semibold" href="' . esc_attr( site_url() ) . '/register/">Sign up</a> <span class="font-size font-14">Need an account?<br />Sign Up to become a member!</span></p>'; ?>
 		<?php echo '</div>'; ?>
 
@@ -91,7 +95,7 @@ function cuny_home_login() {
 			</form>
 		</div>
 	<?php
-	endif;
+	}
 }
 
 /**
@@ -357,10 +361,10 @@ function cuny_home_square( $type ) {
 						<a href="<?php bp_group_permalink(); ?>"><img class="img-responsive" src="<?php echo esc_attr( $avatar_url ); ?>" alt="<?php echo esc_attr( $group->name ); ?>"/></a>
 					</div>
 					<div class="item-content-wrapper">
-						<h4 class="group-title overflow-hidden">
+						<h3 class="group-title overflow-hidden">
 							<a class="no-deco truncate-on-the-fly hyphenate" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?php echo esc_html( bp_get_group_name() ); ?></a>
 							<span class="original-copy hidden"><?php echo esc_html( bp_get_group_name() ); ?></span>
-						</h4>
+						</h3>
 
 						<p class="hyphenate overflow-hidden">
 							<?php
@@ -397,6 +401,23 @@ function cuny_home_square( $type ) {
 
 	echo $html; // WPCS: XSS ok
 }
+
+/**
+ * Busts the transient HTML cache for home page squares.
+ *
+ * Called when a group is created, deleted, or updated, or when the avatar is updated.
+ */
+function openlab_bust_home_square_cache() {
+	delete_transient( 'openlab_home_square_project' );
+	delete_transient( 'openlab_home_square_course' );
+	delete_transient( 'openlab_home_square_club' );
+	delete_transient( 'openlab_home_square_portfolio' );
+}
+add_action( 'groups_created_group', 'openlab_bust_home_square_cache' );
+add_action( 'groups_delete_group', 'openlab_bust_home_square_cache' );
+add_action( 'groups_group_after_save', 'openlab_bust_home_square_cache' );
+add_action( 'bp_core_delete_existing_avatar', 'openlab_bust_home_square_cache' );
+add_action( 'groups_avatar_uploaded', 'openlab_bust_home_square_cache' );
 
 /**
  *  openlab_groups_filter_clause()

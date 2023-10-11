@@ -88,8 +88,21 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                 <div class="new-image-box">
                     <div class="preview-box">
                         <div class="container" >
-                            <div class="container" >
+                            <div class="container image-preview" id="image-preview"  >
                                 <input type="file" name="new_media_file" id="media_file">
+                                <label class="sd-label">
+                                    <div class="upload-overlay">
+                                        <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M2 16.1667V17.6667C2 20.0599 3.9401 22 6.33333 22H21.6667C24.0599 22 26 20.0599 26 17.6667V16.1667M14 17.8333V2M14 2L20.8571 8.66667M14 2L7.14286 8.66667" stroke="#E6386C" stroke-width="2.16667" stroke-linejoin="round"></path> </svg>
+                                        <span class="upload-title"><?php esc_html_e("Drag and drop files here", "folders") ?></span>
+                                        <span class="upload-size"><?php esc_html_e("Maximum file size 40 MB", "folders") ?></span>
+                                    </div>
+                                </label>
+                                <div class="img-overlay" id="img-overlay">
+                                    <div id="file-name">File name: <span></span></div>
+                                    <div id="file-type">Type: <span></span></div>
+                                    <div id="file-dimension">Dimension: <span></span></div>
+                                    <div id="file-size">Size: <span></span></div>
+                                </div>
                             </div>
                         </div>
                     </div>

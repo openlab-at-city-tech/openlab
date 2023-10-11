@@ -6,8 +6,8 @@
  */
 namespace SimpleCalendar\Admin;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (!defined('ABSPATH')) {
+	exit();
 }
 
 /**
@@ -17,26 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 3.0.0
  */
-class Assets {
-
-	/**
-	 * Load minified assets.
-	 *
-	 * @access public
-	 * @var string
-	 */
-	public $min = '.min';
-
+class Assets
+{
 	/**
 	 * Hook in tabs.
 	 *
 	 * @since 3.0.0
 	 */
-	public function __construct() {
-
-		$this->min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG == true ) ? '' : '.min';
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'load' ) );
+	public function __construct()
+	{
+		add_action('admin_enqueue_scripts', [$this, 'load']);
 	}
 
 	/**
@@ -44,13 +34,13 @@ class Assets {
 	 *
 	 * @since 3.0.0
 	 */
-	public function load() {
-
-		$css_path        = SIMPLE_CALENDAR_ASSETS . 'css/';
+	public function load()
+	{
+		$css_path = SIMPLE_CALENDAR_ASSETS . 'generated/';
 		$css_path_vendor = $css_path . 'vendor/';
-		$js_path         = SIMPLE_CALENDAR_ASSETS . 'js/';
-		$js_path_vendor  = $js_path . 'vendor/';
-		$sc_screen       = get_current_screen();
+		$js_path = SIMPLE_CALENDAR_ASSETS . 'generated/';
+		$js_path_vendor = $js_path . 'vendor/';
+		$sc_screen = get_current_screen();
 
 		/* ====================== *
 		 * Register Admin Scripts *
@@ -59,36 +49,23 @@ class Assets {
 		// TipTip uses ".minified.js" filename ending.
 		wp_register_script(
 			'simcal-tiptip',
-			$js_path_vendor . 'jquery.tipTip' . ( ( $this->min !== '' ) ? '.minified' : '' ) . '.js',
-			array( 'jquery' ),
+			$js_path_vendor . 'jquery.tipTip.minified.js',
+			['jquery'],
 			SIMPLE_CALENDAR_VERSION,
 			true
 		);
-		wp_register_script(
-			'simcal-select2',
-			$js_path_vendor . 'select2' . $this->min . '.js',
-			array(),
-			SIMPLE_CALENDAR_VERSION,
-			true
-		);
+		wp_register_script('simcal-select2', $js_path_vendor . 'select2.min.js', [], SIMPLE_CALENDAR_VERSION, true);
 		wp_register_script(
 			'simcal-admin',
-			$js_path . 'admin' . $this->min . '.js',
-			array(
-				'jquery',
-				'jquery-ui-sortable',
-				'jquery-ui-datepicker',
-				'wp-color-picker',
-				'simcal-tiptip',
-				'simcal-select2',
-			),
+			$js_path . 'admin.min.js',
+			['jquery', 'jquery-ui-sortable', 'jquery-ui-datepicker', 'wp-color-picker', 'simcal-tiptip', 'simcal-select2'],
 			SIMPLE_CALENDAR_VERSION,
 			true
 		);
 		wp_register_script(
 			'simcal-admin-add-calendar',
-			$js_path . 'admin-add-calendar' . $this->min . '.js',
-			array( 'simcal-select2' ),
+			$js_path . 'admin-add-calendar.min.js',
+			['simcal-select2'],
 			SIMPLE_CALENDAR_VERSION,
 			true
 		);
@@ -97,80 +74,60 @@ class Assets {
 		 * Register Admin Styles *
 		 * ===================== */
 
-		wp_register_style(
-			'simcal-select2',
-			$css_path_vendor . 'select2' . $this->min . '.css',
-			array(),
-			SIMPLE_CALENDAR_VERSION
-		);
+		wp_register_style('simcal-select2', $css_path_vendor . 'select2.min.css', [], SIMPLE_CALENDAR_VERSION);
 		wp_register_style(
 			'simcal-admin',
-			$css_path . 'admin' . $this->min . '.css',
-			array(
-				'wp-color-picker',
-				'simcal-select2',
-			),
+			$css_path . 'admin.min.css',
+			['wp-color-picker', 'simcal-select2'],
 			SIMPLE_CALENDAR_VERSION
 		);
 		wp_register_style(
 			'simcal-admin-add-calendar',
-			$css_path . 'admin-add-calendar' . $this->min . '.css',
-			array( 'simcal-select2' ),
+			$css_path . 'admin-add-calendar.min.css',
+			['simcal-select2'],
 			SIMPLE_CALENDAR_VERSION
 		);
 
-		if ( simcal_is_admin_screen() !== false ) {
+		if (simcal_is_admin_screen() !== false) {
+			wp_enqueue_script('simcal-admin');
+			wp_localize_script('simcal-admin', 'simcal_admin', simcal_common_scripts_variables());
 
-			wp_enqueue_script( 'simcal-admin' );
-			wp_localize_script(
-				'simcal-admin',
-				'simcal_admin',
-				simcal_common_scripts_variables()
-			);
-
-			wp_enqueue_style( 'simcal-admin' );
-
+			wp_enqueue_style('simcal-admin');
 		} else {
-
 			global $post_type;
 			$screen = get_current_screen();
 
-			$post_types = array();
-			$settings = get_option( 'simple-calendar_settings_calendars' );
-			if ( isset( $settings['general']['attach_calendars_posts'] ) ) {
+			$post_types = [];
+			$settings = get_option('simple-calendar_settings_calendars');
+			if (isset($settings['general']['attach_calendars_posts'])) {
 				$post_types = $settings['general']['attach_calendars_posts'];
 			}
 
-			$conditions = array(
-				in_array( $post_type, (array) $post_types ),
-				$screen->id == 'widgets',
-			);
+			$conditions = [in_array($post_type, (array) $post_types), $screen->id == 'widgets'];
 
-			if ( in_array( true, $conditions ) ) {
-
-				wp_enqueue_script( 'simcal-admin-add-calendar' );
-				wp_localize_script( 'simcal-admin-add-calendar', 'simcal_admin', array(
-					'locale'   => get_locale(),
+			if (in_array(true, $conditions)) {
+				wp_enqueue_script('simcal-admin-add-calendar');
+				wp_localize_script('simcal-admin-add-calendar', 'simcal_admin', [
+					'locale' => get_locale(),
 					'text_dir' => is_rtl() ? 'rtl' : 'ltr',
-				) );
+				]);
 
-				wp_enqueue_style( 'simcal-admin-add-calendar' );
+				wp_enqueue_style('simcal-admin-add-calendar');
 			}
-		}	
-	// Load the style in admin setting page only.	
-		if ( 'calendar_page_simple-calendar_settings' == $sc_screen->id ) {
-			wp_enqueue_style(
-				'sc-admin-style',
-				$css_path . 'admin-sett-style.css',
-				array(),
-				SIMPLE_CALENDAR_VERSION
-			);
-			wp_enqueue_style(
-				'sc-tail-style',
-				$css_path . 'tailwind-output-style.css',
-				array(),
-				SIMPLE_CALENDAR_VERSION
-			);	
-		}	
+		}
+
+		// Load the style on where that needed.
+		if ('calendar_page_simple-calendar_settings' == $sc_screen->id) {
+			wp_enqueue_style('sc-admin-style', $css_path . 'admin-sett-style.min.css', [], SIMPLE_CALENDAR_VERSION);
+			wp_enqueue_style('sc-tail-style', $css_path . 'tailwind.min.css', [], SIMPLE_CALENDAR_VERSION);
+		}
+		if (
+			'dashboard_page_simple-calendar_about' == $sc_screen->id ||
+			'dashboard_page_simple-calendar_credits' == $sc_screen->id ||
+			'dashboard_page_simple-calendar_translators' == $sc_screen->id
+		) {
+			wp_enqueue_style('sc-welcome-style', $css_path . 'sc-welcome-pg-style.min.css', [], SIMPLE_CALENDAR_VERSION);
+			wp_enqueue_style('sc-tail-style', $css_path . 'tailwind.min.css', [], SIMPLE_CALENDAR_VERSION);
+		}
 	}
 }

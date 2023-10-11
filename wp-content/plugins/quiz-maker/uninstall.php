@@ -35,6 +35,7 @@ if(get_option('ays_quiz_maker_upgrade_plugin','false') === 'false'){
     $quizes_table               =   $wpdb->prefix . 'aysquiz_quizes';
     $questions_table            =   $wpdb->prefix . 'aysquiz_questions';
     $question_categories_table  =   $wpdb->prefix . 'aysquiz_categories';
+    $question_tags_table        =   $wpdb->prefix . 'aysquiz_question_tags';
     $answers_table              =   $wpdb->prefix . 'aysquiz_answers';
     $reports_table              =   $wpdb->prefix . 'aysquiz_reports';
     $rates_table                =   $wpdb->prefix . 'aysquiz_rates';
@@ -42,6 +43,7 @@ if(get_option('ays_quiz_maker_upgrade_plugin','false') === 'false'){
     $attributes_table           =   $wpdb->prefix . 'aysquiz_attributes';
     $orders_table               =   $wpdb->prefix . 'aysquiz_orders';
     $settings_table             =   $wpdb->prefix . 'aysquiz_settings';
+    $question_reports_table     =   $wpdb->prefix . 'aysquiz_question_reports';
 
 
     $wpdb->query("DROP TABLE IF EXISTS `".$answers_table."`");
@@ -52,9 +54,11 @@ if(get_option('ays_quiz_maker_upgrade_plugin','false') === 'false'){
     $wpdb->query("DROP TABLE IF EXISTS `".$themes_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$quiz_categories_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$question_categories_table."`");
+    $wpdb->query("DROP TABLE IF EXISTS `".$question_tags_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$attributes_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$orders_table."`");
     $wpdb->query("DROP TABLE IF EXISTS `".$settings_table."`");
+    $wpdb->query("DROP TABLE IF EXISTS `".$question_reports_table."`");
 
     delete_option( "ays_quiz_db_version");
     delete_option( "ays_quiz_maker_upgrade_plugin");

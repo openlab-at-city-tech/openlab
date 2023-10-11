@@ -33,6 +33,7 @@
     $user_id = get_current_user_id();
 
     $quiz_id = isset( $primaryResponse['quizId'] ) ? $primaryResponse['quizId'] : 0;
+    $payment_type = $primaryResponse['paymentType'];
     $payment_terms = isset( $primaryResponse['paymentTerms'] ) ? $primaryResponse['paymentTerms'] : 'lifetime';
     $order_id = isset( $primaryResponse['data']['id'] ) ? $primaryResponse['data']['id'] : '';
     $payment_date = isset( $primaryResponse['data']['created'] ) ? current_time( 'Y-m-d H:i:s', $primaryResponse['data']['created'] ) : current_time( 'mysql' );
@@ -53,22 +54,28 @@
         'order_full_name' => $order_full_name,
         'order_email' => $order_email,
         'payment_date' => $payment_date,
+        'payment_type' => $payment_type,
         'amount' => $amount,
+        'status' => 'created',
         'options' => json_encode( $options )
     );
     $result = $wpdb->insert(
         $wpdb->prefix . "aysquiz_orders",
         $order,
-        array( '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
+        array( '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
     );
     if( $result >= 0  ) {
         switch($payment_terms){
             case "onetime":
-                $_SESSION['ays_quiz_stripe_purchase'] = true;
+                $_SESSION['ays_quiz_stripe_purchase'][$quiz_id] = true;
+                $_SESSION['ays_quiz_stripe_purchased_item'][$quiz_id]['status'] = 'created';
+                $_SESSION['ays_quiz_stripe_purchased_item'][$quiz_id]['order_id'] = $wpdb->insert_id;
                 $user_meta = true;
             break;
             case "lifetime":
-                $_SESSION['ays_quiz_stripe_purchase'] = true;
+                $_SESSION['ays_quiz_stripe_purchase'][$quiz_id] = true;
+                $_SESSION['ays_quiz_stripe_purchased_item'][$quiz_id]['status'] = 'created';
+                $_SESSION['ays_quiz_stripe_purchased_item'][$quiz_id]['order_id'] = $wpdb->insert_id;
                 $current_usermeta = get_user_meta($user_id, "quiz_stripe_purchase");
                 if($current_usermeta !== false && !empty($current_usermeta)){
                     foreach($current_usermeta as $key => $usermeta){

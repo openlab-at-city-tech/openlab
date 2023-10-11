@@ -3,8 +3,8 @@ Contributors: simplecalendar, rosinghal, pderksen, nickyoung87, nekojira, rossha
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
 Requires PHP: 7.3
-Tested up to: 6.2
-Stable tag: 3.2.0
+Tested up to: 6.3.1
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,20 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.2.4 =
+* Fix: Compatibility with WP 6.3.1.
+
+= 3.2.3 =
+* Fix: Add PHP polyfill to fix regression "Call to undefined function str_contains()" error.
+
+= 3.2.2 =
+*  Dev: Update Google API client library to 2.13.1.
+*  Fix: 'if-not-today' shortcode with all day event display issue.
+*  Dev: Revamp admin setting page banner design.
+
+= 3.2.1 =
+* Dev: Revamp welcome page.
 
 = 3.2.0 =
 * Dev: Revamp admin setting page.

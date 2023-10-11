@@ -626,7 +626,7 @@ trait Date
      *
      * @link https://php.net/manual/en/datetime.gettimezone.php
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getTimezone()
     {
         return CarbonTimeZone::instance(parent::getTimezone());
@@ -1362,7 +1362,7 @@ trait Date
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function setDate($year, $month, $day)
     {
         return parent::setDate((int) $year, (int) $month, (int) $day);
@@ -1378,7 +1378,7 @@ trait Date
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function setISODate($year, $week, $day = 1)
     {
         return parent::setISODate((int) $year, (int) $week, (int) $day);
@@ -1412,7 +1412,7 @@ trait Date
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function setTime($hour, $minute, $second = 0, $microseconds = 0)
     {
         return parent::setTime((int) $hour, (int) $minute, (int) $second, (int) $microseconds);
@@ -1426,7 +1426,7 @@ trait Date
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function setTimestamp($unixTimestamp)
     {
         [$timestamp, $microseconds] = self::getIntegerAndDecimalParts($unixTimestamp);
@@ -1478,7 +1478,7 @@ trait Date
      *
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function setTimezone($value)
     {
         $tz = static::safeCreateDateTimeZone($value);

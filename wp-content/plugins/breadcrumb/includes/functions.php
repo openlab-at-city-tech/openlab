@@ -341,16 +341,20 @@ function breadcrumb_tag_options_post_id($parameters)
 
             <?php
 
-            $prefix_text = '';
+
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_id';
+
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
 
-                'parent' => $input_name . '[post_id]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -385,15 +389,17 @@ function breadcrumb_tag_options_post_ancestors($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_ancestors';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_ancestors]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -428,15 +434,17 @@ function breadcrumb_tag_options_post_year($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_year';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_year]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -472,15 +480,17 @@ function breadcrumb_tag_options_post_month($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_month';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_month]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -514,15 +524,17 @@ function breadcrumb_tag_options_post_date($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_date';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_date]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -557,15 +569,17 @@ function breadcrumb_tag_options_post_tag($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_tag';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_tag]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -586,6 +600,11 @@ function breadcrumb_tag_options_front_text($parameters)
     $settings_tabs_field = new settings_tabs_field();
     $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
+    $options = isset($parameters['options']) ? $parameters['options'] : array();
+    $index = isset($parameters['index']) ? $parameters['index'] : 0;
+
+    $text = isset($options['text']) ? $options['text'] : '';
+
 
 ?>
     <div class="item">
@@ -599,15 +618,28 @@ function breadcrumb_tag_options_front_text($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'front_text';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[home]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
+            $args = array(
+                'id'        => 'text',
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Text', 'breadcrumb'),
+                'details'    => __('Write custom text.', 'breadcrumb'),
+                'type'        => 'text',
+                'value'        => $text,
                 'default'        => '',
             );
 
@@ -629,6 +661,7 @@ function breadcrumb_tag_options_custom_text($parameters)
     $settings_tabs_field = new settings_tabs_field();
     $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
     $options = isset($parameters['options']) ? $parameters['options'] : array();
+    $index = isset($parameters['index']) ? $parameters['index'] : 0;
 
     $text = isset($options['text']) ? $options['text'] : '';
     $link = isset($options['link']) ? $options['link'] : '';
@@ -639,16 +672,38 @@ function breadcrumb_tag_options_custom_text($parameters)
             <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
             <span class="sort"><i class="fas fa-sort"></i></span>
 
-            <span class="expand"><?php echo __('Custom text', 'breadcrumb'); ?></span>
+            <span class="expand"><?php echo __('Custom text', 'breadcrumb'); ?> - <?php echo esc_html($text); ?></span>
         </div>
         <div class="element-options options">
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'custom_text';
+
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
+
+
+
+
             $args = array(
                 'id'        => 'text',
-                'parent' => $input_name . '[custom_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Text', 'breadcrumb'),
                 'details'    => __('Write custom text.', 'breadcrumb'),
                 'type'        => 'text',
@@ -661,7 +716,7 @@ function breadcrumb_tag_options_custom_text($parameters)
 
             $args = array(
                 'id'        => 'link',
-                'parent' => $input_name . '[custom_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Link', 'breadcrumb'),
                 'details'    => __('Write link.', 'breadcrumb'),
                 'type'        => 'text',
@@ -688,6 +743,7 @@ function breadcrumb_tag_options_home($parameters)
     $settings_tabs_field = new settings_tabs_field();
     $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
     $options = isset($parameters['options']) ? $parameters['options'] : array();
+    $index = isset($parameters['index']) ? $parameters['index'] : 0;
 
     $url = isset($options['url']) ? $options['url'] : '';
     $text = isset($options['text']) ? $options['text'] : '';
@@ -705,11 +761,27 @@ function breadcrumb_tag_options_home($parameters)
 
             <?php
 
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'home';
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
 
             $args = array(
                 'id'        => 'text',
                 'wrapper_class'        => '',
-                'parent' => $input_name . '[home]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Home Custom Text', 'breadcrumb'),
                 'details'    => __('Set custom text for Home.', 'breadcrumb'),
                 'type'        => 'text',
@@ -724,7 +796,7 @@ function breadcrumb_tag_options_home($parameters)
             $args = array(
                 'id'        => 'url',
                 'wrapper_class'        => '',
-                'parent' => $input_name . '[home]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Home URL', 'breadcrumb'),
                 'details'    => __('Custom URL for Home.', 'breadcrumb'),
                 'type'        => 'text',
@@ -766,15 +838,17 @@ function breadcrumb_tag_options_post_title($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_title';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_title]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -810,15 +884,17 @@ function breadcrumb_tag_options_post_author($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_author';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_author]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -854,15 +930,17 @@ function breadcrumb_tag_options_post_category($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_category';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[post_category]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -884,6 +962,7 @@ function breadcrumb_tag_options_post_term($parameters)
     $settings_tabs_field = new settings_tabs_field();
     $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
     $options = isset($parameters['options']) ? $parameters['options'] : array();
+    $index = isset($parameters['index']) ? $parameters['index'] : 0;
     $taxonomy = isset($options['taxonomy']) ? $options['taxonomy'] : '';
 
     //var_dump($options);
@@ -894,16 +973,35 @@ function breadcrumb_tag_options_post_term($parameters)
             <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
             <span class="sort"><i class="fas fa-sort"></i></span>
 
-            <span class="expand"><?php echo __('Post term(Category/Tag)', 'breadcrumb'); ?></span>
+            <span class="expand"><?php echo __('Post term(Category/Tag)', 'breadcrumb'); ?> - <?php echo esc_html($taxonomy); ?></span>
         </div>
         <div class="element-options options">
 
             <?php
 
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'post_term';
+
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
 
             $args = array(
                 'id'        => 'taxonomy',
-                'parent' => $input_name . '[post_term]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Taxonomy', 'breadcrumb'),
                 'details'    => __('Write post taxonomy. ex: <code>category, post_tag</code>', 'breadcrumb'),
                 'type'        => 'text',
@@ -949,15 +1047,17 @@ function breadcrumb_tag_options_product_cat($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'product_cat';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[product_cat]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -979,7 +1079,7 @@ function breadcrumb_tag_options_category_ancestors($parameters)
     $settings_tabs_field = new settings_tabs_field();
     $input_name = isset($parameters['input_name']) ? $parameters['input_name'] : '{input_name}';
 
-    $prefix_text = isset($parameters['options']['prefix_text']) ? $parameters['options']['prefix_text'] : '';
+    $elementId = isset($parameters['options']['elementId']) ? $parameters['options']['elementId'] : '';
 
     $taxonomy = isset($parameters['options']['taxonomy']) ? $parameters['options']['taxonomy'] : '';
 
@@ -989,22 +1089,24 @@ function breadcrumb_tag_options_category_ancestors($parameters)
             <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
             <span class="sort"><i class="fas fa-sort"></i></span>
 
-            <span class="expand"><?php echo __('Category Ancestors', 'breadcrumb'); ?></span>
+            <span class="expand"><?php echo __('Category Ancestors', 'breadcrumb'); ?> - <?php echo esc_html($taxonomy); ?></span>
         </div>
         <div class="element-options options">
 
             <?php
 
-            //$prefix_text = '';
+            //                $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'category_ancestors';
             $args = array(
-                'id'        => 'prefix_text',
-                'parent' => $input_name . '[category_ancestors]',
+                'id'        => 'elementId',
+                'parent' => $input_name . '[' . $index . ']',
 
                 'wrapper_class'        => 'hidden',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1013,7 +1115,7 @@ function breadcrumb_tag_options_category_ancestors($parameters)
 
             $args = array(
                 'id'        => 'taxonomy',
-                'parent' => $input_name . '[category_ancestors]',
+                'parent' => $input_name . '[' . $index . ']',
 
                 'wrapper_class'        => 'hidden',
                 'title'        => __('Taxonomy', 'breadcrumb'),
@@ -1055,15 +1157,17 @@ function breadcrumb_tag_options_product_tag($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'product_tag';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[product_tag]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1101,15 +1205,17 @@ function breadcrumb_tag_options_wc_shop($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'wc_shop';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[wc_shop]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1146,15 +1252,17 @@ function breadcrumb_tag_options_term_title($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'term_title';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[term_title]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1190,15 +1298,17 @@ function breadcrumb_tag_options_term_parent($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'term_parent';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[term_parent]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1233,15 +1343,17 @@ function breadcrumb_tag_options_term_ancestors($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'term_ancestors';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[term_ancestors]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1278,15 +1390,17 @@ function breadcrumb_tag_options_404_text($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : '404_text';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[404_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1326,11 +1440,27 @@ function breadcrumb_tag_options_date_text($parameters)
 
             <?php
 
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'date_text';
 
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
 
             $args = array(
                 'id'        => 'date_format',
-                'parent' => $input_name . '[date_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Date format', 'breadcrumb'),
                 'details'    => __('Write date format.', 'breadcrumb'),
                 'type'        => 'text',
@@ -1374,11 +1504,27 @@ function breadcrumb_tag_options_month_text($parameters)
 
             <?php
 
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'month_text';
 
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
 
             $args = array(
                 'id'        => 'date_format',
-                'parent' => $input_name . '[month_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Date format', 'breadcrumb'),
                 'details'    => __('Write date format.', 'breadcrumb'),
                 'type'        => 'text',
@@ -1423,11 +1569,27 @@ function breadcrumb_tag_options_year_text($parameters)
 
             <?php
 
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'year_text';
 
+            $args = array(
+                'id'        => 'elementId',
+                'wrapper_class'        => 'hidden',
+
+                'parent' => $input_name . '[' . $index . ']',
+                'title'        => __('Prefix text', 'breadcrumb'),
+                'details'    => __('Add prefix text.', 'breadcrumb'),
+                'type'        => 'hidden',
+                'value'        => $elementId,
+                'default'        => '',
+            );
+
+            $settings_tabs_field->generate_field($args);
 
             $args = array(
                 'id'        => 'date_format',
-                'parent' => $input_name . '[year_text]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Date format', 'breadcrumb'),
                 'details'    => __('Write date format.', 'breadcrumb'),
                 'type'        => 'text',
@@ -1471,15 +1633,17 @@ function breadcrumb_tag_options_search_word($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'search_word';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[search_word]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 
@@ -1515,15 +1679,17 @@ function breadcrumb_tag_options_author_name($parameters)
 
             <?php
 
-            $prefix_text = '';
+            $options = isset($parameters['options']) ? $parameters['options'] : array();
+            $index = isset($parameters['index']) ? $parameters['index'] : 0;
+            $elementId = isset($options['elementId']) ? $options['elementId'] : 'author_name';
             $args = array(
-                'id'        => 'prefix_text',
+                'id'        => 'elementId',
                 'wrapper_class'        => 'hidden',
-                'parent' => $input_name . '[author_name]',
+                'parent' => $input_name . '[' . $index . ']',
                 'title'        => __('Prefix text', 'breadcrumb'),
                 'details'    => __('Add prefix text.', 'breadcrumb'),
                 'type'        => 'hidden',
-                'value'        => $prefix_text,
+                'value'        => $elementId,
                 'default'        => '',
             );
 

@@ -1,0 +1,21 @@
+div.ays-quiz-affiliate-main.wrap div.ays-quiz-affiliate-main-box{
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+div.ays-quiz-affiliate-main.wrap div.ays-quiz-affiliate-main-box .ays-quiz-affiliate-texts-box{
+    margin-top: 25px;
+}
+
+div.ays-quiz-affiliate-main.wrap div.ays-quiz-affiliate-main-box .ays-quiz-affiliate-link{
+    display: inline-block;
+    padding: 10px;
+    background-color: #2271b1;
+    color: white;
+    border-radius: 4px;
+}
+
+div.ays-quiz-affiliate-main.wrap div.ays-quiz-affiliate-main-box .ays-quiz-affiliate-menus{
+    padding:0 10px;
+}

@@ -27,7 +27,7 @@ window.wp = window.wp || {};
 			} );
 
 			// Init existing items.
-			$existing = $.parseJSON( OL_Addl_Faculty_Existing );
+			$existing = JSON.parse( OL_Addl_Faculty_Existing );
 			$.each( $existing, function( k, v ) {
 				create_list_item( v.value, v.label );
 			} );
@@ -78,7 +78,7 @@ window.wp = window.wp || {};
 			} );
 
 			// Init existing items.
-			$existing = $.parseJSON( OL_Primary_Faculty_Existing );
+			$existing = JSON.parse( OL_Primary_Faculty_Existing );
 			$.each( $existing, function( k, v ) {
 				create_list_item( v.value, v.label );
 			} );

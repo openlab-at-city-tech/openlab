@@ -47,9 +47,10 @@
             var result_id = $(this).attr('data-id');
             var action = 'user_reports_info_popup_ajax';
             $.ajax({
-                url: quiz_maker_ajax_public.ajax_url,
+                url: quiz_maker_ajax_user_page_public.ajax_url,
                 method: 'post',
                 dataType: 'json',
+                crossDomain: true,
                 data: {
                     result: result_id,
                     action: action
@@ -89,9 +90,10 @@
             $this.attr('disabled');
 
             $.ajax({
-                url: quiz_maker_ajax_public.ajax_url,
+                url: quiz_maker_ajax_user_page_public.ajax_url,
                 method: 'post',
                 dataType: 'json',
+                crossDomain: true,
                 data: {
                     action: action,
                     result: result_id,
@@ -116,6 +118,54 @@
             e.preventDefault();
         });
 
+        var startDateColumn = $(document).find('#ays-quiz-user-score-page th.ays-quiz-user-results-start-date-column');
+        var startDateColumnIndex = startDateColumn.parents('thead').find('th').index(startDateColumn);
+        var endDateColumn = $(document).find('#ays-quiz-user-score-page th.ays-quiz-user-results-end-date-column');
+        var endDateColumnIndex = endDateColumn.parents('thead').find('th').index(endDateColumn);
+
+        var dataTableData = {
+        	"language": {
+				"sEmptyTable":     quizLangDataTableObj.sEmptyTable,
+				"sInfo":           quizLangDataTableObj.sInfo,
+				"sInfoEmpty":      quizLangDataTableObj.sInfoEmpty,
+				"sInfoFiltered":   quizLangDataTableObj.sInfoFiltered,
+				"sInfoPostFix":    "",
+				"sInfoThousands":  ",",
+				"sLengthMenu":     quizLangDataTableObj.sLengthMenu,
+				"sLoadingRecords": quizLangDataTableObj.sLoadingRecords,
+				"sProcessing":     quizLangDataTableObj.sProcessing,
+				"sSearch":         quizLangDataTableObj.sSearch,
+				"sUrl":            "",
+				"sZeroRecords":    quizLangDataTableObj.sZeroRecords,
+				"oPaginate": {
+					"sFirst":    quizLangDataTableObj.sFirst,
+					"sLast":     quizLangDataTableObj.sLast,
+					"sNext":     quizLangDataTableObj.sNext,
+					"sPrevious": quizLangDataTableObj.sPrevious,
+				},
+				"oAria": {
+					"sSortAscending":  quizLangDataTableObj.sSortAscending,
+					"sSortDescending": quizLangDataTableObj.sSortDescending
+				}
+		    }
+		}
+
+        if( endDateColumnIndex !== -1 ){
+            dataTableData.order = [[ endDateColumnIndex, "desc" ]];
+        }
+
+//        if( endDateColumnIndex !== -1 && startDateColumnIndex !== -1 ){
+//            dataTableData.columnDefs = [{
+//                "targets": [endDateColumnIndex, startDateColumnIndex],
+//                "type": "date"
+//            }];
+//        }
+
+        // for details
+        var is_empty_result = $(document).find('.ays-quiz-user-results-container');
+        if ( !is_empty_result.hasClass("ays-quiz-user-results-empty") ) {
+            $(document).find('#ays-quiz-user-score-page').DataTable( dataTableData );
+        }
     });
     
 })(jQuery);

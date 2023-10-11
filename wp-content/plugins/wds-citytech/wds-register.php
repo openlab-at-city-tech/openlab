@@ -100,18 +100,6 @@ function wds_email_validate() {
 		return;
 	}
 
-	// Check code sigups first.
-	if ( isset( $_POST['signup_validation_code'] ) ) {
-		$is_valid = cac_ncs_validate_code( $_POST['signup_validation_code'] );
-
-		if ( ! $is_valid ) {
-			$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';
-		}
-
-		return;
-	}
-
-
 	$email        = $_POST['signup_email'];
 	$email_parts  = explode( '@', $email );
 	$domain       = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ): '';
@@ -569,3 +557,15 @@ function openlab_user_activated_send_group_invites( $user_id ) {
 	groups_send_invites( $inviter_id, $group_id );
 }
 add_action( 'bp_core_activated_user', 'openlab_user_activated_send_group_invites', 11 );
+
+/**
+ * Add a specific class to server-side validation errors.
+ *
+ * This allows us to remove them easily using client-side validation.
+ */
+add_filter(
+	'bp_members_signup_error_message',
+	function( $message ) {
+		return str_replace( 'class="error"', 'class="error submitted-form-validation-error"', $message );
+	}
+);

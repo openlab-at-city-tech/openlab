@@ -1,13 +1,37 @@
-### 2.7.10.1
+### 2.7.14.2
+- Fixed an issue that causes fatal errors on some sites during the background processing of telemetry data.
+
+### 2.7.14.1
+- AF: Fixed the `Creation of dynamic property CLASS::$delayed_payment_integration is deprecated` notice with PHP 8.2.
+- AF: Fixed an issue where the background feed processor uses a stale instance of the add-on to process the feed preventing the {apc_media} merge tags from outputting values.
+- Fixed an issue where feed settings for ActiveCampaign, Agile CRM, Breeze, Mailchimp, Trello, Twilio, and ZohoCRM display a deprecation warning when using PHP 8.1.
+
+
+### 2.7.14 | 2023-09-19
+- Added validation to name, post title, post body, single line text, paragraph text & address fields to prevent empty entries when fields are filled with text encoded with invalid charset for the database table.
+- Fixed an issue where editing an entry with a multifile upload field could result in broken links to files.
+- AF: Fixed the `strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated` notice that can occur with PHP 8.1 when getting a setting value.
+
+### 2.7.13 | 2023-08-23
+- Updated the minimum WordPress version on the System Status page to 6.2.
+- Updated product usage data so it is processed in the background.
+
+### 2.7.12 | 2023-08-08
+- Fixed a fatal error that occurs when a mapped setup_fee field is hidden by conditional logic.
+- AF: Added the [`$_min_compatible_gravityforms_version`](https://docs.gravityforms.com/gfaddon/#h-the-class-variables) property to the `GFFAddOn` class, enabling add-ons to specify the minimum Gravity Forms version that is compatible with all the add-on features.
+
+### 2.7.11 | 2023-07-27
+- Added a block theme setting for form input accent color.
 - Fixed an issue that causes JavaScript errors in the theme if certain script optimization plugins are used.
 - Fixed an issue where honeypot validation was failing on multipage forms if the last page was hidden by conditional logic.
 - Fixed an issue where printing an entry with the nested form field is causing a fatal error.
-- Fixed errors that occur when attempting to install translations and the WordPress filesystem requires credentials.
-- Fixed the "no route found" error when performing an OPTIONS request to the REST API v2 endpoints
+- Fixed errors that occur when attempting to install translations on a WordPress filesystem that requires credentials.
+- Fixed the "no route found" error when performing an OPTIONS request to the REST API v2 endpoints.
 - Fixed an issue where license validation fails when using a non-standard license key.
-- Added a theme framework utility class of `.gform-theme__disable-reset` to disable theme framework reset styles.
-- Added a theme framework utility class of `.gform-theme__disable-framework` to disable theme framework styles.
-- Added a theme framework utility class of `.gform-theme__disable` to disable theme framework and reset styles.
+- API: Added support for an accent color for input styles for the theme framework.
+- API: Added a theme framework utility class of `.gform-theme__disable-reset` to disable theme framework reset styles.
+- API: Added a theme framework utility class of `.gform-theme__disable-framework` to disable theme framework styles.
+- API: Added a theme framework utility class of `.gform-theme__disable` to disable theme framework and reset styles.
 
 ### 2.7.10 | 2023-07-12
 - Added security enhancements.
@@ -18,6 +42,7 @@
 - Updated the Orbital theme to support max-height/scroll for the consent field.
 - Updated the thumbnail image in the template library for the eCommerce template.
 - Updated the name of the form block to "Form" to make it easier to find in the block inserter.
+
 
 ### 2.7.9 | 2023-06-22
 - Fixed an issue where an empty Number type Quantity field fails validation with a decimals-related error message.

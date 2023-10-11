@@ -75,15 +75,28 @@
             button: {
                 text: 'Upload'
             },
+            frame:    'post',    // <-- this is the important part
+            state:    'insert',
             library: {
                 type: 'image'
             },
             multiple: false
-        }).on('select', function () {
-            var attachment = aysUploader.state().get('selection').first().toJSON();
+        }).on('insert', function () {
+            // var attachment = aysUploader.state().get('selection').first().toJSON();
             var wrap = element.parents('.ays-image-wrap');
-            wrap.find('.ays-image-container img').attr('src', attachment.url);
-            wrap.find('input.ays-image-path').val(attachment.url);
+
+            var state = aysUploader.state();
+            var selection = selection || state.get('selection');
+            if (! selection) return;
+            // We set multiple to false so only get one image from the uploader
+            var attachment = selection.first();
+            var display = state.display(attachment).toJSON();  // <-- additional properties
+            attachment = attachment.toJSON();
+            // Do something with attachment.id and/or attachment.url here
+            var imgurl = attachment.sizes[display.size].url;
+
+            wrap.find('.ays-image-container img').attr('src', imgurl);
+            wrap.find('input.ays-image-path').val(imgurl);
             wrap.find('.ays-image-container').fadeIn();
             wrap.find('a.ays-add-image').hide();
         }).open();
@@ -97,16 +110,29 @@
             button: {
                 text: 'Upload'
             },
+            frame:    'post',    // <-- this is the important part
+            state:    'insert',
             library: {
                 type: 'image'
             },
             multiple: false
-        }).on('select', function () {
-            var attachment = aysUploader.state().get('selection').first().toJSON();
+        }).on('insert', function () {
+            // var attachment = aysUploader.state().get('selection').first().toJSON();
+
+            var state = aysUploader.state();
+            var selection = selection || state.get('selection');
+            if (! selection) return;
+            // We set multiple to false so only get one image from the uploader
+            var attachment = selection.first();
+            var display = state.display(attachment).toJSON();  // <-- additional properties
+            attachment = attachment.toJSON();
+            // Do something with attachment.id and/or attachment.url here
+            var imgurl = attachment.sizes[display.size].url;
+
             element.text('Edit Image');
             element.parent().parent().find('.ays-question-image-container').fadeIn();
-            element.parent().parent().find('img#ays-question-img').attr('src', attachment.url);
-            element.parent().parent().find('input#ays-question-image').val(attachment.url);
+            element.parent().parent().find('img#ays-question-img').attr('src', imgurl);
+            element.parent().parent().find('input#ays-question-image').val(imgurl);
         }).open();
         return false;
     }
@@ -118,16 +144,29 @@
             button: {
                 text: 'Upload'
             },
+            frame:    'post',    // <-- this is the important part
+            state:    'insert',
             library: {
                 type: 'image'
             },
             multiple: false
-        }).on('select', function () {
-            var attachment = aysUploader.state().get('selection').first().toJSON();
+        }).on('insert', function () {
+            // var attachment = aysUploader.state().get('selection').first().toJSON();
+
+            var state = aysUploader.state();
+            var selection = selection || state.get('selection');
+            if (! selection) return;
+            // We set multiple to false so only get one image from the uploader
+            var attachment = selection.first();
+            var display = state.display(attachment).toJSON();  // <-- additional properties
+            attachment = attachment.toJSON();
+            // Do something with attachment.id and/or attachment.url here
+            var imgurl = attachment.sizes[display.size].url;
+
             element.text('Edit Image');
             element.parent().parent().find('.ays-question-bg-image-container').fadeIn();
-            element.parent().parent().find('img#ays-question-bg-img').attr('src', attachment.url);
-            element.parent().parent().find('input#ays-question-bg-image').val(attachment.url);
+            element.parent().parent().find('img#ays-question-bg-img').attr('src', imgurl);
+            element.parent().parent().find('input#ays-question-bg-image').val(imgurl);
         }).open();
         return false;
     }
@@ -139,6 +178,8 @@
             button: {
                 text: 'Upload'
             },
+            // frame:    'post',    // <-- this is the important part
+            // state:    'insert',
             library: {
                 type: 'audio'
             },
@@ -158,28 +199,41 @@
             button: {
                 text: 'Upload'
             },
+            frame:    'post',    // <-- this is the important part
+            state:    'insert',
             library: {
                 type: 'image'
             },
             multiple: false
-        }).on('select', function () {
-            var attachment = aysUploader.state().get('selection').first().toJSON();
+        }).on('insert', function () {
+            // var attachment = aysUploader.state().get('selection').first().toJSON();
+
+            var state = aysUploader.state();
+            var selection = selection || state.get('selection');
+            if (! selection) return;
+            // We set multiple to false so only get one image from the uploader
+            var attachment = selection.first();
+            var display = state.display(attachment).toJSON();  // <-- additional properties
+            attachment = attachment.toJSON();
+            // Do something with attachment.id and/or attachment.url here
+            var imgurl = attachment.sizes[display.size].url;
+
             if(element.hasClass('add-quiz-bg-image')){
-                element.parent().find('img#ays-quiz-bg-img').attr('src', attachment.url);
+                element.parent().find('img#ays-quiz-bg-img').attr('src', imgurl);
                 element.parent().find('.ays-quiz-bg-image-container').fadeIn();
                 element.next().val(attachment.url);
-                jQuery(document).find('.ays-quiz-live-container').css({'background-image': 'url("'+attachment.url+'")'});
+                jQuery(document).find('.ays-quiz-live-container').css({'background-image': 'url("'+imgurl+'")'});
                 element.hide();
             }else if(element.hasClass('ays-edit-quiz-bg-img')){
                 element.parent().find('.ays-quiz-bg-image-container').fadeIn();
-                element.parent().find('img#ays-quiz-bg-img').attr('src', attachment.url);
-                jQuery(document).find('#ays_quiz_bg_image').val(attachment.url);
-                jQuery(document).find('.ays-quiz-live-container').css({'background-image': 'url("'+attachment.url+'")'});
+                element.parent().find('img#ays-quiz-bg-img').attr('src', imgurl);
+                jQuery(document).find('#ays_quiz_bg_image').val(imgurl);
+                jQuery(document).find('.ays-quiz-live-container').css({'background-image': 'url("'+imgurl+'")'});
             }else{
                 element.text('Edit Image');
                 element.parent().parent().find('.ays-quiz-image-container').fadeIn();
-                element.parent().parent().find('img#ays-quiz-img').attr('src', attachment.url);
-                jQuery('input#ays-quiz-image').val(attachment.url);
+                element.parent().parent().find('img#ays-quiz-img').attr('src', imgurl);
+                jQuery('input#ays-quiz-image').val(imgurl);
                 var ays_quiz_theme = jQuery(document).find('input[name="ays_quiz_theme"]:checked').val();
                 switch (ays_quiz_theme) {
                     case 'elegant_dark':
@@ -188,18 +242,20 @@
                     case 'rect_dark':
                     case 'classic_dark':
                     case 'classic_light':
-                        jQuery(document).find('#ays-quiz-live-image').attr('src', attachment.url);
-                        jQuery(document).find('#ays-quiz-live-image').css({'display': 'block'});
+                        jQuery(document).find('.ays-quiz-live-image').attr('src', imgurl);
+                        jQuery(document).find('.ays-quiz-live-image').css({'display': 'block'});
                         break;
                     case 'modern_light':
                     case 'modern_dark':
-                        jQuery(document).find('.ays-quiz-live-container').css({'background-image':'url('+attachment.url+')'});
-                        jQuery(document).find('#ays-quiz-live-image').css({'display': 'none'});
-                        jQuery(document).find('#ays-quiz-live-button').css('border','1px solid');
+                        // jQuery(document).find('.ays-quiz-live-container').css({'background-image':'url('+attachment.url+')'});
+                        // jQuery(document).find('.ays-quiz-live-image').css({'display': 'none'});
+                        jQuery(document).find('.ays-quiz-live-image').attr('src', imgurl);
+                        jQuery(document).find('.ays-quiz-live-image').css({'display': 'block'});
+                        jQuery(document).find('.ays-quiz-live-button').css('border','1px solid');
                         break;
                     default:
-                        jQuery(document).find('#ays-quiz-live-image').attr('src', attachment.url);
-                        jQuery(document).find('#ays-quiz-live-image').css({'display': 'block'});
+                        jQuery(document).find('.ays-quiz-live-image').attr('src', imgurl);
+                        jQuery(document).find('.ays-quiz-live-image').css({'display': 'block'});
                         break;
 
                 }
@@ -216,19 +272,32 @@
             button: {
                 text: 'Upload'
             },
+            frame:    'post',    // <-- this is the important part
+            state:    'insert',
             library: {
                 type: 'image'
             },
             multiple: false
-        }).on('select', function () {
-            var attachment = aysUploader.state().get('selection').first().toJSON();
+        }).on('insert', function () {
+            // var attachment = aysUploader.state().get('selection').first().toJSON();
+
+            var state = aysUploader.state();
+            var selection = selection || state.get('selection');
+            if (! selection) return;
+            // We set multiple to false so only get one image from the uploader
+            var attachment = selection.first();
+            var display = state.display(attachment).toJSON();  // <-- additional properties
+            attachment = attachment.toJSON();
+            // Do something with attachment.id and/or attachment.url here
+            var imgurl = attachment.sizes[display.size].url;
+            
             element.parents().eq(1).find('.add-answer-image').css({'display': 'none'})
             element.parent().parent().find('.ays-answer-image-container').fadeIn();
-            element.parent().parent().find('img.ays-answer-img').attr('src', attachment.url);
-            element.parents('tr').find('input.ays-answer-image-path').val(attachment.url);
+            element.parent().parent().find('img.ays-answer-img').attr('src', imgurl);
+            element.parents('tr').find('input.ays-answer-image-path').val(imgurl);
             if(element.hasClass('add-interval-image')){
-                element.parent().parent().find('img').attr('src', attachment.url);
-                element.parents('tr').find('input.ays-answer-image').val(attachment.url);
+                element.parent().parent().find('img').attr('src', imgurl);
+                element.parents('tr').find('input.ays-answer-image').val(imgurl);
             }
         }).open();
         return false;
@@ -325,7 +394,7 @@
 //        element.prepend('<input type="text" value="' + this_question + '" class="ays_question_input">');
         var answers_tr = element.find('.ays_answers_table tr');
         for (var i = 0; i < answers_tr.length; i++) {
-            var answer_text = (jQuery(answers_tr.eq(i)).find('.ays_answer').text() && jQuery(answers_tr.eq(i)).find('.ays_answer').text() !== "Answer") ? "value='" + jQuery(answers_tr.eq(i)).find('.ays_answer').text() + "'" : "placeholder='Answer text'";
+            var answer_text = (jQuery(answers_tr.eq(i)).find('.ays_answer').text() && jQuery(answers_tr.eq(i)).find('.ays_answer').text() !== "Answer") ? "value='" + jQuery(answers_tr.eq(i)).find('.ays_answer').text() + "'" : "placeholder='"+ functionsQuizLangObj.answerText +"'";
             jQuery(answers_tr.eq(i)).find('.ays_answer_td').empty();
             jQuery(answers_tr.eq(i)).find('.ays_answer_td').append('<input type="text"  ' + answer_text + '  class="ays_answer">');
         }
@@ -403,10 +472,11 @@
             var selection = window.getSelection();
             selection.setBaseAndExtent(el,0,el,1);
 
-            _this.attr( "data-original-title", quizLangObj.copied );
-            _this.attr( "title", quizLangObj.copied );
+            jQuery(el).attr( "data-original-title", quizLangObj.copied );
+            jQuery(el).attr( "title", quizLangObj.copied );
 
-            _this.tooltip("show");
+            jQuery(el).tooltip("show");
+
         } else if (document.selection && document.body.createTextRange) {
             var textRange = document.body.createTextRange();
             textRange.moveToElementText(el);
@@ -470,7 +540,7 @@
         subLoader.css("display", "inline-flex");
         setTimeout(function() {
             if( aysQuizFormSubmitted ){
-                jQuery(document).find('.ays-quiz-loader-banner').attr('disabled', true);
+                jQuery(document).find('.ays-quiz-loader-banner, .ays-quiz-category-next-button-class, .ays-quiz-next-button-class').attr('disabled', true);
             }else{
                 subLoader.removeAttr("style");
                 subLoader.addClass("display_none");
@@ -478,10 +548,52 @@
         }, 50);
 
         setTimeout( function(){
-            jQuery(document).find('.ays-quiz-loader-banner').attr('disabled', false);
+            jQuery(document).find('.ays-quiz-loader-banner, .ays-quiz-category-next-button-class, .ays-quiz-next-button-class').attr('disabled', false);
             subLoader.removeAttr("style");
             subLoader.addClass("display_none");
         }, 5000 );
+    }
+
+    function copyEmbedCodeContents(el) {
+        if (window.getSelection && document.createRange) {
+            var _this = jQuery(document).find('.ays-quiz-embed-code-textarea');
+            var btn   = jQuery(document).find('.ays-quiz-copy-embed-code');
+
+            var text      = _this.val();
+            var textField = document.createElement('textarea');
+
+            textField.innerText = text;
+            document.body.appendChild(textField);
+            textField.select();
+            document.execCommand('copy');
+            textField.remove();
+
+            btn.attr( "data-original-title", quizLangObj.copied );
+            btn.attr( "title", quizLangObj.copied );
+
+            btn.tooltip("show");
+        } else if (document.selection && document.body.createTextRange) {
+            var textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.select();
+        }
+    }
+
+    function ays_quiz_search_box_pagination(listTableClass, searchBox) {
+        if(jQuery(document).find( "." + listTableClass ).length) {
+            if(jQuery(document).find( "#" + searchBox ).length) {
+                var search_string = jQuery(document).find("#" + searchBox).val();
+                if(search_string != "") {
+                    jQuery(document).find("."+ listTableClass +" .pagination-links a").each(function() {
+                        if ( typeof this.href != "undefined" && this.href != "" ) {
+                            if ( this.href.indexOf("&s=") < 0 ) {
+                                this.href = this.href + "&s=" + search_string;
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 
 

@@ -2,8 +2,8 @@
 Contributors: FARAZFRANK 
 Tags: slider, best slider plugin, image slide show, responsive slider, wordpress image slider plugin
 Requires at least: 4.0
-Tested up to: 6.0.2
-Stable tag: 3.5.10
+Tested up to: 6.3.1
+Stable tag: 3.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,11 @@ Change image slide sequence through simple drag and drop feature.
 
 If you have any question contact us at here: [Plugin Support Forum ](http://wordpress.org/support/plugin/ultimate-responsive-image-slider)
 
+### Language Translation Contributors
+
+Hindi by Faraz Khan
+Spanish by [Kane Martin](https://profiles.wordpress.org/kuka7466/)
+
 == Installation ==
 1. Upload the entire **responsive-image-slider** folder to the **/wp-content/plugins/** directory.
 2. Activate the plugin through the **Plugins** menu in WordPress admin.
@@ -109,15 +114,14 @@ If you have any question contact us at here: [Plugin Support Forum ](http://word
 1. Slider Preview Above Content
 2. Slider Preview Between Content
 3. Slider Preview Below Content With Bullets Navigation
-4. Slider Preview With Thumbnail Navigation
-5. Slider Preview Without Bullets & Thumbnail Navigation
+4. Slider Preview Without Bullets & Thumbnail Navigation
+5. Slider Preview With Custom Height & Width
 6. Slider Preview With Custom Height & Width
-7. Slider Preview With Custom Height & Width
-8. Slider Preview With Content & Without Bullets & Thumbnail Navigation
-9. Slider Preview With Thumbnail Navigation Two
-10. Add Slide Images Through Plugin Media uploader
-11. Slider Settings For Individual Slide Show
-12. Slider Shortcode Copy Widget Within Plugin Dashboard
+7. Slider Preview With Content & Without Bullets & Thumbnail Navigation
+8. Slider Preview With Thumbnail Navigation Two
+9. Add Slide Images Through Plugin Media uploader
+10. Slider Settings For Individual Slide Show
+11. Slider Shortcode Copy Widget Within Plugin Dashboard
 
 = Docs & Support =
 If any support required then post your query in WordPress [Plugin Support Forum ](http://wordpress.org/support/plugin/ultimate-responsive-image-slider)
@@ -164,6 +168,9 @@ Just put this code  <?php echo do_shortcode('[URIS id=123]'); ?>
 Please use WordPress [support forum](http://wordpress.org/support/plugin/ultimate-responsive-image-slider) to ask any query regarding any issue.
 
 == Changelog ==
+
+= 3.5.11 =
+* Regular update and maintenance 
 
 = 3.5.10 =
 * Donate link removed from readme

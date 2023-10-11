@@ -143,6 +143,7 @@ if (!function_exists('eportfolio_fonts_url')) :
         if ($fonts) {
             $fonts_url = add_query_arg(array(
                 'family' => urldecode(implode('|', $fonts)),
+                'display' => 'swap',
             ), 'https://fonts.googleapis.com/css');
         }
 

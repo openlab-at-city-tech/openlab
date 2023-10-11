@@ -12,7 +12,7 @@
         </div>
         <div class="col-sm-10">
             <input type="text" class="ays-text-input" id='ays-quiz-title' name='ays_quiz_title'
-                   value="<?php echo esc_attr( $quiz['title'] ); ?>"/>
+                   value="<?php echo $quiz_title; ?>"/>
         </div>
     </div> <!-- Quiz Title -->
     <hr/>
@@ -26,12 +26,12 @@
         </label>
         <div class="ays-quiz-image-container" style="<?php echo $style; ?>">
             <span class="ays-remove-quiz-img"></span>
-            <img src="<?php echo $quiz['quiz_image']; ?>" id="ays-quiz-img"/>
+            <img src="<?php echo $quiz_image; ?>" id="ays-quiz-img"/>
         </div>
     </div> <!-- Quiz Image -->
     <hr/>
-    <input type="hidden" name="ays_quiz_image" id="ays-quiz-image" value="<?php echo $quiz['quiz_image']; ?>"/>
-    <div class='ays-field-dashboard'>
+    <input type="hidden" name="ays_quiz_image" id="ays-quiz-image" value="<?php echo $quiz_image; ?>"/>
+    <div class='ays-field-dashboard ays-quiz-result-message-vars-parent'>
         <label for='ays-quiz-description'>
             <?php echo __('Description', $this->plugin_name); ?>
             <a class="ays_help" data-toggle="tooltip" title="<?php echo __('Provide more information about the quiz. You can choose whether to show it or not in the front end in the “Settings” tab.',$this->plugin_name)?>">
@@ -39,7 +39,8 @@
             </a>
         </label>
         <?php
-            $content = stripslashes((wpautop($quiz['description'])));
+            echo $quiz_message_vars_description_html;
+            $content = $quiz_description;
             $editor_id = 'ays-quiz-description';
             $settings = array(
                 'editor_height' => $quiz_wp_editor_height,
@@ -66,11 +67,15 @@
                 <?php
                 $cat = 0;
                 foreach ($quiz_categories as $key => $quiz_category) {
-                    $selected = (intval($quiz_category['id']) == intval($quiz['quiz_category_id'])) ? "selected" : "";
-                    if ($cat == 0 && intval($quiz['quiz_category_id']) == 0) {
+
+                    $q_category_id = (isset( $quiz_category['id'] ) && $quiz_category['id'] != "") ? $quiz_category['id'] : 1;
+                    $quiz_category_title = (isset( $quiz_category['title'] ) && $quiz_category['title'] != "") ? esc_attr( stripslashes($quiz_category['title']) ) : "";
+
+                    $selected = ($q_category_id == $quiz_category_id) ? "selected" : "";
+                    if ($cat == 0 && $quiz_category_id == 0) {
                         $selected = 'selected';
                     }
-                    echo '<option value="' . $quiz_category["id"] . '" ' . $selected . '>' . stripslashes($quiz_category['title']) . '</option>';
+                    echo '<option value="' . $quiz_category["id"] . '" ' . $selected . '>' . $quiz_category_title . '</option>';
                     $cat++;
                 }
                 ?>
@@ -90,13 +95,13 @@
         <div class="col-sm-10">
             <div class="form-check form-check-inline">
                 <input type="radio" id="ays-publish" name="ays_publish"
-                       value="1" <?php echo ($quiz["published"] == '') ? "checked" : ""; ?>  <?php echo ($quiz["published"] == '1') ? 'checked' : ''; ?>/>
+                       value="1" <?php echo ($quiz_published == '') ? "checked" : ""; ?>  <?php echo ($quiz_published == '1') ? 'checked' : ''; ?>/>
                 <label class="form-check-label"
                        for="ays-publish"> <?php echo __('Published', $this->plugin_name); ?> </label>
             </div>
             <div class="form-check form-check-inline">
                 <input type="radio" id="ays-unpublish" name="ays_publish"
-                       value="0" <?php echo ($quiz["published"] == '0') ? 'checked' : ''; ?>/>
+                       value="0" <?php echo ($quiz_published == '0') ? 'checked' : ''; ?>/>
                 <label class="form-check-label"
                        for="ays-unpublish"> <?php echo __('Unpublished', $this->plugin_name); ?> </label>
             </div>
@@ -168,6 +173,9 @@
     </div> <!-- WP Post -->
     <hr>
     <?php endif; ?>
+    <input type="radio" class="ays-enable-timer1" name="ays_quiz_condition_calculation_type" value="default" <?php echo ($quiz_condition_calculation_type == 'default') ? 'checked' : '' ?> style="display: none;"/>
+    <input type="radio" class="ays-enable-timer1" name="ays_quiz_condition_calculation_type" value="by_keyword" <?php echo ($quiz_condition_calculation_type == 'by_keyword') ? 'checked' : ''; ?> style="display: none;"/>
+    <input type="checkbox" class="ays-enable-timer1" id="ays_quiz_condition_show_all_results" name="ays_quiz_condition_show_all_results" value="on" <?php echo $quiz_condition_show_all_results ? 'checked' : '' ?> style="display: none;" />
     <div class='form-group row ays_items_count_div'>
         <div class="col-sm-3" style="display: flex; align-items: center;">
             <div style='display: flex;align-items: center;margin-right: 15px;'>
@@ -186,7 +194,7 @@
                     <p class="ays_questions_action">
                         <span class="ays_questions_count">
                             <?php
-                            echo '<span class="questions_count_number">' . count($question_id_array) . '</span> '. __('items',$this->plugin_name);
+                            echo '<span class="questions_count_number">' . $question_id_array_count . '</span> '. __('items',$this->plugin_name);
                             ?>
                         </span>
                     </p>
@@ -202,7 +210,7 @@
                         <button class="ays_bulk_del_questions button" type="button" style="margin: 0 10px;" disabled>
                             <?php echo __( 'Delete', $this->plugin_name); ?>
                         </button>
-                        <button class="ays_select_all button" type="button">
+                        <button class="ays_select_all button ays-quiz-select-all-button" type="button">
                             <?php echo __( 'Select All', $this->plugin_name); ?>
                         </button>
                     </div>
@@ -240,26 +248,46 @@
         <table class="ays-questions-table" id="ays-questions-table">
             <thead>
             <tr class="ui-state-default">
-                <th class="th-150"><?php echo __('Ordering', $this->plugin_name); ?></th>
-                <th class="th-650"><?php echo __('Question', $this->plugin_name); ?></th>
-                <th class="th-150"><?php echo __('Type', $this->plugin_name); ?></th>
-                <th class="th-150"><?php echo __('Category', $this->plugin_name); ?></th>
-                <th class="th-150"><?php echo __('ID', $this->plugin_name); ?></th>
-                <th class="th-150" style="min-width:120px;"><?php echo __('Actions', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-ordering-row th-150"><?php echo __('Ordering', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-question-row th-650"><?php echo __('Question', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-type-row th-150"><?php echo __('Type', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-category-row th-150"><?php echo __('Category', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-tag-row th-150"><?php echo __('Tags', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-id-row th-150"><?php echo __('ID', $this->plugin_name); ?></th>
+                <th class="ays-quiz-question-action-row th-150" style="min-width:120px;"><?php echo __('Actions', $this->plugin_name); ?></th>
             </tr>
             </thead>
             <tbody>
             <?php
-            if(!(count($question_id_array) === 1 && $question_id_array[0] == '')) {
+            if(!(count($question_id_array) === 1 && $question_id_array[0] == '')  && 1==0) {
                 foreach ($question_id_array as $key => $question_id) {
                     $data = $this->quizes_obj->get_published_questions_by('id', absint(intval($question_id)));
+
+                    $if_question_trash_status = (isset( $data["published"] ) && absint( $data["published"] ) == 2) ? true : false;
+
+                    if ( $if_question_trash_status ) {
+                        continue;
+                    }
+
                     $className = "";
                     if (($key + 1) % 2 == 0) {
                         $className = "even";
                     }
                     $edit_question_url = "?page=".$this->plugin_name."-questions&action=edit&question=".$data['id'];
-//                    $table_question = (strip_tags(stripslashes($data['question'])));
-//                    $table_question = $this->ays_restriction_string("word",$table_question, 10);
+                    // $table_question = (strip_tags(stripslashes($data['question'])));
+                    // $table_question = $this->ays_restriction_string("word",$table_question, 10);
+                    $data_tag_id = (isset( $data['tag_id'] ) && $data['tag_id'] != "") ? $data['tag_id'] : "";
+
+                    $tag_ids = array();
+                    if ( $data_tag_id != "" ) {
+                        $tag_ids = explode(',',$data['tag_id']);
+                    }
+                    $question_tags_title = '';
+                    foreach ($tag_ids as $tag_id) {
+                        if( isset( $question_tags_array[$tag_id] ) ){
+                            $question_tags_title .= $question_tags_array[$tag_id].",";
+                        }
+                    }
 
                     if($data['type'] == 'custom'){
                         if(isset($data['question_title']) && $data['question_title'] != ''){
@@ -281,22 +309,39 @@
                         }
                         $table_question = $this->ays_restriction_string("word", $table_question, 10);
                     }
+
+                    switch ( $data['type'] ) {
+                        case 'short_text':
+                            $ays_question_type = 'short text';
+                            break;
+                        case 'true_or_false':
+                            $ays_question_type = 'true/false';
+                            break;
+                        case 'fill_in_blank':
+                            $ays_question_type = 'Fill in blank';
+                            break;
+                        default:
+                            $ays_question_type = $data['type'];
+                            break;
+                    }
+
                     ?>
-                    <tr class="ays-question-row ui-state-default <?php echo $className; ?>"
+                    <tr class="ays-question-row ui-state-default ays-question-selected <?php echo $className; ?>"
                         data-id="<?php echo $data['id']; ?>">
-                        <td class="ays-sort"><i class="ays_fa ays_fa_arrows" aria-hidden="true"></i></td>
-                        <td>
+                        <td class="ays-sort ays-quiz-question-ordering-row"><i class="ays_fa ays_fa_arrows" aria-hidden="true"></i></td>
+                        <td class="ays-quiz-question-question-row">
                             <a href="<?php echo $edit_question_url; ?>" target="_blank" class="ays-edit-question" title="<?php echo __('Edit question', $this->plugin_name); ?>">
                                 <?php echo $table_question ?>
                             </a>
                         </td>
-                        <td>
-                            <?php echo $data['type']; ?>
+                        <td class="ays-quiz-question-type-row">
+                            <?php echo $ays_question_type; ?>
                             <input type="hidden" name="ays_question_type[<?php echo $data['type']; ?>][]" value="<?php echo $data['id']; ?>">
                         </td>
-                        <td><?php echo $question_categories_array[$data['category_id']]; ?></td>
-                        <td><?php echo $data['id']; ?></td>
-                        <td>
+                        <td class="ays-quiz-question-category-row"><?php echo $question_categories_array[$data['category_id']]; ?></td>
+                        <td class="ays-quiz-question-tag-row"><?php echo rtrim($question_tags_title,','); ?></td>
+                        <td class="ays-quiz-question-id-row"><?php echo $data['id']; ?></td>
+                        <td class="ays-quiz-question-action-row">
                             <div class="ays-question-row-actions">
                                 <input type="checkbox" class="ays_del_tr">
                                 <a href="<?php echo $edit_question_url; ?>" target="_blank" class="ays-edit-question" title="<?php echo __('Edit question', $this->plugin_name); ?>">
@@ -315,7 +360,7 @@
             if(empty($question_id_array)){
                 ?>
                 <tr class="ays-question-row ui-state-default">
-                    <td colspan="6" class="empty_quiz_td">
+                    <td colspan="7" class="empty_quiz_td">
                         <div>
                             <i class="ays_fa ays_fa_info" aria-hidden="true" style="margin-right:10px"></i>
                             <span style="font-size: 13px; font-style: italic;">
@@ -341,16 +386,17 @@
         <p class="ays_questions_action" style="width:100%;">
             <span class="ays_questions_count">
                 <?php
-                echo '<span class="questions_count_number">' . count($question_id_array) . '</span> '. __('items',$this->plugin_name);
+                echo '<span class="questions_count_number">' . $question_id_array_count . '</span> '. __('items',$this->plugin_name);
                 ?>
             </span>
             <button class="ays_bulk_del_questions button" type="button" disabled>
                 <?php echo __( 'Delete', $this->plugin_name); ?>
             </button>
-            <button class="ays_select_all button" type="button">
+            <button class="ays_select_all button ays-quiz-select-all-button" type="button">
                 <?php echo __( 'Select All', $this->plugin_name); ?>
             </button>
         </p>
     </div> <!-- Questions table -->
     <input type="hidden" id="ays_already_added_questions" name="ays_added_questions" value="<?php echo $question_ids; ?>"/>
+    <input type="hidden" id="ays_already_added_questions_count" value="<?php echo count($question_id_array); ?>"/>
 </div>

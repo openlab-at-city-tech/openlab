@@ -206,6 +206,77 @@ final class Utilities {
 	}
 
 	/**
+	 * Get collation of a table's column.
+	 * 
+	 * @since 2.2.2
+	 *
+	 * @param string $table The table name
+	 * @param string $column The table's column name
+	 * @return null|string
+	 */
+	public static function get_table_col_collation( string $table = '', string $column = '' ) {
+		if ( empty( $table ) || empty( $column ) ) {
+			return null;
+		}
+
+		$table_parts = explode( '.', $table );
+		$table       = ! empty( $table_parts[1] ) ? $table_parts[1] : $table;
+		$col_key     = strtolower( "{$table}_{$column}" );
+
+		static $tables_collates = array();
+
+		if ( ! isset( $tables_collates[ $col_key ] ) ) {
+			global $wpdb;
+
+			$tables_collates[ $col_key ] = null;
+			$table_status                = null;
+
+			// Alternatively in order to check only for wp core tables $wpdb->tables() could be used.
+			$tables_like_table = $wpdb->get_results( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) );
+
+			if ( ! empty( $tables_like_table ) ) {
+				$table_status = $wpdb->get_row(
+					$wpdb->prepare(
+						"SHOW FULL COLUMNS FROM {$table} WHERE field = '%s'",
+						$column
+					)
+				);
+			}
+
+			if ( ! empty( $table_status ) && ! empty( $table_status->Collation ) ) {
+				$tables_collates[ $col_key ] = $table_status->Collation;
+			}
+		}
+
+		return $tables_collates[ $col_key ];
+	}
+
+	/**
+	 * Get charset of a table's column.
+	 * 
+	 * @since 2.2.2
+	 *
+	 * @param string $table The table name
+	 * @param string $column The table's column name
+	 * @return null|string
+	 */
+	public static function get_table_col_charset( string $table = '', string $column = '' ) {
+		if ( empty( $table ) || empty( $column ) ) {
+			return null;
+		}
+
+		$collation = self::get_table_col_collation( $table, $column );
+
+		if ( empty( $collation ) ) {
+			return null;
+		}
+
+		list( $charset ) = explode( '_', $collation );
+
+		return $charset;
+	}
+
+	/**
 	 * Generate random unique id. Useful for creating element ids in scripts
 	 *
 	 * @since 2.0.0

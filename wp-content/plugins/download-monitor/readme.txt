@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker
 Requires at least: 5.4
-Tested up to: 6.2
-Stable tag: 4.8.6
+Tested up to: 6.3
+Stable tag: 4.8.10
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
@@ -120,6 +120,40 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 4.8.10 - 08.09.2023 =
+Fixed: "Downloading Page" upsell meta box does not hide when the addon is active ( [#1329](https://github.com/WPChill/download-monitor/issues/1329) )
+Fixed: Category-Filter not working in Widget “List of Download” ( [#1320](https://github.com/WPChill/download-monitor/issues/1320) )
+Changed: Remake the hooking reports filtering functionality ( [#1324](https://github.com/WPChill/download-monitor/issues/1324) )
+Added: Upsells for the new reports filters ( [#1325](https://github.com/WPChill/download-monitor/issues/1325) )
+
+= 4.8.9 - 01.09.2023 =
+Added: Security & feature updates notification opt in.
+
+= 4.8.8 - 22.08.2023 =
+Changed: Changed text input to select + input for classic editor "Insert Download" popup ( [#1197](https://github.com/WPChill/download-monitor/issues/1197) )
+Fixed: Reports start day to match start day in wordpress settings - only available for Sunday & Monday. ( [#1180](https://github.com/WPChill/download-monitor/issues/1180) )
+Added: Global bool variable to enable/disable File Browser "DLM_FILE_BROWSER" ( [#1259](https://github.com/WPChill/download-monitor/issues/1259) )
+Fixed: Downloads from admin dashboard are no longer logged. ( [#1239](https://github.com/WPChill/download-monitor/issues/1239) )
+Added: do_actions hooks to the backwards compatibility methods ( [#1239](https://github.com/WPChill/download-monitor/issues/1239) )
+Added: Filter to disable/change the loading progress indicator ( [#1213](https://github.com/WPChill/download-monitor/issues/1213) )
+Added: Setters & Getters for the logging class ( [#1312](https://github.com/WPChill/download-monitor/issues/1312) )
+
+= 4.8.7 - 25.07.2023 =
+Fixed: Compatibility with Elementor PRO page transitions ( [#1299](https://github.com/WPChill/download-monitor/issues/1299) )
+Fixed: Always load frontend scripts if "No Access Modal" is enabled. ( [#1298](https://github.com/WPChill/download-monitor/issues/1298) )
+Fixed: Escaping error on download button templates. ( [#1277](https://github.com/WPChill/download-monitor/issues/1277) )
+Fixed: Character encoding on ajax error reporting ( [#1258](https://github.com/WPChill/download-monitor/issues/1258) )
+Fixed: No Access Modal error when download does not exist ( [#1300](https://github.com/WPChill/download-monitor/issues/1300) )
+Added: Filter to retreived log item in DLM_WordPress_Log_Item_Repository ( [#1303](https://github.com/WPChill/download-monitor/issues/1303) )
+Fixed: Compatibility with Wp Maximum Upload File Size plugin ( [#1304](https://github.com/WPChill/download-monitor/issues/1304) )
+Fixed: Create No Access Page on plugin install/activate. ( [#1305](https://github.com/WPChill/download-monitor/issues/1305) )
+Fixed: Removed unused onboarding page code. ( [#1306](https://github.com/WPChill/download-monitor/issues/1306) )
+Fixed: Minor upsells update ( [#1308](https://github.com/WPChill/download-monitor/issues/1308) )
+Fixed: Minor admin visual update for wp 6.3 ( [#1310](https://github.com/WPChill/download-monitor/issues/1310) )
+Fixed: Typo ( [#1309](https://github.com/WPChill/download-monitor/issues/1309) )
+Fixed: Upsell still shows even license valid ( [#1301](https://github.com/WPChill/download-monitor/issues/1301) )
+Added: Filter to disable download progress indicator ( [#1213](https://github.com/WPChill/download-monitor/issues/1213) )
+
 = 4.8.6 - 03.07.2023 =
 Fixed: Check custom tables for columns ( [#1288](https://github.com/WPChill/download-monitor/issues/1288) )
 Added: Upsells in reports page ( [#1290](https://github.com/WPChill/download-monitor/issues/1290) )

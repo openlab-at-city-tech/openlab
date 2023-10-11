@@ -2,8 +2,8 @@
 Contributors: automattic, azaozz
 Tags: block editor, classic editor, editor, Gutenberg, formatting, tinymce, write
 Requires at least: 5.9
-Tested up to: 6.2
-Stable tag: 5.9.0
+Tested up to: 6.3
+Stable tag: 5.9.2
 Requires PHP: 5.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -46,6 +46,12 @@ In that terms Advanced Editor Tools does not affect your website's user privacy 
 If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 5.9.2 =
+* Fixed a typo in the plugin header version string.
+
+= 5.9.1 =
+* Fixed a warning in PHP 8.0 and never.
 
 = 5.9.0 =
 * Updated for WordPress 5.9 and newer.

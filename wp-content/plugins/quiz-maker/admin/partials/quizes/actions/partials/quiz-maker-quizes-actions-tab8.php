@@ -1,6 +1,13 @@
 <div id="tab8" class="ays-quiz-tab-content <?php echo ($ays_quiz_tab == 'tab8') ? 'ays-quiz-tab-content-active' : ''; ?>">
     <p class="ays-subtitle"><?php echo __('Integrations settings',$this->plugin_name)?></p>
     <hr/>
+    <div class="ays-quiz-heading-box ays-quiz-unset-float ays-quiz-unset-margin">
+        <div class="ays-quiz-wordpress-user-manual-box ays-quiz-wordpress-text-align">
+            <a href="https://www.youtube.com/watch?v=joPQrsF0a60" target="_blank">
+                <?php echo __("How to integrate MailChimp - video", $this->plugin_name); ?>
+            </a>
+        </div>
+    </div>
     <fieldset>
         <legend>
             <img class="ays_integration_logo" src="<?php echo AYS_QUIZ_ADMIN_URL; ?>/images/integrations/mailchimp_logo.png" alt="">
@@ -13,12 +20,11 @@
                 if($mailchimp_username == "" || $mailchimp_api_key == ""):
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name );
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
             <?php
@@ -52,7 +58,7 @@
                 </div>
                 <div class="col-sm-8">
                     <?php if(is_array($mailchimp_select)): ?>
-                        <select name="ays_mailchimp_list" id="ays_mailchimp_list"
+                        <select name="ays_mailchimp_list" id="ays_mailchimp_list" class="ays-text-input ays-text-input-short"
                            <?php
                                 if($mailchimp_username == "" || $mailchimp_api_key == ""){
                                     echo 'disabled';
@@ -97,12 +103,11 @@
             else:
         ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name );
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php
@@ -110,6 +115,13 @@
         ?>
     </fieldset> <!-- MailChimp Settings -->
     <hr/>
+    <div class="ays-quiz-heading-box ays-quiz-unset-float ays-quiz-unset-margin">
+        <div class="ays-quiz-wordpress-user-manual-box ays-quiz-wordpress-text-align">
+            <a href="https://www.youtube.com/watch?v=IwT-2d9OE1g" target="_blank">
+                <?php echo __("How to integrate PayPal - video", $this->plugin_name); ?>
+            </a>
+        </div>
+    </div>
     <fieldset>
         <legend>
             <img class="ays_integration_logo" src="<?php echo AYS_QUIZ_ADMIN_URL; ?>/images/integrations/paypal_logo.png" alt="">
@@ -120,12 +132,11 @@
             if(!$ays_paypal_enabling):
         ?>
         <blockquote class="error_message">
-            <?php echo __(
-                sprintf(
-                    "For enabling this option, please go to %s page and fill options.",
-                    "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                ),
-                $this->plugin_name );
+            <?php
+                echo sprintf(
+                    __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                    "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                );
             ?>
         </blockquote>
         <?php
@@ -179,7 +190,7 @@
                 </label>
             </div>
             <div class="col-sm-8">
-                <select name="ays_paypal_currency" id="ays_paypal_currency"
+                <select name="ays_paypal_currency" id="ays_paypal_currency" class="ays-text-input ays-text-input-short"
                     <?php
                         if(!$ays_paypal_enabling){
                             echo 'disabled';
@@ -207,6 +218,12 @@
                         AED - <?php echo __( 'United Arab Emirates Dirham', $this->plugin_name ); ?></option>
                     <option <?php echo ($paypal_currency == 'RUB') ? 'selected' : ''; ?> value="RUB">
                         RUB - <?php echo __( 'Russian Ruble', $this->plugin_name ); ?></option>
+                    <option <?php echo ($paypal_currency == 'NZD') ? 'selected' : ''; ?> value="NZD">
+                        NDZ - <?php echo __( 'New Zealand dollar', $this->plugin_name ); ?></option>
+                    <option <?php echo ($paypal_currency == 'CZK') ? 'selected' : ''; ?> value="CZK">
+                        CZK - <?php echo __( 'Czech koruna', $this->plugin_name ); ?></option>
+                    <option <?php echo ($paypal_currency == 'PLN') ? 'selected' : ''; ?> value="PLN">
+                        PLN - <?php echo __( 'Polish złoty', $this->plugin_name ); ?></option>
                 </select>
             </div>
         </div>
@@ -244,12 +261,11 @@
             if(!$is_enabled_stripe):
         ?>
         <blockquote class="error_message">
-            <?php echo __(
-                sprintf(
-                    "For enabling this option, please go to %s page and fill options.",
-                    "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                ),
-                $this->plugin_name );
+            <?php
+                echo sprintf(
+                    __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                    "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                );
             ?>
         </blockquote>
         <?php
@@ -293,6 +309,8 @@
                         }
                     ?>
                 />
+                <span class="ays_option_description"><?php echo __( "Specify the amount of the payment.", $this->plugin_name ); ?></span>
+                <span class="ays_option_description"><?php echo __( "This field doesn't accept an empty value or a value less than 1.", $this->plugin_name ); ?></span>
             </div>
         </div>
         <hr>
@@ -303,7 +321,7 @@
                 </label>
             </div>
             <div class="col-sm-8">
-                <select name="ays_stripe_currency" id="ays_stripe_currency"
+                <select name="ays_stripe_currency" id="ays_stripe_currency" class="ays-text-input ays-text-input-short"
                     <?php
                         if(!$is_enabled_stripe){
                             echo 'disabled';
@@ -331,6 +349,12 @@
                         AED - <?php echo __( 'United Arab Emirates Dirham', $this->plugin_name ); ?></option>
                     <option <?php echo ($stripe_currency == 'rub') ? 'selected' : ''; ?> value="rub">
                         RUB - <?php echo __( 'Russian Ruble', $this->plugin_name ); ?></option>
+                    <option <?php echo ($stripe_currency == 'nzd') ? 'selected' : ''; ?> value="nzd">
+                        NDZ - <?php echo __( 'New Zealand dollar', $this->plugin_name ); ?></option>
+                    <option <?php echo ($stripe_currency == 'czk') ? 'selected' : ''; ?> value="czk">
+                        CZK - <?php echo __( 'Czech koruna', $this->plugin_name ); ?></option>
+                    <option <?php echo ($stripe_currency == 'pln') ? 'selected' : ''; ?> value="pln">
+                        PLN - <?php echo __( 'Polish złoty', $this->plugin_name ); ?></option>
                 </select>
             </div>
         </div>
@@ -371,12 +395,11 @@
             if ($monitor_client == "" || $monitor_api_key == ""):
                 ?>
                 <blockquote class="error_message">
-                    <?php echo __(
-                        sprintf(
-                            "For enabling this option, please go to %s page and fill all options.",
-                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                        ),
-                        $this->plugin_name);
+                    <?php
+                        echo sprintf(
+                            __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                        );
                     ?>
                 </blockquote>
             <?php
@@ -411,7 +434,7 @@
                     </div>
                     <div class="col-sm-8">
                         <?php if (is_array($monitor_select)): ?>
-                            <select name="ays_monitor_list" id="ays_monitor_list"
+                            <select name="ays_monitor_list" id="ays_monitor_list" class="ays-text-input ays-text-input-short"
                                 <?php
                                 if ($monitor_client == "" || $monitor_api_key == "") {
                                     echo 'disabled';
@@ -435,12 +458,11 @@
         else:
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name);
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php
@@ -460,12 +482,11 @@
             if ($zapier_hook == ""):
                 ?>
                 <blockquote class="error_message">
-                    <?php echo __(
-                        sprintf(
-                            "For enabling this option, please go to %s page and fill all options.",
-                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                        ),
-                        $this->plugin_name);
+                    <?php
+                        echo sprintf(
+                            __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                        );
                     ?>
                 </blockquote>
             <?php else: ?>
@@ -517,12 +538,11 @@
         else:
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name);
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php
@@ -542,12 +562,11 @@
             if ($active_camp_url == "" || $active_camp_api_key == ""):
                 ?>
                 <blockquote class="error_message">
-                    <?php echo __(
-                        sprintf(
-                            "For enabling this option, please go to %s page and fill all options.",
-                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                        ),
-                        $this->plugin_name);
+                    <?php
+                        echo sprintf(
+                            __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                        );
                     ?>
                 </blockquote>
             <?php
@@ -582,7 +601,7 @@
                     </div>
                     <div class="col-sm-8">
                         <?php if (is_array($active_camp_list_select)): ?>
-                            <select name="ays_active_camp_list" id="ays_active_camp_list"
+                            <select name="ays_active_camp_list" id="ays_active_camp_list" class="ays-text-input ays-text-input-short"
                                 <?php
                                 if ($active_camp_url == "" || $active_camp_api_key == "") {
                                     echo 'disabled';
@@ -610,7 +629,7 @@
                     </div>
                     <div class="col-sm-8">
                         <?php if (is_array($active_camp_automation_select)): ?>
-                            <select name="ays_active_camp_automation" id="ays_active_camp_automation"
+                            <select name="ays_active_camp_automation" id="ays_active_camp_automation" class="ays-text-input ays-text-input-short"
                                 <?php
                                 if ($active_camp_url == "" || $active_camp_api_key == "") {
                                     echo 'disabled';
@@ -636,12 +655,11 @@
         else:
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name);
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php
@@ -661,12 +679,11 @@
             if ($slack_token == ""):
                 ?>
                 <blockquote class="error_message">
-                    <?php echo __(
-                        sprintf(
-                            "For enabling this option, please go to %s page and fill all options.",
-                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                        ),
-                        $this->plugin_name);
+                    <?php
+                        echo sprintf(
+                            __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                        );
                     ?>
                 </blockquote>
             <?php
@@ -701,7 +718,7 @@
                     </div>
                     <div class="col-sm-8">
                         <?php if (is_array($slack_select)): ?>
-                            <select name="ays_slack_conversation" id="ays_slack_conversation"
+                            <select name="ays_slack_conversation" id="ays_slack_conversation" class="ays-text-input ays-text-input-short"
                                 <?php
                                 if ($slack_token == "") {
                                     echo 'disabled';
@@ -726,12 +743,11 @@
         else:
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name);
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php
@@ -751,12 +767,11 @@
             if ($google_token == ""):
                 ?>
                 <blockquote class="error_message">
-                    <?php echo __(
-                        sprintf(
-                            "For enabling this option, please go to %s page and fill all options.",
-                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                        ),
-                        $this->plugin_name);
+                    <?php
+                        echo sprintf(
+                            __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                            "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                        );
                     ?>
                 </blockquote>
             <?php
@@ -790,12 +805,11 @@
         else:
             ?>
             <blockquote class="error_message">
-                <?php echo __(
-                    sprintf(
-                        "For enabling this option, please go to %s page and fill all options.",
-                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>this</a>"
-                    ),
-                    $this->plugin_name);
+                <?php
+                    echo sprintf(
+                        __( "For enabling this option, please go to %s page and fill all options.", $this->plugin_name ),
+                        "<a style='color:blue;text-decoration:underline;font-size:20px;' href='?page=$this->plugin_name-settings&ays_quiz_tab=tab2'>". __( "this", $this->plugin_name ) ."</a>"
+                    );
                 ?>
             </blockquote>
         <?php

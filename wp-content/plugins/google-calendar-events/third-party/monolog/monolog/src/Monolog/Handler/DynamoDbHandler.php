@@ -45,7 +45,7 @@ class DynamoDbHandler extends AbstractProcessingHandler
     public function __construct(DynamoDbClient $client, string $table, $level = Logger::DEBUG, bool $bubble = \true)
     {
         /** @phpstan-ignore-next-line */
-        if (\defined('Aws\\Sdk::VERSION') && \version_compare(Sdk::VERSION, '3.0', '>=')) {
+        if (\defined('SimpleCalendar\\plugin_deps\\Aws\\Sdk::VERSION') && \version_compare(Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
             $this->marshaler = new Marshaler();
         } else {
