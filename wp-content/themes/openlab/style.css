@@ -8000,8 +8000,11 @@ a.disabled-link {
   justify-content: space-between;
   height: 64px;
 }
-.announcement-item h1.announcement-title-rendered,
 .announcement-item h2.announcement-title-rendered {
+  font-weight: 700;
+}
+.announcement-item h2.announcement-title-rendered,
+.announcement-item h3.announcement-title-rendered {
   font-size: 14px;
   margin-bottom: 0;
   margin-top: 0;

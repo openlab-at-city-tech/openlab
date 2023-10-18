@@ -70,7 +70,7 @@ $delete_url = wp_nonce_url( $group_url . 'announcements/?delete-announcement-rep
 			</div>
 
 			<div class="item-header-info">
-				<h2 class="announcement-title-rendered"><?php echo esc_html( $reply_title ); ?></h2>
+				<h3 class="announcement-title-rendered"><?php echo esc_html( $reply_title ); ?></h3>
 				<div class="announcement-info">
 					<?php printf( 'Posted by: %s', esc_html( $author_name ) ); ?>
 					<br />

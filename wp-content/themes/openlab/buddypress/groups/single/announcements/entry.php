@@ -76,7 +76,7 @@ if ( $read_only ) {
 					<a href="<?php echo esc_url( $announcement_url ); ?>">
 				<?php endif; ?>
 
-				<h1 id="title-rendered-<?php echo esc_attr( $editor_id ); ?>" class="announcement-title-rendered"><?php echo esc_html( $announcement->post_title ); ?></h1>
+				<h2 id="title-rendered-<?php echo esc_attr( $editor_id ); ?>" class="announcement-title-rendered"><?php echo esc_html( $announcement->post_title ); ?></h2>
 
 				<?php if ( $read_only ) : ?>
 					</a>
