@@ -331,6 +331,9 @@
 				'role': 'textbox',
 				'aria-multiline': true
 		} );
+
+		$( '.ql-preview' ).html( '<span class="screen-reader-text">' + OLRichTextComments.previewLabel + '</span>' );
+		$( '.ql-tooltip input[data-video="Embed URL"]' ).attr( 'aria-label', 'Embed URL' )
 	})
 
 	/**
