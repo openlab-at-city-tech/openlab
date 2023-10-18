@@ -592,7 +592,6 @@ function openlab_group_contact_field() {
 			<div class="panel-body">
 		<p>By default, you are the <?php echo ucwords( $group_type ); ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
 
-		<label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label>
 		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />
 		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ); ?>
 		<input type="hidden" name="group-contact-group-id" id="group-contact-group-id" value="<?php echo intval( $group_id ); ?>" />
