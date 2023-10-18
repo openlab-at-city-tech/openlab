@@ -43,10 +43,7 @@ window.wp = window.wp || {};
 		 * Generate a user-related list item.
 		 */
 		function create_list_item( nicename, label ) {
-			var li = '';
-
-			li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '"><span class="addl-faculty-remove"><a href="#"><span class="fa fa-minus-circle"></span></a></span> ' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"></li>';
-			li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="fa fa-minus-circle"></span></a></span></li>';
+			var li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span></li>';
 			$( '#additional-faculty-list' ).append( li );
 		}
 	}
@@ -94,10 +91,7 @@ window.wp = window.wp || {};
 		 * Generate a user-related list item.
 		 */
 		function create_list_item( nicename, label ) {
-			var li = '';
-
-			li = '<li id="primary-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '"><span class="addl-faculty-remove"><a href="#"><span class="fa fa-minus-circle"></span></a></span> ' + label + '<input type="hidden" name="primary-faculty-js[]" value="' + nicename + '"></li>';
-			li = '<li id="primary-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="primary-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="fa fa-minus-circle"></span></a></span></li>';
+			var li = '<li id="primary-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="primary-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span></li>';
 			$( '#primary-faculty-list' ).append( li );
 		}
 	}
