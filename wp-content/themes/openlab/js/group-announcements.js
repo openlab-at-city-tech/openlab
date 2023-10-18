@@ -311,6 +311,26 @@
 		$announcementList.on( 'click', '.announcement-delete-link', (e) => {
 			return window.confirm( 'Are you sure you want to delete this item?' ) ? true : e.preventDefault()
 		} )
+
+		/**
+		 * Add aria-label to the buttons in the toolbar;
+		 * Add aria-pressed on the buttons in the toolbar;
+		 * Add aria-hidden on the SVG icons in the buttons;
+		 * Add role and aria-multiline attribute to the editor textarea;
+		 */
+		$( 'button.ql-bold' ).attr( 'aria-label', OLRichTextComments.toggleBoldText );
+		$( 'button.ql-italic' ).attr( 'aria-label', OLRichTextComments.toggleItalicText );
+		$( 'button.ql-underline' ).attr( 'aria-label', OLRichTextComments.toggleUnderlineText );
+		$( 'button.ql-link' ).attr( 'aria-label', OLRichTextComments.toggleLinkModal );
+		$( 'button.ql-list[value="ordered"]' ).attr( 'aria-label', OLRichTextComments.toggleOrderedList );
+		$( 'button.ql-list[value="bullet"]' ).attr( 'aria-label', OLRichTextComments.toggleBulletedList );
+		$( 'button.ql-image' ).attr( 'aria-label', OLRichTextComments.toggleMultimediaModal );
+		$( '.ql-formats button' ).attr( 'aria-pressed', false );
+		$( '.ql-formats button > svg' ).attr( 'aria-hidden', true );
+		$( '#ol-rich-editor .ql-editor' ).attr( {
+				'role': 'textbox',
+				'aria-multiline': true
+		} );
 	})
 
 	/**
