@@ -1969,24 +1969,26 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 				<ul class="inline-element-list">
 					<?php $sfi = 1; ?>
 					<?php foreach ( $saved_social_fields as $saved_social_field_slug => $saved_social_field_value ) : ?>
-						<li class="form-inline label-combo row">
-							<div class="form-group col-sm-9">
-								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Platform</label>
+						<li class="social-link-fields">
+							<div class="social-link-fields-inner">
+								<div class="form-group social-link-fields-service">
+									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Platform</label>
 
-								<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>">
-									<option value="">- Select a platform -</option>
-									<?php foreach ( $social_fields as $social_field_slug => $social_field_data ) : ?>
-										<option value="<?php echo esc_attr( $social_field_slug ); ?>" <?php selected( $social_field_slug, $saved_social_field_slug ); ?>><?php echo esc_html( $social_field_data['title'] ); ?></option>
-									<?php endforeach; ?>
-								</select>
+									<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>">
+										<option value="">- Select a platform -</option>
+										<?php foreach ( $social_fields as $social_field_slug => $social_field_data ) : ?>
+											<option value="<?php echo esc_attr( $social_field_slug ); ?>" <?php selected( $social_field_slug, $saved_social_field_slug ); ?>><?php echo esc_html( $social_field_data['title'] ); ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+
+								<div class="form-group social-link-fields-url">
+									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-url">URL or username</label> <input name="social-links[<?php echo esc_attr( $sfi ); ?>][url]" id="social-links-<?php echo esc_attr( $sfi ); ?>-url" class="form-control social-links-url" value="<?php echo esc_attr( $saved_social_field_value ); ?>" />
+								</div>
 							</div>
 
-							<div class="form-group col-sm-15">
-								<label for="social-links-<?php echo esc_attr( $sfi ); ?>-url">URL or username</label> <input name="social-links[<?php echo esc_attr( $sfi ); ?>][url]" id="social-links-<?php echo esc_attr( $sfi ); ?>-url" class="form-control social-links-url" value="<?php echo esc_attr( $saved_social_field_value ); ?>" />
-
-								<div class="link-actions">
-									<button type="button" class="link-remove link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
-								</div>
+							<div class="link-actions">
+								<button type="button" class="link-remove link-action"><span class="sr-only">Remove this link</span><i class="fa fa-minus-circle" role="presentation"></i></button>
 							</div>
 						</li>
 						<?php ++$sfi; ?>

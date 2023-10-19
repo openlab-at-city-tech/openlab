@@ -542,12 +542,57 @@ input:disabled+label {
 		padding: 10px;
 	}
 
+	.social-link-fields {
+		display: flex;
+		gap: 10px;
+		width: 100%;
+		align-items: stretch;
+
+        @media( max-width: @screen-xs-max ) {
+			gap: 0;
+		}
+	}
+
+	.social-link-fields-inner {
+		display: flex;
+		gap: 20px;
+		flex: 0 0 520px;
+
+        @media( max-width: @screen-xs-max ) {
+			display: block;
+			flex: 1;
+			order: 1;
+		}
+	}
+
+	.social-link-fields-service {
+		flex: 0 0 250px;
+
+        @media( max-width: @screen-xs-max ) {
+			flex: 1;
+		}
+	}
+
+	.social-link-fields-url {
+		flex: 0 0 250px;
+
+        @media( max-width: @screen-xs-max ) {
+			flex: 1;
+		}
+	}
+
 	.link-actions {
-		display: inline-block;
-		margin-top: -15px;
-		vertical-align: middle;
-		@media(max-width: @screen-xs-max){
-			margin-top: 0;
+		flex: 0 0 100px;
+		display: flex;
+		align-items: center;
+		margin-top: -10px;
+
+        @media( max-width: @screen-xs-max ) {
+			align-items: flex-start;
+			flex: 0 1 40px;
+			margin-top: 20px;
+			margin-left: -8px;
+			order: 0;
 		}
 	}
 
@@ -562,6 +607,17 @@ input:disabled+label {
 		padding: 0;
 		.fa {
 			margin-left: 0;
+		}
+
+        @media( max-width: @screen-xs-max ) {
+			position: relative;
+
+			&::after {
+				content: "Platform";
+				font-size: 13px;
+				position: absolute;
+				top: 7px;
+			}
 		}
 	}
 
@@ -578,7 +634,7 @@ input:disabled+label {
 	}
 
 	select {
-		width: 90%;
+		width: 100%;
 	}
 }
 
