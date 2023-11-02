@@ -347,8 +347,8 @@ function openlab_bp_group_documents_display_content() {
 												<?php } ?>
 												</ul>
 											</div>
-											<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
-											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
+											<label for="bp-group-documents-new-category-1" class="sr-only">Add new folder</label>
+											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-1" />
 										</fieldset>
 									</div>
 									<?php } ?>
@@ -396,8 +396,8 @@ function openlab_bp_group_documents_display_content() {
 													<?php } ?>
 													</ul>
 												</div>
-												<label for="bp-group-documents-new-category" class="sr-only">Add new folder</label>
-												<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category" />
+												<label for="bp-group-documents-new-category-2" class="sr-only">Add new folder</label>
+												<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-2" />
 											</fieldset>
 										</div>
 									</div>
