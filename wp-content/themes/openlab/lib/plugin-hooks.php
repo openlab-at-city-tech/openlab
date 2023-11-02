@@ -310,6 +310,22 @@ add_filter(
 );
 
 /**
+ * Fix bbPress's bad 'hide_super_sticky_admin_link' regex.
+ *
+ * It only removes the text, but we want to remove the entire empty element.
+ *
+ * This ensures that we don't get "empty link" errors in WAVE tests.
+ */
+add_filter(
+	'bbp_get_topic_stick_link',
+	function( $link ) {
+		// Remove anchor elements with the class bbp-topic-super-sticky-link.
+		return preg_replace( '/<a[^>]*class="bbp-topic-super-sticky-link"[^>]*><\/a>/', '', $link );
+	},
+	100
+);
+
+/**
  * Handle feature toggling for groups.
  */
 function openlab_group_feature_toggle( $group ) {
