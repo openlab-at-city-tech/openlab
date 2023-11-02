@@ -46,8 +46,8 @@ window.wp = window.wp || {};
 		function create_list_item( nicename, label ) {
 			var li = '';
 
-			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '"><span class="group-contact-remove"><a href="#"><span class="fa fa-minus-circle"></span></a></span> ' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"></li>';
-			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"><span class="group-contact-remove"> <a href="#"><span class="fa fa-minus-circle"></span></a></span></li>';
+			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '"><span class="group-contact-remove"><a href="#"><span class="fa fa-minus-circle"></span><span class="screen-reader-text">Remove Contact</span></a></span> ' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"></li>';
+			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"><span class="group-contact-remove"> <a href="#"><span class="fa fa-minus-circle"></span><span class="screen-reader-text">Remove Contact</span></a></span></li>';
 			$( '#group-contact-list' ).append( li );
 		}
 	}
