@@ -309,8 +309,8 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 			<?php do_action( 'template_notices' ); ?>
 
-			<div class="bp-widget">
-				<h4><?php _e( 'Administrators', 'buddypress' ); ?></h4>
+			<div class="bp-widget bpges-manage-members">
+				<h2><?php _e( 'Administrators', 'buddypress' ); ?></h2>
 
 				<?php if ( bp_has_members( '&include=' . bp_group_admin_ids() ) ) : ?>
 
@@ -359,8 +359,8 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			</div>
 
 			<?php if ( bp_group_has_moderators() ) : ?>
-				<div class="bp-widget">
-					<h4><?php _e( 'Moderators', 'buddypress' ); ?></h4>
+				<div class="bp-widget bpges-manage-members">
+					<h2><?php _e( 'Moderators', 'buddypress' ); ?></h2>
 
 						<?php if ( bp_has_members( '&include=' . bp_group_mod_ids() ) ) : ?>
 						<div id="group-manage-moderators-members" class="item-list single-line inline-element-list row group-manage-members group-list">
@@ -405,8 +405,8 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 				</div>
 			<?php endif ?>
 
-			<div class="bp-widget">
-				<h4><?php _e( 'Members', 'buddypress' ); ?></h4>
+			<div class="bp-widget bpges-manage-members">
+				<h2><?php _e( 'Members', 'buddypress' ); ?></h2>
 
 				<?php if ( bp_group_has_members( 'per_page=15&exclude_banned=0' ) ) :
 					// Get private users of the group

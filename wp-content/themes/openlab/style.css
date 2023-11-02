@@ -10331,6 +10331,16 @@ input#group-request-send {
   font-weight: normal;
   margin-bottom: 0;
 }
+.bpges-manage-members h2 {
+  font-size: 16px;
+  margin-top: 25px;
+}
+.bpges-manage-members h3 {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 20px;
+  font-weight: bold;
+}
 body.membership-requests .group-list {
   margin-top: 0;
 }
