@@ -33,6 +33,7 @@ OpenLab.utility = (function ($) {
 			// Modify wplink template.
 			jQuery('#link-selector #wplink-link-existing-content, #link-selector #search-panel').remove();
 			jQuery('#wp-link-wrap').css('height','300px');
+			OpenLab.utility.WpLinkA11y();
 		},
 		detectZoom: function () {
 
@@ -571,6 +572,22 @@ OpenLab.utility = (function ($) {
 					$( this ).html( '<span class="bp-screen-reader-text">Icon column</span>' );
 				}
 			);
+		},
+		WpLinkA11y: function() {
+			var $wpLinkInput = $( '.wp-link-input' );
+			if ( 0 === $wpLinkInput.length ) {
+				return;
+			}
+
+			$wpLinkInput.find( 'input' ).each( function() {
+				if ( $( this ).is( ':hidden' ) ) {
+					// Generate a unique ID for the element.
+					var id = 'wp-link-hidden-' + Math.random().toString( 36 ).substr( 2, 9 );
+					$( this ).attr( 'id', id );
+					$( this ).after( '<label for="' + id + '" class="screen-reader-text">Link search</label>' );
+				}
+
+			} );
 		},
 		initMemberRoleDefinitions: function() {
 			$( '.member-role-definition-label' ).on(
