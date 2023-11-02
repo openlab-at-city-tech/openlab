@@ -10327,6 +10327,10 @@ input#group-request-send {
   margin-left: 0;
   padding-left: 0;
 }
+.group-manage-members.group-list .group-item .group-item-wrapper ul.group-manage-members-bpges-status label {
+  font-weight: normal;
+  margin-bottom: 0;
+}
 body.membership-requests .group-list {
   margin-top: 0;
 }
