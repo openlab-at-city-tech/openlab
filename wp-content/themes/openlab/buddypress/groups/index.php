@@ -25,7 +25,10 @@ global $bp;
         <div class="clearfix visible-xs">
             <span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
         </div>
-        <?php bp_get_template_part('groups/groups', 'loop'); ?>
+
+		<div id="openlab-main-content">
+			<?php bp_get_template_part( 'groups/groups', 'loop' ); ?>
+		</div>
     </div>
 
     <?php openlab_bp_sidebar('members'); ?>
