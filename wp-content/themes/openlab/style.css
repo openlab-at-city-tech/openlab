@@ -10751,6 +10751,12 @@ a.delete-doc-button {
 #content #bbpress-forums .bbp-header .bbp-reply-content {
   margin-left: 130px;
 }
+#content #bbpress-forums .bbp-admin-links {
+  color: #666;
+}
+#content #bbpress-forums .bbp-author-ip {
+  color: #666;
+}
 #content #bbpress-forums .bp_group .bbp-reply-author {
   padding-top: 12px;
 }
