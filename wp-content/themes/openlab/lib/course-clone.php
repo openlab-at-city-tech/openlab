@@ -867,6 +867,8 @@ class Openlab_Clone_Course_Site {
 			'fileupload_url',
 			'oplb_gradebook_db_version', // This will force reinstallation of tables.
 			'duplicate_post_version', // Forces duplicate-post to initialize roles
+			'tec_ct1_events_table_schema_version', // Forces TEC to install tables.
+			'tec_ct1_occurrences_table_schema_version',
 		);
 
 		// now write them all back
@@ -875,6 +877,11 @@ class Openlab_Clone_Course_Site {
 			if ( ! in_array( $key, $preserve_option ) ) {
 				update_option( $key, $value );
 			}
+		}
+
+		// If the-events-calendar is active, set a flag that will run on the first admin load.
+		if ( is_plugin_active( 'the-events-calendar/the-events-calendar.php' ) ) {
+			update_option( 'openlab_migrate_events_calendar', '1' );
 		}
 
 		// add the theme mods
