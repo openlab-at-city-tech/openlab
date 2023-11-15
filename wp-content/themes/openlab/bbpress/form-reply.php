@@ -51,6 +51,8 @@
 
 							<?php do_action( 'bbp_theme_before_reply_form_content' ); ?>
 
+							<label for="bbp_reply_content" class="screen-reader-text">Reply Content</label>
+
 							<?php
 							bbp_the_content(
 								array(

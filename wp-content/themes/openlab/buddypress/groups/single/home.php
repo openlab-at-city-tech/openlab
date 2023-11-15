@@ -7,7 +7,7 @@ if (bp_has_groups()) : while (bp_groups()) : bp_the_group();
         ?>
 
         <?php do_action('bp_before_group_home_content'); ?>
-        <div class="col-sm-18 col-xs-24 groups-single-home">
+        <div class="col-sm-18 col-xs-24 groups-single-home" role="main">
             <div id="openlab-main-content" class="content-wrapper">
 
                 <?php

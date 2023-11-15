@@ -592,7 +592,6 @@ function openlab_group_contact_field() {
 			<div class="panel-body">
 		<p>By default, you are the <?php echo ucwords( $group_type ); ?> Contact. You may add or remove Contacts once your <?php echo $group_type; ?> has more members.</p>
 
-		<label for="group-contact-autocomplete"><?php echo ucwords( $group_type ); ?> Contact</label>
 		<input class="hide-if-no-js form-control" type="textbox" id="group-contact-autocomplete" value="" <?php disabled( bp_is_group_create() ); ?> />
 		<?php wp_nonce_field( 'openlab_group_contact_autocomplete', '_ol_group_contact_nonce', false ); ?>
 		<input type="hidden" name="group-contact-group-id" id="group-contact-group-id" value="<?php echo intval( $group_id ); ?>" />
@@ -931,14 +930,14 @@ function openlab_creator_form_entry( $settings ) {
 		</div>
 
 		<div class="creator-form-fields creator-fields-member-login">
-			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-member-login]">Member Username</label>
+			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-member-login">Member Username</label>
 			<input type="text" id="<?php echo esc_attr( $r['entry_id'] ); ?>-member-login" class="member-login-autocomplete member-login" name="group-creators[<?php echo esc_attr( $r['entry_id'] ); ?>][member-login]" value="<?php echo esc_attr( $r['member-login'] ); ?>" placeholder="Start typing to search OpenLab members" />
 			<input type="hidden" class="member-display-name" value="<?php echo esc_attr( $member_display_name ); ?>" />
 			<input type="hidden" class="member-url" value="<?php echo esc_attr( $member_url ); ?>" />
 		</div>
 
 		<div class="creator-form-fields creator-fields-non-member-name">
-			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-name]">Non-Member Name</label>
+			<label class="sr-only" for="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-name">Non-Member Name</label>
 			<input type="text" class="non-member-name" id="<?php echo esc_attr( $r['entry_id'] ); ?>-non-member-name" class="non-member-name" name="group-creators[<?php echo esc_attr( $r['entry_id'] ); ?>][non-member-name]" value="<?php echo esc_attr( $r['non-member-name'] ); ?>" placeholder="Creator's name" />
 		</div>
 	</div>

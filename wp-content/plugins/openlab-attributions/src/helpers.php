@@ -218,7 +218,7 @@ function get_the_attribution( $item ) {
 	}
 
 	// Append "." at the end of the sentence if there is none.
-	if( substr($attribution, -1) != '.' ) {
+	if ( substr( $attribution, -1 ) !== '.' ) {
 		$attribution .= '.';
 	}
 

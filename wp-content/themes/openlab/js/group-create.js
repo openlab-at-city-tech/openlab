@@ -655,6 +655,11 @@ jQuery( document ).ready(
 
 		setTimeout( maybeShowSiteTemplates, 1500 )
 
+		// We must also run maybeShowSiteTemplates after a category change.
+		$( '.site-template-categories' ).on( 'change', function() {
+			setTimeout( maybeShowSiteTemplates, 1500 )
+		} );
+
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
 			$setuptoggle.trigger( 'click' );
 		}

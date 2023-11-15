@@ -31,31 +31,37 @@ function render_attributions( $content ) {
 	require_once ROOT_DIR . '/views/attributions.php';
 	$content .= ob_get_clean();
 
-	return openlab_get_formatted_content_with_attributions($content);
+	return openlab_get_formatted_content_with_attributions( $content );
 }
 add_filter( 'the_content', __NAMESPACE__ . '\\render_attributions', 12 );
 
 /**
  * Replace content <span> attributions with <a> tags when printing it on the public site.
  */
-function openlab_get_formatted_content_with_attributions($content = '') {
+function openlab_get_formatted_content_with_attributions( $content = '' ) {
 	$doc = new DOMDocument();
-	@$doc->loadHTML( '<?xml encoding="UTF-8">' . $content );
 
-	$finder = new \DomXPath($doc);
-	$className = 'attribution-anchor';
+	$encoding = get_option( 'blog_charset' );
 
-	$nodes = $finder->query("//*[contains(@class, '$className')]");
+	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	@$doc->loadHTML( '<?xml encoding="' . $encoding . '">' . $content );
 
-	foreach($nodes as $node) {
-		$newNode = $doc->createElement('a');
-		$href = openlab_get_node_href_attribute( $node );
-		$newNode->setAttribute('href', $href );
-		$newNode->setAttribute('id', $node->getAttribute('id'));
-		$newNode->setAttribute('aria-label', $node->getAttribute('aria-label'));
-		$newNode->setAttribute('class', $node->getAttribute('class'));
+	$finder     = new \DomXPath( $doc );
+	$class_name = 'attribution-anchor';
 
-		$node->parentNode->replaceChild($newNode, $node);
+	$nodes = $finder->query( "//*[contains(@class, '$class_name')]" );
+
+	foreach ( $nodes as $node ) {
+		$new_node = $doc->createElement( 'a' );
+		$href     = openlab_get_node_href_attribute( $node );
+
+		$new_node->setAttribute( 'href', $href );
+		$new_node->setAttribute( 'id', $node->getAttribute( 'id' ) );
+		$new_node->setAttribute( 'aria-label', $node->getAttribute( 'aria-label' ) );
+		$new_node->setAttribute( 'class', $node->getAttribute( 'class' ) );
+
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$node->parentNode->replaceChild( $new_node, $node );
 	}
 
 	return $doc->saveHTML();
@@ -65,17 +71,17 @@ function openlab_get_formatted_content_with_attributions($content = '') {
  * Get the "href" value from the DOM Node
  */
 function openlab_get_node_href_attribute( $node ) {
-	// If the dom node has "href" attribute, return it's value
-	if( ! empty( $node->getAttribute('href' ) ) ) {
-		return $node->getAttribute('href');
+	// If the dom node has "href" attribute, return its value.
+	if ( ! empty( $node->getAttribute( 'href' ) ) ) {
+		return $node->getAttribute( 'href' );
 	}
 
-	// If the dom node has "data-href" attribute,  return it's value (introduced in the later version of the plugin)
-	if( ! empty( $node->getAttribute('data-href') ) ) {
-		return $node->getAttribute('data-href');
+	// If the dom node has "data-href" attribute,  return its value (introduced in the later version of the plugin).
+	if ( ! empty( $node->getAttribute( 'data-href' ) ) ) {
+		return $node->getAttribute( 'data-href' );
 	}
 
-	// If none of the above exist, try to generate the href value from the "id" attribute
+	// If none of the above exist, try to generate the href value from the "id" attribute.
 	return '#ref-' . openlab_get_attribute_id( $node );
 }
 
@@ -83,6 +89,6 @@ function openlab_get_node_href_attribute( $node ) {
  * Get the attribution ID from the "id" dom element attribute
  */
 function openlab_get_attribute_id( $node ) {
-	// Remove "anchor-" from string in format "anchor-ABC-123"
-	return str_replace( 'anchor-', '', $node->getAttribute('id'));
+	// Remove "anchor-" from string in format "anchor-ABC-123".
+	return str_replace( 'anchor-', '', $node->getAttribute( 'id' ) );
 }

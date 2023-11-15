@@ -1,4 +1,4 @@
-<div class="sidebar-widget" id="group-upcoming-events-sidebar-widget">
+<div class="sidebar-widget" id="group-upcoming-events-sidebar-widget" role="complementary">
     <h2 class="sidebar-header">Upcoming Events</h2>
 
     <div class="sidebar-block">

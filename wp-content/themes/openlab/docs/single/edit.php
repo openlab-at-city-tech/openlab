@@ -48,7 +48,7 @@ if ( $current_doc ) {
 
 						<?php if ( bp_docs_is_existing_doc() ) : ?>
 							<div id="doc-content-permalink">
-								<label for="doc[permalink]">Permalink</label>
+								<label for="doc-permalink">Permalink</label>
 								<code><?php echo trailingslashit( bp_get_group_permalink() ) . BP_DOCS_SLUG . '/' ?></code><input type="text" id="doc-permalink" name="doc[permalink]" class="long" value="<?php bp_docs_edit_doc_slug() ?>" />
 							</div>
 						<?php endif ?>

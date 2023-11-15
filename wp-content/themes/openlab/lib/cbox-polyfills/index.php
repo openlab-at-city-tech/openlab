@@ -278,6 +278,7 @@ add_action(
 	function() {
 		?>
 		<input type="hidden" name="source_blog" />
+		<label for="set-up-site-toggle" class="sr-only">Set up site toggle (hidden)</label>
 		<input type="checkbox" style="display:none;" id="set-up-site-toggle" />
 		<?php
 	}

@@ -2189,3 +2189,24 @@ function openlab_comment_count_fallback( $count, $post_id = 0 ) {
 
 	return count( $comments );
 }
+
+/**
+ * On a newly cloned site, run the-events-calendar migration if necessary.
+ */
+add_action(
+	'admin_init',
+	function() {
+		$run_tec_migration = get_option( 'openlab_migrate_events_calendar' );
+		if ( ! $run_tec_migration ) {
+			return;
+		}
+
+		delete_option( 'openlab_migrate_events_calendar' );
+
+		if ( ! class_exists( 'TEC\Events\Custom_Tables\V1\Activation' ) ) {
+			return;
+		}
+
+		TEC\Events\Custom_Tables\V1\Activation::activate();
+	}
+);

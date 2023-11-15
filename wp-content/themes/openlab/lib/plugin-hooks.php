@@ -84,13 +84,13 @@ function openlab_manage_members_email_status( $user_id = '', $group = '' ) {
 
 	$group_url = bp_get_group_permalink( $group ) . 'admin/manage-members/email';
 	$sub_type  = ass_get_group_subscription_status( $user_id, $group->id );
-	echo '<h5>Email Status</h5>';
+	echo '<h3>Email Status</h3>';
 
 	echo '<ul class="group-manage-members-bpges-status">';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</li>';
-	echo '  <li><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</li>';
+	echo '  <li><label><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'supersub', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/supersub/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="supersub" /> All Email</label></li>';
+	echo '  <li><label><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'dig', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/dig/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="dig" /> Daily</label></li>';
+	echo '  <li><label><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'sum', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/sum/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="sum" /> Weekly</label></li>';
+	echo '  <li><label><input name="group-manage-members-bpges-status-' . esc_attr( $user_id ) . '" type="radio" ' . checked( 'no', $sub_type, false ) . ' data-url="' . esc_url( wp_nonce_url( $group_url . '/no/' . esc_attr( $user_id ) . '/', 'ass_member_email_status' ) ) . '" value="no" /> No Email</label></li>';
 
 	echo '</ul>';
 
@@ -307,6 +307,22 @@ add_filter(
 		$args['tinymce'] = true;
 		return $args;
 	}
+);
+
+/**
+ * Fix bbPress's bad 'hide_super_sticky_admin_link' regex.
+ *
+ * It only removes the text, but we want to remove the entire empty element.
+ *
+ * This ensures that we don't get "empty link" errors in WAVE tests.
+ */
+add_filter(
+	'bbp_get_topic_stick_link',
+	function( $link ) {
+		// Remove anchor elements with the class bbp-topic-super-sticky-link.
+		return preg_replace( '/<a[^>]*class="bbp-topic-super-sticky-link"[^>]*><\/a>/', '', $link );
+	},
+	100
 );
 
 /**

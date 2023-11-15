@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { Tooltip } from 'react-tippy';
+import Tippy from '@tippyjs/react';
 
 /**
  * WordPress dependencies
@@ -27,14 +27,13 @@ const popperOptions = {
 
 export default function Help( { text = '' } ) {
 	return (
-		<Tooltip
-			html={ text }
-			arrow={ true }
-			position="right"
-			trigger="mouseenter"
+		<Tippy
+			content={ text }
 			popperOptions={ popperOptions }
 		>
-			<Button icon="editor-help" className="component-help-button" />
-		</Tooltip>
+			<span className="component-help-button">
+				<span className="dashicons dashicons-editor-help"></span>
+			</span>
+		</Tippy>
 	);
 }

@@ -8,7 +8,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
     $pull_classes .= ($mobile_dropdown ? ' mobile-dropdown' : '');
 
-    echo '<div id="sidebar" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"><div class="sidebar-wrapper">';
+    echo '<div id="sidebar" role="complementary" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"><div class="sidebar-wrapper">';
 
     switch ($type) {
         case 'actions':

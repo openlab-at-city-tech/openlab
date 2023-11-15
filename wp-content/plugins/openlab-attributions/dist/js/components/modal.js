@@ -194,7 +194,11 @@ class AttributionModal extends Component {
 			>
 				<div className="header">
 					<h3>{ title }</h3>
-					<button onClick={ this.handleClose }>
+					<button id="modal-close" onClick={ this.handleClose }>
+						<span className="screen-reader-text">
+							{ __( 'Close modal', 'openlab-attributions' ) }
+						</span>
+
 						<svg
 							width="24"
 							height="24"

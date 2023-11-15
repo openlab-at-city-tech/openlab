@@ -130,6 +130,25 @@ add_action(
 			[],
 			OL_VERSION
 		);
+
+		wp_localize_script(
+			'openlab-group-announcements',
+			'OLRichTextComments',
+			[
+				'commentFieldIsRequired' => __( 'The comment field is required.', 'openlab-rich-text-comments' ),
+				'embedUrl'               => __( 'Embed URL', 'openlab-rich-text-comments' ),
+				'enterAltText'           => __( 'Alt text description', 'openlab-rich-text-comments' ),
+				'enterMediaUrl'          => __( 'Enter media URL', 'openlab-rich-text-comments' ),
+				'previewLabel'           => __( 'Preview', 'openlab-rich-text-comments' ),
+				'toggleBoldText'         => __( 'Toggle bold text', 'openlab-rich-text-comments' ),
+				'toggleBulletedList'     => __( 'Toggle bulleted list', 'openlab-rich-text-comments' ),
+				'toggleItalicText'       => __( 'Toggle italic text', 'openlab-rich-text-comments' ),
+				'toggleLinkModal'        => __( 'Toggle link modal', 'openlab-rich-text-comments' ),
+				'toggleMultimediaModal'  => __( 'Toggle multimedia modal', 'openlab-rich-text-comments' ),
+				'toggleOrderedList'      => __( 'Toggle ordered list', 'openlab-rich-text-comments' ),
+				'toggleUnderlineText'    => __( 'Toggle underline text', 'openlab-rich-text-comments' ),
+			]
+		);
 	}
 );
 

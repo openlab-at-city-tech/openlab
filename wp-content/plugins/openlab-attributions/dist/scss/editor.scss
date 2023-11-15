@@ -1,6 +1,4 @@
-@import "~react-tippy/dist/tippy.css";
-
-.tippy-tooltip {
+.tippy-box {
 	color: #333;
 	background: #e2e4e7;
 	border: 2px solid #0073aa;
@@ -9,14 +7,14 @@
 	text-align: initial;
 }
 
-.tippy-popper[x-placement^="right"] [x-arrow] {
+.tippy-box[x-placement^="right"] [x-arrow] {
 	border-right: 9px solid #0073aa;
 	border-top: 9px solid transparent;
 	border-bottom: 9px solid transparent;
 	left: -9px;
 }
 
-.tippy-popper[x-placement^="left"] [x-arrow] {
+.tippy-box[x-placement^="left"] [x-arrow] {
 	border-left: 9px solid #0073aa;
 	border-top: 9px solid transparent;
 	border-bottom: 9px solid transparent;
@@ -151,7 +149,7 @@
 	}
 
 	.attribution-plugin {
-		background-color: #e2e4e7;
+		background-color: #f6f7f7;
 		padding: 6px 8px;
 	}
 }
@@ -259,7 +257,7 @@
 	flex-flow: row wrap;
 	align-items: center;
 	line-height: 1;
-	
+
 	&:hover {
 		cursor: pointer;
 	}

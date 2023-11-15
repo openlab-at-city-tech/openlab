@@ -2,7 +2,7 @@
   "private": true,
   "name": "openlab-attributions",
   "description": "Add formatted attributions to post content.",
-  "version": "2.0.1",
+  "version": "2.1.2",
   "author": "George Mamadashvili",
   "license": "GPL-2.0+",
   "main": "dist/js/block-editor.js",
@@ -18,14 +18,15 @@
     "format:scripts": "cross-env eslint './dist/js/**/*.js' --fix"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "@wordpress/i18n": "^4.2.0",
     "classnames": "^2.2.6",
     "nanoid": "^2.1.1",
     "react-contenteditable": "^3.3.5",
-    "react-modal-resizable-draggable": "^0.1.6",
-    "react-tippy": "^1.2.3"
+    "react-modal-resizable-draggable": "^0.1.6"
   },
   "devDependencies": {
+		"@babel/plugin-proposal-object-rest-spread": "^7.15.6",
     "@babel/preset-react": "^7.12.13",
     "@wordpress/babel-preset-default": "^5.0.1",
     "@wordpress/dependency-extraction-webpack-plugin": "^3.0.1",
