@@ -54,7 +54,9 @@ class AttributionModal extends Component {
 			} );
 		}
 
-		this.moveModalToEditorElement();
+		if ( this.props.isImageBlock ) {
+			this.moveModalToEditorElement();
+		}
 	}
 
 	/**
@@ -106,15 +108,17 @@ class AttributionModal extends Component {
 	}
 
 	handleClose() {
-		const modal = document.querySelector('.component-attributions-modal');
-		const modalMainElement = modal.parentElement;
+		if ( this.props.isImageBlock ) {
+			const modal = document.querySelector('.component-attributions-modal');
+			const modalMainElement = modal.parentElement;
 
-		// Move the modal element to the original position
-		let originalPosition = document.getElementById('originalModalPosition');
-		originalPosition.parentElement.appendChild(modalMainElement);
+			// Move the modal element to the original position
+			let originalPosition = document.getElementById('originalModalPosition');
+			originalPosition.parentElement.appendChild(modalMainElement);
 
-		// Remove temporary element
-		document.getElementById('originalModalPosition').remove();
+			// Remove temporary element
+			document.getElementById('originalModalPosition').remove();
+		}
 
 		this.props.onClose();
 	}

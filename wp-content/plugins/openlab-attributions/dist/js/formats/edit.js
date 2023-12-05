@@ -37,7 +37,7 @@ const addMarker = ( value, data ) => {
 	dispatch( 'openlab/attributions' ).add( item );
 
 	const startIndex = isCollapsed( value ) ? value.start : value.end;
-	
+
 	// Add empty space at the end of the sentence, so it's possible to continue writing after it.
 	value.text += ' ';
 
@@ -49,11 +49,17 @@ const addMarker = ( value, data ) => {
 export default function Edit( { isActive, value, onChange } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 
-	const { item } = useSelect(
-		( select ) => ( {
-			item: select( 'openlab/modal' ).get(),
-		} ),
-		[]
+	const { isImageBlock, item } = useSelect(
+		( select ) => {
+			const { getBlockSelectionStart, getBlock } = select( 'core/block-editor' );
+			const clientId = getBlockSelectionStart();
+			const block = clientId ? getBlock(clientId) : null;
+
+			return {
+				isImageBlock: block && block.name === 'core/image',
+				item: select( 'openlab/modal' ).get(),
+			}
+		}
 	);
 
 	return (
@@ -71,6 +77,7 @@ export default function Edit( { isActive, value, onChange } ) {
 			{ isOpen && (
 				<Modal
 					isOpen={ isOpen }
+					isImageBlock={ isImageBlock }
 					modalType="add"
 					title={ __( "Add Attribution", 'openlab-attributions' ) }
 					item={ item }
