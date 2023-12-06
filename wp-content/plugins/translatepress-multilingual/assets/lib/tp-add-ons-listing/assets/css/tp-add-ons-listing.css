@@ -1,0 +1,34 @@
+/**
+Style the Add-ons listing page
+*/
+#trp-add-ons-listing .trp-main-header{
+    margin-bottom:30px;
+}
+
+#trp-add-ons-listing .trp-add-ons-section{
+    margin:40px 0;
+}
+
+#trp-add-ons-listing .tablenav{
+    display:none;
+}
+
+#trp-add-ons-listing .column-add_on{
+    width:80%;
+}
+
+#trp-add-ons-listing .column-icon{
+    width: 64px;
+}
+
+#trp-add-ons-listing .column-actions{
+    width:225px;
+    vertical-align: middle !important;
+}
+#trp-add-ons-listing .trp-add-ons-search-box{
+    margin-bottom:40px;
+}
+
+#trp-add-ons-listing #trp-add-ons-search-input{
+    width:350px;
+}

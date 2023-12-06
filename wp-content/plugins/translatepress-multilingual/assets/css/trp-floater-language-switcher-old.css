@@ -1,0 +1,210 @@
+#trp-floater-ls {
+    position: fixed;
+    z-index: 9999999;
+    bottom: 0;
+    left: 80%;
+    border-radius: 5px 5px 0 0;
+    display: block;
+    overflow: hidden;
+}
+
+#trp-floater-ls.trp-color-dark{
+    background: rgb(27,27,27);
+    background: linear-gradient(0deg, rgba(27,27,27,1) 0%, rgba(84,84,84,1) 100%);
+}
+
+#trp-floater-ls.trp-color-light{
+    background: rgb(214,214,214);
+    background: linear-gradient(0deg, rgba(214,214,214,1) 0%, rgba(250,250,250,1) 100%);
+}
+
+#trp-floater-ls.trp-bottom-left{
+    left: 10%;
+}
+
+#trp-floater-ls.trp-top-right{
+    bottom:auto;
+    top: 0;
+    border-radius: 0 0 5px 5px;
+}
+
+#trp-floater-ls.trp-top-left{
+    bottom:auto;
+    top: 0;
+    left: 10%;
+    border-radius: 0 0 5px 5px;
+}
+
+body.admin-bar #trp-floater-ls.trp-top-right,
+body.admin-bar #trp-floater-ls.trp-top-left{
+    top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+    body.admin-bar #trp-floater-ls.trp-top-right,
+    body.admin-bar #trp-floater-ls.trp-top-left {
+        top: 46px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #trp-floater-ls {
+        left: 50%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #trp-floater-ls {
+        left: 10%;
+    }
+}
+
+#trp-floater-ls.trp-floater-ls-codes  #trp-floater-ls-current-language a,
+#trp-floater-ls.trp-floater-ls-codes #trp-floater-ls-language-list {
+    text-align: center;
+}
+
+#trp-floater-ls.trp-floater-ls-flags #trp-floater-ls-current-language a img,
+#trp-floater-ls.trp-floater-ls-flags #trp-floater-ls-language-list a img {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+}
+
+#trp-floater-ls-language-list {
+    display: none;
+}
+
+.trp-poweredby #trp-floater-ls-language-list .trp-language-wrap{
+    padding: 25px;
+    width: auto;
+}
+
+#trp-floater-ls.trp-top-right.trp-poweredby.trp-color-dark #trp-floater-ls-language-list #trp-floater-poweredby,
+#trp-floater-ls.trp-top-left.trp-poweredby.trp-color-dark #trp-floater-ls-language-list #trp-floater-poweredby{
+    border-top: none;
+    border-bottom: 1px solid #747474;
+}
+#trp-floater-ls.trp-top-right.trp-poweredby.trp-color-light #trp-floater-ls-language-list #trp-floater-poweredby,
+#trp-floater-ls.trp-top-left.trp-poweredby.trp-color-light #trp-floater-ls-language-list #trp-floater-poweredby{
+    border-top: none;
+    border-bottom: 1px solid #aaaaaa;
+}
+
+.trp-color-dark.trp-poweredby #trp-floater-ls-language-list #trp-floater-poweredby{
+    border-top: 1px solid #747474;
+    color: #b3b3b3;
+}
+.trp-color-light.trp-poweredby #trp-floater-ls-language-list #trp-floater-poweredby{
+    border-top: 1px solid #aaaaaa;
+    color: #808080;
+}
+
+.trp-poweredby #trp-floater-ls-language-list #trp-floater-poweredby{
+    padding: 5px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.trp-poweredby #trp-floater-ls-language-list #trp-floater-poweredby a{
+    display: inline;
+    padding: 0px 3px;
+    border-radius: 30px;
+    background: #b3b3b3;
+    color: #111;
+    line-height: 11px;
+}
+.trp-poweredby #trp-floater-ls-language-list #trp-floater-poweredby a:hover{
+    background: #f64f4f;
+    color: #f1f1f1;
+    opacity: 1;
+}
+
+
+#trp-floater-ls:focus #trp-floater-ls-current-language,
+#trp-floater-ls:hover #trp-floater-ls-current-language {
+    display: none;
+}
+
+#trp-floater-ls:focus #trp-floater-ls-language-list,
+#trp-floater-ls:hover #trp-floater-ls-language-list {
+    display: block;
+}
+
+#trp-floater-ls {
+    box-shadow: 0 0 5px #212121;
+}
+
+#trp-floater-ls-current-language a,
+#trp-floater-ls-language-list a {
+    display: block;
+    padding: 10px 15px 10px 15px;
+    font-size: 90%;
+}
+
+#trp-floater-ls-current-language,
+#trp-floater-ls-language-list {
+    text-align: left;
+}
+
+#trp-floater-ls-current-language.trp-with-flags,
+#trp-floater-ls-language-list.trp-with-flags {
+    text-align: left;
+}
+
+#trp-floater-ls-current-language {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.trp-color-dark #trp-floater-ls-current-language a,
+.trp-color-dark #trp-floater-ls-language-list a {
+    color: #BDBDBD;
+}
+.trp-color-light #trp-floater-ls-current-language a,
+.trp-color-light #trp-floater-ls-language-list a {
+    color: #404040;
+}
+
+.trp-color-dark #trp-floater-ls-current-language a,
+.trp-color-dark #trp-floater-ls-language-list a {
+    display: block;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#trp-floater-ls-language-list a:hover {
+    color: #FAFAFA;
+    background-color: #656565;
+}
+
+#trp-floater-ls .trp-floater-ls-disabled-language {
+    pointer-events: none;
+    cursor: default;
+}
+
+#trp-floater-ls .trp-with-flags .trp-flag-image {
+    margin-right: 5px;
+    margin-top: -1px;
+    vertical-align: middle;
+    height: auto;
+    max-width: 100%;
+    display: inline;
+    padding: 0;
+}
+
+.trp-flag-image:dir(rtl) {
+    margin-left: 5px;
+}
+
+#trp-floater-ls a {
+    text-decoration: none;
+}
+
+#trp-floater-ls-language-list{
+    max-height: 300px;
+    overflow-y: auto;
+}
