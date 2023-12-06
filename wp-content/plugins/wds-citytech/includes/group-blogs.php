@@ -795,7 +795,7 @@ function wds_bp_group_meta() {
 							$user_blogs = array_values( $user_blogs );
 							?>
 
-							<?php // phpstan-ignore-next-line ?>
+							<?php /* @phpstan-ignore-next-line */ ?>
 							<?php if ( ! empty( $user_blogs ) ) : ?>
 								<div id="wds-website-existing" class="form-field form-required">
 
