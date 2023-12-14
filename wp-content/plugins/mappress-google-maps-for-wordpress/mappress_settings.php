@@ -38,6 +38,7 @@ class Mappress_Options extends Mappress_Obj {
 		$license,
 		$lines,
 		$lineOpts = array('color' => 'blue', 'weight' => 3, 'opacity' => 1.0),
+		$liq, 
 		$mapbox,
 		$mapboxStyles = array(),	// deprecated
 		$mashupBody = 'poi',
@@ -58,6 +59,7 @@ class Mappress_Options extends Mappress_Obj {
 		$scrollWheel = true,
 		$search = true,
 		$searchBox,
+		$searchParam,
 		$searchPlaceholder,
 		$size = 0,
 		$sizes = array(
@@ -139,6 +141,10 @@ class Mappress_Settings {
 		$otype = $args->otype;
 		$start = $args->start;
 
+		// Check that at least one post type is checked
+		if (empty(Mappress::$options->postTypes))
+			Mappress::ajax_response(__('Select at least one post type', 'mappress-google-maps-for-wordpress'));
+		
 		// Get keys for the object type.  If no keys, nothing to do
 		$keys = (Mappress::$options->metaKeys[$otype]) ? Mappress::$options->metaKeys[$otype] : array();
 		if (empty($keys))
@@ -150,13 +156,15 @@ class Mappress_Settings {
 		$meta_table = ($otype == 'post') ? $wpdb->postmeta : $wpdb->usermeta;
 
 		// Read all objects with at least ONE of the mapped keys
-		if ($otype == 'post')
-			$sql = "SELECT DISTINCT post_id AS oid, post_title AS title FROM $wpdb->postmeta INNER JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID ";
-		else
-			$sql = "SELECT DISTINCT user_id AS oid, user_nicename AS title FROM $wpdb->usermeta INNER JOIN $wpdb->users ON $wpdb->usermeta.user_id = $wpdb->users.ID ";
-
-		$sql .= " WHERE meta_key IN ($string_keys)";
-		$sql .= sprintf(" LIMIT %d, %d", $start, $batch_size);
+		$where = " WHERE meta_key IN ($string_keys)"; 
+		$limit = sprintf(" LIMIT %d, %d", $start, $batch_size);        
+		
+		if ($otype == 'post') {
+			$where .= " AND $wpdb->posts.post_type IN ('" .  implode("', '", Mappress::$options->postTypes) . "')";
+			$sql = "SELECT DISTINCT post_id AS oid, post_title AS title FROM $wpdb->postmeta INNER JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID $where $limit";
+		} else {
+			$sql = "SELECT DISTINCT user_id AS oid, user_nicename AS title FROM $wpdb->usermeta INNER JOIN $wpdb->users ON $wpdb->usermeta.user_id = $wpdb->users.ID $where $limit";
+		}
 
 		$results = $wpdb->get_results($sql);
 		$logs = array();

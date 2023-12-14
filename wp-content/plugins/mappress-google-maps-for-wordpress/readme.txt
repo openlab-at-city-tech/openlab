@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, gpx, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
 Requires at least: 5.9.5
 Requires PHP: 7.0
-Tested up to: 6.3
-Stable tag: 2.87.2
+Tested up to: 6.4
+Stable tag: 2.88.13
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -89,6 +89,70 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.88.13 =
+* Fixed: POI modal not closing
+* Fixed: Map settings 'filter' checkbox not working
+
+= 2.88.12 =
+* Fixed: bump WP version in readme
+
+= 2.88.11 =
+* Fixed: map picker not showing maps after saved in editor
+
+= 2.88.10 =
+* Fixed: settings error when upgrading from old version with non-array filters
+
+= 2.88.9 =
+* Fixed: notices for POIs with point as array instead of object
+
+= 2.88.8 =
+* Fixed: unable to use individual poi.data fields in popup templates
+
+= 2.88.7 =
+* Fixed: JS error when displaying some filters with checkboxes
+
+= 2.88.6 =
+* Fixed: JS error when adding new POI data fields
+* Fixed: Mashup query block dropdown sometimes showed first item checked
+* Fixed: Mashup block shows all locations instead of using specified query, due to sanitizing
+
+= 2.88.5 =
+* Added: parameter 'name' (map name) now included in filter 'mappress_filter_values'
+* Fixed: single quotes incorrectly escaped in POI templates
+* Fixed: shortcode attributes allowed single quotes
+
+= 2.88.4 =
+* Added: show invalid address when geocoding from settings screen
+* Fixed: template editor reversed label and token name
+* Fixed: overflow of map container inside iframe
+* Fixed: with left/right thumbnail, POI content truncated when no thumbnail present
+* Fixed: bulk geocoding should be limited to the selected post types in the 'geocoding' settings section
+* Fixed: suppress the geocoding errors section when ACF is present, since it interferes with the mappress_error custom field
+
+= 2.88.3 =
+* Fixed: map doesn't display when geolocation centering 
+
+= 2.88.2 =
+* Fixed: WP dialog changes cause issues with intro guide
+
+= 2.88.1 = 
+* Fixed: free version error with filter class
+
+= 2.88 =
+* Added: initial search can now be specified by URL parameter (enter parameter name in settings)
+* Added: LocationIQ geocoder
+* Changed: removed wp element dependency
+
+= 2.87.5 =
+* Fixed: sort by POIs by title not working when map center is defined only by bounds
+
+= 2.87.4 = 
+* Hotfix for bug in 2.87.3
+
+= 2.87.3 =
+* Changed: add delay for Leaflet initialopeninfo ("load" event triggers too early throwing off popup location)
+* Fixed: debounce triggering on initialization
 
 = 2.87.2 =
 * Fixed: search not working for some geocoders
