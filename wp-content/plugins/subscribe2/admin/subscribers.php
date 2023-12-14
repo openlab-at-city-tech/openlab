@@ -189,13 +189,13 @@ if ( ! empty( $_POST['s'] ) ) {
 	$result = array();
 	if ( 'registered' === $current_tab ) {
 		foreach ( $subscribers as $subscriber ) {
-			if ( is_numeric( stripos( $subscriber['user_email'], sanitize_key( $_POST['s'] ) ) ) ) {
+			if ( is_numeric( stripos( $subscriber['user_email'], sanitize_text_field( $_POST['s'] ) ) ) ) {
 				$result[] = $subscriber;
 			}
 		}
 	} else {
 		foreach ( $subscribers as $subscriber ) {
-			if ( is_numeric( stripos( $subscriber, sanitize_key( $_POST['s'] ) ) ) ) {
+			if ( is_numeric( stripos( $subscriber, sanitize_text_field( $_POST['s'] ) ) ) ) {
 				$result[] = $subscriber;
 			}
 		}
