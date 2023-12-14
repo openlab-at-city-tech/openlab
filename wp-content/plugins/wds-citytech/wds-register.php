@@ -357,7 +357,6 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				$return     .= '</select>';
 				$return     .= '</div>';
 				endif;
-			$return .= do_action( 'bp_custom_profile_edit_fields' );
 			$return .= '<p class="description">' . bp_get_the_profile_field_description() . '</p>';
 			$return .= '</div>';
 					endwhile;

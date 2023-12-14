@@ -785,7 +785,7 @@ class Openlab_Clone_Course_Site {
 			add_action( 'wp_trash_post', '_eventorganiser_delete_calendar_cache' );
 		}
 
-		add_action( 'delete_post', '_update_posts_count_on_delete', 10 );
+		add_action( 'delete_post', '_update_posts_count_on_delete', 10, 2 );
 		add_action( 'delete_post', '_wp_delete_post_menu_item' );
 		add_action( 'delete_attachment', '_delete_attachment_theme_mod' );
 		add_action( 'publish_post', '_publish_post_hook', 5, 1 );
