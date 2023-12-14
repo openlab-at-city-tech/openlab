@@ -35,6 +35,7 @@ function openlab_hide_plugins( $plugins ) {
 		'cac-non-cuny-signup/loader.php',
 		'cardboard/cardboard.php',
 		'cubepoints/cubepoints.php',
+		'distributor/distributor.php', // #3279
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
 		'dw-question-answer/dw-question-answer.php',
