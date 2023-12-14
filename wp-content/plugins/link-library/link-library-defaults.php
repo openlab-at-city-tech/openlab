@@ -457,6 +457,7 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['suppressonemptysearch']			 = false;
 	$options['addlinkformdisplaymode']			 = 'inline';
 	$options['popupbuttonlabel']				 = __( 'Submit a new link', 'link-library' );
+	$options['suppresslinksdiv']				 = false;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$settingsname = 'LinkLibraryPP' . $settings;

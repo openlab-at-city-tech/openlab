@@ -127,6 +127,19 @@ class link_library_plugin_admin {
 			'h6' => array(),
 			'hr' => array(),
 			'i' => array(),
+			'iframe' => array(
+				'allow'    => array(),
+				'allowfullscreen'    => array(),
+				'allowpaymentrequest'    => array(),
+				'height'    => array(),
+				'loading'    => array(),
+				'name'    => array(),
+				'referrerpolicy'    => array(),
+				'sandbox'    => array(),
+				'src'    => array(),
+				'srcdoc'    => array(),
+				'width'    => array(),
+			),
 			'img' => array(
 				'alt'    => array(),
 			  	'class'  => array(),
@@ -2421,7 +2434,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 					'suppress_custom_text_1_if_empty', 'suppress_custom_text_2_if_empty', 'suppress_custom_text_3_if_empty',
 					'suppress_custom_text_4_if_empty', 'suppress_custom_text_5_if_empty', 'suppress_custom_list_1_if_empty', 'suppress_custom_list_2_if_empty',
 					'suppress_custom_list_3_if_empty', 'suppress_custom_list_4_if_empty', 'suppress_custom_list_5_if_empty', 'catnamelink', 'hideemptycats',
-					'rsslibrarypagination', 'showupdatedonly', 'searchfromallcats', 'suppressonemptysearch'
+					'rsslibrarypagination', 'showupdatedonly', 'searchfromallcats', 'suppressonemptysearch', 'suppresslinksdiv'
 				)
 				as $option_name
 			) {
@@ -4869,6 +4882,13 @@ function general_custom_fields_meta_box( $data ) {
 				</td>
 				<td>
 					<input type="checkbox" id="allowcolumnsorting" name="allowcolumnsorting" <?php checked( $options['allowcolumnsorting'] ); ?>/>
+				</td>
+				<td></td>
+				<td>
+					<?php _e( 'Suppress div around link list', 'link-library' ); ?>
+				</td>
+				<td>
+					<input type="checkbox" id="suppresslinksdiv" name="suppresslinksdiv" <?php checked( $options['suppresslinksdiv'] ); ?>/>
 				</td>
 			</tr>
 			<tr>

@@ -3,8 +3,8 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
 Requires at least: 4.4
-Tested up to: 6.2.1
-Stable tag: 7.5.9
+Tested up to: 6.4.1
+Stable tag: 7.5.13
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -49,6 +49,19 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.5.13 =
+* Fix for hierarchical list of categories in add link form
+
+= 7.5.12 =
+* Added missing parameters for iframe white listing
+
+= 7.5.11 =
+* Added iframe to white list of HTML tags for configuration options
+* Enabled embed shortcodes inside of large description fields
+
+= 7.5.10 =
+* Added option to suppress linklist div from output
 
 = 7.5.9 =
 * Fixed admin stylesheet to avoid conflict with default editor
