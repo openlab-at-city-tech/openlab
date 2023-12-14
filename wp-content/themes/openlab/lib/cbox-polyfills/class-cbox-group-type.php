@@ -80,6 +80,13 @@ class CBOX_Group_Type {
 		return 0;
 	}
 
+	/**
+	 * Get site templates associated with this group type.
+	 *
+	 * @param bool $raw Whether to return raw data. If false, templates that are
+	 *                  unlinked will be filtered from the raw list. Default false.
+	 * @return array
+	 */
 	public function get_site_templates( $raw = false ) {
 		$site_template_categories = $this->get_site_template_categories();
 		if ( $site_template_categories ) {
