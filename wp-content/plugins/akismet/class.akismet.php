@@ -73,8 +73,21 @@ class Akismet {
 		add_filter( 'frm_akismet_values', array( 'Akismet', 'prepare_custom_form_values' ) );
 
 		// Fluent Forms
+		/*
+		 * The Fluent Forms  hook names were updated in version 5.0.0. The last version that supported
+		 * the original hook names was 4.3.25, and version 4.3.25 was tested up to WordPress version 6.1.
+		 *
+		 * The legacy hooks are fired before the new hooks. See
+		 * https://github.com/fluentform/fluentform/commit/cc45341afcae400f217470a7bbfb15efdd80454f
+		 *
+		 * The legacy Fluent Forms hooks will be removed when Akismet no longer supports WordPress version 6.1.
+		 * This will provide compatibility with previous versions of Fluent Forms for a reasonable amount of time.
+		 */
 		add_filter( 'fluentform_form_element_start', array( 'Akismet', 'output_custom_form_fields' ) );
 		add_filter( 'fluentform_akismet_fields', array( 'Akismet', 'prepare_custom_form_values' ), 10, 2 );
+		// Current Fluent Form hooks.
+		add_filter( 'fluentform/form_element_start', array( 'Akismet', 'output_custom_form_fields' ) );
+		add_filter( 'fluentform/akismet_fields', array( 'Akismet', 'prepare_custom_form_values' ), 10, 2 );
 
 		add_action( 'update_option_wordpress_api_key', array( 'Akismet', 'updated_option' ), 10, 2 );
 		add_action( 'add_option_wordpress_api_key', array( 'Akismet', 'added_option' ), 10, 2 );
@@ -1427,6 +1440,11 @@ class Akismet {
 	}
 
 	public static function output_custom_form_fields( $post_id ) {
+		if ( 'fluentform/form_element_start' === current_filter() && did_action( 'fluentform_form_element_start' ) ) {
+			// Already did this via the legacy filter.
+			return;
+		}
+
 		// phpcs:ignore WordPress.Security.EscapeOutput
 		echo self::get_akismet_form_fields();
 	}
@@ -1452,6 +1470,11 @@ class Akismet {
 	 * @return array $form
 	 */
 	public static function prepare_custom_form_values( $form, $data = null ) {
+		if ( 'fluentform/akismet_fields' === current_filter() && did_filter( 'fluentform_akismet_fields' ) ) {
+			// Already updated the form fields via the legacy filter.
+			return $form;
+		}
+
 		if ( is_null( $data ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$data = $_POST;
