@@ -6,9 +6,9 @@ Author: ThemeInWP
 Author URI: https://www.themeinwp.com
 Description: ePortfolio is a free minimalist, SEO optimized multi-purpose WordPress Portfolio theme. ePortfolio is an ideal choice to create portfolio sites for photographers, digital marketers, agencies, graphic designers, video producers, web designers, web developers, professional bloggers and other freelance artistic or creative workers. This theme is compatible with Gutenberg, Elementor as well as other page builder plugins which helps you to deliver your content smoothly. Check our demo here:https://demo.themeinwp.com/eportfolio/
 Requires at least: 5.3
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 5.6
-Version: 1.2.3
+Version: 1.2.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: eportfolio
@@ -378,7 +378,10 @@ textarea {
 /*--------------------------------------------------------------
 ## Links
 --------------------------------------------------------------*/
-a:focus {
+a:focus{
+    outline: none;
+}
+a:focus-visible {
     outline: thin dotted;
 }
 a:hover, a:active {
@@ -2133,14 +2136,16 @@ ul.twp-social-icons li a[href*=twitter]:before,
 ul.twp-social-icons-rounded li a[href*=twitter]:before {
     -webkit-mask: url("data:image/svg+xml,%3Csvg class='svg-icon' aria-hidden='true' role='img' focusable='false' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'%3E%3C/path%3E%3C/svg%3E");
     mask: url("data:image/svg+xml,%3Csvg class='svg-icon' aria-hidden='true' role='img' focusable='false' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'%3E%3C/path%3E%3C/svg%3E");
-    -webkit-mask-size: 1.2rem;
-    mask-size: 1.2rem;
+    -webkit-mask-size: 20px;
+    mask-size: 20px;
     content: "";
     background-color: #fff;
-    width: 1.2rem;
-    height: 1.2rem;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
     background-repeat: no-repeat;
-    background-size: 1.2rem;
+    background-size: 20px;
 }
 ul.twp-social-icons li a[href*="telegram"]:before,
 ul.twp-social-icons li a[href*="t.me"]:before,
@@ -2235,11 +2240,19 @@ ul.twp-social-icons-rounded li a[href*=twitter] {
     border-color: #1ca0fe;
     color: white;
     background-color: #1ca0fe;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 ul.twp-social-icons-rounded li a:hover[href*=twitter],
 ul.twp-social-icons-rounded li a:focus[href*=twitter] {
-    color: #1ca0fe;
-    background-color: white;
+    background-color: #fff;
+}
+ul.twp-social-icons-rounded li a[href*=twitter]:hover:before,
+ul.twp-social-icons-rounded li a[href*=twitter]:focus:before{
+    background-color: #1ca0fe;
 }
 ul.twp-social-icons-rounded li a[href*=facebook] {
     border-color: #3b5999;
@@ -3466,6 +3479,7 @@ ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
 .twp-header .twp-menu-section {
     padding: 30px;
     display: flex;
+    gap: 2rem;
     justify-content: space-between;
 }
 .menu .sub-menu {
@@ -3666,6 +3680,7 @@ ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
 @media (min-width: 768px) {
     .comments-area .comment-respond .comment-form .logged-in-as {
         display: flex;
+        align-items: center;
         justify-content: space-between;
     }
 }

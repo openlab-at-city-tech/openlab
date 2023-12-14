@@ -1,9 +1,9 @@
 === ePortfolio ===
 Contributors: themeinwp
 Requires at least: 5.3
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 5.6
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,9 @@ License: Apache License, Version 2.0
 
 
 == Changelog ==
+
+= 1.2.4 =
+* Update - 6.4 compatibility
 
 = 1.2.3 =
 * Update - 6.3 compatibility

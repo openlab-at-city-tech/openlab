@@ -1,3 +1,10 @@
+= 1.2.4 - Dec 10 2023 =
+* Update - 6.4 compatibility
+
+= 1.2.3 - Sep 10 2023 =
+* Update - 6.3 compatibility
+* Update - Twitter Logo
+
 = 1.2.2 - June 14 2023 =
 * Update - 6.2 compatibility
 * Fixed  - Various small fixes.
