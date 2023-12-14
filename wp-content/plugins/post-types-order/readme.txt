@@ -3,8 +3,8 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, sort, post sort, posts sort, post type order, custom order, admin posts order
 Requires at least: 2.8
-Tested up to: 6.2.2
-Stable tag: 2.0.9
+Tested up to: 6.4.1
+Stable tag: 2.1.1
 
 Sort Posts and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
@@ -93,6 +93,14 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==  
+
+= 2.1.1 =
+ - WordPress 6.4.1 compatibility check and tag
+
+= 2.1 =
+ - Trigger wp_cache_flush when saving the order to clear the internal caches
+ - WordPress 6.3 compatibility check and tag
+ - Compatibility update for lite speed cache
 
 = 2.0.9 =
  - Fix: is_plugin_active
