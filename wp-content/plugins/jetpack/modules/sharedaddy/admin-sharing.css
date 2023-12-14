@@ -162,14 +162,14 @@ li.service.share-telegram span:before {
 li.service.share-jetpack-whatsapp span:before {
 	content: '\f608';
 }
-li.service.share-skype span:before {
-	content: '\f220';
-}
 li.service.share-mastodon span:before {
 	content: '\f10a';
 }
 li.service.share-nextdoor span:before {
 	content: '\f10c';
+}
+li.service.share-x span:before {
+	content: '\f10e';
 }
 
 /**
@@ -351,13 +351,6 @@ body.settings_page_sharing .advanced input[type=submit] {
 	height: 20px;
 }
 
-.preview-skype .option-smart-on {
-	background: url(images/smart-skype.png) no-repeat top left;
-	background-size: 60px 20px;
-	width: 60px;
-	height: 20px;
-}
-
 .preview-item.share-deprecated {
 	opacity: 0.5;
 }
@@ -395,10 +388,6 @@ body.settings_page_sharing .advanced input[type=submit] {
 
 	.preview-pocket .option-smart-on {
 		background-image: url(images/smart-pocket@2x.png);
-	}
-
-	.preview-skype .option-smart-on {
-		background-image: url(images/smart-skype@2x.png);
 	}
 }
 

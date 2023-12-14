@@ -153,7 +153,7 @@ class Jetpack_Gutenberg {
 	 * @return string The unprefixed extension name.
 	 */
 	public static function remove_extension_prefix( $extension_name ) {
-		if ( 0 === strpos( $extension_name, 'jetpack/' ) || 0 === strpos( $extension_name, 'jetpack-' ) ) {
+		if ( str_starts_with( $extension_name, 'jetpack/' ) || str_starts_with( $extension_name, 'jetpack-' ) ) {
 			return substr( $extension_name, strlen( 'jetpack/' ) );
 		}
 		return $extension_name;
@@ -466,7 +466,7 @@ class Jetpack_Gutenberg {
 	/**
 	 * Only enqueue block assets when needed.
 	 *
-	 * @param string $type Slug of the block.
+	 * @param string $type Slug of the block or absolute path to the block source code directory.
 	 * @param array  $script_dependencies Script dependencies. Will be merged with automatically
 	 *                                    detected script dependencies from the webpack build.
 	 *
@@ -476,6 +476,16 @@ class Jetpack_Gutenberg {
 		if ( is_admin() ) {
 			// A block's view assets will not be required in wp-admin.
 			return;
+		}
+
+		// Retrieve the feature from block.json if a path is passed.
+		if ( path_is_absolute( $type ) ) {
+			$metadata = Blocks::get_block_metadata_from_file( Blocks::get_path_to_block_metadata( $type ) );
+			$feature  = Blocks::get_block_feature_from_metadata( $metadata );
+
+			if ( ! empty( $feature ) ) {
+				$type = $feature;
+			}
 		}
 
 		$type = sanitize_title_with_dashes( $type );
@@ -612,6 +622,18 @@ class Jetpack_Gutenberg {
 			return;
 		}
 
+		/**
+		 * This can be called multiple times per page load in the admin, during the `enqueue_block_assets` action.
+		 * These assets are necessary for the admin for editing but are not necessary for each pattern preview.
+		 * Therefore we dequeue them, so they don't load for each pattern preview iframe.
+		 */
+		if ( ! wp_should_load_block_editor_scripts_and_styles() ) {
+			wp_dequeue_script( 'jp-tracks' );
+			wp_dequeue_script( 'jetpack-blocks-editor' );
+
+			return;
+		}
+
 		$status = new Status();
 
 		// Required for Analytics. See _inc/lib/admin-pages/class.jetpack-admin-page.php.
@@ -667,13 +689,10 @@ class Jetpack_Gutenberg {
 		}
 
 		// AI Assistant
-		$ai_assistant_state = Jetpack_AI_Helper::get_ai_assistance_feature();
-		if ( is_wp_error( $ai_assistant_state ) ) {
-			$ai_assistant_state = array(
-				'error-message' => $ai_assistant_state->get_error_message(),
-				'error-code'    => $ai_assistant_state->get_error_code(),
-			);
-		}
+		$ai_assistant_state = array(
+			'is-enabled'            => apply_filters( 'jetpack_ai_enabled', true ),
+			'is-playground-visible' => Constants::is_true( 'JETPACK_AI_ASSISTANT_PLAYGROUND' ),
+		);
 
 		$screen_base = null;
 		if ( function_exists( 'get_current_screen' ) ) {
@@ -690,18 +709,7 @@ class Jetpack_Gutenberg {
 				'is_private_site'               => $status->is_private_site(),
 				'is_coming_soon'                => $status->is_coming_soon(),
 				'is_offline_mode'               => $status->is_offline_mode(),
-				'is_newsletter_feature_enabled' => (
-					/**
-					 * Enable the Paid Newsletters feature in the block editor context.
-					 *
-					 * @module subscriptions
-					 * @since 11.8
-					 *
-					 * @param bool false Enable the Paid Newsletters feature in the block editor context.
-					 */
-					apply_filters( 'jetpack_subscriptions_newsletter_feature_enabled', true )
-					&& class_exists( '\Jetpack_Memberships' )
-				),
+				'is_newsletter_feature_enabled' => class_exists( '\Jetpack_Memberships' ),
 				/**
 				 * Enable the RePublicize UI in the block editor context.
 				 *
@@ -730,8 +738,10 @@ class Jetpack_Gutenberg {
 		);
 
 		if ( Jetpack::is_module_active( 'publicize' ) && function_exists( 'publicize_init' ) ) {
-			$publicize               = publicize_init();
-			$sig_settings            = new Automattic\Jetpack\Publicize\Social_Image_Generator\Settings();
+			$publicize                = publicize_init();
+			$sig_settings             = new Automattic\Jetpack\Publicize\Social_Image_Generator\Settings();
+			$auto_conversion_settings = new Automattic\Jetpack\Publicize\Auto_Conversion\Settings();
+
 			$initial_state['social'] = array(
 				'sharesData'                      => $publicize->get_publicize_shares_info( $blog_id ),
 				'hasPaidPlan'                     => $publicize->has_paid_plan(),
@@ -739,8 +749,12 @@ class Jetpack_Gutenberg {
 				'isSocialImageGeneratorAvailable' => $sig_settings->is_available(),
 				'isSocialImageGeneratorEnabled'   => $sig_settings->is_enabled(),
 				'dismissedNotices'                => $publicize->get_dismissed_notices(),
-				'isInstagramConnectionSupported'  => $publicize->has_instagram_connection_feature(),
-				'isMastodonConnectionSupported'   => $publicize->has_mastodon_connection_feature(),
+				'supportedAdditionalConnections'  => $publicize->get_supported_additional_connections(),
+				'autoConversionSettings'          => array(
+					'available' => $auto_conversion_settings->is_available( 'image' ),
+					'image'     => $auto_conversion_settings->is_enabled( 'image' ),
+				),
+				'jetpackSharingSettingsUrl'       => esc_url_raw( admin_url( 'admin.php?page=jetpack#/sharing' ) ),
 			);
 		}
 
@@ -751,66 +765,7 @@ class Jetpack_Gutenberg {
 		);
 
 		// Adds Connection package initial state.
-		wp_add_inline_script( 'jetpack-blocks-editor', Connection_Initial_State::render(), 'before' );
-	}
-
-	/**
-	 * Add the Gutenberg editor stylesheet to iframed editors, such as the site editor,
-	 * which don't have access to stylesheets added with `wp_enqueue_style`.
-	 *
-	 * This workaround is currently used by WordPress.com Simple and Atomic sites.
-	 *
-	 * @since 10.7
-	 *
-	 * @return void
-	 */
-	public static function add_iframed_editor_style() {
-		if ( ! self::should_load() ) {
-			return;
-		}
-
-		global $pagenow;
-		if ( ! isset( $pagenow ) ) {
-			return;
-		}
-
-		// Pre 13.7 pages that still need to be supported if < 13.7 is
-		// still installed.
-		$allowed_old_pages       = array( 'admin.php', 'themes.php' );
-		$is_old_site_editor_page = in_array( $pagenow, $allowed_old_pages, true ) && isset( $_GET['page'] ) && 'gutenberg-edit-site' === $_GET['page']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		// For Gutenberg > 13.7, the core `site-editor.php` route is used instead
-		$is_site_editor_page = 'site-editor.php' === $pagenow;
-
-		$should_skip_adding_styles = ! $is_site_editor_page && ! $is_old_site_editor_page;
-		if ( $should_skip_adding_styles ) {
-			return;
-		}
-
-		$blocks_dir       = self::get_blocks_directory();
-		$blocks_variation = self::blocks_variation();
-
-		if ( 'production' !== $blocks_variation ) {
-			$blocks_env = '-' . esc_attr( $blocks_variation );
-		} else {
-			$blocks_env = '';
-		}
-
-		$path = "{$blocks_dir}editor{$blocks_env}.css";
-		$dir  = dirname( JETPACK__PLUGIN_FILE );
-
-		if ( file_exists( "$dir/$path" ) ) {
-			if ( is_rtl() ) {
-				$rtlcsspath = substr( $path, 0, -4 ) . '.rtl.css';
-				if ( file_exists( "$dir/$rtlcsspath" ) ) {
-					$path = $rtlcsspath;
-				}
-			}
-
-			$url = Assets::normalize_path( plugins_url( $path, JETPACK__PLUGIN_FILE ) );
-			$url = add_query_arg( 'minify', 'false', $url );
-
-			add_editor_style( $url );
-		}
+		Connection_Initial_State::render_script( 'jetpack-blocks-editor' );
 	}
 
 	/**
@@ -1339,11 +1294,4 @@ if ( ( new Host() )->is_woa_site() ) {
 	 * More doc: https://github.com/Automattic/jetpack/blob/trunk/projects/plugins/jetpack/extensions/README.md#upgrades-for-blocks
 	 */
 	add_filter( 'jetpack_block_editor_enable_upgrade_nudge', '__return_true' );
-
-	/**
-	 * Load block editor styles inline for iframed editors.
-	 *
-	 * @see paYJgx-1Kl-p2
-	 */
-	add_action( 'admin_init', array( 'Jetpack_Gutenberg', 'add_iframed_editor_style' ) );
 }

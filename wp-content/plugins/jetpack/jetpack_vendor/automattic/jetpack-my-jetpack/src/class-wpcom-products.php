@@ -7,7 +7,7 @@
 
 namespace Automattic\Jetpack\My_Jetpack;
 
-use Automattic\Jetpack\Connection\Client as Client;
+use Automattic\Jetpack\Connection\Client;
 use Automattic\Jetpack\Status\Visitor;
 use Jetpack_Options;
 use WP_Error;
@@ -149,11 +149,12 @@ class Wpcom_Products {
 	 * Get one product
 	 *
 	 * @param string $product_slug The product slug.
+	 * @param bool   $renew_cache A flag to force the cache to be renewed.
 	 *
 	 * @return ?Object The product details if found
 	 */
-	public static function get_product( $product_slug ) {
-		$products = self::get_products();
+	public static function get_product( $product_slug, $renew_cache = false ) {
+		$products = self::get_products( $renew_cache );
 		if ( ! empty( $products->$product_slug ) ) {
 			return $products->$product_slug;
 		}
@@ -237,6 +238,7 @@ class Wpcom_Products {
 	 * @return Object|WP_Error
 	 */
 	public static function get_site_current_purchases() {
+		// TODO: Add a short-lived cache (less than a minute) to accommodate repeated invocation of this function.
 		static $purchases = null;
 
 		if ( $purchases !== null ) {
