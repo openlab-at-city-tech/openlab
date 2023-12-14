@@ -112,6 +112,10 @@ abstract class Widget_Base extends Element_Base {
 		return [ 'general' ];
 	}
 
+	protected function get_upsale_data() {
+		return null;
+	}
+
 	/**
 	 * Widget base constructor.
 	 *
@@ -317,10 +321,10 @@ abstract class Widget_Base extends Element_Base {
 	 *
 	 * @since 1.7.12
 	 * @access protected
-	 * @deprecated 3.1.0
+	 * @deprecated 3.1.0 Use `register_skins()` method instead.
 	 */
 	protected function _register_skins() {
-		Plugin::$instance->modules_manager->get_modules( 'dev-tools' )->deprecation->deprecated_function( __METHOD__, '3.1.0', __CLASS__ . '::register_skins()' );
+		Plugin::$instance->modules_manager->get_modules( 'dev-tools' )->deprecation->deprecated_function( __METHOD__, '3.1.0', 'register_skins()' );
 
 		$this->register_skins();
 	}
@@ -364,6 +368,7 @@ abstract class Widget_Base extends Element_Base {
 			'html_wrapper_class' => $this->get_html_wrapper_class(),
 			'show_in_panel' => $this->show_in_panel(),
 			'hide_on_search' => $this->hide_on_search(),
+			'upsale_data' => $this->get_upsale_data(),
 		];
 
 		$stack = Plugin::$instance->controls_manager->get_element_stack( $this );
