@@ -19,7 +19,9 @@ abstract class C_Base_Module
     var $module_author;
     var $module_author_uri;
     var $module_type_list = null;
-	var $initialized = FALSE;
+    var $initialized = FALSE;
+
+    public $object;
 
     function __construct()
     {

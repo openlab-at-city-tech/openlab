@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Variables SCSS
+   ========================================================================== */
+
+   $font__main: sans-serif;
+   $font__code: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+   $font__pre: "Courier 10 Pitch", Courier, monospace;
+   $font__line-height-body: 1.5;
+   $font__line-height-pre: 1.6;
+
+   $font_size_tab: 13px;
+
+   $white: #ffffff;
+   $beige_light: #f7f7f7;
+   $black: #000000;
+   $green: #87A20E;
+   $green_alt: #618E00;
+   $grey: #666666;
+   $grey_dark: #6b6e72;
+   $grey_dark_2: #dddddd;
+   $red: #e02626;
+   $red_alt: #f85959;
+
+   $primary_color: $black;
+   $primary_button_color: $black;
+   $primary_button_color_hover: rgba(0,0,0,0.8);
+
+   $danger_button_color: $red;
+   $danger_button_color_hover: $red_alt;
+
+   $color_bg: #f1f1f1;
+
+   $header-height: 120px;
+   $navbar-height: 50px;
+
+   $border-radius-main: 6px;

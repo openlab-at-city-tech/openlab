@@ -1,3 +1,3 @@
 <div class='success updated'>
-	<p><?php esc_html_e($message) ?> saved successfully</p>
+	<p><?php echo esc_html( $message ); ?> saved successfully</p>
 </div>

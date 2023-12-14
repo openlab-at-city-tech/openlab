@@ -1,6 +1,36 @@
 NextGEN Gallery
 by Imagely
 
+= V3.55  - 12.13.2023 =
+* Changed: Changing SweetAlert library version to prevent the interference on .ru sites.
+
+= V3.54  - 12.01.2023 =
+* Fixed:   Assorted possible PHP warnings and notices with PHP 8.0+.
+* Fixed:   Compatibility with some 3rd party extensions.
+
+= V3.53  - 11.30.2023 =
+* Fixed:   A potential conflict with NextGEN Pro Lightbox.
+
+= V3.52  - 11.30.2023 =
+* Fixed:   A potential fatal error caused by accessing NextGEN Pro constants before they are defined.
+* Fixed:   Compatibility with ARI Fancy Lightbox & Imagify, both could generate a fatal exception since 3.50.
+* Fixed:   Paths to non-default template files were being calculated incorrectly, causing the incorrect template to display.
+* Fixed:   Some bulk actions in the Manage Gallery page were broken by the last release.
+* Fixed:   Users of PHP 7 and WordPress 5.8 or older could experience a fatal error due to the use of str_contains().
+
+= V3.50  - 11.29.2023 =
+* IMPORTANT: Support for PHP 5.6 and lower has been discontinued. If you are running PHP 5.6 or lower, you MUST upgrade PHP before installing NextGen 3.5.0. Failure to do that will disable NextGen core functionality.
+* Updated: Major refactor of the plugin to support future improvements! Note: This release Requires at least PHP 7.0.
+* Fixed:   We closed some issues affecting Lightroom users
+
+= V3.41  - 09.27.2023 =
+* Fixed:   NextGEN 3.39 could generate a fatal error when viewing a gallery hosted on IIS.
+* Fixed:   NextGEN 3.39 could not accept uploads from the LightRoom plugin.
+* Fixed:   NextGEN 3.39 could generate a PHP exception when using custom template paths.
+
+= V3.39  - 09.13.2023 =
+* Fixed:   Prevent template files from existing outside of the site document root, WP_CONTENT_DIR, or WP_PLUGIN_DIR
+
 = V3.37  - 05.05.2023 =
 * Fixed:   A fatal error was thrown when uploading images' whose 'Flash' EXIF field is an array instead of the integer it should be.
 * Fixed:   Correcting a possible error in our RankMath SEO compatibility.
@@ -123,7 +153,7 @@ by Imagely
 * Fixed:   Tooltips are illegible (1172)
 * Fixed:   PHP foreach warning (1173)
 
-= V3.9.1 - 03.29.2021 = 
+= V3.9.1 - 03.29.2021 =
 * Fixed:   C_Dynamic_Stylesheet_Controller error
 * Fixed:   Galleries not displaying
 
@@ -1316,7 +1346,7 @@ Fixed:     Match legacy behaviour when changing gallery path, i.e. don't move fi
 * FIXED:   Misc PHP warnings, errors, in gallery plugin
 
 = V1.9.13 - 06.11.2013 =
-* NEW:     Slideshows are now centered to their content area     
+* NEW:     Slideshows are now centered to their content area
 * Secured: Ensure that only logged in users can upload images via plugin
 * Fixed:   Import date is preserved are no longer Jan 1 1970
 * Fixed:   Removed mention of upgrade.php, which no longer exists

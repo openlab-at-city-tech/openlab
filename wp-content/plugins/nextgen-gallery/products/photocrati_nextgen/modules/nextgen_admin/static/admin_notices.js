@@ -8,7 +8,10 @@ jQuery(function($){
         var $notice = $(this).parents('.ngg_admin_notice');
         var $notice_name = $notice.attr('data-notification-name');
         if ($notice_name.length > 0) {
-            var url = ngg_dismiss_url+'&name='+$notice_name+'&code='+code;
+            let url = ngg_notification_dismiss_settings.url;
+            url += '&name=' + $notice_name;
+            url += '&code=' + code;
+            url += '&nonce=' + ngg_notification_dismiss_settings.nonce;
             $.post(url, function(response){
                 if (typeof(response) != 'object') response = JSON.parse(response);
                 if (response.success) {

@@ -1,24 +1,24 @@
 /***
  *
  *  CONTENTS
- * 
+ *
  *  1) NGG Admin CSS: Original 2.0 CSS
- *      Note: This is original NextGEN 2.0 Admin CSS. We've 
+ *      Note: This is original NextGEN 2.0 Admin CSS. We've
  *      left here as a backward compatibility safety net.
  *  2) NGG Admin CSS: General Styles
  *  3) NGG Admin CSS: Header and Menu
  *  4) NGG Admin CSS: Main Content
- *      Note: This CSS sheet also includes substantial CSS for the Attach to Post window. Although 
- *      better separateion of concerns could be achieved by moving it to the attach_to_post module, 
- *      it is here because it directly mimics styling of other pages, and keeping it here ensures 
- *      consistency and simplifies changes. 
- *  5) NGG Admin CSS: Tables 
+ *      Note: This CSS sheet also includes substantial CSS for the Attach to Post window. Although
+ *      better separateion of concerns could be achieved by moving it to the attach_to_post module,
+ *      it is here because it directly mimics styling of other pages, and keeping it here ensures
+ *      consistency and simplifies changes.
+ *  5) NGG Admin CSS: Tables
  *  6) NGG Admin CSS: Custom Post Types
- *      Note: This CSS mostly affects Pro functionality (Orders, Pricelists, Proofs, Coupons, etc), 
- *      but is included here using generic CSS selectors because a) it is common to all of the above, 
+ *      Note: This CSS mostly affects Pro functionality (Orders, Pricelists, Proofs, Coupons, etc),
+ *      but is included here using generic CSS selectors because a) it is common to all of the above,
  *      and b) centralizing it here allows for more efficient changes and c) future custom post type
- *      interfaces will use the same styling, be they basic or pro. Adding it here also acts to 
- *      ensure style consistency for users who update to the NextGEN redesign version, while still 
+ *      interfaces will use the same styling, be they basic or pro. Adding it here also acts to
+ *      ensure style consistency for users who update to the NextGEN redesign version, while still
  *      running an older version of NextGEN Pro.
  *  8) NGG Admin CSS: Media Queries
  *
@@ -35,7 +35,7 @@
 .ngg-admin .notice,
 .ngg-admin div.updated,
 .ngg-admin div.error {
-  margin: 20px 15px 0 0;
+  margin: 20px 15px 0 20px;
 }
 
 .ngg-admin #ngg_page_content .notice,
@@ -135,6 +135,7 @@ body div.ui-tooltip {
   float: left;
   height: auto;
   margin-top: 25px;
+  margin-left: 20px;
   padding: 20px 40px;
   width: 98%;
   color: black;
