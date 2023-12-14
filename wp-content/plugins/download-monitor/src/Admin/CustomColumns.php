@@ -43,6 +43,7 @@ class DLM_Custom_Columns {
 		$columns = array();
 
 		$columns["cb"]              = "<input type=\"checkbox\" />";
+		$columns["featured_image"]  = '<span class="hidden">' . __( 'Featured image', 'download-monitor' ) . '</span>';
 		$columns["download_title"]  = __( "Download Title", 'download-monitor' );
 		$columns["download_cat"]    = __( "Categories", 'download-monitor' );
 		$columns["version"]         = __( "Version", 'download-monitor' );
@@ -180,6 +181,11 @@ class DLM_Custom_Columns {
 			case "download_count" :
 				echo number_format( $this->column_download->get_download_count(), 0, '.', ',' );
 				break;
+			case "featured_image" :
+				echo '<a href="' . esc_attr( get_edit_post_link( $post ) ) . '">';
+					$this->column_download->the_image( 'thumbnail' );
+				echo '</a>';
+				break;
 		}
 	}
 
@@ -217,6 +223,10 @@ class DLM_Custom_Columns {
 	 * @return string
 	 */
 	public function prepend_id_to_title( $title, $id = null ) {
+
+		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return $title;
+		}
 
 		if ( ! isset( $id ) ) {
 			$id = get_the_ID();

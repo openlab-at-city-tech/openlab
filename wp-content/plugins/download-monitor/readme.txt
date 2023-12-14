@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker
 Requires at least: 5.4
-Tested up to: 6.3
-Stable tag: 4.8.10
+Tested up to: 6.4
+Stable tag: 4.9.4
 License: GPLv3
 Text Domain: -
 Requires PHP: 5.6
@@ -120,6 +120,37 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 4.9.4 - 13.12.2023 =
+Changed: Remove upsells when a license is present and active ( [#1375](https://github.com/WPChill/download-monitor/issues/1375) )
+Added: Echo Download content method ( [#1376](https://github.com/WPChill/download-monitor/issues/1376) )
+Changed: Minor settings placement update ( [#1379](https://github.com/WPChill/download-monitor/issues/1379) )
+
+= 4.9.3 - 21.11.2023 =
+Changed: Download CPT admin list table design and alignment. ( [#1152](https://github.com/WPChill/download-monitor/issues/1152) )
+Added: Download CPT admin list table featured download image. ( [#1351](https://github.com/WPChill/download-monitor/issues/1351) )
+Fixed: Polylang no access page redirect compatibility. ( [#1353](https://github.com/WPChill/download-monitor/issues/1353) )
+Added: Filter to hide the "Insert Download" button in classic editor. ( [#1356](https://github.com/WPChill/download-monitor/issues/1356) )
+Fixed: Stop creating image sub-sizes for non-image mime types uploaded to DLM ( [#1366](https://github.com/WPChill/download-monitor/issues/1366) )
+Added: Upsells seasonal offers.
+
+= 4.9.2 - 31.10.2023 =
+Fixed: Ordering by download count doesn't work anymore ( [#1360](https://github.com/WPChill/download-monitor/issues/1360) )
+
+= 4.9.1 - 28.10.2023 =
+Fixed: DB Error regarding table prefix
+
+= 4.9.0 - 26.10.2023 =
+Added: Included Tailwind CSS ( [#1335](https://github.com/WPChill/download-monitor/issues/1335) )
+Changed: Separate template for the No Access Modal functionality ( [#1336](https://github.com/WPChill/download-monitor/issues/1336) )
+Added: Custom event to better extend the download button click functionality in other extensions ( [#1332](https://github.com/WPChill/download-monitor/issues/1332) )
+Changed: Created modal class and move the modal functionality to it ( [#1340](https://github.com/WPChill/download-monitor/issues/1340) )
+Changed: License activation server route ( [#1341](https://github.com/WPChill/download-monitor/issues/1341) )
+Fixed: Download ID prepended to the Download title ( [#1342](https://github.com/WPChill/download-monitor/issues/1342) )
+Changed: Removed the "Support Forum" menu entry ( [#1344]( https://github.com/WPChill/download-monitor/issues/1344) )
+Changed: Restored the Shop functionality ( [#1343]( https://github.com/WPChill/download-monitor/issues/1343) )
+Fixed: Error not allowed page if Freemius is not skipped or Allowed ( [#1339]( https://github.com/WPChill/download-monitor/issues/1339) )
+
+
 = 4.8.10 - 08.09.2023 =
 Fixed: "Downloading Page" upsell meta box does not hide when the addon is active ( [#1329](https://github.com/WPChill/download-monitor/issues/1329) )
 Fixed: Category-Filter not working in Widget “List of Download” ( [#1320](https://github.com/WPChill/download-monitor/issues/1320) )
