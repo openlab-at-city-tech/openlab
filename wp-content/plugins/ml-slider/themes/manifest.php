@@ -5,7 +5,6 @@
  * but as the list grows we might want to start organizing this list
  * The type should be free, premium, or bonus
  */
-
 return array(
     'cubic' => array(
         'folder' => 'cubic',
@@ -150,29 +149,5 @@ return array(
         'tags' => array('light', 'minimalist'),
         'description' => __('A minimalist theme that gets out of the way so you can showcasing your beautiful pictures.', 'ml-slider'),
         'images' => array('danny-howe-361436-unsplash.jpg', 'etienne-beauregard-riverin-48305-unsplash.jpg', 'luca-bravo-198062-unsplash.jpg', 'fabio-mangione-236846-unsplash.jpg', 'olav-ahrens-rotne-1087667-unsplash.jpg')
-    ),
-    'nivo-light' => array(
-        'folder' => 'nivo-light',
-        'title' => 'Nivo Light',
-        'type' => 'free',
-        'supports' => array('nivo'),
-        'tags' => array('nivo only'),
-        'description' => __('The Nivo Light theme included here for legacy purposes. Note: only works with Nivo Slider', 'ml-slider'),
-    ),
-    'nivo-bar' => array(
-        'folder' => 'nivo-bar',
-        'title' => 'Nivo Bar',
-        'type' => 'free',
-        'supports' => array('nivo'),
-        'tags' => array('nivo only'),
-        'description' => __('The Nivo Bar theme included here for legacy purposes. Note: only works with Nivo Slider', 'ml-slider'),
-    ),
-    'nivo-dark' => array(
-        'folder' => 'nivo-dark',
-        'title' => 'Nivo Dark',
-        'type' => 'free',
-        'supports' => array('nivo'),
-        'tags' => array('nivo only'),
-        'description' => __('The Nivo Dark theme included here for legacy purposes. Note: only works with Nivo Slider', 'ml-slider'),
     )
 );

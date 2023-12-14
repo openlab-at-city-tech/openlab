@@ -24,6 +24,9 @@ class MetaNivoSlider extends MetaSlider
         parent::__construct($id, $shortcode_settings);
 
         add_filter('metaslider_nivo_slider_parameters', array( $this, 'set_autoplay_parameter' ), 10, 3);
+        if(metaslider_pro_is_active() == false) {
+            add_filter('metaslider_nivo_slider_parameters', array($this, 'metaslider_nivo_loop'), 99, 3);
+        }
     }
 
     /**
@@ -49,6 +52,34 @@ class MetaNivoSlider extends MetaSlider
         }
         // we don't want this filter hanging around if there's more than one slideshow on the page
         remove_filter('metaslider_nivo_slider_parameters', array( $this, 'set_autoplay_parameter' ), 10, 3);
+
+        return $options;
+    }
+
+    /**
+     * Add JavaScript to stop slideshow
+     *
+     * @param array $options SLide options
+     * @param integer $slider_id Slider ID
+     * @param array $settings Slide settings
+     * @return array
+     */
+    public function metaslider_nivo_loop($options, $slider_id, $settings)
+    {
+        if (isset($settings['loop']) && 'stopOnFirst' === $settings['loop']) {
+            $options['slideshowEnd'] = isset($options['slideshowEnd']) ? $options['slideshowEnd'] : array();
+            $options['slideshowEnd'] = array_merge($options['slideshowEnd'], array(
+                "$('#metaslider_" . esc_js($slider_id) . "').data('nivoslider').stop();"
+            ));
+        }
+
+        if (isset($settings['loop']) && 'stopOnLast' === $settings['loop']) {
+            $options['lastSlide'] = isset($options['lastSlide']) ? $options['lastSlide'] : array();
+            $options['lastSlide'] = array_merge(
+                $options['lastSlide'],
+                array("$('#metaslider_" . esc_js($slider_id) . "').data('nivoslider').stop();")
+            );
+        }
 
         return $options;
     }

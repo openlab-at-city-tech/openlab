@@ -30,6 +30,11 @@ class MetaFlexSlider extends MetaSlider
 
         add_filter('metaslider_flex_slider_parameters', array( $this, 'enable_carousel_mode' ), 10, 2);
         add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_easing' ), 10, 2);
+
+        if(metaslider_pro_is_active() == false) {
+            add_filter('metaslider_flex_slider_parameters', array( $this, 'metaslider_flex_loop'), 99, 3);
+        }
+        
         add_filter('metaslider_css', array( $this, 'get_carousel_css' ), 11, 3);
         add_filter('metaslider_css_classes', array( $this, 'remove_bottom_margin' ), 11, 3);
     }
@@ -82,6 +87,31 @@ class MetaFlexSlider extends MetaSlider
 
         // we don't want this filter hanging around if there's more than one slideshow on the page
         remove_filter('metaslider_flex_slider_parameters', array( $this, 'manage_easing' ), 10, 2);
+
+        return $options;
+    }
+
+     /**
+     * Add JavaScript to stop slideshow
+     *
+     * @param array $options SLide options
+     * @param integer $slider_id Slider ID
+     * @param array $settings Slide settings
+     * @return array
+     */
+    public function metaslider_flex_loop($options, $slider_id, $settings)
+    {
+        if (isset($settings['loop']) && 'stopOnFirst' === $settings['loop']) {
+            $options['after'] = isset($options['after']) ? $options['after'] : array();
+            $options['after'] = array_merge(
+                $options['after'],
+                array("if (slider.currentSlide == 0) { slider.pause(); }")
+            );
+        }
+
+        if (isset($settings['loop']) && 'stopOnLast' === $settings['loop']) {
+            $options['animationLoop'] = "false";
+        }
 
         return $options;
     }
@@ -149,7 +179,8 @@ class MetaFlexSlider extends MetaSlider
             'carouselMode' => 'carouselMode',
             'easing' => 'easing',
             'autoPlay' => 'slideshow',
-            'firstSlideFadeIn' => 'fadeFirstSlide'
+            'firstSlideFadeIn' => 'fadeFirstSlide',
+            'smoothHeight' => 'smoothHeight'
         );
         return isset($params[$param]) ? $params[$param] : false;
     }

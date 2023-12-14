@@ -19,7 +19,7 @@
                 </button>
             </span>
             <span class="mt-3 flex w-full rounded-md sm:mt-0 sm:col-start-1">
-                <button @click="opt('no')" type="button" class="inline-flex justify-center w-full rounded-md px-4 py-2 bg-white text-base leading-6 font-medium text-gray-dark hover:text-gray-darker focus:outline-none focus:border-blue-light focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                <button @click="opt('no')" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 text-base leading-6 font-medium text-black shadow-sm bg-gray hover:text-white hover:bg-gray-darker active:bg-gray-darkest transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                     {{ __('No thanks', 'ml-slider') }}
                 </button>
             </span>

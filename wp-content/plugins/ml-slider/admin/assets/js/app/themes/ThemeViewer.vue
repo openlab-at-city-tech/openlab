@@ -4,10 +4,10 @@
 	<section
 		v-if="current.id"
 		:class="{'unsupported': unsupportedSliderType}"
-		class="ms-postbox theme-select-module">
-		<h3 class="hndle">
-			{{ __('Slideshow Theme', 'ml-slider') }}<template v-if="hasThemeSet">: <span>{{ current.theme.title }}</span></template>
-		</h3>
+		class="theme-select-module">
+		<p v-if="hasThemeSet">
+			{{ __('Slideshow Theme', 'ml-slider') }}<span>: {{ current.theme.title }}</span>
+		</p>
 		<div
 			:class="{'ms-modal-open': is_open}"
 			class="inside wp-clearfix metaslider-theme-viewer">
@@ -49,12 +49,21 @@
 							:src="themeDirectoryUrl + current.theme.folder + '/screenshot.png'"
 							:alt="current.theme.title">
 					</div>
+					<div class="theme-hover-text">
+						<span>
+							{{ __('Click to edit or update', 'ml-slider') }}
+						</span>
+					</div>
 				</button>
-				<p class="button-info">{{ __('Click the image to edit or update', 'ml-slider') }}</p>
 				<button
 					type="button"
 					class="button-link remove-theme"
-					@click="removeTheme">{{ __('Remove theme', 'ml-slider') }}
+					@click="removeTheme">{{ __('Remove', 'ml-slider') }}
+				</button>
+				<button
+					type="button"
+					class="button-link change-theme"
+					@click="openModal">{{ __('Change', 'ml-slider') }}
 				</button>
 			</div>
 
@@ -66,7 +75,7 @@
 				<button
 					v-if="Object.keys(themes).length || Object.keys(customThemes).length"
 					type="button"
-					class="button-link"
+					class="button"
 					@click="openModal">{{ __('Select a custom theme', 'ml-slider') }}
 				</button>
 			</div>
@@ -170,21 +179,28 @@
 					id="custom-themes"
 					:title="__('My Custom Themes', 'ml-slider')">
 					<template v-if="!proUser">
-						<h1>{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h1>
-						<p>
-							{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
-							<a :href="hoplink">{{ __('Learn more', 'ml-slider') }}</a>
-						</p>
+						<div class="promo-wrapper clearfix">
+							<div class="col left">
+								<img :src="asset('images/hero-theme-editor.jpg')" class="w-full block">
+							</div>
+							<div class="col right">
+								<h1 class="customtheme-list-h">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h1>
+								<p class="customtheme-list-p">
+									{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
+								</p>
+								<a class="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent font-medium rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto md:text-xl md:leading-5" :href="hoplink" target="_blank">{{ __('Upgrade now', 'ml-slider') }} <span class="dashicons dashicons-external upgrade-icon"></span></a>
+							</div>
+						</div>
 					</template>
 					<div v-if="loadingCustom">
                         {{ __('Loading...', 'ml-slider') }}
 					</div>
 					<template v-if="!Object.keys(customThemes).length && proUser && !loadingCustom">
-						<h1>{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h1>
-						<p>
-							{{ __('You can create your own themes with our theme editor', 'ml-slider') }}
-							<a :href="themeEditorLink">{{ __('Get started', 'ml-slider') }}</a>
+						<h1 class="customtheme-list-h">{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h1>
+						<p class="customtheme-list-p">
+							{{ __('You can create your own themes with our theme editor', 'ml-slider') }}	
 						</p>
+						<a class="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent font-medium rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto md:text-xl md:leading-5" :href="themeEditorLink">{{ __('Get started', 'ml-slider') }}</a>
 					</template>
 					<div
 						v-if="Object.keys(customThemes).length && proUser"
@@ -685,7 +701,7 @@ export default {
 		align-items: center;
 		font-size: 24px;
 		font-weight: 600;
-		background-color: #999999;
+		background-color: #2271b1;
 		color: white;
 		padding: 1rem;
 		box-sizing: border-box;

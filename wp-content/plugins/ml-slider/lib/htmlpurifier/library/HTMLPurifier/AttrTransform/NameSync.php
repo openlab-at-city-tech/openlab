@@ -8,6 +8,11 @@
 class HTMLPurifier_AttrTransform_NameSync extends HTMLPurifier_AttrTransform
 {
 
+    /**
+     * @since 4.13.1 - https://github.com/MetaSlider/metaslider/issues/494
+     */
+    public $idDef;
+
     public function __construct()
     {
         $this->idDef = new HTMLPurifier_AttrDef_HTML_ID();

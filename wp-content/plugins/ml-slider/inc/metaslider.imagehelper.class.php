@@ -104,6 +104,24 @@ $image_id = $slide_id;
      */
     private function get_crop_dimensions($image_width, $image_height)
     {
+        // Slideshow width exists but not slideshow height
+        if ( $this->container_width && ! $this->container_height ) {
+            $calc_height = ( $image_height * $this->container_width ) / $image_width;
+            return [
+                'width' => absint( $this->container_width ),
+                'height' => absint( $calc_height )
+            ];
+        }
+
+        // Slideshow height exists but not slideshow width
+        if ( $this->container_height && ! $this->container_width ) {
+            $calc_width = ( $image_width * $this->container_height ) / $image_height;
+            return [
+                'width' => absint( $calc_width ),
+                'height' => absint( $this->container_height )
+            ];
+        }
+
         if ($this->crop_type == 'standard') {
             return [
                 'width' => absint($this->container_width),
@@ -228,6 +246,21 @@ $image_id = $slide_id;
         ];
     }
 
+    /**
+     * Call get_crop_dimensions() through an extended class
+     * 
+     * @since 3.60
+     * 
+     * @param integer $image_width  Image Width
+     * @param integer $image_height Image height
+     * 
+     * @return array image dimensions
+     */
+    public function _crop_dimensions( $image_width, $image_height )
+    {
+        return $this->get_crop_dimensions( $image_width, $image_height );
+    }
+
 
     /**
      * Return the image URL, crop the image to the correct dimensions if required
@@ -322,6 +355,18 @@ $image_id = $slide_id;
             }
         }
         return false;
+    }
+
+    /**
+     * Call get_original_image_dimensions() through an extended class
+     * 
+     * @since 3.60
+     * 
+     * @return array
+     */
+    public function _original_image_dimensions()
+    {
+        return $this->get_original_image_dimensions();
     }
 
 

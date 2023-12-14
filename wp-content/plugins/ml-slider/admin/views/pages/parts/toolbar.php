@@ -11,7 +11,7 @@
 		:class="{'shadow-md':scrolling, 'flex': !isIE11}">
 		<div class="container h-full px-6">
 			<div class="flex items-center h-full -mx-4">
-    			<a href="<?php echo esc_url(admin_url('admin.php?page=metaslider')); ?>" class="flex items-center h-full py-2 px-4">
+    			<a href="<?php echo esc_url(admin_url('admin.php?page=metaslider')); ?>" class="flex items-center h-full py-2 px-4 hidden sm:block">
     				<img style="height:46px;width:auto;" class="mr-2 rtl:mr-0 rtl:ml-2" src="<?php echo esc_url(METASLIDER_ADMIN_URL); ?>images/metaslider_logo3.png" alt="MetaSlider">
     			</a>
 				<?php if ($this->slider) : ?>
@@ -21,7 +21,8 @@
 						<div class="px-4 h-full">
 							<div class="flex justify-end items-center h-full text-gray">
 
-								<button @click.prevent="addSlide()" id="add-new-slide" class='ms-toolbar-button tipsy-tooltip-bottom-toolbar' title='<?php esc_attr("Add a new slide", "ml-slider") ?>'>
+                            <?php if (  ! metaslider_viewing_trashed_slides( $this->slider->id ) ) : ?>
+								<button @click.prevent="addSlide()" id="add-new-slide" class='ms-toolbar-button tipsy-tooltip-bottom-toolbar' title='<?php esc_attr_e("Add a new slide", "ml-slider") ?>'>
                                     <svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
@@ -31,7 +32,7 @@
 								<button
                                     @click.prevent="preview()"
                                     id="preview-slideshow"
-                                    title="<?php echo esc_attr(htmlentities(esc_html_e('Save & open preview', 'ml-slider'))); ?><br><?php echo esc_html(htmlentities(_x('(alt + p)', 'This is a keyboard shortcut.', 'ml-slider'))); ?>" class="ms-toolbar-button"
+                                    title="<?php esc_attr_e('Save & open preview', 'ml-slider'); echo esc_attr(_x(' (alt + p)', 'This is a keyboard shortcut.', 'ml-slider')); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg
@@ -82,7 +83,7 @@
 
 								<!-- Pro only add css feature -->
 								<?php ob_start(); ?>
-								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Add custom CSS', 'ml-slider'); ?><br> - <?php esc_attr_e('press to learn more', 'ml-slider'); ?> -" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':true}">
+								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Add custom CSS', 'ml-slider'); ?> - <?php esc_attr_e('press to learn more', 'ml-slider'); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':true}">
                                 <svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                                 </svg>
@@ -98,7 +99,7 @@
                                     @click.prevent="save()"
                                     title="<?php esc_attr_e('Save slideshow', 'ml-slider'); ?>"
                                     id="ms-save"
-                                    class="ms-toolbar-button"
+                                    class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg
@@ -112,6 +113,20 @@
                                     </svg>
 									<span :class="{'text-gray-darkest': !locked}" class="text-sm"><?php esc_html_e('Save', 'ml-slider'); ?></span>
 								</button>
+                            <?php else : ?>
+                                <a href="<?php 
+                                    echo esc_url(
+                                            admin_url( "admin.php?page=metaslider&id={$this->slider->id}" )
+                                    ) ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar">
+                                    <svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                                    </svg>
+									<span :class="{'text-gray-darkest': !locked}" class="text-sm">
+                                        <?php esc_html_e( 'Return to Published Slides', 'ml-slider'); ?>
+                                    </span>
+                                </a>
+                            <?php endif; ?>
+
 							</div>
 						</div>
 					</div>

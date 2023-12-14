@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	<div class="mt-5 md:flex md:items-center">
-	<div class="max-w-xs w-full">
+	<div :class="[wrapperClass, 'max-w-xs']">
 		<label :for="name" class="sr-only">
 			<slot name="input-label"/>
 		</label>
@@ -39,7 +39,14 @@
 <script>
 import { default as LoadingElement } from './shimmers/_textSingleShimmer'
 export default {
-	props: ['value', 'name'],
+	props: {
+		value: String,
+		name: String,
+		wrapperClass: {
+			type: String,
+			default: 'w-full'
+		}
+	},
 	components: {
 		'loading-element' : LoadingElement
 	},

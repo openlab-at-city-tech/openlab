@@ -37,7 +37,6 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
          * The second two require the first to be set to true
          *
          * define('METASLIDER_FORCE_NOTICES', true);
-         * define('METASLIDER_DISABLE_SEASONAL_NOTICES', true);
          *
          * Be sure not to set both of these at the same time
          * define('METASLIDER_FORCE_LITE_NOTICES', true);
@@ -49,11 +48,6 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
 
         // To avoid showing the user ads off the start, lets wait
         $this->notices_content = ($this->ad_delay_has_finished()) ? $this->ads : array();
-
-        // If $notices_content is empty, we still want to offer seasonal ads
-        if (empty($this->notices_content) && !metaslider_pro_is_installed()) {
-            $this->notices_content = $this->valid_seasonal_notices();
-        }
 
         add_action('admin_enqueue_scripts', array($this, 'add_notice_assets'));
         add_action('wp_ajax_notice_handler', array($this, 'ajax_notice_handler'));
@@ -96,54 +90,51 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             return (!defined('METASLIDER_FORCE_LITE_NOTICES')) ? $this->pro_notices() : array();
         }
 
-        return array_merge(
-            [
-                'rate_plugin' => [
-                    'title' => _x('Like MetaSlider? Please help us by giving a positive review at WordPress.org', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
-                    'text' => '',
-                    'image' => 'notices/metaslider_logo.png',
-                    'button_link' => 'metaslider_rate',
-                    'button_meta' => 'review',
-                    'dismiss_time' => 'rate_plugin',
-                    'hide_time' => 12,
-                    'supported_positions' => ['header'],
-                ],
-                'pro_layers' => [
-                    'title' => __('Spice up your site with animated layers and video slides with MetaSlider Pro', 'ml-slider'),
-                    'text' => '',
-                    'image' => 'notices/metaslider_logo.png',
-                    'button_link' => 'metaslider',
-                    'button_meta' => 'buy-w-discount',
-                    'dismiss_time' => 'pro_layers',
-                    'hide_time' => 12,
-                    'supported_positions' => ['header'],
-                    'validity_function' => 'metaslider_pro_is_not_installed',
-                ],
-                'pro_features' => [
-                    'title' => __('Increase your revenue and conversion with video slides and many more MetaSlider Pro features', 'ml-slider'),
-                    'text' => '',
-                    'image' => 'notices/metaslider_logo.png',
-                    'button_link' => 'metaslider',
-                    'button_meta' => 'buy-w-discount',
-                    'dismiss_time' => 'pro_features',
-                    'hide_time' => 12,
-                    'supported_positions' => ['header'],
-                    'validity_function' => 'metaslider_pro_is_not_installed',
-                ],
-                'translation' => [
-                    'title' => __('Can you translate? Want to improve MetaSlider for speakers of your language?', 'ml-slider'),
-                    'text' => '',
-                    'image' => 'notices/metaslider_logo.png',
-                    'button_link' => 'metaslider_translate',
-                    'button_meta' => 'lets_start',
-                    'dismiss_time' => 'translation',
-                    'hide_time' => 12,
-                    'supported_positions' => ['header'],
-                    'validity_function' => 'translation_needed',
-                ],
+        return [
+            'rate_plugin' => [
+                'title' => _x('Like MetaSlider? Please help us by giving a positive review at WordPress.org', 'Keep the plugin name "MetaSlider" when possible', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
+                'button_link' => 'metaslider_rate',
+                'button_meta' => 'review',
+                'dismiss_time' => 'rate_plugin',
+                'hide_time' => 12,
+                'supported_positions' => ['header'],
             ],
-            $this->valid_seasonal_notices()
-        );
+            'pro_layers' => [
+                'title' => __('Spice up your site with animated layers and video slides with MetaSlider Pro', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
+                'button_link' => 'metaslider',
+                'button_meta' => 'buy-w-discount',
+                'dismiss_time' => 'pro_layers',
+                'hide_time' => 12,
+                'supported_positions' => ['header'],
+                'validity_function' => 'metaslider_pro_is_not_installed',
+            ],
+            'pro_features' => [
+                'title' => __('Increase your revenue and conversion with video slides and many more MetaSlider Pro features', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
+                'button_link' => 'metaslider',
+                'button_meta' => 'buy-w-discount',
+                'dismiss_time' => 'pro_features',
+                'hide_time' => 12,
+                'supported_positions' => ['header'],
+                'validity_function' => 'metaslider_pro_is_not_installed',
+            ],
+            'translation' => [
+                'title' => __('Can you translate? Want to improve MetaSlider for speakers of your language?', 'ml-slider'),
+                'text' => '',
+                'image' => 'notices/metaslider_logo.png',
+                'button_link' => 'metaslider_translate',
+                'button_meta' => 'lets_start',
+                'dismiss_time' => 'translation',
+                'hide_time' => 12,
+                'supported_positions' => ['header'],
+                'validity_function' => 'translation_needed',
+            ],
+        ];
     }
 
     /**
@@ -159,71 +150,6 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
         }
 
         return [];
-    }
-
-    /**
-     * Seasonal Notices. Note that if dismissed, they will stay dismissed for 9999 weeks.
-     * An empty string for 'hide_time' will show "Dismiss" instead of "Dismiss (12 weeks)"
-     * Each year the key and dismiss time should be updated
-     *
-     * @return array
-     */
-    protected function seasonal_notices()
-    {
-        if (defined('METASLIDER_DISABLE_SEASONAL_NOTICES') && METASLIDER_DISABLE_SEASONAL_NOTICES) {
-            return array();
-        }
-
-        $coupons = json_decode(file_get_contents(METASLIDER_PATH . 'seasonal-discounts.json'), true);
-        $coupon_object =  array(
-            'blackfriday' => array(
-                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until November 30th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible. Also, "Black Friday" is the name of an event in the United States', 'ml-slider'),
-                'text' => '',
-                'image' => 'notices/metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'hide_time' => '',
-                'supported_positions' => array('header', 'dashboard'),
-            ),
-            'christmas' => array(
-                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until December 25th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => '',
-                'image' => 'notices/metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'hide_time' => '',
-                'supported_positions' => array('header', 'dashboard'),
-            ),
-            'newyear' => array(
-                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until January 14th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => '',
-                'image' => 'notices/metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'hide_time' => '',
-                'supported_positions' => array('header', 'dashboard'),
-            ),
-            'spring' => array(
-                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until April 30th!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => '',
-                'image' => 'notices/metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'hide_time' => '',
-                'supported_positions' => array('header', 'dashboard'),
-            ),
-            'summer' => array(
-                'title' => _x('Upgrade your slideshows! Join today and you get 50% off MetaSlider Pro until July 31st!', 'Keep the phrase "MetaSlider Add-on Pack" when possible', 'ml-slider'),
-                'text' => '',
-                'image' => 'notices/metaslider_logo.png',
-                'button_link' => 'metaslider',
-                'button_meta' => 'buy-w-discount',
-                'hide_time' => '',
-                'supported_positions' => array('header', 'dashboard'),
-            ),
-        );
-
-        return array_map(array($this, 'prepare_notice_fields'), array_merge_recursive($coupon_object, $coupons));
     }
 
     /**
@@ -277,48 +203,6 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     }
 
     /**
-     * Returns all active seasonal ads
-     *
-     * @return array
-     */
-    protected function valid_seasonal_notices()
-    {
-        $valid = array();
-        $time_now = time();
-        // $time_now = strtotime('2021-11-20 00:00:01'); // Black Friday
-        // $time_now = strtotime('2021-12-01 00:00:01'); // XMAS
-        // $time_now = strtotime('2021-12-26 00:00:01'); // NY
-        // $time_now = strtotime('2022-04-01 00:00:01'); // Spring
-        // $time_now = strtotime('2022-07-01 00:00:01'); // Summer
-        foreach ($this->seasonal_notices() as $ad_identifier => $notice) {
-            if (!isset($notice['valid_from']) || !isset($notice['valid_to'])) {
-                continue;
-            }
-            $valid_from = strtotime($notice['valid_from']);
-            $valid_to = strtotime($notice['valid_to']);
-
-            $notice['validity_function'] = 'metaslider_pro_is_not_installed';
-
-            if ($valid_from < $time_now && $time_now <= $valid_to) {
-                $valid[$ad_identifier] = $notice;
-            }
-        }
-        return $valid;
-    }
-
-    /**
-     * The logic is handled elsewhere. This being true does not skip
-     * the seasonal notices. Overrides parent function
-     *
-     * @param array $notice_data Notice data
-     * @return array
-     */
-    protected function skip_seasonal_notices($notice_data)
-    {
-        return !$this->check_notice_dismissed($notice_data['dismiss_time']);
-    }
-
-    /**
      * Checks whether this is an ad page - hard-coded
      *
      * @return bool
@@ -343,18 +227,13 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
      */
     protected function ad_delay_has_finished()
     {
+        // The delay could be empty, ~2 weeks (initial delay) or ~12 weeks
+        $delay = get_option("ms_hide_all_ads_until");
+
         if ($this->force_ads()) {
             // If there's an override, return true
             return true;
         }
-
-        if (metaslider_pro_is_installed()) {
-            // If they are pro don't check anything but show the pro ad.
-            return true;
-        }
-
-        // The delay could be empty, ~2 weeks (initial delay) or ~12 weeks
-        $delay = get_option("ms_hide_all_ads_until");
 
         if (!$this->is_page_with_ads() && !$delay) {
             // Only start the timer if they see a page that can serve ads
@@ -379,6 +258,11 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
         } elseif (get_option("ms_ads_first_seen_on")) {
             // This means the initial delay has elapsed,
             // and the dismissed period expired
+            return true;
+        }
+
+        if (metaslider_pro_is_installed()) {
+            // If they are pro don't check anything but show the pro ad.
             return true;
         }
 
@@ -425,16 +309,14 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
      */
     public function include_template($path, $return_instead_of_echo = false, $args = array())
     {
-        if ($return_instead_of_echo) {
+        if ( $return_instead_of_echo ) {
             ob_start();
         }
 
-        // TODO: Remove extract function
-        // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-        extract($args);
-        if (is_int($hide_time)) {
-            $hide_time = $hide_time . ' ' . __('weeks', 'ml-slider');
+        if ( ! empty( $args['hide_time']) && is_int($args['hide_time'])) {
+            $hide_time = $args['hide_time'] . ' ' . __('weeks', 'ml-slider');
         }
+
         include METASLIDER_PATH . 'admin/views/notices/' . $path;
 
         if ($return_instead_of_echo) {
@@ -576,15 +458,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
             return $all_notices[$ad_identifier];
         }
 
-        // Handle seasonal notices
-        $ad_data = array();
-        $to_upper = strtoupper($ad_identifier);
-        foreach ($all_notices as $notice) {
-            if (isset($notice['discount_code']) && strtoupper($notice['discount_code']) === $to_upper ) {
-                $ad_data = $notice;
-            }
-        }
-        return $ad_data ? $ad_data : new WP_Error('bad_call', __('The requested data does not exist.', 'ml-slider'), array('status' => 401));
+        return new WP_Error('bad_call', __('The requested data does not exist.', 'ml-slider'), array('status' => 401));
     }
 
     /**
@@ -598,7 +472,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     {
 
         // If the time isn't specified it will hide "forever" (9999 weeks)
-        // Update 12/18/2017 - will set this an extra week, so that this individual ad will hide, for example, 13 weeks, while ALL ads (minus seasonal) will hide for 12 weeks. This ensures that the user doesn't see the same ad twice. Minor detail.
+        // Update 12/18/2017 - will set this an extra week, so that this individual ad will hide, for example, 13 weeks, while ALL ads will hide for 12 weeks. This ensures that the user doesn't see the same ad twice. Minor detail.
         $weeks = is_int($weeks) ? $weeks + 1 : 9999;
 
         $result = update_option("ms_hide_{$ad_identifier}_ads_until", time() + $weeks * 7 * 86400);
@@ -652,8 +526,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
     {
         return (defined('METASLIDER_FORCE_NOTICES') && METASLIDER_FORCE_NOTICES) ||
             (defined('METASLIDER_FORCE_PRO_NOTICES') && METASLIDER_FORCE_PRO_NOTICES) ||
-            (defined('METASLIDER_FORCE_LITE_NOTICES') && METASLIDER_FORCE_LITE_NOTICES) ||
-            (defined('METASLIDER_DISABLE_SEASONAL_NOTICES') && METASLIDER_DISABLE_SEASONAL_NOTICES);
+            (defined('METASLIDER_FORCE_LITE_NOTICES') && METASLIDER_FORCE_LITE_NOTICES);
     }
 
     /**

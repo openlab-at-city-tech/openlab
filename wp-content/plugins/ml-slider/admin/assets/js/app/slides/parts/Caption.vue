@@ -1,15 +1,15 @@
 <template>
 	<div class="row caption">
 		<div class="flex justify-between">
-			<label class="mr-2">{{ __("Caption", "ml-slider") }}</label>
+			<label class="mr-4 caption-label">{{ __("Caption", "ml-slider") }}</label>
 			<div
 				:aria-labelledby="'caption_source_' + $parent.id"
 				role="radiogroup"
-				class="flex mb-1 -mx-1">
+				class="mb-1 mr-1">
 				<div
 					v-for="(caption, source) in sources"
 					:key="source"
-					class="whitespace-no-wrap px-1">
+					class="whitespace-no-wrap inline-block mb-1 px-1">
 					<input
 						:id="source + '-' + $parent.id"
 						:value="source"
@@ -21,32 +21,25 @@
 					<label
 						:for="source + '-' + $parent.id"
 						:title="language[source]"
-						style="max-width:150px"
 						class="m-0 truncate">
 						{{ language[source] }}
 					</label>
 				</div>
 			</div>
 		</div>
-		<div
+		<textarea
 			v-if="selectedSource !== 'override'"
+			:value="!sources[selectedSource].length ? __('No default was found', 'ml-slider') : sources[selectedSource]"
 			:title="__('Automatically updates directly from the WP Media Library', 'ml-slider')"
-			class="default tipsy-tooltip-top">
-			<span
-				v-if="!sources[selectedSource].length"
-				class="no-content">{{ __('No default was found', 'ml-slider') }}</span>
-			<span
-				v-else
-				v-text="sources[selectedSource]"/>
-		</div>
+			class="tipsy-tooltip-top"
+			readonly/>
 		<textarea
 			v-if="selectedSource === 'override'"
 			v-model="sources['override']"
 			:title="__('You may use HTML here', 'ml-slider')"
 			:id="'caption_override_' + $parent.id"
 			:name="'attachment[' + $parent.id + '][post_excerpt]'"
-			class="tipsy-tooltip-top"
-			style="margin:0"/>
+			class="tipsy-tooltip-top"/>
 	</div>
 </template>
 
@@ -92,9 +85,9 @@ export default {
 
 		// Set specific wording for the options
 		this.language = {
-			'image-caption': this.__('Media library caption', 'ml-slider'),
-			'image-description': this.__('Media library description', 'ml-slider'),
-			'override': this.__('Enter manually', 'ml-slider')
+			'image-caption': this.__('Media caption', 'ml-slider'),
+			'image-description': this.__('Media description', 'ml-slider'),
+			'override': this.__('Manual entry', 'ml-slider')
 		}
 	},
 	methods: {

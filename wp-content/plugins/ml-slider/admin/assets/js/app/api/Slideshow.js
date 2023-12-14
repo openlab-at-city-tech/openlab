@@ -28,6 +28,13 @@ const Slideshow = {
 			}
 		})
 	},
+	legacy() {
+		return api.get('slideshow/legacy', {
+			params: {
+				action: 'ms_get_legacy_slideshows'
+			}
+		})
+	},
 	save(data, chunks = 10) {
 		const formData = new FormData()
 		let count = 0

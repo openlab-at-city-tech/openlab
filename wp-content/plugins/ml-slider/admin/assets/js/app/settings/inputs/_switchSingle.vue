@@ -29,6 +29,7 @@
 			</span>
 		</div>
 	</div>
+	<slot name="legacy-notices"/>
 </div>
 <transition name="settings-fade" mode="in-out">
 	<loading-element v-if="$parent.$attrs.loading"/>

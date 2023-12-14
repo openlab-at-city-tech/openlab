@@ -44,7 +44,7 @@ class MetaSlider_Themes
     public static function get_instance()
     {
         if (null === self::$instance) {
-self::$instance = new self();
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -56,17 +56,38 @@ self::$instance = new self();
      */
     public function get_all_free_themes()
     {
-        if (!file_exists(METASLIDER_THEMES_PATH . 'manifest.php')) {
+        if (!file_exists(METASLIDER_THEMES_PATH . 'manifest.php') || !file_exists(METASLIDER_THEMES_PATH . 'manifest-legacy.php')) {
             return new WP_Error('manifest_not_found', __('No themes found.', 'ml-slider'), array('status' => 404));
         }
-        $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
 
+        
+        if (is_multisite() && $settings = get_site_option('metaslider_global_settings')) {
+            $global_settings = $settings;
+        }
+        
+        if ($settings = get_option('metaslider_global_settings')) {
+            $global_settings = $settings;
+        }
+        
+        $new_install = get_option('metaslider_new_user');
+        
+        if (
+            (isset($global_settings['legacy']) && true == $global_settings['legacy']) ||
+            (isset($new_install)  && 'new' == $new_install)
+        ) {
+            $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
+            $manifest_file = 'manifest.php';
+        } else {
+            $themes = (include METASLIDER_THEMES_PATH . 'manifest-legacy.php');
+            $manifest_file = 'manifest-legacy.php';
+        }
+        
         // Let theme developers or others define a folder to check for themes
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
             // Make sure there is a manifest
-            if (file_exists(trailingslashit($location) . 'manifest.php')) {
-                $manifest = include(trailingslashit($location) . 'manifest.php');
+            if (file_exists(trailingslashit($location) . $manifest_file)) {
+                $manifest = include(trailingslashit($location) . $manifest_file);
 
                 // Make sure each theme has an existing folder, title, description
                 foreach ($manifest as $data) {
@@ -316,7 +337,7 @@ return $theme;
         // Don't load a theme on the editor page.
         if (is_admin() && function_exists('get_current_screen') && $screen = get_current_screen()) {
             if ('metaslider-pro_page_metaslider-theme-editor' === $screen->id) {
-return false;
+            return false;
             }
         }
 
@@ -325,15 +346,16 @@ return false;
         // No theme for this slideshow? Set a default class
         if ( false === $theme ) {
             add_filter( 'metaslider_css_classes', array( $this, 'add_no_theme_class' ), 10, 3 );
+            remove_filter( 'metaslider_css_classes', array( $this, 'add_theme_class' ), 10, 3 );
         }
         
         // 'none' is the default theme to load no theme. 
         // @TODO - Why we don't seem to get 'none' for slideshows with no theme?
         if ('none' == $theme_id) {
-return false;
+            return false;
         }
         if (is_wp_error($theme) || false === $theme) {
-return $theme;
+            return $theme;
         }
 
         // We have a theme, so lets add the class to the body
@@ -341,6 +363,7 @@ return $theme;
 
         // Add the theme class name to the slideshow
         add_filter('metaslider_css_classes', array($this, 'add_theme_class'), 10, 3);
+        remove_filter( 'metaslider_css_classes', array( $this, 'add_no_theme_class' ), 10, 3 );
 
         // Check our themes for a match
         if (file_exists(METASLIDER_THEMES_PATH . $theme['folder'])) {

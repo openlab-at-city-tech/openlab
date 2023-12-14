@@ -97,6 +97,11 @@ export default {
 			!this.tourStatus && this.id && this.startTour()
 		})
 
+		// Listen when trying to edit a slide in trashed slides screen
+		EventManager.$on('metaslider/cant-edit-trashed-slide', () => {
+			this.notifyError('metaslider/slide-edit-failed', this.__('To edit this slide, click "Restore" and then "Return to Published Slides"', 'ml-slider'), true)
+		})
+
 		if (!this.showOptIn) {
 			EventManager.$emit('metaslider/start-tour')
 		}
@@ -115,43 +120,46 @@ export default {
 	},
 	methods: {
 		async save() {
-			if (this.locked) return
-			this.$store.commit('slideshows/setLocked', true)
-			this.notifyInfo('metaslider/saving', this.__('Saving...', 'ml-slider'))
+			if(this.current.title == '') {
+				this.notifyError('metaslider/title-saved', this.__('Please add a slideshow title'), true)
+			} else {
+				if (this.locked) return
+				this.$store.commit('slideshows/setLocked', true)
+				this.notifyInfo('metaslider/saving', this.__('Saving...', 'ml-slider'))
 
-			// TODO: this is temporary until there is a slide component
-			this.orderSlides()
+				// TODO: this is temporary until there is a slide component
+				this.orderSlides()
 
-			let data = window.jQuery('#ms-form-settings').serializeArray()
-			await this.saveSettings(data).then(() => {
+				let data = window.jQuery('#ms-form-settings').serializeArray()
+				await this.saveSettings(data).then(() => {
 
-				// Todo: refactor out slides logic
-				let slides = this.prepareSlideData(data)
-				slides.length > 20 && this.notifyInfo(
-					'metaslider/saving-more-notice',
-					this.sprintf(this.__('Saving %s slides. This may take a few moments.', 'ml-slider'), slides.length),
-					true
-				)
-				this.showSlideSaveNotification = false
-				setTimeout(() => { this.showSlideSaveNotification = true }, 4000)
-				return this.saveSlides(slides).then(() => {
+					// Todo: refactor out slides logic
+					let slides = this.prepareSlideData(data)
+					slides.length > 20 && this.notifyInfo(
+						'metaslider/saving-more-notice',
+						this.sprintf(this.__('Saving %s slides. This may take a few moments.', 'ml-slider'), slides.length),
+						true
+					)
+					this.showSlideSaveNotification = false
+					setTimeout(() => { this.showSlideSaveNotification = true }, 4000)
+					return this.saveSlides(slides).then(() => {
 
-					// TODO: refactor out with psuedocode below
-					this.cropSlidesTheOldWay()
-					this.notifySuccess('metaslider/save-success', this.__('Slideshow saved', 'ml-slider'), true)
+						// TODO: refactor out with psuedocode below
+						this.cropSlidesTheOldWay()
+						this.notifySuccess('metaslider/save-success', this.__('Slideshow saved', 'ml-slider'), true)
+					}).catch(error => {
+
+						// If the input vars are too low, reload the page with the error message
+						if (error.response.data.data && error.response.data.data.current_input_vars || error.response.data.includes('max_input_vars')) {
+							window.location.replace(this.metasliderPage + '&id=' + this.current.id + '&input_vars_error=true')
+						}
+
+						throw error
+					})
 				}).catch(error => {
-
-					// If the input vars are too low, reload the page with the error message
-					if (error.response.data.data && error.response.data.data.current_input_vars || error.response.data.includes('max_input_vars')) {
-						window.location.replace(this.metasliderPage + '&id=' + this.current.id + '&input_vars_error=true')
-					}
-
-					throw error
+					this.notifyError('metaslider/save-error', error.response, true)
 				})
-			}).catch(error => {
-				this.notifyError('metaslider/save-error', error.response, true)
-			})
-
+			}
 
 			// TODO: refactor like this in a future branch
 			// let touchedSlides = getTouchedSlides()
@@ -264,13 +272,14 @@ export default {
 					this.notifySuccess('metaslider/tour-cancelled-failed', this.__('Tour cancelled unsuccessfully', 'ml-slider'), false)
 				})
 		},
+		// NOTE: this doesn't permanently delete, just move to trash
 		deleteSlideshow() {
 			Swal.queue([{
 				icon: 'warning',
 				iconHtml: '<div class="dashicons dashicons-warning" style="transform: scale(3.5);"></div>',
 				title: this.__('Are you sure?', 'ml-slider'),
-				text: this.__('You will not be able to undo this.', 'ml-slider'),
-				confirmButtonText: this.__('Delete', 'ml-slider'),
+				text: this.__('This slideshow will be moved to the "Trash" area.', 'ml-slider'),
+				confirmButtonText: this.__('Confirm', 'ml-slider'),
 				showCancelButton: true,
 				confirmButtonColor: '#e82323',
 				focusCancel: true,
@@ -283,9 +292,6 @@ export default {
 						slideshow_id: this.current.id
 					})).then(response => {
 						console.log('MetaSlider:', response.data.data)
-
-						// Set the next slideshow to show. If false, just reload the page.
-						this.nextSlideshow = Number.isInteger(response.data.data.message) ? response.data.data.message : false
 					}).catch(error => {
 						let errorMessage = this.getErrorMessage(error.response)
 						this.notifyError('metaslider/delete-error', error)
@@ -300,16 +306,16 @@ export default {
 			}]).then(result => {
 				localStorage.removeItem('metaslider-vuex-' + this.siteId)
 				if (!result.dismiss) {
-
-					// use replace becasue the resource is deleted
-					this.nextSlideshow && window.location.replace(this.metasliderPage + '&id=' + this.nextSlideshow)
-
-					// If no next slideshow then just reload the current page
-					this.nextSlideshow || window.location.reload(true)
+					// use replace because the resource is deleted
+					window.location.replace(
+						this.current.id 
+							? this.metasliderPage + '&action=delete&slideshows=' + this.current.id
+							: this.metasliderPage
+					);
 				}
 
 			})
-		}
+		},
 	}
 }
 </script>
