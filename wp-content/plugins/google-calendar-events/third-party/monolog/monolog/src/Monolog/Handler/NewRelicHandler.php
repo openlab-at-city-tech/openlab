@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @see https://docs.newrelic.com/docs/agents/php-agent
  * @see https://docs.newrelic.com/docs/accounts-partnerships/accounts/security/high-security
+ * @internal
  */
 class NewRelicHandler extends AbstractProcessingHandler
 {

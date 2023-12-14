@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\PermissionList;
  *   $driveService = new Google\Service\Drive(...);
  *   $permissions = $driveService->permissions;
  *  </code>
+ * @internal
  */
 class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

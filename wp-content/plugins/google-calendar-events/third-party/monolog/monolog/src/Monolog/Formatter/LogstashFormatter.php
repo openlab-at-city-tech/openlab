@@ -18,6 +18,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * @see https://github.com/elastic/logstash/blob/master/logstash-core/src/main/java/org/logstash/Event.java
  *
  * @author Tim Mower <timothy.mower@gmail.com>
+ * @internal
  */
 class LogstashFormatter extends NormalizerFormatter
 {

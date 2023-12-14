@@ -13,6 +13,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
  * returned by the provided callable is buffered internally until drained using
  * the read() function of the PumpStream. The provided callable MUST return
  * false when there is no more data to read.
+ * @internal
  */
 final class PumpStream implements StreamInterface
 {

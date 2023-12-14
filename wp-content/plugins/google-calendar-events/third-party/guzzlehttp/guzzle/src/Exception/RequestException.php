@@ -10,6 +10,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * HTTP Request exception
+ * @internal
  */
 class RequestException extends TransferException implements RequestExceptionInterface
 {

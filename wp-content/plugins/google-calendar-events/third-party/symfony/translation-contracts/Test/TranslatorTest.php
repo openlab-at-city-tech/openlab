@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorTrait;
  * The goal to cover all languages is to far fetched so this test case is smaller.
  *
  * @author Clemens Tolboom clemens@build2be.nl
+ * @internal
  */
 class TranslatorTest extends TestCase
 {

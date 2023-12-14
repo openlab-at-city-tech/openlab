@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps;
 # with this source code.
 #
 #
+/** @internal */
 class Parsedown
 {
     # ~
@@ -920,4 +921,5 @@ class Parsedown
 # with this source code.
 #
 #
+/** @internal */
 \class_alias('SimpleCalendar\\plugin_deps\\Parsedown', 'Parsedown', \false);

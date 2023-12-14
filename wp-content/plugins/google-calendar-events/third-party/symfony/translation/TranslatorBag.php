@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Catalogue\AbstractOperation;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Catalogue\TargetOperation;
+/** @internal */
 final class TranslatorBag implements TranslatorBagInterface
 {
     /** @var MessageCatalogue[] */

@@ -20,6 +20,7 @@ if (!\function_exists('SimpleCalendar\\plugin_deps\\trigger_deprecation')) {
      * @param mixed  ...$args Values to insert in the message using printf() formatting
      *
      * @author Nicolas Grekas <p@tchwork.com>
+     * @internal
      */
     function trigger_deprecation(string $package, string $version, string $message, ...$args) : void
     {

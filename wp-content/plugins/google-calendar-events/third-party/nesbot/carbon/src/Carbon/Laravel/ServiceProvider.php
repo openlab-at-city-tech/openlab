@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Illuminate\Events\EventDispatcher;
 use SimpleCalendar\plugin_deps\Illuminate\Support\Carbon as IlluminateCarbon;
 use SimpleCalendar\plugin_deps\Illuminate\Support\Facades\Date;
 use Throwable;
+/** @internal */
 class ServiceProvider extends \SimpleCalendar\plugin_deps\Illuminate\Support\ServiceProvider
 {
     /** @var callable|null */

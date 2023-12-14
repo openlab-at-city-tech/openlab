@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class ProviderException extends RuntimeException implements ProviderExceptionInterface
 {

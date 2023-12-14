@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * Writes to any sqs queue.
  *
  * @author Martijn van Calker <git@amvc.nl>
+ * @internal
  */
 class SqsHandler extends AbstractProcessingHandler
 {

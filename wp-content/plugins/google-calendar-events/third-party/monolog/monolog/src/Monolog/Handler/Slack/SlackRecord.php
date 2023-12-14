@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @phpstan-import-type FormattedRecord from \Monolog\Handler\AbstractProcessingHandler
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class SlackRecord
 {

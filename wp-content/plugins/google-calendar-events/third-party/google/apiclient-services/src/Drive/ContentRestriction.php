@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
+/** @internal */
 class ContentRestriction extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**

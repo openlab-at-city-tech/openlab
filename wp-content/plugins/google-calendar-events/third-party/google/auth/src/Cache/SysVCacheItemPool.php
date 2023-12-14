@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
  * This CacheItemPool implementation can be used among multiple processes, but
  * it doesn't provide any locking mechanism. If multiple processes write to
  * this ItemPool, you have to avoid race condition manually in your code.
+ * @internal
  */
 class SysVCacheItemPool implements CacheItemPoolInterface
 {

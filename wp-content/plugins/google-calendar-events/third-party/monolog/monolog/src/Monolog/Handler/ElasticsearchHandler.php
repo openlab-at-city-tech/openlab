@@ -42,6 +42,7 @@ use SimpleCalendar\plugin_deps\Elastic\Elasticsearch\Client as Client8;
  *    $log->pushHandler($handler);
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
+ * @internal
  */
 class ElasticsearchHandler extends AbstractProcessingHandler
 {

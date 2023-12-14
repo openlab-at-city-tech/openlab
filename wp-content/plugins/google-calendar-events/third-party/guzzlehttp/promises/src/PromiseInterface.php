@@ -11,6 +11,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * the reason why the promise cannot be fulfilled.
  *
  * @see https://promisesaplus.com/
+ * @internal
  */
 interface PromiseInterface
 {

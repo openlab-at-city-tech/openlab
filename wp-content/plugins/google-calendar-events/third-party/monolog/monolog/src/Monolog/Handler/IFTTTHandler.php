@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * value3 will be the log record's message
  *
  * @author Nehal Patel <nehal@nehalpatel.me>
+ * @internal
  */
 class IFTTTHandler extends AbstractProcessingHandler
 {

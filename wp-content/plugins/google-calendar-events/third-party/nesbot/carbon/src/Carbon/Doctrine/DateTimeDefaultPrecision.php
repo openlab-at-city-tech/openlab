@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
+/** @internal */
 class DateTimeDefaultPrecision
 {
     private static $precision = 6;

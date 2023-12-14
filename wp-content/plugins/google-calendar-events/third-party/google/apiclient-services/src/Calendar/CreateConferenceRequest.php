@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $conferenceSolutionKeyType = ConferenceSolutionKey::class;

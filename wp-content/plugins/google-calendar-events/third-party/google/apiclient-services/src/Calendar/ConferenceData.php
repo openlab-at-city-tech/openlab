@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'entryPoints';

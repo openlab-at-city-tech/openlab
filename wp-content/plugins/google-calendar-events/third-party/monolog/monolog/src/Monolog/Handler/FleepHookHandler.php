@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author Ando Roots <ando@sqroot.eu>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class FleepHookHandler extends SocketHandler
 {

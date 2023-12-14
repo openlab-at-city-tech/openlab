@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+/** @internal */
 class NotACarbonClassException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**

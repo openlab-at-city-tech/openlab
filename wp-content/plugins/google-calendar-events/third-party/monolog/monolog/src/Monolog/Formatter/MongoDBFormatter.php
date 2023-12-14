@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * Formats a record for use with the MongoDBHandler.
  *
  * @author Florian Plattner <me@florianplattner.de>
+ * @internal
  */
 class MongoDBFormatter implements FormatterInterface
 {

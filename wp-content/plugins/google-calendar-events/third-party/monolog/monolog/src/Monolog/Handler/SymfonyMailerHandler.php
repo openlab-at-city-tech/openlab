@@ -24,6 +24,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Mime\Email;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class SymfonyMailerHandler extends MailHandler
 {

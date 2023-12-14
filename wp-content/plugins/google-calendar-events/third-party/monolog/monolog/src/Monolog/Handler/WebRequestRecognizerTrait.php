@@ -11,6 +11,7 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
+/** @internal */
 trait WebRequestRecognizerTrait
 {
     /**

@@ -3,6 +3,7 @@
 namespace SimpleCalendar\plugin_deps\Psr\Clock;
 
 use DateTimeImmutable;
+/** @internal */
 interface ClockInterface
 {
     /**

@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * </pre>
  *
  * @author Kolja Zuelsdorf <koljaz@web.de>
+ * @internal
  */
 class ProcessHandler extends AbstractProcessingHandler
 {

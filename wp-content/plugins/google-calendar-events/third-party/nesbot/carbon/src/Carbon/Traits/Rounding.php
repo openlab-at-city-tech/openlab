@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnknownUnitException;
  *
  * @method static copy()
  * @method static startOfWeek(int $weekStartsAt = null)
+ * @internal
  */
 trait Rounding
 {

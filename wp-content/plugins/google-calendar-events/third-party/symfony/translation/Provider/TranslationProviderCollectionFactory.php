@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
+ * @internal
  */
 class TranslationProviderCollectionFactory
 {

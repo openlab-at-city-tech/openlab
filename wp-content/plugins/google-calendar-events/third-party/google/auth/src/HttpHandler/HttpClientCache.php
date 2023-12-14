@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth\HttpHandler;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 /**
  * Stores an HTTP Client in order to prevent multiple instantiations.
+ * @internal
  */
 class HttpClientCache
 {

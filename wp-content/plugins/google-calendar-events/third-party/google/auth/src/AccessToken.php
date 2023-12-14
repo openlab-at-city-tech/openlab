@@ -44,6 +44,7 @@ use UnexpectedValueException;
  * Wrapper around Google Access Tokens which provides convenience functions.
  *
  * @experimental
+ * @internal
  */
 class AccessToken
 {

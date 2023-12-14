@@ -17,6 +17,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler\FingersCrossed;
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 interface ActivationStrategyInterface
 {

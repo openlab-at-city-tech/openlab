@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
+ * @internal
  */
 final class TranslationProviderCollection
 {

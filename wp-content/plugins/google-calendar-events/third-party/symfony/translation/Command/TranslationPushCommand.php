@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Reader\TranslationR
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
+ * @internal
  */
 final class TranslationPushCommand extends Command
 {

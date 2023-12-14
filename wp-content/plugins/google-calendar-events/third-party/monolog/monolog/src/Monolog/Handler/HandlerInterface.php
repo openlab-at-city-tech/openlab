@@ -18,6 +18,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 interface HandlerInterface
 {

@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
  * source (the left argument) and target (the right argument) catalogues.
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
+ * @internal
  */
 abstract class AbstractOperation implements OperationInterface
 {

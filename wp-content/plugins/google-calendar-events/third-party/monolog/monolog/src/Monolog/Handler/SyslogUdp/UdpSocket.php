@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler\SyslogUdp;
 
 use SimpleCalendar\plugin_deps\Monolog\Utils;
 use Socket;
+/** @internal */
 class UdpSocket
 {
     protected const DATAGRAM_MAX_LENGTH = 65023;

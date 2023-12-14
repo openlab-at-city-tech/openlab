@@ -24,6 +24,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * access.
  *
  * Requests are accessed using the Simple API access developer key.
+ * @internal
  */
 class SimpleMiddleware
 {

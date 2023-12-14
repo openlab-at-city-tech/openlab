@@ -19,6 +19,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * influencing the rest of the stack.
  *
  * @author Roel Harbers <roelharbers@gmail.com>
+ * @internal
  */
 class NoopHandler extends Handler
 {

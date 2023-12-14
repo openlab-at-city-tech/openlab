@@ -24,6 +24,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *   $log->pushHandler($redis);
  *
  * @author Gaëtan Faugère <gaetan@fauge.re>
+ * @internal
  */
 class RedisPubSubHandler extends AbstractProcessingHandler
 {

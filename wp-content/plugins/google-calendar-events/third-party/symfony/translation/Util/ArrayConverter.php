@@ -21,6 +21,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Util;
  *     bar2: test2.
  *
  * @author Gennady Telegin <gtelegin@gmail.com>
+ * @internal
  */
 class ArrayConverter
 {

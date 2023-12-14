@@ -14,6 +14,7 @@ use RuntimeException;
 use UnexpectedValueException;
 /**
  * @implements ArrayAccess<string, Key>
+ * @internal
  */
 class CachedKeySet implements ArrayAccess
 {

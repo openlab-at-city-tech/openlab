@@ -18,6 +18,7 @@
 namespace SimpleCalendar\plugin_deps\Google;
 
 use Exception as BaseException;
+/** @internal */
 class Exception extends BaseException
 {
 }

@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * This is especially useful for html email logging
  *
  * @author Tiago Brito <tlfbrito@gmail.com>
+ * @internal
  */
 class HtmlFormatter extends NormalizerFormatter
 {

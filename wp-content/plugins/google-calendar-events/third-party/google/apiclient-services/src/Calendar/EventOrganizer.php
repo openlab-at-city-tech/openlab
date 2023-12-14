@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class EventOrganizer extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**

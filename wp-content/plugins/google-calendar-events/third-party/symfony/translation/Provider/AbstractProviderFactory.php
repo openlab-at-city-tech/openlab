@@ -11,6 +11,7 @@
 namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\IncompleteDsnException;
+/** @internal */
 abstract class AbstractProviderFactory implements ProviderFactoryInterface
 {
     public function supports(Dsn $dsn) : bool

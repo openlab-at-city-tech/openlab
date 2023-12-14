@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\LineFormatter;
  *
  * @author Christophe Coevoet <stof@notk.org>
  * @author Mark Garrett <mark@moderndeveloperllc.com>
+ * @internal
  */
 class NativeMailerHandler extends MailHandler
 {

@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * CouchDB handler
  *
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
+ * @internal
  */
 class CouchDBHandler extends AbstractProcessingHandler
 {

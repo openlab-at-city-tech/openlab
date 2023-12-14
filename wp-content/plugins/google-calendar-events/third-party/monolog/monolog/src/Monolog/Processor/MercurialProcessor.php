@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type LevelName from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 class MercurialProcessor implements ProcessorInterface
 {

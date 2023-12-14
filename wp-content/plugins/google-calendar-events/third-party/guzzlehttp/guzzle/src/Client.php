@@ -12,6 +12,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * @final
+ * @internal
  */
 class Client implements ClientInterface, \SimpleCalendar\plugin_deps\Psr\Http\Client\ClientInterface
 {

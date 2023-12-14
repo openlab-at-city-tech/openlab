@@ -37,6 +37,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
  *
+ * @internal
  */
 class Verify
 {

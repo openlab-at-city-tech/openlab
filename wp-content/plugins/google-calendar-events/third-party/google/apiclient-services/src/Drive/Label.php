@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
+/** @internal */
 class Label extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $fieldsType = LabelField::class;

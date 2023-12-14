@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 use SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA;
 /**
  * Sign a string using a Service Account private key.
+ * @internal
  */
 trait ServiceAccountSignerTrait
 {

@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
  * JsonFileLoader loads translations from an json file.
  *
  * @author singles
+ * @internal
  */
 class JsonFileLoader extends FileLoader
 {

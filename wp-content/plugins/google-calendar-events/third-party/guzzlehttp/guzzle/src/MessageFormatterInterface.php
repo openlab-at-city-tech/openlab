@@ -4,6 +4,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
+/** @internal */
 interface MessageFormatterInterface
 {
     /**

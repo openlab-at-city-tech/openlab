@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 use Exception;
 use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpClientCache;
 use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
+/** @internal */
 trait IamSignerTrait
 {
     /**

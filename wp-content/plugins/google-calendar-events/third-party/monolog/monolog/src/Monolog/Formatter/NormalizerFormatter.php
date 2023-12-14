@@ -18,6 +18,7 @@ use Throwable;
  * Normalizes incoming records to remove objects/resources so it's easier to dump to various targets
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 class NormalizerFormatter implements FormatterInterface
 {

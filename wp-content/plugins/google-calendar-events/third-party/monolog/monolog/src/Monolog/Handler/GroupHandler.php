@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\ResettableInterface;
  * @author Lenar Lõhmus <lenar@city.ee>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class GroupHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface
 {

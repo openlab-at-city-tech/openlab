@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  * Quick setup: <code>ErrorHandler::register($logger);</code>
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 class ErrorHandler
 {

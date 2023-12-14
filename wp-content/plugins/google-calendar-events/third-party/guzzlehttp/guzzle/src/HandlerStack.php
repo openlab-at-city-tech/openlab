@@ -10,6 +10,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
  * an HTTP handler function.
  *
  * @final
+ * @internal
  */
 class HandlerStack
 {

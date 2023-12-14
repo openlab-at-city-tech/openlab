@@ -19,6 +19,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 
 /**
  * An interface implemented by objects that can get quota projects.
+ * @internal
  */
 interface GetQuotaProjectInterface
 {

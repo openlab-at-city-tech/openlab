@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use BadMethodCallException as BaseBadMethodCallException;
 use Throwable;
+/** @internal */
 class BadFluentConstructorException extends BaseBadMethodCallException implements BadMethodCallException
 {
     /**

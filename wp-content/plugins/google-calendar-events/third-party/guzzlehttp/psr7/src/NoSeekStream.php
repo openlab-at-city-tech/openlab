@@ -6,6 +6,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator that prevents a stream from being seeked.
+ * @internal
  */
 final class NoSeekStream implements StreamInterface
 {

@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * SendGridrHandler uses the SendGrid API v2 function to send Log emails, more information in https://sendgrid.com/docs/API_Reference/Web_API/mail.html
  *
  * @author Ricardo Fontanelli <ricardo.fontanelli@hotmail.com>
+ * @internal
  */
 class SendGridHandler extends MailHandler
 {

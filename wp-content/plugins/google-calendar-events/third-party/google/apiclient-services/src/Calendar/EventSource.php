@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class EventSource extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**

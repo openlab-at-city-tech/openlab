@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
 
+/** @internal */
 final class Each
 {
     /**

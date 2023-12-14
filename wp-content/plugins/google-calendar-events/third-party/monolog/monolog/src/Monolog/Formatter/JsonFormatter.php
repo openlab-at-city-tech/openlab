@@ -20,6 +20,7 @@ use Throwable;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class JsonFormatter extends NormalizerFormatter
 {

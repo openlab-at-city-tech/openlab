@@ -31,6 +31,7 @@ use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
  * from credentials from a json key file downloaded from the developer
  * console (via 'Generate new Json Key').  It is not part of any OAuth2
  * flow, rather it creates a JWT and sends that as a credential.
+ * @internal
  */
 class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {

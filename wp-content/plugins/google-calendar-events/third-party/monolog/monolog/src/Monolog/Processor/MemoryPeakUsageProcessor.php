@@ -16,6 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  *
  * @see Monolog\Processor\MemoryProcessor::__construct() for options
  * @author Rob Jensen
+ * @internal
  */
 class MemoryPeakUsageProcessor extends MemoryProcessor
 {

@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Yaml\Yaml;
  * YamlFileLoader loads translations from Yaml files.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class YamlFileLoader extends FileLoader
 {

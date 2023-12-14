@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\DriveList;
  *   $driveService = new Google\Service\Drive(...);
  *   $drives = $driveService->drives;
  *  </code>
+ * @internal
  */
 class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

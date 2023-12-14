@@ -32,6 +32,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * $logger->pushHandler($fluentHandler);
  *
  * @author Andrius Putna <fordnox@gmail.com>
+ * @internal
  */
 class FluentdFormatter implements FormatterInterface
 {

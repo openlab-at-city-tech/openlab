@@ -29,6 +29,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *  - datetime (unix timestamp)
  *
  * @author Paul Statezny <paulstatezny@gmail.com>
+ * @internal
  */
 class RollbarHandler extends AbstractProcessingHandler
 {

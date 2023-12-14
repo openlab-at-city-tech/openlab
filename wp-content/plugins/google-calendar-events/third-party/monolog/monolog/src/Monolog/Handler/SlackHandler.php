@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Monolog\Handler\Slack\SlackRecord;
  * @see    https://api.slack.com/
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class SlackHandler extends SocketHandler
 {

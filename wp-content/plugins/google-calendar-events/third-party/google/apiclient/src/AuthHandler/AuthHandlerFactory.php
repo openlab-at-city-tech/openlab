@@ -19,6 +19,7 @@ namespace SimpleCalendar\plugin_deps\Google\AuthHandler;
 
 use Exception;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
+/** @internal */
 class AuthHandlerFactory
 {
     /**

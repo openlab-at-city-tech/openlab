@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Adds value of getmypid into records
  *
  * @author Andreas Hörnicke
+ * @internal
  */
 class ProcessIdProcessor implements ProcessorInterface
 {

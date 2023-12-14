@@ -11,6 +11,7 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use Throwable;
+/** @internal */
 class UnitNotConfiguredException extends UnitException
 {
     /**

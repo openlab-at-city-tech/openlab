@@ -17,6 +17,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
  * their contents according to the XSD schema.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class XliffUtils
 {

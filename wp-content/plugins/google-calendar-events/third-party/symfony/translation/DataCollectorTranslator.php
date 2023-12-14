@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterfac
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
+ * @internal
  */
 class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, WarmableInterface
 {

@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidAr
  * A trait to help implement TranslatorInterface and LocaleAwareInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 trait TranslatorTrait
 {

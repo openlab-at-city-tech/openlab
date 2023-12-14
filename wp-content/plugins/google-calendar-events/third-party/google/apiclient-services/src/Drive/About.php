@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
+/** @internal */
 class About extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'teamDriveThemes';

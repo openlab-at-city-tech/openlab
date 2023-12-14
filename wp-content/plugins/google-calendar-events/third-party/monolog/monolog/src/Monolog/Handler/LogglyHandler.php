@@ -22,6 +22,7 @@ use CurlHandle;
  * @author Przemek Sobstel <przemek@sobstel.org>
  * @author Adam Pancutt <adam@pancutt.com>
  * @author Gregory Barchard <gregory@barchard.net>
+ * @internal
  */
 class LogglyHandler extends AbstractProcessingHandler
 {

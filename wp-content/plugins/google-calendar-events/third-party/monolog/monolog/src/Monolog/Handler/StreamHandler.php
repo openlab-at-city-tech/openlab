@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class StreamHandler extends AbstractProcessingHandler
 {

@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use OpenSSLAsymmetricKey;
 use OpenSSLCertificate;
 use TypeError;
+/** @internal */
 class Key
 {
     /** @var string|resource|OpenSSLAsymmetricKey|OpenSSLCertificate */

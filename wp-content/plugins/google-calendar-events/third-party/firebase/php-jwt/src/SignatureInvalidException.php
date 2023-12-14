@@ -2,6 +2,7 @@
 
 namespace SimpleCalendar\plugin_deps\Firebase\JWT;
 
+/** @internal */
 class SignatureInvalidException extends \UnexpectedValueException
 {
 }

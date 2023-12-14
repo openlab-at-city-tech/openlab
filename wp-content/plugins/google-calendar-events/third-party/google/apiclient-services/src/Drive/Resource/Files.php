@@ -31,6 +31,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ModifyLabelsResponse;
  *   $driveService = new Google\Service\Drive(...);
  *   $files = $driveService->files;
  *  </code>
+ * @internal
  */
 class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

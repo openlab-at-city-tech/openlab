@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
 /**
  * @copyright Copyright (c) 2010, Union of RAD https://github.com/UnionOfRAD/lithium
  * @copyright Copyright (c) 2012, Clemens Tolboom
+ * @internal
  */
 class PoFileLoader extends FileLoader
 {

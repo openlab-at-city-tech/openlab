@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\NotFoundR
  * CsvFileLoader loads translations from CSV files.
  *
  * @author Saša Stamenković <umpirsky@gmail.com>
+ * @internal
  */
 class CsvFileLoader extends FileLoader
 {

@@ -11,6 +11,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Log\LoggerInterface;
 /**
  * Functions used to create and wrap handlers with handler middleware.
+ * @internal
  */
 final class Middleware
 {

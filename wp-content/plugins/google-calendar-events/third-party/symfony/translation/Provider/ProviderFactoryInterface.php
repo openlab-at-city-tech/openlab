@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\IncompleteDsnException;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
+/** @internal */
 interface ProviderFactoryInterface
 {
     /**

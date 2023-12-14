@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
  * calling overloading (__call()), which on call will see if the method name (plus.activities.list)
  * is available in this service, and if so construct an apiHttpRequest representing it.
  *
+ * @internal
  */
 class Resource
 {

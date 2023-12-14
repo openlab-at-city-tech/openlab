@@ -9,6 +9,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Provides basic proxies for handlers.
  *
  * @final
+ * @internal
  */
 class Proxy
 {

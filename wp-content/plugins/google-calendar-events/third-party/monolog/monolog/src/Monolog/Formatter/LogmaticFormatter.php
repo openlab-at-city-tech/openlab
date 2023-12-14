@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * Encodes message information into JSON in a format compatible with Logmatic.
  *
  * @author Julien Breux <julien.breux@gmail.com>
+ * @internal
  */
 class LogmaticFormatter extends JsonFormatter
 {

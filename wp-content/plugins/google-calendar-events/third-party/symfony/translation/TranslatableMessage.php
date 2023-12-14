@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatableInterfa
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Nate Wiebe <nate@northern.co>
+ * @internal
  */
 class TranslatableMessage implements TranslatableInterface
 {

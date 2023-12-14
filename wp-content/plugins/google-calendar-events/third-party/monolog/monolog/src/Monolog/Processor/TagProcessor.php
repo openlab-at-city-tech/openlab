@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Adds a tags array into record
  *
  * @author Martijn Riemers
+ * @internal
  */
 class TagProcessor implements ProcessorInterface
 {

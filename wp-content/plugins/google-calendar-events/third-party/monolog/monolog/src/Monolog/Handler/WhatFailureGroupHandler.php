@@ -18,6 +18,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * @author Craig D'Amelio <craig@damelio.ca>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class WhatFailureGroupHandler extends GroupHandler
 {

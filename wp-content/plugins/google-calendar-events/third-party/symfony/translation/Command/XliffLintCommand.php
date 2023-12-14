@@ -28,6 +28,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Util\XliffUtils;
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  * @author Robin Chalas <robin.chalas@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
+ * @internal
  */
 class XliffLintCommand extends Command
 {

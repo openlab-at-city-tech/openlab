@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class RedisHandler extends AbstractProcessingHandler
 {

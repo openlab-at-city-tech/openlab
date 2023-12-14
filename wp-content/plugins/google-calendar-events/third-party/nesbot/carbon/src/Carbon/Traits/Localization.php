@@ -21,13 +21,16 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterf
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
+// @codeCoverageIgnoreStart
 if (\interface_exists('SimpleCalendar\\plugin_deps\\Symfony\\Contracts\\Translation\\TranslatorInterface') && !\interface_exists('SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatorInterface')) {
     \class_alias('SimpleCalendar\\plugin_deps\\Symfony\\Contracts\\Translation\\TranslatorInterface', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatorInterface');
 }
+// @codeCoverageIgnoreEnd
 /**
  * Trait Localization.
  *
  * Embed default and locale translators and translation base methods.
+ * @internal
  */
 trait Localization
 {

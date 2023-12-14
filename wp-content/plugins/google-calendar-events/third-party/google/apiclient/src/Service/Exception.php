@@ -18,6 +18,7 @@
 namespace SimpleCalendar\plugin_deps\Google\Service;
 
 use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
+/** @internal */
 class Exception extends GoogleException
 {
     /**

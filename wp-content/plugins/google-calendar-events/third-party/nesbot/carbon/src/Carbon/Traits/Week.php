@@ -32,6 +32,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\Traits;
  * @method static startOfWeek(int $day = 1)
  * @method static subWeeks(int $weeks = 1)
  * @method static year(int $year = null)
+ * @internal
  */
 trait Week
 {

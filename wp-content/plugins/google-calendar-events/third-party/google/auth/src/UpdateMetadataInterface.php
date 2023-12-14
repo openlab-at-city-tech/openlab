@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 /**
  * Describes a Credentials object which supports updating request metadata
  * (request headers).
+ * @internal
  */
 interface UpdateMetadataInterface
 {

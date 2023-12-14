@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Carbon;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\ImmutableException;
 use SimpleCalendar\plugin_deps\Symfony\Component\Config\ConfigCacheFactoryInterface;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
+/** @internal */
 class TranslatorImmutable extends Translator
 {
     /** @var bool */

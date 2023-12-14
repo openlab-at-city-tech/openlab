@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\LogmaticFormatter;
 /**
  * @author Julien Breux <julien.breux@gmail.com>
+ * @internal
  */
 class LogmaticHandler extends SocketHandler
 {

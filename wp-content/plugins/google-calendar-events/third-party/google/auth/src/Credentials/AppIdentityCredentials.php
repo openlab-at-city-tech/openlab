@@ -54,6 +54,7 @@ use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
  *
  * $res = $client->get('volumes?q=Henry+David+Thoreau&country=US');
  * ```
+ * @internal
  */
 class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterface, ProjectIdProviderInterface
 {

@@ -26,6 +26,7 @@ use const E_USER_DEPRECATED;
  * @author Olivier Poitrey <rs@dailymotion.com>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class BrowserConsoleHandler extends AbstractProcessingHandler
 {

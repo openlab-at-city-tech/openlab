@@ -21,6 +21,7 @@ use Throwable;
  * Depends on the following methods:
  *
  * @method static shiftTimezone($timezone) Set the timezone
+ * @internal
  */
 trait Options
 {

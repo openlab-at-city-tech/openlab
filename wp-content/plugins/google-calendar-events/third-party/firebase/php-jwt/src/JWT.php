@@ -23,6 +23,7 @@ use UnexpectedValueException;
  * @author   Anant Narayanan <anant@php.net>
  * @license  http://opensource.org/licenses/BSD-3-Clause 3-clause BSD
  * @link     https://github.com/firebase/php-jwt
+ * @internal
  */
 class JWT
 {

@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\About as AboutModel;
  *   $driveService = new Google\Service\Drive(...);
  *   $about = $driveService->about;
  *  </code>
+ * @internal
  */
 class About extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

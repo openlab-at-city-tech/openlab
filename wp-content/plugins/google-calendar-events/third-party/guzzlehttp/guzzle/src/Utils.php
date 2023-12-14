@@ -8,6 +8,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Handler\CurlMultiHandler;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Handler\Proxy;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Handler\StreamHandler;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
+/** @internal */
 final class Utils
 {
     /**

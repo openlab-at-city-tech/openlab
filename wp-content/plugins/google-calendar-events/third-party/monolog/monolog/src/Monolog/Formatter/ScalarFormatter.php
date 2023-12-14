@@ -16,6 +16,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * Objects and arrays will be JSON encoded.
  *
  * @author Andrew Lawson <adlawson@gmail.com>
+ * @internal
  */
 class ScalarFormatter extends NormalizerFormatter
 {

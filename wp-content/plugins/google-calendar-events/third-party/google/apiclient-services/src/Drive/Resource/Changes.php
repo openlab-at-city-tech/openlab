@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\StartPageToken;
  *   $driveService = new Google\Service\Drive(...);
  *   $changes = $driveService->changes;
  *  </code>
+ * @internal
  */
 class Changes extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

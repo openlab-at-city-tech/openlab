@@ -14,6 +14,7 @@ foreach ($classMap as $class => $alias) {
 /**
  * This class needs to be defined explicitly as scripts must be recognized by
  * the autoloader.
+ * @internal
  */
 class Google_Task_Composer extends \SimpleCalendar\plugin_deps\Google\Task\Composer
 {
@@ -21,67 +22,88 @@ class Google_Task_Composer extends \SimpleCalendar\plugin_deps\Google\Task\Compo
 /**
  * This class needs to be defined explicitly as scripts must be recognized by
  * the autoloader.
+ * @internal
  */
 \class_alias('SimpleCalendar\\plugin_deps\\Google_Task_Composer', 'Google_Task_Composer', \false);
 /** @phpstan-ignore-next-line */
 if (\false) {
+    /** @internal */
     class Google_AccessToken_Revoke extends \SimpleCalendar\plugin_deps\Google\AccessToken\Revoke
     {
     }
+    /** @internal */
     class Google_AccessToken_Verify extends \SimpleCalendar\plugin_deps\Google\AccessToken\Verify
     {
     }
+    /** @internal */
     class Google_AuthHandler_AuthHandlerFactory extends \SimpleCalendar\plugin_deps\Google\AuthHandler\AuthHandlerFactory
     {
     }
+    /** @internal */
     class Google_AuthHandler_Guzzle5AuthHandler extends \SimpleCalendar\plugin_deps\Google\AuthHandler\Guzzle5AuthHandler
     {
     }
+    /** @internal */
     class Google_AuthHandler_Guzzle6AuthHandler extends \SimpleCalendar\plugin_deps\Google\AuthHandler\Guzzle6AuthHandler
     {
     }
+    /** @internal */
     class Google_AuthHandler_Guzzle7AuthHandler extends \SimpleCalendar\plugin_deps\Google\AuthHandler\Guzzle7AuthHandler
     {
     }
+    /** @internal */
     class Google_Client extends \SimpleCalendar\plugin_deps\Google\Client
     {
     }
+    /** @internal */
     class Google_Collection extends \SimpleCalendar\plugin_deps\Google\Collection
     {
     }
+    /** @internal */
     class Google_Exception extends \SimpleCalendar\plugin_deps\Google\Exception
     {
     }
+    /** @internal */
     class Google_Http_Batch extends \SimpleCalendar\plugin_deps\Google\Http\Batch
     {
     }
+    /** @internal */
     class Google_Http_MediaFileUpload extends \SimpleCalendar\plugin_deps\Google\Http\MediaFileUpload
     {
     }
+    /** @internal */
     class Google_Http_REST extends \SimpleCalendar\plugin_deps\Google\Http\REST
     {
     }
+    /** @internal */
     class Google_Model extends \SimpleCalendar\plugin_deps\Google\Model
     {
     }
+    /** @internal */
     class Google_Service extends \SimpleCalendar\plugin_deps\Google\Service
     {
     }
+    /** @internal */
     class Google_Service_Exception extends \SimpleCalendar\plugin_deps\Google\Service\Exception
     {
     }
+    /** @internal */
     class Google_Service_Resource extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     {
     }
+    /** @internal */
     class Google_Task_Exception extends \SimpleCalendar\plugin_deps\Google\Task\Exception
     {
     }
+    /** @internal */
     interface Google_Task_Retryable extends \SimpleCalendar\plugin_deps\Google\Task\Retryable
     {
     }
+    /** @internal */
     class Google_Task_Runner extends \SimpleCalendar\plugin_deps\Google\Task\Runner
     {
     }
+    /** @internal */
     class Google_Utils_UriTemplate extends \SimpleCalendar\plugin_deps\Google\Utils\UriTemplate
     {
     }

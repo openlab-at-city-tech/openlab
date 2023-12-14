@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author  Jason Davis <happydude@jasondavis.net>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class ZendMonitorHandler extends AbstractProcessingHandler
 {

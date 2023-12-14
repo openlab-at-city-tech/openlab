@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Elastica\Document;
  * @author Jelle Vink <jelle.vink@gmail.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class ElasticaFormatter extends NormalizerFormatter
 {

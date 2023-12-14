@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 trait ProcessableHandlerTrait
 {

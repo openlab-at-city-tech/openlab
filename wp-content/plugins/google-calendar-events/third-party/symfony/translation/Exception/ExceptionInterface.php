@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
  * Exception interface for all exceptions thrown by the component.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 interface ExceptionInterface extends \Throwable
 {

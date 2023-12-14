@@ -17,6 +17,7 @@ namespace SimpleCalendar\plugin_deps;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/** @internal */
 function oauth2client_php_autoload($className)
 {
     $classPath = \explode('_', $className);
@@ -32,4 +33,4 @@ function oauth2client_php_autoload($className)
         require_once $filePath;
     }
 }
-\spl_autoload_register('oauth2client_php_autoload');
+\spl_autoload_register('SimpleCalendar\\plugin_deps\\oauth2client_php_autoload');

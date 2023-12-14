@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Google\Auth\FetchAuthTokenInterface;
  * Provides a set of credentials that will always return an empty access token.
  * This is useful for APIs which do not require authentication, for local
  * service emulators, and for testing.
+ * @internal
  */
 class InsecureCredentials implements FetchAuthTokenInterface
 {

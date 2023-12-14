@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\FreeBusyResponse;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $freebusy = $calendarService->freebusy;
  *  </code>
+ * @internal
  */
 class Freebusy extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

@@ -9,6 +9,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * @see https://promisesaplus.com/
  *
  * @final
+ * @internal
  */
 class Promise implements PromiseInterface
 {

@@ -26,6 +26,7 @@ use UnexpectedValueException;
 /**
  * CredentialsLoader contains the behaviour used to locate and find default
  * credentials files on the file system.
+ * @internal
  */
 abstract class CredentialsLoader implements FetchAuthTokenInterface, UpdateMetadataInterface
 {

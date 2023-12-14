@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 use SimpleCalendar\plugin_deps\Monolog\Logger;
 /**
  * @author Robert Kaufmann III <rok3@rok3.me>
+ * @internal
  */
 class LogEntriesHandler extends SocketHandler
 {

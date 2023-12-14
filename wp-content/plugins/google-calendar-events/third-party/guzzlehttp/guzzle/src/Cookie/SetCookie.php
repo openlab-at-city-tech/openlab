@@ -4,6 +4,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Cookie;
 
 /**
  * Set-Cookie object
+ * @internal
  */
 class SetCookie
 {

@@ -30,6 +30,7 @@ use SimpleCalendar\plugin_deps\Google\Auth\OAuth2;
  * location
  *
  * @see [Application Default Credentials](http://goo.gl/mkAHpZ)
+ * @internal
  */
 class UserRefreshCredentials extends CredentialsLoader implements GetQuotaProjectInterface
 {

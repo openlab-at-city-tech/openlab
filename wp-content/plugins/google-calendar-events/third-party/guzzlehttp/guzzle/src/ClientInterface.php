@@ -9,6 +9,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * Client interface for sending HTTP requests.
+ * @internal
  */
 interface ClientInterface
 {

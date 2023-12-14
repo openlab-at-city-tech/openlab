@@ -32,6 +32,7 @@ use ReturnTypeWillChange;
  * Depends on the following methods:
  *
  * @method static Carbon|CarbonImmutable getTestNow()
+ * @internal
  */
 trait Creator
 {
