@@ -1344,10 +1344,17 @@ HTML;
 			$actions['post-new.php?post_type=page'] = array( $cpts['page']->labels->name_admin_bar, 'new-page' );
 		}
 
-		unset( $cpts['post'], $cpts['page'], $cpts['attachment'] );
+		$filtered_cpts = [];
+		foreach ( $cpts as $cpt_name => $cpt ) {
+			if ( in_array( $cpt, [ 'post', 'page', 'attachment' ], true ) ) {
+				continue;
+			}
+
+			$filtered_cpts[ $cpt_name ] = $cpt;
+		}
 
 		// Add any additional custom post types.
-		foreach ( $cpts as $cpt ) {
+		foreach ( $filtered_cpts as $cpt ) {
 			if ( ! current_user_can( $cpt->cap->create_posts ) ) {
 				continue;
 			}
@@ -1359,6 +1366,7 @@ HTML;
 			$key             = 'post-new.php?post_type=' . $cpt->name;
 			$actions[ $key ] = array( $cpt->labels->name_admin_bar, 'new-' . $cpt->name );
 		}
+
 		// Avoid clash with parent node and a 'content' post type.
 		if ( isset( $actions['post-new.php?post_type=content'] ) ) {
 			$actions['post-new.php?post_type=content'][1] = 'add-new-content';
