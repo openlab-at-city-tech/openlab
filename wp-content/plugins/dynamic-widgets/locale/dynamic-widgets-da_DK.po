@@ -400,7 +400,7 @@ msgstr "Opret dump"
 
 #: ../dynwid_admin_overview.php:176
 msgid ""
-"When you deceide not to use this plugin anymore (sorry to hear that!). You "
+"When you decide not to use this plugin anymore (sorry to hear that!). You "
 "can cleanup all settings and data related to this plugin by clicking on the "
 "'Uninstall' button. This process is irreversible! After the cleanup the "
 "plugin is deactivated automaticly."
@@ -506,7 +506,7 @@ msgid ""
 "\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php"
 "\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
 "\t\t\t\t\t\tException rules for tags and individual posts in any combination "
-"work independantly, but will always be counted as one exception.<br />\n"
+"work independently, but will always be counted as one exception.<br />\n"
 "  \t\t\t\t\tPlease note when exception rules are set for Author and/or "
 "Category, these will be removed.\n"
 "  \t\t\t\t"
@@ -582,7 +582,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:43 ../mods/custompost_module.php:46
 #: ../mods/custompost_module.php:89
-msgid "All childs"
+msgid "All children"
 msgstr "Alle børn"
 
 #: ../mods/pages_module.php:83 ../mods/pages_module.php:86
@@ -599,11 +599,11 @@ msgstr "Vis widget som standard på statiske sider?"
 
 #: ../mods/pages_module.php:101
 msgid ""
-"Checking the \"All childs\" option, makes the exception rule apply\n"
+"Checking the \"All children\" option, makes the exception rule apply\n"
 "\t\t\t\t\tto the parent and all items under it in all levels. Also future "
 "items\n"
 "\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
-"\t\t\t\t\t\"All childs\" without the parent."
+"\t\t\t\t\t\"All children\" without the parent."
 msgstr ""
 "Vælges \"Alle børn\" indstillingen, anvender undtagelsesreglen\n"
 "\t\t\t\t\tpå forælderen og alle børn under den på alle niveauer. Også "
@@ -614,7 +614,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:106
 msgid ""
-"Unfortunately the childs-function has been disabled\n"
+"Unfortunately the \"All children\" function has been disabled\n"
 "\t\t\t\t\tbecause you have more than the limit of pages."
 msgstr ""
 "Desværre er børn-funktionen slået fra\n"
@@ -675,7 +675,7 @@ msgstr "Vis widget for alle"
 
 #: ../mods/role_module.php:29
 msgid ""
-"Setting options by role is very powerfull. It can override all other options!"
+"Setting options by role is very powerful. It can override all other options!"
 "<br />\n"
 "\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
 msgstr ""
@@ -755,7 +755,7 @@ msgstr "Vis altid widget?"
 
 #: ../mods/date_module.php:36
 msgid ""
-"Next to the above role option, the date option is also very powerfull. "
+"Next to the above role option, the date option is also very powerful. "
 "You've been warned!"
 msgstr ""
 "Udover rolleindstillingen ovenfor, er datoindstillingen også meget kraftig. "
@@ -763,7 +763,7 @@ msgstr ""
 
 #: ../mods/date_module.php:37
 msgid ""
-"Enter dates in the YYYY-MM-DD format. You can also use the calender by "
+"Enter dates in the YYYY-MM-DD format. You can also use the calendar by "
 "clicking on the"
 msgstr ""
 "Anfør datoer i formatet ÅÅÅÅ-MM-DD. Du kan også bruge kalenderen ved at "

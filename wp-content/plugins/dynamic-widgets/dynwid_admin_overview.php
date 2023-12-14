@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_overview.php - Overview page
  *
- * @version $Id: dynwid_admin_overview.php 1218814 2015-08-12 06:37:21Z qurl $
+ * @version $Id: dynwid_admin_overview.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -179,7 +179,7 @@
 <br /><br />
 
 <!-- uninstall //-->
-<?php _e('When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the \'Uninstall\' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.', DW_L10N_DOMAIN); ?>
+<?php _e('When you decide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the \'Uninstall\' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly.', DW_L10N_DOMAIN); ?>
 <br /><br />
 <div id="uninstall">
   <form action="" method="get">

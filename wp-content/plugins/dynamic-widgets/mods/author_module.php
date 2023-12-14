@@ -2,7 +2,7 @@
 /**
  * Author Module
  *
- * @version $Id: author_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: author_module.php 2829573 2022-12-06 18:56:07Z vivwebs $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -21,17 +21,14 @@
 
 		public static function getAuthors() {
 			global $wpdb;
-
-			if ( function_exists('get_users') ) {
-				$authors = get_users( array('who' => 'authors') );
-			} else {
+			
 				$query = "SELECT " . $wpdb->prefix . "users.ID, " . $wpdb->prefix . "users.display_name
 							 FROM " . $wpdb->prefix . "users
 							 JOIN " . $wpdb->prefix . "usermeta ON " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id
 							 WHERE 1 AND " . $wpdb->prefix . "usermeta.meta_key = '" . $wpdb->prefix . "user_level'
 							 	AND " . $wpdb->prefix . "usermeta.meta_value > '0'";
 				$authors = $wpdb->get_results($query);
-			}
+			
 
 			$list = array();
 			foreach ( $authors as $author ) {

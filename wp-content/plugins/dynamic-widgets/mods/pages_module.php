@@ -2,7 +2,7 @@
 /**
  * Pages Module
  *
- * @version $Id: pages_module.php 2032225 2019-02-16 17:53:18Z qurl $
+ * @version $Id: pages_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -39,7 +39,7 @@
 				$hierarchy = FALSE;
 			}
 
-			// For childs we double the number of pages because of addition of 'All childs' option
+			// For childs we double the number of pages because of addition of 'All children' option
 			if ( ($hierarchy && ($num_pages * 2 > DW_LIST_LIMIT)) || ($num_pages  > DW_LIST_LIMIT) ) {
 				$page_condition_select_style = DW_LIST_STYLE;
 			}
@@ -56,7 +56,7 @@
 			if ( $num_pages < DW_PAGE_LIMIT ) {
 				$childs_infotext = self::infoText();
 			} else {
-				$childs_infotext = __('Unfortunately the childs-function has been disabled
+				$childs_infotext = __('Unfortunately the "All children" function has been disabled
 						because you have more than the limit of pages.', DW_L10N_DOMAIN) . '(' . DW_PAGE_LIMIT . ')';
 			}
 			self::$info = $childs_infotext;
@@ -130,10 +130,10 @@
 		}
 
 		public static function infoText() {
-			return __('Checking the "All childs" option, makes the exception rule apply
+			return __('Checking the "All children" option, makes the exception rule apply
 						to the parent and all items under it in all levels. Also future items
 						under the parent. It\'s not possible to apply an exception rule to
-						"All childs" without the parent.', DW_L10N_DOMAIN);
+						"All children" without the parent.', DW_L10N_DOMAIN);
 		}
 
 	}
@@ -170,7 +170,7 @@
 
 				if ( $args['depth'] > -1 ) {
 					$output .= '<div style="position:relative;left:15px;width:95%;">';
-					$output .= '<input type="checkbox" id="page_childs_act_' . $page->ID . '" name="page_childs_act[]" value="' . $page->ID . '" ' . ( isset(DW_Page::$opt_page_childs->act) && count(DW_Page::$opt_page_childs->act) > 0 && in_array($page->ID, DW_Page::$opt_page_childs->act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'page\', ' . $page->ID . ')" /> <label for="page_childs_act_' . $page->ID . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></div>';
+					$output .= '<input type="checkbox" id="page_childs_act_' . $page->ID . '" name="page_childs_act[]" value="' . $page->ID . '" ' . ( isset(DW_Page::$opt_page_childs->act) && count(DW_Page::$opt_page_childs->act) > 0 && in_array($page->ID, DW_Page::$opt_page_childs->act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'page\', ' . $page->ID . ')" /> <label for="page_childs_act_' . $page->ID . '"><em>' . __('All children', DW_L10N_DOMAIN) . '</em></div>';
 				}
 
 			}

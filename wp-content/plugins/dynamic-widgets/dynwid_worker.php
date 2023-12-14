@@ -47,7 +47,7 @@
 
   foreach ( $sidebars as $sidebar_id => $widgets ) {
     // Only processing active sidebars with widgets
-    if ( $sidebar_id != 'wp_inactive_widgets' && is_countable( $widgets ) && count($widgets) > 0 && is_array($widgets) ) {
+    if ( $sidebar_id != 'wp_inactive_widgets' && count($widgets) > 0 && is_array($widgets) ) {
       foreach ( $widgets as $widget_key => $widget_id ) {
         // Check if the widget has options set
         if ( in_array($widget_id, $DW->dynwid_list) ) {

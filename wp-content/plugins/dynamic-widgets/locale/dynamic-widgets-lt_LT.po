@@ -450,7 +450,7 @@ msgstr "Sukurti atminties turinio pateiktį"
 
 #: ../dynwid_admin_overview.php:176
 msgid ""
-"When you deceide not to use this plugin anymore (sorry to hear that!). You "
+"When you decide not to use this plugin anymore (sorry to hear that!). You "
 "can cleanup all settings and data related to this plugin by clicking on the "
 "'Uninstall' button. This process is irreversible! After the cleanup the "
 "plugin is deactivated automaticly."
@@ -564,7 +564,7 @@ msgid ""
 "\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new."
 "php\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
 "\t\t\t\t\t\tException rules for tags and individual posts in any combination "
-"work independantly, but will always be counted as one exception.<br />\n"
+"work independently, but will always be counted as one exception.<br />\n"
 "  \t\t\t\t\tPlease note when exception rules are set for Author and/or "
 "Category, these will be removed.\n"
 "  \t\t\t\t"
@@ -646,7 +646,7 @@ msgstr ""
 #: ../mods/pages_module.php:43
 #: ../mods/custompost_module.php:46
 #: ../mods/custompost_module.php:89
-msgid "All childs"
+msgid "All children"
 msgstr "Visi dukteriniai"
 
 #: ../mods/pages_module.php:83
@@ -665,11 +665,11 @@ msgstr "Ar rodyti valdiklių numatytas reikšmes statiniuose puslapiuose?"
 
 #: ../mods/pages_module.php:101
 msgid ""
-"Checking the \"All childs\" option, makes the exception rule apply\n"
+"Checking the \"All children\" option, makes the exception rule apply\n"
 "\t\t\t\t\tto the parent and all items under it in all levels. Also future "
 "items\n"
 "\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
-"\t\t\t\t\t\"All childs\" without the parent."
+"\t\t\t\t\t\"All children\" without the parent."
 msgstr ""
 "Pažymėjus \"Visi dukteriniai\", išimties taisyklė bus taikoma\n"
 "\t\t\t\t\ttėviniui elementui ir visiems po juo visuose lygmenyse. Taip pat "
@@ -680,7 +680,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:106
 msgid ""
-"Unfortunately the childs-function has been disabled\n"
+"Unfortunately the \"All children\" function has been disabled\n"
 "\t\t\t\t\tbecause you have more than the limit of pages."
 msgstr ""
 "Deja dukterinių elementų funkcija buvo išjungta, \n"
@@ -741,7 +741,7 @@ msgstr "Ar rodyti valdiklį visiems?"
 
 #: ../mods/role_module.php:29
 msgid ""
-"Setting options by role is very powerfull. It can override all other "
+"Setting options by role is very powerful. It can override all other "
 "options!<br />\n"
 "\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
 msgstr ""
@@ -823,7 +823,7 @@ msgstr "Ar visada rodyti valdiklį?"
 
 #: ../mods/date_module.php:36
 msgid ""
-"Next to the above role option, the date option is also very powerfull. You've "
+"Next to the above role option, the date option is also very powerful. You've "
 "been warned!"
 msgstr ""
 "Dėl auščiau išdėstytos vaidmens pasirinkties, datos pasirinkimas yra labai "
@@ -832,7 +832,7 @@ msgstr ""
 
 #: ../mods/date_module.php:37
 msgid ""
-"Enter dates in the YYYY-MM-DD format. You can also use the calender by "
+"Enter dates in the YYYY-MM-DD format. You can also use the calendar by "
 "clicking on the"
 msgstr ""
 "Įrašykite datas MMMM-mm-dd formatu. Tai pat galite naudoti kalendorių "

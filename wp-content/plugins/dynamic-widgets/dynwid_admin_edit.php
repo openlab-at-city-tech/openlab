@@ -2,7 +2,7 @@
 /**
  * dynwid_admin_edit.php - Options settings
  *
- * @version $Id: dynwid_admin_edit.php 2032225 2019-02-16 17:53:18Z qurl $
+ * @version $Id: dynwid_admin_edit.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -251,7 +251,7 @@ div.settingbox {
   	var display = jQuery( '#child_' + prefix + id ).css( 'display' );
 
 		if ( display == 'none' ) {
-  		jQuery.post( ajaxurl, { action: 'term_tree', id: id, name: name, widget_id: widget_id, prefix: prefix }, function(data) {
+  		jQuery.post( ajaxurl, { action: 'term_tree',nonce:'<?php echo wp_create_nonce('ajax-nonce'); ?>', id: id, name: name, widget_id: widget_id, prefix: prefix }, function(data) {
   			jQuery( '#tree_' + prefix + id ).html( data );
   			jQuery( '#child_' + prefix + id ).slideDown('slow');
   		});
@@ -331,7 +331,7 @@ div.settingbox {
 	_e('When you enable this option, you have the ability to apply an exception rule to tags and individual posts (Posts and Custom Post Types).
 					You can set the exception rule for tags in the single Edit Tag Panel (go to <a href="edit-tags.php?taxonomy=post_tag">Post Tags</a>,
 					click a tag), For individual posts in the <em>New</em> or <em>Edit</em> Posts panel.
-					Exception rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />
+					Exception rules for tags and individual posts in any combination work independently, but will always be counted as one exception.<br />
 	  					Please note when this is enabled, exception rules which are set within Posts for Author and/or Category will be disabled.
 	  				', DW_L10N_DOMAIN);
 	echo '</div></div>';
