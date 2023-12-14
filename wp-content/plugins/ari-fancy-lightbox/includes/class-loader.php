@@ -6,6 +6,7 @@ use Ari_Fancy_Lightbox\Helpers\Settings as Settings;
 class Loader {
     private $settings;
     private $deregister_3rd_plugins = false;
+    private $load_scripts_in_footer = false;
 
     public function __construct() {
         $this->settings = Settings::instance();
