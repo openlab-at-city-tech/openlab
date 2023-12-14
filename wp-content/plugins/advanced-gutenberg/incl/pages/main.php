@@ -9,14 +9,14 @@ defined( 'ABSPATH' ) || die;
         </h1>
     </header>
     <div class="wrap">
-        <div class="pp-columns-wrapper<?php echo ( ! defined( 'ADVANCED_GUTENBERG_PRO' )
+        <div class="pp-columns-wrapper<?php echo ( ! defined( 'ADVANCED_GUTENBERG_PRO_LOADED' )
             ? ' pp-enable-sidebar'
             : '' ) ?>"
         >
             <div class="pp-column-left">
                 <div>
                     <?php
-                    $isPro = defined( 'ADVANCED_GUTENBERG_PRO') ? true : false;
+                    $isPro = defined( 'ADVANCED_GUTENBERG_PRO_LOADED') ? true : false;
                     $features = [
                         [
                             'name' => 'enable_block_access',
@@ -56,9 +56,9 @@ defined( 'ABSPATH' ) || die;
                         ],
                         [
                             'name' => 'reusable_blocks',
-                            'title' => __( 'Reusable Blocks', 'advanced-gutenberg' ),
+                            'title' => __( 'Synced Patterns', 'advanced-gutenberg' ),
                             'description' => __(
-                                'This feature enables a submenu to manage Reusable Blocks.', 'advanced-gutenberg'
+                                'This feature enables a submenu to manage your Synced Patterns.', 'advanced-gutenberg'
                             ),
                             'default' => 1,
                             'access' => true
@@ -93,7 +93,7 @@ defined( 'ABSPATH' ) || die;
                 </div>
             </div><!-- .pp-column-left -->
 
-            <?php if( ! defined( 'ADVANCED_GUTENBERG_PRO' ) ) : ?>
+            <?php if( ! defined( 'ADVANCED_GUTENBERG_PRO_LOADED' ) ) : ?>
                 <div class="pp-column-right">
                     <?php
         			$banners = new PublishPress\WordPressBanners\BannersMain;

@@ -57,7 +57,7 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
         );
     }
 
-    if( defined( 'ADVANCED_GUTENBERG_PRO' ) ) {
+    if( defined( 'ADVANCED_GUTENBERG_PRO_LOADED' ) ) {
         array_push(
             $tabs,
             [
