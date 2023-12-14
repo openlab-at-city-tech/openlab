@@ -210,7 +210,7 @@ function su_shortcode_tab( $atts = null, $content = null ) {
 		'content'  => do_shortcode( $content ),
 		'disabled' => 'yes' === $atts['disabled'] ? ' su-tabs-disabled' : '',
 		'anchor'   => $atts['anchor'] ? ' data-anchor="' . str_replace( array( ' ', '#' ), '', esc_attr( $atts['anchor'] ) ) . '"' : '',
-		'url'      => ' data-url="' . esc_attr( $atts['url'] ) . '"',
+		'url'      => ' data-url="' . esc_attr( esc_url( $atts['url'] ) ) . '"',
 		'target'   => ' data-target="' . esc_attr( $atts['target'] ) . '"',
 		'class'    => $atts['class'],
 	);

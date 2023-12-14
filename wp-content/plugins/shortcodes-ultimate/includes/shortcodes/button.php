@@ -223,6 +223,8 @@ function su_shortcode_button( $atts = null, $content = null ) {
 	// Sanitize the size value
 	$atts['size'] = intval( $atts['size'] );
 
+	$atts['style'] = trim( strtolower( $atts['style'] ) );
+
 	// Common styles for button
 	$styles = array(
 		'size'     => round( ( $atts['size'] + 7 ) * 1.3 ),
@@ -402,6 +404,6 @@ function su_shortcode_button( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return $before . '<a href="' . esc_attr( su_do_attribute( $atts['url'] ) ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( ';', $a_css ) ) . '" target="_' . esc_attr( $atts['target'] ) . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . esc_attr( implode( ';', $span_css ) ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
+	return $before . '<a href="' . esc_attr( esc_url( su_do_attribute( $atts['url'] ) ) ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( ';', $a_css ) ) . '" target="_' . esc_attr( $atts['target'] ) . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . esc_attr( implode( ';', $span_css ) ) . '">' . do_shortcode( stripcslashes( $content ) ) . $desc . '</span></a>' . $after;
 
 }

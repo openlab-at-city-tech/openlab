@@ -76,7 +76,7 @@ function su_shortcode_members( $atts = null, $content = null ) {
 		return;
 	}
 
-	$login = '<a href="' . esc_attr( $atts['login_url'] ) . '">' . $atts['login_text'] . '</a>';
+	$login = '<a href="' . esc_attr( esc_url( $atts['login_url'] ) ) . '">' . $atts['login_text'] . '</a>';
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
