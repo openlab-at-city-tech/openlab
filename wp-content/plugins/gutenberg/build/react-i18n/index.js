@@ -1,36 +1,36 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,17 +39,18 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "I18nProvider": () => (/* binding */ I18nProvider),
-  "useI18n": () => (/* binding */ useI18n),
-  "withI18n": () => (/* binding */ withI18n)
+  I18nProvider: function() { return /* binding */ I18nProvider; },
+  useI18n: function() { return /* binding */ useI18n; },
+  withI18n: function() { return /* binding */ withI18n; }
 });
 
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: ./packages/react-i18n/build-module/index.js
-
 
 /**
  * External dependencies
@@ -58,7 +59,6 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 /**
  * WordPress dependencies
  */
-
 
 
 /**
@@ -76,15 +76,13 @@ function makeContextValue(i18n) {
     hasTranslation: i18n.hasTranslation.bind(i18n)
   };
 }
-
 const I18nContext = (0,external_wp_element_namespaceObject.createContext)(makeContextValue(external_wp_i18n_namespaceObject.defaultI18n));
-
 /**
  * The `I18nProvider` should be mounted above any localized components:
  *
  * @example
  * ```js
- * import { createI18n } from '@wordpress/react-i18n';
+ * import { createI18n } from '@wordpress/i18n';
  * import { I18nProvider } from '@wordpress/react-i18n';
  * const i18n = createI18n();
  *
@@ -107,14 +105,16 @@ function I18nProvider(props) {
     children,
     i18n = external_wp_i18n_namespaceObject.defaultI18n
   } = props;
-  const [update, forceUpdate] = (0,external_wp_element_namespaceObject.useReducer)(() => [], []); // Rerender translations whenever the i18n instance fires a change event.
+  const [update, forceUpdate] = (0,external_wp_element_namespaceObject.useReducer)(() => [], []);
 
+  // Rerender translations whenever the i18n instance fires a change event.
   (0,external_wp_element_namespaceObject.useEffect)(() => i18n.subscribe(forceUpdate), [i18n]);
   const value = (0,external_wp_element_namespaceObject.useMemo)(() => makeContextValue(i18n), [i18n, update]);
-  return (0,external_wp_element_namespaceObject.createElement)(I18nContext.Provider, {
+  return (0,external_React_namespaceObject.createElement)(I18nContext.Provider, {
     value: value
   }, children);
 }
+
 /**
  * React hook providing access to i18n functions. It exposes the `__`, `_x`, `_n`, `_nx`,
  * `isRTL` and `hasTranslation` functions from [`@wordpress/i18n`](../i18n).
@@ -130,9 +130,7 @@ function I18nProvider(props) {
  * }
  * ```
  */
-
 const useI18n = () => (0,external_wp_element_namespaceObject.useContext)(I18nContext);
-
 /**
  * React higher-order component that passes the i18n translate functions (the same set
  * as exposed by the `useI18n` hook) to the wrapped component as props.
@@ -154,11 +152,11 @@ const useI18n = () => (0,external_wp_element_namespaceObject.useContext)(I18nCon
 function withI18n(InnerComponent) {
   const EnhancedComponent = props => {
     const i18nProps = useI18n();
-    return (0,external_wp_element_namespaceObject.createElement)(InnerComponent, { ...props,
+    return (0,external_React_namespaceObject.createElement)(InnerComponent, {
+      ...props,
       ...i18nProps
     });
   };
-
   const innerComponentName = InnerComponent.displayName || InnerComponent.name || 'Component';
   EnhancedComponent.displayName = `WithI18n(${innerComponentName})`;
   return EnhancedComponent;

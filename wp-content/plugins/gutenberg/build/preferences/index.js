@@ -1,36 +1,36 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,58 +39,58 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "PreferenceToggleMenuItem": () => (/* reexport */ PreferenceToggleMenuItem),
-  "store": () => (/* reexport */ store)
+  PreferenceToggleMenuItem: function() { return /* reexport */ PreferenceToggleMenuItem; },
+  store: function() { return /* reexport */ store; }
 });
 
 // NAMESPACE OBJECT: ./packages/preferences/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "set": () => (set),
-  "setDefaults": () => (setDefaults),
-  "setPersistenceLayer": () => (setPersistenceLayer),
-  "toggle": () => (toggle)
+  set: function() { return set; },
+  setDefaults: function() { return setDefaults; },
+  setPersistenceLayer: function() { return setPersistenceLayer; },
+  toggle: function() { return toggle; }
 });
 
 // NAMESPACE OBJECT: ./packages/preferences/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "get": () => (get)
+  get: function() { return get; }
 });
 
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","data"]
-const external_wp_data_namespaceObject = window["wp"]["data"];
+var external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: external ["wp","components"]
-const external_wp_components_namespaceObject = window["wp"]["components"];
+var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","primitives"]
-const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
+var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/check.js
-
 
 /**
  * WordPress dependencies
  */
 
-const check = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const check = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
 }));
-/* harmony default export */ const library_check = (check);
+/* harmony default export */ var library_check = (check);
 
 ;// CONCATENATED MODULE: external ["wp","a11y"]
-const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// CONCATENATED MODULE: ./packages/preferences/build-module/store/reducer.js
 /**
  * WordPress dependencies
  */
+
 
 /**
  * Reducer returning the defaults for user preferences.
@@ -103,22 +103,23 @@ const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
  *
  * @return {Object} Updated state.
  */
-
 function defaults(state = {}, action) {
   if (action.type === 'SET_PREFERENCE_DEFAULTS') {
     const {
       scope,
       defaults: values
     } = action;
-    return { ...state,
-      [scope]: { ...state[scope],
+    return {
+      ...state,
+      [scope]: {
+        ...state[scope],
         ...values
       }
     };
   }
-
   return state;
 }
+
 /**
  * Higher order reducer that does the following:
  * - Merges any data from the persistence layer into the state when the
@@ -129,7 +130,6 @@ function defaults(state = {}, action) {
  *
  * @return {Function} The enhanced reducer.
  */
-
 function withPersistenceLayer(reducer) {
   let persistenceLayer;
   return (state, action) => {
@@ -143,16 +143,14 @@ function withPersistenceLayer(reducer) {
       persistenceLayer = persistence;
       return persistedData;
     }
-
     const nextState = reducer(state, action);
-
     if (action.type === 'SET_PREFERENCE_VALUE') {
       persistenceLayer?.set(nextState);
     }
-
     return nextState;
   };
 }
+
 /**
  * Reducer returning the user preferences.
  *
@@ -161,8 +159,6 @@ function withPersistenceLayer(reducer) {
  *
  * @return {Object} Updated state.
  */
-
-
 const preferences = withPersistenceLayer((state = {}, action) => {
   if (action.type === 'SET_PREFERENCE_VALUE') {
     const {
@@ -170,16 +166,17 @@ const preferences = withPersistenceLayer((state = {}, action) => {
       name,
       value
     } = action;
-    return { ...state,
-      [scope]: { ...state[scope],
+    return {
+      ...state,
+      [scope]: {
+        ...state[scope],
         [name]: value
       }
     };
   }
-
   return state;
 });
-/* harmony default export */ const reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
+/* harmony default export */ var reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   defaults,
   preferences
 }));
@@ -201,6 +198,7 @@ function toggle(scope, name) {
     dispatch.set(scope, name, !currentValue);
   };
 }
+
 /**
  * Returns an action object used in signalling that a preference should be set
  * to a value
@@ -211,7 +209,6 @@ function toggle(scope, name) {
  *
  * @return {Object} Action object.
  */
-
 function set(scope, name, value) {
   return {
     type: 'SET_PREFERENCE_VALUE',
@@ -220,6 +217,7 @@ function set(scope, name, value) {
     value
   };
 }
+
 /**
  * Returns an action object used in signalling that preference defaults should
  * be set.
@@ -229,7 +227,6 @@ function set(scope, name, value) {
  *
  * @return {Object} Action object.
  */
-
 function setDefaults(scope, defaults) {
   return {
     type: 'SET_PREFERENCE_DEFAULTS',
@@ -237,10 +234,9 @@ function setDefaults(scope, defaults) {
     defaults
   };
 }
+
 /** @typedef {() => Promise<Object>} WPPreferencesPersistenceLayerGet */
-
 /** @typedef {(Object) => void} WPPreferencesPersistenceLayerSet */
-
 /**
  * @typedef WPPreferencesPersistenceLayer
  *
@@ -263,7 +259,6 @@ function setDefaults(scope, defaults) {
  *
  * @return {Object} Action object.
  */
-
 async function setPersistenceLayer(persistenceLayer) {
   const persistedData = await persistenceLayer.get();
   return {
@@ -302,6 +297,7 @@ const STORE_NAME = 'core/preferences';
  * WordPress dependencies
  */
 
+
 /**
  * Internal dependencies
  */
@@ -317,7 +313,6 @@ const STORE_NAME = 'core/preferences';
  *
  * @type {Object}
  */
-
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, {
   reducer: reducer,
   actions: actions_namespaceObject,
@@ -327,7 +322,6 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 
 ;// CONCATENATED MODULE: ./packages/preferences/build-module/components/preference-toggle-menu-item/index.js
 
-
 /**
  * WordPress dependencies
  */
@@ -336,10 +330,10 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 
 
 
+
 /**
  * Internal dependencies
  */
-
 
 function PreferenceToggleMenuItem({
   scope,
@@ -356,22 +350,18 @@ function PreferenceToggleMenuItem({
   const {
     toggle
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
-
   const speakMessage = () => {
     if (isActive) {
-      const message = messageDeactivated || (0,external_wp_i18n_namespaceObject.sprintf)(
-      /* translators: %s: preference name, e.g. 'Fullscreen mode' */
+      const message = messageDeactivated || (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: preference name, e.g. 'Fullscreen mode' */
       (0,external_wp_i18n_namespaceObject.__)('Preference deactivated - %s'), label);
       (0,external_wp_a11y_namespaceObject.speak)(message);
     } else {
-      const message = messageActivated || (0,external_wp_i18n_namespaceObject.sprintf)(
-      /* translators: %s: preference name, e.g. 'Fullscreen mode' */
+      const message = messageActivated || (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: preference name, e.g. 'Fullscreen mode' */
       (0,external_wp_i18n_namespaceObject.__)('Preference activated - %s'), label);
       (0,external_wp_a11y_namespaceObject.speak)(message);
     }
   };
-
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     icon: isActive && library_check,
     isSelected: isActive,
     onClick: () => {
