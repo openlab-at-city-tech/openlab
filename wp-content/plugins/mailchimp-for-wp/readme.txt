@@ -4,12 +4,12 @@ Donate link: https://www.mc4wp.com/contribute/#utm_source=wp-plugin-repo&utm_med
 Tags: mailchimp, mc4wp, email, marketing, newsletter, subscribe, widget, mc4wp, contact form 7, woocommerce, buddypress, ibericode, mailchimp form
 Requires at least: 4.6
 Tested up to: 6.3
-Stable tag: 4.9.7
+Stable tag: 4.9.10
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.3
 
-The #1 (unofficial) Mailchimp plugin. Allows you to add various sign-up methods to your WordPress site.
+The #1 Mailchimp plugin for WordPress. Allows you to add a multitude of newsletter sign-up methods to your site.
 
 == Description ==
 
@@ -50,11 +50,12 @@ This plugins helps you grow your email list in Mailchimp. You can use it to crea
 	- [Mailchimp for WordPress Premium](https://www.mc4wp.com/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=add-on-list)
 	- [Mailchimp Top Bar](https://wordpress.org/plugins/mailchimp-top-bar/)
 	- [Boxzilla Pop-ups](https://wordpress.org/plugins/boxzilla/)
-	- [WPBruiser anti-spam](https://wordpress.org/plugins/goodbye-captcha/)
 
 - Well documented through our [knowledge base](https://www.mc4wp.com/kb/).
 
 - Developer friendly. For some inspiration, check out our [repository of example code snippets](https://github.com/ibericode/mailchimp-for-wordpress/tree/master/sample-code-snippets).
+
+- Ready for PHP 8.3, but backwards-compatible all the way down to PHP 5.6.
 
 #### What is Mailchimp?
 
@@ -159,7 +160,7 @@ If you need some help in setting up the plugin, you have various options:
 
 - Search through our [knowledge base](https://www.mc4wp.com/kb/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=description).
 - Open a topic in the [WordPress.org plugin support forums](https://wordpress.org/support/plugin/mailchimp-for-wp)
-- If you're a premium user, send am email to the email address listed inside the plugin.
+- If you're a premium user, send an email to the email address listed inside the plugin.
 
 #### Translations
 
@@ -185,6 +186,29 @@ The plugin provides various filter and action hooks that allow you to modify or 
 8. Page where you modify your form messages.
 
 == Changelog ==
+
+
+#### 4.9.10 - Nov 20, 2023
+
+- Integrations: Update CheckoutWC hook name for WooCommerce checkbox integration.
+- Forms: Don't show form preview to users without `edit_posts` capability.
+- Forms: Explicitly exclude form preview from search engine indexing.
+- General: Don't unnecessarily go through service contrainer while bootstrapping plugin.
+- General: Remove some unnecessary JavaScript now that browser support has caught up.
+
+
+#### 4.9.9 - Oct 3, 2023 
+
+- Fix class "MC4WP_Usage_Tracking" not found error for WP Cron / WP CLI processes.
+
+
+#### 4.9.8 - Oct 3, 2023
+
+- Remove the opt-in usage tracking functionality as we're not really using it for decision making anymore.
+- Add missing label element to the select element for setting the logging level.
+- Our JavaScript assets are now transpiled to support the same set of browsers as WordPress core. 
+This drops support for some very old browsers, but results in smaller bundle sizes for the supported set of browsers.
+- Update third-party JS dependencies to their latest versions.
 
 
 #### 4.9.7 - Aug 29, 2023
