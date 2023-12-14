@@ -1,0 +1,499 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ultimate Responsive Image Slider\n"
+"POT-Creation-Date: 2023-11-22 13:54+0530\n"
+"PO-Revision-Date: 2023-11-23 15:40+0530\n"
+"Last-Translator: Weblizar <lizarweb@gmail.com>\n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: settings.php:231 tooltip.php:51
+msgid "Display Slider Post Title"
+msgstr "スライダーの投稿タイトルを表示"
+
+#: settings.php:237
+msgid "Select Yes/No option to show/hide slide title above slider"
+msgstr "スライダー上にスライドタイトルを表示/非表示にするオプションを選択"
+
+#: settings.php:238 settings.php:251 settings.php:263 settings.php:275 settings.php:288
+#: settings.php:300 settings.php:312 settings.php:326 settings.php:338 settings.php:350
+#: settings.php:378 settings.php:397 settings.php:410 settings.php:423 settings.php:436
+#: settings.php:448 settings.php:462 settings.php:478 settings.php:493 settings.php:515
+#: settings.php:528 settings.php:541 settings.php:553 settings.php:566 settings.php:578
+#: settings.php:591 settings.php:626
+msgid "Preview"
+msgstr "プレビュー"
+
+#: settings.php:244 tooltip.php:56
+msgid "Display Slide Title"
+msgstr "スライドタイトルを表示"
+
+#: settings.php:250
+msgid "Select Yes/No option to show/hide slide title over slides."
+msgstr "スライドの上にスライドタイトルを表示/非表示にするオプションを選択"
+
+#: settings.php:257 tooltip.php:61
+msgid "Slide Title Color"
+msgstr "スライドタイトルの色"
+
+#: settings.php:262
+msgid "Select a color to set slide title color."
+msgstr "スライドタイトルの色を設定する色を選択"
+
+#: settings.php:269 tooltip.php:66
+msgid "Slide Title Background Color"
+msgstr "スライドタイトルの背景色"
+
+#: settings.php:274
+msgid "Select a color to set slide title background color."
+msgstr "スライドタイトルの背景色を設定する色を選択"
+
+#: settings.php:281 tooltip.php:71
+msgid "Display Slide Description"
+msgstr "スライドの説明を表示"
+
+#: settings.php:287
+msgid "Select Yes/No option to show/hide slide description over slides."
+msgstr "スライドの上にスライドの説明を表示/非表示にするオプションを選択"
+
+#: settings.php:294 tooltip.php:76
+msgid "Slide Description Color"
+msgstr "スライドの説明の色"
+
+#: settings.php:299
+msgid "Select a color to set slide description color."
+msgstr "スライドの説明の色を設定する色を選択"
+
+#: settings.php:306 tooltip.php:81
+msgid "Slide Description Background Color"
+msgstr "スライドの説明の背景色"
+
+#: settings.php:311
+msgid "Select a color to set slide description background color."
+msgstr "スライドの説明の背景色を設定する色を選択"
+
+#: settings.php:318
+msgid "Auto Play Slide Show"
+msgstr "自動再生スライドショー"
+
+#: settings.php:321
+msgid "Yes"
+msgstr "はい"
+
+#: settings.php:322
+msgid "Yes with Stop on Mouse Hover"
+msgstr "マウスホバーで停止するはい"
+
+#: settings.php:323
+msgid "No"
+msgstr "いいえ"
+
+#: settings.php:325
+msgid "Select Yes/No option to auto slide enable or disable into slider."
+msgstr "スライダー内の自動スライドを有効または無効にするオプションを選択"
+
+#: settings.php:331
+msgid "Slide Transition"
+msgstr "スライドトランジション"
+
+#: settings.php:337
+msgid "Select a transition effect you want to apply on slides."
+msgstr "スライドに適用したいトランジションエフェクトを選択"
+
+#: settings.php:343
+msgid "Auto play Slider Speed"
+msgstr "スライダーの自動再生速度"
+
+#: settings.php:349
+msgid "Set your desired slider speed of slides. Default speed is 5 Second."
+msgstr "スライドのスライダースピードを設定してください。デフォルトスピードは5秒です。"
+
+#: settings.php:370
+msgid "Slide Order"
+msgstr "スライドの順序"
+
+#: settings.php:373
+msgid "Ascending"
+msgstr "昇順"
+
+#: settings.php:374
+msgid "Descending"
+msgstr "降順"
+
+#: settings.php:375
+msgid "Random"
+msgstr "ランダム"
+
+#: settings.php:377
+msgid "Select a slide order you want to apply on slides"
+msgstr "スライドに適用したいスライドの順序を選択"
+
+#: settings.php:384 tooltip.php:88
+msgid "Distance Between Slide"
+msgstr "スライド間の距離"
+
+#: settings.php:396
+msgid ""
+"Set a gap between all slides. Range 0 to 25. Works when Slide Transition setting "
+"selected to Slide."
+msgstr ""
+"すべてのスライド間に隙間を設定します。範囲は0から25までです。スライドトランジション設定"
+"が「スライド」に選択されている場合に機能します。"
+
+#: settings.php:403 tooltip.php:93
+msgid "Show Thumbnail"
+msgstr "サムネイルを表示"
+
+#: settings.php:409
+msgid "Select Yes/No option to show or hide thumbnail based navigation under slides."
+msgstr ""
+"スライドの下にサムネイルベースのナビゲーションを表示または非表示にするには、はい/いいえ"
+"オプションを選択します。"
+
+#: settings.php:416 tooltip.php:98
+msgid "Thumbnail Position"
+msgstr "サムネイルの位置"
+
+#: settings.php:419
+msgid "Top"
+msgstr "上"
+
+#: settings.php:420
+msgid "Bottom"
+msgstr "下"
+
+#: settings.php:422
+msgid "Select a thumbnail position to show above or below the slider."
+msgstr "スライダーの上または下に表示するサムネイルの位置を選択します。"
+
+#: settings.php:429 tooltip.php:103
+msgid "Selected Thumbnail Style"
+msgstr "選択されたサムネイルのスタイル"
+
+#: settings.php:432
+msgid "Border"
+msgstr "ボーダー"
+
+#: settings.php:433
+msgid "Pointer"
+msgstr "ポインター"
+
+#: settings.php:435
+msgid "Select a style to apply on select thumbnails."
+msgstr "選択したサムネイルに適用するスタイルを選択します。"
+
+#: settings.php:442 tooltip.php:108
+msgid "Selected Thumbnail Style Color"
+msgstr "選択されたサムネイルのスタイルの色"
+
+#: settings.php:447
+msgid "Select a color to set on selected thumbnail style color."
+msgstr "選択されたサムネイルのスタイルの色を設定する色を選択します。"
+
+#: settings.php:454 tooltip.php:113
+msgid "Thumbnail Resize"
+msgstr "サムネイルのリサイズ"
+
+#: settings.php:458
+msgid "Width"
+msgstr "幅"
+
+#: settings.php:459
+msgid "Height"
+msgstr "高さ"
+
+#: settings.php:461
+msgid "Set custom height and width for thumbnails."
+msgstr "サムネイルのカスタムの高さと幅を設定します。"
+
+#: settings.php:468 tooltip.php:118
+msgid "Slider Width"
+msgstr "スライダーの幅"
+
+#: settings.php:472
+msgid "100% Width"
+msgstr "100% 幅"
+
+#: settings.php:473
+msgid "Full Width"
+msgstr "フルウィズ"
+
+#: settings.php:474 settings.php:489
+msgid "Custom"
+msgstr "カスタム"
+
+#: settings.php:477
+msgid "Enter your desired width for slider. Default width is 1000px."
+msgstr "スライダーの幅を指定してください。デフォルトの幅は1000pxです。"
+
+#: settings.php:484 tooltip.php:123
+msgid "Slider Height"
+msgstr "スライダーの高さ"
+
+#: settings.php:488
+msgid "Auto Height"
+msgstr "自動高さ"
+
+#: settings.php:492
+msgid "Enter your desired height for slider. Default height is 500px."
+msgstr "スライダーの高さを指定してください。デフォルトの高さは500pxです。"
+
+#: settings.php:499
+msgid "Slide Scale Mode"
+msgstr "スライドのスケールモード"
+
+#: settings.php:504
+msgid "Cover"
+msgstr "カバー"
+
+#: settings.php:505
+msgid "Contain"
+msgstr "コンテイン"
+
+#: settings.php:506
+msgid "Exact"
+msgstr "正確"
+
+#: settings.php:507
+msgid "None"
+msgstr "なし"
+
+#: settings.php:511
+msgid "COVER will scale and crop the image so that it fills the entire slide."
+msgstr "COVERは画像を拡大し、スライド全体に収まるように切り抜きます。"
+
+#: settings.php:512
+msgid "CONTAIN will keep the entire image visible inside the slide."
+msgstr "CONTAINは画像全体をスライド内で表示します。"
+
+#: settings.php:513
+msgid "EXACT will match the size of the image to the size of the slide."
+msgstr "EXACTは画像のサイズをスライドのサイズに合わせます。"
+
+#: settings.php:514
+msgid "NONE will leave the image to its original size."
+msgstr "NONEは画像をそのままのサイズにします。"
+
+#: settings.php:521
+msgid "Slide Auto Scale Up"
+msgstr "スライドの自動スケールアップ"
+
+#: settings.php:527
+msgid "If the slide can be scaled up more than its original size."
+msgstr "スライドを元のサイズよりも大きくスケーリングできる場合。"
+
+#: settings.php:534 tooltip.php:130
+msgid "Show Navigation Arrow"
+msgstr "ナビゲーションアローを表示"
+
+#: settings.php:540
+msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
+msgstr ""
+"スライド上でマウスをホバーすると矢印を表示または非表示にするオプションを選択します。"
+
+#: settings.php:547 tooltip.php:135
+msgid "Navigation Color"
+msgstr "ナビゲーションの色"
+
+#: settings.php:552
+msgid "Select a color to set navigation arrow and full screen icon color."
+msgstr "ナビゲーションの矢印とフルスクリーンアイコンの色を設定する色を選択します。"
+
+#: settings.php:559 tooltip.php:140
+msgid "Show Navigation Bullets"
+msgstr "ナビゲーションボタンを表示"
+
+#: settings.php:565
+msgid "Select Yes/No option to show or hide slider navigation buttons under image slider."
+msgstr ""
+"画像スライダーの下にあるスライダーナビゲーションボタンを表示または非表示にするオプション"
+"を選択します。"
+
+#: settings.php:572 tooltip.php:145
+msgid "Navigation Bullets Color"
+msgstr "ナビゲーションボタンの色"
+
+#: settings.php:577
+msgid "Select a color to set navigation bullets color."
+msgstr "ナビゲーションボタンの色を設定する色を選択します。"
+
+#: settings.php:584 tooltip.php:150
+msgid "Full Screen Slide Show"
+msgstr "フルスクリーンスライドショー"
+
+#: settings.php:590
+msgid "Select Yes/No option for a full-screen slide show."
+msgstr "フルスクリーンスライドショーのオプションを選択します。"
+
+#: settings.php:597 tooltip.php:155
+msgid "Fonts"
+msgstr "フォント"
+
+#: settings.php:625
+msgid "Choose a font to apply on slide title and description."
+msgstr "スライドタイトルと説明に適用するフォントを選択してください。"
+
+#: settings.php:633
+msgid "Custom CSS"
+msgstr "カスタムCSS"
+
+#: settings.php:638
+msgid "Enter any custom CSS you want to apply on this slider into the text area field."
+msgstr "このスライダーに適用したいカスタムCSSをテキストエリアに入力してください。"
+
+#: ultimate-responsive-image-slider.php:185 ultimate-responsive-image-slider.php:186
+msgid "Add New Slider"
+msgstr "新しいスライダーを追加"
+
+#: ultimate-responsive-image-slider.php:187
+msgid "Edit Slider"
+msgstr "スライダーを編集"
+
+#: ultimate-responsive-image-slider.php:188
+msgid "New Slider"
+msgstr "新しいスライダー"
+
+#: ultimate-responsive-image-slider.php:189
+msgid "View Slider"
+msgstr "スライダーを表示"
+
+#: ultimate-responsive-image-slider.php:190
+msgid "Search Slider"
+msgstr "スライダーを検索"
+
+#: ultimate-responsive-image-slider.php:191
+msgid "No Slider found"
+msgstr "スライダーが見つかりません"
+
+#: ultimate-responsive-image-slider.php:192
+msgid "No Slider Found in Trash"
+msgstr "ゴミ箱内にスライダーは見つかりません"
+
+#: ultimate-responsive-image-slider.php:193
+msgid "Parent Slider:"
+msgstr "親スライダー："
+
+#: ultimate-responsive-image-slider.php:194
+msgid "All Sliders"
+msgstr "すべてのスライダー"
+
+#: ultimate-responsive-image-slider.php:223
+msgid "UR Image Slider Title"
+msgstr "UR画像スライダータイトル"
+
+#: ultimate-responsive-image-slider.php:224 ultimate-responsive-image-slider.php:246
+msgid "Slider Shortcode"
+msgstr "スライダーショートコード"
+
+#: ultimate-responsive-image-slider.php:225
+msgid "Date"
+msgstr "日付"
+
+#: ultimate-responsive-image-slider.php:243
+msgid "Add Slides"
+msgstr "スライドを追加"
+
+#: ultimate-responsive-image-slider.php:244
+msgid "Configure Settings"
+msgstr "設定を構成"
+
+#: ultimate-responsive-image-slider.php:247
+msgid "Try My New Slider Plugin"
+msgstr "新しいスライダープラグインを試す"
+
+#: ultimate-responsive-image-slider.php:345 ultimate-responsive-image-slider.php:544
+msgid "Slide ID"
+msgstr "スライドID"
+
+#: ultimate-responsive-image-slider.php:346 ultimate-responsive-image-slider.php:545
+msgid "Slide Title"
+msgstr "スライドタイトル"
+
+#: ultimate-responsive-image-slider.php:349
+msgid "Enter Slide Title"
+msgstr "スライドタイトルを入力"
+
+#: ultimate-responsive-image-slider.php:352
+msgid "Slide Descriptions"
+msgstr "スライドの説明"
+
+#: ultimate-responsive-image-slider.php:353
+msgid "Enter Slide Description"
+msgstr "スライドの説明を入力"
+
+#: ultimate-responsive-image-slider.php:354 ultimate-responsive-image-slider.php:553
+msgid "Use Rich Text Editor"
+msgstr "リッチテキストエディタを使用"
+
+#: ultimate-responsive-image-slider.php:357 ultimate-responsive-image-slider.php:556
+msgid "Slide Alt Text"
+msgstr "スライドの代替テキスト"
+
+#: ultimate-responsive-image-slider.php:358 ultimate-responsive-image-slider.php:557
+msgid "Max Length 125 Characters"
+msgstr "最大125文字まで"
+
+#: ultimate-responsive-image-slider.php:406
+msgid "Add New Slide"
+msgstr "新しいスライドを追加"
+
+#: ultimate-responsive-image-slider.php:410
+msgid "Sort Ascending by Slide ID"
+msgstr "スライドIDで昇順にソート"
+
+#: ultimate-responsive-image-slider.php:414
+msgid "Sort Descending by Slide ID"
+msgstr "スライドIDで降順にソート"
+
+#: ultimate-responsive-image-slider.php:419
+msgid "Clone Slider"
+msgstr "スライダーを複製"
+
+#: ultimate-responsive-image-slider.php:424
+msgid "Delete All Slides"
+msgstr "すべてのスライドを削除"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Slider clone created successfully."
+msgstr "スライダーの複製が正常に作成されました。"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Go to"
+msgstr "移動"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "All Slider"
+msgstr "すべてのスライダー"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "page to edit cloned slider."
+msgstr "ページを編集して複製したスライダーを表示。"
+
+#: ultimate-responsive-image-slider.php:510
+msgid "Use below shortcode in any Page/Post to publish your slider"
+msgstr "以下のショートコードを任意のページ/投稿に使用して、スライダーを公開します"
+
+#: ultimate-responsive-image-slider.php:513
+msgid "To embed slider in any custom theme template"
+msgstr "カスタムテーマテンプレートにスライダーを埋め込むには"
+
+#: ultimate-responsive-image-slider.php:548
+msgid "Enter Slide Title Here"
+msgstr "ここにスライドのタイトルを入力"
+
+#: ultimate-responsive-image-slider.php:551
+msgid "Slide Description"
+msgstr "スライドの説明"
+
+#: ultimate-responsive-image-slider.php:552
+msgid "Enter Slide Description Here"
+msgstr "ここにスライドの説明を入力"

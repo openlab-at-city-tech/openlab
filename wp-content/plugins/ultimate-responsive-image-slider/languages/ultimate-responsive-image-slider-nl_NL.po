@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Responsive Image Slider\n"
-"POT-Creation-Date: 2023-11-22 13:54+0530\n"
-"PO-Revision-Date: 2023-11-22 15:14+0530\n"
+"POT-Creation-Date: 2023-11-23 16:38+0530\n"
+"PO-Revision-Date: 2023-11-23 16:38+0530\n"
 "Last-Translator: Weblizar <lizarweb@gmail.com>\n"
 "Language-Team: \n"
-"Language: en\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,11 +18,12 @@ msgstr ""
 
 #: settings.php:231 tooltip.php:51
 msgid "Display Slider Post Title"
-msgstr ""
+msgstr "Toon titel van sliderbericht"
 
 #: settings.php:237
 msgid "Select Yes/No option to show/hide slide title above slider"
 msgstr ""
+"Selecteer Ja/Nee optie om titel boven schuifregelaar te tonen/verbergen"
 
 #: settings.php:238 settings.php:251 settings.php:263 settings.php:275
 #: settings.php:288 settings.php:300 settings.php:312 settings.php:326
@@ -32,473 +33,501 @@ msgstr ""
 #: settings.php:528 settings.php:541 settings.php:553 settings.php:566
 #: settings.php:578 settings.php:591 settings.php:626
 msgid "Preview"
-msgstr ""
+msgstr "Voorbeeld"
 
 #: settings.php:244 tooltip.php:56
 msgid "Display Slide Title"
-msgstr ""
+msgstr "Toon titel van dia"
 
 #: settings.php:250
 msgid "Select Yes/No option to show/hide slide title over slides."
-msgstr ""
+msgstr "Selecteer Ja/Nee optie om titel over dia's weer te geven/te verbergen."
 
 #: settings.php:257 tooltip.php:61
 msgid "Slide Title Color"
-msgstr ""
+msgstr "Kleur van diatitel"
 
 #: settings.php:262
 msgid "Select a color to set slide title color."
-msgstr ""
+msgstr "Selecteer een kleur om de kleur van de diatitel in te stellen."
 
 #: settings.php:269 tooltip.php:66
 msgid "Slide Title Background Color"
-msgstr ""
+msgstr "Achtergrondkleur van diatitel"
 
 #: settings.php:274
 msgid "Select a color to set slide title background color."
 msgstr ""
+"Selecteer een kleur om de achtergrondkleur van de diatitel in te stellen."
 
 #: settings.php:281 tooltip.php:71
 msgid "Display Slide Description"
-msgstr ""
+msgstr "Toon beschrijving van dia"
 
 #: settings.php:287
 msgid "Select Yes/No option to show/hide slide description over slides."
 msgstr ""
+"Selecteer Ja/Nee optie om beschrijving over dia's weer te geven/te verbergen."
 
 #: settings.php:294 tooltip.php:76
 msgid "Slide Description Color"
-msgstr ""
+msgstr "Kleur van diabeschrijving"
 
 #: settings.php:299
 msgid "Select a color to set slide description color."
-msgstr ""
+msgstr "Selecteer een kleur om de kleur van de diabeschrijving in te stellen."
 
 #: settings.php:306 tooltip.php:81
 msgid "Slide Description Background Color"
-msgstr ""
+msgstr "Achtergrondkleur van diabeschrijving"
 
 #: settings.php:311
 msgid "Select a color to set slide description background color."
 msgstr ""
+"Selecteer een kleur om de achtergrondkleur van de diabeschrijving in te "
+"stellen."
 
 #: settings.php:318
 msgid "Auto Play Slide Show"
-msgstr ""
+msgstr "Automatisch afspelen van diavoorstelling"
 
 #: settings.php:321
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: settings.php:322
 msgid "Yes with Stop on Mouse Hover"
-msgstr ""
+msgstr "Ja met stop bij muisaanwijzer"
 
 #: settings.php:323
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: settings.php:325
 msgid "Select Yes/No option to auto slide enable or disable into slider."
 msgstr ""
+"Selecteer Ja/Nee optie om automatisch schuifregelaar in- of uit te schakelen."
 
 #: settings.php:331
 msgid "Slide Transition"
-msgstr ""
+msgstr "Overgang van dia"
 
 #: settings.php:337
 msgid "Select a transition effect you want to apply on slides."
-msgstr ""
+msgstr "Selecteer een overgangseffect dat u op dia's wilt toepassen."
 
 #: settings.php:343
 msgid "Auto play Slider Speed"
-msgstr ""
+msgstr "Snelheid automatische weergave schuifregelaar"
 
 #: settings.php:349
 msgid "Set your desired slider speed of slides. Default speed is 5 Second."
 msgstr ""
+"Stel uw gewenste snelheid in voor het schuiven van dia's. Standaardsnelheid "
+"is 5 seconden."
 
 #: settings.php:370
 msgid "Slide Order"
-msgstr ""
+msgstr "Volgorde van dia's"
 
 #: settings.php:373
 msgid "Ascending"
-msgstr ""
+msgstr "Oplopend"
 
 #: settings.php:374
 msgid "Descending"
-msgstr ""
+msgstr "Aflopend"
 
 #: settings.php:375
 msgid "Random"
-msgstr ""
+msgstr "Willekeurig"
 
 #: settings.php:377
 msgid "Select a slide order you want to apply on slides"
-msgstr ""
+msgstr "Selecteer een dia-volgorde die u op dia's wilt toepassen"
 
 #: settings.php:384 tooltip.php:88
 msgid "Distance Between Slide"
-msgstr ""
+msgstr "Afstand tussen dia's"
 
 #: settings.php:396
 msgid ""
 "Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
 "setting selected to Slide."
 msgstr ""
+"Stel een ruimte in tussen alle dia's. Bereik van 0 tot 25. Werkt wanneer de "
+"instelling voor overgang van dia is ingesteld op dia."
 
 #: settings.php:403 tooltip.php:93
 msgid "Show Thumbnail"
-msgstr ""
+msgstr "Toon miniatuur"
 
 #: settings.php:409
 msgid ""
 "Select Yes/No option to show or hide thumbnail based navigation under slides."
 msgstr ""
+"Selecteer Ja/Nee optie om navigatie op basis van miniaturen onder dia's weer "
+"te geven of te verbergen."
 
 #: settings.php:416 tooltip.php:98
 msgid "Thumbnail Position"
-msgstr ""
+msgstr "Positie van miniatuur"
 
 #: settings.php:419
 msgid "Top"
-msgstr ""
+msgstr "Boven"
 
 #: settings.php:420
 msgid "Bottom"
-msgstr ""
+msgstr "Onder"
 
 #: settings.php:422
 msgid "Select a thumbnail position to show above or below the slider."
 msgstr ""
+"Selecteer een positie voor miniaturen om boven of onder de schuifregelaar "
+"weer te geven."
 
 #: settings.php:429 tooltip.php:103
 msgid "Selected Thumbnail Style"
-msgstr ""
+msgstr "Geselecteerde miniatuur stijl"
 
 #: settings.php:432
 msgid "Border"
-msgstr ""
+msgstr "Rand"
 
 #: settings.php:433
 msgid "Pointer"
-msgstr ""
+msgstr "Pijl"
 
 #: settings.php:435
 msgid "Select a style to apply on select thumbnails."
-msgstr ""
+msgstr "Selecteer een stijl om toe te passen op geselecteerde miniaturen."
 
 #: settings.php:442 tooltip.php:108
 msgid "Selected Thumbnail Style Color"
-msgstr ""
+msgstr "Kleur van geselecteerde miniatuur stijl"
 
 #: settings.php:447
 msgid "Select a color to set on selected thumbnail style color."
 msgstr ""
+"Selecteer een kleur om in te stellen voor de kleur van de geselecteerde "
+"miniatuur stijl."
 
 #: settings.php:454 tooltip.php:113
 msgid "Thumbnail Resize"
-msgstr ""
+msgstr "Formaat wijzigen miniatuur"
 
 #: settings.php:458
 msgid "Width"
-msgstr ""
+msgstr "Breedte"
 
 #: settings.php:459
 msgid "Height"
-msgstr ""
+msgstr "Hoogte"
 
 #: settings.php:461
 msgid "Set custom height and width for thumbnails."
-msgstr ""
+msgstr "Stel aangepaste hoogte en breedte in voor miniaturen."
 
 #: settings.php:468 tooltip.php:118
 msgid "Slider Width"
-msgstr ""
+msgstr "Breedte van schuifregelaar"
 
 #: settings.php:472
 msgid "100% Width"
-msgstr ""
+msgstr "100% Breedte"
 
 #: settings.php:473
 msgid "Full Width"
-msgstr ""
+msgstr "Volledige breedte"
 
 #: settings.php:474 settings.php:489
 msgid "Custom"
-msgstr ""
+msgstr "Aangepast"
 
 #: settings.php:477
 msgid "Enter your desired width for slider. Default width is 1000px."
 msgstr ""
+"Voer de gewenste breedte in voor uw schuifregelaar. Standaardbreedte is "
+"1000px."
 
 #: settings.php:484 tooltip.php:123
 msgid "Slider Height"
-msgstr ""
+msgstr "Hoogte van schuifregelaar"
 
 #: settings.php:488
 msgid "Auto Height"
-msgstr ""
+msgstr "Automatische hoogte"
 
 #: settings.php:492
 msgid "Enter your desired height for slider. Default height is 500px."
 msgstr ""
+"Voer de gewenste hoogte in voor uw schuifregelaar. Standaardhoogte is 500px."
 
 #: settings.php:499
 msgid "Slide Scale Mode"
-msgstr ""
+msgstr "Schaalmodus voor dia"
 
 #: settings.php:504
 msgid "Cover"
-msgstr ""
+msgstr "Bedekken"
 
 #: settings.php:505
 msgid "Contain"
-msgstr ""
+msgstr "Inhouden"
 
 #: settings.php:506
 msgid "Exact"
-msgstr ""
+msgstr "Exact"
 
 #: settings.php:507
 msgid "None"
-msgstr ""
+msgstr "Geen"
 
 #: settings.php:511
 msgid "COVER will scale and crop the image so that it fills the entire slide."
-msgstr ""
+msgstr "COVER schaalt en bijsnijdt de afbeelding zodat deze de hele dia vult."
 
 #: settings.php:512
 msgid "CONTAIN will keep the entire image visible inside the slide."
-msgstr ""
+msgstr "CONTAIN houdt de hele afbeelding zichtbaar binnen de dia."
 
 #: settings.php:513
 msgid "EXACT will match the size of the image to the size of the slide."
-msgstr ""
+msgstr "EXACT past de grootte van de afbeelding aan aan de grootte van de dia."
 
 #: settings.php:514
 msgid "NONE will leave the image to its original size."
-msgstr ""
+msgstr "NONE laat de afbeelding op zijn oorspronkelijke grootte."
 
 #: settings.php:521
 msgid "Slide Auto Scale Up"
-msgstr ""
+msgstr "Automatisch schalen van dia"
 
 #: settings.php:527
 msgid "If the slide can be scaled up more than its original size."
-msgstr ""
+msgstr "Als de dia meer kan worden geschaald dan de oorspronkelijke grootte."
 
 #: settings.php:534 tooltip.php:130
 msgid "Show Navigation Arrow"
-msgstr ""
+msgstr "Toon navigatiepijl"
 
 #: settings.php:540
 msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
 msgstr ""
+"Selecteer de Ja/Nee-optie om pijlen weer te geven of te verbergen bij het "
+"zweven van de muis over de dia."
 
 #: settings.php:547 tooltip.php:135
 msgid "Navigation Color"
-msgstr ""
+msgstr "Kleur van de navigatie"
 
 #: settings.php:552
 msgid "Select a color to set navigation arrow and full screen icon color."
 msgstr ""
+"Selecteer een kleur om de kleur van de navigatiepijl en het volledige scherm "
+"pictogram in te stellen."
 
 #: settings.php:559 tooltip.php:140
 msgid "Show Navigation Bullets"
-msgstr ""
+msgstr "Toon navigatieknoppen"
 
 #: settings.php:565
 msgid ""
 "Select Yes/No option to show or hide slider navigation buttons under image "
 "slider."
 msgstr ""
+"Selecteer de Ja/Nee-optie om navigatieknoppen voor de "
+"afbeeldingsschuifregelaar weer te geven of te verbergen."
 
 #: settings.php:572 tooltip.php:145
 msgid "Navigation Bullets Color"
-msgstr ""
+msgstr "Kleur van de navigatieknoppen"
 
 #: settings.php:577
 msgid "Select a color to set navigation bullets color."
-msgstr ""
+msgstr "Selecteer een kleur om de kleur van de navigatieknoppen in te stellen."
 
 #: settings.php:584 tooltip.php:150
 msgid "Full Screen Slide Show"
-msgstr ""
+msgstr "Volledige scherm diavoorstelling"
 
 #: settings.php:590
 msgid "Select Yes/No option for full screen slide show."
-msgstr ""
+msgstr "Selecteer de Ja/Nee-optie voor een volledige scherm diavoorstelling."
 
 #: settings.php:597 tooltip.php:155
 msgid "Fonts"
-msgstr ""
+msgstr "Lettertypen"
 
 #: settings.php:625
 msgid "Choose a font to apply on slide title and description."
-msgstr ""
+msgstr "Kies een lettertype om toe te passen op de dia titel en beschrijving."
 
 #: settings.php:633
 msgid "Custom CSS"
-msgstr ""
+msgstr "Aangepaste CSS"
 
 #: settings.php:638
 msgid ""
 "Enter any custom CSS you want to apply on this slider into text area filed."
 msgstr ""
+"Voer eventuele aangepaste CSS in die u op deze schuifregelaar wilt toepassen "
+"in het tekstveld."
 
 #: ultimate-responsive-image-slider.php:185
 #: ultimate-responsive-image-slider.php:186
 msgid "Add New Slider"
-msgstr ""
+msgstr "Nieuwe schuifregelaar toevoegen"
 
 #: ultimate-responsive-image-slider.php:187
 msgid "Edit Slider"
-msgstr ""
+msgstr "Schuifregelaar bewerken"
 
 #: ultimate-responsive-image-slider.php:188
 msgid "New Slider"
-msgstr ""
+msgstr "Nieuwe schuifregelaar"
 
 #: ultimate-responsive-image-slider.php:189
 msgid "View Slider"
-msgstr ""
+msgstr "Schuifregelaar bekijken"
 
 #: ultimate-responsive-image-slider.php:190
 msgid "Search Slider"
-msgstr ""
+msgstr "Schuifregelaar zoeken"
 
 #: ultimate-responsive-image-slider.php:191
 msgid "No Slider found"
-msgstr ""
+msgstr "Geen schuifregelaar gevonden"
 
 #: ultimate-responsive-image-slider.php:192
 msgid "No Slider Found in Trash"
-msgstr ""
+msgstr "Geen schuifregelaar gevonden in de prullenbak"
 
 #: ultimate-responsive-image-slider.php:193
 msgid "Parent Slider:"
-msgstr ""
+msgstr "Hoofd schuifregelaar:"
 
 #: ultimate-responsive-image-slider.php:194
 msgid "All Sliders"
-msgstr ""
+msgstr "Alle schuifregelaars"
 
 #: ultimate-responsive-image-slider.php:223
 msgid "UR Image Slider Title"
-msgstr ""
+msgstr "UR Afbeeldingsschuifregelaar Titel"
 
 #: ultimate-responsive-image-slider.php:224
 #: ultimate-responsive-image-slider.php:246
 msgid "Slider Shortcode"
-msgstr ""
+msgstr "Schuifregelaar shortcode"
 
 #: ultimate-responsive-image-slider.php:225
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: ultimate-responsive-image-slider.php:243
 msgid "Add Slides"
-msgstr ""
+msgstr "Voeg dia's toe"
 
 #: ultimate-responsive-image-slider.php:244
 msgid "Configure Settings"
-msgstr ""
+msgstr "Instellingen configureren"
 
 #: ultimate-responsive-image-slider.php:247
 msgid "Try My New Slider Plugin"
-msgstr ""
+msgstr "Probeer mijn nieuwe schuifregelaar-plugin"
 
 #: ultimate-responsive-image-slider.php:345
 #: ultimate-responsive-image-slider.php:544
 msgid "Slide ID"
-msgstr ""
+msgstr "Dia-ID"
 
 #: ultimate-responsive-image-slider.php:346
 #: ultimate-responsive-image-slider.php:545
 msgid "Slide Title"
-msgstr ""
+msgstr "Dia titel"
 
 #: ultimate-responsive-image-slider.php:349
 msgid "Enter Slide Title"
-msgstr ""
+msgstr "Voer de dia titel in"
 
 #: ultimate-responsive-image-slider.php:352
 msgid "Slide Descriptions"
-msgstr ""
+msgstr "Dia beschrijvingen"
 
 #: ultimate-responsive-image-slider.php:353
 msgid "Enter Slide Description"
-msgstr ""
+msgstr "Voer de dia beschrijving in"
 
 #: ultimate-responsive-image-slider.php:354
 #: ultimate-responsive-image-slider.php:553
 msgid "Use Rich Text Editor"
-msgstr ""
+msgstr "Gebruik de Rich Text Editor"
 
 #: ultimate-responsive-image-slider.php:357
 #: ultimate-responsive-image-slider.php:556
 msgid "Slide Alt Text"
-msgstr ""
+msgstr "Alternatieve tekst voor dia"
 
 #: ultimate-responsive-image-slider.php:358
 #: ultimate-responsive-image-slider.php:557
 msgid "Max Length 125 Characters"
-msgstr ""
+msgstr "Maximale lengte 125 tekens"
 
 #: ultimate-responsive-image-slider.php:406
 msgid "Add New Slide"
-msgstr ""
+msgstr "Nieuwe dia toevoegen"
 
 #: ultimate-responsive-image-slider.php:410
 msgid "Sort Ascending by Slide ID"
-msgstr ""
+msgstr "Sorteer oplopend op Dia-ID"
 
 #: ultimate-responsive-image-slider.php:414
 msgid "Sort Descending by Slide ID"
-msgstr ""
+msgstr "Sorteer aflopend op Dia-ID"
 
 #: ultimate-responsive-image-slider.php:419
 msgid "Clone Slider"
-msgstr ""
+msgstr "Kloon schuifregelaar"
 
 #: ultimate-responsive-image-slider.php:424
 msgid "Delete All Slides"
-msgstr ""
+msgstr "Verwijder alle dia's"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Slider clone created successfully."
-msgstr ""
+msgstr "Schuifregelaar gekloond met succes."
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Go to"
-msgstr ""
+msgstr "Ga naar"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "All Slider"
-msgstr ""
+msgstr "Alle schuifregelaars"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "page to edit cloned slider."
-msgstr ""
+msgstr "pagina om de gekloonde schuifregelaar te bewerken."
 
 #: ultimate-responsive-image-slider.php:510
 msgid "Use below shortcode in any Page/Post to publish your slider"
 msgstr ""
+"Gebruik de onderstaande shortcode in een willekeurige pagina/bericht om uw "
+"schuifregelaar te publiceren."
 
 #: ultimate-responsive-image-slider.php:513
 msgid "To embed slider in any custom theme template"
-msgstr ""
+msgstr "Om de schuifregelaar in een aangepaste themasjabloon in te sluiten"
 
 #: ultimate-responsive-image-slider.php:548
 msgid "Enter Slide Title Here"
-msgstr ""
+msgstr "Voer hier de titel van de dia in"
 
 #: ultimate-responsive-image-slider.php:551
 msgid "Slide Description"
-msgstr ""
+msgstr "Dia beschrijving"
 
 #: ultimate-responsive-image-slider.php:552
 msgid "Enter Slide Description Here"
-msgstr ""
+msgstr "Voer hier de beschrijving van de dia in"

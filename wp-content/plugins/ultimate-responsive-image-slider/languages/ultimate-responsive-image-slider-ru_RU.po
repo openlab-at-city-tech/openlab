@@ -1,15 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Responsive Image Slider\n"
-"POT-Creation-Date: 2023-11-22 13:54+0530\n"
-"PO-Revision-Date: 2023-11-22 15:14+0530\n"
+"POT-Creation-Date: 2023-11-23 13:50+0530\n"
+"PO-Revision-Date: 2023-11-23 13:51+0530\n"
 "Last-Translator: Weblizar <lizarweb@gmail.com>\n"
 "Language-Team: \n"
-"Language: en\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: _e;__\n"
@@ -18,11 +19,12 @@ msgstr ""
 
 #: settings.php:231 tooltip.php:51
 msgid "Display Slider Post Title"
-msgstr ""
+msgstr "Отображать заголовок слайдера поста"
 
 #: settings.php:237
 msgid "Select Yes/No option to show/hide slide title above slider"
 msgstr ""
+"Выберите опцию Да/Нет для отображения/скрытия заголовка слайда над слайдером"
 
 #: settings.php:238 settings.php:251 settings.php:263 settings.php:275
 #: settings.php:288 settings.php:300 settings.php:312 settings.php:326
@@ -32,473 +34,495 @@ msgstr ""
 #: settings.php:528 settings.php:541 settings.php:553 settings.php:566
 #: settings.php:578 settings.php:591 settings.php:626
 msgid "Preview"
-msgstr ""
+msgstr "Просмотр"
 
 #: settings.php:244 tooltip.php:56
 msgid "Display Slide Title"
-msgstr ""
+msgstr "Отображать заголовок слайда"
 
 #: settings.php:250
 msgid "Select Yes/No option to show/hide slide title over slides."
 msgstr ""
+"Выберите опцию Да/Нет для отображения/скрытия заголовка слайда поверх "
+"слайдов."
 
 #: settings.php:257 tooltip.php:61
 msgid "Slide Title Color"
-msgstr ""
+msgstr "Цвет заголовка слайда"
 
 #: settings.php:262
 msgid "Select a color to set slide title color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета заголовка слайда."
 
 #: settings.php:269 tooltip.php:66
 msgid "Slide Title Background Color"
-msgstr ""
+msgstr "Цвет фона заголовка слайда"
 
 #: settings.php:274
 msgid "Select a color to set slide title background color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета фона заголовка слайда."
 
 #: settings.php:281 tooltip.php:71
 msgid "Display Slide Description"
-msgstr ""
+msgstr "Отображать описание слайда"
 
 #: settings.php:287
 msgid "Select Yes/No option to show/hide slide description over slides."
 msgstr ""
+"Выберите опцию Да/Нет для отображения/скрытия описания слайда поверх слайдов."
 
 #: settings.php:294 tooltip.php:76
 msgid "Slide Description Color"
-msgstr ""
+msgstr "Цвет описания слайда"
 
 #: settings.php:299
 msgid "Select a color to set slide description color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета описания слайда."
 
 #: settings.php:306 tooltip.php:81
 msgid "Slide Description Background Color"
-msgstr ""
+msgstr "Цвет фона описания слайда"
 
 #: settings.php:311
 msgid "Select a color to set slide description background color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета фона описания слайда."
 
 #: settings.php:318
 msgid "Auto Play Slide Show"
-msgstr ""
+msgstr "Автоматическое воспроизведение слайд-шоу"
 
 #: settings.php:321
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: settings.php:322
 msgid "Yes with Stop on Mouse Hover"
-msgstr ""
+msgstr "Да с остановкой при наведении мыши"
 
 #: settings.php:323
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: settings.php:325
 msgid "Select Yes/No option to auto slide enable or disable into slider."
 msgstr ""
+"Выберите опцию Да/Нет для включения или выключения автоматической прокрутки "
+"слайдов в слайдере."
 
 #: settings.php:331
 msgid "Slide Transition"
-msgstr ""
+msgstr "Переход слайдов"
 
 #: settings.php:337
 msgid "Select a transition effect you want to apply on slides."
-msgstr ""
+msgstr "Выберите эффект перехода, который вы хотите применить к слайдам."
 
 #: settings.php:343
 msgid "Auto play Slider Speed"
-msgstr ""
+msgstr "Скорость автоматического воспроизведения слайдера"
 
 #: settings.php:349
 msgid "Set your desired slider speed of slides. Default speed is 5 Second."
 msgstr ""
+"Установите желаемую скорость слайдов. Скорость по умолчанию - 5 секунд."
 
 #: settings.php:370
 msgid "Slide Order"
-msgstr ""
+msgstr "Порядок слайдов"
 
 #: settings.php:373
 msgid "Ascending"
-msgstr ""
+msgstr "По возрастанию"
 
 #: settings.php:374
 msgid "Descending"
-msgstr ""
+msgstr "По убыванию"
 
 #: settings.php:375
 msgid "Random"
-msgstr ""
+msgstr "Случайный"
 
 #: settings.php:377
 msgid "Select a slide order you want to apply on slides"
-msgstr ""
+msgstr "Выберите порядок слайдов, который вы хотите применить к слайдам"
 
 #: settings.php:384 tooltip.php:88
 msgid "Distance Between Slide"
-msgstr ""
+msgstr "Расстояние между слайдами"
 
 #: settings.php:396
 msgid ""
 "Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
 "setting selected to Slide."
 msgstr ""
+"Установите расстояние между всеми слайдами. Диапазон от 0 до 25. Работает, "
+"когда выбран переход слайдов к слайдам."
 
 #: settings.php:403 tooltip.php:93
 msgid "Show Thumbnail"
-msgstr ""
+msgstr "Показать миниатюры"
 
 #: settings.php:409
 msgid ""
 "Select Yes/No option to show or hide thumbnail based navigation under slides."
 msgstr ""
+"Выберите опцию Да/Нет для отображения или скрытия навигации по миниатюрам "
+"под слайдами."
 
 #: settings.php:416 tooltip.php:98
 msgid "Thumbnail Position"
-msgstr ""
+msgstr "Позиция миниатюр"
 
 #: settings.php:419
 msgid "Top"
-msgstr ""
+msgstr "Сверху"
 
 #: settings.php:420
 msgid "Bottom"
-msgstr ""
+msgstr "Снизу"
 
 #: settings.php:422
 msgid "Select a thumbnail position to show above or below the slider."
-msgstr ""
+msgstr "Выберите позицию миниатюр для отображения над или под слайдером."
 
 #: settings.php:429 tooltip.php:103
 msgid "Selected Thumbnail Style"
-msgstr ""
+msgstr "Стиль выбранных миниатюр"
 
 #: settings.php:432
 msgid "Border"
-msgstr ""
+msgstr "Граница"
 
 #: settings.php:433
 msgid "Pointer"
-msgstr ""
+msgstr "Указатель"
 
 #: settings.php:435
 msgid "Select a style to apply on select thumbnails."
-msgstr ""
+msgstr "Выберите стиль для применения к выбранным миниатюрам."
 
 #: settings.php:442 tooltip.php:108
 msgid "Selected Thumbnail Style Color"
-msgstr ""
+msgstr "Цвет стиля выбранных миниатюр"
 
 #: settings.php:447
 msgid "Select a color to set on selected thumbnail style color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета стиля выбранных миниатюр."
 
 #: settings.php:454 tooltip.php:113
 msgid "Thumbnail Resize"
-msgstr ""
+msgstr "Изменение размера миниатюр"
 
 #: settings.php:458
 msgid "Width"
-msgstr ""
+msgstr "Ширина"
 
 #: settings.php:459
 msgid "Height"
-msgstr ""
+msgstr "Высота"
 
 #: settings.php:461
 msgid "Set custom height and width for thumbnails."
-msgstr ""
+msgstr "Установите пользовательские высоту и ширину для миниатюр."
 
 #: settings.php:468 tooltip.php:118
 msgid "Slider Width"
-msgstr ""
+msgstr "Ширина слайдера"
 
 #: settings.php:472
 msgid "100% Width"
-msgstr ""
+msgstr "100% ширина"
 
 #: settings.php:473
 msgid "Full Width"
-msgstr ""
+msgstr "Полная ширина"
 
 #: settings.php:474 settings.php:489
 msgid "Custom"
-msgstr ""
+msgstr "Пользовательский"
 
 #: settings.php:477
 msgid "Enter your desired width for slider. Default width is 1000px."
-msgstr ""
+msgstr "Укажите желаемую ширину слайдера. Ширина по умолчанию - 1000 пикселей."
 
 #: settings.php:484 tooltip.php:123
 msgid "Slider Height"
-msgstr ""
+msgstr "Высота слайдера"
 
 #: settings.php:488
 msgid "Auto Height"
-msgstr ""
+msgstr "Автоматическая высота"
 
 #: settings.php:492
 msgid "Enter your desired height for slider. Default height is 500px."
-msgstr ""
+msgstr "Укажите желаемую высоту слайдера. Высота по умолчанию - 500 пикселей."
 
 #: settings.php:499
 msgid "Slide Scale Mode"
-msgstr ""
+msgstr "Режим масштабирования слайда"
 
 #: settings.php:504
 msgid "Cover"
-msgstr ""
+msgstr "Заполнение"
 
 #: settings.php:505
 msgid "Contain"
-msgstr ""
+msgstr "Сохранение пропорций"
 
 #: settings.php:506
 msgid "Exact"
-msgstr ""
+msgstr "Точно"
 
 #: settings.php:507
 msgid "None"
-msgstr ""
+msgstr "Без масштабирования"
 
 #: settings.php:511
 msgid "COVER will scale and crop the image so that it fills the entire slide."
 msgstr ""
+"ЗАПОЛНЕНИЕ масштабирует и обрезает изображение так, чтобы оно заполнило весь "
+"слайд."
 
 #: settings.php:512
 msgid "CONTAIN will keep the entire image visible inside the slide."
-msgstr ""
+msgstr "СОХРАНЕНИЕ ПРОПОРЦИЙ сохраняет всё изображение видимым внутри слайда."
 
 #: settings.php:513
 msgid "EXACT will match the size of the image to the size of the slide."
-msgstr ""
+msgstr "ТОЧНО сделает размер изображения таким же, как размер слайда."
 
 #: settings.php:514
 msgid "NONE will leave the image to its original size."
-msgstr ""
+msgstr "БЕЗ МАСШТАБИРОВАНИЯ оставит изображение в его исходном размере."
 
 #: settings.php:521
 msgid "Slide Auto Scale Up"
-msgstr ""
+msgstr "Автоматическое масштабирование слайда"
 
 #: settings.php:527
 msgid "If the slide can be scaled up more than its original size."
-msgstr ""
+msgstr "Если слайд можно увеличить более чем в его исходный размер."
 
 #: settings.php:534 tooltip.php:130
 msgid "Show Navigation Arrow"
-msgstr ""
+msgstr "Показать стрелки навигации"
 
 #: settings.php:540
 msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
 msgstr ""
+"Выберите опцию Да/Нет для отображения или скрытия стрелок при наведении мыши "
+"на слайд."
 
 #: settings.php:547 tooltip.php:135
 msgid "Navigation Color"
-msgstr ""
+msgstr "Цвет навигации"
 
 #: settings.php:552
 msgid "Select a color to set navigation arrow and full screen icon color."
 msgstr ""
+"Выберите цвет для установки цвета стрелок навигации и значка полноэкранного "
+"режима."
 
 #: settings.php:559 tooltip.php:140
 msgid "Show Navigation Bullets"
-msgstr ""
+msgstr "Показать точки навигации"
 
 #: settings.php:565
 msgid ""
 "Select Yes/No option to show or hide slider navigation buttons under image "
 "slider."
 msgstr ""
+"Выберите опцию Да/Нет для отображения или скрытия кнопок навигации под "
+"изображением слайдера."
 
 #: settings.php:572 tooltip.php:145
 msgid "Navigation Bullets Color"
-msgstr ""
+msgstr "Цвет точек навигации"
 
 #: settings.php:577
 msgid "Select a color to set navigation bullets color."
-msgstr ""
+msgstr "Выберите цвет для установки цвета точек навигации."
 
 #: settings.php:584 tooltip.php:150
 msgid "Full Screen Slide Show"
-msgstr ""
+msgstr "Показать слайд-шоу в полноэкранном режиме"
 
 #: settings.php:590
 msgid "Select Yes/No option for full screen slide show."
-msgstr ""
+msgstr "Выберите вариант «Да/Нет» для полноэкранного слайд-шоу."
 
 #: settings.php:597 tooltip.php:155
 msgid "Fonts"
-msgstr ""
+msgstr "Шрифты"
 
 #: settings.php:625
 msgid "Choose a font to apply on slide title and description."
-msgstr ""
+msgstr "Выберите шрифт для применения к заголовку и описанию слайда."
 
 #: settings.php:633
 msgid "Custom CSS"
-msgstr ""
+msgstr "Пользовательский CSS"
 
 #: settings.php:638
 msgid ""
 "Enter any custom CSS you want to apply on this slider into text area filed."
 msgstr ""
+"Введите любой пользовательский CSS, который вы хотите применить к этому "
+"слайду, в поле текстовой области."
 
 #: ultimate-responsive-image-slider.php:185
 #: ultimate-responsive-image-slider.php:186
 msgid "Add New Slider"
-msgstr ""
+msgstr "Добавить новый слайдер"
 
 #: ultimate-responsive-image-slider.php:187
 msgid "Edit Slider"
-msgstr ""
+msgstr "Редактировать слайдер"
 
 #: ultimate-responsive-image-slider.php:188
 msgid "New Slider"
-msgstr ""
+msgstr "Новый слайдер"
 
 #: ultimate-responsive-image-slider.php:189
 msgid "View Slider"
-msgstr ""
+msgstr "Просмотр слайдера"
 
 #: ultimate-responsive-image-slider.php:190
 msgid "Search Slider"
-msgstr ""
+msgstr "Поиск слайдера"
 
 #: ultimate-responsive-image-slider.php:191
 msgid "No Slider found"
-msgstr ""
+msgstr "Слайдер не найден"
 
 #: ultimate-responsive-image-slider.php:192
 msgid "No Slider Found in Trash"
-msgstr ""
+msgstr "Слайдер не найден в корзине"
 
 #: ultimate-responsive-image-slider.php:193
 msgid "Parent Slider:"
-msgstr ""
+msgstr "Родительский слайдер:"
 
 #: ultimate-responsive-image-slider.php:194
 msgid "All Sliders"
-msgstr ""
+msgstr "Все слайдеры"
 
 #: ultimate-responsive-image-slider.php:223
 msgid "UR Image Slider Title"
-msgstr ""
+msgstr "Заголовок UR Image Slider"
 
 #: ultimate-responsive-image-slider.php:224
 #: ultimate-responsive-image-slider.php:246
 msgid "Slider Shortcode"
-msgstr ""
+msgstr "Шорткод слайдера"
 
 #: ultimate-responsive-image-slider.php:225
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: ultimate-responsive-image-slider.php:243
 msgid "Add Slides"
-msgstr ""
+msgstr "Добавить слайды"
 
 #: ultimate-responsive-image-slider.php:244
 msgid "Configure Settings"
-msgstr ""
+msgstr "Настроить параметры"
 
 #: ultimate-responsive-image-slider.php:247
 msgid "Try My New Slider Plugin"
-msgstr ""
+msgstr "Попробуйте мой новый плагин слайдера"
 
 #: ultimate-responsive-image-slider.php:345
 #: ultimate-responsive-image-slider.php:544
 msgid "Slide ID"
-msgstr ""
+msgstr "ID слайда"
 
 #: ultimate-responsive-image-slider.php:346
 #: ultimate-responsive-image-slider.php:545
 msgid "Slide Title"
-msgstr ""
+msgstr "Заголовок слайда"
 
 #: ultimate-responsive-image-slider.php:349
 msgid "Enter Slide Title"
-msgstr ""
+msgstr "Введите заголовок слайда"
 
 #: ultimate-responsive-image-slider.php:352
 msgid "Slide Descriptions"
-msgstr ""
+msgstr "Описание слайдов"
 
 #: ultimate-responsive-image-slider.php:353
 msgid "Enter Slide Description"
-msgstr ""
+msgstr "Введите описание слайда"
 
 #: ultimate-responsive-image-slider.php:354
 #: ultimate-responsive-image-slider.php:553
 msgid "Use Rich Text Editor"
-msgstr ""
+msgstr "Использовать редактор Rich Text"
 
 #: ultimate-responsive-image-slider.php:357
 #: ultimate-responsive-image-slider.php:556
 msgid "Slide Alt Text"
-msgstr ""
+msgstr "Альтернативный текст слайда"
 
 #: ultimate-responsive-image-slider.php:358
 #: ultimate-responsive-image-slider.php:557
 msgid "Max Length 125 Characters"
-msgstr ""
+msgstr "Максимальная длина 125 символов"
 
 #: ultimate-responsive-image-slider.php:406
 msgid "Add New Slide"
-msgstr ""
+msgstr "Добавить новый слайд"
 
 #: ultimate-responsive-image-slider.php:410
 msgid "Sort Ascending by Slide ID"
-msgstr ""
+msgstr "Сортировать по возрастанию по ID слайда"
 
 #: ultimate-responsive-image-slider.php:414
 msgid "Sort Descending by Slide ID"
-msgstr ""
+msgstr "Сортировать по убыванию по ID слайда"
 
 #: ultimate-responsive-image-slider.php:419
 msgid "Clone Slider"
-msgstr ""
+msgstr "Клонировать слайдер"
 
 #: ultimate-responsive-image-slider.php:424
 msgid "Delete All Slides"
-msgstr ""
+msgstr "Удалить все слайды"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Slider clone created successfully."
-msgstr ""
+msgstr "Клон слайдера успешно создан."
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Go to"
-msgstr ""
+msgstr "Перейти к"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "All Slider"
-msgstr ""
+msgstr "Все слайдеры"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "page to edit cloned slider."
-msgstr ""
+msgstr "страница для редактирования клонированного слайдера."
 
 #: ultimate-responsive-image-slider.php:510
 msgid "Use below shortcode in any Page/Post to publish your slider"
 msgstr ""
+"Используйте шорткод ниже в любой странице/посте, чтобы опубликовать свой "
+"слайдер"
 
 #: ultimate-responsive-image-slider.php:513
 msgid "To embed slider in any custom theme template"
-msgstr ""
+msgstr "Для вставки слайдера в любой пользовательский шаблон темы"
 
 #: ultimate-responsive-image-slider.php:548
 msgid "Enter Slide Title Here"
-msgstr ""
+msgstr "Введите заголовок слайда здесь"
 
 #: ultimate-responsive-image-slider.php:551
 msgid "Slide Description"
-msgstr ""
+msgstr "Описание слайда"
 
 #: ultimate-responsive-image-slider.php:552
 msgid "Enter Slide Description Here"
-msgstr ""
+msgstr "Введите описание слайда здесь"

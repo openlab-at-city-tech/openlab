@@ -2,8 +2,8 @@
 Contributors: FARAZFRANK 
 Tags: slider, best slider plugin, image slide show, responsive slider, wordpress image slider plugin
 Requires at least: 4.0
-Tested up to: 6.3.1
-Stable tag: 3.5.11
+Tested up to: 6.4.1
+Stable tag: 3.5.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,25 @@ Change image slide sequence through simple drag and drop feature.
 
 If you have any question contact us at here: [Plugin Support Forum ](http://wordpress.org/support/plugin/ultimate-responsive-image-slider)
 
+### The plugin is available in following languages:
+
+Arabic (ar)
+Chinese (zh_CN)
+Finnish (fi_FI)
+French (fr_FR)
+German (de_DE)
+Hindi (hi_IN)
+Hungarian (hu_HU)
+Italian (it_IT)
+Indonesian (id_ID)
+Japanese (ja_JP)
+Dutch (nl_NL)
+Russian (ru_RU)
+Spanish (es_ES)
+Polish (pl_PL)
+Portuguese (pt_PT)
+And you can translate the plugin in your native language easily.
+
 ### Language Translation Contributors
 
 Hindi by Faraz Khan
@@ -168,6 +187,18 @@ Just put this code  <?php echo do_shortcode('[URIS id=123]'); ?>
 Please use WordPress [support forum](http://wordpress.org/support/plugin/ultimate-responsive-image-slider) to ask any query regarding any issue.
 
 == Changelog ==
+
+= 3.5.14 =
+* New language added in plugin: Polish (pl_PL), Dutch (nl_NL), Russian (ru_RU), Italian (it_IT), French (fr_FR), Hungarian (hu_HU), Finnish (fi_FI), and Japanese (ja_JP)
+
+= 3.5.13 =
+* Lazy loading tag added form slide image optimization (not supported by Safari browser)
+* New language added in plugin: Arabic (ar), Chinese (zh_CN), German (de_DE), Hindi (hi_IN), Indonesian (id_ID), Portuguese (pt_PT), and Spanish (es_ES)
+
+= 3.5.12 =
+* WPScan Vulnerability report fixed
+* Clone slider feature finalized
+* Slide ID displaed for Slide Sorting features
 
 = 3.5.11 =
 * Regular update and maintenance 

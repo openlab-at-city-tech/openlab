@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Responsive Image Slider\n"
-"POT-Creation-Date: 2023-11-22 13:54+0530\n"
-"PO-Revision-Date: 2023-11-22 15:14+0530\n"
+"POT-Creation-Date: 2023-11-23 14:18+0530\n"
+"PO-Revision-Date: 2023-11-23 14:18+0530\n"
 "Last-Translator: Weblizar <lizarweb@gmail.com>\n"
 "Language-Team: \n"
-"Language: en\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: _e;__\n"
@@ -18,11 +18,13 @@ msgstr ""
 
 #: settings.php:231 tooltip.php:51
 msgid "Display Slider Post Title"
-msgstr ""
+msgstr "Afficher le titre de l'article du slider"
 
 #: settings.php:237
 msgid "Select Yes/No option to show/hide slide title above slider"
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher/masquer le titre de la "
+"diapositive au-dessus du slider"
 
 #: settings.php:238 settings.php:251 settings.php:263 settings.php:275
 #: settings.php:288 settings.php:300 settings.php:312 settings.php:326
@@ -32,473 +34,522 @@ msgstr ""
 #: settings.php:528 settings.php:541 settings.php:553 settings.php:566
 #: settings.php:578 settings.php:591 settings.php:626
 msgid "Preview"
-msgstr ""
+msgstr "Aperçu"
 
 #: settings.php:244 tooltip.php:56
 msgid "Display Slide Title"
-msgstr ""
+msgstr "Afficher le titre de la diapositive"
 
 #: settings.php:250
 msgid "Select Yes/No option to show/hide slide title over slides."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher/masquer le titre de la "
+"diapositive sur les diapositives."
 
 #: settings.php:257 tooltip.php:61
 msgid "Slide Title Color"
-msgstr ""
+msgstr "Couleur du titre de la diapositive"
 
 #: settings.php:262
 msgid "Select a color to set slide title color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur du titre de la diapositive."
 
 #: settings.php:269 tooltip.php:66
 msgid "Slide Title Background Color"
-msgstr ""
+msgstr "Couleur de fond du titre de la diapositive"
 
 #: settings.php:274
 msgid "Select a color to set slide title background color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur de fond du titre de la "
+"diapositive."
 
 #: settings.php:281 tooltip.php:71
 msgid "Display Slide Description"
-msgstr ""
+msgstr "Afficher la description de la diapositive"
 
 #: settings.php:287
 msgid "Select Yes/No option to show/hide slide description over slides."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher/masquer la description de la "
+"diapositive sur les diapositives."
 
 #: settings.php:294 tooltip.php:76
 msgid "Slide Description Color"
-msgstr ""
+msgstr "Couleur de la description de la diapositive"
 
 #: settings.php:299
 msgid "Select a color to set slide description color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur de la description de la "
+"diapositive."
 
 #: settings.php:306 tooltip.php:81
 msgid "Slide Description Background Color"
-msgstr ""
+msgstr "Couleur de fond de la description de la diapositive"
 
 #: settings.php:311
 msgid "Select a color to set slide description background color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur de fond de la description "
+"de la diapositive."
 
 #: settings.php:318
 msgid "Auto Play Slide Show"
-msgstr ""
+msgstr "Lecture automatique du diaporama"
 
 #: settings.php:321
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: settings.php:322
 msgid "Yes with Stop on Mouse Hover"
-msgstr ""
+msgstr "Oui avec arrêt au survol de la souris"
 
 #: settings.php:323
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: settings.php:325
 msgid "Select Yes/No option to auto slide enable or disable into slider."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour activer ou désactiver automatiquement le "
+"défilement dans le slider."
 
 #: settings.php:331
 msgid "Slide Transition"
-msgstr ""
+msgstr "Transition des diapositives"
 
 #: settings.php:337
 msgid "Select a transition effect you want to apply on slides."
 msgstr ""
+"Sélectionnez un effet de transition que vous souhaitez appliquer aux "
+"diapositives."
 
 #: settings.php:343
 msgid "Auto play Slider Speed"
-msgstr ""
+msgstr "Vitesse de lecture automatique du slider"
 
 #: settings.php:349
 msgid "Set your desired slider speed of slides. Default speed is 5 Second."
 msgstr ""
+"Définissez la vitesse souhaitée du slider. La vitesse par défaut est de 5 "
+"secondes."
 
 #: settings.php:370
 msgid "Slide Order"
-msgstr ""
+msgstr "Ordre des diapositives"
 
 #: settings.php:373
 msgid "Ascending"
-msgstr ""
+msgstr "Ascendant"
 
 #: settings.php:374
 msgid "Descending"
-msgstr ""
+msgstr "Descendant"
 
 #: settings.php:375
 msgid "Random"
-msgstr ""
+msgstr "Aléatoire"
 
 #: settings.php:377
 msgid "Select a slide order you want to apply on slides"
-msgstr ""
+msgstr "Sélectionnez l'ordre des diapositives que vous souhaitez appliquer."
 
 #: settings.php:384 tooltip.php:88
 msgid "Distance Between Slide"
-msgstr ""
+msgstr "Distance entre les diapositives"
 
 #: settings.php:396
 msgid ""
 "Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
 "setting selected to Slide."
 msgstr ""
+"Définissez un espacement entre toutes les diapositives. Plage de 0 à 25. "
+"Fonctionne lorsque la transition des diapositives est sélectionnée."
 
 #: settings.php:403 tooltip.php:93
 msgid "Show Thumbnail"
-msgstr ""
+msgstr "Afficher les miniatures"
 
 #: settings.php:409
 msgid ""
 "Select Yes/No option to show or hide thumbnail based navigation under slides."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher ou masquer la navigation basée "
+"sur les miniatures sous les diapositives."
 
 #: settings.php:416 tooltip.php:98
 msgid "Thumbnail Position"
-msgstr ""
+msgstr "Position des miniatures"
 
 #: settings.php:419
 msgid "Top"
-msgstr ""
+msgstr "Haut"
 
 #: settings.php:420
 msgid "Bottom"
-msgstr ""
+msgstr "Bas"
 
 #: settings.php:422
 msgid "Select a thumbnail position to show above or below the slider."
 msgstr ""
+"Sélectionnez une position pour les miniatures à afficher au-dessus ou en "
+"dessous du slider."
 
 #: settings.php:429 tooltip.php:103
 msgid "Selected Thumbnail Style"
-msgstr ""
+msgstr "Style de la miniature sélectionnée"
 
 #: settings.php:432
 msgid "Border"
-msgstr ""
+msgstr "Bordure"
 
 #: settings.php:433
 msgid "Pointer"
-msgstr ""
+msgstr "Pointeur"
 
 #: settings.php:435
 msgid "Select a style to apply on select thumbnails."
-msgstr ""
+msgstr "Sélectionnez un style à appliquer aux miniatures sélectionnées."
 
 #: settings.php:442 tooltip.php:108
 msgid "Selected Thumbnail Style Color"
-msgstr ""
+msgstr "Couleur du style de la miniature sélectionnée"
 
 #: settings.php:447
 msgid "Select a color to set on selected thumbnail style color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur du style de la miniature "
+"sélectionnée."
 
 #: settings.php:454 tooltip.php:113
 msgid "Thumbnail Resize"
-msgstr ""
+msgstr "Redimensionner les miniatures"
 
 #: settings.php:458
 msgid "Width"
-msgstr ""
+msgstr "Largeur"
 
 #: settings.php:459
 msgid "Height"
-msgstr ""
+msgstr "Hauteur"
 
 #: settings.php:461
 msgid "Set custom height and width for thumbnails."
-msgstr ""
+msgstr "Définir la hauteur et la largeur personnalisées pour les miniatures."
 
 #: settings.php:468 tooltip.php:118
 msgid "Slider Width"
-msgstr ""
+msgstr "Largeur du slider"
 
 #: settings.php:472
 msgid "100% Width"
-msgstr ""
+msgstr "Largeur à 100%"
 
 #: settings.php:473
 msgid "Full Width"
-msgstr ""
+msgstr "Plein écran"
 
 #: settings.php:474 settings.php:489
 msgid "Custom"
-msgstr ""
+msgstr "Personnalisé"
 
 #: settings.php:477
 msgid "Enter your desired width for slider. Default width is 1000px."
 msgstr ""
+"Entrez la largeur souhaitée pour le slider. La largeur par défaut est de "
+"1000px."
 
 #: settings.php:484 tooltip.php:123
 msgid "Slider Height"
-msgstr ""
+msgstr "Hauteur du slider"
 
 #: settings.php:488
 msgid "Auto Height"
-msgstr ""
+msgstr "Hauteur automatique"
 
 #: settings.php:492
 msgid "Enter your desired height for slider. Default height is 500px."
 msgstr ""
+"Entrez la hauteur souhaitée pour le slider. La hauteur par défaut est de "
+"500px."
 
 #: settings.php:499
 msgid "Slide Scale Mode"
-msgstr ""
+msgstr "Mode de mise à l'échelle des diapositives"
 
 #: settings.php:504
 msgid "Cover"
-msgstr ""
+msgstr "Couvrir"
 
 #: settings.php:505
 msgid "Contain"
-msgstr ""
+msgstr "Contenir"
 
 #: settings.php:506
 msgid "Exact"
-msgstr ""
+msgstr "Exact"
 
 #: settings.php:507
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: settings.php:511
 msgid "COVER will scale and crop the image so that it fills the entire slide."
 msgstr ""
+"COVER va mettre à l'échelle et recadrer l'image pour remplir toute la "
+"diapositive."
 
 #: settings.php:512
 msgid "CONTAIN will keep the entire image visible inside the slide."
 msgstr ""
+"CONTAIN maintiendra l'intégralité de l'image visible à l'intérieur de la "
+"diapositive."
 
 #: settings.php:513
 msgid "EXACT will match the size of the image to the size of the slide."
-msgstr ""
+msgstr "EXACT correspondra à la taille de l'image à celle de la diapositive."
 
 #: settings.php:514
 msgid "NONE will leave the image to its original size."
-msgstr ""
+msgstr "NONE laissera l'image à sa taille d'origine."
 
 #: settings.php:521
 msgid "Slide Auto Scale Up"
-msgstr ""
+msgstr "Mise à l'échelle automatique des diapositives"
 
 #: settings.php:527
 msgid "If the slide can be scaled up more than its original size."
 msgstr ""
+"Si la diapositive peut être mise à l'échelle plus grande que sa taille "
+"d'origine."
 
 #: settings.php:534 tooltip.php:130
 msgid "Show Navigation Arrow"
-msgstr ""
+msgstr "Afficher la flèche de navigation"
 
 #: settings.php:540
 msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher ou masquer les flèches au survol "
+"de la souris sur la diapositive."
 
 #: settings.php:547 tooltip.php:135
 msgid "Navigation Color"
-msgstr ""
+msgstr "Couleur de la navigation"
 
 #: settings.php:552
 msgid "Select a color to set navigation arrow and full screen icon color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur de la flèche de navigation "
+"et de l'icône plein écran."
 
 #: settings.php:559 tooltip.php:140
 msgid "Show Navigation Bullets"
-msgstr ""
+msgstr "Afficher les boutons de navigation"
 
 #: settings.php:565
 msgid ""
 "Select Yes/No option to show or hide slider navigation buttons under image "
 "slider."
 msgstr ""
+"Sélectionnez l'option Oui/Non pour afficher ou masquer les boutons de "
+"navigation du slider sous le slider d'images."
 
 #: settings.php:572 tooltip.php:145
 msgid "Navigation Bullets Color"
-msgstr ""
+msgstr "Couleur des boutons de navigation"
 
 #: settings.php:577
 msgid "Select a color to set navigation bullets color."
 msgstr ""
+"Sélectionnez une couleur pour définir la couleur des boutons de navigation."
 
 #: settings.php:584 tooltip.php:150
 msgid "Full Screen Slide Show"
-msgstr ""
+msgstr "Diaporama en plein écran"
 
 #: settings.php:590
 msgid "Select Yes/No option for full screen slide show."
-msgstr ""
+msgstr "Sélectionnez l'option Oui/Non pour le diaporama en plein écran."
 
 #: settings.php:597 tooltip.php:155
 msgid "Fonts"
-msgstr ""
+msgstr "Polices"
 
 #: settings.php:625
 msgid "Choose a font to apply on slide title and description."
 msgstr ""
+"Choisissez une police à appliquer sur le titre et la description de la "
+"diapositive."
 
 #: settings.php:633
 msgid "Custom CSS"
-msgstr ""
+msgstr "CSS personnalisé"
 
 #: settings.php:638
 msgid ""
 "Enter any custom CSS you want to apply on this slider into text area filed."
 msgstr ""
+"Entrez le CSS personnalisé que vous souhaitez appliquer à ce slider dans le "
+"champ de texte."
 
 #: ultimate-responsive-image-slider.php:185
 #: ultimate-responsive-image-slider.php:186
 msgid "Add New Slider"
-msgstr ""
+msgstr "Ajouter un nouveau slider"
 
 #: ultimate-responsive-image-slider.php:187
 msgid "Edit Slider"
-msgstr ""
+msgstr "Modifier le slider"
 
 #: ultimate-responsive-image-slider.php:188
 msgid "New Slider"
-msgstr ""
+msgstr "Nouveau slider"
 
 #: ultimate-responsive-image-slider.php:189
 msgid "View Slider"
-msgstr ""
+msgstr "Voir le slider"
 
 #: ultimate-responsive-image-slider.php:190
 msgid "Search Slider"
-msgstr ""
+msgstr "Rechercher le slider"
 
 #: ultimate-responsive-image-slider.php:191
 msgid "No Slider found"
-msgstr ""
+msgstr "Aucun slider trouvé"
 
 #: ultimate-responsive-image-slider.php:192
 msgid "No Slider Found in Trash"
-msgstr ""
+msgstr "Aucun slider trouvé dans la corbeille"
 
 #: ultimate-responsive-image-slider.php:193
 msgid "Parent Slider:"
-msgstr ""
+msgstr "Slider parent :"
 
 #: ultimate-responsive-image-slider.php:194
 msgid "All Sliders"
-msgstr ""
+msgstr "Tous les sliders"
 
 #: ultimate-responsive-image-slider.php:223
 msgid "UR Image Slider Title"
-msgstr ""
+msgstr "Titre du slider d'images UR"
 
 #: ultimate-responsive-image-slider.php:224
 #: ultimate-responsive-image-slider.php:246
 msgid "Slider Shortcode"
-msgstr ""
+msgstr "Code court du slider"
 
 #: ultimate-responsive-image-slider.php:225
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: ultimate-responsive-image-slider.php:243
 msgid "Add Slides"
-msgstr ""
+msgstr "Ajouter des diapositives"
 
 #: ultimate-responsive-image-slider.php:244
 msgid "Configure Settings"
-msgstr ""
+msgstr "Configurer les paramètres"
 
 #: ultimate-responsive-image-slider.php:247
 msgid "Try My New Slider Plugin"
-msgstr ""
+msgstr "Essayez mon nouveau plugin de slider"
 
 #: ultimate-responsive-image-slider.php:345
 #: ultimate-responsive-image-slider.php:544
 msgid "Slide ID"
-msgstr ""
+msgstr "ID de la diapositive"
 
 #: ultimate-responsive-image-slider.php:346
 #: ultimate-responsive-image-slider.php:545
 msgid "Slide Title"
-msgstr ""
+msgstr "Titre de la diapositive"
 
 #: ultimate-responsive-image-slider.php:349
 msgid "Enter Slide Title"
-msgstr ""
+msgstr "Entrez le titre de la diapositive"
 
 #: ultimate-responsive-image-slider.php:352
 msgid "Slide Descriptions"
-msgstr ""
+msgstr "Descriptions de la diapositive"
 
 #: ultimate-responsive-image-slider.php:353
 msgid "Enter Slide Description"
-msgstr ""
+msgstr "Entrez la description de la diapositive"
 
 #: ultimate-responsive-image-slider.php:354
 #: ultimate-responsive-image-slider.php:553
 msgid "Use Rich Text Editor"
-msgstr ""
+msgstr "Utilisez l'éditeur de texte enrichi"
 
 #: ultimate-responsive-image-slider.php:357
 #: ultimate-responsive-image-slider.php:556
 msgid "Slide Alt Text"
-msgstr ""
+msgstr "Texte alternatif de la diapositive"
 
 #: ultimate-responsive-image-slider.php:358
 #: ultimate-responsive-image-slider.php:557
 msgid "Max Length 125 Characters"
-msgstr ""
+msgstr "Longueur maximale de 125 caractères"
 
 #: ultimate-responsive-image-slider.php:406
 msgid "Add New Slide"
-msgstr ""
+msgstr "Ajouter une nouvelle diapositive"
 
 #: ultimate-responsive-image-slider.php:410
 msgid "Sort Ascending by Slide ID"
-msgstr ""
+msgstr "Trier par ordre croissant selon l'ID de la diapositive"
 
 #: ultimate-responsive-image-slider.php:414
 msgid "Sort Descending by Slide ID"
-msgstr ""
+msgstr "Trier par ordre décroissant selon l'ID de la diapositive"
 
 #: ultimate-responsive-image-slider.php:419
 msgid "Clone Slider"
-msgstr ""
+msgstr "Cloner le slider"
 
 #: ultimate-responsive-image-slider.php:424
 msgid "Delete All Slides"
-msgstr ""
+msgstr "Supprimer toutes les diapositives"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Slider clone created successfully."
-msgstr ""
+msgstr "Clonage du slider créé avec succès."
 
 #: ultimate-responsive-image-slider.php:428
 msgid "Go to"
-msgstr ""
+msgstr "Aller à"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "All Slider"
-msgstr ""
+msgstr "Tous les sliders"
 
 #: ultimate-responsive-image-slider.php:428
 msgid "page to edit cloned slider."
-msgstr ""
+msgstr "page pour éditer le slider cloné."
 
 #: ultimate-responsive-image-slider.php:510
 msgid "Use below shortcode in any Page/Post to publish your slider"
 msgstr ""
+"Utilisez le shortcode ci-dessous dans n'importe quelle page/article pour "
+"publier votre slider"
 
 #: ultimate-responsive-image-slider.php:513
 msgid "To embed slider in any custom theme template"
 msgstr ""
+"Pour intégrer le slider dans n'importe quel modèle de thème personnalisé"
 
 #: ultimate-responsive-image-slider.php:548
 msgid "Enter Slide Title Here"
-msgstr ""
+msgstr "Entrez le titre de la diapositive ici"
 
 #: ultimate-responsive-image-slider.php:551
 msgid "Slide Description"
-msgstr ""
+msgstr "Description de la diapositive"
 
 #: ultimate-responsive-image-slider.php:552
 msgid "Enter Slide Description Here"
-msgstr ""
+msgstr "Entrez la description de la diapositive ici"

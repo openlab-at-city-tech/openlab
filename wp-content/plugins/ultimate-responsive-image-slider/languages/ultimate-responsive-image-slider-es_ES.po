@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ultimate-responsive-image-slider\n"
-"POT-Creation-Date: 2023-07-20 15:37+0530\n"
-"PO-Revision-Date: 2023-07-20 16:20+0530\n"
+"Project-Id-Version: Ultimate Responsive Image Slider\n"
+"POT-Creation-Date: 2023-11-22 13:55+0530\n"
+"PO-Revision-Date: 2023-11-22 15:24+0530\n"
 "Last-Translator: Weblizar <lizarweb@gmail.com>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: _e;__\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -400,7 +400,7 @@ msgstr "Añadir Nuevo Slider"
 
 #: ultimate-responsive-image-slider.php:187
 msgid "Edit Slider"
-msgstr "Editar Slider\\"
+msgstr "Editar Slider"
 
 #: ultimate-responsive-image-slider.php:188
 msgid "New Slider"
@@ -456,91 +456,96 @@ msgid "Try My New Slider Plugin"
 msgstr "Prueba Mi Nuevo Plugin de Slider"
 
 #: ultimate-responsive-image-slider.php:345
-#: ultimate-responsive-image-slider.php:542
+#: ultimate-responsive-image-slider.php:544
+msgid "Slide ID"
+msgstr "ID de diapositiva"
+
+#: ultimate-responsive-image-slider.php:346
+#: ultimate-responsive-image-slider.php:545
 msgid "Slide Title"
 msgstr "Título de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:348
+#: ultimate-responsive-image-slider.php:349
 msgid "Enter Slide Title"
 msgstr "Ingresar Título de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:351
+#: ultimate-responsive-image-slider.php:352
 msgid "Slide Descriptions"
 msgstr "Descripciones de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:352
+#: ultimate-responsive-image-slider.php:353
 msgid "Enter Slide Description"
 msgstr "Ingresar Descripción de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:353
-#: ultimate-responsive-image-slider.php:550
+#: ultimate-responsive-image-slider.php:354
+#: ultimate-responsive-image-slider.php:553
 msgid "Use Rich Text Editor"
 msgstr "Usar Editor de Texto Enriquecido"
 
-#: ultimate-responsive-image-slider.php:356
-#: ultimate-responsive-image-slider.php:553
+#: ultimate-responsive-image-slider.php:357
+#: ultimate-responsive-image-slider.php:556
 msgid "Slide Alt Text"
 msgstr "Texto Alternativo de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:357
-#: ultimate-responsive-image-slider.php:554
+#: ultimate-responsive-image-slider.php:358
+#: ultimate-responsive-image-slider.php:557
 msgid "Max Length 125 Characters"
 msgstr "Longitud Máxima 125 Caracteres"
 
-#: ultimate-responsive-image-slider.php:405
+#: ultimate-responsive-image-slider.php:406
 msgid "Add New Slide"
 msgstr "Añadir Nueva Diapositiva"
 
-#: ultimate-responsive-image-slider.php:409
-msgid "Sort Ascending"
-msgstr "Ordenar Ascendente"
+#: ultimate-responsive-image-slider.php:410
+msgid "Sort Ascending by Slide ID"
+msgstr "Orden ascendente por ID de diapositiva"
 
-#: ultimate-responsive-image-slider.php:413
-msgid "Sort Descending"
-msgstr "Ordenar Descendente"
+#: ultimate-responsive-image-slider.php:414
+msgid "Sort Descending by Slide ID"
+msgstr "Orden descendente por ID de diapositiva"
 
-#: ultimate-responsive-image-slider.php:418
-msgid "Clone Slider (beta)"
-msgstr "Clonar Slider (beta)"
+#: ultimate-responsive-image-slider.php:419
+msgid "Clone Slider"
+msgstr "Clonar Slider"
 
-#: ultimate-responsive-image-slider.php:423
+#: ultimate-responsive-image-slider.php:424
 msgid "Delete All Slides"
 msgstr "Eliminar Todas las Diapositivas"
 
-#: ultimate-responsive-image-slider.php:427
+#: ultimate-responsive-image-slider.php:428
 msgid "Slider clone created successfully."
 msgstr "Clonación del Slider creada exitosamente."
 
-#: ultimate-responsive-image-slider.php:427
+#: ultimate-responsive-image-slider.php:428
 msgid "Go to"
 msgstr "Ir a la página de"
 
-#: ultimate-responsive-image-slider.php:427
+#: ultimate-responsive-image-slider.php:428
 msgid "All Slider"
 msgstr "Todos los Sliders"
 
-#: ultimate-responsive-image-slider.php:427
+#: ultimate-responsive-image-slider.php:428
 msgid "page to edit cloned slider."
 msgstr "para editar el slider clonado."
 
-#: ultimate-responsive-image-slider.php:509
+#: ultimate-responsive-image-slider.php:510
 msgid "Use below shortcode in any Page/Post to publish your slider"
 msgstr ""
 "Usar el código abreviado a continuación en cualquier Página/Entrada para "
 "publicar su slider"
 
-#: ultimate-responsive-image-slider.php:512
+#: ultimate-responsive-image-slider.php:513
 msgid "To embed slider in any custom theme template"
 msgstr "Para incrustar el slider en cualquier plantilla de tema personalizado"
 
-#: ultimate-responsive-image-slider.php:545
+#: ultimate-responsive-image-slider.php:548
 msgid "Enter Slide Title Here"
 msgstr "Ingresar Título de la Diapositiva Aquí"
 
-#: ultimate-responsive-image-slider.php:548
+#: ultimate-responsive-image-slider.php:551
 msgid "Slide Description"
 msgstr "Descripción de la Diapositiva"
 
-#: ultimate-responsive-image-slider.php:549
+#: ultimate-responsive-image-slider.php:552
 msgid "Enter Slide Description Here"
 msgstr "Ingresar Descripción de la Diapositiva Aquí"
