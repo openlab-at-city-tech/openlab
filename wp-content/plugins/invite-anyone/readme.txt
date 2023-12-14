@@ -3,8 +3,8 @@ Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
 Requires at least: 3.2
-Tested up to: 6.3
-Stable tag: 1.4.5
+Tested up to: 6.4
+Stable tag: 1.4.6
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -51,8 +51,14 @@ Additional details about the plugin can be found in the following languages:
 
 == Changelog ==
 
+= 1.4.6 =
+* BuddyPress 12.0 compatibility
+* Improved compatibility with PHP 8.0+
+* Accessibility improvements to invitation checklists
+* Fixed JS bug that might have prevented invitation checkboxes from working properly in some cases
+
 = 1.4.5 =
-* Fixed bug in routen responsible for saving the CloudSponge configuration settings.
+* Fixed bug in routine responsible for saving the CloudSponge configuration settings.
 
 = 1.4.4 =
 * Fixed bug that prevented the installation of email templates.
