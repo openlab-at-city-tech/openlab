@@ -76,8 +76,6 @@ add_action( 'after_setup_theme', 'miniva_after_setup' );
  * Enqueue extra script.
  */
 function miniva_enqueue_scripts() {
-	wp_dequeue_style( 'wp-block-library' );
-
 	if ( miniva_is_amp() ) {
 		return;
 	}
