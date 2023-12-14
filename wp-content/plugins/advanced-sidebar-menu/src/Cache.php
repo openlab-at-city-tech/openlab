@@ -49,17 +49,17 @@ class Cache {
 	 * Retrieve a post's child pages from the cache.
 	 * If no exist in the cache will return false.
 	 *
-	 * @param List_Pages $class - Full menu class with all properties set.
+	 * @note Once WP 6.2 is the lowest supported version, it may not be necessary to cache
+	 *       as WP_Query will likely handle caching natively.
+	 *
+	 * @param List_Pages $list_pages - Full menu class with all properties set.
 	 *
 	 * @return array|false
 	 */
-	public function get_child_pages( $class ) {
-		$key = $this->get_key_from_asm( $class );
+	public function get_child_pages( List_Pages $list_pages ) {
+		$key = $this->get_key_from_asm( $list_pages );
 		$all_child_pages = (array) wp_cache_get( static::CHILD_PAGES_KEY, $this->get_cache_group() );
-		if ( isset( $all_child_pages[ $key ] ) ) {
-			return $all_child_pages[ $key ];
-		}
-		return false;
+		return $all_child_pages[ $key ] ?? false;
 	}
 
 
@@ -67,13 +67,13 @@ class Cache {
 	 * Add a post and its children to the cache
 	 * Uses a global key for all posts so this appends to an array
 	 *
-	 * @param List_Pages $class       - Full menu class with all properties set.
+	 * @param List_Pages $list_pages  - Full menu class with all properties set.
 	 * @param array      $child_pages - List of child pages to store.
 	 *
 	 * @return void
 	 */
-	public function add_child_pages( $class, $child_pages ) {
-		$key = $this->get_key_from_asm( $class );
+	public function add_child_pages( List_Pages $list_pages, $child_pages ) {
+		$key = $this->get_key_from_asm( $list_pages );
 		$all_child_pages = (array) wp_cache_get( static::CHILD_PAGES_KEY, $this->get_cache_group() );
 		$all_child_pages[ $key ] = $child_pages;
 		wp_cache_set( static::CHILD_PAGES_KEY, $all_child_pages, $this->get_cache_group() );
@@ -81,17 +81,17 @@ class Cache {
 
 
 	/**
-	 * There are many possibilities for properties
-	 * set to the object used for generations.
-	 * To guarantee we have a unique id for the cache
-	 * we serialize the whole object and hash it
+	 * Too many possibilities for properties set to the object
+	 * used for generations.
+	 * To guarantee we have a unique id for the cache we serialize
+	 * the entire object and hash it.
 	 *
-	 * @param List_Pages $class - Full menu class with all properties set.
+	 * @param List_Pages $list_pages - Full menu class with all properties set.
 	 *
 	 * @return string
 	 */
-	protected function get_key_from_asm( $class ) {
-		$string = serialize( $class ); //phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
-		return md5( $string );
+	protected function get_key_from_asm( List_Pages $list_pages ) {
+		$string = \serialize( $list_pages ); //phpcs:ignore -- Serialize is required.
+		return \md5( $string );
 	}
 }

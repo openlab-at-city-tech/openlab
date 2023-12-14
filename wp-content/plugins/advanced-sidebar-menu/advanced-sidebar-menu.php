@@ -4,13 +4,13 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 9.0.9
+ * Version: 9.4.1
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
  * Network: false
- * Requires at least: 5.8.0
- * Requires PHP: 7.0.0
+ * Requires at least: 6.0.0
+ * Requires PHP: 7.2.0
  *
  * @package advanced-sidebar-menu
  */
@@ -19,8 +19,8 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.0.9' );
-define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.1.2' );
+define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.4.1' );
+define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.1.8' );
 define( 'ADVANCED_SIDEBAR_MENU_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
 
@@ -74,11 +74,11 @@ add_action( 'plugins_loaded', 'advanced_sidebar_menu_load' );
  * Autoload classes from PSR4 src directory
  * Mirrored after Composer dump-autoload for performance
  *
- * @param string $class - class being loaded.
+ * @param string $class_name - class being loaded.
  *
  * @return void
  */
-function advanced_sidebar_menu_autoload( $class ) {
+function advanced_sidebar_menu_autoload( $class_name ) {
 	$classes = [
 		// Widgets.
 		Widget_Abstract::class => 'Widget/Widget_Abstract.php',
@@ -111,10 +111,9 @@ function advanced_sidebar_menu_autoload( $class ) {
 		// Walkers.
 		Category_Walker::class => 'Walkers/Category_Walker.php',
 		Page_Walker::class     => 'Walkers/Page_Walker.php',
-
 	];
-	if ( isset( $classes[ $class ] ) ) {
-		require __DIR__ . '/src/' . $classes[ $class ];
+	if ( isset( $classes[ $class_name ] ) ) {
+		require __DIR__ . '/src/' . $classes[ $class_name ];
 	}
 }
 

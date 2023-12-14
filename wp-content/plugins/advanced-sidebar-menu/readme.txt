@@ -3,10 +3,10 @@
 Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: block, widget, dynamic, hierarchy, menus, sidebar menu, category, pages, parent, child, automatic
-Requires at least: 5.8.0
-Tested up to: 6.2.2
-Requires PHP: 7.0.0
-Stable tag: 9.0.9
+Requires at least: 6.0.0
+Tested up to: 6.4.1
+Requires PHP: 7.2.0
+Stable tag: 9.4.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,15 +16,17 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Uses the parent/child relationship of your pages or categories to generate menus based on the current section of your site. Assign a page or category to a parent and this will do the rest for you.
 
-Keeps the menu clean and usable. Only related items display, so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong. 
+Keeps the menu clean and usable. Only related items display, so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong.
 
-<strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
+Widgets and blocks are available to display menus where you need them. Look for the "Advanced Sidebar - Pages" widget or block, or the "Advanced Sidebar - Categories" widget or block.
 
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/" target="_blank">PRO version 9.1.0</a> is now available with category counts, custom titles and exclusions!</blockquote>
+<strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
+
+<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org" target="_blank">PRO version 9.2.0</a> is now available with the ability to exclude pages or categories using intuitive search and select!</blockquote>
 
 <h3>Features</h3>
-* Page and Category widgets.
-* Page and Category blocks. **NEW**
+* Page and Category menu Gutenberg blocks.
+* Page and Category menu widgets.
 * Option to display or not display the highest level parent page or category.
 * Option to display the menu when there is only the highest level parent.
 * Ability to order pages by (date, title, page order).
@@ -52,8 +54,8 @@ Keeps the menu clean and usable. Only related items display, so you don't have t
 * Levels of Categories to display when always display child categories is checked.
 
 <h3>PRO Features</h3>
-* Navigation menu widget.		
-* Navigation menu Gutenberg block. **NEW**
+* Navigation menu widget.
+* Navigation menu Gutenberg block.
 * Ability to customize each page or navigation menu item link's text.
 * Click-and-drag styling for page, category, and navigation menus.
 * Styling options for links including color, background color, size, hover, and font weight.
@@ -72,6 +74,8 @@ Keeps the menu clean and usable. Only related items display, so you don't have t
 * Number of levels of pages to show when "always display child pages" is not checked.
 * Ability to select and display custom post types.
 * Ability to select and display custom taxonomies.
+* Ability to display category post counts.
+* Exclude pages or categories using intuitive search and select. **NEW**
 * Option to display only the current page's parents, grandparents, and children.
 * Option to display child page siblings when on a child page (with or without grandchildren available).
 * Ability to display the menu everywhere the widget area is used (including homepage if applicable).
@@ -89,13 +93,15 @@ Keeps the menu clean and usable. Only related items display, so you don't have t
 * French (fr_FR).
 * German (de_DE).
 * Spanish (es_ES).
-   
+
+<h3>Documentation</h3>
+The official documentation for the plugin <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/">may be found here</a>.
+
 <h3>Developers</h3>
-Developer docs may be found <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">here</a>.
+Developer docs <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">may be found here</a>.
 
 <h3>Contribute</h3>
 Send pull requests via the <a target="_blank" href="https://github.com/lipemat/advanced-sidebar-menu">GitHub Repo</a>
-
 
 == Installation ==
 
@@ -107,7 +113,6 @@ Manual Installation
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Drag the "Advanced Sidebar - Pages" widget, or the "Advanced Sidebar - Categories" widget into a sidebar.
 4. Use the block inserter to insert the "Advanced Sidebar - Pages" block, or the "Advanced Sidebar - Categories" block into Gutenberg content.
-
 
 
 == Screenshots ==
@@ -143,11 +148,9 @@ For example the following CSS would:
 .advanced-sidebar-menu li.current-menu-item a {
     color: black;
 }
-
 .advanced-sidebar-menu li.current-menu-item {
     list-style-type: none !important;
 }
-
 .advanced-sidebar-menu li.current-menu-item > a:hover {
 	background: teal;
 }
@@ -164,6 +167,73 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+= 9.4.1 =
+* Dropped support for PHP 7.0 in favor of 7.2.
+* Bumped minimum supported WordPress version to 6.0.0.
+* Improved block preview link handling.
+* Required PRO version 9.1.8+.
+
+= 9.3.4 =
+* Passed block attributes and supports to JavaScript as well as PHP.
+* Fixed issues with block previews in WordPress 6.4.
+* Fixed issues with widget transformations in WordPress 6.4.
+* Improved styles of legacy widget's info panel.
+* Updated PHPStan level to 8 and fixed all warnings.
+
+= 9.3.3 =
+* Fixed issue with blocks loading in WordPress 6.4.
+* Tested to WordPress 6.4.1.
+
+= 9.3.2 =
+* Fixed deployignore configurations.
+
+= 9.3.1 =
+* Improved select input styles in widget settings.
+* Introduced 'advanced-sidebar-menu/scripts/admin-scripts' action.
+* Aligned supported browsers with WordPress core.
+* Updated the Node to version 18.
+* Fixed all ESLint and Stylelint notices.
+* Loosely a requirement for PRO version 9.3.0.
+
+= 9.3.0 =
+* Modernized legacy widget JS and CSS into the Webpack structure.
+* Reduce bundle size of admin resources.
+* Renamed CSS files with the "advanced-sidebar-menu" prefix.
+* Added support for collapsing info panels on page builders and theme customizers.
+* Updated the block `apiVersion` to "3".
+* Tested to WordPress 6.3.2.
+* Greatly improved widgets styles in Beaver Builder and Elementor.
+
+= 9.2.1 =
+* Introduced transform legacy widgets to blocks prompts.
+* Moved configurations to the root of the plugin and general modernization.
+* Made "Go PRO" callouts more tasteful and less intrusive.
+* Improved styles of the info panels in widgets and blocks.
+* Improved styles of buttons and fields in Beaver Builder.
+* Updated WP-PHPCS to version 3 and fixed all warnings.
+
+= 9.1.0 =
+* Separated the exclude pages/categories field into a filterable component.
+* Updated links to various documentation.
+* Added default values to most block attributes.
+* Updated block attribute TS definitions to accurately reflect default values.
+* Updated TS to version 5.
+* Updated PHPCS scanning to version 3 of WP PHPCS standards.
+* Loosely update the minimum requirement for PRO to version 9.2.0.
+
+= 9.0.11 =
+* Changed default limit of child pages to 200 instead of 100.
+* Simplified and improved the `List_Pages::parse_args` method.
+* Added links to documentation in the plugins list.
+* Tested to WordPress core 6.3.1.
+
+= 9.0.10 =
+* Fixed compatibility with Jetpack widget visibility.
+* Included the screen and section information in ErrorBoundary data.
+* Improved static analysis testing.
+* Improved unit testing for WordPress 5.8.
+* Tested to WordPress core 6.3.0.
+
 = 9.0.9 =
 * Fixed conflict with [Stackable WordPress plugin](https://wordpress.org/plugins/stackable-ultimate-gutenberg-blocks/) in the theme customizer.
 * Improved block script reliability.
@@ -223,149 +293,12 @@ Yes. Based on whatever page, post or category you are on, the menu will change a
 * Drop support for PHP 5.6 if favor of PHP 7.0+.
 * Numerous bug fixes.
 
-= 8.8.3 = 
-* Introduced `advanced-sidebar-menu/menus/category/top-level-term-ids` filter.
-* Supported PRO version 8.9.2.
-
-= 8.8.2 =
-* Fixed widget id generation with block based widgets.
-* Introduced `advanced-sidebar-menu/core/include-template-parts-comments` filter.
-* Organized the `Menu_Abstract` class constants.
-* Tested to WordPress Core 6.0.1.
-
-= 8.8.1 = 
-* Introduced `advanced-sidebar-menu/menus/page/is-excluded` filter.
-* Introduced `advanced-sidebar-menu/menus/category/is-excluded` filter.
-* Tested to WordPress Core 6.0.0.
-* Required PRO version 8.7.0+.
-
-= 8.8.0 =
-* Implement universal 'menu-item' style CSS classes to all menus.
-* Introduced `Category::is_current_top_level_term` method.
-* Introduced `Category::get_current_ancestors` method.
-* Introduced `Category::is_current_term` method.
-* Enabled PHPCS caching.
-* Required WordPress core version 5.4.0+.
-* Tested to WordPress 5.9.3.
-
-= 8.7.3 = 
-* Include WP core version in debug info.
-* Tested to WordPress 5.9.2.
-
-= 8.7.2 = 
-* Improved position of close icon in widget previews.
-* Improved plugin links utm structure.
-* Added a "Go PRO" action to the plugins list.
-* Prevented overrides of non-public post types during debugging.
-
-= 8.7.1 =
-* Fine tune widgets styles for WordPress 5.9.
-* Tested to WordPress 5.9.
-
-= 8.7.0 =
-* Use Webp extension for preview images.
-* Simplify the Widget names.
-* Introduce `Utils::array_map_recursive` method for deep sanitization.
-* Support multidimensional arrays in debug overrides. 
-* Tested to WordPress 5.8.3.
-* Required PRO version 8.5.0+.
-
-= 8.6.4 = 
-* Introduced `advanced-sidebar-menu/debug/print-instance` filter.
-* Improved FAQ information.
-* Remove dangling reference to old built in styles from FAQ.
-
-= 8.6.3 =
-* Fix issue with CSS classnames on the current page's children.
-
-= 8.6.2 =
-* Assured consistency for levels of page menu's CSS classes.
-* Converted category get the highest parent logic to `get_ancestors`.
-* Gracefully handle invalid taxonomies in Category widgets.
-* Gracefully handle widgets without ids.
-* Fixed color pickers in Elementor.
-* Fixed color pickers in Beaver Builder.
-
-= 8.6.1 = 
-* Improved widget interaction handling.
-* Synced styles between block, classic and customizer widgets.
-* Fixed customizer widget buttons.
-
-= 8.6.0 =
-* Support WordPress version 5.8.
-* Support Gutenberg widgets screen.
-* Minimum required version for PRO 8.5.
-
-= 8.5.0 =
-* Introduce `Utils` class for shared non specific functionality.
-* Introduce `is_checked` method for determining checkbox state from anywhere.
-* Make `Widget_Abstract::set_instance` public for external use.
-* Complete preparations for PRO version 8.4.
-* Minimum required version for PRO 8.4.
-
-= 8.4.0 =
-* Introduce new Category Walker to increase extensibility.
-* Support `data-level` on all widgets.
-
-= 8.3.4 =
-* Support widget fields with array values.
-
-= 8.3.3 =
-* Introduce `data-level` on all page menu levels for specific targeting.
-* Tested to WordPress 5.7.2.
-
-= 8.3.2 =
-* Fully compatible with PHP8.
-* Tested to WordPress 5.7.1.
-
-= 8.3.1 =
-* Add readme for translations.
-* Tested to WordPress 5.7.
-* Require WordPress core 5.2+.
-* Improved PHPCS configuration.
-
-= 8.3.0 =
-* Improved plugin headers.
-* Added translations for French (fr_FR).
-* Added translations for Spanish (es_ES).
-* Expose `Category::is_tax` method for public filters.
-* Improved type casting and PHPStan static type checking.
-* Fix tense in readme.txt words.
-
-= 8.2.0 =
-* Improved widget labels, descriptions and styles.
-* Support blocked styling borders on all levels.
-* Improved Beaver Builder and Elementor styles.
-* Improved info panel.
-
-= 8.1.1 =
-* Improved readme.
-* Tested to WordPress 5.6.0.
-
-= 8.1.0 =
-* Restructure widget info panels.
-* Introduced new `advanced-sidebar-menu/widget/page/before-columns` action.
-* Introduced new `advanced-sidebar-menu/widget/category/before-columns` action.
-* Improved PHPCS exclusion declarations.
-* Improved CSS structure.
-* Improved JavaScript structure.
-
-= 8.0.4 =
-* Improved styles when used with Beaver Builder.
-* Require WordPress version 5.0.0+.
-
-= 8.0.3 =
-* Allow `List_Pages::get_args()` to be filtered on any level.
-* Make debugging functionality more stable.
-
-= 8.0.2 = 
-* Introduced new `advanced-sidebar-menu/menus/category/get-child-terms` filter
-* Support filtering the first level of categories.
-* Use `is_excluded` vs `is_first_level_category` in category view.
-
-= 8.0.0 =
-Major version update. See <a href="https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-menu-version-8-migration-guide/">migration guide</a> if you are extending the plugin's functionality via action, filters, or calling plugin classes.
-
 == Upgrade Notice ==
-= 9.0.1 = 
+= 9.3.4 =
+Update to support WordPress 6.4.
+
+= 9.1.0 =
+Update to support PRO version 9.2.0.
+
+= 9.0.1 =
 Introducing <a href="https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-menu-gutenberg-blocks/">Gutenberg blocks</a>.

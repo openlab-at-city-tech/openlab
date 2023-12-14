@@ -23,7 +23,7 @@ class Notice {
 		add_action( 'advanced-sidebar-menu/widget/category/right-column', [ $this, 'info_panel' ], 1, 2 );
 		add_action( 'advanced-sidebar-menu/widget/page/right-column', [ $this, 'info_panel' ], 1, 2 );
 
-		add_filter( 'plugin_action_links_' . Core::PLUGIN_FILE, [ $this, 'plugin_action_link' ] );
+		add_filter( 'plugin_action_links_' . Core::PLUGIN_FILE, [ $this, 'plugin_action_link' ], 11 );
 
 		if ( $this->is_conflicting_pro_version() ) {
 			add_action( 'all_admin_notices', [ $this, 'pro_version_warning' ] );
@@ -38,7 +38,7 @@ class Notice {
 	 * @return bool
 	 */
 	public function is_conflicting_pro_version() {
-		return defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) && version_compare( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION, ADVANCED_SIDEBAR_MENU_PRO_VERSION, '>' );
+		return \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) && version_compare( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION, ADVANCED_SIDEBAR_MENU_PRO_VERSION, '>' );
 	}
 
 
@@ -86,16 +86,18 @@ class Notice {
 			</div>
 			<?php
 		}
-		if ( defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
 			return;
 		}
 
+		/**
+		 * On clicking of the <h3> element add an "open" class to the parent
+		 * div element.
+		 */
 		?>
-		<div class="advanced-sidebar-menu-column-box advanced-sidebar-info-panel">
-			<h3>
-				<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-title&utm_campaign=gopro&utm_medium=wp-dash">
-					<?php esc_html_e( 'Advanced Sidebar Menu PRO', 'advanced-sidebar-menu' ); ?>
-				</a>
+		<div class="advanced-sidebar-menu-column-box advanced-sidebar-info-panel wp-core-ui">
+			<h3 onclick="this.parentNode.classList.toggle('open')">
+				<?php esc_html_e( 'Go PRO', 'advanced-sidebar-menu' ); ?>
 			</h3>
 			<ol>
 				<?php
@@ -108,25 +110,20 @@ class Notice {
 				}
 				?>
 				<li>
-					<a
-						href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-more&utm_campaign=gopro&utm_medium=wp-dash"
-						target="_blank"
-						style="text-decoration: none;">
-						<?php esc_html_e( 'So much more...', 'advanced-sidebar-menu' ); ?>
-					</a>
+					<?php esc_html_e( 'And so much more…', 'advanced-sidebar-menu' ); ?>
 				</li>
 			</ol>
 			<a
 				class="button-primary"
-				href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?trigger_buy_now=1&utm_source=widget-upgrade&utm_campaign=gopro&utm_medium=wp-dash"
+				href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=widget-upgrade&utm_campaign=gopro&utm_medium=wp-dash#buy-now-choices"
 				target="_blank"
 			>
 				<?php esc_html_e( 'Upgrade', 'advanced-sidebar-menu' ); ?>
 			</a>
 			<div
 				data-js="advanced-sidebar-menu/pro/preview/trigger"
-				data-target="advanced-sidebar-menu/pro/preview/<?php echo esc_attr( $widget->id ); ?>"
-				class="advanced-sidebar-desktop-only"
+				data-target="advanced-sidebar-menu/pro/preview/<?php echo esc_attr( (string) $widget->id ); ?>"
+				class="advanced-sidebar-desktop-only advanced-sidebar-preview-trigger"
 			>
 				<button class="button-secondary">
 					<?php esc_html_e( 'Preview', 'advanced-sidebar-menu' ); ?>
@@ -154,7 +151,7 @@ class Notice {
 		}
 		?>
 		<div
-			data-js="advanced-sidebar-menu/pro/preview/<?php echo esc_attr( $widget->id ); ?>"
+			data-js="advanced-sidebar-menu/pro/preview/<?php echo esc_attr( (string) $widget->id ); ?>"
 			class="advanced-sidebar-desktop-only advanced-sidebar-menu-full-width advanced-sidebar-menu-preview-wrap">
 			<div class="dashicons dashicons-no-alt advanced-sidebar-menu-close-icon"></div>
 			<img
@@ -191,12 +188,11 @@ class Notice {
 	 */
 	public function get_features() {
 		return [
-			__( 'Styling options including borders, bullets, colors, backgrounds, size, and font weight.', 'advanced-sidebar-menu' ),
+			__( 'Styling options including borders, bullets, colors, backgrounds, font size and weight.', 'advanced-sidebar-menu' ),
 			__( 'Accordion menus.', 'advanced-sidebar-menu' ),
 			__( 'Support for custom navigation menus from Appearance -> Menus.', 'advanced-sidebar-menu' ),
 			__( 'Select and display custom post types and taxonomies.', 'advanced-sidebar-menu' ),
 			__( 'Priority support with access to members only support area.', 'advanced-sidebar-menu' ),
 		];
 	}
-
 }

@@ -6,7 +6,6 @@ namespace Advanced_Sidebar_Menu\Menus;
  * Base for Menu classes.
  *
  * @author OnPoint Plugins
- * @since  7.0.0
  */
 abstract class Menu_Abstract {
 	const WIDGET = 'menu-abstract';
@@ -70,7 +69,7 @@ abstract class Menu_Abstract {
 	/**
 	 * Get id of the highest level parent item.
 	 *
-	 * @return int
+	 * @return ?int
 	 */
 	abstract public function get_top_parent_id();
 
@@ -132,7 +131,7 @@ abstract class Menu_Abstract {
 		// Block widgets loaded via the REST API don't have full widget args.
 		if ( ! isset( $this->args['widget_id'] ) ) {
 			// Prefix any leading digits or hyphens with '_'.
-			$this->args['widget_id'] = \preg_replace( '/^([\d-])/', '_$1', wp_hash( wp_json_encode( $this->instance ) ) );
+			$this->args['widget_id'] = \preg_replace( '/^([\d-])/', '_$1', wp_hash( (string) wp_json_encode( $this->instance ) ) );
 			//phpcs:ignore -- Not actually using the value of $_POST.
 		} elseif ( ! empty( $_POST['action'] ) && 'elementor_ajax' === $_POST['action'] ) {
 			/**
@@ -140,14 +139,14 @@ abstract class Menu_Abstract {
 			 * Since we can't increment nor is there a unique id, we always
 			 * use the instance for Elementor previews.
 			 */
-			$this->args['widget_id'] .= wp_hash( wp_json_encode( $this->instance ) );
+			$this->args['widget_id'] .= wp_hash( (string) wp_json_encode( $this->instance ) );
 		}
 
 		if ( \in_array( $this->args['widget_id'], static::$unique_widget_ids, true ) ) {
 			$suffix = 2;
 			do {
 				$alt_widget_id = $this->args['widget_id'] . "-$suffix";
-				$suffix ++;
+				++$suffix;
 			} while ( \in_array( $alt_widget_id, static::$unique_widget_ids, true ) );
 			$this->args['widget_id'] = $alt_widget_id;
 			static::$unique_widget_ids[] = $alt_widget_id;
@@ -207,14 +206,14 @@ abstract class Menu_Abstract {
 	 * @return bool
 	 */
 	public function include_parent() {
-		return $this->checked( static::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() );
+		return $this->checked( static::INCLUDE_PARENT ) && ! $this->is_excluded( $this->get_top_parent_id() ?? - 1 );
 	}
 
 
 	/**
 	 * Is this id excluded from this menu?
 	 *
-	 * @param int $id ID of the object.
+	 * @param int|string $id ID of the object.
 	 *
 	 * @return bool
 	 */
@@ -227,13 +226,13 @@ abstract class Menu_Abstract {
 	/**
 	 * Retrieve the excluded items' ids.
 	 *
-	 * @return array
+	 * @return array<int>
 	 */
 	public function get_excluded_ids() {
-		if ( empty( $this->instance[ static::EXCLUDE ] ) ) {
+		if ( ! \array_key_exists( static::EXCLUDE, $this->instance ) ) {
 			return [];
 		}
-		return \array_map( 'intval', \array_filter( \explode( ',', $this->instance[ static::EXCLUDE ] ), 'is_numeric' ) );
+		return \array_map( '\intval', \array_filter( \explode( ',', $this->instance[ static::EXCLUDE ] ), 'is_numeric' ) );
 	}
 
 
@@ -243,14 +242,13 @@ abstract class Menu_Abstract {
 	 * @return void
 	 */
 	public function title() {
-		if ( ! empty( $this->instance[ static::TITLE ] ) ) {
-			$title = apply_filters( 'widget_title', $this->instance[ static::TITLE ], $this->args, $this->instance );
-			$title = apply_filters( 'advanced-sidebar-menu/menus/widget-title', esc_html( $title ), $this->args, $this->instance, $this );
-
-			// phpcs:disable
-			echo $this->args['before_title'] . $title . $this->args['after_title'];
-			// phpcs:enable
+		if ( ! \array_key_exists( static::TITLE, $this->instance ) || '' === (string) $this->instance[ static::TITLE ] ) {
+			return;
 		}
+		$title = apply_filters( 'widget_title', $this->instance[ static::TITLE ], $this->args, $this->instance );
+		$title = apply_filters( 'advanced-sidebar-menu/menus/widget-title', $title, $this->args, $this->instance, $this );
+
+		echo $this->args['before_title'] . esc_html( $title ) . $this->args['after_title']; //phpcs:ignore -- Args are HTML.
 	}
 
 
@@ -277,7 +275,7 @@ abstract class Menu_Abstract {
 
 
 	/**
-	 * Construct a new instance of this class.
+	 * Constructs a new instance of this class.
 	 *
 	 * @param array $widget_instance - Widget settings.
 	 * @param array $widget_args     - Widget registration args.

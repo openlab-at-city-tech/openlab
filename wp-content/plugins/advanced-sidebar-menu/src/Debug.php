@@ -1,4 +1,5 @@
 <?php
+//phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 namespace Advanced_Sidebar_Menu;
 
@@ -27,10 +28,10 @@ class Debug {
 	 * @return void
 	 */
 	protected function hook() {
-		if ( ! empty( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
+		if ( isset( $_GET[ static::DEBUG_PARAM ] ) ) {
 			add_action( 'advanced-sidebar-menu/widget/before-render', [ $this, 'print_instance' ], 1, 2 );
 
-			if ( \is_array( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
+			if ( \is_array( $_GET[ static::DEBUG_PARAM ] ) ) {
 				add_filter( 'advanced-sidebar-menu/menus/widget-instance', [ $this, 'adjust_widget_settings' ] );
 			}
 		}
@@ -45,16 +46,18 @@ class Debug {
 	 * @return array
 	 */
 	public function adjust_widget_settings( array $instance ) {
-		if ( empty( $_GET[ self::DEBUG_PARAM ] ) ) { //phpcs:ignore
+		if ( ! isset( $_GET[ static::DEBUG_PARAM ] ) ) {
 			return $instance;
 		}
 
-		$overrides = Utils::instance()->array_map_recursive( 'sanitize_text_field', (array) $_GET[ self::DEBUG_PARAM ] ); //phpcs:ignore
+		$overrides = Utils::instance()->array_map_recursive( function( $value ) {
+			return sanitize_text_field( wp_unslash( $value ) );
+		}, (array) $_GET[ static::DEBUG_PARAM ] ); //phpcs:ignore -- Input is sanitized.
 
 		// Do not allow passing a non-public post type.
 		if ( isset( $overrides['post_type'] ) ) {
 			$type = get_post_type_object( $overrides['post_type'] );
-			if ( $type && ! $type->public ) {
+			if ( null !== $type && ! $type->public ) {
 				unset( $overrides['post_type'] );
 			}
 		}
@@ -77,7 +80,7 @@ class Debug {
 	 *
 	 * @return array
 	 */
-	public function get_site_info() : array {
+	public function get_site_info(): array {
 		$data = [
 			'basic'          => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
 			'classicWidgets' => is_plugin_active( 'classic-widgets/classic-widgets.php' ),
@@ -106,10 +109,11 @@ class Debug {
 		$data = apply_filters( 'advanced-sidebar-menu/debug/print-instance', $this->get_site_info(), $menu, $widget );
 		?>
 		<script name="<?php echo esc_attr( static::DEBUG_PARAM ); ?>">
-			if ( 'undefined' === typeof ( <?php echo esc_attr( static::DEBUG_PARAM ); ?> ) ) {
-				var <?php echo esc_attr( static::DEBUG_PARAM ); ?> = <?php echo wp_json_encode( $data ); ?>;
-			}
-				<?php echo esc_attr( static::DEBUG_PARAM ); ?>[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
+			window.asm_debug = window.asm_debug || <?php echo wp_json_encode( $data ); ?>;
+			<?php
+			echo esc_attr( static::DEBUG_PARAM );
+			?>
+			[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
 		</script>
 		<?php
 	}

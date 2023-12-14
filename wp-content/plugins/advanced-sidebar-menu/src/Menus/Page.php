@@ -9,7 +9,6 @@ use Advanced_Sidebar_Menu\List_Pages;
  * Page menu.
  *
  * @author OnPoint Plugins
- * @since  7.0.0
  */
 class Page extends Menu_Abstract {
 	const WIDGET = 'page';
@@ -27,7 +26,7 @@ class Page extends Menu_Abstract {
 	 * or special extending.
 	 *
 	 * @param \WP_Post $post - New current post.
-
+	 *
 	 * @return void
 	 */
 	public function set_current_post( \WP_Post $post ) {
@@ -42,9 +41,13 @@ class Page extends Menu_Abstract {
 	 * @return null|\WP_Post
 	 */
 	public function get_current_post() {
-		if ( null === $this->post ) {
-			if ( is_page() || is_singular() ) {
-				$this->post = get_queried_object();
+		if ( null !== $this->post ) {
+			return $this->post;
+		}
+		if ( is_page() || is_singular() ) {
+			$post = get_queried_object();
+			if ( $post instanceof \WP_Post ) {
+				$this->post = $post;
 			}
 		}
 
@@ -73,7 +76,7 @@ class Page extends Menu_Abstract {
 
 
 	/**
-	 * Get the id of page which is the top-level parent of
+	 * Get the top-level parent page id of
 	 * the page we are currently on.
 	 *
 	 * Returns -1 if we don't have one.
@@ -82,11 +85,14 @@ class Page extends Menu_Abstract {
 	 */
 	public function get_top_parent_id() {
 		$top_id = - 1;
-		$ancestors = get_post_ancestors( $this->get_current_post() );
-		if ( ! empty( $ancestors ) ) {
-			$top_id = end( $ancestors );
-		} elseif ( null !== $this->get_current_post() ) {
-			$top_id = $this->get_current_post()->ID;
+		$post = $this->get_current_post();
+		if ( null !== $post ) {
+			$ancestors = get_post_ancestors( $post );
+			if ( \count( $ancestors ) > 0 ) {
+				$top_id = \end( $ancestors );
+			} elseif ( null !== $this->get_current_post() ) {
+				$top_id = $this->get_current_post()->ID;
+			}
 		}
 
 		return apply_filters( 'advanced-sidebar-menu/menus/page/top-parent', $top_id, $this->args, $this->instance, $this );
@@ -101,7 +107,8 @@ class Page extends Menu_Abstract {
 	public function is_displayed() {
 		$display = false;
 		$post_type = $this->get_post_type();
-		if ( is_page() || ( is_singular() && $post_type === $this->get_current_post()->post_type ) ) {
+		$current_post_type = $this->get_current_post()->post_type ?? 'invalid';
+		if ( is_page() || ( is_singular() && $post_type === $current_post_type ) ) {
 			// If we are on the correct post type.
 			if ( get_post_type( $this->get_top_parent_id() ) === $post_type ) {
 				// If we have children.
@@ -130,7 +137,7 @@ class Page extends Menu_Abstract {
 		$list_pages = List_Pages::factory( $this );
 		$children = $list_pages->get_child_pages( $this->get_top_parent_id(), true );
 
-		return ! empty( $children );
+		return \count( $children ) > 0;
 	}
 
 
@@ -162,10 +169,10 @@ class Page extends Menu_Abstract {
 	/**
 	 * Get ids of any pages excluded via widget settings.
 	 *
-	 * @return array|mixed
+	 * @return array<int>
 	 */
-	public function get_excluded_ids() {
-		return apply_filters( 'advanced-sidebar-menu/menus/page/excluded', parent::get_excluded_ids(), $this->get_current_post(), $this->args, $this->instance, $this );
+	public function get_excluded_ids(): array {
+		return \array_map( '\intval', (array) apply_filters( 'advanced-sidebar-menu/menus/page/excluded', parent::get_excluded_ids(), $this->get_current_post(), $this->args, $this->instance, $this ) );
 	}
 
 
@@ -190,7 +197,6 @@ class Page extends Menu_Abstract {
 		do_action( 'advanced-sidebar-menu/menus/page/render/after', $this );
 
 		echo $this->args['after_widget'];
-
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }

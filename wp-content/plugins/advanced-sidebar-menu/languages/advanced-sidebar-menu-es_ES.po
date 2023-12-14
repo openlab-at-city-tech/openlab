@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2023-02-07 18:14-0500\n"
-"PO-Revision-Date: 2023-02-07 18:14-0500\n"
+"POT-Creation-Date: 2023-10-05 02:22-0500\n"
+"PO-Revision-Date: 2023-10-05 02:22-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -21,10 +21,19 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
+#: js/src/components/TransformNotice.tsx:36
+msgid "Blocks are the future of Advanced Sidebar Menu."
+msgstr "Los bloques son el futuro del menú avanzado de la barra lateral."
+
+#: js/src/components/TransformNotice.tsx:42
+msgid "This widget may be transformed into a block."
+msgstr "Este widget puede transformarse en un bloque."
+
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Category.php:140
+#. translators: Selected post type single label
+#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:139
 #, javascript-format, php-format
-msgid "Display the highest level parent %s"
+msgid "Display highest level parent %s"
 msgstr "Mostrar el %s principal de nivel más alto"
 
 #. translators: Selected taxonomy single label
@@ -62,20 +71,40 @@ msgstr "Mostrar %1$s niveles de %2$s secundario"
 msgid "- All -"
 msgstr "- Todo -"
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:16 src/Notice.php:97
+#. translators: 1: Opening anchor tag, 2: Closing anchor tag
+#: js/src/gutenberg/blocks/ExcludeField.tsx:25
+#, javascript-format
+msgid "For more robust and intuitive exclusions use the %1$sPRO version%2$s."
+msgstr ""
+"Para exclusiones más robustas e intuitivas, utilice la versión %1$sPRO%2$s."
+
+#. translators: Selected post type plural label
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: js/src/gutenberg/blocks/ExcludeField.tsx:31 src/Widget/Category.php:273
+#: src/Widget/Page.php:255
+#, javascript-format, php-format
+msgid "%s to exclude (ids, comma separated)"
+msgstr "%s para excluir (ids, separados por comas)"
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:28 src/Notice.php:175
+msgid "Go PRO"
+msgstr "Actualizar a PRO"
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:34 src/Notice.php:97
 msgid "Advanced Sidebar Menu PRO"
 msgstr "Advanced Sidebar Menu PRO"
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:29
-msgid "So much more…"
-msgstr "Mucho más…"
+#: js/src/gutenberg/blocks/InfoPanel.tsx:43 src/Notice.php:111
+msgid "And so much more…"
+msgstr "Y mucho más…"
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:40 src/Notice.php:124
+#: js/src/gutenberg/blocks/InfoPanel.tsx:53 src/Notice.php:119
 msgid "Upgrade"
 msgstr "Actualizar"
 
 #: js/src/gutenberg/blocks/Preview.tsx:66
-#: js/src/gutenberg/blocks/pages/block.tsx:66 src/Widget/Page.php:55
+#: js/src/gutenberg/blocks/pages/block.tsx:65 src/Widget/Page.php:55
 msgid "Advanced Sidebar - Pages"
 msgstr "Advanced Sidebar - Páginas"
 
@@ -86,7 +115,7 @@ msgid "No preview available"
 msgstr "No hay vista previa disponible"
 
 #: js/src/gutenberg/blocks/Preview.tsx:73
-#: js/src/gutenberg/blocks/categories/block.tsx:67 src/Widget/Category.php:59
+#: js/src/gutenberg/blocks/categories/block.tsx:65 src/Widget/Category.php:59
 msgid "Advanced Sidebar - Categories"
 msgstr "Advanced Sidebar - Categorías"
 
@@ -94,59 +123,32 @@ msgstr "Advanced Sidebar - Categorías"
 msgid "Advanced Sidebar - Navigation"
 msgstr "Advanced Sidebar - Páginas"
 
-#. translators: {taxonomy plural label}, {taxonomy single label}, {<a>}, {</a>}
-#. translators: {post type plural label}, {post type single label}, {<a>}, {</a>}
-#: js/src/gutenberg/blocks/categories/Edit.tsx:55
-#: js/src/gutenberg/blocks/pages/Edit.tsx:59
-#, javascript-format
-msgid ""
-"%1$s may also be excluded from all menus via the Advanced Sidebar settings "
-"when %3$sediting a %2$s%4$s."
-msgstr ""
-"%1$s también se pueden excluir de todos los menús a través de la "
-"configuración del menú de barra lateral avanzada al %3$sedición de un %2$s"
-"%4$s."
-
-#: js/src/gutenberg/blocks/categories/Edit.tsx:70
-#: js/src/gutenberg/blocks/pages/Edit.tsx:74 src/Widget/Category.php:305
+#: js/src/gutenberg/blocks/categories/Edit.tsx:57
+#: js/src/gutenberg/blocks/pages/Edit.tsx:62 src/Widget/Category.php:305
 #: src/Widget/Page.php:116 src/Widget/Page.php:286
 msgid "Title"
 msgstr "Título"
 
 #. translators: Selected taxonomy plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:88 src/Widget/Category.php:217
+#: js/src/gutenberg/blocks/categories/Edit.tsx:76 src/Widget/Category.php:217
 #, javascript-format, php-format
 msgid "Display %s on single posts"
 msgstr "Mostrar %s en publicaciones individuales"
 
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:103 src/Widget/Category.php:227
+#: js/src/gutenberg/blocks/categories/Edit.tsx:91 src/Widget/Category.php:227
 #, javascript-format, php-format
 msgid "Display each single post's %s"
 msgstr "Muestra las %s de cada publicación"
 
-#. translators: Selected post type plural label
-#. translators: Selected taxonomy plural label
-#. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:122
-#: js/src/gutenberg/blocks/pages/Edit.tsx:105 src/Widget/Category.php:273
-#: src/Widget/Page.php:255
-#, javascript-format, php-format
-msgid "%s to exclude (ids, comma separated)"
-msgstr "%s para excluir (ids, separados por comas)"
-
-#: js/src/gutenberg/blocks/categories/Edit.tsx:137
-#: js/src/gutenberg/blocks/pages/Edit.tsx:120
+#: js/src/gutenberg/blocks/categories/Edit.tsx:119
+#: js/src/gutenberg/blocks/pages/Edit.tsx:104
 msgid "block documentation"
 msgstr "bloquear documentación"
 
-#: js/src/gutenberg/blocks/pages/Edit.tsx:91 src/Widget/Page.php:221
+#: js/src/gutenberg/blocks/pages/Edit.tsx:80 src/Widget/Page.php:221
 msgid "Order by"
 msgstr "Ordenar por"
-
-#: src/Blocks/Block_Abstract.php:258
-msgid "This block requires WordPress version 5.6!"
-msgstr "¡Este bloque requiere WordPress versión 5.6!"
 
 #: src/Blocks/Categories.php:25 src/Blocks/Pages.php:25
 #: src/Widget/Category.php:52
@@ -174,9 +176,13 @@ msgstr "término"
 msgid "pages"
 msgstr "páginas"
 
-#: src/Core.php:49
+#: src/Core.php:64
 msgid "widget documentation"
 msgstr "documentación del widget"
+
+#: src/Core.php:104
+msgid "Documentation"
+msgstr "Documentación"
 
 #. translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>]
 #: src/Notice.php:69
@@ -189,44 +195,36 @@ msgstr ""
 "Advanced Sidebar Menu requiere %1$sAdvanced Sidebar Menu PRO%2$s versión %3$s"
 "+. Actualice o desactive la versión PRO."
 
-#: src/Notice.php:115
-msgid "So much more..."
-msgstr "Mucho más..."
-
-#: src/Notice.php:132
+#: src/Notice.php:127
 msgid "Preview"
 msgstr "Vista previa"
 
-#: src/Notice.php:165
+#: src/Notice.php:160
 msgid "PRO version widget options"
 msgstr "Opciones del widget de la versión PRO"
 
-#: src/Notice.php:180
-msgid "Go PRO"
-msgstr "Actualizar a PRO"
-
-#: src/Notice.php:194
+#: src/Notice.php:189
 msgid ""
-"Styling options including borders, bullets, colors, backgrounds, size, and "
-"font weight."
+"Styling options including borders, bullets, colors, backgrounds, font size "
+"and weight."
 msgstr ""
-"Opciones de estilo que incluyen bordes, viñetas, colores, fondos, tamaño y "
-"peso de fuente."
+"Opciones de estilo que incluyen bordes, viñetas, colores, fondos, tamaño de "
+"fuente y peso."
 
-#: src/Notice.php:195
+#: src/Notice.php:190
 msgid "Accordion menus."
 msgstr "Menús de acordeón."
 
-#: src/Notice.php:196
+#: src/Notice.php:191
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr "Compatibilidad con menús de navegación personalizados."
 
-#: src/Notice.php:197
+#: src/Notice.php:192
 msgid "Select and display custom post types and taxonomies."
 msgstr ""
 "Seleccione y muestre taxonomías y tipos de publicaciones personalizadas."
 
-#: src/Notice.php:198
+#: src/Notice.php:193
 msgid "Priority support with access to members only support area."
 msgstr "Soporte prioritario con acceso a los miembros solo área de apoyo."
 
@@ -237,6 +235,12 @@ msgstr "En un nuevo widget"
 #: src/Widget/Category.php:119
 msgid "In another list in the same widget"
 msgstr "En otra lista en el mismo widget"
+
+#. translators: Selected taxonomy single label
+#: src/Widget/Category.php:140
+#, php-format
+msgid "Display the highest level parent %s"
+msgstr "Mostrar el %s principal de nivel más alto"
 
 #: src/Widget/Page.php:48
 msgid "Creates a menu of all the pages using the parent/child relationship"
@@ -249,12 +253,6 @@ msgstr "Orden de páginas"
 #: src/Widget/Page.php:117
 msgid "Published Date"
 msgstr "Fecha de publicación"
-
-#. translators: Selected post type single label
-#: src/Widget/Page.php:139
-#, php-format
-msgid "Display highest level parent %s"
-msgstr "Mostrar el %s principal de nivel más alto"
 
 #. Plugin Name of the plugin/theme
 msgid "Advanced Sidebar Menu"
@@ -279,6 +277,21 @@ msgstr "OnPoint Plugins"
 #. Author URI of the plugin/theme
 msgid "https://onpointplugins.com"
 msgstr "https://onpointplugins.com"
+
+#~ msgid "And so much more..."
+#~ msgstr "Y mucho más..."
+
+#, javascript-format
+#~ msgid ""
+#~ "%1$s may also be excluded from all menus via the Advanced Sidebar "
+#~ "settings when %3$sediting a %2$s%4$s."
+#~ msgstr ""
+#~ "%1$s también se pueden excluir de todos los menús a través de la "
+#~ "configuración del menú de barra lateral avanzada al %3$sedición de un %2$s"
+#~ "%4$s."
+
+#~ msgid "This block requires WordPress version 5.6!"
+#~ msgstr "¡Este bloque requiere WordPress versión 5.6!"
 
 #~ msgid "Select and display custom taxonomies."
 #~ msgstr "Seleccione y muestre taxonomías personalizadas."
