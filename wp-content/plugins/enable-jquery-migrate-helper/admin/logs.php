@@ -118,7 +118,7 @@ $logs = get_option( 'jqmh_logs', array() );
 
         <tr>
             <td><?php echo esc_html( $log['registered'] ); ?></td>
-            <td><?php echo esc_html( $notice ); ?></td>
+            <td><?php echo esc_html( wp_unslash( $notice ) ); ?></td>
             <td><?php echo $source; ?></td>
             <td><?php echo esc_html( $file ); ?></td>
             <td><?php echo esc_html( $log['page'] ); ?></td>

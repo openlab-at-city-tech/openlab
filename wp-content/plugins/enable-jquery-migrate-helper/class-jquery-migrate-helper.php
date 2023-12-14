@@ -286,7 +286,7 @@ class jQuery_Migrate_Helper {
                 var erroredFunction = msg.match( match_pattern );
 
                 // If there was no matching functions, do not try to downgrade.
-                if ( typeof erroredFunction !== 'object' || typeof erroredFunction[1] === "undefined" || -1 === jQueryFunctions.indexOf( erroredFunction[1] ) ) {
+                if ( null === erroredFunction || typeof erroredFunction !== 'object' || typeof erroredFunction[1] === "undefined" || -1 === jQueryFunctions.indexOf( erroredFunction[1] ) ) {
                     return true;
                 }
 
@@ -412,8 +412,8 @@ class jQuery_Migrate_Helper {
             self::set_script( $scripts, 'jquery-touch-punch', false, array( 'jquery-ui-widget', 'jquery-ui-mouse' ), '0.2.2', 1 );
 		} else {
 			if ( 'yes' === get_option( '_jquery_migrate_modern_deprecations', 'no' ) ) {
-				self::set_script( $scripts, 'jquery-migrate', $assets_url . 'jquery-migrate/jquery-migrate-3.3.2-wp.js', array(), '3.3.2-wp' );
-				self::set_script( $scripts, 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.5.1-wp' );
+				self::set_script( $scripts, 'jquery-migrate', $assets_url . 'jquery-migrate/jquery-migrate-3.4.1-wp.js', array(), '3.4.1-wp' );
+				self::set_script( $scripts, 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.6.4-wp' );
 			}
 		}
 	}
