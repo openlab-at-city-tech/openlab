@@ -2093,6 +2093,34 @@ add_action(
 );
 
 /**
+ * Remove columns that should not be visible to the current user.
+ *
+ * @param array $cols Columns.
+ * @return array
+ */
+add_filter(
+	'manage_users_columns',
+	function( $cols ) {
+		if ( is_super_admin() ) {
+			return $cols;
+		}
+
+		// 'faculty' and 'staff' can see all columns.
+		$user_type = openlab_get_user_member_type( get_current_user_id() );
+		if ( in_array( $user_type, [ 'faculty', 'staff' ], true ) ) {
+			return $cols;
+		}
+
+		// Remove the 'name' and 'email' columns.
+		unset( $cols['name'] );
+		unset( $cols['email'] );
+
+		return $cols;
+	},
+	100
+);
+
+/**
  * Hide private comments even after the plugin is deactivated.
  *
  * @param WP_Comment_Query $query
