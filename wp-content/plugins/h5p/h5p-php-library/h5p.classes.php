@@ -631,6 +631,7 @@ interface H5PFrameworkInterface {
 class H5PValidator {
   public $h5pF;
   public $h5pC;
+  public $h5pCV;
 
   // Schemas used to validate the h5p files
   private $h5pRequired = array(
@@ -1998,7 +1999,7 @@ class H5PCore {
 
   public static $coreApi = array(
     'majorVersion' => 1,
-    'minorVersion' => 24
+    'minorVersion' => 26
   );
   public static $styles = array(
     'styles/h5p.css',
@@ -2051,6 +2052,21 @@ class H5PCore {
     self::DISABLE_EMBED => self::DISPLAY_OPTION_EMBED,
     self::DISABLE_COPYRIGHT => self::DISPLAY_OPTION_COPYRIGHT
   );
+
+  /** @var string */
+  public $url;
+
+  /** @var int evelopment mode. */
+  public $development_mode;
+
+  /** @var bool aggregated files for assets. */
+  public $aggregateAssets;
+
+  /** @var string full path of plugin. */
+  protected $fullPluginPath;
+
+  /** @var string regex for converting copied files paths. */
+  public $relativePathRegExp;
 
   /**
    * Constructor for the H5PCore
@@ -3508,6 +3524,9 @@ class H5PContentValidator {
   public $h5pC;
   private $typeMap, $libraries, $dependencies, $nextWeight;
   private static $allowed_styleable_tags = array('span', 'p', 'div','h1','h2','h3', 'td');
+
+  /** @var bool Allowed styles status. */
+  protected $allowedStyles;
 
   /**
    * Constructor for the H5PContentValidator
