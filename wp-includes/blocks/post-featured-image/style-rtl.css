@@ -4,6 +4,7 @@
 }
 .wp-block-post-featured-image a{
   display:block;
+  height:100%;
 }
 .wp-block-post-featured-image img{
   box-sizing:border-box;
@@ -59,4 +60,7 @@
 }
 .wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-100{
   opacity:1;
+}
+.wp-block-post-featured-image:where(.alignleft,.alignright){
+  width:100%;
 }

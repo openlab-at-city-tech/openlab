@@ -135,8 +135,10 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 
 	$published_statuses = array( 'publish', 'future' );
 
-	// Posts 'submitted for approval' are submitted to $_POST the same as if they were being published.
-	// Change status from 'publish' to 'pending' if user lacks permissions to publish or to resave published posts.
+	/*
+	 * Posts 'submitted for approval' are submitted to $_POST the same as if they were being published.
+	 * Change status from 'publish' to 'pending' if user lacks permissions to publish or to resave published posts.
+	 */
 	if ( isset( $post_data['post_status'] )
 		&& ( in_array( $post_data['post_status'], $published_statuses, true )
 		&& ! current_user_can( $ptype->cap->publish_posts ) )
@@ -191,7 +193,19 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 			return new WP_Error( 'invalid_date', __( 'Invalid date.' ) );
 		}
 
-		$post_data['post_date_gmt'] = get_gmt_from_date( $post_data['post_date'] );
+		/*
+		 * Only assign a post date if the user has explicitly set a new value.
+		 * See #59125 and #19907.
+		 */
+		$previous_date = $post_id ? get_post_field( 'post_date', $post_id ) : false;
+		if ( $previous_date && $previous_date !== $post_data['post_date'] ) {
+			$post_data['edit_date']     = true;
+			$post_data['post_date_gmt'] = get_gmt_from_date( $post_data['post_date'] );
+		} else {
+			$post_data['edit_date'] = false;
+			unset( $post_data['post_date'] );
+			unset( $post_data['post_date_gmt'] );
+		}
 	}
 
 	if ( isset( $post_data['post_category'] ) ) {
@@ -664,6 +678,15 @@ function bulk_edit_posts( $post_data = null ) {
 		// Prevent wp_insert_post() from overwriting post format with the old data.
 		unset( $post_data['tax_input']['post_format'] );
 
+		// Reset post date of scheduled post to be published.
+		if (
+			in_array( $post->post_status, array( 'future', 'draft' ), true ) &&
+			'publish' === $post_data['post_status']
+		) {
+			$post_data['post_date']     = current_time( 'mysql' );
+			$post_data['post_date_gmt'] = '';
+		}
+
 		$post_id = wp_update_post( $post_data );
 		update_post_meta( $post_id, '_edit_last', get_current_user_id() );
 		$updated[] = $post_id;
@@ -676,6 +699,16 @@ function bulk_edit_posts( $post_data = null ) {
 			}
 		}
 	}
+
+	/**
+	 * Fires after processing the post data for bulk edit.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param int[] $updated          An array of updated post IDs.
+	 * @param array $shared_post_data Associative array containing the post data.
+	 */
+	do_action( 'bulk_edit_posts', $updated, $shared_post_data );
 
 	return array(
 		'updated' => $updated,
@@ -1010,11 +1043,10 @@ function get_meta_keys() {
 	global $wpdb;
 
 	$keys = $wpdb->get_col(
-		"
-			SELECT meta_key
-			FROM $wpdb->postmeta
-			GROUP BY meta_key
-			ORDER BY meta_key"
+		"SELECT meta_key
+		FROM $wpdb->postmeta
+		GROUP BY meta_key
+		ORDER BY meta_key"
 	);
 
 	return $keys;
@@ -1126,7 +1158,7 @@ function _fix_attachment_links( $post ) {
 		$url_id = (int) $url_match[2];
 		$rel_id = (int) $rel_match[1];
 
-		if ( ! $url_id || ! $rel_id || $url_id != $rel_id || strpos( $url_match[0], $site_url ) === false ) {
+		if ( ! $url_id || ! $rel_id || $url_id != $rel_id || ! str_contains( $url_match[0], $site_url ) ) {
 			continue;
 		}
 
@@ -1421,8 +1453,10 @@ function get_sample_permalink( $post, $title = null, $name = null ) {
 		$post->post_name   = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
 	}
 
-	// If the user wants to set a new name -- override the current one.
-	// Note: if empty name is supplied -- use the title instead, see #6072.
+	/*
+	 * If the user wants to set a new name -- override the current one.
+	 * Note: if empty name is supplied -- use the title instead, see #6072.
+	 */
 	if ( ! is_null( $name ) ) {
 		$post->post_name = sanitize_title( $name ? $name : $title, $post->ID );
 	}
@@ -1516,7 +1550,7 @@ function get_sample_permalink_html( $post, $new_title = null, $new_slug = null )
 	}
 
 	// Permalinks without a post/page name placeholder don't have anything to edit.
-	if ( false === strpos( $permalink, '%postname%' ) && false === strpos( $permalink, '%pagename%' ) ) {
+	if ( ! str_contains( $permalink, '%postname%' ) && ! str_contains( $permalink, '%pagename%' ) ) {
 		$return = '<strong>' . __( 'Permalink:' ) . "</strong>\n";
 
 		if ( false !== $view_link ) {
@@ -1555,11 +1589,11 @@ function get_sample_permalink_html( $post, $new_title = null, $new_slug = null )
 	 * @since 2.9.0
 	 * @since 4.4.0 Added `$post` parameter.
 	 *
-	 * @param string  $return    Sample permalink HTML markup.
-	 * @param int     $post_id   Post ID.
-	 * @param string  $new_title New sample permalink title.
-	 * @param string  $new_slug  New sample permalink slug.
-	 * @param WP_Post $post      Post object.
+	 * @param string      $return    Sample permalink HTML markup.
+	 * @param int         $post_id   Post ID.
+	 * @param string|null $new_title New sample permalink title.
+	 * @param string|null $new_slug  New sample permalink slug.
+	 * @param WP_Post     $post      Post object.
 	 */
 	$return = apply_filters( 'get_sample_permalink_html', $return, $post->ID, $new_title, $new_slug, $post );
 
@@ -1756,7 +1790,7 @@ function _admin_notice_post_locked() {
 	}
 
 	$sendback = wp_get_referer();
-	if ( $locked && $sendback && false === strpos( $sendback, 'post.php' ) && false === strpos( $sendback, 'post-new.php' ) ) {
+	if ( $locked && $sendback && ! str_contains( $sendback, 'post.php' ) && ! str_contains( $sendback, 'post-new.php' ) ) {
 
 		$sendback_text = __( 'Go back' );
 	} else {
@@ -1931,11 +1965,12 @@ function wp_create_post_autosave( $post_data ) {
 		 * Fires before an autosave is stored.
 		 *
 		 * @since 4.1.0
+		 * @since 6.4.0 The `$is_update` parameter was added to indicate if the autosave is being updated or was newly created.
 		 *
 		 * @param array $new_autosave Post array - the autosave that is about to be saved.
+		 * @param bool  $is_update    Whether this is an existing autosave.
 		 */
-		do_action( 'wp_creating_autosave', $new_autosave );
-
+		do_action( 'wp_creating_autosave', $new_autosave, true );
 		return wp_update_post( $new_autosave );
 	}
 
@@ -1943,7 +1978,68 @@ function wp_create_post_autosave( $post_data ) {
 	$post_data = wp_unslash( $post_data );
 
 	// Otherwise create the new autosave as a special post revision.
-	return _wp_put_post_revision( $post_data, true );
+	$revision = _wp_put_post_revision( $post_data, true );
+
+	if ( ! is_wp_error( $revision ) && 0 !== $revision ) {
+
+		/** This action is documented in wp-admin/includes/post.php */
+		do_action( 'wp_creating_autosave', get_post( $revision, ARRAY_A ), false );
+	}
+
+	return $revision;
+}
+
+/**
+ * Autosave the revisioned meta fields.
+ *
+ * Iterates through the revisioned meta fields and checks each to see if they are set,
+ * and have a changed value. If so, the meta value is saved and attached to the autosave.
+ *
+ * @since 6.4.0
+ *
+ * @param array $new_autosave The new post data being autosaved.
+ */
+function wp_autosave_post_revisioned_meta_fields( $new_autosave ) {
+	/*
+	 * The post data arrives as either $_POST['data']['wp_autosave'] or the $_POST
+	 * itself. This sets $posted_data to the correct variable.
+	 *
+	 * Ignoring sanitization to avoid altering meta. Ignoring the nonce check because
+	 * this is hooked on inner core hooks where a valid nonce was already checked.
+	 */
+	$posted_data = isset( $_POST['data']['wp_autosave'] ) ? $_POST['data']['wp_autosave'] : $_POST;
+
+	$post_type = get_post_type( $new_autosave['post_parent'] );
+
+	/*
+	 * Go thru the revisioned meta keys and save them as part of the autosave, if
+	 * the meta key is part of the posted data, the meta value is not blank and
+	 * the the meta value has changes from the last autosaved value.
+	 */
+	foreach ( wp_post_revision_meta_keys( $post_type ) as $meta_key ) {
+
+		if (
+		isset( $posted_data[ $meta_key ] ) &&
+		get_post_meta( $new_autosave['ID'], $meta_key, true ) !== wp_unslash( $posted_data[ $meta_key ] )
+		) {
+			/*
+			 * Use the underlying delete_metadata() and add_metadata() functions
+			 * vs delete_post_meta() and add_post_meta() to make sure we're working
+			 * with the actual revision meta.
+			 */
+			delete_metadata( 'post', $new_autosave['ID'], $meta_key );
+
+			/*
+			 * One last check to ensure meta value not empty().
+			 */
+			if ( ! empty( $posted_data[ $meta_key ] ) ) {
+				/*
+				 * Add the revisions meta data to the autosave.
+				 */
+				add_metadata( 'post', $new_autosave['ID'], $meta_key, $posted_data[ $meta_key ] );
+			}
+		}
+	}
 }
 
 /**
@@ -2051,8 +2147,10 @@ function wp_autosave( $post_data ) {
 		// Drafts and auto-drafts are just overwritten by autosave for the same user if the post is not locked.
 		return edit_post( wp_slash( $post_data ) );
 	} else {
-		// Non-drafts or other users' drafts are not overwritten.
-		// The autosave is stored in a special post revision for each user.
+		/*
+		 * Non-drafts or other users' drafts are not overwritten.
+		 * The autosave is stored in a special post revision for each user.
+		 */
 		return wp_create_post_autosave( wp_slash( $post_data ) );
 	}
 }
@@ -2178,6 +2276,8 @@ function taxonomy_meta_box_sanitize_cb_input( $taxonomy, $terms ) {
  * of a block relevant for client registration.
  *
  * @since 5.0.0
+ * @since 6.3.0 Added `selectors` field.
+ * @since 6.4.0 Added `block_hooks` field.
  *
  * @return array An associative array of registered block data.
  */
@@ -2192,6 +2292,8 @@ function get_block_editor_server_block_settings() {
 		'attributes'       => 'attributes',
 		'provides_context' => 'providesContext',
 		'uses_context'     => 'usesContext',
+		'block_hooks'      => 'blockHooks',
+		'selectors'        => 'selectors',
 		'supports'         => 'supports',
 		'category'         => 'category',
 		'styles'           => 'styles',
@@ -2436,7 +2538,7 @@ function the_block_editor_meta_box_post_form_hidden_fields( $post ) {
 	$classic_elements = wp_html_split( $classic_output );
 	$hidden_inputs    = '';
 	foreach ( $classic_elements as $element ) {
-		if ( 0 !== strpos( $element, '<input ' ) ) {
+		if ( ! str_starts_with( $element, '<input ' ) ) {
 			continue;
 		}
 

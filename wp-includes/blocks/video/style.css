@@ -2,12 +2,12 @@
   box-sizing:border-box;
 }
 .wp-block-video video{
+  vertical-align:middle;
   width:100%;
 }
 @supports (position:sticky){
   .wp-block-video [poster]{
-    -o-object-fit:cover;
-       object-fit:cover;
+    object-fit:cover;
   }
 }
 .wp-block-video.aligncenter{
