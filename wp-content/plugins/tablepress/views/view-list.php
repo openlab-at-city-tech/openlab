@@ -34,10 +34,12 @@ class TablePress_List_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $action Action for this view.
-	 * @param array  $data   Data for this view.
+	 * @param string               $action Action for this view.
+	 * @param array<string, mixed> $data   Data for this view.
 	 */
-	public function setup( $action, array $data ) {
+	#[\Override]
+	public function setup( /* string */ $action, array $data ) /* : void */ {
+		// Don't use type hints in the method declaration to prevent PHP errors, as the method is inherited.
 		parent::setup( $action, $data );
 
 		add_thickbox(); // For the table preview.
@@ -48,7 +50,7 @@ class TablePress_List_View extends TablePress_View {
 			$message .= '<p>' . sprintf( __( 'If you encounter any questions or problems, please visit the <a href="%1$s">FAQ</a>, the <a href="%2$s">Documentation</a>, and the <a href="%3$s">Support</a> section on the <a href="%4$s">plugin website</a>.', 'tablepress' ), 'https://tablepress.org/faq/', 'https://tablepress.org/documentation/', 'https://tablepress.org/support/', 'https://tablepress.org/' ) . '</p>';
 
 			if ( tb_tp_fs()->is_free_plan() ) {
-				$message .= '<p style="font-size:14px;"><strong>' . sprintf( __( 'More great features for you and your site’s visitors and priority email support are available with a Premium license plan of TablePress. <a href="%s">Go check them out!</a>', 'tablepress' ), 'https://tablepress.org/premium/' ) . '</strong></p>';
+				$message .= '<p style="font-size:14px;"><strong>' . sprintf( __( 'More great features for you and your site’s visitors and priority email support are available with a Premium license plan of TablePress. <a href="%s">Go check them out!</a>', 'tablepress' ), 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=textlink&utm_content=first-visit-message' ) . '</strong></p>';
 			}
 
 			$message .= '<p style="margin-top:14px;">' . $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'first_visit', 'return' => 'list' ), __( 'Hide this message', 'tablepress' ) ) . '</p>';
@@ -59,19 +61,19 @@ class TablePress_List_View extends TablePress_View {
 		}
 
 		if ( $data['messages']['donation_message'] ) {
-			$message = '<p><img alt="' . esc_attr__( 'Tobias Bäthge, developer of TablePress', 'tablepress' ) . '" src="https://secure.gravatar.com/avatar/50f1cff2e27a1f522b18ce229c057bc5?s=125" height="125" width="125" style="float:left;margin:2px 10px 30px 0;" />'
+			$message = '<p style="font-size:14px;"><img alt="' . esc_attr__( 'Tobias Bäthge, developer of TablePress', 'tablepress' ) . '" src="https://secure.gravatar.com/avatar/50f1cff2e27a1f522b18ce229c057bc5?s=300" height="150" width="150" style="float:left;margin:2px 15px 30px 0;" />'
 				. __( 'Hi, my name is Tobias, I&#8217;m the developer of the TablePress plugin.', 'tablepress' ) . '</p>';
-			$message .= '<p>' . __( 'Thank you for using it!', 'tablepress' ) . ' ';
+			$message .= '<p style="font-size:14px;">' . __( 'Thank you for using it!', 'tablepress' ) . ' ';
 			if ( $data['table_count'] > 0 ) {
 				$message .= sprintf( _n( 'I hope that everything works and that you are satisfied with the results of managing your %s table.', 'I hope that everything works and that you are satisfied with the results of managing your %s tables.', $data['table_count'], 'tablepress' ), $data['table_count'] );
 			} else {
 				$message .= sprintf( __( 'It looks like you haven’t added a table yet. If you need help to get started, please find more information in the FAQ and Documentation on the <a href="%s">TablePress website</a>.', 'tablepress' ), 'https://tablepress.org/' );
 			}
 			$message .= '</p>';
-			$message .= '<p><strong>' . sprintf( __( 'I would like to invite you to check out the <a href="%s">Premium versions of TablePress</a>.', 'tablepress' ), 'https://tablepress.org/premium/' ) . ' '
+			$message .= '<p style="font-size:14px;"><strong>' . sprintf( __( 'I would like to invite you to check out the <a href="%s">Premium versions of TablePress</a>.', 'tablepress' ), 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=textlink&utm_content=upgrade-message' ) . '<br />'
 				. __( 'The available Pro and Max plans offer user support and many exciting and helpful features for your tables.', 'tablepress' ) . '</strong></p>';
-			$message .= '<p>' . __( 'Sincerely, Tobias', 'tablepress' ) . '</p>';
-			$message .= '<p>' . sprintf( '<a href="%s" class="button button-primary" style="font-size:14px;margin-right:1em"><strong>%s</strong><span class="dashicons dashicons-arrow-right-alt" style="vertical-align:middle;margin:0 0 4px 4px"></span></a>', 'https://tablepress.org/premium/', __( 'Tell me more about the Premium features', 'tablepress' ) )
+			$message .= '<p style="font-size:14px;">' . __( 'Sincerely, Tobias', 'tablepress' ) . '</p>';
+			$message .= '<p>' . sprintf( '<a href="%s" class="button button-primary" style="font-size:14px;margin-right:1em">%s<span class="dashicons dashicons-arrow-right-alt" style="vertical-align:middle;margin:0 0 4px 4px"></span></a>', 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=textlink&utm_content=upgrade-message', __( 'Tell me more about the Premium features', 'tablepress' ) )
 				. $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'donation_nag', 'return' => 'list' ), __( 'Hide this message', 'tablepress' ) ) . '</p>';
 
 			$title = '<em>' . __( 'TablePress has more to offer!', 'tablepress' ) . '</em>';
@@ -80,10 +82,10 @@ class TablePress_List_View extends TablePress_View {
 		}
 
 		if ( $data['messages']['plugin_update_message'] ) {
-			$message = '<p>' . sprintf( __( 'To find out more about what’s new, please read the <a href="%s"><strong>release announcement</strong></a>.', 'tablepress' ), 'https://tablepress.org/news/' ) . '</p>';
+			$message = '<p>' . sprintf( __( 'To find out more about what’s new, please read the <a href="%s"><strong>release announcement</strong></a>.', 'tablepress' ), 'https://tablepress.org/news/?utm_source=plugin&utm_medium=textlink&utm_content=plugin-update-message' ) . '</p>';
 
 			if ( tb_tp_fs()->is_free_plan() ) {
-				$message .= '<p style="font-size:14px;"><strong>' . sprintf( __( 'More great features for you and your site’s visitors and priority email support are available with a Premium license plan of TablePress. <a href="%s">Go check them out!</a>', 'tablepress' ), 'https://tablepress.org/premium/' ) . '</strong></p>';
+				$message .= '<p><strong>' . sprintf( __( 'More great features and priority email support are available with a Premium license plan. <a href="%s">Check them out!</a>', 'tablepress' ), 'https://tablepress.org/premium/?utm_source=plugin&utm_medium=textlink&utm_content=plugin-update-message' ) . '</strong></p>';
 			}
 
 			$message .= '<p style="margin-top:14px;">' . $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'plugin_update', 'return' => 'list' ), __( 'Hide this message', 'tablepress' ) ) . '</p>';
@@ -126,7 +128,8 @@ class TablePress_List_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 */
-	public function render() {
+	#[\Override]
+	public function render(): void {
 		?>
 		<div id="tablepress-page" class="wrap">
 		<?php
@@ -177,10 +180,10 @@ class TablePress_List_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Data for this screen.
-	 * @param array $box  Information about the text box.
+	 * @param array<string, mixed> $data Data for this screen.
+	 * @param array<string, mixed> $box  Information about the text box.
 	 */
-	public function textbox_head( array $data, array $box ) {
+	public function textbox_head( array $data, array $box ): void {
 		echo '<p>';
 		_e( 'This is a list of your tables.', 'tablepress' );
 		echo ' ';
@@ -200,10 +203,10 @@ class TablePress_List_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Data for this screen.
-	 * @param array $box  Information about the text box.
+	 * @param array<string, mixed> $data Data for this screen.
+	 * @param array<string, mixed> $box  Information about the text box.
 	 */
-	public function textbox_tables_list( array $data, array $box ) {
+	public function textbox_tables_list( array $data, array $box ): void {
 		if ( ! empty( $_GET['s'] ) ) {
 			printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'tablepress' ) . '</span>', esc_html( wp_unslash( $_GET['s'] ) ) );
 		}
@@ -231,11 +234,11 @@ class TablePress_List_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $params Parameters for the URL.
-	 * @param string $text   Text for the link.
+	 * @param array<string, mixed> $params Parameters for the URL.
+	 * @param string               $text   Text for the link.
 	 * @return string HTML code for the link.
 	 */
-	protected function ajax_link( array $params, $text ) {
+	protected function ajax_link( array $params, string $text ): string {
 		$class = 'ajax-link';
 		if ( ! empty( $params['class'] ) ) {
 			$class .= ' ' . esc_attr( $params['class'] );
@@ -243,7 +246,7 @@ class TablePress_List_View extends TablePress_View {
 		$url = TablePress::url( $params, true, 'admin-post.php' );
 		$action = esc_attr( $params['action'] );
 		$item = esc_attr( $params['item'] );
-		$target = isset( $params['target'] ) ? esc_attr( $params['target'] ) : '';
+		$target = esc_attr( $params['target'] ?? '' );
 		return "<a class=\"{$class}\" href=\"{$url}\" data-action=\"{$action}\" data-item=\"{$item}\" data-target=\"{$target}\">{$text}</a>";
 	}
 
