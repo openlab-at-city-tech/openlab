@@ -33,6 +33,9 @@
 	height: auto;
 }
 
+.edit-post-meta-boxes-area #wp2t.postbox > .inside {
+	padding: 0 12px 12px;
+}
 
 .wp-to-twitter .panel-toggle {
 	margin-bottom: 0;
@@ -146,52 +149,6 @@
 	width: 100%;
 }
 
-.wptab {
-    border-radius: 0 0 4px 4px;
-    border: 1px solid #ddd;
-    background: #fdfdfd;
-    padding: 10px;
-    margin: 0 2px;
-    -moz-column-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    column-break-inside: avoid;
-}
-
-.wptab {
-    min-height: 22em;
-}
-
-.free .wptab {
-    min-height: 11em;
-}
-
-#wp2t .tabs {
-    display: none;
-}
-
-#side-sortables #wp2t .tabs {
-    display: block;
-}
-
-#side-sortables .wptab {
-    min-height: 16em;
-    padding: 5px;
-    margin: 2px 0;
-}
-
-#side-sortables .free .wptab {
-    min-height: 9em;
-}
-
-#notes p {
-    font-size: 1.3em;
-    line-height: 1.5;
-}
-
-#side-sortables .free #notes p {
-    font-size: 1em;
-}
-
 .wpt-player-card-settings {
 	padding: .5em;
 	margin: -.5em -.5em 0;
@@ -226,18 +183,17 @@ button.time div {
 
 .wpt-options .tabs a {
     display: inline-block;
-    padding: 4px 6px;
-    border-radius: 4px 4px 0 0;
-    border: 1px solid #ccc;
-    background: #f3f3f3;
 }
 
 .wpt-options .tabs a.active {
-    border-bottom: 1px solid #fefefe;
     background: #fefefe;
-	text-decoration: none;
 	color: #444;
 	font-weight: 700;
+}
+
+.wptab .inline-list {
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .wpt_log, #wpt_set_tweet_time {
@@ -337,4 +293,24 @@ button.time div {
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
     overflow: hidden;
+}
+
+.link-highlight {
+	text-align: center;
+	margin: 1rem;
+}
+
+.link-highlight a {
+	padding: .5rem 1rem;
+	font-size: 1.2rem;
+	background: #555;
+	font-weight: 700;
+	text-decoration: none;
+	color: #fff;
+	box-shadow: 3px 3px 0 #fcb000;
+}
+
+.link-highlight a:hover,
+.link-highlight a:focus {
+	box-shadow: 3px 3px 0 #000;
 }

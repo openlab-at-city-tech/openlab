@@ -1,9 +1,9 @@
 <?php
 /**
- * Core support functions WP to Twitter
+ * Core support functions XPoster
  *
  * @category Core
- * @package  WP to Twitter
+ * @package  XPoster
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/wp-to-twitter/
@@ -32,11 +32,13 @@ function wpt_checkbox( $field, $sub1 = false, $sub2 = '' ) {
 		} else {
 			$value = 0;
 		}
-		if ( 1 === (int) $value ) {
+		if ( $value && 1 === (int) $value ) {
 			return 'checked="checked"';
+		} else {
+			return '';
 		}
 	}
-	if ( '1' === get_option( $field ) ) {
+	if ( 1 === (int) get_option( $field ) ) {
 		return 'checked="checked"';
 	}
 
@@ -81,7 +83,7 @@ function wpt_set_log( $data, $id, $message ) {
  * @param string $data Option key.
  * @param int    $id Post ID.
  *
- * @return stored message.
+ * @return string message.
  */
 function wpt_get_log( $data, $id ) {
 	if ( 'test' === $id ) {
@@ -107,35 +109,35 @@ function wpt_check_functions() {
 	$shrink   = apply_filters( 'wptt_shorten_link', $testurl, $title, false, true );
 	if ( false === $shrink ) {
 		$error    = htmlentities( get_option( 'wpt_shortener_status' ) );
-		$message .= '<li class="error"><strong>' . __( 'WP to Twitter was unable to contact your selected URL shortening service.', 'wp-to-twitter' ) . '</strong></li>';
+		$message .= '<li class="error"><strong>' . __( 'XPoster was unable to contact your selected URL shortening service.', 'wp-to-twitter' ) . '</strong></li>';
 		if ( is_string( $error ) && strlen( trim( $error ) ) > 0 ) {
 			$message .= "<li><code>$error</code></li>";
 		} else {
 			$message .= '<li><code>' . __( 'No error message was returned.', 'wp-to-twitter' ) . '</code></li>';
 		}
 	} else {
-		$message .= '<li><strong>' . __( "WP to Twitter successfully contacted your URL shortening service.</strong>  This link should point to your site's homepage:", 'wp-to-twitter' );
+		$message .= '<li><strong>' . __( "XPoster successfully contacted your URL shortening service.</strong>  This link should point to your site's homepage:", 'wp-to-twitter' );
 		$message .= " <a href='$shrink'>$shrink</a></li>";
 	}
 	// check twitter credentials.
 	if ( wtt_oauth_test() ) {
-		$rand     = rand( 1000000, 9999999 );
-		$testpost = wpt_post_to_twitter( "This is a test of WP to Twitter. $shrink ($rand)" );
+		$rand     = wp_rand( 1000000, 9999999 );
+		$testpost = wpt_post_to_twitter( "This is a test of XPoster. $shrink ($rand)" );
 		if ( $testpost ) {
-			$message .= '<li><strong>' . __( 'WP to Twitter successfully submitted a status update to Twitter.', 'wp-to-twitter' ) . '</strong></li>';
+			$message .= '<li><strong>' . __( 'XPoster successfully submitted a status update to X.com.', 'wp-to-twitter' ) . '</strong></li>';
 		} else {
 			$error    = wpt_get_log( 'wpt_status_message', 'test' );
-			$message .= '<li class="error"><strong>' . __( 'WP to Twitter failed to submit an update to Twitter.', 'wp-to-twitter' ) . '</strong></li>';
+			$message .= '<li class="error"><strong>' . __( 'XPoster failed to submit an update to X.com.', 'wp-to-twitter' ) . '</strong></li>';
 			$message .= "<li class='error'>$error</li>";
 		}
 	} else {
-		$message .= '<strong>' . __( 'You have not connected WordPress to Twitter.', 'wp-to-twitter' ) . '</strong> ';
+		$message .= '<strong>' . __( 'You have not connected WordPress to X.com.', 'wp-to-twitter' ) . '</strong> ';
 	}
 	if ( false === $testpost && false === $shrink ) {
-		$message .= '<li class="error">' . __( "<strong>Your server does not appear to support the required methods for WP to Twitter to function.</strong> You can try it anyway - these tests aren't perfect.", 'wp-to-twitter' ) . '</li>';
+		$message .= '<li class="error">' . __( "<strong>Your server does not appear to support the required methods for XPoster to function.</strong> You can try it anyway - these tests aren't perfect.", 'wp-to-twitter' ) . '</li>';
 	}
 	if ( $testpost && $shrink ) {
-		$message .= '<li><strong>' . __( 'Your server should run WP to Twitter successfully.', 'wp-to-twitter' ) . '</strong></li>';
+		$message .= '<li><strong>' . __( 'Your server should run XPoster successfully.', 'wp-to-twitter' ) . '</strong></li>';
 	}
 	$message .= '</ul>
 	</div>';
@@ -151,9 +153,9 @@ function wpt_settings_tabs() {
 	$username = get_option( 'wtt_twitter_username' );
 	$default  = ( '' === $username || false === $username ) ? 'connection' : 'basic';
 	$current  = ( isset( $_GET['tab'] ) ) ? sanitize_text_field( $_GET['tab'] ) : $default;
-	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'WP Tweets PRO', 'wp-to-twitter' );
+	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'XPoster PRO', 'wp-to-twitter' );
 	$pages    = array(
-		'connection' => __( 'Twitter Connection', 'wp-to-twitter' ),
+		'connection' => __( 'X Connection', 'wp-to-twitter' ),
 		'basic'      => __( 'Basic Settings', 'wp-to-twitter' ),
 		'shortener'  => __( 'URL Shortener', 'wp-to-twitter' ),
 		'advanced'   => __( 'Advanced Settings', 'wp-to-twitter' ),
@@ -213,7 +215,7 @@ function wpt_handle_errors() {
 					' . $nonce . '
 				</div>
 				<p>
-					<input type="submit" name="submit" value="' . __( "Clear 'WP to Twitter' Error Messages", 'wp-to-twitter' ) . '" class="button-primary" />
+					<input type="submit" name="submit" value="' . __( 'Clear Error Messages', 'wp-to-twitter' ) . '" class="button-primary" />
 				</p>
 			</form>
 		</div>';
@@ -411,7 +413,7 @@ function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $retur
 			'method'     => $method,
 			'body'       => $body,
 			'headers'    => $headers,
-			'user-agent' => 'WP to Twitter/http://www.joedolson.com/wp-to-twitter/',
+			'user-agent' => 'XPoster/https://xposterpro.com',
 		)
 	);
 
@@ -510,7 +512,7 @@ if ( ! function_exists( 'mb_strrpos' ) ) {
 }
 
 /**
- * This function is obsolete; only exists for people using out of date versions of WP Tweets PRO.
+ * This function is obsolete; only exists for people using out of date versions of XPoster Pro.
  *
  * @param string $field Field to check.
  * @param string $value Value to check.
@@ -571,6 +573,10 @@ function wpt_post_attachment( $post_ID ) {
 	$use_featured_image = apply_filters( 'wpt_use_featured_image', true, $post_ID );
 	if ( has_post_thumbnail( $post_ID ) && $use_featured_image ) {
 		$attachment = get_post_thumbnail_id( $post_ID );
+		// X.com API endpoint does not accept GIFs.
+		if ( wp_attachment_is( 'gif', $attachment ) ) {
+			return false;
+		}
 
 		$return = $attachment;
 	} else {
@@ -601,7 +607,7 @@ function wpt_get_support_form() {
 	$current_user   = wp_get_current_user();
 	$request        = '';
 	$response_email = $current_user->user_email;
-	// send fields for WP to Twitter.
+	// send fields for XPoster.
 	$license = ( get_option( 'wpt_license_key' ) ) ? get_option( 'wpt_license_key' ) : 'none';
 	if ( 'none' !== $license ) {
 		$valid = ( ( 'true' === get_option( 'wpt_license_valid' ) ) || ( 'active' === get_option( 'wpt_license_valid' ) ) || ( 'valid' === get_option( 'wpt_license_valid' ) ) ) ? ' (active)' : ' (inactive)';
@@ -645,9 +651,9 @@ function wpt_get_support_form() {
 
 		$data = "
 	================ Installation Data ====================
-	==WP to Twitter==
+	==XPoster==
 	Version: $version
-	Twitter username: http://twitter.com/$wtt_twitter_username
+	X.com username: http://twitter.com/$wtt_twitter_username
 	$license
 
 	==WordPress:==
@@ -676,7 +682,7 @@ function wpt_get_support_form() {
 		if ( isset( $_POST['wpt_support'] ) ) {
 			$nonce = $_REQUEST['_wpnonce'];
 			if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
-				wp_die( 'WP to Twitter: Security check failed' );
+				wp_die( 'XPoster: Security check failed' );
 			}
 			$request = ( ! empty( $_POST['support_request'] ) ) ? stripslashes( sanitize_textarea_field( $_POST['support_request'] ) ) : false;
 			if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
@@ -684,7 +690,7 @@ function wpt_get_support_form() {
 			} else {
 				$pro = '';
 			}
-			$subject        = "WP Tweets $pro support request.";
+			$subject        = "XPoster $pro support request.";
 			$message        = $request . "\n\n" . $data;
 			$response_email = ( isset( $_POST['response_email'] ) ) ? sanitize_email( $_POST['response_email'] ) : false;
 			$from           = "From: $current_user->display_name <$response_email>\r\nReply-to: $current_user->display_name <$response_email>\r\n";
@@ -694,10 +700,10 @@ function wpt_get_support_form() {
 			} elseif ( ! $request ) {
 				echo "<div class='notice error'><p>" . __( 'Please describe your problem. I\'m not psychic.', 'wp-to-twitter' ) . '</p></div>';
 			} else {
-				$sent = wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
+				$sent = wp_mail( 'plugins@xposterpro.com', $subject, $message, $from );
 				if ( $sent ) {
 					// Translators: Email address.
-					echo "<div class='notice updated'><p>" . sprintf( __( 'Thank you for supporting WP to Twitter! I\'ll get back to you as soon as I can. Please make sure you can receive email at <code>%s</code>.', 'wp-to-twitter' ), $response_email ) . '</p></div>';
+					echo "<div class='notice updated'><p>" . sprintf( __( 'Thank you for supporting XPoster! I\'ll get back to you as soon as I can. Please make sure you can receive email at <code>%s</code>.', 'wp-to-twitter' ), $response_email ) . '</p></div>';
 				} else {
 					// Translators: URL to plugin support form.
 					echo "<div class='notice error'><p>" . __( "Sorry! I couldn't send that message. Here's the text of your request:", 'wp-to-twitter' ) . '</p><p>' . sprintf( __( '<a href="%s">Contact me here</a>, instead.', 'wp-to-twitter' ), 'https://www.joedolson.com/contact/get-support/' ) . "</p><pre>$request</pre></div>";
@@ -710,7 +716,7 @@ function wpt_get_support_form() {
 		<form method='post' action='$admin_url'>
 			<div><input type='hidden' name='_wpnonce' value='" . wp_create_nonce( 'wp-to-twitter-nonce' ) . "' /></div>
 			<div>
-			<p>" . __( "If you're having trouble with WP Tweets Pro, please try to answer these questions in your message:", 'wp-to-twitter' ) . '</p>
+			<p>" . __( "If you're having trouble with XPoster Pro, please try to answer these questions in your message:", 'wp-to-twitter' ) . '</p>
 			<ul>
 				<li>' . __( 'What were you doing when the problem occurred?', 'wp-to-twitter' ) . '</li>
 				<li>' . __( 'What did you expect to happen?', 'wp-to-twitter' ) . '</li>
@@ -720,11 +726,6 @@ function wpt_get_support_form() {
 			<label for='response_email'>" . __( 'Your Email', 'wp-to-twitter' ) . "</label><br />
 			<input type='email' name='response_email' id='response_email' value='$response_email' class='widefat' required='required' aria-required='true' />
 			</p>
-			<p>
-			<input type='checkbox' name='has_read_faq' id='has_read_faq' value='on' required='required' aria-required='true' /> <label for='has_read_faq'>";
-		// Translators: Link to plugin FAQ.
-		echo sprintf( __( 'I have read <a href="%1$s">the FAQ for this plug-in</a> <span>(required)</span>', 'wp-to-twitter' ), 'http://www.joedolson.com/wp-to-twitter/support-2/' );
-		echo "</p>
 			<p>
 			<label for='support_request'>" . __( 'Support Request:', 'wp-to-twitter' ) . "</label><br /><textarea class='support-request' name='support_request' id='support_request' cols='80' rows='10' class='widefat'>" . stripslashes( esc_attr( $request ) ) . "</textarea>
 			</p>
@@ -741,7 +742,7 @@ function wpt_get_support_form() {
 		" . wpautop( $data ) . '
 		</div>';
 	} else {
-		echo '<p>' . __( 'You need a valid WP Tweets Pro license to receive support.', 'wp-to-twitter' ) . '</p>';
+		echo '<p>' . __( 'You need a valid XPoster Pro license to receive support. Return to this screen to use the premium support form after <a href="https://xposterpro.com/awesome/xposter-pro/">getting your Pro license</a>.', 'wp-to-twitter' ) . '</p>';
 	}
 	wpt_faq();
 }
@@ -752,20 +753,12 @@ function wpt_get_support_form() {
 function wpt_faq() {
 	$qs = array(
 		array(
-			'question' => __( 'My app has been suspended by Twitter. What do I do now?', 'wp-to-twitter' ),
-			'answer'   => __( 'Some users have been successful by removing their existing app and creating a new one, following the setup instructions in the Twitter Connection tab. It is unlikely you will make any progress by contesting the suspension.', 'wp-to-twitter' ),
+			'question' => __( 'My app has been suspended by X.com. What do I do now?', 'wp-to-twitter' ),
+			'answer'   => __( 'Some users have been successful by removing their existing app and creating a new one, following the setup instructions in the X.com Connection tab. It is unlikely you will make any progress by contesting the suspension.', 'wp-to-twitter' ),
 		),
 		array(
-			'question' => __( "I'm receiving a '401 Unauthorized' error from Twitter, but my credentials haven't changed. What should I do?", 'wp-to-twitter' ),
-			'answer'   => __( 'First, check and see whether your app has been suspended in your Twitter developer account. If it has, see above. If not, this is most likely a temporary problem in the Twitter API; but you can try generating new keys and secrets in your developer account and re-connect your app. Some users have also been successful by changing their account status to the free account. (Older accounts may have a legacy status that is not handled well by Twitter.)', 'wp-to-twitter' ),
-		),
-		array(
-			'question' => __( 'Error code 453: You currently have access to Twitter API v2 endpoints and limited v1.1 endpoints only.', 'wp-to-twitter' ),
-			'answer'   => __( 'This is most likely caused by use of an API endpoint that is not included in the new free API tier. According to Twitter documentation, the Twitter Feed is not an allowed endpoint, although I have not personally had any problems with it yet. Enforcement of API rules appears to be inconsistent, so this is only a guess. You can try removing the Twitter Feed widget from your site.', 'wp-to-twitter' ),
-		),
-		array(
-			'question' => __( 'Is WP to Twitter dead?', 'wp-to-twitter' ),
-			'answer'   => __( 'No, but it is on life support. I will ship security, WordPress compatibility, and PHP compatibility updates, but no new feature development.', 'wp-to-twitter' ),
+			'question' => __( "I'm receiving a '401 Unauthorized' error from X.com, but my credentials haven't changed. What should I do?", 'wp-to-twitter' ),
+			'answer'   => __( 'First, check and see whether your app has been suspended in your X.com developer account. If it has, see above. If not, this is most likely a temporary problem in the X.com API; but you can try generating new keys and secrets in your developer account and re-connect your app. Some users have also been successful by changing their account status to the free account. (Older accounts may have a legacy status that is not handled well by X.com.)', 'wp-to-twitter' ),
 		),
 	);
 
@@ -810,7 +803,6 @@ function wp_get_curl( $url ) {
 	curl_setopt( $curl, CURLOPT_USERAGENT, '' );
 	curl_setopt( $curl, CURLOPT_TIMEOUT, 10 );
 	curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true );
-	curl_setopt( $curl, CURLOPT_BINARYTRANSFER, true );
 
 	$response = curl_exec( $curl );
 	if ( 0 !== curl_errno( $curl ) || 200 !== curl_getinfo( $curl, CURLINFO_HTTP_CODE ) ) {
@@ -824,7 +816,7 @@ function wp_get_curl( $url ) {
 add_action( 'dp_duplicate_post', 'wpt_delete_copied_meta', 10, 2 );
 add_action( 'dp_duplicate_page', 'wpt_delete_copied_meta', 10, 2 );
 /**
- * Prevent 'Duplicate Posts' plug-in from copying WP to Twitter meta data
+ * Prevent 'Duplicate Posts' plug-in from copying XPoster meta data
  *
  * @param int    $new_id New post ID.
  * @param object $post Old Post.
@@ -834,7 +826,7 @@ function wpt_delete_copied_meta( $new_id, $post ) {
 	if ( $disable ) {
 		return;
 	}
-	// delete WP to Twitter's meta data from copied post.
+	// delete XPoster's meta data from copied post.
 	// I can't prevent them from being copied, but I can delete them after the fact.
 	delete_post_meta( $new_id, '_wpt_short_url' );
 	delete_post_meta( $new_id, '_wp_jd_target' );
@@ -844,7 +836,7 @@ function wpt_delete_copied_meta( $new_id, $post ) {
 }
 
 /**
- * Provide aliases for changed function names if plug-ins or themes are calling WP to Twitter functions in custom code.
+ * Provide aliases for changed function names if plug-ins or themes are calling XPoster functions in custom code.
  *
  * @param string $url Query url.
  * @param string $method Method.
