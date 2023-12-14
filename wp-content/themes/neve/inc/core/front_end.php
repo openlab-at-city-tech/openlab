@@ -45,23 +45,27 @@ class Front_End {
 			'width'       => 200,
 		);
 
-		add_theme_support( 'title-tag' );
-		add_theme_support( 'post-thumbnails' );
-		add_theme_support( 'automatic-feed-links' );
-		add_theme_support( 'custom-logo', $logo_settings );
-		add_theme_support( 'html5', array( 'search-form' ) );
-		add_theme_support( 'customize-selective-refresh-widgets' );
-		add_theme_support( 'custom-background', [] );
 		add_theme_support( 'align-wide' );
+		add_theme_support( 'automatic-feed-links' );
+		add_theme_support( 'border' );
+		add_theme_support( 'custom-background', [] );
+		add_theme_support( 'custom-logo', $logo_settings );
+		add_theme_support( 'custom-spacing' );
+		add_theme_support( 'custom-units' );
+		add_theme_support( 'customize-selective-refresh-widgets' );
 		add_theme_support( 'editor-color-palette', $this->get_gutenberg_color_palette() );
-		add_theme_support( 'fl-theme-builder-headers' );
 		add_theme_support( 'fl-theme-builder-footers' );
+		add_theme_support( 'fl-theme-builder-headers' );
 		add_theme_support( 'fl-theme-builder-parts' );
 		add_theme_support( 'header-footer-elementor' );
+		add_theme_support( 'html5', array( 'search-form' ) );
 		add_theme_support( 'lifterlms-sidebars' );
 		add_theme_support( 'lifterlms' );
+		add_theme_support( 'link-color' );
+		add_theme_support( 'post-thumbnails' );
 		add_theme_support( 'service_worker', true );
 		add_theme_support( 'starter-content', ( new Starter_Content() )->get() );
+		add_theme_support( 'title-tag' );
 		add_filter( 'script_loader_tag', array( $this, 'filter_script_loader_tag' ), 10, 2 );
 		add_filter( 'embed_oembed_html', array( $this, 'wrap_oembeds' ), 10, 3 );
 		add_filter( 'video_embed_html', array( $this, 'wrap_jetpack_oembeds' ), 10, 1 );
@@ -510,27 +514,43 @@ class Front_End {
 	 */
 	public function get_strings() {
 		return [
-			'add_item'          => __( 'Add item', 'neve' ),
-			'add_items'         => __( 'Add items by clicking the ones below.', 'neve' ),
-			'all_selected'      => __( 'All items are already selected.', 'neve' ),
-			'page_layout'       => __( 'Page Layout', 'neve' ),
-			'page_title'        => __( 'Page Title', 'neve' ),
-			'upsell_components' => __( 'Upgrade to Neve Pro and unlock all components, including Wish List, Breadcrumbs, Custom Layouts and many more.', 'neve' ),
-			'header_booster'    => esc_html__( 'Header Booster', 'neve' ),
-			'blog_booster'      => esc_html__( 'Blog Booster', 'neve' ),
-			'woo_booster'       => esc_html__( 'WooCommerce Booster', 'neve' ),
-			'custom_layouts'    => esc_html__( 'Custom Layouts', 'neve' ),
-			'white_label'       => esc_html__( 'White Label module', 'neve' ),
-			'scroll_to_top'     => esc_html__( 'Scroll to Top module', 'neve' ),
-			'elementor_booster' => esc_html__( 'Elementor Booster', 'neve' ),
-			'ext_h_description' => esc_html__( 'Extend your header with more components and settings, build sticky/transparent headers or display them conditionally.', 'neve' ),
-			'ctm_h_description' => esc_html__( 'Easily create custom headers and footers as well as adding your own custom code or content in any of the hooks locations.', 'neve' ),
-			'elem_description'  => esc_html__( 'Leverage the true flexibility of Elementor with powerful addons and templates that you can import with just one click.', 'neve' ),
-			'get_pro_cta'       => esc_html__( 'Get the PRO version!', 'neve' ),
-			'opens_new_tab_des' => esc_html__( '(opens in a new tab)', 'neve' ),
-			'filter'            => __( 'Filter', 'neve' ),
+			'add_item'                 => __( 'Add item', 'neve' ),
+			'add_items'                => __( 'Add items by clicking the ones below.', 'neve' ),
+			'all_selected'             => __( 'All items are already selected.', 'neve' ),
+			'page_layout'              => __( 'Page Layout', 'neve' ),
+			'page_title'               => __( 'Page Title', 'neve' ),
+			'upsell_components'        => __( 'Upgrade to Neve Pro and unlock all components, including Wish List, Breadcrumbs, Custom Layouts and many more.', 'neve' ),
+			'header_booster'           => esc_html__( 'Header Booster', 'neve' ),
+			'blog_booster'             => esc_html__( 'Blog Booster', 'neve' ),
+			'woo_booster'              => esc_html__( 'WooCommerce Booster', 'neve' ),
+			'custom_layouts'           => esc_html__( 'Custom Layouts', 'neve' ),
+			'white_label'              => esc_html__( 'White Label module', 'neve' ),
+			'scroll_to_top'            => esc_html__( 'Scroll to Top module', 'neve' ),
+			'elementor_booster'        => esc_html__( 'Elementor Booster', 'neve' ),
+			'ext_h_description'        => esc_html__( 'Extend your header with more components and settings, build sticky/transparent headers or display them conditionally.', 'neve' ),
+			'ctm_h_description'        => esc_html__( 'Easily create custom headers and footers as well as adding your own custom code or content in any of the hooks locations.', 'neve' ),
+			'elem_description'         => esc_html__( 'Leverage the true flexibility of Elementor with powerful addons and templates that you can import with just one click.', 'neve' ),
+			'get_pro_cta'              => esc_html__( 'Get the PRO version!', 'neve' ),
+			'opens_new_tab_des'        => esc_html__( '(opens in a new tab)', 'neve' ),
+			'filter'                   => __( 'Filter', 'neve' ),
 			/* translators: %s - Theme name */
-			'neve_options'      => __( '%s Options', 'neve' ),
+			'neve_options'             => __( '%s Options', 'neve' ),
+			'migrate_builder_d'        => __( 'Migrating builder data', 'neve' ),
+			'rollback_builder'         => __( 'Rolling back builder', 'neve' ),
+			'remove_old_data'          => __( 'Removing old data', 'neve' ),
+			'customizer_values_notice' => __( 'You must save the current customizer values before running the migration.', 'neve' ),
+			'wrong_reload_notice'      => __( 'Something went wrong. Please reload the page and try again.', 'neve' ),
+			'rollback_to_old'          => __( 'Want to roll back to the old builder?', 'neve' ),
+			'new_hfg_experience'       => __( "We've created a new Header/Footer Builder experience! You can always roll back to the old builder from right here.", 'neve' ),
+			'manual_adjust'            => __( 'Some manual adjustments may be required.', 'neve' ),
+			'reload'                   => __( 'Reload', 'neve' ),
+			'migrate'                  => __( 'Migrate Builders Data', 'neve' ),
+			'legacy_skin'              => __( 'Legacy Skin', 'neve' ),
+			'neve_30'                  => __( 'Neve 3.0', 'neve' ),
+			'switching_skin'           => __( 'Switching skin', 'neve' ),
+			'switch_skin'              => __( 'Switch Skin', 'neve' ),
+			'dismiss'                  => __( 'Dismiss', 'neve' ),
+			'rollback'                 => __( 'Roll Back', 'neve' ),
 		];
 	}
 

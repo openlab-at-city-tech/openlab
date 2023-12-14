@@ -173,20 +173,21 @@ class About_Us extends Abstract_Module {
 	 * @return array
 	 */
 	private function get_about_localization_data() {
-		$links = isset( $this->about_data['page_menu'] ) ? $this->about_data['page_menu'] : [];
-
+		$links         = isset( $this->about_data['page_menu'] ) ? $this->about_data['page_menu'] : [];
+		$product_pages = isset( $this->about_data['product_pages'] ) ? $this->about_data['product_pages'] : [];
 		return [
-			'links'          => $links,
-			'logoUrl'        => $this->about_data['logo'],
-			'products'       => $this->get_other_products_data(),
-			'homeUrl'        => esc_url( home_url() ),
-			'pageSlug'       => $this->get_about_page_slug(),
-			'currentProduct' => [
+			'links'              => $links,
+			'logoUrl'            => $this->about_data['logo'],
+			'productPages'       => $this->get_product_pages_data( $product_pages ),
+			'products'           => $this->get_other_products_data(),
+			'homeUrl'            => esc_url( home_url() ),
+			'pageSlug'           => $this->get_about_page_slug(),
+			'currentProduct'     => [
 				'slug' => $this->product->get_key(),
 				'name' => $this->product->get_name(),
 			],
-			'teamImage'      => $this->get_sdk_uri() . 'assets/images/team.jpg',
-			'strings'        => [
+			'teamImage'          => $this->get_sdk_uri() . 'assets/images/team.jpg',
+			'strings'            => [
 				'aboutUs'          => __( 'About us', 'neve' ),
 				'heroHeader'       => __( 'Our Story', 'neve' ),
 				'heroTextFirst'    => __( 'Themeisle was founded in 2012 by a group of passionate developers who wanted to create beautiful and functional WordPress themes and plugins. Since then, we have grown into a team of over 20 dedicated professionals who are committed to delivering the best possible products to our customers.', 'neve' ),
@@ -202,7 +203,95 @@ class About_Us extends Abstract_Module {
 				'notInstalled'     => __( 'Not Installed', 'neve' ),
 				'active'           => __( 'Active', 'neve' ),
 			],
+			'canInstallPlugins'  => current_user_can( 'install_plugins' ),
+			'canActivatePlugins' => current_user_can( 'activate_plugins' ),
 		];
+	}
+
+	/**
+	 * Get product pages data.
+	 *
+	 * @param array $product_pages Product pages.
+	 *
+	 * @return array
+	 */
+	private function get_product_pages_data( $product_pages ) {
+
+		$otter_slug                     = 'otter-blocks';
+		$otter_plugin                   = [
+			'status' => 'not-installed',
+		];
+		$otter_plugin['status']         = $this->is_plugin_installed( $otter_slug ) ? 'installed' : 'not-installed';
+		$otter_plugin['status']         = $this->is_plugin_active( $otter_slug ) ? 'active' : $otter_plugin['status'];
+		$otter_plugin['activationLink'] = $this->get_plugin_activation_link( $otter_slug );
+
+		$pages = [
+			'otter-page' => [
+				'name'    => 'Otter Blocks',
+				'hash'    => '#otter-page',
+				'product' => $otter_slug,
+				'plugin'  => $otter_plugin,
+				'strings' => [
+					'heading'      => __( 'Build innovative layouts with Otter Blocks and Gutenberg', 'neve' ),
+					'text'         => __( 'Otter is a lightweight, dynamic collection of page building blocks and templates for the WordPress block editor.', 'neve' ),
+					'buttons'      => [
+						'install_otter_free' => __( "Install Otter - It's free!", 'neve' ),
+						'install_now'        => __( 'Install Now', 'neve' ),
+						'learn_more'         => __( 'Learn More', 'neve' ),
+						'learn_more_link'    => tsdk_utmify( 'https://themeisle.com/plugins/otter-blocks/', 'otter-page', 'about-us' ),
+					],
+					'features'     => [
+						'advancedTitle' => __( 'Advanced Features', 'neve' ),
+						'advancedDesc'  => __( 'Add features such as Custom CSS, Animations & Visibility Conditions to all blocks.', 'neve' ),
+						'fastTitle'     => __( 'Lightweight and Fast', 'neve' ),
+						'fastDesc'      => __( 'Otter enhances WordPress site building experience without impacting site speed.', 'neve' ),
+						'mobileTitle'   => __( 'Mobile-Friendly', 'neve' ),
+						'mobileDesc'    => __( 'Each block can be tweaked to provide a consistent experience across all devices.', 'neve' ),
+					],
+					'details'      => [
+						's1Image' => $this->get_sdk_uri() . 'assets/images/otter/otter-builder.png',
+						's1Title' => __( 'A Better Page Building Experience', 'neve' ),
+						's1Text'  => __( 'Otter can be used to build everything from a personal blog to an e-commerce site without losing the personal touch. Otter’s ease of use transforms basic blocks into expressive layouts in seconds.', 'neve' ),
+						's2Image' => $this->get_sdk_uri() . 'assets/images/otter/otter-patterns.png',
+						's2Title' => __( 'A New Collection of Patterns', 'neve' ),
+						's2Text'  => __( 'A New Patterns Library, containing a range of different elements in a variety of styles to help you build great pages. All of your website’s most important areas are covered: headers, testimonials, pricing tables, sections and more.', 'neve' ),
+						's3Image' => $this->get_sdk_uri() . 'assets/images/otter/otter-library.png',
+						's3Title' => __( 'Advanced Blocks', 'neve' ),
+						's3Text'  => __( 'Enhance your website’s design with powerful blocks, like the Add to Cart, Business Hours, Review Comparison, and dozens of WooCommerce blocks.', 'neve' ),
+					],
+					'testimonials' => [
+						'heading' => __( 'Trusted by more than 300K website owners', 'neve' ),
+						'users'   => [
+							[
+								'avatar' => 'https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:80/h:80/q:mauto/https://themeisle.com/wp-content/uploads/2021/05/avatar-03.png',
+								'name'   => 'Michael Burry',
+								'text'   => 'Loved the collection of blocks. If you want to create nice Gutenberg Pages, this plugin will be very handy and useful.',
+							],
+							[
+								'avatar' => 'https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:80/h:80/q:mauto/https://themeisle.com/wp-content/uploads/2022/04/avatar-04.png',
+								'name'   => 'Maria Gonzales',
+								'text'   => 'I am very satisfied with Otter – a fantastic collection of blocks. And the plugin is perfectly integrated with Gutenberg and complete enough for my needs. ',
+							],
+							[
+								'avatar' => 'https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:80/h:80/q:mauto/https://themeisle.com/wp-content/uploads/2022/04/avatar-05.png',
+								'name'   => 'Florian Henckel',
+								'text'   => 'Otter Blocks work really well and I like the customization options. Easy to use and format to fit in with my site theme – and I’ve not encountered any compatibility or speed issues.',
+							],
+						],
+					],
+				],
+			],
+		];
+
+		return array_filter(
+			$pages,
+			function ( $page_data, $page_key ) use ( $product_pages ) {
+				return in_array( $page_key, $product_pages, true ) &&
+					   isset( $page_data['plugin']['status'] ) &&
+					   $page_data['plugin']['status'] === 'not-installed';
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
 	}
 
 	/**
@@ -257,8 +346,8 @@ class About_Us extends Abstract_Module {
 				'condition'   => class_exists( 'WooCommerce', false ),
 			],
 			'templates-patterns-collection'       => [
-				'name'        => 'Template Cloud',
-				'description' => __( 'Ultimate Free Templates Cloud for WordPress, for blocks, patters of full pages.', 'neve' ),
+				'name'        => 'Templates Cloud',
+				'description' => __( 'Design, save, and revisit your templates anytime with your personal vault on Templates Cloud.', 'neve' ),
 			],
 		];
 
