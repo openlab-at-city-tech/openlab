@@ -2,8 +2,8 @@
 namespace NestedPages\Entities\PostType;
 
 /**
-* Enables the filtering of custom fields in the quick edit interface 
-* Basic field types currently supported : text|date|select
+* Enables the filtering of custom fields in the quick edit and bulk edit interfaces 
+* Basic field types currently supported : text|date|select|url
 * 
 * Filter should return an array of fields
 * 
@@ -22,7 +22,19 @@ namespace NestedPages\Entities\PostType;
 */
 class PostTypeCustomFields 
 {
-	public function outputFields($post_type, $column = 'left')
+	public function outputBulkEditFields($post_type, $column = 'left')
+	{
+		$fields = apply_filters('nestedpages_bulkedit_custom_fields', [], $post_type, $column);
+		if ( empty($fields) ) return;
+		$out = '';
+		foreach ( $fields as $field ){
+			$method = $field['type'] . 'Field';
+			if ( method_exists($this, $method) ) $out .= $this->$method($field);
+		}
+		return $out;
+	}
+
+	public function outputQuickEditFields($post_type, $column = 'left')
 	{
 		$fields = apply_filters('nestedpages_quickedit_custom_fields', [], $post_type, $column);
 		if ( empty($fields) ) return;
@@ -52,11 +64,20 @@ class PostTypeCustomFields
 		return $out;
 	}
 
+	public function urlField($field)
+	{
+		$out = '<div class="form-control">';
+		$out .= '<label>' . $field['label'] . '</label>';
+		$out .= '<input type="text" name="np_custom_nptype_url_nptype_' . $field['key'] . '" value="" data-np-custom-field="' . $field['key'] . '" />';
+		$out .= '</div>';
+		return $out;
+	}
+
 	public function selectField($field)
 	{
 		$out = '<div class="form-control">';
 		$out .= '<label>' . $field['label'] . '</label>';
-		$out .= '<select name="np_custom_' . $field['key'] . '" value="" data-np-custom-field="' . $field['key'] . '">';
+		$out .= '<select name="np_custom_nptype_select_nptype_' . $field['key'] . '" value="" data-np-custom-field="' . $field['key'] . '">';
 		foreach ( $field['choices'] as $key => $label ){
 			$out .= '<option value="' . $key . '">' . $label . '</option>';
 		}
@@ -79,6 +100,7 @@ class PostTypeCustomFields
 			$custom_value = ( isset($post->meta[$field['key']]) ) ? $post->meta[$field['key']] : null;
 			if ( $custom_value ) :
 				$value = $custom_value[0];
+				if ( $field['type'] == 'url' && $value !== '' ) $value = esc_url($value);
 				if ( $field['type'] == 'date' && $field['format_save'] && $value !== '' ) $value = date($field['format_save'], strtotime($value));
 				$out .= ' data-npcustom-' . $field['key'] . '="' . $value . '"';
 			endif;
