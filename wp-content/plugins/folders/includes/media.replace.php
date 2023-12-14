@@ -1264,19 +1264,7 @@ class folders_replace_media {
                 $file_ext = array_pop($file_ext);
                 $ext = strtolower($file_ext);
 
-                $wpmime = wp_get_mime_types();
-
-                if(!isset($wpmime[$ext]) && !in_array($file['type'], $wpmime)) {
-                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
-                }
-
-                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif'])) {
-                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
-                }
-
-                $ext = strtolower($file_ext);
-
-                $wpmime = wp_get_mime_types();
+                $wpmime = get_allowed_mime_types();
 
                 if(!isset($wpmime[$ext]) && !in_array($file['type'], $wpmime)) {
                     wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
@@ -1289,6 +1277,7 @@ class folders_replace_media {
                 if (wp_attachment_is('image', $attachment_id)) {
                     $this->is_old_image = 1;
                 }
+
                 $this->old_file_url = $attachment_url;
                 $this->old_image_meta = wp_get_attachment_metadata($attachment_id);
 

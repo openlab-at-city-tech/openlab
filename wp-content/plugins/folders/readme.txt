@@ -2,8 +2,8 @@
 Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library, posts folders, media folders, media replace, file manager, directories, media library folders, media library folder
 Requires at least: 3.0.0
-Tested up to: 6.3
-Stable tag: 2.9.8
+Tested up to: 6.4
+Stable tag: 3.0
 Plugin URI: https://premio.io/downloads/folders/
 
 🔥 With the Folders WordPress plugin create unlimited folders, organize & manage your Media Library files, Pages & Posts in folders 📁
@@ -46,11 +46,12 @@ It’s rather simple really – once you install the plugin, you can begin using
 
 * <strong>Create unlimited folders</strong>
 * Drag and drop pages, posts, and media library
-* New! Media replace - replace media files with other files uploaded by you
-* New! Import folders from other plugins - import folders from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder
-* New! Keyboard shortcuts ⌨️ - you can do quick actions with your folders using keyboard shortcuts. For example, you can now create new folders, rename folders, duplicate a folder, reorder folders, and much more  - all from your keyboard!
+* Media replace - replace media files with other files uploaded by you
+* NEW! Folders icon colors - you can change the color of your folder icons. You can change it for specific folders, or all folders. You can use it to mark folders that require special attention, etc.
+* Import folders from other plugins - import folders from FileBird, Enhanced Media Library, Wicked Folders, Real Media Library, and WP Media Folder
+* Keyboard shortcuts ⌨️ - you can do quick actions with your folders using keyboard shortcuts. For example, you can now create new folders, rename folders, duplicate a folder, reorder folders, and much more  - all from your keyboard!
 * You can also move media library files, pages & posts to folders without using our drag and drop feature. Whenever you select any element or select some elements in bulk, you can move it to a folder using our dropdown menu
-* NEW! - Undo action - undo your last action in Folders with the click of a button
+* Undo action - undo your last action in Folders with the click of a button
 * Select specific folders when you add media to your pages, posts or any other post type
 * Drag and drop folders, change order, and hierarchy
 * Search folder names
@@ -76,6 +77,7 @@ It’s rather simple really – once you install the plugin, you can begin using
 * Dynamic Folders - automatically filter posts, pages, custom posts, and media library files based on author, date, file types, WooCommerce products & more
 * Delete unused media library files - using the Folders plugin, you can now search for unused media files that take up unnecessary space on your server, and clean them with just a few clicks. You'll see your unused media library sorted from the biggest files to the smallest media library files
 * NEW! Organize your Plugins using Folders - you can create Folders for your plugins and organize them in seconds
+* NEW! Improve folder customization with more folders icon colors
 * Download any media library folder as a ZIP: you can download any media library folder as a zip file. Use this feature to organize your website files and download them locally
 * Sticky folders - you can pin your folders to the upper part of the folders navigation area. Use the sticky folders feature to make your most important folders accessible at all times
 * Add stars to important directories
@@ -235,7 +237,17 @@ A live demo for the Folders plugin is available at <a href="https://demo.premio.
 
 == Changelog ==
 
-= 2.9.8=
+= 3.0 =
+Folders icon colors - you can change the color of your folder icons. You can change it for specific folders, or all folders. You can use it to mark folders that require special attention, etc.
+Improved folders drag and drop functionality
+Added WordPress Multisite support
+Added support for LMS "All courses categories" (Pro feature)
+Fixed Polylang bug
+Speed and infrastructure improvements were implemented
+CatFolders import was added
+File upload to folder bug fixed
+
+= 2.9.8 =
 Thrive Themes bug fixed
 
 = 2.9.7 =

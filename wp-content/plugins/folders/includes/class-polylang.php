@@ -73,7 +73,11 @@ class WCP_Folder_PolyLang
 
         if ($this->active) {
             if (isset($polylang->curlang) && is_object($polylang->curlang)) {
-                $this->poly_lang_term_taxonomy_id = $polylang->curlang->term_taxonomy_id;
+                if(method_exists($polylang->curlang, 'get_tax_prop')) {
+                    $this->poly_lang_term_taxonomy_id = $polylang->curlang->get_tax_prop('language', 'term_taxonomy_id');
+                } else {
+                    $this->poly_lang_term_taxonomy_id = $polylang->curlang->term_taxonomy_id;
+                }
 
                 add_filter('premio_folder_item_in_taxonomy', [$this, 'items_in_taxonomy'], 10, 2);
                 add_filter('premio_folder_un_categorized_items', [$this, 'un_categorized_items'], 10, 2);
