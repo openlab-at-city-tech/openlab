@@ -68,7 +68,9 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
     echo '<div id="wpmc-admin-settings"></div>';
   }
 
-  
+	function is_pro_user() {
+		return class_exists( 'MeowPro_WPMC_Core' ) && !!$this->is_registered();
+	}
 
 }
 

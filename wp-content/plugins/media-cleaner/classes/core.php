@@ -41,7 +41,7 @@ class Meow_WPMC_Core {
 		$this->servername = str_replace( 'http://', '', str_replace( 'https://', '', $this->site_url ) );
 		$uploaddir = wp_upload_dir();
 		$this->upload_path = $uploaddir['basedir'];
-		$this->upload_url = substr( $uploaddir['baseurl'], 1 + strlen( $this->site_url ) );
+		$this->upload_url = substr( $uploaddir['baseurl'], strlen( $this->site_url ) );
 		$this->check_content = $this->get_option( 'content' );
 		$this->debug_logs = $this->get_option( 'debuglogs' );
 		$this->is_rest = MeowCommon_Helpers::is_rest();
@@ -684,6 +684,41 @@ class Meow_WPMC_Core {
 		return true;
 	}
 
+	function repair( $id ) {
+		$repair = $this->get_repair( $id );
+		if ( empty( $repair ) ) {
+			$this->log( "🚫 Repair #{$id} does not exist. Cannot repair this." );
+			return false;
+		}
+		foreach ( $repair->child_ids as $child_id ) {
+			if ( !$this->delete( $child_id ) ) {
+				$this->log( "🚫 Failed to repair the file." );
+				return false;
+			}
+		}
+		$full_path = $this->get_full_upload_path( $repair->path );
+		$filetype = wp_check_filetype( basename( $full_path ), null );
+		$wp_upload_dir = wp_upload_dir();
+		$attachment = array(
+			'guid'           => $wp_upload_dir['url'] . '/' . basename( $full_path ), 
+			'post_mime_type' => $filetype['type'],
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $full_path ) ),
+			'post_content'   => '',
+			'post_status'    => 'inherit'
+		);
+		$attach_id = wp_insert_attachment( $attachment, $full_path );
+
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		$attach_data = wp_generate_attachment_metadata( $attach_id, $full_path );
+		wp_update_attachment_metadata( $attach_id, $attach_data );
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $table_name WHERE id = %d OR parentId = %d", $id, $id ) );
+		$this->log( "✅ Repaired {$repair->path}." );
+		return true;
+	}
+
 	function ignore( $id, $ignore ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_scan";
@@ -709,10 +744,10 @@ class Meow_WPMC_Core {
 
 	function endsWith( $haystack, $needle )
 	{
-	  $length = strlen( $needle );
-	  if ( $length == 0 )
-	    return true;
-	  return ( substr( $haystack, -$length ) === $needle );
+		$length = strlen( $needle );
+		if ( $length == 0 )
+			return true;
+		return ( substr( $haystack, -$length ) === $needle );
 	}
 
 	function clean_dir( $dir ) {
@@ -742,6 +777,133 @@ class Meow_WPMC_Core {
 		$issue->ignored = (int)$issue->ignored;
 		$issue->path = stripslashes( $issue->path );
 		return $issue;
+	}
+
+	function get_repair( $id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+		$repair = $wpdb->get_row( $wpdb->prepare( "SELECT
+				main.id AS id,
+				main.path AS path,
+				GROUP_CONCAT(child.id) AS child_ids
+			FROM
+				$table_name AS main
+			LEFT JOIN
+				$table_name AS child ON main.id = child.parentId
+				WHERE main.id = %d", $id
+			), OBJECT );
+		if ( empty( $repair ) ) {
+			return false;
+		}
+		$repair->id = (int)$repair->id;
+		$regex = "^(.*)(\\s\\(\\+.*)$";
+		$repair->path = preg_replace( '/' . $regex . '/i', '$1', stripslashes( $repair->path ) );
+		$repair->child_ids = $repair->child_ids ? explode( ',', $repair->child_ids ) : [];
+		return $repair;
+	}
+
+	function get_issues_to_repair( $order_by = 'id', $order = 'asc', $search = '', $skip = 0, $limit = 10 ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+
+		$search_clause = '';
+		if ( !empty( $search ) ) {
+			$search_clause = $wpdb->prepare("AND main.path LIKE %s", ( '%' . $search . '%' ));
+		}
+
+		$order_clause = 'ORDER BY main.id ASC';
+		if ( $order_by === 'path' ) {
+			$order_clause = 'ORDER BY main.path ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+		else if ( $order_by === 'issue' ) {
+			$order_clause = 'ORDER BY main.issue ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+		else if ( $order_by === 'size' ) {
+			$order_clause = 'ORDER BY main.size ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+		}
+
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT
+				main.id AS id,
+				main.path AS path,
+				GROUP_CONCAT(child.id) AS child_ids,
+				GROUP_CONCAT(child.path) AS child_paths,
+				main.type AS type,
+				main.postId AS postId,
+				main.size AS size,
+				main.ignored AS ignored,
+				main.deleted AS deleted,
+				main.issue AS issue
+			FROM
+				$table_name AS main
+			LEFT JOIN
+				$table_name AS child ON main.id = child.parentId
+			WHERE
+				main.path IS NOT NULL AND main.parentId IS NULL
+				AND main.deleted = 0 AND main.ignored = 0
+				AND main.type = 0
+				$search_clause
+			GROUP BY main.id
+			$order_clause
+			LIMIT %d, %d;
+		", $skip, $limit ) );
+
+		return $result;
+	}
+
+	function get_repair_ids ( $search = '' ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+
+		$search_clause = '';
+		if ( !empty( $search ) ) {
+			$search_clause = $wpdb->prepare("AND main.path LIKE %s", ( '%' . $search . '%' ));
+		}
+
+		return $wpdb->get_col( "SELECT DISTINCT main.id
+			FROM
+				$table_name AS main
+				LEFT JOIN $table_name AS child ON main.id = child.parentId
+			WHERE
+				main.path IS NOT NULL
+				AND main.parentId IS NULL
+				$search_clause
+			GROUP BY
+				main.id
+			;"
+		);
+	}
+
+	function get_stats_of_issues_to_repair( $search = '' ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_scan";
+
+		$search_clause = '';
+		if ( !empty( $search ) ) {
+			$search_clause = $wpdb->prepare("AND main.path LIKE %s", ( '%' . $search . '%' ));
+		}
+
+		return $wpdb->get_row( "SELECT
+			COUNT(id) AS entries,
+			SUM(size) AS size
+			FROM (
+				SELECT
+					COUNT(DISTINCT main.id) as id,
+					main.size as size
+				FROM
+					$table_name AS main
+				LEFT JOIN
+					$table_name AS child ON main.id = child.parentId
+				WHERE
+					main.path IS NOT NULL AND main.parentId IS NULL AND main.deleted = 0 AND main.ignored = 0
+					$search_clause
+				GROUP BY main.id
+			) t;
+		" );
+	}
+
+	function get_count_of_issues_to_repair( $search ) {
+		$stats = $this->get_stats_of_issues_to_repair( $search );
+		return $stats->entries;
 	}
 
 	function delete( $id ) {
@@ -885,6 +1047,7 @@ class Meow_WPMC_Core {
 		$ref->mediaId = (int)$ref->mediaId;
 		$ref->originType = (int)$ref->originType;
 		$ref->origin = stripslashes( $ref->origin );
+		$ref->parentId = empty( $ref->parentId ) ? null : (int)$ref->parentId;
 		return $ref;
 	}
 
@@ -910,7 +1073,8 @@ class Meow_WPMC_Core {
 				'id' => (int)$ref->id,
 				'mediaId' => $mediaId,
 				'mediaUrl' => $ref->mediaUrl,
-				'originType' => $ref->originType
+				'originType' => $ref->originType,
+				'parentId' => empty( $ref->parentId ) ? null : (int)$ref->parentId,
 			] );
 		}
 		return $fresh_refs;
@@ -943,34 +1107,81 @@ class Meow_WPMC_Core {
 		}
 	}
 
-	// The cache containing the references is wrote to the DB.
-	function write_references() {
+	function insert_references($entries)
+	{
 		global $wpdb;
 		$table = $wpdb->prefix . "mclean_refs";
 		$values = array();
 		$place_holders = array();
-		$query = "INSERT INTO $table (mediaId, mediaUrl, originType) VALUES ";
-		foreach ( $this->refcache as $value ) {
-			if ( !is_null( $value['id'] ) ) {
+		$query = "INSERT INTO $table (mediaId, mediaUrl, originType, parentId) VALUES ";
+
+		foreach ( $entries as $value ) {
+			if ( !is_null($value['id'] ) ) {
+				// Media Reference
 				array_push( $values, $value['id'], $value['type'] );
-				$place_holders[] = "('%d',NULL,'%s')";
-				if ( $this->debug_logs ) {
-					$this->log( "＋ Media #{$value['id']} (as ID)" );
+				$place_holders[] = "('%d', NULL, '%s', NULL)";
+
+				if ($this->debug_logs) {
+					$this->log("＋ Media #{$value['id']} (as ID)");
 				}
 			}
-			else if ( !is_null( $value['url'] ) ) {
+			else if ( !is_null($value['url'] ) ) {
+				// File Reference
 				array_push( $values, $value['url'], $value['type'] );
-				$place_holders[] = "(NULL,'%s','%s')";
-				if ( $this->debug_logs ) {
-					$this->log( "＋ {$value['url']}" );
+				if ( isset( $value['parentId'] ) ) {
+					array_push( $values, $value['parentId'] );
+					$place_holders[] = "(NULL, '%s', '%s', '%d')";
+					if ( $this->debug_logs ) {
+						$this->log( "＋ {$value['url']} (as URL) (ParentID: {$value['parentId']})" );
+					}
+				} else {
+					$place_holders[] = "(NULL, '%s', '%s', NULL)";
+					if ( $this->debug_logs ) {
+						$this->log("＋ {$value['url']} (as URL)");
+					}
 				}
 			}
 		}
+
 		if ( !empty( $values ) ) {
 			$query .= implode( ', ', $place_holders );
 			$prepared = $wpdb->prepare( "$query ", $values );
 			$wpdb->query( $prepared );
 		}
+	}
+
+
+	// The cache containing the references is wrote to the DB.
+	function write_references() {
+		global $wpdb;
+		$table = $wpdb->prefix . "mclean_refs";
+
+		$potential_parents = array();
+		$potential_children = array();
+
+		foreach ( $this->refcache as $value ) {
+			$potentialParentPath = !is_null( $value['url'] ) ? $this->clean_url_from_resolution( $value['url'] ) : null;
+			if ( $potentialParentPath === $value['url'] ) {
+				$potential_parents[] = $value;
+			}
+			else {
+				$potential_children[] = $value;
+			}
+		}
+
+		$this->insert_references( $potential_parents );
+
+		// Resolve parentId for potential children
+		foreach ( $potential_children as &$child ) {
+			$potentialParentPath = $this->clean_url_from_resolution( $child['url'] );
+			$parentId = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table WHERE mediaUrl = %s", $potentialParentPath ) );
+			if ( !empty( $parentId ) ) {
+				$child['parentId'] = (int)$parentId;
+			}
+		}
+
+		// Insert potential children with resolved parentIds
+		$this->insert_references( $potential_children );
 		$this->refcache = array();
 	}
 
@@ -1120,6 +1331,12 @@ class Meow_WPMC_Core {
 		return false;
 	}
 
+	function get_full_upload_path( $relative_path ) {
+		$wp_upload_dir = wp_upload_dir();
+		$full_path = trailingslashit( $wp_upload_dir['basedir'] ) . $relative_path;
+		return $full_path;
+	}
+
 	function get_paths_from_attachment( $attachmentId ) {
 		$paths = array();
 		$fullpath = get_attached_file( $attachmentId );
@@ -1244,6 +1461,10 @@ class Meow_WPMC_Core {
 		if ( file_exists( WPMC_PATH . '/logs/media-cleaner.log' ) ) {
 			file_put_contents( WPMC_PATH . '/logs/media-cleaner.log', '' );
 		}
+	}
+
+	function reset_references() {
+		global $wpdb;
 		$table_name = $wpdb->prefix . "mclean_refs";
 		$wpdb->query("TRUNCATE $table_name");
 	}
@@ -1276,6 +1497,29 @@ class Meow_WPMC_Core {
 		}
 	}
 
+	function get_uploads_directory_hierarchy() {
+		$uploads_dir = wp_upload_dir();
+		$base_dir = $uploads_dir['basedir'];
+		$root = '/' . wp_basename( $base_dir );
+		$directories = array();
+
+		// Get all subdirectories of the base directory
+		$dir_iterator = new RecursiveDirectoryIterator( $base_dir, FilesystemIterator::KEY_AS_PATHNAME|FilesystemIterator::CURRENT_AS_FILEINFO|FilesystemIterator::SKIP_DOTS );
+		$iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
+		foreach ( $iterator as $file ) {
+			if ( $file->isDir() ) {
+				// Remove base_dir from path
+				$directory = str_replace( $base_dir, '', $file->getPathname() );
+				if ( $directory ) {
+					$directories[] = $root . $directory;
+				}
+			}
+		}
+
+		// Return the hierarchy as a JSON file
+		return json_encode( $directories );
+	}
+
 	/**
 	 *
 	 * Roles & Access Rights
@@ -1289,7 +1533,7 @@ class Meow_WPMC_Core {
 		return apply_filters( 'wpmc_allow_usage', current_user_can( 'administrator' ) );
 	}
 
-	#region Options 
+	#region Options
 
 	function list_options() {
 		return array(
@@ -1315,6 +1559,8 @@ class Meow_WPMC_Core {
 			'shortcodes_disabled' => false,
 			'posts_per_page' => 10,
 			'clean_uninstall' => false,
+			'repair_mode' => false,
+			'expert_mode' => false,
 		);
 	}
 
@@ -1419,15 +1665,24 @@ function wpmc_check_database() {
 	if ( $wpmc_check_database_done ) {
 		return true;
 	}
-	$table_scan = $wpdb->prefix . "mclean_refs";
-	$table_refs = $wpdb->prefix . "mclean_scan";
-	$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan )
-		|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs ) );
+	$table_refs = $wpdb->prefix . "mclean_refs";
+	$table_scan = $wpdb->prefix . "mclean_scan";
+	$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs )
+		|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan ) );
 	if ( !$db_init ) {
 		wpmc_create_database();
-		$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan )
-			|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs ) );
+		$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs )
+			|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan ) );
 	}
+
+	// Check if parentId column exists in the table
+	// TODO: Delete this after June 2024
+	$parentIdExists = $wpdb->get_var( "SHOW COLUMNS FROM $table_refs LIKE 'parentId'" );
+	if ( !$parentIdExists ) {
+		$wpdb->query( "ALTER TABLE $table_refs ADD parentId BIGINT(20) NULL;" );
+		$wpdb->query( "ALTER TABLE $table_scan ADD parentId BIGINT(20) NULL;" );
+	}
+
 	$wpmc_check_database_done = true;
 }
 
@@ -1445,6 +1700,7 @@ function wpmc_create_database() {
 		ignored TINYINT(1) NOT NULL DEFAULT 0,
 		deleted TINYINT(1) NOT NULL DEFAULT 0,
 		issue TINYTEXT NOT NULL,
+		parentId BIGINT(20) NULL,
 		PRIMARY KEY  (id)
 	) " . $charset_collate . ";" ;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -1460,6 +1716,7 @@ function wpmc_create_database() {
 		mediaId BIGINT(20) NULL,
 		mediaUrl TINYTEXT NULL,
 		originType TINYTEXT NOT NULL,
+		parentId BIGINT(20) NULL,
 		PRIMARY KEY  (id)
 	) " . $charset_collate . ";";
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

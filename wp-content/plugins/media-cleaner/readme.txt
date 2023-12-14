@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, acf
 Donate link: https://meowapps.com/donation/
 Requires at least: 6.0
-Tested up to: 6.3.1
+Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 6.6.7
+Stable tag: 6.6.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,10 +47,20 @@ This plugin is compatible with all media types, including retina and WebP versio
 
 == Changelog ==
 
+= 6.6.9 (2023/12/05) =
+* Add: Expert Mode for advanced users.
+* Info: We are working hard on Media Cleaner. If you want to share some love, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.6.8 (2023/11/18) =
+* Add: Support for ACF File Field based on IDs.
+* Add: Repair Mode for Filesystem Scan (use this carefully, still in beta).
+* Update: Much better "References" section in the Dashboard, with additional filters.
+* Update: Various additional enhancements, maybe you'll notice! 😊
+* Add: Support for Academy LMS.
+
 = 6.6.7 (2023/09/21) =
 * Update: Enhanced the get_references_for_post_id function.
 * Update: Code cleaning.
-* Info: I am working hard on Media Cleaner. If you want to give me some love and motivation, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.6.6 (2023/09/14) =
 * Add: The get_reference_for_media_id and get_references_for_post_id functions are now accessible through the global $wpmc_core variable. Those functions will return where a specific media entry is used, or which  media entries are used in a specific post. 
