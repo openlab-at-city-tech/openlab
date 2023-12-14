@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.7.14.2
+Version: 2.8.0
 Requires at least: 4.0
 Requires PHP: 5.6
 Author: Gravity Forms
@@ -121,7 +121,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  *
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '6.2' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '6.3' );
 
 /**
  * The filesystem path of the directory that contains the plugin, includes trailing slash.
@@ -245,7 +245,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.7.14.2';
+	public static $version = '2.8.0';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -304,6 +304,7 @@ class GFForms {
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\Updates\GF_Auto_Updates_Service_Provider() );
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\License\GF_License_Service_Provider() );
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\Config\GF_Config_Service_Provider() );
+        $container->add_provider( new \Gravity_Forms\Gravity_Forms\Editor_Button\GF_Editor_Service_Provider() );
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\Embed_Form\GF_Embed_Service_Provider() );
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\Merge_Tags\GF_Merge_Tags_Service_Provider() );
 		$container->add_provider( new \Gravity_Forms\Gravity_Forms\Duplicate_Submissions\GF_Duplicate_Submissions_Service_Provider() );
@@ -338,6 +339,7 @@ class GFForms {
 		require_once GF_PLUGIN_DIR_PATH . 'includes/duplicate-submissions/class-gf-duplicate-submissions-service-provider.php';
 		require_once GF_PLUGIN_DIR_PATH . 'includes/util/class-gf-util-service-provider.php';
 		require_once GF_PLUGIN_DIR_PATH . 'includes/config/class-gf-config-service-provider.php';
+        require_once GF_PLUGIN_DIR_PATH . 'includes/editor-button/class-gf-editor-service-provider.php';
 		require_once GF_PLUGIN_DIR_PATH . 'includes/embed-form/class-gf-embed-service-provider.php';
 		require_once GF_PLUGIN_DIR_PATH . 'includes/form-editor/class-gf-form-editor-service-provider.php';
 		require_once GF_PLUGIN_DIR_PATH . 'includes/splash-page/class-gf-splash-page-service-provider.php';
@@ -1977,6 +1979,8 @@ class GFForms {
 		 * @var string $ajax
 		 * @var int    $tabindex
 		 * @var string $action
+		 * @var string $theme
+		 * @var string $styles
 		 */
 		extract(
 			shortcode_atts(
@@ -1989,6 +1993,8 @@ class GFForms {
 					'ajax'         => false,
 					'tabindex'     => 0,
 					'action'       => 'form',
+					'theme'        => get_option( 'rg_gforms_default_theme', 'gravity-theme' ),
+					'styles'       => '',
 				), $attributes, 'gravityforms'
 			)
 		);
@@ -2023,7 +2029,7 @@ class GFForms {
 				parse_str( $field_values, $field_value_array ); //parsing query string like string for field values and placing them into an associative array
 				$field_value_array = stripslashes_deep( $field_value_array );
 
-				$shortcode_string = self::get_form( $id, $title, $description, false, $field_value_array, $ajax, $tabindex );
+				$shortcode_string = self::get_form( $id, $title, $description, false, $field_value_array, $ajax, $tabindex, $theme, $styles );
 
 		}
 
@@ -2119,10 +2125,12 @@ class GFForms {
 			$display_title       = ! isset( $args['title'] ) || ! empty( $args['title'] ) ? true : false;
 			$display_description = ! isset( $args['description'] ) || ! empty( $args['description'] ) ? true : false;
 			$tabindex            = isset( $args['tabindex'] ) ? absint( $args['tabindex'] ) : 0;
+			$theme               = isset( $args['theme'] ) ? $args['theme'] : null;
+			$styles              = isset( $args['styles'] ) ? $args['styles'] : null;
 
 			parse_str( rgpost( 'gform_field_values' ), $field_values );
 
-			$result = GFFormDisplay::get_form( $form_id, $display_title, $display_description, false, $field_values, true, $tabindex );
+			$result = GFFormDisplay::get_form( $form_id, $display_title, $display_description, false, $field_values, true, $tabindex, $theme, $styles, array() );
 		} else {
 			// The form ID in the footer inputs has been tampered with; handling it like a honeypot failure and returning the default confirmation instead.
 			$default_confirmation = GFFormsModel::get_default_confirmation();
@@ -3331,10 +3339,10 @@ class GFForms {
 	 * @uses   GFFormDisplay::get_form()
 	 * @uses   GFCommon::get_base_path()
 	 */
-	public static function get_form( $form_id, $display_title = true, $display_description = true, $force_display = false, $field_values = null, $ajax = false, $tabindex = 0 ) {
+	public static function get_form( $form_id, $display_title = true, $display_description = true, $force_display = false, $field_values = null, $ajax = false, $tabindex = 0, $theme = null, $style_settings = null ) {
 		require_once( GFCommon::get_base_path() . '/form_display.php' );
 
-		return GFFormDisplay::get_form( $form_id, $display_title, $display_description, $force_display, $field_values, $ajax, $tabindex );
+		return GFFormDisplay::get_form( $form_id, $display_title, $display_description, $force_display, $field_values, $ajax, $tabindex, $theme, $style_settings );
 	}
 
 	/**
@@ -6740,6 +6748,8 @@ class RGForms extends GFForms {
  *
  * Should be used to insert a Gravity Form from code.
  *
+ * @since 2.7.15 Added $form_theme and $style_settings parameters.
+ *
  * @param string $id The form ID
  * @param bool $display_title If the form title should be displayed in the form. Defaults to true.
  * @param bool $display_description If the form description should be displayed in the form. Defaults to true.
@@ -6748,15 +6758,17 @@ class RGForms extends GFForms {
  * @param bool $ajax If submission should be processed via AJAX. Defaults to false.
  * @param int $tabindex Starting tabindex. Defaults to 0.
  * @param bool $echo If the field should be echoed.  Defaults to true.
+ * @param string $form_theme Form theme slug.
+ * @param string $style_settings JSON-encoded style settings. Passing false will bypass the gform_default_styles filter.
  *
  * @return string|void
  */
-function gravity_form( $id, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 0, $echo = true ) {
+function gravity_form( $id, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 0, $echo = true, $form_theme = null, $style_settings = null ) {
 	if ( ! $echo ) {
-		return GFForms::get_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex );
+		return GFForms::get_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex, $form_theme, $style_settings );
 	}
 
-	echo GFForms::get_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex );
+	echo GFForms::get_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex, $form_theme, $style_settings );
 }
 
 /**

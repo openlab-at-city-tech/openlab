@@ -810,17 +810,28 @@ class GFFormDisplay {
 		// If form is legacy, return that early to avoid calculating orbital styles.
 		if ( GFCommon::is_legacy_markup_enabled( $form ) ) {
 			$slug = 'legacy';
+		} elseif ( GFCommon::is_preview() ) {
+			return 'gravity-theme';
 		} else {
 			$instance       = rgar( $form, 'page_instance', 0 );
 			$all_blocks     = apply_filters( 'gform_form_block_attribute_values', array() );
 			$block_settings = empty( $all_blocks[ $form['id'] ] ) ? array() : $all_blocks[ $form['id'] ][ $instance ];
 
-			// If Orbital is selected for this block, return that.
-			if ( isset( $block_settings['theme'] ) && $block_settings['theme'] !== 'gravity' ) {
+			// If a theme is selected for this block or shortcode, return that.
+			if ( isset( $block_settings['theme'] ) ) {
 				$slug = $block_settings['theme'];
-			} else {
-				$slug = 'gravity-theme';
+			} elseif( rgar( $form, 'theme' ) ) {
+				$slug = $form['theme'];
 			}
+		}
+
+		// allow using the short version in shortcodes.
+		if ( !empty( $slug ) && $slug == 'gravity' ) {
+			$slug = 'gravity-theme';
+		}
+
+		if ( empty( $slug ) || ! in_array( $slug, array( 'legacy', 'gravity-theme', 'orbital' ) ) ) {
+			$slug = get_option( 'rg_gforms_default_theme', 'gravity-theme' );
 		}
 
 		/**
@@ -836,7 +847,25 @@ class GFFormDisplay {
 		return apply_filters( 'gform_form_theme_slug', $slug, $form );
 	}
 
-	public static function get_form( $form_id, $display_title = true, $display_description = true, $force_display = false, $field_values = null, $ajax = false, $tabindex = 0 ) {
+	/**
+	 * Get a form for display.
+	 *
+	 * @since unknown
+	 * @since 2.7.15 Added the $form_theme and $style_settings parameters.
+	 *
+	 * @param int    $form_id The id of the form.
+	 * @param bool   $display_title Whether to display the form title.
+	 * @param bool   $display_description Whether to display the form description.
+	 * @param bool   $force_display Whether to force the form to display even if it is inactive.
+	 * @param array  $field_values Array of field values.
+	 * @param bool   $ajax Whether ajax is enabled.
+	 * @param int    $tabindex Tabindex for the form.
+	 * @param string $form_theme Form theme slug.
+	 * @param string $style_settings JSON-encoded style settings. Passing false will bypass the gform_default_styles filter.
+	 *
+	 * @return mixed|string|WP_Error
+	 */
+	public static function get_form( $form_id, $display_title = true, $display_description = true, $force_display = false, $field_values = null, $ajax = false, $tabindex = 0, $form_theme = null, $style_settings = null ) {
 		GFCommon::timer_start( __METHOD__ );
 
 		/**
@@ -987,6 +1016,12 @@ class GFFormDisplay {
 				RGFormsModel::insert_form_view( $form_id );
 			}
 		}
+
+		if ( null !== $form_theme ) {
+			$form['theme'] = $form_theme;
+		}
+
+		$form['styles'] = self::get_form_styles( $style_settings );
 
 		//Fired right before the form rendering process. Allow users to manipulate the form object before it gets displayed in the front end
 		$form = gf_apply_filters( array( 'gform_pre_render', $form_id ), $form, $ajax, $field_values );
@@ -1152,10 +1187,8 @@ class GFFormDisplay {
                         </div>';
 			}
 
-			$novalidate = GFFormsModel::is_html5_enabled() ? 'novalidate' : '';
-
 			$action = esc_url( $action );
-			$form_string .= gf_apply_filters( array( 'gform_form_tag', $form_id ), "<form method='post' enctype='multipart/form-data' {$target} id='gform_{$form_id}' {$form_css_class} action='{$action}' data-formid='{$form_id}' $novalidate>", $form );
+			$form_string .= gf_apply_filters( array( 'gform_form_tag', $form_id ), "<form method='post' enctype='multipart/form-data' {$target} id='gform_{$form_id}' {$form_css_class} action='{$action}' data-formid='{$form_id}' novalidate>", $form );
 
 
 
@@ -1264,7 +1297,7 @@ class GFFormDisplay {
 				 * @param array $form The Form object to filter through
 				 */
 				$previous_button = gf_apply_filters( array( 'gform_previous_button', $form_id ), $previous_button, $form );
-				$form_string .= '</div>' . self::gform_footer( $form, 'gform_page_footer ' . rgar( $form, 'labelPlacement', 'before' ), $ajax, $field_values, $previous_button, $display_title, $display_description, $tabindex ) . '
+				$form_string .= '</div>' . self::gform_footer( $form, 'gform_page_footer ' . rgar( $form, 'labelPlacement', 'before' ), $ajax, $field_values, $previous_button, $display_title, $display_description, $tabindex, $form_theme, $style_settings ) . '
                         </div>'; //closes gform_page
 			}
 
@@ -1273,7 +1306,7 @@ class GFFormDisplay {
 			//suppress form footer for multi-page forms (footer will be included on the last page
 			$label_placement = rgar( $form, 'labelPlacement', 'before' );
 			if ( ! $has_pages ) {
-				$form_string .= self::gform_footer( $form, 'gform_footer ' . $label_placement, $ajax, $field_values, '', $display_title, $display_description, $tabindex );
+				$form_string .= self::gform_footer( $form, 'gform_footer ' . $label_placement, $ajax, $field_values, '', $display_title, $display_description, $tabindex, $form_theme, $style_settings );
 			}
 
 			$form_string .= '
@@ -1542,11 +1575,7 @@ class GFFormDisplay {
 				$input_type = 'button';
 			} else {
 				// prevent multiple form submissions when button is pressed multiple times
-				if ( GFFormsModel::is_html5_enabled() ) {
-					$set_submitting = "if( !jQuery(\"#gform_{$form_id}\")[0].checkValidity || jQuery(\"#gform_{$form_id}\")[0].checkValidity()){window[\"gf_submitting_{$form_id}\"]=true;}";
-				} else {
-					$set_submitting = "window[\"gf_submitting_{$form_id}\"]=true;";
-				}
+				$set_submitting = "if( !jQuery(\"#gform_{$form_id}\")[0].checkValidity || jQuery(\"#gform_{$form_id}\")[0].checkValidity()){window[\"gf_submitting_{$form_id}\"]=true;}";
 
 				$onclick_submit = $button['type'] == 'link' ? $do_submit : '';
 
@@ -1606,7 +1635,7 @@ class GFFormDisplay {
 		return $class;
 	}
 
-	public static function gform_footer( $form, $class, $ajax, $field_values, $previous_button, $display_title, $display_description, $tabindex = 1 ) {
+	public static function gform_footer( $form, $class, $ajax, $field_values, $previous_button, $display_title, $display_description, $tabindex = 1, $theme = null, $style_settings = null ) {
 		$form_id      = absint( $form['id'] );
 		$footer       = "
         <div class='" . esc_attr( $class ) . "'>";
@@ -1635,8 +1664,18 @@ class GFFormDisplay {
 
 		$tabindex = (int) $tabindex;
 
+		$theme = $theme ? "&amp;theme={$theme}" : '';
+
+		// Make sure style settings are valid JSON.
+		if ( ! empty( $style_settings ) ) {
+			$valid_json = json_decode( $style_settings );
+			if ( null !== $valid_json ) {
+				$style_settings .= "&amp;styles={$style_settings}";
+			}
+		}
+
 		if ( $ajax ) {
-			$footer .= "<input type='hidden' name='gform_ajax' value='" . esc_attr( "form_id={$form_id}&amp;title={$display_title}&amp;description={$display_description}&amp;tabindex={$tabindex}" ) . "' />";
+			$footer .= "<input type='hidden' name='gform_ajax' value='" . esc_attr( "form_id={$form_id}&amp;title={$display_title}&amp;description={$display_description}&amp;tabindex={$tabindex}{$theme}{$style_settings}" ) . "' />";
 		}
 
 		$current_page     = self::get_current_page( $form_id );
@@ -2617,11 +2656,13 @@ class GFFormDisplay {
 			self::parse_forms( $post->post_content, $found_forms, $found_blocks );
 
 			if ( ! empty( $found_forms ) ) {
-				foreach ( $found_forms as $form_id => $ajax ) {
+				foreach ( $found_forms as $form_id => $attributes ) {
 					$form = GFAPI::get_form( $form_id );
+					$ajax  = $attributes['ajax'];
+					$theme = $attributes['theme'];
 
 					if ( $form && $form['is_active'] && ! $form['is_trash'] ) {
-						self::enqueue_form_scripts( $form, $ajax );
+						self::enqueue_form_scripts( $form, $ajax, $theme );
 					}
 				}
 
@@ -2704,9 +2745,11 @@ class GFFormDisplay {
 			// Get the form ID and AJAX attributes.
 			$form_id = (int) $block['attrs']['formId'];
 			$ajax    = isset( $block['attrs']['ajax'] ) ? (bool) $block['attrs']['ajax'] : false;
+			$theme   = isset( $block['attrs']['theme'] ) ? $block['attrs']['theme'] : '';
 
 			if ( self::is_applicable_form( $form_id, $ajax, $found_forms ) ) {
-				$found_forms[ $form_id ] = $ajax;
+				$found_forms[ $form_id ]['ajax']  = $ajax;
+				$found_forms[ $form_id ]['theme'] = $theme;
 			}
 		}
 	}
@@ -2766,9 +2809,11 @@ class GFFormDisplay {
 
 				$form_id = (int) $form_id;
 				$ajax    = isset( $attr['ajax'] ) && strtolower( substr( $attr['ajax'], 0, 4 ) ) == 'true';
+				$theme   = isset( $attr['theme'] ) ? $attr['theme'] : '';
 
 				if ( self::is_applicable_form( $form_id, $ajax, $found_forms ) ) {
-					$found_forms[ $form_id ] = $ajax;
+					$found_forms[ $form_id ]['ajax']  = $ajax;
+					$found_forms[ $form_id ]['theme'] = $theme;
 				}
 			}
 		}
@@ -2822,15 +2867,26 @@ class GFFormDisplay {
 	 * Get the various enqueueable assets for a given form.
 	 *
 	 * @since 2.5
+	 * @since 2.7 Added $theme parameter
 	 *
 	 * @param array $form An array representing the current Form object.
+	 * @param string $theme The theme slug for the form.
 	 *
 	 * @return GF_Asset[]
 	 */
-	public static function get_form_enqueue_assets( $form ) {
+	public static function get_form_enqueue_assets( $form, $theme = null ) {
 		$assets = array();
 
-		if ( ! get_option( 'rg_gforms_disable_css' ) ) {
+		/**
+		 * Allows users to disable all CSS files from being loaded on the Front End.
+		 *
+		 * @since 2.8
+		 *
+		 * @param boolean Whether to disable css.
+		 */
+		$disable_css = apply_filters( 'gform_disable_css', get_option( 'rg_gforms_disable_css' ) );
+
+		if ( ! $disable_css ) {
 
 			if ( GFCommon::is_legacy_markup_enabled( $form ) ) {
 
@@ -2862,21 +2918,34 @@ class GFFormDisplay {
 				}
 
 			} else {
+				$theme_slug = $theme ? $theme : self::get_form_theme_slug( $form );
+				if ( 'gravity-theme' == $theme_slug ) {
+					$assets[] = new GF_Style_Asset( 'gform_basic' );
 
-				$assets[] = new GF_Style_Asset( 'gform_basic' );
+					/**
+					 * Allows users to disable the main theme.css file from being loaded on the Front End.
+					 *
+					 * @since 2.5-beta-3
+					 *
+					 * @param boolean Whether to disable the theme css.
+					 */
+					$disable_theme_css = apply_filters( 'gform_disable_form_theme_css', false );
 
-				/**
-				 * Allows users to disable the main theme.css file from being loaded on the Front End.
-				 *
-				 * @since 2.5-beta-3
-				 *
-				 * @param boolean Whether to disable the theme css.
-				 */
-				$disable_theme_css = apply_filters( 'gform_disable_form_theme_css', false );
-
-				if ( ! $disable_theme_css ) {
-					$assets[] = new GF_Style_Asset( 'gform_theme' );
+					if ( ! $disable_theme_css ) {
+						$assets[] = new GF_Style_Asset( 'gform_theme' );
+					}
 				}
+
+				if ( 'orbital' == $theme_slug ) {
+
+					$assets[] = new GF_Style_Asset( 'gravity_forms_orbital_theme' );
+					$assets[] = new GF_Style_Asset( 'gravity_forms_theme_foundation' );
+					$assets[] = new GF_Style_Asset( 'gravity_forms_theme_framework' );
+					$assets[] = new GF_Style_Asset( 'gravity_forms_theme_reset' );
+
+				}
+
+
 			}
 
 			if ( self::has_password_visibility( $form ) ) {
@@ -2988,12 +3057,15 @@ class GFFormDisplay {
 	/**
 	 * Enqueue the required scripts for this form.
 	 *
+	 * @since 2.7 Added the $theme parameter
+	 *
 	 * @param array $form An array representing the current Form object.
 	 * @param false $ajax Whether this is being requested via AJAX.
+	 * @param string $theme The form theme slug.
 	 *
 	 * @return void
 	 */
-	public static function enqueue_form_scripts( $form, $ajax = false ) {
+	public static function enqueue_form_scripts( $form, $ajax = false, $theme = null ) {
 
 		// adding pre enqueue scripts hook so that scripts can be added first if a need exists
 		/**
@@ -3006,7 +3078,7 @@ class GFFormDisplay {
 
 		add_filter( 'script_loader_tag', array( 'GFFormDisplay', 'add_script_defer' ), 10, 2 );
 
-		$assets = self::get_form_enqueue_assets( $form );
+		$assets = self::get_form_enqueue_assets( $form, $theme );
 
 		foreach( $assets as $asset ) {
 			/**
@@ -3526,7 +3598,7 @@ class GFFormDisplay {
 				"} " . //keep the space. needed to prevent plugins from replacing }} with ]}
 				"} );" .
 
-				"jQuery(document).bind('gform_post_conditional_logic', function(event, formId, fields, isInit){";
+				"jQuery(document).on('gform_post_conditional_logic', function(event, formId, fields, isInit){";
 			foreach ( $init_scripts as $init_script ) {
 				if ( $init_script['location'] == self::ON_CONDITIONAL_LOGIC ) {
 					$script_body .= $init_script['script'];
@@ -4218,6 +4290,11 @@ class GFFormDisplay {
 
 		$field_content = gf_apply_filters( array( 'gform_field_content', $form_id, $field->id ), $field_content, $field, $value, 0, $form_id );
 
+		$admin_compact_view_menu = $is_form_editor ? sprintf( "<div id='dropdown_field_%s' data-js='gform-compact-view-overflow-menu' class='gform-compact-view-overflow-menu'></div>", $field->id ) : '';
+
+		if( $is_form_editor ) {
+			$field_content = '<div class="gfield-admin-wrapper">' . $field_content . '</div>' . ( $field->type !== 'submit' ? $admin_compact_view_menu : '' );
+		}
 		return $field_content;
 	}
 
@@ -4582,8 +4659,6 @@ class GFFormDisplay {
 		$anchor = self::get_anchor( $form, $ajax );
 		$action .= $anchor['id'];
 
-		$html_input_type = RGFormsModel::is_html5_enabled() ? 'email' : 'text';
-
 		$resume_token = esc_attr( $resume_token );
 
 		$form_is_invalid = ! is_null( $email ) && ! GFCommon::is_valid_email( $email );
@@ -4615,7 +4690,7 @@ class GFFormDisplay {
 							<form action='{$action}' method='POST' id='gform_{$form_id}' data-formid='{$form_id}' {$target}>
 								{$ajax_fields}
 								<label for='gform_resume_email' class='gform_resume_email_label gfield_label' aria-describedby='email-validation-error'>{$email_input_label}</label>
-								<input type='{$html_input_type}' name='gform_resume_email' value='{$email_esc}' id='gform_resume_email' placeholder='{$email_input_label}' aria-describedby='email-validation-error'/>
+								<input type='email' name='gform_resume_email' value='{$email_esc}' id='gform_resume_email' placeholder='{$email_input_label}' aria-describedby='email-validation-error'/>
 								<input type='hidden' name='gform_resume_token' value='{$resume_token}' />
 								<input type='hidden' name='gform_send_resume_link' value='{$form_id}' />
 								<input type='hidden' class='gform_hidden' name='is_submit_{$form_id}' value='1' />
@@ -4634,7 +4709,7 @@ class GFFormDisplay {
 									<div class='gfield gfield--type-email gfield--width-full field_sublabel_below field_description_below gfield_visibility_visible'>
 										<label for='gform_resume_email' class='gform_resume_email_label gfield_label gform-field-label'>{$email_input_label}{$email_input_label_required}</label>
 										<div class='ginput_container ginput_container_text'>
-											<input type='{$html_input_type}' name='gform_resume_email' class='large' id='gform_resume_email' value='{$email_esc}' aria-describedby='email-validation-error' />
+											<input type='email' name='gform_resume_email' class='large' id='gform_resume_email' value='{$email_esc}' aria-describedby='email-validation-error' />
 											{$validation_output}
 										</div>
 									</div>
@@ -5069,6 +5144,88 @@ class GFFormDisplay {
 		$classes = implode( ' ', array_unique( $class_list ) );
 
 		return $classes;
+	}
+
+
+	/**
+	 * Parse and validates styles from the gform_default_styles filter.
+	 *
+	 * @since 2.7.15
+	 *
+	 * @param mixed $styles Array or JSON string of styles.
+	 *
+	 * @return array|bool $styles
+	 */
+	public static function validate_form_styles( $styles ) {
+		if ( $styles === false ) {
+			return false;
+		}
+
+		if ( ! is_array( $styles ) ) {
+			$styles = json_decode( $styles, true );
+		}
+
+		if ( ! is_array( $styles ) ) {
+			return array();
+		}
+
+		$whitelist = array(
+			'theme',
+			'inputSize',
+			'inputBorderRadius',
+			'inputBorderColor',
+			'inputBackgroundColor',
+			'inputColor',
+			'inputPrimaryColor',
+			'labelFontSize',
+			'labelColor',
+			'descriptionFontSize',
+			'descriptionColor',
+			'buttonPrimaryBackgroundColor',
+			'buttonPrimaryColor',
+		);
+
+		foreach( $styles as $key => $value ) {
+			if ( ! in_array( $key, $whitelist ) ) {
+				unset( $styles[ $key ] );
+			}
+		}
+
+		return $styles;
+	}
+
+	/**
+	 * Get the form styles from the form parameters and the global style filter.
+	 *
+	 * @since 2.7.15
+	 *
+	 * @param array|string $style_settings Array or JSON string of styles.
+	 *
+	 * @return array|false|string
+	 */
+	public static function get_form_styles( $style_settings ) {
+		$global_styles = self::validate_form_styles( apply_filters( 'gform_default_styles', false ) );
+
+		$form_styles = '';
+
+		if ( $style_settings === false ) {
+			// if $style_settings is false, ignore the gform_default_styles filter.
+			return false;
+		} else if ( ! empty( $style_settings ) ) {
+			// if we have style settings, merge them with the gform_default_styles filter.
+			if ( ! is_array( $style_settings ) ) {
+				$style_settings = json_decode( $style_settings, true );
+			}
+			if ( $global_styles !== null ) {
+				$style_settings = array_merge( is_array( $global_styles ) ? $global_styles : array(), is_array( $style_settings ) ? $style_settings : array() );
+			}
+			$form_styles = $style_settings;
+		} else if ( ! empty( $global_styles ) ) {
+			// if we don't have style settings, just use the filter.
+			$form_styles = $global_styles;
+		}
+
+		return $form_styles;
 	}
 
 }
