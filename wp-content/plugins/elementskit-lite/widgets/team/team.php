@@ -2340,10 +2340,10 @@ class ElementsKit_Widget_Team extends Widget_Base {
 
 		<div <?php echo $this->get_render_attribute_string('profile_card'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
 			<?php if ($settings['ekit_team_chose_popup'] == 'yes') : ?>
-				<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" class="ekit-team-popup">
+				<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" class="ekit-team-popup">
 			<?php endif; ?>
 			
-				<div class="profile-header ekit-team-img <?php echo esc_attr($ekit_team_style == 'default' ? 'ekit-img-overlay ekit-team-img-block' : ''); ?>" <?php if ( (isset($settings['ekit_team_chose_popup']) ? $ekit_team_chose_popup : 'no')  == 'yes') :?> data-toggle="modal" data-target="ekit_team_modal_#<?php echo esc_attr($this->get_id()); ?>" <?php endif; ?>>
+				<div class="profile-header ekit-team-img <?php echo esc_attr($ekit_team_style == 'default' ? 'ekit-img-overlay ekit-team-img-block' : ''); ?>" <?php if ( (isset($settings['ekit_team_chose_popup']) ? $ekit_team_chose_popup : 'no')  == 'yes') :?> data-toggle="modal" data-target="ekit_team_modal_#<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" <?php endif; ?>>
 					<?php echo wp_kses($image_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
 				</div><!-- .profile-header END -->
 			<?php if ($settings['ekit_team_chose_popup'] == 'yes') : ?>
@@ -2374,7 +2374,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
 
 					<h2 class="profile-title">
 					<?php if ($settings['ekit_team_chose_popup'] == 'yes') : ?>
-						<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" class="ekit-team-popup">
+						<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" class="ekit-team-popup">
 						<?php echo esc_html( $ekit_team_name ); ?>
 						</a>
 						<?php else: ?>
@@ -2418,7 +2418,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
 							<div class="profile-body">
 								<h2 class="profile-title">
 								<?php if ($settings['ekit_team_chose_popup'] == 'yes') : ?>
-									<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" class="ekit-team-popup">
+									<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" class="ekit-team-popup">
 									<?php echo esc_html( $ekit_team_name ); ?>
 									</a>
 									<?php else: ?>
@@ -2448,13 +2448,13 @@ class ElementsKit_Widget_Team extends Widget_Base {
 				
 				<div class="profile-square-v square-v4 elementor-animation-<?php echo esc_attr($team_hover_animation) ?> ekit-team-style-<?php echo esc_attr($ekit_team_style); ?>">
 					<div class="profile-card <?php if(isset($ekit_team_content_text_align)) { echo esc_attr($ekit_team_content_text_align);} ?>">
-						<div class="profile-header ekit-team-img" <?php if ($settings['ekit_team_chose_popup'] == 'yes') :?> data-toggle="modal" data-target="#ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" <?php endif; ?>>
+						<div class="profile-header ekit-team-img" <?php if ($settings['ekit_team_chose_popup'] == 'yes') :?> data-toggle="modal" data-target="#ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" <?php endif; ?>>
 							<?php echo wp_kses($image_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
 						</div><!-- .profile-header END -->
 						<div class="profile-body">
 							<h2 class="profile-title">
 							<?php if ($settings['ekit_team_chose_popup'] == 'yes') : ?>
-								<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" class="ekit-team-popup">
+								<a aria-label="profile" href="javascript:void(0)" data-mfp-src="#ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" class="ekit-team-popup">
 								<?php echo esc_html( $ekit_team_name ); ?>
 								</a>
 								<?php else: ?>
@@ -2476,7 +2476,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
 			<?php endif; ?>
 
 		<?php if ( $ekit_team_chose_popup == 'yes' ): ?>
-			<div class="zoom-anim-dialog mfp-hide elementskit-team-popup" id="ekit_team_modal_<?php echo esc_attr($this->get_id()); ?>" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="zoom-anim-dialog mfp-hide elementskit-team-popup" id="ekit_team_modal_<?php echo esc_attr($this->get_id() . '_' . get_the_ID()); ?>" tabindex="-1" role="dialog" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						<button type="button" class="ekit-team-modal-close">

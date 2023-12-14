@@ -1424,7 +1424,7 @@ class ElementsKit_Widget_Post_List extends Widget_Base {
 			);
 
 			if($settings['section_layout_options'] === 'popular'){
-				$post_args['meta_key']	= 'ekit_post_views_count';
+				$post_args['meta_key']	= 'ekit_post_views_count'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				$post_args['orderby'] 	= 'meta_value_num';
 				$post_args['order']		= 'DESC';
 			}

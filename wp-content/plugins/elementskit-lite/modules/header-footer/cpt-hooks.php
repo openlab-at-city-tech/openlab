@@ -98,8 +98,8 @@ class Cpt_Hooks {
 			&& $_GET['elementskit_type_filter'] != 'all' // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are using wordpress default query filter for managing menu items
 		) {
 			$type                              = sanitize_text_field(wp_unslash($_GET['elementskit_type_filter'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- We are using wordpress default query filter for managing menu items
-			$query->query_vars['meta_key']     = 'elementskit_template_type';
-			$query->query_vars['meta_value']   = $type;
+			$query->query_vars['meta_key']     = 'elementskit_template_type';  // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			$query->query_vars['meta_value']   = $type; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			$query->query_vars['meta_compare'] = '=';
 		}
 	}

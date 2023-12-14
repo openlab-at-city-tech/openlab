@@ -155,7 +155,14 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'condition' => [
 					'ekit_testimonial_wartermark_enable' => 'yes',
 					'ekit_testimonial_style' => ['style5']
-				]
+				],
+				'selectors_dictionary' => [
+					'top' => 'position: unset;',
+					'bottom' => 'bottom: 30px; right: 30px;',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_testimonial_style_5 .elementskit-watermark-icon' => '{{VALUE}}',
+				],
 			]
 		);
 
@@ -659,17 +666,20 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			    'tab'	 => Controls_Manager::TAB_STYLE,
 		    ]
 	    );
-			$this->add_responsive_control(
-				'ekit_testimonial_layout_margin',
-				[
-					'label'         => esc_html__('Column Gap', 'elementskit-lite'),
-					'type'          => Controls_Manager::SLIDER,
-					'size_units'    => ['px', 'em'],
-					'selectors' => [
-						'{{WRAPPER}} .elementskit-tootltip-testimonial .elementskit-commentor-content, {{WRAPPER}} .elementskit-single-testimonial-slider, {{WRAPPER}}  .elementskit-testimonial_card' => 'margin-left: {{SIZE}}{{UNIT}}; margin-right: {{SIZE}}{{UNIT}};',
-					],
-				]
-			);
+
+		$this->add_responsive_control(
+			'ekit_testimonial_layout_margin',
+			[
+				'label'         => esc_html__('Column Gap', 'elementskit-lite'),
+				'type'          => Controls_Manager::SLIDER,
+				'size_units'    => ['px', 'em'],
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-tootltip-testimonial .elementskit-commentor-content,
+					{{WRAPPER}} .ekit-main-swiper .elementskit-single-testimonial-slider,
+					{{WRAPPER}} .elementskit-testimonial_card' => 'margin-left: {{SIZE}}{{UNIT}}; margin-right: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
 
 
 			$this->add_responsive_control(
@@ -857,6 +867,9 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
                     '{{WRAPPER}} .elementkit-testimonial-col' => 'align-self: {{VALUE}};'
                 ],
 				'default' => 'center',
+				'condition' => [
+					'ekit_testimonial_style' => 'style1',
+				],
 			]
 		);
 
@@ -883,6 +896,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
                     '{{WRAPPER}} .elementskit-commentor-content' => 'text-align: {{VALUE}};',
                     '{{WRAPPER}} .elementskit-testimonial_card' => 'text-align: {{VALUE}};',
                     '{{WRAPPER}} .elementskit-profile-info' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-commentor-bio' => 'text-align: {{VALUE}}; justify-content: {{VALUE}}',
                     '{{WRAPPER}} .ekit_testimonial_style_5 .elementskit-commentor-header' => 'text-align: {{VALUE}};',
                 ]
 			]
@@ -2398,23 +2412,25 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			'slidesPerGroup'	=> (int) $slides_to_scroll_count,
 			'slidesPerView'		=> (int) $slides_to_show_count,
 			'loop'				=> ( !empty($ekit_testimonial_loop) && $ekit_testimonial_loop == 'yes' ) ? true : false,
-			'breakpoints'		=> [
-                320 => [
-                    'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_mobile ) ? $ekit_testimonial_slidetoshow_mobile : 1,
-                    'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_mobile ) ? $ekit_testimonial_slidesToScroll_mobile : 1,
-                    'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_mobile['size'] ) ? $ekit_testimonial_left_right_spacing_mobile['size'] : 10,
-                ],
-                768 => [
-                    'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_tablet ) ? $ekit_testimonial_slidetoshow_tablet : 2,
-                    'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_tablet ) ? $ekit_testimonial_slidesToScroll_tablet : 1,
-                    'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_tablet['size'] ) ? $ekit_testimonial_left_right_spacing_tablet['size'] : 10,
-                ],
-                1024 => [
-                    'slidesPerView'      =>  $slides_to_show_count,
-                    'slidesPerGroup'     =>  $slides_to_scroll_count,
+			'spaceBetween' => isset($ekit_testimonial_left_right_spacing['size']) ? ($ekit_testimonial_left_right_spacing['size'] !== 0 ? $ekit_testimonial_left_right_spacing['size'] : 0) : 15,
+			'breakpoints'  => [
+				320 => [
+					'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_mobile ) ? $ekit_testimonial_slidetoshow_mobile : 1,
+					'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_mobile ) ? $ekit_testimonial_slidesToScroll_mobile : 1,
+					'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_mobile['size'] ) ? $ekit_testimonial_left_right_spacing_mobile['size'] : 10,
+				],
+				768 => [
+					'slidesPerView'      => !empty( $ekit_testimonial_slidetoshow_tablet ) ? $ekit_testimonial_slidetoshow_tablet : 2,
+					'slidesPerGroup'     => !empty( $ekit_testimonial_slidesToScroll_tablet ) ? $ekit_testimonial_slidesToScroll_tablet : 1,
+					'spaceBetween'       => !empty( $ekit_testimonial_left_right_spacing_tablet['size'] ) ? $ekit_testimonial_left_right_spacing_tablet['size'] : 10,
+				],
+				1024 => [
+					'slidesPerView'      =>  $slides_to_show_count,
+					'slidesPerGroup'     =>  $slides_to_scroll_count,
 					'spaceBetween'		=> !empty( $ekit_testimonial_left_right_spacing['size'] ) ? $ekit_testimonial_left_right_spacing['size'] : 15,
-                ]
-            ],
+				]
+			],
+			
 		];
 
 		// HTML Attribute

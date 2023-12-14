@@ -16,7 +16,7 @@ class Init {
 		}
 
 		$activation_stamp = get_option( 'elementskit_lite_activation_stamp' );
-		if ( date( 'd', ( time() - $activation_stamp ) ) > 10 ) {
+		if ( gmdate( 'd', ( time() - $activation_stamp ) ) > 10 ) {
 			add_action( 'admin_head', array( $this, 'show_go_pro_notice' ) );
 		}
 

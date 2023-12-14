@@ -665,9 +665,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit_form_control',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -1039,9 +1037,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-mail-submit',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -1073,9 +1069,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-mail-submit:before',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -1185,9 +1179,7 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .elementskit_input_group_text',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 

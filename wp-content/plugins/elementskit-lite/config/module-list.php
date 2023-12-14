@@ -109,6 +109,21 @@ class Module_List extends \ElementsKit_Lite\Core\Config_List {
 					'package' => 'pro-disabled',
 					'title'   => 'Particles',
 				),
+				'wrapper-link' => array(
+					'slug'    => 'wrapper-link',
+					'package' => 'pro-disabled',
+					'title'   => 'Wrapper Link',
+				),
+				'glass-morphism' => array(
+					'slug'    => 'glass-morphism',
+					'package' => 'pro-disabled',
+					'title'   => 'Glass Morphism',
+				),
+				'mouse-cursor' => array(
+					'slug'              => 'mouse-cursor',
+					'package'           => 'pro-disabled',
+					'title'             => 'Mouse Cursor',
+				),
 			)
 		);
 	}

@@ -959,7 +959,7 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
             <?php foreach ( $ekit_img_accordion_items as $key => $item ) :
                 // enabling wrap link
                 if(!Plugin::$instance->editor->is_edit_mode() && $item['ekit_img_accordion_enable_wrap_link'] == 'yes') {
-                    $this->add_render_attribute( 'wrap-link-' . $key, 'data-link', json_encode($item['ekit_img_accordion_wrap_link_url']) );
+                    $this->add_render_attribute( 'wrap-link-' . $key, 'data-link', wp_json_encode($item['ekit_img_accordion_wrap_link_url']) );
                     $this->add_render_attribute( 'wrap-link-' . $key, 'data-behavior', $active_behavior );
                     $this->add_render_attribute( 'wrap-link-' . $key, 'data-active', $item['ekit_img_accordion_active'] );
                 }

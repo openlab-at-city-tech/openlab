@@ -30,10 +30,15 @@ class Ajax_Select2 extends \Elementor\Base_Data_Control {
 	 * @access public
 	 */
 	public function enqueue() {
-		// script
-		wp_register_script( 'elementskit-js-ajaxchoose-control', Init::get_url() . 'assets/js/ajaxchoose.js' );
-		wp_enqueue_script( 'elementskit-js-ajaxchoose-control' );
-	}
+		// Define script dependencies if needed.
+		$dependencies = array('jquery'); // Replace 'jquery' with the appropriate dependency.
+	
+		// Register the script with version and set it to load in the footer.
+		wp_register_script('elementskit-js-ajaxchoose-control', Init::get_url() . 'assets/js/ajaxchoose.js', $dependencies, '1.0.0', true);
+	
+		// Enqueue the script.
+		wp_enqueue_script('elementskit-js-ajaxchoose-control');
+	}	
 
 	/**
 	 * Get select2 control default settings.

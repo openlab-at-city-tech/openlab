@@ -105,7 +105,7 @@ class Activator {
 			'order'          => 'DESC',
 			'post_status'    => 'publish',
 			'post_type'      => $this->post_type,
-			'meta_query'     => array(
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'     => 'elementskit_template_activation',
 					'value'   => 'yes',

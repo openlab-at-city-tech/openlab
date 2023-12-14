@@ -203,7 +203,12 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 			$atts['class'] .= ' ekit-menu-dropdown-toggle';
 		}
 		if ( in_array( 'menu-item-has-children', $classes ) || $is_megamenu_item == true ) {
-			$submenu_indicator .= '<i class="icon icon-down-arrow1 elementskit-submenu-indicator"></i>';
+			// Use an if statement to conditionally display the submenu indicator icon
+			if(!empty($args->submenu_indicator_icon)) {
+				$submenu_indicator .= $args->submenu_indicator_icon;
+			} else {
+				$submenu_indicator .= '<i class="icon icon-down-arrow1 elementskit-submenu-indicator"></i>';
+			}
 		}
 		if ( $depth > 0 ) {
 			$manual_class   = array_values( $classes )[0] . ' ' . 'dropdown-item';

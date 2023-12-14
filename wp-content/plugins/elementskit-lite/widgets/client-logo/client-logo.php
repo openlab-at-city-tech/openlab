@@ -858,6 +858,7 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button svg' => 'font-size: {{SIZE}}{{UNIT}}; width: 1em; height: 1em;',
 				],
 			]
         );
@@ -947,10 +948,6 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				'label' => esc_html__( 'Left Arrow Position (X)', 'elementskit-lite' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
-				'default'		 => [
-					'size' => '15',
-					'unit' => 'px'
-				],
 				'range' => [
 					'px' => [
 						'min' => -1000,
@@ -1008,10 +1005,6 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				'label' => esc_html__( 'Right Arrow Position (X)', 'elementskit-lite' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
-				'default'		 => [
-					'size' => '15',
-					'unit' => 'px'
-				],
 				'range' => [
 					'px' => [
 						'min' => -1000,
@@ -1072,6 +1065,7 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				'default' => '#101010',
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button svg' => 'fill: {{VALUE}}',
 				],
 			]
         );
@@ -1105,6 +1099,7 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementskit-clients-slider .swiper-navigation-button:hover svg' => 'fill: {{VALUE}}',
 				],
 			]
         );
@@ -1534,16 +1529,22 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
         $logos = $settings['ekit_client_logo_repiter'];
         
 		// Left Arrow Icon
-        $migrated = isset( $settings['__fa4_migrated']['ekit_client_logo_left_arrow_icon'] );
-        // - Check if its a new widget without previously selected icon using the old Icon control
-        $is_new = empty( $settings['ekit_client_logo_left_arrow'] );
-        $prevArrowIcon = ($is_new || $migrated) ? (!empty($ekit_client_logo_left_arrow_icon) && $ekit_client_logo_left_arrow_icon['library'] != 'svg' ? $ekit_client_logo_left_arrow_icon['value'] : '') : $ekit_client_logo_left_arrow;
+		$prevArrowIcon = '';
+		if (isset($settings['__fa4_migrated']['ekit_client_logo_left_arrow_icon'])) {
+			$prevArrowIcon = Icons_Manager::try_get_icon_html($settings['ekit_client_logo_left_arrow_icon'], ['aria-hidden' => 'true']);
+		} else {
+			$is_new = empty($settings['ekit_client_logo_left_arrow']) && Icons_Manager::is_migration_allowed();
+			$prevArrowIcon = $is_new ? Icons_Manager::try_get_icon_html($settings['ekit_client_logo_left_arrow_icon'], ['aria-hidden' => 'true']) : '';
+		}
 
 		// Right Arrow Icon
-        $migrated = isset( $settings['__fa4_migrated']['ekit_client_logo_right_arrow_icon'] );
-        // - Check if its a new widget without previously selected icon using the old Icon control
-        $is_new = empty( $settings['ekit_client_logo_right_arrow'] );
-        $nextArrowIcon = ($is_new || $migrated) ? (!empty($ekit_client_logo_right_arrow_icon) && $ekit_client_logo_right_arrow_icon['library'] != 'svg' ? $ekit_client_logo_right_arrow_icon['value'] : '') : $ekit_client_logo_right_arrow;
+		$nextArrowIcon = '';
+		if (isset($settings['__fa4_migrated']['ekit_client_logo_right_arrow_icon'])) {
+			$nextArrowIcon = Icons_Manager::try_get_icon_html($settings['ekit_client_logo_right_arrow_icon'], ['aria-hidden' => 'true']);
+		} else {
+			$is_new = empty($settings['ekit_client_logo_right_arrow']) && Icons_Manager::is_migration_allowed();
+			$nextArrowIcon = $is_new ? Icons_Manager::try_get_icon_html($settings['ekit_client_logo_right_arrow_icon'], ['aria-hidden' => 'true']) : '';
+		}
 
         // Config
         $config = [
@@ -1669,8 +1670,12 @@ class ElementsKit_Widget_Client_Logo extends Widget_Base {
 				<?php endif; ?>
 
 				<?php if(!empty($settings['ekit_client_logo_show_arrow'])) : ?>
-					<div class="swiper-navigation-button swiper-button-prev"><i class="<?php echo esc_attr($prevArrowIcon); ?>"></i></div>
-					<div class="swiper-navigation-button swiper-button-next"><i class="<?php echo esc_attr($nextArrowIcon); ?>"></i></div>
+					<div class="swiper-navigation-button swiper-button-prev">
+						<?php echo wp_kses($prevArrowIcon, \ElementsKit_Lite\Utils::get_kses_array()); ?>
+					</div>
+					<div class="swiper-navigation-button swiper-button-next">
+						<?php echo wp_kses($nextArrowIcon, \ElementsKit_Lite\Utils::get_kses_array()); ?>
+					</div>
 				<?php endif; ?>
 			</div><!-- .elementskit-clients-slider END -->
 		</div>

@@ -26,12 +26,15 @@ class Image_Choose extends \Elementor\Base_Data_Control {
 	 * @access public
 	 */
 	public function enqueue() {
+		// Define script dependencies if needed.
+		$dependencies = array('jquery'); // Replace 'jquery' with the appropriate dependency.
+
 		// styles
 		wp_register_style( 'elementskit-css-image-choose-control', Init::get_url() . 'assets/css/imagechoose.css', array(), '1.0.0' );
 		wp_enqueue_style( 'elementskit-css-image-choose-control' );
 
 		// script
-		wp_register_script( 'elementskit-js-image-choose-control', Init::get_url() . 'assets/js/imagechoose.js' );
+		wp_register_script( 'elementskit-js-image-choose-control', Init::get_url() . 'assets/js/imagechoose.js',  $dependencies, '1.0.0', true);
 		wp_enqueue_script( 'elementskit-js-image-choose-control' );
 	}
 

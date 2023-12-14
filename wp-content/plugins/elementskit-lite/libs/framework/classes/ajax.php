@@ -78,7 +78,7 @@ class Ajax {
 
 	public function return_json( $data ) {
 		if ( is_array( $data ) || is_object( $data ) ) {
-			return json_encode( $data );
+			return wp_json_encode( $data );
 		} else {
 			return $data;
 		}

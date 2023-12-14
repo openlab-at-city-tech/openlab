@@ -532,6 +532,12 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
+				'comparison-table' => array(
+					'slug'            => 'comparison-table',
+					'title'           => 'Comparison Table',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
 			)
 		);
 	}

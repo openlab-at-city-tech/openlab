@@ -2024,9 +2024,7 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
                     'condition' => [
                         'show_form_progressbar'  => 'yes'
                     ],
-                    'exclude'    => [
-                        'image'
-                    ]
+                    'exclude'    => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
                 ]
             );
 
@@ -2115,9 +2113,7 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
                     'condition' => [
                         'show_form_progressbar'  => 'yes'
                     ],
-                    'exclude'    => [
-                        'image'
-                    ]
+                    'exclude'    => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
                 ]
             );
 

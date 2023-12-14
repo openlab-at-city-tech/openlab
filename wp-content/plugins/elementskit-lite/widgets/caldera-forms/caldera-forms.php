@@ -314,9 +314,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]), {{WRAPPER}} .ekit-form form textarea',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -369,9 +367,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]):hover, {{WRAPPER}} .ekit-form form textarea:hover',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -424,9 +420,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form.caldera_forms_form .form-group input.form-control:not([type="submit"]):focus, {{WRAPPER}} .ekit-form form textarea:focus',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -775,9 +769,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-form form input[type="submit"]',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -834,9 +826,7 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-form form input[type="submit"]:hover',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 

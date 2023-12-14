@@ -439,6 +439,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'label_off' => esc_html__('No', 'elementskit-lite'),
 				'condition' => [
 					'ekit_video_player_current' => 'yes',
+					'ekit_video_popup_video_type' => 'self',
 				],
 			]
 		);
@@ -1129,7 +1130,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 			$this->add_render_attribute('player', 'muted', '');
 		}
 		?>
-		<div class="video-content" data-video-player="<?php echo esc_attr(json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(json_encode($video_settings)); ?>">
+		<div class="video-content" data-video-player="<?php echo esc_attr(wp_json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(wp_json_encode($video_settings)); ?>">
 			<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :
 				include Handler::get_dir() . 'parts/video-button.php';  ?>
 			<?php else : 

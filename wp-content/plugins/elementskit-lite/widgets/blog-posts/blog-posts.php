@@ -108,7 +108,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                         'label' => esc_html__( 'Featured Image Size', 'elementskit-lite' ),
                     ],
                 ],
-                'exclude'           => [ 'custom' ],
+                'exclude'           => [ 'custom' ], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
                 'default'           => 'large',
                 'condition'         => [
                     'ekit_blog_posts_feature_img'   => 'yes',
@@ -1181,9 +1181,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
                 'selector' => '{{WRAPPER}} .post-meta-list > span',
-                'exclude' => [
-                    'image'
-                ]
+                'exclude' => [ 'image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
         );
 
@@ -1270,9 +1268,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
                 'selector' => '{{WRAPPER}} .post-meta-list > span:hover, {{WRAPPER}}.ekit-blog-posts--bg-hover .elementskit-post-image-card:hover .post-meta-list > span',
-                'exclude' => [
-                    'image'
-                ]
+                'exclude' => [ 'image' ] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
         );
 
@@ -3132,7 +3128,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                                 ?>
                                 <div class="btn-wraper">
                                     <?php if($icon_align == 'right'): ?>
-                                        <a href="<?php echo esc_url( the_permalink() ); ?>" class="elementskit-btn <?php echo esc_attr( $btn_class ); ?>" <?php echo esc_attr($btn_id); ?>>
+                                        <a href="<?php the_permalink(); ?>" class="elementskit-btn <?php echo esc_attr( $btn_class ); ?>" <?php echo esc_attr($btn_id); ?>>
                                             <?php echo esc_html( $btn_text ); ?>
                                             <?php if($settings['ekit_blog_posts_btn_icons__switch'] === 'yes'): 
 
@@ -3154,7 +3150,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                                     <?php endif; ?>
 
                                     <?php if($icon_align == 'left'): ?>
-                                        <a href="<?php echo esc_url( the_permalink() ); ?>" class="elementskit-btn <?php echo esc_attr( $btn_class ); ?>" <?php echo esc_attr($btn_id); ?>>
+                                        <a href="<?php the_permalink(); ?>" class="elementskit-btn <?php echo esc_attr( $btn_class ); ?>" <?php echo esc_attr($btn_id); ?>>
                                         <?php if($settings['ekit_blog_posts_btn_icons__switch'] === 'yes'): 
                                                 // new icon
                                                 $migrated = isset( $settings['__fa4_migrated']['ekit_blog_posts_btn_icons'] );

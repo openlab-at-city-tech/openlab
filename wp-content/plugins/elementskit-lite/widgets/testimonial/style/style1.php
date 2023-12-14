@@ -42,24 +42,6 @@
 													echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full'), \ElementsKit_Lite\Utils::get_kses_array());
 													?>
 											<?php } ?>
-											<?php if( isset($ekit_testimonial_enable_social) && $ekit_testimonial_enable_social == 'yes'):?>
-												<div class="elementskit-hover-area">
-													<ul class="social-list medium circle text-colored">
-														<?php if(isset($testimonial['facebook_url']) && strlen($testimonial['facebook_url']) > 5){?>
-														<li><a href="<?php esc_attr_e($testimonial['facebook_url'], 'elementskit-lite');?>" class="facebook"><i class="fa fa-facebook"></i></a></li>
-														<?php }?>
-														<?php if(isset($testimonial['twitter_url']) && strlen($testimonial['twitter_url']) > 5){?>
-														<li><a href="<?php esc_attr_e($testimonial['twitter_url'], 'elementskit-lite');?>" class="twitter"><i class="fa fa-twitter"></i></a></li>
-														<?php }?>
-														<?php if(isset($testimonial['linkedin_url']) && strlen($testimonial['linkedin_url']) > 5){?>
-														<li><a href="<?php esc_attr_e($testimonial['linkedin_url'], 'elementskit-lite');?>" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
-														<?php }?>
-														<?php if(isset($testimonial['youtube_url']) && strlen($testimonial['youtube_url']) > 5){?>
-														<li><a href="<?php esc_attr_e($testimonial['youtube_url'], 'elementskit-lite');?>" class="youtube"><i class="fa fa-youtube"></i></a></li>
-														<?php }?>
-													</ul>
-												</div>
-											<?php endif;?>
 										</div>
 									</div>
 								</div>

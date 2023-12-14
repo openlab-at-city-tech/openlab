@@ -17,7 +17,7 @@
 					$clientPhoto = isset($testimonial['client_photo']['url']) ? $testimonial['client_photo']['url'] : '';  } ?>
 					<div class="swiper-slide">
 						<div class="swiper-slide-inner">
-							<<?php echo esc_attr( $wrapTag ); ?> class="elementskit-testimonial_card" style="background-image: url(<?php esc_attr_e($clientPhoto, 'elementskit-lite' );?>);" <?php echo $this->get_render_attribute_string( 'link-' . esc_attr($testimonial['_id'] )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
+							<<?php echo esc_attr( $wrapTag ); ?> class="elementskit-testimonial_card" style="background-image: url(<?php echo esc_url($clientPhoto);?>);" <?php echo $this->get_render_attribute_string( 'link-' . esc_attr($testimonial['_id'] )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
 								<?php if ($ekit_testimonial_rating_enable == 'yes') : ?>
 								<ul class="elementskit-stars">
 									<?php
@@ -28,7 +28,7 @@
 											$iconStart = 'eicon-star active';
 										}
 									?>
-									<li><<?php echo esc_attr( $ratingTag ); ?>><i class="<?php esc_attr_e( $iconStart, 'elementskit-lite' );?>"></i></<?php echo esc_attr( $ratingTag ); ?>></li>
+									<li><<?php echo esc_attr( $ratingTag ); ?>><i class="<?php echo esc_attr( $iconStart); ?>"></i></<?php echo esc_attr( $ratingTag ); ?>></li>
 
 									<?php }?>
 								</ul>
@@ -36,12 +36,6 @@
 
 								<?php if ( isset($testimonial['review']) && !empty($testimonial['review'])) : ?>
 									<p class="elementskit-commentor-coment"><?php echo isset($testimonial['review']) ? wp_kses($testimonial['review'], \ElementsKit_Lite\Utils::get_kses_array()): ''; ?></p>
-								<?php endif;  ?>
-
-								<?php if ( isset($testimonial['review_youtube_link']) && !empty($testimonial['review_youtube_link'])) : ?>
-									<div class="elementskit-video-popup-content">
-										<a href="<?php esc_attr_e($review_youtube_link, 'elementskit-lite');?>" class="video-popup"><i class="icon icon-play"></i></a>
-									</div><!-- .elementskit-video-popup-content END -->
 								<?php endif;  ?>
 
 								<span class="elementskit-profile-info">

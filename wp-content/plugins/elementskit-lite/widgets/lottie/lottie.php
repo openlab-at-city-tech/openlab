@@ -71,10 +71,10 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
                 'ekit_lottie_json',
                 [
                     'show_label'    => false,
-                    'description'   => sprintf(
-                        __('Discover thousands of %sLottie animations%s ready to use.', 'elementskit-lite'),
-                        '<a href="https://lottiefiles.com/featured" target="_blank">',
-                        '</a>'
+                    'description'   => sprintf('%1$s <a href="https://lottiefiles.com/featured" target="_blank"> %2$s</a> %3$s',
+						esc_html__('Discover thousands of' , 'elementskit-lite'),
+						esc_html__('Lottie animations' , 'elementskit-lite'),
+						esc_html__('ready to use.' , 'elementskit-lite'),
                     ),
                     'type'          => \Elementor\Controls_Manager::MEDIA,
                     'media_type'    => 'application/json',
@@ -89,11 +89,11 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
                 [
                     'show_label'    => false,
                     'label_block'   => true,
-                    'description'   => sprintf(
-                        __('Discover thousands of %sLottie animations%s ready to use.', 'elementskit-lite'),
-                        '<a href="https://lottiefiles.com/featured" target="_blank">',
-                        '</a>'
-                    ),
+                    'description'   => sprintf('%1$s <a href="https://lottiefiles.com/featured" target="_blank"> %2$s</a> %3$s',
+						esc_html__('Discover thousands of' , 'elementskit-lite'),
+						esc_html__('Lottie animations' , 'elementskit-lite'),
+						esc_html__('ready to use.' , 'elementskit-lite'),
+					),
                     'type'          => \Elementor\Controls_Manager::TEXT,
 					'dynamic'       => [
 						'active' => true,

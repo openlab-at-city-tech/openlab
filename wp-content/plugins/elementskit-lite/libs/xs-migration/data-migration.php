@@ -53,7 +53,7 @@ abstract class Data_Migration implements Migration_Contract {
 
 			$log   = array();
 			$log[] = 'Migration never has been done for this domain.';
-			$log[] = 'Initiating migration for version ' . $versionFrom . ' to ' . $versionTo . ' at ' . date( 'Y-m-d H:i:s' ) . ' .';
+			$log[] = 'Initiating migration for version ' . $versionFrom . ' to ' . $versionTo . ' at ' . gmdate( 'Y-m-d H:i:s' ) . ' .';
 			$log[] = 'Scanning migration file for conversion methods.';
 
 			$cStack = $this->getCallStacks( array(), $frm, $trm );
@@ -144,7 +144,7 @@ abstract class Data_Migration implements Migration_Contract {
 				} else {
 
 					$log[] = 'No new conversion method detected.';
-					$log[] = 'Updating the migration plan as finished for version ' . $versionTo . ' at ' . date( 'Y-m-d H:i:s' ) . '.';
+					$log[] = 'Updating the migration plan as finished for version ' . $versionTo . ' at ' . gmdate( 'Y-m-d H:i:s' ) . '.';
 
 					$existingOption['_func']                 = $fn;
 					$existingOption['_log']                  = $log;
@@ -211,7 +211,7 @@ abstract class Data_Migration implements Migration_Contract {
 			$log = $existingOption['_log'];
 
 			$log[] = 'All conversion method has been executed.';
-			$log[] = 'Setting the migration plan as finished for version ' . $versionTo . ' at ' . date( 'Y-m-d H:i:s' ) . '.';
+			$log[] = 'Setting the migration plan as finished for version ' . $versionTo . ' at ' . gmdate( 'Y-m-d H:i:s' ) . '.';
 
 			$existingOption['_log']                  = $log;
 			$existingOption['_status']               = self::STATUS_FINISHED;
@@ -235,8 +235,8 @@ abstract class Data_Migration implements Migration_Contract {
 
 			$log = $existingOption['_log'];
 
-			$log[] = 'Conversion method ' . $curExecMethod . ' entered into queue at ' . date( 'Y-m-d H:i:s' ) . '.';
-			$log[] = '- Conversion method ' . $curExecMethod . ' has entered into execution phase at ' . date( 'Y-m-d H:i:s' );
+			$log[] = 'Conversion method ' . $curExecMethod . ' entered into queue at ' . gmdate( 'Y-m-d H:i:s' ) . '.';
+			$log[] = '- Conversion method ' . $curExecMethod . ' has entered into execution phase at ' . gmdate( 'Y-m-d H:i:s' );
 
 			$fn = $existingOption['_func'];
 
@@ -263,7 +263,7 @@ abstract class Data_Migration implements Migration_Contract {
 
 			$log = $existingOption['_log'];
 
-			$log[] = '- Conversion method ' . $curExecMethod . ' has entered into executing phase at ' . date( 'Y-m-d H:i:s' );
+			$log[] = '- Conversion method ' . $curExecMethod . ' has entered into executing phase at ' . gmdate( 'Y-m-d H:i:s' );
 
 			$fn = $existingOption['_func'];
 

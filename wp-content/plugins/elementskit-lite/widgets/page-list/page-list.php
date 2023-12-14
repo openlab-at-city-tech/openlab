@@ -78,9 +78,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-wid-con {{CURRENT_ITEM}}',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -211,9 +209,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', ],
 				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} .ekit_menu_label',
-				'exclude' => [
-					'image'
-				],
+				'exclude' => ['image'], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'condition' => [
 					'ekit_menu_list_show_label' => 'yes'
 				]
@@ -389,9 +385,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .elementor-icon-list-item > a',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 		$this->add_control(
@@ -409,9 +403,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				'label' => esc_html__( 'Background Hover', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .elementor-icon-list-item > a:hover',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
