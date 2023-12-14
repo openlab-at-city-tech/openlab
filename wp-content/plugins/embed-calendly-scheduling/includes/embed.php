@@ -53,22 +53,46 @@ class EMCS_Embed
 
             do_action('emcp_before_calendar_embed', $this->url);
 
-            switch ($this->atts['embed_type']) {
-                case EMCS_BUTTON_EMBED_TYPE:
+            $sanitized_atts = $this->clean_shortcode_atts($this->atts);
 
-                    if ($this->atts['button_style'] == 1) {
-                        return $this->embed_inline_button_widget($this->atts);
-                    } else {
-                        return $this->embed_popup_button_widget($this->atts);
-                    }
+            if ($sanitized_atts) {
 
-                case EMCS_POPUP_TEXT_EMBED_TYPE:
-                    return $this->embed_popup_text_widget($this->atts);
+                switch ($sanitized_atts['embed_type']) {
+                    case EMCS_BUTTON_EMBED_TYPE:
 
-                default:
-                    return $this->embed_inline_widget($this->atts);
+                        if ($sanitized_atts['button_style'] == 1) {
+                            return $this->embed_inline_button_widget($sanitized_atts);
+                        } else {
+                            return $this->embed_popup_button_widget($sanitized_atts);
+                        }
+
+                    case EMCS_POPUP_TEXT_EMBED_TYPE:
+                        return $this->embed_popup_text_widget($sanitized_atts);
+
+                    default:
+                        return $this->embed_inline_widget($sanitized_atts);
+                }
             }
         }
+    }
+
+    /**
+     * Clean shortcode attributes and properly escape them
+     * 
+     * @param array atts Array of shortcode options
+     * @return array Cleaned attributes
+     */
+    private function clean_shortcode_atts($atts)
+    {
+        $sanitized_atts = [];
+
+        if ($atts) {
+            foreach ($atts as $att_key => $att_value) {
+                $sanitized_atts[$att_key] = esc_html($att_value);
+            }
+        }
+
+        return $sanitized_atts;
     }
 
     /**
