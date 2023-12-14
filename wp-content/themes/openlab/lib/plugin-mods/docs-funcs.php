@@ -144,33 +144,32 @@ add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_actio
  * Don't allow any of budypress-docs's native directory filters.
  *
  * Instead, we have a Search filter in the theme.
+ *
+ * @return array
  */
-add_filter(
-	'bp_docs_filter_types',
-	function( $types ) {
-		// We only return an empty aray when getting filter titles.
-		$dbs              = debug_backtrace();
-		$is_filter_titles = false;
-		foreach ( $dbs as $db ) {
-			if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
-				$is_filter_titles = true;
-				break;
-			}
+function openlab_remove_directory_filters_from_doc_list( $types ) {
+	// We only return an empty aray when getting filter titles.
+	$dbs              = debug_backtrace();
+	$is_filter_titles = false;
+	foreach ( $dbs as $db ) {
+		if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
+			$is_filter_titles = true;
+			break;
 		}
+	}
 
-		if ( $is_filter_titles ) {
-			return [];
+	if ( $is_filter_titles ) {
+		return [];
+	}
+
+	return array_filter(
+		$types,
+		function( $type ) {
+			return 'search' === $type['slug'];
 		}
-
-		return array_filter(
-			$types,
-			function( $type ) {
-				return 'search' === $type['slug'];
-			}
-		);
-	},
-	999
-);
+	);
+}
+add_filter( 'bp_docs_filter_types', 'openlab_remove_directory_filters_from_doc_list', 999 );
 
 /**
  * Don't show openlab-private-comments or wp-grade-comments Private checkbox on Docs comments.

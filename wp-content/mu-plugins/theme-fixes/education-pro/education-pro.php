@@ -138,19 +138,25 @@ add_theme_support( 'genesis-style-selector', array(
 
 unregister_sidebar( 'header-right' );
 
-add_filter(
-	'genesis_get_layouts',
-	function( $layouts ) {
-		$keys = [ 'content-sidebar', 'sidebar-content', 'full-width-content' ];
-		return array_filter(
-			$layouts,
-			function( $k ) use ( $keys ) {
-				return in_array( $k, $keys, true );
-			},
-			ARRAY_FILTER_USE_KEY
-		);
-	}
-);
+/**
+ * Remove unused Genesis layouts.
+ *
+ * @return array
+ */
+function openlab_education_pro_remove_unused_layouts( $layouts ) {
+	$keys = [ 'content-sidebar', 'sidebar-content', 'full-width-content' ];
+
+	$filtered_keys = array_filter(
+		$layouts,
+		function( $k ) use ( $keys ) {
+			return in_array( $k, $keys, true );
+		},
+		ARRAY_FILTER_USE_KEY
+	);
+
+	return $filtered_keys;
+}
+add_filter( 'genesis_get_layouts', 'openlab_education_pro_remove_unused_layouts' );
 
 $deregister_sidebars = [ 'home-featured', 'home-top', 'home-middle', 'home-bottom', 'sidebar-alt' ];
 foreach ( $deregister_sidebars as $deregister_sidebar ) {
@@ -391,14 +397,14 @@ function openlab_custom_header_style() {
 
 /**
  * Remove Copyright text in footer.
+ *
+ * @return array
  */
-add_filter(
-	'genesis_footer_creds_text',
-	function( $text ) {
-		$regex = '/\[footer_copyright[^\]]+\] &#x000B7;/';
-		return preg_replace( $regex, '', $text );
-	}
-);
+function openlab_education_pro_remove_copyright_text_from_footer( $text ) {
+	$regex = '/\[footer_copyright[^\]]+\] &#x000B7;/';
+	return preg_replace( $regex, '', $text );
+}
+add_filter( 'genesis_footer_creds_text', 'openlab_education_pro_remove_copyright_text_from_footer');
 
 
 remove_action( 'genesis_header', 'genesis_do_header' );
