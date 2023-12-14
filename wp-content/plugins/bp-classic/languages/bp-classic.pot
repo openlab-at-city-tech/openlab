@@ -1,0 +1,1933 @@
+# Copyright (C) 2023 The BuddyPress Community
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: BP Classic\n"
+"Report-Msgid-Bugs-To: https://github.com/buddypress/bp-classic/issues\n"
+"Last-Translator: JOHN JAMES JACOBY <jjj@buddypress.org>\n"
+"Language-Team: ENGLISH <jjj@buddypress.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-11-21T20:39:01+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: bp-classic\n"
+
+#. Plugin Name of the plugin
+msgid "BP Classic"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/buddypress/bp-classic"
+msgstr ""
+
+#. Description of the plugin
+msgid "BuddyPress Classic backwards compatibility add-on."
+msgstr ""
+
+#. Author of the plugin
+msgid "The BuddyPress Community"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://buddypress.org"
+msgstr ""
+
+#. translators: %s. is current version of BuddyPress.
+#: class-bp-classic.php:233
+msgid "Friendly reminder: BP Classic only runs when BuddyPress version is 12.0.0 (or up). Your current version of BuddyPress is: %s. Unless you activated BP Classic in anticipation of the 12.0.0 upgrade, you can deactivate it. This information will be shown regularly (every week) and as long as your BuddyPress version is lower than 12.0.0."
+msgstr ""
+
+#: class-bp-classic.php:239
+msgid "Please, make sure to activate BP Classic at the network level, just like BuddyPress is."
+msgstr ""
+
+#: class-bp-classic.php:242
+msgid "Please, make sure to activate BP Classic on the same site of the network BuddyPress is activated on."
+msgstr ""
+
+#: inc/activity/admin/functions.php:27
+msgctxt "page label"
+msgid "BP Activity Page"
+msgstr ""
+
+#: inc/blogs/admin/functions.php:27
+msgctxt "page label"
+msgid "BP Sites Page"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:28
+msgid "A list of recently published posts from across your network."
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:36
+msgctxt "widget name"
+msgid "(BuddyPress) Recent Networkwide Posts"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:69
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:181
+msgid "Recent Networkwide Posts"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:137
+msgid "Sorry, there were no posts found. Why not write one?"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:193
+msgctxt "Label for the Title field of the Recent Networkwide Posts widget"
+msgid "Title:"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:194
+msgid "Link widget title to Blogs directory"
+msgstr ""
+
+#: inc/blogs/classes/class-bp-classic-blogs-recent-posts-widget.php:195
+msgid "Max posts to show:"
+msgstr ""
+
+#. Translators: %s is the url to the permalink settings.
+#: inc/core/admin/functions.php:24
+msgid "<strong>BuddyPress is almost ready</strong>. You must <a href=\"%s\">update your permalink structure</a> to something other than the default for it to work."
+msgstr ""
+
+#: inc/core/admin/slugs.php:20
+msgid "BuddyPress Settings"
+msgstr ""
+
+#: inc/core/admin/slugs.php:20
+#: inc/core/admin/slugs.php:374
+msgid "Pages"
+msgstr ""
+
+#: inc/core/admin/slugs.php:28
+#: themes/bp-default/members/single/settings/profile.php:92
+msgid "Save Settings"
+msgstr ""
+
+#: inc/core/admin/slugs.php:83
+#: inc/core/classes/class-bp-classic-core-login-widget.php:126
+msgid "Register"
+msgstr ""
+
+#: inc/core/admin/slugs.php:84
+#: themes/bp-default/registration/activate.php:38
+msgid "Activate"
+msgstr ""
+
+#: inc/core/admin/slugs.php:113
+msgid "Directories"
+msgstr ""
+
+#: inc/core/admin/slugs.php:115
+msgid "Associate a WordPress Page with each BuddyPress component directory."
+msgstr ""
+
+#: inc/core/admin/slugs.php:142
+#: inc/core/admin/slugs.php:224
+msgid "- None -"
+msgstr ""
+
+#: inc/core/admin/slugs.php:151
+#: themes/bp-default/activity/entry.php:37
+#: themes/bp-default/functions.php:180
+msgid "View"
+msgstr ""
+
+#: inc/core/admin/slugs.php:152
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: inc/core/admin/slugs.php:192
+msgid "Registration"
+msgstr ""
+
+#: inc/core/admin/slugs.php:196
+msgid "Associate WordPress Pages with the following BuddyPress Registration pages."
+msgstr ""
+
+#: inc/core/admin/slugs.php:197
+msgid "These pages will only be reachable by users who are not logged in."
+msgstr ""
+
+#. translators: %s: the link to the Network settings page
+#: inc/core/admin/slugs.php:256
+msgctxt "Disabled registration message for multisite config"
+msgid "Registration is currently disabled. Before associating a page is allowed, please enable registration by selecting either the \"User accounts may be registered\" or \"Both sites and user accounts can be registered\" option on %s."
+msgstr ""
+
+#: inc/core/admin/slugs.php:260
+msgctxt "Link text for the Multisite’s network settings page"
+msgid "this page"
+msgstr ""
+
+#. translators: %s: the link to the Site general options page
+#: inc/core/admin/slugs.php:270
+msgctxt "Disabled registration message for regular site config"
+msgid "Registration is currently disabled. Before associating a page is allowed, please enable registration by clicking on the \"Anyone can register\" checkbox on %s."
+msgstr ""
+
+#: inc/core/admin/slugs.php:274
+msgctxt "Link text for the Site’s general options page"
+msgid "this page"
+msgstr ""
+
+#: inc/core/admin/slugs.php:338
+#: inc/core/admin/slugs.php:339
+msgid "BuddyPress Pages"
+msgstr ""
+
+#: inc/core/admin/slugs.php:393
+msgid "Overview"
+msgstr ""
+
+#: inc/core/admin/slugs.php:394
+msgid "Using BP Classic, BuddyPress Components root directory/archive pages are saved as regular WordPress pages. You can change the page associations for each active component by using the form below."
+msgstr ""
+
+#: inc/core/admin/slugs.php:400
+msgid "For more information:"
+msgstr ""
+
+#: inc/core/admin/slugs.php:401
+msgid "<a href=\"https://codex.buddypress.org/getting-started/configure-components/#settings-buddypress-pages\">Managing Pages</a>"
+msgstr ""
+
+#: inc/core/admin/slugs.php:402
+msgid "<a href=\"https://buddypress.org/support/\">Support Forums</a>"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-legacy-nav-backcompat.php:70
+#: inc/core/classes/class-bp-classic-core-legacy-nav-backcompat.php:105
+#: inc/core/classes/class-bp-classic-core-legacy-nav-backcompat.php:129
+#: inc/core/classes/class-bp-classic-core-legacy-nav-backcompat.php:156
+msgid "The bp_nav and bp_options_nav globals should not be used directly and are deprecated. Please use the BuddyPress nav functions instead."
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-legacy-options-nav-backcompat.php:43
+#: inc/core/classes/class-bp-classic-core-legacy-options-nav-backcompat.php:83
+msgid "These globals should not be used directly and are deprecated. Please use the BuddyPress nav functions instead."
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:29
+msgctxt "Title of the login widget"
+msgid "(BuddyPress) Log In"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:31
+msgid "Show a Log In form to logged-out visitors, and a Log Out link to those who are logged in."
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:94
+#: themes/bp-default/sidebar.php:18
+msgid "Log Out"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:114
+#: themes/bp-default/registration/register.php:37
+#: themes/bp-default/sidebar.php:44
+msgid "Username"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:117
+#: themes/bp-default/sidebar.php:47
+msgid "Password"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:120
+#: themes/bp-default/sidebar.php:50
+msgid "Remember Me"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:122
+#: themes/bp-default/sidebar.php:52
+msgid "Log In"
+msgstr ""
+
+#: inc/core/classes/class-bp-classic-core-login-widget.php:187
+#: inc/groups/classes/class-bp-classic-groups-widget.php:239
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:166
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:172
+#: inc/members/classes/class-bp-classic-members-widget.php:228
+#: inc/messages/classes/class-bp-classic-messages-sitewide-notices-widget.php:133
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:195
+msgid "Title:"
+msgstr ""
+
+#: inc/core/functions.php:451
+msgid "This user has been marked as a spammer. Only site admins can view this profile."
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:28
+msgid "A dynamic list of recently active, popular, and newest Friends of the displayed member. Widget is only shown when viewing a member profile."
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:33
+msgctxt "widget name"
+msgid "(BuddyPress) Friends"
+msgstr ""
+
+#. Translators: %s is the User's Full name
+#: inc/friends/classes/class-bp-classic-friends-widget.php:83
+msgid "%s's Friends"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:116
+#: inc/friends/classes/class-bp-classic-friends-widget.php:215
+#: inc/groups/classes/class-bp-classic-groups-widget.php:128
+#: inc/groups/classes/class-bp-classic-groups-widget.php:248
+#: inc/members/classes/class-bp-classic-members-widget.php:127
+#: inc/members/classes/class-bp-classic-members-widget.php:250
+#: themes/bp-default/blogs/index.php:56
+#: themes/bp-default/members/single/blogs.php:22
+msgid "Newest"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:117
+#: inc/friends/classes/class-bp-classic-friends-widget.php:216
+#: inc/groups/classes/class-bp-classic-groups-widget.php:130
+#: inc/groups/classes/class-bp-classic-groups-widget.php:249
+#: inc/members/classes/class-bp-classic-members-widget.php:129
+#: inc/members/classes/class-bp-classic-members-widget.php:251
+msgid "Active"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:118
+#: inc/friends/classes/class-bp-classic-friends-widget.php:217
+#: inc/groups/classes/class-bp-classic-groups-widget.php:132
+#: inc/groups/classes/class-bp-classic-groups-widget.php:250
+#: inc/members/classes/class-bp-classic-members-widget.php:133
+#: inc/members/classes/class-bp-classic-members-widget.php:252
+msgid "Popular"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:153
+#: themes/bp-default/members/members-loop.php:108
+msgid "Sorry, no members were found."
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:208
+#: inc/members/classes/class-bp-classic-members-widget.php:236
+msgid "Link widget title to Members directory"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:210
+msgid "Max friends to show:"
+msgstr ""
+
+#: inc/friends/classes/class-bp-classic-friends-widget.php:213
+msgid "Default friends to show:"
+msgstr ""
+
+#: inc/friends/widgets.php:112
+#: inc/members/widgets.php:137
+msgid "There were no members found, please try another filter."
+msgstr ""
+
+#: inc/groups/admin/functions.php:27
+msgctxt "page label"
+msgid "BP Groups Page"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:28
+msgid "A dynamic list of recently active, popular, newest, or alphabetical groups"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:33
+msgctxt "widget name"
+msgid "(BuddyPress) Groups"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:82
+#: inc/groups/classes/class-bp-classic-groups-widget.php:219
+msgid "Groups"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:134
+#: inc/groups/classes/class-bp-classic-groups-widget.php:251
+#: themes/bp-default/blogs/index.php:57
+#: themes/bp-default/groups/index.php:60
+#: themes/bp-default/members/index.php:62
+#: themes/bp-default/members/single/blogs.php:23
+#: themes/bp-default/members/single/friends.php:24
+#: themes/bp-default/members/single/groups.php:25
+msgid "Alphabetical"
+msgstr ""
+
+#. Translators: %s is the date the group was created on.
+#: inc/groups/classes/class-bp-classic-groups-widget.php:154
+#: inc/groups/widgets.php:89
+msgid "created %s"
+msgstr ""
+
+#. translators: %s: last activity timestamp (e.g. "Active 1 hour ago")
+#: inc/groups/classes/class-bp-classic-groups-widget.php:159
+msgid "Active %s"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:175
+msgid "There are no groups to display."
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:241
+msgid "Link widget title to Groups directory"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:243
+msgid "Max groups to show:"
+msgstr ""
+
+#: inc/groups/classes/class-bp-classic-groups-widget.php:246
+msgid "Default groups to show:"
+msgstr ""
+
+#. translators: %s: last activity timestamp (e.g. "Active 1 hour ago")
+#: inc/groups/widgets.php:98
+msgctxt "last time the group was active"
+msgid "Active %s"
+msgstr ""
+
+#: inc/groups/widgets.php:114
+msgid "No groups matched the current filter."
+msgstr ""
+
+#: inc/members/admin/functions.php:27
+msgctxt "page label"
+msgid "BP Members Page"
+msgstr ""
+
+#: inc/members/admin/functions.php:32
+msgctxt "page label"
+msgid "BP Registration Page"
+msgstr ""
+
+#: inc/members/admin/functions.php:36
+msgctxt "page label"
+msgid "BP Activation Page"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:27
+msgctxt "widget name"
+msgid "(BuddyPress) Recently Active Members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:28
+msgid "Profile photos of recently active members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:118
+msgid "There are no recently active members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:172
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:179
+#: inc/members/classes/class-bp-classic-members-widget.php:242
+msgid "Max members to show:"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-recently-active-widget.php:191
+msgid "Recently Active Members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:27
+msgctxt "widget name"
+msgid "(BuddyPress) Who's Online"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:28
+msgid "Profile photos of online users"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:121
+msgid "There are no users currently online"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-whos-online-widget.php:199
+msgid "Who's Online"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-widget.php:29
+msgctxt "widget name"
+msgid "(BuddyPress) Members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-widget.php:30
+msgid "A dynamic list of recently active, popular, and newest members"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-widget.php:175
+msgid "No one has signed up yet!"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-widget.php:248
+msgid "Default members to show:"
+msgstr ""
+
+#: inc/members/classes/class-bp-classic-members-widget.php:270
+msgid "Members"
+msgstr ""
+
+#: inc/messages/classes/class-bp-classic-messages-sitewide-notices-widget.php:29
+msgid "(BuddyPress) Sitewide Notices"
+msgstr ""
+
+#: inc/messages/classes/class-bp-classic-messages-sitewide-notices-widget.php:32
+msgid "Display Sitewide Notices posted by the site administrator"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:37
+msgid "Display the latest updates of your community having the types of your choice."
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:43
+msgid "(BuddyPress) Latest Activities"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:65
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:176
+msgid "Latest updates"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:200
+msgid "Maximum amount to display:"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-latest-activities.php:204
+msgid "Type:"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-object-nav-widget.php:29
+msgid "Displays BuddyPress primary nav in the sidebar of your site. Make sure to use it as the first widget of the sidebar and only once."
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-object-nav-widget.php:36
+msgid "(BuddyPress) Primary navigation"
+msgstr ""
+
+#: inc/templates/classes/class-bp-classic-templates-nouveau-object-nav-widget.php:161
+msgid "Include navigation title"
+msgstr ""
+
+#: themes/bp-default/404.php:7
+msgid "Page not found"
+msgstr ""
+
+#: themes/bp-default/404.php:9
+msgid "We're sorry, but we can't find the page that you're looking for. Perhaps searching will help."
+msgstr ""
+
+#: themes/bp-default/activity/activity-loop.php:41
+msgid "Load More"
+msgstr ""
+
+#: themes/bp-default/activity/activity-loop.php:55
+msgid "Sorry, there was no activity found. Please try a different filter."
+msgstr ""
+
+#. translators: 1: user profile link, 2: user name, 3: activity permalink, 4: activity timestamp
+#: themes/bp-default/activity/comment.php:30
+msgid "<a href=\"%1$s\">%2$s</a> replied <a href=\"%3$s\" class=\"activity-time-since\"><span class=\"time-since\">%4$s</span></a>"
+msgstr ""
+
+#: themes/bp-default/activity/comment.php:40
+msgid "Reply"
+msgstr ""
+
+#: themes/bp-default/activity/comment.php:46
+#: themes/bp-default/members/single/messages/messages-loop.php:51
+#: themes/bp-default/members/single/messages/single.php:24
+msgid "Delete"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:37
+msgid "In reply to: "
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:37
+msgid "View Thread / Permalink"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:60
+msgid "Comment <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:68
+msgid "Mark as Favorite"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:68
+#: themes/bp-default/functions.php:181
+#: themes/bp-default/_inc/ajax.php:514
+#: themes/bp-default/_inc/ajax.php:541
+msgid "Favorite"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:72
+#: themes/bp-default/functions.php:182
+#: themes/bp-default/_inc/ajax.php:512
+#: themes/bp-default/_inc/ajax.php:543
+msgid "Remove Favorite"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:104
+msgid "Post"
+msgstr ""
+
+#: themes/bp-default/activity/entry.php:104
+msgid "or press esc to cancel."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:21
+msgid "Site Activity"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:39
+msgid "The public activity for everyone on this site."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:39
+#: themes/bp-default/members/index.php:35
+msgid "All Members <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:49
+msgid "The activity of my friends only."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:49
+#: themes/bp-default/members/index.php:39
+msgid "My Friends <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:61
+msgid "The activity of groups I am a member of."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:61
+#: themes/bp-default/groups/index.php:39
+msgid "My Groups <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:71
+msgid "The activity I've marked as a favorite."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:71
+msgid "My Favorites <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:79
+msgid "Activity that I have been mentioned in."
+msgstr ""
+
+#: themes/bp-default/activity/index.php:79
+msgid "Mentions"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:79
+msgctxt "Number of new activity mentions"
+msgid "%s new"
+msgid_plural "%s new"
+msgstr[0] ""
+msgstr[1] ""
+
+#: themes/bp-default/activity/index.php:91
+#: themes/bp-default/groups/single/activity.php:3
+msgid "RSS Feed"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:91
+#: themes/bp-default/groups/single/activity.php:3
+msgid "RSS"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:96
+#: themes/bp-default/groups/single/activity.php:8
+#: themes/bp-default/members/single/activity.php:18
+msgid "Show:"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:98
+#: themes/bp-default/groups/single/activity.php:10
+#: themes/bp-default/members/single/activity.php:20
+msgid "&mdash; Everything &mdash;"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:99
+#: themes/bp-default/groups/single/activity.php:11
+#: themes/bp-default/members/single/activity.php:21
+msgid "Updates"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:103
+#: themes/bp-default/members/single/activity.php:27
+msgid "Posts"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:104
+#: themes/bp-default/members/single/activity.php:28
+msgid "Comments"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:110
+#: themes/bp-default/groups/single/activity.php:14
+#: themes/bp-default/members/single/activity.php:43
+msgid "Forum Topics"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:111
+#: themes/bp-default/groups/single/activity.php:15
+#: themes/bp-default/members/single/activity.php:44
+msgid "Forum Replies"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:117
+#: themes/bp-default/members/single/activity.php:50
+msgid "New Groups"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:118
+#: themes/bp-default/groups/single/activity.php:18
+#: themes/bp-default/members/single/activity.php:51
+msgid "Group Memberships"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:124
+#: themes/bp-default/members/single/activity.php:35
+msgid "Friendships"
+msgstr ""
+
+#: themes/bp-default/activity/index.php:128
+msgid "New Members"
+msgstr ""
+
+#: themes/bp-default/activity/post-form.php:23
+msgid "What's new in %s, %s?"
+msgstr ""
+
+#: themes/bp-default/activity/post-form.php:25
+msgid "What's new, %s?"
+msgstr ""
+
+#: themes/bp-default/activity/post-form.php:35
+msgid "Post Update"
+msgstr ""
+
+#: themes/bp-default/activity/post-form.php:42
+msgid "Post in"
+msgstr ""
+
+#: themes/bp-default/activity/post-form.php:45
+#: themes/bp-default/members/single/profile/profile-wp.php:8
+msgid "My Profile"
+msgstr ""
+
+#: themes/bp-default/archive.php:10
+msgid "You are browsing the archive for %1$s."
+msgstr ""
+
+#: themes/bp-default/archive.php:24
+#: themes/bp-default/attachment.php:18
+#: themes/bp-default/index.php:24
+#: themes/bp-default/search.php:26
+#: themes/bp-default/single.php:16
+msgctxt "Post written by..."
+msgid "by %s"
+msgstr ""
+
+#: themes/bp-default/archive.php:28
+#: themes/bp-default/attachment.php:22
+#: themes/bp-default/index.php:32
+#: themes/bp-default/search.php:30
+msgid "Permanent Link to"
+msgstr ""
+
+#: themes/bp-default/archive.php:30
+#: themes/bp-default/index.php:34
+#: themes/bp-default/search.php:32
+#: themes/bp-default/single.php:23
+msgid "%1$s <span>in %2$s</span>"
+msgstr ""
+
+#: themes/bp-default/archive.php:33
+#: themes/bp-default/index.php:37
+#: themes/bp-default/search.php:35
+#: themes/bp-default/single.php:28
+msgid "Read the rest of this entry &rarr;"
+msgstr ""
+
+#: themes/bp-default/archive.php:34
+#: themes/bp-default/index.php:38
+#: themes/bp-default/onecolumn-page.php:31
+#: themes/bp-default/page.php:20
+#: themes/bp-default/single.php:30
+msgid "Pages: "
+msgstr ""
+
+#: themes/bp-default/archive.php:37
+#: themes/bp-default/index.php:41
+#: themes/bp-default/search.php:38
+#: themes/bp-default/single.php:33
+msgid "Tags: "
+msgstr ""
+
+#: themes/bp-default/archive.php:37
+#: themes/bp-default/index.php:41
+#: themes/bp-default/search.php:38
+msgid "No Comments &#187;"
+msgstr ""
+
+#: themes/bp-default/archive.php:37
+#: themes/bp-default/index.php:41
+#: themes/bp-default/search.php:38
+msgid "1 Comment &#187;"
+msgstr ""
+
+#: themes/bp-default/archive.php:37
+#: themes/bp-default/index.php:41
+#: themes/bp-default/search.php:38
+msgid "% Comments &#187;"
+msgstr ""
+
+#: themes/bp-default/archive.php:50
+#: themes/bp-default/index.php:54
+msgid "Not Found"
+msgstr ""
+
+#: themes/bp-default/attachment.php:26
+#: themes/bp-default/single.php:24
+msgid "Edit this entry"
+msgstr ""
+
+#: themes/bp-default/attachment.php:40
+msgid "Full size is %s pixels"
+msgstr ""
+
+#: themes/bp-default/attachment.php:43
+msgid "Link to full size image"
+msgstr ""
+
+#: themes/bp-default/attachment.php:62
+msgid "Sorry, no attachments matched your criteria."
+msgstr ""
+
+#: themes/bp-default/blogs/blogs-loop.php:90
+msgid "Sorry, there were no sites found."
+msgstr ""
+
+#: themes/bp-default/blogs/create.php:21
+#: themes/bp-default/blogs/index.php:21
+msgid "Create a Site"
+msgstr ""
+
+#: themes/bp-default/blogs/create.php:21
+#: themes/bp-default/blogs/index.php:21
+msgid "Site Directory"
+msgstr ""
+
+#: themes/bp-default/blogs/create.php:32
+msgid "Site registration is currently disabled"
+msgstr ""
+
+#: themes/bp-default/blogs/index.php:33
+msgid "All Sites <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/blogs/index.php:37
+msgid "My Sites <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/blogs/index.php:53
+#: themes/bp-default/groups/index.php:55
+#: themes/bp-default/members/index.php:55
+#: themes/bp-default/members/single/blogs.php:19
+#: themes/bp-default/members/single/friends.php:20
+#: themes/bp-default/members/single/groups.php:20
+msgid "Order By:"
+msgstr ""
+
+#: themes/bp-default/blogs/index.php:55
+#: themes/bp-default/groups/index.php:57
+#: themes/bp-default/members/index.php:57
+#: themes/bp-default/members/single/blogs.php:21
+#: themes/bp-default/members/single/friends.php:22
+#: themes/bp-default/members/single/groups.php:22
+msgid "Last Active"
+msgstr ""
+
+#: themes/bp-default/comments.php:12
+msgid "Password Protected"
+msgstr ""
+
+#: themes/bp-default/comments.php:13
+msgid "Enter the password to view comments."
+msgstr ""
+
+#: themes/bp-default/comments.php:31
+msgid "1 response to %2$s"
+msgid_plural "%1$s responses to %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: themes/bp-default/comments.php:55
+msgid "Comments are closed, but <a href=\"%1$s\" title=\"Trackback URL for this post\">trackbacks</a> and pingbacks are open."
+msgstr ""
+
+#: themes/bp-default/comments.php:59
+msgid "Comments are closed."
+msgstr ""
+
+#: themes/bp-default/comments.php:70
+msgid "1 trackback"
+msgid_plural "%d trackbacks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: themes/bp-default/footer.php:15
+msgid "Proudly powered by <a href=\"%1$s\">WordPress</a> and <a href=\"%2$s\">BuddyPress</a>."
+msgstr ""
+
+#: themes/bp-default/functions.php:85
+msgid "Primary Navigation"
+msgstr ""
+
+#: themes/bp-default/functions.php:172
+msgid "My Favorites"
+msgstr ""
+
+#: themes/bp-default/functions.php:173
+msgid "Accepted"
+msgstr ""
+
+#: themes/bp-default/functions.php:174
+msgid "Rejected"
+msgstr ""
+
+#: themes/bp-default/functions.php:175
+msgid "Show all comments for this thread"
+msgstr ""
+
+#: themes/bp-default/functions.php:176
+msgid "Show all %d comments"
+msgstr ""
+
+#: themes/bp-default/functions.php:177
+msgid "Show all"
+msgstr ""
+
+#: themes/bp-default/functions.php:178
+msgid "comments"
+msgstr ""
+
+#: themes/bp-default/functions.php:179
+#: themes/bp-default/members/single/profile/edit.php:137
+#: themes/bp-default/registration/register.php:180
+msgid "Close"
+msgstr ""
+
+#: themes/bp-default/functions.php:183
+msgid "Your profile has unsaved changes. If you leave the page, the changes will be lost."
+msgstr ""
+
+#: themes/bp-default/functions.php:405
+msgid "The sidebar widget area"
+msgstr ""
+
+#: themes/bp-default/functions.php:414
+msgid "First Footer Widget Area"
+msgstr ""
+
+#: themes/bp-default/functions.php:416
+msgid "The first footer widget area"
+msgstr ""
+
+#: themes/bp-default/functions.php:425
+msgid "Second Footer Widget Area"
+msgstr ""
+
+#: themes/bp-default/functions.php:427
+msgid "The second footer widget area"
+msgstr ""
+
+#: themes/bp-default/functions.php:436
+msgid "Third Footer Widget Area"
+msgstr ""
+
+#: themes/bp-default/functions.php:438
+msgid "The third footer widget area"
+msgstr ""
+
+#: themes/bp-default/functions.php:447
+msgid "Fourth Footer Widget Area"
+msgstr ""
+
+#: themes/bp-default/functions.php:449
+msgid "The fourth footer widget area"
+msgstr ""
+
+#. translators: 1: comment author url, 2: comment author name, 3: comment permalink, 4: comment date/timestamp
+#: themes/bp-default/functions.php:504
+msgid "<a href=\"%1$s\" rel=\"nofollow\">%2$s</a> said on <a href=\"%3$s\"><span class=\"time-since\">%4$s</span></a>"
+msgstr ""
+
+#: themes/bp-default/functions.php:511
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: themes/bp-default/functions.php:523
+msgid "Edit comment"
+msgstr ""
+
+#: themes/bp-default/functions.php:523
+msgid "Edit"
+msgstr ""
+
+#: themes/bp-default/functions.php:593
+msgid "Theme activated! This theme contains <a href=\"%s\">custom header image</a> support and <a href=\"%s\">sidebar widgets</a>."
+msgstr ""
+
+#: themes/bp-default/functions.php:657
+#: themes/bp-default/members/single/profile/profile-wp.php:15
+msgid "Name"
+msgstr ""
+
+#: themes/bp-default/functions.php:659
+msgid "Email"
+msgstr ""
+
+#: themes/bp-default/functions.php:661
+#: themes/bp-default/members/single/profile/profile-wp.php:33
+msgid "Website"
+msgstr ""
+
+#: themes/bp-default/functions.php:669
+msgid "You must be <a href=\"%1$s\">logged in</a> to post a comment."
+msgstr ""
+
+#: themes/bp-default/functions.php:670
+msgid "Leave a reply"
+msgstr ""
+
+#: themes/bp-default/functions.php:757
+msgid "&larr; Previous Entries"
+msgstr ""
+
+#: themes/bp-default/functions.php:758
+msgid "Next Entries &rarr;"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:18
+#: themes/bp-default/groups/index.php:21
+msgid "Create a Group"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:18
+#: themes/bp-default/groups/index.php:21
+msgid "Groups Directory"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:39
+#: themes/bp-default/groups/single/admin.php:16
+msgid "Group Name (required)"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:42
+#: themes/bp-default/groups/single/admin.php:19
+msgid "Group Description (required)"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:58
+#: themes/bp-default/groups/single/admin.php:56
+msgid "Privacy Options"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:62
+#: themes/bp-default/groups/single/admin.php:61
+msgid "This is a public group"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:64
+#: themes/bp-default/groups/single/admin.php:63
+msgid "Any site member can join this group."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:65
+#: themes/bp-default/groups/create.php:74
+#: themes/bp-default/groups/single/admin.php:64
+#: themes/bp-default/groups/single/admin.php:74
+msgid "This group will be listed in the groups directory and in search results."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:66
+#: themes/bp-default/groups/single/admin.php:65
+msgid "Group content and activity will be visible to any site member."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:71
+#: themes/bp-default/groups/single/admin.php:71
+msgid "This is a private group"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:73
+#: themes/bp-default/groups/single/admin.php:73
+msgid "Only users who request membership and are accepted can join the group."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:75
+#: themes/bp-default/groups/create.php:84
+#: themes/bp-default/groups/single/admin.php:75
+#: themes/bp-default/groups/single/admin.php:85
+msgid "Group content and activity will only be visible to members of the group."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:80
+#: themes/bp-default/groups/single/admin.php:81
+msgid "This is a hidden group"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:82
+#: themes/bp-default/groups/single/admin.php:83
+msgid "Only users who are invited can join the group."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:83
+#: themes/bp-default/groups/single/admin.php:84
+msgid "This group will not be listed in the groups directory or search results."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:89
+#: themes/bp-default/groups/single/admin.php:92
+msgid "Group Invitations"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:91
+#: themes/bp-default/groups/single/admin.php:94
+msgid "Which members of this group are allowed to invite others?"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:96
+#: themes/bp-default/groups/single/admin.php:99
+msgid "All group members"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:101
+#: themes/bp-default/groups/single/admin.php:104
+msgid "Group admins and mods only"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:106
+#: themes/bp-default/groups/single/admin.php:109
+msgid "Group admins only"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:112
+msgid "Group Forums"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:116
+msgid "Should this group have a forum?"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:119
+#: themes/bp-default/groups/single/admin.php:47
+msgid "Enable discussion forum"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:123
+msgid "<strong>Attention Site Admin:</strong> Group forums require the <a href=\"%s\">correct setup and configuration</a> of a bbPress installation."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:149
+#: themes/bp-default/groups/single/admin.php:127
+msgid "Upload an image to use as an avatar for this group. The image will be shown on the main group page, and in search results."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:153
+#: themes/bp-default/groups/single/admin.php:131
+#: themes/bp-default/members/single/profile/change-avatar.php:18
+msgid "Upload Image"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:157
+msgid "To skip the avatar upload process, hit the \"Next Step\" button."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:164
+msgid "Crop Group Avatar"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:166
+#: themes/bp-default/groups/single/admin.php:151
+#: themes/bp-default/members/single/profile/change-avatar.php:33
+msgid "Avatar to crop"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:169
+#: themes/bp-default/groups/single/admin.php:154
+#: themes/bp-default/members/single/profile/change-avatar.php:36
+msgid "Avatar preview"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:172
+#: themes/bp-default/groups/single/admin.php:157
+#: themes/bp-default/members/single/profile/change-avatar.php:39
+msgid "Crop Image"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:211
+#: themes/bp-default/groups/single/send-invites.php:22
+msgid "Select people to invite from your friends list."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:229
+#: themes/bp-default/groups/single/send-invites.php:42
+#: themes/bp-default/_inc/ajax.php:628
+msgid "Remove Invite"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:246
+#: themes/bp-default/groups/single/send-invites.php:73
+msgid "Once you have built up friend connections you will be able to invite others to your group."
+msgstr ""
+
+#: themes/bp-default/groups/create.php:268
+msgid "Back to Previous Step"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:275
+msgid "Next Step"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:282
+msgid "Create Group and Continue"
+msgstr ""
+
+#: themes/bp-default/groups/create.php:289
+msgid "Finish"
+msgstr ""
+
+#: themes/bp-default/groups/groups-loop.php:47
+#: themes/bp-default/groups/single/group-header.php:42
+msgid "active %s"
+msgstr ""
+
+#: themes/bp-default/groups/groups-loop.php:95
+msgid "There were no groups found."
+msgstr ""
+
+#: themes/bp-default/groups/index.php:35
+msgid "All Groups <span>%s</span>"
+msgstr ""
+
+#: themes/bp-default/groups/index.php:58
+#: themes/bp-default/members/single/groups.php:23
+msgid "Most Members"
+msgstr ""
+
+#: themes/bp-default/groups/index.php:59
+#: themes/bp-default/members/single/groups.php:24
+msgid "Newly Created"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:26
+msgid "Notify group members of these changes via email"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:32
+#: themes/bp-default/groups/single/admin.php:117
+#: themes/bp-default/members/single/profile/edit.php:155
+#: themes/bp-default/members/single/settings/general.php:72
+#: themes/bp-default/members/single/settings/notifications.php:61
+msgid "Save Changes"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:137
+msgid "If you'd like to remove the existing avatar but not upload a new one, please use the delete avatar button."
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:139
+#: themes/bp-default/members/single/profile/change-avatar.php:24
+msgid "Delete Avatar"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:149
+msgid "Crop Avatar"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:177
+msgid "Administrators"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:185
+#: themes/bp-default/groups/single/admin.php:212
+msgid "Profile picture of %s"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:190
+#: themes/bp-default/groups/single/admin.php:217
+msgid "Demote to Member"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:205
+msgid "Moderators"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:216
+#: themes/bp-default/groups/single/admin.php:272
+msgid "Promote to Admin"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:260
+msgid "(banned)"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:266
+msgid "Unban this member"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:266
+msgid "Remove Ban"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:270
+msgid "Kick and ban this member"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:270
+msgid "Kick &amp; Ban"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:271
+msgid "Promote to Mod"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:276
+msgid "Remove this member"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:276
+msgid "Remove from group"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:290
+#: themes/bp-default/groups/single/members.php:87
+msgid "This group has no members."
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:320
+#: themes/bp-default/members/single/friends/requests.php:37
+#: themes/bp-default/members/single/groups/invites.php:23
+msgid "Accept"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:322
+#: themes/bp-default/members/single/friends/requests.php:38
+#: themes/bp-default/members/single/groups/invites.php:24
+msgid "Reject"
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:335
+msgid "There are no pending membership requests."
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:352
+msgid "WARNING: Deleting this group will completely remove ALL content associated with it. There is no way back, please be careful with this option."
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:355
+msgid "I understand the consequences of deleting this group."
+msgstr ""
+
+#: themes/bp-default/groups/single/admin.php:360
+msgid "Delete Group"
+msgstr ""
+
+#: themes/bp-default/groups/single/group-header.php:11
+msgid "Group Admins"
+msgstr ""
+
+#: themes/bp-default/groups/single/group-header.php:20
+msgid "Group Mods"
+msgstr ""
+
+#: themes/bp-default/groups/single/request-membership.php:7
+msgid "Comments (optional)"
+msgstr ""
+
+#: themes/bp-default/groups/single/request-membership.php:12
+msgid "Send Request"
+msgstr ""
+
+#: themes/bp-default/groups/single/send-invites.php:60
+msgid "Send Invites"
+msgstr ""
+
+#: themes/bp-default/header.php:22
+msgctxt "Home page banner link title"
+msgid "Home"
+msgstr ""
+
+#: themes/bp-default/header.php:25
+msgid "Search for:"
+msgstr ""
+
+#: themes/bp-default/header.php:30
+#: themes/bp-default/searchform.php:5
+msgid "Search"
+msgstr ""
+
+#: themes/bp-default/index.php:27
+msgctxt "Sticky post"
+msgid "Featured"
+msgstr ""
+
+#: themes/bp-default/index.php:55
+msgid "Sorry, but you are looking for something that isn't here."
+msgstr ""
+
+#: themes/bp-default/links.php:16
+msgid "Links"
+msgstr ""
+
+#: themes/bp-default/members/index.php:21
+msgid "Members Directory"
+msgstr ""
+
+#: themes/bp-default/members/index.php:58
+#: themes/bp-default/members/single/friends.php:23
+msgid "Newest Registered"
+msgstr ""
+
+#: themes/bp-default/members/single/friends/requests.php:68
+msgid "You have no pending friendship requests."
+msgstr ""
+
+#: themes/bp-default/members/single/groups/invites.php:14
+msgid "1 member"
+msgid_plural "%d members"
+msgstr[0] ""
+msgstr[1] ""
+
+#: themes/bp-default/members/single/groups/invites.php:37
+msgid "You have no outstanding group invites."
+msgstr ""
+
+#: themes/bp-default/members/single/messages/compose.php:5
+msgid "Send To (Username or Friend's Name)"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/compose.php:17
+msgid "Subject"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/compose.php:20
+msgid "Message"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/compose.php:28
+msgid "Send Message"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/messages-loop.php:32
+msgid "From:"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/messages-loop.php:37
+msgid "To:"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/messages-loop.php:69
+msgid "Sorry, no messages were found."
+msgstr ""
+
+#: themes/bp-default/members/single/messages/notices-loop.php:36
+msgid "Sent:"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/notices-loop.php:54
+msgid "Sorry, no notices were found."
+msgstr ""
+
+#: themes/bp-default/members/single/messages/single.php:14
+msgid "You are alone in this conversation."
+msgstr ""
+
+#: themes/bp-default/members/single/messages/single.php:18
+msgid "Conversation between %s and you."
+msgstr ""
+
+#: themes/bp-default/members/single/messages/single.php:75
+msgid "Send a Reply"
+msgstr ""
+
+#: themes/bp-default/members/single/messages/single.php:91
+msgid "Send Reply"
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/feedback-no-notifications.php:7
+msgid "You have no unread notifications."
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/feedback-no-notifications.php:11
+msgid "This member has no unread notifications."
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/feedback-no-notifications.php:19
+msgid "You have no notifications."
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/feedback-no-notifications.php:23
+msgid "This member has no notifications."
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/notifications-loop.php:5
+msgid "Notification"
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/notifications-loop.php:6
+msgid "Date Received"
+msgstr ""
+
+#: themes/bp-default/members/single/notifications/notifications-loop.php:7
+msgid "Actions"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:1
+msgid "Change Avatar"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:7
+msgid "Your avatar will be used on your profile and throughout the site. If there is a <a href=\"http://gravatar.com\">Gravatar</a> associated with your account email we will use that, or you can upload an image from your computer."
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:14
+msgid "Click below to select a JPG, GIF or PNG format photo from your computer and then click 'Upload Image' to proceed."
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:23
+msgid "If you'd like to delete your current avatar but not upload a new one, please use the delete avatar button."
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:24
+msgid "Delete My Avatar"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:31
+msgid "Crop Your New Avatar"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/change-avatar.php:55
+msgid "Your avatar will be used on your profile and throughout the site. To change your avatar, please create an account with <a href=\"http://gravatar.com\">Gravatar</a> using the same email address as you used to register with this site."
+msgstr ""
+
+#: themes/bp-default/members/single/profile/edit.php:26
+#: themes/bp-default/members/single/profile/edit.php:33
+#: themes/bp-default/members/single/profile/edit.php:40
+#: themes/bp-default/members/single/profile/edit.php:49
+#: themes/bp-default/members/single/profile/edit.php:67
+#: themes/bp-default/members/single/profile/edit.php:83
+#: themes/bp-default/members/single/profile/edit.php:93
+#: themes/bp-default/members/single/profile/edit.php:118
+#: themes/bp-default/registration/register.php:37
+#: themes/bp-default/registration/register.php:41
+#: themes/bp-default/registration/register.php:45
+#: themes/bp-default/registration/register.php:49
+#: themes/bp-default/registration/register.php:78
+#: themes/bp-default/registration/register.php:86
+#: themes/bp-default/registration/register.php:94
+#: themes/bp-default/registration/register.php:104
+#: themes/bp-default/registration/register.php:115
+#: themes/bp-default/registration/register.php:130
+#: themes/bp-default/registration/register.php:141
+#: themes/bp-default/registration/register.php:161
+#: themes/bp-default/registration/register.php:223
+#: themes/bp-default/registration/register.php:232
+msgid "(required)"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/edit.php:58
+#: themes/bp-default/members/single/profile/edit.php:73
+#: themes/bp-default/registration/register.php:121
+msgid "Clear"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/edit.php:127
+#: themes/bp-default/members/single/profile/edit.php:141
+#: themes/bp-default/registration/register.php:170
+#: themes/bp-default/registration/register.php:185
+msgid "This field can be seen by: <span class=\"current-visibility-level\">%s</span>"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/edit.php:127
+msgid "Change"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/edit.php:132
+#: themes/bp-default/registration/register.php:175
+msgid "Who can see this field?"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/profile-wp.php:8
+msgid "%s's Profile"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/profile-wp.php:24
+msgid "About Me"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/profile-wp.php:42
+msgid "Jabber"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/profile-wp.php:51
+msgid "AOL Messenger"
+msgstr ""
+
+#: themes/bp-default/members/single/profile/profile-wp.php:60
+msgid "Yahoo Messenger"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/capabilities.php:49
+msgid "Capabilities"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/capabilities.php:57
+msgid "This user is a spammer."
+msgstr ""
+
+#: themes/bp-default/members/single/settings/capabilities.php:61
+msgid "Save"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/delete-account.php:50
+#: themes/bp-default/members/single/settings/delete-account.php:76
+msgid "Delete Account"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/delete-account.php:56
+msgid "Deleting your account will delete all of the content you have created. It will be completely irrecoverable."
+msgstr ""
+
+#: themes/bp-default/members/single/settings/delete-account.php:60
+msgid "Deleting this account will delete all of the content it has created. It will be completely irrecoverable."
+msgstr ""
+
+#: themes/bp-default/members/single/settings/delete-account.php:72
+msgid "I understand the consequences."
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:49
+msgid "General Settings"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:57
+msgid "Current Password <span>(required to update email or change current password)</span>"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:58
+msgid "Password Lost and Found"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:58
+msgid "Lost your password?"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:62
+msgid "Account Email"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:65
+msgid "Change Password <span>(leave blank for no change)</span>"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:66
+msgid "New Password"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/general.php:67
+msgid "Repeat New Password"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/notifications.php:49
+msgid "Email Notification"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/notifications.php:54
+msgid "Send an email notice when:"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/profile.php:49
+msgid "Profile Settings"
+msgstr ""
+
+#: themes/bp-default/members/single/settings/profile.php:65
+msgid "Visibility"
+msgstr ""
+
+#: themes/bp-default/onecolumn-page.php:29
+#: themes/bp-default/page.php:18
+msgid "<p class=\"serif\">Read the rest of this page &rarr;</p>"
+msgstr ""
+
+#: themes/bp-default/onecolumn-page.php:32
+#: themes/bp-default/page.php:21
+msgid "Edit this page."
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:11
+msgid "Account Activated"
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:13
+msgid "Activate your Account"
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:23
+msgid "Your account was activated successfully! Your account details have been sent to you in a separate email."
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:25
+msgid "Your account was activated successfully! You can now <a href=\"%s\">log in</a> with the username and password you provided when you signed up."
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:30
+msgid "Please provide a valid activation key."
+msgstr ""
+
+#: themes/bp-default/registration/activate.php:34
+msgid "Activation Key:"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:16
+msgid "User registration is currently not allowed."
+msgstr ""
+
+#: themes/bp-default/registration/register.php:23
+msgid "Create an Account"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:27
+msgid "Registering for this site is easy, just fill in the fields below and we'll get a new account set up for you in no time."
+msgstr ""
+
+#: themes/bp-default/registration/register.php:35
+msgid "Account Details"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:41
+msgid "Email Address"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:45
+msgid "Choose a Password"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:49
+msgid "Confirm Password"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:67
+msgid "Profile Details"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:170
+msgctxt "Change profile field visibility level"
+msgid "Change"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:217
+msgid "Blog Details"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:219
+msgid "Yes, I'd like to create a new site"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:223
+msgid "Blog URL"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:232
+msgid "Site Title"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:236
+msgid "I would like my site to appear in search engines, and in public listings around this network."
+msgstr ""
+
+#: themes/bp-default/registration/register.php:239
+msgid "Yes"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:240
+msgid "No"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:255
+msgid "Complete Sign Up"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:266
+msgid "Check Your Email To Activate Your Account!"
+msgstr ""
+
+#: themes/bp-default/registration/register.php:272
+msgid "You have successfully created your account! To begin using this site you will need to activate your account via the email we have just sent to your address."
+msgstr ""
+
+#: themes/bp-default/registration/register.php:274
+msgid "You have successfully created your account! Please log in using the username and password you have just created."
+msgstr ""
+
+#: themes/bp-default/search.php:10
+msgid "Site"
+msgstr ""
+
+#: themes/bp-default/search.php:14
+msgid "Search Results"
+msgstr ""
+
+#: themes/bp-default/search.php:51
+msgid "No posts found. Try a different search?"
+msgstr ""
+
+#: themes/bp-default/sidebar.php:37
+msgid "Please <a href=\"%s\" title=\"Create an account\">create an account</a> to get started."
+msgstr ""
+
+#: themes/bp-default/sidebar.php:65
+msgid "Forum Topic Tags"
+msgstr ""
+
+#: themes/bp-default/single.php:35
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr ""
+
+#: themes/bp-default/single.php:36
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr ""
+
+#: themes/bp-default/single.php:45
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:279
+msgid "Please enter some content to post."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:294
+msgid "There was a problem posting your update. Please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:330
+msgid "Please do not leave the comment area blank."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:333
+#: themes/bp-default/_inc/ajax.php:343
+msgid "There was an error posting that reply, please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:403
+#: themes/bp-default/_inc/ajax.php:439
+msgid "There was a problem when deleting. Please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:632
+msgid "%s has previously requested to join this group. Sending an invitation will automatically add the member to the group."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:676
+msgid "Friendship could not be canceled."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:678
+#: themes/bp-default/_inc/ajax.php:696
+msgid "Add Friend"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:686
+msgid " Friendship could not be requested."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:688
+msgid "Cancel Friendship Request"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:698
+msgid "Friendship request could not be cancelled."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:703
+msgid "Request Pending"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:723
+msgid "There was a problem accepting that request. Please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:742
+msgid "There was a problem rejecting that request. Please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:772
+msgid "Error joining group"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:774
+#: themes/bp-default/_inc/ajax.php:787
+msgid "Leave Group"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:785
+#: themes/bp-default/_inc/ajax.php:795
+msgid "Error requesting membership"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:797
+msgid "Membership Requested"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:806
+msgid "Error leaving group"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:808
+msgid "Join Group"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:810
+msgid "Request Membership"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:831
+msgid "There was a problem closing the notice."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:865
+msgid "Sent %s"
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:882
+msgid "There was a problem sending that reply. Please try again."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:902
+msgid "There was a problem marking messages as unread."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:929
+msgid "There was a problem marking messages as read."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:956
+msgid "There was a problem deleting messages."
+msgstr ""
+
+#: themes/bp-default/_inc/ajax.php:965
+msgid "Messages deleted."
+msgstr ""
