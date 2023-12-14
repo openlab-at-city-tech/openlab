@@ -3,9 +3,9 @@ Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
 Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires PHP: 5.6.20
-Stable tag: 2.6.7
+Stable tag: 2.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,10 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
+= 2.6.8 =
+* Fixed relative urls with anchor links on translated pages
+* Fixed searching in translated languages on sites with specific plugins combination
+
 = 2.6.7 =
 * Added new feature that displays translation percentage for current page in Translation Editor
 * Added RSS Feed support for translating title, content and excerpt

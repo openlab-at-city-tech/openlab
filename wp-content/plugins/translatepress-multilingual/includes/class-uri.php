@@ -373,4 +373,12 @@ class Uri
         $scheme = $this->getScheme();
         return (bool) ($this->isRelative() || ($this->isAbsolute() && empty($scheme)));
     }
+
+    public function hasAnchor(){
+        return (bool) isset( $this->fragment );
+    }
+
+    public function hasQueryParam(){
+        return (bool) isset( $this->query );
+    }
 }

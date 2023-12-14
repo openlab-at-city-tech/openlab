@@ -66,7 +66,7 @@ class TRP_Translate_Press{
         define( 'TRP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'TRP_PLUGIN_BASE', plugin_basename( __DIR__ . '/index.php' ) );
         define( 'TRP_PLUGIN_SLUG', 'translatepress-multilingual' );
-        define( 'TRP_PLUGIN_VERSION', '2.6.7' );
+        define( 'TRP_PLUGIN_VERSION', '2.6.8' );
 
 	    wp_cache_add_non_persistent_groups(array('trp'));
 

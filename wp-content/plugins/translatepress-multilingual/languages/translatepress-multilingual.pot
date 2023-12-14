@@ -469,7 +469,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: includes/class-settings.php:583, includes/class-translation-manager.php:504
+#: includes/class-settings.php:583, includes/class-translation-manager.php:504, add-ons-pro/translator-accounts/includes/class-translator-accounts.php:152
 msgid "Translate Site"
 msgstr ""
 
@@ -1081,7 +1081,7 @@ msgstr ""
 msgid "<strong>TranslatePress</strong> requires <strong><a href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP library</a></strong>. Please contact your server administrator to install it on your server."
 msgstr ""
 
-#: includes/compatibility-functions.php:1652
+#: includes/compatibility-functions.php:1656
 msgid "Detected long query limitation on WPEngine hosting. Some large pages may appear untranslated. You can remove limitation by adding the following to your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
 msgstr ""
 
@@ -2457,15 +2457,15 @@ msgstr ""
 msgid "Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set up an API key and control API costs."
 msgstr ""
 
-#: add-ons-pro/translator-accounts/includes/class-translator-accounts-activator.php:30, add-ons-pro/translator-accounts/includes/class-translator-accounts.php:96, add-ons-pro/translator-accounts/includes/class-translator-accounts.php:97
+#: add-ons-pro/translator-accounts/includes/class-translator-accounts-activator.php:30, add-ons-pro/translator-accounts/includes/class-translator-accounts.php:97, add-ons-pro/translator-accounts/includes/class-translator-accounts.php:98
 msgid "Translator"
 msgstr ""
 
-#: add-ons-pro/translator-accounts/includes/class-translator-accounts.php:92
+#: add-ons-pro/translator-accounts/includes/class-translator-accounts.php:93
 msgid " TranslatePress Settings"
 msgstr ""
 
-#: add-ons-pro/translator-accounts/includes/class-translator-accounts.php:101
+#: add-ons-pro/translator-accounts/includes/class-translator-accounts.php:102
 msgid "Allow this user to translate the website."
 msgstr ""
 

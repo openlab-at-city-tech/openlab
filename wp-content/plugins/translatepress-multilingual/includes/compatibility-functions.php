@@ -1182,10 +1182,14 @@ function trp_overrule_main_query_condition(){
     }
 }
 
-// Otherwise trp-post-container is stripped
+/**
+ * Otherwise trp-post-container is stripped
+ *
+ * Applied this solution permanently. It's problematic with Elementor and WooCommerce too.
+ */
 add_filter( 'wp_kses_allowed_html', 'trp_prevent_kses_from_stripping_trp_post_container', 10, 2 );
 function trp_prevent_kses_from_stripping_trp_post_container( $allowedposttags, $context  ) {
-    if ( class_exists('Rtcl') && $context === 'post' ){
+    if ( $context === 'post' ){
         $allowedposttags['trp-post-container'] = array( 'data-trp-post-id' => true );
     }
     return $allowedposttags;

@@ -428,7 +428,12 @@ class TRP_Url_Converter {
 
             $processed_permalink = get_permalink($post_id);
 
-            $url_to_replace = ($url_obj->isSchemeless()) ? trailingslashit(trailingslashit( home_url() ) . ltrim($url, '/') ) : $url;
+            $url_to_replace = ( $url_obj->isSchemeless() ) ?
+                                  ( $url_obj->hasAnchor() || $url_obj->hasQueryParam() ) ?
+                                        trailingslashit( home_url() ) . ltrim($url, '/')
+                                    :trailingslashit(trailingslashit( home_url() ) . ltrim($url, '/') )
+                               :$url;
+
             $arguments = str_replace(untrailingslashit($processed_permalink), '', $url_to_replace );
 
             // if nothing was replaced, something was wrong, just use the normal permalink without any arguments.
