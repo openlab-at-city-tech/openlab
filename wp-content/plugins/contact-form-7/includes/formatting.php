@@ -275,6 +275,17 @@ function wpcf7_sanitize_unit_tag( $tag ) {
 function wpcf7_antiscript_file_name( $filename ) {
 	$filename = wp_basename( $filename );
 
+	// Apply part of protection logic from sanitize_file_name().
+	$filename = str_replace(
+		array(
+			'?', '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', "'", '"',
+			'&', '$', '#', '*', '(', ')', '|', '~', '`', '!', '{', '}',
+			'%', '+', '’', '«', '»', '”', '“', chr( 0 )
+		),
+		'',
+		$filename
+	);
+
 	$filename = preg_replace( '/[\r\n\t -]+/', '-', $filename );
 	$filename = preg_replace( '/[\pC\pZ]+/iu', '', $filename );
 
@@ -522,7 +533,13 @@ function wpcf7_format_atts( $atts ) {
 		}
 
 		static $boolean_attributes = array(
-			'checked', 'disabled', 'multiple', 'readonly', 'required', 'selected',
+			'checked',
+			'disabled',
+			'inert',
+			'multiple',
+			'readonly',
+			'required',
+			'selected',
 		);
 
 		if ( in_array( $name, $boolean_attributes ) and '' === $value ) {
