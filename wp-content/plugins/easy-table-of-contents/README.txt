@@ -3,9 +3,9 @@ Contributors: magazine3
 Donate link: https://tocwp.com/
 Tags: table of contents, toc
 Requires at least: 5.0
-Tested up to: 6.3
+Tested up to: 6.4.2
 Requires PHP: 5.6.20
-Stable tag: 2.0.55
+Stable tag: 2.0.61
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,14 +38,41 @@ A user friendly, featured focused [Easy Table of Contents](https://tocwp.com/) p
 * The widget auto highlights the sections currently visible on the page. The highlight color is configurable.
 * Developer friendly with many action hooks and filters available. More can be added by request on [Github](https://github.com/shazahm1/Easy-Table-of-Contents). Pull requests are welcomed.
 * An option to show toc based on dynamic paragraph count.
+* An option which Preserve Line Breaks in TOC.
+* An option to use the TOC without anchor links in the URL.
+* Support for custom taxonomy description.
+* Adds SiteNavigation Schema.
 
 = TAKE IT A STEP FURTHER WITH EASY TABLE OF CONTENTS PRO =
 With [EASY TABLE OF CONTENTS PRO](https://tocwp.com/pricing/) You will get access to more professional Settings, options and positions to really push your TOC to the next level.
 * <strong>New - Gutenberg Block </strong>: Easily create TOC in Gutenberg block without the need of any coding or shortcode.
 * <strong>New - Elementor Widget </strong>: Easily create TOC using Elementor Widget without the need of any coding or shortcode.
 * <strong>New - Fixed/Sticky TOC </strong>: Users can find the content that they need, much faster through the option of sticky TOC.
+* <strong>New - Fixed/Sticky TOC Customization </strong>: Customize the appearance of Sticky TOC with Theme Design options.
 * <strong>New - Full AMP Support </strong>: Generates a TOC with your existing setup and make it AMP compatible automatically.
 * <strong>NEW – ACF Support </strong>: Easily create TOC with your custom ACF fields.
+* <strong>NEW – View More </strong>: Show selected number of TOC heading before user clicks to show remaining headings.
+* <strong>NEW – Read Time </strong>: Show time of read for your posts/pages.
+* <strong>NEW – Collapsable Sub Headings </strong>: Show/Hide sub headings of the Table of contents.
+* <strong>NEW – Highlight Headings </strong>: Sticky heading highlight while scrolling through the content.
+
+### Shortcode
+
+With Our shortcode feature you are in command of the table of contents with very little effort and even if you have little to no programming skills.
+
+[ez-toc] Would generate the table of contents. 
+
+Below are the attibutes we support and could be useful in configuring the table of contents:
+
+[header_label="Title"] – title for the table of contents
+[display_header_label="no"] - no title for the table of contents
+[toggle_view="no"] – no toggle for the table of contents 
+[initial_view="no"] –  initially hide the table of contents 
+[display_counter="no"] – no counter for the table of contents
+[post_types="post,page"] – post types seperated by ,(comma)
+[post_in="1,2"] – ID's of the posts|pages seperated by ,(comma)
+[device_target="desktop"] – mobile or desktop device support for the table of contents
+[view_more="5"] – 5, is the number of headings loads on first view, before user interaction (PRO)
 
 ### Support
 
@@ -59,7 +86,6 @@ Bug reports for Easy Table of Contents are [welcomed on GitHub](https://github.c
 
 ### Roadmap 
 * Fragment caching for improved performance.
-* Improve SEO by adding options to add nofollow to TOC link and wrap TOC nav in noindex tag.
 * Improve accessibility.
 * Add Bullet and Arrow options for list counter style.
 * [View Full Road Map](https://github.com/ahmedkaludi/Easy-Table-of-Contents/milestones)
@@ -102,6 +128,102 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+
+= 2.0.61 13/12/2023 =
+* New: checkbox selection should work on label clicks #473
+* New: Should be able to change the sticky toggle header label for each post individually #625
+* New: TOC plugin is not working with AJAX #634
+* New: Need to add a feature to customize the View More/Less label #637
+* New: To make the Sticky Toggle heading highlight while scrolling through the content #647
+* New: The option font size is only working for the Sticky Toggle title Label but not for the headings #661
+* New: Meta field to turn off sticky individually on post/pages. #666
+* Bug: Put documents links #510
+* Bug: Recent TOC Update 2.0.56.1 Causing W3C Validation Error #611
+* Bug: The size of headings not increasing individually as per setting. #623
+* Bug: Checklist #658
+* Bug: The option "Width" is not getting saved for the option Sticky Toggle. #660
+* Bug: The feature "Fixed TOC" is not working #662
+* Bug: The H4, H5, and H6 headings are not changing the font size if customized in the Settings #663
+* Bug: Target device functionality is not working in sticky toc #664
+* Bug: PHP Warning in TOC Plugin: Undefined Array Key 'desc' in class.options.php (Line 1776) #665
+* Bug: Sticky TOC on Password-Protected Pages Before Entry #667
+
+= 2.0.60 05/12/2023 =
+* New: Alignment of TOC to the center on selected posts/pages #314
+* New: An option to show the TOC content after the first image #336
+* New: An option where users can show or hide the TOC on mobile devices and desktops. #362
+* New: A feature to change a header label for specific post or page. #472
+* New: An option to exclude/include heading via shortcode #566
+* New: An option to load js in footer or header #586
+* New: Add shortcode attribute to Hide/show counters in toc #649
+* Bug: A sticky toggle appears on the Author pages and it contains the headings of the latest post published by them. #640
+* Bug: Heading are not working if the plugin Molongui Authorship is activated ad if the heading contains "..." in it #642
+
+= 2.0.59 29/11/2023 =
+* New: An option to show TOC on Tag #489
+* New: Toc support for custom taxonomy description #512
+* New: Apply default anchor prefix in the Japanese language #528
+* New: An option to restrict the toc if any part of url match with saved limit path #560
+* New: An option to use the TOC without anchor links in the URL. #587
+* New: An option which Preserve Line Breaks in TOC. #591
+* New: Collapsable sub heading #622
+* New: Enable support attributes inside shortcode #624
+* New: Filter to hide and show metabox #645
+* Bug: The WP Bakery image gallery is getting braked on first reload #627
+* Bug: Warning in debug log #636
+* Bug: When we set the counter as a disc while using the viewMore option, then TOC CSS is not working fine. #638
+* Bug: Fix CSS Style Placement for Easy-Table-of-Contents WordPress Plugin #639
+* Bug: Fatal error while activating pro version #644
+* Bug: Conflict issue with the Smooth Scroll Offset option #646
+* Bug: Critical Error with READ TIME Option when Set to "0"(Zero) #648
+
+= 2.0.58 15/11/2023 =
+* New: Generate schema/SiteNavigationElement for Table of contents #592
+* New: An option to show estimated time to read the full article #594
+* New: An option of TOC not crawl the paragraphs in blockquotes #601
+* New: Add the View More feature compatibility with the Shortcode #628
+* Bug: Widget Auto-Highlight Issue After Update 2.0.56.1 #610
+* Bug: Conflict with the plugin Perfmatters's option "Enable FastClick" #612
+* Bug: Add compatibility with the theme Oliver Lohse #615
+* Bug: Sticky TOC is showing on Blog pages #617
+* Bug: Toc not showing if AMP Page Builder is used #619
+* Bug: Smooth Scroll offset issue after latest update #620
+* Bug: JSON error when we try to added the ETOC in page/post section #621
+* Bug: The WP Bakery image gallery is getting braked on first reload #627
+* Bug: Issue showing on the page speed tool as Lists do not contain only <li> elements and script-supporting elements #630
+
+= 2.0.57.1 27/10/2023 =
+* Bug: Incomplete CSS Classes in Version 2.0.57 Causing Style Issues #614
+
+= 2.0.57 25/10/2023 =
+* New: A feature to show only limited number of headings and rest should be as "View More" #474
+* Bug: The Footnotes are being repeated if the plugin is activated #597
+* Bug: A warning is showing while using the TOC #606
+* Bug: Jump anchors with apostrophe headings not working if theme Bamboo by Mediavine is active #607
+* Bug: Conflict issue with Molongui Authorship plugin in 2.0.56 version #608
+* Bug: Widget Auto-Highlight Issue After Update 2.0.56.1 #610
+
+= 2.0.56.1 09/10/2023 =
+* Bug: Toggle is not working with the pure CSS loading method. #604
+* Bug: Border colour is not changing in TOC #603
+* Bug: jQuery issue showing in console #605
+
+= 2.0.56 05/10/2023 =
+* New: Option to exclude toc from wp-json rest api #580
+* New: Feature to customize the CSS of the TOC container #553
+* New: Compatibility with the plugin CM Tooltip Glossary Ecommerce #556
+* New: Compatibility with the plugin Molongui Authorship #563
+* New: Option to include Page title in Table Of Content #568
+* New: Feature to customize the Background color of the Header Label #569
+* New: Added shortcode [no_ez_toc] so that users can disable the auto insertion of the TOC on a specific post/page #581
+* New: Compatibility with the ACF Flexible Content Module #589
+* New: Compatibility with salesdorado-tailpress theme #590
+* New: Compatibility of javascript scroll with Walker News Template theme #593
+* New: Options to customise the sticky TOC toggle. #583 #286
+* Bug: Unwanted spacing added in post while using TOC with uncode theme #588
+* Bug: Links are not working if the placement option "After Paragraph Number" is selected #598
+* Bug: TOC shortcode is added to the single.php file, it does not work. #599
+
 
 = 2.0.55 04/09/2023 =
 * New: Option to set position for sticky TOC toggle. #576

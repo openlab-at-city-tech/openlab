@@ -170,6 +170,11 @@ div#farbtastic_colour_wheel {
     font-style: italic;
 }
 
+#toc .form-table tr > th > label > strong {
+    font-size: 18px;
+    font-style: italic;
+}
+
 /* Tab panel styles */
 .postbox {
     padding: 10px;
@@ -1436,4 +1441,16 @@ div#eztoc-tabs a:first-child.active, div#eztoc-tabs a.active {
     #general #eztoc-tabs.moving {
         top: -12px;
     }
+}
+.ez-toc-upgrade-paragraph{
+    position: absolute;
+}
+.ez-toc-upgrade-paragraph a {
+    color: #ea4c89;
+}
+#eztoc-sticky tr:nth-child(16) hr {
+    display: none;
+}
+textarea#ez-toc-settings\[restrict_url_text\] {
+    height: 70px;
 }

@@ -104,7 +104,6 @@ if ( ! class_exists( 'ezTOC_Admin' ) ) {
             $data = apply_filters( 'eztoc_localize_filter', $data, 'eztoc_admin_data' );
 
             wp_localize_script( 'cn_toc_admin_script', 'cn_toc_admin_data', $data );
-			self::inlineAdminStickyToggleJS();
                         
                         self::inlineAdminAMPNonJS();
 						self::inlineAdminHeadingsPaddingJS();
@@ -330,134 +329,6 @@ INLINEOCCASIONALADSPOPUSJS;
                 }
 
 		/**
-		 * inlineAdminStickyToggleJS Method
-		 * Prints out inline Sticky Toggle JS after the core CSS file to allow overriding core styles via options.
-		 *
-		 * @access private
-		 * @return void
-		 * @since  2.0.32
-		 * @static
-		 */
-		private static function inlineAdminStickyToggleJS() {
-            $stickyToggleOpenButtonTextJS = "";
-            if( empty( ezTOC_Option::get( 'sticky-toggle-open-button-text' ) ) ) {
-                $stickyToggleOpenButtonTextJS = "$('input[name=\"ez-toc-settings[sticky-toggle-open-button-text]\"').val('Index')";
-            }
-			$inlineAdminStickyToggleJS = <<<INLINESTICKYTOGGLEJS
-/**
- * Admin Sticky Sidebar JS
- */
-jQuery(function($) {
-
-    let stickyToggleCheckbox = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle]']");
-    let stickyTogglePosition = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-position]']");
-	let stickyToggleAlignment = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-alignment]']");
-    let stickyToggleWidth = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-width]']");
-    let stickyToggleWidthCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-width-custom]']");
-    let stickyToggleHeight = $('#eztoc-general').find("select[name='ez-toc-settings[sticky-toggle-height]']");
-    let stickyToggleHeightCustom = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-height-custom]']");
-    let stickyToggleCloseOnMobile = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-close-on-mobile]']");
-	let stickyToggleCloseOnDesktop = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-close-on-desktop]']");
-	let stickyToggleOpen = $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-open]']");
-    
-    $stickyToggleOpenButtonTextJS
-    
-    if($(stickyToggleCheckbox).prop('checked') == false) {
-        $(stickyTogglePosition).parents('tr').hide(500);
-		$(stickyToggleAlignment).parents('tr').hide(500);
-        $(stickyToggleWidth).parents('tr').hide(500);
-        $(stickyToggleWidthCustom).parents('tr').hide(500);
-        $(stickyToggleHeight).parents('tr').hide(500);
-        $(stickyToggleCloseOnMobile).parents('tr').hide(500);
-		$(stickyToggleCloseOnDesktop).parents('tr').hide(500);
-		$(stickyToggleOpen).parents('tr').hide(500);
-                                
-        $(stickyToggleHeightCustom).parents('tr').hide(500);
-        $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-position]'][value='left']").prop('checked', true);
-		$('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-alignment]'][value='top']").prop('checked', true);
-        $(stickyToggleWidth).val('auto');
-        $(stickyToggleHeight).val('auto');
-        $(stickyToggleCloseOnMobile).prop('checked', false);
-		$(stickyToggleCloseOnDesktop).prop('checked', false);
-		$(stickyToggleOpen).prop('checked', false);
-
-                                
-        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
-        $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
-    }
-    $(document).on("change, click", "input[name='ez-toc-settings[sticky-toggle]']", function() {
-    
-        if($(stickyToggleCheckbox).prop('checked') == true) {
-            $(stickyTogglePosition).parents('tr').show(500);
-			$(stickyToggleAlignment).parents('tr').show(500);
-            $(stickyToggleWidth).parents('tr').show(500);
-            $(stickyToggleHeight).parents('tr').show(500);
-            $(stickyToggleCloseOnMobile).parents('tr').show(500);
-			$(stickyToggleCloseOnDesktop).parents('tr').show(500);
-			$(stickyToggleOpen).parents('tr').show(500);
-                                
-            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').show(500);
-            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
-        } else {
-            $(stickyTogglePosition).parents('tr').hide(500);
-			$(stickyToggleAlignment).parents('tr').hide(500);
-            $(stickyToggleWidth).parents('tr').hide(500);
-            $(stickyToggleWidthCustom).parents('tr').hide(500);
-            $(stickyToggleHeight).parents('tr').hide(500);
-            $(stickyToggleCloseOnMobile).parents('tr').hide(500);
-			$(stickyToggleCloseOnDesktop).parents('tr').hide(500);
-			$(stickyToggleOpen).parents('tr').hide(500);
-                                
-            $(stickyToggleHeightCustom).parents('tr').hide(500);
-            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').parents('tr').hide(500);
-            $('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-position]'][value='left']").prop('checked', true);
-			$('#eztoc-general').find("input[name='ez-toc-settings[sticky-toggle-alignment]'][value='top']").prop('checked', true);
-            $(stickyToggleWidth).val('auto');
-            $(stickyToggleHeight).val('auto');
-            $(stickyToggleCloseOnMobile).prop('checked', false);
-			$(stickyToggleCloseOnDesktop).prop('checked', false);
-			$(stickyToggleOpen).prop('checked', false);
-                                
-            $('input[name="ez-toc-settings[sticky-toggle-open-button-text]"').val('Index');
-        }
-        
-    });
-     
-    
-    if($(stickyToggleWidth).val() == '' || $(stickyToggleWidth).val() != 'custom')
-        $(stickyToggleWidthCustom).parents('tr').hide();
-        
-    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-width]']", function() {
-        if($(stickyToggleWidth).val() == 'custom') {
-            $(stickyToggleWidthCustom).val('350px');
-            $(stickyToggleWidthCustom).parents('tr').show(500);
-        } else {
-            $(stickyToggleWidthCustom).val('');
-            $(stickyToggleWidthCustom).parents('tr').hide(500);
-        }
-    });
-     
-    
-    if($(stickyToggleHeight).val() == '' || $(stickyToggleHeight).val() != 'custom')
-        $(stickyToggleHeightCustom).parents('tr').hide();
-        
-    $(document).on("change", "select[name='ez-toc-settings[sticky-toggle-height]']", function() {
-        if($(stickyToggleHeight).val() == 'custom') {
-            $(stickyToggleHeightCustom).val('800px');
-            $(stickyToggleHeightCustom).parents('tr').show(500);
-        } else {
-            $(stickyToggleHeightCustom).val('');
-            $(stickyToggleHeightCustom).parents('tr').hide(500);
-        }
-    });
-    
-    
-});
-INLINESTICKYTOGGLEJS;
-			wp_add_inline_script( 'cn_toc_admin_script', $inlineAdminStickyToggleJS );
-		}
-
-		/**
 		 * Callback to add plugin as a submenu page of the Options page.
 		 *
 		 * This also adds the action to enqueue the scripts to be loaded on plugin's admin pages only.
@@ -503,7 +374,7 @@ INLINESTICKYTOGGLEJS;
 		 * @static
 		 */
 		public function registerMetaboxes() {
-
+			if(apply_filters('ez_toc_register_metaboxes_flag', true)){
 			foreach ( get_post_types() as $type ) {
 
 				if ( in_array( $type, ezTOC_Option::get( 'enabled_post_types', array() ) ) ) {
@@ -512,6 +383,7 @@ INLINESTICKYTOGGLEJS;
 					add_action( "save_post_$type", array( $this, 'save' ), 10, 3 );
 				}
 			}
+		  }
 		}
 
 		/**
@@ -541,11 +413,13 @@ INLINESTICKYTOGGLEJS;
 			// Add an nonce field so we can check for it on save.
 			wp_nonce_field( 'ez_toc_save', '_ez_toc_nonce' );
 
-			$suppress = get_post_meta( $post->ID, '_ez-toc-disabled', true ) == 1 ? true : false;
-			$insert   = get_post_meta( $post->ID, '_ez-toc-insert', true ) == 1 ? true : false;
-			$headings = get_post_meta( $post->ID, '_ez-toc-heading-levels', true );
-			$exclude  = get_post_meta( $post->ID, '_ez-toc-exclude', true );
-			$altText  = get_post_meta( $post->ID, '_ez-toc-alttext', true );
+			$suppress     = get_post_meta( $post->ID, '_ez-toc-disabled', true ) == 1 ? true : false;
+			$insert       = get_post_meta( $post->ID, '_ez-toc-insert', true ) == 1 ? true : false;
+			$header_label = get_post_meta( $post->ID, '_ez-toc-header-label', true );
+			$alignment    = get_post_meta( $post->ID, '_ez-toc-alignment', true );
+			$headings     = get_post_meta( $post->ID, '_ez-toc-heading-levels', true );
+			$exclude      = get_post_meta( $post->ID, '_ez-toc-exclude', true );
+			$altText      = get_post_meta( $post->ID, '_ez-toc-alttext', true );
 			$visibility_hide_by_default  = get_post_meta( $post->ID, '_ez-toc-visibility_hide_by_default', true );
 
 			if ( ! is_array( $headings ) ) {
@@ -586,6 +460,60 @@ INLINESTICKYTOGGLEJS;
 
 						endif; ?>
 
+					</td>
+				</tr>
+
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Header Label', 'easy-table-of-contents' ); ?></th>
+					<td>
+						<?php
+						ezTOC_Option::text(
+							array(
+								'id' => 'header-label',
+								'desc' => '<br>'.__( 'Eg: Contents, Table of Contents, Page Contents', 'easy-table-of-contents' ),
+								'default' => $header_label,
+							),
+							$header_label
+						);
+						?>
+					</td>
+				</tr>
+
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Appearance:', 'easy-table-of-contents' ); ?></th>
+					<td>
+						<?php
+						ezTOC_Option::descriptive_text(
+							array(
+								'id' => 'appearance-desc',
+								'desc' => '<p><strong>' . esc_html__( 'NOTE:', 'easy-table-of-contents' ) . '</strong></p>' .
+								          '<ul>' .
+								          '<li>' . esc_html__( 'Using the appearance options below will override the global Appearance settings.', 'easy-table-of-contents' ) . '</li>' .
+								          '</ul>',
+							)
+						);
+						?>
+					</td>
+				</tr>
+
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Alignment', 'easy-table-of-contents' ); ?></th>
+					<td>
+						<?php
+						ezTOC_Option::select(
+							array(
+								'id' => 'toc-alignment',
+								'options' => array(
+									'none' => __( 'None (Default)', 'easy-table-of-contents' ),
+									'left' => __( 'Left', 'easy-table-of-contents' ),
+									'right' => __( 'Right', 'easy-table-of-contents' ),
+									'center' => __( 'Center', 'easy-table-of-contents' ),
+								),
+								'default' => $alignment,
+							),
+							$alignment
+						);
+						?>
 					</td>
 				</tr>
 
@@ -758,6 +686,24 @@ INLINESTICKYTOGGLEJS;
 				} else {
 
 					update_post_meta( $post_id, '_ez-toc-insert', false );
+				}
+
+				if ( isset( $_REQUEST['ez-toc-settings']['header-label'] )) {
+					$header_label = sanitize_text_field( $_REQUEST['ez-toc-settings']['header-label'] );					
+					update_post_meta( $post_id, '_ez-toc-header-label', $header_label );
+				} 
+
+				if ( isset( $_REQUEST['ez-toc-settings']['toc-alignment'] ) ) {
+				    $align_values = array(
+				                        'none',
+				                        'left',
+				                        'right',
+				                        'center'
+				                    );
+				    $alignment = sanitize_text_field( $_REQUEST['ez-toc-settings']['toc-alignment'] );					
+				    if( in_array( $alignment, $align_values ) ) {
+				        update_post_meta( $post_id, '_ez-toc-alignment', $alignment );
+				    }
 				}
 
 				if ( isset( $_REQUEST['ez-toc-settings']['heading-levels'] ) && ! empty( $_REQUEST['ez-toc-settings']['heading-levels'] ) ) {
