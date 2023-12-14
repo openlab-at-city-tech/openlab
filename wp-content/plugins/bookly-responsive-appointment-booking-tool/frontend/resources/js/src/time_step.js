@@ -30,6 +30,9 @@ export default function stepTime(params, error_message) {
         data.time_zone_offset = opt[params.form_id].timeZoneOffset;
     }
     $.extend(data, params);
+    let columnizerObserver = false;
+    let lastObserverTime = 0;
+    let lastObserverWidth = 0;
 
     // Build slots html
     function prepareSlotsHtml(slots_data, selected_date) {
@@ -69,7 +72,6 @@ export default function stepTime(params, error_message) {
                 columns             = 0,
                 screen_index        = 0,
                 has_more_slots      = response.has_more_slots,
-                form_hidden         = false,
                 show_calendar       = response.show_calendar,
                 is_rtl              = response.is_rtl,
                 $screens,
@@ -108,6 +110,9 @@ export default function stepTime(params, error_message) {
                 opt[params.form_id].timeZoneOffset = undefined;
                 showSpinner();
                 requestRenderTime.cancel();
+                if (columnizerObserver) {
+                    columnizerObserver.disconnect();
+                }
                 stepTime({
                     form_id: params.form_id,
                     time_zone: opt[params.form_id].timeZone
@@ -206,32 +211,15 @@ export default function stepTime(params, error_message) {
                 } else if (slots_per_column > 10) {
                     slots_per_column = 10;
                 }
+                var hammertime = $('.bookly-time-step', $container).hammer({swipe_velocity: 0.1});
 
-                columns_per_screen = parseInt($columnizer_wrap.width() / column_width, 10);
-
-                if (columns_per_screen > 10) {
-                    columns_per_screen = 10;
-                } else if (columns_per_screen == 0) {
-                    // Bookly form display hidden.
-                    form_hidden = true;
-                    columns_per_screen = 4;
-                }
-
-                initSlots();
-
-                if (!has_more_slots && $screens.length == 1) {
-                    $time_next_button.hide();
-                }
-
-                var hammertime = $('.bookly-time-step', $container).hammer({ swipe_velocity: 0.1 });
-
-                hammertime.on('swipeleft', function() {
+                hammertime.on('swipeleft', function () {
                     if ($time_next_button.is(':visible')) {
                         $time_next_button.trigger('click');
                     }
                 });
 
-                hammertime.on('swiperight', function() {
+                hammertime.on('swiperight', function () {
                     if ($time_prev_button.is(':visible')) {
                         $time_prev_button.trigger('click');
                     }
@@ -241,25 +229,25 @@ export default function stepTime(params, error_message) {
                     $time_prev_button.show();
                     if ($screens.eq(screen_index + 1).length) {
                         $columnizer.animate(
-                            { left: (is_rtl ? '+' : '-') + ( screen_index + 1 ) * $current_screen.width() },
-                            { duration: 800 }
+                            {left: (is_rtl ? '+' : '-') + (screen_index + 1) * $current_screen.width()},
+                            {duration: 800}
                         );
 
-                        $current_screen = $screens.eq(++ screen_index);
+                        $current_screen = $screens.eq(++screen_index);
                         $columnizer_wrap.animate(
-                            { height: $current_screen.height() },
-                            { duration: 800 }
+                            {height: $current_screen.height()},
+                            {duration: 800}
                         );
 
-                        if (screen_index + 1 == $screens.length && !has_more_slots) {
+                        if (screen_index + 1 === $screens.length && !has_more_slots) {
                             $time_next_button.hide();
                         }
                     } else if (has_more_slots) {
                         // Do ajax request when there are more slots.
                         var $button = $('> button:last', $columnizer);
-                        if ($button.length == 0) {
+                        if ($button.length === 0) {
                             $button = $('.bookly-column:hidden:last > button:last', $columnizer);
-                            if ($button.length == 0) {
+                            if ($button.length === 0) {
                                 $button = $('.bookly-column:last > button:last', $columnizer);
                             }
                         }
@@ -279,7 +267,7 @@ export default function stepTime(params, error_message) {
                             if (response.has_slots) { // if there are available time
                                 has_more_slots = response.has_more_slots;
                                 var slots_data = '';
-                                $.each(prepareSlotsHtml(response.slots_data, response.selected_date), function(group, group_slots) {
+                                $.each(prepareSlotsHtml(response.slots_data, response.selected_date), function (group, group_slots) {
                                     slots_data += group_slots;
                                 });
                                 var $html = $(slots_data);
@@ -297,21 +285,24 @@ export default function stepTime(params, error_message) {
                                 $time_next_button.hide();
                             }
                             ladda.stop();
-                        }).catch(response => { $time_next_button.hide(); ladda.stop(); });
+                        }).catch(response => {
+                            $time_next_button.hide();
+                            ladda.stop();
+                        });
 
                     }
                 });
 
                 $time_prev_button.on('click', function () {
                     $time_next_button.show();
-                    $current_screen = $screens.eq(-- screen_index);
+                    $current_screen = $screens.eq(--screen_index);
                     $columnizer.animate(
-                        { left: (is_rtl ? '+' : '-') + screen_index * $current_screen.width() },
-                        { duration: 800 }
+                        {left: (is_rtl ? '+' : '-') + screen_index * $current_screen.width()},
+                        {duration: 800}
                     );
                     $columnizer_wrap.animate(
-                        { height: $current_screen.height() },
-                        { duration: 800 }
+                        {height: $current_screen.height()},
+                        {duration: 800}
                     );
                     if (screen_index === 0) {
                         $time_prev_button.hide();
@@ -488,10 +479,64 @@ export default function stepTime(params, error_message) {
 
                 // Columnizer width & height.
                 $('.bookly-time-step', $container).width(columns_per_screen * column_width);
-                $columnizer_wrap.height(form_hidden
-                    ? $('.bookly-column.bookly-js-first-column button', $current_screen).length * (slot_height + 3)
-                    : $current_screen.height());
-                form_hidden = false;
+                $columnizer_wrap.height($current_screen.height());
+            }
+
+            function observeResizeColumnizer() {
+                if ($('.bookly-time-step', $container).length > 0) {
+                    let time = new Date().getTime();
+                    if (time - lastObserverTime > 200) {
+                        let formWidth = $columnizer_wrap.closest('.bookly-form').width();
+                        if (formWidth !== lastObserverWidth) {
+                            resizeColumnizer();
+                            lastObserverWidth = formWidth;
+                            lastObserverTime = time;
+                        }
+                    }
+                } else {
+                    columnizerObserver.disconnect();
+                }
+            }
+
+            function resizeColumnizer() {
+                $columnizer.html(slots_data).css('left', '0px');
+                columns = 0;
+                screen_index = 0;
+                $current_screen = null;
+                if (column_width > 0) {
+                    let formWidth = $columnizer_wrap.closest('.bookly-form').width();
+                    if (show_calendar) {
+                        let calendarWidth = $('.bookly-js-slot-calendar', $container).width();
+                        if (formWidth > calendarWidth + column_width + 24) {
+                            columns_per_screen = parseInt((formWidth - calendarWidth - 24) / column_width, 10);
+                        } else {
+                            columns_per_screen = parseInt(formWidth / column_width, 10);
+                        }
+                    } else {
+                        columns_per_screen = parseInt(formWidth / column_width, 10);
+                    }
+                }
+                if (columns_per_screen > 10) {
+                    columns_per_screen = 10;
+                }
+                columns_per_screen = Math.max(columns_per_screen, 1);
+
+                initSlots();
+
+                $time_prev_button.hide();
+
+                if (!has_more_slots && $screens.length === 1) {
+                    $time_next_button.hide();
+                } else {
+                    $time_next_button.show();
+                }
+            }
+
+            if (typeof ResizeObserver === "undefined" || typeof ResizeObserver === undefined) {
+                resizeColumnizer();
+            } else {
+                columnizerObserver = new ResizeObserver(observeResizeColumnizer);
+                columnizerObserver.observe($container.get(0));
             }
         })
         .catch(response => { stepService({form_id: params.form_id}); })

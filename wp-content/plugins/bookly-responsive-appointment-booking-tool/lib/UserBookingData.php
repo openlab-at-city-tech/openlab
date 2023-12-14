@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib\Proxy\Pro;
 
-/**
- * Class UserBookingData
- *
- * @package Bookly\Lib
- */
 class UserBookingData
 {
     // Protected properties
@@ -60,6 +55,8 @@ class UserBookingData
     protected $street_number;
     /** @var string */
     protected $additional_address;
+    /** @var string */
+    protected $full_address;
     /** @var string */
     protected $phone;
     /** @var array */
@@ -177,6 +174,10 @@ class UserBookingData
         $this->cart = new Cart( $this );
         $this->chain = new Chain();
 
+        if ( Config::depositPaymentsActive() && get_option( 'bookly_deposit_allow_full_payment' ) === '2' ) {
+            $this->deposit_full = 1;
+        }
+
         // If logged in then set name, email and if existing customer then also phone.
         $current_user = wp_get_current_user();
         if ( $current_user && $current_user->ID ) {
@@ -215,8 +216,8 @@ class UserBookingData
             }
         } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) && isset( $_COOKIE['bookly-cst-full-name'] ) ) {
             $this
-                ->setFullName( $_COOKIE['bookly-cst-full-name'] )
-                ->setInfoFields( (array)json_decode( stripslashes( $_COOKIE['bookly-cst-info-fields'] ), true ) );
+                ->setFullName( $_COOKIE['bookly-cst-full-name'] );
+                Proxy\CustomerInformation::setFromCookies( $this );
             if ( isset( $_COOKIE['bookly-cst-birthday'] ) ) {
                 $date = explode( '-', $_COOKIE['bookly-cst-birthday'] );
                 $birthday = array(
@@ -652,15 +653,17 @@ class UserBookingData
         if ( $this->getAdditionalAddress() != '' ) {
             $customer->setAdditionalAddress( $this->getAdditionalAddress() );
         }
+        if ( $this->getFullAddress() !== '' ) {
+            $customer->setFullAddress( $this->getFullAddress() );
+        }
 
         // Customer information fields.
-        if ( $customer->getId() === null || get_option( 'bookly_customer_information_enabled' ) ) {
-            $customer->setInfoFields( json_encode( $this->getInfoFields() ) );
-        }
+        $customer->setInfoFields( json_encode( $this->getInfoFields() ) );
 
         Proxy\Pro::createWPUser( $customer );
 
         $customer->save();
+        Proxy\Files::attachCIFiles( $this->getInfoFields(), $customer );
 
         // Order.
         $order = DataHolders\Booking\Order::create( $customer );
@@ -690,7 +693,9 @@ class UserBookingData
             setcookie( 'bookly-cst-street', $customer->getStreet(), $expire );
             setcookie( 'bookly-cst-street-number', $customer->getStreetNumber(), $expire );
             setcookie( 'bookly-cst-additional-address', $customer->getAdditionalAddress(), $expire );
-            setcookie( 'bookly-cst-info-fields', $customer->getInfoFields(), $expire );
+            if ( Config::customerInformationActive() ) {
+                setcookie( 'bookly-cst-info-fields', $customer->getInfoFields(), $expire );
+            }
         }
 
         return $this->cart->save( $order, $this->getTimeZone(), $this->getTimeZoneOffset() );
@@ -759,12 +764,12 @@ class UserBookingData
                     } else {
                         // Try to find customer by phone or email.
                         $params = Config::phoneRequired()
-                            ? ( $this->getPhone() ? array( 'phone' => $this->getPhone() ) : array() )
-                            : ( $this->getEmail() ? array( 'email' => $this->getEmail() ) : array() );
+                            ? ( $this->getPhone() !== null && $this->getPhone() !== '' ? array( 'phone' => $this->getPhone() ) : array() )
+                            : ( $this->getEmail() !== null && $this->getEmail() !== '' ? array( 'email' => $this->getEmail() ) : array() );
                         if ( ! empty ( $params ) && ! $this->customer->loadBy( $params ) ) {
                             $params = Config::phoneRequired()
-                                ? ( $this->getEmail() ? array( 'email' => $this->getEmail(), 'phone' => '' ) : array() )
-                                : ( $this->getPhone() ? array( 'phone' => $this->getPhone(), 'email' => '' ) : array() );
+                                ? ( $this->getEmail() !== null && $this->getEmail() !== '' ? array( 'email' => $this->getEmail(), 'phone' => '' ) : array() )
+                                : ( $this->getPhone() !== null && $this->getPhone() !== '' ? array( 'phone' => $this->getPhone(), 'email' => '' ) : array() );
                             if ( ! empty( $params ) ) {
                                 // Try to find customer by 'secondary' identifier, otherwise return new customer.
                                 $this->customer->loadBy( $params );
@@ -776,6 +781,43 @@ class UserBookingData
         }
 
         return $this->customer;
+    }
+
+    /**
+     * @param array $customer_data
+     * @return $this
+     */
+    public function setModernFormCustomer( $customer_data )
+    {
+        if ( $this->customer === null ) {
+            // Find or create customer.
+            $this->customer = new Entities\Customer();
+            $customer_data['phone'] = isset( $customer_data['phone_formatted'] ) ? $customer_data['phone_formatted'] : $customer_data['phone'];
+            $customer_fields = array( 'first_name', 'last_name', 'full_name', 'email', 'phone' );
+            $user_id = get_current_user_id();
+            if ( $user_id > 0 ) {
+                // Try to find customer by WP user ID.
+                $this->customer->loadBy( array( 'wp_user_id' => $user_id ) );
+                if ( Config::allowDuplicates() ) {
+                    $fields = array();
+                    foreach ( $customer_fields as $field ) {
+                        if ( $customer_data[ $field ] ) {
+                            $fields['field'] = $customer_data[ $field ];
+                        }
+                    }
+                    $this->customer->loadBy( $fields );
+                } else if ( $customer_data['phone'] && ! $this->customer->loadBy( array( 'phone' => $customer_data['phone'] ) ) ) {
+                    $this->customer->loadBy( array( 'email' => $customer_data['email'] ) );
+                }
+            }
+
+            foreach ( $customer_fields as $field ) {
+                $this->fillData( array( $field => $customer_data[ $field ] ?: '' ) );
+                $this->customer->setFields( array( $field => $customer_data[ $field ] ?: '' ) );
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -832,58 +874,26 @@ class UserBookingData
     /**
      * Set payment ( PayPal, 2Checkout, PayU Latam, Mollie ) transaction status.
      *
-     * @param string $gateway
      * @param string $status
-     * @param mixed $data
      * @return $this
-     * @todo use $status as const
      */
-    public function setPaymentStatus( $gateway, $status, $data = null )
+    public function setPaymentStatus( $status )
     {
-        Session::setFormVar( $this->form_id, 'payment', compact( 'gateway', 'status', 'data' ) );
+        Session::setFormVar( $this->form_id, 'payment', compact( 'status' ) );
 
         return $this;
     }
 
     /**
-     * @param string $gateway
-     * @param string $status
-     * @param null $data
-     * @return $this
-     */
-    public function setFailedPaymentStatus( $gateway, $status, $data = null )
-    {
-        $payment = new Entities\Payment();
-        $payment->loadBy( array(
-            'type' => $gateway,
-            'id' => $this->getPaymentId(),
-        ) );
-        if ( $payment->isLoaded() ) {
-            /** @var Entities\CustomerAppointment $ca */
-            foreach ( Entities\CustomerAppointment::query()->where( 'payment_id', $payment->getId() )->find() as $ca ) {
-                $ca->deleteCascade();
-            }
-            $payment->delete();
-        }
-        foreach ( $this->cart->getItems() as $cart_item ) {
-            // Appointment was deleted
-            $cart_item->setAppointmentId( null );
-        }
-
-        return $this->setPaymentStatus( $gateway, $status, $data );
-    }
-
-    /**
      * Get and clear ( PayPal, 2Checkout, PayU Latam, Payson, ... ) transaction status.
      *
-     * @param string $gateway
      * @return array|false
      */
-    public function extractPaymentStatus( $gateway )
+    public function extractPaymentStatus()
     {
         $status = Session::getFormVar( $this->form_id, 'payment' );
 
-        if ( isset( $status['gateway'] ) && ( $gateway === null || $status['gateway'] === $gateway ) ) {
+        if ( isset( $status['status'] ) ) {
             Session::destroyFormVar( $this->form_id, 'payment' );
 
             return $status;
@@ -1376,6 +1386,24 @@ class UserBookingData
     public function setAdditionalAddress( $additional_address )
     {
         $this->additional_address = $additional_address;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullAddress()
+    {
+        return $this->full_address;
+    }
+
+    /**
+     * @param string $full_address
+     */
+    public function setFullAddress( $full_address )
+    {
+        $this->full_address = $full_address;
 
         return $this;
     }

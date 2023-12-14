@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tests;
 
-/**
- * Class Test
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 abstract class Test
 {
     /** @var bool */

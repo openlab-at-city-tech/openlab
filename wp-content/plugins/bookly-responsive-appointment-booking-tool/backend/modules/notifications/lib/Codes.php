@@ -5,11 +5,6 @@ use Bookly\Lib;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Backend\Modules\Notifications\Proxy;
 
-/**
- * Class Codes
- *
- * @package Bookly\Backend\Modules\Notifications\Lib
- */
 class Codes
 {
     /** @var string */
@@ -36,6 +31,7 @@ class Codes
                 'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly' ), 'if' => true ),
                 'booking_number' => array( 'description' => __( 'Booking number', 'bookly' ) ),
                 'internal_note' => array( 'description' => __( 'Internal note', 'bookly' ) ),
+                'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
             ),
             'cart' => array(
                 'cart_info' => array( 'description' => __( 'Cart information', 'bookly' ) ),

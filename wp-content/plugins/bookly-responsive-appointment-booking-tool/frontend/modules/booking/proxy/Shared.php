@@ -4,10 +4,6 @@ namespace Bookly\Frontend\Modules\Booking\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Shared
- *
- * @package Bookly\Frontend\Modules\Booking\Proxy
- *
  * @method static array  booklyFormOptions( array $bookly_options ) Modify Bookly form options.
  * @method static array  stepOptions( array $options, string $step, Lib\UserBookingData $userData ) Modify options for given step.
  * @method static array  enqueueBookingScripts( array $depends ) Enqueue scripts for booking form. @params $depends as array of registered script handles this script depends on.
@@ -18,7 +14,6 @@ use Bookly\Lib;
  * @method static array  prepareSlotsData( array $slots_data ) Prepare slots data for Time step.
  * @method static void   renderCartItemInfo( Lib\UserBookingData $userData, $cart_key, $positions, $desktop ) Render extra info for cart item at Cart step.
  * @method static string renderCustomFieldsOnDetailsStep( Lib\UserBookingData $userData ) Get Custom Fields HTML for details step.
- * @method static void   renderPaymentForms( $form_id, $page_url ) Render payment form for each gateway at Payment step.
  * @method static void   renderWaitingListInfoText() Render WL info text in Time step.
  */
 abstract class Shared extends Lib\Base\Proxy

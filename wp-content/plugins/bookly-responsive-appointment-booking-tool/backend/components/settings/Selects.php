@@ -1,11 +1,8 @@
 <?php
 namespace Bookly\Backend\Components\Settings;
+
 use Bookly\Backend\Components\Controls;
 
-/**
- * Class Selects
- * @package Bookly\Backend\Components\Settings
- */
 class Selects
 {
     /**

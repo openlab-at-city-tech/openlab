@@ -6,10 +6,6 @@ use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Base;
 use Bookly\Lib\Notifications\Assets\Verification\Codes;
 
-/**
- * Class Sender
- * @package Bookly\Lib\Notifications\Verification
- */
 abstract class Sender extends Base\Sender
 {
     /**

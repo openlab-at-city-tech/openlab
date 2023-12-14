@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tests;
 
-/**
- * Class IncompatiblePlugins
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 class IncompatiblePlugins extends Test
 {
     protected $slug = 'check-incompatible-plugins';

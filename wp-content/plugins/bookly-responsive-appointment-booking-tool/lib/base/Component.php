@@ -3,11 +3,6 @@ namespace Bookly\Lib\Base;
 
 use Bookly\Lib;
 
-/**
- * Class Component
- *
- * @package Bookly\Lib\Base
- */
 abstract class Component extends Cache
 {
     /**
@@ -191,7 +186,7 @@ abstract class Component extends Cache
                 stripslashes_deep( $_REQUEST );
             if ( ! current_user_can( 'unfiltered_html' ) ) {
                 $parameters = Lib\Utils\Common::arrayMapRecursive( function ( $value ) {
-                    return is_string( $value ) ? Lib\Utils\Common::stripScripts( $value ) : $value;
+                    return is_string( $value ) ? wp_kses( stripslashes( $value ), 'post' ) : $value;
                 }, $parameters );
             }
             $parameters = new Lib\Utils\Collection( $parameters );
@@ -209,35 +204,55 @@ abstract class Component extends Cache
 
         if ( ! ( wp_script_is( 'bookly-frontend-globals', 'registered' )
             || wp_script_is( 'bookly-backend-globals', 'registered' ) ) ) {
-            Component::_register( 'scripts', array(
-                'backend' => array(
-                    'bootstrap/js/bootstrap.min.js' => array( 'jquery' ),
-                    'js/datatables.min.js' => array( 'jquery' ),
-                    'js/moment.min.js' => array(),
-                    'js/daterangepicker.js' => array( 'bookly-moment.min.js', 'jquery' ),
-                    'js/dropdown.js' => array( 'jquery' ),
-                    'js/common.js' => array( 'jquery' ),
-                    'js/select2.min.js' => array( 'jquery' ),
-                ),
-                'frontend' => array(
-                    'js/spin.min.js' => array( 'jquery' ),
-                    'js/ladda.min.js' => array( 'jquery' ),
-                ),
-                'alias' => array(
-                    'bookly-globals' => array( 'bookly-spin.min.js' ),
-                    'bookly-frontend-globals' => array( 'bookly-globals', 'bookly-spin.min.js', 'bookly-ladda.min.js', 'bookly-moment.min.js' ),
-                    'bookly-backend-globals' => array( 'bookly-globals', 'bookly-bootstrap.min.js', 'bookly-datatables.min.js', 'bookly-daterangepicker.js', 'bookly-dropdown.js', 'bookly-select2.min.js', 'bookly-common.js', 'bookly-spin.min.js', 'bookly-ladda.min.js', ),
-                ),
-            ) );
 
-            Component::_register( 'styles', array(
-                'backend' => array( 'bootstrap/css/bootstrap.min.css', ),
-                'frontend' => array( 'css/ladda.min.css', ),
-                'alias' => array(
-                    'bookly-frontend-globals' => array( 'bookly-ladda.min.css' ),
-                    'bookly-backend-globals' => array( 'bookly-bootstrap.min.css', 'bookly-ladda.min.css' ),
-                ),
-            ) );
+            if ( ! is_admin() || ( isset( $_REQUEST['page'] ) && strpos( $_REQUEST['page'], 'bookly-' ) === 0 ) ) {
+                Component::_register( 'scripts', array(
+                    'backend' => array(
+                        'bootstrap/js/bootstrap.min.js' => array( 'jquery' ),
+                        'js/datatables.min.js' => array( 'jquery' ),
+                        'js/moment.min.js' => array(),
+                        'js/daterangepicker.js' => array( 'bookly-moment.min.js', 'jquery' ),
+                        'js/dropdown.js' => array( 'jquery' ),
+                        'js/common.js' => array( 'jquery' ),
+                        'js/select2.min.js' => array( 'jquery' ),
+                    ),
+                    'frontend' => array(
+                        'js/spin.min.js' => array( 'jquery' ),
+                        'js/ladda.min.js' => array( 'jquery' ),
+                    ),
+                    'alias' => array(
+                        'bookly-globals' => array( 'bookly-spin.min.js' ),
+                        'bookly-frontend-globals' => array( 'bookly-globals', 'bookly-spin.min.js', 'bookly-ladda.min.js', 'bookly-moment.min.js' ),
+                        'bookly-backend-globals' => array(
+                            'bookly-globals',
+                            'bookly-bootstrap.min.js',
+                            'bookly-datatables.min.js',
+                            'bookly-daterangepicker.js',
+                            'bookly-dropdown.js',
+                            'bookly-select2.min.js',
+                            'bookly-common.js',
+                            'bookly-spin.min.js',
+                            'bookly-ladda.min.js',
+                        ),
+                    ),
+                ) );
+
+                Component::_register( 'styles', array(
+                    'backend' => array( 'bootstrap/css/bootstrap.min.css', ),
+                    'frontend' => array( 'css/ladda.min.css', ),
+                    'alias' => array(
+                        'bookly-frontend-globals' => array( 'bookly-ladda.min.css' ),
+                        'bookly-backend-globals' => array( 'bookly-bootstrap.min.css', 'bookly-ladda.min.css' ),
+                    ),
+                ) );
+            } else {
+                Component::_register( 'scripts', array(
+                    'alias' => array(
+                        'bookly-globals' => array( 'jquery' ),
+                        'bookly-backend-globals' => array( 'bookly-globals' ),
+                    ),
+                ) );
+            }
             $ajax_url = admin_url( 'admin-ajax.php' );
             wp_localize_script( 'bookly-globals', 'BooklyL10nGlobal', Lib\Proxy\Shared::prepareL10nGlobal( array(
                 'csrf_token' => Lib\Utils\Common::getCsrfToken(),

@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class PluginsUpdater
- *
- * @package Bookly\Lib
- */
 class PluginsUpdater
 {
     public static function init()
@@ -206,6 +201,8 @@ class PluginsUpdater
 
     /**
      * @param Plugin $bookly_plugin
+     * @param $bookly_plugin
+     * @return string|void
      */
     protected static function renderSupportInfo( $bookly_plugin )
     {
@@ -225,7 +222,7 @@ class PluginsUpdater
                     '</a>'
                 ) . '<br>
                     ' . sprintf( __( 'You can renew support %1$s here %3$s or %2$s I\'ve already renewed support. %3$s', 'bookly' ),
-                    '<a href="' . esc_url( array_key_exists( 'renew_support', $data ) ? $data['renew_support'] : 'https://codecanyon.net/user/ladela' ) . '" target="_blank">',
+                    '<a href="' . esc_url( array_key_exists( 'renew_support', $data ) ? $data['renew_support'] : 'https://codecanyon.net/user/nota-info' ) . '" target="_blank">',
                     '<a href="#" data-bookly-plugin="' . $bookly_plugin::getRootNamespace() . '">',
                     '</a>'
                 ) . ' <span class="spinner" style="float: none; margin: -2px 0 0 2px"></span><br>

@@ -183,3 +183,10 @@ use Bookly\Lib\Utils;
         <i class="far fa-comment-dots"></i><span class="d-none d-lg-inline ml-2"><?php esc_html_e( 'Feedback', 'bookly' ) ?></span>
     </a>
 </div>
+<?php if ( ! current_user_can( 'unfiltered_html' ) ) : ?>
+    <div class="col-auto">
+        <button id="bookly-alert-notices" class="btn btn-default">
+            <i class="fas fa-exclamation-triangle text-danger"></i>
+        </button>
+    </div>
+<?php endif ?>

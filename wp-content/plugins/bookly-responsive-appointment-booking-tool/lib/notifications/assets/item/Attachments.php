@@ -6,9 +6,6 @@ use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Order;
 
 /**
- * Class Attachments
- * @package Bookly\Lib\Notifications\Assets\Item
- *
  * @property Codes $codes
  */
 class Attachments extends Order\Attachments

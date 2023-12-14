@@ -292,7 +292,7 @@ jQuery(function($) {
                             if (response.data.new_extras_list) {
                                 BooklyExtrasL10n.list = response.data.new_extras_list
                             }
-                            $servicesList.DataTable().ajax.reload();
+                            $servicesList.DataTable().ajax.reload(null, false);
                             $serviceDialog.booklyModal('hide');
                         }
                     }, 'json').always(function() {

@@ -4,10 +4,6 @@ namespace Bookly\Lib\DataHolders\Booking;
 use Bookly\Lib;
 use Bookly\Lib\DataHolders\Booking;
 
-/**
- * Class Item
- * @package Bookly\Lib\DataHolders\Booking
- */
 abstract class Item
 {
     const TYPE_SIMPLE        = 1;
@@ -15,6 +11,7 @@ abstract class Item
     const TYPE_COMPOUND      = 3;
     const TYPE_SERIES        = 4;
     const TYPE_PACKAGE       = 5;
+    const TYPE_GIFT_CARD     = 6;
 
     /** @var int */
     protected $type;
@@ -81,6 +78,16 @@ abstract class Item
     public function isPackage()
     {
         return $this->type == self::TYPE_PACKAGE;
+    }
+
+    /**
+     * Check if item is gift card.
+     *
+     * @return bool
+     */
+    public function isGiftCard()
+    {
+        return $this->type === self::TYPE_GIFT_CARD;
     }
 
     /**

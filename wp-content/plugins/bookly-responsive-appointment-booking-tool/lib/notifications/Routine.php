@@ -1,5 +1,4 @@
 <?php
-
 namespace Bookly\Lib\Notifications;
 
 use Bookly\Lib;
@@ -17,11 +16,6 @@ use Bookly\Lib\Entities\Staff;
 use Bookly\Lib\Entities\StaffService;
 use Bookly\Lib\Utils\DateTime;
 
-/**
- * Class Routine
- *
- * @package Bookly\Lib\Notifications
- */
 abstract class Routine
 {
     /** @var Lib\Slots\DatePoint */
@@ -45,11 +39,11 @@ abstract class Routine
         $settings = new Settings( $notification );
 
         if ( ! $settings->getInstant() ) {
-            $ca_list   = array();
+            $ca_list = array();
             $customers = array();
             $statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
-                Lib\Entities\CustomerAppointment::STATUS_PENDING,
-                Lib\Entities\CustomerAppointment::STATUS_APPROVED,
+                CustomerAppointment::STATUS_PENDING,
+                CustomerAppointment::STATUS_APPROVED,
             ) );
 
             switch ( $notification->getType() ) {
@@ -80,7 +74,7 @@ abstract class Routine
             }
 
             if ( $ca_list ) {
-                $compounds      = array();
+                $compounds = array();
                 $collaboratives = array();
                 foreach ( $ca_list as $ca ) {
                     if ( $token = $ca->getCompoundToken() ) {
@@ -100,7 +94,6 @@ abstract class Routine
                 }
                 foreach ( $compounds as $compound ) {
                     if ( Booking\Reminder::send( $notification, $compound ) ) {
-                        /** @var Simple $item */
                         foreach ( $compound->getItems() as $item ) {
                             self::wasSent( $notification, $item->getCA()->getId() );
                         }
@@ -108,7 +101,6 @@ abstract class Routine
                 }
                 foreach ( $collaboratives as $collaborative ) {
                     if ( Booking\Reminder::send( $notification, $collaborative ) ) {
-                        /** @var Simple $item */
                         foreach ( $collaborative->getItems() as $item ) {
                             self::wasSent( $notification, $item->getCA()->getId() );
                         }
@@ -187,7 +179,7 @@ abstract class Routine
      * Get last customer appointments for notification
      *
      * @param Notification $notification
-     * @param Settings     $settings
+     * @param Settings $settings
      * @return CustomerAppointment[]
      */
     private static function getLastCustomerAppointments( Notification $notification, Settings $settings )
@@ -198,12 +190,10 @@ abstract class Routine
         $ca_list = array();
 
         $replace = array(
-            '{bookly_appointments}'          => Appointment::getTableName(),
+            '{bookly_appointments}' => Appointment::getTableName(),
             '{bookly_customer_appointments}' => CustomerAppointment::getTableName(),
-            '{bookly_customers}'             => Customer::getTableName(),
-            '{bookly_sent_notifications}'    => SentNotification::getTableName(),
-            '{ca2_status_equal}'             => 'true',
-            '{ca3_status_equal}'             => 'true',
+            '{bookly_customers}' => Customer::getTableName(),
+            '{bookly_sent_notifications}' => SentNotification::getTableName(),
         );
 
         if ( $settings->getAtHour() !== null ) {
@@ -245,8 +235,9 @@ abstract class Routine
             );
 
             $busy = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
-                Lib\Entities\CustomerAppointment::STATUS_PENDING,
-                Lib\Entities\CustomerAppointment::STATUS_APPROVED,
+                CustomerAppointment::STATUS_PENDING,
+                CustomerAppointment::STATUS_APPROVED,
+                CustomerAppointment::STATUS_DONE,
             ) );
 
             array_walk( $busy, array( $wpdb, 'escape_by_ref' ) );
@@ -269,7 +260,7 @@ abstract class Routine
      * Customers for birthday congratulations
      *
      * @param Notification $notification
-     * @param Settings     $settings
+     * @param Settings $settings
      * @return Customer[]
      */
     private static function getCustomersWithBirthday( Notification $notification, Settings $settings )
@@ -309,7 +300,7 @@ abstract class Routine
      * Send Staff Agenda
      *
      * @param Notification $notification
-     * @param Settings     $settings
+     * @param Settings $settings
      */
     private static function sendStaffAgenda( Notification $notification, Settings $settings )
     {
@@ -371,15 +362,15 @@ abstract class Routine
                     }
 
                     $columns = array(
-                        '{10_time}'     => __( 'Time', 'bookly' ),
-                        '{30_service}'  => __( 'Service', 'bookly' ),
+                        '{10_time}' => __( 'Time', 'bookly' ),
+                        '{30_service}' => __( 'Service', 'bookly' ),
                         '{40_customer}' => __( 'Customer', 'bookly' ),
                     );
                     if ( Lib\Config::locationsActive() ) {
                         $columns['{20_location}'] = __( 'Location', 'bookly' );
                     }
                     $columns_extended = $columns;
-                    if ( Lib\Config::customFieldsActive() && get_option( 'bookly_custom_fields_enabled' ) ) {
+                    if ( Lib\Config::customFieldsActive() ) {
                         $columns_extended['{50_custom_fields}']  = __( 'Custom Fields', 'bookly' );
                         $columns_extended['{60_internal_notes}'] = __( 'Internal Notes', 'bookly' );
                     }
@@ -387,26 +378,26 @@ abstract class Routine
                     ksort( $columns_extended );
                     $is_html = ( get_option( 'bookly_email_send_as' ) == 'html' && $notification->getGateway() != 'sms' );
                     if ( $is_html ) {
-                        $table          = '<table cellspacing="1" border="1" cellpadding="5"><thead><tr><td>'
+                        $table = '<table cellspacing="1" border="1" cellpadding="5"><thead><tr><td>'
                             . implode( '</td><td>', $columns )
                             . '</td></tr></thead><tbody>%s</tbody></table>';
                         $table_extended = '<table cellspacing="1" border="1" cellpadding="5"><thead><tr><td>'
                             . implode( '</td><td>', $columns_extended )
                             . '</td></tr></thead><tbody>%s</tbody></table>';
-                        $tr             = '<tr><td>' . implode( '</td><td>', array_keys( $columns ) ) . '</td></tr>';
-                        $tr_extended    = '<tr><td>' . implode( '</td><td>', array_keys( $columns_extended ) ) . '</td></tr>';
+                        $tr = '<tr><td>' . implode( '</td><td>', array_keys( $columns ) ) . '</td></tr>';
+                        $tr_extended = '<tr><td>' . implode( '</td><td>', array_keys( $columns_extended ) ) . '</td></tr>';
                     } else {
-                        $table          = '%s';
+                        $table = '%s';
                         $table_extended = '%s';
-                        $tr             = implode( ', ', array_keys( $columns ) ) . PHP_EOL;
-                        $tr_extended    = implode( ', ', array_keys( $columns_extended ) ) . PHP_EOL;
+                        $tr = implode( ', ', array_keys( $columns ) ) . PHP_EOL;
+                        $tr_extended = implode( ', ', array_keys( $columns_extended ) ) . PHP_EOL;
                     }
 
                     foreach ( $appointments as $staff_id => $collection ) {
-                        $sent            = false;
-                        $staff_email     = null;
-                        $staff_phone     = null;
-                        $agenda          = '';
+                        $sent = false;
+                        $staff_email = null;
+                        $staff_phone = null;
+                        $agenda = '';
                         $agenda_extended = '';
                         foreach ( $collection as $appointment ) {
                             if ( ! Lib\Proxy\Pro::graceExpired() ) {
@@ -421,15 +412,15 @@ abstract class Routine
                                     $appointment->end_date = DateTime::convertTimeZone( $appointment->end_date, Lib\Config::getWPTimeZone(), $staff_tz );
                                 }
                                 $tr_data = array(
-                                    '{10_time}'     => DateTime::formatTime( $appointment->start_date ) . '-' . DateTime::formatTime( $appointment->end_date ),
+                                    '{10_time}' => DateTime::formatTime( $appointment->start_date ) . '-' . DateTime::formatTime( $appointment->end_date ),
                                     '{40_customer}' => $appointment->customer_name,
                                 );
 
-                                $location                 = Lib\Proxy\Locations::findById( $appointment->location_id );
+                                $location = Lib\Proxy\Locations::findById( $appointment->location_id );
                                 $tr_data['{20_location}'] = $location ? $location->getName() : '';
 
                                 // Extras
-                                $extras  = '';
+                                $extras = '';
                                 $_extras = (array) Lib\Proxy\ServiceExtras::getInfo( json_decode( $appointment->extras, true ), false );
                                 if ( ! empty ( $_extras ) ) {
                                     foreach ( $_extras as $extra ) {
@@ -445,8 +436,8 @@ abstract class Routine
                                 }
 
                                 $tr_data['{30_service}'] = $appointment->service_title . $extras;
-                                $tr_data_extended        = $tr_data;
-                                if ( Lib\Config::customFieldsActive() && get_option( 'bookly_custom_fields_enabled' ) ) {
+                                $tr_data_extended = $tr_data;
+                                if ( Lib\Config::customFieldsActive() ) {
                                     $ca = new CustomerAppointment();
                                     $ca->load( $appointment->ca_id );
                                     $custom_filed_str = '';
@@ -460,10 +451,10 @@ abstract class Routine
                                     $tr_data_extended['{50_custom_fields}']  = $custom_filed_str;
                                     $tr_data_extended['{60_internal_notes}'] = $appointment->internal_note;
                                 }
-                                $agenda          .= strtr( $tr, $tr_data );
+                                $agenda .= strtr( $tr, $tr_data );
                                 $agenda_extended .= strtr( $tr_extended, $tr_data_extended );
                             } else {
-                                $agenda          = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly' );
+                                $agenda = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly' );
                                 $agenda_extended = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly' );
                             }
                             $staff_email = $appointment->staff_email;
@@ -474,10 +465,10 @@ abstract class Routine
                             || ( ( $notification->getGateway() != 'email' ) && $staff_phone != '' )
                         ) {
                             $codes = new Assets\StaffAgenda\Codes();
-                            $codes->agenda_date     = DateTime::formatDate( date( 'Y-m-d', current_time( 'timestamp' ) + abs( $settings->getOffsetHours() * HOUR_IN_SECONDS ) ) );
+                            $codes->agenda_date = DateTime::formatDate( date( 'Y-m-d', current_time( 'timestamp' ) + abs( $settings->getOffsetHours() * HOUR_IN_SECONDS ) ) );
                             $codes->next_day_agenda = sprintf( $table, $agenda );
                             $codes->next_day_agenda_extended = sprintf( $table_extended, $agenda_extended );
-                            $codes->staff           = Staff::find( $appointment->staff_id ) ?: new Staff();
+                            $codes->staff = Staff::find( $appointment->staff_id ) ?: new Staff();
                             $sent = Base\Reminder::sendToStaff( $codes->staff, $notification, $codes );
                             if ( Base\Reminder::sendToAdmins( $notification, $codes ) ) {
                                 $sent = true;

@@ -3,12 +3,6 @@ namespace Bookly\Backend\Modules\Appearance;
 
 use Bookly\Lib;
 
-
-/**
- * Class Page
- *
- * @package Bookly\Backend\Modules\Appearance
- */
 class Page extends Lib\Base\Component
 {
     public static function render()

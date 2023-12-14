@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class NotificationQueue
- *
- * @package Bookly\Lib\Entities
- */
 class NotificationQueue extends Lib\Base\Entity
 {
     /** @var string */

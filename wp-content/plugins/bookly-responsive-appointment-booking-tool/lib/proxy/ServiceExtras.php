@@ -4,9 +4,6 @@ namespace Bookly\Lib\Proxy;
 use Bookly\Lib;
 
 /**
- * Class ServiceExtras
- * @package Bookly\Lib\Proxy
- *
  * @method static bool  considerDuration( $default = null ) Consider extras length in appointment duration.
  * @method static \BooklyServiceExtras\Lib\Entities\ServiceExtra[] findByIds( array $extras_ids ) Return extras entities.
  * @method static \BooklyServiceExtras\Lib\Entities\ServiceExtra[] findByServiceId( int $service_id ) Return extras entities.

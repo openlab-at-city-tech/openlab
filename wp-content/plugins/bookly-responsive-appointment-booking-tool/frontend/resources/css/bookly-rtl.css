@@ -93,7 +93,7 @@
     float: right!important;
 }
 /* Details */
-.bookly-form-group .intl-tel-input input {
+.bookly-form-group .iti input {
     padding-right: 45px !important;
     padding-left: 0 !important;
 }
@@ -108,44 +108,29 @@
     margin-left: auto;
 }
 
-.intl-tel-input {
-    margin-top: -2px !important;
-}
-
-.intl-tel-input .selected-flag .iti-flag {
+.iti .selected-flag .iti__flag {
     margin: auto 10px auto auto !important;
 }
 
-.bookly-details-step .bookly-form-group .intl-tel-input input,
-.bookly-details-step .bookly-form-group .intl-tel-input input[type=text],
-.bookly-details-step .bookly-form-group .intl-tel-input input[type=tel] {
+.bookly-details-step .bookly-form-group .iti input,
+.bookly-details-step .bookly-form-group .iti input[type=text],
+.bookly-details-step .bookly-form-group .iti input[type=tel] {
     padding: 6px 48px 5px 5px !important;
 }
-.intl-tel-input .flag-container {
-    position: relative !important;
-}
-.intl-tel-input .selected-flag {
-    position: absolute;
-    top: 2px;
-    padding:0 8px 0 0;
-    display: block;
-    height: 28px;
-}
-.intl-tel-input .selected-flag .arrow {
+
+.iti .iti__selected-flag .iti__arrow {
     left:4px;
     border-right:3px solid transparent;
     border-left:3px solid transparent;
     right: auto;
 }
-.intl-tel-input .country-list {
-    margin: 32px -1px 0 0;
-    text-align: right !important;
-}
-.intl-tel-input .country-list .flag-box,
-.intl-tel-input .country-list .country-name {
+
+.iti .iti__country-list .iti__flag-box,
+.iti .iti__country-list .iti__country-name {
     margin-left:6px;
 }
-.intl-tel-input select {
+
+.iti select {
     right:0;
     left: auto;
 }

@@ -7,11 +7,6 @@ use Bookly\Lib\Entities\Staff;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Common;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Calendar
- */
 class Ajax extends Page
 {
     /**

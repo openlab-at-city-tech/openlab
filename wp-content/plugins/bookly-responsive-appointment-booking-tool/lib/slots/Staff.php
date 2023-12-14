@@ -4,11 +4,6 @@ namespace Bookly\Lib\Slots;
 use Bookly\Lib\Entities;
 use Bookly\Lib\Proxy;
 
-/**
- * Class Staff
- *
- * @package Bookly\Lib\Slots
- */
 class Staff
 {
     /** @var Schedule[] */

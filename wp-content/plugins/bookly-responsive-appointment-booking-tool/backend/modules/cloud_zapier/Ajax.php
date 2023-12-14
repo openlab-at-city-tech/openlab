@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\CloudZapier;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Modules\CloudZapier
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
-/**
- * Class DataManagement
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class DataManagement extends Tool
 {
     protected $slug = 'data-management';

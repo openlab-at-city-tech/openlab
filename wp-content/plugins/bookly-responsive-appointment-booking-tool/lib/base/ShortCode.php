@@ -3,11 +3,6 @@ namespace Bookly\Lib\Base;
 
 use Bookly\Lib;
 
-/**
- * Class ShortCode
- *
- * @package Bookly\Lib\Base
- */
 abstract class ShortCode extends Component
 {
     /** @var string */

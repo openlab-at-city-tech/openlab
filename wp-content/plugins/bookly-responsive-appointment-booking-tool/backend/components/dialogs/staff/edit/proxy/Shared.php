@@ -4,9 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Shared
- * @package Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy
- *
  * @method static array editStaffAdvanced( array $data, Lib\Entities\Staff $staff ) Prepare edit staff form.
  * @method static array preUpdateStaffAdvanced( array $data, Lib\Entities\Staff $staff, array $parameters ) Do stuff before staff update.
  * @method static void  renderStaffDetails( Lib\Entities\Staff $staff ) Render Details tab of staff edit form.

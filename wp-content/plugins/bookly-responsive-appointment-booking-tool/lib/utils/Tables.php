@@ -3,11 +3,6 @@ namespace Bookly\Lib\Utils;
 
 use Bookly\Lib;
 
-/**
- * Class Tables
- *
- * @package Bookly\Lib\Utils
- */
 abstract class Tables
 {
     const APPOINTMENTS = 'appointments';
@@ -39,6 +34,8 @@ abstract class Tables
     const VOICE_PRICES = 'voice_prices';
     const WHATSAPP_DETAILS = 'whatsapp_details';
     const WHATSAPP_NOTIFICATIONS = 'whatsapp_notifications';
+    const LOGS = 'logs';
+    const CUSTOMER_CABINET_APPOINTMENTS = 'customer_cabinet_appointments';
 
     /**
      * Get columns for given table.
@@ -225,7 +222,35 @@ abstract class Tables
                     'wp_user' => esc_html__( 'User', 'bookly' ),
                 );
                 break;
-
+            case self::CUSTOMER_CABINET_APPOINTMENTS:
+                $columns = array(
+                    'category' => Common::getTranslatedOption( 'bookly_l10n_label_category' ),
+                    'service' => Common::getTranslatedOption( 'bookly_l10n_label_service' ),
+                    'staff' => Common::getTranslatedOption( 'bookly_l10n_label_employee' ),
+                    'location' => Common::getTranslatedOption( 'bookly_l10n_label_location' ),
+                    'duration' => __( 'Duration', 'bookly' ),
+                    'date' => __( 'Date', 'bookly' ),
+                    'time' => __( 'Time', 'bookly' ),
+                    'price' => __( 'Price', 'bookly' ),
+                    'online_meeting' => __( 'Online meeting', 'bookly' ),
+                    'join_online_meeting' => __( 'Join online meeting', 'bookly' ),
+                    'cancel' => __( 'Cancel', 'bookly' ),
+                    'reschedule' => __( 'Reschedule', 'bookly' ),
+                    'status' => __( 'Status', 'bookly' ),
+                );
+                break;
+            case self::LOGS:
+                $columns = array(
+                    'created_at' => __( 'Date', 'bookly' ),
+                    'action' => __( 'Action', 'bookly' ),
+                    'target' => __( 'Target', 'bookly' ),
+                    'target_id' => __( 'Target ID', 'bookly' ),
+                    'author' => __( 'Author', 'bookly' ),
+                    'details' => __( 'Details', 'bookly' ),
+                    'comment' => __( 'Comment', 'bookly' ),
+                    'ref' => __( 'Reference', 'bookly' ),
+                );
+                break;
         }
 
         return Lib\Proxy\Shared::prepareTableColumns( $columns, $table );
@@ -315,6 +340,73 @@ abstract class Tables
         $meta['filter'] = $filter;
 
         update_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', $meta );
+    }
+
+    /**
+     * @param array $columns
+     * @param string $table
+     * @return array
+     */
+    public static function filterColumns( $columns, $table )
+    {
+        $def_columns = array_keys( self::getColumns( $table ) );
+
+        $replaces = array();
+        switch ( $table ) {
+            case self::CUSTOMER_CABINET_APPOINTMENTS:
+                $replaces = array(
+                    'date' => 'start_date',
+                    'service' => 'service.title',
+                    'staff' => 'staff_name',
+                    'online_meeting' => 'online_meeting_provider',
+                    'join_online_meeting' => 'online_meeting_provider',
+                );
+                foreach ( $def_columns as &$column ) {
+                    if ( strpos( $column, 'custom_field' ) === 0 ) {
+                        $column = 'custom_fields.' . substr( $column, 13 );
+                    }
+                }
+                break;
+            case self::APPOINTMENTS:
+                $replaces = array(
+                    'customer_full_name' => 'customer.full_name',
+                    'customer_phone' => 'customer.phone',
+                    'customer_email' => 'customer.email',
+                    'customer_address' => 'customer.address',
+                    'customer_birthday' => 'customer.birthday',
+                    'staff_name' => 'staff.name',
+                    'service_title' => 'service.title',
+                    'service_duration' => 'service.duration',
+                    'attachments' => 'attachment',
+                    'online_meeting' => 'online_meeting_provider',
+                );
+                break;
+            case self::PACKAGES:
+                foreach ( $def_columns as &$column ) {
+                    $column = str_replace( '_', '.', $column );
+                }
+                $def_columns[] = 'customer.full_name';
+                $def_columns[] = 'created_at';
+                break;
+        }
+        foreach ( $def_columns as &$column ) {
+            foreach ( $replaces as $key => $replacement ) {
+                if ( $column === $key ) {
+                    $column = $replacement;
+                }
+            }
+            if ( strpos( $column, 'custom_field' ) === 0 ) {
+                $column = 'custom_fields.' . substr( $column, 13 );
+            }
+        }
+
+        foreach ( $columns as &$column ) {
+            if ( ! in_array( $column['data'], $def_columns, true ) ) {
+                $column['data'] = 'true';
+            }
+        }
+
+        return $columns;
     }
 
     /**

@@ -18,14 +18,16 @@ use Bookly\Backend\Components;
                 <?php Components\Settings\Menu::renderItem( __( 'Customers', 'bookly' ), 'customers' ) ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Appointments', 'bookly' ), 'appointments' ) ?>
                 <?php Proxy\Mailchimp::renderMenuItem() ?>
-                <?php Proxy\Pro::renderGoogleCalendarMenuItem() ?>
+                <?php Proxy\Pro::renderMenuItem( __( 'Google Calendar', 'bookly' ), 'google_calendar' ) ?>
                 <?php Proxy\Shared::renderMenuItem() ?>
-                <?php Proxy\Pro::renderOnlineMeetingsMenuItem() ?>
-                <?php Proxy\Pro::renderUserPermissionsMenuItem() ?>
+                <?php Proxy\Pro::renderMenuItem( __( 'Online Meetings', 'bookly' ), 'online_meetings' ) ?>
+                <?php Proxy\Pro::renderMenuItem( __( 'User Permissions', 'bookly' ), 'user_permissions' ) ?>
                 <?php Proxy\WaitingList::renderWaitingListMenuItem(); ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Payments', 'bookly' ), 'payments' ) ?>
+                <?php Proxy\Pro::renderMenuItem( __( 'Additional', 'bookly' ), 'additional' ) ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Business Hours', 'bookly' ), 'business_hours' ) ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Holidays', 'bookly' ), 'holidays' ) ?>
+                <?php Proxy\Pro::renderMenuItem( __( 'Purchase Code', 'bookly' ), 'purchase_code' ) ?>
                 <?php Proxy\Pro::renderPurchaseCodeMenuItem() ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Logs', 'bookly' ), 'logs' ) ?>
             </div>
@@ -53,15 +55,12 @@ use Bookly\Backend\Components;
                         <?php self::renderTemplate( '_appointmentsForm', array( 'statuses' => $values['statuses'] ) ) ?>
                     </div>
                     <?php Proxy\Mailchimp::renderTab() ?>
-                    <?php Proxy\Pro::renderGoogleCalendarTab() ?>
                     <?php Proxy\Shared::renderTab() ?>
                     <?php Proxy\CustomStatuses::renderTab() ?>
                     <div class="tab-pane" id="bookly_settings_payments">
                         <?php include '_paymentsForm.php' ?>
                     </div>
-                    <?php Proxy\Pro::renderOnlineMeetingsTab() ?>
-                    <?php Proxy\Pro::renderUserPermissionsTab() ?>
-                    <?php Proxy\WaitingList::renderWaitingListTab(); ?>
+                    <?php Proxy\WaitingList::renderWaitingListTab() ?>
                     <div class="tab-pane" id="bookly_settings_business_hours">
                         <?php include '_hoursForm.php' ?>
                     </div>

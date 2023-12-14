@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\RenewAutoRecharge;
 
 use Bookly\Backend\Components\Notices\Base;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\RenewAutoRecharge
- */
 class Notice extends Base\Notice
 {
     /**

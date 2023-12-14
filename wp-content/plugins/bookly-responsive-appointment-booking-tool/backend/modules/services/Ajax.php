@@ -4,11 +4,6 @@ namespace Bookly\Backend\Modules\Services;
 use Bookly\Backend\Components\Dialogs\Service\Edit\Forms;
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Services
- */
 class Ajax extends Page
 {
     /**
@@ -16,7 +11,7 @@ class Ajax extends Page
      */
     public static function getServices()
     {
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SERVICES );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
         $limits = array(

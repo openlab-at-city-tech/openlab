@@ -7,12 +7,8 @@ use Bookly\Lib\DataHolders\Booking\Package;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Booking;
-use Bookly\Frontend\Modules\ModernBookingForm\Proxy\Packages;
+use Bookly\Lib\Proxy As BooklyProxy;
 
-/**
- * Class Sender
- * @package Bookly\Lib\Notifications\Cart
- */
 abstract class Sender extends Booking\BaseSender
 {
     /**
@@ -28,7 +24,7 @@ abstract class Sender extends Booking\BaseSender
 
         $codes = new Codes( $order );
 
-        $notifications           = static::getNotifications( Notification::TYPE_NEW_BOOKING );
+        $notifications = static::getNotifications( Notification::TYPE_NEW_BOOKING );
         $notifications_recurring = static::getNotifications( Notification::TYPE_NEW_BOOKING_RECURRING );
 
         foreach ( $order->getItems() as $item ) {
@@ -40,7 +36,9 @@ abstract class Sender extends Booking\BaseSender
                 static::notifyStaffAndAdmins( $notifications_recurring['staff'], $item, $order, $codes );
             } elseif ( $item->isPackage() ) {
                 /** @var Package $item */
-                Packages::sendNotifications( $item->getPackage() );
+                BooklyProxy\Packages::sendNotifications( $item->getPackage() );
+            } elseif ( $item->isGiftCard() ) {
+                // ok
             } else {
                 // Notify client.
                 static::notifyClient( $notifications['client'], $item, $order, $codes );

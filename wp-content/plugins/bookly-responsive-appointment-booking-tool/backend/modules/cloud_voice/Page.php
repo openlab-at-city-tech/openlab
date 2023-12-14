@@ -4,10 +4,6 @@ namespace Bookly\Backend\Modules\CloudVoice;
 use Bookly\Lib;
 use Bookly\Backend\Components;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\CloudVoice
- */
 class Page extends Lib\Base\Component
 {
     /**
@@ -73,11 +69,10 @@ class Page extends Lib\Base\Component
 
             self::renderTemplate( 'index', compact( 'datatables' ) );
         } else {
-            wp_redirect( add_query_arg(
+            Lib\Utils\Common::redirect( add_query_arg(
                 array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
                 admin_url( 'admin.php' ) )
             );
-            exit;
         }
     }
 

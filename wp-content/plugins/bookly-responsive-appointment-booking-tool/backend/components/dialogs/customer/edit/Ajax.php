@@ -3,11 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Customer\Edit;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Components\Dialogs\Customer\Edit
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -101,6 +96,7 @@ class Ajax extends Lib\Base\Ajax
 
         if ( $customer ) {
             $customer['id'] = (int) $customer['id'];
+            $files = Lib\Proxy\Files::getFileNamesForCustomerInformationFields( json_decode( $customer['info_fields'], true ) ) ?: array();
             if ( isset( $customer['info_fields'] ) && $customer['info_fields'] ) {
                 $customer['info_fields'] = array_map( function( $item ) { return array( 'id' => (int) $item['id'], 'value' => $item['value'] ); }, json_decode( $customer['info_fields'], true ) );
             }
@@ -108,7 +104,7 @@ class Ajax extends Lib\Base\Ajax
             $wp_user = $customer['wp_user_id']
                 ? $wpdb->get_row( Dialog::getWPUsersQuery() . ( is_multisite() ? ' AND ' : ' WHERE ' ) . ' ID = ' . (int) $customer['wp_user_id'] )
                 : null;
-            wp_send_json_success( compact( 'customer', 'wp_user' ) );
+            wp_send_json_success( compact( 'customer', 'wp_user', 'files' ) );
         } else {
             wp_send_json_error();
         }

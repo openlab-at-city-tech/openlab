@@ -6,10 +6,6 @@ use Bookly\Lib\Entities\Notification;
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Modules\Notifications\Lib\Codes;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Sms
- */
 class Dialog extends Lib\Base\Component
 {
     /**

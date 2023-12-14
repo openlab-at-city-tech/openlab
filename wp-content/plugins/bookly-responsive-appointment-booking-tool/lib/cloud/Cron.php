@@ -1,15 +1,9 @@
 <?php
-
 namespace Bookly\Lib\Cloud;
 
-/**
- * Class Cron
- *
- * @package Bookly\Lib\Cloud
- */
 class Cron extends Product
 {
-    const ACTIVATE                = '/1.0/users/%token%/products/cron/activate';                  //POST
+    const ACTIVATE                = '/1.1/users/%token%/products/cron/activate';                  //POST
     const DEACTIVATE_NEXT_RENEWAL = '/1.0/users/%token%/products/cron/deactivate/next-renewal';   //POST
     const DEACTIVATE_NOW          = '/1.0/users/%token%/products/cron/deactivate/now';            //POST
     const REVERT_CANCEL           = '/1.0/users/%token%/products/cron/revert-cancel';             //POST
@@ -25,7 +19,6 @@ class Cron extends Product
     public function activate( $product_price )
     {
         $data = $this->getActivatingData( $product_price );
-        $data['test_endpoint'] = add_query_arg( array( 'action' => 'bookly_cloud_cron_test' ), admin_url( 'admin-ajax.php' ) );
 
         $response = $this->api
             ->setRequestTimeout( 90 )
@@ -76,7 +69,7 @@ class Cron extends Product
     {
         switch ( $error_code ) {
             case 'ENDPOINT_ACCESS_ERROR':
-                return __( 'Bookly Cloud couldn\'t connect to your server.', 'bookly' );
+                return __( 'Bookly Cloud couldn\'t connect to your server.', 'bookly' ) . '<br>' . __( 'Please check your firewall settings.', 'bookly' ) . '<br>' . sprintf( __( 'If problem persists, please contact us at <a href="mailto:%1$s">%1$s</a>', 'bookly'), 'support@bookly.info' );
             default:
                 return null;
         }

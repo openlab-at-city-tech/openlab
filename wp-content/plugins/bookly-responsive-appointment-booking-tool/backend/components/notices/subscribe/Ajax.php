@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\Subscribe;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Notices\Subscribe
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

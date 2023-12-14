@@ -3,10 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Category
- * @package Bookly\Lib\Entities
- */
 class Category extends Lib\Base\Entity
 {
     /** @var  string */

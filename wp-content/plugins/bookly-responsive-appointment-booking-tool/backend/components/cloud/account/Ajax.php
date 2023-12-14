@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Cloud\Account;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Cloud\Account
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

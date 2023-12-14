@@ -3,11 +3,6 @@ namespace Bookly\Backend\Modules\Shop;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Shop
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

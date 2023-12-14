@@ -3,11 +3,6 @@ namespace Bookly\Lib\Base;
 
 use Bookly\Lib;
 
-/**
- * Class Entity
- *
- * @package Bookly\Lib\Base
- */
 abstract class Entity extends Cache
 {
 
@@ -423,5 +418,10 @@ abstract class Entity extends Cache
         $this->id = $id;
 
         return $this;
+    }
+
+    public function __call( $name, $arguments )
+    {
+        Lib\Utils\Log::put( Lib\Utils\Log::ACTION_ERROR, 'call unknown method', null, json_encode( $arguments ), null, get_called_class() . '::' . $name );
     }
 }

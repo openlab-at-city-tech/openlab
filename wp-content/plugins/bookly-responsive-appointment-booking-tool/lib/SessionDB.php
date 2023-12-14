@@ -1,13 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-use Bookly\Lib\Entities;
-
-/**
- * Class SessionDB
- *
- * @package Bookly\Lib
- */
 abstract class SessionDB extends Session
 {
     protected static $affected = array();
@@ -215,9 +208,9 @@ abstract class SessionDB extends Session
     {
         $session = self::getSession();
 
-        $db_session = new Entities\Session();
         foreach ( self::$affected as $name ) {
             $value = isset( $session[ $name ] ) ? $session[ $name ] : null;
+            $db_session = new Entities\Session();
             $db_session->loadBy( array( 'token' => self::sessionId(), 'name' => $name ) );
             $db_session
                 ->setToken( self::sessionId() )

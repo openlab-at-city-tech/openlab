@@ -3,11 +3,6 @@ namespace Bookly\Backend\Modules\Payments;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Payments
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -24,9 +19,15 @@ class Ajax extends Lib\Base\Ajax
     public static function getPayments()
     {
         $filter = self::parameter( 'filter' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::PAYMENTS );
+        $order = self::parameter( 'order', array() );
+        $limits = array(
+            'length' => self::parameter( 'length' ),
+            'start' => self::parameter( 'start' ),
+        );
 
         $query = Lib\Entities\Payment::query( 'p' )
-            ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, p.target, c.full_name customer, st.full_name provider, s.title service, a.start_date' )
+            ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, p.target, c.full_name AS customer, st.full_name AS provider, s.title AS service, a.start_date' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
             ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
@@ -64,6 +65,17 @@ class Ajax extends Lib\Base\Ajax
             $query->where( 'ca.customer_id', $filter['customer'] );
         }
 
+        $clone = clone $query;
+        $counts = $clone->fetchCol( 'COUNT(p.id)' );
+
+        foreach ( $order as $sort_by ) {
+            $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
+                ->order( $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+        }
+
+        if ( ! empty( $limits ) ) {
+            $query->limit( $limits['length'] )->offset( $limits['start'] );
+        }
         $payments = $query->fetchArray();
 
         unset( $filter['created_at'] );
@@ -102,9 +114,8 @@ class Ajax extends Lib\Base\Ajax
 
         wp_send_json( array(
             'draw' => ( int ) self::parameter( 'draw' ),
-            'recordsTotal' => count( $data ),
-            'recordsFiltered' => count( $data ),
             'data' => $data,
+            'recordsFiltered' => count( $counts ),
             'total' => Lib\Utils\Price::format( $total ),
         ) );
     }

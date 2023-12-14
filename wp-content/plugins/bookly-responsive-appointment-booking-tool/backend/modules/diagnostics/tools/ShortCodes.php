@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
-/**
- * Class ShortCodes
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class ShortCodes extends Tool
 {
     protected $slug = 'short-codes';

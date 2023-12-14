@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Mailing\CreateList;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Dialogs\Mailing\CreateList
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

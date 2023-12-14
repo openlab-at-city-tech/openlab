@@ -4,9 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Pro
- * @package Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy
- *
  * @method static void   enqueueAssets() Enqueue assets for staff edit dialog.
  * @method static void   renderAdvancedTab() Render advanced tab.
  * @method static void   renderArchivingComponents()

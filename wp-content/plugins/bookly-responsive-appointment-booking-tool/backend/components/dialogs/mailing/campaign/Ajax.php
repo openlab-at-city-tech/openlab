@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Mailing\Campaign;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Dialogs\Mailing\Campaign
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -22,16 +18,29 @@ class Ajax extends Lib\Base\Ajax
         }
         $campaign
             ->setName( self::parameter( 'name' ) )
-            ->setSendAt( $mode == 'at_time' ? self::parameter( 'send_at' ) : current_time( 'mysql' ) )
+            ->setSendAt( $mode === 'at_time' ? self::parameter( 'send_at' ) : null )
             ->setText( self::parameter( 'text' ) )
             ->setState( Lib\Entities\MailingCampaign::STATE_PENDING )
             ->setMailingListId( self::parameter( 'mailing_list_id' ) ?: null )
             ->save();
 
-        if ( $mode == 'immediately' ) {
-            Lib\Routines::mailing();
+        wp_send_json_success();
+    }
+
+    public static function startCampaign()
+    {
+        $campaign = new Lib\Entities\MailingCampaign();
+        $id = self::parameter( 'id' );
+        if ( $id ) {
+            $campaign->load( $id );
         }
 
+        $campaign
+            ->setSendAt( current_time( 'mysql' ) )
+            ->save();
+
+        Lib\Routines::mailing();
+        
         wp_send_json_success();
     }
 

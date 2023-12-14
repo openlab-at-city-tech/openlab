@@ -6,10 +6,6 @@ use Bookly\Backend\Modules;
 use Bookly\Backend\Components\Notices;
 use Bookly\Backend\Components\Support\Lib\Urls;
 
-/**
- * Class Buttons
- * @package Bookly\Backend\Components\Support
- */
 class Buttons extends Lib\Base\Component
 {
     /**
@@ -28,8 +24,9 @@ class Buttons extends Lib\Base\Component
         ) );
 
         wp_localize_script( 'bookly-support.js', 'BooklySupportL10n', array(
-            'csrfToken' => Lib\Utils\Common::getCsrfToken(),
             'featuresRequestUrl' => Lib\Utils\Common::prepareUrlReferrers( Urls::FEATURES_REQUEST_PAGE, 'notification_bar' ),
+            'capabilities' => sprintf( __( 'Please note that your user doesn\'t have the %s capability. All potentially unsecure HTML in Appearance, Email Notifications, and other Bookly sections will be sanitized during the saving of any changes' ), '`unfiltered_html`' ),
+            'contact_with_admin' => __( 'Please contact your website administrator for additional information' ),
         ) );
 
         $days_in_use = (int) ( ( time() - Lib\Plugin::getInstallationTime() ) / DAY_IN_SECONDS );

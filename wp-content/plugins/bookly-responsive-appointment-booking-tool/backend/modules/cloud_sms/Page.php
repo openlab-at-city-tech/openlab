@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Backend\Modules\CloudProducts\Page as CloudProducts;
 use Bookly\Backend\Components;
 
-/**
- * Class Controller
- * @package Bookly\Backend\Modules\CloudSms
- */
 class Page extends Lib\Base\Component
 {
     /**
@@ -73,10 +69,13 @@ class Page extends Lib\Base\Component
                     'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
                     'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
                     'edit' => __( 'Edit', 'bookly' ),
+                    'run' => __( 'Start Now', 'bookly' ),
+                    'manual' => __( 'Manual', 'bookly' ),
                     'settingsSaved' => __( 'Settings saved.', 'bookly' ),
                     'na' => __( 'N/A', 'bookly' ),
                     'campaign' => array(
                         'pending' => __( 'Pending', 'bookly' ),
+                        'waiting' => __( 'Ready to send', 'bookly' ),
                         'in_progress' => __( 'In progress', 'bookly' ),
                         'completed' => __( 'Completed', 'bookly' ),
                         'canceled' => __( 'Canceled', 'bookly' ),

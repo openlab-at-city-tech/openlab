@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Frontend\Modules\Booking\Proxy;
 use Bookly\Frontend\Modules\Booking\Lib\Steps;
 
-/**
- * Class InfoText
- * @package Bookly\Frontend\Components\Booking
- */
 class InfoText
 {
     /**
@@ -109,7 +105,7 @@ class InfoText
                     $data['category_info'][] = $appointment_data['category_info'];
                     $data['category_name'][] = $appointment_data['category_name'];
                     $data['service_image'][] = $appointment_data['service_image'];
-                    $data['service_info'][] = $service->getTranslatedInfo();
+                    $data['service_info'][] = $appointment_data['service_info'];
                     $data['service_name'][] = $appointment_data['service_name'];
 
                     $duration = 0;
@@ -125,7 +121,9 @@ class InfoText
                         $duration = $chain_item->getUnits() * $service->getDuration();
                     }
                     $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
+                    $appointment_data['total_duration'] = Lib\Utils\DateTime::secondsToInterval( Lib\Proxy\ServiceExtras::considerDuration() && $chain_item->getExtras() ? Lib\Proxy\ServiceExtras::getTotalDuration( $chain_item->getExtras() ) + $duration : $duration );
                     $data['service_duration'][] = $appointment_data['service_duration'];
+                    $data['total_duration'][] = $appointment_data['total_duration'];
 
                     if ( $step == Steps::REPEAT ) {
                         $slot = $userData->getSlots();
@@ -226,6 +224,7 @@ class InfoText
                     'staff_info' => self::implode( $data['staff_info'] ),
                     'staff_name' => self::implode( $data['staff_name'] ),
                     'staff_photo' => self::implode( $data['staff_photo'] ),
+                    'total_duration' => self::implode( $data['total_duration'] ),
                     'total_price' => Lib\Utils\Price::format( $data['total_price'] ),
                 );
                 $codes = Proxy\Shared::prepareInfoTextCodes( $codes, $data );
@@ -262,16 +261,16 @@ class InfoText
                     $slots = $cart_item->getSlots();
                     $service_dp = $slots[0][2] ? Lib\Slots\DatePoint::fromStr( $slots[0][2] )->toClientTz() : null;
 
-                    $category = $service->getCategoryId() ? Lib\Entities\Category::find( $service->getCategoryId() ) : false;
+                    $category = $service && $service->getCategoryId() ? Lib\Entities\Category::find( $service->getCategoryId() ) : false;
                     $appointment_data['appointment_id'] = $cart_item->getAppointmentId();
                     $appointment_data['appointment_date'] = $service_dp ? $service_dp->formatI18nDate() : __( 'N/A', 'bookly' );
                     $appointment_data['category_image'] = ( $category && $url = $category->getImageUrl() ) ? '<img src="' . $url . '"/>' : '';
                     $appointment_data['category_info'] = $category ? $category->getTranslatedInfo() : '';
-                    $appointment_data['category_name'] = $service->getTranslatedCategoryName();
-                    $appointment_data['service_image'] = ( $url = $service->getImageUrl() ) ? '<img src="' . $url . '"/>' : '';
-                    $appointment_data['service_info'] = $service->getTranslatedInfo();
-                    $appointment_data['service_name'] = $service->getTranslatedTitle();
-                    $appointment_data['service_price'] = Lib\Utils\Price::format( $cart_item->getServicePriceWithoutExtras() );
+                    $appointment_data['category_name'] = $service ? $service->getTranslatedCategoryName() : '';
+                    $appointment_data['service_image'] = ( $service && $url = $service->getImageUrl() ) ? '<img src="' . $url . '"/>' : '';
+                    $appointment_data['service_info'] = $service ? $service->getTranslatedInfo() : '';
+                    $appointment_data['service_name'] = $service ? $service->getTranslatedTitle() : '';
+                    $appointment_data['service_price'] = $service ? Lib\Utils\Price::format( $cart_item->getServicePriceWithoutExtras() ) : '';
 
                     $data['number_of_persons'][] = $cart_item->getNumberOfPersons();
                     $data['appointment_date'][] = $appointment_data['appointment_date'];
@@ -279,30 +278,38 @@ class InfoText
                     $data['category_info'][] = $appointment_data['category_info'];
                     $data['category_name'][] = $appointment_data['category_name'];
                     $data['service_image'][] = $appointment_data['service_image'];
-                    $data['service_info'][] = $service->getTranslatedInfo();
+                    $data['service_info'][] = $appointment_data['service_info'] ;
                     $data['service_name'][] = $appointment_data['service_name'];
                     $data['service_price'][] = $appointment_data['service_price'];
-                    if ( $cart_item->getService()->withSubServices() ) {
-                        $duration = 0;
-                        foreach ( $cart_item->getService()->getSubServices() as $sub_service ) {
-                            if ( $cart_item->getService()->isCompound() ) {
-                                $duration += $sub_service->getDuration();
-                            } elseif ( $cart_item->getService()->isCollaborative() ) {
-                                $duration = max( $duration, $sub_service->getDuration() );
+                    if ( $service ) {
+                        if ( $service->withSubServices() ) {
+                            $duration = 0;
+                            foreach ( $service->getSubServices() as $sub_service ) {
+                                if ( $service->isCompound() ) {
+                                    $duration += $sub_service->getDuration();
+                                } elseif ( $service->isCollaborative() ) {
+                                    $duration = max( $duration, $sub_service->getDuration() );
+                                }
                             }
+                            $appointment_data['appointment_time'] = $service_dp
+                                ? ( $duration >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
+                                : __( 'N/A', 'bookly' );
+                            $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
+                            $appointment_data['total_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration + $cart_item->getExtrasDuration() );
+                        } else {
+                            $appointment_data['appointment_time'] = $service_dp
+                                ? ( $cart_item->getUnits() * $service->getDuration() >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
+                                : __( 'N/A', 'bookly' );
+                            $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $service->getDuration() );
+                            $appointment_data['total_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $service->getDuration() + $cart_item->getExtrasDuration() );
                         }
-                        $appointment_data['appointment_time'] = $service_dp
-                            ? ( $duration >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
-                            : __( 'N/A', 'bookly' );
-                        $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
                     } else {
-                        $appointment_data['appointment_time'] = $service_dp
-                            ? ( $cart_item->getUnits() * $cart_item->getService()->getDuration() >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
-                            : __( 'N/A', 'bookly' );
-                        $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $cart_item->getService()->getDuration() );
+                        $appointment_data['service_duration'] = '';
+                        $appointment_data['total_duration'] = '';
                     }
                     $data['appointment_time'][] = $appointment_data['appointment_time'];
                     $data['service_duration'][] = $appointment_data['service_duration'];
+                    $data['total_duration'][] = $appointment_data['total_duration'];
                     // For Task when time step can be skipped, staff can be false
                     $data['staff'] = $cart_item->getStaff();
                     $appointment_data['staff_name'] = $data['staff'] ? esc_html( $data['staff']->getTranslatedName() ) : '';
@@ -352,6 +359,7 @@ class InfoText
                     'staff_info' => self::implode( $data['staff_info'] ),
                     'staff_name' => self::implode( $data['staff_name'] ),
                     'staff_photo' => self::implode( $data['staff_photo'] ),
+                    'total_duration' => self::implode( $data['total_duration'] ),
                     'total_price' => Lib\Utils\Price::format( $cart_info->getTotal() ),
                 );
 

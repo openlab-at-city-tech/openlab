@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Staff
- *
- * @package Bookly\Lib\Entities
- */
 class Staff extends Lib\Base\Entity
 {
     /** @var integer */
@@ -38,10 +33,6 @@ class Staff extends Lib\Base\Entity
     protected $outlook_data;
     /** @var string */
     protected $zoom_authentication = 'default';
-    /** @var string */
-    protected $zoom_jwt_api_key;
-    /** @var string */
-    protected $zoom_jwt_api_secret;
     /** @var string */
     protected $zoom_oauth_token;
     /** @var int */
@@ -75,8 +66,6 @@ class Staff extends Lib\Base\Entity
         'outlook_data' => array( 'format' => '%s' ),
         'time_zone' => array( 'format' => '%s' ),
         'zoom_authentication' => array( 'format' => '%s' ),
-        'zoom_jwt_api_key' => array( 'format' => '%s' ),
-        'zoom_jwt_api_secret' => array( 'format' => '%s' ),
         'zoom_oauth_token' => array( 'format' => '%s' ),
         'icalendar' => array( 'format' => '%d' ),
         'icalendar_token' => array( 'format' => '%s' ),
@@ -643,40 +632,6 @@ class Staff extends Lib\Base\Entity
 
         return $this;
     }
-
-    /**
-     * Gets zoom_jwt_api_key
-     *
-     * @return string
-     */
-    public function getZoomJwtApiKey()
-    {
-        return $this->zoom_jwt_api_key;
-    }
-
-    /**
-     * Sets zoom_jwt_api_key
-     *
-     * @param string $zoom_jwt_api_key
-     * @return $this
-     */
-    public function setZoomJwtApiKey( $zoom_jwt_api_key )
-    {
-        $this->zoom_jwt_api_key = $zoom_jwt_api_key;
-
-        return $this;
-    }
-
-    /**
-     * Gets zoom_jwt_api_secret
-     *
-     * @return string
-     */
-    public function getZoomJwtApiSecret()
-    {
-        return $this->zoom_jwt_api_secret;
-    }
-
     /**
      * Gets zoom_oauth_token
      *

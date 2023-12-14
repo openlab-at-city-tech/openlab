@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class Chain
- * @package Bookly\Lib
- */
 class Chain
 {
     /** @var ChainItem[] */

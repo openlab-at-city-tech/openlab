@@ -6,10 +6,6 @@ use Bookly\Backend\Components\Elementor\Base;
 use Bookly\Lib\Config;
 use Elementor\Controls_Manager;
 
-/**
- * Class Widget
- * @package Bookly\Backend\Components\Elementor\Widgets\BooklyForm
- */
 class Widget extends Base\Widget
 {
     protected $name = 'bookly-form';

@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class News
- *
- * @package Bookly\Lib\Entities
- */
 class News extends Lib\Base\Entity
 {
     /** @var  int */

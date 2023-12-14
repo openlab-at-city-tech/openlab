@@ -8,9 +8,6 @@ use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Price;
 
 /**
- * Class Config
- *
- * @package Bookly\Lib
  * @method static bool advancedGoogleCalendarActive()  Check whether Advanced Google Calendar add-on is active or not.
  * @method static bool authorizeNetActive()            Check whether Authorize.Net add-on is active or not.
  * @method static bool cartActive()                    Check whether Cart add-on is active or not.
@@ -34,6 +31,7 @@ use Bookly\Lib\Utils\Price;
  * @method static bool mailchimpActive()               Check whether Mailchimp add-on is active or not.
  * @method static bool mollieActive()                  Check whether Mollie add-on is active or not.
  * @method static bool multiplyAppointmentsActive()    Check whether Multiply Appointments add-on is active or not.
+ * @method static bool outlookCalendarActive()         Check whether Outlook Calendar add-on is active or not.
  * @method static bool packagesActive()                Check whether Packages add-on is active or not.
  * @method static bool paypalCheckoutActive()          Check whether PayPal checkout add-on is active or not.
  * @method static bool paypalPaymentsStandardActive()  Check whether PayPal payments standard add-on is active or not.
@@ -378,7 +376,6 @@ abstract class Config
             || ( self::stripeActive() && get_option( 'bookly_stripe_enabled' ) )
             || self::stripeCloudEnabled()
             || self::squareEnabled()
-            || self::giftEnabled()
             || self::paypalEnabled()
         );
     }
@@ -900,5 +897,25 @@ abstract class Config
         return is_array( $order )
             ? $order
             : explode( ',', $order );
+    }
+
+    /**
+     * @return array
+     */
+    public static function syncCalendars()
+    {
+        $result = array(
+            0 => false, // sync
+            1 => false, // Google Calendar
+            2 => false, // Outlook Calendar
+        );
+
+        if ( self::proActive() ) {
+            $result[1] = (bool) ( get_option( 'bookly_gc_client_id' ) && get_option( 'bookly_gc_client_secret' ) );
+            $result[2] = (bool) ( self::outlookCalendarActive() && get_option( 'bookly_oc_app_id' ) && get_option( 'bookly_oc_app_secret' ) );
+            $result[0] = max( $result[1], $result[2] );
+        }
+
+        return $result;
     }
 }

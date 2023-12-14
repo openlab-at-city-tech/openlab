@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Customers;
 
 use Bookly\Lib;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\Customers
- */
 class Page extends Lib\Base\Component
 {
     /**
@@ -40,6 +36,7 @@ class Page extends Lib\Base\Component
             'create_customer' => __( 'Create customer', 'bookly' ),
             'save' => __( 'Save', 'bookly' ),
             'search' => __( 'Quick search customer', 'bookly' ),
+            'download' => __( 'Download', 'bookly' ),
             'datatables' => $datatables,
         ) );
 

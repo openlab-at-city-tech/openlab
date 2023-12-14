@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class MailingList
- *
- * @package Bookly\Lib\Entities
- */
 class MailingList extends Lib\Base\Entity
 {
     /** @var string */

@@ -9,11 +9,6 @@ use Bookly\Backend\Modules\CloudWhatsapp\Page as CloudWhatsAppPage;
 use Bookly\Lib;
 use Bookly\Lib\Cloud\Account;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\CloudProducts
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

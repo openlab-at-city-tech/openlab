@@ -4,10 +4,7 @@ namespace Bookly\Backend\Modules\Services\Forms;
 use Bookly\Lib;
 
 /**
- * Class Category
  * @method Lib\Entities\Category save()
- *
- * @package Bookly\Backend\Modules\Services\Forms
  */
 class Category extends Lib\Base\Form
 {

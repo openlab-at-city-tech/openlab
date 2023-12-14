@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\Wpml;
 
 use Bookly\Lib;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\Wpml
- */
 class Notice extends Lib\Base\Component
 {
     /**

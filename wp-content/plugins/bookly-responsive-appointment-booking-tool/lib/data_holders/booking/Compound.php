@@ -3,10 +3,6 @@ namespace Bookly\Lib\DataHolders\Booking;
 
 use Bookly\Lib;
 
-/**
- * Class Compound
- * @package Bookly\Lib\DataHolders\Booking
- */
 class Compound extends Item
 {
     /** @var Lib\Entities\Service */

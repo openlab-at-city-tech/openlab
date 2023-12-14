@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tests;
 
 use Bookly\Lib;
 
-/**
- * Class Sessions
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 class Sessions extends Test
 {
     protected $slug = 'check-sessions';

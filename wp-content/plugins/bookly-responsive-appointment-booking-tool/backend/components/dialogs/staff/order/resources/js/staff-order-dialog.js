@@ -62,7 +62,8 @@ jQuery(function($) {
             $list.append(
                 $template.clone().show().html()
                     .replace(/{{id}}/g, staff.id)
-                    .replace(/{{full_name}}/g, staff.full_name)
+                    .replace(/{{full_name}}/g, staff.full_name + (staff.archived == '1' ? ' — <i>' + BooklyStaffOrderDialogL10n.archived + '</i>': ''))
+                    .replace(/{{class}}/g, staff.archived == '1'?' text-muted':'')
             );
         });
     });

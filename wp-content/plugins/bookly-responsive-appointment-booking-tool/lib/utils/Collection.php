@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Lib\Utils;
 
-/**
- * Class Collection
- *
- * @package Bookly\Lib\Utils
- */
 class Collection implements \IteratorAggregate, \Countable
 {
     protected $values = array();

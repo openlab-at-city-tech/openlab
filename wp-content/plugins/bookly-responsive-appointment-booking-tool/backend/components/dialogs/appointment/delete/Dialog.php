@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Appointment\Delete;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Appointment
- */
 class Dialog extends Lib\Base\Component
 {
     /**

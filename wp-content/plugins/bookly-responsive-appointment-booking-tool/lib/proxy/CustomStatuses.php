@@ -5,9 +5,6 @@ use Bookly\Lib;
 use BooklyCustomStatuses\Lib\Entities\CustomStatus;
 
 /**
- * Class CustomStatuses
- * @package Bookly\Lib\Proxy
- *
  * @method static CustomStatus[] getAll() Get all custom statuses.
  * @method static array prepareAllStatuses( array $statuses ) Prepare all available statuses.
  * @method static array prepareBusyStatuses( array $statuses ) Prepare statuses which are considered busy.

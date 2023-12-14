@@ -4,9 +4,6 @@ namespace Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Pro
- *
- * @package Bookly\Backend\Modules\Appearance\Proxy
  * @method static void renderModernAppearance() Render modern appearance
  * @method static void renderAddress() Render inputs for address fields in appearance.
  * @method static void renderBirthday() Render inputs for birthday fields in appearance.
@@ -15,9 +12,7 @@ use Bookly\Lib;
  * @method static void renderGiftCards() Render gift cards on Payment step.
  * @method static void renderPaymentImpossible() Render payment impossible alert.
  * @method static void renderFacebookButton() Render facebook login button on Time step.
- * @method static void renderShowAddress() render 'Show Address Fields' on Details Step.
- * @method static void renderShowBirthday() render 'Show Birthday Fields' on Details Step.
- * @method static void renderShowFacebookButton() Render 'Show facebook login button switcher' on Time step.
+ * @method static void renderShowStepDetailsSettings() render 'Show Birthday Fields' on Details Step.
  * @method static void renderShowGiftCards() Render 'Show gift cards' on Payment step.
  * @method static void renderShowTips() Render 'Show tips' on Payment step.
  * @method static void renderShowQRCode() Render 'Show QR code' on Done step.

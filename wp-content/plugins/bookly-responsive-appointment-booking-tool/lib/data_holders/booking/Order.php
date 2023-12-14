@@ -2,11 +2,9 @@
 namespace Bookly\Lib\DataHolders\Booking;
 
 use Bookly\Lib;
+use Bookly\Lib\Entities\Appointment;
+use Bookly\Lib\Entities\CustomerAppointment;
 
-/**
- * Class Order
- * @package Bookly\Lib\DataHolders\Booking
- */
 class Order
 {
     /** @var Lib\Entities\Customer */
@@ -15,6 +13,8 @@ class Order
     protected $payment;
     /** @var Item[] */
     protected $items = array();
+    /** @var int */
+    protected $order_id;
 
     /**
      * Constructor.
@@ -136,6 +136,25 @@ class Order
     }
 
     /**
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->order_id;
+    }
+
+    /**
+     * @param int $order_id
+     * @return Order
+     */
+    public function setOrderId( $order_id )
+    {
+        $this->order_id = $order_id;
+
+        return $this;
+    }
+
+    /**
      * Create new order.
      *
      * @param Lib\Entities\Customer $customer
@@ -171,7 +190,18 @@ class Order
      */
     public static function createFromOrderId( $order_id )
     {
-        return self::createOrderByCaList( Lib\Entities\CustomerAppointment::query()->where( 'order_id', $order_id )->find() );
+        if ( $order_id ) {
+            $ca_list = Lib\Entities\CustomerAppointment::query()->where( 'order_id', $order_id )->find();
+            if ( $ca_list ) {
+                return self::createOrderByCaList( $ca_list );
+            }
+            $pkg_list = Lib\Proxy\Packages::getOrderPackages( $order_id );
+            if ( $pkg_list ) {
+                return self::createOrderByPkgList( $pkg_list );
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -206,6 +236,7 @@ class Order
             if ( $payment_id ) {
                 $order->setPayment( Lib\Entities\Payment::find( $payment_id ) );
             }
+            $order->setOrderId( $ca_list[0]->getOrderId() );
             /**
              * @var Lib\DataHolders\Booking\Compound[] $compounds
              * @var Lib\DataHolders\Booking\Collaborative[] $collaboratives
@@ -270,4 +301,35 @@ class Order
         return null;
     }
 
+    /**
+     * @param \BooklyPackages\Lib\Entities\Package[] $pkg_list
+     * @return Order
+     */
+    private static function createOrderByPkgList( $pkg_list )
+    {
+        $payment_id = $pkg_list[0]->getPaymentId();
+        $customer = Lib\Entities\Customer::find( $pkg_list[0]->getCustomerId() );
+        $order = static::create( $customer );
+        if ( $payment_id ) {
+            $order->setPayment( Lib\Entities\Payment::find( $payment_id ) );
+        }
+        $order->setOrderId( $pkg_list[0]->getOrderId() );
+        $item_key = 0;
+        foreach ( $pkg_list as $package ) {
+            $package_id = $package->getId();
+            $customer_id = $package->getCustomerId();
+            $service_id = $package->getServiceId();
+            $staff_id = $package->getStaffId();
+            $location_id = $package->getLocationId();
+            $created_from = 'frontend';
+            $item = Package::create( new CustomerAppointment( compact( 'package_id', 'payment_id', 'customer_id', 'created_from' ) ) )
+                ->setService( Lib\Entities\Service::find( $service_id ) )
+                ->setAppointment( new Appointment( compact( 'service_id', 'staff_id', 'location_id' ) ) );
+
+            $item->setPackage( $package );
+            $order->addItem( $item_key++, $item );
+        }
+
+        return $order;
+    }
 }

@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Staff;
 
 use Bookly\Lib;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\Staff
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -29,7 +25,7 @@ class Ajax extends Lib\Base\Ajax
     {
         global $wpdb;
 
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::STAFF_MEMBERS );
         $order   = self::parameter( 'order', array() );
         $filter  = self::parameter( 'filter' );
         $limits  = array(

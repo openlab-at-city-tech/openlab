@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Dashboard\Appointments;
 use Bookly\Lib;
 use Bookly\Backend\Modules;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Dashboard\Appointments
- */
 class Ajax extends Lib\Base\Ajax
 {
     public static function getAppointmentsDataForDashboard()

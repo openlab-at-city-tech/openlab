@@ -3,11 +3,6 @@ namespace Bookly\Backend\Components\Settings;
 
 use Bookly\Lib;
 
-/**
- * Class Inputs
- *
- * @package Bookly\Backend\Components\Settings
- */
 class Inputs
 {
     /**
@@ -261,7 +256,7 @@ class Inputs
         wp_enqueue_script( 'bookly-settings-controls.js', $resources . '/js/settings-controls.js', array( 'jquery' ), $version );
 
         $control = strtr(
-            '<span id="{name}" style="cursor: text" class="text-truncate">{value}</span>
+            '<span id="{name}" style="cursor: text; white-space: normal; overflow-wrap: anywhere;" class="text-truncate">{value}</span>
              <a href="#{name}" class="far fa-copy fa-fw text-secondary text-decoration-none ml-auto" title="{title}"></a>
              <small class="text-muted ml-auto" style="display:none">{copied}</small>',
 
@@ -274,7 +269,7 @@ class Inputs
         );
 
         echo strtr(
-            '<div class="form-group bookly-js-copy-to-clipboard">{label}<div class="form-control d-flex align-items-center" readonly style="opacity:1;cursor:default">{control}</div>{help}</div>',
+            '<div class="form-group bookly-js-copy-to-clipboard">{label}<div class="form-control d-flex align-items-center" readonly style="opacity:1; cursor:default; height: auto;">{control}</div>{help}</div>',
             array(
                 '{label}' => $label != '' ? sprintf( '<label for="%s">%s</label>', $name, $label ) : '',
                 '{help}' => $help != '' ? sprintf( '<small class="form-text text-muted">%s</small>', $help ) : '',

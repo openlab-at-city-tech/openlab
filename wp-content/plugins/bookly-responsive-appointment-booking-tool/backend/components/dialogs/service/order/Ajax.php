@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Service\Order;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Service\Order
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

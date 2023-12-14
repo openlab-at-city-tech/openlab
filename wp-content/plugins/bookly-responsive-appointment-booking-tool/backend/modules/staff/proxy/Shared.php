@@ -4,9 +4,6 @@ namespace Bookly\Backend\Modules\Staff\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Shared
- * @package Bookly\Backend\Modules\Staff\Proxy
- *
  * @method static void   enqueueStaffProfileScripts() Enqueue scripts for page Staff.
  * @method static void   enqueueStaffProfileStyles() Enqueue styles for page Staff.
  * @method static string getAffectedAppointmentsFilter( string $filter_url, int[] $staff_ids ) Get link with filter for appointments page.

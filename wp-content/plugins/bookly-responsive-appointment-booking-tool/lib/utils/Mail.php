@@ -7,9 +7,6 @@ use Bookly\Lib\Proxy;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 use PHPMailer\PHPMailer\PHPMailer;
 
-/**
- * Sends a bookly emails.
- */
 abstract class Mail
 {
     /**

@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\Limitation;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Notices\Limitation
- */
 class Ajax extends Lib\Base\Ajax
 {
     public static function requiredBooklyPro()

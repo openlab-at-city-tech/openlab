@@ -3,11 +3,6 @@ namespace Bookly\Lib\Cloud;
 
 use Bookly\Lib\Utils;
 
-/**
- * Class WhatsApp
- *
- * @package Bookly\Lib\Cloud
- */
 class WhatsApp extends Product
 {
     const ACTIVATE                = '/1.0/users/%token%/products/whatsapp/activate';        //POST

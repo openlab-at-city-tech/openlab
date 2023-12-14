@@ -3,10 +3,6 @@ namespace Bookly\Lib\Base;
 
 use Bookly\Lib;
 
-/**
- * Class Block
- * @package Bookly\Lib\Base
- */
 abstract class Block extends Component
 {
     /**

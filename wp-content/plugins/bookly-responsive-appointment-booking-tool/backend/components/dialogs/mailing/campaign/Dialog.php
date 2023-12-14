@@ -4,11 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Mailing\Campaign;
 use Bookly\Lib;
 use Bookly\Backend\Components\Controls\Buttons;
 
-/**
- * Class Dialog
- *
- * @package Bookly\Backend\Components\Dialogs\Mailing\Campaign
- */
 class Dialog extends Lib\Base\Component
 {
     /**
@@ -54,16 +49,17 @@ class Dialog extends Lib\Base\Component
                 'close' => __( 'Close', 'bookly' ),
                 'name' => __( 'Name', 'bookly' ),
                 'start_campaign' => __( 'Start campaign', 'bookly' ),
-                'immediately' => __( 'Immediately', 'bookly' ),
+                'manual' => __( 'Manual', 'bookly' ),
                 'start_sending_at' => __( 'Start sending messages at', 'bookly' ),
                 'start_sending_help' => __( 'Set the time when the mailing will start', 'bookly' ),
                 'start_time' => __( 'Start time', 'bookly' ),
-                'start' => __( 'Start', 'bookly' ),
                 'recipients' => __( 'Recipients', 'bookly' ),
                 'sms_text' => __( 'Sms text', 'bookly' ),
                 'campaign' => __( 'Campaign', 'bookly' ),
                 'cancel_campaign' => __( 'Cancel campaign', 'bookly' ) . '…',
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
+                'start_now_text' => __( 'You\'re about to send an SMS Campaign. If you\'re sure about the setup, click \'Start Now\'. Otherwise, please take a moment to review the details.', 'bookly' ),
+                'run' => __( 'Start Now', 'bookly' ),
                 'doc_hint' => sprintf( __( 'Start typing "{" to see the available codes. For more information, see the <a href="%s" target="_blank">documentation</a> page', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-sms-campaigns' ),
             ),
         ) );

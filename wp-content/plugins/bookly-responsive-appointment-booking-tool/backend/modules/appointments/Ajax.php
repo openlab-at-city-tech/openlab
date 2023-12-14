@@ -3,11 +3,6 @@ namespace Bookly\Backend\Modules\Appointments;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Appointments
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -23,7 +18,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getAppointments()
     {
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::APPOINTMENTS );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
         $limits = array(
@@ -35,7 +30,7 @@ class Ajax extends Lib\Base\Ajax
 
         unset( $filter['date'] );
 
-        Lib\Utils\Tables::updateSettings( 'appointments', $columns, $order, $filter );
+        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::APPOINTMENTS, $columns, $order, $filter );
 
         wp_send_json( array(
             'draw' => ( int ) self::parameter( 'draw' ),
@@ -149,6 +144,7 @@ class Ajax extends Lib\Base\Ajax
                 c.street     AS customer_street,
                 c.street_number AS customer_street_number,
                 c.additional_address AS customer_additional_address,
+                c.full_address AS customer_full_address,
                 st.full_name AS staff_name,
                 st.visibility AS staff_visibility,
                 p.paid       AS payment,
@@ -227,8 +223,16 @@ class Ajax extends Lib\Base\Ajax
         }
 
         foreach ( $order as $sort_by ) {
-            $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
-                ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+            $column = str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] );
+            if ( $column === 'no' ) {
+                if ( Lib\Config::groupBookingActive() ) {
+                    $query->sortBy( 'id' )
+                        ->order( $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+                }
+                $column = 'ca_id';
+            }
+            $query->sortBy( $column )
+                ->order( $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
         }
 
         $custom_fields = array();
@@ -278,7 +282,18 @@ class Ajax extends Lib\Base\Ajax
             $customer_appointment = new Lib\Entities\CustomerAppointment();
             $customer_appointment->load( $row['ca_id'] );
             foreach ( (array) Lib\Proxy\CustomFields::getForCustomerAppointment( $customer_appointment, false, null, false ) as $custom_field ) {
-                $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
+                if ( $custom_field['value'] != '' ) {
+                    switch ( $custom_field['type'] ) {
+                        case 'time':
+                            $custom_fields[ $custom_field['id'] ] = Lib\Utils\DateTime::formatTime( $custom_field['value'] );
+                            break;
+                        case 'date':
+                            $custom_fields[ $custom_field['id'] ] = Lib\Utils\DateTime::formatDate( $custom_field['value'] );
+                            break;
+                        default:
+                            $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
+                    }
+                }
             }
             if ( $row['ca_id'] !== null ) {
                 $extras = (array) Lib\Proxy\ServiceExtras::getInfo( json_decode( $row['extras'], true ) ?: array(), false );
@@ -311,6 +326,7 @@ class Ajax extends Lib\Base\Ajax
                         'street' => $row['customer_street'],
                         'street_number' => $row['customer_street_number'],
                         'additional_address' => $row['customer_additional_address'],
+                        'full_address' => $row['customer_full_address'],
                     ) ),
                 ),
                 'service' => array(

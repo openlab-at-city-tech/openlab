@@ -51,14 +51,11 @@ use Bookly\Lib\Utils\Log;
                 <table id="bookly-logs-table" class="table table-striped table-hover nowrap w-100 bookly-table-wrap">
                     <thead>
                     <tr>
-                        <th><?php esc_html_e( 'Date', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Action', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Target', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Target ID', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Author', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Details', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Comment', 'bookly' ) ?></th>
-                        <th><?php esc_html_e( 'Reference', 'bookly' ) ?></th>
+                        <?php foreach ( $datatables['logs']['settings']['columns'] as $column => $show ) : ?>
+                            <?php if ( $show ) : ?>
+                                <th><?php echo esc_html( $datatables['logs']['titles'][ $column ] ) ?></th>
+                            <?php endif ?>
+                        <?php endforeach ?>
                     </tr>
                     </thead>
                 </table>

@@ -6,10 +6,6 @@ use Bookly\Backend\Modules;
 use Bookly\Backend\Components\Notices\Base;
 use Bookly\Backend\Components\Support\Lib\Urls;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\Rate
- */
 class Notice extends Base\Notice
 {
     /**

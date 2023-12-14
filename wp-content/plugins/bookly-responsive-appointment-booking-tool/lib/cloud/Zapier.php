@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
-/**
- * Class Zapier
- * @package Bookly\Lib\Cloud
- */
 class Zapier extends Product
 {
     const ACTIVATE                = '/1.0/users/%token%/products/zapier/activate';                  //POST

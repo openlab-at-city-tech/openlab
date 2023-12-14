@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Lib\Notifications\Verification\Sender;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 
-/**
- * Class Validator
- *
- * @package Bookly\Lib
- */
 class Validator
 {
     private $errors = array();

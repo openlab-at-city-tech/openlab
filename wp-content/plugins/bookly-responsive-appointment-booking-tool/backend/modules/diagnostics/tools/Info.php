@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
-/**
- * Class Info
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class Info extends Tool
 {
     protected $slug = 'info';

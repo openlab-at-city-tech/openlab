@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Base;
 
-/**
- * Class Installer
- * @package Bookly\Lib\Base
- */
 abstract class Installer extends Schema
 {
     protected $options = array();

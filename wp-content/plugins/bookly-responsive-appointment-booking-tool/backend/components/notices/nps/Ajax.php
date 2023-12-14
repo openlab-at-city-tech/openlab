@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Notices\Nps;
 use Bookly\Lib;
 use Bookly\Backend\Modules;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Notices
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

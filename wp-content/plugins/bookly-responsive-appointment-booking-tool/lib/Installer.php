@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\DataHolders\Notification\Settings;
 
-/**
- * Class Installer
- *
- * @package Bookly
- */
 class Installer extends Base\Installer
 {
     /** @var array */
@@ -254,6 +249,7 @@ class Installer extends Base\Installer
             'bookly_app_show_staff_info' => '0',
             'bookly_app_show_terms' => '0',
             'bookly_app_show_download_ics' => '0',
+            'bookly_app_show_add_to_calendar' => '0',
             'bookly_l10n_button_apply' => __( 'Apply', 'bookly' ),
             'bookly_l10n_button_back' => __( 'Back', 'bookly' ),
             'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly' ),
@@ -267,6 +263,7 @@ class Installer extends Base\Installer
             'bookly_l10n_info_payment_step_single_app' => __( 'Please tell us how you would like to pay: ', 'bookly' ),
             'bookly_l10n_info_service_step' => __( 'Please select service: ', 'bookly' ),
             'bookly_l10n_info_time_step' => __( "Below you can find a list of available time slots for {service_name} by {staff_name}.\nClick on a time slot to proceed with booking.", 'bookly' ),
+            'bookly_l10n_info_add_to_calendar' => __( 'Add to calendar', 'bookly' ),
             'bookly_l10n_label_category' => __( 'Category', 'bookly' ),
             'bookly_l10n_label_email' => __( 'Email', 'bookly' ),
             'bookly_l10n_label_email_confirm' => __( 'Confirm email', 'bookly' ),
@@ -449,6 +446,8 @@ class Installer extends Base\Installer
             'bookly_smtp_user' => '',
             'bookly_smtp_password' => '',
             'bookly_smtp_secure' => 'none',
+            // Appointments.
+            'bookly_appointment_end_date_method' => 'default',
         );
     }
 
@@ -487,7 +486,6 @@ class Installer extends Base\Installer
                 'bookly_dismiss_nps_notice',
                 'bookly_dismiss_powered_by_notice',
                 'bookly_dismiss_subscribe_notice',
-                'bookly_dismiss_zoom_jwt_notice',
                 'bookly_email_notifications_table_settings',
                 'bookly_payments_table_settings',
                 'bookly_show_collecting_stats_notice',
@@ -528,7 +526,7 @@ class Installer extends Base\Installer
                 `attachment_id`         INT UNSIGNED DEFAULT NULL,
                 `full_name`             VARCHAR(255) DEFAULT NULL,
                 `email`                 VARCHAR(255) DEFAULT NULL,
-                `phone`                 VARCHAR(255) DEFAULT NULL,
+                `phone`                 VARCHAR(32) DEFAULT NULL,
                 `time_zone`             VARCHAR(255) DEFAULT NULL,
                 `info`                  TEXT DEFAULT NULL,
                 `working_time_limit`    INT UNSIGNED DEFAULT NULL,
@@ -536,9 +534,7 @@ class Installer extends Base\Installer
                 `position`              INT NOT NULL DEFAULT 9999,
                 `google_data`           TEXT DEFAULT NULL,
                 `outlook_data`          TEXT DEFAULT NULL,
-                `zoom_authentication`   ENUM("default", "jwt", "oauth") NOT NULL DEFAULT "default",
-                `zoom_jwt_api_key`      VARCHAR(255) DEFAULT NULL,
-                `zoom_jwt_api_secret`   VARCHAR(255) DEFAULT NULL,
+                `zoom_authentication`   ENUM("default", "oauth") NOT NULL DEFAULT "default",
                 `zoom_oauth_token`      TEXT DEFAULT NULL,
                 `icalendar`             TINYINT(1) NOT NULL DEFAULT 0,
                 `icalendar_token`       VARCHAR(255) DEFAULT NULL,
@@ -722,19 +718,20 @@ class Installer extends Base\Installer
                 `wp_user_id`         BIGINT(20) UNSIGNED DEFAULT NULL,
                 `facebook_id`        BIGINT(20) UNSIGNED DEFAULT NULL,
                 `group_id`           INT UNSIGNED DEFAULT NULL,
-                `full_name`          VARCHAR(255) NOT NULL DEFAULT "",
-                `first_name`         VARCHAR(255) NOT NULL DEFAULT "",
-                `last_name`          VARCHAR(255) NOT NULL DEFAULT "",
-                `phone`              VARCHAR(255) NOT NULL DEFAULT "",
-                `email`              VARCHAR(255) NOT NULL DEFAULT "",
+                `full_name`          VARCHAR(128) NOT NULL DEFAULT "",
+                `first_name`         VARCHAR(64) NOT NULL DEFAULT "",
+                `last_name`          VARCHAR(64) NOT NULL DEFAULT "",
+                `phone`              VARCHAR(32) NOT NULL DEFAULT "",
+                `email`              VARCHAR(128) NOT NULL DEFAULT "",
                 `birthday`           DATE DEFAULT NULL,
-                `country`            VARCHAR(255) DEFAULT NULL,
-                `state`              VARCHAR(255) DEFAULT NULL,
-                `postcode`           VARCHAR(255) DEFAULT NULL,
-                `city`               VARCHAR(255) DEFAULT NULL,
-                `street`             VARCHAR(255) DEFAULT NULL,
-                `street_number`      VARCHAR(255) DEFAULT NULL,
+                `country`            VARCHAR(32) DEFAULT NULL,
+                `state`              VARCHAR(32) DEFAULT NULL,
+                `postcode`           VARCHAR(10) DEFAULT NULL,
+                `city`               VARCHAR(64) DEFAULT NULL,
+                `street`             VARCHAR(64) DEFAULT NULL,
+                `street_number`      VARCHAR(16) DEFAULT NULL,
                 `additional_address` VARCHAR(255) DEFAULT NULL,
+                `full_address`       VARCHAR(255) DEFAULT NULL,
                 `notes`              TEXT NOT NULL,
                 `info_fields`        TEXT DEFAULT NULL,
                 `stripe_account`     VARCHAR(255) DEFAULT NULL,
@@ -807,12 +804,20 @@ class Installer extends Base\Installer
         );
 
         $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\Order::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) DEFAULT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Payment::getTableName() . '` (
                 `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `target`       ENUM("appointments","packages","gift_cards") NOT NULL DEFAULT "appointments",
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
-                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square","cloud_gift") NOT NULL DEFAULT "local",
+                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square") NOT NULL DEFAULT "local",
                 `total`        DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `tax`          DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `paid`         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -821,17 +826,15 @@ class Installer extends Base\Installer
                 `status`       ENUM("pending","completed","rejected","refunded") NOT NULL DEFAULT "completed",
                 `token`        VARCHAR(255) DEFAULT NULL,
                 `details`      TEXT DEFAULT NULL,
+                `order_id`     INT UNSIGNED DEFAULT NULL,
                 `ref_id`       VARCHAR(255) DEFAULT NULL,
                 `created_at`   DATETIME NOT NULL,
-                `updated_at`   DATETIME NOT NULL
-            ) ENGINE = INNODB
-            ' . $charset_collate
-        );
-
-        $wpdb->query(
-            'CREATE TABLE IF NOT EXISTS `' . Entities\Order::getTableName() . '` (
-                `id`    INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `token` VARCHAR(255) DEFAULT NULL
+                `updated_at`   DATETIME NOT NULL,
+            CONSTRAINT
+                FOREIGN KEY (order_id)
+                REFERENCES ' . Entities\Order::getTableName() . '(id)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE
             ) ENGINE = INNODB
             ' . $charset_collate
         );
@@ -1009,7 +1012,7 @@ class Installer extends Base\Installer
                 `name` VARCHAR(255) DEFAULT NULL,
                 `text` TEXT DEFAULT NULL,
                 `state` ENUM("pending","in-progress","completed","canceled") NOT NULL DEFAULT "pending",
-                `send_at` DATETIME NOT NULL,
+                `send_at` DATETIME DEFAULT NULL,
                 `created_at` DATETIME NOT NULL,
             CONSTRAINT
                 FOREIGN KEY (mailing_list_id)
@@ -1050,7 +1053,7 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\NotificationQueue::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `token` VARCHAR(255) NOT NULL,
-                `data` TEXT DEFAULT NULL,
+                `data` LONGTEXT DEFAULT NULL,
                 `sent` TINYINT(1) DEFAULT 0,
                 `created_at` DATETIME NOT NULL
             ) ENGINE = INNODB

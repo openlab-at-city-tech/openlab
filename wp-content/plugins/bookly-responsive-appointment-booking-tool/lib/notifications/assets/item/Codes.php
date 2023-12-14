@@ -9,12 +9,8 @@ use Bookly\Lib\Notifications\Assets\Order;
 use Bookly\Lib\Notifications\Base\Reminder;
 use Bookly\Lib\Notifications\WPML;
 use Bookly\Lib\Utils;
+use Bookly\Lib\Slots\DatePoint;
 
-/**
- * Class Codes
- *
- * @package Bookly\Lib\Notifications\Assets\Item
- */
 class Codes extends Order\Codes
 {
     // Core
@@ -77,6 +73,7 @@ class Codes extends Order\Codes
     // Service Extras
     public $extras;
     public $extras_total_price;
+    public $extras_duration;
     // Taxes
     public $service_tax;
     public $service_tax_rate;
@@ -176,13 +173,19 @@ class Codes extends Order\Codes
             ? add_query_arg( 'bookly-appointment-token', $this->appointment_token, $cancel_appointment_confirm_url )
             : '';
 
+        if ( $this->appointment_start && $this->service_duration >= DAY_IN_SECONDS && get_option( 'bookly_appointment_end_date_method' ) === 'accurate' ) {
+            $appointment_end_date = DatePoint::fromStr( $this->appointment_end )->modify( '-1 day' )->format( 'Y-m-d H:i:s' );
+        } else {
+            $appointment_end_date = $this->appointment_end;
+        }
+
         // Add replace codes.
         $replace_codes += array(
             'appointment_id' => $this->appointment_id,
             'appointment_date' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : Utils\DateTime::formatDate( $this->appointment_start ),
             'appointment_time' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $this->appointment_start ) : $this->appointment_start_info ),
-            'appointment_end_date' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : Utils\DateTime::formatDate( $this->appointment_end ),
-            'appointment_end_time' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $this->appointment_end ) : $this->appointment_end_info ),
+            'appointment_end_date' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : Utils\DateTime::formatDate( $appointment_end_date ),
+            'appointment_end_time' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $appointment_end_date ) : $this->appointment_end_info ),
             'appointment_notes' => $this->appointment_notes ? ( $format == 'html' ? nl2br( $this->appointment_notes ) : $this->appointment_notes ) : '',
             'approve_appointment_url' => $this->appointment_token ? admin_url( 'admin-ajax.php?action=bookly_approve_appointment&token=' . urlencode( Utils\Common::xorEncrypt( $this->appointment_token, 'approve' ) ) ) : '',
             'booking_number' => $this->booking_number,
@@ -208,6 +211,7 @@ class Codes extends Order\Codes
             'service_image' => $service_image,
             'service_price' => Utils\Price::format( $this->service_price ),
             'service_duration' => Utils\DateTime::secondsToInterval( $this->service_duration ),
+            'total_duration' => Utils\DateTime::secondsToInterval( $this->service_duration + ( $this->extras_duration ?: 0 ) ),
             'staff_email' => $this->staff_email,
             'staff_info' => $format === 'html' && $this->staff_info ? nl2br( $this->staff_info ) : $this->staff_info,
             'staff_name' => $this->staff_name,

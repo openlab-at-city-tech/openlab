@@ -47,7 +47,7 @@ jQuery(function($) {
     Ladda.bind('button[type=submit]', {timeout: 2000});
 
     // Customers tab.
-    $.each($.fn.intlTelInput.getCountryData(), function(index, value) {
+    $.each(window.intlTelInputGlobals.getCountryData(), function (index, value) {
         $defaultCountry.append('<option value="' + value.iso2 + '" data-code="' + value.dialCode + '">' + value.name + ' +' + value.dialCode + '</option>');
     });
     $defaultCountry.val(BooklyL10n.default_country);
@@ -239,7 +239,6 @@ jQuery(function($) {
         $('.bookly-paypal-ps').toggle(this.value == 'ps');
         $('.bookly-paypal-checkout').toggle(this.value == 'checkout');
         $('.bookly-paypal').toggle(this.value != '0');
-        $('#bookly_paypal_timeout').closest('.form-group').toggle(this.value != 'ec');
     }).change();
 
     $('#bookly-payments-reset').on('click', function(event) {
@@ -266,14 +265,16 @@ jQuery(function($) {
     });
 
     function addCloudStripeMetadata(name, value) {
-        $cloudStripeMetadata.append(
-            $('#bookly-stripe-metadata-template').clone()
-                .find('.bookly-js-meta-name').attr('name', 'bookly_cloud_stripe_meta_name[]').end()
-                .find('.bookly-js-meta-value').attr('name', 'bookly_cloud_stripe_meta_value[]').end()
-                .show().html()
-                .replace(/{{name}}/g, name)
-                .replace(/{{value}}/g, value)
-        );
+        if ($cloudStripeMetadata.length > 0) {
+            $cloudStripeMetadata.append(
+                $('#bookly-stripe-metadata-template').clone()
+                    .find('.bookly-js-meta-name').attr('name', 'bookly_cloud_stripe_meta_name[]').end()
+                    .find('.bookly-js-meta-value').attr('name', 'bookly_cloud_stripe_meta_value[]').end()
+                    .show().html()
+                    .replace(/{{name}}/g, name)
+                    .replace(/{{value}}/g, value)
+            );
+        }
     }
 
     // URL tab.
@@ -355,7 +356,7 @@ jQuery(function($) {
                 dataType: 'json',
                 success: function() {
                     ladda.stop();
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 }
             });
         }
@@ -467,18 +468,14 @@ jQuery(function($) {
         dt.columns.adjust().responsive.recalc();
     });
 
-    $logsDateFilter.on('apply.daterangepicker', function() {
+    function onChangeFilter() {
         dt.ajax.reload();
-    });
-    $logsTarget.on('keyup', function() {
-        dt.ajax.reload()
-    });
-    $logsAction.on('change', function() {
-        dt.ajax.reload()
-    });
-    $logsSearch.on('keyup', function() {
-        dt.ajax.reload()
-    })
+    }
+
+    $logsDateFilter.on('apply.daterangepicker', onChangeFilter);
+    $logsTarget.on('keyup', onChangeFilter);
+    $logsAction.on('change', onChangeFilter);
+    $logsSearch.on('keyup', onChangeFilter)
         .on('keydown', function(e) {
             if (e.keyCode == 13) {
                 e.preventDefault();

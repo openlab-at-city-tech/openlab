@@ -1,7 +1,8 @@
 jQuery(function ($) {
-    let $modal        = $('#bookly-contact-us-modal'),
+    let $modal = $('#bookly-contact-us-modal'),
         $btnContactUs = $('#bookly-contact-us-btn'),
-        $btnFeedback  = $('#bookly-feedback-btn'),
+        $btnFeedback = $('#bookly-feedback-btn'),
+        $notices = $('#bookly-alert-notices'),
         popoverConfig = {
             html: true,
             sanitize: false,
@@ -16,9 +17,9 @@ jQuery(function ($) {
             .on('click', function () {
                 $btnContactUs.booklyPopover('hide');
                 $.ajax({
-                    url  : ajaxurl,
-                    type : 'POST',
-                    data : { action : 'bookly_contact_us_btn_clicked', csrf_token : BooklySupportL10n.csrfToken }
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {action : 'bookly_contact_us_btn_clicked', csrf_token: BooklyL10nGlobal.csrf_token }
                 });
             })
             .booklyPopover($.extend({
@@ -32,7 +33,7 @@ jQuery(function ($) {
                                 type: 'POST',
                                 data: {
                                     action: 'bookly_dismiss_contact_us_notice',
-                                    csrf_token: BooklySupportL10n.csrfToken
+                                    csrf_token: BooklyL10nGlobal.csrf_token
                                 },
                                 success: function (response) {
                                     $btnContactUs.attr('data-processed', true);
@@ -52,9 +53,9 @@ jQuery(function ($) {
             .on('click', function () {
                 $btnFeedback.booklyPopover('hide');
                 $.ajax({
-                    url  : ajaxurl,
-                    type : 'POST',
-                    data : { action : 'bookly_dismiss_feedback_notice', csrf_token : BooklySupportL10n.csrfToken }
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {action: 'bookly_dismiss_feedback_notice', csrf_token: BooklyL10nGlobal.csrf_token}
                 });
             })
             .booklyPopover($.extend({
@@ -65,9 +66,9 @@ jQuery(function ($) {
                         .find('button').on('click', function () {
                         $btnFeedback.booklyPopover('hide');
                         $.ajax({
-                            url  : ajaxurl,
-                            type : 'POST',
-                            data : { action : 'bookly_dismiss_feedback_notice', csrf_token : BooklySupportL10n.csrfToken }
+                            url: ajaxurl,
+                            type: 'POST',
+                            data: {action : 'bookly_dismiss_feedback_notice', csrf_token : BooklyL10nGlobal.csrf_token }
                         });
                     });
 
@@ -79,9 +80,9 @@ jQuery(function ($) {
     }
 
     $('#bookly-support-send').on('click', function () {
-        var $name  = $('#bookly-support-name'),
+        var $name = $('#bookly-support-name'),
             $email = $('#bookly-support-email'),
-            $msg   = $('#bookly-support-msg')
+            $msg = $('#bookly-support-msg')
         ;
 
         // Validation.
@@ -93,14 +94,14 @@ jQuery(function ($) {
             var ladda = Ladda.create(this);
             ladda.start();
             $.ajax({
-                url  : ajaxurl,
-                type : 'POST',
-                data : {
-                    action     : 'bookly_send_support_request',
-                    csrf_token : BooklySupportL10n.csrfToken,
-                    name       : $name.val(),
-                    email      : $email.val(),
-                    msg        : $msg.val()
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'bookly_send_support_request',
+                    csrf_token: BooklyL10nGlobal.csrf_token,
+                    name: $name.val(),
+                    email: $email.val(),
+                    msg: $msg.val()
                 },
                 dataType : 'json',
                 success  : function (response) {
@@ -136,7 +137,7 @@ jQuery(function ($) {
                 type: 'POST',
                 data: {
                     action: 'bookly_mark_read_all_messages',
-                    csrf_token: BooklySupportL10n.csrfToken
+                    csrf_token: BooklyL10nGlobal.csrf_token
                 },
                 dataType: 'json',
                 success: function (response) {
@@ -165,7 +166,7 @@ jQuery(function ($) {
                     type: 'POST',
                     data: {
                         action: 'bookly_dismiss_demo_site_description',
-                        csrf_token: BooklySupportL10n.csrfToken
+                        csrf_token: BooklyL10nGlobal.csrf_token
                     },
                     dataType: 'json',
                     success: function (response) {
@@ -188,7 +189,7 @@ jQuery(function ($) {
                     type: 'POST',
                     data: {
                         action: 'bookly_dismiss_feature_requests_description',
-                        csrf_token: BooklySupportL10n.csrfToken
+                        csrf_token: BooklyL10nGlobal.csrf_token
                     },
                     dataType: 'json',
                     success: function (response) {
@@ -201,4 +202,28 @@ jQuery(function ($) {
             $modal.booklyModal('hide');
             window.open(BooklySupportL10n.featuresRequestUrl, '_blank');
         });
+
+    $notices.booklyPopover({
+        html: true,
+        placement: function(tip) {
+            $(tip).css({maxWidth: '500px'});
+
+            return 'bottom';
+        },
+        container: '#bookly-tbs',
+        template: '<div class="bookly-popover" role="tooltip"><div class="popover-body"></div></div>',
+        content: function () {
+            let $txt_l1 = $('<span></span>'),
+                $txt_l2 = $('<span></span>'),
+                $content = $('<div class="mt-2"><br/><hr style="border-top-color: rgba(0,0,0,.1)"/></div>');
+            $txt_l1.text(BooklySupportL10n.capabilities);
+            $txt_l2.text(BooklySupportL10n.contact_with_admin);
+
+            $content.find('br:first').before($txt_l1);
+            $content.find('hr').after($txt_l2);
+
+            return $content.get(0);
+        },
+        trigger: 'hover'
+    });
 });

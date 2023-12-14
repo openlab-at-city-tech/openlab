@@ -68,9 +68,6 @@ use Bookly\Lib\Config;
                                 </div>
                             </form>
                         <?php endif ?>
-                        <form class="bookly-card-form bookly-clear-bottom" style="display: none;">
-                            <?php Proxy\Shared::renderGatewayOptions( $slug ) ?>
-                        </form>
                     </div>
                 <?php endforeach ?>
             </div>

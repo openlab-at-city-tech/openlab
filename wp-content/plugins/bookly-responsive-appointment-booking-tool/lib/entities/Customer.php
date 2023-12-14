@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Customer
- *
- * @package Bookly\Lib\Entities
- */
 class Customer extends Lib\Base\Entity
 {
     const REMOTE_LIMIT = 100;
@@ -43,6 +38,8 @@ class Customer extends Lib\Base\Entity
     /** @var string */
     protected $additional_address = '';
     /** @var string */
+    protected $full_address = '';
+    /** @var string */
     protected $notes = '';
     /** @var string */
     protected $birthday;
@@ -75,6 +72,7 @@ class Customer extends Lib\Base\Entity
         'street' => array( 'format' => '%s' ),
         'street_number' => array( 'format' => '%s' ),
         'additional_address' => array( 'format' => '%s' ),
+        'full_address' => array( 'format' => '%s' ),
         'notes' => array( 'format' => '%s' ),
         'info_fields' => array( 'format' => '%s' ),
         'stripe_account' => array( 'format' => '%s' ),
@@ -661,7 +659,26 @@ class Customer extends Lib\Base\Entity
             'street' => $this->getStreet(),
             'street_number' => $this->getStreetNumber(),
             'additional_address' => $this->getAdditionalAddress(),
+            'full_address' => $this->getFullAddress(),
         ) );
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullAddress()
+    {
+        return $this->full_address;
+    }
+
+    /**
+     * @param string $full_address
+     */
+    public function setFullAddress( $full_address )
+    {
+        $this->full_address = $full_address;
+
+        return $this;
     }
 
     /**************************************************************************

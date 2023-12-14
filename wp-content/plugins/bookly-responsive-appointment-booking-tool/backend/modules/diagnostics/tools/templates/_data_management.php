@@ -27,22 +27,20 @@ $tables = array( 'appointments' => false, 'payments' => false, 'files' => true, 
         </form>
     </div>
     <div class="col-auto">
-        <form id="bookly_import" action="<?php echo admin_url( 'admin-ajax.php?action=bookly_import_data' ) ?>" method="POST" enctype="multipart/form-data">
-            <?php Inputs::renderCsrf() ?>
-            <div class="input-group">
-                <div class="btn btn-primary btn-file" style="border-top-right-radius: unset; border-bottom-right-radius: unset;">
-                    <span class="ladda-label">Import data</span>
-                    <input type="file" id="bookly_import_file" name="import" class="w-100">
-                </div>
-                <div class="input-group-append" style="border-left: 1px solid white;">
-                    <button type="button" class="btn btn-primary bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                    <div class="bookly-dropdown-menu overflow-hidden bookly-js-tables-dropdown">
-                        <div class="px-3 py-2">
-                            <?php Inputs::renderCheckBox( 'Safe import', null, true, array( 'name' => 'safe' ) ) ?>
-                        </div>
+        <div class="input-group">
+            <div class="btn btn-primary btn-file" style="border-top-right-radius: unset; border-bottom-right-radius: unset;">
+                <span class="bookly-js-text">Import data</span>
+                <span class="spinner-border spinner-border-sm bookly-js-spinner" style="display: none"></span>
+                <input type="file" id="bookly_import_file" name="import" class="w-100">
+            </div>
+            <div class="input-group-append" style="border-left: 1px solid white;">
+                <button type="button" class="btn btn-primary bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                <div class="bookly-dropdown-menu overflow-hidden bookly-js-tables-dropdown">
+                    <div class="px-3 py-2">
+                        <?php Inputs::renderCheckBox( 'Safe import', null, true, array( 'name' => 'safe' ) ) ?>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>

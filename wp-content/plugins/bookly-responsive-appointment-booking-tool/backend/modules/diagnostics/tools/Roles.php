@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
-/**
- * Class Roles
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class Roles extends Tool
 {
     protected $slug = 'roles';

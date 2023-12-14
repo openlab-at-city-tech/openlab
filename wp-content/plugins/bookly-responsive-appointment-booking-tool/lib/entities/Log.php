@@ -3,10 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Appointment
- * @package Bookly\Lib\Entities
- */
 class Log extends Lib\Base\Entity
 {
     /** @var string */

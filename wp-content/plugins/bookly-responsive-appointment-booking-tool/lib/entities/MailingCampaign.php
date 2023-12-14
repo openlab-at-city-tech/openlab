@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class MailingCampaign
- *
- * @package Bookly\Lib\Entities
- */
 class MailingCampaign extends Lib\Base\Entity
 {
     const STATE_PENDING = 'pending';

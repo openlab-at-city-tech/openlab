@@ -3,10 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class ScheduleItemBreak
- * @package Bookly\Lib\Entities
- */
 class ScheduleItemBreak extends Lib\Base\Entity
 {
     /** @var  int */

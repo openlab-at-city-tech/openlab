@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Schedule;
 
 use Bookly\Lib;
 
-/**
- * Class Component
- * @package Bookly\Backend\Components\Schedule
- */
 class Component extends Lib\Base\Component implements \Iterator
 {
     /** @var array */

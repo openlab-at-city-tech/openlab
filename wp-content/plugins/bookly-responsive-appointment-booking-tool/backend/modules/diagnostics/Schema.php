@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics;
 
-/**
- * Class Schema
- *
- * @package Bookly\Backend\Modules\Diagnostics\Lib
- */
 class Schema
 {
     /** @var string MySQL | MariaDB | Percona | ? */

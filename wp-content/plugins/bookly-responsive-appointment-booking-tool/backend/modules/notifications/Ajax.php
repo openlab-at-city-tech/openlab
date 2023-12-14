@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Notifications;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Modules\Notifications
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

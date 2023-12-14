@@ -11,10 +11,6 @@ use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Cart\Proxy;
 
-/**
- * Class Sender
- * @package Bookly\Lib\Notifications\Instant\Backend
- */
 abstract class Sender extends BaseSender
 {
     /**

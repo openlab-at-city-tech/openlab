@@ -4,9 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Lib\Base\Cache;
 
 /**
- * Class Session
- *
- * @package Bookly\Lib
  * @method static mixed get( $name, $default = null )
  * @method static void  set( $name, $value )
  * @method static bool  has( $name )

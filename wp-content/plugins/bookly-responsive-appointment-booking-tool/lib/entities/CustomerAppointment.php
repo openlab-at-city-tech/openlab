@@ -4,11 +4,6 @@ namespace Bookly\Lib\Entities;
 use Bookly\Lib;
 use Bookly\Lib\DataHolders\Booking;
 
-/**
- * Class CustomerAppointment
- *
- * @package Bookly\Lib\Entities
- */
 class CustomerAppointment extends Lib\Base\Entity
 {
     const STATUS_PENDING    = 'pending';
@@ -146,7 +141,8 @@ class CustomerAppointment extends Lib\Base\Entity
                 Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
                 // Waiting list.
                 Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
-                Lib\Proxy\WaitingList::handleFreePlace( false, $this );
+
+                Lib\Proxy\WaitingList::handleAppointmentFreePlace( false, $appointment );
             }
             if ( $compound_collaborative ) {
                 /** @var CustomerAppointment[] $ca_list */
@@ -239,7 +235,7 @@ class CustomerAppointment extends Lib\Base\Entity
                             // Waiting list.
                             Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
 
-                            Lib\Proxy\WaitingList::handleFreePlace( false, $i->getCA() );
+                            Lib\Proxy\WaitingList::handleAppointmentFreePlace( false, $appointment );
                         }
                     }
                 }

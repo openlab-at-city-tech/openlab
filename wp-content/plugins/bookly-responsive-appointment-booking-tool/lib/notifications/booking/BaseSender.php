@@ -10,10 +10,6 @@ use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Base;
 use Bookly\Lib\Notifications\WPML;
 
-/**
- * Class BaseSender
- * @package Bookly\Lib\Notifications\Base
- */
 abstract class BaseSender extends Base\Sender
 {
     /**

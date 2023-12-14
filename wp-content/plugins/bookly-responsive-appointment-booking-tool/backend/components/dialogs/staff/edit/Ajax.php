@@ -3,14 +3,8 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Edit;
 
 use Bookly\Backend\Components\Schedule\BreakItem;
 use Bookly\Backend\Components\Schedule\Component as ScheduleComponent;
-use Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Components\Dialogs\Staff\Edit
- */
 class Ajax extends Lib\Base\Ajax
 {
     /** @var Lib\Entities\Staff */
@@ -278,7 +272,7 @@ class Ajax extends Lib\Base\Ajax
             $break = new BreakItem( $schedule_item_break->getId(), $schedule_item_break->getStartTime(), $schedule_item_break->getEndTime() );
             wp_send_json_success( array(
                 'html' => $break->render( false ),
-                'interval' => $break->getFormatedInterval(),
+                'interval' => $break->getFormattedInterval(),
             ) );
         } else {
             wp_send_json_error( array( 'message' => __( 'Error adding the break interval', 'bookly' ), ) );

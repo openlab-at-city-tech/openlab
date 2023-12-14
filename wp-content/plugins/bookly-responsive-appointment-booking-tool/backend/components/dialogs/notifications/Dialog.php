@@ -6,10 +6,6 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog as SmsDialog;
 use Bookly\Backend\Modules\Notifications\Lib\Codes;
 use Bookly\Lib\Entities\Notification;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Notifications
- */
 class Dialog extends SmsDialog
 {
     /**

@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class Query
- * @package Bookly\Lib
- */
 class Query
 {
     // Query type.
@@ -76,6 +72,9 @@ class Query
 
     /** @var array */
     protected $schema;
+
+    /** @var array */
+    protected $unions = array();
 
     /**
      * Constructor.
@@ -216,6 +215,19 @@ class Query
     public function joinSelect( Query $query, $alias, $on, $join = null )
     {
         return $this->joinRaw( $query, $alias, $on, $join );
+    }
+
+    /**
+     * Add UNION query
+     *
+     * @param Query $query
+     * @return $this
+     */
+    public function union( Query $query )
+    {
+        $this->unions[] = $query;
+
+        return $this;
     }
 
     /**
@@ -766,6 +778,15 @@ class Query
         $limit  = '';
         $offset = '';
         $values = array();
+        $unions = array();
+
+        if ( $this->unions ) {
+            $this->sortBy( null );
+            foreach ( $this->unions as $union ) {
+                $union->sortBy( null );
+                $unions[] = $union->composeQuery( $only_count );
+            }
+        }
 
         // Join.
         foreach ( $this->joins as $alias => $t ) {
@@ -958,19 +979,23 @@ class Query
             $offset = ' OFFSET ' . $this->offset;
         }
 
+        $union_sql = $unions
+            ? ' UNION ' . implode( ' UNION ', $unions )
+            : '';
+
         // Query
         if ( $only_count ) {
-            return $this->_prepare( "SELECT COUNT(*) FROM `{$table}` AS `{$this->alias}`{$join}{$where}{$group}{$having}", $values );
+            return $this->_prepare( "SELECT COUNT(*) FROM `{$table}` AS `{$this->alias}`{$join}{$where}{$group}{$having}{$union_sql}", $values );
         }
 
         switch ( $this->type ) {
             case self::TYPE_DELETE:
-                return $this->_prepare( "DELETE {$this->target} FROM `{$table}` AS `{$this->alias}`{$join}{$where}", $values );
+                return $this->_prepare( "DELETE {$this->target} FROM `{$table}` AS `{$this->alias}`{$join}{$where}", $values ) . $union_sql;
             case self::TYPE_UPDATE:
-                return $this->_prepare( "UPDATE `{$table}` AS `{$this->alias}`{$join} SET {$set}{$where}", $values );
+                return $this->_prepare( "UPDATE `{$table}` AS `{$this->alias}`{$join} SET {$set}{$where}", $values ) . $union_sql;
             case self::TYPE_SELECT:
             default:
-                return $this->_prepare( "SELECT {$this->target} FROM `{$table}` AS `{$this->alias}`{$join}{$where}{$group}{$having}{$order}{$limit}{$offset}", $values );
+                return $this->_prepare( "SELECT {$this->target} FROM `{$table}` AS `{$this->alias}`{$join}{$where}{$group}{$having}{$order}{$limit}{$offset}", $values ) . $union_sql;
         }
     }
 

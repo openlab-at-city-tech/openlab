@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Notifications;
 
 use Bookly\Lib;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\Notifications
- */
 class Page extends Lib\Base\Component
 {
     /**

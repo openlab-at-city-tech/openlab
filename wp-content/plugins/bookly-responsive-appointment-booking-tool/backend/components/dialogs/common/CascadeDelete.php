@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Common;
 
 use Bookly\Lib;
 
-/**
- * Class CascadeDelete
- * @package Bookly\Backend\Components\Dialogs\Common
- */
 class CascadeDelete extends Lib\Base\Component
 {
     /**

@@ -27,6 +27,10 @@ if ( Config::customerGroupsActive() ) {
             <?php Ace\Editor::render( 'bookly-placeholders', 'bookly-ics-staff-editor', Codes::getJson( 'ics_for_staff' ), get_option( 'bookly_ics_staff_template', '' ), 'bookly-ace-editor-h80' ) ?>
             <input type="hidden" name="bookly_ics_staff_template" value="<?php echo esc_attr( get_option( 'bookly_ics_staff_template', '' ) ) ?>"/>
         </div>
+        <?php Selects::renderSingle( 'bookly_appointment_end_date_method', __( 'The value returned by {appointment_end_date} placeholder', 'bookly' ), __( 'Choose \'Accurate date\' if you want the {appointment_end_date} placeholder to return the exact end date of the appointment. Select \'+1 day\' if you prefer the placeholder to include an additional day in the end date calculation. Please note that this setting will affect only appointments with a duration longer or equal to one day.', 'bookly' ), array(
+            array( 'default', __( '+1 day', 'bookly' ) ),
+            array( 'accurate', __( 'Accurate date', 'bookly' ) ),
+        ) ) ?>
     </div>
 
     <div class="card-footer bg-transparent d-flex justify-content-end">

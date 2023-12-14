@@ -3,11 +3,6 @@ namespace Bookly\Backend\Modules\CloudSms;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\CloudSms
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -26,11 +21,19 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getSmsList()
     {
-        $dates = explode( ' - ', self::parameter( 'range' ), 2 );
-        $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
-        $end = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        $filter = self::parameter( 'filter' );
+        $dates = explode( ' - ', $filter['range'], 2 );
+        $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
+        $end_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
 
-        wp_send_json( Lib\Cloud\API::getInstance()->sms->getSmsList( $start, $end ) );
+        $filter = compact( 'start_date', 'end_date' );
+        $length = self::parameter( 'length' );
+        $start = self::parameter( 'start' );
+
+        $data = Lib\Cloud\API::getInstance()->sms->getSmsList( $start, $length, $filter );
+        $data['draw'] = (int) self::parameter( 'draw' );
+
+        wp_send_json( $data );
     }
 
     /**
@@ -243,7 +246,7 @@ class Ajax extends Lib\Base\Ajax
     {
         global $wpdb;
 
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_LISTS );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
         $limits = array(
@@ -279,7 +282,7 @@ class Ajax extends Lib\Base\Ajax
             }
             if ( ! empty( $search_columns ) ) {
                 $query->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) );
-                $filtered = Lib\Entities\MailingList::query()->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) )->count();
+                $filtered = Lib\Entities\MailingList::query( 'm' )->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) )->count();
             }
         }
 
@@ -308,7 +311,7 @@ class Ajax extends Lib\Base\Ajax
     {
         global $wpdb;
 
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_RECIPIENTS_LIST );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
         $limits = array(
@@ -401,7 +404,7 @@ class Ajax extends Lib\Base\Ajax
     {
         global $wpdb;
 
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_CAMPAIGNS );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
         $limits = array(

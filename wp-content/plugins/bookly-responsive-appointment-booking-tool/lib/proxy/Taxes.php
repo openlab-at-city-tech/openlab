@@ -5,9 +5,6 @@ use Bookly\Lib;
 use Bookly\Lib\CartItem;
 
 /**
- * Class Taxes
- * @package Bookly\Lib\Proxy
- *
  * @method static void  addBooklyMenuItem() Add 'Taxes' to Bookly menu.
  * @method static float getItemTaxAmount( CartItem $cart_item ) Get amount of tax.
  * @method static float getServiceTaxAmount( CartItem $cart_item  ) Get amount of tax for services without extras

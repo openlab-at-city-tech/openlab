@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Schedule;
 
 use Bookly\Lib;
 
-/**
- * Class Select
- * @package Bookly\Backend\Components\Schedule
- */
 class Select
 {
     /** @var array */

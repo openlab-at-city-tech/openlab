@@ -28,7 +28,7 @@ use Bookly\Lib\Config;
             <div class="form-row">
                 <div class="col-md-1">
                     <div class="form-group">
-                        <input class="form-control" type="text" id="bookly-filter-id" placeholder="<?php esc_attr_e( 'No.', 'bookly' ) ?>"/>
+                        <input class="form-control" type="text" id="bookly-filter-id" placeholder="<?php esc_attr_e( 'ID', 'bookly' ) ?>"/>
                     </div>
                 </div>
                 <div class="col-md-2">

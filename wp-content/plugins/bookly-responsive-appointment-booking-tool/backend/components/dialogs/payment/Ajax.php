@@ -3,11 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Payment;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Components\Dialogs\Payment
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -52,7 +47,7 @@ class Ajax extends Lib\Base\Ajax
                 $show_deposit = Lib\Config::depositPaymentsActive();
                 if ( ! $show_deposit ) {
                     foreach ( $data['payment']['items'] as $item ) {
-                        if ( isset( $item['deposit_format'] ) ) {
+                        if ( array_key_exists( 'deposit_format', $item ) && $item['deposit_format'] ) {
                             $show_deposit = true;
                             break;
                         }
@@ -72,7 +67,7 @@ class Ajax extends Lib\Base\Ajax
                         || get_option( 'bookly_cloud_stripe_addition' ) != 0;
                     break;
                 default:
-                    $price_correction = \Bookly\Backend\Modules\Payments\Proxy\Shared::paymentSpecificPriceExists( $data['payment']['type'] ) === true;
+                    $price_correction = Lib\Payment\Proxy\Shared::paymentSpecificPriceExists( $data['payment']['type'] ) === true;
                     break;
             }
 
@@ -92,7 +87,7 @@ class Ajax extends Lib\Base\Ajax
             ) {
                 $data['payment']['order_link'] = admin_url( 'post.php?action=edit&post=' . $data['payment']['gateway_ref_id'] );
             }
-            $data['refundable'] = $payment->getRefId() && $payment->getType() == Lib\Entities\Payment::TYPE_CLOUD_STRIPE && $payment->getStatus() != Lib\Entities\Payment::STATUS_REFUNDED;
+            $data['refundable'] = $payment->getRefId() && $payment->getType() === Lib\Entities\Payment::TYPE_CLOUD_STRIPE && $payment->getStatus() === Lib\Entities\Payment::STATUS_COMPLETED;
             foreach ( $data['payment']['items'] as &$item ) {
                 if ( isset( $item['units'], $item['duration'] ) && $item['units'] > 1 ) {
                     $item['service_name'] .= ' (' . Lib\Utils\DateTime::secondsToInterval( $item['units'] * $item['duration'] ) . ')';
@@ -112,12 +107,13 @@ class Ajax extends Lib\Base\Ajax
     public static function completePayment()
     {
         $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
-        $details = json_decode( $payment->getDetails(), true );
-        $details['tax_paid'] = $payment->getTax();
+        $details = $payment->getDetailsData();
+        $details->setData(
+            array( 'tax_paid' => $payment->getTax() )
+        );
         $payment
             ->setPaid( $payment->getTotal() )
             ->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )
-            ->setDetails( json_encode( $details ) )
             ->save();
 
         $payment_title = Lib\Utils\Price::format( $payment->getPaid() );

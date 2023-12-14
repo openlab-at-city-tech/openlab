@@ -3,11 +3,6 @@ namespace Bookly\Lib\Utils;
 
 use Bookly\Lib;
 
-/**
- * Class Common
- *
- * @package Bookly\Lib\Utils
- */
 abstract class Common extends Lib\Base\Cache
 {
     /** @var string CSRF token */
@@ -63,9 +58,7 @@ abstract class Common extends Lib\Base\Cache
     public static function cancelAppointmentRedirect( $allow )
     {
         if ( $url = $allow ? get_option( 'bookly_url_cancel_page_url' ) : get_option( 'bookly_url_cancel_denied_page_url' ) ) {
-            wp_redirect( $url );
             self::redirect( $url );
-            exit;
         }
 
         $url = home_url();
@@ -75,9 +68,8 @@ abstract class Common extends Lib\Base\Cache
                 $url = $_SERVER['HTTP_REFERER'];
             }
         }
-        wp_redirect( $url );
+
         self::redirect( $url );
-        exit;
     }
 
     /**
@@ -87,6 +79,7 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function redirect( $url )
     {
+        wp_redirect( $url );
         printf( '<!doctype html>
                 <html>
                 <head>
@@ -106,6 +99,7 @@ abstract class Common extends Lib\Base\Cache
             __( 'Page Redirection', 'bookly' ),
             sprintf( __( 'If you are not redirected automatically, follow the <a href="%s">link</a>.', 'bookly' ), esc_attr( $url ) )
         );
+        exit ( 0 );
     }
 
     /**
@@ -808,5 +802,18 @@ abstract class Common extends Lib\Base\Cache
         return $url
             ? sprintf( '<img src="%s" alt="%s" />', esc_attr( $url ), esc_attr( $alt ) )
             : '';
+    }
+
+    /**
+     * @param int $response_code
+     * @return void
+     */
+    public static function emptyResponse( $response_code )
+    {
+        if ( ! headers_sent() ) {
+            header( 'Content-Type: text/html; charset=utf-8' );
+            http_response_code( $response_code );
+        }
+        exit;
     }
 }

@@ -3,10 +3,6 @@ namespace Bookly\Lib\Base;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Lib\Base
- */
 abstract class Ajax extends Component
 {
     /**

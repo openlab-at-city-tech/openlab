@@ -4,10 +4,6 @@ namespace Bookly\Frontend\Modules\Zapier;
 use Bookly\Lib;
 use Bookly\Lib\Entities\Customer;
 
-/**
- * Class Ajax
- * @package Bookly\Frontend\Modules\Zapier
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -144,7 +140,9 @@ class Ajax extends Lib\Base\Ajax
             if ( $appointment['payment_id'] === null ) {
                 $total = 0;
                 if ( $appointment['order_id'] === null ) {
-                    $total = Lib\DataHolders\Booking\Simple::create( Lib\Entities\CustomerAppointment::find( $appointment['ca_id'] ) )->getTotalPrice();
+                    if ( $appointment['ca_id'] ) {
+                        $total = Lib\DataHolders\Booking\Simple::create( Lib\Entities\CustomerAppointment::find( $appointment['ca_id'] ) )->getTotalPrice();
+                    }
                 } else {
                     foreach ( Lib\DataHolders\Booking\Order::createFromOrderId( $appointment['order_id'] )->getItems() as $item ) {
                         $total += $item->getTotalPrice();
@@ -159,8 +157,8 @@ class Ajax extends Lib\Base\Ajax
             }
 
             // Date time
-            $appointment['start_date']  = Lib\Slots\DatePoint::fromStr( $appointment['start_date'] )->format( 'Y-m-d\TH:i:sO' );
-            $appointment['end_date']    = Lib\Slots\DatePoint::fromStr( $appointment['end_date'] )->format( 'Y-m-d\TH:i:sO' );
+            $appointment['start_date'] = $appointment['start_date'] ? Lib\Slots\DatePoint::fromStr( $appointment['start_date'] )->format( 'Y-m-d\TH:i:sO' ) : null;
+            $appointment['end_date'] = $appointment['end_date'] ? Lib\Slots\DatePoint::fromStr( $appointment['end_date'] )->format( 'Y-m-d\TH:i:sO' ) : null;
             $appointment['updated_at']  = Lib\Slots\DatePoint::fromStr( $appointment['updated_at'] )->format( 'Y-m-d\TH:i:sO' );
 
             $customer = new Customer();
@@ -175,7 +173,7 @@ class Ajax extends Lib\Base\Ajax
             $appointment['custom_fields']    = implode( '; ', $custom_fields );
             $appointment['extras']           = implode( '; ', $extras );
 
-            unset( $appointment['extras_multiply_nop'], $appointment['extras_multiply_nop'], $appointment['time_zone'], $appointment['time_zone_offset'], $appointment['online_meeting_provider'], $appointment['online_meeting_id'], $appointment['online_meeting_data'], $appointment['ca_id'], $appointment['order_id'] );
+            unset( $appointment['extras_multiply_nop'], $appointment['time_zone'], $appointment['time_zone_offset'], $appointment['online_meeting_provider'], $appointment['online_meeting_id'], $appointment['online_meeting_data'], $appointment['ca_id'], $appointment['order_id'] );
         }
 
         return $appointments;
@@ -194,12 +192,12 @@ class Ajax extends Lib\Base\Ajax
         switch ( $records ) {
             case 'new':
                 $query
-                    ->select( 'CONCAT(ca.id,\'-\',UNIX_TIMESTAMP(ca.created_at)) AS id' )
+                    ->select( 'CONCAT(COALESCE(ca.id,a.id),\'-\',UNIX_TIMESTAMP(ca.created_at)) AS id' )
                     ->whereGte( 'ca.created_at', $date );
                 break;
             case 'new_or_updated':
                 $query
-                    ->select( 'CONCAT(ca.id,\'-\',UNIX_TIMESTAMP(GREATEST(ca.updated_at,a.updated_at,COALESCE(p.updated_at,0)))) AS id' )
+                    ->select( 'CONCAT(COALESCE(ca.id,a.id),\'-\',UNIX_TIMESTAMP(GREATEST(COALESCE(ca.updated_at,0),a.updated_at,COALESCE(p.updated_at,0)))) AS id' )
                     ->whereRaw(
                         'ca.updated_at >= \'%s\' 
                         OR a.updated_at >= \'%s\'
@@ -209,7 +207,7 @@ class Ajax extends Lib\Base\Ajax
                 break;
             case 'updated':
                 $query
-                    ->select( 'CONCAT(ca.id,\'-\',UNIX_TIMESTAMP(GREATEST(ca.updated_at,a.updated_at,COALESCE(p.updated_at,0)))) AS id' )
+                    ->select( 'CONCAT(COALESCE(ca.id,a.id),\'-\',UNIX_TIMESTAMP(GREATEST(COALESCE(ca.updated_at,0),a.updated_at,COALESCE(p.updated_at,0)))) AS id' )
                     ->whereRaw(
                         '(ca.updated_at > ca.created_at AND ca.updated_at >= \'%s\') 
                         OR (a.updated_at > a.created_at AND a.updated_at >= \'%s\')
@@ -238,7 +236,7 @@ class Ajax extends Lib\Base\Ajax
             ct.name AS category_name,
             c.full_name AS client_name, c.first_name AS client_first_name, c.last_name AS client_last_name, c.phone AS client_phone, c.email AS client_email,
             p.total, p.type AS payment_gateway, p.status AS payment_status, p.paid, p.id AS payment_id,
-            GREATEST(ca.updated_at,a.updated_at,COALESCE(p.updated_at,0)) AS updated_at' )
+            GREATEST(COALESCE(ca.updated_at,0),a.updated_at,COALESCE(p.updated_at,0)) AS updated_at' )
         ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
         ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
         ->leftJoin( 'Payment', 'p', 'p.id = ca.payment_id' )
@@ -246,7 +244,7 @@ class Ajax extends Lib\Base\Ajax
         ->leftJoin( 'Category', 'ct', 'ct.id = s.category_id' )
         ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
         ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id' )
-        ->groupBy( 'a.id' )
+        ->groupBy( 'ca.id' )
         ->sortBy( 'updated_at' )
         ->order( 'DESC' );
 

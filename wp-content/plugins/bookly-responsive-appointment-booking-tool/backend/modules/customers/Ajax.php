@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Customers;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Modules\Customers
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -27,7 +23,7 @@ class Ajax extends Lib\Base\Ajax
     {
         global $wpdb;
 
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::CUSTOMERS );
         $order   = self::parameter( 'order', array() );
         $filter  = self::parameter( 'filter' );
 
@@ -261,6 +257,9 @@ class Ajax extends Lib\Base\Ajax
                 }
                 if ( $target_customer->getAdditionalAddress() == '' ) {
                     $target_customer->setAdditionalAddress( $customer->getAdditionalAddress() );
+                }
+                if ( $target_customer->getFullAddress() == '' ) {
+                    $target_customer->setFullAddress( $customer->getFullAddress() );
                 }
                 if ( $target_customer->getNotes() == '' ) {
                     $target_customer->setNotes( $customer->getNotes() );

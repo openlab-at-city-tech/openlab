@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Frontend\Modules\Cron;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Frontend\Modules\Cron
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

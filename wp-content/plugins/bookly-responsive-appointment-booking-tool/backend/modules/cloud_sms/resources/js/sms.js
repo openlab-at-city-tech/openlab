@@ -92,6 +92,7 @@ jQuery(function($) {
             campaign_in_progress = $('<span/>', {class: 'badge badge-primary', text: BooklyL10n.campaign.in_progress})[0].outerHTML,
             campaign_completed = $('<span/>', {class: 'badge badge-success', text: BooklyL10n.campaign.completed})[0].outerHTML,
             campaign_canceled = $('<span/>', {class: 'badge badge-secondary', text: BooklyL10n.campaign.canceled})[0].outerHTML,
+            campaign_waiting = $('<span/>', {class: 'badge badge-info', text: BooklyL10n.campaign.waiting})[0].outerHTML,
             dt;
 
         /**
@@ -107,7 +108,7 @@ jQuery(function($) {
                             render: function(data, type, row, meta) {
                                 switch (data) {
                                     case 'pending':
-                                        return campaign_pending;
+                                        return row.send_at === null ? campaign_waiting : campaign_pending;
                                     case 'in-progress':
                                         return campaign_in_progress;
                                     case 'completed':
@@ -125,7 +126,7 @@ jQuery(function($) {
                             data: column,
                             className: 'align-middle',
                             render: function(data, type, row, meta) {
-                                return moment(data).format(BooklyL10n.moment_format_date_time);
+                                return data === null ? BooklyL10n.manual : moment(data).format(BooklyL10n.moment_format_date_time);
                             }
                         });
                         break;
@@ -147,9 +148,12 @@ jQuery(function($) {
             data: null,
             responsivePriority: 1,
             orderable: false,
-            className: "text-right",
+            className: 'text-right',
             render: function(data, type, row, meta) {
-                return '<button type="button" class="btn btn-default"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
+                let buttons = '<div class="d-inline-flex">';
+                buttons += row.send_at === null && row.state === 'pending' ? '<button type="button" class="btn btn-default bookly-js-campaign-run mr-1"><i class="fas fa-fw fa-play mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.run + '…</span></button>' : '';
+
+                return buttons + '<button type="button" class="btn btn-default bookly-js-campaign-edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button></div>';
             }
         });
         columns.push({
@@ -195,17 +199,27 @@ jQuery(function($) {
         $add_campaign
             .on('click', function() {
                 BooklyCampaignDialog.showDialog(null, function() {
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 });
             });
 
         /**
          * Edit campaign.
          */
-        $list.on('click', 'button', function() {
+        $list.on('click', 'button.bookly-js-campaign-edit', function () {
             let data = dt.row($(this).closest('td')).data();
-            BooklyCampaignDialog.showDialog(data.id, function() {
-                dt.ajax.reload();
+            BooklyCampaignDialog.showDialog(data.id, function () {
+                dt.ajax.reload(null, false);
+            })
+        });
+
+        /**
+         * Run campaign.
+         */
+        $list.on('click', 'button.bookly-js-campaign-run', function () {
+            let data = dt.row($(this).closest('td')).data();
+            BooklyCampaignDialog.runCampaign(data.id, function () {
+                dt.ajax.reload(null, false);
             })
         });
 
@@ -261,10 +275,11 @@ jQuery(function($) {
         /**
          * On filters change.
          */
+        function onChangeFilter() {
+            dt.ajax.reload();
+        }
         $filter
-            .on('keyup', function() {
-                dt.ajax.reload();
-            })
+            .on('keyup', onChangeFilter)
             .on('keydown', function(e) {
                 if (e.keyCode == 13) {
                     e.preventDefault();
@@ -287,7 +302,10 @@ jQuery(function($) {
                 columns: [],
                 order: [],
                 dt: null,
-                list_id: null
+                list_id: null,
+                onChangeFilter: function() {
+                    ml.dt.ajax.reload();
+                }
             },
             mr = {
                 $list: $('#bookly-recipients-list', $mr_container),
@@ -299,12 +317,15 @@ jQuery(function($) {
                 $list_name: $('#bookly-js-mailing-list-name', $mr_container),
                 dt: null,
                 $back: $('#bookly-js-show-mailing-list', $mr_container),
-                $add_recipients_button: $('#bookly-js-add-recipients', $mr_container)
+                $add_recipients_button: $('#bookly-js-add-recipients', $mr_container),
+                onChangeFilter: function() {
+                    mr.dt.ajax.reload();
+                }
             };
 
         mr.$add_recipients_button.on('click', function() {
             BooklyAddRecipientsDialog.showDialog(ml.list_id, function() {
-                mr.dt.ajax.reload();
+                mr.dt.ajax.reload(null, false);
             });
         });
 
@@ -340,7 +361,7 @@ jQuery(function($) {
             data: null,
             responsivePriority: 1,
             orderable: false,
-            className: "text-right",
+            className: 'text-right',
             render: function(data, type, row, meta) {
                 return '<button type="button" class="btn btn-default"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
             }
@@ -525,9 +546,7 @@ jQuery(function($) {
          * On filters change.
          */
         ml.$filter
-            .on('keyup', function() {
-                ml.dt.ajax.reload();
-            })
+            .on('keyup', ml.onChangeFilter)
             .on('keydown', function(e) {
                 if (e.keyCode == 13) {
                     e.preventDefault();
@@ -535,9 +554,7 @@ jQuery(function($) {
                 }
             });
         mr.$filter
-            .on('keyup', function() {
-                mr.dt.ajax.reload();
-            })
+            .on('keyup', mr.onChangeFilter)
             .on('keydown', function(e) {
                 if (e.keyCode == 13) {
                     e.preventDefault();
@@ -549,7 +566,7 @@ jQuery(function($) {
             if (view === 'mailing_lists') {
                 $mr_container.hide();
                 $ml_container.show();
-                ml.dt.ajax.reload();
+                ml.dt.ajax.reload(null, false);
             } else {
                 $ml_container.hide();
                 if (mr.dt === null) {
@@ -582,7 +599,7 @@ jQuery(function($) {
                         dom: '<\'row\'<\'col-sm-12\'tr>><\'row float-left mt-3\'<\'col-sm-12\'p>>',
                     });
                 } else {
-                    mr.dt.ajax.reload();
+                    mr.dt.ajax.reload(null, false);
                 }
                 $mr_container.show();
             }
@@ -646,21 +663,27 @@ jQuery(function($) {
         if (columns.length) {
             let dt = $('#bookly-sms').DataTable({
                 ordering: false,
-                paging: false,
                 info: false,
                 searching: false,
+                lengthChange: false,
                 processing: true,
                 responsive: true,
+                pageLength: 25,
+                pagingType: 'numbers',
+                serverSide: true,
+                dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
                 ajax: {
                     url: ajaxurl,
+                    method: 'POST',
                     data: function(d) {
-                        return {
+                        return $.extend({}, d, {
                             action: 'bookly_get_sms_list',
                             csrf_token: BooklyL10nGlobal.csrf_token,
-                            range: $date_range.data('date')
-                        };
+                            filter: {
+                                range: $date_range.data('date')
+                            }
+                        });
                     },
-                    dataSrc: 'list'
                 },
                 columns: columns,
                 language: {
@@ -668,11 +691,12 @@ jQuery(function($) {
                     processing: BooklyL10n.processing
                 }
             });
-            $date_range.on('apply.daterangepicker', function() {
+            function onChangeFilter() {
                 dt.ajax.reload();
-            });
+            }
+            $date_range.on('apply.daterangepicker', onChangeFilter);
             $(this).on('click', function() {
-                dt.ajax.reload();
+                dt.ajax.reload(null, false);
             });
         }
     });
@@ -699,14 +723,14 @@ jQuery(function($) {
                         data: column,
                         className: 'align-middle',
                         render: function(data, type, row, meta) {
-                            return '<div class="iti-flag ' + data + '"></div>';
+                            return '<div class="iti__flag iti__' + data + '"></div>';
                         }
                     });
                     break;
                 case 'price':
                     columns.push({
                         data: column,
-                        className: "text-right",
+                        className: 'text-right',
                         render: function(data, type, row, meta) {
                             return formatPrice(data);
                         }
@@ -715,7 +739,7 @@ jQuery(function($) {
                 case 'price_alt':
                     columns.push({
                         data: column,
-                        className: "text-right",
+                        className: 'text-right',
                         render: function(data, type, row, meta) {
                             if (row.price_alt === '') {
                                 return BooklyL10n.na;
@@ -829,7 +853,7 @@ jQuery(function($) {
                         $request_sender_id.hide();
                         $sender_id.prop('disabled', true);
                         $cancel_sender_id.show();
-                        dt.ajax.reload();
+                        dt.ajax.reload(null, false);
                     } else {
                         booklyAlert({error: [response.data.message]});
                     }
@@ -854,7 +878,7 @@ jQuery(function($) {
                             $sender_id.prop('disabled', false).val('');
                             $request_sender_id.show();
                             $cancel_sender_id.hide();
-                            dt.ajax.reload();
+                            dt.ajax.reload(null, false);
                         } else {
                             booklyAlert({error: [response.data.message]});
                         }
@@ -877,7 +901,7 @@ jQuery(function($) {
                             $sender_id.prop('disabled', false).val('');
                             $request_sender_id.show();
                             $cancel_sender_id.hide();
-                            dt.ajax.reload();
+                            dt.ajax.reload(null, false);
                         } else {
                             if (response.data && response.data.message) {
                                 booklyAlert({error: [response.data.message]});
@@ -889,7 +913,7 @@ jQuery(function($) {
                 });
             }
         });
-        $(this).on('click', function() { dt.ajax.reload(); });
+        $(this).on('click', function() { dt.ajax.reload(null, false); });
     });
 
     $('#bookly-open-tab-sender-id').on('click', function(e) {

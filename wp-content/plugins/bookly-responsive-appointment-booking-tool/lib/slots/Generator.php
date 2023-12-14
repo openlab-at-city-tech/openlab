@@ -4,11 +4,6 @@ namespace Bookly\Lib\Slots;
 use Bookly\Lib\Proxy\Locations as LocationsProxy;
 use Bookly\Lib\Proxy\Pro as ProProxy;
 
-/**
- * Class Generator
- *
- * @package Bookly\Lib\Slots
- */
 class Generator implements \Iterator
 {
     const CONNECTION_CONSECUTIVE = 1;
@@ -114,6 +109,11 @@ class Generator implements \Iterator
         $this->next_generator = $next_generator;
         $this->next_connection = $next_connection;
 
+        // Time limit only matters if the length is less than one day.
+        if ( $this->time_limit && $this->time_limit->length() >= DAY_IN_SECONDS ) {
+            $this->time_limit = null;
+        }
+
         // Pick only those staff members who provides the service
         // and who can serve the requested number of persons.
         foreach ( $staff_members as $staff_id => $staff ) {
@@ -159,6 +159,27 @@ class Generator implements \Iterator
                 $ranges = $this->srv_duration_days
                     ? $schedule->getAllDayRange( $this->dp, $this->srv_id, $staff_id, $this->location_id )
                     : $schedule->getRanges( $this->dp, $this->srv_id, $staff_id, $this->location_id, $staff->getTimeZone() );
+
+                // Initial solution that provides the possibility of booking at the junction of two work schedules.
+                if ( ! $this->srv_duration_days && $ranges->isNotEmpty() ) {
+                    $next_dp = $this->dp->modify( '+1 day midnight' );
+                    $key = $ranges->count() - 1;
+                    $last_range = $ranges->get( $key );
+                    // If the last range passes midnight, we check the next day.
+                    if ( $last_range->end()->gte( $next_dp ) && ! $schedule->isDayOff( $next_dp ) ) {
+                        $next_ranges = $schedule->getRanges( $next_dp, $this->srv_id, $staff_id, $this->location_id, $staff->getTimeZone() );
+                        $first_next_range = $next_ranges->get( 0 );
+                        // If there is no gap in the schedule between the days, we extend the last range.
+                        if ( $first_next_range && $first_next_range->start()->lte( $last_range->end() ) ) {
+                            $last_range = new Range(
+                                $last_range->start(),
+                                $first_next_range->end(),
+                                $last_range->data()
+                            );
+                            $ranges->put( $key, $last_range );
+                        }
+                    }
+                }
 
                 // Create booked ranges from staff bookings.
                 $ranges = $this->_mapStaffBookings( $ranges, $staff );

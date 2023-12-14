@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Dashboard;
 
 use Bookly\Lib;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\Dashboard
- */
 class Page extends Lib\Base\Component
 {
     /**

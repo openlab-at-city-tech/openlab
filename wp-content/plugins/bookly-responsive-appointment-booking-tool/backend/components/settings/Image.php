@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Settings;
 
 use Bookly\Lib;
 
-/**
- * Class Image
- * @package Bookly\Backend\Components\Settings
- */
 class Image extends Lib\Base\Component
 {
     /**

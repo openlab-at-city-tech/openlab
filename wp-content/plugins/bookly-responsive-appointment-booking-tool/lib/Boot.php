@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class Boot
- * @package Bookly\Lib
- */
 class Boot
 {
     /**

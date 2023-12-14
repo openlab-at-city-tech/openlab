@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Pro
- *
- * @package Bookly\Backend\Components\Dialogs\Service\Edit\Proxy
- *
  * @method static void renderPadding( array $service ) Render padding settings for service.
  * @method static void renderStaffPreference( array $service ) Render staff preference rules "any" is selected.
  * @method static void renderGatewayPreference( array $service ) Render gateway preference rules.

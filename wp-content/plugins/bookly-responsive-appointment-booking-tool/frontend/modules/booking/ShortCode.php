@@ -4,11 +4,6 @@ namespace Bookly\Frontend\Modules\Booking;
 use Bookly\Lib;
 use Bookly\Frontend\Modules\Booking\Lib\Errors;
 
-/**
- * Class ShortCode
- *
- * @package Bookly\Frontend\Modules\Booking
- */
 class ShortCode extends Lib\Base\ShortCode
 {
     public static $code = 'bookly-form';
@@ -49,10 +44,8 @@ class ShortCode extends Lib\Base\ShortCode
             $wp_locale = new \WP_Locale();
         }
 
-        // Disable emoji in IE11
-        if ( array_key_exists( 'HTTP_USER_AGENT', $_SERVER ) && strpos( $_SERVER['HTTP_USER_AGENT'], 'Trident/7.0' ) !== false ) {
-            Lib\Utils\Common::disableEmoji();
-        }
+        // Disable emoji
+        Lib\Utils\Common::disableEmoji();
 
         self::enqueueScripts( array(
             'bookly' => array(
@@ -113,13 +106,12 @@ class ShortCode extends Lib\Base\ShortCode
             if ( isset ( $data['payment'] ) ) {
                 if ( ! isset ( $data['payment']['processed'] ) ) {
                     switch ( $data['payment']['status'] ) {
-                        case 'success':
-                        case 'processing':
+                        case Lib\Base\Gateway::STATUS_COMPLETED:
+                        case Lib\Base\Gateway::STATUS_PROCESSING:
                             $form_id = $saved_form_id;
                             $status = array( 'booking' => 'finished' );
                             break;
-                        case 'cancelled':
-                        case 'error':
+                        case Lib\Base\Gateway::STATUS_FAILED:
                             $form_id = $saved_form_id;
                             end( $data['cart'] );
                             $status = array( 'booking' => 'cancelled', 'cart_key' => key( $data['cart'] ) );
@@ -201,6 +193,9 @@ class ShortCode extends Lib\Base\ShortCode
 
         if ( $hide_service_part1 && $hide_service_part2 ) {
             Lib\Session::setFormVar( $form_id, 'skip_service_step', true );
+        } else {
+            Lib\Session::setFormVar( $form_id, 'hide_service_part1', $hide_service_part1 );
+            Lib\Session::setFormVar( $form_id, 'hide_service_part2', $hide_service_part2 );
         }
 
         // Store parameters in session for later use.

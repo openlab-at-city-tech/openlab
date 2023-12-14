@@ -2,13 +2,7 @@
 namespace Bookly\Backend\Modules\Appearance;
 
 use Bookly\Lib;
-use Bookly\Backend\Modules\Appearance\Proxy;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Appearance
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -30,6 +24,7 @@ class Ajax extends Lib\Base\Ajax
             'bookly_l10n_info_payment_step_several_apps',
             'bookly_l10n_info_service_step',
             'bookly_l10n_info_time_step',
+            'bookly_l10n_info_add_to_calendar',
             // Category, service and staff info at service step.
             'bookly_l10n_step_service_category_info',
             'bookly_l10n_step_service_service_info',
@@ -94,22 +89,23 @@ class Ajax extends Lib\Base\Ajax
             'bookly_app_required_employee',
             'bookly_app_service_duration_with_price',
             'bookly_app_service_name_with_duration',
+            'bookly_app_show_add_to_calendar',
             'bookly_app_show_blocked_timeslots',
             'bookly_app_show_calendar',
+            'bookly_app_show_category_info',
             'bookly_app_show_day_one_column',
+            'bookly_app_show_download_ics',
             'bookly_app_show_email_confirm',
             'bookly_app_show_facebook_login_button',
             'bookly_app_show_login_button',
             'bookly_app_show_notes',
             'bookly_app_show_progress_tracker',
-            'bookly_app_show_category_info',
             'bookly_app_show_service_info',
-            'bookly_app_show_staff_info',
             'bookly_app_show_slots',
+            'bookly_app_show_staff_info',
             'bookly_app_show_start_over',
             'bookly_app_show_terms',
             'bookly_app_show_time_zone_switcher',
-            'bookly_app_show_download_ics',
             'bookly_app_staff_name_with_price',
             'bookly_cst_first_last_name',
             'bookly_cst_required_details',
@@ -143,7 +139,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function saveCustomCss()
     {
-        update_option( 'bookly_app_custom_styles', self::parameter( 'custom_css' ) );
+        update_option( 'bookly_app_custom_styles', html_entity_decode( self::parameter( 'custom_css' ) ) );
 
         wp_send_json_success( array( 'message' => __( 'Your custom CSS was saved. Please refresh the page to see your changes.', 'bookly' ) ) );
     }
