@@ -27,9 +27,11 @@ add_action( 'wp_enqueue_scripts', 'wpa_register_scripts' );
  * Register jQuery scripts.
  */
 function wpa_register_scripts() {
-	$wpa_version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
-	wp_register_script( 'wpa-toolbar', plugins_url( 'wp-accessibility/js/wpa-toolbar.js' ), array(), $wpa_version, true );
-	wp_register_script( 'ui-a11y', plugins_url( 'wp-accessibility/toolbar/js/a11y.js' ), array( 'jquery' ), $wpa_version, true );
+	$wpa_version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
+	$wpatb       = ( SCRIPT_DEBUG ) ? plugins_url( 'js/wpa-toolbar.js', __FILE__ ) : plugins_url( 'js/wpa-toolbar.min.js', __FILE__ );
+	wp_register_script( 'wpa-toolbar', $wpatb, array(), $wpa_version, true );
+	$wpaui = ( SCRIPT_DEBUG ) ? plugins_url( 'js/a11y.js', __FILE__ ) : plugins_url( 'js/a11y.min.js', __FILE__ );
+	wp_register_script( 'ui-a11y', $wpaui, array( 'jquery' ), $wpa_version, true );
 }
 
 add_action( 'wp_enqueue_scripts', 'wpa_toolbar_enqueue_scripts' );
@@ -37,7 +39,7 @@ add_action( 'wp_enqueue_scripts', 'wpa_toolbar_enqueue_scripts' );
  * Enqueue Toolbar scripts dependent on options.
  */
 function wpa_toolbar_enqueue_scripts() {
-	$wpa_version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
+	$wpa_version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
 	wp_enqueue_script( 'jquery' );
 	if ( 'on' === get_option( 'wpa_toolbar' ) ) {
 		// Enqueue Toolbar JS if enabled.
@@ -47,7 +49,7 @@ function wpa_toolbar_enqueue_scripts() {
 	wp_enqueue_script( 'ui-a11y' );
 
 	// High Contrast CSS.
-	$plugin_path = plugins_url( 'wp-accessibility/toolbar/css/a11y-contrast.css' );
+	$plugin_path = plugins_url( 'toolbar/css/a11y-contrast.css', __FILE__ );
 	if ( file_exists( get_stylesheet_directory() . '/a11y-contrast.css' ) ) {
 		$plugin_path = get_stylesheet_directory_uri() . '/a11y-contrast.css';
 	}
@@ -138,13 +140,13 @@ function wpa_toolbar_html( $type = 'widget', $control = 'button' ) {
 	$enable_fontsize  = ( 'off' === get_option( 'wpa_toolbar_fs' ) ) ? false : true;
 	$responsive       = ( 'on' === get_option( 'wpa_toolbar_mobile' ) ) ? 'a11y-responsive ' : '';
 	$is_rtl           = ( is_rtl() ) ? ' rtl' : ' ltr';
-	$is_right         = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? ' right' : ' left';
+	$is_reversed      = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? ' reverse' : ' default';
 	$toolbar_type     = ( 'widget' === $type ) ? 'a11y-toolbar-widget' : 'a11y-toolbar';
 	$control_type     = ( 'button' !== $control ) ? 'a href="#" role="button"' : 'button type="button"'; // button control does not work in Edge.
 	$closure          = ( 'button' !== $control ) ? 'a' : 'button';  // button control does not work in Edge.
 	$toolbar          = '
 <!-- a11y toolbar widget -->
-<div class="' . $responsive . ' ' . $is_rtl . ' ' . $is_right . ' ' . $toolbar_type . '">
+<div class="' . $responsive . ' ' . $is_rtl . ' ' . $is_reversed . ' ' . $toolbar_type . '">
 	<ul>';
 	if ( $enable_contrast ) {
 		$toolbar .= '<li><' . $control_type . ' class="a11y-toggle a11y-toggle-contrast toggle-contrast" id="is_normal_contrast" aria-pressed="false"><span class="offscreen">' . $contrast . '</span> <span class="aticon aticon-adjust" aria-hidden="true"></span></' . $closure . '></li>';
@@ -177,10 +179,10 @@ function wpa_toolbar_js() {
 	 *
 	 * @return string
 	 */
-	$location   = apply_filters( 'wpa_move_toolbar', $default );
-	$is_rtl     = ( is_rtl() ) ? 'rtl' : 'ltr';
-	$is_right   = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? 'right' : 'left';
-	$responsive = ( 'on' === get_option( 'wpa_toolbar_mobile' ) ) ? 'a11y-responsive' : 'a11y-non-responsive';
+	$location    = apply_filters( 'wpa_move_toolbar', $default );
+	$is_rtl      = ( is_rtl() ) ? 'rtl' : 'ltr';
+	$is_reversed = ( 'on' === get_option( 'wpa_toolbar_right' ) ) ? 'reversed' : 'default';
+	$responsive  = ( 'on' === get_option( 'wpa_toolbar_mobile' ) ) ? 'a11y-responsive' : 'a11y-non-responsive';
 
 	$contrast         = esc_html__( 'Toggle High Contrast', 'wp-accessibility' );
 	$grayscale        = esc_html__( 'Toggle Grayscale', 'wp-accessibility' );
@@ -192,7 +194,7 @@ function wpa_toolbar_js() {
 	return array(
 		'location'         => $location,
 		'is_rtl'           => $is_rtl,
-		'is_right'         => $is_right,
+		'is_right'         => $is_reversed,
 		'responsive'       => $responsive,
 		'contrast'         => $contrast,
 		'grayscale'        => $grayscale,
