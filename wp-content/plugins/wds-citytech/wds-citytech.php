@@ -3563,3 +3563,48 @@ function openlab_enable_captions_on_video_embeds( $html ) {
 	return $html;
 }
 add_filter( 'oembed_result', 'openlab_enable_captions_on_video_embeds' );
+
+/** Distributor **********************************************************/
+
+/**
+ * Sets registration info for Distributor.
+ *
+ * @param array $settings Distributor settings.
+ * @return array
+ */
+function openlab_distributor_settings( $settings ) {
+	$distributor_key   = defined( 'OPENLAB_DISTRIBUTOR_KEY' ) ? OPENLAB_DISTRIBUTOR_KEY : '';
+	$distributor_email = defined( 'OPENLAB_DISTRIBUTOR_EMAIL' ) ? OPENLAB_DISTRIBUTOR_EMAIL : '';
+
+	if ( ! $distributor_key || ! $distributor_email ) {
+		return $settings;
+	}
+
+	if ( ! is_array( $settings ) ) {
+		$settings = [];
+	}
+
+	$settings['license_key']   = $distributor_key;
+	$settings['email']         = $distributor_email;
+	$settings['valid_license'] = true;
+
+	return $settings;
+}
+add_filter( 'default_option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'site_option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'default_site_option_dt_settings', 'openlab_distributor_settings' );
+
+/**
+ * Loads JS that removes the 'Registration Key' section from the Distributor settings panel.
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function( $hook ) {
+		if ( 'distributor_page_distributor-settings' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-distributor-settings', plugins_url( 'wds-citytech/assets/js/distributor-settings.js' ), [ 'jquery' ], OL_VERSION );
+	}
+);
