@@ -3,8 +3,8 @@ Contributors: edo888
 Author: Translate AI Multilingual Solutions
 Tags: translate, translate wordpress, multilingual, translation, translate language, bilingual, localization, translation proxy, localisation, multilanguage, google translate
 Requires at least: 2.8.1
-Tested up to: 6.3
-Stable tag: 3.0.4
+Tested up to: 6.4
+Stable tag: 3.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://gtranslate.io/?xyz=998#pricing
@@ -248,6 +248,11 @@ If you want us to translate your website professionally or provide you a proofre
 8. User Dashboard (paid)
 
 == Changelog ==
+= 3.0.5 =
+* Fix for fatal error in email translation when args parameter is malformed
+* Updated flags location to avoid additional 301 redirect for sub-domain URL structure
+* Added skip translate for language links rendered by gt-link shortcode
+
 = 3.0.4 =
 * Added protection against XSS by bad acting admins
 * Added flag size option for Globe widget look

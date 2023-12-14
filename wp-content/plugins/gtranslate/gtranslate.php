@@ -3,7 +3,7 @@
 Plugin Name: GTranslate
 Plugin URI: https://gtranslate.io/?xyz=998
 Description: Translate your website and make it multilingual. For support visit <a href="https://wordpress.org/support/plugin/gtranslate">GTranslate Support Forum</a>.
-Version: 3.0.4
+Version: 3.0.5
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
 Text Domain: gtranslate
@@ -166,9 +166,9 @@ class GTranslate extends WP_Widget {
         $flag_src = self::get_flag_src($lang_code);
 
         if(isset($atts['current_wrapper']))
-            $add_class = $lang_code == $data['default_language'] ? ' class="gt-current-wrapper"' : '';
+            $add_class = $lang_code == $data['default_language'] ? ' class="gt-current-wrapper notranslate"' : ' class="notranslate"';
         else
-            $add_class = $lang_code == $data['default_language'] ? ' class="gt-current-lang"' : '';
+            $add_class = $lang_code == $data['default_language'] ? ' class="gt-current-lang notranslate"' : ' class="notranslate"';
 
         switch($widget_look) {
             case 'lang_names': $el_code = '<a href="#" data-gt-lang="' . esc_attr($lang_code) . '"' . $add_class . '>' . esc_html($label) . '</a>'; break;
@@ -197,7 +197,10 @@ class GTranslate extends WP_Widget {
                 wp_enqueue_script('gt_widget_script_' . $unique_id, 'https://cdn.gtranslate.net/widgets/latest/base.js', array(), '', true);
             } else {
                 $base_path = plugins_url('', __FILE__);
-                $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/';
+                if($data['enterprise_version'])
+                    $gt_settings['flags_location'] = $base_path . '/flags/';
+                else
+                    $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/';
 
                 wp_enqueue_script('gt_widget_script_' . $unique_id, $base_path . '/js/base.js', array(), '', true);
             }
@@ -348,10 +351,17 @@ class GTranslate extends WP_Widget {
             wp_enqueue_script('gt_widget_script_' . $unique_id, 'https://cdn.gtranslate.net/widgets/latest/' . $widget_short_name . '.js', array(), '', true);
         } else {
             $base_path = plugins_url('', __FILE__);
-            if($data['widget_look'] == 'globe')
-                $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/svg/';
-            else
-                $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/';
+            if($data['widget_look'] == 'globe') {
+                if($data['enterprise_version'])
+                    $gt_settings['flags_location'] = $base_path . '/flags/svg/';
+                else
+                    $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/svg/';
+            } else {
+                if($data['enterprise_version'])
+                    $gt_settings['flags_location'] = $base_path . '/flags/';
+                else
+                    $gt_settings['flags_location'] = wp_make_link_relative($base_path) . '/flags/';
+            }
 
             wp_enqueue_script('gt_widget_script_' . $unique_id, $base_path . '/js/' . $widget_short_name . '.js', array(), '', true);
         }
@@ -2438,6 +2448,9 @@ if($data['pro_version'] or $data['enterprise_version']) {
     // translate emails
     if($data['email_translation']) {
         function gt_translate_emails($args) {
+            if(!is_array($args) or !isset($args['subject']) or !isset($args['message']))
+                return $args;
+
             $subject = $args['subject'];
             $message = $args['message'];
 
@@ -2683,6 +2696,7 @@ function cache_exclude_js_gtranslate($excluded_js) {
 
 // LiteSpeed Cache
 add_filter('litespeed_optimize_js_excludes', 'cache_exclude_js_gtranslate');
+//todo: add_filter('litespeed_optm_js_defer_exc', '');
 
 // WP Rocket
 add_filter('rocket_exclude_js', 'cache_exclude_js_gtranslate');
