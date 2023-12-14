@@ -341,6 +341,8 @@ class BP_XProfile_Query {
 	 *
 	 * @since 2.2.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param array $clause       Query clause.
 	 * @param array $parent_query Parent query array.
 	 * @return array {
@@ -370,7 +372,7 @@ class BP_XProfile_Query {
 			'IN', 'NOT IN',
 			'BETWEEN', 'NOT BETWEEN',
 			'EXISTS', 'NOT EXISTS',
-			'REGEXP', 'NOT REGEXP', 'RLIKE'
+			'REGEXP', 'NOT REGEXP', 'RLIKE',
 		) ) ) {
 			$clause['compare'] = '=';
 		}
@@ -522,7 +524,7 @@ class BP_XProfile_Query {
 			$clause_compare  = strtoupper( $clause['compare'] );
 			$sibling_compare = strtoupper( $sibling['compare'] );
 			if ( in_array( $clause_compare, $compatible_compares ) && in_array( $sibling_compare, $compatible_compares ) ) {
-				$alias = $sibling['alias'];
+				$alias = preg_replace( '/\W/', '_', $sibling['alias'] );
 				break;
 			}
 		}

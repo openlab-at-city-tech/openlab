@@ -16,7 +16,10 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Creates our Blogs component.
+ *
+ * @since 1.5.0
  */
+#[AllowDynamicProperties]
 class BP_Blogs_Component extends BP_Component {
 
 	/**
@@ -40,8 +43,7 @@ class BP_Blogs_Component extends BP_Component {
 	/**
 	 * Set up global settings for the blogs component.
 	 *
-	 * The BP_BLOGS_SLUG constant is deprecated, and only used here for
-	 * backwards compatibility.
+	 * The BP_BLOGS_SLUG constant is deprecated.
 	 *
 	 * @since 1.5.0
 	 *
@@ -50,10 +52,13 @@ class BP_Blogs_Component extends BP_Component {
 	 * @param array $args See {@link BP_Component::setup_globals()}.
 	 */
 	public function setup_globals( $args = array() ) {
-		$bp = buddypress();
+		$bp           = buddypress();
+		$default_slug = $this->id;
 
-		if ( ! defined( 'BP_BLOGS_SLUG' ) ) {
-			define ( 'BP_BLOGS_SLUG', $this->id );
+		// @deprecated.
+		if ( defined( 'BP_BLOGS_SLUG' ) ) {
+			_doing_it_wrong( 'BP_BLOGS_SLUG', esc_html__( 'Slug constants are deprecated.', 'buddypress' ), 'BuddyPress 12.0.0' );
+			$default_slug = BP_BLOGS_SLUG;
 		}
 
 		// Global tables for messaging component.
@@ -72,9 +77,15 @@ class BP_Blogs_Component extends BP_Component {
 
 		// All globals for blogs component.
 		$args = array(
-			'slug'                  => BP_BLOGS_SLUG,
-			'root_slug'             => isset( $bp->pages->blogs->slug ) ? $bp->pages->blogs->slug : BP_BLOGS_SLUG,
+			'slug'                  => $default_slug,
+			'root_slug'             => isset( $bp->pages->blogs->slug ) ? $bp->pages->blogs->slug : $default_slug,
 			'has_directory'         => is_multisite(), // Non-multisite installs don't need a top-level Sites directory, since there's only one site.
+			'rewrite_ids'           => array(
+				'directory'                  => 'blogs',
+				'create_single_item'         => 'blog_create',
+				'directory_action'           => 'blogs_action',
+				'directory_action_variables' => 'blogs_action_variables'
+			),
 			'directory_title'       => isset( $bp->pages->blogs->title ) ? $bp->pages->blogs->title : $default_directory_title,
 			'notification_callback' => 'bp_blogs_format_notifications',
 			'search_string'         => __( 'Search sites...', 'buddypress' ),
@@ -139,7 +150,6 @@ class BP_Blogs_Component extends BP_Component {
 			$includes[] = 'activity';
 
 			if ( is_multisite() ) {
-				$includes[] = 'widgets';
 				$includes[] = 'blocks';
 			}
 		}
@@ -168,19 +178,19 @@ class BP_Blogs_Component extends BP_Component {
 
 		// Actions.
 		if ( isset( $_GET['random-blog'] ) ) {
-			require $this->path . 'bp-blogs/actions/random.php';
+			require_once $this->path . 'bp-blogs/actions/random.php';
 		}
 
 		// Screens.
 		if ( bp_is_user() ) {
-			require $this->path . 'bp-blogs/screens/my-blogs.php';
+			require_once $this->path . 'bp-blogs/screens/my-blogs.php';
 		} else {
 			if ( bp_is_blogs_directory() ) {
-				require $this->path . 'bp-blogs/screens/directory.php';
+				require_once $this->path . 'bp-blogs/screens/directory.php';
 			}
 
 			if ( is_user_logged_in() && bp_is_current_action( 'create' ) ) {
-				require $this->path . 'bp-blogs/screens/create.php';
+				require_once $this->path . 'bp-blogs/screens/create.php';
 			}
 
 			// Theme compatibility.
@@ -189,17 +199,18 @@ class BP_Blogs_Component extends BP_Component {
 	}
 
 	/**
-	 * Set up component navigation for bp-blogs.
+	 * Register component navigation.
 	 *
-	 * @see BP_Component::setup_nav() for a description of arguments.
+	 * @since 12.0.0
 	 *
-	 * @param array $main_nav Optional. See BP_Component::setup_nav() for
+	 * @see `BP_Component::register_nav()` for a description of arguments.
+	 *
+	 * @param array $main_nav Optional. See `BP_Component::register_nav()` for
 	 *                        description.
-	 * @param array $sub_nav  Optional. See BP_Component::setup_nav() for
+	 * @param array $sub_nav  Optional. See `BP_Component::register_nav()` for
 	 *                        description.
 	 */
-	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
-
+	public function register_nav( $main_nav = array(), $sub_nav = array() ) {
 		/**
 		 * Blog/post/comment menus should not appear on single WordPress setups.
 		 * Although comments and posts made by users will still show on their
@@ -209,32 +220,10 @@ class BP_Blogs_Component extends BP_Component {
 			return false;
 		}
 
-		// Determine user to use.
-		if ( bp_displayed_user_domain() ) {
-			$user_domain = bp_displayed_user_domain();
-		} elseif ( bp_loggedin_user_domain() ) {
-			$user_domain = bp_loggedin_user_domain();
-		} else {
-			return;
-		}
+		$slug = bp_get_blogs_slug();
 
-		$slug       = bp_get_blogs_slug();
-		$parent_url = trailingslashit( $user_domain . $slug );
-
-		// Add 'Sites' to the main navigation.
-		$count    = (int) bp_get_total_blog_count_for_user();
-		$class    = ( 0 === $count ) ? 'no-count' : 'count';
-		$nav_text = sprintf(
-			/* translators: %s: Site count for the current user */
-			__( 'Sites %s', 'buddypress' ),
-			sprintf(
-				'<span class="%s">%s</span>',
-				esc_attr( $class ),
-				esc_html( $count )
-			)
-		);
 		$main_nav = array(
-			'name'                => $nav_text,
+			'name'                => __( 'Sites', 'buddypress' ),
 			'slug'                => $slug,
 			'position'            => 30,
 			'screen_function'     => 'bp_blogs_screen_my_blogs',
@@ -245,13 +234,45 @@ class BP_Blogs_Component extends BP_Component {
 		$sub_nav[] = array(
 			'name'            => __( 'My Sites', 'buddypress' ),
 			'slug'            => 'my-sites',
-			'parent_url'      => $parent_url,
 			'parent_slug'     => $slug,
 			'screen_function' => 'bp_blogs_screen_my_blogs',
 			'position'        => 10
 		);
 
 		// Setup navigation.
+		parent::register_nav( $main_nav, $sub_nav );
+	}
+
+	/**
+	 * Set up component navigation.
+	 *
+	 * @since 1.5.0
+	 * @since 12.0.0 Used to customize the main navigation name.
+	 *
+	 * @see `BP_Component::setup_nav()` for a description of arguments.
+	 *
+	 * @param array $main_nav Optional. See `BP_Component::setup_nav()` for
+	 *                        description.
+	 * @param array $sub_nav  Optional. See `BP_Component::setup_nav()` for
+	 *                        description.
+	 */
+	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
+		// Only grab count if we're on a user page.
+		if ( is_multisite() && bp_is_user() && isset( $this->main_nav['name'] ) ) {
+			// Add the number of sites to the main nav.
+			$count                  = (int) bp_get_total_blog_count_for_user();
+			$class                  = ( 0 === $count ) ? 'no-count' : 'count';
+			$this->main_nav['name'] = sprintf(
+				/* translators: %s: Site count for the displayed user */
+				__( 'Sites %s', 'buddypress' ),
+				sprintf(
+					'<span class="%s">%s</span>',
+					esc_attr( $class ),
+					bp_core_number_format( $count )
+				)
+			);
+		}
+
 		parent::setup_nav( $main_nav, $sub_nav );
 	}
 
@@ -264,7 +285,6 @@ class BP_Blogs_Component extends BP_Component {
 	 *
 	 * @param array $wp_admin_nav See BP_Component::setup_admin_bar()
 	 *                            for description.
-	 * @return bool
 	 */
 	public function setup_admin_bar( $wp_admin_nav = array() ) {
 
@@ -274,21 +294,21 @@ class BP_Blogs_Component extends BP_Component {
 		 * Comments and posts made by users will still show in their activity.
 		 */
 		if ( ! is_multisite() ) {
-			return false;
+			return;
 		}
 
 		// Menus for logged in user.
 		if ( is_user_logged_in() ) {
 
 			// Setup the logged in user variables.
-			$blogs_link = trailingslashit( bp_loggedin_user_domain() . bp_get_blogs_slug() );
+			$blogs_slug = bp_get_blogs_slug();
 
 			// Add the "Sites" sub menu.
 			$wp_admin_nav[] = array(
 				'parent' => buddypress()->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
 				'title'  => __( 'Sites', 'buddypress' ),
-				'href'   => $blogs_link
+				'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( array( $blogs_slug ) ) ),
 			);
 
 			// My Sites.
@@ -296,17 +316,23 @@ class BP_Blogs_Component extends BP_Component {
 				'parent'   => 'my-account-' . $this->id,
 				'id'       => 'my-account-' . $this->id . '-my-sites',
 				'title'    => __( 'My Sites', 'buddypress' ),
-				'href'     => trailingslashit( $blogs_link . 'my-sites' ),
-				'position' => 10
+				'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $blogs_slug, 'my-sites' ) ) ),
+				'position' => 10,
 			);
 
 			// Create a Site.
 			if ( bp_blog_signup_enabled() ) {
+				$url = bp_get_blogs_directory_url(
+					array(
+						'create_single_item' => 1,
+					)
+				);
+
 				$wp_admin_nav[] = array(
 					'parent'   => 'my-account-' . $this->id,
 					'id'       => 'my-account-' . $this->id . '-create',
 					'title'    => __( 'Create a Site', 'buddypress' ),
-					'href'     => trailingslashit( bp_get_blogs_directory_permalink() . 'create' ),
+					'href'     => $url,
 					'position' => 99
 				);
 			}
@@ -364,6 +390,113 @@ class BP_Blogs_Component extends BP_Component {
 	}
 
 	/**
+	 * Add the Blog Create rewrite tags.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param array $rewrite_tags Optional. See BP_Component::add_rewrite_tags() for
+	 *                            description.
+	 */
+	public function add_rewrite_tags( $rewrite_tags = array() ) {
+		$rewrite_tags = array(
+			'create_single_item'         => '([1]{1,})',
+			'directory_action'           => '([^/]+)',
+			'directory_action_variables' => '(.+?)',
+		);
+
+		parent::add_rewrite_tags( $rewrite_tags );
+	}
+
+	/**
+	 * Add the Registration and Activation rewrite rules.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param array $rewrite_rules Optional. See BP_Component::add_rewrite_rules() for
+	 *                             description.
+	 */
+	public function add_rewrite_rules( $rewrite_rules = array() ) {
+		$create_slug = bp_rewrites_get_slug( 'blogs', 'blog_create', 'create' );
+
+		$rewrite_rules = array(
+			'directory_action_variables' => array(
+				'regex' => $this->root_slug . '/([^/]+)/(.+?)/?$',
+				'order' => 70,
+				'query' => 'index.php?' . $this->rewrite_ids['directory'] . '=1&' . $this->rewrite_ids['directory_action'] . '=$matches[1]&' . $this->rewrite_ids['directory_action_variables'] . '=$matches[2]',
+			),
+			'directory_action'           => array(
+				'regex' => $this->root_slug . '/([^/]+)/?$',
+				'order' => 60,
+				'query' => 'index.php?' . $this->rewrite_ids['directory'] . '=1&' . $this->rewrite_ids['directory_action'] . '=$matches[1]',
+			),
+			'create_single_item' => array(
+				'regex' => $this->root_slug . '/' . $create_slug . '/?$',
+				'order' => 50,
+				'query' => 'index.php?' . $this->rewrite_ids['directory'] . '=1&' . $this->rewrite_ids['create_single_item'] . '=1',
+			),
+		);
+
+		parent::add_rewrite_rules( $rewrite_rules );
+	}
+
+	/**
+	 * Parse the WP_Query and eventually display the component's directory or single item.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param WP_Query $query Required. See BP_Component::parse_query() for
+	 *                        description.
+	 */
+	public function parse_query( $query ) {
+		/*
+		 * Only Multisite configs have a Sites directory.
+		 * If BP Rewrites are not in use, no need to parse BP URI globals another time.
+		 * Legacy Parser should have already set these.
+		 */
+		if ( ! is_multisite() || 'rewrites' !== bp_core_get_query_parser() ) {
+			return parent::parse_query( $query );
+		}
+
+		// Get the BuddyPress main instance.
+		$bp = buddypress();
+
+		if ( home_url( '/' ) === bp_get_requested_url() && bp_is_directory_homepage( $this->id ) ) {
+			$query->set( $this->rewrite_ids['directory'], 1 );
+		}
+
+		if ( 1 === (int) $query->get( $this->rewrite_ids['directory'] ) ) {
+			$bp->current_component = 'blogs';
+			$is_blog_create        = 1 === (int) $query->get( $this->rewrite_ids['create_single_item'] );
+
+			if ( $is_blog_create ) {
+				$bp->current_action = 'create';
+			} else {
+				$current_action = $query->get( $this->rewrite_ids['directory_action'] );
+				if ( $current_action ) {
+					$bp->current_action = $current_action;
+				}
+
+				$action_variables = $query->get( $this->rewrite_ids['directory_action_variables'] );
+				if ( $action_variables ) {
+					if ( ! is_array( $action_variables ) ) {
+						$bp->action_variables = explode( '/', ltrim( $action_variables, '/' ) );
+					} else {
+						$bp->action_variables = $action_variables;
+					}
+				}
+			}
+
+			// Set the BuddyPress queried object.
+			if ( isset( $bp->pages->blogs->id ) && ( ! bp_current_action() || bp_is_current_action( 'create' ) ) ) {
+				$query->queried_object    = get_post( $bp->pages->blogs->id );
+				$query->queried_object_id = $query->queried_object->ID;
+			}
+		}
+
+		parent::parse_query( $query );
+	}
+
+	/**
 	 * Init the BP REST API.
 	 *
 	 * @since 6.0.0
@@ -390,6 +523,7 @@ class BP_Blogs_Component extends BP_Component {
 	 * Register the BP Blogs Blocks.
 	 *
 	 * @since 9.0.0
+	 * @since 12.0.0 Use the WP Blocks API v2.
 	 *
 	 * @param array $blocks Optional. See BP_Component::blocks_init() for
 	 *                      description.
@@ -399,56 +533,11 @@ class BP_Blogs_Component extends BP_Component {
 
 		if ( is_multisite() && bp_is_active( 'activity' ) ) {
 			$blocks['bp/recent-posts'] = array(
-				'name'               => 'bp/recent-posts',
-				'editor_script'      => 'bp-recent-posts-block',
-				'editor_script_url'  => plugins_url( 'js/blocks/recent-posts.js', dirname( __FILE__ ) ),
-				'editor_script_deps' => array(
-					'wp-blocks',
-					'wp-element',
-					'wp-components',
-					'wp-i18n',
-					'wp-block-editor',
-					'wp-server-side-render',
-				),
-				'style'              => 'bp-recent-posts-block',
-				'style_url'          => plugins_url( 'css/blocks/recent-posts.css', dirname( __FILE__ ) ),
-				'attributes'         => array(
-					'title'     => array(
-						'type'    => 'string',
-						'default' => __( 'Recent Networkwide Posts', 'buddypress' ),
-					),
-					'maxPosts'  => array(
-						'type'    => 'number',
-						'default' => 10,
-					),
-					'linkTitle' => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-				),
-				'render_callback'    => 'bp_blogs_render_recent_posts_block',
+				'metadata'        => trailingslashit( buddypress()->plugin_dir ) . 'bp-blogs/blocks/recent-posts',
+				'render_callback' => 'bp_blogs_render_recent_posts_block',
 			);
 		}
 
 		parent::blocks_init( $blocks );
-	}
-
-	/**
-	 * Add the Sites directory states.
-	 *
-	 * @since 10.0.0
-	 *
-	 * @param array   $states Optional. See BP_Component::admin_directory_states() for description.
-	 * @param WP_Post $post   Optional. See BP_Component::admin_directory_states() for description.
-	 * @return array          See BP_Component::admin_directory_states() for description.
-	 */
-	public function admin_directory_states( $states = array(), $post = null ) {
-		$bp = buddypress();
-
-		if ( isset( $bp->pages->blogs->id ) && (int) $bp->pages->blogs->id === (int) $post->ID ) {
-			$states['page_for_sites_directory'] = _x( 'BP Sites Page', 'page label', 'buddypress' );
-		}
-
-		return parent::admin_directory_states( $states, $post );
 	}
 }

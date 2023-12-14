@@ -57,6 +57,9 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 * manipulation required prior to rendering.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global string $usersearch The users search terms.
+	 * @global string $mode       The display mode.
 	 */
 	public function prepare_items() {
 		global $usersearch, $mode;
@@ -358,7 +361,6 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 		}
 
 		if ( bp_is_active( 'xprofile' ) ) {
-			$profile_field_ids = array();
 
 			// Fetch registration field data once only.
 			if ( ! $this->signup_field_labels ) {
@@ -396,6 +398,8 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @global string $mode The display mode.
+	 *
 	 * @param object|null $signup_object The signup data object.
 	 */
 	public function column_registered( $signup_object = null ) {
@@ -414,6 +418,8 @@ class BP_Members_MS_List_Table extends WP_MS_Users_List_Table {
 	 * Display the last time an activation email has been sent.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global string $mode The display mode.
 	 *
 	 * @param object|null $signup_object Signup object instance.
 	 */

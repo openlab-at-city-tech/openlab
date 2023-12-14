@@ -113,29 +113,14 @@ function bp_the_message_star_action_link( $args = array() ) {
 			'messages_star_action_link'
 		);
 
-		// Check user ID and determine base user URL.
-		switch ( $r['user_id'] ) {
-
-			// Current user.
-			case bp_loggedin_user_id() :
-				$user_domain = bp_loggedin_user_domain();
-				break;
-
-			// Displayed user.
-			case bp_displayed_user_id() :
-				$user_domain = bp_displayed_user_domain();
-				break;
-
-			// Empty or other.
-			default :
-				$user_domain = bp_core_get_user_domain( $r['user_id'] );
-				break;
-		}
-
-		// Bail if no user domain was calculated.
-		if ( empty( $user_domain ) ) {
+		// Check user ID.
+		$user_id = (int) $r['user_id'];
+		if ( empty( $user_id ) ) {
 			return '';
 		}
+
+		// Init path chunks.
+		$path_chunks = array( bp_get_messages_slug() );
 
 		// Define local variables.
 		$retval = $bulk_attr = '';
@@ -182,12 +167,14 @@ function bp_the_message_star_action_link( $args = array() ) {
 			$nonce = wp_create_nonce( "bp-messages-star-{$message_id}" );
 
 			if ( true === $is_starred ) {
-				$action    = 'unstar';
-				$bulk_attr = ' data-star-bulk="1"';
-				$retval    = $user_domain . bp_get_messages_slug() . '/unstar/' . $message_id . '/' . $nonce . '/all/';
+				$action        = 'unstar';
+				$bulk_attr     = ' data-star-bulk="1"';
+				$path_chunks[] = $action;
+				$path_chunks[] = array( $message_id, $nonce, 'all' );
 			} else {
-				$action    = 'star';
-				$retval    = $user_domain . bp_get_messages_slug() . '/star/' . $message_id . '/' . $nonce . '/';
+				$action        = 'star';
+				$path_chunks[] = $action;
+				$path_chunks[] = array( $message_id, $nonce );
 			}
 
 			$title = $r["title_{$action}_thread"];
@@ -200,24 +187,26 @@ function bp_the_message_star_action_link( $args = array() ) {
 
 			if ( true === $is_starred ) {
 				$action = 'unstar';
-				$retval = $user_domain . bp_get_messages_slug() . '/unstar/' . $message_id . '/' . $nonce . '/';
 			} else {
 				$action = 'star';
-				$retval = $user_domain . bp_get_messages_slug() . '/star/' . $message_id . '/' . $nonce . '/';
 			}
 
-			$title = $r["title_{$action}"];
+			$path_chunks[] = $action;
+			$path_chunks[] = array( $message_id, $nonce );
+			$title         = $r["title_{$action}"];
 		}
+
+		$url = bp_members_get_user_url( $user_id, bp_members_get_path_chunks( $path_chunks ) );
 
 		/**
 		 * Filters the star action URL for starring / unstarring a message.
 		 *
 		 * @since 2.3.0
 		 *
-		 * @param string $retval URL for starring / unstarring a message.
-		 * @param array  $r      Parsed link arguments. See $args in bp_get_the_message_star_action_link().
+		 * @param string $url URL for starring / unstarring a message.
+		 * @param array  $r   Parsed link arguments. See $args in bp_get_the_message_star_action_link().
 		 */
-		$retval = esc_url( apply_filters( 'bp_get_the_message_star_action_urlonly', $retval, $r ) );
+		$retval = esc_url( apply_filters( 'bp_get_the_message_star_action_urlonly', $url, $r ) );
 		if ( true === (bool) $r['url_only'] ) {
 			return $retval;
 		}

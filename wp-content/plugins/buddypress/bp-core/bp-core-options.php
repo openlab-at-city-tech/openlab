@@ -74,6 +74,9 @@ function bp_get_default_options() {
 		// Email unsubscribe salt.
 		'bp-emails-unsubscribe-salt'           => '',
 
+		// Community visibility.
+		'_bp_community_visibility'             => array( 'global' => 'anyone' ),
+
 		/* Groups ************************************************************/
 
 		// @todo Move this into the groups component
@@ -92,19 +95,8 @@ function bp_get_default_options() {
 
 		/* Legacy *********************************************/
 
-		// Do not register the bp-default themes directory.
-		'_bp_retain_bp_default'                => false,
-
 		// Ignore deprecated code.
 		'_bp_ignore_deprecated_code'           => true,
-
-		/* Widgets **************************************************/
-		'widget_bp_core_login_widget'                => false,
-		'widget_bp_core_members_widget'              => false,
-		'widget_bp_core_whos_online_widget'          => false,
-		'widget_bp_core_recently_active_widget'      => false,
-		'widget_bp_groups_widget'                    => false,
-		'widget_bp_messages_sitewide_notices_widget' => false,
 	);
 
 	/**

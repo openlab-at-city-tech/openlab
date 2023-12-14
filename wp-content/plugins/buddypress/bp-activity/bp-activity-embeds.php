@@ -86,6 +86,8 @@ add_action( 'embed_head', 'bp_activity_embed_add_inline_styles', 20 );
  *
  * @since 2.6.0
  *
+ * @global BP_Activity_Template $activities_template The Activity template loop.
+ *
  * @param  int $activity_id The activity ID.
  * @return bool
  */
@@ -126,6 +128,8 @@ function bp_activity_embed_excerpt( $content = '' ) {
 	 * Generates excerpt for an activity embed item.
 	 *
 	 * @since 2.6.0
+	 * 
+	 * @global BP_Activity_Template $activities_template The Activity template loop.
 	 *
 	 * @param  string $content The content to generate an excerpt for.
 	 * @return string
@@ -162,6 +166,9 @@ function bp_activity_embed_excerpt( $content = '' ) {
  * Outputs the first embedded item in the activity oEmbed template.
  *
  * @since 2.6.0
+ * 
+ * @global BP_Activity_Template $activities_template The Activity template loop.
+ * 
  */
 function bp_activity_embed_media() {
 	// Bail if oEmbed request explicitly hides media.
@@ -347,3 +354,17 @@ EOD;
 	/** This hook is documented in /bp-activity/bp-activity-embeds.php */
 	do_action( 'bp_activity_embed_after_media' );
 }
+
+/**
+ * Make sure the Activity embed template will be used if neded.
+ *
+ * @since 12.0.0
+ *
+ * @param WP_Query $query Required.
+ */
+function bp_activity_parse_embed_query( $query ) {
+	if ( bp_is_single_activity() && $query->get( 'embed' ) ) {
+		$query->is_embed = true;
+	}
+}
+add_action( 'bp_members_parse_query', 'bp_activity_parse_embed_query', 10, 1 );

@@ -35,29 +35,25 @@ function bp_support_blocks() {
  * @since 6.0.0
  * @since 9.0.0 Adds a dependency to `wp-server-side-render` if WP >= 5.3.
  *              Uses a dependency to `wp-editor` otherwise.
+ * @since 12.0.0 Uses the `@wordpress/scripts` `index.asset.php` generated file to get dependencies.
  */
 function bp_register_block_components() {
+	$asset      = array(
+		'dependencies' => array(),
+		'version'      => bp_get_version(),
+	);
+	$asset_file = trailingslashit( dirname( __FILE__ ) ) . 'blocks/block-components/index.asset.php';
+
+	if ( file_exists( $asset_file ) ) {
+		$asset = require $asset_file;
+	}
+
 	wp_register_script(
 		'bp-block-components',
-		plugins_url( 'js/block-components.js', __FILE__ ),
-		array(
-			'wp-element',
-			'wp-components',
-			'wp-i18n',
-			'wp-api-fetch',
-			'wp-url',
-		),
-		bp_get_version(),
+		plugins_url( 'blocks/block-components/index.js', __FILE__ ),
+		$asset['dependencies'],
+		$asset['version'],
 		false
-	);
-
-	// Adds BP Block Components to the `bp` global.
-	wp_add_inline_script(
-		'bp-block-components',
-		'window.bp = window.bp || {};
-		bp.blockComponents = bpBlock.blockComponents;
-		delete bpBlock;',
-		'after'
 	);
 }
 add_action( 'bp_blocks_init', 'bp_register_block_components', 1 );
@@ -66,17 +62,43 @@ add_action( 'bp_blocks_init', 'bp_register_block_components', 1 );
  * Registers the BP Block Assets.
  *
  * @since 9.0.0
+ * @since 12.0.0 Adds the BuddyPress Blocks collection & uses the `@wordpress/scripts`
+ *               `index.asset.php` generated file to get dependencies.
  */
 function bp_register_block_assets() {
+	$default_asset   = array(
+		'dependencies' => array(),
+		'version'      => bp_get_version(),
+	);
+	$asset_data_file = trailingslashit( dirname( __FILE__ ) ) . 'blocks/block-data/index.asset.php';
+
+	if ( file_exists( $asset_data_file ) ) {
+		$asset_data = require $asset_data_file;
+	} else {
+		$asset_data = $default_asset;
+	}
+
 	wp_register_script(
 		'bp-block-data',
-		plugins_url( 'js/block-data.js', __FILE__ ),
-		array(
-			'wp-data',
-			'wp-api-fetch',
-			'lodash',
-		),
-		bp_get_version(),
+		plugins_url( 'blocks/block-data/index.js', __FILE__ ),
+		$asset_data['dependencies'],
+		$asset_data['version'],
+		false
+	);
+
+	$asset_collection_file = trailingslashit( dirname( __FILE__ ) ) . 'blocks/block-collection/index.asset.php';
+
+	if ( file_exists( $asset_collection_file ) ) {
+		$asset_collection = require $asset_collection_file;
+	} else {
+		$asset_collection = $default_asset;
+	}
+
+	wp_register_script(
+		'bp-blocks-collection',
+		plugins_url( 'blocks/block-collection/index.js', __FILE__ ),
+		$asset_collection['dependencies'],
+		$asset_collection['version'],
 		false
 	);
 
@@ -84,16 +106,30 @@ function bp_register_block_assets() {
 	wp_add_inline_script(
 		'bp-block-data',
 		sprintf(
-			'window.bp = window.bp || {};
-			bp.blockData = bpBlock.blockData;
-			bp.blockData.embedScriptURL = \'%s\';
-			delete bpBlock;',
+			'bp.blockData.embedScriptURL = \'%s\';',
 			esc_url_raw( includes_url( 'js/wp-embed.min.js' ) )
 		),
 		'after'
 	);
 }
 add_action( 'bp_blocks_init', 'bp_register_block_assets', 2 );
+
+/**
+ * Enqueue additional BP Assets for the Block Editor.
+ *
+ * @since 12.0.0
+ */
+function bp_enqueue_block_editor_assets() {
+	wp_enqueue_script( 'bp-blocks-collection' );
+
+	/**
+	 * Fires when it's time to enqueue BP Block assets.
+	 *
+	 * @since 12.0.0
+	 */
+	do_action( 'bp_enqueue_block_editor_assets' );
+}
+add_action( 'enqueue_block_editor_assets', 'bp_enqueue_block_editor_assets', 9 );
 
 /**
  * Filters the Block Editor settings to gather BuddyPress ones into a `bp` key.
@@ -161,6 +197,16 @@ add_filter( 'block_editor_rest_api_preload_paths', 'bp_blocks_preload_paths' );
  * @return BP_Block   The BuddyPress block type object.
  */
 function bp_register_block( $args = array() ) {
+	if ( isset( $args['metadata'] ) && is_string( $args['metadata'] ) && file_exists( $args['metadata'] ) ) {
+		$callback = array();
+
+		if ( isset( $args['render_callback'] ) ) {
+			$callback['render_callback'] = $args['render_callback'];
+		}
+
+		return register_block_type_from_metadata( $args['metadata'], $callback );
+	}
+
 	return new BP_Block( $args );
 }
 
@@ -234,7 +280,7 @@ function bp_blocks_get_login_widget_registration_link( $content = '', $args = ar
 		if ( isset( $args['include_pwd_link'] ) && true === $args['include_pwd_link'] ) {
 			$content .= sprintf(
 				'<p class="bp-login-widget-pwd-link"><a href="%1$s">%2$s</a></p>',
-				esc_url( wp_lostpassword_url( bp_get_root_domain() ) ),
+				esc_url( wp_lostpassword_url( bp_get_root_url() ) ),
 				esc_html__( 'Lost your password?', 'buddypress' )
 			);
 		}
@@ -313,7 +359,7 @@ function bp_block_render_login_form_block( $attributes = array() ) {
 					%2$s
 				</a>
 			</div>',
-			bp_loggedin_user_domain(),
+			bp_loggedin_user_url(),
 			bp_get_loggedin_user_avatar(
 				array(
 					'type'   => 'thumb',

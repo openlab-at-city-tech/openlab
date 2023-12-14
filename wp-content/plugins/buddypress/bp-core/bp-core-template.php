@@ -107,23 +107,6 @@ function bp_get_options_nav( $parent_slug = '' ) {
 }
 
 /**
- * Get the 'bp_options_title' property from the BP global.
- *
- * Not currently used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_get_options_title() {
-	$bp = buddypress();
-
-	if ( empty( $bp->bp_options_title ) ) {
-		$bp->bp_options_title = __( 'Options', 'buddypress' );
-	}
-
-	echo apply_filters( 'bp_get_options_title', esc_attr( $bp->bp_options_title ) );
-}
-
-/**
  * Get the directory title for a component.
  *
  * Used for the <title> element and the page header on the component directory
@@ -159,69 +142,6 @@ function bp_get_directory_title( $component = '' ) {
 }
 
 /** Avatars *******************************************************************/
-
-/**
- * Check to see if there is an options avatar.
- *
- * An options avatar is an avatar for something like a group, or a friend.
- * Basically an avatar that appears in the sub nav options bar.
- *
- * Not currently used in BuddyPress.
- *
- * @return bool $value Returns true if an options avatar has been set, otherwise false.
- */
-function bp_has_options_avatar() {
-	return (bool) buddypress()->bp_options_avatar;
-}
-
-/**
- * Output the options avatar.
- *
- * Not currently used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_get_options_avatar() {
-	echo apply_filters( 'bp_get_options_avatar', buddypress()->bp_options_avatar );
-}
-
-/**
- * Output a comment author's avatar.
- *
- * Not currently used in BuddyPress.
- */
-function bp_comment_author_avatar() {
-	global $comment;
-
-	echo apply_filters( 'bp_comment_author_avatar', bp_core_fetch_avatar( array(
-		'item_id' => $comment->user_id,
-		'type'    => 'thumb',
-		'alt'     => sprintf(
-			/* translators: %s: member name */
-			__( 'Profile photo of %s', 'buddypress' ),
-			bp_core_get_user_displayname( $comment->user_id )
-		),
-	) ) );
-}
-
-/**
- * Output a post author's avatar.
- *
- * Not currently used in BuddyPress.
- */
-function bp_post_author_avatar() {
-	global $post;
-
-	echo apply_filters( 'bp_post_author_avatar', bp_core_fetch_avatar( array(
-		'item_id' => $post->post_author,
-		'type'    => 'thumb',
-		'alt'     => sprintf(
-			/* translators: %s: member name */
-			__( 'Profile photo of %s', 'buddypress' ),
-			bp_core_get_user_displayname( $post->post_author )
-		),
-	) ) );
-}
 
 /**
  * Output the current avatar upload step.
@@ -316,19 +236,6 @@ function bp_avatar_to_crop_src() {
 		 */
 		return apply_filters( 'bp_get_avatar_to_crop_src', $src );
 	}
-
-/**
- * Output the avatar cropper <img> markup.
- *
- * No longer used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_avatar_cropper() {
-?>
-	<img id="avatar-to-crop" class="avatar" src="<?php echo esc_url( buddypress()->avatar_admin->image ); ?>" />
-<?php
-}
 
 /**
  * Output the name of the BP site. Used in RSS headers.
@@ -495,18 +402,6 @@ function bp_word_or_name( $youtext, $nametext, $capitalize = true, $echo = true 
 	}
 }
 
-/**
- * Do the 'bp_styles' action, and call wp_print_styles().
- *
- * No longer used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_styles() {
-	do_action( 'bp_styles' );
-	wp_print_styles();
-}
-
 /** Search Form ***************************************************************/
 
 /**
@@ -517,15 +412,21 @@ function bp_styles() {
  * @return string URL action attribute for search forms, eg example.com/search/.
  */
 function bp_search_form_action() {
+	$url = bp_rewrites_get_url(
+		array(
+			'component_id'     => 'core',
+			'community_search' => 1,
+		)
+	);
 
 	/**
 	 * Filters the "action" attribute for search forms.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $value Search form action url.
+	 * @param string $url Search form action url.
 	 */
-	return apply_filters( 'bp_search_form_action', trailingslashit( bp_get_root_domain() . '/' . bp_get_search_slug() ) );
+	return apply_filters( 'bp_search_form_action', $url );
 }
 
 /**
@@ -702,28 +603,6 @@ function bp_search_default_text( $component = '' ) {
 		 */
 		return apply_filters( 'bp_get_search_default_text', $default_text, $component );
 	}
-
-/**
- * Fire the 'bp_custom_profile_boxes' action.
- *
- * No longer used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_custom_profile_boxes() {
-	do_action( 'bp_custom_profile_boxes' );
-}
-
-/**
- * Fire the 'bp_custom_profile_sidebar_boxes' action.
- *
- * No longer used in BuddyPress.
- *
- * @todo Deprecate.
- */
-function bp_custom_profile_sidebar_boxes() {
-	do_action( 'bp_custom_profile_sidebar_boxes' );
-}
 
 /**
  * Output the attributes for a form field.
@@ -1121,14 +1000,6 @@ function bp_total_member_count() {
 	}
 	add_filter( 'bp_get_total_member_count', 'bp_core_number_format' );
 
-/**
- * Output whether blog signup is allowed.
- *
- * @todo Deprecate. It doesn't make any sense to echo a boolean.
- */
-function bp_blog_signup_allowed() {
-	echo bp_get_blog_signup_allowed();
-}
 	/**
 	 * Is blog signup allowed?
 	 *
@@ -1399,39 +1270,51 @@ function bp_action_variable( $position = 0 ) {
 }
 
 /**
- * Output the "root domain", the URL of the BP root blog.
+ * Returns the BP root blog's domain name.
  *
- * @since 1.1.0
+ * @since 12.0.0
+ *
+ * @return string The BP root blog's domain name.
  */
-function bp_root_domain() {
-	echo bp_get_root_domain();
+function bp_get_domain() {
+	return wp_parse_url( bp_get_root_url(), PHP_URL_HOST );
 }
-	/**
-	 * Return the "root domain", the URL of the BP root blog.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @return string URL of the BP root blog.
-	 */
-	function bp_get_root_domain() {
-		$bp = buddypress();
 
-		if ( ! empty( $bp->root_domain ) ) {
-			$domain = $bp->root_domain;
-		} else {
-			$domain          = bp_core_get_root_domain();
-			$bp->root_domain = $domain;
-		}
+/**
+ * Gets the BP root blog's URL.
+ *
+ * @since 12.0.0
+ *
+ * @return string The BP root blog's URL.
+ */
+function bp_get_root_url() {
+	$bp = buddypress();
 
-		/**
-		 * Filters the "root domain", the URL of the BP root blog.
-		 *
-		 * @since 1.2.4
-		 *
-		 * @param string $domain URL of the BP root blog.
-		 */
-		return apply_filters( 'bp_get_root_domain', $domain );
+	if ( ! empty( $bp->root_url ) ) {
+		$url = $bp->root_url;
+	} else {
+		$url          = bp_rewrites_get_root_url();
+		$bp->root_url = $url;
 	}
+
+	/**
+	 * Filters the "root url", the URL of the BP root blog.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param string $url URL of the BP root blog.
+	 */
+	return apply_filters( 'bp_get_root_url', $url );
+}
+
+/**
+ * Output the "root url", the URL of the BP root blog.
+ *
+ * @since 12.0.0
+ */
+function bp_root_url() {
+	echo esc_url( bp_get_root_url() );
+}
 
 /**
  * Output the root slug for a given component.
@@ -2715,11 +2598,13 @@ function bp_is_user_members_invitations_send_screen() {
  * @return bool True if the current page is the groups directory.
  */
 function bp_is_groups_directory() {
-	if ( bp_is_groups_component() && ! bp_is_group() && ( ! bp_current_action() || ( bp_action_variable() && bp_is_current_action( bp_get_groups_group_type_base() ) ) ) ) {
-		return true;
+	$return = false;
+
+	if ( bp_is_groups_component() && ! bp_is_group() ) {
+		$return = ! bp_current_action() || ! empty( buddypress()->groups->current_directory_type );
 	}
 
-	return false;
+	return $return;
 }
 
 /**
@@ -3140,7 +3025,7 @@ function bp_get_title_parts( $seplocation = 'right' ) {
 		}
 
 		// If on the user profile's landing page, just use the fullname.
-		if ( bp_is_current_component( $bp->default_component ) && ( bp_get_requested_url() === bp_displayed_user_domain() ) ) {
+		if ( bp_is_current_component( $bp->default_component ) && ( bp_get_requested_url() === bp_displayed_user_url() ) ) {
 			$bp_title_parts[] = $displayed_user_name;
 
 		// Use component name on member pages.
@@ -3579,7 +3464,10 @@ function bp_get_nav_menu_items( $component = 'members' ) {
 	// Get the item nav and build the menus.
 	foreach ( $bp->{$component}->nav->get_item_nav() as $nav_menu ) {
 		// Get the correct menu link. See https://buddypress.trac.wordpress.org/ticket/4624.
-		$link = bp_loggedin_user_domain() ? str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $nav_menu->link ) : trailingslashit( bp_displayed_user_domain() . $nav_menu->link );
+		$link = $nav_menu->link;
+		if ( bp_loggedin_user_url() ) {
+			$link = str_replace( bp_loggedin_user_url(), bp_displayed_user_url(), $nav_menu->link );
+		}
 
 		// Add this menu.
 		$menu         = new stdClass;
@@ -3888,7 +3776,7 @@ function bp_is_widget_block_active( $block_name = '', $widget_id_base = '' ) {
 		'block'  => false,
 	);
 
-	if ( $block_name && bp_is_running_wp( '5.8.0', '>=' ) ) {
+	if ( $block_name ) {
 		$widget_blocks = get_option( 'widget_block', array() );
 		$sidebars      = wp_get_sidebars_widgets();
 

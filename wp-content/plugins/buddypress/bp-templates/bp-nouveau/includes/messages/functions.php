@@ -3,7 +3,7 @@
  * Messages functions
  *
  * @since 3.0.0
- * @version 10.3.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -99,11 +99,11 @@ function bp_nouveau_messages_localize_scripts( $params = array() ) {
 		$root_url = $primary_nav->link;
 
 		// Make sure to use the displayed user domain.
-		if ( bp_loggedin_user_domain() ) {
-			$root_url = str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $root_url );
+		if ( bp_loggedin_user_url() ) {
+			$root_url = str_replace( bp_loggedin_user_url(), bp_displayed_user_url(), $root_url );
 		}
 	} else {
-		$root_url = trailingslashit( bp_displayed_user_domain() . $slug );
+		$root_url = $primary_nav->link;
 	}
 
 	// Build default routes list.
@@ -209,22 +209,29 @@ function bp_nouveau_messages_adjust_nav() {
 }
 
 /**
+ * Replaces the Notices Compose URL.
+ *
  * @since 3.0.0
+ *
+ * @param array $admin_nav The WP Admin Nav.
  */
 function bp_nouveau_messages_adjust_admin_nav( $admin_nav ) {
 	if ( empty( $admin_nav ) ) {
 		return $admin_nav;
 	}
 
-	$user_messages_link = trailingslashit( bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'messages' ) );
-
 	foreach ( $admin_nav as $nav_iterator => $nav ) {
 		$nav_id = str_replace( 'my-account-messages-', '', $nav['id'] );
 
 		if ( 'notices' === $nav_id ) {
-			$admin_nav[ $nav_iterator ]['href'] = esc_url( add_query_arg( array(
-				'page' => 'bp-notices'
-			), bp_get_admin_url( 'users.php' ) ) );
+			$admin_nav[ $nav_iterator ]['href'] = esc_url(
+				add_query_arg(
+					array(
+						'page' => 'bp-notices',
+					),
+					bp_get_admin_url( 'users.php' )
+				)
+			);
 		}
 	}
 
@@ -270,7 +277,7 @@ function bp_nouveau_add_notice_notification_for_user( $notifications, $user_id )
 		'is_new'            => 1,
 		'total_count'       => 1,
 		'content'           => __( 'New sitewide notice', 'buddypress' ),
-		'href'              => bp_loggedin_user_domain(),
+		'href'              => bp_loggedin_user_url(),
 	);
 
 	if ( ! is_array( $notifications ) ) {
@@ -296,9 +303,10 @@ function bp_nouveau_format_notice_notification_for_user( $array ) {
 
 /**
  * @since 3.0.0
+ * @deprecated 12.0.0
  */
 function bp_nouveau_unregister_notices_widget() {
-	unregister_widget( 'BP_Messages_Sitewide_Notices_Widget' );
+	_deprecated_function( __FUNCTION__, '12.0.0' );
 }
 
 /**
@@ -504,4 +512,17 @@ function bp_nouveau_messages_catch_hook_content( $hooks = array() ) {
 	ob_end_clean();
 
 	return $content;
+}
+
+/**
+ * Register Messages Ajax actions.
+ *
+ * @since 12.0.0
+ */
+function bp_nouveau_register_messages_ajax_actions() {
+	$ajax_actions = array( 'messages_send_message', 'messages_send_reply', 'messages_get_user_message_threads', 'messages_thread_read', 'messages_get_thread_messages', 'messages_delete', 'messages_exit', 'messages_unstar', 'messages_star', 'messages_unread', 'messages_read', 'messages_dismiss_sitewide_notice' );
+
+	foreach ( $ajax_actions as $ajax_action ) {
+		bp_ajax_register_action( $ajax_action );
+	}
 }

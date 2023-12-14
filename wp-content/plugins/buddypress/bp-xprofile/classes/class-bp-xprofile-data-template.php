@@ -143,7 +143,7 @@ class BP_XProfile_Data_Template {
 				6 => 'exclude_fields',
 				7 => 'hide_empty_fields',
 				8 => 'fetch_visibility_level',
-				9 => 'update_meta_cache'
+				9 => 'update_meta_cache',
 			);
 
 			$args = bp_core_parse_args_array( $old_args_keys, $function_args );
@@ -301,6 +301,9 @@ class BP_XProfile_Data_Template {
 	 * Sets up the profile group.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @global object $group Current group of profile fields.
+	 *
 	 */
 	public function the_profile_group() {
 		global $group;
@@ -392,6 +395,9 @@ class BP_XProfile_Data_Template {
 	 * Set up the profile fields.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @global object $field Current profile field.
+	 *
 	 */
 	public function the_profile_field() {
 		global $field;

@@ -291,25 +291,30 @@ function bp_core_filter_comments( $comments, $post_id ) {
 	global $wpdb;
 
 	foreach( (array) $comments as $comment ) {
-		if ( $comment->user_id )
+		if ( $comment->user_id ) {
 			$user_ids[] = $comment->user_id;
+		}
 	}
 
-	if ( empty( $user_ids ) )
+	if ( empty( $user_ids ) ) {
 		return $comments;
+	}
 
 	$user_ids = implode( ',', wp_parse_id_list( $user_ids ) );
 
-	if ( !$userdata = $wpdb->get_results( "SELECT ID as user_id, user_login, user_nicename FROM {$wpdb->users} WHERE ID IN ({$user_ids})" ) )
+	if ( ! $userdata = $wpdb->get_results( "SELECT ID as user_id, user_login, user_nicename FROM {$wpdb->users} WHERE ID IN ({$user_ids})" ) ) {
 		return $comments;
+	}
 
-	foreach( (array) $userdata as $user )
-		$users[$user->user_id] = bp_core_get_user_domain( $user->user_id, $user->user_nicename, $user->user_login );
+	foreach( (array) $userdata as $user ) {
+		$users[$user->user_id] = bp_members_get_user_url( $user->user_id );
+	}
 
 	foreach( (array) $comments as $i => $comment ) {
-		if ( !empty( $comment->user_id ) ) {
-			if ( !empty( $users[$comment->user_id] ) )
+		if ( ! empty( $comment->user_id ) ) {
+			if ( ! empty( $users[$comment->user_id] ) ) {
 				$comments[$i]->comment_author_url = $users[$comment->user_id];
+			}
 		}
 	}
 
@@ -378,7 +383,7 @@ function bp_core_login_redirect( $redirect_to, $redirect_to_raw, $user ) {
 	 *
 	 * @param string $value URL to redirect to.
 	 */
-	return apply_filters( 'bp_core_login_redirect_to', bp_get_root_domain() );
+	return apply_filters( 'bp_core_login_redirect_to', bp_get_root_url() );
 }
 add_filter( 'bp_login_redirect', 'bp_core_login_redirect', 10, 3 );
 
@@ -665,7 +670,6 @@ add_filter( 'signup_site_meta', 'bp_core_add_meta_to_multisite_signups' );
  * @since 1.5.0
  *
  * @see wp_title()
- * @global object $bp BuddyPress global settings.
  *
  * @param string $title       Original page title.
  * @param string $sep         How to separate the various items within the page title.
@@ -943,6 +947,76 @@ function bp_customizer_nav_menus_set_item_types( $item_types = array() ) {
 add_filter( 'customize_nav_menu_available_item_types', 'bp_customizer_nav_menus_set_item_types', 10, 1 );
 
 /**
+ * Eventually append BuddyPress directories to WP Dropdown's pages control.
+ *
+ * @since 12.0.0
+ *
+ * @param WP_Post[] $pages Array of page objects.
+ * @param array     $args  Array of get_pages() arguments.
+ * @return WP_Post[]       Array of page objects, potentially including BP directories.
+ */
+function bp_core_include_directory_on_front( $pages = array(), $args = array() ) {
+	$is_page_on_front_dropdown = false;
+
+	if ( isset( $args['name'] ) ) {
+		$is_page_on_front_dropdown = 'page_on_front' === $args['name'];
+
+		if ( is_customize_preview() ) {
+			$is_page_on_front_dropdown = '_customize-dropdown-pages-page_on_front' === $args['name'];
+		}
+	}
+
+	if ( $is_page_on_front_dropdown ) {
+		$directories = bp_core_get_directory_pages();
+		$null        = '0000-00-00 00:00:00';
+
+		foreach ( (array) $directories as $component => $directory ) {
+			if ( 'activate' === $component || 'register' === $component ) {
+				continue;
+			}
+
+			$post = (object) array(
+				'ID'                    => (int) $directory->id,
+				'post_author'           => 0,
+				'post_date'             => $null,
+				'post_date_gmt'         => $null,
+				'post_content'          => '',
+				'post_title'            => $directory->title,
+				'post_excerpt'          => '',
+				'post_status'           => 'publish',
+				'comment_status'        => 'closed',
+				'ping_status'           => 'closed',
+				'post_password'         => '',
+				'post_name'             => $directory->slug,
+				'pinged'                => '',
+				'to_ping'               => '',
+				'post_modified'         => $null,
+				'post_modified_gmt'     => $null,
+				'post_content_filtered' => '',
+				'post_parent'           => 0,
+				'guid'                  => bp_rewrites_get_url(
+					array(
+						'component_id' => $component,
+					)
+				),
+				'menu_order'            => 0,
+				'post_type'             => 'buddypress',
+				'post_mime_type'        => '',
+				'comment_count'         => 0,
+				'filter'                => 'raw',
+			);
+
+			$pages[] = get_post( $post );
+		}
+
+		$pages = bp_alpha_sort_by_key( $pages, 'post_title' );
+	}
+
+	return $pages;
+}
+add_filter( 'get_pages', 'bp_core_include_directory_on_front', 10, 2 );
+
+/**
  * Filter SQL query strings to swap out the 'meta_id' column.
  *
  * WordPress uses the meta_id column for commentmeta and postmeta, and so
@@ -1047,63 +1121,6 @@ function bp_maybe_load_mentions_scripts_for_blog_content( $load_mentions, $menti
 add_filter( 'bp_activity_maybe_load_mentions_scripts', 'bp_maybe_load_mentions_scripts_for_blog_content', 10, 2 );
 
 /**
- * Injects specific BuddyPress CSS classes into a widget sidebar.
- *
- * Helps to standardize styling of BuddyPress widgets within a theme that
- * does not use dynamic CSS classes in their widget sidebar's 'before_widget'
- * call.
- *
- * @since 2.4.0
- * @access private
- *
- * @global array $wp_registered_widgets Current registered widgets.
- *
- * @param array $params Current sidebar params.
- * @return array
- */
-function _bp_core_inject_bp_widget_css_class( $params ) {
-	global $wp_registered_widgets;
-
-	$widget_id = $params[0]['widget_id'];
-
-	// If callback isn't an array, bail.
-	if ( false === is_array( $wp_registered_widgets[ $widget_id ]['callback'] ) ) {
-		return $params;
-	}
-
-	// If the current widget isn't a BuddyPress one, stop!
-	// We determine if a widget is a BuddyPress widget, if the widget class
-	// begins with 'bp_'.
-	if ( 0 !== strpos( $wp_registered_widgets[ $widget_id ]['callback'][0]->id_base, 'bp_' ) ) {
-		return $params;
-	}
-
-	// Dynamically add our widget CSS classes for BP widgets if not already there.
-	$classes = array();
-
-	// Try to find 'widget' CSS class.
-	if ( false === strpos( $params[0]['before_widget'], 'widget ' ) ) {
-		$classes[] = 'widget';
-	}
-
-	// Try to find 'buddypress' CSS class.
-	if ( false === strpos( $params[0]['before_widget'], ' buddypress' ) ) {
-		$classes[] = 'buddypress';
-	}
-
-	// Stop if widget already has our CSS classes.
-	if ( empty( $classes ) ) {
-		return $params;
-	}
-
-	// CSS injection time!
-	$params[0]['before_widget'] = str_replace( 'class="', 'class="' . implode( ' ', $classes ) . ' ', $params[0]['before_widget'] );
-
-	return $params;
-}
-add_filter( 'dynamic_sidebar_params', '_bp_core_inject_bp_widget_css_class' );
-
-/**
  * Add email link styles to rendered email template.
  *
  * This is only used when the email content has been merged into the email template.
@@ -1201,7 +1218,7 @@ add_filter( 'bp_email_get_headers', 'bp_email_set_default_headers', 6, 4 );
  */
 function bp_email_set_default_tokens( $tokens, $property_name, $transform, $email ) {
 	$tokens['site.admin-email'] = bp_get_option( 'admin_email' );
-	$tokens['site.url']         = bp_get_root_domain();
+	$tokens['site.url']         = bp_get_root_url();
 	$tokens['email.subject']    = $email->get_subject();
 
 	// These options are escaped with esc_html on the way into the database in sanitize_option().
@@ -1231,11 +1248,12 @@ function bp_email_set_default_tokens( $tokens, $property_name, $transform, $emai
 			$tokens['recipient.username'] = $user_obj->user_login;
 
 			if ( bp_is_active( 'settings' ) && empty( $tokens['unsubscribe'] ) ) {
-				$tokens['unsubscribe'] = esc_url( sprintf(
-					'%s%s/notifications/',
-					bp_core_get_user_domain( $user_obj->ID ),
-					bp_get_settings_slug()
-				) );
+				$tokens['unsubscribe'] = esc_url(
+					bp_members_get_user_url(
+						$user_obj->ID,
+						bp_members_get_path_chunks( array( bp_get_settings_slug(), 'notifications' ) )
+					)
+				);
 			}
 		}
 	}
@@ -1327,3 +1345,36 @@ function bp_core_components_subdirectory_reserved_names( $names = array() ) {
 	return array_merge( $names, wp_list_pluck( $bp_pages, 'slug' ) );
 }
 add_filter( 'subdirectory_reserved_names', 'bp_core_components_subdirectory_reserved_names' );
+
+/**
+ * Make sure `buddypress` post type links are built using BP Rewrites.
+ *
+ * @since 12.0.0
+ *
+ * @param string       $link The post type link.
+ * @param WP_Post|null $post The post type object.
+ * @return string            The post type link.
+ */
+function bp_get_post_type_link( $link = '', $post = null ) {
+	if (  'rewrites' === bp_core_get_query_parser() && 'buddypress' === get_post_type( $post ) ) {
+		$bp_pages = (array) buddypress()->pages;
+
+		$bp_current_page = wp_list_filter( $bp_pages, array( 'id' => $post->ID ) );
+		if ( $bp_current_page ) {
+			$args = array(
+				'component_id' => key( $bp_current_page ),
+			);
+
+			if ( 'register' === $args['component_id'] || 'activate' === $args['component_id'] ) {
+				$key_action           = 'member_' . $args['component_id'];
+				$args['component_id'] = 'members';
+				$args[ $key_action ]  = 1;
+			}
+
+			$link = bp_rewrites_get_url( $args );
+		}
+	}
+
+	return $link;
+}
+add_filter( 'post_type_link', 'bp_get_post_type_link', 10, 2 );

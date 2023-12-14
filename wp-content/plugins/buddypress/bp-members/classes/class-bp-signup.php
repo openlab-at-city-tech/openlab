@@ -12,6 +12,7 @@
  *
  * @since 2.0.0
  */
+#[AllowDynamicProperties]
 class BP_Signup {
 
 	/**
@@ -21,6 +22,14 @@ class BP_Signup {
 	 * @var integer
 	 */
 	public $id;
+
+	/**
+	 * ID of the signup which the object relates to.
+	 *
+	 * @since 2.0.0
+	 * @var integer
+	 */
+	public $signup_id;
 
 	/**
 	 * The URL to the full size of the avatar for the user.
@@ -163,6 +172,8 @@ class BP_Signup {
 	 * Populate the instantiated class with data based on the signup_id provided.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 */
 	public function populate() {
 		global $wpdb;
@@ -248,6 +259,8 @@ class BP_Signup {
 	 *
 	 * @since 2.0.0
 	 * @since 6.0.0 Added a list of allowed orderby parameters.
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 *
 	 * @param array $args {
 	 *     The argument to retrieve desired signups.
@@ -433,6 +446,8 @@ class BP_Signup {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @global wpdb $wpdb The WordPress database object.
+	 *
 	 * @param array $args {
 	 *     Array of arguments for signup addition.
 	 *     @type string     $domain         New user's domain.
@@ -518,6 +533,8 @@ class BP_Signup {
 	 * default behavior.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 *
 	 * @param string $user_login    User login string.
 	 * @param string $user_password User password.
@@ -606,12 +623,10 @@ class BP_Signup {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param int $user_id ID of the user being checked.
-	 * @return int|bool The status if found, otherwise false.
+	 * @param  int      $user_id ID of the user being checked.
+	 * @return int|bool          The status if found, otherwise false.
 	 */
 	public static function check_user_status( $user_id = 0 ) {
-		global $wpdb;
-
 		if ( empty( $user_id ) ) {
 			return false;
 		}
@@ -633,6 +648,8 @@ class BP_Signup {
 	 * Activate a signup.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 *
 	 * @param string $key Activation key.
 	 * @return bool True on success, false on failure.
@@ -707,6 +724,8 @@ class BP_Signup {
 	 * email was sent and how many times activation was sent.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 *
 	 * @param array $args {
 	 *     Array of arguments for the signup update.
@@ -974,6 +993,8 @@ class BP_Signup {
 	 * Delete a pending account.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global wpdb $wpdb The WordPress database object.
 	 *
 	 * @param array $signup_ids Single ID or list of IDs to delete.
 	 * @return array

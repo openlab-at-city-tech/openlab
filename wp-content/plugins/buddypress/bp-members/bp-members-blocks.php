@@ -43,7 +43,7 @@ function bp_members_render_member_block( $attributes = array() ) {
 	$container_classes = array( 'bp-block-member' );
 
 	// Mention variables.
-	$username   = bp_core_get_username( $member_id );
+	$username   = bp_members_get_user_slug( $member_id );
 	$at_mention = '';
 
 	// Avatar variables.
@@ -57,7 +57,7 @@ function bp_members_render_member_block( $attributes = array() ) {
 
 	// Member name variables.
 	$display_name = bp_core_get_user_displayname( $member_id );
-	$member_link  = bp_core_get_user_domain( $member_id );
+	$member_link  = bp_members_get_user_url( $member_id );
 
 	// Member action button.
 	$action_button         = '';
@@ -198,6 +198,11 @@ function bp_members_render_members_block( $attributes = array() ) {
 		return '';
 	}
 
+	// Make sure the avatar size exists.
+	if ( ! in_array( $block_args['avatarSize'], array( 'thumb', 'full' ), true ) ) {
+		$block_args['avatarSize'] = 'none';
+	}
+
 	$container_classes = sprintf( 'bp-block-members avatar-%s', $block_args['avatarSize'] );
 	if ( 'grid' === $block_args['layoutPreference'] ) {
 		$container_classes .= sprintf( ' is-grid columns-%d', (int) $block_args['columns'] );
@@ -229,7 +234,7 @@ function bp_members_render_members_block( $attributes = array() ) {
 		$output .= sprintf( '<div class="%s">', $member_item_classes );
 
 		// Get Member link.
-		$member_link = bp_core_get_user_domain( $member->ID );
+		$member_link = bp_members_get_user_url( $member->ID );
 
 		// Set the Avatar output.
 		if ( $bp->avatar && $bp->avatar->show_avatars && 'none' !== $block_args['avatarSize'] ) {
@@ -420,18 +425,18 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 	$item_options = array(
 		'newest' => array(
 			'class' => '',
-			'label' => __( 'Newest', 'buddypress' ),
+			'label' => _x( 'Newest', 'Members', 'buddypress' ),
 		),
 		'active' => array(
 			'class' => '',
-			'label' => __( 'Active', 'buddypress' ),
+			'label' => _x( 'Active', 'Members', 'buddypress' ),
 		),
 	);
 
 	if ( bp_is_active( 'friends' ) ) {
 		$item_options['popular'] = array(
 			'class' => '',
-			'label' => __( 'Popular', 'buddypress' ),
+			'label' => _x( 'Popular', 'Members', 'buddypress' ),
 		);
 	}
 
@@ -482,7 +487,7 @@ function bp_members_render_dynamic_members_block( $attributes = array() ) {
 					'assets/widgets/dynamic-members.php',
 					'php',
 					array(
-						'data.link'              => bp_core_get_user_domain( $user->ID, $user->user_nicename, $user->user_login ),
+						'data.link'              => bp_members_get_user_url( $user->ID ),
 						'data.name'              => $user->display_name,
 						'data.avatar_urls.thumb' => bp_core_fetch_avatar(
 							array(
@@ -632,7 +637,7 @@ function bp_members_render_members_avatars_block( $block_args = array() ) {
 						<img loading="lazy" src="%3$s" class="avatar user-%4$s-avatar avatar-50 photo" width="50" height="50" alt="%5$s">
 					</a>
 				</div>',
-				esc_url( bp_core_get_user_domain( $member->ID, $member->user_nicename, $member->user_login ) ),
+				esc_url( bp_members_get_user_url( $member->ID ) ),
 				esc_html( $member->display_name ),
 				bp_core_fetch_avatar(
 					array(

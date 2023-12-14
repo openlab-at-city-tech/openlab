@@ -247,7 +247,7 @@ function xprofile_sanitize_data_value_before_save( $field_value, $field_id = 0, 
 			$filtered_values[] = apply_filters( 'xprofile_filtered_data_value_before_save', $filtered_value, $value, $data_obj );
 		}
 
-		if ( !empty( $reserialize ) ) {
+		if ( ! empty( $reserialize ) ) {
 			$filtered_field_value = serialize( $filtered_values );
 		} else {
 			$filtered_field_value = $filtered_values;
@@ -563,6 +563,8 @@ add_action( 'bp_pre_user_query', 'bp_xprofile_add_xprofile_query_to_user_query' 
  * Filter meta queries to modify for the xprofile data schema.
  *
  * @since 2.0.0
+ * 
+ * @global wpdb $wpdb WordPress database object.
  *
  * @access private Do not use.
  *

@@ -67,8 +67,8 @@ class BP_XProfile_Meta_Query extends WP_Meta_Query {
 		}
 
 		// BP_XProfile_Query sets 'object_type' = '' by default.
-		if ( isset( $qv[ 'object_type' ] ) && ( '' !== $qv[ 'object_type' ] ) && ( ! is_array( $qv[ 'object_type' ] ) || $qv[ 'object_type' ] ) ) {
-			$meta_query[0]['object'] = $qv[ 'object_type' ];
+		if ( isset( $qv['object_type'] ) && ( '' !== $qv['object_type'] ) && ( ! is_array( $qv['object_type'] ) || $qv['object_type'] ) ) {
+			$meta_query[0]['object'] = $qv['object_type'];
 		}
 
 		$existing_meta_query = isset( $qv['meta_query'] ) && is_array( $qv['meta_query'] ) ? $qv['meta_query'] : array();
@@ -152,6 +152,8 @@ class BP_XProfile_Meta_Query extends WP_Meta_Query {
 	 * "First-order" means that it's an array with a 'key' or 'value'.
 	 *
 	 * @since 2.3.0
+	 * 
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array  $clause       Query clause, passed by reference.
 	 * @param array  $parent_query Parent query array.
@@ -184,7 +186,7 @@ class BP_XProfile_Meta_Query extends WP_Meta_Query {
 			'IN', 'NOT IN',
 			'BETWEEN', 'NOT BETWEEN',
 			'EXISTS', 'NOT EXISTS',
-			'REGEXP', 'NOT REGEXP', 'RLIKE'
+			'REGEXP', 'NOT REGEXP', 'RLIKE',
 		) ) ) {
 			$clause['compare'] = '=';
 		}

@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
+#[AllowDynamicProperties]
 class BP_Messages_Thread {
 
 	/**
@@ -26,12 +27,20 @@ class BP_Messages_Thread {
 	public $thread_id;
 
 	/**
-	 * The current messages.
+	 * The current messages in the message thread.
 	 *
 	 * @since 1.0.0
 	 * @var array
 	 */
 	public $messages;
+
+	/**
+	 * The current messages count in the message thread.
+	 *
+	 * @since 12.0.0
+	 * @var int
+	 */
+	public $messages_total_count;
 
 	/**
 	 * The current recipients in the message thread.
@@ -182,19 +191,26 @@ class BP_Messages_Thread {
 		$this->messages_order = $r['order'];
 		$this->thread_id      = (int) $thread_id;
 
-		// Get messages for thread.
-		$this->messages = self::get_messages( $this->thread_id, $r );
+		// Get latest message.
+		$latest_message = self::get_latest_thread_message( $this->thread_id );
 
-		if ( empty( $this->messages ) ) {
+		// Bail early if no thread message is found.
+		if ( empty( $latest_message ) ) {
 			return false;
 		}
 
-		$last_message_index         = count( $this->messages ) - 1;
-		$this->last_message_id      = $this->messages[ $last_message_index ]->id;
-		$this->last_message_date    = $this->messages[ $last_message_index ]->date_sent;
-		$this->last_sender_id       = $this->messages[ $last_message_index ]->sender_id;
-		$this->last_message_subject = $this->messages[ $last_message_index ]->subject;
-		$this->last_message_content = $this->messages[ $last_message_index ]->message;
+		// Set latest message data.
+		$this->last_message_id      = $latest_message->id;
+		$this->last_message_date    = $latest_message->date_sent;
+		$this->last_sender_id       = $latest_message->sender_id;
+		$this->last_message_subject = $latest_message->subject;
+		$this->last_message_content = $latest_message->message;
+
+		// Get messages for thread.
+		$this->messages = self::get_messages( $this->thread_id, $r );
+
+		// Messages total count.
+		$this->messages_total_count = self::get_total_thread_message_count( $this->thread_id );
 
 		foreach ( (array) $this->messages as $key => $message ) {
 			$this->sender_ids[ $message->sender_id ] = $message->sender_id;
@@ -249,7 +265,6 @@ class BP_Messages_Thread {
 	 * @since 2.3.0  Added `$thread_id` as a parameter.
 	 * @since 10.0.0 Added `$args` as a parameter.
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int   $thread_id Message thread ID.
@@ -338,7 +353,6 @@ class BP_Messages_Thread {
 	 * @since 2.3.0
 	 * @since 10.0.0 Added `$args` as a parameter.
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int   $thread_id The message thread ID.
@@ -420,6 +434,55 @@ class BP_Messages_Thread {
 	}
 
 	/**
+	 * Get latest thread message.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
+	 * @param integer $thread_id The message thread ID.
+	 * @return object|null
+	 */
+	public static function get_latest_thread_message( $thread_id ) {
+		global $wpdb;
+
+		$thread_id = (int) $thread_id;
+		$cache_key = "{$thread_id}_bp_messages_thread_latest_message";
+		$message   = wp_cache_get( $cache_key, 'bp_messages_threads' );
+
+		// Get latest message and cache it.
+		if ( empty( $message ) ) {
+			$bp      = buddypress();
+			$message = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM {$bp->messages->table_name_messages} WHERE thread_id = %d ORDER BY date_sent DESC",
+					$thread_id
+				)
+			);
+
+			// Cast integers.
+			if ( ! empty( $message ) ) {
+				$message->id        = (int) $message->id;
+				$message->sender_id = (int) $message->sender_id;
+				$message->thread_id = (int) $message->thread_id;
+
+				// Cache message.
+				wp_cache_set( $cache_key, $message, 'bp_messages_threads' );
+			}
+		}
+
+		/**
+		 * Latest thread message.
+		 *
+		 * @since 12.0.0
+		 *
+		 * @param object|null $message   Latest thread message or null.
+		 * @param integer     $thread_id ID of the thread.
+		 */
+		return apply_filters( 'messages_thread_get_latest_message', $message, $thread_id );
+	}
+
+	/**
 	 * Static method to get message recipients by thread ID.
 	 *
 	 * @since 2.3.0
@@ -442,7 +505,6 @@ class BP_Messages_Thread {
 	 * @since 2.7.0 The $user_id parameter was added. Previously the current user
 	 *              was always assumed.
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $thread_id The message thread ID.
@@ -603,7 +665,6 @@ class BP_Messages_Thread {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args {
@@ -828,7 +889,6 @@ class BP_Messages_Thread {
 	 * @since 1.0.0
 	 * @since 9.0.0 Added the `user_id` parameter.
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $thread_id The message thread ID.
@@ -874,7 +934,6 @@ class BP_Messages_Thread {
 	 * @since 1.0.0
 	 * @since 9.0.0 Added the `user_id` parameter.
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $thread_id The message thread ID.
@@ -919,6 +978,8 @@ class BP_Messages_Thread {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @global wpdb $wpdb The WordPress database object.
+	 *
 	 * @param int    $user_id The user ID.
 	 * @param string $box     The type of mailbox to get. Either 'inbox' or 'sentbox'.
 	 *                        Defaults to 'inbox'.
@@ -946,11 +1007,47 @@ class BP_Messages_Thread {
 	}
 
 	/**
+	 * Returns the total number of messages in a thread.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
+	 * @param integer $thread_id The message thread ID.
+	 * @return integer Total thread message count
+	 */
+	public static function get_total_thread_message_count( $thread_id ) {
+		global $wpdb;
+
+		$cache_key   = "{$thread_id}_bp_messages_thread_total_count";
+		$total_count = wp_cache_get( $cache_key, 'bp_messages_threads' );
+
+		if ( false === $total_count ) {
+			$bp = buddypress();
+
+			$total_count = (int) $wpdb->get_var(
+				$wpdb->prepare( "SELECT COUNT(id) FROM {$bp->messages->table_name_messages} WHERE thread_id = %d", $thread_id )
+			);
+
+			wp_cache_set( $cache_key, $total_count, 'bp_messages_threads' );
+		}
+
+		/**
+		 * Thread messages count.
+		 *
+		 * @since 12.0.0
+		 *
+		 * @param integer $total_count Total thread messages count.
+		 * @param integer $thread_id   ID of the thread.
+		 */
+		return (int) apply_filters( 'messages_thread_get_total_message_count', $total_count, (int) $thread_id );
+	}
+
+	/**
 	 * Determine if the logged-in user is a sender of any message in a thread.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $thread_id The message thread ID.
@@ -975,7 +1072,6 @@ class BP_Messages_Thread {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $thread_id The message thread ID.
@@ -998,7 +1094,6 @@ class BP_Messages_Thread {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $user_id The user ID.
@@ -1122,7 +1217,6 @@ class BP_Messages_Thread {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @return bool

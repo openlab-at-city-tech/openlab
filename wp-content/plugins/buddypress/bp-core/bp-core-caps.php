@@ -20,7 +20,9 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.1.0
  *
- * @return object
+ * @global WP_Roles $wp_roles WordPress role management object.
+ *
+ * @return array
  */
 function bp_get_current_blog_roles() {
 	global $wp_roles;
@@ -56,6 +58,8 @@ function bp_get_current_blog_roles() {
  * This is called on plugin activation.
  *
  * @since 1.6.0
+ *
+ * @global WP_Roles $wp_roles WordPress role management object.
  */
 function bp_add_caps() {
 	global $wp_roles;
@@ -88,6 +92,8 @@ function bp_add_caps() {
  * This is called on plugin deactivation.
  *
  * @since 1.6.0
+ *
+ * @global WP_Roles $wp_roles WordPress role management object.
  */
 function bp_remove_caps() {
 	global $wp_roles;
@@ -118,6 +124,7 @@ function bp_remove_caps() {
  * Map community caps to built in WordPress caps.
  *
  * @since 1.6.0
+ * @since 12.0.0 Added mapping for `bp_view` capability.
  *
  * @see WP_User::has_cap() for description of the arguments passed to the
  *      'map_meta_cap' filter.
@@ -130,6 +137,21 @@ function bp_remove_caps() {
  * @return array Actual capabilities for meta capability. See {@link WP_User::has_cap()}.
  */
 function bp_map_meta_caps( $caps, $cap, $user_id, $args ) {
+
+	switch ( $cap ) {
+		case 'bp_view' :
+			$caps = array( 'exist' );
+			if ( ! $user_id ) {
+
+				// A BuddyPress component ID may be optionally passed with the `bp_view` check.
+				$component = isset( $args[0]['bp_component'] ) ? $args[0]['bp_component'] : '';
+
+				if ( 'members' === bp_get_community_visibility( $component ) ) {
+					$caps = array( 'do_not_allow' );
+				}
+			}
+			break;
+	}
 
 	/**
 	 * Filters the community caps mapping to be built in WordPress caps.
@@ -295,6 +317,17 @@ function bp_current_user_can( $capability, $args = array() ) {
 	 * @param array  $args       Array of extra arguments as originally passed.
 	 */
 	return (bool) apply_filters( 'bp_current_user_can', $retval, $capability, $args['site_id'], $args );
+}
+
+/**
+ * Callback function to inform whether current user can moderate the community.
+ *
+ * @since 12.0.0
+ *
+ * @return boolean True if current user can moderate the community. False otherwise.
+ */
+function bp_current_user_can_moderate() {
+	return bp_current_user_can( 'bp_moderate' );
 }
 
 /**

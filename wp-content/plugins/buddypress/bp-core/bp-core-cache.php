@@ -13,30 +13,34 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Prune the WP Super Cache.
- *
- * When WP Super Cache is installed, this function will clear cached pages
- * so that success/error messages or time-sensitive content are not cached.
- *
- * @since 1.0.0
- *
- * @see prune_super_cache()
- *
- * @return int
- */
-function bp_core_clear_cache() {
-	global $cache_path;
+if ( ! function_exists( 'bp_core_clear_cache' ) ) {
 
-	if ( function_exists( 'prune_super_cache' ) ) {
+	/**
+	 * Prune the WP Super Cache.
+	 *
+	 * When WP Super Cache is installed, this function will clear cached pages
+	 * so that success/error messages or time-sensitive content are not cached.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @global string $cache_path Path directory.
+	 *
+	 * @see prune_super_cache()
+	 */
+	function bp_core_clear_cache() {
+		global $cache_path;
 
-		/**
-		 * Fires before the pruning of WP Super Cache.
-		 *
-		 * @since 1.0.0
-		 */
-		do_action( 'bp_core_clear_cache' );
-		return prune_super_cache( $cache_path, true );
+		if ( function_exists( 'prune_super_cache' ) ) {
+
+			/**
+			 * Fires before the pruning of WP Super Cache.
+			 *
+			 * @since 1.0.0
+			 */
+			do_action( 'bp_core_clear_cache' );
+
+			prune_super_cache( $cache_path, true );
+		}
 	}
 }
 
@@ -180,7 +184,7 @@ function bp_get_non_cached_ids( $item_ids, $cache_group ) {
  *
  * @since 1.6.0
  *
- * @global object $wpdb WordPress database object for queries..
+ * @global wpdb $wpdb WordPress database object.
  *
  * @param array $args {
  *     Array of arguments.
@@ -415,9 +419,9 @@ add_action( 'bp_setup_cache_groups', 'bp_set_object_type_terms_cache_group' );
 function bp_clear_object_type_terms_cache( $type_id = 0, $taxonomy = '' ) {
 	wp_cache_delete( $taxonomy, 'bp_object_terms' );
 }
-add_action( 'bp_type_inserted', 'bp_clear_object_type_terms_cache' );
-add_action( 'bp_type_updated', 'bp_clear_object_type_terms_cache' );
-add_action( 'bp_type_deleted', 'bp_clear_object_type_terms_cache' );
+add_action( 'bp_type_inserted', 'bp_clear_object_type_terms_cache', 10, 2 );
+add_action( 'bp_type_updated', 'bp_clear_object_type_terms_cache', 10, 2 );
+add_action( 'bp_type_deleted', 'bp_clear_object_type_terms_cache', 10, 2 );
 
 /**
  * Resets all incremented bp_optout caches.

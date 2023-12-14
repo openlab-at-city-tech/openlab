@@ -197,18 +197,20 @@ class BP_REST_Group_Membership_Endpoint extends WP_REST_Controller {
 				'status' => rest_authorization_required_code(),
 			)
 		);
-		$group  = $this->groups_endpoint->get_group_object( $request->get_param( 'group_id' ) );
 
-		if ( empty( $group->id ) ) {
-			$retval = new WP_Error(
-				'bp_rest_group_invalid_id',
-				__( 'Invalid group ID.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
-			);
-		} elseif ( bp_current_user_can( 'bp_moderate' ) || 'public' === $group->status || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
-			$retval = true;
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'groups' ) ) ) {
+			$group = $this->groups_endpoint->get_group_object( $request->get_param( 'group_id' ) );
+			if ( empty( $group->id ) ) {
+				$retval = new WP_Error(
+					'bp_rest_group_invalid_id',
+					__( 'Invalid group ID.', 'buddypress' ),
+					array(
+						'status' => 404,
+					)
+				);
+			} elseif ( bp_current_user_can( 'bp_moderate' ) || 'public' === $group->status || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+				$retval = true;
+			}
 		}
 
 		/**
@@ -702,6 +704,11 @@ class BP_REST_Group_Membership_Endpoint extends WP_REST_Controller {
 		$context                = ! empty( $request->get_param( 'context' ) ) ? $request->get_param( 'context' ) : 'view';
 		$member_data            = $this->members_endpoint->user_data( $user, $context, $request );
 		$group_member->group_id = $request->get_param( 'group_id' );
+		$date_modified          = $group_member->date_modified;
+
+		if ( is_null( $date_modified ) ) {
+			$date_modified = '';
+		}
 
 		// Merge both info.
 		$data = array_merge(
@@ -712,8 +719,8 @@ class BP_REST_Group_Membership_Endpoint extends WP_REST_Controller {
 				'is_admin'          => (bool) $group_member->is_admin,
 				'is_banned'         => (bool) $group_member->is_banned,
 				'is_confirmed'      => (bool) $group_member->is_confirmed,
-				'date_modified'     => bp_rest_prepare_date_response( $group_member->date_modified, get_date_from_gmt( $group_member->date_modified ) ),
-				'date_modified_gmt' => bp_rest_prepare_date_response( $group_member->date_modified ),
+				'date_modified'     => bp_rest_prepare_date_response( $date_modified, get_date_from_gmt( $date_modified ) ),
+				'date_modified_gmt' => bp_rest_prepare_date_response( $date_modified ),
 			)
 		);
 

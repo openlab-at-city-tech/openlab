@@ -65,6 +65,29 @@ class BP_Groups_Group_Members_Template {
 	public $pag_links;
 
 	/**
+	 * URL argument used for the pagination param.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	public $pag_arg;
+
+	/**
+	 * The type of member being requested. Used for ordering results.
+	 *
+	 * @since 2.3.0
+	 * @var string
+	 */
+	public $type = '';
+
+	/**
+	 * The total number of members.
+	 *
+	 * @var int
+	 */
+	public $total_member_count;
+
+	/**
 	 * @since 1.0.0
 	 * @var int
 	 */
@@ -145,10 +168,15 @@ class BP_Groups_Group_Members_Template {
 		}
 
 		// Assemble the base URL for pagination.
-		$base_url = trailingslashit( bp_get_group_permalink( $current_group ) . bp_current_action() );
+		$chunks = array( bp_current_action() );
 		if ( bp_action_variable() ) {
-			$base_url = trailingslashit( $base_url . bp_action_variable() );
+			$chunks[] = bp_action_variable();
 		}
+
+		$base_url = bp_get_group_url(
+			$current_group,
+			bp_groups_get_path_chunks( $chunks )
+		);
 
 		$members_args = $r;
 

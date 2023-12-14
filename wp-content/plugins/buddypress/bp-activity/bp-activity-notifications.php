@@ -29,14 +29,15 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 	$activity_id   = $item_id;
 	$user_id       = $secondary_item_id;
 	$user_fullname = bp_core_get_user_displayname( $user_id );
+	$activity_slug = bp_get_activity_slug();
 
 	switch ( $action ) {
 		case 'new_at_mention':
 			$action_filter = 'at_mentions';
-			$link          = bp_loggedin_user_domain() . bp_get_activity_slug() . '/mentions/';
+			$link          = bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'mentions' ) ) );
 
 			/* translators: %s: the current user display name */
-			$title  = sprintf( __( '@%s Mentions', 'buddypress' ), bp_get_loggedin_user_username() );
+			$text   = sprintf( __( '@%s Mentions', 'buddypress' ), bp_get_loggedin_user_username() );
 			$amount = 'single';
 
 			if ( (int) $total_items > 1 ) {
@@ -51,7 +52,7 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 
 		case 'update_reply':
 			$link   = bp_get_notifications_permalink();
-			$title  = __( 'New Activity reply', 'buddypress' );
+			$text   = __( 'New Activity reply', 'buddypress' );
 			$amount = 'single';
 
 			if ( (int) $total_items > 1 ) {
@@ -70,7 +71,7 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 
 		case 'comment_reply':
 			$link   = bp_get_notifications_permalink();
-			$title  = __( 'New Activity comment reply', 'buddypress' );
+			$text   = __( 'New Activity comment reply', 'buddypress' );
 			$amount = 'single';
 
 			if ( (int) $total_items > 1 ) {
@@ -411,7 +412,7 @@ function bp_activity_screen_notification_settings() {
 					<td>
 						<?php
 						/* translators: %s: the displayed user username */
-						printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_core_get_username( bp_displayed_user_id() ) );
+						printf( __( 'A member mentions you in an update using "@%s"', 'buddypress' ), bp_members_get_user_slug( bp_displayed_user_id() ) );
 						?>
 					</td>
 					<td class="yes"><input type="radio" name="notifications[notification_activity_new_mention]" id="notification-activity-new-mention-yes" value="yes" <?php checked( $mention, 'yes', true ) ?>/><label for="notification-activity-new-mention-yes" class="bp-screen-reader-text"><?php

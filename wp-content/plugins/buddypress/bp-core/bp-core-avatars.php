@@ -17,24 +17,27 @@ defined( 'ABSPATH' ) || exit;
  */
 function bp_core_set_avatar_constants() {
 
-	$bp = buddypress();
-
-	if ( !defined( 'BP_AVATAR_THUMB_WIDTH' ) )
+	if ( ! defined( 'BP_AVATAR_THUMB_WIDTH' ) ) {
 		define( 'BP_AVATAR_THUMB_WIDTH', 50 );
+	}
 
-	if ( !defined( 'BP_AVATAR_THUMB_HEIGHT' ) )
+	if ( ! defined( 'BP_AVATAR_THUMB_HEIGHT' ) ) {
 		define( 'BP_AVATAR_THUMB_HEIGHT', 50 );
+	}
 
-	if ( !defined( 'BP_AVATAR_FULL_WIDTH' ) )
+	if ( ! defined( 'BP_AVATAR_FULL_WIDTH' ) ) {
 		define( 'BP_AVATAR_FULL_WIDTH', 150 );
+	}
 
-	if ( !defined( 'BP_AVATAR_FULL_HEIGHT' ) )
+	if ( ! defined( 'BP_AVATAR_FULL_HEIGHT' ) ) {
 		define( 'BP_AVATAR_FULL_HEIGHT', 150 );
+	}
 
-	if ( !defined( 'BP_AVATAR_ORIGINAL_MAX_WIDTH' ) )
+	if ( ! defined( 'BP_AVATAR_ORIGINAL_MAX_WIDTH' ) ) {
 		define( 'BP_AVATAR_ORIGINAL_MAX_WIDTH', 450 );
+	}
 
-	if ( !defined( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE' ) ) {
+	if ( ! defined( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE' ) ) {
 		define( 'BP_AVATAR_ORIGINAL_MAX_FILESIZE', bp_attachments_get_max_upload_file_size( 'avatar' ) );
 	}
 
@@ -200,7 +203,7 @@ function bp_core_is_default_gravatar( $d = '' ) {
  *                                   of the user's email address; this argument provides it. If not
  *                                   provided, the function will infer it: for users, by getting the
  *                                   user's email from the database, for groups/blogs, by concatenating
- *                                   "{$item_id}-{$object}@{bp_get_root_domain()}". The user query adds
+ *                                   "{$item_id}-{$object}@{bp_get_domain()}". The user query adds
  *                                   overhead, so it's recommended that wrapper functions provide a
  *                                   value for 'email' when querying user IDs. Default: false.
  *     @type bool       $no_grav     Whether to disable the default Gravatar fallback.
@@ -641,7 +644,7 @@ function bp_core_fetch_avatar( $args = '' ) {
 			if ( 'user' == $params['object'] ) {
 				$params['email'] = bp_core_get_user_email( $params['item_id'] );
 			} elseif ( 'group' == $params['object'] || 'blog' == $params['object'] ) {
-				$params['email'] = $params['item_id'] . '-' . $params['object'] . '@' . bp_get_root_domain();
+				$params['email'] = $params['item_id'] . '-' . $params['object'] . '@' . bp_get_domain();
 			}
 		}
 
@@ -1620,7 +1623,8 @@ function bp_core_check_avatar_type( $file ) {
  * @return string The avatar upload directory path.
  */
 function bp_core_get_upload_dir( $type = 'upload_path' ) {
-	$bp = buddypress();
+	$bp     = buddypress();
+	$retval = '';
 
 	switch ( $type ) {
 		case 'upload_path' :
@@ -1636,7 +1640,7 @@ function bp_core_get_upload_dir( $type = 'upload_path' ) {
 			break;
 
 		default :
-			return false;
+			return $retval;
 
 			break;
 	}
@@ -1664,20 +1668,16 @@ function bp_core_get_upload_dir( $type = 'upload_path' ) {
 				$bp->avatar->upload_dir = $upload_dir;
 			}
 
-			// Directory does not exist and cannot be created.
-			if ( ! empty( $upload_dir['error'] ) ) {
-				$retval = '';
-
-			} else {
-				$retval = $upload_dir[$key];
+			// Upload directory exists.
+			if ( isset( $upload_dir[ $key ] ) ) {
+				$retval = $upload_dir[ $key ];
 
 				// If $key is 'baseurl', check to see if we're on SSL
 				// Workaround for WP13941, WP15928, WP19037.
-				if ( $key == 'baseurl' && is_ssl() ) {
+				if ( $key === 'baseurl' && is_ssl() ) {
 					$retval = str_replace( 'http://', 'https://', $retval );
 				}
 			}
-
 		}
 
 		// Stash in $bp for later use.
@@ -2600,3 +2600,18 @@ function bp_avatar_ajax_delete_previous_avatar() {
 	);
 }
 add_action( 'wp_ajax_bp_avatar_delete_previous', 'bp_avatar_ajax_delete_previous_avatar' );
+
+
+/**
+ * Register Avatar ajax actions.
+ *
+ * @since 12.0.0
+ */
+function bp_avatar_register_ajax_actions() {
+	$ajax_actions = array( 'bp_avatar_upload', 'bp_avatar_set', 'bp_avatar_delete', 'bp_avatar_recycle_previous', 'bp_avatar_delete_previous' );
+
+	foreach ( $ajax_actions as $ajax_action ) {
+		bp_ajax_register_action( $ajax_action );
+	}
+}
+add_action( 'bp_init', 'bp_avatar_register_ajax_actions' );

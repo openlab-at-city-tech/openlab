@@ -107,7 +107,7 @@ function bp_get_group_by( $field, $value ) {
  *
  * @since 10.0.0
  *
- * @global BP_Groups_Template $groups_template Groups template object.
+ * @global BP_Groups_Template $groups_template The main Groups template loop class.
  *
  * @param false|int|string|object|BP_Groups_Group $group (Optional) The Group ID, the Group Slug or the Group object.
  *                                                       Default: false.
@@ -1258,8 +1258,6 @@ function groups_total_groups_for_user( $user_id = 0 ) {
  *
  * @since 1.5.0
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @return BP_Groups_Group|bool The current group object or false.
  */
 function groups_get_current_group() {
@@ -1277,6 +1275,25 @@ function groups_get_current_group() {
 	 * @param BP_Groups_Group|bool $current_group Current BP_Groups_Group object or false.
 	 */
 	return apply_filters( 'groups_get_current_group', $current_group );
+}
+
+/**
+ * Can the current user access to the current group?
+ *
+ * @since 12.0.0
+ *
+ * @return boolean True if the current user can access to the current group.
+ *                 False otherwise.
+ */
+function bp_groups_user_can_access_current_group() {
+	$can_access = false;
+
+	$current_group = groups_get_current_group();
+	if ( isset( $current_group->user_has_access ) ) {
+		$can_access = $current_group->user_has_access;
+	}
+
+	return $can_access;
 }
 
 /** Group Avatars *************************************************************/
@@ -2446,6 +2463,8 @@ function groups_accept_all_pending_membership_requests( $group_id = 0 ) {
  *
  * @since 1.0.0
  *
+ * @global wpdb $wpdb WordPress database object.
+ *
  * @param int         $group_id   ID of the group.
  * @param string|bool $meta_key   The key of the row to delete.
  * @param string|bool $meta_value Optional. Metadata value. If specified, only delete
@@ -3335,7 +3354,7 @@ function bp_groups_memberships_personal_data_exporter( $email_address, $page ) {
 			),
 			array(
 				'name'  => __( 'Group URL', 'buddypress' ),
-				'value' => bp_get_group_permalink( $group ),
+				'value' => bp_get_group_url( $group ),
 			),
 		);
 
@@ -3424,7 +3443,7 @@ function bp_groups_pending_requests_personal_data_exporter( $email_address, $pag
 			),
 			array(
 				'name'  => __( 'Group URL', 'buddypress' ),
-				'value' => bp_get_group_permalink( $group ),
+				'value' => bp_get_group_url( $group ),
 			),
 			array(
 				'name'  => __( 'Date Sent', 'buddypress' ),
@@ -3490,7 +3509,7 @@ function bp_groups_pending_sent_invitations_personal_data_exporter( $email_addre
 			),
 			array(
 				'name'  => __( 'Group URL', 'buddypress' ),
-				'value' => bp_get_group_permalink( $group ),
+				'value' => bp_get_group_url( $group ),
 			),
 			array(
 				'name'  => __( 'Sent To', 'buddypress' ),
@@ -3560,7 +3579,7 @@ function bp_groups_pending_received_invitations_personal_data_exporter( $email_a
 			),
 			array(
 				'name'  => __( 'Group URL', 'buddypress' ),
-				'value' => bp_get_group_permalink( $group ),
+				'value' => bp_get_group_url( $group ),
 			),
 			array(
 				'name'  => __( 'Invited By', 'buddypress' ),
@@ -3593,6 +3612,8 @@ function bp_groups_pending_received_invitations_personal_data_exporter( $email_a
  * Migrate invitations and requests from pre-5.0 group_members table to invitations table.
  *
  * @since 5.0.0
+ *
+ * @global wpdb $wpdb WordPress database object.
  */
 function bp_groups_migrate_invitations() {
 	global $wpdb;
@@ -3725,4 +3746,337 @@ function bp_groups_defer_group_members_count( $defer = true, $group_id = 0 ) {
 	if  ( $group_id ) {
 		bp_groups_update_group_members_count( 0, (int) $group_id );
 	}
+}
+
+/**
+ * Returns the Group restricted screens.
+ *
+ * @since 12.0.0
+ *
+ * @return array The list of the Group restricted screens.
+ */
+function bp_get_group_restricted_screens() {
+	return array(
+		'bp_group_create'      => array(
+			'rewrite_id' => 'bp_group_create',
+			'slug'       => 'create',
+			'name'       => _x( 'Create Group root slug', 'Group create restricted rewrite id', 'buddypress' ),
+			'context'    => 'create',
+		),
+		'bp_group_create_step' => array(
+			'rewrite_id' => 'bp_group_create_step',
+			'slug'       => 'step',
+			'name'       => _x( 'Create step slug', 'Group create restricted rewrite id', 'buddypress' ),
+			'context'    => 'create',
+		),
+	);
+}
+
+/**
+ * Returns all registered Group Extension front-end screens.
+ *
+ * @since 12.0.0
+ *
+ * @param string $context The display context. Required. Defaults to `read`.
+ * @return array          The list of registered Group Extension screens.
+ */
+function bp_get_group_extension_screens( $context = 'read' ) {
+	$bp = buddypress();
+
+	$group_extension_screens = array(
+		'create' => array(),
+		'manage' => array(),
+		'read'   => array(),
+	);
+
+	if ( $bp->groups->group_extensions ) {
+		foreach ( $bp->groups->group_extensions as $extension_screens ) {
+			if ( ! is_array( $extension_screens ) ) {
+				continue;
+			}
+
+			foreach ( $extension_screens as $ctext => $extension_screen ) {
+				$group_extension_screens[ $ctext ] = array_merge( $group_extension_screens[ $ctext ], $extension_screen );
+			}
+		}
+	}
+
+	if ( ! array_filter( $group_extension_screens ) || ! isset( $group_extension_screens[ $context ] ) ) {
+		return array();
+	}
+
+	return $group_extension_screens[ $context ];
+}
+
+/**
+ * Returns all potential Group screens.
+ *
+ * @since 12.0.0
+ *
+ * @param string  $context  The display context. Required. Defaults to `read`.
+ *                          Possible values are `read`, `manage` or `create`.
+ * @param boolean $built_in True to only get builtin screens. False otherwise.
+ * @return array            The list of potential Group screens.
+ */
+function bp_get_group_screens( $context = 'read', $built_in = false ) {
+	$screens = array(
+		'create' => array(
+			'group-details'     => array(
+				'rewrite_id' => 'bp_group_create_group_details',
+				'slug'       => 'group-details',
+				'name'       => _x( 'Details', 'Group create screen', 'buddypress' ),
+				'position'   => 0,
+			),
+			'group-settings'    => array(
+				'rewrite_id' => 'bp_group_create_group_settings',
+				'slug'       => 'group-settings',
+				'name'       => _x( 'Settings', 'Group create screen', 'buddypress' ),
+				'position'   => 10,
+			),
+			'group-avatar'      => array(
+				'rewrite_id' => 'bp_group_create_group_avatar',
+				'slug'       => 'group-avatar',
+				'name'       => _x( 'Photo', 'Group create screen', 'buddypress' ),
+				'position'   => 20,
+			),
+			'group-cover-image' => array(
+				'rewrite_id' => 'bp_group_create_group_cover_image',
+				'slug'       => 'group-cover-image',
+				'name'       => _x( 'Cover Image', 'Group create screen', 'buddypress' ),
+				'position'   => 25,
+			),
+			'group-invites'     => array(
+				'rewrite_id' => 'bp_group_create_group_invites',
+				'slug'       => 'group-invites',
+				'name'       => _x( 'Invites', 'Group create screen', 'buddypress' ),
+				'position'   => 30,
+			),
+		),
+		'read'   => array(
+			'home'               => array(
+				'rewrite_id'      => 'bp_group_read_home',
+				'slug'            => 'home',
+				'name'            => _x( 'Home', 'Group read screen', 'buddypress' ),
+				'screen_function' => 'groups_screen_group_home',
+				'position'        => 10,
+				'item_css_id'     => 'home',
+			),
+			'request-membership' => array(
+				'rewrite_id'      => 'bp_group_read_request_membership',
+				'slug'            => 'request-membership',
+				'name'            => _x( 'Request Membership', 'Group read screen', 'buddypress' ),
+				'screen_function' => 'groups_screen_group_request_membership',
+				'position'        => 30,
+			),
+			'activity'           => array(
+				'rewrite_id'               => 'bp_group_read_activity',
+				'slug'                     => 'activity',
+				'name'                     => _x( 'Activity', 'Group read screen', 'buddypress' ),
+				'screen_function'          => 'groups_screen_group_activity',
+				'position'                 => 11,
+				'user_has_access'          => false,
+				'user_has_access_callback' => 'bp_groups_user_can_access_current_group',
+				'no_access_url'            => '',
+				'item_css_id'              => 'activity',
+			),
+			'members'            => array(
+				'rewrite_id'               => 'bp_group_read_members',
+				'slug'                     => 'members',
+				/* translators: %s: total member count */
+				'name'                     => _x( 'Members %s', 'Group read screen', 'buddypress' ),
+				'screen_function'          => 'groups_screen_group_members',
+				'position'                 => 60,
+				'user_has_access'          => false,
+				'user_has_access_callback' => 'bp_groups_user_can_access_current_group',
+				'no_access_url'            => '',
+				'item_css_id'              => 'members',
+			),
+			'send-invites'       => array(
+				'rewrite_id'               => 'bp_group_read_send_invites',
+				'slug'                     => 'send-invites',
+				'name'                     => _x( 'Send Invites', 'Group read screen', 'buddypress' ),
+				'screen_function'          => 'groups_screen_group_invite',
+				'position'                 => 70,
+				'user_has_access'          => false,
+				'user_has_access_callback' => 'bp_groups_user_can_send_invites',
+				'no_access_url'            => '',
+				'item_css_id'              => 'invite',
+			),
+			'admin'              => array(
+				'rewrite_id'               => 'bp_group_read_admin',
+				'slug'                     => 'admin',
+				'name'                     => _x( 'Manage', 'Group read screen', 'buddypress' ),
+				'screen_function'          => 'groups_screen_group_admin',
+				'position'                 => 1000,
+				'user_has_access'          => false,
+				'user_has_access_callback' => 'bp_is_item_admin',
+				'no_access_url'            => '',
+				'item_css_id'              => 'admin',
+			),
+		),
+		'manage' => array(
+			'edit-details'        => array(
+				'rewrite_id'        => 'bp_group_manage_edit_details',
+				'slug'              => 'edit-details',
+				'name'              => _x( 'Details', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 0,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'group-settings'      => array(
+				'rewrite_id'        => 'bp_group_manage_group_settings',
+				'slug'              => 'group-settings',
+				'name'              => _x( 'Settings', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 10,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'group-avatar'        => array(
+				'rewrite_id'        => 'bp_group_manage_group_avatar',
+				'slug'              => 'group-avatar',
+				'name'              => _x( 'Photo', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 20,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'group-cover-image'   => array(
+				'rewrite_id'        => 'bp_group_manage_group_cover_image',
+				'slug'              => 'group-cover-image',
+				'name'              => _x( 'Cover Image', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 25,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'manage-members'      => array(
+				'rewrite_id'        => 'bp_group_manage_manage_members',
+				'slug'              => 'manage-members',
+				'name'              => _x( 'Members', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 30,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'membership-requests' => array(
+				'rewrite_id'        => 'bp_group_manage_membership_requests',
+				'slug'              => 'membership-requests',
+				'name'              => _x( 'Requests', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 40,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+			'delete-group'        => array(
+				'rewrite_id'        => 'bp_group_manage_delete_group',
+				'slug'              => 'delete-group',
+				'name'              => _x( 'Delete', 'Group manage screen', 'buddypress' ),
+				'screen_function'   => 'groups_screen_group_admin',
+				'position'          => 1000,
+				'user_has_access'   => false,
+				'show_in_admin_bar' => true,
+			),
+		),
+	);
+
+	if ( ! isset( $screens[ $context ] ) ) {
+		return array();
+	}
+
+	// We only need built-in screens, do not get custom ones.
+	if ( $built_in ) {
+		return $screens[ $context ];
+	}
+
+	$context_screens         = array();
+	$custom_screens          = apply_filters( 'bp_get_group_custom_' . $context . '_screens', $context_screens );
+	$group_extension_screens = bp_get_group_extension_screens( $context );
+
+	if ( $group_extension_screens ) {
+		$custom_screens = array_merge( $custom_screens, $group_extension_screens );
+	}
+
+	if ( $custom_screens && ! wp_is_numeric_array( $custom_screens ) ) {
+		// The screen key (used as default slug) and `rewrite_id` prop need to be unique.
+		$valid_custom_screens = array_diff_key( $custom_screens, $screens[ $context ] );
+		$existing_rewrite_ids = array_column( $screens[ $context ], 'rewrite_id' );
+		$existing_rewrite_ids = array_merge(
+			$existing_rewrite_ids,
+			// BP Group Reserved rewrite IDs.
+			array_keys( bp_get_group_restricted_screens() )
+		);
+
+		foreach ( $valid_custom_screens as $key_screen => $screen ) {
+			if ( ! isset( $screen['rewrite_id'] ) || ! in_array( $screen['rewrite_id'], $existing_rewrite_ids, true ) ) {
+				continue;
+			}
+
+			unset( $valid_custom_screens[ $key_screen ] );
+		}
+
+		$context_screens = array_merge( $screens[ $context ], $valid_custom_screens );
+	} else {
+		$context_screens = $screens[ $context ];
+	}
+
+	return $context_screens;
+}
+
+/**
+ * Get single Groups item customized path chunks using an array of BP URL default slugs.
+ *
+ * @since 12.0.0
+ *
+ * @param array $chunks   An array of BP URL default slugs.
+ * @param string $context Whether to get chunks for the 'read', 'create' or 'manage' contexts.
+ * @return array An associative array containing group's customized path chunks.
+ */
+function bp_groups_get_path_chunks( $chunks = array(), $context = 'read' ) {
+	$path_chunks   = array();
+	$group_screens = bp_get_group_screens( $context );
+
+	if ( 'read' === $context ) {
+		$single_item_action = array_shift( $chunks );
+		if ( $single_item_action ) {
+			if ( isset( $group_screens[ $single_item_action ]['rewrite_id'] ) ) {
+				$item_action_rewrite_id            = $group_screens[ $single_item_action ]['rewrite_id'];
+				$path_chunks['single_item_action'] = bp_rewrites_get_slug( 'groups', $item_action_rewrite_id, $single_item_action );
+			} else {
+				$path_chunks['single_item_action'] = $single_item_action;
+			}
+		}
+	}
+
+	$key_action_variables = 'single_item_action_variables';
+	if ( 'create' === $context ) {
+		$path_chunks['create_single_item'] = 1;
+		$key_action_variables              = 'create_single_item_variables';
+
+		// Init create action variables with the `step` slug.
+		$path_chunks[ $key_action_variables ][] = bp_rewrites_get_slug( 'groups', 'bp_group_create_step', 'step' );
+	}
+
+	if ( $chunks ) {
+		// If action variables were added as an array, reset chunks to it.
+		if ( isset( $chunks[0] ) && is_array( $chunks[0] ) ) {
+			$chunks = reset( $chunks );
+		}
+
+		foreach ( $chunks as $chunk ) {
+			if ( is_numeric( $chunk ) ) {
+				$path_chunks[ $key_action_variables ][] = $chunk;
+			} else {
+				if ( isset( $group_screens[ $chunk ]['rewrite_id'] ) ) {
+					$item_action_variable_rewrite_id        = $group_screens[ $chunk ]['rewrite_id'];
+					$path_chunks[ $key_action_variables ][] = bp_rewrites_get_slug( 'groups', $item_action_variable_rewrite_id, $chunk );
+				} else {
+					$path_chunks[ $key_action_variables ][] = $chunk;
+				}
+			}
+		}
+	}
+
+	return $path_chunks;
 }

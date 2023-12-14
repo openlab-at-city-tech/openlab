@@ -3,7 +3,7 @@
  * BP Nouveau Members
  *
  * @since 3.0.0
- * @version 6.0.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 3.0.0
  */
+#[AllowDynamicProperties]
 class BP_Nouveau_Members {
 	/**
 	 * Constructor
@@ -65,6 +66,8 @@ class BP_Nouveau_Members {
 		foreach ( $ajax_actions as $ajax_action ) {
 			$action = key( $ajax_action );
 
+			bp_ajax_register_action( $action );
+
 			add_action( 'wp_ajax_' . $action, $ajax_action[ $action ]['function'] );
 
 			if ( ! empty( $ajax_action[ $action ]['nopriv'] ) ) {
@@ -77,6 +80,10 @@ class BP_Nouveau_Members {
 		// Actions to check whether we are in the member's default front page sidebar
 		add_action( 'dynamic_sidebar_before', array( $this, 'user_home_sidebar_set' ), 10, 1 );
 		add_action( 'dynamic_sidebar_after', array( $this, 'user_home_sidebar_unset' ), 10, 1 );
+
+		// Priority navs for Block Themes.
+		add_action( 'bp_member_primary_nav', 'bp_nouveau_hidden_primary_nav' );
+		add_action( 'bp_member_secondary_nav', 'bp_nouveau_hidden_secondary_nav' );
 	}
 
 	/**

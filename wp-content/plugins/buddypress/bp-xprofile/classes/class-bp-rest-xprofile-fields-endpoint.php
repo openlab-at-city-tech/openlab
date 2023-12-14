@@ -189,16 +189,27 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'xprofile' ) ) ) {
+			$retval = true;
+		}
 
 		/**
 		 * Filter the XProfile fields `get_items` permissions check.
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param true|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Whether the user has access to xprofile fields.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
-		return apply_filters( 'bp_rest_xprofile_fields_get_items_permissions_check', true, $request );
+		return apply_filters( 'bp_rest_xprofile_fields_get_items_permissions_check', $retval, $request );
 	}
 
 	/**
@@ -267,16 +278,27 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'xprofile' ) ) ) {
+			$retval = true;
+		}
 
 		/**
 		 * Filter the XProfile fields `get_item` permissions check.
 		 *
 		 * @since 5.0.0
 		 *
-		 * @param true|WP_Error   $retval  Returned value.
+		 * @param true|WP_Error   $retval  Whether the user has access to xprofile fields.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
-		return apply_filters( 'bp_rest_xprofile_fields_get_item_permissions_check', true, $request );
+		return apply_filters( 'bp_rest_xprofile_fields_get_item_permissions_check', $retval, $request );
 	}
 
 	/**
@@ -894,7 +916,8 @@ class BP_REST_XProfile_Fields_Endpoint extends WP_REST_Controller {
 		$key  = 'get_item';
 
 		if ( WP_REST_Server::CREATABLE === $method || WP_REST_Server::EDITABLE === $method ) {
-			$args['description']['type'] = 'string';
+			$args['description']['type']    = 'string';
+			$args['description']['default'] = '';
 			unset( $args['description']['properties'] );
 
 			// Add specific properties to the edit context.

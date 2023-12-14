@@ -3,7 +3,7 @@
  * Members template tags
  *
  * @since 3.0.0
- * @version 10.3.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -247,20 +247,10 @@ function bp_nouveau_members_loop_buttons( $args = array() ) {
 			$parent_element = $args['parent_element'];
 		}
 
-		/*
-		 * If we have a arg value for $button_element passed through
-		 * use it to default all the $buttons['button_element'] values
-		 * otherwise default to 'a' (anchor)
-		 * Or override & hardcode the 'element' string on $buttons array.
-		 *
-		 * Icons sets a class for icon display if not using the button element
-		 */
-		$icons = '';
 		if ( ! empty( $args['button_element'] ) ) {
 			$button_element = $args['button_element'] ;
 		} else {
 			$button_element = 'button';
-			$icons = ' icons';
 		}
 
 		// If we pass through parent classes add them to $button array
@@ -435,7 +425,7 @@ function bp_nouveau_members_loop_buttons( $args = array() ) {
 		 */
 		$buttons_group = apply_filters( 'bp_nouveau_get_members_buttons', $buttons, $user_id, $type, $args );
 		if ( ! $buttons_group ) {
-			return $buttons;
+			return array();
 		}
 
 		// It's the first entry of the loop, so build the Group and sort it
@@ -1030,3 +1020,31 @@ function bp_nouveau_invitations_bulk_management_dropdown() {
 	<input type="submit" id="invitation-bulk-manage" class="button action" value="<?php echo esc_attr_x( 'Apply', 'button', 'buddypress' ); ?>">
 	<?php
 }
+
+/**
+ * Customize the way to output the Members' loop member latest activities.
+ *
+ * @since 12.0.0
+ *
+ * @param string $activity_content Formatted latest update for current member.
+ * @param array  $args             Array of parsed arguments.
+ * @param array  $latest_update    Array of the latest activity data.
+ * @return string The formatted latest update for current member.
+ */
+function bp_nouveau_get_member_latest_update( $activity_content = '', $args = array(), $latest_update = array() ) {
+	if ( ! isset( $latest_update['content'], $latest_update['excerpt'], $latest_update['permalink'] ) ) {
+		return $activity_content;
+	}
+
+	if ( strlen( $latest_update['excerpt'] ) < strlen( $latest_update['content'] ) ) {
+		return sprintf(
+			'%1$s<span class="activity-read-more"><a href="%2$s" rel="nofollow">%3$s</a></span>',
+			esc_html( $latest_update['excerpt'] ) . "\n",
+			esc_url( $latest_update['permalink'] ),
+			esc_html__( 'View full conversation', 'buddypress' )
+		);
+	}
+
+	return esc_html( $latest_update['excerpt'] );
+}
+add_filter( 'bp_get_member_latest_update', 'bp_nouveau_get_member_latest_update', 10, 3 );

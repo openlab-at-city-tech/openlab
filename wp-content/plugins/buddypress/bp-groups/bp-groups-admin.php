@@ -234,7 +234,7 @@ function bp_groups_admin_load() {
 			'id'      => 'bp-groups-overview-actions',
 			'title'   => __( 'Group Actions', 'buddypress' ),
 			'content' =>
-				'<p>' . __( 'Clicking "Visit" will take you to the group&#8217;s public page. Use this link to see what the group looks like on the front end of your site.', 'buddypress' ) . '</p>' .
+				'<p>' . __( 'Clicking "View" will take you to the group&#8217;s public page. Use this link to see what the group looks like on the front end of your site.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'Clicking "Edit" will take you to a Dashboard panel where you can manage various details about the group, such as its name and description, its members, and other settings.', 'buddypress' ) . '</p>' .
 				'<p>' . __( 'If you click "Delete" under a specific group, or select a number of groups and then choose Delete from the Bulk Actions menu, you will be led to a page where you&#8217;ll be asked to confirm the permanent deletion of the group(s).', 'buddypress' ) . '</p>',
 		) );
@@ -636,8 +636,9 @@ function bp_groups_admin_edit() {
 	$group_name = isset( $group->name ) ? bp_get_group_name( $group ) : '';
 
 	// Construct URL for form.
-	$form_url = remove_query_arg( array( 'action', 'deleted', 'no_admins', 'error', 'error_new', 'success_new', 'error_modified', 'success_modified' ), $_SERVER['REQUEST_URI'] );
-	$form_url = add_query_arg( 'action', 'save', $form_url );
+	$form_url   = remove_query_arg( array( 'action', 'deleted', 'no_admins', 'error', 'error_new', 'success_new', 'error_modified', 'success_modified' ), $_SERVER['REQUEST_URI'] );
+	$form_url   = add_query_arg( 'action', 'save', $form_url );
+	$create_url = bp_groups_get_create_url();
 
 	/**
 	 * Fires before the display of the edit form.
@@ -654,7 +655,7 @@ function bp_groups_admin_edit() {
 		<h1 class="wp-heading-inline"><?php _e( 'Edit Group', 'buddypress' ); ?></h1>
 
 		<?php if ( is_user_logged_in() && bp_user_can_create_groups() ) : ?>
-			<a class="page-title-action" href="<?php echo trailingslashit( bp_get_groups_directory_permalink() . 'create' ); ?>"><?php _e( 'Add New', 'buddypress' ); ?></a>
+			<a class="page-title-action" href="<?php echo esc_url( $create_url ); ?>"><?php esc_html_e( 'Add New', 'buddypress' ); ?></a>
 		<?php endif; ?>
 
 		<hr class="wp-header-end">
@@ -683,9 +684,9 @@ function bp_groups_admin_edit() {
 										<div id="bp-groups-permalink-box">
 											<strong><?php esc_html_e( 'Permalink:', 'buddypress' ) ?></strong>
 											<span id="bp-groups-permalink">
-												<?php bp_groups_directory_permalink(); ?> <input type="text" id="bp-groups-slug" name="bp-groups-slug" value="<?php bp_group_slug( $group ); ?>" autocomplete="off"> /
+												<?php bp_groups_directory_url(); ?> <input type="text" id="bp-groups-slug" name="bp-groups-slug" value="<?php bp_group_slug( $group ); ?>" autocomplete="off"> /
 											</span>
-											<a href="<?php echo bp_group_permalink( $group ) ?>" class="button button-small" id="bp-groups-visit-group"><?php esc_html_e( 'Visit Group', 'buddypress' ) ?></a>
+											<a href="<?php bp_group_url( $group ) ?>" class="button button-small" id="bp-groups-visit-group"><?php esc_html_e( 'View Group', 'buddypress' ) ?></a>
 										</div>
 
 										<label for="bp-groups-description" class="screen-reader-text"><?php
@@ -813,6 +814,7 @@ function bp_groups_admin_index() {
 
 	// Prepare the group items for display.
 	$bp_groups_list_table->prepare_items();
+	$create_url = bp_groups_get_create_url();
 
 	/**
 	 * Fires before the display of messages for the edit form.
@@ -830,7 +832,7 @@ function bp_groups_admin_index() {
 		<h1 class="wp-heading-inline"><?php _e( 'Groups', 'buddypress' ); ?></h1>
 
 		<?php if ( is_user_logged_in() && bp_user_can_create_groups() ) : ?>
-			<a class="page-title-action" href="<?php echo trailingslashit( bp_get_groups_directory_permalink() . 'create' ); ?>"><?php _e( 'Add New', 'buddypress' ); ?></a>
+			<a class="page-title-action" href="<?php echo esc_url( $create_url ); ?>"><?php esc_html_e( 'Add New', 'buddypress' ); ?></a>
 		<?php endif; ?>
 
 		<?php if ( !empty( $_REQUEST['s'] ) ) : ?>
@@ -1033,7 +1035,7 @@ function bp_groups_admin_edit_metabox_members( $item ) {
 						<th scope="row" class="uid-column"><?php echo esc_html( $type_user->ID ); ?></th>
 
 						<td class="uname-column">
-							<a style="float: left;" href="<?php echo bp_core_get_user_domain( $type_user->ID ); ?>"><?php echo bp_core_fetch_avatar( array(
+							<a style="float: left;" href="<?php echo bp_members_get_user_url( $type_user->ID ); ?>"><?php echo bp_core_fetch_avatar( array(
 								'item_id' => $type_user->ID,
 								'width'   => '32',
 								'height'  => '32'

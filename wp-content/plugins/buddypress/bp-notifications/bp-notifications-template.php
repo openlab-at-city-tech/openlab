@@ -60,12 +60,12 @@ function bp_notifications_permalink( $user_id = 0 ) {
 	function bp_get_notifications_permalink( $user_id = 0 ) {
 		if ( 0 === $user_id ) {
 			$user_id = bp_loggedin_user_id();
-			$domain  = bp_loggedin_user_domain();
-		} else {
-			$domain = bp_core_get_user_domain( (int) $user_id );
 		}
 
-		$retval = trailingslashit( $domain . bp_get_notifications_slug() );
+		$retval = bp_members_get_user_url(
+			$user_id,
+			bp_members_get_path_chunks( array( bp_get_notifications_slug() ) )
+		);
 
 		/**
 		 * Filters the notifications permalink.
@@ -101,12 +101,12 @@ function bp_notifications_unread_permalink( $user_id = 0 ) {
 	function bp_get_notifications_unread_permalink( $user_id = 0 ) {
 		if ( 0 === $user_id ) {
 			$user_id = bp_loggedin_user_id();
-			$domain  = bp_loggedin_user_domain();
-		} else {
-			$domain = bp_core_get_user_domain( (int) $user_id );
 		}
 
-		$retval = trailingslashit( $domain . bp_get_notifications_slug() . '/unread' );
+		$retval = bp_members_get_user_url(
+			$user_id,
+			bp_members_get_path_chunks( array( bp_get_notifications_slug(), 'unread' ) )
+		);
 
 		/**
 		 * Filters the unread notifications permalink.
@@ -141,12 +141,12 @@ function bp_notifications_read_permalink( $user_id = 0 ) {
 	function bp_get_notifications_read_permalink( $user_id = 0 ) {
 		if ( 0 === $user_id ) {
 			$user_id = bp_loggedin_user_id();
-			$domain  = bp_loggedin_user_domain();
-		} else {
-			$domain = bp_core_get_user_domain( (int) $user_id );
 		}
 
-		$retval = trailingslashit( $domain . bp_get_notifications_slug() . '/read' );
+		$retval = bp_members_get_user_url(
+			$user_id,
+			bp_members_get_path_chunks( array( bp_get_notifications_slug(), 'read' ) )
+		);
 
 		/**
 		 * Filters the read notifications permalink.

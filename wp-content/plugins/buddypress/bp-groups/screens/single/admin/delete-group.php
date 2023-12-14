@@ -14,18 +14,22 @@
  */
 function groups_screen_group_admin_delete_group() {
 
-	if ( 'delete-group' != bp_get_group_current_admin_tab() )
+	if ( 'delete-group' != bp_get_group_current_admin_tab() ) {
 		return false;
+	}
 
-	if ( ! bp_is_item_admin() && !bp_current_user_can( 'bp_moderate' ) )
+	if ( ! bp_is_item_admin() && ! bp_current_user_can( 'bp_moderate' ) ) {
 		return false;
+	}
 
 	$bp = buddypress();
 
 	if ( isset( $_REQUEST['delete-group-button'] ) && isset( $_REQUEST['delete-group-understand'] ) ) {
+		$groups_slug = bp_get_groups_slug();
+		$redirect    = bp_loggedin_user_url( bp_members_get_path_chunks( array( bp_get_groups_slug() ) ) );
 
 		// Check the nonce first.
-		if ( !check_admin_referer( 'groups_delete_group' ) ) {
+		if ( ! check_admin_referer( 'groups_delete_group' ) ) {
 			return false;
 		}
 
@@ -39,7 +43,7 @@ function groups_screen_group_admin_delete_group() {
 		do_action( 'groups_before_group_deleted', $bp->groups->current_group->id );
 
 		// Group admin has deleted the group, now do it.
-		if ( !groups_delete_group( $bp->groups->current_group->id ) ) {
+		if ( ! groups_delete_group( $bp->groups->current_group->id ) ) {
 			bp_core_add_message( __( 'There was an error deleting the group. Please try again.', 'buddypress' ), 'error' );
 		} else {
 			bp_core_add_message( __( 'The group was deleted successfully.', 'buddypress' ) );
@@ -52,11 +56,9 @@ function groups_screen_group_admin_delete_group() {
 			 * @param int $id ID of the group being deleted.
 			 */
 			do_action( 'groups_group_deleted', $bp->groups->current_group->id );
-
-			bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) );
 		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_groups_slug() ) );
+		bp_core_redirect( $redirect );
 	}
 
 	/**

@@ -95,7 +95,13 @@ add_action( bp_core_admin_hook(), 'bp_admin_repair_handler' );
  * @return array
  */
 function bp_admin_repair_list() {
-	$repair_list = array();
+	$repair_list = array(
+		-1 => array(
+			'bp-reset-slugs',
+			__( 'Reset all BuddyPress slugs to default ones', 'buddypress' ),
+			'bp_admin_reset_slugs',
+		),
+	);
 
 	// Members:
 	// - member count
@@ -176,6 +182,24 @@ function bp_admin_repair_list() {
 	 * @param array $repair_list Array of values for the Repair list options.
 	 */
 	return (array) apply_filters( 'bp_repair_list', $repair_list );
+}
+
+/**
+ * Reset all BuddyPress slug to default ones.
+ *
+ * @since 12.0.0
+ */
+function bp_admin_reset_slugs() {
+	/* translators: %s: the result of the action performed by the repair tool */
+	$statement = __( 'Removing all custom slugs and resetting default ones&hellip; %s', 'buddypress' );
+
+	bp_core_add_page_mappings( buddypress()->active_components, 'delete' );
+
+	// Delete BP Pages cache and rewrite rules.
+	wp_cache_delete( 'directory_pages', 'bp_pages' );
+	bp_delete_rewrite_rules();
+
+	return array( 0, sprintf( $statement, __( 'Complete!', 'buddypress' ) ) );
 }
 
 /**
@@ -672,6 +696,19 @@ function bp_core_admin_debug_information( $debug_info = array() ) {
 	global $wp_settings_fields;
 	$active_components = array_intersect_key( bp_core_get_components(), buddypress()->active_components );
 	$bp_settings       = array();
+	$bp_url_parsers    = array(
+		'rewrites' => __( 'BP Rewrites API', 'buddypress' ),
+		'legacy'   => __( 'Legacy Parser', 'buddypress' ),
+	);
+
+	// Get the current URL parser.
+	$current_parser = bp_core_get_query_parser();
+	if ( isset( $bp_url_parsers[ $current_parser ] ) ) {
+		$bp_url_parser = $bp_url_parsers[ $current_parser ];
+	} else {
+		$bp_url_parser = __( 'Custom', 'buddypress' );
+	}
+
 
 	foreach ( $wp_settings_fields['buddypress'] as $section => $settings ) {
 		$prefix       = '';
@@ -729,6 +766,10 @@ function bp_core_admin_debug_information( $debug_info = array() ) {
 				'template_pack' => array(
 					'label' => __( 'Active template pack', 'buddypress' ),
 					'value' => bp_get_theme_compat_name() . ' ' . bp_get_theme_compat_version(),
+				),
+				'url_parser'    => array(
+					'label' => __( 'URL Parser', 'buddypress' ),
+					'value' => $bp_url_parser,
 				),
 			),
 			$bp_settings

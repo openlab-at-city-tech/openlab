@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.5.0
  */
+#[AllowDynamicProperties]
 class BP_Core extends BP_Component {
 
 	/**
@@ -216,9 +217,9 @@ class BP_Core extends BP_Component {
 			$bp->table_prefix = bp_core_get_table_prefix();
 		}
 
-		// The domain for the root of the site where the main blog resides.
-		if ( empty( $bp->root_domain ) ) {
-			$bp->root_domain = bp_core_get_root_domain();
+		// The URL for the root of the site where the main blog resides.
+		if ( empty( $bp->root_url ) ) {
+			$bp->root_url = bp_rewrites_get_root_url();
 		}
 
 		// Fetches all of the core BuddyPress settings in one fell swoop.
@@ -274,9 +275,12 @@ class BP_Core extends BP_Component {
 		 */
 		$bp->grav_default->blog  = apply_filters( 'bp_blog_gravatar_default',  $bp->grav_default->user );
 
-		// Backward compatibility for plugins modifying the legacy bp_nav and bp_options_nav global properties.
-		$bp->bp_nav         = new BP_Core_BP_Nav_BackCompat();
-		$bp->bp_options_nav = new BP_Core_BP_Options_Nav_BackCompat();
+		// Only fully deprecate the legacy navigation globals if BP Classic is not active.
+		if ( ! function_exists( 'bp_classic' ) ) {
+			// Backward compatibility for plugins modifying the legacy bp_nav and bp_options_nav global properties.
+			$bp->bp_nav         = new BP_Core_BP_Nav_BackCompat();
+			$bp->bp_options_nav = new BP_Core_BP_Options_Nav_BackCompat();
+		}
 
 		/**
 		 * Used to determine if user has admin rights on current content. If the
@@ -290,6 +294,16 @@ class BP_Core extends BP_Component {
 
 		// Is the logged in user is a mod for the current item?
 		bp_update_is_item_mod( false, 'core' );
+
+		/*
+		 * As the BP Core component is excluded from the BP Component code
+		 * used to set the Rewrite IDs, we need to set it here. As the `search`
+		 * word is already a WordPress rewrite tag, we are not adding a custom
+		 * rule for this component to avoid messing with it.
+		 */
+		$this->rewrite_ids = array(
+			'community_search' => 'bp_search',
+		);
 
 		parent::setup_globals(
 			array(
@@ -322,11 +336,37 @@ class BP_Core extends BP_Component {
 	/**
 	 * Set up post types.
 	 *
-	 * @since BuddyPress (2.4.0)
+	 * @since 2.4.0
+	 * @since 12.0.0 Registers the 'buddypress' post type for component directories.
 	 */
 	public function register_post_types() {
+		// Component directories.
+		if ( (int) get_current_blog_id() === bp_get_post_type_site_id() ) {
+			register_post_type(
+				'buddypress',
+				array(
+					'label'               => _x( 'BuddyPress Directories', 'Post Type label', 'buddypress' ),
+					'labels'              => array(
+						'singular_name' => _x( 'BuddyPress Directory', 'Post Type singular name', 'buddypress' ),
+					),
+					'description'         => __( 'The BuddyPress Post Type used for component directories.', 'buddypress' ),
+					'public'              => true,
+					'hierarchical'        => true,
+					'exclude_from_search' => true,
+					'publicly_queryable'  => false,
+					'show_ui'             => false,
+					'show_in_nav_menus'   => true,
+					'show_in_rest'        => true,
+					'supports'            => array( 'title' ),
+					'has_archive'         => false,
+					'rewrite'             => false,
+					'query_var'           => false,
+					'delete_with_user'    => false,
+				)
+			);
+		}
 
-		// Emails
+		// Emails.
 		if ( bp_is_root_blog() && ! is_network_admin() ) {
 			register_post_type(
 				bp_get_email_post_type(),
@@ -358,6 +398,34 @@ class BP_Core extends BP_Component {
 	}
 
 	/**
+	 * Parse the WP_Query and eventually set the BP Search mechanism.
+	 *
+	 * Search doesn't have an associated page, so we check for it separately.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param WP_Query $query Required. See BP_Component::parse_query() for
+	 *                        description.
+	 */
+	public function parse_query( $query ) {
+		/*
+		 * If BP Rewrites are not in use, no need to parse BP URI globals another time.
+		 * Legacy Parser should have already set these.
+		 */
+		if ( 'rewrites' !== bp_core_get_query_parser() ) {
+			return parent::parse_query( $query );
+		}
+
+		$is_search = $query->get( 'pagename' ) === bp_get_search_slug() || ( isset( $_GET['bp_search'] ) && 1 === (int) $_GET['bp_search'] );
+
+		if ( isset( $_POST['search-terms'] ) && $is_search ) {
+			buddypress()->current_component = bp_get_search_slug();
+		}
+
+		parent::parse_query( $query );
+	}
+
+	/**
 	 * Init the Core controllers of the BP REST API.
 	 *
 	 * @since 9.0.0
@@ -377,6 +445,7 @@ class BP_Core extends BP_Component {
 	 * Register the BP Core Blocks.
 	 *
 	 * @since 9.0.0
+	 * @since 12.0.0 Use the WP Blocks API v2.
 	 *
 	 * @param array $blocks Optional. See BP_Component::blocks_init() for
 	 *                      description.
@@ -385,30 +454,8 @@ class BP_Core extends BP_Component {
 		parent::blocks_init(
 			array(
 				'bp/login-form' => array(
-					'name'               => 'bp/login-form',
-					'editor_script'      => 'bp-login-form-block',
-					'editor_script_url'  => plugins_url( 'js/blocks/login-form.js', dirname( __FILE__ ) ),
-					'editor_script_deps' => array(
-						'wp-blocks',
-						'wp-element',
-						'wp-components',
-						'wp-i18n',
-						'wp-block-editor',
-						'wp-server-side-render',
-					),
-					'style'              => 'bp-login-form-block',
-					'style_url'          => plugins_url( 'css/blocks/login-form.css', dirname( __FILE__ ) ),
-					'attributes'         => array(
-						'title'         => array(
-							'type'    => 'string',
-							'default' => '',
-						),
-						'forgotPwdLink' => array(
-							'type'    => 'boolean',
-							'default' => false,
-						),
-					),
-					'render_callback'    => 'bp_block_render_login_form_block',
+					'metadata'        => trailingslashit( buddypress()->plugin_dir ) . 'bp-core/blocks/login-form',
+					'render_callback' => 'bp_block_render_login_form_block',
 				),
 			)
 		);

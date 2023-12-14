@@ -12,8 +12,6 @@
  *
  * @since 1.0.0
  *
- * @global BuddyPress $bp The one true BuddyPress instance.
- *
  * @return bool False on failure.
  */
 function messages_screen_conversation() {
@@ -30,7 +28,9 @@ function messages_screen_conversation() {
 			bp_core_add_message( __( 'The conversation you tried to access is no longer available', 'buddypress' ), 'error' );
 		}
 
-		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_messages_slug() ) );
+		bp_core_redirect(
+			bp_loggedin_user_url( bp_members_get_path_chunks( array( bp_get_messages_slug() ) ) )
+		);
 	}
 
 	// No access.
@@ -43,7 +43,10 @@ function messages_screen_conversation() {
 		// Redirect away.
 		} else {
 			bp_core_add_message( __( 'You do not have access to that conversation.', 'buddypress' ), 'error' );
-			bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() ) );
+
+			bp_core_redirect(
+				bp_loggedin_user_url( bp_members_get_path_chunks( array( bp_get_messages_slug() ) ) )
+			);
 		}
 	}
 

@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 9.0.0
  *
+ * @global BP_Activity_Template $activities_template The Activity template loop.
+ *
  * @param array $attributes The block attributes.
  * @return string           HTML output.
  */
@@ -32,7 +34,7 @@ function bp_blogs_render_recent_posts_block( $attributes = array() ) {
 
 	$classnames           = 'widget_bp_blogs_widget buddypress widget';
 	$wrapper_attributes   = get_block_wrapper_attributes( array( 'class' => $classnames ) );
-	$blogs_directory_link = bp_get_blogs_directory_permalink();
+	$blogs_directory_link = bp_get_blogs_directory_url();
 	$max_posts            = (int) $block_args['maxPosts'];
 	$no_posts             = __( 'Sorry, there were no posts found.', 'buddypress' );
 
@@ -72,7 +74,7 @@ function bp_blogs_render_recent_posts_block( $attributes = array() ) {
 			$reset_activities_template = $GLOBALS['activities_template'];
 		}
 
-		$GLOBALS['activities_template'] = new \stdClass();
+		$GLOBALS['activities_template'] = new stdClass();
 		$activities                     = array();
 
 		foreach ( $blog_activities as $blog_activity ) {
