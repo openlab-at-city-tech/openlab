@@ -30,13 +30,18 @@ $videoMeta = ($isVideo) ? wp_read_video_metadata(get_attached_file($postData->ID
 $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d", (strtotime(sanitize_text_field($_GET['schedDate']) . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600)) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate(sanitize_text_field($_GET['schedDateTime']), $userTimeZoneOffset * (-1)))) : '' );    //routing from calendar or curated content
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 $isDraft = false;
-if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) && (int) $_GET['postId'] > 0) {
+$optionsOnboarding = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
+$onboarding = $optionsOnboarding->_getOption('onboarding_active');
+if (isset($_GET['postId']) && (int) $_GET['postId'] > 0) {
     global $wpdb;
     if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
-        $sql = $wpdb->prepare("SELECT data FROM `{$wpdb->prefix}b2s_posts_drafts` WHERE `blog_user_id` = %d AND `post_id` = %d AND `save_origin` = %d", (int) B2S_PLUGIN_BLOG_USER_ID, (int) $_GET['postId'], 0);
+        $sql = $wpdb->prepare("SELECT data, last_save_date, id FROM `{$wpdb->prefix}b2s_posts_drafts` WHERE `blog_user_id` = %d AND `post_id` = %d AND `save_origin` = %d", (int) B2S_PLUGIN_BLOG_USER_ID, (int) $_GET['postId'], 0);
         $sqlResult = $wpdb->get_row($sql);
         $draftData = (isset($sqlResult->data) && !empty($sqlResult->data)) ? unserialize($sqlResult->data) : '';
-        if (!empty($draftData)) {
+        $draftDate =  (isset($sqlResult->last_save_date) && !empty($sqlResult->last_save_date)) ? $sqlResult->last_save_date : '';
+        $draftId =  (isset($sqlResult->id) && !empty($sqlResult->id)) ? $sqlResult->id : '';
+
+        if (!empty($draftData) && !empty($draftId)) {
             $isDraft = true;
         }
     }
@@ -59,12 +64,23 @@ $draftIncompleteModal = false;
                         <h3>
                             <?php
                             if (!$isVideo) {
-                                echo esc_html_e('Social Media Scheduling & Sharing', 'blog2social');
+                                esc_html_e('Social Media Scheduling & Sharing', 'blog2social');
                             } else {
-                                echo esc_html_e('Video Sharing', 'blog2social');
+                                esc_html_e('Video Sharing', 'blog2social');
                             }
                             ?>
                         </h3>
+
+                        <?php 
+                        if($isDraft){
+                            echo sprintf(esc_html__('This is your saved draft from %s', 'blog2social'),$draftDate);
+                        ?>
+                        <a class="btn btn-default btn-sm deleteDraftBtn" data-b2s-draft-id="<?php echo esc_attr($draftId) ?>"><?php esc_html_e('delete', 'blog2social')?></a>
+
+                        <?php 
+                        } 
+                        ?>
+
                         <?php if (!$isVideo) { ?>
                             <div class="info"><?php esc_html_e('Title', 'blog2social') ?>: <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?></div>
                             <?php if (!isset($_GET['b2sPostType'])) { ?>
@@ -75,13 +91,13 @@ $draftIncompleteModal = false;
                             $videoMeta = wp_read_video_metadata(get_attached_file($postData->ID));
                             ?>
                             <div class="info">
-                                <video id="b2sVideoPreview" controls height="73" poster="#" autobuffer="true" autoplay="false" class="pull-left">
-                                    <source src="<?php echo esc_html__(wp_get_attachment_url($postData->ID)); ?>" type="<?php echo esc_html__($postData->post_mime_type); ?>">
+                                <video id="b2sVideoPreview" controls height="73" poster="#" autobuffer="true" class="pull-left">
+                                    <source src="<?php echo esc_attr(wp_get_attachment_url($postData->ID)); ?>" type="<?php echo esc_attr($postData->post_mime_type); ?>">
                                     <img src="<?php echo esc_url(plugins_url('/assets/images/video_default.png', B2S_PLUGIN_FILE)); ?>" alt="video" class="hidden-xs" height="73"/>
                                 </video> 
                                 <div class="add-padding-left pull-left">
                                     <b><?php esc_html_e('Video', 'blog2social') ?>:</b> <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?><br>
-                                    <b><?php echo esc_html__('Type', 'blog2social') ?> :</b> <?php
+                                    <b><?php esc_html_e('Type', 'blog2social') ?> :</b> <?php
                                     echo esc_html__($postData->post_mime_type) . ' | ' .
                                     esc_html__('Size', 'blog2social') . ': ' . esc_html__(size_format($videoMeta['filesize'])) . ' | ' . esc_html__('Length', 'blog2social') .
                                     ':' . esc_html__($videoMeta['length']) . esc_html__('s', 'blog2social');
@@ -112,7 +128,7 @@ $draftIncompleteModal = false;
                                 <?php } else { ?>
                                     <a href="#" class="btn btn-primary btn-xs b2s-btn-disabled b2s-get-settings-sched-time-open-modal b2sPreFeatureModalBtn" data-title="<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>">
                                     <?php } esc_html_e('Load Best Times', 'blog2social'); ?> <?php echo wp_kses($isPremium, array('span' => array('class' => array()))); ?></a>
-                                <a href="#" class="btn btn-link btn-xs hidden-sm b2s-load-settings-sched-time-default-info b2sInfoSchedTimesModalBtn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
+                                <a href="#" class="btn btn-link btn-xs hidden-sm b2s-load-settings-sched-time-default-info b2sInfoSchedTimesModalBtn"><?php esc_html_e('Info', 'blog2social'); ?></a>
                                 </div>
                                 </div>
                             <?php } ?>
@@ -240,7 +256,8 @@ $draftIncompleteModal = false;
                                                         'network_id' => (int) $channelData->networkId,
                                                         'network_type' => 0,
                                                         'network_auth_id' => (int) $channelData->networkAuthId,
-                                                        'network_display_name' => $channelData->networkUserName), array('%d', '%d', '%d', '%s'));
+                                                        'network_display_name' => $channelData->networkUserName,
+                                                        'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('%d', '%d', '%d', '%s', '%d'));
                                                 }
                                             }
                                         }
@@ -281,6 +298,32 @@ $draftIncompleteModal = false;
 
                                         </li>
                                     </ul>
+                                    
+                                    <?php
+                                        if($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0){
+                                            $onboardingPaused = $optionsOnboarding->_getOption('onboarding_paused');
+                                            if(!isset($onboardingPaused) || empty($onboardingPaused)){
+                                                $onboardingPaused = 0;
+                                            }
+
+                                    ?>
+                                        <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+
+                                        <div id="b2s-onboarding-toastee">
+                                            <div id="b2s-onboarding-toastee-inner">
+                                                <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour","blog2social") ?>
+                                                    <input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox" <?php echo $onboardingPaused == 0 ? 'checked' : '' ?>>
+                                                </h3>
+                                                <div class="b2s-onboarding-toastee-body" <?php echo $onboardingPaused == 1 ? 'style="display:none;"' : '' ?>>
+                                                    <hr class="b2s-onboarding-hr">
+                                                    <p class="b2s-onboarding-p" ><?php esc_html_e("Ready to Share? Choose your preferred settings and hit the 'Share' button to distribute your post across your networks.","blog2social")  ?><a class="btn btn-default btn-sm" href="admin.php?page=blog2social&step=3"><?php esc_html_e("Go to the next step", "blog2social") ?></a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+  
+                                    <?php
+                                        }
+                                    ?>
                                     <input type="hidden" class="b2s-network-navbar-order" value='<?php echo esc_attr(json_encode($orderArray)) ?>'>
                                 </div>
 
@@ -348,7 +391,7 @@ $draftIncompleteModal = false;
                                             <input type="hidden" id="action" name="action" value="b2s_save_ship_data">
                                             <input type='hidden' id='post_id' name="post_id" value='<?php echo (int) esc_attr(sanitize_text_field($_GET['postId'])); ?>'>
                                             <input type='hidden' id='user_timezone' name="user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
-                                            <input type='hidden' id='user_timezone_text' name="user_timezone_text" value="<?php echo esc_html_e('Time zone', 'blog2social') . ': (UTC ' . B2S_Util::humanReadableOffset($userTimeZoneOffset) . ') ' . $userTimeZone ?>">
+                                            <input type='hidden' id='user_timezone_text' name="user_timezone_text" value="<?php echo esc_attr('Time zone', 'blog2social') . ': (UTC ' . B2S_Util::humanReadableOffset($userTimeZoneOffset) . ') ' . $userTimeZone ?>">
                                             <input type='hidden' id="default_titel" name="default_titel" value="<?php echo esc_attr(addslashes(B2S_Util::getTitleByLanguage($postData->post_title, $userLang))); ?>">
                                             <input type="hidden" id="b2sChangeOgMeta" name="change_og_meta" value="0">
                                             <input type="hidden" id="b2sRelayAccountData" name="relay_account_data" value="<?php echo esc_attr(base64_encode($relayAccountDataHtml)); ?>">
@@ -361,13 +404,43 @@ $draftIncompleteModal = false;
                                             <div class="b2s-reporting-btn-area col-md-9 del-padding-left" style="display: none;">
                                                 <div class="panel panel-group">
                                                     <div class="panel-body">
+                                                        
+                                                        <?php
+                                                            if($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0){
+                                                                $onboardingPaused = $optionsOnboarding->_getOption('onboarding_paused');
+                                                                if(!isset($onboardingPaused) || empty($onboardingPaused)){
+                                                                    $onboardingPaused = 0;
+                                                                }
+
+                                                        ?>
+                                                            <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+
+                                                            <div id="b2s-onboarding-toastee2">
+                                                                <div id="b2s-onboarding-toastee-inner2">
+                                                                    <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour","blog2social") ?>
+                                                                        <input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox" <?php echo $onboardingPaused == 0 ? 'checked' : '' ?>>
+                                                                    </h3>
+                                                                    <div class="b2s-onboarding-toastee-body" <?php echo $onboardingPaused == 1 ? 'style="display:none;"' : '' ?>>
+                                                                        <hr class="b2s-onboarding-hr">
+                                                                        <p class="b2s-onboarding-p" ><?php esc_html_e("Successfully shared!","blog2social")  ?><a class="btn btn-default btn-sm" href="admin.php?page=blog2social&step=3"><?php esc_html_e("Explore more features with Blog2Social Premium.", "blog2social") ?></a></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                    
+                                                        <?php
+                                                            }
+                                                        ?>
                                                         <div class="pull-right">
                                                             <?php
-                                                            $allPosts = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-post';
+                                                            if(isset($_GET["origin"]) && $_GET["origin"] == "favourites"){
+                                                                $allPosts = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-favorites';
+                                                            } else {
+                                                                $allPosts = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-post';
+                                                            }
                                                             $videoPosts = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-video';
                                                             ?>
 
-                                                            <a href="#" class="btn btn-link btn-sm hidden-sm del-padding-left b2s-info-btn b2s-re-share-info b2s-re-share-info-btn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
+                                                            <a href="#" class="btn btn-link btn-sm hidden-sm del-padding-left b2s-info-btn b2s-re-share-info b2s-re-share-info-btn"><?php esc_html_e('Info', 'blog2social'); ?></a>
                                                             <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                                                                 <button class="btn btn-primary b2s-re-share-btn"><?php esc_html_e('Re-share this post', 'blog2social') ?></button>
                                                             <?php } else { ?>
@@ -750,7 +823,8 @@ $draftIncompleteModal = false;
                                                             'data-post-format-type' => array(),
                                                             'data-network-type' => array(),
                                                             'data-network-id' => array(),
-                                                            'data-post-format' => array()
+                                                            'data-post-format' => array(),
+                                                            'data-network-count' => array(),
                                                         ),
                                                         'img' => array(
                                                             'class' => array(),
@@ -980,6 +1054,27 @@ $draftIncompleteModal = false;
                             <?php }
                             ?>
 
+        
+
+                            <div class="modal fade b2s-delete-draft-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-draft-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-delete-draft-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Delete Social Media Draft', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <b><?php esc_html_e('Are you sure you want to delete this Social Media draft?', 'blog2social') ?> </b>
+                                            <input type="hidden" value="" id="b2s-delete-confirm-draft-id">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-default" data-dismiss="modal"><?php esc_html_e('NO', 'blog2social') ?></button>
+                                            <button class="btn btn-danger b2s-draft-delete-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="b2s-network-editor-image-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2s-network-editor-image" aria-hidden="true" data-backdrop="false" style="display: none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class=" modal-content">
@@ -1015,3 +1110,7 @@ $draftIncompleteModal = false;
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+
+                                

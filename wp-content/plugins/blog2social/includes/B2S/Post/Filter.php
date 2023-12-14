@@ -240,8 +240,12 @@ class B2S_Post_Filter {
         $this->postFilter .= '<div class="form-group">';
 
         $this->postFilter .= '<a href="#" id="b2s-sort-submit-btn" class="btn btn-primary margin-top-8 btn-sm">' . esc_html__('sort', 'blog2social') . '</a>
-                                    <a id="b2s-sort-reset-btn" class="btn btn-primary margin-top-8 btn-sm" href="#">' . esc_html__('reset', 'blog2social') . '</a>
-                             </div>';
+                                    <a id="b2s-sort-reset-btn" class="btn btn-primary margin-top-8 btn-sm" href="#">' . esc_html__('reset', 'blog2social') . '</a>';
+        if ($this->type == 'publish') {
+            $this->postFilter .= ' <a href="#" id="b2s-delete-modal-btn" class="btn btn-primary margin-top-8 b2s-delete-post-btn btn-sm">' . esc_html__('Mass delete posts', 'blog2social') . ' </a> ';
+        }
+
+        $this->postFilter .= '</div>';
 
         if ($this->type == 'sched') {
             $this->postFilter .= '<div id="b2s-sched-calendar-area"><br><div id="b2s-sched-datepicker-area"></div><br>';

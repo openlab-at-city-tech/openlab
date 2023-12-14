@@ -17,14 +17,14 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                             </div> 
                         <?php } else { ?>
                             <div class="col-md-2 del-padding-left">
-                                <a class="" href="https://www.blog2social.com" target="_blank">
+                                <a class="" href="admin.php?page=blog2social">
                                     <img class="img-responsive b2s-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)); ?>" alt="logo">
                                 </a>
                             </div> 
                             <div class="col-md-10 del-padding-left">
                                 <div class="media-body">
                                     <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LOGO', B2S_PLUGIN_ADMIN)) { ?>
-                                        <a href="https://www.blog2social.com" class="b2s-btn-logo" target="_blank"><?php esc_html_e("Blog2Social", "blog2social") ?></a> 
+                                        <a href="admin.php?page=blog2social" class="b2s-btn-logo"><?php esc_html_e("Blog2Social", "blog2social") ?></a> 
                                         <div class="b2s-sidebar-version padding-left-5"><?php echo ($b2sLastVersion !== false) ? esc_html__("Version", "blog2social") . ' ' . B2S_Util::getVersion($b2sLastVersion) : ''; ?> </div>
                                     <?php } ?>
                                     <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LICENSE', B2S_PLUGIN_ADMIN)) { ?> 
@@ -102,7 +102,12 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                 <i class="glyphicon glyphicon-calendar glyphicon-success"></i> <a href="admin.php?page=blog2social-calendar" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-calendar') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Calendar", "blog2social") ?></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
-                                <i class="glyphicon glyphicon-exclamation-sign glyphicon-success"></i> <a href="admin.php?page=blog2social-notice" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-notice') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Notifications", "blog2social") ?></a> 
+                                <?php 
+                                    global $wpdb;
+                                    $sql = "SELECT COUNT(posts.`post_id`) FROM `{$wpdb->prefix}b2s_posts` posts WHERE (posts.`sched_date` = '0000-00-00 00:00:00' OR (posts.`sched_type` = 3 AND posts.`publish_date` != '0000-00-00 00:00:00')) AND posts.`post_for_approve`= 0  AND posts.`publish_error_code` != '' AND posts.`hide` = 0";
+                                    $res = $wpdb->get_var($sql);
+                                ?>
+                                <i class="glyphicon glyphicon-exclamation-sign glyphicon-success"></i> <a href="admin.php?page=blog2social-notice" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-notice') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Notifications", "blog2social") ?></a> <?php echo ($res > 0 ? '<span class="label label-warning label-sm">'.esc_html($res).'</span>' : "") ?>
                             </li>
                         </ul>
                         <hr>
@@ -143,9 +148,9 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                         <div class="b2s-sidebar-head">
                             <div class="b2s-sidebar-head-text">
                                 <span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span><span class="glyphicon glyphicon-star glyphicon-success"></span> 
-                                <?php esc_html_e("Rate it!", "blog2social"); ?> 
+                                <?php esc_html_e("VALUE BLOG2SOCIAL", "blog2social"); ?> 
                             </div>
-                            <p><?php esc_html_e("If you like Blog2Social, we would be greatly delighted, if you could leave us a 5-star rating. If there's something you need assistance with, you can ask all your questions in the Blog2Social support community where you will receive help from our committed support team.", "blog2social"); ?></p>
+                            <p><?php esc_html_e("If you love the plugin and our service, please leave us a 5-star rating to help Blog2Social grow and improve.", "blog2social"); ?></p>
                             <a target="_blank" href="https://wordpress.org/support/plugin/blog2social/reviews/" class="btn btn-success btn-block"><?php esc_html_e("RATE BLOG2SOCIAL", "blog2social") ?></a>
                         </div>
                     </div>

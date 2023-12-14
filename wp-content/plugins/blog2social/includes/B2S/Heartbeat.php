@@ -174,14 +174,15 @@ class B2S_Heartbeat {
                                             if (isset($vpv2['external_post_id']) && !empty($vpv2['external_post_id'])) {
                                                 $insightData = array(
                                                     'network_post_id' => $vpv2['external_post_id'],
-                                                    'insight' => '',
+                                                    'insight' => ((isset($vpv2['insights']) && !empty($vpv2['insights'])) ? $vpv2['insights'] : ''),
                                                     'blog_user_id' => $blog_user_id,
                                                     'b2s_posts_id' => (int) $post_id,
                                                     'b2s_posts_network_details_id' => $networkDetailsId,
                                                     'last_update' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day')),
-                                                    'active' => 1
+                                                    'active' => 1,
+                                                    'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
                                                 );
-                                                $wpdb->insert($wpdb->prefix . 'b2s_posts_insights', $insightData, array('%s', '%s', '%d', '%d', '%d', '%s', '%d'));
+                                                $wpdb->insert($wpdb->prefix . 'b2s_posts_insights', $insightData, array('%s', '%s', '%d', '%d', '%d', '%s', '%d', '%d'));
                                             }
 
 
@@ -234,14 +235,14 @@ class B2S_Heartbeat {
                             $wpdb->update($wpdb->prefix . 'b2s_posts', $updateData, array('id' => $v->id), array('%s', '%s', '%s', '%s', '%s', '%d', '%d'), array('%d'));
 
                             if (isset($v->external_post_id) && !empty($v->external_post_id)) {
-                                $netowkDetailsData = $wpdb->get_results($wpdb->prepare("SELECT network_details_id, blog_user_id FROM {$wpdb->prefix}b2s_posts WHERE id= %d", $v->id), ARRAY_A);
-                                if (isset($netowkDetailsData[0]) && isset($netowkDetailsData[0]['network_details_id']) && (int) $netowkDetailsData[0]['network_details_id'] > 0 && isset($netowkDetailsData[0]['blog_user_id']) && (int) $netowkDetailsData[0]['blog_user_id'] > 0) {
+                                $networkDetailsData = $wpdb->get_results($wpdb->prepare("SELECT network_details_id, blog_user_id FROM {$wpdb->prefix}b2s_posts WHERE id= %d", $v->id), ARRAY_A);
+                                if (isset($networkDetailsData[0]) && isset($networkDetailsData[0]['network_details_id']) && (int) $networkDetailsData[0]['network_details_id'] > 0 && isset($networkDetailsData[0]['blog_user_id']) && (int) $networkDetailsData[0]['blog_user_id'] > 0) {
                                     $insightData = array(
                                         'network_post_id' => $v->external_post_id,
-                                        'insight' => '',
-                                        'blog_user_id' => (int) $netowkDetailsData[0]['blog_user_id'],
+                                        'insight' => ((isset($v->insights) && !empty($v->insights)) ? $v->insights : ''),
+                                        'blog_user_id' => (int) $networkDetailsData[0]['blog_user_id'],
                                         'b2s_posts_id' => (int) $v->id,
-                                        'b2s_posts_network_details_id' => (int) $netowkDetailsData[0]['network_details_id'],
+                                        'b2s_posts_network_details_id' => (int) $networkDetailsData[0]['network_details_id'],
                                         'last_update' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day')),
                                         'active' => 1
                                     );
@@ -353,11 +354,11 @@ class B2S_Heartbeat {
                     $where = array('id' => $id);
                     $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d'), array('%d'));
 
-                //if not failed and delete flag hide = 2 is set, delete completely
-                } else if(isset($value['hide']) && (int) $value['hide'] == 2){
-                    if(isset($value['id']) && (int) $value['id'] > 0){
+                    //if not failed and delete flag hide = 2 is set, delete completely
+                } else if (isset($value['hide']) && (int) $value['hide'] == 2) {
+                    if (isset($value['id']) && (int) $value['id'] > 0) {
                         $wpdb->delete($wpdb->prefix . 'b2s_posts', array('id' => $value['id']), array('%d'));
-                        if( isset($value["sched_details_id"]) && (int) $value["sched_details_id"] > 0){
+                        if (isset($value["sched_details_id"]) && (int) $value["sched_details_id"] > 0) {
                             $wpdb->delete($wpdb->prefix . 'b2s_posts_sched_details', array('id' => $value['sched_details_id']), array('%d'));
                         }
                     }
@@ -564,22 +565,43 @@ class B2S_Heartbeat {
                                     if (isset($res['state']) && (int) $res['state'] == 0) {
                                         if (isset($res['publish_url']) && isset($res['post_id']) && (int) $res['post_id'] > 0) {
                                             //Update
-                                            $data = array('hook_action' => 0, 'publish_link' => $res['publish_url'], 'publish_error_code' => '');
+
+                                            $publish_date = (isset($res['publish_date'])) ? strtotime($res['publish_date']) : time();
+
+                                            $data = array('hook_action' => 0,
+                                                'publish_link' => $res['publish_url'],
+                                                'publish_error_code' => '',
+                                                'sched_date' => '0000-00-00 00:00:00',
+                                                'sched_date_utc' => '0000-00-00 00:00:00',
+                                                'publish_date' => date('Y-m-d H:i:s', $publish_date),
+                                            );
+
                                             $where = array('id' => (int) $res['post_id'], 'upload_video_token' => $token);
-                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%d', '%s'));
+                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s', '%s', '%s', '%s'), array('%d', '%s'));
                                         }
                                     } else if (isset($res['state']) && (int) $res['state'] == 1) {
                                         if (isset($res['b2s_error_code']) && isset($res['post_id']) && (int) $res['post_id'] > 0) {
                                             //Update
-                                            $data = array('hook_action' => 0, 'publish_link' => '', 'publish_error_code' => $res['b2s_error_code']);
+                                            $data = array('hook_action' => 0,
+                                                'publish_link' => '',
+                                                'publish_error_code' => $res['b2s_error_code'],
+                                                'sched_date' => '0000-00-00 00:00:00',
+                                                'sched_date_utc' => '0000-00-00 00:00:00',
+                                                'publish_date' => gmdate('Y-m-d H:i:s'));
                                             $where = array('id' => (int) $res['post_id'], 'upload_video_token' => $token);
-                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%d', '%s'));
+                                            $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s', '%s', '%s', '%s'), array('%d', '%s'));
                                         }
                                     } else if (!isset($res['state']) && !isset($res['post_id']) && isset($res['b2s_error_code']) && !empty($res['b2s_error_code'])) {
                                         //Update
-                                        $data = array('hook_action' => 0, 'publish_link' => '', 'publish_error_code' => $res['b2s_error_code']);
+                                        $data = array('hook_action' => 0,
+                                            'publish_link' => '',
+                                            'publish_error_code' => $res['b2s_error_code'],
+                                            'sched_date' => '0000-00-00 00:00:00',
+                                            'sched_date_utc' => '0000-00-00 00:00:00',
+                                            'publish_date' => gmdate('Y-m-d H:i:s'));
+
                                         $where = array('publish_error_code' => '', 'publish_link' => '', 'upload_video_token' => $token);
-                                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%s', '%s', '%s'));
+                                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s', '%s', '%s', '%s'), array('%s', '%s', '%s'));
                                     }
                                 }
                             }
@@ -589,50 +611,4 @@ class B2S_Heartbeat {
             }
         }
     }
-
-    private function updateVideoStatus() {
-        global $wpdb;
-        $sql = "SELECT videos.id, videos.hook_action, videos.video_token, sched_details.sched_data FROM {$wpdb->prefix}b2s_posts_videos as videos LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS sched_details on videos.sched_details_id = sched_details.id WHERE hook_action > %d LIMIT 5";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 0), ARRAY_A);
-        if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
-            require_once (B2S_PLUGIN_DIR . '/includes/B2S/Video/Post.php');
-            $videoPost = new B2S_Video_Post();
-            foreach ($sendData as $k => $value) {
-                $data = array('hook_action' => '0');
-                $where = array('id' => $value['id']);
-                $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
-                if ($value['hook_action'] == 1) {
-                    //check upload complete
-                    $status = $videoPost->getVideoStatus($value['video_token']);
-                    if ($status !== false && (int) $status == 2) {
-                        //send data to publish
-                        $sched_data = unserialize($value['sched_data']);
-                        $publish = $videoPost->publishVideo($value['video_token'], $sched_data['auth_id'], $sched_data['title'], $sched_data['content']);
-
-                        if ($publish['success'] == true && !empty($publish['link'])) {
-                            $data = array('hook_action' => '0', 'publish_link' => $publish['link'], 'publish_date' => date('Y-m-d H:i:s'));
-                            $where = array('id' => $value['id']);
-                            $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
-                        }
-
-                        $data = array('hook_action' => '2');
-                        $where = array('id' => $value['id']);
-                        $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
-                    } else {
-                        $data = array('hook_action' => '1');
-                        $where = array('id' => $value['id']);
-                        $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
-                    }
-                }
-                if ($value['hook_action'] == 2) {
-                    //get publish status
-
-                    $data = array('hook_action' => '0');
-                    $where = array('id' => $value['id']);
-                    $wpdb->update($wpdb->prefix . 'b2s_posts_videos', $data, $where, array('%d'), array('%d'));
-                }
-            }
-        }
-    }
-
 }

@@ -37,7 +37,10 @@ jQuery(window).on("load", function () {
             autoclose: true
         });
     }
+
+    
 });
+
 
 
 function wopApprove(blogPostId, postId, url, name) {
@@ -86,6 +89,7 @@ jQuery('#b2sImageZoomModal').on('hidden.bs.modal', function () {
 });
 
 jQuery(document).on('click', '.b2sDetailsPublishPostBtn', function () {
+    var triggerLink = jQuery(this).parent().parent().find('p').find('a');
     var postId = jQuery(this).attr('data-post-id');
     var showByDate = jQuery(this).attr('data-search-date');
     if (!jQuery(this).find('i').hasClass('isload')) {
@@ -119,13 +123,16 @@ jQuery(document).on('click', '.b2sDetailsPublishPostBtn', function () {
             }
         });
         jQuery(this).find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up').addClass('isload').addClass('isShow');
+        jQuery(triggerLink).find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up').addClass('isload').addClass('isShow');
     } else {
         if (jQuery(this).find('i').hasClass('isShow')) {
             jQuery('.b2s-post-publish-area[data-post-id="' + postId + '"]').hide();
             jQuery(this).find('i').removeClass('isShow').addClass('isHide').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+            jQuery(triggerLink).find('i').removeClass('isShow').addClass('isHide').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
         } else {
             jQuery('.b2s-post-publish-area[data-post-id="' + postId + '"]').show();
             jQuery(this).find('i').removeClass('isHide').addClass('isShow').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+            jQuery(triggerLink).find('i').removeClass('isHide').addClass('isShow').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
         }
     }
 });
@@ -404,7 +411,64 @@ jQuery(document).on('click', '.b2sDetailsSchedPostBtn', function () {
     }
 
 });
+
+
+jQuery(document).on('click', '.b2sPostsDetailBtn', function () {
+    var postId = jQuery(this).attr('data-post-id');
+    var showByDate = jQuery(this).attr('data-search-date');
+    var showByNetwork = jQuery(this).attr('data-search-network');
+    var userAuthId = jQuery('#b2sUserAuthId').val();
+    if (!jQuery(this).find('i').hasClass('isload')) {
+        jQuery('.b2s-server-connection-fail').hide();
+        jQuery.ajax({
+            url: ajaxurl,
+            type: "POST",
+            dataType: "json",
+            cache: false,
+            data: {
+                'action': 'get_posts_detail_data',
+                'postId': postId,
+                'showByDate': showByDate,
+                'showByNetwork': showByNetwork,
+                'userAuthId': userAuthId,
+                'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+            },
+            error: function () {
+                jQuery('.b2s-server-connection-fail').show();
+                return false;
+            },
+            success: function (data) {
+                if (data.result == true) {
+                    jQuery('.b2s-post-details-area[data-post-id="' + data.postId + '"]').html(data.content);
+                } else {
+                    if (data.error == 'nonce') {
+                        jQuery('.b2s-nonce-check-fail').show();
+                    }
+                }
+            }
+        });
+        jQuery(this).find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up').addClass('isload').addClass('isShow');
+    } else {
+        if (jQuery(this).find('i').hasClass('isShow')) {
+            jQuery('.b2s-post-details-area[data-post-id="' + postId + '"]').hide();
+            jQuery(this).find('i').removeClass('isShow').addClass('isHide').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        } else {
+            jQuery('.b2s-post-details-area[data-post-id="' + postId + '"]').show();
+            jQuery(this).find('i').removeClass('isHide').addClass('isShow').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        }
+    }
+
+});
+
+
 jQuery(document).on('click', '.b2sDetailsPublishPostTriggerLink', function () {
+    
+    if (!jQuery(this).find('i').hasClass('isload')) {
+        jQuery(this).find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up').addClass('isload').addClass('isShow');
+    } else if (jQuery(this).find('i').hasClass('isShow')) {
+        jQuery(this).find('i').removeClass('isShow').addClass('isHide').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+    }
+
     jQuery(this).parent().prev().find('button').trigger('click');
     return false;
 });
@@ -651,6 +715,7 @@ jQuery(document).on('click', '.b2s-publish-delete-confirm-btn', function () {
             jQuery('.b2s-delete-publish-modal').modal('hide');
             if (data.result == true) {
                 var count = parseInt(jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html());
+
                 var newCount = count - data.postCount;
                 jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html(newCount);
                 if (newCount >= 1) {
@@ -658,7 +723,104 @@ jQuery(document).on('click', '.b2s-publish-delete-confirm-btn', function () {
                         jQuery('.b2s-post-publish-area-li[data-post-id="' + id + '"]').remove();
                     });
                 } else {
-                    jQuery('.b2s-post-publish-area-li[data-post-id="' + data.postId[0] + '"]').closest('ul').closest('li').remove();
+                        jQuery('.b2s-post-publish-area-li[data-post-id="' + data.postId[0] + '"]').closest('ul').closest('li').remove();
+                }
+                jQuery('.b2s-post-remove-success').show();
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-post-remove-fail').show();
+            }
+            wp.heartbeat.connectNow();
+            return true;
+        }
+    });
+});
+
+jQuery(document).on('click', '.b2s-all-posts-delete-confirm-btn', function () {
+    jQuery('.b2s-post-remove-fail').hide();
+    jQuery('.b2s-post-remove-success').hide();
+    jQuery('.b2s--all-posts-delete-confirm-btn').prop('disabled', true);
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_delete_user_publish_post',
+            'postId': jQuery('#b2s-delete-confirm-post-id').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-delete-publish-modal').modal('hide');
+            if (data.result == true) {
+                
+                var count = parseInt(jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html());
+
+                var newCount = count - data.postCount;
+                jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html(newCount);
+                if (newCount >= 1) {
+                    jQuery.each(data.postId, function (i, id) {
+                        jQuery('.b2s-post-publish-area-li[data-post-id="' + id + '"]').remove();
+                    });
+                } else {
+                    jQuery('.b2s-post-publish-area-li[data-post-id="' + data.postId[0] + '"]').closest('ul').remove();
+                    jQuery('.b2sPostsDetailBtn[data-post-id="' + data.blogPostId + '"]').prop('disabled', true);
+                    
+                }
+                jQuery('.b2s-post-remove-success').show();
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-post-remove-fail').show();
+            }
+            wp.heartbeat.connectNow();
+            return true;
+        }
+    });
+});
+
+jQuery(document).on('click', '.b2s-all-sched-posts-delete-confirm-btn', function () {
+    jQuery('.b2s-post-remove-fail').hide();
+    jQuery('.b2s-post-remove-success').hide();
+    jQuery('.b2s--all-posts-delete-confirm-btn').prop('disabled', true);
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_delete_user_sched_post',
+            'postId': jQuery('#b2s-delete-confirm-post-id').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-delete-sched-modal').modal('hide');
+            if (data.result == true) {
+                
+                var count = parseInt(jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html());
+
+                var newCount = count - data.postCount;
+                jQuery('.b2s-publish-count[data-post-id="' + data.blogPostId + '"]').html(newCount);
+                if (newCount >= 1) {
+                    jQuery.each(data.postId, function (i, id) {
+                        jQuery('.b2s-post-sched-area-li[data-post-id="' + id + '"]').remove();
+                    });
+                } else {
+                    jQuery('.b2s-post-sched-area-li[data-post-id="' + data.postId[0] + '"]').closest('ul').remove();
+                    jQuery('.b2sPostsDetailBtn[data-post-id="' + data.blogPostId + '"]').prop('disabled', true);
                 }
                 jQuery('.b2s-post-remove-success').show();
             } else {
@@ -1366,5 +1528,80 @@ jQuery(document).on('click', '.b2s-repost-multi', function () {
             });
             jQuery(this).attr('href', jQuery(this).attr('href') + '&multi_network_auth_id=' + authIds.join(','))
         }
+    }
+});
+
+
+jQuery(document).on('click', '.b2s-stop-onboarding', function() {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_save_user_onboarding',
+            'onboarding': 2,
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+});
+
+
+jQuery(document).on('change', '.b2s-toastee-toggle', function () {
+    var onboardingPaused = jQuery("#b2s-toastee-paused").val()
+
+    if (jQuery(this).is(':checked')) {
+        if(onboardingPaused == 1){
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_save_user_onboarding_paused',
+                    'onboarding_paused': 0,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery("#b2s-toastee-paused").val(0)
+                }
+            });
+        }
+        jQuery('.b2s-onboarding-toastee-body').show();
+    } else {
+        if(onboardingPaused == 0){
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_save_user_onboarding_paused',
+                    'onboarding_paused': 1,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery("#b2s-toastee-paused").val(1)
+
+                }
+            });
+        }
+        jQuery('.b2s-onboarding-toastee-body').hide();
+
     }
 });

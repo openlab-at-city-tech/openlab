@@ -320,6 +320,48 @@ jQuery(document).on('click', '#b2s-user-network-settings-allow-shortcode', funct
     return false;
 });
 
+jQuery(document).on('click', '#b2s-user-network-settings-use-permalinks', function () {
+    jQuery('.b2s-settings-user-success').hide();
+    jQuery('.b2s-settings-user-error').hide();
+    jQuery(".b2s-loading-area").show();
+    jQuery(".b2s-user-settings-area").hide();
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_user_network_settings',
+            'use_permalinks': jQuery('#b2s-user-network-settings-use-permalinks').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery(".b2s-loading-area").hide();
+            jQuery(".b2s-user-settings-area").show();
+            if (data.result == true) {
+                jQuery('.b2s-settings-user-success').show();
+                jQuery('#b2s-user-network-settings-use-permalinks').val(data.content);
+                if (jQuery("#b2s-user-network-settings-use-permalinks").is(":checked")) {
+                    jQuery('#b2s-user-network-settings-use-permalinks').prop('checked', false);
+                } else {
+                    jQuery('#b2s-user-network-settings-use-permalinks').prop('checked', true);
+                }
+            } else {
+                if(data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-settings-user-error').show();
+            }
+        }
+    });
+    return false;
+});
+
 
 jQuery(document).on('click', '#b2s-general-settings-legacy-mode', function () {
     jQuery('.b2s-settings-user-success').hide();
@@ -456,6 +498,16 @@ jQuery(document).on('click', '.b2sInfoAllowShortcodeModalBtn', function () {
 jQuery(document).on('click', '.b2sInfoLegacyModeBtn', function () {
     jQuery('#b2sInfoLegacyMode').modal('show');
 });
+jQuery(document).on('click', '.b2sInfoUsePermalinksModalBtn', function () {
+    var userVersion = jQuery('#b2s_user_version').val();
+    if(userVersion >= 2){
+        jQuery('#b2sInfoUsePermalinksModal').modal('show');
+    } else {
+        jQuery('#b2sInfoUsePermalinksProModal').modal('show');
+    }
+
+});
+
 
 jQuery(document).on('change', '.b2s-time-format-toggle', function() {
     var time_format = 1;

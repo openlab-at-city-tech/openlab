@@ -110,6 +110,7 @@ if ($optionUserTimeFormat == false) {
                                             'value' => array(),
                                             'type' => array(),
                                             'data-provider-id' => array(),
+                                            'disabled' => array(),
                                         ),
                                         'span' => array(
                                             'data-provider-id' => array(),
@@ -296,6 +297,62 @@ if ($optionUserTimeFormat == false) {
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="b2sInfoUsePermalinksModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoUsePermalinksModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoUsePermalinksModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Permalinks for scheduled posts', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php esc_html_e('Using Custom Permalinks for Scheduled Posts', 'blog2social');?>
+                <br><br>
+                
+                <?php esc_html_e('By default, WordPress generates links that might look like \'yourwebsite.com/?p=123\' for unpublished posts. However, Blog2Social can help you to use your custom permalinks and replace these default links with personalized, \'talking\' URLs, e.g. \'yourwebsite.com/[blog-post-name]\'.', 'blog2social'); ?>         
+                <br><br>
+                <?php esc_html_e('Please note: Before activating custom permalinks for scheduling social media posts, it\'s essential to be aware of the following potential issue:', 'blog2social');?>
+                <br><br>
+                <?php esc_html_e('Editing a scheduled, unpublished post, especially if you make corrections to the title, may lead to a damaged link. The link could end up leading your users to an error page on your website instead of to the content you want to refer them to.', 'blog2social');?>
+                <br><br>
+                <?php esc_html_e('Be sure to check your custom permalink structure before you set up your social media posts. Maintain link consistency, even when making edits to the post. to prevent damaged links and to ensure your readers end up where they\'re supposed to be.', 'blog2social');?>
+                <br><br>
+                <?php esc_html_e('If you collaborate with multiple users, be sure every user is aware of how to avoid any issues with permalinks.', 'blog2social');?>
+                <br><br>
+                <?php echo sprintf(__('<a href="%s" target="_blank">Learn more about it here.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('custom_permalinks')));
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sInfoUsePermalinksProModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoUsePermalinksProModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoUsePermalinksProModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Unleash the Power of Memorable URLs with Blog2Social!', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php esc_html_e('Tired of generic WordPress links like \'yourwebsite.com/?p=123\'? With Blog2Social\'s Pro and Business versions, you can transform them into engaging, personalized URLs like \'yourwebsite.com/[blog-post-name]\'.', 'blog2social'); ?>
+                <br><br>
+                <?php  esc_html_e('-Create memorable, \'talking\' URLs for better engagement.', 'blog2social');?>
+                <br><br>
+                <?php esc_html_e('-Automate the process, ensuring every post gets its unique touch.', 'blog2social');?>
+                <br><br>
+                <?php  esc_html_e('-Boost engagement with URLs that resonate and are easy to remember.', 'blog2social');?>
+                <br><br>
+                <?php esc_html_e('Upgrade to Blog2Social Pro or Business today and give your social media posts the URL they deserve!', 'blog2social');?>
+                <br><br>
+                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
+                <br>
+                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">

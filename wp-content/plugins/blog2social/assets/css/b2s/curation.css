@@ -250,3 +250,39 @@
     width: 22px;
     display: inline-block;
 }
+
+
+.b2s-curation-preview {
+    margin:10px;
+    padding:3px;
+}
+
+.b2s-curation-preview-body {
+    border-width:1px;
+    border-style:solid;
+    border-color:grey;
+    min-height: 50px;
+    padding:5px;
+}
+
+.b2s-curation-preview-body-account {
+    font-size:12pt;
+}
+
+.b2s-curation-preview-body-text {
+    margin-top:8px;
+    overflow-wrap: break-word;
+}
+
+.b2s-curation-preview-body-post-data {
+    font-size:8pt;
+}
+
+.b2s-curation-preview-footer-img {
+    padding-top:10px;
+    width:100%;
+}
+
+#b2s-curation-input-title{
+    width:100%;
+}

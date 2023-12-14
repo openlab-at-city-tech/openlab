@@ -26,7 +26,8 @@ class B2S_Ship_Save {
                 'network_id' => (int) $network_id,
                 'network_type' => (int) $network_type,
                 'network_auth_id' => (int) $network_auth_id,
-                'network_display_name' => $network_display_name), array('%d', '%d', '%d', '%s'));
+                'network_display_name' => $network_display_name,
+                'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,), array('%d', '%d', '%d', '%s', '%d'));
             return $wpdb->insert_id;
         }
     }
@@ -74,8 +75,8 @@ class B2S_Ship_Save {
             $this->postData["blog_user_id"] = $data["blog_user_id"];
             $this->postData["post_id"] = $data["post_id"];
             $this->postData["default_titel"] = $data["default_titel"];
-            $this->postData["is_video"] = $data["is_video"];
-            $this->postData["video_upload_size"] = $data["video_upload_size"];
+            $this->postData["is_video"] = isset($data["is_video"]) ? $data["is_video"] : 0;
+            $this->postData["video_upload_size"] = isset($data["video_upload_size"]) ? $data["video_upload_size"] : 0;
             $this->postData["no_cache"] = (int) $data["no_cache"];
             $this->postData["lang"] = $data["lang"];
             $this->postData['user_timezone'] = $data['user_timezone'];
@@ -106,7 +107,7 @@ class B2S_Ship_Save {
                 'image_url' => $data['image_url'],
                 'content' => $data['content'],
                 'url' => $data['url'],
-                'share_as_reel' => $data['share_as_reel']
+                'share_as_reel' => isset($data['share_as_reel']) ? $data['share_as_reel'] : 0,
             );
         }
     }
@@ -128,7 +129,7 @@ class B2S_Ship_Save {
         unset($serializeData['last_edit_blog_user_id']);
 
         //mode:scheduling
-        if (($schedData['releaseSelect'] == 1) && is_array($schedData['date']) && isset($schedData['date'][0]) && !empty($schedData['date'][0]) && isset($schedData['time'][0]) && !empty($schedData['time'][0])) {
+        if (isset($schedData['releaseSelect']) && ($schedData['releaseSelect'] == 1) && is_array($schedData['date']) && isset($schedData['date'][0]) && !empty($schedData['date'][0]) && isset($schedData['time'][0]) && !empty($schedData['time'][0])) {
             foreach ($schedData['date'] as $key => $date) {
                 if (isset($schedData['time'][$key]) && !empty($schedData['time'][$key])) {
                     //content
@@ -308,14 +309,22 @@ class B2S_Ship_Save {
             if (isset($result->data) && is_array($result->data)) {
                 foreach ($result->data as $key => $post) {
                     if (isset($post->internal_post_id) && (int) $post->internal_post_id > 0 && (int) $post->internal_post_id == (int) $v['internal_post_id']) {
+                        $hook_action = 0;
+                        if(isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type > 0){
+                            $hook_action = 6;
+                        }else if(isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type == 0){
+                            $hook_action = 7;
+                        }
+
                         $data = array('publish_link' => $post->publishUrl,
                             'publish_error_code' => (isset($post->error_code) ? $post->error_code : ''),
                             'upload_video_token' => (isset($post->video_token) ? $post->video_token : ''),
-                            'hook_action' => ((isset($post->video_token) && !empty($post->video_token)) ? 6 : 0),
+                            'hook_action' => $hook_action,
                         );
                         $where = array('id' => $post->internal_post_id);
                         $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%s', '%s', '%s', '%d'), array('%d'));
                         $errorCode = isset($post->error_code) ? $post->error_code : '';
+                        $isVideo = (isset($post->video_token) && !empty($post->video_token)) ? 1 : 0;
 
                         //since V4.8.0 relay posts
                         $printDelayDates = array();
@@ -326,34 +335,31 @@ class B2S_Ship_Save {
                             $schedData = array('user_timezone' => $userTimeZone, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc, 'post_id' => $this->postData['post_id'], 'blog_user_id' => $this->postData['blog_user_id']);
                             $printDelayDates = $this->saveRelayDetails((int) $v['internal_post_id'], $v['relay_data'], $schedData);
                             if (!$quickShare) {
-                                $videoUploadType = isset($post->video_upload_type) ? (int) $post->video_upload_type : 0;
-                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $videoUploadType));
+                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $isVideo));
                             } else {
                                 $content[] = array('networkAuthId' => $post->network_auth_id, 'networkDisplayName' => $v['network_display_name'], 'networkId' => $v['network_id'], 'networkType' => $v['network_type'], 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true));
                             }
                             //since V7.1.0 video Posts
                         } else if (empty($errorCode) && isset($v["post_format"]) && $v["post_format"] == 2 && isset($v["sched_date_utc"]) && !empty($v["sched_date_utc"])) {
                             $printDelayDates[] = $v["sched_date"];
-                            $videoUploadType = isset($post->video_upload_type) ? (int) $post->video_upload_type : 0;
                             $valueInContent = false;
                             foreach ($content as $key => &$value) {
                                 if ($value["networkAuthId"] == $post->network_auth_id) {
                                     if (!isset($value["html"])) {
-                                        $value["html"] = $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $videoUploadType);
+                                        $value["html"] = $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $isVideo);
                                     } else {
-                                        $value["html"] .= $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $videoUploadType);
+                                        $value["html"] .= $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $isVideo);
                                     }
                                     $valueInContent = true;
                                     continue;
                                 }
                             }
                             if (!$valueInContent) {
-                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $videoUploadType));
+                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $isVideo));
                             }
                         } else {
                             if (!$quickShare) {
-                                $videoUploadType = isset($post->video_upload_type) ? (int) $post->video_upload_type : 0;
-                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $videoUploadType));
+                                $content[] = array('networkAuthId' => $post->network_auth_id, 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true, $isVideo));
                             } else {
                                 $content[] = array('networkAuthId' => $post->network_auth_id, 'networkDisplayName' => $v['network_display_name'], 'networkId' => $v['network_id'], 'networkType' => $v['network_type'], 'html' => $this->getItemHtml($networkId, $errorCode, $post->publishUrl, $printDelayDates, true));
                             }
@@ -384,7 +390,7 @@ class B2S_Ship_Save {
             }
             //DEFAULT ERROR
             if ($found == false) {
-                $errorCode = (isset($result->data) && isset($errorText[$result->data])) ? sanitize_text_field(wp_unslash($result->data)) : 'DEFAULT';
+                $errorCode = (isset($result->data->error) && isset($errorText[$result->data->error])) ? sanitize_text_field(wp_unslash($result->data)) : 'DEFAULT';
                 if (!$quickShare) {
                     $content[] = array('networkAuthId' => $v['network_auth_id'], 'html' => $this->getItemHtml($networkId, $errorCode, '', '', true));
                 } else {
@@ -697,25 +703,21 @@ class B2S_Ship_Save {
         return $html;
     }
 
-    public function getItemHtml($network_id = 0, $error = "", $link = "", $schedDate = array(), $directPost = false, $videoUploadType = 0) {
+    public function getItemHtml($network_id = 0, $error = "", $link = "", $schedDate = array(), $directPost = false, $isVideo = 0) {
         $html = "";
         if (empty($error)) {
             if ($directPost) {
-                if ($videoUploadType > 0) {
+                if ($isVideo == 1) {
                     if ($network_id == 36) { // mobile approvement
                         $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('Your video will now be uploaded. After TikTok has processed your video, you can unlock it in your TikTok app.', 'blog2social') . '</b> (<a href="' . esc_url(B2S_Tools::getSupportLink('video_sharing_tiktok')) . '" target="_blank">' . esc_html__('Learn how it works', 'blog2social') . '</a>)</div>';
                     } else if (is_array($schedDate) && empty($schedDate)) {
                         $html .= '<br><div class="alert alert-info"><b>' . esc_html__('Your video is uploading.', 'blog2social') . '</b></div>';
-                    }
+                    } 
                 } else {
-                    /* if ($network_id == 1 && empty($link)) { // NOTE fb reel ?
-                      $html .= '<br><span class="text-success"><i class="glyphicon glyphicon-ok-circle"></i> ' . esc_html__('Your video will now be uploaded. Your video will be published after Facebook processing', 'blog2social');
-                      } else { *///}
-                    if(!isset($schedDate) || empty($schedDate)){
+                    if (!isset($schedDate) || empty($schedDate)) {
                         $html .= '<br><span class="text-success"><i class="glyphicon glyphicon-ok-circle"></i> ' . esc_html__('published', 'blog2social');
-                        $html .= !empty($link) ? ': <a href="' . esc_url($link) . '" target="_blank">' . esc_html__('view social media post', 'blog2social') . '</a>' : '';    
+                        $html .= !empty($link) ? ': <a href="' . esc_url($link) . '" target="_blank">' . esc_html__('view social media post', 'blog2social') . '</a>' : '';    	
                     }
-
                     $html .= '</span>';
                 }
             }
@@ -731,11 +733,6 @@ class B2S_Ship_Save {
                     }
                     $schedDateTime = date_i18n($dateFormat . ' ' . $timeFormat, strtotime($date));
                     $isRelay = (isset($v['relay'])) ? " - " . esc_html__('Retweet', 'blog2social') : '';
-                    if ($videoUploadType > 0) {
-                        
-                    } else {
-                        
-                    }
                     $html .= '<br><span class="text-success"><i class="glyphicon glyphicon-time"></i> ' . esc_html__('scheduled on', 'blog2social') . ': ' . esc_html($schedDateTime) . $isRelay . '</span>';
                 }
             }

@@ -8,6 +8,7 @@ jQuery(window).on("load", function () {
 
     jQuery(".b2s-re-post-type").chosen();
     jQuery(".b2s-re-post-categories").chosen();
+    jQuery(".b2s-re-post-tags").chosen();
     jQuery(".b2s-re-post-author").chosen();
 
     var dateFormat = "yyyy-mm-dd";
@@ -97,11 +98,13 @@ jQuery(document).on('change', '.b2s-re-post-settings-option', function () {
         jQuery('.b2s-re-post-settings-customize-area input').prop('disabled', false);
         jQuery(".b2s-re-post-type").prop('disabled', false).trigger("chosen:updated");
         jQuery(".b2s-re-post-categories").prop('disabled', false).trigger("chosen:updated");
+        jQuery(".b2s-re-post-tags").prop('disabled', false).trigger("chosen:updated");
         jQuery(".b2s-re-post-author").prop('disabled', false).trigger("chosen:updated");
     } else {
         jQuery('.b2s-re-post-settings-customize-area input').prop('disabled', true);
         jQuery(".b2s-re-post-type").prop('disabled', true).trigger("chosen:updated");
         jQuery(".b2s-re-post-categories").prop('disabled', true).trigger("chosen:updated");
+        jQuery(".b2s-re-post-tags").prop('disabled', true).trigger("chosen:updated");
         jQuery(".b2s-re-post-author").prop('disabled', true).trigger("chosen:updated");
     }
 });
@@ -752,6 +755,15 @@ jQuery(document).on('change', '.b2s-re-post-categories', function () {
         jQuery('.b2s-re-post-categories-active').prop('checked', false);
     } else {
         jQuery('.b2s-re-post-categories-active').prop('checked', true);
+    }
+});
+
+
+jQuery(document).on('change', '.b2s-re-post-tags', function () {
+    if (jQuery(this).val() == null) {
+        jQuery('.b2s-re-post-tags-active').prop('checked', false);
+    } else {
+        jQuery('.b2s-re-post-tags-active').prop('checked', true);
     }
 });
 

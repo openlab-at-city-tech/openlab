@@ -68,6 +68,11 @@ class Ajax_Post {
         add_action('wp_ajax_b2s_final_trial_option', array($this, 'hideFinalTrialOption'));
         add_action('wp_ajax_b2s_upload_video', array($this, 'uploadVideo'));
         add_action('wp_ajax_b2s_delete_all_posts_older_than', array($this, 'deleteAllPostsOlderThan'));
+        add_action('wp_ajax_b2s_add_user_app', array($this, 'addUserApp'));
+        add_action('wp_ajax_b2s_edit_user_app', array($this, 'editUserApp'));
+        add_action('wp_ajax_b2s_delete_user_app', array($this, 'deleteUserApp'));
+        add_action('wp_ajax_b2s_save_user_onboarding', array($this, 'saveUserOnboarding'));
+        add_action('wp_ajax_b2s_save_user_onboarding_paused', array($this, 'saveUserOnboardingPaused'));
     }
 
     public function uploadVideo() {
@@ -185,9 +190,17 @@ class Ajax_Post {
         //save as blog post
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postFormat'])) {
+                $title = "";
                 if ((int) $_POST['postFormat'] == 1) { //Imagepost
+                    if (isset($_POST['b2s-instant-sharing-input-title_image']) && !empty($_POST['b2s-instant-sharing-input-title_image'])) {
+                        $title = sanitize_textarea_field($_POST['b2s-instant-sharing-input-title_image']);
+                    }
                     if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
-                        $data = array('title' => sanitize_textarea_field($_POST['comment_image']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        if (!empty($title)) {
+                            $data = array('title' => sanitize_textarea_field(wp_unslash($title)), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        } else {
+                            $data = array('title' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        }
                     } else {
                         echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                         wp_die();
@@ -200,8 +213,15 @@ class Ajax_Post {
                         wp_die();
                     }
                 } else {
+                    if (isset($_POST['b2s-instant-sharing-input-title_text']) && !empty($_POST['b2s-instant-sharing-input-title_text'])) {
+                        $title = sanitize_textarea_field($_POST['b2s-instant-sharing-input-title_text']);
+                    }
                     if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
-                        $data = array('title' => sanitize_textarea_field($_POST['comment_text']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        if (!empty($title)) {
+                            $data = array('title' => sanitize_textarea_field(wp_unslash($title)), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        } else {
+                            $data = array('content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        }
                     } else {
                         echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                         wp_die();
@@ -288,7 +308,8 @@ class Ajax_Post {
                                                                 'network_id' => (int) $value->networkId,
                                                                 'network_type' => (int) $value->networkType,
                                                                 'network_auth_id' => (int) $value->networkAuthId,
-                                                                'network_display_name' => $value->networkUserName), array('%d', '%d', '%d', '%s'));
+                                                                'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
+                                                                'network_display_name' => $value->networkUserName), array('%d', '%d', '%d', '%d', '%s'));
                                                             $networkDetailsId = $wpdb->insert_id;
                                                         }
                                                         $timeZone = (isset($_POST['b2s_user_timezone']) ? (int) $_POST['b2s_user_timezone'] : 0 );
@@ -368,8 +389,12 @@ class Ajax_Post {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             if (isset($_POST['postFormat'])) {
                 if ((int) $_POST['postFormat'] == 1) { //Imagepost
+                    $title = "";
+                    if (isset($_POST['b2s-instant-sharing-input-title_image'])) {
+                        $title = sanitize_textarea_field($_POST['b2s-instant-sharing-input-title_image']);
+                    }
                     if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
-                        $data = array('title' => sanitize_textarea_field($_POST['comment_image']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        $data = array('title' => !empty($title) ? $title : sanitize_textarea_field($_POST['comment_image']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
                         $imgUrl = (isset($_POST['image_url']) && !empty($_POST['image_url'])) ? esc_url_raw(wp_unslash($_POST['image_url'])) : '';
                     } else {
                         echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
@@ -384,8 +409,12 @@ class Ajax_Post {
                         wp_die();
                     }
                 } else if ((int) $_POST['postFormat'] == 2) {//Textpost
+                    $title = "";
+                    if (isset($_POST['b2s-instant-sharing-input-title_text'])) {
+                        $title = sanitize_textarea_field($_POST['b2s-instant-sharing-input-title_text']);
+                    }
                     if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
-                        $data = array('title' => sanitize_textarea_field($_POST['comment_text']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                        $data = array('title' => !empty($title) ? $title : sanitize_textarea_field($_POST['comment_text']), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
                     } else {
                         echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                         wp_die();
@@ -596,6 +625,7 @@ class Ajax_Post {
                 'lang' => trim(strtolower(substr(B2S_LANGUAGE, 0, 2))));
 
             foreach ($post['b2s'] as $networkAuthId => $data) {
+
                 if (!isset($data['network_id'])) {
                     continue;
                 }
@@ -663,14 +693,23 @@ class Ajax_Post {
                     }
                 }
 
+                //as there's a separate reels checkbox in the sched field and we don't want to use the wrong one, make a distinction
+                $reel = 0;
+                if (isset($data['releaseSelect']) && $data['releaseSelect'] == 0) {
+                    $reel = isset($data['share_as_reel']) && !empty($data['share_as_reel']) ? (int) $data['share_as_reel'] : 0;
+                } else if (isset($data['releaseSelect']) && $data['releaseSelect'] == 1) {
+                    $reel = isset($data['sched_share_as_reel']) && !empty($data['sched_share_as_reel']) ? (int) $data['sched_share_as_reel'] : 0;
+                }
+
                 $sendData = array("board" => isset($data['board']) ? sanitize_text_field($data['board']) : '',
                     "status_privacy" => isset($data['status_privacy']) ? sanitize_text_field($data['status_privacy']) : '',
                     "group" => isset($data['group']) ? sanitize_text_field($data['group']) : '',
                     "custom_title" => isset($data['custom_title']) ? sanitize_text_field($data['custom_title']) : '',
                     "content" => (isset($data['content']) && !empty($data['content'])) ? strip_tags(preg_replace("/(<[\/]*)em(>)/", "$1i$2", html_entity_decode(sanitize_textarea_field(htmlentities($data['content'])))), '<p><h1><h2><br><i><b><a><img>') : '',
-                    'share_as_reel' => isset($data['share_as_reel']) && !empty($data['share_as_reel']) ? (int) $data['share_as_reel'] : 0,
+                    'share_as_reel' => $reel,
                     'url' => isset($data['url']) ? htmlspecialchars_decode(esc_url_raw($data['url'])) : '',
                     'image_url' => isset($data['image_url']) ? trim(esc_url_raw($data['image_url'])) : '',
+                    'image_alt_text' => isset($data['image_alt_text']) ? trim(sanitize_text_field($data['image_alt_text'])) : '',
                     'video_url' => ((isset($post['is_video']) && (int) $post['is_video'] == 1 && isset($post['video_upload_url']) && !empty($post['video_upload_url'])) ? htmlspecialchars_decode(esc_url_raw($post['video_upload_url'])) : ''),
                     'video_size' => ((isset($post['is_video']) && (int) $post['is_video'] == 1 && isset($post['video_upload_size']) && !empty($post['video_upload_size'])) ? sanitize_text_field($post['video_upload_size']) : 0),
                     'tags' => isset($data['tags']) ? $data['tags'] : array(),
@@ -686,7 +725,9 @@ class Ajax_Post {
                     'post_format' => isset($data['post_format']) ? (int) $data['post_format'] : '',
                     'user_timezone' => isset($post['user_timezone']) ? (int) $post['user_timezone'] : 0,
                     'publish_date' => isset($post['publish_date']) ? date('Y-m-d H:i:s', strtotime(sanitize_text_field(wp_unslash($post['publish_date'])))) : date('Y-m-d H:i:s', current_time('timestamp')),
-                    'frame_color' => ((isset($data['frame_color']) && !empty($data['frame_color'])) ? sanitize_text_field($data['frame_color']) : '#ffffff')
+                    'frame_color' => ((isset($data['frame_color']) && !empty($data['frame_color'])) ? sanitize_text_field($data['frame_color']) : '#ffffff'),
+                    'share_as_story' => (isset($data['share_as_story']) && (int) $data['share_as_story'] == 1) ? (int) $data['share_as_story'] : 0,
+                    'video_upload_api_share' => 1, //since 7.3.1
                 );
 
                 if (isset($post['is_video']) && (int) $post['is_video'] == 0) {
@@ -751,13 +792,15 @@ class Ajax_Post {
                     $schedData = array();
                     if (isset($data['releaseSelect']) && (int) $data['releaseSelect'] == 0) {
                         $b2sShipSend->savePublishDetails(array_merge($defaultPostData, $sendData), $relayData);
-                        //mode: schedule custom once times
+
+                        //mode: schedule custom once
                     } else if (isset($data['releaseSelect']) && (int) $data['releaseSelect'] == 1 && isset($data['date'][0]) && isset($data['time'][0])) {
                         $schedData = array(
                             'date' => isset($data['date']) ? $data['date'] : array(),
                             'time' => isset($data['time']) ? $data['time'] : array(),
                             'sched_content' => isset($data['sched_content']) ? $data['sched_content'] : array(),
                             'sched_image_url' => isset($data['sched_image_url']) ? $data['sched_image_url'] : array(),
+                            'image_alt_text' => isset($data['image_alt_text']) ? $data['image_alt_text'] : "",
                             'sched_multi_image_1' => isset($data['sched_multi_image_1']) ? $data['sched_multi_image_1'] : array(),
                             'sched_multi_image_2' => isset($data['sched_multi_image_2']) ? $data['sched_multi_image_2'] : array(),
                             'sched_multi_image_3' => isset($data['sched_multi_image_3']) ? $data['sched_multi_image_3'] : array(),
@@ -773,6 +816,7 @@ class Ajax_Post {
                         );
                         $schedResult [] = $b2sShipSend->saveSchedDetails(array_merge($defaultPostData, $sendData), $schedData, $relayData);
                         $content = array_merge($content, $schedResult);
+
                         //mode: recurrently schedule
                     } else {
                         $schedData = array(
@@ -937,6 +981,18 @@ class Ajax_Post {
                 wp_die();
             }
 
+            if (B2S_PLUGIN_USER_VERSION >= 2) {
+                if (isset($_POST['use_permalinks'])) {
+                    if ((int) $_POST['use_permalinks'] == 1) {
+                        delete_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID);
+                    } else {
+                        update_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID, 1, false);
+                    }
+                    echo json_encode(array('result' => true, 'content' => (((int) $_POST['use_permalinks'] == 1) ? 0 : 1)));
+                    wp_die();
+                }
+            }
+
             if (isset($_POST['user_time_zone']) && !empty($_POST['user_time_zone'])) {
                 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
                 $options->_setOption('user_time_zone', sanitize_text_field($_POST['user_time_zone']));
@@ -983,7 +1039,6 @@ class Ajax_Post {
                 wp_die();
             }
 
-
             //Auto-Poster A
             $network_auth_id = isset($_POST['b2s-import-auto-post-network-auth-id']) && is_array($_POST['b2s-import-auto-post-network-auth-id']) ? B2S_Tools::sanitize_array($_POST['b2s-import-auto-post-network-auth-id']) : array();
             $post_type = isset($_POST['b2s-import-auto-post-type-data']) && is_array($_POST['b2s-import-auto-post-type-data']) ? B2S_Tools::sanitize_array($_POST['b2s-import-auto-post-type-data']) : array();
@@ -1013,6 +1068,15 @@ class Ajax_Post {
             $publish = isset($_POST['b2s-settings-auto-post-publish']) && is_array($_POST['b2s-settings-auto-post-publish']) ? B2S_Tools::sanitize_array($_POST['b2s-settings-auto-post-publish']) : array();
             $update = isset($_POST['b2s-settings-auto-post-update']) && is_array($_POST['b2s-settings-auto-post-update']) ? B2S_Tools::sanitize_array($_POST['b2s-settings-auto-post-update']) : array();
 
+            $echo = isset($_POST['b2s-auto-post-echo-setting']) ? (int) $_POST['b2s-auto-post-echo-setting'] : 0;
+            $echoSetting = isset($_POST['b2s-auto-post-echo-dropdown']) ? (int) $_POST['b2s-auto-post-echo-dropdown'] : 0;
+            $importTemplateSetting = isset($_POST['b2s-auto-post-import-template-setting']) ? (int) $_POST['b2s-auto-post-import-template-setting'] : 0;
+            $delaySetting = isset($_POST['b2s-auto-post-delay-state']) ? (int) $_POST['b2s-auto-post-delay-state'] : 0;
+            $delay = 0;
+            if ($delaySetting == 1 && isset($_POST['b2s-auto-post-delay-time'])) {
+                $delay = (int) $_POST['b2s-auto-post-delay-time'];
+            }
+
             $assignUser = isset($_POST['b2s-auto-post-assign-user-data']) && is_array($_POST['b2s-auto-post-assign-user-data']) ? B2S_Tools::sanitize_array($_POST['b2s-auto-post-assign-user-data']) : array();
             $oldOptions = $options->_getOption('auto_post');
             if (isset($oldOptions['assignUser'])) {
@@ -1022,7 +1086,6 @@ class Ajax_Post {
                         //delete assignment
                         $assignOptions = new B2S_Options($userId);
                         $assignAutoPostOptions = $assignOptions->_getOption('auto_post');
-
                         //delete $assignAutoPostOptions['assignProfile']
                         if (isset($assignAutoPostOptions['assignProfile']) && (int) $assignAutoPostOptions['assignProfile'] > 0) {
                             $assignToken = B2S_Tools::getTokenById($userId);
@@ -1035,8 +1098,6 @@ class Ajax_Post {
                                 $wpdb->delete($wpdb->prefix . 'b2s_user_network_settings', array('mandant_id' => (int) $assignAutoPostOptions['assignProfile'], 'blog_user_id' => $userId), array('%d', '%d'));
                             }
                         }
-
-
                         $assignAutoPostOptions['assignBy'] = 0;
                         $assignAutoPostOptions['assignProfile'] = 0;
                         $assignAutoPostOptions['assignTwitter'] = 0;
@@ -1073,11 +1134,11 @@ class Ajax_Post {
                                                 $networkAuthIdExist = $wpdb->get_row($sql);
                                                 if (empty($networkAuthIdExist) || !isset($networkAuthIdExist->id)) {
                                                     //Insert
-                                                    $sqlInsertNetworkAuthId = $wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_posts_network_details` (`network_id`, `network_type`,`network_auth_id`,`network_display_name`) VALUES (%d,%d,%d,%s);", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name']);
+                                                    $sqlInsertNetworkAuthId = $wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_posts_network_details` (`network_id`, `network_type`,`network_auth_id`,`network_display_name`,`owner_blog_user_id`) VALUES (%d,%d,%d,%s,%d);", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], B2S_PLUGIN_BLOG_USER_ID);
                                                     $wpdb->query($sqlInsertNetworkAuthId);
                                                 } else {
                                                     //Update
-                                                    $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `network_id` = %d, `network_type` = %d, `network_auth_id` = %d, `network_display_name` = %s WHERE `network_auth_id` = %d;", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], (int) $assignUserAuth['assign_network_auth_id']);
+                                                    $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `network_id` = %d, `network_type` = %d, `network_auth_id` = %d, `network_display_name` = %s, `owner_blog_user_id` = %d WHERE `network_auth_id` = %d;", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], (int) $assignUserAuth['assign_network_auth_id'], B2S_PLUGIN_BLOG_USER_ID);
                                                     $wpdb->query($sqlUpdateNetworkAuthId);
                                                 }
                                                 $wpdb->insert($wpdb->prefix . 'b2s_user_network_settings', array('blog_user_id' => (int) $userId, 'mandant_id' => $assignProfile, 'network_auth_id' => (int) $assignUserAuth['assign_network_auth_id']), array('%d', '%d', '%d'));
@@ -1106,7 +1167,7 @@ class Ajax_Post {
                 }
             }
 
-            $auto_post = array('active' => $active, 'profile' => $profile, 'twitter' => $twitter, 'publish' => $publish, 'update' => $update, 'best_times' => $best_times, 'assignUser' => $assignUser);
+            $auto_post = array('active' => $active, 'profile' => $profile, 'twitter' => $twitter, 'publish' => $publish, 'update' => $update, 'best_times' => $best_times, 'assignUser' => $assignUser, 'echo' => (($echo > 0) ? $echoSetting : 0), 'import_template' => $importTemplateSetting, 'delay' => $delay, 'delay_state' => $delaySetting);
             $options->_setOption('auto_post', $auto_post);
             echo json_encode(array('result' => true));
             wp_die();
@@ -1314,6 +1375,7 @@ class Ajax_Post {
                             $licenseName = unserialize(B2S_PLUGIN_VERSION_TYPE);
                             $printName = (isset($keyResult->trail) && $keyResult->trail == true) ? 'FREE-TRIAL' : $licenseName[$keyResult->version];
                         } else {
+                            $tokenInfo=array();
                             $tokenInfo['B2S_PLUGIN_USER_VERSION'] = (isset($keyResult->version) ? $keyResult->version : 0);
                             $tokenInfo['B2S_PLUGIN_VERSION'] = B2S_PLUGIN_VERSION;
                             if (isset($keyResult->trail) && $keyResult->trail == true && isset($keyResult->trailEndDate) && $keyResult->trailEndDate != "") {
@@ -1522,7 +1584,8 @@ class Ajax_Post {
                         'network_id' => (int) $_POST['networkId'],
                         'network_type' => (int) $_POST['networkType'],
                         'network_auth_id' => (int) $_POST['networkAuthId'],
-                        'network_display_name' => sanitize_text_field(wp_unslash(B2S_Util::remove4byte($_POST['displayName'])))), array('%d', '%d', '%d', '%s'));
+                        'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
+                        'network_display_name' => sanitize_text_field(wp_unslash(B2S_Util::remove4byte($_POST['displayName'])))), array('%d', '%d', '%d', '%d', '%s'));
                 }
                 $mandantCount = $wpdb->get_var($wpdb->prepare("SELECT COUNT(mandant_id)FROM {$wpdb->prefix}b2s_user_network_settings  WHERE mandant_id =%d AND blog_user_id=%d ", (int) $_POST['mandandId'], B2S_PLUGIN_BLOG_USER_ID));
                 if ($mandantCount > 0) {
@@ -1971,11 +2034,11 @@ class Ajax_Post {
                     $networkAuthIdExist = $wpdb->get_row($sql);
                     if (empty($networkAuthIdExist) || !isset($networkAuthIdExist->id)) {
                         //Insert
-                        $sqlInsertNetworkAuthId = $wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_posts_network_details` (`network_id`, `network_type`,`network_auth_id`,`network_display_name`) VALUES (%d,%d,%d,%s);", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name']);
+                        $sqlInsertNetworkAuthId = $wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_posts_network_details` (`network_id`, `network_type`,`network_auth_id`,`network_display_name`,`owner_blog_user_id`) VALUES (%d,%d,%d,%s,%d);", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], B2S_PLUGIN_BLOG_USER_ID);
                         $wpdb->query($sqlInsertNetworkAuthId);
                     } else {
                         //Update
-                        $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `network_id` = %d, `network_type` = %d, `network_auth_id` = %d, `network_display_name` = %s WHERE `network_auth_id` = %d;", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], (int) $assignUserAuth['assign_network_auth_id']);
+                        $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `network_id` = %d, `network_type` = %d, `network_auth_id` = %d, `network_display_name` = %s, `owner_blog_user_id` = %d WHERE `network_auth_id` = %d;", (int) $assignUserAuth['assign_network_id'], $assignUserAuth['assign_network_type'], (int) $assignUserAuth['assign_network_auth_id'], $assignUserAuth['assign_network_display_name'], (int) $assignUserAuth['assign_network_auth_id'], B2S_PLUGIN_BLOG_USER_ID);
                         $wpdb->query($sqlUpdateNetworkAuthId);
                     }
                     $wpdb->insert($wpdb->prefix . 'b2s_user_network_settings', array('blog_user_id' => (int) $_POST['assignBlogUserId'], 'mandant_id' => 0, 'network_auth_id' => (int) $assignUserAuth['assign_network_auth_id']), array('%d', '%d', '%d'));
@@ -2047,7 +2110,7 @@ class Ajax_Post {
                         $rawOriginalData = $wpdb->get_row($sql);
                         $originalData = unserialize($rawOriginalData->data);
                         if ($originalData != false && $originalData != NULL && is_array($originalData) && isset($originalData) && !empty($originalData) && isset($originalData['url_parameter'])) {
-                            $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `data` = %s WHERE `network_auth_id` = %d;", serialize(array('url_parameter' => $originalData['url_parameter'])), (int) $assignUserAuth['assign_network_auth_id']);
+                            $sqlUpdateNetworkAuthId = $wpdb->prepare("UPDATE `{$wpdb->prefix}b2s_posts_network_details` SET `data` = %s, `owner_blog_user_id` = %d WHERE `network_auth_id` = %d;", serialize(array('url_parameter' => $originalData['url_parameter'])), B2S_PLUGIN_BLOG_USER_ID, (int) $assignUserAuth['assign_network_auth_id']);
                             $wpdb->query($sqlUpdateNetworkAuthId);
                         }
                     }
@@ -2130,6 +2193,10 @@ class Ajax_Post {
                                     'limit' => $limit
                                 )
                             );
+                        }
+
+                        if ((int) $_POST['networkId'] == 2) {
+                            $new_template[$type]['twitterThreads'] = ((isset($data['twitterThreads']) && $data['twitterThreads'] == 'false') ? false : true);
                         }
                         if ((int) $_POST['networkId'] == 24 || (int) $_POST['networkId'] == 12 || (int) $_POST['networkId'] == 1 || (int) $_POST['networkId'] == 2) {
                             $new_template[$type]['addLink'] = ((isset($data['addLink']) && $data['addLink'] == 'false') ? false : true);
@@ -2292,7 +2359,7 @@ class Ajax_Post {
                                 } else {
                                     $data = array('url_parameter' => array(0 => array('name' => 'default', 'querys' => $newParams)));
                                 }
-                                $wpdb->update($wpdb->prefix . 'b2s_posts_network_details', array('data' => serialize($data)), array('network_auth_id' => (int) $network['networkAuthId']));
+                                $wpdb->update($wpdb->prefix . 'b2s_posts_network_details', array('data' => serialize($data)), array('owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('network_auth_id' => (int) $network['networkAuthId']));
                             } else {
                                 if (isset($network['networkId']) && isset($network['networkType']) && isset($network['networkAuthId']) && isset($network['displayName'])) {
                                     $data = array('url_parameter' => array(0 => array('name' => 'default', 'querys' => $newParams)));
@@ -2301,7 +2368,8 @@ class Ajax_Post {
                                         'network_type' => (int) $network['networkType'],
                                         'network_auth_id' => (int) $network['networkAuthId'],
                                         'network_display_name' => $network['displayName'],
-                                        'data' => serialize($data)), array('%d', '%d', '%d', '%s', '%s')
+                                        'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
+                                        'data' => serialize($data)), array('%d', '%d', '%d', '%s', '%d', '%s')
                                     );
                                 }
                             }
@@ -2382,6 +2450,12 @@ class Ajax_Post {
                             $_POST['b2s-re-post-categories-data'] = B2S_Tools::sanitize_array($_POST['b2s-re-post-categories-data']);
                             $join .= " LEFT JOIN (SELECT * FROM $wpdb->term_relationships WHERE term_taxonomy_id IN ('" . implode("','", $_POST['b2s-re-post-categories-data']) . "')) AS tr ON tr.object_id = posts.ID";
                             $where .= " AND term_taxonomy_id IS " . ((isset($_POST['b2s-re-post-categories-state']) && !empty($_POST['b2s-re-post-categories-state']) && (int) $_POST['b2s-re-post-categories-state'] == 1) ? '' : 'NOT') . " NULL ";
+                        }
+                        //tags
+                        if (isset($_POST['b2s-re-post-tags-active']) && (int) $_POST['b2s-re-post-tags-active'] == 1 && isset($_POST['b2s-re-post-tags-data']) && !empty($_POST['b2s-re-post-tags-data']) && is_array($_POST['b2s-re-post-tags-data'])) {
+                            $_POST['b2s-re-post-tags-data'] = B2S_Tools::sanitize_array($_POST['b2s-re-post-tags-data']);
+                            $join .= " LEFT JOIN (SELECT * FROM $wpdb->term_relationships WHERE term_taxonomy_id IN ('" . implode("','", $_POST['b2s-re-post-tags-data']) . "')) AS tr ON tr.object_id = posts.ID";
+                            $where .= " AND term_taxonomy_id IS " . ((isset($_POST['b2s-re-post-tags-state']) && !empty($_POST['b2s-re-post-tags-state']) && (int) $_POST['b2s-re-post-tags-state'] == 1) ? '' : 'NOT') . " NULL ";
                         }
                         //include only favorites
                         if (isset($_POST['b2s-re-post-favorites-active']) && (int) $_POST['b2s-re-post-favorites-active'] == 1) {
@@ -2722,6 +2796,149 @@ class Ajax_Post {
             wp_die();
         } else {
             echo json_encode(array('result' => false, 'error_reason' => 'nonce'));
+            wp_die();
+        }
+    }
+
+    public function addUserApp() {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+            $supportedNetworks = unserialize(B2S_PLUGIN_USER_APP_NETWORKS);
+
+            if (isset($_POST['app_name']) && !empty($_POST['app_name']) && isset($_POST['network_id']) && !empty($_POST['network_id']) && isset($_POST['app_key']) && !empty($_POST['app_key']) && isset($_POST['app_secret']) && !empty($_POST['app_secret'])) {
+
+                $appName = sanitize_text_field($_POST['app_name']);
+                $appNetwork = (int) $_POST['network_id'];
+                if (in_array($appNetwork, $supportedNetworks)) {
+                    //call API app/add endpoint here
+                    $postData = array('action' => 'addUserApp', 'token' => B2S_PLUGIN_TOKEN,
+                        "app_name" => $appName,
+                        "network_id" => $appNetwork,
+                        "app_key" => sanitize_text_field($_POST['app_key']),
+                        "app_secret" => sanitize_text_field($_POST['app_secret']),
+                        "plugin_version" => B2S_PLUGIN_VERSION
+                    );
+
+                    $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData));
+                    if (isset($result->result) && $result->result !== false && isset($result->app_id) && (int) $result->app_id > 0) {
+                        $editAppText = esc_html__('Edit app data', 'blog2social');
+                        $deleteAppText = esc_html__('Delete app data', 'blog2social');
+                        echo json_encode(array("result" => true, "app_id" => $result->app_id, 'app_name' => $appName, 'network_id' => (int) $_POST['network_id'],
+                            'deleteAppText' => $deleteAppText, 'editAppText' => $editAppText));
+                        wp_die();
+                    } else {
+                        if (isset($result->error_code) && $result->error_code == "APP_PAID") {
+                            echo json_encode(array("result" => false, "error_code" => $result->error_code));
+                            wp_die();
+                        }
+                    }
+                }
+            }
+            echo json_encode(array("result" => false, "app_id" => -1));
+            wp_die();
+        }
+    }
+
+    public function editUserApp() {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+            if (isset($_POST['app_id']) && (int) $_POST['app_id'] > 0) {
+                $postData = array('action' => 'editUserApp', 'token' => B2S_PLUGIN_TOKEN,
+                    "app_id" => (int) $_POST['app_id'],
+                    'app_name' => isset($_POST['app_name']) ? sanitize_text_field($_POST['app_name']) : '',
+                    'app_key' => isset($_POST['app_key']) ? sanitize_text_field($_POST['app_key']) : '',
+                    'app_secret' => isset($_POST['app_secret']) ? sanitize_text_field($_POST['app_secret']) : '',
+                    "plugin_version" => B2S_PLUGIN_VERSION
+                );
+
+                $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData));
+
+                if ($result->result !== false) {
+                    $app_name = isset($_POST['app_name']) ? sanitize_text_field($_POST['app_name']) : '';
+                    echo json_encode(array("result" => true, 'app_id' => (int) $_POST['app_id'], 'app_name' => $app_name));
+                    wp_die();
+                }
+            }
+            echo json_encode(array("result" => false));
+            wp_die();
+        }
+    }
+
+    public function deleteUserApp() {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+            if (isset($_POST['app_id']) && (int) $_POST['app_id'] > 0) {
+                $postData = array('action' => 'deleteUserApp', 'token' => B2S_PLUGIN_TOKEN,
+                    "app_id" => (int) $_POST['app_id'],
+                    "plugin_version" => B2S_PLUGIN_VERSION
+                );
+
+                $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData));
+                if (isset($result->result) && $result->result !== false && $result->result != 0) {
+
+                    if (isset($result->inactive_auth_ids) && is_array($result->inactive_auth_ids) && sizeof($result->inactive_auth_ids) > 0) {
+                        $this->deleteAppAuthsAndSchedPosts($result->inactive_auth_ids);
+                    }
+                    echo json_encode(array("result" => true));
+                    wp_die();
+                }
+            }
+            echo json_encode(array("result" => false));
+            wp_die();
+        }
+    }
+
+    private function deleteAppAuthsAndSchedPosts($network_auth_ids = array()) {
+        if (is_array($network_auth_ids) && !empty($network_auth_ids) && sizeof($network_auth_ids) > 0) {
+            require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Tools.php');
+            global $wpdb;
+            foreach ($network_auth_ids as $auth_id) {
+                $res = $wpdb->get_results($wpdb->prepare("SELECT b.id, b.post_id, b.post_for_approve, b.post_for_relay FROM {$wpdb->prefix}b2s_posts b LEFT JOIN {$wpdb->prefix}b2s_posts_network_details d ON (d.id = b.network_details_id) WHERE d.network_auth_id= %d AND b.hide = %d AND b.publish_date =%s", $auth_id, 0, '0000-00-00 00:00:00'));
+                if (is_array($res) && !empty($res)) {
+                    foreach ($res as $k => $row) {
+                        if (isset($row->id) && (int) $row->id > 0) {
+                            $hookAction = (isset($row->post_for_approve) && (int) $row->post_for_approve == 0) ? 3 : 0;   //since 4.9.1 Facebook Instant Sharing
+                            $wpdb->update($wpdb->prefix . 'b2s_posts', array('hook_action' => $hookAction, 'hide' => 1), array('id' => (int) $row->id));
+                            //is post for relay
+                            if ((int) $row->post_for_relay == 1) {
+                                $relay = B2S_Post_Tools::getAllRelayByPrimaryPostId($row->id);
+                                if (is_array($relay) && !empty($relay)) {
+                                    $relay = B2S_Tools::sanitize_array($relay);
+                                    foreach ($relay as $item) {
+                                        if (isset($item->id) && (int) $item->id > 0) {
+                                            $wpdb->update($wpdb->prefix . 'b2s_posts', array('hook_action' => 3, 'hide' => 1), array('id' => $item->id));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function saveUserOnboarding() {
+
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+
+            if (isset($_POST['onboarding']) && ((int) $_POST['onboarding'] == 0 || (int) $_POST['onboarding'] == 1 || (int) $_POST['onboarding'] == 2)) {
+                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
+                $options->_setOption('onboarding_active', (int) $_POST['onboarding']);
+                echo json_encode(array("result" => true));
+                wp_die();
+            }
+            echo json_encode(array("result" => false));
+            wp_die();
+        }
+    }
+
+    public function saveUserOnboardingPaused() {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+            if (isset($_POST['onboarding_paused']) && ((int) $_POST['onboarding_paused'] == 0 || (int) $_POST['onboarding_paused'] == 1)) {
+                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
+                $options->_setOption('onboarding_paused', (int) $_POST['onboarding_paused']);
+                echo json_encode(array("result" => true));
+                wp_die();
+            }
+            echo json_encode(array("result" => false));
             wp_die();
         }
     }

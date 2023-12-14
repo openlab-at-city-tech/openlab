@@ -58,7 +58,7 @@
                                                     if($registerdCommunity == false) {
                                                 ?>
                                                     <div class="b2s-community-register-form">
-                                                        <h5 class="b2s-bold"><?php echo esc_html_e('Create your support account to ask questions and get help', 'blog2social'); ?></h5>
+                                                        <h5 class="b2s-bold"><?php esc_html_e('Create your support account to ask questions and get help', 'blog2social'); ?></h5>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_data" style="display: none;"><?php esc_html_e('Unknown error has occurred. Please try again.', 'blog2social') ?></div>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_password" style="display: none;"><?php esc_html_e('Enter at least 8 characters', 'blog2social') ?></div>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_email" style="display: none;"><?php esc_html_e('Invalid email address', 'blog2social') ?></div>

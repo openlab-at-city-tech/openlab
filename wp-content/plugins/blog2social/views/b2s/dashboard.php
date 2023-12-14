@@ -83,7 +83,7 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 <input type="hidden" id="b2s-redirect-url-sched-post" value="<?php echo esc_url($b2sSiteUrl) . 'wp-admin/admin.php?page=blog2social-sched'; ?>"/>
 <input type="hidden" id="isLegacyMode" value="<?php echo (isset($b2sGeneralOptions['legacy_mode']) ? (int) esc_attr($b2sGeneralOptions['legacy_mode']) : 0); ?>">
-<input type="hidden" id="showFullCalenderText" value="<?php esc_html_e('show full calendar', 'blog2social'); ?>">
+<input type="hidden" id="showFullCalenderText" value="<?php  esc_attr_e('show full calendar', 'blog2social'); ?>">
 
 <div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">

@@ -181,7 +181,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2sUserVersion" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>" />
 <input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserTimeFormat" value="<?php echo esc_attr($optionUserTimeFormat); ?>">
-<input type="hidden" id="b2sJSTextAddPost" value="<?php echo esc_html_e("add post", "blog2social"); ?>">                    
+<input type="hidden" id="b2sJSTextAddPost" value="<?php esc_attr_e("add post", "blog2social"); ?>">                    
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">
 <input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
 <input type="hidden" id="user_version" name="user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">

@@ -37,6 +37,8 @@ class B2S_Settings_Item {
     public function getGeneralSettingsHtml() {
 
         $isCheckedAllowShortcode = (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
+        $isCheckedUsePermalink =  (get_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
+
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
         $optionUserTimeFormat = $this->options->_getOption('user_time_format');
@@ -104,10 +106,17 @@ class B2S_Settings_Item {
             $content .= '</span>';
             $content .= '<br>';
         }
+        $isProBadge = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-success">'. esc_html__('Pro', 'blog2social') .'</span>' : '';
+        $isDisabled = !empty($isProBadge) ? 'disabled' : '';
 
         $content .= '<br>';
         $content .= '<strong>' . esc_html__('Shortcodes', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoAllowShortcodeModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> <br>';
         $content .= '<input type="checkbox" value="' . esc_attr($isCheckedAllowShortcode) . '" id="b2s-user-network-settings-allow-shortcode" ' . (($isCheckedAllowShortcode == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('allow shortcodes in my post', 'blog2social');
+        $content .= '<br>';
+        $content .= '<br>';
+        $content .= '<strong>' . esc_html__('Use custom permalinks for scheduled posts', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoUsePermalinksModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> '. $isProBadge .'<br>';
+        $content .= '<input type="checkbox" '.$isDisabled.' value="' . esc_attr($isCheckedUsePermalink) . '" id="b2s-user-network-settings-use-permalinks" ' . (($isCheckedUsePermalink == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('This feature lets you use personalized permalinks when scheduling social media posts for unpublished WordPress articles, replacing the default WordPress-generated link (e.g., "yourwebsite.com/?p=123"). Be sure to review the explanation before activating this option.', 'blog2social');
+
 
         if (current_user_can('administrator')) {
             $content .= '<br>';

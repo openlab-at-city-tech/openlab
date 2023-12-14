@@ -2,8 +2,8 @@
 (function ($) {
 	$.fn.loading = function () {
 		var DEFAULTS = {
-			backgroundColor: '#b3cef6',
-			progressColor: '#4b86db',
+			backgroundColor: '#4b86db',
+			progressColor: '#b3cef6',
 			percent: 100,
 			duration: 2000,
                         customText:''
@@ -19,7 +19,6 @@
                         customText: $target.data('custom-text') ? $target.data('custom-text') : DEFAULTS.customText,
 			duration: $target.data('duration') ? $target.data('duration') : DEFAULTS.duration
 			};
-			// console.log(opts);
 	
 			$target.append('<div class="background"></div><div class="rotate"></div><div class="left"></div><div class="right"></div><div class=""><span>' + ((opts.customText != '') ? opts.customText :  opts.percent+'%') +'</span></div>');
 	

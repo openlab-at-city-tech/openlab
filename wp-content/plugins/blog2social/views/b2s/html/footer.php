@@ -6,7 +6,7 @@
         <?php } ?>
     </div>
     <div class="pull-right hidden-xs <?php echo isset($noLegend) || isset($noLegendCalender) ? 'hide' : ''; ?>">
-        <?php if ($_GET['page'] != 'blog2social-video') { ?>
+        <?php if (sanitize_text_field(wp_unslash($_GET['page'])) != 'blog2social-video') { ?>
             <small>
                 <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/video-icon.png', B2S_PLUGIN_FILE)); ?>" alt="video">  <?php esc_html_e('Video', 'blog2social') ?> 
                 <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="beitrag">  <?php esc_html_e('Post', 'blog2social') ?> 
@@ -18,7 +18,7 @@
     </div>
 </div>
 <!--Footer Ende-->
-<?php if ($_GET['page'] != 'blog2social-calendar') { ?>
+<?php if (sanitize_text_field(wp_unslash($_GET['page'])) != 'blog2social-calendar') { ?>
 
     <div class="modal fade" id="b2sPreFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sPreFeatureModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
@@ -325,7 +325,7 @@
                 </div>
                 <div class="modal-body">
                     <p><?php
-                        echo esc_html__('Share your blog posts with the Auto Poster: Your blog posts will be shared automatically on your social media channels as soon as you publish or update a new post. You can also choose to autopost scheduled blog posts as soon as they are published.', 'blog2social');
+                        esc_html_e('Share your blog posts with the Auto Poster: Your blog posts will be shared automatically on your social media channels as soon as you publish or update a new post. You can also choose to autopost scheduled blog posts as soon as they are published.', 'blog2social');
                         echo ' ' . sprintf(__('<a target="_blank" href="%s">Learn how to set up auto posting for your blog posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_m')));
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
@@ -365,7 +365,7 @@
                 </div>
                 <div class="modal-body">
                     <p><?php
-                        echo esc_html__('Share imported posts with the Auto Poster: Posts that you import via RSS feeds and plugins can be shared automatically on your social media channels.', 'blog2social');
+                        esc_html_e('Share imported posts with the Auto Poster: Posts that you import via RSS feeds and plugins can be shared automatically on your social media channels.', 'blog2social');
                         echo ' ' . sprintf(__('<a target="_blank" href="%s">Learn how to set up auto posting for imported posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_a')));
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
@@ -422,7 +422,7 @@
                 </div>
                 <div class="modal-body">
                     <p><?php
-                        echo esc_html__('Keep your social media feed updated automatically with your best content and save valuable time by reviving your evergreen content regularly. Automate your resharing process with Blog2Social, so you can use your time to create new content and interact with your community.', 'blog2social');
+                        esc_html_e('Keep your social media feed updated automatically with your best content and save valuable time by reviving your evergreen content regularly. Automate your resharing process with Blog2Social, so you can use your time to create new content and interact with your community.', 'blog2social');
                         echo ' ' . sprintf(__('<a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('re_post')));
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
@@ -454,6 +454,25 @@
     </div>
 
 <?php } ?>
+
+
+<div class="modal fade" id="b2sInfoTwitterThreads" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTwitterThreads" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoTwitterThreads" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Twitter Threads', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <?php esc_html_e('Use Twitter threads (now X posts) to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
+                    <br>
+                    <br>
+                    <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for Twitter.', 'blog2social') ?>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="modal fade" id="b2s-info-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
     <div class="modal-dialog">

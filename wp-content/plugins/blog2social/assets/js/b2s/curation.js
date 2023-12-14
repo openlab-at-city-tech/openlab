@@ -275,6 +275,7 @@ jQuery(document).on('click', '#b2s-btn-curation-share', function () {
     jQuery('#b2s-curation-no-data-info').hide();
     jQuery('#b2s-curation-no-auth-info').hide();
     jQuery('#b2s-curation-saved-draft-info').hide();
+    jQuery("#b2s-instant-sharing-optional").hide();
     jQuery('.b2s-post-curation-action').val('b2s_curation_share');
     var noContent = false;
     if(jQuery('#b2s-curation-post-format').val() == '0') {
@@ -1045,3 +1046,46 @@ function loadDraftShipData() {
 jQuery(document).on('click', '.b2sTextPostInfoModalBtn', function() {
     jQuery('#b2sTextPostInfoModal').modal('show');
 });
+
+jQuery(document).on('input','#b2s-post-curation-comment-text', function() {
+    var value = jQuery('#b2s-post-curation-comment-text').val();
+    jQuery('#b2s-curation-preview-body-text').html(value);
+});
+
+jQuery(document).on('input',"#b2s-post-curation-comment-image",function() {
+    var value = jQuery('#b2s-post-curation-comment-image').val();
+    var img = jQuery(".b2s-post-item-details-url-image")[0].currentSrc;
+    if(img.endsWith("blog2social/assets/images/no-image.png")){ 
+        jQuery('#b2s-curation-preview-body-text').html(value);
+
+    } else {
+        jQuery('#b2s-curation-preview-body-text').html(value + '<br><br><img src="'+img+'" style="width:100%;">');
+
+    }
+});
+
+jQuery(document).on('input',"#b2s-post-curation-comment",function() {
+    var value = jQuery('#b2s-post-curation-comment').val();
+    var url = jQuery(".b2s-post-item-details-preview-url")[0].firstChild.href;
+    if(url.length > 23){
+        url = url.slice(0,23)+"...";
+    }
+    jQuery('#b2s-curation-preview-body-text').html(value+"<br><br>"+url);
+});
+
+jQuery(document).on('click', '.b2s-image-change-btn-area', function() {
+    var value = jQuery('#b2s-post-curation-comment-image').val();
+    var img = jQuery(".b2s-post-item-details-url-image")[0].currentSrc;
+    jQuery('#b2s-curation-preview-body-text').html(value + '<br><br><img src="'+img+'" style="width:100%;">');
+
+});
+
+jQuery(document).on('click', '#b2s-instant-sharing-optional-toggle', function () {
+
+    if(jQuery(".b2s-instant-sharing-optional-fields").is(':visible')){
+        jQuery(".b2s-instant-sharing-optional-fields").hide();
+    } else {
+        jQuery(".b2s-instant-sharing-optional-fields").show();
+    }
+});
+

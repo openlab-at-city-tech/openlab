@@ -182,6 +182,11 @@ jQuery(document).on('click', '.b2s-modal-close', function () {
     return false;
 });
 
+jQuery(document).on('click', '.b2s-load-info-twitter-thread-modal', function () {
+    jQuery('#b2sInfoTwitterThreads').modal('show');
+    return false;
+});
+
 
 jQuery(document).on('click', '.b2s-load-info-meta-tag-modal', function () {
     var dataType = jQuery(this).attr('data-meta-type');

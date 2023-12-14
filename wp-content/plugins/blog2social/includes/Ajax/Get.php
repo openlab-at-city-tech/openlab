@@ -44,6 +44,7 @@ class Ajax_Get {
         add_action('wp_ajax_b2s_get_image_caption', array($this, 'getImageCaption'));
         add_action('wp_ajax_b2s_load_insights', array($this, 'loadInsights'));
         add_action('wp_ajax_b2s_get_video_upload_data', array($this, 'getVideoUploadData'));
+        add_action('wp_ajax_get_posts_detail_data', array($this, 'getPostsDetailData'));
     }
 
     public function getBlogPostStatus() {
@@ -80,7 +81,9 @@ class Ajax_Get {
                                 foreach ($auth as $u => $item) {
                                     if (in_array($item->networkId, $isVideoNetwork)) {
                                         if (!in_array($item->networkId, array(1, 2, 6, 12, 38, 39))) {
-                                            unset($result->data->auth->{$a[$u]});
+                                            if (isset($a[$u])) {
+                                                unset($result->data->auth->{$a[$u]});
+                                            }
                                         }
                                     }
                                 }
@@ -114,7 +117,7 @@ class Ajax_Get {
             $b2sShowPagination = !isset($_POST['b2sShowPagination']) || (int) $_POST['b2sShowPagination'] == 1;
             $b2sSortPostTitle = isset($_POST['b2sSortPostTitle']) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostTitle']))) : "";
             $b2sSortPostAuthor = (isset($_POST['b2sSortPostAuthor']) && (int) $_POST['b2sSortPostAuthor'] > 0) ? (int) $_POST['b2sSortPostAuthor'] : 0;
-            $b2sSortPostSchedDate = isset($_POST['b2sSortPostSchedDate']) ? (in_array(trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostSchedDate']))), array('desc', 'asc')) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostSchedDate']))) : '') : '';
+            $b2sSortPostSchedDate = isset($_POST['b2sSortPostSchedDate']) ? (in_array(trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostSchedDate']))), array('desc', 'asc', 'sched_desc', 'sched_asc')) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostSchedDate']))) : '') : '';
             $b2sSortPostPublishDate = isset($_POST['b2sSortPostPublishDate']) ? (in_array(trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostPublishDate']))), array('desc', 'asc')) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostPublishDate']))) : '') : '';
             $b2sSortPostStatus = isset($_POST['b2sSortPostStatus']) ? (in_array(trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostStatus']))), array('publish', 'future', 'pending')) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostStatus']))) : '') : '';
             $b2sSortPostShareStatus = isset($_POST['b2sSortPostShareStatus']) ? (in_array(trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostShareStatus']))), array('never', 'shared', 'scheduled', 'autopost', 'repost')) ? trim(sanitize_text_field(wp_unslash($_POST['b2sSortPostShareStatus']))) : '') : '';
@@ -234,6 +237,7 @@ class Ajax_Get {
 
                 //Check IsValidVideoForNetwork
                 $isVideoMode = false;
+                $canReel = array();
                 if (isset($_POST['isVideo']) && (int) $_POST['isVideo'] == 1) {
                     require_once B2S_PLUGIN_DIR . 'includes/B2S/Video/Validation.php';
                     $validVideo = new B2S_Video_Validation();
@@ -246,10 +250,15 @@ class Ajax_Get {
                     }
 
                     // NOTE check if it's a reel
-                    if(isset($isValid['canReel']['result']) && !empty($isValid['canReel']['result']) && $isValid['canReel']['result'] === true) {
+                    if (isset($isValid['canReel']['result']) && !empty($isValid['canReel']['result']) && $isValid['canReel']['result'] === true) {
                         $canReel = array('result' => true);
                     } else {
-                        $canReel = array('result' => false, 'content' => $isValid['canReel']['content']);
+                        if(isset($isValid['canReel']['content']) && !empty($isValid['canReel']['content'])){
+                            $canReel = array('result' => false, 'content' => $isValid['canReel']['content']);
+                        } else {
+                            $canReel = array('result' => false, 'content' => '');
+
+                        }
                     }
                 }
 
@@ -437,7 +446,8 @@ class Ajax_Get {
                         'network_id' => (int) $_POST['networkId'],
                         'network_type' => (int) $_POST['networkType'],
                         'network_auth_id' => (int) $_POST['networkAuthId'],
-                        'network_display_name' => sanitize_text_field(wp_unslash($_POST['displayName']))), array('%d', '%d', '%d', '%s'));
+                        'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
+                        'network_display_name' => sanitize_text_field(wp_unslash($_POST['displayName']))), array('%d', '%d', '%d', '%d', '%s'));
                 }
                 $mandantCount = $wpdb->get_var($wpdb->prepare("SELECT COUNT(mandant_id)FROM {$wpdb->prefix}b2s_user_network_settings  WHERE mandant_id =%d AND blog_user_id=%d ", (int) $_POST['mandandId'], B2S_PLUGIN_BLOG_USER_ID));
                 if ($mandantCount > 0) {
@@ -822,7 +832,9 @@ class Ajax_Get {
                     foreach ($auth as $u => $item) {
                         if (in_array($item->networkId, $isVideoNetwork)) {
                             if (!in_array($item->networkId, array(1, 2, 6, 12, 38, 39))) {
-                                unset($result->data->auth->{$a[$u]});
+                                if (isset($a[$u])) {
+                                    unset($result->data->auth->{$a[$u]});
+                                }
                             }
                         }
                     }
@@ -911,6 +923,31 @@ class Ajax_Get {
             $filterDates = ((isset($_GET['filter_dates']) && is_array($_GET['filter_dates']) && !empty($_GET['filter_dates'])) ? B2S_Tools::sanitize_array($_GET['filter_dates']) : array());
             $data = $metrics->getInsightsData($filterNetwork, $filterDates);
             echo json_encode(array('result' => true, 'data' => $data));
+            wp_die();
+        } else {
+            echo json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+    }
+
+    
+
+    public function getPostsDetailData() {
+        if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
+            if (isset($_POST['postId']) && (int) $_POST['postId'] > 0) {
+                require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Item.php');
+                require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
+                $postData = new B2S_Post_Item(((isset($_POST['type']) && sanitize_text_field(wp_unslash($_POST['type'])) == 'repost') ? 'repost' : 'all'));
+                $showByDate = isset($_POST['showByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim(sanitize_text_field(wp_unslash($_POST['showByDate'])))) ? trim(sanitize_text_field(wp_unslash($_POST['showByDate']))) : "") : "";
+                $showByNetwork = (isset($_POST['showByNetwork']) && (int) $_POST['showByNetwork'] > 0) ? (int) $_POST['showByNetwork'] : 0;
+                $userAuthId = (isset($_POST['userAuthId']) && (int) $_POST['userAuthId'] > 0) ? (int) $_POST['userAuthId'] : 0;
+                $result = $postData->getAllPostsDataHtml((int) $_POST['postId'], $showByDate, (int) $showByNetwork, (int) $userAuthId);
+                if ($result !== false) {
+                    echo json_encode(array('result' => true, 'postId' => (int) $_POST['postId'], 'content' => $result));
+                    wp_die();
+                }
+            }
+            echo json_encode(array('result' => false));
             wp_die();
         } else {
             echo json_encode(array('result' => false, 'error' => 'nonce'));

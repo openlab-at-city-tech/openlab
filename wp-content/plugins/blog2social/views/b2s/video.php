@@ -91,7 +91,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="b2sSelSchedDate" value="<?php echo esc_attr((($selSchedDate != "") ? strtotime($selSchedDate) . '000' : '')); ?>">
+                            <input type="hidden" id="b2sSelSchedDate" value="">
                             <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
                             <input type="hidden" id="b2sJsTextPublish" value="<?php esc_html_e('published', 'blog2social') ?>">
                             <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
@@ -154,7 +154,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                     <?php if (!$canUseVideoAddon) { ?>
                                         <div class="row">
                                             <div class="col-md-3">                                     
-                                                <div class="b2s-progress-bar" data-percent="0" data-custom-text="<?php echo esc_attr("You have 0GB <br>of 0GB left", "blog2social") ?>" data-duration="2000"></div>
+                                                <div class="b2s-progress-bar" data-percent="0" data-custom-text="<?php esc_attr_e("You have 0GB <br>of 0GB left", "blog2social") ?>" data-duration="2000"></div>
                                             </div>
                                             <div class="col-md-9">
                                                 <h4><?php esc_html_e("You have reached the limit of your free video trial period", 'blog2social') ?></h4>                                            
@@ -175,7 +175,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                                 <div class="col-md-3">                                     
                                                     <div class="b2s-progress-bar" 
                                                          data-percent="<?php echo esc_attr(B2S_Util::getUsedPercentOfXy(B2S_PLUGIN_ADDON_VIDEO['volume_open'], B2S_PLUGIN_ADDON_VIDEO['volume_total'])); ?>" 
-                                                         data-custom-text="<?php echo esc_attr(sprintf(__('You still have<br><b>%s</b><br>of %s left', 'blog2social'), B2S_Util::convertKbToGb(B2S_PLUGIN_ADDON_VIDEO['volume_open']), B2S_Util::convertKbToGb(B2S_PLUGIN_ADDON_VIDEO['volume_total']))) ?>" 
+                                                         data-custom-text="<?php echo esc_attr(sprintf(__('You still have<br><b>%s</b><br>of %s left', 'blog2social'), B2S_Util::getRemainingVideoVolume(B2S_PLUGIN_ADDON_VIDEO['volume_open']), B2S_Util::convertKbToGb(B2S_PLUGIN_ADDON_VIDEO['volume_total']))) ?>" 
                                                          data-duration="2000">
                                                     </div>
                                                 </div>

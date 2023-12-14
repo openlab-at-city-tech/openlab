@@ -233,7 +233,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-metrics-info-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo esc_html__('Social Media Metrics', 'blog2social') . ' <span class="label label-success label-sm">' . esc_html__("BETA", "blog2social") . '</span>'; ?></h4>
+                <h4 class="modal-title"><?php esc_html_e('Social Media Metrics', 'blog2social') . ' <span class="label label-success label-sm">' . esc_html__("BETA", "blog2social") . '</span>'; ?></h4>
             </div>
             <div class="modal-body">
                 <?php esc_html_e('You can now track the performance of your posts for Facebook and Twitter directly in Blog2Social. With these Social Media Metrics, you can analyze the performance of your social media posts you shared with the Blog2Social. Use it to optimize your social media strategy to reach your audience and to get better results for your social media posts.', 'blog2social') ?>
@@ -287,7 +287,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                 <h4 class="modal-title"><?php esc_html_e('Feedback', 'blog2social'); ?></h4>
                 <div id="b2s-metrics-feedback-checkbox">
                     <input type="checkbox" id="b2s-metrics-dont-show-again" name="b2s-metrics-dont-show-again" value="0">
-                    <label for="b2s-metrics-dont-show-again"><?php esc_html_e("Don't show this again", "blog2social") ?> </label><br>
+                    <label for="b2s-metrics-dont-show-again"><?php esc_html_e("Don’t show this again.", "blog2social")?></label><br>
                 </div>
             </div>
             <div class="modal-body">

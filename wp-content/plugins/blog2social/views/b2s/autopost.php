@@ -13,13 +13,6 @@ $autoPostItem = new B2S_AutoPost_Item();
             <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
             <!--Header|End-->
             <div class="clearfix"></div>
-            <!--Navbar|Start-->
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
-                </div>
-            </div>
-            <!--Navbar|End-->
             <div class="clearfix"></div>
             <!--Content|Start-->
             <div class="panel panel-group b2s-upload-image-no-permission" style="display:none;">
@@ -148,8 +141,8 @@ $autoPostItem = new B2S_AutoPost_Item();
 <input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">
 <input type="hidden" id="b2sShowSection" value="<?php echo (isset($_GET['show']) ? esc_attr(sanitize_text_field($_GET['show'])) : ''); ?>">
-<input type="hidden" id="b2s_wp_media_headline" value="<?php esc_html_e('Select or upload an image from media gallery', 'blog2social') ?>">
-<input type="hidden" id="b2s_wp_media_btn" value="<?php esc_html_e('Use image', 'blog2social') ?>">
+<input type="hidden" id="b2s_wp_media_headline" value="<?php esc_attr_e('Select or upload an image from media gallery', 'blog2social') ?>">
+<input type="hidden" id="b2s_wp_media_btn" value="<?php esc_attr_e('Use image', 'blog2social') ?>">
 <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION) ?>">
 <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
 
@@ -261,6 +254,19 @@ $autoPostItem = new B2S_AutoPost_Item();
                 <br>
                 <?php esc_html_e('Please make sure you activate and define the preferred settings panel for each user.', 'blog2social'); ?>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="b2sAutoPostEchoInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sAutoPostEchoInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAutoPostEchoInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Repost', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php esc_html_e('Apply the Re-Poster settings to repost the content within 48 hours. Select the time window for repeated posting, either once on Day 1 or Day 2 after publishing, or once on each of the two days.', 'blog2social'); ?>
+               </div>
         </div>
     </div>
 </div>
