@@ -7,7 +7,7 @@
  * @package StellarWP\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -15,7 +15,7 @@ namespace TEC\Common\StellarWP\Telemetry\Telemetry;
 
 use TEC\Common\StellarWP\Telemetry\Config;
 use TEC\Common\StellarWP\Telemetry\Contracts\Data_Provider;
-use TEC\Common\StellarWP\Telemetry\Core;
+use TEC\Common\StellarWP\Telemetry\Opt_In\Opt_In_Template;
 use TEC\Common\StellarWP\Telemetry\Opt_In\Status;
 
 /**
@@ -62,9 +62,9 @@ class Telemetry {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param boolean $force Force the creation of the site on the server.
+	 * @param bool $force Force the creation of the site on the server.
 	 *
-	 * @return boolean
+	 * @return bool True if the site was registered, false otherwise.
 	 */
 	public function register_site( bool $force = false ) {
 		// If site is already registered and we're not forcing a new registration, bail.
@@ -86,16 +86,22 @@ class Telemetry {
 	 * @since 2.0.0 - Add support for setting the stellar slug.
 	 *
 	 * @param string $stellar_slug The slug to pass to the server when registering the site user.
+	 * @param string $opt_in_text  The opt-in text displayed to the user when they agreed to share their data.
 	 *
 	 * @return void
 	 */
-	public function register_user( string $stellar_slug = '' ) {
+	public function register_user( string $stellar_slug = '', string $opt_in_text = '' ) {
 		if ( '' === $stellar_slug ) {
 			$stellar_slug = Config::get_stellar_slug();
 		}
 
+		$user_details = $this->get_user_details( $stellar_slug, $opt_in_text );
+
 		try {
-			$this->send( $this->get_user_details( $stellar_slug ), Config::get_server_url() . '/opt-in' );
+			// Store the user info in the options table.
+			update_option( Status::OPTION_NAME_USER_INFO, $user_details, false );
+
+			$this->send( $user_details, Config::get_server_url() . '/opt-in', false );
 		} catch ( \Error $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			// We don't want to throw errors if the server fails.
 		}
@@ -114,7 +120,7 @@ class Telemetry {
 	 * @return void
 	 */
 	public function send_uninstall( string $plugin_slug, string $uninstall_reason_id, string $uninstall_reason, string $comment = '' ) {
-		$response = $this->send(
+		$this->send(
 			[
 				'access_token'        => $this->get_token(),
 				'plugin_slug'         => $plugin_slug,
@@ -122,8 +128,77 @@ class Telemetry {
 				'uninstall_reason'    => $uninstall_reason,
 				'comment'             => $comment,
 			],
-			$this->get_uninstall_url()
+			$this->get_uninstall_url(),
+			false
 		);
+	}
+
+	/**
+	 * Saves the telemetry server's auth token for the site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $token The site token to authenticate the request with.
+	 *
+	 * @return bool
+	 */
+	public function save_token( string $token ) {
+		$option = array_merge(
+			$this->get_option(),
+			[
+				'token' => $token,
+			]
+		);
+
+		return update_option( $this->opt_in_status->get_option_name(), $option );
+	}
+
+	/**
+	 * Determines if the current site is registered on the telemetry server.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_registered() {
+		// Check if the site is registered by checking if the token is set.
+		$option = $this->get_option();
+
+		return ! empty( $option['token'] );
+	}
+
+	/**
+	 * Sends data to the telemetry server.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function send_data() {
+		if ( ! $this->is_registered() ) {
+			return false;
+		}
+
+		if ( ! $this->opt_in_status->is_active() ) {
+			return false;
+		}
+
+		$response = $this->send( $this->get_send_data_args(), $this->get_send_data_url() );
+
+		return isset( $response['status'] );
+	}
+
+	/**
+	 * Gets the stored auth token for the current site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_token() {
+		$option = $this->get_option();
+
+		return $option['token'] ?? '';
 	}
 
 	/**
@@ -131,13 +206,20 @@ class Telemetry {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array  $data The array of data to send.
-	 * @param string $url  The url of the telemetry server.
+	 * @param array  $data     The array of data to send.
+	 * @param string $url      The url of the telemetry server.
+	 * @param bool   $blocking Whether the request should be blocking or not.
+	 * @param float  $timeout  The timeout for the request, `0` for no timeout.
 	 *
 	 * @return array|null
 	 */
-	protected function send( array $data, string $url ) {
-		$response = $this->request( $url, $data );
+	public function send( array $data, string $url, bool $blocking = true, float $timeout = 5.0 ) {
+
+		if ( ! $this->opt_in_status->is_active() ) {
+			return null;
+		}
+
+		$response = $this->request( $url, $data, $blocking, $timeout );
 
 		if ( is_wp_error( $response ) ) {
 			return null;
@@ -157,16 +239,20 @@ class Telemetry {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $url  The url of the telemetry server.
-	 * @param array  $data The data to send.
+	 * @param string $url      The url of the telemetry server.
+	 * @param array  $data     The data to send.
+	 * @param bool   $blocking Whether the request should be blocking or not.
+	 * @param float  $timeout  The timeout for the request, `0` for no timeout.
 	 *
 	 * @return array|\WP_Error
 	 */
-	protected function request( string $url, array $data ) {
+	protected function request( string $url, array $data, bool $blocking = true, float $timeout = 5.0 ) {
 		return wp_remote_post(
 			$url,
 			[
-				'body' => $data,
+				'blocking' => $blocking,
+				'timeout'  => $timeout,
+				'body'     => $data,
 			]
 		);
 	}
@@ -260,20 +346,23 @@ class Telemetry {
 	 * @since 2.0.0 - Add support for passing stellar_slug directly.
 	 *
 	 * @param string $stellar_slug The plugin slug to pass to the server when registering a site user.
+	 * @param string $opt_in_text  The opt-in text displayed to the user when they agreed to share their data.
 	 *
 	 * @return array
 	 */
-	protected function get_user_details( string $stellar_slug = '' ) {
+	protected function get_user_details( string $stellar_slug = '', string $opt_in_text = '' ) {
 		if ( '' == $stellar_slug ) {
 			$stellar_slug = Config::get_stellar_slug();
 		}
 
-		$user = wp_get_current_user();
+		$user     = wp_get_current_user();
+		$template = Config::get_container()->get( Opt_In_Template::class );
 
 		$args = [
 			'name'        => $user->display_name,
 			'email'       => $user->user_email,
 			'plugin_slug' => $stellar_slug,
+			'opt_in_text' => $opt_in_text,
 		];
 
 		/**
@@ -302,75 +391,30 @@ class Telemetry {
 	}
 
 	/**
-	 * Saves the telemetry server's auth token for the site.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $token The site token to authenticate the request with.
-	 *
-	 * @return bool
-	 */
-	public function save_token( string $token ) {
-		$option = array_merge(
-			$this->get_option(),
-			[
-				'token' => $token,
-			]
-		);
-
-		return update_option( $this->opt_in_status->get_option_name(), $option );
-	}
-
-	/**
-	 * Determines if the current site is registered on the telemetry server.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return boolean
-	 */
-	public function is_registered() {
-		// Check if the site is registered by checking if the token is set.
-		$option = $this->get_option();
-
-		return ! empty( $option['token'] );
-	}
-
-	/**
-	 * Sends data to the telemetry server.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return boolean
-	 */
-	public function send_data() {
-		if ( ! $this->is_registered() ) {
-			return false;
-		}
-
-		if ( ! $this->opt_in_status->is_active() ) {
-			return false;
-		}
-
-		$response = $this->send( $this->get_send_data_args(), $this->get_send_data_url() );
-
-		return $response['status'] ?? false;
-	}
-
-	/**
 	 * Gets the args for sending data to the telemetry server.
 	 *
 	 * @since 1.0.0
+	 * @since TBD - Updated to include the opted in user with the telemetry json.
 	 *
 	 * @return array
 	 */
 	protected function get_send_data_args() {
+		$opt_in_user = get_option( Status::OPTION_NAME_USER_INFO, [] );
+		$telemetry   = $this->provider->get_data();
+
+		if ( count( $opt_in_user ) > 0 ) {
+			$telemetry['opt_in_user'] = json_decode( $opt_in_user['user'], true );
+		}
+
+		$args = [
+			'token'         => $this->get_token(),
+			'telemetry'     => wp_json_encode( $telemetry ),
+			'stellar_slugs' => wp_json_encode( $this->opt_in_status->get_opted_in_plugins() ),
+		];
+
 		return apply_filters(
 			'stellarwp/telemetry/' . Config::get_hook_prefix() . 'send_data_args',
-			[
-				'token'         => $this->get_token(),
-				'telemetry'     => wp_json_encode( $this->provider->get_data() ),
-				'stellar_slugs' => wp_json_encode( $this->opt_in_status->get_opted_in_plugins() ),
-			]
+			$args
 		);
 	}
 
@@ -391,18 +435,4 @@ class Telemetry {
 		 */
 		return apply_filters( 'stellarwp/telemetry/' . Config::get_hook_prefix() . 'send_data_url', Config::get_server_url() . '/telemetry' );
 	}
-
-	/**
-	 * Gets the stored auth token for the current site.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	protected function get_token() {
-		$option = $this->get_option();
-
-		return $option['token'] ?? '';
-	}
-
 }

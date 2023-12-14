@@ -118,6 +118,10 @@
 		width: 100%;
 	}
 
+	.tec-ct1-upgrade progress.focus-visible {
+			outline-color: var(--_progress);
+		}
+
 	.tec-ct1-upgrade progress:focus-visible {
 			outline-color: var(--_progress);
 		}

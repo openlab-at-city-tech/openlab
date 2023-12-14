@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -46,7 +46,7 @@ trait JoinClause {
 	 *
 	 * @return static
 	 */
-	public function leftJoin( $table, $column1, $column2, $alias = null ) {
+	public function leftJoin( $table, $column1, $column2, $alias = '' ) {
 		$this->join(
 			function ( JoinQueryBuilder $builder ) use ( $table, $column1, $column2, $alias ) {
 				$builder
@@ -66,7 +66,7 @@ trait JoinClause {
 	 *
 	 * @return static
 	 */
-	public function innerJoin( $table, $column1, $column2, $alias = null ) {
+	public function innerJoin( $table, $column1, $column2, $alias = '' ) {
 		$this->join(
 			function ( JoinQueryBuilder $builder ) use ( $table, $column1, $column2, $alias ) {
 				$builder
@@ -86,7 +86,7 @@ trait JoinClause {
 	 *
 	 * @return static
 	 */
-	public function rightJoin( $table, $column1, $column2, $alias = null ) {
+	public function rightJoin( $table, $column1, $column2, $alias = '' ) {
 		$this->join(
 			function ( JoinQueryBuilder $builder ) use ( $table, $column1, $column2, $alias ) {
 				$builder

@@ -7,7 +7,7 @@
  * @package StellarWP\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -133,17 +133,6 @@ class Template implements Template_Interface {
 	 */
 	public function render( string $stellar_slug ) {
 		load_template( dirname( dirname( __DIR__ ) ) . '/views/exit-interview.php', false, $this->get_args( $stellar_slug ) );
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function enqueue() {
-		// TODO: Implement enqueue() method.
 	}
 
 	/**

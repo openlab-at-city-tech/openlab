@@ -56,6 +56,7 @@
 			<form method="post" action="" data-js="optin-form">
 				<input type="hidden" name="action" value="stellarwp-telemetry">
 				<input type="hidden" name="stellar_slug" value="<?php echo esc_attr( $args['plugin_slug'] ); ?>">
+				<input type="hidden" name="opt_in_text" value="<?php echo esc_attr( $args['intro'] ); ?>">
 				<?php wp_nonce_field( 'stellarwp-telemetry' ); ?>
 				<button class="stellarwp-telemetry-btn-primary" data-js="form-submit" type="submit" name="optin-agreed" value="true">
 					<?php echo esc_html__( 'Allow & Continue', 'stellarwp-telemetry' ); ?>

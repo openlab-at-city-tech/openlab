@@ -7,7 +7,7 @@
  * @package StellarWP\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -84,24 +84,24 @@ class Exit_Interview_Subscriber extends Abstract_Subscriber {
 	 * @return void
 	 */
 	public function ajax_exit_interview() {
-		$uninstall_reason_id = filter_input( INPUT_POST, 'uninstall_reason_id', FILTER_SANITIZE_STRING );
+		$uninstall_reason_id = filter_input( INPUT_POST, 'uninstall_reason_id', FILTER_SANITIZE_SPECIAL_CHARS );
 		$uninstall_reason_id = ! empty( $uninstall_reason_id ) ? $uninstall_reason_id : false;
 		if ( ! $uninstall_reason_id ) {
 			wp_send_json_error( 'No reason id provided' );
 		}
 
-		$uninstall_reason = filter_input( INPUT_POST, 'uninstall_reason', FILTER_SANITIZE_STRING );
+		$uninstall_reason = filter_input( INPUT_POST, 'uninstall_reason', FILTER_SANITIZE_SPECIAL_CHARS );
 		$uninstall_reason = ! empty( $uninstall_reason ) ? $uninstall_reason : false;
 		if ( ! $uninstall_reason ) {
 			wp_send_json_error( 'No reason provided' );
 		}
 
-		$plugin_slug = filter_input( INPUT_POST, 'plugin_slug', FILTER_SANITIZE_STRING );
+		$plugin_slug = filter_input( INPUT_POST, 'plugin_slug', FILTER_SANITIZE_SPECIAL_CHARS );
 
-		$comment = filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_STRING );
+		$comment = filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS );
 		$comment = ! empty( $comment ) ? $comment : '';
 
-		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_SPECIAL_CHARS );
 		$nonce = ! empty( $nonce ) ? $nonce : '';
 
 		if ( ! wp_verify_nonce( $nonce, self::AJAX_ACTION ) ) {

@@ -7,7 +7,7 @@
  * @package TEC\Common\StellarWP\Telemetry\Contracts
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -28,15 +28,6 @@ interface Template_Interface {
 	 * @return void
 	 */
 	public function render( string $stellar_slug );
-
-	/**
-	 * Enqueues assets for the rendered template.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function enqueue();
 
 	/**
 	 * Determines if the template should be rendered.

@@ -15,9 +15,13 @@ use Tribe\Events\Views\V2\Views\Traits\With_Fast_Forward_Link;
 use Tribe__Date_Utils as Dates;
 use Tribe__Utils__Array as Arr;
 use Tribe__Context;
+use Tribe\Events\Views\V2\Views\Traits\With_Noindex;
+
+use DateTime;
 
 class Day_View extends View {
 	use With_Fast_Forward_Link;
+	use With_Noindex;
 
 	/**
 	 * Slug for this view
@@ -45,7 +49,7 @@ class Day_View extends View {
 	 *
 	 * @var array
 	 */
-	protected $cached_event_dates = [];
+	protected array $memoized_dates = [];
 
 	/**
 	 * Visibility for this view.
@@ -93,9 +97,12 @@ class Day_View extends View {
 		// Use cache to reduce the performance impact.
 		$cache_key = __METHOD__ . '_' . substr( md5( wp_json_encode( [ $current_date, $args ] ) ), 10 );
 
-		if ( isset( $this->cached_event_dates[ $cache_key ] ) ) {
-			return $this->cached_event_dates[ $cache_key ];
+		if ( isset( $this->memoized_dates[ $cache_key ] ) ) {
+			return $this->memoized_dates[ $cache_key ];
 		}
+
+		// When dealing with previous event date we only fetch one.
+		$args['posts_per_page'] = 1;
 
 		// Find the first event that starts before the start of today.
 		$prev_event = tribe_events()
@@ -105,6 +112,8 @@ class Day_View extends View {
 			->first();
 
 		if ( ! $prev_event instanceof \WP_Post ) {
+			$this->memoized_dates[ $cache_key ] = false;
+
 			return false;
 		}
 
@@ -115,7 +124,7 @@ class Day_View extends View {
 			$current_date->sub( new \DateInterval( 'P1D' ) )
 		);
 
-		$this->cached_event_dates[ $cache_key ] = $prev_date;
+		$this->memoized_dates[ $cache_key ] = $prev_date;
 
 		return $prev_date;
 	}
@@ -168,9 +177,12 @@ class Day_View extends View {
 		// Use cache to reduce the performance impact.
 		$cache_key = __METHOD__ . '_' . substr( md5( wp_json_encode( [ $current_date, $args ] ) ), 10 );
 
-		if ( isset( $this->cached_event_dates[ $cache_key ] ) ) {
-			return $this->cached_event_dates[ $cache_key ];
+		if ( isset( $this->memoized_dates[ $cache_key ] ) ) {
+			return $this->memoized_dates[ $cache_key ];
 		}
+
+		// For the next event date we only care about 1 item.
+		$args['posts_per_page'] = 1;
 
 		// The first event that ends after the end of the month; it could still begin in this month.
 		$next_event = tribe_events()
@@ -180,6 +192,8 @@ class Day_View extends View {
 			->first();
 
 		if ( ! $next_event instanceof \WP_Post ) {
+			$this->memoized_dates[ $cache_key ] = false;
+
 			return false;
 		}
 
@@ -189,7 +203,7 @@ class Day_View extends View {
 			$current_date->add( new \DateInterval( 'P1D' ) )
 		);
 
-		$this->cached_event_dates[ $cache_key ] = $next_date;
+		$this->memoized_dates[ $cache_key ] = $next_date;
 
 		return $next_date;
 	}

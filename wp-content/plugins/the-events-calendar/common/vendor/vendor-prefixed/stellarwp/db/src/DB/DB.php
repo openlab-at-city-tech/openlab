@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -178,12 +178,12 @@ class DB {
 	/**
 	 * Create QueryBuilder instance
 	 *
-	 * @param string $table
-	 * @param null|string $alias
+	 * @param string|RawSQL $table
+	 * @param string|null  $alias
 	 *
 	 * @return QueryBuilder
 	 */
-	public static function table( $table, $alias = null ) {
+	public static function table( $table, $alias = '' ) {
 		$builder = new QueryBuilder();
 		$builder->from( $table, $alias );
 

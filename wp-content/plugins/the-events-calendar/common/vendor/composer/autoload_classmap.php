@@ -7,6 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Common\\Configuration\\Configuration' => $baseDir . '/src/Common/Configuration/Configuration.php',
+    'TEC\\Common\\Configuration\\Configuration_Loader' => $baseDir . '/src/Common/Configuration/Configuration_Loader.php',
+    'TEC\\Common\\Configuration\\Configuration_Provider_Interface' => $baseDir . '/src/Common/Configuration/Configuration_Provider_Interface.php',
+    'TEC\\Common\\Configuration\\Constants_Provider' => $baseDir . '/src/Common/Configuration/Constants_Provider.php',
     'TEC\\Common\\Context\\Post_Request_Type' => $baseDir . '/src/Common/Context/Post_Request_Type.php',
     'TEC\\Common\\Contracts\\Container' => $baseDir . '/src/Common/Contracts/Container.php',
     'TEC\\Common\\Contracts\\Provider\\Controller' => $baseDir . '/src/Common/Contracts/Provider/Controller.php',
@@ -32,6 +36,7 @@ return array(
     'TEC\\Common\\Site_Health\\Provider' => $baseDir . '/src/Common/Site_Health/Provider.php',
     'TEC\\Common\\Storage\\Timed_Option' => $baseDir . '/src/Common/Storage/Timed_Option.php',
     'TEC\\Common\\Telemetry\\Migration' => $baseDir . '/src/Common/Telemetry/Migration.php',
+    'TEC\\Common\\Telemetry\\Opt_In' => $baseDir . '/src/Common/Telemetry/Opt_In.php',
     'TEC\\Common\\Telemetry\\Provider' => $baseDir . '/src/Common/Telemetry/Provider.php',
     'TEC\\Common\\Telemetry\\Telemetry' => $baseDir . '/src/Common/Telemetry/Telemetry.php',
     'TEC\\Common\\Translations_Loader' => $baseDir . '/src/Common/Translations_Loader.php',
