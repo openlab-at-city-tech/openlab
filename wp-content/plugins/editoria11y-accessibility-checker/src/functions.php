@@ -58,6 +58,7 @@ function ed11y_get_default_options( $option = false ) {
 		'ed11y_checkvisibility'     => $check_visibility,
 		'ed11y_no_run'              => false,
 		'ed11y_report_restrict'     => false,
+		'ed11y_custom_tests'        => 0,
 	);
 
 	// Allow dev to filter the default settings.
@@ -116,14 +117,148 @@ function ed11y_load_scripts() {
 add_action( 'wp_enqueue_scripts', 'ed11y_load_scripts' );
 
 /**
- * Loads the scripts for the plugin.
+ * Enqueue content assets but only in the Editor.
  */
-function ed11y_load_block_editor_scripts() {
-	// Get the enable option.
-	// Check if scroll top enable.
-	// Todo: only load on edit pages.
-	wp_enqueue_script( 'editoria11y-js', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js', null, Editoria11y::ED11Y_VERSION, false );
-	wp_enqueue_script( 'editoria11y-editor', trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor.js', null, Editoria11y::ED11Y_VERSION, false );
+function ed11y_enqueue_editor_content_assets() {
+
+	if ( is_admin() ) {
+
+		// Allowed roles.
+		$user               = wp_get_current_user();
+		$allowed_roles      = array( 'editor', 'administrator', 'author', 'contributor' );
+		$allowed_user_roles = array_intersect( $allowed_roles, $user->roles );
+		if ( $allowed_user_roles && 'none' !== ed11y_get_plugin_settings( 'ed11y_livecheck', false ) ) {
+			wp_enqueue_script(
+				'editoria11y-js',
+				trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js',
+				null,
+				Editoria11y::ED11Y_VERSION,
+				false
+			);
+			wp_enqueue_script(
+				'editoria11y-editor',
+				trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor.js',
+				null,
+				Editoria11y::ED11Y_VERSION,
+				false
+			);
+			wp_localize_script(
+				'editoria11y-editor',
+				'ed11yVars',
+				array(
+					'worker'  => trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor-worker.js',
+					'options' => ed11y_get_params( wp_get_current_user() ),
+				)
+			);
+		}
+	}
+}
+add_action( 'enqueue_block_assets', 'ed11y_enqueue_editor_content_assets' );
+
+
+/**
+ * Returns page-specific config for the Editoria11y library.
+ *
+ * @param Object $user WP_User.
+ */
+function ed11y_get_params( $user ) {
+
+	// Get settings array from cache, if available.
+	$ed1vals = get_site_transient( 'editoria11y_settings' );
+	if ( false === $ed1vals ) {
+		$settings                            = ed11y_get_plugin_settings( false, true );
+		$ed1vals                             = array();
+		$ed1vals['theme']                    = $settings['ed11y_theme'];
+		$ed1vals['checkRoots']               = $settings['ed11y_checkRoots'];
+		$ed1vals['ignoreElements']           = '#wpadminbar *,' . $settings['ed11y_ignore_elements'];
+		$ed1vals['linkIgnoreStrings']        = $settings['ed11y_link_ignore_strings'];
+		$ed1vals['videoContent']             = $settings['ed11y_videoContent'];
+		$ed1vals['audioContent']             = $settings['ed11y_audioContent'];
+		$ed1vals['documentLinks']            = $settings['ed11y_documentContent'];
+		$ed1vals['dataVizContent']           = $settings['ed11y_datavizContent'];
+		$ed1vals['checkVisible']             = $settings['ed11y_checkvisibility'];
+		$ed1vals['preventCheckingIfPresent'] = $settings['ed11y_no_run'];
+		$ed1vals['liveCheck']                = $settings['ed11y_livecheck'];
+		$ed1vals['customTests']              = $settings['ed11y_custom_tests'];
+		set_site_transient( 'editoria11y_settings', $ed1vals, 360 );
+	}
+
+	// Use permalink as sync URL if available, otherwise use query path.
+	$ed1vals['currentPage'] = get_permalink( get_the_ID() );
+	if ( empty( $ed1vals['currentPage'] ) || is_archive() || is_home() || is_front_page() ) {
+		global $wp;
+		$ed1vals['currentPage'] = home_url( $wp->request );
+	}
+
+	// Get dismissals for route. Complex joins require manual DB call.
+	// phpcs:disable
+	global $wpdb;
+	$utable                      = $wpdb->prefix . 'ed11y_urls';
+	$dtable                      = $wpdb->prefix . 'ed11y_dismissals';
+	$dismissals_on_page          = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT
+			{$dtable}.result_key,
+			{$dtable}.element_id,
+			{$dtable}.dismissal_status
+			FROM {$dtable}
+			INNER JOIN {$utable} ON {$utable}.pid={$dtable}.pid
+			WHERE {$utable}.page_url = %s
+			AND (
+				{$dtable}.dismissal_status = 'ok'
+					OR
+					(
+						{$dtable}.dismissal_status = 'hide'
+						AND
+						{$dtable}.user = %d
+					)
+				)
+			;",
+			array(
+				$ed1vals['currentPage'],
+				$user->ID,
+			)
+		)
+	);
+	// phpcs:enable
+	$ed1vals['syncedDismissals'] = array();
+	foreach ( $dismissals_on_page as $key => $value ) {
+		$ed1vals['syncedDismissals'][ $value->result_key ][ $value->element_id ] = $value->dismissal_status;
+	}
+
+	$ed1vals['title'] = trim( wp_title( '', false, 'right' ) );
+
+	$ed1vals['entity_type'] = 'other';
+	// Ref https://wordpress.stackexchange.com/questions/83887/return-current-page-type .
+	if ( is_page() ) {
+		$ed1vals['entity_type'] = is_front_page() ? 'Front' : 'Page';
+	} elseif ( is_home() ) {
+		$ed1vals['entity_type'] = 'Home';
+	} elseif ( is_single() ) {
+		$ed1vals['entity_type'] = ( is_attachment() ) ? 'Attachment' : 'Post';
+	} elseif ( is_category() ) {
+		$ed1vals['entity_type'] = 'Category';
+	} elseif ( is_tag() ) {
+		$ed1vals['entity_type'] = 'Tag';
+	} elseif ( is_tax() ) {
+		$ed1vals['entity_type'] = 'Taxonomy';
+	} elseif ( is_archive() ) {
+		if ( is_author() ) {
+			$ed1vals['entity_type'] = 'Author';
+		} else {
+			$ed1vals['entity_type'] = 'Archive';
+		}
+	} elseif ( is_search() ) {
+		$ed1vals['entity_type'] = 'Search';
+	} elseif ( is_404() ) {
+		$ed1vals['entity_type'] = '404';
+	}
+
+	// Mode is assertive from 0ms to 10minutes after a post is modified.
+	$page_edited          = get_post_modified_time( 'U', true );
+	$page_edited          = $page_edited ? abs( 1 + $page_edited - time() ) : false;
+	$ed1vals['alertMode'] = $page_edited && $page_edited < 600 ? 'assertive' : 'polite';
+	return( $ed1vals );
 }
 
 /**
@@ -131,116 +266,21 @@ function ed11y_load_block_editor_scripts() {
  */
 function ed11y_init() {
 
-	// Allowed roles.
-	$user               = wp_get_current_user();
-	$allowed_roles      = array( 'editor', 'administrator', 'author', 'contributor' );
-	$allowed_user_roles = array_intersect( $allowed_roles, $user->roles );
-
 	// Instantiates Editoria11y on the page for allowed users.
-	if ( is_user_logged_in()
-		&& ( $allowed_user_roles || current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' ) )
-	) {
-		// Get settings array from cache, if available.
-		$ed1vals = get_site_transient( 'editoria11y_settings' );
-		if ( false === $ed1vals ) {
-			$settings                            = ed11y_get_plugin_settings( false, true );
-			$ed1vals                             = array();
-			$ed1vals['theme']                    = $settings['ed11y_theme'];
-			$ed1vals['checkRoots']               = $settings['ed11y_checkRoots'];
-			$ed1vals['ignoreElements']           = '#wpadminbar *,' . $settings['ed11y_ignore_elements'];
-			$ed1vals['linkIgnoreStrings']        = $settings['ed11y_link_ignore_strings'];
-			$ed1vals['videoContent']             = $settings['ed11y_videoContent'];
-			$ed1vals['audioContent']             = $settings['ed11y_audioContent'];
-			$ed1vals['documentLinks']            = $settings['ed11y_documentContent'];
-			$ed1vals['dataVizContent']           = $settings['ed11y_datavizContent'];
-			$ed1vals['checkVisible']             = $settings['ed11y_checkvisibility'];
-			$ed1vals['preventCheckingIfPresent'] = $settings['ed11y_no_run'];
-			$ed1vals['liveCheck']                = $settings['ed11y_livecheck'];
-			set_site_transient( 'editoria11y_settings', $ed1vals, 360 );
+	if ( is_user_logged_in() ) {
+		// Allowed roles.
+		$user               = wp_get_current_user();
+		$allowed_roles      = array( 'editor', 'administrator', 'author', 'contributor' );
+		$allowed_user_roles = array_intersect( $allowed_roles, $user->roles );
+		if ( $allowed_user_roles || current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' ) ) {
+
+			// At the moment, PHP escapes HTML breakouts. This would not be safe in other languages.
+			echo '
+			<script id="editoria11y-init" type="application/json">
+				' . wp_json_encode( ed11y_get_params( $user ) ) . '
+			</script>
+			';
 		}
-
-		// Use permalink as sync URL if available, otherwise use query path.
-		$ed1vals['currentPage'] = get_permalink( get_the_ID() );
-		if ( empty( $ed1vals['currentPage'] ) || is_archive() || is_home() || is_front_page() ) {
-			global $wp;
-			$ed1vals['currentPage'] = home_url( $wp->request );
-		}
-
-		// Get dismissals for route. Complex joins require manual DB call.
-		// phpcs:disable
-		global $wpdb;
-		$utable                      = $wpdb->prefix . 'ed11y_urls';
-		$dtable                      = $wpdb->prefix . 'ed11y_dismissals';
-		$dismissals_on_page          = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT
-				{$dtable}.result_key,
-				{$dtable}.element_id,
-				{$dtable}.dismissal_status
-				FROM {$dtable}
-				INNER JOIN {$utable} ON {$utable}.pid={$dtable}.pid
-				WHERE {$utable}.page_url = %s
-				AND (
-					{$dtable}.dismissal_status = 'ok'
-						OR
-						(
-							{$dtable}.dismissal_status = 'hide'
-							AND
-							{$dtable}.user = %d
-						)
-					)
-				;",
-				array(
-					$ed1vals['currentPage'],
-					$user->ID,
-				)
-			)
-		);
-		// phpcs:enable
-		$ed1vals['syncedDismissals'] = array();
-		foreach ( $dismissals_on_page as $key => $value ) {
-			$ed1vals['syncedDismissals'][ $value->result_key ][ $value->element_id ] = $value->dismissal_status;
-		}
-
-		$ed1vals['title'] = trim( wp_title( '', false, 'right' ) );
-
-		$ed1vals['entity_type'] = 'other';
-		// Ref https://wordpress.stackexchange.com/questions/83887/return-current-page-type .
-		if ( is_page() ) {
-			$ed1vals['entity_type'] = is_front_page() ? 'Front' : 'Page';
-		} elseif ( is_home() ) {
-			$ed1vals['entity_type'] = 'Home';
-		} elseif ( is_single() ) {
-			$ed1vals['entity_type'] = ( is_attachment() ) ? 'Attachment' : 'Post';
-		} elseif ( is_category() ) {
-			$ed1vals['entity_type'] = 'Category';
-		} elseif ( is_tag() ) {
-			$ed1vals['entity_type'] = 'Tag';
-		} elseif ( is_tax() ) {
-			$ed1vals['entity_type'] = 'Taxonomy';
-		} elseif ( is_archive() ) {
-			if ( is_author() ) {
-				$ed1vals['entity_type'] = 'Author';
-			} else {
-				$ed1vals['entity_type'] = 'Archive';
-			}
-		} elseif ( is_search() ) {
-			$ed1vals['entity_type'] = 'Search';
-		} elseif ( is_404() ) {
-			$ed1vals['entity_type'] = '404';
-		}
-
-		// Mode is assertive from 0ms to 10minutes after a post is modified.
-		$page_edited          = get_post_modified_time( 'U', true );
-		$page_edited          = $page_edited ? abs( 1 + $page_edited - time() ) : false;
-		$ed1vals['alertMode'] = $page_edited && $page_edited < 600 ? 'assertive' : 'polite';
-
-		// At the moment, PHP escapes HTML breakouts. This would not be safe in other languages.
-		echo '
-		<script id="editoria11y-init" type="application/json">
-			' . wp_json_encode( $ed1vals ) . '
-		</script>
-		';
 	}
 }
 add_action( 'wp_footer', 'ed11y_init' );
@@ -263,10 +303,11 @@ add_filter( 'old_slug_redirect_url', 'ed11y_old_slug_redirect_url_filter' );
 
 /**
  * Load live checker when editor is present.
+ * THIS IS NOT WORKING FOR NEW EDITOR
  * */
 function ed11y_editor_init() {
 	if ( 'none' !== ed11y_get_plugin_settings( 'ed11y_livecheck', false ) ) {
-		add_action( 'enqueue_block_editor_assets', 'ed11y_load_block_editor_scripts' );
+		add_action( 'enqueue_block_assets', 'ed11y_enqueue_editor_content_assets' );
 		add_action( 'admin_footer', 'ed11y_init' );
 	}
 }

@@ -49,48 +49,4 @@ class Editoria11y_Validate {
 		);
 		return in_array( $user_input, $valid, true );
 	}
-
-	/**
-	 * Validate results.
-	 *
-	 * @param string $user_input Valid test names.
-	 */
-	public static function test_name( $user_input ) {
-		$valid = array(
-			'headingLevelSkipped',
-			'headingEmpty',
-			'headingIsLong',
-			'blockQuoteIsShort',
-			'altMissing',
-			'altNull',
-			'altURL',
-			'alURLLinked',
-			'altImageOf',
-			'altImageOfLinked',
-			'altDeadspace',
-			'altDeadspaceLinked',
-			'altEmptyLinked',
-			'altLong',
-			'altLongLinked',
-			'altPartOfLinkWithText',
-			'linkNoText',
-			'linkTextIsUrl',
-			'linkTextIsURL',
-			'linkTextIsGeneric',
-			'linkDocument',
-			'linkNewWindow',
-			'tableNoHeaderCells',
-			'tableContainsContentHeading',
-			'tableEmptyHeaderCell',
-			'textPossibleList',
-			'textPossibleHeading',
-			'textUppercase',
-			'embedVideo',
-			'embedAudio',
-			'embedVisualization',
-			'embedTwitter',
-			'embedCustom',
-		);
-		return in_array( $user_input, $valid, true );
-	}
 }

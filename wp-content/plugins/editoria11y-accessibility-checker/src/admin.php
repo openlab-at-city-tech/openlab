@@ -215,6 +215,16 @@ function ed11y_setting_sections_fields() {
 
 	// Don't run ed11y if these elements exist.
 	add_settings_field(
+		'ed11y_custom_tests',
+		esc_html__( 'Pause tests for this number of custom result insertions', 'editoria11y' ),
+		'ed11y_custom_tests_field',
+		'ed11y',
+		'ed11y_compatibility_settings',
+		array( 'label_for' => 'ed11y_custom_tests' )
+	);
+
+	// Don't run ed11y if these elements exist.
+	add_settings_field(
 		'ed11y_no_run',
 		esc_html__( 'Turn off Editoria11y if these elements exist', 'editoria11y' ),
 		'ed11y_no_run_field',
@@ -444,6 +454,28 @@ function ed11y_link_ignore_strings_field() {
 /**
  * Turn off Editoria11y if these elements are detected
  */
+function ed11y_custom_tests_field() {
+	$settings = ed11y_get_plugin_settings( 'ed11y_custom_tests' );
+	$default  = ed11y_get_default_options( 'ed11y_custom_tests' );
+	?>
+	<input autocomplete="off" 
+	class="regular-text" id="ed11y_custom_tests" 
+	aria-describedby="ed11y_custom_tests_description" 
+	type="number" min="0" max="99" name="ed11y_plugin_settings[ed11y_custom_tests]" 
+	placeholder="<?php echo esc_attr( $default ); ?>" 
+	value="<?php echo esc_attr( $settings ); ?>" pattern="[^<>\\\x27;|@&]+"/>
+	<p id="ed11y_custom_tests_description">
+		<?php
+			echo wp_kses( __( 'Themes and modules can add custom tests to the checker. When custom tests finish, the send an "ed11yResume" event. Editoria11y will wait until it receives this number of resume notifications before showing results.', 'editoria11y' ), ed11y_allowed_html( 'a' ) );
+		?>
+	</p>
+
+	<?php
+}
+
+/**
+ * Turn off Editoria11y if these elements are detected
+ */
 function ed11y_no_run_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_no_run' );
 	$default  = ed11y_get_default_options( 'ed11y_no_run' );
@@ -456,7 +488,7 @@ function ed11y_no_run_field() {
 	value="<?php echo esc_attr( $settings ); ?>" pattern="[^<>\\\x27;|@&]+"/>
 	<p id="ed11y_no_run_description">
 		<?php
-			echo wp_kses( __( 'Used to disable checks on particular pager, or when content editing tools are active.', 'editoria11y' ), ed11y_allowed_html() );
+			echo wp_kses( __( 'Used to disable checks on particular page, or when content editing tools are active.', 'editoria11y' ), ed11y_allowed_html() );
 		?>
 	</p>
 
@@ -559,6 +591,11 @@ function ed11y_plugin_settings_validate( $settings ) {
 	$settings['ed11y_link_ignore_strings'] = strtr(
 		sanitize_text_field( $settings['ed11y_link_ignore_strings'] ),
 		$remove
+	);
+
+	$settings['ed11y_custom_tests'] = strtr(
+		sanitize_text_field( $settings['ed11y_custom_tests'] ),
+		$target_remove
 	);
 
 	/* Don't run Editoria11y */

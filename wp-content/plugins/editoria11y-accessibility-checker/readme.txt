@@ -1,8 +1,8 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 1.0.12
-Tested up to: 6.3
+Stable tag: 1.0.13
+Tested up to: 6.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,7 @@ Check out a [demo of the checker itself](https://editoria11y.princeton.edu/demo)
 * When **logged-in authors and editors** are viewing published or in-preview pages, Editoria11y's toggle discretely indicates if any issues are present on the current page.
 * Clicking the toggle opens the checker's main panel. Alerts are placed on pieces of content with issues, with tooltips to explain each problem and what actions are needed to resolve it. If an issue is not critical or may be OK as written, buttons are available to dismiss the alert on this page, either for the current user ("Hide alert") or for all users ("Mark as Checked and OK").
 * When Editoria11y finds **new** issues on a page that was just edited, the panel pops open automatically.
-* The main panel also allows authors jump to the next issue, restore previously dismissed alerts, visualize text alternatives for images on the page ("alts"), and view the document's heading outline.
+* The main panel also allows authors to jump to the next issue, restore previously dismissed alerts, visualize text alternatives for images on the page ("alts"), and view the document's heading outline.
 * Optionally, the checker can also outline blocks with issues while the author is editing the content.
 
 ## The admin experience
@@ -65,6 +65,7 @@ Note that all this runs locally within your site. This plugin is the WordPress a
     * Video embeds, reminding the user to add closed captions
     * Audio embeds, reminding the user to provide a transcript
     * Social media embeds, reminding the user to provide alt attributes
+* [Custom results](https://editoria11y.princeton.edu/configuration/#customtests) provided by your JS
 
 == Frequently Asked Questions ==
 
@@ -116,7 +117,7 @@ If you notice anything amiss, experiment with these settings:
 4. If you do not want PDF or other document types flagged for manual checks, provide a shorter selector list or set "Document types that need manual review" to `false`
 5. If your theme has done something very unusual with its layout, such as setting the height of the content container to 0px, you may see confusing alerts when opening Editoria11y tips saying that the highlighted element may be off-screen or invisible. If that happens, disable "Check if elements are visible when using panel navigation buttons." This is disabled by defaults on any WordPress themes we have noticed this on, so if you find a theme 
 
-If you are a theme developer, note that the library dispatches JavaScript events at several key moments (scan finishes, panel opens, tooltip opens or shuts), allowing you to attach custom functionality. JavaScript on sites running Editoria11y can use these events to do things like [automatically opening accordion widgets](https://editoria11y.princeton.edu/configuration/#hidden-content) if they contain hidden alerts, disabling "sticky" site menus if the panel is open, or even syncing results to third-party dashboards.
+If you are a theme developer, note that the library dispatches JavaScript events at several key moments (scan finishes, panel opens, tooltip opens or shuts), allowing you to attach custom functionality. JavaScript on sites running Editoria11y can use these events to do things like [automatically opening accordion widgets](https://editoria11y.princeton.edu/configuration/#hidden-content) if they contain hidden alerts, disabling "sticky" site menus if the panel is open, inserting [custom results](https://editoria11y.princeton.edu/configuration/#customtests), or syncing results to third-party dashboards.
 
 And then...tell us how it went! This plugin and its base library are both under active development. Ideally send bug reports and feature requests through the [GitHub issue queue](https://github.com/itmaybejj/editoria11y-wp/issues).
 
@@ -138,6 +139,15 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 4. Checker set to dark theme, showing a table header alert
 
 == Changelog ==
+
+= 1.0.13 =
+* Themes and plugins can now provide [custom results](https://editoria11y.princeton.edu/configuration/#customtests).
+* Old results will clear from the dashboard when clicking through to a page with checking disabled.
+* More accurate accessible name calculation for complex situations involving CSS generated content, nested SVG or aria-labelledby references.
+* Headings are now clickable in the outline panel.
+* Experimental inline checker now highlights specific links with issues within a block.
+* Bugfix: Experimental inline checker was not appearing for 
+* Bugfix: two consecutive paragraphs starting with "A " could throw a false positive on the possible link test.
 
 = 1.0.12 =
 * "Is this a list" test can now detect emoji-based fake lists.

@@ -76,7 +76,7 @@ class Editoria11y_Api_Results extends WP_REST_Controller {
 		$direction   = 'ASC' === $params['direction'] ? 'ASC' : 'DESC';
 		$order_by    = ! empty( $params['sort'] ) && $validate->sort( $params['sort'] ) ? $params['sort'] : false;
 		$entity_type = ! empty( $params['entity_type'] ) && $validate->entity_type( $params['entity_type'] ) ? $params['entity_type'] : false;
-		$result_key  = ! empty( $params['result_key'] ) && true === $validate->test_name( $params['result_key'] ) ? $params['result_key'] : false;
+		$result_key  = ! empty( $params['result_key'] ) && 'false' !== $params['result_key'] ? esc_sql( $params['result_key'] ) : false;
 		$utable      = $wpdb->prefix . 'ed11y_urls';
 		$rtable      = $wpdb->prefix . 'ed11y_results';
 
