@@ -48,6 +48,7 @@ class View extends Base {
 
 		$dashborad_url = admin_url( 'admin.php?page=blc_dash' );
 		$message       = sprintf(
+			/* translators: %1$s The dashboard url */
 			__( 'Cloud-based Broken Link Checker is currently active on your site. <a href="%1$s">Activate the old version</a> to go back to using Local BLC.', 'broken-link-checker' ),
 			$dashborad_url
 		);

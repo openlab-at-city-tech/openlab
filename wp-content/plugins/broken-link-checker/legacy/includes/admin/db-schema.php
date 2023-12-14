@@ -100,7 +100,11 @@ if ( ! function_exists( 'blc_get_db_schema' ) ) {
 		KEY `url` (`url`(150)),
 		KEY `final_url` (`final_url`(150)),
 		KEY `http_code` (`http_code`),
-		KEY `broken` (`broken`)
+		KEY `broken` (`broken`),
+		KEY `last_check_attempt` (`last_check_attempt`),
+		KEY `may_recheck` (`may_recheck`),
+		KEY `check_count` (`check_count`)
+
 	) {$charset_collate};
 
 	CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}blc_synch` (

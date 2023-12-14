@@ -3,9 +3,9 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
-Tested up to: 6.3
-Stable tag: 2.2.2
-Requires PHP: 7.2
+Tested up to: 6.4
+Stable tag: 2.2.3
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,6 +114,11 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.2.3 =
+* Enhance: Optimize local db tables.
+* Fix: Rare but possible Fatal error when unlinking a link.
+* Fix: Removed deprecated Defender hooks.
 
 = 2.2.2 =
 * Fix: Exclusions list spacing in Local settings.

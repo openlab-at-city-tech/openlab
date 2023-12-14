@@ -873,6 +873,7 @@ final class Utilities {
 
 		if ( $seconds >= HOUR_IN_SECONDS ) {
 			$hours_str = sprintf(
+				//translators: 1. The Hours of the datetime.
 				_n(
 					'%d h ',
 					'%d h ',
@@ -884,6 +885,7 @@ final class Utilities {
 		}
 
 		$minutes_str = sprintf(
+			//translators: 1. The Minutes of the datetime.
 			_n(
 				'%d min ',
 				'%d min ',
@@ -894,6 +896,7 @@ final class Utilities {
 		);
 
 		$seconds_str = ( $seconds % MINUTE_IN_SECONDS ) > 0 ? sprintf(
+			//translators: 1. The Seconds of the datetime.
 			_n(
 				'%d s ',
 				'%d s ',

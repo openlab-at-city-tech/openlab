@@ -43,10 +43,14 @@ class View extends Admin_Page {
 
 		if ( $this->is_settings_tab ) {
 			// When links tab is checked:
-			$local_blc->options_page();
+            if ( is_object( $local_blc ) && method_exists( $local_blc, 'options_page' ) ) {
+                $local_blc->options_page();
+            }
 		} else {
 			// When settings/options tab is checked:
-			$local_blc->links_page();
+            if ( is_object( $local_blc ) && method_exists( $local_blc, 'links_page' ) ) {
+                $local_blc->links_page();
+            }
 		}
 	}
 
@@ -59,8 +63,8 @@ class View extends Admin_Page {
         ?>
         <div id="wpmudev-blc-local-nav-wrap" class="_notice">
             <nav class="wpmudev-blc-local-nav">
-                <a href="<?php echo admin_url( 'admin.php?page=blc_local' );?>" class="wpmudev-blc-local-nav-item blc-local-links <?php if ( ! $this->is_settings_tab ) echo 'active'; ?>" aria-current="true">Broken Links</a>
-                <a href="<?php echo admin_url( 'admin.php?page=blc_local&local-settings=true' ); ?>" class="wpmudev-blc-local-nav-item blc-local-settings <?php if ( $this->is_settings_tab ) echo 'active'; ?>" aria-current="true">Settings</a>
+                <a href="<?php echo admin_url( 'admin.php?page=blc_local' );?>" class="wpmudev-blc-local-nav-item blc-local-links <?php if ( ! $this->is_settings_tab ) echo 'active'; ?>" aria-current="true"><?php echo esc_html__( 'Broken Links', 'broken-link-checker' ); ?></a>
+                <a href="<?php echo admin_url( 'admin.php?page=blc_local&local-settings=true' ); ?>" class="wpmudev-blc-local-nav-item blc-local-settings <?php if ( $this->is_settings_tab ) echo 'active'; ?>" aria-current="true"><?php echo esc_html__( 'Settings', 'broken-link-checker' ); ?></a>
             </nav>
         </div>
         <?php

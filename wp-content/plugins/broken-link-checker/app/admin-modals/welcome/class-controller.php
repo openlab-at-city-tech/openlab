@@ -128,7 +128,7 @@ class Controller extends Base {
 	 * @since 2.2.0
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/welcome-modal/main.asset.php';
+		$script_data  = include WPMUDEV_BLC_DIR . 'assets/dist/welcome.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',
@@ -140,7 +140,7 @@ class Controller extends Base {
 
 		return array(
 			'blc_welcome_modal' => array(
-				'src'       => $this->scripts_dir . 'welcome-modal/main.js',
+				'src'       => $this->scripts_dir . 'welcome.js',
 				'deps'      => $dependencies,
 				'ver'       => $version,
 				'in_footer' => true,
@@ -168,12 +168,23 @@ class Controller extends Base {
 		return array(
 			'blc_sui'          => array(
 				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
-				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
+				'ver' => $this->scripts_version(),
 			),
 			'blc_welcome_modal' => array(
-				'src' => $this->styles_dir . 'welcome-modal.min.css',
-				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
+				'src' => $this->scripts_dir . 'style-welcome.css',
+				'ver' => $this->scripts_version(),
 			),
 		);
+	}
+
+	protected function scripts_version() {
+		static $scripts_version = null;
+
+		if ( is_null( $scripts_version ) ) {
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/welcome.asset.php';
+			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+		}
+
+		return $scripts_version;
 	}
 }

@@ -16,14 +16,12 @@ namespace WPMUDEV_BLC\App\Broken_Links_Actions\Processors;
 // Abort if called directly.
 defined( 'WPINC' ) || die;
 
-use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
-
 /**
  * Class Scan_Data
  *
  * @package WPMUDEV_BLC\App\Broken_Links_Actions\Processors
  */
-class Unlink_Link extends Base {
+class Unlink_Link extends Link_Processor {
 	/**
 	 * Using a dynamic way to handle special cases like the Button Block of WP.
 	 * This way it is easier to accept further special cases in future.
@@ -35,14 +33,20 @@ class Unlink_Link extends Base {
 	 *
 	 * @var array
 	 */
-	protected $special_strings = array(
-		'button_block' => array(
-			'description'        => 'In WP Button reusable block, removing the <a> tag will give an error notice when editing a page with that reusable block. Instead we can remove the href att',
-			'condition_callback' => 'str_starts_with',
+	/*protected $special_strings = array(
+		'reusable_button_block' => array(
+			'description'        => 'In WP Button reusable block, removing the <a> tag will make button show as a simple string. Instead we can remove only the href att',
+			'condition_callback' => array( $this, 'str_starts_with' ),
 			'needle'             => '<!-- wp:buttons -->',
-			'action'             => 'rm_href_attribute',
+			'action'             => array( $this, 'rm_href_attribute' ),
 		),
-	);
+		'button_blocks' => array(
+			'description'        => 'In WP Button block, removing the <a> tag will make button show as a simple string. Instead we can remove only the href att',
+			'condition_callback' => array( $this, 'is_specific_block' ),
+			'needle'             => '<!-- wp:buttons -->',
+			'action'             => array( $this, 'rm_href_attribute' ),
+		),
+	);*/
 
 	/**
 	 * Executes the Processor's action.
@@ -50,10 +54,10 @@ class Unlink_Link extends Base {
 	 * @param string $content
 	 * @param string $link
 	 * @param string $new_link
-	 * @return bool
+	 * @return string
 	 */
-	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
-		if ( empty( $this->get_target_tags() ) ) {
+	public function execute( string $content = null, string $link = null, string $new_link = null ) {
+		if ( empty( $this->get_target_tags() ) || empty( str_replace( PHP_EOL, '', $content ) ) ) {
 			return $content;
 		}
 
@@ -64,7 +68,7 @@ class Unlink_Link extends Base {
 			if ( ! empty( $tag_atts ) ) {
 				foreach ( $tag_atts as $tag_att ) {
 					// First try with `DOMDocument` by default.
-					if ( apply_filters( 'wpmudev_blc_link_action_use_dom', true, 'unink', $link ) ) {
+					if ( apply_filters( 'wpmudev_blc_link_action_use_dom', true, 'unlink', $link ) ) {
 						$replacements = $this->use_domdocument_processor( $content, $link, $new_link, $tag_name, $tag_att );
 					} else {
 						// Optionally in case Regex is preferred, the filter `wpmudev_blc_link_action_use_dom` can be set to return false.
@@ -77,63 +81,9 @@ class Unlink_Link extends Base {
 		return empty( $replacements ) ? $content : str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
 	}
 
-	/**
-	 * Checks if content requires special handling based on cases registered in `$this->special_strings`.
-	 *
-	 * @param string $content
-	 * @return array
-	 */
-	public function content_special_actions( string $content = '' ) {
-		if ( empty( $this->special_strings ) ) {
-			return array();
-		}
-
-		// An array for storing the special actions for this content, if there are any.
-		$special_actions = array();
-
-		foreach ( $this->special_strings as $special_case_key => $special_case_data ) {
-			if ( empty( $special_case_data['condition_callback'] ) || empty( $special_case_data['action'] ) ) {
-				continue;
-			}
-
-			// First we need to make sure that the callback is valid and callable.
-			if (
-				is_callable( array( $this, $special_case_data['condition_callback'] ) ) &&
-				is_callable( array( $this, $special_case_data['action'] ) )
-			) {
-				// Now we need to check if the content will fit the callback's condition(s).
-				if ( call_user_func(
-					array( $this, $special_case_data['condition_callback'] ),
-					trim( $content ),
-					! empty( $special_case_data['needle'] ) ? $special_case_data['needle'] : ''
-				)
-				) {
-					$special_actions[ $special_case_key ] = $special_case_data['action'];
-				}
-			}
-
-		}
-
-		return $special_actions;
-	}
-
-	/**
-	 * Checks if a string starts with given needle.
-	 *
-	 * @param string $haystack
-	 * @param string $needle
-	 * @return bool
-	 */
-	public function str_starts_with( string $haystack = '', string $needle = '' ) {
-		if ( function_exists( 'str_starts_with' ) ) {
-			return str_starts_with( $haystack, $needle );
-		}
-
-		if ( '' === $needle ) {
-			return true;
-		}
-
-		return 0 === strpos( $haystack, $needle );
+	public function get_block_att_value_replacement( string $search_term = null, string $new_term = null ) {
+		// When unlinking we can set the block att that holds the search link to empty string,
+		return '';
 	}
 
 	/**
@@ -159,18 +109,11 @@ class Unlink_Link extends Base {
 			$search_markup      = '';
 			$replacement_str    = '';
 			$old_link           = $dom_link->getAttribute( $tag_att );
-			$site_url           = site_url();
-			$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-			$absolute_link      = $site_url . $link;
-			$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-			$links_match        = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
-				strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
-				strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
 
-			if ( $links_match ) {
+			if ( $this->links_match( $link, $old_link ) ) {	
 				$search_markup   = $dom->saveHTML( $dom_link );
 				$replacement_str = $dom_link->nodeValue;
-
+				
 				if ( ! empty( $replacements[ $search_markup ] ) ) {
 					continue;
 				}
@@ -181,9 +124,9 @@ class Unlink_Link extends Base {
 					$replacement_str = $search_markup;
 
 					foreach ( $special_actions as $special_case_key => $callback ) {
-						if ( is_callable( array( $this, $callback ) ) ) {
+						if ( is_callable( $callback ) ) {
 							$replacement_str = call_user_func(
-								array( $this, $callback ),
+								$callback,
 								$replacement_str,
 							);
 						}
@@ -230,33 +173,9 @@ class Unlink_Link extends Base {
 
 			if ( ! empty( $matches[0] ) ) {
 				foreach ( $matches[0] as $key => $markup ) {
-					$old_link    = untrailingslashit( trim( $matches[2][ $key ], '\'"' ) );
-					$links_match = false;
+					$old_link = untrailingslashit( trim( $matches[2][ $key ], '\'"' ) );
 
-					/**
-					 * If link doesn't have Host part, it is internal link. All internal links are stored as relative urls in Queue.
-					 * If link does have the Host part, then it's an external link.
-					 * For internal links we need to test 3 cases:
-					 * 1. Relative urls (that is how it is stored in Queue)
-					 * 2. Absolute url.
-					 * 3. Absolute url without scheme ( //site.com )
-					 * Engine treats all those types as full urls
-					 */
-					if ( empty( wp_parse_url( $link, PHP_URL_HOST ) ) ) {
-						// Check Relative, Absolute and Absolute without host urls for $old_link.
-						$site_url           = site_url();
-						$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-						$absolute_link      = $site_url . $link;
-						$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-						$links_match        = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
-							strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
-							strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
-					} else {
-						// Check $old_link normally.
-						$links_match = strcasecmp( trailingslashit( $old_link ), trailingslashit( $link ) ) == 0;
-					}
-
-					if ( $links_match ) {
+					if ( $this->links_match( $link, $old_link ) ) {
 						$replacements[ $markup ] = $matches[3][ $key ];
 					}
 				}
@@ -267,7 +186,7 @@ class Unlink_Link extends Base {
 	}
 
 	/**
-	 * This is the callback function that is set in `$this->special_strings` var.
+	 * This is the callback function that is set in `$this->set_special_rules` method.
 	 * It removes the `$tag_att` (default `href`) args from the `$tag_name` (default `<a>` tag) of the input var ($content).
 	 *
 	 * @param string $content
@@ -294,18 +213,22 @@ class Unlink_Link extends Base {
 		return $content;
 	}
 
-	/**
-	 * Provides a list of tags and attributes in which BLC will search for broken links.
-	 *
-	 * @return array
-	 */
-	public function get_target_tags() {
-
-		return apply_filters(
-			'wpmudev_blc_replace_target_tags',
-			array(
-				'a' => array( 'href' ),
-			)
+	protected function set_special_rules() {
+		$special_strings = array(
+			'reusable_button_block' => array(
+				'description'        => 'In WP Button reusable block, removing the <a> tag will make button show as a simple string. Instead we can remove only the href att',
+				'condition_callback' => array( $this, 'str_starts_with' ),
+				'needle'             => '<!-- wp:buttons -->',
+				'action'             => array( $this, 'rm_href_attribute' ),
+			),
+			/*'button_blocks' => array(
+				'description'        => 'In WP Button block, removing the <a> tag will make button show as a simple string. Instead we can remove only the href att',
+				'condition_callback' => array( $this, 'is_block' ),
+				'needle'             => null,
+				'action'             => array( $this, 'rm_href_attribute' ),
+			),*/
 		);
+
+		$this->special_rules = $special_strings;
 	}
 }

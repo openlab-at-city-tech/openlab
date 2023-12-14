@@ -16,17 +16,22 @@ namespace WPMUDEV_BLC\App\Broken_Links_Actions\Processors;
 // Abort if called directly.
 defined( 'WPINC' ) || die;
 
-use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
-
 /**
  * Class Scan_Data
  *
  * @package WPMUDEV_BLC\App\Broken_Links_Actions\Processors
  */
-class Replace_Link extends Base {
-
-	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
-		if ( empty( $this->get_target_tags() ) ) {
+class Replace_Link extends Link_Processor {
+	/**
+	 * Executes the Processor's action.
+	 *
+	 * @param string $content
+	 * @param string $link
+	 * @param string $new_link
+	 * @return string
+	*/
+	public function execute( string $content = null, string $link = null, string $new_link = null ) {
+		if ( empty( $this->get_target_tags() ) || empty( str_replace( PHP_EOL, '', $content ) ) ) {
 			return $content;
 		}
 
@@ -56,6 +61,10 @@ class Replace_Link extends Base {
 		return $content;
 	}
 
+	public function get_block_att_value_replacement( string $search_term = null, string $new_term = null ) {
+		return $new_term;
+	}
+
 	/**
 	 * Processes content using wp native class `\WP_HTML_Tag_Processor`.
 	 *
@@ -73,21 +82,7 @@ class Replace_Link extends Base {
 			while ( $processor->next_tag( array( 'tag_name' => $tag_name ) ) ) {
 				$old_link = untrailingslashit( trim( $processor->get_attribute( $tag_att ), '\'"' ) );
 
-				if ( empty( wp_parse_url( $link, PHP_URL_HOST ) ) ) {
-					// Check Relative, Absolute and Absolute without host urls for $old_link.
-					$site_url           = site_url();
-					$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-					$absolute_link      = $site_url . $link;
-					$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-					$links_match        = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
-						strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
-						strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
-				} else {
-					// Check $old_link normally.
-					$links_match = strcasecmp( trailingslashit( $old_link ), trailingslashit( $link ) ) == 0;
-				}
-
-				if ( $links_match ) {
+				if ( $this->links_match( $link , $old_link ) ) {
 					$processor->set_attribute( $tag_att, $new_link );
 
 					if ( apply_filters( 'wpmudev_blc_link_action_edit_wrap', false, $link, $new_link ) ) {
@@ -132,17 +127,10 @@ class Replace_Link extends Base {
 		$dom->loadHTML( $content );
 
 		foreach ( $dom->getElementsByTagName( 'a' ) as $dom_link ) {
-			$old_link           = $dom_link->getAttribute( "href" );
-			$site_url           = site_url();
-			$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-			$absolute_link      = $site_url . $link;
-			$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-			$links_match        = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
-				strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
-				strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
+			$old_link = $dom_link->getAttribute( "href" );
 
 			// 1. Check if found link matches the searched link.
-			if ( $links_match ) {
+			if ( $this->links_match( $link, $old_link ) ) {
 				// 2. Prepare the old link markup to be searched and replaced.
 				//2.1 Let's prepare the markup that needs to be replaced.
 				$old_link_markup_search = $dom->saveHTML( $dom_link );
@@ -199,34 +187,9 @@ class Replace_Link extends Base {
 		$content = preg_replace_callback(
 			"/$regexp/siU",
 			function ($match) use ($link, $new_link, $tag_att) {
-				$old_link    = untrailingslashit( trim( $match[2], '\'"' ) );
-				$links_match = false;
+				$old_link = untrailingslashit( trim( $match[2], '\'"' ) );
 
-				/**
-				 * If link doesn't have Host part, it is internal link. All internal links are stored as relative urls in Queue.
-				 * If link does have the Host part, then it's an external link.
-				 * For internal links we need to test 3 cases:
-				 * 1. Relative urls (that is how it is stored in Queue)
-				 * 2. Absolute url.
-				 * 3. Absolute url without scheme ( //site.com )
-				 * Engine treats all those types as full urls
-				 */
-				if ( empty( wp_parse_url( $link, PHP_URL_HOST ) ) ) {
-					// Check Relative, Absolute and Absolute without host urls for $old_link.
-					$site_url           = site_url();
-					$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-					$absolute_link      = $site_url . $link;
-					$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-					$links_match = strcasecmp( trailingslashit( $link ), trailingslashit( $old_link ) ) == 0 ||
-						strcasecmp( trailingslashit( $absolute_link ), trailingslashit( $old_link ) ) == 0 ||
-						strcasecmp( trailingslashit( $semi_absolute_link ), trailingslashit( $old_link ) ) == 0;
-				} else {
-					// Check $old_link normally.
-					$links_match = strcasecmp( trailingslashit( $old_link ), trailingslashit( $link ) ) == 0;
-				}
-
-				//if ( $old_link === $link ) {
-				if ( $links_match ) {
+				if ( $this->links_match( $link, $old_link ) ) {
 					// Let's not use str_replace, so we avoid replacing url in tag content or other tag atts.
 					// We have stripped trailing slashes, but we use `/?` in regex as link might have or might not have trailing slash.
 					return preg_replace( "#({$tag_att}=[\"|\'])" . $old_link . '/?(["|\'])#i', '\1' . $new_link . '\2', $match[0], 1 );
@@ -240,21 +203,8 @@ class Replace_Link extends Base {
 		return $content;
 	}
 
-	/**
-	 * * Provides a list of tags and attributes in which BLC will search for broken links.
-	 *
-	 * @return array
-	 */
-	public function get_target_tags() {
+	protected function set_special_rules() {
 
-		return apply_filters(
-			'wpmudev_blc_replace_target_tags',
-			array(
-				'a' => array( 'href' ),
-				//'img'    => array( 'src', 'srcset ),
-				//'iframe' => 'src'
-			)
-		);
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * BLC admin modal for legacy screens.
+ * BLC admin modal for legacy screens. This is a modal that appears when Cloud is active and contains options to switch to local.
  *
  * @link    https://wordpress.org/plugins/broken-link-checker/
  * @since   2.0.0
@@ -16,7 +16,6 @@ namespace WPMUDEV_BLC\App\Admin_Modals\Legacy;
 // Abort if called directly.
 defined( 'WPINC' ) || die;
 
-use WPMUDEV_BLC\Core\Controllers\Admin_Modals;
 use WPMUDEV_BLC\App\Options\Settings\Model as Settings;
 
 use WPMUDEV_BLC\Core\Utils\Utilities;
@@ -67,13 +66,13 @@ class Controller extends Base {
 	 * Boots modal parts.
 	 */
 	public function boot() {
+		$this->prepare_props();
+		
 		if ( $this->can_boot() ) {
 			add_filter( 'admin_body_class', array( $this, 'admin_body_classes' ), 999 );
 			add_action( 'admin_footer', array( $this, 'output' ) );
 
 			$this->unique_id = Utilities::get_unique_id();
-
-			$this->prepare_props();
 			$this->prepare_scripts();
 		}
 	}
@@ -114,7 +113,13 @@ class Controller extends Base {
 		$this->admin_pages = array(
 			'view-broken-links',
 			'link-checker-settings',
+			'blc_local',
 		);
+
+		// We should not show the Local Modal on subsites.
+		if ( is_multisite() && ! is_main_site() ) {
+			unset( $this->admin_pages[ array_search( 'blc_local', $this->admin_pages ) ] );
+		}
 	}
 
 	/**
@@ -124,6 +129,10 @@ class Controller extends Base {
 	 * @since 2.0.0
 	 */
 	public function output() {
+		if ( ! $this->can_boot() ) {
+			return;
+		}
+		
 		View::instance()->render( array( 'unique_id' => $this->unique_id ) );
 	}
 
@@ -136,13 +145,24 @@ class Controller extends Base {
 		return array(
 			'blc_sui'          => array(
 				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
-				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
+				'ver' => $this->scripts_version(),
 			),
 			'blc_legacy_modal' => array(
-				'src' => $this->styles_dir . 'legacy-modal.min.css',
-				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
+				'src' => $this->scripts_dir . 'style-local.css',
+				'ver' => $this->scripts_version(),
 			),
 		);
+	}
+
+	protected function scripts_version() {
+		static $scripts_version = null;
+
+		if ( is_null( $scripts_version ) ) {
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local.asset.php';
+			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+		}
+
+		return $scripts_version;
 	}
 
 	/**
@@ -163,7 +183,7 @@ class Controller extends Base {
 	 * @since 2.0.0
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/legacy-modal/main.asset.php';
+		$script_data  = include WPMUDEV_BLC_DIR . 'assets/dist/local.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',
@@ -175,7 +195,7 @@ class Controller extends Base {
 
 		return array(
 			'blc_legacy_popup' => array(
-				'src'       => $this->scripts_dir . 'legacy-modal/main.js',
+				'src'       => $this->scripts_dir . 'local.js',
 				'deps'      => $dependencies,
 				'ver'       => $version,
 				'in_footer' => true,
