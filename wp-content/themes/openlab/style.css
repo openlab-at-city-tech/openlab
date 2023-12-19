@@ -8134,6 +8134,53 @@ a.disabled-link {
   background: transparent;
   color: #333333;
 }
+/** Avatar upload */
+.register-avatar-upload {
+  padding: 1em 0;
+}
+.register-avatar-upload .drag-drop {
+  margin: 1em 0;
+  padding: 32px 16px;
+  border: 1px dashed #dddddd;
+}
+.register-avatar-upload .drag-drop .drag-drop-inside {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.register-avatar-upload .drag-drop .drag-drop-inside p {
+  margin: 0;
+}
+.register-avatar-upload .drag-drop-holder {
+  margin: 1em 0;
+}
+.register-avatar-upload .avatar-preview-outside-wrap {
+  background: #dddddd;
+  padding: 20px;
+}
+.register-avatar-upload .avatar-preview-wrap {
+  height: 225px;
+  overflow: hidden;
+  width: 225px;
+}
+.register-avatar-upload .original-avatar-preview {
+  display: none;
+}
+.register-avatar-upload .bp-avatar,
+.register-avatar-upload .bp-avatar-status {
+  margin-top: 1em;
+}
+.register-avatar-upload #avatar-crop-actions {
+  margin: 1em 0;
+}
+.avatar-upload #avatar-crop-pane {
+  overflow: hidden;
+}
+.avatar-upload-form {
+  display: flex;
+  gap: 20px;
+}
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;

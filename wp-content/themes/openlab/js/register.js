@@ -1,5 +1,4 @@
 (function ($) {
-
 	function checkPasswordStrength(pw, blacklist) {
 		var score = window.wp.passwordStrength.meter(pw, blacklist, '');
 
@@ -448,6 +447,8 @@
 
 				});
 
+				deinitAvatarFields();
+
 				$.ajax(ajaxurl, {
 					data: {
 						action: 'wds_load_account_type',
@@ -471,8 +472,8 @@
 							formValidation($wds_fields);
 							updateSubmitButtonStatus();
 							openlab.academicUnits.init();
+							initAvatarFields();
 						}
-
 					}
 				});
 			}
@@ -504,6 +505,45 @@
 				$('#signup_submit').val('Please Complete Required Fields');
 			}
 
+		}
+
+		/**
+		 * Unhide avatar upload fields, and move to the correct place in the DOM.
+		 */
+		function initAvatarFields() {
+			var $avatar_fields = $( '#register-avatar-upload' );
+
+			// We insert after either the S/O/D fields (Faculty/Staff) or 'Major Program of Study'.
+			var elementToInsertAfter = null;
+			var academicUnitSelector = document.querySelector( '.academic-unit-selector' );
+			if ( academicUnitSelector ) {
+				elementToInsertAfter = academicUnitSelector.closest( '.editfield' );
+			} else {
+				departmentSelector = document.querySelector( 'select[name="departments-dropdown"]' );
+				if ( departmentSelector ) {
+					elementToInsertAfter = departmentSelector.closest( '.editfield' );
+				}
+			}
+
+			if ( ! elementToInsertAfter ) {
+				return;
+			}
+
+			$( elementToInsertAfter ).after( $avatar_fields );
+			$avatar_fields.show();
+		}
+
+		/**
+		 * "Deinit" avatar fields by moving them back to their original place in the DOM.
+		 *
+		 * This is necessary because the new location is removed as part of the
+		 * member-type profile field AJAX.
+		 */
+		function deinitAvatarFields() {
+			var $avatar_fields = $( '#register-avatar-upload' );
+			var $register_page = $( '#register-page' );
+			$register_page.after( $avatar_fields );
+			$avatar_fields.hide();
 		}
 
 		function evaluateFormValidation() {

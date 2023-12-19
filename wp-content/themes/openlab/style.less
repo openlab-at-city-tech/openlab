@@ -1020,6 +1020,67 @@ a.disabled-link {
 	}
 }
 
+/** Avatar upload */
+.register-avatar-upload {
+	padding: 1em 0;
+
+	.drag-drop {
+		margin: 1em 0;
+		padding: 32px 16px;
+		border: 1px dashed @10gray;
+
+		.drag-drop-inside {
+			display: flex;
+			gap: 10px;
+			justify-content: center;
+			align-items: center;
+
+			p {
+				margin: 0;
+			}
+		}
+	}
+
+	.drag-drop-holder {
+		margin: 1em 0;
+	}
+
+	.avatar-preview-outside-wrap {
+		background: @10gray;
+		padding: 20px;
+	}
+
+	.avatar-preview-wrap {
+		height: 225px;
+		overflow: hidden;
+		width: 225px;
+	}
+
+	.original-avatar-preview {
+		display: none;
+	}
+
+	.bp-avatar,
+	.bp-avatar-status {
+		margin-top: 1em;
+	}
+
+	#avatar-crop-actions {
+		margin: 1em 0;
+	}
+}
+
+.avatar-upload {
+	#avatar-crop-pane {
+		overflow: hidden;
+	}
+}
+
+.avatar-upload-form {
+	display: flex;
+	gap: 20px;
+}
+
 /**page**/
 h1.entry-title{
     border-bottom: 1px solid @30gray;
