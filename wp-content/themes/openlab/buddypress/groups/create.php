@@ -147,13 +147,6 @@
                                     <li>CourseCode CourseName, Semester Year</li>
                                     <li>ARCH3522 NYC Arch, FA2013</li>
                                 </ul>
-                            <?php elseif( 'portfolio' == $group_type ) : ?>
-                                <p class="ol-tooltip">The suggested <?php echo $group_label ?> Name below uses your first and last name. If you do not wish to use your full name, you may change it now or at any time in the future.</p>
-
-                                <ul class="ol-tooltip">
-                                    <li>FirstName LastName's <?php echo $group_label ?> </li>
-                                    <li>Jane Smith's <?php echo $group_label ?> (Example)</li>
-                                </ul>
                             <?php else : ?>
                                 <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                             <?php endif; ?>

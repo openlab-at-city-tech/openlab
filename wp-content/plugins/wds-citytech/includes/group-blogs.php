@@ -757,10 +757,9 @@ function wds_bp_group_meta() {
 
 										<div class="col-sm-5 site-label">
 											<?php
-											$suggested_path = $group_type == 'portfolio' ? openlab_suggest_portfolio_path() : '';
 											echo esc_html( $current_site->domain . $current_site->path );
 
-											$default_path_message = $suggested_path ? 'Sorry, that URL is already taken.' : 'You must provide a URL.';
+											$default_path_message = 'You must provide a URL.';
 											?>
 										</div>
 
@@ -772,7 +771,7 @@ function wds_bp_group_meta() {
 												name="blog[domain]"
 												type="text"
 												title="Domain"
-												value="<?php echo esc_html( $suggested_path ); ?>"
+												value=""
 											/>
 											<div id="field_new_site_error" class="error-container"></div>
 										</div>
