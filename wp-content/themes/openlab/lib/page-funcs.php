@@ -249,7 +249,7 @@ function openlab_stay_up_to_date() {
 			'title'       => 'The Buzz',
 			'url'         => 'https://openlab.citytech.cuny.edu/groups/the-buzz/',
 			'description' => 'Follow our student bloggers as they post about life at City Tech and beyond!',
-			'avatar'      => 'https://openlab.citytech.cuny.edu/wp-content/uploads/group-avatars/2038/70c40887176f540c50463c79c3c8e667-bpfull.jpg',
+			'avatar'      => 'https://openlab.citytech.cuny.edu/wp-content/uploads/group-avatars/2038/1702317797-bpfull.png',
 		),
 		array(
 			'title'       => 'Open Pedagogy on the OpenLab',
