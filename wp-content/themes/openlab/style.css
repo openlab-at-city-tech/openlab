@@ -8143,14 +8143,19 @@ a.disabled-link {
   padding: 32px 16px;
   border: 1px dashed #dddddd;
 }
-.register-avatar-upload .drag-drop .drag-drop-inside {
+.register-avatar-upload .drag-drop-inside {
   display: flex;
   gap: 10px;
   justify-content: center;
   align-items: center;
 }
-.register-avatar-upload .drag-drop .drag-drop-inside p {
+.register-avatar-upload .drag-drop-inside p {
   margin: 0;
+}
+@media (max-width: 991px) {
+  .register-avatar-upload .drag-drop-inside p:not(.drag-drop-buttons) {
+    display: none;
+  }
 }
 .register-avatar-upload .drag-drop-holder {
   margin: 1em 0;
@@ -8163,6 +8168,11 @@ a.disabled-link {
   height: 225px;
   overflow: hidden;
   width: 225px;
+}
+@media (max-width: 991px) {
+  .register-avatar-upload .avatar-preview-wrap {
+    margin: 0 auto;
+  }
 }
 .register-avatar-upload .original-avatar-preview {
   display: none;
@@ -8180,6 +8190,11 @@ a.disabled-link {
 .avatar-upload-form {
   display: flex;
   gap: 20px;
+}
+@media (max-width: 991px) {
+  .avatar-upload-form {
+    flex-direction: column;
+  }
 }
 /**page**/
 h1.entry-title {

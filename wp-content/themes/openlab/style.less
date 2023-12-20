@@ -1028,15 +1028,21 @@ a.disabled-link {
 		margin: 1em 0;
 		padding: 32px 16px;
 		border: 1px dashed @10gray;
+	}
 
-		.drag-drop-inside {
-			display: flex;
-			gap: 10px;
-			justify-content: center;
-			align-items: center;
+	.drag-drop-inside {
+		display: flex;
+		gap: 10px;
+		justify-content: center;
+		align-items: center;
 
-			p {
-				margin: 0;
+		p {
+			margin: 0;
+		}
+
+		@media (max-width: @screen-sm-max) {
+			p:not(.drag-drop-buttons) {
+				display: none;
 			}
 		}
 	}
@@ -1054,6 +1060,10 @@ a.disabled-link {
 		height: 225px;
 		overflow: hidden;
 		width: 225px;
+
+		@media (max-width: @screen-sm-max) {
+			margin: 0 auto;
+		}
 	}
 
 	.original-avatar-preview {
@@ -1079,6 +1089,10 @@ a.disabled-link {
 .avatar-upload-form {
 	display: flex;
 	gap: 20px;
+
+	@media (max-width: @screen-sm-max) {
+		flex-direction: column;
+	}
 }
 
 /**page**/
