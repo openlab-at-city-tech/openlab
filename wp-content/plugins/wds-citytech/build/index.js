@@ -1,272 +1,165 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/blocks/openlab-help/edit.js":
-/*!*****************************************!*\
-  !*** ./src/blocks/openlab-help/edit.js ***!
-  \*****************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ edit; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/openlab-help/editor.scss");
-
-
-
-
-/**
- * Editor styles.
- */
-
-
-/**
- * Edit function.
- *
- * @return {WPElement} Element to render.
- */
-
-function edit(_ref) {
-  let {
-    attributes,
-    setAttributes
-  } = _ref;
-
-  const blockProps = () => (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
-
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3___default()), {
-    attributes: attributes,
-    block: "openlab/openlab-help",
-    httpMethod: "GET"
-  }));
-}
-
-/***/ }),
-
-/***/ "./src/blocks/openlab-help/index.js":
-/*!******************************************!*\
-  !*** ./src/blocks/openlab-help/index.js ***!
-  \******************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./src/blocks/openlab-help/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./src/blocks/openlab-help/block.json");
-
-/**
- * Internal dependencies
- */
-
-
-
-/**
- * Block definition.
- */
-
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__, {
-  title: 'OpenLab Help',
-  edit: _edit__WEBPACK_IMPORTED_MODULE_1__["default"],
-
-  /**
-   * Rendered in PHP.
-   */
-  save: () => {
-    return null;
-  }
-});
-
-/***/ }),
-
-/***/ "./src/blocks/openlab-support/edit.js":
-/*!********************************************!*\
-  !*** ./src/blocks/openlab-support/edit.js ***!
-  \********************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ edit; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/server-side-render */ "@wordpress/server-side-render");
-/* harmony import */ var _wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/openlab-support/editor.scss");
-
-
-
-
-/**
- * Editor styles.
- */
-
-
-/**
- * Edit function.
- *
- * @return {WPElement} Element to render.
- */
-
-function edit(_ref) {
-  let {
-    attributes,
-    setAttributes
-  } = _ref;
-
-  const blockProps = () => (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)();
-
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps(), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3___default()), {
-    attributes: attributes,
-    block: "openlab/openlab-support",
-    httpMethod: "GET"
-  }));
-}
-
-/***/ }),
-
-/***/ "./src/blocks/openlab-support/index.js":
-/*!*********************************************!*\
-  !*** ./src/blocks/openlab-support/index.js ***!
-  \*********************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./edit */ "./src/blocks/openlab-support/edit.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./block.json */ "./src/blocks/openlab-support/block.json");
-
-/**
- * Internal dependencies
- */
-
-
-
-/**
- * Block definition.
- */
-
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_2__, {
-  title: 'OpenLab Support',
-  edit: _edit__WEBPACK_IMPORTED_MODULE_1__["default"],
-
-  /**
-   * Rendered in PHP.
-   */
-  save: () => {
-    return null;
-  }
-});
-
-/***/ }),
-
-/***/ "./src/blocks/openlab-help/editor.scss":
-/*!*********************************************!*\
-  !*** ./src/blocks/openlab-help/editor.scss ***!
-  \*********************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/blocks/openlab-support/editor.scss":
+/***/ "./src/components/post-sharing-options.js":
 /*!************************************************!*\
-  !*** ./src/blocks/openlab-support/editor.scss ***!
+  !*** ./src/components/post-sharing-options.js ***!
   \************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/edit-post */ "@wordpress/edit-post");
+/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
 
+
+
+
+
+const PostSharingOptions = ({}) => {
+  const {
+    currentGroupTypeSiteLabel,
+    shareOnlyWithGroup,
+    siteIsPublic
+  } = openlabBlocksPostVisibility;
+  if (!siteIsPublic) {
+    return null;
+  }
+  const {
+    editPost
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useDispatch)('core/editor');
+  const onChange = value => {
+    editPost({
+      meta: {
+        'openlab_post_visibility': value
+      }
+    });
+  };
+  const {
+    postVisibility
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
+    const postMeta = select('core/editor').getEditedPostAttribute('meta');
+    return {
+      postVisibility: postMeta['openlab_post_visibility'] || 'default'
+    };
+  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__.PluginDocumentSettingPanel, {
+    name: "post-sharing-options",
+    title: "Visibility Options",
+    className: "post-sharing-options"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", {
+    className: "editor-post-visibility__fieldset"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.VisuallyHidden, {
+    as: "legend"
+  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Control the visibility of this post.'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+    instanceId: "post-sharing-options",
+    value: "group-members-only",
+    label: currentGroupTypeSiteLabel,
+    info: shareOnlyWithGroup,
+    onChange: event => onChange(event.target.value),
+    checked: postVisibility === 'group-members-only'
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+    instanceId: "post-sharing-options",
+    value: "members-only",
+    label: "OpenLab members only",
+    info: "Share only with logged in members of the OpenLab.",
+    onChange: event => onChange(event.target.value),
+    checked: postVisibility === 'members-only'
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+    instanceId: "post-sharing-options",
+    value: "default",
+    label: "Public",
+    info: "Share according to site visibility settings.",
+    onChange: event => onChange(event.target.value),
+    checked: postVisibility === 'default'
+  })));
+};
+function PostSharingChoice({
+  instanceId,
+  value,
+  label,
+  info,
+  ...props
+}) {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "editor-post-visibility__choice"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "radio",
+    name: `editor-post-visibility__setting-${instanceId}`,
+    value: value,
+    id: `editor-post-${value}-${instanceId}`,
+    "aria-describedby": `editor-post-${value}-${instanceId}-description`,
+    className: "editor-post-visibility__radio",
+    ...props
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    htmlFor: `editor-post-${value}-${instanceId}`,
+    className: "editor-post-visibility__label"
+  }, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    id: `editor-post-${value}-${instanceId}-description`,
+    className: "editor-post-visibility__info"
+  }, info));
+}
+(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
+  render: PostSharingOptions
+});
 
 /***/ }),
 
-/***/ "@wordpress/block-editor":
-/*!*************************************!*\
-  !*** external ["wp","blockEditor"] ***!
-  \*************************************/
-/***/ (function(module) {
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/***/ ((module) => {
 
-module.exports = window["wp"]["blockEditor"];
-
-/***/ }),
-
-/***/ "@wordpress/blocks":
-/*!********************************!*\
-  !*** external ["wp","blocks"] ***!
-  \********************************/
-/***/ (function(module) {
-
-module.exports = window["wp"]["blocks"];
+module.exports = window["React"];
 
 /***/ }),
 
-/***/ "@wordpress/element":
-/*!*********************************!*\
-  !*** external ["wp","element"] ***!
-  \*********************************/
-/***/ (function(module) {
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
 
-module.exports = window["wp"]["element"];
+module.exports = window["wp"]["components"];
 
 /***/ }),
 
-/***/ "@wordpress/i18n":
+/***/ "@wordpress/data":
 /*!******************************!*\
-  !*** external ["wp","i18n"] ***!
+  !*** external ["wp","data"] ***!
   \******************************/
-/***/ (function(module) {
+/***/ ((module) => {
 
-module.exports = window["wp"]["i18n"];
-
-/***/ }),
-
-/***/ "@wordpress/server-side-render":
-/*!******************************************!*\
-  !*** external ["wp","serverSideRender"] ***!
-  \******************************************/
-/***/ (function(module) {
-
-module.exports = window["wp"]["serverSideRender"];
+module.exports = window["wp"]["data"];
 
 /***/ }),
 
-/***/ "./src/blocks/openlab-help/block.json":
-/*!********************************************!*\
-  !*** ./src/blocks/openlab-help/block.json ***!
-  \********************************************/
-/***/ (function(module) {
+/***/ "@wordpress/edit-post":
+/*!**********************************!*\
+  !*** external ["wp","editPost"] ***!
+  \**********************************/
+/***/ ((module) => {
 
-module.exports = JSON.parse('{"apiVersion":2,"name":"openlab/openlab-help","title":"OpenLab Help","icon":"lightbulb","category":"openlab","supports":{"anchor":true},"attributes":{}}');
+module.exports = window["wp"]["editPost"];
 
 /***/ }),
 
-/***/ "./src/blocks/openlab-support/block.json":
-/*!***********************************************!*\
-  !*** ./src/blocks/openlab-support/block.json ***!
-  \***********************************************/
-/***/ (function(module) {
+/***/ "@wordpress/plugins":
+/*!*********************************!*\
+  !*** external ["wp","plugins"] ***!
+  \*********************************/
+/***/ ((module) => {
 
-module.exports = JSON.parse('{"apiVersion":2,"name":"openlab/openlab-support","title":"OpenLab Support","icon":"lightbulb","category":"openlab","supports":{"anchor":true},"attributes":{}}');
+module.exports = window["wp"]["plugins"];
 
 /***/ })
 
@@ -298,58 +191,60 @@ module.exports = JSON.parse('{"apiVersion":2,"name":"openlab/openlab-support","t
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-!function() {
+(() => {
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _blocks_openlab_help__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./blocks/openlab-help */ "./src/blocks/openlab-help/index.js");
-/* harmony import */ var _blocks_openlab_support__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./blocks/openlab-support */ "./src/blocks/openlab-support/index.js");
+/* harmony import */ var _components_post_sharing_options__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/post-sharing-options */ "./src/components/post-sharing-options.js");
+//import './blocks/openlab-help'
+//import './blocks/openlab-support'
 
 
-}();
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
