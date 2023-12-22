@@ -1,11 +1,11 @@
 {
-	"apiVersion": 2,
-	"name": "openlab/openlab-help",
-	"title": "OpenLab Help",
-	"icon": "lightbulb",
-	"category": "openlab",
-	"supports": {
-		"anchor": true
-	},
-	"attributes": {}
+  "apiVersion": 2,
+  "name": "openlab/openlab-help",
+  "title": "OpenLab Help",
+  "icon": "lightbulb",
+  "category": "openlab",
+  "supports": {
+    "anchor": true
+  },
+  "attributes": {}
 }

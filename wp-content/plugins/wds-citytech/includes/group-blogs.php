@@ -2237,3 +2237,195 @@ add_action(
 		TEC\Events\Custom_Tables\V1\Activation::activate();
 	}
 );
+
+/** OpenLab Post Visibility **************************************************/
+
+/**
+ * Registers openlab_post_visibility meta field.
+ *
+ * @return void
+ */
+function openlab_register_post_visibility_meta() {
+	register_meta(
+		'post',
+		'openlab_post_visibility',
+		[
+			'single'       => true,
+			'type'         => 'string',
+			'description'  => 'Visibility of the post.',
+			'show_in_rest' => true,
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'sanitize_callback' => function( $value ) {
+				return sanitize_text_field( $value );
+			},
+		]
+	);
+}
+add_action( 'init', 'openlab_register_post_visibility_meta', 20 );
+
+/**
+ * Adds script data for wp-blocks related to openlab_post_visibility.
+ *
+ * @return void
+ */
+function openlab_add_post_visibility_script_data() {
+	$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+
+	$group_type_label = 'Group';
+	if ( $current_site_group_id ) {
+		$group_type_label = openlab_get_group_type_label(
+			[
+				'group_id' => $current_site_group_id,
+				'case'     => 'upper',
+			]
+		);
+	}
+
+	$blog_public = (int) get_option( 'blog_public' );
+
+	wp_add_inline_script(
+		'openlab-blocks',
+		'const openlabBlocksPostVisibility = ' . wp_json_encode(
+			[
+				'currentGroupTypeLabel'     => $group_type_label,
+				'currentGroupTypeSiteLabel' => sprintf( '%s Site', $group_type_label ),
+				'shareOnlyWithGroup'        => sprintf( 'Share only with members of this %s Site.', $group_type_label ),
+				'siteIsPublic'              => $blog_public >= 0,
+			]
+		) . ';',
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'openlab_add_post_visibility_script_data', 20 );
+
+/**
+ * Single-post access control for openlab_post_visibility.
+ *
+ * @return void
+ */
+function openlab_post_visibility_access_control() {
+	$queried_object = get_queried_object();
+	if ( ! is_a( $queried_object, 'WP_Post' ) ) {
+		return;
+	}
+
+	// Do nothing if the site is not public, since visibility is controlled by site access.
+	$blog_public = (int) get_option( 'blog_public' );
+	if ( $blog_public < 0 ) {
+		return;
+	}
+
+	$post_visibility = get_post_meta( $queried_object->ID, 'openlab_post_visibility', true );
+
+	// Logged-in members only.
+	if ( 'members-only' === $post_visibility ) {
+		// If the user is logged in, allow access.
+		if ( is_user_logged_in() ) {
+			return;
+		}
+
+		// If the user is not logged in, redirect to the login page.
+		wp_safe_redirect( wp_login_url( get_permalink( $queried_object->ID ) ) );
+		exit;
+	}
+
+	if ( 'group-members-only' === $post_visibility ) {
+		$redirect = null;
+		if ( ! is_user_logged_in() ) {
+			$redirect = wp_login_url( get_permalink( $queried_object->ID ) );
+		} else {
+			$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+			if ( $current_site_group_id && ! groups_is_user_member( get_current_user_id(), $current_site_group_id ) ) {
+				$redirect = home_url();
+			}
+		}
+
+		if ( $redirect ) {
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+	}
+
+	// If no visibility is set, or some other value exists, fall through and allow access.
+}
+add_action( 'template_redirect', 'openlab_post_visibility_access_control' );
+
+/**
+ * Remove posts from queries according to openlab_post_visibility settings.
+ *
+ * @param WP_Query $query Query object.
+ * @return void
+ */
+function openlab_post_visibility_query_filter( $query ) {
+	$invisible_post_ids = openlab_get_invisible_post_ids();
+	if ( ! $invisible_post_ids ) {
+		return;
+	}
+
+	// We will run a separate query and pass posts to post__in.
+	$post__not_in = $query->get( 'post__not_in' );
+	if ( ! is_array( $post__not_in ) ) {
+		$post__not_in = [];
+	}
+
+	$post__not_in = array_merge( $post__not_in, $invisible_post_ids );
+	$query->set( 'post__not_in', $post__not_in );
+}
+add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+
+/**
+ * Gets a list of post IDs that are not visible to the current user.
+ *
+ * @return array
+ */
+function openlab_get_invisible_post_ids() {
+	static $post_ids = null;
+
+	if ( null === $post_ids ) {
+		// If there's no associated group ID, there's no visibility settings.
+		$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		if ( ! $current_site_group_id ) {
+			$post_ids = [];
+			return $post_ids;
+		}
+
+		// Do nothing if the site is not public, since visibility is controlled by site access.
+		$blog_public = (int) get_option( 'blog_public' );
+		if ( $blog_public < 0 ) {
+			$post_ids = [];
+			return $post_ids;
+		}
+
+		// If the user is a super admin or a group member, allow access to all posts.
+		if ( is_super_admin() || groups_is_user_member( get_current_user_id(), $current_site_group_id ) ) {
+			$post_ids = [];
+			return $post_ids;
+		}
+
+		// If we've gotten here, the current user is not a group member.
+		$invisible_settings = [ 'group-members-only' ];
+
+		if ( ! is_user_logged_in() ) {
+			$invisible_settings[] = 'members-only';
+		}
+
+		remove_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+		$post_ids = get_posts(
+			[
+				'post_type'   => 'any',
+				'post_status' => 'any',
+				'fields'      => 'ids',
+				'meta_query'  => [
+					[
+						'key'   => 'openlab_post_visibility',
+						'value' => $invisible_settings,
+					]
+				],
+			]
+		);
+		add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+	}
+
+	return $post_ids;
+}

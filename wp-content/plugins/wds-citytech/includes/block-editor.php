@@ -52,7 +52,7 @@ function openlab_enqueue_block_assets() {
 		true
 	);
 }
-//add_action( 'enqueue_block_editor_assets', 'openlab_enqueue_block_assets' );
+add_action( 'enqueue_block_editor_assets', 'openlab_enqueue_block_assets' );
 
 /**
  * Renders a block template.
