@@ -259,11 +259,17 @@ function bpar_validate_upload( $upload ) {
 		break;
 
 		case 'image/jpeg' :
-
 			$jpg = imagecreatefromjpeg( $tmp_name );
+
 			if ( empty( $jpg ) ) {
 				$file_is_ok = false;
 			} else {
+				$exif = exif_read_data( $tmp_name );
+				if ( ! empty( $exif['Orientation'] ) ) {
+					$jpg = imagecreatefromjpeg( $tmp_name );
+					$jpg = bpar_apply_orientation( $jpg, $exif['Orientation'] );
+				}
+
 				$new_tmp_name = wp_tempnam( wp_rand() );
 				$copied = imagejpeg( $jpg, $new_tmp_name, 100 );
 				$upload['tmp_name'] = $new_tmp_name;
@@ -277,4 +283,20 @@ function bpar_validate_upload( $upload ) {
 	}
 
 	return $upload;
+}
+
+function bpar_apply_orientation( $image, $orientation ) {
+	switch ( $orientation ) {
+		case 3:
+			$image = imagerotate( $image, 180, 0 );
+			break;
+		case 6:
+			$image = imagerotate( $image, -90, 0 );
+			break;
+		case 8:
+			$image = imagerotate( $image, 90, 0 );
+			break;
+	}
+
+	return $image;
 }
