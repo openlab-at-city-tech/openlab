@@ -2,18 +2,18 @@
   "name": "wds-citytech",
   "description": "Core functionality for the City Tech OpenLab",
   "devDependencies": {
-    "@wordpress/scripts": "^22.5.0",
+    "@wordpress/scripts": "^26.19.0",
     "sass": "^1.42.1"
   },
   "scripts": {
     "build": "wp-scripts build src/index.js",
-		"build:copy-php": "wp-scripts build --webpack-copy-php",
+    "build:copy-php": "wp-scripts build --webpack-copy-php",
     "check-engines": "wp-scripts check-engines",
     "compile:css": "node-sass sass/ -o ./ && stylelint '*.css' --fix || true && stylelint '*.css' --fix",
     "compile:rtl": "rtlcss style.css style-rtl.css",
     "lint:scss": "wp-scripts lint-style 'sass/**/*.scss'",
     "lint:js": "wp-scripts lint-js 'js/*.js'",
     "start": "wp-scripts start src/index.js",
-		"start:copy-php": "wp-scripts start --webpack-copy-php"
+    "start:copy-php": "wp-scripts start --webpack-copy-php"
   }
 }
