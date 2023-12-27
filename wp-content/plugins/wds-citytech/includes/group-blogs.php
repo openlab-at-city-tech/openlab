@@ -2358,6 +2358,11 @@ add_action( 'template_redirect', 'openlab_post_visibility_access_control' );
  * @return void
  */
 function openlab_post_visibility_query_filter( $query ) {
+	// Don't perform the query on singular posts, which are handled by template_redirect logic.
+	if ( $query->is_singular() && $query->is_main_query() ) {
+		return;
+	}
+
 	$invisible_post_ids = openlab_get_invisible_post_ids();
 	if ( ! $invisible_post_ids ) {
 		return;
