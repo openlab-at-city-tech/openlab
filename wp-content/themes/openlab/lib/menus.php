@@ -78,10 +78,6 @@ function openlab_modify_options_nav() {
 			bp_get_current_group_slug()
 		);
 
-        buddypress()->groups->nav->edit_nav(array(
-            'name' => 'Settings',
-                ), 'admin', bp_get_current_group_slug());
-
         // Keep the following tabs as-is
         $keepers = array( 'home', 'admin', 'members', 'forum', 'docs', 'files' );
         $nav_items = buddypress()->groups->nav->get_secondary(array('parent_slug' => bp_get_current_group_slug()));
@@ -96,6 +92,14 @@ function openlab_modify_options_nav() {
         buddypress()->groups->nav->edit_nav(array(
             'position' => 15,
                 ), 'admin', bp_get_current_group_slug());
+
+        $f = buddypress()->groups->nav->edit_nav(
+			[
+				'name' => 'Settings',
+			],
+			'admin',
+			bp_get_current_group_slug()
+		);
     }
 
     if (bp_is_group() && !bp_is_group_create()) {
