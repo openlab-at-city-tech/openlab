@@ -4,7 +4,7 @@ import ContentEditable from 'react-contenteditable';
  * WordPress dependencies
  */
 import { Component } from '@wordpress/element';
-import { Button, Modal, Notice } from '@wordpress/components';
+import { Button, Notice } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -80,13 +80,6 @@ class AttributionModal extends Component {
 		}, 100 )
 	}
 
-	componentDidUpdate( prevProps, prevState ) {
-		if ( prevState.focusedElement === this.state.focusedElement ) {
-
-			console.log(prevProps, this.props);
-		}
-	}
-
 	setFocusedElement( element ) {
 		this.setState( {
 			focusedElement: element,
@@ -148,7 +141,6 @@ class AttributionModal extends Component {
 		// Set focus to the next element in the list. If we're at the end, loop around.
 		if ( 'undefined' === typeof inputs[ previousFocusedElementIndex + forwardOrBackward ] ) {
 			const loopedIndex = forwardOrBackward > 0 ? 0 : inputs.length - 1;
-			console.log( loopedIndex, inputs[ loopedIndex ] );
 			inputs[ loopedIndex ].focus();
 		} else {
 			const nextFocusedElement = inputs[ previousFocusedElementIndex + forwardOrBackward ];
@@ -156,9 +148,6 @@ class AttributionModal extends Component {
 				nextFocusedElement.focus();
 			}
 		}
-
-		// Reset the focused element.
-		this.setFocusedElement( nextFocusedElement );
 	}
 
 	/**
@@ -215,7 +204,7 @@ class AttributionModal extends Component {
 			const modalMainElement = modal.parentElement;
 
 			// Move the modal element to the original position
-			let originalPosition = document.getElementById('originalModalPosition');
+			const originalPosition = document.getElementById( 'originalModalPosition' );
 			originalPosition.parentElement.appendChild(modalMainElement);
 
 			// Remove temporary element
@@ -278,7 +267,7 @@ class AttributionModal extends Component {
 			blockEditorMenu.style.position = 'relative';
 		}
 
-		const { onClose, modalType } = this.props;
+		const { modalType } = this.props;
 
 		const title =
 			modalType === 'add' ? __( 'Add Attribution', 'openlab-attributions' ) : __( 'Update Attribution', 'openlab-attributions' );

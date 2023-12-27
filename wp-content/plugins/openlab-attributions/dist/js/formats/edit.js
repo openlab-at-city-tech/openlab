@@ -98,8 +98,8 @@ export default function Edit( { value, onChange } ) {
 							const selectedBlockClientId = wp.data.select( 'openlab/modal' ).getSelectedBlockClientId();
 							const blockSelectionStart = wp.data.select( 'openlab/modal' ).getBlockSelectionStart();
 
-							selectBlock( selectedBlockClientId, blockSelectionStart );
-						} )
+							dispatch( 'core/block-editor' ).selectBlock( selectedBlockClientId, blockSelectionStart );
+						}, 100 )
 					} }
 					addItem={ ( data ) => onChange( addMarker( value, data ) ) }
 				/>
