@@ -32,6 +32,10 @@ class AttributionModal extends Component {
 		this.handleSubmit = this.handleSubmit.bind( this );
 		this.discardChanges = this.discardChanges.bind( this );
 		this.handleClose = this.handleClose.bind( this );
+		this.getFocusableElements = this.getFocusableElements.bind( this );
+		this.handleFocusIn = this.handleFocusIn.bind( this );
+		this.setFocusedElement = this.setFocusedElement.bind( this );
+		this.handleKeyDown = this.handleKeyDown.bind( this );
 
 		this.state = {
 			editedContent: false,
@@ -40,7 +44,9 @@ class AttributionModal extends Component {
 			adaptedLicense: '',
 			content: '',
 			...props.item,
-			isAdaptedFromDisplayed: false
+			isAdaptedFromDisplayed: false,
+			focusedElement: null,
+			focusableElements: null,
 		};
 	}
 
@@ -57,6 +63,102 @@ class AttributionModal extends Component {
 		if ( this.props.isImageBlock ) {
 			this.moveModalToEditorElement();
 		}
+
+		// eslint-disable-next-line
+		document.addEventListener( 'keydown', this.handleKeyDown );
+
+		// eslint-disable-next-line
+		document.addEventListener( 'focusin', this.handleFocusIn );
+
+		// Set focus on the first input in .component-attributions-modal.
+		setTimeout( () => {
+			const input = document.querySelector( '.component-attributions-modal input' );
+
+			if ( input ) {
+				input.focus();
+			}
+		}, 100 )
+	}
+
+	componentDidUpdate( prevProps, prevState ) {
+		if ( prevState.focusedElement === this.state.focusedElement ) {
+
+			console.log(prevProps, this.props);
+		}
+	}
+
+	setFocusedElement( element ) {
+		this.setState( {
+			focusedElement: element,
+		} );
+	}
+
+	getFocusableElements() {
+		if ( null !== this.state.focusableElements ) {
+			return this.state.focusableElements
+		}
+
+		const modal = document.querySelector( '.component-attributions-modal' );
+
+		const focusableElements = modal.querySelectorAll( 'input, select, textarea, button' );
+
+		this.setState( {
+			focusableElements
+		} );
+
+		return focusableElements;
+	}
+
+	handleFocusIn( event ) {
+		const isModal = event.target.closest( '.component-attributions-modal' );
+		if ( ! isModal ) {
+			return;
+		}
+
+		this.setFocusedElement( event.target );
+	}
+
+	handleKeyDown = ( event ) => {
+		// Handle Tab and Shift+Tab only.
+		if ( 9 !== event.keyCode ) {
+			return;
+		}
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		const forwardOrBackward = event.shiftKey ? -1 : 1;
+
+		const previousFocusedElement = this.state.focusedElement;
+		if ( ! previousFocusedElement ) {
+			return;
+		}
+
+		// Get a list of all focusable elements in the modal.
+		const inputs = this.getFocusableElements();
+
+		// Get the index of the previously focused element.
+		const previousFocusedElementIndex = Array.prototype.indexOf.call( inputs, previousFocusedElement );
+
+		// If not found, return.
+		if ( -1 === previousFocusedElementIndex ) {
+			return;
+		}
+
+		// Set focus to the next element in the list. If we're at the end, loop around.
+		if ( 'undefined' === typeof inputs[ previousFocusedElementIndex + forwardOrBackward ] ) {
+			const loopedIndex = forwardOrBackward > 0 ? 0 : inputs.length - 1;
+			console.log( loopedIndex, inputs[ loopedIndex ] );
+			inputs[ loopedIndex ].focus();
+		} else {
+			const nextFocusedElement = inputs[ previousFocusedElementIndex + forwardOrBackward ];
+			if ( nextFocusedElement ) {
+				nextFocusedElement.focus();
+			}
+		}
+
+		// Reset the focused element.
+		this.setFocusedElement( nextFocusedElement );
 	}
 
 	/**

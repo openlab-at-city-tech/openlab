@@ -8,7 +8,7 @@ const nanoid = require( 'nanoid' );
  */
 import { useState } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
-import { BlockControls } from '@wordpress/block-editor';
+import { BlockControls, selectBlock } from '@wordpress/block-editor';
 import { isCollapsed, insertObject } from '@wordpress/rich-text';
 import { Toolbar, IconButton } from '@wordpress/components'
 import { __ } from '@wordpress/i18n';
@@ -46,7 +46,7 @@ const addMarker = ( value, data ) => {
 	return newValue;
 };
 
-export default function Edit( { isActive, value, onChange } ) {
+export default function Edit( { value, onChange } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 
 	const { isImageBlock, item } = useSelect(
@@ -70,7 +70,16 @@ export default function Edit( { isActive, value, onChange } ) {
 						icon={ icon }
 						label="Add Attribution"
 						className="components-toolbar_control"
-						onClick={ () => setIsOpen( true ) }
+						onClick={ () => {
+							setIsOpen( true )
+
+							const { getSelectedBlockClientId, getBlockSelectionStart } = wp.data.select('core/block-editor');
+							const selectedBlockClientId = getSelectedBlockClientId();
+							const blockSelectionStart = getBlockSelectionStart();
+
+							dispatch( 'openlab/modal' ).setBlockSelectionStart( blockSelectionStart );
+							dispatch( 'openlab/modal' ).setSelectedBlockClientId( selectedBlockClientId );
+						} }
 					/>
 				</Toolbar>
 			</BlockControls>
@@ -81,7 +90,17 @@ export default function Edit( { isActive, value, onChange } ) {
 					modalType="add"
 					title={ __( "Add Attribution", 'openlab-attributions' ) }
 					item={ item }
-					onClose={ () => setIsOpen( false ) }
+					onClose={ () => {
+						setIsOpen( false )
+
+						// Set focus back on the block editor.
+						setTimeout( () => {
+							const selectedBlockClientId = wp.data.select( 'openlab/modal' ).getSelectedBlockClientId();
+							const blockSelectionStart = wp.data.select( 'openlab/modal' ).getBlockSelectionStart();
+
+							selectBlock( selectedBlockClientId, blockSelectionStart );
+						} )
+					} }
 					addItem={ ( data ) => onChange( addMarker( value, data ) ) }
 				/>
 			) }
