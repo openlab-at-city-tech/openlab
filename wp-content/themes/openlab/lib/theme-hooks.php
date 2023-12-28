@@ -42,10 +42,47 @@ function openlab_custom_the_content($content) {
         }
     }
 
+	$queried_object = get_queried_object();
+	if ( $queried_object instanceof WP_Post && false !== strpos( $queried_object->post_content, '[contact-form-7' ) && in_array( $queried_object->post_name, [ 'contact-us' ], true ) ) {
+		// There are several 'contact-us' on the website. We want the one with parent 'About'.
+		$replace_post_content = false;
+
+		$post_parent_id = $queried_object->post_parent;
+		if ( $post_parent_id ) {
+			$post_parent = get_post( $post_parent_id );
+			if ( $post_parent ) {
+				$replace_post_content = 'about' === $post_parent->post_name;
+			}
+		}
+
+		if ( ! $replace_post_content ) {
+			return $content;
+		}
+
+		$raw_content = $post->post_content;
+
+		$matched = preg_match( '/\[contact-form-7.*id="([^"]+)".*\]/', $raw_content, $matches );
+		if ( ! $matched ) {
+			return $content;
+		}
+
+		$rendered_shortcode = do_shortcode( $matches[0] );
+		$wrapped_shortcode  = sprintf(
+			'<div class="panel panel-default">
+				<div class="panel-heading">Contact Form</div>
+				<div class="panel-body">%s</div>
+			</div>',
+			$rendered_shortcode
+		);
+
+		$content = str_replace( $matches[0], $wrapped_shortcode, $post->post_content );
+	}
+
+//var_dump( $content ); die;
     return $content;
 }
 
-add_filter('the_content', 'openlab_custom_the_content');
+add_filter('the_content', 'openlab_custom_the_content', 11);
 
 /**
  * OpenLab main menu markup.
