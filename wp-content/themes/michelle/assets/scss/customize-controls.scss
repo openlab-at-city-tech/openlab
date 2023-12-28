@@ -1,0 +1,18 @@
+/* FILE: customize-controls.scss */
+@use 'sass:math';
+
+//
+// Customize controls styles.
+//
+// @package    Michelle
+// @copyright  WebMan Design, Oliver Juhas
+//
+// @since    1.0.0
+// @version  1.5.0
+//
+
+$left: left;
+$right: right;
+$rtl_multiplier: 1; // For `translateX` transform, for example.
+
+@import 'customize-controls/_index';

@@ -1,0 +1,104 @@
+/* FILE: global/menu/_primary-sub-menu.scss */
+
+.main-navigation {
+
+	.sub-menu {
+		@extend %shaded_background;
+		display: none;
+		position: absolute;
+		width: auto;
+		min-width: 16em;
+		#{$left}: -2em;
+		top: 100%;
+		padding: calc( 6vh - .25em ) 2em calc( 6vh - .25em );
+		background: var(--color_navigation_background);
+		color: var(--color_navigation_text);
+		box-shadow: var(--drop_shadow);
+		z-index: 1;
+
+		@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+			#{$left}: -6vh;
+			padding-left: 6vh;
+			padding-right: 6vh;
+		}
+
+		.sub-menu {
+			#{$left}: 100%;
+			top: calc( -6vh + .25em );
+			padding-top: calc( 6vh - .25em );
+		}
+
+	}
+
+	.menu-item-has-children {
+		position: relative;
+
+		// Inaccessible menu fallback indicating submenu.
+		.no-js:not(.is-amp) &:not(.menu-item-is-depth-3) {
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+
+				> a {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					&::after {
+						content: '\25bc';
+						padding-#{$left}: 1em;
+						margin-#{$left}: auto;
+						font-size: .5em;
+					}
+
+				}
+
+				.menu-item-has-children:not(.menu-item-is-depth-3) > a::after {
+					@if 'left' == $left {
+						content: '\25b6';
+					} @else {
+						content: '\25C0';
+					}
+				}
+
+			}
+		}
+
+		&:hover > .sub-menu,
+		.no-js &:focus-within > .sub-menu {
+
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+				display: block;
+			}
+
+		}
+
+	}
+
+}
+
+.main-navigation.main-navigation .sub-menu {
+
+	&::before {
+		opacity: 0;
+	}
+
+	.sub-menu {
+
+		&::before {
+			opacity: .03;
+		}
+
+		.sub-menu::before {
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+				opacity: .06;
+			}
+		}
+
+	}
+
+}
+
+.no-js:not(.is-amp) .sub-menu {
+	@include media( ( map_get( $breakpoint, $mobile_menu_breakpoint ), 'max-width' ) ) {
+		display: block;
+	}
+}

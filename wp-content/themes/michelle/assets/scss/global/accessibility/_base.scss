@@ -1,0 +1,21 @@
+/* FILE: global/accessibility/_base.scss */
+
+.site :focus {
+	outline-width: 2px;
+	outline-style: dashed;
+	outline-offset: 1px;
+	outline-color: currentColor;
+}
+
+.skip-link:focus {
+	outline-color: var( --color_button_background, #36b );
+}
+
+body:focus {
+	outline: none;
+}
+
+[name="top"] {
+	position: absolute;
+	top: -99em;
+}

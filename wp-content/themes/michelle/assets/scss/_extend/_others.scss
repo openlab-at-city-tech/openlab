@@ -1,0 +1,12 @@
+/* FILE: _extend/_others.scss */
+
+%clearfix {
+
+	&::after {
+		content: '';
+		clear: both;
+		display: table;
+		table-layout: fixed;
+	}
+
+}

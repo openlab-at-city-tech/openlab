@@ -1,0 +1,56 @@
+/* FILE: global/typography/_base.scss */
+
+html {
+	font-family: var(--typography_font_global);
+	font-size: var(--typography_font_size_base);
+	line-height: var(--typography_line_height);
+}
+
+.site-title {
+	font-family: var(--typography_font_site_title);
+}
+
+small {
+	font-size: var(--typography_font_size_s_em);
+}
+
+pre,
+code,
+kbd,
+tt,
+var {
+	font-family: var(--typography_font_monospace);
+	font-size: 1em;
+	font-style: normal;
+	font-weight: 400;
+	text-transform: none;
+	text-decoration: none;
+	letter-spacing: 0;
+}
+
+pre,
+pre code {
+	word-wrap: normal;
+	white-space: pre-wrap; // https://css-tricks.com/almanac/properties/w/whitespace
+	line-height: 1.5;
+}
+
+b,
+strong {
+	font-weight: 700;
+}
+
+address {
+	font-style: normal;
+}
+
+dfn,
+cite,
+em,
+i {
+	font-style: italic;
+}
+
+big {
+	font-size: 125%;
+}

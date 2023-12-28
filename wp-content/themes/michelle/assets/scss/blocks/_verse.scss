@@ -1,0 +1,10 @@
+/* FILE: blocks/_verse.scss */
+
+pre.wp-block-verse,
+.wp-block-verse pre {
+	padding: 0;
+	font-family: var(--typography_font_monospace);
+	font-size: inherit;
+	border: 0;
+	overflow: hidden;
+}

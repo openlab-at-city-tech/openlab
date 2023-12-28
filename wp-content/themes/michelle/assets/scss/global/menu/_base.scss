@@ -1,0 +1,15 @@
+/* FILE: global/menu/_base.scss */
+
+.menu {
+
+	a {
+		text-decoration: none;
+	}
+
+	&-item .hide-on-mobile {
+		@include media( ( map_get( $breakpoint, 'm' ), 'max-width' ) ) {
+			@include screen_reader( 'hide' );
+		}
+	}
+
+}

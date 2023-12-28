@@ -1,0 +1,160 @@
+/* FILE: global/form/_search-modal.scss */
+
+.modal-search {
+
+	&-container {
+
+		&.toggled {
+			position: fixed;
+			width: 100%;
+			height: 100vh;
+			left: 0; // No RTL needed here.
+			top: 0;
+			background: var(--color_search_background);
+			color: var(--color_search_text);
+			box-shadow: var(--drop_shadow);
+			z-index: 999; // Above mobile menu toggle button.
+
+			.admin-bar & {
+				@media screen and (min-width: 601px) and (max-width: #{ map_get( $breakpoint, 'xl' ) + px }) {
+					height: calc( 100vh - var(--wp-admin--admin-bar--height) );
+					top: var(--wp-admin--admin-bar--height);
+				}
+			}
+
+			.admin-bar.has-scrolled & {
+				// This is already treated in `.site-header` wrapper.
+				top: 0;
+			}
+
+			@include media( map_get( $breakpoint, 'xl' ) ) {
+				width: calc( 100% - 12vh );
+				height: calc( 100% - 12vh );
+
+				.site .site-header & {
+					margin: 6vh;
+				}
+
+				.admin-bar & {
+					height: calc( 100% - var(--wp-admin--admin-bar--height) - 12vh );
+					top: var(--wp-admin--admin-bar--height);
+				}
+
+			}
+
+			form {
+				position: absolute;
+				width: 32em;
+				max-width: 88vw;
+				left: 50%;
+				top: 50%;
+				transform: translateX(-50%) translateY(-50%);
+
+				@include media( map_get( $breakpoint, 'm' ) ) {
+					font-size: 1.5em;
+				}
+
+				@include media( map_get( $breakpoint, 'xl' ) ) {
+					font-size: 2em;
+				}
+
+				@include media( ( map_get( $breakpoint, 'l' ), 'max-width' ) ) {
+					flex-wrap: wrap;
+
+					input,
+					select,
+					button {
+						width: 100%;
+						margin: .25em 0;
+					}
+
+				}
+
+			}
+
+			~ .main-navigation { // Do not use `+` here as AMP adds additional tag in between search modal and navigation.
+				display: none;
+			}
+
+		}
+
+		[type="submit"] {
+			padding-left: math.div( 1.5em, $button_font_size );
+			padding-right: math.div( 1.5em, $button_font_size );
+			color: inherit;
+			border: 1px solid;
+
+			&,
+			&:hover,
+			&:focus,
+			&:active {
+				background: none;
+			}
+
+		}
+
+		.no-js:not(.is-amp) &,
+		&:not(.toggled) form,
+		&.toggled .modal-search-open,
+		&:not(.toggled) .modal-search-close {
+			display: none;
+		}
+
+	}
+
+	&-toggle {
+		padding: .5em 1em;
+		font-size: 1em;
+
+		@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+			padding-top: 6vh;
+			padding-bottom: 6vh;
+			line-height: 1.25;
+		}
+
+		body &,
+		&:hover,
+		&:focus,
+		&:active {
+			background: none;
+			color: inherit;
+			border: 0;
+			box-shadow: none;
+		}
+
+		.svg-icon {
+			width: auto;
+			height: $ratio + em;
+			vertical-align: middle;
+		}
+
+		.toggled & {
+			position: absolute;
+			width: 100%;
+			left: 0; // No RTL needed here.
+			top: 0;
+			padding: 1em;
+			z-index: 1;
+
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+				padding-top: 6vh;
+				padding-bottom: 6vh;
+			}
+
+			&,
+			&:hover,
+			&:focus,
+			&:active {
+				box-shadow: var(--drop_shadow);
+
+				@include media( map_get( $breakpoint, 'xl' ) ) {
+					box-shadow: none;
+				}
+
+			}
+
+		}
+
+	}
+
+}

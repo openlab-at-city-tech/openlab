@@ -1,0 +1,33 @@
+//
+// Math power function.
+//
+// @since    1.3.0
+// @version  1.5.0
+//
+// @param  float $number
+// @param  int   $exponent
+//
+@function _pow( $number, $exponent ) {
+
+	// Variables
+
+		$value: 1;
+
+
+	// Processing
+
+		@if $exponent > 0 {
+			@for $i from 1 through $exponent {
+				$value: $value * $number;
+			}
+		} @else if $exponent < 0 {
+			@for $i from 1 through -$exponent {
+				$value: math.div( $value, $number );
+			}
+		}
+
+
+	// Output
+
+		@return $value;
+}

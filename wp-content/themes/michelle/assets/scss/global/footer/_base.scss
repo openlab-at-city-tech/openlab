@@ -1,0 +1,20 @@
+/* FILE: global/footer/_base.scss */
+
+.site-footer {
+
+	@include media( map_get( $breakpoint, 'xl' ) ) {
+		font-size: var(--typography_size_footer);
+	}
+
+	&-section {
+		position: relative;
+		padding: 0 var(--body_padding);
+	}
+
+	&-content {
+		max-width: var(--max_width_footer_content);
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+}

@@ -1,0 +1,36 @@
+/* FILE: comments/_pagination.scss */
+
+.comment-navigation {
+	@extend %clearfix;
+	clear: both;
+	display: block;
+	position: relative;
+	padding: ( $ratio + em ) 0;
+	margin: 0;
+
+	&[aria-label] > h2.screen-reader-text {
+		display: none;
+	}
+
+	.comment-list + & {
+		padding: 0 0 ( $ratio * 2em );
+	}
+
+	a {
+		display: inline-block;
+		padding: ( $ratio_maj + em ) 1em;
+		line-height: normal;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	.nav-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+	}
+}

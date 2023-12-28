@@ -1,0 +1,30 @@
+/* FILE: blocks/_list.scss */
+
+ul,
+ol {
+
+	&.aligncenter {
+		margin-#{$left}: 0;
+		list-style: none;
+
+		li:not(:first-child) {
+			margin-top: .5em;
+		}
+
+	}
+
+	&.has-background.has-background {
+		padding-#{$left}: calc( #{$ratio + em} + var(--gap) );
+
+		@if not variable-exists( 'selector_editor_wrapper' ) {
+			margin-#{$left}: 0;
+		}
+
+		@include media( ( map_get( $breakpoint, 'm' ), 'max-width' ) ) {
+			padding-left: calc( #{$ratio + em} + var(--body_padding) );
+			padding-right: calc( #{$ratio + em} + var(--body_padding) );
+		}
+
+	}
+
+}

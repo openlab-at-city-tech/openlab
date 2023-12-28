@@ -1,0 +1,13 @@
+//
+// Gallery caption styles.
+//
+// @since  1.3.0
+//
+@mixin gallery_caption() {
+	padding: 4%;
+	font-size: var(--typography_font_size_s_em);
+	text-align: center;
+	background: rgba( #000, .66 );
+	color: #fff;
+	backdrop-filter: blur( 10px );
+}

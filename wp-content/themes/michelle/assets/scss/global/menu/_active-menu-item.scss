@@ -1,0 +1,10 @@
+/* FILE: global/menu/_active-menu-item.scss */
+
+.main-navigation {
+
+	.current-menu-item > a,
+	.current-menu-ancestor > a {
+		font-weight: 700;
+	}
+
+}

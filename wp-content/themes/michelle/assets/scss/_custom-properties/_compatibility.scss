@@ -1,0 +1,26 @@
+/* FILE: _custom-properties/_compatibility.scss */
+
+body {
+
+	// Plugin: Integration for WooCommerce.
+
+		--wcti--color--accent: var(--color_accent);
+		--wcti--color--accent-contrast: var(--color_body_background);
+
+		--wcti--font-size--heading--block--featured-product: var(--typography_font_size_xxl_em);
+		--wcti--font-size--heading--block--featured-category: var(--typography_font_size_xxl_em);
+		--wcti--font-size--heading--product-title: var(--typography_heading_size_2_em);
+		--wcti--font-size--heading--products-product: calc( var(--typography_heading_size_posts) * 1em );
+		--wcti--font-size--heading--uppercase: var(--typography_font_size_l_em);
+
+		--wcti--spacing--margin--page-header--bottom: 0;
+
+		--wcti--width--col-gap: #{ $ratio + rem };
+
+		@include media( map_get( $breakpoint, 'xl' ) ) {
+			--wcti--width--col--product-gallery: #{ percentage( $ratio_maj ) };
+			--wcti--width--col--product-summary: #{ percentage( $ratio_min ) };
+			--wcti--font-size--heading--block--featured-product: var(--typography_font_size_xxxl_em);
+			--wcti--font-size--heading--block--featured-category: var(--typography_font_size_xxxl_em);
+		}
+}

@@ -1,0 +1,20 @@
+//
+// Math round function.
+//
+// @since    1.3.0
+// @version  1.5.0
+//
+// @param  float $number
+// @param  int   $decimals
+//
+@function _round( $number, $decimals ) {
+
+	// Variables
+
+		$decimals: _pow( 10, $decimals );
+
+
+	// Output
+
+		@return math.div( round( $number * $decimals ), $decimals );
+}

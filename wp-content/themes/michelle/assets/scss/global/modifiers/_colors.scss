@@ -1,0 +1,122 @@
+/* FILE: global/modifiers/_colors.scss */
+
+// Color classes
+
+	$specificity : ':root [class]';
+
+	@if variable-exists( 'selector_editor_wrapper' ) {
+		$specificity : '[class]';
+	}
+
+	@each $option, $value in $customize_options {
+		@if str-index( #{ $option }, 'color_' ) or str-index( #{ $option }, 'palette_' ) {
+			$selector: _str_replace( 'color_', '', $option );
+			$selector: _str_replace( '_', '-', $selector );
+
+			#{ $specificity }.has-#{ $selector } {
+
+				&-color {
+
+					&,
+					&:hover,
+					&:focus,
+					&:active,
+					&:visited {
+						color: var(--#{ $option });
+					}
+
+				}
+
+				&-background-color {
+					background-color: var(--#{ $option });
+				}
+
+				&-border-color {
+					border-color: var(--#{ $option });
+				}
+			}
+		}
+	}
+
+	$white_text_bg: (
+		'black',
+	);
+	@each $color in $white_text_bg {
+		#{ $specificity }.has-#{ $color }-background-color:not(.has-text-color) {
+			color: #fff;
+		}
+	}
+
+	$black_text_bg: (
+		'white',
+	);
+	@each $color in $black_text_bg {
+		#{ $specificity }.has-#{ $color }-background-color:not(.has-text-color) {
+			color: #000;
+		}
+	}
+
+	.has-initial-border-color,
+	.has-current-border-color,
+	.has-currentColor-border-color {
+		border-color: currentColor;
+	}
+
+// Has background
+
+	$important_modifiers: _important( 'modifier_has_background' );
+
+	.has-background.has-background {
+		// Need to use absolute units due to possible
+		// custom font size set on the paragraph block.
+		padding: var(--gap) $important_modifiers;
+
+		@include media( ( map_get( $breakpoint, 'm' ), 'max-width' ) ) {
+			padding-left: var(--body_padding) $important_modifiers;
+			padding-right: var(--body_padding) $important_modifiers;
+		}
+
+	}
+
+	.has-background.alignwide,
+	.has-background.alignfull,
+	[data-align="wide"] > .has-background,
+	[data-align="full"] > .has-background {
+		padding: var(--block_padding) $important_modifiers;
+	}
+
+	.has-background.alignfull,
+	[data-align="full"] > .has-background {
+		padding-left: var(--body_padding) $important_modifiers;
+		padding-right: var(--body_padding) $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Has text color
+
+	.has-text-color {
+
+		h1, h2, h3, h4, h5, h6,
+		.h1, .h2, .h3, .h4, .h5, .h6 {
+			color: inherit;
+		}
+
+	}
+
+// Force link color inheritance
+
+	.has-text-color a {
+		color: inherit;
+	}
+
+	.link-color-inherit a,
+	.has-inherit-link-color a,
+	a.link-color-inherit
+	a.has-inherit-link-color {
+
+		.site & {
+			color: inherit;
+		}
+
+	}
