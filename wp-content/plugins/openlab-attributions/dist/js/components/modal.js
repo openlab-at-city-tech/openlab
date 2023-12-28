@@ -77,6 +77,18 @@ class AttributionModal extends Component {
 			if ( input ) {
 				input.focus();
 			}
+
+			// Prevent Block Editor's default up/down arrow key behavior.
+			const focusableElements = this.getFocusableElements();
+			focusableElements.forEach( ( element ) => {
+				element.addEventListener( 'keydown', ( event ) => {
+					if ( 40 !== event.keyCode && 38 !== event.keyCode ) {
+						return;
+					}
+
+					event.preventDefault();
+				} )
+			} )
 		}, 100 )
 	}
 
@@ -112,41 +124,69 @@ class AttributionModal extends Component {
 	}
 
 	handleKeyDown = ( event ) => {
-		// Handle Tab and Shift+Tab only.
-		if ( 9 !== event.keyCode ) {
+		const handledKeycodes = [ 9, 13 ];
+		if ( ! handledKeycodes.includes( event.keyCode ) ) {
 			return;
 		}
 
-		event.preventDefault();
-		event.stopPropagation();
-
-		const forwardOrBackward = event.shiftKey ? -1 : 1;
-
-		const previousFocusedElement = this.state.focusedElement;
-		if ( ! previousFocusedElement ) {
+		const isModal = event.target.closest( '.component-attributions-modal' );
+		if ( ! isModal ) {
 			return;
 		}
 
-		// Get a list of all focusable elements in the modal.
-		const inputs = this.getFocusableElements();
+		switch ( event.keyCode ) {
+			// Tab key.
+			case 9:
+				event.preventDefault();
+				event.stopPropagation();
 
-		// Get the index of the previously focused element.
-		const previousFocusedElementIndex = Array.prototype.indexOf.call( inputs, previousFocusedElement );
+				const forwardOrBackward = event.shiftKey ? -1 : 1;
 
-		// If not found, return.
-		if ( -1 === previousFocusedElementIndex ) {
-			return;
-		}
+				const previousFocusedElement = this.state.focusedElement;
+				if ( ! previousFocusedElement ) {
+					return;
+				}
 
-		// Set focus to the next element in the list. If we're at the end, loop around.
-		if ( 'undefined' === typeof inputs[ previousFocusedElementIndex + forwardOrBackward ] ) {
-			const loopedIndex = forwardOrBackward > 0 ? 0 : inputs.length - 1;
-			inputs[ loopedIndex ].focus();
-		} else {
-			const nextFocusedElement = inputs[ previousFocusedElementIndex + forwardOrBackward ];
-			if ( nextFocusedElement ) {
+				// Get a list of all focusable elements in the modal.
+				const inputs = this.getFocusableElements();
+
+				// Get the index of the previously focused element.
+				const previousFocusedElementIndex = Array.prototype.indexOf.call( inputs, previousFocusedElement );
+
+				// If not found, return.
+				if ( -1 === previousFocusedElementIndex ) {
+					return;
+				}
+
+				// Set focus to the next element in the list. If we're at the end, loop around.
+				let nextFocusedElement = null;
+				if ( 'undefined' === typeof inputs[ previousFocusedElementIndex + forwardOrBackward ] ) {
+					const loopedIndex = forwardOrBackward > 0 ? 0 : inputs.length - 1;
+					nextFocusedElement = inputs[ loopedIndex ];
+				} else {
+					nextFocusedElement = inputs[ previousFocusedElementIndex + forwardOrBackward ];
+				}
+
+				// If we are focused on a field inside of #adaptedFrom, remove the 'hidden' class from #adaptedFrom.
+				const adaptedFromEl = document.getElementById( 'adaptedFrom' );
+				if ( adaptedFromEl.contains( nextFocusedElement ) ) {
+					adaptedFromEl.classList.remove( 'hidden' );
+				}
+
 				nextFocusedElement.focus();
-			}
+
+			break;
+
+			// Enter.
+			case 13:
+				if ( 'BUTTON' === event.target.tagName ) {
+					return true;
+				}
+
+				event.preventDefault();
+				event.stopPropagation();
+
+			break;
 		}
 	}
 
@@ -286,6 +326,7 @@ class AttributionModal extends Component {
 				className={ 'component-attributions-modal' }
 				onRequestClose={ this.handleClose }
 				isOpen={ this.props.isOpen }
+				disableKeystroke={ true }
 			>
 				<div className="header">
 					<h3>{ title }</h3>
