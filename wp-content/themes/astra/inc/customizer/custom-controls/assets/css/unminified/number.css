@@ -1,0 +1,48 @@
+li[ID*="-image-custom-scale-width"], li[ID*="-image-custom-scale-height"] {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+li[ID*="-image-custom-scale-height"] {
+	float: none;
+    padding: 0 !important;
+    width: calc(50% + 12px);
+}
+li[ID*="-image-custom-scale-width"] {
+    width: calc(50% - 12px);
+}
+li[ID*="-image-custom-scale-height"]:before {
+    content: ':';
+    padding: 0 10px;
+	line-height: 30px;
+}
+li[ID*="-image-custom-scale-height"].customize-control-ast-hidden {
+    float: unset;
+    width: unset;
+}
+li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
+    content: unset;
+}
+
+/* Hide spin buttons for WebKit (Chrome, Safari) */
+.customize-control-ast-number input[type="number"]::-webkit-inner-spin-button,
+.customize-control-ast-number input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0; /* Adjust as needed */
+}
+
+/* Hide spin buttons for Firefox */`
+.customize-control-ast-number input[type="number"] {
+  -moz-appearance: textfield;
+  text-align: center;
+}
+
+/* Hide spin buttons for Edge & IE */
+.customize-control-ast-number input[type="number"]::-webkit-outer-spin-button,
+.customize-control-ast-number input[type="number"]::-webkit-inner-spin-button,
+.customize-control-ast-number input[type="number"]::-ms-clear,
+.customize-control-ast-number input[type="number"]::-ms-reveal {
+  display: none;
+}
