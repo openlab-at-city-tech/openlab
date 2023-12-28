@@ -1,0 +1,932 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AcademiaThemes: Bradbury\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-10 16:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/"
+
+#. %s theme name
+#: academia-admin/admin-notices/academiathemes-notice-welcome.php:62
+#, php-format
+msgid "%s Video Guide"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:170
+msgid "- show from all categories -"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:192
+msgid "1000+ Google Fonts"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:212
+msgid "12"
+msgstr ""
+
+#: functions.php:424
+#, php-format
+msgctxt "1: date, 2: time"
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:206
+#: academia-admin/widgets/recent-posts.php:190
+msgid "2"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:191
+msgid "3"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:192
+msgid "4"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:211
+msgid "6"
+msgstr ""
+
+#. Theme name and version
+#: academia-admin/academia-theme-settings.php:75
+#, php-format
+msgid ""
+"<span class=\"theme-name\">%1$s Lite Theme</span> <span class=\"theme-"
+"version\">(version %2$s)</span>"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:13
+msgid "Academia: Featured Pages"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:13
+msgid "Academia: Recent Posts"
+msgstr ""
+
+#. Author of the theme
+msgid "AcademiaThemes.com"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:84
+msgid "AcademiaThemes.com Logo"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:52
+msgid "Accent Color"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:63
+msgid "Accent Color (Meta)"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notices.php:69
+msgid "Action failed. Please refresh the page and retry."
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-review.php:74
+msgid "Add a Rating for Bradbury"
+msgstr ""
+
+#: 404.php:17
+msgid ""
+"Apologies, but the requested page cannot be found. Perhaps searching will "
+"help find a related page."
+msgstr ""
+
+#: search.php:22
+msgid "Apologies, but the search query did not return any results."
+msgstr ""
+
+#: customizer/sections/color-scheme.php:259
+#: customizer/sections/color-scheme.php:300
+#: customizer/sections/color-scheme.php:363
+msgid "Background"
+msgstr ""
+
+#: customizer/sections/background.php:14
+msgid "Background Color"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:19
+msgid "Body Text"
+msgstr ""
+
+#. Name of the theme
+#: academia-admin/admin-notices/academiathemes-notice-review.php:54
+#: academia-admin/admin-notices/academiathemes-notice-upgrade.php:56
+msgid "Bradbury"
+msgstr ""
+
+#. Description of the theme
+msgid ""
+"Bradbury is a fast, clean and mobile friendly (responsive) WordPress theme. "
+"It is WCAG 2.0 (Level AAA) compliant. It works well with page builders like "
+"Elementor, Beaver Builder, Visual Composer, Brizy, Divi, SiteOrigin, etc. "
+"Bradbury theme is best used to create a website for a school, university, "
+"kindergarten, church, museum, city hall, local government office, NGO, "
+"nonprofit or different education institutions. Other features include: "
+"Responsive Design; Mobile Menu; Blog ready; SEO code; Custom Widgets; Color "
+"Customization; Layout Settings; Translation Ready; Regular updates. Check "
+"out the theme's demo and video tutorial here: https://www.academiathemes."
+"com/free-wordpress-themes/bradbury-lite/"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:171
+#: academia-admin/admin-notices/academiathemes-notice-welcome.php:46
+msgid "Bradbury Lite"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:49
+msgid "Bradbury Lite Theme"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:172
+msgid "Bradbury PRO"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-upgrade.php:75
+msgid "Bradbury PRO Details"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:69
+msgid "Bradbury Theme Screenshot"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:115
+msgid "Bradbury Theme Video Tutorial"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-upgrade.php:75
+msgid "Bradbury vs Bradbury PRO Comparison"
+msgstr ""
+
+#: 404.php:24 search.php:24
+msgid "Browse Categories"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:168
+msgid "Category of posts"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:190
+msgid ""
+"Change the font and font size for the main elements on the website directly "
+"from the Customizer."
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notices.php:73
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:171
+#: academia-admin/widgets/featured-pages.php:190
+#: academia-admin/widgets/featured-pages.php:209
+#: academia-admin/widgets/featured-pages.php:228
+msgid "Choose page:"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:114
+msgid "Click the image below to open the video guide in a new browser tab."
+msgstr ""
+
+#: template-parts/mobile-menu.php:6
+msgid "Close Menu"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:185
+msgid "Color Customization"
+msgstr ""
+
+#: comments.php:53 comments.php:74
+msgid "Comment navigation"
+msgstr ""
+
+#: comments.php:90
+msgid "Comments are closed."
+msgstr ""
+
+#. 1: number of comments, 2: post title
+#: comments.php:37
+#, php-format
+msgctxt "comments title"
+msgid "%1$s Reply to &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s Replies to &ldquo;%2$s&rdquo;"
+msgstr[0] ""
+msgstr[1] ""
+
+#. %s: post title
+#: comments.php:33
+#, php-format
+msgctxt "comments title"
+msgid "One Reply to &ldquo;%s&rdquo;"
+msgstr ""
+
+#. %s: Link tittle attribute
+#: academia-admin/helper-functions.php:82
+#, php-format
+msgid "Continue Reading: %s"
+msgstr ""
+
+#: footer.php:44 customizer/sections/general.php:141
+msgid "Copyright &copy; "
+msgstr ""
+
+#. This is the copyright notice that appears in the footer of the website.
+#: customizer/helpers-defaults.php:58
+#, php-format
+msgid "Copyright &copy; %1$s %2$s."
+msgstr ""
+
+#: customizer/sections/general.php:145
+msgid "Copyright Text"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:205
+msgid "Custom Widgets"
+msgstr ""
+
+#. %1$s current user display name.
+#: academia-admin/admin-notices/academiathemes-notice-upgrade.php:64
+#, php-format
+msgid ""
+"Dear %1$s! I hope you are happy with everything that the %2$s has to offer. "
+"%3$sIf you like the free version of Bradbury Theme, you will love the PRO "
+"version. %3$s%4$s contains many improvements and features that were "
+"suggested by our users."
+msgstr ""
+
+#. %1$s current user display name.
+#: academia-admin/admin-notices/academiathemes-notice-review.php:62
+#, php-format
+msgid ""
+"Dear %1$s! We hope you are happy with everything that the %2$s has to offer. "
+"%3$sIf you can spare a moment, please consider adding a rating for %4$s on "
+"WordPress.org. %3$sIt helps us continue providing updates and support for "
+"this theme."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:215
+msgid "Demo Content Importer"
+msgstr ""
+
+#: customizer/sections/general.php:14
+msgid "Display"
+msgstr ""
+
+#: customizer/sections/general.php:156
+msgid "Display \"Theme by AcademiaThemes\""
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:263
+msgid "Display a Read More button"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:206
+msgid "Display date"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:202
+msgid "Display excerpt"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:248
+msgid "Display Featured Image"
+msgstr ""
+
+#: customizer/sections/general.php:53
+msgid "Display Featured Images in Posts and Pages"
+msgstr ""
+
+#: customizer/sections/general.php:64
+msgid "Display Featured Pages on Homepage"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:258
+msgid "Display Page Excerpt"
+msgstr ""
+
+#: customizer/sections/general.php:42
+msgid "Display the Dynamic Menu"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:198
+msgid "Display thumbnail"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:253
+msgid "Display Title"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:16
+msgid ""
+"Displays in a grid and links to multiple static pages. Best used in the "
+"'Homepage: Content Widgets' widgetized area."
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:16
+msgid "Displays the most recent blog posts, optionally filtered by category."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:94
+msgid "Documentation and Support"
+msgstr ""
+
+#: customizer/sections/general.php:15
+msgid "Don't display"
+msgstr ""
+
+#: functions.php:406 functions.php:434
+msgid "Edit"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:195
+msgid "Enable/disable the primary and secondary sidebars for the full website."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:200
+msgid ""
+"Enable/disable the primary and secondary sidebars separately for each page "
+"or post."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:170
+msgid "Feature"
+msgstr ""
+
+#: functions.php:113
+msgid "Featured Image: Page Thumbnail"
+msgstr ""
+
+#: functions.php:112
+msgid "Featured Image: Slideshow Size"
+msgstr ""
+
+#: functions.php:114
+msgid "Featured Image: Thumbnail"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:190
+msgid "Font Customization"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:290 customizer/sections/general.php:135
+msgid "Footer"
+msgstr ""
+
+#: academia-admin/sidebars.php:32
+msgid "Footer: Column 1"
+msgstr ""
+
+#: academia-admin/sidebars.php:41
+msgid "Footer: Column 2"
+msgstr ""
+
+#: academia-admin/sidebars.php:50
+msgid "Footer: Column 3"
+msgstr ""
+
+#: academia-admin/sidebars.php:59
+msgid "Footer: Column 4"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:353
+msgid "Footer: Copyright"
+msgstr ""
+
+#. Name of the template
+msgid "Full Width Page"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:207
+msgid "Gain access to one more custom widget: \"Call to Action\"."
+msgstr ""
+
+#: customizer/sections/color-scheme.php:9
+msgid "General"
+msgstr ""
+
+#: customizer/sections/general.php:20
+msgid "General Settings"
+msgstr ""
+
+#. %s theme name
+#: academia-admin/admin-notices/academiathemes-notice-welcome.php:58
+#, php-format
+msgid "Get started with %s"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:195
+msgid "Global Layout Settings"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:104
+msgid "Go to Bradbury Support Forum"
+msgstr ""
+
+#: customizer/sections/general.php:10
+msgid "Hidden"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-review.php:75
+msgid "Hide this notice"
+msgstr ""
+
+#: academia-admin/sidebars.php:22
+msgid "Homepage: Content Widgets"
+msgstr ""
+
+#. Name of the template
+msgid "Homepage: Only Widgets"
+msgstr ""
+
+#. Name of the template
+msgid "Homepage: Widgets + Page Content"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://www.academiathemes.com/"
+msgstr ""
+
+#. URI of the theme
+msgid "https://www.academiathemes.com/free-wordpress-themes/bradbury-lite/"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:145
+msgid ""
+"If you enjoy using Bradbury Theme, please leave a review for it on WordPress."
+"org. It helps us continue providing updates and support for it."
+msgstr ""
+
+#. Theme name and link to WordPress.org Support forum for the theme
+#: academia-admin/academia-theme-settings.php:162
+#, php-format
+msgid ""
+"If you like the free version of %1$s Theme, you will love the PRO version."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:215
+msgid "Import the demo content for an easier start with the theme."
+msgstr ""
+
+#: template-parts/content-home-featured.php:61
+msgid ""
+"Important: This message is NOT visible to site visitors, only to admins and "
+"editors."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:143
+msgid "Leave a Review"
+msgstr ""
+
+#: customizer/sections/general.php:8
+msgid "Left"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:333
+#: customizer/sections/color-scheme.php:385
+msgid "Link"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:220
+msgid "Link Border Color"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:30
+#: customizer/sections/color-scheme.php:230
+msgid "Link Color"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:240
+msgid "Link Color :hover"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:41
+msgid "Link Color on Hover"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:344
+#: customizer/sections/color-scheme.php:396
+msgid "Link on Hover"
+msgstr ""
+
+#: functions.php:382
+msgid "Logo for "
+msgstr ""
+
+#: functions.php:92
+msgid "Main Menu"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:82
+#: customizer/sections/color-scheme.php:270
+msgid "Menu Item"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:93
+#: customizer/sections/color-scheme.php:281
+msgid "Menu Item on Hover"
+msgstr ""
+
+#: functions.php:93 template-parts/mobile-menu.php:25
+#: customizer/sections/color-scheme.php:157
+msgid "Mobile Menu"
+msgstr ""
+
+#: 404.php:31 search.php:29
+msgid "Monthly Archives"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:57
+#: academia-admin/widgets/recent-posts.php:124
+msgid "More in "
+msgstr ""
+
+#: comments.php:57 comments.php:78
+msgid "Newer Comments"
+msgstr ""
+
+#: template-parts/content-home-featured.php:57
+msgid "No Featured Pages Found"
+msgstr ""
+
+#: customizer/helpers.php:140 customizer/helpers.php:190
+#: customizer/helpers.php:240
+msgid "None"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:221
+msgid "Nonpriority"
+msgstr ""
+
+#: academia-admin/widgets/recent-posts.php:188
+msgid "Number of posts to display"
+msgstr ""
+
+#: customizer/customizer.php:269
+msgid "Official Theme Page"
+msgstr ""
+
+#: comments.php:56 comments.php:77
+msgid "Older Comments"
+msgstr ""
+
+#: template-parts/mobile-menu.php:4
+msgid "Open Menu"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:210
+msgid "Open Menu Background"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:167
+msgid "Open Menu Button Background"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:178
+msgid "Open Menu Button Background :hover"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:189
+msgid "Open Menu Button Color"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:200
+msgid "Open Menu Button Color :hover"
+msgstr ""
+
+#. Name of the template
+msgid "Page Builder Template"
+msgstr ""
+
+#: 404.php:15
+msgid "Page not found"
+msgstr ""
+
+#: academia-admin/helper-functions.php:114
+msgid "Pages"
+msgstr ""
+
+#: loop.php:31
+#, php-format
+msgid "Permalink to %s"
+msgstr ""
+
+#: functions.php:406
+msgid "Pingback:"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:426
+msgid "Post Meta & Page Taglines"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:415
+msgid "Post/Page Title"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:405
+msgid "Posts and Pages"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:72
+msgid "Primary Menu"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:222
+msgid "Priority Support"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:222
+msgid "Quick and friendly support is available via email and Skype."
+msgstr ""
+
+#: customizer/customizer.php:281
+msgid "Rate Bradbury"
+msgstr ""
+
+#: academia-admin/helper-functions.php:82
+#: template-parts/content-home-featured.php:37
+msgid "Read More"
+msgstr ""
+
+#: index.php:30
+msgid "Recent Posts"
+msgstr ""
+
+#: academia-admin/sidebars.php:24
+msgid ""
+"Recommended widgets: [Academia: Recent Posts], [Academia: Featured Pages]"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:180
+msgid "Responsive Layout"
+msgstr ""
+
+#: customizer/sections/general.php:9
+msgid "Right"
+msgstr ""
+
+#: search.php:15
+msgid "Search Results for"
+msgstr ""
+
+#: functions.php:94 customizer/sections/color-scheme.php:249
+msgid "Secondary Menu"
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:169
+#: academia-admin/widgets/featured-pages.php:188
+#: academia-admin/widgets/featured-pages.php:207
+#: academia-admin/widgets/featured-pages.php:226
+msgid "Select page:"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:200
+msgid "Separate Layout Settings for each Page & Post"
+msgstr ""
+
+#: academia-admin/helper-functions.php:229
+msgid "Show sub menu"
+msgstr ""
+
+#: academia-admin/sidebars.php:13
+msgid "Sidebar"
+msgstr ""
+
+#: customizer/sections/general.php:30
+msgid "Sidebar Position"
+msgstr ""
+
+#: customizer/sections/background.php:10
+msgid "Site Background"
+msgstr ""
+
+#: header.php:17
+msgid "Skip to content"
+msgstr ""
+
+#: customizer/sections/general.php:75
+msgid "Slideshow: Featured Page #1"
+msgstr ""
+
+#: customizer/sections/general.php:88
+msgid "Slideshow: Featured Page #2"
+msgstr ""
+
+#: customizer/sections/general.php:100
+msgid "Slideshow: Featured Page #3"
+msgstr ""
+
+#: customizer/sections/general.php:112
+msgid "Slideshow: Featured Page #4"
+msgstr ""
+
+#: customizer/sections/general.php:124
+msgid "Slideshow: Featured Page #5"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:126
+msgid "Sub-Menu Item"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:104
+msgid "Sub-Menu Item Background"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:115
+msgid "Sub-Menu Item Background on Hover"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:148
+msgid "Sub-Menu Item Border Bottom"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:137
+msgid "Sub-Menu Item on Hover"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:134
+msgid "Subscribe"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:126
+msgid "Subscribe to our newsletter"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:220
+msgid "Support"
+msgstr ""
+
+#. Theme name and link to WordPress.org Support forum for the theme
+#: academia-admin/academia-theme-settings.php:99
+#, php-format
+msgid ""
+"Support for %1$s Theme is provided in the official WordPress.org community "
+"support forums. "
+msgstr ""
+
+#: customizer/customizer.php:277
+msgid "Support Forum"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:221
+msgid "Support is provided in the WordPress.org community forums."
+msgstr ""
+
+#: academia-admin/helper-functions.php:128
+msgid "Tags"
+msgstr ""
+
+#: customizer/sections/color-scheme.php:311
+#: customizer/sections/color-scheme.php:374
+msgid "Text"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-welcome.php:49
+msgid "Thank you for choosing Bradbury Lite Theme!"
+msgstr ""
+
+#: customizer/customizer.php:286
+msgid ""
+"The PRO version comes with additional custom widgets, templates, "
+"customization options and priority support!"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:101
+msgid ""
+"The usual response time is less than 45 minutes during regular work hours, "
+"Monday through Friday, 9:00am - 6:00pm (GMT+01:00). <br>Response time can be "
+"slower outside of these hours."
+msgstr ""
+
+#: footer.php:45
+msgid "Theme by"
+msgstr ""
+
+#: customizer/customizer.php:207
+msgid "Theme Colors"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:80
+msgid "Theme Demo"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:79
+msgid "Theme Details"
+msgstr ""
+
+#: customizer/customizer.php:273
+msgid "Theme Documentation"
+msgstr ""
+
+#: academia-admin/admin-notices/academiathemes-notice-review.php:76
+msgid "Theme Help"
+msgstr ""
+
+#: customizer/customizer.php:328
+msgid "Theme Help & Support"
+msgstr ""
+
+#: customizer/customizer.php:206
+msgid "Theme Settings"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:81
+#: academia-admin/academia-theme-settings.php:111
+msgid "Theme Video Tutorial"
+msgstr ""
+
+#: customizer/sections/general.php:76
+#, php-format
+msgid "This list is populated with <a href=\"%1$s\">Pages</a>."
+msgstr ""
+
+#: template-parts/content-home-featured.php:60
+msgid ""
+"This section will display your featured pages. Configure (or disable) it via "
+"the Customizer."
+msgstr ""
+
+#. %1$s: theme name, %2$s link
+#: academia-admin/admin-notices/academiathemes-notice-welcome.php:53
+#, php-format
+msgid ""
+"To take advantage of everything that this theme can offer, please take a "
+"look at the <a href=\"%2$s\">Get Started with %1$s</a> page."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:175
+msgid "Unlimited theme usage"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:166
+#: academia-admin/academia-theme-settings.php:225
+msgid "Upgrade to Bradbury PRO"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:157 customizer/customizer.php:285
+msgid "Upgrade to Bradbury Pro"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:166
+msgid "Video: Bradbury vs Bradbury Pro"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:104
+msgid "View Bradbury Documentation"
+msgstr ""
+
+#: customizer/customizer.php:287
+msgid "View Bradbury Pro"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:129
+msgid ""
+"We send out the newsletter once every few months. It contains information "
+"about our new themes and important theme updates."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:136
+msgid ""
+"We use Mailchimp as our marketing platform. By clicking above to subscribe, "
+"you acknowledge that your information will be transferred to Mailchimp for "
+"processing."
+msgstr ""
+
+#: academia-admin/widgets/featured-pages.php:150
+#: academia-admin/widgets/featured-pages.php:164
+#: academia-admin/widgets/recent-posts.php:153
+#: academia-admin/widgets/recent-posts.php:163
+#: customizer/sections/color-scheme.php:322
+msgid "Widget Title"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:210
+msgid "Widgetized Areas"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:147
+msgid "Write a Review for Bradbury"
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:175
+msgid ""
+"You can use the theme on any number of websites for as long as you wish."
+msgstr ""
+
+#: academia-admin/academia-theme-settings.php:164
+msgid ""
+"You will be able to create an even more unique website using the additional "
+"custom widgets, templates and customization options."
+msgstr ""
+
+#: functions.php:430
+msgid "Your comment is awaiting moderation."
+msgstr ""

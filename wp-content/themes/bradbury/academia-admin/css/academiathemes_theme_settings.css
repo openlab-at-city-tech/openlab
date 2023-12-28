@@ -1,0 +1,618 @@
+/**
+ * Widgets styles
+ */
+.academiathemes-h4 {
+	border-bottom: 1px solid #e5e5e5;
+	padding-bottom: 0.825em;
+	font-weight: 800;
+	margin-bottom: 0;
+}
+
+/**
+ * Widgets Page
+ */
+.widgets-php #widget-list div[id*=academiathemes-section-] {
+	display: none !important;
+}
+
+.academiathemes_widget_style .widget-top {
+	background-color: #f8e8b7;
+	border-color: #d9c483;
+}
+
+#available-widgets [class*=academiathemes] .widget-title:before{
+	background: transparent url('../../images/academia-icon-20.png') no-repeat top left;
+	content: '';
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+}
+
+.academiathemes_widget_style .widget-top .widget-title:before {
+	display: none !important;
+}
+
+#academia_dashboard_help_widget .inside a {
+	text-decoration: underline;
+}
+
+#academia_dashboard_help_widget h2 {
+	color: #E63946;
+}
+
+.ocdi__gl-item-image {
+	position: relative;
+}
+
+.ocdi__gl-item-image-container::after {
+	content: none;
+	display: none;
+}
+
+.academiathemes-wrapper {
+	font-size: 16px;
+	line-height: 1.6em;
+	margin: 30px 0; 
+	text-align: left; 
+	width: calc(100% - 15px);
+}
+
+.academiathemes-wrapper a,
+.academiathemes-wrapper li {
+	-webkit-transition-duration: 0.3s; -moz-transition-duration: 0.3s; transition-duration: 0.3s;	
+}
+
+.cleaner,
+.divider {
+	margin:0;
+	clear: both; 
+	font-size:1px; 
+	height: 1px;  
+	line-height: 1px; 
+}
+
+.divider {
+	border-top: solid 1px #f1f1f1;
+	margin: 15px 0;
+}
+
+/* Header */
+
+.academiathemes-header {
+	background: #fff;
+	margin: 0;
+	padding: 30px;
+	box-shadow: 1px 1px 12px rgba(0,0,0,0.06);
+	border: solid 1px #ddd;
+	border-radius: 3px;
+}
+
+#academiathemes-logo {
+	display: inline-block;
+	vertical-align: top;
+	text-align: right;
+	width: 20%;
+}
+
+#academiathemes-logo img,
+.video-preview {
+	max-width: 100%;
+	height: auto;
+}
+
+#academiathemes-theme-info {
+	display: inline-block;
+	margin: 0;
+	vertical-align: top;
+	width: 80%;
+}
+
+#academiathemes-theme-info p {
+	margin: 0;
+}
+
+#academiathemes-theme-info span.theme-name {
+	font-size: 30px;
+	font-weight: 600;
+}
+
+#academiathemes-theme-info span.theme-version {
+	font-size: 14px;
+}
+
+#academiathemes-theme-info .theme-buttons {
+	margin-top: 1.25rem;
+}
+
+#academiathemes-theme-info .theme-buttons .button {
+	margin-right: 4px;
+}
+
+/* Documentation Page */
+
+.academiathemes-documentation {
+	background-color: #fff;
+	box-shadow: 1px 1px 12px rgba(0,0,0,0.06);
+	border: solid 1px #ddd;
+	border-radius: 3px;
+	font-size: 16px;
+	line-height: 1.8em;
+	margin: 30px 0;
+	padding: 30px;
+}
+
+.academiathemes-documentation p {
+	font-size: inherit;
+	margin: 0 0 2em;
+}
+
+.academiathemes-documentation h2 {
+	font-size: 26px;
+	margin: 0 0 1.5em;
+}
+
+.academiathemes-documentation ul {
+	margin: 1rem 2em;
+}
+
+.academiathemes-documentation li {
+	list-style-position: inside;
+	list-style-type: square;
+}
+
+.academiathemes-documentation hr {
+	margin: 40px 0;
+}
+
+/*messages*/
+.error {color:#cc0000;}
+
+/* Documentation Columns */
+
+.academiathemes-theme-intro {
+	max-width: 700px;
+	margin: 0 auto 0 0;
+}
+
+.academiathemes-theme-intro p {
+	line-height: 2em;
+}
+
+.academiathemes-documentation .button {
+	font-size: 15px;
+	margin: 0 16px 0 0;
+}
+
+.theme-comparison-table .button {
+	margin-right: 0;
+}
+
+.academiathemes-documentation .doc-buttons .button {
+	margin: 6px 16px 6px 0;
+}
+
+.academiathemes-documentation h3 {
+	font-size: 18px;
+	line-height: 1.5em;
+	margin: 0;
+}
+
+.academiathemes-documentation .academiathemes-doc-columns {
+	margin: 0;
+	padding: 0;
+}
+
+.academiathemes-documentation .academiathemes-doc-columns .academiathemes-doc-column {
+	display: inline-block;
+	margin: 0 40px 0 0;
+	vertical-align: top;
+	width: calc(50% - 20px);
+}
+
+.academiathemes-documentation .academiathemes-doc-columns .academiathemes-doc-column-2 {
+	margin-right: 0;
+}
+
+.academiathemes-documentation .column-title {
+	margin-bottom: 30px;
+}
+
+.academiathemes-documentation .doc-section {
+	background-color: #fff;
+	border: solid 1px #eee;
+	margin: 0 0 30px;
+	padding: 30px;
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	transition: all 0.15s ease-in-out;
+}
+
+.academiathemes-documentation .doc-section:hover,
+.academiathemes-documentation .doc-section:focus {
+	background-color: #f0f4f8;
+	border-color: #e1e8ee;
+}
+
+.academiathemes-documentation .academiathemes-doc-column-text-wrapper {
+	font-size: 16px;
+	line-height: 1.8em;
+}
+
+.academiathemes-documentation .academiathemes-doc-column-text-wrapper p {
+	margin: 0;
+}
+
+.academiathemes-documentation .academiathemes-doc-column-text-wrapper p + p {
+	margin-top: 2em;
+}
+
+.academiathemes-documentation .button-donate {
+	background-color: #22b366;
+	border-color: #169954;
+	box-shadow: 0 1px 0 #169954;
+	text-shadow: 0 -1px 1px #169954, 1px 0 1px #169954, 0 1px 1px #169954, -1px 0 1px #169954;
+}
+
+.academiathemes-documentation .button-donate:hover,
+.academiathemes-documentation .button-donate:focus {
+	background-color: #169954;
+}
+
+.academiathemes-icon {
+	display: inline-block;
+	font-size: 22px;
+	line-height: 1.3;
+	margin-right: 8px;
+	width: auto;
+}
+
+.academiathemes-title-text {
+	display: inline-block;
+}
+
+.academiathemes-button-youtube {
+	background: #cc0000 !important;
+	border-color: #cc0000 !important;
+}
+
+.academiathemes-button-youtube:hover,
+.academiathemes-button-youtube:focus {
+	background: #aa0000 !important;
+	border-color: #aa0000 !important;
+}
+
+.academiathemes-button .dashicons {
+	line-height: 1.4em;
+	height: auto;
+	width: auto;
+}
+
+.doc-section .academiathemes-button .dashicons {
+	margin-top: 3px;
+}
+
+/* Admin Notices */
+
+.academiathemes-message-content {
+	padding: 20px 10px;
+}
+
+.academiathemes-message-image {
+	display: inline-block;
+	margin-right: 30px;
+	vertical-align: top;
+	width: 140px;
+	outline: 1px solid rgba(0,0,0,.12);
+	outline-offset: -1px;
+	box-shadow: 2px 2px 6px rgba(0,0,0,.05);
+}
+
+.academiathemes-message-image .academiathemes-screenshot {
+	height: auto;
+	width: 100%;
+}
+
+.academiathemes-header .academiathemes-message-image {
+	float: left;
+}
+
+.academiathemes-message-text {
+	display: inline-block;
+	font-size: 14px;
+	max-width: 800px;
+	vertical-align: middle;
+	width: calc(100% - 170px);
+}
+
+.academiathemes-message-text .academiathemes-message-heading {
+	margin-top: 0;
+}
+
+.academiathemes-message-text .notice-buttons {
+	margin-bottom: 0;
+}
+
+.academiathemes-message-text p {
+	font-size: 14px;
+	margin: 1em 0;
+}
+
+.academiathemes-message-text p:first-of-type {
+	margin-top: 0;
+}
+
+.academiathemes-message-text p a.button {
+	margin-right: 8px;
+}
+
+.academiathemes-notice {
+	position: relative;
+}
+
+.academiathemes-notice .notice-dismiss {
+	text-decoration: none;
+}
+
+.theme-comparison-table {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-collapse: collapse;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 16px;
+    margin: 30px 0 0;
+    table-layout: fixed; 
+    width: 100%;
+}
+
+.theme-comparison-table th {
+    background: #333;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: normal;
+    padding: 10px 20px;
+}
+
+.theme-comparison-table th:first-child {
+    background: #444;
+}
+
+.theme-comparison-table th:last-child {
+    background: #222;
+}
+
+.theme-comparison-table tr:nth-child(2n) {
+    background-color: #f2f5f5;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.theme-comparison-table td {
+    line-height: 1.4;
+    padding: 12px 15px;
+    vertical-align: middle;
+    width: 33.333333%;
+}
+
+.theme-comparison-table .dashicons {
+    font-size: 20px;
+}
+
+.theme-comparison-table .dashicons-minus {
+    color: #333;
+}
+
+.theme-comparison-table .dashicons-yes-alt {
+    color: #157f1f;
+}
+
+/* Post Options Box */
+
+#academiathemes_post_options_metabox .hndle {
+	background-color: #A5243D;
+	color: #fff;
+ }
+
+ #academiathemes_post_options_metabox .handlediv .toggle-indicator {
+ 	color: #fff;
+ }
+
+  #academiathemes_post_options_metabox .academiathemes-admin-options-section-title {
+	background-color: #23282d;
+	color: #fff;
+	line-height: 1.4em;
+	margin: -16px -16px 0;
+	padding: 8px 15px;
+	text-align: left;
+	text-transform: uppercase;
+}
+
+#academiathemes_post_options_metabox .academiathemes-admin-section {
+	border: solid 1px #ddd;
+	margin: -1px 0 0;
+	padding: 15px;
+}
+
+#academiathemes_post_options_metabox .academiathemes-admin-section:first-of-type {
+	margin-top: 15px;
+}
+
+.academiathemes-admin-section .academiathemes-admin-options-item {
+	border-bottom: solid 1px #ddd;
+	margin: 12px 0;
+	padding-bottom: 10px;
+}
+
+.academiathemes-admin-section .academiathemes-admin-options-item:last-of-type {
+	border-bottom-width: 0;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.reveal-options-block {
+	display: none;
+	margin-top: 0.75rem;
+}
+
+input[type="checkbox"]:checked ~ .reveal-options-block {
+	display: block;
+}
+
+#academiathemes_post_options_metabox p {
+	line-height: 1.3em;
+}
+
+#academiathemes_post_options_metabox label + label {
+	margin-top: 10px;
+}
+
+.academiathemes-admin-options-span-wrap {
+	display: block;
+	transition: all 0.08s ease-in-out;
+}
+
+input[type="checkbox"] + .academiathemes-admin-options-span-wrap {
+	display: inline-block;
+}
+
+.academiathemes-admin-options-span-headline {
+	display: inline-block;
+}
+
+input[type=checkbox]:checked + .academiathemes-admin-options-span-wrap,
+input[type=checkbox]:checked + .academiathemes-admin-options-span-headline {
+	color: #111;
+	font-weight: bold;
+}
+
+.academiathemes-admin-options-span-description {
+	color: #666;
+	display: block;
+	font-style: italic;
+	font-weight: normal;
+	margin: 10px 0 0;
+}
+
+.academiathemes-admin-section select,
+.academiathemes-admin-section input[type="text"] {
+	margin-top: 10px;
+}
+
+.academiathemes-importer-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px 0 0;
+}
+
+.academiathemes-importer-table td {
+    font-size: 13px;
+    padding: 8px 0;
+    border: 1px solid #eee;
+    overflow: hidden;
+    word-break: normal;
+}
+
+table.academiathemes-importer-table tr:nth-child(2n) td,
+table.academiathemes-importer-table tr:nth-child(2n) th {
+    background: #fcfcfc;
+}
+
+.academiathemes-importer-table th {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 0;
+    border: 1px solid #eee;
+    overflow: hidden;
+    word-break: normal;
+    text-align: left;
+}
+
+.academiathemes-importer-table .td-value {
+    text-align: center;
+    vertical-align: top
+}
+
+.academiathemes-importer-table .td-title {
+    vertical-align: top;
+    padding-left: 10px;
+}
+
+.academiathemes-importer-table .td-value strong.good {
+    color: #090;
+}
+
+.academiathemes-importer-table .td-value strong.bad {
+    color: #c00;
+}
+
+/* Tooltips */
+
+/* Tooltip container */
+.academia-tooltip {
+	border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+	display: inline-block;
+	margin: 0 6px 0 0;
+	position: relative;
+}
+
+/* Tooltip text */
+.academia-tooltip .academia-tooltiptext {
+	background-color: #222;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 1rem;
+	line-height: 1.3;
+	padding: 12px 10px;
+	text-align: left;
+	visibility: hidden;
+	width: 240px;
+
+	position: absolute;
+	z-index: 1;
+	bottom: 32px;
+	left: 0;
+	margin-left: -125px;
+
+	opacity: 0;
+	transition: opacity 0.3s;
+	box-shadow: 1px 1px 12px rgba(0,0,0,0.06);
+}
+
+/* Tooltip arrow */
+.academia-tooltip .academia-tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -3px;
+	border-width: 8px;
+	border-style: solid;
+	border-color: #222 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.academia-tooltip:hover .academia-tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
+@media screen and (max-width: 1200px) {
+
+	.academiathemes-documentation {
+		padding: 40px 30px 20px;
+	}
+
+	.academiathemes-documentation .academiathemes-doc-columns .academiathemes-doc-column {
+		display: block;
+		margin: 0 0 40px 0;
+		width: 100%;
+	}
+
+	.academiathemes-documentation .academiathemes-doc-columns .academiathemes-doc-column:last-of-type {
+		margin-bottom: 0;
+	}
+
+	.academiathemes-wrapper {
+		margin-bottom: 0;
+	}
+
+}
