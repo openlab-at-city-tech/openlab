@@ -8140,12 +8140,12 @@ a.disabled-link {
 }
 .register-avatar-upload .drag-drop {
   margin: 1em 0;
-  padding: 32px 16px;
   border: 1px dashed #dddddd;
 }
 .register-avatar-upload .drag-drop-inside {
   display: flex;
   gap: 10px;
+  padding: 32px 16px;
   justify-content: center;
   align-items: center;
 }
