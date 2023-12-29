@@ -1,0 +1,93 @@
+/**
+ * Basic styling for admin
+ * This file is part of the Name Directory plugin for WordPress
+ */
+table.name_directory_names td {
+    border-bottom: 1px solid #F0F0F0;
+}
+
+table.name-directory td.post-title.page-title.column-title {
+    padding-left: 0;
+}
+
+table.name-directory td.post-title.page-title.column-title strong span {
+    font-weight: normal;
+}
+
+.name_directory_export p {
+    line-height: 2.5;
+}
+
+.name_directory_embed_code {
+    display: none;
+}
+
+.name_directory_embed_code input {
+    text-align: center;
+    padding: 8px 5px;
+}
+
+.name_directory_widest {
+    width: 100%;
+}
+
+.toggle_published:hover {
+    cursor: pointer;
+}
+
+
+
+
+/* Toggle switch */
+.name_directory_switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 26px;
+}
+
+.name_directory_switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.name_directory_slider {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 25px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.name_directory_slider:before {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .name_directory_slider {
+    background-color: #2271b1;
+}
+
+input:focus + .name_directory_slider {
+    box-shadow: 0 0 1px #2271b1;
+}
+
+input:checked + .name_directory_slider:before {
+    -webkit-transform: translateX(19px);
+    -ms-transform: translateX(19px);
+    transform: translateX(19px);
+}

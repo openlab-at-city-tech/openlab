@@ -1,0 +1,104 @@
+/**
+ * Basic styling for directories
+ * This file is part of the Name Directory plugin for WordPress
+ */
+.name_directory_column_clear {
+    clear: both;
+}
+.name_directory_column {
+    padding-left: 0.3%;
+}
+.name_directory_startswith {
+    padding: 0 2px;
+}
+.name_directory_column.name_directory_nr2 {
+    width: 49%;
+    float: left;
+    display: inline-block;
+}
+.name_directory_column.name_directory_nr3 {
+    width: 33%;
+    float: left;
+    display: inline-block;
+}
+.name_directory_column.name_directory_nr4 {
+    width: 24%;
+    float: left;
+    display: inline-block;
+}
+.name_directory_form_result {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #D8D8D8;
+    text-align: center;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    display: none;
+}
+
+.name_directory_form_result.form-result-success {
+    background-color: rgb(236, 255, 216);
+    display: block;
+    color: green;
+}
+
+.name_directory_form_result.form-result-error {
+    background-color: rgb(255, 249, 242);
+    display: block;
+    color: rgb(211, 0, 0);
+}
+
+.name_directory_character_header {
+    font-size: x-large;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
+/**
+ * Read-more buttons without Javascript
+ * Credits: https://codepen.io/Idered/pen/AeBgF
+ */
+.name_directory_readmore_state {
+    display: none;
+}
+
+.name_directory_readmore_target {
+    opacity: 0;
+    max-height: 0;
+    font-size: 0;
+    transition: .25s ease;
+}
+
+.name_directory_readmore_target img {
+    display: none;
+}
+
+.name_directory_readmore_state:checked ~ .name_directory_readmore_wrap .name_directory_readmore_target {
+    opacity: 1;
+    font-size: inherit;
+    max-height: 999em;
+}
+
+.name_directory_readmore_state:checked ~ .name_directory_readmore_wrap .name_directory_readmore_target img {
+    display: block;
+}
+
+.name_directory_readmore_state ~ .name_directory_readmore_trigger:before {
+    content: 'Show more';
+}
+
+.name_directory_readmore_state:checked ~ .name_directory_readmore_trigger:before {
+    content: 'Show less';
+}
+
+.name_directory_readmore_trigger {
+    cursor: pointer;
+    display: inline-block;
+    color: #666;
+    font-size: .9em;
+    font-weight: normal;
+    font-style: italic;
+}
