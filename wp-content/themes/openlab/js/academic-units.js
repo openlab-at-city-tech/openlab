@@ -29,12 +29,23 @@ openlab.academicUnits = (function($){
                 selectedUnitSlugs.push( v.value );
             } );
 
-            au.academicUnits.removeClass( 'academic-unit-visible' ).addClass( 'academic-unit-hidden' );
+            au
+							.academicUnits
+							.removeClass( 'academic-unit-visible' )
+							.addClass( 'academic-unit-hidden' )
+							.attr( 'aria-hidden', 'true' )
+							.find( '.academic-unit-checkbox' ).attr( 'aria-hidden', 'true' );
+
             au.academicUnitCheckboxes.each( function( k, v ) {
                 // Items without parents or with unchecked parents should be shown.
                 var hasParent = v.dataset.hasOwnProperty( 'parent' ) && v.dataset.parent.length > 0;
                 if ( ! hasParent || -1 !== selectedUnitSlugs.indexOf( v.dataset.parent ) ) {
-                    $( v ).closest( '.academic-unit' ).removeClass( 'academic-unit-hidden' ).addClass( 'academic-unit-visible' );
+                    $( v )
+											.closest( '.academic-unit' )
+											.removeClass( 'academic-unit-hidden' )
+											.addClass( 'academic-unit-visible' )
+											.attr( 'aria-hidden', 'false' )
+											.find( '.academic-unit-checkbox' ).attr( 'aria-hidden', 'false' );
                 } else {
                     // Hidden fields can't be checked.
                     $( v ).prop( 'checked', false );

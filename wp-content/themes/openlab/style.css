@@ -10279,6 +10279,7 @@ input#group-request-send {
 }
 .academic-unit-hidden {
   display: none;
+  visibility: hidden;
 }
 .openlab-academic-units-select2-container .select2-results__option[aria-disabled=true] {
   display: none;
