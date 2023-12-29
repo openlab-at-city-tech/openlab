@@ -1,0 +1,56 @@
+
+/*Progress Bar CSS*/
+
+.admin-bar .progress-container-top {
+  position: fixed;
+  top: 30px;
+  z-index: 100;
+  width: 100%;
+
+  
+}
+
+/*Progress Bar CSS*/
+
+.progress-container-top {
+  position: fixed;
+  top: 0px;
+  z-index: 100;
+  width: 100%;
+  height: 10px;
+  background: unset;
+}
+
+.progress-container-bottom {
+  position: fixed;
+  bottom: 0px;
+  z-index: 100;
+  width: 100%;
+  height: 10px;
+  background: unset;
+}
+
+.progress-bar {
+  height: 8px;
+  background: unset;
+  width: 0%;
+  z-index: 200;
+}
+
+/*Reading time Display CSS*/
+.bsf-rt-show-readtime-label {
+  min-width: 200px;
+  display: inline-block;
+}
+
+.bsf-rt-display-label:after {
+  content: attr(prefix);
+}
+
+.bsf-rt-display-time:after {
+  content: attr(reading_time);
+}
+
+.bsf-rt-display-postfix:after {
+  content: attr(postfix);
+}
