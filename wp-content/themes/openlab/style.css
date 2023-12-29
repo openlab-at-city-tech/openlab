@@ -8164,6 +8164,10 @@ a.disabled-link {
 .register-avatar-upload .drag-drop-holder {
   margin: 1em 0;
 }
+.register-avatar-upload .bp-avatar-upload-status {
+  display: flex;
+  gap: 10px;
+}
 .register-avatar-upload .avatar-preview-outside-wrap {
   background: #dddddd;
   padding: 20px;

@@ -38,6 +38,8 @@
 		<div class="bp-progress">
 			<div class="bp-bar"></div>
 		</div>
-		<div class="filename">{{data.filename}}</div>
+		<div class="bp-avatar-upload-status">
+			<div class="uploading-label">Uploading:</div> <div class="filename">{{data.filename}}</div>
+		</div>
 	</div>
 </script>
