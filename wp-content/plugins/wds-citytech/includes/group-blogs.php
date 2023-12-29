@@ -2310,12 +2310,6 @@ function openlab_post_visibility_access_control() {
 		return;
 	}
 
-	// Do nothing if the site is not public, since visibility is controlled by site access.
-	$blog_public = (int) get_option( 'blog_public' );
-	if ( $blog_public < 0 ) {
-		return;
-	}
-
 	$post_visibility = get_post_meta( $queried_object->ID, 'openlab_post_visibility', true );
 
 	// Logged-in members only.
@@ -2391,13 +2385,6 @@ function openlab_get_invisible_post_ids() {
 		// If there's no associated group ID, there's no visibility settings.
 		$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		if ( ! $current_site_group_id ) {
-			$post_ids = [];
-			return $post_ids;
-		}
-
-		// Do nothing if the site is not public, since visibility is controlled by site access.
-		$blog_public = (int) get_option( 'blog_public' );
-		if ( $blog_public < 0 ) {
 			$post_ids = [];
 			return $post_ids;
 		}
