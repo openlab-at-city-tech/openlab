@@ -8137,6 +8137,7 @@ a.disabled-link {
 /** Avatar upload */
 .register-avatar-upload {
   padding: 1em 0;
+  margin-bottom: 1em;
 }
 .register-avatar-upload .drag-drop {
   margin: 1em 0;
