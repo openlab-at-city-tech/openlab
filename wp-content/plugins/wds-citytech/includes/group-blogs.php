@@ -2376,23 +2376,28 @@ add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
 /**
  * Gets a list of post IDs that are not visible to the current user.
  *
+ * @param int $blog_id Blog ID. Defaults to current blog.
  * @return array
  */
-function openlab_get_invisible_post_ids() {
-	static $post_ids = null;
+function openlab_get_invisible_post_ids( $blog_id = null ) {
+	static $post_ids = [];
 
-	if ( null === $post_ids ) {
+	if ( null === $blog_id ) {
+		$blog_id = get_current_blog_id();
+	}
+
+	if ( ! isset( $post_ids[ $blog_id ] ) ) {
 		// If there's no associated group ID, there's no visibility settings.
-		$current_site_group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$current_site_group_id = openlab_get_group_id_by_blog_id( $blog_id );
 		if ( ! $current_site_group_id ) {
-			$post_ids = [];
-			return $post_ids;
+			$post_ids[ $blog_id ] = [];
+			return $post_ids[ $blog_id ];
 		}
 
 		// If the user is a super admin or a group member, allow access to all posts.
 		if ( is_super_admin() || groups_is_user_member( get_current_user_id(), $current_site_group_id ) ) {
-			$post_ids = [];
-			return $post_ids;
+			$post_ids[ $blog_id ] = [];
+			return $post_ids[ $blog_id ];
 		}
 
 		// If we've gotten here, the current user is not a group member.
@@ -2402,8 +2407,14 @@ function openlab_get_invisible_post_ids() {
 			$invisible_settings[] = 'members-only';
 		}
 
+		$switched = false;
+		if ( $blog_id !== get_current_blog_id() ) {
+			switch_to_blog( $blog_id );
+			$switched = true;
+		}
+
 		remove_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
-		$post_ids = get_posts(
+		$post_ids[ $blog_id ] = get_posts(
 			[
 				'post_type'   => 'any',
 				'post_status' => 'any',
@@ -2417,7 +2428,11 @@ function openlab_get_invisible_post_ids() {
 			]
 		);
 		add_action( 'pre_get_posts', 'openlab_post_visibility_query_filter' );
+
+		if ( $switched ) {
+			restore_current_blog();
+		}
 	}
 
-	return $post_ids;
+	return $post_ids[ $blog_id ];
 }

@@ -1464,8 +1464,10 @@ function openlab_show_site_posts_and_comments() {
         case 'local':
 			if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
 				$group_private_members = [];
+				$post__not_in          = [];
 			} else {
 				$group_private_members = openlab_get_private_members_of_group( $group_id );
+				$post__not_in          = openlab_get_invisible_post_ids( $site_id );
 			}
 
 			// Don't show posts from users with hidden memberships.
@@ -1476,6 +1478,7 @@ function openlab_show_site_posts_and_comments() {
 				[
 					'posts_per_page' => 3,
 					'author__not_in' => $group_private_members,
+					'post__not_in'   => $post__not_in,
 				]
 			);
 
