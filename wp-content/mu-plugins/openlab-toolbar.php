@@ -1363,6 +1363,11 @@ HTML;
 				continue;
 			}
 
+			// Skip 'attachment', as it's added separately.
+			if ( 'attachment' === $cpt->name ) {
+				continue;
+			}
+
 			$key             = 'post-new.php?post_type=' . $cpt->name;
 			$actions[ $key ] = array( $cpt->labels->name_admin_bar, 'new-' . $cpt->name );
 		}
