@@ -24,10 +24,12 @@ const PostSharingOptions = ({}) => {
 		}
 	} )
 
+	const publicOverrideString = 'This will override the Public visibility setting above.'
+
 	return (
 		<PluginDocumentSettingPanel
 			name="post-sharing-options"
-			title="Visibility Options"
+			title="More visibility options"
 			className="post-sharing-options"
 		>
 			<fieldset className="editor-post-visibility__fieldset">
@@ -35,13 +37,13 @@ const PostSharingOptions = ({}) => {
 					Sharing
 				</VisuallyHidden>
 
-				<p>{ 'Control the visibility of this post.' }</p>
+				<p>{ 'Control who can see this post.' }</p>
 
 				<PostSharingChoice
 					instanceId="post-sharing-options"
 					value="group-members-only"
-					label={ currentGroupTypeSiteLabel }
-					info={ shareOnlyWithGroup }
+					label="Site Members"
+					info={ shareOnlyWithGroup + ' ' + publicOverrideString }
 					onChange={ ( event ) => onChange( event.target.value ) }
 					checked={ postVisibility === 'group-members-only' }
 				/>
@@ -50,7 +52,7 @@ const PostSharingOptions = ({}) => {
 					instanceId="post-sharing-options"
 					value="members-only"
 					label="OpenLab members only"
-					info="Share only with logged in members of the OpenLab."
+					info={ 'Only logged-in OpenLab members can see this post. ' + publicOverrideString }
 					onChange={ ( event ) => onChange( event.target.value ) }
 					checked={	postVisibility === 'members-only' }
 				/>
@@ -59,7 +61,7 @@ const PostSharingOptions = ({}) => {
 					instanceId="post-sharing-options"
 					value="default"
 					label="Public"
-					info="Share according to site visibility settings."
+					info="Everyone who can view this site can see this post."
 					onChange={ ( event ) => onChange( event.target.value ) }
 					checked={ postVisibility === 'default' }
 				/>

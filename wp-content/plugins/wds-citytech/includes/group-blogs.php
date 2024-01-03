@@ -2291,7 +2291,7 @@ function openlab_add_post_visibility_script_data() {
 			[
 				'currentGroupTypeLabel'     => $group_type_label,
 				'currentGroupTypeSiteLabel' => sprintf( '%s Site', $group_type_label ),
-				'shareOnlyWithGroup'        => sprintf( 'Share only with members of this %s Site.', $group_type_label ),
+				'shareOnlyWithGroup'        => sprintf( 'Only logged-in members of this %s can see this post.', $group_type_label ),
 				'siteIsPublic'              => $blog_public >= 0,
 			]
 		) . ';',
