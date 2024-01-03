@@ -51,33 +51,34 @@ const PostSharingOptions = ({}) => {
       postVisibility: postMeta['openlab_post_visibility'] || 'default'
     };
   });
+  const publicOverrideString = 'This will override the Public visibility setting above.';
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__.PluginDocumentSettingPanel, {
     name: "post-sharing-options",
-    title: "Visibility Options",
+    title: "More visibility options",
     className: "post-sharing-options"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", {
     className: "editor-post-visibility__fieldset"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.VisuallyHidden, {
     as: "legend"
-  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Control the visibility of this post.'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Control who can see this post.'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
     instanceId: "post-sharing-options",
     value: "group-members-only",
-    label: currentGroupTypeSiteLabel,
-    info: shareOnlyWithGroup,
+    label: "Site Members",
+    info: shareOnlyWithGroup + ' ' + publicOverrideString,
     onChange: event => onChange(event.target.value),
     checked: postVisibility === 'group-members-only'
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
     instanceId: "post-sharing-options",
     value: "members-only",
     label: "OpenLab members only",
-    info: "Share only with logged in members of the OpenLab.",
+    info: 'Only logged-in OpenLab members can see this post. ' + publicOverrideString,
     onChange: event => onChange(event.target.value),
     checked: postVisibility === 'members-only'
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
     instanceId: "post-sharing-options",
     value: "default",
     label: "Public",
-    info: "Share according to site visibility settings.",
+    info: "Everyone who can view this site can see this post.",
     onChange: event => onChange(event.target.value),
     checked: postVisibility === 'default'
   })));
