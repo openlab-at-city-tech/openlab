@@ -872,19 +872,23 @@ function openlab_render_message() {
 function openlab_group_profile_activity_list() {
     global $wpdb, $bp;
 
-	$recent_announcements = get_posts(
-		[
-			'post_type'      => 'openlab_announcement',
-			'post_status'    => 'publish',
-			'posts_per_page' => 3,
-			'meta_query'     => [
-				[
-					'key'   => 'openlab_announcement_group_id',
-					'value' => bp_get_current_group_id(),
-				]
-			],
-		]
-	);
+	if ( openlab_is_announcements_enabled_for_group( bp_get_current_group_id() ) ) {
+		$recent_announcements = get_posts(
+			[
+				'post_type'      => 'openlab_announcement',
+				'post_status'    => 'publish',
+				'posts_per_page' => 3,
+				'meta_query'     => [
+					[
+						'key'   => 'openlab_announcement_group_id',
+						'value' => bp_get_current_group_id(),
+					]
+				],
+			]
+		);
+	} else {
+		$recent_announcements = [];
+	}
 
     ?>
     <div id="single-course-body">
