@@ -260,6 +260,7 @@
 							$emaillabel.html(message);
 							$emaillabel.fadeIn();
 						});
+						$( '#register-avatar-upload' ).show();
 					} else {
 						$emaillabel.fadeOut();
 
@@ -473,6 +474,11 @@
 							updateSubmitButtonStatus();
 							openlab.academicUnits.init();
 							initAvatarFields();
+
+							// If this is an Account Type other than 'Non-City Tech', show account fields.
+							if ( 'non-city-tech' !== selected_account_type ) {
+								$( '#register-avatar-upload' ).show();
+							}
 						}
 					}
 				});
@@ -513,24 +519,33 @@
 		function initAvatarFields() {
 			var $avatar_fields = $( '#register-avatar-upload' );
 
-			// We insert after either the S/O/D fields (Faculty/Staff) or 'Major Program of Study'.
+			/*
+			 * We insert:
+			 * a. After the S/O/D fields (Faculty/Staff)
+			 * b. After 'Major Program of Study' (Student/Alumni)
+			 * c. At the beginning of the wds-account-type div (Non-City Tech)
+			 */
 			var elementToInsertAfter = null;
+			var elementToInsertInto = null;
 			var academicUnitSelector = document.querySelector( '.academic-unit-selector' );
+			var departmentSelector = document.querySelector( 'select[name="departments-dropdown"]' );
 			if ( academicUnitSelector ) {
 				elementToInsertAfter = academicUnitSelector.closest( '.editfield' );
+			} else if ( departmentSelector ) {
+				elementToInsertAfter = departmentSelector.closest( '.editfield' );
 			} else {
-				departmentSelector = document.querySelector( 'select[name="departments-dropdown"]' );
-				if ( departmentSelector ) {
-					elementToInsertAfter = departmentSelector.closest( '.editfield' );
-				}
+				elementToInsertInto = document.getElementById( 'wds-account-type' );
 			}
 
-			if ( ! elementToInsertAfter ) {
+			if ( ! elementToInsertAfter && ! elementToInsertInto ) {
 				return;
 			}
 
-			$( elementToInsertAfter ).after( $avatar_fields );
-			$avatar_fields.show();
+			if ( elementToInsertInto ) {
+				$( elementToInsertInto ).prepend( $avatar_fields );
+			} else {
+				$( elementToInsertAfter ).after( $avatar_fields );
+			}
 		}
 
 		/**
