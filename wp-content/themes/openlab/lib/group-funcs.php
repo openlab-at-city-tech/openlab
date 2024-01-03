@@ -1501,6 +1501,7 @@ function openlab_show_site_posts_and_comments() {
 				'status'         => 'approve',
 				'number'         => 3,
 				'author__not_in' => $group_private_members,
+				'post__not_in'   => $post__not_in,
 				'meta_query'     => [
 					'relation' => 'AND',
 					[
