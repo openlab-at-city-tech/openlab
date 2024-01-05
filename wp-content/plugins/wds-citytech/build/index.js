@@ -77,7 +77,7 @@ const PostSharingOptions = ({}) => {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
     instanceId: "post-sharing-options",
     value: "default",
-    label: "Public",
+    label: "Everyone",
     info: "Everyone who can view this site can see this post.",
     onChange: event => onChange(event.target.value),
     checked: postVisibility === 'default'
