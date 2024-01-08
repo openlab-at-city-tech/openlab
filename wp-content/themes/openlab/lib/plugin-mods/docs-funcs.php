@@ -289,3 +289,39 @@ function openlab_add_excerpt_to_docs_activity( $args ) {
 	return $args;
 }
 add_filter( 'bp_docs_activity_args', 'openlab_add_excerpt_to_docs_activity' );
+
+/**
+ * Modifies caps for BP Docs.
+ *
+ * - Allows group admins/mods to manage docs in their group.
+ *
+ * @param array  $caps    Capabilities.
+ * @param string $cap     Capability.
+ * @param int    $user_id User ID.
+ * @param array  $args    Args.
+ * @return array
+ */
+function openlab_bp_docs_map_meta_caps( $caps, $cap, $user_id, $args ) {
+	if ( 'bp_docs_manage' !== $cap ) {
+		return $caps;
+	}
+
+	$doc = bp_docs_get_doc_for_caps( $args );
+	if ( $doc instanceof WP_Post && 0 === $doc->ID && bp_docs_get_post_type_name() === $doc->post_type ) {
+		return $caps;
+	}
+
+	$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+	if ( ! $group_id ) {
+		return $caps;
+	}
+
+	if ( ! groups_is_user_admin( $user_id, $group_id ) && ! groups_is_user_mod( $user_id, $group_id ) ) {
+		return $caps;
+	}
+
+	$caps = [ 'read' ];
+
+	return $caps;
+}
+add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps', 100, 4 );
