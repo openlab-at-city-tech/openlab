@@ -1,14 +1,16 @@
 <?php
 
 function openlab_ssl_fix( $text ) {
+	$root_domain = bp_get_root_url();
+
 	// Replacing the root domain will catch the specific blog domain
 	// because we aren't using subdomains
 	if ( is_ssl() ) {
-		$search  = set_url_scheme( bp_get_root_domain(), 'http' );
-		$replace = set_url_scheme( bp_get_root_domain(), 'https' );
+		$search  = set_url_scheme( $root_domain, 'http' );
+		$replace = set_url_scheme( $root_domain, 'https' );
 	} else {
-		$search  = set_url_scheme( bp_get_root_domain(), 'https' );
-		$replace = set_url_scheme( bp_get_root_domain(), 'http' );
+		$search  = set_url_scheme( $root_domain, 'https' );
+		$replace = set_url_scheme( $root_domain, 'http' );
 	}
 
 	return str_replace( $search, $replace, $text );
