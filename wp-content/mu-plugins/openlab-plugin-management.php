@@ -48,6 +48,7 @@ function openlab_hide_plugins( $plugins ) {
 		'embed-comment-images/eiic.php',
 		'embed-google-map/embed_google_map.php',
 		'enable-jquery-migrate-helper/enable-jquery-migrate-helper.php',
+		'enhanced-tooltipglossary/enhanced-tooltipglossary.php', // #3301
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
