@@ -3608,3 +3608,75 @@ add_action(
 		wp_enqueue_script( 'openlab-distributor-settings', plugins_url( 'wds-citytech/assets/js/distributor-settings.js' ), [ 'jquery' ], OL_VERSION );
 	}
 );
+
+/**
+ * Better population of "authorized sites" list.
+ *
+ * Distributor queries all network sites up to 1000.
+ */
+add_filter(
+	'dt_pre_get_authorized_sites',
+	function( $pre_sites, $context ) {
+		$user_id = get_current_user_id();
+
+		$last_changed = get_site_option( 'last_changed_sites' );
+
+		if ( ! $last_changed ) {
+			$last_changed = time();
+			update_site_option( 'last_changed_sites', $last_changed );
+		}
+
+		$cache_key        = "authorized_sites:$user_id:$context:$last_changed";
+		$authorized_sites = get_transient( $cache_key );
+		if ( false === $authorized_sites ) {
+			$authorized_sites = array();
+			$blogs_of_user    = get_blogs_of_user( $user_id );
+			$current_blog_id  = (int) get_current_blog_id();
+
+			foreach ( $blogs_of_user as $blog_of_user ) {
+				$blog_id = (int) $blog_of_user->userblog_id;
+
+				if ( $blog_id === $current_blog_id ) {
+					continue;
+				}
+
+				$base_url = get_site_url( $blog_id );
+
+				if ( empty( $base_url ) ) {
+					continue;
+				}
+
+				switch_to_blog( $blog_id );
+
+				$post_types            = get_post_types();
+				$authorized_post_types = array();
+
+				foreach ( $post_types as $post_type ) {
+					$post_type_object = get_post_type_object( $post_type );
+
+					if ( current_user_can( $post_type_object->cap->create_posts ) ) {
+						$authorized_post_types[] = $post_type;
+					}
+				}
+
+				if ( ! empty( $authorized_post_types ) ) {
+					$authorized_sites[] = array(
+						'site'       => get_site( $blog_id ),
+						'post_types' => $authorized_post_types,
+					);
+				}
+
+				restore_current_blog();
+			}
+		}
+
+		// Make sure we save and return an array.
+		$authorized_sites = ! is_array( $authorized_sites ) ? array() : $authorized_sites;
+
+		set_transient( $cache_key, $authorized_sites, 15 * MINUTE_IN_SECONDS );
+
+		return $authorized_sites;
+	},
+	10,
+	2
+);
