@@ -3680,3 +3680,19 @@ add_filter(
 	10,
 	2
 );
+
+/** Read Meter **********************************************************/
+
+/**
+ * Loads stylesheet specific to the read-meter plugin.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'BSF_RT_PATH' ) ) {
+			return;
+		}
+
+		wp_enqueue_style( 'openlab-read-meter', plugins_url( 'wds-citytech/assets/css/read-meter.css' ), null, OL_VERSION );
+	}
+);
