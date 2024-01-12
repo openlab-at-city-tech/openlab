@@ -3689,10 +3689,25 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function() {
-		if ( ! defined( 'BSF_RT_PATH' ) ) {
+		if ( ! class_exists( 'BSFRT_ReadTime' ) ) {
 			return;
 		}
 
 		wp_enqueue_style( 'openlab-read-meter', plugins_url( 'wds-citytech/assets/css/read-meter.css' ), null, OL_VERSION );
+
+		/*
+		 * Ensure that the plugin's assets are loaded when the content contains
+		 * the [read_meter] shortcode.
+		 */
+		if ( is_singular() && has_shortcode( get_the_content(), 'read_meter' ) ) {
+			wp_enqueue_style( 'bsfrt_frontend' );
+
+			add_action(
+				'wp_print_scripts',
+				function() {
+					BSFRT_ReadTime::get_instance()->bsf_rt_set_readtime_styles_content();
+				}
+			);
+		}
 	}
 );
