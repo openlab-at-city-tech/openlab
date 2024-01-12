@@ -90,7 +90,6 @@ function openlab_hide_plugins( $plugins ) {
 		'taxonomy-terms-order/taxonomy-terms-order.php',
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
-		'translatepress-multilingual/index.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'watupro/watupro.php',
 		'webwork/webwork.php',
