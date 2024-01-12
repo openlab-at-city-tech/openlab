@@ -3705,6 +3705,7 @@ add_action(
 			add_action(
 				'wp_print_scripts',
 				function() {
+					// @phpstan-ignore-next-line
 					BSFRT_ReadTime::get_instance()->bsf_rt_set_readtime_styles_content();
 				}
 			);
