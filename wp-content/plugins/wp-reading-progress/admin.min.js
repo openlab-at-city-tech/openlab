@@ -1,0 +1,1 @@
+'use strict';jQuery(document).ready(function(a){try{a("[name='ruigehond006[bar_color]']").wpColorPicker()}catch(b){console.error(b)}a(".ruigehond006.explanation a").on("click",function(){a(this).parents("td").find("input").val(this.innerHTML)}).css({cursor:"pointer"})});
