@@ -2717,6 +2717,10 @@ add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
 add_action(
 	'plugins_loaded',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
 	}
 );
@@ -2727,6 +2731,10 @@ add_action(
 add_action(
 	'widgets_init',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		unregister_widget( 'Wp_Accessibility_Toolbar' );
 	},
 	20
@@ -2738,6 +2746,10 @@ add_action(
 add_action(
 	'admin_menu',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		$allowed = get_option( 'wpa_post_types', array() );
 		if ( is_array( $allowed ) ) {
 			foreach ( $allowed as $post_type ) {
