@@ -748,7 +748,11 @@ class Openlab_Clone_Course_Site {
 		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10 );
 		remove_action( 'to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10 );
 
-		remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+		$taxonomy_terms_order_is_active = function_exists( 'TO_apply_order_filter' );
+
+		if ( $taxonomy_terms_order_is_active ) {
+			remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+		}
 
 		switch_to_blog( $this->site_id );
 		$eo_is_active = is_plugin_active( 'event-organiser/event-organiser.php' );
@@ -778,7 +782,10 @@ class Openlab_Clone_Course_Site {
 		add_action( 'bp_activity_after_save', 'ass_group_notification_activity', 50 );
 		add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_coauthors', 10, 3);
 		add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);
-		add_filter('terms_clauses', 'TO_apply_order_filter', 10, 3);
+
+		if ( $taxonomy_terms_order_is_active ) {
+			add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+		}
 
 		if ( function_exists( '_eventorganiser_delete_calendar_cache' ) ) {
 			_eventorganiser_delete_calendar_cache();
