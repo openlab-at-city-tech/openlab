@@ -1422,10 +1422,17 @@ function ra_copy_blog_page( $group_id ) {
 							 * on the cloned site, and so the t.term_order clause will
 							 * always trigger an error.
 							 */
-							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+							$taxonomy_terms_order_is_active = function_exists( 'TO_apply_order_filter' );
+							if ( $taxonomy_terms_order_is_active ) {
+								remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+							}
+
 							OpenLab\NavMenus\add_group_menu_item( $group_id );
 							OpenLab\NavMenus\add_home_menu_item();
-							add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+
+							if ( $taxonomy_terms_order_is_active ) {
+								add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+							}
 
 							restore_current_blog();
 							$msg = __( 'Blog Copied' );
