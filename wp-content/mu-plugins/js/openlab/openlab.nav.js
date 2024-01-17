@@ -141,19 +141,22 @@ OpenLab.nav = (function ($) {
 				}
 			);
 
-			const menupopItems = document.getElementById( 'wpadminbar' ).querySelectorAll( '.menupop' );
-			const menupopLinks = document.getElementById( 'wpadminbar' ).querySelectorAll( '.menupop a' );
-			for (const link of menupopLinks) {
-				link.addEventListener( 'focus', function (e) {
-					const parentMenupop = e.target.classList.contains( 'menupop' ) ? e.target : e.target.closest( '.menupop' );
+			const wpAdminBar = document.getElementById( 'wpadminbar' );
+			if ( wpAdminBar ) {
+				const menupopItems = wpAdminBar.querySelectorAll( '.menupop' );
+				const menupopLinks = wpAdminBar.querySelectorAll( '.menupop a' );
+				for (const link of menupopLinks) {
+					link.addEventListener( 'focus', function (e) {
+						const parentMenupop = e.target.classList.contains( 'menupop' ) ? e.target : e.target.closest( '.menupop' );
 
-					// Remove 'hover' from all menupop items other than the parent.
-					for (const item of menupopItems) {
-						if (item !== parentMenupop) {
-							item.classList.remove( 'hover' );
+						// Remove 'hover' from all menupop items other than the parent.
+						for (const item of menupopItems) {
+							if (item !== parentMenupop) {
+								item.classList.remove( 'hover' );
+							}
 						}
-					}
-				} )
+					} )
+				}
 			}
 
 		},
