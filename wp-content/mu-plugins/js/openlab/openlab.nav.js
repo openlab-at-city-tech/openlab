@@ -485,9 +485,8 @@ OpenLab.nav = (function ($) {
 
 	$( document ).ready(
 		function () {
-
+			$( 'body' ).removeClass( 'no-js' ).addClass( 'js' );
 			OpenLab.nav.init();
-
 		}
 	);
 
