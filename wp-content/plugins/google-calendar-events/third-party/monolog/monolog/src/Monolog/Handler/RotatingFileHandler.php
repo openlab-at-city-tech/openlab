@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Christophe Coevoet <stof@notk.org>
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 class RotatingFileHandler extends StreamHandler
 {

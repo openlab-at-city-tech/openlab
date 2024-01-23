@@ -1,17 +1,14 @@
 <?php
 namespace Bookly\Lib;
 
+use Bookly\Lib\Base\Schema;
 use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Lib\Entities\MailingCampaign;
 use Bookly\Lib\Entities\MailingListRecipient;
 use Bookly\Lib\Entities\MailingQueue;
+use Bookly\Lib\Entities\NotificationQueue;
 use Bookly\Lib\Entities\Payment;
 
-/**
- * Class Routines
- *
- * @package Bookly\Lib
- */
 abstract class Routines
 {
     /**
@@ -72,6 +69,7 @@ abstract class Routines
             self::sendDailyStatistics();
             // Calculate goal by number of customer appointments achieved
             self::calculateGoalOfCA();
+            self::clearNotificationQueue();
             // Let add-ons do their daily routines.
             Proxy\Shared::doDailyRoutine();
         }
@@ -104,7 +102,7 @@ abstract class Routines
         }
 
         // Mark unpaid appointments as rejected.
-        $payments = Proxy\Shared::prepareOutdatedUnpaidPayments( $payments );
+        $payments = \Bookly\Lib\Payment\Proxy\Shared::prepareOutdatedUnpaidPayments( $payments );
         if ( ! empty( $payments ) ) {
             Payment::query()
                 ->update()
@@ -243,51 +241,49 @@ abstract class Routines
         }
     }
 
+    protected static function clearNotificationQueue()
+    {
+        NotificationQueue::query()->delete()
+            ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 2 DAY)', array() )
+            ->execute();
+    }
+
     public static function mailing()
     {
         $cloud = Cloud\API::getInstance();
         if ( $cloud->getToken() ) {
             global $wpdb;
-            /** @var MailingCampaign[] $mc_list */
-            $mc_list = MailingCampaign::query()
+            /** @var MailingCampaign $mc */
+            while ( $mc = MailingCampaign::query()
                 ->where( 'state', MailingCampaign::STATE_PENDING )
                 ->whereLte( 'send_at', current_time( 'mysql' ) )
-                ->find();
-            foreach ( $mc_list as $mc ) {
+                ->findOne() )
+            {
                 $mc->setState( MailingCampaign::STATE_IN_PROGRESS )->save();
                 $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at)
                           SELECT mlr.phone, mlr.name, %s, 0, %d, %s
                             FROM `' . MailingListRecipient::getTableName() . '` AS mlr
                            WHERE mlr.mailing_list_id = %s';
                 $wpdb->query( $wpdb->prepare( $query, $mc->getText(), $mc->getId(), current_time( 'mysql' ), $mc->getMailingListId() ) );
+                if ( Schema::getAffectedRows() == 0 ) {
+                    $mc->setState( MailingCampaign::STATE_COMPLETED )->save();
+                }
             }
 
             /** @var MailingQueue[] $sms_items */
-            $sms_items = MailingQueue::query()->where( 'sent', '0' )->sortBy( 'campaign_id' )->find();
-            if ( $sms_items ) {
-                $notification_type_id = 60;
-                $init_campaign_id = $campaign_id = $sms_items[0]->getCampaignId();
-                foreach ( $sms_items as $sms ) {
-                    $sms->setSent( 1 )->save();
+            $query = MailingQueue::query()->where( 'sent', '0' )->sortBy( 'campaign_id' )->limit( 2 );
+            while ( $sms_items = $query->find() ) {
+                $sms = $sms_items[0];
+                $sms->setSent( 1 )->save();
 
-                    $codes = new Notifications\Assets\Mailing\Codes( $sms );
-                    $message = $codes->replaceForSms( $sms->getText() );
-                    $cloud->sms->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], $notification_type_id );
-                    if ( $campaign_id !== $sms->getCampaignId() ) {
-                        MailingCampaign::query()
-                            ->update()
-                            ->set( 'state', MailingCampaign::STATE_COMPLETED )
-                            ->where( 'id', $campaign_id )
-                            ->execute();
-                        $campaign_id = $sms->getCampaignId();
-                    }
-                }
-
-                if ( $init_campaign_id === $campaign_id ) {
+                $codes = new Notifications\Assets\Mailing\Codes( $sms );
+                $message = $codes->replaceForSms( $sms->getText() );
+                $cloud->sms->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], 60 );
+                if ( count( $sms_items ) === 1 || $sms_items[0]->getCampaignId() != $sms_items[1]->getCampaignId() ) {
                     MailingCampaign::query()
                         ->update()
                         ->set( 'state', MailingCampaign::STATE_COMPLETED )
-                        ->where( 'id', $campaign_id )
+                        ->where( 'id', $sms_items[0]->getCampaignId() )
                         ->execute();
                 }
             }

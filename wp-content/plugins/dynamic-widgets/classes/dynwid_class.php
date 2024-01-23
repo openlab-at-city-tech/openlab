@@ -412,8 +412,7 @@
 		 * @return integer
 		 */
 		public function checkWPhead() {
-			$ct = current_theme_info();
-			$headerfile = $ct->template_dir . '/header.php';
+			$headerfile = get_template_directory () . '/header.php';
 			if ( file_exists($headerfile) ) {
 				$buffer = file_get_contents($headerfile);
 				if ( strpos($buffer, 'wp_head()') ) {

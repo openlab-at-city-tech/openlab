@@ -1,0 +1,18 @@
+/* FILE: blocks-rtl.scss */
+@use 'sass:math';
+
+//
+// Content styles, RTL.
+//
+// @package    Michelle
+// @copyright  WebMan Design, Oliver Juhas
+//
+
+$left: right;
+$right: left;
+$rtl_multiplier: -1; // For `translateX` transform, for example.
+
+@import '_tools/_index';
+@import '_setup/_index';
+
+@import 'blocks/_index';

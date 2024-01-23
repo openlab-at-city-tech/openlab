@@ -3,9 +3,9 @@ Contributors: joedolson
 Donate link: http://www.joedolson.com/donate/
 Tags: title, accessibility, accessible, navigation, wcag, a11y, section508, focus, alt text, labels, aria
 Requires at least: 3.4.2
-Requires PHP: 5.6
-Tested up to: 6.1
-Stable tag: 2.0.1
+Tested up to: 6.4
+Requires PHP: 7.0
+Stable tag: 2.1.6
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -59,6 +59,12 @@ Learn more! <a href="https://docs.joedolson.com/wp-accessibility/">Read about th
 
 The plug-in is intended to help with deficiencies commonly found in themes and to solve some issues in WordPress core. It can't correct every problem (by a long shot), but provides tools to fix some issues, supplement the accessibility of your site, or identify problems.
 
+= Statistics Collection =
+
+WP Accessibility includes a statistics collection feature to help you identify how WP Accessibility is used on your site. This package does not collect any personally identifying data.
+
+<a href="https://docs.joedolson.com/wp-accessibility/2023/11/16/wp-accessibility-statistics/">Learn more about WP Accessibility statistics</a>.
+
 = Contribute! =
 
 * <a href="https://translate.wordpress.org/projects/wp-plugins/wp-accessibility">Help Translate WP Accessibility</a>
@@ -75,6 +81,46 @@ The plug-in is intended to help with deficiencies commonly found in themes and t
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+=  2.1.5, 2.1.6 =
+
+* Security fix: XSS vulnerability caused by a debugging statement left in place. Props Joshua Bixler.
+
+= 2.1.4 =
+
+* Bug fix: Incorrect type check caused most stats to display as 'no data'.
+* Change: Only show first 5 changes on user stats in dashboard.
+
+= 2.1.3 =
+
+* Bug fix: Error thrown if a 3rd party is using `the_title` filters improperly.
+* Bug fix: Handle case if passed data is invalid.
+* Bug fix: Change dashboard widget function name to minimize conflict.
+* Bug fix: Setting stats to 'none' should fully disable stats collection.
+* Bug fix: Ensure that admin status is verified on server side when stats set to 'admin'.
+
+= 2.1.2 =
+
+* Bug fix: Build error caused JS errors when not running in SCRIPT_DEBUG.
+
+= 2.1.1 =
+
+* Bug fix: Comparison of new stats to old stats didn't remove timestamp, so comparison was always false.
+
+= 2.1.0 =
+
+* Bug fix: Fix label `for` attributes. Props @sabernhardt.
+* Bug fix: Fix position of image alt attribute warnings.
+* Bug fix: Prevent existence of alt warnings from breaking captions.
+* Change: Render toolbar location relatively instead of absolutely.
+* Change: Improve alt text tests.
+* Change: Record count of occurrences for fake button/link tests.
+* Change: Set `wpa_lang` option to on by default.
+* Change: Switch auto labeling to always one.
+* Change: Switch skiplink CSS to use default by default.
+* Change: Remove setting for filtering title attributes and turn on by default.
+* Change: Consolidate and minify JS.
+* Feature: Add stats collection to provide view into what WP Accessibility is doing.
 
 = 2.0.1 =
 
@@ -605,4 +651,4 @@ Even if WP Accessibility is running correctly, not all accessibility testing too
 
 == Upgrade Notice ==
 
-* 1.4.6 - Bug fix for duplicate IDs in longdesc implementation
+* 2.1.6 Security Fix. Please update promptly.

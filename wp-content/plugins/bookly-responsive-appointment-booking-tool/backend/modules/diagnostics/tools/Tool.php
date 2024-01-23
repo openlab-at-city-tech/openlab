@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
 use Bookly\Lib\Base\Component;
 
-/**
- * Class Tool
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 abstract class Tool extends Component
 {
     /** @var bool */

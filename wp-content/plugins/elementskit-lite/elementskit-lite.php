@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
  * Description: The most advanced addons for Elementor with tons of widgets, Header builder, Footer builder, Mega menu builder, layout pack and powerful custom controls.
  * Plugin URI: https://products.wpmet.com/elementskit
  * Author: Wpmet
- * Version: 2.9.2
+ * Version: 3.0.3
  * Author URI: https://wpmet.com/
  *
  * Text Domain: elementskit-lite
@@ -32,7 +32,7 @@ final class ElementsKit_Lite {
 	 * @var string The plugin version.
 	 */
 	static function version() {
-		return '2.9.2';
+		return '3.0.3';
 	}
 
 	/**
@@ -381,7 +381,11 @@ final class ElementsKit_Lite {
 
 		\Oxaim\Libs\Notice::instance( 'elementskit-lite', 'unsupported-elementor-version' )
 		->set_type( 'error' )
-		->set_message( sprintf( esc_html__( 'ElementsKit requires Elementor version %1$s+, which is currently NOT RUNNING.', 'elementskit-lite' ), self::min_el_version() ) )
+		->set_message( sprintf( '%1$s %2$s+, %3$s', 
+				esc_html__( 'ElementsKit requires Elementor version', 'elementskit-lite' ),
+				self::min_el_version() ,
+				esc_html__( 'which is currently NOT RUNNING.', 'elementskit-lite' ),
+			) )
 		->set_button( $btn )
 		->call();
 	}
@@ -398,7 +402,11 @@ final class ElementsKit_Lite {
 	public function failed_php_version() {
 		\Oxaim\Libs\Notice::instance( 'elementskit-lite', 'unsupported-php-version' )
 		->set_type( 'error' )
-		->set_message( sprintf( esc_html__( 'ElementsKit requires PHP version %1$s+, which is currently NOT RUNNING on this server.', 'elementskit-lite' ), self::min_php_version() ) )
+		->set_message( sprintf( '%1$s %2$s+, %3$s',
+				esc_html__( 'ElementsKit requires PHP version', 'elementskit-lite' ),
+				self::min_php_version(),
+				esc_html__( 'which is currently NOT RUNNING on this server.', 'elementskit-lite' )
+			))
 		->call();
 	}
 

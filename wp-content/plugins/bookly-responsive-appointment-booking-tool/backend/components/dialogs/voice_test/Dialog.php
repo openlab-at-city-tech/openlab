@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\VoiceTest;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\VoiceTest
- */
 class Dialog extends Lib\Base\Component
 {
     /**

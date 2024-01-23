@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use SimpleCalendar\plugin_deps\PHPStan\Reflection\ReflectionProvider;
 use ReflectionClass;
 use ReflectionException;
+/** @internal */
 final class MacroScanner
 {
     /**

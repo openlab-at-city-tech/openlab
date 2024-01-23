@@ -226,7 +226,7 @@ jQuery(document).on('click', '#b2s-auto-post-settings-btn', function () {
         }
         if (jQuery('#b2s-auto-post-profil-data-' + jQuery('#b2s-auto-post-profil-dropdown').val()).val() == "") {
             submit = false;
-            jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').show();
+            //jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').show();
         }
     }
 
@@ -289,4 +289,19 @@ jQuery(document).on('click', '#b2s-auto-post-assign-by-disconnect', function () 
         }
     });
     return false;
+});
+
+
+jQuery(document).on('change', '.b2s-auto-post-echo-setting', function () {
+    if (jQuery(this).is(':checked')) {
+        jQuery('.b2s-auto-post-echo').show();
+    } else {
+        jQuery('.b2s-auto-post-echo').hide();
+
+    }
+});
+
+
+jQuery(document).on('click', '.b2sAutoPostEchoSettingInfoModalBtn', function () {
+    jQuery("#b2sAutoPostEchoInfoModal").modal('show');
 });

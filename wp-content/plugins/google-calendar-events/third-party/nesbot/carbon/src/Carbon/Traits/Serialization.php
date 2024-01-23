@@ -29,6 +29,7 @@ use Throwable;
  *
  * @method string|static locale(string $locale = null, string ...$fallbackLocales)
  * @method string        toJSON()
+ * @internal
  */
 trait Serialization
 {
@@ -127,7 +128,7 @@ trait Serialization
     public function __serialize() : array
     {
         // @codeCoverageIgnoreStart
-        if (isset($this->timezone_type)) {
+        if (isset($this->timezone_type, $this->timezone, $this->date)) {
             return ['date' => $this->date ?? null, 'timezone_type' => $this->timezone_type, 'timezone' => $this->timezone ?? null];
         }
         // @codeCoverageIgnoreEnd

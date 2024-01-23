@@ -15,13 +15,14 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
+#[AllowDynamicProperties]
 class BP_XProfile_Field {
 
 	/**
 	 * Field ID.
 	 *
 	 * @since 1.0.0
-	 * @var int ID of field.
+	 * @var int
 	 */
 	public $id;
 
@@ -29,7 +30,7 @@ class BP_XProfile_Field {
 	 * Field group ID.
 	 *
 	 * @since 1.0.0
-	 * @var int Field group ID for field.
+	 * @var int
 	 */
 	public $group_id;
 
@@ -37,7 +38,7 @@ class BP_XProfile_Field {
 	 * Field parent ID.
 	 *
 	 * @since 1.0.0
-	 * @var int Parent ID of field.
+	 * @var int
 	 */
 	public $parent_id;
 
@@ -45,31 +46,31 @@ class BP_XProfile_Field {
 	 * Field type.
 	 *
 	 * @since 1.0.0
-	 * @var string Field type.
+	 * @var string
 	 */
-	public $type;
+	public $type = '';
 
 	/**
 	 * Field name.
 	 *
 	 * @since 1.0.0
-	 * @var string Field name.
+	 * @var string
 	 */
-	public $name;
+	public $name = '';
 
 	/**
 	 * Field description.
 	 *
 	 * @since 1.0.0
-	 * @var string Field description.
+	 * @var string
 	 */
-	public $description;
+	public $description = '';
 
 	/**
 	 * Required field?
 	 *
 	 * @since 1.0.0
-	 * @var bool Is field required to be filled out?
+	 * @var bool
 	 */
 	public $is_required;
 
@@ -77,7 +78,7 @@ class BP_XProfile_Field {
 	 * Deletable field?
 	 *
 	 * @since 1.0.0
-	 * @var int Can field be deleted?
+	 * @var int
 	 */
 	public $can_delete = '1';
 
@@ -85,7 +86,7 @@ class BP_XProfile_Field {
 	 * Field position.
 	 *
 	 * @since 1.0.0
-	 * @var int Field position.
+	 * @var int
 	 */
 	public $field_order;
 
@@ -93,7 +94,7 @@ class BP_XProfile_Field {
 	 * Option order.
 	 *
 	 * @since 1.0.0
-	 * @var int Option order.
+	 * @var int
 	 */
 	public $option_order;
 
@@ -101,24 +102,32 @@ class BP_XProfile_Field {
 	 * Order child fields.
 	 *
 	 * @since 1.0.0
-	 * @var string Order child fields by.
+	 * @var string
 	 */
-	public $order_by;
+	public $order_by = '';
 
 	/**
 	 * Is this the default option?
 	 *
 	 * @since 1.0.0
-	 * @var bool Is this the default option for this field?
+	 * @var bool
 	 */
 	public $is_default_option;
 
 	/**
 	 * Field data visibility.
 	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	public $visibility;
+
+	/**
+	 * Field data visibility.
+	 *
 	 * @since 1.9.0
 	 * @since 2.4.0 Property marked protected. Now accessible by magic method or by `get_default_visibility()`.
-	 * @var string Default field data visibility.
+	 * @var string
 	 */
 	protected $default_visibility;
 
@@ -127,7 +136,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 2.3.0
 	 * @since 2.4.0 Property marked protected. Now accessible by magic method or by `get_allow_custom_visibility()`.
-	 * @var string Members are allowed/disallowed to modify data visibility.
+	 * @var string
 	 */
 	protected $allow_custom_visibility;
 
@@ -206,7 +215,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 * @global object $userdata
 	 *
 	 * @param int      $id Field ID.
@@ -246,6 +255,8 @@ class BP_XProfile_Field {
 	 * @since 2.4.0
 	 * @since 2.8.0 Added `$user_id` and `$get_data` parameters.
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @static
 	 *
 	 * @param int      $field_id ID of the field.
@@ -257,8 +268,6 @@ class BP_XProfile_Field {
 	 * @return BP_XProfile_Field|false Field object if found, otherwise false.
 	 */
 	public static function get_instance( $field_id, $user_id = null, $get_data = true ) {
-		global $wpdb;
-
 		$field_id = (int) $field_id;
 		if ( ! $field_id ) {
 			return false;
@@ -282,7 +291,7 @@ class BP_XProfile_Field {
 
 		$int_fields = array(
 			'id', 'is_required', 'group_id', 'parent_id', 'is_default_option',
-			'field_order', 'option_order', 'can_delete'
+			'field_order', 'option_order', 'can_delete',
 		);
 
 		foreach ( $args as $k => $v ) {
@@ -346,7 +355,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param boolean $delete_data Whether or not to delete data.
 	 * @return boolean
@@ -404,7 +413,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @return boolean
 	 */
@@ -475,8 +484,8 @@ class BP_XProfile_Field {
 				$parent_id = $this->id;
 
 				// Allow plugins to filter the field's child options (i.e. the items in a selectbox).
-				$post_option  = ! empty( $_POST["{$this->type}_option"]           ) ? $_POST["{$this->type}_option"]           : '';
-				$post_default = ! empty( $_POST["isDefault_{$this->type}_option"] ) ? $_POST["isDefault_{$this->type}_option"] : '';
+				$post_option  = ! empty( $_POST[ "{$this->type}_option" ]           ) ? $_POST[ "{$this->type}_option" ] : '';
+				$post_default = ! empty( $_POST[ "isDefault_{$this->type}_option" ] ) ? $_POST[ "isDefault_{$this->type}_option" ] : '';
 
 				/**
 				 * Filters the submitted field option value before saved.
@@ -499,7 +508,7 @@ class BP_XProfile_Field {
 				$defaults = apply_filters( 'xprofile_field_default_before_save', $post_default, $this->type );
 
 				$counter = 1;
-				if ( !empty( $options ) ) {
+				if ( ! empty( $options ) ) {
 					foreach ( (array) $options as $option_key => $option_value ) {
 						$is_default = 0;
 
@@ -561,7 +570,6 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @global BuddyPress $bp The one true BuddyPress instance.
 	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param bool $for_editing Whether or not the field is for editing. Default to false.
@@ -607,7 +615,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 */
 	public function delete_children() {
 		global $wpdb;
@@ -919,6 +927,8 @@ class BP_XProfile_Field {
 	/**
 	 * Get the type for provided field ID.
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param int $field_id Field ID to get type of.
 	 * @return bool|null|string
 	 */
@@ -947,7 +957,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.2.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $group_id ID of the field group to delete fields from.
 	 * @return boolean
@@ -977,7 +987,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param string $field_name Name of the field to query the ID for.
 	 * @return int|null Field ID on success; null on failure.
@@ -1006,7 +1016,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int      $field_id       ID of the field to update.
 	 * @param int|null $position       Field position to update.
@@ -1050,6 +1060,8 @@ class BP_XProfile_Field {
 	 * Gets the IDs of fields applicable for a given member type or array of member types.
 	 *
 	 * @since 2.4.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param string|array $member_types Member type or array of member types. Use 'any' to return unrestricted
 	 *                                   fields (those available for anyone, regardless of member type).
@@ -1125,7 +1137,7 @@ class BP_XProfile_Field {
 	 *
 	 * @since 2.2.0
 	 *
-	 * @global $message
+	 * @global string $message The feedback message to show.
 	 *
 	 * @return boolean
 	 */
@@ -1237,18 +1249,18 @@ class BP_XProfile_Field {
 			$action = add_query_arg( array(
 				'page'     => 'bp-profile-setup',
 				'mode'     => 'add_field',
-				'group_id' => (int) $this->group_id
+				'group_id' => (int) $this->group_id,
 			), $users_url . '#tabs-' . (int) $this->group_id );
 
-			if ( !empty( $_POST['saveField'] ) ) {
+			if ( ! empty( $_POST['saveField'] ) ) {
 				$this->name        = $_POST['title'];
 				$this->description = $_POST['description'];
 				$this->is_required = $_POST['required'];
 				$this->type        = $_POST['fieldtype'];
 				$this->field_order = $_POST['field_order'];
 
-				if ( ! empty( $_POST["sort_order_{$this->type}"] ) ) {
-					$this->order_by = $_POST["sort_order_{$this->type}"];
+				if ( ! empty( $_POST[ "sort_order_{$this->type}" ] ) ) {
+					$this->order_by = $_POST[ "sort_order_{$this->type}" ];
 				}
 			}
 
@@ -1260,7 +1272,7 @@ class BP_XProfile_Field {
 				'page'     => 'bp-profile-setup',
 				'mode'     => 'edit_field',
 				'group_id' => (int) $this->group_id,
-				'field_id' => (int) $this->id
+				'field_id' => (int) $this->id,
 			), $users_url . '#tabs-' . (int) $this->group_id );
 		} ?>
 
@@ -1269,7 +1281,7 @@ class BP_XProfile_Field {
 			<h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 			<hr class="wp-header-end">
 
-			<?php if ( !empty( $message ) ) : ?>
+			<?php if ( ! empty( $message ) ) : ?>
 
 				<div id="message" class="error fade notice is-dismissible">
 					<p><?php echo esc_html( $message ); ?></p>
@@ -1419,7 +1431,7 @@ class BP_XProfile_Field {
 		// Setup the URL for deleting
 		$users_url  = bp_get_admin_url( 'users.php' );
 		$cancel_url = add_query_arg( array(
-			'page' => 'bp-profile-setup'
+			'page' => 'bp-profile-setup',
 		), $users_url );
 
 
@@ -1428,7 +1440,7 @@ class BP_XProfile_Field {
 			$delete_url = wp_nonce_url( add_query_arg( array(
 				'page'     => 'bp-profile-setup',
 				'mode'     => 'delete_field',
-				'field_id' => (int) $this->id
+				'field_id' => (int) $this->id,
 			), $users_url ), 'bp_xprofile_delete_field-' . $this->id, 'bp_xprofile_delete_field' );
 		}
 		/**
@@ -1501,23 +1513,36 @@ class BP_XProfile_Field {
 	 * @since 2.3.0
 	 */
 	private function name_and_description() {
+		// Set default values.
+		$description = '';
+		$name        = '';
+
+		if ( $this->description ) {
+			$description = $this->description;
+		}
+
+		if ( $this->name ) {
+			$name = $this->name;
+		}
 	?>
 
 		<div id="titlediv">
 			<div class="titlewrap">
 				<label id="title-prompt-text" for="title"><?php echo esc_html_x( 'Name (required)', 'XProfile admin edit field', 'buddypress' ); ?></label>
-				<input type="text" name="title" id="title" value="<?php echo esc_attr( $this->name ); ?>" autocomplete="off" />
+				<input type="text" name="title" id="title" value="<?php echo esc_attr( $name ); ?>" autocomplete="off" />
 			</div>
 		</div>
 
 		<div class="postbox">
 			<h2><?php echo esc_html_x( 'Description', 'XProfile admin edit field', 'buddypress' ); ?></h2>
 			<div class="inside">
-				<label for="description" class="screen-reader-text"><?php
+				<label for="description" class="screen-reader-text">
+					<?php
 					/* translators: accessibility text */
 					esc_html_e( 'Add description', 'buddypress' );
-				?></label>
-				<textarea name="description" id="description" rows="8" cols="60"><?php echo esc_textarea( $this->description ); ?></textarea>
+					?>
+				</label>
+				<textarea name="description" id="description" rows="8" cols="60"><?php echo esc_textarea( $description ); ?></textarea>
 			</div>
 		</div>
 

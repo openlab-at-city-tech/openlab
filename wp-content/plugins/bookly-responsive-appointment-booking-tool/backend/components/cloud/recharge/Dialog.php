@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Cloud\Recharge;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Cloud\Recharge
- */
 class Dialog extends Lib\Base\Component
 {
 

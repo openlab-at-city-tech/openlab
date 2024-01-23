@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "trp/language-switcher",
+    "title": "Language Switcher",
+    "category": "trp-block",
+    "description": "Displays the Language Switcher.",
+    "keywords": [ "Language Switcher", "Translate", "TranslatePress", "Language Names", "Flags" ],
+    "textdomain": "translatepress-multilingual",
+    "attributes": {
+        "display_setting": {
+            "type": "string",
+            "default": ""
+        },
+        "is_preview": {
+            "type": "boolean",
+            "default": false
+        },
+        "is_editor": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "example": {
+        "attributes": {
+            "display_setting": "",
+            "is_preview": true,
+            "is_editor": true
+        }
+    },
+    "editorScript": "trp-block-ls-shortcode"
+}

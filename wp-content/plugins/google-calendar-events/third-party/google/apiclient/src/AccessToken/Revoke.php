@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
  *
+ * @internal
  */
 class Revoke
 {

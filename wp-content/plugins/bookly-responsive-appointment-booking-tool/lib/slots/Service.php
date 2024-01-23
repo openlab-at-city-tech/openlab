@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class Service
- *
- * @package Bookly\Lib\Slots
- */
 class Service
 {
     /** @var double */

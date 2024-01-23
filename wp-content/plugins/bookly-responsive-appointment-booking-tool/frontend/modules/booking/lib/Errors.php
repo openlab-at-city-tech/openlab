@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Frontend\Modules\Booking\Lib;
 
-/**
- * Class Errors
- *
- * @package Bookly\Frontend\Modules\Booking\Lib
- */
 abstract class Errors
 {
     const SESSION_ERROR               = 'session_error';

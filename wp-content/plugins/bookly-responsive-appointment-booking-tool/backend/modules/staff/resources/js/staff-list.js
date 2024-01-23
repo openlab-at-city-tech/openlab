@@ -216,9 +216,12 @@ jQuery(function ($) {
             e.preventDefault();
             return false;
         }
-    })
-    ;
-    filters.visibility.on('change', function () {dt.ajax.reload();});
-    filters.archived.on('change', function () {dt.ajax.reload();});
-    filters.category.on('change', function () {dt.ajax.reload();});
+    });
+
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
+    filters.visibility.on('change', onChangeFilter);
+    filters.archived.on('change', onChangeFilter);
+    filters.category.on('change', onChangeFilter);
 });

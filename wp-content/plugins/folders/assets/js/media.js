@@ -7,7 +7,7 @@
             var totalItems = folders_media_options.terms.length;
             _.each(folders_media_options.terms || {}, function(term, index) {
                 filters[term.term_id] = {
-                    text: term.name + ' (' + term.count + ')',
+                    text: term.name + ' (' + term.trash_count + ')',
                     props: {
                         'media_folder': term.slug
                     }
@@ -33,7 +33,7 @@
             var filters = {};
             _.each(folders_media_options.terms || {}, function(term, index) {
                 filters[term.term_id] = {
-                    text: term.name + ' (' + term.count + ')',
+                    text: term.name + ' (' + term.trash_count + ')',
                     props: {
                         'media_folder': term.slug
                     }
@@ -214,7 +214,7 @@ function resetDDCounter() {
                     selectedDD.html("<option value='all'>All Folders</option><option value='unassigned'>(Unassigned)</option>");
                     lastFolderData = res.taxonomies;
                     for (i = 0; i < res.taxonomies.length; i++) {
-                        selectedDD.append("<option value='" + res.taxonomies[i].term_id + "'>" + res.taxonomies[i].name + " (" + res.taxonomies[i].count + ")</option>");
+                        selectedDD.append("<option value='" + res.taxonomies[i].term_id + "'>" + res.taxonomies[i].name + " (" + res.taxonomies[i].trash_count + ")</option>");
                     }
                     selectedDD.val(currentDDVal).trigger("change");
 
@@ -241,7 +241,7 @@ function resetSelectMediaDropDown() {
                     selectedDD.html("<option value='-1'>(Unassigned)</option>");
                     lastFolderData = res.taxonomies;
                     for (i = 0; i < res.taxonomies.length; i++) {
-                        selectedDD.append("<option value='" + res.taxonomies[i].term_id + "'>" + res.taxonomies[i].name + " (" + res.taxonomies[i].count + ")</option>");
+                        selectedDD.append("<option value='" + res.taxonomies[i].term_id + "'>" + res.taxonomies[i].name + " (" + res.taxonomies[i].trash_count + ")</option>");
                     }
                     selectedDD.append("<option value='add-folder'>+ Create a New Folder</option>");
                 }
@@ -256,6 +256,7 @@ function resetSelectMediaDropDown() {
     });
 }
 var wp = window.wp;
+var hasNoMedia = false;
 //Upload on page Media Library (upload.php)
 if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
     wp.media.view.Modal.prototype.on('open', function() {
@@ -264,7 +265,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                 if(jQuery("#media-attachment-taxonomy-filter").val() == "all") {
                     jQuery("#media-attachment-taxonomy-filter option:gt(1)").remove();
                     _.each(folders_media_options.terms, function(term, index){
-                        jQuery("#media-attachment-taxonomy-filter").append("<option value='" + term.term_id + "'>" + term.name + " (" + term.count + ")</option>")
+                        jQuery("#media-attachment-taxonomy-filter").append("<option value='" + term.term_id + "'>" + term.name + " (" + term.trash_count + ")</option>")
                     });
                 }
 
@@ -283,6 +284,13 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
             if (this.uploader) {
                 this.uploader.bind('FileFiltered', function (up, file) {
                     filesInQueue++;
+                    if(jQuery(".attachments li").length) {
+                        jQuery(".attachments li:first-child").before('<li id="file-'+file.id+'" class="attachment first-file-uploads temp-attachment-li uploading save-ready"> <div class="attachment-preview"> <div class="thumbnail"> <div class="media-progress-bar"><div style=""></div></div> </div> </div> </li>');
+                    } else {
+                        hasNoMedia = true;
+                        jQuery("p.no-media").hide();
+                        jQuery(".attachments-wrapper ul.attachments").append('<li id="file-'+file.id+'" class="attachment first-file-uploads temp-attachment-li uploading save-ready"> <div class="attachment-preview"> <div class="thumbnail"> <div class="media-progress-bar"><div style="width:0%"></div></div> </div> </div> </li>');
+                    }
                     jQuery(".folder-meter").css("width", "0%");
                     jQuery(".media-folder-loader").show();
                     jQuery("#total_upload_files").text(filesInQueue);
@@ -301,12 +309,57 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                     }
                     uploadedFileCount++;
                     jQuery("#current_upload_files").text(uploadedFileCount);
+                });
+                this.uploader.bind('FileUploaded', function (fileData, file) {
+                    console.log(file);
+                    if(typeof(file.attachment.attributes.url) !== 'undefined') {
+                        var data = file.attachment.attributes;
+                        console.log(data);
+                        var mediaHtml = "<div class='attachment-preview js--select-attachment type-"+data.type+" subtype-"+ data.subtype+" "+data.orientation+"'><div class='thumbnail'>";
+                        if ( 'image' === data.type && data.size && data.size.url ) {
+                            mediaHtml += '<div class="centered"><img src="'+data.size.url+'" draggable="false" alt="" /></div>';
+                        } else {
+                            if ( 'image' === data.type && data.sizes && data.sizes.thumbnail && data.sizes.thumbnail.url ) {
+                                mediaHtml += '<div class="centered"><img src="'+data.sizes.thumbnail.url+'" class="thumbnail" draggable="false" alt="" /></div>';
+                            } else if ( 'image' === data.type && data.url ) {
+                                mediaHtml += '<div class="centered"><img src="'+data.url+'" class="thumbnail" draggable="false" alt="" /></div>';
+                            } else if ( data.image && data.image.src && data.image.src !== data.icon ) {
+                                mediaHtml += '<div class="centered"><img src="'+data.image.src+'" class="thumbnail" draggable="false" alt="" /></div>';
+                            } else if ( data.sizes && data.sizes.medium ) {
+                                mediaHtml += '<div class="centered"><img src="'+data.sizes.medium.url+'" class="thumbnail" draggable="false" alt="" /></div>';
+                            } else {
+                                mediaHtml += '<div class="centered"><img src="'+data.icon+'" class="icon" draggable="false" alt="" /></div>';
+                            }
+                            if(data.type != "image") {
+                                mediaHtml += '<div class="filename"><div>' + data.filename + '</div></div>';
+                            }
+                        }
+                        mediaHtml += "</div></div>";
 
+                        jQuery("#file-"+file.id).html(mediaHtml).removeClass("uploading").addClass("save-ready ui-draggable ui-draggable-handle").removeClass("temp-attachment-li");
+                    } else {
+                        jQuery("#file-"+file.id).remove();
+                    }
+                });
+                this.uploader.bind('Error', function (up, error, code, message) {
+                    if(error.file && error.file.id && jQuery("#file-"+error.file.id).length) {
+                        jQuery("#file-"+error.file.id).remove();
+                    }
+                });
+                this.uploader.bind('UploadProgress', function (up, file) {
+                    if(parseInt(file.percent) < 100) {
+                        jQuery("#file-"+file.id+" .media-progress-bar > div").css("width", parseInt(file.percent)+"%");
+                    }
                 });
                 this.uploader.bind('UploadComplete', function (up, files) {
                     selectedFolderMediaId = -1;
                 });
                 this.uploader.bind('UploadComplete', function (up, files) {
+                    jQuery(".temp-attachment-li").remove();
+                    if(hasNoMedia) {
+                        jQuery(".first-file-uploads").remove();
+                    }
+                    hasNoMedia = false;
                     var wp_media = window.wp;
 
                     jQuery(".folder-meter").css("width", "100%");
@@ -315,11 +368,10 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                         jQuery(".folder-meter").css("width", "0%");
                         filesInQueue = 0;
                         uploadedFileCount = 0;
-                    }, 1250);
+                    }, 100);
 
                     resetDDCounter();
-
-                    if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null) {
+                    if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
                         wp_media.media.frame.content.get().collection.props.set({ignore: (+ new Date())});
                         wp_media.media.frame.content.get().options.selection.reset();
                     } else {

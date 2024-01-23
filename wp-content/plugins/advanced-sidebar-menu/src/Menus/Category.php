@@ -10,7 +10,6 @@ use Advanced_Sidebar_Menu\Walkers\Category_Walker;
  * Category menu.
  *
  * @author OnPoint Plugins
- * @since  7.0.0
  */
 class Category extends Menu_Abstract {
 	use Memoize;
@@ -78,12 +77,16 @@ class Category extends Menu_Abstract {
 				$args['depth'] = $this->get_levels_to_display();
 				break;
 			case static::LEVEL_CHILD:
-				$args['include'] = $term->term_id;
-				$args['depth'] = 1;
+				if ( null !== $term ) {
+					$args['include'] = $term->term_id;
+					$args['depth'] = 1;
+				}
 				break;
 			case static::LEVEL_GRANDCHILD:
-				$args['child_of'] = $term->term_id;
-				$args['depth'] = $this->get_levels_to_display();
+				if ( null !== $term ) {
+					$args['child_of'] = $term->term_id;
+					$args['depth'] = $this->get_levels_to_display();
+				}
 				break;
 		}
 
@@ -130,7 +133,10 @@ class Category extends Menu_Abstract {
 	 */
 	public function get_current_term() {
 		if ( $this->is_tax() ) {
-			return get_queried_object();
+			$term = get_queried_object();
+			if ( $term instanceof \WP_Term ) {
+				return $term;
+			}
 		}
 		return null;
 	}
@@ -152,6 +158,9 @@ class Category extends Menu_Abstract {
 				]
 			)
 		);
+		if ( is_wp_error( $terms ) ) {
+			return [];
+		}
 
 		return apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', \array_filter( $terms ), $this );
 	}
@@ -216,9 +225,15 @@ class Category extends Menu_Abstract {
 	public function get_included_term_ids() {
 		$term_ids = [];
 		if ( is_singular() ) {
-			$term_ids = wp_get_object_terms( get_the_ID(), $this->get_taxonomy(), [ 'fields' => 'ids' ] );
+			$id = get_the_ID();
+			if ( false !== $id ) {
+				$term_ids = wp_get_post_terms( $id, $this->get_taxonomy(), [ 'fields' => 'ids' ] );
+			}
 		} elseif ( $this->is_tax() ) {
-			$term_ids[] = get_queried_object()->term_id;
+			$term = get_queried_object();
+			if ( $term instanceof \WP_Term ) {
+				$term_ids[] = $term->term_id;
+			}
 		}
 
 		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/included-term-ids', $term_ids, $this->args, $this->instance, $this );
@@ -306,7 +321,8 @@ class Category extends Menu_Abstract {
 			if ( ! $this->checked( static::INCLUDE_PARENT ) || ! $this->checked( static::INCLUDE_CHILDLESS_PARENT ) ) {
 				return false;
 			}
-			if ( $this->is_excluded( $this->get_top_parent_id() ) ) {
+			$top = $this->get_top_parent_id() ?? - 1;
+			if ( $this->is_excluded( $top ) ) {
 				return false;
 			}
 		}
@@ -343,33 +359,33 @@ class Category extends Menu_Abstract {
 		if ( null === $this->top_level_term ) {
 			return false;
 		}
-		return ( (int) $term->term_id ) === ( (int) $this->top_level_term->term_id );
+		return $term->term_id === $this->top_level_term->term_id;
 	}
 
 
 	/**
 	 * Get list of excluded ids from widget settings.
 	 *
-	 * @return array
+	 * @return array<int>
 	 */
-	public function get_excluded_ids() {
-		return apply_filters( 'advanced-sidebar-menu/menus/category/excluded', parent::get_excluded_ids(), $this->args, $this->instance, $this );
+	public function get_excluded_ids(): array {
+		return \array_map( '\intval', (array) apply_filters( 'advanced-sidebar-menu/menus/category/excluded', parent::get_excluded_ids(), $this->args, $this->instance, $this ) );
 	}
 
 
 	/**
 	 * Removes the closing </li> tag from a list item to allow for child menus inside of it
 	 *
-	 * @param string|bool $item - An <li></li> item.
+	 * @param string|false $item - An <li></li> item.
 	 *
-	 * @return string|bool
+	 * @return string|false
 	 */
 	public function openListItem( $item = false ) {
-		if ( ! $item ) {
+		if ( false === $item ) {
 			return false;
 		}
 
-		return substr( trim( $item ), 0, - 5 );
+		return \substr( \trim( $item ), 0, - 5 );
 	}
 
 
@@ -440,9 +456,9 @@ class Category extends Menu_Abstract {
 	 *
 	 * @return bool
 	 */
-	public function is_first_level_term( \WP_Term $term ) {
+	public function is_first_level_term( \WP_Term $term ): bool {
 		$return = false;
-		if ( ! $this->is_excluded( $term->term_id ) && (int) $term->parent === (int) $this->get_top_parent_id() ) {
+		if ( ! $this->is_excluded( $term->term_id ) && $term->parent === $this->get_top_parent_id() ) {
 			$return = true;
 		}
 
@@ -603,5 +619,4 @@ class Category extends Menu_Abstract {
 		echo $this->args['after_widget'];
 		//phpcs:enable WordPress.Security.EscapeOutput
 	}
-
 }

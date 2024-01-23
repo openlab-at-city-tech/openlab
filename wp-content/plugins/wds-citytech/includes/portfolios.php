@@ -201,20 +201,6 @@ function openlab_suggest_portfolio_path() {
 	return $slug;
 }
 
-/**
- * Ensure that a suggested name is included in the Name input of the creation screen
- */
-function openlab_bp_get_new_group_name( $name ) {
-	if ( openlab_is_portfolio() || ( ! empty( $_GET['type'] ) && 'portfolio' == $_GET['type'] ) ) {
-		if ( '' == $name ) {
-			$name = openlab_suggest_portfolio_name();
-		}
-	}
-
-	return $name;
-}
-add_filter( 'bp_get_new_group_name', 'openlab_bp_get_new_group_name' );
-
 /** Group Portfolios *********************************************************/
 
 /**

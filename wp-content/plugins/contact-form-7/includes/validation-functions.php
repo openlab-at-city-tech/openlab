@@ -75,13 +75,43 @@ function wpcf7_is_number( $text ) {
  * @link https://html.spec.whatwg.org/multipage/input.html#date-state-(type=date)
  */
 function wpcf7_is_date( $text ) {
-	$result = preg_match( '/^([0-9]{4,})-([0-9]{2})-([0-9]{2})$/', $text, $matches );
+	$result = preg_match(
+		'/^([0-9]{4,})-([0-9]{2})-([0-9]{2})$/',
+		$text,
+		$matches
+	);
 
 	if ( $result ) {
 		$result = checkdate( $matches[2], $matches[3], $matches[1] );
 	}
 
 	return apply_filters( 'wpcf7_is_date', $result, $text );
+}
+
+
+/**
+ * Checks whether the given text is a valid time.
+ *
+ * @link https://html.spec.whatwg.org/multipage/input.html#time-state-(type=time)
+ */
+function wpcf7_is_time( $text ) {
+	$result = preg_match(
+		'/^([0-9]{2})\:([0-9]{2})(?:\:([0-9]{2}))?$/',
+		$text,
+		$matches
+	);
+
+	if ( $result ) {
+		$hour = (int) $matches[1];
+		$minute = (int) $matches[2];
+		$second = empty( $matches[3] ) ? 0 : (int) $matches[3];
+
+		$result = 0 <= $hour && $hour <= 23 &&
+			0 <= $minute && $minute <= 59 &&
+			0 <= $second && $second <= 59;
+	}
+
+	return apply_filters( 'wpcf7_is_time', $result, $text );
 }
 
 
@@ -223,18 +253,46 @@ function wpcf7_is_email_in_site_domain( $email ) {
  *              false otherwise.
  */
 function wpcf7_is_file_path_in_content_dir( $path ) {
-	if ( $real_path = realpath( $path ) ) {
-		$path = $real_path;
-	} else {
+	if ( ! is_string( $path ) or '' === $path ) {
 		return false;
 	}
 
-	if ( 0 === strpos( $path, realpath( WP_CONTENT_DIR ) ) ) {
+	$callback = static function ( $path, $dir ) {
+		if ( $real_path = realpath( $path ) ) {
+			$path = $real_path;
+		} else {
+			return false;
+		}
+
+		if ( $real_dir = realpath( $dir ) ) {
+			$dir = trailingslashit( $real_dir );
+		} else {
+			return false;
+		}
+
+		return str_starts_with(
+			wp_normalize_path( $path ),
+			wp_normalize_path( $dir )
+		);
+	};
+
+	if (
+		call_user_func( $callback, $path, WP_CONTENT_DIR )
+	) {
 		return true;
 	}
 
-	if ( defined( 'UPLOADS' )
-	and 0 === strpos( $path, realpath( ABSPATH . UPLOADS ) ) ) {
+	if (
+		defined( 'UPLOADS' ) and
+		call_user_func( $callback, $path, ABSPATH . UPLOADS )
+	) {
+		return true;
+	}
+
+	if (
+		defined( 'WP_TEMP_DIR' ) and
+		call_user_func( $callback, $path, WP_TEMP_DIR )
+	) {
 		return true;
 	}
 

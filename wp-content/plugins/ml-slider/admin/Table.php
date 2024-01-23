@@ -15,12 +15,10 @@ class MetaSlider_Admin_Table extends WP_List_table
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
 
-        if (!isset( $_POST['search_wpnonce']) || ! wp_verify_nonce(sanitize_key($_POST['search_wpnonce']), 'metaslider_search_slideshows')) {
-            $table_data = $this->table_data();
+        if (isset($_REQUEST['s'])) {
+            $table_data = $this->table_data(sanitize_text_field($_REQUEST['s']));
         } else {
-            if (isset($_POST['s'])) {
-                $table_data = $this->table_data(sanitize_text_field($_POST['s']));
-            }
+            $table_data = $this->table_data();
         }
 
         //pagination
@@ -38,7 +36,7 @@ class MetaSlider_Admin_Table extends WP_List_table
     protected function get_views() {
         global $wpdb;
         $views = array();
-        $paramaters = array('action', 'slideshows', 'post_status', '_wpnonce');
+        $paramaters = array('action', 'slideshows', 'post_status', '_wpnonce', 'paged');
         $current = ( !empty($_REQUEST['post_status']) ? $_REQUEST['post_status'] : 'all');
    
         $all = remove_query_arg($paramaters);
@@ -106,10 +104,10 @@ class MetaSlider_Admin_Table extends WP_List_table
             case 'post_title':
                 return $item[ $column_name ];
             case 'post_date':
-                $date = date_create($item[ $column_name ]);
+                $date = strtotime($item[ $column_name ]);
                 $dateFormat = get_option('date_format');
                 $timeFormat = get_option( 'time_format' );
-                return date_format($date, $dateFormat.' \a\t '.$timeFormat);
+                return ucfirst( wp_date( $dateFormat.' \a\t '.$timeFormat, $date ) );
             case 'ID':
                 return $this->shortcodeColumn($item[$column_name]);
             default:
@@ -119,9 +117,7 @@ class MetaSlider_Admin_Table extends WP_List_table
 
     public function shortcodeColumn($slideshowID)
     {
-        return ('<metaslider-shortcode inline-template>
-        <pre id="shortcode" ref="shortcode" dir="ltr" class="text-gray text-sm"><div @click.prevent="copyShortcode($event)" class="text-orange cursor-pointer whitespace-normal inline">[metaslider id="'. esc_attr($slideshowID) .'"]</div></pre>
-        </metaslider-shortcode>');
+        return ('<pre class="copy-shortcode tipsy-tooltip" original-title="' . __('Click to copy shortcode.', 'ml-slider') . '"><div class="text-orange cursor-pointer whitespace-normal inline">[metaslider id="'. esc_attr($slideshowID) .'"]</div></pre><span class="copy-message" style="display:none;"><div class="dashicons dashicons-yes"></div></span>');
     }
 
     protected function column_cb($item)
@@ -134,10 +130,10 @@ class MetaSlider_Admin_Table extends WP_List_table
     protected function process_action()
     {
         if (isset($_POST['_wpnonce']) && ! empty($_POST['_wpnonce'])) {
-            $nonce  = filter_input( INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING );
+            $nonce  = filter_input( INPUT_POST, '_wpnonce', FILTER_SANITIZE_SPECIAL_CHARS );
             $action = 'bulk-' . $this->_args['plural'];
             if ( ! wp_verify_nonce($nonce, $action)) {
-                wp_die( 'Nope! Security check failed!' );
+                wp_die( 'Cannot process action' );
             }
         }
 
@@ -150,7 +146,7 @@ class MetaSlider_Admin_Table extends WP_List_table
 
         if(isset($_GET['_wpnonce'])) {
             if ( ! wp_verify_nonce($_GET['_wpnonce'], 'metaslider-action')) {
-                wp_die( 'Cannot process bulk and single actions' );
+                wp_die( 'Cannot process action' );
             }
         }
 
@@ -189,6 +185,14 @@ class MetaSlider_Admin_Table extends WP_List_table
                         'ID' => $slideshow_id,
                         'post_status' => 'publish'
                     ));
+
+                    $slides = $this->get_slides($slideshow_id, 'trash');
+                    foreach ($slides as $key => $slide) {
+                        wp_update_post(array(
+                            'ID' => $slide->ID,
+                            'post_status' => 'publish'
+                        ));
+                    }
                 }
                 break;
             default:
@@ -219,7 +223,6 @@ class MetaSlider_Admin_Table extends WP_List_table
         }
 
         $query_results = $wpdb->get_results($slides_query, ARRAY_A ); // WPCS: unprepared SQL OK.
-
         return $query_results;
     }
 
@@ -254,11 +257,11 @@ class MetaSlider_Admin_Table extends WP_List_table
         return $slidethumb;
     }
 
-    public function slideshow_thumb($slideshowId)
+    public function get_slides($slideshowId, $status)
     {
         $slides = get_posts(array(
             'post_type' => array('ml-slide'),
-            'post_status' => array('publish'),
+            'post_status' => array($status),
             'lang' => '',
             'suppress_filters' => 1,
             'posts_per_page' => -1,
@@ -271,6 +274,12 @@ class MetaSlider_Admin_Table extends WP_List_table
             )
         ));
 
+        return $slides;
+    }
+
+    public function slideshow_thumb($slideshowId)
+    {
+        $slides = $this->get_slides($slideshowId, 'publish');
         $numberOfSlides = count($slides);
         $logo = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(__FILE__) . '/assets/metaslider.svg'));
         $thumbHtml = "<div class='w-16 h-16 bg-gray-light'>";
@@ -311,7 +320,7 @@ class MetaSlider_Admin_Table extends WP_List_table
                 $this->row_actions($actions)
             );
         } else {
-            $editUrl = wp_nonce_url('?page=' . $page . '&id=' . absint($item['ID']), 'metaslider-action' );
+            $editUrl = '?page=' . $page . '&id=' . absint($item['ID']);
             $deleteUrl = wp_nonce_url('?page=' . $page . '&action=delete&slideshows=' . absint($item['ID']), 'metaslider-action' );
 
             $actions = [

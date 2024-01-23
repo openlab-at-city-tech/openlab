@@ -1,4 +1,4 @@
-/*! elementor - v3.14.0 - 26-06-2023 */
+/*! elementor - v3.18.0 - 08-12-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -189,14 +189,14 @@ module.exports = _toPropertyKey, module.exports.__esModule = true, module.export
   \********************************************************/
 /***/ ((module) => {
 
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
+  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -250,10 +250,10 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_module_js") return "98506bec715bd31c4134.bundle.js";
-/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "6ed74dd3befaff90b65c.bundle.js";
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_nested-element-types-base_js") return "1268ff89b5a9b9f27951.bundle.js";
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_views_view_js") return "96124ada3ba05750eec1.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_module_js") return "f9b37afff6a65f7b9541.bundle.js";
+/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "fd6a00ae23a1bc2c6190.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_nested-element-types-base_js") return "e8a7573e654d921656ab.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_views_view_js") return "46e544e5863270fc32f2.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -301,6 +301,7 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
 /******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 		
 /******/ 				script.src = url;
 /******/ 			}
 /******/ 			inProgress[url] = [done];
@@ -331,7 +332,10 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /******/ 				scriptUrl = document.currentScript.src;
 /******/ 			if (!scriptUrl) {
 /******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
+/******/ 				}
 /******/ 			}
 /******/ 		}
 /******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
@@ -386,7 +390,7 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /******/ 								}
 /******/ 							};
 /******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 						}
 /******/ 					}
 /******/ 				}
 /******/ 		};

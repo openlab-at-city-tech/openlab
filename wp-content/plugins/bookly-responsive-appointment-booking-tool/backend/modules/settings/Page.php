@@ -5,11 +5,6 @@ use Bookly\Lib;
 use Bookly\Backend\Components\Schedule\Component as ScheduleComponent;
 use Bookly\Lib\Entities\CustomerAppointment;
 
-/**
- * Class Page
- *
- * @package Bookly\Backend\Modules\Settings
- */
 class Page extends Lib\Base\Ajax
 {
     /**
@@ -148,6 +143,7 @@ class Page extends Lib\Base\Ajax
                     do_action( 'wpml_register_single_string', 'bookly', 'bookly_l10n_ics_customer_template', self::parameter( 'bookly_l10n_ics_customer_template' ) );
                     update_option( 'bookly_ics_staff_template', self::parameter( 'bookly_ics_staff_template' ) );
                     update_option( 'bookly_appointment_default_status', self::parameter( 'bookly_appointment_default_status' ) );
+                    update_option( 'bookly_appointment_end_date_method', self::parameter( 'bookly_appointment_end_date_method' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
                 case 'company':  // Company form.
@@ -173,6 +169,7 @@ class Page extends Lib\Base\Ajax
 
         Proxy\Shared::enqueueAssets();
 
+        $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::LOGS );
         wp_localize_script( 'bookly-settings.js', 'BooklyL10n', array(
             'alert' => $alert,
             'current_tab' => $current_tab,
@@ -189,6 +186,7 @@ class Page extends Lib\Base\Ajax
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
+            'datatables' => $datatables,
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
             'processing' => __( 'Processing...', 'bookly' ),
@@ -218,7 +216,7 @@ class Page extends Lib\Base\Ajax
         $payments = self::_getPayments();
         $business_hours = self::_getBusinessHours();
 
-        self::renderTemplate( 'index', compact( 'values', 'payments', 'business_hours' ) );
+        self::renderTemplate( 'index', compact( 'values', 'payments', 'business_hours', 'datatables' ) );
     }
 
     /**

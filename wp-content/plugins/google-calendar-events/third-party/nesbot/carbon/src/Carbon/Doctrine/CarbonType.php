@@ -11,6 +11,7 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Platforms\AbstractPlatform;
+/** @internal */
 class CarbonType extends DateTimeType implements CarbonDoctrineType
 {
     /**

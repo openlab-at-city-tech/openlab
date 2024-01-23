@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Service
- *
- * @package Bookly\Lib\Entities
- */
 class Service extends Lib\Base\Entity
 {
     const TYPE_SIMPLE        = 'simple';
@@ -393,7 +388,7 @@ class Service extends Lib\Base\Entity
      */
     public function isCollaborative()
     {
-        return $this->getType() == self::TYPE_COLLABORATIVE;
+        return $this->getType() === self::TYPE_COLLABORATIVE;
     }
 
     /**
@@ -403,17 +398,7 @@ class Service extends Lib\Base\Entity
      */
     public function isCompound()
     {
-        return $this->getType() == self::TYPE_COMPOUND;
-    }
-
-    /**
-     * Check if service is a package.
-     *
-     * @return bool
-     */
-    public function isPackage()
-    {
-        return $this->getType() == self::TYPE_PACKAGE;
+        return $this->getType() === self::TYPE_COMPOUND;
     }
 
     /**
@@ -554,6 +539,27 @@ class Service extends Lib\Base\Entity
      */
     public function getDuration()
     {
+        return $this->duration;
+    }
+
+    /**
+     * Gets collaborative duration
+     *
+     * @return int
+     */
+    public function getCollaborativeDuration()
+    {
+        if ( $this->getType() === self::TYPE_COLLABORATIVE && $this->getCollaborativeEqualDuration() ) {
+            $collaborative_max_duration = 0;
+            foreach ( $this->getSubServices() as $sub_service ) {
+                $duration = $sub_service->getDuration();
+                if ( $duration > $collaborative_max_duration ) {
+                    $collaborative_max_duration = $duration;
+                }
+            }
+            return $collaborative_max_duration;
+        }
+
         return $this->duration;
     }
 

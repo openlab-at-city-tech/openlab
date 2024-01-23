@@ -614,10 +614,10 @@ function cuny_profile_activty_block( $type, $title, $last, $desc_length = 135 ) 
 		$groups = openlab_get_groups_of_user( $get_group_args );
 
 		$bp_has_groups_args = [
-			'include'        => $groups['group_ids_sql'],
-			'per_page'       => 20,
-			'exclude_groups' => $exclude_groups,
-			'meta_query'     => [
+			'include'    => $groups['group_ids_sql'],
+			'per_page'   => 20,
+			'exclude'    => $exclude_groups,
+			'meta_query' => [
 				'active_status' => [
 					'key'     => 'group_is_inactive',
 					'compare' => 'NOT EXISTS',

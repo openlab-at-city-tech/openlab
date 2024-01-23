@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
+ * @internal
  */
 class LineFormatter extends NormalizerFormatter
 {

@@ -91,6 +91,7 @@ abstract class Block_Abstract {
 		add_filter( 'advanced-sidebar-menu/scripts/js-config', [ $this, 'js_config' ] );
 		add_filter( 'widget_display_callback', [ $this, 'short_circuit_widget_blocks' ], 10, 3 );
 		add_filter( 'widget_types_to_hide_from_legacy_widget_block', [ $this, 'exclude_from_legacy_widgets' ] );
+		add_filter( 'jetpack_widget_visibility_server_side_render_blocks', [ $this, 'add_jetpack_support' ] );
 	}
 
 
@@ -100,9 +101,9 @@ abstract class Block_Abstract {
 	 * Leave existing intact while forcing users to use the block
 	 * instead for new widgets.
 	 *
-	 * @param array $blocks - Excluded blocks.
+	 * @param array|bool $blocks - Excluded blocks.
 	 *
-	 * @return array
+	 * @return array|bool
 	 */
 	public function exclude_from_legacy_widgets( $blocks ) {
 		if ( ! \is_array( $blocks ) ) {
@@ -134,14 +135,14 @@ abstract class Block_Abstract {
 	 * We mimic the functionality of the inner echo while excluding
 	 * the calls to output the wrap.
 	 *
-	 * @param bool|array $instance - Contents of the block, before parsing.
+	 * @param false|array $instance - Contents of the block, before parsing.
 	 * @param \WP_Widget $widget   - Object representing a block based widget.
 	 * @param array      $args     - Widget area arguments.
 	 *
 	 * @return false|array
 	 */
 	public function short_circuit_widget_blocks( $instance, $widget, array $args ) {
-		if ( ! \is_array( $instance ) || empty( $instance['content'] ) || strpos( $instance['content'], static::NAME ) === false ) {
+		if ( ! \is_array( $instance ) || empty( $instance['content'] ) || false === strpos( $instance['content'], static::NAME ) ) {
 			return $instance;
 		}
 
@@ -151,6 +152,32 @@ abstract class Block_Abstract {
 		echo apply_filters( 'widget_block_content', $instance['content'], $instance, $widget, $args ); //phpcs:ignore
 
 		return false;
+	}
+
+
+	/**
+	 * Jetpack assumes that no blocks will be using `ServerSideRender` and adds
+	 * a custom `conditions` attribute to all blocks via JS. This causes the
+	 * previews to fail due to invalid attributes.
+	 *
+	 * Only affected when Jetpack's "widget-visibility" module is active.
+	 *
+	 * By including the block name in the list of blocks that use `ServerSideRender`
+	 * Jetpack will add the `conditions` attribute to the block.
+	 *
+	 * @ticket #11837
+	 * @link https://github.com/Automattic/jetpack/pull/31928
+	 *
+	 * @param ?array $blocks Blocks that Jetpack supports.
+	 *
+	 * @return array
+	 */
+	public function add_jetpack_support( $blocks ): array {
+		if ( ! \is_array( $blocks ) ) {
+			$blocks = [];
+		}
+		$blocks[] = static::NAME;
+		return $blocks;
 	}
 
 
@@ -168,7 +195,7 @@ abstract class Block_Abstract {
 	public function register() {
 		register_block_type( static::NAME,
 			apply_filters( 'advanced-sidebar-menu/block-register/' . static::NAME, [
-				'api_version'     => 2,
+				'api_version'     => 3,
 				'attributes'      => $this->get_all_attributes(),
 				'description'     => $this->get_description(),
 				'editor_script'   => Scripts::GUTENBERG_HANDLE,
@@ -188,19 +215,19 @@ abstract class Block_Abstract {
 	 */
 	protected function get_all_attributes() {
 		return \array_merge( [
-			'clientId'           => [
+			'clientId'             => [
 				'type' => 'string',
 			],
 			static::RENDER_REQUEST => [
 				'type' => 'boolean',
 			],
-			'sidebarId'          => [
+			'sidebarId'            => [
 				'type' => 'string',
 			],
-			'style'              => [
+			'style'                => [
 				'type' => 'object',
 			],
-			Menu_Abstract::TITLE => [
+			Menu_Abstract::TITLE   => [
 				'type' => 'string',
 			],
 		], $this->get_attributes() );
@@ -219,6 +246,8 @@ abstract class Block_Abstract {
 	public function js_config( array $config ) {
 		$config['blocks'][ \explode( '/', static::NAME )[1] ] = [
 			'id' => static::NAME,
+			'attributes' => $this->get_all_attributes(),
+			'supports'   => $this->get_block_support(),
 		];
 
 		return $config;
@@ -259,7 +288,7 @@ abstract class Block_Abstract {
 		 */
 		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ static::RENDER_REQUEST ] ) ) {
 			if ( ! empty( get_post() ) ) {
-				add_action( 'advanced-sidebar-menu/widget/before-render', function( $menu ) {
+				add_action( 'advanced-sidebar-menu/widget/before-render', function( Menu_Abstract $menu ) {
 					if ( method_exists( $menu, 'set_current_post' ) ) {
 						$menu->set_current_post( get_post() );
 					}
@@ -268,7 +297,7 @@ abstract class Block_Abstract {
 				$GLOBALS['wp_query']->queried_object = get_post();
 				$GLOBALS['wp_query']->queried_object_id = get_the_ID();
 				$GLOBALS['wp_query']->is_singular = true;
-				if ( get_post_type() === 'page' ) {
+				if ( 'page' === get_post_type() ) {
 					$GLOBALS['wp_query']->is_page = true;
 				} else {
 					$GLOBALS['wp_query']->is_single = true;
@@ -313,7 +342,6 @@ abstract class Block_Abstract {
 		ob_start();
 		$widget = $this->get_widget_class();
 		$widget->widget( $this->widget_args, $this->convert_checkbox_values( $attr ) );
-		return ob_get_clean();
+		return (string) ob_get_clean();
 	}
-
 }

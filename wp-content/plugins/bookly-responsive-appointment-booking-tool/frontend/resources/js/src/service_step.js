@@ -309,6 +309,8 @@ export default function stepService(params) {
                     $next_step.trigger('click');
                 } else {
                     $('.bookly-js-mobile-step-1', $container).hide();
+                    $('.bookly-stepper li:eq(1)', $container).addClass('bookly-step-active');
+                    $('.bookly-stepper li:eq(0)', $container).removeClass('bookly-step-active');
                     $('.bookly-js-mobile-step-2', $container).css('display', 'block');
                     scrollTo($container, params.form_id);
                 }
@@ -323,6 +325,8 @@ export default function stepService(params) {
             setTimeout(function() {
                 opt[params.form_id].scroll = false;
                 $mobile_next_step.trigger('click');
+                $('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
+                $('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
             }, 0);
             $mobile_prev_step.remove();
         } else {
@@ -331,6 +335,8 @@ export default function stepService(params) {
                 e.preventDefault();
                 $('.bookly-js-mobile-step-1', $container).show();
                 $('.bookly-js-mobile-step-2', $container).hide();
+                $('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
+                $('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
                 return false;
             });
         }

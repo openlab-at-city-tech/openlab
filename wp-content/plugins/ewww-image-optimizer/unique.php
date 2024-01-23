@@ -181,7 +181,7 @@ function ewww_image_optimizer_jpegtran_autorotate( $file, $type, $orientation ) 
  *                             6=imagestore.
  * @param bool   $converted True if this is a resize and the full image was converted to a
  *                          new format. Deprecated, always false now.
- * @param bool   $new True if this is a new image, so it should attempt conversion regardless of
+ * @param bool   $new_image True if this is a new image, so it should attempt conversion regardless of
  *                    previous results.
  * @param bool   $fullsize True if this is a full size (original) image.
  * @return array {
@@ -193,7 +193,7 @@ function ewww_image_optimizer_jpegtran_autorotate( $file, $type, $orientation ) 
  *     @type string The original filename if converted.
  * }
  */
-function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $new = false, $fullsize = false ) {
+function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $new_image = false, $fullsize = false ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 	session_write_close();
 	if ( function_exists( 'wp_raise_memory_limit' ) ) {
@@ -229,32 +229,9 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		ewwwio_debug_message( "couldn't write to the file $file" );
 		return array( false, $msg, $converted, $original );
 	}
-	$file_perms = 'unknown';
-	if ( ewww_image_optimizer_function_exists( 'fileperms' ) ) {
-		$file_perms = substr( sprintf( '%o', fileperms( $file ) ), -4 );
-	}
-	$file_owner = 'unknown';
-	$file_group = 'unknown';
-	if ( function_exists( 'posix_getpwuid' ) ) {
-		$file_owner = posix_getpwuid( fileowner( $file ) );
-		if ( $file_owner ) {
-			$file_owner = 'xxxxxxxx' . substr( $file_owner['name'], -4 );
-		} else {
-			$file_owner = 'unknown';
-		}
-	}
-	if ( function_exists( 'posix_getgrgid' ) ) {
-		$file_group = posix_getgrgid( filegroup( $file ) );
-		if ( $file_group ) {
-			$file_group = 'xxxxx' . substr( $file_group['name'], -5 );
-		} else {
-			$file_group = 'unknown';
-		}
-	}
-	ewwwio_debug_message( "permissions: $file_perms, owner: $file_owner, group: $file_group" );
 	$type = ewww_image_optimizer_mimetype( $file, 'i' );
 	if ( ! $type ) {
-		ewwwio_debug_message( 'could not find any functions for mimetype detection' );
+		ewwwio_debug_message( 'could not find mimetype' );
 		// Otherwise we store an error message since we couldn't get the mime-type.
 		return array( false, __( 'Unknown file type', 'ewww-image-optimizer' ), $converted, $original );
 	}
@@ -282,7 +259,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 	} else {
 		$skip_lossy = false;
 	}
-	if ( ini_get( 'max_execution_time' ) < 90 && ewww_image_optimizer_stl_check() ) {
+	if ( ini_get( 'max_execution_time' ) && ini_get( 'max_execution_time' ) < 90 && ewww_image_optimizer_stl_check() ) {
 		set_time_limit( 0 );
 	}
 	// Get the original image size.
@@ -334,7 +311,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' );
 			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new && $convert ) ) {
+			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
 				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
@@ -615,7 +592,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			} // End if().
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' );
 			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new && $convert ) ) {
+			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
 				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
@@ -804,7 +781,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 							$imagick->setImageAlphaChannel( 11 );
 						}
 						$imagick->setImageFormat( 'JPG' );
-						$imagick->setCompressionQuality( $gquality );
+						$imagick->setImageCompressionQuality( $gquality );
 						$imagick->writeImage( $jpgfile );
 					} catch ( Exception $imagick_error ) {
 						ewwwio_debug_message( $imagick_error->getMessage() );
@@ -926,7 +903,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' );
 			// Check for previous optimization, so long as the force flag is on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new && $convert ) ) {
+			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
 				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
@@ -1178,7 +1155,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			break;
 		default:
-			// If not a JPG, PNG, GIF, or SVG tell the user we don't work with strangers.
+			// If not a JPG, PNG, GIF, PDF or SVG tell the user we don't work with strangers.
 			return array( false, __( 'Unsupported file type', 'ewww-image-optimizer' ) . ": $type", $converted, $original );
 	} // End switch().
 	// Allow other plugins to run operations on the images after optimization.

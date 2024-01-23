@@ -7,7 +7,7 @@
      */
     $.fn.booklySelectCountry = function (opts) {
         const formatCountry = function (item) {
-            return $('<span class="intl-tel-input"><div class="d-inline-block mr-2 iti-flag ' + item.id + '"></div>' + item.text + '</span>');
+            return $('<span class="intl-tel-input"><div class="d-inline-block mr-2 iti__flag iti__' + item.id + '"></div>' + item.text + '</span>');
         };
         opts = $.extend({
             width: '100%',

@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics;
 
 use Bookly\Lib;
 
-/**
- * Class Diagnostics
- *
- * @package Bookly\Backend\Modules\Diagnostics
- */
 class Page extends Lib\Base\Component
 {
     /**

@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @internal
  */
 class FirePHPHandler extends AbstractProcessingHandler
 {

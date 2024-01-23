@@ -52,8 +52,6 @@ class BP_Optouts_List_Table extends WP_Users_List_Table {
 	 * @since 8.0.0
 	 */
 	public function prepare_items() {
-		global $usersearch;
-
 		$search   = isset( $_REQUEST['s'] ) ? $_REQUEST['s'] : '';
 		$per_page = $this->get_items_per_page( str_replace( '-', '_', "{$this->screen->id}_per_page" ) );
 		$paged    = $this->get_pagenum();
@@ -324,7 +322,7 @@ class BP_Optouts_List_Table extends WP_Users_List_Table {
 		if ( ! $inviter ) {
 			return;
 		}
-		$user_link = bp_core_get_user_domain( $optout->user_id );
+		$user_link = bp_members_get_user_url( $optout->user_id );
 		echo $avatar . sprintf( '<strong><a href="%1$s" class="edit">%2$s</a></strong><br/>', esc_url( $user_link ), esc_html( $inviter->user_login ) );
 	}
 

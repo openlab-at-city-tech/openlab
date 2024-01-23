@@ -42,7 +42,10 @@ jQuery(function ($) {
         isMobile = true;
     } catch (e) {}
 
-    $statusFilter.booklyDropdown({onChange: function () { dt.ajax.reload(); }});
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
+    $statusFilter.booklyDropdown({onChange: onChangeFilter});
 
     $('.bookly-js-select').val(null);
 
@@ -331,7 +334,7 @@ jQuery(function ($) {
             null,
             moment(),
             function (event) {
-                dt.ajax.reload();
+                dt.ajax.reload(null, false);
             }
         )
     });
@@ -421,7 +424,7 @@ jQuery(function ($) {
             BooklyPaymentDetailsDialog.showDialog({
                 payment_id: getDTRowData(this).payment_id,
                 done: function (event) {
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 }
             });
         })
@@ -433,7 +436,7 @@ jQuery(function ($) {
                 null,
                 null,
                 function (event) {
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 }
             )
         });
@@ -627,11 +630,11 @@ jQuery(function ($) {
         return dt.row($el).data();
     }
 
-    $idFilter.on('keyup', function () { dt.ajax.reload(); });
-    $appointmentDateFilter.on('apply.daterangepicker', function () { dt.ajax.reload(); });
-    $creationDateFilter.on('apply.daterangepicker', function () { dt.ajax.reload(); });
-    $staffFilter.on('change', function () { dt.ajax.reload(); });
-    $customerFilter.on('change', function () { dt.ajax.reload(); });
-    $serviceFilter.on('change', function () { dt.ajax.reload(); });
-    $locationFilter.on('change', function () { dt.ajax.reload(); });
+    $idFilter.on('keyup', onChangeFilter);
+    $appointmentDateFilter.on('apply.daterangepicker', onChangeFilter);
+    $creationDateFilter.on('apply.daterangepicker', onChangeFilter);
+    $staffFilter.on('change', onChangeFilter);
+    $customerFilter.on('change', onChangeFilter);
+    $serviceFilter.on('change', onChangeFilter);
+    $locationFilter.on('change', onChangeFilter);
 });

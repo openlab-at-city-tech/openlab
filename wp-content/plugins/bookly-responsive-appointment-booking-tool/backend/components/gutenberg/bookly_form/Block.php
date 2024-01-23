@@ -3,11 +3,6 @@ namespace Bookly\Backend\Components\Gutenberg\BooklyForm;
 
 use Bookly\Lib;
 
-/**
- * Class Block
- *
- * @package Bookly\Backend\Components\Gutenberg\BooklyForm
- */
 class Block extends Lib\Base\Block
 {
     /**

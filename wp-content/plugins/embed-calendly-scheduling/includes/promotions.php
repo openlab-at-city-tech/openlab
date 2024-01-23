@@ -29,6 +29,45 @@ class EMCS_Promotions
         self::promotion_actions_listener();
     }
 
+    public static function init_menu()
+    {
+        self::$show_promotions = apply_filters('emcs_promotions', true);
+
+        if (self::$show_promotions) {
+
+            add_submenu_page(
+                'emcs-event-types',
+                __('Embed Calendly Pro License', 'embed-calendly-scheduling'),
+                __('Premium', 'embed-calendly-scheduling'),
+                'manage_options',
+                'emcs-licenses',
+                'EMCS_Promotions::pro_license_page'
+            );
+        }
+    }
+
+    public static function pro_license_page()
+    {
+?>
+        <div class="emcs-pro-promotion-page">
+            <h1>Unlock More Features With Embed Calendly Pro</h1>
+            <ul>
+                <li>
+                    <strong>Track your calendar conversion</strong> - Understand how visitors interact with your booking page & calendar.
+                </li>
+                <li>
+                    <strong>View all upcoming events in WordPress</strong> - See all booked events without leaving your WordPress website.
+                </li>
+                <li>
+                    <strong>24/7 Premium Support</strong> - Gain access to our priority customer support.
+                </li>
+            </ul>
+            <h4><i>- With 14 days money back guarantee. No questions asked.</i></h4>
+            <a href="https://embedcalendly.com/pricing" class="button-primary" target="_blank">Get Embed Calendly Pro</a>
+        </div>
+        <?php
+    }
+
     /**
      * Handles the dismiss promotion button
      */
@@ -77,13 +116,10 @@ class EMCS_Promotions
     {
         $current_promotion_id = self::get_current_promotion_id();
 
-        switch ($current_promotion_id) {
-            case 2:
-                return self::emcp_promotion();
-            case 3:
-                return self::email_list_promotion();
-            default:
-                return self::optimization_promotion();
+        if ($current_promotion_id == 2) {
+            return self::email_list_promotion();
+        } else {
+            return self::optimization_promotion();
         }
     }
 
@@ -93,16 +129,19 @@ class EMCS_Promotions
         global $pagenow;
 
         if ($pagenow == 'index.php') {
-?>
+        ?>
             <div class="notice notice-info is-dismissible emcs-promotion-notice">
                 <div class="emcs-row">
                     <div class="emcs-col">
-                        <h2>Keep your calendar booked this <?php echo date('F', strtotime('+1 month')) ?>!</h2>
+                        <h2>Turn Your Website Into <strong>A Lead Generation Tool</strong></h2>
                         <h3>Optimize your website to <strong><u>book more calls</u></strong> and <strong><u>land more clients</u></strong></h3>
                         <div>
-                            <a href="https://embedcalendly.com/promotion" class="button-primary" target="_blank">Learn how</a>
+                            <a href="https://embedcalendly.com/promotion" class="button-primary" target="_blank">See how >></a>
                             <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class="">Don't show again.</a>
                         </div>
+                    </div>
+                    <div class="emcs-col emcs-hide-col">
+                        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc.svg') ?>" alt="embed calendly logo" width="100px" />
                     </div>
                 </div>
             </div>
@@ -111,7 +150,7 @@ class EMCS_Promotions
         }
     }
 
-    public static  function email_list_promotion()
+    public static function email_list_promotion()
     {
         global $pagenow;
 
@@ -139,32 +178,6 @@ class EMCS_Promotions
                     </div>
                 </div>
             </div>
-        <?php
-        }
-    }
-
-    public static function emcp_promotion()
-    {
-        global $pagenow;
-
-        if ($pagenow == 'index.php') {
-
-        ?>
-            <div class="notice notice-info is-dismissible emcs-promotion-notice-secondary">
-                <div class="emcs-row">
-                    <div class="emcs-col">
-                        <h2>Track Your Calendar Conversion And View <br> Calendly Bookings Directly In WordPress</h2>
-                        <br>
-                        <div>
-                            <a href="https://embedcalendly.com/pricing" class="button-primary" target="_blank">
-                                Get <strong>Embed Calendly Pro</strong>
-                            </a>
-                            <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class="">Don't show again.</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
 <?php
         }
     }
@@ -174,8 +187,6 @@ class EMCS_Promotions
      */
     private static function get_current_promotion_id()
     {
-        return 2;
-        
         $promotion_id = 1;
         $last_promotion_id = get_option(self::LAST_DISPLAYED_PROMOTION);
         $current_promotion_delay = get_option(self::PROMOTION_DELAY_OPTION);
@@ -184,7 +195,7 @@ class EMCS_Promotions
 
             if (self::is_more_than_3days_ago($current_promotion_delay)) {
 
-                if ($last_promotion_id < 3) {
+                if ($last_promotion_id < 2) {
 
                     $promotion_id = $last_promotion_id + 1;
                     self::update_promotion_delay($promotion_id);;

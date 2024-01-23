@@ -9,11 +9,6 @@ use Bookly\Lib\Utils\Common;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Price;
 
-/**
- * Class Page
- *
- * @package Bookly\Backend\Modules\Calendar
- */
 class Page extends Lib\Base\Ajax
 {
     /**
@@ -136,6 +131,7 @@ class Page extends Lib\Base\Ajax
             'client_last_name' => '',
             'client_phone' => '',
             'client_birthday' => '',
+            'client_full_birthday' => '',
             'client_note' => '',
             'company_address' => get_option( 'bookly_co_address' ),
             'company_name' => get_option( 'bookly_co_name' ),

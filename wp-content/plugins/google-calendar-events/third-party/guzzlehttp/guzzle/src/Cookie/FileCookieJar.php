@@ -5,6 +5,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Cookie;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
+ * @internal
  */
 class FileCookieJar extends CookieJar
 {

@@ -29,6 +29,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *   }
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
+ * @internal
  */
 class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, FormattableHandlerInterface, ResettableInterface
 {

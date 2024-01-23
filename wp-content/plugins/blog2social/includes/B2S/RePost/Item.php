@@ -6,12 +6,14 @@ class B2S_RePost_Item {
     private $postTypesData;
     private $postCategoriesData;
     private $postAuthorData;
+    private $postTagsData;
 
     public function __construct() {
         $this->options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
         $this->postTypesData = get_post_types(array('public' => true));
         $this->postCategoriesData = get_categories();
         $this->postAuthorData = get_users();
+        $this->postTagsData = get_tags(array('hide_empty' => false));
     }
 
     public function getRePostOptionsHtml() {
@@ -47,6 +49,8 @@ class B2S_RePost_Item {
         $content .= '<br>';
         $content .= $this->getDateData();
         $content .= $this->getChosenPostCategoriesData();
+        $content .= '<br>';
+        $content .= $this->getChosenPostTagsData();
         $content .= '<br>';
         $content .= $this->getChosenPostAuthorData();
         $content .= '<br>';
@@ -152,27 +156,33 @@ class B2S_RePost_Item {
 
     private function getMandantSelect($mandantId = 0, $twitterId = 0) {
         $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
-        if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
+		if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
             /*
-             * since V7.0 Remove Video Networks
-             */
-            $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
-            foreach ($result->data->auth as $a => $auth) {
-                foreach ($auth as $u => $item) {
-                    if (in_array($item->networkId, $isVideoNetwork)) {
-                        if (!in_array($item->networkId, array(1, 2, 6, 12, 38, 39))) {
-                            unset($result->data->auth->$u);                        }
+                 * since V7.0 Remove Video Networks
+                 */
+                if (!empty($result->data->auth)) {
+                    $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
+                    foreach ($result->data->auth as $a => $auth) {
+                        foreach ($auth as $u => $item) {
+                            if (in_array($item->networkId, $isVideoNetwork)) {
+                                if (!in_array($item->networkId, array(1, 2, 3, 6, 12, 38, 39))) {
+                                    if (isset($a[$u])) {
+                                        unset($result->data->auth->{$a[$u]});
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-            }
             $mandant = $result->data->mandant;
             $auth = $result->data->auth;
             $authContent = '';
             $content = '<div class="row"><div class="col-md-6 b2s-re-post-profile"><label for="b2s-re-post-profil-dropdown">' . esc_html__('Select network collection:', 'blog2social') . '</label><a class="b2s-network-info-modal-btn pull-right" href="#">' . esc_html__('Info', 'blog2social') . '</a>
                 <select class="b2s-w-100" id="b2s-re-post-profil-dropdown" name="b2s-re-post-profil-dropdown">';
-            foreach ($mandant as $k => $m) {
+            
+			foreach ($mandant as $k => $m) {
                 $content .= '<option value="' . esc_attr($m->id) . '" ' . (((int) $m->id == (int) $mandantId) ? 'selected' : '') . '>' . esc_html((($m->id == 0) ? __($m->name, 'blog2social') : $m->name)) . '</option>';
-                $profilData = (isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0])) ? json_encode($auth->{$m->id}) : '';
+            	$profilData = (isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0])) ? json_encode($auth->{$m->id}) : '';
                 $authContent .= "<input type='hidden' name='b2s-re-post-profil-data-" . esc_attr($m->id) . "' id='b2s-re-post-profil-data-" . esc_attr($m->id) . "' value='" . base64_encode($profilData) . "'/>";
             }
             $content .= '</select><div class="pull-right hidden-sm hidden-xs"><a href="' . esc_url(get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-network') . '" target="_blank">' . esc_html__('Network settings', 'blog2social') . '</a></div></div>';
@@ -245,6 +255,25 @@ class B2S_RePost_Item {
             $html .= '<select name="b2s-re-post-categories-data[]" data-placeholder="Select Post Categories" class="b2s-re-post-categories" multiple>';
 
             foreach ($this->postCategoriesData as $cat) {
+                $html .= '<option value="' . esc_attr($cat->term_taxonomy_id) . '">' . esc_html($cat->name) . '</option>';
+            }
+
+            $html .= '</select>';
+        }
+        return $html;
+    }
+
+    private function getChosenPostTagsData() {
+
+        $html = '';
+        if (is_array($this->postTagsData) && !empty($this->postTagsData)) {
+            $html .= '<input type="checkbox" name="b2s-re-post-tags-active" class="b2s-re-post-tags-active" id="b2s-re-post-tags-active" value="1">';
+            $html .= '<label for="b2s-re-post-tags-active"> ' . esc_html__('Tags', 'blog2social') . ' </label>';
+            $html .= '<input id="b2s-re-post-tags-state-include" name="b2s-re-post-tags-state" value="0" checked type="radio" class="b2s-re-post-state"><label class="padding-bottom-3" for="b2s-re-post-tags-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
+            $html .= '<input id="b2s-re-post-tags-state-exclude" name="b2s-re-post-tags-state" value="1" type="radio" class="b2s-re-post-state"><label class="padding-bottom-3" for="b2s-re-post-tags-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label>';
+            $html .= '<select name="b2s-re-post-tags-data[]" data-placeholder="Select Post Tags" class="b2s-re-post-tags" multiple>';
+
+            foreach ($this->postTagsData as $cat) {
                 $html .= '<option value="' . esc_attr($cat->term_taxonomy_id) . '">' . esc_html($cat->name) . '</option>';
             }
 

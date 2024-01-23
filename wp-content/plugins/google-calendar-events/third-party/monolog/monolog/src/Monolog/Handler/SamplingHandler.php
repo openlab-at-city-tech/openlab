@@ -28,6 +28,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 class SamplingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {

@@ -29,6 +29,7 @@ use ReturnTypeWillChange;
  * @method static copy()
  * @method static resolveCarbon($date = null)
  * @method static Translator translator()
+ * @internal
  */
 trait Difference
 {

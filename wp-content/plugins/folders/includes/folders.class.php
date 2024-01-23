@@ -155,6 +155,8 @@ class WCP_Folders
         add_action('wp_ajax_folder_plugin_deactivate', [ $this, 'folder_plugin_deactivate' ]);
         // Update Parent Data
         add_action('wp_ajax_wcp_remove_post_folder', [$this, 'wcp_remove_post_folder']);
+        // Change folder color
+        add_action('wp_ajax_wcp_change_color_folder', [$this, 'wcp_change_color_folder']);
         // Send message on owner
         add_action('wp_ajax_wcp_folder_send_message_to_owner', [ $this, 'wcp_folder_send_message_to_owner' ]);
         // Get default list
@@ -246,6 +248,7 @@ class WCP_Folders
          * Hide Folder CTA
          * */
         add_action('wp_ajax_hide_folders_cta', [$this, 'hide_folders_cta']);
+        add_action('wp_ajax_hide_folder_color_pop_up', [$this, 'hide_folder_color_pop_up']);
 
         add_action("manage_posts_extra_tablenav", [$this, "manage_posts_extra_fields"]);
 
@@ -388,6 +391,43 @@ class WCP_Folders
             }
         }
     }
+
+    /**
+     * Hide CTA button text
+     *
+     * @since  1.0.0
+     * @access public
+     * @return $response
+     */
+    public function hide_folder_color_pop_up()
+    {
+        $response            = [];
+        $response['status']  = 0;
+        $response['error']   = 0;
+        $response['data']    = [];
+        $response['message'] = "";
+        $postData            = filter_input_array(INPUT_POST);
+        $errorCounter        = 0;
+        if (!isset($postData['nonce']) || empty($postData['nonce'])) {
+            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $errorCounter++;
+        } else {
+            $nonce = self::sanitize_options($postData['nonce']);
+            if (!wp_verify_nonce($nonce, 'hide_folder_color_pop_up')) {
+                $response['message'] = esc_html__("Your request is not valid", 'folders');
+                $errorCounter++;
+            }
+        }
+
+        if ($errorCounter == 0) {
+            $response['status'] = 1;
+            add_option("hide_folder_color_pop_up", "yes");
+        }
+
+        echo json_encode($response);
+        die;
+
+    }//end hide_folder_color_pop_up()
 
     /**
      * Hide CTA button text
@@ -783,7 +823,7 @@ class WCP_Folders
         if (!isset($postData['post_id']) || empty($postData['post_id'])) {
             $response['message'] = esc_html__("Your request is not valid", 'folders');
             $error = 1;
-        } else if (!isset($postData['post_type']) || empty($postData['type'])) {
+        } else if (!isset($postData['post_type']) || empty($postData['post_type'])) {
             $response['message'] = esc_html__("Your request is not valid", 'folders');
             $error = 1;
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
@@ -1434,6 +1474,56 @@ class WCP_Folders
 
     }//end premio_check_for_other_folders()
 
+    public function wcp_change_color_folder()
+    {
+        $response            = [];
+        $response['status']  = 0;
+        $response['error']   = 0;
+        $response['data']    = [];
+        $response['message'] = "";
+        $response['id']      = [];
+
+        $postData            = filter_input_array(INPUT_POST);
+        $errorCounter        = 0;
+        if (!current_user_can("manage_categories")) {
+            $response['message'] = esc_html__("You have not permission to update folder", 'folders');
+            $errorCounter++;
+        } else if (!isset($postData['term_id']) || empty($postData['term_id'])) {
+            $errorCounter++;
+            $response['message'] = esc_html__("Your request is not valid", 'folders');
+        } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
+            $response['message'] = esc_html__("Your request is not valid", 'folders');
+            $errorCounter++;
+        } else {
+            $term_id = self::sanitize_options($postData['term_id']);
+            if (!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
+                $response['message'] = esc_html__("Your request is not valid", 'folders');
+                $errorCounter++;
+            }
+        }
+
+        if ($errorCounter == 0) {
+            $term_id = self::sanitize_options($postData['term_id']);
+            $getColor = self::sanitize_options($postData['color']);
+
+            $folder_info    = get_term_meta($term_id, "folder_info", true);
+
+            if ($folder_info) {
+                $folder_info['has_color'] = $getColor;
+                update_term_meta($term_id, "folder_info", $folder_info);
+            } else {
+                $folder_info = [];
+                $folder_info['has_color'] = $getColor;
+                add_term_meta($term_id, "folder_info", $folder_info);
+            }
+            $response['id'] = $term_id;
+            $response['status'] = 1;
+        }
+
+        echo json_encode($response);
+        wp_die();
+
+    }//end wcp_change_color_folder()
 
     /**
      * Remove Folder
@@ -1977,6 +2067,7 @@ class WCP_Folders
                         'is_high'   => 0,
                         'is_locked' => 0,
                         'is_active' => 0,
+                        'has_color' => ''
                     ], $folder_info);
 
                     $folder_settings[] = [
@@ -1985,6 +2076,7 @@ class WCP_Folders
                         'is_locked'    => intval($folder_info['is_locked']),
                         'is_active'    => intval($folder_info['is_active']),
                         'is_high'      => intval($folder_info['is_high']),
+                        'has_color'    => $folder_info['has_color'],
                         'nonce'        => wp_create_nonce('wcp_folder_term_'.$taxonomy->term_id),
                         'is_deleted'   => 0,
                         'slug'         => $taxonomy->slug,
@@ -2014,6 +2106,10 @@ class WCP_Folders
                 }
 
                 $use_shortcuts = !isset($customize_folders['use_shortcuts']) ? "yes" : $customize_folders['use_shortcuts'];
+
+                ob_start();
+                include_once dirname(dirname(__FILE__)).WCP_DS."/templates".WCP_DS."admin".WCP_DS."modals.php";
+                $form_content = ob_get_clean();
 
                 $lang = $this->js_strings();
                 wp_dequeue_script("jquery-jstree");
@@ -2054,7 +2150,9 @@ class WCP_Folders
                         'defaultTimeout'    => $defaultTimeout,
                         'default_folder'    => $default_folder,
                         'use_shortcuts'     => $use_shortcuts,
-                        'lang'              => $lang
+                        'lang'              => $lang,
+                        'selected_colors'   => $this->selected_colors(),
+                        'form_content'      => $form_content
                     ]
                 );
                 // Free/Pro URL Change
@@ -2079,9 +2177,14 @@ class WCP_Folders
                 if (!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
                     $customize_folders['folder_bg_color'] = "#FA166B";
                 }
+                if (!isset($customize_folders['default_icon_color']) || empty($customize_folders['default_icon_color'])) {
+                    $customize_folders['default_icon_color'] = "#334155";
+                }
 
                 $rgbColor  = self::hexToRgb($customize_folders['folder_bg_color']);
                 $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked), body:not(.no-hover-css) #custom-scroll-menu .jstree-hovered:not(.jstree-clicked):hover { background: rgba(".esc_attr($rgbColor['r']).",".esc_attr($rgbColor['g']).",".esc_attr($rgbColor['b']).", 0.08) !important; color: #333333;}";
+                $css_text .= ".dynamic-menu li.color-folder:hover { background: rgba(".$rgbColor['r'].",".$rgbColor['g'].",".$rgbColor['b'].", 0.08) !important; }";
+                $css_text .= "body:not(.no-hover-css) .dynamic-menu li.color-folder a:hover { background: transparent !important;}";
                 $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover { background: ".esc_attr($customize_folders['folder_bg_color'])." !important; color: #ffffff !important; }";
                 $css_text .= "body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked .folder-actions { background: ".esc_attr($customize_folders['folder_bg_color'])." !important; color: #ffffff !important; }";
                 $css_text .= "#custom-scroll-menu .jstree-hovered.wcp-drop-hover, #custom-scroll-menu .jstree-hovered.wcp-drop-hover:hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover, #custom-scroll-menu .jstree-clicked.wcp-drop-hover:hover, body #custom-scroll-menu  *.drag-in >, body #custom-scroll-menu  *.drag-in > a:hover { background: ".esc_attr($customize_folders['folder_bg_color'])." !important; color: #ffffff !important; }";
@@ -2098,7 +2201,7 @@ class WCP_Folders
                 $css_text .= ".jstree-default .jstree-clicked { background-color:".esc_attr($customize_folders['folder_bg_color'])."}";
                 $css_text .= ".jstree-node.drag-in > a.jstree-anchor.jstree-hovered { background-color: ".esc_attr($customize_folders['folder_bg_color'])."; color: #ffffff; }";
                 $css_text .= "#custom-scroll-menu .jstree-hovered:not(.jstree-clicked) .pfolder-folder-close { color: ".esc_attr($customize_folders['folder_bg_color'])."; }";
-
+                $css_text   .= ".pfolder-folder-close {color: ".esc_attr($customize_folders['default_icon_color'])."}";
                 if (!isset($customize_folders['bulk_organize_button_color']) || empty($customize_folders['bulk_organize_button_color'])) {
                     $customize_folders['bulk_organize_button_color'] = "#FA166B";
                 }
@@ -4239,6 +4342,7 @@ class WCP_Folders
                     $folder_item['is_high']      = 0;
                     $folder_item['is_locked']    = 0;
                     $folder_item['folder_count'] = 0;
+                    $folder_item['has_color']    ='';
 
                     add_term_meta($result['term_id'], "created_by", $user_id);
 
@@ -4260,12 +4364,14 @@ class WCP_Folders
                                     'is_high'   => 0,
                                     'is_locked' => 0,
                                     'is_active' => 0,
+                                    'has_color' => ''
                                 ], $folder_info);
 
                                 $folder_item['is_active'] = intval($folder_info['is_active']);
                                 $folder_item['is_high']   = intval($folder_info['is_high']);
                                 $folder_item['is_locked'] = intval($folder_info['is_locked']);
                                 $folder_item['is_sticky'] = intval($folder_info['is_sticky']);
+                                $folder_item['has_color'] = $folder_info['has_color'];
 
                                 add_term_meta($term->term_id, "folder_info", $folder_info);
 
@@ -4640,6 +4746,25 @@ class WCP_Folders
                 }
             }
         }
+        if(class_exists("youzify_media")) {
+            $term = get_term_by( 'slug', 'youzify_media', 'category' );
+            if(isset($term->term_id)) {
+                $where[] = "( P.ID NOT IN (
+                    SELECT object_id
+                    FROM ".$wpdb->term_relationships."
+                    WHERE term_taxonomy_id IN (".$term->term_id.") ) )";
+            }
+        }
+
+        /* W3 Cache */
+        if(defined("W3TC")) {
+            $where[] = "( WTCPM.post_id IS NULL )";
+        }
+
+        /* Jetbrain Video */
+        if(defined("JETPACK_VIDEOPRESS_NAME")) {
+            $where[] = " JBV.post_id IS NULL ";
+        }
         return $where;
     }
 
@@ -4674,6 +4799,16 @@ class WCP_Folders
             $join .= " LEFT JOIN ".$wpdb->postmeta." AS ELPM
                         ON ( P.ID = ELPM.post_id
                         AND ELPM.meta_key = '_elementor_is_screenshot') ";
+        }
+        if(defined("W3TC")) {
+            $join .= "LEFT JOIN ".$wpdb->postmeta." AS WTCPM
+                ON ( P.ID = WTCPM.post_id
+                AND WTCPM.meta_key = 'w3tc_imageservice_file' )";
+        }
+        if(defined("JETPACK_VIDEOPRESS_NAME")) {
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS JBV
+                        ON ( P.ID = JBV.post_id
+                        AND JBV.meta_key = 'videopress_poster_image') ";
         }
         return $join;
     }
@@ -5249,6 +5384,30 @@ class WCP_Folders
 
             if ($typenow == "attachment") {
                 $admin_url = admin_url("upload.php?post_type=attachment&media_folder=");
+                global $current_user;
+                if (isset($current_user->ID)) {
+                    $userMode = get_user_option('media_library_mode', get_current_user_id()) ? get_user_option('media_library_mode', get_current_user_id()) : 'grid';
+                    if($userMode == "list") {
+                        $admin_url = admin_url("upload.php?post_type=attachment");
+                        $search    = filter_input(INPUT_GET, "s");
+                        if (!empty($search)) {
+                            $admin_url .= "&s=".esc_attr($search);
+                        }
+
+                        if (!empty($post_status)) {
+                            $admin_url .= "&post_status=".sanitize_text_field($post_status);
+                        }
+
+                        if(isset($_REQUEST['paged']) && !empty($_REQUEST['paged']) && is_numeric($_REQUEST['paged'])) {
+                            $paged = (int)sanitize_text_field($_REQUEST['paged']);
+                            if(!empty($paged)) {
+                                $admin_url .= "&paged=".esc_attr($paged);
+                            }
+                        }
+
+                        $admin_url .= "&".esc_attr($post_type)."=";
+                    }
+                }
             } else {
                 $admin_url = admin_url("edit.php?post_type=".$typenow);
                 $search    = filter_input(INPUT_GET, "s");
@@ -5258,6 +5417,13 @@ class WCP_Folders
 
                 if (!empty($post_status)) {
                     $admin_url .= "&post_status=".sanitize_text_field($post_status);
+                }
+
+                if(isset($_REQUEST['paged']) && !empty($_REQUEST['paged']) && is_numeric($_REQUEST['paged'])) {
+                    $paged = (int)sanitize_text_field($_REQUEST['paged']);
+                    if(!empty($paged)) {
+                        $admin_url .= "&paged=".esc_attr($paged);
+                    }
                 }
 
                 $admin_url .= "&".esc_attr($post_type)."=";
@@ -5327,6 +5493,7 @@ class WCP_Folders
                     'is_high'   => 0,
                     'is_locked' => 0,
                     'is_active' => 0,
+                    'has_color' => ''
                 ], $folder_info);
 
                 $folder_settings[] = [
@@ -5335,6 +5502,7 @@ class WCP_Folders
                     'is_high'      => intval($folder_info['is_high']),
                     'is_locked'    => intval($folder_info['is_locked']),
                     'is_active'    => intval($folder_info['is_active']),
+                    'has_color'    => $folder_info['has_color'],
                     'nonce'        => wp_create_nonce('wcp_folder_term_'.$taxonomy->term_id),
                     'is_deleted'   => 0,
                     'slug'         => $taxonomy->slug,
@@ -5363,6 +5531,8 @@ class WCP_Folders
             $hasChild = self::check_for_setting("has_child", "general");
             $hasChild = empty($hasChild) ? 0 : 1;
             $hasStars = empty($hasStars) ? 0 : 1;
+            $colors = $this->selected_colors();
+
             wp_localize_script(
                 'wcp-folders-custom',
                 'wcp_settings',
@@ -5397,7 +5567,8 @@ class WCP_Folders
                     'post_status'       => $post_status,
                     'lang'              => $lang,
                     'review_nonce'      => wp_create_nonce("folders_review_box"),
-                    'review_box_nonce'  => wp_create_nonce("folders_review_box_message")
+                    'review_box_nonce'  => wp_create_nonce("folders_review_box_message"),
+                    'selected_colors'   => $colors
                 ]
             );
         } else {
@@ -5448,6 +5619,9 @@ class WCP_Folders
         return [
             "ALL_FOLDERS"                => esc_html__("All Folders", "folders"),
             "NEW_FOLDER"                 => esc_html__("New folder", "folders"),
+            "CHANGE_COLOR"               => esc_html__("Icon Color","folders"),
+            "REMOVE_COLOR"               => esc_html__("Remove Icon Color","folders"),
+            "ADD_CUSTOM_COLORS"          => esc_html__("Add more colors (Pro)", "folders"),
             "NEW_SUB_FOLDER"             => esc_html__("New Sub-folder", "folders"),
             "RENAME"                     => esc_html__("Rename", "folders"),
             "REMOVE_STICKY_FOLDER"       => esc_html__("Remove Sticky Folder", "folders"),
@@ -5511,6 +5685,19 @@ class WCP_Folders
         ];
 
     }//end js_strings()
+
+    /**
+     * Selected colors for folders
+     *
+     * @since  2.9.8
+     * @access public
+     */
+    public function selected_colors() {
+        $customize_folders = get_option('customize_folders');
+        $defaultColors = ["#202020", "#86cd91", "#1E88E5", "#ff6060"];
+        $colors = isset($customize_folders['folder_colors'])?$customize_folders['folder_colors']:$defaultColors;
+        return $colors;
+    }//end selected_colors()
 
 
     /**
@@ -5616,6 +5803,15 @@ class WCP_Folders
         $option = get_option("folder_redirect_status");
         if ($option === false) {
             add_option("folder_intro_box", "show");
+        }
+
+        if(WCP_FOLDER_VERSION == "3.0") {
+            $hide_folder_color_pop_up = get_option("hide_folder_color_pop_up");
+            if(!($hide_folder_color_pop_up)) {
+                add_option("hide_folder_color_pop_up", "yes");
+            } else {
+                update_option("hide_folder_color_pop_up", "yes");
+            }
         }
 
         update_option("folder_redirect_status", 1);

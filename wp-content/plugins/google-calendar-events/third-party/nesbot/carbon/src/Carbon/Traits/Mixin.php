@@ -23,6 +23,7 @@ use Throwable;
  * Trait Mixin.
  *
  * Allows mixing in entire classes with multiple macros.
+ * @internal
  */
 trait Mixin
 {

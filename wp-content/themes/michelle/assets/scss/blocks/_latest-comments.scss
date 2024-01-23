@@ -1,0 +1,10 @@
+/* FILE: blocks/_latest-comments.scss */
+
+.wp-block-latest-comments {
+	margin-#{$left}: 0;
+
+	&__comment-meta {
+		margin: 0;
+	}
+
+}

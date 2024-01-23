@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
-/**
- * Class Product
- * @package Bookly\Lib\Cloud
- */
 class Product extends Base
 {
     const ACTIVATE                = ''; //POST
@@ -86,6 +82,7 @@ class Product extends Base
         $data = compact( 'product_price' );
         if ( method_exists( $this, 'getEndPoint' ) ) {
             $data['endpoint'] = $this->getEndPoint();
+            $data = $this->addTestCanIUse( $data );
         }
 
         return $data;

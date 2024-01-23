@@ -2,8 +2,8 @@
 Contributors: wordpressdotorg, clorith, azaozz
 Tags: jquery, javascript, update
 Requires at least: 5.4
-Tested up to: 5.6
-Stable tag: 1.3.0
+Tested up to: 6.3
+Stable tag: 1.4.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,6 +56,13 @@ Deprecated notices means that the Migration tool is in place making sure these f
 3. That's it! The plugin handles the rest automatically for you.
 
 == Changelog ==
+
+= v 1.4.0 (2023-07-31) =
+* Fixed a bug where an empty error text would cause the plugin scripts from working properly.
+* Improved how inline scripts are detected and logged when applicable.
+* Improved logging to also capture deprecations within WordPress core.
+* Changed variable declarations for front-end scripts to use `var` instead of `const` and `let`, to improve compatibility for sites servicing older clients.
+* Updated the (modern) bundled jQuery Migrate script to match what is shipped with WordPress core.
 
 = v 1.3.0 =
 * Added legacy jQuery UI to be loaded if legacy jQuery is in use.

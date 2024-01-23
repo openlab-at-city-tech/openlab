@@ -6,6 +6,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * Cookie jar that stores cookies as an array
+ * @internal
  */
 class CookieJar implements CookieJarInterface
 {

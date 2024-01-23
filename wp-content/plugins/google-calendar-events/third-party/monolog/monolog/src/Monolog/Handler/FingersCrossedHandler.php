@@ -36,6 +36,7 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
+ * @internal
  */
 class FingersCrossedHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
 {

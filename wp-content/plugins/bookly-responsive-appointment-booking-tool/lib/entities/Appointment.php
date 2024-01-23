@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class Appointment
- *
- * @package Bookly\Lib\Entities
- */
 class Appointment extends Lib\Base\Entity
 {
     /** @var int */
@@ -205,8 +200,9 @@ class Appointment extends Lib\Base\Entity
                 ->setTimeZone( is_array( $time_zone ) ? $time_zone['time_zone'] : $time_zone )
                 ->setTimeZoneOffset( is_array( $time_zone ) ? $time_zone['time_zone_offset'] : $time_zone )
                 ->save();
-            Lib\Proxy\Files::attachFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
+            Lib\Proxy\Files::attachCFFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             Lib\Proxy\Pro::createBackendPayment( $ca_data[ $id ], $customer_appointment );
+            Lib\Proxy\Packages::attachPackages( $customer_appointment, $ca_data[ $id ], $this->getStaffId(), $this->getLocationId() );
             $customer_appointment->setJustCreated( true );
             $ca_status_changed[] = $customer_appointment;
         }
@@ -225,7 +221,7 @@ class Appointment extends Lib\Base\Entity
             if ( $customer_appointment->getPaymentId() != $ca_data[ $id ]['payment_id'] ) {
                 $customer_appointment->setPaymentId( $ca_data[ $id ]['payment_id'] );
             }
-            Lib\Proxy\Files::attachFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
+            Lib\Proxy\Files::attachCFFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             $customer_appointment
                 ->setNumberOfPersons( $ca_data[ $id ]['number_of_persons'] )
                 ->setNotes( $ca_data[ $id ]['notes'] )
@@ -236,8 +232,9 @@ class Appointment extends Lib\Base\Entity
                 ->setTimeZoneOffset( $time_zone['time_zone_offset'] );
             $customer_appointment
                 ->save();
-            Lib\Proxy\Files::attachFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
+            Lib\Proxy\Files::attachCFFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             Lib\Proxy\Pro::createBackendPayment( $ca_data[ $id ], $customer_appointment );
+            Lib\Proxy\Packages::attachPackages( $customer_appointment, $ca_data[ $id ], $this->getStaffId(), $this->getLocationId() );
         }
 
         return $ca_status_changed;

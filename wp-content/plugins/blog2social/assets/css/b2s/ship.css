@@ -956,3 +956,90 @@ input[type="number"]{
 #b2s-network-editor-error-not-save{
     display: none;
 }
+
+.b2s-twitter-thread-container {
+    margin-bottom:10px;
+}
+
+
+.b2s-tiktok-menu {
+    margin-bottom:10px;
+}
+
+
+#b2s-onboarding-toastee {
+    position: fixed; 
+    top: 30px; 
+    right: 20px;
+}
+
+#b2s-onboarding-toastee-inner {
+    display: block; 
+    position: relative; 
+    z-index: 2000; 
+    border-radius: 10px; 
+    min-width: 250px; 
+    max-width: 250px; 
+    height: auto; 
+    background: rgb(121, 179, 51);
+}
+
+#b2s-onboarding-toastee2 {
+    position: fixed; 
+    top: 30px; 
+    right: 20px;
+}
+
+#b2s-onboarding-toastee-inner2 {
+    display: block; 
+    position: relative; 
+    z-index: 2000; 
+    border-radius: 10px; 
+    min-width: 250px; 
+    max-width: 250px; 
+    height: auto; 
+    background: rgb(121, 179, 51);
+}
+
+.closeToastee{
+    color: #fff; 
+    text-align: center; 
+    line-height: .8; 
+    padding: 5px;
+    border-radius: 100%; 
+    border: 2px solid #fff; 
+    font-family: sans-serif; 
+    display: block; 
+    cursor: pointer; 
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    color: #fff;
+}
+
+.b2s-onboarding-toastee-title {
+    text-align: center; 
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:5px;
+    padding-bottom:10px;
+    color: #fff;
+}
+
+.b2s-onboarding-hr {
+    color: transparent; 
+    width: 80%; 
+    margin: 0 auto; 
+    border-bottom: 1px solid #fff; 
+    opacity: 0.3
+}
+
+.b2s-onboarding-p {
+    padding: 20px; 
+    color: #fff
+}
+
+.toggle {
+    float:right;
+    width:50px !important;
+}

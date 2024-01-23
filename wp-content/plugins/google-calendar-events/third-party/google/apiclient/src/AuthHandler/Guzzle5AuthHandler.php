@@ -13,6 +13,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * This supports Guzzle 5
+ * @internal
  */
 class Guzzle5AuthHandler
 {

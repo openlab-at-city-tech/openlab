@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * @deprecated
+ * @internal
  */
 class Guzzle5HttpHandler
 {

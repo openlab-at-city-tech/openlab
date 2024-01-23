@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Backend\Modules\Appearance;
 
-/**
- * Class Codes
- * @package Bookly\Backend\Modules\Appearance
- */
 class Codes
 {
     /**
@@ -32,13 +28,14 @@ class Codes
                         'category_info' => array( 'description' => __( 'Service category info of appointment', 'bookly' ), 'if' => true ),
                         'category_name' => array( 'description' => __( 'Service category name of appointment', 'bookly' ), 'if' => true ),
                         'service_duration' => array( 'description' => __( 'Service duration of appointment', 'bookly' ) ),
-                        'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true  ),
+                        'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true ),
                         'service_name' => array( 'description' => __( 'Service name of appointment', 'bookly' ) ),
                         'service_price' => array( 'description' => __( 'Service price of appointment', 'bookly' ), 'if' => true ),
                         'staff_category_image' => array( 'description' => __( 'Image of staff category', 'bookly' ), 'if' => true ),
                         'staff_category_info' => array( 'description' => __( 'Staff category info of appointment', 'bookly' ), 'if' => true ),
                         'staff_category_name' => array( 'description' => __( 'Staff category name of appointment', 'bookly' ), 'if' => true ),
                         'staff_name' => array( 'description' => __( 'Staff member full name in appointment', 'bookly' ) ),
+                        'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
                     ),
                 ),
                 'flags' => array( 'step' => '>1' ),
@@ -71,6 +68,7 @@ class Codes
             'staff_name' => array( 'description' => __( 'Full name of staff member', 'bookly' ) ),
             'staff_photo' => array( 'description' => __( 'Photo of staff member', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
             'total_price' => array( 'description' => __( 'Total price of booking', 'bookly' ), 'if' => true ),
+            'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
         ) );
 
         $codes = self::filter( $codes, compact( 'step', 'extra_codes' ) );

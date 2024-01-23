@@ -67,11 +67,15 @@ function invite_anyone_opt_out_screen() {
 	global $bp;
 
 	if ( isset( $_POST['oops_submit'] ) ) {
-		$oops_email = urlencode( stripslashes( $_POST['opt_out_email'] ) );
-		$opt_out_link = add_query_arg( array(
-			'iaaction' => 'accept-invitation',
-			'email'    => $oops_email,
-		), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+		$oops_email   = urlencode( stripslashes( $_POST['opt_out_email'] ) );
+		$opt_out_link = add_query_arg(
+			array(
+				'iaaction' => 'accept-invitation',
+				'email'    => $oops_email,
+			),
+			bp_get_signup_page()
+		);
+
 		bp_core_redirect( $opt_out_link );
 	}
 
@@ -291,7 +295,10 @@ function invite_anyone_setup_nav() {
 		'show_for_displayed_user' => invite_anyone_access_test()
 	) );
 
-	$invite_anyone_link = $bp->loggedin_user->domain . $bp->invite_anyone->slug . '/';
+	$invite_anyone_link = bp_members_get_user_url(
+		bp_loggedin_user_id(),
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug ] )
+	);
 
 	/* Create two sub nav items for this component */
 	bp_core_new_subnav_item( array(
@@ -447,7 +454,8 @@ function invite_anyone_catch_send() {
 		bp_core_add_message( __( 'Sorry, there was a problem sending your invitations. Please try again.', 'invite-anyone' ), 'error' );
 	}
 
-	bp_core_redirect( bp_displayed_user_domain() . $bp->invite_anyone->slug . '/sent-invites' );
+	$redirect_url = invite_anyone_get_user_sent_invites_url( bp_displayed_user_id() );
+	bp_core_redirect( $redirect_url );
 }
 add_action( 'bp_actions', 'invite_anyone_catch_send' );
 
@@ -499,7 +507,8 @@ function invite_anyone_catch_clear() {
 				bp_core_add_message( __( 'There was a problem clearing the invitations.', 'invite-anyone' ), 'error' );
 		}
 
-		bp_core_redirect( $bp->displayed_user->domain . $bp->invite_anyone->slug . '/sent-invites/' );
+		$redirect_url = invite_anyone_get_user_sent_invites_url( bp_displayed_user_id() );
+		bp_core_redirect( $redirect_url );
 	}
 }
 add_action( 'bp_template_redirect', 'invite_anyone_catch_clear', 5 );
@@ -609,8 +618,13 @@ function invite_anyone_screen_one_content() {
 	$blogname = get_bloginfo('name');
 	$welcome_message = sprintf( __( 'Invite friends to join %s by following these steps:', 'invite-anyone' ), $blogname );
 
+	$form_action = bp_members_get_user_url(
+		bp_displayed_user_id(),
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug, 'sent-invites', 'send' ] )
+	);
+
   ?>
-	<form id="invite-anyone-by-email" action="<?php echo $bp->displayed_user->domain . $bp->invite_anyone->slug . '/sent-invites/send/' ?>" method="post">
+	<form id="invite-anyone-by-email" action="<?php echo esc_url( $form_action ); ?>" method="post">
 
 	<h4><?php _e( 'Invite New Members', 'invite-anyone' ); ?></h4>
 
@@ -787,7 +801,7 @@ function invite_anyone_screen_two() {
 			$order = 'ASC';
 		}
 
-		$base_url = $bp->displayed_user->domain . $bp->invite_anyone->slug . '/sent-invites/';
+		$base_url = invite_anyone_get_user_sent_invites_url( bp_displayed_user_id() );
 
 		?>
 
@@ -932,6 +946,35 @@ function invite_anyone_email_fields( $returned_emails = false ) {
 <?php
 }
 
+/**
+ * Gets the URL of a user's invite-new-members page.
+ *
+ * @since 1.4.6
+ *
+ * @param int $user_id User ID.
+ * @return string
+ */
+function invite_anyone_get_user_invite_new_members_url( $user_id ) {
+	return bp_members_get_user_url(
+		$user_id,
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug, 'invite-new-members' ] )
+	);
+}
+
+/**
+ * Gets the URL of a user's sent-invites page.
+ *
+ * @since 1.4.6
+ *
+ * @param int $user_id User ID.
+ * @return string
+ */
+function invite_anyone_get_user_sent_invites_url( $user_id ) {
+	return bp_members_get_user_url(
+		$user_id,
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug, 'sent-invites' ] )
+	);
+}
 
 function invite_anyone_invitation_subject( $returned_message = false ) {
 	global $bp;
@@ -1011,10 +1054,13 @@ function invite_anyone_process_footer( $email ) {
  * @return string
  */
 function invite_anyone_get_accept_url( $email ) {
-	$accept_link  = add_query_arg( array(
-		'iaaction' => 'accept-invitation',
-		'email'    => $email,
-	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+	$accept_link  = add_query_arg(
+		array(
+			'iaaction' => 'accept-invitation',
+			'email'    => $email,
+		),
+		bp_get_signup_page()
+	);
 
 	/**
 	 * Filters the invitation acceptance URL for a given email address.
@@ -1037,10 +1083,13 @@ function invite_anyone_get_accept_url( $email ) {
  * @return string
  */
 function invite_anyone_get_opt_out_url( $email ) {
-	$opt_out_link = add_query_arg( array(
-		'iaaction' => 'opt-out',
-		'email'    => $email,
-	), bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+	$opt_out_link = add_query_arg(
+		array(
+			'iaaction' => 'opt-out',
+			'email'    => $email,
+		),
+		bp_get_signup_page()
+	);
 
 	/**
 	 * Filters the opt-out acceptance URL for a given email address.
@@ -1058,7 +1107,7 @@ function invite_anyone_wildcard_replace( $text, $email = false ) {
 
 	$inviter_name = bp_core_get_user_displayname( bp_loggedin_user_id() );
 	$site_name    = get_bloginfo( 'name' );
-	$inviter_url  = bp_loggedin_user_domain();
+	$inviter_url  = bp_loggedin_user_url();
 
 	$email = urlencode( $email );
 
@@ -1186,7 +1235,7 @@ function invite_anyone_process_invitations( $data ) {
 
 	$options = invite_anyone_options();
 
-	$emails = false;
+	$emails = [];
 	// Parse out the individual email addresses
 	if ( !empty( $data['invite_anyone_email_addresses'] ) ) {
 		$emails = invite_anyone_parse_addresses( $data['invite_anyone_email_addresses'] );
@@ -1226,14 +1275,17 @@ function invite_anyone_process_invitations( $data ) {
 		$returned_data['error_emails'] 	= $emails;
 
 		setcookie( 'invite-anyone', wp_json_encode( $returned_data ), 0, '/' );
-		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
+
+		$redirect = invite_anyone_get_user_invite_new_members_url( bp_displayed_user_id() );
 		bp_core_redirect( $redirect );
 		die();
 	}
 
 	if ( empty( $emails ) ) {
 		bp_core_add_message( __( 'You didn\'t include any email addresses!', 'invite-anyone' ), 'error' );
-		bp_core_redirect( $bp->loggedin_user->domain . $bp->invite_anyone->slug . '/invite-new-members' );
+
+		$redirect = invite_anyone_get_user_invite_new_members_url( bp_loggedin_user_id() );
+		bp_core_redirect( $redirect );
 		die();
 	}
 
@@ -1249,7 +1301,7 @@ function invite_anyone_process_invitations( $data ) {
 			$returned_data['error_emails'] = $emails;
 
 			setcookie( 'invite-anyone', wp_json_encode( $returned_data ), 0, '/' );
-			$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
+			$redirect = invite_anyone_get_user_invite_new_members_url( bp_loggedin_user_id() );
 			bp_core_redirect( $redirect );
 			die();
 		}
@@ -1411,7 +1463,7 @@ function invite_anyone_process_invitations( $data ) {
 	// If there are errors, redirect to the Invite New Members page
 	if ( ! empty( $returned_data['error_emails'] ) ) {
 		setcookie( 'invite-anyone', wp_json_encode( $returned_data ), 0, '/' );
-		$redirect = bp_loggedin_user_domain() . $bp->invite_anyone->slug . '/invite-new-members/';
+		$redirect = invite_anyone_get_user_invite_new_members_url( bp_loggedin_user_id() );
 		bp_core_redirect( $redirect );
 		die();
 	}
@@ -1474,7 +1526,7 @@ function invite_anyone_accept_invitation_backward_compatibility() {
 		return;
 	}
 
-	$redirect_to = add_query_arg( 'iaaction', $action, bp_get_root_domain() . '/' . bp_get_signup_slug() . '/' );
+	$redirect_to = add_query_arg( 'iaaction', $action, bp_get_signup_page() );
 
 	$email = bp_action_variable( 0 );
 	$email = str_replace( ' ', '+', $email );
@@ -1642,7 +1694,12 @@ function invite_anyone_already_accepted_redirect( $redirect ) {
 		return $redirect;
 	}
 
-	$redirect = add_query_arg( 'already', 'accepted', trailingslashit( bp_loggedin_user_domain() . $bp->invite_anyone->slug ) );
+	$redirect_base = bp_members_get_user_url(
+		bp_loggedin_user_id(),
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug ] )
+	);
+
+	$redirect = add_query_arg( 'already', 'accepted', $redirect_base );
 
 	return $redirect;
 }

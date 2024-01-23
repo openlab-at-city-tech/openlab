@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * Stores to PHP error_log() handler.
  *
  * @author Elan Ruusamäe <glen@delfi.ee>
+ * @internal
  */
 class ErrorLogHandler extends AbstractProcessingHandler
 {

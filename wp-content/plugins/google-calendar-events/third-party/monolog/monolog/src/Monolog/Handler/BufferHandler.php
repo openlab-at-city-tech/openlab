@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * @author Christophe Coevoet <stof@notk.org>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class BufferHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {

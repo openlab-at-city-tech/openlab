@@ -4,6 +4,8 @@ namespace Ari\Forms\Fields;
 use Ari\Forms\Field as Field;
 
 class Checkbox_Group extends Field {
+    public $options;
+
     public function __set( $name, $value ) {
         switch ( $name ) {
             default:

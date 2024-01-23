@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Settings as SettingsModel
  *   $calendarService = new Google\Service\Calendar(...);
  *   $settings = $calendarService->settings;
  *  </code>
+ * @internal
  */
 class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

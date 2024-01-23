@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ReplyList;
  *   $driveService = new Google\Service\Drive(...);
  *   $replies = $driveService->replies;
  *  </code>
+ * @internal
  */
 class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

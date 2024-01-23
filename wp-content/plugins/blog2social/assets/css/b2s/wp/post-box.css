@@ -277,10 +277,17 @@
     float: right;
 }
 
-.b2s-meta-box-share-info {
-    background-color: #79B232;
-    padding: 10px;
+.b2s-meta-box-customize {
+    background-color: #79B232 !important;
+    border-color: #629027 !important;
     color: #fff;
+}
+
+.b2s-meta-box-share-info {
+    color: #fff !important;
+    background-color: #337ab7 !important;
+    border-color: #2e6da4 !important;
+    padding: 10px;
 }
 
 @font-face {

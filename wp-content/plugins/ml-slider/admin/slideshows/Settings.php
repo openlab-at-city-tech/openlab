@@ -83,6 +83,7 @@ class MetaSlider_Slideshow_Settings
             'slices' => 15,
             'center' => false,
             'smartCrop' => true,
+            'smoothHeight' => false,
             'carouselMode' => false,
             'carouselMargin' => 5,
             'firstSlideFadeIn' => false,

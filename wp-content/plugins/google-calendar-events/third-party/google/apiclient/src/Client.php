@@ -47,6 +47,7 @@ use UnexpectedValueException;
 /**
  * The Google API Client
  * https://github.com/google/google-api-php-client
+ * @internal
  */
 class Client
 {

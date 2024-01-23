@@ -1,12 +1,10 @@
-=== BuddyPress Docs  ===
+=== BuddyPress Docs ===
 Contributors: boonebgorges, cuny-academic-commons, dcavins
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, docs, wiki, documents, collaboration
 Requires at least: 3.3
-Tested up to: 6.1
-Stable tag: 2.1.8
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Tested up to: 6.4
+Stable tag: 2.1.1
 
 Adds collaborative Docs to BuddyPress.
 
@@ -34,6 +32,25 @@ This plugin is in active development. For feature requests and bug reports, visi
 1. Sit back and watch the jack roll in.
 
 == Changelog ==
+
+= 2.2.1 =
+* Fixed regression in 2.2.0 that caused Docs content to appear twice in some contexts
+* Improved compatibility with WP default block themes, including full-width templates and previously-broken directory views
+* Added the ability to disable 'bp_doc_edited' activity items
+* Fixed bug that caused certain group permission checks not to work properly in BP 12.0+.
+* Fixed bug introduced in 2.2.0 that caused post-save redirects to go to the wrong place.
+
+= 2.2.0 =
+* Compatibility with BuddyPress 12.0+.
+* Improved compatibility with PHP 8.2+.
+* Caching for attachment protection check.
+* Improved appearance of Docs list tables when there are no Docs to display.
+* Improved hooks for customizing the Docs group admin/create panel.
+* Added a shortcode, `bp_docs_recent_docs`, to output a simple list of docs similar to the Recent Docs widget.
+
+= 2.1.9 =
+* Improved compatibility with WP 6.3 in the History tab.
+* Prevent Docs tag archive from being access via the template hierarchy, rather than through the dedicated Docs interface.
 
 = 2.1.8 =
 * Better compatibility with third-party plugins when serving attachments.

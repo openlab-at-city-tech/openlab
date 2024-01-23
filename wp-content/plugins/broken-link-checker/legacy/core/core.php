@@ -25,6 +25,10 @@ require BLC_DIRECTORY_LEGACY . '/includes/screen-meta-links.php';
 require BLC_DIRECTORY_LEGACY . '/includes/wp-mutex.php';
 require BLC_DIRECTORY_LEGACY . '/includes/transactions-manager.php';
 
+if ( ! class_exists( 'blcLinkQuery' ) ) {
+	include_once BLC_DIRECTORY_LEGACY . '/includes/link-query.php';
+}
+
 if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 
 	/**

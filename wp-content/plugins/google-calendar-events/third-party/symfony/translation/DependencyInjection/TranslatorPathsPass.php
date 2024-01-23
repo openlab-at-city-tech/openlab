@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\ServiceLoca
 use SimpleCalendar\plugin_deps\Symfony\Component\HttpKernel\Controller\ArgumentResolver\TraceableValueResolver;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
+ * @internal
  */
 class TranslatorPathsPass extends AbstractRecursivePass
 {

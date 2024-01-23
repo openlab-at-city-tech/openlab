@@ -2,8 +2,8 @@
 Contributors: conjur3r
 Tags: table of contents, indexes, toc, sitemap, cms, options, list, page listing, category listing
 Requires at least: 3.2
-Tested up to: 6.1.1
-Stable tag: 2302
+Tested up to: 6.4
+Stable tag: 2311
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,8 +48,6 @@ That's it!  The table of contents will appear on pages with at least four or mor
 
 You can change the default settings and more under Settings > TOC+
 
-This plugin requires PHP 5.
-
 
 == Shortcodes ==
 The plugin was designed to be as seamless and painfree as possible and did not require you to insert a shortcode for operation.  However, using the shortcode allows you to fully control the position of the table of contents within your page.  The following shortcodes are available with this plugin.
@@ -80,6 +78,7 @@ Lets you print out a listing of only pages. The following attributes are accepte
 * "no_label": true/false, shows or hides the list heading
 * "exclude": IDs of the pages or categories you wish to exclude
 * "exclude_tree": ID of the page or category you wish to exclude including its all descendants
+* "child_of": "current" or page ID of the parent page. Defaults to 0 which includes all pages.
 
 = [sitemap_categories] =
 Same as `[sitemap_pages]` but for categories.
@@ -105,6 +104,19 @@ I will never ask for any form of reward or compensation.  Helping others achieve
 
 
 == Changelog ==
+= 2311 =
+* Released: 7 November 2023
+* Bump tested WordPress version to 6.4
+* Do not trigger on REST requests (props steffenster)
+* Update include mechanism in init.php (props maciejmackowiak)
+
+= 2309 =
+* Released: 19 September 2023
+* Bump tested version to 6.3.1
+* Added `child_of` property to sitemap_pages shortcode (props flagsoft). This lets you output a listing of child pages for a set parent or "current". Property is optional and defaults to all pages. 
+* Fixed XSS possibility handling nonce while saving options (thanks to Patchstack)
+* Updated WordPress Coding Standard to 3.0
+
 = 2302 =
 * Released: 9 February 2023
 * Added `toc_brackets` CSS class to square brackets around show/hide text

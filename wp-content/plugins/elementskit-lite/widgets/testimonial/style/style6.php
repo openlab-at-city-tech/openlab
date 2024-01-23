@@ -74,7 +74,7 @@
 												$iconStart = 'eicon-star active';
 											}
 										?>
-										<li><<?php echo esc_attr( $ratingTag ); ?>><i class="<?php esc_attr_e( $iconStart, 'elementskit-lite' );?>"></i></<?php echo esc_attr( $ratingTag ); ?>></li>
+										<li><<?php echo esc_attr( $ratingTag ); ?>><i class="<?php echo esc_attr( $iconStart); ?>"></i></<?php echo esc_attr( $ratingTag ); ?>></li>
 
 										<?php }?>
 									</ul>

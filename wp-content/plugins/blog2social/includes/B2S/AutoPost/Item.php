@@ -93,7 +93,57 @@ class B2S_AutoPost_Item {
             $content .= '<div class="col-md-12">';
             $content .= '<input id="b2s-auto-post-best-times" class="b2s-auto-post-best-times" name="b2s-auto-post-best-times" type="checkbox" value="1" ' . ((isset($optionAutoPost['best_times']) && (int) $optionAutoPost['best_times'] == 1) ? 'checked' : '') . '><label for="b2s-auto-post-best-times"> ' . esc_html__('Apply best times', 'blog2social') . '</label> <a href="#" class="b2sAutoPostBestTimesInfoModalBtn">Info</a>';
             $content .= '</div>';
-            $content .= '</div>';
+
+            $selected1 = '';
+            $selected2 = '';
+            $selected3 = '';
+            if(isset($optionAutoPost['echo'])){
+                if((int)$optionAutoPost['echo'] > 0){
+                    $echoChecked = 'checked';
+                    $echoShow = '';
+                    $selected1 = $optionAutoPost['echo'] == 1 ? 'selected="selected"' : '';
+                    $selected2 = $optionAutoPost['echo'] == 2 ? 'selected="selected"' : '';
+                    $selected3 = $optionAutoPost['echo'] == 3 ? 'selected="selected"' : '';
+                } else {
+                    $echoChecked = ''; 
+                    $echoShow = 'style="display:none;"';
+                }
+            } else {
+                $echoChecked = '';
+                $echoShow = 'style="display:none;"';
+            }
+
+            $content .= '<div class="col-md-12">';
+            $content .= '<br>';
+            $content .= '<input type="checkbox" id="b2s-auto-post-echo-setting" class="b2s-auto-post-echo-setting" name="b2s-auto-post-echo-setting" value="1" '.$echoChecked.'>';
+            $content .= '<label for="b2s-auto-post-echo-setting"> ' . esc_html__('Repost', 'blog2social') . '</label>  <a href="#" class="b2sAutoPostEchoSettingInfoModalBtn">Info</a>';
+            
+            $content .= '<div class="row">
+            <div class="col-md-3 b2s-auto-post-echo" '.$echoShow.'>
+            <br>
+
+                <select class="b2s-w-100" id="b2s-auto-post-echo-dropdown" name="b2s-auto-post-echo-dropdown">
+                    <option value="' . esc_attr(1). '" '.$selected1.'>' . esc_html__("Day 1", "blog2social") . '</option>
+                    <option value="' . esc_attr(2). '" '.$selected2.'>' . esc_html__("Day 2", "blog2social") . '</option>
+                    <option value="' . esc_attr(3). '" '.$selected3.'>' . esc_html__("Day 1 and 2", "blog2social") . '</option>
+                </select>
+
+            </div>
+            </div>';
+            
+            
+            $content .= "</div>";
+            $content .= '<div class=" col-md-12 b2s-auto-post-area">';
+            $content .= '<br>';
+
+            $content .= '<p class="b2s-bold">' . esc_html__('Select to auto-post immediately after publishing or with a delay', 'blog2social') . '</p>';
+            $content .= '<input id="b2s-auto-post-time-now" name="b2s-auto-post-delay-state" ' . (((isset($optionAutoPost['delay_state']) && (int) $optionAutoPost['delay_state'] == 0) || !isset($optionAutoPost['delay_state'])) ? 'checked' : '') . ' value="0" type="radio"><label for="b2s-auto-post-time-now"> ' . esc_html__('immediately', 'blog2social') . '</label><br>';
+            $content .= '<input id="b2s-auto-post-time-delay" name="b2s-auto-post-delay-state" value="1" ' . ((isset($optionAutoPost['delay_state']) && (int) $optionAutoPost['delay_state'] == 1) ? 'checked' : '') . ' type="radio"><label for="b2s-auto-post-time-delay"> ' . esc_html__('publish with a delay of', 'blog2social');
+            $content .= ' <input type="number" maxlength="2" max="10" min="0" class="b2s-input-text-size-45" name="b2s-auto-post-delay-time" value="' . esc_attr((isset($optionAutoPost['delay']) ? $optionAutoPost['delay'] : 0)) . '" placeholder="1" > (0-10) ' . esc_html__('minutes', 'blog2social') . '</label>';
+            $content .= '<br>';
+            $content .= "</div>";
+
+
 
             if (current_user_can('administrator')) {
                 global $wpdb;
@@ -107,7 +157,6 @@ class B2S_AutoPost_Item {
                 if (isset($networkAuthAssignment['userList']) && !empty($networkAuthAssignment['userList']) && count($networkAuthAssignment['userList']) > 1) {
                     $doneIds = array();
                     $content .= '<br>';
-                    $content .= '<div class="row">';
                     $content .= '<div class="col-md-12">';
                     $content .= '<span class="b2s-bold">' . esc_html__('Transfer Auto-Poster settings to other users', 'blog2social') . ' </span>';
                     $content .= '<a class="b2sInfoAssignAutoPostBtn" href="#">' . esc_html__('Info', 'blog2social') . '</a><br>';
@@ -130,7 +179,6 @@ class B2S_AutoPost_Item {
                     }
                     $content .= '</select>';
                     $content .= '</div>';
-                    $content .= '</div>';
                 }
             }
             $content .= '</div>';
@@ -138,6 +186,20 @@ class B2S_AutoPost_Item {
 
         $content .= '<br>';
         $content .= '<hr>';
+        
+        
+        
+    
+
+
+
+
+        $content .= '</div>';
+
+
+
+
+    
         $content .= '<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter for Imported Posts', 'blog2social') . '</h4><a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('auto_post_import')) . '">Info</a>';
         $content .= '<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your imported posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
         $content .= '<p>' . esc_html__('Your current license:', 'blog2social') . '<span class="b2s-key-name"> ' . esc_html($versionType[B2S_PLUGIN_USER_VERSION]) . '</span> ';
@@ -164,10 +226,30 @@ class B2S_AutoPost_Item {
         $content .= '<input id="b2s-import-auto-post-time-delay" name="b2s-import-auto-post-time-state" value="1" ' . ((isset($optionAutoPostImport['ship_state']) && (int) $optionAutoPostImport['ship_state'] == 1) ? 'checked' : '') . ' type="radio"><label for="b2s-import-auto-post-time-delay">' . esc_html__('publish with a delay of', 'blog2social');
         $content .= ' <input type="number" maxlength="2" max="10" min="1" class="b2s-input-text-size-45" name="b2s-import-auto-post-time-data" value="' . esc_attr((isset($optionAutoPostImport['ship_delay_time']) ? $optionAutoPostImport['ship_delay_time'] : 1)) . '" placeholder="1" > (1-10) ' . esc_html__('minutes', 'blog2social') . '</label>';
         $content .= '<br>';
+
+        if(isset($optionAutoPost['import_template'])){
+            if($optionAutoPost['import_template'] == 1){
+                $templateChecked = 'checked="checked"';
+
+            } else {
+                $templateChecked = ''; 
+            }
+        } else {
+            $templateChecked = '';
+        }
+
+        $content .= '<div class="">';
+        $content .= '<input type="checkbox" id="b2s-auto-post-import-template-setting" class="b2s-auto-post-import-template-setting" name="b2s-auto-post-import-template-setting" value="1" '.$templateChecked.'>';
+        $content .= '<label for="b2s-auto-post-import-template-setting"> ' . sprintf(__('Apply post templates for imported posts. (You can find more information on this <a href="%s">here</a>.)', 'blog2social'), esc_url(B2S_Tools::getSupportLink('post_template'))) . '</label>';
+        $content .= '</div>';
+
+        $content .= '<br>';
         $content .= $this->getChosenPostTypesData($optionAutoPostImport);
         $content .= '</div>';
         $content .= '<input type="hidden" name="action" value="b2s_auto_post_settings">';
-        $content .= '</div>';
+
+        
+        
         $content .= '</form>';
         if (B2S_PLUGIN_USER_VERSION > 0) {
             $content .= '<button class="pull-right btn btn-primary btn-sm" id="b2s-auto-post-settings-btn" type="submit">';
@@ -252,11 +334,13 @@ class B2S_AutoPost_Item {
                 }
                 $html .= ' <a href="admin.php?page=blog2social-network" class="b2s-info-btn">' . esc_html__('add/change connection', 'blog2social') . '</a>';
                 $html .= '</h4>';
-                $html .= '<ul class="b2s-network-item-auth-list" data-network-id="' . esc_attr($v) . '" data-network-count="true" >';
+                $html .= '<ul class="b2s-network-item-auth-list" data-network-id="' . esc_attr($v) . '" data-network-count="true" >';           
+
                 if (!empty($this->networkAuthData)) {
                     foreach ($this->networkAuthData as $i => $t) {
                         if ($v == $t->networkId) {
                             $html .= '<li class="b2s-network-item-auth-list-li" data-network-auth-id="' . esc_attr($t->networkAuthId) . '"  data-network-id="' . esc_attr($t->networkId) . '" data-network-type="0">';
+                                                    
                             $networkType = ((int) $t->networkType == 0 ) ? __('Profile', 'blog2social') : __('Page', 'blog2social');
                             if ($t->notAllow !== false) {
                                 $html .= '<span class="glyphicon glyphicon-remove-circle glyphicon-danger"></span> <span class="not-allow">' . esc_html($networkType) . ': ' . esc_html(stripslashes($t->networkUserName)) . '</span> ';

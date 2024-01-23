@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\PHPStan;
 use SimpleCalendar\plugin_deps\PHPStan\BetterReflection\Reflection;
 use ReflectionMethod;
 if (!\class_exists(AbstractReflectionMacro::class, \false)) {
+    /** @internal */
     abstract class AbstractReflectionMacro extends AbstractMacro
     {
         /**

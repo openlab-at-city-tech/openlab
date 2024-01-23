@@ -233,7 +233,7 @@ class S2_Core {
 				$recipient = trim( $recipient );
 
 				// Sanity check -- make sure we have a valid email.
-				if ( false === is_email( $recipient ) || empty( $recipient ) ) {
+				if ( false === sanitize_email( $recipient ) || empty( $recipient ) ) {
 					continue;
 				}
 

@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Base;
 
-/**
- * Class Cache
- * @package Bookly\Lib\Base
- */
 abstract class Cache
 {
     /** @var array */

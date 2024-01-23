@@ -104,6 +104,6 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
     </div>
 </div>
 
-<input type="hidden" id="b2sNoFavoritesText" value="<?php esc_html_e('You have not saved any favorites.', 'blog2social'); ?>">
+<input type="hidden" id="b2sNoFavoritesText" value="<?php esc_attr_e('You have not saved any favorites.', 'blog2social'); ?>">
 <input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">

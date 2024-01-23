@@ -3,10 +3,6 @@ namespace Bookly\Lib\DataHolders\Booking;
 
 use Bookly\Lib;
 
-/**
- * Class Simple
- * @package Bookly\Lib\DataHolders\Booking
- */
 class Simple extends Item
 {
     /** @var Lib\Entities\Service */
@@ -37,7 +33,7 @@ class Simple extends Item
     public function getAppointment()
     {
         if ( ! $this->appointment ) {
-            $this->appointment = Lib\Entities\Appointment::find( $this->ca->getAppointmentId() );
+            $this->appointment = Lib\Entities\Appointment::find( $this->ca->getAppointmentId(), false );
         }
 
         return $this->appointment;
@@ -157,7 +153,6 @@ class Simple extends Item
                 $this->getService()->getId(),
                 Lib\Proxy\Locations::prepareStaffLocationId( $this->appointment->getLocationId(), $this->getStaff()->getId() ) ?: null,
                 substr( $this->getAppointment()->getStartDate(), 11 ),  // start time
-                $this->getCA()->getUnits(),
                 date( 'w', strtotime( $this->getAppointment()->getStartDate() ) ) + 1
             );
         } else {

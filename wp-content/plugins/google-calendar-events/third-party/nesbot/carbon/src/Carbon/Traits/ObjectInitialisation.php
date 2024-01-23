@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Traits;
 
+/** @internal */
 trait ObjectInitialisation
 {
     /**

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
+class ComposerStaticInitf1826f72bdc3508f80565dff22e569cb
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -27,6 +27,8 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Events\\Blocks\\Controller' => __DIR__ . '/../..' . '/src/Events/Blocks/Controller.php',
+        'TEC\\Events\\Configuration\\Provider' => __DIR__ . '/../..' . '/src/Events/Configuration/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Activation' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Activation.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Provider.php',
@@ -142,9 +144,10 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
         'TEC\\Events\\Custom_Tables\\V1\\WP_Query\\Redirection_Schema' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/WP_Query/Redirection_Schema.php',
         'TEC\\Events\\Custom_Tables\\V1\\WP_Query\\Repository\\Custom_Tables_Query_Filters' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/WP_Query/Repository/Custom_Tables_Query_Filters.php',
         'TEC\\Events\\Custom_Tables\\V1\\WP_Query\\Repository\\Query_Replace' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/WP_Query/Repository/Query_Replace.php',
-        'TEC\\Events\\Editor\\Full_Site\\Hooks' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Hooks.php',
-        'TEC\\Events\\Editor\\Full_Site\\Provider' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Provider.php',
-        'TEC\\Events\\Editor\\Full_Site\\Templates' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Templates.php',
+        'TEC\\Events\\Editor\\Full_Site\\Archive_Block_Template' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Archive_Block_Template.php',
+        'TEC\\Events\\Editor\\Full_Site\\Block_Template_Contract' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Block_Template_Contract.php',
+        'TEC\\Events\\Editor\\Full_Site\\Controller' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Controller.php',
+        'TEC\\Events\\Editor\\Full_Site\\Single_Block_Template' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Single_Block_Template.php',
         'TEC\\Events\\Installer\\Provider' => __DIR__ . '/../..' . '/src/Events/Installer/Provider.php',
         'TEC\\Events\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Events/Integrations/Integration_Abstract.php',
         'TEC\\Events\\Integrations\\Plugins\\Colbri_Page_Builder\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Colbri_Page_Builder/Provider.php',
@@ -158,10 +161,14 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Template' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Template.php',
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Controller' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Controller.php',
+        'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Apple_Wallet\\Event_Modifier' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Apple_Wallet/Event_Modifier.php',
+        'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Pdf' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Pdf.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
+        'TEC\\Events\\SEO\\Controller' => __DIR__ . '/../..' . '/src/Events/SEO/Controller.php',
         'TEC\\Events\\Site_Health\\Info_Section' => __DIR__ . '/../..' . '/src/Events/Site_Health/Info_Section.php',
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
         'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
@@ -179,7 +186,6 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
         'Tribe\\Events\\Aggregator\\Processes\\Batch_Imports' => __DIR__ . '/../..' . '/src/Tribe/Aggregator/Processes/Batch_Imports.php',
         'Tribe\\Events\\Aggregator\\Record\\Batch_Queue' => __DIR__ . '/../..' . '/src/Tribe/Aggregator/Record/Batch_Queue.php',
         'Tribe\\Events\\Collections\\Lazy_Post_Collection' => __DIR__ . '/../..' . '/src/Tribe/Collections/Lazy_Post_Collection.php',
-        'Tribe\\Events\\Editor\\Blocks\\Archive_Events' => __DIR__ . '/../..' . '/src/Tribe/Editor/Blocks/Archive_Events.php',
         'Tribe\\Events\\Editor\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Editor/Hooks.php',
         'Tribe\\Events\\Editor\\Objects\\Editor_Object_Interface' => __DIR__ . '/../..' . '/src/Tribe/Editor/Objects/Editor_Object_Interface.php',
         'Tribe\\Events\\Editor\\Objects\\Event' => __DIR__ . '/../..' . '/src/Tribe/Editor/Objects/Event.php',
@@ -270,6 +276,7 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\Json_Ld_Data' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/Json_Ld_Data.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\List_Behavior' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/List_Behavior.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\With_Fast_Forward_Link' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/With_Fast_Forward_Link.php',
+        'Tribe\\Events\\Views\\V2\\Views\\Traits\\With_Noindex' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/With_Noindex.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\iCal_Data' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/iCal_Data.php',
         'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_List_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Widgets/Widget_List_View.php',
         'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Widgets/Widget_View.php',
@@ -299,9 +306,9 @@ class ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit10c4b6d1a7f369be4db9b3d06ce0c3c2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf1826f72bdc3508f80565dff22e569cb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf1826f72bdc3508f80565dff22e569cb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf1826f72bdc3508f80565dff22e569cb::$classMap;
 
         }, null, ClassLoader::class);
     }

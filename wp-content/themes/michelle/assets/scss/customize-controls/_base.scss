@@ -1,0 +1,17 @@
+/* FILE: customize-controls/_base.scss */
+
+$input_types: (
+	'tel',
+	'url',
+	'text',
+	'password',
+	'email',
+	'number',
+	'search',
+);
+
+@each $input_type in $input_types {
+	.customize-control input[type="#{$input_type}"][size] {
+		width: auto;
+	}
+}

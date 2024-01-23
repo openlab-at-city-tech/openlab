@@ -6,6 +6,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * Decorator used to return only a subset of a stream.
+ * @internal
  */
 final class LimitStream implements StreamInterface
 {

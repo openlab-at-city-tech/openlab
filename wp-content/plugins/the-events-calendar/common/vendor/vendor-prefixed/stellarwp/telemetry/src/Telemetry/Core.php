@@ -7,7 +7,7 @@
  * @package StellarWP\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -18,6 +18,7 @@ use TEC\Common\StellarWP\Telemetry\Admin\Admin_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Admin\Resources;
 use TEC\Common\StellarWP\Telemetry\Contracts\Data_Provider;
 use TEC\Common\StellarWP\Telemetry\Data_Providers\Debug_Data;
+use TEC\Common\StellarWP\Telemetry\Events\Event_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Exit_Interview\Exit_Interview_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Exit_Interview\Template;
 use TEC\Common\StellarWP\Telemetry\Last_Send\Last_Send_Subscriber;
@@ -49,6 +50,7 @@ class Core {
 	private $subscribers = [
 		Admin_Subscriber::class,
 		Exit_Interview_Subscriber::class,
+		Event_Subscriber::class,
 		Last_Send_Subscriber::class,
 		Opt_In_Subscriber::class,
 		Telemetry_Subscriber::class,

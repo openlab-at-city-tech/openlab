@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea357ea237f030408f790bd76fb5572d
+class ComposerStaticInit43ec74747c68c7396bedc0a710526d75
 {
     public static $prefixLengthsPsr4 = array (
         'l' => 
@@ -107,6 +107,10 @@ class ComposerStaticInitea357ea237f030408f790bd76fb5572d
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Common\\Configuration\\Configuration' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration.php',
+        'TEC\\Common\\Configuration\\Configuration_Loader' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration_Loader.php',
+        'TEC\\Common\\Configuration\\Configuration_Provider_Interface' => __DIR__ . '/../..' . '/src/Common/Configuration/Configuration_Provider_Interface.php',
+        'TEC\\Common\\Configuration\\Constants_Provider' => __DIR__ . '/../..' . '/src/Common/Configuration/Constants_Provider.php',
         'TEC\\Common\\Context\\Post_Request_Type' => __DIR__ . '/../..' . '/src/Common/Context/Post_Request_Type.php',
         'TEC\\Common\\Contracts\\Container' => __DIR__ . '/../..' . '/src/Common/Contracts/Container.php',
         'TEC\\Common\\Contracts\\Provider\\Controller' => __DIR__ . '/../..' . '/src/Common/Contracts/Provider/Controller.php',
@@ -132,6 +136,7 @@ class ComposerStaticInitea357ea237f030408f790bd76fb5572d
         'TEC\\Common\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Common/Site_Health/Provider.php',
         'TEC\\Common\\Storage\\Timed_Option' => __DIR__ . '/../..' . '/src/Common/Storage/Timed_Option.php',
         'TEC\\Common\\Telemetry\\Migration' => __DIR__ . '/../..' . '/src/Common/Telemetry/Migration.php',
+        'TEC\\Common\\Telemetry\\Opt_In' => __DIR__ . '/../..' . '/src/Common/Telemetry/Opt_In.php',
         'TEC\\Common\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Common/Telemetry/Provider.php',
         'TEC\\Common\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Common/Telemetry/Telemetry.php',
         'TEC\\Common\\Translations_Loader' => __DIR__ . '/../..' . '/src/Common/Translations_Loader.php',
@@ -223,9 +228,9 @@ class ComposerStaticInitea357ea237f030408f790bd76fb5572d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$classMap;
 
         }, null, ClassLoader::class);
     }

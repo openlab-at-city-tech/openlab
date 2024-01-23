@@ -1213,6 +1213,15 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
 
         template_data[networkType]['format'] = jQuery('.b2s-edit-template-post-format[data-network-type="' + networkType + '"]').val();
         template_data[networkType]['content'] = jQuery('.b2s-edit-template-post-content[data-network-type="' + networkType + '"]').val();
+        
+        if (jQuery('#b2s-edit-template-network-id').val() == 2){
+            if (jQuery('.b2s-twitter-thread[data-network-type="' + networkType + '"]').is(':checked')) {
+                template_data[networkType]['twitterThreads'] = true;
+            }else{
+                template_data[networkType]['twitterThreads'] = false;
+            }
+        }
+
         if (jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
             if (jQuery('.b2s-edit-template-enable-link[data-network-type="' + networkType + '"]').is(':checked')) {
                 template_data[networkType]['addLink'] = true;
@@ -1644,3 +1653,76 @@ function generateExamplePost(template, content_range, exerpt_range) {
     }
     return template;
 }
+
+jQuery(document).on('click', '.b2s-stop-onboarding', function() {
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_save_user_onboarding',
+            'onboarding': 2,
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            location.reload();
+        }
+    });
+});
+
+jQuery(document).on('change', '.b2s-toastee-toggle', function () {
+    var onboardingPaused = jQuery("#b2s-toastee-paused").val()
+
+    if (jQuery(this).is(':checked')) {
+        if(onboardingPaused == 1){
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_save_user_onboarding_paused',
+                    'onboarding_paused': 0,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery("#b2s-toastee-paused").val(0)
+                }
+            });
+        }
+        jQuery('.b2s-onboarding-toastee-body').show();
+    } else {
+        if(onboardingPaused == 0){
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_save_user_onboarding_paused',
+                    'onboarding_paused': 1,
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    jQuery("#b2s-toastee-paused").val(1)
+
+                }
+            });
+        }
+        jQuery('.b2s-onboarding-toastee-body').hide();
+
+    }
+});

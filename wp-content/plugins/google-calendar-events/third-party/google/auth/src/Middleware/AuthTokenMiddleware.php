@@ -30,6 +30,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Requests will be accessed with the authorization header:
  *
  * 'authorization' 'Bearer <value of auth_token>'
+ * @internal
  */
 class AuthTokenMiddleware
 {

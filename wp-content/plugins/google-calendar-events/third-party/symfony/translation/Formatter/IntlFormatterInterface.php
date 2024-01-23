@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter;
  * Formats ICU message patterns.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ * @internal
  */
 interface IntlFormatterInterface
 {

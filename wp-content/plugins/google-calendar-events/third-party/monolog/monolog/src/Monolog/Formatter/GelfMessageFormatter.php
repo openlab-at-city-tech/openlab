@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * @author Matt Lehner <mlehner@gmail.com>
  *
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 class GelfMessageFormatter extends NormalizerFormatter
 {

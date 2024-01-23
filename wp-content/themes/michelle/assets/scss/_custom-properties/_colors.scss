@@ -1,0 +1,22 @@
+/* FILE: _custom-properties/_colors.scss */
+
+:root {
+
+	// WordPress color variables.
+	--wp--style--color--link: var(--color_accent);
+	--wp--preset--color--accent: var(--color_accent);
+	@each $option, $value in $color_palette {
+		$color_name: _str_replace( 'color_', '', $option );
+		$color_name: _str_replace( '_', '-', $color_name );
+		--wp--preset--color--#{ $color_name }: var(--#{ $option });
+	}
+
+	// Overlaid header colors.
+
+		// "Light/dark" refers to overlaid header text color.
+		--color_overlaid_header_light_background: linear-gradient( to bottom, #030507, #{ rgba( #030507, .8 ) } );
+		--color_overlaid_header_light: #fff;
+		--color_overlaid_header_dark_background: linear-gradient( to bottom, #fff, #{ rgba( #fff, .8 ) } );
+		--color_overlaid_header_dark: #030507;
+
+}

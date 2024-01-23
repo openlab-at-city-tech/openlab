@@ -2,6 +2,7 @@
 
 namespace SimpleCalendar\plugin_deps\Psr\Http\Message;
 
+/** @internal */
 interface UriFactoryInterface
 {
     /**

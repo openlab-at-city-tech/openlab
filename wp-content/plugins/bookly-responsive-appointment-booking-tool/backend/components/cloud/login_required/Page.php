@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Cloud\LoginRequired;
 
 use Bookly\Lib;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\CloudProducts
- */
 class Page extends Lib\Base\Component
 {
     /**

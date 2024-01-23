@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\PhpAmqpLib\Channel\AMQPChannel;
 use AMQPExchange;
 /**
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class AmqpHandler extends AbstractProcessingHandler
 {

@@ -19,6 +19,10 @@
     text-align: right !important;
 }
 
+.bookly-text-center {
+    text-align: center;
+}
+
 .bookly-bold {
     font-weight: bold !important;
 }
@@ -1105,11 +1109,11 @@ label.bookly-square {
     margin: 10px 0 0 !important;
 }
 
-.bookly-details-step .bookly-form-group .intl-tel-input {
+.bookly-details-step .bookly-form-group .iti {
     display: block;
 }
 
-.bookly-details-step .bookly-form-group .intl-tel-input input {
+.bookly-details-step .bookly-form-group .iti input {
     padding-left: 45px !important;
 }
 
@@ -1526,10 +1530,6 @@ label.bookly-square {
     white-space: nowrap;
 }
 
-.bookly-row .bookly-text-center {
-    text-align: center;
-}
-
 .bookly-row .bookly-col-label {
     text-align: right;
 }
@@ -1646,6 +1646,10 @@ label.bookly-square {
     margin-top: -10px;
 }
 
+ol.bookly-stepper {
+    display: none;
+}
+
 /* Mobile */
 @media screen and (max-width: 650px) {
     .bookly-form-group label:empty {
@@ -1675,6 +1679,51 @@ label.bookly-square {
 
     .bookly-progress-tracker {
         display: none;
+    }
+
+    /* Stepper */
+    .bookly-form ol.bookly-stepper {
+        display: flex !important;
+        list-style: none;
+        justify-content: space-between;
+        margin: 0px 0px 20px 0px;
+        padding: 0px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #FFFFFF 10.9px, silver 11px, silver 12.9px, #FFFFFF 13px);
+    }
+
+    .bookly-form ol.bookly-stepper li {
+        display: grid !important;
+        position: relative;
+        outline: 4px solid white;
+    }
+
+    .bookly-form ol.bookly-stepper li::before {
+        content: " ";
+        display: grid !important;
+        aspect-ratio: 1;
+        height: 24px;
+        border: 2px solid #FFFFFF;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        border-radius: 50%;
+        z-index: 1;
+        background-color: var(--bookly-main-color);
+        border-color: var(--bookly-main-color);
+        outline: 4px solid white;
+    }
+    .bookly-form ol.bookly-stepper li.bookly-step-active ~ li::before{
+        background: white;
+        border: 2px solid silver;
+    }
+    .bookly-form ol.bookly-stepper li.bookly-step-active::after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        right: 100%;
+        top: 11px;
+        width: 100vw;
+        background-color: var(--bookly-main-color);
     }
 
     .bookly-mobile-step-1 .bookly-nav-steps {
@@ -1735,10 +1784,6 @@ label.bookly-square {
         height: auto !important;
         margin-left: 0 !important;
         margin-bottom: 15px;
-        clear: both;
-    }
-
-    .bookly-time-step {
         clear: both;
     }
 
@@ -1822,16 +1867,20 @@ label.bookly-square {
     .bookly-repeat-step .bookly-schedule-time {
         width: 90px !important;
     }
+
+    button.bookly-inline-block {
+        margin-bottom: 3px;
+    }
 }
 
 /* intlTelInput.js */
-.iti-flag {
-    background-image: url("../images/flags.png");
+.iti__flag {
+    background-image: url("../images/flags.png?1");
 }
 
 @media only screen and (min-resolution: 2dppx) {
-    .iti-flag {
-        background-image: url("../images/flags@2x.png")
+    .iti__flag {
+        background-image: url("../images/flags@2x.png?1")
     }
 }
 
@@ -1856,3 +1905,31 @@ label.bookly-square {
 .pac-container {
     z-index: 1000000 !important;
 }
+
+.bookly-fa-svg {
+    height: 16px;
+    width: 16px;
+    background-color: #ffffff;
+    margin-right: 8px;
+    display: inline-block;;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+}
+
+.bookly-google {
+    mask-image: url(../../../frontend/resources/images/google.svg);
+    -webkit-mask-image: url(../../../frontend/resources/images/google.svg);
+}
+.bookly-microsoft {
+    mask-image: url(../../../frontend/resources/images/microsoft.svg);
+    -webkit-mask-image: url(../../../frontend/resources/images/microsoft.svg);
+}
+.bookly-yahoo {
+    mask-image: url(../../../frontend/resources/images/yahoo.svg);
+    -webkit-mask-image: url(../../../frontend/resources/images/yahoo.svg);
+}
+.bookly-apple {
+    mask-image: url(../../../frontend/resources/images/apple.svg);
+    -webkit-mask-image: url(../../../frontend/resources/images/apple.svg);
+}
+

@@ -1,0 +1,26 @@
+/* FILE: editor-block/blocks/_letest-posts.scss */
+
+#{ $selector_editor_wrapper } .wp-block-latest-posts {
+
+	&.wp-block-latest-posts:not(.alignwide):not(.alignfull) {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.wp-block-latest-posts__post-author,
+	.wp-block-latest-posts__post-date {
+		margin-top: -1em;
+		font-size: var(--typography_font_size_s_em);
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+	}
+
+	&__post-excerpt {
+
+		a:last-child {
+			display: none;
+		}
+
+	}
+
+}

@@ -40,6 +40,17 @@ if (! defined('ABSPATH')) {
             <?php if ($setting_page == "folder-settings") { ?>
                 $(".select2-box").select2();
             <?php } ?>
+            <?php
+            if(isset($_GET['focus']) && $_GET['focus'] == "icon-color") {
+                $hide_folder_color_pop_up = get_option("hide_folder_color_pop_up");
+                if(!($hide_folder_color_pop_up)) {
+                    add_option("hide_folder_color_pop_up", "yes");
+                } else {
+                    update_option("hide_folder_color_pop_up", "yes");
+                }
+                ?>
+                $(".default-icon-color").addClass("add-focus-animate");
+            <?php } ?>
             $(document).on("click",".form-cancel-btn, .close-popup-button, .folder-popup-form",function(){
                 if($(this).hasClass("cancel-folders") || $(this).hasClass("remove-folders-box") || $(this).hasClass("close-remove-folders")) {
                     $("#remove_folders_when_removed").prop("checked", false);
@@ -111,6 +122,9 @@ if (! defined('ABSPATH')) {
                 } else {
                     $(".media-setting-box").removeClass("active");
                 }
+            });
+            $(document).on("change", "input[name='customize_folders[default_icon_color]']:checked", function(){
+                setCSSProperties();
             });
             setCSSProperties();
             $('.color-field').spectrum({
@@ -428,6 +442,12 @@ if (! defined('ABSPATH')) {
             } else {
                 $(".folder-list li a span, .header-posts a, .un-categorised-items a").css("font-size", "14px");
             }
+
+            var folderColor = "#334155";
+            if($("input[name='customize_folders[default_icon_color]']:checked").length) {
+                folderColor = $("input[name='customize_folders[default_icon_color]']:checked").val();
+            }
+            $(".folder-list i").css("color", folderColor);
         }
 
         $(window).on("scroll", function(){
@@ -1173,6 +1193,33 @@ if ($wp_status == "yes") {
                                                 </a>
                                             </li>
                                         </ul>
+                                    </td>
+                                </tr>
+                                <tr class="default-icon-color">
+                                    <td class="no-padding">
+                                        <label for="enable_horizontal_scroll" >
+                                            <?php esc_html_e("Default icon color", 'folders'); ?>
+                                            <span class="folder-tooltip" data-title="<?php esc_html_e("You can set the default icon color for Folders from here. Each folder and subfolder can have a different color, which you can change in the folder settings.", "folders"); ?>"><span class="dashicons dashicons-editor-help"></span></span>
+                                        </label>
+                                    </td>
+                                    <?php
+                                    $default_icon_color = isset($customize_folders['default_icon_color'])?$customize_folders['default_icon_color']:"#334155";
+                                    $colors = ["#334155", "#86cd91", "#1E88E5", "#ff6060"];
+                                    ?>
+                                    <td colspan="2">
+                                        <div class="folder-colors">
+                                            <div class="folder-default-colors">
+                                                <?php foreach($colors as $key=>$color) {
+                                                    ?>
+                                                    <div class="folder-default-color" id="default-color-<?php echo esc_attr($key) ?>" data-id="<?php echo esc_attr($key) ?>">
+                                                        <input <?php checked($color, $default_icon_color) ?> id="icon-color-<?php echo esc_attr($key) ?>" name="customize_folders[default_icon_color]" class="sr-only" value="<?php echo esc_attr($color) ?>" type="radio" />
+                                                        <label for="icon-color-<?php echo esc_attr($key) ?>" style="background: <?php echo esc_attr($color) ?>"></label>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                        <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" class="custom-icon-color-link"><?php esc_html_e("Add more colors (Pro)", "folders"); ?></a>
                                     </td>
                                 </tr>
                                 <?php

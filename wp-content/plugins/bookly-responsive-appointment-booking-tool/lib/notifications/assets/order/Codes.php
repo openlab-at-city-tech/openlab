@@ -9,11 +9,6 @@ use Bookly\Lib\Notifications\Assets\Base;
 use Bookly\Lib\Slots\DatePoint;
 use Bookly\Lib\Utils;
 
-/**
- * Class Codes
- *
- * @package Bookly\Lib\Notifications\Assets\Order
- */
 class Codes extends Base\Codes
 {
     // Core

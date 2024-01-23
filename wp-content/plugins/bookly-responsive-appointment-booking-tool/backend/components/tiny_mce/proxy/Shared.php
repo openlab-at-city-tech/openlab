@@ -4,9 +4,6 @@ namespace Bookly\Backend\Components\TinyMce\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Shared
- * @package Bookly\Backend\Components\TinyMce\Proxy
- *
  * @method static void renderMediaButtons( string $version ) Add buttons to WordPress editor.
  * @method static void renderBooklyFormFields() Render controls in popup for bookly-form (build shortcode).
  * @method static void renderBooklyFormHead() Render controls in header of popup for bookly-form (build shortcode).

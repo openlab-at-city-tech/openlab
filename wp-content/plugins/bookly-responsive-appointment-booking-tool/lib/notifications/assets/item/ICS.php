@@ -3,11 +3,6 @@ namespace Bookly\Lib\Notifications\Assets\Item;
 
 use Bookly\Lib;
 
-/**
- * Class ICS
- *
- * @package Bookly\Lib\Notifications\Assets\Item
- */
 class ICS extends Lib\Utils\Ics\Base
 {
     protected $data;

@@ -90,16 +90,21 @@ class MetaSlide
         /*
         * Verifies that the $image_id is an actual image
         */
-        if (!($thumbnail_url = wp_get_attachment_image_url($image_id))) {
+        if ( ! ( $thumbnail_url_small = $this->get_intermediate_image_src( 240, $image_id ) ) ) {
             return new WP_Error('update_failed', __('The requested image does not exist. Please try again.', 'ml-slider'), array('status' => 409));
         }
 
         /*
-        * Updates database record and thumbnail if selection changed, assigns it to the slideshow, crops the image
-        */
+         * Updates database record and thumbnail if selection changed, assigns it to the slideshow, crops the image
+         */
         update_post_meta( $slide_id, '_thumbnail_id', $image_id );
         if ( $slideshow_id ) {
             $this->set_slider( $slideshow_id );
+
+            // Get cropped images for srcset attribute
+            $thumbnail_url_large = $this->get_intermediate_image_src( 1024, $image_id );
+            $thumbnail_url_medium  = $this->get_intermediate_image_src( 768, $image_id );
+
             // get resized image
             $imageHelper = new MetaSliderImageHelper(
                 $slide_id,
@@ -110,7 +115,9 @@ class MetaSlide
 
             return array(
                 'message' => __( 'The image was successfully updated.', 'ml-slider' ),
-                'thumbnail_url' => $thumbnail_url,
+                'thumbnail_url_small' => $thumbnail_url_small,
+                'thumbnail_url_medium' => $thumbnail_url_medium,
+                'thumbnail_url_large' => $thumbnail_url_large,
                 'img_url' => $imageHelper ? $imageHelper->get_image_url() : wp_get_attachment_image_url( $image_id, 'full' )
             );
         }
@@ -355,9 +362,22 @@ class MetaSlide
         $return = "<ul class='tabs'>";
 
         foreach ($tabs as $id => $tab) {
+            
             $pos = array_search($id, array_keys($tabs));
 
-            $selected = $pos == 0 ? "class='selected'" : "";
+            if ($tab['title'] == 'Mobile') {
+                $add_class = 'flex-setting';
+                if($this->settings['type'] != 'flex') {
+                    $hide = 'display: none';
+                } else {
+                    $hide = '';
+                }
+            } else {
+                $add_class = '';
+                $hide = '';
+            }
+
+            $selected = $pos == 0 ? "class='selected " . esc_attr($add_class) . "' style='" . esc_attr($hide) . "'" : "class='" . esc_attr($add_class) . "' style='" . esc_attr($hide) . "'";
 
             $return .= "<li {$selected} ><a tabindex='0' href='#' data-tab_id='tab-" . esc_attr($pos) . "'>" . esc_html($tab['title']) . "</a></li>";
         }
@@ -550,6 +570,9 @@ class MetaSlide
 
     /**
      * Get the thumbnail for the slide
+     * Use get_intermediate_image_src() instead when possible - since @3.60
+     * 
+     * @return string
      */
     public function get_thumb()
     {
@@ -565,4 +588,185 @@ class MetaSlide
 
         return "";
     }
+
+    /**
+     * Get the closest image based on a width size
+     * 
+     * @since 3.60
+     * 
+     * @param int $width            Image width we want to target
+     * @param int $attachment_id    Optional image ID. We use in ajax_update_slide_image()
+     * 
+     * @return string 
+     */
+    public function get_intermediate_image_src( $width, $attachment_id = false )
+    {
+        /* If the post type is 'attachment', we return get_thumb() 
+         * for possible backward compatibility */
+        if ( get_post_type( $this->slide->ID ) == 'attachment' ) {
+            return $this->get_thumb();
+        }
+
+        if ( ! $attachment_id ) {
+            $attachment_id  = get_post_thumbnail_id( $this->slide->ID );
+        }
+        
+        $image_sizes = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+        if ( is_array( $image_sizes ) && count( $image_sizes ) ) {
+            $original_width = $image_sizes[1]; // Image width value from array
+            
+            // Find the closest image size to $width in width
+            $sizes = get_intermediate_image_sizes(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_intermediate_image_sizes_get_intermediate_image_sizes
+
+            // Default if no smaller size is found
+            $closest_size = 'full'; 
+
+            foreach ( $sizes as $size ) {
+                $size_info  = image_get_intermediate_size( $attachment_id, $size );
+
+                if ( isset( $size_info['width'] ) 
+                    && $size_info['width'] >= $width 
+                    && $size_info['width'] < $original_width 
+                ) {
+                    $closest_size = $size;
+                    break;
+                }
+            }
+
+            // Get the URL of the closest image size.
+            $closest_image = wp_get_attachment_image_src( $attachment_id, $closest_size );
+            
+            // $closest_image[0] URL
+            // $closest_image[1] width
+            // $closest_image[2] height
+            // $closest_image[3] boolean for: is the image cropped?
+
+            if ( is_array( $closest_image ) ) {
+                $image_ = is_ssl() ? set_url_scheme( $closest_image[0], 'https' ) : set_url_scheme( $closest_image[0], 'http' );
+                return $image_;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Slide thumb image HTML in admin
+     * 
+     * @since 3.60
+     * 
+     * @return html
+     */
+    public function get_admin_slide_thumb()
+    {
+        $thumb_small    = $this->get_intermediate_image_src( 240 );
+        $thumb_medium   = $this->get_intermediate_image_src( 768 );
+        $thumb_large    = $this->get_intermediate_image_src( 1024 );
+        $slide_type     = get_post_meta( $this->slide->ID, 'ml-slider_type', true );
+        $attachment_id  = $this->get_attachment_id();
+        
+        $html = '<div class="metaslider-ui-inner metaslider-slide-thumb">
+            <button class="update-image image-button" data-slide-type="' . 
+            esc_attr( $slide_type ) . '" data-button-text="' . 
+            esc_attr__( 'Update slide image', 'ml-slider' ) . '" title="' . 
+            esc_attr__( 'Update slide image', 'ml-slider' ) . '" data-slide-id="' . 
+            esc_attr( $this->slide->ID ) . '" data-attachment-id="' . 
+            esc_attr( $attachment_id ) . '">
+                <div class="thumb">
+                    <img style="display:none" src="' . 
+                    esc_url( $thumb_small ) . '" srcset="' . 
+                    esc_url( $thumb_large ) . ' 1024w, ' . 
+                    esc_url( $thumb_medium ) . ' 768w, ' . 
+                    esc_url( $thumb_small ) . ' 240w" sizes="(min-width: 990px) and (max-width: 1024px) 1024px, (max-width: 768px) 768px, 240px" />
+                </div>
+            </button>
+        </div>';
+
+        return $html;
+    }
+
+    /**
+     * HTML output for switch toggle
+     * 
+     * @since 3.60
+     * 
+     * @param string $name      Valid input name
+     * @param bool $isChecked   true or false
+     * @param array $attrs      Optional array of attributes. e.g. array( 'lorem' => 'value' )
+     * @param string $class     Optional CSS classes for the wrapper
+     * 
+     * @return html
+     */
+    public function switch_button( $name, $isChecked, $attrs = array(), $class = '' )
+    {
+        $html = '<div class="ms-switch-button' . 
+            esc_attr( ! empty( $class ) ? ' ' . $class : '' ) . '">
+            <label><input type="checkbox" name="' . 
+                esc_attr( $name ) . '"' . 
+               ( $isChecked ? ' checked="checked"' : '' );
+                
+                // Append $attrs as valid HTML attributes
+                foreach( $attrs as $item => $value ) {
+                    $html .= ' ' . esc_attr( $item ) . '="' . esc_attr( $value ) . '"';
+                }
+                
+        $html .= ' /><span></span>
+        </label>
+        </div>';
+
+        return $html;
+    }
+
+    /**
+     * Info icon with tooltip
+     * 
+     * @since 3.60
+     * 
+     * @return html
+     */
+    public function info_tooltip( $label )
+    {
+        $html = '<span class="dashicons dashicons-info tipsy-tooltip-top" title="' . 
+            esc_attr( $label ) . '"></span>';
+
+        return $html;
+    }
+
+    /**
+     * Include slider assets, JS and CSS paths are specified by child classes.
+     */
+    public function enqueue_scripts()
+    {
+        if (filter_var($this->get_setting('printJs'), FILTER_VALIDATE_BOOLEAN)) {
+            $handle = 'metaslider-' . $this->get_setting('type') . '-slider';
+            wp_enqueue_script($handle, METASLIDER_ASSETS_URL . $this->js_path, array('jquery'), METASLIDER_ASSETS_VERSION);
+            $this->wp_add_inline_script($handle, $this->get_inline_javascript());
+        }
+
+        if (filter_var($this->get_setting('printCss'), FILTER_VALIDATE_BOOLEAN)) {
+            wp_enqueue_style('metaslider-' . $this->get_setting('type') . '-slider', METASLIDER_ASSETS_URL . $this->css_path, false, METASLIDER_ASSETS_VERSION);
+            wp_enqueue_style('metaslider-public', METASLIDER_ASSETS_URL . 'metaslider/public.css', false, METASLIDER_ASSETS_VERSION);
+
+            $extra_css = apply_filters("metaslider_css", "", $this->settings, $this->id);
+            wp_add_inline_style('metaslider-public', $extra_css);
+        }
+
+        
+
+        wp_enqueue_script('metaslider-script', METASLIDER_ASSETS_URL . 'metaslider/script.min.js', array('jquery'), METASLIDER_ASSETS_VERSION);
+
+        do_action('metaslider_register_public_styles');
+    }
+
+    public function get_global_settings() {
+        if (is_multisite() && $settings = get_site_option('metaslider_global_settings')) {
+            return $settings;
+        }
+
+        if ($settings = get_option('metaslider_global_settings')) {
+            return $settings;
+        }
+    }
+
 }

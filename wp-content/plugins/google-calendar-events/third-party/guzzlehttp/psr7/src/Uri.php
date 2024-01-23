@@ -11,6 +11,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
  * @author Michael Dowling
  * @author Tobias Schultze
  * @author Matthew Weier O'Phinney
+ * @internal
  */
 class Uri implements UriInterface, \JsonSerializable
 {

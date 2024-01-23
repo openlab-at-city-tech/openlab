@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Backend\Components\Settings;
 
-/**
- * Class Menu
- * @package Bookly\Backend\Components\Settings
- */
 class Menu
 {
     /**

@@ -1,9 +1,9 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 4.3.2
+Stable tag: 4.4.0
 Tags: font, awesome, fontawesome, font-awesome, icon, svg, webfont
 Requires at least: 4.7
-Tested up to: 6.1.1
+Tested up to: 6.3
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -161,6 +161,13 @@ You can get more information about all the available settings and troubleshootin
 
 
 == Changelog ==
+
+= 4.4.0 =
+* Update the Icon Chooser to fix the use of Sharp Solid in more recent versions of Font Awesome,
+  and include Sharp Regular and Sharp Light.
+* Add the "defer" attribute to script tags when in "Use a Kit" mode. This was already the behavior
+  under "Use CDN" mode.
+* Fix some deprecation notices for php 8.2.
 
 = 4.3.2 =
 * Security Fix: escape shortcode attribute values.

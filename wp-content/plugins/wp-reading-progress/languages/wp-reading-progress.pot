@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP plugin - Ruigehond006\n"
+"POT-Creation-Date: 2019-09-23 13:03+0200\n"
+"PO-Revision-Date: 2019-09-23 13:03+0200\n"
+"Last-Translator: \n"
+"Language-Team: ruige hond\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_x;_n\n"
+"X-Poedit-SearchPath-0: wp-reading-progress.php\n"
+
+#: wp-reading-progress.php:5, Description
+msgid "Light weight customizable reading progress bar. Great UX on longreads! Customize under Settings -> WP Reading Progress"
+msgstr ""
+
+#: wp-reading-progress.php:91
+msgid "Set your options"
+msgstr ""
+
+#: wp-reading-progress.php:93
+msgid ""
+"This plugin displays a reading progress bar on your single blog post pages, "
+"using the blog article to calculate reading progress."
+msgstr ""
+
+#: wp-reading-progress.php:94
+msgid ""
+"Optionally you can place it on other pages as well. When it does not find a single article, it uses the whole page to calculate reading progress."
+msgstr ""
+
+#: wp-reading-progress.php:95
+msgid "Please use valid input or the bar might not display."
+msgstr ""
+
+#: wp-reading-progress.php:103
+#, php-format
+msgid "No options found, please deactivate %s and then activate it again."
+msgstr ""
+
+#: wp-reading-progress.php:109
+msgid "Stick the bar to this element"
+msgstr ""
+
+#: wp-reading-progress.php:112
+#, php-format
+msgid ""
+"Use %s or %s, or any VALID selector of a fixed element where the bar can be "
+"appended to, e.g. a sticky menu."
+msgstr ""
+
+#: wp-reading-progress.php:126
+msgid "Color of the progress bar"
+msgstr ""
+
+#: wp-reading-progress.php:141
+msgid "Progress bar thickness"
+msgstr ""
+
+#: wp-reading-progress.php:144
+#, php-format
+msgid ""
+"Thickness based on screen height is recommended, e.g. %s. But you can also "
+"use pixels, e.g. %s."
+msgstr ""
+
+#: wp-reading-progress.php:156
+msgid "On single post page"
+msgstr ""
+
+#: wp-reading-progress.php:162
+msgid "use whole page to calculate reading progress"
+msgstr ""
+
+#: wp-reading-progress.php:174
+msgid "Show reading progress on these (custom) post types as well"
+msgstr ""
+
+#: wp-reading-progress.php:200
+msgid "And on their archives"
+msgstr ""
+
+#: wp-reading-progress.php:230
+msgid "Save Settings"
+msgstr ""

@@ -1,6 +1,6 @@
 <?php
 /**
- * BLC admin modal for legacy screens.
+ * BLC admin modal for legacy screens. Called from WPMUDEV_BLC\App\Admin_Pages\Local_Submenu\View.
  *
  * @link    https://wordpress.org/plugins/broken-link-checker/
  * @since   2.1
@@ -134,7 +134,7 @@ class Controller extends Base {
 	 * @return array Register scripts for the admin page.
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/local-modal/main.asset.php';
+		$script_data  = include WPMUDEV_BLC_DIR . 'assets/dist/local.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',
@@ -154,7 +154,7 @@ class Controller extends Base {
 
 		return array(
 			'blc_local_modal' => array(
-				'src'       => $this->scripts_dir . 'local-modal/main.js',
+				'src'       => $this->scripts_dir . 'local-topnav.js',
 				'deps'      => $dependencies,
 				'ver'       => $version,
 				'in_footer' => true,
@@ -195,8 +195,13 @@ class Controller extends Base {
 	 */
 	public function set_admin_styles() {
 		return array(
+			'blc_sui'          => array(
+				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
+				'ver' => $this->scripts_version(),
+			),
 			'blc_legacy_modal' => array(
-				'src' => $this->styles_dir . 'local-modal.min.css',
+				//'src' => $this->styles_dir . 'local-modal.min.css',
+				'src' => $this->scripts_dir . 'style-local-topnav.css',
 				'ver' => $this->scripts_version(),
 			),
 		);
@@ -206,7 +211,7 @@ class Controller extends Base {
 		static $scripts_version = null;
 
 		if ( is_null( $scripts_version ) ) {
-			$script_data     = include WPMUDEV_BLC_DIR . 'assets/js/local-modal/main.asset.php';
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local-topnav.asset.php';
 			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 

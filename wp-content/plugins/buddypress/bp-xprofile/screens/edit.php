@@ -22,7 +22,9 @@ function xprofile_screen_edit_profile() {
 
 	// Make sure a group is set.
 	if ( ! bp_action_variable( 1 ) ) {
-		bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_profile_slug() . '/edit/group/1' ) );
+		bp_core_redirect(
+			bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_profile_slug(), 'edit', array( 'group', 1 ) ) ) )
+		);
 	}
 
 	// Check the field group exists.
@@ -32,7 +34,8 @@ function xprofile_screen_edit_profile() {
 	}
 
 	// No errors.
-	$errors = false;
+	$errors      = false;
+	$path_chunks = array( bp_get_profile_slug(), 'edit' );
 
 	// Check to see if any new information has been submitted.
 	if ( isset( $_POST['field_ids'] ) ) {
@@ -42,7 +45,8 @@ function xprofile_screen_edit_profile() {
 
 		// Check we have field ID's.
 		if ( empty( $_POST['field_ids'] ) ) {
-			bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_profile_slug() . '/edit/group/' . bp_action_variable( 1 ) ) );
+			$path_chunks[] = array( 'group', bp_action_variable( 1 ) );
+			bp_core_redirect( bp_displayed_user_url( bp_members_get_path_chunks( $path_chunks ) ) );
 		}
 
 		// Explode the posted field IDs into an array so we know which
@@ -58,13 +62,13 @@ function xprofile_screen_edit_profile() {
 			bp_xprofile_maybe_format_datebox_post_data( $field_id );
 
 			$is_required[ $field_id ] = xprofile_check_is_required_field( $field_id ) && ! bp_current_user_can( 'bp_moderate' );
-			if ( $is_required[$field_id] && empty( $_POST['field_' . $field_id] ) ) {
+			if ( $is_required[ $field_id ] && empty( $_POST[ 'field_' . $field_id ] ) ) {
 				$errors = true;
 			}
 		}
 
 		// There are errors.
-		if ( !empty( $errors ) ) {
+		if ( ! empty( $errors ) ) {
 			bp_core_add_message( __( 'Your changes have not been saved. Please fill in all required fields, and save your changes again.', 'buddypress' ), 'error' );
 
 		// No errors.
@@ -78,9 +82,9 @@ function xprofile_screen_edit_profile() {
 			foreach ( (array) $posted_field_ids as $field_id ) {
 
 				// Certain types of fields (checkboxes, multiselects) may come through empty. Save them as an empty array so that they don't get overwritten by the default on the next edit.
-				$value = isset( $_POST['field_' . $field_id] ) ? $_POST['field_' . $field_id] : '';
+				$value = isset( $_POST[ 'field_' . $field_id ] ) ? $_POST[ 'field_' . $field_id ] : '';
 
-				$visibility_level = !empty( $_POST['field_' . $field_id . '_visibility'] ) ? $_POST['field_' . $field_id . '_visibility'] : 'public';
+				$visibility_level = ! empty( $_POST[ 'field_' . $field_id . '_visibility' ] ) ? $_POST[ 'field_' . $field_id . '_visibility' ] : 'public';
 
 				// Save the old and new values. They will be
 				// passed to the filter and used to determine
@@ -148,14 +152,15 @@ function xprofile_screen_edit_profile() {
 			}
 
 			// Set the feedback messages.
-			if ( !empty( $errors ) ) {
+			if ( ! empty( $errors ) ) {
 				bp_core_add_message( __( 'There was a problem updating some of your profile information. Please try again.', 'buddypress' ), 'error' );
 			} else {
 				bp_core_add_message( __( 'Changes saved.', 'buddypress' ) );
 			}
 
 			// Redirect back to the edit screen to display the updates and message.
-			bp_core_redirect( trailingslashit( bp_displayed_user_domain() . bp_get_profile_slug() . '/edit/group/' . bp_action_variable( 1 ) ) );
+			$path_chunks[] = array( 'group', bp_action_variable( 1 ) );
+			bp_core_redirect( bp_displayed_user_url( bp_members_get_path_chunks( $path_chunks ) ) );
 		}
 	}
 

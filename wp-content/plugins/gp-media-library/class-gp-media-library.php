@@ -338,6 +338,8 @@ class GP_Media_Library extends GWPerk {
 
 				}
 
+				$this->save_file_path_entry_meta( $id, $entry['id'] );
+
 			}
 
 			$ids[] = $id;
@@ -345,6 +347,37 @@ class GP_Media_Library extends GWPerk {
 		}
 
 		return $ids;
+	}
+
+	/**
+	 * Save the GPML-imported file path info to the entry meta.
+	 *
+	 * Gravity Forms saves the file path info to entry meta and uses that meta as a check when updating the entry value.
+	 * This is relevant when editing a child entry that contains a Multi File Upload field via Nested Forms. Without this,
+	 * previously uploaded files are lost on edit.
+	 *
+	 * @param $attachment_id
+	 * @param $entry_id
+	 *
+	 * @return bool
+	 */
+	public function save_file_path_entry_meta( $attachment_id, $entry_id ) {
+
+		if ( ! is_callable( 'GF_Field_FileUpload', 'get_file_upload_path_meta_key_hash' ) ) {
+			return false;
+		}
+
+		$attachment = get_post( $attachment_id );
+
+		$file_path_info = array(
+			'path'      => trailingslashit( pathinfo( get_attached_file( $attachment_id ) )['dirname'] ),
+			'url'       => trailingslashit( dirname( $attachment->guid ) ),
+			'file_name' => wp_basename( $attachment->guid ),
+		);
+
+		$file_url_hash = GF_Field_FileUpload::get_file_upload_path_meta_key_hash( $attachment->guid );
+
+		return (bool) gform_add_meta( $entry_id, $file_url_hash, $file_path_info );
 	}
 
 	public function get_physical_file_path( $url, $form_id ) {
@@ -419,6 +452,14 @@ class GP_Media_Library extends GWPerk {
 		 */
 		$should_delete = gf_apply_filters( array( 'gpml_delete_entry_files_from_media_library', $form['id'] ), true, $entry_id, $form );
 		if ( ! $should_delete ) {
+			// if we are not deleting the file from media library, we must ensure that Gravity Forms' delete entry invocation doesn't remove it.
+			// we can simply unset that media library field id from the entry to make Gravity Forms logic doesn't remove the file.
+			foreach ( $form['fields'] as $field ) {
+				if ( $this->is_applicable_field( $field ) ) {
+					unset( $entry[ $field['id'] ] );
+					GFAPI::update_entry( $entry );
+				}
+			}
 			return;
 		}
 

@@ -87,6 +87,12 @@ function openlab_set_user_member_type( $user_id, $member_type ) {
  * @return string
  */
 function openlab_get_member_types() {
+	$switched = false;
+	if ( ! bp_is_root_blog() ) {
+		switch_to_blog( bp_get_root_blog_id() );
+		$switched = true;
+	}
+
 	$bp_types = bp_get_member_types( [], 'objects' );
 
 	$types = array_map(
@@ -117,6 +123,10 @@ function openlab_get_member_types() {
 			return $a_index > $b_index ? 1 : -1;
 		}
 	);
+
+	if ( $switched ) {
+		restore_current_blog();
+	}
 
 	return $types;
 }

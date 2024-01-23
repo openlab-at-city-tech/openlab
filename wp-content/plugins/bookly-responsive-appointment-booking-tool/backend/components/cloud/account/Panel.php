@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Backend\Modules;
 use Bookly\Lib\Utils\Common;
 
-/**
- * Class Panel
- * @package Bookly\Backend\Components\Cloud\Account
- */
 class Panel extends Lib\Base\Component
 {
     /**

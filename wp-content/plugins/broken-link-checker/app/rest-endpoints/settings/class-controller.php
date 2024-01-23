@@ -244,6 +244,7 @@ class Controller extends Rest_Api {
 							'key'   => 'show_notice',
 							'value' => array(
 								'content'     => sprintf(
+									//translators: 1: The Hub's signup url.
 									__( 'Dashboard plugin is not installed. You can connect your site for free directly from <a href="%s">Hub<a>.', 'broken-link-checker' ),
 									esc_html( Utilities::hub_signup_url() )
 								),

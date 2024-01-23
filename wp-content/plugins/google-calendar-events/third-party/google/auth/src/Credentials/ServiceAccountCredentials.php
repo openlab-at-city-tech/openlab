@@ -56,6 +56,7 @@ use InvalidArgumentException;
  *   ]);
  *
  *   $res = $client->get('myproject/taskqueues/myqueue');
+ * @internal
  */
 class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {

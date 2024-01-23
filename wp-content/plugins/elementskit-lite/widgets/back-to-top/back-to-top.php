@@ -206,7 +206,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
                'name'           => 'ekit_btn_typography',
                'label'          => esc_html__('Typography', 'elementskit-lite'),
                'selector'       => '{{WRAPPER}} .ekit-btt__button',
-               'exclude'  => ['letter_spacing', 'font_style', 'text_decoration', 'line_height'],
+               'exclude'  => ['letter_spacing', 'font_style', 'text_decoration', 'line_height'], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
                'fields_options'  => [
 						'typography'  => [
 							'default' => 'custom',
@@ -314,7 +314,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 				'name' => 'ekit_button_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
 				'selector' => '{{WRAPPER}} .ekit-btt__button',
-            'exclude' => ['border_color'],
+            	'exclude' => ['border_color'], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'condition'	=> [
 					'ekit_button_appearance!' => 'progress_indicator'
 				]
@@ -463,7 +463,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 				'background' => $settings['ekit_button_prgoress_background']
 		]
 		?>
-			<div class="ekit-back-to-top-container ekit-btt <?php echo esc_attr( $appearance ) ?>" data-settings="<?php echo esc_attr( json_encode($args) ) ?>"> 
+			<div class="ekit-back-to-top-container ekit-btt <?php echo esc_attr( $appearance ) ?>" data-settings="<?php echo esc_attr( wp_json_encode($args) ) ?>"> 
 				<span class="ekit-btt__button <?php echo esc_attr( $is_scroll ) ?>">
 					<?php // start container
 					switch( $appearance ) {

@@ -21,6 +21,7 @@ use ReflectionExtension;
  *
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
+ * @internal
  */
 class SignalHandler
 {

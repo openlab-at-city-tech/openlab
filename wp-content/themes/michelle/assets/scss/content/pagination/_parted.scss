@@ -1,0 +1,19 @@
+/* FILE: content/pagination/_parted.scss */
+
+.post-nav-links {
+	clear: both;
+	margin-top: 3rem;
+}
+
+.post-page-numbers {
+	display: inline-block;
+	padding: .191em .618em;
+	margin: .1em;
+	vertical-align: middle;
+
+	&.current {
+		font-weight: 700;
+		border: 0;
+	}
+
+}

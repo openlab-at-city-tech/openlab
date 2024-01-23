@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Exception\R
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Reference;
 /**
  * Adds tagged translation.extractor services to translation extractor.
+ * @internal
  */
 class TranslationExtractorPass implements CompilerPassInterface
 {

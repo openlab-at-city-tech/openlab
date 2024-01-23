@@ -3,11 +3,6 @@ namespace Bookly\Backend;
 
 use Bookly\Lib;
 
-/**
- * Class Backend
- *
- * @package Bookly\Backend
- */
 abstract class Backend
 {
     /**
@@ -38,8 +33,6 @@ abstract class Backend
                     Components\Notices\RenewAutoRecharge\Notice::create( 'bookly-js-renew' )->render();
                     // Show WPML re save notice.
                     Components\Notices\Wpml\Notice::render();
-                    // Show Zoom JWT deprecation notice.
-                    Components\Notices\ZoomJwt\Notice::render();
                 }
                 // Let add-ons render admin notices.
                 Lib\Proxy\Shared::renderAdminNotices( $bookly_page );

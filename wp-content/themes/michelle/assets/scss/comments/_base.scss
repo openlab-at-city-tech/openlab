@@ -1,0 +1,35 @@
+/* FILE: comments/_base.scss */
+
+.comments-area {
+	position: relative;
+	max-width: var(--layout_width_entry_content);
+	margin: 0 auto;
+	margin-top: var(--white_space);
+
+	.has-content-layout-no-padding & {
+		margin-bottom: var(--content_padding);
+	}
+
+}
+
+.comments-title {
+	font-size: var(--typography_heading_size_4_em);
+
+	span {
+		font-family: var(--typography_font_global);
+		font-weight: 400;
+	}
+
+	.add-comment-link {
+		display: block;
+		margin: 1em 0;
+		font-size: var(--typography_font_size_s_em);
+
+		@include media( map_get( $breakpoint, 'l' ) ) {
+			float: $right;
+			margin: 0;
+		}
+
+	}
+
+}

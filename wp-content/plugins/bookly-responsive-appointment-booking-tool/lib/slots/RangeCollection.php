@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class RangeCollection
- * @package Bookly\Lib\Slots
- */
 class RangeCollection implements \IteratorAggregate
 {
     /** @var  Range[] */
@@ -101,6 +97,16 @@ class RangeCollection implements \IteratorAggregate
     public function all()
     {
         return $this->ranges;
+    }
+
+    /**
+     * Get the number of ranges in the collection.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count( $this->ranges );
     }
 
     /**

@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Appointment\Delete;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Dialogs\Appointment\Delete
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

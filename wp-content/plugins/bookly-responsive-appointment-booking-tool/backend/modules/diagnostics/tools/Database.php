@@ -1,16 +1,10 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
 use Bookly\Lib;
 use Bookly\Backend\Modules\Diagnostics\Schema;
 use Bookly\Backend\Modules\Diagnostics\QueryBuilder;
 
-/**
- * Class DataManagement
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class Database extends Tool
 {
     protected $slug = 'database';
@@ -18,6 +12,7 @@ class Database extends Tool
 
     protected $troubles;
     protected $fixable = false;
+    protected $error = 0;
 
     public function __construct()
     {
@@ -82,7 +77,16 @@ class Database extends Tool
                             $queries++;
                             $success = $this->executeSql( QueryBuilder::getAddColumn( $table_name, $column ) );
                             if ( $success !== true ) {
-                                $errors[] = sprintf( 'Can`t add column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
+                                if ( $this->error === 1118 ) {
+                                    $queries++;
+                                    if ( $this->executeSql( 'OPTIMIZE TABLE `' . $table_name . '`' ) ) {
+                                        $queries++;
+                                        $success = $this->executeSql( QueryBuilder::getAddColumn( $table_name, $column ) );
+                                    }
+                                }
+                                if ( $success !== true ) {
+                                    $errors[] = sprintf( 'Can`t add column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
+                                }
                             }
                         }
                     }
@@ -266,61 +270,65 @@ class Database extends Tool
     public function executeJob()
     {
         global $wpdb;
-        $success = true;
+        $success = 'Fail';
         $class = null;
         list( $table_name, $fix, $trouble, $target ) = explode( '~', self::parameter( 'job' ) );
-        foreach ( apply_filters( 'bookly_plugins', array() ) as $plugin ) {
-            foreach ( $plugin::getEntityClasses() as $entity_class ) {
-                if ( $table_name == $entity_class::getTableName() ) {
-                    $class = $entity_class;
-                    break 2;
+        if ( QueryBuilder::isBooklyTable( $table_name ) ) {
+            foreach ( apply_filters( 'bookly_plugins', array() ) as $plugin ) {
+                foreach ( $plugin::getEntityClasses() as $entity_class ) {
+                    if ( $table_name == $entity_class::getTableName() ) {
+                        $class = $entity_class;
+                        break 2;
+                    }
                 }
             }
-        }
-        $troubles = $this->getTroubles( $class );
-        if ( isset( $troubles[ $fix ][ $trouble ] ) ) {
-            foreach ( $troubles[ $fix ][ $trouble ] as $value ) {
-                if ( $value['title'] == $target ) {
-                    switch ( $trouble ) {
-                        case 'unknown':
-                            if ( $fix === 'fields' ) {
-                                $success = $this->dropColumn( $table_name, $target );
-                            } elseif ( $fix === 'constraints' ) {
-                                $success = $this->executeSql( sprintf( 'ALTER TABLE `%s` DROP FOREIGN KEY `%s`', $table_name, $value['data']['key'] ) );
-                            }
-                            break 2;
-                        case 'missing':
-                            if ( $fix === 'constraints' ) {
-                                $parts = explode( '~', self::parameter( 'job' ) );
-                                if ( count( $parts ) == 5 ) {
-                                    switch ( $parts[4] ) {
-                                        case 'delete':
-                                            $this->executeSql( sprintf( 'DELETE FROM `%s` WHERE `%s` NOT IN ( SELECT `%s` FROM `%s` )',
-                                                $table_name, $value['data']['column'], $value['data']['ref_column_name'], $value['data']['ref_table_name']
-                                            ) );
-                                            break;
-                                        case 'update':
-                                            $this->executeSql( sprintf( 'UPDATE `%s` SET `%s` = NULL WHERE `%s` NOT IN ( SELECT `%s` FROM `%s` )',
-                                                $table_name, $value['data']['column'], $value['data']['column'], $value['data']['ref_column_name'], $value['data']['ref_table_name']
-                                            ) );
-                                            break;
+            $troubles = $this->getTroubles( $class );
+            if ( isset( $troubles[ $fix ][ $trouble ] ) ) {
+                foreach ( $troubles[ $fix ][ $trouble ] as $value ) {
+                    if ( $value['title'] == $target ) {
+                        switch ( $trouble ) {
+                            case 'unknown':
+                                if ( $fix === 'fields' ) {
+                                    if ( ! QueryBuilder::getColumnData( $table_name, $target ) ) {
+                                        $success = $this->dropColumn( $table_name, $target );
                                     }
+                                } elseif ( $fix === 'constraints' ) {
+                                    $success = $this->executeSql( sprintf( 'ALTER TABLE `%s` DROP FOREIGN KEY `%s`', $table_name, $value['data']['key'] ) );
                                 }
-                                $success = $this->executeSql( sprintf( 'ALTER TABLE `%s` ADD CONSTRAINT FOREIGN KEY (`%s`) REFERENCES `%s` (`%s`) ON DELETE %s ON UPDATE %s',
-                                    $table_name, $value['data']['column'], $value['data']['ref_table_name'], $value['data']['ref_column_name'], $value['data']['rules']['DELETE_RULE'], $value['data']['rules']['UPDATE_RULE']
-                                ) );
-                            }
-                            break 2;
-                        case 'character':
-                            $query = 'ALTER TABLE `' . $table_name . '` ';
-                            if ( in_array( 'character_set', $value['data'] ) ) {
-                                $query .= ' CONVERT TO CHARACTER SET ' . $wpdb->charset;
-                            }
-                            if ( in_array( 'collation', $value['data'] ) ) {
-                                $query .= ' COLLATE ' . $wpdb->collate;
-                            }
-                            $success = $this->executeSql( $query );
-                            break 2;
+                                break 2;
+                            case 'missing':
+                                if ( $fix === 'constraints' ) {
+                                    $parts = explode( '~', self::parameter( 'job' ) );
+                                    if ( count( $parts ) === 5 ) {
+                                        switch ( $parts[4] ) {
+                                            case 'delete':
+                                                $this->executeSql( sprintf( 'DELETE FROM `%s` WHERE `%s` NOT IN ( SELECT `%s` FROM `%s` )',
+                                                    $table_name, $value['data']['column'], $value['data']['ref_column_name'], $value['data']['ref_table_name']
+                                                ) );
+                                                break;
+                                            case 'update':
+                                                $this->executeSql( sprintf( 'UPDATE `%s` SET `%s` = NULL WHERE `%s` NOT IN ( SELECT `%s` FROM `%s` )',
+                                                    $table_name, $value['data']['column'], $value['data']['column'], $value['data']['ref_column_name'], $value['data']['ref_table_name']
+                                                ) );
+                                                break;
+                                        }
+                                    }
+                                    $success = $this->executeSql( sprintf( 'ALTER TABLE `%s` ADD CONSTRAINT FOREIGN KEY (`%s`) REFERENCES `%s` (`%s`) ON DELETE %s ON UPDATE %s',
+                                        $table_name, $value['data']['column'], $value['data']['ref_table_name'], $value['data']['ref_column_name'], $value['data']['rules']['DELETE_RULE'], $value['data']['rules']['UPDATE_RULE']
+                                    ) );
+                                }
+                                break 2;
+                            case 'character':
+                                $query = 'ALTER TABLE `' . $table_name . '` ';
+                                if ( in_array( 'character_set', $value['data'] ) ) {
+                                    $query .= ' CONVERT TO CHARACTER SET ' . $wpdb->charset;
+                                }
+                                if ( in_array( 'collation', $value['data'] ) ) {
+                                    $query .= ' COLLATE ' . $wpdb->collate;
+                                }
+                                $success = $this->executeSql( $query );
+                                break 2;
+                        }
                     }
                 }
             }
@@ -362,7 +370,10 @@ class Database extends Tool
 
         ob_start();
         $result = $wpdb->query( $sql );
+        /** @var \mysqli $dd */
+        $this->error = $wpdb->dbh->errno;
         ob_end_clean();
+
 
         return $result === false
             ? $wpdb->last_error

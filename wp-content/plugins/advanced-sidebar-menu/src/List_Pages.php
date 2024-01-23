@@ -1,4 +1,5 @@
 <?php
+//phpcs:disable Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound -- Not a constructor.
 
 namespace Advanced_Sidebar_Menu;
 
@@ -74,16 +75,7 @@ class List_Pages {
 		$this->menu = $menu;
 		$this->top_parent_id = $menu->get_top_parent_id();
 		$this->current_page = $menu->get_current_post();
-
-		$args = [
-			'post_type' => $menu->get_post_type(),
-			'orderby'   => $menu->get_order_by(),
-			'order'     => $menu->get_order(),
-			'exclude'   => $menu->get_excluded_ids(),
-			'levels'    => $menu->get_levels_to_display(),
-		];
-
-		$this->args = $this->parse_args( $args );
+		$this->args = $this->parse_args();
 		$this->hook();
 	}
 
@@ -122,7 +114,7 @@ class List_Pages {
 			if ( $this->get_current_page_id() === $post->ID ) {
 				$classes[] = 'current_page_item';
 				$classes[] = 'current-menu-item';
-			} elseif ( $this->current_page->post_parent === $post->ID ) {
+			} elseif ( null !== $this->current_page && $this->current_page->post_parent === $post->ID ) {
 				$classes[] = 'current_page_parent';
 				$classes[] = 'current_page_ancestor';
 				$classes[] = 'current-menu-parent';
@@ -176,9 +168,7 @@ class List_Pages {
 
 
 	/**
-	 * __toString
-	 *
-	 * Magic method to allow using a simple echo to get output
+	 * Magic method to allow using a simple echo to get output.
 	 *
 	 * @return string
 	 */
@@ -188,36 +178,29 @@ class List_Pages {
 
 
 	/**
-	 * Do any adjustments to list page arguments here.
-	 *
-	 * @param array $args - Arguments for the walk_page_tree function.
+	 * Generate the arguments shared by `walk_page_tree` and `get_posts`.
 	 *
 	 * @return array
 	 */
-	protected function parse_args( $args ) {
-		$defaults = [
-			'exclude'          => '',
+	protected function parse_args() {
+		$args = [
 			'echo'             => 0,
-			'order'            => 'ASC',
-			'orderby'          => 'menu_order, title',
-			'walker'           => new Page_Walker(),
-			'link_before'      => '',
-			'link_after'       => '',
-			'title_li'         => '',
-			'levels'           => 100,
+			'exclude'          => $this->menu->get_excluded_ids(),
 			'item_spacing'     => 'preserve',
-			'posts_per_page'   => 100,
+			'levels'           => $this->menu->get_levels_to_display(),
+			'order'            => $this->menu->get_order(),
+			'orderby'          => $this->menu->get_order_by(),
+			'post_type'        => $this->menu->get_post_type(),
+			// phpcs:ignore -- Several cases of menu items higher than 100.
+			'posts_per_page'   => 200,
 			'suppress_filters' => false,
+			'title_li'         => '',
+			'walker'           => new Page_Walker(),
 		];
 
-		$args = (array) wp_parse_args( $args, $defaults );
-
-		if ( is_string( $args['exclude'] ) ) {
-			$args['exclude'] = explode( ',', $args['exclude'] );
-		}
-		// Sanitize, mostly to keep spaces out.
-		//phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-		$args['exclude'] = \preg_replace( '/[^0-9,]/', '', \implode( ',', apply_filters( 'wp_list_pages_excludes', $args['exclude'] ) ) );
+		//phpcs:ignore -- Using WP core filter for `wp_list_pages` compatibility.
+		$args['exclude'] = apply_filters( 'wp_list_pages_excludes', wp_parse_id_list( $args['exclude'] ) );
+		$args['exclude'] = \implode( ',', $args['exclude'] );
 
 		return apply_filters( 'advanced-sidebar-menu/list-pages/parse-args', $args, $this );
 	}
@@ -242,7 +225,7 @@ class List_Pages {
 	 *
 	 * @return string
 	 */
-	public function list_pages() : string {
+	public function list_pages() {
 		$pages = $this->get_child_pages( $this->top_parent_id, true );
 		foreach ( $pages as $page ) {
 			$this->output .= walk_page_tree( [ $page ], 1, $this->get_current_page_id(), $this->args );
@@ -303,7 +286,7 @@ class List_Pages {
 	 *
 	 * @return \WP_Post[]
 	 */
-	public function get_child_pages( $parent_page_id, $is_first_level = false ) : array {
+	public function get_child_pages( $parent_page_id, $is_first_level = false ): array {
 		// Holds a unique key so cache can distinguish calls.
 		$this->current_children_parent = $parent_page_id;
 
@@ -319,7 +302,7 @@ class List_Pages {
 			$cache->add_child_pages( $this, $child_pages );
 		}
 
-		$child_pages = \array_map( 'get_post', (array) $child_pages );
+		$child_pages = \array_map( 'get_post', $child_pages );
 
 		if ( $is_first_level ) {
 			return (array) apply_filters( 'advanced-sidebar-menu/list-pages/first-level-child-pages', $child_pages, $this, $this->menu );
@@ -336,15 +319,15 @@ class List_Pages {
 	 *
 	 * @return bool
 	 */
-	public function is_current_page_ancestor( $page_id ) : bool {
+	public function is_current_page_ancestor( $page_id ): bool {
 		$return = false;
 		$current_page_id = $this->get_current_page_id();
 		if ( ! empty( $current_page_id ) ) {
 			if ( (int) $page_id === $current_page_id ) {
 				$return = true;
-			} elseif ( $this->current_page->post_parent === (int) $page_id ) {
+			} elseif ( null !== $this->current_page && $this->current_page->post_parent === (int) $page_id ) {
 				$return = true;
-			} else {
+			} elseif ( null !== $this->current_page ) {
 				$ancestors = get_post_ancestors( $this->current_page );
 				if ( ! empty( $ancestors ) && \in_array( (int) $page_id, $ancestors, true ) ) {
 					$return = true;
@@ -361,12 +344,9 @@ class List_Pages {
 	 *
 	 * @param Page $menu - Menu class.
 	 *
-	 * @static
-	 *
 	 * @return List_Pages
 	 */
-	public static function factory( Page $menu ) : List_Pages {
+	public static function factory( Page $menu ): List_Pages {
 		return new static( $menu );
 	}
-
 }

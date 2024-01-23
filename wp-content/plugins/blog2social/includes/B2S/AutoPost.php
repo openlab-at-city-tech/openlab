@@ -15,12 +15,15 @@ class B2S_AutoPost {
     private $current_user_date;
     private $setPreFillText;
     private $optionPostFormat;
+    private $setPreFillTextLimit;
     private $allowHashTag;
     private $userVersion;
     private $allowHtml = array(4, 11, 14, 25);
     private $default_template;
+    private $echo;
+    private $delay;
 
-    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0) {
+    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0, $echo = 0, $delay = 0) {
         $this->postId = $postId;
         $this->blogPostData = $blogPostData;
         $this->current_user_date = $current_user_date;
@@ -38,6 +41,9 @@ class B2S_AutoPost {
         $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000), 1 => array(6 => 300, 17 => 442, 19 => 239), 2 => array(17 => 442, 19 => 239), 20 => 300);
         $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000), 1 => array(6 => 400, 19 => 400), 2 => array(19 => 9000));
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
+        $this->echo = $echo;
+        $this->delay = $delay;
+
     }
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0, $networkKind = 0) {
@@ -325,6 +331,12 @@ class B2S_AutoPost {
         $sched_date = $this->blogPostData['sched_date'];
         $sched_date_utc = $this->blogPostData['sched_date_utc'];
 
+        if($this->delay > 0){
+            $time = "+ " . $this->delay . " minutes";
+            $sched_date = date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date)));
+            $sched_date_utc = date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date_utc)));
+        }
+
         //Scheduling post once with user times 
         if ($sched_type == 2 && $this->myTimeSettings !== false && is_array($this->myTimeSettings) && isset($this->myTimeSettings['times']) && is_array($this->myTimeSettings['times']) && isset($this->myTimeSettings['type'])) {
             //V 5.1.0 Seeding
@@ -382,9 +394,44 @@ class B2S_AutoPost {
                 'network_id' => (int) $network_id,
                 'network_type' => (int) $network_type,
                 'network_auth_id' => (int) $network_auth_id,
-                'network_display_name' => $network_display_name), array('%d', '%d', '%d', '%s'));
+                'network_display_name' => $network_display_name,
+                'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID),
+                array('%d', '%d', '%d', '%s', '%d'));
             $networkDetailsId = $wpdb->insert_id;
         }
+
+        //after 24 hours
+        $echoDates = array();
+        if($this->echo == 1){
+            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date_utc)));
+
+            $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
+
+        //after 48 hours
+        } else if($this->echo == 2){
+            $date = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date_utc)));
+            $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
+
+
+        //both  
+        } else if($this->echo == 3){
+            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date_utc)));
+
+            $date2 = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date)));
+            $date2_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date_utc)));
+
+            $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
+            $echoDates[] = array("date" => $date2, "date_utc" => $date2_utc);
+        }
+
+        if(($sched_type == 3) && $this->delay == 0){
+            $publishDate = $sched_date;
+        } else {
+            $publishDate = "0000-00-00 00:00:00";
+        }   
 
         if ($networkDetailsId > 0) {
             //DeprecatedNetwork-8 31 march
@@ -397,13 +444,14 @@ class B2S_AutoPost {
                     'publish_error_code' => 'DEPRECATED_NETWORK_8',
                     'network_details_id' => $networkDetailsId), array('%d', '%d', '%s', '%s', '%s', '%d'));
             } else {
+       
                 $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
                 $schedDetailsId = $wpdb->insert_id;
                 $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
                     'post_id' => $this->postId,
                     'blog_user_id' => $this->blogPostData['blog_user_id'],
                     'user_timezone' => $this->blogPostData['user_timezone'],
-                    'publish_date' => (($sched_type == 3) ? $sched_date : "0000-00-00 00:00:00"), // selection for view publish / scheduled posts
+                    'publish_date' => $publishDate, // selection for view publish / scheduled posts
                     'sched_details_id' => $schedDetailsId,
                     'sched_type' => 3, // Auto-Posting direkt or scheduled by wp post
                     'sched_date' => $sched_date,
@@ -411,10 +459,34 @@ class B2S_AutoPost {
                     'network_details_id' => $networkDetailsId,
                     'post_for_approve' => (int) $shareApprove,
                     'hook_action' => (((int) $shareApprove == 0) ? 1 : 0),
-                    'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : null)
+                    'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : 0)
                         ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
                 $insertId = $wpdb->insert_id;
                 B2S_Rating::trigger();
+
+
+                if(is_array($echoDates) && !empty($echoDates)){
+                    foreach($echoDates as $date){
+                        $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
+                        $schedDetailsId = $wpdb->insert_id;
+                        $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
+                            'post_id' => $this->postId,
+                            'blog_user_id' => $this->blogPostData['blog_user_id'],
+                            'user_timezone' => $this->blogPostData['user_timezone'],
+                            'publish_date' => "0000-00-00 00:00:00", // selection for view publish / scheduled posts
+                            'sched_details_id' => $schedDetailsId,
+                            'sched_type' => 3, // Auto-Posting direkt or scheduled by wp post
+                            'sched_date' => $date["date"],
+                            'sched_date_utc' => $date["date_utc"],
+                            'network_details_id' => $networkDetailsId,
+                            'post_for_approve' => (int) $shareApprove,
+                            'hook_action' => (((int) $shareApprove == 0) ? 1 : 0),
+                            'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : 0)
+                                ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
+                    }
+                }
+
+
                 return $insertId;
             }
         }

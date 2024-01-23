@@ -39,6 +39,7 @@ use SimpleCalendar\plugin_deps\PhpConsole\Helper;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @deprecated Since 2.8.0 and 3.2.0, PHPConsole is abandoned and thus we will drop this handler in Monolog 4
+ * @internal
  */
 class PHPConsoleHandler extends AbstractProcessingHandler
 {

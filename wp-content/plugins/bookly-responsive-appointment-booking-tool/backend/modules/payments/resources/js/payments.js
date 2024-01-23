@@ -198,12 +198,15 @@ jQuery(function($) {
      */
     var dt = $payments_list.DataTable({
         order: order,
-        paging: false,
         info: false,
         searching: false,
+        lengthChange: false,
         processing: true,
         responsive: true,
-        serverSide: false,
+        pageLength: 25,
+        pagingType: 'numbers',
+        serverSide: true,
+        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
         ajax: {
             url: ajaxurl,
             type: 'POST',
@@ -276,7 +279,7 @@ jQuery(function($) {
             BooklyPaymentDetailsDialog.showDialog({
                 payment_id: dt.row($(this).closest('td')).data().id,
                 done: function(event) {
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 }
             });
         });
@@ -312,13 +315,16 @@ jQuery(function($) {
         }
     );
 
-    $id_filter.on('keyup', function() { dt.ajax.reload(); });
-    $creationDateFilter.on('apply.daterangepicker', function() { dt.ajax.reload(); });
-    $type_filter.on('change', function() { dt.ajax.reload(); });
-    $customer_filter.on('change', function() { dt.ajax.reload(); });
-    $staff_filter.on('change', function() { dt.ajax.reload(); });
-    $service_filter.on('change', function() { dt.ajax.reload(); });
-    $status_filter.on('change', function() { dt.ajax.reload(); });
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
+    $id_filter.on('keyup', onChangeFilter);
+    $creationDateFilter.on('apply.daterangepicker', onChangeFilter);
+    $type_filter.on('change', onChangeFilter);
+    $customer_filter.on('change', onChangeFilter);
+    $staff_filter.on('change', onChangeFilter);
+    $service_filter.on('change', onChangeFilter);
+    $status_filter.on('change', onChangeFilter);
 
     /**
      * Delete payments.
@@ -345,7 +351,7 @@ jQuery(function($) {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        dt.ajax.reload();
+                        dt.ajax.reload(null, false);
                     } else {
                         alert(response.data.message);
                     }

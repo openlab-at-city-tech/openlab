@@ -10,6 +10,7 @@ namespace SimpleCalendar\plugin_deps\Mexitek\PHPColors;
 use Exception;
 /**
  * A color utility that helps manipulate HEX colors
+ * @internal
  */
 class Color
 {

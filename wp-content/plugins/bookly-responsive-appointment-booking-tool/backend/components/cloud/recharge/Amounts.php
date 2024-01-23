@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Cloud\Recharge;
 use Bookly\Lib\Base;
 use Bookly\Lib\Cloud;
 
-/**
- * Class Amounts
- * @package Bookly\Backend\Components\Cloud\Recharge
- */
 class Amounts extends Base\Cache
 {
     const RECHARGE_TYPE_MANUAL = 'manual';

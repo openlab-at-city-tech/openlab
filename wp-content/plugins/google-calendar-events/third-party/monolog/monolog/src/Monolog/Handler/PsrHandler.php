@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * log record's message.
  *
  * @author Michael Moussa <michael.moussa@gmail.com>
+ * @internal
  */
 class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
 {

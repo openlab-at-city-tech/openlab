@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib\Entities\Payment;
 
-/**
- * Class CartInfo
- *
- * @package Bookly\Lib\Booking
- */
 class CartInfo
 {
     /** @var UserBookingData $userData */
@@ -27,8 +22,6 @@ class CartInfo
     protected $group_discount = 0;
     /** @var float  amount of discount for applied coupon */
     protected $coupon_discount = 0;
-    /** @var float  amount of discount for applied gift */
-    protected $gift_discount = 0;
     /** @var float  cost of services including coupon and group discount */
     protected $total = 0;
     /** @var array [['rate' =>float, 'deposit' => float, 'total' => float, 'allow_coupon' => bool]]
@@ -91,21 +84,29 @@ class CartInfo
             }
 
             // Cart contains a service that was already removed/deleted from Bookly (WooCommerce)
-            if ( $item->getService() ) {
-                $item_price = $item->getServicePrice( $item->getNumberOfPersons() );
-                if ( Config::waitingListActive() && get_option( 'bookly_waiting_list_enabled' ) && $item->toBePutOnWaitingList() ) {
-                    $this->waiting_list_total += $item_price;
-                    $this->waiting_list_deposit += Proxy\DepositPayments::prepareAmount( $item_price, $item->getDeposit(), $item->getNumberOfPersons() );
-                } else {
-                    $allow_coupon = false;
-                    if ( $this->coupon && $this->coupon->validForCartItem( $item ) ) {
-                        $coupon_total += $item_price;
-                        $allow_coupon = true;
+            switch ( $item->getType() ) {
+                case CartItem::TYPE_APPOINTMENT:
+                case CartItem::TYPE_PACKAGE:
+                    if ( $item->getService() ) {
+                        $item_price = $item->getServicePrice( $item->getNumberOfPersons() );
+                        if ( Config::waitingListActive() && get_option( 'bookly_waiting_list_enabled' ) && $item->toBePutOnWaitingList() ) {
+                            $this->waiting_list_total += $item_price;
+                            $this->waiting_list_deposit += Proxy\DepositPayments::prepareAmount( $item_price, $item->getDeposit(), $item->getNumberOfPersons() );
+                        } else {
+                            $allow_coupon = false;
+                            if ( $this->coupon && $this->coupon->validForCartItem( $item ) ) {
+                                $coupon_total += $item_price;
+                                $allow_coupon = true;
+                            }
+                            $this->subtotal += $item_price;
+                            $this->deposit += Proxy\DepositPayments::prepareAmount( $item_price, $item->getDeposit(), $item->getNumberOfPersons() );
+                            $this->amounts_taxable = Proxy\Taxes::prepareTaxRateAmounts( $this->amounts_taxable, $item, $allow_coupon );
+                        }
                     }
-                    $this->subtotal += $item_price;
-                    $this->deposit += Proxy\DepositPayments::prepareAmount( $item_price, $item->getDeposit(), $item->getNumberOfPersons() );
-                    $this->amounts_taxable = Proxy\Taxes::prepareTaxRateAmounts( $this->amounts_taxable, $item, $allow_coupon );
-                }
+                    break;
+                default:
+                    Proxy\Shared::prepareCartInfo( $this, $item );
+                    break;
             }
         }
 
@@ -160,11 +161,33 @@ class CartInfo
     }
 
     /**
+     * @param float|int $subtotal
+     * @return CartInfo
+     */
+    public function setSubtotal( $subtotal )
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getDeposit()
     {
         return $this->deposit;
+    }
+
+    /**
+     * @param float $deposit
+     * @return CartInfo
+     */
+    public function setDeposit( $deposit )
+    {
+        $this->deposit = $deposit;
+
+        return $this;
     }
 
     /**
@@ -326,9 +349,9 @@ class CartInfo
     /**
      * @return bool
      */
-    public function withDiscount()
+    public function hasDiscount()
     {
-        return ( $this->coupon_discount + $this->group_discount + $this->price_correction + $this->addon_discount + ( $this->gift_card ? 1 : 0 ) ) < 0;
+        return ( $this->coupon_discount + $this->group_discount + $this->price_correction + $this->addon_discount + ( $this->gift_card ? -1 : 0 ) ) < 0;
     }
 
     /**
@@ -337,6 +360,22 @@ class CartInfo
     public function getUserData()
     {
         return $this->userData;
+    }
+
+    public function getTarget()
+    {
+        $items = $this->userData->cart->getItems();
+        /** @var CartItem $item */
+        $item = reset( $items );
+        switch ( $item->getType() ) {
+            case CartItem::TYPE_PACKAGE:
+                return Payment::TARGET_PACKAGES;
+            case CartItem::TYPE_GIFT_CARD:
+                return Payment::TARGET_GIFT_CARDS;
+            case CartItem::TYPE_APPOINTMENT:
+            default:
+                return Payment::TARGET_APPOINTMENTS;
+        }
     }
 
     /**************************************************************************
@@ -454,7 +493,9 @@ class CartInfo
 
             if ( $coupon_total > 0 ) {
                 $tax_products_with_coupon = 1 - ( $this->coupon->getDiscount() / 100 + $this->coupon->getDeduction() / $coupon_total );
-                $tax_products_with_coupon *= $taxes['allow_coupon'];
+                $tax_products_with_coupon = $tax_products_with_coupon > 0
+                    ? $tax_products_with_coupon * $taxes['allow_coupon']
+                    : 0;
             } else {
                 $tax_products_with_coupon = 0;
             }

@@ -48,7 +48,7 @@
                                         )); ?>
                                     </select>
                                     <input type="hidden" id="b2s-license-user" value="<?php echo esc_attr(get_current_user_id()); ?>">
-                                    <input type="hidden" id="b2s-no-user-found" value="<?php esc_html_e('No User found', 'blog2social'); ?>">
+                                    <input type="hidden" id="b2s-no-user-found" value="<?php esc_attr_e('No User found', 'blog2social'); ?>">
                                 </div>
                                 <div class="input-group col-md-8 col-sm-12 col-xs-12">
                                     <input class="form-control input-sm b2s-key-area-input" placeholder="<?php esc_html_e('Enter license key and change your version', 'blog2social'); ?>" value="" type="text">

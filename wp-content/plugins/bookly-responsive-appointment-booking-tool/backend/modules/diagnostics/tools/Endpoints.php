@@ -4,11 +4,6 @@ namespace Bookly\Backend\Modules\Diagnostics\Tools;
 use Bookly\Lib;
 use Bookly\Lib\Cloud\Account;
 
-/**
- * Class Endpoints
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 class Endpoints extends Tool
 {
     protected $slug = 'products-endpoint';

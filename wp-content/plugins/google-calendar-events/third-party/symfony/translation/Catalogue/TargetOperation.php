@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
  * Basically, the result contains messages from the target catalogue.
  *
  * @author Michael Lee <michael.lee@zerustech.com>
+ * @internal
  */
 class TargetOperation extends AbstractOperation
 {

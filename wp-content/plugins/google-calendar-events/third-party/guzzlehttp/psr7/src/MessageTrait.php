@@ -7,6 +7,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\MessageInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * Trait implementing functionality common to requests and responses.
+ * @internal
  */
 trait MessageTrait
 {

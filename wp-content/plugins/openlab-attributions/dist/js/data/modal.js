@@ -22,6 +22,8 @@ const initalState = {
 	isOpen: false,
 	modalType: 'update',
 	item: DEFAULT_ITEM,
+	selectedBlockClientId: null,
+	blockSelectionStart: null,
 };
 
 // Reducer
@@ -38,6 +40,18 @@ function reducer( state = initalState, action ) {
 
 		case 'HIDE_MODAL':
 			return initalState;
+
+		case 'SET_BLOCK_SELECTION_START':
+			return {
+				...state,
+				blockSelectionStart: action.clientId,
+			};
+
+		case 'SET_SELECTED_BLOCK_CLIENT_ID':
+			return {
+				...state,
+				selectedBlockClientId: action.clientId,
+			};
 	}
 
 	return state;
@@ -57,12 +71,30 @@ const actions = {
 			type: 'HIDE_MODAL',
 		};
 	},
+	setBlockSelectionStart( clientId ) {
+		return {
+			type: 'SET_BLOCK_SELECTION_START',
+			clientId,
+		};
+	},
+	setSelectedBlockClientId( clientId ) {
+		return {
+			type: 'SET_SELECTED_BLOCK_CLIENT_ID',
+			clientId,
+		};
+	}
 };
 
 // Selectors
 const selectors = {
 	get( state ) {
 		return state;
+	},
+	getSelectedBlockClientId( state ) {
+		return state.selectedBlockClientId;
+	},
+	getBlockSelectionStart( state ) {
+		return state.blockSelectionStart;
 	},
 };
 

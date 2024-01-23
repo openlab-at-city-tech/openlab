@@ -57,6 +57,8 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 * manipulation required prior to rendering.
 	 *
 	 * @since 2.0.0
+	 *
+	 * @global string $usersearch The users search terms.
 	 */
 	public function prepare_items() {
 		global $usersearch;
@@ -97,7 +99,7 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 	 *
 	 * @since 2.5.0
 	 *
-	 * @global string $role The name of role the users screens is filtered by
+	 * @global string $role The name of role the users screens is filtered by.
 	 */
 	public function views() {
 		global $role;
@@ -365,8 +367,6 @@ class BP_Members_List_Table extends WP_Users_List_Table {
 		if ( ! bp_is_active( 'xprofile' ) ) {
 			return;
 		}
-
-		$profile_field_ids = array();
 
 		// Fetch registration field data once only.
 		if ( ! $this->signup_field_labels ) {

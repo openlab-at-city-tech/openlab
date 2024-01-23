@@ -11,6 +11,8 @@ class Form {
 
     protected $groups = array();
 
+    public $options;
+
     function __construct( $options = array() ) {
         $this->options = new Form_Options( $options );
 

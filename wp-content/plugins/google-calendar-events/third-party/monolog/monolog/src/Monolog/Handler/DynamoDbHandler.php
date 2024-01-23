@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *
  * @link https://github.com/aws/aws-sdk-php/
  * @author Andrew Lawson <adlawson@gmail.com>
+ * @internal
  */
 class DynamoDbHandler extends AbstractProcessingHandler
 {

@@ -6,6 +6,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * PHP stream implementation.
+ * @internal
  */
 class Stream implements StreamInterface
 {

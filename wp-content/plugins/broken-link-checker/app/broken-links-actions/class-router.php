@@ -44,7 +44,8 @@ class Router extends Base {
 	public function direct_endpoint( string $action = null ) {
 		if ( ! empty( Settings::instance()->get( 'use_legacy_blc_version' ) ) ) {
 			$response['error_code'] = 'blc_local_mode';
-			$response['message']    = sprintf( 
+			$response['message']    = sprintf(
+				//translators: %1$s: Open a tag  %2$s: Close a tag.
 				esc_html__( 'BLC plugin is set to Local Engine and can not perform any Cloud Engine action. Please make sure plugin is set to %1$sCloud Engine%2$s', 'broken-link-checker' ) ,
 				'<a href="' .  admin_url( 'admin.php?page=blc_dash' ) . '">',
 				'</a>'
@@ -262,6 +263,7 @@ class Router extends Base {
 						return new \WP_Error(
 							'blc-link-action-normalization-error',
 							sprintf(
+								//translators: %1$s: The keyname of the schema that will be used to sanitize.
 								esc_html__(
 									'Links params do not follow schema. Key `%1$s` missing',
 									'broken-link-checker'
@@ -281,6 +283,7 @@ class Router extends Base {
 						return new \WP_Error(
 							'blc-link-action-sanitization-error',
 							sprintf(
+								//translators: %1$s: The schema's key name.
 								esc_html__(
 									'Links param `%1$s` potentially malicious',
 									'broken-link-checker'

@@ -652,7 +652,8 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
          */
         $language_prefix = (!function_exists('pll_current_language') ? '' : pll_current_language());
 
-        $ekit_search_link = apply_filters( 'ekit_search_link', home_url( '/'.$language_prefix ) );
+		$ekit_search_link = apply_filters('ekit_search_link', home_url( '/'.$language_prefix ));
+		$placeholder_and_label = $settings['ekit_search_placeholder_text']; 
         ?>
         <a href="#ekit_modal-popup-<?php echo esc_attr($this->get_id()); ?>" class="ekit_navsearch-button ekit-modal-popup" aria-label="navsearch-button">
             <?php
@@ -676,8 +677,8 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
             <div class="ekit-search-panel">
             <!-- Polylang search - thanks to Alain Melsens -->
                 <form role="search" method="get" class="ekit-search-group" action="<?php echo esc_url( $ekit_search_link ); ?>">
-                    <input type="search" class="ekit_search-field" placeholder="<?php echo esc_attr( $settings['ekit_search_placeholder_text'] ); ?>" value="<?php echo esc_attr(get_search_query()); ?>" name="s" />
-                    <button type="submit" class="ekit_search-button">
+                    <input type="search" class="ekit_search-field" aria-label="search-form" placeholder="<?php echo esc_attr($placeholder_and_label); ?>" value="<?php echo esc_attr(get_search_query()); ?>" name="s">
+					<button type="submit" class="ekit_search-button" aria-label="search-button">
                         <?php
                             // new icon
                             $migrated = isset( $settings['__fa4_migrated']['ekit_search_icons'] );
@@ -688,7 +689,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                                 Icons_Manager::render_icon( $settings['ekit_search_icons'], [ 'aria-hidden' => 'true' ] );
                             } else {
                                 ?>
-                                <i class="<?php echo esc_attr($settings['ekit_search_icon']); ?>" aria-hidden="true"></i>
+                                <i class="<?php echo esc_attr($settings['ekit_search_icon']); ?>" title="Search" aria-hidden="true"></i>
                                 <?php
                             }
                         ?>

@@ -2,7 +2,7 @@
 /**
  * WP OAuth class adapted from Abraham.
  *
- * @package     WP to Twitter
+ * @package     XPoster
  * @author      Joe Dolson
  * @copyright   2012-2023 Joe Dolson
  * @license     GPL-2.0+

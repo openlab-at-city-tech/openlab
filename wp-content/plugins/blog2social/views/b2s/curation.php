@@ -7,6 +7,8 @@ $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
 $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d H:i:s", (strtotime(sanitize_text_field(wp_unslash($_GET['schedDate'])) . ' ' . gmdate('H:i:s')))) : "";    //routing from calendar
+$isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-success">'. esc_html__('Pro', 'blog2social') .'</span>' : '';
+
 ?>
 <div class="b2s-container">
     <div class="b2s-inbox">
@@ -18,18 +20,18 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                 <!--Header|End-->
                 <h1 id="b2s-curation-title-link" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Link Post', 'blog2social'); ?></h1>
                 <h1 id="b2s-curation-title-text" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Text Post', 'blog2social'); ?></h1>
-                <h1 id="b2s-curation-title-image" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Image Post', 'blog2social'); ?></h1>
+                <h1 id="b2s-curation-title-image" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Image Post', 'blog2social') . $isImagePro; ?></h1>
                 <h1 id="b2s-curation-title-video" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Video Post', 'blog2social'); ?></h1>
                 <p id="b2s-curation-subtitle-link" class="b2s-bold b2s-color-grey b2s-curation-subtitle" style="display: none;"><?php esc_html_e('Add a link you’d like to share on your social networks. You can also share a video link, for example from YouTube or Vimeo (also see Video Post).', 'blog2social'); ?></p>
                 <p id="b2s-curation-subtitle-text" class="b2s-bold b2s-color-grey b2s-curation-subtitle" style="display: none;"><?php esc_html_e('Add a comment or text you like to share on your social media accounts.', 'blog2social'); ?></p>
                 <p id="b2s-curation-subtitle-image" class="b2s-bold b2s-color-grey b2s-curation-subtitle" style="display: none;"><?php esc_html_e('Upload an image or select an image from your media library and share the image with a short description (comment) on your social media accounts.', 'blog2social'); ?></p>
                 <p id="b2s-curation-subtitle-video" class="b2s-bold b2s-color-grey b2s-curation-subtitle" style="display: none;"><?php esc_html_e('Add a video link, for example from YouTube or Vimeo, you like to share on your social media accounts.', 'blog2social'); ?></p>
                 <br>
-                
+
                 <!--Navbar|Start-->
                 <div class="panel panel-default">
                     <div class="panel-body">
-                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                     </div>
                 </div>
                 <input type="hidden" id="b2s-curation-post-format" value="0">
@@ -53,90 +55,130 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                             <span class="glyphicon glyphicon-success glyphicon-ok"></span> <?php esc_html_e('Saved as draft.', 'blog2social'); ?>
                         </div>
                         <div class="b2s-curation-area">
-                            <form id="b2s-curation-post-form" method="post">
-                                <div class="b2s-loading-area" style="display:none">
-                                    <br>
-                                    <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
-                                    <div class="clearfix"></div>
-                                    <div class="text-center b2s-loader-text"><?php esc_html_e("Load data...", "blog2social"); ?></div>
-                                </div>
-                                <div class="b2s-curation-link-area">
-                                    <div class="b2s-curation-input-area">
-                                        <div class="col-md-12">
-                                            <div class="row form-group">
-                                                <p class="b2s-curation-input-area-info-header-text"> <?php esc_html_e("Enter a link you want to share on your social media networks. You can also share a video link, for example from YouTube or from Vimeo (also see Video Post).", "blog2social"); ?></p>
-                                                <p class="b2s-curation-input-area-info-header-text-video"> <?php esc_html_e("Enter a video link you want to share on your social media networks, for example from YouTube or from Vimeo.", "blog2social"); ?></p>
-                                                <small id="b2s-curation-input-url-help" class="form-text text-muted b2s-color-text-red"><?php esc_html_e("Please enter a valid link", "blog2social") ?></small>
-                                                <input type="email" class="form-control" id="b2s-curation-input-url" value="" placeholder="<?php esc_html_e("Enter link", "blog2social"); ?>">
-                                                <div class="clearfix"></div>
-                                                <div class="b2s-curation-input-area-btn">
-                                                    <button class="btn btn-primary b2s-btn-curation-continue"><?php esc_html_e("continue", "blog2social"); ?></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="b2s-curation-result-area">
-                                        <div class="col-md-12">
-                                            <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
-                                            <div class="b2s-curation-preview-area"></div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <form id="b2s-curation-post-form" method="post">
+                                        <div class="b2s-loading-area" style="display:none">
+                                            <br>
+                                            <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
                                             <div class="clearfix"></div>
+                                            <div class="text-center b2s-loader-text"><?php esc_html_e("Load data...", "blog2social"); ?></div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row b2s-curation-image-area">
-                                    <div class="col-md-12">
-                                        <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
-                                        <div class="b2s-curation-form-area">
-                                            <div class="col-xs-12 col-sm-5 col-lg-3">
-                                                <button class="btn btn-primary btn-circle b2s-image-remove-btn" style="display:none;" type="button"><i class="glyphicon glyphicon-trash"></i></button>
-                                                <img src="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>" class="b2s-post-item-details-url-image center-block img-responsive">
-                                                <input type="hidden" class="b2s-image-url-hidden-field form-control" value="" name="image_url">
-                                                <input type="hidden" class="b2s-image-id-hidden-field form-control" value="" name="image_id">
+                                        <div class="b2s-curation-link-area">
+                                            <div class="b2s-curation-input-area">
+                                                <div class="col-md-12">
+                                                    <div class="row form-group">
+                                                        <p class="b2s-curation-input-area-info-header-text"> <?php esc_html_e("Enter a link you want to share on your social media networks. You can also share a video link, for example from YouTube or from Vimeo (also see Video Post).", "blog2social"); ?></p>
+                                                        <p class="b2s-curation-input-area-info-header-text-video"> <?php esc_html_e("Enter a video link you want to share on your social media networks, for example from YouTube or from Vimeo.", "blog2social"); ?></p>
+                                                        <small id="b2s-curation-input-url-help" class="form-text text-muted b2s-color-text-red"><?php esc_html_e("Please enter a valid link", "blog2social") ?></small>
+                                                        <input type="email" class="form-control" id="b2s-curation-input-url" value="" placeholder="<?php esc_html_e("Enter link", "blog2social"); ?>">
+                                                        <div class="clearfix"></div>
+                                                        <div class="b2s-curation-input-area-btn">
+                                                            <button class="btn btn-primary b2s-btn-curation-continue"><?php esc_html_e("continue", "blog2social"); ?></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="b2s-curation-result-area">
+                                                <div class="col-md-12">
+                                                    <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
+                                                    <div class="b2s-curation-preview-area"></div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row b2s-curation-image-area">
+                                            <div class="col-md-12">
+                                                <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
+                                                <div class="b2s-curation-form-area">
+                                                    <div class="col-xs-12 col-sm-5 col-lg-3">
+                                                        <button class="btn btn-primary btn-circle b2s-image-remove-btn" style="display:none;" type="button"><i class="glyphicon glyphicon-trash"></i></button>
+                                                        <img src="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>" class="b2s-post-item-details-url-image center-block img-responsive">
+                                                        <input type="hidden" class="b2s-image-url-hidden-field form-control" value="" name="image_url">
+                                                        <input type="hidden" class="b2s-image-id-hidden-field form-control" value="" name="image_id">
+                                                        <div class="clearfix"></div>
+                                                        <button class="btn btn-link btn-xs center-block b2s-select-image-modal-open"><?php esc_html_e('Change image', 'blog2social'); ?></button>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-7 col-lg-9">
+                                                        <div class="b2s-post-item-details-item-message-area">
+                                                    		<input class="form-control" name="b2s-instant-sharing-input-title_image" id="b2s-instant-sharing-input-title_image" value="" placeholder="<?php esc_html_e('Enter title (optional)', 'blog2social'); ?>">
+                                                    		<br>
+
+                                                            <textarea id="b2s-post-curation-comment-image" class="form-control b2s-post-item-details-item-message-input" name="comment_image" placeholder="<?php esc_html_e('Write something...', 'blog2social'); ?>"></textarea>
+                                                            <button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>"/></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="clearfix"></div>
-                                                <button class="btn btn-link btn-xs center-block b2s-select-image-modal-open"><?php esc_html_e('Change image', 'blog2social'); ?></button>
-                                            </div>
-                                            <div class="col-xs-12 col-sm-7 col-lg-9">
-                                                <div class="b2s-post-item-details-item-message-area">
-                                                    <textarea id="b2s-post-curation-comment-image" class="form-control b2s-post-item-details-item-message-input" name="comment_image" placeholder="<?php esc_html_e('Write something...', 'blog2social'); ?>"></textarea>
-                                                    <button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>"/></button>
-                                                </div>
+                                            </div>                                    
+                                        </div>
+                                        <div class="row b2s-curation-text-area">
+                                            <div class="col-md-12">
+                                                <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
+                                                <div class="b2s-curation-form-area">
+                                                    <div class="col-xs-12 col-sm-12 col-lg-12" style="padding: 0px;padding-top: 20px;">
+                                                        <div class="b2s-post-item-details-item-message-area">
+                                                            <input class="form-control" name="b2s-instant-sharing-input-title_text" id="b2s-instant-sharing-input-title_text" value="" placeholder="<?php esc_html_e('Enter title (optional)', 'blog2social'); ?>">
+                                                            <br>
+                                                            <textarea id="b2s-post-curation-comment-text" class="form-control b2s-post-item-details-item-message-input" name="comment_text" placeholder="<?php esc_html_e('Write something...', 'blog2social'); ?>"></textarea>
+                                                            <button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>"/></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>                                    
                                             </div>
                                         </div>
-                                        <div class="clearfix"></div>
-                                    </div>                                    
+                                        <div class="b2s-curation-settings-area"></div>
+                                        <input type="hidden" id="b2s-draft-id" value="" name="b2s-draft-id">
+                                        <textarea id="b2s-post-curation-comment-dummy" style="display:none;"></textarea>
+                                    </form>
+                                    <div class="row b2s-curation-post-list-area">
+                                        <div class="b2s-curation-post-list"></div>
+                                        <div class="col-md-12">
+                                            <div class="pull-right">
+                                                <button class="btn btn-primary b2s-re-share-btn"><?php esc_html_e('Re-share this post', 'blog2social') ?></button>
+                                                <a class="btn btn-primary" href="admin.php?page=blog2social-curation"><?php esc_html_e('Create a new post', 'blog2social') ?></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="b2sSelSchedDate" value="<?php echo esc_attr((($selSchedDate != "") ? strtotime($selSchedDate) . '000' : '')); ?>">
+                                    <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
+                                    <input type="hidden" id="b2sJsTextPublish" value="<?php esc_attr_e('published', 'blog2social') ?>">
+                                    <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
+                                    <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
                                 </div>
-                                <div class="row b2s-curation-text-area">
-                                    <div class="col-md-12">
-                                        <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
-                                        <div class="b2s-curation-form-area">
-                                            <div class="col-xs-12 col-sm-12 col-lg-12" style="padding: 0px;padding-top: 20px;">
-                                                <div class="b2s-post-item-details-item-message-area">
-                                                    <textarea id="b2s-post-curation-comment-text" class="form-control b2s-post-item-details-item-message-input" name="comment_text" placeholder="<?php esc_html_e('Write something...', 'blog2social'); ?>"></textarea>
-                                                    <button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>"/></button>
+                                <div class="col-sm-4">
+                                    <div id="b2s-curation-preview" class="b2s-curation-preview">
+                                        <div id="b2s-curation-preview-header" class="b2s-bold">
+
+                                        </div>
+                                        <div id="b2s-curation-preview-body" class="b2s-curation-preview-body">
+                                            <div class="row">
+                                                <div id="b2s-curation-preview-body-account-img" class="col-sm-2 b2s-curation-preview-body-account-img">
+                                                    <img src="<?php echo esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)); ?>" alt="Blog2Social">
+                                                </div>
+                                                <div id="b2s-curation-preview-body-account-post" class="col-sm-10">
+                                                    <div id="b2s-curation-preview-body-account" class="b2s-curation-preview-body-account">
+                                                        <?php esc_html_e('Blog2Social', 'blog2social') ?>
+                                                    </div>
+                                                    <div id="b2s-curation-preview-body-post-data" class="b2s-curation-preview-body-post-data">
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="clearfix"></div>
-                                        </div>                                    
-                                    </div>
-                                </div>
-                                <div class="b2s-curation-settings-area"></div>
-                                <input type="hidden" id="b2s-draft-id" value="" name="b2s-draft-id">
-                                <textarea id="b2s-post-curation-comment-dummy" style="display:none;"></textarea>
-                            </form>
-                            <div class="row b2s-curation-post-list-area">
-                                <div class="b2s-curation-post-list"></div>
-                                <div class="col-md-12">
-                                    <div class="pull-right">
-                                        <button class="btn btn-primary b2s-re-share-btn"><?php esc_html_e('Re-share this post', 'blog2social') ?></button>
-                                        <a class="btn btn-primary" href="admin.php?page=blog2social-curation"><?php esc_html_e('Create a new post', 'blog2social') ?></a>
+
+
+                                            <div id="b2s-curation-preview-body-text" class="b2s-curation-preview-body-text">
+                                                <?php esc_html_e('Write something...', 'blog2social') ?>
+                                            </div>
+                                            <div id="b2s-curation-preview-footer" class="b2s-curation-preview-footer">
+                                                <img class="b2s-curation-preview-footer-img" src="<?php echo esc_url(plugins_url('/assets/images/settings/like-icons-1.png', B2S_PLUGIN_FILE)); ?>" alt="The Blog2Social logo in green">
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="b2sSelSchedDate" value="<?php echo esc_attr((($selSchedDate != "") ? strtotime($selSchedDate) . '000' : '')); ?>">
-                            <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
-                            <input type="hidden" id="b2sJsTextPublish" value="<?php esc_html_e('published', 'blog2social') ?>">
-                            <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
-                            <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
                         </div>
                     </div>
                 </div>
@@ -220,10 +262,10 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                 <p><?php
                     if (B2S_PLUGIN_USER_VERSION <= 1) {
                         ?>
-                    
-                    <?php esc_html_e('With Blog2Social you can share your WordPress posts and pages as well as create your own social media posts to share any content based on text, links, images, or video links, or even third-party content from any sources. This enables you to manage all your social media content in one place directly from your WordPress dashboard. Schedule and share link posts, text posts, image posts, and video posts (video links, for example from Youtube) and provide your followers with the best content-mix on your social media networks.', 'blog2social') ?>
-                    <br>
-                    <br>
+
+                        <?php esc_html_e('With Blog2Social you can share your WordPress posts and pages as well as create your own social media posts to share any content based on text, links, images, or video links, or even third-party content from any sources. This enables you to manage all your social media content in one place directly from your WordPress dashboard. Schedule and share link posts, text posts, image posts, and video posts (video links, for example from Youtube) and provide your followers with the best content-mix on your social media networks.', 'blog2social') ?>
+                        <br>
+                        <br>
                     <p class="b2s-bold"><?php esc_html_e('Unlock Blog2Social Premium Pro to create and share image posts, video links, and text posts from any source.', 'blog2social') ?></p>
                     <br>
                     <?php esc_html_e('Share image posts:', 'blog2social') ?>
@@ -267,7 +309,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                     <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Torial') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE)) ?>">
                     <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Bloglovin') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE)) ?>">
                     <img class="pull-left hidden-xs b2s-network-info-img" alt="<?php esc_attr_e('Blogger') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/25_flat.png', B2S_PLUGIN_FILE)) ?>">
-                    
+
                     <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Flickr') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE)) ?>">
                     <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Diigo') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE)) ?>">
                     <img class="pull-right hidden-xs b2s-network-info-img-disabled" alt="<?php esc_attr_e('Pinterest') ?>" src="<?php echo esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)) ?>">
@@ -294,7 +336,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                 <br>
                 <p><?php echo sprintf(__('In the <a href="%s">Network Settings</a> you can define one or more network selections for your posts.', 'blog2social'), 'admin.php?page=blog2social-network'); ?>
                     <br>
-                <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_grouping'))); ?></p>
+                    <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_grouping'))); ?></p>
             </div>
         </div>
     </div>
@@ -413,7 +455,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
                 <br>
                 <p><?php echo sprintf(__('In the <a href="%s">Network Settings</a> you can define network selections to select and save your most-used networks for specific posts or campaigns.', 'blog2social'), 'admin.php?page=blog2social-network'); ?>
                     <br>
-                <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_grouping'))); ?></p>
+                    <?php echo sprintf(__('More information on how to create a network selection in the guide <a href="%s" target="_blank">"How can I save a specific selection of networks?"</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_grouping'))); ?></p>
             </div>
         </div>
     </div>

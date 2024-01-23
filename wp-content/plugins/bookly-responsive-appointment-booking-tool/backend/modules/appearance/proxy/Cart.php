@@ -4,9 +4,6 @@ namespace Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Cart
- * @package Bookly\Backend\Modules\Appearance\Proxy
- *
  * @method static void renderButton() Render Cart button.
  * @method static void renderCartStepSettings() Render settings on Cart step.
  * @method static void renderShowStep() Render "Show Cart step".

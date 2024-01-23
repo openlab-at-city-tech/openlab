@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Schedule;
 
 use Bookly\Lib;
 
-/**
- * Class Range
- * @package Bookly\Backend\Components\Schedule
- */
 class Range extends Lib\Base\Component
 {
     /** @var string */

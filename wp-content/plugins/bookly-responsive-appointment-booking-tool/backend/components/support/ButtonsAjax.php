@@ -4,11 +4,6 @@ namespace Bookly\Backend\Components\Support;
 use Bookly\Lib;
 use Bookly\Backend\Modules;
 
-/**
- * Class ButtonsAjax
- *
- * @package Bookly\Backend\Components\Support
- */
 class ButtonsAjax extends Lib\Base\Ajax
 {
     /**

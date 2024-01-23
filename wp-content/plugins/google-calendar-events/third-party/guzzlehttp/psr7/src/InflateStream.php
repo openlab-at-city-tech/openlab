@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
  * @see http://tools.ietf.org/html/rfc1950
  * @see http://tools.ietf.org/html/rfc1952
  * @see http://php.net/manual/en/filters.compression.php
+ * @internal
  */
 final class InflateStream implements StreamInterface
 {

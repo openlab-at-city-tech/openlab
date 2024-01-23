@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * @author Christophe Coevoet <stof@notk.org>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class ChromePHPHandler extends AbstractProcessingHandler
 {

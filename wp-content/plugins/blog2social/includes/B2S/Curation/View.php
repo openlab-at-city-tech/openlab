@@ -20,6 +20,7 @@ class B2S_Curation_View {
         $html = '';
         $html .='<div class="row">';
         $html .='<div class="b2s-post-item-details-item-message-area">';
+
         $html .='<textarea class="form-control col-xs-12 b2s-post-item-details-item-message-input" placeholder="' . esc_attr__('Write something...', 'blog2social') . '" id="b2s-post-curation-comment" name="comment">'.esc_html($desc).'</textarea>';
         $html .='<button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="'.esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)).'"/></button>';
         $html .='</div>';
@@ -105,11 +106,11 @@ class B2S_Curation_View {
         $content .='<hr>';
         $content .='<input type="hidden" class="b2s-post-curation-action" name="action" value="">';
         $content .='<div class="row">';
-        $content .='<div class="col-xs-12 col-sm-6 col-lg-6">';
+        $content .='<div class="col-xs-12 col-sm-8">';
         $content .= '<button class="btn btn-primary pull-left" type="submit" id="b2s-btn-curation-customize">' . esc_html__('Customize & Schedule', 'blog2social') . '</button>';
         $content .= '<button class="btn btn-primary pull-left" type="submit" id="b2s-btn-curation-draft">' . esc_html__('Save as Draft', 'blog2social') . '</button>';
         $content .='</div>';
-        $content .='<div class="col-xs-12 col-sm-6 col-lg-6">';
+        $content .='<div class="col-xs-12 col-sm-4">';
         $content .= '<button class="btn btn-success pull-right" type="submit" id="b2s-btn-curation-share">' . esc_html__('Share', 'blog2social') . '</button>';
         $content .='</div>';
         $content .='</div>';

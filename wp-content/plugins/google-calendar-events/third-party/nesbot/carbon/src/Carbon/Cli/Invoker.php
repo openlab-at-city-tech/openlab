@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Cli;
 
+/** @internal */
 class Invoker
 {
     public const CLI_CLASS_NAME = 'SimpleCalendar\\plugin_deps\\Carbon\\Cli';

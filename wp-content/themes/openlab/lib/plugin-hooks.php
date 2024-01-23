@@ -315,15 +315,14 @@ add_filter(
  * It only removes the text, but we want to remove the entire empty element.
  *
  * This ensures that we don't get "empty link" errors in WAVE tests.
+ *
+ * @return string
  */
-add_filter(
-	'bbp_get_topic_stick_link',
-	function( $link ) {
-		// Remove anchor elements with the class bbp-topic-super-sticky-link.
-		return preg_replace( '/<a[^>]*class="bbp-topic-super-sticky-link"[^>]*><\/a>/', '', $link );
-	},
-	100
-);
+function openlab_bbpress_remove_super_sticky_link( $link ) {
+	// Remove anchor elements with the class bbp-topic-super-sticky-link.
+	return preg_replace( '/<a[^>]*class="bbp-topic-super-sticky-link"[^>]*><\/a>/', '', $link );
+}
+add_filter( 'bbp_get_topic_stick_link', 'openlab_bbpress_remove_super_sticky_link', 100 );
 
 /**
  * Handle feature toggling for groups.

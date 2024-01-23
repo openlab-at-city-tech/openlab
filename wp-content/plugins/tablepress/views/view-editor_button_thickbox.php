@@ -43,10 +43,13 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $action Action for this view.
-	 * @param array  $data   Data for this view.
+	 * @param string               $action Action for this view.
+	 * @param array<string, mixed> $data   Data for this view.
 	 */
-	public function setup( $action, array $data ) {
+	#[\Override]
+	public function setup( /* string */ $action, array $data ) /* : void */ {
+		// Don't use type hints in the method declaration to prevent PHP errors, as the method is inherited.
+
 		$this->action = $action;
 		$this->data = $data;
 
@@ -61,7 +64,8 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 	 *
 	 * @since 1.0.0
 	 */
-	public function render() {
+	#[\Override]
+	public function render(): void {
 		_wp_admin_html_begin();
 
 		wp_print_styles( 'colors' );

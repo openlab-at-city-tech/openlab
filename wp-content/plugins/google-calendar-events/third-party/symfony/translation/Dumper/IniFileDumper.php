@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * IniFileDumper generates an ini formatted string representation of a message catalogue.
  *
  * @author Stealth35
+ * @internal
  */
 class IniFileDumper extends FileDumper
 {

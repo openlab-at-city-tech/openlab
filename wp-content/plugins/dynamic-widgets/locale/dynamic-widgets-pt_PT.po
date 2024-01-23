@@ -411,7 +411,7 @@ msgid "Create dump"
 msgstr "Criar \"dump\""
 
 #: ../dynwid_admin_overview.php:176
-msgid "When you deceide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly."
+msgid "When you decide not to use this plugin anymore (sorry to hear that!). You can cleanup all settings and data related to this plugin by clicking on the 'Uninstall' button. This process is irreversible! After the cleanup the plugin is deactivated automaticly."
 msgstr "Se porventura decidir não usar mais este plugin (óoo, sniff sniff), pode limpar os dados e opções da base de dados ao clicar no botão 'Desinstalar'. O processo é irreversível."
 
 #: ../dynwid_admin_overview.php:181
@@ -509,7 +509,7 @@ msgid ""
 "When you enable this option, you have the ability to apply the exception rule for <em>Single Posts</em> to tags and individual posts.\n"
 "\t\t\t\t\t\tYou can set the exception rule for tags in the single Edit Tag Panel (go to <a href=\"edit-tags.php?taxonomy=post_tag\">Post Tags</a>,\n"
 "\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
-"\t\t\t\t\t\tException rules for tags and individual posts in any combination work independantly, but will always be counted as one exception.<br />\n"
+"\t\t\t\t\t\tException rules for tags and individual posts in any combination work independently, but will always be counted as one exception.<br />\n"
 "  \t\t\t\t\tPlease note when exception rules are set for Author and/or Category, these will be removed.\n"
 "  \t\t\t\t"
 msgstr ""
@@ -569,7 +569,7 @@ msgstr "Isto é provavelmente por que construir uma árvore hierárquica demorou
 #: ../mods/pages_module.php:43
 #: ../mods/custompost_module.php:46
 #: ../mods/custompost_module.php:89
-msgid "All childs"
+msgid "All children"
 msgstr "Todos os filhos"
 
 #: ../mods/pages_module.php:83
@@ -588,10 +588,10 @@ msgstr "Mostrar widget padrão nas páginas estáticas?"
 
 #: ../mods/pages_module.php:101
 msgid ""
-"Checking the \"All childs\" option, makes the exception rule apply\n"
+"Checking the \"All children\" option, makes the exception rule apply\n"
 "\t\t\t\t\tto the parent and all items under it in all levels. Also future items\n"
 "\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
-"\t\t\t\t\t\"All childs\" without the parent."
+"\t\t\t\t\t\"All children\" without the parent."
 msgstr ""
 "A opção \"Todos os Filhos\" faz a regra de exceção ser aplicada\n"
 "\t\t\t\t\tao parente e todos items dos níveis abaixo. Também items futuros\n"
@@ -600,7 +600,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:106
 msgid ""
-"Unfortunately the childs-function has been disabled\n"
+"Unfortunately the \"All children\" function has been disabled\n"
 "\t\t\t\t\tbecause you have more than the limit of pages."
 msgstr ""
 "Infelizmente, a função-filhos foi desativada\n"
@@ -661,7 +661,7 @@ msgstr "Mostrar widget a todos?"
 
 #: ../mods/role_module.php:29
 msgid ""
-"Setting options by role is very powerfull. It can override all other options!<br />\n"
+"Setting options by role is very powerful. It can override all other options!<br />\n"
 "\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
 msgstr ""
 "Definir opções por função é bastante poderoso. Pode  substituir todas as outras opções!<br />\n"
@@ -732,11 +732,11 @@ msgid "Show widget always?"
 msgstr "Mostrar widget de qualquer forma?"
 
 #: ../mods/date_module.php:36
-msgid "Next to the above role option, the date option is also very powerfull. You've been warned!"
+msgid "Next to the above role option, the date option is also very powerful. You've been warned!"
 msgstr "Tal como a opção Função, a opção de data é também muito poderosa!"
 
 #: ../mods/date_module.php:37
-msgid "Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the"
+msgid "Enter dates in the YYYY-MM-DD format. You can also use the calendar by clicking on the"
 msgstr "Insira as datas no formato AAAA-MM-DDD. Pode ainda usar o calendário clicando no"
 
 #: ../mods/date_module.php:38

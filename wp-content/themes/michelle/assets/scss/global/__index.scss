@@ -1,0 +1,16 @@
+/* FILE: global/__index.scss */
+
+@import 'reset/_index';
+@import 'typography/_index';
+@import 'elements/_index';
+@import 'classes/_index';
+@import 'accessibility/_index';
+@import 'form/_index';
+@import 'header/_index';
+@import 'menu/_index';
+@import 'footer/_index';
+@import 'wp/_index';
+@import 'others/_index';
+@import 'modifiers/_index';
+
+@import '../extend';

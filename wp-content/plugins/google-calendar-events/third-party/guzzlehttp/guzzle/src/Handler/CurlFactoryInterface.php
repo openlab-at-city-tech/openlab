@@ -3,6 +3,7 @@
 namespace SimpleCalendar\plugin_deps\GuzzleHttp\Handler;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
+/** @internal */
 interface CurlFactoryInterface
 {
     /**

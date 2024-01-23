@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Elementor\Base;
 
 use Elementor\Widget_Base;
 
-/**
- * Class Widget
- * @package Bookly\Backend\Components\Elementor\Base
- */
 abstract class Widget extends Widget_Base
 {
     /** @var string widget name */

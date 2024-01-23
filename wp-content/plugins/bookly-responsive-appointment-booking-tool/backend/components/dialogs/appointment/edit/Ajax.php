@@ -14,11 +14,6 @@ use Bookly\Lib\Slots\DatePoint;
 use Bookly\Lib\Utils\Common;
 use Bookly\Lib\Utils\DateTime;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Components\Dialogs\Appointment\Edit
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -47,7 +42,7 @@ class Ajax extends Lib\Base\Ajax
             'customer_gr_def_app_status' => Lib\Proxy\CustomerGroups::prepareDefaultAppointmentStatuses( array( 0 => Lib\Config::getDefaultAppointmentStatus() ) ),
         );
 
-        $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
+        $appointments_time_delimiter = (int) get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
 
         // Staff list
         /** @var Staff[] $staff_members */
@@ -80,7 +75,9 @@ class Ajax extends Lib\Base\Ajax
                 $sub_services = $service->getSubServices();
                 if ( $type == Service::TYPE_SIMPLE || ! empty( $sub_services ) ) {
                     if ( $staff_service->getLocationId() === null || Lib\Proxy\Locations::prepareStaffLocationId( $staff_service->getLocationId(), $staff_service->getStaffId() ) == $staff_service->getLocationId() ) {
-                        if ( ! in_array( $service->getId(), array_map( function ( $service ) { return $service['id']; }, $services ) ) ) {
+                        if ( ! in_array( $service->getId(), array_map( function ( $service ) {
+                            return $service['id'];
+                        }, $services ) ) ) {
                             $service_data = array(
                                 'id' => (int) $service->getId(),
                                 'name' => sprintf( '%s (%s)', $service->getTitle(), DateTime::secondsToInterval( $service->getDuration() ) ),
@@ -640,11 +637,19 @@ class Ajax extends Lib\Base\Ajax
                     $queue = array();
 
                     foreach ( $customers as &$customer ) {
-                        if ( $customer['payment_action'] === 'create' ) {
-                            // Set 'current', the employee can choose 'Create: Payment for the entire series',
-                            // but series cannot be created here
-                            $customer['payment_for'] = 'current';
+                        if ( $customer['payment_for'] === 'series' ) {
+                            $series = Lib\Entities\Series::find( $customer['series_id'] );
+                            if ( $series ) {
+                                if ( $customer['payment_action'] === 'create' ) {
+                                    Proxy\RecurringAppointments::createBackendPayment( $series, $customer );
+                                } elseif ( $customer['payment_action'] === 'attach' ) {
+                                    Proxy\RecurringAppointments::attachBackendPayment( $series, $customer );
+                                }
+                            }
                         }
+                        // Set 'current', the employee can choose 'Create: Payment for the entire series',
+                        // but series cannot be created here
+                        $customer['payment_for'] = 'current';
                     }
                     // Save customer appointments.
                     $ca_status_changed = $appointment->saveCustomerAppointments( $customers );
@@ -720,12 +725,14 @@ class Ajax extends Lib\Base\Ajax
                     $response['data'] = $skip_date
                         ? array()
                         : self::_getAppointmentForCalendar( $appointment->getId(), $display_tz );
-                    $db_queue = new Lib\Entities\NotificationQueue();
-                    $db_queue
-                        ->setData( json_encode( array( 'all' => $queue, 'changed_status' => $queue_changed_status ) ) )
-                        ->save();
+                    if ( $queue || $queue_changed_status ) {
+                        $db_queue = new Lib\Entities\NotificationQueue();
+                        $db_queue
+                            ->setData( json_encode( array( 'all' => $queue, 'changed_status' => $queue_changed_status ) ) )
+                            ->save();
 
-                    $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue, 'changed_status' => $queue_changed_status );
+                        $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue, 'changed_status' => $queue_changed_status );
+                    }
 
                     self::_deleteSentReminders( $appointment, $modified );
                 } else {
@@ -932,7 +939,7 @@ class Ajax extends Lib\Base\Ajax
                     && ( $service_duration == 0 || $appointment_duration % $service_duration == 0 ) );
 
                 // Check customers for appointments limit
-                foreach ( $customers as $index => $customer ) {
+                foreach ( $customers as $customer ) {
                     if ( $service->appointmentsLimitReached( $customer['id'], array( $start_date ) ) ) {
                         $customer_error = Customer::find( $customer['id'] );
                         $result['customers_appointments_limit'][] = sprintf( __( '%s has reached the limit of bookings for this service', 'bookly' ), $customer_error->getFullName() );
@@ -994,29 +1001,32 @@ class Ajax extends Lib\Base\Ajax
         $schedule = $scheduler->scheduleForFrontend( 1 );
         $result = array();
         $time_format = get_option( 'time_format' );
-        foreach ( $schedule[0]['options'] as $slot ) {
-            $value = json_decode( $slot['value'], true );
-            $date = date_create( $value[0][2] );
-            $value = $date->format( 'H:i' );
-            if ( ! empty( $custom_slot ) && $value === $custom_slot['value'] ) {
-                $custom_slot = array();
-            }
-            if ( ! empty( $custom_slot ) && strcmp( $value, $custom_slot['value'] ) > 0 ) {
-                $result[] = $custom_slot;
-                $custom_slot = array();
-            }
-            $end_date = $date->modify( $service->getDuration() . ' seconds' );
-            $result['start'][] = array(
-                'title' => $slot['title'],
-                'value' => $value,
-                'disabled' => $slot['disabled'],
-            );
+        if ( isset( $schedule[0]['options'] ) ) {
+            foreach ( $schedule[0]['options'] as $slot ) {
+                $value = json_decode( $slot['value'], true );
+                $date = date_create( $value[0][2] );
+                $value = $date->format( 'H:i' );
+                if ( ! empty( $custom_slot ) && $value === $custom_slot['value'] ) {
+                    $custom_slot = array();
+                }
+                if ( ! empty( $custom_slot ) && strcmp( $value, $custom_slot['value'] ) > 0 ) {
+                    $result[] = $custom_slot;
+                    $custom_slot = array();
+                }
+                $end_date = clone $date;
+                $end_date = $end_date->modify( $service->getDuration() . ' seconds' );
+                $result['start'][] = array(
+                    'title' => $slot['title'],
+                    'value' => $value,
+                    'disabled' => $slot['disabled'],
+                );
 
-            $result['end'][] = array(
-                'title_time' => date_i18n( $time_format, $end_date->getTimestamp() ),
-                'value' => $end_date->format( 'H:i' ),
-                'disabled' => $slot['disabled'],
-            );
+                $result['end'][] = array(
+                    'title_time' => date_i18n( $time_format, $end_date->getTimestamp() ),
+                    'value' => $end_date->getTimestamp() - $date->modify( 'midnight' )->getTimestamp() >= DAY_IN_SECONDS ? ( (int) $end_date->format( 'H' ) + 24 ) . ':' . $end_date->format( 'i' ) : $end_date->format( 'H:i' ),
+                    'disabled' => $slot['disabled'],
+                );
+            }
         }
 
         if ( ! empty( $custom_slot ) ) {

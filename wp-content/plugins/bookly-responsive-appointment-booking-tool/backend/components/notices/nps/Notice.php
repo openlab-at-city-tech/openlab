@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Backend\Modules;
 use Bookly\Backend\Components\Notices\Rate;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\Nps
- */
 class Notice extends Lib\Base\Component
 {
     /**

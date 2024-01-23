@@ -48,6 +48,11 @@ class HTMLPurifier_Lexer
      */
     public $tracksLineNumbers = false;
 
+    /**
+     * @since 4.13.1 - https://github.com/MetaSlider/metaslider/issues/494
+     */
+    private $_entity_parser;
+
     // -- STATIC ----------------------------------------------------------
 
     /**

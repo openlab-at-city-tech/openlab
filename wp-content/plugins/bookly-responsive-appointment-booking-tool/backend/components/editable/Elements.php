@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Editable;
 
 use Bookly\Lib;
 
-/**
- * Class Editable
- * @package Bookly\Backend\Components\Appearance
- */
 class Elements extends Lib\Base\Component
 {
     /**

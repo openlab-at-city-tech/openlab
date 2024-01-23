@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\CommentList;
  *   $driveService = new Google\Service\Drive(...);
  *   $comments = $driveService->comments;
  *  </code>
+ * @internal
  */
 class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

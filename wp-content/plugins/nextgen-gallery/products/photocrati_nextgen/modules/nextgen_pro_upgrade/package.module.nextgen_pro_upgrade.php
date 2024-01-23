@@ -1,17 +1,18 @@
 <?php
 /**
  * Class A_NextGen_Pro_Plus_Upgrade_Page
+ *
  * @mixin C_NextGen_Admin_Page_Manager
  * @adapts I_Page_Manager
  * @todo merge with A_NextGen_Pro_Upgrade_Page class
  */
 class A_NextGen_Pro_Plus_Upgrade_Page extends Mixin
 {
-    function setup()
+    public function setup()
     {
         // Using include() to retrieve the is_plugin_active() is apparently The WordPress Way(tm)..
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        // We shouldn't show the upgrade page if they already have the plugin and it's active
+        // We shouldn't show the upgrade page if they already have the plugin and it's active.
         $found = false;
         if (defined('NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME')) {
             $found = 'NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME';
@@ -20,7 +21,7 @@ class A_NextGen_Pro_Plus_Upgrade_Page extends Mixin
             $found = 'NGG_PRO_PLUGIN_BASENAME';
         }
         if (!($found && is_plugin_active(constant($found)))) {
-            $this->object->add('ngg_pro_upgrade', array('adapter' => 'A_NextGen_Pro_Upgrade_Controller', 'parent' => NGGFOLDER));
+            $this->object->add('ngg_pro_upgrade', ['adapter' => 'A_NextGen_Pro_Upgrade_Controller', 'parent' => NGGFOLDER]);
         }
         return $this->call_parent('setup');
     }
@@ -30,20 +31,20 @@ class A_NextGen_Pro_Plus_Upgrade_Page extends Mixin
  */
 class A_NextGen_Pro_Upgrade_Controller extends Mixin
 {
-    function enqueue_backend_resources()
+    public function enqueue_backend_resources()
     {
         $this->call_parent('enqueue_backend_resources');
         wp_enqueue_style('nextgen_pro_upgrade_page', $this->get_static_url('photocrati-nextgen_pro_upgrade#style.css'), ['ngg_marketing_blocks_style'], NGG_SCRIPT_VERSION);
     }
-    function get_page_title()
+    public function get_page_title()
     {
         return __('Extensions', 'nggallery');
     }
-    function get_required_permission()
+    public function get_required_permission()
     {
         return 'NextGEN Change options';
     }
-    function get_i18n_strings()
+    public function get_i18n_strings()
     {
         $i18n = new stdClass();
         $i18n->page_title = $this->object->get_page_title();
@@ -78,31 +79,32 @@ class A_NextGen_Pro_Upgrade_Controller extends Mixin
         $retval[] = new C_Marketing_Block_Card(__('Frontend Search', 'nggallery'), __('With this stunning display type, you can offer image searching capabilities with smart, powerful filtering based on the tags specified for images in your galleries.', 'nggallery'), 'frontend-search.svg', $medium, 'frontendsearch');
         $retval[] = new C_Marketing_Block_Card(__('Hover Captions', 'nggallery'), __('Gain the ability to add hover capability to galleries. The hover feature includes social sharing, titles, and descriptions. Each can be controlled individually. The hover feature also includes multiple effects, like fade and slide up.', 'nggallery'), 'hover-captions.svg', $medium, 'hovercaptions');
         // This block is used just to have an even number of cards so the two-column layout doesn't get
-        // stretched at the very end of the block listing
+        // stretched at the very end of the block listing.
         $retval[] = new C_Marketing_Block_Card(__('Digital Downloads', 'nggallery'), __('Offer digital downloads of your images for free, or with payment using the Ecommerce system. You have complete control over sizes and pricing for every image.', 'nggallery'), 'digital-downloads.svg', $medium, 'digitaldownloads');
         return $retval;
     }
-    function index_action()
+    public function index_action()
     {
         $this->object->enqueue_backend_resources();
-        $router = C_Router::get_instance();
+        $router = \Imagely\NGG\Util\Router::get_instance();
         $template = 'photocrati-nextgen_pro_upgrade#upgrade';
-        print $this->object->render_view($template, ['i18n' => $this->get_i18n_strings(), 'header_image_url' => $router->get_static_url('photocrati-nextgen_admin#imagely_icon.png'), 'marketing_blocks' => $this->object->get_marketing_blocks()], TRUE);
+        print $this->object->render_view($template, ['i18n' => $this->get_i18n_strings(), 'header_image_url' => $router->get_static_url('photocrati-nextgen_admin#imagely_icon.png'), 'marketing_blocks' => $this->object->get_marketing_blocks()], true);
     }
 }
 /**
  * Class A_NextGen_Pro_Upgrade_Page
+ *
  * @mixin C_NextGen_Admin_Page_Controller
  * @adapts I_NextGen_Admin_Page_Controller
  * @todo merge with A_NextGen_Pro_Plus_Upgrade_Page class
  */
 class A_NextGen_Pro_Upgrade_Page extends Mixin
 {
-    function setup()
+    public function setup()
     {
         // Using include() to retrieve the is_plugin_active() is apparently The WordPress Way(tm)..
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        // We shouldn't show the upgrade page if they already have the plugin and it's active
+        // We shouldn't show the upgrade page if they already have the plugin and it's active.
         $found = false;
         if (defined('NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME')) {
             $found = 'NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME';
@@ -111,7 +113,7 @@ class A_NextGen_Pro_Upgrade_Page extends Mixin
             $found = 'NGG_PRO_PLUGIN_BASENAME';
         }
         if (!($found && is_plugin_active(constant($found)))) {
-            $this->object->add('ngg_pro_upgrade', array('adapter' => 'A_NextGen_Pro_Upgrade_Controller', 'parent' => NGGFOLDER));
+            $this->object->add('ngg_pro_upgrade', ['adapter' => 'A_NextGen_Pro_Upgrade_Controller', 'parent' => NGGFOLDER]);
         }
         return $this->call_parent('setup');
     }

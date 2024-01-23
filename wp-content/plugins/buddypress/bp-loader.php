@@ -20,8 +20,8 @@
  * Text Domain:       buddypress
  * Domain Path:       /bp-languages/
  * Requires PHP:      5.6
- * Requires at least: 5.7
- * Version:           11.2.0
+ * Requires at least: 5.8
+ * Version:           12.0.0
  */
 
 /**

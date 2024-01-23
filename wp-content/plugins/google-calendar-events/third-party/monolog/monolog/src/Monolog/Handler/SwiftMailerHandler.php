@@ -24,6 +24,7 @@ use SimpleCalendar\plugin_deps\Swift;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @deprecated Since Monolog 2.6. Use SymfonyMailerHandler instead.
+ * @internal
  */
 class SwiftMailerHandler extends MailHandler
 {

@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Doctrine\DBAL\Types\ConversionException;
 use Exception;
 /**
  * @template T of CarbonInterface
+ * @internal
  */
 trait CarbonTypeConverter
 {

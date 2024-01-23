@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Events as EventsModel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $events = $calendarService->events;
  *  </code>
+ * @internal
  */
 class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

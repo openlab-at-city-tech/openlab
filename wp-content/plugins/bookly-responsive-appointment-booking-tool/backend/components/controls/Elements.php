@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Backend\Components\Controls;
 
-/**
- * Class Elements
- * @package Bookly\Backend\Components\Controls
- */
 class Elements
 {
     /**

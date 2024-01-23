@@ -1,11 +1,6 @@
 <?php
-
 namespace Bookly\Lib\Cloud;
 
-/**
- * Class Events
- * @package Bookly\Lib\Cloud
- */
 abstract class Events
 {
     const ACCOUNT_LOGGED_OUT         = 'account::logged-out';

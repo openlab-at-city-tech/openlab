@@ -30,6 +30,7 @@ use ReturnTypeWillChange;
  * Depends on the following methods:
  *
  * @method static copy()
+ * @internal
  */
 trait Converter
 {

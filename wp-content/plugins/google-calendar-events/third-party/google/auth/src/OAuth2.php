@@ -34,6 +34,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
  * It primary supports
  * - service account authorization
  * - authorization where a user already has an access token
+ * @internal
  */
 class OAuth2 implements FetchAuthTokenInterface
 {

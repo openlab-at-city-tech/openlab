@@ -1,0 +1,74 @@
+.wp-core-ui .button.nextgen-button {
+	border-radius: 6px;
+}
+.wp-core-ui .nextgen-primary-button {
+	border-color: $primary_color;
+	color: $white;
+	background-color: $primary_color;
+	-webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+	padding: 6px 16px;
+	font-weight: 700;
+	&:focus,
+	&:hover {
+		background: $primary_button_color_hover;
+		border-color: $primary_button_color_hover;
+		color: #fff;
+		box-shadow: none;
+	}
+}
+
+.wp-core-ui .nextgen-secondary-button {
+	border: 1px solid #6060604D;
+	color: #282828;
+	background-color: #FFFFFF;
+	box-shadow: none;
+	border-radius: 4px;
+	padding: 6px 16px;
+	font-weight: 700;
+	-webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+	&:focus,
+	&:hover {
+		border-color: rgb(235, 235, 235);
+		color: rgb(100, 100, 100);
+		background-color: rgb(235, 235, 235);
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+	}
+}
+.wp-core-ui .nextgen-green-button {
+	border-color: $green_alt;
+	color: $white;
+	background-color: $green_alt;
+	border-radius: 4px;
+	-webkit-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+	&:focus,
+	&:hover {
+		background: $green;
+		border-color: $green;
+		color: #fff;
+		box-shadow: none;
+	}
+}
+
+.wp-core-ui .nextgen-button-blue {
+	border-color: #3871AC;
+	color: $white;
+	background-color: #3871AC;
+	border-radius: 4px;
+	-webkit-transition: opacity 100ms linear;
+    -ms-transition: opacity 100ms linear;
+    transition: opacity 100ms linear;
+	&:focus,
+	&:hover {
+		background-color: #3871AC;
+		border-color: #3871AC;
+	    opacity: 0.75;
+		color: #fff;
+		box-shadow: none;
+	}
+}

@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
+/** @internal */
 class NotLocaleAwareException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**

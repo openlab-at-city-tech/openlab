@@ -1,0 +1,67 @@
+@font-face {
+  font-family: 'icomoon';
+  src:
+    url('../fonts/icomoon.ttf?nw1ubk') format('truetype'),
+    url('../fonts/icomoon.woff?nw1ubk') format('woff'),
+    url('../fonts/icomoon.svg?nw1ubk#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.icon-icomoon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.academia-icon-angle-down:before {
+  content: "\f107";
+}
+.academia-icon-angle-left:before {
+  content: "\f104";
+}
+.academia-icon-angle-right:before {
+  content: "\f105";
+}
+.academia-icon-angle-up:before {
+  content: "\f106";
+}
+.academia-icon-bars:before {
+  content: "\f0c9";
+}
+.academia-icon-chevron-down:before {
+  content: "\f078";
+}
+.academia-icon-chevron-left:before {
+  content: "\f053";
+}
+.academia-icon-chevron-right:before {
+  content: "\f054";
+}
+.academia-icon-chevron-up:before {
+  content: "\f077";
+}
+.academia-icon-search:before {
+  content: "\f002";
+}
+.academia-icon-facebook-square:before {
+  content: "\f082";
+}
+.academia-icon-instagram-square:before {
+  content: "\e055";
+}
+.academia-icon-twitter-square:before {
+  content: "\f081";
+}
+.academia-icon-youtube:before {
+  content: "\f167";
+}

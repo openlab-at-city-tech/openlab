@@ -67,38 +67,57 @@ function bp_blogs_root_slug() {
 	}
 
 /**
- * Output blog directory permalink.
+ * Output Blogs directory's URL.
  *
- * @since 1.5.0
- *
+ * @since 12.0.0
  */
-function bp_blogs_directory_permalink() {
-	echo esc_url( bp_get_blogs_directory_permalink() );
+function bp_blogs_directory_url() {
+	echo esc_url( bp_get_blogs_directory_url() );
 }
-	/**
-	 * Return blog directory permalink.
-	 *
-	 * @since 1.5.0
-	 *
-	 *
-	 * @return string The URL of the Blogs directory.
-	 */
-	function bp_get_blogs_directory_permalink() {
 
-		/**
-		 * Filters the blog directory permalink.
-		 *
-		 * @since 1.5.0
-		 *
-		 * @param string $value Permalink URL for the blog directory.
-		 */
-		return apply_filters( 'bp_get_blogs_directory_permalink', trailingslashit( bp_get_root_domain() . '/' . bp_get_blogs_root_slug() ) );
-	}
+/**
+ * Returns the Blogs directory's URL.
+ *
+ * @since 12.0.0
+ *
+ * @param array $path_chunks {
+ *     An array of arguments. Optional.
+ *
+ *     @type int $create_single_item `1` to get the Blogs create link.
+ * }
+ * @return string The URL built for the BP Rewrites URL parser.
+ */
+function bp_get_blogs_directory_url( $path_chunks = array() ) {
+	$supported_chunks = array_fill_keys( array( 'create_single_item' ), true );
+
+	$path_chunks = bp_parse_args(
+		array_intersect_key( $path_chunks, $supported_chunks ),
+		array(
+			'component_id' => 'blogs'
+		)
+	);
+
+	$url = bp_rewrites_get_url( $path_chunks );
+
+	/**
+	 * Filters the Blogs directory's URL.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param string  $url      The Blogs directory's URL.
+	 * @param array   $path_chunks {
+	 *     An array of arguments. Optional.
+	 *
+	 *     @type int $create_single_item `1` to get the Blogs create link.
+	 * }
+	 */
+	return apply_filters( 'bp_get_blogs_directory_url', $url, $path_chunks );
+}
 
 /**
  * Rewind the blogs and reset blog index.
  *
- * @global BP_Blogs_Template $blogs_template {@link BP_Blogs_Template}
+ * @global BP_Blogs_Template $blogs_template The main blog template loop class.
  */
 function bp_rewind_blogs() {
 	global $blogs_template;
@@ -119,7 +138,7 @@ function bp_rewind_blogs() {
  * @since 2.0.0 Added $include_blog_ids, $update_meta_cache parameters
  * @since 10.0.0 Added $date_query parameter
  *
- * @global BP_Blogs_Template $blogs_template {@link BP_Blogs_Template}
+ * @global BP_Blogs_Template $blogs_template The main blog template loop class.
  *
  * @param array|string $args {
  *     Arguments for limiting the contents of the blogs loop. Most arguments
@@ -202,7 +221,7 @@ function bp_has_blogs( $args = '' ) {
 /**
  * Determine if there are still blogs left in the loop.
  *
- * @global object $blogs_template {@link BP_Blogs_Template}
+ * @global BP_Blogs_Template $blogs_template The main blog template loop class.
  *
  * @return bool Returns true when blogs are found.
  */
@@ -215,7 +234,7 @@ function bp_blogs() {
 /**
  * Get the current blog object in the loop.
  *
- * @global object $blogs_template {@link BP_Blogs_Template}
+ * @global BP_Blogs_Template $blogs_template The main blog template loop class.
  *
  * @return object The current blog within the loop.
  */
@@ -239,7 +258,7 @@ function bp_blogs_pagination_count() {
  *
  * @since 2.7.0
  *
- * @global object $blogs_template {@link BP_Blogs_Template}
+ * @global BP_Blogs_Template $blogs_template The main blog template loop class.
  *
  * @return string
  */
@@ -280,7 +299,7 @@ function bp_blogs_pagination_links() {
 	/**
 	 * Return the blogs pagination links.
 	 *
-	 * @global object $blogs_template {@link BP_Blogs_Template}
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @return string HTML pagination links.
 	 */
@@ -473,12 +492,14 @@ function bp_blog_permalink() {
 	function bp_get_blog_permalink() {
 		global $blogs_template;
 
-		if ( empty( $blogs_template->blog->domain ) )
-			$permalink = bp_get_root_domain() . $blogs_template->blog->path;
-		else {
+		if ( ! empty( $blogs_template->blog->domain ) ) {
+			$permalink = get_site_url( $blogs_template->blog->blog_id );
+
+		} else {
 			$protocol = 'http://';
-			if ( is_ssl() )
+			if ( is_ssl() ) {
 				$protocol = 'https://';
+			}
 
 			$permalink = $protocol . $blogs_template->blog->domain . $blogs_template->blog->path;
 		}
@@ -592,7 +613,7 @@ function bp_blog_class( $classes = array() ) {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @global BP_Blogs_Template $blogs_template
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @param array $classes Array of custom classes.
 	 * @return string Row class of the site.
@@ -656,7 +677,7 @@ function bp_blog_last_active( $args = array() ) {
 
 		// Backwards compatibility for anyone forcing a 'true' active_format.
 		if ( true === $r['active_format'] ) {
-			/* translators: %s: human time diff of the last time the site was active. */
+			/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
 			$r['active_format'] = _x( 'Active %s', 'last time the site was active', 'buddypress' );
 		}
 
@@ -764,7 +785,7 @@ function bp_blog_latest_post_title() {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @global BP_Blogs_Template
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @return string Post title.
 	 */
@@ -801,7 +822,7 @@ function bp_blog_latest_post_permalink() {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @global BP_Blogs_Template
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @return string URL of the blog's latest post.
 	 */
@@ -837,7 +858,7 @@ function bp_blog_latest_post_content() {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @global BP_Blogs_Template
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @return string Content of the blog's latest post.
 	 */
@@ -876,7 +897,7 @@ function bp_blog_latest_post_featured_image( $size = 'thumbnail' ) {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @global BP_Blogs_Template
+	 * @global BP_Blogs_Template $blogs_template The main blog template loop class.
 	 *
 	 * @param string $size Image version to return. 'thumbnail', 'medium',
 	 *                     'large', or 'post-thumbnail'. Default: 'thumbnail'.
@@ -1306,26 +1327,13 @@ function bp_blogs_confirm_blog_signup( $domain, $path, $blog_title, $user_name, 
 	$login_url = set_url_scheme( wp_login_url() );
 	restore_current_blog();
 
-	?>
-	<p class="success"><?php esc_html_e( 'Congratulations! You have successfully registered a new site.', 'buddypress' ) ?></p>
-	<p>
-		<?php printf(
-			'%s %s',
-			sprintf(
-				/* translators: %s: the link of the new site */
-				__( '%s is your new site.', 'buddypress' ),
-				sprintf( '<a href="%s">%s</a>', esc_url( $blog_url ), esc_url( $blog_url ) )
-			),
-			sprintf(
-				/* translators: 1: Login URL, 2: User name */
-				__( '<a href="%1$s">Log in</a> as "%2$s" using your existing password.', 'buddypress' ),
-				esc_url( $login_url ),
-				esc_html( $user_name )
-			)
-		); ?>
-	</p>
+	$args = array(
+		'blog_url'  => $blog_url,
+		'login_url' => $login_url,
+		'user_name' => $user_name,
+	);
 
-<?php
+	bp_get_template_part( 'blogs/confirm', null, $args );
 
 	/**
 	 * Fires after the default successful blog registration message markup.
@@ -1348,67 +1356,26 @@ function bp_create_blog_link() {
 		return;
 	}
 
+	$url = bp_get_blogs_directory_url(
+		array(
+			'create_single_item' => 1,
+		)
+	);
+
 	/**
 	 * Filters "Create a Site" links for users viewing their own profiles.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $value HTML link for creating a site.
+	 * @param string $url HTML link for creating a site.
 	 */
-	echo apply_filters( 'bp_create_blog_link', '<a href="' . trailingslashit( bp_get_blogs_directory_permalink() . 'create' ) . '">' . __( 'Create a Site', 'buddypress' ) . '</a>' );
-}
-
-/**
- * Output navigation tabs for a user Blogs page.
- *
- * Currently unused by BuddyPress.
- */
-function bp_blogs_blog_tabs() {
-
-	// Don't show these tabs on a user's own profile.
-	if ( bp_is_my_profile() ) {
-		return false;
-	} ?>
-
-	<ul class="content-header-nav">
-		<li<?php if ( bp_is_current_action( 'my-blogs' ) || !bp_current_action() ) : ?> class="current"<?php endif; ?>>
-			<a href="<?php echo trailingslashit( bp_displayed_user_domain() . bp_get_blogs_slug() . '/my-blogs' ); ?>">
-				<?php
-				/* translators: %s: the User Display Name */
-				printf( __( "%s's Sites", 'buddypress' ), bp_get_displayed_user_fullname() );
-				?>
-			</a>
-		</li>
-		<li<?php if ( bp_is_current_action( 'recent-posts' ) ) : ?> class="current"<?php endif; ?>>
-			<a href="<?php echo trailingslashit( bp_displayed_user_domain() . bp_get_blogs_slug() . '/recent-posts'    ); ?>">
-				<?php
-				/* translators: %s: the User Display Name */
-				printf( __( "%s's Recent Posts", 'buddypress' ), bp_get_displayed_user_fullname() );
-				?>
-			</a>
-		</li>
-		<li<?php if ( bp_is_current_action( 'recent-comments' ) ) : ?> class="current"<?php endif; ?>>
-			<a href="<?php echo trailingslashit( bp_displayed_user_domain() . bp_get_blogs_slug() . '/recent-comments' ); ?>">
-				<?php
-				/* translators: %s: the User Display Name */
-				printf( __( "%s's Recent Comments", 'buddypress' ), bp_get_displayed_user_fullname() );
-				?>
-			</a>
-		</li>
-	</ul>
-
-<?php
-
-	/**
-	 * Fires after the markup for the navigation tabs for a user Blogs page.
-	 *
-	 * @since 1.0.0
-	 */
-	do_action( 'bp_blogs_blog_tabs' );
+	echo apply_filters( 'bp_create_blog_link', '<a href="' . $url . '">' . __( 'Create a Site', 'buddypress' ) . '</a>' );
 }
 
 /**
  * Output the blog directory search form.
+ *
+ * @since 1.9.0
  */
 function bp_directory_blogs_search_form() {
 
@@ -1459,12 +1426,18 @@ function bp_blog_create_button() {
 			return false;
 		}
 
+		$url = bp_get_blogs_directory_url(
+			array(
+				'create_single_item' => 1,
+			)
+		);
+
 		$button_args = array(
 			'id'         => 'create_blog',
 			'component'  => 'blogs',
 			'link_text'  => __( 'Create a Site', 'buddypress' ),
 			'link_class' => 'blog-create no-ajax',
-			'link_href'  => trailingslashit( bp_get_blogs_directory_permalink() . 'create' ),
+			'link_href'  => $url,
 			'wrapper'    => false,
 			'block_self' => false,
 		);
@@ -1521,8 +1494,6 @@ function bp_blog_create_nav_item() {
  * if so, transform the title button into a Blogs directory nav item.
  *
  * @since 2.2.0
- *
- * @return string|null HTML Output
  */
 function bp_blog_backcompat_create_nav_item() {
 	// Bail if Blogs nav item is already used by bp-legacy.

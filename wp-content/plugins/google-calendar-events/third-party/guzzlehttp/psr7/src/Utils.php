@@ -7,6 +7,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ServerRequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
+/** @internal */
 final class Utils
 {
     /**

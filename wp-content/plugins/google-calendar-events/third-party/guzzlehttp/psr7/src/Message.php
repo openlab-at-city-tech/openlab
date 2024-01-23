@@ -6,6 +6,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\MessageInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
+/** @internal */
 final class Message
 {
     /**

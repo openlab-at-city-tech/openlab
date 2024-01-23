@@ -18,6 +18,7 @@
 namespace SimpleCalendar\plugin_deps\Google\Auth;
 
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
+/** @internal */
 trait CacheTrait
 {
     /**

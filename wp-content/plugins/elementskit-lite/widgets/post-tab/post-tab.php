@@ -137,9 +137,7 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
 				'name' => 'ekit_post_tab_wraper_background',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic', ],
-                'exclude' => [
-                    'image'
-                ],
+                'exclude' => ['image'], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'selector' => '{{WRAPPER}} .tab__list',
 			]
         );
@@ -238,9 +236,7 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
 				'name' => 'ekit_post_tab__item_background_color_normal',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic', ],
-                'exclude' => [
-                    'image'
-                ],
+                'exclude' => [ 'image' ], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'selector' => '{{WRAPPER}} .post--tab .tabHeader .tab__list .tab__list__item',
 			]
 		);
@@ -301,9 +297,7 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
 				'name' => 'ekit_post_tab__item_background_color_hover',
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic', ],
-                'exclude' => [
-                    'image'
-                ],
+                'exclude' => ['image'], // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'selector' => '{{WRAPPER}} .post--tab .tabHeader .tab__list .tab__list__item.active',
 			]
 		);

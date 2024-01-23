@@ -6,9 +6,30 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit0d7fdc4301187a7a48c21510255f4f13
 {
+    public static $prefixLengthsPsr4 = array (
+        'H' => 
+        array (
+            'HardG\\BuddyPress120URLPolyfills\\' => 32,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'HardG\\BuddyPress120URLPolyfills\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hard-g/buddypress-12.0-url-polyfills/src',
+        ),
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0d7fdc4301187a7a48c21510255f4f13::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0d7fdc4301187a7a48c21510255f4f13::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0d7fdc4301187a7a48c21510255f4f13::$classMap;
 
         }, null, ClassLoader::class);
     }

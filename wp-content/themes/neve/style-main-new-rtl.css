@@ -674,7 +674,7 @@ blockquote.is-style-large.wp-block-quote > p {
 
 .site-logo h1,
 .site-logo p {
-  font-size: 24px;
+  font-size: var(--fs);
   font-weight: var(--h1fontweight);
   line-height: var(--bodylineheight);
   letter-spacing: var(--bodyletterspacing);

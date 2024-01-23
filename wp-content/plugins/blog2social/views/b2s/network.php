@@ -9,6 +9,10 @@ if ($optionUserTimeFormat == false) {
     $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
 }
 $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/');
+
+$optionsOnboarding = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
+$onboarding = $optionsOnboarding->_getOption('onboarding_active');
+
 $displayName = stripslashes(get_user_by('id', B2S_PLUGIN_BLOG_USER_ID)->display_name);
 $displayName = ((empty($displayName) || $displayName == false) ? __("Unknown username", "blog2social") : $displayName);
 $networkItem = new B2S_Network_Item();
@@ -17,11 +21,13 @@ $networkData = $networkItem->getData();
 
 <div class="b2s-container">
     <div class=" b2s-inbox col-md-12 del-padding-left">
+
         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
         <div class="col-md-9 del-padding-left del-padding-right">
             <!--Header|Start - Include-->
             <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
             <!--Header|End-->
+                 
             <div class="clearfix"></div>
             <!--Content|Start-->
             <div class="panel panel-default">
@@ -61,6 +67,9 @@ $networkData = $networkItem->getData();
                             <div class="grid-body">
                                 <div class="hidden-lg hidden-md hidden-sm filterShow"><a href="#" onclick="showFilter('show');return false;"><i class="glyphicon glyphicon-chevron-down"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
                                 <div class="hidden-lg hidden-md hidden-sm filterHide"><a href="#" onclick="showFilter('hide');return false;"><i class="glyphicon glyphicon-chevron-up"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
+
+                                    
+                                
                                 <div class="form-inline" role="form">
                                     <?php
                                     echo wp_kses($networkItem->getSelectMandantHtml($networkData['mandanten']), array(
@@ -103,7 +112,9 @@ $networkData = $networkItem->getData();
                                 <br>
                             </div>
                         </div>
+
                         <div class="row b2s-network-auth-area">
+
                             <?php
                             echo wp_kses($networkItem->getPortale($networkData['mandanten'], $networkData['auth'], $networkData['portale'], $networkData['auth_count'], $networkData['addon_count']), array(
                                 'div' => array(
@@ -182,6 +193,14 @@ $networkData = $networkItem->getData();
                                     'data-type' => array(),
                                     'onclick' => array(),
                                     'data-network-id' => array(),
+                                ),
+                                'select' => array(
+                                    'class' => array(),
+                                    'data-network-id' => array(),
+                                ),
+                                'option' => array(
+                                    'value' => array(),
+                                    'selected' => array()
                                 ),
                             ));
                             ?>
@@ -279,7 +298,7 @@ $networkData = $networkItem->getData();
                 <?php esc_html_e('Loading...', 'blog2social') ?>
             </div>
             <div class="modal-body b2s-btn-network-delete-auth-confirm-text">
-                <?php esc_html_e('Do you really want to delete this authorization', 'blog2social') ?>!
+                <?php esc_html_e('Do you really want to delete this authorization', 'blog2social') ?>?
             </div>
             <div class="modal-body b2s-btn-network-delete-auth-show-post-text">
                 <p class="b2s-btn-network-delete-sched-text" style="display: none;"><?php esc_html_e('You have still set up scheduled posts for this network:', 'blog2social'); ?></p>
@@ -761,3 +780,35 @@ $networkData = $networkItem->getData();
 <input type="hidden" id="b2sDaysName" value="<?php echo esc_attr(esc_html_e('Days', 'blog2social')); ?>">
 <input type="hidden" id="b2sBlogHasUsedVideoAddon" value="<?php echo esc_attr((defined('B2S_PLUGIN_ADDON_VIDEO_TRIAL_END_DATE') ? 1 : 0)); ?>">
 <input type="hidden" id="b2s-redirect-url-sched-post" value="<?php echo esc_url($b2sSiteUrl) . 'wp-admin/admin.php?page=blog2social-sched'; ?>"/>
+
+<?php
+    if($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0){
+        $onboardingPaused = $optionsOnboarding->_getOption('onboarding_paused');
+        if(!isset($onboardingPaused) || empty($onboardingPaused)){
+            $onboardingPaused = 0;
+        }
+
+?>
+    <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+
+    <div id="b2s-onboarding-toastee">
+        <div id="b2s-onboarding-toastee-inner">
+            <!--<a class="closeToastee">X</a>-->
+            <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour","blog2social") ?>
+                <input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox" <?php echo $onboardingPaused == 0 ? 'checked' : '' ?>>
+            </h3>
+            <div class="b2s-onboarding-toastee-body" <?php echo $onboardingPaused == 1 ? 'style="display:none;"' : '' ?>>
+                <hr class="b2s-onboarding-hr">
+                <p class="b2s-onboarding-p" ><?php esc_html_e("Connect your first network with Blog2Social and start sharing your content.","blog2social")  ?><a class="btn btn-default btn-sm" href="admin.php?page=blog2social-post"><?php esc_html_e("Go to the next step", "blog2social") ?></a></p>
+            </div>
+        </div>
+    </div>
+        <!--
+
+<div class="toggle btn btn-xs btn-primary" data-toggle="toggle" style="width: 90px; height: 22px;"><input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox"><div class="toggle-group"><label class="btn btn-primary btn-xs toggle-on" style="line-height: 14px;">ON</label><label class="btn btn-default btn-xs active toggle-off" style="line-height: 14px;">OFF</label><span class="toggle-handle btn btn-default btn-xs"></span></div></div>
+<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox">
+
+    -->
+<?php
+    }
+?>

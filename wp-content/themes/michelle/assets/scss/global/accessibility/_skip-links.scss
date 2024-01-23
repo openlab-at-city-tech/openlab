@@ -1,0 +1,27 @@
+/* FILE: global/accessibility/_skip-links.scss */
+
+.menu-skip-links {
+
+	ul {
+		position: absolute;
+		#{$left}: 0;
+		top: 0;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	li {
+		white-space: nowrap;
+	}
+
+}
+
+.entry-skip-links {
+	position: relative;
+}
+
+.skip-link {
+	background: #000;
+	color: #fff;
+}

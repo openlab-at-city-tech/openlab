@@ -1,0 +1,11 @@
+/* FILE: content/wp/_sticky.scss */
+
+.sticky {
+	@extend %shaded_background;
+	position: relative;
+
+	.posts & {
+		border-top-color: var(--color_accent);
+	}
+
+}

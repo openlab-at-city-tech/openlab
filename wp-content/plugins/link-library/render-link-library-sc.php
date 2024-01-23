@@ -763,7 +763,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			}
 		}
 
-		if ( $level == 0 ) {
+		if ( $level == 0 && !$suppresslinksdiv ) {
 			$output .= "<div id='linklist" . $settings . "' class='linklist";
 
 			if ( 'categorymasonrygrid' == $displayastable ) {
@@ -1784,6 +1784,9 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 								if ( !empty( $rel_list ) ) {
 									$linkitem['link_rel'] = trim( ' rel="' . implode( ' ', $rel_list ) . '"' );
 								}
+
+								global $wp_embed;
+								$linkitem['link_textfield'] = $wp_embed->run_shortcode( $linkitem['link_textfield'] );
 
 								$linkitem['link_textfield'] = do_shortcode( $linkitem['link_textfield'] );
 
@@ -2989,7 +2992,9 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 	$currentcategory = $currentcategory + 1;
 
 	if ( $level == 0 ) {
-		$output .= '</div><!-- Div Linklist -->';
+		if ( !$suppresslinksdiv ) {
+			$output .= '</div><!-- Div Linklist -->';
+		}		
 
 		$output .= "\n<!-- End of Link Library Output -->\n\n";
 	}

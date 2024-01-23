@@ -22,6 +22,7 @@ use ReturnTypeWillChange;
  * Trait Units.
  *
  * Add, subtract and set units.
+ * @internal
  */
 trait Units
 {
@@ -164,7 +165,7 @@ trait Units
     public function add($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         if ($unit instanceof CarbonConverterInterface) {
             return $this->resolveCarbon($unit->convertDate($this, \false));
@@ -298,7 +299,7 @@ trait Units
     public function sub($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         if ($unit instanceof CarbonConverterInterface) {
             return $this->resolveCarbon($unit->convertDate($this, \true));
@@ -328,7 +329,7 @@ trait Units
     public function subtract($unit, $value = 1, $overflow = null)
     {
         if (\is_string($unit) && \func_num_args() === 1) {
-            $unit = CarbonInterval::make($unit);
+            $unit = CarbonInterval::make($unit, [], \true);
         }
         return $this->sub($unit, $value, $overflow);
     }

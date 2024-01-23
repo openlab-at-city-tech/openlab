@@ -1,17 +1,10 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics;
 
 use Bookly\Backend\Modules\Diagnostics\Tests\Test;
 use Bookly\Backend\Modules\Diagnostics\Tools\Tool;
 use Bookly\Lib;
 
-
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Diagnostics
- */
 class Ajax extends Lib\Base\Ajax
 {
     protected static function permissions()
@@ -87,6 +80,7 @@ class Ajax extends Lib\Base\Ajax
                     break;
                 case 'mailing queue':
                     $ignore[] = 'bookly_mailing_queue';
+                    $ignore[] = 'bookly_notifications_queue';
                     break;
                 case 'payments':
                     $ignore[] = 'bookly_payments';
@@ -153,6 +147,7 @@ class Ajax extends Lib\Base\Ajax
         /** @global \wpdb $wpdb */
         global $wpdb;
         $fs = Lib\Utils\Common::getFilesystem();
+        $errors = $info = array();
 
         if ( $_FILES['import']['name'] ) {
             $json = $fs->get_contents( $_FILES['import']['tmp_name'] );
@@ -168,7 +163,9 @@ class Ajax extends Lib\Base\Ajax
                 /** @since Bookly 17.7 */
                 if ( isset( $data['plugins'] ) ) {
                     foreach ( $bookly_plugins as $plugin ) {
-                        if ( ! array_key_exists( $plugin::getBasename(), $data['plugins'] ) ) {
+                        if ( array_key_exists( $plugin::getBasename(), $data['plugins'] ) ) {
+                            $info[] = $plugin::getTitle() . ' v' . $data['plugins'][ $plugin::getBasename() ] . ( version_compare( $plugin::getVersion(), $data['plugins'][ $plugin::getBasename() ], '==' ) ? '' : ' ⚠️' );
+                        } else {
                             deactivate_plugins( $plugin::getBasename(), true, is_network_admin() );
                         }
                     }
@@ -184,31 +181,46 @@ class Ajax extends Lib\Base\Ajax
                     /** @var Lib\Base\Installer $installer */
                     $installer = new $installer_class();
 
+                    // Updater has been blocked for 30 seconds.
+                    set_transient( $plugin::getPrefix() . 'updating_db', time(), 30 );
+
                     // Drop all data and options.
                     $installer->removeData();
                     $installer->dropTables();
                     $installer->createTables();
-
                     // Insert tables data.
                     foreach ( $plugin::getEntityClasses() as $entity_class ) {
                         if ( isset ( $data['entities'][ $entity_class ]['values'][0] ) ) {
                             $table_name = $entity_class::getTableName();
-                            $query = sprintf(
-                                'INSERT INTO `%s` (`%s`) VALUES (%%s)',
-                                $table_name,
-                                implode( '`,`', $data['entities'][ $entity_class ]['fields'] )
-                            );
+                            $unknown_values = array();
+                            $query = self::getQuery( $table_name, $data['entities'][ $entity_class ]['fields'], $unknown_values );
+                            if ( $unknown_values ) {
+                                $errors[] = 'The dump for `' . $table_name . '` contains unknown columns: ' . implode( ', ', $unknown_values );
+                            }
                             $placeholders = array();
                             $values = array();
                             $counter = 0;
                             foreach ( $data['entities'][ $entity_class ]['values'] as $row ) {
                                 $params = array();
-                                foreach ( $row as $value ) {
-                                    if ( $value === null ) {
-                                        $params[] = 'NULL';
-                                    } else {
-                                        $params[] = '%s';
-                                        $values[] = $value;
+                                if ( $unknown_values ) {
+                                    foreach ( $row as $id => $value ) {
+                                        if ( ! array_key_exists( $id, $unknown_values ) ) {
+                                            if ( $value === null ) {
+                                                $params[] = 'NULL';
+                                            } else {
+                                                $params[] = '%s';
+                                                $values[] = $value;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    foreach ( $row as $value ) {
+                                        if ( $value === null ) {
+                                            $params[] = 'NULL';
+                                        } else {
+                                            $params[] = '%s';
+                                            $values[] = $value;
+                                        }
                                     }
                                 }
                                 $placeholders[] = implode( ',', $params );
@@ -241,16 +253,16 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        header( 'Location: ' . admin_url( 'admin.php?page=bookly-diagnostics&debug' ) );
-
-        exit ( 0 );
+        $errors
+            ? wp_send_json_error( array( 'message' => $errors ) )
+            : wp_send_json_success( array( 'message' => implode( '<br>', $info ) ) );
     }
 
     /**
      * Make import/export data 'safe'
      *
-     * @param $data
-     * @return mixed
+     * @param array $data
+     * @return array
      */
     protected static function makeSafe( $data )
     {
@@ -261,8 +273,11 @@ class Ajax extends Lib\Base\Ajax
             'bookly_oc_app_secret',
             'bookly_zoom_oauth_client_id',
             'bookly_zoom_oauth_client_secret',
-            'bookly_zoom_jwt_api_key',
-            'bookly_zoom_jwt_api_secret',
+            'bookly_smtp_host',
+            'bookly_smtp_port',
+            'bookly_smtp_user',
+            'bookly_smtp_password',
+            'bookly_cloud_token',
         );
 
         $unsafe_entities = array(
@@ -270,8 +285,6 @@ class Ajax extends Lib\Base\Ajax
                 'google_data' => null,
                 'outlook_data' => null,
                 'zoom_authentication' => 'default',
-                'zoom_jwt_api_key' => null,
-                'zoom_jwt_api_secret' => null,
                 'zoom_oauth_token' => null,
             ),
         );
@@ -279,6 +292,8 @@ class Ajax extends Lib\Base\Ajax
         foreach ( $unsafe_options as $option ) {
             unset( $data['options'][ $option ] );
         }
+
+        $data['options']['bookly_email_gateway'] = 'wp';
 
         // Remove unsafe staff settings
         foreach ( $unsafe_entities as $entity => $entity_unsafe_values ) {
@@ -303,5 +318,26 @@ class Ajax extends Lib\Base\Ajax
         );
 
         return in_array( $action, $excluded_actions ) || parent::csrfTokenValid( $action );
+    }
+
+    private static function getQuery( $table_name, $fields, &$unknown_values )
+    {
+        global $wpdb;
+        $columns = $wpdb->get_col( $wpdb->prepare( 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = SCHEMA() AND TABLE_NAME = %s ORDER BY TABLE_NAME, ORDINAL_POSITION', $table_name ) );
+
+        $exist_fields = array();
+        foreach ( $fields as $id => $field ) {
+            if ( in_array( $field, $columns ) ) {
+                $exist_fields[] = $field;
+            } else {
+                $unknown_values[ $id ] = $field;
+            }
+        }
+
+        return sprintf(
+            'INSERT INTO `%s` (`%s`) VALUES (%%s)',
+            $table_name,
+            implode( '`,`', $exist_fields )
+        );
     }
 }

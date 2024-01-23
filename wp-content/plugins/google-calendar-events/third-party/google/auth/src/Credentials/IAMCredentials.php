@@ -19,6 +19,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth\Credentials;
 
 /**
  * Authenticates requests using IAM credentials.
+ * @internal
  */
 class IAMCredentials
 {

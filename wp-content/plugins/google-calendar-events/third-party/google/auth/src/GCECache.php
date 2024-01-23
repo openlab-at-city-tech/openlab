@@ -33,6 +33,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
  *     $sysvCache
  * );
  * ```
+ * @internal
  */
 class GCECache
 {

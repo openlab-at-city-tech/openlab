@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Channel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $acl = $calendarService->acl;
  *  </code>
+ * @internal
  */
 class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

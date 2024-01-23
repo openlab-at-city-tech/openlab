@@ -1,0 +1,9 @@
+/* FILE: blocks/_tag-cloud.scss */
+
+.wp-block-tag-cloud {
+	@extend %widget_tag_cloud;
+}
+
+.widget_block .tag-cloud-link {
+	font-size: .8em !important;
+}

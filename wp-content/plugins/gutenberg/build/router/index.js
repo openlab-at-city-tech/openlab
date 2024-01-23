@@ -1,36 +1,36 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -39,27 +39,26 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "privateApis": () => (/* reexport */ privateApis)
+  privateApis: function() { return /* reexport */ privateApis; }
 });
 
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 function extends_extends() {
-  extends_extends = Object.assign || function (target) {
+  extends_extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   };
-
   return extends_extends.apply(this, arguments);
 }
 ;// CONCATENATED MODULE: ./node_modules/history/index.js
@@ -80,50 +79,46 @@ b?["/"]:b).map(function(d){var f=C(_extends({pathname:"/",search:"",hash:"",stat
 typeof d?d:I(d)},push:z,replace:A,go:y,back:function(){y(-1)},forward:function(){y(1)},listen:function(d){return v.push(d)},block:function(d){return q.push(d)}}};
 
 ;// CONCATENATED MODULE: external ["wp","url"]
-const external_wp_url_namespaceObject = window["wp"]["url"];
+var external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: ./packages/router/build-module/history.js
 /**
  * External dependencies
  */
 
+
 /**
  * WordPress dependencies
  */
 
-
 const history_history = createBrowserHistory();
 const originalHistoryPush = history_history.push;
 const originalHistoryReplace = history_history.replace;
-
 function push(params, state) {
   const currentArgs = (0,external_wp_url_namespaceObject.getQueryArgs)(window.location.href);
   const currentUrlWithoutArgs = (0,external_wp_url_namespaceObject.removeQueryArgs)(window.location.href, ...Object.keys(currentArgs));
   const newUrl = (0,external_wp_url_namespaceObject.addQueryArgs)(currentUrlWithoutArgs, params);
   return originalHistoryPush.call(history_history, newUrl, state);
 }
-
 function replace(params, state) {
   const currentArgs = (0,external_wp_url_namespaceObject.getQueryArgs)(window.location.href);
   const currentUrlWithoutArgs = (0,external_wp_url_namespaceObject.removeQueryArgs)(window.location.href, ...Object.keys(currentArgs));
   const newUrl = (0,external_wp_url_namespaceObject.addQueryArgs)(currentUrlWithoutArgs, params);
   return originalHistoryReplace.call(history_history, newUrl, state);
 }
-
 history_history.push = push;
 history_history.replace = replace;
-/* harmony default export */ const build_module_history = (history_history);
+/* harmony default export */ var build_module_history = (history_history);
 
 ;// CONCATENATED MODULE: ./packages/router/build-module/router.js
-
 
 /**
  * WordPress dependencies
  */
 
+
 /**
  * Internal dependencies
  */
-
 
 const RoutesContext = (0,external_wp_element_namespaceObject.createContext)();
 const HistoryContext = (0,external_wp_element_namespaceObject.createContext)();
@@ -133,14 +128,13 @@ function useLocation() {
 function useHistory() {
   return (0,external_wp_element_namespaceObject.useContext)(HistoryContext);
 }
-
 function getLocationWithParams(location) {
   const searchParams = new URLSearchParams(location.search);
-  return { ...location,
+  return {
+    ...location,
     params: Object.fromEntries(searchParams.entries())
   };
 }
-
 function RouterProvider({
   children
 }) {
@@ -152,15 +146,15 @@ function RouterProvider({
       setLocation(getLocationWithParams(updatedLocation));
     });
   }, []);
-  return (0,external_wp_element_namespaceObject.createElement)(HistoryContext.Provider, {
+  return (0,external_React_namespaceObject.createElement)(HistoryContext.Provider, {
     value: build_module_history
-  }, (0,external_wp_element_namespaceObject.createElement)(RoutesContext.Provider, {
+  }, (0,external_React_namespaceObject.createElement)(RoutesContext.Provider, {
     value: location
   }, children));
 }
 
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 ;// CONCATENATED MODULE: ./packages/router/build-module/lock-unlock.js
 /**
  * WordPress dependencies
@@ -169,7 +163,7 @@ const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/router');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/router');
 
 ;// CONCATENATED MODULE: ./packages/router/build-module/private-apis.js
 /**

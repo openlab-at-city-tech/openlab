@@ -76,7 +76,11 @@ function bp_members_invitations_action_bulk_manage() {
 			break;
 	}
 
+	$invite_slug = bp_get_members_invitations_slug();
+	$action_slug = bp_current_action();
+	$path_chunks = bp_members_get_path_chunks( array( $invite_slug, $action_slug ) );
+
 	// Redirect.
-	bp_core_redirect( bp_displayed_user_domain() . bp_get_members_invitations_slug() . '/' . bp_current_action() . '/' );
+	bp_core_redirect( bp_displayed_user_url( $path_chunks ) );
 }
 add_action( 'bp_actions', 'bp_members_invitations_action_bulk_manage' );

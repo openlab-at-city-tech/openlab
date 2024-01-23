@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\HtmlFormatter;
  * @author Gyula Sallai
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 abstract class MailHandler extends AbstractProcessingHandler
 {

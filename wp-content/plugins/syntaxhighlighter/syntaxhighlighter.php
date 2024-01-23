@@ -4,7 +4,7 @@
 
 Plugin Name:  SyntaxHighlighter Evolved
 Plugin URI:   https://alex.blog/wordpress-plugins/syntaxhighlighter/
-Version:      3.6.2
+Version:      3.7.0
 Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>. Includes a new editor block.
 Author:       Alex Mills (Viper007Bond)
 Author URI:   https://alex.blog/
@@ -12,14 +12,14 @@ Text Domain:  syntaxhighlighter
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.7
-Tested up to: 5.9
+Tested up to: 6.4
 Requires PHP: 7.0
 
 **************************************************************************/
 
 class SyntaxHighlighter {
 	// All of these variables are private. Filters are provided for things that can be modified.
-	public $pluginver            = '3.6.2';  // Plugin version
+	public $pluginver            = '3.7.0';  // Plugin version
 	public $agshver              = false;    // Alex Gorbatchev's SyntaxHighlighter version (dynamically set below due to v2 vs v3)
 	public $shfolder             = false;    // Controls what subfolder to load SyntaxHighlighter from (v2 or v3)
 	public $settings             = array();  // Contains the user's settings
@@ -31,8 +31,9 @@ class SyntaxHighlighter {
 	public $encoded              = false;    // Used to mark that a character encode took place
 	public $codeformat           = false;    // If set, SyntaxHighlighter::get_code_format() will return this value
 	public $content_save_pre_ran = false;    // It's possible for the "content_save_pre" filter to run multiple times, so keep track
+	public $brush_names          = array();  // Array of brush names for use.
+	public $specialchars         = array(); // Array of special characters to be encoded.
 
-	// Initalize the plugin by registering the hooks
 	function __construct() {
 		if ( ! function_exists( 'do_shortcodes_in_html_tags' ) )
 			return;
@@ -618,6 +619,24 @@ class SyntaxHighlighter {
 
 
 	/**
+	 * Returns all shortcodes not handled by SyntaxHighlighter unchanged, so they
+	 * can be processed by their original handlers after SyntaxHighlighter has
+	 * run.
+	 *
+	 * @param mixed $output The shortcode's returned value (false by default).
+	 * @param string $tag The name of the shortcode.
+	 * @param array|null $attr The shortcode attributes.
+	 * @param array $m Regular expression match array.
+	 * @return string|false Return the matched shortcode as-is for all shortcodes not handled by SyntaxHighlighter, returns $output otherwise.
+	 */
+	function pre_do_shortcode_shortcode_hack_skip_others( $output, $tag, $attr, $m ) {
+		if ( ! in_array( $tag, $this->shortcodes, true ) ) {
+			return $m[0];
+		}
+		return $output;
+	}
+
+	/**
 	 * Process only this plugin's shortcodes.
 	 *
 	 * If we waited for the normal do_shortcode() call at priority 11,
@@ -628,7 +647,11 @@ class SyntaxHighlighter {
 	 *
 	 * First we need to clear out all existing shortcodes, then register
 	 * just this plugin's ones, process them, and then restore the original
-	 * list of shortcodes.
+	 * list of shortcodes. Additionally, we have to add another hack to other
+	 * shortcodes, such as [gallery], to return the entire shortcode string as
+	 * it appears in the original content to allow SyntaxHighlighter's shortcode
+	 * strings (e.g., [c]) be used within other shortcodes without interference
+	 * from SyntaxHighlighter.
 	 *
 	 * To make matters more complicated, if someone has done [[code]foo[/code]]
 	 * in order to display the shortcode (not render it), then do_shortcode()
@@ -638,10 +661,6 @@ class SyntaxHighlighter {
 	 * So instead before do_shortcode() runs for the first time, we add
 	 * even more brackets escaped shortcodes in order to result in
 	 * the shortcodes actually being displayed instead rendered.
-	 *
-	 * We only need to do this for this plugin's shortcodes however
-	 * as all other shortcodes such as [[gallery]] will be untouched
-	 * by this pass of do_shortcode.
 	 *
 	 * Phew!
 	 *
@@ -659,8 +678,8 @@ class SyntaxHighlighter {
 			return $content;
 		}
 
-		// Backup current registered shortcodes and clear them all out
-		$orig_shortcode_tags = $shortcode_tags;
+		// Backup current registered shortcodes and clear them all out (we do not backup our own, because we will add and parse them below)
+		$orig_shortcode_tags = array_diff_key( $shortcode_tags, array_flip( $this->shortcodes ) );
 		remove_all_shortcodes();
 
 		// Register all of this plugin's shortcodes
@@ -668,7 +687,13 @@ class SyntaxHighlighter {
 			add_shortcode( $shortcode, $callback );
 		}
 
-		$regex = '/' . get_shortcode_regex( $this->shortcodes ) . '/';
+		// Register all other shortcodes, ensuring their content remains unchanged using yet another hack.
+		foreach ( $orig_shortcode_tags as $shortcode_tagname => $shortcode ) {
+			add_shortcode( $shortcode_tagname, '__return_empty_string' );
+		}
+		add_filter( 'pre_do_shortcode_tag', array( $this, 'pre_do_shortcode_shortcode_hack_skip_others' ), 10, 4 );
+
+		$regex = '/' . get_shortcode_regex() . '/';
 
 		// Parse the shortcodes (only this plugins's are registered)
 		if ( $ignore_html ) {
@@ -692,8 +717,9 @@ class SyntaxHighlighter {
 			);
 		}
 
-		// Put the original shortcodes back
+		// Put the original shortcodes back, and remove the hacky pre_do_shortcode_tag filter
 		$shortcode_tags = $orig_shortcode_tags;
+		remove_filter('pre_do_shortcode_tag', array($this, 'pre_do_shortcode_shortcode_hack_skip_others'), 10);
 
 		return $content;
 	}
@@ -748,7 +774,6 @@ class SyntaxHighlighter {
 
 		return do_shortcode_tag( $match );
 	}
-
 
 	// The main filter for the post contents. The regular shortcode filter can't be used as it's post-wpautop().
 	function parse_shortcodes( $content ) {
@@ -1377,7 +1402,7 @@ class SyntaxHighlighter {
 		$code = ( false === strpos( $code, '<' ) && false === strpos( $code, '>' ) && 2 == $this->get_code_format( $post ) ) ? strip_tags( $code ) : htmlspecialchars( $code );
 
 		// Escape shortcodes
-		$code = preg_replace( '/\[/', '&#91;', $code );
+		$code = preg_replace( '/\[/', '&#x5B;', $code );
 
 		$params[] = 'notranslate'; // For Google, see http://otto42.com/9k
 
@@ -1596,11 +1621,7 @@ class SyntaxHighlighter {
 				echo wp_kses(
 					sprintf(
 						// translators: %1$s Lang parameter; %2$s Language parameter; %3$s List of brush names.
-						_x(
-							'%1$s or %2$s &#8212; The language syntax to highlight with. You can alternately just use that as the tag, such as <code>[php]code[/php]</code>. Available tags: %3$s.',
-							'language parameter',
-							'syntaxhighlighter'
-						),
+						_x( '%1$s or %2$s &#8212; The language syntax to highlight with. You can alternately just use that as the tag, such as <code>[php]code[/php]</code>. Available tags: %3$s.', 'language parameter', 'syntaxhighlighter' ),
 						'<code>lang</code>',
 						'<code>language</code>',
 						implode( ', ', array_keys( $this->brushes ) )
@@ -1618,11 +1639,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Autolinks parameter.
-					esc_html_x(
-						'%s &#8212; Toggle automatic URL linking.',
-						'autolinks parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Toggle automatic URL linking.', 'autolinks parameter', 'syntaxhighlighter' ),
 					'<code>autolinks</code>'
 				);
 			?>
@@ -1631,11 +1648,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Classname parameter.
-					esc_html_x(
-						'%s &#8212; Add an additional CSS class to the code box.',
-						'classname parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Add an additional CSS class to the code box.', 'classname parameter', 'syntaxhighlighter' ),
 					'<code>classname</code>'
 				);
 			?>
@@ -1644,11 +1657,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Collapse parameter.
-					esc_html_x(
-						'%s &#8212; Toggle collapsing the code box by default, requiring a click to expand it. Good for large code posts.',
-						'collapse parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Toggle collapsing the code box by default, requiring a click to expand it. Good for large code posts.', 'collapse parameter', 'syntaxhighlighter' ),
 					'<code>collapse</code>'
 				);
 			?>
@@ -1657,11 +1666,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Firstline parameter.
-					esc_html_x(
-						'%s &#8212; An interger specifying what number the first line should be (for the line numbering).',
-						'firstline parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; An interger specifying what number the first line should be (for the line numbering).', 'firstline parameter', 'syntaxhighlighter' ),
 					'<code>firstline</code>'
 				);
 			?>
@@ -1670,11 +1675,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Gutter parameter.
-					esc_html_x(
-						'%s &#8212; Toggle the left-side line numbering.',
-						'gutter parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Toggle the left-side line numbering.', 'gutter parameter', 'syntaxhighlighter' ),
 					'<code>gutter</code>'
 				);
 			?>
@@ -1683,11 +1684,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %1$s Highlight parameter; %2$s Example.
-					esc_html_x(
-						'%1$s &#8212; A comma-separated list of line numbers to highlight. You can also specify a range. Example: %2$s',
-						'highlight parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%1$s &#8212; A comma-separated list of line numbers to highlight. You can also specify a range. Example: %2$s', 'highlight parameter', 'syntaxhighlighter' ),
 					'<code>highlight</code>',
 					'<code>2,5-10,12</code>'
 				);
@@ -1697,11 +1694,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Htmlscript parameter.
-					esc_html_x(
-						"%s &#8212; Toggle highlighting any extra HTML/XML. Good for when you're mixing HTML/XML with another language, such as having PHP inside an HTML web page. The above preview has it enabled for example. This only works with certain languages.",
-						'htmlscript parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( "%s &#8212; Toggle highlighting any extra HTML/XML. Good for when you're mixing HTML/XML with another language, such as having PHP inside an HTML web page. The above preview has it enabled for example. This only works with certain languages.", 'htmlscript parameter', 'syntaxhighlighter' ),
 					'<code>htmlscript</code>'
 				);
 			?>
@@ -1710,11 +1703,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Light parameter.
-					esc_html_x(
-						'%s &#8212; Toggle light mode which disables the gutter and toolbar all at once.',
-						'light parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Toggle light mode which disables the gutter and toolbar all at once.', 'light parameter', 'syntaxhighlighter' ),
 					'<code>light</code>'
 				);
 			?>
@@ -1723,11 +1712,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Padlinenumbers parameter.
-					esc_html_x(
-						'%s &#8212; Controls line number padding. Valid values are <code>false</code> (no padding), <code>true</code> (automatic padding), or an integer (forced padding).',
-						'padlinenumbers parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Controls line number padding. Valid values are <code>false</code> (no padding), <code>true</code> (automatic padding), or an integer (forced padding).', 'padlinenumbers parameter', 'syntaxhighlighter' ),
 					'<code>padlinenumbers</code>'
 				);
 			?>
@@ -1736,11 +1721,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %1$s Title parameter; %2$s Collapse parameter.
-					esc_html_x(
-						'%1$s (v3 only) &#8212; Sets some text to show up before the code. Very useful when combined with the %2$s parameter.',
-						'title parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%1$s (v3 only) &#8212; Sets some text to show up before the code. Very useful when combined with the %2$s parameter.', 'title parameter', 'syntaxhighlighter' ),
 					'<code>title</code>',
 					'<code>collapse</code>'
 				);
@@ -1750,11 +1731,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Toolbar parameter.
-					esc_html_x(
-						'%s &#8212; Toggle the toolbar (buttons in v2, the about question mark in v3)',
-						'toolbar parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Toggle the toolbar (buttons in v2, the about question mark in v3)', 'toolbar parameter', 'syntaxhighlighter' ),
 					'<code>toolbar</code>'
 				);
 			?>
@@ -1763,11 +1740,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Wraplines parameter.
-					esc_html_x(
-						'%s (v2 only) &#8212; Toggle line wrapping.',
-						'wraplines parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s (v2 only) &#8212; Toggle line wrapping.', 'wraplines parameter', 'syntaxhighlighter' ),
 					'<code>wraplines</code>'
 				);
 			?>
@@ -1776,11 +1749,7 @@ class SyntaxHighlighter {
 			<?php
 				printf(
 					// translators: %s Quickcode parameter.
-					esc_html_x(
-						'%s &#8212; Enable edit mode on double click.',
-						'quickcode parameter',
-						'syntaxhighlighter'
-					),
+					esc_html_x( '%s &#8212; Enable edit mode on double click.', 'quickcode parameter', 'syntaxhighlighter' ),
 					'<code>quickcode</code>'
 				);
 			?>

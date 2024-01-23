@@ -76,6 +76,7 @@ class Controller extends Admin_Notice {
 	 * @since 2.1
 	 * @return array Register scripts for the admin page.
 	 */
+	/*
 	public function set_admin_scripts() {
 		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/local-modal/main.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
@@ -97,7 +98,7 @@ class Controller extends Admin_Notice {
 
 		return array(
 			'blc_local_notice' => array(
-				'src'       => $this->scripts_dir . 'local-notice/main.js',
+				'src'       => $this->scripts_dir . 'local-notice.js',
 				'deps'      => $dependencies,
 				'ver'       => $version,
 				'in_footer' => true,
@@ -107,15 +108,6 @@ class Controller extends Admin_Notice {
 							'rest_url'           => esc_url_raw( rest_url() ),
 							'settings_endpoint'  => '/wpmudev_blc/v1/settings',
 							'nonce'              => wp_create_nonce( 'wp_rest' ),
-							/*'legacy_active'      => boolval( Settings::instance()->get( 'use_legacy_blc_version' ) ),
-							'local_blc_url'      => admin_url( 'admin.php?page=blc_local' ),
-							'cloud_blc_url'      => admin_url( 'admin.php?page=blc_dash' ),
-							'assets_url'         => WPMUDEV_BLC_ASSETS_URL,
-							'site_connected'     => (bool) self::site_connected(),
-							'expired_membership' => boolval( Utilities::membership_expired() ),
-							'hub_signup_url'     => $signup_url,
-							'dash_installed'     => boolval( Utilities::dash_plugin_installed() ),
-							'dash_active'        => boolval( Utilities::dash_plugin_active() ),*/
 						),
 						'labels' => array(
 							'error_messages' => array(
@@ -130,6 +122,7 @@ class Controller extends Admin_Notice {
 			// END OF blc_activation_popup.
 		);
 	}
+	*/
 
 	protected function scripts_version() {
 		static $scripts_version = null;

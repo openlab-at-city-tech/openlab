@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author Kirill chEbba Chebunin <iam@chebba.org>
  *
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 class WildfireFormatter extends NormalizerFormatter
 {

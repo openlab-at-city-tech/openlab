@@ -28,10 +28,11 @@ defined( 'ABSPATH' ) || exit;
  * @return array|string
  */
 function friends_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
+	$friends_slug = bp_get_friends_slug();
 
 	switch ( $action ) {
 		case 'friendship_accepted':
-			$link = trailingslashit( bp_loggedin_user_domain() . bp_get_friends_slug() . '/my-friends' );
+			$link = bp_loggedin_user_url( bp_members_get_path_chunks( array( $friends_slug, 'my-friends' ) ) );
 
 			// $action and $amount are used to generate dynamic filter names.
 			$action = 'accepted';
@@ -50,7 +51,11 @@ function friends_format_notifications( $action, $item_id, $secondary_item_id, $t
 			break;
 
 		case 'friendship_request':
-			$link = bp_loggedin_user_domain() . bp_get_friends_slug() . '/requests/?new';
+			$link = add_query_arg(
+				'new',
+				1,
+				bp_loggedin_user_url( bp_members_get_path_chunks( array( $friends_slug, 'requests' ) ) )
+			);
 
 			$action = 'request';
 

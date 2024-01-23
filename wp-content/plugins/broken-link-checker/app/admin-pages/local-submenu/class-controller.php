@@ -189,7 +189,7 @@ class Controller extends Admin_Page {
 			),
 
 			'blc_dashboard' => array(
-				'src' => $this->styles_dir . 'blc-local.min.css',
+				'src' => $this->scripts_dir . 'style-local-nav.css',
 				'ver' => $this->scripts_version(),
 			),
 		);
@@ -199,7 +199,7 @@ class Controller extends Admin_Page {
 		static $scripts_version = null;
 
 		if ( is_null( $scripts_version ) ) {
-			$script_data     = include WPMUDEV_BLC_DIR . 'assets/js/dashboard/main.asset.php';
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local-nav.asset.php';
 			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
@@ -215,7 +215,7 @@ class Controller extends Admin_Page {
 	public function get_local_style_data() {
 		return array(
 			'blc_local_style' => array(
-				'src' => $this->styles_dir . 'blc-local.min.css',
+				'src' => $this->scripts_dir . 'style-local-nav.css',
 				'ver' => $this->scripts_version(),
 			),
 		);

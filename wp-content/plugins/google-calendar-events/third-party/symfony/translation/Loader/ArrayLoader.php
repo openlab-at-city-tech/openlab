@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * ArrayLoader loads translations from a PHP array.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class ArrayLoader implements LoaderInterface
 {

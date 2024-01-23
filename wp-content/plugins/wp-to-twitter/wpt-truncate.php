@@ -1,9 +1,9 @@
 <?php
 /**
- * Construct and check lengths of Tweets - WP to Twitter
+ * Construct and check lengths of Tweets - XPoster
  *
  * @category Core
- * @package  WP to Twitter
+ * @package  XPoster
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/wp-to-twitter/
@@ -65,7 +65,7 @@ function wpt_filter_urls( $tweet, $post_ID ) {
  * @param array   $post Post data.
  * @param int     $post_ID Post ID.
  * @param boolean $retweet Is this a retweet.
- * @param boolean $ref Twitter author Reference.
+ * @param boolean $ref X.com author Reference.
  *
  * @return string New text.
  */
@@ -100,7 +100,7 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 	if ( ! wpt_has_tags( $tweet ) ) {
 		$post_tweet = mb_substr( $tweet, 0, $length, $encoding );
 		/**
-		 * Filter a Tweet template that does not contain any WP to Twitter template tags.
+		 * Filter a Tweet template that does not contain any XPoster template tags.
 		 *
 		 * @hook wpt_custom_truncate
 		 * @param {string} $post_tweet Text to Tweet truncated to maximum allowed length.
@@ -153,7 +153,7 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 		// Tweet is too long, so we'll have to truncate that sucker.
 		$length_array = wpt_length_array( $values, $encoding );
 
-		// Twitter's t.co shortener is mandatory. All URLS are max-character value set by Twitter.
+		// X.com's t.co shortener is mandatory. All URLS are max-character value set by X.com.
 		$tco   = ( wpt_is_ssl( $values['url'] ) ) ? $maxlength['https_length'] : $maxlength['http_length'];
 		$order = get_option( 'wpt_truncation_order' );
 		if ( is_array( $order ) ) {

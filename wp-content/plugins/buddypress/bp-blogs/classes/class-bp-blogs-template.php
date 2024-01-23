@@ -29,7 +29,7 @@ class BP_Blogs_Template {
 	 *
 	 * @var int
 	 */
-	public $blog_count = 0;
+	public $blog_count;
 
 	/**
 	 * Array of blogs located by the query..
@@ -74,11 +74,18 @@ class BP_Blogs_Template {
 	public $pag_links = '';
 
 	/**
+	 * URL argument used for the pagination param.
+	 *
+	 * @var string
+	 */
+	public $pag_arg;
+
+	/**
 	 * The total number of blogs matching the query parameters.
 	 *
 	 * @var int
 	 */
-	public $total_blog_count = 0;
+	public $total_blog_count;
 
 	/**
 	 * Constructor method.
@@ -153,11 +160,13 @@ class BP_Blogs_Template {
 			) );
 		}
 
+		$max = (int) wp_unslash( $r['max'] );
+
 		// Set the total blog count.
-		if ( empty( $r['max'] ) || ( $r['max'] >= (int) $this->blogs['total'] ) ) {
+		if ( empty( $max ) || ( $max >= (int) $this->blogs['total'] ) ) {
 			$this->total_blog_count = (int) $this->blogs['total'];
 		} else {
-			$this->total_blog_count = (int) $max;
+			$this->total_blog_count = $max;
 		}
 
 		// Set the blogs array (to loop through later.
@@ -167,10 +176,10 @@ class BP_Blogs_Template {
 		$blog_count = count( $this->blogs );
 
 		// Set the current blog count.
-		if ( empty( $r['max'] ) || ( $r['max'] >= (int) $blog_count ) ) {
+		if ( empty( $max ) || ( $max >= (int) $blog_count ) ) {
 			$this->blog_count = (int) $blog_count;
 		} else {
-			$this->blog_count = (int) $max;
+			$this->blog_count = $max;
 		}
 
 		// Build pagination links based on total blogs and current page number.

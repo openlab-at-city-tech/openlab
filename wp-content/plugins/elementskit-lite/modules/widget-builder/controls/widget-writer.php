@@ -460,7 +460,7 @@ class Widget_Writer {
 
 	private function close_php_writer() {
 
-		fclose( $this->file_handler );
+		fclose( $this->file_handler ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 		return true;
 	}

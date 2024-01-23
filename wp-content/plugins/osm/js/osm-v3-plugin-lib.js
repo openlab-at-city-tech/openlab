@@ -208,6 +208,13 @@ function osm_addMouseHover(a_mapname){
 }
 
 function getTileLayer(a_source, a_api_key) {
+
+/* ++++++++ quickfix since stamen is now hosted by Stadia Maps */
+  if ((a_source == "stamen_toner") || (a_source == "stamen_watercolor") || (a_source == "stamen_terrain")||(a_source == "stamen_terrain-labels")){
+    a_source = "osm";
+  } 
+/*  ------- */
+
   if ((a_source == "osm") || (a_source == "brezhoneg")||(a_source == "openseamap")){
    return new ol.layer.Tile({
         source: new ol.source.OSM({ }),

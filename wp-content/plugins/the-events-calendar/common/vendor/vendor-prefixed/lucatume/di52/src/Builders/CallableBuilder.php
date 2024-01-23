@@ -5,7 +5,7 @@
  * @package TEC\Common\lucatume\DI52\Builders
  *
  * @license GPL-3.0
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 

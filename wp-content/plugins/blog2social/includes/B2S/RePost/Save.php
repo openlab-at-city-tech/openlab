@@ -432,7 +432,9 @@ class B2S_RePost_Save {
                 'network_id' => (int) $network_id,
                 'network_type' => (int) $network_type,
                 'network_auth_id' => (int) $network_auth_id,
-                'network_display_name' => $network_display_name), array('%d', '%d', '%d', '%s'));
+                'network_display_name' => $network_display_name,
+                'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), 
+                array('%d', '%d', '%d', '%s', '%s'));
             $networkDetailsId = $wpdb->insert_id;
         }
 

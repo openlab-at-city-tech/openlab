@@ -7,6 +7,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * PSR-7 response implementation.
+ * @internal
  */
 class Response implements ResponseInterface
 {

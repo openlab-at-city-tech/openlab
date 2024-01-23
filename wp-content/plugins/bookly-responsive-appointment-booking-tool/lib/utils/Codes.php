@@ -4,11 +4,6 @@ namespace Bookly\Lib\Utils;
 use Bookly\Lib;
 use Bookly\Lib\Entities;
 
-/**
- * Class Codes
- *
- * @package Bookly\Lib\Utils
- */
 abstract class Codes
 {
     protected static $tokens = array(
@@ -286,8 +281,18 @@ abstract class Codes
 
         $timezone = $staff->getTimeZone() ?: Lib\Config::getWPTimeZone();
         $appointment_start = $appointment->getStartDate() ? Lib\Utils\DateTime::convertTimeZone( $appointment->getStartDate(), Lib\Config::getWPTimeZone(), $timezone ) : null;
-        $appointment_end = $appointment->getStartDate() ? Lib\Utils\DateTime::convertTimeZone( Lib\Slots\DatePoint::fromStr( $appointment->getEndDate() )->modify( $appointment->getExtrasDuration() )
-            ->format( 'Y-m-d H:i:s' ), Lib\Config::getWPTimeZone(), $timezone ) : null;
+        if ( $appointment->getStartDate() ) {
+            $appointment_end = Lib\Slots\DatePoint::fromStr( $appointment->getEndDate() )->modify( $appointment->getExtrasDuration() );
+            $appointment_end_date = clone $appointment_end;
+            if ( $service->getDuration() >= DAY_IN_SECONDS && get_option( 'bookly_appointment_end_date_method' ) === 'accurate' ) {
+                $appointment_end_date->modify( '-1 day' );
+            }
+            $appointment_end = Lib\Utils\DateTime::convertTimeZone( $appointment_end->format( 'Y-m-d H:i:s' ), Lib\Config::getWPTimeZone(), $timezone );
+            $appointment_end_date = Lib\Utils\DateTime::convertTimeZone( $appointment_end_date->format( 'Y-m-d H:i:s' ), Lib\Config::getWPTimeZone(), $timezone );
+        } else {
+            $appointment_end = null;
+            $appointment_end_date = null;
+        }
         $service_name = $appointment->getServiceId() === null ? $appointment->getCustomServiceName() : $service->getTranslatedTitle();
         $staff_photo = $staff->getImageUrl();
         $category = $service->getCategoryId() ? Entities\Category::find( $service->getCategoryId() ) : false;
@@ -307,8 +312,8 @@ abstract class Codes
             'appointment_id' => $appointment->getId(),
             'appointment_date' => $appointment_start === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_start ),
             'appointment_time' => $appointment_start === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_start ) : $service->getStartTimeInfo() ),
-            'appointment_end_date' => $appointment_end === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_end ),
-            'appointment_end_time' => $appointment_end === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_end ) : $service->getEndTimeInfo() ),
+            'appointment_end_date' => $appointment_end === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_end_date ),
+            'appointment_end_time' => $appointment_end === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_end_date ) : $service->getEndTimeInfo() ),
             'booking_number' => $appointment->getId(),
             'category_name' => $service->getTranslatedCategoryName(),
             'category_info' => $category ? $category->getTranslatedInfo() : '',

@@ -935,7 +935,7 @@ class Admin {
 	 */
 	public function grunion_sort_objects( $a, $b ) {
 		if ( isset( $a['order'] ) && isset( $b['order'] ) ) {
-			return $a['order'] - $b['order'];
+			return $a['order'] <=> $b['order'];
 		}
 		return 0;
 	}
@@ -961,7 +961,7 @@ class Admin {
 
 		if ( isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) ) {
 			$fields = sanitize_text_field( stripslashes_deep( $_POST['fields'] ) );
-			usort( $fields, 'grunion_sort_objects' );
+			usort( $fields, array( $this, 'grunion_sort_objects' ) );
 
 			$field_shortcodes = array();
 
@@ -1388,7 +1388,8 @@ class Admin {
 		$query = 'post_type=feedback&post_status=publish';
 
 		if ( isset( $_POST['limit'] ) && isset( $_POST['offset'] ) ) {
-			$query .= '&posts_per_page=' . (int) $_POST['limit'] . '&offset=' . (int) $_POST['offset'];
+			// phpcs:ignore Generic.Strings.UnnecessaryStringConcat.Found -- Avoiding https://github.com/WordPress/WordPress-Coding-Standards/issues/2390
+			$query .= '&posts_per' . '_page=' . (int) $_POST['limit'] . '&offset=' . (int) $_POST['offset'];
 		}
 
 		$approved_feedbacks = get_posts( $query );

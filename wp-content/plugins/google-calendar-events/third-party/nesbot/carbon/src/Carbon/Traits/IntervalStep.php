@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
+/** @internal */
 trait IntervalStep
 {
     /**

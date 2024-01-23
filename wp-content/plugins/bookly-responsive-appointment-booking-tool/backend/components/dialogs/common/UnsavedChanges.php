@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Common;
 
 use Bookly\Lib;
 
-/**
- * Class UnsavedChanges
- * @package Bookly\Backend\Components\Dialogs\Common
- */
 class UnsavedChanges extends Lib\Base\Component
 {
     /**

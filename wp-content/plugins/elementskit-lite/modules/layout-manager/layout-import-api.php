@@ -22,14 +22,14 @@ class Layout_Import_Api {
 					$editor_post_id = absint( $data['editor_post_id'] );
 
 					if ( ! get_post( $editor_post_id ) ) {
-						throw new \Exception( __( 'Post not found', 'elementskit-lite' ) );
+						throw new \Exception( esc_html__( 'Post not found', 'elementskit-lite' ) );
 					}
 
 					\Elementor\Plugin::instance()->db->switch_to_post( $editor_post_id );
 				}
 
 				if ( empty( $data['template_id'] ) ) {
-					throw new \Exception( __( 'Template id missing', 'elementskit-lite' ) );
+					throw new \Exception( esc_html__( 'Template id missing', 'elementskit-lite' ) );
 				}
 
 				$result = $this->get_template_data( $data );

@@ -66,7 +66,7 @@ export default function stepDetails(params) {
             $first_name_field = $('.bookly-js-first-name', $container),
             $last_name_field = $('.bookly-js-last-name', $container),
             $notes_field = $('.bookly-js-user-notes', $container),
-            $custom_field = $('.bookly-custom-field', $container),
+            $custom_field = $('.bookly-js-custom-field', $container),
             $info_field = $('.bookly-js-info-field', $container),
             $phone_error = $('.bookly-js-user-phone-error', $container),
             $email_error = $('.bookly-js-user-email-error', $container),
@@ -201,37 +201,54 @@ export default function stepDetails(params) {
             }
             $errors.filter(':not(.bookly-custom-field-error)').html('');
         };
-
-        // Conditional custom fields
-        $('.bookly-custom-field-row').on('change', 'select, input[type="checkbox"], input[type="radio"]', function () {
-            let $row = $(this).closest('.bookly-custom-field-row'),
-                id = $row.data('id'),
-                $that = $(this)
-            ;
+        let checkCustomFieldConditions = function ($row) {
+            let id = $row.data('id'),
+                value = [];
+            switch ($row.data('type')) {
+                case 'drop-down':
+                    value.push($row.find('select').val());
+                    break;
+                case 'radio-buttons':
+                    value.push($row.find('input:checked').val());
+                    break;
+                case 'checkboxes':
+                    $row.find('input').each(function () {
+                        if ($(this).prop('checked')) {
+                            value.push($(this).val())
+                        }
+                    });
+                    break;
+            }
             $.each(custom_fields_conditions, function (i, condition) {
-                let $target = $('.bookly-custom-field-row[data-id="' + condition.target + '"]');
+                let $target = $('.bookly-custom-field-row[data-id="' + condition.target + '"]'),
+                    target_visibility = $target.is(':visible');
                 if (parseInt(condition.source) === id) {
-                    switch ($row.data('type')) {
-                        case 'drop-down':
-                        case 'radio-buttons':
-                            if ((condition.value.includes($that.val()) && condition.equal === '1') || (!condition.value.includes($that.val()) && condition.equal !== '1')) {
-                                $target.show();
-                            } else {
-                                $target.hide();
-                            }
-                            break;
-                        case 'checkboxes':
-                            let show = false;
-                            $row.find('input').each(function () {
-                                if ($(this).prop('checked') && ((condition.value.includes($(this).val()) && condition.equal === '1') || (!condition.value.includes($(this).val()) && condition.equal !== '1'))) {
-                                    show = true;
-                                }
-                            });
-                            $target.toggle(show);
-                            break;
+                    let show = false;
+                    $.each(value, function (i, v) {
+                        if ($row.is(':visible') && ((condition.value.includes(v) && condition.equal === '1') || (!condition.value.includes(v) && condition.equal !== '1'))) {
+                            show = true;
+                        }
+                    });
+                    $target.toggle(show);
+                    if ($target.is(':visible') !== target_visibility) {
+                        checkCustomFieldConditions($target);
                     }
                 }
             });
+        }
+        // Conditional custom fields
+        $('.bookly-custom-field-row').on('change', 'select, input[type="checkbox"], input[type="radio"]', function () {
+            checkCustomFieldConditions($(this).closest('.bookly-custom-field-row'));
+        });
+        $('.bookly-custom-field-row').each(function () {
+            const _type = $(this).data('type');
+            if (['drop-down', 'radio-buttons', 'checkboxes'].includes(_type)) {
+                if (_type === 'drop-down') {
+                    $(this).find('select').trigger('change');
+                } else {
+                    $(this).find('input:checked').trigger('change');
+                }
+            }
         });
         // Custom fields date fields
         $('.bookly-js-cf-date', $container).each(function () {
@@ -389,6 +406,8 @@ export default function stepDetails(params) {
                     var $this = $(this);
                     switch ($this.data('type')) {
                         case 'text-field':
+                        case 'file':
+                        case 'number':
                             info_fields.push({
                                 id: $this.data('id'),
                                 value: $this.find('input.bookly-js-info-field').val()
@@ -417,9 +436,16 @@ export default function stepDetails(params) {
                             });
                             break;
                         case 'drop-down':
+                        case 'time':
                             info_fields.push({
                                 id: $this.data('id'),
                                 value: $this.find('select.bookly-js-info-field').val()
+                            });
+                            break;
+                        case 'date':
+                            info_fields.push({
+                                id: $this.data('id'),
+                                value: $this.find('input.bookly-js-info-field').pickadate('picker').get('select', 'yyyy-mm-dd')
                             });
                             break;
                     }
@@ -435,20 +461,21 @@ export default function stepDetails(params) {
                             switch ($this.data('type')) {
                                 case 'text-field':
                                 case 'file':
+                                case 'number':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('input.bookly-custom-field').val()
+                                        value: $this.find('input.bookly-js-custom-field').val()
                                     });
                                     break;
                                 case 'textarea':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('textarea.bookly-custom-field').val()
+                                        value: $this.find('textarea.bookly-js-custom-field').val()
                                     });
                                     break;
                                 case 'checkboxes':
                                     checkbox_values = [];
-                                    $this.find('input.bookly-custom-field:checked').each(function () {
+                                    $this.find('input.bookly-js-custom-field:checked').each(function () {
                                         checkbox_values.push(this.value);
                                     });
                                     custom_fields_data.push({
@@ -459,44 +486,33 @@ export default function stepDetails(params) {
                                 case 'radio-buttons':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('input.bookly-custom-field:checked').val() || null
+                                        value: $this.find('input.bookly-js-custom-field:checked').val() || null
                                     });
                                     break;
                                 case 'drop-down':
-                                    custom_fields_data.push({
-                                        id: $this.data('id'),
-                                        value: $this.find('select.bookly-custom-field').val()
-                                    });
-                                    break;
-                                case 'number':
-                                    custom_fields_data.push({
-                                        id: $this.data('id'),
-                                        value: $this.find('input.bookly-custom-field').val()
-                                    });
-                                    break;
                                 case 'time':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('select.bookly-custom-field').val()
+                                        value: $this.find('select.bookly-js-custom-field').val()
                                     });
                                     break;
                                 case 'date':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('input.bookly-custom-field').pickadate('picker').get('select', 'yyyy-mm-dd')
+                                        value: $this.find('input.bookly-js-custom-field').pickadate('picker').get('select', 'yyyy-mm-dd')
                                     });
                                     break;
                                 case 'captcha':
                                     custom_fields_data.push({
                                         id: $this.data('id'),
-                                        value: $this.find('input.bookly-custom-field').val()
+                                        value: $this.find('input.bookly-js-custom-field').val()
                                     });
                                     captcha_ids.push($this.data('id'));
                                     break;
                             }
                         }
                     });
-                    custom_fields[key] = {custom_fields: JSON.stringify(custom_fields_data)};
+                    custom_fields[key] = {custom_fields: custom_fields_data};
                 });
 
                 try {
@@ -555,10 +571,10 @@ export default function stepDetails(params) {
                             type: 'POST',
                             data: data
                         }).then(response => {
-                            window.location.href = woocommerce.cart_url;
+                            window.location.href = response.data.target_url;
                         }).catch(response => {
                             ladda.stop();
-                            stepTime({form_id: params.form_id}, opt[params.form_id].errors[response.error]);
+                            stepTime({form_id: params.form_id}, opt[params.form_id].errors[response.data.error]);
                         });
                     } else {
                         stepPayment({form_id: params.form_id});
@@ -698,9 +714,9 @@ export default function stepDetails(params) {
                                     var $custom_fields_collector = $('.bookly-custom-fields-container[data-key="' + key + '"]', $container);
                                     var $div = $('[data-id="' + field_id + '"]', $custom_fields_collector);
                                     $div.find('.bookly-custom-field-error').html(message);
-                                    $div.find('.bookly-custom-field').addClass('bookly-error');
+                                    $div.find('.bookly-js-custom-field').addClass('bookly-error');
                                     if ($scroll_to === null) {
-                                        $scroll_to = $div.find('.bookly-custom-field');
+                                        $scroll_to = $div.find('.bookly-js-custom-field');
                                     }
                                 });
                             });

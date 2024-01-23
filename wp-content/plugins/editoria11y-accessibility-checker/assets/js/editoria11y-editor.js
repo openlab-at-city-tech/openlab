@@ -1,6 +1,14 @@
-let ed11yOptions = false;
+// eslint-disable-next-line no-undef
+let ed11yOptions = ed11yVars.options;
 let ed11yOpen = localStorage.getItem('ed11yOpen');
 ed11yOpen = 'open' === ed11yOpen ? true : false;
+let ed11yReadyCount = 0;
+let ed11yScriptIs = false; // onPage, inIframe, outsideIframe
+let ed11yButtonWrapper = false;
+let ed11yWPBlocks = [];
+// eslint-disable-next-line no-undef
+const ed11yWorker = window.SharedWorker ? new SharedWorker(ed11yVars.worker) : false;
+
 
 // Possible todo: create aria-live region? Populate it with the issues for the is-active block?
 
@@ -25,13 +33,74 @@ ed11yReady(
   }
 );
 
-// Get issue count from Ed11y object and apply to alert link.
-let ed11yUpdateCount = function () {
-  let count = ed11yOptions['liveCheck'] === 'errors' ? Ed11y.errorCount : Ed11y.totalCount;
-  count = parseInt(count);
+let ed11yUpdateButton = function(count) {
+  if (!Ed11y.wpIssueToggle) {
+    // Set up issue counter link.
+    let ed11yButtonDescription = document.createElement('span');
+    ed11yButtonDescription.setAttribute('hidden', '');
+    ed11yButtonDescription.setAttribute('id', 'ed11y-button-description');
+    ed11yButtonDescription.textContent = 'Screen reader accessible issue descriptions have been added to the preview page.';
+
+    Ed11y.wpIssueToggle = document.createElement('button');
+    Ed11y.wpIssueToggle.classList.add('components-button', 'is-secondary', 'hidden');
+    Ed11y.wpIssueToggle.setAttribute('id', 'ed11y-issue-link');
+    Ed11y.wpIssueToggle.setAttribute('aria-describedby', 'ed11y-button-description');
+    Ed11y.wpIssueToggle.addEventListener('click', function () {
+      if (ed11yOpen) {
+        // closing
+        let newStyles = document.querySelector('#ed11y-live-highlighter');
+        if (newStyles) {
+          newStyles.innerHTML = '';
+        }
+      } else {
+        Ed11y.wpIssueToggle.textContent = 'Hide issues';
+      }
+      ed11yOpen = !ed11yOpen;
+      let newState = ed11yOpen ? 'open' : 'shut';
+      localStorage.setItem('ed11yOpen', newState);
+      ed11yOptions['showResults'] = ed11yOpen;
+      if (ed11yScriptIs === 'onPage') {
+        Ed11y.checkAll(false, false);
+      } else if (ed11yWorker) {
+        ed11yWorker.port.postMessage([false, false, newState]);
+      }
+
+
+    });
+    Ed11y.wpIssueToggle.textContent = '0';
+
+    ed11yButtonWrapper.prepend(Ed11y.wpIssueToggle);
+    Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yButtonDescription);
+
+    let ed11yStyle = document.createElement('div');
+    ed11yStyle.setAttribute('hidden', '');
+    ed11yStyle.innerHTML = `
+ <style>
+  #ed11y-issue-link.ed11y-warning {
+   background-color: #fad859;
+   color: #000b;
+   box-shadow: none;
+  }
+
+  #ed11y-issue-link.ed11y-alert {
+   background-color: #b80519;
+   color: #fff;
+   box-shadow: none;
+  }
+  #ed11y-issue-link:hover {
+   background: var(--wp-admin-theme-color-darker-10);
+   color: white;
+  }
+  #ed11y-issue-link:focus-visible {
+   box-shadow: 0 0 0 1px white, 0 0 0 2px var(--wp-admin-theme-color-darker-10);
+  }
+  ed11y-element-panel { display: none !important; }
+ </style>`;
+    Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yStyle);
+  }
   let buttonText = ed11yOpen ? 'Hide alerts' : `${count} issues`;
   Ed11y.wpIssueToggle.textContent = buttonText;
-  if ((ed11yOptions['liveCheck'] === 'all') && Ed11y.totalCount === 0 || ed11yOptions === 'errors' && Ed11y.errorCount === 0) {
+  if ((ed11yOptions['liveCheck'] === 'all') && Ed11y.totalCount === 0 || ed11yOptions['liveCheck'] === 'errors' && Ed11y.errorCount === 0) {
     Ed11y.wpIssueToggle.classList.add('hidden');
   } else if (ed11yOpen) {
     Ed11y.wpIssueToggle.classList.remove('ed11y-warning', 'hidden', 'ed11y-alert');
@@ -42,7 +111,29 @@ let ed11yUpdateCount = function () {
     Ed11y.wpIssueToggle.classList.remove('ed11y-alert', 'hidden');
     Ed11y.wpIssueToggle.classList.add('ed11y-warning');
   }
+};
 
+
+// Get issue count from Ed11y object and apply to alert link.
+let  ed11yReadResults = function () {
+  // todo inject from WP
+  let count = ed11yOptions['liveCheck'] === 'errors' ? Ed11y.errorCount : Ed11y.totalCount;
+  count = parseInt(count);
+  if (ed11yScriptIs === 'inIframe') {
+    ed11yWorker.port.postMessage([false, {
+      totalCount: Ed11y.totalCount,
+      warningCount: Ed11y.warningCount,
+      errorCount: Ed11y.errorCount,
+    }]);
+  } else {
+    ed11yUpdateButton(count);
+  }
+
+  if (ed11yScriptIs === 'outsideIframe') {
+    return;
+  }
+
+  // Otherwise highlight items.
   let newStyles = document.querySelector('#ed11y-live-highlighter');
   if (!newStyles) {
     newStyles = document.createElement('div');
@@ -56,38 +147,49 @@ let ed11yUpdateCount = function () {
     let ed11yStyles = '';
     let ed11yKnownContainers = {};
     Ed11y.results.forEach(result => {
+      let ed11yContainerId = result.element.closest('.wp-block').getAttribute('id');
       // Skip dismissed items, and only show warnings if they have not been suppressed in plugin settings.
-      if (ed11yOpen && result[5] === false && !(ed11yOptions['liveCheck'] === 'errors' && result[4])) {
-        let ed11yContainerId = result[0].closest('.wp-block').getAttribute('id');
-        let ed11yRingColor = !result[4] ? Ed11y.theme.alert : Ed11y.theme.warning;
-        let ed11yFontColor = !result[4] ? '#fff' : '#111';
+      if (ed11yOpen && result.dismissalStatus === false && !(ed11yOptions['liveCheck'] === 'errors' && result.dismissalKey)) {
+        let subSelector = false;
+        if (result.element.closest('a[href]')) {
+          subSelector = `a[href="${CSS.escape(result.element.closest('a[href]').getAttribute('href'))}"]`;
+        } else if (result.element.closest('img[src]')) {
+          subSelector = `img[src="${CSS.escape(result.element.closest('img[src]').getAttribute('src'))}"]`;
+        }
+        let ed11yRingColor = !result.dismissalKey ? Ed11y.theme.alert : Ed11y.theme.warning;
+        let ed11yFontColor = !result.dismissalKey ? '#fff' : '#111';
+        let subRing = {
+            ring: ed11yRingColor,
+            subSelector : subSelector,
+        };
         // Concatenate results when multiple hits in same black.
         if (!ed11yKnownContainers[ed11yContainerId]) {
           // First alert in block.
           ed11yKnownContainers[ed11yContainerId] = {
-            title: Ed11y.M[result[1]]['title'],
+            title: Ed11y.M[result.test]['title'],
             ring: ed11yRingColor,
             font: ed11yFontColor,
+            subSelector : [subRing],
           };
         } else {
-          if (ed11yKnownContainers[ed11yContainerId]['title'].indexOf(Ed11y.M[result[1]]['title']) === -1) {
+          if (ed11yKnownContainers[ed11yContainerId]['title'].indexOf(Ed11y.M[result.test]['title']) === -1) {
             // First alert of this type in block.
             if (ed11yKnownContainers[ed11yContainerId]['ring'] !== ed11yRingColor) {
-              // If one is red, red wins.
+              // If either is red, red wins.
               ed11yRingColor = Ed11y.theme.alert;
+              ed11yFontColor = '#fff';
             }
             // Put question marks at end.
             let ed11yNewTitle = '';
-            if (Ed11y.M[result[1]]['title'].indexOf('?') === -1) {
-              ed11yNewTitle = Ed11y.M[result[1]]['title'] + ', ' + ed11yKnownContainers[ed11yContainerId]['title'];
+            if (Ed11y.M[result.test]['title'].indexOf('?') === -1) {
+              ed11yNewTitle = Ed11y.M[result.test]['title'] + ', ' + ed11yKnownContainers[ed11yContainerId]['title'];
             } else {
-              ed11yNewTitle = ed11yKnownContainers[ed11yContainerId]['title'] + ', ' + Ed11y.M[result[1]]['title'];
+              ed11yNewTitle = ed11yKnownContainers[ed11yContainerId]['title'] + ', ' + Ed11y.M[result.test]['title'];
             }
-            ed11yKnownContainers[ed11yContainerId] = {
-              title: ed11yNewTitle,
-              ring: ed11yRingColor,
-              font: ed11yFontColor,
-            };
+            ed11yKnownContainers[ed11yContainerId].title = ed11yNewTitle;
+            ed11yKnownContainers[ed11yContainerId].ring = ed11yRingColor;
+            ed11yKnownContainers[ed11yContainerId].font = ed11yFontColor;            
+            ed11yKnownContainers[ed11yContainerId].subSelector.push(subRing);
           }
         }
       }
@@ -96,45 +198,59 @@ let ed11yUpdateCount = function () {
 
     for (const [key, value] of Object.entries(ed11yKnownContainers)) {
       ed11yStyles += `
-				#${key}::after { 
-					position: absolute !important;
-					font-size: 13px !important;
-					background: ${value.ring} !important;
-					color: ${value.font} !important;
-					display: inline-block !important;
-					padding: 4px 4px 2px 6px !important;
-					content: "${value.title.replace('"',"'").replace('?,', ',') /* eslint-disable-line */ }";
-					z-index: -1 !important;
-					opacity: 0 !important;
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
-					font-weight: 500 !important;
-					line-height: 15px !important;
-					bottom: 0 !important;
-					right: 0 !important;
+    #${key}::after {
+     position: absolute !important;
+     font-size: 13px !important;
+     background: ${value.ring} !important;
+     color: ${value.font} !important;
+     display: inline-block !important;
+     padding: 4px 4px 2px 6px !important;
+     content: "${value.title.replace('"', "'").replace('?,', ',') /* eslint-disable-line */}";
+     z-index: -1 !important;
+     opacity: 0 !important;
+     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
+     font-weight: 500 !important;
+     line-height: 15px !important;
+     bottom: 0 !important;
+     right: 0 !important;
           top: auto !important;
           left: auto !important;
           width: auto !important;
           height: auto !important;
-					border-radius: 2px 0 0 0 !important;
+     border-radius: 2px 0 0 0 !important;
           letter-spacing: 0 !important;
-				}
-				#${key}:not(.is-selected)::after { 
-					opacity: 1 !important;
-					z-index: 1 !important;
-				}
-				#${key}:not(.is-selected) { 
-					box-shadow: 0 0 0 2px ${value.ring};
-					outline: 1px solid ${value.ring};
-					border-radius: 2px;
-				}
-			`;
     }
+    #${key}:not(.is-selected)::after {
+     opacity: 1 !important;
+     z-index: 1 !important;
+    }
+    #${key}:not(.is-selected) {
+     box-shadow: 0 0 0 2px ${value.ring};
+     outline: 1px solid ${value.ring};
+     border-radius: 2px;
+    }
+   `;
+   value.subSelector.forEach(subSelector => {
+    if (subSelector) {
+        ed11yStyles += `
+        #${key}:not(.is-selected) ${subSelector.subSelector} {
+            box-shadow: 0 0 0 2px ${subSelector.ring}, 0 0 0 3px ;
+            outline: 2px solid ${subSelector.ring};
+            border-radius: 2px;
+           }
+        `;
+       }
+   });
+   
+    }
+    
 
 
-
-    newStyles.innerHTML = `
-		<style>${ed11yStyles}</style>
-		`;
+    
+    newStyles.innerHTML = '';
+    let styleWrapper = document.createElement('style');
+    styleWrapper.textContent = ed11yStyles;
+    newStyles.append(styleWrapper);
   }
   else {
     newStyles.innerHTML = '';
@@ -145,16 +261,27 @@ let ed11yFindNewBlocks = function () {
   ed11yOptions['ignoreElements'] = ed11yOptions['originalIgnore'];
   let ed11yActiveBlock = document.querySelector('.wp-block.is-selected')?.getAttribute('id');
   // Ignoring a new block until it is edited.
-  if (!!ed11yActiveBlock && ed11yActiveBlock !== 'undefined' && !Ed11y.WPBlocks.includes(ed11yActiveBlock)) {
-    Ed11y.WPBlocks.push(ed11yActiveBlock);
+  if (!!ed11yActiveBlock && ed11yActiveBlock !== 'undefined' && !ed11yWPBlocks.includes(ed11yActiveBlock)) {
+    ed11yWPBlocks.push(ed11yActiveBlock);
     ed11yOptions['ignoreElements'] += `, #${ed11yActiveBlock}, #${ed11yActiveBlock} *`;
   }
 };
 
-// Initiate Editoria11y create alert link, initiate content change watcher.
-let ed11yAdminInit = function () {
+let ed11yFirstScan = function() {
+  let ed11yInitialBlocks = document.querySelectorAll('.wp-block');
+  if (ed11yInitialBlocks.length !== null) {
+    ed11yInitialBlocks.forEach(block => {
+      ed11yWPBlocks.push(block.getAttribute('id'));
+    });
+  }
+  ed11yFindNewBlocks();
+  const ed11y = new Ed11y(ed11yOptions); // eslint-disable-line
+  document.addEventListener('ed11yResults', function () {
+    ed11yReadResults();
+  });
+};
 
-  ed11yOptions = JSON.parse(ed11yOptions.innerHTML);
+let ed11yGetOptions = function() {
   ed11yOptions.linkIgnoreStrings = ed11yOptions.linkIgnoreStrings ? new RegExp(ed11yOptions.linkIgnoreStrings, 'g') : false;
 
   // Initiate Ed11y with admin options.
@@ -169,77 +296,9 @@ let ed11yAdminInit = function () {
 
   ed11yOptions['showResults'] = true;
   ed11yOptions['alertMode'] = 'headless';
-  let ed11yInitialBlocks = document.querySelectorAll('.wp-block');
-  Ed11y.WPBlocks = [];
-  if (ed11yInitialBlocks.length !== null) {
-    ed11yInitialBlocks.forEach(block => {
-      Ed11y.WPBlocks.push(block.getAttribute('id'));
-    });
-  }
-  ed11yFindNewBlocks();
-  const ed11y = new Ed11y(ed11yOptions); // eslint-disable-line
-  document.addEventListener('ed11yResults', function () {
-    ed11yUpdateCount();
-  });
+};
 
-  // Set up issue counter link.
-  let ed11yButtonDescription = document.createElement('span');
-  ed11yButtonDescription.setAttribute('hidden', '');
-  ed11yButtonDescription.setAttribute('id', 'ed11y-button-description');
-  ed11yButtonDescription.textContent = 'Screen reader accessible issue descriptions have been added to the preview page.';
-  Ed11y.wpIssueToggle = document.createElement('button');
-  Ed11y.wpIssueToggle.classList.add('components-button', 'is-secondary', 'hidden');
-  Ed11y.wpIssueToggle.setAttribute('id', 'ed11y-issue-link');
-  Ed11y.wpIssueToggle.setAttribute('aria-describedby', 'ed11y-button-description');
-  Ed11y.wpIssueToggle.addEventListener('click', function () {
-    if (ed11yOpen) {
-      localStorage.setItem('ed11yOpen', 'shut');
-      ed11yOpen = false;
-      let newStyles = document.querySelector('#ed11y-live-highlighter');
-      if (newStyles) {
-        newStyles.innerHTML = '';
-      }
-      ed11yOptions['showResults'] = false;
-      ed11yUpdateCount();
-    } else {
-      localStorage.setItem('ed11yOpen', 'open');
-      ed11yOpen = true;
-      ed11yOptions['showResults'] = true;
-      Ed11y.wpIssueToggle.textContent = 'Hide issues';
-      ed11yUpdateCount();
-    }
-  });
-  Ed11y.wpIssueToggle.textContent = '0';
-
-  ed11yPreviewLink.parentElement.insertAdjacentElement('afterend', Ed11y.wpIssueToggle);
-  Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yButtonDescription);
-
-  let ed11yStyle = document.createElement('div');
-  ed11yStyle.setAttribute('hidden', '');
-  ed11yStyle.innerHTML = `
-	<style>
-		#ed11y-issue-link.ed11y-warning {
-			background-color: #fad859;
-			color: #000b;
-			box-shadow: none;
-		}
-		
-		#ed11y-issue-link.ed11y-alert {
-			background-color: #b80519;
-			color: #fff;
-			box-shadow: none;
-		}
-		#ed11y-issue-link:hover {
-			background: var(--wp-admin-theme-color-darker-10);
-			color: white;
-		}
-		#ed11y-issue-link:focus-visible {
-			box-shadow: 0 0 0 1px white, 0 0 0 2px var(--wp-admin-theme-color-darker-10);
-		}
-		ed11y-element-panel { display: none !important; }
-	</style>`;
-  Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yStyle);
-
+let ed11yChangeObserverInit = function () {
   // Set up change observer.
   const ed11yTargetNode = document.querySelector('.editor-styles-wrapper');
   // Observe for class changes and typing.
@@ -259,21 +318,76 @@ let ed11yAdminInit = function () {
 
   // Start observing the target node for configured mutations
   ed11yObserver.observe(ed11yTargetNode, ed11yObserverConfig);
+};
 
+let ed11yInnerInit = function() {
+  ed11yWorker.port.onmessage = (e) => {
+    if (e.data[2]) {
+      // open or shut
+      ed11yOpen = e.data[2] === 'open';
+      ed11yOptions['showResults'] = ed11yOpen;
+      Ed11y.checkAll(false, false);
+    }
+  };
+  ed11yGetOptions();
+  ed11yFirstScan();
+  ed11yChangeObserverInit();
+};
+
+let ed11yOuterInit = function() {
+  ed11yGetOptions();
+  // todo: set up button update
+  ed11yWorker.port.onmessage = function (e) {
+    if (e.data[1]) {
+      Ed11y.totalCount = e.data[1].totalCount;
+      Ed11y.warningCount = e.data[1].warningCount;
+      Ed11y.errorCount = e.data[1].errorCount;
+    }
+    ed11yReadResults();
+  };
+  // todo check for messages
+};
+
+// Initiate Editoria11y create alert link, initiate content change watcher.
+let ed11yPageInit = function () {
+  ed11yGetOptions();
+  ed11yFirstScan();
+  ed11yChangeObserverInit();
 };
 
 // Look to see if Gutenberg has loaded.
 // Possible todo: add checks/markup for other common editors.
-let ed11yReadyCount = 0;
-let ed11yTarget = false;
-let ed11yPreviewLink = false;
 let ed11yFindCompatibleEditor = function () {
-  ed11yTarget = ed11yTarget ? ed11yTarget : document.querySelector('.editor-styles-wrapper');
-  ed11yPreviewLink = ed11yPreviewLink ? ed11yPreviewLink : document.querySelector('button[class*="preview"]');
-  ed11yOptions = ed11yOptions ? ed11yOptions : document.getElementById('editoria11y-init');
-  if (!!ed11yTarget & !!ed11yPreviewLink && !!ed11yOptions) {
-    ed11yAdminInit();
-  } else if (ed11yReadyCount < 10) {
+
+  if (!ed11yScriptIs) {
+
+    if (document.querySelector('body.editor-styles-wrapper') && ed11yWorker) {
+      // inside iFrame
+      ed11yScriptIs = 'inIframe';
+    } else if (document.querySelector('[class*="-visual-editor"] iframe') && ed11yWorker) {
+      ed11yScriptIs = 'outsideIframe'; // onPage, inIframe, outsideIframe
+    } else if ( document.querySelector('.has-inline-canvas')) {
+      ed11yScriptIs = 'onPage';
+    }
+  }
+
+  switch (ed11yScriptIs) {
+  case 'inIframe':
+    ed11yInnerInit();
+    return;
+  case 'onPage':
+  case 'outsideIframe':
+    ed11yButtonWrapper = ed11yButtonWrapper ? ed11yButtonWrapper : document.querySelector('.edit-post-header__settings, .edit-site-header-edit-mode__end');
+  }
+  if (!!ed11yButtonWrapper && !!ed11yOptions) {
+    if (ed11yScriptIs === 'onPage') {
+      ed11yPageInit();
+    } else {
+      ed11yOuterInit();
+    }
+    return;
+  }
+  if (ed11yReadyCount < 10) {
     window.setTimeout(function () {
       ed11yReadyCount++;
       ed11yFindCompatibleEditor();
@@ -281,6 +395,7 @@ let ed11yFindCompatibleEditor = function () {
   } else {
     console.log('No editor found');
   }
+
 };
 
 /**

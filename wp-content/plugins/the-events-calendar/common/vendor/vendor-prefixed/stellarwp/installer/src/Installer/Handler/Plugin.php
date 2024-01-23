@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0-or-later
  *
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -120,7 +120,7 @@ class Plugin implements Handler {
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct( string $name, string $slug, ?string $download_url = null, ?string $did_action = null, string $js_action ) {
+	public function __construct( string $name, string $slug, ?string $download_url = null, ?string $did_action = null, ?string $js_action = null ) {
 		$this->name         = $name;
 		$this->slug         = $slug;
 		$this->download_url = $download_url;

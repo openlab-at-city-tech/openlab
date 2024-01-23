@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Backend;
 use Bookly\Frontend;
 
-/**
- * Class Plugin
- *
- * @package Bookly\Lib
- */
 abstract class Plugin extends Base\Plugin
 {
     protected static $prefix = 'bookly_';
@@ -27,6 +22,8 @@ abstract class Plugin extends Base\Plugin
      */
     public static function init()
     {
+        include_once 'BooklyDeprecated.php';
+
         Backend\Modules\Settings\Ajax::init();
 
         // Init ajax.
@@ -62,7 +59,6 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Statistic\Ajax::init();
         Backend\Components\Notices\Subscribe\Ajax::init();
         Backend\Components\Notices\Wpml\Ajax::init();
-        Backend\Components\Notices\ZoomJwt\Ajax::init();
         Backend\Components\Support\ButtonsAjax::init();
         Backend\Components\TinyMce\Tools::init();
         Backend\Modules\Appearance\Ajax::init();
@@ -87,12 +83,9 @@ abstract class Plugin extends Base\Plugin
         Frontend\Modules\Booking\Ajax::init();
         Frontend\Modules\Booking\Proxy\Invoices::init();
         Frontend\Modules\Cron\Ajax::init();
+        Frontend\Modules\Payment\Ajax::init();
         Frontend\Modules\Stripe\Ajax::init();
         Frontend\Modules\Zapier\Ajax::init();
-
-        add_action( 'elementor/widgets/widgets_registered', function ( $widgets_manager ) {
-            Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );
-        } );
 
         if ( ! is_admin() ) {
             // Init short code.
@@ -108,6 +101,18 @@ abstract class Plugin extends Base\Plugin
         // l10n.
         load_plugin_textdomain( 'bookly', false, self::getSlug() . '/languages' );
 
+        if ( defined( 'ELEMENTOR_VERSION' ) ) {
+            if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '>' ) ) {
+                add_action( 'elementor/widgets/register', function ( $widgets_manager ) {
+                    Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );
+                } );
+            } else {
+                add_action( 'elementor/widgets/widgets_registered', function ( $widgets_manager ) {
+                    Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );
+                } );
+            }
+        }
+
         parent::run();
     }
 
@@ -122,8 +127,6 @@ abstract class Plugin extends Base\Plugin
 
         if ( is_admin() ) {
             Backend\Backend::registerHooks();
-        } else {
-            Frontend\Frontend::registerHooks();
         }
 
         if ( get_option( 'bookly_gen_collect_stats' ) ) {

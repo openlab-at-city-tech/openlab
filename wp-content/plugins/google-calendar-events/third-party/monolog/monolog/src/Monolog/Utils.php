@@ -11,6 +11,7 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog;
 
+/** @internal */
 final class Utils
 {
     const DEFAULT_JSON_FLAGS = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRESERVE_ZERO_FRACTION | \JSON_INVALID_UTF8_SUBSTITUTE | \JSON_PARTIAL_OUTPUT_ON_ERROR;

@@ -22,6 +22,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Middleware;
+/** @internal */
 class HttpHandlerFactory
 {
     /**

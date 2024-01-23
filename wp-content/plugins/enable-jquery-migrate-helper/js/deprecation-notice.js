@@ -2,10 +2,10 @@
  * Show all jQuery Migrate warnings in the UI.
  */
 jQuery( document ).ready( function( $ ) {
-	const notice       = $( '.notice.jquery-migrate-deprecation-notice' );
-	const warnings     = jQuery.migrateWarnings || [];
-	const adminbar     = $( '#wp-admin-bar-enable-jquery-migrate-helper' );
-	const countWrapper = $( '.count-wrapper', adminbar );
+	var notice       = $( '.notice.jquery-migrate-deprecation-notice' );
+	var warnings     = jQuery.migrateWarnings || [];
+	var adminbar     = $( '#wp-admin-bar-enable-jquery-migrate-helper' );
+	var countWrapper = $( '.count-wrapper', adminbar );
 
 	var previousDeprecations = [];
 
@@ -13,7 +13,7 @@ jQuery( document ).ready( function( $ ) {
 	 * Filter the trace, return the first URI that is to a plugin or theme script.
 	 */
 	function getSlugFromTrace( trace ) {
-		let traceLines = trace.split( '\n' ),
+		var traceLines = trace.split( '\n' ),
 			match = null;
 
 		// Loop over each line in the stack trace
@@ -30,7 +30,17 @@ jQuery( document ).ready( function( $ ) {
 			if (
 				! match &&
 				line.indexOf( '/' + JQMH.plugin_slug + '/js' ) === -1 &&
-				( line.indexOf( '/plugins/' ) > -1 || line.indexOf( '/themes/' ) > -1 || line.indexOf( '/wp-admin/js/' ) > -1 )
+				( line.indexOf( '/plugins/' ) > -1 || line.indexOf( '/themes/' ) > -1 || line.indexOf( '/wp-admin/js/' ) > -1 || line.indexOf( '/wp-includes/js/' ) > -1 )
+			) {
+				match = line.replace( /.*?http/, 'http' );
+			}
+
+			// If no match is found, we do a second pass, and attempt to extrapolate special
+			// cases where the script may be within anonymous functions, and thus has no asset relationship.
+			if (
+				! match &&
+				line.indexOf( '/' + JQMH.plugin_slug + '/js' ) === -1 &&
+				line.indexOf( 'anonymous' ) > -1
 			) {
 				match = line.replace( /.*?http/, 'http' );
 			}
@@ -85,7 +95,7 @@ jQuery( document ).ready( function( $ ) {
 	 * @param message
 	 */
 	function appendNoticeDisplay( message ) {
-		const list = notice.find( '.jquery-migrate-deprecation-list' );
+		var list = notice.find( '.jquery-migrate-deprecation-list' );
 
 		if ( ! notice.length ) {
 			return;
@@ -122,7 +132,7 @@ jQuery( document ).ready( function( $ ) {
 			return;
 		}
 
-		let data = {
+		var data = {
 			action: 'jquery-migrate-log-notice',
 			notice: message,
 			nonce: JQMH.report_nonce,
@@ -132,7 +142,7 @@ jQuery( document ).ready( function( $ ) {
 
 		$.post( {
 			url: JQMH.ajaxurl,
-			data
+			data: data
 		} );
 	}
 
@@ -158,8 +168,8 @@ jQuery( document ).ready( function( $ ) {
 
 	// Add handler for dismissing of the dashboard notice.
 	$( document ).on( 'click', '.jquery-migrate-dashboard-notice .notice-dismiss', function() {
-		const $notice = $( this ).closest( '.notice' );
-		const notice_id = $notice.data( 'notice-id' );
+		var $notice = $( this ).closest( '.notice' );
+		var notice_id = $notice.data( 'notice-id' );
 
 		$.post( {
 			url: window.ajaxurl,

@@ -4,6 +4,6 @@
 .metaslider-ui option:disabled {
     @apply text-gray italic !important;
 }
-.metaslider-ui select {
+.metaslider-ui select:not([class*="mr-"]) {
 	@apply m-0 !important;
 }

@@ -19,6 +19,7 @@ use SimpleCalendar\plugin_deps\Doctrine\CouchDB\CouchDBClient;
  * CouchDB handler for Doctrine CouchDB ODM
  *
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
+ * @internal
  */
 class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {

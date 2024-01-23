@@ -153,6 +153,8 @@ const edit = (props) => {
  */
 export default withSelect(
     (select) => ({
-        wideControlsEnabled: select('core/editor').getEditorSettings().alignWide
+        wideControlsEnabled: select('core/editor') 
+                                && select('core/editor').getCurrentPostType() === 'post' 
+                                && select('core/editor').getEditorSettings().alignWide
     })
 )(edit)

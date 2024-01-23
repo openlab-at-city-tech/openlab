@@ -433,8 +433,18 @@ class Jetpack_Likes {
 		* we need a slightly more unique id / name for the widget wrapper.
 		*/
 		$uniqid = uniqid();
+		/**
+		 * Enable an alternate Likes layout.
+		 *
+		 * @since 12.9
+		 *
+		 * @module likes
+		 *
+		 * @param bool $new_layout Enable the new Likes layout. False by default.
+		 */
+		$new_layout = apply_filters( 'likes_new_layout', true ) ? '&amp;n=1' : '';
 
-		$src      = sprintf( 'https://widgets.wp.com/likes/#blog_id=%1$d&amp;post_id=%2$d&amp;origin=%3$s&amp;obj_id=%1$d-%2$d-%4$s', $blog_id, $post_id, $domain, $uniqid );
+		$src      = sprintf( 'https://widgets.wp.com/likes/#blog_id=%1$d&amp;post_id=%2$d&amp;origin=%3$s&amp;obj_id=%1$d-%2$d-%4$s%5$s', $blog_id, $post_id, $domain, $uniqid, $new_layout );
 		$name     = sprintf( 'like-post-frame-%1$d-%2$d-%3$s', $blog_id, $post_id, $uniqid );
 		$wrapper  = sprintf( 'like-post-wrapper-%1$d-%2$d-%3$s', $blog_id, $post_id, $uniqid );
 		$headline = sprintf(
@@ -617,14 +627,5 @@ add_action( 'rest_api_init', 'jetpack_post_likes_register_rest_field' );
 // Some CPTs (e.g. Jetpack portfolios and testimonials) get registered with
 // restapi_theme_init because they depend on theme support, so let's also hook to that.
 add_action( 'restapi_theme_init', 'jetpack_post_likes_register_rest_field', 20 );
-
-/**
- * Set the Likes and Sharing Gutenberg extension availability.
- */
-function jetpack_post_likes_set_extension_availability() {
-	Jetpack_Gutenberg::set_extension_available( 'likes' );
-}
-
-add_action( 'jetpack_register_gutenberg_extensions', 'jetpack_post_likes_set_extension_availability' );
 
 Jetpack_Likes::init();

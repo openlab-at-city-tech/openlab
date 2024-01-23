@@ -14,8 +14,21 @@ jQuery(function($) {
         $exportDialog = $('#bookly-export-customers-dialog'),
         $exportSelectAll = $('#bookly-js-export-select-all', $exportDialog),
         columns = [],
-        order = []
+        order = [],
+        info_renders = {}
     ;
+
+    for (var a in BooklyL10n.infoFields) {
+        info_renders[BooklyL10n.infoFields[a].id] = $.fn.dataTable.render.text();
+        if (BooklyL10n.infoFields[a].type === 'file') {
+            info_renders[BooklyL10n.infoFields[a].id] = function(data, type, row, meta) {
+                if (data != '') {
+                    return '<button type="button" class="btn btn-link" data-download-file="' + data + '" title="' + BooklyL10n.download + '"><i class="fas fa-fw fa-paperclip"></i></button>';
+                }
+                return '';
+            }
+        }
+    }
 
     /**
      * Init table columns.
@@ -52,11 +65,9 @@ jQuery(function($) {
                 }
                 default:
                     if (column.startsWith('info_fields_')) {
-                        const id = parseInt(column.split('_').pop());
-                        const field = BooklyL10n.infoFields.find(function(i) { return i.id === id; });
                         columns.push({
-                            data: 'info_fields.' + id + '.value' + (field.type === 'checkboxes' ? '[, ]' : ''),
-                            render: $.fn.dataTable.render.text(),
+                            data: column.replace(/_([^_]*)$/, '.$1'),
+                            render: info_renders[parseInt(column.split('_').pop())],
                             orderable: false
                         });
                     } else {
@@ -137,7 +148,7 @@ jQuery(function($) {
         BooklyCustomerDialog.showDialog({
             action: 'create',
             onDone: function(event) {
-                dt.ajax.reload();
+                dt.ajax.reload(null, false);
             }
         })
     });
@@ -161,15 +172,23 @@ jQuery(function($) {
                 action: 'load',
                 customerId: getDTRowData(this).id,
                 onDone: function(event) {
-                    dt.ajax.reload();
+                    dt.ajax.reload(null, false);
                 }
             })
+        })
+        .on('click', '[data-download-file]', function (e) {
+            e.preventDefault();
+            window.open(ajaxurl + (ajaxurl.indexOf('?') > 0 ? '&' : '?') + 'action=bookly_files_download&slug=' + $(this).data('download-file') + '&csrf_token=' + BooklyL10nGlobal.csrf_token, '_blank');
         });
 
     /**
      * On filters change.
      */
-    $filter.on('keyup', function() { dt.ajax.reload(); });
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
+
+    $filter.on('keyup', onChangeFilter);
 
     /**
      * Merge list.

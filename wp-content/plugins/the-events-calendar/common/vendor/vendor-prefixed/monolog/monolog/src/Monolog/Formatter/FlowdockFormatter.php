@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 

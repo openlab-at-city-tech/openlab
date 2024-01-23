@@ -44,7 +44,7 @@ class Mappress_Map extends Mappress_Obj {
 
 		$atts = Mappress::to_atts($vars);
 		$pois = join('', array_map(function($poi) { return $poi->to_html(); }, $this->pois));
-		return "\r\n<mappress-map {$atts}>$pois\r\n</mappress-map>\r\n";
+		return "\r\n<mappress-map {$atts}>\r\n$pois\r\n</mappress-map>\r\n";
 	}
 
 	function to_json() {
@@ -92,7 +92,43 @@ class Mappress_Map extends Mappress_Obj {
 
 		add_action('show_user_profile', array(__CLASS__, 'display_user_map'));
 		add_action('edit_user_profile', array(__CLASS__, 'display_user_map'));
-		add_action('deleted_user', array(__CLASS__, 'deleted_user'));
+		add_action('deleted_user', array(__CLASS__, 'deleted_user'));		
+		
+		// Add post column filters for registered post types
+		$post_types = (Mappress::$options->postTypes) ? Mappress::$options->postTypes : array();
+		foreach($post_types as $post_type) {
+			add_filter("manage_{$post_type}_posts_columns", array(__CLASS__, 'manage_posts_columns'));
+			add_action("manage_{$post_type}_posts_custom_column", array(__CLASS__, 'manage_posts_custom_column'), 10, 2);
+		}        
+	}
+
+	static function manage_posts_columns($defaults) {
+		$defaults['mapid'] = 'Map';
+		return $defaults;
+	}
+
+	static function manage_posts_custom_column($column_name, $post_id) {   
+		global $wpdb;
+		
+		if ($column_name === 'mapid') {
+			$maps = self::get_list('post', $post_id);
+			if ($maps) {                     
+				$links = array();
+				$count = 0;
+				foreach($maps as $map) {
+					$count++;
+					if ($count > 2) {
+						$links[] = sprintf(__('+%d more', 'mappress-google-maps-for-wordpress'), (count($maps) - $count + 1));
+						break;
+					}
+					$title = ($map->title) ? $map->title : __('Untitled', 'mappress-google-maps-for-wordpress');
+					$links[] = sprintf('<a class="mapp-post-edit" data-oid="%d" data-mapid="%d" href="#" title="%s">%d %s</a>', $post_id, $map->mapid, __('Edit map', 'mappress-google-maps-for-wordpress'), $map->mapid, $title);
+				}
+				echo implode('<hr/>', $links);
+			} else {
+				echo sprintf('<a class="mapp-post-attach" data-oid="%d" data-mapid="0" href="#">%s</a>', $post_id, __('Attach', 'mappress-google-maps-for-wordpress'));
+			}
+		}
 	}
 
 	static function ajax_get_post() {
@@ -233,11 +269,10 @@ class Mappress_Map extends Mappress_Obj {
 			// Convert booleans to strings
 			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
 
-			// Query or mapid - no POIs in iframe URL
+			// No POIs in URL.  Programmatic maps get a transient
 			if ($this->query || $this->mapid) {
 				unset($args['pois']);
 			} else {
-				// Programmatic - URL contains only transient id
 				$transient = 'mapp-iframe-' . md5(json_encode($this));
 				set_transient($transient, $this, 30);
 				$args = array('transient' => $transient);
@@ -429,6 +464,9 @@ class Mappress_Map extends Mappress_Obj {
 		$where = $wpdb->prepare("WHERE otype=%s", $otype);
 		if ($oid)
 			$where .= $wpdb->prepare(" AND oid=%d", $oid);
+			
+		// Exclude maps in trash
+		$where .= " AND status != 'trashed' ";
 
 		$mapids = $wpdb->get_col("SELECT mapid FROM $maps_table $where");
 		if (!$mapids)

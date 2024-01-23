@@ -5,11 +5,6 @@ use Bookly\Backend\Modules;
 use Bookly\Lib\Base\Cache;
 use Bookly\Lib\Plugin;
 
-/**
- * Class API
- *
- * @package Bookly\Lib\Cloud
- */
 class API extends Cache
 {
     const API_URL = 'https://cloud.bookly.pro';

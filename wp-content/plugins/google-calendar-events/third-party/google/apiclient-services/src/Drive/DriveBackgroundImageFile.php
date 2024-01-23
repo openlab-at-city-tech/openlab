@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
+/** @internal */
 class DriveBackgroundImageFile extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**

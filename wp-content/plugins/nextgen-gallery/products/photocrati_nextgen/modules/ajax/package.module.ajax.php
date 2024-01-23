@@ -1,69 +1,72 @@
 <?php
 /**
  * Class C_Ajax_Controller
+ *
  * @implements I_Ajax_Controller
  */
 class C_Ajax_Controller extends C_MVC_Controller
 {
-    static $_instances = array();
-    function define($context = FALSE)
+    public static $_instances = array();
+    /**
+     * Returns an instance of this class
+     *
+     * @param string|bool $context
+     * @return C_Ajax_Controller
+     */
+    public static function get_instance($context = false)
+    {
+        if (!isset(self::$_instances[$context])) {
+            self::$_instances[$context] = new C_Ajax_Controller($context);
+        }
+        return self::$_instances[$context];
+    }
+    public function define($context = false)
     {
         parent::define($context);
         $this->implement('I_Ajax_Controller');
     }
-    function index_action($return = FALSE)
+    public function index_action($return = false)
     {
-        $retval = NULL;
-        define('DOING_AJAX', TRUE);
-        // Inform the MVC framework what type of content we're returning
+        $retval = null;
+        define('DOING_AJAX', true);
+        // Inform the MVC framework what type of content we're returning.
         $this->set_content_type('json');
-        // Start an output buffer to avoid displaying any PHP warnings/errors
+        // Start an output buffer to avoid displaying any PHP warnings/errors.
         ob_start();
-        // Get the action requested & find and execute the related method
+        // Get the action requested & find and execute the related method.
         if ($action = $this->param('action')) {
             $method = "{$action}_action";
             if ($this->has_method($method)) {
                 $retval = $this->call_method($method);
             } else {
-                $retval = array('error' => 'Not a valid AJAX action');
+                $retval = ['error' => 'Not a valid AJAX action'];
             }
         } else {
-            $retval = array('error' => 'No action specified');
+            $retval = ['error' => 'No action specified'];
         }
-        // Flush the buffer
+        // Flush the buffer.
         $buffer_limit = 0;
         $zlib = ini_get('zlib.output_compression');
         if (!is_numeric($zlib) && $zlib == 'On') {
             $buffer_limit = 1;
-        } else {
-            if (is_numeric($zlib) && $zlib > 0) {
-                $buffer_limit = 1;
-            }
+        } elseif (is_numeric($zlib) && $zlib > 0) {
+            $buffer_limit = 1;
         }
         while (ob_get_level() != $buffer_limit) {
             ob_end_clean();
         }
-        // Return the JSON to the browser
+        // Return the JSON to the browser.
         wp_send_json($retval);
     }
-    /**
-     * Returns an instance of this class
-     * @param string|bool $context
-     * @return C_Ajax_Controller
-     */
-    static function get_instance($context = FALSE)
+    public function validate_ajax_request($action = null, $token = false)
     {
-        if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
+        // Security::verify_nonce() is a wrapper to wp_verify_nonce().
+        //
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        if (true === $token && (!isset($_REQUEST['nonce']) || !\Imagely\NGG\Util\Security::verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['nonce'])), $action))) {
+            return false;
         }
-        return self::$_instances[$context];
-    }
-    function validate_ajax_request($action = NULL, $token = FALSE)
-    {
-        if ($token === TRUE && (!isset($_REQUEST['nonce']) || !M_Security::verify_nonce($_REQUEST['nonce'], $action))) {
-            return FALSE;
-        }
-        return M_Security::is_allowed($action);
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        return \Imagely\NGG\Util\Security::is_allowed($action);
     }
 }

@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class ConferenceProperties extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'allowedConferenceSolutionTypes';

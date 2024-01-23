@@ -1,0 +1,10 @@
+parameters:
+    level: 9
+
+	# Exclusions
+    excludePaths:
+        - vendor
+
+    # Inclusions
+    paths:
+    	- .

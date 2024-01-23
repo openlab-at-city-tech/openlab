@@ -3,11 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class SubService
- *
- * @package Bookly\Lib\Entities
- */
 class SubService extends Lib\Base\Entity
 {
     const TYPE_SERVICE    = 'service';

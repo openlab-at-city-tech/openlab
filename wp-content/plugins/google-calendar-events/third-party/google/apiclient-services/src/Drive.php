@@ -31,6 +31,7 @@ use SimpleCalendar\plugin_deps\Google\Client;
  * </p>
  *
  * @author Google, Inc.
+ * @internal
  */
 class Drive extends \SimpleCalendar\plugin_deps\Google\Service
 {

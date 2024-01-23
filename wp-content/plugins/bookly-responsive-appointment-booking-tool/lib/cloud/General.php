@@ -1,13 +1,8 @@
 <?php
-
 namespace Bookly\Lib\Cloud;
 
 use Bookly\Lib\Config;
 
-/**
- * Class General
- * @package Bookly\Lib\Cloud
- */
 class General extends Base
 {
     const GET_INFO                     = '/1.0/info';                                 //GET

@@ -42,6 +42,7 @@ span.folder-actions {
     display: inline-block;
     font-size: 10px;
     text-align: center;
+    color: #333;
 }
 .folder-actions span.premio-folder-count {
     width: auto;
@@ -172,9 +173,13 @@ li.jstree-node .jstree-hovered .star-icon, li.jstree-node .jstree-hovered .stick
 .folder-menu-content .cssload-container {
     margin: 100px 0 0 0;
 }
-.dynamic-menu ul > li > a >span.dashicons {
+.dynamic-menu ul > li > a >span.dashicons, .dynamic-menu ul > li > a > span > span.dashicons {
     font-size: 18px;
     text-align: left;
+    height: 16px !important;
+    width: 16px !important;
+    display: inline-block;
+    vertical-align: middle;
 }
 .close-popup-button {
     position: absolute;
@@ -865,4 +870,113 @@ select.upgrade-review-reminder:focus {
     outline: none;
     box-shadow: none;
     border-color: rgba(183, 141, 235, 1);
+}
+.color-selector {
+    position: absolute;
+    top: -10px;
+    left: 100%;
+    -webkit-box-shadow: 2px 0 5px 0 rgba(0, 0, 0, .25);
+    -moz-box-shadow: 2px 0 5px 0 rgba(0, 0, 0, .25);
+    box-shadow: 2px 0 5px 0 rgba(0, 0, 0, .25);
+    background: #fff;
+    width: 285px;
+    display: none;
+}
+.color-selector .color-selector-ul {
+    padding-bottom: 12px;
+}
+.color-selector .folder-color-option {
+    height: 30px;
+    display: inline-block;
+    width: 30px;
+    border-radius: 50%;
+    margin: 10px 5px 0;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+.color-folder:hover .color-selector {
+    display: block;
+}
+.folder-color-default {
+    text-decoration: none;
+    position: relative;
+    display: block;
+    padding: 9px 10px;
+    line-height: 18px;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #7D7D7E;
+}
+li.color-selector-ul {
+    border-bottom: solid 1px #d8d8d8;
+}
+.dynamic-menu {
+    width: 235px;
+    width: fit-content;
+}
+.dynamic-menu a.folder-color-default, .dynamic-menu a.folder-color-default:hover {
+    color: #F24141;
+}
+.dynamic-menu li li {
+    padding: 0;
+}
+body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked .folder-actions span, body:not(.no-hover-css) #custom-scroll-menu .jstree-clicked:not(.jstree-clicked):focus .folder-actions span, #custom-scroll-menu .jstree-clicked, #custom-scroll-menu .jstree-clicked:hover .folder-actions span {
+    color: #fff;
+}
+html[dir="rtl"] .color-selector {
+    left: auto;
+    right: 100%;
+}
+html[dir="rtl"] .dynamic-menu ul>li>a>span.dashicons.dashicons-arrow-right-alt2 {
+    transform: rotate(180deg);
+}
+
+.color-popup-options .popup-form-content {
+    width: 450px;
+    padding: 0;
+}
+.color-popup-options .add-update-folder-title {
+    padding: 0;
+    color: #333333;
+}
+.color-popup-options .add-update-folder-title:after {
+    display: none;
+}
+.folder-popup-top img {
+    width: 100%;
+    height: auto;
+}
+.folder-color-title {
+    color: #333333;
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    line-height: 24px;
+}
+.folder-popup-bottom {
+    padding: 15px;
+}
+.folder-color-desc {
+    color: #7D7D7D;
+    font-size: 14px;
+    line-height: 20px;
+}
+.color-popup-options .folder-form-buttons {
+    padding: 5px 10px 15px;
+}
+.color-popup-options .folder-form-buttons a, .color-popup-options .folder-form-buttons a:focus {
+    margin: 0 5px;
+    color: #4983D0;
+    border-color: #4983D0;
+}
+.color-popup-options .folder-form-buttons a.customize-folder-color, .color-popup-options .folder-form-buttons a.customize-folder-color:focus {
+    background-color: #E6386C;
+    border-color: #E6386C;
+    color: #ffffff;
+}
+.color-popup-options .close-popup-button {
+    top: 0;
+    right: 0;
 }

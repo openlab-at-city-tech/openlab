@@ -14,8 +14,6 @@ defined( 'ABSPATH' ) || exit;
  * Register activity actions for the blogs component.
  *
  * @since 1.0.0
- *
- * @return bool|null Returns false if activity component is not active.
  */
 function bp_blogs_register_activity_actions() {
 	if ( is_multisite() ) {
@@ -240,7 +238,7 @@ function bp_blogs_format_activity_action_new_blog_post( $action, $activity ) {
 		$post = get_post( $activity->secondary_item_id );
 		restore_current_blog();
 
-		if ( ! empty( $post ) && ! is_wp_error( $post ) ) {
+		if ( ! empty( $post ) && $post instanceof WP_Post ) {
 			$post_url = add_query_arg( 'p', $post->ID, trailingslashit( get_home_url( $activity->item_id ) ) );
 			$action   = apply_filters_deprecated( 'bp_blogs_activity_new_post_action', array( $action, $post, $post_url ), '2.0.0', 'bp_blogs_format_activity_action_new_blog_post' );
 		}
@@ -352,7 +350,7 @@ function bp_blogs_format_activity_action_new_blog_comment( $action, $activity ) 
 		$comment = get_comment( $activity->secondary_item_id );
 		restore_current_blog();
 
-		if ( ! empty( $comment ) && ! is_wp_error( $comment ) ) {
+		if ( ! empty( $comment ) && $comment instanceof WP_Comment ) {
 			$action = apply_filters_deprecated( 'bp_blogs_activity_new_comment_action', array( $action, $comment, $post_url . '#' . $activity->secondary_item_id ), '2.0.0', 'bp_blogs_format_activity_action_new_blog_comment' );
 		}
 	}
@@ -453,9 +451,9 @@ function bp_blogs_record_activity( $args = '' ) {
 		 *
 		 * @since 1.2.0
 		 *
-		 * @param string $value Generated summary from content for the activity stream.
-		 * @param string $value Content for the activity stream.
-		 * @param array  $r     Array of arguments used for the activity stream item.
+		 * @param string $summary Generated summary from content for the activity stream.
+		 * @param string $content Content for the activity stream.
+		 * @param array  $r       Array of arguments used for the activity stream item.
 		 */
 		$r['content'] = apply_filters( 'bp_blogs_record_activity_content', bp_activity_create_summary( $r['content'], $r ), $r['content'], $r );
 	}
@@ -499,7 +497,7 @@ function bp_blogs_delete_activity( $args = '' ) {
 		)
 	);
 
-	bp_activity_delete_by_item_id( $r );
+	return bp_activity_delete_by_item_id( $r );
 }
 
 /**
@@ -614,8 +612,8 @@ function bp_blogs_record_activity_on_site_creation( $recorded_blog, $is_private,
 			 *
 			 * @since 1.1.0
 			 *
-			 * @param string $value Blog primary link.
-			 * @param int    $value Blog ID.
+			 * @param string $link    Blog primary link.
+			 * @param int    $blog_id Blog ID.
 			 */
 			'primary_link' => apply_filters( 'bp_blogs_activity_created_blog_primary_link', bp_blogs_get_blogmeta( $recorded_blog->blog_id, 'url' ), $recorded_blog->blog_id ),
 			'type'         => 'new_blog',
@@ -677,7 +675,6 @@ add_action( 'bp_blogs_remove_data_for_blog', 'bp_blogs_delete_activity_for_site'
  * @param int $blog_id Optional. Defaults to current blog ID.
  * @param int $user_id Optional. Defaults to the logged-in user ID. This param
  *                     is currently unused in the function (but is passed to hooks).
- * @return bool
  */
 function bp_blogs_remove_post( $post_id, $blog_id = 0, $user_id = 0 ) {
 	global $wpdb;
@@ -787,7 +784,7 @@ function bp_blogs_sync_add_from_activity_comment( $comment_id, $params, $parent_
 		'comment_post_ID'      => $parent_activity->secondary_item_id,
 		'comment_author'       => bp_core_get_user_displayname( $params['user_id'] ),
 		'comment_author_email' => $user->user_email,
-		'comment_author_url'   => bp_core_get_user_domain( $params['user_id'], $user->user_nicename, $user->user_login ),
+		'comment_author_url'   => bp_members_get_user_url( $params['user_id'] ),
 		'comment_content'      => $params['content'],
 		'comment_type'         => '', // Could be interesting to add 'BuddyPress' here...
 		'comment_parent'       => (int) $comment_parent,
@@ -957,7 +954,6 @@ function bp_blogs_sync_activity_edit_to_post_comment( BP_Activity_Activity $acti
 
 	// Get the comment status.
 	$post_comment_status = wp_get_comment_status( $post_comment_id );
-	$old_comment_status  = $post_comment_status;
 
 	// No need to edit the activity, as it's the activity who's updating the comment.
 	remove_action( 'transition_comment_status', 'bp_activity_transition_post_type_comment_status', 10 );
@@ -1033,8 +1029,8 @@ function bp_blogs_new_blog_comment_query_backpat( $args ) {
 	global $wpdb;
 	$bp = buddypress();
 
-	// If activity comments are disabled for blog posts, stop now!
-	if ( bp_disable_blogforum_comments() ) {
+	// If activity comments are disabled for blog posts or if the action is not a string, stop now!
+	if ( bp_disable_blogforum_comments() || ! is_string( $args['action'] ) ) {
 		return $args;
 	}
 
@@ -1420,7 +1416,6 @@ function bp_blogs_activity_comment_single_action( $retval, $activity ) {
 	$blog_comment_id = bp_activity_get_meta( $activity->id, "bp_blogs_{$post_type}_comment_id" );
 
 	if ( ! empty( $blog_comment_id ) ) {
-		$bp = buddypress();
 
 		// Check if a comment action id is set for the parent activity.
 		$comment_action_id = bp_activity_post_type_get_tracking_arg( $parent_activity->type, 'comment_action_id' );

@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class Range
- * @package Bookly\Lib\Slots
- */
 class Range
 {
     const AVAILABLE            = 1;

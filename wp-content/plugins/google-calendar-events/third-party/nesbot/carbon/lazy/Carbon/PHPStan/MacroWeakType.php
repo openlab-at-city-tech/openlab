@@ -12,6 +12,7 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Carbon\PHPStan;
 
 if (!\class_exists(LazyMacro::class, \false)) {
+    /** @internal */
     abstract class LazyMacro extends AbstractReflectionMacro
     {
         /**

@@ -5,10 +5,6 @@ use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Entities\Service;
 use Bookly\Lib\Utils\Codes;
 
-/**
- * Class Settings
- * @package Bookly\Lib\DataHolders\Notification
- */
 class Settings
 {
     /** @var array */

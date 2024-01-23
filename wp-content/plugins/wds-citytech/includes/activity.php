@@ -111,16 +111,30 @@ function openlab_toggle_hide_sitewide_for_private_membership_activity( $activity
 add_action(
 	'bp_activity_add',
 	function( $r, $activity_id ) {
-		if ( 'groups' !== $r['component'] ) {
-			return;
+		if ( 'groups' === $r['component'] ) {
+			$user_private_memberships = openlab_get_user_private_membership( $r['user_id'] );
+			if ( in_array( (int) $r['item_id'], $user_private_memberships, true ) ) {
+				openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id );
+			}
 		}
 
-		$user_private_memberships = openlab_get_user_private_membership( $r['user_id'] );
-		if ( ! in_array( (int) $r['item_id'], $user_private_memberships, true ) ) {
-			return;
-		}
+		$activity = new BP_Activity_Activity( $activity_id );
+		if ( in_array( $activity->type, [ 'new_blog_post', 'new_blog_comment' ], true ) ) {
+			if ( 'new_blog_post' === $activity->type ) {
+				$post_id = (int) $activity->secondary_item_id;
+			} else {
+				$comment = get_comment( $activity->secondary_item_id );
+				$post_id = (int) $comment->comment_post_ID;
+			}
 
-		openlab_toggle_hide_sitewide_for_private_membership_activity( $activity_id );
+			$post_visibility = get_post_meta( $post_id, 'openlab_post_visibility', true );
+			if ( ! $activity->hide_sitewide && in_array( $post_visibility, [ 'members-only', 'group-members-only' ], true ) ) {
+				$cloned_activity = new BP_Activity_Activity( $activity_id );
+
+				$cloned_activity->hide_sitewide = 1;
+				$saved = $cloned_activity->save();
+			}
+		}
 	},
 	100,
 	2

@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Edit\Forms;
 
 use Bookly\Lib;
 
-/**
- * Class StaffServices
- * @package Bookly\Backend\Components\Dialogs\Staff\Edit\Forms
- */
 class StaffServices extends Lib\Base\Form
 {
     protected static $entity_class = 'StaffService';

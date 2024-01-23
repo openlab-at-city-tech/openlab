@@ -98,13 +98,17 @@ if ( function_exists( 'bp_post_get_permalink' ) ) { // ugly ugly ugly hack to ch
 	<?php endwhile; endif;
 
 } else { // Begin BP 1.2 code
+	$invitation_url = bp_members_get_user_url(
+		bp_loggedin_user_id(),
+		bp_members_get_path_chunks( [ buddypress()->invite_anyone->slug, 'invite-new-members', 'group-invites', bp_get_group_id() ] )
+	);
 
 	?>
 
 	<?php do_action( 'bp_before_group_send_invites_content' ) ?>
 
 	<?php if ( invite_anyone_access_test() && !bp_is_group_create() ) : ?>
-		<p><?php _e( 'Want to invite someone to the group who is not yet a member of the site?', 'invite-anyone' ) ?> <a href="<?php echo bp_loggedin_user_domain() . BP_INVITE_ANYONE_SLUG . '/invite-new-members/group-invites/' . bp_get_group_id() ?>"><?php _e( 'Send invitations by email.', 'invite-anyone' ) ?></a></p>
+		<p><?php _e( 'Want to invite someone to the group who is not yet a member of the site?', 'invite-anyone' ) ?> <a href="<?php echo esc_url( $invitation_url ); ?>"><?php _e( 'Send invitations by email.', 'invite-anyone' ) ?></a></p>
 	<?php endif; ?>
 
 	<?php if ( !bp_get_new_group_id() ) : ?>

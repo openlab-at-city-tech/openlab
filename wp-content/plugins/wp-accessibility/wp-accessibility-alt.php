@@ -169,7 +169,6 @@ function wpa_insert_alt_verification( $form_fields, $post ) {
 	$mime = get_post_mime_type( $post->ID );
 	if ( 'image/jpeg' === $mime || 'image/png' === $mime || 'image/gif' === $mime ) {
 		$no_alt                = get_post_meta( $post->ID, '_no_alt', true );
-		$alt                   = get_post_meta( $post->ID, '_wp_attachment_image_alt', true );
 		$checked               = checked( $no_alt, 1, false );
 		$form_fields['no_alt'] = array(
 			'label' => __( 'Decorative', 'wp-accessibility' ),
@@ -219,21 +218,29 @@ function wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $
 	// Get data for the image attachment.
 	$noalt = (bool) get_post_meta( $id, '_no_alt', true );
 	// Get the original title to compare to alt.
-	$title   = get_the_title( $id );
 	$warning = false;
 	if ( true === $noalt ) {
 		$html = str_replace( 'alt="' . $alt . '"', 'alt=""', $html );
 	}
-	if ( ( '' === $alt || $alt === $title || wpa_suspicious_alt( $alt ) ) && true !== $noalt ) {
-		if ( $alt === $title ) {
-			$warning = __( 'The alt text for this image is the same as the title. In most cases, that means that the alt attribute has been automatically provided from the image file name.', 'wp-accessibility' );
-			$image   = 'alt-same.png';
+	$suspicious = wpa_suspicious_alt( $alt );
+	$long       = wpa_long_alt( $alt );
+	if ( ( '' === $alt || $suspicious ) && true !== $noalt ) {
+		if ( $long ) {
+			$warning         = 'wpa-warning wpa-long-alt';
+			$caption_warning = __( 'Long alt text', 'wp-accessibility' );
+		} elseif ( $suspicious ) {
+			$warning         = 'wpa-warning wpa-suspicious-alt';
+			$caption_warning = __( 'Suspicious alt text', 'wp-accessibility' );
+		} elseif ( $alt && $caption === $alt ) {
+			$warning         = 'wpa-warning wpa-caption-is-alt';
+			$caption_warning = __( 'Caption and alt text are the same', 'wp-accessibility' );
 		} else {
-			$warning = __( 'This image requires alt text, but the alt text is currently blank. Either add alt text or mark the image as decorative.', 'wp-accessibility' );
-			$image   = 'alt-missing.png';
+			$warning         = 'wpa-warning wpa-image-missing-alt';
+			$caption_warning = __( 'Missing alt text', 'wp-accessibility' );
 		}
+		$html = str_replace( 'class="', 'data-warning="' . $caption_warning . '" class="' . $warning . ' ', $html );
 	}
-	if ( $warning ) {
+	if ( $warning && ! $caption ) {
 		return '<div class="wp-block-image">' . $html . '</div>';
 	}
 
@@ -245,7 +252,7 @@ add_action( 'init', 'wpa_add_editor_styles' );
  * Enqueue custom editor styles for WP Accessibility. Used in display of img replacements.
  */
 function wpa_add_editor_styles() {
-	$wpa_version = ( SCRIPT_DEBUG ) ? rand( 10000, 100000 ) : wpa_check_version();
+	$wpa_version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
 	add_editor_style( plugins_url( 'css/editor-style.css', __FILE__ ), false, $wpa_version );
 }
 
@@ -254,5 +261,6 @@ add_action( 'enqueue_block_editor_assets', 'wpa_block_editor_assets' );
  * Enqueue custom block editor styles for WP Accessibility. Used in display of img replacements.
  */
 function wpa_block_editor_assets() {
-	wp_enqueue_style( 'wpa-block-styles', plugins_url( 'css/editor-style.css', __FILE__ ), false, wpa_check_version() );
+	$wpa_version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
+	wp_enqueue_style( 'wpa-block-styles', plugins_url( 'css/editor-style.css', __FILE__ ), false, $wpa_version );
 }

@@ -8134,6 +8134,76 @@ a.disabled-link {
   background: transparent;
   color: #333333;
 }
+/** Avatar upload */
+.register-avatar-upload {
+  padding: 1em 0;
+  margin-bottom: 1em;
+}
+.register-avatar-upload .drag-drop {
+  margin: 1em 0;
+  border: 1px dashed #dddddd;
+}
+.register-avatar-upload .drag-drop.drag-over .drag-drop-inside {
+  background: #eaeaea;
+}
+.register-avatar-upload .drag-drop-inside {
+  display: flex;
+  gap: 10px;
+  padding: 32px 16px;
+  justify-content: center;
+  align-items: center;
+}
+.register-avatar-upload .drag-drop-inside p {
+  margin: 0;
+}
+@media (max-width: 991px) {
+  .register-avatar-upload .drag-drop-inside p:not(.drag-drop-buttons) {
+    display: none;
+  }
+}
+.register-avatar-upload .drag-drop-holder {
+  margin: 1em 0;
+}
+.register-avatar-upload .bp-avatar-upload-status {
+  display: flex;
+  gap: 10px;
+}
+.register-avatar-upload .avatar-preview-outside-wrap {
+  background: #dddddd;
+  padding: 20px;
+}
+.register-avatar-upload .avatar-preview-wrap {
+  height: 225px;
+  overflow: hidden;
+  width: 225px;
+}
+@media (max-width: 991px) {
+  .register-avatar-upload .avatar-preview-wrap {
+    margin: 0 auto;
+  }
+}
+.register-avatar-upload .original-avatar-preview {
+  display: none;
+}
+.register-avatar-upload .bp-avatar,
+.register-avatar-upload .bp-avatar-status {
+  margin-top: 1em;
+}
+.register-avatar-upload #avatar-crop-actions {
+  margin: 1em 0;
+}
+.avatar-upload #avatar-crop-pane {
+  overflow: hidden;
+}
+.avatar-upload-form {
+  display: flex;
+  gap: 20px;
+}
+@media (max-width: 991px) {
+  .avatar-upload-form {
+    flex-direction: column;
+  }
+}
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
@@ -10217,6 +10287,7 @@ input#group-request-send {
 }
 .academic-unit-hidden {
   display: none;
+  visibility: hidden;
 }
 .openlab-academic-units-select2-container .select2-results__option[aria-disabled=true] {
   display: none;

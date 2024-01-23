@@ -53,6 +53,8 @@ function bp_settings_action_notifications() {
 	 */
 	do_action( 'bp_core_notification_settings_after_save' );
 
-	bp_core_redirect( bp_displayed_user_domain() . bp_get_settings_slug() . '/notifications/' );
+	bp_core_redirect(
+		bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_settings_slug(), 'notifications' ) ) )
+	);
 }
 add_action( 'bp_actions', 'bp_settings_action_notifications' );

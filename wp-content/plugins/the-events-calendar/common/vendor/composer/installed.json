@@ -67,17 +67,17 @@
         },
         {
             "name": "lucatume/di52",
-            "version": "3.3.3",
-            "version_normalized": "3.3.3.0",
+            "version": "3.3.5",
+            "version_normalized": "3.3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucatume/di52",
-                "reference": "4185e21be2ac6c96bb1bb03970258352b6876bb2"
+                "reference": "d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucatume/di52/zipball/4185e21be2ac6c96bb1bb03970258352b6876bb2",
-                "reference": "4185e21be2ac6c96bb1bb03970258352b6876bb2",
+                "url": "https://api.github.com/repos/lucatume/di52/zipball/d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3",
+                "reference": "d39d1cbbc57eb41c7aa21fab106e17b6938ec6b3",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
             "require-dev": {
                 "phpunit/phpunit": "<10.0"
             },
-            "time": "2023-04-28T07:39:10+00:00",
+            "time": "2023-09-01T08:49:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -299,23 +299,23 @@
         },
         {
             "name": "stellarwp/container-contract",
-            "version": "1.1.0",
-            "version_normalized": "1.1.0.0",
+            "version": "1.1.1",
+            "version_normalized": "1.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/container-contract.git",
-                "reference": "b1568be99b4d2d38446895d31a1c0f3718bf4d36"
+                "reference": "b2c42c76681db314e4edbb2af0a312b6c06b495e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/container-contract/zipball/b1568be99b4d2d38446895d31a1c0f3718bf4d36",
-                "reference": "b1568be99b4d2d38446895d31a1c0f3718bf4d36",
+                "url": "https://api.github.com/repos/stellarwp/container-contract/zipball/b2c42c76681db314e4edbb2af0a312b6c06b495e",
+                "reference": "b2c42c76681db314e4edbb2af0a312b6c06b495e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0"
             },
-            "time": "2023-02-13T21:24:31+00:00",
+            "time": "2023-09-05T20:08:29+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -343,23 +343,23 @@
             ],
             "support": {
                 "issues": "https://github.com/stellarwp/container-contract/issues",
-                "source": "https://github.com/stellarwp/container-contract/tree/1.1.0"
+                "source": "https://github.com/stellarwp/container-contract/tree/1.1.1"
             },
             "install-path": "../stellarwp/container-contract"
         },
         {
             "name": "stellarwp/db",
-            "version": "1.0.3",
-            "version_normalized": "1.0.3.0",
+            "version": "1.0.7",
+            "version_normalized": "1.0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/db.git",
-                "reference": "782daf58b6160478059baeb7e7d84d6127726067"
+                "reference": "e299e35869cb8092b48143a11509c1574cc33dc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/db/zipball/782daf58b6160478059baeb7e7d84d6127726067",
-                "reference": "782daf58b6160478059baeb7e7d84d6127726067",
+                "url": "https://api.github.com/repos/stellarwp/db/zipball/e299e35869cb8092b48143a11509c1574cc33dc0",
+                "reference": "e299e35869cb8092b48143a11509c1574cc33dc0",
                 "shasum": ""
             },
             "require-dev": {
@@ -377,7 +377,7 @@
                 "symfony/string": "^5.4",
                 "szepeviktor/phpstan-wordpress": "^1.1"
             },
-            "time": "2022-11-22T21:32:56+00:00",
+            "time": "2023-10-23T20:46:29+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -402,23 +402,23 @@
             "description": "A WPDB wrapper and query builder library.",
             "support": {
                 "issues": "https://github.com/stellarwp/db/issues",
-                "source": "https://github.com/stellarwp/db/tree/1.0.3"
+                "source": "https://github.com/stellarwp/db/tree/1.0.7"
             },
             "install-path": "../stellarwp/db"
         },
         {
             "name": "stellarwp/installer",
-            "version": "1.1.0",
-            "version_normalized": "1.1.0.0",
+            "version": "1.1.1",
+            "version_normalized": "1.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/installer.git",
-                "reference": "13e800c750dbdab561ad6d67b768938fa4fee8a4"
+                "reference": "9c2774a1fcc9724839c7f009784420ed71831fde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/installer/zipball/13e800c750dbdab561ad6d67b768938fa4fee8a4",
-                "reference": "13e800c750dbdab561ad6d67b768938fa4fee8a4",
+                "url": "https://api.github.com/repos/stellarwp/installer/zipball/9c2774a1fcc9724839c7f009784420ed71831fde",
+                "reference": "9c2774a1fcc9724839c7f009784420ed71831fde",
                 "shasum": ""
             },
             "require": {
@@ -441,7 +441,7 @@
                 "the-events-calendar/coding-standards": "dev-master",
                 "wp-coding-standards/wpcs": "^2.3"
             },
-            "time": "2023-01-30T18:33:24+00:00",
+            "time": "2023-06-06T13:25:04+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -458,23 +458,23 @@
             "description": "StellarWP plugin install/activation library.",
             "support": {
                 "issues": "https://github.com/stellarwp/installer/issues",
-                "source": "https://github.com/stellarwp/installer/tree/1.1.0"
+                "source": "https://github.com/stellarwp/installer/tree/1.1.1"
             },
             "install-path": "../stellarwp/installer"
         },
         {
             "name": "stellarwp/telemetry",
-            "version": "2.0.0",
-            "version_normalized": "2.0.0.0",
+            "version": "2.3.1",
+            "version_normalized": "2.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stellarwp/telemetry.git",
-                "reference": "e02f117dd260fc3d55fae28ec1dcfccfb83c9ea9"
+                "reference": "79f7a048c0f1b3beddd1dc07075e5e70ad39cd21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stellarwp/telemetry/zipball/e02f117dd260fc3d55fae28ec1dcfccfb83c9ea9",
-                "reference": "e02f117dd260fc3d55fae28ec1dcfccfb83c9ea9",
+                "url": "https://api.github.com/repos/stellarwp/telemetry/zipball/79f7a048c0f1b3beddd1dc07075e5e70ad39cd21",
+                "reference": "79f7a048c0f1b3beddd1dc07075e5e70ad39cd21",
                 "shasum": ""
             },
             "require": {
@@ -484,22 +484,16 @@
             },
             "require-dev": {
                 "automattic/vipwpcs": "^2.3",
-                "codeception/module-asserts": "^1.0",
-                "codeception/module-cli": "^1.0",
-                "codeception/module-db": "^1.0",
-                "codeception/module-filesystem": "^1.0",
-                "codeception/module-phpbrowser": "^1.0",
-                "codeception/module-webdriver": "^1.0",
-                "codeception/util-universalframework": "^1.0",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
                 "lucatume/di52": "3.0.0",
-                "lucatume/wp-browser": "^3.1",
+                "lucatume/wp-browser": "^4.0",
                 "phpcompatibility/phpcompatibility-wp": "*",
+                "phpunit/php-code-coverage": "^9.2",
                 "szepeviktor/phpstan-wordpress": "^1.1",
                 "the-events-calendar/coding-standards": "dev-master",
                 "wp-coding-standards/wpcs": "^2.3"
             },
-            "time": "2023-04-25T19:13:21+00:00",
+            "time": "2023-11-09T18:29:08+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -511,7 +505,8 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "StellarWP\\Telemetry\\Tests\\": "tests/"
+                    "StellarWP\\Telemetry\\Tests\\": "tests/",
+                    "StellarWP\\Telemetry\\Tests\\Support\\": "tests/_support/"
                 }
             },
             "scripts": {
@@ -554,7 +549,7 @@
             ],
             "description": "Telemetry library for StellarWP plugins.",
             "support": {
-                "source": "https://github.com/stellarwp/telemetry/tree/2.0.0",
+                "source": "https://github.com/stellarwp/telemetry/tree/2.3.1",
                 "issues": "https://github.com/stellarwp/telemetry/issues"
             },
             "install-path": "../stellarwp/telemetry"

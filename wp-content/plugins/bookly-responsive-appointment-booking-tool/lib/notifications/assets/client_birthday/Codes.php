@@ -4,10 +4,6 @@ namespace Bookly\Lib\Notifications\Assets\ClientBirthday;
 use Bookly\Lib\Entities\Customer;
 use Bookly\Lib\Notifications\Assets\Base;
 
-/**
- * Class Codes
- * @package Bookly\Lib\Notifications\Assets\ClientBirthday
- */
 class Codes extends Base\Codes
 {
     // Core
@@ -19,6 +15,7 @@ class Codes extends Base\Codes
     public $client_note;
     public $client_phone;
     public $client_birthday;
+    public $client_full_birthday;
 
     /**
      * Constructor.
@@ -35,6 +32,7 @@ class Codes extends Base\Codes
         $this->client_phone = $customer->getPhone();
         $this->client_note = $customer->getNotes();
         if ( $customer->getBirthday() ) {
+            $this->client_full_birthday = \Bookly\Lib\Utils\DateTime::formatDate( $customer->getBirthday() );
             $this->client_birthday = date_i18n( 'F j', strtotime( $customer->getBirthday() ) );
         }
     }
@@ -56,6 +54,7 @@ class Codes extends Base\Codes
             'client_phone' => $this->client_phone,
             'client_note' => $this->client_note,
             'client_birthday' => $this->client_birthday,
+            'client_full_birthday' => $this->client_full_birthday,
         );
 
         return $replace_codes;

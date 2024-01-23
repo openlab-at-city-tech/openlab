@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class Schedule
- * @package Bookly\Lib\Slots
- */
 class Schedule
 {
     /** @var RangeCollection[] */

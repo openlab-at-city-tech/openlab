@@ -30,6 +30,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
  * Note that calls to `Google\Http\Batch::execute()` do not clear the queued
  * requests. To start a new batch, be sure to create a new instance of this
  * class.
+ * @internal
  */
 class Batch
 {

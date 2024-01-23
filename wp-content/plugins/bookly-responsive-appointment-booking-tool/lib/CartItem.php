@@ -1,13 +1,15 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class CartItem
- * @package Bookly\Lib
- */
 class CartItem
 {
+    const TYPE_APPOINTMENT = 'appointment';
+    const TYPE_PACKAGE = 'package';
+    const TYPE_GIFT_CARD = 'gift_card';
+
     // Step service
+    /** @var  string */
+    protected $type = self::TYPE_APPOINTMENT;
     /** @var  int */
     protected $location_id;
     /** @var  int */
@@ -26,6 +28,8 @@ class CartItem
     protected $time_to;
     /** @var  int */
     protected $units;
+    /** @var  int */
+    protected $cart_type_id;
 
     // Step extras
     /** @var  array */
@@ -158,7 +162,7 @@ class CartItem
                 }
                 $service_price = $staff_service->getPrice() * $this->getUnits();
                 if ( $this->slots && $date_time ) {
-                    $service_price = Proxy\SpecialHours::adjustPrice( $service_price, $staff_id, $service_id, $location_id, $service_start, $this->getUnits(), date( 'w', strtotime( $date_time ) ) + 1 );
+                    $service_price = Proxy\SpecialHours::adjustPrice( $service_price, $staff_id, $service_id, $location_id, $service_start, date( 'w', strtotime( $date_time ) ) + 1 );
                 }
                 $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] = $service_price;
             }
@@ -299,6 +303,25 @@ class CartItem
      **************************************************************************/
 
     /**
+     * @return int|string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int|string $type
+     * @return CartItem
+     */
+    public function setType( $type )
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
      * Gets appointment_id
      *
      * @return int
@@ -382,6 +405,25 @@ class CartItem
     public function setServiceId( $service_id )
     {
         $this->service_id = $service_id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCartTypeId()
+    {
+        return $this->cart_type_id;
+    }
+
+    /**
+     * @param int $cart_type_id
+     * @return CartItem
+     */
+    public function setCartTypeId( $cart_type_id )
+    {
+        $this->cart_type_id = $cart_type_id;
 
         return $this;
     }

@@ -30,6 +30,10 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 */
 		public function __construct() {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if ( ! class_exists( '\Imagely\NGG\DataMappers\Image' ) && ! class_exists( 'C_Image_Mapper' ) ) {
+				ewwwio_debug_message( 'incompatible NGG, no C_Image_Mapper or \Imagely\* class' );
+				return;
+			}
 			add_filter( 'ngg_manage_images_number_of_columns', array( $this, 'ewww_manage_images_number_of_columns' ) );
 			add_filter( 'ngg_manage_images_columns', array( $this, 'manage_images_columns' ) );
 			add_filter( 'ngg_manage_images_row_actions', array( $this, 'ewww_manage_images_row_actions' ) );
@@ -59,9 +63,58 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		}
 
 		/**
+		 * Get an Ngg Image object.
+		 *
+		 * @param int $id The image ID number.
+		 * @return object|bool The Image object on success, false otherwise.
+		 */
+		public function get_ngg_image( $id ) {
+			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if ( class_exists( '\Imagely\NGG\DataMappers\Image' ) ) {
+				return \Imagely\NGG\DataMappers\Image::get_instance()->find( $id );
+			} elseif ( class_exists( 'C_Image_Mapper' ) ) {
+				return C_Image_Mapper::get_instance()->find( $id );
+			}
+			return false;
+		}
+
+		/**
+		 * Get the image sizes for a given Ngg Image.
+		 *
+		 * @param object $image An Ngg Image object.
+		 * @return array An array of image sub-sizes.
+		 */
+		public function get_image_sizes( $image = false ) {
+			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if ( class_exists( '\Imagely\NGG\DataStorage\Manager' ) ) {
+				return \Imagely\NGG\DataStorage\Manager::get_instance()->get_image_sizes( $image );
+			} elseif ( class_exists( 'C_Gallery_Storage' ) ) {
+				return C_Gallery_Storage::get_instance()->get_image_sizes( $image );
+			}
+			return array();
+		}
+
+		/**
+		 * Get the absolute path for a given image sub-size for a particular Ngg Image.
+		 *
+		 * @param object $image An Ngg Image object.
+		 * @param string $size The name of a particiular sub-size.
+		 * @return string The absolute path for an image file.
+		 */
+		public function get_image_abspath( $image, $size ) {
+			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+			if ( class_exists( '\Imagely\NGG\DataStorage\Manager' ) ) {
+				return \Imagely\NGG\DataStorage\Manager::get_instance()->get_image_abspath( $image, $size );
+			} elseif ( class_exists( 'C_Gallery_Storage' ) ) {
+				return C_Gallery_Storage::get_instance()->get_image_abspath( $image, $size );
+			}
+			return '';
+		}
+
+		/**
 		 * Adds the Bulk Optimize page to the NextGEN menu.
 		 */
-		function ewww_ngg_bulk_menu() {
+		public function ewww_ngg_bulk_menu() {
 			if ( ! defined( 'NGGFOLDER' ) ) {
 				return;
 			}
@@ -72,7 +125,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Removes unnecessary menu items from the NextGEN menu.
 		 */
-		function ewww_ngg_update_menu() {
+		public function ewww_ngg_update_menu() {
 			if ( ! defined( 'NGGFOLDER' ) ) {
 				return;
 			}
@@ -86,9 +139,24 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param string $size The name of the size being processed.
 		 * @return array The image sizing parameters, sanitized.
 		 */
-		function ewww_ngg_quality_param( $params, $size ) {
+		public function ewww_ngg_quality_param( $params, $size ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-			$settings = C_NextGen_Settings::get_instance();
+			$ngg_quality = false;
+			if ( class_exists( '\Imagely\NGG\Settings\Settings' ) ) {
+				$settings = Imagely\NGG\Settings\Settings::get_instance();
+				if ( 'full' === $size ) {
+					$ngg_quality = (int) $settings->get( 'imgQuality' );
+				} else {
+					$ngg_quality = (int) $settings->get( 'thumbquality' );
+				}
+			} elseif ( class_exists( 'C_NextGen_Settings' ) ) {
+				$settings = C_NextGen_Settings::get_instance();
+				if ( 'full' === $size ) {
+					$ngg_quality = (int) $settings->imgQuality; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				} else {
+					$ngg_quality = (int) $settings->thumbquality;
+				}
+			}
 			if ( is_array( $params ) ) {
 				ewwwio_debug_message( 'params is an array' );
 				if ( ! empty( $params['quality'] ) && 100 === (int) $params['quality'] ) {
@@ -100,11 +168,6 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 			}
 			if ( empty( $params ) || empty( $params['quality'] ) ) {
 				$wp_quality = (int) apply_filters( 'jpeg_quality', 82, 'image_resize' );
-				if ( 'full' === $size ) {
-					$ngg_quality = (int) $settings->imgQuality;
-				} else {
-					$ngg_quality = (int) $settings->thumbquality;
-				}
 				if ( empty( $ngg_quality ) || 100 === $ngg_quality ) {
 					$params['quality'] = 'full' === $size && 82 === $wp_quality ? 90 : $wp_quality;
 					ewwwio_debug_message( "setting quality for ngg to {$params['quality']} for $size" );
@@ -120,7 +183,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param array $meta The image metadata from NextGEN.
 		 * @return array The full list of known image sizes for this image.
 		 */
-		function maybe_get_more_sizes( $sizes, $meta ) {
+		public function maybe_get_more_sizes( $sizes, $meta ) {
 			if ( 2 === count( $sizes ) && ewww_image_optimizer_iterable( $meta ) ) {
 				foreach ( $meta as $meta_key => $meta_val ) {
 					if ( 'backup' !== $meta_key && is_array( $meta_val ) && isset( $meta_val['width'] ) && ! in_array( $meta_key, $sizes, true ) ) {
@@ -135,31 +198,18 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * Adds a newly uploaded image to the optimization queue.
 		 *
 		 * @param object|array $image The new image.
-		 * @param object       $storage A nextgen storage object for finding metadata.
 		 */
-		function queue_new_image( $image, $storage = null ) {
+		public function queue_new_image( $image ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-			if ( empty( $storage ) ) {
-				// Creating the 'registry' object for working with nextgen.
-				$registry = C_Component_Registry::get_instance();
-				// Creating a database storage object from the 'registry' object.
-				$storage = $registry->get_utility( 'I_Gallery_Storage' );
-			}
 			// Find the image id.
 			if ( is_array( $image ) ) {
 				$image_id = $image['id'];
-				$image    = $storage->object->_image_mapper->find( $image_id, true );
 			} else {
-				$image_id = $storage->object->_get_image_id( $image );
-			}
-			global $ewwwio_ngg2_background;
-			if ( ! is_object( $ewwwio_ngg2_background ) ) {
-				$ewwwio_ngg2_background = new EWWWIO_Ngg2_Background_Process();
+				$image_id = $image->pid;
 			}
 			ewwwio_debug_message( "backgrounding optimization for $image_id" );
-			$ewwwio_ngg2_background->push_to_queue( array( 'id' => $image_id ) );
-			$ewwwio_ngg2_background->dispatch();
-			ewww_image_optimizer_debug_log();
+			ewwwio()->background_ngg2->push_to_queue( array( 'id' => $image_id ) );
+			ewwwio()->background_ngg2->dispatch();
 		}
 
 		/**
@@ -168,29 +218,33 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @global object $ewww_image Contains more information about the image currently being processed.
 		 *
 		 * @param object|array $image The new image.
-		 * @param object       $storage A nextgen storage object for finding metadata.
 		 * @return object The image object with any modifications necessary.
 		 */
-		function ewww_added_new_image( $image, $storage = null ) {
+		public function ewww_added_new_image( $image ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-			if ( empty( $storage ) ) {
-				// Creating the 'registry' object for working with nextgen.
-				$registry = C_Component_Registry::get_instance();
-				// Creating a database storage object from the 'registry' object.
-				$storage = $registry->get_utility( 'I_Gallery_Storage' );
-			}
+
 			global $ewww_image;
 			$this->bulk_sizes = array();
+
 			// Find the image id.
 			if ( is_array( $image ) ) {
-				$image_id = $image['id'];
-				$image    = $storage->object->_image_mapper->find( $image_id, true );
+				$image_id  = $image['id'];
+				$ngg_image = $this->get_ngg_image( $image_id );
+				if ( ! $ngg_image ) {
+					return $image;
+				}
+				$image = $ngg_image;
 			} else {
-				$image_id = $storage->object->_get_image_id( $image );
+				if ( empty( $image->pid ) ) {
+					ewwwio_debug_message( 'image missing pid' );
+					return $image;
+				}
+				$image_id = $image->pid;
 			}
 			ewwwio_debug_message( "image id: $image_id" );
+
 			// Get an array of sizes available for the $image.
-			$sizes = $storage->get_image_sizes( $image );
+			$sizes = $this->get_image_sizes( $image );
 			$sizes = $this->maybe_get_more_sizes( $sizes, $image->meta_data );
 			// Run the optimizer on the image for each $size.
 			if ( ewww_image_optimizer_iterable( $sizes ) ) {
@@ -204,7 +258,11 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 						continue;
 					}
 					// Get the absolute path.
-					$file_path = $storage->get_image_abspath( $image, $size );
+					$file_path = $this->get_image_abspath( $image, $size );
+					if ( empty( $file_path ) ) {
+						ewwwio_debug_message( "no file found for $size" );
+						continue;
+					}
 					ewwwio_debug_message( "optimizing (nextgen) $size: $file_path" );
 					$ewww_image         = new EWWW_Image( $image_id, 'nextgen', $file_path );
 					$ewww_image->resize = $size;
@@ -225,29 +283,25 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param object $image A nextgen image object.
 		 * @param object $size The name of the size generated.
 		 */
-		function ewww_ngg_generated_image( $image, $size ) {
+		public function ewww_ngg_generated_image( $image, $size ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			global $ewww_image;
-			// Creating the 'registry' object for working with nextgen.
-			$registry = C_Component_Registry::get_instance();
-			// Creating a database storage object from the 'registry' object.
-			$storage            = $registry->get_utility( 'I_Gallery_Storage' );
-			$filename           = $storage->get_image_abspath( $image, $size );
+
+			$filename           = $this->get_image_abspath( $image, $size );
 			$ewww_image         = new EWWW_Image( $image->pid, 'nextgen', $filename );
 			$ewww_image->resize = $size;
-			if ( file_exists( $filename ) ) {
+			if ( is_file( $filename ) ) {
 				ewww_image_optimizer( $filename, 2 );
 				ewwwio_debug_message( "nextgen dynamic thumb saved: $filename" );
 				$image_size = ewww_image_optimizer_filesize( $filename );
 				ewwwio_debug_message( "optimized size: $image_size" );
 			}
-			ewww_image_optimizer_debug_log();
 		}
 
 		/**
 		 * Manually process an image from the NextGEN Gallery.
 		 */
-		function ewww_ngg_manual() {
+		public function ewww_ngg_manual() {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			// Check permission of current user.
 			$permissions = apply_filters( 'ewww_image_optimizer_manual_permissions', '' );
@@ -277,13 +331,9 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 			}
 			global $ewww_force;
 			$ewww_force = ! empty( $_REQUEST['ewww_force'] ) ? true : false;
-			// Creating the 'registry' object for working with nextgen.
-			$registry = C_Component_Registry::get_instance();
-			// Creating a database storage object from the 'registry' object.
-			$storage = $registry->get_utility( 'I_Gallery_Storage' );
 			// Get an image object.
-			$image   = $storage->object->_image_mapper->find( $id );
-			$image   = $this->ewww_added_new_image( $image, $storage );
+			$image   = $this->get_ngg_image( $id );
+			$image   = $this->ewww_added_new_image( $image );
 			$success = $this->ewww_manage_image_custom_column( '', $image );
 			if ( 'exceeded' === get_transient( 'ewww_image_optimizer_cloud_status' ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_exceeded' ) > time() ) {
 				ewwwio_ob_clean();
@@ -317,7 +367,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Restore an image from the NextGEN Gallery.
 		 */
-		function ewww_ngg_image_restore() {
+		public function ewww_ngg_image_restore() {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			// Check permission of current user.
 			$permissions = apply_filters( 'ewww_image_optimizer_manual_permissions', '' );
@@ -345,12 +395,8 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( array( 'error' => esc_html__( 'Access denied.', 'ewww-image-optimizer' ) ) ) );
 			}
-			// Creating the 'registry' object for working with nextgen.
-			$registry = C_Component_Registry::get_instance();
-			// Creating a database storage object from the 'registry' object.
-			$storage = $registry->get_utility( 'I_Gallery_Storage' );
 			// Get an image object.
-			$image = $storage->object->_image_mapper->find( $id );
+			$image = $this->get_ngg_image( $id );
 			global $eio_backup;
 			$eio_backup->restore_backup_from_meta_data( $image->pid, 'nextgen' );
 			$success = $this->ewww_manage_image_custom_column( '', $image );
@@ -363,7 +409,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 *
 		 * @param string $hook The hook value for the current page.
 		 */
-		function ewww_ngg_manual_actions_script( $hook ) {
+		public function ewww_ngg_manual_actions_script( $hook ) {
 			$screen = get_current_screen();
 			if ( is_null( $screen ) ) {
 				return;
@@ -395,7 +441,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param array $columns A list of existing column names.
 		 * @return array The revised list of column names.
 		 */
-		function manage_images_columns( $columns ) {
+		public function manage_images_columns( $columns ) {
 			if ( is_array( $columns ) ) {
 				$columns['ewww_image_optimizer'] = esc_html__( 'Image Optimizer', 'ewww-image-optimizer' );
 			}
@@ -408,8 +454,8 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param int $count The number of columns for the table display.
 		 * @return int The new number of columns.
 		 */
-		function ewww_manage_images_number_of_columns( $count ) {
-			$count++;
+		public function ewww_manage_images_number_of_columns( $count ) {
+			++$count;
 			add_filter( "ngg_manage_images_column_{$count}_header", array( $this, 'ewww_manage_images_columns' ) );
 			add_filter( "ngg_manage_images_column_{$count}_content", array( $this, 'ewww_manage_image_custom_column' ), 10, 2 );
 			return $count;
@@ -421,7 +467,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param array|null $columns List of headers for the table.
 		 * @return array|string The new list of headers, or the single header for EWWW IO.
 		 */
-		function ewww_manage_images_columns( $columns = null ) {
+		public function ewww_manage_images_columns( $columns = null ) {
 			if ( is_array( $columns ) ) {
 				$columns['ewww_image_optimizer'] = esc_html__( 'Image Optimizer', 'ewww-image-optimizer' );
 				return $columns;
@@ -438,20 +484,16 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param int    $id The image id for the current row.
 		 * @return string The column output, potentially echoed instead.
 		 */
-		function ewww_manage_image_custom_column( $column_name, $id ) {
+		public function ewww_manage_image_custom_column( $column_name, $id ) {
 			// Once we've found our custom column (newer versions will be blank).
 			if ( 'ewww_image_optimizer' === $column_name || ! $column_name ) {
 				ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-				// Creating the 'registry' object for working with nextgen.
-				$registry = C_Component_Registry::get_instance();
-				// Creating a database storage object from the 'registry' object.
-				$storage = $registry->get_utility( 'I_Gallery_Storage' );
 				ob_start();
 				if ( is_object( $id ) ) {
 					$image = $id;
 				} else {
 					// Get an image object.
-					$image = $storage->object->_image_mapper->find( $id );
+					$image = $this->get_ngg_image( $id );
 				}
 				echo '<div id="ewww-nextgen-status-' . (int) $image->pid . '">';
 				if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_debug' ) && ewww_image_optimizer_function_exists( 'print_r' ) ) {
@@ -463,7 +505,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				}
 
 				// Get the absolute path.
-				$file_path = $storage->get_image_abspath( $image, 'full' );
+				$file_path = $this->get_image_abspath( $image, 'full' );
 				// Get the mimetype of the image.
 				$type = ewww_image_optimizer_quick_mimetype( $file_path );
 
@@ -515,7 +557,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				}
 				// If we have metadata, populate db from meta.
 				if ( ! empty( $image->meta_data['ewww_image_optimizer'] ) ) {
-					$sizes = $storage->get_image_sizes( $image );
+					$sizes = $this->get_image_sizes( $image );
 					$sizes = $this->maybe_get_more_sizes( $sizes, $image->meta_data );
 					if ( ewww_image_optimizer_iterable( $sizes ) ) {
 						foreach ( $sizes as $size ) {
@@ -524,7 +566,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 							} elseif ( 'backup' === $size ) {
 								continue;
 							} else {
-								$file_path = $storage->get_image_abspath( $image, $size );
+								$file_path = $this->get_image_abspath( $image, $size );
 								$full_size = false;
 							}
 							ewww_image_optimizer_update_file_from_meta( $file_path, 'nextgen', $image->pid, $size );
@@ -566,7 +608,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param bool       $optimized Optional. True if the image has already been optimized. Default false.
 		 * @param bool       $restorable Optional. True if the image can be restored via the API. Default false.
 		 */
-		function ewww_render_optimize_action_link( $id, $image = null, $optimized = false, $restorable = false ) {
+		public function ewww_render_optimize_action_link( $id, $image = null, $optimized = false, $restorable = false ) {
 			if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_manual_permissions', '' ) ) ) {
 				return;
 			}
@@ -612,7 +654,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param object     $image A nextgen image object.
 		 * @return string The output from the action_link function.
 		 */
-		function ewww_render_optimize_action_link_capture( $id, $image = null ) {
+		public function ewww_render_optimize_action_link_capture( $id, $image = null ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			ob_start();
 			$this->ewww_render_optimize_action_link( $id, $image, false, false );
@@ -625,17 +667,15 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param array $actions A list of actions with to display under the image.
 		 * @return array The updated list of actions.
 		 */
-		function ewww_manage_images_row_actions( $actions ) {
+		public function ewww_manage_images_row_actions( $actions ) {
 			$actions['optimize'] = array( &$this, 'ewww_render_optimize_action_link_capture' );
 			return $actions;
 		}
 
 		/**
 		 * Output the html for the bulk optimize page.
-		 *
-		 * @global string $eio_debug In-memory debug log.
 		 */
-		function ewww_ngg_bulk_preview() {
+		public function ewww_ngg_bulk_preview() {
 			if ( ! empty( $_REQUEST['doaction'] ) ) {
 				if (
 					empty( $_REQUEST['_wpnonce'] ) ||
@@ -663,8 +703,8 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				return;
 			}
 			?>
-			<div class="wrap">
-				<h1><?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
+			<div class="ewww_bulk_wrap wrap">
+				<h1 class="wp-heading-inline"><?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
 				<?php
 				if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
 					ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) );
@@ -742,18 +782,18 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 			}
 			echo '</div>';
 			if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_debug' ) ) {
-				global $eio_debug;
 				echo '<div style="clear:both;"></div>';
-				echo '<p><strong>' . esc_html__( 'Debugging Information', 'ewww-image-optimizer' ) . ':</strong></p><div style="border:1px solid #e5e5e5;background:#fff;overflow:auto;height:300px;width:800px;">' . wp_kses_post( $eio_debug ) . '</div>';
+				echo '<p><strong>' . esc_html__( 'Debugging Information', 'ewww-image-optimizer' ) . ':</strong></p><div style="border:1px solid #e5e5e5;background:#fff;overflow:auto;height:300px;width:800px;">' . wp_kses_post( EWWW\Base::$debug_data ) . '</div>';
 			}
-			echo '</div>';
-			return;
+			?>
+			</div><!-- end .wrap -->
+			<?php
 		}
 
 		/**
 		 * Removes the nextgen jquery styling when it gets in the way.
 		 */
-		function ewww_ngg_style_remove() {
+		public function ewww_ngg_style_remove() {
 			wp_deregister_style( 'jquery-ui-nextgen' );
 			wp_deregister_style( 'ngg_progressbar' );
 			wp_deregister_style( 'nextgen_admin_css' );
@@ -772,7 +812,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 *
 		 * @param string $hook Identifier for the page being loaded.
 		 */
-		function ewww_ngg_bulk_script( $hook ) {
+		public function ewww_ngg_bulk_script( $hook ) {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			ewwwio_debug_message( $hook );
 			if ( strpos( $hook, 'ewww-ngg-bulk' ) === false ) {
@@ -879,7 +919,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Start the bulk operation.
 		 */
-		function ewww_ngg_bulk_init() {
+		public function ewww_ngg_bulk_init() {
 			$permissions = apply_filters( 'ewww_image_optimizer_bulk_permissions', '' );
 			$output      = array();
 			if ( empty( $_REQUEST['ewww_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-bulk' ) || ! current_user_can( $permissions ) ) {
@@ -916,15 +956,9 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 * @param int $id The ID number of the image.
 		 * @return string|bool The name of the current file or false.
 		 */
-		function ewww_ngg_bulk_filename( $id ) {
-			// Creating the 'registry' object for working with nextgen.
-			$registry = C_Component_Registry::get_instance();
-			// Creating a database storage object from the 'registry' object.
-			$storage = $registry->get_utility( 'I_Gallery_Storage' );
-			// Get an image object.
-			$image = $storage->object->_image_mapper->find( $id );
+		public function ewww_ngg_bulk_filename( $id ) {
 			// Get the filename for the image, and output our current status.
-			$file_path = esc_html( $storage->get_image_abspath( $image, 'full' ) );
+			$file_path = esc_html( $this->get_image_abspath( $id, 'full' ) );
 			if ( ! empty( $file_path ) ) {
 				return $file_path;
 			} else {
@@ -937,7 +971,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		 *
 		 * @global bool $ewww_defer Set to false to avoid deferring image optimization.
 		 */
-		function ewww_ngg_bulk_loop() {
+		public function ewww_ngg_bulk_loop() {
 			global $ewww_defer;
 			$ewww_defer  = false;
 			$output      = array();
@@ -960,13 +994,9 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 			// Get the list of attachments remaining from the db.
 			$attachments = get_option( 'ewww_image_optimizer_bulk_ngg_attachments' );
 			$id          = array_shift( $attachments );
-			// Creating the 'registry' object for working with nextgen.
-			$registry = C_Component_Registry::get_instance();
-			// Creating a database storage object from the 'registry' object.
-			$storage = $registry->get_utility( 'I_Gallery_Storage' );
 			// Get an image object.
-			$image       = $storage->object->_image_mapper->find( $id );
-			$image       = $this->ewww_added_new_image( $image, $storage );
+			$image       = $this->get_ngg_image( $id );
+			$image       = $this->ewww_added_new_image( $image );
 			$ewww_status = get_transient( 'ewww_image_optimizer_cloud_status' );
 			if ( ! empty( $ewww_status ) && preg_match( '/exceeded/', $ewww_status ) ) {
 				$output['error'] = esc_html__( 'License Exceeded', 'ewww-image-optimizer' );
@@ -974,7 +1004,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 				wp_die( wp_json_encode( $output ) );
 			}
 			// Output the results of the optimization.
-			$output['results'] = sprintf( '<p>' . esc_html__( 'Optimized image:', 'ewww-image-optimizer' ) . ' <strong>%s</strong><br>', esc_html( wp_basename( $storage->object->get_image_abspath( $image, 'full' ) ) ) );
+			$output['results'] = sprintf( '<p>' . esc_html__( 'Optimized image:', 'ewww-image-optimizer' ) . ' <strong>%s</strong><br>', esc_html( wp_basename( $this->get_image_abspath( $image, 'full' ) ) ) );
 			if ( ewww_image_optimizer_iterable( $this->bulk_sizes ) ) {
 				foreach ( $this->bulk_sizes as $size => $results_msg ) {
 					if ( 'backup' === $size ) {
@@ -1019,7 +1049,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Finish the bulk operation.
 		 */
-		function ewww_ngg_bulk_cleanup() {
+		public function ewww_ngg_bulk_cleanup() {
 			$permissions = apply_filters( 'ewww_image_optimizer_bulk_permissions', '' );
 			if ( empty( $_REQUEST['ewww_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-bulk' ) || ! current_user_can( $permissions ) ) {
 				ewwwio_ob_clean();
@@ -1035,7 +1065,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Insert a bulk optimize option in the actions list for the gallery and image management pages (via javascript, since we have no hooks).
 		 */
-		function ewww_ngg_bulk_actions_script() {
+		public function ewww_ngg_bulk_actions_script() {
 			global $current_screen;
 			if ( ( strpos( $current_screen->id, 'nggallery-manage-images' ) === false && strpos( $current_screen->id, 'nggallery-manage-gallery' ) === false ) || ! current_user_can( apply_filters( 'ewww_image_optimizer_bulk_permissions', '' ) ) ) {
 				return;
@@ -1052,7 +1082,7 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 		/**
 		 * Handles the bulk actions POST.
 		 */
-		function ewww_ngg_bulk_action_handler() {
+		public function ewww_ngg_bulk_action_handler() {
 			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 			if (
 				empty( $_REQUEST['_wpnonce'] ) ||
@@ -1101,35 +1131,3 @@ if ( ! class_exists( 'EWWW_Nextgen' ) ) {
 	global $ewwwngg;
 	$ewwwngg = new EWWW_Nextgen();
 } // End if().
-
-if ( ! empty( $_REQUEST['page'] ) && 'ngg_other_options' !== $_REQUEST['page'] && ! class_exists( 'EWWWIO_Gallery_Storage' ) && class_exists( 'Mixin' ) && class_exists( 'C_Gallery_Storage' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-	/**
-	 * Extension for NextGEN image generation.
-	 */
-	class EWWWIO_Gallery_Storage extends Mixin {
-		/**
-		 * Generates an image size (via the parent class) and then optimizes it.
-		 *
-		 * @param int|object $image A nextgen image object or the image ID number.
-		 * @param string     $size The name of the size.
-		 * @param array      $params Image generation parameters: width, height, and crop_frame.
-		 * @param bool       $skip_defaults I have no idea, ask the NextGEN devs...
-		 */
-		function generate_image_size( $image, $size, $params = null, $skip_defaults = false ) {
-			ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-			$success = $this->call_parent( 'generate_image_size', $image, $size, $params, $skip_defaults );
-			if ( $success ) {
-				$filename = $success->fileName;
-				ewww_image_optimizer( $filename );
-				ewwwio_debug_message( "nextgen dynamic thumb saved via extension: $filename" );
-				$image_size = ewww_image_optimizer_filesize( $filename );
-				ewwwio_debug_message( "optimized size: $image_size" );
-			}
-			ewww_image_optimizer_debug_log();
-			ewwwio_memory( __METHOD__ );
-			return $success;
-		}
-	}
-	$storage = C_Gallery_Storage::get_instance();
-	$storage->get_wrapped_instance()->add_mixin( 'EWWWIO_Gallery_Storage' );
-}

@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0-or-later
  *
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -14,7 +14,7 @@ class Installer {
 	 *
 	 * @since 1.1.0
 	 */
-	public const VERSION = '1.1.0';
+	public const VERSION = '1.1.1';
 
 	/**
 	 * Asset object.

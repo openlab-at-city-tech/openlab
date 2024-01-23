@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Lib\DataHolders\Booking\Item;
 use Bookly\Lib\DataHolders\Notification\Settings;
 
-/**
- * Class Notification
- * @package Bookly\Lib\Entities
- */
 class Notification extends Lib\Base\Entity
 {
     const TYPE_APPOINTMENT_REMINDER                          = 'appointment_reminder';

@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Config\Resource\ResourceInterfa
  * MessageCatalogueInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 interface MessageCatalogueInterface
 {

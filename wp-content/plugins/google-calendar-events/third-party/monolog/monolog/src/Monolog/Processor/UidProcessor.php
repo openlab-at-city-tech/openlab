@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Monolog\ResettableInterface;
  * Adds a unique identifier into records
  *
  * @author Simon Mönch <sm@webfactory.de>
+ * @internal
  */
 class UidProcessor implements ProcessorInterface, ResettableInterface
 {

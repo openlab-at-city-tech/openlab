@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Carbon;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInterface;
 if (!\class_exists(LazyTranslator::class, \false)) {
+    /** @internal */
     class LazyTranslator extends AbstractTranslator implements TranslatorStrongTypeInterface
     {
         public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null) : string

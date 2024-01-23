@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * Base Handler class providing basic close() support as well as handleBatch
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 abstract class Handler implements HandlerInterface
 {

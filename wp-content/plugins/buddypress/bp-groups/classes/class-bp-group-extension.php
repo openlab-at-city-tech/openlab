@@ -188,6 +188,14 @@ class BP_Group_Extension {
 	public $user_can_see_nav_item;
 
 	/**
+	 * The Callback function to use before showing the navigation item.
+	 *
+	 * @since 12.0.0
+	 * @var string
+	 */
+	public $show_tab_callback = '';
+
+	/**
 	 * Whether the current user can visit the tab.
 	 *
 	 * @since 2.1.0
@@ -222,6 +230,14 @@ class BP_Group_Extension {
 	 * @var string
 	 */
 	public $template_file = 'groups/single/plugins';
+
+	/**
+	 * The template file.
+	 *
+	 * @since 1.1.0
+	 * @var string
+	 */
+	public $edit_screen_template;
 
 	/** Protected *********************************************************/
 
@@ -283,14 +299,26 @@ class BP_Group_Extension {
 	 *
 	 * @param int|null $group_id ID of the group to display.
 	 */
-	public function display( $group_id = null ) {}
+	public function display( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
 
 	/**
 	 * Content displayed in a widget sidebar, if applicable.
 	 *
 	 * @since 1.1.0
 	 */
-	public function widget_display() {}
+	public function widget_display() {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
 
 	/*
 	 * *_screen() displays the settings form for the given context
@@ -299,14 +327,126 @@ class BP_Group_Extension {
 	 * be overridden by the more specific edit_*, create_*, and admin_*
 	 * versions.
 	 */
-	public function settings_screen( $group_id = null ) {}
-	public function settings_screen_save( $group_id = null ) {}
-	public function edit_screen( $group_id = null ) {}
-	public function edit_screen_save( $group_id = null ) {}
-	public function create_screen( $group_id = null ) {}
-	public function create_screen_save( $group_id = null ) {}
-	public function admin_screen( $group_id = null ) {}
-	public function admin_screen_save( $group_id = null ) {}
+
+	/**
+	 * Provide the fallback markup for Group's Create/Admin/Edit screens.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function settings_screen( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * Group's Fallback handler for the Create/Admin/Edit screens.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function settings_screen_save( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * The content of the Manage sub tab.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function edit_screen( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * Group Manage sub tab handler.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function edit_screen_save( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * The content of the group create step tab.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function create_screen( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * Group create step tab handler.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function create_screen_save( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * The content of Group's WP Administration screen metabox.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function admin_screen( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
+
+	/**
+	 * Group's WP Administration screen handler.
+	 *
+	 * @since 1.8.0
+	 *
+	 * @param int|null $group_id ID of the group to display.
+	 */
+	public function admin_screen_save( $group_id = null ) {
+		return new WP_Error(
+			'invalid-method',
+			/* translators: %s: Method name. */
+			sprintf( __( "Method '%s' not implemented. Must be overridden in subclass.", 'buddypress' ), __METHOD__ )
+		);
+	}
 
 	/** Setup *************************************************************/
 
@@ -328,6 +468,7 @@ class BP_Group_Extension {
 	 *
 	 * @since 1.8.0
 	 * @since 2.1.0 Added 'access' and 'show_tab' arguments to `$args`.
+	 * @since 12.0.0 Set the Group Extension screens.
 	 *
 	 * @param array $args {
 	 *     Array of initialization arguments.
@@ -364,36 +505,117 @@ class BP_Group_Extension {
 	 *                                           tab to group moderators and admins, specify
 	 *                                           `array( 'mod', 'admin' )`. Defaults to 'anyone' for public groups
 	 *                                           and 'member' for private groups.
+	 *    @type string|array  $show_tab_callback The function to execute to set the $show_tab argument.
 	 * }
 	 */
 	public function init( $args = array() ) {
 		// Store the raw arguments.
 		$this->params_raw = $args;
 
-		// Before this init() method was introduced, plugins were
-		// encouraged to set their config directly. For backward
-		// compatibility with these plugins, we detect whether this is
-		// one of those legacy plugins, and parse any legacy arguments
-		// with those passed to init().
+		/*
+		 * Before this init() method was introduced, plugins were
+		 * encouraged to set their config directly. For backward
+		 * compatibility with these plugins, we detect whether this is
+		 * one of those legacy plugins, and parse any legacy arguments
+		 * with those passed to init().
+		 */
 		$this->parse_legacy_properties();
 		$args = $this->parse_args_r( $args, $this->legacy_properties_converted );
 
 		// Parse with defaults.
-		$this->params = $this->parse_args_r( $args, array(
-			'slug'              => $this->slug,
-			'name'              => $this->name,
-			'visibility'        => $this->visibility,
-			'nav_item_position' => $this->nav_item_position,
-			'enable_nav_item'   => (bool) $this->enable_nav_item,
-			'nav_item_name'     => $this->nav_item_name,
-			'display_hook'      => $this->display_hook,
-			'template_file'     => $this->template_file,
-			'screens'           => $this->get_default_screens(),
-			'access'            => null,
-			'show_tab'          => null,
-		) );
+		$this->params = $this->parse_args_r(
+			$args,
+			array(
+				'slug'              => $this->slug,
+				'name'              => $this->name,
+				'visibility'        => $this->visibility,
+				'nav_item_position' => $this->nav_item_position,
+				'enable_nav_item'   => (bool) $this->enable_nav_item,
+				'nav_item_name'     => $this->nav_item_name,
+				'display_hook'      => $this->display_hook,
+				'template_file'     => $this->template_file,
+				'screens'           => $this->get_default_screens(),
+				'access'            => null,
+				'show_tab'          => null,
+				'show_tab_callback' => '',
+			)
+		);
+
+		if ( $this->params['show_tab_callback'] && is_callable( $this->params['show_tab_callback'] ) ) {
+			$this->show_tab_callback = $this->params['show_tab_callback'];
+		}
 
 		$this->initialized = true;
+
+		// Specific to BP Rewrites.
+		$bp                    = buddypress();
+		$group_extension_class = get_class( $this );
+		$slug                  = $this->params['slug'];
+		$name                  = $this->params['name'];
+		$rewrite_id_suffix     = str_replace( '-', '_', $slug );
+
+		// Populate Slugs And Names to allow BP Rewrites customizations.
+		if ( isset( $bp->groups->group_extensions[ $group_extension_class ] ) ) {
+			$default_data = array(
+				'slug' => $slug,
+				'name' => $name,
+			);
+
+			$bp->groups->group_extensions[ $group_extension_class ] = array(
+				'read'   => array(
+					$slug => array_merge(
+						$default_data,
+						array(
+							'rewrite_id' => 'bp_group_read_' . $rewrite_id_suffix,
+						)
+					),
+				),
+				'manage' => array(
+					$slug => array_merge(
+						$default_data,
+						array(
+							'rewrite_id' => 'bp_group_manage_' . $rewrite_id_suffix,
+						)
+					),
+				),
+				'create' => array(
+					$slug => array_merge(
+						$default_data,
+						array(
+							'rewrite_id' => 'bp_group_create_' . $rewrite_id_suffix,
+						)
+					),
+				),
+			);
+
+			if ( $this->params['nav_item_name'] ) {
+				$bp->groups->group_extensions[ $group_extension_class ]['read']['name'] = $this->params['nav_item_name'];
+			}
+
+			foreach ( $this->params['screens'] as $screen => $data ) {
+				$screen_key = $screen;
+				if ( 'admin' === $screen ) {
+					continue;
+				}
+
+				if ( 'edit' === $screen ) {
+					$screen_key = 'manage';
+				}
+
+				if ( ! $data['enabled'] ) {
+					unset( $bp->groups->group_extensions[ $group_extension_class ][ $screen_key ] );
+					continue;
+				}
+
+				if ( isset( $data['slug'] ) && $data['slug'] ) {
+					$bp->groups->group_extensions[ $group_extension_class ][ $screen_key ][ $slug ]['slug'] = $data['slug'];
+				}
+
+				if ( isset( $data['name'] ) && $data['name'] ) {
+					$bp->groups->group_extensions[ $group_extension_class ][ $screen_key ][ $slug ]['name'] = $data['name'];
+				}
+			}
+		}
 	}
 
 	/**
@@ -485,22 +707,37 @@ class BP_Group_Extension {
 		$group_id = bp_get_current_group_id();
 
 		// On the admin, get the group id out of the $_GET params.
-		if ( empty( $group_id ) && is_admin() && ( isset( $_GET['page'] ) && ( 'bp-groups' === $_GET['page'] ) ) && ! empty( $_GET['gid'] ) ) {
-			$group_id = (int) $_GET['gid'];
+		if ( empty( $group_id ) && is_admin() ) {
+			// phpcs:disable WordPress.Security.NonceVerification
+			$admin_page = '';
+			if ( isset( $_GET['page'] ) ) {
+				$admin_page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+			}
+
+			if ( 'bp-groups' === $admin_page && isset( $_GET['gid'] ) ) {
+				$group_id = (int) sanitize_text_field( wp_unslash( $_GET['gid'] ) );
+			}
+			// phpcs:enable WordPress.Security.NonceVerification
 		}
 
-		// This fallback will only be hit when the create step is very
-		// early.
+		/*
+		 * This fallback will only be hit when the create step is very
+		 * early.
+		 */
 		if ( empty( $group_id ) && bp_get_new_group_id() ) {
 			$group_id = bp_get_new_group_id();
 		}
 
-		// On some setups, the group id has to be fetched out of the
-		// $_POST array
-		// @todo Figure out why this is happening during group creation.
+		/*
+		 * On some setups, the group id has to be fetched out of the
+		 * $_POST array
+		 * @todo Figure out why this is happening during group creation.
+		 */
+		// phpcs:disable WordPress.Security.NonceVerification
 		if ( empty( $group_id ) && isset( $_POST['group_id'] ) ) {
-			$group_id = (int) $_POST['group_id'];
+			$group_id = (int) sanitize_text_field( wp_unslash( $_POST['group_id'] ) );
 		}
+		// phpcs:enable WordPress.Security.NonceVerification
 
 		return $group_id;
 	}
@@ -579,8 +816,10 @@ class BP_Group_Extension {
 		// Tab Access.
 		$this->user_can_visit = false;
 
-		// Backward compatibility for components that do not provide
-		// explicit 'access' parameter.
+		/*
+		 * Backward compatibility for components that do not provide
+		 * explicit 'access' parameter.
+		 */
 		if ( empty( $this->params['access'] ) ) {
 			if ( false === $this->params['enable_nav_item'] ) {
 				$this->params['access'] = 'noone';
@@ -603,8 +842,10 @@ class BP_Group_Extension {
 			$access_conditions = explode( ',', $access_conditions );
 		}
 
-		// If the current user meets at least one condition, the
-		// get access.
+		/*
+		 * If the current user meets at least one condition, the
+		 * get access.
+		 */
 		foreach ( $access_conditions as $access_condition ) {
 			if ( $this->user_meets_access_condition( $access_condition ) ) {
 				$this->user_can_visit = true;
@@ -615,20 +856,31 @@ class BP_Group_Extension {
 		// Tab Visibility.
 		$this->user_can_see_nav_item = false;
 
-		// Backward compatibility for components that do not provide
-		// explicit 'show_tab' parameter.
+		// Use the provided callback to show or hide the Group extension tab.
+		if ( $this->show_tab_callback ) {
+			$this->params['show_tab'] = call_user_func_array( $this->show_tab_callback, array( $this->group_id ) );
+		}
+
+		/*
+		 * Backward compatibility for components that do not provide
+		 * explicit 'show_tab_callback' or 'show_tab' parameters.
+		 */
 		if ( empty( $this->params['show_tab'] ) ) {
 			if ( false === $this->params['enable_nav_item'] ) {
-				// The enable_nav_item index is only false if it's been
-				// defined explicitly as such in the
-				// constructor. So we always trust this value.
+				/*
+				 * The enable_nav_item index is only false if it's been
+				 * defined explicitly as such in the
+				 * constructor. So we always trust this value.
+				 */
 				$this->params['show_tab'] = 'noone';
 
 			} elseif ( isset( $this->params_raw['enable_nav_item'] ) || isset( $this->params_raw['visibility'] ) ) {
-				// If enable_nav_item or visibility is passed,
-				// we assume this  is a legacy extension.
-				// Legacy behavior is that enable_nav_item=true +
-				// visibility=private implies members-only.
+				/*
+				 * If enable_nav_item or visibility is passed,
+				 * we assume this  is a legacy extension.
+				 * Legacy behavior is that enable_nav_item=true +
+				 * visibility=private implies members-only.
+				 */
 				if ( 'public' !== $this->visibility ) {
 					$this->params['show_tab'] = 'member';
 				} else {
@@ -636,8 +888,10 @@ class BP_Group_Extension {
 				}
 
 			} else {
-				// No show_tab or enable_nav_item value is
-				// available, so match the value of 'access'.
+				/*
+				 * No show_tab or enable_nav_item value is
+				 * available, so match the value of 'access'.
+				 */
 				$this->params['show_tab'] = $this->params['access'];
 			}
 		}
@@ -648,8 +902,10 @@ class BP_Group_Extension {
 			$access_conditions = explode( ',', $access_conditions );
 		}
 
-		// If the current user meets at least one condition, the
-		// get access.
+		/*
+		 * If the current user meets at least one condition, the
+		 * get access.
+		 */
 		foreach ( $access_conditions as $access_condition ) {
 			if ( $this->user_meets_access_condition( $access_condition ) ) {
 				$this->user_can_see_nav_item = true;
@@ -702,6 +958,26 @@ class BP_Group_Extension {
 	/** Display ***********************************************************/
 
 	/**
+	 * Returns the Rewrite ID of the Group Extension Item according to the context.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param string $context One of these contexts: 'create', 'manage', 'read'.
+	 * @return string         The found Rewrite ID, an empty string otherwise.
+	 */
+	protected function get_rewrite_id_for( $context = '' ) {
+		$rewrite_id            = '';
+		$group_extensions      = buddypress()->groups->group_extensions;
+		$group_extension_class = get_class( $this );
+
+		if ( isset( $group_extensions[ $group_extension_class ][ $context ][ $this->slug ]['rewrite_id'] ) ) {
+			$rewrite_id = $group_extensions[ $group_extension_class ][ $context ][ $this->slug ]['rewrite_id'];
+		}
+
+		return $rewrite_id;
+	}
+
+	/**
 	 * Hook this extension's group tab into BuddyPress, if necessary.
 	 *
 	 * @since 1.8.0
@@ -721,47 +997,58 @@ class BP_Group_Extension {
 		// If the user can see the nav item, we create it.
 		$user_can_see_nav_item = $this->user_can_see_nav_item();
 
-		if ( $user_can_see_nav_item ) {
-			$group_permalink = bp_get_group_permalink( groups_get_current_group() );
-
-			bp_core_create_subnav_link( array(
-				'name'            => ! $this->nav_item_name ? $this->name : $this->nav_item_name,
-				'slug'            => $this->slug,
-				'parent_slug'     => bp_get_current_group_slug(),
-				'parent_url'      => $group_permalink,
-				'position'        => $this->nav_item_position,
-				'item_css_id'     => 'nav-' . $this->slug,
-				'screen_function' => array( &$this, '_display_hook' ),
-				'user_has_access' => $user_can_see_nav_item,
-				'no_access_url'   => $group_permalink,
-			), 'groups' );
-		}
-
 		// If the user can visit the screen, we register it.
 		$user_can_visit = $this->user_can_visit();
 
-		if ( $user_can_visit ) {
-			$group_permalink = bp_get_group_permalink( groups_get_current_group() );
+		if ( $user_can_see_nav_item || $user_can_visit ) {
+			$group_permalink = bp_get_group_url( groups_get_current_group() );
+		}
 
-			bp_core_register_subnav_screen_function( array(
-				'slug'            => $this->slug,
-				'parent_slug'     => bp_get_current_group_slug(),
-				'screen_function' => array( &$this, '_display_hook' ),
-				'user_has_access' => $user_can_visit,
-				'no_access_url'   => $group_permalink,
-			), 'groups' );
+		if ( $user_can_see_nav_item ) {
+			bp_core_create_subnav_link(
+				array(
+					'name'            => ! $this->nav_item_name ? $this->name : $this->nav_item_name,
+					'slug'            => $this->slug,
+					'parent_slug'     => bp_get_current_group_slug(),
+					'position'        => $this->nav_item_position,
+					'item_css_id'     => 'nav-' . $this->slug,
+					'screen_function' => array( &$this, '_display_hook' ),
+					'user_has_access' => $user_can_see_nav_item,
+					'no_access_url'   => $group_permalink,
+				),
+				'groups'
+			);
+		}
+
+		if ( $user_can_visit ) {
+			bp_core_register_subnav_screen_function(
+				array(
+					'slug'            => $this->slug,
+					'parent_slug'     => bp_get_current_group_slug(),
+					'screen_function' => array( &$this, '_display_hook' ),
+					'user_has_access' => $user_can_visit,
+					'no_access_url'   => $group_permalink,
+				),
+				'groups'
+			);
 
 			// When we are viewing the extension display page, set the title and options title.
 			if ( bp_is_current_action( $this->slug ) ) {
 				add_filter( 'bp_group_user_has_access',   array( $this, 'group_access_protection' ), 10, 2 );
 
 				$extension_name = $this->name;
-				add_action( 'bp_template_content_header', function() use ( $extension_name ) {
-					echo esc_attr( $extension_name );
-				} );
-				add_action( 'bp_template_title', function() use ( $extension_name ) {
-					echo esc_attr( $extension_name );
-				} );
+				add_action(
+					'bp_template_content_header',
+					function() use ( $extension_name ) {
+						echo esc_attr( $extension_name );
+					}
+				);
+				add_action(
+					'bp_template_title',
+					function() use ( $extension_name ) {
+						echo esc_attr( $extension_name );
+					}
+				);
 			}
 		}
 
@@ -862,8 +1149,11 @@ class BP_Group_Extension {
 		if ( ! $user_can_visit && is_user_logged_in() ) {
 			$current_group = groups_get_group( $this->group_id );
 
-			$no_access_args['message'] = __( 'You do not have access to this content.', 'buddypress' );
-			$no_access_args['root'] = bp_get_group_permalink( $current_group ) . 'home/';
+			$no_access_args['message']  = __( 'You do not have access to this content.', 'buddypress' );
+			$no_access_args['root']     = bp_get_group_url(
+				$current_group,
+				bp_groups_get_path_chunks( array( 'home' ) )
+			);
 			$no_access_args['redirect'] = false;
 		}
 
@@ -883,20 +1173,33 @@ class BP_Group_Extension {
 			return;
 		}
 
+		$bp     = buddypress();
 		$screen = $this->screens['create'];
 
-		// Insert the group creation step for the new group extension.
-		buddypress()->groups->group_creation_steps[ $screen['slug'] ] = array(
-			'name'     => $screen['name'],
-			'slug'     => $screen['slug'],
-			'position' => $screen['position'],
-		);
+		if ( ! isset( $bp->groups->group_creation_steps[ $screen['slug'] ] ) ) {
+			$create_data = array(
+				'name'     => $screen['name'],
+				'slug'     => $screen['slug'],
+				'position' => $screen['position'],
+			);
 
-		// The maybe_ methods check to see whether the create_*
-		// callbacks should be invoked (ie, are we on the
-		// correct group creation step). Hooked in separate
-		// methods because current creation step info not yet
-		// available at this point.
+			$rewrite_id = $this->get_rewrite_id_for( 'create' );
+			if ( $rewrite_id ) {
+				$create_data['rewrite_id']   = $rewrite_id;
+				$create_data['default_slug'] = $screen['slug'];
+			}
+
+			// Insert the group creation step for the new group extension.
+			$bp->groups->group_creation_steps[ $screen['slug'] ] = $create_data;
+		}
+
+		/*
+		 * The maybe_ methods check to see whether the create_*
+		 * callbacks should be invoked (ie, are we on the
+		 * correct group creation step). Hooked in separate
+		 * methods because current creation step info not yet
+		 * available at this point.
+		 */
 		add_action( 'groups_custom_create_steps', array( $this, 'maybe_create_screen' ) );
 		add_action( 'groups_create_group_step_save_' . $screen['slug'], array( $this, 'maybe_create_screen_save' ) );
 	}
@@ -914,8 +1217,10 @@ class BP_Group_Extension {
 		call_user_func( $this->screens['create']['screen_callback'], $this->group_id );
 		$this->nonce_field( 'create' );
 
-		// The create screen requires an additional nonce field
-		// due to a quirk in the way the templates are built.
+		/*
+		 * The create screen requires an additional nonce field
+		 * due to a quirk in the way the templates are built.
+		 */
 		wp_nonce_field( 'groups_create_save_' . bp_get_groups_current_create_step(), '_wpnonce', false );
 	}
 
@@ -951,19 +1256,15 @@ class BP_Group_Extension {
 			return;
 		}
 
-		$screen = $this->screens['edit'];
-
-		$position = isset( $screen['position'] ) ? (int) $screen['position'] : 10;
-		$position += 40;
-
+		$screen        = $this->screens['edit'];
+		$position      = isset( $screen['position'] ) ? (int) $screen['position'] : 10;
+		$position     += 40;
 		$current_group = groups_get_current_group();
-		$admin_link    = trailingslashit( bp_get_group_permalink( $current_group ) . 'admin' );
 
 		$subnav_args = array(
 			'name'            => $screen['name'],
 			'slug'            => $screen['slug'],
 			'parent_slug'     => $current_group->slug . '_manage',
-			'parent_url'      => $admin_link,
 			'user_has_access' => bp_is_item_admin(),
 			'position'        => $position,
 			'screen_function' => 'groups_screen_group_admin',
@@ -983,8 +1284,10 @@ class BP_Group_Extension {
 
 			add_action( 'groups_custom_edit_steps', array( &$this, 'call_edit_screen' ) );
 
-			// Determine the proper template and save for later
-			// loading.
+			/*
+			 * Determine the proper template and save for later
+			 * loading.
+			 */
 			if ( '' !== bp_locate_template( array( 'groups/single/home.php' ), false ) ) {
 				$this->edit_screen_template = '/groups/single/home';
 			} else {
@@ -997,8 +1300,10 @@ class BP_Group_Extension {
 				$this->edit_screen_template = '/groups/single/plugins';
 			}
 
-			// We load the template at bp_screens, to give all
-			// extensions a chance to load.
+			/*
+			 * We load the template at bp_screens, to give all
+			 * extensions a chance to load.
+			 */
 			add_action( 'bp_screens', array( $this, 'call_edit_screen_template_loader' ) );
 		}
 	}
@@ -1039,16 +1344,20 @@ class BP_Group_Extension {
 			return;
 		}
 
-		// When DOING_AJAX, the POST global will be populated, but we
-		// should assume it's a save.
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		/*
+		 * When DOING_AJAX, the POST global will be populated, but we
+		 * should assume it's a save.
+		 */
+		if ( wp_doing_ajax() ) {
 			return;
 		}
 
 		$this->check_nonce( 'edit' );
 
-		// Detect whether the screen_save_callback is performing a
-		// redirect, so that we don't do one of our own.
+		/*
+		 * Detect whether the screen_save_callback is performing a
+		 * redirect, so that we don't do one of our own.
+		 */
 		add_filter( 'wp_redirect', array( $this, 'detect_post_save_redirect' ) );
 
 		// Call the extension's save routine.
@@ -1200,11 +1509,17 @@ class BP_Group_Extension {
 	 * @since 1.7.0
 	 */
 	public function _meta_box_display_callback() {
-		$group_id = isset( $_GET['gid'] ) ? (int) $_GET['gid'] : 0;
-		$screen   = $this->screens['admin'];
+		// phpcs:disable WordPress.Security.NonceVerification
+		$group_id = 0;
+		if ( isset( $_GET['gid'] ) ) {
+			$group_id = (int) sanitize_text_field( wp_unslash( $_GET['gid'] ) );
+		}
+		// phpcs:enable WordPress.Security.NonceVerification
+
+		$screen = $this->screens['admin'];
 
 		$extension_slug = $this->slug;
-		$callback = function() use ( $extension_slug, $group_id ) {
+		$callback       = function() use ( $extension_slug, $group_id ) {
 			do_action( 'bp_groups_admin_meta_box_content_' . $extension_slug, $group_id );
 		};
 

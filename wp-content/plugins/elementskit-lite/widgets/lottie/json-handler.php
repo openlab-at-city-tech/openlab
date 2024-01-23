@@ -44,9 +44,10 @@ class ElementsKit_Json_Handler {
 		$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
 
 		if(self::EXT !== $ext) {
-			$file['error'] = sprintf(
-				__('The uploaded %s file is not supported. Please upload a valid JSON file', 'elementskit-lite'),
-				$file['name']
+			$file['error'] = sprintf('%1a %2s $3s',
+				esc_html__('The uploaded', 'elementskit-lite'),
+				$file['name'],
+				esc_html__('file is not supported. Please upload a valid JSON file', 'elementskit-lite'),
 			);
 
 			return $file;

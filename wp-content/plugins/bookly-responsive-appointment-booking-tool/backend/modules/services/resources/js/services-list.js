@@ -165,10 +165,11 @@ jQuery(function($) {
     /**
      * On filter search change.
      */
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
     filters.search
-        .on('keyup', function() {
-            dt.ajax.reload();
-        })
+        .on('keyup', onChangeFilter)
         .on('keydown', function(e) {
             if (e.keyCode == 13) {
                 e.preventDefault();
@@ -177,9 +178,7 @@ jQuery(function($) {
         })
     ;
     filters.category
-        .on('change', function() {
-            dt.ajax.reload();
-        });
+        .on('change', onChangeFilter);
 
     /**
      * Select all appointments.
@@ -243,7 +242,7 @@ jQuery(function($) {
                 },
                 function(response) {
                     if (response.success) {
-                        dt.ajax.reload();
+                        dt.ajax.reload(null, false);
                         BooklyServiceOrderDialogL10n.services.push({id: response.data.id, title: response.data.title});
                     } else {
                         requiredBooklyPro();

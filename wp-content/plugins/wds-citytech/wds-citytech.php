@@ -1422,10 +1422,17 @@ function ra_copy_blog_page( $group_id ) {
 							 * on the cloned site, and so the t.term_order clause will
 							 * always trigger an error.
 							 */
-							remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+							$taxonomy_terms_order_is_active = function_exists( 'TO_apply_order_filter' );
+							if ( $taxonomy_terms_order_is_active ) {
+								remove_filter( 'terms_clauses', 'TO_apply_order_filter', 10 );
+							}
+
 							OpenLab\NavMenus\add_group_menu_item( $group_id );
 							OpenLab\NavMenus\add_home_menu_item();
-							add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+
+							if ( $taxonomy_terms_order_is_active ) {
+								add_filter( 'terms_clauses', 'TO_apply_order_filter', 10, 3 );
+							}
 
 							restore_current_blog();
 							$msg = __( 'Blog Copied' );
@@ -2717,6 +2724,10 @@ add_filter( 'default_option_rta_from_tag_clouds', 'openlab_wpa_return_on' );
 add_action(
 	'plugins_loaded',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		remove_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
 	}
 );
@@ -2727,6 +2738,10 @@ add_action(
 add_action(
 	'widgets_init',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		unregister_widget( 'Wp_Accessibility_Toolbar' );
 	},
 	20
@@ -2738,6 +2753,10 @@ add_action(
 add_action(
 	'admin_menu',
 	function() {
+		if ( ! function_exists( 'wpa_add_inner_box' ) ) {
+			return;
+		}
+
 		$allowed = get_option( 'wpa_post_types', array() );
 		if ( is_array( $allowed ) ) {
 			foreach ( $allowed as $post_type ) {
@@ -3563,3 +3582,120 @@ function openlab_enable_captions_on_video_embeds( $html ) {
 	return $html;
 }
 add_filter( 'oembed_result', 'openlab_enable_captions_on_video_embeds' );
+
+/** Distributor **********************************************************/
+
+/**
+ * Sets registration info for Distributor.
+ *
+ * @param array $settings Distributor settings.
+ * @return array
+ */
+function openlab_distributor_settings( $settings ) {
+	$distributor_key   = defined( 'OPENLAB_DISTRIBUTOR_KEY' ) ? OPENLAB_DISTRIBUTOR_KEY : '';
+	$distributor_email = defined( 'OPENLAB_DISTRIBUTOR_EMAIL' ) ? OPENLAB_DISTRIBUTOR_EMAIL : '';
+
+	if ( ! $distributor_key || ! $distributor_email ) {
+		return $settings;
+	}
+
+	if ( ! is_array( $settings ) ) {
+		$settings = [];
+	}
+
+	$settings['license_key']   = $distributor_key;
+	$settings['email']         = $distributor_email;
+	$settings['valid_license'] = true;
+
+	return $settings;
+}
+add_filter( 'default_option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'site_option_dt_settings', 'openlab_distributor_settings' );
+add_filter( 'default_site_option_dt_settings', 'openlab_distributor_settings' );
+
+/**
+ * Loads JS that removes the 'Registration Key' section from the Distributor settings panel.
+ */
+add_action(
+	'admin_enqueue_scripts',
+	function( $hook ) {
+		if ( 'distributor_page_distributor-settings' !== $hook ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-distributor-settings', plugins_url( 'wds-citytech/assets/js/distributor-settings.js' ), [ 'jquery' ], OL_VERSION );
+	}
+);
+
+/**
+ * Better population of "authorized sites" list.
+ *
+ * Distributor queries all network sites up to 1000.
+ */
+add_filter(
+	'dt_pre_get_authorized_sites',
+	function( $pre_sites, $context ) {
+		$user_id = get_current_user_id();
+
+		$last_changed = get_site_option( 'last_changed_sites' );
+
+		if ( ! $last_changed ) {
+			$last_changed = time();
+			update_site_option( 'last_changed_sites', $last_changed );
+		}
+
+		$cache_key        = "authorized_sites:$user_id:$context:$last_changed";
+		$authorized_sites = get_transient( $cache_key );
+		if ( false === $authorized_sites ) {
+			$authorized_sites = array();
+			$blogs_of_user    = get_blogs_of_user( $user_id );
+			$current_blog_id  = (int) get_current_blog_id();
+
+			foreach ( $blogs_of_user as $blog_of_user ) {
+				$blog_id = (int) $blog_of_user->userblog_id;
+
+				if ( $blog_id === $current_blog_id ) {
+					continue;
+				}
+
+				$base_url = get_site_url( $blog_id );
+
+				if ( empty( $base_url ) ) {
+					continue;
+				}
+
+				switch_to_blog( $blog_id );
+
+				$post_types            = get_post_types();
+				$authorized_post_types = array();
+
+				foreach ( $post_types as $post_type ) {
+					$post_type_object = get_post_type_object( $post_type );
+
+					if ( current_user_can( $post_type_object->cap->create_posts ) ) {
+						$authorized_post_types[] = $post_type;
+					}
+				}
+
+				if ( ! empty( $authorized_post_types ) ) {
+					$authorized_sites[] = array(
+						'site'       => get_site( $blog_id ),
+						'post_types' => $authorized_post_types,
+					);
+				}
+
+				restore_current_blog();
+			}
+		}
+
+		// Make sure we save and return an array.
+		$authorized_sites = ! is_array( $authorized_sites ) ? array() : $authorized_sites;
+
+		set_transient( $cache_key, $authorized_sites, 15 * MINUTE_IN_SECONDS );
+
+		return $authorized_sites;
+	},
+	10,
+	2
+);

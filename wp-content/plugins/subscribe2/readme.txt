@@ -3,8 +3,8 @@ Contributors: tareq1988, nizamuddinbabu, wemail
 Donate link: https://getwemail.io
 Tags: posts, subscription, email, subscribe, notify, notification, newsletter, post notification, email marketing, optin, form
 Requires at least: 4.0
-Tested up to: 6.1.1
-Stable tag: 10.41
+Tested up to: 6.4.1
+Stable tag: 10.42
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -71,6 +71,11 @@ This token will automatically be replaced by dynamic subscription information an
 [Visit FAQ site](https://subscribe2.wordpress.com/support/faqs/)
 
 == Changelog ==
+
+= 10.42 (12th October, 2023) =
+
+* Fix: Subscribers searching filter can't search by email address.
+* Fix: Post notification email is not sending to public subscribers.
 
 = 10.41 (23rd June, 2023) =
 

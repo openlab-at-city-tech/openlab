@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Composer\Script\Event;
 use InvalidArgumentException;
 use SimpleCalendar\plugin_deps\Symfony\Component\Filesystem\Filesystem;
 use SimpleCalendar\plugin_deps\Symfony\Component\Finder\Finder;
+/** @internal */
 class Composer
 {
     /**

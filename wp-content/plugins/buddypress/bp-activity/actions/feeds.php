@@ -24,15 +24,17 @@ function bp_activity_action_sitewide_feed() {
 	$link = bp_get_activity_directory_permalink();
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'sitewide',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'sitewide',
 
-		/* translators: %s Site Name */
-		'title'         => sprintf( __( '%s | Site-Wide Activity', 'buddypress' ), bp_get_site_name() ),
-		'link'          => $link,
-		'description'   => __( 'Activity feed for the entire site.', 'buddypress' ),
-		'activity_args' => 'display_comments=threaded'
-	) );
+			/* translators: %s Site Name */
+			'title'         => sprintf( __( '%s | Site-Wide Activity', 'buddypress' ), bp_get_site_name() ),
+			'link'          => $link,
+			'description'   => __( 'Activity feed for the entire site.', 'buddypress' ),
+			'activity_args' => 'display_comments=threaded'
+		)
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );
@@ -52,20 +54,22 @@ function bp_activity_action_personal_feed() {
 		return false;
 	}
 
-	$link = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() );
+	$link = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug() ) ) );
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'personal',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'personal',
 
-		/* translators: 1: Site Name. 2: User Display Name. */
-		'title'         => sprintf( _x( '%1$s | %2$s | Activity', 'Personal activity feed title', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
-		'link'          => $link,
+			/* translators: 1: Site Name. 2: User Display Name. */
+			'title'         => sprintf( _x( '%1$s | %2$s | Activity', 'Personal activity feed title', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+			'link'          => $link,
 
-		/* translators: %s: User Display Name */
-		'description'   => sprintf( __( 'Activity feed for %s.', 'buddypress' ), bp_get_displayed_user_fullname() ),
-		'activity_args' => 'user_id=' . bp_displayed_user_id()
-	) );
+			/* translators: %s: User Display Name */
+			'description'   => sprintf( __( 'Activity feed for %s.', 'buddypress' ), bp_get_displayed_user_fullname() ),
+			'activity_args' => 'user_id=' . bp_displayed_user_id()
+		)
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );
@@ -85,20 +89,22 @@ function bp_activity_action_friends_feed() {
 		return false;
 	}
 
-	$link = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/' . bp_get_friends_slug() );
+	$link = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug(), bp_get_friends_slug() ) ) );
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'friends',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'friends',
 
-		/* translators: 1: Site Name 2: User Display Name */
-		'title'         => sprintf( __( '%1$s | %2$s | Friends Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
-		'link'          => $link,
+			/* translators: 1: Site Name 2: User Display Name */
+			'title'         => sprintf( __( '%1$s | %2$s | Friends Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+			'link'          => $link,
 
-		/* translators: %s: User Display Name */
-		'description'   => sprintf( __( "Activity feed for %s's friends.", 'buddypress' ), bp_get_displayed_user_fullname() ),
-		'activity_args' => 'scope=friends'
-	) );
+			/* translators: %s: User Display Name */
+			'description'   => sprintf( __( "Activity feed for %s's friends.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+			'activity_args' => 'scope=friends'
+		)
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );
@@ -121,24 +127,26 @@ function bp_activity_action_my_groups_feed() {
 	// Get displayed user's group IDs.
 	$groups    = groups_get_user_groups();
 	$group_ids = implode( ',', $groups['groups'] );
-	$link      = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/' . bp_get_groups_slug() );
+	$link      = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug(), bp_get_groups_slug() ) ) );
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'mygroups',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'mygroups',
 
-		/* translators: 1: Site Name 2: User Display Name */
-		'title'         => sprintf( __( '%1$s | %2$s | Group Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
-		'link'          => $link,
+			/* translators: 1: Site Name 2: User Display Name */
+			'title'         => sprintf( __( '%1$s | %2$s | Group Activity', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+			'link'          => $link,
 
-		/* translators: %s: User Display Name */
-		'description'   => sprintf( __( "Public group activity feed of which %s is a member.", 'buddypress' ), bp_get_displayed_user_fullname() ),
-		'activity_args' => array(
-			'object'           => buddypress()->groups->id,
-			'primary_id'       => $group_ids,
-			'display_comments' => 'threaded'
+			/* translators: %s: User Display Name */
+			'description'   => sprintf( __( 'Public group activity feed of which %s is a member.', 'buddypress' ), bp_get_displayed_user_fullname() ),
+			'activity_args' => array(
+				'object'           => buddypress()->groups->id,
+				'primary_id'       => $group_ids,
+				'display_comments' => 'threaded'
+			)
 		)
-	) );
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );
@@ -162,22 +170,24 @@ function bp_activity_action_mentions_feed() {
 		return false;
 	}
 
-	$link = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/mentions' );
+	$link = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug(), 'mentions' ) ) );
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'mentions',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'mentions',
 
-		/* translators: 1: Site Name 2: User Display Name */
-		'title'         => sprintf( __( '%1$s | %2$s | Mentions', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
-		'link'          => $link,
+			/* translators: 1: Site Name 2: User Display Name */
+			'title'         => sprintf( __( '%1$s | %2$s | Mentions', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+			'link'          => $link,
 
-		/* translators: %s: User Display Name */
-		'description'   => sprintf( __( "Activity feed mentioning %s.", 'buddypress' ), bp_get_displayed_user_fullname() ),
-		'activity_args' => array(
-			'search_terms' => '@' . bp_core_get_username( bp_displayed_user_id() )
+			/* translators: %s: User Display Name */
+			'description'   => sprintf( __( "Activity feed mentioning %s.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+			'activity_args' => array(
+				'search_terms' => '@' . bp_members_get_user_slug( bp_displayed_user_id() )
+			)
 		)
-	) );
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );
@@ -200,20 +210,22 @@ function bp_activity_action_favorites_feed() {
 	// Get displayed user's favorite activity IDs.
 	$favs    = bp_activity_get_user_favorites( bp_displayed_user_id() );
 	$fav_ids = implode( ',', (array) $favs );
-	$link    = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() . '/favorites' );
+	$link    = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug(), 'favorites' ) ) );
 
 	// Setup the feed.
-	buddypress()->activity->feed = new BP_Activity_Feed( array(
-		'id'            => 'favorites',
+	buddypress()->activity->feed = new BP_Activity_Feed(
+		array(
+			'id'            => 'favorites',
 
-		/* translators: 1: Site Name 2: User Display Name */
-		'title'         => sprintf( __( '%1$s | %2$s | Favorites', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
-		'link'          => $link,
+			/* translators: 1: Site Name 2: User Display Name */
+			'title'         => sprintf( __( '%1$s | %2$s | Favorites', 'buddypress' ), bp_get_site_name(), bp_get_displayed_user_fullname() ),
+			'link'          => $link,
 
-		/* translators: %s: User Display Name */
-		'description'   => sprintf( __( "Activity feed of %s's favorites.", 'buddypress' ), bp_get_displayed_user_fullname() ),
-		'activity_args' => 'include=' . $fav_ids
-	) );
+			/* translators: %s: User Display Name */
+			'description'   => sprintf( __( "Activity feed of %s's favorites.", 'buddypress' ), bp_get_displayed_user_fullname() ),
+			'activity_args' => 'include=' . $fav_ids
+		)
+	);
 
 	if ( ! buddypress()->activity->feed->enabled ) {
 		bp_core_redirect( $link );

@@ -3827,21 +3827,14 @@ OpenLab.nav = (function ($) {
 			}
 		},
 		tabindexNormalizer: function () {
-
-			//find tabindices in the adminbar greater than 1 and re-set
 			$( '#wpadminbar [tabindex]' ).each(
 				function () {
-
-					var thisElem = $( this );
-					if (parseInt( thisElem.attr( 'tabindex' ) ) > 0) {
-						thisElem.attr( 'tabindex', 0 );
-					}
-
+					$( this ).removeAttr( 'tabindex' );
 				}
 			);
 
 			//add tabindex to mol icon menus
-			$( '#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity, #wp-admin-bar-my-account, #wp-admin-bar-top-logout, #wp-admin-bar-bp-register, #wp-admin-bar-bp-login' ).attr( 'tabindex', '0' );
+			$( '#wp-admin-bar-invites, #wp-admin-bar-messages, #wp-admin-bar-activity, #wp-admin-bar-openlab-favorites, #wp-admin-bar-my-account, #wp-admin-bar-top-logout, #wp-admin-bar-bp-register, #wp-admin-bar-bp-login' ).attr( 'tabindex', '0' );
 
 		},
 		focusActions: function () {
@@ -3852,7 +3845,6 @@ OpenLab.nav = (function ($) {
 			adminbar.find( 'li.menupop' ).on(
 				'focus',
 				function (e) {
-
 					var el = $( this );
 
 					if (el.parent().is( '#wp-admin-bar-root-default' ) && ! el.hasClass( 'hover' )) {
@@ -3887,6 +3879,24 @@ OpenLab.nav = (function ($) {
 
 				}
 			);
+
+			const wpAdminBar = document.getElementById( 'wpadminbar' );
+			if ( wpAdminBar ) {
+				const menupopItems = wpAdminBar.querySelectorAll( '.menupop' );
+				const menupopLinks = wpAdminBar.querySelectorAll( '.menupop a' );
+				for (const link of menupopLinks) {
+					link.addEventListener( 'focus', function (e) {
+						const parentMenupop = e.target.classList.contains( 'menupop' ) ? e.target : e.target.closest( '.menupop' );
+
+						// Remove 'hover' from all menupop items other than the parent.
+						for (const item of menupopItems) {
+							if (item !== parentMenupop) {
+								item.classList.remove( 'hover' );
+							}
+						}
+					} )
+				}
+			}
 
 		},
 		blurActions: function () {
@@ -4214,9 +4224,8 @@ OpenLab.nav = (function ($) {
 
 	$( document ).ready(
 		function () {
-
+			$( 'body' ).removeClass( 'no-js' ).addClass( 'js' );
 			OpenLab.nav.init();
-
 		}
 	);
 

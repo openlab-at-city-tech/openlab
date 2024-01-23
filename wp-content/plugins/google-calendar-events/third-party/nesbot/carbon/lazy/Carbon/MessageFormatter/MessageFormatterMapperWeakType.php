@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\MessageFormatter;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\ChoiceMessageFormatterInterface;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 if (!\class_exists(LazyMessageFormatter::class, \false)) {
+    /** @internal */
     abstract class LazyMessageFormatter implements MessageFormatterInterface, ChoiceMessageFormatterInterface
     {
         protected abstract function transformLocale(?string $locale) : ?string;

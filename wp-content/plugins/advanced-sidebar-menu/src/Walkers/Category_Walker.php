@@ -27,7 +27,7 @@ class Category_Walker extends \Walker_Category {
 
 		// Add 1 level to the depth when coming from the grandparent level.
 		if ( ! empty( $args['level'] ) && Category::LEVEL_GRANDCHILD === $args['level'] ) {
-			$depth ++;
+			++ $depth;
 		}
 
 		$indent = str_repeat( "\t", $depth );

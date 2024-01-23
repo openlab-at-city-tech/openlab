@@ -16,6 +16,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterf
  * Filters domains and locales between the Translator config values and those specific to each provider.
  *
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
+ * @internal
  */
 class FilteringProvider implements ProviderInterface
 {

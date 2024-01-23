@@ -80,23 +80,22 @@ jQuery(function ($) {
         $show_birthday_fields = $('#bookly-show-birthday'),
         $show_address_fields = $('#bookly-show-address'),
         $show_google_maps = $('#bookly-show-google-maps'),
-        $show_custom_fields = $('#bookly-show-custom-fields'),
-        $show_customer_information = $('#bookly-show-customer-information'),
-        $show_files = $('#bookly-show-files'),
         $show_terms = $('#bookly-show-terms'),
         // Step payment.
         $show_coupons = $('#bookly-show-coupons'),
         $show_gift_cards = $('#bookly-show-gift-cards'),
         $show_tips = $('#bookly-show-tips'),
         // Step done.
-        $done_nav_container = $('#bookly-step-8 .bookly-nav-steps'),
-        $show_start_over = $('#bookly-show-start-over'),
-        $show_download_invoice = $('#bookly-show-download-invoice'),
-        $show_download_ics = $('#bookly-show-download-ics'),
-        $show_appointment_qr = $('#bookly-show-appointment-qr'),
+        $done_nav_container = $('.bookly-nav-steps', steps.$done),
+        $show_start_over = $('#bookly-show-start-over', $step_settings),
+        $show_download_invoice = $('#bookly-show-download-invoice', $step_settings),
+        $show_download_ics = $('#bookly-show-download-ics', $step_settings),
+        $show_add_to_calendar = $('#bookly-show-add-to-calendar', $step_settings),
+        $show_appointment_qr = $('#bookly-show-appointment-qr', $step_settings),
         $start_over = $('[data-option="bookly_l10n_step_done_button_start_over"]', $done_nav_container).parent('div'),
         $download_invoice = $('[data-option="bookly_l10n_button_download_invoice"]', $done_nav_container).parent('div'),
         $download_ics = $('[data-option="bookly_l10n_button_download_ics"]', $done_nav_container).parent('div'),
+        $add_to_calendar = $('[data-option="bookly_l10n_info_add_to_calendar"]', steps.$done).parent('div'),
         $done_step_view = $('#bookly-done-step-view'),
         $qr_info_popover = $('#bookly-show-appointment-qr-popover'),
         // Buttons.
@@ -792,27 +791,8 @@ jQuery(function ($) {
         $('.bookly-js-google-maps').toggle(this.checked);
     }).trigger('change');
 
-    $show_custom_fields.change(function () {
-        $('.bookly-js-custom-fields').toggle(this.checked);
-        if (this.checked) {
-            $show_files.closest('[data-toggle="bookly-popover"]').booklyPopover('disable');
-            $show_files.prop('disabled', false);
-        } else {
-            $show_files.closest('[data-toggle="bookly-popover"]').booklyPopover('enable');
-            $show_files.prop('checked', false).prop('disabled', true).trigger('change');
-        }
-    }).trigger('change');
-
-    $show_files.change(function () {
-        $('.bookly-js-files').toggle(this.checked);
-    }).trigger('change');
-
     $show_terms.change(function () {
         $('.bookly-js-terms').toggle(this.checked);
-    }).trigger('change');
-
-    $show_customer_information.change(function () {
-        $('.bookly-js-customer-information').toggle(this.checked);
     }).trigger('change');
 
     /**
@@ -856,10 +836,8 @@ jQuery(function ($) {
 
     // Switch done step view (success/error).
     $done_step_view.on('change', function () {
-        $('.bookly-js-done-success').toggle(this.value == 'booking-success');
-        $('.bookly-js-done-limit-error').toggle(this.value == 'booking-limit-error');
-        $('.bookly-js-done-processing').toggle(this.value == 'booking-processing');
-        $('.bookly-js-done-skip-payment').toggle(this.value == 'booking-skip-payment');
+        $('[class*="bookly-js-done-state-"]').hide();
+        $('.bookly-js-done-state-' + this.value).show();
         doneNavContainerToggle();
     });
 
@@ -887,6 +865,10 @@ jQuery(function ($) {
         doneNavContainerToggle();
     });
 
+    $show_add_to_calendar.change(function () {
+        doneNavContainerToggle();
+    });
+
     function doneNavContainerToggle() {
         let show_container = $show_start_over.prop('checked') || $show_download_ics.prop('checked');
         switch ($done_step_view.val()) {
@@ -895,6 +877,7 @@ jQuery(function ($) {
                 show_container = show_container || ($show_download_invoice.length > 0 && $show_download_invoice.prop('checked'));
                 $download_invoice.toggle($show_download_invoice.prop('checked'));
                 $download_ics.toggle($show_download_ics.prop('checked'));
+                $add_to_calendar.toggle($show_add_to_calendar.prop('checked'));
                 break;
             case 'booking-limit-error':
                 $download_ics.hide();
@@ -1024,9 +1007,6 @@ jQuery(function ($) {
                 'bookly_chain_appointments_enabled': Number($show_chain_appointments.prop('checked')),
                 'bookly_coupons_enabled': Number($show_coupons.prop('checked')),
                 'bookly_app_show_tips': Number($show_tips.prop('checked')),
-                'bookly_custom_fields_enabled': Number($show_custom_fields.prop('checked')),
-                'bookly_customer_information_enabled': Number($show_customer_information.prop('checked')),
-                'bookly_files_enabled': Number($show_files.prop('checked')),
                 'bookly_app_show_terms': Number($show_terms.prop('checked')),
                 'bookly_waiting_list_enabled': Number($show_waiting_list.prop('checked')),
                 'bookly_google_maps_address_enabled': Number($show_google_maps.prop('checked')),
@@ -1034,6 +1014,7 @@ jQuery(function ($) {
                 'bookly_service_extras_show': bookly_service_extras_show,
                 'bookly_invoices_show_download_invoice': Number($show_download_invoice.prop('checked')),
                 'bookly_app_show_download_ics': Number($show_download_ics.prop('checked')),
+                'bookly_app_show_add_to_calendar': Number($show_add_to_calendar.prop('checked')),
                 'bookly_app_show_appointment_qr': Number($show_appointment_qr.prop('checked')),
                 'bookly_app_button_book_more_near_next': Number($book_more_place.prop('checked')),
                 'bookly_recurring_appointments_hide_times_input': Number($hide_times_input.prop('checked')),

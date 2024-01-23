@@ -11,6 +11,7 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Doctrine;
 
 use SimpleCalendar\plugin_deps\Doctrine\DBAL\Platforms\AbstractPlatform;
+/** @internal */
 interface CarbonDoctrineType
 {
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform);

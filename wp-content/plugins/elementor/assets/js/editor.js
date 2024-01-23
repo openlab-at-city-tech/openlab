@@ -1,4 +1,4 @@
-/*! elementor - v3.14.0 - 26-06-2023 */
+/*! elementor - v3.18.0 - 08-12-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -11,58 +11,60 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EnhancerArray": () => (/* binding */ EnhancerArray),
-/* harmony export */   "MiddlewareArray": () => (/* binding */ MiddlewareArray),
-/* harmony export */   "SHOULD_AUTOBATCH": () => (/* binding */ SHOULD_AUTOBATCH),
-/* harmony export */   "TaskAbortError": () => (/* binding */ TaskAbortError),
-/* harmony export */   "__DO_NOT_USE__ActionTypes": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.__DO_NOT_USE__ActionTypes),
-/* harmony export */   "addListener": () => (/* binding */ addListener),
-/* harmony export */   "applyMiddleware": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware),
-/* harmony export */   "autoBatchEnhancer": () => (/* binding */ autoBatchEnhancer),
-/* harmony export */   "bindActionCreators": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.bindActionCreators),
-/* harmony export */   "clearAllListeners": () => (/* binding */ clearAllListeners),
-/* harmony export */   "combineReducers": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers),
-/* harmony export */   "compose": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.compose),
-/* harmony export */   "configureStore": () => (/* binding */ configureStore),
-/* harmony export */   "createAction": () => (/* binding */ createAction),
-/* harmony export */   "createAsyncThunk": () => (/* binding */ createAsyncThunk),
-/* harmony export */   "createDraftSafeSelector": () => (/* binding */ createDraftSafeSelector),
-/* harmony export */   "createEntityAdapter": () => (/* binding */ createEntityAdapter),
-/* harmony export */   "createImmutableStateInvariantMiddleware": () => (/* binding */ createImmutableStateInvariantMiddleware),
-/* harmony export */   "createListenerMiddleware": () => (/* binding */ createListenerMiddleware),
-/* harmony export */   "createNextState": () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__["default"]),
-/* harmony export */   "createReducer": () => (/* binding */ createReducer),
-/* harmony export */   "createSelector": () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector),
-/* harmony export */   "createSerializableStateInvariantMiddleware": () => (/* binding */ createSerializableStateInvariantMiddleware),
-/* harmony export */   "createSlice": () => (/* binding */ createSlice),
-/* harmony export */   "createStore": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.createStore),
-/* harmony export */   "current": () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.current),
-/* harmony export */   "findNonSerializableValue": () => (/* binding */ findNonSerializableValue),
-/* harmony export */   "freeze": () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.freeze),
-/* harmony export */   "getDefaultMiddleware": () => (/* binding */ getDefaultMiddleware),
-/* harmony export */   "getType": () => (/* binding */ getType),
-/* harmony export */   "isAction": () => (/* binding */ isAction),
-/* harmony export */   "isAllOf": () => (/* binding */ isAllOf),
-/* harmony export */   "isAnyOf": () => (/* binding */ isAnyOf),
-/* harmony export */   "isAsyncThunkAction": () => (/* binding */ isAsyncThunkAction),
-/* harmony export */   "isDraft": () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.isDraft),
-/* harmony export */   "isFluxStandardAction": () => (/* binding */ isFSA),
-/* harmony export */   "isFulfilled": () => (/* binding */ isFulfilled),
-/* harmony export */   "isImmutableDefault": () => (/* binding */ isImmutableDefault),
-/* harmony export */   "isPending": () => (/* binding */ isPending),
-/* harmony export */   "isPlain": () => (/* binding */ isPlain),
-/* harmony export */   "isPlainObject": () => (/* binding */ isPlainObject),
-/* harmony export */   "isRejected": () => (/* binding */ isRejected),
-/* harmony export */   "isRejectedWithValue": () => (/* binding */ isRejectedWithValue),
-/* harmony export */   "legacy_createStore": () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.legacy_createStore),
-/* harmony export */   "miniSerializeError": () => (/* binding */ miniSerializeError),
-/* harmony export */   "nanoid": () => (/* binding */ nanoid),
-/* harmony export */   "original": () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.original),
-/* harmony export */   "prepareAutoBatched": () => (/* binding */ prepareAutoBatched),
-/* harmony export */   "removeListener": () => (/* binding */ removeListener),
-/* harmony export */   "unwrapResult": () => (/* binding */ unwrapResult)
+/* harmony export */   EnhancerArray: () => (/* binding */ EnhancerArray),
+/* harmony export */   MiddlewareArray: () => (/* binding */ MiddlewareArray),
+/* harmony export */   SHOULD_AUTOBATCH: () => (/* binding */ SHOULD_AUTOBATCH),
+/* harmony export */   TaskAbortError: () => (/* binding */ TaskAbortError),
+/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.__DO_NOT_USE__ActionTypes),
+/* harmony export */   addListener: () => (/* binding */ addListener),
+/* harmony export */   applyMiddleware: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware),
+/* harmony export */   autoBatchEnhancer: () => (/* binding */ autoBatchEnhancer),
+/* harmony export */   bindActionCreators: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.bindActionCreators),
+/* harmony export */   clearAllListeners: () => (/* binding */ clearAllListeners),
+/* harmony export */   combineReducers: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers),
+/* harmony export */   compose: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.compose),
+/* harmony export */   configureStore: () => (/* binding */ configureStore),
+/* harmony export */   createAction: () => (/* binding */ createAction),
+/* harmony export */   createActionCreatorInvariantMiddleware: () => (/* binding */ createActionCreatorInvariantMiddleware),
+/* harmony export */   createAsyncThunk: () => (/* binding */ createAsyncThunk),
+/* harmony export */   createDraftSafeSelector: () => (/* binding */ createDraftSafeSelector),
+/* harmony export */   createEntityAdapter: () => (/* binding */ createEntityAdapter),
+/* harmony export */   createImmutableStateInvariantMiddleware: () => (/* binding */ createImmutableStateInvariantMiddleware),
+/* harmony export */   createListenerMiddleware: () => (/* binding */ createListenerMiddleware),
+/* harmony export */   createNextState: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   createReducer: () => (/* binding */ createReducer),
+/* harmony export */   createSelector: () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector),
+/* harmony export */   createSerializableStateInvariantMiddleware: () => (/* binding */ createSerializableStateInvariantMiddleware),
+/* harmony export */   createSlice: () => (/* binding */ createSlice),
+/* harmony export */   createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.createStore),
+/* harmony export */   current: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.current),
+/* harmony export */   findNonSerializableValue: () => (/* binding */ findNonSerializableValue),
+/* harmony export */   freeze: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.freeze),
+/* harmony export */   getDefaultMiddleware: () => (/* binding */ getDefaultMiddleware),
+/* harmony export */   getType: () => (/* binding */ getType),
+/* harmony export */   isAction: () => (/* binding */ isAction),
+/* harmony export */   isActionCreator: () => (/* binding */ isActionCreator),
+/* harmony export */   isAllOf: () => (/* binding */ isAllOf),
+/* harmony export */   isAnyOf: () => (/* binding */ isAnyOf),
+/* harmony export */   isAsyncThunkAction: () => (/* binding */ isAsyncThunkAction),
+/* harmony export */   isDraft: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.isDraft),
+/* harmony export */   isFluxStandardAction: () => (/* binding */ isFSA),
+/* harmony export */   isFulfilled: () => (/* binding */ isFulfilled),
+/* harmony export */   isImmutableDefault: () => (/* binding */ isImmutableDefault),
+/* harmony export */   isPending: () => (/* binding */ isPending),
+/* harmony export */   isPlain: () => (/* binding */ isPlain),
+/* harmony export */   isPlainObject: () => (/* binding */ isPlainObject),
+/* harmony export */   isRejected: () => (/* binding */ isRejected),
+/* harmony export */   isRejectedWithValue: () => (/* binding */ isRejectedWithValue),
+/* harmony export */   legacy_createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.legacy_createStore),
+/* harmony export */   miniSerializeError: () => (/* binding */ miniSerializeError),
+/* harmony export */   nanoid: () => (/* binding */ nanoid),
+/* harmony export */   original: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.original),
+/* harmony export */   prepareAutoBatched: () => (/* binding */ prepareAutoBatched),
+/* harmony export */   removeListener: () => (/* binding */ removeListener),
+/* harmony export */   unwrapResult: () => (/* binding */ unwrapResult)
 /* harmony export */ });
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! immer */ "../node_modules/immer/dist/immer.esm.mjs");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! immer */ "../node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.esm.mjs");
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
 /* harmony import */ var reselect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-thunk */ "../node_modules/redux-thunk/es/index.js");
@@ -209,6 +211,66 @@ function isPlainObject(value) {
 }
 // src/getDefaultMiddleware.ts
 
+// src/tsHelpers.ts
+var hasMatchFunction = function (v) {
+    return v && typeof v.match === "function";
+};
+// src/createAction.ts
+function createAction(type, prepareAction) {
+    function actionCreator() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        if (prepareAction) {
+            var prepared = prepareAction.apply(void 0, args);
+            if (!prepared) {
+                throw new Error("prepareAction did not return an object");
+            }
+            return __spreadValues(__spreadValues({
+                type: type,
+                payload: prepared.payload
+            }, "meta" in prepared && { meta: prepared.meta }), "error" in prepared && { error: prepared.error });
+        }
+        return { type: type, payload: args[0] };
+    }
+    actionCreator.toString = function () { return "" + type; };
+    actionCreator.type = type;
+    actionCreator.match = function (action) { return action.type === type; };
+    return actionCreator;
+}
+function isAction(action) {
+    return isPlainObject(action) && "type" in action;
+}
+function isActionCreator(action) {
+    return typeof action === "function" && "type" in action && hasMatchFunction(action);
+}
+function isFSA(action) {
+    return isAction(action) && typeof action.type === "string" && Object.keys(action).every(isValidKey);
+}
+function isValidKey(key) {
+    return ["type", "payload", "error", "meta"].indexOf(key) > -1;
+}
+function getType(actionCreator) {
+    return "" + actionCreator;
+}
+// src/actionCreatorInvariantMiddleware.ts
+function getMessage(type) {
+    var splitType = type ? ("" + type).split("/") : [];
+    var actionName = splitType[splitType.length - 1] || "actionCreator";
+    return "Detected an action creator with type \"" + (type || "unknown") + "\" being dispatched. \nMake sure you're calling the action creator before dispatching, i.e. `dispatch(" + actionName + "())` instead of `dispatch(" + actionName + ")`. This is necessary even if the action has no payload.";
+}
+function createActionCreatorInvariantMiddleware(options) {
+    if (options === void 0) { options = {}; }
+    if (false) {}
+    var _c = options.isActionCreator, isActionCreator2 = _c === void 0 ? isActionCreator : _c;
+    return function () { return function (next) { return function (action) {
+        if (isActionCreator2(action)) {
+            console.warn(getMessage(action.type));
+        }
+        return next(action);
+    }; }; };
+}
 // src/utils.ts
 
 function getTimeMeasureUtils(maxDelay, fnName) {
@@ -356,11 +418,13 @@ function trackForMutations(isImmutable, ignorePaths, obj) {
         }
     };
 }
-function trackProperties(isImmutable, ignorePaths, obj, path) {
+function trackProperties(isImmutable, ignorePaths, obj, path, checkedObjects) {
     if (ignorePaths === void 0) { ignorePaths = []; }
     if (path === void 0) { path = ""; }
+    if (checkedObjects === void 0) { checkedObjects = new Set(); }
     var tracked = { value: obj };
-    if (!isImmutable(obj)) {
+    if (!isImmutable(obj) && !checkedObjects.has(obj)) {
+        checkedObjects.add(obj);
         tracked.children = {};
         for (var key in obj) {
             var childPath = path ? path + "." + key : key;
@@ -561,7 +625,7 @@ function curryGetDefaultMiddleware() {
 }
 function getDefaultMiddleware(options) {
     if (options === void 0) { options = {}; }
-    var _c = options.thunk, thunk = _c === void 0 ? true : _c, _d = options.immutableCheck, immutableCheck = _d === void 0 ? true : _d, _e = options.serializableCheck, serializableCheck = _e === void 0 ? true : _e;
+    var _c = options.thunk, thunk = _c === void 0 ? true : _c, _d = options.immutableCheck, immutableCheck = _d === void 0 ? true : _d, _e = options.serializableCheck, serializableCheck = _e === void 0 ? true : _e, _f = options.actionCreatorCheck, actionCreatorCheck = _f === void 0 ? true : _f;
     var middlewareArray = new MiddlewareArray();
     if (thunk) {
         if (isBoolean(thunk)) {
@@ -585,6 +649,13 @@ function getDefaultMiddleware(options) {
                 serializableOptions = serializableCheck;
             }
             middlewareArray.push(createSerializableStateInvariantMiddleware(serializableOptions));
+        }
+        if (actionCreatorCheck) {
+            var actionCreatorOptions = {};
+            if (!isBoolean(actionCreatorCheck)) {
+                actionCreatorOptions = actionCreatorCheck;
+            }
+            middlewareArray.unshift(createActionCreatorInvariantMiddleware(actionCreatorOptions));
         }
     }
     return middlewareArray;
@@ -632,42 +703,6 @@ function configureStore(options) {
     var composedEnhancer = finalCompose.apply(void 0, storeEnhancers);
     return (0,redux__WEBPACK_IMPORTED_MODULE_0__.createStore)(rootReducer, preloadedState, composedEnhancer);
 }
-// src/createAction.ts
-function createAction(type, prepareAction) {
-    function actionCreator() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        if (prepareAction) {
-            var prepared = prepareAction.apply(void 0, args);
-            if (!prepared) {
-                throw new Error("prepareAction did not return an object");
-            }
-            return __spreadValues(__spreadValues({
-                type: type,
-                payload: prepared.payload
-            }, "meta" in prepared && { meta: prepared.meta }), "error" in prepared && { error: prepared.error });
-        }
-        return { type: type, payload: args[0] };
-    }
-    actionCreator.toString = function () { return "" + type; };
-    actionCreator.type = type;
-    actionCreator.match = function (action) { return action.type === type; };
-    return actionCreator;
-}
-function isAction(action) {
-    return isPlainObject(action) && "type" in action;
-}
-function isFSA(action) {
-    return isAction(action) && typeof action.type === "string" && Object.keys(action).every(isValidKey);
-}
-function isValidKey(key) {
-    return ["type", "payload", "error", "meta"].indexOf(key) > -1;
-}
-function getType(actionCreator) {
-    return "" + actionCreator;
-}
 // src/createReducer.ts
 
 // src/mapBuilders.ts
@@ -686,8 +721,11 @@ function executeReducerBuilderCallback(builderCallback) {
                 }
             }
             var type = typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
+            if (!type) {
+                throw new Error("`builder.addCase` cannot be called with an empty action type");
+            }
             if (type in actionsMap) {
-                throw new Error("addCase cannot be called with two reducers for the same action type");
+                throw new Error("`builder.addCase` cannot be called with two reducers for the same action type");
             }
             actionsMap[type] = reducer;
             return builder;
@@ -1411,10 +1449,6 @@ function unwrapResult(action) {
 function isThenable(value) {
     return value !== null && typeof value === "object" && typeof value.then === "function";
 }
-// src/tsHelpers.ts
-var hasMatchFunction = function (v) {
-    return v && typeof v.match === "function";
-};
 // src/matchers.ts
 var matches = function (matcher, action) {
     if (hasMatchFunction(matcher)) {
@@ -1663,9 +1697,9 @@ var createDelay = function (signal) {
 var assign = Object.assign;
 var INTERNAL_NIL_TOKEN = {};
 var alm = "listenerMiddleware";
-var createFork = function (parentAbortSignal) {
+var createFork = function (parentAbortSignal, parentBlockingPromises) {
     var linkControllers = function (controller) { return addAbortSignalListener(parentAbortSignal, function () { return abortControllerWithReason(controller, parentAbortSignal.reason); }); };
-    return function (taskExecutor) {
+    return function (taskExecutor, opts) {
         assertFunction(taskExecutor, "taskExecutor");
         var childAbortController = new AbortController();
         linkControllers(childAbortController);
@@ -1688,6 +1722,9 @@ var createFork = function (parentAbortSignal) {
                 }
             });
         }); }, function () { return abortControllerWithReason(childAbortController, taskCompleted); });
+        if (opts == null ? void 0 : opts.autoJoin) {
+            parentBlockingPromises.push(result);
+        }
         return {
             result: createPause(parentAbortSignal)(result),
             cancel: function () {
@@ -1858,15 +1895,16 @@ function createListenerMiddleware(middlewareOptions) {
         return !!entry;
     };
     var notifyListener = function (entry, action, api, getOriginalState) { return __async(_this, null, function () {
-        var internalTaskController, take, listenerError_1;
+        var internalTaskController, take, autoJoinPromises, listenerError_1;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     internalTaskController = new AbortController();
                     take = createTakePattern(startListening, internalTaskController.signal);
+                    autoJoinPromises = [];
                     _c.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, 4, 5]);
+                    _c.trys.push([1, 3, 4, 6]);
                     entry.pending.add(internalTaskController);
                     return [4 /*yield*/, Promise.resolve(entry.effect(action, assign({}, api, {
                             getOriginalState: getOriginalState,
@@ -1876,7 +1914,7 @@ function createListenerMiddleware(middlewareOptions) {
                             pause: createPause(internalTaskController.signal),
                             extra: extra,
                             signal: internalTaskController.signal,
-                            fork: createFork(internalTaskController.signal),
+                            fork: createFork(internalTaskController.signal, autoJoinPromises),
                             unsubscribe: entry.unsubscribe,
                             subscribe: function () {
                                 listenerMap.set(entry.id, entry);
@@ -1892,7 +1930,7 @@ function createListenerMiddleware(middlewareOptions) {
                         })))];
                 case 2:
                     _c.sent();
-                    return [3 /*break*/, 5];
+                    return [3 /*break*/, 6];
                 case 3:
                     listenerError_1 = _c.sent();
                     if (!(listenerError_1 instanceof TaskAbortError)) {
@@ -1900,12 +1938,14 @@ function createListenerMiddleware(middlewareOptions) {
                             raisedBy: "effect"
                         });
                     }
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 6];
+                case 4: return [4 /*yield*/, Promise.allSettled(autoJoinPromises)];
+                case 5:
+                    _c.sent();
                     abortControllerWithReason(internalTaskController, listenerCompleted);
                     entry.pending.delete(internalTaskController);
                     return [7 /*endfinally*/];
-                case 5: return [2 /*return*/];
+                case 6: return [2 /*return*/];
             }
         });
     }); };
@@ -5169,10 +5209,7 @@ var AttachPreview = /*#__PURE__*/function (_$e$modules$CommandIn) {
         if (!isInitialDocument) {
           elementor.$previewElementorEl.addClass('elementor-embedded-editor');
         }
-        $e.internal('document/elements/populate', {
-          document: document,
-          elements: JSON.parse(JSON.stringify(document.config.elements))
-        });
+        elementor.initElements();
         elementor.initPreviewView(document);
         document.container.view = elementor.getPreviewView();
         document.container.model.attributes.elements = elementor.elements;
@@ -8533,7 +8570,54 @@ Object.defineProperty(exports, "Drop", ({
     return _drop.Drop;
   }
 }));
+Object.defineProperty(exports, "Reload", ({
+  enumerable: true,
+  get: function get() {
+    return _reload.Reload;
+  }
+}));
 var _drop = __webpack_require__(/*! ./drop */ "../assets/dev/js/editor/components/preview/commands/drop.js");
+var _reload = __webpack_require__(/*! ./reload */ "../assets/dev/js/editor/components/preview/commands/reload.js");
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/components/preview/commands/reload.js":
+/*!*********************************************************************!*\
+  !*** ../assets/dev/js/editor/components/preview/commands/reload.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Reload = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var Reload = /*#__PURE__*/function (_$e$modules$CommandBa) {
+  (0, _inherits2.default)(Reload, _$e$modules$CommandBa);
+  var _super = _createSuper(Reload);
+  function Reload() {
+    (0, _classCallCheck2.default)(this, Reload);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(Reload, [{
+    key: "apply",
+    value: function apply() {
+      elementor.reloadPreview();
+    }
+  }]);
+  return Reload;
+}($e.modules.CommandBase);
+exports.Reload = Reload;
 
 /***/ }),
 
@@ -9018,7 +9102,7 @@ module.exports = elementorModules.ViewModule.extend({
               },
               error: function error() {
                 // eslint-disable-next-line no-alert
-                alert('An error occurred');
+                alert('An error occurred.');
               }
             }));
           case 6:
@@ -9221,7 +9305,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _componentBase = _interopRequireDefault(__webpack_require__(/*! elementor-api/modules/component-base */ "../modules/web-cli/assets/js/modules/component-base.js"));
+var _componentBase = _interopRequireDefault(__webpack_require__(/*! elementor-editor/component-base */ "../assets/dev/js/editor/component-base.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Component = /*#__PURE__*/function (_ComponentBase) {
@@ -9253,8 +9337,23 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
     }
   }, {
     key: "renderTab",
-    value: function renderTab(tab) {
-      elementor.getPanelView().setPage('page_settings').activateTab(tab);
+    value: function renderTab(tab, args) {
+      var activeControl = args.activeControl,
+        _args$refresh = args.refresh,
+        refresh = _args$refresh === void 0 ? false : _args$refresh;
+      if (this.shouldRenderPage(tab) || refresh) {
+        elementor.getPanelView().setPage('page_settings').activateTab(tab);
+      }
+      this.activateControl(activeControl);
+    }
+  }, {
+    key: "shouldRenderPage",
+    value: function shouldRenderPage(tab) {
+      var _currentPanelView$get;
+      var currentPanelView = elementor.getPanelView();
+      var isSamePage = 'page_settings' === currentPanelView.getCurrentPageName();
+      var isSameTab = tab === ((_currentPanelView$get = currentPanelView.getCurrentPageView()) === null || _currentPanelView$get === void 0 ? void 0 : _currentPanelView$get.activeTab);
+      return !isSamePage || !isSameTab;
     }
   }, {
     key: "getTabsWrapperSelector",
@@ -10112,7 +10211,7 @@ TemplateLibraryManager = function TemplateLibraryManager() {
     if (!errorDialog) {
       errorDialog = elementorCommon.dialogsManager.createWidget('alert', {
         id: 'elementor-template-library-error-dialog',
-        headerMessage: __('An error occurred', 'elementor')
+        headerMessage: __('An error occurred.', 'elementor')
       });
     }
     return errorDialog;
@@ -10302,16 +10401,17 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     };
   },
   getTemplateActionButton: function getTemplateActionButton(templateData) {
-    var _subscriptionPlans$te;
     var subscriptionPlans = elementor.config.library_connect.subscription_plans,
-      baseAccessLevel = elementor.config.library_connect.base_access_level;
-    var viewId = '#tmpl-elementor-template-library-' + (baseAccessLevel !== templateData.accessLevel ? 'upgrade-plan-button' : 'insert-button');
+      baseAccessTier = elementor.config.library_connect.base_access_tier,
+      templateAccessTier = templateData.accessTier,
+      shouldUpgrade = baseAccessTier !== templateAccessTier;
+    var viewId = '#tmpl-elementor-template-library-' + (shouldUpgrade ? 'upgrade-plan-button' : 'insert-button');
     viewId = elementor.hooks.applyFilters('elementor/editor/template-library/template/action-button', viewId, templateData);
     var template = Marionette.TemplateCache.get(viewId);
-    var subscriptionPlan = (_subscriptionPlans$te = subscriptionPlans[templateData.accessLevel]) !== null && _subscriptionPlans$te !== void 0 ? _subscriptionPlans$te : subscriptionPlans[1]; // 1 is Pro plan.
-
+    var subscriptionPlan = subscriptionPlans[templateAccessTier];
+    var promotionText = elementorAppConfig.hasPro ? 'Upgrade' : "Go ".concat(subscriptionPlan.label);
     return Marionette.Renderer.render(template, {
-      promotionText: "Upgrade",
+      promotionText: promotionText,
       promotionLink: subscriptionPlan.promotion_url
     });
   },
@@ -10973,6 +11073,9 @@ module.exports = TemplateLibraryCollectionView;
 
 var TemplateLibraryInsertTemplateBehavior = __webpack_require__(/*! elementor-templates/behaviors/insert-template */ "../assets/dev/js/editor/components/template-library/behaviors/insert-template.js"),
   TemplateLibraryTemplateView;
+var _require = __webpack_require__(/*! elementor-utils/tiers */ "../assets/dev/js/utils/tiers.js"),
+  isTierAtLeast = _require.isTierAtLeast,
+  TIERS = _require.TIERS;
 TemplateLibraryTemplateView = Marionette.ItemView.extend({
   className: function className() {
     var classes = 'elementor-template-library-template',
@@ -10981,21 +11084,27 @@ TemplateLibraryTemplateView = Marionette.ItemView.extend({
     if ('remote' === source) {
       classes += ' elementor-template-library-template-' + this.model.get('type');
     }
-    if (elementor.config.library_connect.base_access_level !== this.model.get('accessLevel')) {
+    if (elementor.config.library_connect.base_access_tier !== this.model.get('accessTier')) {
       classes += ' elementor-template-library-pro-template';
     }
     return classes;
   },
   attributes: function attributes() {
-    var _this = this;
-    var getSubscriptionPlan = function getSubscriptionPlan() {
-      var _subscriptionPlans$_t;
-      var subscriptionPlans = elementor.config.library_connect.subscription_plans;
+    var userAccessTier = elementor.config.library_connect.current_access_tier;
+    var templateAccessTier = this.model.get('accessTier');
+    var canDownloadTemplate = isTierAtLeast(userAccessTier, templateAccessTier);
 
-      // 1 is Pro plan.
-      return (_subscriptionPlans$_t = subscriptionPlans[_this.model.get('accessLevel')]) !== null && _subscriptionPlans$_t !== void 0 ? _subscriptionPlans$_t : subscriptionPlans[1];
-    };
-    var subscriptionPlan = getSubscriptionPlan();
+    // User with access to the template shouldn't see the badge.
+    if (canDownloadTemplate) {
+      return {};
+    }
+    var subscriptionPlans = elementor.config.library_connect.subscription_plans;
+    var subscriptionPlan = subscriptionPlans[templateAccessTier];
+
+    // Free user should see a generic "Pro" badge.
+    if (userAccessTier === TIERS.free) {
+      subscriptionPlan = subscriptionPlans.essential;
+    }
     if (!subscriptionPlan) {
       return {};
     }
@@ -11632,7 +11741,7 @@ ControlBaseDataView = ControlBaseView.extend({
   /**
    * Get the responsive parent view if exists.
    *
-   * @return {ControlBaseDataView|null} responsive parent view if exists
+   * @return {ControlBaseDataView|undefined} responsive parent view if exists
    */
   getResponsiveParentView: function getResponsiveParentView() {
     var parent = this.model.get('parent');
@@ -12164,7 +12273,6 @@ ControlBaseView = Marionette.CompositeView.extend({
     return Marionette.TemplateCache.get('#tmpl-elementor-control-' + this.model.get('type') + '-content');
   },
   initialize: function initialize(options) {
-    var _this = this;
     var label = this.model.get('label');
 
     // TODO: Temp backwards compatibility. since 2.8.0.
@@ -12215,10 +12323,12 @@ ControlBaseView = Marionette.CompositeView.extend({
     var settings = this.container ? this.container.settings : this.elementSettingsModel;
     this.listenTo(settings, 'change', this.onAfterChange);
     if (this.model.attributes.responsive) {
-      elementor.listenTo(elementor.channels.deviceMode, 'change', function () {
-        return _this.onDeviceModeChange();
-      });
+      this.onDeviceModeChange = this.onDeviceModeChange.bind(this);
+      elementor.listenTo(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
     }
+  },
+  onDestroy: function onDestroy() {
+    elementor.stopListening(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
   },
   onDeviceModeChange: function onDeviceModeChange() {
     this.toggleControlVisibility();
@@ -13717,6 +13827,8 @@ module.exports = ControlMediaItemView;
 "use strict";
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js"));
 // eslint-disable-next-line prefer-const
 var ControlDimensionsView = __webpack_require__(/*! elementor-controls/dimensions */ "../assets/dev/js/editor/controls/dimensions.js"),
   ControlGapItemView;
@@ -13732,6 +13844,33 @@ ControlGapItemView = ControlDimensionsView.extend({
   },
   getPossibleDimensions: function getPossibleDimensions() {
     return ['row', 'column'];
+  },
+  setValue: function setValue(key, value) {
+    var values = this.getControlValue();
+    if ('object' === (0, _typeof2.default)(key)) {
+      _.each(key, function (internalValue, internalKey) {
+        values[internalKey] = internalValue;
+      });
+    } else {
+      values[key] = value;
+    }
+    var conversion = this.model.get('conversion_map');
+    if (conversion && conversion.old_key && conversion.new_key) {
+      values[conversion.old_key] = parseInt(values[conversion.new_key]);
+    }
+    this.setSettingsModel(values);
+  },
+  getControlValue: function getControlValue(key) {
+    var valuesUpdated = ControlDimensionsView.prototype.getControlValue.apply(this, arguments);
+    if (this.shouldUpdateGapsValues(valuesUpdated)) {
+      valuesUpdated.column = '' + valuesUpdated.size;
+      valuesUpdated.row = '' + valuesUpdated.size;
+      valuesUpdated.isLinked = true;
+    }
+    return valuesUpdated;
+  },
+  shouldUpdateGapsValues: function shouldUpdateGapsValues(valuesUpdated) {
+    return !!valuesUpdated.hasOwnProperty('size') && '' !== valuesUpdated.size && !valuesUpdated.hasOwnProperty('column');
   }
 });
 module.exports = ControlGapItemView;
@@ -14757,11 +14896,8 @@ var ControlPopoverStarterView = /*#__PURE__*/function (_ControlChooseView) {
           elementor.helpers.enqueueFont(value, 'editor');
         }
         if ('font_size' === property) {
-          // Set max size for Typography previews in the select popover so it isn't too big.
-          if (value.size > 40) {
-            value.size = 40;
-          }
-          cssObject.fontSize = value.size + value.unit;
+          var fontSize = 'custom' === value.unit ? value.size : "".concat(value.size).concat(value.unit);
+          cssObject.fontSize = "min(".concat(fontSize, ", 28px)");
         } else {
           // Convert the snake case property names into camel case to match their corresponding CSS property names.
           if (property.includes('_')) {
@@ -14779,7 +14915,8 @@ var ControlPopoverStarterView = /*#__PURE__*/function (_ControlChooseView) {
     value: function createGlobalItemMarkup(globalData) {
       var $typographyPreview = jQuery('<div>', {
         class: 'e-global__preview-item e-global__typography',
-        'data-global-id': globalData.id
+        'data-global-id': globalData.id,
+        title: globalData.title
       });
       $typographyPreview.html(globalData.title).css(this.buildPreviewItemCSS(globalData.value));
       return $typographyPreview;
@@ -15088,7 +15225,8 @@ ControlRepeaterItemView = ControlBaseDataView.extend({
     return {
       axis: 'y',
       handle: '.elementor-repeater-row-tools',
-      items: ' > :not(.elementor-repeater-row--disable-sort)'
+      items: ' > :not(.elementor-repeater-row--disable-sort)',
+      cancel: '' // Elements that do not allow sorting (by default it includs buttons).
     };
   },
   onRender: function onRender() {
@@ -15414,6 +15552,7 @@ module.exports = ControlSelect2ItemView;
 "use strict";
 
 
+var _helpers = __webpack_require__(/*! elementor-editor-utils/helpers */ "../assets/dev/js/editor/utils/helpers.js");
 var ControlBaseUnitsItemView = __webpack_require__(/*! elementor-controls/base-units */ "../assets/dev/js/editor/controls/base-units.js"),
   ControlSliderItemView;
 ControlSliderItemView = ControlBaseUnitsItemView.extend({
@@ -15535,8 +15674,14 @@ ControlSliderItemView = ControlBaseUnitsItemView.extend({
     if ('size' === dataChanged && this.isSliderInitialized()) {
       this.ui.slider[0].noUiSlider.set(this.getSize());
     } else if ('unit' === dataChanged) {
+      this.handleUnitChange();
+    }
+  },
+  handleUnitChange: function handleUnitChange() {
+    if (!this.isCustomUnit()) {
       this.resetSize();
     }
+    this.maybeDoFractionToCustomConversions();
   },
   updateUnitChoices: function updateUnitChoices() {
     ControlBaseUnitsItemView.prototype.updateUnitChoices.apply(this, arguments);
@@ -15551,9 +15696,50 @@ ControlSliderItemView = ControlBaseUnitsItemView.extend({
       this.ui.input.attr('type', inputType);
     }
   },
+  maybeDoFractionToCustomConversions: function maybeDoFractionToCustomConversions() {
+    var _this$getControlPlace2, _this$model$get2;
+    if (this.isMultiple()) {
+      return;
+    }
+
+    /*
+    We want our code to run only when the user switched from 'fr' to 'custom'.
+    But currently we do not have the previous state, so we won't know the user was previously on 'fr'.
+    So we make the assumption that if the control only has two units ('fr' and 'custom'), and we
+    are switching to custom now, then we can run our conversion logic.
+    In future, we might want to investigate a way to build some kind of 'previous state cache' to know
+    where we switched from.
+    */
+    var sizeUnits = this.model.get('size_units'),
+      isFrToCustom = 2 === (sizeUnits === null || sizeUnits === void 0 ? void 0 : sizeUnits.length) && sizeUnits.includes('fr') && sizeUnits.includes('custom');
+    if (!isFrToCustom) {
+      return;
+    }
+    var currentSize = this.getSize(),
+      alreadyConverted = 'string' === typeof currentSize && currentSize.includes('fr');
+    if (alreadyConverted) {
+      return;
+    }
+    var sizeValue = this.isCustomUnit() ? (0, _helpers.convertSizeToFrString)(currentSize) : ((_this$getControlPlace2 = this.getControlPlaceholder()) === null || _this$getControlPlace2 === void 0 ? void 0 : _this$getControlPlace2.size) || ((_this$model$get2 = this.model.get('default')) === null || _this$model$get2 === void 0 ? void 0 : _this$model$get2.size);
+    this.setValue('size', sizeValue);
+    this.render();
+  },
   onBeforeDestroy: function onBeforeDestroy() {
     this.destroySlider();
     this.$el.remove();
+  },
+  onDeviceModeChange: function onDeviceModeChange() {
+    var _this = this;
+    var currentDeviceMode = elementor.channels.deviceMode.request('currentMode'),
+      isMobile = 'mobile' === currentDeviceMode,
+      isMobileValue = this.model.get('name').includes('_mobile'),
+      hasDefault = this.model.get('default'),
+      shouldRunConversion = isMobile && isMobileValue && hasDefault && this.isCustomUnit();
+    if (shouldRunConversion) {
+      setTimeout(function () {
+        _this.maybeDoFractionToCustomConversions();
+      });
+    }
   }
 });
 module.exports = ControlSliderItemView;
@@ -17312,91 +17498,13 @@ exports["default"] = Component;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-Object.defineProperty(exports, "Populate", ({
-  enumerable: true,
-  get: function get() {
-    return _populate.Populate;
-  }
-}));
 Object.defineProperty(exports, "SetSettings", ({
   enumerable: true,
   get: function get() {
     return _setSettings.SetSettings;
   }
 }));
-var _populate = __webpack_require__(/*! ./populate */ "../assets/dev/js/editor/document/elements/commands-internal/populate.js");
 var _setSettings = __webpack_require__(/*! ./set-settings */ "../assets/dev/js/editor/document/elements/commands-internal/set-settings.js");
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/document/elements/commands-internal/populate.js":
-/*!*******************************************************************************!*\
-  !*** ../assets/dev/js/editor/document/elements/commands-internal/populate.js ***!
-  \*******************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = exports.Populate = void 0;
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _utils = __webpack_require__(/*! elementor-document/elements/utils */ "../assets/dev/js/editor/document/elements/utils.js");
-var _document = _interopRequireDefault(__webpack_require__(/*! elementor-editor/components/documents/document */ "../assets/dev/js/editor/components/documents/document.js"));
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-var Populate = /*#__PURE__*/function (_$e$modules$editor$Co) {
-  (0, _inherits2.default)(Populate, _$e$modules$editor$Co);
-  var _super = _createSuper(Populate);
-  function Populate() {
-    (0, _classCallCheck2.default)(this, Populate);
-    return _super.apply(this, arguments);
-  }
-  (0, _createClass2.default)(Populate, [{
-    key: "validateArgs",
-    value: function validateArgs() {
-      this.requireArgumentInstance('document', _document.default);
-    }
-  }, {
-    key: "apply",
-    value: function apply(args) {
-      var document = args.document,
-        elements = args.elements;
-      $e.store.dispatch(this.component.store.actions.populate({
-        documentId: document.id,
-        elements: elements
-      }));
-
-      // TODO: BC for initializing Marionette views.
-      elementor.initElements();
-    }
-  }], [{
-    key: "reducer",
-    value: function reducer(state, _ref) {
-      var payload = _ref.payload;
-      var documentId = payload.documentId,
-        elements = payload.elements;
-      state[documentId] = {
-        document: {
-          id: 'document',
-          elements: []
-        }
-      };
-      (0, _utils.addElementToDocumentState)(elements, state[documentId]);
-    }
-  }]);
-  return Populate;
-}($e.modules.editor.CommandContainerInternalBase);
-exports.Populate = Populate;
-var _default = Populate;
-exports["default"] = _default;
 
 /***/ }),
 
@@ -17414,14 +17522,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.SetSettings = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var SetSettings = /*#__PURE__*/function (_$e$modules$editor$Co) {
@@ -17444,7 +17549,6 @@ var SetSettings = /*#__PURE__*/function (_$e$modules$editor$Co) {
   }, {
     key: "apply",
     value: function apply() {
-      var _this = this;
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var _args$containers = args.containers,
         containers = _args$containers === void 0 ? [args.container] : _args$containers,
@@ -17467,25 +17571,7 @@ var SetSettings = /*#__PURE__*/function (_$e$modules$editor$Co) {
         } else if (render) {
           container.render();
         }
-        $e.store.dispatch(_this.component.store.actions.settings({
-          documentId: elementor.documents.getCurrentId(),
-          elementId: container.id,
-          // Deep copy in order to avoid making container setting properties immutable.
-          settings: JSON.parse(JSON.stringify(settings))
-        }));
       });
-    }
-  }], [{
-    key: "reducer",
-    value: function reducer(state, _ref) {
-      var _state$documentId;
-      var payload = _ref.payload;
-      var documentId = payload.documentId,
-        elementId = payload.elementId,
-        settings = payload.settings;
-      if ((_state$documentId = state[documentId]) !== null && _state$documentId !== void 0 && _state$documentId[elementId]) {
-        state[documentId][elementId].settings = _objectSpread(_objectSpread({}, state[documentId][elementId].settings), settings);
-      }
     }
   }]);
   return SetSettings;
@@ -17644,7 +17730,6 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _utils = __webpack_require__(/*! elementor-document/elements/utils */ "../assets/dev/js/editor/document/elements/utils.js");
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Create = /*#__PURE__*/function (_$e$modules$editor$do) {
@@ -17706,12 +17791,6 @@ var Create = /*#__PURE__*/function (_$e$modules$editor$do) {
             }
           });
         }
-        $e.store.dispatch(_this.component.store.actions.create({
-          documentId: elementor.documents.getCurrentId(),
-          parentId: container.id,
-          elements: [createdContainer.model.toJSON()],
-          index: options.at
-        }));
       });
       if (1 === result.length) {
         result = result[0];
@@ -17741,24 +17820,6 @@ var Create = /*#__PURE__*/function (_$e$modules$editor$do) {
         });
       }
     }
-  }, {
-    key: "reducer",
-    value: function reducer(state, _ref) {
-      var payload = _ref.payload;
-      var parentId = payload.parentId,
-        documentId = payload.documentId,
-        elements = payload.elements,
-        index = payload.index;
-      if (!state[documentId]) {
-        state[documentId] = {
-          document: {
-            id: 'document',
-            elements: []
-          }
-        };
-      }
-      (0, _utils.addElementToDocumentState)(elements, state[documentId], parentId, index);
-    }
   }]);
   return Create;
 }($e.modules.editor.document.CommandHistoryBase);
@@ -17787,7 +17848,6 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _utils = __webpack_require__(/*! elementor-document/elements/utils */ "../assets/dev/js/editor/document/elements/utils.js");
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Delete = /*#__PURE__*/function (_$e$modules$editor$do) {
@@ -17820,11 +17880,6 @@ var Delete = /*#__PURE__*/function (_$e$modules$editor$do) {
         containers = _args$containers2 === void 0 ? [args.container] : _args$containers2;
       containers.forEach(function (container) {
         container = container.lookup();
-        $e.store.dispatch(_this.component.store.actions.delete({
-          documentId: elementor.documents.getCurrentId(),
-          elementId: container.id,
-          parentId: container.parent.id
-        }));
         if (_this.isHistoryActive()) {
           $e.internal('document/history/log-sub-item', {
             container: container,
@@ -17862,17 +17917,6 @@ var Delete = /*#__PURE__*/function (_$e$modules$editor$do) {
             at: data.at
           }
         });
-      }
-    }
-  }, {
-    key: "reducer",
-    value: function reducer(state, _ref) {
-      var payload = _ref.payload;
-      var elementId = payload.elementId,
-        parentId = payload.parentId,
-        documentId = payload.documentId;
-      if (state[documentId]) {
-        (0, _utils.removeElementFromDocumentState)(elementId, parentId, state[documentId]);
       }
     }
   }]);
@@ -18119,9 +18163,6 @@ var Empty = /*#__PURE__*/function (_$e$modules$editor$do) {
       if (args.force && elementor.elements) {
         elementor.elements.reset();
         elementor.getPreviewContainer().panel.closeEditor();
-        $e.store.dispatch(this.component.store.actions.empty({
-          documentId: elementor.documents.getCurrentId()
-        }));
         return;
       }
       elementor.getClearPageDialog().show();
@@ -18142,28 +18183,10 @@ var Empty = /*#__PURE__*/function (_$e$modules$editor$do) {
         var data = historyItem.get('data');
         if (data) {
           elementor.getPreviewView().addChildModel(data);
-          $e.store.dispatch($e.store.get('document/elements').actions.populate({
-            documentId: elementor.documents.getCurrentId(),
-            elements: structuredClone(data)
-          }));
         }
         $e.internal('document/save/set-is-modified', {
           status: true
         });
-      }
-    }
-  }, {
-    key: "reducer",
-    value: function reducer(state, _ref) {
-      var payload = _ref.payload;
-      var documentId = payload.documentId;
-      if (state[documentId]) {
-        state[documentId] = {
-          document: {
-            id: 'document',
-            elements: []
-          }
-        };
       }
     }
   }]);
@@ -19678,22 +19701,6 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
       return this.importCommands(commandsInternal);
     }
   }, {
-    key: "defaultStates",
-    value: function defaultStates() {
-      return {
-        '': {
-          initialState: {},
-          reducers: {
-            create: this.commands.create.reducer,
-            delete: this.commands.delete.reducer,
-            empty: this.commands.empty.reducer,
-            populate: this.commandsInternal.populate.reducer,
-            settings: this.commandsInternal['set-settings'].reducer
-          }
-        }
-      };
-    }
-  }, {
     key: "defaultUtils",
     value: function defaultUtils() {
       var _this = this;
@@ -19756,80 +19763,6 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
   return Component;
 }(_componentBase.default);
 exports["default"] = Component;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/document/elements/utils.js":
-/*!**********************************************************!*\
-  !*** ../assets/dev/js/editor/document/elements/utils.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.addElementToDocumentState = addElementToDocumentState;
-exports.removeElementFromDocumentState = removeElementFromDocumentState;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-/**
- * Add element to Redux state BY REFERENCE using Immer.
- *
- * @param {Object} element       - Element model data as JSON.
- * @param {Object} documentState - Document state from Redux reducer.
- * @param {string} parentId      - Parent element ID.
- * @param {number} index         - New index to insert at.
- */
-function addElementToDocumentState(element, documentState) {
-  var parentId = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'document';
-  var index = arguments.length > 3 ? arguments[3] : undefined;
-  var parent = documentState[parentId];
-  if (!parent) {
-    return;
-  }
-  if (Array.isArray(element)) {
-    element.forEach(function (el) {
-      return addElementToDocumentState(el, documentState, parentId, index);
-    });
-    return;
-  }
-  documentState[element.id] = _objectSpread(_objectSpread({}, element), {}, {
-    elements: []
-  });
-  documentState[parentId].elements.splice(index !== null && index !== void 0 ? index : parent.elements.length, 0, element.id);
-  if (element.elements) {
-    element.elements.forEach(function (child) {
-      return addElementToDocumentState(child, documentState, element.id);
-    });
-  }
-}
-
-/**
- * Remove element from Redux state BY REFERENCE using Immer.
- *
- * @param {Object} elementId     - Element ID to remove.
- * @param {string} parentId      - Parent element ID.
- * @param {Object} documentState - Document state from Redux reducer.
- */
-function removeElementFromDocumentState(elementId, parentId, documentState) {
-  var element = documentState[elementId],
-    parent = documentState[parentId];
-  if (!element || !parent) {
-    return;
-  }
-  element.elements.forEach(function (childId) {
-    return removeElementFromDocumentState(childId, elementId, documentState);
-  });
-  delete documentState[elementId];
-  parent.elements = parent.elements.filter(function (childId) {
-    return childId !== elementId;
-  });
-}
 
 /***/ }),
 
@@ -22061,15 +21994,9 @@ var Helper = /*#__PURE__*/function () {
           /**
            * TODO: Try improve performance of using 'document/elements/create` instead of manual create.
            */
-          var createdContainer = container.view.addElement(model, {
+          container.view.addElement(model, {
             edit: false
-          }).getContainer();
-          $e.store.dispatch($e.store.get('document/elements').actions.create({
-            documentId: elementor.documents.getCurrentId(),
-            parentId: container.id,
-            elements: [createdContainer.model.toJSON()],
-            index: options.at
-          }));
+          });
 
           /**
            * Manual history & not using of `$e.run('document/elements/create')`
@@ -25331,6 +25258,7 @@ var Save = /*#__PURE__*/function (_$e$modules$CommandIn) {
           remove: ['default']
         }),
         oldStatus = container.settings.get('post_status');
+      this.addPersistentSettingsToPayload(settings, container);
 
       // TODO: Remove - Backwards compatibility.
       elementor.saver.trigger('before:save', args).trigger('before:save:' + status, args);
@@ -25465,6 +25393,16 @@ var Save = /*#__PURE__*/function (_$e$modules$CommandIn) {
     key: "onAfterAjax",
     value: function onAfterAjax(document) {
       document.editor.isSaving = false;
+    }
+  }, {
+    key: "addPersistentSettingsToPayload",
+    value: function addPersistentSettingsToPayload(settings, container) {
+      var _elementor, _elementor$config, _elementor$config$per;
+      (_elementor = elementor) === null || _elementor === void 0 ? void 0 : (_elementor$config = _elementor.config) === null || _elementor$config === void 0 ? void 0 : (_elementor$config$per = _elementor$config.persistent_keys) === null || _elementor$config$per === void 0 ? void 0 : _elementor$config$per.forEach(function (setting) {
+        if (container.settings.defaults.hasOwnProperty(setting) && !settings.hasOwnProperty(setting)) {
+          settings[setting] = container.settings.defaults[setting];
+        }
+      });
     }
   }]);
   return Save;
@@ -26929,6 +26867,7 @@ var _events = _interopRequireDefault(__webpack_require__(/*! elementor-utils/eve
 var _component3 = _interopRequireDefault(__webpack_require__(/*! ./document/component */ "../assets/dev/js/editor/document/component.js"));
 var _component4 = _interopRequireDefault(__webpack_require__(/*! ./data/globals/component */ "../assets/dev/js/editor/data/globals/component.js"));
 var _controlConditions = _interopRequireDefault(__webpack_require__(/*! ./utils/control-conditions */ "../assets/dev/js/editor/utils/control-conditions.js"));
+var _module5 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/promotions/assets/js/editor/module */ "../modules/promotions/assets/js/editor/module.js"));
 var elementTypes = _interopRequireWildcard(__webpack_require__(/*! ./elements/types */ "../assets/dev/js/editor/elements/types/index.js"));
 var _elementBase = _interopRequireDefault(__webpack_require__(/*! ./elements/types/base/element-base */ "../assets/dev/js/editor/elements/types/base/element-base.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -26958,7 +26897,6 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "helpers", __webpack_require__(/*! elementor-editor-utils/helpers */ "../assets/dev/js/editor/utils/helpers.js"));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "imagesManager", __webpack_require__(/*! elementor-editor-utils/images-manager */ "../assets/dev/js/editor/utils/images-manager.js"));
     // TODO: Unused.
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "schemes", __webpack_require__(/*! elementor-editor-utils/schemes */ "../assets/dev/js/editor/utils/schemes.js"));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "presetsFactory", __webpack_require__(/*! elementor-editor-utils/presets-factory */ "../assets/dev/js/editor/utils/presets-factory.js"));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "templates", __webpack_require__(/*! elementor-templates/manager */ "../assets/dev/js/editor/components/template-library/manager.js"));
     // TODO = BC Since 2.3.0
@@ -27288,6 +27226,7 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
         this.modules.landingLibraryPageModule = new _module3.default();
       }
       this.modules.elementsColorPicker = new _module4.default();
+      this.modules.promotionModule = new _module5.default();
 
       // TODO: Move to elementor:init-data-components
       $e.components.register(new _component4.default());
@@ -27445,6 +27384,7 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
       this.addRegions({
         panel: __webpack_require__(/*! elementor-regions/panel/panel */ "../assets/dev/js/editor/regions/panel/panel.js")
       });
+      window.dispatchEvent(new CustomEvent('elementor/panel/init'));
       this.trigger('panel:init');
     }
   }, {
@@ -27987,7 +27927,6 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
       }
       this.$previewContents = this.$preview.contents();
       this.initFrontend();
-      this.schemes.init();
       this.preventClicksInsideEditor();
       this.addBackgroundClickArea(elementorFrontend.elements.window.document);
       if (!this.previewLoadedOnce) {
@@ -28800,7 +28739,10 @@ exports["default"] = Document;
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _baseElementModel = _interopRequireDefault(__webpack_require__(/*! ./base-element-model */ "../assets/dev/js/editor/elements/models/base-element-model.js"));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var ColumnSettingsModel = __webpack_require__(/*! elementor-elements/models/column-settings */ "../assets/dev/js/editor/elements/models/column-settings.js"),
   ElementModel;
 
@@ -28859,7 +28801,9 @@ ElementModel = _baseElementModel.default.extend({
     if ('widget' === elType) {
       settings.widgetType = this.get('widgetType');
     }
-    settings.elType = elType;
+    settings = _objectSpread(_objectSpread({}, settings), {}, {
+      elType: elType
+    }); // Create a shallow copy as elType is sometimes read only when trying to drop a widget preset.
     settings.isInner = this.get('isInner');
 
     // Allow passing custom `_title` from model.
@@ -28915,14 +28859,29 @@ ElementModel = _baseElementModel.default.extend({
     return elementor.getElementData(this).title;
   },
   getTitle: function getTitle() {
-    var title = this.getSetting('_title');
+    var _custom$isPreset;
+    var title = this.getSetting('_title') || this.getSetting('presetTitle');
+    var custom = this.get('custom');
+    if (!title && ((_custom$isPreset = custom === null || custom === void 0 ? void 0 : custom.isPreset) !== null && _custom$isPreset !== void 0 ? _custom$isPreset : false)) {
+      return this.get('title') || title;
+    }
     if (!title) {
       title = this.getDefaultTitle();
     }
     return title;
   },
   getIcon: function getIcon() {
-    return elementor.getElementData(this).icon;
+    var _custom$isPreset2;
+    var mainIcon = elementor.getElementData(this).icon,
+      custom = this.get('custom');
+    if ((_custom$isPreset2 = custom === null || custom === void 0 ? void 0 : custom.isPreset) !== null && _custom$isPreset2 !== void 0 ? _custom$isPreset2 : false) {
+      return this.attributes.custom.preset_settings.presetIcon || mainIcon;
+    }
+    var savedPresetIcon = this.getSetting('presetIcon');
+    if ('string' === typeof savedPresetIcon && '' !== savedPresetIcon.trim()) {
+      return savedPresetIcon;
+    }
+    return mainIcon;
   },
   createRemoteRenderRequest: function createRemoteRenderRequest() {
     var data = this.toJSON();
@@ -29883,8 +29842,8 @@ BaseElementView = BaseContainer.extend({
      *
      * This filter allows adding new context menu groups to elements.
      *
-     * @param  array  customGroups - An array of group objects.
-     * @param  string elementType - The current element type.
+     * @param array  customGroups - An array of group objects.
+     * @param string elementType - The current element type.
      */
     customGroups = elementor.hooks.applyFilters('elements/context-menu/groups', customGroups, this.options.model.get('elType'));
     if (customGroups.length) {
@@ -29919,6 +29878,7 @@ BaseElementView = BaseContainer.extend({
     return {};
   },
   initialize: function initialize() {
+    var _this2 = this;
     BaseContainer.prototype.initialize.apply(this, arguments);
     var editModel = this.getEditModel();
     if (this.collection && this.onCollectionChanged) {
@@ -29931,6 +29891,12 @@ BaseElementView = BaseContainer.extend({
     }
     this.listenTo(editModel.get('editSettings'), 'change', this.onEditSettingsChanged).listenTo(this.model, 'request:edit', this.onEditRequest).listenTo(this.model, 'request:toggleVisibility', this.toggleVisibility);
     this.initControlsCSSParser();
+    if (!this.onDynamicServerRequestEnd) {
+      this.onDynamicServerRequestEnd = _.debounce(function () {
+        _this2.render();
+        _this2.$el.removeClass('elementor-loading');
+      }, 100);
+    }
   },
   getHandlesOverlay: function getHandlesOverlay() {
     var elementType = this.getElementType(),
@@ -29953,7 +29919,7 @@ BaseElementView = BaseContainer.extend({
        *
        * @since 3.5.0
        *
-       * @param  array editButtons An array of buttons.
+       * @param array editButtons An array of buttons.
        */
       editButtons = elementor.hooks.applyFilters("elements/edit-buttons", editButtons);
 
@@ -29966,7 +29932,7 @@ BaseElementView = BaseContainer.extend({
        *
        * @since 3.5.0
        *
-       * @param  array editButtons An array of buttons.
+       * @param array editButtons An array of buttons.
        */
       editButtons = elementor.hooks.applyFilters("elements/edit-buttons/".concat(elementType), editButtons);
     }
@@ -30268,7 +30234,7 @@ BaseElementView = BaseContainer.extend({
    * Not working with dynamics, will required full re-render.
    */
   linkDataBindings: function linkDataBindings() {
-    var _this2 = this;
+    var _this3 = this;
     /**
      * @type {Array.<DataBinding>}
      */
@@ -30285,7 +30251,7 @@ BaseElementView = BaseContainer.extend({
       // To support nested data-binding bypass nested data-binding that are not part of the current.
       if (jQuery(current).closest('.elementor-element').data('id') === id) {
         if (current.dataset.bindingType) {
-          _this2.dataBindings.push({
+          _this3.dataBindings.push({
             el: current,
             dataset: current.dataset
           });
@@ -30377,10 +30343,7 @@ BaseElementView = BaseContainer.extend({
       onServerRequestStart: function onServerRequestStart() {
         self.$el.addClass('elementor-loading');
       },
-      onServerRequestEnd: function onServerRequestEnd() {
-        self.render();
-        self.$el.removeClass('elementor-loading');
-      }
+      onServerRequestEnd: self.onDynamicServerRequestEnd
     };
   },
   serializeData: function serializeData() {
@@ -30401,7 +30364,7 @@ BaseElementView = BaseContainer.extend({
     BaseContainer.prototype.render.apply(this, arguments);
   },
   onRender: function onRender() {
-    var _this3 = this;
+    var _this4 = this;
     this.linkDataBindings();
     this.renderUI();
     this.runReadyTrigger();
@@ -30422,8 +30385,8 @@ BaseElementView = BaseContainer.extend({
 
     // Defer to wait for all of the children to render.
     setTimeout(function () {
-      _this3.initDraggable();
-      _this3.dispatchElementLifeCycleEvent('rendered');
+      _this4.initDraggable();
+      _this4.dispatchElementLifeCycleEvent('rendered');
     });
   },
   dispatchElementLifeCycleEvent: function dispatchElementLifeCycleEvent(eventType) {
@@ -30505,7 +30468,7 @@ BaseElementView = BaseContainer.extend({
     elementorFrontend.elements.window.document.activeElement.blur();
   },
   onDestroy: function onDestroy() {
-    var _this4 = this;
+    var _this5 = this;
     if (this.dataBindings) {
       delete this.dataBindings;
     }
@@ -30515,7 +30478,7 @@ BaseElementView = BaseContainer.extend({
 
     // Defer so the event is fired after the element is removed from the DOM.
     setTimeout(function () {
-      return _this4.dispatchElementLifeCycleEvent('destroyed');
+      return _this5.dispatchElementLifeCycleEvent('destroyed');
     });
   },
   // eslint-disable-next-line jsdoc/require-returns-check
@@ -30550,27 +30513,31 @@ BaseElementView = BaseContainer.extend({
    * Initialize the Droppable instance.
    */
   initDraggable: function initDraggable() {
-    var _this5 = this;
+    var _this6 = this;
+    if (!elementor.userCan('design')) {
+      return;
+    }
+
     // Init the draggable only for Containers and their children.
     if (!this.$el.hasClass('.e-con') && !this.$el.parents('.e-con').length) {
       return;
     }
     this.$el.html5Draggable({
       onDragStart: function onDragStart(e) {
-        var _this5$options$dragga;
+        var _this6$options$dragga;
         e.stopPropagation();
-        if (_this5.getContainer().isLocked()) {
+        if (_this6.getContainer().isLocked()) {
           e.originalEvent.preventDefault();
           return;
         }
 
         // Need to stop this event when the element is absolute since it clashes with this one.
         // See `behaviors/widget-draggable.js`.
-        if ((_this5$options$dragga = _this5.options.draggable) !== null && _this5$options$dragga !== void 0 && _this5$options$dragga.isActive) {
+        if ((_this6$options$dragga = _this6.options.draggable) !== null && _this6$options$dragga !== void 0 && _this6$options$dragga.isActive) {
           return;
         }
-        var helper = _this5.getDraggableHelper();
-        _this5.$el[0].appendChild(helper);
+        var helper = _this6.getDraggableHelper();
+        _this6.$el[0].appendChild(helper);
 
         // Set the x & y coordinates of the helper the same as the legacy jQuery sortable.
         e.originalEvent.dataTransfer.setDragImage(helper, 25, 20);
@@ -30580,12 +30547,12 @@ BaseElementView = BaseContainer.extend({
         setTimeout(function () {
           helper.remove();
         });
-        _this5.onDragStart(e);
-        elementor.channels.editor.reply('element:dragged', _this5);
+        _this6.onDragStart(e);
+        elementor.channels.editor.reply('element:dragged', _this6);
       },
       onDragEnd: function onDragEnd(e) {
         e.stopPropagation();
-        _this5.onDragEnd(e);
+        _this6.onDragEnd(e);
       },
       groups: ['elementor-element']
     });
@@ -30683,6 +30650,7 @@ module.exports = ResizableBehavior;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _environment = _interopRequireDefault(__webpack_require__(/*! elementor-common/utils/environment */ "../core/common/assets/js/utils/environment.js"));
 var _base = _interopRequireDefault(__webpack_require__(/*! elementor-views/add-section/base */ "../assets/dev/js/editor/views/add-section/base.js"));
 var ContextMenu = __webpack_require__(/*! elementor-editor-utils/context-menu */ "../assets/dev/js/editor/utils/context-menu.js");
 module.exports = Marionette.Behavior.extend({
@@ -30707,6 +30675,7 @@ module.exports = Marionette.Behavior.extend({
   },
   initContextMenu: function initContextMenu() {
     var _this = this;
+    var controlSign = _environment.default.mac ? '&#8984;' : '^';
     var contextMenuGroups = this.getOption('groups'),
       deleteGroup = _.findWhere(contextMenuGroups, {
         name: 'delete'
@@ -30722,6 +30691,7 @@ module.exports = Marionette.Behavior.extend({
           name: 'navigator',
           icon: 'eicon-navigator',
           title: elementorCommon.config.experimentalFeatures.editor_v2 ? __('Structure', 'elementor') : __('Navigator', 'elementor'),
+          shortcut: controlSign + '+I',
           callback: function callback() {
             return $e.route('navigator', {
               reOpen: true,
@@ -32048,6 +32018,8 @@ var _inline = _interopRequireDefault(__webpack_require__(/*! elementor-views/add
 var _widgetResizeable = _interopRequireDefault(__webpack_require__(/*! ./behaviors/widget-resizeable */ "../assets/dev/js/editor/elements/views/behaviors/widget-resizeable.js"));
 var _containerHelper = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/container-helper */ "../assets/dev/js/editor/utils/container-helper.js"));
 var _emptyView = _interopRequireDefault(__webpack_require__(/*! elementor-elements/views/container/empty-view */ "../assets/dev/js/editor/elements/views/container/empty-view.js"));
+var _hooks = __webpack_require__(/*! elementor-document/hooks */ "../assets/dev/js/editor/document/hooks/index.js");
+var _utils = __webpack_require__(/*! elementor/modules/nested-elements/assets/js/editor/utils */ "../modules/nested-elements/assets/js/editor/utils.js");
 // Most of the code has been copied from `section.js`.
 
 var BaseElementView = __webpack_require__(/*! elementor-elements/views/base */ "../assets/dev/js/editor/elements/views/base.js");
@@ -32065,7 +32037,8 @@ var ContainerView = BaseElementView.extend({
     return Marionette.CompositeView.prototype.getChildViewContainer.apply(this, arguments);
   },
   className: function className() {
-    return "".concat(BaseElementView.prototype.className.apply(this), " e-con");
+    var isNestedClassName = this.model.get('isInner') ? 'e-child' : 'e-parent';
+    return "".concat(BaseElementView.prototype.className.apply(this), " e-con ").concat(isNestedClassName);
   },
   childViewOptions: function childViewOptions() {
     return {
@@ -32082,10 +32055,16 @@ var ContainerView = BaseElementView.extend({
     return ui;
   },
   getCurrentUiStates: function getCurrentUiStates() {
-    var currentDirection = this.container.settings.get(this.getDirectionSettingKey());
+    var currentDeviceMode = elementor.channels.deviceMode.request('currentMode'),
+      deviceSuffix = 'desktop' === currentDeviceMode ? '' : '_' + currentDeviceMode,
+      directionSettingKey = this.getDirectionSettingKey() + deviceSuffix,
+      currentDirection = this.container.settings.get(directionSettingKey);
     return {
       directionMode: currentDirection || _containerHelper.default.DIRECTION_DEFAULT
     };
+  },
+  onDeviceModeChange: function onDeviceModeChange() {
+    _hooks.SetDirectionMode.set(this.getContainer());
   },
   getDirectionSettingKey: function getDirectionSettingKey() {
     var containerType = this.container.settings.get('container_type'),
@@ -32109,6 +32088,12 @@ var ContainerView = BaseElementView.extend({
   initialize: function initialize() {
     BaseElementView.prototype.initialize.apply(this, arguments);
     this.model.get('editSettings').set('defaultEditRoute', 'layout');
+    this.onDeviceModeChange = this.onDeviceModeChange.bind(this);
+    elementor.listenTo(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
+  },
+  onDestroy: function onDestroy() {
+    BaseElementView.prototype.onDestroy.apply(this, arguments);
+    elementor.stopListening(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
   },
   /**
    * TODO: Remove. It's a temporary solution for the Navigator sortable.
@@ -32139,6 +32124,10 @@ var ContainerView = BaseElementView.extend({
       return 0;
     }
     return parent.view.getNestingLevel() + 1;
+  },
+  isNestedElementContentContainer: function isNestedElementContentContainer() {
+    var widgetType = this.container.parent.model.get('widgetType');
+    return widgetType && widgetType.trim() !== '' && (0, _utils.isWidgetSupportNesting)(widgetType);
   },
   getDroppableAxis: function getDroppableAxis() {
     var _axisMap;
@@ -32255,6 +32244,7 @@ var ContainerView = BaseElementView.extend({
    *
    */
   getContextMenuGroups: function getContextMenuGroups() {
+    var _this2 = this;
     var groups = BaseElementView.prototype.getContextMenuGroups.apply(this, arguments),
       transferGroupClipboardIndex = groups.indexOf(_.findWhere(groups, {
         name: 'clipboard'
@@ -32267,7 +32257,10 @@ var ContainerView = BaseElementView.extend({
       actions: [{
         name: 'save',
         title: __('Save as Template', 'elementor'),
-        callback: this.saveAsTemplate.bind(this)
+        callback: this.saveAsTemplate.bind(this),
+        isEnabled: function isEnabled() {
+          return !_this2.getContainer().isLocked();
+        }
       }]
     });
     groups.splice(transferGroupGeneralIndex + 1, 0, {
@@ -32357,19 +32350,28 @@ var ContainerView = BaseElementView.extend({
     this.addSectionView = addSectionView;
   },
   onRender: function onRender() {
-    var _this2 = this;
+    var _this3 = this;
     BaseElementView.prototype.onRender.apply(this, arguments);
 
     // Defer to wait for everything to render.
     setTimeout(function () {
-      _this2.nestingLevel = _this2.getNestingLevel();
-      _this2.$el[0].dataset.nestingLevel = _this2.nestingLevel;
+      _this3.nestingLevel = _this3.getNestingLevel();
+      _this3.$el[0].dataset.nestingLevel = _this3.nestingLevel;
+      if (!_this3.model.get('isInner')) {
+        _this3.model.set('isInner', _this3.isNestedElementContentContainer() || _this3.getNestingLevel() > 0);
+      }
 
       // Add the EmptyView to the end of the Grid Container on initial page load if there are already some widgets.
-      if (_this2.isGridContainer()) {
-        _this2.reInitEmptyView();
+      if (_this3.isGridContainer()) {
+        _this3.reInitEmptyView();
       }
-      _this2.droppableInitialize(_this2.container.settings);
+
+      // Todo: Remove in version 3.21.0: https://elementor.atlassian.net/browse/ED-11884.
+      // Remove together with support for physical properties inside the Mega Menu & Nested Carousel widgets.
+      if (!_this3.model.get('isInner')) {
+        _this3.$el[0].dataset.coreV316Plus = 'true';
+      }
+      _this3.droppableInitialize(_this3.container.settings);
     });
   },
   onRenderEmpty: function onRenderEmpty() {
@@ -32395,6 +32397,26 @@ var ContainerView = BaseElementView.extend({
       this.droppableDestroy();
       this.droppableInitialize(settings);
     }
+    if (settings.changed.container_type) {
+      this.updatePanelTitlesAndIcons();
+    }
+  },
+  updatePanelTitlesAndIcons: function updatePanelTitlesAndIcons() {
+    var title = this.getPanelTitle(),
+      icon = this.getPanelIcon();
+    this.model.set('icon', icon);
+    this.model.set('title', title);
+    this.model.get('settings').set('presetTitle', title);
+    this.model.get('settings').set('presetIcon', icon);
+
+    /* Translators: %s: Element name. */
+    jQuery('#elementor-panel-header-title').html(sprintf(__('Edit %s', 'elementor'), title));
+  },
+  getPanelTitle: function getPanelTitle() {
+    return this.isFlexContainer() ? __('Container', 'elementor') : __('Grid', 'elementor');
+  },
+  getPanelIcon: function getPanelIcon() {
+    return this.isFlexContainer() ? 'eicon-container' : 'eicon-container-grid';
   },
   onDragStart: function onDragStart() {
     this.droppableDestroy();
@@ -32452,7 +32474,8 @@ var ContainerView = BaseElementView.extend({
   },
   handleGridEmptyView: function handleGridEmptyView() {
     var currentContainer = this.getCorrectContainerElement();
-    this.moveElementToLastChild(currentContainer, currentContainer.find('> .elementor-empty-view'));
+    var emptyViewItem = currentContainer.find('> .elementor-empty-view');
+    this.moveElementToLastChild(currentContainer, emptyViewItem);
   },
   moveElementToLastChild: function moveElementToLastChild(parentWrapperElement, childElementToMove) {
     var parent = parentWrapperElement.get(0),
@@ -32607,13 +32630,15 @@ var EmptyView = /*#__PURE__*/function (_Marionette$ItemView) {
       ReactDOM.render(defaultElement, this.el);
     }
   }, {
-    key: "attachElContent",
-    value: function attachElContent() {
-      var _this2 = this;
+    key: "onRender",
+    value: function onRender() {
       this.$el.addClass(this.className);
-      setTimeout(function () {
-        _this2.renderReactDefaultElement(_this2.ownerView.container);
-      });
+      this.renderReactDefaultElement(this.ownerView.container);
+    }
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {
+      ReactDOM.unmountComponentAtNode(this.el);
     }
   }]);
   return EmptyView;
@@ -33652,7 +33677,7 @@ var _default = /*#__PURE__*/function (_Marionette$ItemView) {
   }, {
     key: "onRendr",
     value: function onRendr() {
-      this.$el.css('padding-' + (elementorCommon.config.isRTL ? 'right' : 'left'), this.getOption('indent'));
+      this.$el.css('padding-inline-start', this.getOption('indent'));
     }
   }]);
   return _default;
@@ -33706,7 +33731,8 @@ var _default = /*#__PURE__*/function (_Marionette$Composite) {
         toggleList: '> .elementor-navigator__item > .elementor-navigator__element__list-toggle',
         indicators: '> .elementor-navigator__item > .elementor-navigator__element__indicators',
         indicator: '> .elementor-navigator__item > .elementor-navigator__element__indicators > .elementor-navigator__element__indicator',
-        elements: '> .elementor-navigator__elements'
+        elements: '> .elementor-navigator__elements',
+        icon: '> .elementor-navigator__item .elementor-navigator__element__element-type'
       };
     }
   }, {
@@ -34015,7 +34041,7 @@ var _default = /*#__PURE__*/function (_Marionette$Composite) {
       if (this.isRoot()) {
         return;
       }
-      this.ui.item.css('padding-' + (elementorCommon.config.isRTL ? 'right' : 'left'), this.getIndent());
+      this.ui.item.css('padding-inline-start', this.getIndent());
       this.toggleHiddenClass();
       this.renderIndicators();
     }
@@ -34032,6 +34058,12 @@ var _default = /*#__PURE__*/function (_Marionette$Composite) {
       var _this3 = this;
       if (undefined !== settingsModel.changed._title) {
         this.ui.title.text(this.model.getTitle());
+      }
+      if (undefined !== settingsModel.changed.presetTitle && undefined === settingsModel._title) {
+        this.ui.title.text(this.model.getTitle());
+      }
+      if (undefined !== settingsModel.changed.presetIcon) {
+        this.ui.icon.html("<i class=\"".concat(this.model.attributes.icon, "\"></i>"));
       }
       jQuery.each(elementor.navigator.indicators, function (indicatorName, indicatorSettings) {
         if (Object.keys(settingsModel.changed).filter(function (key) {
@@ -35324,6 +35356,8 @@ var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/h
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _classPrivateFieldGet2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classPrivateFieldGet */ "../node_modules/@babel/runtime/helpers/classPrivateFieldGet.js"));
+var _classPrivateFieldSet2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classPrivateFieldSet */ "../node_modules/@babel/runtime/helpers/classPrivateFieldSet.js"));
 var _componentBase = _interopRequireDefault(__webpack_require__(/*! elementor-editor/component-base */ "../assets/dev/js/editor/component-base.js"));
 var commands = _interopRequireWildcard(__webpack_require__(/*! ./commands/ */ "../assets/dev/js/editor/regions/panel/commands/index.js"));
 var commandsInternal = _interopRequireWildcard(__webpack_require__(/*! ./commands/internal/ */ "../assets/dev/js/editor/regions/panel/commands/internal/index.js"));
@@ -35331,6 +35365,9 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+var _userInteractionsBlocked = /*#__PURE__*/new WeakMap();
 var Component = /*#__PURE__*/function (_ComponentBase) {
   (0, _inherits2.default)(Component, _ComponentBase);
   var _super = _createSuper(Component);
@@ -35342,6 +35379,10 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
     }
     _this = _super.call.apply(_super, [this].concat(args));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "stateReadyOnce", false);
+    _classPrivateFieldInitSpec((0, _assertThisInitialized2.default)(_this), _userInteractionsBlocked, {
+      writable: true,
+      value: false
+    });
     return _this;
   }
   (0, _createClass2.default)(Component, [{
@@ -35381,9 +35422,13 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
   }, {
     key: "defaultShortcuts",
     value: function defaultShortcuts() {
+      var _this3 = this;
       return {
         toggle: {
-          keys: 'ctrl+p'
+          keys: 'ctrl+p',
+          dependency: function dependency() {
+            return !_this3.isUserInteractionsBlocked();
+          }
         },
         save: {
           keys: 'ctrl+s'
@@ -35406,6 +35451,23 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
           keys: 'ctrl+shift+u'
         }
       };
+    }
+  }, {
+    key: "blockUserInteractions",
+    value: function blockUserInteractions() {
+      elementor.panel.$el.addClass('e-panel-block-interactions');
+      (0, _classPrivateFieldSet2.default)(this, _userInteractionsBlocked, true);
+    }
+  }, {
+    key: "unblockUserInteractions",
+    value: function unblockUserInteractions() {
+      elementor.panel.$el.removeClass('e-panel-block-interactions');
+      (0, _classPrivateFieldSet2.default)(this, _userInteractionsBlocked, false);
+    }
+  }, {
+    key: "isUserInteractionsBlocked",
+    value: function isUserInteractionsBlocked() {
+      return (0, _classPrivateFieldGet2.default)(this, _userInteractionsBlocked);
     }
   }]);
   return Component;
@@ -35473,7 +35535,7 @@ EditModeItemView = Marionette.ItemView.extend({
     }
   },
   onEditModeChanged: function onEditModeChanged(activeMode) {
-    var ctrlLabel = _environment.default.mac ? '&#8984;' : 'Ctrl';
+    var ctrlLabel = _environment.default.mac ? "\u2318" : 'Ctrl';
     var text = 'preview' === activeMode ? __('Show Panel', 'elementor') : __('Hide Panel', 'elementor');
     text += " (".concat(ctrlLabel, " + P)");
     this.ui.previewLabel.attr('title', text);
@@ -35714,22 +35776,8 @@ PanelLayoutView = Marionette.LayoutView.extend({
       menu: {
         view: elementor.modules.layouts.panel.pages.menu.Menu,
         title: '<img src="' + elementorCommon.config.urls.assets + 'images/logo-panel.svg">'
-      },
-      colorScheme: {
-        view: __webpack_require__(/*! elementor-panel/pages/schemes/colors */ "../assets/dev/js/editor/regions/panel/pages/schemes/colors.js")
-      },
-      typographyScheme: {
-        view: __webpack_require__(/*! elementor-panel/pages/schemes/typography */ "../assets/dev/js/editor/regions/panel/pages/schemes/typography.js")
       }
     };
-    var schemesTypes = Object.keys(elementor.schemes.getSchemes()),
-      disabledSchemes = _.difference(schemesTypes, elementor.schemes.getEnabledSchemesTypes());
-    _.each(disabledSchemes, function (schemeType) {
-      var scheme = elementor.schemes.getScheme(schemeType);
-      pages[schemeType + 'Scheme'].view = (__webpack_require__(/*! elementor-panel/pages/schemes/disabled */ "../assets/dev/js/editor/regions/panel/pages/schemes/disabled.js").extend)({
-        disabledTitle: scheme.disabled_title
-      });
-    });
     return pages;
   },
   initPages: function initPages() {
@@ -36076,11 +36124,18 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
   }, {
     key: "renderTab",
     value: function renderTab(tab, args) {
+      var _model$attributes, _model$attributes$cus, _model$changed;
       var model = args.model,
         view = args.view,
-        activeControl = args.activeControl,
-        title = sprintf(__('Edit %s', 'elementor'), elementor.getElementData(model).title);
-      if (this.wasOutOfFocus() || this.activeModelId !== args.model.id || tab !== this.activeTabs[args.model.id]) {
+        activeControl = args.activeControl;
+      var elementTitle = model !== null && model !== void 0 && (_model$attributes = model.attributes) !== null && _model$attributes !== void 0 && (_model$attributes$cus = _model$attributes.custom) !== null && _model$attributes$cus !== void 0 && _model$attributes$cus.isPreset || model !== null && model !== void 0 && (_model$changed = model.changed) !== null && _model$changed !== void 0 && _model$changed.title ? model.attributes.title : elementor.getElementData(model).title;
+      if (model.attributes.settings.attributes.presetTitle) {
+        elementTitle = model.attributes.settings.attributes.presetTitle;
+      }
+
+      /* Translators: %s: Element name. */
+      var title = sprintf(__('Edit %s', 'elementor'), elementTitle);
+      if (this.shouldRenderPage(tab, args.model.id)) {
         this.activeModelId = args.model.id;
         this.activeTabs[args.model.id] = tab;
         elementor.getPanelView().setPage('editor', title, {
@@ -36093,12 +36148,13 @@ var Component = /*#__PURE__*/function (_ComponentBase) {
       this.activateControl(activeControl);
     }
   }, {
-    key: "wasOutOfFocus",
-    value: function wasOutOfFocus() {
-      var history = $e.routes.getHistory('panel');
-      var lastRoute = history[history.length - 1].route;
-      var lastRouteParts = lastRoute.split('/');
-      return 'categories' === lastRouteParts[lastRouteParts.length - 1];
+    key: "shouldRenderPage",
+    value: function shouldRenderPage(tab, modelId) {
+      var currentPanelView = elementor.getPanelView();
+      var isSamePage = 'editor' === currentPanelView.getCurrentPageName();
+      var isSameTab = tab === currentPanelView.getCurrentPageView().activeTab;
+      var isEditingSameModel = modelId === this.activeModelId;
+      return !isSamePage || !isSameTab || !isEditingSameModel;
     }
   }, {
     key: "setDefaultTab",
@@ -36277,7 +36333,11 @@ exports["default"] = Component;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var PanelElementsCategoriesCollection = __webpack_require__(/*! ./collections/categories */ "../assets/dev/js/editor/regions/panel/pages/elements/collections/categories.js"),
   PanelElementsElementsCollection = __webpack_require__(/*! ./collections/elements */ "../assets/dev/js/editor/regions/panel/pages/elements/collections/elements.js"),
   PanelElementsCategoriesView = __webpack_require__(/*! ./views/categories */ "../assets/dev/js/editor/regions/panel/pages/elements/views/categories.js"),
@@ -36337,8 +36397,8 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
     });
   },
   initElementsCollection: function initElementsCollection() {
-    var elementsCollection = new PanelElementsElementsCollection(),
-      isContainerActive = elementorCommon.config.experimentalFeatures.container;
+    var _this = this;
+    var elementsCollection = new PanelElementsElementsCollection();
 
     // Deprecated widget handling.
     Object.entries(elementor.widgetsCache).forEach(function (_ref) {
@@ -36356,25 +36416,10 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
       if (elementor.config.document.panel.widgets_settings[widget.widget_type]) {
         widget = _.extend(widget, elementor.config.document.panel.widgets_settings[widget.widget_type]);
       }
-      if (!widget.show_in_panel) {
+      if (!_this.shouldAddWidget(widget)) {
         return;
       }
-
-      // Don't register the `Inner Section` if the Container experiment is enabled.
-      if ('inner-section' === widget.name && isContainerActive) {
-        return;
-      }
-      elementsCollection.add({
-        title: widget.title,
-        elType: widget.elType,
-        categories: widget.categories,
-        keywords: widget.keywords,
-        icon: widget.icon,
-        widgetType: widget.widget_type,
-        custom: widget.custom,
-        editable: widget.editable,
-        hideOnSearch: widget.hide_on_search
-      });
+      elementsCollection.add(_this.getCollectionItem(widget));
     });
     jQuery.each(elementor.config.promotionWidgets, function (index, widget) {
       elementsCollection.add({
@@ -36385,7 +36430,31 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
         editable: false
       });
     });
+    if (elementorCommon.config.experimentalFeatures.container_grid) {
+      jQuery.each(elementor.config.elementsPresets, function (index, widget) {
+        var originalWidget = elementor.widgetsCache[widget.replacements.custom.originalWidget],
+          replacements = widget.replacements,
+          presetWidget = _this.deepMerge(originalWidget, replacements);
+        if (!_this.shouldAddWidget(presetWidget)) {
+          return;
+        }
+        elementsCollection.add(_this.getCollectionItem(presetWidget));
+      });
+    }
     this.elementsCollection = elementsCollection;
+  },
+  getCollectionItem: function getCollectionItem(item) {
+    return {
+      title: item.title,
+      elType: item.elType,
+      categories: item.categories,
+      keywords: item.keywords,
+      icon: item.icon,
+      widgetType: item.widget_type,
+      custom: item.custom,
+      editable: item.editable,
+      hideOnSearch: item.hide_on_search
+    };
   },
   initCategoriesCollection: function initCategoriesCollection() {
     var categories = {};
@@ -36417,6 +36486,28 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
       });
     });
     this.categoriesCollection = categoriesCollection;
+  },
+  shouldAddWidget: function shouldAddWidget(widget) {
+    var isContainerActive = elementorCommon.config.experimentalFeatures.container;
+    return widget.show_in_panel && ('inner-section' !== widget.name || !isContainerActive);
+  },
+  deepMerge: function deepMerge(originalObj, replacementObj) {
+    var mergedObj = _objectSpread({}, originalObj);
+    for (var key in replacementObj) {
+      this.deepMergeKey(mergedObj, originalObj, replacementObj, key);
+    }
+    return mergedObj;
+  },
+  deepMergeKey: function deepMergeKey(mergedObj, originalObj, replacementObj, key) {
+    if (!replacementObj.hasOwnProperty(key)) {
+      return;
+    }
+    var isMergeableObject = 'object' === (0, _typeof2.default)(replacementObj[key]) && null !== replacementObj[key] && originalObj.hasOwnProperty(key) && 'object' === (0, _typeof2.default)(originalObj[key]) && null !== originalObj[key];
+    if (isMergeableObject) {
+      mergedObj[key] = this.deepMerge(originalObj[key], replacementObj[key]);
+    } else {
+      mergedObj[key] = replacementObj[key];
+    }
   },
   showView: function showView(viewName) {
     var viewDetails = this.regionViews[viewName],
@@ -36684,6 +36775,7 @@ module.exports = Marionette.ItemView.extend({
     });
   },
   addToPage: function addToPage() {
+    var _this$model$attribute, _this$model$attribute2, _this$model$attribute3;
     var selectedElements = this.getSelectedElements();
     var isMultiSelect = selectedElements.length > 1;
 
@@ -36757,6 +36849,9 @@ module.exports = Marionette.ItemView.extend({
     var container = view.getContainer();
     if (!container) {
       throw new Error("View doesn't support adding from panel", view);
+    }
+    if ((_this$model$attribute = (_this$model$attribute2 = this.model.attributes) === null || _this$model$attribute2 === void 0 ? void 0 : (_this$model$attribute3 = _this$model$attribute2.custom) === null || _this$model$attribute3 === void 0 ? void 0 : _this$model$attribute3.isPreset) !== null && _this$model$attribute !== void 0 ? _this$model$attribute : false) {
+      this.model.set('settings', this.model.get('custom').preset_settings);
     }
     $e.run('preview/drop', {
       container: container,
@@ -37098,6 +37193,14 @@ PanelMenu.addAdminMenu = function () {
       return $e.route('finder');
     }
   }, 'navigate_from_page', 'view-page');
+  PanelMenu.addItem({
+    name: 'apps',
+    icon: 'eicon-apps',
+    title: __('Apps', 'elementor'),
+    type: 'link',
+    link: elementor.config.admin_apps_url,
+    newTab: true
+  }, 'navigate_from_page', 'finder');
 };
 PanelMenu.addExitItem = function () {
   var itemArgs;
@@ -37299,329 +37402,6 @@ module.exports = Marionette.ItemView.extend({
     }
   }
 });
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/base.js":
-/*!*******************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/base.js ***!
-  \*******************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var childViewTypes = {
-    color: __webpack_require__(/*! elementor-panel/pages/schemes/items/color */ "../assets/dev/js/editor/regions/panel/pages/schemes/items/color.js"),
-    typography: __webpack_require__(/*! elementor-panel/pages/schemes/items/typography */ "../assets/dev/js/editor/regions/panel/pages/schemes/items/typography.js")
-  },
-  PanelSchemeBaseView;
-PanelSchemeBaseView = Marionette.CompositeView.extend({
-  id: function id() {
-    return 'elementor-panel-scheme-' + this.getType();
-  },
-  className: function className() {
-    return 'elementor-panel-scheme elementor-panel-scheme-' + this.getUIType();
-  },
-  childViewContainer: '.elementor-panel-scheme-items',
-  getTemplate: function getTemplate() {
-    return Marionette.TemplateCache.get('#tmpl-elementor-panel-schemes-' + this.getType());
-  },
-  getChildView: function getChildView() {
-    return childViewTypes[this.getUIType()];
-  },
-  getUIType: function getUIType() {
-    return this.getType();
-  },
-  ui: function ui() {
-    return {
-      saveButton: '.elementor-panel-scheme-save .elementor-button',
-      discardButton: '.elementor-panel-scheme-discard .elementor-button',
-      resetButton: '.elementor-panel-scheme-reset .elementor-button'
-    };
-  },
-  events: function events() {
-    return {
-      'click @ui.saveButton': 'saveScheme',
-      'click @ui.discardButton': 'discardScheme',
-      'click @ui.resetButton': 'setDefaultScheme'
-    };
-  },
-  initialize: function initialize() {
-    this.model = new Backbone.Model();
-    this.resetScheme();
-  },
-  getType: function getType() {},
-  getScheme: function getScheme() {
-    return elementor.schemes.getScheme(this.getType());
-  },
-  changeChildrenUIValues: function changeChildrenUIValues(schemeItems) {
-    var self = this;
-    _.each(schemeItems, function (value, key) {
-      var model = self.collection.findWhere({
-          key: key
-        }),
-        childView = self.children.findByModelCid(model.cid);
-      childView.changeUIValue(value);
-    });
-  },
-  discardScheme: function discardScheme() {
-    elementor.schemes.resetSchemes(this.getType());
-    this.onSchemeChange();
-    this.ui.saveButton.prop('disabled', true);
-    this._renderChildren();
-  },
-  setSchemeValue: function setSchemeValue(key, value) {
-    elementor.schemes.setSchemeValue(this.getType(), key, value);
-    this.onSchemeChange();
-  },
-  saveScheme: function saveScheme() {
-    NProgress.start();
-    elementor.schemes.saveScheme(this.getType()).done(NProgress.done);
-    this.ui.saveButton.prop('disabled', true);
-    this.resetScheme();
-    this._renderChildren();
-  },
-  setDefaultScheme: function setDefaultScheme() {
-    var defaultScheme = elementor.config.default_schemes[this.getType()].items;
-    this.changeChildrenUIValues(defaultScheme);
-  },
-  resetItems: function resetItems() {
-    this.model.set('items', this.getScheme().items);
-  },
-  resetCollection: function resetCollection() {
-    var self = this,
-      items = self.model.get('items');
-    self.collection = new Backbone.Collection();
-    _.each(items, function (item, key) {
-      item.type = self.getType();
-      item.key = key;
-      self.collection.add(item);
-    });
-  },
-  resetScheme: function resetScheme() {
-    this.resetItems();
-    this.resetCollection();
-  },
-  onSchemeChange: function onSchemeChange() {
-    elementor.schemes.printSchemesStyle();
-  },
-  onChildviewValueChange: function onChildviewValueChange(childView, newValue) {
-    this.ui.saveButton.removeProp('disabled');
-    this.setSchemeValue(childView.model.get('key'), newValue);
-  }
-});
-module.exports = PanelSchemeBaseView;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/colors.js":
-/*!*********************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/colors.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var PanelSchemeBaseView = __webpack_require__(/*! elementor-panel/pages/schemes/base */ "../assets/dev/js/editor/regions/panel/pages/schemes/base.js"),
-  PanelSchemeColorsView;
-PanelSchemeColorsView = PanelSchemeBaseView.extend({
-  ui: function ui() {
-    var ui = PanelSchemeBaseView.prototype.ui.apply(this, arguments);
-    ui.systemSchemes = '.elementor-panel-scheme-color-system-scheme';
-    return ui;
-  },
-  events: function events() {
-    var events = PanelSchemeBaseView.prototype.events.apply(this, arguments);
-    events['click @ui.systemSchemes'] = 'onSystemSchemeClick';
-    return events;
-  },
-  getType: function getType() {
-    return 'color';
-  },
-  onSystemSchemeClick: function onSystemSchemeClick(event) {
-    var $schemeClicked = jQuery(event.currentTarget),
-      schemeName = $schemeClicked.data('schemeName'),
-      scheme = elementor.config.system_schemes[this.getType()][schemeName].items;
-    this.changeChildrenUIValues(scheme);
-  }
-});
-module.exports = PanelSchemeColorsView;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/disabled.js":
-/*!***********************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/disabled.js ***!
-  \***********************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-var PanelSchemeDisabledView;
-PanelSchemeDisabledView = Marionette.ItemView.extend({
-  template: '#tmpl-elementor-panel-schemes-disabled',
-  id: 'elementor-panel-schemes-disabled',
-  className: 'elementor-nerd-box',
-  disabledTitle: '',
-  templateHelpers: function templateHelpers() {
-    return {
-      disabledTitle: this.disabledTitle
-    };
-  }
-});
-module.exports = PanelSchemeDisabledView;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/items/base.js":
-/*!*************************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/items/base.js ***!
-  \*************************************************************************/
-/***/ ((module) => {
-
-"use strict";
-
-
-var PanelSchemeItemView;
-PanelSchemeItemView = Marionette.ItemView.extend({
-  getTemplate: function getTemplate() {
-    return Marionette.TemplateCache.get('#tmpl-elementor-panel-scheme-' + this.getUIType() + '-item');
-  },
-  className: function className() {
-    return 'elementor-panel-scheme-item';
-  }
-});
-module.exports = PanelSchemeItemView;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/items/color.js":
-/*!**************************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/items/color.js ***!
-  \**************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-var _colorPicker = _interopRequireDefault(__webpack_require__(/*! elementor-editor/utils/color-picker */ "../assets/dev/js/editor/utils/color-picker.js"));
-var PanelSchemeItemView = __webpack_require__(/*! elementor-panel/pages/schemes/items/base */ "../assets/dev/js/editor/regions/panel/pages/schemes/items/base.js");
-module.exports = PanelSchemeItemView.extend({
-  getUIType: function getUIType() {
-    return 'color';
-  },
-  ui: {
-    pickerPlaceholder: '.elementor-panel-scheme-color-picker-placeholder'
-  },
-  changeUIValue: function changeUIValue(newValue) {
-    this.colorPicker.picker.setColor(newValue);
-  },
-  onRender: function onRender() {
-    var _this = this;
-    this.colorPicker = new _colorPicker.default({
-      picker: {
-        el: this.ui.pickerPlaceholder[0],
-        default: this.model.get('value')
-      },
-      onChange: function onChange() {
-        _this.triggerMethod('value:change', _this.colorPicker.getColor());
-      },
-      onClear: function onClear() {
-        _this.triggerMethod('value:change', '');
-      }
-    });
-  },
-  onBeforeDestroy: function onBeforeDestroy() {
-    this.colorPicker.destroy();
-  }
-});
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/items/typography.js":
-/*!*******************************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/items/typography.js ***!
-  \*******************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var PanelSchemeItemView = __webpack_require__(/*! elementor-panel/pages/schemes/items/base */ "../assets/dev/js/editor/regions/panel/pages/schemes/items/base.js"),
-  PanelSchemeTypographyView;
-PanelSchemeTypographyView = PanelSchemeItemView.extend({
-  getUIType: function getUIType() {
-    return 'typography';
-  },
-  className: function className() {
-    var classes = PanelSchemeItemView.prototype.className.apply(this, arguments);
-    return classes + ' elementor-panel-box';
-  },
-  ui: {
-    heading: '.elementor-panel-heading',
-    allFields: '.elementor-panel-scheme-typography-item-field',
-    inputFields: 'input.elementor-panel-scheme-typography-item-field',
-    selectFields: 'select.elementor-panel-scheme-typography-item-field',
-    selectFamilyFields: 'select.elementor-panel-scheme-typography-item-field[name="font_family"]'
-  },
-  events: {
-    'input @ui.inputFields': 'onFieldChange',
-    'change @ui.selectFields': 'onFieldChange',
-    'click @ui.heading': 'toggleVisibility'
-  },
-  onRender: function onRender() {
-    var self = this;
-    this.ui.inputFields.add(this.ui.selectFields).each(function () {
-      var $this = jQuery(this),
-        name = $this.attr('name'),
-        value = self.model.get('value')[name];
-      $this.val(value);
-    });
-    this.ui.selectFamilyFields.select2({
-      dir: elementorCommon.config.isRTL ? 'rtl' : 'ltr'
-    });
-  },
-  toggleVisibility: function toggleVisibility() {
-    this.$el.toggleClass('e-open');
-  },
-  changeUIValue: function changeUIValue(newValue) {
-    this.ui.allFields.each(function () {
-      var $this = jQuery(this),
-        thisName = $this.attr('name'),
-        newFieldValue = newValue[thisName];
-      $this.val(newFieldValue).trigger('change');
-    });
-  },
-  onFieldChange: function onFieldChange() {
-    var currentValue = elementor.schemes.getSchemeValue('typography', this.model.get('key')).value;
-    this.triggerMethod('value:change', currentValue);
-  }
-});
-module.exports = PanelSchemeTypographyView;
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/regions/panel/pages/schemes/typography.js":
-/*!*************************************************************************!*\
-  !*** ../assets/dev/js/editor/regions/panel/pages/schemes/typography.js ***!
-  \*************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var PanelSchemeBaseView = __webpack_require__(/*! elementor-panel/pages/schemes/base */ "../assets/dev/js/editor/regions/panel/pages/schemes/base.js"),
-  PanelSchemeTypographyView;
-PanelSchemeTypographyView = PanelSchemeBaseView.extend({
-  getType: function getType() {
-    return 'typography';
-  }
-});
-module.exports = PanelSchemeTypographyView;
 
 /***/ }),
 
@@ -38153,9 +37933,10 @@ var ContainerHelper = /*#__PURE__*/function () {
     /**
      * Create a Container element.
      *
-     * @param {Object}    settings - Settings to set to each Container.
-     * @param {Container} target   - The Container object to create the new Container elements inside.
-     * @param {Object}    options  - Additional command options.
+     * @param {Object}    settings        - Settings to set to each Container.
+     * @param {Container} target          - The Container object to create the new Container elements inside.
+     * @param {Object}    options         - Additional command options.
+     * @param {Object}    modelAttributes - Additional model attributes.
      *
      * @return {Container} - The newly created Container.
      */
@@ -38165,12 +37946,13 @@ var ContainerHelper = /*#__PURE__*/function () {
       var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var target = arguments.length > 1 ? arguments[1] : undefined;
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var modelAttributes = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
       return $e.run('document/elements/create', {
         container: target,
-        model: {
+        model: _objectSpread({
           elType: 'container',
           settings: settings
-        },
+        }, modelAttributes),
         options: options
       });
     }
@@ -38227,7 +38009,10 @@ var ContainerHelper = /*#__PURE__*/function () {
         } : {}), {}, {
           flex_gap: {
             unit: 'px',
-            size: 0 // Set the gap to 0 to override the default inherited from `Site Settings`.
+            size: 0,
+            // Set the gap to 0 to override the default inherited from `Site Settings`.
+            column: '0',
+            row: '0'
           }
         });
 
@@ -38306,13 +38091,14 @@ var ContainerHelper = /*#__PURE__*/function () {
             {
               settings = {
                 flex_direction: ContainerHelper.DIRECTION_ROW,
-                flex_wrap: 'wrap',
                 flex_gap: {
                   unit: 'px',
-                  size: 0 // Set the gap to 0 to override the default inherited from `Site Settings`.
+                  size: 0,
+                  // Set the gap to 0 to override the default inherited from `Site Settings`.
+                  column: '0',
+                  row: '0'
                 }
               };
-
               if (!createWrapper) {
                 $e.run('document/elements/settings', {
                   container: target,
@@ -38344,7 +38130,10 @@ var ContainerHelper = /*#__PURE__*/function () {
                 // Create the right Container with 0 padding (default is 10px).
                 flex_gap: {
                   unit: 'px',
-                  size: 0 // Set the gap to 0 to override the default inherited from `Site Settings`.
+                  size: 0,
+                  // Set the gap to 0 to override the default inherited from `Site Settings`.
+                  column: '0',
+                  row: '0'
                 }
               }), newContainer, {
                 edit: false
@@ -38435,7 +38224,9 @@ module.exports = elementorModules.Module.extend({
     var self = this,
       classes = self.getSettings('classes'),
       $item = jQuery('<div>', {
-        class: classes.item + ' ' + classes.itemTypePrefix + action.name
+        class: classes.item + ' ' + classes.itemTypePrefix + action.name,
+        role: 'menuitem',
+        tabindex: '0'
       }),
       $itemTitle = jQuery('<div>', {
         class: classes.itemTitle
@@ -38459,6 +38250,13 @@ module.exports = elementorModules.Module.extend({
       $item.on('click', function () {
         self.runAction(action);
       });
+      $item.on('keyup', function (event) {
+        var ENTER_KEY = 13,
+          SPACE_KEY = 32;
+        if (ENTER_KEY === event.keyCode || SPACE_KEY === event.keyCode) {
+          self.runAction(action);
+        }
+      });
     }
     action.$item = $item;
     return $item;
@@ -38468,11 +38266,13 @@ module.exports = elementorModules.Module.extend({
       classes = self.getSettings('classes'),
       groups = self.getSettings('groups'),
       $list = jQuery('<div>', {
-        class: classes.list
+        class: classes.list,
+        role: 'menu'
       });
     groups.forEach(function (group) {
       var $group = jQuery('<div>', {
-        class: classes.group + ' ' + classes.groupPrefix + group.name
+        class: classes.group + ' ' + classes.groupPrefix + group.name,
+        role: 'group'
       });
       group.actions.forEach(function (action) {
         $group.append(self.buildActionItem(action));
@@ -38884,6 +38684,12 @@ ControlsCSSParser = elementorModules.ViewModule.extend({
           if (_this3.unitHasCustomSelector(control, value)) {
             cssProperty = control.unit_selectors_dictionary[value.unit];
           }
+          if (_this3.shouldDoUpgradeMap(control, value)) {
+            var _control$upgrade_conv;
+            (_control$upgrade_conv = control.upgrade_conversion_map) === null || _control$upgrade_conv === void 0 ? void 0 : _control$upgrade_conv.new_keys.forEach(function (key) {
+              value[key] = '' + value[control.upgrade_conversion_map.old_key];
+            });
+          }
           outputCssProperty = cssProperty.replace(/{{(?:([^.}]+)\.)?([^}| ]*)(?: *\|\| *(?:([^.}]+)\.)?([^}| ]*) *)*}}/g, function (originalPhrase, controlName, placeholder, fallbackControlName, fallbackValue) {
             var externalControlMissing = controlName && !controls[controlName];
             var parsedValue = '';
@@ -38965,6 +38771,9 @@ ControlsCSSParser = elementorModules.ViewModule.extend({
   },
   unitHasCustomSelector: function unitHasCustomSelector(control, value) {
     return control.unit_selectors_dictionary && undefined !== control.unit_selectors_dictionary[value.unit];
+  },
+  shouldDoUpgradeMap: function shouldDoUpgradeMap(control, value) {
+    return control.upgrade_conversion_map && !!value.hasOwnProperty(control.upgrade_conversion_map.old_key) && '' !== value[control.upgrade_conversion_map.old_key] && !value.hasOwnProperty(control.upgrade_conversion_map.new_keys[0]);
   },
   parsePropertyPlaceholder: function parsePropertyPlaceholder(control, value, controls, values, placeholder, parserControlName) {
     if (parserControlName) {
@@ -39331,9 +39140,21 @@ module.exports = {
       }
     }
   },
+  /**
+   * @param {string}                   url
+   * @param {jQuery}                   $document
+   * @param {{ crossOrigin: boolean }} options
+   */
   enqueueCSS: function enqueueCSS(url, $document) {
-    var selector = 'link[href="' + url + '"]',
-      link = '<link href="' + url + '" rel="stylesheet" type="text/css">';
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var selector = 'link[href="' + url + '"]';
+    var link = document.createElement('link');
+    link.href = url;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    if (options.crossOrigin) {
+      link.crossOrigin = 'anonymous';
+    }
     if (!$document) {
       return;
     }
@@ -39421,7 +39242,7 @@ module.exports = {
    * @param {*}      attributes - default {} - attributes to attach to rendered html tag
    * @param {string} tag        - default i - html tag to render
    * @param {*}      returnType - default value - retrun type
-   * @return {string|boolean|*} result
+   * @return {string|undefined|*} result
    */
   renderIcon: function renderIcon(view, icon) {
     var attributes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -39514,6 +39335,7 @@ module.exports = {
         el: 'greek',
         he_IL: 'hebrew'
       };
+    var enqueueOptions = {};
     var fontUrl;
     switch (fontType) {
       case 'googlefonts':
@@ -39521,11 +39343,13 @@ module.exports = {
         if (subsets[elementor.config.locale]) {
           fontUrl += '&subset=' + subsets[elementor.config.locale];
         }
+        enqueueOptions.crossOrigin = true;
         break;
       case 'earlyaccess':
         {
           var fontLowerString = font.replace(/\s+/g, '').toLowerCase();
           fontUrl = 'https://fonts.googleapis.com/earlyaccess/' + fontLowerString + '.css';
+          enqueueOptions.crossOrigin = true;
           break;
         }
     }
@@ -39534,7 +39358,7 @@ module.exports = {
         // TODO: Find better solution, temporary fix, covering issue: 'fonts does not rendered in global styles'.
         this.enqueueCSS(fontUrl, elementorCommon.elements.$document);
       } else {
-        this.enqueueCSS(fontUrl, elementor.$previewContents);
+        this.enqueueCSS(fontUrl, elementor.$previewContents, enqueueOptions);
       }
     }
     this._enqueuedFonts[target].push(font);
@@ -39855,6 +39679,17 @@ module.exports = {
    */
   validateHTMLTag: function validateHTMLTag(tag) {
     return allowedHTMLWrapperTags.includes(tag.toLowerCase()) ? tag : 'div';
+  },
+  convertSizeToFrString: function convertSizeToFrString(size) {
+    if ('number' !== typeof size || size <= 0) {
+      return size;
+    }
+    var frString = Array.from({
+      length: size
+    }, function () {
+      return '1fr';
+    }).join(' ');
+    return frString;
   }
 };
 
@@ -40068,7 +39903,7 @@ var LocalizedValueStore = /*#__PURE__*/function () {
    * English values will be returned as is
    * Paste will return an empty value
    *
-   * @param  event - the incoming event
+   * @param event - the incoming event
    * @return string
    */
   (0, _createClass2.default)(LocalizedValueStore, [{
@@ -40348,7 +40183,7 @@ presetsFactory = {
       '33-33-33-33-66': "\n\t\t\t\t<svg viewBox=\"0 0 89 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t<rect width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect x=\"30\" width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect x=\"60\" width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect y=\"22.5\" width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect x=\"30\" y=\"22.5\" width=\"59\" height=\"21.5\"/>\n\t\t\t\t</svg>\n\t\t\t",
       '66-33-33-66': "\n\t\t\t\t<svg viewBox=\"0 0 89 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t<rect width=\"59\" height=\"21.5\"/>\n\t\t\t\t\t<rect x=\"60\" width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect y=\"22.5\" width=\"29\" height=\"21.5\"/>\n\t\t\t\t\t<rect x=\"30\" y=\"22.5\" width=\"59\" height=\"21.5\"/>\n\t\t\t\t</svg>\n\t\t\t",
       c100: "\n\t\t\t\t<svg viewBox=\"0 0 89 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t<title>".concat(__('Direction Column', 'elementor'), "</title>\n\t\t\t\t\t<rect width=\"89\" height=\"44\" />\n\t\t\t\t\t<path d=\"M43.956 24.644L42 22.748C41.848 22.596 41.672 22.52 41.472 22.52C41.28 22.52 41.108 22.596 40.956 22.748C40.804 22.9 40.728 23.076 40.728 23.276C40.728 23.476 40.804 23.652 40.956 23.804L44.304 27.056C44.456 27.208 44.628 27.284 44.82 27.284C45.02 27.284 45.196 27.208 45.348 27.056L48.504 23.852C48.656 23.7 48.732 23.524 48.732 23.324C48.732 23.124 48.656 22.948 48.504 22.796C48.352 22.644 48.176 22.568 47.976 22.568C47.776 22.568 47.6 22.644 47.448 22.796L45.456 24.848L45.504 17.048C45.504 16.848 45.428 16.676 45.276 16.532C45.124 16.38 44.948 16.304 44.748 16.304C44.548 16.304 44.372 16.38 44.22 16.532C44.076 16.676 44.004 16.848 44.004 17.048L43.956 24.644Z\"/>\n\t\t\t\t</svg>\n\t\t\t"),
-      r100: "\n\t\t\t\t<svg viewBox=\"0 0 89 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t<title>".concat(__('Direction Row', 'elementor'), "</title>\n\t\t\t\t\t<rect width=\"89\" height=\"44\"/>\n\t\t\t\t\t<path d=\"M47.856 23.352L45.948 25.296C45.796 25.448 45.72 25.624 45.72 25.824C45.72 26.024 45.796 26.2 45.948 26.352C46.1 26.504 46.276 26.58 46.476 26.58C46.676 26.58 46.852 26.504 47.004 26.352L50.256 23.004C50.408 22.852 50.484 22.676 50.484 22.476C50.484 22.276 50.408 22.1 50.256 21.948L47.052 18.804C46.9 18.652 46.724 18.576 46.524 18.576C46.324 18.576 46.148 18.652 45.996 18.804C45.844 18.956 45.768 19.132 45.768 19.332C45.768 19.524 45.844 19.696 45.996 19.848L48.048 21.852L40.248 21.804C40.048 21.804 39.872 21.88 39.72 22.032C39.576 22.176 39.504 22.348 39.504 22.548C39.504 22.748 39.576 22.924 39.72 23.076C39.872 23.228 40.048 23.304 40.248 23.304L47.856 23.352Z\"/>\n\t\t\t\t</svg>\n\t\t\t"),
+      r100: "\n\t\t\t\t<svg class=\"exclude-rtl-scale\" viewBox=\"0 0 89 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t<title>".concat(__('Direction Row', 'elementor'), "</title>\n\t\t\t\t\t<rect width=\"89\" height=\"44\"/>\n\t\t\t\t\t<path d=\"M47.856 23.352L45.948 25.296C45.796 25.448 45.72 25.624 45.72 25.824C45.72 26.024 45.796 26.2 45.948 26.352C46.1 26.504 46.276 26.58 46.476 26.58C46.676 26.58 46.852 26.504 47.004 26.352L50.256 23.004C50.408 22.852 50.484 22.676 50.484 22.476C50.484 22.276 50.408 22.1 50.256 21.948L47.052 18.804C46.9 18.652 46.724 18.576 46.524 18.576C46.324 18.576 46.148 18.652 45.996 18.804C45.844 18.956 45.768 19.132 45.768 19.332C45.768 19.524 45.844 19.696 45.996 19.848L48.048 21.852L40.248 21.804C40.048 21.804 39.872 21.88 39.72 22.032C39.576 22.176 39.504 22.348 39.504 22.548C39.504 22.748 39.576 22.924 39.72 23.076C39.872 23.228 40.048 23.304 40.248 23.304L47.856 23.352Z\"/>\n\t\t\t\t</svg>\n\t\t\t"),
       default: "\n\t\t\t\t<div style=\"--text:'".concat(text, "'\" class=\"e-preset--container\">\n\t\t\t\t\t<svg viewBox=\"0 0 90 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n\t\t\t\t\t\t<rect width=\"89\" height=\"44\" transform=\"translate(0.5)\" />\n\t\t\t\t\t\t<rect x=\"3\" y=\"2.5\" width=\"84\" height=\"39\" rx=\"2.5\" stroke=\"#FCFCFC\" stroke-linejoin=\"round\" stroke-dasharray=\"3 2\"/>\n\t\t\t\t\t</svg>\n\t\t\t\t</div>\n\t\t\t")
     };
     return presets[presetId] || presets.default;
@@ -40542,147 +40377,6 @@ function setQueryParam(name, value) {
 function removeQueryParam(name) {
   setQueryParam(name, null);
 }
-
-/***/ }),
-
-/***/ "../assets/dev/js/editor/utils/schemes.js":
-/*!************************************************!*\
-  !*** ../assets/dev/js/editor/utils/schemes.js ***!
-  \************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-
-var Schemes,
-  Stylesheet = __webpack_require__(/*! elementor-editor-utils/stylesheet */ "../assets/dev/js/editor/utils/stylesheet.js"),
-  ControlsCSSParser = __webpack_require__(/*! elementor-editor-utils/controls-css-parser */ "../assets/dev/js/editor/utils/controls-css-parser.js");
-Schemes = function Schemes() {
-  var self = this,
-    stylesheet = new Stylesheet(),
-    schemes = {},
-    settings = {
-      selectorWrapperPrefix: '.elementor-widget-'
-    },
-    elements = {};
-  var buildUI = function buildUI() {
-    elements.$previewHead.append(elements.$style);
-  };
-  var initElements = function initElements() {
-    var id = 'elementor-style-scheme';
-    elements.$style = elementor.$previewContents.find("#".concat(id));
-    if (!elements.$style.length) {
-      elements.$style = jQuery('<style>', {
-        id: id
-      });
-    }
-    elements.$previewHead = elementor.$previewContents.find('head');
-  };
-  var initSchemes = function initSchemes() {
-    schemes = elementorCommon.helpers.cloneObject(elementor.config.schemes.items);
-  };
-  var fetchControlStyles = function fetchControlStyles(control, controlsStack, widgetType) {
-    ControlsCSSParser.addControlStyleRules(stylesheet, control, controlsStack, function (controlStyles) {
-      return self.getSchemeValue(controlStyles.scheme.type, controlStyles.scheme.value, controlStyles.scheme.key).value;
-    }, ['{{WRAPPER}}'], [settings.selectorWrapperPrefix + widgetType]);
-  };
-  var fetchWidgetControlsStyles = function fetchWidgetControlsStyles(widget) {
-    var widgetSchemeControls = self.getWidgetSchemeControls(widget);
-    _.each(widgetSchemeControls, function (control) {
-      fetchControlStyles(control, widgetSchemeControls, widget.widget_type);
-    });
-  };
-  var fetchAllWidgetsSchemesStyle = function fetchAllWidgetsSchemesStyle() {
-    _.each(elementor.widgetsCache, function (widget) {
-      fetchWidgetControlsStyles(widget);
-    });
-  };
-  this.init = function () {
-    initElements();
-    buildUI();
-    initSchemes();
-    return self;
-  };
-  this.getWidgetSchemeControls = function (widget) {
-    return _.filter(widget.controls, function (control) {
-      return _.isObject(control.scheme);
-    });
-  };
-  this.getSchemes = function () {
-    return schemes;
-  };
-  this.getEnabledSchemesTypes = function () {
-    return elementor.config.schemes.enabled_schemes;
-  };
-  this.getScheme = function (schemeType) {
-    return schemes[schemeType];
-  };
-  this.getSchemeValue = function (schemeType, value, key) {
-    if (this.getEnabledSchemesTypes().indexOf(schemeType) < 0) {
-      return false;
-    }
-    var scheme = self.getScheme(schemeType),
-      schemeValue = scheme.items[value];
-    if (key && _.isObject(schemeValue)) {
-      var clonedSchemeValue = elementorCommon.helpers.cloneObject(schemeValue);
-      clonedSchemeValue.value = schemeValue.value[key];
-      return clonedSchemeValue;
-    }
-    return schemeValue;
-  };
-  this.printSchemesStyle = function () {
-    stylesheet.empty();
-    fetchAllWidgetsSchemesStyle();
-    elements.$style.text(stylesheet);
-  };
-  this.resetSchemes = function (schemeName) {
-    schemes[schemeName] = elementorCommon.helpers.cloneObject(elementor.config.schemes.items[schemeName]);
-  };
-  this.saveScheme = function (schemeName) {
-    elementor.config.schemes.items[schemeName].items = elementorCommon.helpers.cloneObject(schemes[schemeName].items);
-    var itemsToSave = {};
-    _.each(schemes[schemeName].items, function (item, key) {
-      itemsToSave[key] = item.value;
-    });
-    return elementorCommon.ajax.addRequest('apply_scheme', {
-      data: {
-        scheme_name: schemeName,
-        data: JSON.stringify(itemsToSave)
-      }
-    });
-  };
-  this.setSchemeValue = function (schemeName, itemKey, value) {
-    schemes[schemeName].items[itemKey].value = value;
-  };
-  this.addSchemeItem = function (schemeName, item, at) {
-    var scheme = schemes[schemeName],
-      schemeKeys = Object.keys(scheme.items),
-      hasAt = undefined !== at,
-      targetIndex = hasAt ? at : +schemeKeys.slice(-1)[0] || 0;
-    if (hasAt) {
-      var itemIndex = schemeKeys.length + 1;
-      for (; itemIndex > at; itemIndex--) {
-        scheme.items[itemIndex] = scheme.items[itemIndex - 1];
-      }
-    }
-    scheme.items[targetIndex + 1] = item;
-  };
-  this.removeSchemeItem = function (schemeName, itemKey) {
-    var items = schemes[schemeName].items;
-
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      itemKey++;
-      var nextItem = items[itemKey + 1];
-      if (!nextItem) {
-        delete items[itemKey];
-        break;
-      }
-      items[itemKey] = nextItem;
-    }
-  };
-};
-module.exports = new Schemes();
 
 /***/ }),
 
@@ -41108,13 +40802,14 @@ var AddSectionBase = /*#__PURE__*/function (_Marionette$ItemView) {
   }, {
     key: "behaviors",
     value: function behaviors() {
-      return {
+      var behaviors = {
         contextMenu: {
           behaviorClass: __webpack_require__(/*! elementor-behaviors/context-menu */ "../assets/dev/js/editor/elements/views/behaviors/context-menu.js"),
           groups: this.getContextMenuGroups(),
           eventTargets: ['.elementor-add-section-inner']
         }
       };
+      return elementor.hooks.applyFilters('views/add-section/behaviors', behaviors, this);
     }
   }, {
     key: "className",
@@ -41266,7 +40961,15 @@ var AddSectionBase = /*#__PURE__*/function (_Marionette$ItemView) {
           unit: 'fr',
           size: parsedStructure.rows
         }
-      }, elementor.getPreviewContainer(), this.options);
+      }, elementor.getPreviewContainer(), this.options, {
+        title: __('Grid', 'elementor'),
+        custom: {
+          isPreset: true,
+          preset_settings: {
+            presetIcon: 'eicon-container-grid'
+          }
+        }
+      });
       if (isAddedAboveAnotherContainer) {
         this.destroy();
       }
@@ -41574,6 +41277,7 @@ module.exports = Marionette.CompositeView.extend({
     return this.createElementFromModel(container.model, options);
   },
   createElementFromModel: function createElementFromModel(model) {
+    var _model$isPreset, _model;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     if (model instanceof Backbone.Model) {
       model = model.toJSON();
@@ -41586,6 +41290,9 @@ module.exports = Marionette.CompositeView.extend({
     // Check whether the container cannot contain a section, in which case we should use an inner-section.
     if ('section' === model.elType) {
       model.isInner = true;
+    }
+    if ((_model$isPreset = (_model = model) === null || _model === void 0 ? void 0 : _model.isPreset) !== null && _model$isPreset !== void 0 ? _model$isPreset : false) {
+      model.settings = model.preset_settings;
     }
     var historyId = $e.internal('document/history/start-log', {
       type: this.getHistoryType(options.event),
@@ -41966,6 +41673,9 @@ ControlsStack = Marionette.CompositeView.extend({
     }
     this.listenTo(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
   },
+  onDestroy: function onDestroy() {
+    this.stopListening(elementor.channels.deviceMode, 'change', this.onDeviceModeChange);
+  },
   initCollection: function initCollection() {
     this.collection = new Backbone.Collection(_.values(elementor.mergeControlsSettings(this.getOption('controls'))));
   },
@@ -42071,8 +41781,8 @@ ControlsStack = Marionette.CompositeView.extend({
 }, {
   handlePopovers: function handlePopovers(view) {
     var popover;
-    view.popovers = [];
     this.removePopovers(view);
+    view.popovers = [];
     view.children.each(function (control) {
       if (popover) {
         popover.addChild(control);
@@ -42091,7 +41801,8 @@ ControlsStack = Marionette.CompositeView.extend({
     });
   },
   removePopovers: function removePopovers(view) {
-    view.popovers.forEach(function (popover) {
+    var _view$popovers;
+    (_view$popovers = view.popovers) === null || _view$popovers === void 0 ? void 0 : _view$popovers.forEach(function (popover) {
       return popover.destroy();
     });
   }
@@ -43408,6 +43119,49 @@ module.exports = elementorModules.Module.extend({
     this.initToast();
   }
 });
+
+/***/ }),
+
+/***/ "../assets/dev/js/utils/tiers.js":
+/*!***************************************!*\
+  !*** ../assets/dev/js/utils/tiers.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.isTierAtLeast = exports.TIERS_PRIORITY = exports.TIERS = void 0;
+var TIERS_PRIORITY = Object.freeze(['free', 'essential', 'essential-oct2023', 'advanced', 'expert', 'agency']);
+
+/**
+ * @type {Readonly<{
+ *     free: string;
+ *     essential: string;
+ *     'essential-oct2023': string;
+ *     advanced: string;
+ *     expert: string;
+ *     agency: string;
+ * }>}
+ */
+exports.TIERS_PRIORITY = TIERS_PRIORITY;
+var TIERS = Object.freeze(TIERS_PRIORITY.reduce(function (acc, tier) {
+  acc[tier] = tier;
+  return acc;
+}, {}));
+exports.TIERS = TIERS;
+var isTierAtLeast = function isTierAtLeast(currentTier, expectedTier) {
+  var currentTierIndex = TIERS_PRIORITY.indexOf(currentTier);
+  var expectedTierIndex = TIERS_PRIORITY.indexOf(expectedTier);
+  if (-1 === currentTierIndex || -1 === expectedTierIndex) {
+    return false;
+  }
+  return currentTierIndex >= expectedTierIndex;
+};
+exports.isTierAtLeast = isTierAtLeast;
 
 /***/ }),
 
@@ -46652,7 +46406,8 @@ var _default = /*#__PURE__*/function (_RepeaterRow) {
     key: "events",
     value: function events() {
       return {
-        'click @ui.removeButton': 'onRemoveButtonClick'
+        'click @ui.removeButton': 'onRemoveButtonClick',
+        'keyup @ui.removeButton': 'onRemoveButtonPress'
       };
     }
   }, {
@@ -46756,6 +46511,16 @@ var _default = /*#__PURE__*/function (_RepeaterRow) {
         }
       });
       this.confirmDeleteModal.show();
+    }
+  }, {
+    key: "onRemoveButtonPress",
+    value: function onRemoveButtonPress(event) {
+      var ENTER_KEY = 13,
+        SPACE_KEY = 32;
+      if (ENTER_KEY === event.keyCode || SPACE_KEY === event.keyCode) {
+        event.currentTarget.click();
+        event.stopPropagation();
+      }
     }
   }]);
   return _default;
@@ -46895,7 +46660,7 @@ var Apply = /*#__PURE__*/function (_$e$modules$CommandBa) {
         var prevText = trigger.swatch.dataset.text;
 
         // Show `Selected!` message.
-        trigger.swatch.dataset.text = __('Selected!', 'elementor');
+        trigger.swatch.dataset.text = __('Selected', 'elementor');
 
         // Hide message after a second.
         setTimeout(function () {
@@ -50266,7 +50031,7 @@ module.exports = Marionette.CompositeView.extend({
         revisionView.$el.removeClass('elementor-revision-item-loading');
 
         // eslint-disable-next-line no-alert
-        alert('An error occurred');
+        alert('An error occurred.');
       }
     });
   },
@@ -50636,6 +50401,167 @@ var LandingPageLibraryModule = /*#__PURE__*/function (_elementorModules$edi) {
 }(elementorModules.editor.utils.Module);
 var _default = LandingPageLibraryModule;
 exports["default"] = _default;
+
+/***/ }),
+
+/***/ "../modules/nested-elements/assets/js/editor/utils.js":
+/*!************************************************************!*\
+  !*** ../modules/nested-elements/assets/js/editor/utils.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var sprintf = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["sprintf"];
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.extractNestedItemTitle = extractNestedItemTitle;
+exports.findChildContainerOrFail = findChildContainerOrFail;
+exports.isWidgetSupportNesting = isWidgetSupportNesting;
+function extractNestedItemTitle(container, index) {
+  var title = container.view.model.config.defaults.elements_title;
+
+  // Translations comes from server side.
+  return sprintf(title, index);
+}
+function isWidgetSupportNesting(widgetType) {
+  var widgetConfig = elementor.widgetsCache[widgetType];
+  if (!widgetConfig) {
+    return false;
+  }
+  return widgetConfig.support_nesting;
+}
+function findChildContainerOrFail(container, index) {
+  var childView = container.view.children.findByIndex(index);
+  if (!childView) {
+    throw new Error('Child container was not found for the current repeater item.');
+  }
+  return childView.getContainer();
+}
+
+/***/ }),
+
+/***/ "../modules/promotions/assets/js/editor/module.js":
+/*!********************************************************!*\
+  !*** ../modules/promotions/assets/js/editor/module.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var Module = /*#__PURE__*/function (_elementorModules$edi) {
+  (0, _inherits2.default)(Module, _elementorModules$edi);
+  var _super = _createSuper(Module);
+  function Module() {
+    (0, _classCallCheck2.default)(this, Module);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(Module, [{
+    key: "onElementorInit",
+    value: function onElementorInit() {
+      var _elementor$config;
+      if (!((_elementor$config = elementor.config) !== null && _elementor$config !== void 0 && _elementor$config.promotionWidgets) || !elementor.config.promotionWidgets.length) {
+        return;
+      }
+      elementor.hooks.addFilter('element/view', function (DefaultView, model) {
+        var widgetType = model.get('widgetType');
+        var isProWidget = elementor.config.promotionWidgets.find(function (item) {
+          return widgetType === item.name;
+        });
+        if (isProWidget) {
+          return (__webpack_require__(/*! ./widget/view */ "../modules/promotions/assets/js/editor/widget/view.js")["default"]);
+        }
+        return DefaultView;
+      });
+    }
+  }]);
+  return Module;
+}(elementorModules.editor.utils.Module);
+exports["default"] = Module;
+
+/***/ }),
+
+/***/ "../modules/promotions/assets/js/editor/widget/view.js":
+/*!*************************************************************!*\
+  !*** ../modules/promotions/assets/js/editor/widget/view.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/get */ "../node_modules/@babel/runtime/helpers/get.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var WidgetView = elementor.modules.elements.views.Widget;
+var View = /*#__PURE__*/function (_WidgetView) {
+  (0, _inherits2.default)(View, _WidgetView);
+  var _super = _createSuper(View);
+  function View() {
+    (0, _classCallCheck2.default)(this, View);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(View, [{
+    key: "events",
+    value: function events() {
+      return {
+        'click .e-promotion-delete': 'onRemoveButtonClick',
+        'click .e-promotion-go-pro': 'onGoProButtonClick'
+      };
+    }
+  }, {
+    key: "className",
+    value: function className() {
+      return (0, _get2.default)((0, _getPrototypeOf2.default)(View.prototype), "className", this).call(this).replace(/elementor-element-edit-mode/g, '') + ' e-widget-pro-promotion';
+    }
+  }, {
+    key: "getHandlesOverlay",
+    value: function getHandlesOverlay() {
+      return '';
+    }
+  }, {
+    key: "getContextMenuGroups",
+    value: function getContextMenuGroups() {
+      return (0, _get2.default)((0, _getPrototypeOf2.default)(View.prototype), "getContextMenuGroups", this).call(this).filter(function (group) {
+        return 'clipboard' !== group.name && 'save' !== group.name && 'general' !== group.name;
+      });
+    }
+  }, {
+    key: "onGoProButtonClick",
+    value: function onGoProButtonClick(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.open(event.currentTarget.href, '_blank');
+    }
+  }]);
+  return View;
+}(WidgetView);
+exports["default"] = View;
 
 /***/ }),
 
@@ -54159,13 +54085,13 @@ thunk.withExtraArgument = createThunkMiddleware;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "__DO_NOT_USE__ActionTypes": () => (/* binding */ ActionTypes),
-/* harmony export */   "applyMiddleware": () => (/* binding */ applyMiddleware),
-/* harmony export */   "bindActionCreators": () => (/* binding */ bindActionCreators),
-/* harmony export */   "combineReducers": () => (/* binding */ combineReducers),
-/* harmony export */   "compose": () => (/* binding */ compose),
-/* harmony export */   "createStore": () => (/* binding */ createStore),
-/* harmony export */   "legacy_createStore": () => (/* binding */ legacy_createStore)
+/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* binding */ ActionTypes),
+/* harmony export */   applyMiddleware: () => (/* binding */ applyMiddleware),
+/* harmony export */   bindActionCreators: () => (/* binding */ bindActionCreators),
+/* harmony export */   combineReducers: () => (/* binding */ combineReducers),
+/* harmony export */   compose: () => (/* binding */ compose),
+/* harmony export */   createStore: () => (/* binding */ createStore),
+/* harmony export */   legacy_createStore: () => (/* binding */ legacy_createStore)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_esm_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/objectSpread2 */ "../node_modules/@babel/runtime/helpers/esm/objectSpread2.js");
 
@@ -54886,9 +54812,9 @@ function applyMiddleware() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createCacheKeyComparator": () => (/* binding */ createCacheKeyComparator),
-/* harmony export */   "defaultEqualityCheck": () => (/* binding */ defaultEqualityCheck),
-/* harmony export */   "defaultMemoize": () => (/* binding */ defaultMemoize)
+/* harmony export */   createCacheKeyComparator: () => (/* binding */ createCacheKeyComparator),
+/* harmony export */   defaultEqualityCheck: () => (/* binding */ defaultEqualityCheck),
+/* harmony export */   defaultMemoize: () => (/* binding */ defaultMemoize)
 /* harmony export */ });
 // Cache implementation based on Erik Rasmussen's `lru-memoize`:
 // https://github.com/erikras/lru-memoize
@@ -55049,11 +54975,11 @@ function defaultMemoize(func, equalityCheckOrOptions) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createSelector": () => (/* binding */ createSelector),
-/* harmony export */   "createSelectorCreator": () => (/* binding */ createSelectorCreator),
-/* harmony export */   "createStructuredSelector": () => (/* binding */ createStructuredSelector),
-/* harmony export */   "defaultEqualityCheck": () => (/* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultEqualityCheck),
-/* harmony export */   "defaultMemoize": () => (/* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultMemoize)
+/* harmony export */   createSelector: () => (/* binding */ createSelector),
+/* harmony export */   createSelectorCreator: () => (/* binding */ createSelectorCreator),
+/* harmony export */   createStructuredSelector: () => (/* binding */ createStructuredSelector),
+/* harmony export */   defaultEqualityCheck: () => (/* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultEqualityCheck),
+/* harmony export */   defaultMemoize: () => (/* reexport safe */ _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__.defaultMemoize)
 /* harmony export */ });
 /* harmony import */ var _defaultMemoize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defaultMemoize */ "../node_modules/reselect/es/defaultMemoize.js");
 
@@ -55320,6 +55246,42 @@ module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exp
 
 /***/ }),
 
+/***/ "../node_modules/@babel/runtime/helpers/classApplyDescriptorGet.js":
+/*!*************************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/classApplyDescriptorGet.js ***!
+  \*************************************************************************/
+/***/ ((module) => {
+
+function _classApplyDescriptorGet(receiver, descriptor) {
+  if (descriptor.get) {
+    return descriptor.get.call(receiver);
+  }
+  return descriptor.value;
+}
+module.exports = _classApplyDescriptorGet, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/classApplyDescriptorSet.js":
+/*!*************************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/classApplyDescriptorSet.js ***!
+  \*************************************************************************/
+/***/ ((module) => {
+
+function _classApplyDescriptorSet(receiver, descriptor, value) {
+  if (descriptor.set) {
+    descriptor.set.call(receiver, value);
+  } else {
+    if (!descriptor.writable) {
+      throw new TypeError("attempted to set read only private field");
+    }
+    descriptor.value = value;
+  }
+}
+module.exports = _classApplyDescriptorSet, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "../node_modules/@babel/runtime/helpers/classCallCheck.js":
 /*!****************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/classCallCheck.js ***!
@@ -55332,6 +55294,55 @@ function _classCallCheck(instance, Constructor) {
   }
 }
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/classExtractFieldDescriptor.js":
+/*!*****************************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/classExtractFieldDescriptor.js ***!
+  \*****************************************************************************/
+/***/ ((module) => {
+
+function _classExtractFieldDescriptor(receiver, privateMap, action) {
+  if (!privateMap.has(receiver)) {
+    throw new TypeError("attempted to " + action + " private field on non-instance");
+  }
+  return privateMap.get(receiver);
+}
+module.exports = _classExtractFieldDescriptor, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/classPrivateFieldGet.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/classPrivateFieldGet.js ***!
+  \**********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var classApplyDescriptorGet = __webpack_require__(/*! ./classApplyDescriptorGet.js */ "../node_modules/@babel/runtime/helpers/classApplyDescriptorGet.js");
+var classExtractFieldDescriptor = __webpack_require__(/*! ./classExtractFieldDescriptor.js */ "../node_modules/@babel/runtime/helpers/classExtractFieldDescriptor.js");
+function _classPrivateFieldGet(receiver, privateMap) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
+  return classApplyDescriptorGet(receiver, descriptor);
+}
+module.exports = _classPrivateFieldGet, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/classPrivateFieldSet.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/classPrivateFieldSet.js ***!
+  \**********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var classApplyDescriptorSet = __webpack_require__(/*! ./classApplyDescriptorSet.js */ "../node_modules/@babel/runtime/helpers/classApplyDescriptorSet.js");
+var classExtractFieldDescriptor = __webpack_require__(/*! ./classExtractFieldDescriptor.js */ "../node_modules/@babel/runtime/helpers/classExtractFieldDescriptor.js");
+function _classPrivateFieldSet(receiver, privateMap, value) {
+  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+  classApplyDescriptorSet(receiver, descriptor, value);
+  return value;
+}
+module.exports = _classPrivateFieldSet, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -55531,7 +55542,11 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /***/ ((module) => {
 
 function _isNativeFunction(fn) {
-  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  try {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  } catch (e) {
+    return typeof fn === "function";
+  }
 }
 module.exports = _isNativeFunction, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -55577,31 +55592,31 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
   \**********************************************************************/
 /***/ ((module) => {
 
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s,
-      _e,
-      _x,
-      _r,
-      _arr = [],
-      _n = !0,
-      _d = !1;
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e,
+      n,
+      i,
+      u,
+      a = [],
+      f = !0,
+      o = !1;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i) return;
-        _n = !1;
-      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
-    } catch (err) {
-      _d = !0, _e = err;
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t) return;
+        f = !1;
+      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);
+    } catch (r) {
+      o = !0, n = r;
     } finally {
       try {
-        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+        if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return;
       } finally {
-        if (_d) throw _e;
+        if (o) throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -55664,304 +55679,304 @@ var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/ru
 function _regeneratorRuntime() {
   "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
+    return e;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  var exports = {},
-    Op = Object.prototype,
-    hasOwn = Op.hasOwnProperty,
-    defineProperty = Object.defineProperty || function (obj, key, desc) {
-      obj[key] = desc.value;
+  var t,
+    e = {},
+    r = Object.prototype,
+    n = r.hasOwnProperty,
+    o = Object.defineProperty || function (t, e, r) {
+      t[e] = r.value;
     },
-    $Symbol = "function" == typeof Symbol ? Symbol : {},
-    iteratorSymbol = $Symbol.iterator || "@@iterator",
-    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
+    i = "function" == typeof Symbol ? Symbol : {},
+    a = i.iterator || "@@iterator",
+    c = i.asyncIterator || "@@asyncIterator",
+    u = i.toStringTag || "@@toStringTag";
+  function define(t, e, r) {
+    return Object.defineProperty(t, e, {
+      value: r,
       enumerable: !0,
       configurable: !0,
       writable: !0
-    }), obj[key];
+    }), t[e];
   }
   try {
     define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
+  } catch (t) {
+    define = function define(t, e, r) {
+      return t[e] = r;
     };
   }
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-      generator = Object.create(protoGenerator.prototype),
-      context = new Context(tryLocsList || []);
-    return defineProperty(generator, "_invoke", {
-      value: makeInvokeMethod(innerFn, self, context)
-    }), generator;
+  function wrap(t, e, r, n) {
+    var i = e && e.prototype instanceof Generator ? e : Generator,
+      a = Object.create(i.prototype),
+      c = new Context(n || []);
+    return o(a, "_invoke", {
+      value: makeInvokeMethod(t, r, c)
+    }), a;
   }
-  function tryCatch(fn, obj, arg) {
+  function tryCatch(t, e, r) {
     try {
       return {
         type: "normal",
-        arg: fn.call(obj, arg)
+        arg: t.call(e, r)
       };
-    } catch (err) {
+    } catch (t) {
       return {
         type: "throw",
-        arg: err
+        arg: t
       };
     }
   }
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
+  e.wrap = wrap;
+  var h = "suspendedStart",
+    l = "suspendedYield",
+    f = "executing",
+    s = "completed",
+    y = {};
   function Generator() {}
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
+  var p = {};
+  define(p, a, function () {
     return this;
   });
-  var getProto = Object.getPrototypeOf,
-    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
+  var d = Object.getPrototypeOf,
+    v = d && d(d(values([])));
+  v && v !== r && n.call(v, a) && (p = v);
+  var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p);
+  function defineIteratorMethods(t) {
+    ["next", "throw", "return"].forEach(function (e) {
+      define(t, e, function (t) {
+        return this._invoke(e, t);
       });
     });
   }
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if ("throw" !== record.type) {
-        var result = record.arg,
-          value = result.value;
-        return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
+  function AsyncIterator(t, e) {
+    function invoke(r, o, i, a) {
+      var c = tryCatch(t[r], t, o);
+      if ("throw" !== c.type) {
+        var u = c.arg,
+          h = u.value;
+        return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) {
+          invoke("next", t, i, a);
+        }, function (t) {
+          invoke("throw", t, i, a);
+        }) : e.resolve(h).then(function (t) {
+          u.value = t, i(u);
+        }, function (t) {
+          return invoke("throw", t, i, a);
         });
       }
-      reject(record.arg);
+      a(c.arg);
     }
-    var previousPromise;
-    defineProperty(this, "_invoke", {
-      value: function value(method, arg) {
+    var r;
+    o(this, "_invoke", {
+      value: function value(t, n) {
         function callInvokeWithMethodAndArg() {
-          return new PromiseImpl(function (resolve, reject) {
-            invoke(method, arg, resolve, reject);
+          return new e(function (e, r) {
+            invoke(t, n, e, r);
           });
         }
-        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+        return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
     });
   }
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = "suspendedStart";
-    return function (method, arg) {
-      if ("executing" === state) throw new Error("Generator is already running");
-      if ("completed" === state) {
-        if ("throw" === method) throw arg;
-        return doneResult();
+  function makeInvokeMethod(e, r, n) {
+    var o = h;
+    return function (i, a) {
+      if (o === f) throw new Error("Generator is already running");
+      if (o === s) {
+        if ("throw" === i) throw a;
+        return {
+          value: t,
+          done: !0
+        };
       }
-      for (context.method = method, context.arg = arg;;) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
+      for (n.method = i, n.arg = a;;) {
+        var c = n.delegate;
+        if (c) {
+          var u = maybeInvokeDelegate(c, n);
+          if (u) {
+            if (u === y) continue;
+            return u;
           }
         }
-        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-          if ("suspendedStart" === state) throw state = "completed", context.arg;
-          context.dispatchException(context.arg);
-        } else "return" === context.method && context.abrupt("return", context.arg);
-        state = "executing";
-        var record = tryCatch(innerFn, self, context);
-        if ("normal" === record.type) {
-          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+        if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) {
+          if (o === h) throw o = s, n.arg;
+          n.dispatchException(n.arg);
+        } else "return" === n.method && n.abrupt("return", n.arg);
+        o = f;
+        var p = tryCatch(e, r, n);
+        if ("normal" === p.type) {
+          if (o = n.done ? s : l, p.arg === y) continue;
           return {
-            value: record.arg,
-            done: context.done
+            value: p.arg,
+            done: n.done
           };
         }
-        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+        "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg);
       }
     };
   }
-  function maybeInvokeDelegate(delegate, context) {
-    var methodName = context.method,
-      method = delegate.iterator[methodName];
-    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+  function maybeInvokeDelegate(e, r) {
+    var n = r.method,
+      o = e.iterator[n];
+    if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y;
+    var i = tryCatch(o, e.iterator, r.arg);
+    if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y;
+    var a = i.arg;
+    return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y);
   }
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
+  function pushTryEntry(t) {
+    var e = {
+      tryLoc: t[0]
     };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+    1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e);
   }
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
+  function resetTryEntry(t) {
+    var e = t.completion || {};
+    e.type = "normal", delete e.arg, t.completion = e;
   }
-  function Context(tryLocsList) {
+  function Context(t) {
     this.tryEntries = [{
       tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
+    }], t.forEach(pushTryEntry, this), this.reset(!0);
   }
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-          next = function next() {
-            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            return next.value = undefined, next.done = !0, next;
+  function values(e) {
+    if (e || "" === e) {
+      var r = e[a];
+      if (r) return r.call(e);
+      if ("function" == typeof e.next) return e;
+      if (!isNaN(e.length)) {
+        var o = -1,
+          i = function next() {
+            for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next;
+            return next.value = t, next.done = !0, next;
           };
-        return next.next = next;
+        return i.next = i;
       }
     }
-    return {
-      next: doneResult
-    };
+    throw new TypeError(_typeof(e) + " is not iterable");
   }
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", {
     value: GeneratorFunctionPrototype,
     configurable: !0
-  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+  }), o(GeneratorFunctionPrototype, "constructor", {
     value: GeneratorFunction,
     configurable: !0
-  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) {
+    var e = "function" == typeof t && t.constructor;
+    return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name));
+  }, e.mark = function (t) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t;
+  }, e.awrap = function (t) {
     return {
-      __await: arg
+      __await: t
     };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () {
     return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
+  }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) {
+    void 0 === i && (i = Promise);
+    var a = new AsyncIterator(wrap(t, r, n, o), i);
+    return e.isGeneratorFunction(r) ? a : a.next().then(function (t) {
+      return t.done ? t.value : a.next();
     });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
+  }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () {
     return this;
-  }), define(Gp, "toString", function () {
+  }), define(g, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (val) {
-    var object = Object(val),
-      keys = [];
-    for (var key in object) keys.push(key);
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
+  }), e.keys = function (t) {
+    var e = Object(t),
+      r = [];
+    for (var n in e) r.push(n);
+    return r.reverse(), function next() {
+      for (; r.length;) {
+        var t = r.pop();
+        if (t in e) return next.value = t, next.done = !1, next;
       }
       return next.done = !0, next;
     };
-  }, exports.values = values, Context.prototype = {
+  }, e.values = values, Context.prototype = {
     constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
+    reset: function reset(e) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t);
     },
     stop: function stop() {
       this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
+      var t = this.tryEntries[0].completion;
+      if ("throw" === t.type) throw t.arg;
       return this.rval;
     },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
+    dispatchException: function dispatchException(e) {
+      if (this.done) throw e;
+      var r = this;
+      function handle(n, o) {
+        return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o;
       }
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-          record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-            hasFinally = hasOwn.call(entry, "finallyLoc");
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var i = this.tryEntries[o],
+          a = i.completion;
+        if ("root" === i.tryLoc) return handle("end");
+        if (i.tryLoc <= this.prev) {
+          var c = n.call(i, "catchLoc"),
+            u = n.call(i, "finallyLoc");
+          if (c && u) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
+          } else if (c) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
           } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
+            if (!u) throw new Error("try statement without catch or finally");
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
           }
         }
       }
     },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
+    abrupt: function abrupt(t, e) {
+      for (var r = this.tryEntries.length - 1; r >= 0; --r) {
+        var o = this.tryEntries[r];
+        if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) {
+          var i = o;
           break;
         }
       }
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
+      i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null);
+      var a = i ? i.completion : {};
+      return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a);
     },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
+    complete: function complete(t, e) {
+      if ("throw" === t.type) throw t.arg;
+      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y;
     },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+    finish: function finish(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y;
       }
     },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
+    "catch": function _catch(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.tryLoc === t) {
+          var n = r.completion;
+          if ("throw" === n.type) {
+            var o = n.arg;
+            resetTryEntry(r);
           }
-          return thrown;
+          return o;
         }
       }
       throw new Error("illegal catch attempt");
     },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
+    delegateYield: function delegateYield(e, r, n) {
       return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
+        iterator: values(e),
+        resultName: r,
+        nextLoc: n
+      }, "next" === this.method && (this.arg = t), y;
     }
-  }, exports;
+  }, e;
 }
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -56079,14 +56094,14 @@ module.exports = _toPropertyKey, module.exports.__esModule = true, module.export
   \********************************************************/
 /***/ ((module) => {
 
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
+  return (module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -56219,26 +56234,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defineProperty.js */ "../node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function (r) {
+      return Object.getOwnPropertyDescriptor(e, r).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-      (0,_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread2(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+      (0,_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__["default"])(e, r, t[r]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
     });
   }
-  return target;
+  return e;
 }
 
 /***/ }),
@@ -56302,49 +56317,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ _typeof)
 /* harmony export */ });
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
 
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
 }
 
 /***/ }),
 
-/***/ "../node_modules/immer/dist/immer.esm.mjs":
-/*!************************************************!*\
-  !*** ../node_modules/immer/dist/immer.esm.mjs ***!
-  \************************************************/
+/***/ "../node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.esm.mjs":
+/*!******************************************************************************!*\
+  !*** ../node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.esm.mjs ***!
+  \******************************************************************************/
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Immer": () => (/* binding */ un),
-/* harmony export */   "applyPatches": () => (/* binding */ pn),
-/* harmony export */   "castDraft": () => (/* binding */ K),
-/* harmony export */   "castImmutable": () => (/* binding */ $),
-/* harmony export */   "createDraft": () => (/* binding */ ln),
-/* harmony export */   "current": () => (/* binding */ R),
+/* harmony export */   Immer: () => (/* binding */ un),
+/* harmony export */   applyPatches: () => (/* binding */ pn),
+/* harmony export */   castDraft: () => (/* binding */ K),
+/* harmony export */   castImmutable: () => (/* binding */ $),
+/* harmony export */   createDraft: () => (/* binding */ ln),
+/* harmony export */   current: () => (/* binding */ R),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "enableAllPlugins": () => (/* binding */ J),
-/* harmony export */   "enableES5": () => (/* binding */ F),
-/* harmony export */   "enableMapSet": () => (/* binding */ C),
-/* harmony export */   "enablePatches": () => (/* binding */ T),
-/* harmony export */   "finishDraft": () => (/* binding */ dn),
-/* harmony export */   "freeze": () => (/* binding */ d),
-/* harmony export */   "immerable": () => (/* binding */ L),
-/* harmony export */   "isDraft": () => (/* binding */ r),
-/* harmony export */   "isDraftable": () => (/* binding */ t),
-/* harmony export */   "nothing": () => (/* binding */ H),
-/* harmony export */   "original": () => (/* binding */ e),
-/* harmony export */   "produce": () => (/* binding */ fn),
-/* harmony export */   "produceWithPatches": () => (/* binding */ cn),
-/* harmony export */   "setAutoFreeze": () => (/* binding */ sn),
-/* harmony export */   "setUseProxies": () => (/* binding */ vn)
+/* harmony export */   enableAllPlugins: () => (/* binding */ J),
+/* harmony export */   enableES5: () => (/* binding */ F),
+/* harmony export */   enableMapSet: () => (/* binding */ C),
+/* harmony export */   enablePatches: () => (/* binding */ T),
+/* harmony export */   finishDraft: () => (/* binding */ dn),
+/* harmony export */   freeze: () => (/* binding */ d),
+/* harmony export */   immerable: () => (/* binding */ L),
+/* harmony export */   isDraft: () => (/* binding */ r),
+/* harmony export */   isDraftable: () => (/* binding */ t),
+/* harmony export */   nothing: () => (/* binding */ H),
+/* harmony export */   original: () => (/* binding */ e),
+/* harmony export */   produce: () => (/* binding */ fn),
+/* harmony export */   produceWithPatches: () => (/* binding */ cn),
+/* harmony export */   setAutoFreeze: () => (/* binding */ sn),
+/* harmony export */   setUseProxies: () => (/* binding */ vn)
 /* harmony export */ });
 function n(n){for(var r=arguments.length,t=Array(r>1?r-1:0),e=1;e<r;e++)t[e-1]=arguments[e];if(true){var i=Y[n],o=i?"function"==typeof i?i.apply(null,t):i:"unknown error nr: "+n;throw Error("[Immer] "+o)}throw Error("[Immer] minified error nr: "+n+(t.length?" "+t.map((function(n){return"'"+n+"'"})).join(","):"")+". Find the full error at: https://bit.ly/3cXEKWf")}function r(n){return!!n&&!!n[Q]}function t(n){var r;return!!n&&(function(n){if(!n||"object"!=typeof n)return!1;var r=Object.getPrototypeOf(n);if(null===r)return!0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z}(n)||Array.isArray(n)||!!n[L]||!!(null===(r=n.constructor)||void 0===r?void 0:r[L])||s(n)||v(n))}function e(t){return r(t)||n(23,t),t[Q].t}function i(n,r,t){void 0===t&&(t=!1),0===o(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n)})):n.forEach((function(t,e){return r(e,t,n)}))}function o(n){var r=n[Q];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s(n)?2:v(n)?3:0}function u(n,r){return 2===o(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a(n,r){return 2===o(n)?n.get(r):n[r]}function f(n,r,t){var e=o(n);2===e?n.set(r,t):3===e?n.add(t):n[r]=t}function c(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s(n){return X&&n instanceof Map}function v(n){return q&&n instanceof Set}function p(n){return n.o||n.t}function l(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]})}return Object.create(Object.getPrototypeOf(n),r)}function d(n,e){return void 0===e&&(e=!1),y(n)||r(n)||!t(n)||(o(n)>1&&(n.set=n.add=n.clear=n.delete=h),Object.freeze(n),e&&i(n,(function(n,r){return d(r,!0)}),!0)),n}function h(){n(2)}function y(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b(r){var t=tn[r];return t||n(18,r),t}function m(n,r){tn[n]||(tn[n]=r)}function _(){return false||U||n(0),U}function j(n,r){r&&(b("Patches"),n.u=[],n.s=[],n.v=r)}function g(n){O(n),n.p.forEach(S),n.p=null}function O(n){n===U&&(U=n.l)}function w(n){return U={p:[],l:U,h:n,m:!0,_:0}}function S(n){var r=n[Q];0===r.i||1===r.i?r.j():r.g=!0}function P(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.O||b("ES5").S(e,r,o),o?(i[Q].P&&(g(e),n(4)),t(r)&&(r=M(e,r),e.l||x(e,r)),e.u&&b("Patches").M(i[Q].t,r,e.u,e.s)):r=M(e,i,[]),g(e),e.u&&e.v(e.u,e.s),r!==H?r:void 0}function M(n,r,t){if(y(r))return r;var e=r[Q];if(!e)return i(r,(function(i,o){return A(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l(e.k):e.o,u=o,a=!1;3===e.i&&(u=new Set(o),o.clear(),a=!0),i(u,(function(r,i){return A(n,e,o,r,i,t,a)})),x(n,o,!1),t&&n.u&&b("Patches").N(e,t,n.u,n.s)}return e.o}function A(e,i,o,a,c,s,v){if( true&&c===o&&n(5),r(c)){var p=M(e,c,s&&i&&3!==i.i&&!u(i.R,a)?s.concat(a):void 0);if(f(o,a,p),!r(p))return;e.m=!1}else v&&o.add(c);if(t(c)&&!y(c)){if(!e.h.D&&e._<1)return;M(e,c),i&&i.A.l||x(e,c)}}function x(n,r,t){void 0===t&&(t=!1),!n.l&&n.h.D&&n.m&&d(r,t)}function z(n,r){var t=n[Q];return(t?p(t):n)[r]}function I(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t)}}function k(n){n.P||(n.P=!0,n.l&&k(n.l))}function E(n){n.o||(n.o=l(n.t))}function N(n,r,t){var e=s(r)?b("MapSet").F(r,t):v(r)?b("MapSet").T(r,t):n.O?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b("ES5").J(r,t);return(t?t.A:_()).p.push(e),e}function R(e){return r(e)||n(22,e),function n(r){if(!t(r))return r;var e,u=r[Q],c=o(r);if(u){if(!u.P&&(u.i<4||!b("ES5").K(u)))return u.t;u.I=!0,e=D(r,c),u.I=!1}else e=D(r,c);return i(e,(function(r,t){u&&a(u.t,r)===t||f(e,r,n(t))})),3===c?new Set(e):e}(e)}function D(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l(n)}function F(){function t(n,r){var t=s[n];return t?t.enumerable=r:s[n]=t={configurable:!0,enumerable:r,get:function(){var r=this[Q];return true&&f(r),en.get(r,n)},set:function(r){var t=this[Q]; true&&f(t),en.set(t,n,r)}},t}function e(n){for(var r=n.length-1;r>=0;r--){var t=n[r][Q];if(!t.P)switch(t.i){case 5:a(t)&&k(t);break;case 4:o(t)&&k(t)}}}function o(n){for(var r=n.t,t=n.k,e=nn(t),i=e.length-1;i>=0;i--){var o=e[i];if(o!==Q){var a=r[o];if(void 0===a&&!u(r,o))return!0;var f=t[o],s=f&&f[Q];if(s?s.t!==a:!c(f,a))return!0}}var v=!!r[Q];return e.length!==nn(r).length+(v?0:1)}function a(n){var r=n.k;if(r.length!==n.t.length)return!0;var t=Object.getOwnPropertyDescriptor(r,r.length-1);if(t&&!t.get)return!0;for(var e=0;e<r.length;e++)if(!r.hasOwnProperty(e))return!0;return!1}function f(r){r.g&&n(3,JSON.stringify(p(r)))}var s={};m("ES5",{J:function(n,r){var e=Array.isArray(n),i=function(n,r){if(n){for(var e=Array(r.length),i=0;i<r.length;i++)Object.defineProperty(e,""+i,t(i,!0));return e}var o=rn(r);delete o[Q];for(var u=nn(o),a=0;a<u.length;a++){var f=u[a];o[f]=t(f,n||!!o[f].enumerable)}return Object.create(Object.getPrototypeOf(r),o)}(e,n),o={i:e?5:4,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:i,o:null,g:!1,C:!1};return Object.defineProperty(i,Q,{value:o,writable:!0}),i},S:function(n,t,o){o?r(t)&&t[Q].A===n&&e(n.p):(n.u&&function n(r){if(r&&"object"==typeof r){var t=r[Q];if(t){var e=t.t,o=t.k,f=t.R,c=t.i;if(4===c)i(o,(function(r){r!==Q&&(void 0!==e[r]||u(e,r)?f[r]||n(o[r]):(f[r]=!0,k(t)))})),i(e,(function(n){void 0!==o[n]||u(o,n)||(f[n]=!1,k(t))}));else if(5===c){if(a(t)&&(k(t),f.length=!0),o.length<e.length)for(var s=o.length;s<e.length;s++)f[s]=!1;else for(var v=e.length;v<o.length;v++)f[v]=!0;for(var p=Math.min(o.length,e.length),l=0;l<p;l++)o.hasOwnProperty(l)||(f[l]=!0),void 0===f[l]&&n(o[l])}}}}(n.p[0]),e(n.p))},K:function(n){return 4===n.i?o(n):a(n)}})}function T(){function e(n){if(!t(n))return n;if(Array.isArray(n))return n.map(e);if(s(n))return new Map(Array.from(n.entries()).map((function(n){return[n[0],e(n[1])]})));if(v(n))return new Set(Array.from(n).map(e));var r=Object.create(Object.getPrototypeOf(n));for(var i in n)r[i]=e(n[i]);return u(n,L)&&(r[L]=n[L]),r}function f(n){return r(n)?e(n):n}var c="add";m("Patches",{$:function(r,t){return t.forEach((function(t){for(var i=t.path,u=t.op,f=r,s=0;s<i.length-1;s++){var v=o(f),p=i[s];"string"!=typeof p&&"number"!=typeof p&&(p=""+p),0!==v&&1!==v||"__proto__"!==p&&"constructor"!==p||n(24),"function"==typeof f&&"prototype"===p&&n(24),"object"!=typeof(f=a(f,p))&&n(15,i.join("/"))}var l=o(f),d=e(t.value),h=i[i.length-1];switch(u){case"replace":switch(l){case 2:return f.set(h,d);case 3:n(16);default:return f[h]=d}case c:switch(l){case 1:return"-"===h?f.push(d):f.splice(h,0,d);case 2:return f.set(h,d);case 3:return f.add(d);default:return f[h]=d}case"remove":switch(l){case 1:return f.splice(h,1);case 2:return f.delete(h);case 3:return f.delete(t.value);default:return delete f[h]}default:n(17,u)}})),r},N:function(n,r,t,e){switch(n.i){case 0:case 4:case 2:return function(n,r,t,e){var o=n.t,s=n.o;i(n.R,(function(n,i){var v=a(o,n),p=a(s,n),l=i?u(o,n)?"replace":c:"remove";if(v!==p||"replace"!==l){var d=r.concat(n);t.push("remove"===l?{op:l,path:d}:{op:l,path:d,value:p}),e.push(l===c?{op:"remove",path:d}:"remove"===l?{op:c,path:d,value:f(v)}:{op:"replace",path:d,value:f(v)})}}))}(n,r,t,e);case 5:case 1:return function(n,r,t,e){var i=n.t,o=n.R,u=n.o;if(u.length<i.length){var a=[u,i];i=a[0],u=a[1];var s=[e,t];t=s[0],e=s[1]}for(var v=0;v<i.length;v++)if(o[v]&&u[v]!==i[v]){var p=r.concat([v]);t.push({op:"replace",path:p,value:f(u[v])}),e.push({op:"replace",path:p,value:f(i[v])})}for(var l=i.length;l<u.length;l++){var d=r.concat([l]);t.push({op:c,path:d,value:f(u[l])})}i.length<u.length&&e.push({op:"replace",path:r.concat(["length"]),value:i.length})}(n,r,t,e);case 3:return function(n,r,t,e){var i=n.t,o=n.o,u=0;i.forEach((function(n){if(!o.has(n)){var i=r.concat([u]);t.push({op:"remove",path:i,value:n}),e.unshift({op:c,path:i,value:n})}u++})),u=0,o.forEach((function(n){if(!i.has(n)){var o=r.concat([u]);t.push({op:c,path:o,value:n}),e.unshift({op:"remove",path:o,value:n})}u++}))}(n,r,t,e)}},M:function(n,r,t,e){t.push({op:"replace",path:[],value:r===H?void 0:r}),e.push({op:"replace",path:[],value:n})}})}function C(){function r(n,r){function t(){this.constructor=n}a(n,r),n.prototype=(t.prototype=r.prototype,new t)}function e(n){n.o||(n.R=new Map,n.o=new Map(n.t))}function o(n){n.o||(n.o=new Set,n.t.forEach((function(r){if(t(r)){var e=N(n.A.h,r,n);n.p.set(r,e),n.o.add(e)}else n.o.add(r)})))}function u(r){r.g&&n(3,JSON.stringify(p(r)))}var a=function(n,r){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,r){n.__proto__=r}||function(n,r){for(var t in r)r.hasOwnProperty(t)&&(n[t]=r[t])})(n,r)},f=function(){function n(n,r){return this[Q]={i:2,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,R:void 0,t:n,k:this,C:!1,g:!1},this}r(n,Map);var o=n.prototype;return Object.defineProperty(o,"size",{get:function(){return p(this[Q]).size}}),o.has=function(n){return p(this[Q]).has(n)},o.set=function(n,r){var t=this[Q];return u(t),p(t).has(n)&&p(t).get(n)===r||(e(t),k(t),t.R.set(n,!0),t.o.set(n,r),t.R.set(n,!0)),this},o.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),e(r),k(r),r.t.has(n)?r.R.set(n,!1):r.R.delete(n),r.o.delete(n),!0},o.clear=function(){var n=this[Q];u(n),p(n).size&&(e(n),k(n),n.R=new Map,i(n.t,(function(r){n.R.set(r,!1)})),n.o.clear())},o.forEach=function(n,r){var t=this;p(this[Q]).forEach((function(e,i){n.call(r,t.get(i),i,t)}))},o.get=function(n){var r=this[Q];u(r);var i=p(r).get(n);if(r.I||!t(i))return i;if(i!==r.t.get(n))return i;var o=N(r.A.h,i,r);return e(r),r.o.set(n,o),o},o.keys=function(){return p(this[Q]).keys()},o.values=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.values()},n.next=function(){var n=t.next();return n.done?n:{done:!1,value:r.get(n.value)}},n},o.entries=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.entries()},n.next=function(){var n=t.next();if(n.done)return n;var e=r.get(n.value);return{done:!1,value:[n.value,e]}},n},o[V]=function(){return this.entries()},n}(),c=function(){function n(n,r){return this[Q]={i:3,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,t:n,k:this,p:new Map,g:!1,C:!1},this}r(n,Set);var t=n.prototype;return Object.defineProperty(t,"size",{get:function(){return p(this[Q]).size}}),t.has=function(n){var r=this[Q];return u(r),r.o?!!r.o.has(n)||!(!r.p.has(n)||!r.o.has(r.p.get(n))):r.t.has(n)},t.add=function(n){var r=this[Q];return u(r),this.has(n)||(o(r),k(r),r.o.add(n)),this},t.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),o(r),k(r),r.o.delete(n)||!!r.p.has(n)&&r.o.delete(r.p.get(n))},t.clear=function(){var n=this[Q];u(n),p(n).size&&(o(n),k(n),n.o.clear())},t.values=function(){var n=this[Q];return u(n),o(n),n.o.values()},t.entries=function(){var n=this[Q];return u(n),o(n),n.o.entries()},t.keys=function(){return this.values()},t[V]=function(){return this.values()},t.forEach=function(n,r){for(var t=this.values(),e=t.next();!e.done;)n.call(r,e.value,e.value,this),e=t.next()},n}();m("MapSet",{F:function(n,r){return new f(n,r)},T:function(n,r){return new c(n,r)}})}function J(){F(),C(),T()}function K(n){return n}function $(n){return n}var G,U,W="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X="undefined"!=typeof Map,q="undefined"!=typeof Set,B="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H=W?Symbol.for("immer-nothing"):((G={})["immer-nothing"]=!0,G),L=W?Symbol.for("immer-draftable"):"__$immer_draftable",Q=W?Symbol.for("immer-state"):"__$immer_state",V="undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator",Y={0:"Illegal state",1:"Immer drafts cannot have computed properties",2:"This object has been frozen and should not be mutated",3:function(n){return"Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? "+n},4:"An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",5:"Immer forbids circular references",6:"The first or second argument to `produce` must be a function",7:"The third argument to `produce` must be a function or undefined",8:"First argument to `createDraft` must be a plain object, an array, or an immerable object",9:"First argument to `finishDraft` must be a draft returned by `createDraft`",10:"The given draft is already finalized",11:"Object.defineProperty() cannot be used on an Immer draft",12:"Object.setPrototypeOf() cannot be used on an Immer draft",13:"Immer only supports deleting array indices",14:"Immer only supports setting array indices and the 'length' property",15:function(n){return"Cannot apply patch, path doesn't resolve: "+n},16:'Sets cannot have "replace" patches.',17:function(n){return"Unsupported patch operation: "+n},18:function(n){return"The plugin for '"+n+"' has not been loaded into Immer. To enable the plugin, import and call `enable"+n+"()` when initializing your application."},20:"Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",21:function(n){return"produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '"+n+"'"},22:function(n){return"'current' expects a draft, got: "+n},23:function(n){return"'original' expects a draft, got: "+n},24:"Patching reserved attributes like __proto__, prototype and constructor is not allowed"},Z=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t)})),r},tn={},en={get:function(n,r){if(r===Q)return n;var e=p(n);if(!u(e,r))return function(n,r,t){var e,i=I(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t(i)?i:i===z(n.t,r)?(E(n),n.o[r]=N(n.A.h,i,n)):i},has:function(n,r){return r in p(n)},ownKeys:function(n){return Reflect.ownKeys(p(n))},set:function(n,r,t){var e=I(p(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z(p(n),r),o=null==i?void 0:i[Q];if(o&&o.t===t)return n.o[r]=t,n.R[r]=!1,!0;if(c(t,i)&&(void 0!==t||u(n.t,r)))return!0;E(n),k(n)}return n.o[r]===t&&(void 0!==t||r in n.o)||Number.isNaN(t)&&Number.isNaN(n.o[r])||(n.o[r]=t,n.R[r]=!0),!0},deleteProperty:function(n,r){return void 0!==z(n.t,r)||r in n.t?(n.R[r]=!1,E(n),k(n)):delete n.R[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n(11)},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n(12)}},on={};i(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)}})),on.deleteProperty=function(r,t){return true&&isNaN(parseInt(t))&&n(13),on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return true&&"length"!==t&&isNaN(parseInt(t))&&n(14),en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.O=B,this.D=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return(t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n(6),void 0!==o&&"function"!=typeof o&&n(7),t(r)){var c=w(e),s=N(e,r,void 0),v=!0;try{f=i(s),v=!1}finally{v?g(c):O(c)}return"undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j(c,o),P(n,c)}),(function(n){throw g(c),n})):(j(c,o),P(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H&&(f=void 0),e.D&&d(f,!0),o){var p=[],l=[];b("Patches").M(r,f,p,l),o(p,l)}return f}n(21,r)},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r}));return"undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return[n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze)}var i=e.prototype;return i.createDraft=function(e){t(e)||n(8),r(e)&&(e=R(e));var i=w(this),o=N(this,e,void 0);return o[Q].C=!0,O(i),o},i.finishDraft=function(r,t){var e=r&&r[Q]; true&&(e&&e.C||n(9),e.I&&n(10));var i=e.A;return j(i,t),P(void 0,i)},i.setAutoFreeze=function(n){this.D=n},i.setUseProxies=function(r){r&&!B&&n(20),this.O=r},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b("Patches").$;return r(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce,cn=an.produceWithPatches.bind(an),sn=an.setAutoFreeze.bind(an),vn=an.setUseProxies.bind(an),pn=an.applyPatches.bind(an),ln=an.createDraft.bind(an),dn=an.finishDraft.bind(an);/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fn);
 //# sourceMappingURL=immer.esm.js.map

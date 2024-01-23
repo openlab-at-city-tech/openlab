@@ -26,8 +26,7 @@ defined( 'ABSPATH' ) || exit;
 function messages_format_notifications( $action, $item_id, $secondary_item_id, $total_items, $format = 'string' ) {
 	$total_items = (int) $total_items;
 	$text        = '';
-	$link        = trailingslashit( bp_loggedin_user_domain() . bp_get_messages_slug() . '/inbox' );
-	$title       = __( 'Inbox', 'buddypress' );
+	$link        = bp_loggedin_user_url( bp_members_get_path_chunks( array( bp_get_messages_slug(), 'inbox' ) ) );
 	$amount      = 'single';
 
 	if ( 'new_message' === $action ) {
@@ -216,7 +215,7 @@ add_action( 'messages_message_sent', 'bp_messages_message_sent_add_notification'
  *
  * @since 1.9.0
  *
- * @global BP_Messages_Thread_Template $thread_template
+ * @global BP_Messages_Thread_Template $thread_template Message Thread Template Class.
  */
 function bp_messages_screen_conversation_mark_notifications() {
 	global $thread_template;

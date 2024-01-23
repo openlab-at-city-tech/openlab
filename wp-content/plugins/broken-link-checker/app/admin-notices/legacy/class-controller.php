@@ -72,7 +72,9 @@ class Controller extends Admin_Notice {
 	 */
 	public function can_boot() {
 		// TODO: Probably remove this notice completely.
-		//return false;
+		// For now not allowing to boot.
+		return false;
+
 		/**
 		 * Until multisites are officially supported, BLC v2 menus are disabled in subsites.
 		 * Legacy menus are loaded instead. Lagecy admin notification does not need to appear on subsites at this point.

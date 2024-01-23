@@ -707,7 +707,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/redux-routine/build-module/is-generator.js
 /* eslint-disable jsdoc/valid-types */
-
 /**
  * Returns true if the given object is a generator, or false otherwise.
  *
@@ -731,7 +730,7 @@ function isPromise(obj) {
   return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/redux-routine/node_modules/is-plain-object/dist/is-plain-object.mjs
+;// CONCATENATED MODULE: ./node_modules/is-plain-object/dist/is-plain-object.mjs
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -772,8 +771,8 @@ function isPlainObject(o) {
  * External dependencies
  */
 
-/* eslint-disable jsdoc/valid-types */
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Returns true if the given object quacks like an action.
  *
@@ -781,10 +780,10 @@ function isPlainObject(o) {
  *
  * @return {object is import('redux').AnyAction}  Whether object is an action.
  */
-
 function isAction(object) {
   return isPlainObject(object) && typeof object.type === 'string';
 }
+
 /**
  * Returns true if the given object quacks like an action and has a specific
  * action type
@@ -794,7 +793,6 @@ function isAction(object) {
  *
  * @return {object is import('redux').AnyAction} Whether object is an action and is of specific type.
  */
-
 function isActionOfType(object, expectedType) {
   /* eslint-enable jsdoc/valid-types */
   return isAction(object) && object.type === expectedType;
@@ -811,53 +809,41 @@ function isActionOfType(object, expectedType) {
  * Internal dependencies
  */
 
+
 /**
  * Create a co-routine runtime.
  *
- * @param  controls Object of control handlers.
- * @param  dispatch Unhandled action dispatch.
+ * @param controls Object of control handlers.
+ * @param dispatch Unhandled action dispatch.
  */
-
-function createRuntime() {
-  let controls = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let dispatch = arguments.length > 1 ? arguments[1] : undefined;
-  const rungenControls = Object.entries(controls).map(_ref => {
-    let [actionType, control] = _ref;
-    return (value, next, iterate, yieldNext, yieldError) => {
-      if (!isActionOfType(value, actionType)) {
-        return false;
-      }
-
-      const routine = control(value);
-
-      if (isPromise(routine)) {
-        // Async control routine awaits resolution.
-        routine.then(yieldNext, yieldError);
-      } else {
-        yieldNext(routine);
-      }
-
-      return true;
-    };
+function createRuntime(controls = {}, dispatch) {
+  const rungenControls = Object.entries(controls).map(([actionType, control]) => (value, next, iterate, yieldNext, yieldError) => {
+    if (!isActionOfType(value, actionType)) {
+      return false;
+    }
+    const routine = control(value);
+    if (isPromise(routine)) {
+      // Async control routine awaits resolution.
+      routine.then(yieldNext, yieldError);
+    } else {
+      yieldNext(routine);
+    }
+    return true;
   });
-
   const unhandledActionControl = (value, next) => {
     if (!isAction(value)) {
       return false;
     }
-
     dispatch(value);
     next();
     return true;
   };
-
   rungenControls.push(unhandledActionControl);
   const rungenRuntime = (0,dist.create)(rungenControls);
   return action => new Promise((resolve, reject) => rungenRuntime(action, result => {
     if (isAction(result)) {
       dispatch(result);
     }
-
     resolve(result);
   }, reject));
 }
@@ -866,6 +852,7 @@ function createRuntime() {
 /**
  * Internal dependencies
  */
+
 
 
 /**
@@ -880,16 +867,13 @@ function createRuntime() {
  *
  * @return {import('redux').Middleware} Co-routine runtime
  */
-
-function createMiddleware() {
-  let controls = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function createMiddleware(controls = {}) {
   return store => {
     const runtime = createRuntime(controls, store.dispatch);
     return next => action => {
       if (!isGenerator(action)) {
         return next(action);
       }
-
       return runtime(action);
     };
   };

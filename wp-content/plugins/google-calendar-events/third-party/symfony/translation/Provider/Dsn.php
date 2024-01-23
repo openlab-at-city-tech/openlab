@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\MissingRe
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Oskar Stark <oskarstark@googlemail.com>
+ * @internal
  */
 final class Dsn
 {

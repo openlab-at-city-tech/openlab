@@ -1,0 +1,159 @@
+/* FILE: global/modifiers/_typography.scss */
+
+// Font family
+
+	$important_modifiers: _important( 'modifier_font_family' );
+
+	.has-root-font-family,
+	.has-global-font-family {
+		font-family: var(--typography_font_global);
+	}
+
+	.has-headings-font-family {
+		font-family: var(--typography_font_headings);
+	}
+
+	.has-site-title-font-family {
+		font-family: var(--typography_font_site_title);
+	}
+
+	.has-inherit-font-family,
+	.has-inherited-font-family {
+		font-family: inherit;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Font size
+
+	$important_modifiers: _important( 'modifier_font_size' );
+
+	$specificity : '';
+	@if variable-exists( 'selector_editor_wrapper' ) {
+		$specificity : '[class]';
+	}
+
+	.has-xs-font-size,
+	.has-extra-small-font-size {
+		font-size: var(--typography_font_size_xs_em) $important_modifiers;
+	}
+
+	.has-s-font-size,
+	.has-small-font-size {
+		font-size: var(--typography_font_size_s_em) $important_modifiers;
+	}
+
+	#{ $specificity }.has-m-font-size,
+	#{ $specificity }.has-medium-font-size,
+	#{ $specificity }.has-regular-font-size,
+	#{ $specificity }.has-normal-font-size {
+		font-size: 1em $important_modifiers;
+		line-height: inherit;
+	}
+
+	#{ $specificity }.has-l-font-size,
+	#{ $specificity }.has-large-font-size {
+		font-size: var(--typography_font_size_l_em) $important_modifiers;
+		line-height: calc( 1 + #{ $ratio_maj } / var(--typography_font_size_l) );
+	}
+
+	#{ $specificity }.has-xl-font-size,
+	#{ $specificity }.has-extra-large-font-size {
+		font-size: var(--typography_font_size_xl_em) $important_modifiers;
+		line-height: calc( 1 + #{ $ratio_maj } / var(--typography_font_size_xl) );
+	}
+
+	#{ $specificity }.has-xxl-font-size,
+	#{ $specificity }.has-giant-font-size {
+		font-size: var(--typography_font_size_xxl_em) $important_modifiers;
+		line-height: calc( 1 + #{ $ratio_maj } / var(--typography_font_size_xxl) );
+	}
+
+	#{ $specificity }.has-xxxl-font-size,
+	#{ $specificity }.has-huge-font-size {
+		font-size: var(--typography_font_size_xxxl_em) $important_modifiers;
+		line-height: calc( 1 + #{ $ratio_maj } / var(--typography_font_size_xxxl) );
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Font style
+
+	$important_modifiers: _important( 'modifier_font_style' );
+
+	.has-italic-font-style {
+		font-style: italic $important_modifiers;
+	}
+
+	.has-normal-font-style {
+		font-style: normal $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Font weight
+
+	$important_modifiers: _important( 'modifier_font_weight' );
+
+	// @link  https://developer.mozilla.org/en/docs/Web/CSS/font-weight
+	@for $i from 1 through 9 {
+		.has-#{ $i * 100 }-font-weight {
+			font-weight: $i * 100 $important_modifiers;
+		}
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Line height
+
+	$important_modifiers: _important( 'modifier_line_height' );
+
+	.has-1-line-height {
+		line-height: 1 $important_modifiers;
+	}
+
+	.has-xs-line-height,
+	.has-extra-small-line-height {
+		line-height: ( 1 + math.div( $ratio_min, 2 ) ) $important_modifiers;
+	}
+
+	.has-s-line-height,
+	.has-small-line-height {
+		line-height: ( 1 + $ratio_min ) $important_modifiers;
+	}
+
+	.has-m-line-height,
+	.has-regular-line-height,
+	.has-medium-line-height,
+	.has-normal-line-height {
+		line-height: var(--typography_line_height) $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Text transform
+
+	$important_modifiers: _important( 'modifier_text_transform' );
+
+	.has-uppercase-text-transform,
+	.is-style-uppercase {
+		text-transform: uppercase $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.
+
+// Text shadow
+
+	$important_modifiers: _important( 'modifier_text_shadow' );
+
+	.has-dark-text-shadow,
+	.is-style-text-shadow-dark {
+		text-shadow: 0 1px 2px #000 $important_modifiers;
+	}
+
+	.has-light-text-shadow,
+	.is-style-text-shadow-light {
+		text-shadow: 0 1px 2px #fff $important_modifiers;
+	}
+
+	$important_modifiers: null; // Required reset.

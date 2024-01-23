@@ -43,7 +43,6 @@ use Bookly\Lib\Entities\CustomerAppointment;
                 <input type="hidden" name="bookly_cal_many_participants" value="<?php echo esc_attr( get_option( 'bookly_cal_many_participants', '' ) ) ?>">
             </div>
         </div>
-        <?php Settings\Proxy\Pro::renderDisplayFrontendCalendar() ?>
     </div>
 
     <div class="card-footer bg-transparent d-flex justify-content-end">

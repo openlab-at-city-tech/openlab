@@ -14,14 +14,14 @@ $customizeArea = B2S_System::customizeArea();
                             </div> 
                         <?php } else { ?>
                             <div class="col-md-2 del-padding-left">
-                                <a class="" href="https://www.blog2social.com" target="_blank">
+                            <a class="" href="admin.php?page=blog2social">
                                     <img class="img-responsive b2s-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)); ?>" alt="logo">
                                 </a>
                             </div>
                             <div class="col-md-10 del-padding-left">
                                 <div class="media-body">
                                     <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LOGO', B2S_PLUGIN_ADMIN)) { ?> 
-                                        <a href="https://www.blog2social.com" class="b2s-btn-logo" target="_blank"><?php esc_html_e("Blog2Social", "blog2social") ?></a> 
+                                        <a href="admin.php?page=blog2social" class="b2s-btn-logo"><?php esc_html_e("Blog2Social", "blog2social") ?></a> 
                                         <span class="b2s-sidebar-version padding-left-5"><?php echo ($b2sLastVersion !== false) ? esc_html__("Version", "blog2social") . ' ' . B2S_Util::getVersion(B2S_PLUGIN_VERSION) : ''; ?> </span>
                                     <?php } ?>
                                     <br>

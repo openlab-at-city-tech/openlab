@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.0.0
  */
+#[AllowDynamicProperties]
 class BP_XProfile_Group {
 
 	/**
@@ -83,8 +84,6 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global $wpdb $wpdb
-	 *
 	 * @param int $id Field group ID.
 	 * @return boolean
 	 */
@@ -92,7 +91,7 @@ class BP_XProfile_Group {
 
 		// Get this group.
 		$group = self::get( array(
-			'profile_group_id' => $id
+			'profile_group_id' => $id,
 		) );
 
 		// Bail if group not found.
@@ -116,7 +115,7 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @return boolean
 	 */
@@ -177,7 +176,7 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @global object $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @return boolean
 	 */
@@ -213,7 +212,7 @@ class BP_XProfile_Group {
 			// Remove profile data for the groups fields.
 			if ( ! empty( $this->fields ) ) {
 				for ( $i = 0, $count = count( $this->fields ); $i < $count; ++$i ) {
-					BP_XProfile_ProfileData::delete_for_field( $this->fields[$i]->id );
+					BP_XProfile_ProfileData::delete_for_field( $this->fields[ $i ]->id );
 				}
 			}
 		}
@@ -241,7 +240,7 @@ class BP_XProfile_Group {
 	 * @since 8.0.0  Introduced `$hide_field_types` & `$signup_fields_only` arguments.
 	 * @since 11.0.0 `$profile_group_id` accepts an array of profile group ids.
 	 *
-	 * @global object $wpdb WordPress DB access object.
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args {
 	 *      Array of optional arguments.
@@ -467,6 +466,8 @@ class BP_XProfile_Group {
 	 * @since 5.0.0
 	 * @since 11.0.0 `$profile_group_id` accepts an array of profile group ids.
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param array $args {
 	 *    Array of optional arguments.
 	 *
@@ -523,6 +524,8 @@ class BP_XProfile_Group {
 	 * Gets group field IDs, based on passed parameters.
 	 *
 	 * @since 5.0.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $group_ids Array of group IDs.
 	 * @param array $args {
@@ -616,6 +619,8 @@ class BP_XProfile_Group {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param array $group_ids Array of IDs.
 	 * @return array
 	 */
@@ -692,7 +697,7 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global string $message
+	 * @global string $message The feedback message to show.
 	 *
 	 * @return boolean
 	 */
@@ -713,7 +718,7 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @global $wpdb $wpdb
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param  int $field_group_id ID of the group the field belongs to.
 	 * @param  int $position       Field group position.
@@ -786,6 +791,8 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.6.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @return array $default_visibility_levels An array, keyed by field_id, of default
 	 *                                          visibility level + allow_custom
 	 *                                          (whether the admin allows this
@@ -827,7 +834,7 @@ class BP_XProfile_Group {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global string $message
+	 * @global string $message The feedback message to show.
 	 */
 	public function render_admin_form() {
 		global $message;
@@ -837,34 +844,42 @@ class BP_XProfile_Group {
 
 		// URL to cancel to.
 		$cancel_url = add_query_arg( array(
-			'page' => 'bp-profile-setup'
+			'page' => 'bp-profile-setup',
 		), $users_url );
 
 		// New field group.
 		if ( empty( $this->id ) ) {
-			$title	= __( 'Add New Field Group', 'buddypress' );
-			$button	= __( 'Save',                'buddypress' );
-			$action	= add_query_arg( array(
-				'page' => 'bp-profile-setup',
-				'mode' => 'add_group'
-			), $users_url );
+			$title	     = __( 'Add New Field Group', 'buddypress' );
+			$button	     = __( 'Save',                'buddypress' );
+			$action	     = add_query_arg(
+				array(
+					'page' => 'bp-profile-setup',
+					'mode' => 'add_group',
+				),
+				$users_url
+			);
+			$description = '';
 
 		// Existing field group.
 		} else {
-			$title  = __( 'Edit Field Group', 'buddypress' );
-			$button	= __( 'Update',           'buddypress' );
-			$action	= add_query_arg( array(
-				'page'     => 'bp-profile-setup',
-				'mode'     => 'edit_group',
-				'group_id' => (int) $this->id
-			), $users_url );
+			$title       = __( 'Edit Field Group', 'buddypress' );
+			$button	     = __( 'Update',           'buddypress' );
+			$action	     = add_query_arg(
+				array(
+					'page'     => 'bp-profile-setup',
+					'mode'     => 'edit_group',
+					'group_id' => (int) $this->id,
+				),
+				$users_url
+			);
+			$description = $this->description;
 
 			if ( $this->can_delete ) {
 				// Delete Group URL.
 				$delete_url = wp_nonce_url( add_query_arg( array(
 					'page'     => 'bp-profile-setup',
 					'mode'     => 'delete_group',
-					'group_id' => (int) $this->id
+					'group_id' => (int) $this->id,
 				), $users_url ), 'bp_xprofile_delete_group' );
 			}
 		} ?>
@@ -895,11 +910,13 @@ class BP_XProfile_Group {
 							<div class="postbox">
 								<h2><?php esc_html_e( 'Field Group Description', 'buddypress' ); ?></h2>
 								<div class="inside">
-									<label for="group_description" class="screen-reader-text"><?php
+									<label for="group_description" class="screen-reader-text">
+										<?php
 										/* translators: accessibility text */
 										esc_html_e( 'Add description', 'buddypress' );
-									?></label>
-									<textarea name="group_description" id="group_description" rows="8" cols="60"><?php echo esc_textarea( $this->description ); ?></textarea>
+										?>
+									</label>
+									<textarea name="group_description" id="group_description" rows="8" cols="60"><?php echo esc_textarea( $description ); ?></textarea>
 								</div>
 							</div>
 

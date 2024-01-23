@@ -25,7 +25,7 @@ class WPCF7_SWV_FileRule extends WPCF7_SWV_Rule {
 		$acceptable_filetypes = array();
 
 		foreach ( (array) $this->get_property( 'accept' ) as $accept ) {
-			if ( false === strpos( $accept, '/' ) ) {
+			if ( preg_match( '/^\.[a-z0-9]+$/i', $accept ) ) {
 				$acceptable_filetypes[] = strtolower( $accept );
 			} else {
 				foreach ( wpcf7_convert_mime_to_ext( $accept ) as $ext ) {
@@ -60,7 +60,4 @@ class WPCF7_SWV_FileRule extends WPCF7_SWV_Rule {
 		return true;
 	}
 
-	public function to_array() {
-		return array( 'rule' => self::rule_name ) + (array) $this->properties;
-	}
 }

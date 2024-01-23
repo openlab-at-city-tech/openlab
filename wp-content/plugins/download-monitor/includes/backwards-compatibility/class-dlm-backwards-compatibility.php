@@ -44,7 +44,6 @@ class DLM_Backwards_Compatibility {
 	 * @return void
 	 */
 	public function __construct() {
-
 		// Add post meta count to total downloads.
 		add_filter( 'dlm_shortcode_total_downloads', array( $this, 'total_downloads_shortcode' ) );
 		// Add orderby postmeta compatibility.
@@ -53,10 +52,12 @@ class DLM_Backwards_Compatibility {
 		add_action( 'dlm_reset_postdata', array( $this, 'reset_postdata' ), 15, 1 );
 		// Add version postmeta downloads to the version download count.
 		add_filter( 'dlm_add_version_meta_download_count', array( $this, 'add_meta_download_count' ), 15, 2 );
-		// Add Download postmeta downloads to the Download download count.
+		// Add Download postmeta downloads to the Download's download count.
 		add_filter( 'dlm_add_meta_download_count', array( $this, 'add_meta_download_count' ), 30, 2 );
 		// If the DB upgrade functionality did not take place we won't have the option stored.
 		$this->upgrade_option = get_option( 'dlm_db_upgraded' );
+		// Terms and Conditions extension placement inside the settings page.
+		add_filter( 'dlm_settings', array( $this, 'dlm_terms_and_conditions_placement' ), 5, 1 );
 
 	}
 
@@ -111,7 +112,8 @@ class DLM_Backwards_Compatibility {
 	/**
 	 * Order by post meta download_count compatibility
 	 *
-	 * @param  mixed $filters Filters for the query.
+	 * @param mixed $filters Filters for the query.
+	 *
 	 * @return void
 	 *
 	 * @since 4.6.0
@@ -127,7 +129,7 @@ class DLM_Backwards_Compatibility {
 		if ( 'dlm_download' !== $filters['post_type'] ) {
 			return;
 		}
-		
+
 		do_action( 'dlm_backwards_compatibility_orderby_meta_before', $filters );
 
 		if ( apply_filters( 'dlm_backwards_compatibility_orderby_meta', false ) ) {
@@ -164,10 +166,10 @@ class DLM_Backwards_Compatibility {
 		}
 
 		$this->filters = $filters;
-	// @todo: Think the below filters are not useful anymore as we changed the SQL query.
-	//	add_filter( 'dlm_admin_sort_columns', array( $this, 'query_args_download_count_compatibility' ), 60 );
-	//	add_filter( 'dlm_query_args_filter', array( $this, 'query_args_download_count_compatibility' ), 60 );
-	
+		// @todo: Think the below filters are not useful anymore as we changed the SQL query.
+		//	add_filter( 'dlm_admin_sort_columns', array( $this, 'query_args_download_count_compatibility' ), 60 );
+		//	add_filter( 'dlm_query_args_filter', array( $this, 'query_args_download_count_compatibility' ), 60 );
+
 		// @todo: delete this filter and function after feedback, as version 4.7.0 doesn't need it.
 		// add_filter( 'posts_where', array( $this, 'where_download_count_compatibility' ) );
 		add_filter( 'posts_groupby', array( $this, 'groupby_download_count_compatibility' ) );
@@ -178,10 +180,11 @@ class DLM_Backwards_Compatibility {
 	/**
 	 * Add custom table to query JOIN
 	 *
+	 * @param mixed $join The join query part.
+	 *
+	 * @return string
 	 * @since 4.6.0
 	 *
-	 * @param  mixed $join The join query part.
-	 * @return string
 	 */
 	public function join_download_count_compatibility( $join ) {
 		global $wpdb;
@@ -216,10 +219,11 @@ class DLM_Backwards_Compatibility {
 	/**
 	 * Add select from custom table to the query fields part
 	 *
+	 * @param mixed $fields The fields query part.
+	 *
+	 * @return string
 	 * @since 4.6.0
 	 *
-	 * @param  mixed $fields The fields query part.
-	 * @return string
 	 */
 	public function select_download_count_compatibility( $fields ) {
 
@@ -244,6 +248,7 @@ class DLM_Backwards_Compatibility {
 	 * Group by download_id from download_log in order to properly return our downloads
 	 *
 	 * @param [type] $group_by
+	 *
 	 * @return void
 	 *
 	 * @since 4.6.0
@@ -259,10 +264,11 @@ class DLM_Backwards_Compatibility {
 	/**
 	 * Add orderby custom table count value
 	 *
+	 * @param mixed $orderby The orderby string which we overwrite.
+	 *
+	 * @return string
 	 * @since 4.6.0
 	 *
-	 * @param  mixed $orderby The orderby string which we overwrite.
-	 * @return string
 	 */
 	public function orderby_download_count_compatibility( $orderby ) {
 
@@ -277,16 +283,20 @@ class DLM_Backwards_Compatibility {
 			$order = $this->filters['order'];
 		}
 
-		return ' total_downloads ' . $order;
-
+		if ( apply_filters( 'dlm_count_meta_downloads', true ) ) {
+			return " (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) + 
+			IFNULL( meta_downloads.meta_value, 0 ) ) {$order}";
+		} else {
+			return " (  IFNULL( {$wpdb->dlm_downloads}.download_count, 0 ) ) {$order}";
+		}
 	}
 
 	/**
 	 * Let's reset the query if we have completed our display of downloads, removing our added filters.
 	 *
+	 * @return void
 	 * @since 4.6.0
 	 *
-	 * @return void
 	 */
 	public function reset_postdata() {
 		do_action( 'dlm_backwards_compatibility_reset_postdata' );
@@ -303,6 +313,7 @@ class DLM_Backwards_Compatibility {
 	 * Backwards compatiblity for query args if using custom functionality
 	 *
 	 * @param [type] $query_args
+	 *
 	 * @return void
 	 *
 	 * @since 4.6.0
@@ -332,6 +343,7 @@ class DLM_Backwards_Compatibility {
 	 * Backwards compatiblity for query args if user wants to still order by post meta
 	 *
 	 * @param [type] $query_args
+	 *
 	 * @return void
 	 *
 	 * @since 4.6.0
@@ -352,6 +364,7 @@ class DLM_Backwards_Compatibility {
 	 *
 	 * @param [type] $count
 	 * @param [type] $download_id
+	 *
 	 * @return void
 	 *
 	 * @since 4.6.0
@@ -376,5 +389,37 @@ class DLM_Backwards_Compatibility {
 		}
 
 		return $counts;
+	}
+
+	/**
+	 * Backwards compatibility for Terms and Conditions extension placement inside the settings page.
+	 *
+	 * @param array $settings The settings array.
+	 *
+	 * @return array
+	 *
+	 * @since 4.9.4
+	 */
+	public function dlm_terms_and_conditions_placement( $settings ) {
+		// Set plugin
+		$plugin = 'dlm-terms-and-conditions/dlm-terms-and-conditions.php';
+		// Check if active
+		if ( is_plugin_active( $plugin ) ) {
+			// Get plugin data
+			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+
+			if ( version_compare( $plugin_data['Version'], '4.1.2', '>' ) ) {
+				unset( $settings['terns_and_conditions'] );
+			} else {
+				$settings['terns_and_conditions'] = array(
+					'title'    => __( 'Terms and Conditions', 'download-monitor' ),
+					'sections' => array(),
+					// Need to put sections here for backwards compatibility
+				);
+				unset( $settings['lead_generation']['sections']['terns_and_conditions'] );
+			}
+		}
+
+		return $settings;
 	}
 }

@@ -3,12 +3,6 @@ namespace Bookly\Backend\Modules\Appearance;
 
 use Bookly\Lib;
 
-
-/**
- * Class BooklyForm
- *
- * @package Bookly\Backend\Modules\Appearance
- */
 class BooklyForm extends Lib\Base\Component
 {
     /**

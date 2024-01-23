@@ -19,6 +19,7 @@ namespace SimpleCalendar\plugin_deps\Google;
 
 use SimpleCalendar\plugin_deps\Google\Http\Batch;
 use TypeError;
+/** @internal */
 class Service
 {
     public $batchPath;

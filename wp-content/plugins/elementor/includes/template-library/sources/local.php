@@ -46,7 +46,8 @@ class Source_Local extends Source_Base {
 
 	/**
 	 * Elementor template-library meta key.
-	 * @deprecated 2.3.0 Use \Elementor\Core\Base\Document::TYPE_META_KEY instead
+	 *
+	 * @deprecated 2.3.0 Use `Elementor\Core\Base\Document::TYPE_META_KEY` const instead.
 	 */
 	const TYPE_META_KEY = '_elementor_template_type';
 
@@ -232,16 +233,16 @@ class Source_Local extends Source_Base {
 		$labels = [
 			'name' => $name,
 			'singular_name' => esc_html_x( 'Template', 'Template Library', 'elementor' ),
-			'add_new' => esc_html_x( 'Add New', 'Template Library', 'elementor' ),
-			'add_new_item' => esc_html_x( 'Add New Template', 'Template Library', 'elementor' ),
-			'edit_item' => esc_html_x( 'Edit Template', 'Template Library', 'elementor' ),
-			'new_item' => esc_html_x( 'New Template', 'Template Library', 'elementor' ),
-			'all_items' => esc_html_x( 'All Templates', 'Template Library', 'elementor' ),
-			'view_item' => esc_html_x( 'View Template', 'Template Library', 'elementor' ),
-			'search_items' => esc_html_x( 'Search Template', 'Template Library', 'elementor' ),
-			'not_found' => esc_html_x( 'No Templates found', 'Template Library', 'elementor' ),
-			'not_found_in_trash' => esc_html_x( 'No Templates found in Trash', 'Template Library', 'elementor' ),
-			'parent_item_colon' => '',
+			'add_new' => esc_html__( 'Add New Template', 'elementor' ),
+			'add_new_item' => esc_html__( 'Add New Template', 'elementor' ),
+			'edit_item' => esc_html__( 'Edit Template', 'elementor' ),
+			'new_item' => esc_html__( 'New Template', 'elementor' ),
+			'all_items' => esc_html__( 'All Templates', 'elementor' ),
+			'view_item' => esc_html__( 'View Template', 'elementor' ),
+			'search_items' => esc_html__( 'Search Template', 'elementor' ),
+			'not_found' => esc_html__( 'No Templates found', 'elementor' ),
+			'not_found_in_trash' => esc_html__( 'No Templates found in Trash', 'elementor' ),
+			'parent_item_colon' => esc_html__( 'Parent Template:', 'elementor' ),
 			'menu_name' => esc_html_x( 'Templates', 'Template Library', 'elementor' ),
 		];
 
@@ -1380,6 +1381,15 @@ class Source_Local extends Source_Base {
 		<?php
 	}
 
+	/**
+	 * Add filter by category.
+	 *
+	 * In the templates library, add a filter by Elementor library category.
+	 *
+	 * @access public
+	 *
+	 * @param string $post_type The post type slug.
+	 */
 	public function add_filter_by_category( $post_type ) {
 		if ( self::CPT !== $post_type ) {
 			return;
@@ -1399,7 +1409,13 @@ class Source_Local extends Source_Base {
 			//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required to retrieve the value.
 			'selected' => Utils::get_super_global_value( $_GET, self::TAXONOMY_CATEGORY_SLUG ) ?? '',
 		);
-		echo '<label class="screen-reader-text" for="cat">' . esc_html_x( 'Filter by category', 'Template Library', 'elementor' ) . '</label>';
+
+		printf(
+			/* translators: 1: Taxonomy slug, 2: Label text. */
+			'<label class="screen-reader-text" for="%1$s">%2$s</label>',
+			esc_attr( self::TAXONOMY_CATEGORY_SLUG ),
+			esc_html_x( 'Filter by category', 'Template Library', 'elementor' )
+		);
 		wp_dropdown_categories( $dropdown_options );
 	}
 

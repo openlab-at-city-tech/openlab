@@ -15,9 +15,10 @@
  * @return string Returns the next posts link for the query pagination.
  */
 function gutenberg_render_block_core_query_pagination_next( $attributes, $content, $block ) {
-	$page_key = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
-	$page     = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
-	$max_page = isset( $block->context['query']['pages'] ) ? (int) $block->context['query']['pages'] : 0;
+	$page_key            = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
+	$enhanced_pagination = isset( $block->context['enhancedPagination'] ) && $block->context['enhancedPagination'];
+	$page                = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
+	$max_page            = isset( $block->context['query']['pages'] ) ? (int) $block->context['query']['pages'] : 0;
 
 	$wrapper_attributes = get_block_wrapper_attributes();
 	$show_label         = isset( $block->context['showLabel'] ) ? (bool) $block->context['showLabel'] : true;
@@ -36,7 +37,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 
 	// Check if the pagination is for Query that inherits the global context.
 	if ( isset( $block->context['query']['inherit'] ) && $block->context['query']['inherit'] ) {
-		$filter_link_attributes = static function() use ( $wrapper_attributes ) {
+		$filter_link_attributes = static function () use ( $wrapper_attributes ) {
 			return $wrapper_attributes;
 		};
 		add_filter( 'next_posts_link_attributes', $filter_link_attributes );
@@ -49,7 +50,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 		$content = get_next_posts_link( $label, $max_page );
 		remove_filter( 'next_posts_link_attributes', $filter_link_attributes );
 	} elseif ( ! $max_page || $max_page > $page ) {
-		$custom_query           = new WP_Query( gutenberg_build_query_vars_from_query_block( $block, $page ) );
+		$custom_query           = new WP_Query( build_query_vars_from_query_block( $block, $page ) );
 		$custom_query_max_pages = (int) $custom_query->max_num_pages;
 		if ( $custom_query_max_pages && $custom_query_max_pages !== $page ) {
 			$content = sprintf(
@@ -61,6 +62,23 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 		}
 		wp_reset_postdata(); // Restore original Post Data.
 	}
+
+	if ( $enhanced_pagination && isset( $content ) ) {
+		$p = new WP_HTML_Tag_Processor( $content );
+		if ( $p->next_tag(
+			array(
+				'tag_name'   => 'a',
+				'class_name' => 'wp-block-query-pagination-next',
+			)
+		) ) {
+			$p->set_attribute( 'data-wp-key', 'query-pagination-next' );
+			$p->set_attribute( 'data-wp-on--click', 'core/query::actions.navigate' );
+			$p->set_attribute( 'data-wp-on--mouseenter', 'core/query::actions.prefetch' );
+			$p->set_attribute( 'data-wp-watch', 'core/query::callbacks.prefetch' );
+			$content = $p->get_updated_html();
+		}
+	}
+
 	return $content;
 }
 

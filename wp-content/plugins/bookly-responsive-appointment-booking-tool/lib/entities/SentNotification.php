@@ -3,10 +3,6 @@ namespace Bookly\Lib\Entities;
 
 use Bookly\Lib;
 
-/**
- * Class SentNotification
- * @package Bookly\Lib\Entities
- */
 class SentNotification extends Lib\Base\Entity
 {
     /** @var  int */

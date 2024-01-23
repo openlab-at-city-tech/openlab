@@ -45,9 +45,11 @@ SQL;
 	}
 
 	// Parse the posts for references (based on $limit and $limitsize for paging the scan)
-	function extractRefsFromContent( $limit, $limitsize, &$message = '' ) {
-		if ( empty( $limit ) )
+	function extractRefsFromContent( $limit, $limitsize, &$message = '', $post_id = null ) {
+		if ( empty( $limit ) ) {
 			$this->core->reset_issues();
+			$this->core->reset_references();
+		}
 
 		$method = $this->core->current_method;
 
@@ -73,7 +75,7 @@ SQL;
 		// Initialize the parsers
 		do_action( 'wpmc_initialize_parsers' );
 
-		$posts = $this->get_posts_to_check( $limit, $limitsize );
+		$posts = $post_id !== null ? [ $post_id ] : $this->get_posts_to_check( $limit, $limitsize );
 
 		// Only at the beginning, check the Widgets and the Scan Once in the Parsers
 		if ( empty( $limit ) ) {
@@ -127,7 +129,7 @@ SQL;
 	}
 
 	// Parse the posts for references (based on $limit and $limitsize for paging the scan)
-	function extractRefsFromLibrary( $limit, $limitsize, &$message = '' ) {
+	function extractRefsFromLibrary( $limit, $limitsize, &$message = '', $post_id = null ) {
 		$method = $this->core->current_method;
 		if ( $method == 'media' ) {
 			$message = __( "Skipped, as it is not needed for the Media Library method.", 'media-cleaner' );
@@ -139,7 +141,7 @@ SQL;
 			return true;
 		}
 
-		$medias = $this->get_media_entries( $limit, $limitsize );
+		$medias = $this->get_media_entries( $limit, $limitsize, false, $post_id );
 
 		// Only at the beginning
 		if ( empty( $limit ) ) {
@@ -180,13 +182,19 @@ SQL;
 	 * Returns the media entries to check the references
 	 * @param int $offset Negative number means no limit
 	 * @param int $size   Negative number means no limit
+	 * @param bool $unattachedOnly
+	 * @param int|null $post_parent_id If this is set with $unattachedOnly, this is ignored. ($unattachedOnly is prioritized)
 	 * @return NULL|array
 	 */
-	function get_media_entries( $offset = -1, $size = -1, $unattachedOnly = false ) {
+	function get_media_entries( $offset = -1, $size = -1, $unattachedOnly = false, $post_parent_id = null ) {
 		global $wpdb;
 		$r = null;
 
-		$extraAnd = $unattachedOnly ? "AND p.post_parent = 0" : "";
+		$extraAnd = $unattachedOnly
+			? "AND p.post_parent = 0"
+			: ( $post_parent_id !== null
+				? $wpdb->prepare( "AND p.post_parent = %d", $post_parent_id )
+				: '' );
 
 		$q = <<<SQL
 SELECT p.ID FROM $wpdb->posts p
@@ -229,13 +237,18 @@ SQL;
 			$clean_path = $this->core->clean_uploaded_filename( $file );
 			$table_name = $wpdb->prefix . "mclean_scan";
 			$filesize = file_exists( $filepath ) ? filesize ($filepath) : 0;
+			// Let's find out if there is a parentId for this file
+			$potentialParentPath = $this->core->clean_url_from_resolution( $clean_path );
+			$parentId = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM $table_name WHERE path = %s", $potentialParentPath ) );
+			$parentId = $parentId ? (int)$parentId : null;
 			$wpdb->insert( $table_name,
 				array(
 					'time' => current_time('mysql'),
 					'type' => 0,
 					'path' => $clean_path,
 					'size' => $filesize,
-					'issue' => $issue
+					'issue' => $issue,
+					'parentId' => $parentId
 				)
 			);
 		}

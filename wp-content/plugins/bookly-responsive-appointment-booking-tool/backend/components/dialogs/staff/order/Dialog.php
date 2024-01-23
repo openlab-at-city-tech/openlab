@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Order;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Staff\Order
- */
 class Dialog extends Lib\Base\Component
 {
     /**
@@ -26,7 +22,7 @@ class Dialog extends Lib\Base\Component
         ) );
 
         $query = Lib\Entities\Staff::query( 's' )
-            ->select( 's.id, s.full_name' )
+            ->select( 's.id, s.full_name, s.visibility = \'archive\' AS archived' )
             ->tableJoin( $wpdb->users, 'wpu', 'wpu.ID = s.wp_user_id' );
 
         if ( ! Lib\Utils\Common::isCurrentUserAdmin() ) {
@@ -37,11 +33,13 @@ class Dialog extends Lib\Base\Component
             $staff[] = array(
                 'id' => $_staff['id'],
                 'full_name' => esc_html( $_staff['full_name'] ),
+                'archived' => $_staff['archived'],
             );
         }
 
         wp_localize_script( 'bookly-staff-order-dialog.js', 'BooklyStaffOrderDialogL10n', array(
             'staff' => $staff,
+            'archived' => __( 'Archived', 'bookly' )
         ) );
 
         self::renderTemplate( 'dialog' );

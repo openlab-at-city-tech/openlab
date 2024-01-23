@@ -164,10 +164,7 @@ function bp_attachments_get_max_upload_file_size( $type = '' ) {
  */
 function bp_attachments_get_allowed_types( $type = 'avatar' ) {
 	// Defaults to BuddyPress supported image extensions.
-	$exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' );
-	if ( bp_is_running_wp( '5.8.0', '>=' ) ) {
-		$exts[] = 'webp';
-	}
+	$exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' );
 
 	// Avatar and cover image are images.
 	if ( 'image' !== $type && 'avatar' !== $type && 'cover_image' !== $type ) {
@@ -786,7 +783,7 @@ function bp_attachments_enqueue_scripts( $class = '' ) {
 	}
 
 	// Check if WebP images can be edited.
-	if ( bp_is_running_wp( '5.8.0', '>=' ) && ! wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
+	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
 		$defaults['webp_upload_error'] = true;
 	}
 
@@ -1648,6 +1645,17 @@ function bp_attachments_cover_image_ajax_delete() {
 	}
 }
 add_action( 'wp_ajax_bp_cover_image_delete', 'bp_attachments_cover_image_ajax_delete' );
+
+/**
+ * Register Cover Image ajax actions.
+ *
+ * @since 12.0.0
+ */
+function bp_attachments_cover_register_ajax_actions() {
+	bp_ajax_register_action( 'bp_cover_image_upload' );
+	bp_ajax_register_action( 'bp_cover_image_delete' );
+}
+add_action( 'bp_init', 'bp_attachments_cover_register_ajax_actions' );
 
 /**
  * Returns a file's mime type.

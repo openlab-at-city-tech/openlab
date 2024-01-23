@@ -19,7 +19,7 @@ class Migration extends Data_Migration {
 		$log[] = '- This is a blank method for testing.';
 		$log[] = '- All functionality is checked and updated.';
 		$log[] = '- Updating method execution status to executed.';
-		$log[] = '- Method execution is finished at ' . date( 'Y-m-d H:i:s' );
+		$log[] = '- Method execution is finished at ' . gmdate( 'Y-m-d H:i:s' );
 
 		$fn = $existingOption['_func'];
 
@@ -145,7 +145,7 @@ class Migration extends Data_Migration {
 
 			$checkList['post_meta_data_processed'] = self::SUB_ROUTINE_STATUS_DONE;
 
-			$log[] = '-- Subroutine is finished at ' . date( 'Y-m-d H:i:s' );
+			$log[] = '-- Subroutine is finished at ' . gmdate( 'Y-m-d H:i:s' );
 
 			$existingOption['exec_plan'][ __FUNCTION__ ]['progress']['check_list'] = $checkList;
 
@@ -159,7 +159,7 @@ class Migration extends Data_Migration {
 
 		$log[] = '- All subroutine is processed.';
 		$log[] = '- Updating method execution status to executed.';
-		$log[] = '- Method execution is finished at ' . date( 'Y-m-d H:i:s' );
+		$log[] = '- Method execution is finished at ' . gmdate( 'Y-m-d H:i:s' );
 
 		$fn = $existingOption['_func'];
 
@@ -293,7 +293,7 @@ class Migration extends Data_Migration {
 
 			$checkList['duplicate_icl_translation'] = self::SUB_ROUTINE_STATUS_DONE;
 
-			$log[] = '-- Subroutine is finished at ' . date( 'Y-m-d H:i:s' );
+			$log[] = '-- Subroutine is finished at ' . gmdate( 'Y-m-d H:i:s' );
 
 			$existingOption['exec_plan'][ __FUNCTION__ ]['progress']['check_list'] = $checkList;
 
@@ -307,7 +307,7 @@ class Migration extends Data_Migration {
 
 		$log[] = '- All subroutine is processed.';
 		$log[] = '- Updating method execution status to executed.';
-		$log[] = '- Method execution is finished at ' . date( 'Y-m-d H:i:s' );
+		$log[] = '- Method execution is finished at ' . gmdate( 'Y-m-d H:i:s' );
 
 		$fn = $existingOption['_func'];
 
@@ -479,7 +479,7 @@ class Migration extends Data_Migration {
 
 		//$qry = 'UPDATE `'.$tbl.'` SET `meta_value` = \''.$value.'\'  WHERE `meta_id`=\''.intval($meta_id).'\';';
 
-		return $wpdb->update( $tbl, array( 'meta_value' => $value ), array( 'meta_id' => intval( $meta_id ) ), array( '%s' ), array( '%d' ) );
+		return $wpdb->update( $tbl, array( 'meta_value' => $value ), array( 'meta_id' => intval( $meta_id ) ), array( '%s' ), array( '%d' ) ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 	}
 
 

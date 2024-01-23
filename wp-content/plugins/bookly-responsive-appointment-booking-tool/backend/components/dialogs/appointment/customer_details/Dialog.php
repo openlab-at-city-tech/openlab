@@ -3,13 +3,7 @@ namespace Bookly\Backend\Components\Dialogs\Appointment\CustomerDetails;
 
 use Bookly\Lib;
 use Bookly\Lib\Entities\CustomerAppointment;
-use Bookly\Backend\Components\Dialogs\Appointment\CustomerDetails\Proxy;
 
-/**
- * Class Dialog
- *
- * @package Bookly\Backend\Components\Dialogs\Appointment\CustomerDetails
- */
 class Dialog extends Lib\Base\Component
 {
     /**
@@ -18,12 +12,13 @@ class Dialog extends Lib\Base\Component
     public static function render()
     {
         self::enqueueScripts( array(
-            'module' => array( 'js/customer_details.js' => array( 'bookly-backend-globals' ), ),
+            'module' => array( 'js/customer-details.js' => array( 'bookly-backend-globals' ), ),
         ) );
 
         self::enqueueData( array(
             'extras_list',
-        ), 'bookly-customer_details.js' );
+            'extras_multiply_nop'
+        ), 'bookly-customer-details.js' );
 
         $statuses = array();
         foreach ( CustomerAppointment::getStatuses() as $status ) {
@@ -33,8 +28,7 @@ class Dialog extends Lib\Base\Component
             );
         }
 
-        wp_localize_script( 'bookly-customer_details.js', 'BooklyL10nCustomerDetailsDialog', Proxy\Shared::prepareL10n( array(
-            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+        wp_localize_script( 'bookly-customer-details.js', 'BooklyL10nCustomerDetailsDialog', Proxy\Shared::prepareL10n( array(
             'statuses' => $statuses,
             'showNotes' => Lib\Config::showNotes(),
             'l10n' => array(
@@ -42,6 +36,7 @@ class Dialog extends Lib\Base\Component
                 'nop' => __( 'Number of persons', 'bookly' ),
                 'status' => __( 'Status', 'bookly' ),
                 'notes' => __( 'Appointment notes', 'bookly' ),
+                'notes_help' => __( 'This text can be inserted into notifications with {appointment_notes} code', 'bookly' ),
                 'timezone' => __( 'Timezone', 'bookly' ),
                 'apply' => __( 'Apply', 'bookly' ),
                 'cancel' => __( 'Cancel', 'bookly' ),

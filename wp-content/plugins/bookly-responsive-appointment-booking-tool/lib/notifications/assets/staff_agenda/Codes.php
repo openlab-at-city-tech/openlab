@@ -6,10 +6,6 @@ use Bookly\Lib\Notifications\Assets\Base;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Common;
 
-/**
- * Class Codes
- * @package Bookly\Lib\Notifications\Assets\StaffAgenda
- */
 class Codes extends Base\Codes
 {
     // Core

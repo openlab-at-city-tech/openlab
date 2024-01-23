@@ -1,12 +1,6 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
-/**
- * Class ExternalPlugins
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class ExternalPlugins extends Tool
 {
     protected $slug = 'external-plugins';

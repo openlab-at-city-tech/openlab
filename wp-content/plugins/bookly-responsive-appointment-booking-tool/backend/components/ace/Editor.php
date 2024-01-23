@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Ace;
 
 use Bookly\Lib;
 
-/**
- * Class Widget
- * @package Bookly\Backend\Components\Ace
- */
 class Editor extends Lib\Base\Component
 {
     /**

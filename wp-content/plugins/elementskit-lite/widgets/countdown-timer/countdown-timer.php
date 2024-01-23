@@ -111,7 +111,7 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
 			[
 				'label' => esc_html__( 'Countdown Due Date', 'elementskit-lite' ),
 				'type' => Controls_Manager::DATE_TIME,
-				'default' => date("Y-m-d", strtotime("+ 1 day")),
+				'default' => date("Y-m-d", strtotime("+ 1 day")), // PHPCS:Ignore WordPress.DateTime.RestrictedFunctions.date_date
                 'description' => esc_html__( 'Set the due date and time', 'elementskit-lite' ),
 			]
 		);

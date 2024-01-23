@@ -4,10 +4,6 @@ namespace Bookly\Backend\Modules\CloudSettings;
 use Bookly\Lib;
 use Bookly\Backend\Components;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\CloudSettings
- */
 class Page extends Lib\Base\Component
 {
     /**

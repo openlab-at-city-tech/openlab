@@ -4,11 +4,6 @@ namespace Bookly\Lib;
 use Bookly\Lib;
 use Bookly\Lib\Slots\DatePoint;
 
-/**
- * Class Scheduler
- *
- * @package BooklyRecurringAppointments\Lib
- */
 class Scheduler
 {
     const REPEAT_DAILY    = 'daily';

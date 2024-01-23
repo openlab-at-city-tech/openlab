@@ -9,6 +9,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Content-Type, and Expect headers.
  *
  * @final
+ * @internal
  */
 class PrepareBodyMiddleware
 {

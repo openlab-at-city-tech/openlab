@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Backend\Modules\Services\Proxy as ServicesProxy;
 use Bookly\Backend\Modules\Services\Page as ServicesPage;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Modules\Services
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

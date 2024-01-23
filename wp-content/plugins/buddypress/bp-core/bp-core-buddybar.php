@@ -119,8 +119,6 @@ function bp_core_new_nav_item( $args, $component = 'members' ) {
  * @return false|array Returns false on failure, new nav item on success.
  */
 function bp_core_create_nav_link( $args = '', $component = 'members' ) {
-	$bp = buddypress();
-
 	$defaults = array(
 		'component_id'            => '',    // The component ID registering this nav item.
 		'name'                    => false, // Display name for the nav item.
@@ -160,7 +158,6 @@ function bp_core_create_nav_link( $args = '', $component = 'members' ) {
 		'component_id'            => $r['component_id'],
 		'name'                    => $r['name'],
 		'slug'                    => $r['slug'],
-		'link'                    => trailingslashit( bp_loggedin_user_domain() . $r['slug'] ),
 		'css_id'                  => $r['item_css_id'],
 		'show_for_displayed_user' => $r['show_for_displayed_user'],
 		'position'                => $r['position'],
@@ -346,32 +343,38 @@ function bp_core_new_nav_default( $args = '' ) {
 		$parent_nav->slug
 	);
 
-	/**
-	 * Update secondary nav items:
-	 * - The previous default nav item needs to have its slug added to its link property.
-	 * - The new default nav item needs to have its slug removed from its link property.
-	 */
-	$previous_default_subnav = $bp->members->nav->get( $parent_nav->slug . '/' . $parent_nav->default_subnav_slug );
+	// Only edit old & new default subnavs when using the Legacy URL parser.
+	if ( 'rewrites' !== bp_core_get_query_parser() ) {
+		/**
+		 * Update secondary nav items:
+		 * - The previous default nav item needs to have its slug added to its link property.
+		 * - The new default nav item needs to have its slug removed from its link property.
+		 */
+		$previous_default_subnav = $bp->members->nav->get( $parent_nav->slug . '/' . $parent_nav->default_subnav_slug );
 
-	// Edit the link of the previous default nav item.
-	$bp->members->nav->edit_nav(
-		array(
-			'link' => trailingslashit( $previous_default_subnav->link . $previous_default_subnav->slug ),
-		),
-		$previous_default_subnav->slug,
-		$parent_nav->slug
-	);
+		// Edit the link of the previous default nav item.
+		$bp->members->nav->edit_nav(
+			array(
+				'link' => trailingslashit( $previous_default_subnav->link . $previous_default_subnav->slug ),
+			),
+			$previous_default_subnav->slug,
+			$parent_nav->slug
+		);
 
-	$new_default_subnav = $bp->members->nav->get( $parent_nav->slug . '/' . $r['subnav_slug'] );
+		$new_default_subnav = $bp->members->nav->get( $parent_nav->slug . '/' . $r['subnav_slug'] );
 
-	// Edit the link of the new default nav item.
-	$bp->members->nav->edit_nav(
-		array(
-			'link' => rtrim( untrailingslashit( $new_default_subnav->link ), $new_default_subnav->slug ),
-		),
-		$new_default_subnav->slug,
-		$parent_nav->slug
-	);
+		// Make sure the `$new_default_subnav` properties are set.
+		if ( isset( $new_default_subnav->link, $new_default_subnav->slug ) ) {
+			// Edit the link of the new default nav item.
+			$bp->members->nav->edit_nav(
+				array(
+					'link' => rtrim( untrailingslashit( $new_default_subnav->link ), $new_default_subnav->slug ),
+				),
+				$new_default_subnav->slug,
+				$parent_nav->slug
+			);
+		}
+	}
 
 	if ( bp_is_current_component( $parent_nav->slug ) ) {
 
@@ -539,8 +542,6 @@ function bp_core_new_subnav_item( $args, $component = null ) {
  * @return false|array Returns false on failure, new BP_Core_Nav_Item instance on success.
  */
 function bp_core_create_subnav_link( $args = '', $component = 'members' ) {
-	$bp = buddypress();
-
 	$r = bp_parse_args(
 		$args,
 		array(
@@ -560,22 +561,13 @@ function bp_core_create_subnav_link( $args = '', $component = 'members' ) {
 	);
 
 	// If we don't have the required info we need, don't create this subnav item.
-	if ( empty( $r['name'] ) || empty( $r['slug'] ) || empty( $r['parent_slug'] ) || empty( $r['parent_url'] ) || empty( $r['screen_function'] ) )
+	if ( empty( $r['name'] ) || empty( $r['slug'] ) || empty( $r['parent_slug'] ) || empty( $r['screen_function'] ) ) {
 		return false;
+	}
 
-	// Link was not forced, so create one.
-	if ( empty( $r['link'] ) ) {
+	// Preserve backward compatibility for plugins forcing URLs.
+	if ( empty( $r['link'] ) && ! empty( $r['parent_url'] ) ) {
 		$r['link'] = trailingslashit( $r['parent_url'] . $r['slug'] );
-
-		$parent_nav = $bp->{$component}->nav->get_primary( array( 'slug' => $r['parent_slug'] ), false );
-
-		// If this sub item is the default for its parent, skip the slug.
-		if ( $parent_nav ) {
-			$parent_nav_item = reset( $parent_nav );
-			if ( ! empty( $parent_nav_item->default_subnav_slug ) && $r['slug'] === $parent_nav_item->default_subnav_slug ) {
-				$r['link'] = trailingslashit( $r['parent_url'] );
-			}
-		}
 	}
 
 	// If this is for site admins only and the user is not one, don't create the subnav item.
@@ -600,6 +592,7 @@ function bp_core_create_subnav_link( $args = '', $component = 'members' ) {
 		'show_in_admin_bar' => (bool) $r['show_in_admin_bar'],
 	);
 
+	// Add the item to the subnav.
 	buddypress()->{$component}->nav->add_nav( $subnav_item );
 
 	return $subnav_item;
@@ -759,7 +752,7 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item, $component
 				// publicly accessible.
 				if ( bp_is_my_profile() || ( isset( $parent_nav_default_item ) && $parent_nav_default_item->show_for_displayed_user ) ) {
 					$message     = __( 'You do not have access to that page.', 'buddypress' );
-					$redirect_to = bp_displayed_user_domain();
+					$redirect_to = bp_displayed_user_url();
 
 				// In some cases, the default tab is not accessible to
 				// the logged-in user. So we fall back on a tab that we
@@ -767,19 +760,20 @@ function bp_core_maybe_hook_new_subnav_screen_function( $subnav_item, $component
 				} else {
 					// Try 'activity' first.
 					if ( bp_is_active( 'activity' ) && isset( $bp->pages->activity ) ) {
-						$redirect_to = trailingslashit( bp_displayed_user_domain() . bp_get_activity_slug() );
-					// Then try 'profile'.
+						$redirect_to = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_activity_slug() ) ) );
+
+						// Then try 'profile'.
 					} else {
-						$redirect_to = trailingslashit( bp_displayed_user_domain() . ( 'xprofile' == $bp->profile->id ? 'profile' : $bp->profile->id ) );
+						$redirect_to = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_profile_slug() ) ) );
 					}
 
-					$message     = '';
+					$message = '';
 				}
 
 			// Fall back to the home page.
 			} else {
 				$message     = __( 'You do not have access to this page.', 'buddypress' );
-				$redirect_to = bp_get_root_domain();
+				$redirect_to = bp_get_root_url();
 			}
 
 			$retval['redirect_args'] = array(
@@ -869,9 +863,16 @@ function bp_core_remove_nav_item( $slug, $component = null ) {
 
 	$screen_functions = $bp->{$component}->nav->delete_nav( $slug );
 
-	// Reset backcompat nav items so that subsequent references will be correct.
-	$bp->bp_nav->reset();
-	$bp->bp_options_nav->reset();
+	/**
+	 * Fires when a nav item was removed from navigation.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param false|callable|array $screen_functions False, the screen function(s) on success.
+	 * @param string               $slug             The slug of the primary navigation item.
+	 * @param string|null          $component        The component the navigation is attached to. Defaults to 'members'.
+	 */
+	do_action( 'bp_core_removed_nav_item', $screen_functions, $slug, $component );
 
 	if ( ! is_array( $screen_functions ) ) {
 		return false;
@@ -918,9 +919,17 @@ function bp_core_remove_subnav_item( $parent_slug, $slug, $component = null ) {
 
 	$screen_functions = $bp->{$component}->nav->delete_nav( $slug, $parent_slug );
 
-	// Reset backcompat nav items so that subsequent references will be correct.
-	$bp->bp_nav->reset();
-	$bp->bp_options_nav->reset();
+	/**
+	 * Fires when a subnav item was removed from navigation.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param false|callable|array $screen_functions False, the screen function(s) on success.
+	 * @param string               $parent_slug The slug of the primary navigation item.
+	 * @param string               $slug        The slug of the secondary item to be removed.
+	 * @param string|null          $component   The component the navigation is attached to. Defaults to 'members'.
+	 */
+	do_action( 'bp_core_removed_subnav_item', $screen_functions, $parent_slug, $slug, $component );
 
 	if ( ! is_array( $screen_functions ) ) {
 		return false;

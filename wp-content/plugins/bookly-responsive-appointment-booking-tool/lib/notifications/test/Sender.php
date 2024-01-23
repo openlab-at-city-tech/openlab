@@ -6,10 +6,6 @@ use Bookly\Lib\Notifications\Base;
 use Bookly\Lib\Notifications\Assets\Item\Attachments;
 use Bookly\Lib\Notifications\Assets\Test\Codes;
 
-/**
- * Class Sender
- * @package Bookly\Lib\Notifications\Instant
- */
 abstract class Sender extends Base\Sender
 {
     /**

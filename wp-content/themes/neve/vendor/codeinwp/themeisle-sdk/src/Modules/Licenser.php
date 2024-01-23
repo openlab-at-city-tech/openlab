@@ -265,6 +265,23 @@ class Licenser extends Abstract_Module {
 	}
 
 	/**
+	 * Get license hash.
+	 * 
+	 * @param string $key Product key.
+	 * 
+	 * @return bool|string
+	 */
+	public static function create_license_hash( $key ) {
+		$data = self::get_license_data( $key );
+
+		if ( ! $data ) {
+			return false;
+		}
+
+		return isset( $data->key ) ? wp_hash( $data->key ) : false;
+	}
+
+	/**
 	 * Check if license is valid.
 	 *
 	 * @param string $product_file Product basefile.

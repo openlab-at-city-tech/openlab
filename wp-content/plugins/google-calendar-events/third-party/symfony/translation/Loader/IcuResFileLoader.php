@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * IcuResFileLoader loads translations from a resource bundle.
  *
  * @author stealth35
+ * @internal
  */
 class IcuResFileLoader implements LoaderInterface
 {

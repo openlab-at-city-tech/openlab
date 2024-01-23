@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.87.2
+Version: 2.88.13
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.87.2';
+	const VERSION = '2.88.13';
 
 	static
 		$api,
@@ -169,6 +169,7 @@ class Mappress {
 			'appearance_page_gutenberg-widgets',
 			'appearance_page_gutenberg-edit-site',
 			'customize.php',
+			'edit.php',
 			'plugins.php',
 			'post.php',
 			'post-new.php',
@@ -357,7 +358,12 @@ class Mappress {
 	}
 
 	static function get_api_keys() {
-		$results = (object) array('browser' => self::$options->apiKey, 'server' => self::$options->apiKeyServer, 'mapbox' => self::$options->mapbox);
+		$results = (object) array(
+			'browser' => self::$options->apiKey, 
+			'server' => self::$options->apiKeyServer, 
+			'liq' => self::$options->liq,
+			'mapbox' => self::$options->mapbox
+		);
 		if (empty($results->browser) && defined('MAPPRESS_APIKEY'))
 			$results->browser = MAPPRESS_APIKEY;
 		if (empty($results->server) && defined('MAPPRESS_APIKEY_SERVER'))
@@ -365,7 +371,7 @@ class Mappress {
 		if (empty($results->mapbox) && defined('MAPPRESS_APIKEY_MAPBOX'))
 			$results->mapbox = MAPPRESS_APIKEY_MAPBOX;
 		return $results;
-	}
+	}    
 
 	static function get_iframe($map) {
 		$styles = new WP_Styles();
@@ -682,9 +688,11 @@ class Mappress {
 			'blockCategory' => self::$block_category,
 			'debug' => self::$debug,
 			'editurl' => admin_url('post.php'),
-			'iconsUrl' => (self::$pro) ? Mappress_Icons::$icons_url : null,
+			'filterParams' => (class_exists('Mappress_Filter')) ? Mappress_Filter::get_url_params() : array(),
+			'iconsUrl' => (self::$pro) ? Mappress_Icons::$icons_url : null,    
 			'isIE' => $is_IE,
 			'language' => self::get_language(),
+			'liq' => self::get_api_keys()->liq,
 			'mapbox' => self::get_api_keys()->mapbox,
 			'nonce' => wp_create_nonce('mappress'),
 			'oid' => ($post) ? $post->ID : null,	// Note: GT => numeric, classic => string
@@ -744,8 +752,8 @@ class Mappress {
 		'directionsPopup', 'directionsServer', 'engine', 'filters', 'filtersPos', 'geocoder', 'geolocate',
 		'highlight', 'highlightIcon', 'iconScale', 'initialOpenInfo', 'layout', 'lines', 'lineOpts',
 		'mashupClick', 'mini', 'poiFields', 'poiList', 'poiListOpen', 'poiListPageSize', 'poiListViewport', 'poiZoom', 'radius', 'scrollWheel', 'search',
-		'searchBox', 'searchPlaceholder', 'size', 'sizes', 'sort', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 'tooltips', 
-		'units', 'userLocation', 'webComponent');
+		'searchBox', 'searchParam', 'searchPlaceholder', 'size', 'sizes', 'sort', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 
+		'tooltips', 'units', 'userLocation', 'webComponent');
 
 		foreach($options as $option) {
 			if (isset(self::$options->$option)) {
@@ -847,7 +855,7 @@ class Mappress {
 		$js = ($dev) ? "https://localhost/$dev/wp-content/plugins/mappress-google-maps-for-wordpress/build" : self::$baseurl . '/build';
 
 		// Dependencies
-		$deps = array('wp-element', 'wp-i18n');
+		$deps = array('react', 'react-dom', 'wp-i18n');
 		if (self::$options->engine == 'leaflet')
 			$deps = array_merge(array('mappress-leaflet', 'mappress-leaflet-omnivore'), $deps);
 		if (self::$options->engine != 'leaflet' || self::$options->geocoder == 'google')
@@ -906,6 +914,12 @@ class Mappress {
 	static function scrub_atts($atts=null) {
 		if (!$atts || !is_array($atts))
 			return array();
+			
+		// Sanitize, single quotes could be used for xss JS
+		foreach($atts as $key => $value) {
+			if (is_string($value))
+				$atts[$key] = esc_attr($value);
+		}
 
 		$atts = self::string_to_boolean($atts);
 
@@ -940,7 +954,7 @@ class Mappress {
 			$atts['center'] = null;
 			$atts['geolocate'] = true;
 		}
-
+							 
 		return $atts;
 	}
 

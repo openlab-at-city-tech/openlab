@@ -41,6 +41,22 @@ class B2S_Util {
         return $fileSize = round($kbytes / 1024 / 1024, 3) . 'GB';
     }
 
+    public static function convertKbToGbOneDecimal($kbytes) {
+        return $fileSize = round($kbytes / 1024 / 1024, 1) . 'GB';
+    }
+
+    public static function convertKbToMb($kbytes) {
+        return $fileSize = round($kbytes / 1024, 0) . 'MB';
+    }
+
+    public static function getRemainingVideoVolume($kbytes){
+        if(self::convertKbToGbOneDecimal($kbytes) > 1){
+            return self::convertKbToGbOneDecimal($kbytes) ;
+        } else {
+            return self::convertKbToMb($kbytes);
+        }
+    }
+
     public static function getUsedPercentOfXy($open, $total) {
         $usedOf = (100-((100 / $total) * $open));
         return round($usedOf, 2);
@@ -138,7 +154,7 @@ class B2S_Util {
             }
         }
 //GETDATA
-        $getTags = array('title', 'description', 'image');
+        $getTags = array('title', 'description', 'image', 'image_alt_text');
         $param = array();
         libxml_use_internal_errors(true); // Yeah if you are so worried about using @ with warnings
         $postUrl = $postUrl . ((parse_url($postUrl, PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');  //nocache
@@ -215,6 +231,11 @@ class B2S_Util {
         }
         $metas = $doc->getElementsByTagName('meta');
         $title = $doc->getElementsByTagName("title");
+        $figure = $doc->getElementsByTagName('img');
+        for ($i = 0; $i < $figure->length; $i++) {
+            $fig = $figure->item($i);
+            $list['image_alt_text'] = $fig->getAttribute('alt');
+        }
 
         if ($type == 'all') {
             if ($title->length > 0) {
@@ -474,10 +495,10 @@ class B2S_Util {
             $rand = '0' . $rand;
         }
         $hour = substr($rand, 0, 2);
-        $miunte = substr($rand, 2, 2);
-        $minute = $miunte > 50 ? '30' : '00';
-
-        return $hour . ':' . $minute;
+        $minute = substr($rand, 2, 2);       
+        $timeSlots = array('00','15','30','45');
+        $minuteRound = $timeSlots[($minute % 5)];   
+        return $hour . ':' . $minuteRound;
     }
 
     public static function getTimeByLang($time, $lang = 'de') {

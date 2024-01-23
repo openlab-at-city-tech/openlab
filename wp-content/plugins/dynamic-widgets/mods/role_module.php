@@ -2,14 +2,14 @@
 /**
  * Role Module
  *
- * @version $Id: role_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: role_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
 	defined('ABSPATH') or die("No script kiddies please!");
 
 	class DW_Role extends DWModule {
-		protected static $info = 'Setting options by role is very powerfull. It can override all other options!<br />Users who are not logged in, get the <em>Anonymous</em> role.';
+		protected static $info = 'Setting options by role is very powerful. It can override all other options!<br />Users who are not logged in, get the <em>Anonymous</em> role.';
 		protected static $except = 'Except for:';
 		public static $option = array( 'role' => 'Role' );
 		protected static $overrule = TRUE;

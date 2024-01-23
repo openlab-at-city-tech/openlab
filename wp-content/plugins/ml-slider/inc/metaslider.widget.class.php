@@ -31,21 +31,18 @@ class MetaSlider_Widget extends WP_Widget
      */
     public function widget($args, $instance)
     {
-        // TODO: Remove extract
-        extract($args); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-
         if (isset($instance['slider_id'])) {
             $slider_id = $instance['slider_id'];
 
             $title = apply_filters('widget_title', $instance['title']);
 
-            echo $before_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $args['before_widget']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             if (! empty($title)) {
-                echo $before_title . $title . $after_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                echo $args['before_title'] . $title . $args['after_title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
 
             echo do_shortcode("[metaslider id={$slider_id}]");
-            echo $after_widget; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $args['after_widget']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
     }
 
@@ -79,7 +76,7 @@ class MetaSlider_Widget extends WP_Widget
     {
         $selected_slider = 0;
         $title = "";
-        $sliders = false;
+        $sliders = array();
 
         if (isset($instance['slider_id'])) {
             $selected_slider = $instance['slider_id'];
@@ -110,7 +107,7 @@ class MetaSlider_Widget extends WP_Widget
 
         ?>
         <p>
-            <?php if ($sliders) { ?>
+            <?php if (count($sliders) > 0) { ?>
                 <p>
                     <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'ml-slider'); ?></label>
                     <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />

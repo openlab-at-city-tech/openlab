@@ -1,0 +1,138 @@
+
+input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week] {
+    padding: 0 8px;
+    line-height: 2;
+    min-height: 30px;
+    width: 100% !important;
+    box-sizing: border-box;
+}
+input[type=radio]{
+    border-radius: 50%;
+    line-height: .71428571;
+    border: 1px solid #8c8f94;
+    background: #fff;
+    color: #50575e;
+    clear: none;
+    cursor: pointer;
+    display: inline-block;
+    height: 1rem;
+    margin: -0.25rem 0.25rem 0 0;
+    outline: 0;
+    padding: 0!important;
+    text-align: center;
+    vertical-align: middle;
+    width: 1rem;
+    min-width: 1rem;
+    -webkit-appearance: none;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    transition: .05s border-color ease-in-out;
+}
+
+input[type=radio]:checked::before {
+    content: "";
+    border-radius: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0.1875rem;
+    background-color: #3582c4;
+    line-height: 1.14285714;
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+    speak: never;
+    -webkit-font-smoothing: antialiased;
+}
+
+input[type=checkbox]:checked::before {
+    content: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%233582c4%27%2F%3E%3C%2Fsvg%3E);
+    margin: -0.1875rem 0 0 -0.25rem;
+    height: 1.3125rem;
+    width: 1.3125rem;
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+    speak: never;
+    -webkit-font-smoothing: antialiased;
+}
+
+table{
+    width: 100% !important;
+    border-collapse: collapse;
+    line-height: 1.7;
+    padding: 10px;
+}
+
+th, td{
+    border: 1px solid #ddd;
+    text-align:left!important;
+    padding: 12px;
+}
+
+.input[type=button], input[type=submit], input[type=reset] {
+    border: none;
+    background-color:var(--wp--preset--color--primary);
+    color: var(--wp--preset--color--background);
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+    border: 1px solid var(--wp--preset--color--secondary);
+}
+
+pre{
+    color: #424141;
+    font-family: Menlo,Consolas,monaco,monospace;
+    font-size: 15px;
+    white-space: pre-wrap;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+input[type=checkbox] {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    background: #fff;
+    color: #50575e;
+    clear: none;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 0;
+    height: 1rem;
+    margin: -0.25rem 0.25rem 0 0;
+    outline: 0;
+    padding: 0!important;
+    text-align: center;
+    vertical-align: middle;
+    width: 1rem;
+    min-width: 1rem;
+    -webkit-appearance: none;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    transition: .05s border-color ease-in-out;
+}
+
+
+textarea{
+    width: 100% !important;
+}
+
+select{
+    font-size: 14px;
+    line-height: 2;
+    color: #2c3338;
+    border-color: #8c8f94;
+    box-shadow: none;
+    border-radius: 3px;
+    padding: 0 24px 0 8px;
+    min-height: 30px;
+    max-width: 25rem;
+    -webkit-appearance: none;
+    background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E) no-repeat right 5px top 55%;
+    background-size: 16px 16px;
+    cursor: pointer;
+    vertical-align: middle;
+}

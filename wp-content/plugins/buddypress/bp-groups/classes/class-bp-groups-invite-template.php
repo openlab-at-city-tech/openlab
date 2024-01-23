@@ -41,6 +41,14 @@ class BP_Groups_Invite_Template {
 	public $invite;
 
 	/**
+	 * List of invites found and their respective data.
+	 *
+	 * @since 1.1.0
+	 * @var array
+	 */
+	public $invite_data = array();
+
+	/**
 	 * @since 1.1.0
 	 * @var bool
 	 */
@@ -63,6 +71,14 @@ class BP_Groups_Invite_Template {
 	 * @var string
 	 */
 	public $pag_links;
+
+	/**
+	 * URL argument used for the pagination param.
+	 *
+	 * @since 1.1.0
+	 * @var string
+	 */
+	public $pag_arg;
 
 	/**
 	 * @since 1.1.0
@@ -276,7 +292,7 @@ class BP_Groups_Invite_Template {
 		);
 
 		$this->invite->user->email     = $this->invite->user->user_email;
-		$this->invite->user->user_url  = bp_core_get_user_domain( $user_id, $this->invite->user->user_nicename, $this->invite->user->user_login );
+		$this->invite->user->user_url  = bp_members_get_user_url( $user_id );
 		$this->invite->user->user_link = "<a href='{$this->invite->user->user_url}'>{$this->invite->user->fullname}</a>";
 
 		/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */

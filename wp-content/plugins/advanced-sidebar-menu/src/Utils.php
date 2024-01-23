@@ -42,16 +42,16 @@ class Utils {
 	 * a new array instead of requiring you pass the array element by reference
 	 * and alter it directly.
 	 *
-	 * @param callable $callback - Callback for each element in each level of array.
-	 * @param array    $array    - Array to recurse.
-	 *
 	 * @since 8.6.5
+	 *
+	 * @param callable $callback   - Callback for each element in each level of array.
+	 * @param array    $to_recurse - Array to recurse.
 	 *
 	 * @return array
 	 */
-	public function array_map_recursive( callable $callback, array $array ) {
+	public function array_map_recursive( callable $callback, array $to_recurse ): array {
 		$output = [];
-		foreach ( $array as $key => $data ) {
+		foreach ( $to_recurse as $key => $data ) {
 			if ( \is_array( $data ) ) {
 				$output[ $key ] = $this->array_map_recursive( $callback, $data );
 			} else {

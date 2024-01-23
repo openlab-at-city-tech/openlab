@@ -4,10 +4,6 @@ namespace Bookly\Lib\Cloud;
 use Bookly\Backend\Modules\CloudProducts;
 use Bookly\Lib\Config;
 
-/**
- * Class Stripe
- * @package Bookly\Lib\Cloud
- */
 class Stripe extends Base
 {
     const CONNECT        = '/1.0/users/%token%/products/stripe/connect';            //POST|DELETE
@@ -42,11 +38,11 @@ class Stripe extends Base
      */
     public function connect()
     {
-        $data = array(
-            'notify_url'  => $this->getEndPoint(),
+        $data = $this->addTestCanIUse( array(
+            'notify_url' => $this->getEndPoint(),
             'success_url' => add_query_arg( array( 'page' => CloudProducts\Page::pageSlug() ), admin_url( 'admin.php' ) ) . '#cloud-product=stripe&status=activated',
-            'cancel_url'  => add_query_arg( array( 'page' => CloudProducts\Page::pageSlug() ), admin_url( 'admin.php' ) ) . '#cloud-product=stripe&status=cancelled'
-        );
+            'cancel_url' => add_query_arg( array( 'page' => CloudProducts\Page::pageSlug() ), admin_url( 'admin.php' ) ) . '#cloud-product=stripe&status=cancelled',
+        ) );
         $response = $this->api->sendPostRequest( self::CONNECT, $data );
         if ( $response ) {
             return $response['redirect_url'];

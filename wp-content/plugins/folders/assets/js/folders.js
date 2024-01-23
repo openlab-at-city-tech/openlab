@@ -64,6 +64,32 @@
             }
         });
 
+        /** Media page grid/list view switch */
+        $(document).on("click", ".view-switch > a", function(e){
+            if(location.search != "") {
+                try {
+                    if($(this).hasClass("view-grid") || $(this).hasClass("view-list")) {
+                        var eleLink = $(this).attr("href");
+                    }
+                    e.preventDefault();
+                    var str = location.search.substring(1);
+                    const searchArray = Object.fromEntries(new URLSearchParams(str));
+                    if (Object.keys(searchArray).length) {
+                        $.each(searchArray, function (key, keyVal) {
+                            if (key != "mode" && key != "paged") {
+                                if(keyVal != "") {
+                                    eleLink += "&" + key + "=" + keyVal;
+                                }
+                            }
+                        });
+                    }
+                    window.location = eleLink;
+                } catch (exceptionVar) {
+
+                }
+            }
+        });
+
         /* check for jetpack */
         if($("body").hasClass("jetpack-connected") && !$("body").hasClass("mobile")) {
             if(!$("body").hasClass("folded")) {
@@ -291,8 +317,19 @@
             } else {
                 menuHtml += "<li class='new-folder-pro'><a target='_blank' href='javascript:;'><span class=''><i class='pfolder-add-folder'></i></span>"+wcp_settings.lang.PRO.NEW_SUB_FOLDER+"</a></li>";
             }
-            menuHtml += "<li class='rename-folder'><a href='javascript:;'><span class=''><i class='pfolder-edit'></i></span>"+wcp_settings.lang.RENAME+"</a></li>" +
-                        "<li class='default-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class=''><i class='pfolder-active-icon'></i></span>"+wcp_settings.lang.PRO.OPEN_THIS_FOLDER+"</a></li>" +
+            menuHtml += "<li class='rename-folder'><a href='javascript:;'><span class=''><i class='pfolder-edit'></i></span>"+wcp_settings.lang.RENAME+"</a></li>";
+            menuHtml += "<li class='color-folder'><a href='javascript:;'><span class=''><span class='dashicons dashicons-art'></span></span>" + wcp_settings.lang.CHANGE_COLOR + "<span class='dashicons dashicons-arrow-right-alt2'></span></a>";
+            menuHtml += "<ul class='color-selector'>";
+            menuHtml += "<li class='color-selector-ul'>";
+            $(wcp_settings.selected_colors).each(function(key,value) {
+                menuHtml += "<span class='folder-color-option' data-color='"+value+"' style='background-color:"+value+"'></span>";
+            });
+            menuHtml += "</li>";
+            menuHtml += "<li><a href='"+wcp_settings.upgrade_url+"' target='_blank' class='change-custom-color'>"+wcp_settings.lang.ADD_CUSTOM_COLORS+"</a></li>";
+            menuHtml += "<li><a href='javascript:;' class='folder-color-default'>"+wcp_settings.lang.REMOVE_COLOR+"</a></li>";
+            menuHtml += "</ul>";
+            menuHtml += "</li>";
+            menuHtml += "<li class='default-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class=''><i class='pfolder-active-icon'></i></span>"+wcp_settings.lang.PRO.OPEN_THIS_FOLDER+"</a></li>" +
                         "<li class='sticky-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class='sticky-pin'><i class='pfolder-pin'></i></span>"+wcp_settings.lang.PRO.STICKY_FOLDER+"</a></li>";
             if(hasStars) {
                 menuHtml += "<li class='mark-folder'><a href='javascript:;'><span class=''><i class='pfolder-star'></i></span>" + ((isHigh) ? wcp_settings.lang.REMOVE_STAR : wcp_settings.lang.ADD_STAR) + "</a></li>";
@@ -332,6 +369,37 @@
             if((yPosition + $(".dynamic-menu").height()) > $(window).height()) {
                 $(".dynamic-menu").css("margin-top", $(window).height() - (yPosition + $(".dynamic-menu").height()));
             }
+        });
+
+        $(document).on("click",".folder-color-option , .folder-color-default",function (e) {
+            e.stopPropagation();
+            folderID = $(this).closest(".dynamic-menu").data("id");
+            var current_color = $(this).attr("data-color");
+            if(typeof(current_color) == "undefined") {
+                current_color = "";
+            }
+
+            var folderPostId = getIndexForPostSetting(folderID);
+            folderPropertyArray[folderPostId]['has_color'] = current_color;
+            nonce = getSettingForPost(folderID, 'nonce');
+            update_custom_folder_color_css();
+            $.ajax({
+                url: wcp_settings.ajax_url,
+                data: {
+                    term_id: folderID,
+                    type: wcp_settings.post_type,
+                    action: "wcp_change_color_folder",
+                    nonce: nonce,
+                    color: current_color
+                },
+                method: 'post',
+                cache: false,
+                success: function (res) {
+                    res = $.parseJSON(res);
+                    update_custom_folder_color_css();
+                }
+            });
+
         });
 
         $(document).on("click", ".sticky-folders .sticky-fldr > a", function(e) {
@@ -429,7 +497,7 @@
             $("#sub-folder-popup").show();
         });
 
-        $(document).on("click", ".close-popup-button a:not(.hide-upgrade-modal)", function(){
+        $(document).on("click", ".close-popup-button a:not(.hide-upgrade-modal):not(.is-modal)", function(){
             $(".folder-popup-form").hide();
             if($(".jstree-node[id='"+fileFolderID+"']").length) {
                 $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
@@ -569,7 +637,23 @@
         }
     }
 
+
+
+    function update_custom_folder_color_css() {
+        $("#custome_folder_color_css").remove();
+        var custom_color = "<style id='custome_folder_color_css'>"
+        $(folderPropertyArray).each(function (key,val) {
+            if(val.has_color != "") {
+                custom_color += "li.jstree-node[id='" + val.folder_id + "'] .pfolder-folder-close {color: "+val.has_color+ "!important;}";
+            }
+        });
+        custom_color += "</style>";
+        $("head").append(custom_color);
+    }
+
     function setDragAndDropElements() {
+
+        update_custom_folder_color_css();
 
         checkForCopyPaste();
 
@@ -618,6 +702,7 @@
         $(".jstree-anchor:not(.ui-droppable)").droppable({
             accept: ".wcp-move-file, .wcp-move-multiple, .attachments-browser li.attachment",
             hoverClass: 'wcp-drop-hover',
+            tolerance: "pointer",
             classes: {
                 "ui-droppable-active": "ui-state-highlight"
             },
@@ -732,6 +817,7 @@
         $(".un-categorised-items:not(.ui-droppable)").droppable({
             accept: ".wcp-move-file, .wcp-move-multiple, .attachments-browser li.attachment",
             hoverClass: 'wcp-hover-list',
+            tolerance: "pointer",
             classes: {
                 "ui-droppable-active": "ui-state-highlight"
             },
@@ -795,6 +881,7 @@
         $(".tree-structure .folder-item:not(.ui-droppable)").droppable({
             accept: ".wcp-move-file, .wcp-move-multiple, .attachments-browser li.attachment",
             hoverClass: 'wcp-drop-hover-list',
+            tolerance: "pointer",
             classes: {
                 "ui-droppable-active": "ui-state-highlight"
             },
@@ -894,6 +981,7 @@
         $(".sticky-folders li a:not(.ui-droppable)").droppable({
             accept: ".wcp-move-file, .wcp-move-multiple, .attachments-browser li.attachment",
             hoverClass: 'wcp-drop-hover',
+            tolerance: "pointer",
             classes: {
                 "ui-droppable-active": "ui-state-highlight"
             },
@@ -1211,6 +1299,7 @@
                     }
                 }
             });
+            update_custom_folder_color_css();
         }
 
         folderId = 0;
@@ -1478,6 +1567,7 @@
                                         'is_sticky': result.data[i]['is_sticky'],
                                         'is_high': result.data[i]['is_high'],
                                         'nonce': result.data[i]['nonce'],
+                                        'has_color': result.data[i]['has_color'],
                                         'slug': result.data[i]['slug'],
                                         'is_deleted': 0
                                     };
@@ -1583,7 +1673,7 @@
         });
 
 
-        $(document).on("click", ".form-cancel-btn", function(){
+        $(document).on("click", ".form-cancel-btn:not(.avoid-cancel)", function(){
             $(".folder-popup-form").hide();
             if($(".jstree-node[id='"+fileFolderID+"']").length) {
                 $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
@@ -1662,7 +1752,7 @@
             $("#upgrade-modal-popup").remove();
         });
 
-        $(document).on("click", ".folder-popup-form", function (e) {
+        $(document).on("click", ".folder-popup-form:not(.always-show)", function (e) {
             $(".folder-popup-form").hide();
             if($(".jstree-node[id='"+fileFolderID+"']").length) {
                 $(".jstree-node[id='"+fileFolderID+"'] > a.jstree-anchor").trigger("focus");
@@ -2356,6 +2446,7 @@
             //data.text is the new name:
             setDragAndDropElements();
         })).bind("move_node.jstree", (function(t, n) {
+
             if(!hasChildren) {
                 var oldPosition = n.old_position;
                 var currentParent = n.parent;
@@ -2365,6 +2456,8 @@
                     return false;
                 }
             }
+            setActionPosition();
+            setFolderCount();
             if(n.node.parent != "#") {
                 jQuery("#js-tree-menu").jstree("open_node",n.node.parent);
             }
@@ -2380,6 +2473,7 @@
             } else {
                 parentID = 0;
             }
+            setActionPosition();
             if(orderString != "") {
                 $(".form-loader-count").css("width","100%");
                 $.ajax({
@@ -2402,6 +2496,7 @@
                             $("#error-folder-popup").show();
                             window.location.reload(true);
                         }
+                        setActionPosition();
                     }
                 });
             }
@@ -2649,6 +2744,14 @@
             }
             $(".jstree-node[id='" + foldersArray[i].term_id + "'] > a.jstree-anchor span.premio-folder-count").text(foldersArray[i].trash_count);
             $(".sticky-folder-"+foldersArray[i].term_id+" .premio-folder-count").text(foldersArray[i].trash_count);
+        }
+
+        if($(".wp-filter #media_folder").length) {
+            for (var i = 0; i < foldersArray.length; i++) {
+                if($(".wp-filter #media_folder option[value='"+foldersArray[i].slug+"']").length) {
+                    $(".wp-filter #media_folder option[value='"+foldersArray[i].slug+"']").html(foldersArray[i].name + " (" + foldersArray[i].trash_count + ")");
+                }
+            }
         }
         $("span.premio-folder-count").each(function(){
             if($(this).text() == "") {

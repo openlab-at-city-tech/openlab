@@ -1,17 +1,17 @@
-/*! elementor - v3.14.0 - 26-06-2023 */
+/*! elementor - v3.18.0 - 08-12-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
-/*!*********************************************************!*\
-  !*** ../core/editor/assets/js/editor-environment-v2.js ***!
-  \*********************************************************/
+/*!************************************************************!*\
+  !*** ../core/editor/loader/v2/js/editor-environment-v2.js ***!
+  \************************************************************/
 
 
-var _window$__UNSTABLE__e;
-if (!((_window$__UNSTABLE__e = window.__UNSTABLE__elementorPackages) !== null && _window$__UNSTABLE__e !== void 0 && _window$__UNSTABLE__e.env)) {
+var _window$elementorV;
+if (!((_window$elementorV = window.elementorV2) !== null && _window$elementorV !== void 0 && _window$elementorV.env)) {
   throw new Error('The "@elementor/env" package was not loaded.');
 }
-window.__UNSTABLE__elementorPackages.env.initEnv(window.elementorEditorV2Env);
+window.elementorV2.env.initEnv(window.elementorEditorV2Env);
 /******/ })()
 ;
 //# sourceMappingURL=editor-environment-v2.js.map

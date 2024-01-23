@@ -5,11 +5,6 @@ use Bookly\Lib;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Backend\Modules\Calendar\Page as CalendarPage;
 
-/**
- * Class Page
- *
- * @package Bookly\Backend\Modules\Setup
- */
 class Page extends Lib\Base\Component
 {
     /**

@@ -4,11 +4,6 @@ namespace Bookly\Lib\Utils;
 use Bookly\Lib;
 use Bookly\Lib\Base\Cache;
 
-/**
- * Class DateTime
- *
- * @package Bookly\Lib\Utils
- */
 class DateTime extends Cache
 {
     const FORMAT_MOMENT_JS         = 1;

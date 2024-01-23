@@ -12,7 +12,8 @@
 			data-lpignore="true"
 			type="text"
 			style="width:calc(100% + 1rem)!important;transition:background .3s ease,border-left .3s ease!important"
-			class="-ml-4 h-16 pl-4 pr-12 text-2xl font-light rounded-none shadow-none bg-transparent border-0 border-l-4 border-transparent hover:border-gray-light hover:bg-white focus:bg-white focus:shadow-sm focus:border-gray-light rtl:border-l-0 rtl:border-r-0 rtl:ml-0 rtl:-mr-4 rtl:pl-12 rtl:pr-4"/>
+			class="-ml-4 h-16 pl-4 pr-12 text-2xl font-light rounded-none shadow-none bg-transparent border-0 border-l-4 border-transparent hover:border-gray-light hover:bg-white focus:bg-white focus:shadow-sm focus:border-gray-light rtl:border-l-0 rtl:border-r-0 rtl:ml-0 rtl:-mr-4 rtl:pl-12 rtl:pr-4"
+			required />
         <svg
 			class="pointer-events-none opacity-0 transition-all duration-300 ease-in absolute m-2 w-6 top-0 right-0 text-gray rtl:left-0 rtl:right-auto"
             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,11 +59,15 @@ export default {
 	mounted() {},
 	methods: {
 		save() {
-			if (this.currentSavedTitle.trim() === this.current.title.trim()) return
-			Settings.saveSingleSlideshowSetting('title', this.current.title.trim()).then(() => {
-				this.notifySuccess('metaslider/title-saved', this.__('Slideshow title updated'), true)
-				this.currentSavedTitle = this.current.title
-			})
+			if(this.current.title != '') {
+				if (this.currentSavedTitle.trim() === this.current.title.trim()) return
+				Settings.saveSingleSlideshowSetting('title', this.current.title.trim()).then(() => {
+					this.notifySuccess('metaslider/title-saved', this.__('Slideshow title updated'), true)
+					this.currentSavedTitle = this.current.title
+				})
+			} else {
+				this.notifyError('metaslider/title-saved', this.__('Please add a slideshow title'), true)
+			}
 		},
 		bail(event) {
 			this.$store.commit('slideshows/updateTitle', this.currentSavedTitle);

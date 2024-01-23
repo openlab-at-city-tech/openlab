@@ -3,7 +3,7 @@
  * TmhOAuth
  *
  * @category OAuth
- * @package  WP to Twitter
+ * @package  XPoster
  * @author   Joe Dolson
  * @license  GPLv2 or later
  * @link     https://www.joedolson.com/wp-to-twitter/
@@ -29,7 +29,7 @@ class TmhOAuth {
 	const VERSION = '0.7.5';
 
 	/**
-	 * The response from Twitter.
+	 * The response from X.com.
 	 *
 	 * @var $response
 	 */
@@ -584,8 +584,11 @@ class TmhOAuth {
 
 		list( $key, $value ) = array_pad( explode( ':', $header, 2 ), 2, null );
 
-		$key   = trim( $key );
-		$value = trim( $value );
+		$key   = ( is_string( $key ) ) ? trim( $key ) : '';
+		$value = ( is_string( $value ) ) ? trim( $value ) : '';
+		if ( '' === $key . $value ) {
+			return 0;
+		}
 
 		if ( ! isset( $this->response['headers'][ $key ] ) ) {
 			$this->response['headers'][ $key ] = $value;

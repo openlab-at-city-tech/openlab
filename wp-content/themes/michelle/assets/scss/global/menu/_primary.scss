@@ -1,0 +1,43 @@
+/* FILE: global/menu/_primary.scss */
+
+.main-navigation {
+
+	ul {
+		margin: 0;
+		list-style: none;
+	}
+
+	a {
+		display: block;
+		padding: .25em 0;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+}
+
+.menu-primary {
+	display: flex;
+	align-items: flex-end;
+	height: 100%;
+
+	// Top level menu items.
+	> li {
+		margin-#{$right}: 1em;
+
+		@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+			padding-bottom: calc( 6vh - .25em );
+		}
+
+		@include media( map_get( $breakpoint, 'xxl' ) ) {
+			margin-#{$right}: 1.5em;
+		}
+
+		> a {
+			text-transform: uppercase;
+			letter-spacing: var(--letter_spacing);
+		}
+
+	}
+
+}

@@ -26,4 +26,19 @@ jQuery(document).ready(function ($) {
 			$(target).show().attr( 'tabindex', '-1' ).focus();
 		});
 	};
+
+	var maxLength = $( '#wpt_tweet_length' );
+	if ( maxLength.val() <= 280 ) {
+		$( '#maxlengthwarning' ).hide();
+	}
+	if ( maxLength.length > 0 ) {
+		maxLength.on( 'change', function(e) {
+			var val = $( this ).val();
+			if ( val > 280 ) {
+				$( '#maxlengthwarning' ).show();
+			} else {
+				$( '#maxlengthwarning' ).hide();
+			}
+		});
+	}
 });

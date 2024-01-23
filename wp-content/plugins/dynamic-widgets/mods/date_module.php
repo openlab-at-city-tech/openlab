@@ -3,7 +3,7 @@
  * Date Module
  * Can't use DWOpts object because value = the actual date
  *
- * @version $Id: date_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: date_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -46,8 +46,8 @@
 <?php $DW->dumpOpt($opt_date); ?>
 <div>
 	<div id="date_info" class="infotext">
-  <?php _e('Next to the above role option, the date option is also very powerfull. You\'ve been warned!', DW_L10N_DOMAIN); ?><br />
-  <?php _e('Enter dates in the YYYY-MM-DD format. You can also use the calender by clicking on the', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
+  <?php _e('Next to the above role option, the date option is also very powerful. You\'ve been warned!', DW_L10N_DOMAIN); ?><br />
+  <?php _e('Enter dates in the YYYY-MM-DD format. You can also use the calendar by clicking on the', DW_L10N_DOMAIN); ?> <img src="<?php echo $DW->plugin_url; ?>img/calendar.gif" alt="Calendar" /><br />
   <?php _e('Date ranges can be made by entering a From AND a To date<br />
   					When you want the widget to be displayed from a specific date, only fill in the From date<br />
   					When you want the widget to stop displaying on a specific date, only fill in the To date.

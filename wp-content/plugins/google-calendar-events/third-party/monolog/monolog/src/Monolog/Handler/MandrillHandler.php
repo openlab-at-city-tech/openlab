@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Swift_Message;
  * MandrillHandler uses cURL to send the emails to the Mandrill API
  *
  * @author Adam Nicholson <adamnicholson10@gmail.com>
+ * @internal
  */
 class MandrillHandler extends MailHandler
 {

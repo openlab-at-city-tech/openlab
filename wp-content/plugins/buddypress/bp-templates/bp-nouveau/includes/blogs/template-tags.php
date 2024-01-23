@@ -3,7 +3,7 @@
  * Blogs Template tags
  *
  * @since 3.0.0
- * @version 6.0.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -99,6 +99,31 @@ function bp_nouveau_blogs_create_hook( $when = '', $suffix = '' ) {
 }
 
 /**
+ * Fire specific hooks into the blogs confirm template
+ *
+ * @since 12.0.0
+ *
+ * @param string $when   Optional. Either 'before' or 'after'.
+ * @param string $suffix Optional. Use it to add terms at the end of the hook name.
+ */
+function bp_nouveau_blogs_confirm_hook( $when = '', $suffix = '' ) {
+	$hook = array( 'bp' );
+
+	if ( $when ) {
+		$hook[] = $when;
+	}
+
+	// It's a create a blog hook
+	$hook[] = 'blog_confirmed';
+
+	if ( $suffix ) {
+		$hook[] = $suffix;
+	}
+
+	bp_nouveau_hook( $hook );
+}
+
+/**
  * Fire an isolated hook inside the blogs loop
  *
  * @since 3.0.0
@@ -183,23 +208,13 @@ function bp_nouveau_blogs_loop_buttons( $args = array() ) {
 			$parent_element = false;
 		}
 
-		/*
-		 * If we have a arg value for $button_element passed through
-		 * use it to default all the $buttons['button_element'] values
-		 * otherwise default to 'a' (anchor)
-		 * Or override & hardcode the 'element' string on $buttons array.
-		 *
-		 * Icons sets a class for icon display if not using the button element
-		 */
-		$icons = '';
 		if ( ! empty( $args['button_element'] ) ) {
 			$button_element = $args['button_element'] ;
 		} else {
 			$button_element = 'a';
-			$icons = ' icons';
 		}
 
-		// If we pass through parent classes add them to $button array
+		// If we pass through parent classes add them to `$button` array.
 		$parent_class = '';
 		if ( ! empty( $args['parent_attr']['class'] ) ) {
 			$parent_class = $args['parent_attr']['class'];

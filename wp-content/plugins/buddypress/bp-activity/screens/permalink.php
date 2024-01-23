@@ -16,12 +16,14 @@
  */
 function bp_activity_action_permalink_router() {
 	// Not viewing activity.
-	if ( ! bp_is_activity_component() || ! bp_is_current_action( 'p' ) )
+	if ( ! bp_is_activity_component() || ! bp_is_current_action( 'p' ) ) {
 		return false;
+	}
 
 	// No activity to display.
-	if ( ! bp_action_variable( 0 ) || ! is_numeric( bp_action_variable( 0 ) ) )
+	if ( ! bp_action_variable( 0 ) || ! is_numeric( bp_action_variable( 0 ) ) ) {
 		return false;
+	}
 
 	// Get the activity details.
 	$activity = bp_activity_get_specific( array( 'activity_ids' => bp_action_variable( 0 ), 'show_hidden' => true ) );
@@ -35,27 +37,29 @@ function bp_activity_action_permalink_router() {
 	}
 
 	// Do not redirect at default.
-	$redirect = false;
+	$redirect    = false;
+	$path_chunks = bp_members_get_path_chunks( array( bp_get_activity_slug(), $activity->id ) );
 
 	// Redirect based on the type of activity.
 	if ( bp_is_active( 'groups' ) && $activity->component == buddypress()->groups->id ) {
 
 		// Activity is a user update.
 		if ( ! empty( $activity->user_id ) ) {
-			$redirect = bp_core_get_user_domain( $activity->user_id, $activity->user_nicename, $activity->user_login ) . bp_get_activity_slug() . '/' . $activity->id . '/';
+			$redirect = bp_members_get_user_url( $activity->user_id, $path_chunks );
 
 		// Activity is something else.
 		} else {
 
 			// Set redirect to group activity stream.
 			if ( $group = groups_get_group( $activity->item_id ) ) {
-				$redirect = bp_get_group_permalink( $group ) . bp_get_activity_slug() . '/' . $activity->id . '/';
+				$path_chunks = bp_groups_get_path_chunks( array( bp_get_activity_slug(), $activity->id ) );
+				$redirect    = bp_get_group_url( $group, $path_chunks );
 			}
 		}
 
 	// Set redirect to users' activity stream.
 	} elseif ( ! empty( $activity->user_id ) ) {
-		$redirect = bp_core_get_user_domain( $activity->user_id, $activity->user_nicename, $activity->user_login ) . bp_get_activity_slug() . '/' . $activity->id . '/';
+		$redirect = bp_members_get_user_url( $activity->user_id, $path_chunks );
 	}
 
 	// If set, add the original query string back onto the redirect URL.
@@ -73,7 +77,7 @@ function bp_activity_action_permalink_router() {
 	 * @param array $value Array with url to redirect to and activity related to the redirect.
 	 */
 	if ( ! $redirect = apply_filters_ref_array( 'bp_activity_permalink_redirect_url', array( $redirect, &$activity ) ) ) {
-		bp_core_redirect( bp_get_root_domain() );
+		bp_core_redirect( bp_get_root_url() );
 	}
 
 	// Redirect to the actual activity permalink page.
@@ -147,7 +151,7 @@ function bp_activity_screen_single_activity_permalink() {
 		// Redirect away.
 		} else {
 			bp_core_add_message( __( 'You do not have access to this activity.', 'buddypress' ), 'error' );
-			bp_core_redirect( bp_loggedin_user_domain() );
+			bp_core_redirect( bp_loggedin_user_url() );
 		}
 	}
 

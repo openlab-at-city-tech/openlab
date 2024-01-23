@@ -3,7 +3,7 @@
  * Common template tags
  *
  * @since 3.0.0
- * @version 10.0.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -474,11 +474,6 @@ function bp_nouveau_pagination( $position ) {
 			break;
 	}
 
-	$count_class = sprintf( '%1$s-%2$s-count-%3$s', $pagination_type, $screen, $position );
-	$links_class = sprintf( '%1$s-%2$s-links-%3$s', $pagination_type, $screen, $position );
-	?>
-
-	<?php
 	if ( 'bottom' === $position && isset( $bottom_hook ) ) {
 		/**
 		 * Fires after the component directory list.
@@ -1036,10 +1031,25 @@ function bp_nouveau_nav_scope() {
 		$scope      = array();
 
 		if ( 'directory' === $bp_nouveau->displayed_nav ) {
-			$scope = array( 'data-bp-scope' => $nav_item->slug );
+			$scope = array(
+				'data-bp-scope' => $nav_item->slug
+			);
 
 		} elseif ( 'personal' === $bp_nouveau->displayed_nav && ! empty( $nav_item->secondary ) ) {
-			$scope = array( 'data-bp-user-scope' => $nav_item->slug );
+			$rewrite_id = bp_rewrites_get_custom_slug_rewrite_id( 'members', $nav_item->slug, bp_current_component() );
+			$user_scope = $nav_item->slug;
+
+			if ( $rewrite_id ) {
+				$user_scope = str_replace(
+					array( 'bp_member_' . bp_current_component() . '_', '_' ),
+					array( '', '-' ),
+					$rewrite_id
+				);
+			}
+
+			$scope = array(
+				'data-bp-user-scope' => $nav_item->slug
+			);
 
 		} else {
 			/**
@@ -1086,10 +1096,8 @@ function bp_nouveau_nav_link() {
 		}
 
 		if ( 'personal' === $bp_nouveau->displayed_nav && ! empty( $nav_item->primary ) ) {
-			if ( bp_loggedin_user_domain() ) {
-				$link = str_replace( bp_loggedin_user_domain(), bp_displayed_user_domain(), $link );
-			} else {
-				$link = trailingslashit( bp_displayed_user_domain() . $link );
+			if ( bp_loggedin_user_url() ) {
+				$link = str_replace( bp_loggedin_user_url(), bp_displayed_user_url(), $link );
 			}
 		}
 
@@ -1505,12 +1513,6 @@ function bp_nouveau_container_classes() {
 
 		// Add classes according to site owners preferences. These are options set via Customizer.
 
-		// These are general site wide Cust options falling outside component checks
-		$general_settings = bp_nouveau_get_temporary_setting( 'avatar_style', bp_nouveau_get_appearance_settings( 'avatar_style' ) );
-		if ( $general_settings ) {
-			$classes[] = 'round-avatars';
-		}
-
 		// Set via earlier switch for component check to provide correct option key.
 		if ( $customizer_option ) {
 			$layout_prefs  = bp_nouveau_get_temporary_setting( $customizer_option, bp_nouveau_get_appearance_settings( $customizer_option ) );
@@ -1570,14 +1572,21 @@ function bp_nouveau_single_item_nav_classes() {
 		$classes    = array( 'main-navs', 'no-ajax', 'bp-navs', 'single-screen-navs' );
 		$component  = bp_current_component();
 		$bp_nouveau = bp_nouveau();
+		$object     = '';
 
 		// @todo wasn't able to get $customizer_option to pass a string to get_settings
 		// this is a temp workaround but differs from earlier dir approach- bad!
 		if ( bp_is_group() ) {
+			$object   = 'group';
 			$nav_tabs = (int) bp_nouveau_get_temporary_setting( 'group_nav_tabs', bp_nouveau_get_appearance_settings( 'group_nav_tabs' ) );
 
 		} elseif ( bp_is_user() ) {
+			$object   = 'member';
 			$nav_tabs = (int) bp_nouveau_get_temporary_setting( 'user_nav_tabs', bp_nouveau_get_appearance_settings( 'user_nav_tabs' ) );
+		}
+
+		if ( $object && bp_nouveau_single_item_supports_priority_nav( $object ) ) {
+			$classes[] = 'bp-priority-nav';
 		}
 
 		if ( bp_is_group() && 1 === $nav_tabs) {
@@ -1645,11 +1654,17 @@ function bp_nouveau_single_item_subnav_classes() {
 
 		// Set user or group class string
 		if ( bp_is_user() ) {
+			$object    = 'member';
 			$classes[] = 'user-subnav';
 		}
 
 		if ( bp_is_group() ) {
+			$object    = 'group';
 			$classes[] = 'group-subnav';
+		}
+
+		if ( $object && bp_nouveau_single_item_supports_priority_nav( $object ) ) {
+			$classes[] = 'bp-priority-nav';
 		}
 
 		if ( ( bp_is_group() && 'send-invites' === bp_current_action() ) || ( bp_is_group_create() && 'group-invites' === bp_get_groups_current_create_step() ) ) {
@@ -2260,20 +2275,20 @@ function bp_nouveau_get_customizer_link( $args = array() ) {
 	$url = '';
 
 	if ( bp_is_user() ) {
-		$url = rawurlencode( bp_displayed_user_domain() );
+		$url = rawurlencode( bp_displayed_user_url() );
 
 	} elseif ( bp_is_group() ) {
-		$url = rawurlencode( bp_get_group_permalink( groups_get_current_group() ) );
+		$url = rawurlencode( bp_get_group_url( groups_get_current_group() ) );
 
 	} elseif ( ! empty( $r['object'] ) && ! empty( $r['item_id'] ) ) {
 		if ( 'user' === $r['object'] ) {
-			$url = rawurlencode( bp_core_get_user_domain( $r['item_id'] ) );
+			$url = rawurlencode( bp_members_get_user_url( $r['item_id'] ) );
 
 		} elseif ( 'group' === $r['object'] ) {
 			$group = groups_get_group( array( 'group_id' => $r['item_id'] ) );
 
 			if ( ! empty( $group->id ) ) {
-				$url = rawurlencode( bp_get_group_permalink( $group ) );
+				$url = rawurlencode( bp_get_group_url( $group ) );
 			}
 		}
 	}
@@ -2700,32 +2715,32 @@ function bp_nouveau_is_feed_enable() {
 				$retval = bp_activity_is_feed_enable( 'personal' );
 
 				if ( $retval ) {
-					$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/feed' );
+					$bp_nouveau->activity->current_rss_feed['link'] = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_nouveau_get_component_slug( 'activity' ), 'feed' ) ) );
 				}
 
 				if ( bp_is_active( 'friends' ) && bp_is_current_action( bp_nouveau_get_component_slug( 'friends' ) ) ) {
 					$retval = bp_activity_is_feed_enable( 'friends' );
 
 					if ( $retval ) {
-						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'friends' ) . '/feed' );
+						$bp_nouveau->activity->current_rss_feed['link'] = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_nouveau_get_component_slug( 'activity' ), bp_nouveau_get_component_slug( 'friends' ), 'feed' ) ) );
 					}
 				} elseif ( bp_is_active( 'groups' ) && bp_is_current_action( bp_nouveau_get_component_slug( 'groups' ) ) ) {
 					$retval = bp_activity_is_feed_enable( 'mygroups' );
 
 					if ( $retval ) {
-						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'groups' ) . '/feed' );
+						$bp_nouveau->activity->current_rss_feed['link'] = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_nouveau_get_component_slug( 'activity' ), bp_nouveau_get_component_slug( 'groups' ), 'feed' ) ) );
 					}
 				} elseif ( bp_activity_do_mentions() && bp_is_current_action( 'mentions' ) ) {
 					$retval = bp_activity_is_feed_enable( 'mentions' );
 
 					if ( $retval ) {
-						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/mentions/feed' );
+						$bp_nouveau->activity->current_rss_feed['link'] = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_nouveau_get_component_slug( 'activity' ), 'mentions', 'feed' ) ) );
 					}
 				} elseif ( bp_activity_can_favorite() && bp_is_current_action( 'favorites' ) ) {
 					$retval = bp_activity_is_feed_enable( 'mentions' );
 
 					if ( $retval ) {
-						$bp_nouveau->activity->current_rss_feed['link'] = trailingslashit( bp_displayed_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/favorites/feed' );
+						$bp_nouveau->activity->current_rss_feed['link'] = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_nouveau_get_component_slug( 'activity' ), 'favorites', 'feed' ) ) );
 					}
 				}
 			}
@@ -2733,4 +2748,54 @@ function bp_nouveau_is_feed_enable() {
 	}
 
 	return $retval;
+}
+
+/**
+ * Displays an ellipsis to show hidden primary nav items.
+ *
+ * @since 12.0.0
+ */
+function bp_nouveau_hidden_primary_nav() {
+	$object = bp_nouveau_get_current_priority_nav_object();
+
+	if ( ! $object || ! bp_nouveau_single_item_supports_priority_nav( $object ) ) {
+		return '';
+	}
+?>
+	<div class="primary-nav-more">
+		<ul class="bp-priority-object-nav-nav-items">
+			<li class="primary-nav-item primary-nav-item-has-children">
+				<button class="submenu-expand bp-priority-nav-more-toggle is-empty" tabindex="-1" aria-label="<?php esc_attr_e( 'More', 'buddypress' ); ?>" aria-haspopup="true" aria-expanded="false">
+					<span class="dashicons dashicons-ellipsis"></span>
+				</button>
+				<ul class="sub-menu hidden-items"></ul>
+			</li>
+		</ul>
+	</div>
+<?php
+}
+
+/**
+ * Displays an ellipsis to show hidden secondary nav items.
+ *
+ * @since 12.0.0
+ */
+function bp_nouveau_hidden_secondary_nav() {
+	$object = bp_nouveau_get_current_priority_nav_object();
+
+	if ( ! $object || ! bp_nouveau_single_item_supports_priority_nav( $object ) ) {
+		return '';
+	}
+?>
+	<div class="secondary-nav-more">
+		<ul class="bp-priority-subnav-nav-items">
+			<li class="secondary-nav-item secondary-nav-item-has-children">
+				<button class="submenu-expand bp-priority-nav-more-toggle is-empty" tabindex="-1" aria-label="<?php esc_attr_e( 'More', 'buddypress' ); ?>" aria-haspopup="true" aria-expanded="false">
+					<span class="dashicons dashicons-ellipsis"></span>
+				</button>
+				<ul class="sub-menu hidden-items"></ul>
+			</li>
+		</ul>
+	</div>
+<?php
 }

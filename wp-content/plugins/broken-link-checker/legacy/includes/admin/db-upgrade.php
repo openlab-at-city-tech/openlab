@@ -32,6 +32,10 @@ class blcDatabaseUpgrader {
 			if ( $current < 5 ) {
 				blcDatabaseUpgrader::upgrade_095();
 			}
+
+			if ( $current == 16 ) {
+				blcDatabaseUpgrader::upgrade_3_2_3();
+			}
 		}
 
 		$conf->options['current_db_version'] = BLC_DATABASE_VERSION;
@@ -135,6 +139,43 @@ class blcDatabaseUpgrader {
 			WHERE
 			 instances.container_type = 'post' AND posts.post_type IS NOT NULL";
 		$wpdb->query( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+
+	/**
+	 * Set keys to optimize query in BLC-138.
+	 *
+	 * @return void
+	 */
+	static function upgrade_3_2_3() {
+		global $wpdb;
+
+		$db_name = defined( 'DB_NAME' ) ? DB_NAME : '';
+
+		if ( empty( $db_name ) ) {
+			return;
+		}
+
+		// First let's check if table exists. You never know.
+		$table_response = $wpdb->get_var( "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '{$db_name}') AND (TABLE_NAME = '{$wpdb->prefix}blc_links')" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( empty( $table_response ) ) {
+			return;
+		}
+
+		// Then lets check if `last_check_attempt` field is already indexed to avoid getting the `Duplicate key name` db error.
+		$columns_data = $wpdb->get_results( "SHOW COLUMNS FROM {$wpdb->prefix}blc_links LIKE '%last_check_attempt'" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( ! empty( $columns_data ) ) {
+			$column_data = $columns_data[0];
+			// A key can be PRI, UNI or MUL. In our index case it is the multiple one (MUL).
+			if ( ! empty( $column_data->Key ) ) {
+				return;
+			}
+
+			$wpdb->query( "ALTER TABLE {$wpdb->prefix}blc_links ADD INDEX last_check_attempt(last_check_attempt)" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "ALTER TABLE {$wpdb->prefix}blc_links ADD INDEX may_recheck(may_recheck)" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( "ALTER TABLE {$wpdb->prefix}blc_links ADD INDEX check_count(check_count)" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		}
 	}
 
 }

@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tools;
 
 use Bookly\Lib\Session;
 
-/**
- * Class FormsData
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tools
- */
 class FormsData extends Tool
 {
     protected $slug = 'forms-data';

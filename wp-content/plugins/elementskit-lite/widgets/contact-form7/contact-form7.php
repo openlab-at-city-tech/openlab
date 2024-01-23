@@ -312,9 +312,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]) ,{{WRAPPER}} .ekit-form form textarea, {{WRAPPER}} .ekit-form form select',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -367,9 +365,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):hover ,{{WRAPPER}} .ekit-form form textarea:hover, {{WRAPPER}} .ekit-form form select:hover',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -422,9 +418,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):focus ,{{WRAPPER}} .ekit-form form textarea:focus, {{WRAPPER}} .ekit-form form select:focus',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -773,9 +767,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-form form input[type="submit"]',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 
@@ -832,9 +824,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
 				'label' => esc_html__( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient', ],
 				'selector' => '{{WRAPPER}} .ekit-form form input[type="submit"]:hover',
-				'exclude' => [
-					'image'
-				]
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			]
 		);
 

@@ -17,6 +17,7 @@ use ReflectionFunction;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\MessageFormatterInterface;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader\ArrayLoader;
+/** @internal */
 abstract class AbstractTranslator extends Translation\Translator
 {
     /**

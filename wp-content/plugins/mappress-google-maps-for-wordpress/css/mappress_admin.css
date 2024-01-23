@@ -145,7 +145,12 @@
 */
 
 .mapp-pick-modal {
-	max-width: 1200px;
+	max-width: 1000px;
+}
+
+/* Override WP font stuff */
+.mapp-pick-modal input, .mapp-pick-modal select {
+	font-size: 13px;
 }
 
 /* Fill container when displayed in library */
@@ -611,13 +616,10 @@ button.mapp-query-refresh {
 	padding: 5px 0;
 }
 
-.mapp-query-add-taxonomy {
-	flex: 1;
-}
-
 .mapp-query-help {
 	margin-bottom: 10px;
 }
+
 
 /*
 	-----------------------------------------------------------------------------------
@@ -678,8 +680,6 @@ button.mapp-query-refresh {
 .mapp-poi-tabs.mapp-tab-main .mapp-tab-content {
 	gap: 0;
 }
-
-
 
 .mapp-poi-tabs .mapp-tab-content .dashicon {
 	font-size: 20px;
@@ -806,10 +806,8 @@ button.mapp-query-refresh {
 	padding: 10px 10px 0 0;
 }
 
-/* Make inputs full width */
-.mapp-poi-data .mapp-control-input { display: block; }
-.mapp-poi-data .mapp-control-input label { display: flex; }
-.mapp-poi-data .mapp-control-input input { flex: 1; }
+/* Make poi data inputs on data tab full width */
+.mapp-poi-tabs.mapp-tab-data .mapp-control-input { display: flex; flex-direction: column; }
 
 /*
 	-----------------------------------------------------------------------------------
@@ -917,7 +915,7 @@ button.mapp-query-refresh {
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
-	max-height: 150px;
+	max-height: 250px;
 	position: absolute;
 	top: 0; left: 0; right: 0;
 	z-index: 100000;
@@ -940,17 +938,33 @@ button.mapp-query-refresh {
 	background-color: #eee;
 }
 
-.mapp-select .components-base-control, .mapp-select .components-base-control__field {
-	margin-bottom: 0 !important;
+.mapp-select-dropdown-item label {
+	flex: 1;
 }
 
-/* WP checkboxcontrol has a bug: it doubles click events on any parent, so we can't use parent div, and it also doesn't make event object available; So, make checkbox full width instead */
-.mapp-select-dropdown-item .components-base-control__field {
-	display: flex;
+/* Controls in dropdown must stack vertically */
+.mapp-query .mapp-control {
+	display: block;
 }
 
 .mapp-select-dropdown-item label {
-	flex: 1;
+	display: block;
+}
+
+.mapp-query .mapp-control, .mapp-query .mapp-control label {
+	display: block;
+}
+
+.mapp-query .mapp-control-input input {
+	width: 100%;
+}
+
+.mapp-query .mapp-control-textarea, .mapp-query .mapp-control-textarea textarea {
+	width: 100%;
+}
+
+.mapp-query .mapp-control-select select {
+	width: 100%;
 }
 
 .mapp-select-tokens {
@@ -1210,13 +1224,13 @@ button.mapp-options-save {
 	z-index: 1;
 }
 
-.mapp-option-mapbox {
+.mapp-option-mapbox, .mapp-option-liq {
 	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
 }
 
-.mapp-option-mapbox input {
+.mapp-option-mapbox input, .mapp-option-liq input {
 	flex: 1;
 	margin-right: 10px;
 	max-width: 800px;
@@ -1606,6 +1620,11 @@ button.mapp-option-geocode {
 	justify-content: start;
 	min-height: auto;
 	overflow: auto;
+}
+
+/* Horrible WP dialog inserts extra blank div */
+.mapp-guide .components-modal__content > div:nth-child(2) {
+	height: 100%;
 }
 
 .mapp-guide .components-guide__container {

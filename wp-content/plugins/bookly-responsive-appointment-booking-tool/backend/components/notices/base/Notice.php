@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Notices\Base;
 use Bookly\Lib;
 use Bookly\Backend\Modules;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\Base
- */
 class Notice extends Lib\Base\Component
 {
     protected $id;

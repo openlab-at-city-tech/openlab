@@ -19,6 +19,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * @todo Add dynamic menu items for group extensions.
  *
+ * @global WP_Admin_Bar $wp_admin_bar WordPress object implementing a Toolbar API.
+ *
  * @return false|null False if not on a group page, or if user does not have
  *                    access to group admin options.
  */
@@ -43,7 +45,7 @@ function bp_groups_group_admin_menu() {
 	$wp_admin_bar->add_node( array(
 		'id'    => $bp->group_admin_menu_id,
 		'title' => __( 'Edit Group', 'buddypress' ),
-		'href'  => bp_get_group_permalink( $bp->groups->current_group )
+		'href'  => bp_get_group_url( $bp->groups->current_group )
 	) );
 
 	// Index of the Manage tabs parent slug.
@@ -54,6 +56,8 @@ function bp_groups_group_admin_menu() {
 		return;
 	}
 
+	$manage_screens = bp_get_group_screens( 'manage' );
+
 	// Build the Group Admin menus.
 	foreach ( $secondary_nav_items as $menu ) {
 		/**
@@ -63,7 +67,7 @@ function bp_groups_group_admin_menu() {
 		 * to also add the link to the "edit screen" of their group component. To do so, set the
 		 * the 'show_in_admin_bar' argument of your edit screen to true
 		 */
-		if ( $menu->show_in_admin_bar ) {
+		if ( $menu->show_in_admin_bar && isset( $manage_screens[ $menu->slug ] ) ) {
 			/* translators: %s the group menu name */
 			$title = sprintf( _x( 'Edit Group %s', 'Group WP Admin Bar manage links', 'buddypress' ), $menu->name );
 
@@ -73,12 +77,17 @@ function bp_groups_group_admin_menu() {
 				$title = sprintf( _x( '%s Group', 'Group WP Admin Bar delete link', 'buddypress' ), $menu->name );
 			}
 
-			$wp_admin_bar->add_node( array(
-				'parent' => $bp->group_admin_menu_id,
-				'id'     => $menu->slug,
-				'title'  => $title,
-				'href'   => bp_get_groups_action_link( 'admin/' . $menu->slug )
-			) );
+			$wp_admin_bar->add_node(
+				array(
+					'parent' => $bp->group_admin_menu_id,
+					'id'     => $menu->slug,
+					'title'  => $title,
+					'href'   => bp_get_group_manage_url(
+						$bp->groups->current_group,
+						bp_groups_get_path_chunks( array( $menu->slug ), 'manage' )
+					),
+				)
+			);
 		}
 	}
 }

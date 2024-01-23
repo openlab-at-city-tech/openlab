@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class Booking
- *
- * @package Bookly\Lib\Slots
- */
 class Booking
 {
     /** @var int */

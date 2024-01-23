@@ -145,9 +145,28 @@ $images = $this->get_theme_images($theme_id);
             return new WP_Error('images_not_found', __('We could not find any images to import.', 'ml-slider'), array('status' => 404));
         }
 
+        if (is_multisite() && $settings = get_site_option('metaslider_global_settings')) {
+            $global_settings = $settings;
+        }
+        
+        if ($settings = get_option('metaslider_global_settings')) {
+            $global_settings = $settings;
+        }
+
+        $new_install = get_option('metaslider_new_user');
+        
+        if (
+            (isset($global_settings['legacy']) && true == $global_settings['legacy']) ||
+            (isset($new_install)  && 'new' == $new_install)
+        ) {
+            $manifest_file = 'manifest.php';
+        } else {
+            $manifest_file = 'manifest-legacy.php';
+        }
+
         // Check for the manifest, and load theme specific images for a theme (if a theme is set)
-        if (!is_null($theme_id) && file_exists(METASLIDER_THEMES_PATH . 'manifest.php')) {
-            $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
+        if (!is_null($theme_id) && file_exists(METASLIDER_THEMES_PATH . $manifest_file)) {
+            $themes = (include METASLIDER_THEMES_PATH . $manifest_file);
 
             // Check if the theme is available and has images set
             foreach ($themes as $theme) {

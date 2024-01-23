@@ -6,6 +6,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * Exception when an HTTP error occurs (4xx or 5xx error)
+ * @internal
  */
 class BadResponseException extends RequestException
 {

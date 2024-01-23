@@ -17,6 +17,13 @@ class MetaSlider_Theme_Base
     public $id;
 
     /**
+     * Assets
+     *
+     * @var array
+     */
+    public $assets;
+
+    /**
      * Registered Themes - used to give access to the themes options and settings
      *
      * @var array
@@ -149,12 +156,6 @@ return $options;
      */
     public function add_title_to_replace_dots($html, $slideshow_id, $settings)
     {
-        // Only do this on this theme
-        $theme = get_post_meta($slideshow_id, 'metaslider_slideshow_theme', true);
-        if ($this->id !== $theme['folder']) {
-return $html;
-        }
-
         // We want to insert this after the closing ul but before the container div
         $nav = "</ul>";
 

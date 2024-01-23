@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils;
  * Tools for using the IAM API.
  *
  * @see https://cloud.google.com/iam/docs IAM Documentation
+ * @internal
  */
 class Iam
 {

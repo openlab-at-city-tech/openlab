@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-/**
- * Class SessionPHP
- *
- * @package Bookly\Lib
- */
 abstract class SessionPHP extends Session
 {
     public static function initSession()

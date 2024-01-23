@@ -1,0 +1,35 @@
+/* FILE: blocks/_quote.scss */
+
+.wp-block-quote {
+
+	// This is for backwards compatibility (with possible existing content).
+	&.is-large,
+	&.is-style-large:not(.is-style-plain) {
+		padding: 0;
+		font-size: var(--typography_heading_size_3_em);
+		line-height: $ratio_min + 1;
+
+		p {
+			font-size: 1em;
+			font-style: inherit;
+			line-height: inherit;
+		}
+
+		cite {
+			font-size: var(--typography_font_size_s_em);
+			text-align: inherit;
+		}
+
+	}
+
+}
+
+.wp-block-quote.has-text-align-center cite {
+	text-align: center;
+}
+
+.wp-block-quote__citation,
+.wp-block-quote cite,
+.wp-block-quote footer {
+	color: inherit;
+}

@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Service\Order;
 use Bookly\Lib;
 use Bookly\Backend\Modules\Services\Proxy;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Service\Order
- */
 class Dialog extends Lib\Base\Component
 {
     /**

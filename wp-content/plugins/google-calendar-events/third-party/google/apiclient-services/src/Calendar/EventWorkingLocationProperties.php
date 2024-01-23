@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class EventWorkingLocationProperties extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $customLocationType = EventWorkingLocationPropertiesCustomLocation::class;

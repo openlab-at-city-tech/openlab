@@ -3,10 +3,6 @@ namespace Bookly\Lib\Utils;
 
 use Bookly\Lib\Config;
 
-/**
- * Class Price
- * @package Bookly\Lib\Utils
- */
 abstract class Price
 {
     /** @var array */
@@ -18,6 +14,7 @@ abstract class Price
         'AOA' => array( 'symbol' => 'Kz', 'format' => '{symbol} {price|2}' ),
         'ARS' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
         'AUD' => array( 'symbol' => 'A$', 'format' => '{symbol}{price|2}' ),
+        'AZN' => array( 'symbol' => '₼', 'format' => '{symbol}{price|2}' ),
         'BAM' => array( 'symbol' => 'KM', 'format' => '{price|2} {symbol}' ),
         'BDT' => array( 'symbol' => '৳', 'format' => '{symbol}{price|2}' ),
         'BGN' => array( 'symbol' => 'лв.', 'format' => '{price|2} {symbol}' ),
@@ -44,6 +41,7 @@ abstract class Price
         'GHS' => array( 'symbol' => 'GH¢', 'format' => '{symbol} {price|2}' ),
         'GTQ' => array( 'symbol' => 'Q', 'format' => '{symbol}{price|2}' ),
         'HKD' => array( 'symbol' => 'HK$', 'format' => '{symbol}{price|2}' ),
+        'HNL' => array( 'symbol' => 'L', 'format' => '{symbol}{price|2}' ),
         'HRK' => array( 'symbol' => 'kn', 'format' => '{price|2} {symbol}' ),
         'HUF' => array( 'symbol' => 'Ft', 'format' => '{price|2} {symbol}' ),
         'IDR' => array( 'symbol' => 'Rp', 'format' => '{price|2} {symbol}' ),

@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Class RangeData
- * @package Bookly\Lib\Slots
- */
 class RangeData
 {
     /** @var int */

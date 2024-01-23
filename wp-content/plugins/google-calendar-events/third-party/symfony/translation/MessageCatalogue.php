@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Config\Resource\ResourceInterfa
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\LogicException;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterface
 {

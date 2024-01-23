@@ -27,6 +27,7 @@ use InvalidArgumentException;
  * @method static        nowWithSameTz()
  * @method static static yesterday($timezone = null)
  * @method static static tomorrow($timezone = null)
+ * @internal
  */
 trait Comparison
 {

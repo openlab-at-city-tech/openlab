@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
  * PhpFileLoader loads translations from PHP files returning an array of translations.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @internal
  */
 class PhpFileLoader extends FileLoader
 {

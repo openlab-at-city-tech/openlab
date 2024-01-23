@@ -27,6 +27,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * This class implements the RESTful transport of apiServiceRequest()'s
+ * @internal
  */
 class REST
 {

@@ -33,6 +33,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
  * - {res_body}:       Response body
  *
  * @final
+ * @internal
  */
 class MessageFormatter implements MessageFormatterInterface
 {

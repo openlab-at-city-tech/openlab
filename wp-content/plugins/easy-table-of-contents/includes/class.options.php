@@ -48,6 +48,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						array(
 							'section'     => $section,
 							'id'          => isset( $option['id'] ) ? $option['id'] : null,
+							'label_for'   => isset( $option['id'] ) && isset( $option['type'] ) && $option['type'] == 'checkbox' ? 'ez-toc-settings[' . $option['id'] . ']' : null,
 							'desc'        => ! empty( $option['desc'] ) ? $option['desc'] : '',
 							'name'        => isset( $option['name'] ) ? $option['name'] : null,
 							'size'        => isset( $option['size'] ) ? $option['size'] : null,
@@ -227,6 +228,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 								'after' => __( 'After first heading', 'easy-table-of-contents' ),
 								'afterpara' => __( 'After first paragraph', 'easy-table-of-contents' ),
 								'aftercustompara' => __( 'After paragraph number', 'easy-table-of-contents' ),
+								'aftercustomimg' => __( 'After Image number', 'easy-table-of-contents' ),
 								'top' => __( 'Top', 'easy-table-of-contents' ),
 								'bottom' => __( 'Bottom', 'easy-table-of-contents' ),
 							),
@@ -239,6 +241,21 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'number',
 							'size' => 'small',
 							'default' => 1,
+						),
+						'custom_img_number' => array(
+							'id' => 'custom_img_number',
+							'name' => __( 'Select Image', 'easy-table-of-contents' ),
+							'desc' => __( 'Select Image after which ETOC should get display', 'easy-table-of-contents' ),
+							'type' => 'number',
+							'size' => 'small',
+							'default' => 1,
+						),
+						'blockqoute_checkbox' => array(
+							'id' => 'blockqoute_checkbox',
+							'name' => __( 'Exclude Blockqoute', 'easy-table-of-contents' ),
+							'desc' => __( 'Do not consider Paragraphs which are inside Blockqoute', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
 						),
 						'start' => array(
 							'id' => 'start',
@@ -272,7 +289,6 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'heading_text_tag' => array(
 							'id' => 'heading_text_tag',
 							'name' => __( 'Header Label Tag', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => array(
 								'p' => __( 'p (default)', 'easy-table-of-contents' ),
@@ -299,14 +315,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'show_hierarchy' => array(
 							'id' => 'show_hierarchy',
 							'name' => __( 'Show as Hierarchy', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'checkbox',
 							'default' => true,
 						),
 						'counter' => array(
 							'id' => 'counter',
 							'name' => __( 'Counter', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => self::getCounterList(),
 							'default' => 'decimal',
@@ -314,22 +328,13 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'counter-position' => array(
 							'id' => 'counter-position',
 							'name' => __( 'Counter Position', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => self::getCounterPositionList(),
 							'default' => 'inside',
 						),
-						'smooth_scroll' => array(
-							'id' => 'smooth_scroll',
-							'name' => __( 'Smooth Scroll', 'easy-table-of-contents' ),
-							'desc' => '',
-							'type' => 'checkbox',
-							'default' => true,
-						),
 						'toc_loading' => array(
 							'id' => 'toc_loading',
 							'name' => __( 'TOC Loading Method', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => array(
 								'js' => __( 'JavaScript (default)', 'easy-table-of-contents' ),
@@ -338,117 +343,27 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							),
 							'default' => 'js',
 						),
+						'smooth_scroll' => array(
+							'id' => 'smooth_scroll',
+							'name' => __( 'Smooth Scroll', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => true,
+						),
+						'avoid_anch_jump' => array(
+							'id' => 'avoid_anch_jump',
+							'name' => __( 'Exclude href from url', 'easy-table-of-contents' ),
+							'desc' => __( 'Jump link works without adding ids in the URL', 'easy-table-of-contents' ) .
+							          '<br><span class="description">' . __( 'NOTE: Please keep Smooth Scroll "ON" to make this option work properly.', 'easy-table-of-contents' ) . '<span>',
+							'type' => 'checkbox',
+							'default' => false,
+						),
                                             
                                                 'toc-run-on-amp-pages' => array(
 							'id' => 'toc-run-on-amp-pages',
 							'name' => __( 'TOC AMP Page Support', 'easy-table-of-contents' ),
-							'desc' => __( 'On/Off<br/>You can on or off Easy TOC for the AMP Pages.', 'easy-table-of-contents' ),
+							'desc' => __( 'You can on or off Easy TOC for the AMP Pages.', 'easy-table-of-contents' ),
 							'type'    => 'checkbox',
 							'default' => 'Off',
-						),
-						'sticky-toggle-above-header'      => array(
-							'id'   => 'sticky-toggle-above-header',
-							'name' => '<strong>' . __( 'Sticky Toggle Options', 'easy-table-of-contents' ) . '</strong>',
-							'type' => 'header',
-						),
-						'sticky-toggle'                   => array(
-							'id'      => 'sticky-toggle',
-							'name'    => __( 'On/Off', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type'    => 'checkbox',
-							'default' => false,
-						),
-						'sticky-toggle-position'                   => array(
-							'id'      => 'sticky-toggle-position',
-							'name'    => __( 'Position', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type' => 'radio',
-							'options' => array(
-								'left' => __( 'Left', 'easy-table-of-contents' ),
-								'right' => __( 'Right', 'easy-table-of-contents' ),
-							),
-							'default' => 'left',
-						),
-						'sticky-toggle-alignment'                   => array(
-							'id'      => 'sticky-toggle-alignment',
-							'name'    => __( 'Alignment', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type' => 'radio',
-							'options' => array(
-								'top' => __( 'Top', 'easy-table-of-contents' ),
-								'middle' => __( 'Middle', 'easy-table-of-contents' ),
-								'bottom' => __( 'Bottom', 'easy-table-of-contents' ),
-							),
-							'default' => 'top',
-						),
-						'sticky-toggle-open' => array(
-							'id'      => 'sticky-toggle-open',
-							'name'    => __( 'TOC open on load', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type'    => 'checkbox',
-							'default' => false,
-						),
-						'sticky-toggle-width'             => array(
-							'id'      => 'sticky-toggle-width',
-							'name'    => __( 'Width', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type'    => 'select',
-							'options' => array(
-								'auto'   => __( 'Auto', 'easy-table-of-contents' ),
-								'custom' => __( 'User Defined', 'easy-table-of-contents' ),
-							),
-							'default' => 'auto',
-						),
-						'sticky-toggle-width-custom'      => array(
-							'id'          => 'sticky-toggle-width-custom',
-							'name'        => __( 'Custom Width', 'easy-table-of-contents' ),
-							'desc'        => '',
-							'type'        => 'text',
-							'default'     => false,
-							'placeholder' => __( 'Enter sticky toggle custom width here..', 'easy-table-of-contents' )
-						),
-						'sticky-toggle-height'            => array(
-							'id'      => 'sticky-toggle-height',
-							'name'    => __( 'Height', 'easy-table-of-contents' ),
-							'desc'    => '',
-							'type'    => 'select',
-							'options' => array(
-								'auto'   => __( 'Auto', 'easy-table-of-contents' ),
-								'custom' => __( 'User Defined', 'easy-table-of-contents' ),
-							),
-							'default' => 'auto',
-						),
-						'sticky-toggle-height-custom'     => array(
-							'id'          => 'sticky-toggle-height-custom',
-							'name'        => __( 'Custom Height', 'easy-table-of-contents' ),
-							'desc'        => '',
-							'type'        => 'text',
-							'default'     => false,
-							'placeholder' => __( 'Enter sticky toggle custom height here..', 'easy-table-of-contents' )
-						),
-						'sticky-toggle-open-button-text'     => array(
-							'id'          => 'sticky-toggle-open-button-text',
-							'name'        => __( 'Open Button Text', 'easy-table-of-contents' ),
-							'desc'        => '',
-							'type'        => 'text',
-							'default'     => false,
-							'placeholder' => __( 'Enter sticky toggle open button text here..', 'easy-table-of-contents' )
-						),
-						'sticky-toggle-close-on-mobile'     => array(
-							'id'          => 'sticky-toggle-close-on-mobile',
-							'name'        => __( 'Click TOC Close on Mobile', 'easy-table-of-contents' ),
-							'desc'        => '',
-							'type'        => 'checkbox',
-							'default'     => false,
-							'placeholder' => __( 'Close Sticky Toggle on click over headings in mobile devices', 'easy-table-of-contents' )
-						),
-						'sticky-toggle-close-on-desktop'     => array(
-							'id'          => 'sticky-toggle-close-on-desktop',
-							'name'        => __( 'Click TOC Close on desktop', 'easy-table-of-contents' ),
-							'desc'        => '',
-							'type'        => 'checkbox',
-							'default'     => false,
-							'placeholder' => __( 'Close Sticky Toggle on click over headings in desktop', 'easy-table-of-contents' )
 						),
 					)
 				),
@@ -458,7 +373,6 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'width' => array(
 							'id' => 'width',
 							'name' => __( 'Width', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'selectgroup',
 							'options' => array(
 								'fixed' => array(
@@ -506,7 +420,6 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'wrapping' => array(
 							'id' => 'wrapping',
 							'name' => __( 'Alignment', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => array(
 								'none' => __( 'None (Default)', 'easy-table-of-contents' ),
@@ -519,14 +432,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'toc_wrapping'  => array(
 							'id'      => 'toc_wrapping',
 							'name'    => __( 'Enable Wrapping', 'easy-table-of-contents' ),
-							'desc'    => '',
 							'type'    => 'checkbox',
 							'default' => false,
 						),
 						'headings-padding'                   => array(
 							'id'      => 'headings-padding',
 							'name'    => __( 'Headings Padding', 'easy-table-of-contents' ),
-							'desc'    => '',
 							'type'    => 'checkbox',
 							'default' => false,
 						),
@@ -562,14 +473,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'title_font_size' => array(
 							'id' => 'title_font_size',
 							'name' => __( 'Title Font Size', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'font_size',
 							'default' => 120,
 						),
 						'title_font_weight' => array(
 							'id' => 'title_font_weight',
 							'name' => __( 'Title Font Weight', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'select',
 							'options' => array(
 								'100' => __( 'Thin', 'easy-table-of-contents' ),
@@ -587,14 +496,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'font_size' => array(
 							'id' => 'font_size',
 							'name' => __( 'Font Size', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'font_size',
 							'default' => 95,
 						),
 						'child_font_size' => array(
 							'id' => 'child_font_size',
 							'name' => __( 'Child Font Size', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'child_font_size',
 							'default' => 90,
 						),
@@ -627,49 +534,42 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'custom_background_colour' => array(
 							'id' => 'custom_background_colour',
 							'name' => __( 'Background Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#fff',
 						),
 						'custom_border_colour' => array(
 							'id' => 'custom_border_colour',
 							'name' => __( 'Border Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#ddd',
 						),
 						'custom_title_colour' => array(
 							'id' => 'custom_title_colour',
 							'name' => __( 'Title Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#999',
 						),
 						'custom_link_colour' => array(
 							'id' => 'custom_link_colour',
 							'name' => __( 'Link Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#428bca',
 						),
 						'custom_link_hover_colour' => array(
 							'id' => 'custom_link_hover_colour',
 							'name' => __( 'Link Hover Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#2a6496',
 						),
 						'custom_link_visited_colour' => array(
 							'id' => 'custom_link_visited_colour',
 							'name' => __( 'Link Visited Color', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'color',
 							'default' => '#428bca',
 						),
 						'heading-text-direction' => array(
                             'id' => 'heading-text-direction',
                             'name' => __( 'Heading Text Direction', 'easy-table-of-contents' ),
-                            'desc' => '',
                             'type' => 'radio',
                             'options' => array(
                                 'ltr' => __( 'Left to Right (LTR)', 'easy-table-of-contents' ),
@@ -699,7 +599,9 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'include_homepage' => array(
 							'id' => 'include_homepage',
 							'name' => __( 'Homepage', 'easy-table-of-contents' ),
-							'desc' => __( 'Show the table of contents for qualifying items on the homepage.', 'easy-table-of-contents' ),
+							'desc' => sprintf(
+								      __( 'Show the table of contents for qualifying items on the homepage. <a target="_blank" href="%s">Learn More</a>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-add-a-table-of-content-on-the-homepage/'
+								      ),
 							'type' => 'checkbox',
 							'default' => false,
 						),
@@ -710,12 +612,49 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'checkbox',
 							'default' => false,
 						),
+						'include_tag' => array(
+							'id' => 'include_tag',
+							'name' => __( 'Tag', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the table of contents for description on the tag pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
 						'include_product_category' => array(
 							'id' => 'include_product_category',
 							'name' => __( 'Product Category', 'easy-table-of-contents' ),
 							'desc' => __( 'Show the table of contents for description on the product category pages.', 'easy-table-of-contents' ),
 							'type' => 'checkbox',
 							'default' => false,
+						),
+						'include_custom_tax' => array(
+							'id' => 'include_custom_tax',
+							'name' => __( 'Custom Taxonomy', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the table of contents for description on the custom taxonomy pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'device_target' => array(
+							'id' => 'device_target',
+							'name' => __( 'Device Target', 'easy-table-of-contents' ),
+							'type' => 'select',
+							'options' => array(
+								'' => __( 'Select', 'easy-table-of-contents' ),
+								'mobile' => __( 'Mobile', 'easy-table-of-contents' ),
+								'desktop' => __( 'Desktop', 'easy-table-of-contents' ),
+								 
+							),
+							'default' => 'Select',
+						),
+						'load_js_in' => array(
+							'id' => 'load_js_in',
+							'name' => __( 'Load Js In', 'easy-table-of-contents' ),
+							'type' => 'select',
+							'options' => array(
+								'footer' => __( 'Footer (default)', 'easy-table-of-contents' ),
+								'header' => __( 'Header', 'easy-table-of-contents' ),
+								 
+							),
+							'default' => 'footer',
 						),
 						'exclude_css' => array(
 							'id' => 'exclude_css',
@@ -749,7 +688,9 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'exclude' => array(
 							'id' => 'exclude',
 							'name' => __( 'Exclude Headings', 'easy-table-of-contents' ),
-							'desc' => __( 'Specify headings to be excluded from appearing in the table of contents. Separate multiple headings with a pipe <code>|</code>. Use an asterisk <code>*</code> as a wildcard to match other text.', 'easy-table-of-contents' ),
+							'desc' => sprintf(
+							      		__( 'Specify headings to be excluded from appearing in the table of contents. Separate multiple headings with a pipe <code>|</code>. Use an asterisk <code>*</code> as a wildcard to match other text.', 'easy-table-of-contents' )
+							      		),
 							'type' => 'text',
 							'size' => 'large',
 							'default' => '',
@@ -757,14 +698,17 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'exclude_desc' => array(
 							'id' => 'exclude_desc',
 							'name' => '',
-							'desc' => '<p><strong>' . __( 'Examples:', 'easy-table-of-contents' ) . '</strong></p>' .
-							          '<ul>' .
-							          '<li>' . __( '<code>Fruit*</code> Ignore headings starting with "Fruit".', 'easy-table-of-contents' ) . '</li>' .
-							          '<li>' . __( '<code>*Fruit Diet*</code> Ignore headings with "Fruit Diet" somewhere in the heading.', 'easy-table-of-contents' ) . '</li>' .
-							          '<li>' . __( '<code>Apple Tree|Oranges|Yellow Bananas</code> Ignore headings that are exactly "Apple Tree", "Oranges" or "Yellow Bananas".', 'easy-table-of-contents' ) . '</li>' .
-							          '</ul>' .
-							          '<p>' . __( '<strong>Note:</strong> This is not case sensitive.', 'easy-table-of-contents' ) . '</p>',
+							'desc' => sprintf(
+							      		__( '<p><strong>Examples:</strong></p><ul><li><code>Fruit*</code> Ignore headings starting with "Fruit".</li><li><code>*Fruit Diet*</code> Ignore headings with "Fruit Diet" somewhere in the heading.</li><li><code>Apple Tree|Oranges|Yellow Bananas</code> Ignore headings that are exactly "Apple Tree", "Oranges" or "Yellow Bananas".</li></ul><p><strong>Note:</strong> This is not case sensitive</p>', 'easy-table-of-contents' )
+							      		),
 							'type' => 'descriptive_text',
+						),
+						'schema_sitenav_checkbox' => array(
+							'id' => 'schema_sitenav_checkbox',
+							'name' => __( 'SiteNavigation Schema', 'easy-table-of-contents' ),
+							'desc' => __( 'Add SiteNavigation Schema for displayed table of contents', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
 						),
 						'smooth_scroll_offset' => array(
 							'id' => 'smooth_scroll_offset',
@@ -789,6 +733,16 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							          '<br/><span class="description">' . __( 'Eg: /wiki/, /corporate/annual-reports/', 'easy-table-of-contents' ) . '</span>',
 							'type' => 'text',
 						),
+						'restrict_url_text' => array(
+							'id' => 'restrict_url_text',
+							'name' => __( 'Exclude By Matching Url/String', 'easy-table-of-contents' ),
+							'desc' => '<br/>' . __( 'Add the url of the pages that you do not want to show table of contents on. Any part or match of the url, will restrict table of contents from loading on those pages. Please add the urls in the new lines by clicking on "enter".', 'easy-table-of-contents' ) .
+							          '<br/><span class="description">' . __( 'Note: This setting will override above Limit Path option, if the limit path has been set.', 'easy-table-of-contents' ) . '</span>',
+							'type' => 'textarea',
+							'placeholder' => 'wp
+text
+/featured/',
+						),
 						'fragment_prefix' => array(
 							'id' => 'fragment_prefix',
 							'name' => __( 'Default Anchor Prefix', 'easy-table-of-contents' ),
@@ -797,6 +751,13 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							          '<br/><span class="description">' . __( 'Eg: i, toc_index, index, _', 'easy-table-of-contents' ) . '</span>',
 							'type' => 'text',
 							'default' => 'i',
+						),
+						'all_fragment_prefix' => array(
+							'id' => 'all_fragment_prefix',
+							'name' => __( 'Default Anchor Prefix For All', 'easy-table-of-contents' ),
+							'desc' => __( 'Apply default anchor prefix option to all anchors whether characters qualify or not.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
 						),
 						'widget_affix_selector' => array(
 							'id' => 'widget_affix_selector',
@@ -817,23 +778,62 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 						'remove_special_chars_from_title' => array(
 							'id' => 'remove_special_chars_from_title',
 							'name' => __( 'Remove \':\' from TOC Title', 'easy-table-of-contents' ),
-							'desc' => '',
 							'type' => 'checkbox',
 							'default' => false,
 						),
-						
+						'show_title_in_toc' => array(
+							'id' => 'show_title_in_toc',
+							'name' => __( 'Show Page title in TOC', 'easy-table-of-contents' ),
+							'desc' => __( 'It will add page title to the list in TOC', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'disable_in_restapi' => array(
+							'id' => 'disable_in_restapi',
+							'name' => __( 'Disable TOC in RestAPI', 'easy-table-of-contents' ),
+							'desc' => __( 'It excludes TOC from Rest API Content.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'generate_toc_link_ids' => array(
+							'id' => 'generate_toc_link_ids',
+							'name' => __( 'Generate TOC link ids', 'easy-table-of-contents' ),
+							'desc' => __( 'Enable This option when the TOC shortcode is used inside custom template, sidebar or when manually added do_shortcode("[ez-toc]") function in php files', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'prsrv_line_brk' => array(
+							'id' => 'prsrv_line_brk',
+							'name' => __( 'Preserve Line Breaks', 'easy-table-of-contents' ),
+							'desc' => __( 'Keeps line break of headings while generating toc.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'ajax_load_more' => array(
+							'id' => 'ajax_load_more',
+							'name' => __( 'Ajax Load More', 'easy-table-of-contents' ),
+							'desc' => __( 'Makes toggle (js method) work for Infinite Scroll – Ajax Loaded contents/posts.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						)
 					)
 				),
                 'shortcode' => apply_filters(
-                    'ez_toc_settings_shortcode',
+                    'Copy shortcode  ',
                     array(
                         'shortcode-first-paragraph'      => array(
                             'id'   => 'shortcode-first-paragraph',
                             'name' => __( 'Manual Adding the shortcode', 'easy-table-of-contents' ),
-                            'desc' => __( 'You can use the following shortcode to `Easy Table of Contents` display in your particular post or page:<br/><input type="text" id="ez-toc-clipboard-apply" value="[ez-toc]" disabled />&nbsp;<span class="ez-toc-tooltip"><button type="button"  onclick="ez_toc_clipboard(\'ez-toc-clipboard-apply\', \'ez-toc-myTooltip\', this, event)" onmouseout="ez_toc_outFunc(\'ez-toc-myTooltip\', this, event)"><span class="ez-toc-tooltiptext ez-toc-myTooltip">Copy to clipboard</span>Copy shortcode  </button></span>', 'easy-table-of-contents' ),
+                            'desc' => sprintf(
+                            		__( 'You can use the following shortcode to `Easy Table of Contents` display in your particular post or page. <a target="_blank" href="">Learn More</a><br/><input type="text" id="ez-toc-clipboard-apply" value="[ez-toc]" disabled />&nbsp;<span class="ez-toc-tooltip"><button type="button"  onclick="ez_toc_clipboard(\'ez-toc-clipboard-apply\', \'ez-toc-myTooltip\', this, event)" onmouseout="ez_toc_outFunc(\'ez-toc-myTooltip\', this, event)"><span class="ez-toc-tooltiptext ez-toc-myTooltip">Copy to clipboard</span>Copy shortcode  </button></span>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-add-toc-with-shortcode/'
+                            		),
                             'type' => 'paragraph',
                             'allowedHtml' => array(
 								'br' => array(),
+								'a' => array(
+								    'target' => array(),
+								    'href' => array()
+								),
 								'input' => array(
 					               'type' => true,
 					               'id' => true,
@@ -858,10 +858,169 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
                         ),
                         'shortcode-second-paragraph'      => array(
                             'id'   => 'shortcode-second-paragraph',
+                            'name' => __( 'Supported Attributes', 'easy-table-of-contents' ),
+                            'desc' => sprintf(
+                            		__( '<p><code>[header_label=”Title”]</code> – title for the table of contents</p><p><code>[display_header_label=”no”]</code> – no title for the table of contents</p><p><code>[toggle_view=”no”]</code> – no toggle for the table of contents</p><p><code>[initial_view=”no”]</code> – initially hide the table of contents</p><p><code>[display_counter=”no”]</code> – no counter for the table of contents</p><p><code>[post_types=”post,page”]</code> – post types seperated by ,(comma)</p><p><code>[post_in=”1,2″]</code> – ID’s of the posts|pages seperated by ,(comma)</p><p><code>[device_target=”desktop”]</code> – mobile or desktop device support for the table of contents</p><p><code>[view_more=”5″]</code> – 5, is the number of headings loads on first view, before user interaction (PRO)</p>', 'easy-table-of-contents' )
+                            		),
+                            'type' => 'descriptive_text',
+                        ),
+                        'shortcode-third-paragraph'      => array(
+                            'id'   => 'shortcode-third-paragraph',
                             'name' => __( 'Auto Insert', 'easy-table-of-contents' ),
                             'desc' => __( 'You can add `Easy Table of Contents` without using shortcode from `Auto Insert` option in General Setting so then there is no need to add shortcode while post, page or any post type editing.', 'easy-table-of-contents' ),
                             'type' => 'paragraph',
                         ),
+                    )
+                ),
+				'sticky' => apply_filters(
+                    'ez_toc_settings_sticky',
+                    array(
+						'sticky-toggle'                   => array(
+							'id'      => 'sticky-toggle',
+							'name'    => __( 'Sticky TOC', 'easy-table-of-contents' ),
+							'desc' => sprintf(
+							      		__( 'Table of contents as Sticky on your site. <a target="_blank" href="%s">Learn More</a>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-use-fixed-sticky-toc/'
+							      		),
+							'type'    => 'checkbox',
+							'default' => false,
+						),
+						'sticky-post-types' => array(
+							'id' => 'sticky-post-types',
+							'name' => __( 'Enable Support', 'easy-table-of-contents' ),
+							'desc' => __( 'Select the post types which will have the Sticky TOC inserted.', 'easy-table-of-contents' ) .
+							          '<br><span class="description">' . __( 'NOTE: The Sticky TOC will only be inserted on post types for which it has been enabled.', 'easy-table-of-contents' ) . '<span>',
+							'type' => 'checkboxgroup',
+							'options' => self::getPostTypes(),
+							'default' => array('post'=>'Post','page'=>'Page'),
+						),
+						'sticky_include_homepage' => array(
+							'id' => 'sticky_include_homepage',
+							'name' => __( 'Homepage', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the Sticky TOC for qualifying items on the homepage.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						  ),
+						  'sticky_include_category' => array(
+							'id' => 'sticky_include_category',
+							'name' => __( 'Category', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the Sticky TOC for description on the category pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => true,
+						  ),
+						  'sticky_include_tag' => array(
+							'id' => 'sticky_include_tag',
+							'name' => __( 'Tag', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the Sticky TOC for description on the tag pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => true,
+						  ),
+						  'sticky_include_product_category' => array(
+							'id' => 'sticky_include_product_category',
+							'name' => __( 'Product Category', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the Sticky TOC for description on the product category pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => true,
+						  ),
+						  'sticky_include_custom_tax' => array(
+							'id' => 'sticky_include_custom_tax',
+							'name' => __( 'Custom Taxonomy', 'easy-table-of-contents' ),
+							'desc' => __( 'Show the Sticky TOC for description on the custom taxonomy pages.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						  ),
+						  'sticky_device_target' => array(
+  							'id' => 'sticky_device_target',
+  							'name' => __( 'Device Target', 'easy-table-of-contents' ),
+  							'type' => 'select',
+  							'options' => array(
+  								'' => __( 'Select', 'easy-table-of-contents' ),
+  								'mobile' => __( 'Mobile', 'easy-table-of-contents' ),
+  								'desktop' => __( 'Desktop', 'easy-table-of-contents' ),
+  								 
+  							),
+  							'default' => 'Select',
+  						),
+						'sticky-toggle-position'                   => array(
+							'id'      => 'sticky-toggle-position',
+							'name'    => __( 'Position', 'easy-table-of-contents' ),
+							'type' => 'radio',
+							'options' => array(
+								'left' => __( 'Left', 'easy-table-of-contents' ),
+								'right' => __( 'Right', 'easy-table-of-contents' ),
+							),
+							'default' => 'left',
+						),
+
+						'sticky-toggle-alignment'                   => array(
+							'id'      => 'sticky-toggle-alignment',
+							'name'    => __( 'Alignment', 'easy-table-of-contents' ),
+							'type' => 'radio',
+							'options' => array(
+								'top' => __( 'Top', 'easy-table-of-contents' ),
+								'middle' => __( 'Middle', 'easy-table-of-contents' ),
+								'bottom' => __( 'Bottom', 'easy-table-of-contents' ),
+							),
+							'default' => 'top',
+						),
+						'sticky-toggle-open' => array(
+							'id'      => 'sticky-toggle-open',
+							'name'    => __( 'TOC open on load', 'easy-table-of-contents' ),
+							'type'    => 'checkbox',
+							'default' => false,
+						),
+						'sticky-toggle-width'             => array(
+							'id'      => 'sticky-toggle-width',
+							'name'    => __( 'Width', 'easy-table-of-contents' ),
+							'type'    => 'select',
+							'options' => array(
+								'auto'   => __( 'Auto', 'easy-table-of-contents' ),
+								'custom' => __( 'User Defined', 'easy-table-of-contents' ),
+							),
+							'default' => 'auto',
+						),
+						'sticky-toggle-width-custom'      => array(
+							'id'          => 'sticky-toggle-width-custom',
+							'name'        => __( 'Custom Width', 'easy-table-of-contents' ),
+							'type'        => 'custom_width',
+							'default'     => 350,
+						),
+						'sticky-toggle-height'            => array(
+							'id'      => 'sticky-toggle-height',
+							'name'    => __( 'Height', 'easy-table-of-contents' ),
+							'type'    => 'select',
+							'options' => array(
+								'auto'   => __( 'Auto', 'easy-table-of-contents' ),
+								'custom' => __( 'User Defined', 'easy-table-of-contents' ),
+							),
+							'default' => 'auto',
+						),
+						'sticky-toggle-height-custom'     => array(
+							'id'          => 'sticky-toggle-height-custom',
+							'name'        => __( 'Custom Height', 'easy-table-of-contents' ),
+							'type'        => 'custom_width',
+							'default'     => 800,
+						),
+						'sticky-toggle-open-button-text'     => array(
+							'id'          => 'sticky-toggle-open-button-text',
+							'name'        => __( 'Open Button Text', 'easy-table-of-contents' ),
+							'type'        => 'text',
+							'default'     => false,
+							'placeholder' => __( 'Enter sticky toggle open button text here..', 'easy-table-of-contents' )
+						),
+						'sticky-toggle-close-on-mobile'     => array(
+							'id'          => 'sticky-toggle-close-on-mobile',
+							'name'        => __( 'Click TOC Close on Mobile', 'easy-table-of-contents' ),
+							'type'        => 'checkbox',
+							'default'     => false,
+							'placeholder' => __( 'Close Sticky Toggle on click over headings in mobile devices', 'easy-table-of-contents' )
+						),
+						'sticky-toggle-close-on-desktop'     => array(
+							'id'          => 'sticky-toggle-close-on-desktop',
+							'name'        => __( 'Click TOC Close on desktop', 'easy-table-of-contents' ),
+							'type'        => 'checkbox',
+							'default'     => false,
+							'placeholder' => __( 'Close Sticky Toggle on click over headings in desktop', 'easy-table-of-contents' )
+						)
                     )
                 ),
                 'compatibility' => apply_filters(
@@ -878,6 +1037,12 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'id' => 'goodlayers-core',
 							'name' => __( 'Goodlayers Core Builder', 'easy-table-of-contents' ),
 							'desc' => __( 'It includes Goodlayers Builder content to TOC.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'molongui-authorship' => array(
+							'id' => 'molongui-authorship',
+							'name' => __( 'Molongui Authorship', 'easy-table-of-contents' ),
 							'type' => 'checkbox',
 							'default' => false,
 						),
@@ -1040,6 +1205,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'mobile_smooth_scroll_offset'        => 0,
 				'visibility'                         => true,
 				'toc_loading'                        => 'js',
+				'avoid_anch_jump'                    => false,
 				'remove_special_chars_from_title'    => false,
 				'visibility_hide_by_default'         => false,
 				'width'                              => 'auto',
@@ -1058,6 +1224,7 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'font_size'                          => 95,
 				'child_font_size'					 => 90,
 				'font_size_units'                    => '%',
+				'child_font_size_units'              => '%',
 				'theme'                              => 'grey',
 				'custom_background_colour'           => '#fff',
 				'custom_border_colour'               => '#ddd',
@@ -1069,8 +1236,10 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'hyphenate'                          => false,
 				'include_homepage'                   => false,
 				'include_category'                   => false,
+				'include_tag'                        => false,
+				'include_custom_tax'                 => false,
 				'exclude_css'                        => false,
-				'inline_css'                        => false,
+				'inline_css'                         => false,
 				'exclude'                            => '',
 				'heading_levels'                     => array( '1', '2', '3', '4', '5', '6' ),
 				'restrict_path'                      => '',
@@ -1082,7 +1251,18 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 				'sticky-toggle-alignment'             => 'top',
 				'add_request_uri'                     => false,
 				'mediavine-create'                    => 0,
+				'molongui-authorship'                 => false,
 				'custom_para_number'                  => 1,
+				'blockqoute_checkbox'                  => false,
+				'disable_in_restapi'                  => false,
+				'show_title_in_toc'				      => false,	
+				'sticky-post-types'					  => array('post','page'),
+				'sticky_include_homepage' 			  => false,
+				'sticky_include_category' 			  => true,
+				'sticky_include_tag' 		     	  => false,
+				'sticky_include_product_category'     => true,
+				'sticky_include_custom_tax'           => false,
+				'generate_toc_link_ids'               => false,
 			);
 
 			return apply_filters( 'ez_toc_get_default_options', $defaults );
@@ -1337,7 +1517,7 @@ HR_TAG;
 			        $placeholder . '" />';
 
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1380,12 +1560,14 @@ HR_TAG;
 			$readonly = isset( $args['readonly'] ) && $args['readonly'] === true ? ' readonly="readonly"' : '';
 			$size     = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			$placeholder = isset( $args['placeholder'] ) && $args['placeholder'] != '' ? 'placeholder="'.$args['placeholder'].'"' : '';
+
+			$html .= '<textarea rows="10" cols="50" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name .  $readonly . $placeholder. '/>' . esc_textarea( $value ) . '</textarea>';
+
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
-
-			$html .= '<textarea rows="10" cols="50" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name .  $readonly . '/>' . esc_textarea( $value ) . '</textarea>';
 
 			echo $html;
 		}
@@ -1419,9 +1601,11 @@ HR_TAG;
 			$readonly = isset( $args['readonly'] ) && $args['readonly'] === true ? ' readonly="readonly"' : '';
 			$size     = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
 
-			$html = '<input type="number" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
+			$min = isset( $args['min'] ) && $args['min'] != '' ? 'min="'.$args['min'].'"' : '';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			$html = '<input type="number" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . $min . ' />';
+
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1461,7 +1645,7 @@ HR_TAG;
 
 			$html = '<input type="checkbox" id="ez-toc-settings[' . $args['id'] . ']"' . $name . ' value="1" ' . $checked . '/>';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1506,7 +1690,7 @@ HR_TAG;
 
 				endforeach;
 
-				if ( 0 < strlen( $args['desc'] ) ) {
+				if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 					echo '<p class="description">' . $args['desc'] . '</p>';
 				}
@@ -1534,7 +1718,7 @@ HR_TAG;
 				echo '<label for="ez-toc-settings[' . $args['id'] . '][' . $key . ']">' . $option . '</label><br/>';
 			}
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<p class="description">' . $args['desc'] . '</p>';
 			}
@@ -1576,7 +1760,7 @@ HR_TAG;
 
 			$html .= '</select>';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1628,7 +1812,7 @@ HR_TAG;
 
 			$html .= '</select>';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$html .= '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1652,7 +1836,7 @@ HR_TAG;
             if( !isset( $args['without_hr'] ) || ( isset( $args['without_hr'] ) && $args['without_hr']) )
 			    echo '<hr/>';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<p>' . wp_kses_post( $args['desc'] ) . '</p>';
 			}
@@ -1672,7 +1856,7 @@ HR_TAG;
 		 */
 		public static function paragraph( $args ) {
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				$allowed_html = [];
 				if( is_array( $args['allowedHtml'] ) && count( $args['allowedHtml'] ) > 0 ) {
@@ -1717,7 +1901,7 @@ HR_TAG;
 
 			$html  = '<input type="text" class="ez-toc-color-picker" id="ez-toc-settings[' . $args['id'] . ']" name="ez-toc-settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1736,7 +1920,7 @@ HR_TAG;
 		 */
 		public static function custom_width( $args ) {
 
-			self::text(
+			self::number(
 				array(
 					'id'      => $args['id'],
 					'desc'    => '',
@@ -1753,12 +1937,13 @@ HR_TAG;
 						'px' => 'px',
 						'%'  => '%',
 						'em' => 'em',
+						'vh' => 'vh',
 					),
 					'default' => 'px',
 				)
 			);
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1798,7 +1983,7 @@ HR_TAG;
 				)
 			);
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1837,7 +2022,7 @@ public static function child_font_size( $args ) {
 				)
 			);
 
-			if ( 0 < strlen( $args['desc'] ) ) {
+			if ( isset( $args['desc'] ) && 0 < strlen( $args['desc'] ) ) {
 
 				echo '<label for="ez-toc-settings[' . $args['id'] . ']"> ' . $args['desc'] . '</label>';
 			}
@@ -1867,4 +2052,21 @@ public static function child_font_size( $args ) {
 
 	add_action( 'wp_ajax_eztoc_reset_options_to_default', array( 'ezTOC_Option', 'eztoc_reset_options_to_default' ) );
 
+}
+
+add_filter("ez_toc_settings_sticky", "ez_toc_settings_sticky_func_nonpro");
+function ez_toc_settings_sticky_func_nonpro($settings)
+{
+	if(function_exists('is_plugin_active') && !is_plugin_active('easy-table-of-contents-pro/easy-table-of-contents-pro.php')){
+			$sticky_pro_settings = array(
+			'upgrade-paragraph'      => array(
+				'id'   => 'upgrade-paragraph',
+				'name' => '<h4 class="ez-toc-upgrade-paragraph">'.__( 'To unlock Sticky Theme Design options', 'easy-table-of-contents' ).'<a href="https://tocwp.com/pricing/" target="_blank"> <u>'.__( 'Upgrade to  Pro', 'easy-table-of-contents' ).'</u></a></h4><br>',
+				'type' => 'header',
+			)
+		);
+		return array_merge($settings, $sticky_pro_settings);
+	}
+	return $settings;
+	
 }

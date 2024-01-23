@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Some methods that are common for all memory processors
  *
  * @author Rob Jensen
+ * @internal
  */
 abstract class MemoryProcessor implements ProcessorInterface
 {

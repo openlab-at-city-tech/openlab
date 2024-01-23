@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Auth\Credentials;
 use SimpleCalendar\plugin_deps\Google\Auth\CredentialsLoader;
 use SimpleCalendar\plugin_deps\Google\Auth\IamSignerTrait;
 use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
+/** @internal */
 class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements SignBlobInterface
 {
     use IamSignerTrait;

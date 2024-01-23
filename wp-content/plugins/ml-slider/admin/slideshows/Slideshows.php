@@ -593,7 +593,7 @@ class MetaSlider_Slideshows
             return $slideshow;
         }
 
-        return array_map('self::build_slideshow_object', $slideshow->posts);
+        return array_map([self::class, 'build_slideshow_object'], $slideshow->posts);
     }
 
     /**
@@ -891,7 +891,7 @@ class MetaSlider_Slideshows
     <body>
         <div id="preview-container">
             <div id="preview-inner">
-                <?php echo do_shortcode($this->shortcode(absint($slideshow_id), null, 'none')); ?>
+                <?php echo do_shortcode($this->shortcode(absint($slideshow_id), null, $this->themes->theme_id)); ?>
             </div>
         </div>
         <?php wp_footer(); ?>

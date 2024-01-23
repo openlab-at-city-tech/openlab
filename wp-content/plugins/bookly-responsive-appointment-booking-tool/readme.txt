@@ -3,9 +3,9 @@ Contributors: Ladela
 Tags: appointment booking, booking, booking calendar, booking system, appointments
 Donate link: https://www.booking-wp-plugin.com/
 Requires at least: 3.7
-Tested up to: 6.2
+Tested up to: 6.4
 Requires PHP: 5.3.7
-Stable tag: 21.8
+Stable tag: 22.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,7 +13,7 @@ Bookly is a booking plugin for WordPress for building an advanced automated onli
 
 == Description ==
 
-**Bookly** is a free **scheduling plugin for WordPress** that allows accepting **online bookings** on your website and automating your **reservation system**. Manage your **booking calendar**, services, client base, save time and money – all in one place. Join more than 60,000 businesses all around the world that have already automated their **online booking system**!
+**Bookly** is a free **scheduling plugin for WordPress** that allows accepting **online bookings** on your website and automating your **reservation system**. Manage your **booking calendar**, services, client base, save time and money – all in one place. Join more than 70,000 businesses all around the world that have already automated their **online booking system**!
 
 https://youtu.be/XkCrADjLt2s
 
@@ -172,7 +172,7 @@ We have dozens of add-ons available for Bookly Pro only and continue adding more
   * ‘Bookly Locations’ allows your customers to pick the most suitable place to get the service you provide and you can associate your employees with different locations.
   * ‘Service Extras’ allows purchasing extra items for the service you provide.
 You can check the full list of add-ons and how they work [here](https://www.booking-wp-plugin.com/demo-list/?utm_source=WP_ORG&utm_medium=cpc&utm_campaign=wp_FAQ).
-If you have Bookly Pro you can purchase add-ons [here](https://codecanyon.net/user/ladela/portfolio?utm_source=WP_ORG&utm_medium=cpc&utm_campaign=wp_FAQ&ref=ladela).
+If you have Bookly Pro you can purchase add-ons [here](https://codecanyon.net/user/nota-info/portfolio?utm_source=WP_ORG&utm_medium=cpc&utm_campaign=wp_FAQ&ref=ladela).
 
 = Can I use Bookly for the hotel or rental business? =
 

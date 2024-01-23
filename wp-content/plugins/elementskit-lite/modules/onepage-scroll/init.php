@@ -37,13 +37,13 @@ class Init {
 	}
 
 	public function load_styles() {
-		if ( $this->get_page_setting( 'ekit_onepagescroll' ) ) :
+		if ( self::get_page_data_setting( 'ekit_onepagescroll' ) ) :
 			wp_enqueue_style( 'one-page-scroll', $this->url . 'assets/css/one-page-scroll.min.css', array(), \ElementsKit_Lite::version() );
 		endif;
 	}
 
 	public function load_scripts() {
-		if ( $this->get_page_setting( 'ekit_onepagescroll' ) ) :
+		if ( self::get_page_data_setting( 'ekit_onepagescroll' ) ) :
 			wp_enqueue_script( 'one-page-scroll', $this->url . 'assets/js/one-page-scroll.js', array( 'jquery', 'elementor-frontend' ), \ElementsKit_Lite::version(), true );
 		endif;
 	}
@@ -53,12 +53,19 @@ class Init {
 		// wp_enqueue_script( 'ekit-onepage-scroll-editor', $this->url . 'assets/js/editor.js', ['jquery', 'elementor-editor', 'elementor-frontend'], \ElementsKit_Lite::version(), true );
 	}
 
-	public static function get_page_setting( $id ) {
+	public static function get_settings_model() {
 		$post_id = get_the_ID();
-
 		$page_settings_manager = \Elementor\Core\Settings\Manager::get_settings_managers( 'page' );
-		$page_settings_model   = $page_settings_manager->get_model( $post_id );
+		return $page_settings_manager->get_model( $post_id );
+	}
 
-		return $page_settings_model->get_settings( $id );
+	public static function get_page_data_setting( $id ) {
+		$page_settings = self::get_settings_model()->get_data('settings');
+		return isset($page_settings[$id]) ? $page_settings[$id] : false;
+	}
+
+	public static function get_page_setting( $id ) {
+		$settings_model = self::get_settings_model();
+		return $settings_model->get_settings( $id );
 	}
 }

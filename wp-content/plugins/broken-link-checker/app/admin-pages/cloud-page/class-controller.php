@@ -147,7 +147,7 @@ class Controller extends Admin_Page {
 	 * @return array Register scripts for the admin page.
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/js/dashboard/main.asset.php';
+		$script_data  = include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php';
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',
@@ -162,7 +162,7 @@ class Controller extends Admin_Page {
 
 		return array(
 			'blc_dashboard' => array(
-				'src'       => $this->scripts_dir . 'dashboard/main.js',
+				'src'       => $this->scripts_dir . 'cloud.js',
 				'deps'      => $dependencies,
 				'ver'       => $version,
 				'in_footer' => true,
@@ -179,7 +179,7 @@ class Controller extends Admin_Page {
 		static $scripts_version = null;
 
 		if ( is_null( $scripts_version ) ) {
-			$script_data     = include WPMUDEV_BLC_DIR . 'assets/js/dashboard/main.asset.php';
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php';
 			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
@@ -263,6 +263,7 @@ class Controller extends Admin_Page {
 	 *
 	 * @return array
 	 */
+	
 	public function set_admin_styles() {
 		return array(
 			'blc_sui'       => array(
@@ -270,11 +271,12 @@ class Controller extends Admin_Page {
 				'ver' => $this->scripts_version(),
 			),
 			'blc_dashboard' => array(
-				'src' => $this->styles_dir . 'dashboard.min.css',
+				'src' => $this->scripts_dir . 'style-cloud.css',
 				'ver' => $this->scripts_version(),
 			),
 		);
 	}
+	
 
 	/**
 	 * Adds Page specific hooks. Extends $this->actions.

@@ -87,7 +87,9 @@ class B2S_PostBox {
                         foreach ($auth as $u => $item) {
                             if (in_array($item->networkId, $isVideoNetwork)) {
                                 if (!in_array($item->networkId, array(1, 2, 3, 6, 12, 38, 39))) {
-                                    unset($result->data->auth->{$a[$u]});
+                                    if (isset($a[$u])) {
+                                        unset($result->data->auth->{$a[$u]});
+                                    }
                                 }
                             }
                         }
@@ -180,7 +182,7 @@ class B2S_PostBox {
                     <input type="hidden" id="b2sAutoPostImportIsActive" name="autoPostImportIsActive" value="' . (($autoPostImport) ? 1 : 0) . '">
 
                     <h3 class="b2s-meta-box-headline">' . esc_html__('Custom Sharing & Scheduling', 'blog2social') . ' <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalSched" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
-                    <a id="b2s-meta-box-btn-customize" class="b2s-btn b2s-btn-primary b2s-btn-sm b2s-center-block b2s-btn-margin-bottom-15" href="#">' . esc_html__('Customize & Schedule Social Media Posts', 'blog2social') . '</a>
+                    <a id="b2s-meta-box-btn-customize" class="b2s-btn b2s-btn-primary b2s-meta-box-customize b2s-btn-sm b2s-center-block b2s-btn-margin-bottom-15" href="#">' . esc_html__('Customize & Schedule Social Media Posts', 'blog2social') . '</a>
                     <div class="b2s-post-box-content">
                     <h3 class="b2s-meta-box-headline">' . esc_html__('The Autoposter is', 'blog2social') . ' <span class="b2s-post-meta-box-active" style="color:green;' . ((!$autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('activated', 'blog2social') . '</span><span class="b2s-post-meta-box-inactive" style="color:red;' . (($autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('deactivated', 'blog2social') . '</span> <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalAutoPost" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
                     <div class="b2s-meta-box-share-info">

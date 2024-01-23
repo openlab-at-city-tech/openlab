@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
 /**
  * Injects value of gethostname in all records
+ * @internal
  */
 class HostnameProcessor implements ProcessorInterface
 {

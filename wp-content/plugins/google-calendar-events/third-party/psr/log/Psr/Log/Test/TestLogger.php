@@ -52,6 +52,7 @@ use SimpleCalendar\plugin_deps\Psr\Log\AbstractLogger;
  * @method bool hasNoticeThatPasses($message)
  * @method bool hasInfoThatPasses($message)
  * @method bool hasDebugThatPasses($message)
+ * @internal
  */
 class TestLogger extends AbstractLogger
 {

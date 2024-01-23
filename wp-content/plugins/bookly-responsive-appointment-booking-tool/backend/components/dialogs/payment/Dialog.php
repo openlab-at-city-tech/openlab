@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Payment;
 use Bookly\Lib;
 use Bookly\Lib\Entities\Payment;
 
-/**
- * Class Details
- * @package Bookly\Backend\Components\Dialogs\Payment
- */
 class Dialog extends Lib\Base\Component
 {
     /**

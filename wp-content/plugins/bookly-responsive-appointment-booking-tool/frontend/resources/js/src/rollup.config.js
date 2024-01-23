@@ -17,7 +17,8 @@ export default {
 		file: !production || minify ? '../bookly.min.js' : '../bookly.js',
 		globals: {
 			jquery: 'jQuery'
-		}
+		},
+		footer: 'const bookly_js_created_at = "' + (new Date()).toISOString().slice(0, 10) + '";',
 	},
 	external: ['jquery'],
 	plugins: [

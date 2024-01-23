@@ -47,7 +47,7 @@ class Categories extends Block_Abstract {
 	 *
 	 * English and translated so both will be searchable.
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	public function get_keywords() {
 		$category = get_taxonomy( 'category' );
@@ -60,8 +60,8 @@ class Categories extends Block_Abstract {
 			'categories',
 			'taxonomy',
 			'term',
-			$category ? $category->labels->name : '',
-			$category ? $category->labels->singular_name : '',
+			false !== $category ? $category->labels->name : '',
+			false !== $category ? $category->labels->singular_name : '',
 			__( 'menu', 'advanced-sidebar-menu' ),
 			__( 'sidebar', 'advanced-sidebar-menu' ),
 			__( 'taxonomy', 'advanced-sidebar-menu' ),
@@ -82,16 +82,20 @@ class Categories extends Block_Abstract {
 	protected function get_attributes() {
 		return apply_filters( 'advanced-sidebar-menu/blocks/categories/attributes', [
 			Category::INCLUDE_PARENT           => [
-				'type' => 'boolean',
+				'type'    => 'boolean',
+				'default' => false,
 			],
 			Category::INCLUDE_CHILDLESS_PARENT => [
-				'type' => 'boolean',
+				'type'    => 'boolean',
+				'default' => false,
 			],
 			Category::EXCLUDE               => [
-				'type' => 'string',
+				'type'    => 'string',
+				'default' => '',
 			],
 			Category::DISPLAY_ALL           => [
-				'type' => 'boolean',
+				'type'    => 'boolean',
+				'default' => false,
 			],
 			Category::DISPLAY_ON_SINGLE     => [
 				'type'    => 'boolean',
@@ -118,5 +122,4 @@ class Categories extends Block_Abstract {
 	protected function get_widget_class() {
 		return new Category();
 	}
-
 }

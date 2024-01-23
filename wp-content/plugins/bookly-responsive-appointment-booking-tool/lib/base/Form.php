@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Base;
 
-/**
- * Class Form
- * @package Bookly\Lib\Base
- */
 abstract class Form
 {
     // Protected properties.

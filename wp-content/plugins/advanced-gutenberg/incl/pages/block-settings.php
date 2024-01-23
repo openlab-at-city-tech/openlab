@@ -72,7 +72,7 @@ $new_titles = [
 ];
 
 // Pro
-if( defined( 'ADVANCED_GUTENBERG_PRO' ) ) {
+if( defined( 'ADVANCED_GUTENBERG_PRO_LOADED' ) ) {
     if ( method_exists( 'PPB_AdvancedGutenbergPro\Utils\Definitions', 'advgb_pro_default_block_settings' ) ) {
         $excludedProBlocks = PPB_AdvancedGutenbergPro\Utils\Definitions::advgb_pro_default_block_settings( 'excluded_blocks' );
         foreach ( $excludedProBlocks as $excludedProBlock ) {

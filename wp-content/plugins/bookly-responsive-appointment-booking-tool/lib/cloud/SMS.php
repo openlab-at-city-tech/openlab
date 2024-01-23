@@ -3,17 +3,13 @@ namespace Bookly\Lib\Cloud;
 
 use Bookly\Lib\Utils;
 
-/**
- * Class SMS
- * @package Bookly\Lib\Cloud
- */
 class SMS extends Base
 {
     const CANCEL_SENDER_ID    = '/1.0/users/%token%/sender-ids/cancel'; //GET
     const CHANGE_SMS_STATUS   = '/1.0/users/%token%/sms';               //PATCH
     const GET_PRICES          = '/1.0/prices';                          //GET
     const GET_SENDER_IDS_LIST = '/1.0/users/%token%/sender-ids';        //GET
-    const GET_SMS_LIST        = '/1.0/users/%token%/sms';               //GET
+    const GET_SMS_LIST        = '/1.1/users/%token%/sms-list';          //POST
     const REQUEST_SENDER_ID   = '/1.0/users/%token%/sender-ids';        //POST
     const RESET_SENDER_ID     = '/1.0/users/%token%/sender-ids/reset';  //GET
     const SEND_SMS            = '/1.1/users/%token%/sms';               //POST
@@ -112,16 +108,19 @@ class SMS extends Base
     /**
      * Get SMS list.
      *
-     * @param null $start_date
-     * @param null $end_date
+     * @param int $start
+     * @param int $length
+     * @param array $filter
      * @return array
      */
-    public function getSmsList( $start_date = null, $end_date = null )
+    public function getSmsList( $start, $length, array $filter )
     {
+        $data = array();
+        $filtered = 0;
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendGetRequest(
+            $response = $this->api->sendPostRequest(
                 self::GET_SMS_LIST,
-                compact( 'start_date', 'end_date' )
+                compact( 'start', 'length', 'filter' )
             );
             if ( $response ) {
                 array_walk( $response['list'], function( &$item ) {
@@ -185,11 +184,15 @@ class SMS extends Base
 
                 $this->setUndeliveredSmsCount( 0 );
 
-                return $response;
+                $data = $response['list'];
+                $filtered = $response['filtered'];
             }
         }
 
-        return array( 'success' => false, 'list' => array() );
+        return array(
+            'data' => $data,
+            'recordsFiltered' => $filtered,
+        );
     }
 
     /**

@@ -137,6 +137,10 @@
 		transition: box-shadow 0.1s linear;
 		border: 1px solid #e2e4e7;
 		min-height: 18px;
+
+		a {
+			color: #000;
+		}
 	}
 
 	.attribution-preview__notice {
@@ -151,6 +155,10 @@
 	.attribution-plugin {
 		background-color: #f6f7f7;
 		padding: 6px 8px;
+
+		a {
+			color: #000 !important;
+		}
 	}
 }
 

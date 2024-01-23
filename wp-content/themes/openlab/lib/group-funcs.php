@@ -872,19 +872,23 @@ function openlab_render_message() {
 function openlab_group_profile_activity_list() {
     global $wpdb, $bp;
 
-	$recent_announcements = get_posts(
-		[
-			'post_type'      => 'openlab_announcement',
-			'post_status'    => 'publish',
-			'posts_per_page' => 3,
-			'meta_query'     => [
-				[
-					'key'   => 'openlab_announcement_group_id',
-					'value' => bp_get_current_group_id(),
-				]
-			],
-		]
-	);
+	if ( openlab_is_announcements_enabled_for_group( bp_get_current_group_id() ) ) {
+		$recent_announcements = get_posts(
+			[
+				'post_type'      => 'openlab_announcement',
+				'post_status'    => 'publish',
+				'posts_per_page' => 3,
+				'meta_query'     => [
+					[
+						'key'   => 'openlab_announcement_group_id',
+						'value' => bp_get_current_group_id(),
+					]
+				],
+			]
+		);
+	} else {
+		$recent_announcements = [];
+	}
 
     ?>
     <div id="single-course-body">
@@ -1464,8 +1468,10 @@ function openlab_show_site_posts_and_comments() {
         case 'local':
 			if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
 				$group_private_members = [];
+				$post__not_in          = [];
 			} else {
 				$group_private_members = openlab_get_private_members_of_group( $group_id );
+				$post__not_in          = openlab_get_invisible_post_ids( $site_id );
 			}
 
 			// Don't show posts from users with hidden memberships.
@@ -1476,6 +1482,7 @@ function openlab_show_site_posts_and_comments() {
 				[
 					'posts_per_page' => 3,
 					'author__not_in' => $group_private_members,
+					'post__not_in'   => $post__not_in,
 				]
 			);
 
@@ -1498,6 +1505,7 @@ function openlab_show_site_posts_and_comments() {
 				'status'         => 'approve',
 				'number'         => 3,
 				'author__not_in' => $group_private_members,
+				'post__not_in'   => $post__not_in,
 				'meta_query'     => [
 					'relation' => 'AND',
 					[

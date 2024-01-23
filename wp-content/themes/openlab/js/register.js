@@ -1,5 +1,4 @@
 (function ($) {
-
 	function checkPasswordStrength(pw, blacklist) {
 		var score = window.wp.passwordStrength.meter(pw, blacklist, '');
 
@@ -261,6 +260,7 @@
 							$emaillabel.html(message);
 							$emaillabel.fadeIn();
 						});
+						$( '#register-avatar-upload' ).show();
 					} else {
 						$emaillabel.fadeOut();
 
@@ -448,6 +448,8 @@
 
 				});
 
+				deinitAvatarFields();
+
 				$.ajax(ajaxurl, {
 					data: {
 						action: 'wds_load_account_type',
@@ -471,8 +473,13 @@
 							formValidation($wds_fields);
 							updateSubmitButtonStatus();
 							openlab.academicUnits.init();
-						}
+							initAvatarFields();
 
+							// If this is an Account Type other than 'Non-City Tech', show account fields.
+							if ( 'non-city-tech' !== selected_account_type ) {
+								$( '#register-avatar-upload' ).show();
+							}
+						}
 					}
 				});
 			}
@@ -504,6 +511,54 @@
 				$('#signup_submit').val('Please Complete Required Fields');
 			}
 
+		}
+
+		/**
+		 * Unhide avatar upload fields, and move to the correct place in the DOM.
+		 */
+		function initAvatarFields() {
+			var $avatar_fields = $( '#register-avatar-upload' );
+
+			/*
+			 * We insert:
+			 * a. After the S/O/D fields (Faculty/Staff)
+			 * b. After 'Major Program of Study' (Student/Alumni)
+			 * c. At the beginning of the wds-account-type div (Non-City Tech)
+			 */
+			var elementToInsertAfter = null;
+			var elementToInsertInto = null;
+			var academicUnitSelector = document.querySelector( '.academic-unit-selector' );
+			var departmentSelector = document.querySelector( 'select[name="departments-dropdown"]' );
+			if ( academicUnitSelector ) {
+				elementToInsertAfter = academicUnitSelector.closest( '.editfield' );
+			} else if ( departmentSelector ) {
+				elementToInsertAfter = departmentSelector.closest( '.editfield' );
+			} else {
+				elementToInsertInto = document.getElementById( 'wds-account-type' );
+			}
+
+			if ( ! elementToInsertAfter && ! elementToInsertInto ) {
+				return;
+			}
+
+			if ( elementToInsertInto ) {
+				$( elementToInsertInto ).prepend( $avatar_fields );
+			} else {
+				$( elementToInsertAfter ).after( $avatar_fields );
+			}
+		}
+
+		/**
+		 * "Deinit" avatar fields by moving them back to their original place in the DOM.
+		 *
+		 * This is necessary because the new location is removed as part of the
+		 * member-type profile field AJAX.
+		 */
+		function deinitAvatarFields() {
+			var $avatar_fields = $( '#register-avatar-upload' );
+			var $register_page = $( '#register-page' );
+			$register_page.after( $avatar_fields );
+			$avatar_fields.hide();
 		}
 
 		function evaluateFormValidation() {

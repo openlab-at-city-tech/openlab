@@ -1,4 +1,4 @@
-/*! elementor - v3.14.0 - 26-06-2023 */
+/*! elementor - v3.18.0 - 08-12-2023 */
 #e-dashboard-widget-admin-top-bar {
   position: absolute;
   opacity: 0;
@@ -47,8 +47,7 @@ body.folded #e-admin-top-bar-root {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  -webkit-margin-end: 40px;
-          margin-inline-end: 40px;
+  margin-inline-end: 40px;
 }
 #e-admin-top-bar-root .e-admin-top-bar__main-area {
   display: inline-flex;

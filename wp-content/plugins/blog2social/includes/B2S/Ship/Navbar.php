@@ -20,7 +20,7 @@ class B2S_Ship_Navbar {
         $this->networkTypeNameOverride = unserialize(B2S_PLUGIN_NETWORK_TYPE_INDIVIDUAL);
         $this->networkKindName = unserialize(B2S_PLUGIN_NETWORK_KIND);
         $hostUrl = (function_exists('rest_url')) ? rest_url() : get_site_url();
-        $this->authUrl = B2S_PLUGIN_API_ENDPOINT_AUTH . '?b2s_token=' . B2S_PLUGIN_TOKEN . '&sprache=' . substr(B2S_LANGUAGE, 0, 2) . '&unset=true&hostUrl=' . $hostUrl;
+        $this->authUrl = B2S_PLUGIN_API_ENDPOINT_AUTH . '?b2s_token=' . B2S_PLUGIN_TOKEN . '&plugin_version='.B2S_PLUGIN_VERSION. '&sprache=' . substr(B2S_LANGUAGE, 0, 2) . '&unset=true&hostUrl=' . $hostUrl;
         $this->allowProfil = unserialize(B2S_PLUGIN_NETWORK_ALLOW_PROFILE);
         $this->allowPage = unserialize(B2S_PLUGIN_NETWORK_ALLOW_PAGE);
         $this->allowGroup = unserialize(B2S_PLUGIN_NETWORK_ALLOW_GROUP);
@@ -52,9 +52,6 @@ class B2S_Ship_Navbar {
 
         if ($isVideoView) {
             if (!in_array($data->networkId, $this->isVideoNetwork) || (in_array($data->networkId, array(1, 6, 12)) && $data->networkType == 0 )) {
-                return;
-            }
-            if($data->networkId == 3 && $data->networkType == 0){
                 return;
             }
         } else if (in_array($data->networkId, $this->isVideoNetwork)) {

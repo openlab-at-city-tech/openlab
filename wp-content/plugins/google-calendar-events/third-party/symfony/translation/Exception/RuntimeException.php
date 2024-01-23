@@ -14,6 +14,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
  * Base RuntimeException for the Translation component.
  *
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
+ * @internal
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {

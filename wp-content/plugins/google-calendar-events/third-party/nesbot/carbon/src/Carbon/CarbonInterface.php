@@ -514,6 +514,7 @@ use Throwable;
  * @method        string           longRelativeToOtherDiffForHumans(DateTimeInterface $other = null, int $parts = 1)  Get the difference (long format, 'RelativeToOther' mode) in a human readable format in the current locale. ($other and $parts parameters can be swapped.)
  *
  * </autodoc>
+ * @internal
  */
 interface CarbonInterface extends DateTimeInterface, JsonSerializable
 {

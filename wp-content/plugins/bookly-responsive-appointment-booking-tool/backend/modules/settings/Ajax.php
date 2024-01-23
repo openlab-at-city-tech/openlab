@@ -3,11 +3,6 @@ namespace Bookly\Backend\Modules\Settings;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- *
- * @package Bookly\Backend\Modules\Settings
- */
 class Ajax extends Page
 {
     /**
@@ -81,7 +76,7 @@ class Ajax extends Page
         global $wpdb;
 
         $filter = self::parameter( 'filter' );
-        $columns = self::parameter( 'columns' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::LOGS );
         $order = self::parameter( 'order', array() );
 
         $query = Lib\Entities\Log::query();

@@ -17,6 +17,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * TranslationReader reads translation messages from translation files.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
+ * @internal
  */
 class TranslationReader implements TranslationReaderInterface
 {

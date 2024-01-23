@@ -1,6 +1,15 @@
 
 # Changelog
 
+## 1.2.29
+
+	- Fixed potential PHP error when using WP-CLI.
+	- Fixed issue where the `gpml_delete_entry_files_from_media_library` hook was not taking effect if set to `false`.
+
+## 1.2.28
+
+	- Fixed an issue introduced in Gravity Forms 2.7.13.1 where existing files in a Multi File Upload field were lost when editing an entry via a Gravity Form.
+
 ## 1.2.27
 
 	- Updated `gpml_delete_entry_files_from_media_library` PHP filter hook to include a new `$form` param and also have a form-specific variation (e.g. `gpml_delete_entry_files_from_media_library_29`).

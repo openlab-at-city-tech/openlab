@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
+/** @internal */
 class ReplyList extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'replies';

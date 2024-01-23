@@ -9,6 +9,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * PSR-7 request implementation.
+ * @internal
  */
 class Request implements RequestInterface
 {

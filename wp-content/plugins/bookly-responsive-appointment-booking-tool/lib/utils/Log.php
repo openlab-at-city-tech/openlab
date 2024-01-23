@@ -3,11 +3,6 @@ namespace Bookly\Lib\Utils;
 
 use Bookly\Lib;
 
-/**
- * Class Log
- *
- * @package Bookly\Lib\Utils
- */
 abstract class Log
 {
     const ACTION_CREATE = 'create';

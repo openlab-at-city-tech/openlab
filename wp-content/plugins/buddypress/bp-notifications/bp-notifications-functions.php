@@ -234,7 +234,7 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 				// callback functions.
 				if ( is_string( $content ) ) {
 					$notification_object->content = $content;
-					$notification_object->href    = bp_loggedin_user_domain();
+					$notification_object->href    = bp_loggedin_user_url();
 				} else {
 					$notification_object->content = isset( $content['text'] ) ? $content['text'] : '';
 					$notification_object->href    = isset( $content['link'] ) ? $content['link'] : '';
@@ -302,7 +302,7 @@ function bp_notifications_get_notifications_for_user( $user_id, $format = 'strin
 				// callback functions.
 				if ( is_string( $content ) ) {
 					$notification_object->content = $content;
-					$notification_object->href    = bp_loggedin_user_domain();
+					$notification_object->href    = bp_loggedin_user_url();
 				} else {
 					$notification_object->content = $content['text'];
 					$notification_object->href    = $content['link'];
@@ -777,8 +777,6 @@ function bp_notifications_screen_settings() {}
  *
  * @since 2.3.0
  *
- * @global object $wpdb WordPress database access object.
- *
  * @param int    $notification_id ID of the notification item whose metadata is being deleted.
  * @param string $meta_key        Optional. The key of the metadata being deleted. If
  *                                omitted, all metadata associated with the notification
@@ -927,8 +925,6 @@ function bp_notifications_personal_data_exporter( $email_address, $page ) {
 		'user_id'  => $user->ID,
 		'order'    => 'DESC',
 	) );
-
-	$user_data_to_export = array();
 
 	foreach ( $notifications as $notification ) {
 		if ( 'xprofile' === $notification->component_name ) {

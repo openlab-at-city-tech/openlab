@@ -51,7 +51,7 @@ class ElementsKit_Cpt_Api extends Core\Handler_Api {
 
 		// get wpml post by language code
 		$referer = wp_get_referer();
-		$referer = parse_url($referer);
+		$referer = wp_parse_url($referer);
 		$referer = !empty($referer['query']) ? $referer['query'] : '';
 		$referer = parse_str($referer, $referer_args);
 

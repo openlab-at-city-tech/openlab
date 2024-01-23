@@ -59,7 +59,7 @@ if ( defined( 'BLC_ACTIVE' ) ) {
 	define( 'BLC_FOR_EDITING', 'edit' );
 	define( 'BLC_FOR_PARSING', 'parse' );
 	define( 'BLC_FOR_DISPLAY', 'display' );
-	define( 'BLC_DATABASE_VERSION', 16 );
+	define( 'BLC_DATABASE_VERSION', 17 );
 
 	/***********************************************
 					Configuration
@@ -290,7 +290,21 @@ if ( defined( 'BLC_ACTIVE' ) ) {
 			// Ensure the database is up to date
 			if ( BLC_DATABASE_VERSION !== $blc_config_manager->options['current_db_version'] ) {
 				require_once BLC_DIRECTORY_LEGACY . '/includes/admin/db-upgrade.php';
-				blcDatabaseUpgrader::upgrade_database(); // Also updates the DB ver. in options['current_db_version'].
+
+				if ( is_multisite() ) {
+					$last_upgrade_time = intval( get_site_option( 'wpmudev_blc_last_db_upgrade', 0 ) );
+					$last_upgrade_diff = time() - $last_upgrade_time;
+
+					if ( apply_filters( 'wpmudev_blc_db_upgrade_cooldown_sec', 30 ) <= $last_upgrade_diff ) {
+						update_site_option( 'wpmudev_blc_last_db_upgrade', time() );
+
+						// Also updates the DB ver. in options['current_db_version'].
+						blcDatabaseUpgrader::upgrade_database();
+					}
+				} else {
+					// Also updates the DB ver. in options['current_db_version'].
+					blcDatabaseUpgrader::upgrade_database();
+				}
 			}
 
 			// Load the base classes and utilities

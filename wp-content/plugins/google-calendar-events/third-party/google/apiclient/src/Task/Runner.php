@@ -23,6 +23,7 @@ use SimpleCalendar\plugin_deps\Google\Task\Exception as GoogleTaskException;
  * A task runner with exponential backoff support.
  *
  * @see https://developers.google.com/drive/web/handle-errors#implementing_exponential_backoff
+ * @internal
  */
 class Runner
 {

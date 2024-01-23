@@ -3,9 +3,9 @@
 Plugin Name: Enable jQuery Migrate Helper
 Plugin URI: https://wordpress.org/plugins/enable-jquery-migrate-helper
 Description: Enable support for old and outdated plugins and themes during a jQuery update transitional phase.
-Version: 1.3.0
+Version: 1.4.0
 Requires at least: 5.4
-Tested up to: 5.5
+Tested up to: 6.3
 Requires PHP: 5.6
 Author: The WordPress Team
 Author URI: https://wordpress.org

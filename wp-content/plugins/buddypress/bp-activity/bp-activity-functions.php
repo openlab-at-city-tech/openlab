@@ -271,10 +271,14 @@ function bp_activity_get_user_mentionname( $user_id ) {
  *
  * @since 1.9.0
  *
+ * @global wpdb $wpdb WordPress database object.
+ *
  * @param string $mentionname Username of user in @-mentions.
  * @return int|bool ID of the user, if one is found. Otherwise false.
  */
 function bp_activity_get_userid_from_mentionname( $mentionname ) {
+	global $wpdb;
+
 	$user_id = false;
 
 	/*
@@ -292,7 +296,6 @@ function bp_activity_get_userid_from_mentionname( $mentionname ) {
 		// Doing a direct query to use proper regex. Necessary to
 		// account for hyphens + spaces in the same user_login.
 		if ( empty( $userdata ) || ! is_a( $userdata, 'WP_User' ) ) {
-			global $wpdb;
 			$regex   = esc_sql( str_replace( '-', '[ \-]', $mentionname ) );
 			$user_id = $wpdb->get_var( "SELECT ID FROM {$wpdb->users} WHERE user_login REGEXP '{$regex}'" );
 		} else {
@@ -304,7 +307,6 @@ function bp_activity_get_userid_from_mentionname( $mentionname ) {
 	} else {
 		$user_id = bp_core_get_userid_from_nicename( $mentionname );
 	}
-
 
 	return $user_id;
 }
@@ -1012,6 +1014,39 @@ function bp_activity_get_actions_for_context( $context = '' ) {
 /** Favorites ****************************************************************/
 
 /**
+ * Sanitize callback for the User's favorites meta.
+ *
+ * @since 12.0.0
+ *
+ * @param array $value The list of favorited activity IDs.
+ * @return array The sanitized list of favorited activity IDs.
+ */
+function bp_activity_sanitize_user_favorites_meta( $value = array() ) {
+	return array_filter( wp_parse_id_list( $value ) );
+}
+
+/**
+ * Use WordPress Meta API to deal with favorites meta properties and sanitization.
+ *
+ * @since 12.0.0
+ */
+function bp_activity_register_user_favorites_meta() {
+	register_meta(
+		'user',
+		'bp_favorite_activities',
+		array(
+			'single'            => true,
+			'type'              => 'array',
+			'description'       => __( 'The list of Activity IDs a user favorited.', 'buddypress' ),
+			'show_in_rest'      => false, // We're not showing this meta into the WP users REST endpoint.
+			'sanitize_callback' => 'bp_activity_sanitize_user_favorites_meta',
+			'default'           => array(),
+		)
+	);
+}
+add_action( 'bp_init', 'bp_activity_register_user_favorites_meta' );
+
+/**
  * Get a users favorite activity stream items.
  *
  * @since 1.2.0
@@ -1049,19 +1084,27 @@ function bp_activity_get_user_favorites( $user_id = 0 ) {
  * @return bool True on success, false on failure.
  */
 function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
+	// Cast as an integer to make sure we're only saving integers into the user's meta.
+	if ( ! empty( $activity_id ) ) {
+		$activity_id = (int) $activity_id;
+	} else {
+		$activity_id = 0;
+	}
+
+	if ( ! $activity_id ) {
+		return false;
+	}
 
 	// Fallback to logged in user if no user_id is passed.
 	if ( empty( $user_id ) ) {
 		$user_id = bp_loggedin_user_id();
 	}
 
-	$my_favs = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
-	if ( empty( $my_favs ) || ! is_array( $my_favs ) ) {
-		$my_favs = array();
-	}
+	// Get user's existing favorites.
+	$my_favs = bp_activity_get_user_favorites( $user_id );
 
 	// Bail if the user has already favorited this activity item.
-	if ( in_array( $activity_id, $my_favs ) ) {
+	if ( in_array( $activity_id, $my_favs, true ) ) {
 		return false;
 	}
 
@@ -1069,8 +1112,12 @@ function bp_activity_add_user_favorite( $activity_id, $user_id = 0 ) {
 	$my_favs[] = $activity_id;
 
 	// Update the total number of users who have favorited this activity.
-	$fav_count = bp_activity_get_meta( $activity_id, 'favorite_count' );
-	$fav_count = !empty( $fav_count ) ? (int) $fav_count + 1 : 1;
+	$fav_count = (int) bp_activity_get_meta( $activity_id, 'favorite_count' );
+	if ( ! empty( $fav_count ) ) {
+		$fav_count += 1;
+	} else {
+		$fav_count = 1;
+	}
 
 	// Update user meta.
 	bp_update_user_meta( $user_id, 'bp_favorite_activities', $my_favs );
@@ -1124,8 +1171,8 @@ function bp_activity_remove_user_favorite( $activity_id, $user_id = 0 ) {
 		$user_id = bp_loggedin_user_id();
 	}
 
-	$my_favs = bp_get_user_meta( $user_id, 'bp_favorite_activities', true );
-	$my_favs = array_flip( (array) $my_favs );
+	$my_favs = bp_activity_get_user_favorites( $user_id );
+	$my_favs = array_flip( $my_favs );
 
 	// Bail if the user has not previously favorited the item.
 	if ( ! isset( $my_favs[ $activity_id ] ) ) {
@@ -1133,7 +1180,7 @@ function bp_activity_remove_user_favorite( $activity_id, $user_id = 0 ) {
 	}
 
 	// Remove the fav from the user's favs.
-	unset( $my_favs[$activity_id] );
+	unset( $my_favs[ $activity_id ] );
 	$my_favs = array_unique( array_flip( $my_favs ) );
 
 	// Update the total number of users who have favorited this activity.
@@ -1238,8 +1285,6 @@ function bp_activity_total_favorites_for_user( $user_id = 0 ) {
  * Delete a meta entry from the DB for an activity stream item.
  *
  * @since 1.2.0
- *
- * @global object $wpdb WordPress database access object.
  *
  * @param int    $activity_id ID of the activity item whose metadata is being deleted.
  * @param string $meta_key    Optional. The key of the metadata being deleted. If
@@ -1409,7 +1454,7 @@ add_action( 'delete_user', 'bp_activity_remove_all_user_data_on_delete_user' );
  *
  * @since 1.6.0
  *
- * @global object $wpdb WordPress database access object.
+ * @global wpdb $wpdb WordPress database object.
  *
  * @param int $user_id ID of the user whose activity is being spammed.
  * @return bool
@@ -1478,7 +1523,7 @@ add_action( 'bp_make_spam_user', 'bp_activity_spam_all_user_data' );
  *
  * @since 1.6.0
  *
- * @global object $wpdb WordPress database access object.
+ * @global wpdb $wpdb WordPress database object.
  *
  * @param int $user_id ID of the user whose activity is being hammed.
  * @return bool
@@ -3262,10 +3307,18 @@ function bp_activity_get_permalink( $activity_id, $activity_obj = false ) {
 	if ( false !== array_search( $activity_obj->type, $use_primary_links ) ) {
 		$link = $activity_obj->primary_link;
 	} else {
-		if ( 'activity_comment' == $activity_obj->type ) {
-			$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $activity_obj->item_id . '/#acomment-' . $activity_obj->id;
+		$path_chunks = array(
+			'component_id'                 => 'activity',
+			'single_item_action'           => 'p',
+			'single_item_action_variables' => array( $activity_obj->id ),
+		);
+
+		if ( 'activity_comment' === $activity_obj->type ) {
+			$path_chunks['single_item_action_variables'] = array( $activity_obj->item_id );
+
+			$link = bp_rewrites_get_url( $path_chunks ) . '#acomment-' . $activity_obj->id;
 		} else {
-			$link = bp_get_root_domain() . '/' . bp_get_activity_root_slug() . '/p/' . $activity_obj->id . '/';
+			$link = bp_rewrites_get_url( $path_chunks );
 		}
 	}
 
@@ -3296,8 +3349,12 @@ function bp_activity_user_can_read( $activity, $user_id = 0 ) {
 		$user_id = bp_loggedin_user_id();
 	}
 
+	if ( ! bp_current_user_can( 'bp_view', array( 'bp_component' => 'activity' ) ) ) {
+		$retval = false;
+	}
+
 	// If activity is from a group, do extra cap checks.
-	if ( bp_is_active( 'groups' ) && buddypress()->groups->id === $activity->component ) {
+	if ( bp_is_active( 'groups' ) && buddypress()->groups->id === $activity->component && bp_current_user_can( 'bp_view', array( 'bp_component' => 'groups' ) ) ) {
 		// Check to see if the user has access to the activity's parent group.
 		$group = groups_get_group( $activity->item_id );
 		if ( $group ) {
@@ -4380,11 +4437,9 @@ add_action( 'transition_comment_status', 'bp_activity_transition_post_type_comme
  * @return array An array of personal data.
  */
 function bp_activity_personal_data_exporter( $email_address, $page ) {
-	$number = 50;
-
-	$email_address = trim( $email_address );
-
-	$data_to_export = array();
+	$number              = 50;
+	$email_address       = trim( $email_address );
+	$user_data_to_export = array();
 
 	$user = get_user_by( 'email', $email_address );
 
@@ -4405,7 +4460,6 @@ function bp_activity_personal_data_exporter( $email_address, $page ) {
 		),
 	) );
 
-	$user_data_to_export = array();
 	$activity_actions    = bp_activity_get_actions();
 
 	foreach ( $activities['activities'] as $activity ) {
@@ -4453,7 +4507,7 @@ function bp_activity_personal_data_exporter( $email_address, $page ) {
 		 */
 		$item_data = apply_filters( 'bp_activity_personal_data_export_item_data', $item_data, $activity );
 
-		$data_to_export[] = array(
+		$user_data_to_export[] = array(
 			'group_id'    => 'bp_activity',
 			'group_label' => __( 'Activity', 'buddypress' ),
 			'item_id'     => "bp-activity-{$activity->id}",
@@ -4465,7 +4519,7 @@ function bp_activity_personal_data_exporter( $email_address, $page ) {
 	$done = count( $activities['activities'] ) < $number;
 
 	return array(
-		'data' => $data_to_export,
+		'data' => $user_data_to_export,
 		'done' => $done,
 	);
 }
@@ -4474,19 +4528,22 @@ function bp_activity_personal_data_exporter( $email_address, $page ) {
  * Checks whether an activity feed is enabled.
  *
  * @since 8.0.0
+ * @since 12.0.0 Added bp_current_user_can( 'bp_view' ) check.
  *
  * @param string $feed_id The feed identifier. Possible values are:
  *                        'sitewide', 'personal', 'friends', 'mygroups', 'mentions', 'favorites'.
  */
 function bp_activity_is_feed_enable( $feed_id = '' ) {
+	$retval = bp_current_user_can( 'bp_view', array( 'bp_component' => 'activity' ) );
+
 	/**
 	 * Filters if BuddyPress should consider feeds enabled. If disabled, it will return early.
 	 *
 	 * @since 1.8.0
 	 * @since 8.0.0 Adds the `$feed_id` parameter.
 	 *
-	 * @param bool   $value   Defaults to true aka feeds are enabled.
+	 * @param bool   $retval  Whether this feed is enabled or not.
 	 * @param string $feed_id The feed identifier.
 	 */
-	return (bool) apply_filters( 'bp_activity_enable_feeds', true, $feed_id );
+	return (bool) apply_filters( 'bp_activity_enable_feeds', $retval, $feed_id );
 }

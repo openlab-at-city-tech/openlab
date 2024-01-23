@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tests;
 
 use Bookly\Lib;
 
-/**
- * Class SSL
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 class SSL extends Test
 {
     protected $slug = 'check-ssl';

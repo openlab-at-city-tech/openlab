@@ -407,6 +407,8 @@
                         
                     //trigger action completed
                     do_action('PTO/order_update_complete');
+                    
+                    wp_cache_flush();
                 }
                 
                 
@@ -486,7 +488,8 @@
                         
                     //trigger action completed
                     do_action('PTO/order_update_complete');
-                                    
+                    
+                    wp_cache_flush();                
                 }
             
 

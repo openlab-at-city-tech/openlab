@@ -25,7 +25,7 @@ use Bookly\Backend\Components\Controls\Elements;
         <div class="row align-items-center">
             <input type="hidden" name="id" value="{{id}}"/>
             <div class="col-auto"><?php Elements::renderReorder() ?></div>
-            <div class="col-auto px-1 bookly-js-full_name">{{full_name}}</div>
+            <div class="col-auto px-1 bookly-js-full_name{{class}}">{{full_name}}</div>
         </div>
     </li>
 </div>

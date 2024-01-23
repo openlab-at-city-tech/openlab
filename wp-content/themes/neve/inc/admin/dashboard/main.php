@@ -7,6 +7,7 @@
 
 namespace Neve\Admin\Dashboard;
 
+use Neve\Core\Limited_Offers;
 use Neve\Core\Theme_Info;
 /**
  * Class Main
@@ -83,29 +84,49 @@ class Main {
 		add_action( 'admin_menu', [ $this, 'register' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'init', array( $this, 'register_settings' ) );
+		add_action( 'init', array( $this, 'register_about_page' ), 1 );
+	}
+
+	/**
+	 * Add the about page with respect to the white label settings.
+	 *
+	 * @return void
+	 */
+	public function register_about_page() {
+		$theme         = wp_get_theme();
+		$filtered_name = apply_filters( 'ti_wl_theme_name', $theme->__get( 'Name' ) );
+		$slug          = $theme->__get( 'stylesheet' );
+
+		if ( empty( $slug ) || empty( $filtered_name ) ) {
+			return;
+		}
+
+		// We check if the name is different from the filtered name,
+		// if it is, the whitelabel is in use and we should not add the about page.
+		// this check allows for child themes to use the about page.
+		if ( $filtered_name !== $theme->__get( 'Name' ) ) {
+			return;
+		}
 
 		add_filter(
 			'neve_about_us_metadata',
-			function () {
+			function () use ( $filtered_name ) {
+
 				return [
 					// Top-level page in the dashboard sidebar
 					'location'         => 'neve-welcome',
 					// Logo to display on the page
 					'logo'             => get_template_directory_uri() . '/assets/img/dashboard/logo.svg',
-					// Menu displayed at the top of the page - optional
-					// 'page_menu'        => [
-					// [ 'text' => 'SDK GitHub Issues', 'url' => esc_url( 'https://github.com/codeinwp/themeisle-sdk/issues' ) ],
-					// [ 'text' => 'Themeisle', 'url' => esc_url( 'https://themeisle.com' ) ]
-					// ],
 					// Condition to show or hide the upgrade menu in the sidebar
 					'has_upgrade_menu' => ! defined( 'NEVE_PRO_VERSION' ),
+					// Add predefined product pages to the about page.
+					'product_pages'    => [ 'otter-page' ],
 					// Upgrade menu item link & text
 					'upgrade_link'     => tsdk_utmify( esc_url( 'https://themeisle.com/themes/neve/upgrade/' ), 'aboutfilter', 'nevedashboard' ),
-					'upgrade_text'     => __( 'Upgrade', 'neve' ) . ' ' . $this->theme_args['name'],
+					'upgrade_text'     => __( 'Upgrade', 'neve' ) . ' ' . $filtered_name,
 				];
 			}
 		);
-
 	}
 
 	/**
@@ -156,7 +177,7 @@ class Main {
 		}
 		$neve_icon  = apply_filters( 'neve_menu_icon', $icon );
 		$priority   = apply_filters( 'neve_menu_priority', 59 );  // The position of the menu item, 60 is the position of the Appearance menu.
-		$capability = 'activate_plugins';
+		$capability = 'manage_options';
 
 		// Place a theme page in the Appearance menu, for older versions of Neve Pro or TPC. to maintain backwards compatibility.
 		if (
@@ -195,7 +216,7 @@ class Main {
 			[ $this, 'render' ]
 		);
 
-		$this->copy_customizer_page( $theme_page, $capability );
+		$this->copy_customizer_page( $theme_page );
 
 		if ( ! defined( 'NEVE_PRO_VERSION' ) || 'valid' !== apply_filters( 'product_neve_license_status', false ) ) {
 			// Add Custom Layout submenu for upsell.
@@ -213,11 +234,10 @@ class Main {
 	 * Copy the customizer page to the dashboard.
 	 *
 	 * @param string $theme_page The theme page slug.
-	 * @param string $capability The capability required to view the page.
 	 *
 	 * @return void
 	 */
-	private function copy_customizer_page( $theme_page, $capability ) {
+	private function copy_customizer_page( $theme_page ) {
 		global $submenu;
 		if ( ! isset( $submenu['themes.php'] ) ) {
 			return;
@@ -245,7 +265,7 @@ class Main {
 			$theme_page,
 			$customizer_menu_item[0],
 			$customizer_menu_item[0],
-			$capability,
+			'manage_options',
 			'customize.php'
 		);
 	}
@@ -296,6 +316,9 @@ class Main {
 	 * @return array
 	 */
 	private function get_localization() {
+
+		$offer = new Limited_Offers();
+
 		$old_about_config  = apply_filters( 'ti_about_config_filter', [ 'useful_plugins' => true ] );
 		$theme_name        = apply_filters( 'ti_wl_theme_name', $this->theme_args['name'] );
 		$plugin_name       = apply_filters( 'ti_wl_plugin_name', 'Neve Pro' );
@@ -355,6 +378,9 @@ class Main {
 			'tpcAdminURL'             => admin_url( 'admin.php?page=tiob-starter-sites' ),
 			'pluginsURL'              => esc_url( admin_url( 'plugins.php' ) ),
 			'getPluginStateBaseURL'   => esc_url( rest_url( '/nv/v1/dashboard/plugin-state/' ) ),
+			'canInstallPlugins'       => current_user_can( 'install_plugins' ),
+			'canActivatePlugins'      => current_user_can( 'activate_plugins' ),
+			'deal'                    => ! defined( 'NEVE_PRO_VERSION' ) ? $offer->get_localized_data() : array(),
 		];
 
 		if ( defined( 'NEVE_PRO_PATH' ) ) {
@@ -362,8 +388,16 @@ class Main {
 			$is_otter_installed                    = array_key_exists( 'otter-pro/otter-pro.php', $installed_plugins );
 			$is_sparks_installed                   = array_key_exists( 'sparks-for-woocommerce/sparks-for-woocommerce.php', $installed_plugins );
 			$data['changelogPro']                  = $this->cl_handler->get_changelog( NEVE_PRO_PATH . '/CHANGELOG.md' );
+			$data['isOtterProInstalled']           = $is_otter_installed;
 			$data['otterProInstall']               = $is_otter_installed ? esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=otter-pro%2Fotter-pro.php&plugin_status=all&paged=1&s' ), 'activate-plugin_otter-pro/otter-pro.php' ) ) : esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=install_otter_pro' ), 'install_otter_pro' ) );
 			$data['sparksInstallActivateEndpoint'] = $is_sparks_installed ? esc_url( wp_nonce_url( admin_url( 'plugins.php?action=activate&plugin=sparks-for-woocommerce%2Fsparks-for-woocommerce.php&plugin_status=all&paged=1&s' ), 'activate-plugin_sparks-for-woocommerce/sparks-for-woocommerce.php' ) ) : esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=install_sparks' ), 'install_sparks' ) );
+			$data['moduleObserver']                = array(
+				'customLayouts' => array(
+					'labelSubMenu' => __( 'Custom Layouts', 'neve' ),
+					'linkSubMenu'  => 'edit.php?post_type=neve_custom_layouts',
+				),
+			);
+
 		}
 
 		if ( isset( $_GET['onboarding'] ) && $_GET['onboarding'] === 'yes' ) {
@@ -617,6 +651,7 @@ class Main {
 				$available[ $slug ]['path']       = $this->plugin_helper->get_plugin_path( $slug );
 				$available[ $slug ]['activate']   = $this->plugin_helper->get_plugin_action_link( $slug );
 				$available[ $slug ]['deactivate'] = $this->plugin_helper->get_plugin_action_link( $slug, 'deactivate' );
+				$available[ $slug ]['network']    = $this->plugin_helper->get_is_network_wide( $slug );
 				$available[ $slug ]['version']    = ! empty( $available[ $slug ]['version'] ) ? $this->plugin_helper->get_plugin_version( $slug, $available[ $slug ]['version'] ) : '';
 			}
 
@@ -645,6 +680,7 @@ class Main {
 				'path'        => $this->plugin_helper->get_plugin_path( $slug ),
 				'activate'    => $this->plugin_helper->get_plugin_action_link( $slug ),
 				'deactivate'  => $this->plugin_helper->get_plugin_action_link( $slug, 'deactivate' ),
+				'network'     => $this->plugin_helper->get_is_network_wide( $slug ),
 			];
 		}
 

@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\Channel;
  *   $driveService = new Google\Service\Drive(...);
  *   $channels = $driveService->channels;
  *  </code>
+ * @internal
  */
 class Channels extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

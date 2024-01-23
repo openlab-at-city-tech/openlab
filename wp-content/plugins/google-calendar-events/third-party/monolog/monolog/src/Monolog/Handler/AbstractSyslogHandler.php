@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\LineFormatter;
  * Common syslog functionality
  *
  * @phpstan-import-type Level from \Monolog\Logger
+ * @internal
  */
 abstract class AbstractSyslogHandler extends AbstractProcessingHandler
 {

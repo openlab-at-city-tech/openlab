@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\Wpml;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Notices\Wpml
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**

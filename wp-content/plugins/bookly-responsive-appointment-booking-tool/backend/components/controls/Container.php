@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Controls;
 
 use Bookly\Lib;
 
-/**
- * Class Container
- * @package Bookly\Backend\Components\Controls
- */
 class Container extends Lib\Base\Component
 {
     /**

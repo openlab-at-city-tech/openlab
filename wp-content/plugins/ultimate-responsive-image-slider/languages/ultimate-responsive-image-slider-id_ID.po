@@ -1,0 +1,530 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ultimate Responsive Image Slider\n"
+"POT-Creation-Date: 2023-11-22 15:23+0530\n"
+"PO-Revision-Date: 2023-11-22 15:23+0530\n"
+"Last-Translator: Weblizar <lizarweb@gmail.com>\n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.4.1\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: settings.php:231 tooltip.php:51
+msgid "Display Slider Post Title"
+msgstr "Tampilkan Judul Posting Slider"
+
+#: settings.php:237
+msgid "Select Yes/No option to show/hide slide title above slider"
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan judul slide di atas "
+"slider"
+
+#: settings.php:238 settings.php:251 settings.php:263 settings.php:275
+#: settings.php:288 settings.php:300 settings.php:312 settings.php:326
+#: settings.php:338 settings.php:350 settings.php:378 settings.php:397
+#: settings.php:410 settings.php:423 settings.php:436 settings.php:448
+#: settings.php:462 settings.php:478 settings.php:493 settings.php:515
+#: settings.php:528 settings.php:541 settings.php:553 settings.php:566
+#: settings.php:578 settings.php:591 settings.php:626
+msgid "Preview"
+msgstr "Pratinjau"
+
+#: settings.php:244 tooltip.php:56
+msgid "Display Slide Title"
+msgstr "Tampilkan Judul Slide"
+
+#: settings.php:250
+msgid "Select Yes/No option to show/hide slide title over slides."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan judul slide di atas "
+"slide."
+
+#: settings.php:257 tooltip.php:61
+msgid "Slide Title Color"
+msgstr "Warna Judul Slide"
+
+#: settings.php:262
+msgid "Select a color to set slide title color."
+msgstr "Pilih warna untuk mengatur warna judul slide."
+
+#: settings.php:269 tooltip.php:66
+msgid "Slide Title Background Color"
+msgstr "Warna Latar Belakang Judul Slide"
+
+#: settings.php:274
+msgid "Select a color to set slide title background color."
+msgstr "Pilih warna untuk mengatur warna latar belakang judul slide."
+
+#: settings.php:281 tooltip.php:71
+msgid "Display Slide Description"
+msgstr "Tampilkan Deskripsi Slide"
+
+#: settings.php:287
+msgid "Select Yes/No option to show/hide slide description over slides."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan deskripsi slide di atas "
+"slide."
+
+#: settings.php:294 tooltip.php:76
+msgid "Slide Description Color"
+msgstr "Warna Deskripsi Slide"
+
+#: settings.php:299
+msgid "Select a color to set slide description color."
+msgstr "Pilih warna untuk mengatur warna deskripsi slide."
+
+#: settings.php:306 tooltip.php:81
+msgid "Slide Description Background Color"
+msgstr "Warna Latar Belakang Deskripsi Slide"
+
+#: settings.php:311
+msgid "Select a color to set slide description background color."
+msgstr "Pilih warna untuk mengatur warna latar belakang deskripsi slide."
+
+#: settings.php:318
+msgid "Auto Play Slide Show"
+msgstr "Putar Slide Secara Otomatis"
+
+#: settings.php:321
+msgid "Yes"
+msgstr "Ya"
+
+#: settings.php:322
+msgid "Yes with Stop on Mouse Hover"
+msgstr "Ya dengan Berhenti saat Mengarahkan Mouse"
+
+#: settings.php:323
+msgid "No"
+msgstr "Tidak"
+
+#: settings.php:325
+msgid "Select Yes/No option to auto slide enable or disable into slider."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk mengaktifkan atau menonaktifkan slide otomatis "
+"pada slider."
+
+#: settings.php:331
+msgid "Slide Transition"
+msgstr "Transisi Slide"
+
+#: settings.php:337
+msgid "Select a transition effect you want to apply on slides."
+msgstr "Pilih efek transisi yang ingin Anda terapkan pada slide."
+
+#: settings.php:343
+msgid "Auto play Slider Speed"
+msgstr "Kecepatan Putar Otomatis Slider"
+
+#: settings.php:349
+msgid "Set your desired slider speed of slides. Default speed is 5 Second."
+msgstr ""
+"Atur kecepatan slider yang diinginkan. Kecepatan default adalah 5 detik."
+
+#: settings.php:370
+msgid "Slide Order"
+msgstr "Urutan Slide"
+
+#: settings.php:373
+msgid "Ascending"
+msgstr "Menaik"
+
+#: settings.php:374
+msgid "Descending"
+msgstr "Menurun"
+
+#: settings.php:375
+msgid "Random"
+msgstr "Acak"
+
+#: settings.php:377
+msgid "Select a slide order you want to apply on slides"
+msgstr "Pilih urutan slide yang ingin Anda terapkan pada slide"
+
+#: settings.php:384 tooltip.php:88
+msgid "Distance Between Slide"
+msgstr "Jarak Antara Slide"
+
+#: settings.php:396
+msgid ""
+"Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
+"setting selected to Slide."
+msgstr ""
+"Atur jarak antara semua slide. Rentang 0 hingga 25. Berfungsi saat "
+"pengaturan Transisi Slide dipilih menjadi Slide."
+
+#: settings.php:403 tooltip.php:93
+msgid "Show Thumbnail"
+msgstr "Tampilkan Thumbnail"
+
+#: settings.php:409
+msgid ""
+"Select Yes/No option to show or hide thumbnail based navigation under slides."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan navigasi berdasarkan "
+"thumbnail di bawah slide."
+
+#: settings.php:416 tooltip.php:98
+msgid "Thumbnail Position"
+msgstr "Posisi Thumbnail"
+
+#: settings.php:419
+msgid "Top"
+msgstr "Atas"
+
+#: settings.php:420
+msgid "Bottom"
+msgstr "Bawah"
+
+#: settings.php:422
+msgid "Select a thumbnail position to show above or below the slider."
+msgstr "Pilih posisi thumbnail untuk ditampilkan di atas atau di bawah slider."
+
+#: settings.php:429 tooltip.php:103
+msgid "Selected Thumbnail Style"
+msgstr "Gaya Thumbnail Terpilih"
+
+#: settings.php:432
+msgid "Border"
+msgstr "Batas"
+
+#: settings.php:433
+msgid "Pointer"
+msgstr "Penunjuk"
+
+#: settings.php:435
+msgid "Select a style to apply on select thumbnails."
+msgstr "Pilih gaya untuk diterapkan pada thumbnail yang terpilih."
+
+#: settings.php:442 tooltip.php:108
+msgid "Selected Thumbnail Style Color"
+msgstr "Warna Gaya Thumbnail Terpilih"
+
+#: settings.php:447
+msgid "Select a color to set on selected thumbnail style color."
+msgstr "Pilih warna untuk mengatur warna gaya thumbnail terpilih."
+
+#: settings.php:454 tooltip.php:113
+msgid "Thumbnail Resize"
+msgstr "Ubah Ukuran Thumbnail"
+
+#: settings.php:458
+msgid "Width"
+msgstr "Lebar"
+
+#: settings.php:459
+msgid "Height"
+msgstr "Tinggi"
+
+#: settings.php:461
+msgid "Set custom height and width for thumbnails."
+msgstr "Atur tinggi dan lebar kustom untuk thumbnail."
+
+#: settings.php:468 tooltip.php:118
+msgid "Slider Width"
+msgstr "Lebar Slider"
+
+#: settings.php:472
+msgid "100% Width"
+msgstr "Lebar 100%"
+
+#: settings.php:473
+msgid "Full Width"
+msgstr "Lebar Penuh"
+
+#: settings.php:474 settings.php:489
+msgid "Custom"
+msgstr "Kustom"
+
+#: settings.php:477
+msgid "Enter your desired width for slider. Default width is 1000px."
+msgstr ""
+"Masukkan lebar yang Anda inginkan untuk slider. Lebar default adalah 1000px."
+
+#: settings.php:484 tooltip.php:123
+msgid "Slider Height"
+msgstr "Tinggi Slider"
+
+#: settings.php:488
+msgid "Auto Height"
+msgstr "Tinggi Otomatis"
+
+#: settings.php:492
+msgid "Enter your desired height for slider. Default height is 500px."
+msgstr ""
+"Masukkan tinggi yang Anda inginkan untuk slider. Tinggi default adalah 500px."
+
+#: settings.php:499
+msgid "Slide Scale Mode"
+msgstr "Mode Skala Slide"
+
+#: settings.php:504
+msgid "Cover"
+msgstr "Tutupi"
+
+#: settings.php:505
+msgid "Contain"
+msgstr "Selaraskan"
+
+#: settings.php:506
+msgid "Exact"
+msgstr "Tepat"
+
+#: settings.php:507
+msgid "None"
+msgstr "Tidak Ada"
+
+#: settings.php:511
+msgid "COVER will scale and crop the image so that it fills the entire slide."
+msgstr ""
+"COVER akan menyesuaikan dan memotong gambar sehingga mengisi seluruh slide."
+
+#: settings.php:512
+msgid "CONTAIN will keep the entire image visible inside the slide."
+msgstr "CONTAIN akan menjaga seluruh gambar tetap terlihat di dalam slide."
+
+#: settings.php:513
+msgid "EXACT will match the size of the image to the size of the slide."
+msgstr "EXACT akan sesuaikan ukuran gambar dengan ukuran slide."
+
+#: settings.php:514
+msgid "NONE will leave the image to its original size."
+msgstr "NONE akan mempertahankan ukuran asli gambar."
+
+#: settings.php:521
+msgid "Slide Auto Scale Up"
+msgstr "Penyesuaian Otomatis Ukuran Slide Ke Atas"
+
+#: settings.php:527
+msgid "If the slide can be scaled up more than its original size."
+msgstr "Jika slide dapat diperbesar lebih dari ukuran aslinya."
+
+#: settings.php:534 tooltip.php:130
+msgid "Show Navigation Arrow"
+msgstr "Tampilkan Panah Navigasi"
+
+#: settings.php:540
+msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan panah saat mouse di "
+"atas slide."
+
+#: settings.php:547 tooltip.php:135
+msgid "Navigation Color"
+msgstr "Warna Navigasi"
+
+#: settings.php:552
+msgid "Select a color to set navigation arrow and full screen icon color."
+msgstr "Pilih warna untuk mengatur warna panah navigasi dan ikon layar penuh."
+
+#: settings.php:559 tooltip.php:140
+#, fuzzy
+#| msgid "Navigation Bullets Color"
+msgid "Show Navigation Bullets"
+msgstr "Warna Peluru Navigasi"
+
+#: settings.php:565
+msgid ""
+"Select Yes/No option to show or hide slider navigation buttons under image "
+"slider."
+msgstr ""
+"Pilih opsi Ya/Tidak untuk menampilkan/menyembunyikan tombol navigasi slider "
+"di bawah slider gambar."
+
+#: settings.php:572 tooltip.php:145
+msgid "Navigation Bullets Color"
+msgstr "Warna Peluru Navigasi"
+
+#: settings.php:577
+msgid "Select a color to set navigation bullets color."
+msgstr "Pilih warna untuk mengatur warna peluru navigasi."
+
+#: settings.php:584 tooltip.php:150
+msgid "Full Screen Slide Show"
+msgstr "Tayangan Slide Layar Penuh"
+
+#: settings.php:590
+msgid "Select Yes/No option for full screen slide show."
+msgstr "Pilih opsi Ya/Tidak untuk tayangan slide layar penuh."
+
+#: settings.php:597 tooltip.php:155
+msgid "Fonts"
+msgstr "Font"
+
+#: settings.php:625
+msgid "Choose a font to apply on slide title and description."
+msgstr "Pilih font yang akan digunakan pada judul dan deskripsi slide."
+
+#: settings.php:633
+msgid "Custom CSS"
+msgstr "CSS Kustom"
+
+#: settings.php:638
+msgid ""
+"Enter any custom CSS you want to apply on this slider into text area filed."
+msgstr ""
+"Masukkan CSS kustom yang ingin Anda terapkan pada slider ini ke dalam bidang "
+"area teks."
+
+#: ultimate-responsive-image-slider.php:185
+#: ultimate-responsive-image-slider.php:186
+msgid "Add New Slider"
+msgstr "Tambahkan Slider Baru"
+
+#: ultimate-responsive-image-slider.php:187
+msgid "Edit Slider"
+msgstr "Edit Slider"
+
+#: ultimate-responsive-image-slider.php:188
+msgid "New Slider"
+msgstr "Slider Baru"
+
+#: ultimate-responsive-image-slider.php:189
+msgid "View Slider"
+msgstr "Lihat Slider"
+
+#: ultimate-responsive-image-slider.php:190
+msgid "Search Slider"
+msgstr "Cari Slider"
+
+#: ultimate-responsive-image-slider.php:191
+msgid "No Slider found"
+msgstr "Tidak ada slider ditemukan"
+
+#: ultimate-responsive-image-slider.php:192
+msgid "No Slider Found in Trash"
+msgstr "Tidak ada slider yang ditemukan di Tempat Sampah"
+
+#: ultimate-responsive-image-slider.php:193
+msgid "Parent Slider:"
+msgstr "Slider Induk:"
+
+#: ultimate-responsive-image-slider.php:194
+msgid "All Sliders"
+msgstr "Semua Slider"
+
+#: ultimate-responsive-image-slider.php:223
+msgid "UR Image Slider Title"
+msgstr "Judul Slider Gambar UR"
+
+#: ultimate-responsive-image-slider.php:224
+#: ultimate-responsive-image-slider.php:246
+msgid "Slider Shortcode"
+msgstr "Kode Singkat Slider"
+
+#: ultimate-responsive-image-slider.php:225
+msgid "Date"
+msgstr "Tanggal"
+
+#: ultimate-responsive-image-slider.php:243
+msgid "Add Slides"
+msgstr "Tambahkan Slide"
+
+#: ultimate-responsive-image-slider.php:244
+msgid "Configure Settings"
+msgstr "Konfigurasikan Pengaturan"
+
+#: ultimate-responsive-image-slider.php:247
+msgid "Try My New Slider Plugin"
+msgstr "Coba Plugin Slider Baru Saya"
+
+#: ultimate-responsive-image-slider.php:345
+#: ultimate-responsive-image-slider.php:544
+msgid "Slide ID"
+msgstr "ID Slide"
+
+#: ultimate-responsive-image-slider.php:346
+#: ultimate-responsive-image-slider.php:545
+msgid "Slide Title"
+msgstr "Judul Slide"
+
+#: ultimate-responsive-image-slider.php:349
+msgid "Enter Slide Title"
+msgstr "Masukkan Judul Slide"
+
+#: ultimate-responsive-image-slider.php:352
+msgid "Slide Descriptions"
+msgstr "Deskripsi Slide"
+
+#: ultimate-responsive-image-slider.php:353
+msgid "Enter Slide Description"
+msgstr "Masukkan Deskripsi Slide"
+
+#: ultimate-responsive-image-slider.php:354
+#: ultimate-responsive-image-slider.php:553
+msgid "Use Rich Text Editor"
+msgstr "Gunakan Editor Teks Kaya"
+
+#: ultimate-responsive-image-slider.php:357
+#: ultimate-responsive-image-slider.php:556
+msgid "Slide Alt Text"
+msgstr "Teks Alternatif Slide"
+
+#: ultimate-responsive-image-slider.php:358
+#: ultimate-responsive-image-slider.php:557
+msgid "Max Length 125 Characters"
+msgstr "Panjang Maksimum 125 Karakter"
+
+#: ultimate-responsive-image-slider.php:406
+msgid "Add New Slide"
+msgstr "Tambahkan Slide Baru"
+
+#: ultimate-responsive-image-slider.php:410
+msgid "Sort Ascending by Slide ID"
+msgstr "Urutkan Secara Menaik berdasarkan ID Slide"
+
+#: ultimate-responsive-image-slider.php:414
+msgid "Sort Descending by Slide ID"
+msgstr "Urutkan Secara Menurun berdasarkan ID Slide"
+
+#: ultimate-responsive-image-slider.php:419
+msgid "Clone Slider"
+msgstr "Kloning Slider"
+
+#: ultimate-responsive-image-slider.php:424
+msgid "Delete All Slides"
+msgstr "Hapus Semua Slide"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Slider clone created successfully."
+msgstr "Kloning slider berhasil dibuat."
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Go to"
+msgstr "Buka"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "All Slider"
+msgstr "Semua Slider"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "page to edit cloned slider."
+msgstr "halaman untuk mengedit slider yang di-klon."
+
+#: ultimate-responsive-image-slider.php:510
+msgid "Use below shortcode in any Page/Post to publish your slider"
+msgstr ""
+"Gunakan kode singkat di bawah ini dalam setiap Halaman/Pos untuk "
+"memublikasikan slider Anda"
+
+#: ultimate-responsive-image-slider.php:513
+msgid "To embed slider in any custom theme template"
+msgstr "Untuk menyisipkan slider dalam template tema kustom apa pun"
+
+#: ultimate-responsive-image-slider.php:548
+msgid "Enter Slide Title Here"
+msgstr "Masukkan Judul Slide di Sini"
+
+#: ultimate-responsive-image-slider.php:551
+msgid "Slide Description"
+msgstr "Deskripsi Slide"
+
+#: ultimate-responsive-image-slider.php:552
+msgid "Enter Slide Description Here"
+msgstr "Masukkan Deskripsi Slide di Sini"

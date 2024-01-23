@@ -3,7 +3,7 @@
  * Groups Template tags
  *
  * @since 3.0.0
- * @version 10.0.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -250,53 +250,6 @@ function bp_nouveau_groups_get_group_invites_setting( $user_id = 0 ) {
 	}
 
 	return (int) bp_get_user_meta( $user_id, '_bp_nouveau_restrict_invites_to_friends' );
-}
-
-/**
- * Outputs the group creation numbered steps navbar
- *
- * @since 3.0.0
- *
- * @todo This output isn't localised correctly.
- */
-function bp_nouveau_group_creation_tabs() {
-	$bp = buddypress();
-
-	if ( ! is_array( $bp->groups->group_creation_steps ) ) {
-		return;
-	}
-
-	if ( ! bp_get_groups_current_create_step() ) {
-		$keys                            = array_keys( $bp->groups->group_creation_steps );
-		$bp->groups->current_create_step = array_shift( $keys );
-	}
-
-	$counter = 1;
-
-	foreach ( (array) $bp->groups->group_creation_steps as $slug => $step ) {
-		$is_enabled = bp_are_previous_group_creation_steps_complete( $slug ); ?>
-
-		<li<?php if ( bp_get_groups_current_create_step() === $slug ) : ?> class="current"<?php endif; ?>>
-			<?php if ( $is_enabled ) : ?>
-				<a href="<?php echo esc_url( bp_groups_directory_permalink() . 'create/step/' . $slug . '/' ); ?>">
-					<?php echo (int) $counter; ?> <?php echo esc_html( $step['name'] ); ?>
-				</a>
-			<?php else : ?>
-				<?php echo (int) $counter; ?>. <?php echo esc_html( $step['name'] ); ?>
-			<?php endif ?>
-		</li>
-			<?php
-		$counter++;
-	}
-
-	unset( $is_enabled );
-
-	/**
-	 * Fires at the end of the creation of the group tabs.
-	 *
-	 * @since 1.0.0
-	 */
-	do_action( 'groups_creation_tabs' );
 }
 
 /**
@@ -735,20 +688,10 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 			$parent_element = false;
 		}
 
-		/*
-		 * If we have a arg value for $button_element passed through
-		 * use it to default all the $buttons['button_element'] values
-		 * otherwise default to 'a' (anchor) o override & hardcode the
-		 * 'element' string on $buttons array.
-		 *
-		 * Icons sets a class for icon display if not using the button element
-		 */
-		$icons = '';
 		if ( ! empty( $args['button_element'] ) ) {
 			$button_element = $args['button_element'] ;
 		} else {
 			$button_element = 'a';
-			$icons = ' icons';
 		}
 
 		// If we pass through parent classes add them to $button array
@@ -1054,9 +997,8 @@ function bp_nouveau_groups_manage_members_buttons( $args = array() ) {
 		 * @param array  $args    Button arguments.
 		 */
 		$buttons_group = apply_filters( 'bp_nouveau_get_groups_buttons', $buttons, $group, $type, $args );
-
 		if ( ! $buttons_group ) {
-			return $buttons;
+			return array();
 		}
 
 		// It's the first entry of the loop, so build the Group and sort it
@@ -1462,15 +1404,21 @@ function bp_nouveau_get_group_description_excerpt( $group = null, $length = null
 		}
 	}
 
+	if ( $length ) {
+		$excerpt = bp_create_excerpt( $group->description, $length );
+	} else {
+		$excerpt = bp_create_excerpt( $group->description );
+	}
+
 	/**
 	 * Filters the excerpt of a group description.
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param string $value Excerpt of a group description.
-	 * @param object $group Object for group whose description is made into an excerpt.
+	 * @param string $excerpt Excerpt of a group description.
+	 * @param object $group   Object for group whose description is made into an excerpt.
 	 */
-	return apply_filters( 'bp_nouveau_get_group_description_excerpt', bp_create_excerpt( $group->description, $length ), $group );
+	return apply_filters( 'bp_nouveau_get_group_description_excerpt', $excerpt, $group );
 }
 
 /**

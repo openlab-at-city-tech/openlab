@@ -1,10 +1,8 @@
 <?php if (!defined('ABSPATH')) {
 die('No direct access.');
 } ?>
-<div class="row">
+<div class="row has-right-field">
     <label><?php esc_html_e("Crop Position", "ml-slider"); ?></label>
-</div>
-<div class="row">
     <select class="crop_position" name="attachment[<?php echo esc_attr($slide_id); ?>][crop_position]">
         <option value="left-top" <?php echo selected($crop_position, 'left-top', false); ?>> <?php esc_html_e("Top Left", "ml-slider"); ?></option>
         <option value="center-top" <?php echo selected($crop_position, 'center-top', false); ?>> <?php esc_html_e("Top Center", "ml-slider"); ?></option>

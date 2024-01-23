@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\TableSettings;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Dialogs\TableSettings
- */
 class Ajax extends Lib\Base\Ajax
 {
     /** @var array */

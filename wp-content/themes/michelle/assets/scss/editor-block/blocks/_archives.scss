@@ -1,0 +1,11 @@
+/* FILE: editor-block/blocks/_archives.scss */
+
+#{ $selector_editor_wrapper } .wp-block-archives {
+	margin-left: auto;
+	margin-right: auto;
+
+	ul {
+		padding: 0;
+	}
+
+}

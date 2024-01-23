@@ -1,14 +1,8 @@
 <?php
-
 namespace Bookly\Backend\Modules\Diagnostics\Tests;
 
 use Bookly\Lib;
 
-/**
- * Class TimeZone
- *
- * @package Bookly\Backend\Modules\Diagnostics\Tests
- */
 class TimeZone extends Test
 {
     protected $slug = 'time-zone';

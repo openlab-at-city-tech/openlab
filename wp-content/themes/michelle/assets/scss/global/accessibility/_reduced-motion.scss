@@ -1,0 +1,15 @@
+/* FILE: global/accessibility/_reduced-motion.scss */
+
+// Accessibility improvement, adapted from CSS-Tricks article code.
+// @link  https://css-tricks.com/revisiting-prefers-reduced-motion-the-reduced-motion-media-query/
+@media (prefers-reduced-motion: reduce), (update: slow) {
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0s !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0s !important;
+	}
+
+}

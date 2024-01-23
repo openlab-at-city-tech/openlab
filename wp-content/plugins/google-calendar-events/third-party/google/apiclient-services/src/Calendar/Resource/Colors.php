@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Colors as ColorsModel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $colors = $calendarService->colors;
  *  </code>
+ * @internal
  */
 class Colors extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

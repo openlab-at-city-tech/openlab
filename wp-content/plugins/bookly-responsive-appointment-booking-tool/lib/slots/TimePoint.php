@@ -3,10 +3,6 @@ namespace Bookly\Lib\Slots;
 
 use Bookly\Lib\Utils\DateTime;
 
-/**
- * Class TimePoint
- * @package Bookly\Lib\Slots
- */
 class TimePoint implements IPoint
 {
     /** @var string */

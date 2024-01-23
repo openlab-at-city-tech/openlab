@@ -1776,10 +1776,15 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
         $btn_text = $settings['ekit_icon_box_btn_text'];
         $btn_url = (! empty( $settings['ekit_icon_box_btn_url']['url'])) ? $settings['ekit_icon_box_btn_url']['url'] : '';
 
+		// Get Link  attributes
+		if ( ! empty( $settings['ekit_icon_box_global_link']['url'] ) ) {
+			$this->add_link_attributes( 'ekit_icon_box_global_link', $settings['ekit_icon_box_global_link'] );
+		}
+
         ?>
         <!-- link opening -->
         <?php if($settings['ekit_icon_box_show_global_link'] == 'yes' && $settings['ekit_icon_box_enable_btn'] != 'yes' && (!empty( $settings['ekit_icon_box_global_link']['url']))) : ?>
-        <a href="<?php echo esc_url($settings['ekit_icon_box_global_link']['url'])?>" target="<?php echo esc_attr($settings['ekit_icon_box_global_link']['is_external'] ? '_blank' : '_self');?>" rel="<?php echo esc_attr($settings['ekit_icon_box_global_link']['nofollow'] ? 'nofollow' : '');?>" class="ekit_global_links">
+        <a <?php $this->print_render_attribute_string('ekit_icon_box_global_link'); ?> class="ekit_global_links">
         <?php endif; ?>
         <!-- end link opening -->
 

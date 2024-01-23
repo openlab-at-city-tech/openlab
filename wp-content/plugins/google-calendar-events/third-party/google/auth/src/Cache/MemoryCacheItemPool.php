@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemInterface;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * Simple in-memory cache implementation.
+ * @internal
  */
 final class MemoryCacheItemPool implements CacheItemPoolInterface
 {

@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Base;
 
-/**
- * Class ValidationException
- * @package Bookly\Lib\Base
- */
 class ValidationException extends \Exception
 {
     /** @var string */

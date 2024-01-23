@@ -17,6 +17,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
+/** @internal */
 class Colors extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $calendarType = ColorDefinition::class;

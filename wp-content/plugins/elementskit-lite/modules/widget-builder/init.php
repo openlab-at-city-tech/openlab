@@ -100,8 +100,8 @@ class Init {
 			return;
 		}
 
-		wp_enqueue_style( 'google-fonts-roboto', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700', array(), null );
-		wp_enqueue_style( 'font-awesome', ELEMENTOR_ASSETS_URL . 'lib/font-awesome/css/all.min.css', array(), null );
+		wp_enqueue_style( 'google-fonts-roboto', 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700', array(), null ); // PHPCS:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion 
+		wp_enqueue_style( 'font-awesome', ELEMENTOR_ASSETS_URL . 'lib/font-awesome/css/all.min.css', array(), null ); // PHPCS:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style( 'elementskit-widget-builder-editor-css', $this->url . 'assets/css/ekit-widget-builder-editor.css', array(), \ElementsKit_Lite::version() );
 		wp_enqueue_style( 'elementskit-widget-builder-common-css', $this->url . 'assets/css/ekit-widget-builder-common.css', array(), \ElementsKit_Lite::version() );
 

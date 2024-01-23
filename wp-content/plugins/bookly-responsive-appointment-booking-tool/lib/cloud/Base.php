@@ -1,10 +1,8 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
-/**
- * Class Base
- * @package Bookly\Lib\Cloud
- */
+use Bookly\Backend\Modules\Diagnostics\Tests;
+
 abstract class Base
 {
     /** @var API */
@@ -51,5 +49,23 @@ abstract class Base
     protected function setupListeners()
     {
 
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function addTestCanIUse( array $data )
+    {
+        $data['test'] = array(
+            'data' => array(
+                'test' => 'Connections',
+                'ajax' => 'ajax',
+            ),
+            'expected' => Tests\Connections::$query,
+            'endpoint' => add_query_arg( array( 'action' => 'bookly_diagnostics_ajax' ), admin_url( 'admin-ajax.php' ) ),
+        );
+
+        return $data;
     }
 }

@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface;
+/** @internal */
 interface ProviderInterface
 {
     public function __toString() : string;

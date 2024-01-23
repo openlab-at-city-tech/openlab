@@ -6,6 +6,9 @@ $checkbox_img = plugins_url( 'frontend/resources/images/checkbox.png', \Bookly\L
 $custom_css = trim( get_option( 'bookly_app_custom_styles' ) );
 ?>
     <style type="text/css">
+        :root {
+            --bookly-main-color: <?php echo esc_attr( $color ) ?> !important;
+        }
         /* Color */
         .bookly-form .bookly-form-group > label,
         .bookly-form .bookly-label-error,

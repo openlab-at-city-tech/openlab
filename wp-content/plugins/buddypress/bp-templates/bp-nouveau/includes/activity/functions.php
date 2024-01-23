@@ -3,7 +3,7 @@
  * Activity functions
  *
  * @since 3.0.0
- * @version 8.0.0
+ * @version 12.0.0
  */
 
 // Exit if accessed directly.
@@ -87,7 +87,7 @@ function bp_nouveau_activity_localize_scripts( $params = array() ) {
 			) ),
 			'avatar_width'  => $width,
 			'avatar_height' => $height,
-			'user_domain'   => bp_loggedin_user_domain(),
+			'user_domain'   => bp_loggedin_user_url(),
 			'avatar_alt'    => sprintf(
 				/* translators: %s: member name */
 				__( 'Profile photo of %s', 'buddypress' ),
@@ -219,6 +219,7 @@ function bp_nouveau_get_activity_directory_nav_items() {
 				array( 'bp_before_activity_type_tab_favorites', 'activity', 26 ),
 			)
 		);
+		$activity_slug    = bp_nouveau_get_component_slug( 'activity' );
 
 		// If the user has favorite create a nav item
 		if ( bp_get_total_favorite_count_for_user( bp_loggedin_user_id() ) ) {
@@ -226,7 +227,7 @@ function bp_nouveau_get_activity_directory_nav_items() {
 				'component' => 'activity',
 				'slug'      => 'favorites', // slug is used because BP_Core_Nav requires it, but it's the scope
 				'li_class'  => array(),
-				'link'      => bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/favorites/',
+				'link'      => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'favorites' ) ) ),
 				'text'      => __( 'My Favorites', 'buddypress' ),
 				'count'     => false,
 				'position'  => 35,
@@ -239,7 +240,7 @@ function bp_nouveau_get_activity_directory_nav_items() {
 				'component' => 'activity',
 				'slug'      => 'friends', // slug is used because BP_Core_Nav requires it, but it's the scope
 				'li_class'  => array( 'dynamic' ),
-				'link'      => bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'friends' ) . '/',
+				'link'      =>  bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, bp_nouveau_get_component_slug( 'friends' ) ) ) ),
 				'text'      => __( 'My Friends', 'buddypress' ),
 				'count'     => '',
 				'position'  => 15,
@@ -252,7 +253,7 @@ function bp_nouveau_get_activity_directory_nav_items() {
 				'component' => 'activity',
 				'slug'      => 'groups', // slug is used because BP_Core_Nav requires it, but it's the scope
 				'li_class'  => array( 'dynamic' ),
-				'link'      => bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/' . bp_nouveau_get_component_slug( 'groups' ) . '/',
+				'link'      => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, bp_nouveau_get_component_slug( 'groups' ) ) ) ),
 				'text'      => __( 'My Groups', 'buddypress' ),
 				'count'     => '',
 				'position'  => 25,
@@ -262,8 +263,8 @@ function bp_nouveau_get_activity_directory_nav_items() {
 		// Mentions are allowed
 		if ( bp_activity_do_mentions() ) {
 			$deprecated_hooks[] = array( 'bp_before_activity_type_tab_mentions', 'activity', 36 );
+			$count              = '';
 
-			$count = '';
 			if ( bp_get_total_mention_count_for_user( bp_loggedin_user_id() ) ) {
 				$count = bp_get_total_mention_count_for_user( bp_loggedin_user_id() );
 			}
@@ -272,7 +273,7 @@ function bp_nouveau_get_activity_directory_nav_items() {
 				'component' => 'activity',
 				'slug'      => 'mentions', // slug is used because BP_Core_Nav requires it, but it's the scope
 				'li_class'  => array( 'dynamic' ),
-				'link'      => bp_loggedin_user_domain() . bp_nouveau_get_component_slug( 'activity' ) . '/mentions/',
+				'link'      => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'mentions' ) ) ),
 				'text'      => __( 'Mentions', 'buddypress' ),
 				'count'     => $count,
 				'position'  => 45,
@@ -555,3 +556,16 @@ function bp_nouveau_activity_excerpt_append_text( $read_more = '' ) {
 	return str_replace( array( '[', ']' ), '', $read_more );
 }
 add_filter( 'bp_activity_excerpt_append_text', 'bp_nouveau_activity_excerpt_append_text', 10, 1 );
+
+/**
+ * Register Activity Ajax actions.
+ *
+ * @since 12.0.0
+ */
+function bp_nouveau_register_activity_ajax_actions() {
+	$ajax_actions = array( 'activity_filter', 'get_single_activity_content', 'activity_mark_fav', 'activity_mark_unfav', 'activity_clear_new_mentions', 'delete_activity', 'new_activity_comment', 'bp_nouveau_get_activity_objects', 'post_update', 'bp_spam_activity', 'heartbeat' );
+
+	foreach ( $ajax_actions as $ajax_action ) {
+		bp_ajax_register_action( $ajax_action );
+	}
+}

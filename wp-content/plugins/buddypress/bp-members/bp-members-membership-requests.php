@@ -177,7 +177,7 @@ function bp_members_membership_requests_notify_site_admins( $signup ) {
 
 		// Bail if member opted out of receiving this email.
 		if ( 'no' === bp_get_user_meta( $admin_id, 'notification_members_membership_request', true ) ) {
-			return;
+			continue;
 		}
 
 		$unsubscribe_args = array(
@@ -376,14 +376,14 @@ add_filter( 'bp_members_ms_signup_date_sent_unsent_message', 'bp_members_members
 
 /**
  * Filter/add "Request Membership" links in the following locations:
- * - BP login widget,
+ * - BP login block widget,
  * - Sidebar register link,
  * - WP Toolbar,
  * - WP login form.
  *********************************************************************/
 
 /**
- * Add "Request Membership" link to Widget login form.
+ * Add "Request Membership" link to Block Widget login form.
  *
  * @since 10.0.0
  *
@@ -421,7 +421,7 @@ add_filter( 'register', 'bp_members_membership_requests_filter_sidebar_register_
  *
  * @since 10.0.0
  *
- * @param WP_Admin_Bar $wp_admin_bar WP_Admin_Bar instance, passed by reference
+ * @param WP_Admin_Bar $wp_admin_bar WordPress object implementing a Toolbar API.
  */
 function bp_members_membership_requests_add_toolbar_link( $wp_admin_bar ) {
 	if ( is_user_logged_in() ) {

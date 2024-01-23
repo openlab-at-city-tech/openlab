@@ -8,7 +8,6 @@ use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
  * Creates a Widget of parent Child Categories
  *
  * @author  OnPoint Plugins
- * @since   7.0.0
  *
  * @package Advanced Sidebar Menu
  */
@@ -52,9 +51,10 @@ class Category extends Widget_Abstract {
 			'description'           => __( 'Creates a menu of all the categories using the parent/child relationship', 'advanced-sidebar-menu' ),
 			'show_instance_in_rest' => true,
 		];
-		$control_ops = [
-			'width' => wp_is_mobile() ? false : 620,
-		];
+		$control_ops = [];
+		if ( ! wp_is_mobile() ) {
+			$control_ops['width'] = 620;
+		}
 
 		parent::__construct( static::NAME, __( 'Advanced Sidebar - Categories', 'advanced-sidebar-menu' ), $widget_ops, $control_ops );
 
@@ -91,17 +91,20 @@ class Category extends Widget_Abstract {
 	 *
 	 * For adjusting widget option labels.
 	 *
+	 * @since 8.2.0
+	 *
 	 * @param array $instance - Widget settings.
 	 * @param bool  $single   - Singular label or plural.
 	 *
-	 * @since 8.2.0
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	public function get_taxonomy_label( $instance, $single = true ) {
+	public function get_taxonomy_label( array $instance, $single = true ): string {
 		$taxonomy = get_taxonomy( apply_filters( 'advanced-sidebar-menu/widget/category/taxonomy-for-label', 'category', $this->control_options, $instance ) );
-		if ( empty( $taxonomy ) ) {
-			$taxonomy = get_taxonomy( 'category' ); // Sensible fallback.
+		if ( false === $taxonomy ) {
+			$taxonomy = get_taxonomy( 'category' );// Sensible fallback.
+			if ( false === $taxonomy ) {
+				return $single ? __( 'Category', 'advanced-sidebar-menu' ) : __( 'Categories', 'advanced-sidebar-menu' );
+			}
 		}
 
 		return $single ? $taxonomy->labels->singular_name : $taxonomy->labels->name;
@@ -176,7 +179,7 @@ class Category extends Widget_Abstract {
 								?>
 								<option
 									value="<?php echo esc_attr( (string) $i ); ?>" <?php selected( $i, (int) $instance[ static::LEVELS ] ); ?>>
-									<?php echo (int) $i; ?>
+									<?php echo \absint( $i ); ?>
 								</option>
 								<?php
 							}
@@ -334,7 +337,7 @@ class Category extends Widget_Abstract {
 	 * @param array $new_instance - New widget settings.
 	 * @param array $old_instance - Old widget settings.
 	 *
-	 * @return array|mixed
+	 * @return array
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$new_instance['exclude'] = wp_strip_all_tags( $new_instance['exclude'] );
@@ -361,5 +364,4 @@ class Category extends Widget_Abstract {
 
 		do_action( 'advanced-sidebar-menu/widget/after-render', $menu, $this );
 	}
-
 }

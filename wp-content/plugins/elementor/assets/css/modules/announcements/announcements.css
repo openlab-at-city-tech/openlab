@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   padding: 16px 32px;
-  border-bottom: var(--e-a-border);
+  border-block-end: var(--e-a-border);
 }
 #e-announcements-root .announcements-container .announcements-heading-container .eicon-elementor {
   color: var(--e-a-color-logo);
@@ -61,7 +61,7 @@
   font-size: 18px;
   font-weight: 700;
   color: var(--e-a-color-txt-accent);
-  padding-bottom: 15px;
+  padding-block-end: 15px;
 }
 #e-announcements-root .announcements-container .announcement-body-container .announcement-body-content .announcement-body-description {
   font-size: 16px;
@@ -70,15 +70,15 @@
   color: var(--e-a-color-txt);
 }
 #e-announcements-root .announcements-container .announcement-body-container .announcement-body-content p {
-  margin-bottom: 15px;
+  margin-block-end: 15px;
 }
 #e-announcements-root .announcements-container .announcement-body-container .announcement-body-content ul {
-  margin-left: 20px;
-  margin-bottom: 15px;
+  margin-inline-start: 20px;
+  margin-block-end: 15px;
 }
 #e-announcements-root .announcements-container .announcement-body-container .announcement-body-content li {
   list-style: disc;
-  margin-bottom: 5px;
+  margin-block-end: 5px;
 }
 #e-announcements-root .announcements-container .announcement-footer-container {
   display: flex;
@@ -87,7 +87,6 @@
 }
 #e-announcements-root .announcements-container .announcement-footer-container .button-item {
   margin-inline-start: 12px;
-  text-transform: uppercase;
   padding: 8px 16px;
   outline: none;
   border: none;

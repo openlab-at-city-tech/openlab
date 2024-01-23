@@ -20,6 +20,7 @@ use Throwable;
  * As soon as one handler handles a record successfully, the handling stops there.
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class FallbackGroupHandler extends GroupHandler
 {

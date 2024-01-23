@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Frontend\Modules\Booking\Lib;
 
-/**
- * Class Steps
- *
- * @package Bookly\Frontend\Modules\Booking\Lib
- */
 class Steps
 {
     const SERVICE = 1;

@@ -47,7 +47,7 @@ class Pages extends Block_Abstract {
 	 *
 	 * English and translated so both will be searchable.
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	public function get_keywords() {
 		return [
@@ -106,5 +106,4 @@ class Pages extends Block_Abstract {
 	protected function get_widget_class() {
 		return new Page();
 	}
-
 }

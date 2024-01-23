@@ -32,6 +32,7 @@ use SimpleCalendar\plugin_deps\Elastica\Exception\ExceptionInterface;
  *    $log->pushHandler($handler);
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
+ * @internal
  */
 class ElasticaHandler extends AbstractProcessingHandler
 {

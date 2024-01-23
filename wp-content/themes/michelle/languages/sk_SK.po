@@ -1,0 +1,2554 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Michelle\n"
+"Report-Msgid-Bugs-To: https://support.webmandesign.eu\n"
+"POT-Creation-Date: 2023-08-14 06:55+0200\n"
+"PO-Revision-Date: 2023-08-14 06:55+0200\n"
+"Last-Translator: Oliver Juhas, WebMan Design\n"
+"Language-Team: WebMan Design\n"
+"Language: sk_SK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#. translators: 1: title.
+#: comments.php:49
+#, php-format
+msgid "One thought on &ldquo;%1$s&rdquo;"
+msgstr "Jeden komentár k &ldquo;%1$s&rdquo;"
+
+#. translators: 1: comment count number, 2: title.
+#: comments.php:55
+#, php-format
+msgctxt "Comments list title."
+msgid "%1$d thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$d thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] "%1$d komentár k &ldquo;%2$s&rdquo;"
+msgstr[1] "%1$d komentáre k &ldquo;%2$s&rdquo;"
+msgstr[2] "%1$d komentárov k &ldquo;%2$s&rdquo;"
+
+#: comments.php:85
+msgid "Comments are closed."
+msgstr "Komentáre sú uzavreté."
+
+#. translators: %s: menu item label.
+#: includes/Accessibility/Component.php:89
+#, php-format
+msgid "Collapse menu: %s"
+msgstr "Zbaliť menu: %s"
+
+#. translators: %s: menu item label.
+#: includes/Accessibility/Component.php:91
+#, php-format
+msgid "Expand menu: %s"
+msgstr "Rozbaliť menu: %s"
+
+#: includes/Accessibility/Component.php:158
+#: templates/parts/accessibility/menu-skip-links.php:25
+msgid "Skip to main content"
+msgstr "Preskočiť na hlavný obsah"
+
+#: includes/Accessibility/Component.php:209
+msgid "Skip back to main navigation"
+msgstr "Preskočiť späť na hlavnú navigáciu"
+
+#. translators: 1: required WP version number, 2: available WP version number
+#: includes/Compatibility.php:56
+#, php-format
+msgid ""
+"This theme requires at least WordPress version %1$s. You are running version "
+"%2$s."
+msgstr "Táto téma vyžaduje aspoň WordPress verzie %1$s. Používate verziu %2$s."
+
+#. translators: 1: required PHP version number, 2: available PHP version number
+#: includes/Compatibility.php:65
+#, php-format
+msgid ""
+"This theme requires at least PHP version %1$s. You are running version %2$s."
+msgstr "Táto téma vyžaduje aspoň PHP verzie %1$s. Používate verziu %2$s."
+
+#: includes/Compatibility.php:72
+msgid "Please upgrade and try again."
+msgstr "Aktualizujte a skúste to znova."
+
+#: includes/Content/Block_Patterns.php:234
+msgctxt "Block pattern category label."
+msgid "Call to Action"
+msgstr "Výzva k akcii"
+
+#: includes/Content/Block_Patterns.php:235
+msgctxt "Block pattern category label."
+msgid "Contact"
+msgstr "Kontakt"
+
+#: includes/Content/Block_Patterns.php:236
+msgctxt "Block pattern category label."
+msgid "Cover"
+msgstr "Titulka"
+
+#: includes/Content/Block_Patterns.php:237
+msgctxt "Block pattern category label."
+msgid "Lists"
+msgstr "Zoznamy"
+
+#: includes/Content/Block_Patterns.php:238
+msgctxt "Block pattern category label."
+msgid "Media and Text"
+msgstr "Médiá a text"
+
+#: includes/Content/Block_Patterns.php:239
+msgctxt "Block pattern category label."
+msgid "Numbers"
+msgstr "Čísla"
+
+#: includes/Content/Block_Patterns.php:240
+msgctxt "Block pattern category label."
+msgid "Posts"
+msgstr "Príspevky"
+
+#: includes/Content/Block_Patterns.php:241
+msgctxt "Block pattern category label."
+msgid "Prices"
+msgstr "Ceny"
+
+#: includes/Content/Block_Patterns.php:242
+msgctxt "Block pattern category label."
+msgid "Question and Answer"
+msgstr "Otázka a odpoveď"
+
+#: includes/Content/Block_Patterns.php:243
+msgctxt "Block pattern category label."
+msgid "Quotes"
+msgstr "Citácie"
+
+#: includes/Content/Block_Patterns.php:244
+msgctxt "Website. Block pattern category label."
+msgid "Site"
+msgstr "Webstránka"
+
+#: includes/Content/Block_Patterns.php:245
+msgctxt "Block pattern category label."
+msgid "Team"
+msgstr "Tím"
+
+#: includes/Content/Block_Patterns.php:262
+msgctxt "Block pattern category label."
+msgid "Michelle theme"
+msgstr "Téma Michelle"
+
+#: includes/Content/Block_Styles.php:101
+msgctxt "Block style label."
+msgid "Single column: align left"
+msgstr "Jediný stĺpec: zarovnať doľava"
+
+#: includes/Content/Block_Styles.php:107
+msgctxt "Block style label."
+msgid "Single column: align right"
+msgstr "Jediný stĺpec: zarovnať doprava"
+
+#: includes/Content/Block_Styles.php:114
+msgctxt "Block style label."
+msgid "Double-line"
+msgstr "Dvojitá čiara"
+
+#: includes/Content/Block_Styles.php:121
+msgctxt "Block style label."
+msgid "Double-line wide"
+msgstr "Široká dvojitá čiara"
+
+#: includes/Content/Block_Styles.php:128
+msgctxt "Block style label."
+msgid "Drop shadow"
+msgstr "Tieň"
+
+#: includes/Content/Block_Styles.php:141
+msgctxt "Block style label."
+msgid "Has padding"
+msgstr "Vnútorné odsadenie"
+
+#: includes/Content/Block_Styles.php:148
+msgctxt "Block style label."
+msgid "Hide on tablet"
+msgstr "Skryť na tablete"
+
+#: includes/Content/Block_Styles.php:155
+msgctxt "Block style label."
+msgid "Inner shadow"
+msgstr "Vnútorný tieň"
+
+#: includes/Content/Block_Styles.php:164
+msgctxt "Block style label."
+msgid "Media on top"
+msgstr "Médiá hore"
+
+#: includes/Content/Block_Styles.php:171
+msgctxt "Block style label."
+msgid "No gaps"
+msgstr "Žiadne medzery"
+
+#: includes/Content/Block_Styles.php:180
+msgctxt "Block style label."
+msgid "No vertical gap"
+msgstr "Žiadna vertikálna medzera"
+
+#: includes/Content/Block_Styles.php:202
+msgctxt "Block style label."
+msgid "Overlap gradient"
+msgstr "Postupné prekrytie"
+
+#: includes/Content/Block_Styles.php:209
+msgctxt "Block style label."
+msgid "Padding left"
+msgstr "Odsadenie vľavo"
+
+#: includes/Content/Block_Styles.php:215
+msgctxt "Block style label."
+msgid "Padding right"
+msgstr "Odsadenie vpravo"
+
+#: includes/Content/Block_Styles.php:222
+msgctxt "Block style label."
+msgid "Scale image"
+msgstr "Prispôsobiť veľkosť obrázka"
+
+#: includes/Content/Block_Styles.php:229
+msgctxt "Block style label."
+msgid "Accessibly hidden"
+msgstr "Prístupne skrytý"
+
+#: includes/Content/Block_Styles.php:236
+msgctxt "Block style label."
+msgid "Simple"
+msgstr "Jednoduchý"
+
+#: includes/Content/Block_Styles.php:243
+msgctxt "Block style label."
+msgid "Stack on tablet"
+msgstr "Naskladať na tablete"
+
+#: includes/Content/Block_Styles.php:251
+msgctxt "Block style label."
+msgid "Dark text shadow"
+msgstr "Tmavý tieň textu"
+
+#: includes/Content/Block_Styles.php:259
+msgctxt "Block style label."
+msgid "Light text shadow"
+msgstr "Svetlý tieň textu"
+
+#: includes/Content/Block_Styles.php:267
+msgctxt "Block style label."
+msgid "Uppercase"
+msgstr "Veľké písmená"
+
+#: includes/Content/Block_Styles.php:275
+msgctxt "Block style label."
+msgid "Variable"
+msgstr "Variabilná"
+
+#: includes/Content/Block_Styles.php:282
+msgctxt "Block style label."
+msgid "Zig-zag"
+msgstr "Cik-cak"
+
+#: includes/Content/Block_Styles.php:289
+msgctxt "Block style label."
+msgid "Zig-zag wide"
+msgstr "Široký cik-cak"
+
+#. translators: Paginated content title suffix. %d: page number.
+#: includes/Content/Component.php:126
+#, php-format
+msgid "(page %d)"
+msgstr "(strana %d)"
+
+#: includes/Content/Starter.php:128
+msgctxt "Theme starter content"
+msgid "Home"
+msgstr "Úvod"
+
+#: includes/Content/Starter.php:141 includes/Content/Starter.php:195
+msgctxt "Theme starter content"
+msgid "About"
+msgstr "O nás"
+
+#: includes/Content/Starter.php:149 includes/Content/Starter.php:202
+msgctxt "Theme starter content"
+msgid "Services"
+msgstr "Služby"
+
+#: includes/Content/Starter.php:157 includes/Content/Starter.php:209
+msgctxt "Theme starter content"
+msgid "FAQ"
+msgstr "Otázky"
+
+#: includes/Content/Starter.php:165 includes/Content/Starter.php:216
+msgctxt "Theme starter content"
+msgid "Contact"
+msgstr "Kontakt"
+
+#: includes/Content/Starter.php:189
+msgctxt "Theme starter content"
+msgid "Primary Menu"
+msgstr "Primárne menu"
+
+#: includes/Content/Starter.php:223
+msgctxt "Theme starter content"
+msgid "Blog"
+msgstr "Blog"
+
+#: includes/Content/Starter.php:230
+msgctxt "Theme starter content."
+msgid "Demo website"
+msgstr "Demo webstránka"
+
+#: includes/Content/Starter.php:235
+msgctxt "Theme starter content."
+msgid "User manual"
+msgstr "Príručka pre používateľov"
+
+#: includes/Content/Starter.php:344
+msgctxt "Demo text."
+msgid "Some text"
+msgstr "Nejaký text"
+
+#: includes/Content/Starter.php:345
+msgctxt "Demo text."
+msgid "Just a short sentence"
+msgstr "Len krátka vetička"
+
+#: includes/Content/Starter.php:346
+msgctxt "Demo text."
+msgid "Write your own copy text here"
+msgstr "Sem si napíšte vlastný text"
+
+#: includes/Content/Starter.php:347
+msgctxt "Demo text."
+msgid "This is just a demo text you should overwrite"
+msgstr "Toto je len demo text, ktorý by ste mali prepísať"
+
+#: includes/Content/Starter.php:350
+msgctxt "Demo text."
+msgid "This is title"
+msgstr "Som nadpis"
+
+#: includes/Content/Starter.php:351
+msgctxt "Demo text."
+msgid "Write some title text here"
+msgstr "Napíšte sem text nadpisu"
+
+#: includes/Content/Starter.php:352
+msgctxt "Demo text."
+msgid "The ideal length of the title text in here should be maybe a bit longer"
+msgstr "Ideálna dĺžka textu nadpisu by tu mala byť možno o niečo dlhšia"
+
+#: includes/Content/Starter.php:356
+msgctxt "Demo text."
+msgid "123 Street Name<br>Cityname, 56789<br>COUNTRY"
+msgstr "Názov Ulice 123<br>Názovmesta, 56789<br>KRAJINA"
+
+#: includes/Content/Starter.php:357
+msgctxt "Demo text."
+msgid "example@example.com"
+msgstr "priklad@priklad.sk"
+
+#: includes/Content/Starter.php:358
+msgctxt "Demo text."
+msgid "+1 (123) 456-7890"
+msgstr "+421 (900) 123 456"
+
+#: includes/Content/Starter.php:362
+msgctxt "Demo text."
+msgid "10:30 am on Monday, July 1, 2021"
+msgstr "10:30 v pondelok 1. júla 2021"
+
+#: includes/Content/Starter.php:363
+msgctxt "Demo text. Week days."
+msgid "Mon - Fri"
+msgstr "Po - Pi"
+
+#: includes/Content/Starter.php:364
+msgctxt "Demo text. Weekend days."
+msgid "Sat - Sun"
+msgstr "So - Ne"
+
+#: includes/Content/Starter.php:365
+msgctxt "Demo text."
+msgid "Monday"
+msgstr "Pondelok"
+
+#: includes/Content/Starter.php:366
+msgctxt "Demo text."
+msgid "Tuesday"
+msgstr "Utorok"
+
+#: includes/Content/Starter.php:367
+msgctxt "Demo text."
+msgid "Wednesday"
+msgstr "Streda"
+
+#: includes/Content/Starter.php:368
+msgctxt "Demo text."
+msgid "Thursday"
+msgstr "Štvrtok"
+
+#: includes/Content/Starter.php:369
+msgctxt "Demo text."
+msgid "Friday"
+msgstr "Piatok"
+
+#: includes/Content/Starter.php:370
+msgctxt "Demo text."
+msgid "Saturday"
+msgstr "Sobota"
+
+#: includes/Content/Starter.php:371
+msgctxt "Demo text."
+msgid "Sunday"
+msgstr "Nedeľa"
+
+#: includes/Content/Starter.php:375
+msgctxt "Demo text."
+msgid "Name Surname"
+msgstr "Meno Priezvisko"
+
+#: includes/Content/Starter.php:376
+msgctxt "Demo text. A job title."
+msgid "Designer"
+msgstr "Dizajnér"
+
+#: includes/Content/Starter.php:380
+msgctxt "Demo text. Image alt text."
+msgid "Image alternative description text"
+msgstr "Text alternatívneho popisu obrázka"
+
+#: includes/Content/Starter.php:381
+msgctxt "Demo text. Button label."
+msgid "Click here →"
+msgstr "Kliknite sem →"
+
+#: includes/Content/Starter.php:382
+msgctxt "Demo text. Price."
+msgid "$19"
+msgstr "19 €"
+
+#: includes/Customize/Control/HTML.php:56
+msgid "Please set the `content` parameter for the HTML control."
+msgstr "Nastavte parameter `content` pre pole HTML."
+
+#: includes/Customize/Control/Multiselect.php:127
+msgid "Press CTRL key for multiple selection."
+msgstr "Pridržte klávesu CTRL pre viacnásobnú voľbu."
+
+#: includes/Customize/Custom_Logo.php:77
+msgid "Logo variation: light"
+msgstr "Variácia loga: svetlé"
+
+#: includes/Customize/Custom_Logo.php:78
+msgid "This logo image will be displayed in overlaid header with light color."
+msgstr "Tento obrázok loga sa zobrazí v prekrytej hlavičke svetlej farby."
+
+#: includes/Customize/Custom_Logo.php:86 includes/Customize/Custom_Logo.php:91
+#: includes/Customize/Custom_Logo.php:132
+#: includes/Customize/Custom_Logo.php:137
+msgid "Select logo"
+msgstr "Vybrať logo"
+
+#: includes/Customize/Custom_Logo.php:87 includes/Customize/Custom_Logo.php:133
+msgid "Change logo"
+msgstr "Zmeniť logo"
+
+#: includes/Customize/Custom_Logo.php:88 includes/Customize/Custom_Logo.php:134
+msgid "Remove"
+msgstr "Odstrániť"
+
+#: includes/Customize/Custom_Logo.php:89 includes/Customize/Custom_Logo.php:135
+msgid "Default"
+msgstr "Pôvodná"
+
+#: includes/Customize/Custom_Logo.php:90 includes/Customize/Custom_Logo.php:136
+msgid "No logo selected"
+msgstr "Logo nebolo vybrané"
+
+#: includes/Customize/Custom_Logo.php:92 includes/Customize/Custom_Logo.php:138
+msgid "Choose logo"
+msgstr "Zvoliť logo"
+
+#: includes/Customize/Custom_Logo.php:123
+msgid "Logo variation: dark"
+msgstr "Variácia loga: tmavé"
+
+#: includes/Customize/Custom_Logo.php:124
+msgid "This logo image will be displayed in overlaid header with dark color."
+msgstr "Tento obrázok loga sa zobrazí v prekrytej hlavičke tmavej farby."
+
+#: includes/Customize/Options.php:149
+msgctxt "Variable image height."
+msgid "variable height"
+msgstr "variabilná výška"
+
+#: includes/Customize/Options.php:151
+#: templates/parts/admin/media-image-sizes.php:59
+msgid "cropped"
+msgstr "orezaný"
+
+#: includes/Customize/Options.php:151
+#: templates/parts/admin/media-image-sizes.php:59
+msgid "scaled"
+msgstr "zmenšený"
+
+#: includes/Customize/Options.php:163
+msgid "&mdash; no block"
+msgstr "&mdash; žiadny blok"
+
+#: includes/Customize/Options.php:183
+msgid "Max logo image height (px)"
+msgstr "Maximálna výška obrázka loga (px)"
+
+#: includes/Customize/Options.php:184
+msgid "Do not forget to set the logo max height."
+msgstr "Nezabudnite nastaviť maximálnu výšku loga."
+
+#: includes/Customize/Options.php:184
+msgid "Upload twice as big image to make your logo ready for high DPI screens."
+msgstr ""
+"Nahrajte dvakrát tak veľký obrázok, aby bolo logo pripravené pre obrazovky s "
+"vysokým DPI."
+
+#: includes/Customize/Options.php:211
+msgid "Display site title & tagline"
+msgstr "Zobraziť názov a slogan stránky"
+
+#: includes/Customize/Options.php:212
+msgid ""
+"Tagline longer than 40 characters gets accessibly hidden automatically on "
+"your live website."
+msgstr "Slogan dlhší ako 40 znakov bude automaticky skrytý."
+
+#: includes/Customize/Options.php:224
+msgid "Site title position"
+msgstr "Pozícia názvu stránky"
+
+#: includes/Customize/Options.php:227
+msgid "First item in header"
+msgstr "Prvá položka v hlavičke"
+
+#: includes/Customize/Options.php:228
+msgid "Last item in header"
+msgstr "Posledná položka v hlavičke"
+
+#: includes/Customize/Options.php:242 includes/Customize/Options.php:275
+#: includes/Customize/Options.php:333 includes/Customize/Options.php:403
+#: includes/Customize/Options.php:493 includes/Customize/Options.php:550
+#: includes/Customize/Options.php:630 includes/Customize/Options.php:703
+#: includes/Customize/Options.php:882 includes/Customize/Options.php:910
+#: includes/Loop/Featured_Posts.php:261 includes/Tool/Page_Builder.php:126
+msgctxt "Customizer panel title."
+msgid "Theme Options"
+msgstr "Nastavenia témy"
+
+#: includes/Customize/Options.php:243
+msgid "Theme Credits"
+msgstr "O téme"
+
+#. translators: 1: linked theme name, 2: theme author name.
+#: includes/Customize/Options.php:247
+#, php-format
+msgid "%1$s is a WordPress theme developed by %2$s."
+msgstr "%1$s je WordPress téma vytvorená spoločnosťou %2$s."
+
+#. translators: %s: theme author link.
+#: includes/Customize/Options.php:255
+#, php-format
+msgid "You can obtain other professional WordPress themes at %s."
+msgstr "Ďalšie profesionálne WordPress témy môžete získať na %s."
+
+#: includes/Customize/Options.php:260
+msgid "Thank you for using a theme by WebMan Design!"
+msgstr "Ďakujeme, že používate tému od WebMan Design!"
+
+#. translators: Customizer section title. %s = section name.
+#: includes/Customize/Options.php:272 includes/Customize/Options.php:330
+#: includes/Customize/Options.php:400 includes/Customize/Options.php:490
+#: includes/Customize/Options.php:547
+#, php-format
+msgid "Colors: %s"
+msgstr "Farby: %s"
+
+#: includes/Customize/Options.php:273
+msgctxt "Customizer color section title"
+msgid "General"
+msgstr "Všeobecné"
+
+#: includes/Customize/Options.php:281 includes/Customize/Options.php:380
+#: includes/Customize/Options.php:432 includes/Customize/Options.php:470
+#: includes/Customize/Options.php:513
+msgid "Text color"
+msgstr "Farba textu"
+
+#: includes/Customize/Options.php:295
+msgid "Headings color"
+msgstr "Farba nadpisov"
+
+#: includes/Customize/Options.php:310
+msgid "Decorative border color"
+msgstr "Farba dekoratívneho okraja"
+
+#: includes/Customize/Options.php:331
+msgctxt "Customizer color section title"
+msgid "Accents"
+msgstr "Akcentované"
+
+#: includes/Customize/Options.php:339 includes/Customize/Options.php:350
+msgid "Accent color"
+msgstr "Akcentovaná farba"
+
+#: includes/Customize/Options.php:360
+msgid "Button"
+msgstr "Tlačidlo"
+
+#: includes/Customize/Options.php:366 includes/Customize/Options.php:418
+#: includes/Customize/Options.php:456 includes/Customize/Options.php:499
+msgid "Background color"
+msgstr "Farba pozadia"
+
+#: includes/Customize/Options.php:401
+msgctxt "Customizer color section title"
+msgid "Header"
+msgstr "Záhlavie"
+
+#: includes/Customize/Options.php:411
+msgid "Site navigation"
+msgstr "Navigácia webstránky"
+
+#: includes/Customize/Options.php:412
+msgid "Primary menu location sub-menu colors."
+msgstr "Farby vnoreného menu primárneho menu umiestnenia."
+
+#: includes/Customize/Options.php:449
+msgid "Search form"
+msgstr "Formulár vyhľadávania"
+
+#: includes/Customize/Options.php:450
+msgid "Pop-up search form colors."
+msgstr "Farby vyskakovacieho formulára vyhľadávania."
+
+#: includes/Customize/Options.php:491
+msgctxt "Customizer color section title"
+msgid "Footer"
+msgstr "Pätka"
+
+#: includes/Customize/Options.php:527
+msgid "Link color"
+msgstr "Farba odkazu"
+
+#: includes/Customize/Options.php:548
+msgctxt "Customizer color section title"
+msgid "Editor palette"
+msgstr "Paleta editora"
+
+#: includes/Customize/Options.php:555
+msgid ""
+"Accent color is also being conveniently added into editor color palette for "
+"you, so you don't need to duplicate it here."
+msgstr ""
+"Do palety editora bude automaticky pridaná aj farba akcentu, takže ju nie je "
+"nutné duplikovať v týchto nastaveniach."
+
+#. translators: Editor palette color label. %d: color number.
+#: includes/Customize/Options.php:563 includes/Customize/Options.php:584
+#: includes/Customize/Options.php:605
+#, php-format
+msgid "Palette color %d"
+msgstr "Paletová farba %d"
+
+#: includes/Customize/Options.php:629
+msgctxt "Customizer section title."
+msgid "Layout"
+msgstr "Rozloženie"
+
+#: includes/Customize/Options.php:638
+msgctxt "A website container."
+msgid "Site Container"
+msgstr "Kontajner webovej stránky"
+
+#: includes/Customize/Options.php:644
+msgid "Content width"
+msgstr "Šírka obsahu"
+
+#: includes/Customize/Options.php:646 includes/Customize/Options.php:672
+#: includes/Customize/Options.php:798 includes/Customize/Options.php:811
+#: includes/Customize/Options.php:824 includes/Customize/Options.php:837
+msgid "Default value:"
+msgstr "Predvolená hodnota:"
+
+#: includes/Customize/Options.php:648
+msgid "This width is applied on archive pages, wide-aligned blocks&hellip;"
+msgstr "Táto šírka sa aplikuje na stránky archívov, na široké bloky&hellip;"
+
+#: includes/Customize/Options.php:670
+msgid "Entry content width"
+msgstr "Šírka obsahu stránky"
+
+#: includes/Customize/Options.php:674
+msgid "This width is applied on post and page actual content elements."
+msgstr "Táto šírka sa aplikuje na samotné prvky obsahu stránky."
+
+#: includes/Customize/Options.php:676
+msgid "Set this cautiously for the best readability."
+msgstr "Nastavte ju s ohľadom na najlepšiu čitateľnosť."
+
+#: includes/Customize/Options.php:702
+msgctxt "Customizer section title."
+msgid "Typography"
+msgstr "Písmo"
+
+#: includes/Customize/Options.php:709
+msgid "Basic font size in px"
+msgstr "Základná veľkosť písma v px"
+
+#: includes/Customize/Options.php:710
+msgid ""
+"All other font sizes are calculated automatically from this basic font size."
+msgstr ""
+"Všetky ostatné veľkosti písma budú automaticky vypočítané z tejto základnej "
+"hodnoty."
+
+#: includes/Customize/Options.php:732
+msgid "Header font size in px"
+msgstr "Veľkosť písma hlavičky v px"
+
+#: includes/Customize/Options.php:754
+msgid "Footer font size in px"
+msgstr "Veľkosť písma pätičky v px"
+
+#: includes/Customize/Options.php:778
+msgid "Font families setup"
+msgstr "Nastavenie typov písma"
+
+#. translators: %s: customizer option values.
+#: includes/Customize/Options.php:783
+#, php-format
+msgid "Values of %s set web safe system font families."
+msgstr ""
+"Hodnoty %s nastavia typy písma bezpečne použiteľné na webových stránkach."
+
+#: includes/Customize/Options.php:788
+msgid "You can use any Google Fonts with this theme."
+msgstr "S touto témou môžete použiť akýkoľvek z Google Fonts."
+
+#: includes/Customize/Options.php:790
+msgid ""
+"Just input the Google Fonts font family name into the fields below, choose "
+"language, and you are done!"
+msgstr ""
+"Jednoducho do poľa zadajte názov typu písma Google Fonts, zvoľte jazyk a ste "
+"hotoví!"
+
+#: includes/Customize/Options.php:797
+msgid "Global font"
+msgstr "Globálny typ písma"
+
+#: includes/Customize/Options.php:810
+msgid "Headings font"
+msgstr "Písmo nadpisov"
+
+#: includes/Customize/Options.php:823
+msgid "Site title font"
+msgstr "Typ písma názvu stránky"
+
+#: includes/Customize/Options.php:836
+msgid "Alternative font"
+msgstr "Alternatívne písmo"
+
+#: includes/Customize/Options.php:837
+msgid "Used for quotes, for example."
+msgstr "Používa sa napríklad v citáciách."
+
+#: includes/Customize/Options.php:850
+msgid "Enable theme Google Fonts loading"
+msgstr "Povoliť načítavanie Google Fonts témou"
+
+#: includes/Customize/Options.php:851
+msgid "In case you are loading fonts via plugin, disable this option."
+msgstr ""
+"V prípade, že načítavate typy písma pomocou pluginu, vypnite túto možnosť."
+
+#: includes/Customize/Options.php:857
+msgid "Languages"
+msgstr "Jazyky"
+
+#: includes/Customize/Options.php:859
+msgid "Not all Google Fonts support all languages."
+msgstr "Nie všetky Google Fonts podporujú všetky jazyky."
+
+#: includes/Customize/Options.php:861
+msgid "Please check on Google Fonts website to make sure."
+msgstr "Skontrolujte podporu na stránkach Google Fonts."
+
+#: includes/Customize/Options.php:864
+msgid "Latin"
+msgstr "Latinka"
+
+#: includes/Customize/Options.php:865
+msgid "Latin Extended"
+msgstr "Rozšírená latinka"
+
+#: includes/Customize/Options.php:866
+msgid "Cyrillic"
+msgstr "Cyrilika"
+
+#: includes/Customize/Options.php:867
+msgid "Cyrillic Extended"
+msgstr "Rozšírená cyrilika"
+
+#: includes/Customize/Options.php:868
+msgid "Greek"
+msgstr "Gréčtina"
+
+#: includes/Customize/Options.php:869
+msgid "Greek Extended"
+msgstr "Rozšírená gréčtina"
+
+#: includes/Customize/Options.php:870
+msgid "Vietnamese"
+msgstr "Vietnamčina"
+
+#: includes/Customize/Options.php:881
+msgctxt "Customizer section title."
+msgid "Posts"
+msgstr "Príspevky"
+
+#: includes/Customize/Options.php:888
+msgid "Post thumbnail aspect ratio"
+msgstr "Pomer strán prezentačného obrázka príspevku"
+
+#: includes/Customize/Options.php:889
+msgid ""
+"Note that if you already have images uploaded to your website, you need to "
+"regenerate their sizes to apply this change."
+msgstr ""
+"Upozorňujeme, že ak už máte obrázky na webstránke nahrané, musíte "
+"regenerovať ich veľkosti, aby sa táto zmena aplikovala."
+
+#: includes/Customize/Options.php:889
+msgid "You can use a plugin for that &rarr;"
+msgstr "Môžete na to využiť plugin &rarr;"
+
+#: includes/Customize/Options.php:889
+msgid "(This option can not be previewed here, only on your live website.)"
+msgstr ""
+"(Náhľad tohto nastavenia je možné prezrieť iba na živej webstránke, nie tu.)"
+
+#: includes/Customize/Options.php:892
+msgid "Keep original image aspect ratio"
+msgstr "Zachovať pôvodný pomer strán obrázka"
+
+#: includes/Customize/Options.php:909
+msgctxt "Customizer section title."
+msgid "Others"
+msgstr "Ostatné"
+
+#: includes/Customize/Options.php:916
+msgid "Show \"Welcome\" page"
+msgstr "Zobraziť stránku \"Vitajte\""
+
+#: includes/Customize/Options.php:917
+msgid "Under \"Appearance\" WordPress dashboard menu."
+msgstr "V administračnom menu \"Vzhľad\"."
+
+#: includes/Customize/Options.php:925
+msgid "Enable mobile navigation"
+msgstr "Povoliť mobilnú navigáciu"
+
+#: includes/Customize/Options.php:926
+msgid ""
+"If your website navigation is very simple and you do not want to use the "
+"mobile navigation functionality, you can disable it here."
+msgstr ""
+"V prípade, že je navigácia vašej webstránky veľmi jednoduchá, je možné "
+"vypnúť funkcionalitu mobilnej navigácie."
+
+#: includes/Customize/Options.php:933
+msgid "Enable sticky header on small screens"
+msgstr "Povoliť prilepovaciu hlavičku na malých obrazovkách"
+
+#: includes/Customize/Options.php:934
+msgid ""
+"When visitor scrolls up on small screens site header appears immediately."
+msgstr ""
+"Keď sa návštevník posunie na stránke nahor, na malých obrazovkách sa ihneď "
+"zobrazí hlavička webstránky."
+
+#: includes/Customize/Options.php:940
+msgid "Content"
+msgstr "Obsah"
+
+#: includes/Customize/Options.php:942
+msgid ""
+"Create and edit your content with block editor in Reusable Blocks manager."
+msgstr ""
+"Vytvorte alebo upravte obsah editorom blokov v správcovi opakovane "
+"použiteľných blokov."
+
+#: includes/Customize/Options.php:944
+msgid "Open Reusable Blocks manager in a new window now &rarr;"
+msgstr "Otvoriť správcu opakovane použiteľných blokov v novom okne &rarr;"
+
+#: includes/Customize/Options.php:946
+msgid "Then assign created reusable blocks for display below."
+msgstr ""
+"Následne zobrazte vytvorené opakovane použiteľné bloky priradením nižšie."
+
+#: includes/Customize/Options.php:952
+msgid "Footer content"
+msgstr "Obsah pätičky"
+
+#: includes/Customize/Options.php:961
+msgid "Error 404 content"
+msgstr "Obsah chyby 404"
+
+#: includes/Entry/Component.php:244
+msgctxt "Added to posts and pages that are missing titles."
+msgid "Untitled"
+msgstr "Bez názvu"
+
+#. translators: %s: Custom post type singular label.
+#: includes/Entry/Navigation.php:95
+#, php-format
+msgid "Previous %s"
+msgstr "Predchádzajúci %s"
+
+#. translators: %s: Custom post type singular label.
+#: includes/Entry/Navigation.php:102
+#, php-format
+msgid "Next %s"
+msgstr "Nasledujúci %s"
+
+#: includes/Entry/Navigation.php:109
+msgid "Published in"
+msgstr "Uverejnené v"
+
+#: includes/Entry/Summary.php:71
+msgid "This content is password protected."
+msgstr "Tento obsah je chránený heslom."
+
+#: includes/Entry/Summary.php:73
+msgid "Enter the password to view it."
+msgstr "Zadajte heslo pre jeho zobrazenie."
+
+#: includes/Header/Component.php:252
+msgctxt "Search form modal toggle button label."
+msgid "Toggle search form modal box"
+msgstr "Zobraziť/skryť modálne okno formulára vyhľadávania"
+
+#: includes/Loop/Featured_Posts.php:260
+msgctxt "Customizer section title."
+msgid "Blog"
+msgstr "Blog"
+
+#: includes/Loop/Featured_Posts.php:269
+msgid "Featured posts"
+msgstr "Odporúčané príspevky"
+
+#: includes/Loop/Featured_Posts.php:276
+msgid "Featured posts tag slug"
+msgstr "Slug značky odporúčaných príspevkov"
+
+#: includes/Loop/Featured_Posts.php:277
+msgid ""
+"3 latest posts assigned to this tag will be displayed as featured posts on "
+"blog page."
+msgstr ""
+"3 najnovšie príspevky priradené k tejto značke sa zobrazia ako odporúčané "
+"príspevky na stránke blogu."
+
+#: includes/Loop/Featured_Posts.php:277
+msgid "Open tags manager in a new window now &rarr;"
+msgstr "Otvoriť správcu značiek v novom okne &rarr;"
+
+#: includes/Loop/Featured_Posts.php:282
+msgctxt "Form field placeholder. URL slug, no diacritic."
+msgid "featured"
+msgstr "odporucane"
+
+#: includes/Loop/Featured_Posts.php:289
+msgid "Remove from blog posts"
+msgstr "Odstrániť z blogových príspevkov"
+
+#: includes/Loop/Featured_Posts.php:290
+msgid ""
+"Makes sure the featured posts will be removed from posts list on blog page."
+msgstr ""
+"Zabezpečuje, aby sa odporúčané príspevky odstránili zo zoznamu príspevkov na "
+"stránke blogu."
+
+#: includes/Loop/Featured_Posts.php:297
+msgid "Fallback image"
+msgstr "Záložný obrázok"
+
+#: includes/Loop/Featured_Posts.php:298
+msgid "This image will be displayed when post has no featured image set."
+msgstr ""
+"Tento obrázok sa zobrazí, keď príspevok nemá nastavený žiadny prezentačný "
+"obrázok."
+
+#: includes/Loop/Pagination.php:107 includes/Loop/Pagination.php:212
+msgctxt "Pagination text (visible): previous."
+msgid "&laquo;"
+msgstr "&laquo;"
+
+#: includes/Loop/Pagination.php:108 includes/Loop/Pagination.php:213
+msgctxt "Pagination text (hidden): previous."
+msgid "Previous page"
+msgstr "Predchádzajúca stránka"
+
+#: includes/Loop/Pagination.php:110 includes/Loop/Pagination.php:215
+msgctxt "Pagination text (hidden): next."
+msgid "Next page"
+msgstr "Nasledujúca stránka"
+
+#: includes/Loop/Pagination.php:111 includes/Loop/Pagination.php:216
+msgctxt "Pagination text (visible): next."
+msgid "&raquo;"
+msgstr "&raquo;"
+
+#: includes/Loop/Pagination.php:141 includes/Loop/Pagination.php:240
+msgctxt "Pagination page number screen reader label."
+msgid "Page:"
+msgstr "Strana:"
+
+#. translators: 1: current page number, 2: total page count.
+#: includes/Loop/Pagination.php:160
+#, php-format
+msgid "Posts navigation, page %1$d of %2$d"
+msgstr "Navigácia príspevkov, strana %1$d z %2$d"
+
+#. translators: 1: current page number, 2: total page count.
+#: includes/Loop/Pagination.php:166 includes/Loop/Pagination.php:283
+#, php-format
+msgid "Page %1$d of %2$d"
+msgstr "Strana %1$d z %2$d"
+
+#. translators: 1: current page number, 2: total page count.
+#: includes/Loop/Pagination.php:267
+#, php-format
+msgid "Comments navigation, page %1$d of %2$d"
+msgstr "Navigácia komentárov, strana %1$d z %2$d"
+
+#: includes/Menu/Component.php:59
+msgctxt "Navigational menu location"
+msgid "Primary"
+msgstr "Primárne"
+
+#: includes/Menu/Component.php:103
+msgid "Skip to menu toggle button"
+msgstr "Preskočiť na tlačidlo zapnutia a vypnutia menu"
+
+#: includes/Setup/Editor.php:166
+msgctxt "Font size label."
+msgid "S (Small)"
+msgstr "S (malé)"
+
+#: includes/Setup/Editor.php:167
+msgctxt "Font size label abbreviation."
+msgid "S"
+msgstr "S"
+
+#: includes/Setup/Editor.php:173
+msgctxt "Font size."
+msgid "M (Medium, normal)"
+msgstr "M (stredné, normálne)"
+
+#: includes/Setup/Editor.php:174
+msgctxt "Font size label abbreviation."
+msgid "M"
+msgstr "M"
+
+#: includes/Setup/Editor.php:180
+msgctxt "Font size."
+msgid "L (Large)"
+msgstr "L (veľké)"
+
+#: includes/Setup/Editor.php:181
+msgctxt "Font size label abbreviation."
+msgid "L"
+msgstr "L"
+
+#: includes/Setup/Editor.php:187
+msgctxt "Font size."
+msgid "XL (Extra Large)"
+msgstr "XL (extra veľké)"
+
+#: includes/Setup/Editor.php:188
+msgctxt "Font size label abbreviation."
+msgid "XL"
+msgstr "XL"
+
+#: includes/Setup/Editor.php:194
+msgctxt "Font size."
+msgid "Huge"
+msgstr "Obrovské"
+
+#: includes/Setup/Editor.php:200
+msgctxt "Font size."
+msgid "Gigantic"
+msgstr "Gigantické"
+
+#: includes/Setup/Media.php:160
+msgctxt "WordPress predefined image size name."
+msgid "Thumbnail"
+msgstr "Prezentačný obrázok"
+
+#: includes/Setup/Media.php:161
+msgid "Not used by the theme."
+msgstr "Nepoužíva sa v téme."
+
+#: includes/Setup/Media.php:168
+msgctxt "WordPress predefined image size name."
+msgid "Medium"
+msgstr "Stredný"
+
+#: includes/Setup/Media.php:169
+msgid "In image attachment page preview."
+msgstr "V ukážke na stránke prílohy typu obrázok."
+
+#: includes/Setup/Media.php:176
+msgctxt "WordPress predefined image size name."
+msgid "Large"
+msgstr "Veľký"
+
+#: includes/Setup/Media.php:177
+msgid "In featured posts."
+msgstr "V odporúčaných príspevkoch."
+
+#: includes/Setup/Media.php:184
+msgctxt "Image size name"
+msgid "Post thumbnail"
+msgstr "Prezentačný obrázok príspevku"
+
+#: includes/Setup/Media.php:185
+msgid "In posts list."
+msgstr "V zozname príspevkov."
+
+#: includes/Setup/Media.php:185
+msgid "Change this image &rarr;"
+msgstr "Zmeniť tento obrázok &rarr;"
+
+#: includes/Tool/AMP.php:92
+msgid "Expand child menu"
+msgstr "Rozbaliť vnorené menu"
+
+#: includes/Tool/AMP.php:93
+msgid "Collapse child menu"
+msgstr "Zbaliť vnorené menu"
+
+#: includes/Tool/Page_Builder.php:125
+msgctxt "Customizer section title."
+msgid "Page builders"
+msgstr "Editory stránok"
+
+#: includes/Tool/Page_Builder.php:132
+msgid "Enable \"Page builder\" page/post template"
+msgstr "Povoliť šablónu \"Editor stránok\""
+
+#: includes/Tool/Page_Builder.php:133
+msgid ""
+"Use this page/post template when building a content with your page builder "
+"plugin."
+msgstr "Použite túto šablónu pri tvorbe obsahu pluginom editora stránok."
+
+#: includes/Tool/Page_Builder.php:133
+msgid "You can tweak the desired layout of this template below."
+msgstr "Požadované rozloženie tejto šablóny môžete vyladiť nižšie."
+
+#: includes/Tool/Page_Builder.php:133
+msgid "Open a page/post template instructions in new window &rarr;"
+msgstr "Otvoriť inštrukcie o šablónach v novom okne &rarr;"
+
+#: includes/Tool/Page_Builder.php:140
+msgid "Page builder layout"
+msgstr "Rozloženie editora stránok"
+
+#: includes/Tool/Page_Builder.php:141
+msgid "Tweaks content area layout when using \"Page builder\" template."
+msgstr "Vyladí rozloženie obsahu pri použití šablóny \"Editor stránok\"."
+
+#: includes/Tool/Page_Builder.php:141
+msgid ""
+"As every page builder plugin works differently, set this according to your "
+"needs."
+msgstr ""
+"Keďže každý plugin typu editora stránok je iný, zvoľte možnosť podľa potreby."
+
+#: includes/Tool/Page_Builder.php:144
+msgid "Full width content area, no padding"
+msgstr "Roztiahnuť oblasť obsahu, žiadne odsadenie"
+
+#: includes/Tool/Page_Builder.php:145
+msgid "Keep content area width, just remove padding"
+msgstr "Zachovať šírku obsahovej oblasti, ale odstrániť odsadenie"
+
+#: includes/Welcome/Component.php:171 includes/Welcome/Component.php:172
+msgid "Welcome"
+msgstr "Vitajte"
+
+#. translators: %1$s: heart icon, %2$s: star icons.
+#: includes/Welcome/Component.php:233
+#, php-format
+msgid "If you %1$s love this theme don't forget to rate it %2$s."
+msgstr "Ak sa vám %1$s páči táto téma, nezabudnite ju hodnotiť %2$s."
+
+#: includes/Welcome/Component.php:240
+msgid "And/or please consider a donation."
+msgstr "Zvážte prosím podporu."
+
+#: includes/Welcome/Component.php:243
+#: templates/parts/admin/welcome-promo.php:35
+msgid "Thank you!"
+msgstr "Vďaka!"
+
+#: includes/Welcome/Component.php:260
+msgid ""
+"Have a suggestion for improvement or something is not working as it should?"
+msgstr "Máte návrh na zlepšenie, alebo niečo nefunguje tak, ako by malo?"
+
+#: includes/Welcome/Component.php:262
+msgid "&rarr; Contact support"
+msgstr "&rarr; Kontaktujte technickú podporu"
+
+#. translators: Custom page template name.
+#: templates/no-intro-content-only.php:21
+msgid "Content only"
+msgstr "Iba obsah"
+
+#. translators: Custom page template name.
+#: templates/no-intro-header-overlaid-dark.php:20
+msgid "Overlay header (dark)"
+msgstr "Prekrytá hlavička (tmavá)"
+
+#. translators: Custom page template name.
+#: templates/no-intro-header-overlaid-light.php:20
+msgid "Overlay header (light)"
+msgstr "Prekrytá hlavička (svetlá)"
+
+#. translators: Custom page template name.
+#: templates/no-intro.php:19
+msgid "No intro"
+msgstr "Bez intra"
+
+#. translators: Custom page template name.
+#: templates/page-builder-header-overlaid-dark.php:21
+msgid "Page builder (overlay header dark)"
+msgstr "Editor stránok (prekrytá hlavička tmavá)"
+
+#. translators: Custom page template name.
+#: templates/page-builder-header-overlaid-light.php:21
+msgid "Page builder (overlay header light)"
+msgstr "Editor stránok (prekrytá hlavička svetlá)"
+
+#. translators: Custom page template name.
+#: templates/page-builder.php:20
+msgid "Page builder"
+msgstr "Editor stránok"
+
+#: templates/parts/accessibility/menu-skip-links.php:19
+msgid "Skip links"
+msgstr "Preskakovacie odkazy"
+
+#: templates/parts/accessibility/menu-skip-links.php:24
+msgid "Skip to main navigation"
+msgstr "Preskočiť na hlavnú navigáciu"
+
+#: templates/parts/accessibility/menu-skip-links.php:26
+msgid "Skip to search form"
+msgstr "Preskočiť na formulár vyhľadávania"
+
+#: templates/parts/accessibility/menu-skip-links.php:27
+msgid "Skip to footer"
+msgstr "Preskočiť na pätičku"
+
+#: templates/parts/admin/content-starter-excerpt.php:22
+msgctxt "Theme starter content"
+msgid "This is a page/post excerpt text."
+msgstr "Toto je text výňatku stránky/článku."
+
+#: templates/parts/admin/media-image-sizes.php:31
+msgid "Recommended image sizes"
+msgstr "Odporúčané rozmery obrázkov"
+
+#: templates/parts/admin/media-image-sizes.php:34
+msgid ""
+"For the optimal theme display, please, set image sizes recommended below."
+msgstr "Pre optimálne zobrazenie témy nastavte odporúčané veľkosti obrázkov."
+
+#: templates/parts/admin/media-image-sizes.php:35
+msgid ""
+"If you already have images uploaded to your website you need to resize them "
+"after changing the sizes here."
+msgstr ""
+"Ak už máte obrázky nahrané na vašej webovej stránke, musíte ich po zmene "
+"veľkostí regenerovať."
+
+#: templates/parts/admin/media-image-sizes.php:36
+msgid "Resize images using plugin &rarr;"
+msgstr "Regenerovať obrázky pomocou pluginu &rarr;"
+
+#: templates/parts/admin/media-image-sizes.php:43
+msgid "Size name"
+msgstr "Názov rozmeru"
+
+#: templates/parts/admin/media-image-sizes.php:44
+msgid "Size ID"
+msgstr "ID veľkosti"
+
+#: templates/parts/admin/media-image-sizes.php:45
+msgid "Size parameters"
+msgstr "Parametre rozmeru"
+
+#: templates/parts/admin/media-image-sizes.php:46
+msgid "Theme usage"
+msgstr "Použitie v téme"
+
+#: templates/parts/admin/media-image-sizes.php:63
+msgid ""
+"Additional image size added by the theme. Can not be changed on this page."
+msgstr ""
+"Dodatočný rozmer obrázkov vytvorený použitou témou. Nie je ho možné nastaviť "
+"na tejto stránke."
+
+#. translators: 1: image width, 2: image height, 3: cropped or scaled?
+#: templates/parts/admin/media-image-sizes.php:91
+#, php-format
+msgid "%1$d &times; %2$d, %3$s"
+msgstr "%1$d &times; %2$d, %3$s"
+
+#. translators: %s: Theme name.
+#: templates/parts/admin/notice-welcome.php:32
+#, php-format
+msgid "Thank you for installing %s theme!"
+msgstr "Vďaka za inštaláciu témy %s!"
+
+#: templates/parts/admin/notice-welcome.php:40
+msgid "Visit \"Welcome\" page for information on how to set up your website."
+msgstr ""
+"Začnite na uvítacej stránke, kde nájdete informácie, ako nastaviť vašu "
+"webovú stránku."
+
+#: templates/parts/admin/notice-welcome.php:48
+msgid "Let's Get Started &raquo;"
+msgstr "Začíname &raquo;"
+
+#: templates/parts/admin/welcome-a11y.php:27
+msgid "Create an Accessible Website"
+msgstr "Vytvorte prístupnú webstránku"
+
+#: templates/parts/admin/welcome-a11y.php:31
+msgid "Make your website inclusive and accessible to anyone."
+msgstr "Urobte svoju webovú stránku inkluzívnou a prístupnou pre kohokoľvek."
+
+#: templates/parts/admin/welcome-a11y.php:32
+msgid ""
+"This theme will help you create a disabilities friendly and barrier-less "
+"user experience."
+msgstr ""
+"Táto téma vám pomôže vytvoriť bezbariérový používateľský zážitok bez ohľadu "
+"na zdravotné postihnutie."
+
+#: templates/parts/admin/welcome-a11y.php:33
+msgid ""
+"When building your content, just follow web accessibility best practices."
+msgstr ""
+"Pri vytváraní obsahu stačí dodržiavať osvedčené postupy prístupnosti "
+"webových stránok."
+
+#: templates/parts/admin/welcome-a11y.php:37
+msgid "Simplicity"
+msgstr "Jednoduchosť"
+
+#: templates/parts/admin/welcome-a11y.php:38
+msgid ""
+"Keep your text simple. Paragraphs with more than four lines are more "
+"difficult to read. Use lists and spacing in your content."
+msgstr ""
+"Udržujte text jednoduchý. Odseky s viac ako štyrmi riadkami textu sú ťažšie "
+"čitateľné. Používajte zoznamy a dostatok priestoru v obsahu stránok."
+
+#: templates/parts/admin/welcome-a11y.php:42
+msgid "Hierarchy"
+msgstr "Hierarchia"
+
+#: templates/parts/admin/welcome-a11y.php:43
+msgid ""
+"Keep proper headings hierarchy, do not skip heading levels: H2 should be "
+"followed by H3 and so on."
+msgstr ""
+"Udržujte správnu hierarchiu nadpisov, nepreskakujte úrovne nadpisov: po H2 "
+"by mal nasledovať H3 a tak ďalej."
+
+#: templates/parts/admin/welcome-a11y.php:47
+msgid "Images"
+msgstr "Obrázky"
+
+#: templates/parts/admin/welcome-a11y.php:48
+msgid "Adding images to posts and pages makes your content easier to remember."
+msgstr ""
+"Pridávaním obrázkov do príspevkov a stránok uľahčíte zapamätanie obsahu."
+
+#: templates/parts/admin/welcome-a11y.php:52
+msgid "Alternatives"
+msgstr "Alternatívy"
+
+#: templates/parts/admin/welcome-a11y.php:54
+msgid ""
+"Set alt text to images (do this in the media library or directly in post "
+"editor)."
+msgstr ""
+"Nastavte alternatívny text obrázkov (urobte to v knižnici médií alebo priamo "
+"v editore obsahu)."
+
+#: templates/parts/admin/welcome-a11y.php:55
+msgid "Provide text alternatives for videos and sound."
+msgstr "Poskytnite textové alternatívy pre videá a zvuk."
+
+#: templates/parts/admin/welcome-a11y.php:61
+msgid "More info in theme documentation &rarr;"
+msgstr "Viac informácií v dokumentácii témy &rarr;"
+
+#: templates/parts/admin/welcome-demo.php:27
+msgid "Theme Demo Content"
+msgstr "Demo obsah témy"
+
+#: templates/parts/admin/welcome-demo.php:32
+msgid "WordPress starter content"
+msgstr "Štartovací obsah WordPress"
+
+#: templates/parts/admin/welcome-demo.php:35
+msgid "This theme contains a predefined starter content."
+msgstr "Táto téma obsahuje preddefinovaný štartovací obsah."
+
+#: templates/parts/admin/welcome-demo.php:36
+msgid ""
+"So, if you haven't created any content yet, just open the customizer to "
+"preview the starter content."
+msgstr ""
+"Ak ste teda ešte nevytvorili žiadny obsah, stačí otvoriť Prispôsobenie a "
+"prezrieť si ukážku štartovacieho obsahu."
+
+#: templates/parts/admin/welcome-demo.php:37
+msgid ""
+"Once you publish your customizer settings, the starter content will be "
+"imported into your website automatically."
+msgstr ""
+"Po zverejnení nastavení Prispôsobenia sa štartovací obsah automaticky "
+"importuje do vašej webovej stránky."
+
+#: templates/parts/admin/welcome-demo.php:40
+msgid ""
+"(Note that WordPress starter content works only with fresh installation of "
+"WordPress.)"
+msgstr ""
+"(Upozorňujeme, že štartovací obsah funguje iba s čerstvou novou inštaláciou "
+"WordPress.)"
+
+#: templates/parts/admin/welcome-demo.php:42
+#: templates/parts/admin/welcome-guide.php:42
+#: templates/parts/admin/welcome-guide.php:48
+msgid "Customize"
+msgstr "Prispôsobiť"
+
+#: templates/parts/admin/welcome-demo.php:47
+msgid "Full theme demo content"
+msgstr "Plný demo obsah témy"
+
+#: templates/parts/admin/welcome-demo.php:50
+msgid ""
+"You can install a full theme demo content to match the theme demo website."
+msgstr ""
+"Môžete nainštalovať plný demo obsah témy zodpovedajúci demo stránke témy."
+
+#: templates/parts/admin/welcome-demo.php:51
+msgid "(Preview the demo &rarr;)"
+msgstr "(Prezrieť demo →)"
+
+#: templates/parts/admin/welcome-demo.php:52
+msgid "This provides a comprehensive start for building your own website."
+msgstr ""
+"Týmto poskytujeme obsiahly začiatok pre vytvorenie vlastnej webovej stránky."
+
+#: templates/parts/admin/welcome-demo.php:57
+msgid "Install demo content"
+msgstr "Inštalovať demo obsah"
+
+#: templates/parts/admin/welcome-demo.php:59
+msgid "(Appearance &rarr; Import Demo Data)"
+msgstr "(Vzhľad → Importovať demo údaje)"
+
+#: templates/parts/admin/welcome-demo.php:62
+msgid "How to import demo content &raquo;"
+msgstr "Ako importovať demo obsah &raquo;"
+
+#: templates/parts/admin/welcome-features.php:25
+msgid "Theme Features"
+msgstr "Vybrané vlastnosti témy"
+
+#: templates/parts/admin/welcome-features.php:29
+msgid "Block Patterns"
+msgstr "Vzory blokov"
+
+#: templates/parts/admin/welcome-features.php:30
+msgid ""
+"Create your content faster with integrated pre-designed patterns library."
+msgstr ""
+"Vytvorte obsah rýchlejšie pomocou integrovanej knižnice predpripravených "
+"vzorov blokov."
+
+#: templates/parts/admin/welcome-features.php:31
+#: templates/parts/admin/welcome-features.php:38
+#: templates/parts/admin/welcome-features.php:45
+#: templates/parts/admin/welcome-features.php:53
+msgid "Watch instructions in new window &rarr;"
+msgstr "Pozrieť inštrukcie v novom okne &rarr;"
+
+#: templates/parts/admin/welcome-features.php:36
+msgid "Block Styles"
+msgstr "Štýly blokov"
+
+#: templates/parts/admin/welcome-features.php:37
+msgid "Change the style of blocks immediately and easily without coding."
+msgstr "Zmeňte štýl blokov okamžite a jednoducho bez kódovania."
+
+#: templates/parts/admin/welcome-features.php:43
+msgid "Templates"
+msgstr "Šablóny"
+
+#: templates/parts/admin/welcome-features.php:44
+msgid "Modify a front-end page or post layout swiftly using templates."
+msgstr "Upravte rozloženie strany alebo príspevku rýchlo pomocou šablón."
+
+#: templates/parts/admin/welcome-features.php:50
+msgid "Featured Posts"
+msgstr "Odporúčané príspevky"
+
+#: templates/parts/admin/welcome-features.php:51
+msgid "Display important news immediately on top of your blog page."
+msgstr "Zobrazte dôležité novinky ihneď v hornej časti stránky blogu."
+
+#: templates/parts/admin/welcome-features.php:55
+msgid "Set featured posts tag now &rarr;"
+msgstr "Nastaviť značku odporúčaných príspevkov &rarr;"
+
+#: templates/parts/admin/welcome-footer.php:31
+msgid ""
+"You can disable this page in Appearance &rarr; Customize &rarr; Theme "
+"Options &rarr; Others."
+msgstr ""
+"Túto stránku môžete vypnúť vo Vzhľad &rarr; Prispôsobenie &rarr; Možnosti "
+"témy &rarr; Iné."
+
+#: templates/parts/admin/welcome-guide.php:25
+msgid "Quickstart Guide"
+msgstr "Inštalačná príručka"
+
+#: templates/parts/admin/welcome-guide.php:30
+msgid "Set up"
+msgstr "Nastaviť"
+
+#: templates/parts/admin/welcome-guide.php:33
+msgid "Make sure to tweak \"Settings\" section of your site."
+msgstr "Nezabudnite vyladiť sekciu Nastavení vašej webovej stránky."
+
+#: templates/parts/admin/welcome-guide.php:34
+msgid "(Pay attention to image size setup under Settings &rarr; Media.)"
+msgstr ""
+"(Venujte pozornosť nastaveniu veľkostí obrázkov v sekcii Nastavenia &rarr; "
+"Médiá.)"
+
+#: templates/parts/admin/welcome-guide.php:36
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: templates/parts/admin/welcome-guide.php:45
+msgid "You can customize your website using a live-preview editor."
+msgstr "Stránku si môžete prispôsobiť použitím editora so živím náhľadom."
+
+#: templates/parts/admin/welcome-guide.php:46
+msgid "Customization changes apply only after you publish them."
+msgstr "Zmeny prispôsobenia sa aplikujú až po ich publikovaní."
+
+#: templates/parts/admin/welcome-guide.php:54
+msgid "New to WordPress?"
+msgstr "Je pre vás WordPress novinkou?"
+
+#: templates/parts/admin/welcome-guide.php:56
+msgid "If you are new to WordPress check out info in theme documentation."
+msgstr ""
+"Ak ste vo WordPress nováčikom, pozrite si informácie v dokumentácii k téme."
+
+#: templates/parts/admin/welcome-guide.php:57
+msgid "Get to know WordPress &rarr;"
+msgstr "Spoznajte WordPress &rarr;"
+
+#. translators: 1: theme name, 2: theme developer link.
+#: templates/parts/admin/welcome-header.php:37
+#, php-format
+msgid "Congratulations and thank you for choosing %1$s theme by %2$s!"
+msgstr "Gratulujeme a ďakujeme za používanie témy %1$s od %2$s!"
+
+#: templates/parts/admin/welcome-header.php:43
+msgid "Information on this page introduces the theme and provides useful tips."
+msgstr ""
+"Informácie na tejto stránke predstavujú tému a poskytujú užitočné tipy."
+
+#: templates/parts/admin/welcome-header.php:48
+msgid "Features"
+msgstr "Vlastnosti"
+
+#: templates/parts/admin/welcome-header.php:49
+msgid "Accessibility"
+msgstr "Prístupnosť"
+
+#: templates/parts/admin/welcome-header.php:50
+msgid "Quickstart"
+msgstr "Sprievodca nastavením"
+
+#: templates/parts/admin/welcome-header.php:51
+msgid "Demo content"
+msgstr "Demo obsah"
+
+#: templates/parts/admin/welcome-header.php:52
+msgid "Upgrade"
+msgstr "Aktualizácia"
+
+#: templates/parts/admin/welcome-header.php:57
+msgid "Documentation &rarr;"
+msgstr "Dokumentácia &rarr;"
+
+#: templates/parts/admin/welcome-header.php:58
+msgid "Support Forum &rarr;"
+msgstr "Fórum technickej podpory &rarr;"
+
+#: templates/parts/admin/welcome-header.php:62
+msgctxt "Notice, hint."
+msgid "Tip:"
+msgstr "Tip:"
+
+#: templates/parts/admin/welcome-promo.php:29
+msgid "Like the theme?"
+msgstr "Páči sa vám téma?"
+
+#: templates/parts/admin/welcome-promo.php:33
+#, no-php-format
+msgid ""
+"You are using a fully functional 100% free WordPress theme without any paid "
+"upgrade."
+msgstr ""
+"Používate plne funkčnú a bezplatnú WordPress tému bez akejkoľvek platenej "
+"nadstavby."
+
+#: templates/parts/admin/welcome-promo.php:34
+msgid ""
+"If you find it helpful, please support its updates and technical support "
+"service with a donation or by purchasing one of paid products at "
+"WebManDesign.eu."
+msgstr ""
+"Ak ju považujete za užitočnú, podporte jej aktualizácie a službu technickej "
+"pomoci darom alebo zakúpením jedného z platených produktov na stránke "
+"WebManDesign.eu."
+
+#: templates/parts/admin/welcome-promo.php:38
+msgid "Visit WebMan Design website now &rarr;"
+msgstr "Navštíviť webstránku WebMan Design &rarr;"
+
+#: templates/parts/block/pattern/contact/bg-1.php:19
+msgctxt "Block pattern title."
+msgid "With background image"
+msgstr "S obrázkom pozadia"
+
+#: templates/parts/block/pattern/contact/bg-1.php:21
+#: templates/parts/block/pattern/contact/bg-2.php:21
+#: templates/parts/block/pattern/contact/description.php:21
+#: templates/parts/block/pattern/contact/image-middle.php:21
+#: templates/parts/block/pattern/contact/image-side.php:21
+#: templates/parts/block/pattern/contact/quote.php:21
+#: templates/parts/block/pattern/contact/shadow.php:21
+#: templates/parts/block/pattern/contact/social.php:21
+msgctxt "keyword"
+msgid "contact"
+msgstr "kontakt"
+
+#: templates/parts/block/pattern/contact/bg-2.php:19
+msgctxt "Block pattern title."
+msgid "Columns with background"
+msgstr "Stĺpce s pozadím"
+
+#: templates/parts/block/pattern/contact/description.php:19
+msgctxt "Block pattern title."
+msgid "With description"
+msgstr "S popisom"
+
+#: templates/parts/block/pattern/contact/image-middle.php:19
+msgctxt "Block pattern title."
+msgid "With image in the middle"
+msgstr "S obrázkom v strede"
+
+#: templates/parts/block/pattern/contact/image-middle.php:52
+#: templates/parts/block/pattern/contact/image-side.php:35
+#: templates/parts/block/pattern/media-text/with-image.php:35
+#: templates/parts/block/pattern/team/team.php:57
+msgid "Image alt text"
+msgstr "Alternatívny text obrázka"
+
+#: templates/parts/block/pattern/contact/image-side.php:19
+msgctxt "Block pattern title."
+msgid "With image on side"
+msgstr "S obrázkom na boku"
+
+#: templates/parts/block/pattern/contact/quote.php:19
+#: templates/parts/block/pattern/cta/quote.php:19
+msgctxt "Block pattern title."
+msgid "With quote"
+msgstr "S citátom"
+
+#: templates/parts/block/pattern/contact/quote.php:22
+#: templates/parts/block/pattern/quote/testimonial-bg.php:21
+#: templates/parts/block/pattern/quote/testimonial.php:21
+#: templates/parts/block/pattern/quote/testimonials.php:21
+msgctxt "keyword"
+msgid "quote"
+msgstr "citát"
+
+#: templates/parts/block/pattern/contact/quote.php:23
+#: templates/parts/block/pattern/quote/testimonial-bg.php:22
+#: templates/parts/block/pattern/quote/testimonials.php:22
+msgctxt "keyword"
+msgid "testimonial"
+msgstr "referencia"
+
+#: templates/parts/block/pattern/contact/shadow.php:19
+msgctxt "Block pattern title."
+msgid "With drop shadow"
+msgstr "S tieňom"
+
+#: templates/parts/block/pattern/contact/social.php:19
+msgctxt "Block pattern title."
+msgid "With social links"
+msgstr "S odkazmi sociálnych sietí"
+
+#: templates/parts/block/pattern/cover/2-images.php:19
+msgctxt "Block pattern title."
+msgid "With 2 images and description"
+msgstr "S 2 obrázkami a popisom"
+
+#: templates/parts/block/pattern/cover/2-images.php:21
+#: templates/parts/block/pattern/cover/bg-image.php:21
+#: templates/parts/block/pattern/cover/bg-links.php:21
+#: templates/parts/block/pattern/cover/bg-text-left.php:21
+#: templates/parts/block/pattern/cover/centered-background.php:21
+#: templates/parts/block/pattern/cover/color-image-large.php:21
+#: templates/parts/block/pattern/cover/color-image.php:21
+#: templates/parts/block/pattern/cover/fullscreen-bottom-text.php:21
+#: templates/parts/block/pattern/cover/images.php:21
+#: templates/parts/block/pattern/cover/overflow.php:21
+#: templates/parts/block/pattern/cover/overlap.php:21
+#: templates/parts/block/pattern/text/with-description.php:21
+msgctxt "keyword"
+msgid "intro"
+msgstr "intro"
+
+#: templates/parts/block/pattern/cover/2-images.php:22
+#: templates/parts/block/pattern/cover/bg-image.php:22
+#: templates/parts/block/pattern/cover/bg-links.php:22
+#: templates/parts/block/pattern/cover/bg-text-left.php:22
+#: templates/parts/block/pattern/cover/centered-background.php:22
+#: templates/parts/block/pattern/cover/color-image-large.php:22
+#: templates/parts/block/pattern/cover/color-image.php:22
+#: templates/parts/block/pattern/cover/fullscreen-bottom-text.php:22
+#: templates/parts/block/pattern/cover/images.php:22
+#: templates/parts/block/pattern/cover/overflow.php:22
+#: templates/parts/block/pattern/cover/overlap.php:22
+#: templates/parts/block/pattern/header/hidden-accessibly.php:22
+#: templates/parts/block/pattern/text/2-columns-text.php:21
+#: templates/parts/block/pattern/text/heading-columns.php:22
+#: templates/parts/block/pattern/text/large-lead.php:22
+#: templates/parts/block/pattern/text/with-description.php:22
+msgctxt "keyword"
+msgid "title"
+msgstr "titulok"
+
+#: templates/parts/block/pattern/cover/2-images.php:23
+#: templates/parts/block/pattern/cover/bg-image.php:23
+#: templates/parts/block/pattern/cover/bg-links.php:23
+#: templates/parts/block/pattern/cover/bg-text-left.php:23
+#: templates/parts/block/pattern/cover/centered-background.php:23
+#: templates/parts/block/pattern/cover/color-image-large.php:23
+#: templates/parts/block/pattern/cover/color-image.php:23
+#: templates/parts/block/pattern/cover/fullscreen-bottom-text.php:23
+#: templates/parts/block/pattern/cover/images.php:23
+#: templates/parts/block/pattern/cover/overflow.php:23
+#: templates/parts/block/pattern/cover/overlap.php:23
+#: templates/parts/block/pattern/header/hidden-accessibly.php:23
+#: templates/parts/block/pattern/text/heading-columns.php:23
+#: templates/parts/block/pattern/text/large-lead.php:23
+#: templates/parts/block/pattern/text/with-description.php:23
+msgctxt "keyword"
+msgid "heading"
+msgstr "nadpis"
+
+#: templates/parts/block/pattern/cover/bg-image.php:19
+msgctxt "Block pattern title."
+msgid "With image and background image"
+msgstr "S obrázkom a obrázkom na pozadí"
+
+#: templates/parts/block/pattern/cover/bg-links.php:19
+msgctxt "Block pattern title."
+msgid "With page links and background"
+msgstr "S odkazmi na stránky a pozadím"
+
+#: templates/parts/block/pattern/cover/bg-text-left.php:19
+msgctxt "Block pattern title."
+msgid "With background and text on the left"
+msgstr "S pozadím a textom vľavo"
+
+#: templates/parts/block/pattern/cover/centered-background.php:19
+msgctxt "Block pattern title."
+msgid "Centered with background"
+msgstr "Centrovaný s pozadím"
+
+#: templates/parts/block/pattern/cover/color-image-large.php:19
+msgctxt "Block pattern title."
+msgid "Colored, with large image"
+msgstr "Farebný, s veľkým obrázkom"
+
+#: templates/parts/block/pattern/cover/color-image.php:19
+msgctxt "Block pattern title."
+msgid "Colored, with image"
+msgstr "Farebný, s obrázkom"
+
+#: templates/parts/block/pattern/cover/fullscreen-bottom-text.php:19
+msgctxt "Block pattern title."
+msgid "Full-screen with bottom text"
+msgstr "Na celú obrazovku s textom dole"
+
+#: templates/parts/block/pattern/cover/images.php:19
+msgctxt "Block pattern title."
+msgid "With 3 images"
+msgstr "S 3 obrázkami"
+
+#: templates/parts/block/pattern/cover/overflow.php:19
+msgctxt "Block pattern title."
+msgid "Overflown heading"
+msgstr "Pretečený nadpis"
+
+#: templates/parts/block/pattern/cover/overlap.php:19
+msgctxt "Block pattern title."
+msgid "Overlapped"
+msgstr "Prekrývajúci sa"
+
+#: templates/parts/block/pattern/cta/bg.php:19
+msgctxt "Block pattern title."
+msgid "With background"
+msgstr "S pozadím"
+
+#: templates/parts/block/pattern/cta/bg.php:21
+#: templates/parts/block/pattern/cta/box.php:21
+#: templates/parts/block/pattern/cta/centered.php:21
+#: templates/parts/block/pattern/cta/cta.php:21
+#: templates/parts/block/pattern/cta/large.php:21
+#: templates/parts/block/pattern/cta/quote.php:21
+#: templates/parts/block/pattern/cta/simple.php:21
+#: templates/parts/block/pattern/list/features-bg-image.php:23
+#: templates/parts/block/pattern/list/features-bg-shadow.php:23
+#: templates/parts/block/pattern/list/features-parallax.php:23
+#: templates/parts/block/pattern/list/features-simple.php:23
+#: templates/parts/block/pattern/post/project-gallery.php:25
+msgctxt "keyword"
+msgid "button"
+msgstr "tlačidlo"
+
+#: templates/parts/block/pattern/cta/bg.php:22
+#: templates/parts/block/pattern/cta/box.php:22
+#: templates/parts/block/pattern/cta/centered.php:22
+#: templates/parts/block/pattern/cta/cta.php:22
+#: templates/parts/block/pattern/cta/large.php:22
+#: templates/parts/block/pattern/cta/quote.php:22
+#: templates/parts/block/pattern/cta/simple.php:22
+#: templates/parts/block/pattern/list/features-bg-image.php:24
+#: templates/parts/block/pattern/list/features-bg-shadow.php:24
+#: templates/parts/block/pattern/list/features-parallax.php:24
+#: templates/parts/block/pattern/list/features-simple.php:24
+#: templates/parts/block/pattern/post/project-gallery.php:24
+msgctxt "keyword"
+msgid "call to action"
+msgstr "výzva k akcii"
+
+#: templates/parts/block/pattern/cta/bg.php:23
+#: templates/parts/block/pattern/cta/box.php:23
+#: templates/parts/block/pattern/cta/centered.php:23
+#: templates/parts/block/pattern/cta/cta.php:23
+#: templates/parts/block/pattern/cta/large.php:23
+#: templates/parts/block/pattern/cta/quote.php:23
+#: templates/parts/block/pattern/cta/simple.php:23
+msgctxt "keyword"
+msgid "cta"
+msgstr "výzva k akcii (VKA, CTA)"
+
+#: templates/parts/block/pattern/cta/box.php:19
+msgctxt "Block pattern title."
+msgid "Boxed"
+msgstr "Orámovaná"
+
+#: templates/parts/block/pattern/cta/centered.php:19
+msgctxt "Block pattern title."
+msgid "Centered"
+msgstr "Centrovaná"
+
+#: templates/parts/block/pattern/cta/cta.php:19
+msgctxt "Block pattern title."
+msgid "Fullwidth with 2 buttons"
+msgstr "Na celú šírku s 2 tlačidlami"
+
+#: templates/parts/block/pattern/cta/large.php:19
+msgctxt "Block pattern title."
+msgid "Large with image"
+msgstr "Veľká s obrázkom"
+
+#: templates/parts/block/pattern/cta/simple.php:19
+msgctxt "Block pattern title."
+msgid "Simple"
+msgstr "Jednoduché"
+
+#: templates/parts/block/pattern/faq/question-answer.php:19
+msgctxt "Block pattern title."
+msgid "Question and answer"
+msgstr "Otázka a odpoveď"
+
+#: templates/parts/block/pattern/faq/question-answer.php:21
+msgctxt "keyword"
+msgid "FAQ - frequently asked questions"
+msgstr "FAQ - často kladené otázky"
+
+#: templates/parts/block/pattern/gallery/gallery-captions.php:19
+msgctxt "Block pattern title."
+msgid "With captions"
+msgstr "S popiskami"
+
+#: templates/parts/block/pattern/gallery/gallery-captions.php:21
+#: templates/parts/block/pattern/gallery/gallery-no-gap.php:21
+#: templates/parts/block/pattern/gallery/gallery-variable-with-description.php:21
+#: templates/parts/block/pattern/gallery/image-padding-left.php:21
+#: templates/parts/block/pattern/gallery/image-padding-right.php:21
+#: templates/parts/block/pattern/gallery/image-parallax.php:21
+#: templates/parts/block/pattern/gallery/logos.php:21
+#: templates/parts/block/pattern/post/project-gallery.php:23
+#: templates/parts/block/pattern/team/team-2.php:24
+#: templates/parts/block/pattern/team/team.php:24
+msgctxt "keyword"
+msgid "gallery"
+msgstr "galéria"
+
+#: templates/parts/block/pattern/gallery/gallery-captions.php:22
+#: templates/parts/block/pattern/gallery/gallery-no-gap.php:22
+#: templates/parts/block/pattern/gallery/gallery-variable-with-description.php:22
+#: templates/parts/block/pattern/gallery/image-padding-left.php:22
+#: templates/parts/block/pattern/gallery/image-padding-right.php:22
+#: templates/parts/block/pattern/gallery/image-parallax.php:22
+#: templates/parts/block/pattern/gallery/logos.php:22
+msgctxt "keyword"
+msgid "images"
+msgstr "obrázky"
+
+#: templates/parts/block/pattern/gallery/gallery-no-gap.php:19
+msgctxt "Block pattern title."
+msgid "Full-width with no gaps"
+msgstr "Plná šírka bez medzier"
+
+#: templates/parts/block/pattern/gallery/gallery-variable-with-description.php:19
+msgctxt "Block pattern title."
+msgid "Variable, with description"
+msgstr "Premenlivá, s popisom"
+
+#: templates/parts/block/pattern/gallery/image-padding-left.php:19
+msgctxt "Block pattern title."
+msgid "Fullwidth image with left padding"
+msgstr "Obrázok na celú šírku s odsadením vľavo"
+
+#: templates/parts/block/pattern/gallery/image-padding-right.php:19
+msgctxt "Block pattern title."
+msgid "Fullwidth image with right padding"
+msgstr "Obrázok na celú šírku s odsadením vpravo"
+
+#: templates/parts/block/pattern/gallery/image-parallax.php:19
+msgctxt "Block pattern title."
+msgid "Parallax background"
+msgstr "Paralaxa pozadia"
+
+#: templates/parts/block/pattern/gallery/logos.php:19
+msgctxt "Block pattern title."
+msgid "Logos"
+msgstr "Logá"
+
+#: templates/parts/block/pattern/gallery/logos.php:23
+msgctxt "keyword"
+msgid "clients"
+msgstr "klienti"
+
+#: templates/parts/block/pattern/gallery/logos.php:24
+msgctxt "keyword"
+msgid "partners"
+msgstr "partneri"
+
+#: templates/parts/block/pattern/header/hidden-accessibly.php:19
+msgctxt "Block pattern title."
+msgid "Heading: Accessibly hidden"
+msgstr "Nadpis: Prístupne skrytý"
+
+#: templates/parts/block/pattern/header/hidden-accessibly.php:24
+msgctxt "keyword"
+msgid "a11y"
+msgstr "a11y"
+
+#: templates/parts/block/pattern/header/hidden-accessibly.php:25
+msgctxt "keyword"
+msgid "barrierless"
+msgstr "bezbariérový"
+
+#: templates/parts/block/pattern/header/hidden-accessibly.php:26
+msgctxt "keyword"
+msgid "screen reader"
+msgstr "čítačka obrazovky"
+
+#: templates/parts/block/pattern/header/hidden-accessibly.php:38
+msgid "Visually hidden, but kept accessible for screen readers"
+msgstr "Vizuálne skryté, ale prístupné pre čítačky obrazovky"
+
+#: templates/parts/block/pattern/list/features-bg-image.php:19
+msgctxt "Block pattern title."
+msgid "Features with background and image"
+msgstr "Vlastnosti s pozadím a obrázkom"
+
+#: templates/parts/block/pattern/list/features-bg-image.php:21
+#: templates/parts/block/pattern/list/features-bg-shadow.php:21
+#: templates/parts/block/pattern/list/features-center-icon.php:21
+#: templates/parts/block/pattern/list/features-fullwidth-bg.php:21
+#: templates/parts/block/pattern/list/features-large-image.php:21
+#: templates/parts/block/pattern/list/features-parallax.php:21
+#: templates/parts/block/pattern/list/features-shadow.php:21
+#: templates/parts/block/pattern/list/features-simple.php:21
+#: templates/parts/block/pattern/list/features-single-large.php:21
+#: templates/parts/block/pattern/price/columns-with-icons.php:22
+#: templates/parts/block/pattern/price/with-contact.php:22
+msgctxt "keyword"
+msgid "services"
+msgstr "služby"
+
+#: templates/parts/block/pattern/list/features-bg-image.php:22
+#: templates/parts/block/pattern/list/features-bg-shadow.php:22
+#: templates/parts/block/pattern/list/features-center-icon.php:22
+#: templates/parts/block/pattern/list/features-fullwidth-bg.php:22
+#: templates/parts/block/pattern/list/features-large-image.php:22
+#: templates/parts/block/pattern/list/features-parallax.php:22
+#: templates/parts/block/pattern/list/features-shadow.php:22
+#: templates/parts/block/pattern/list/features-simple.php:22
+#: templates/parts/block/pattern/media-text/parallax.php:22
+#: templates/parts/block/pattern/number/steps.php:21
+#: templates/parts/block/pattern/team/team-2.php:25
+#: templates/parts/block/pattern/team/team.php:25
+#: templates/parts/block/pattern/text/2-columns-text.php:22
+#: templates/parts/block/pattern/text/extra-hierarchy.php:21
+#: templates/parts/block/pattern/text/heading-columns.php:21
+#: templates/parts/block/pattern/text/large-lead.php:21
+msgctxt "keyword"
+msgid "columns"
+msgstr "stĺpce"
+
+#: templates/parts/block/pattern/list/features-bg-shadow.php:19
+msgctxt "Block pattern title."
+msgid "Features with background image and drop shadow"
+msgstr "Vlastnosti s obrázkom na pozadí a tieňom"
+
+#: templates/parts/block/pattern/list/features-center-icon.php:19
+msgctxt "Block pattern title."
+msgid "Center aligned features with icon"
+msgstr "Vlastnosti zarovnané do stredu s ikonkou"
+
+#: templates/parts/block/pattern/list/features-fullwidth-bg.php:19
+msgctxt "Block pattern title."
+msgid "Features with background image"
+msgstr "Vlastnosti s obrázkom na pozadí"
+
+#: templates/parts/block/pattern/list/features-large-image.php:19
+msgctxt "Block pattern title."
+msgid "Features with large image"
+msgstr "Vlastnosti s veľkým obrázkom"
+
+#: templates/parts/block/pattern/list/features-parallax.php:19
+msgctxt "Block pattern title."
+msgid "Parallax features"
+msgstr "Vlastnosti s paralaxou"
+
+#: templates/parts/block/pattern/list/features-shadow.php:19
+msgctxt "Block pattern title."
+msgid "Features with drop shadow"
+msgstr "Vlastnosti s tieňom"
+
+#: templates/parts/block/pattern/list/features-simple.php:19
+msgctxt "Block pattern title."
+msgid "Features"
+msgstr "Vlastnosti"
+
+#: templates/parts/block/pattern/list/features-single-large.php:19
+msgctxt "Block pattern title."
+msgid "A large feature"
+msgstr "Veľká vlastnosť"
+
+#: templates/parts/block/pattern/media-text/parallax.php:19
+msgctxt "Block pattern title."
+msgid "Text with parallax background"
+msgstr "Text s paralaxou pozadia"
+
+#: templates/parts/block/pattern/media-text/parallax.php:21
+#: templates/parts/block/pattern/media-text/with-image.php:21
+#: templates/parts/block/pattern/post/project-image.php:23
+msgctxt "keyword"
+msgid "image"
+msgstr "obrázok"
+
+#: templates/parts/block/pattern/media-text/with-image.php:19
+msgctxt "Block pattern title."
+msgid "Text with image"
+msgstr "Text s obrázkom"
+
+#: templates/parts/block/pattern/number/steps.php:19
+msgctxt "Block pattern title."
+msgid "Steps"
+msgstr "Kroky"
+
+#: templates/parts/block/pattern/post/blog.php:19
+msgctxt "Block pattern title."
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/parts/block/pattern/post/blog.php:21
+msgctxt "keyword"
+msgid "articles"
+msgstr "články"
+
+#: templates/parts/block/pattern/post/blog.php:22
+#: templates/parts/block/pattern/post/project-gallery.php:21
+#: templates/parts/block/pattern/post/project-image.php:21
+msgctxt "keyword"
+msgid "posts"
+msgstr "príspevky, články"
+
+#: templates/parts/block/pattern/post/project-gallery.php:19
+msgctxt "Block pattern title."
+msgid "Project with gallery"
+msgstr "Projekt s galériou"
+
+#: templates/parts/block/pattern/post/project-gallery.php:22
+#: templates/parts/block/pattern/post/project-image.php:22
+msgctxt "keyword"
+msgid "portfolio"
+msgstr "portfólio"
+
+#: templates/parts/block/pattern/post/project-image.php:19
+msgctxt "Block pattern title."
+msgid "Project with image"
+msgstr "Projekt s obrázkom"
+
+#: templates/parts/block/pattern/price/cards.php:19
+msgctxt "Block pattern title."
+msgid "Cards"
+msgstr "Karty"
+
+#: templates/parts/block/pattern/price/cards.php:21
+#: templates/parts/block/pattern/price/columns-with-icons.php:21
+#: templates/parts/block/pattern/price/food-menu.php:21
+#: templates/parts/block/pattern/price/with-contact.php:21
+msgctxt "keyword"
+msgid "price"
+msgstr "cena"
+
+#: templates/parts/block/pattern/price/cards.php:22
+msgctxt "keyword"
+msgid "food menu"
+msgstr "jedálny lístok"
+
+#: templates/parts/block/pattern/price/columns-with-icons.php:19
+msgctxt "Block pattern title."
+msgid "Pricing columns with with icons"
+msgstr "Cenové stĺpce s ikonkami"
+
+#: templates/parts/block/pattern/price/food-menu.php:19
+msgctxt "Block pattern title."
+msgid "Food menu"
+msgstr "Jedálny lístok"
+
+#: templates/parts/block/pattern/price/with-contact.php:19
+msgctxt "Block pattern title."
+msgid "A large feature with contact"
+msgstr "Veľká vlastnosť s kontaktnými údajmi"
+
+#: templates/parts/block/pattern/quote/testimonial-bg.php:19
+msgctxt "Block pattern title."
+msgid "Testimonial: With background image"
+msgstr "Referencia: S obrázkom na pozadí"
+
+#: templates/parts/block/pattern/quote/testimonial-bg.php:23
+msgctxt "keyword"
+msgid "photo"
+msgstr "fotografia"
+
+#: templates/parts/block/pattern/quote/testimonial.php:19
+msgctxt "Block pattern title."
+msgid "Testimonial"
+msgstr "Referencia"
+
+#: templates/parts/block/pattern/quote/testimonials.php:19
+msgctxt "Block pattern title."
+msgid "Testimonials"
+msgstr "Referencie"
+
+#: templates/parts/block/pattern/site/footer-form.php:19
+msgctxt "Block pattern title."
+msgid "Site footer with subscription form"
+msgstr "Pätička s formulárom odberu"
+
+#: templates/parts/block/pattern/site/footer-form.php:21
+#: templates/parts/block/pattern/site/footer.php:21
+msgctxt "keyword"
+msgid "site"
+msgstr "webstránka"
+
+#: templates/parts/block/pattern/site/footer.php:19
+msgctxt "Block pattern title."
+msgid "Site footer with logo, links, description and social links"
+msgstr "Pätička s logom, odkazmi, popisom a sociálnymi odkazmi"
+
+#: templates/parts/block/pattern/site/footer.php:22
+msgctxt "keyword"
+msgid "links"
+msgstr "odkazy"
+
+#: templates/parts/block/pattern/site/footer.php:23
+msgctxt "keyword"
+msgid "social links"
+msgstr "odkazy sociálnych sietí"
+
+#: templates/parts/block/pattern/team/team-2.php:19
+msgctxt "Block pattern title."
+msgid "2 large descriptions"
+msgstr "2 veľké popisy"
+
+#: templates/parts/block/pattern/team/team-2.php:21
+#: templates/parts/block/pattern/team/team.php:21
+msgctxt "keyword"
+msgid "staff"
+msgstr "zamestnanci"
+
+#: templates/parts/block/pattern/team/team-2.php:22
+#: templates/parts/block/pattern/team/team.php:22
+msgctxt "keyword"
+msgid "employees"
+msgstr "zamestnanci"
+
+#: templates/parts/block/pattern/team/team-2.php:23
+#: templates/parts/block/pattern/team/team.php:23
+msgctxt "keyword"
+msgid "people"
+msgstr "ľudia"
+
+#: templates/parts/block/pattern/team/team.php:19
+msgctxt "Block pattern title."
+msgid "4 members"
+msgstr "4 členovia"
+
+#: templates/parts/block/pattern/text/2-columns-text.php:19
+msgctxt "Block pattern title."
+msgid "Centered main heading with 2 columns text"
+msgstr "Centrovaný hlavný nadpis s textom v 2 stĺpcov"
+
+#: templates/parts/block/pattern/text/2-columns-wider-heading.php:19
+msgctxt "Block pattern title."
+msgid "Text in 2 columns with wider heading"
+msgstr "Text v 2 stĺpcoch so širším nadpisom"
+
+#: templates/parts/block/pattern/text/extra-hierarchy.php:19
+msgctxt "Block pattern title."
+msgid "Text with extra hierarchy"
+msgstr "Text s extra hierarchiou"
+
+#: templates/parts/block/pattern/text/heading-columns.php:19
+msgctxt "Block pattern title."
+msgid "Text with heading in columns"
+msgstr "Text s nadpisom v stĺpcoch"
+
+#: templates/parts/block/pattern/text/large-lead.php:19
+msgctxt "Block pattern title."
+msgid "Text with large subheading"
+msgstr "Text s veľkým podnadpisom"
+
+#: templates/parts/block/pattern/text/with-description.php:19
+msgctxt "Block pattern title."
+msgid "Main title with description on side"
+msgstr "Hlavný nadpis s popisom na boku"
+
+#. translators: %s: Name of current post
+#: templates/parts/component/link-more.php:26
+#, php-format
+msgid "Continue reading %s"
+msgstr "Prečítať %s"
+
+#: templates/parts/component/link-more.php:35
+msgid "Continue reading&hellip;"
+msgstr "Prečítať&hellip;"
+
+#: templates/parts/component/page-header-404.php:36
+msgid "Oops! That page can not be found."
+msgstr "Hľadaná stránka nebola nájdená."
+
+#: templates/parts/component/page-header-none.php:36
+msgid "Nothing Found"
+msgstr "Nenašli sa žiadne záznamy"
+
+#. translators: %s: search query.
+#: templates/parts/component/page-header-search.php:40
+#, php-format
+msgid "Search Results for: %s"
+msgstr "Výsledky vyhľadávania pre: %s"
+
+#: templates/parts/component/search-results-count.php:26
+#, php-format
+msgid "We found %d result for your search."
+msgid_plural "We found %d results for your search."
+msgstr[0] "Našli sme %d výsledok vášho vyhľadávania."
+msgstr[1] "Našli sme %d výsledky vášho vyhľadávania."
+msgstr[2] "Našli sme %d výsledkov vášho vyhľadávania."
+
+#: templates/parts/content/content-404.php:19
+msgid "It looks like nothing was found at this location. Maybe try a search?"
+msgstr ""
+"Vyzerá to tak, že sa nenašli žiadne záznamy. Možno skúste vyhľadávanie?"
+
+#: templates/parts/content/content-attachment-image.php:32
+msgctxt "Attachment page image info table caption."
+msgid "Image info"
+msgstr "Informácie o obrázku"
+
+#: templates/parts/content/content-attachment-image.php:37
+msgctxt "Attachment page publish time."
+msgid "Image published on:"
+msgstr "Obrázok publikovaný dňa:"
+
+#: templates/parts/content/content-attachment-image.php:51
+msgid "Image size:"
+msgstr "Veľkosť obrázku:"
+
+#: templates/parts/content/content-attachment-image.php:62
+msgid "Image file name:"
+msgstr "Názov súboru obrázku:"
+
+#: templates/parts/content/content-attachment.php:28
+msgid "Download attachment file:"
+msgstr "Prevziať súbor prílohy:"
+
+#. translators: 1: link to WP admin new post page.
+#: templates/parts/content/content-none.php:33
+#, php-format
+msgid ""
+"Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+"Pripravený publikovať svoj prvý článok? <a href=\"%1$s\">Začnite hneď</a>."
+
+#: templates/parts/content/content-none.php:46
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr ""
+"Vášmu vyhľadávaniu nezodpovedajú žiadne záznamy. Skúste znovu pomocou iných "
+"kľúčových slov."
+
+#: templates/parts/content/content-none.php:55
+msgid ""
+"It seems we can not find what you are looking for. Perhaps searching can "
+"help."
+msgstr "Zdá sa, že nemôžeme nájsť to, čo hľadáte. Možno pomôže vyhľadávanie."
+
+#: templates/parts/footer/site-info.php:37
+msgid "Back to top of the page"
+msgstr "Späť na začiatok stránky"
+
+#. translators: 1: linked CMS name (WordPress), 2: theme name.
+#: templates/parts/footer/site-info.php:50
+#, php-format
+msgid "Powered by %1$s and %2$s."
+msgstr "Používame %1$s a %2$s."
+
+#: templates/parts/footer/site-info.php:51
+msgid "https://wordpress.org/"
+msgstr "https://sk.wordpress.org/"
+
+#: templates/parts/menu/menu-primary.php:27
+msgctxt "Navigational menu."
+msgid "Main menu"
+msgstr "Hlavné menu"
+
+#: templates/parts/menu/menu-primary.php:41
+msgctxt "Mobile navigation toggle button title."
+msgid "Menu"
+msgstr "Navigácia"
+
+#: templates/parts/meta/entry-meta-item-author.php:22
+msgctxt "Post meta info description: author name."
+msgid "Written by:"
+msgstr "Autor:"
+
+#. translators: Used between list items, there is a space after the comma.
+#: templates/parts/meta/entry-meta-item-category.php:18
+msgctxt "Categories list separator."
+msgid ", "
+msgstr ", "
+
+#: templates/parts/meta/entry-meta-item-category.php:30
+msgctxt "Post meta info description: categories list."
+msgid "Categorized in:"
+msgstr "Kategorizované ako:"
+
+#. translators: %d: number of comments.
+#: templates/parts/meta/entry-meta-item-comments.php:37
+#, php-format
+msgid "Comments: %d"
+msgstr "Komentáre: %d"
+
+#: templates/parts/meta/entry-meta-item-comments.php:40
+msgctxt "Post meta info description: comments count."
+msgid "Comments:"
+msgstr "Komentáre:"
+
+#: templates/parts/meta/entry-meta-item-date.php:22
+#: templates/parts/meta/entry-meta-item-date.php:23
+msgctxt "Post meta info description: publish date."
+msgid "Posted on:"
+msgstr "Publikované dňa:"
+
+#: templates/parts/meta/entry-meta-item-date.php:25
+#: templates/parts/meta/entry-meta-item-date.php:26
+msgctxt "Post meta info description: update date."
+msgid "Last updated on:"
+msgstr "Naposledy aktualizované:"
+
+#. translators: %s: Name of current post. Only visible to screen readers.
+#: templates/parts/meta/entry-meta-item-edit.php:22
+#, php-format
+msgid "Edit %s"
+msgstr "Upraviť %s"
+
+#. translators: Used between list items, there is a space after the comma.
+#: templates/parts/meta/entry-meta-item-tags.php:18
+msgctxt "Tags list separator."
+msgid ", "
+msgstr ", "
+
+#: templates/parts/meta/entry-meta-item-tags.php:33
+msgctxt "Post meta info description: tags list."
+msgid "Tagged as:"
+msgstr "Označené ako:"
+
+#: templates/parts/plugin/content-ocdi-info.php:19
+msgid "Manual import procedure"
+msgstr "Postup manuálneho importu"
+
+#: templates/parts/plugin/content-ocdi-info.php:22
+msgid ""
+"By importing this demo content you get the exact copy of the theme demo "
+"website."
+msgstr ""
+"Importovaním tohto demo obsahu témy získate totožnú kópiu demo webstránky "
+"témy."
+
+#: templates/parts/plugin/content-ocdi-info.php:23
+msgid "Preview the theme demo website &raquo;"
+msgstr "Prezrieť demo webstránku témy &raquo;"
+
+#: templates/parts/plugin/content-ocdi-info.php:26
+msgid ""
+"For instructions on importing theme demo content please visit GitHub "
+"repository."
+msgstr "Inštrukcie pre import demo obsahu témy nájdete v GitHub depozitári."
+
+#: templates/parts/plugin/content-ocdi-info.php:27
+msgid "GitHub repository instructions &raquo;"
+msgstr "Inštrukcie v GitHub depozitári &raquo;"
+
+#: templates/parts/plugin/content-ocdi-info.php:33
+msgid "Media files quality"
+msgstr "Kvalita súborov médií"
+
+#: templates/parts/plugin/content-ocdi-info.php:36
+msgid ""
+"Please note that imported media files (such as images, video and audio "
+"files) are of low quality to prevent copyright infringement."
+msgstr ""
+"Upozorňujeme, že importované súbory médií (napríklad obrázky, video a audio "
+"súbory) majú nízku kvalitu, aby sa zabránilo porušovaniu autorských práv."
+
+#: templates/parts/plugin/content-ocdi-info.php:37
+msgid ""
+"Please read \"Credits\" section of theme documentation for reference where "
+"the demo media files were obtained from."
+msgstr ""
+"Zoznam zdrojov multimediálnych súborov nájdete v sekcii \"Credits\" v "
+"dokumentácii témy."
+
+#: templates/parts/plugin/content-ocdi-info.php:40
+msgid "Get media for your website &raquo;"
+msgstr "Získať médiá pre vaše webové stránky &raquo;"
+
+#: templates/parts/plugin/content-ocdi-info.php:46
+msgid "Install demo required plugins!"
+msgstr "Nainštalujte vyžadované demo pluginy!"
+
+#: templates/parts/plugin/content-ocdi-info.php:49
+msgid ""
+"Please read the information about the theme demo required plugins first."
+msgstr ""
+"Najskôr si prečítajte informácie o pluginoch vyžadovaných pre demo obsah "
+"témy."
+
+#: templates/parts/plugin/content-ocdi-info.php:50
+msgid ""
+"If you do not install and activate the demo required plugins, some of the "
+"content will not be imported."
+msgstr ""
+"Ak pluginy vyžadované pre demo obsah témy nebudú nainštalované a aktivované, "
+"časti demo obsahu nebudú importované."
+
+#: templates/parts/plugin/content-ocdi-info.php:52
+msgid ""
+"Read the information before you run the theme demo content import process."
+msgstr ""
+"Preštudujte si informácie predtým, než spustíte proces importu demo obsahu."
+
+#: templates/parts/plugin/content-ocdi-info.php:53
+msgid "View the list of required plugins &raquo;"
+msgstr "Zobraziť zoznam požadovaných pluginov &raquo;"
+
+#: templates/parts/plugin/content-ocdi-info.php:58
+msgid ""
+"(Note that this set of plugins may differ from plugins recommended under "
+"Appearance &rarr; Install Plugins!)"
+msgstr ""
+"(Upozorňujeme, že táto sada pluginov sa môže líšiť od pluginov odporúčaných "
+"na stránke Vzhľad &rarr; Inštalovať pluginy!)"
+
+#~ msgid "Posts navigation"
+#~ msgstr "Navigácia príspevkov"

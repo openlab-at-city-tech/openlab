@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\RevisionList;
  *   $driveService = new Google\Service\Drive(...);
  *   $revisions = $driveService->revisions;
  *  </code>
+ * @internal
  */
 class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {

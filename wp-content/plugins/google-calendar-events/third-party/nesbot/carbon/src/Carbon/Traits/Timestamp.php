@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Carbon\Traits;
 
 /**
  * Trait Timestamp.
+ * @internal
  */
 trait Timestamp
 {

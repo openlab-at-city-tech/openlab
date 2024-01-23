@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\BadFluentConstructorException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\BadFluentSetterException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidCastException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidIntervalException;
+use SimpleCalendar\plugin_deps\Carbon\Exceptions\OutOfRangeException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\ParseErrorException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnitNotConfiguredException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnknownGetterException;
@@ -31,8 +32,10 @@ use SimpleCalendar\plugin_deps\DateMalformedIntervalStringException;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use InvalidArgumentException;
 use ReflectionException;
 use ReturnTypeWillChange;
+use RuntimeException;
 use Throwable;
 /**
  * A simple API extension for DateInterval.
@@ -180,6 +183,7 @@ use Throwable;
  * @method $this floorMicroseconds(int|float $precision = 1) Truncate the current instance microsecond with given precision.
  * @method $this ceilMicrosecond(int|float $precision = 1) Ceil the current instance microsecond with given precision.
  * @method $this ceilMicroseconds(int|float $precision = 1) Ceil the current instance microsecond with given precision.
+ * @internal
  */
 class CarbonInterval extends DateInterval implements CarbonConverterInterface
 {
@@ -220,6 +224,10 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
      * @var array|null
      */
     private static $flipCascadeFactors;
+    /**
+     * @var bool
+     */
+    private static $floatSettersEnabled = \false;
     /**
      * The registered macros.
      *
@@ -298,6 +306,18 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
         self::$flipCascadeFactors = null;
         static::$cascadeFactors = $cascadeFactors;
     }
+    /**
+     * This option allow you to opt-in for the Carbon 3 behavior where float
+     * values will no longer be cast to integer (so truncated).
+     *
+     * ⚠️ This settings will be applied globally, which mean your whole application
+     * code including the third-party dependencies that also may use Carbon will
+     * adopt the new behavior.
+     */
+    public static function enableFloatSetters(bool $floatSettersEnabled = \true) : void
+    {
+        self::$floatSettersEnabled = $floatSettersEnabled;
+    }
     ///////////////////////////////////////////////////////////////////
     //////////////////////////// CONSTRUCTORS /////////////////////////
     ///////////////////////////////////////////////////////////////////
@@ -305,13 +325,13 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
      * Create a new CarbonInterval instance.
      *
      * @param Closure|DateInterval|string|int|null $years
-     * @param int|null                             $months
-     * @param int|null                             $weeks
-     * @param int|null                             $days
-     * @param int|null                             $hours
-     * @param int|null                             $minutes
-     * @param int|null                             $seconds
-     * @param int|null                             $microseconds
+     * @param int|float|null                       $months
+     * @param int|float|null                       $weeks
+     * @param int|float|null                       $days
+     * @param int|float|null                       $hours
+     * @param int|float|null                       $minutes
+     * @param int|float|null                       $seconds
+     * @param int|float|null                       $microseconds
      *
      * @throws Exception when the interval_spec (passed as $years) cannot be parsed as an interval.
      */
@@ -328,7 +348,8 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
             return;
         }
         $spec = $years;
-        if (!\is_string($spec) || (float) $years || \preg_match('/^[\\d.]/', $years)) {
+        $isStringSpec = \is_string($spec) && !\preg_match('/^[\\d.]/', $spec);
+        if (!$isStringSpec || (float) $years) {
             $spec = static::PERIOD_PREFIX;
             $spec .= $years > 0 ? $years . static::PERIOD_YEARS : '';
             $spec .= $months > 0 ? $months . static::PERIOD_MONTHS : '';
@@ -347,7 +368,55 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
                 $spec .= '0' . static::PERIOD_YEARS;
             }
         }
-        parent::__construct($spec);
+        try {
+            parent::__construct($spec);
+        } catch (Throwable $exception) {
+            try {
+                parent::__construct('PT0S');
+                if ($isStringSpec) {
+                    if (!\preg_match('/^P
+                        (?:(?<year>[+-]?\\d*(?:\\.\\d+)?)Y)?
+                        (?:(?<month>[+-]?\\d*(?:\\.\\d+)?)M)?
+                        (?:(?<week>[+-]?\\d*(?:\\.\\d+)?)W)?
+                        (?:(?<day>[+-]?\\d*(?:\\.\\d+)?)D)?
+                        (?:T
+                            (?:(?<hour>[+-]?\\d*(?:\\.\\d+)?)H)?
+                            (?:(?<minute>[+-]?\\d*(?:\\.\\d+)?)M)?
+                            (?:(?<second>[+-]?\\d*(?:\\.\\d+)?)S)?
+                        )?
+                    $/x', $spec, $match)) {
+                        throw new InvalidArgumentException("Invalid duration: {$spec}");
+                    }
+                    $years = (float) ($match['year'] ?? 0);
+                    $this->assertSafeForInteger('year', $years);
+                    $months = (float) ($match['month'] ?? 0);
+                    $this->assertSafeForInteger('month', $months);
+                    $weeks = (float) ($match['week'] ?? 0);
+                    $this->assertSafeForInteger('week', $weeks);
+                    $days = (float) ($match['day'] ?? 0);
+                    $this->assertSafeForInteger('day', $days);
+                    $hours = (float) ($match['hour'] ?? 0);
+                    $this->assertSafeForInteger('hour', $hours);
+                    $minutes = (float) ($match['minute'] ?? 0);
+                    $this->assertSafeForInteger('minute', $minutes);
+                    $seconds = (float) ($match['second'] ?? 0);
+                    $this->assertSafeForInteger('second', $seconds);
+                }
+                $totalDays = $weeks * static::getDaysPerWeek() + $days;
+                $this->assertSafeForInteger('days total (including weeks)', $totalDays);
+                $this->y = (int) $years;
+                $this->m = (int) $months;
+                $this->d = (int) $totalDays;
+                $this->h = (int) $hours;
+                $this->i = (int) $minutes;
+                $this->s = (int) $seconds;
+                if ((float) $this->y !== $years || (float) $this->m !== $months || (float) $this->d !== $totalDays || (float) $this->h !== $hours || (float) $this->i !== $minutes || (float) $this->s !== $seconds) {
+                    $this->add(static::fromString($years - $this->y . ' years ' . ($months - $this->m) . ' months ' . ($totalDays - $this->d) . ' days ' . ($hours - $this->h) . ' hours ' . ($minutes - $this->i) . ' minutes ' . ($seconds - $this->s) . ' seconds '));
+                }
+            } catch (Throwable $secondException) {
+                throw $secondException instanceof OutOfRangeException ? $secondException : $exception;
+            }
+        }
         if ($microseconds !== null) {
             $this->f = $microseconds / Carbon::MICROSECONDS_PER_SECOND;
         }
@@ -568,6 +637,21 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
         }
     }
     /**
+     * Evaluate the PHP generated by var_export() and recreate the exported CarbonInterval instance.
+     *
+     * @param array $dump data as exported by var_export()
+     *
+     * @return static
+     */
+    #[ReturnTypeWillChange]
+    public static function __set_state($dump)
+    {
+        /** @noinspection PhpVoidFunctionResultUsedInspection */
+        /** @var DateInterval $dateInterval */
+        $dateInterval = parent::__set_state($dump);
+        return static::instance($dateInterval);
+    }
+    /**
      * Return the current context from inside a macro callee or a new one if static.
      *
      * @return static
@@ -781,11 +865,17 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
      * set the $days field.
      *
      * @param DateInterval $interval
+     * @param bool         $skipCopy set to true to return the passed object
+     *                               (without copying it) if it's already of the
+     *                               current class
      *
      * @return static
      */
-    public static function instance(DateInterval $interval, array $skip = [])
+    public static function instance(DateInterval $interval, array $skip = [], bool $skipCopy = \false)
     {
+        if ($skipCopy && $interval instanceof static) {
+            return $interval;
+        }
         return self::castIntervalToClass($interval, static::class, $skip);
     }
     /**
@@ -796,16 +886,19 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
      *
      * @param mixed|int|DateInterval|string|Closure|null $interval interval or number of the given $unit
      * @param string|null                                $unit     if specified, $interval must be an integer
+     * @param bool                                       $skipCopy set to true to return the passed object
+     *                                                             (without copying it) if it's already of the
+     *                                                             current class
      *
      * @return static|null
      */
-    public static function make($interval, $unit = null)
+    public static function make($interval, $unit = null, bool $skipCopy = \false)
     {
         if ($unit) {
             $interval = "{$interval} " . Carbon::pluralUnit($unit);
         }
         if ($interval instanceof DateInterval) {
-            return static::instance($interval);
+            return static::instance($interval, [], $skipCopy);
         }
         if ($interval instanceof Closure) {
             return new static($interval);
@@ -937,29 +1030,49 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
         foreach ($properties as $key => $value) {
             switch (Carbon::singularUnit(\rtrim($key, 'z'))) {
                 case 'year':
+                    $this->checkIntegerValue($key, $value);
                     $this->y = $value;
+                    $this->handleDecimalPart('year', $value, $this->y);
                     break;
                 case 'month':
+                    $this->checkIntegerValue($key, $value);
                     $this->m = $value;
+                    $this->handleDecimalPart('month', $value, $this->m);
                     break;
                 case 'week':
-                    $this->d = $value * (int) static::getDaysPerWeek();
+                    $this->checkIntegerValue($key, $value);
+                    $days = $value * (int) static::getDaysPerWeek();
+                    $this->assertSafeForInteger('days total (including weeks)', $days);
+                    $this->d = $days;
+                    $this->handleDecimalPart('day', $days, $this->d);
                     break;
                 case 'day':
+                    $this->checkIntegerValue($key, $value);
                     $this->d = $value;
+                    $this->handleDecimalPart('day', $value, $this->d);
                     break;
                 case 'daysexcludeweek':
                 case 'dayzexcludeweek':
-                    $this->d = $this->weeks * (int) static::getDaysPerWeek() + $value;
+                    $this->checkIntegerValue($key, $value);
+                    $days = $this->weeks * (int) static::getDaysPerWeek() + $value;
+                    $this->assertSafeForInteger('days total (including weeks)', $days);
+                    $this->d = $days;
+                    $this->handleDecimalPart('day', $days, $this->d);
                     break;
                 case 'hour':
+                    $this->checkIntegerValue($key, $value);
                     $this->h = $value;
+                    $this->handleDecimalPart('hour', $value, $this->h);
                     break;
                 case 'minute':
+                    $this->checkIntegerValue($key, $value);
                     $this->i = $value;
+                    $this->handleDecimalPart('minute', $value, $this->i);
                     break;
                 case 'second':
+                    $this->checkIntegerValue($key, $value);
                     $this->s = $value;
+                    $this->handleDecimalPart('second', $value, $this->s);
                     break;
                 case 'milli':
                 case 'millisecond':
@@ -2281,6 +2394,51 @@ class CarbonInterval extends DateInterval implements CarbonConverterInterface
                 return $index === $parts - 1;
             default:
                 return \true;
+        }
+    }
+    private function checkIntegerValue(string $name, $value)
+    {
+        if (\is_int($value)) {
+            return;
+        }
+        $this->assertSafeForInteger($name, $value);
+        if (\is_float($value) && (float) (int) $value === $value) {
+            return;
+        }
+        if (!self::$floatSettersEnabled) {
+            $type = \gettype($value);
+            @\trigger_error("Since 2.70.0, it's deprecated to pass {$type} value for {$name}.\n" . "It's truncated when stored as an integer interval unit.\n" . "From 3.0.0, decimal part will no longer be truncated and will be cascaded to smaller units.\n" . "- To maintain the current behavior, use explicit cast: {$name}((int) \$value)\n" . "- To adopt the new behavior globally, call CarbonInterval::enableFloatSetters()\n", \E_USER_DEPRECATED);
+        }
+    }
+    /**
+     * Throw an exception if precision loss when storing the given value as an integer would be >= 1.0.
+     */
+    private function assertSafeForInteger(string $name, $value)
+    {
+        if ($value && !\is_int($value) && ($value >= 0x7fffffffffffffff || $value <= -0x7fffffffffffffff)) {
+            throw new OutOfRangeException($name, -0x7fffffffffffffff, 0x7fffffffffffffff, $value);
+        }
+    }
+    private function handleDecimalPart(string $unit, $value, $integerValue)
+    {
+        if (self::$floatSettersEnabled) {
+            $floatValue = (float) $value;
+            $base = (float) $integerValue;
+            if ($floatValue === $base) {
+                return;
+            }
+            $units = ['y' => 'year', 'm' => 'month', 'd' => 'day', 'h' => 'hour', 'i' => 'minute', 's' => 'second'];
+            $upper = \true;
+            foreach ($units as $property => $name) {
+                if ($name === $unit) {
+                    $upper = \false;
+                    continue;
+                }
+                if (!$upper && $this->{$property} !== 0) {
+                    throw new RuntimeException("You cannot set {$unit} to a float value as {$name} would be overridden, " . 'set it first to 0 explicitly if you really want to erase its value');
+                }
+            }
+            $this->add($unit, $floatValue - $base);
         }
     }
 }

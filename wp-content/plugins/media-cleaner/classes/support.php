@@ -184,6 +184,10 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Mailpoet' );
 		}
 
+    if ( defined( 'ACADEMY_VERSION' ) ) {
+      array_push( $unsupported, 'Academy LMS' );
+    }
+
     return $unsupported;
   }
 }

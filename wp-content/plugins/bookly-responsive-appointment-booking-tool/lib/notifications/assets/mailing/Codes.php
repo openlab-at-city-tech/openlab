@@ -4,12 +4,6 @@ namespace Bookly\Lib\Notifications\Assets\Mailing;
 use Bookly\Lib;
 use Bookly\Lib\Notifications\Assets;
 
-
-/**
- * Class Codes
- *
- * @package Bookly\Lib\Notifications\Assets\Mailing
- */
 class Codes extends Assets\Base\Codes
 {
     /** @var Lib\Entities\MailingQueue */

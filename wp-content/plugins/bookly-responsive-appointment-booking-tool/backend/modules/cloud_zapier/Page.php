@@ -4,10 +4,6 @@ namespace Bookly\Backend\Modules\CloudZapier;
 use Bookly\Lib;
 use Bookly\Backend\Components;
 
-/**
- * Class Page
- * @package Bookly\Backend\Modules\CloudZapier
- */
 class Page extends Lib\Base\Component
 {
     /**
@@ -34,11 +30,10 @@ class Page extends Lib\Base\Component
 
             self::renderTemplate( 'index' );
         } else {
-            wp_redirect( add_query_arg(
-                array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
-                admin_url( 'admin.php' ) )
+            Lib\Utils\Common::redirect( add_query_arg(
+                    array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
+                    admin_url( 'admin.php' ) )
             );
-            exit;
         }
     }
 

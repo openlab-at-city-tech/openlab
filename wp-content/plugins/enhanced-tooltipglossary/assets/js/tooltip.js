@@ -177,7 +177,6 @@ CM_Tooltip.gtooltip = function ( opts ) {
             tooltipWrapper.setAttribute( 'id', id );
             tooltipWrapper.setAttribute( 'role', 'tooltip' );
             tooltipWrapper.setAttribute( 'aria-hidden', true );
-            tooltipWrapper.setAttribute( 'aria-label', 'Tooltip wrapper' );
 
             tooltipTop = document.createElement( 'div' );
             tooltipTop.setAttribute( 'id', id + 'top' );
@@ -328,6 +327,11 @@ CM_Tooltip.gtooltip = function ( opts ) {
 			 * Create the tooltip
 			 */
             this.create();
+
+            jQuery( '#tt' ).hide();
+            jQuery('.glossaryItemTitle').html('');
+            jQuery('.glossaryItemBody').html('');
+            jQuery('.cmtt_synonyms_wrapper').html('');
             /*
 			Clear the hide timeout
 			 */
@@ -476,6 +480,7 @@ CM_Tooltip.gtooltip = function ( opts ) {
 			1) Check where we have more space to place the tooltip
 			2) Place the tooltip either above or below the current element
 			 */
+
             var spaceAbove = currentElementPosition.y - opts.top - aboveOffset;
             var spaceUnder = screenHeight - currentElementPosition.bottom - opts.top;
             var spaceLeft = currentElementPosition.x - opts.left;

@@ -7,7 +7,7 @@
  * @package StellarWP\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by the-events-calendar on 23-June-2023 using Strauss.
+ * Modified using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -81,9 +81,15 @@ class Opt_In_Subscriber extends Abstract_Subscriber {
 			$stellar_slug = sanitize_text_field( $_POST['stellar_slug'] );
 		}
 
+		$opt_in_text = '';
+
+		if ( isset( $_POST['opt_in_text'] ) ) {
+			$opt_in_text = sanitize_text_field( $_POST['opt_in_text'] );
+		}
+
 		// User agreed to opt-in to Telemetry.
 		if ( 'true' === $_POST['optin-agreed'] ) {
-			$this->opt_in( $stellar_slug );
+			$this->opt_in( $stellar_slug, $opt_in_text );
 		}
 
 		// Don't show the opt-in modal again.
@@ -138,17 +144,19 @@ class Opt_In_Subscriber extends Abstract_Subscriber {
 	 *
 	 * @since 1.0.0
 	 * @since 2.0.0 - Updated to allow specifying the stellar slug.
+	 * @since 2.2.0 - Updated to add opt-in text.
 	 *
 	 * @param string $stellar_slug The slug to use when opting in.
+	 * @param string $opt_in_text  The text displayed to the user when they agreed to opt-in.
 	 *
 	 * @return void
 	 */
-	public function opt_in( string $stellar_slug ) {
+	public function opt_in( string $stellar_slug, string $opt_in_text = '' ) {
 		$this->container->get( Status::class )->set_status( true, $stellar_slug );
 
 		try {
 			$this->container->get( Telemetry::class )->register_site();
-			$this->container->get( Telemetry::class )->register_user( $stellar_slug );
+			$this->container->get( Telemetry::class )->register_user( $stellar_slug, $opt_in_text );
 		} catch ( \Error $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			// We don't want to throw errors if the server cannot be reached.
 		}

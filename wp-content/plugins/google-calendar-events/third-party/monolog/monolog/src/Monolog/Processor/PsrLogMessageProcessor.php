@@ -18,6 +18,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * It replaces {foo} with the value from $context['foo']
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 class PsrLogMessageProcessor implements ProcessorInterface
 {

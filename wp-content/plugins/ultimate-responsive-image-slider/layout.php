@@ -245,7 +245,7 @@ if($WRIS_L3_Slide_Title) { ?>
 							}
 						?>
 						<div class="sp-slide">
-							<img class="sp-image" alt="<?php echo esc_attr($slide_alt); ?>" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/css/images/blank.gif"); ?>" data-src="<?php echo esc_url($slide_src[0]); ?>" />
+							<img class="sp-image" loading="lazy" alt="<?php echo esc_attr($slide_alt); ?>" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/css/images/blank.gif"); ?>" data-src="<?php echo esc_url($slide_src[0]); ?>" />
 
 							<?php if($slide_title != "" && $WRIS_L3_Show_Slide_Title) { ?>
 							<p class="sp-layer sp-white sp-padding title-in title-in-bg hide-small-screen" 
@@ -295,7 +295,7 @@ if($WRIS_L3_Slide_Title) { ?>
 							$slide_alt = $post_title;
 						}
 						$j++; ?>
-						<img class="sp-thumbnail" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo $slide_alt; ?>"/>
+						<img class="sp-thumbnail" loading="lazy" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo $slide_alt; ?>"/>
 					<?php } // end of for each
 				}// end of is_array ?>
 			</div>

@@ -17,6 +17,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 interface FormatterInterface
 {

@@ -45,6 +45,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Extractor;
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/** @internal */
 class PhpStringTokenParser
 {
     protected static $replacements = ['\\' => '\\', '$' => '$', 'n' => "\n", 'r' => "\r", 't' => "\t", 'f' => "\f", 'v' => "\v", 'e' => "\x1b"];

@@ -69,7 +69,7 @@ class Controller extends Admin_Notice {
 		static $scripts_version = null;
 
 		if ( is_null( $scripts_version ) ) {
-			$script_data     = include WPMUDEV_BLC_DIR . 'assets/js/local-notice/main.asset.php';
+			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local-features.asset.php';
 			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
@@ -83,7 +83,7 @@ class Controller extends Admin_Notice {
 				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
 			),
 			'blc_features_notice' => array(
-				'src' => $this->styles_dir . 'features-notice.min.css',
+				'src' => $this->scripts_dir . 'style-local-features.css',
 				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
 			),
 		);

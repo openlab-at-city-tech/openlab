@@ -26,6 +26,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 /**
  * Manage large file uploads, which may be media but can be any type
  * of sizable data.
+ * @internal
  */
 class MediaFileUpload
 {

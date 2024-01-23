@@ -35,6 +35,7 @@ function openlab_hide_plugins( $plugins ) {
 		'cac-non-cuny-signup/loader.php',
 		'cardboard/cardboard.php',
 		'cubepoints/cubepoints.php',
+		'distributor/distributor.php', // #3279
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
 		'dw-question-answer/dw-question-answer.php',
@@ -47,6 +48,7 @@ function openlab_hide_plugins( $plugins ) {
 		'embed-comment-images/eiic.php',
 		'embed-google-map/embed_google_map.php',
 		'enable-jquery-migrate-helper/enable-jquery-migrate-helper.php',
+		'enhanced-tooltipglossary/enhanced-tooltipglossary.php', // #3301
 		'enigma/enigma.php',
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
@@ -64,6 +66,7 @@ function openlab_hide_plugins( $plugins ) {
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
 		'openlab-modules/openlab-modules.php',
+		'openlab-text-to-speech/openlab-text-to-speech.php',
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',

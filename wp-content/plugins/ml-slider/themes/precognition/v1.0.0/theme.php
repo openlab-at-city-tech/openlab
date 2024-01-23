@@ -48,13 +48,6 @@ class MetaSlider_Theme_Precognition extends MetaSlider_Theme_Base
      */
     public function use_manual_controls($options, $slideshow_id, $settings)
     {
-
-        // Only do this on this theme
-        $theme = get_post_meta($slideshow_id, 'metaslider_slideshow_theme', true);
-        if ($this->id !== $theme['folder']) {
-return $options;
-        }
-
         // Only enable this for dots nav
         if ('true' === $settings['navigation']) {
             $options['manualControls'] = "'.titleNav-{$slideshow_id} li a'";

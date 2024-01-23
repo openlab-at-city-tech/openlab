@@ -3,11 +3,6 @@ namespace Bookly\Lib\Cloud;
 
 use Bookly\Lib\Utils;
 
-/**
- * Class Voice
- *
- * @package Bookly\Lib\Cloud
- */
 class Voice extends Product
 {
     const ACTIVATE       = '/1.0/users/%token%/products/voice/activate';        //POST

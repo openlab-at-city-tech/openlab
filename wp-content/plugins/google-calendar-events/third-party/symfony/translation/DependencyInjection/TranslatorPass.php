@@ -14,6 +14,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Compiler\Co
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\ContainerBuilder;
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Reference;
+/** @internal */
 class TranslatorPass implements CompilerPassInterface
 {
     private $translatorServiceId;

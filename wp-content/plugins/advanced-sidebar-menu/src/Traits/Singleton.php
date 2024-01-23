@@ -6,7 +6,6 @@ namespace Advanced_Sidebar_Menu\Traits;
  * Trait Singleton
  *
  * @author Mat Lipe
- * @since  7.7.0
  */
 trait Singleton {
 
@@ -28,14 +27,15 @@ trait Singleton {
 
 
 	/**
-	 * Create the instance of the class
+	 * Instantiate this class if not already instantiated
+	 * and call a `hook` method if exists.
 	 *
-	 * @static
 	 * @return void
 	 */
 	public static function init() {
 		static::$instance = static::instance();
-		if ( method_exists( static::$instance, 'hook' ) ) {
+		/* @phpstan-ignore-next-line */
+		if ( \method_exists( static::$instance, 'hook' ) ) {
 			static::$instance->hook();
 		}
 		static::$inited = true;

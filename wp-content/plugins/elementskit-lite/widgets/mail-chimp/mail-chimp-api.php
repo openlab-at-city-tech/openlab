@@ -56,7 +56,7 @@ class ElementsKit_Widget_Mail_Chimp_Api extends Core\Handler_Api {
 							'Authorization' => 'apikey '.$token,
 							'Content-Type' => 'application/json; charset=utf-8'
 					],
-			'body' => json_encode($data	)
+			'body' => wp_json_encode($data	)
 			]
 		);
 		if ( is_wp_error( $response ) ) {

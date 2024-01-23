@@ -144,33 +144,32 @@ add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_actio
  * Don't allow any of budypress-docs's native directory filters.
  *
  * Instead, we have a Search filter in the theme.
+ *
+ * @return array
  */
-add_filter(
-	'bp_docs_filter_types',
-	function( $types ) {
-		// We only return an empty aray when getting filter titles.
-		$dbs              = debug_backtrace();
-		$is_filter_titles = false;
-		foreach ( $dbs as $db ) {
-			if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
-				$is_filter_titles = true;
-				break;
-			}
+function openlab_remove_directory_filters_from_doc_list( $types ) {
+	// We only return an empty aray when getting filter titles.
+	$dbs              = debug_backtrace();
+	$is_filter_titles = false;
+	foreach ( $dbs as $db ) {
+		if ( ! empty( $db['function'] ) && 'bp_docs_filter_titles' === $db['function'] ) {
+			$is_filter_titles = true;
+			break;
 		}
+	}
 
-		if ( $is_filter_titles ) {
-			return [];
+	if ( $is_filter_titles ) {
+		return [];
+	}
+
+	return array_filter(
+		$types,
+		function( $type ) {
+			return 'search' === $type['slug'];
 		}
-
-		return array_filter(
-			$types,
-			function( $type ) {
-				return 'search' === $type['slug'];
-			}
-		);
-	},
-	999
-);
+	);
+}
+add_filter( 'bp_docs_filter_types', 'openlab_remove_directory_filters_from_doc_list', 999 );
 
 /**
  * Don't show openlab-private-comments or wp-grade-comments Private checkbox on Docs comments.
@@ -290,3 +289,39 @@ function openlab_add_excerpt_to_docs_activity( $args ) {
 	return $args;
 }
 add_filter( 'bp_docs_activity_args', 'openlab_add_excerpt_to_docs_activity' );
+
+/**
+ * Modifies caps for BP Docs.
+ *
+ * - Allows group admins/mods to manage docs in their group.
+ *
+ * @param array  $caps    Capabilities.
+ * @param string $cap     Capability.
+ * @param int    $user_id User ID.
+ * @param array  $args    Args.
+ * @return array
+ */
+function openlab_bp_docs_map_meta_caps( $caps, $cap, $user_id, $args ) {
+	if ( 'bp_docs_manage' !== $cap ) {
+		return $caps;
+	}
+
+	$doc = bp_docs_get_doc_for_caps( $args );
+	if ( $doc instanceof WP_Post && 0 === $doc->ID && bp_docs_get_post_type_name() === $doc->post_type ) {
+		return $caps;
+	}
+
+	$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+	if ( ! $group_id ) {
+		return $caps;
+	}
+
+	if ( ! groups_is_user_admin( $user_id, $group_id ) && ! groups_is_user_mod( $user_id, $group_id ) ) {
+		return $caps;
+	}
+
+	$caps = [ 'read' ];
+
+	return $caps;
+}
+add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps', 100, 4 );

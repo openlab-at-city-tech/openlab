@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps;
  */
 use SimpleCalendar\plugin_deps\Carbon\CarbonImmutable;
 require_once __DIR__ . '/vendor/autoload.php';
+/** @internal */
 function getOpenCollectiveSponsors() : string
 {
     $members = \json_decode(\file_get_contents('https://opencollective.com/carbon/members/all.json'), \true);

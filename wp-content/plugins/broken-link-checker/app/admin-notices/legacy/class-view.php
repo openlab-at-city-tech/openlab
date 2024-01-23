@@ -39,6 +39,7 @@ class View extends Base {
 	public function render_body() {
 		$dashborad_url = admin_url( 'admin.php?page=blc_dash' );
 		$message       = sprintf(
+			/* translators: %1$s The dashboard url */
 			__( 'We have completely rebuilt BLC with a new cloud-based engine. It’s now 20x faster, more accurate, and works perfectly with any site. Plus, no page limits, no ads, and it’s still 100%% free! Check out Broken Link Checker\'s <a href="%1$s">new dashboard</a>.', 'broken-link-checker' ),
 			$dashborad_url
 		);

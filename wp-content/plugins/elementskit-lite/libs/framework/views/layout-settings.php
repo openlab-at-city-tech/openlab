@@ -12,8 +12,9 @@
 				$count = 0;
 				foreach ( $settings_sections as $section_key => $section ) :
 					reset( $settings_sections ); 
+					$attr_section_key = ( $section_key !== key( $settings_sections ) ) ? '' : 'attr-active';
 					?>
-				<li role="presentation" class="<?php echo ( $section_key !== key( $settings_sections ) ) ? : 'attr-active'; ?>">
+				<li role="presentation" class="<?php echo esc_attr($attr_section_key) ?>">
 					<a class="ekit-admin-nav-link <?php echo $count == 1 ? 'bottom' : ''; ?>" id="v-elementskit-<?php echo esc_attr( $section_key ); ?>-tab" data-attr-toggle="pill" href="#v-elementskit-<?php echo esc_attr( $section_key ); ?>" role="tab"
 						aria-controls="v-elementskit-<?php echo esc_attr( $section_key ); ?>" data-attr-toggle="tab" role="tab">
 						<div class="ekit-admin-tab-content">
@@ -56,8 +57,9 @@ endforeach;
 			<?php 
 			foreach ( $settings_sections as $section_key => $section ) :
 				reset( $settings_sections ); 
+				$attr_section_key = ( $section_key !== key( $settings_sections ) ) ? '' : 'attr-active';
 				?>
-				<div class="attr-tab-pane <?php echo ( $section_key !== key( $settings_sections ) ) ? : 'attr-active'; ?>" id="v-elementskit-<?php echo esc_attr( $section_key ); ?>" role="tabpanel" aria-labelledby="v-elementskit-tab-<?php echo esc_attr( $section_key ); ?>">
+				<div class="attr-tab-pane <?php echo esc_attr($attr_section_key) ?>" id="v-elementskit-<?php echo esc_attr( $section_key ); ?>" role="tabpanel" aria-labelledby="v-elementskit-tab-<?php echo esc_attr( $section_key ); ?>">
 					<div class="ekit-admin-section-header">
 						<h2 class="ekit-admin-section-heaer-title"><i class="<?php echo esc_attr( $section['icon'] ); ?>"></i><?php echo esc_html( $section['title'] ); ?></h2>
 								

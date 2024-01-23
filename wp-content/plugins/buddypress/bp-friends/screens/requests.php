@@ -13,38 +13,51 @@
  * @since 1.0.0
  */
 function friends_screen_requests() {
+	$redirect = false;
+
 	if ( bp_is_action_variable( 'accept', 0 ) && is_numeric( bp_action_variable( 1 ) ) ) {
 		// Check the nonce.
 		check_admin_referer( 'friends_accept_friendship' );
 
-		if ( friends_accept_friendship( bp_action_variable( 1 ) ) )
+		if ( friends_accept_friendship( bp_action_variable( 1 ) ) ) {
 			bp_core_add_message( __( 'Friendship accepted', 'buddypress' ) );
-		else
+		} else {
 			bp_core_add_message( __( 'Friendship could not be accepted', 'buddypress' ), 'error' );
+		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
+		$redirect = true;
 
 	} elseif ( bp_is_action_variable( 'reject', 0 ) && is_numeric( bp_action_variable( 1 ) ) ) {
 		// Check the nonce.
 		check_admin_referer( 'friends_reject_friendship' );
 
-		if ( friends_reject_friendship( bp_action_variable( 1 ) ) )
+		if ( friends_reject_friendship( bp_action_variable( 1 ) ) ) {
 			bp_core_add_message( __( 'Friendship rejected', 'buddypress' ) );
-		else
+		} else {
 			bp_core_add_message( __( 'Friendship could not be rejected', 'buddypress' ), 'error' );
+		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
+		$redirect = true;
 
 	} elseif ( bp_is_action_variable( 'cancel', 0 ) && is_numeric( bp_action_variable( 1 ) ) ) {
 		// Check the nonce.
 		check_admin_referer( 'friends_withdraw_friendship' );
 
-		if ( friends_withdraw_friendship( bp_loggedin_user_id(), bp_action_variable( 1 ) ) )
+		if ( friends_withdraw_friendship( bp_loggedin_user_id(), bp_action_variable( 1 ) ) ) {
 			bp_core_add_message( __( 'Friendship request withdrawn', 'buddypress' ) );
-		else
+		} else {
 			bp_core_add_message( __( 'Friendship request could not be withdrawn', 'buddypress' ), 'error' );
+		}
 
-		bp_core_redirect( trailingslashit( bp_loggedin_user_domain() . bp_current_component() . '/' . bp_current_action() ) );
+		$redirect = true;
+	}
+
+	if ( $redirect ) {
+		bp_core_redirect(
+			bp_loggedin_user_url(
+				bp_members_get_path_chunks( array( bp_get_friends_slug(), 'requests' ) )
+			)
+		);
 	}
 
 	/**

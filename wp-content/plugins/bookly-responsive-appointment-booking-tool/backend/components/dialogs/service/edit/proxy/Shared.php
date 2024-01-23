@@ -4,9 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib;
 
 /**
- * Class Shared
- * @package Bookly\Backend\Components\Dialogs\Service\Edit\Proxy
- *
  * @method static void  enqueueAssetsForServices() Enqueue assets for page Services.
  * @method static array prepareUpdateService( array $data ) Prepare update service settings in add-ons.
  * @method static array prepareUpdateServiceResponse( array $response, Lib\Entities\Service $service ) Prepare response for updated service.

@@ -13,6 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation;
 if (!\function_exists(t::class)) {
     /**
      * @author Nate Wiebe <nate@northern.co>
+     * @internal
      */
     function t(string $message, array $parameters = [], string $domain = null) : TranslatableMessage
     {

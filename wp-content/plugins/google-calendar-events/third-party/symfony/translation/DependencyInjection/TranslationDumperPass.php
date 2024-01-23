@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\ContainerBu
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Reference;
 /**
  * Adds tagged translation.formatter services to translation writer.
+ * @internal
  */
 class TranslationDumperPass implements CompilerPassInterface
 {

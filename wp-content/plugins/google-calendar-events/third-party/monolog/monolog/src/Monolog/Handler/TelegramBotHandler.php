@@ -29,6 +29,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * @author Mazur Alexandr <alexandrmazur96@gmail.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
+ * @internal
  */
 class TelegramBotHandler extends AbstractProcessingHandler
 {

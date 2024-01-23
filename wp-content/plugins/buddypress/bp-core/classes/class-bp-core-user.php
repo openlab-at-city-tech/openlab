@@ -155,12 +155,12 @@ class BP_Core_User {
 		if ( !empty( $this->profile_data ) ) {
 			$full_name_field_name = bp_xprofile_fullname_field_name();
 
-			$this->user_url  = bp_core_get_user_domain( $this->id, $this->profile_data['user_nicename'], $this->profile_data['user_login'] );
+			$this->user_url  = bp_members_get_user_url( $this->id );
 			$this->fullname  = esc_attr( $this->profile_data[$full_name_field_name]['field_data'] );
 			$this->user_link = "<a href='{$this->user_url}'>{$this->fullname}</a>";
 			$this->email     = esc_attr( $this->profile_data['user_email'] );
 		} else {
-			$this->user_url  = bp_core_get_user_domain( $this->id );
+			$this->user_url  = bp_members_get_user_url( $this->id );
 			$this->user_link = bp_core_get_userlink( $this->id );
 			$this->fullname  = esc_attr( bp_core_get_user_displayname( $this->id ) );
 			$this->email     = esc_attr( bp_core_get_user_email( $this->id ) );
@@ -204,7 +204,7 @@ class BP_Core_User {
 			)
 		);
 
-		/* translators: %s: human time diff of the last time the user was active on the site. */
+		/* translators: %s: last activity timestamp (e.g. "Active 1 hour ago") */
 		$this->last_active = bp_core_get_last_activity( bp_get_user_last_activity( $this->id ), _x( 'Active %s', 'last time the user was active', 'buddypress' ) );
 	}
 

@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dashboard\Appointments;
 
 use Bookly\Lib;
 
-/**
- * Class Widget
- * @package Bookly\Backend\Components\Dashboard\Appointments
- */
 class Widget extends Lib\Base\Component
 {
     public static function init()

@@ -1,0 +1,105 @@
+/* FILE: global/menu/_toggle-sub-menus.scss */
+
+// A11yMenu JS accessible menu.
+.toggle-sub-menus {
+
+	.menu-item-has-children {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		> a {
+			padding-#{$right}: $ratio_min + em;
+		}
+
+	}
+
+	.button-toggle-sub-menu {
+		position: relative;
+		width: var(--button_toggle_sub_menu_size);
+		height: var(--button_toggle_sub_menu_size);
+		padding: 0;
+		border: 0;
+		background: none;
+		color: inherit;
+		box-shadow: none;
+		opacity: .33;
+
+		&:hover,
+		&:focus,
+		&:active {
+			background: none;
+			box-shadow: none;
+			opacity: 1;
+		}
+
+		// Touch enabled devices.
+		@media (hover: none) {
+			border: 1px solid;
+			border-color: inherit;
+			opacity: 1;
+		}
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			width: 10px;
+			height: 2px;
+			left: 50%; // No RTL needed here.
+			top: 50%;
+			background: currentColor;
+			transform: translateX(-50%) translateY(-50%); // No RTL needed here.
+		}
+
+		&::after {
+			transform: translateX(-50%) translateY(-50%) rotate(90deg); // No RTL needed here.
+			transition: transform .2s;
+		}
+
+		.menu-item-is-depth-3 & {
+			display: none;
+		}
+
+	}
+
+	.has-expanded-sub-menu > .sub-menu {
+		// See below for AMP styles.
+		display: block;
+	}
+
+	.has-expanded-sub-menu > .button-toggle-sub-menu::after {
+		// See below for AMP styles.
+		transform: translateX(-50%) translateY(-50%) rotate(0); // No RTL needed here.
+	}
+
+	.menu-item-has-children:hover > .button-toggle-sub-menu {
+		opacity: 1;
+
+		&::after {
+			@include media( map_get( $breakpoint, $mobile_menu_breakpoint ) ) {
+				transform: translateX(-50%) translateY(-50%) rotate(0); // No RTL needed here.
+			}
+		}
+
+	}
+
+}
+
+// AMP.
+.is-amp .button-toggle-sub-menu.toggled {
+	@include media( ( map_get( $breakpoint, $mobile_menu_breakpoint ), 'max-width' ) ) {
+		// With AMP we need to make this toggled only for mobile menu
+		// as otherwise it looks weird on large screens
+		// On large screens the CSS :focus-within takes charge.
+
+		~ .sub-menu {
+			display: block;
+		}
+
+		&::after {
+			transform: translateX(-50%) translateY(-50%) rotate(0); // No RTL needed here.
+		}
+
+	}
+}

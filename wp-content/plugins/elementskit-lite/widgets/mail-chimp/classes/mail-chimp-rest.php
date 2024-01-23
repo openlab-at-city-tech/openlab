@@ -41,7 +41,7 @@ if(!function_exists('ekit_mail_chimp_rest')){
 							'Authorization' => 'apikey '.$token,
 							'Content-Type' => 'application/json; charset=utf-8'
 					],
-			'body' => json_encode($postData	)
+			'body' => wp_json_encode($postData	)
 			]
 		);
 		

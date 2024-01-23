@@ -65,6 +65,7 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
  *
  * $res = $client->get('myproject/taskqueues/myqueue');
  * ```
+ * @internal
  */
 class ApplicationDefaultCredentials
 {

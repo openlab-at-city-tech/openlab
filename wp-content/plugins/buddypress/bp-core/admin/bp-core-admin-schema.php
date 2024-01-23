@@ -437,7 +437,7 @@ function bp_core_install_blog_tracking() {
  *
  * @since 2.0.0
  *
- * @global $wpdb
+ * @global wpdb $wpdb WordPress database object.
  */
 function bp_core_install_signups() {
 	global $wpdb;
@@ -484,7 +484,7 @@ function bp_core_install_signups() {
  * @link https://core.trac.wordpress.org/ticket/27855 WordPress Trac Ticket
  * @link https://buddypress.trac.wordpress.org/ticket/5563 BuddyPress Trac Ticket
  *
- * @global WPDB $wpdb
+ * @global wpdb $wpdb WordPress database object.
  */
 function bp_core_upgrade_signups() {
 	global $wpdb;
@@ -613,7 +613,6 @@ function bp_core_install_invitations() {
 function bp_core_install_nonmember_opt_outs() {
 	$sql             = array();
 	$charset_collate = $GLOBALS['wpdb']->get_charset_collate();
-	$bp_prefix       = bp_core_get_table_prefix();
 	$optouts_class   = new BP_Optout();
 	$table_name      = $optouts_class->get_table_name();
 	$sql = "CREATE TABLE {$table_name} (

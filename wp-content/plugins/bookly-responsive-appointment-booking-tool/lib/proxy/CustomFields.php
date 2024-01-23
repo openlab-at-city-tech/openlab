@@ -4,9 +4,6 @@ namespace Bookly\Lib\Proxy;
 use Bookly\Lib;
 
 /**
- * Class CustomFields
- *
- * @package Bookly\Lib\Proxy
  * @method static void addBooklyMenuItem() Add 'Custom Fields' to Bookly menu.
  * @method static \stdClass[] getAll( $exclude = array() ) Get custom fields
  * @method static array filterForService( array $custom_fields, int $service_id ) Get custom fields

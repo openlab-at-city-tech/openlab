@@ -13,7 +13,6 @@ jQuery(function($){
         var id = $(this).attr('data-id');
         $('.ngg_page_content_main > div').css("display", "none");
         $('div[data-id="' + $(this).attr('data-id') + '"]').css("display", "block");
-
     });
 
     /* Set up responsive menu for mobile devices. */   

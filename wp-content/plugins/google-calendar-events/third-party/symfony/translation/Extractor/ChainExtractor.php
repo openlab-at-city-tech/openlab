@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * ChainExtractor extracts translation messages from template files.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
+ * @internal
  */
 class ChainExtractor implements ExtractorInterface
 {

@@ -21,20 +21,19 @@ class Scripts {
 
 
 	/**
-	 * Add various scripts to the cue.
+	 * Add various scripts to the queue.
 	 */
 	public function hook() {
 		add_action( 'init', [ $this, 'register_gutenberg_scripts' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'use_development_version_of_react' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ], 11 );
 
 		// Elementor support.
 		add_action( 'elementor/editor/after_enqueue_scripts', [ $this, 'register_gutenberg_scripts' ] );
 		add_action( 'elementor/editor/after_enqueue_scripts', [ $this, 'admin_scripts' ] );
 
-		// UGH! Beaver Builder hack.
-		if ( isset( $_GET['fl_builder'] ) ) { // phpcs:ignore
-			add_action( 'wp_enqueue_scripts', [ $this, 'admin_scripts' ] );
-		}
+		// Beaver Builder support.
+		add_action( 'fl_builder_ui_enqueue_scripts', [ $this, 'admin_scripts' ] );
 
 		add_action( 'advanced-sidebar-menu/widget/category/after-form', [ $this, 'init_widget_js' ], 1000 );
 		add_action( 'advanced-sidebar-menu/widget/page/after-form', [ $this, 'init_widget_js' ], 1000 );
@@ -66,11 +65,9 @@ class Scripts {
 	 * @return void
 	 */
 	public function register_gutenberg_scripts() {
-		$js_dir = apply_filters( 'advanced-sidebar-menu/js-dir', ADVANCED_SIDEBAR_MENU_URL . 'js/dist/' );
-		$file = $this->is_script_debug_enabled() ? 'admin' : 'admin.min';
-
-		wp_register_script( static::GUTENBERG_HANDLE, "{$js_dir}{$file}.js", [
+		wp_register_script( static::GUTENBERG_HANDLE, $this->get_dist_file( 'advanced-sidebar-menu-block-editor', 'js' ), [
 			'jquery',
+			'lodash',
 			'react',
 			'react-dom',
 			'wp-block-editor',
@@ -84,12 +81,8 @@ class Scripts {
 			'wp-url',
 		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, true );
 
-		// Must register here because used as a dependency of the Gutenberg styles.
-		wp_register_style( static::ADMIN_STYLE, ADVANCED_SIDEBAR_MENU_URL . 'resources/css/advanced-sidebar-menu.css', [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
-
 		if ( ! $this->is_webpack_enabled() ) {
-			wp_register_style( static::GUTENBERG_CSS_HANDLE, "{$js_dir}{$file}.css", [
-				static::ADMIN_STYLE,
+			wp_register_style( static::GUTENBERG_CSS_HANDLE, $this->get_dist_file( 'advanced-sidebar-menu-block-editor', 'css' ), [
 				'dashicons',
 			], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 		}
@@ -110,16 +103,25 @@ class Scripts {
 	/**
 	 * Add JS and CSS to the admin and in specific cases the front-end.
 	 *
-	 * @action admin_enqueue_scripts 10 0
-	 *
 	 * @return void
 	 */
 	public function admin_scripts() {
-		wp_enqueue_script( static::ADMIN_SCRIPT, ADVANCED_SIDEBAR_MENU_URL . 'resources/js/advanced-sidebar-menu.js', [
+		wp_enqueue_script( static::ADMIN_SCRIPT, $this->get_dist_file( 'advanced-sidebar-menu-admin', 'js' ), [
 			'jquery',
 		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, false );
-
-		wp_enqueue_style( static::ADMIN_STYLE );
+		if ( ! $this->is_webpack_enabled() ) {
+			wp_enqueue_style( static::ADMIN_STYLE, $this->get_dist_file( 'advanced-sidebar-menu-admin', 'css' ), [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
+		}
+		/**
+		 * Fire action when admin scripts are being loaded.
+		 * Simply loading additional scripts such as "runtime" in any context
+		 * the admin scripts are used.
+		 *
+		 * @since 9.3.1
+		 *
+		 * @param Scripts $scripts - The Scripts instance.
+		 */
+		do_action( 'advanced-sidebar-menu/scripts/admin-scripts', $this );
 	}
 
 
@@ -131,8 +133,14 @@ class Scripts {
 	 * @return bool
 	 */
 	public function is_script_debug_enabled() {
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		return ( \defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ! empty( $_GET['script-debug'] );
+		if ( SCRIPT_DEBUG ) {
+			return true;
+		}
+		//phpcs:ignore -- Not using nonce because users enter manually in url.
+		if ( isset( $_GET['script-debug'] ) && 'true' === $_GET['script-debug'] ) {
+			return true;
+		}
+		return false;
 	}
 
 
@@ -142,12 +150,41 @@ class Scripts {
 	 * Provides a consistent interface for determining considerations
 	 * when Webpack is enabled.
 	 *
-	 * @since 9.0.0.
+	 * @since 9.0.0
 	 *
 	 * @return bool
 	 */
 	public function is_webpack_enabled() {
-		return SCRIPT_DEBUG && has_filter( 'advanced-sidebar-menu/js-dir' );
+		return SCRIPT_DEBUG && file_exists( ADVANCED_SIDEBAR_MENU_DIR . '/js/dist/.running' );
+	}
+
+
+	/**
+	 * Use the development version of React to improve our ErrorBoundary data.
+	 *
+	 * Provides more useful debugging information.
+	 *
+	 * - Do not change if we are already on SCRIPT_DEBUG.
+	 * - Do not change if our custom `$_GET['script-debug']` is not available.
+	 * - Only available in the context of Gutenberg.
+	 *
+	 * @since 9.0.10
+	 *
+	 * @return void
+	 */
+	public function use_development_version_of_react() {
+		if ( SCRIPT_DEBUG || ! $this->is_script_debug_enabled() ) {
+			return;
+		}
+
+		$script = wp_scripts()->query( 'react', 'scripts' );
+		if ( ! \is_bool( $script ) && is_a( $script, \_WP_Dependency::class ) ) {
+			$script->src = \str_replace( wp_scripts_get_suffix(), '', (string) $script->src );
+		}
+		$script = wp_scripts()->query( 'react-dom', 'scripts' );
+		if ( ! \is_bool( $script ) && is_a( $script, \_WP_Dependency::class ) ) {
+			$script->src = \str_replace( wp_scripts_get_suffix(), '', (string) $script->src );
+		}
 	}
 
 
@@ -161,7 +198,7 @@ class Scripts {
 			'categories'    => [
 				'displayEach' => Category::get_display_each_options(),
 			],
-			'currentScreen' => is_admin() ? get_current_screen()->base : '',
+			'currentScreen' => is_admin() && \function_exists( 'get_current_screen' ) ? get_current_screen()->base ?? '' : '',
 			'docs'          => [
 				'page'     => Core::instance()->get_documentation_url( Page::NAME ),
 				'category' => Core::instance()->get_documentation_url( Category::NAME ),
@@ -200,11 +237,27 @@ class Scripts {
 		}
 		?>
 		<script>
-			if ( typeof ( advanced_sidebar_menu ) !== 'undefined' ) {
-				advanced_sidebar_menu.init();
+			if ( typeof ( window.advancedSidebarMenuAdmin ) !== 'undefined' ) {
+				window.advancedSidebarMenuAdmin.init();
 			}
 		</script>
 		<?php
 	}
 
+
+	/**
+	 * Translate a file slug to its location based on the current context.
+	 *
+	 * @since 9.2.2
+	 *
+	 * @param string $file_slug - The file slug.
+	 * @param string $extension - The file extension.
+	 *
+	 * @return string
+	 */
+	protected function get_dist_file( string $file_slug, string $extension ): string {
+		$js_dir = apply_filters( 'advanced-sidebar-menu/js-dir', ADVANCED_SIDEBAR_MENU_URL . 'js/dist/' );
+		$file_slug = $this->is_script_debug_enabled() ? $file_slug : "{$file_slug}.min";
+		return "{$js_dir}{$file_slug}.{$extension}";
+	}
 }

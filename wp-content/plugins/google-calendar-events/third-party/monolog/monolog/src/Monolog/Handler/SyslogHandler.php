@@ -25,6 +25,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *   $log->pushHandler($syslog);
  *
  * @author Sven Paulus <sven@karlsruhe.org>
+ * @internal
  */
 class SyslogHandler extends AbstractSyslogHandler
 {

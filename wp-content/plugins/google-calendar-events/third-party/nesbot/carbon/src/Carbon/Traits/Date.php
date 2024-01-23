@@ -521,6 +521,7 @@ use Throwable;
  * @method        string           longRelativeToOtherDiffForHumans(DateTimeInterface $other = null, int $parts = 1)  Get the difference (long format, 'RelativeToOther' mode) in a human readable format in the current locale. ($other and $parts parameters can be swapped.)
  *
  * </autodoc>
+ * @internal
  */
 trait Date
 {
@@ -1936,7 +1937,7 @@ trait Date
             $replacements = ['d' => \true, 'D' => 'ddd', 'j' => \true, 'l' => 'dddd', 'N' => \true, 'S' => function ($date) {
                 $day = $date->rawFormat('j');
                 return \str_replace((string) $day, '', $date->isoFormat('Do'));
-            }, 'w' => \true, 'z' => \true, 'W' => \true, 'F' => 'MMMM', 'm' => \true, 'M' => 'MMM', 'n' => \true, 't' => \true, 'L' => \true, 'o' => \true, 'Y' => \true, 'y' => \true, 'a' => 'a', 'A' => 'A', 'B' => \true, 'g' => \true, 'G' => \true, 'h' => \true, 'H' => \true, 'i' => \true, 's' => \true, 'u' => \true, 'v' => \true, 'E' => \true, 'I' => \true, 'O' => \true, 'P' => \true, 'Z' => \true, 'c' => \true, 'r' => \true, 'U' => \true];
+            }, 'w' => \true, 'z' => \true, 'W' => \true, 'F' => 'MMMM', 'm' => \true, 'M' => 'MMM', 'n' => \true, 't' => \true, 'L' => \true, 'o' => \true, 'Y' => \true, 'y' => \true, 'a' => 'a', 'A' => 'A', 'B' => \true, 'g' => \true, 'G' => \true, 'h' => \true, 'H' => \true, 'i' => \true, 's' => \true, 'u' => \true, 'v' => \true, 'E' => \true, 'I' => \true, 'O' => \true, 'P' => \true, 'Z' => \true, 'c' => \true, 'r' => \true, 'U' => \true, 'T' => \true];
         }
         return $replacements;
     }

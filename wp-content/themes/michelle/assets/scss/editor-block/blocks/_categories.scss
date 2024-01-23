@@ -1,0 +1,18 @@
+/* FILE: editor-block/blocks/_categories.scss */
+
+#{ $selector_editor_wrapper } .wp-block-categories {
+	max-width: $max_width_entry_content;
+	margin-left: auto;
+	margin-right: auto;
+
+	ul {
+		padding: 0;
+
+		&:last-child {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+	}
+
+}

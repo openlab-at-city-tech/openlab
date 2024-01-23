@@ -1,0 +1,64 @@
+/* FILE: comments/_meta.scss */
+
+.comment-meta {
+	clear: both;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1em;
+	overflow: hidden;
+
+	.avatar {
+		display: block;
+		width: 5em - $ratio;
+		margin-bottom: 1em;
+		border-radius: 10em;
+
+		@include media( map_get( $breakpoint, 'm' ) ) {
+			position: absolute;
+			width: 4em;
+			#{$left}: 0;
+			top: $ratio + em;
+			margin-bottom: 0;
+		}
+
+	}
+
+	.says {
+		@extend %screen_reader--hide;
+	}
+
+}
+
+.comment-metadata {
+	font-size: var(--typography_font_size_s_em);
+	font-style: italic;
+
+	a {
+		text-decoration: none;
+		color: inherit;
+
+		&:hover {
+			text-decoration: underline;
+			text-underline-offset: .15em;
+			text-decoration-style: dotted;
+			text-decoration-skip-ink: none;
+		}
+
+	}
+
+	.edit-link {
+		padding-#{$left}: 1rem;
+		font-style: normal;
+		text-transform: uppercase;
+		letter-spacing: var(--letter_spacing);
+	}
+
+}
+
+.comment-author {
+
+	a {
+		color: var(--color_content_headings);
+	}
+
+}

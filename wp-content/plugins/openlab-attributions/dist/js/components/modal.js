@@ -4,7 +4,7 @@ import ContentEditable from 'react-contenteditable';
  * WordPress dependencies
  */
 import { Component } from '@wordpress/element';
-import { Button, Modal, Notice } from '@wordpress/components';
+import { Button, Notice } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -32,6 +32,10 @@ class AttributionModal extends Component {
 		this.handleSubmit = this.handleSubmit.bind( this );
 		this.discardChanges = this.discardChanges.bind( this );
 		this.handleClose = this.handleClose.bind( this );
+		this.getFocusableElements = this.getFocusableElements.bind( this );
+		this.handleFocusIn = this.handleFocusIn.bind( this );
+		this.setFocusedElement = this.setFocusedElement.bind( this );
+		this.handleKeyDown = this.handleKeyDown.bind( this );
 
 		this.state = {
 			editedContent: false,
@@ -40,7 +44,9 @@ class AttributionModal extends Component {
 			adaptedLicense: '',
 			content: '',
 			...props.item,
-			isAdaptedFromDisplayed: false
+			isAdaptedFromDisplayed: false,
+			focusedElement: null,
+			focusableElements: null,
 		};
 	}
 
@@ -54,7 +60,134 @@ class AttributionModal extends Component {
 			} );
 		}
 
-		this.moveModalToEditorElement();
+		if ( this.props.isImageBlock ) {
+			this.moveModalToEditorElement();
+		}
+
+		// eslint-disable-next-line
+		document.addEventListener( 'keydown', this.handleKeyDown );
+
+		// eslint-disable-next-line
+		document.addEventListener( 'focusin', this.handleFocusIn );
+
+		// Set focus on the first input in .component-attributions-modal.
+		setTimeout( () => {
+			const input = document.querySelector( '.component-attributions-modal input' );
+
+			if ( input ) {
+				input.focus();
+			}
+
+			// Prevent Block Editor's default up/down arrow key behavior.
+			const focusableElements = this.getFocusableElements();
+			focusableElements.forEach( ( element ) => {
+				element.addEventListener( 'keydown', ( event ) => {
+					if ( 40 !== event.keyCode && 38 !== event.keyCode ) {
+						return;
+					}
+
+					event.preventDefault();
+				} )
+			} )
+		}, 100 )
+	}
+
+	setFocusedElement( element ) {
+		this.setState( {
+			focusedElement: element,
+		} );
+	}
+
+	getFocusableElements() {
+		if ( null !== this.state.focusableElements ) {
+			return this.state.focusableElements
+		}
+
+		const modal = document.querySelector( '.component-attributions-modal' );
+
+		const focusableElements = modal.querySelectorAll( 'input, select, textarea, button' );
+
+		this.setState( {
+			focusableElements
+		} );
+
+		return focusableElements;
+	}
+
+	handleFocusIn( event ) {
+		const isModal = event.target.closest( '.component-attributions-modal' );
+		if ( ! isModal ) {
+			return;
+		}
+
+		this.setFocusedElement( event.target );
+	}
+
+	handleKeyDown = ( event ) => {
+		const handledKeycodes = [ 9, 13 ];
+		if ( ! handledKeycodes.includes( event.keyCode ) ) {
+			return;
+		}
+
+		const isModal = event.target.closest( '.component-attributions-modal' );
+		if ( ! isModal ) {
+			return;
+		}
+
+		switch ( event.keyCode ) {
+			// Tab key.
+			case 9:
+				event.preventDefault();
+				event.stopPropagation();
+
+				const forwardOrBackward = event.shiftKey ? -1 : 1;
+
+				const previousFocusedElement = this.state.focusedElement;
+				if ( ! previousFocusedElement ) {
+					return;
+				}
+
+				// Get a list of all focusable elements in the modal.
+				const inputs = this.getFocusableElements();
+
+				// Get the index of the previously focused element.
+				const previousFocusedElementIndex = Array.prototype.indexOf.call( inputs, previousFocusedElement );
+
+				// If not found, return.
+				if ( -1 === previousFocusedElementIndex ) {
+					return;
+				}
+
+				// Set focus to the next element in the list. If we're at the end, loop around.
+				let nextFocusedElement = null;
+				if ( 'undefined' === typeof inputs[ previousFocusedElementIndex + forwardOrBackward ] ) {
+					const loopedIndex = forwardOrBackward > 0 ? 0 : inputs.length - 1;
+					nextFocusedElement = inputs[ loopedIndex ];
+				} else {
+					nextFocusedElement = inputs[ previousFocusedElementIndex + forwardOrBackward ];
+				}
+
+				// If we are focused on a field inside of #adaptedFrom, remove the 'hidden' class from #adaptedFrom.
+				const adaptedFromEl = document.getElementById( 'adaptedFrom' );
+				if ( adaptedFromEl.contains( nextFocusedElement ) ) {
+					adaptedFromEl.classList.remove( 'hidden' );
+				}
+
+				nextFocusedElement.focus();
+
+			break;
+
+			// Enter.
+			case 13:
+				if ( 'BUTTON' === event.target.tagName ) {
+					return true;
+				}
+
+				event.preventDefault();
+				event.stopPropagation();
+
+			break;
+		}
 	}
 
 	/**
@@ -106,15 +239,17 @@ class AttributionModal extends Component {
 	}
 
 	handleClose() {
-		const modal = document.querySelector('.component-attributions-modal');
-		const modalMainElement = modal.parentElement;
+		if ( this.props.isImageBlock ) {
+			const modal = document.querySelector('.component-attributions-modal');
+			const modalMainElement = modal.parentElement;
 
-		// Move the modal element to the original position
-		let originalPosition = document.getElementById('originalModalPosition');
-		originalPosition.parentElement.appendChild(modalMainElement);
+			// Move the modal element to the original position
+			const originalPosition = document.getElementById( 'originalModalPosition' );
+			originalPosition.parentElement.appendChild(modalMainElement);
 
-		// Remove temporary element
-		document.getElementById('originalModalPosition').remove();
+			// Remove temporary element
+			document.getElementById('originalModalPosition').remove();
+		}
 
 		this.props.onClose();
 	}
@@ -172,7 +307,7 @@ class AttributionModal extends Component {
 			blockEditorMenu.style.position = 'relative';
 		}
 
-		const { onClose, modalType } = this.props;
+		const { modalType } = this.props;
 
 		const title =
 			modalType === 'add' ? __( 'Add Attribution', 'openlab-attributions' ) : __( 'Update Attribution', 'openlab-attributions' );
@@ -191,6 +326,7 @@ class AttributionModal extends Component {
 				className={ 'component-attributions-modal' }
 				onRequestClose={ this.handleClose }
 				isOpen={ this.props.isOpen }
+				disableKeystroke={ true }
 			>
 				<div className="header">
 					<h3>{ title }</h3>

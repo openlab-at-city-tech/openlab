@@ -583,7 +583,7 @@ class Jetpack_Tweetstorm_Helper {
 				$block['media'],
 				function ( $single ) {
 					// Only images and videos can be uploaded.
-					if ( 0 === strpos( $single['type'], 'image/' ) || 0 === strpos( $single['type'], 'video/' ) ) {
+					if ( str_starts_with( $single['type'], 'image/' ) || str_starts_with( $single['type'], 'video/' ) ) {
 						return true;
 					}
 
@@ -593,7 +593,7 @@ class Jetpack_Tweetstorm_Helper {
 		);
 
 		if ( count( $media ) > 0 ) {
-			if ( 0 === strpos( $media[0]['type'], 'video/' ) || 'image/gif' === $media[0]['type'] ) {
+			if ( str_starts_with( $media[0]['type'], 'video/' ) || 'image/gif' === $media[0]['type'] ) {
 				// We can only attach a single video or GIF.
 				$current_tweet['media'] = array_slice( $media, 0, 1 );
 			} else {
@@ -602,7 +602,7 @@ class Jetpack_Tweetstorm_Helper {
 					array_filter(
 						$media,
 						function ( $single ) {
-							if ( 0 === strpos( $single['type'], 'video/' ) || 'image/gif' === $single['type'] ) {
+							if ( str_starts_with( $single['type'], 'video/' ) || 'image/gif' === $single['type'] ) {
 								return false;
 							}
 
@@ -1205,7 +1205,7 @@ class Jetpack_Tweetstorm_Helper {
 			}
 		} elseif ( 'video' === $block_def['type'] ) {
 			// Handle VideoPress videos.
-			if ( isset( $block['attrs']['src'] ) && 0 === strpos( $block['attrs']['src'], 'https://videos.files.wordpress.com/' ) ) {
+			if ( isset( $block['attrs']['src'] ) && str_starts_with( $block['attrs']['src'], 'https://videos.files.wordpress.com/' ) ) {
 				$url = array( $block['attrs']['src'] );
 			} else {
 				$url = self::extract_attr_content_from_html(
@@ -1430,7 +1430,7 @@ class Jetpack_Tweetstorm_Helper {
 					}
 
 					// A link has opened, grab the URL for inserting later.
-					if ( 0 === strpos( $token, '<a ' ) ) {
+					if ( str_starts_with( $token, '<a ' ) ) {
 						$href_values = self::extract_attr_content_from_html( 'a', 'href', $token );
 						if ( ! empty( $href_values[0] ) && $validator->isValidURL( $href_values[0] ) ) {
 							// Remember the URL.
@@ -1448,12 +1448,12 @@ class Jetpack_Tweetstorm_Helper {
 					}
 
 					// We don't return inline images, but they technically take up 1 character in the RichText.
-					if ( 0 === strpos( $token, '<img ' ) ) {
+					if ( str_starts_with( $token, '<img ' ) ) {
 						$values[ $tag ][ $opened ] .= self::$inline_placeholder;
 					}
 				}
 
-				if ( "<$tag>" === $token || 0 === strpos( $token, "<$tag " ) ) {
+				if ( "<$tag>" === $token || str_starts_with( $token, "<$tag " ) ) {
 					// A tag has just been opened.
 					++$opened;
 					// Set an empty value now, so we're keeping track of empty tags.
@@ -1571,7 +1571,7 @@ class Jetpack_Tweetstorm_Helper {
 			array_pop( $token_attrs );
 
 			// We somehow got a tag that isn't the one we're after. Skip it.
-			if ( 0 !== strpos( $found_tag, "<$tag " ) ) {
+			if ( ! str_starts_with( $found_tag, "<$tag " ) ) {
 				continue;
 			}
 
@@ -1651,7 +1651,7 @@ class Jetpack_Tweetstorm_Helper {
 
 		$requests = array_filter( $requests );
 
-		// Remove this check once WordPress 6.2 is the minimum supported version.
+		// @todo Remove this check when wpcom picks up the new Requests lib (it seems it was skipped during their update to 6.2)
 		if ( ! class_exists( '\WpOrg\Requests\Hooks' ) ) {
 			$hooks = new Requests_Hooks();
 		} else {
@@ -1663,7 +1663,7 @@ class Jetpack_Tweetstorm_Helper {
 			array( self::class, 'validate_redirect_url' )
 		);
 
-		// Remove this check once WordPress 6.2 is the minimum supported version.
+		// @todo Remove this check when wpcom picks up the new Requests lib (it seems it was skipped during their update to 6.2)
 		$results = class_exists( '\WpOrg\Requests\Requests' )
 			? \WpOrg\Requests\Requests::request_multiple( $requests, array( 'hooks' => $hooks ) )
 			: Requests::request_multiple( $requests, array( 'hooks' => $hooks ) );
@@ -1744,7 +1744,7 @@ class Jetpack_Tweetstorm_Helper {
 	 */
 	public static function validate_redirect_url( $redirect_url ) {
 		if ( ! wp_http_validate_url( $redirect_url ) ) {
-			// Remove this check once WordPress 6.2 is the minimum supported version.
+			// @todo Remove this check when wpcom picks up the new Requests lib (it seems it was skipped during their update to 6.2)
 			if ( ! class_exists( '\WpOrg\Requests\Exception' ) ) {
 				throw new Requests_Exception( __( 'A valid URL was not provided.', 'jetpack' ), 'wp_http.redirect_failed_validation' );
 			}

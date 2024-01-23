@@ -3,11 +3,6 @@ namespace Bookly\Lib\Utils\Ics;
 
 use Bookly\Lib;
 
-/**
- * Class Event
- *
- * @package Bookly\Lib\Utils\Ics
- */
 class Event extends Base
 {
     /** @var string */

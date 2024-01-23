@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\TableSettings;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\TableSettings
- */
 class Dialog extends Lib\Base\Component
 {
     /**

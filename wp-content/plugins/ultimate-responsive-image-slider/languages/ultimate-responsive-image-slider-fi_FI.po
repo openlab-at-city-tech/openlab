@@ -1,0 +1,503 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Ultimate Responsive Image Slider\n"
+"POT-Creation-Date: 2023-11-23 15:24+0530\n"
+"PO-Revision-Date: 2023-11-23 15:24+0530\n"
+"Last-Translator: Weblizar <lizarweb@gmail.com>\n"
+"Language-Team: \n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.1\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: settings.php:231 tooltip.php:51
+msgid "Display Slider Post Title"
+msgstr "Näytä liukusäkeen otsikko"
+
+#: settings.php:237
+msgid "Select Yes/No option to show/hide slide title above slider"
+msgstr "Valitse Kyllä/Ei -vaihtoehto näyttääksesi/piilottaaksesi liukusäkeen otsikon liukusäkeen yläpuolella"
+
+#: settings.php:238 settings.php:251 settings.php:263 settings.php:275
+#: settings.php:288 settings.php:300 settings.php:312 settings.php:326
+#: settings.php:338 settings.php:350 settings.php:378 settings.php:397
+#: settings.php:410 settings.php:423 settings.php:436 settings.php:448
+#: settings.php:462 settings.php:478 settings.php:493 settings.php:515
+#: settings.php:528 settings.php:541 settings.php:553 settings.php:566
+#: settings.php:578 settings.php:591 settings.php:626
+msgid "Preview"
+msgstr "Esikatselu"
+
+#: settings.php:244 tooltip.php:56
+msgid "Display Slide Title"
+msgstr "Näytä liukusäkeen otsikko"
+
+#: settings.php:250
+msgid "Select Yes/No option to show/hide slide title over slides."
+msgstr "Valitse Kyllä/Ei -vaihtoehto näyttääksesi/piilottaaksesi liukusäkeen otsikon liukusäkkeen päällä."
+
+#: settings.php:257 tooltip.php:61
+msgid "Slide Title Color"
+msgstr "Aseta liukusäkeen otsikon väri"
+
+#: settings.php:262
+msgid "Select a color to set slide title color."
+msgstr "Valitse väri asettaaksesi liukusäkeen otsikon värin."
+
+#: settings.php:269 tooltip.php:66
+msgid "Slide Title Background Color"
+msgstr "Liukusäkeen otsikon taustaväri"
+
+#: settings.php:274
+msgid "Select a color to set slide title background color."
+msgstr "Valitse väri asettaaksesi liukusäkeen otsikon taustavärin."
+
+#: settings.php:281 tooltip.php:71
+msgid "Display Slide Description"
+msgstr "Näytä liukusäkeen kuvaus"
+
+#: settings.php:287
+msgid "Select Yes/No option to show/hide slide description over slides."
+msgstr "Valitse Kyllä/Ei -vaihtoehto näyttääksesi/piilottaaksesi liukusäkeen kuvauksen liukusäkkeen päällä."
+
+#: settings.php:294 tooltip.php:76
+msgid "Slide Description Color"
+msgstr "Liukusäkeen kuvauksen väri"
+
+#: settings.php:299
+msgid "Select a color to set slide description color."
+msgstr "Valitse väri asettaaksesi liukusäkeen kuvauksen värin."
+
+#: settings.php:306 tooltip.php:81
+msgid "Slide Description Background Color"
+msgstr "Liukusäkeen kuvauksen taustaväri"
+
+#: settings.php:311
+msgid "Select a color to set slide description background color."
+msgstr "Valitse väri asettaaksesi liukusäkeen kuvauksen taustavärin."
+
+#: settings.php:318
+msgid "Auto Play Slide Show"
+msgstr "Toista liukusäkeen näytös automaattisesti"
+
+#: settings.php:321
+msgid "Yes"
+msgstr "Kyllä"
+
+#: settings.php:322
+msgid "Yes with Stop on Mouse Hover"
+msgstr "Kyllä, pysäytä hiiren napsautuksella"
+
+#: settings.php:323
+msgid "No"
+msgstr "Ei"
+
+#: settings.php:325
+msgid "Select Yes/No option to auto slide enable or disable into slider."
+msgstr "Valitse Kyllä/Ei -vaihtoehto ottaaksesi käyttöön tai poistaaksesi liukusäkeen automaattisen liu'un."
+
+#: settings.php:331
+msgid "Slide Transition"
+msgstr "Liukusäkkeen siirtymä"
+
+#: settings.php:337
+msgid "Select a transition effect you want to apply on slides."
+msgstr "Valitse siirtymäefekti, jonka haluat soveltaa liukusäkeisiin."
+
+#: settings.php:343
+msgid "Auto play Slider Speed"
+msgstr "Automaattisen liukusäkeen toistonopeus"
+
+#: settings.php:349
+msgid "Set your desired slider speed of slides. Default speed is 5 seconds."
+msgstr "Aseta haluamasi liukusäkeen liikkeenopeus. Oletusnopeus on 5 sekuntia."
+
+#: settings.php:370
+msgid "Slide Order"
+msgstr "Liukusäkeen järjestys"
+
+#: settings.php:373
+msgid "Ascending"
+msgstr "Nouseva"
+
+#: settings.php:374
+msgid "Descending"
+msgstr "Laskeva"
+
+#: settings.php:375
+msgid "Random"
+msgstr "Satunnainen"
+
+#: settings.php:377
+msgid "Select a slide order you want to apply on slides"
+msgstr "Valitse liukusäkeiden järjestys, jonka haluat soveltaa."
+
+#: settings.php:384 tooltip.php:88
+msgid "Distance Between Slide"
+msgstr "Etäisyys liukusäkeen välillä"
+
+#: settings.php:396
+msgid ""
+"Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
+"setting selected to Slide."
+msgstr ""
+"Aseta väli kaikkien liukusäkeiden välille. Vaihteluväli 0-25. Toimii, kun Siirtymäasetus on valittu liukusäkeeksi."
+
+#: settings.php:403 tooltip.php:93
+msgid "Show Thumbnail"
+msgstr "Näytä pikkukuva"
+
+#: settings.php:409
+msgid ""
+"Select Yes/No option to show or hide thumbnail based navigation under slides."
+msgstr ""
+"Valitse Kyllä/Ei -vaihtoehto näyttääksesi/piilottaaksesi pikkukuvapohjaisen navigoinnin liukusäkeen alla."
+
+#: settings.php:416 tooltip.php:98
+msgid "Thumbnail Position"
+msgstr "Pikkukuvan sijainti"
+
+#: settings.php:419
+msgid "Top"
+msgstr "Yläosa"
+
+#: settings.php:420
+msgid "Bottom"
+msgstr "Alaosa"
+
+#: settings.php:422
+msgid "Select a thumbnail position to show above or below the slider."
+msgstr "Valitse pikkukuvan sijainti näyttääksesi sen liukusäkkeen ylä- tai alaosassa."
+
+#: settings.php:429 tooltip.php:103
+msgid "Selected Thumbnail Style"
+msgstr "Valittu pikkukuvan tyyli"
+
+#: settings.php:432
+msgid "Border"
+msgstr "Reuna"
+
+#: settings.php:433
+msgid "Pointer"
+msgstr "Osoitin"
+
+#: settings.php:435
+msgid "Select a style to apply on select thumbnails."
+msgstr "Valitse tyyli soveltaaksesi valittuihin pikkukuviin."
+
+#: settings.php:442 tooltip.php:108
+msgid "Selected Thumbnail Style Color"
+msgstr "Valittu pikkukuvan tyylin väri"
+
+#: settings.php:447
+msgid "Select a color to set on selected thumbnail style color."
+msgstr "Valitse väri valitun pikkukuvan tyylin väriksi."
+
+#: settings.php:454 tooltip.php:113
+msgid "Thumbnail Resize"
+msgstr "Pikkukuvan muutos"
+
+#: settings.php:458
+msgid "Width"
+msgstr "Leveys"
+
+#: settings.php:459
+msgid "Height"
+msgstr "Korkeus"
+
+#: settings.php:461
+msgid "Set custom height and width for thumbnails."
+msgstr "Aseta mukautettu korkeus ja leveys pikkukuville."
+
+#: settings.php:468 tooltip.php:118
+msgid "Slider Width"
+msgstr "Liukusäkkeen leveys"
+
+#: settings.php:472
+msgid "100% Width"
+msgstr "100 % leveys"
+
+#: settings.php:473
+msgid "Full Width"
+msgstr "Täysi leveys"
+
+#: settings.php:474 settings.php:489
+msgid "Custom"
+msgstr "Mukautettu"
+
+#: settings.php:477
+msgid "Enter your desired width for slider. Default width is 1000px."
+msgstr "Syötä haluamasi leveys liukusäkkeelle. Oletusleveys on 1000px."
+
+#: settings.php:484 tooltip.php:123
+msgid "Slider Height"
+msgstr "Liukusäkkeen korkeus"
+
+#: settings.php:488
+msgid "Auto Height"
+msgstr "Automaattinen korkeus"
+
+#: settings.php:492
+msgid "Enter your desired height for slider. Default height is 500px."
+msgstr "Syötä haluamasi korkeus liukusäkkeelle. Oletuskorkeus on 500px."
+
+#: settings.php:499
+msgid "Slide Scale Mode"
+msgstr "Liukusäkkeen skaalaustila"
+
+#: settings.php:504
+msgid "Cover"
+msgstr "Peitä"
+
+#: settings.php:505
+msgid "Contain"
+msgstr "Sisällä"
+
+#: settings.php:506
+msgid "Exact"
+msgstr "Tarkka"
+
+#: settings.php:507
+msgid "None"
+msgstr "Ei mitään"
+
+#: settings.php:511
+msgid "COVER will scale and crop the image so that it fills the entire slide."
+msgstr "PEITÄ skaalaa ja rajaa kuva siten, että se täyttää koko liukusäkkeen."
+
+#: settings.php:512
+msgid "CONTAIN will keep the entire image visible inside the slide."
+msgstr "SISÄLLÄ pitää koko kuvan näkyvissä liukusäkkeen sisällä."
+
+#: settings.php:513
+msgid "EXACT will match the size of the image to the size of the slide."
+msgstr "TARKKA vastaa kuvan kokoa liukusäkkeen kokoon."
+
+#: settings.php:514
+msgid "NONE will leave the image to its original size."
+msgstr "EI JÄTÄ kuvaa sen alkuperäiseen kokoon."
+
+#: settings.php:521
+msgid "Slide Auto Scale Up"
+msgstr "Liukusäkeen automaattinen skaalaus ylöspäin"
+
+#: settings.php:527
+msgid "If the slide can be scaled up more than its original size."
+msgstr "Jos liukusäkettä voidaan skaalata enemmän kuin sen alkuperäinen koko."
+
+#: settings.php:534 tooltip.php:130
+msgid "Show Navigation Arrow"
+msgstr "Näytä navigointinuoli"
+
+#: settings.php:540
+msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
+msgstr "Valitse Kyllä/Ei-optio näyttääksesi tai piilottaaksesi nuolet hiiren ollessa liu'un päällä."
+
+#: settings.php:547 tooltip.php:135
+msgid "Navigation Color"
+msgstr "Navigoinnin väri"
+
+#: settings.php:552
+msgid "Select a color to set navigation arrow and full screen icon color."
+msgstr "Valitse väri asettaaksesi navigointinuolen ja koko näytön kuvakkeen värin."
+
+#: settings.php:559 tooltip.php:140
+msgid "Show Navigation Bullets"
+msgstr "Näytä navigointipisteet"
+
+#: settings.php:565
+msgid "Select Yes/No option to show or hide slider navigation buttons under image slider."
+msgstr "Valitse Kyllä/Ei-optio näyttääksesi tai piilottaaksesi liukusäkeen kuvanavigoinnin painikkeet."
+
+#: settings.php:572 tooltip.php:145
+msgid "Navigation Bullets Color"
+msgstr "Navigointipisteiden väri"
+
+#: settings.php:577
+msgid "Select a color to set navigation bullets color."
+msgstr "Valitse väri asettaaksesi navigointipisteiden värin."
+
+#: settings.php:584 tooltip.php:150
+msgid "Full Screen Slide Show"
+msgstr "Koko näytön diaesitys"
+
+#: settings.php:590
+msgid "Select Yes/No option for full screen slide show."
+msgstr "Valitse Kyllä/Ei-optio koko näytön diaesitystä varten."
+
+#: settings.php:597 tooltip.php:155
+msgid "Fonts"
+msgstr "Fontit"
+
+#: settings.php:625
+msgid "Choose a font to apply on slide title and description."
+msgstr "Valitse fontti liukusäkkeen otsikon ja kuvauksen käyttämiseksi."
+
+#: settings.php:633
+msgid "Custom CSS"
+msgstr "Mukautettu CSS"
+
+#: settings.php:638
+msgid "Enter any custom CSS you want to apply on this slider into text area filed."
+msgstr "Syötä mukautettu CSS halutessasi soveltaa sitä tähän liukusäkkeeseen tekstikenttään."
+
+#: ultimate-responsive-image-slider.php:185
+#: ultimate-responsive-image-slider.php:186
+msgid "Add New Slider"
+msgstr "Lisää uusi liukusäädin"
+
+#: ultimate-responsive-image-slider.php:187
+msgid "Edit Slider"
+msgstr "Muokkaa liukusäädintä"
+
+#: ultimate-responsive-image-slider.php:188
+msgid "New Slider"
+msgstr "Uusi liukusäädin"
+
+#: ultimate-responsive-image-slider.php:189
+msgid "View Slider"
+msgstr "Näytä liukusäädin"
+
+#: ultimate-responsive-image-slider.php:190
+msgid "Search Slider"
+msgstr "Etsi liukusäädintä"
+
+#: ultimate-responsive-image-slider.php:191
+msgid "No Slider found"
+msgstr "Ei löydy liukusäädintä"
+
+#: ultimate-responsive-image-slider.php:192
+msgid "No Slider Found in Trash"
+msgstr "Roskakorista ei löytynyt liukusäädintä"
+
+#: ultimate-responsive-image-slider.php:193
+msgid "Parent Slider:"
+msgstr "Yläliukusäädin:"
+
+#: ultimate-responsive-image-slider.php:194
+msgid "All Sliders"
+msgstr "Kaikki liukusäätimet"
+
+#: ultimate-responsive-image-slider.php:223
+msgid "UR Image Slider Title"
+msgstr "UR Kuvan liukusäätimen otsikko"
+
+#: ultimate-responsive-image-slider.php:224
+#: ultimate-responsive-image-slider.php:246
+msgid "Slider Shortcode"
+msgstr "Liukusäätimen lyhytkoodi"
+
+#: ultimate-responsive-image-slider.php:225
+msgid "Date"
+msgstr "Päivämäärä"
+
+#: ultimate-responsive-image-slider.php:243
+msgid "Add Slides"
+msgstr "Lisää liukusäkkeet"
+
+#: ultimate-responsive-image-slider.php:244
+msgid "Configure Settings"
+msgstr "Määritä asetukset"
+
+#: ultimate-responsive-image-slider.php:247
+msgid "Try My New Slider Plugin"
+msgstr "Kokeile uutta liukusäätimen lisäosaa"
+
+#: ultimate-responsive-image-slider.php:345
+#: ultimate-responsive-image-slider.php:544
+msgid "Slide ID"
+msgstr "Liukusäkeen tunniste"
+
+#: ultimate-responsive-image-slider.php:346
+#: ultimate-responsive-image-slider.php:545
+msgid "Slide Title"
+msgstr "Liukusäkeen otsikko"
+
+#: ultimate-responsive-image-slider.php:349
+msgid "Enter Slide Title"
+msgstr "Syötä liukusäkkeen otsikko"
+
+#: ultimate-responsive-image-slider.php:352
+msgid "Slide Descriptions"
+msgstr "Liukusäkeen kuvaus"
+
+#: ultimate-responsive-image-slider.php:353
+msgid "Enter Slide Description"
+msgstr "Syötä liukusäkkeen kuvaus"
+
+#: ultimate-responsive-image-slider.php:354
+#: ultimate-responsive-image-slider.php:553
+msgid "Use Rich Text Editor"
+msgstr "Käytä tekstieditoria"
+
+#: ultimate-responsive-image-slider.php:357
+#: ultimate-responsive-image-slider.php:556
+msgid "Slide Alt Text"
+msgstr "Liukusäkkeen vaihtoehtoinen teksti"
+
+#: ultimate-responsive-image-slider.php:358
+#: ultimate-responsive-image-slider.php:557
+msgid "Max Length 125 Characters"
+msgstr "Enintään 125 merkkiä"
+
+#: ultimate-responsive-image-slider.php:406
+msgid "Add New Slide"
+msgstr "Lisää uusi liukusäke"
+
+#: ultimate-responsive-image-slider.php:410
+msgid "Sort Ascending by Slide ID"
+msgstr "Lajittele nousevasti liukusäkeen tunnisteen perusteella"
+
+#: ultimate-responsive-image-slider.php:414
+msgid "Sort Descending by Slide ID"
+msgstr "Lajittele laskevasti liukusäkeen tunnisteen perusteella"
+
+#: ultimate-responsive-image-slider.php:419
+msgid "Clone Slider"
+msgstr "Kloonaa liukusäädin"
+
+#: ultimate-responsive-image-slider.php:424
+msgid "Delete All Slides"
+msgstr "Poista kaikki liukusäkkeet"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Slider clone created successfully."
+msgstr "Liukusäätimen klooni luotiin onnistuneesti."
+
+#: ultimate-responsive-image-slider.php:428
+msgid "Go to"
+msgstr "Siirry sivulle"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "All Slider"
+msgstr "Kaikki liukusäätimet"
+
+#: ultimate-responsive-image-slider.php:428
+msgid "page to edit cloned slider."
+msgstr "muokataksesi kloonattua liukusäädintä."
+
+#: ultimate-responsive-image-slider.php:510
+msgid "Use below shortcode in any Page/Post to publish your slider"
+msgstr "Käytä alla olevaa lyhytkoodia millä tahansa sivulla tai viestissä liukusäätimesi julkaisemiseksi"
+
+#: ultimate-responsive-image-slider.php:513
+msgid "To embed slider in any custom theme template"
+msgstr "Upottamiseksi mukautetun teeman mihin tahansa pohjaan"
+
+#: ultimate-responsive-image-slider.php:548
+msgid "Enter Slide Title Here"
+msgstr "Syötä liukusäkkeen otsikko tähän"
+
+#: ultimate-responsive-image-slider.php:551
+msgid "Slide Description"
+msgstr "Liukusäkkeen kuvaus"
+
+#: ultimate-responsive-image-slider.php:552
+msgid "Enter Slide Description Here"
+msgstr "Syötä liukusäkkeen kuvaus tähän"

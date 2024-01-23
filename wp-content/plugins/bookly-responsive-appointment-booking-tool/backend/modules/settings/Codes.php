@@ -1,11 +1,6 @@
 <?php
 namespace Bookly\Backend\Modules\Settings;
 
-/**
- * Class Codes
- *
- * @package Bookly\Backend\Modules\Settings
- */
 class Codes
 {
     /**

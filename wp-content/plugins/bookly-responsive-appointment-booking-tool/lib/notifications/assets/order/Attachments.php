@@ -5,10 +5,6 @@ use Bookly\Lib;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Base;
 
-/**
- * Class Attachments
- * @package Bookly\Lib\Notifications\Assets\Order
- */
 class Attachments extends Base\Attachments
 {
     /** @var Codes */

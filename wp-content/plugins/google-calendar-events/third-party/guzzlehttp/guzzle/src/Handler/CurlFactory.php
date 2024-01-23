@@ -15,6 +15,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Creates curl resources from a request
  *
  * @final
+ * @internal
  */
 class CurlFactory implements CurlFactoryInterface
 {

@@ -119,15 +119,21 @@ class Controller extends Base {
 	 * @return boolean
 	 */
 	protected function can_run_schedule() {
+		// Better not run when membership is expired.
+		if ( boolval( Utilities::membership_expired() ) ) {
+			return false;
+		}
+
 		// For some reason this is called multiple times
-		$cur_date       = new \DateTimeImmutable();
-		$scan_results = Settings::instance()->get( 'scan_results' );
-		$last_timestamp = $scan_results['end_time'] ?? null;
-		$last_scan_date = new \DateTimeImmutable( date( 'Y-m-d H:i:s', $last_timestamp ) );
+		$cur_date           = new \DateTimeImmutable();
+		$scan_results       = Settings::instance()->get( 'scan_results' );
+		$last_timestamp     = $scan_results['end_time'] ?? null;
+		$last_scan_date     = new \DateTimeImmutable( date( 'Y-m-d H:i:s', $last_timestamp ) );
 		$interval_from_last = $cur_date->diff( $last_scan_date );
 
-		if ( 'in_progress' === Settings::instance()->get( 'scan_status' ) || abs( $interval_from_last->format( '%h' ) )  <= 5 ) {
-			$this->set_scan_schedule();
+		if ( 'in_progress' === Settings::instance()->get( 'scan_status' ) || ( ! empty( $last_timestamp ) && abs( $interval_from_last->format( '%h' ) ) <= 5 ) ) {
+			// Since we return `false` at this point, `$this->set_scan_schedule()` will be called from `process_scheduled_event()`. No need to run it here too.
+			//$this->set_scan_schedule();
 			return false;
 		}
 

@@ -15,6 +15,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Injects url/method and remote IP of the current web request in all records
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ * @internal
  */
 class WebProcessor implements ProcessorInterface
 {

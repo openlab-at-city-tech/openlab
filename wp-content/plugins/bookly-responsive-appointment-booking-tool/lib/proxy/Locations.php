@@ -5,9 +5,6 @@ use Bookly\Lib;
 use BooklyLocations\Lib\Entities\Location;
 
 /**
- * Class Locations
- *
- * @package Bookly\Lib\Proxy
  * @method static void            addBooklyMenuItem() Add 'Locations' to Bookly menu.
  * @method static Lib\Slots\Staff addServices( Lib\Slots\Staff $staff, int $staff_id, int $service_id )
  * @method static Location|false  findById( int $location_id ) Find location by id

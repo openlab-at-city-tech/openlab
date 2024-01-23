@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Notifications;
 
-/**
- * Class WPML
- * @package Bookly\Lib\Notifications
- */
 abstract class WPML
 {
     /** @var string|null */

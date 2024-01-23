@@ -16,6 +16,7 @@ use DateTimeInterface;
  * Format a log message into an Elasticsearch record
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
+ * @internal
  */
 class ElasticsearchFormatter extends NormalizerFormatter
 {

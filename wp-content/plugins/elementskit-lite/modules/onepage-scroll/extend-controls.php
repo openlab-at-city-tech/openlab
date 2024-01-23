@@ -48,13 +48,17 @@ class ElementsKit_Extend_Onepage_Scroll {
 				'type'        => \Elementor\Controls_Manager::CHOOSE,
 				'options'     => array(
 					'1' => array(
-						'icon' => 'fa fa-unlock-alt',
+						'icon' => 'eicon-lock',
 					),
 				),
 				'default'     => '1',
 				'toggle'      => false,
 				'separator'   => 'before',
-				'description' => sprintf( __( '%1$s Get the %2$s Pro version %3$s for more awesome elements and powerful modules. %4$s', 'elementskit-lite' ), '<span class="ekit-widget-pro-feature">', '<a href="https://wpmet.com/elementskit-pricing" target="_blank">', '</a>', '</span>' ),
+				'description' => sprintf('<span class="ekit-widget-pro-feature"> %1$s <a href="https://wpmet.com/elementskit-pricing" target="_blank"> %2$s </a> %3$s </span>',
+					esc_html__('Get the', 'elementskit-lite'),
+					esc_html__('Pro version', 'elementskit-lite'),
+					esc_html__('for more awesome elements and powerful modules.', 'elementskit-lite'),
+				),
 			)
 		);
 	}

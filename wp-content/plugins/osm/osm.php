@@ -3,13 +3,13 @@
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
-Version: 6.0.1
+Version: 6.0.2
 Author: MiKa
 Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
 */
 
-/*  (c) Copyright 2022  MiKa (www.hyumika.com)
+/*  (c) Copyright 2023  MiKa (www.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V6.0.1");
+define ("PLUGIN_VER", "V6.0.2");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.

@@ -1,14 +1,8 @@
 <?php
 namespace Bookly\Backend\Components\TinyMce;
 
-use Bookly\Backend\Components\TinyMce\Proxy;
 use Bookly\Lib;
 
-/**
- * Class Tools
- *
- * @package Bookly\Backend\Modules\TinyMce
- */
 class Tools extends Lib\Base\Component
 {
     public static function init()

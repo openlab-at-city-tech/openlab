@@ -4,6 +4,7 @@ namespace SimpleCalendar\plugin_deps\Psr\Log;
 
 /**
  * Describes log levels.
+ * @internal
  */
 class LogLevel
 {

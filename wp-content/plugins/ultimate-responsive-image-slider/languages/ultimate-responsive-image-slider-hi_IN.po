@@ -1,390 +1,379 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Flicker Album Gallery\n"
-"POT-Creation-Date: 2020-05-29 18:48+0530\n"
-"PO-Revision-Date: 2020-05-29 18:50+0530\n"
+"Project-Id-Version: Ultimate Responsive Image Slider\n"
+"POT-Creation-Date: 2023-11-22 13:54+0530\n"
+"PO-Revision-Date: 2023-11-22 15:34+0530\n"
 "Last-Translator: Weblizar <lizarweb@gmail.com>\n"
 "Language-Team: \n"
-"Language: en\n"
+"Language: hi_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: .\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _e;__\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: settings.php:229 tooltip.php:48
+#: settings.php:231 tooltip.php:51
 msgid "Display Slider Post Title"
 msgstr "स्लाइडर शीर्षक प्रदर्शन"
 
-#: settings.php:235
+#: settings.php:237
 msgid "Select Yes/No option to show/hide slide title above slider"
 msgstr "शीर्षक को दिखाने के लिए हां / नहीं विकल्प का करे"
 
-#: settings.php:236 settings.php:249 settings.php:261 settings.php:273
-#: settings.php:286 settings.php:298 settings.php:310 settings.php:324
-#: settings.php:336 settings.php:348 settings.php:376 settings.php:395
-#: settings.php:408 settings.php:421 settings.php:434 settings.php:446
-#: settings.php:460 settings.php:476 settings.php:491 settings.php:513
-#: settings.php:526 settings.php:539 settings.php:551 settings.php:564
-#: settings.php:576 settings.php:589 settings.php:624
+#: settings.php:238 settings.php:251 settings.php:263 settings.php:275 settings.php:288 settings.php:300
+#: settings.php:312 settings.php:326 settings.php:338 settings.php:350 settings.php:378 settings.php:397
+#: settings.php:410 settings.php:423 settings.php:436 settings.php:448 settings.php:462 settings.php:478
+#: settings.php:493 settings.php:515 settings.php:528 settings.php:541 settings.php:553 settings.php:566
+#: settings.php:578 settings.php:591 settings.php:626
 msgid "Preview"
 msgstr "पूर्व दर्शन"
 
-#: settings.php:242 tooltip.php:53
+#: settings.php:244 tooltip.php:56
 msgid "Display Slide Title"
 msgstr "स्लाइडर शीर्षक प्रदर्शन"
 
-#: settings.php:248
+#: settings.php:250
 msgid "Select Yes/No option to show/hide slide title over slides."
 msgstr "शीर्षक को दिखाने के लिए हां / नहीं विकल्प का करे।"
 
-#: settings.php:255 tooltip.php:58
+#: settings.php:257 tooltip.php:61
 msgid "Slide Title Color"
 msgstr "स्लाइड शीर्षक रंग"
 
-#: settings.php:260
+#: settings.php:262
 msgid "Select a color to set slide title color."
-msgstr "स्लाइड शीर्षक रंग निर्धारित करने के लिए एक रंग का चयन करें"
+msgstr "स्लाइड शीर्षक रंग निर्धारित करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:267 tooltip.php:63
+#: settings.php:269 tooltip.php:66
 msgid "Slide Title Background Color"
 msgstr "स्लाइड शीर्षक पृष्ठभूमि रंग"
 
-#: settings.php:272
+#: settings.php:274
 msgid "Select a color to set slide title background color."
 msgstr "स्लाइड शीर्षक पृष्ठभूमि का रंग निर्धारित करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:279 tooltip.php:68
+#: settings.php:281 tooltip.php:71
 msgid "Display Slide Description"
 msgstr "स्लाइड विवरण प्रदर्शित करें"
 
-#: settings.php:285
+#: settings.php:287
 msgid "Select Yes/No option to show/hide slide description over slides."
 msgstr "शीर्षक को दिखाने के लिए हां / नहीं विकल्प का करे।"
 
-#: settings.php:292 tooltip.php:73
+#: settings.php:294 tooltip.php:76
 msgid "Slide Description Color"
 msgstr "स्लाइड विवरण रंग"
 
-#: settings.php:297
+#: settings.php:299
 msgid "Select a color to set slide description color."
 msgstr "स्लाइड के वर्णन का रंग निर्धारित करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:304 tooltip.php:78
+#: settings.php:306 tooltip.php:81
 msgid "Slide Description Background Color"
 msgstr "स्लाइड विवरण पृष्ठभूमि का रंग"
 
-#: settings.php:309
+#: settings.php:311
 msgid "Select a color to set slide description background color."
 msgstr "स्लाइड विवरण पृष्ठभूमि रंग सेट करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:316
+#: settings.php:318
 msgid "Auto Play Slide Show"
 msgstr "ऑटो प्ले स्लाइड शो"
 
-#: settings.php:319
+#: settings.php:321
 msgid "Yes"
 msgstr "हाँ"
 
-#: settings.php:320
+#: settings.php:322
 msgid "Yes with Stop on Mouse Hover"
 msgstr "हाँ mouseover पर रोक के साथ"
 
-#: settings.php:321
+#: settings.php:323
 msgid "No"
 msgstr "नहीं"
 
-#: settings.php:323
+#: settings.php:325
 msgid "Select Yes/No option to auto slide enable or disable into slider."
 msgstr "ऑटो स्लाइड करने के लिए हां / नहीं विकल्प का चयन करें।"
 
-#: settings.php:329
+#: settings.php:331
 msgid "Slide Transition"
 msgstr "स्लाइड हस्तांतरण"
 
-#: settings.php:335
+#: settings.php:337
 msgid "Select a transition effect you want to apply on slides."
 msgstr "आप स्लाइड पर लागू करने के लिए एक हस्तांतरण प्रभाव का चयन करें।"
 
-#: settings.php:341
+#: settings.php:343
 msgid "Auto play Slider Speed"
 msgstr "ऑटो प्ले स्लाइडर स्पीड"
 
-#: settings.php:347
+#: settings.php:349
 msgid "Set your desired slider speed of slides. Default speed is 5 Second."
 msgstr "स्लाइड्स के अपने वांछित संक्रमण गति सेट करें। डिफ़ॉल्ट चौड़ाई 5000px है।"
 
-#: settings.php:368
+#: settings.php:370
 msgid "Slide Order"
 msgstr "स्लाइड आदेश"
 
-#: settings.php:371
+#: settings.php:373
 msgid "Ascending"
 msgstr "आरोही"
 
-#: settings.php:372
+#: settings.php:374
 msgid "Descending"
 msgstr "अवरोही"
 
-#: settings.php:373
+#: settings.php:375
 msgid "Random"
 msgstr "क्रमरहित"
 
-#: settings.php:375
+#: settings.php:377
 msgid "Select a slide order you want to apply on slides"
 msgstr "आप स्लाइड परलागू करने के लिए एक स्लाइड आदेश का चयन करें"
 
-#: settings.php:382 tooltip.php:85
+#: settings.php:384 tooltip.php:88
 msgid "Distance Between Slide"
 msgstr "स्लाइड के बीच की दूरी"
 
-#: settings.php:394
+#: settings.php:396
 msgid ""
-"Set a gap between all slides. Range 0 to 25. Works when Slide Transition "
-"setting selected to Slide."
+"Set a gap between all slides. Range 0 to 25. Works when Slide Transition setting selected to Slide."
 msgstr "सभी स्लाइड्स के बीच एक खाई सेट करें। रेंज 0-25।"
 
-#: settings.php:401 tooltip.php:90
+#: settings.php:403 tooltip.php:93
 msgid "Show Thumbnail"
 msgstr "थंबनेल दिखाएँ"
 
-#: settings.php:407
-msgid ""
-"Select Yes/No option to show or hide thumbnail based navigation under slides."
+#: settings.php:409
+msgid "Select Yes/No option to show or hide thumbnail based navigation under slides."
 msgstr "थम्बनेल आधारित नेविगेशन दिखाने के लिए हां । नहीं विकल्प का चयन करें।"
 
-#: settings.php:414 tooltip.php:95
+#: settings.php:416 tooltip.php:98
 msgid "Thumbnail Position"
 msgstr "थंबनेल स्थिति"
 
-#: settings.php:417
+#: settings.php:419
 msgid "Top"
 msgstr "ऊपर"
 
-#: settings.php:418
+#: settings.php:420
 msgid "Bottom"
 msgstr "नीचे"
 
-#: settings.php:420
+#: settings.php:422
 msgid "Select a thumbnail position to show above or below the slider."
 msgstr "स्लाइडर ऊपर या नीचे दिखाने के लिए एक थंबनेल स्थिति का चयन करें।"
 
-#: settings.php:427 tooltip.php:100
+#: settings.php:429 tooltip.php:103
 msgid "Selected Thumbnail Style"
 msgstr "चुनिंदा थंबनेल शैली"
 
-#: settings.php:430
+#: settings.php:432
 msgid "Border"
 msgstr "सीमा"
 
-#: settings.php:431
+#: settings.php:433
 msgid "Pointer"
 msgstr "सूचक"
 
-#: settings.php:433
+#: settings.php:435
 msgid "Select a style to apply on select thumbnails."
 msgstr "थंबनेल पर लागू करने के लिए एक थंबनेल शैली का चयन करें।"
 
-#: settings.php:440 tooltip.php:105
+#: settings.php:442 tooltip.php:108
 msgid "Selected Thumbnail Style Color"
 msgstr "चयनित थंबनेल शैली रंग"
 
-#: settings.php:445
+#: settings.php:447
 msgid "Select a color to set on selected thumbnail style color."
 msgstr "स्लाइड शीर्षक रंग निर्धारित करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:452 tooltip.php:110
+#: settings.php:454 tooltip.php:113
 msgid "Thumbnail Resize"
 msgstr "थंबनेल आकार"
 
-#: settings.php:456
+#: settings.php:458
 msgid "Width"
 msgstr "चौड़ाई"
 
-#: settings.php:457
+#: settings.php:459
 msgid "Height"
 msgstr "ऊंचाई"
 
-#: settings.php:459
+#: settings.php:461
 msgid "Set custom height and width for thumbnails."
 msgstr "आप के अनुसार कस्टम थंबनेल लम्बाई और चौड़ाई सेट करें।"
 
-#: settings.php:466 tooltip.php:115
+#: settings.php:468 tooltip.php:118
 msgid "Slider Width"
 msgstr "स्लाइडर चौड़ाई"
 
-#: settings.php:470
+#: settings.php:472
 msgid "100% Width"
 msgstr "100% चौड़ाई"
 
-#: settings.php:471
+#: settings.php:473
 msgid "Full Width"
 msgstr "पूरी चौड़ाई"
 
-#: settings.php:472 settings.php:487
+#: settings.php:474 settings.php:489
 msgid "Custom"
 msgstr "बनाइए"
 
-#: settings.php:475
+#: settings.php:477
 msgid "Enter your desired width for slider. Default width is 1000px."
 msgstr "स्लाइडर के लिए अपने इच्छित चौड़ाई दर्ज करें। डिफ़ॉल्ट चौड़ाई 1000px है।"
 
-#: settings.php:482 tooltip.php:120
+#: settings.php:484 tooltip.php:123
 msgid "Slider Height"
 msgstr "स्लाइडर ऊंचाई"
 
-#: settings.php:486
+#: settings.php:488
 msgid "Auto Height"
 msgstr "ऑटो ऊँचाई"
 
-#: settings.php:490
+#: settings.php:492
 msgid "Enter your desired height for slider. Default height is 500px."
 msgstr "स्लाइडर के लिए अपने वांछित ऊंचाई दर्ज करें। तयशुदा ऊंचाई 500px है।"
 
-#: settings.php:497
+#: settings.php:499
 msgid "Slide Scale Mode"
 msgstr "स्लाइड स्केल मोड"
 
-#: settings.php:502
+#: settings.php:504
 msgid "Cover"
 msgstr "आवरण"
 
-#: settings.php:503
+#: settings.php:505
 msgid "Contain"
 msgstr "समाविष्ट"
 
-#: settings.php:504
+#: settings.php:506
 msgid "Exact"
 msgstr "ठीक"
 
-#: settings.php:505
+#: settings.php:507
 msgid "None"
 msgstr "कोई नहीं"
 
-#: settings.php:509
+#: settings.php:511
 msgid "COVER will scale and crop the image so that it fills the entire slide."
 msgstr "कवर छवि को स्केल और क्रॉप करेगा ताकि यह पूरी स्लाइड को भर दे।"
 
-#: settings.php:510
+#: settings.php:512
 msgid "CONTAIN will keep the entire image visible inside the slide."
 msgstr "CONTAIN पूरी छवि को स्लाइड के अंदर रखेगा।"
 
-#: settings.php:511
+#: settings.php:513
 msgid "EXACT will match the size of the image to the size of the slide."
 msgstr "EXACT स्लाइड के आकार से छवि के आकार से मेल खाएगा।"
 
-#: settings.php:512
+#: settings.php:514
 msgid "NONE will leave the image to its original size."
 msgstr "NONE छवि को उसके मूल आकार में नहीं छोड़ेगा।"
 
-#: settings.php:519
+#: settings.php:521
 msgid "Slide Auto Scale Up"
 msgstr "स्लाइड ऑटो स्केल अप"
 
-#: settings.php:525
+#: settings.php:527
 msgid "If the slide can be scaled up more than its original size."
 msgstr "NONE छवि को उसके मूल आकार में नहीं छोड़ेगा।"
 
-#: settings.php:532 tooltip.php:127
+#: settings.php:534 tooltip.php:130
 msgid "Show Navigation Arrow"
 msgstr "नेविगेशन तीर दिखाएं"
 
-#: settings.php:538
+#: settings.php:540
 msgid "Select Yes/No option to show or hide arrows on mouse hover on slide."
-msgstr ""
-"स्लाइड पर माउस मंडराना पर तीर दिखाने या छिपाने के लिए हां / नहीं विकल्प का चयन करें।"
+msgstr "स्लाइड पर माउस मंडराना पर तीर दिखाने या छिपाने के लिए हां / नहीं विकल्प का चयन करें।"
 
-#: settings.php:545 tooltip.php:132
+#: settings.php:547 tooltip.php:135
 msgid "Navigation Color"
 msgstr "नेविगेशन रंग"
 
-#: settings.php:550
+#: settings.php:552
 msgid "Select a color to set navigation arrow and full screen icon color."
 msgstr "नेविगेशन तीर और फुलस्क्रीन आइकन रंग सेट करने के लिए एक रंग चुनें।"
 
-#: settings.php:557 tooltip.php:137
+#: settings.php:559 tooltip.php:140
 msgid "Show Navigation Bullets"
 msgstr "नेविगेशन बुलेट दिखाएँ"
 
-#: settings.php:563
-msgid ""
-"Select Yes/No option to show or hide slider navigation buttons under image "
-"slider."
-msgstr ""
-"छवि स्लाइडर के तहत स्लाइडर नेविगेशन बटन दिखाने या छिपाने के लिए हां / नहीं विकल्प का "
-"चयन करें।"
+#: settings.php:565
+msgid "Select Yes/No option to show or hide slider navigation buttons under image slider."
+msgstr "छवि स्लाइडर के तहत स्लाइडर नेविगेशन बटन दिखाने या छिपाने के लिए हां / नहीं विकल्प का चयन करें।"
 
-#: settings.php:570 tooltip.php:142
+#: settings.php:572 tooltip.php:145
 msgid "Navigation Bullets Color"
 msgstr "नेविगेशन रंग"
 
-#: settings.php:575
+#: settings.php:577
 msgid "Select a color to set navigation bullets color."
 msgstr "स्लाइड शीर्षक रंग निर्धारित करने के लिए एक रंग का चयन करें।"
 
-#: settings.php:582 tooltip.php:147
+#: settings.php:584 tooltip.php:150
 msgid "Full Screen Slide Show"
 msgstr "पूर्ण स्क्रीन स्लाइड शो"
 
-#: settings.php:588
+#: settings.php:590
 msgid "Select Yes/No option for full screen slide show."
 msgstr "पूर्ण स्क्रीन स्लाइड शो के लिए हां / नहीं विकल्प का चयन करें।"
 
-#: settings.php:595 tooltip.php:152
+#: settings.php:597 tooltip.php:155
 msgid "Fonts"
 msgstr "फोंट्स"
 
-#: settings.php:623
+#: settings.php:625
 msgid "Choose a font to apply on slide title and description."
 msgstr "स्लाइड शीर्षक और विवरण पर लागू करने के लिए एक फ़ॉन्ट चुनें।"
 
-#: settings.php:631
+#: settings.php:633
 msgid "Custom CSS"
 msgstr "कस्टम सीएसएस"
 
-#: settings.php:636
-msgid ""
-"Enter any custom CSS you want to apply on this slider into text area filed."
+#: settings.php:638
+msgid "Enter any custom CSS you want to apply on this slider into text area filed."
 msgstr "कोई भी कस्टम सीएसएस दर्ज करें जो इस स्लाइडर पर लागू करना चाहते हैं।"
 
-#: ultimate-responsive-image-slider.php:183
-#: ultimate-responsive-image-slider.php:184
+#: ultimate-responsive-image-slider.php:185 ultimate-responsive-image-slider.php:186
 msgid "Add New Slider"
 msgstr "नई स्लाइडर जोड़ें"
 
-#: ultimate-responsive-image-slider.php:185
+#: ultimate-responsive-image-slider.php:187
 msgid "Edit Slider"
 msgstr "संपादित स्लाइडर"
 
-#: ultimate-responsive-image-slider.php:186
+#: ultimate-responsive-image-slider.php:188
 msgid "New Slider"
 msgstr "नई स्लाइडर जोड़ें"
 
-#: ultimate-responsive-image-slider.php:187
+#: ultimate-responsive-image-slider.php:189
 msgid "View Slider"
 msgstr "स्लाइडर देखें"
 
-#: ultimate-responsive-image-slider.php:188
+#: ultimate-responsive-image-slider.php:190
 msgid "Search Slider"
 msgstr "स्लाइडर खोजें"
 
-#: ultimate-responsive-image-slider.php:189
+#: ultimate-responsive-image-slider.php:191
 msgid "No Slider found"
 msgstr "स्लाइडर नहीं मिला"
 
-#: ultimate-responsive-image-slider.php:190
+#: ultimate-responsive-image-slider.php:192
 msgid "No Slider Found in Trash"
 msgstr "कचरा पेटी में कोई स्लाइडर नहीं मिला"
 
-#: ultimate-responsive-image-slider.php:191
+#: ultimate-responsive-image-slider.php:193
 msgid "Parent Slider:"
 msgstr "जनक स्लाइडर:"
 
-#: ultimate-responsive-image-slider.php:192
+#: ultimate-responsive-image-slider.php:194
 msgid "All Sliders"
 msgstr "सभी स्लाइडर"
 
@@ -392,7 +381,7 @@ msgstr "सभी स्लाइडर"
 msgid "UR Image Slider Title"
 msgstr "यू.आर. छवि स्लाइडर शीर्षक"
 
-#: ultimate-responsive-image-slider.php:224
+#: ultimate-responsive-image-slider.php:224 ultimate-responsive-image-slider.php:246
 msgid "Slider Shortcode"
 msgstr "स्लाइडर शोर्टकोड"
 
@@ -400,101 +389,108 @@ msgstr "स्लाइडर शोर्टकोड"
 msgid "Date"
 msgstr "तारीख"
 
-#: ultimate-responsive-image-slider.php:242
+#: ultimate-responsive-image-slider.php:243
 msgid "Add Slides"
 msgstr "नई स्लाइडर जोड़ें"
 
-#: ultimate-responsive-image-slider.php:243
+#: ultimate-responsive-image-slider.php:244
 msgid "Configure Settings"
-msgstr "कॉन्फ़िगर सेटिंग्स "
+msgstr "कॉन्फ़िगर सेटिंग्स"
 
-#: ultimate-responsive-image-slider.php:245
-msgid "Copy Slider Shortcode"
-msgstr "स्लाइडर शोर्टकोड कॉपी करें"
+#: ultimate-responsive-image-slider.php:247
+msgid "Try My New Slider Plugin"
+msgstr "मेरा नया स्लाइडर प्लगइन आज़माएँ"
 
-#: ultimate-responsive-image-slider.php:368
-#: ultimate-responsive-image-slider.php:554
+#: ultimate-responsive-image-slider.php:345 ultimate-responsive-image-slider.php:544
+msgid "Slide ID"
+msgstr "स्लाइड आईडी"
+
+#: ultimate-responsive-image-slider.php:346 ultimate-responsive-image-slider.php:545
 msgid "Slide Title"
 msgstr "शीर्षक स्लाइड"
 
-#: ultimate-responsive-image-slider.php:371
+#: ultimate-responsive-image-slider.php:349
 msgid "Enter Slide Title"
 msgstr "शीर्षक स्लाइड दर्ज करें"
 
-#: ultimate-responsive-image-slider.php:374
+#: ultimate-responsive-image-slider.php:352
 msgid "Slide Descriptions"
 msgstr "स्लाइड विवरण"
 
-#: ultimate-responsive-image-slider.php:375
+#: ultimate-responsive-image-slider.php:353
 msgid "Enter Slide Description"
 msgstr "स्लाइड विवरण दर्ज करें"
 
-#: ultimate-responsive-image-slider.php:376
-#: ultimate-responsive-image-slider.php:562
+#: ultimate-responsive-image-slider.php:354 ultimate-responsive-image-slider.php:553
 msgid "Use Rich Text Editor"
 msgstr "रिच टेक्स्ट एडिटर का उपयोग करें"
 
-#: ultimate-responsive-image-slider.php:379
-#: ultimate-responsive-image-slider.php:565
+#: ultimate-responsive-image-slider.php:357 ultimate-responsive-image-slider.php:556
 msgid "Slide Alt Text"
 msgstr "स्लाइड वैकल्पिक शब्द"
 
-#: ultimate-responsive-image-slider.php:380
-#: ultimate-responsive-image-slider.php:566
+#: ultimate-responsive-image-slider.php:358 ultimate-responsive-image-slider.php:557
 msgid "Max Length 125 Characters"
 msgstr "अधिकतम लंबाई 125 वर्ण"
 
-#: ultimate-responsive-image-slider.php:428
+#: ultimate-responsive-image-slider.php:406
 msgid "Add New Slide"
 msgstr "नई स्लाइडर जोड़ें"
 
-#: ultimate-responsive-image-slider.php:432
-msgid "Sort Ascending"
-msgstr "आरोही"
+#: ultimate-responsive-image-slider.php:410
+msgid "Sort Ascending by Slide ID"
+msgstr "आरोही क्रम"
 
-#: ultimate-responsive-image-slider.php:436
-msgid "Sort Descending"
-msgstr "अवरोही"
+#: ultimate-responsive-image-slider.php:414
+msgid "Sort Descending by Slide ID"
+msgstr "अवरोही क्रम"
 
-#: ultimate-responsive-image-slider.php:440
-msgid "Clone Slider (beta)"
+#: ultimate-responsive-image-slider.php:419
+msgid "Clone Slider"
 msgstr "क्लोन स्लाइडर"
 
-#: ultimate-responsive-image-slider.php:445
+#: ultimate-responsive-image-slider.php:424
 msgid "Delete All Slides"
 msgstr "सभी स्लाइड्स मिटायें"
 
-#: ultimate-responsive-image-slider.php:449
+#: ultimate-responsive-image-slider.php:428
 msgid "Slider clone created successfully."
 msgstr "स्लाइडर क्लोन सफलतापूर्वक बनाया गया।"
 
-#: ultimate-responsive-image-slider.php:449
+#: ultimate-responsive-image-slider.php:428
 msgid "Go to"
 msgstr "के लिए जाओ"
 
-#: ultimate-responsive-image-slider.php:449
+#: ultimate-responsive-image-slider.php:428
 msgid "All Slider"
 msgstr "सभी स्लाइडर"
 
-#: ultimate-responsive-image-slider.php:449
+#: ultimate-responsive-image-slider.php:428
 msgid "page to edit cloned slider."
 msgstr "क्लोन किए गए स्लाइडर को संपादित करने के लिए पेज।"
 
-#: ultimate-responsive-image-slider.php:531
+#: ultimate-responsive-image-slider.php:510
 msgid "Use below shortcode in any Page/Post to publish your slider"
 msgstr "किसी भी पोस्ट पेज में अपने स्लाइडर प्रकाशित करने के लिए नीचे शोर्टकोड का प्रयोग करें"
 
-#: ultimate-responsive-image-slider.php:557
+#: ultimate-responsive-image-slider.php:513
+msgid "To embed slider in any custom theme template"
+msgstr "किसी भी कस्टम थीम टेम्पलेट में स्लाइडर एम्बेड करने के लिए"
+
+#: ultimate-responsive-image-slider.php:548
 msgid "Enter Slide Title Here"
 msgstr "यहाँ स्लाइड शीर्षक दर्ज करें"
 
-#: ultimate-responsive-image-slider.php:560
+#: ultimate-responsive-image-slider.php:551
 msgid "Slide Description"
 msgstr "स्लाइड विवरण"
 
-#: ultimate-responsive-image-slider.php:561
+#: ultimate-responsive-image-slider.php:552
 msgid "Enter Slide Description Here"
 msgstr "यहाँ स्लाइड विवरण दर्ज करें"
+
+#~ msgid "Copy Slider Shortcode"
+#~ msgstr "स्लाइडर शोर्टकोड कॉपी करें"
 
 #, fuzzy
 #~ msgid "UR Image Slider"
@@ -506,9 +502,6 @@ msgstr "यहाँ स्लाइड विवरण दर्ज करे�
 
 #~ msgid "Sliding Arrow"
 #~ msgstr "तीर फिसलने"
-
-#~ msgid "Slide Distance"
-#~ msgstr "स्लाइड दूरी"
 
 #~ msgid "Set Slide Title As"
 #~ msgstr "शीर्षक स्लाइड"
@@ -592,11 +585,8 @@ msgstr "यहाँ स्लाइड विवरण दर्ज करे�
 #~ msgstr "सफेद"
 
 #~ msgid ""
-#~ "Select a color to set navigation bullets color, pointer color, border "
-#~ "color, navigation arrow color"
-#~ msgstr ""
-#~ "नेविगेशन गोलियों रंग, सूचक रंग, सीमा रंग, नेविगेशन तीर रंग निर्धारित करने के लिए एक रंग "
-#~ "का चयन करें"
+#~ "Select a color to set navigation bullets color, pointer color, border color, navigation arrow color"
+#~ msgstr "नेविगेशन गोलियों रंग, सूचक रंग, सीमा रंग, नेविगेशन तीर रंग निर्धारित करने के लिए एक रंग का चयन करें"
 
 #~ msgid "Help and Support"
 #~ msgstr "मदद और समर्थन"

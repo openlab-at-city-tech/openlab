@@ -21,6 +21,7 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
+ * @internal
  */
 abstract class AbstractHandler extends Handler implements ResettableInterface
 {

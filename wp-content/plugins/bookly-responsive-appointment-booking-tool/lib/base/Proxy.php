@@ -4,10 +4,6 @@ namespace Bookly\Lib\Base;
 use Bookly\Lib;
 use BooklyPro\Lib\Base\Proxy as ProxyPro;
 
-/**
- * Class Proxy
- * @package Bookly\Lib\Base
- */
 abstract class Proxy extends Component
 {
     /**

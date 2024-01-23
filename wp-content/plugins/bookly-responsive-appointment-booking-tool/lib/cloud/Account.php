@@ -6,11 +6,6 @@ use Bookly\Lib\Config;
 use Bookly\Lib\Utils;
 use Bookly\Lib\Slots\DatePoint;
 
-/**
- * Class Account
- *
- * @package Bookly\Lib\Cloud
- */
 class Account extends Base
 {
     const AUTHENTICATE                   = '/1.1/logins';                                 //POST

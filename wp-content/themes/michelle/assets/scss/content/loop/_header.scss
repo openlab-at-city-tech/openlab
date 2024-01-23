@@ -1,0 +1,13 @@
+/* FILE: content/loop/_header.scss */
+
+.posts {
+
+	.entry-header {
+		margin-bottom: 2rem;
+	}
+
+	.entry-title {
+		font-size: calc( var(--typography_heading_size_posts) * 1em );
+	}
+
+}

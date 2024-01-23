@@ -3164,7 +3164,7 @@ class CMTT_Free {
 			}
 		}
 
-		$additionalAttributes .= " data-gt-translate-attributes='[{\"attribute\":\"data-cmtooltip\", \"format\":\"html\"}]'";
+		$additionalAttributes .= " data-gt-translate-attributes='[{\"attribute\":\"data-cmtooltip\", \"format\":\"html\"}]'  tabindex='0' role='link'";
 		$customAttr           = apply_filters( 'cmtt_term_custom_attribute', $additionalAttributes, $glossary_item );
 		/*
 		 * Build the span/link with/without tooltips for replacement
@@ -4190,6 +4190,9 @@ class CMTT_Free {
 		$tag  = ! empty( $atts['link'] ) ? 'a' : 'span';
 		$href = ! empty( $atts['link'] ) ? 'href="' . esc_url( $atts['link'] ) . '"' : '';
 		$text = $dashicon . $text;
+        if($tag == 'span') {
+            $additionalAttributes .= ' tabindex="0" aria-describedby="tt" role="link"';
+        }
 
 		if ( $atts['type'] == 'text' ) {
 			$readmore  = '';

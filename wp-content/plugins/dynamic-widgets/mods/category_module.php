@@ -2,7 +2,7 @@
 /**
  * Category Module
  *
- * @version $Id: category_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: category_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -92,7 +92,7 @@
 					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_act) && count($category_act) > 0 && in_array($cat->cat_ID, $category_act) ? 'checked="checked"' : '' ) . '  onchange="chkChild(\'' . ( $single ? 'single_' : '' ) . 'category\', ' . $pid . ');' . ( $single ? 'ci(\'single_category_act_' . $cat->cat_ID . '\')' : '' ) . '" /> <label for="' . ( $single ? 'single_' : '' ) . 'category_act_' . $cat->cat_ID . '">' . $cat->name . '</label><br />';
 
 					echo '<div style="position:relative;left:15px;">';
-					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_childs_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_childs_act) && count($category_childs_act) > 0 && in_array($cat->cat_ID, $category_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . ( $single ? 'single_' : '' ) . 'category\', ' . $cat->cat_ID . ');' . ( $single ? 'ci(\'single_category_act_' . $cat->cat_ID . '\')' : '' ) . '" /> <label for="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
+					echo '<input type="checkbox" id="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '" name="' . ( $single ? 'single_' : '' ) . 'category_childs_act[]" value="' . $cat->cat_ID . '" ' . ( isset($category_childs_act) && count($category_childs_act) > 0 && in_array($cat->cat_ID, $category_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . ( $single ? 'single_' : '' ) . 'category\', ' . $cat->cat_ID . ');' . ( $single ? 'ci(\'single_category_act_' . $cat->cat_ID . '\')' : '' ) . '" /> <label for="' . ( $single ? 'single_' : '' ) . 'category_childs_act_' . $cat->cat_ID . '"><em>' . __('All children', DW_L10N_DOMAIN) . '</em></label><br />';
 					echo '</div>';
 
 					if ( count($childs) > 0 ) {

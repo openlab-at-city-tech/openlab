@@ -3,11 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\SmtpTest;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- *
- * @package Bookly\Backend\Components\Dialogs\SmtpTest
- */
 class Dialog extends Lib\Base\Component
 {
     /**

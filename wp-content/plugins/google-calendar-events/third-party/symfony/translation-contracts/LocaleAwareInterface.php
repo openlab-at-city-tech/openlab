@@ -10,6 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Symfony\Contracts\Translation;
 
+/** @internal */
 interface LocaleAwareInterface
 {
     /**

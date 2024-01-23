@@ -20,7 +20,7 @@ class Mappress_Poi extends Mappress_Obj {
 
 	function to_html() {
 		$vars = (object) array_diff_key(get_object_vars($this), array('body' => ''));
-		$vars->point = (isset($this->point)) ? $this->point->lat . ',' . $this->point->lng : '';
+		$vars->point = (isset($this->point)) ? ((object)$this->point)->lat . ',' . ((object)$this->point)->lng : '';  // Point can be object or array
 		$vars->viewport = (isset($this->viewport)) ? sprintf("%s,%s,%s,%s", $this->viewport->sw->lat, $this->viewport->sw->lng, $this->viewport->ne->lat, $this->viewport->ne->lng) : '';
 		$atts = Mappress::to_atts($vars);
 		$body = str_replace(array("\r", "\n"), '', $this->body);

@@ -3,7 +3,7 @@
  * URL Module
  * Can't use DWOpts object because value = the serialized values
  *
- * @version $Id: domain_module.php 1698398 2017-07-18 19:34:08Z qurl $
+ * @version $Id: domain_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2017 Jacco Drabbe
  */
 
@@ -44,7 +44,7 @@
 			   </div>
 			   <br />
 			   <input type="radio" name="domain" value="yes" id="domain-yes" <?php echo ( isset($domain_yes_selected) ) ? $domain_yes_selected : ''; ?> /> <label for="domain-yes"><?php _e('Yes'); ?></label>
-			   <input type="radio" name="domain" value="no" id="url-no" <?php echo ( isset($domain_no_selected) ) ? $domain_no_selected : ''; ?> /> <label for="domain-no"><?php _e('No'); ?></label><br />
+			   <input type="radio" name="domain" value="no" id="domain-no" <?php echo ( isset($domain_no_selected) ) ? $domain_no_selected : ''; ?> /> <label for="domain-no"><?php _e('No'); ?></label><br />
 			   <?php _e('Except the domains', DW_L10N_DOMAIN); ?>:<br />
 			   <div id="domain-select" class="condition-select">
 				   <textarea name="domain_value" style="width:300px;height:150px;"><?php echo ( isset($domains) ) ? implode("\n", $domains) : ''; ?></textarea>

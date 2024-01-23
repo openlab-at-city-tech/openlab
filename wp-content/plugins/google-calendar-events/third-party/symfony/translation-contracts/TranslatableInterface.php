@@ -12,6 +12,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Contracts\Translation;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
+ * @internal
  */
 interface TranslatableInterface
 {

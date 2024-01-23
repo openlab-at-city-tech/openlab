@@ -1,10 +1,6 @@
 <?php
 namespace Bookly\Lib\Slots;
 
-/**
- * Interface IPoint
- * @package Bookly\Lib\Slots
- */
 interface IPoint
 {
     /**

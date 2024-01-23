@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Sms;
 
 use Bookly\Lib;
 
-/**
- * Class Ajax
- * @package Bookly\Backend\Components\Sms
- */
 class Ajax extends Lib\Base\Ajax
 {
     /**
@@ -20,6 +16,7 @@ class Ajax extends Lib\Base\Ajax
         if ( ! $is_new ) {
             unset( $data['id'] );
         }
+        $data['message'] = html_entity_decode( $data['message'] );
         $notification->setFields( $data )->save();
 
         wp_send_json_success();

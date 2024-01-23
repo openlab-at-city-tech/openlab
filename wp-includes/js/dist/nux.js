@@ -51,27 +51,27 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "DotTip": function() { return /* reexport */ dot_tip; },
-  "store": function() { return /* reexport */ store; }
+  DotTip: function() { return /* reexport */ dot_tip; },
+  store: function() { return /* reexport */ store; }
 });
 
 // NAMESPACE OBJECT: ./node_modules/@wordpress/nux/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "disableTips": function() { return disableTips; },
-  "dismissTip": function() { return dismissTip; },
-  "enableTips": function() { return enableTips; },
-  "triggerGuide": function() { return triggerGuide; }
+  disableTips: function() { return disableTips; },
+  dismissTip: function() { return dismissTip; },
+  enableTips: function() { return enableTips; },
+  triggerGuide: function() { return triggerGuide; }
 });
 
 // NAMESPACE OBJECT: ./node_modules/@wordpress/nux/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "areTipsEnabled": function() { return selectors_areTipsEnabled; },
-  "getAssociatedGuide": function() { return getAssociatedGuide; },
-  "isTipVisible": function() { return isTipVisible; }
+  areTipsEnabled: function() { return selectors_areTipsEnabled; },
+  getAssociatedGuide: function() { return getAssociatedGuide; },
+  isTipVisible: function() { return isTipVisible; }
 });
 
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
@@ -84,6 +84,7 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
  * WordPress dependencies
  */
 
+
 /**
  * Reducer that tracks which tips are in a guide. Each guide is represented by
  * an array which contains the tip identifiers contained within that guide.
@@ -93,18 +94,14 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
  *
  * @return {Array} Updated state.
  */
-
-function guides() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function guides(state = [], action) {
   switch (action.type) {
     case 'TRIGGER_GUIDE':
       return [...state, action.tipIds];
   }
-
   return state;
 }
+
 /**
  * Reducer that tracks whether or not tips are globally enabled.
  *
@@ -113,21 +110,16 @@ function guides() {
  *
  * @return {boolean} Updated state.
  */
-
-function areTipsEnabled() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function areTipsEnabled(state = true, action) {
   switch (action.type) {
     case 'DISABLE_TIPS':
       return false;
-
     case 'ENABLE_TIPS':
       return true;
   }
-
   return state;
 }
+
 /**
  * Reducer that tracks which tips have been dismissed. If the state object
  * contains a tip identifier, then that tip is dismissed.
@@ -137,21 +129,16 @@ function areTipsEnabled() {
  *
  * @return {Object} Updated state.
  */
-
-function dismissedTips() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function dismissedTips(state = {}, action) {
   switch (action.type) {
     case 'DISMISS_TIP':
-      return { ...state,
+      return {
+        ...state,
         [action.id]: true
       };
-
     case 'ENABLE_TIPS':
       return {};
   }
-
   return state;
 }
 const preferences = (0,external_wp_data_namespaceObject.combineReducers)({
@@ -178,6 +165,7 @@ function triggerGuide(tipIds) {
     tipIds
   };
 }
+
 /**
  * Returns an action object that, when dispatched, dismisses the given tip. A
  * dismissed tip will not show again.
@@ -186,31 +174,30 @@ function triggerGuide(tipIds) {
  *
  * @return {Object} Action object.
  */
-
 function dismissTip(id) {
   return {
     type: 'DISMISS_TIP',
     id
   };
 }
+
 /**
  * Returns an action object that, when dispatched, prevents all tips from
  * showing again.
  *
  * @return {Object} Action object.
  */
-
 function disableTips() {
   return {
     type: 'DISABLE_TIPS'
   };
 }
+
 /**
  * Returns an action object that, when dispatched, makes all tips show again.
  *
  * @return {Object} Action object.
  */
-
 function enableTips() {
   return {
     type: 'ENABLE_TIPS'
@@ -520,6 +507,7 @@ function isShallowEqual(a, b, fromIndex) {
  * External dependencies
  */
 
+
 /**
  * An object containing information about a guide.
  *
@@ -538,7 +526,6 @@ function isShallowEqual(a, b, fromIndex) {
  *
  * @return {?NUXGuideInfo} Information about the associated guide.
  */
-
 const getAssociatedGuide = rememo((state, tipId) => {
   for (const tipIds of state.guides) {
     if (tipIds.includes(tipId)) {
@@ -551,9 +538,9 @@ const getAssociatedGuide = rememo((state, tipId) => {
       };
     }
   }
-
   return null;
 }, state => [state.guides, state.preferences.dismissedTips]);
+
 /**
  * Determines whether or not the given tip is showing. Tips are hidden if they
  * are disabled, have been dismissed, or are not the current tip in any
@@ -564,26 +551,20 @@ const getAssociatedGuide = rememo((state, tipId) => {
  *
  * @return {boolean} Whether or not the given tip is showing.
  */
-
 function isTipVisible(state, tipId) {
-  var _state$preferences$di;
-
   if (!state.preferences.areTipsEnabled) {
     return false;
   }
-
-  if ((_state$preferences$di = state.preferences.dismissedTips) !== null && _state$preferences$di !== void 0 && _state$preferences$di.hasOwnProperty(tipId)) {
+  if (state.preferences.dismissedTips?.hasOwnProperty(tipId)) {
     return false;
   }
-
   const associatedGuide = getAssociatedGuide(state, tipId);
-
   if (associatedGuide && associatedGuide.currentTipId !== tipId) {
     return false;
   }
-
   return true;
 }
+
 /**
  * Returns whether or not tips are globally enabled.
  *
@@ -591,7 +572,6 @@ function isTipVisible(state, tipId) {
  *
  * @return {boolean} Whether tips are globally enabled.
  */
-
 function selectors_areTipsEnabled(state) {
   return state.preferences.areTipsEnabled;
 }
@@ -601,14 +581,15 @@ function selectors_areTipsEnabled(state) {
  * WordPress dependencies
  */
 
+
 /**
  * Internal dependencies
  */
 
 
 
-
 const STORE_NAME = 'core/nux';
+
 /**
  * Store definition for the nux namespace.
  *
@@ -616,15 +597,15 @@ const STORE_NAME = 'core/nux';
  *
  * @type {Object}
  */
-
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, {
   reducer: reducer,
   actions: actions_namespaceObject,
   selectors: selectors_namespaceObject,
   persist: ['preferences']
-}); // Once we build a more generic persistence plugin that works across types of stores
-// we'd be able to replace this with a register call.
+});
 
+// Once we build a more generic persistence plugin that works across types of stores
+// we'd be able to replace this with a register call.
 (0,external_wp_data_namespaceObject.registerStore)(STORE_NAME, {
   reducer: reducer,
   actions: actions_namespaceObject,
@@ -644,7 +625,6 @@ var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/close.js
 
-
 /**
  * WordPress dependencies
  */
@@ -659,10 +639,10 @@ const close_close = (0,external_wp_element_namespaceObject.createElement)(extern
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/nux/build-module/components/dot-tip/index.js
 
-
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -673,40 +653,32 @@ const close_close = (0,external_wp_element_namespaceObject.createElement)(extern
  * Internal dependencies
  */
 
-
-
 function onClick(event) {
   // Tips are often nested within buttons. We stop propagation so that clicking
   // on a tip doesn't result in the button being clicked.
   event.stopPropagation();
 }
-
-function DotTip(_ref) {
-  let {
-    position = 'middle right',
-    children,
-    isVisible,
-    hasNextTip,
-    onDismiss,
-    onDisable
-  } = _ref;
+function DotTip({
+  position = 'middle right',
+  children,
+  isVisible,
+  hasNextTip,
+  onDismiss,
+  onDisable
+}) {
   const anchorParent = (0,external_wp_element_namespaceObject.useRef)(null);
   const onFocusOutsideCallback = (0,external_wp_element_namespaceObject.useCallback)(event => {
     if (!anchorParent.current) {
       return;
     }
-
     if (anchorParent.current.contains(event.relatedTarget)) {
       return;
     }
-
     onDisable();
   }, [onDisable, anchorParent]);
-
   if (!isVisible) {
     return null;
   }
-
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     className: "nux-dot-tip",
     position: position,
@@ -725,10 +697,9 @@ function DotTip(_ref) {
     onClick: onDisable
   }));
 }
-/* harmony default export */ var dot_tip = ((0,external_wp_compose_namespaceObject.compose)((0,external_wp_data_namespaceObject.withSelect)((select, _ref2) => {
-  let {
-    tipId
-  } = _ref2;
+/* harmony default export */ var dot_tip = ((0,external_wp_compose_namespaceObject.compose)((0,external_wp_data_namespaceObject.withSelect)((select, {
+  tipId
+}) => {
   const {
     isTipVisible,
     getAssociatedGuide
@@ -738,10 +709,9 @@ function DotTip(_ref) {
     isVisible: isTipVisible(tipId),
     hasNextTip: !!(associatedGuide && associatedGuide.nextTipId)
   };
-}), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, _ref3) => {
-  let {
-    tipId
-  } = _ref3;
+}), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, {
+  tipId
+}) => {
   const {
     dismissTip,
     disableTips
@@ -750,11 +720,9 @@ function DotTip(_ref) {
     onDismiss() {
       dismissTip(tipId);
     },
-
     onDisable() {
       disableTips();
     }
-
   };
 }))(DotTip));
 

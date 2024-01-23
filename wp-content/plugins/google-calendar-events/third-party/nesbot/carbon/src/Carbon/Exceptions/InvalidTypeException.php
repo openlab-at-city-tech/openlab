@@ -11,6 +11,7 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
+/** @internal */
 class InvalidTypeException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     //

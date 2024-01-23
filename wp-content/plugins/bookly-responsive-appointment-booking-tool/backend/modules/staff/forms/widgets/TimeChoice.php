@@ -3,10 +3,6 @@ namespace Bookly\Backend\Modules\Staff\Forms\Widgets;
 
 use Bookly\Lib;
 
-/**
- * Class TimeChoice
- * @package Bookly\Backend\Modules\Staff\Forms\Widgets
- */
 class TimeChoice
 {
     /**

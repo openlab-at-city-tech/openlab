@@ -10,11 +10,6 @@ use Bookly\Lib\Notifications\Assets\Base\Codes;
 use Bookly\Lib\Proxy;
 use Bookly\Lib\Utils;
 
-/**
- * Class Reminder
- *
- * @package Bookly\Lib\Notifications\Base
- */
 abstract class Reminder
 {
     const RECIPIENT_ADMINS = 'admins';

@@ -93,9 +93,34 @@ jQuery(function ($) {
     $('.bookly-js-tables-dropdown').on('click', function (e) {
         e.stopPropagation();
     });
-    $('#bookly_import_file').change(function () {
+    $('#bookly_import_file').change(function (e) {
         if ($(this).val()) {
-            $('#bookly_import').submit();
+            let $spinner = $(this).siblings('.bookly-js-spinner');
+            $spinner.show();
+            const formData = new FormData();
+            formData.append('action', 'bookly_import_data');
+            formData.append('csrf_token', BooklyL10nGlobal.csrf_token);
+            formData.append('safe', $(this).closest('.input-group').prop('checked') ? '1' : '0');
+            formData.append('import', e.target.files[0]);
+            fetch(ajaxurl, {method: 'POST', body: formData})
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(result) {
+                    if (result.success) {
+                        booklyAlert({success: [result.data.message]});
+                    } else {
+                        booklyAlert({error: result.data.message});
+                    }
+                    $spinner.hide();
+                    let $modal = booklyModal('Are you sure you want to reload this page?', null, 'No', 'Reload')
+                        .on('bs.click.main.button', function (event, modal, mainButton) {
+                            location.reload();
+                        });
+                    setTimeout(function() {
+                        $('.modal-footer .btn-success', $modal).focus();
+                    }, 500);
+                });
         }
     });
     // Forms Data

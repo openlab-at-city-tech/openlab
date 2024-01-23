@@ -13,6 +13,17 @@ class ListCategoryPostsWidget extends WP_Widget{
 
   function widget($args, $instance) {
     global $post;
+    /* Since WP 4.9 global $post is nullified in text widgets
+     * when is_singular() is false. It should also be nullified in LCP
+     * widgets, otherwise the plugin will mark the last post of the loop
+     * as the current post.
+     * 
+     * https://wordpress.org/support/topic/current-class-is-being-added-to-final-post-in-list/
+     */
+    if ( ! is_singular() ) {
+      $post = null;
+    }
+
     extract( $args );
 
     $title = empty($instance['title']) ? ' ' : apply_filters('widget_title', $instance['title']);
@@ -69,6 +80,16 @@ class ListCategoryPostsWidget extends WP_Widget{
       'pagination' => $pagination,
       'instance' => $this->id
     );
+    /* To make this rather old widget code compatible with the rest of the plugin,
+     * the id passed to params cannot be '-1', which the widget uses to indicate
+     * 'current category'. The following lines normalise it and assing proper values.
+     * @since 0.89.2
+     */
+    if ('-1' === $atts['id']) {
+      $atts['id'] = '';
+      $atts['categorypage'] = 'yes';
+    }
+    // This is because the plugin has many more params than those used by the plugin.
     $atts = array_merge(ListCategoryPosts::default_params(), $atts);
 
     echo $before_widget;

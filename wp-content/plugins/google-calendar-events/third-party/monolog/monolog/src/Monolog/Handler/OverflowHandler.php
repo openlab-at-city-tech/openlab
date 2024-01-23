@@ -32,6 +32,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *```
  *
  * @author Kris Buist <krisbuist@gmail.com>
+ * @internal
  */
 class OverflowHandler extends AbstractHandler implements FormattableHandlerInterface
 {

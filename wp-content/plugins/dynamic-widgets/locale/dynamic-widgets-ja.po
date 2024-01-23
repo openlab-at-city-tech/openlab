@@ -293,7 +293,7 @@ msgid ""
 "\t\t\t\t\tclick a tag), For individual posts in the <em>New</em> or "
 "<em>Edit</em> Posts panel.\n"
 "\t\t\t\t\tException rules for tags and individual posts in any combination "
-"work independantly, but will always be counted as one exception.<br />\n"
+"work independently, but will always be counted as one exception.<br />\n"
 "\t  \t\t\t\t\tPlease note when this is enabled, exception rules which are "
 "set within Posts for Author and/or Category will be disabled.\n"
 "\t  \t\t\t\t"
@@ -436,7 +436,7 @@ msgstr "ダンプを作成"
 
 #: ../dynwid_admin_overview.php:176
 msgid ""
-"When you deceide not to use this plugin anymore (sorry to hear that!). You "
+"When you decide not to use this plugin anymore (sorry to hear that!). You "
 "can cleanup all settings and data related to this plugin by clicking on the "
 "'Uninstall' button. This process is irreversible! After the cleanup the "
 "plugin is deactivated automaticly."
@@ -550,7 +550,7 @@ msgid ""
 "\t\t\t\t\t\tclick a tag), For individual posts in the <a href=\"post-new.php"
 "\">New</a> or <a href=\"edit.php\">Edit</a> Posts panel.\n"
 "\t\t\t\t\t\tException rules for tags and individual posts in any combination "
-"work independantly, but will always be counted as one exception.<br />\n"
+"work independently, but will always be counted as one exception.<br />\n"
 "  \t\t\t\t\tPlease note when exception rules are set for Author and/or "
 "Category, these will be removed.\n"
 "  \t\t\t\t"
@@ -631,7 +631,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:43 ../mods/custompost_module.php:46
 #: ../mods/custompost_module.php:89
-msgid "All childs"
+msgid "All children"
 msgstr "全ての子要素"
 
 #: ../mods/pages_module.php:83 ../mods/pages_module.php:86
@@ -648,11 +648,11 @@ msgstr "固定ページでウィジェットを表示しますか？"
 
 #: ../mods/pages_module.php:101
 msgid ""
-"Checking the \"All childs\" option, makes the exception rule apply\n"
+"Checking the \"All children\" option, makes the exception rule apply\n"
 "\t\t\t\t\tto the parent and all items under it in all levels. Also future "
 "items\n"
 "\t\t\t\t\tunder the parent. It's not possible to apply an exception rule to\n"
-"\t\t\t\t\t\"All childs\" without the parent."
+"\t\t\t\t\t\"All children\" without the parent."
 msgstr ""
 "\"全ての子階層\"の設定をチェックすると、親を含め階層下の全項目に除外ルールを"
 "適用します。\n"
@@ -661,7 +661,7 @@ msgstr ""
 
 #: ../mods/pages_module.php:106
 msgid ""
-"Unfortunately the childs-function has been disabled\n"
+"Unfortunately the \"All children\" function has been disabled\n"
 "\t\t\t\t\tbecause you have more than the limit of pages."
 msgstr ""
 "子の機能は無効にされました\n"
@@ -722,7 +722,7 @@ msgstr "全でのユーザーにウィジェットを表示しますか？"
 
 #: ../mods/role_module.php:29
 msgid ""
-"Setting options by role is very powerfull. It can override all other options!"
+"Setting options by role is very powerful. It can override all other options!"
 "<br />\n"
 "\t\t\t\t\t\tUsers who are not logged in, get the <em>Anonymous</em> role."
 msgstr ""
@@ -800,13 +800,13 @@ msgstr "常にウィジェットを表示しますか？"
 
 #: ../mods/date_module.php:36
 msgid ""
-"Next to the above role option, the date option is also very powerfull. "
+"Next to the above role option, the date option is also very powerful. "
 "You've been warned!"
 msgstr "日付設定もとても便利です。"
 
 #: ../mods/date_module.php:37
 msgid ""
-"Enter dates in the YYYY-MM-DD format. You can also use the calender by "
+"Enter dates in the YYYY-MM-DD format. You can also use the calendar by "
 "clicking on the"
 msgstr ""
 "YYYY-MM-DD形式で日付を入力してください。クリックしてカレンダーで指定すること"

@@ -159,7 +159,6 @@ class Promotions extends Abstract_Module {
 	 */
 	public function load_available() {
 		$this->promotions = $this->filter_by_screen_and_merge();
-
 		if ( empty( $this->promotions ) ) {
 			return;
 		}
@@ -269,6 +268,22 @@ class Promotions extends Abstract_Module {
 	}
 
 	/**
+	 * Third-party compatibility.
+	 * 
+	 * @return boolean
+	 */
+	private function has_conflicts() {
+		global $pagenow;
+	
+		// Editor notices aren't compatible with Enfold theme.
+		if ( defined( 'AV_FRAMEWORK_VERSION' ) && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get promotions.
 	 *
 	 * @return array
@@ -285,6 +300,8 @@ class Promotions extends Abstract_Module {
 		$has_ppom                = defined( 'PPOM_VERSION' ) || $this->is_plugin_installed( 'woocommerce-product-addon' );
 		$is_min_req_v            = version_compare( get_bloginfo( 'version' ), '5.8', '>=' );
 		$is_min_fse_v            = version_compare( get_bloginfo( 'version' ), '6.2', '>=' );
+		$current_theme           = wp_get_theme();
+		$has_neve_fse            = $current_theme->template === 'neve-fse' || $current_theme->parent() === 'neve-fse';
 		$has_enough_attachments  = $this->has_min_media_attachments();
 		$has_enough_old_posts    = $this->has_old_posts();
 
@@ -351,7 +368,7 @@ class Promotions extends Abstract_Module {
 			],
 			'neve-fse'    => [
 				'neve-fse-themes-popular' => [
-					'env'    => $is_min_fse_v,
+					'env'    => ! $has_neve_fse && $is_min_fse_v,
 					'screen' => 'themes-install-popular',
 				],
 			],
@@ -359,7 +376,7 @@ class Promotions extends Abstract_Module {
 
 		foreach ( $all as $slug => $data ) {
 			foreach ( $data as $key => $conditions ) {
-				if ( ! $conditions['env'] ) {
+				if ( ! $conditions['env'] || $this->has_conflicts() ) {
 					unset( $all[ $slug ][ $key ] );
 
 					continue;
@@ -530,6 +547,12 @@ class Promotions extends Abstract_Module {
 				$this->load_woo_promos();
 				break;
 			case 'neve-fse-themes-popular':
+				// Remove any other notifications if Neve FSE promotion is showing
+				remove_action( 'admin_notices', array( 'ThemeisleSDK\Modules\Notification', 'show_notification' ) );
+				remove_action( 'wp_ajax_themeisle_sdk_dismiss_notice', array( 'ThemeisleSDK\Modules\Notification', 'dismiss' ) );
+				remove_action( 'admin_head', array( 'ThemeisleSDK\Modules\Notification', 'dismiss_get' ) );
+				remove_action( 'admin_head', array( 'ThemeisleSDK\Modules\Notification', 'setup_notifications' ) );
+				// Add required actions to display this notification
 				add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 				add_action( 'admin_notices', [ $this, 'render_neve_fse_themes_notice' ] );
 				break;
@@ -784,7 +807,7 @@ class Promotions extends Abstract_Module {
 				);
 
 				return $tabs;
-			} 
+			}
 		);
 
 		add_action( 'woocommerce_product_data_panels', array( $this, 'woocommerce_tab_content' ) );
@@ -800,7 +823,7 @@ class Promotions extends Abstract_Module {
 			function( $key ) {
 				return in_array( $key, $this->promotions, true );
 			},
-			ARRAY_FILTER_USE_KEY 
+			ARRAY_FILTER_USE_KEY
 		);
 
 		// Display CSS

@@ -249,9 +249,7 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			array(
 				'name' => 'ekit_img_comparison_container_box_shadow',
-				'exclude' => array(
-					'box_shadow_position',
-				),
+				'exclude' => array('box_shadow_position'), // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'selector' => '{{WRAPPER}} .elementskit-image-comparison',
 			)
 		);

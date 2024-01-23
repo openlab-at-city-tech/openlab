@@ -51,13 +51,13 @@ class B2S_Video_Validation {
                             if(($networkId == 1 && $networkType == 1) || $networkId == 12) {
 
                                 $reelSupport = array(
-                                    'reel_format' => $network->reel_support->reel_format,
-                                    'reel_max_length' => $network->reel_support->reel_max_length,
-                                    'reel_min_length' => $network->reel_support->reel_min_length,
-                                    'reel_min_framerate' => $network->reel_support->reel_min_framerate,
-                                    'reel_min_resolution_x' => $network->reel_support->reel_min_resolution_x,
-                                    'reel_min_resolution_y' => $network->reel_support->reel_min_resolution_y,
-                                    'reel_aspect_ratio' => $network->reel_support->reel_aspect_ratio_x . ':' . $network->reel_support->reel_aspect_ratio_y
+                                    'reel_format' => isset($network->reel_support->reel_format) ? $network->reel_support->reel_format : 0,
+                                    'reel_max_length' => isset($network->reel_support->reel_max_length) ? $network->reel_support->reel_max_length: 0,
+                                    'reel_min_length' => isset($network->reel_support->reel_min_length) ? $network->reel_support->reel_min_length : 0,
+                                    'reel_min_framerate' => isset($network->reel_support->reel_min_framerate) ? $network->reel_support->reel_min_framerate : 0,
+                                    'reel_min_resolution_x' => isset($network->reel_support->reel_min_resolution_x) ? $network->reel_support->reel_min_resolution_x : 0,
+                                    'reel_min_resolution_y' => isset($network->reel_support->reel_min_resolution_y) ? $network->reel_support->reel_min_resolution_y : 0,
+                                    'reel_aspect_ratio' => isset($network->reel_support->reel_aspect_ratio_x) && isset($network->reel_support->reel_aspect_ratio_y) ? $network->reel_support->reel_aspect_ratio_x . ':' . $network->reel_support->reel_aspect_ratio_y : ''
                                 );
 
                                 if (strpos($reelSupport['reel_format'], strtolower($video_meta['fileformat'])) === false) {

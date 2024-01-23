@@ -116,7 +116,14 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                     'options'   => [
                         'before'  => esc_html__('Before', 'elementskit-lite'),
                         'after'  => esc_html__('After', 'elementskit-lite'),
-                    ],  
+                    ],
+					'selectors_dictionary' => [
+						'after' => 'display: flex; flex-direction: row-reverse;',
+						'before' => 'display: flex; flex-direction: row;',
+					],
+					'selectors' => [
+						'{{WRAPPER}} .ekit-offcanvas-toggle-wraper a.ekit_offcanvas-sidebar' => '{{VALUE}}; width: fit-content;',
+					],
                     'condition' => [
                         'ekit_offcanvas_menu_type' => 'icon_with_text',
                     ]
@@ -150,24 +157,120 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                 ]
             );
 
-            $this->add_control(
-                'ekit_offcanvas_menu_close_icons',
-                [
-                    'label' => esc_html__('Close Icon', 'elementskit-lite'),
-                    'label_block' => true,
-                    'type' => Controls_Manager::ICONS,
-                    'fa4compatibility' => 'ekit_offcanvas_menu_close_icon',
-                    'default' => [
-                        'value' => 'fas fa-times',
-                        'library' => 'fa-solid',
-                    ],
-                ]
-            );
+			$this->add_control(
+				'ekit_offcanvas_menu_close_type',
+				[
+					'label' => esc_html__('Close Menu Type:', 'elementskit-lite'),
+					'type' => Controls_Manager::SELECT,
+					'default'   => 'icon',
+					'options'   => [
+						'icon'  => esc_html__('Icon', 'elementskit-lite'),
+						'text'  => esc_html__('Text', 'elementskit-lite'),
+						'icon_with_text'  => esc_html__('Icon with Text', 'elementskit-lite'),
+					],
+				]
+			);
+
+			$this->add_control(
+				'ekit_offcanvas_menu_close_icons',
+				[
+					'label' => esc_html__('Close Icon', 'elementskit-lite'),
+					'label_block' => true,
+					'type' => Controls_Manager::ICONS,
+					'fa4compatibility' => 'ekit_offcanvas_menu_close_icon',
+					'default' => [
+						'value' => 'fas fa-times',
+						'library' => 'fa-solid',
+					],
+					'condition' => [
+						'ekit_offcanvas_menu_close_type' => [ 'icon', 'icon_with_text' ],
+					] 
+				]
+			);
+
+			$this->add_control(
+				'ekit_offcanvas_menu_close_icons_position',
+				[
+					'label' => esc_html__('Icon Positioin', 'elementskit-lite'),
+					'type' => Controls_Manager::SELECT,
+					'default'   => 'before',
+					'options'   => [
+						'before'  => esc_html__('Before', 'elementskit-lite'),
+						'after'  => esc_html__('After', 'elementskit-lite'),
+					],
+					'selectors_dictionary' => [
+						'after' => 'display: flex; flex-direction: row-reverse;',
+						'before' => 'display: flex; flex-direction: row;',
+					],
+					'selectors' => [
+						'{{WRAPPER}} .ekit-sidebar-group a.ekit_close-side-widget' => '{{VALUE}};',
+					],
+					'condition' => [
+						'ekit_offcanvas_menu_close_type' => 'icon_with_text',
+					]
+				]
+			);
+
+			$this->add_control(
+				'ekit_offcanvas_menu_close_text',
+				[
+					'label' => esc_html__('Text', 'elementskit-lite'),
+					'label_block' => true,
+					'type' => Controls_Manager::TEXT,
+					'default' => esc_html__( 'Close', 'elementskit-lite' ),
+					'dynamic' => [
+						'active' => true,
+					],
+					'condition' => [
+						'ekit_offcanvas_menu_close_type' => [ 'text', 'icon_with_text' ],
+					] 
+				]
+			);
 
             $this->end_controls_tab();
 
         $this->end_controls_tabs();
         // end tabs
+
+		$this->add_control(
+			'ekit_offcanvas_icons_spacing',
+			[
+				'label' => esc_html__( 'Icons Gap', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
+				'separator' => 'before',
+				'render_type' => 'template',
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .ekit-wid-con .ekit-offcanvas-toggle-wraper.before .ekit_navSidebar-button :is(svg, i)' => 'margin-right:{{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .ekit-wid-con .ekit-offcanvas-toggle-wraper.after .ekit_navSidebar-button :is(svg, i)' => 'margin-left:{{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .ekit-wid-con .ekit-sidebar-widget .ekit_widget-heading.before :is(svg, i)' => 'margin-right:{{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .ekit-wid-con .ekit-sidebar-widget .ekit_widget-heading.after :is(svg, i)' => 'margin-left:{{SIZE}}{{UNIT}};',
+				],
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'ekit_offcanvas_menu_close_type',
+							'value' => 'icon_with_text',
+						],
+						[	
+							'name'  => 'ekit_offcanvas_menu_type',
+							'value' => 'icon_with_text',
+						],
+					],
+				],
+			]
+		);
 
 		$this->add_control(
 			'ekit_offcanvas_disable_bodyscroll',
@@ -184,6 +287,42 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
 
         $this->end_controls_section();
 
+		$this->start_controls_section(
+			'ekit_header_search_setting',
+			[
+				'label' => esc_html__('Offcanvas Settings', 'elementskit-lite'),
+			]
+		);
+
+		$this->add_control(
+			'ekit_header_search_style',
+			[
+				'label' => esc_html__( 'Offcanvas Style', 'elementskit-lite' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'ekit-slide',
+				'options' => [
+					'ekit-slide'  => esc_html__( 'Slide', 'elementskit-lite' ),
+					'ekit-fade' => esc_html__( 'Fade', 'elementskit-lite' ),
+				],
+			]
+		);
+
+		$this->add_control(
+			'ekit_header_search_transition',
+			[
+				'label' => esc_html__( 'Transition Duration (s)', 'elementskit-lite' ),
+				'type' => Controls_Manager::NUMBER,
+				'max' => 50,
+				'step' => 5,
+				'step' => 0.5,
+				'default' => 0.5,
+				'selectors' => [
+					'{{WRAPPER}} .ekit-sidebar-group' => '--transition-duration: {{SIZE}}s',
+				],
+			]
+		);
+
+		$this->end_controls_section();
 
         $this->start_controls_section(
             'ekit_header_offcanvas_section_tab_style',
@@ -301,7 +440,6 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                     'name'     => 'ekit_offcanvas_text_typo',
                     'label'    => esc_html__('Text Typography', 'elementskit-lite'),
                     'selector' => '{{WRAPPER}} .ekit_navSidebar-button',
-    
                     'fields_options' => [
                         'typography'  => [
                             'default' => 'custom',
@@ -495,8 +633,7 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                     ],
                 ]
             );
-    
-    
+
             $this->add_responsive_control(
                 'ekit_offcanvas_close_icon_font_size',
                 [
@@ -509,12 +646,19 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                         'size' => '20',
                     ],
                     'selectors' => [
-                        '{{WRAPPER}} .ekit_close-side-widget' => 'font-size: {{SIZE}}{{UNIT}};',
+                        '{{WRAPPER}} .ekit_close-side-widget i' => 'font-size: {{SIZE}}{{UNIT}};',
                         '{{WRAPPER}} .ekit_close-side-widget svg'   => 'max-width: {{SIZE}}{{UNIT}};',
                     ],
-    
                 ]
             );
+
+			$this->add_group_control(
+				Group_Control_Typography::get_type(),
+				[
+					'name' => 'ekit_offcanvas_close_typography',
+					'selector' => '{{WRAPPER}} .ekit_close-side-widget',
+				]
+			);
 
             $this->add_responsive_control(
                 'close_btn_size',
@@ -698,14 +842,15 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
         ]
 
         ?>
-        <div class="ekit-offcanvas-toggle-wraper">
+        <div class="ekit-offcanvas-toggle-wraper <?php echo esc_attr($settings['ekit_offcanvas_menu_icons_position']); ?>">
             <a href="#" class="ekit_navSidebar-button ekit_offcanvas-sidebar" aria-label="offcanvas-menu">
                 <?php
-                    if($settings['ekit_offcanvas_menu_type'] == 'icon') {
+                    if($settings['ekit_offcanvas_menu_type'] !== 'text') {
                         // new icon
                         $migrated = isset( $settings['__fa4_migrated']['ekit_offcanvas_menu_icons'] );
                         // Check if its a new widget without previously selected icon using the old Icon control
                         $is_new = empty( $settings['ekit_offcanvas_menu_icon'] );
+
                         if ( $is_new || $migrated ) {
                             // new icon
                             Icons_Manager::render_icon( $settings['ekit_offcanvas_menu_icons'], [ 'aria-hidden' => 'true' ] );
@@ -714,62 +859,42 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
                             <i class="<?php echo esc_attr($settings['ekit_offcanvas_menu_icon']); ?>" aria-hidden="true"></i>
                             <?php
                         }
-                    } elseif($settings['ekit_offcanvas_menu_type'] == 'icon_with_text') {
-                         // new icon
-                         $migrated = isset( $settings['__fa4_migrated']['ekit_offcanvas_menu_icons'] );
-                         // Check if its a new widget without previously selected icon using the old Icon control
-                         $is_new = empty( $settings['ekit_offcanvas_menu_icon'] );
-                         if($settings['ekit_offcanvas_menu_icons_position'] == 'before') {
-                            if ( $is_new || $migrated ) {
-                                // new icon
-                                Icons_Manager::render_icon( $settings['ekit_offcanvas_menu_icons'], [ 'aria-hidden' => 'true' ] );
-                            } else {
-                                ?>
-                                <i class="<?php echo esc_attr($settings['ekit_offcanvas_menu_icon']); ?>" aria-hidden="true"></i>
-                                <?php
-                            }
-                            echo ' '.esc_html($settings['ekit_offcanvas_menu_text']);
-                         } else {
-                            echo esc_html($settings['ekit_offcanvas_menu_text']).' ';
-                            if ( $is_new || $migrated ) {
-                                // new icon
-                                Icons_Manager::render_icon( $settings['ekit_offcanvas_menu_icons'], [ 'aria-hidden' => 'true' ] );
-                            } else {
-                                ?>
-                                <i class="<?php echo esc_attr($settings['ekit_offcanvas_menu_icon']); ?>" aria-hidden="true"></i>
-                                <?php
-                            }
-                         }
-                         
-                    } elseif($settings['ekit_offcanvas_menu_type'] == 'text') {
-                        echo esc_html($settings['ekit_offcanvas_menu_text']);
                     }
+					if($settings['ekit_offcanvas_menu_type'] == 'icon_with_text' || $settings['ekit_offcanvas_menu_type'] == 'text'){
+						echo esc_html($settings['ekit_offcanvas_menu_text']);
+					}
                 ?>
             </a>
         </div>
         <!-- offset cart strart -->
         <!-- sidebar cart item -->
-        <div class="ekit-sidebar-group info-group" data-settings="<?php echo esc_attr( json_encode($data_settings) ) ?>">
+        <div class="ekit-sidebar-group info-group <?php echo esc_attr($settings['ekit_header_search_style']); ?>" data-settings="<?php echo esc_attr( json_encode($data_settings)); ?>">
             <div class="ekit-overlay ekit-bg-black"></div>
             <div class="ekit-sidebar-widget">
                 <div class="ekit_sidebar-widget-container">
-                    <div class="ekit_widget-heading">
+                    <div class="ekit_widget-heading <?php echo esc_attr($settings['ekit_offcanvas_menu_close_icons_position']); ?>">
                         <a href="#" class="ekit_close-side-widget" aria-label="close-icon">
 
-                            <?php
-                                // new icon
-                                $migrated = isset( $settings['__fa4_migrated']['ekit_offcanvas_menu_close_icons'] );
-                                // Check if its a new widget without previously selected icon using the old Icon control
-                                $is_new = empty( $settings['ekit_offcanvas_menu_close_icon'] );
-                                if ( $is_new || $migrated ) {
-                                    // new icon
-                                    Icons_Manager::render_icon( $settings['ekit_offcanvas_menu_close_icons'], [ 'aria-hidden' => 'true' ] );
-                                } else {
-                                    ?>
-                                    <i class="<?php echo esc_attr($settings['ekit_offcanvas_menu_close_icon']); ?>" aria-hidden="true"></i>
-                                    <?php
-                                }
-                            ?>
+							<?php
+								// new icon
+								$migrated = isset($settings['__fa4_migrated']['ekit_offcanvas_menu_close_icons']);
+								 // Check if its a new widget without previously selected icon using the old Icon control
+								$is_new = empty($settings['ekit_offcanvas_menu_close_icon']);
+
+								if($settings['ekit_offcanvas_menu_close_type'] !== 'text'){
+									if ($is_new || $migrated) {
+										Icons_Manager::render_icon($settings['ekit_offcanvas_menu_close_icons'], ['aria-hidden' => 'true']);
+									} else {
+										?>
+											<i class="<?php echo esc_attr($settings['ekit_offcanvas_menu_close_icon']); ?>" aria-hidden="true"></i>
+										<?php
+									}
+								}
+
+								if($settings['ekit_offcanvas_menu_close_type'] == 'icon_with_text' || $settings['ekit_offcanvas_menu_close_type'] == 'text' ){
+									echo esc_html($settings['ekit_offcanvas_menu_close_text']);
+								}
+							?>
 
                         </a>
                     </div>

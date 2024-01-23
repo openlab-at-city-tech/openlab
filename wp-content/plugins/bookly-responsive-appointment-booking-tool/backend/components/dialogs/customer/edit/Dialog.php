@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Customer\Edit;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Customer\Edit
- */
 class Dialog extends Lib\Base\Component
 {
     /**
@@ -48,9 +44,10 @@ class Dialog extends Lib\Base\Component
         wp_localize_script( 'bookly-customer.js', 'BooklyL10nCustomerDialog', Proxy\Shared::prepareL10n( array(
             'wpUsers' => $show_wp_users ? $wp_users : array(),
             'wpUsersRemote' => $show_wp_users ? $wp_users_remote : false,
+            'moment_format_time' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
             'intlTelInput' => array(
                 'enabled' => $tel_input_enabled,
-                'utils'   => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
+                'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                 'country' => get_option( 'bookly_cst_phone_default_country' ),
             ),
             'datePicker' => Lib\Utils\DateTime::datePickerOptions( array(
@@ -68,6 +65,7 @@ class Dialog extends Lib\Base\Component
                 'phone' => __( 'Phone', 'bookly' ),
                 'email' => __( 'Email', 'bookly' ),
                 'notes' => __( 'Notes', 'bookly' ),
+                'notes_help' => __( 'This text can be inserted into notifications with {client_note} code', 'bookly' ),
                 'save' => __( 'Save', 'bookly' ),
                 'cancel' => __( 'Cancel', 'bookly' ),
                 'required' => __( 'Required', 'bookly' ),

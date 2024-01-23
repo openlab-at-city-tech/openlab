@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.5.0
  */
+#[AllowDynamicProperties]
 class BP_Activity_Component extends BP_Component {
 
 	/**
@@ -120,22 +121,22 @@ class BP_Activity_Component extends BP_Component {
 			if ( is_user_logged_in() &&
 				in_array( bp_current_action(), array( 'delete', 'spam', 'post', 'reply', 'favorite', 'unfavorite' ), true )
 			) {
-				require $this->path . 'bp-activity/actions/' . bp_current_action() . '.php';
+				require_once $this->path . 'bp-activity/actions/' . bp_current_action() . '.php';
 			}
 
 			// RSS feeds.
 			if ( bp_is_current_action( 'feed' ) || bp_is_action_variable( 'feed', 0 ) ) {
-				require $this->path . 'bp-activity/actions/feeds.php';
+				require_once $this->path . 'bp-activity/actions/feeds.php';
 			}
 
 			// Screens - Directory.
 			if ( bp_is_activity_directory() ) {
-				require $this->path . 'bp-activity/screens/directory.php';
+				require_once $this->path . 'bp-activity/screens/directory.php';
 			}
 
 			// Screens - User main nav.
 			if ( bp_is_user() ) {
-				require $this->path . 'bp-activity/screens/just-me.php';
+				require_once $this->path . 'bp-activity/screens/just-me.php';
 			}
 
 			/**
@@ -161,12 +162,12 @@ class BP_Activity_Component extends BP_Component {
 			$slug = bp_current_action();
 
 			if ( bp_is_user() && isset( $filenames[ $slug ] ) ) {
-				require $this->path . 'bp-activity/screens/' . $filenames[ $slug ] . '.php';
+				require_once $this->path . 'bp-activity/screens/' . $filenames[ $slug ] . '.php';
 			}
 
 			// Screens - Single permalink.
 			if ( bp_is_current_action( 'p' ) || is_numeric( bp_current_action() ) ) {
-				require $this->path . 'bp-activity/screens/permalink.php';
+				require_once $this->path . 'bp-activity/screens/permalink.php';
 			}
 
 			// Theme compatibility.
@@ -177,8 +178,7 @@ class BP_Activity_Component extends BP_Component {
 	/**
 	 * Set up component global variables.
 	 *
-	 * The BP_ACTIVITY_SLUG constant is deprecated, and only used here for
-	 * backwards compatibility.
+	 * The BP_ACTIVITY_SLUG constant is deprecated.
 	 *
 	 * @since 1.5.0
 	 *
@@ -187,11 +187,13 @@ class BP_Activity_Component extends BP_Component {
 	 * @param array $args See BP_Component::setup_globals() for a description.
 	 */
 	public function setup_globals( $args = array() ) {
-		$bp = buddypress();
+		$bp           = buddypress();
+		$default_slug = $this->id;
 
-		// Define a slug, if necessary.
-		if ( ! defined( 'BP_ACTIVITY_SLUG' ) ) {
-			define( 'BP_ACTIVITY_SLUG', $this->id );
+		// @deprecated.
+		if ( defined( 'BP_ACTIVITY_SLUG' ) ) {
+			_doing_it_wrong( 'BP_ACTIVITY_SLUG', esc_html__( 'Slug constants are deprecated.', 'buddypress' ), 'BuddyPress 12.0.0' );
+			$default_slug = BP_ACTIVITY_SLUG;
 		}
 
 		// Global tables for activity component.
@@ -212,9 +214,14 @@ class BP_Activity_Component extends BP_Component {
 		// All globals for activity component.
 		// Note that global_tables is included in this array.
 		$args = array(
-			'slug'                  => BP_ACTIVITY_SLUG,
-			'root_slug'             => isset( $bp->pages->activity->slug ) ? $bp->pages->activity->slug : BP_ACTIVITY_SLUG,
+			'slug'                  => $default_slug,
+			'root_slug'             => isset( $bp->pages->activity->slug ) ? $bp->pages->activity->slug : $default_slug,
 			'has_directory'         => true,
+			'rewrite_ids'           => array(
+				'directory'                    => 'activities',
+				'single_item_action'           => 'activity_action',
+				'single_item_action_variables' => 'activity_action_variables',
+			),
 			'directory_title'       => isset( $bp->pages->activity->title ) ? $bp->pages->activity->title : $default_directory_title,
 			'notification_callback' => 'bp_activity_format_notifications',
 			'search_string'         => __( 'Search Activity...', 'buddypress' ),
@@ -231,33 +238,17 @@ class BP_Activity_Component extends BP_Component {
 	}
 
 	/**
-	 * Set up component navigation.
+	 * Register component navigation.
 	 *
-	 * @since 1.5.0
+	 * @since 12.0.0
 	 *
-	 * @see BP_Component::setup_nav() for a description of arguments.
+	 * @see `BP_Component::register_nav()` for a description of arguments.
 	 *
-	 * @param array $main_nav Optional. See BP_Component::setup_nav() for description.
-	 * @param array $sub_nav  Optional. See BP_Component::setup_nav() for description.
+	 * @param array $main_nav Optional. See `BP_Component::register_nav()` for description.
+	 * @param array $sub_nav  Optional. See `BP_Component::register_nav()` for description.
 	 */
-	public function setup_nav( $main_nav = array(), $sub_nav = array() ) {
-
-		// Stop if there is no user displayed or logged in.
-		if ( ! is_user_logged_in() && ! bp_displayed_user_id() ) {
-			return;
-		}
-
-		// Determine user to use.
-		if ( bp_displayed_user_domain() ) {
-			$user_domain = bp_displayed_user_domain();
-		} elseif ( bp_loggedin_user_domain() ) {
-			$user_domain = bp_loggedin_user_domain();
-		} else {
-			return;
-		}
-
-		$slug          = bp_get_activity_slug();
-		$activity_link = trailingslashit( $user_domain . $slug );
+	public function register_nav( $main_nav = array(), $sub_nav = array() ) {
+		$slug = bp_get_activity_slug();
 
 		// Add 'Activity' to the main navigation.
 		$main_nav = array(
@@ -273,49 +264,43 @@ class BP_Activity_Component extends BP_Component {
 		$sub_nav[] = array(
 			'name'            => _x( 'Personal', 'Profile activity screen sub nav', 'buddypress' ),
 			'slug'            => 'just-me',
-			'parent_url'      => $activity_link,
 			'parent_slug'     => $slug,
 			'screen_function' => 'bp_activity_screen_my_activity',
 			'position'        => 10
 		);
 
 		// Check @mentions.
-		if ( bp_activity_do_mentions() ) {
-			$sub_nav[] = array(
-				'name'            => _x( 'Mentions', 'Profile activity screen sub nav', 'buddypress' ),
-				'slug'            => 'mentions',
-				'parent_url'      => $activity_link,
-				'parent_slug'     => $slug,
-				'screen_function' => 'bp_activity_screen_mentions',
-				'position'        => 20,
-				'item_css_id'     => 'activity-mentions'
-			);
-		}
+		$sub_nav[] = array(
+			'name'            => _x( 'Mentions', 'Profile activity screen sub nav', 'buddypress' ),
+			'slug'            => 'mentions',
+			'parent_slug'     => $slug,
+			'screen_function' => 'bp_activity_screen_mentions',
+			'position'        => 20,
+			'item_css_id'     => 'activity-mentions',
+			'generate'        => bp_activity_do_mentions(),
+		);
 
 		// Favorite activity items.
-		if ( bp_activity_can_favorite() ) {
-			$sub_nav[] = array(
-				'name'            => _x( 'Favorites', 'Profile activity screen sub nav', 'buddypress' ),
-				'slug'            => 'favorites',
-				'parent_url'      => $activity_link,
-				'parent_slug'     => $slug,
-				'screen_function' => 'bp_activity_screen_favorites',
-				'position'        => 30,
-				'item_css_id'     => 'activity-favs'
-			);
-		}
+		$sub_nav[] = array(
+			'name'            => _x( 'Favorites', 'Profile activity screen sub nav', 'buddypress' ),
+			'slug'            => 'favorites',
+			'parent_slug'     => $slug,
+			'screen_function' => 'bp_activity_screen_favorites',
+			'position'        => 30,
+			'item_css_id'     => 'activity-favs',
+			'generate'        => bp_activity_can_favorite(),
+		);
 
 		// Additional menu if friends is active.
 		if ( bp_is_active( 'friends' ) ) {
 			$sub_nav[] = array(
 				'name'            => _x( 'Friends', 'Profile activity screen sub nav', 'buddypress' ),
 				'slug'            => bp_get_friends_slug(),
-				'parent_url'      => $activity_link,
 				'parent_slug'     => $slug,
 				'screen_function' => 'bp_activity_screen_friends',
 				'position'        => 40,
-				'item_css_id'     => 'activity-friends'
-			) ;
+				'item_css_id'     => 'activity-friends',
+			);
 		}
 
 		// Additional menu if groups is active.
@@ -323,7 +308,6 @@ class BP_Activity_Component extends BP_Component {
 			$sub_nav[] = array(
 				'name'            => _x( 'Groups', 'Profile activity screen sub nav', 'buddypress' ),
 				'slug'            => bp_get_groups_slug(),
-				'parent_url'      => $activity_link,
 				'parent_slug'     => $slug,
 				'screen_function' => 'bp_activity_screen_groups',
 				'position'        => 50,
@@ -331,7 +315,7 @@ class BP_Activity_Component extends BP_Component {
 			);
 		}
 
-		parent::setup_nav( $main_nav, $sub_nav );
+		parent::register_nav( $main_nav, $sub_nav );
 	}
 
 	/**
@@ -351,12 +335,12 @@ class BP_Activity_Component extends BP_Component {
 		if ( is_user_logged_in() ) {
 
 			// Setup the logged in user variables.
-			$activity_link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
+			$activity_slug = bp_get_activity_slug();
 
 			// Unread message count.
 			if ( bp_activity_do_mentions() ) {
 				$count = bp_get_total_mention_count_for_user( bp_loggedin_user_id() );
-				if ( !empty( $count ) ) {
+				if ( ! empty( $count ) ) {
 					$title = sprintf(
 						/* translators: %s: Unread mention count for the current user */
 						_x( 'Mentions %s', 'Toolbar Mention logged in user', 'buddypress' ),
@@ -372,7 +356,7 @@ class BP_Activity_Component extends BP_Component {
 				'parent' => buddypress()->my_account_menu_id,
 				'id'     => 'my-account-' . $this->id,
 				'title'  => _x( 'Activity', 'My Account Activity sub nav', 'buddypress' ),
-				'href'   => $activity_link
+				'href'   => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug ) ) ),
 			);
 
 			// Personal.
@@ -380,8 +364,8 @@ class BP_Activity_Component extends BP_Component {
 				'parent'   => 'my-account-' . $this->id,
 				'id'       => 'my-account-' . $this->id . '-personal',
 				'title'    => _x( 'Personal', 'My Account Activity sub nav', 'buddypress' ),
-				'href'     => trailingslashit( $activity_link . 'just-me' ),
-				'position' => 10
+				'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'just-me' ) ) ),
+				'position' => 10,
 			);
 
 			// Mentions.
@@ -390,8 +374,8 @@ class BP_Activity_Component extends BP_Component {
 					'parent'   => 'my-account-' . $this->id,
 					'id'       => 'my-account-' . $this->id . '-mentions',
 					'title'    => $title,
-					'href'     => trailingslashit( $activity_link . 'mentions' ),
-					'position' => 20
+					'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'mentions' ) ) ),
+					'position' => 20,
 				);
 			}
 
@@ -401,8 +385,8 @@ class BP_Activity_Component extends BP_Component {
 					'parent'   => 'my-account-' . $this->id,
 					'id'       => 'my-account-' . $this->id . '-favorites',
 					'title'    => _x( 'Favorites', 'My Account Activity sub nav', 'buddypress' ),
-					'href'     => trailingslashit( $activity_link . 'favorites' ),
-					'position' => 30
+					'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, 'favorites' ) ) ),
+					'position' => 30,
 				);
 			}
 
@@ -412,8 +396,8 @@ class BP_Activity_Component extends BP_Component {
 					'parent'   => 'my-account-' . $this->id,
 					'id'       => 'my-account-' . $this->id . '-friends',
 					'title'    => _x( 'Friends', 'My Account Activity sub nav', 'buddypress' ),
-					'href'     => trailingslashit( $activity_link . bp_get_friends_slug() ),
-					'position' => 40
+					'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, bp_get_friends_slug() ) ) ),
+					'position' => 40,
 				);
 			}
 
@@ -423,7 +407,7 @@ class BP_Activity_Component extends BP_Component {
 					'parent'   => 'my-account-' . $this->id,
 					'id'       => 'my-account-' . $this->id . '-groups',
 					'title'    => _x( 'Groups', 'My Account Activity sub nav', 'buddypress' ),
-					'href'     => trailingslashit( $activity_link . bp_get_groups_slug() ),
+					'href'     => bp_loggedin_user_url( bp_members_get_path_chunks( array( $activity_slug, bp_get_groups_slug() ) ) ),
 					'position' => 50
 				);
 			}
@@ -481,6 +465,57 @@ class BP_Activity_Component extends BP_Component {
 	}
 
 	/**
+	 * Parse the WP_Query and eventually display the component's directory or single item.
+	 *
+	 * @since 12.0.0
+	 *
+	 * @param WP_Query $query Required. See BP_Component::parse_query() for
+	 *                        description.
+	 */
+	public function parse_query( $query ) {
+		/*
+		 * If BP Rewrites are not in use, no need to parse BP URI globals another time.
+		 * Legacy Parser should have already set these.
+		 */
+		if ( 'rewrites' !== bp_core_get_query_parser() ) {
+			return parent::parse_query( $query );
+		}
+
+		if ( home_url( '/' ) === bp_get_requested_url() && bp_is_directory_homepage( $this->id ) ) {
+			$query->set( $this->rewrite_ids['directory'], 1 );
+		}
+
+		if ( 1 === (int) $query->get( $this->rewrite_ids['directory'] ) ) {
+			$bp = buddypress();
+
+			// Set the Activity component as current.
+			$bp->current_component = 'activity';
+
+			$current_action = $query->get( $this->rewrite_ids['single_item_action'] );
+			if ( $current_action ) {
+				$bp->current_action = $current_action;
+			}
+
+			$action_variables = $query->get( $this->rewrite_ids['single_item_action_variables'] );
+			if ( $action_variables ) {
+				if ( ! is_array( $action_variables ) ) {
+					$bp->action_variables = explode( '/', ltrim( $action_variables, '/' ) );
+				} else {
+					$bp->action_variables = $action_variables;
+				}
+			}
+
+			// Set the BuddyPress queried object.
+			if ( isset( $bp->pages->activity->id ) ) {
+				$query->queried_object    = get_post( $bp->pages->activity->id );
+				$query->queried_object_id = $query->queried_object->ID;
+			}
+		}
+
+		parent::parse_query( $query );
+	}
+
+	/**
 	 * Init the BP REST API.
 	 *
 	 * @since 5.0.0
@@ -496,6 +531,7 @@ class BP_Activity_Component extends BP_Component {
 	 * Register the BP Activity Blocks.
 	 *
 	 * @since 7.0.0
+	 * @since 12.0.0 Use the WP Blocks API v2.
 	 *
 	 * @param array $blocks Optional. See BP_Component::blocks_init() for
 	 *                      description.
@@ -503,79 +539,18 @@ class BP_Activity_Component extends BP_Component {
 	public function blocks_init( $blocks = array() ) {
 		$blocks = array(
 			'bp/latest-activities' => array(
-				'name'               => 'bp/latest-activities',
-				'editor_script'      => 'bp-latest-activities-block',
-				'editor_script_url'  => plugins_url( 'js/blocks/latest-activities.js', dirname(  __FILE__ ) ),
-				'editor_script_deps' => array(
-					'wp-blocks',
-					'wp-element',
-					'wp-components',
-					'wp-i18n',
-					'wp-block-editor',
-					'wp-server-side-render',
-					'bp-block-data',
-				),
-				'style'              => 'bp-latest-activities-block',
-				'style_url'          => plugins_url( 'css/blocks/latest-activities.css', dirname(  __FILE__ ) ),
-				'attributes'         => array(
-					'title'         => array(
-						'type'    => 'string',
-						'default' => __( 'Latest updates', 'buddypress' ),
-					),
-					'maxActivities' => array(
-						'type'    => 'number',
-						'default' => 5,
-					),
-					'type'          => array(
-						'type'    => 'array',
-						'default' => array( 'activity_update' ),
-					),
-					'postId'        => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-				),
-				'render_callback'    => 'bp_activity_render_latest_activities_block',
+				'metadata'        => trailingslashit( buddypress()->plugin_dir ) . 'bp-activity/blocks/latest-activities',
+				'render_callback' => 'bp_activity_render_latest_activities_block',
 			),
 		);
 
 		if ( bp_is_active( $this->id, 'embeds' ) ) {
 			$blocks['bp/embed-activity'] = array(
-				'name'               => 'bp/embed-activity',
-				'editor_script'      => 'bp-embed-activity-block',
-				'editor_script_url'  => plugins_url( 'js/blocks/embed-activity.js', dirname(  __FILE__ ) ),
-				'editor_script_deps' => array(
-					'wp-blocks',
-					'wp-element',
-					'wp-i18n',
-					'wp-components',
-					'wp-block-editor',
-					'wp-data',
-					'wp-compose',
-					'bp-block-data',
-				),
+				'metadata' => trailingslashit( buddypress()->plugin_dir ) . 'bp-activity/blocks/embed-activity',
+
 			);
 		}
 
 		parent::blocks_init( $blocks );
-	}
-
-	/**
-	 * Add the Activity directory state.
-	 *
-	 * @since 10.0.0
-	 *
-	 * @param array   $states Optional. See BP_Component::admin_directory_states() for description.
-	 * @param WP_Post $post   Optional. See BP_Component::admin_directory_states() for description.
-	 * @return array          See BP_Component::admin_directory_states() for description.
-	 */
-	public function admin_directory_states( $states = array(), $post = null ) {
-		$bp = buddypress();
-
-		if ( isset( $bp->pages->activity->id ) && (int) $bp->pages->activity->id === (int) $post->ID ) {
-			$states['page_for_activity_directory'] = _x( 'BP Activity Page', 'page label', 'buddypress' );
-		}
-
-		return parent::admin_directory_states( $states, $post );
 	}
 }

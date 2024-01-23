@@ -27,6 +27,7 @@ use ReflectionParameter;
 use ReflectionType;
 use stdClass;
 use Throwable;
+/** @internal */
 abstract class AbstractMacro implements BuiltinMethodReflection
 {
     /**

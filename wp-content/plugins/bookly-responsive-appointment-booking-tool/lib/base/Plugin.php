@@ -4,11 +4,6 @@ namespace Bookly\Lib\Base;
 use Bookly\Lib;
 use BooklyPro\Lib\Base\Plugin as PluginPro;
 
-/**
- * Class Plugin
- *
- * @package Bookly\Lib\Base
- */
 abstract class Plugin
 {
     /******************************************************************************************************************

@@ -4,10 +4,6 @@ namespace Bookly\Backend\Components\Dialogs\Service\Edit;
 use Bookly\Lib;
 use Bookly\Backend\Modules\Services\Page;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Service\Edit
- */
 class Dialog extends Lib\Base\Component
 {
     /**

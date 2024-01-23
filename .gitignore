@@ -61,3 +61,7 @@ wp-content/themes/*/node_modules/
 wp-content/themes/*/nbproject/
 
 /vendor/
+
+# We run a build copy of openlab-attributions and shouldn't accidentally commit dev assets.
+wp-content/plugins/openlab-attributions/.github
+wp-content/plugins/openlab-attributions/.gitignore

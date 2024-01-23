@@ -1,14 +1,8 @@
 <?php
 namespace Bookly\Backend\Components\Dialogs\Staff\Edit;
 
-use Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
 use Bookly\Lib;
 
-/**
- * Class Dialog
- *
- * @package Bookly\Backend\Components\Dialogs\Staff\Edit
- */
 class Dialog extends Lib\Base\Component
 {
     /**

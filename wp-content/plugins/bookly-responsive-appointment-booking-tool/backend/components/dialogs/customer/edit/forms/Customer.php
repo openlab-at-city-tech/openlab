@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Customer\Edit\Forms;
 
 use Bookly\Lib;
 
-/**
- * Class Customer
- * @package Bookly\Backend\Components\Dialogs\Customer\Forms
- */
 class Customer extends Lib\Base\Form
 {
     protected static $entity_class = 'Customer';
@@ -28,6 +24,7 @@ class Customer extends Lib\Base\Form
             'street',
             'street_number',
             'additional_address',
+            'full_address',
             'notes',
             'birthday',
             'info_fields',

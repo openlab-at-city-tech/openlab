@@ -20,6 +20,7 @@ namespace SimpleCalendar\plugin_deps\Google\Task;
 /**
  * Interface for checking how many times a given task can be retried following
  * a failure.
+ * @internal
  */
 interface Retryable
 {

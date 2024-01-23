@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Notices\PoweredBy;
 
 use Bookly\Lib;
 
-/**
- * Class Notice
- * @package Bookly\Backend\Components\Notices\PoweredBy
- */
 class Notice extends Lib\Base\Component
 {
     /**

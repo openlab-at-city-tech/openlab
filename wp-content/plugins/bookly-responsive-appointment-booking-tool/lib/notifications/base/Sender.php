@@ -3,10 +3,6 @@ namespace Bookly\Lib\Notifications\Base;
 
 use Bookly\Lib\Entities\Notification;
 
-/**
- * Class Sender
- * @package Bookly\Lib\Notifications\Base
- */
 abstract class Sender extends Reminder
 {
     /**

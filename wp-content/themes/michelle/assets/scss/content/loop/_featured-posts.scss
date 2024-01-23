@@ -1,0 +1,259 @@
+/* FILE: content/loop/_featured-posts.scss */
+
+.featured-posts {
+	display: flex;
+	flex-wrap: wrap;
+	min-height: 50vh;
+
+	@include media( map_get( $breakpoint, 'l' ) ) {
+		min-height: $ratio_maj * 100 + vh;
+	}
+
+	&-section {
+		margin-top: var(--content_padding_negative);
+		margin-bottom: var(--white_space);
+		overflow-x: hidden;
+
+		.has-primary-title & {
+			margin-top: 0;
+		}
+
+	}
+
+	h2,
+	a {
+		color: inherit;
+	}
+
+	img {
+		position: absolute;
+		#{$left}: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: -2;
+	}
+
+	.svg-icon {
+		fill: currentColor;
+	}
+
+	.link-more-container {
+		padding-top: $ratio_maj + rem;
+	}
+
+	.entry {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		position: relative;
+		width: 100%;
+		min-width: 100%;
+		min-height: $ratio_min * 100 + vh;
+		padding: var(--posts_list_gap);
+		padding-top: var(--white_space);
+		background: #333;
+		color: #fff;
+		z-index: 1; // Trick to keep pseudo element below child elements.
+		transition:
+			transform var(--featured_posts_transition_speed),
+			margin var(--featured_posts_transition_speed),
+			box-shadow var(--featured_posts_transition_speed),
+			opacity var(--featured_posts_transition_speed);
+
+		@include media( map_get( $breakpoint, 'xxl' ) ) {
+			padding: calc( 2 * var(--posts_list_gap) );
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			// All of left, right, top and bottom are needed to override potential sticky post ::before styles.
+			left: 0;
+			right: 0;
+			top: auto;
+			bottom: 0;
+			width: 100%;
+			height: calc( 100% - ( var(--white_space) / 2 ) );
+			background: linear-gradient( to top, #000, rgba( #000, 0 ) );
+			transition: opacity var(--featured_posts_transition_speed);
+			opacity: .8;
+			pointer-events: none; // So we can click the image below.
+			z-index: -1; // Trick to keep pseudo element below child elements.
+		}
+
+		> * {
+			margin-top: $ratio_maj + rem;
+			margin-bottom: 0;
+		}
+
+		&-header,
+		&-meta,
+		&-content {
+			width: 100%;
+			max-width: var(--layout_width_entry_content);
+		}
+
+		&-content {
+			display: none;
+
+			@include media( map_get( $breakpoint, 'xl' ) ) {
+				display: block;
+			}
+
+		}
+
+	}
+
+	@include media( map_get( $breakpoint, 'xl' ) ) {
+
+		&:hover,
+		&:focus-within {
+
+			.entry {
+
+				&,
+				&:first-child {
+					opacity: var(--featured_posts_opacity_shaded);
+				}
+
+				&:hover,
+				&:focus-within {
+					opacity: 1;
+					z-index: 10;
+
+					&::before {
+						opacity: 1;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+.has-2-featured-posts .entry {
+
+	@include media( map_get( $breakpoint, 'l' ) ) {
+		width: 50%;
+		min-width: 50%;
+	}
+
+}
+
+.has-3-featured-posts .entry {
+
+	@include media(
+		( map_get( $breakpoint, 'm' ), 'min-width' ),
+		( map_get( $breakpoint, 'xl' ), 'max-width' )
+	) {
+
+		&:not(:first-child) {
+			width: 50%;
+			min-width: 50%;
+		}
+
+	}
+
+	@include media( map_get( $breakpoint, 'xl' ) ) {
+		width: 50%;
+		min-width: 50%;
+		opacity: var(--featured_posts_opacity_shaded);
+
+		&:nth-child(1) {
+			margin-top: calc( -1 * var(--posts_list_gap) / 2 );
+			margin-bottom: calc( -1 * var(--posts_list_gap) / 2 );
+			// box-shadow: 0 0 0 calc( var(--posts_list_gap) / 2 ) var(--color_body_background);
+			opacity: 1;
+			z-index: 5;
+		}
+
+		&:nth-child(2) {
+			margin-#{$right}: -25%;
+
+			&:hover,
+			&:focus-within {
+				transform: translateX( $rtl_multiplier * -50% );
+			}
+
+		}
+
+		&:nth-child(3) {
+			order: -1;
+			margin-#{$left}: -25%;
+
+			&:hover,
+			&:focus-within {
+				transform: translateX( $rtl_multiplier * 50% );
+			}
+
+		}
+
+	}
+
+	@include media( map_get( $breakpoint, 'xxl' ) ) {
+
+		&:nth-child(1) {
+			margin-top: calc( -1 * var(--posts_list_gap) );
+			margin-bottom: calc( -1 * var(--posts_list_gap) );
+			// box-shadow: 0 0 0 var(--posts_list_gap) var(--color_body_background);
+		}
+
+	}
+
+}
+
+.has-2-featured-posts,
+.has-3-featured-posts {
+
+	@include media( map_get( $breakpoint, 'xl' ) ) {
+		padding: var(--posts_list_gap) 0;
+
+		&:hover,
+		&:focus-within {
+
+			.entry {
+				margin-top: 0;
+				margin-bottom: 0;
+				box-shadow: none;
+
+				&:hover,
+				&:focus-within {
+					margin-top: calc( -1 * var(--posts_list_gap) / 2 );
+					margin-bottom: calc( -1 * var(--posts_list_gap) / 2 );
+					// box-shadow: 0 0 0 calc( var(--posts_list_gap) / 2 ) var(--color_body_background);
+				}
+
+			}
+
+		}
+
+	}
+
+	@include media( map_get( $breakpoint, 'xxl' ) ) {
+
+		&:hover,
+		&:focus-within {
+
+			.entry {
+
+				&:hover,
+				&:focus-within {
+					margin-top: calc( -1 * var(--posts_list_gap) );
+					margin-bottom: calc( -1 * var(--posts_list_gap) );
+					// box-shadow: 0 0 0 var(--posts_list_gap) var(--color_body_background);
+				}
+
+			}
+
+		}
+
+	}
+
+}

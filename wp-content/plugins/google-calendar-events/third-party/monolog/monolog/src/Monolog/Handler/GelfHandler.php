@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @author Matt Lehner <mlehner@gmail.com>
  * @author Benjamin Zikarsky <benjamin@zikarsky.de>
+ * @internal
  */
 class GelfHandler extends AbstractProcessingHandler
 {

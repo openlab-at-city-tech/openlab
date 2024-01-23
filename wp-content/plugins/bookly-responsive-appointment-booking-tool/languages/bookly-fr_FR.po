@@ -8,11 +8,11 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-24 08:39+0000\n"
-"PO-Revision-Date: 2023-04-24 22:11+0000\n"
-"Last-Translator: Mathilde Massardier <mathilde.mass@icloud.com>\n"
+"POT-Creation-Date: 2023-10-16 07:41+0000\n"
+"PO-Revision-Date: 2023-10-19 07:44+0000\n"
+"Last-Translator: support@bookly.info\n"
 "Language-Team: French (France)\n"
-"X-Loco-Version: 2.3.1; wp-6.1"
+"X-Loco-Version: 2.3.1; wp-6.3.1"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Facture n° {invoice_number} de votre rendez-vous"
@@ -186,6 +186,9 @@ msgstr "Sous-total"
 
 msgid "Coupon discount"
 msgstr "Bon de remise"
+
+msgid "Tips"
+msgstr "Pourboires"
 
 msgid "Group discount"
 msgstr "Remise groupée"
@@ -634,9 +637,6 @@ msgstr "Le champ sera affiché dans le formulaire de réservation"
 
 msgid "Field will not be displayed in booking form"
 msgstr "Le champ ne sera pas affiché dans le formulaire de réservation"
-
-msgid "Show custom fields"
-msgstr "Montrer champs personnalisés"
 
 msgid "Custom field description"
 msgstr "Description du champ personnalisé"
@@ -1565,6 +1565,9 @@ msgstr "Vous n'avez rien sélectionné"
 msgid "Save"
 msgstr "Enregistrer"
 
+msgid "Incorrect payment data"
+msgstr "Informations paiement incorrectes"
+
 msgid "I will pay now with Credit Card"
 msgstr "Je paie maintenant par Carte"
 
@@ -1582,6 +1585,21 @@ msgstr "Merchant Key"
 
 msgid "Merchant Salt"
 msgstr "Merchant Salt"
+
+msgid "OFF"
+msgstr "OFF"
+
+msgid "Time interval of payment gateway"
+msgstr "Intervalle de temps de la plate-forme de paiement"
+
+msgid ""
+"This setting determines the time limit after which the payment made via the "
+"payment gateway is considered to be incomplete. This functionality requires "
+"a scheduled cron job."
+msgstr ""
+"Ce paramètre détermine la limite de temps après lequel le paiement effectué "
+"via la plateforme de paiement est considéré incomplet. Cette fonctionnalité "
+"requiert de planifier un job cron."
 
 msgid "Duration"
 msgstr "Durée"
@@ -1650,9 +1668,6 @@ msgstr "Journées spéciales"
 
 msgid "The requested interval is not available"
 msgstr "L'intervalle demandé n'est pas disponible"
-
-msgid "OFF"
-msgstr "OFF"
 
 msgid "Compound"
 msgstr "Combinaison"
@@ -1891,8 +1906,22 @@ msgstr "Échec de la connexion à Zoom"
 msgid "Zoom: OAuth2.0 connection needed"
 msgstr "Zoom : Connexion à OAuth2.0 nécessaire"
 
-msgid "You don't have permissions to view this content."
-msgstr "Vous n'êtes pas autorisé à visualiser ce contenu"
+msgid "Oops!"
+msgstr "Oups !"
+
+msgid ""
+"It seems like you are trying to log in with a user that is not associated "
+"with an existing customer or staff member."
+msgstr ""
+"On dirait que vous essayez de vous connecter avec un utilisateur qui n'est "
+"pas associé à un client ou à un membre du personnel existant."
+
+msgid ""
+"Please double-check your credentials and ensure that you are using the "
+"correct login information."
+msgstr ""
+"Veuillez vérifier vos informations d'identification et vous assurer que vous "
+"utilisez les bonnes informations de connexion."
 
 msgid ""
 "Your account has been disabled. Contact your website administrator to "
@@ -1992,11 +2021,14 @@ msgstr "Champ d'informations du client"
 msgid "Ask once"
 msgstr "Demander une fois"
 
-msgid "Show customer information"
-msgstr "Montrer information client"
+msgid "Customer Information description"
+msgstr "Description de l'information client"
 
 msgid "Info field"
 msgstr "Champ d'information"
+
+msgid "Download"
+msgstr "Télécharger"
 
 msgid ""
 "To receive REST API credentials, in <b>My Apps & Credentials</b> of your "
@@ -2022,29 +2054,8 @@ msgstr "ID Client"
 msgid "Secret"
 msgstr "Secret"
 
-msgid "Invalid session"
-msgstr "Session invalide"
-
-msgid "Mollie error."
-msgstr "Erreur Mollie."
-
 msgid "I will pay now with Mollie"
 msgstr "Je paie avec Mollie"
-
-msgid "Time interval of payment gateway"
-msgstr "Intervalle de temps de la plate-forme de paiement"
-
-msgid ""
-"This setting determines the time limit after which the payment made via the "
-"payment gateway is considered to be incomplete. This functionality requires "
-"a scheduled cron job."
-msgstr ""
-"Ce paramètre détermine la limite de temps après lequel le paiement effectué "
-"via la plateforme de paiement est considéré incomplet. Cette fonctionnalité "
-"requiert de planifier un job cron."
-
-msgid "Payment failed"
-msgstr "Échec du payement"
 
 msgid "Persons"
 msgstr "Personnes"
@@ -2155,6 +2166,9 @@ msgstr "Affichage de l'adresse requis"
 
 msgid "Show google maps field"
 msgstr "Afficher champ google maps"
+
+msgid "Google maps address"
+msgstr "Adresse sur Google maps"
 
 msgid "Do not allow to select a specific staff member"
 msgstr "Ne pas autoriser à séléctioner un membre du personnel spécifique "
@@ -2305,9 +2319,6 @@ msgstr ""
 "Le créneau horaire sélectionné n'est plus disponible. Merci d'en choisir un "
 "autre."
 
-msgid "Time"
-msgstr "Heure"
-
 msgid "Wrong current password"
 msgstr "Mot de passe en cours invalide"
 
@@ -2343,6 +2354,9 @@ msgstr "Confirmer"
 msgid "Ok"
 msgstr "Ok"
 
+msgid "Time"
+msgstr "Heure"
+
 #, php-format
 msgid " and %d more item"
 msgid_plural " and %d more items"
@@ -2358,6 +2372,16 @@ msgstr "%d min"
 
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr "Bookly Cloud n'a pas pu se connecter à votre serveur."
+
+msgid "Please check your firewall settings."
+msgstr "Veuillez vérifier les paramètres de votre pare-feu."
+
+#, php-format
+msgid ""
+"If problem persists, please contact us at <a href=\"mailto:%1$s\">%1$s</a>"
+msgstr ""
+"Si le problème persiste, veuillez nous contacter à <a href=\"mailto:%1$s\">"
+"%1$s</a>"
 
 msgid "Stripe not connected"
 msgstr "Stripe non connecté "
@@ -2897,6 +2921,9 @@ msgstr ""
 "{service_name} chez {staff_name}.\n"
 "Cliquez sur un créneau pour continuer la réservation."
 
+msgid "Add to calendar"
+msgstr "Ajouter au calendrier"
+
 msgid "Confirm email"
 msgstr "Confirmer e-mail"
 
@@ -3022,107 +3049,6 @@ msgstr "Agenda du jour"
 
 msgid "Notification to staff member about pending appointment"
 msgstr "Notification au prestataire pour le rendez-vous en attente"
-
-msgid "Invalid day"
-msgstr "Le Jour invalide"
-
-msgid "Day is required"
-msgstr "Le Jour est requis"
-
-msgid "Month is required"
-msgstr "Le mois est requis"
-
-msgid "Year is required"
-msgstr "L'année est requise"
-
-msgid "Country"
-msgstr "Pays"
-
-msgid "State/Region"
-msgstr "État/Région"
-
-msgid "Postal Code"
-msgstr "Code Postal"
-
-msgid "City"
-msgstr "Ville"
-
-msgid "Street Address"
-msgstr "Adresse"
-
-msgid "Additional Address"
-msgstr "Adresse complémentaire"
-
-msgid "Country is required"
-msgstr "Le Pays est requis"
-
-msgid "State is required"
-msgstr "L’état est requis"
-
-msgid "Postcode is required"
-msgstr "Le Code Postal est requis"
-
-msgid "City is required"
-msgstr "La ville est requise"
-
-msgid "Street is required"
-msgstr "L'adresse est requise"
-
-msgid "Additional address is required"
-msgstr "L'adresse complémentaire est requise"
-
-msgid ""
-"The highlighted time is not available anymore. Please, choose another time "
-"slot."
-msgstr ""
-"Le créneau surligné n'est plus disponible. Veuillez en choisir un autre."
-
-msgid "Happy Birthday!"
-msgstr "Joyeux anniversaire!"
-
-msgid ""
-"Dear {client_name},\n"
-"\n"
-"Happy birthday!\n"
-"We wish you all the best.\n"
-"May you and your family be happy and healthy.\n"
-"\n"
-"Thank you for choosing our company.\n"
-"\n"
-"{company_name}\n"
-"{company_phone}\n"
-"{company_website}"
-msgstr ""
-"Cher/Chère {client_name},\n"
-"\n"
-"Joyeux anniversaire!\n"
-"Nous vous souhaitons le meilleur dans votre vie.\n"
-"Du bonheur et de la santé pour vous et votre famille.\n"
-"\n"
-"Merci d'avoir choisi notre société.\n"
-"\n"
-"{company_name}\n"
-"{company_phone}\n"
-"{company_website}"
-
-msgid ""
-"Dear {client_name},\n"
-"Happy birthday!\n"
-"We wish you all the best.\n"
-"May you and your family be happy and healthy.\n"
-"Thank you for choosing our company.\n"
-"{company_name}\n"
-"{company_phone}\n"
-"{company_website}"
-msgstr ""
-"Cher/Chère {client_name},\n"
-"Joyeux anniversaire!\n"
-"Nous vous souhaitons les meilleures choses possibles.\n"
-"Et une bonne santé et du bonheur pour vous-même et votre famille.\n"
-"Merci d'avoir choisi notre société.\n"
-"{company_name}\n"
-"{company_phone}\n"
-"{company_website}"
 
 msgid "Page Redirection"
 msgstr "Redirection de page"
@@ -3485,6 +3411,9 @@ msgstr "Langue"
 msgid "Flag"
 msgstr "Flag"
 
+msgid "Country"
+msgstr "Pays"
+
 msgid "Code"
 msgstr "Code"
 
@@ -3502,6 +3431,24 @@ msgstr "ID demandé"
 
 msgid "Status date"
 msgstr "Date du statut"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Target"
+msgstr "Cible"
+
+msgid "Target ID"
+msgstr "ID cible"
+
+msgid "Author"
+msgstr "Auteur"
+
+msgid "Comment"
+msgstr "Commentaire"
+
+msgid "Reference"
+msgstr "Référennce"
 
 #, php-format
 msgid ""
@@ -3592,9 +3539,6 @@ msgstr "Pas de mises à jour disponibles"
 
 msgid "Free"
 msgstr "Libre"
-
-msgid "Gift card"
-msgstr "Carte cadeau"
 
 msgid "Completed"
 msgstr "Terminé"
@@ -4024,11 +3968,26 @@ msgstr "Service payé localement"
 msgid "URL Settings"
 msgstr "Réglages d'URL"
 
+msgid "Google Calendar"
+msgstr "Google Calendar"
+
+msgid "Online Meetings"
+msgstr "Réunions en ligne"
+
+msgid "User Permissions"
+msgstr "Permissions des utilisateurs"
+
+msgid "Additional"
+msgstr "Supplémentaire"
+
 msgid "Business Hours"
 msgstr "Heures d'ouverture"
 
 msgid "Holidays"
 msgstr "Vacances"
+
+msgid "Purchase Code"
+msgstr "Code Achat"
 
 msgid "Logs"
 msgstr "Registres"
@@ -4137,6 +4096,29 @@ msgstr "Description de l'ICS pour les clients"
 
 msgid "ICS description for staff"
 msgstr "Description de l'ICS pour le personnel"
+
+msgid "The value returned by {appointment_end_date} placeholder"
+msgstr "La valeur renvoyée par l'attribut {appointment_end_date}"
+
+msgid ""
+"Choose 'Accurate date' if you want the {appointment_end_date} placeholder to "
+"return the exact end date of the appointment. Select '+1 day' if you prefer "
+"the placeholder to include an additional day in the end date calculation. "
+"Please note that this setting will affect only appointments with a duration "
+"longer or equal to one day."
+msgstr ""
+"Choisissez \"Date exacte\" si vous souhaitez que le caractère générique "
+"{appointment_end_date} renvoie la date exacte de fin du rendez-vous. "
+"Sélectionnez \"+1 jour\" si vous préférez que le caractère générique inclue "
+"un jour supplémentaire dans le calcul de la date de fin. Veuillez noter que "
+"ce paramètre n'affecte que les rendez-vous dont la durée est supérieure ou "
+"égale à un jour."
+
+msgid "+1 day"
+msgstr "+1 jour"
+
+msgid "Accurate date"
+msgstr "Date exacte"
 
 msgid "Show only business days in the calendar"
 msgstr "Afficher uniquement les jours ouvrables dans le calendrier"
@@ -4352,26 +4334,8 @@ msgstr ""
 msgid "All actions"
 msgstr "Toutes les actions"
 
-msgid "Target ID"
-msgstr "ID cible"
-
 msgid "Quick search"
 msgstr "Recherche rapide"
-
-msgid "Action"
-msgstr "Action"
-
-msgid "Target"
-msgstr "Cible"
-
-msgid "Author"
-msgstr "Auteur"
-
-msgid "Comment"
-msgstr "Commentaire"
-
-msgid "Reference"
-msgstr "Référennce"
 
 msgid "Clear logs"
 msgstr "Effacer les registres"
@@ -4803,9 +4767,6 @@ msgstr ""
 msgid "Congrats!"
 msgstr "Félicitation!"
 
-msgid "Oops!"
-msgstr "Oups !"
-
 msgid "best offer"
 msgstr "meilleure offre"
 
@@ -5173,6 +5134,9 @@ msgstr "Afficher le bouton 'Recommencer'"
 msgid "Show 'Download ICS' button"
 msgstr "Afficher le bouton \"Télécharger ICS\"."
 
+msgid "Show 'Add to calendar'"
+msgstr "Afficher \"Ajouter au calendrier\""
+
 msgid ""
 "The booking form on this step may have different set or states of its "
 "elements. It depends on various conditions such as installed/activated add-"
@@ -5234,6 +5198,9 @@ msgstr "Nom de la catégorie de personnel du rendez-vous"
 
 msgid "Staff member full name in appointment"
 msgstr "Nom complet du membre du personnel dans le rendez-vous"
+
+msgid "Duration of appointment"
+msgstr "Durée du rendez-vous"
 
 msgid "Total quantity of appointments in cart"
 msgstr "Quantité totale de randez-vous dans le panier"
@@ -6072,9 +6039,6 @@ msgstr "Paiement non trouvé"
 msgid "Reason"
 msgstr "Motif"
 
-msgid "Tips"
-msgstr "Pourboires"
-
 msgid "order ID"
 msgstr "ID de la commande"
 
@@ -6137,6 +6101,10 @@ msgstr "Envoyer comme nouveau"
 msgid "View"
 msgstr "Voir"
 
+msgid "This text can be inserted into notifications with {internal_note} code"
+msgstr ""
+"Ce texte peut être inséré dans les notifications avec le code {internal_note}"
+
 msgid "Please select a provider"
 msgstr "Veuillez sélectionner un fournisseur"
 
@@ -6172,6 +6140,12 @@ msgid "Appointment notes"
 msgstr "Notes pour le rendez-vous"
 
 msgid ""
+"This text can be inserted into notifications with {appointment_notes} code"
+msgstr ""
+"Ce texte peut être inséré dans les notifications avec le code "
+"{appointment_notes}"
+
+msgid ""
 "You are going to delete appointment(s). Notifications will be sent in "
 "accordance with your settings."
 msgstr ""
@@ -6204,6 +6178,10 @@ msgstr "En pause"
 
 msgid "Limit exceeded"
 msgstr "Limite dépassée"
+
+msgid "This text can be inserted into notifications with {client_note} code"
+msgstr ""
+"Ce texte peut être inséré dans les notifications avec le code {client_note}"
 
 msgid "Delete customers"
 msgstr "Supprimer client"
@@ -6549,37 +6527,6 @@ msgstr "Gestion avancée du service et du personnel"
 
 msgid "Upgrade"
 msgstr "Mise à niveau"
-
-msgid "Migrate your Zoom JWT app to the new app type by June 1, 2023."
-msgstr ""
-"Faites migrer votre application Zoom JWT vers le nouveau type d'application "
-"d'ici le 1er juin 2023."
-
-msgid ""
-"Zoom JWT app type will be deprecated June 1, 2023. After this date, you will "
-"no longer be able to use your JWT apps."
-msgstr ""
-"Le type d'application Zoom JWT sera déprécié le 1er juin 2023. Après cette "
-"date, vous ne pourrez plus utiliser vos applications JWT."
-
-msgid ""
-"We recommend that you create an OAuth app to replace the functionality of a "
-"JWT app in your account."
-msgstr ""
-"Nous vous recommandons de créer une application OAuth pour remplacer la "
-"fonctionnalité d'une application JWT dans votre compte."
-
-msgid ""
-"To learn more, please visit the <a href=\"https://marketplace.zoom."
-"us/docs/guides/build/jwt-app/jwt-faq/\" target=\"_blank\">official Zoom "
-"page</a> about this change"
-msgstr ""
-"Pour en savoir plus, consultez <a href=\"https://marketplace.zoom."
-"us/docs/guides/build/jwt-app/jwt-faq/\" target=\"_blank\">la page de Zoom "
-"officielle</a> concernant ce changement"
-
-msgid "Go to Settings"
-msgstr "Accédez aux paramètres"
 
 #, php-format
 msgid ""
@@ -7017,6 +6964,30 @@ msgstr "Date de création"
 msgid "Packages"
 msgstr "Pack"
 
+msgid "Show packages without payments in a packages list"
+msgstr "Afficher les paquets sans paiement dans une liste de packs"
+
+msgid ""
+"If enabled, packages without attached payments will be displayed for "
+"customers in a packages list"
+msgstr ""
+"Si cette option est activée, les packs sans paiement attaché seront affichés "
+"pour les clients dans une liste de packs."
+
+msgid "Show packages with payments"
+msgstr "Afficher les paquets avec les paiements"
+
+msgid ""
+"If enabled, only packages with attached payments in \"Completed\" status "
+"will be displayed for customers in a packages list"
+msgstr ""
+"Si cette option est activée, seuls les packs dont les paiements sont en "
+"cours et dont le statut est \"Terminé\" seront affichés pour les clients "
+"dans une liste de packs."
+
+msgid "With completed payments only"
+msgstr "Uniquement pour les paiements effectués"
+
 msgid "New package"
 msgstr "Nouveau pack"
 
@@ -7055,6 +7026,21 @@ msgstr ""
 "sélectionnés. La désactivation du service entraîne la désactivation du "
 "forfait."
 
+msgid "Attach package"
+msgstr "Joindre le paquet"
+
+msgid "Attach to package"
+msgstr "Joindre au paquet"
+
+msgid "Create package"
+msgstr "Créer un paquet"
+
+msgid "Select package"
+msgstr "Sélectionnez un paquet"
+
+msgid "No packages available"
+msgstr "Aucun paquet disponible"
+
 msgid ""
 "Select service provider to see the packages provided. Or select unassigned "
 "package to see packages with no particular provider."
@@ -7083,9 +7069,6 @@ msgstr "Combinaison location/pack incorrecte"
 
 msgid "Please select a customer"
 msgstr "Veuillez choisir un client"
-
-msgid "Could not save package in database."
-msgstr "Impossible d'enregistrer le pack dans la base de données"
 
 msgid ""
 "Selected appointment date exceeds the period when the customer can use a "
@@ -7242,6 +7225,34 @@ msgstr ""
 "{company_phone}\n"
 "{company_website}"
 
+msgid "Happy Birthday!"
+msgstr "Joyeux anniversaire!"
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"Happy birthday!\n"
+"We wish you all the best.\n"
+"May you and your family be happy and healthy.\n"
+"\n"
+"Thank you for choosing our company.\n"
+"\n"
+"{company_name}\n"
+"{company_phone}\n"
+"{company_website}"
+msgstr ""
+"Cher/Chère {client_name},\n"
+"\n"
+"Joyeux anniversaire!\n"
+"Nous vous souhaitons le meilleur dans votre vie.\n"
+"Du bonheur et de la santé pour vous et votre famille.\n"
+"\n"
+"Merci d'avoir choisi notre société.\n"
+"\n"
+"{company_name}\n"
+"{company_phone}\n"
+"{company_website}"
+
 msgid "Your agenda for {tomorrow_date}"
 msgstr "Votre planning pour {tomorrow_date}"
 
@@ -7328,6 +7339,25 @@ msgstr ""
 "Merci."
 
 msgid ""
+"Dear {client_name},\n"
+"Happy birthday!\n"
+"We wish you all the best.\n"
+"May you and your family be happy and healthy.\n"
+"Thank you for choosing our company.\n"
+"{company_name}\n"
+"{company_phone}\n"
+"{company_website}"
+msgstr ""
+"Cher/Chère {client_name},\n"
+"Joyeux anniversaire!\n"
+"Nous vous souhaitons les meilleures choses possibles.\n"
+"Et une bonne santé et du bonheur pour vous-même et votre famille.\n"
+"Merci d'avoir choisi notre société.\n"
+"{company_name}\n"
+"{company_phone}\n"
+"{company_website}"
+
+msgid ""
 "Dear {client_name}.\n"
 "This is a confirmation that you have booked the following items:\n"
 "{cart_info}\n"
@@ -7350,6 +7380,9 @@ msgstr "Appliqué"
 msgid "I will pay now with PayPal"
 msgstr "Je paie avec PayPal"
 
+msgid "Gift card"
+msgstr "Carte cadeau"
+
 msgid ""
 "You are not required to pay for the booked services, click Next to complete "
 "the booking process."
@@ -7362,11 +7395,56 @@ msgstr ""
 "Aucune méthode de paiement n'est disponible. Veuillez contacter votre "
 "fournisseur de services."
 
+msgid "State/Region"
+msgstr "État/Région"
+
+msgid "Postal Code"
+msgstr "Code Postal"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Street Address"
+msgstr "Adresse"
+
 msgid "Street Number"
 msgstr "N° de rue"
 
+msgid "Additional Address"
+msgstr "Adresse complémentaire"
+
+msgid "Invalid day"
+msgstr "Le Jour invalide"
+
+msgid "Day is required"
+msgstr "Le Jour est requis"
+
+msgid "Month is required"
+msgstr "Le mois est requis"
+
+msgid "Year is required"
+msgstr "L'année est requise"
+
+msgid "Country is required"
+msgstr "Le Pays est requis"
+
+msgid "State is required"
+msgstr "L’état est requis"
+
+msgid "Postcode is required"
+msgstr "Le Code Postal est requis"
+
+msgid "City is required"
+msgstr "La ville est requise"
+
+msgid "Street is required"
+msgstr "L'adresse est requise"
+
 msgid "Street number is required"
 msgstr "N° de rue obligatoire"
+
+msgid "Additional address is required"
+msgstr "L'adresse complémentaire est requise"
 
 msgid "Card Security Code"
 msgstr "Code Sécurité Carte"
@@ -7469,6 +7547,9 @@ msgstr "Rendez-vous min."
 
 msgid "Max. appointments"
 msgstr "Rendez-vous max."
+
+msgid "Link with customer"
+msgstr "Lier avec le client"
 
 msgid "New staff's WordPress user login details"
 msgstr "Détails de connexion de l'utilisateur WordPress du nouveau personnel"
@@ -7596,6 +7677,11 @@ msgstr "Imprimer"
 msgid "Gift Cards"
 msgstr "Cartes cadeaux"
 
+msgid "Please note that Local payments not allowed for gift cards."
+msgstr ""
+"Veuillez noter que les paiements locaux ne sont pas autorisés pour les "
+"cartes-cadeaux."
+
 msgid "Cards"
 msgstr "Cartes"
 
@@ -7657,17 +7743,6 @@ msgid ""
 msgstr ""
 "Définissez la limite minimal d'annulation (par exemple, le client doit "
 "annuler au moins une heure à l'avance)."
-
-msgid "Appointment cancellation confirmation URL"
-msgstr "URL de confirmation de l'annulation du rendez-vous"
-
-msgid ""
-"Set the URL of an appointment cancellation confirmation page that is shown "
-"to clients when they press cancellation link."
-msgstr ""
-"Définissez l'URL de la page qui confirme l'annulation d'un rendez-vous. Elle "
-"est affichée au client lorsqu'il a cliqué le lien pour annuler le rendez-"
-"vous."
 
 msgid ""
 "You need to install and activate WooCommerce plugin before using the options "
@@ -7744,6 +7819,69 @@ msgstr ""
 msgid "Cart item data"
 msgstr "Données élement panier"
 
+msgid "First value for newly created appointments via backend"
+msgstr "Première valeur pour les rendez-vous nouvellement créés via le backend"
+
+msgid ""
+"Select what value should be selected first when creating a new appointment "
+"via backend."
+msgstr ""
+"Sélectionnez la valeur qui doit être sélectionnée en premier lors de la "
+"création d'un nouveau rendez-vous via le backend."
+
+msgid "Displayed time slots"
+msgstr "Affiché les créneaux horaires"
+
+msgid ""
+"Select what time slots will be shown when creating a new appointment via "
+"backend."
+msgstr ""
+"Sélectionnez les créneaux horaires qui seront affichés lors de la création "
+"d'un nouveau rendez-vous via le backend."
+
+msgid "Only appropriate slots"
+msgstr "Seulement les créneaux adaptés"
+
+msgid "Time delimiter"
+msgstr "Délimiteur de temps"
+
+msgid ""
+"This setting allows you to set a delimiter during a day for appointments "
+"created via backend."
+msgstr ""
+"Ce paramètre vous permet de définir un délimiteur pendant une journée pour "
+"les rendez-vous créés via le backend."
+
+msgid "Cancel appointment action"
+msgstr "Annuler action de réservation"
+
+msgid ""
+"Select what happens when customer clicks cancel appointment link. With "
+"\"Delete\" the appointment will be deleted from the calendar. With "
+"\"Cancel\" only appointment status will be changed to \"Cancelled\"."
+msgstr ""
+"Choisissez ce qui se passe quand le client clique sur le lien d'annulation "
+"de réservation. Avec \"Supprimer\" la réservation sera supprimée du planning."
+" Avec \"Annuler\" seul le statut sera changé en \"Annulé\"."
+
+msgid "Automatically change status of appointment"
+msgstr "Changement automatique du statut du rendez-vous"
+
+msgid ""
+"If enabled, initial status of the appointment will be changed to the status "
+"set in the \"Status to be set\" field after the appointment has been "
+"completed."
+msgstr ""
+"Si cette option est activée, l'état initial du rendez-vous sera modifié par "
+"l'état défini dans le champ \"État à définir\" une fois le rendez-vous "
+"terminé."
+
+msgid "Initial status"
+msgstr "Statut initial"
+
+msgid "Status to be set"
+msgstr "Statut à définir"
+
 msgid "Make address mandatory"
 msgstr "Rendre l'adresse obligatoire"
 
@@ -7773,16 +7911,6 @@ msgstr ""
 
 msgid "Enter a URL"
 msgstr "Entrer une URL"
-
-msgid "Make birthday mandatory"
-msgstr "Rendre anniversaire obligatoire"
-
-msgid ""
-"If enabled, a customer will be required to enter a date of birth to proceed "
-"with a booking."
-msgstr ""
-"Si activé, Le client devra renseigner une date de naissance pour pouvoir "
-"effectuer une réservation."
 
 msgid "Columns"
 msgstr "Colonnes"
@@ -7978,6 +8106,16 @@ msgstr "Utilisez-le dans le formulaire ci-dessous."
 msgid "App ID"
 msgstr "ID App"
 
+msgid "Display front-end calendar"
+msgstr "Afficher le calendrier frontend"
+
+msgid ""
+"If this option is enabled then customers will be able to view the "
+"availability of the selected staff in a front-end calendar"
+msgstr ""
+"Si cette option est activée, les clients pourront voir la disponibilité du "
+"personnel sélectionné dans un calendrier frontend."
+
 msgid "Select who can manage Bookly appointments"
 msgstr "Sélectionnez qui peut gérer les rendez-vous Bookly"
 
@@ -8058,79 +8196,15 @@ msgstr ""
 "Si vous ne fournissez pas un code d'achat valide d'ici {days}, votre accès "
 "aux réservations sera désactivé."
 
-msgid "First value for newly created appointments via backend"
-msgstr "Première valeur pour les rendez-vous nouvellement créés via le backend"
-
-msgid ""
-"Select what value should be selected first when creating a new appointment "
-"via backend."
-msgstr ""
-"Sélectionnez la valeur qui doit être sélectionnée en premier lors de la "
-"création d'un nouveau rendez-vous via le backend."
-
-msgid "Displayed time slots"
-msgstr "Affiché les créneaux horaires"
-
-msgid ""
-"Select what time slots will be shown when creating a new appointment via "
-"backend."
-msgstr ""
-"Sélectionnez les créneaux horaires qui seront affichés lors de la création "
-"d'un nouveau rendez-vous via le backend."
-
-msgid "Only appropriate slots"
-msgstr "Seulement les créneaux adaptés"
-
-msgid "Time delimiter"
-msgstr "Délimiteur de temps"
-
-msgid ""
-"This setting allows you to set a delimiter during a day for appointments "
-"created via backend."
-msgstr ""
-"Ce paramètre vous permet de définir un délimiteur pendant une journée pour "
-"les rendez-vous créés via le backend."
-
-msgid "Cancel appointment action"
-msgstr "Annuler action de réservation"
-
-msgid ""
-"Select what happens when customer clicks cancel appointment link. With "
-"\"Delete\" the appointment will be deleted from the calendar. With "
-"\"Cancel\" only appointment status will be changed to \"Cancelled\"."
-msgstr ""
-"Choisissez ce qui se passe quand le client clique sur le lien d'annulation "
-"de réservation. Avec \"Supprimer\" la réservation sera supprimée du planning."
-" Avec \"Annuler\" seul le statut sera changé en \"Annulé\"."
-
-msgid "Automatically change status of appointment"
-msgstr "Changement automatique du statut du rendez-vous"
-
-msgid ""
-"If enabled, initial status of the appointment will be changed to the status "
-"set in the \"Status to be set\" field after the appointment has been "
-"completed."
-msgstr ""
-"Si cette option est activée, l'état initial du rendez-vous sera modifié par "
-"l'état défini dans le champ \"État à définir\" une fois le rendez-vous "
-"terminé."
-
-msgid "Initial status"
-msgstr "Statut initial"
-
-msgid "Status to be set"
-msgstr "Statut à définir"
-
 msgid "Authentication"
 msgstr "Authentification"
 
-msgid "Instructions for creating an JWT App"
-msgstr "Instructions pour la création d'une application JWT"
+msgid "Instructions for creating an OAuth App"
+msgstr "Instructions pour la création d'une application OAuth"
 
-msgid "To find your API Key and Secret, do the following:"
+msgid "To find your Client ID and Client Secret, do the following:"
 msgstr ""
-"Pour obtenir votre clé d'API et le code Secret, effectuez les étapes "
-"suivantes:"
+"Pour trouver votre ID client et votre secret client, procédez comme suit :"
 
 msgid "Sign in to your Zoom account"
 msgstr "Connexion à votre compte Zoom"
@@ -8150,49 +8224,6 @@ msgstr ""
 "en haut à droite et sélectionnez <b>Build App</b>"
 
 msgid ""
-"A page with various app types will be displayed. Select <b>JWT</b> as the "
-"app type and click on <b>Create</b>"
-msgstr ""
-"Une page avec divers types d'applications s'affiche. Sélectionnez <b>JWT</b> "
-"comme type d'application et cliquez sur <b>Créer</b>"
-
-msgid "After creating your app, fill out descriptive and contact information"
-msgstr ""
-"Après avoir créé votre application, renseignez la description et les "
-"informations de contact"
-
-msgid ""
-"Go to <b>App Credentials</b> tab and look for the <b>API Key</b> and <b>API "
-"Secret</b>. Use them in the form below on this page"
-msgstr ""
-"Aller dans l'onglet <b>App Credentials</b> et chercher la <b>clé API</b> et "
-"le '<b>code Secret API</b>. Renseignez-les dans le formulaire ci-dessous sur "
-"cette page"
-
-msgid ""
-"Once you've copied over your API Key and Secret, go to <b>Activation</b> tab "
-"and make sure your app is activated"
-msgstr ""
-"Après avoir copié votre clé d'API et le code Secret, allez dans l'onglet <b>"
-"Activation</b>  et assurez-vous que votre app est activée"
-
-msgid "The API Key obtained from your JWT app"
-msgstr "La clé API obtenue dans votre app JWT"
-
-msgid "API Secret"
-msgstr "Code Secret API"
-
-msgid "The API Secret obtained from your JWT app"
-msgstr "Le code Secret API obtenu dans votre app JWT"
-
-msgid "Instructions for creating an OAuth App"
-msgstr "Instructions pour la création d'une application OAuth"
-
-msgid "To find your Client ID and Client Secret, do the following:"
-msgstr ""
-"Pour trouver votre ID client et votre secret client, procédez comme suit :"
-
-msgid ""
 "A page with various app types will be displayed. Select <b>OAuth</b> as the "
 "app type and click on <b>Create</b>"
 msgstr ""
@@ -8206,6 +8237,11 @@ msgstr ""
 "Saisissez le nom de votre application. Dans <b>Choisir le type "
 "d'application</b> sélectionnez <b>Application au niveau du compte</b> et "
 "cliquez sur <b>Créer</b>"
+
+msgid "After creating your app, fill out descriptive and contact information"
+msgstr ""
+"Après avoir créé votre application, renseignez la description et les "
+"informations de contact"
 
 msgid ""
 "Go to <b>App Credentials</b> tab and look for the <b>Client ID</b> and <b>"
@@ -8293,8 +8329,14 @@ msgstr "Secret partagé"
 msgid "The Secret obtained from command return"
 msgstr "Le secret obtenu par le retour de commande"
 
+msgid "The URL of Jitsi server used for online meetings"
+msgstr "URL du serveur Jitsi utilisé pour les réunions en ligne"
+
 msgid "Please select a Booking product"
 msgstr "Veuillez sélectionner un produit de réservation"
+
+msgid "Client birthday full date"
+msgstr "Date complète de l'anniversaire du client"
 
 msgid "Extras titles"
 msgstr "Titres suplémentaires"
@@ -8350,6 +8392,17 @@ msgstr ""
 "Tous les membres du personnel utiliseront ces paramètres en se connectant "
 "sur Zoom. "
 
+msgid "Appointment cancellation confirmation URL"
+msgstr "URL de confirmation de l'annulation du rendez-vous"
+
+msgid ""
+"Set the URL of an appointment cancellation confirmation page that is shown "
+"to clients when they press cancellation link."
+msgstr ""
+"Définissez l'URL de la page qui confirme l'annulation d'un rendez-vous. Elle "
+"est affichée au client lorsqu'il a cliqué le lien pour annuler le rendez-"
+"vous."
+
 msgid ""
 "Do not count appointments in 'Limit appointments per customer' with the "
 "following statuses"
@@ -8357,11 +8410,15 @@ msgstr ""
 "Ne pas compter les rendez-vous dans \"Limite de rendez-vous par client\" "
 "avec les statuts suivants"
 
-msgid "Google Calendar"
-msgstr "Google Calendar"
+msgid "Make birthday mandatory"
+msgstr "Rendre anniversaire obligatoire"
 
-msgid "Purchase Code"
-msgstr "Code Achat"
+msgid ""
+"If enabled, a customer will be required to enter a date of birth to proceed "
+"with a booking."
+msgstr ""
+"Si activé, Le client devra renseigner une date de naissance pour pouvoir "
+"effectuer une réservation."
 
 msgid "Create WordPress user account for customers"
 msgstr "Créer un compte utilisateur WordPress pour les clients"
@@ -8396,12 +8453,6 @@ msgstr ""
 "Sélectionnez le rôle qui sera attribué aux comptes d'utilisateurs WordPress "
 "nouvellement créés pour le personnel"
 
-msgid "Online Meetings"
-msgstr "Réunions en ligne"
-
-msgid "User Permissions"
-msgstr "Permissions des utilisateurs"
-
 msgid "Show tips"
 msgstr "Afficher les pourboires"
 
@@ -8420,9 +8471,6 @@ msgstr ""
 "Vue du formulaire s'il n'y a pas de méthodes de paiement communes au client "
 "et au personnel"
 
-msgid "Show gift cards"
-msgstr "Afficher les cartes cadeaux"
-
 msgid "Show birthday field"
 msgstr "Afficher champ anniversaire"
 
@@ -8439,6 +8487,9 @@ msgid ""
 msgstr ""
 "Veuillez d'abord configurer Facebook App integration dans <a href=\"%s\">"
 "Settings</a>."
+
+msgid "Show gift cards"
+msgstr "Afficher les cartes cadeaux"
 
 msgid "Show time zone switcher"
 msgstr "Afficher changement fuseau horaire"
@@ -8502,6 +8553,9 @@ msgstr "Largeur"
 msgid "Header height"
 msgstr "Hauteur de l'en-tête"
 
+msgid "Body height"
+msgstr "Taille du corps"
+
 msgid "Form title"
 msgstr "Titre du formulaire"
 
@@ -8510,9 +8564,6 @@ msgstr "Slug"
 
 msgid "Main color"
 msgstr "Couleur principale"
-
-msgid "Show Address"
-msgstr "Afficher l'adresse"
 
 msgid "Show 'Book more' button"
 msgstr "Afficher le bouton \"Réserver plus\"."
@@ -8565,6 +8616,36 @@ msgstr "Afficher les services"
 msgid "Display gift cards"
 msgstr "Afficher les cartes cadeaux"
 
+msgid ""
+"It is important to leave at least one visible field with personal info (Full "
+"name, First name or Last name) and one field with contact info (Email or "
+"Phone), otherwise the booking will be created without required customer "
+"details."
+msgstr ""
+"Il est important de laisser au moins un champ visible avec des informations "
+"personnelles (nom complet, prénom ou nom de famille) et un champ avec des "
+"informations de contact (mail ou téléphone), sinon la réservation sera créée "
+"sans les détails requis du client."
+
+msgid ""
+"Please note that email address is required for some payment gateways in "
+"order to complete a transaction."
+msgstr ""
+"Veuillez noter que l'adresse mail est requise par certaines passerelles de "
+"paiement afin d'effectuer une transaction."
+
+msgid "Step content"
+msgstr "Contenu de l'étape"
+
+msgid "Cards display mode"
+msgstr "Mode affichage des cartes"
+
+msgid "Show all available cards"
+msgstr "Afficher toutes les cartes disponibles"
+
+msgid "Show cards with time slots only"
+msgstr "Afficher les cartes avec des plages horaires uniquement"
+
 msgid "Add new form"
 msgstr "Ajouter un nouveau formulaire"
 
@@ -8593,6 +8674,9 @@ msgstr "Succès de la prise de rendez-vous"
 msgid "Success package booking"
 msgstr "Réservation du package avec succès"
 
+msgid "Step settings"
+msgstr "Réglages de l'étape"
+
 msgid "Custom CSS"
 msgstr "CSS personnalisé"
 
@@ -8612,6 +8696,12 @@ msgstr ""
 "de menu, puis sélectionnez \"Copier le shortcode\". Ouvrez la page où vous "
 "voulez ajouter le formulaire de réservation en mode d'édition de page et "
 "collez le shortcode copié précédemment. Le formulaire sera ajouté à la page."
+
+msgid "Main text"
+msgstr "Texte principal"
+
+msgid "Terms & conditions"
+msgstr "Conditions générales"
 
 msgid "Service title"
 msgstr "Titre du service"
@@ -8688,6 +8778,15 @@ msgstr "Confirmer l'annulation"
 msgid "Do not cancel"
 msgstr "Ne pas annuler"
 
+msgid "This appointment has been already cancelled."
+msgstr "Ce rendez-vous a déjà été annulé."
+
+msgid "This appointment does not exist."
+msgstr "Ce rendez-vous n'existe pas."
+
+msgid "Cancellation of this appointment is not allowed."
+msgstr "Vous n'êtes pas autorisé à annuler ce rendez-vous."
+
 msgid "Import"
 msgstr "Importer"
 
@@ -8740,9 +8839,6 @@ msgstr "Bénéficiaire"
 msgid "Headers"
 msgstr "En-têtes"
 
-msgid "Client birthday full date"
-msgstr "Date complète de l'anniversaire du client"
-
 msgid "Time zone of staff"
 msgstr "Fuseau horaire du personnel"
 
@@ -8754,6 +8850,9 @@ msgstr "Date de début de validité de la carte cadeau"
 
 msgid "Gift card expiration date"
 msgstr "Date d'expiration de la carte cadeau "
+
+msgid "Customer notes for gift card"
+msgstr "Notes du client pour la carte cadeau"
 
 msgid "Appearance form name"
 msgstr "Nom du formulaire d'apparence"
@@ -8804,16 +8903,6 @@ msgstr ""
 "Êtes-vous sur que vous voulez dissocier le code d'achat de %s?\n"
 "\n"
 "Cela effacera aussi le code achat entré pour ce site."
-
-msgid "Display front-end calendar"
-msgstr "Afficher le calendrier frontend"
-
-msgid ""
-"If this option is enabled then customers will be able to view the "
-"availability of the selected staff in a front-end calendar"
-msgstr ""
-"Si cette option est activée, les clients pourront voir la disponibilité du "
-"personnel sélectionné dans un calendrier frontend."
 
 msgid "Error dissociating purchase code."
 msgstr "Erreur en dissociant le code achat"
@@ -9033,6 +9122,16 @@ msgstr "Nouveau type de carte cadeau"
 msgid "Edit gift card type"
 msgstr "Modifier le type de carte cadeau"
 
+msgid "Automatically link a gift card to a customer"
+msgstr "Associer automatiquement une carte-cadeau à un client"
+
+msgid ""
+"If enabled, the card will be automatically associated with the customer who "
+"purchases it via the frontend booking form"
+msgstr ""
+"Si cette option est activée, la carte sera automatiquement associée au "
+"client qui l'achète via le formulaire de réservation en ligne."
+
 msgid "Min appointments should be greater than zero."
 msgstr "Min. rendez-vous doit être supérieur à 0."
 
@@ -9054,6 +9153,11 @@ msgid ""
 msgstr ""
 "Vous pouvez entrer un masque contenant des astérisques \"*\" pour ces "
 "variables, puis cliquer Créer"
+
+msgid "This text can be inserted into notifications with {gift_card_note} code"
+msgstr ""
+"Ce texte peut être inséré dans les notifications avec le code "
+"{gift_card_note}"
 
 msgid "Select card type"
 msgstr "Sélectionnez le type de carte"
@@ -9357,9 +9461,6 @@ msgstr "Liste des rendez-vous"
 msgid "A custom block for displaying appointments list"
 msgstr "Bloc personnalisé pour l'affichage de la liste des rendez-vous"
 
-msgid "Invalid token provided"
-msgstr "Token fourni invalide"
-
 msgid ""
 "Sorry, the time slot %date_time% for %service% has been already occupied."
 msgstr "Désolé. Le créneau  %date_time% pour %service% est déjà occupé."
@@ -9375,6 +9476,9 @@ msgstr ""
 
 msgid "This service is no longer provided."
 msgstr "Ce service n'est plus disponible."
+
+msgid "Gift card type was not found"
+msgstr "Le type de carte cadeau n'a pas été trouvé"
 
 msgid "Service was not found"
 msgstr "Le service n'a pas été trouvé"
@@ -9406,8 +9510,11 @@ msgstr "Options acompte"
 msgid "Deposit only"
 msgstr "Acompte uniquement"
 
-msgid "Deposit or full price"
-msgstr "Acompte ou prix total"
+msgid "Deposit or full price (deposit by default)"
+msgstr "Acompte ou prix total (acompte par défaut)"
+
+msgid "Full price or deposit (full price by default)"
+msgstr "Prix total ou acompte (prix total par défaut)"
 
 msgid ""
 "If you enable \"Deposit only\", customers will be requested to pay only a "
@@ -9541,9 +9648,6 @@ msgstr ""
 
 msgid "Selected period doesn't match service schedule"
 msgstr "La période sélectionnée ne correspond pas au planning du service"
-
-msgid "Incorrect payment data"
-msgstr "Informations paiement incorrectes"
 
 msgid "Agent ID"
 msgstr "ID Agent"
@@ -10037,12 +10141,6 @@ msgstr "Champ Fichier à Charger"
 msgid "File"
 msgstr "Document"
 
-msgid "Show custom fields required"
-msgstr "Affichage des champs personnalisés requis"
-
-msgid "Show files"
-msgstr "Afficher fichiers"
-
 msgid "Number of uploaded files"
 msgstr "Nombre de fichiers téléchargés"
 
@@ -10146,6 +10244,12 @@ msgid ""
 msgstr ""
 "Ci-dessous vous trouvez une liste de services disponibles.\n"
 "Cliquez sur RESERVER PLUS pour ajouter d'autres services."
+
+msgid ""
+"The highlighted time is not available anymore. Please, choose another time "
+"slot."
+msgstr ""
+"Le créneau surligné n'est plus disponible. Veuillez en choisir un autre."
 
 msgid "Show \"Book more\" near \"Next\" button"
 msgstr "Afficher \"Réserver plus\" près du bouton \"Suivant\""
@@ -10298,12 +10402,6 @@ msgstr "ID compte"
 
 msgid "Merchant ID"
 msgstr "ID Marchand"
-
-msgid "Transaction rejected"
-msgstr "Transaction rejetée"
-
-msgid "Pending payment"
-msgstr "Paiement en attente"
 
 msgid "Edit custom JavaScript"
 msgstr "Editer le JavaScript personnalisé"

@@ -1,18 +1,17 @@
 <?php
 namespace Bookly\Lib\Base;
 
-/**
- * Class Updater
- *
- * @package Bookly\Lib\Base
- */
 abstract class Updater extends Schema
 {
+    protected $errors = array();
+
     /**
      * Run updates on 'plugins_loaded' hook.
      */
     public function run()
     {
+        global $wpdb;
+
         $plugin_class = Plugin::getPluginFor( $this );
         $transient_name = $plugin_class::getPrefix() . 'updating_db';
         $lock = (int) get_transient( $transient_name );
@@ -37,8 +36,41 @@ abstract class Updater extends Schema
                         // Update the lock.
                         set_transient( $transient_name, time() );
                         // Do update.
-                        call_user_func( array( $this, $method ) );
+                        try {
+                            call_user_func( array( $this, $method ) );
+                        } catch ( \Error $e ) {
+                            $this->errors[] = array(
+                                'method' => get_class( $this ) . '::' . $method,
+                                'message' => $e->getMessage(),
+                                'file' => $e->getFile(),
+                                'line' => $e->getLine(),
+                            );
+                        } catch ( \Exception $e ) {
+                            $this->errors[] = array(
+                                'method' => get_class( $this ) . '::' . $method,
+                                'message' => $e->getMessage(),
+                                'file' => $e->getFile(),
+                                'line' => $e->getLine(),
+                            );
+                        }
                         update_option( $version_option_name, $version );
+                    }
+                }
+                // Log errors.
+                if ( $this->errors ) {
+                    try {
+                        $logs_table = $this->getTableName( 'bookly_log' );
+                        foreach ( $this->errors as $error ) {
+                            $wpdb->insert( $logs_table, array(
+                                'action' => 'error',
+                                'target' => 'bookly-updater',
+                                'author' => get_current_user_id(),
+                                'details' => json_encode( $error ),
+                                'ref' => isset( $error['method'] ) ? $error['method'] : '',
+                                'created_at' => current_time( 'mysql' ),
+                            ) );
+                        }
+                    } catch ( \Exception $e ) {
                     }
                 }
                 // Make sure db_version is set to plugin version (even though there were no updates).
@@ -54,36 +86,16 @@ abstract class Updater extends Schema
      */
     protected function alterTables( array $data )
     {
-        /** @global \wpdb $wpdb */
-        global $wpdb;
-
         foreach ( $data as $table => $queries ) {
             $table_name = $this->getTableName( $table );
             foreach ( $queries as $query ) {
-                $wpdb->query( sprintf( $query, $table_name ) );
+                $this->query( sprintf( $query, $table_name ) );
             }
         }
     }
 
     /**
-     * Rename columns
-     *
-     * @param array $tables
-     * @return void
-     */
-    protected function renameTablesColumns( array $tables )
-    {
-        foreach ( $tables as $table => $columns ) {
-            $queries = array();
-            foreach ( $columns as $filed_name => $new_field_name ) {
-                $queries[] = 'ALTER TABLE `%s` RENAME COLUMN ' . $filed_name . ' TO ' . $new_field_name;
-            }
-            $this->alterTables( array( $table => $queries, ) );
-        }
-    }
-
-    /**
-     * Rername tables
+     * Rename tables
      *
      * @param array $tables
      * @return void
@@ -106,7 +118,7 @@ abstract class Updater extends Schema
         global $wpdb;
 
         foreach ( $options as $old_name => $new_name ) {
-            $wpdb->query( $wpdb->prepare(
+            $this->query( $wpdb->prepare(
                 'UPDATE `' . $wpdb->options . '` SET `option_name` = %s WHERE `option_name` = %s',
                 $new_name,
                 $old_name
@@ -125,7 +137,7 @@ abstract class Updater extends Schema
         global $wpdb;
 
         foreach ( $meta as $old_name => $new_name ) {
-            $wpdb->query( $wpdb->prepare(
+            $this->query( $wpdb->prepare(
                 'UPDATE `' . $wpdb->usermeta . '` SET `meta_key` = %s WHERE `meta_key` = %s',
                 $new_name,
                 $old_name
@@ -144,7 +156,7 @@ abstract class Updater extends Schema
         global $wpdb;
 
         foreach ( $meta as $meta_key => $value ) {
-            $wpdb->query( $wpdb->prepare(
+            $this->query( $wpdb->prepare(
                 'UPDATE `' . $wpdb->usermeta . '` SET `meta_value` = %s WHERE `meta_key` = %s',
                 $value,
                 $meta_key
@@ -162,7 +174,7 @@ abstract class Updater extends Schema
         /** @global \wpdb $wpdb */
         global $wpdb;
 
-        $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . $wpdb->usermeta . '` WHERE meta_key IN (%s)',
+        $this->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . $wpdb->usermeta . '` WHERE meta_key IN (%s)',
             implode( ', ', array_fill( 0, count( $meta_names ), '%s' ) ) ), $meta_names ) );
     }
 
@@ -192,7 +204,7 @@ abstract class Updater extends Schema
         $disposable_key = strtolower( strtok( __NAMESPACE__, '\\' ) ) . '_disposable_' . $token . '_completed';
         $completed = (int) get_option( $disposable_key );
         if ( $completed === 0 ) {
-            call_user_func( $callable );
+            $callable( $this );
             add_option( $disposable_key, '1' );
         }
 
@@ -213,7 +225,7 @@ abstract class Updater extends Schema
         if ( $this->existsTable( 'icl_strings' ) ) {
             $wpml_strings_table = $this->getTableName( 'icl_strings' );
             // Check that `domain_name_context_md5` column exists.
-            $exists = $wpdb->query( $wpdb->prepare(
+            $exists = $this->query( $wpdb->prepare(
                 'SELECT 1 FROM `INFORMATION_SCHEMA`.`COLUMNS`
                     WHERE `COLUMN_NAME`  = "domain_name_context_md5"
                       AND `TABLE_NAME`   = %s
@@ -223,7 +235,7 @@ abstract class Updater extends Schema
             ) );
             if ( $exists ) {
                 foreach ( $strings as $old_name => $new_name ) {
-                    $wpdb->query( $wpdb->prepare(
+                    $this->query( $wpdb->prepare(
                         "UPDATE `$wpml_strings_table`
                           SET `name` = %s, `domain_name_context_md5` = MD5(CONCAT(`context`, %s, `gettext_context`))
                           WHERE `name` = %s",
@@ -234,7 +246,7 @@ abstract class Updater extends Schema
                 }
             } else {
                 foreach ( $strings as $old_name => $new_name ) {
-                    $wpdb->query( $wpdb->prepare(
+                    $this->query( $wpdb->prepare(
                         "UPDATE `$wpml_strings_table` SET `name` = %s WHERE `name` = %s",
                         $new_name,
                         $old_name
@@ -283,7 +295,7 @@ abstract class Updater extends Schema
                 $query .= ' GROUP BY TABLE_NAME';
                 $records = $wpdb->get_col( $wpdb->prepare( $query, $params ) );
                 foreach ( $records as $table ) {
-                    $wpdb->query( sprintf( $alter, $table ) );
+                    $this->query( sprintf( $alter, $table ) );
                 }
             }
         }
@@ -325,7 +337,41 @@ abstract class Updater extends Schema
             : 'DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci';
 
         foreach ( $data as $table => $query ) {
-            $wpdb->query( sprintf( $query . ' ' . $charset_collate, $this->getTableName( $table ) ) );
+            $this->query( sprintf( $query . ' ' . $charset_collate, $this->getTableName( $table ) ) );
         }
-   }
+    }
+
+    /**
+     * WPDB query with error handling.
+     *
+     * @param $query
+     * @return bool|int|\mysqli_result|resource|null
+     */
+    protected function query( $query )
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $result = $wpdb->query( $query );
+        if ( $wpdb->last_error ) {
+            $method = '';
+            try {
+                $debug_backtrace = debug_backtrace();
+                foreach ( $debug_backtrace as $trace ) {
+                    if ( isset( $trace['function'] ) && strpos( $trace['function'], 'update_' ) === 0 ) {
+                        $method = $trace['class'] . '::' . $trace['function'];
+                        break;
+                    }
+                }
+            } catch ( \Exception $e ) {
+            }
+            $this->errors[] = array(
+                'method' => $method,
+                'query' => $query,
+                'error' => $wpdb->last_error,
+            );
+        }
+
+        return $result;
+    }
 }

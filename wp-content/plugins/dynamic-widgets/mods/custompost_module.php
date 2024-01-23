@@ -2,7 +2,7 @@
 /**
  * Custom Post Type Module
  *
- * @version $Id: custompost_module.php 1095126 2015-02-20 12:59:35Z qurl $
+ * @version $Id: custompost_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 
@@ -215,7 +215,7 @@
 
 								echo '<input type="hidden" id="' . $ct . '_act" name="' . $ct . '_act" value="' . ( (is_array($opt_ct_archive->act)) ? implode(',', $opt_ct_archive->act) : '' ) . '" />';
 								if ( isset($opt_ct_archive_childs) ) {
-									echo '<input type="hidden" id="' . $ct . '_childs_act" name="' . $ct . '_childs_act" value="' . ( (is_array($opt_tax_childs->act)) ? implode(',', $opt_tax_childs->act) : '' ) . '" />';
+									echo '<input type="hidden" id="' . $ct . '_childs_act" name="' . $ct . '_childs_act" value="' . ( (is_array($opt_ct_archive_childs->act)) ? implode(',', $opt_ct_archive_childs->act) : '' ) . '" />';
 								}
 
 								self::prtTax($widget_id, $tax->name, $tree, $opt_ct_archive->act, $childs, $ct);
@@ -275,14 +275,14 @@
 					// $term = get_term_by('id', $pid, $tax);
 
 					echo '<div style="position:relative;left:15px;">';
-					echo '<input type="checkbox" id="' . $prefix . '_act_' . $term->term_id . '" name="' . $prefix . '_chkbx[]" value="' . $term->term_id . '" ' . ( isset($terms_act) && count($terms_act) > 0 && in_array($term->term_id, $terms_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(\'' . $prefix . '\', ' . $term->term_id . ')" /> <label for="' . $prefix . '_act_' . $term->term_id . '">' . $term->name . '</label>';
-					echo ( $terms_childs_act !== FALSE ) ? ' <span title=" Click to expand " onclick="term_tree(\'' . $widget_id . '\', \'' . $tax . '\', ' . $term->term_id . ', \'' . $prefix . '\');return false;"><img src="' . $DW->plugin_url .'/img/arrow-down.png" /></span>' : '';
+					echo '<input type="checkbox" id="' . esc_html($prefix) . '_act_' . $term->term_id . '" name="' . esc_html($prefix) . '_chkbx[]" value="' . $term->term_id . '" ' . ( isset($terms_act) && count($terms_act) > 0 && in_array($term->term_id, $terms_act) ? 'checked="checked"' : '' ) . ' onchange="chkChild(\'' . esc_js($prefix) . '\', ' . $term->term_id . ')" /> <label for="' . esc_html($prefix) . '_act_' . $term->term_id . '">' . $term->name . '</label>';
+					echo ( $terms_childs_act !== FALSE ) ? ' <span title=" Click to expand " onclick="term_tree(\'' . esc_js($widget_id) . '\', \'' . esc_js($tax) . '\', ' . $term->term_id . ', \'' . esc_js($prefix) . '\');return false;"><img src="' . $DW->plugin_url .'/img/arrow-down.png" /></span>' : '';
 					echo '<br />';
 
 					if ( $terms_childs_act !== FALSE ) {
-						echo '<div id="child_' . $prefix . $term->term_id  . '" style="position:relative;left:15px;display:none;">';
-						echo '<input type="checkbox" id="' . $prefix . '_childs_act_' . $term->term_id . '" name="' . $prefix . '_childs_chkbx[]" value="' . $term->term_id . '" ' . ( isset($terms_childs_act) && count($terms_childs_act) > 0 && in_array($term->term_id, $terms_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . $prefix . '\', ' . $term->term_id . ')" /> <label for="' . $prefix . '_childs_act_' . $term->term_id . '"><em>' . __('All childs', DW_L10N_DOMAIN) . '</em></label><br />';
-						echo '<div id="tree_' . $prefix . $term->term_id . '"></div>';
+						echo '<div id="child_' . esc_html($prefix) . $term->term_id  . '" style="position:relative;left:15px;display:none;">';
+						echo '<input type="checkbox" id="' . esc_html($prefix) . '_childs_act_' . $term->term_id . '" name="' . esc_html($prefix) . '_childs_chkbx[]" value="' . $term->term_id . '" ' . ( isset($terms_childs_act) && count($terms_childs_act) > 0 && in_array($term->term_id, $terms_childs_act) ? 'checked="checked"' : '' ) . ' onchange="chkParent(\'' . esc_js($prefix) . '\', ' . $term->term_id . ')" /> <label for="' . esc_html($prefix) . '_childs_act_' . $term->term_id . '"><em>' . __('All children', DW_L10N_DOMAIN) . '</em></label><br />';
+						echo '<div id="tree_' . esc_html($prefix) . $term->term_id . '"></div>';
 						echo '</div>';
 
 						/* if ( count($childs) > 0 ) {

@@ -3,11 +3,6 @@ namespace Bookly\Lib\Slots;
 
 use Bookly\Lib;
 
-/**
- * Class Finder
- *
- * @package Bookly\Lib\Slots
- */
 class Finder
 {
     // Input parameters.
@@ -517,7 +512,7 @@ class Finder
                         0,
                         0,
                         1,
-                        0,
+                        1,
                         1,
                         Lib\Entities\Service::PREFERRED_MOST_EXPENSIVE,
                         array(),
@@ -769,7 +764,7 @@ class Finder
                     if ( isset ( $datetime, $this->staff[ $staff_id ] ) ) {
                         $service = Lib\Entities\Service::find( $service_id );
                         $range = Range::fromDates( $datetime, $datetime );
-                        $range = $range->resize( $service->getDuration() * $cart_item->getUnits() + $extras_duration );
+                        $range = $range->resize( ( $cart_item->getService()->isCollaborative() ? $cart_item->getService()->getCollaborativeDuration() : $service->getDuration() ) * $cart_item->getUnits() + $extras_duration );
                         $extras_duration = 0;
                         $booking_exists = false;
                         foreach ( $this->staff[ $staff_id ]->getBookings() as $booking ) {

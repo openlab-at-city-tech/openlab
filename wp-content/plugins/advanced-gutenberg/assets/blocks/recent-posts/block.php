@@ -123,7 +123,7 @@ function advgbRenderBlockRecentPosts($attributes)
     }
 
     if(
-        defined('ADVANCED_GUTENBERG_PRO')
+        defined('ADVANCED_GUTENBERG_PRO_LOADED')
         && isset( $attributes['includePosts'] )
         && ! empty( $attributes['includePosts'] )
     ) {
@@ -170,7 +170,7 @@ function advgbRenderBlockRecentPosts($attributes)
     $recent_posts = wp_get_recent_posts( apply_filters( 'advgb_get_recent_posts_args', $args, $attributes, $post_type ), OBJECT );
 
     $saved_settings    = get_option('advgb_settings');
-    $default_thumb     = plugins_url('assets/blocks/recent-posts/recent-post-default.png', ADVANCED_GUTENBERG_PLUGIN);
+    $default_thumb     = ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/blocks/recent-posts/recent-post-default.png';
     $rp_default_thumb  = isset($saved_settings['rp_default_thumb']) ? $saved_settings['rp_default_thumb'] : array('url' => $default_thumb, 'id' => 0);
 
     $postHtml = '';
@@ -371,7 +371,7 @@ function advgbRenderBlockRecentPosts($attributes)
     						}
     						$props = $info[ $name ];
     						$slug = $props['slug'];
-    						$postHtml .= "<div class='advgb-post-tax advgb-post-cpt advgb-post-${slug}'>";
+    						$postHtml .= "<div class='advgb-post-tax advgb-post-cpt advgb-post-{$slug}'>";
     						if ( isset( $attributes['linkCustomTax'] ) && $attributes['linkCustomTax'] ) {
     							$postHtml .= implode( '', $props['linked'] );
     						} else {
@@ -459,7 +459,7 @@ function advgbRenderBlockRecentPosts($attributes)
         $blockClass = 'masonry-view columns-' . esc_html($attributes['columns']) . ' tbl-columns-' . esc_html($attributes['columnsT']) . ' mbl-columns-' . esc_html($attributes['columnsM']) . ' gap-' . esc_html($attributes['gap']);
     }
 
-    if (defined('ADVANCED_GUTENBERG_PRO') && isset($attributes['orderSections'])) {
+    if (defined('ADVANCED_GUTENBERG_PRO_LOADED') && isset($attributes['orderSections'])) {
         $blockClass .= ' sections-' . esc_html($attributes['orderSections']);
     }
 
@@ -1395,18 +1395,21 @@ function advgbSeriesOrderSort() {
 			if ( function_exists( 'publishpress_multi_series_supported' ) 
 			    && publishpress_multi_series_supported() ) {
                 
-			    // We get the terms titles. The same stored in block's taxonomies->series attribute
-			    // @TODO - Store and use term ids instead as attributes
-			    $terms = $query->query_vars['tax_query'][0]['terms'];
-			    $metakeys = [];
-			    if( count( $terms ) ) {
-			        foreach( $terms as $term ) {
-			            // Get the term object and then use the id to get the meta_key 
-			            $term_obj = get_term_by( 'name', $term, 'series' );
-			            $metakeys[] = '_series_part_' . (int) $term_obj->term_id;
-			        }
-			        $query->set( 'meta_key', $metakeys );
-			    }
+			    // Make sure series are selected
+                if( isset( $query->query_vars['tax_query'][0]['terms'] ) 
+                    && count( $query->query_vars['tax_query'][0]['terms'] ) 
+                ) {
+                    // We get the terms titles. The same stored in block's taxonomies->series attribute
+                    // @TODO - Store and use term ids instead as attributes
+                    $terms = $query->query_vars['tax_query'][0]['terms'];
+                    $metakeys = [];
+                    foreach( $terms as $term ) {
+                        // Get the term object and then use the id to get the meta_key 
+                        $term_obj = get_term_by( 'name', $term, 'series' );
+                        $metakeys[] = '_series_part_' . (int) $term_obj->term_id;
+                    }
+                    $query->set( 'meta_key', $metakeys );
+                }
 			} else {
 			    // Series Pro 2.11.3- and Series Free 2.11.2-
 			    $query->set( 'meta_key', '_series_part' );
@@ -1524,7 +1527,7 @@ function getDisplayImageVsOrder( $attributes, $key )  {
                     )
                 )
             )
-        ) || !defined('ADVANCED_GUTENBERG_PRO')
+        ) || !defined('ADVANCED_GUTENBERG_PRO_LOADED')
     ) {
         return 'ignore-order';
     } else {

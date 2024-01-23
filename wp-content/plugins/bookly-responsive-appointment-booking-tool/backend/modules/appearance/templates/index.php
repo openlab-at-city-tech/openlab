@@ -7,7 +7,6 @@ use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components;
 use Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Backend\Modules\Appearance;
-
 ?>
 <?php if ( trim( $custom_css ) ) : ?>
     <style type="text/css">
@@ -161,13 +160,8 @@ use Bookly\Backend\Modules\Appearance;
                             <div class="col-md-3 my-2">
                                 <?php Inputs::renderCheckBox( __( 'Show notes field', 'bookly' ), null, get_option( 'bookly_app_show_notes' ), array( 'id' => 'bookly-show-notes' ) ) ?>
                             </div>
-                            <?php Proxy\Pro::renderShowBirthday() ?>
-                            <?php Proxy\Pro::renderShowAddress() ?>
+                            <?php Proxy\Pro::renderShowStepDetailsSettings() ?>
                             <?php Proxy\GoogleMapsAddress::renderShowGoogleMaps() ?>
-                            <?php Proxy\CustomFields::renderShowCustomFields() ?>
-                            <?php Proxy\Files::renderShowFiles() ?>
-                            <?php Proxy\CustomerInformation::renderShowCustomerInformation() ?>
-                            <?php Proxy\Pro::renderShowFacebookButton() ?>
                             <div class="col-md-3 my-2">
                                 <?php Inputs::renderCheckBox( __( 'Show Terms & Conditions checkbox', 'bookly' ), null, get_option( 'bookly_app_show_terms' ), array( 'id' => 'bookly-show-terms' ) ) ?>
                             </div>
@@ -189,6 +183,9 @@ use Bookly\Backend\Modules\Appearance;
                             </div>
                             <div class="col-md-3 my-2">
                                 <?php Inputs::renderCheckBox( __( 'Show \'Download ICS\' button', 'bookly' ), null, get_option( 'bookly_app_show_download_ics' ), array( 'id' => 'bookly-show-download-ics' ) ) ?>
+                            </div>
+                            <div class="col-md-3 my-2">
+                                <?php Inputs::renderCheckBox( __( 'Show \'Add to calendar\'', 'bookly' ), null, get_option( 'bookly_app_show_add_to_calendar' ), array( 'id' => 'bookly-show-add-to-calendar' ) ) ?>
                             </div>
                             <?php Proxy\Pro::renderShowQRCode() ?>
                             <?php Proxy\Invoices::renderShowDownloadInvoice() ?>

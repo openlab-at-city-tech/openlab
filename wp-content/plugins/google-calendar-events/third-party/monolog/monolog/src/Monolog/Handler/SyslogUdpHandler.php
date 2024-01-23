@@ -20,6 +20,7 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Jesper Skovgaard Nielsen <nulpunkt@gmail.com>
  * @author Dominik Kukacka <dominik.kukacka@gmail.com>
+ * @internal
  */
 class SyslogUdpHandler extends AbstractSyslogHandler
 {

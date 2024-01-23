@@ -10,6 +10,7 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * immediately and ignore other callbacks.
  *
  * @final
+ * @internal
  */
 class RejectedPromise implements PromiseInterface
 {

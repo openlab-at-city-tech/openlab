@@ -88,6 +88,7 @@ $plugins_allowedtags = [
 ];
 
 $recommended_plugins = [];
+
 // Poptin Plugins
 $args = [
     'slug'   => 'poptin',
@@ -103,6 +104,23 @@ if ($data && ! is_wp_error($data)) {
     $recommended_plugins['poptin']       = $data;
     $recommended_plugins['poptin']->name = 'Poptin: Beautiful Pop Ups and Embedded Inline Contact Forms for Your Website';
     $recommended_plugins['poptin']->short_description = 'Pop ups and contact forms builder for your website. Get more sales, leads, and subscribers with beautiful popups & inline forms templates, no coding skills required';
+}
+
+// Chatway Plugins
+$args = [
+    'slug'   => 'chatway-live-chat',
+    'fields' => [
+        'short_description' => true,
+        'icons'             => true,
+        'reviews'           => false,
+// excludes all reviews
+    ],
+];
+$data = plugins_api('plugin_information', $args);
+if ($data && ! is_wp_error($data)) {
+    $recommended_plugins['chatway']       = $data;
+    $recommended_plugins['chatway']->name = 'Free Live Chat, WordPress Website Chat Plugin, Support Chat App: Chatway';
+    $recommended_plugins['chatway']->short_description = 'Live chat with your website’s visitors through your WordPress website. With Chatway – live chat app, you can do just that and much more!';
 }
 
 // Chaty Plugins
@@ -138,24 +156,6 @@ if ($data && ! is_wp_error($data)) {
     $recommended_plugins['mystickyelements']->name = 'All-in-one Floating Contact Form, Call, Chat, and 50+ Social Icon Tabs – My Sticky Elements';
     $recommended_plugins['mystickyelements']->short_description = 'Add floating form and tabs on any side of your website to help your visitors contact you and easily find your Facebook page, YouTube channel, open hours';
 }
-
-// Stars Ttestimonials Plugins
-$args = [
-    'slug'   => 'stars-testimonials-with-slider-and-masonry-grid',
-    'fields' => [
-        'short_description' => true,
-        'icons'             => true,
-        'reviews'           => false,
-// excludes all reviews
-    ],
-];
-$data = plugins_api('plugin_information', $args);
-if ($data && ! is_wp_error($data)) {
-    $recommended_plugins['stars-testimonials']       = $data;
-    $recommended_plugins['stars-testimonials']->name = 'Stars Testimonials: Responsive Testimonials, Social Proof, and Customer Reviews';
-    $recommended_plugins['stars-testimonials']->short_description = 'Simple but yet powerful testimonial WordPress plugin for your website. Display responsive website testimonials and customer reviews with ease and increase conversion rate';
-}
-
 
 ?>
 <div class="wrap mystickyelement-wrap recommended-plugins">

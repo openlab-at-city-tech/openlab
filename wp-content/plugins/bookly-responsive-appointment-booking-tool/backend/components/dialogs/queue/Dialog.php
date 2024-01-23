@@ -3,10 +3,6 @@ namespace Bookly\Backend\Components\Dialogs\Queue;
 
 use Bookly\Lib;
 
-/**
- * Class Dialog
- * @package Bookly\Backend\Components\Dialogs\Queue
- */
 class Dialog extends Lib\Base\Component
 {
     /**
