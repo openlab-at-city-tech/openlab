@@ -1,0 +1,411 @@
+/*
+Theme Name: Typology
+Description: Used to style the TinyMCE editor.
+*/
+
+
+/**
+ * Table of Contents:
+ *
+ * 1.0 - Body
+ * 2.0 - Typography
+ * 3.0 - Alignment
+ * 4.0 - Caption
+ * 5.0 - Galleries
+ * 6.0 - Audio / Video
+ * 7.0 - RTL
+ */
+
+
+/**
+ * 1.0 - Body
+ */
+body.rtl.mce-content-body{
+    font-family: initial;
+    font-size: initial;
+}
+html,
+body {
+    font-size: 62.5%;
+}
+
+body {
+    line-height: 1.88;
+}
+
+body {
+    max-width: 720px;
+    margin: 40px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+a {
+    text-decoration: underline;
+}
+
+
+/**
+ * 2.0 - Typography
+ */
+
+p {
+    margin: 0 0 3.6rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin-top: 0;
+    margin-bottom: 3.6rem;
+}
+
+h1,
+.h1 {
+    line-height: 1.2;
+}
+
+h2,
+.h2 {
+    line-height: 1.25;
+}
+
+h3,
+.h3 {
+    line-height: 1.3;
+}
+
+h4,
+.h4 {
+    line-height: 1.35;
+}
+
+h5,
+.h5 {
+    line-height: 1.5;
+}
+
+h6,
+.h6 {
+    line-height: 1.4;
+}
+
+blockquote,
+q {
+    position: relative;
+    padding: 8rem 8rem 7rem 8rem;
+    margin-bottom: 3.6rem;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 1.88;
+    border: 1px double rgba(0, 0, 0, 0.1);
+    margin: 6rem 0;
+    display: block;
+}
+
+blockquote:before,
+q:before,
+blockquote:after,
+q:after {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    display: block;
+    line-height: 40px;
+    text-align: center;
+    left: 50%;
+    margin-left: -20px;
+    color: #FFF;
+    border-radius: 50%;
+    -webkit-box-shadow: 0 0 0 10px #FFF;
+    box-shadow: 0 0 0 10px #FFF;
+    font-size: 3.6rem;
+    font-weight: 600;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+blockquote:before,
+q:before {
+    content: "\201D";
+    top: -2rem;
+}
+
+blockquote p,
+q p {
+    margin-bottom: 0;
+}
+
+blockquote cite,
+q cite {
+    display: block;
+    opacity: 0.6;
+    font-size: 80%;
+    margin-top: 2rem;
+}
+
+ul li,
+ol li {
+    margin-bottom: 4px;
+}
+
+table,
+.mce-item-table,
+.mce-item-table td,
+.mce-item-table th,
+.mce-item-table caption {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 24px;
+}
+
+table:last-child {
+    margin-bottom: 0;
+}
+
+td,
+th {
+    padding: 10px 15px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+}
+
+pre {
+    white-space: pre-wrap;
+    background: rgba(105, 105, 105, .1);
+    padding: 15px 20px;
+    margin-bottom: 3rem;
+}
+
+pre {
+    margin-top: 0;
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, monospace;
+    font-size: 1em;
+}
+
+
+/**
+ * 3.0 - Alignment
+ */
+
+.aligncenter,
+.alignnone {
+    clear: both;
+    display: block;
+    margin: 0 auto 3.6rem;
+    max-width: 100%;
+}
+
+.alignright {
+    display: inline;
+    float: right;
+    max-width: 100%;
+    margin: 0.75rem 0 2.6rem 3.5rem;
+}
+
+.alignleft {
+    display: inline;
+    float: left;
+    margin: 0.75rem 3.5rem 2.6rem 0;
+}
+
+
+/**
+ * 4.0 - Caption
+ */
+
+.wp-caption-text,
+.wp-caption-dd {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+}
+
+
+/**
+ * 5.0 - Galleries
+ */
+
+.gallery {
+    margin: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+}
+
+.gallery-item {
+    display: inline-block;
+    padding: 0 2px 2px 0;
+    text-align: center;
+    vertical-align: top;
+    width: 100%;
+    margin: 0;
+    position: relative;
+}
+
+.gallery-columns-1 .gallery-item {
+    width: 100%;
+}
+
+.gallery-columns-1 {
+    display: block;
+}
+
+.gallery-columns-1 .gallery-item {
+    max-width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+    max-width: 50%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+}
+
+.gallery-columns-3 .gallery-item {
+    max-width: 33.33%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 33.33%;
+    flex: 0 0 33.33%;
+}
+
+.gallery-columns-4 .gallery-item {
+    max-width: 25%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+    max-width: 20%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+    max-width: 16.66%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 16.66%;
+    flex: 0 0 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+    max-width: 14.28%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 14.28%;
+    flex: 0 0 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+    max-width: 12.5%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 12.5%;
+    flex: 0 0 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+    max-width: 11.11%;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 11.11%;
+    flex: 0 0 11.11%;
+}
+
+.gallery-icon img {
+    margin: 0 auto;
+}
+
+.gallery-icon .herald-popup {
+    position: relative;
+    float: left;
+    outline: none;
+    width: 100%;
+}
+
+.gallery-columns-2 .gallery-item:nth-of-type(2n),
+.gallery-columns-3 .gallery-item:nth-of-type(3n),
+.gallery-columns-4 .gallery-item:nth-of-type(4n),
+.gallery-columns-5 .gallery-item:nth-of-type(5n),
+.gallery-columns-6 .gallery-item:nth-of-type(6n),
+.gallery-columns-7 .gallery-item:nth-of-type(7n),
+.gallery-columns-8 .gallery-item:nth-of-type(8n),
+.gallery-columns-9 .gallery-item:nth-of-type(9n) {
+    padding-right: 0;
+}
+
+.gallery-columns-1 .gallery-item {
+    padding: 0;
+}
+
+.gallery-caption {
+    display: none;
+}
+
+
+/**
+ * 6.0 - Audio / Video
+ */
+
+embed,
+iframe,
+object {
+	margin-bottom: 1.5em;
+	max-width: 100%;
+}
+/**
+ * 7.0 - RTL
+ */
+
+.rtl th {
+	text-align: right;
+}
+
+.rtl ol {
+	counter-reset: item;
+}
+
+.rtl ol li:before {
+	left: auto;
+	right: -1.5em;
+}
+
+.rtl li > ul,
+.rtl li > ol {
+	margin-left: 0;
+	margin-right: 1.5em;
+}
+
+.rtl .mejs-offscreen {
+	right: -10000px;
+}
