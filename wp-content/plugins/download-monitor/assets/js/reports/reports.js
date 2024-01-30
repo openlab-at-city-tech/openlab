@@ -1105,6 +1105,7 @@ class DLM_Reports {
 			}
 			dlmReportsInstance.setTopDownloads();
 			element.data('dateRangePicker').close();
+			jQuery(document).trigger('dlm_daterangepicker_on_close', [element, dlmReportsInstance]);
 		});
 
 		switch (opener.target) {
