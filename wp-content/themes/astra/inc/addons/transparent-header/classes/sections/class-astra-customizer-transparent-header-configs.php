@@ -200,7 +200,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					'default'  => $diff_trans_logo,
 					'type'     => 'control',
 					'section'  => $_section,
-					'title'    => __( 'Different Logo for Transparent Header?', 'astra' ),
+					'title'    => __( 'Different Transparent Logo', 'astra' ),
 					'priority' => 30,
 					'control'  => 'ast-toggle-control',
 				),

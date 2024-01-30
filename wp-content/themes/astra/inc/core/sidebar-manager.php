@@ -57,6 +57,9 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 				// Check only post type archive option value.
 				$layout = astra_get_option( 'archive-post-sidebar-layout' );
 
+				$search_sidebar_layout = astra_get_option( 'ast-search-sidebar-layout', 'default' );
+				$layout                = 'default' !== $search_sidebar_layout ? $search_sidebar_layout : $layout;
+
 				if ( 'default' == $layout || empty( $layout ) ) {
 
 					// Get the global sidebar value.

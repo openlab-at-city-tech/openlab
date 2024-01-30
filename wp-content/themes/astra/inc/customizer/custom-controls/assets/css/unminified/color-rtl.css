@@ -409,10 +409,6 @@
 .ast-field-settings-modal .ast-color-btn-clear-wrap {
     left: 78px;
 }
-.ast-field-settings-modal .customize-control-ast-color.customize-control,
-.ast-field-settings-modal .customize-control-ast-color.customize-control:first-child {
-    margin-top: 25px;
-}
 .astra-color-picker-wrap .components-color-picker__inputs-wrapper {
 	min-width: unset;
 }
@@ -500,10 +496,6 @@
         width: 20px;
         top: -2px;
     }
-    .ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
-        width: 24px;
-        height: 24px;
-    }
     .astra-popover-color .ast-color-palette.components-circular-option-picker {
         width: auto;
         padding: 16px 8px 0px 0px;
@@ -528,6 +520,10 @@
 		top: -2px;
 		width: 18px;
 	}
+	.ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
+        width: 24px;
+        height: 24px;
+    }
 }
 @supports (-moz-appearance:none) {
 	@media (max-width: 1845px) {

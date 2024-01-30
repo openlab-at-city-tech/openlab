@@ -228,6 +228,16 @@ function astra_is_content_style_boxed( $post_id = false ) {
 			$is_boxed = false;
 		}
 	}
+
+	// Search.
+	if ( is_search() ) {
+		$content_style = astra_get_option( 'ast-search-content-style', '' );
+
+		if ( ! empty( $content_style ) && 'default' !== $content_style ) {
+			$is_boxed = ( 'boxed' === $content_style );
+		}
+	}
+
 	return apply_filters( 'astra_is_content_layout_boxed', $is_boxed );
 }
 
@@ -242,15 +252,16 @@ function astra_with_third_party( $is_sidebar_option = false ) {
 
 	$post_type = strval( get_post_type() );
 
-	/** @psalm-suppress UndefinedFunction */
+	// @codingStandardsIgnoreStart
+	/**
+	 * @psalm-suppress UndefinedFunction
+	 */
 	if ( class_exists( 'WooCommerce' ) && ( is_woocommerce() || is_checkout() || is_cart() || is_account_page() ) ) {
 		return 'woocommerce';
 	}
-	/** @psalm-suppress UndefinedFunction */
 	elseif ( class_exists( 'Easy_Digital_Downloads' ) && astra_is_edd_page() ) {
 		return 'edd';
 	}
-	/** @psalm-suppress UndefinedFunction */
 	elseif ( class_exists( 'LifterLMS' ) && ( is_lifterlms() || is_llms_account_page() || is_llms_checkout() ) ) {
 		if ( $is_sidebar_option && ( is_lesson() || is_course() ) ) {
 			return 'lifterlms-course-lesson';
@@ -259,6 +270,7 @@ function astra_with_third_party( $is_sidebar_option = false ) {
 	} elseif ( class_exists( 'SFWD_LMS' ) && in_array( $post_type, array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-topic', 'sfwd-quiz', 'sfwd-certificates', 'sfwd-assignment' ) ) ) {
 		return 'learndash';
 	}
+	// @codingStandardsIgnoreEnd
 
 	return false;
 }
@@ -331,6 +343,14 @@ function astra_is_sidebar_style_boxed( $post_id = false ) {
 			$is_sidebar_boxed = true;
 		} else {
 			$is_sidebar_boxed = false;
+		}
+	}
+
+	// Search.
+	if ( is_search() ) {
+		$sidebar_style = astra_get_option( 'ast-search-sidebar-style', '' );
+		if ( ! empty( $sidebar_style ) && 'default' !== $sidebar_style ) {
+			$is_sidebar_boxed = ( 'boxed' === $sidebar_style );
 		}
 	}
 
@@ -429,21 +449,24 @@ function astra_third_party_archive_meta( $option ) {
 		$shop_page_id = get_option( 'woocommerce_shop_page_id' );
 		$meta_value   = get_post_meta( $shop_page_id, $option, true );
 	} elseif ( 'lifterlms' === $third_party ) {
-		/** @psalm-suppress UndefinedFunction */
+		// @codingStandardsIgnoreStart
+		/**
+		 * @psalm-suppress UndefinedFunction
+		 */
 		if ( is_courses() ) {
 			$lifter_page_id = get_option( 'lifterlms_shop_page_id' );
 			$meta_value     = get_post_meta( $lifter_page_id, $option, true );
 		}
-		/** @psalm-suppress UndefinedFunction */
 		elseif ( is_memberships() ) {
 			$lifter_page_id = get_option( 'lifterlms_memberships_page_id' );
 			$meta_value     = get_post_meta( $lifter_page_id, $option, true );
 		} elseif ( is_course_taxonomy() ) {
 			$meta_value = 'default';
 		}
+		// @codingStandardsIgnoreEnd
 	} elseif ( 'edd' === $third_party && astra_is_edd_single_page() ) {
 		$page_id = get_the_ID();
-		/** @psalm-suppress PossiblyFalseArgument */
+		/** @psalm-suppress PossiblyFalseArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$meta_value = get_post_meta( $page_id, $option, true );
 	}
 
@@ -475,10 +498,11 @@ if ( ! function_exists( 'astra_number_pagination' ) ) {
 		/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		the_posts_pagination(
 			array(
-				'prev_text'    => astra_default_strings( 'string-blog-navigation-previous', false ),
-				'next_text'    => astra_default_strings( 'string-blog-navigation-next', false ),
-				'taxonomy'     => 'category',
-				'in_same_term' => true,
+				'prev_text'          => astra_default_strings( 'string-blog-navigation-previous', false ),
+				'next_text'          => astra_default_strings( 'string-blog-navigation-next', false ),
+				'taxonomy'           => 'category',
+				'in_same_term'       => true,
+				'screen_reader_text' => __( 'Post pagination', 'astra' ),
 			)
 		);
 		/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -1583,12 +1607,18 @@ if ( ! function_exists( 'astra_the_excerpt' ) ) {
 		$excerpt_type = apply_filters( 'astra_excerpt_type', astra_get_option( 'blog-post-content' ) );
 
 		do_action( 'astra_the_excerpt_before', $excerpt_type );
-
-		if ( 'full-content' === $excerpt_type ) {
-			the_content();
-		} else {
-			the_excerpt();
-		}
+		?>
+			<div class="ast-excerpt-container ast-blog-single-element">
+				<?php
+				if ( 'full-content' === $excerpt_type ) {
+					the_content();
+				} else {
+					the_excerpt();
+					add_filter( 'excerpt_more', '__return_false' );
+				}
+				?>
+			</div>
+		<?php
 
 		do_action( 'astra_the_excerpt_after', $excerpt_type );
 	}
@@ -1759,6 +1789,7 @@ if ( ! function_exists( 'astra_get_post_thumbnail' ) ) {
 		$output = '';
 
 		$check_is_singular = is_singular();
+		$check_is_archive  = ( is_archive() || is_search() || is_home() );
 
 		$featured_image = true;
 		$post_type      = strval( get_post_type() );
@@ -1768,6 +1799,13 @@ if ( ! function_exists( 'astra_get_post_thumbnail' ) ) {
 		} else {
 			$is_featured_image = astra_get_option( 'ast-featured-img' );
 		}
+
+		$featured_image_size = 'large';
+		if ( $check_is_archive ) {
+			$featured_image_size = astra_get_option( 'blog-image-size', 'large' );
+		}
+
+		$is_featured_image = astra_get_option( 'ast-featured-img' );
 
 		if ( 'disabled' === $is_featured_image ) {
 			$featured_image = false;
@@ -1782,11 +1820,12 @@ if ( ! function_exists( 'astra_get_post_thumbnail' ) ) {
 
 			if ( $featured_image && ( ! ( $check_is_singular ) || ( ! post_password_required() && ! is_attachment() && has_post_thumbnail() ) ) ) {
 
+				$image_size = $check_is_singular ? astra_get_option( 'ast-dynamic-single-' . $post_type . '-article-featured-image-size', 'large' ) : $featured_image_size;
 				$post_thumb = apply_filters(
 					'astra_featured_image_markup',
 					get_the_post_thumbnail(
 						get_the_ID(),
-						apply_filters( 'astra_post_thumbnail_default_size', 'large' ),
+						apply_filters( 'astra_post_thumbnail_default_size', $image_size ),
 						apply_filters( 'astra_post_thumbnail_itemprop', '' )
 					)
 				);
@@ -2098,7 +2137,18 @@ function astra_setup_article_featured_image() {
 		return;
 	}
 
-	$post_type           = strval( get_post_type() );
+	$post_type = strval( get_post_type() );
+
+	if ( ( 'disabled' === astra_get_option_meta( 'ast-featured-img' ) && Astra_Dynamic_CSS::astra_4_6_2_compatibility() ) || false === astra_get_option( 'ast-single-' . $post_type . '-title' ) ) {
+
+		/**
+		 * Bail early if featured image option "Show featured image in the posts lists only, but hide it in the single post view." is enabled.
+		 *
+		 * @since 4.6.2
+		 */
+		return;
+	}
+
 	$banner_title_layout = astra_get_option( 'ast-dynamic-single-' . $post_type . '-layout', 'layout-1' );
 	$single_structure    = astra_get_option( 'ast-dynamic-single-' . $post_type . '-structure', astra_get_option( 'ast-dynamic-single-' . $post_type . '-structure', 'page' === $post_type ? array( 'ast-dynamic-single-' . $post_type . '-image', 'ast-dynamic-single-' . $post_type . '-title' ) : array( 'ast-dynamic-single-' . $post_type . '-title', 'ast-dynamic-single-' . $post_type . '-meta' ) ) );
 

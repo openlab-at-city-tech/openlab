@@ -7738,6 +7738,12 @@ return array(
 		),
 	),
 	array(
+		'Rubik Broken Fax' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
 		'Rubik Bubbles' => array(
 			'variants' => array( 'regular' ),
 			'category' => 'display',
@@ -7762,6 +7768,18 @@ return array(
 		),
 	),
 	array(
+		'Rubik Doodle Shadow' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
+		'Rubik Doodle Triangles' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
 		'Rubik Gemstones' => array(
 			'variants' => array( 'regular' ),
 			'category' => 'display',
@@ -7775,6 +7793,18 @@ return array(
 	),
 	array(
 		'Rubik Iso' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
+		'Rubik Lines' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
+		'Rubik Maps' => array(
 			'variants' => array( 'regular' ),
 			'category' => 'display',
 		),
@@ -7817,6 +7847,12 @@ return array(
 	),
 	array(
 		'Rubik Puddles' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'display',
+		),
+	),
+	array(
+		'Rubik Scribble' => array(
 			'variants' => array( 'regular' ),
 			'category' => 'display',
 		),

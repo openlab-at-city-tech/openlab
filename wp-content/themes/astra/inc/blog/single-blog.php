@@ -94,7 +94,6 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 	 * @return mixed          Comment markup.
 	 */
 	function astra_theme_comment( $comment, $args, $depth ) {
-
 		switch ( $comment->comment_type ) {
 
 			case 'pingback':
@@ -110,6 +109,7 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 			default:
 				// Proceed with normal comments.
 				global $post;
+				$entry_content_class = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? ' entry-content' : '';
 				?>
 				<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
 
@@ -164,24 +164,41 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 								<?php astra_markup_close( 'ast-comment-meta-wrap' ); ?>
 								</header> <!-- .ast-comment-meta -->
 							</div>
-							<section class="ast-comment-content comment">
+							<section class="ast-comment-content comment <?php echo esc_attr( $entry_content_class ); ?>">
 								<?php comment_text(); ?>
 								<div class="ast-comment-edit-reply-wrap">
-									<?php edit_comment_link( astra_default_strings( 'string-comment-edit-link', false ), '<span class="ast-edit-link">', '</span>' ); ?>
 									<?php
-									comment_reply_link(
-										array_merge(
-											$args,
-											array(
-												'reply_text' => astra_default_strings( 'string-comment-reply-link', false ),
-												'add_below' => 'comment',
-												'depth'  => $depth,
-												'max_depth' => $args['max_depth'],
-												'before' => '<span class="ast-reply-link">',
-												'after'  => '</span>',
+									if ( Astra_Dynamic_CSS::astra_4_6_0_compatibility() ) {
+										comment_reply_link(
+											array_merge(
+												$args,
+												array(
+													'reply_text' => astra_default_strings( 'string-comment-reply-link', false ),
+													'add_below' => 'comment',
+													'depth'  => $depth,
+													'max_depth' => $args['max_depth'],
+													'before' => '<span class="ast-reply-link">',
+													'after'  => '</span>',
+												)
 											)
-										)
-									);
+										);
+										edit_comment_link( astra_default_strings( 'string-comment-edit-link', false ), '<span class="ast-edit-link">', '</span>' );
+									} else {
+										edit_comment_link( astra_default_strings( 'string-comment-edit-link', false ), '<span class="ast-edit-link">', '</span>' );
+										comment_reply_link(
+											array_merge(
+												$args,
+												array(
+													'reply_text' => astra_default_strings( 'string-comment-reply-link', false ),
+													'add_below' => 'comment',
+													'depth'  => $depth,
+													'max_depth' => $args['max_depth'],
+													'before' => '<span class="ast-reply-link">',
+													'after'  => '</span>',
+												)
+											)
+										);
+									}
 									?>
 								</div>
 								<?php if ( '0' == $comment->comment_approved ) : ?>
@@ -195,6 +212,27 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 				break;
 		}
 	}
+}
+
+/**
+ * Adjacent navigation post link attributes.
+ *
+ * @param string         $output   The adjacent post link.
+ * @param string         $format   Link anchor format.
+ * @param string         $link     Link permalink format.
+ * @param WP_Post|string $post     The adjacent post. Empty string if no corresponding post exists.
+ * @param string         $adjacent Whether the post is previous or next.
+ *
+ * @return string       Link of post URL.
+ * @since 4.6.0
+ */
+function astra_adjacent_post_links_title( $output, $format, $link, $post, $adjacent ) {
+	/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+	if ( ! empty( $post->post_title ) ) {
+		/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$output = str_replace( 'href="', 'title="' . esc_attr( $post->post_title ) . '"' . 'href="', $output );
+	}
+	return $output;
 }
 
 /**
@@ -216,16 +254,22 @@ if ( ! function_exists( 'astra_single_post_navigation_markup' ) ) {
 		if ( is_single() && $single_post_navigation_enabled ) {
 
 			$post_obj = get_post_type_object( get_post_type() );
+			/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$post_singular_name = ! empty( $post_obj->labels->singular_name ) ? $post_obj->labels->singular_name : '';
+			/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
-			$next_text = sprintf(
-				astra_default_strings( 'string-single-navigation-next', false ),
-				$post_obj->labels->singular_name
-			);
-
-			$prev_text = sprintf(
+			$prev_text = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? '<span class="ast-post-nav">' . Astra_Builder_UI_Controller::fetch_svg_icon( 'long-arrow-alt-left' ) . ' ' . astra_default_strings( 'string-previous-text', false ) . '</span> <p> %title </p>' : sprintf(
 				astra_default_strings( 'string-single-navigation-previous', false ),
-				$post_obj->labels->singular_name
+				$post_singular_name
 			);
+			$next_text = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? '<span class="ast-post-nav">' . astra_default_strings( 'string-next-text', false ) . ' ' . Astra_Builder_UI_Controller::fetch_svg_icon( 'long-arrow-alt-right' ) . '</span> <p> %title </p>' : sprintf(
+				astra_default_strings( 'string-single-navigation-next', false ),
+				$post_singular_name
+			);
+
+			add_filter( 'previous_post_link', 'astra_adjacent_post_links_title', 10, 5 );
+			add_filter( 'next_post_link', 'astra_adjacent_post_links_title', 10, 5 );
+
 			/**
 			 * Filter the post pagination markup
 			 */
@@ -233,12 +277,15 @@ if ( ! function_exists( 'astra_single_post_navigation_markup' ) ) {
 				apply_filters(
 					'astra_single_post_navigation',
 					array(
-						'next_text' => $next_text,
-						'prev_text' => $prev_text,
+						'next_text'          => $next_text,
+						'prev_text'          => $prev_text,
+						'screen_reader_text' => __( 'Post navigation', 'astra' ),
 					)
 				)
 			);
 
+			remove_filter( 'previous_post_link', 'astra_adjacent_post_links_title', 10 );
+			remove_filter( 'next_post_link', 'astra_adjacent_post_links_title', 10 );
 		}
 	}
 }

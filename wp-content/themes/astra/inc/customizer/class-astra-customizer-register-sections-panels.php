@@ -220,6 +220,13 @@ if ( ! class_exists( 'Astra_Customizer_Register_Sections_Panels' ) ) {
 					'priority' => 40,
 					'title'    => __( 'Page', 'astra' ),
 				),
+				array(
+					'name'     => 'section-single-page',
+					'type'     => 'section',
+					'priority' => 10,
+					'title'    => __( 'Single Page', 'astra' ),
+					'section'  => 'section-page-dynamic-group',
+				),
 
 				array(
 					'name'               => 'section-sidebars',
@@ -417,6 +424,21 @@ if ( ! class_exists( 'Astra_Customizer_Register_Sections_Panels' ) ) {
 					'priority' => 60,
 				),
 			);
+
+			// Add spacial page section under page group.
+			foreach ( Astra_Posts_Structure_Loader::get_special_page_types() as $index => $special_type ) {
+				$configs[] = array(
+					'name'     => 'ast-section-' . $special_type . '-page',
+					'type'     => 'section',
+					'priority' => 10 + absint( $index ),
+					'title'    => sprintf(
+						/* translators: %s: Name of special page type */
+						esc_html__( '%s Page', 'astra' ),
+						ucfirst( $special_type )
+					),
+					'section'  => 'section-page-dynamic-group',
+				);
+			}
 
 			return array_merge( $configurations, $configs );
 		}

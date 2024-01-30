@@ -29,7 +29,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 	$current_post_type    = strval( get_post_type() );
 	$supported_post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
 
-	if ( ! in_array( $current_post_type, $supported_post_types ) ) {
+	if ( is_search() || ! in_array( $current_post_type, $supported_post_types ) ) {
 		return $dynamic_css;
 	}
 	if ( false === astra_get_option( 'ast-archive-' . $current_post_type . '-title', ( class_exists( 'WooCommerce' ) && 'product' === $current_post_type ) ? false : true ) ) {
@@ -228,7 +228,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 		 * Desktop CSS.
 		 */
 		$css_output_desktop = array(
-			$selector                        => array(
+			$selector                                    => array(
 				'text-align'      => $desk_h_alignment,
 				'justify-content' => $vert_alignment,
 				'min-height'      => $desk_banner_height,
@@ -236,16 +236,16 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 				'margin-bottom'   => astra_responsive_spacing( $banner_margin, 'bottom', 'desktop' ),
 				'margin-left'     => astra_responsive_spacing( $banner_margin, 'left', 'desktop' ),
 				'margin-right'    => astra_responsive_spacing( $banner_margin, 'right', 'desktop' ),
+				'padding-top'     => astra_responsive_spacing( $banner_padding, 'top', 'desktop' ),
+				'padding-right'   => astra_responsive_spacing( $banner_padding, 'right', 'desktop' ),
+				'padding-bottom'  => astra_responsive_spacing( $banner_padding, 'bottom', 'desktop' ),
+				'padding-left'    => astra_responsive_spacing( $banner_padding, 'left', 'desktop' ),
 			),
-			$selector . ' .ast-container'    => array(
-				'width'          => '100%',
-				'padding-top'    => astra_responsive_spacing( $banner_padding, 'top', 'desktop' ),
-				'padding-right'  => astra_responsive_spacing( $banner_padding, 'right', 'desktop' ),
-				'padding-bottom' => astra_responsive_spacing( $banner_padding, 'bottom', 'desktop' ),
-				'padding-left'   => astra_responsive_spacing( $banner_padding, 'left', 'desktop' ),
+			$selector . ' .ast-container'                => array(
+				'width' => '100%',
 			),
-			$selector . ' .ast-container *'  => astra_get_font_array_css( astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-text-font-family' ), astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-text-font-weight' ), $banner_text_font_size, 'ast-dynamic-archive-' . $current_post_type . '-text-font-extras', $text_color ),
-			$selector . ' .ast-container h1' => astra_get_font_array_css( astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-title-font-family' ), astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-title-font-weight', Astra_Posts_Structure_Loader::get_customizer_default( 'title-font-weight' ) ), $banner_title_font_size, 'ast-dynamic-archive-' . $current_post_type . '-title-font-extras', $title_color ),
+			$selector . ' .ast-container *'              => astra_get_font_array_css( astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-text-font-family' ), astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-text-font-weight' ), $banner_text_font_size, 'ast-dynamic-archive-' . $current_post_type . '-text-font-extras', $text_color ),
+			$selector . ' .ast-container h1'             => astra_get_font_array_css( astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-title-font-family' ), astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-title-font-weight', Astra_Posts_Structure_Loader::get_customizer_default( 'title-font-weight' ) ), $banner_title_font_size, 'ast-dynamic-archive-' . $current_post_type . '-title-font-extras', $title_color ),
 			'.ast-page-builder-template ' . $selector . ' .ast-container' => array(
 				'max-width' => '100%',
 			),
@@ -260,6 +260,9 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 			),
 			$selector . ' .ast-container > *:not(:last-child)' => array(
 				'margin-bottom' => $elements_gap . 'px',
+			),
+			$selector . ' .ast-container > *:last-child' => array(
+				'margin-bottom' => '0',
 			),
 		);
 

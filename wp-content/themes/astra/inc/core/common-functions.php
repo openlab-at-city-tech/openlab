@@ -152,7 +152,7 @@ if ( ! function_exists( 'astra_get_font_css_value' ) ) {
 	 *  astra_get_css_value( VALUE, 'tablet' );
 	 *  astra_get_css_value( VALUE, 'mobile' );
 	 *
-	 * @param  string $value        CSS value.
+	 * @param  mixed  $value        CSS value.
 	 * @param  string $unit         CSS unit.
 	 * @param  string $device       CSS device.
 	 * @return mixed                CSS value depends on $unit & $device
@@ -169,6 +169,7 @@ if ( ! function_exists( 'astra_get_font_css_value' ) ) {
 		switch ( $unit ) {
 			case 'em':
 			case 'vw':
+			case 'rem':
 			case '%':
 						$css_val = esc_attr( $value ) . $unit;
 				break;
@@ -909,7 +910,7 @@ if ( ! function_exists( 'astra_get_the_title' ) ) {
 			} elseif ( is_search() ) {
 
 				/* translators: 1: search string */
-				$title = apply_filters( 'astra_the_search_page_title', sprintf( __( 'Search Results for: %s', 'astra' ), '<span>' . get_search_query() . '</span>' ) );
+				$title = apply_filters( 'astra_the_search_page_title', sprintf( astra_get_option( 'section-search-page-title-custom-title' ) . ' %s', '<span>' . get_search_query() . '</span>' ) );
 
 			} elseif ( class_exists( 'WooCommerce' ) && is_shop() ) {
 
@@ -951,19 +952,31 @@ function astra_use_dynamic_blog_layouts() {
  * @since 4.0.0
  */
 function astra_get_taxonomy_banner_legacy_layout() {
+	$post_type        = strval( get_post_type() );
+	$banner_structure = is_search() ? astra_get_option( 'section-search-page-title-structure' ) : astra_get_option( 'ast-dynamic-archive-' . $post_type . '-structure', array( 'ast-dynamic-archive-' . $post_type . '-title', 'ast-dynamic-archive-' . $post_type . '-description' ) );
+
+	if ( empty( $banner_structure ) ) {
+		return;
+	}
+
 	?>
 		<section class="ast-archive-description">
 			<?php
-				$post_type        = strval( get_post_type() );
-				$banner_structure = astra_get_option( 'ast-dynamic-archive-' . $post_type . '-structure', array( 'ast-dynamic-archive-' . $post_type . '-title', 'ast-dynamic-archive-' . $post_type . '-description' ) );
 			foreach ( $banner_structure as $metaval ) {
 				$meta_key = 'archive-' . astra_get_last_meta_word( $metaval );
 				switch ( $meta_key ) {
 					case 'archive-title':
 						do_action( 'astra_before_archive_title' );
-						add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
-						the_archive_title( '<h1 class="page-title ast-archive-title">', '</h1>' );
-						remove_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+						if ( is_search() ) {
+							$title = apply_filters( 'astra_the_search_page_title', sprintf( /* translators: 1: search string */ astra_get_option( 'section-search-page-title-custom-title' ) . ' %s', '<span>' . get_search_query() . '</span>' ) );
+							?>
+							 <h1 class="page-title ast-archive-title"> <?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> </h1>
+																				  <?php
+						} else {
+							add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+							the_archive_title( '<h1 class="page-title ast-archive-title">', '</h1>' );
+							remove_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+						}
 						do_action( 'astra_after_archive_title' );
 						break;
 					case 'archive-breadcrumb':
@@ -975,7 +988,15 @@ function astra_get_taxonomy_banner_legacy_layout() {
 						break;
 					case 'archive-description':
 						do_action( 'astra_before_archive_description' );
-						echo wp_kses_post( wpautop( get_the_archive_description() ) );
+						if ( is_search() ) {
+							if ( have_posts() ) {
+								echo wp_kses_post( wpautop( astra_get_option( 'section-search-page-title-found-custom-description' ) ) );
+							} else {
+								echo wp_kses_post( wpautop( astra_get_option( 'section-search-page-title-not-found-custom-description' ) ) );
+							}
+						} else {
+							echo wp_kses_post( wpautop( get_the_archive_description() ) );
+						}
 						do_action( 'astra_after_archive_description' );
 						break;
 				}
@@ -1001,8 +1022,11 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 
 			// Author.
 			if ( is_author() ) {
-				$author_name      = get_the_author() ? get_the_author() : '';
-				$author_name_html = ( true === astra_check_is_structural_setup() && $author_name ) ? __( 'Author name: ', 'astra' ) . $author_name : $author_name;
+				$author_name        = get_the_author() ? get_the_author() : '';
+				$author_name_html   = ( true === astra_check_is_structural_setup() && $author_name ) ? __( 'Author name: ', 'astra' ) . $author_name : $author_name;
+				$author_description = get_the_author_meta( 'description' );
+				/** @psalm-suppress RedundantConditionGivenDocblockType */
+				$author_description_html = wp_kses_post( $author_description ); 
 				?>
 
 				<section class="ast-author-box ast-archive-description">
@@ -1010,7 +1034,7 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 						<?php do_action( 'astra_before_archive_title' ); ?>
 						<h1 class='page-title ast-archive-title'><?php echo esc_html( apply_filters( 'astra_author_page_title', $author_name_html ) ); ?></h1>
 						<?php do_action( 'astra_after_archive_title' ); ?>
-						<p><?php echo wp_kses_post( get_the_author_meta( 'description' ) ); ?></p>
+						<p><?php echo $author_description_html; ?></p>
 						<?php do_action( 'astra_after_archive_description' ); ?>
 					</div>
 					<div class="ast-author-avatar">
@@ -1020,25 +1044,10 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 
 				<?php
 
-				// Search.
-			} elseif ( is_search() ) {
-				?>
-
-				<section class="ast-archive-description">
-					<?php do_action( 'astra_before_archive_title' ); ?>
-					<?php
-						/* translators: 1: search string */
-						$title = apply_filters( 'astra_the_search_page_title', sprintf( __( 'Search Results for: %s', 'astra' ), '<span>' . get_search_query() . '</span>' ) );
-					?>
-					<h1 class="page-title ast-archive-title"> <?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> </h1>
-					<?php do_action( 'astra_after_archive_title' ); ?>
-				</section>
-
-				<?php
-
-				// Other.
 			} else {
-				echo wp_kses_post( astra_get_taxonomy_banner_legacy_layout() );
+				$taxonomy_banner_content      = astra_get_taxonomy_banner_legacy_layout();
+				$taxonomy_banner_content_html = is_string( $taxonomy_banner_content ) ? wp_kses_post( $taxonomy_banner_content ) : '';
+				echo $taxonomy_banner_content_html;
 			}
 		}
 	}
@@ -1331,8 +1340,8 @@ function astra_get_tablet_breakpoint( $min = '', $max = '' ) {
 /**
  * Get the mobile breakpoint value.
  *
- * @param string $min min.
- * @param string $max max.
+ * @param mixed $min min.
+ * @param mixed $max max.
  *
  * @since 2.4.0
  *
@@ -1736,10 +1745,10 @@ function astra_get_filter_svg( $filter_id, $color ) {
 					"
 				/>
 				<feComponentTransfer color-interpolation-filters="sRGB" >
-					<feFuncR type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['r'] ) ); ?>" />
-					<feFuncG type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['g'] ) ); ?>" />
-					<feFuncB type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['b'] ) ); ?>" />
-					<feFuncA type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['a'] ) ); ?>" />
+					<feFuncR type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['r'] ) ); ?> <?php echo esc_attr( implode( ' ', $duotone_values['r'] ) ); ?>" />
+					<feFuncG type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['g'] ) ); ?> <?php echo esc_attr( implode( ' ', $duotone_values['g'] ) ); ?>" />
+					<feFuncB type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['b'] ) ); ?> <?php echo esc_attr( implode( ' ', $duotone_values['b'] ) ); ?>" />
+					<feFuncA type="table" tableValues="<?php echo esc_attr( implode( ' ', $duotone_values['a'] ) ); ?> <?php echo esc_attr( implode( ' ', $duotone_values['a'] ) ); ?>" />
 				</feComponentTransfer>
 				<feComposite in2="SourceGraphic" operator="in" />
 			</filter>

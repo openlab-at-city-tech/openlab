@@ -33,6 +33,7 @@ class Astra_Post_Structures {
 		if ( ! is_admin() ) {
 			require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'css/single-dynamic.css.php';
 			require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'css/archive-dynamic.css.php';
+			require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'css/special-dynamic.css.php';
 		}
 		// @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 	}

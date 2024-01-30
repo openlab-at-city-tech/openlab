@@ -264,7 +264,8 @@ td.ast-advanced-hook-row-heading {
 }
 .components-button:focus:not(:disabled) {
     box-shadow: none;
-    outline: 0;
+    outline: 1.5px solid transparent;
+    border: 1px solid #ccc;
 }
 .ast-advanced-hook-row-content section {
     max-width: 250px;
@@ -993,11 +994,6 @@ a.ast-pro-upgrade-link {
 
 .astra-popover-color .components-h-stack .components-button {
     flex: inherit;
-}
-
-.astra-popover-color .components-circular-option-picker__option:focus::after{
-    width: auto;
-    height: auto;
 }
 
 .astra-popover-color .components-h-stack .components-circular-option-picker__option-wrapper{

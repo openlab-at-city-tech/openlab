@@ -14,37 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Post types for live search.
- *
- * @since 4.4.0
- */
-function astra_customizer_live_search_posttypes() {
-	$supported_post_types = array();
-	if ( is_customize_preview() ) {
-		$supported_post_types = astra_get_queried_post_types();
-	}
-	return apply_filters( 'astra_live_search_posttypes', $supported_post_types );
-}
-
-/**
- * Get formatted live search post types.
- *
- * @since 4.4.0
- * @return array
- */
-function astra_customizer_search_post_types_choices() {
-	$all_post_types    = astra_customizer_live_search_posttypes();
-	$post_type_choices = array();
-	foreach ( $all_post_types as $post_type ) {
-		$post_type_object = get_post_type_object( $post_type );
-		/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$post_type_choices[ $post_type ] = ! empty( $post_type_object->labels->name ) ? $post_type_object->labels->name : $post_type;
-		/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-	}
-	return $post_type_choices;
-}
-
-/**
  * Register search header builder Customizer Configurations.
  *
  * @since 4.5.2
@@ -158,7 +127,7 @@ function astra_header_search_configuration() {
 			'control'  => 'ast-toggle-control',
 			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			'section'  => $_section,
-			'title'    => __( 'Enable Live Search', 'astra' ),
+			'title'    => __( 'Live Search', 'astra' ),
 			'priority' => 5,
 			'context'  => Astra_Builder_Helper::$general_tab,
 		),

@@ -116,13 +116,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 			$post_id   = get_the_ID();
 
 			if ( 'fl-theme-layout' === $post_type && $post_id ) {
-
-				$template_type = get_post_meta( $post_id, '_fl_theme_layout_type', true );
-
-				if ( ! ( 'archive' === $template_type || 'singular' === $template_type || '404' === $template_type ) ) {
-
 					remove_meta_box( 'astra_settings_meta_box', 'fl-theme-layout', 'side' );
-				}
 			}
 		}
 
@@ -609,7 +603,14 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 			$palette_css_var_prefix   = Astra_Global_Palette::get_css_variable_prefix();
 			$apply_new_default_values = astra_button_default_padding_updated();
-			$page_bg_dynamic_title    = ( $post_type ? __( ucfirst( $post_type ) . ' Background', 'astra' ) : __( 'Page Background', 'astra' ) );
+			$bg_updated_title         = sprintf(
+				/* translators: 1: Post type, 2: Background string */
+				'%1$s %2$s',
+				ucfirst( strval( $post_type ) ),
+				__( 'Background', 'astra' )
+			);
+			$page_bg_dynamic_title = ( $post_type ? $bg_updated_title : __( 'Page Background', 'astra' ) );
+			$global_palette        = astra_get_option( 'global-color-palette' );
 
 			wp_localize_script(
 				'astra-meta-settings',
@@ -732,6 +733,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 					'page_bg_toggle_options'         => $this->get_page_bg_toggle_options(),
 					'surface_color_help_text'        => __( 'Enabling this option will override global > colors > surface color options', 'astra' ),
 					'page_bg_dynamic_title'          => $page_bg_dynamic_title,
+					'global_color_palette'           => $global_palette,
 				)
 			);
 

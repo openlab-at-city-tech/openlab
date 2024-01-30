@@ -1,9 +1,90 @@
+v4.6.4
+- New: Introducing new "rem" unit support for font-size in customizer typography settings.
+- Improvement - Accessibility improvement for search form input fields.
+- Improvement: - Secondary Buttons - Default design styling updated for better UI/UX.
+- Improvement - Added alt tag dynamically to related post-featured images to avoid accessibility errors.
+- Improvement - WordPress supporting embeds compatibility from theme. ( https://wordpress.org/documentation/article/embeds/ )
+- Fix: EDD - PHP error with "Uncaught Error: function 'astra_edd_cart_header_configuration' not found" for old header setup.
+- Fix: Deprecated warning "Deprecated: preg_replace()" on category archive page with PHP 8.1 or higher.
+- Fix: Smooth Scroll to ID does not work as expected for inter-page navigation.
+- Fix: Block Editor - Gradient color picker bubble items are not visible in draggable state.
+- Fix: Accessibility input highlight color not working when WooCommerce is active.
+
+v4.6.3
+- Fix: BBPress - Forum - Archive items get shrink on the frontend due to inheriting blog layout configurations.
+- Fix: Single Layout - Banner - Featured image visible on the frontend if title area is disabled when image is positioned as "Behind" or "Below" for Layout-1 & Layout-2 respectively.
+- Fix: Header - Menu - Last menu item's padding missing on the frontend.
+- Fix: Single Layout - Banner - Alignment of title area not working.
+- Fix: Single Layout - Author Meta - Avatar size not working when banner layout is set as layout-2.
+- Fix: Customizer - Number control's input field UI breaking in Firefox browser.
+
+v4.6.2
+- Fix: Page: Featured Image directly show on the frontend after recent v4.6.0 update.
+- Fix: WooCommerce - "No. of Products" option not working for the Shop page and its inheriting Blog "No. of Posts" option.
+- Fix: Single Title Area - Featured image not hiding if "Behind" is set for title area layout 1 & "Below" is set for title area layout 2.
+
+v4.6.1
+- Fix: PHP error with "Uncaught Error: Class 'Astra_Builder_Base_Dynamic_CSS' not found" when old header-footer is active.
+
+v4.6.0
+	** Blog Improvements (https://wpastra.com/docs/blog-archive-improvements/)
+		- New: Blog - Introducing new featured image options like Image Ratio, Image Size, Hover Effect etc.
+		- New: Blog - Dedicated Post Structure elements like Featured Image, Categories, Tags, Title, Meta, Excerpt, Read More, etc.
+		- New: Blog - Introducing modern Grid, List, and Cover blog/archive skins.
+		- New: Blog - Introduced new meta divider styles.
+		- New: Blog - Introduced new taxonomy styles like Badge and Underline.
+		- Improvement: Blog - Improved the overall UI of the archive page for a better user experience.
+		- Improvement: Blog - Updated "Read More" default button text to "Read Post" for articles.
+	** Single Layout Improvements (https://wpastra.com/docs/single-post-improvements/)
+		- New: Single - Banner Title - Added avatar options like Enable Avatar, Prefix Label, and Avatar Size in Author metadata.
+		- New: Single - Introduced new meta divider styles.
+		- New: Single - Introduced new taxonomy styles like Badge and Underline.
+		- New: Related Posts - Introducing new featured image options like Image Ratio, Image Size, etc.
+		- New: Related Posts - Introduced dedicated spacing option to control container area spacing.
+		- New: Related Posts - Introduced section placement options like Contained, Separated.
+		- New: Comments - Introduced section placement options like Contained and Separated.
+		- New: Single Post - Title area - Introduced new "Removed Featured Image Padding" option for layout 1 with the "None" position set.
+		- New: Single Post - Introducing a new option "Content Images Box Shadow" to highlight the content area's images for a better visual experience.
+		- New: Single Layouts - Introducing new margin-padding spacing options for container areas in all single layout sections.
+		- Improvement: Related Posts - Introduced new filter "astra_related_posts_box_heading_tag" to change the heading tag of the related posts section.
+		- Improvement: Comments - Introduced new filter "astra_comment_title_tag" to change the heading tag of the comments section.
+		- Improvement: Single Post - Improvised default internal spacing in between blocks for better readability within the post content.
+		- Improvement: Single Post - Comments - Improvised comment area UI for better user experience.
+		- Improvement: Single Post - Set up default container style to Narrow Width for better readability within the post content.
+		- Improvement: Post Navigation - Showcasing post titles along with post navigation with improvised default UI for a better user experience.
+		- Improvement: Single Post - Introducing new Border, Spacing controls to Related Posts, Comments section.
+		- Improvement: Added customizer section shortcut links to Related Posts, and Comments section to quick access for better user experience.
+		- Improvement: Single - Moved the Related Posts, and Comments settings from the Single Post section to the new sub-sections under the Single Post section.
+	** Search Page
+		- New: Search Page - Introducing a new section “Search” under Customizer > Page for improvising the search results page area.
+		- New: Search Page - Introduced dedicated container & sidebar layout options.
+		- New: Search Page - Introduced new layout options to showcase post results in grid, list or cover style.
+		- New: Search Page: Introduced Live Search option when no results found.
+		- New: Search Page - Introduced title area to control banner elements.
+	** General
+		- Improvement: Improvised default form UI with the theme for better user experience.
+		- Improvement: Knowledge base data storing in the local uploads directory for better performance.
+		- Improvement - Check for Class Exists in class-astra-admin-loader.php file.
+		- Fix: Logo color not working in Firefox browser.
+		- Fix: Site title and tagline font-sizes were not part of export-import header compatibility settings.
+		- Fix: Self-hosted Google fonts not working properly on the multisite setup.
+		- Fix: Cart count color not working for the first cart icon option.
+		- Fix: RTL - Hidden menu on Desktop when off-canvas is of type Flyout and position is set to Left.
+		- Fix: Block Editor - The color picker picks the wrong color on Surface Color Page Level Setting.
+		- Fix: WooCommerce - PHP fatal error for old header footer builder users 'Call to undefined function astra_header_woo_cart_configuration' when WooCommerce is enabled.
+		- Fix: The CSS color property is set to "unset" when the color is reset through the customizer.
+		- Fix: WooCommerce - Single product image is not aligned in the centre on the Firefox browser
+		- Fix: Theme meta settings showing for Beaver Builder themer layouts unnecessarily.
+		- Fix: WooCommerce - Cart & Checkout Blocks - Design is breaking with default theme settings.
+		- Fix: Secondary Button Styles - The background color option does not apply to the background color of the outline button as expected.
+
 v4.5.2
 - New: Compatibility to Import Export header-footer builder customizer layouts with the "Astra Import Export" plugin.
 - New: Introducing new "vw" unit support for font-size in customizer typography settings.
 - Improvement: Compatibility with WooCommerce 8.4.
 - Improvement: Improved accessibility by adding aria-label and title attributes to the shopping cart link.
 - Improvement: Secondary Button Styles - Padding default values updated for Page Builder button's support.
+- Improvement: Accessibility improvements for search fields.
 - Fix: Preventing duplication of multiple keys in the Block Editor's post-update request by setting values for the 'astra-migrate-meta-layouts' meta key.
 - Fix: Secondary Button Styles - Background color option does not apply background color to outline button as expected.
 - Fix: Site Builder - Toggle Block Inserter redirects to Site Builder when Full-screen mode in Editor is disabled.
@@ -16,6 +97,7 @@ v4.5.2
 - Fix: Input fields border focus did not consistently inherit the correct styling in certain scenarios.
 - Fix: WooCommerce - PHP fatal error 'Uncaught Error: Call to a member function get_cart_contents_total() on null' when cart element is added in the header and "Hide Cart Total Label" option is enabled.
 - Fix: PHP deprecated notices with PHP 8.0 and above when activating the theme.
+- Fix: WooCommerce - Mini cart values does not update automatically on the cart page.
 
 v4.5.1
 - Improvement: Compatibility with WooCommerce 8.3.

@@ -82,6 +82,20 @@ function astra_off_canvas_row_setting( $dynamic_css, $dynamic_css_filtered = '' 
 		),
 	);
 
+	if ( is_rtl() ) {
+
+		/**
+		 * Off-Canvas CSS if RTL mode is enabled.
+		 */
+		$css_output['.rtl #ast-mobile-popup-wrapper #ast-mobile-popup'] = array(
+			'pointer-events' => 'none',
+		);
+
+		$css_output['.rtl #ast-mobile-popup-wrapper #ast-mobile-popup.active'] = array(
+			'pointer-events' => 'unset',
+		);
+	}
+
 	$css_output[ $selector . ' .menu-toggle-close' ]['color'] = $off_canvas_close_color;
 
 	/* Parse CSS from array() */

@@ -1273,10 +1273,6 @@ section.ast-palette-presets-inner-wrap:last-child {
 .ast-field-settings-modal .ast-color-btn-clear-wrap {
     left: 78px;
 }
-.ast-field-settings-modal .customize-control-ast-color.customize-control,
-.ast-field-settings-modal .customize-control-ast-color.customize-control:first-child {
-    margin-top: 25px;
-}
 .astra-color-picker-wrap .components-color-picker__inputs-wrapper {
 	min-width: unset;
 }
@@ -1364,10 +1360,6 @@ section.ast-palette-presets-inner-wrap:last-child {
         width: 20px;
         top: -2px;
     }
-    .ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
-        width: 24px;
-        height: 24px;
-    }
     .astra-popover-color .ast-color-palette.components-circular-option-picker {
         width: auto;
         padding: 16px 8px 0px 0px;
@@ -1392,6 +1384,10 @@ section.ast-palette-presets-inner-wrap:last-child {
 		top: -2px;
 		width: 18px;
 	}
+	.ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
+        width: 24px;
+        height: 24px;
+    }
 }
 @supports (-moz-appearance:none) {
 	@media (max-width: 1845px) {
@@ -1605,6 +1601,10 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
   cursor: help;
 }
 
+.customize-control .ast-control-tooltip:hover {
+    color: var(--ast-customizer-color-1);
+}
+
 .customize-control.customize-control-ast-toggle-control .ast-control-tooltip {
   position: absolute;
   top: 50%;
@@ -1622,6 +1622,10 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
   top: 55%;
   left: 40px;
   transform: translateY(0);
+}
+
+.customize-control-ast-selector.customize-control .ast-control-tooltip {
+    top: -3px;
 }
 
 .customize-control.customize-control-ast-toggle-control.ast-top-divider .ast-control-tooltip {
@@ -1659,7 +1663,8 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
 	left: 30px;
 	top: 50%;
 }
-.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
+.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip,
+.ast-top-section-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
     top: 24px;
 }
 
@@ -1789,6 +1794,7 @@ input[type="text"].select2-search__field {
     height: 100%;
 	align-items: center;
     align-content: center;
+	max-height: 46px;
 }
 
 .ast-section-toggle label {
@@ -1814,7 +1820,7 @@ input[type="text"].select2-search__field {
 }
 
 .customize-control.customize-control-ast-section-toggle {
-    border: 1px dashed var(--ast-customizer-color-7);
+    border: 1px dashed var(--ast-customizer-color-1);
     background: var(--ast-customizer-color-11);
     cursor: pointer;
     box-shadow: none !important;
@@ -1830,7 +1836,9 @@ input[type="text"].select2-search__field {
     transition: all 0.2s;
     padding-top: 0;
     padding-bottom: 0;
+	margin-top: 24px;
 	margin-bottom: 9px;
+	margin-top: 24px;
 }
 .customize-control.customize-control-ast-section-toggle:hover {
     background: var(--ast-customizer-color-9);
@@ -1846,8 +1854,8 @@ input[type="text"].select2-search__field {
 }
 
 .ast-section-toggle-icon span {
-  font-size: 16px;
-  line-height: 20px;
+	font-size: 16px;
+	line-height: 16px;
 	width: 16px;
 	height: 16px;
 }
@@ -1857,8 +1865,14 @@ input[type="text"].select2-search__field {
   padding-bottom: 16px;
 }
 
+li#customize-control-astra-settings-related-posts-title {
+    margin-top: 32px;
+}
+
 li[ID*="accordion-section-ast-dynamic-single-"].control-section-ast_section,
-li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
+li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section,
+li#accordion-section-section-search-page-title.control-section-ast_section,
+li[ID*="accordion-section-ast-sub-section-"].control-section-ast_section {
   display: none !important;
 }
 
@@ -1883,6 +1897,10 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
   font-size: 11px;
   line-height: 16px;
   font-weight: 400;
+}
+
+.customize-control .customize-control-description {
+	display: none;
 }
 
 .customize-control-ast-divider hr {
@@ -1984,12 +2002,17 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 * CSS for ast-spacing attribute started.
 */
 
-.customize-control.ast-bottom-spacing {
+.customize-control.ast-bottom-spacing, .ast-field-settings-modal .customize-control.ast-bottom-spacing {
 	margin-bottom: 16px;
 }
-
-.customize-control.ast-top-spacing {
+.customize-control.ast-top-spacing, .ast-field-settings-modal .customize-control.ast-top-spacing {
 	margin-top: 16px;
+}
+li.customize-control.ast-bottom-section-spacing {
+	margin-bottom: 24px;
+}
+li.customize-control.ast-top-section-spacing {
+	margin-top: 24px;
 }
 
 /*
@@ -2036,7 +2059,6 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
     bottom: 25px;
 }
 
-
 /*
 * CSS for ast-section-divider attribute started.
 */
@@ -2062,7 +2084,6 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 
 .customize-control.ast-sub-bottom-dotted-divider {
     padding-bottom: 20px;
-	margin-bottom: 10px;
 }
 
 .customize-control.ast-top-section-divider::before,
@@ -2135,6 +2156,16 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 .ast-fields-wrap .customize-control.ast-bottom-section-divider::after, .ast-fields-wrap .customize-control.ast-top-section-divider::before {
     width: 100%;
     right: 0px;
+}
+
+.ast-top-dotted-divider .ast-control-tooltip {
+    top: 22px;
+}
+.ast-top-section-divider .ast-control-tooltip {
+    top: 30px;
+}
+.ast-field-settings-modal .customize-control.ast-top-dotted-divider {
+    margin-top: 0;
 }
 
 .ast-typo-presets {
@@ -2702,31 +2733,60 @@ span.customize-control-title.ast-group-section-title {
 	flex: 0 0 calc(28% - 10px);
 }
 
-li[ID*="-image-custom-scale-width"], li[ID*="-image-custom-scale-height"] {
-    display: inline-flex;
+.customize-control-ast-number .ast-number-single{
+    display: flex;
+    border: 1px solid #D1D5DB;
+    border-radius: 3px;
+    background-color: #fff;
+    width: 96px;
+}
+
+.customize-control-ast-number .components-input-control__container, .customize-control-ast-number .components-input-control__input {
+    text-align: center;
+}
+
+.customize-control-ast-number .ast-number-single .dashicon.dashicons  {
+    display: flex;
+    align-items: center;
     justify-content: center;
-    align-content: center;
+    color: #676879;
+    font-size: 10px;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+.customize-control-ast-number .components-input-control__backdrop {
+    border: 0 !important;
+}
+
+.customize-control-ast-number .ast-number-single input[type=number]::-webkit-inner-spin-button,
+.customize-control-ast-number .ast-number-single input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.customize-control-ast-number .ast-control-wrapper {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
-li[ID*="-image-custom-scale-height"] {
-	float: none;
-    padding: 0 !important;
-    width: calc(50% + 12px);
+
+.customize-control-ast-number .ast-title-wrapper {
+    width: 50%;
 }
-li[ID*="-image-custom-scale-width"] {
-    width: calc(50% - 12px);
+
+.customize-control-ast-number .ast-number-single {
+    display: none
 }
-li[ID*="-image-custom-scale-height"]:before {
-    content: ':';
-    padding: 0 10px;
-	line-height: 30px;
+
+.customize-control-ast-number .ast-number-single.active {
+    display: flex;
 }
-li[ID*="-image-custom-scale-height"].customize-control-ast-hidden {
-    float: unset;
-    width: unset;
-}
-li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
-    content: unset;
+
+.customize-control-ast-number .ast-responsive-btns {
+    margin-right: 0.5em;
 }
 
 /* Hide spin buttons for WebKit (Chrome, Safari) */
@@ -2737,7 +2797,7 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
   margin: 0; /* Adjust as needed */
 }
 
-/* Hide spin buttons for Firefox */`
+/* Hide spin buttons for Firefox */
 .customize-control-ast-number input[type="number"] {
   -moz-appearance: textfield;
   text-align: center;
@@ -2750,6 +2810,7 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
 .customize-control-ast-number input[type="number"]::-ms-reveal {
   display: none;
 }
+
 
 .customize-control-ast-radio-icon .ast-control-wrap {
     display: flex;
@@ -3527,6 +3588,7 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
 .customize-control-ast-responsive-slider .ast-resp-slider-reset-wrap,
 .customize-control-ast-slider .ast-resp-slider-reset-wrap {
 	top: 1px;
+	left: -8px;
 }
 
 
@@ -3537,6 +3599,7 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
 .customize-control-ast-responsive-slider .ast-slider-wrap .components-range-control__number input{
   text-align: center;
 }
+
 .customize-control-ast-responsive-spacing .customize-control-title {
   display: inline-block;
 }
@@ -4130,10 +4193,6 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
   top: 2px;
 }
 
-.ast-field-settings-modal .customize-control {
-  margin-top: 2px;
-}
-
 #customize-control-headings-font-extras.ast-sub-top-dotted-divider {
   margin-top: 12px;
 }
@@ -4370,8 +4429,8 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
 
 .customize-control-ast-responsive-slider .ast-responsive-units {
   position: absolute;
-  top: 3px;
-  left: 23px;
+  top: 4px;
+  left: 15px;
   font-size: 11px;
   line-height: normal;
   border-left: 1px solid #ddd;
@@ -4673,14 +4732,12 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
 
 .ast-togglecontrol-wrapper .toggle-control-label, .ast-togglecontrol-wrapper .components-toggle-control__label {
   font-size: 14px;
-  font-weight: 600;
 }
 
 .customize-control-ast-toggle-control .components-toggle-control .components-toggle-control__label, .ast-togglecontrol-wrapper label {
   display: flex;
   flex: 1 1 auto;
   font-size: 14px;
-  font-weight: 600;
 }
 
 .ast-switch ~ label {
@@ -4805,6 +4862,10 @@ li[ID*="-image-custom-scale-height"].customize-control-ast-hidden:before {
     top: 18%;
     padding: 0;
     font-size: 20px;
+}
+.customize-control.customize-control-ast-color i.ast-control-tooltip {
+    top: 5px;
+    left: 60px;
 }
 
 .select2-container {

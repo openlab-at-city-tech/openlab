@@ -644,6 +644,10 @@
 	font-size: 14px;
 }
 
+.ahfb-builder-item:hover .dashicons, .ahfb-builder-item.active-builder-item .dashicons {
+    color: var(--ast-customizer-color-4);
+}
+
 .ast-builder-elements-section .ast-builder-elements-notice  {
     border: 1px dashed #b4b9be;
     background: transparent;
@@ -1534,9 +1538,9 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 }
 
 .ahfb-social-add-area .ahfb-sorter-add-item, .ahfb-language-selector-add-area .ahfb-sorter-add-item {
-    height: 30px;
+    height: 29px;
     line-height: normal;
-    padding: 0 12px 2px;
+    padding: 0 12px;
 }
 
 .ahfb-sorter-item-panel-content .components-button.button-add-media {

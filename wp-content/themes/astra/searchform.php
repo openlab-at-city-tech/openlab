@@ -22,9 +22,9 @@ $astra_search_input_value       = isset( $args['input_value'] ) ? $args['input_v
 
 ?>
 <form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-	<label>
+	<label for="search-field">
 		<span class="screen-reader-text"><?php echo esc_html__( 'Search for:', 'astra' ); ?></span>
-		<input type="search" class="search-field" <?php echo esc_attr( $astra_search_data_attrs ); ?> placeholder="<?php echo esc_attr( $astra_search_input_placeholder ); ?>" value="<?php echo esc_attr( $astra_search_input_value ); ?>" name="s" tabindex="-1">
+		<input type="search" id="search-field" class="search-field" <?php echo esc_attr( $astra_search_data_attrs ); ?> placeholder="<?php echo esc_attr( $astra_search_input_placeholder ); ?>" value="<?php echo esc_attr( $astra_search_input_value ); ?>" name="s" tabindex="-1">
 		<?php if ( class_exists( 'Astra_Icons' ) && Astra_Icons::is_svg_icons() ) { ?>
 			<button class="search-submit ast-search-submit" aria-label="<?php echo esc_attr__( 'Search Submit', 'astra' ); ?>">
 				<span hidden><?php echo esc_html__( 'Search', 'astra' ); ?></span>

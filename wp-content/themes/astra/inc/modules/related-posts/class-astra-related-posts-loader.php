@@ -77,28 +77,44 @@ class Astra_Related_Posts_Loader {
 		 */
 		$apply_new_default_color_typo_values = Astra_Dynamic_CSS::astra_check_default_color_typo();
 
-		$astra_options = Astra_Theme_Options::get_astra_options();
+		$astra_options     = Astra_Theme_Options::get_astra_options();
+		$astra_blog_update = Astra_Dynamic_CSS::astra_4_6_0_compatibility();
 
 		// Related Posts.
-		$defaults['enable-related-posts']          = false;
-		$defaults['related-posts-title']           = __( 'Related Posts', 'astra' );
-		$defaults['releted-posts-title-alignment'] = 'left';
-		$defaults['related-posts-total-count']     = 2;
-		$defaults['enable-related-posts-excerpt']  = false;
-		$defaults['related-posts-excerpt-count']   = 25;
-		$defaults['related-posts-based-on']        = 'categories';
-		$defaults['related-posts-order-by']        = 'date';
-		$defaults['related-posts-order']           = 'asc';
-		$defaults['related-posts-grid-responsive'] = array(
+		$defaults['enable-related-posts']                    = false;
+		$defaults['related-posts-title']                     = __( 'Related Posts', 'astra' );
+		$defaults['releted-posts-title-alignment']           = 'left';
+		$defaults['related-posts-total-count']               = 2;
+		$defaults['enable-related-posts-excerpt']            = false;
+		$defaults['related-posts-box-placement']             = 'default';
+		$defaults['related-posts-outside-location']          = 'above';
+		$defaults['related-posts-container-width']           = $astra_blog_update ? '' : 'fallback';
+		$defaults['related-posts-excerpt-count']             = 25;
+		$defaults['related-posts-based-on']                  = 'categories';
+		$defaults['related-posts-order-by']                  = 'date';
+		$defaults['related-posts-order']                     = 'asc';
+		$defaults['related-posts-grid-responsive']           = array(
 			'desktop' => '2-equal',
 			'tablet'  => '2-equal',
 			'mobile'  => 'full',
 		);
-		$defaults['related-posts-structure']       = array(
+		$defaults['related-posts-structure']                 = array(
 			'featured-image',
 			'title-meta',
 		);
-		$defaults['related-posts-meta-structure']  = array(
+		$defaults['related-posts-tag-style']                 = 'none';
+		$defaults['related-posts-category-style']            = 'none';
+		$defaults['related-posts-date-format']               = '';
+		$defaults['related-posts-meta-date-type']            = 'published';
+		$defaults['related-posts-author-avatar-size']        = '';
+		$defaults['related-posts-author-avatar']             = false;
+		$defaults['related-posts-author-prefix-label']       = astra_default_strings( 'string-blog-meta-author-by', false );
+		$defaults['related-posts-image-size']                = '';
+		$defaults['related-posts-image-custom-scale-width']  = 16;
+		$defaults['related-posts-image-custom-scale-height'] = 9;
+		$defaults['related-posts-image-ratio-pre-scale']     = '16/9';
+		$defaults['related-posts-image-ratio-type']          = '';
+		$defaults['related-posts-meta-structure']            = array(
 			'comments',
 			'category',
 			'author',
@@ -147,7 +163,7 @@ class Astra_Related_Posts_Loader {
 			'mobile-unit'  => 'px',
 		);
 		$defaults['related-posts-title-font-extras']    = array(
-			'line-height'         => ! isset( $astra_options['related-posts-title-font-extras'] ) && isset( $astra_options['related-posts-title-line-height'] ) ? $astra_options['related-posts-title-line-height'] : '1',
+			'line-height'         => ! isset( $astra_options['related-posts-title-font-extras'] ) && isset( $astra_options['related-posts-title-line-height'] ) ? $astra_options['related-posts-title-line-height'] : ( $astra_blog_update ? '1.5' : '1' ),
 			'line-height-unit'    => 'em',
 			'letter-spacing'      => '',
 			'letter-spacing-unit' => 'px',
@@ -178,9 +194,9 @@ class Astra_Related_Posts_Loader {
 		);
 
 		// Related Posts - Content typo.
-		$defaults['related-posts-content-font-family'] = 'inherit';
-		$defaults['related-posts-content-font-weight'] = 'inherit';
-		$defaults['related-posts-content-font-extras'] = array(
+		$defaults['related-posts-content-font-family']     = 'inherit';
+		$defaults['related-posts-content-font-weight']     = 'inherit';
+		$defaults['related-posts-content-font-extras']     = array(
 			'line-height'         => ! isset( $astra_options['related-posts-content-font-extras'] ) && isset( $astra_options['related-posts-content-line-height'] ) ? $astra_options['related-posts-content-line-height'] : '',
 			'line-height-unit'    => 'em',
 			'letter-spacing'      => '',
@@ -188,13 +204,59 @@ class Astra_Related_Posts_Loader {
 			'text-transform'      => ! isset( $astra_options['related-posts-content-font-extras'] ) && isset( $astra_options['related-posts-content-text-transform'] ) ? $astra_options['related-posts-content-text-transform'] : '',
 			'text-decoration'     => '',
 		);
-		$defaults['related-posts-content-font-size']   = array(
+		$defaults['related-posts-content-font-size']       = array(
 			'desktop'      => '',
 			'tablet'       => '',
 			'mobile'       => '',
 			'desktop-unit' => 'px',
 			'tablet-unit'  => 'px',
 			'mobile-unit'  => 'px',
+		);
+		$defaults['ast-sub-section-related-posts-padding'] = array(
+			'desktop'      => array(
+				'top'    => 2.5,
+				'right'  => 2.5,
+				'bottom' => 2.5,
+				'left'   => 2.5,
+			),
+			'tablet'       => array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			),
+			'mobile'       => array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			),
+			'desktop-unit' => 'em',
+			'tablet-unit'  => 'em',
+			'mobile-unit'  => 'em',
+		);
+		$defaults['ast-sub-section-related-posts-margin']  = array(
+			'desktop'      => array(
+				'top'    => 2,
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			),
+			'tablet'       => array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			),
+			'mobile'       => array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			),
+			'desktop-unit' => 'em',
+			'tablet-unit'  => 'em',
+			'mobile-unit'  => 'em',
 		);
 
 		return $defaults;

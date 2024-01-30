@@ -73,6 +73,10 @@ function astra_comments_css( $dynamic_css ) {
       list-style: none;
       }
 
+	  .site-content article .comments-area {
+		border-top: 1px solid var(--ast-single-post-border,var(--ast-border-color));
+	  }
+
       .ast-comment-list li {
       list-style: none;
       }
