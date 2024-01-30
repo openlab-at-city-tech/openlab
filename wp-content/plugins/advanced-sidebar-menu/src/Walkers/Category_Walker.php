@@ -19,6 +19,8 @@ class Category_Walker extends \Walker_Category {
 	 * @param int    $depth  Optional. Depth of category. Used for tab indentation. Default 0.
 	 * @param array  $args   Optional. An array of arguments. Will only append content if style argument.
 	 *                       value is 'list'. See wp_list_categories(). Default empty array.
+	 *
+	 * @return void
 	 */
 	public function start_lvl( &$output, $depth = 0, $args = [] ) {
 		if ( 'list' !== $args['style'] ) {

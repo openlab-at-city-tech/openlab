@@ -12,7 +12,7 @@ trait Memoize {
 	/**
 	 * Store results of the memoize methods.
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $memoize_cache = [];
 

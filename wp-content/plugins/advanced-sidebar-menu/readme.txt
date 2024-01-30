@@ -4,9 +4,9 @@ Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: block, widget, dynamic, hierarchy, menus, sidebar menu, category, pages, parent, child, automatic
 Requires at least: 6.0.0
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 Requires PHP: 7.2.0
-Stable tag: 9.4.1
+Stable tag: 9.4.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -114,14 +114,12 @@ Manual Installation
 3. Drag the "Advanced Sidebar - Pages" widget, or the "Advanced Sidebar - Categories" widget into a sidebar.
 4. Use the block inserter to insert the "Advanced Sidebar - Pages" block, or the "Advanced Sidebar - Categories" block into Gutenberg content.
 
-
 == Screenshots ==
 
 1. Page widget options.
 2. Category widget options.
 3. Example of a page menu using the 2017 theme and default styles.
 4. Example of a category menu ordered by title using the 2017 theme and default styles.
-
 
 == Frequently Asked Questions ==
 
@@ -167,6 +165,12 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+= 9.4.2 =
+* Fixed translation loading in blocks.
+* Improved CSS and JS linting.
+* Introduced 'advanced-sidebar-menu/block-wrapper-attributes' filter.
+* Fully support PHP 8.2.
+
 = 9.4.1 =
 * Dropped support for PHP 7.0 in favor of 7.2.
 * Bumped minimum supported WordPress version to 6.0.0.

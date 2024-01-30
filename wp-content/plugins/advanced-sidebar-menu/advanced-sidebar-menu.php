@@ -4,7 +4,7 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 9.4.1
+ * Version: 9.4.2
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
@@ -19,7 +19,7 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.4.1' );
+define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.4.2' );
 define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.1.8' );
 define( 'ADVANCED_SIDEBAR_MENU_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
@@ -51,6 +51,8 @@ use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
  * @return void
  */
 function advanced_sidebar_menu_load() {
+	load_plugin_textdomain( 'advanced-sidebar-menu', false, 'advanced-sidebar-menu/languages' );
+
 	Core::init();
 	// Blocks.
 	Categories::init();
@@ -64,8 +66,6 @@ function advanced_sidebar_menu_load() {
 	if ( Notice::instance()->is_conflicting_pro_version() ) {
 		remove_action( 'plugins_loaded', 'advanced_sidebar_menu_pro_init', 11 );
 	}
-
-	load_plugin_textdomain( 'advanced-sidebar-menu', false, 'advanced-sidebar-menu/languages' );
 }
 
 add_action( 'plugins_loaded', 'advanced_sidebar_menu_load' );

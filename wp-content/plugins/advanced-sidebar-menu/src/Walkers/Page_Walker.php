@@ -13,6 +13,8 @@ class Page_Walker extends \Walker_Page {
 	 * @param \WP_Post $page   - Current page.
 	 * @param int      $depth  - Depth of menu.
 	 * @param array    $args   - Any arguments.
+	 *
+	 * @return void
 	 */
 	public function end_el( &$output, $page, $depth = 0, $args = [] ) {
 		/** Do Nothing */

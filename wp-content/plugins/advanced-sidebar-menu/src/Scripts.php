@@ -13,17 +13,17 @@ use Advanced_Sidebar_Menu\Widget\Page;
 class Scripts {
 	use Singleton;
 
-	const ADMIN_SCRIPT = 'advanced-sidebar-menu-script';
-	const ADMIN_STYLE  = 'advanced-sidebar-menu-style';
+	public const ADMIN_SCRIPT = 'advanced-sidebar-menu-script';
+	public const ADMIN_STYLE  = 'advanced-sidebar-menu-style';
 
-	const GUTENBERG_HANDLE     = 'advanced-sidebar-menu/gutenberg';
-	const GUTENBERG_CSS_HANDLE = 'advanced-sidebar-menu/gutenberg-css';
+	public const GUTENBERG_HANDLE     = 'advanced-sidebar-menu/gutenberg';
+	public const GUTENBERG_CSS_HANDLE = 'advanced-sidebar-menu/gutenberg-css';
 
 
 	/**
 	 * Add various scripts to the queue.
 	 */
-	public function hook() {
+	public function hook(): void {
 		add_action( 'init', [ $this, 'register_gutenberg_scripts' ] );
 		add_action( 'enqueue_block_editor_assets', [ $this, 'use_development_version_of_react' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ], 11 );
