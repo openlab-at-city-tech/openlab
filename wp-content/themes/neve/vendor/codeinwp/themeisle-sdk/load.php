@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 // Current SDK version and path.
-$themeisle_sdk_version = '3.3.10';
+$themeisle_sdk_version = '3.3.12';
 $themeisle_sdk_path    = dirname( __FILE__ );
 
 global $themeisle_sdk_max_version;
@@ -90,8 +90,8 @@ if ( ! function_exists( 'tsdk_utmify' ) ) {
 			$current_page = isset( $screen->id ) ? $screen->id : ( ( $screen === null ) ? 'non-admin' : $screen );
 			$current_page = sanitize_key( str_replace( '.php', '', $current_page ) );
 		}
-		$location = $location === null ? $current_page : $location;
-		$content  = sanitize_key(
+		$location        = $location === null ? $current_page : $location;
+		$content         = sanitize_key(
 			trim(
 				str_replace(
 					[
@@ -102,22 +102,26 @@ if ( ! function_exists( 'tsdk_utmify' ) ) {
 						'/upgrade',
 					],
 					'',
-					$url 
+					$url
 				),
-				'/' 
-			) 
+				'/'
+			)
 		);
-		return esc_url_raw(
+		$filter_key      = sanitize_key( $content );
+		$url_args        = [
+			'utm_source'   => 'wpadmin',
+			'utm_medium'   => $location,
+			'utm_campaign' => $area,
+			'utm_content'  => $content,
+		];
+		$query_arguments = apply_filters( 'tsdk_utmify_' . $filter_key, $url_args, $url );
+		$utmify_url      = esc_url_raw(
 			add_query_arg(
-				[
-					'utm_source'   => 'wpadmin',
-					'utm_medium'   => $location,
-					'utm_campaign' => $area,
-					'utm_content'  => $content,
-				],
-				$url 
-			) 
+				$query_arguments,
+				$url
+			)
 		);
+		return apply_filters( 'tsdk_utmify_url_' . $filter_key, $utmify_url, $url );
 	}
 
 	add_filter( 'tsdk_utmify', 'tsdk_utmify', 10, 3 );

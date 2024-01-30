@@ -1609,6 +1609,7 @@ body .layout-grid > .article-content-col,
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  text-align: var(--textalign, center);
 }
 
 .nv-post-cover .nv-title-meta-wrap {
@@ -1630,7 +1631,6 @@ body .layout-grid > .article-content-col,
 .nv-post-cover .container {
   display: flex;
   justify-content: var(--justify, center);
-  text-align: var(--textalign, center);
 }
 
 .nv-is-boxed {

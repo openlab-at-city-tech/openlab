@@ -340,6 +340,131 @@ main .nv-shop {
   color: inherit;
 }
 
+.neve-main .wc-block-components-notice-banner {
+  --btnfs: $text-sm;
+  --primarybtnpadding: 10px 15px;
+  --primarybtnborderwidth: 3px;
+  --primarybtncolor: #fff;
+  --primarybtnhovercolor: #fff;
+  --primarybtnhoverbg: transparent;
+  --primarybtnbg: transparent;
+}
+
+.neve-main .wc-block-components-notice-banner .wc-block-components-notice-banner__content:has(.wc-forward, .showcoupon) {
+  display: inline-flex;
+  flex-basis: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.neve-main .wc-block-components-notice-banner .wc-block-components-notice-banner__content:has(.wc-forward) {
+  flex-direction: row-reverse;
+}
+
+.neve-main .wc-block-components-notice-banner .wc-block-components-notice-banner__content:has(.showcoupon) {
+  flex-direction: row;
+}
+
+.neve-main .wc-block-components-notice-banner.is-success {
+  border-radius: 3px;
+  background-color: var(--nv-c-1);
+  border: 0;
+  color: #fff;
+  font-size: inherit;
+  line-height: inherit;
+  align-items: center;
+}
+
+.neve-main .wc-block-components-notice-banner.is-success svg {
+  background-color: #fff;
+  fill: var(--nv-c-1);
+}
+
+.neve-main .wc-block-components-notice-banner.is-success a:is(.wc-forward, .showcoupon) {
+  background: var(--primarybtnbg) !important;
+  border: var(--primarybtnborderwidth, 0) solid currentColor !important;
+  border-radius: var(--primarybtnborderradius, 3px);
+  color: var(--primarybtncolor) !important;
+  padding: var(--primarybtnpadding, 13px 15px) !important;
+  text-decoration: none !important;
+  opacity: 1;
+  float: none;
+}
+
+.neve-main .wc-block-components-notice-banner.is-success a:is(.wc-forward, .showcoupon):hover {
+  background: var(--primarybtnhoverbg) !important;
+  color: var(--primarybtnhovercolor) !important;
+  border-color: var(--primarybtnhovercolor) !important;
+  opacity: 0.9;
+}
+
+.neve-main .wc-block-components-notice-banner.is-error {
+  border-radius: 3px;
+  background-color: var(--nv-c-2);
+  border: 0;
+  color: #fff;
+  font-size: inherit;
+  line-height: inherit;
+  align-items: center;
+}
+
+.neve-main .wc-block-components-notice-banner.is-error svg {
+  background-color: #fff;
+  fill: var(--nv-c-2);
+}
+
+.neve-main .wc-block-components-notice-banner.is-error a:is(.wc-forward, .showcoupon) {
+  background: var(--primarybtnbg) !important;
+  border: var(--primarybtnborderwidth, 0) solid currentColor !important;
+  border-radius: var(--primarybtnborderradius, 3px);
+  color: var(--primarybtncolor) !important;
+  padding: var(--primarybtnpadding, 13px 15px) !important;
+  text-decoration: none !important;
+  opacity: 1;
+  float: none;
+}
+
+.neve-main .wc-block-components-notice-banner.is-error a:is(.wc-forward, .showcoupon):hover {
+  background: var(--primarybtnhoverbg) !important;
+  color: var(--primarybtnhovercolor) !important;
+  border-color: var(--primarybtnhovercolor) !important;
+  opacity: 0.9;
+}
+
+.neve-main .wc-block-components-notice-banner.is-info {
+  border-radius: 3px;
+  background-color: var(--nv-primary-accent);
+  border: 0;
+  color: #fff;
+  font-size: inherit;
+  line-height: inherit;
+  align-items: center;
+}
+
+.neve-main .wc-block-components-notice-banner.is-info svg {
+  background-color: #fff;
+  fill: var(--nv-primary-accent);
+}
+
+.neve-main .wc-block-components-notice-banner.is-info a:is(.wc-forward, .showcoupon) {
+  background: var(--primarybtnbg) !important;
+  border: var(--primarybtnborderwidth, 0) solid currentColor !important;
+  border-radius: var(--primarybtnborderradius, 3px);
+  color: var(--primarybtncolor) !important;
+  padding: var(--primarybtnpadding, 13px 15px) !important;
+  text-decoration: none !important;
+  opacity: 1;
+  float: none;
+}
+
+.neve-main .wc-block-components-notice-banner.is-info a:is(.wc-forward, .showcoupon):hover {
+  background: var(--primarybtnhoverbg) !important;
+  color: var(--primarybtnhovercolor) !important;
+  border-color: var(--primarybtnhovercolor) !important;
+  opacity: 0.9;
+}
+
 .woocommerce .woocommerce-error {
   padding-right: 3.5em;
 }
@@ -1143,7 +1268,7 @@ section.exclusive ul:not(.tns-slider) li:nth-child(n+5) {
   border: 0 !important;
 }
 
-.woocommerce-checkout main button {
+.woocommerce-checkout main button:not(.wc-block-components-button) {
   width: 100%;
 }
 
@@ -1471,6 +1596,14 @@ body.woocommerce-account table.order_details td {
   color: var(--nv-text-color);
   font-size: 14px;
   white-space: nowrap;
+  scrollbar-width: none;
+  /* Firefox */
+  overflow-x: scroll;
+}
+
+.woocommerce .woocommerce-breadcrumb::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera*/
 }
 
 .woocommerce .woocommerce-breadcrumb a {
