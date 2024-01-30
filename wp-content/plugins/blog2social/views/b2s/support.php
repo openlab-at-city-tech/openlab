@@ -197,17 +197,6 @@
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Linkedin">  <span class="b2s-text-bold"><?php esc_html_e("Pinterest Rich Pins Validator", "blog2social") ?></span>
-                                            </div>
-                                            <div class="input-group col-md-7 b2s-padding-top-8">
-                                                <input type="text" name="b2s-debug-url" class="input-sm form-control" id="b2s-debug-url" value="<?php echo esc_attr(get_site_url()); ?>" data-network-id="6" placeholder="<?php esc_html_e("For example your Wordpress Home Page", "blog2social"); ?>">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="6" b2s-url-query="https://developers.pinterest.com/tools/url-debugger/?link="><?php esc_html_e("validate", "blog2social") ?></button>
-                                                </span>
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <br>
-                                            <div>
                                                 <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Twitter">  <span class="b2s-text-bold"><?php esc_html_e("Twitter Card Validator", "blog2social") ?>
                                                     | <a class="btn-link" href="<?php echo esc_url(B2S_Tools::getSupportLink("twitter_cards")); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Twitter Card tags.", "blog2social"); ?></a>
                                                 </span>

@@ -27,6 +27,11 @@ jQuery(document).on('click', '.b2s-show-feedback-modal', function () {
   jQuery('#b2sTrailFeedbackModal').modal('show');
 });
 
+
+jQuery(document).on('click', '.b2sAiTextGeneratorModalBtn', function () {
+    jQuery('#b2sAiTextGeneratorModal').modal('show');
+});
+
 jQuery(document).on('click', '.b2s-send-trail-feedback', function () {
   jQuery('.b2s-network-auth-info').hide();
   if (jQuery('#b2s-trial_message').val() == "") {

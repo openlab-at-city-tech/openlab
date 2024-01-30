@@ -135,7 +135,8 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo sprintf(__('The API Key and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your Twitter account via OAuth (You can find more information on this <a href="%s">here</a>.)', 'blog2social'), esc_url('https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret')); ?>
+                        <p class="b2s-padding-bottom-5"><?php echo sprintf(__('The API Key and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your Twitter account via OAuth (You can find more information on this <a href="%s">here</a>.)', 'blog2social'), esc_url('https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret')); ?></p>
+                        
                         <form id = "b2s-add-app-form" method = "post">
                         <div class="form-group">
                             <input type="text" class="form-control b2s-user-app-form" maxlength="50" id="b2s-add-user-app-name" name="b2s-add-user-app-name" placeholder="App Name">
@@ -149,7 +150,7 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                         <div class="clearfix"></div>
                         <input type="hidden" id="b2s-add-user-app-network-id" value="">
                         </form> 
-                        <div style="margin-top:25px;">
+                        <div class="b2s-padding-top-8">
                             <button class="btn btn-primary pull-right b2s-add-app-submit-btn"><?php esc_html_e('Confirm', 'blog2social'); ?></button>
                         </div>
                     </div>

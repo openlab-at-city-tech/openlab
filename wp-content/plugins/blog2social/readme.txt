@@ -5,7 +5,7 @@ Tags: auto post, auto publish, social media scheduling, social media calendar, s
 Donate link: https://paypal.me/adenion
 Requires at least: 4.7.0
 Tested up to: 6.4
-Stable tag: 7.3.4
+Stable tag: 7.3.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Blog2Social automatically creates social media posts for your content and auto-p
 
 _Compatible with WooCommerce, Gutenberg Editor, Hummingbird, Bitly, Rebrand.ly, Sniply, WP Automatic Plugin, Page Builder & RSS Importer._
 
-* New: Share Stories on Instagram, and Create X (Twitter) Threads
+* New: AI Social Media Post Generator and Today's Content Calendar Tips
 
 Download Blog2Social today to make your social media marketing easier than ever for your WordPress site or blog. Blog2Social is a freemium plugin, with a free comprehensive basic version and premium plans offering more advanced features. To ensure compliance with the high quality standards of the new networks’ API rules and community guidelines, some functions of the auto-poster are premium features and not part of the free version. 
 The Blog2Social free version offers you a wide range of features. ([See what’s included in the free version](https://wordpress.org/plugins/blog2social/#faq "Blog2Social Free Features")). 
@@ -265,6 +265,8 @@ To get started with the basics of Blog2Social and maybe find some useful tips an
 
 
 == Changelog ==
+= 7.3.5 =
+Usability Optimization, Pinterest Title, AI Social Media Post Generator, Today's Content Calendar Tips
 = 7.3.4 =
 Bugfix: Video Posting Status
 = 7.3.3 =
@@ -399,6 +401,8 @@ Usability Optimization, Rebrandly integration, url parameter settings
 New Image Posts, Imgur, Animated Gifs and Emojis
 
 == Upgrade Notice ==
+= 7.3.5 =
+Usability Optimization, Pinterest Title, AI Social Media Post Generator, Today's Content Calendar Tips
 = 7.3.4 =
 Bugfix: Video Posting Status
 = 7.3.3 =

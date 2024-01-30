@@ -1371,11 +1371,33 @@ class Ajax_Post {
                             if (isset($keyResult->addon->video)) {
                                 $option['B2S_PLUGIN_ADDON_VIDEO'] = (array) $keyResult->addon->video;
                             }
+ 
+                            if (isset($keyResult->addon->app)) {
+                                $appQuantity = unserialize(B2S_PLUGIN_DEFAULT_USER_APP_QUANTITY);
+                                $quantity = isset($appQuantity[$keyResult->version]) ? $appQuantity[$keyResult->version] : 1;
+
+                                if (isset($keyResult->trail) && $keyResult->trail == true) {
+                                    $quantity = 1;
+                                }
+                                $network_quantities = array();
+                                foreach (unserialize(B2S_PLUGIN_USER_APP_NETWORKS) as $network) {
+                                    $network_quantities[$network] = $quantity;
+                                }
+                                foreach ($keyResult->addon->app as $network_id => $entry) {
+                                    foreach ($entry as $individual_addon) {
+                                        if (isset($individual_addon->volume_total)) {
+                                            $network_quantities[$network_id] = (int) $network_quantities[$network_id] + (int) $individual_addon->volume_total;
+                                        }
+                                    }
+                                }
+                                $option['B2S_PLUGIN_ALLOWED_USER_APPS'] = serialize($network_quantities);
+                            }
+
                             update_option('B2S_PLUGIN_USER_VERSION_' . $user_id, $option, false);
                             $licenseName = unserialize(B2S_PLUGIN_VERSION_TYPE);
                             $printName = (isset($keyResult->trail) && $keyResult->trail == true) ? 'FREE-TRIAL' : $licenseName[$keyResult->version];
                         } else {
-                            $tokenInfo=array();
+                            $tokenInfo = array();
                             $tokenInfo['B2S_PLUGIN_USER_VERSION'] = (isset($keyResult->version) ? $keyResult->version : 0);
                             $tokenInfo['B2S_PLUGIN_VERSION'] = B2S_PLUGIN_VERSION;
                             if (isset($keyResult->trail) && $keyResult->trail == true && isset($keyResult->trailEndDate) && $keyResult->trailEndDate != "") {
@@ -1385,6 +1407,29 @@ class Ajax_Post {
                             if (isset($keyResult->addon->video)) {
                                 $tokenInfo['B2S_PLUGIN_ADDON_VIDEO'] = (array) $keyResult->addon->video;
                             }
+
+                            if (isset($keyResult->addon->app)) {
+                                $appQuantity = unserialize(B2S_PLUGIN_DEFAULT_USER_APP_QUANTITY);
+                                $quantity = isset($appQuantity[$keyResult->version]) ? $appQuantity[$keyResult->version] : 1;
+
+                                if (isset($keyResult->trail) && $keyResult->trail == true) {
+                                    $quantity = 1;
+                                }
+                                $network_quantities = array();
+                                foreach (unserialize(B2S_PLUGIN_USER_APP_NETWORKS) as $network) {
+                                    $network_quantities[$network] = $quantity;
+                                }
+                                foreach ($keyResult->addon->app as $network_id => $entry) {
+                                    foreach ($entry as $individual_addon) {
+                                        if (isset($individual_addon->volume_total)) {
+                                            $network_quantities[$network_id] = (int) $network_quantities[$network_id] + (int) $individual_addon->volume_total;
+                                        }
+                                    }
+                                }
+                                $tokenInfo['B2S_PLUGIN_ALLOWED_USER_APPS'] = serialize($network_quantities);
+                            }
+
+
                             if (!isset($keyResult->version)) {
                                 define('B2S_PLUGIN_NOTICE', 'CONNECTION');
                             } else {

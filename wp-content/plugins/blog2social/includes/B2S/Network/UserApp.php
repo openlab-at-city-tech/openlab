@@ -11,9 +11,7 @@ class B2S_Network_UserApp {
     }
 
     public function getData() {
-
         $data = array('action' => 'getUserAppList', 'token' => B2S_PLUGIN_TOKEN, 'plugin_version' => B2S_PLUGIN_VERSION);
-
         $apps = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $data, 30), true);
         $appsByNetwork = array();
         $supportedNetworks = unserialize(B2S_PLUGIN_USER_APP_NETWORKS);
@@ -25,8 +23,8 @@ class B2S_Network_UserApp {
             foreach ($apps['app_list'] as $network => $app) {
                 foreach ($app as $id => $data) {
                     $appsByNetwork[$network][$id] = array(
-                        "name" => $data['name'], 
-                        'secret' => $data['secret'], 
+                        "name" => $data['name'],
+                        'secret' => $data['secret'],
                         'key' => $data['key'],
                         'is_addon' => isset($data['is_addon']) ? $data['is_addon'] : false,
                         'is_addon_valid' => isset($data['is_addon_valid']) ? $data['is_addon_valid'] : false,
@@ -52,7 +50,7 @@ class B2S_Network_UserApp {
             $html .= '<h4>' . esc_html($this->networks[$networkId]);
             $html .= '<span class="pull-right">';
             $disabled = $appCount >= $this->allowedAppsPerNetwork[$networkId] ? "disabled" : "";
-            $html .= '<button onclick="return false;" '.' class="btn btn-default btn-sm b2s-network-auth-btn b2s-network-add-user-app-btn" data-network-id="' . esc_attr($networkId) . '"><span class="glyphicon glyphicon-plus glyphicon-grey"></span>' . esc_html__('Add App', 'blog2social') . '</button>';
+            $html .= '<button onclick="return false;" ' . ' class="btn btn-default btn-sm b2s-network-auth-btn b2s-network-add-user-app-btn" data-network-id="' . esc_attr($networkId) . '"><span class="glyphicon glyphicon-plus glyphicon-grey"></span>' . esc_html__('Add App', 'blog2social') . '</button>';
             $html .= '</span>';
             $html .= '</h4>';
             $html .= '<div class="clearfix"></div>';
@@ -63,31 +61,30 @@ class B2S_Network_UserApp {
             $html .= '</li>';
 
             foreach ($network_apps as $id => $app) {
-           
+
                 $border = "";
-                if($app['is_addon'] && !$app['is_addon_valid']){
+                if ($app['is_addon'] && !$app['is_addon_valid']) {
                     $border = "b2s-label-danger-border-left";
                 }
-                $html .= '<li class="b2s-network-item-auth-list-li '.$border.'" data-network-id="' . esc_attr($networkId) . '" data-app-id="' . esc_attr($id) . '">';
+                $html .= '<li class="b2s-network-item-auth-list-li ' . $border . '" data-network-id="' . esc_attr($networkId) . '" data-app-id="' . esc_attr($id) . '">';
                 $html .= '<div class="pull-left">';
-                if($app['is_addon']){
+                if ($app['is_addon']) {
                     $html .= '<div class="b2s-app-addon">';
-                    if($app['is_addon_valid']){
+                    if ($app['is_addon_valid']) {
                         $html .= "additional app";
                     } else {
                         $html .= "The license for your app addon has expired.";
                     }
 
                     $html .= '</div>';
-
-                } 
+                }
                 $html .= '<span class="b2s-user-app-name" data-app-id="' . esc_attr($id) . '">' . esc_html($app['name']) . '</span>';
                 $html .= '</div>';
                 $html .= '<div class="pull-right">';
                 $html .= '<a class="b2s-btn-delete-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="' . esc_attr($id) . '" data-app-name="' . esc_attr($app['name']) . '" data-network-id="' . esc_attr($networkId) . '" href="#">';
                 $html .= '<span class="glyphicon glyphicon-trash glyphicon-grey"></span>';
                 $html .= '</a>';
-                if(!$app['is_addon'] || $app['is_addon_valid']){
+                if (!$app['is_addon'] || $app['is_addon_valid']) {
                     $html .= '<a class="b2s-btn-edit-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="' . esc_attr($id) . '" data-app-name="' . esc_attr($app['name']) . '" data-app-key="' . esc_attr($app['key']) . '" data-network-id="' . esc_attr($networkId) . '" data-app-secret="' . esc_attr($app['secret']) . '"  href="#">';
                     $html .= '<span class="glyphicon glyphicon-pencil glyphicon-grey"></span>';
                     $html .= '</a>';
@@ -111,14 +108,14 @@ class B2S_Network_UserApp {
         return $html;
     }
 
-    private function getAppPerNetworkCount($apps){
+    private function getAppPerNetworkCount($apps) {
         $count = 0;
-        foreach($apps as $app){
-            if(!$app['is_addon'] || $app['is_addon_valid']){
+        foreach ($apps as $app) {
+            if (!$app['is_addon'] || $app['is_addon_valid']) {
                 $count++;
             }
         }
-        return $count; 
+        return $count;
     }
 
 }

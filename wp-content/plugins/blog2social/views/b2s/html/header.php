@@ -234,29 +234,34 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 </div>
 
 <!-- user apps -->
-<div class="panel panel-group b2s-user-apps-generic-error" style="display: none;">
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-generic-error" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The app data could not be saved. Please try again.', 'blog2social'); ?></a>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your app could not be saved. Please try again.', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-apps-permission-premium" style="display: none;">
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-premium" style="display: none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo sprintf(__('To connect more Twitter apps with your Twitter accounts, please upgrade your current Blog2Social license or get a Twitter app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', esc_url(B2S_Tools::getSupportLink('addon_apps'))), 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-apps-permission-free" style="display: none;">
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-free" style="display: none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo sprintf(__('You have no more open app slots for this network. <a href="%s">Upgrade to a premium license to purchase additional slots.</a>', esc_url(B2S_Tools::getSupportLink('affiliate'))), 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-apps-success" style="display: none;">
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-success" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-check glyphicon-success"></span> <?php esc_html_e('App data creation successful', 'blog2social'); ?></a>
+        <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app was saved successfully.', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-apps-edit-success" style="display: none;">
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-edit-success" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-check glyphicon-success"></span> <?php esc_html_e('App data successfully edited', 'blog2social'); ?></a>
+        <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app was updated successfully.', 'blog2social'); ?></a>
+    </div>
+</div>
+<div class="panel panel-group b2s-user-app-alert b2s-user-apps-delete-success" style="display: none;">
+    <div class="panel-body">
+        <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app has been removed successfully.', 'blog2social'); ?></a>
     </div>
 </div>
 
@@ -340,11 +345,11 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <div class="b2s-hide-premium-message b2s-close"><i class="glyphicon glyphicon-remove"></i></div>
                     <h2 style="margin-top:0;font-size:20px;"><?php esc_html_e('Start your free 30-day-Premium-trial', 'blog2social'); ?></h2>
                     <p>
-            <?php esc_html_e('Check out Blog2Social Premium with more awesome features for scheduling and sharing (e.g. auto-posting, best time scheduling, social media calendar) 30-days for free. The trial is free of charge, without any obligations, no automatic subscription. Basic features of the Free Version are free forever.', 'blog2social'); ?>
+                        <?php esc_html_e('Check out Blog2Social Premium with more awesome features for scheduling and sharing (e.g. auto-posting, best time scheduling, social media calendar) 30-days for free. The trial is free of charge, without any obligations, no automatic subscription. Basic features of the Free Version are free forever.', 'blog2social'); ?>
                     </p>
                     <p class="b2s-notice-buttons">
                         <a href="<?php echo esc_url(B2S_Tools::getSupportLink('feature')); ?>" target="_blank" class="b2s-text-underline">
-            <?php esc_html_e('Yes, I want to test Blog2Social Premium 30 days for free', 'blog2social'); ?>
+                            <?php esc_html_e('Yes, I want to test Blog2Social Premium 30 days for free', 'blog2social'); ?>
                         </a>
                     </p>
                 </div>
@@ -366,7 +371,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     ?>
                 </h2>
                 <p>
-        <?php esc_html_e('Blog2Social PREMIUM can do so much for you: Auto-publish your blog post on autopilot, automatically schedule your social media posts with the Best Time Manager. Select images and post formats (link post or image post) for each social community. Upload and select any image for sharing. Save multiple combinations of networks for different sharing purposes. Start from only $6.58 per month to benefit from PREMIUM features.', 'blog2social'); ?>
+                    <?php esc_html_e('Blog2Social PREMIUM can do so much for you: Auto-publish your blog post on autopilot, automatically schedule your social media posts with the Best Time Manager. Select images and post formats (link post or image post) for each social community. Upload and select any image for sharing. Save multiple combinations of networks for different sharing purposes. Start from only $6.58 per month to benefit from PREMIUM features.', 'blog2social'); ?>
                 </p>
                 <p class="b2s-notice-buttons">
                     <a target="_blank" class="b2s-text-underline" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>"><?php esc_html_e('Upgrade to PREMIUM', 'blog2social'); ?></a>
@@ -381,11 +386,11 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
             <div class="panel-body">
                 <div class="b2s-hide-trail-ended-modal b2s-close"><i class="glyphicon glyphicon-remove"></i></div>
                 <h2 style="margin-top:0;font-size:20px;">
-        <?php esc_html_e('Your free trial of Blog2Social PREMIUM has ended.', 'blog2social'); ?>
+                    <?php esc_html_e('Your free trial of Blog2Social PREMIUM has ended.', 'blog2social'); ?>
                     <?php esc_html_e('We hope you liked Blog2Social Premium.', 'blog2social'); ?>
                 </h2>
                 <p>
-        <?php esc_html_e('Blog2Social PREMIUM can do so much for you: Auto-publish your blog post on autopilot, automatically schedule your social media posts with the Best Time Manager. Select images and post formats (link post or image post) for each social community. Upload and select any image for sharing. Save multiple combinations of networks for different sharing purposes. Start from only $6.58 per month to benefit from PREMIUM features.', 'blog2social'); ?>
+                    <?php esc_html_e('Blog2Social PREMIUM can do so much for you: Auto-publish your blog post on autopilot, automatically schedule your social media posts with the Best Time Manager. Select images and post formats (link post or image post) for each social community. Upload and select any image for sharing. Save multiple combinations of networks for different sharing purposes. Start from only $6.58 per month to benefit from PREMIUM features.', 'blog2social'); ?>
                 </p>
                 <p class="b2s-notice-buttons">
                     <a target="_blank" class="b2s-text-underline" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>"><?php esc_html_e('Yes, I want to upgrade to Blog2Social Premium', 'blog2social'); ?></a>
@@ -408,7 +413,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <?php esc_html_e('Upgrade to Blog2Social Premium now.', 'blog2social'); ?>
                 </a>
                 <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_license_advice')); ?>" class="b2s-hide-rating b2s-text-underline" target="_blank">
-    <?php esc_html_e('I need advice on the right license.', 'blog2social'); ?>
+                    <?php esc_html_e('I need advice on the right license.', 'blog2social'); ?>
                 </a>
             </p>
         </div>
@@ -461,7 +466,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                         <div class="clearfix"></div>
                         <div class="row">
                             <div class="col-md-12">
-<?php esc_html_e('The license has been successfully activated.', 'blog2social'); ?>
+                                <?php esc_html_e('The license has been successfully activated.', 'blog2social'); ?>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -477,7 +482,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                         <div class="clearfix"></div>
                         <div class="row">
                             <div class="col-md-12">
-<?php esc_html_e('Your entered License Key is invalid. Please contact support!', 'blog2social'); ?>
+                                <?php esc_html_e('Your entered License Key is invalid. Please contact support!', 'blog2social'); ?>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -493,7 +498,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                         <div class="clearfix"></div>
                         <div class="row">
                             <div class="col-md-12">
-<?php esc_html_e('Your license key has reached the maximum number of users.', 'blog2social'); ?>
+                                <?php esc_html_e('Your license key has reached the maximum number of users.', 'blog2social'); ?>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -509,7 +514,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                         <div class="clearfix"></div>
                         <div class="row">
                             <div class="col-md-12">
-<?php esc_html_e('Something went wrong on our side. Please contact support!', 'blog2social'); ?>
+                                <?php esc_html_e('Something went wrong on our side. Please contact support!', 'blog2social'); ?>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -569,7 +574,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                 <?php esc_html_e('You can now track the performance of your post directly in Blog2Social, and you can test it exclusively and for free!', 'blog2social'); ?>
                 <br>
                 <br>
-<?php esc_html_e('Benefit from the new Social Media Metrics and use the analysis of your social media posts for your further social media strategy.', 'blog2social'); ?>
+                <?php esc_html_e('Benefit from the new Social Media Metrics and use the analysis of your social media posts for your further social media strategy.', 'blog2social'); ?>
                 <br>
                 <br>
                 <img src="<?php echo esc_url(plugins_url('/assets/images/metrics/banner.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social">
@@ -611,7 +616,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <br>
                     <?php esc_html_e('What do you like best of Blog2Social Premium?', 'blog2social'); ?>
                     <br>
-    <?php esc_html_e('Did you try all options on how to organize your social media scheduling and sharing tasks even more easily and automatically with Blog2Social Premium, for example:', 'blog2social'); ?>
+                    <?php esc_html_e('Did you try all options on how to organize your social media scheduling and sharing tasks even more easily and automatically with Blog2Social Premium, for example:', 'blog2social'); ?>
                     <br>
                     <br>
                     <div class="col-md-6 padding-lr-40">
@@ -632,7 +637,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <div class="clearfix"></div>
                     <br>
                     <br>
-    <?php esc_html_e('To keep all these benefits from all advanced features for automated scheduling and sharing and to keep all your individual settings und scheduling, don’t forget to upgrade to Blog2Social Premium before your trial expires. You can also upgrade at any time later, but please note that your Premium settings and your scheduling will be lost by then. To keep all your settings, upgrade to Blog2Social Premium now.', 'blog2social'); ?>
+                    <?php esc_html_e('To keep all these benefits from all advanced features for automated scheduling and sharing and to keep all your individual settings und scheduling, don’t forget to upgrade to Blog2Social Premium before your trial expires. You can also upgrade at any time later, but please note that your Premium settings and your scheduling will be lost by then. To keep all your settings, upgrade to Blog2Social Premium now.', 'blog2social'); ?>
                     <br>
                     <br>
                     <div class="row">
@@ -671,7 +676,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <?php esc_html_e('With Blog2Social Premium you have all the options you need to promote your content on your social media channels successfully and time-savingly.', 'blog2social'); ?>
                     <br>
                     <br>
-    <?php esc_html_e('Upgrade now to keep all benefits of Blog2Social Premium:', 'blog2social'); ?>
+                    <?php esc_html_e('Upgrade now to keep all benefits of Blog2Social Premium:', 'blog2social'); ?>
                     <br>
                     <br>
                     <div class="col-md-6 padding-lr-40">
@@ -692,7 +697,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <br>
                     <div class="clearfix"></div>
                     <br>
-    <?php esc_html_e('Save a lot of time for your social media tasks!', 'blog2social'); ?>
+                    <?php esc_html_e('Save a lot of time for your social media tasks!', 'blog2social'); ?>
                     <br>
                     <br>
                     <hr class="b2s-dash">
@@ -702,7 +707,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
                     <?php echo sprintf(__('Interested in reading more reviews? <a href="%s" target="_blank">Check out what others think about Blog2Social.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('b2s_reviews'))); ?>
                     <br>
                     <br>
-    <?php esc_html_e('Get all Premium benefits starting from just $7 per month.', 'blog2social'); ?>
+                    <?php esc_html_e('Get all Premium benefits starting from just $7 per month.', 'blog2social'); ?>
                     <br>
                     <br>
                     <div class="row">
