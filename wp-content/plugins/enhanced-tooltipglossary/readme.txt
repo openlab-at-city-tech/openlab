@@ -2,10 +2,10 @@
 Name: CM Tooltip Glossary
 Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
-Tags: WordPress glossary,WordPress tooltips,lexicon, WordPress dictionary, knowledgebase
+Tags: WordPress glossary,WordPress tooltips,lexicon, dictionary, knowledgebase
 Requires at least: 5.4.0
 Tested up to: 6.4
-Stable tag: 4.2.9
+Stable tag: 4.2.10
 
 Create a WordPress glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
 
@@ -14,9 +14,9 @@ Create a WordPress glossary, encyclopedia, or dictionary of terms and display re
 
 [Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](https://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P) | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
 
-**Utilizing the WordPress Glossary plugin, you can establish an extensive glossary featuring terms with corresponding definitions. This powerful tool includes the tooltip WordPress plugin feature, allowing you to effortlessly present dynamic descriptions that activate when users hover over a term. This delivers a seamless and user-friendly method for users to swiftly access definitions. Be sure to check out the exciting enhancements of the New 2023 Version!**
+Utilizing the Glossary plugin, you can establish an extensive glossary featuring terms with corresponding definitions. This powerful tool includes the tooltip plugin feature, allowing you to effortlessly present dynamic descriptions that activate when users hover over a term. This delivers a seamless and user-friendly method for users to swiftly access definitions. 
 
-The CM Glossary Tooltip is a robust WordPress glossary plugin. It empowers you to establish an extensive knowledgebase of terms and their definitions on your website. This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
+The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to establish an extensive knowledgebase of terms and their definitions on your website. This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
 
 Upon hovering over the linked term, a tooltip instantly emerges, presenting users with a concise definition. Furthermore, the plugin generates an adaptable glossary index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
 
@@ -28,7 +28,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 
 [youtube https://www.youtube.com/watch?v=drumP4tDL5Y]
 
-== WordPress Glossary Plugin Use-Cases ==
+==  Glossary Plugin Use-Cases ==
 (Some of these use cases might include pro features)
 
 * Dictionary - Creates a dictionary of specifically used terms on your site.
@@ -45,7 +45,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 * Music - Include mp3 voice or music file for each tooltip
 * Amazon - Enhance your site with Tooltips including Amazon product recommendation
 
-== Free WordPress Glossary Plugin Features ==
+== Free Glossary Plugin Features ==
 
 * Automatically generates a Glossary index of terms. [Example](http://www.cminds.com/glossary/)
 * Ability to show the A-Z Glossary index as a list or as tiles.
@@ -61,10 +61,10 @@ The Pro editions include even more powerful features, such as: audio and video t
 * Control if the Tooltip should appear more than once.
 * Supports UTF-8
 
-== Additional Features Available With the WordPress Glossary Plugin Pro Version ==
+== Additional Features Available With the Glossary Pro Version ==
 
 > * Includes all features of the Free Version.
-> * The WordPress Glossary index can show unlimited number of glossary terms.
+> * The Glossary index can show unlimited number of glossary terms.
 > * Optimized for fast work with large glossaries.
 > * Ability to show glossary terms in all custom post types.
 > * Allows to define how many terms to show in the Index page and where to place the pagination navigation.
@@ -78,11 +78,11 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * Supports changing permalink structure for glossary terms.
 > * Fully compatible with the WPML plugin.
 > * Allows to parse the ACF fields with of various(selectable) types.
-> * Allows to disable creation of the WordPress glossary term pages
+> * Allows to disable creation of the glossary term pages
 > * (NEW) Allows to display glossary terms as footnotes instead of tooltips
 > * Over 130 configuration options in total!
 
-== List of Pro+ WordPress Glossary Plugin Features ==
+== List of Glossary Pro+ Features ==
 
 > * Includes all features of the Free and Pro Versions.
 > * Allows to choose one from over 18 templates for the Glossary Index page
@@ -93,7 +93,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * Supports displaying "Share This" widget for sharing terms in social medias.
 > * Supports Google Translate integration.
 > * Supports creating and displaying multiple glossary categories.
-> * Shows a search box in the WordPress Glossary page.
+> * Shows a search box in the Glossary page.
 > * Over 10 helpful shortcodes.
 > * Supports integration with Merriam-Webster Dictionary and Thesaurus
 > * Search & Replace engine allows to parse and replace terms on the fly.
@@ -103,7 +103,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * Includes a frontend turn tooltip on/off button.
 > * Over 240 configuration options in total!
 
-== List of the Ecommerce Features ==
+== List of the Glossary Ecommerce Features ==
 
 > * Includes all features of the Free, Pro and Pro+ Versions.
 > * (NEW) Supports ChatGPT integration
@@ -112,7 +112,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * Supports embedding audio in a tooltip.
 > * Supports embedding video in a tooltip.
 > * Supports Wikipedia and Wiktionary integration.
-> * Supports creating a multilanguage WordPress glossary.
+> * Supports creating a multilanguage glossary.
 > * Supports Amazon Products integration.
 > * Supports WooCommerce Products integration.
 > * Supports adding tags to terms.
@@ -135,7 +135,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 
 == Code and Style Issues ==
 
-The WordPress Glossary plugin creates tooltips with JavaScript. They are based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
+The Glossary plugin creates tooltips with JavaScript. They are based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
 The Tooltip can be customized and styled through the tooltip.css and tooltip.js files.
 The alphabetical index for the Glossary index is based on [jQuery ListNav Plugin](http://www.ihwy.com/labs/jquery-listnav-plugin.aspx)
 
@@ -147,10 +147,9 @@ The alphabetical index for the Glossary index is based on [jQuery ListNav Plugin
 == Suggested Plugins by CreativeMinds ==
 
 * [CM Download Manager](https://www.downloadmanagerplugin.com/) - Allows users to upload, manage, track and support documents or files in a download directory listing database for others to contribute, use and comment upon.
-* [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!.
+* [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!
 * [CM Restrict Content](https://restrictcontent.com/) - A full-featured, powerful membership solution and content restriction plugin for WordPress. Support access by role to content on your site.
-* [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and
-the user satisfaction.
+* [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and the user satisfaction.
 
 == Installation ==
 
@@ -213,8 +212,13 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 12. Wikipedia Embedded Content
 13. Import / Export
 
-== WordPress Glossary Plugin Changelog ==
+== Glossary Plugin Changelog ==
+= 4.2.10 =
+Release Date: 25 December 2023
+* Update package info
+
 = 4.2.9 =
+Release Date: 3 December 2023
 * Improved compatibility with screen readers
 
 = 4.2.8 =
