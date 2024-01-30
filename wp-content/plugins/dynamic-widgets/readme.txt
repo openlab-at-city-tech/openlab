@@ -2,7 +2,7 @@
 Contributors: vivwebs, Qurl
 Tags: widget, dynamic, sidebar, custom, rules, logic, display, condition, conditional content, hide, show
 Tested up to: 6.4
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
