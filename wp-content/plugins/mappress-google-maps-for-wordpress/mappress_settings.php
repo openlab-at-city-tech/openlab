@@ -493,7 +493,7 @@ class Mappress_Settings {
 	static function get_taxonomies() {
 		$results = array();
 		$tax_objs = get_taxonomies(array('public' => true), 'objects');
-		unset($tax_objs['post_format']);
+		unset($tax_objs['post_format'], $tax_objs['wp_pattern_category']);
 		foreach($tax_objs as $tax_obj)
 			$results[$tax_obj->name] = $tax_obj->label;
 		return $results;

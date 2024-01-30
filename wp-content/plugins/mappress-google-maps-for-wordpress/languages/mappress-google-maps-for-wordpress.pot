@@ -1,15 +1,15 @@
-# Copyright (C) 2023 Chris Richardson
+# Copyright (C) 2024 Chris Richardson
 # This file is distributed under the same license as the MapPress Google Maps and Leaflet Maps plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.88.13\n"
+"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.88.18\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-25T02:23:40+00:00\n"
+"POT-Creation-Date: 2024-01-27T19:09:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 
@@ -175,7 +175,7 @@ msgid "Copy of %s"
 msgstr ""
 
 #: mappress_api.php:66
-#: mappress_map.php:124
+#: mappress_map.php:129
 #: build/index_mappress_admin.js:1
 msgid "Untitled"
 msgstr ""
@@ -185,7 +185,7 @@ msgid "Success!  Upgrade complete."
 msgstr ""
 
 #: mappress_db.php:148
-#: mappress_map.php:489
+#: mappress_map.php:510
 #: build/index_mappress_admin.js:1
 msgid "MapPress"
 msgstr ""
@@ -206,32 +206,36 @@ msgstr ""
 msgid "Your map data is up to date."
 msgstr ""
 
-#: mappress_map.php:121
+#: mappress_map.php:126
 msgid "+%d more"
 msgstr ""
 
-#: mappress_map.php:125
+#: mappress_map.php:130
 #: build/index_mappress_admin.js:1
 msgid "Edit map"
 msgstr ""
 
-#: mappress_map.php:129
+#: mappress_map.php:134
 msgid "Attach"
 msgstr ""
 
-#: mappress_map.php:143
+#: mappress_map.php:149
 msgid "Post not found"
 msgstr ""
 
-#: mappress_map.php:370
+#: mappress_map.php:162
+msgid "Post not available"
+msgstr ""
+
+#: mappress_map.php:389
 msgid "Geocoding error: %s"
 msgstr ""
 
-#: mappress_map.php:376
+#: mappress_map.php:395
 msgid "Location"
 msgstr ""
 
-#: mappress_poi.php:67
+#: mappress_poi.php:69
 msgid "Invalid lat/lng coordinate: %s,%s"
 msgstr ""
 
@@ -1581,11 +1585,11 @@ msgid "Advanced Custom Fields"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "To generate MapPress maps from ACF fields, leave this blank and use the Geocoding section"
+msgid "To generate MapPress maps from ACF fields, leave this blank and use the Geocoding section instead"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "ACF map field to include on MapPress mashups"
+msgid "ACF map field to include in mashups"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
