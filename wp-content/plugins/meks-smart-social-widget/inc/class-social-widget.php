@@ -56,7 +56,7 @@ class MKS_Social_Widget extends WP_Widget {
 ?>
 
 		<?php if ( !empty( $instance['content'] ) ) : ?>
-			<?php echo wpautop( $instance['content'] );?>
+			<?php echo wpautop( wp_kses_post( $instance['content'] ) ); ?> 
 		<?php endif; ?>
 
 		<?php if ( !empty( $instance['social'] ) ): ?>
