@@ -27,7 +27,7 @@ trait Dashboard_API {
 	 *
 	 * @return \WPMUDEV_Dashboard_Api|null
 	 */
-	public static function get_dashboard_api() {
+	public static function get_dashboard_api(): ?\WPMUDEV_Dashboard_Api {
 		if ( class_exists( 'WPMUDEV_Dashboard' ) && ! empty( \WPMUDEV_Dashboard::$api ) ) {
 			return \WPMUDEV_Dashboard::$api;
 		}
@@ -45,13 +45,13 @@ trait Dashboard_API {
 	 * 'paused'  - Membership access is paused.
 	 * 'expired' - Expired membership.
 	 * ''        - (empty string) If user is not logged in or with an unknown type.
-	 * 
+	 *
 	 * @return string
 	 */
-	public static function get_membership_type() {
+	public static function get_membership_type(): ?string {
 		$api = self::get_dashboard_api();
 
-		if (  $api ) {
+		if ( $api ) {
 			$result = null;
 
 			if ( is_callable( array( $api, 'get_membership_status' ) ) ) {
@@ -61,11 +61,10 @@ trait Dashboard_API {
 			}
 
 			if ( ! \is_null( $result ) ) {
-				$result = strval( apply_filters( 'wpmudev_blc_dashboard_membership_type', $result ) );
-				return $result;
+				return strval( apply_filters( 'wpmudev_blc_dashboard_membership_type', $result ) );
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -74,7 +73,7 @@ trait Dashboard_API {
 	 *
 	 * @return bool
 	 */
-	public static function site_connected() {
+	public static function site_connected(): bool {
 		return apply_filters( 'wpmudev_blc_dashboard_site_connected', ! empty( self::get_membership_type() ) );
 
 		/*
@@ -93,14 +92,14 @@ trait Dashboard_API {
 
 	/**
 	 * Returns the Hub site id.
-	 * 
+	 *
 	 * @return int|null
 	 */
-	public static function get_site_id() {
+	public static function get_site_id(): ?int {
 		$api = self::get_dashboard_api();
 
-		if ( $api instanceof \WPMUDEV_Dashboard_Api ) {
-			return $api->get_site_id();
+		if ( $api instanceof \WPMUDEV_Dashboard_Api && is_numeric( $api->get_site_id() ) ) {
+			return intval( $api->get_site_id() );
 		}
 
 		return null;

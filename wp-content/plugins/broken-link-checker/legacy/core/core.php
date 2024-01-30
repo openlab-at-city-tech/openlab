@@ -603,12 +603,16 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 				}
 
 				$this->conf->options['mark_broken_links'] = ! empty( $_POST['mark_broken_links'] );
+
 				$new_broken_link_css                      = trim( $cleanPost['broken_link_css'] );
-				$this->conf->options['broken_link_css']   = $new_broken_link_css;
 
 				$this->conf->options['mark_removed_links'] = ! empty( $_POST['mark_removed_links'] );
 				$new_removed_link_css                      = trim( $cleanPost['removed_link_css'] );
-				$this->conf->options['removed_link_css']   = $new_removed_link_css;
+
+				if ( current_user_can( 'unfiltered_html' ) ) {
+					$this->conf->options['broken_link_css']  = $new_broken_link_css;
+					$this->conf->options['removed_link_css'] = $new_removed_link_css;
+				}
 
 				$this->conf->options['nofollow_broken_links'] = ! empty( $_POST['nofollow_broken_links'] );
 
@@ -683,7 +687,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 				$this->conf->options['run_via_cron']     = ! empty( $_POST['run_via_cron'] );
 
 				//youtube api
-				$this->conf->options['youtube_api_key'] = ! empty( $_POST['youtube_api_key'] ) ? $_POST['youtube_api_key'] : '';
+				$this->conf->options['youtube_api_key'] = ! empty( $_POST['youtube_api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['youtube_api_key'] ) ) : '';
 
 				//Email notifications on/off
 				$email_notifications              = ! empty( $_POST['send_email_notifications'] );
@@ -709,9 +713,9 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 					$this->conf->options['notification_email_address'] = '';
 				}
 
-				$widget_cap = strval( $_POST['dashboard_widget_capability'] );
+				$widget_cap = sanitize_text_field( wp_unslash( strval( $_POST['dashboard_widget_capability'] ) ) );
 				if ( ! empty( $widget_cap ) ) {
-					$this->conf->options['dashboard_widget_capability'] = $widget_cap;
+					$this->conf->options['dashboard_widget_capability'] =  $widget_cap;
 				}
 
 				//Link actions. The user can hide some of them to reduce UI clutter.
@@ -1090,9 +1094,8 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 												}
 												?>
                                             >
-					<textarea name="broken_link_css" id="broken_link_css" cols='45' rows='4'>
-					<?php
-					if ( isset( $this->conf->options['broken_link_css'] ) ) {
+					<textarea name="broken_link_css" id="broken_link_css" cols='45' rows='4'><?php
+					if ( isset( $this->conf->options['broken_link_css'] ) && current_user_can( 'unfiltered_html' ) ) {
 						echo $this->conf->options['broken_link_css'];
 					}
 					?>
@@ -1135,9 +1138,8 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 												}
 												?>
                                             >
-					<textarea name="removed_link_css" id="removed_link_css" cols='45' rows='4'>
-					<?php
-					if ( isset( $this->conf->options['removed_link_css'] ) ) {
+					<textarea name="removed_link_css" id="removed_link_css" cols='45' rows='4'><?php
+					if ( isset( $this->conf->options['removed_link_css'] ) && current_user_can( 'unfiltered_html' ) ) {
 						echo $this->conf->options['removed_link_css'];
 					}
 					?>
@@ -1218,7 +1220,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
                                                             type="text"
                                                             name="youtube_api_key"
                                                             id="youtube_api_key"
-                                                            value="<?php echo $this->conf->options['youtube_api_key']; ?>"
+                                                            value="<?php echo esc_html( $this->conf->options['youtube_api_key'] ); ?>"
                                                             class="regular-text ltr">
                                                 </label><br>
                                                 <span class="description">

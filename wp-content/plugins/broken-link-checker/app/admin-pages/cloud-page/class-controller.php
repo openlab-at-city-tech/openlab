@@ -34,14 +34,14 @@ class Controller extends Admin_Page {
 	 *
 	 * @since 2.0.0
 	 */
-	use Escape, Dashboard_API;
+	use Escape;
+	use Dashboard_API;
 
 	/**
 	 * States if the site is connected to Hub.
 	 *
 	 * @since 2.0.0
 	 * @var bool $site_connected True if site is connected, else false.
-	 *
 	 */
 	private $site_connected = false;
 
@@ -50,7 +50,6 @@ class Controller extends Admin_Page {
 	 *
 	 * @since 2.0.0
 	 * @var bool $site_connected True if using false legacy false if not.
-	 *
 	 */
 	private $use_legacy = false;
 
@@ -107,8 +106,7 @@ class Controller extends Admin_Page {
 					</clipPath>
 				</defs>
 			</svg>'
-			);
-
+		);
 	}
 
 	/**
@@ -137,7 +135,6 @@ class Controller extends Admin_Page {
 				'site_connected' => $this->site_connected,
 			)
 		);
-
 	}
 
 	/**
@@ -147,7 +144,8 @@ class Controller extends Admin_Page {
 	 * @return array Register scripts for the admin page.
 	 */
 	public function set_admin_scripts() {
-		$script_data  = include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php';
+		$script_data  = file_exists( WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php' ) ?
+						include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php' : array();
 		$dependencies = $script_data['dependencies'] ?? array(
 			'react',
 			'wp-element',
@@ -160,27 +158,38 @@ class Controller extends Admin_Page {
 		// In case Clipboard is required in order to import '@wpmudev/shared-ui' scripts.
 		// $dependencies[] = 'clipboard';.
 
-		return array(
-			'blc_dashboard' => array(
-				'src'       => $this->scripts_dir . 'cloud.js',
-				'deps'      => $dependencies,
-				'ver'       => $version,
-				'in_footer' => true,
-				'localize'  => array(
-					'blc_dashboard' => $this->localized_values(),
+		return apply_filters(
+			'wpmudev_blc_cloud_page_admin_scripts',
+			array(
+				'blc_dashboard' => array(
+					'src'       => $this->scripts_dir . 'cloud.js',
+					'deps'      => $dependencies,
+					'ver'       => $version,
+					'in_footer' => true,
+					'localize'  => array(
+						'blc_dashboard' => $this->localized_values(),
+					),
+					'translate' => true,
 				),
-				'translate' => true,
-			),
-			// END OF blc_dashboard.
+				// END OF blc_dashboard.
+			)
 		);
 	}
 
-	protected function scripts_version() {
+	/**
+	 *
+	 * The version of assets.
+	 *
+	 * @return string
+	 */
+	protected function scripts_version(): string {
 		static $scripts_version = null;
 
 		if ( is_null( $scripts_version ) ) {
-			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php';
-			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+			// First attempt to fetch from cloud.asset.php file, else use defined version.
+			$script_data     = file_exists( WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php' ) ?
+				include WPMUDEV_BLC_DIR . 'assets/dist/cloud.asset.php' : array();
+			$scripts_version = ! empty( $script_data['version'] ) ? WPMUDEV_BLC_SCIPTS_VERSION . '-' . $script_data['version'] : WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
 		return $scripts_version;
@@ -191,7 +200,7 @@ class Controller extends Admin_Page {
 	 *
 	 * @return array
 	 */
-	protected function localized_values() {
+	protected function localized_values(): array {
 		$user_roles = Dash_Model::list_user_roles();
 		$signup_url = add_query_arg(
 			array(
@@ -200,6 +209,16 @@ class Controller extends Admin_Page {
 				'utm_campaign' => 'blc_plugin_onboarding',
 			),
 			Utilities::signup_url()
+		);
+
+		$hub_pricing_url    = ! empty( Utilities::dev_pricing_url() ) ? esc_url( Utilities::dev_pricing_url() ) : '';
+		$limit_campaign_url = empty( $hub_pricing_url ) ? '' : add_query_arg(
+			array(
+				'utm_source'   => 'blc',
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'blc_30_minutes_limit_upgrade_link',
+			),
+			$hub_pricing_url
 		);
 
 		return array(
@@ -216,12 +235,13 @@ class Controller extends Admin_Page {
 				'dash_active'            => boolval( Utilities::dash_plugin_active() ),
 				'site_connected'         => boolval( $this->site_connected ),
 				'expired_membership'     => boolval( Utilities::membership_expired() ),
+				'free_membership'        => boolval( Utilities::is_free_member() ),
 				'use_legacy'             => esc_html( $this->use_legacy ),
-				//'hub_url'            => esc_url( Utilities::hub_connect_url() ),
-				'hub_home_url'           => ! empty(  Utilities::hub_home_url() ) ? esc_url( Utilities::hub_home_url() ) : '',
-				'hub_scan_url'           => ! empty(  Utilities::hub_scan_url() ) ? esc_url( Utilities::hub_scan_url() ) : '',
+				'hub_home_url'           => ! empty( Utilities::hub_home_url() ) ? esc_url( Utilities::hub_home_url() ) : '',
+				'hub_scan_url'           => ! empty( Utilities::hub_scan_url() ) ? esc_url( Utilities::hub_scan_url() ) : '',
 				'hub_signup_url'         => $signup_url,
 				'hub_account_url'        => ! empty( Utilities::hub_account_url() ) ? esc_url( Utilities::hub_account_url() ) : '',
+				'limit_campaign_url'     => $limit_campaign_url,
 				'scan_results'           => $this->escape_array_fixed( Dash_Model::get_scan_results() ),
 				'scan_in_progress'       => Dash_Model::scan_in_progress(),
 				'site_url'               => esc_url_raw( get_site_url() ),
@@ -239,6 +259,7 @@ class Controller extends Admin_Page {
 				'allowedRolesSlugs'      => wp_list_pluck( $user_roles, 'role_slug' ),
 				'cooldownData'           => $this->escape_array_fixed( Dash_Model::get_cooldown_data() ),
 				'linksProcessStatus'     => Dash_Model::links_process_status(),
+				'freePlanMinutesLimit'   => 30,
 			), // End blc_dashboard/data.
 			'labels' => array(
 				'page_title'     => esc_html( $this->page_title ),
@@ -263,20 +284,15 @@ class Controller extends Admin_Page {
 	 *
 	 * @return array
 	 */
-	
 	public function set_admin_styles() {
 		return array(
-			'blc_sui'       => array(
-				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
-				'ver' => $this->scripts_version(),
-			),
 			'blc_dashboard' => array(
 				'src' => $this->scripts_dir . 'style-cloud.css',
 				'ver' => $this->scripts_version(),
 			),
 		);
 	}
-	
+
 
 	/**
 	 * Adds Page specific hooks. Extends $this->actions.
@@ -309,7 +325,7 @@ class Controller extends Admin_Page {
 			'user',
 			'roles',
 			array(
-				'get_callback'    => function ( $object, $field_name, $request ) {
+				'get_callback'    => function ( $obj, $field_name, $request ) {
 					$referer = $request->get_header( 'referer' );
 
 					if ( ! $referer || Utilities::get_query_var( $referer, 'page' ) !== $this->menu_slug ) {
@@ -317,7 +333,7 @@ class Controller extends Admin_Page {
 					}
 
 					// Return up to the first 3 roles.
-					return implode( ', ', array_slice( Utilities::user_role_names( $object['id'] ), 0, 3 ) );
+					return implode( ', ', array_slice( Utilities::user_role_names( $obj['id'] ), 0, 3 ) );
 				},
 				'update_callback' => null,
 				'schema'          => array(
@@ -364,5 +380,4 @@ class Controller extends Admin_Page {
 
 		return $data;
 	}
-
 }

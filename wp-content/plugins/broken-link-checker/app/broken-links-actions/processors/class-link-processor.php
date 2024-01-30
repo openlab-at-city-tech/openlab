@@ -297,7 +297,7 @@ abstract class Link_Processor extends Base {
 
 	abstract protected function set_special_rules();
 
-	abstract public function execute( string $content = null, string $link = null, string $new_link = null );
+	abstract public function execute( string $content = '', string $link = '', string $new_link = '' );
 
 	abstract public function get_block_att_value_replacement( string $search_term = null, string $new_term = null );
 }

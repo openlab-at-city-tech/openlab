@@ -31,7 +31,6 @@ class Model {
 	 *
 	 * @since 2.0.0
 	 * @var array $settings
-	 *
 	 */
 	private static $settings = array();
 
@@ -40,20 +39,24 @@ class Model {
 	 *
 	 * @since 2.0.0
 	 * @var array $schedule
-	 *
 	 */
 	private static $schedule = array();
 
 	/**
 	 * Returns an item from settings.
+	 *
+	 * @param string $item Settings key.
+	 * @param string $fallback Default value if given key does not exist.
+	 *
 	 * @return array|string|null
 	 */
-	public static function get_settings_item( string $item = '', $default = null ) {
-		return isset( self::get_settings()[ $item ] ) ? self::get_settings()[ $item ] : $default;
+	public static function get_settings_item( string $item = '', $fallback = null ) {
+		return isset( self::get_settings()[ $item ] ) ? self::get_settings()[ $item ] : $fallback;
 	}
 
 	/**
 	 * Returns DB Settings from options table.
+	 *
 	 * @return array
 	 */
 	public static function get_settings() {
@@ -65,7 +68,12 @@ class Model {
 		return self::$settings;
 	}
 
-	public static function use_legacy() {
+	/**
+	 * Checks if we are using Local (Legacy) mode.
+	 *
+	 * @return bool
+	 */
+	public static function use_legacy(): bool {
 		return boolval( self::get_settings_item( 'use_legacy_blc_version' ) );
 	}
 
@@ -97,12 +105,8 @@ class Model {
 					$item = '-';
 				}
 
-				if ( in_array( $key, array( 'succeeded_urls', 'unique_urls', 'total_urls' ) ) ) {
-					//$item .= __( ' URLs', 'broken-link-checker' );
-				}
-
-				if ( in_array( $key, array( 'start_time', 'end_time' ) ) ) {
-					if ( in_array( $item, array( '-', 0 ) ) ) {
+				if ( in_array( $key, array( 'start_time', 'end_time' ), true ) ) {
+					if ( in_array( $item, array( '-', 0 ), true ) ) {
 						$item = '-';
 					} else {
 						$item = Utilities::timestamp_to_formatted_date( \intval( $item ), true );
@@ -117,10 +121,19 @@ class Model {
 			}
 		);
 
+		if ( ! empty( $settings_scan_results['duration'] ) ) {
+			$scan_results['duration_seconds'] = floatval( $settings_scan_results['duration'] );
+		}
+
 		return $scan_results;
 	}
 
-	public static function get_hours_list() {
+	/**
+	 * Returns array with formatted hour list.
+	 *
+	 * @return array
+	 */
+	public static function get_hours_list(): array {
 		$hour_list          = array();
 		$hour_list_unsorted = Utilities::get_hour_list();
 
@@ -134,22 +147,28 @@ class Model {
 			}
 		);
 
-		return $hour_list;
+		return is_array( $hour_list ) ? $hour_list : array();
 	}
 
+	/**
+	 * Returns array with formatted user data. Data includes id, name, avatar and roles.
+	 *
+	 * @return array
+	 */
 	public static function get_current_user_data_formated() {
 		return self::format_recipient_user_data( get_current_user_id() );
 	}
 
 	/**
-	 * @param $input
-	 * @param string $input_type
-	 * @param array $args
+	 * Provides formation and includes specific data in user's data list.
+	 *
+	 * @param int|srting $input Main input which can be user id or email.
+	 * @param string     $input_type Describes the input type. Valid options are `id` or `email`.
+	 * @param array      $args An optional array than can contain user `key` and `display_name`. Used when no valid user found with given input value and type.
 	 *
 	 * @return array
 	 */
-	public static function format_recipient_user_data( $input = null, string $input_type = 'id', array $args = array()
-	) {
+	public static function format_recipient_user_data( $input = null, string $input_type = 'id', array $args = array() ) {
 		$key          = null;
 		$display_name = null;
 		$roles        = array();
@@ -164,7 +183,7 @@ class Model {
 			'validated' => '',
 		);
 
-		if ( ! in_array( $input_type, array( 'id', 'email' ) ) ) {
+		if ( ! in_array( $input_type, array( 'id', 'email' ), true ) ) {
 			return $default;
 		}
 
@@ -174,7 +193,7 @@ class Model {
 			}
 
 			$user = get_user_by( 'email', $input );
-		} else if ( 'id' === $input_type ) {
+		} elseif ( 'id' === $input_type ) {
 			$key  = intval( $input );
 			$user = get_user_by( 'id', $key );
 
@@ -250,9 +269,8 @@ class Model {
 	/**
 	 * Provides an item from the schedule data from DB settings option.The returned value is not escaped.
 	 *
+	 * @param string|null $item Schedule key.
 	 * @return array|string
-	 * @var string|null $item
-	 *
 	 */
 	public static function get_schedule_item( $item = null ) {
 		if ( is_null( $item ) ) {
@@ -289,9 +307,9 @@ class Model {
 			self::$schedule['monthdays'] = array( 1 );
 		}
 
-		// Match system time format as set from General Settings,
+		// Match system time format as set from General Settings.
 		if ( Utilities::get_time_format() ) {
-			self::$schedule['time'] = date( Utilities::get_time_format(), strtotime(self::$schedule['time']) );
+			self::$schedule['time'] = gmdate( Utilities::get_time_format(), strtotime( self::$schedule['time'] ) );
 		}
 
 		return self::$schedule;
@@ -307,26 +325,29 @@ class Model {
 		$roles_list     = array();
 		$rec_roles_list = array();
 
-		array_walk_recursive( $recipients, function ( $value, $key ) use ( &$rec_roles_list ) {
-			if ( 'roles' === $key ) {
-				$roles = explode( ',', $value );
+		array_walk_recursive(
+			$recipients,
+			function ( $value, $key ) use ( &$rec_roles_list ) {
+				if ( 'roles' === $key ) {
+					$roles = explode( ',', $value );
 
-				if ( ! empty( $roles ) ) {
-					foreach ( $roles as $role ) {
-						$role = trim( $role );
+					if ( ! empty( $roles ) ) {
+						foreach ( $roles as $role ) {
+							$role = trim( $role );
 
-						$rec_roles_list[ $role ] = array_key_exists( $role, $rec_roles_list ) ?
+							$rec_roles_list[ $role ] = array_key_exists( $role, $rec_roles_list ) ?
 							intval( $rec_roles_list[ $role ] ) + 1 :
 							1;
+						}
 					}
 				}
-
-			}
-		}, $rec_roles_list );
+			},
+			$rec_roles_list
+		);
 
 		if ( ! empty( $user_count['avail_roles'] ) ) {
 			foreach ( $user_count['avail_roles'] as $role_name => $user_count ) {
-				if ( ! in_array( $role_name, $allowed_roles ) ) {
+				if ( ! in_array( $role_name, $allowed_roles ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					continue;
 				}
 
@@ -351,7 +372,7 @@ class Model {
 	public static function get_cooldown_data() {
 		$scan_results = self::get_settings_item( 'scan_results' );
 		$end_time     = ! empty( $scan_results['end_time'] ) ? intval( $scan_results['end_time'] ) : 0;
-		$date_utc     = new \DateTime( "now", new \DateTimeZone( "UTC" ) );
+		$date_utc     = new \DateTime( 'now', new \DateTimeZone( 'UTC' ) );
 		$diff         = round( ( $date_utc->getTimestamp() - $end_time ) / 60 );
 		$remaining    = intval( 15 - $diff );
 
@@ -370,5 +391,4 @@ class Model {
 		// If Queue is empty return false. If Queue is not empty it means there are Links to process so return true.
 		return ! Queue::instance()->queue_is_empty();
 	}
-
 }

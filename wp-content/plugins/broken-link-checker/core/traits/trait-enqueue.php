@@ -29,7 +29,7 @@ trait Enqueue {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return void JS assets url.
+	 * @var string JS assets url.
 	 */
 	public $scripts_dir = WPMUDEV_BLC_ASSETS_URL . 'dist/';
 
@@ -38,7 +38,7 @@ trait Enqueue {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return void CSS assets url.
+	 * @var string CSS assets url.
 	 */
 	public $styles_dir = WPMUDEV_BLC_ASSETS_URL . 'css/';
 

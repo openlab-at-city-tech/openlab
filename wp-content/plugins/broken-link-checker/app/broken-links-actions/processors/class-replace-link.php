@@ -30,7 +30,7 @@ class Replace_Link extends Link_Processor {
 	 * @param string $new_link
 	 * @return string
 	*/
-	public function execute( string $content = null, string $link = null, string $new_link = null ) {
+	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
 		if ( empty( $this->get_target_tags() ) || empty( str_replace( PHP_EOL, '', $content ) ) ) {
 			return $content;
 		}
