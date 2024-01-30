@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -2822,6 +2822,7 @@ var FileReaderBase = /*#__PURE__*/function () {
     (0, _defineProperty2.default)(this, "file", void 0);
     this.file = file;
   }
+
   /**
    * Get the file-reader name.
    *
@@ -2906,6 +2907,18 @@ var FileReaderBase = /*#__PURE__*/function () {
     key: "getName",
     value: function getName() {
       return '';
+    }
+
+    /**
+     * Check if the reader is currently active.
+     *
+     * @abstract
+     * @return {boolean}
+     */
+  }, {
+    key: "isActive",
+    value: function isActive() {
+      return true;
     }
 
     /**
@@ -3288,6 +3301,7 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _fileParserBase = _interopRequireDefault(__webpack_require__(/*! ../../file-parser-base */ "../assets/dev/js/editor/components/browser-import/files/file-parser-base.js"));
 var _containerFactory = _interopRequireDefault(__webpack_require__(/*! ../../../container-factory */ "../assets/dev/js/editor/components/browser-import/container-factory.js"));
+var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../../../../../utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Elements = /*#__PURE__*/function (_FileParserBase) {
@@ -3349,26 +3363,73 @@ var Elements = /*#__PURE__*/function (_FileParserBase) {
   }, {
     key: "validate",
     value: function () {
-      var _validate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(reader) {
-        var data;
-        return _regenerator.default.wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
+      var _validate = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3(reader) {
+        var _this = this;
+        return _regenerator.default.wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.next = 2;
-              return reader.getData();
+              if (elementorCommon.config.filesUpload.unfilteredFiles) {
+                _context3.next = 2;
+                break;
+              }
+              return _context3.abrupt("return", new Promise(function (resolve) {
+                var enableUnfilteredDialog = _filesUploadHandler.default.getUnfilteredFilesNotEnabledImportTemplateDialog( /*#__PURE__*/(0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+                  var result;
+                  return _regenerator.default.wrap(function _callee2$(_context2) {
+                    while (1) switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _context2.next = 2;
+                        return _this.validateData(reader);
+                      case 2:
+                        result = _context2.sent;
+                        resolve(result);
+                      case 4:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }, _callee2);
+                })));
+                enableUnfilteredDialog.show();
+              }));
             case 2:
-              data = _context2.sent;
-              return _context2.abrupt("return", data.version && data.type && Array.isArray(data.content));
+              _context3.next = 4;
+              return this.validateData(reader);
             case 4:
+              return _context3.abrupt("return", _context3.sent);
+            case 5:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
-        }, _callee2);
+        }, _callee3, this);
       }));
       function validate(_x) {
         return _validate.apply(this, arguments);
       }
       return validate;
+    }()
+  }, {
+    key: "validateData",
+    value: function () {
+      var _validateData = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee4(reader) {
+        var data;
+        return _regenerator.default.wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return reader.getData();
+            case 2:
+              data = _context4.sent;
+              return _context4.abrupt("return", data.version && data.type && Array.isArray(data.content));
+            case 4:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }));
+      function validateData(_x2) {
+        return _validateData.apply(this, arguments);
+      }
+      return validateData;
     }()
   }]);
   return Elements;
@@ -3733,6 +3794,12 @@ var Json = /*#__PURE__*/function (_FileReaderBase) {
      */
     function getName() {
       return 'json';
+    }
+  }, {
+    key: "isActive",
+    value: function isActive() {
+      var _elementor$config$use, _elementor$config$use2;
+      return elementor.config.user.is_administrator || ((_elementor$config$use = (_elementor$config$use2 = elementor.config.user.restrictions) === null || _elementor$config$use2 === void 0 ? void 0 : _elementor$config$use2.includes('json-upload')) !== null && _elementor$config$use !== void 0 ? _elementor$config$use : false);
     }
 
     /**
@@ -4156,8 +4223,12 @@ var Manager = /*#__PURE__*/function (_elementorModules$edi) {
         _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _reader$isActive, _reader$isActive2;
           var reader = _step.value;
-          this.registerFileReader(reader);
+          var isActive = (_reader$isActive = (_reader$isActive2 = reader.isActive) === null || _reader$isActive2 === void 0 ? void 0 : _reader$isActive2.call(reader)) !== null && _reader$isActive !== void 0 ? _reader$isActive : true;
+          if (isActive) {
+            this.registerFileReader(reader);
+          }
         }
       } catch (err) {
         _iterator.e(err);
@@ -4242,7 +4313,7 @@ var Manager = /*#__PURE__*/function (_elementorModules$edi) {
         for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
           var readerName = _step3.value;
           if (!this.readers[readerName]) {
-            throw new Error("Reader ".concat(readerName, " is not registered."));
+            continue;
           } else if (!this.parsers[readerName]) {
             this.parsers[readerName] = {};
           }
@@ -9904,6 +9975,17 @@ var Component = /*#__PURE__*/function (_ComponentModalBase) {
   }, {
     key: "insertTemplate",
     value: function insertTemplate(args) {
+      this.downloadTemplate(args, function (data, callbackParams) {
+        $e.run('document/elements/import', {
+          model: callbackParams.model,
+          data: data,
+          options: callbackParams.importOptions
+        });
+      });
+    }
+  }, {
+    key: "downloadTemplate",
+    value: function downloadTemplate(args, callback) {
       var _this2 = this;
       var autoImportSettings = elementor.config.document.remoteLibrary.autoImportSettings,
         model = args.model;
@@ -9930,10 +10012,9 @@ var Component = /*#__PURE__*/function (_ComponentModalBase) {
           // Hide for next open.
           _this2.manager.layout.hideLoadingView();
           _this2.manager.layout.hideModal();
-          $e.run('document/elements/import', {
+          callback(data, {
             model: model,
-            data: data,
-            options: importOptions
+            importOptions: importOptions
           });
         },
         error: function error(data) {
@@ -11122,10 +11203,13 @@ TemplateLibraryTemplateView = Marionette.ItemView.extend({
       'click @ui.previewButton': 'onPreviewButtonClick'
     };
   },
-  behaviors: {
-    insertTemplate: {
-      behaviorClass: TemplateLibraryInsertTemplateBehavior
-    }
+  behaviors: function behaviors() {
+    var behaviors = {
+      insertTemplate: {
+        behaviorClass: TemplateLibraryInsertTemplateBehavior
+      }
+    };
+    return elementor.hooks.applyFilters('elementor/editor/template-library/template/behaviors', behaviors, this);
   }
 });
 module.exports = TemplateLibraryTemplateView;
@@ -13631,6 +13715,8 @@ module.exports = ControlSelect2View.extend({
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 var ControlBaseDataView = __webpack_require__(/*! elementor-controls/base-data */ "../assets/dev/js/editor/controls/base-data.js"),
   ControlMediaItemView;
@@ -13641,6 +13727,10 @@ ControlMediaItemView = ControlBaseDataView.extend({
     ui.clearGallery = '.elementor-control-gallery-clear';
     ui.galleryThumbnails = '.elementor-control-gallery-thumbnails';
     ui.status = '.elementor-control-gallery-status-title';
+    ui.warnings = '.elementor-control-media__warnings';
+    ui.promotions = '.elementor-control-media__promotions';
+    ui.promotions_dismiss = '.elementor-control-media__promotions .elementor-control-notice-dismiss';
+    ui.promotions_action = '.elementor-control-media__promotions .elementor-control-notice-main-actions button';
     return ui;
   },
   events: function events() {
@@ -13648,6 +13738,8 @@ ControlMediaItemView = ControlBaseDataView.extend({
       'click @ui.addImages': 'onAddImagesClick',
       'click @ui.clearGallery': 'onClearGalleryClick',
       'click @ui.galleryThumbnails': 'onGalleryThumbnailsClick',
+      'click @ui.promotions_dismiss': 'onPromotionDismiss',
+      'click @ui.promotions_action': 'onPromotionAction',
       'keyup @ui.galleryThumbnails': 'onGalleryThumbnailsKeyPress'
     });
   },
@@ -13655,28 +13747,84 @@ ControlMediaItemView = ControlBaseDataView.extend({
     this.initRemoveDialog();
   },
   applySavedValue: function applySavedValue() {
-    var images = this.getControlValue(),
-      imagesCount = images.length,
-      hasImages = !!imagesCount;
-    this.$el.toggleClass('elementor-gallery-has-images', hasImages).toggleClass('elementor-gallery-empty', !hasImages);
-    var $galleryThumbnails = this.ui.galleryThumbnails;
-    $galleryThumbnails.empty();
+    var _this = this;
+    return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var images, imagesCount, hasImages, imagesWithoutAlt, imagesWithoutOptimization, promotionsAlwaysOn, hasPromotions, $galleryThumbnails, attachments;
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            images = _this.getControlValue(), imagesCount = images.length, hasImages = !!imagesCount, imagesWithoutAlt = 0, imagesWithoutOptimization = 0, promotionsAlwaysOn = false;
+            hasPromotions = _this.ui.promotions.length && !elementor.config.user.dismissed_editor_notices.includes(_this.getDismissPromotionEventName());
+            _this.$el.toggleClass('elementor-gallery-has-images', hasImages).toggleClass('elementor-gallery-empty', !hasImages);
+            $galleryThumbnails = _this.ui.galleryThumbnails;
+            $galleryThumbnails.empty();
 
-    /* Translators: %s: Selected images count. */
-    this.ui.status.text(hasImages ? sprintf(__('%s Images Selected', 'elementor'), imagesCount) : __('No Images Selected', 'elementor'));
-    if (!hasImages) {
-      return;
-    }
-    this.getControlValue().forEach(function (image) {
-      var $thumbnail = jQuery('<div>', {
-        class: 'elementor-control-gallery-thumbnail'
-      });
-      $thumbnail.css('background-image', 'url(' + image.url + ')');
-      $galleryThumbnails.append($thumbnail);
-    });
+            /* Translators: %s: Selected images count. */
+            _this.ui.status.text(hasImages ? sprintf(__('%s Images Selected', 'elementor'), imagesCount) : __('No Images Selected', 'elementor'));
+            if (hasPromotions) {
+              promotionsAlwaysOn = _this.ui.promotions.find('.elementor-control-notice').data('display') || false;
+            }
+            if (hasImages) {
+              _context.next = 9;
+              break;
+            }
+            return _context.abrupt("return");
+          case 9:
+            attachments = [];
+            _this.getControlValue().forEach(function (image, thumbIndex) {
+              var $thumbnail = jQuery('<img>', {
+                class: 'elementor-control-gallery-thumbnail',
+                src: image.url,
+                alt: 'gallery-thumbnail-' + thumbIndex
+              });
+              $galleryThumbnails.append($thumbnail);
+              var handleHints = function handleHints(attachment) {
+                var hasAlt = _this.imageHasAlt(attachment);
+                if (!hasAlt) {
+                  $thumbnail.addClass('unoptimized__image');
+                  imagesWithoutAlt += hasAlt ? 0 : 1;
+                }
+                if (hasPromotions && _this.imageNotOptimized(attachment)) {
+                  imagesWithoutOptimization += 1;
+                }
+              };
+              attachments.push(wp.media.attachment(image.id).fetch().then(handleHints));
+            });
+
+            // Ensure all attachments are fetched before updating the warnings
+            _context.next = 13;
+            return Promise.all(attachments).then(function () {
+              _this.ui.warnings.toggle(!!imagesWithoutAlt);
+              if (hasPromotions) {
+                var showHints = promotionsAlwaysOn || !!imagesWithoutOptimization;
+                _this.ui.promotions.toggle(showHints);
+              }
+            });
+          case 13:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }))();
   },
   hasImages: function hasImages() {
     return !!this.getControlValue().length;
+  },
+  imageHasAlt: function imageHasAlt(attachment) {
+    var _attachment$alt;
+    var attachmentAlt = (attachment === null || attachment === void 0 ? void 0 : (_attachment$alt = attachment.alt) === null || _attachment$alt === void 0 ? void 0 : _attachment$alt.trim()) || '';
+    return !!attachmentAlt;
+  },
+  imageNotOptimized: function imageNotOptimized(attachment) {
+    var checks = {
+      height: 1080,
+      width: 1920,
+      filesizeInBytes: 100000
+    };
+    return Object.keys(checks).some(function (key) {
+      var value = attachment[key] || false;
+      return value && value > checks[key];
+    });
   },
   openFrame: function openFrame(action) {
     this.initFrame(action);
@@ -13769,6 +13917,50 @@ ControlMediaItemView = ControlBaseDataView.extend({
     this.setValue(images);
     this.applySavedValue();
   },
+  onPromotionDismiss: function onPromotionDismiss() {
+    this.dismissPromotion(this.getDismissPromotionEventName());
+  },
+  getDismissPromotionEventName: function getDismissPromotionEventName() {
+    var _$dismissButton$, _$dismissButton$$data;
+    var $promotions = this.ui.promotions;
+    var $dismissButton = $promotions.find('.elementor-control-notice-dismiss');
+    // Remove listener
+    $dismissButton.off('click');
+    return ((_$dismissButton$ = $dismissButton[0]) === null || _$dismissButton$ === void 0 ? void 0 : (_$dismissButton$$data = _$dismissButton$.dataset) === null || _$dismissButton$$data === void 0 ? void 0 : _$dismissButton$$data.event) || false;
+  },
+  hidePromotion: function hidePromotion() {
+    var eventName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var $promotions = this.ui.promotions;
+    $promotions.hide();
+    if (!eventName) {
+      eventName = this.getDismissPromotionEventName();
+    }
+    // Prevent opening the same promotion again in current editor session.
+    elementor.config.user.dismissed_editor_notices.push(eventName);
+  },
+  onPromotionAction: function onPromotionAction(event) {
+    var _JSON$parse = JSON.parse(event.target.closest('button').dataset.settings),
+      _JSON$parse$action_ur = _JSON$parse.action_url,
+      actionURL = _JSON$parse$action_ur === void 0 ? null : _JSON$parse$action_ur;
+    if (actionURL) {
+      window.open(actionURL, '_blank');
+    }
+    this.hidePromotion();
+  },
+  dismissPromotion: function dismissPromotion(eventName) {
+    var $promotions = this.ui.promotions;
+    $promotions.hide();
+    if (eventName) {
+      elementorCommon.ajax.addRequest('dismissed_editor_notices', {
+        data: {
+          dismissId: eventName
+        }
+      });
+
+      // Prevent opening the same promotion again in current editor session.
+      elementor.config.user.dismissed_editor_notices.push(eventName);
+    }
+  },
   onBeforeDestroy: function onBeforeDestroy() {
     if (this.frame) {
       this.frame.off();
@@ -13778,6 +13970,10 @@ ControlMediaItemView = ControlBaseDataView.extend({
   clearGallery: function clearGallery() {
     this.setValue([]);
     this.applySavedValue();
+    this.ui.warnings.hide();
+    if (this.ui.promotions) {
+      this.ui.promotions.hide();
+    }
   },
   initRemoveDialog: function initRemoveDialog() {
     var removeDialog;
@@ -14418,6 +14614,10 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     ui.mediaVideo = '.elementor-control-media-video';
     ui.frameOpeners = '.elementor-control-preview-area';
     ui.removeButton = '.elementor-control-media__remove';
+    ui.warnings = '.elementor-control-media__warnings';
+    ui.promotions = '.elementor-control-media__promotions';
+    ui.promotions_dismiss = '.elementor-control-media__promotions .elementor-control-notice-dismiss';
+    ui.promotions_action = '.elementor-control-media__promotions .elementor-control-notice-main-actions button';
     ui.fileName = '.elementor-control-media__file__content__info__name';
     ui.mediaInputImageSize = '.e-image-size-select';
     return ui;
@@ -14426,7 +14626,9 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     return _.extend(ControlMultipleBaseItemView.prototype.events.apply(this, arguments), {
       'click @ui.frameOpeners': 'openFrame',
       'click @ui.removeButton': 'deleteImage',
-      'change @ui.mediaInputImageSize': 'onMediaInputImageSizeChange'
+      'change @ui.mediaInputImageSize': 'onMediaInputImageSizeChange',
+      'click @ui.promotions_dismiss': 'onPromotionDismiss',
+      'click @ui.promotions_action': 'onPromotionAction'
     });
   },
   getMediaType: function getMediaType() {
@@ -14446,9 +14648,11 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     return 'svg' === mediaType ? 'image/svg+xml' : mediaType;
   },
   applySavedValue: function applySavedValue() {
-    var _this$getControlPlace;
+    var _this$getControlPlace,
+      _this = this;
     var value = this.getControlValue('url'),
       url = value || ((_this$getControlPlace = this.getControlPlaceholder()) === null || _this$getControlPlace === void 0 ? void 0 : _this$getControlPlace.url),
+      attachmentId = this.getControlValue('id'),
       isPlaceholder = !value && url,
       mediaType = this.getMediaType();
     if (['image', 'svg'].includes(mediaType)) {
@@ -14471,10 +14675,29 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
       this.ui.mediaInputImageSize.val(imageSize).toggleClass('e-select-placeholder', isPlaceholder);
     }
     this.ui.controlMedia.toggleClass('e-media-empty', !value).toggleClass('e-media-empty-placeholder', !value && !isPlaceholder);
+    if ('image' === mediaType) {
+      if (attachmentId) {
+        var dismissPromotionEventName = this.getDismissPromotionEventName();
+        var handleHints = function handleHints(attachment) {
+          _this.ui.warnings.toggle(!_this.imageHasAlt(attachment));
+          if (_this.ui.promotions.length && !elementor.config.user.dismissed_editor_notices.includes(dismissPromotionEventName)) {
+            var alwaysOn = _this.ui.promotions.find('.elementor-control-notice').data('display') || false;
+            var showHint = alwaysOn || _this.imageNotOptimized(attachment);
+            _this.ui.promotions.toggle(showHint);
+          }
+        };
+        wp.media.attachment(attachmentId).fetch().then(handleHints);
+      } else {
+        this.ui.warnings.hide();
+        if (this.ui.promotions.length) {
+          this.ui.promotions.hide();
+        }
+      }
+    }
   },
   openFrame: function openFrame(e) {
     var _arguments = arguments,
-      _this = this;
+      _this2 = this;
     return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var _e$target, _e$target$dataset;
       var source, mediaType, selectedId;
@@ -14482,8 +14705,8 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
         while (1) switch (_context.prev = _context.next) {
           case 0:
             source = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : null;
-            mediaType = (e === null || e === void 0 ? void 0 : (_e$target = e.target) === null || _e$target === void 0 ? void 0 : (_e$target$dataset = _e$target.dataset) === null || _e$target$dataset === void 0 ? void 0 : _e$target$dataset.mediaType) || _this.getMediaType();
-            _this.mediaType = mediaType;
+            mediaType = (e === null || e === void 0 ? void 0 : (_e$target = e.target) === null || _e$target === void 0 ? void 0 : (_e$target$dataset = _e$target.dataset) === null || _e$target$dataset === void 0 ? void 0 : _e$target$dataset.mediaType) || _this2.getMediaType();
+            _this2.mediaType = mediaType;
             if (mediaType) {
               _context.next = 5;
               break;
@@ -14495,7 +14718,7 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
               break;
             }
             _filesUploadHandler.default.getUnfilteredFilesNotEnabledDialog(function () {
-              return _this.openFrame(e, 'filter-popup');
+              return _this2.openFrame(e, 'filter-popup');
             }).show();
             return _context.abrupt("return", false);
           case 8:
@@ -14511,21 +14734,21 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
           case 11:
             // If there is no frame, or the current initialized frame contains a different library than
             // the `data-media-type` of the clicked button, (re)initialize the frame.
-            if (!_this.frame || _this.getLibraryType(mediaType) !== _this.currentLibraryType) {
-              _this.initFrame();
+            if (!_this2.frame || _this2.getLibraryType(mediaType) !== _this2.currentLibraryType) {
+              _this2.initFrame();
             }
-            _this.frame.open();
+            _this2.frame.open();
 
             // Set params to trigger sanitizer
-            _filesUploadHandler.default.setUploadTypeCaller(_this.frame);
-            selectedId = _this.getControlValue('id');
+            _filesUploadHandler.default.setUploadTypeCaller(_this2.frame);
+            selectedId = _this2.getControlValue('id');
             if (selectedId) {
               _context.next = 17;
               break;
             }
             return _context.abrupt("return");
           case 17:
-            _this.frame.state().get('selection').add(wp.media.attachment(selectedId));
+            _this2.frame.state().get('selection').add(wp.media.attachment(selectedId));
           case 18:
           case "end":
             return _context.stop();
@@ -14541,8 +14764,64 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     });
     this.applySavedValue();
   },
+  imageHasAlt: function imageHasAlt(attachment) {
+    var _attachment$alt;
+    var attachmentAlt = (attachment === null || attachment === void 0 ? void 0 : (_attachment$alt = attachment.alt) === null || _attachment$alt === void 0 ? void 0 : _attachment$alt.trim()) || '';
+    return !!attachmentAlt;
+  },
+  imageNotOptimized: function imageNotOptimized(attachment) {
+    var checks = {
+      height: 1080,
+      width: 1920,
+      filesizeInBytes: 100000
+    };
+    return Object.keys(checks).some(function (key) {
+      var value = attachment[key] || false;
+      return value && value > checks[key];
+    });
+  },
+  getDismissPromotionEventName: function getDismissPromotionEventName() {
+    var _$dismissButton$, _$dismissButton$$data;
+    var $promotions = this.ui.promotions;
+    var $dismissButton = $promotions.find('.elementor-control-notice-dismiss');
+    // Remove listener
+    $dismissButton.off('click');
+    return ((_$dismissButton$ = $dismissButton[0]) === null || _$dismissButton$ === void 0 ? void 0 : (_$dismissButton$$data = _$dismissButton$.dataset) === null || _$dismissButton$$data === void 0 ? void 0 : _$dismissButton$$data.event) || false;
+  },
+  onPromotionDismiss: function onPromotionDismiss() {
+    this.dismissPromotion(this.getDismissPromotionEventName());
+  },
+  onPromotionAction: function onPromotionAction(event) {
+    var _JSON$parse = JSON.parse(event.target.closest('button').dataset.settings),
+      _JSON$parse$action_ur = _JSON$parse.action_url,
+      actionURL = _JSON$parse$action_ur === void 0 ? null : _JSON$parse$action_ur;
+    if (actionURL) {
+      window.open(actionURL, '_blank');
+    }
+    this.hidePromotion();
+  },
+  dismissPromotion: function dismissPromotion(eventName) {
+    this.hidePromotion(eventName);
+    if (eventName) {
+      elementorCommon.ajax.addRequest('dismissed_editor_notices', {
+        data: {
+          dismissId: eventName
+        }
+      });
+    }
+  },
+  hidePromotion: function hidePromotion() {
+    var eventName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var $promotions = this.ui.promotions;
+    $promotions.hide();
+    if (!eventName) {
+      eventName = this.getDismissPromotionEventName();
+    }
+    // Prevent opening the same promotion again in current editor session.
+    elementor.config.user.dismissed_editor_notices.push(eventName);
+  },
   onMediaInputImageSizeChange: function onMediaInputImageSizeChange() {
-    var _this2 = this;
+    var _this3 = this;
     if (!this.model.get('has_sizes')) {
       return;
     }
@@ -14574,7 +14853,7 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
       imageURL = (_data$currentControlV = data[currentControlValue.id]) === null || _data$currentControlV === void 0 ? void 0 : _data$currentControlV[currentControlValue.size];
       if (imageURL) {
         currentControlValue.url = imageURL;
-        _this2.setValue(currentControlValue);
+        _this3.setValue(currentControlValue);
       }
     });
     imageURL = elementor.imagesManager.getImageUrl({
@@ -14704,6 +14983,70 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
   }
 });
 module.exports = ControlMediaItemView;
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/controls/notice.js":
+/*!**************************************************!*\
+  !*** ../assets/dev/js/editor/controls/notice.js ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
+var ControlBaseView = __webpack_require__(/*! elementor-controls/base */ "../assets/dev/js/editor/controls/base.js");
+module.exports = ControlBaseView.extend({
+  ui: function ui() {
+    var ui = ControlBaseView.prototype.ui.apply(this, arguments);
+    ui.button = '.elementor-control-notice-dismiss';
+    return ui;
+  },
+  events: {
+    'click @ui.button.e-btn-1': 'onButton1Click',
+    'click @ui.button.e-btn-2': 'onButton2Click',
+    'click @ui.button.elementor-control-notice-dismiss': 'onDismissButtonClick'
+  },
+  onButton1Click: function onButton1Click() {
+    var eventName = this.model.get('event');
+    elementor.channels.editor.trigger(eventName, this);
+  },
+  onButton2Click: function onButton2Click() {
+    var eventName = this.model.get('event');
+    elementor.channels.editor.trigger(eventName, this);
+  },
+  getDismissId: function getDismissId() {
+    var _this$options, _this$options$element, _this$options$element2, _this$options$element3, _this$options2, _this$options2$elemen, _this$options2$elemen2, _this$options2$elemen3, _this$options3, _this$options3$elemen, _this$options3$elemen2, _this$options3$elemen3;
+    var controlName = this.model.get('name');
+    var elementType = 'widget' === ((_this$options = this.options) === null || _this$options === void 0 ? void 0 : (_this$options$element = _this$options.element) === null || _this$options$element === void 0 ? void 0 : (_this$options$element2 = _this$options$element.model) === null || _this$options$element2 === void 0 ? void 0 : (_this$options$element3 = _this$options$element2.attributes) === null || _this$options$element3 === void 0 ? void 0 : _this$options$element3.elType) ? (_this$options2 = this.options) === null || _this$options2 === void 0 ? void 0 : (_this$options2$elemen = _this$options2.element) === null || _this$options2$elemen === void 0 ? void 0 : (_this$options2$elemen2 = _this$options2$elemen.model) === null || _this$options2$elemen2 === void 0 ? void 0 : (_this$options2$elemen3 = _this$options2$elemen2.attributes) === null || _this$options2$elemen3 === void 0 ? void 0 : _this$options2$elemen3.widgetType : (_this$options3 = this.options) === null || _this$options3 === void 0 ? void 0 : (_this$options3$elemen = _this$options3.element) === null || _this$options3$elemen === void 0 ? void 0 : (_this$options3$elemen2 = _this$options3$elemen.model) === null || _this$options3$elemen2 === void 0 ? void 0 : (_this$options3$elemen3 = _this$options3$elemen2.attributes) === null || _this$options3$elemen3 === void 0 ? void 0 : _this$options3$elemen3.elType;
+    return "".concat(elementType, "-").concat(controlName);
+  },
+  onDismissButtonClick: function onDismissButtonClick() {
+    var _this = this;
+    var dismissId = this.getDismissId();
+    elementorCommon.ajax.addRequest('dismissed_editor_notices', {
+      data: {
+        dismissId: dismissId
+      },
+      success: function success() {
+        var _elementor, _elementor$config, _elementor$config$use;
+        _this.$el.remove();
+        var dismissedNotices = (_elementor = elementor) !== null && _elementor !== void 0 && (_elementor$config = _elementor.config) !== null && _elementor$config !== void 0 && (_elementor$config$use = _elementor$config.user) !== null && _elementor$config$use !== void 0 && _elementor$config$use.dismissed_editor_notices ? (0, _toConsumableArray2.default)(elementor.config.user.dismissed_editor_notices) : [];
+        elementor.config.user.dismissed_editor_notices = [].concat((0, _toConsumableArray2.default)(dismissedNotices), [dismissId]);
+      }
+    });
+  },
+  templateHelpers: function templateHelpers() {
+    var _elementor2, _elementor2$config, _elementor2$config$us;
+    var controlData = ControlBaseView.prototype.templateHelpers.apply(this, arguments);
+    var dismissedNotices = (_elementor2 = elementor) !== null && _elementor2 !== void 0 && (_elementor2$config = _elementor2.config) !== null && _elementor2$config !== void 0 && (_elementor2$config$us = _elementor2$config.user) !== null && _elementor2$config$us !== void 0 && _elementor2$config$us.dismissed_editor_notices ? (0, _toConsumableArray2.default)(elementor.config.user.dismissed_editor_notices) : [];
+    var dismissId = this.getDismissId();
+    controlData.data.shouldRenderNotice = !dismissedNotices.includes(dismissId);
+    return controlData;
+  }
+});
 
 /***/ }),
 
@@ -27019,6 +27362,7 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
         Icons: __webpack_require__(/*! elementor-controls/icons */ "../assets/dev/js/editor/controls/icons.js"),
         Image_dimensions: __webpack_require__(/*! elementor-controls/image-dimensions */ "../assets/dev/js/editor/controls/image-dimensions.js"),
         Media: __webpack_require__(/*! elementor-controls/media */ "../assets/dev/js/editor/controls/media.js"),
+        Notice: __webpack_require__(/*! elementor-controls/notice */ "../assets/dev/js/editor/controls/notice.js"),
         Number: __webpack_require__(/*! elementor-controls/number */ "../assets/dev/js/editor/controls/number.js"),
         Popover_toggle: _popoverToggle.default,
         Repeater: __webpack_require__(/*! elementor-controls/repeater */ "../assets/dev/js/editor/controls/repeater.js"),
@@ -27125,7 +27469,7 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
       if (!this.config.elements[elType]) {
         return false;
       }
-      var elementConfig = elementorCommon.helpers.cloneObject(this.config.elements[elType]);
+      var elementConfig = structuredClone(this.config.elements[elType]);
       if ('section' === elType && model.get('isInner')) {
         elementConfig.title = __('Inner Section', 'elementor');
       }
@@ -27802,24 +28146,6 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
       return elementorCommon.translate(stringKey, null, templateArgs, i18nStack);
     }
   }, {
-    key: "logSite",
-    value: function logSite() {
-      var text = '',
-        style = '';
-      if (_environment.default.firefox) {
-        var asciiText = [' ;;;;;;;;;;;;;;; ', ';;;  ;;       ;;;', ';;;  ;;;;;;;;;;;;', ';;;  ;;;;;;;;;;;;', ';;;  ;;       ;;;', ';;;  ;;;;;;;;;;;;', ';;;  ;;;;;;;;;;;;', ';;;  ;;       ;;;', ' ;;;;;;;;;;;;;;; '];
-        text += '%c' + asciiText.join('\n') + '\n';
-        style = 'color: #C42961';
-      } else {
-        text += '%c00';
-        style = 'font-size: 22px; background-image: url("' + elementorCommon.config.urls.assets + 'images/logo-icon.png"); color: transparent; background-repeat: no-repeat';
-      }
-      setTimeout(console.log.bind(console, text, style)); // eslint-disable-line
-
-      text = '%cLove using Elementor? Join our growing community of Elementor developers: %chttps://github.com/elementor/elementor';
-      setTimeout(console.log.bind(console, text, 'color: #9B0A46', '')); // eslint-disable-line
-    }
-  }, {
     key: "requestWidgetsConfig",
     value: function requestWidgetsConfig() {
       var _this6 = this;
@@ -27909,7 +28235,6 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
         _events.default.dispatch(elementorCommon.elements.$window, 'elementor/init', null, 'elementor:init');
         _this8.initNavigator();
       });
-      this.logSite();
     }
   }, {
     key: "onPreviewLoaded",
@@ -28170,7 +28495,7 @@ var EditorBase = /*#__PURE__*/function (_Marionette$Applicati) {
         var devicesArrayToDuplicate = controlDevices || devices;
         devicesArrayToDuplicate.forEach(function (device, index) {
           var _controlArgs$popover;
-          var controlArgs = elementorCommon.helpers.cloneObject(controlConfig);
+          var controlArgs = structuredClone(controlConfig);
           if (controlArgs.device_args) {
             if (controlArgs.device_args[device]) {
               controlArgs = _objectSpread(_objectSpread({}, controlArgs), controlArgs.device_args[device]);
@@ -28796,7 +29121,7 @@ ElementModel = _baseElementModel.default.extend({
       },
       SettingsModel = settingModels[elType] || elementorModules.editor.elements.models.BaseSettings;
     if (jQuery.isEmptyObject(settings)) {
-      settings = elementorCommon.helpers.cloneObject(settings);
+      settings = structuredClone(settings);
     }
     if ('widget' === elType) {
       settings.widgetType = this.get('widgetType');
@@ -31802,7 +32127,7 @@ var BaseElementView = __webpack_require__(/*! elementor-elements/views/base */ "
 ColumnView = BaseElementView.extend({
   template: Marionette.TemplateCache.get('#tmpl-elementor-column-content'),
   emptyView: ColumnEmptyView,
-  childViewContainer: elementorCommon.config.experimentalFeatures.e_dom_optimization ? '> .elementor-widget-wrap' : '> .elementor-column-wrap > .elementor-widget-wrap',
+  childViewContainer: '> .elementor-widget-wrap',
   toggleEditTools: true,
   behaviors: function behaviors() {
     var behaviors = BaseElementView.prototype.behaviors.apply(this, arguments);
@@ -31827,7 +32152,7 @@ ColumnView = BaseElementView.extend({
   },
   ui: function ui() {
     var ui = BaseElementView.prototype.ui.apply(this, arguments);
-    ui.columnInner = elementorCommon.config.experimentalFeatures.e_dom_optimization ? '> .elementor-widget-wrap' : '> .elementor-column-wrap';
+    ui.columnInner = '> .elementor-widget-wrap';
     ui.percentsTooltip = '> .elementor-element-overlay .elementor-column-percents-tooltip';
     return ui;
   },
@@ -31953,29 +32278,18 @@ ColumnView = BaseElementView.extend({
   },
   onRender: function onRender() {
     var _this = this;
-    var isDomOptimizationActive = elementorCommon.config.experimentalFeatures.e_dom_optimization,
-      getDropIndex = function getDropIndex(side, event) {
-        var newIndex = jQuery(event.currentTarget).index();
-
-        // Since 3.0.0, the `.elementor-background-overlay` element sit at the same level as widgets
-        if ('bottom' === side && !isDomOptimizationActive) {
-          newIndex++;
-        } else if ('top' === side && isDomOptimizationActive) {
-          newIndex--;
-        }
-        return newIndex;
-      };
-    var itemsClasses = '';
-    if (isDomOptimizationActive) {
-      itemsClasses = ' > .elementor-widget-wrap > .elementor-element, >.elementor-widget-wrap > .elementor-empty-view > .elementor-first-add';
-    } else {
-      itemsClasses = ' > .elementor-column-wrap > .elementor-widget-wrap > .elementor-element, >.elementor-column-wrap > .elementor-widget-wrap > .elementor-empty-view > .elementor-first-add';
-    }
+    var getDropIndex = function getDropIndex(side, event) {
+      var newIndex = jQuery(event.currentTarget).index();
+      if ('top' === side) {
+        newIndex--;
+      }
+      return newIndex;
+    };
     BaseElementView.prototype.onRender.apply(this, arguments);
     this.changeChildContainerClasses();
     this.changeSizeUI();
     this.$el.html5Droppable({
-      items: itemsClasses,
+      items: ' > .elementor-widget-wrap > .elementor-element, >.elementor-widget-wrap > .elementor-empty-view > .elementor-first-add',
       axis: ['vertical'],
       groups: ['elementor-element'],
       isDroppingAllowed: this.isDroppingAllowed.bind(this),
@@ -32411,6 +32725,7 @@ var ContainerView = BaseElementView.extend({
 
     /* Translators: %s: Element name. */
     jQuery('#elementor-panel-header-title').html(sprintf(__('Edit %s', 'elementor'), title));
+    this.updateNeedHelpLink();
   },
   getPanelTitle: function getPanelTitle() {
     return this.isFlexContainer() ? __('Container', 'elementor') : __('Grid', 'elementor');
@@ -32517,6 +32832,13 @@ var ContainerView = BaseElementView.extend({
       delete this._showingEmptyView; // Marionette property that needs to be falsy for showEmptyView() to fully execute.
       this.showEmptyView(); // Marionette function.
       this.handleGridEmptyView();
+    }
+  },
+  updateNeedHelpLink: function updateNeedHelpLink() {
+    var $linkElement = jQuery('#elementor-panel__editor__help__link');
+    var href = this.isGridContainer() ? 'https://go.elementor.com/widget-container-grid' : 'https://go.elementor.com/widget-container';
+    if ($linkElement) {
+      $linkElement.attr('href', href);
     }
   }
 });
@@ -32666,11 +32988,7 @@ var DEFAULT_INNER_SECTION_COLUMNS = 2,
   DEFAULT_MAX_COLUMNS = 10;
 var SectionView = BaseElementView.extend({
   childViewContainer: function childViewContainer() {
-    var containerSelector = '> .elementor-container';
-    if (!elementorCommon.config.experimentalFeatures.e_dom_optimization) {
-      containerSelector += ' > .elementor-row';
-    }
-    return containerSelector;
+    return '> .elementor-container';
   },
   template: Marionette.TemplateCache.get('#tmpl-elementor-section-content'),
   addSectionView: null,
@@ -34041,7 +34359,7 @@ var _default = /*#__PURE__*/function (_Marionette$Composite) {
       if (this.isRoot()) {
         return;
       }
-      this.ui.item.css('padding-inline-start', this.getIndent());
+      this.ui.item.css('padding-inline-start', this.getIndent() + 'px');
       this.toggleHiddenClass();
       this.renderIndicators();
     }
@@ -38926,8 +39244,23 @@ var FilesUploadHandler = /*#__PURE__*/function () {
       frame.uploader.uploader.param('uploadTypeCaller', 'elementor-wp-media-upload');
     }
   }, {
+    key: "getUnfilteredFilesNonAdminDialog",
+    value: function getUnfilteredFilesNonAdminDialog() {
+      return elementorCommon.dialogsManager.createWidget('alert', {
+        id: 'e-unfiltered-files-disabled-dialog',
+        headerMessage: __('Sorry, you can\'t upload that file yet', 'elementor'),
+        message: __('This is because JSON files may pose a security risk.', 'elementor') + '<br><br>' + __('To upload them anyway, ask the site administrator to enable unfiltered file uploads.', 'elementor'),
+        strings: {
+          confirm: __('Got it', 'elementor')
+        }
+      });
+    }
+  }, {
     key: "getUnfilteredFilesNotEnabledDialog",
     value: function getUnfilteredFilesNotEnabledDialog(callback) {
+      if (!elementor.config.user.is_administrator) {
+        return this.getUnfilteredFilesNonAdminDialog();
+      }
       var onConfirm = function onConfirm() {
         elementorCommon.ajax.addRequest('enable_unfiltered_files_upload', {}, true);
         elementorCommon.config.filesUpload.unfilteredFiles = true;
@@ -38938,6 +39271,9 @@ var FilesUploadHandler = /*#__PURE__*/function () {
   }, {
     key: "getUnfilteredFilesNotEnabledImportTemplateDialog",
     value: function getUnfilteredFilesNotEnabledImportTemplateDialog(callback) {
+      if (!elementor.config.user.is_administrator) {
+        return this.getUnfilteredFilesNonAdminDialog();
+      }
       return elementorCommon.dialogsManager.createWidget('confirm', {
         id: 'e-enable-unfiltered-files-dialog-import-template',
         headerMessage: __('Enable Unfiltered File Uploads', 'elementor'),
@@ -40082,7 +40418,7 @@ presetsFactory = {
     };
   },
   getAbsolutePresetValues: function getAbsolutePresetValues(preset) {
-    var clonedPreset = elementorCommon.helpers.cloneObject(preset),
+    var clonedPreset = structuredClone(preset),
       presetDictionary = this.getPresetsDictionary();
     _.each(clonedPreset, function (unitValue, unitIndex) {
       if (presetDictionary[unitValue]) {
@@ -40092,7 +40428,7 @@ presetsFactory = {
     return clonedPreset;
   },
   getPresets: function getPresets(columnsCount, presetIndex) {
-    var presets = elementorCommon.helpers.cloneObject(elementor.config.elements.section.presets);
+    var presets = structuredClone(elementor.config.elements.section.presets);
     if (columnsCount) {
       presets = presets[columnsCount];
     }
@@ -41931,21 +42267,11 @@ var Preview = BaseSectionsContainerView.extend({
     });
   },
   onRender: function onRender() {
-    var $contentContainer;
-    if (elementorCommon.config.experimentalFeatures.e_dom_optimization) {
-      $contentContainer = this.$el;
-    } else {
-      var $inner = jQuery('<div>', {
-        class: 'elementor-inner'
-      });
-      this.$el.html($inner);
-      $contentContainer = $inner;
-    }
-    $contentContainer.html(this.$childViewContainer);
+    this.$el.html(this.$childViewContainer);
     if (elementor.userCan('design')) {
       var addNewSectionView = new _independent.default();
       addNewSectionView.render();
-      $contentContainer.append(addNewSectionView.$el);
+      this.$el.append(addNewSectionView.$el);
     }
   }
 });
@@ -50443,6 +50769,71 @@ function findChildContainerOrFail(container, index) {
 
 /***/ }),
 
+/***/ "../modules/promotions/assets/js/editor/behavior.js":
+/*!**********************************************************!*\
+  !*** ../modules/promotions/assets/js/editor/behavior.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var PromotionBehavior = /*#__PURE__*/function (_Marionette$Behavior) {
+  (0, _inherits2.default)(PromotionBehavior, _Marionette$Behavior);
+  var _super = _createSuper(PromotionBehavior);
+  function PromotionBehavior() {
+    (0, _classCallCheck2.default)(this, PromotionBehavior);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(PromotionBehavior, [{
+    key: "ui",
+    value: function ui() {
+      return {
+        displayConditionsButton: '.eicon-flow.e-control-display-conditions-promotion'
+      };
+    }
+  }, {
+    key: "events",
+    value: function events() {
+      return {
+        'click @ui.displayConditionsButton': 'onClickControlButtonDisplayConditions'
+      };
+    }
+  }, {
+    key: "onClickControlButtonDisplayConditions",
+    value: function onClickControlButtonDisplayConditions(event) {
+      event.stopPropagation();
+      var dialogOptions = {
+        title: __('Display Conditions', 'elementor'),
+        content: __('Upgrade to Elementor Pro Advanced to get the Display Conditions Feature as well as additional professional and ecommerce widgets', 'elementor'),
+        targetElement: this.el,
+        actionButton: {
+          url: 'https://go.elementor.com/go-pro-display-conditions/',
+          text: __('Upgrade Now', 'elementor')
+        }
+      };
+      elementor.promotion.showDialog(dialogOptions);
+    }
+  }]);
+  return PromotionBehavior;
+}(Marionette.Behavior);
+exports["default"] = PromotionBehavior;
+
+/***/ }),
+
 /***/ "../modules/promotions/assets/js/editor/module.js":
 /*!********************************************************!*\
   !*** ../modules/promotions/assets/js/editor/module.js ***!
@@ -50462,6 +50853,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _behavior = _interopRequireDefault(__webpack_require__(/*! ./behavior */ "../modules/promotions/assets/js/editor/behavior.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var Module = /*#__PURE__*/function (_elementorModules$edi) {
@@ -50488,6 +50880,21 @@ var Module = /*#__PURE__*/function (_elementorModules$edi) {
         }
         return DefaultView;
       });
+      elementor.hooks.addFilter('controls/base/behaviors', this.registerControlBehavior);
+    }
+  }, {
+    key: "registerControlBehavior",
+    value: function registerControlBehavior(behaviors, view) {
+      if ('display_conditions_pro' !== view.options.model.get('name')) {
+        return behaviors;
+      }
+      if (!behaviors) {
+        behaviors = {};
+      }
+      behaviors.promotions = {
+        behaviorClass: _behavior.default
+      };
+      return behaviors;
     }
   }]);
   return Module;

@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -25,8 +25,8 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-var ConvertAll = /*#__PURE__*/function (_$e$modules$document$) {
-  (0, _inherits2.default)(ConvertAll, _$e$modules$document$);
+var ConvertAll = /*#__PURE__*/function (_$e$modules$editor$do) {
+  (0, _inherits2.default)(ConvertAll, _$e$modules$editor$do);
   var _super = _createSuper(ConvertAll);
   function ConvertAll() {
     (0, _classCallCheck2.default)(this, ConvertAll);
@@ -53,7 +53,7 @@ var ConvertAll = /*#__PURE__*/function (_$e$modules$document$) {
     }
   }]);
   return ConvertAll;
-}($e.modules.document.CommandHistory);
+}($e.modules.editor.document.CommandHistoryBase);
 exports.ConvertAll = ConvertAll;
 
 /***/ }),
@@ -84,8 +84,8 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 /**
  * @typedef {import('../../../../../../assets/dev/js/editor/container/container')} Container
  */
-var Convert = /*#__PURE__*/function (_$e$modules$document$) {
-  (0, _inherits2.default)(Convert, _$e$modules$document$);
+var Convert = /*#__PURE__*/function (_$e$modules$editor$do) {
+  (0, _inherits2.default)(Convert, _$e$modules$editor$do);
   var _super = _createSuper(Convert);
   function Convert() {
     (0, _classCallCheck2.default)(this, Convert);
@@ -184,7 +184,7 @@ var Convert = /*#__PURE__*/function (_$e$modules$document$) {
     }
   }]);
   return Convert;
-}($e.modules.document.CommandHistory);
+}($e.modules.editor.document.CommandHistoryBase);
 exports.Convert = Convert;
 
 /***/ }),

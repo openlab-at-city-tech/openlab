@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -2273,6 +2273,42 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/ai/assets/js/editor/components/prompt-library-link.js":
+/*!************************************************************************!*\
+  !*** ../modules/ai/assets/js/editor/components/prompt-library-link.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var PromptLibraryLink = function PromptLibraryLink(props) {
+  return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    variant: "body2",
+    color: "text.secondary"
+  }, (0, _i18n.__)('For more inspiration, try experimenting with proven prompts from our'), ' ', /*#__PURE__*/_react.default.createElement(_ui.Link, {
+    href: props.libraryLink,
+    className: "elementor-clickable",
+    target: "_blank"
+  }, (0, _i18n.__)('prompt library')));
+};
+PromptLibraryLink.propTypes = {
+  libraryLink: _propTypes.default.string
+};
+var _default = PromptLibraryLink;
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/ai/assets/js/editor/components/prompt-search.js":
 /*!******************************************************************!*\
   !*** ../modules/ai/assets/js/editor/components/prompt-search.js ***!
@@ -2349,12 +2385,13 @@ var PromptSuggestions = function PromptSuggestions(props) {
         return props.onSelect(option);
       }
     });
-  })));
+  })), props.children);
 };
 PromptSuggestions.propTypes = {
   suggestions: _propTypes.default.arrayOf(_propTypes.default.string),
   onSelect: _propTypes.default.func.isRequired,
-  suggestionFilter: _propTypes.default.func
+  suggestionFilter: _propTypes.default.func,
+  children: _propTypes.default.node
 };
 var _default = PromptSuggestions;
 exports["default"] = _default;
@@ -3963,7 +4000,6 @@ var useUserInfo = function useUserInfo() {
       is_connected: false,
       is_get_started: false,
       connect_url: '',
-      builder_url: '',
       usage: {
         hasAiSubscription: false,
         quota: 0,
@@ -5127,6 +5163,7 @@ var _promptErrorMessage = _interopRequireDefault(__webpack_require__(/*! ../../c
 var _codeBlock = _interopRequireDefault(__webpack_require__(/*! ./code-block */ "../modules/ai/assets/js/editor/pages/form-code/code-block.js"));
 var _useCodePrompt2 = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-code-prompt */ "../modules/ai/assets/js/editor/hooks/use-code-prompt.js"));
 var _promptHistoryActionContext = __webpack_require__(/*! ../../components/prompt-history/context/prompt-history-action-context */ "../modules/ai/assets/js/editor/components/prompt-history/context/prompt-history-action-context.js");
+var _promptLibraryLink = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-library-link */ "../modules/ai/assets/js/editor/components/prompt-library-link.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
@@ -5175,7 +5212,16 @@ var FormCode = function FormCode(_ref) {
     }
   }]);
   var lastRun = (0, _react.useRef)(function () {});
-  var autocompleteItems = 'css' === (additionalOptions === null || additionalOptions === void 0 ? void 0 : additionalOptions.codeLanguage) ? _actionsData.codeCssAutocomplete : _actionsData.codeHtmlAutocomplete;
+  var autocompleteItems = _actionsData.codeHtmlAutocomplete;
+  var promptLibraryLink = '';
+  if ('css' === (additionalOptions === null || additionalOptions === void 0 ? void 0 : additionalOptions.codeLanguage)) {
+    autocompleteItems = _actionsData.codeCssAutocomplete;
+    promptLibraryLink = 'https://go.elementor.com/ai-prompt-library-css/';
+  } else if (additionalOptions !== null && additionalOptions !== void 0 && additionalOptions.htmlMarkup) {
+    promptLibraryLink = 'https://go.elementor.com/ai-prompt-library-html/';
+  } else {
+    promptLibraryLink = 'https://go.elementor.com/ai-prompt-library-custom-code/';
+  }
   var showSuggestions = !prompt;
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(event) {
@@ -5229,7 +5275,9 @@ var FormCode = function FormCode(_ref) {
   })), showSuggestions && /*#__PURE__*/_react.default.createElement(_promptSuggestions.default, {
     suggestions: autocompleteItems,
     onSelect: setPrompt
-  }), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+  }, /*#__PURE__*/_react.default.createElement(_promptLibraryLink.default, {
+    libraryLink: promptLibraryLink
+  })), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     direction: "row",
     alignItems: "center",
     sx: {
@@ -8032,6 +8080,7 @@ var _useTextToImage2 = _interopRequireDefault(__webpack_require__(/*! ./hooks/us
 var _useImageActions2 = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-image-actions */ "../modules/ai/assets/js/editor/pages/form-media/hooks/use-image-actions.js"));
 var _globalSettingsContext = __webpack_require__(/*! ../../context/global-settings-context */ "../modules/ai/assets/js/editor/pages/form-media/context/global-settings-context.js");
 var _promptHistoryActionContext = __webpack_require__(/*! ../../../../components/prompt-history/context/prompt-history-action-context */ "../modules/ai/assets/js/editor/components/prompt-history/context/prompt-history-action-context.js");
+var _promptLibraryLink = _interopRequireDefault(__webpack_require__(/*! ../../../../components/prompt-library-link */ "../modules/ai/assets/js/editor/components/prompt-library-link.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var getPromptPlaceholder = function getPromptPlaceholder(images) {
@@ -8163,7 +8212,13 @@ var Generate = function Generate() {
     onEditImage: edit
   }) : /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_view.default.ContentHeading, {
     primary: (0, _i18n.__)('Spark your imagination with images generated by our community', 'elementor')
-  }), /*#__PURE__*/_react.default.createElement(_gallery.default, {
+  }), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    sx: {
+      mb: 3
+    }
+  }, /*#__PURE__*/_react.default.createElement(_promptLibraryLink.default, {
+    libraryLink: "https://go.elementor.com/ai-prompt-library-image/"
+  })), /*#__PURE__*/_react.default.createElement(_gallery.default, {
     cols: 3
   }, suggestedImages === null || suggestedImages === void 0 ? void 0 : suggestedImages.map(function (suggestedPrompt) {
     return /*#__PURE__*/_react.default.createElement(_gallery.default.Image, {
@@ -9769,6 +9824,7 @@ var _loader = _interopRequireDefault(__webpack_require__(/*! ../../components/lo
 var _promptSearch = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-search */ "../modules/ai/assets/js/editor/components/prompt-search.js"));
 var _textarea = _interopRequireDefault(__webpack_require__(/*! ../../components/textarea */ "../modules/ai/assets/js/editor/components/textarea.js"));
 var _promptSuggestions = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-suggestions */ "../modules/ai/assets/js/editor/components/prompt-suggestions.js"));
+var _promptLibraryLink = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-library-link */ "../modules/ai/assets/js/editor/components/prompt-library-link.js"));
 var _promptActionSelection = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-action-selection */ "../modules/ai/assets/js/editor/components/prompt-action-selection.js"));
 var _generateButton = _interopRequireDefault(__webpack_require__(/*! ../../components/generate-button */ "../modules/ai/assets/js/editor/components/generate-button.js"));
 var _promptAction = _interopRequireDefault(__webpack_require__(/*! ../../components/prompt-action */ "../modules/ai/assets/js/editor/components/prompt-action.js"));
@@ -9922,7 +9978,9 @@ var FormText = function FormText(_ref) {
     suggestionFilter: function suggestionFilter(suggestion) {
       return suggestion + '...';
     }
-  }), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+  }, /*#__PURE__*/_react.default.createElement(_promptLibraryLink.default, {
+    libraryLink: "https://go.elementor.com/ai-prompt-library-text/"
+  })), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     direction: "row",
     alignItems: "center",
     sx: {

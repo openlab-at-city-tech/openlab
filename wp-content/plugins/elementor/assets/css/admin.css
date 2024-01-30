@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 .elementor-button,
 .e-btn,
 #elementor-deactivate-feedback-modal .dialog-skip,
@@ -106,6 +106,12 @@
 #elementor-deactivate-feedback-modal .dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-submit:disabled {
   background: transparent;
   color: var(--e-a-color-txt-disabled);
+}
+.elementor-button.e-btn-txt-border,
+.e-btn.e-btn-txt-border,
+#elementor-deactivate-feedback-modal .e-btn-txt-border.dialog-skip,
+#elementor-deactivate-feedback-modal .e-btn-txt-border.dialog-submit {
+  border: 1px solid var(--e-a-color-txt-muted);
 }
 .elementor-button.elementor-button-success, .elementor-button.e-success,
 .e-btn.elementor-button-success,
@@ -478,6 +484,30 @@
 #elementor-deactivate-feedback-modal .e-accent.dialog-skip:active,
 #elementor-deactivate-feedback-modal .e-accent.dialog-submit:active {
   background-color: var(--e-a-btn-bg-accent-active);
+}
+.elementor-button.elementor-button-info, .elementor-button.e-info,
+.e-btn.elementor-button-info,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-skip,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-submit,
+.e-btn.e-info,
+#elementor-deactivate-feedback-modal .e-info.dialog-skip,
+#elementor-deactivate-feedback-modal .e-info.dialog-submit {
+  background-color: var(--e-a-btn-bg-info);
+}
+.elementor-button.elementor-button-info:hover, .elementor-button.elementor-button-info:focus, .elementor-button.e-info:hover, .elementor-button.e-info:focus,
+.e-btn.elementor-button-info:hover,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-skip:hover,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-submit:hover,
+.e-btn.elementor-button-info:focus,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-skip:focus,
+#elementor-deactivate-feedback-modal .elementor-button-info.dialog-submit:focus,
+.e-btn.e-info:hover,
+#elementor-deactivate-feedback-modal .e-info.dialog-skip:hover,
+#elementor-deactivate-feedback-modal .e-info.dialog-submit:hover,
+.e-btn.e-info:focus,
+#elementor-deactivate-feedback-modal .e-info.dialog-skip:focus,
+#elementor-deactivate-feedback-modal .e-info.dialog-submit:focus {
+  background-color: var(--e-a-btn-bg-info-hover);
 }
 .elementor-button.elementor-button-warning, .elementor-button.e-warning,
 .e-btn.elementor-button-warning,
@@ -1420,6 +1450,10 @@ fieldset:disabled a.e-button {
   background: transparent;
   color: var(--e-a-color-txt-disabled);
 }
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt-border,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt-border {
+  border: 1px solid var(--e-a-color-txt-muted);
+}
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success {
@@ -1532,6 +1566,18 @@ fieldset:disabled a.e-button {
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:active,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:active {
   background-color: var(--e-a-btn-bg-accent-active);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info {
+  background-color: var(--e-a-btn-bg-info);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:focus {
+  background-color: var(--e-a-btn-bg-info-hover);
 }
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning,
@@ -2086,14 +2132,21 @@ fieldset:disabled a.e-button {
 }
 #elementor-role-manager .elementor-role-row .elementor-role-controls .elementor-role-go-pro {
   display: flex;
+  align-items: center;
 }
 #elementor-role-manager .elementor-role-row .elementor-role-controls .elementor-role-go-pro .elementor-role-go-pro__desc {
   font-weight: 500;
   font-style: italic;
+  flex-grow: 1;
 }
 #elementor-role-manager .elementor-role-row .elementor-role-controls .elementor-role-go-pro .elementor-role-go-pro__link {
-  text-align: end;
-  flex-grow: 1;
+  display: flex;
+}
+#elementor-role-manager .elementor-role-row .elementor-role-controls-advanced > div + div {
+  margin-block-start: 15px;
+}
+#elementor-role-manager .elementor-role-control-warning {
+  color: var(--e-a-color-danger);
 }
 
 #elementor-beta-tester-modal {
@@ -2236,5 +2289,105 @@ fieldset:disabled a.e-button {
 }
 .e-landing-pages-empty .e-trashed-items {
   text-align: center;
+}
+
+.e-feature-promotion {
+  --e-a-top-bar-height: 50px;
+  --e-a-content-area-spacing: 110px;
+  width: 1220px;
+  height: calc(100vh - var(--e-a-top-bar-height) - var(--e-a-content-area-spacing));
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: auto;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  margin: auto;
+  transform: translate(-10px, 40px);
+  text-align: center;
+  font-family: var(--e-a-font-family);
+}
+.e-feature-promotion_data {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: self-start;
+  margin-inline-start: 15px;
+  padding-inline-end: 40px;
+  max-width: 608px;
+}
+.e-feature-promotion_data h3 {
+  margin-block-start: 0;
+  margin-inline-end: 0;
+  margin-block-end: 33px;
+  margin-inline-start: 0;
+  text-align: start;
+  font-size: 1.85rem;
+  font-weight: 300;
+  color: inherit;
+  line-height: 1.2;
+}
+.e-feature-promotion_data ul {
+  margin-block-start: 0;
+  margin-block-end: 1.6rem;
+  text-align: start;
+}
+.e-feature-promotion_data ul > li {
+  margin-block-start: 0;
+  margin-inline-end: 9px;
+  margin-block-end: 8px;
+  margin-inline-start: 8px;
+  display: flex;
+  font-size: 1rem;
+  line-height: 21px;
+}
+.e-feature-promotion_data ul > li:before {
+  content: url("data:image/svg+xml,%3Csvg width='25' height='24' viewBox='0 0 25 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M21.5201 6.46967C21.813 6.76256 21.813 7.23744 21.5201 7.53033L11.5201 17.5303C11.2272 17.8232 10.7523 17.8232 10.4594 17.5303L5.45942 12.5303C5.16652 12.2374 5.16652 11.7626 5.45942 11.4697C5.75231 11.1768 6.22718 11.1768 6.52008 11.4697L10.9897 15.9393L20.4594 6.46967C20.7523 6.17678 21.2272 6.17678 21.5201 6.46967Z' fill='%230C0D0E'/%3E%3C/svg%3E%0A");
+  font-size: 1.4rem;
+  margin-block-start: -3px;
+  margin-inline-end: 9px;
+  margin-block-end: 0;
+  margin-inline-start: -9px;
+}
+.e-feature-promotion_data > .go-pro {
+  display: flex;
+  align-items: center;
+  padding: 9px 15px;
+  font-size: 1rem;
+}
+.e-feature-promotion_data > .side-note {
+  justify-self: baseline;
+  margin-block-start: 2rem;
+  text-align: start;
+}
+.e-feature-promotion_iframe {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  aspect-ratio: 16/9;
+  width: 608px;
+}
+
+body.rtl .e-feature-promotion {
+  transform: translateX(10px);
+}
+
+@media (max-width: 1410px) {
+  .e-feature-promotion {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 90%;
+  }
+  .e-feature-promotion_data {
+    margin-block-end: 2rem;
+    margin-inline-start: unset;
+    padding-inline-end: unset;
+  }
+  .e-feature-promotion_iframe {
+    max-width: 90%;
+    aspect-ratio: 16/9;
+  }
 }
 /*# sourceMappingURL=admin.css.map */

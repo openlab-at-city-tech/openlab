@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 #e-dashboard-widget-admin-top-bar {
   position: absolute;
   opacity: 0;
@@ -77,11 +77,11 @@ body.folded #e-admin-top-bar-root {
   display: block;
 }
 #e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody #wpbody-content {
-  margin-top: 50px;
+  margin-block-start: 50px;
 }
 #e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody .wrap {
   clear: both;
-  padding-top: 10px;
+  padding-block-start: 10px;
 }
 #e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody .wrap h1 {
   display: none;

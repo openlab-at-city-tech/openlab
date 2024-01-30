@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["kit-library"],{
 
 /***/ "../app/modules/kit-library/assets/js/components/badge.scss":
@@ -3360,6 +3360,7 @@ __webpack_require__(/*! ./index-header.scss */ "../app/modules/kit-library/asset
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function IndexHeader(props) {
+  var _elementorAppConfig$u, _elementorAppConfig$u2;
   var navigate = (0, _router.useNavigate)();
   var _useState = (0, _react.useState)(false),
     _useState2 = (0, _slicedToArray2.default)(_useState, 2),
@@ -3382,6 +3383,7 @@ function IndexHeader(props) {
     var element = e.target.classList.contains('eps-modal__overlay') ? 'overlay' : 'x';
     eventTracking('kit-library/modal-close', element, null, 'info');
   };
+  var shouldShowImportButton = elementorAppConfig.user.is_administrator || ((_elementorAppConfig$u = (_elementorAppConfig$u2 = elementorAppConfig.user.restrictions) === null || _elementorAppConfig$u2 === void 0 ? void 0 : _elementorAppConfig$u2.includes('json-upload')) !== null && _elementorAppConfig$u !== void 0 ? _elementorAppConfig$u : false);
   var buttons = (0, _react.useMemo)(function () {
     return [{
       id: 'info',
@@ -3401,7 +3403,7 @@ function IndexHeader(props) {
         eventTracking('kit-library/refetch');
         props.refetch();
       }
-    }, {
+    }, shouldShowImportButton && {
       id: 'import',
       text: __('Import', 'elementor'),
       hideText: true,
@@ -3412,7 +3414,7 @@ function IndexHeader(props) {
         navigate('/import?referrer=kit-library');
       }
     }];
-  }, [props.isFetching, props.refetch]);
+  }, [props.isFetching, props.refetch, shouldShowImportButton]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_header.default, {
     buttons: buttons
   }), /*#__PURE__*/_react.default.createElement(_popoverDialog.default, {
@@ -4583,4 +4585,4 @@ exports.isTierAtLeast = isTierAtLeast;
 /***/ })
 
 }]);
-//# sourceMappingURL=kit-library.411b75eeafae7457107e.bundle.js.map
+//# sourceMappingURL=kit-library.f07b34b5f8e5950b1f5f.bundle.js.map

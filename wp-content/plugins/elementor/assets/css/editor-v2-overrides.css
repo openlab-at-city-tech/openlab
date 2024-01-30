@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /**
  * Here should be only styles that related to the Editor v1, and should be overridden when using the Editor v2.
  */
@@ -25,7 +25,7 @@ body.elementor-navigator-docked #elementor-navigator {
   font-weight: 700;
   background-color: var(--e-a-bg-default);
   color: var(--e-a-color-txt-accent);
-  border-bottom: var(--e-a-border);
+  border-block-end: var(--e-a-border);
   height: 48px;
 }
 

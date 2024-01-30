@@ -3,9 +3,9 @@ Contributors: elemntor
 Tags: page builder, editor, landing page, drag-and-drop, elementor, visual editor, wysiwyg, design, maintenance mode, coming soon, under construction, website builder, landing page builder, front-end builder
 Requires at least: 6.0
 Tested up to: 6.4
-Requires PHP: 7.3
-Stable tag: 3.18.2
-Beta tag: 3.18.0-beta4
+Requires PHP: 7.4
+Stable tag: 3.19.0
+Beta tag: 3.19.0-beta6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=lBu9TKg7dFM
 
 Elementor is the leading WordPress website builder that empowers you to successfully build professional, pixel-perfect websites. With an intuitive drag and drop interface, you get complete control to build any type of website,  without writing a single line of code.
 
-Revolutionize the way you build websites with [Elementor AI](https://go.elementor.com/elementor-ai/), a native AI integration built specifically for Elementor, that transforms the way you build websites by enabling you to create complete sections, original text, code, and images instantly.
+Revolutionize the way you build websites with [Elementor AI](https://go.elementor.com/wp-repo-description-tab-elementor-ai/), a native AI integration built specifically for Elementor, that transforms the way you build websites by enabling you to create complete sections, original text, code, and images instantly.
 
 Unlock all of Elementor’s features and elevate your website’s potential with [Elementor Pro](https://go.elementor.com/wp-repo-description-tab-elementor-pro-pro-features/).
 
@@ -83,6 +83,8 @@ To accelerate your workflow Elementor includes a multitude of workflow enhancing
 
 = FAST LOADING WEBSITES =
 Your website’s performance impacts your visitor’s experience and search result ranking. Therefore, Elementor continuously invests in improving performance and recently partnered with Google Chrome to identify more ways to optimize performance, without impacting design. Performance improving features include: reduced DOM output, improved media file loading, reduced CSS and JS files, lazy loading, faster font loading, optimize front-end asset loading, and more. To learn more, check out our [performance page](https://go.elementor.com/wp-repo-description-tab-performance-performance-page/).
+
+***Looking to boost your site's performance?** Meet the [Image Optimizer plugin](https://go.elementor.com/wp-repo-description-tab-elementor-io/) by Elementor: an easy-to-use WordPress plugin that effortlessly reduces image sizes without sacrificing quality. Compatible with popular formats like JPEG, PNG, WebP, and GIF, it ensures a visually stunning, high-speed website. Elevate your performance with Image Optimizer – [download now](https://wordpress.org/plugins/image-optimization/)!*
 
 = EMPLOYING ACCESSIBILITY BEST-PRACTICES =
 Elementor is built with accessibility in mind and offers tools and enhancements to help you provide a better experience for all users. These include HTML 5 semantic, full keyboard navigation menu, ongoing accessibility improvement of features, widget, and more.
@@ -154,12 +156,12 @@ More information could be found in our [Trust Center](https://go.elementor.com/t
 = Minimum Requirements =
 
 * WordPress 6.0 or greater
-* PHP version 7.3 or greater
+* PHP version 7.4 or greater
 * MySQL version 5.0 or greater
 
 = Recommended Requirements =
 
-* PHP version 7.4 or greater
+* PHP version 8.1 or greater
 * MySQL version 5.6 or greater
 * WordPress Memory limit of 64 MB or greater (128 MB or higher is preferred)
 
@@ -245,8 +247,42 @@ You can also add a new language via [translate.wordpress.org](https://go.element
 
 == Changelog ==
 
-= 3.18.2 - 2023-12-08 =
+= 3.19.0 - 2024-01-29 =
 
-* Security Fix: Addressed security weaknesses in template upload mechanism
+* New: Generate Container Variations with AI directly from Elementor's Blocks Template Library
+* New: Introducing the 'What's New' screen - Insights on the latest features, enhancements, and updates
+* Tweak: Added responsive controls to Gradient in Background and Background Overlay ([#10247](https://github.com/elementor/elementor/issues/10247), [#6783](https://github.com/elementor/elementor/issues/6783), [#10449](https://github.com/elementor/elementor/issues/10449), [#15377](https://github.com/elementor/elementor/issues/15377), [#17000](https://github.com/elementor/elementor/issues/17000))
+* Tweak: Added caption space option in Basic Gallery and Image Carousel widgets (props [@rodolphebertozzo](https://github.com/rodolphebertozzo), [#12533](https://github.com/elementor/elementor/issues/12533), [#21128](https://github.com/elementor/elementor/issues/21128))
+* Tweak: Added responsive control to Size Resolution in Testimonial widget (props [@rodolphebertozzo](https://github.com/rodolphebertozzo))
+* Tweak: Restricted JSON file upload privileges to admin users only for enhanced security and control
+* Tweak: Introduced the ability for admin users to grant JSON file upload permissions to non-admin users in Role Manager
+* Tweak: Raised the minimum required PHP version from 7.3 to 7.4
+* Tweak: Incorporated workflow hints within the media control to improve accessibility
+* Tweak: Incorporated workflow hints within the gallery control to improve accessibility
+* Tweak: Implemented CSS logical properties in Divider widget
+* Tweak: Removed `Size` control for new usage in Heading Widget
+* Tweak: Removed `Size` control for new usage in Button Widget
+* Tweak: Removed `Progress Type` control for new usage in Progress Bar widget
+* Tweak: Added responsive control to Vertical Align in Icon Box widget
+* Tweak: Added responsive control to Image Position in Image Box widget
+* Tweak: Added All Statuses filter in Element Manager
+* Tweak: Added additional size units and custom units in all elements
+* Tweak: Limit pagination for five attempts in Build with AI modal
+* Tweak: Replaced select control with choose control for Image Position in Testimonial widget
+* Tweak: Shifted alignment controls from the Content tab to the Style tab in Heading, Icon, and Image widgets
+* Tweak: Promoted Optimized Gutenberg Loading feature to Stable status
+* Tweak: Promoted Optimize Image Loading feature to Stable status
+* Tweak: Promoted Build with AI feature to Beta status and activated for all users
+* Tweak: Optimized DOM Output feature merged to version
+* Tweak: Added new Notice control for Editor panels
+* Tweak: Added new Alert control for Editor panels
+* Fix: Deprecation notices in console log in History panel ([#19456](https://github.com/elementor/elementor/issues/19456), [#22159](https://github.com/elementor/elementor/issues/22159))
+* Fix: Dark Mode affects the link options modal in Text Editor widget ([#23477](https://github.com/elementor/elementor/issues/23477))
+* Fix: Enhanced code quality checks within the template export process
+* Fix: Added better output escaping to Image Size control attributes
+* Fix: Added better output escaping to URL controls
+* Fix: Justify items not working when grid is set to full width in Grid Container
+* Fix: Asymmetric icons are not displayed correctly in Accordion widget
+* Fix: Share copy options were not functioning properly with VideoPress integration in Video widget
 
 [See changelog for all versions.](https://go.elementor.com/full-changelog/)

@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["container"],{
 
@@ -51,6 +51,16 @@ class GridContainer extends elementorModules.frontend.handlers.Base {
     super.onInit();
     this.initLayoutOverlay();
     this.updateEmptyViewHeight();
+    elementor.hooks.addAction('panel/open_editor/container', this.onPanelShow);
+  }
+  onPanelShow(panel, model) {
+    const settingsModel = model.get('settings'),
+      containerType = settingsModel.get('container_type'),
+      $linkElement = panel.$el.find('#elementor-panel__editor__help__link'),
+      href = 'grid' === containerType ? 'https://go.elementor.com/widget-container-grid' : 'https://go.elementor.com/widget-container';
+    if ($linkElement) {
+      $linkElement.attr('href', href);
+    }
   }
   bindEvents() {
     elementorFrontend.elements.$window.on('resize', this.onDeviceModeChange);
@@ -490,4 +500,4 @@ exports["default"] = Shapes;
 /***/ })
 
 }]);
-//# sourceMappingURL=container.dfea7c883442d5ae61c8.bundle.js.map
+//# sourceMappingURL=container.af34d8c7325197c9feb9.bundle.js.map

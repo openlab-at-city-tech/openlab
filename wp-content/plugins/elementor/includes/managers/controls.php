@@ -92,9 +92,19 @@ class Controls_Manager {
 	const RAW_HTML = 'raw_html';
 
 	/**
+	 * Notice control.
+	 */
+	const NOTICE = 'notice';
+
+	/**
 	 * Deprecated Notice control.
 	 */
 	const DEPRECATED_NOTICE = 'deprecated_notice';
+
+	/**
+	 * Alert control.
+	 */
+	const ALERT = 'alert';
 
 	/**
 	 * Popover Toggle control.
@@ -401,6 +411,8 @@ class Controls_Manager {
 			self::TABS,
 			self::DIVIDER,
 			self::DEPRECATED_NOTICE,
+			self::ALERT,
+			self::NOTICE,
 
 			self::COLOR,
 			self::MEDIA,
@@ -1213,5 +1225,36 @@ class Controls_Manager {
 		}
 
 		return true;
+	}
+
+	public function add_display_conditions_controls( Controls_Stack $controls_stack ) {
+		if ( Utils::has_pro() ) {
+			return;
+		}
+
+		ob_start();
+		?>
+		<div class="e-control-display-conditions-promotion__wrapper">
+			<div class="e-control-display-conditions-promotion__description">
+				<span class="e-control-display-conditions-promotion__text">
+					<?php echo esc_html__( 'Display Conditions', 'elementor' ); ?>
+				</span>
+				<span class="e-control-display-conditions-promotion__lock-wrapper">
+					<i class="eicon-lock e-control-display-conditions-promotion"></i>
+				</span>
+			</div>
+			<i class="eicon-flow e-control-display-conditions-promotion"></i>
+		</div>
+		<?php
+		$control_template = ob_get_clean();
+
+		$controls_stack->add_control(
+			'display_conditions_pro',
+			[
+				'type'      => self::RAW_HTML,
+				'separator' => 'before',
+				'raw'       => $control_template,
+			]
+		);
 	}
 }

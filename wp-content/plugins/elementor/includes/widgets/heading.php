@@ -139,7 +139,6 @@ class Widget_Heading extends Widget_Base {
 				'default' => [
 					'url' => '',
 				],
-				'separator' => 'before',
 			]
 		);
 
@@ -148,7 +147,6 @@ class Widget_Heading extends Widget_Base {
 			[
 				'label' => esc_html__( 'Size', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 'default',
 				'options' => [
 					'default' => esc_html__( 'Default', 'elementor' ),
 					'small' => esc_html__( 'Small', 'elementor' ),
@@ -156,6 +154,10 @@ class Widget_Heading extends Widget_Base {
 					'large' => esc_html__( 'Large', 'elementor' ),
 					'xl' => esc_html__( 'XL', 'elementor' ),
 					'xxl' => esc_html__( 'XXL', 'elementor' ),
+				],
+				'default' => 'default',
+				'condition' => [
+					'size!' => 'default', // a workaround to hide the control, unless it's in use (not default).
 				],
 			]
 		);
@@ -177,6 +179,16 @@ class Widget_Heading extends Widget_Base {
 					'p' => 'p',
 				],
 				'default' => 'h2',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_title_style',
+			[
+				'label' => esc_html__( 'Title', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -207,25 +219,6 @@ class Widget_Heading extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}}' => 'text-align: {{VALUE}};',
 				],
-			]
-		);
-
-		$this->add_control(
-			'view',
-			[
-				'label' => esc_html__( 'View', 'elementor' ),
-				'type' => Controls_Manager::HIDDEN,
-				'default' => 'traditional',
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_title_style',
-			[
-				'label' => esc_html__( 'Title', 'elementor' ),
-				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -319,6 +312,8 @@ class Widget_Heading extends Widget_Base {
 
 		if ( ! empty( $settings['size'] ) ) {
 			$this->add_render_attribute( 'title', 'class', 'elementor-size-' . $settings['size'] );
+		} else {
+			$this->add_render_attribute( 'title', 'class', 'elementor-size-default' );
 		}
 
 		$this->add_inline_editing_attributes( 'title' );
@@ -354,7 +349,13 @@ class Widget_Heading extends Widget_Base {
 			title = '<a href="' + _.escape( settings.link.url ) + '">' + title + '</a>';
 		}
 
-		view.addRenderAttribute( 'title', 'class', [ 'elementor-heading-title', 'elementor-size-' + settings.size ] );
+		view.addRenderAttribute( 'title', 'class', [ 'elementor-heading-title' ] );
+
+		if ( '' !== settings.size ) {
+			view.addRenderAttribute( 'title', 'class', [ 'elementor-size-' + settings.size ] );
+		} else {
+			view.addRenderAttribute( 'title', 'class', [ 'elementor-size-default' ] );
+		}
 
 		view.addInlineEditingAttributes( 'title' );
 
