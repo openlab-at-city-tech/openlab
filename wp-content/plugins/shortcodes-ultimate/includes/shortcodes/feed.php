@@ -75,7 +75,7 @@ function su_shortcode_feed( $atts = null, $content = null ) {
 
 		$output .= sprintf(
 			'<li><a href="%s" target="_%s" title="%s">%s</a></li>',
-			esc_attr( $item->get_permalink() ),
+			esc_url( $item->get_permalink() ),
 			sanitize_key( $atts['target'] ),
 			esc_attr( $item->get_description() ),
 			wp_kses_post( $item->get_title() )
