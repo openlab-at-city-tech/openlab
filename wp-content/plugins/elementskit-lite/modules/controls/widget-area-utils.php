@@ -7,28 +7,6 @@ class Widget_Area_Utils {
 
 	function init() {
 		add_action( 'elementor/editor/after_enqueue_styles', array( $this, 'modal_content' ) );
-
-		add_action( 'wp_ajax_ekit_widgetarea_content', array( $this, 'ekit_widgetarea_content' ) );
-		add_action( 'wp_ajax_nopriv_ekit_widgetarea_content', array( $this, 'ekit_widgetarea_content' ) );
-	}
-
-	public function ekit_widgetarea_content() {
-		
-		if ( !isset($_POST['nonce']) || !wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'ekit_pro' ) ) {
-			wp_die();
-		}
-
-		$post_id = isset($_POST['post_id']) ? intval( $_POST['post_id'] ) : 0;
-		
-		if ( isset( $post_id ) ) {
-			$elementor = \Elementor\Plugin::instance();
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
-			echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $post_id ), $post_id ) );
-		} else {
-            echo esc_html__( 'Click on the Edit Content button to edit/add the content.', 'elementskit-lite' );
-		}
-		
-		wp_die();
 	}
 
 	public function modal_content() { 

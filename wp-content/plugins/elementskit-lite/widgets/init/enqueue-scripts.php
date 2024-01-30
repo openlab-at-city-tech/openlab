@@ -41,10 +41,6 @@ class Enqueue_Scripts {
 
         // Enqueue Scripts
         wp_enqueue_script( 'elementskit-elementor', \ElementsKit_Lite::widget_url() . 'init/assets/js/elementor.js', ['jquery', 'elementor-frontend', 'animate-circle'], \ElementsKit_Lite::version(), true );
-        wp_localize_script( 'elementskit-elementor', 'ekit_config', [
-            'ajaxurl'   => admin_url( 'admin-ajax.php' ),
-            'nonce'     => wp_create_nonce( 'ekit_pro' ),
-        ] );
 
         // compatibility
         if($this->is_plugin_active('elementskit/elementskit.php') && version_compare(\Elementskit::version(), '3.2.0', '<=')) {

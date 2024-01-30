@@ -497,7 +497,7 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
 
         ?>
         <div class="waypoint-tigger">
-            <div class="skillbar-group <?php echo esc_attr( $ekit_progressbar_style ); ?>" data-progress-bar>
+            <div class="skillbar-group <?php echo esc_attr( $ekit_progressbar_style ); ?>" data-progress-bar="">
                 <div class="single-skill-bar">
                     <?php if ( 'style-switch' != $ekit_progressbar_style ): ?>
                         <div class="skill-bar-content">
@@ -532,7 +532,7 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
                                 <?php endif; ?>
 
                                 <div class="number-percentage-wraper">
-                                    <span class="number-percentage" data-value="<?php echo esc_attr( $ekit_progressbar_percentage ); ?>" data-animation-duration=<?php echo esc_attr( $ekit_progressbar_data_duration['size'] ); ?>>0</span>%
+                                    <span class="number-percentage" data-value="<?php echo esc_attr( $ekit_progressbar_percentage ); ?>" data-animation-duration="<?php echo esc_attr( $ekit_progressbar_data_duration['size'] ); ?>">0</span>%
 
                                     <?php if ( 'tooltip-style' == $ekit_progressbar_style ): ?>
                                         <div class="svg-content">
@@ -556,7 +556,7 @@ class ElementsKit_Widget_Progressbar extends Widget_Base {
                             </div><!-- .skill-bar END -->
                         </div>
                         <span class="number-percentage-wraper">
-                            <span class="number-percentage" data-value=<?php echo esc_attr( $ekit_progressbar_percentage ); ?> data-animation-duration=<?php echo esc_attr( $ekit_progressbar_data_duration['size'] ); ?>>0</span>%
+                            <span class="number-percentage" data-value="<?php echo esc_attr( $ekit_progressbar_percentage ); ?>" data-animation-duration="<?php echo esc_attr( $ekit_progressbar_data_duration['size'] ); ?>">0</span>%
                         </span>
                     <?php endif; ?>
                 </div><!-- .single-skill-bar END -->

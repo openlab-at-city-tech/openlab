@@ -553,26 +553,57 @@ $pro_active = ( in_array( 'elementskit/elementskit.php', apply_filters( 'active_
 					<div class="attr-panel-body">
 						<div class="ekit-admin-user-data-separator"></div>
 						<?php
-						$this->utils->input(
-							array(
-								'type'        => 'text',
-								'name'        => 'user_data[zoom][api_key]',
-								'label'       => esc_html__( 'Api key', 'elementskit-lite' ),
-								'placeholder' => 'FmOUK_vdR-eepOExMhN7Kg',
-								'value'       => ( ! isset( $user_data['zoom']['api_key'] ) ) ? '' : ( $user_data['zoom']['api_key'] ),
-							)
-						);
-						?>
-						<?php
-						$this->utils->input(
-							array(
-								'type'        => 'text',
-								'name'        => 'user_data[zoom][secret_key]',
-								'label'       => esc_html__( 'Secret Key', 'elementskit-lite' ),
-								'placeholder' => 'OhDwAoNflUK6XkFB8ShCY5R7I8HxyWLMXR2SHK',
-								'value'       => ( ! isset( $user_data['zoom']['secret_key'] ) ) ? '' : ( $user_data['zoom']['secret_key'] ),
-							)
-						);
+						if(method_exists('ElementsKit', 'version') && version_compare(\ElementsKit::version(), '3.5.0', '>')) {
+							$this->utils->input(
+								array(
+									'type'        => 'text',
+									'name'        => 'user_data[zoom][account_id]',
+									'label'       => esc_html__( 'Account ID', 'elementskit-lite' ),
+									'placeholder' => 'YhZDX-CdQ9KpttH2Ho7f0g',
+									'value'       => ( ! isset( $user_data['zoom']['account_id'] ) ) ? '' : ( $user_data['zoom']['account_id'] ),
+								)
+							);
+
+							$this->utils->input(
+								array(
+									'type'        => 'text',
+									'name'        => 'user_data[zoom][client_id]',
+									'label'       => esc_html__( 'Client ID', 'elementskit-lite' ),
+									'placeholder' => 'dZMbttQeRUCaxzXtKoYZVQ',
+									'value'       => ( ! isset( $user_data['zoom']['client_id'] ) ) ? '' : ( $user_data['zoom']['client_id'] ),
+								)
+							);
+
+							$this->utils->input(
+								array(
+									'type'        => 'text',
+									'name'        => 'user_data[zoom][client_secret]',
+									'label'       => esc_html__( 'Client Secret', 'elementskit-lite' ),
+									'placeholder' => '3Tlz4Dqd2hyf3q3bLRfn1GF6hr8tB2KR',
+									'value'       => ( ! isset( $user_data['zoom']['client_secret'] ) ) ? '' : ( $user_data['zoom']['client_secret'] ),
+								)
+							);
+						} else {
+							$this->utils->input(
+								array(
+									'type'        => 'text',
+									'name'        => 'user_data[zoom][api_key]',
+									'label'       => esc_html__( 'Api key', 'elementskit-lite' ),
+									'placeholder' => 'FmOUK_vdR-eepOExMhN7Kg',
+									'value'       => ( ! isset( $user_data['zoom']['api_key'] ) ) ? '' : ( $user_data['zoom']['api_key'] ),
+								)
+							);
+
+							$this->utils->input(
+								array(
+									'type'        => 'text',
+									'name'        => 'user_data[zoom][secret_key]',
+									'label'       => esc_html__( 'Secret Key', 'elementskit-lite' ),
+									'placeholder' => 'OhDwAoNflUK6XkFB8ShCY5R7I8HxyWLMXR2SHK',
+									'value'       => ( ! isset( $user_data['zoom']['secret_key'] ) ) ? '' : ( $user_data['zoom']['secret_key'] ),
+								)
+							);
+						}
 						?>
 						<div class="ekit-admin-accordion-btn-group">
 							<a href="https://token.wpmet.com/index.php?provider=zoom"

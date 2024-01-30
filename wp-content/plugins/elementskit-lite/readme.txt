@@ -3,8 +3,8 @@ Contributors: xpeedstudio, Ataurr, emranio
 Tags: Elementor addons, mega menu builder, widgets for Elementor, header footer builder, Elementor widgets, elementor addon, elements, widgets, Elementor modules, page builder addons, addons
 Requires at least: 5.0
 Tested up to: 6.4
-Requires PHP: 7.1
-Stable tag: 3.0.3
+Requires PHP: 7.4
+Stable tag: 3.0.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -650,6 +650,11 @@ Visit  [wpmet](https://wpmet.com/)  to learn more about how to get the best of W
 
 
 == Changelog ==
+ElementsKit Elementor Addons Version: 3.0.4 (2023-12-18)
+Fixed: Mailchimp integration compatibility
+Added: New zoom data fields due to JWT deprecation
+Improved: Removed unnecessary code and enhance security measures
+
 ElementsKit Elementor Addons Version: 3.0.3 (2023-11-27)
 Fixed: Improve accessibility, performance, and security best practices with 10up/plugin-check tool
 Fixed: Optimize testimonial widget markup for improved performance
