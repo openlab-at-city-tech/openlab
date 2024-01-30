@@ -499,12 +499,29 @@ if ( ! class_exists( 'ezTOC_Option' ) ) {
 							'type' => 'font_size',
 							'default' => 95,
 						),
+						'font_weight' => array(
+							'id' => 'font_weight',
+							'name' => __( 'Font Weight', 'easy-table-of-contents' ),
+							'type' => 'select',
+							'options' => array(
+								'100' => __( 'Thin', 'easy-table-of-contents' ),
+								'200' => __( 'Extra Light', 'easy-table-of-contents' ),
+								'300' => __( 'Light', 'easy-table-of-contents' ),
+								'400' => __( 'Normal', 'easy-table-of-contents' ),
+								'500' => __( 'Medium', 'easy-table-of-contents' ),
+								'600' => __( 'Semi Bold', 'easy-table-of-contents' ),
+								'700' => __( 'Bold', 'easy-table-of-contents' ),
+								'800' => __( 'Extra Bold', 'easy-table-of-contents' ),
+								'900' => __( 'Heavy', 'easy-table-of-contents' ),
+							),
+							'default' => '500',
+						),
 						'child_font_size' => array(
 							'id' => 'child_font_size',
 							'name' => __( 'Child Font Size', 'easy-table-of-contents' ),
 							'type' => 'child_font_size',
 							'default' => 90,
-						),
+						),						
 						'theme_option_header' => array(
 							'id' => 'theme_option_header',
 							'name' => '<strong>' . __( 'Theme Options', 'easy-table-of-contents' ) . '</strong>',
@@ -825,7 +842,7 @@ text
                             'id'   => 'shortcode-first-paragraph',
                             'name' => __( 'Manual Adding the shortcode', 'easy-table-of-contents' ),
                             'desc' => sprintf(
-                            		__( 'You can use the following shortcode to `Easy Table of Contents` display in your particular post or page. <a target="_blank" href="">Learn More</a><br/><input type="text" id="ez-toc-clipboard-apply" value="[ez-toc]" disabled />&nbsp;<span class="ez-toc-tooltip"><button type="button"  onclick="ez_toc_clipboard(\'ez-toc-clipboard-apply\', \'ez-toc-myTooltip\', this, event)" onmouseout="ez_toc_outFunc(\'ez-toc-myTooltip\', this, event)"><span class="ez-toc-tooltiptext ez-toc-myTooltip">Copy to clipboard</span>Copy shortcode  </button></span>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-add-toc-with-shortcode/'
+                            		__( 'You can use the following shortcode to `Easy Table of Contents` display in your particular post or page. <a target="_blank" href="%s">Learn More</a><br/><input type="text" id="ez-toc-clipboard-apply" value="[ez-toc]" disabled />&nbsp;<span class="ez-toc-tooltip"><button type="button" onclick="ez_toc_clipboard(\'ez-toc-clipboard-apply\', \'ez-toc-myTooltip\', this, event)" onmouseout="ez_toc_outFunc(\'ez-toc-myTooltip\', this, event)"><span class="ez-toc-tooltiptext ez-toc-myTooltip">Copy to clipboard</span>Copy shortcode</button></span>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-add-toc-with-shortcode/'
                             		),
                             'type' => 'paragraph',
                             'allowedHtml' => array(
@@ -860,12 +877,47 @@ text
                             'id'   => 'shortcode-second-paragraph',
                             'name' => __( 'Supported Attributes', 'easy-table-of-contents' ),
                             'desc' => sprintf(
-                            		__( '<p><code>[header_label=”Title”]</code> – title for the table of contents</p><p><code>[display_header_label=”no”]</code> – no title for the table of contents</p><p><code>[toggle_view=”no”]</code> – no toggle for the table of contents</p><p><code>[initial_view=”no”]</code> – initially hide the table of contents</p><p><code>[display_counter=”no”]</code> – no counter for the table of contents</p><p><code>[post_types=”post,page”]</code> – post types seperated by ,(comma)</p><p><code>[post_in=”1,2″]</code> – ID’s of the posts|pages seperated by ,(comma)</p><p><code>[device_target=”desktop”]</code> – mobile or desktop device support for the table of contents</p><p><code>[view_more=”5″]</code> – 5, is the number of headings loads on first view, before user interaction (PRO)</p>', 'easy-table-of-contents' )
+                            		__( '<p><code>[header_label="Title"]</code> – title for the table of contents</p><p><code>[display_header_label="no"]</code> – no title for the table of contents</p><p><code>[toggle_view="no"]</code> – no toggle for the table of contents</p><p><code>[initial_view="no"]</code> – initially hide the table of contents</p><p><code>[display_counter="no"]</code> – no counter for the table of contents</p><p><code>[post_types="post,page"]</code> – post types seperated by ,(comma)</p><p><code>[post_in="1,2"]</code> – ID’s of the posts|pages seperated by ,(comma)</p><p><code>[device_target="desktop"]</code> – mobile or desktop device support for the table of contents</p><p><code>[view_more="5"]</code> – 5, is the number of headings loads on first view, before user interaction (PRO)</p>', 'easy-table-of-contents' )
                             		),
                             'type' => 'descriptive_text',
                         ),
                         'shortcode-third-paragraph'      => array(
                             'id'   => 'shortcode-third-paragraph',
+                            'name' => __( 'Manual Adding widget shortcode', 'easy-table-of-contents' ),
+                            'desc' => sprintf(
+                            		__( 'You can use the following widget shortcode to display `Easy Table of Contents` in your sidebar. <a target="_blank" href="%s">Learn More</a><br/><input type="text" id="ez-toc-clipboard-apply" value="[ez-toc-widget-sticky]" disabled />&nbsp;<span class="ez-toc-tooltip"><button type="button" onclick="ez_toc_clipboard(\'ez-toc-clipboard-apply\', \'ez-toc-myTooltip\', this, event)" onmouseout="ez_toc_outFunc(\'ez-toc-myTooltip\', this, event)"><span class="ez-toc-tooltiptext ez-toc-myTooltip">Copy to clipboard</span>Copy shortcode</button></span>', 'easy-table-of-contents' ), 'https://tocwp.com/docs/knowledge-base/how-to-add-toc-with-shortcode/'
+                            		),
+                            'type' => 'paragraph',
+                            'allowedHtml' => array(
+								'br' => array(),
+								'a' => array(
+								    'target' => array(),
+								    'href' => array()
+								),
+								'input' => array(
+					               'type' => true,
+					               'id' => true,
+					               'value' => true,
+					               'readonly' => true,
+					               'disabled' => true,
+					               'class' => true,
+					           ),
+					           '&nbsp;' => array(),
+					           'span' => array(
+					               'class' => true,
+					               'id' => true,
+					           ),
+					           'button' => array(
+					               'type' => true,
+					               'onclick' => true,
+					               'onmouseout' => true,
+					               'id' => true,
+					               'class' => true,
+					           ),
+				           ),
+                        ),
+                        'shortcode-fourth-paragraph'      => array(
+                            'id'   => 'shortcode-fourth-paragraph',
                             'name' => __( 'Auto Insert', 'easy-table-of-contents' ),
                             'desc' => __( 'You can add `Easy Table of Contents` without using shortcode from `Auto Insert` option in General Setting so then there is no need to add shortcode while post, page or any post type editing.', 'easy-table-of-contents' ),
                             'type' => 'paragraph',
@@ -945,8 +997,8 @@ text
 							'name'    => __( 'Position', 'easy-table-of-contents' ),
 							'type' => 'radio',
 							'options' => array(
-								'left' => __( 'Left', 'easy-table-of-contents' ),
-								'right' => __( 'Right', 'easy-table-of-contents' ),
+								'left' => _x( 'Left', 'Position', 'easy-table-of-contents' ),
+								'right' => _x( 'Right', 'Position', 'easy-table-of-contents' ),
 							),
 							'default' => 'left',
 						),
@@ -956,9 +1008,9 @@ text
 							'name'    => __( 'Alignment', 'easy-table-of-contents' ),
 							'type' => 'radio',
 							'options' => array(
-								'top' => __( 'Top', 'easy-table-of-contents' ),
+								'top' => _x( 'Top', 'Alignment', 'easy-table-of-contents' ),
 								'middle' => __( 'Middle', 'easy-table-of-contents' ),
-								'bottom' => __( 'Bottom', 'easy-table-of-contents' ),
+								'bottom' => _x( 'Bottom', 'Alignment', 'easy-table-of-contents' ),
 							),
 							'default' => 'top',
 						),
