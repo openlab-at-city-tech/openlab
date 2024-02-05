@@ -12401,3 +12401,13 @@ p.private-membership-indicator {
 .group-validate-form #site-options .error-container {
   margin-bottom: 15px;
 }
+.ol-contact-form label {
+  font-weight: 400;
+}
+.ol-contact-form fieldset,
+.ol-contact-form .gfield {
+  margin-bottom: 10px !important;
+}
+.ol-contact-form .gfield_description {
+  padding-bottom: 5px !important;
+}
