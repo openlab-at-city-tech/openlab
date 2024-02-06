@@ -6,7 +6,14 @@
 /**
  * Don't let Typology load its Welcome panel.
  */
-add_filter( 'pre_option_typology_welcome_box_displayed', '__return_true' );
+add_action(
+	'admin_init',
+	function() {
+		remove_action( 'admin_notices', 'typology_welcome_msg', 1 );
+		remove_action( 'admin_notices', 'typology_update_msg', 1 );
+	},
+	20
+);
 
 /**
  * Ensure that Redux Framework is activated.
