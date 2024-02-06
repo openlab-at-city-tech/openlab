@@ -3699,3 +3699,22 @@ add_filter(
 	10,
 	2
 );
+
+/** GTranslate **********************************************************/
+
+/**
+ * Sets default 'widget_look' setting to 'dropdown'.
+ *
+ * The gtranslate plugin installs its default settings in an activation hook.
+ * It's not easy to intercept this, so instead we hook to the post-add_option hook
+ * and modify the just-saved options.
+ */
+function openlab_gtranslate_settings() {
+	$options = get_option( 'GTranslate' );
+	$options = is_array( $options ) ? $options : array();
+
+	$options['widget_look'] = 'dropdown';
+
+	update_option( 'GTranslate', $options );
+}
+add_filter( 'add_option_GTranslate', 'openlab_gtranslate_settings' );
