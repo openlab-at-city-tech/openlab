@@ -1,0 +1,3 @@
+a:focus, a:not([href]):not([tabindex]):focus, button:focus {
+	outline: auto;
+}

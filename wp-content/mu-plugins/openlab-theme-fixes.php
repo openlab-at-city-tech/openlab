@@ -24,6 +24,7 @@ function openlab_load_theme_fixes() {
 		case 'p2':
 		case 'pilcrow':
 		case 'sliding-door':
+		case 'typology':
 		case 'themorningafter':
 		case 'wu-wei':
 		case 'twentyseventeen':
