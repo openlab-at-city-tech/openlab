@@ -61,6 +61,7 @@ add_action(
 			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
+			case 'typology':
 			case 'twentynineteen':
 				$subdir = $t;
 				include __DIR__ . '/theme-fixes/' . $subdir . '/' . $t . '.php';
