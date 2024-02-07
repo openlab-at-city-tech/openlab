@@ -3734,6 +3734,9 @@ add_action(
 		$settings['color_content_meta'] = '#757575';
 		$settings['single_author']      = false;
 
+		$settings['layout_a_buttons']['rl']     = false;
+		$settings['layout_cover_buttons']['rl'] = false;
+
 		update_option( 'typology_settings', $settings );
 	}
 );
