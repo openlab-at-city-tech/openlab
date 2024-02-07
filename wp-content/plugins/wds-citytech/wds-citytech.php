@@ -3731,7 +3731,7 @@ add_action(
 	function() {
 		$settings = get_option( 'typology_settings', [] );
 
-		$settings['color_content_meta'] = '#555555';
+		$settings['color_content_meta'] = '#757575';
 		$settings['single_author']      = false;
 
 		update_option( 'typology_settings', $settings );
