@@ -155,6 +155,52 @@ class BBP_Forums_Group_Extension extends BP_Group_Extension {
 			add_filter( 'bbp_current_user_can_access_create_topic_form', array( $this, 'form_permissions' ) );
 			add_filter( 'bbp_current_user_can_access_create_reply_form', array( $this, 'form_permissions' ) );
 		}
+
+		// Fix rewrite pagination.
+		add_filter( 'bbp_get_global_object', array( $this, 'fix_rewrite_pagination' ), 10, 2 );
+	}
+
+	/**
+	 * Fixes rewrite pagination.
+	 *
+	 * Required for compatibility with BP 12.0, where the /groups/ rewrite rule will
+	 * be caught before bbPress's /page/ rule.
+	 */
+	public function fix_rewrite_pagination( $object, $type ) {
+		if ( 'wp_query' !== $type ) {
+			return $object;
+		}
+
+		if ( ! bp_is_group() ) {
+			return $object;
+		}
+
+		if ( ! bp_is_current_action( 'forum' ) ) {
+			return $object;
+		}
+
+		$page_number = null;
+
+		// Can't use bbp_is_single_topic() because it triggers a loop.
+		$is_single_topic = bp_is_action_variable( 'topic', 0 );
+
+		if ( $is_single_topic ) {
+			if ( bp_is_action_variable( 'page', 2 ) ) {
+				$page_number = bp_action_variable( 3 );
+			}
+		} else {
+			if ( bp_is_action_variable( 'page', 0 ) ) {
+				$page_number = bp_action_variable( 1 );
+			}
+		}
+
+		if ( ! $page_number ) {
+			return $object;
+		}
+
+		$object->set( 'paged', $page_number );
+
+		return $object;
 	}
 
 	/**

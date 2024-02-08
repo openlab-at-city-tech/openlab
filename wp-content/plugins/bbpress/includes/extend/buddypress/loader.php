@@ -52,6 +52,18 @@ class BBP_Forums_Component extends BP_Component {
 	 * Include BuddyPress classes and functions
 	 */
 	public function includes( $includes = array() ) {
+		static $included;
+
+		// Bail if already included
+		if ( $included ) {
+			return;
+		}
+
+		$included = true;
+
+		if ( ! is_array( $includes ) ) {
+			$includes = array();
+		}
 
 		// Helper BuddyPress functions
 		$includes[] = 'functions.php';
@@ -74,19 +86,7 @@ class BBP_Forums_Component extends BP_Component {
 			$includes[] = 'groups.php';
 		}
 
-		// Require files if they exist
-		foreach ( $includes as $file ) {
-			if ( @is_file( $this->path . $file ) ) {
-				require $this->path . $file;
-			}
-		}
-
-		/**
-		 * Hook for plugins to include files, if necessary.
-		 *
-		 * @since 2.6.0 bbPress (r3552)
-		 */
-		do_action( "bp_{$this->id}_includes" );
+		parent::includes( $includes );
 	}
 
 	/**
