@@ -199,7 +199,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				}
 
 				/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				if ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && astra_get_option( 'live-search', false ) ) {
+				if ( ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && astra_get_option( 'live-search', false ) ) || ( is_search() && true === astra_get_option( 'ast-search-live-search' ) ) ) {
 					/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 					$default_assets['js']['astra-live-search'] = 'live-search';
 				}
@@ -403,7 +403,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 
 			wp_localize_script( 'astra-mobile-cart', 'astra_cart', apply_filters( 'astra_cart_js_localize', $astra_cart_localize_data ) );
 
-			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && astra_get_option( 'live-search', false ) ) {
+			if ( ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && astra_get_option( 'live-search', false ) ) || ( is_search() && true === astra_get_option( 'ast-search-live-search' ) ) ) {
 				$search_post_types      = array();
 				$search_post_type_label = array();
 				$search_within_val      = astra_get_option( 'live-search-post-types' );
@@ -419,13 +419,31 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 					}
 				}
 
+				$search_page_post_types      = array();
+				$search_page_post_type_label = array();
+				$search_page_within_val      = astra_get_option( 'ast-search-live-search-post-types' );
+				if ( is_search() && ! empty( $search_page_within_val ) && is_array( $search_page_within_val ) ) {
+					foreach ( $search_page_within_val as $post_type => $value ) {
+						if ( $value && post_type_exists( $post_type ) ) {
+							$search_page_post_types[] = $post_type;
+							/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+							$post_type_object                          = get_post_type_object( $post_type );
+							$search_page_post_type_label[ $post_type ] = is_object( $post_type_object ) && isset( $post_type_object->labels->name ) ? esc_html( $post_type_object->labels->name ) : $post_type;
+							/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						}
+					}
+				}
+
 				$astra_live_search_localize_data = array(
-					'rest_api_url'             => get_rest_url(),
-					'search_posts_per_page'    => 5,
-					'search_post_types'        => $search_post_types,
-					'search_post_types_labels' => $search_post_type_label,
-					'search_language'          => astra_get_current_language_slug(),
-					'no_live_results_found'    => __( 'No results found', 'astra' ),
+					'rest_api_url'                 => get_rest_url(),
+					'search_posts_per_page'        => 5,
+					'search_post_types'            => $search_post_types,
+					'search_post_types_labels'     => $search_post_type_label,
+					'search_language'              => astra_get_current_language_slug(),
+					'no_live_results_found'        => __( 'No results found', 'astra' ),
+					'search_page_condition'        => is_search() && true === astra_get_option( 'ast-search-live-search' ) ? true : false,
+					'search_page_post_types'       => $search_page_post_types,
+					'search_page_post_type_labels' => $search_page_post_type_label,
 				);
 
 				wp_localize_script( 'astra-live-search', 'astra_search', apply_filters( 'astra_search_js_localize', $astra_live_search_localize_data ) );

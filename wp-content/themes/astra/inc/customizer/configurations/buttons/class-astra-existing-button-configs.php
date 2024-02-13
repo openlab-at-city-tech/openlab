@@ -240,22 +240,27 @@ if ( ! class_exists( 'Astra_Existing_Button_Configs' ) ) {
 					'section'     => 'section-primary-menu',
 					'default'     => astra_get_option( 'primary-header-button-font-size' ),
 					'control'     => 'ast-responsive-slider',
-					'suffix'      => array( 'px', 'em', 'vw' ),
+					'suffix'      => array( 'px', 'em', 'vw', 'rem' ),
 					'input_attrs' => array(
-						'px' => array(
+						'px'  => array(
 							'min'  => 0,
 							'step' => 1,
 							'max'  => 200,
 						),
-						'em' => array(
+						'em'  => array(
 							'min'  => 0,
 							'step' => 0.01,
 							'max'  => 20,
 						),
-						'vw' => array(
+						'vw'  => array(
 							'min'  => 0,
 							'step' => 0.1,
 							'max'  => 25,
+						),
+						'rem' => array(
+							'min'  => 0,
+							'step' => 0.1,
+							'max'  => 20,
 						),
 					),
 				),

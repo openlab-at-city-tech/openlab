@@ -5,7 +5,7 @@ Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
 Tested up to: 6.4
 Requires PHP: 5.4
-Stable tag: 3.2.5
+Stable tag: 3.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,8 @@ Nested Pages provides a drag and drop interface for managing pages & posts in th
 * Works on touch-enabled devices
 
 For more information visit [nestedpages.com](http://nestedpages.com).
+
+For development inquiries or to submit security notices, please visit the [Github repository](https://github.com/kylephillips/wp-nested-pages).
 
 **Important: Nested Pages requires WordPress version 3.8 or higher, and PHP version 5.4 or higher.**
 
@@ -104,6 +106,10 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.2.7 =
+* Fixes issue with cache and page ordering (Thanks to Felipe Lavín Z.)
+* Security fix in admin customization that allowed possible vulnerability from users with administration-level access with unfiltered_html capabilities.
 
 = 3.2.6 =
 * Fixes issue where bulk edit disappears when no user roles have been selected

@@ -4,7 +4,7 @@ Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
 Tested up to: 6.4
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -105,6 +105,10 @@ BLC’s search and filtering tools make it faster and easier to find specific UR
 
 Export your broken link lists as a CSV file for greater analysis inside of Google Sheets, Microsoft Excel, and other spreadsheet/data software.
 
+### HELP KEEP BLC SECURE
+
+We take plugin security incredibly seriously; if you have a bug or vulnerability to report, you can do so through the Patchstack Vulnerability Disclosure Program. It’s fast, easy, and you will be notified when the issue is fixed. [Report a vulnerability](https://patchstack.com/database/vdp/broken-link-checker).
+
 ### ABOUT US
 
 The developers of BLC, WPMU DEV is an all-in-one WordPress platform that has helped millions of web developers worldwide run and grow their businesses for over 15 years.
@@ -114,6 +118,9 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.2.4 =
+* Enhance: Code stability improvements.
 
 = 2.2.3 =
 * Enhance: Optimize local db tables.

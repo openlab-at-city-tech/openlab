@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hallo
 Requires at least: 4.9
 Tested up to: 6.4
 Requires PHP: 5.6
-Stable tag: 1.5.3
+Stable tag: 1.5.7
 License: GPLv3
 
 Light weight fully customizable reading progress bar. Sticks to top, bottom or sticky menu, with fallback for small screens
@@ -33,19 +33,19 @@ Behaviour:
 
 - If there is no single article identified (by class names or id) it uses the whole page to calculate progress.
 
-This is my 6th Wordpress plugin but my first one freely available to everybody. I hope you enjoy using it as much as I enjoy building it!
+This is my 6th WordPress plugin but my first one freely available to everybody. I hope you enjoy using it as much as I enjoy building it!
 
 Regards,
-Joeri (ruige hond)
+Joeri
 
 == Installation ==
-1. Install the plugin by clicking 'Install now' below, or the 'Download' button, and put the WP-reading-progress folder in your plugins folder
+1. Install the plugin by clicking ‘Install now’ below, or the ‘Download’ button, and put the WP-reading-progress folder in your plugins folder
 
-2. By default it only works on single blog posts and uses an orange colour
+2. By default, it only works on single blog posts and uses an orange colour
 
 3. Go to settings->WP Reading Progress to customize it
 
-Upon uninstall WP Reading Progress removes its own options and post_meta data (if any) leaving no traces.
+Upon uninstall WP Reading Progress removes its own options and `post_meta` data (if any) leaving no traces.
 
 == Screenshots ==
 1. Example of the reading progress bar on my photography blog
@@ -53,6 +53,14 @@ Upon uninstall WP Reading Progress removes its own options and post_meta data (i
 3. Activate the bar for an individual post (if that post type is not enabled)
 
 == Changelog ==
+
+1.5.7: fix save settings and calculation correction (again)
+
+1.5.6: adapt calculation to safari and chrome alike
+
+1.5.5: bar top position calculation improved and allowing fractional pixels
+
+1.5.4: escape translate strings
 
 1.5.3: update screenshots
 
@@ -108,10 +116,10 @@ Upon uninstall WP Reading Progress removes its own options and post_meta data (i
 
 = 1.5.1 =
 
-For speed the plugin looks for elements to stick to only once per request, this should work. If not, please let me know and downgrade to 1.5.0 in the mean time.
+For speed the plugin looks for elements to stick to only once per request, this should work. If not, please let me know and downgrade to 1.5.0 in the meantime.
 
 = 1.4.0 =
 
 The bar will select between multiple elements when available and pick the first one in the viewport. If you use it with a sticky element please check whether it still behaves as you expect, or stick it to a better element from now on.
 
-If you upgrade from a version before 1.3.0, you have to check the 'post' post type in the WP Reading Bar settings manually to keep the same behaviour.
+If you upgrade from a version before 1.3.0, you have to check the `post` post type in the WP Reading Bar settings manually to keep the same behaviour.

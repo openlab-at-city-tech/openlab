@@ -534,7 +534,7 @@ class Astra_Social_Icon_Component_Configs {
 					'priority'  => 6,
 					'title'     => __( 'Alignment', 'astra' ),
 					'context'   => Astra_Builder_Helper::$general_tab,
-					'transport' => 'postMessage',
+					'transport' => 'refresh',
 					'choices'   => array(
 						'left'   => 'align-left',
 						'center' => 'align-center',

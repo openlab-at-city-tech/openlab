@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
- * Version: 1.6.1
+ * Version: 1.6.2
  * Requires at least: 3.0.0
  * Requires PHP: 5.2.7
  * Author: vivwebs
@@ -16,7 +16,7 @@
  *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
- * @version $Id: dynamic-widgets.php 2971998 2023-09-26 21:24:42Z vivalex $
+ * @version $Id: dynamic-widgets.php 3022396 2024-01-16 13:08:47Z vivwebs $
  * @copyright 2017 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.

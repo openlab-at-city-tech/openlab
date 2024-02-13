@@ -104,8 +104,8 @@ class Controller extends Base {
 		Utilities::log( 'Sync request started.' );
 		Settings::instance()->init();
 
-		$request_status  = $this->can_do_request();
-		//$previous_status = Settings::instance()->get( 'scan_status' );
+		$request_status = $this->can_do_request();
+		// $previous_status = Settings::instance()->get( 'scan_status' );
 
 		if ( is_wp_error( $request_status ) ) {
 			$this->set_response_code( 500 );
@@ -212,9 +212,9 @@ class Controller extends Base {
 
 		if ( Settings::instance()->get( 'blc_schedule_scan_in_progress' ) ) {
 			// TODO Ensure that notification is sent after schedule scan completed even if HUB response fails.
-			//Currently we need to remove this notification due to possible duplicates: BLC-392.
-			//ReportMailer::instance()->init();
-			//ReportMailer::instance()->send_email();
+			// Currently we need to remove this notification due to possible duplicates: BLC-392.
+			// ReportMailer::instance()->init();
+			// ReportMailer::instance()->send_email();
 			Settings::instance()->set( array( 'blc_schedule_scan_in_progress' => false ) );
 		}
 
@@ -226,7 +226,7 @@ class Controller extends Base {
 
 		$scan_results = Settings::instance()->get( 'scan_results' );
 		$end_time     = ! empty( $scan_results['end_time'] ) ? intval( $scan_results['end_time'] ) : 0;
-		$date_utc     = new \DateTime( "now", new \DateTimeZone( "UTC" ) );
+		$date_utc     = new \DateTime( 'now', new \DateTimeZone( 'UTC' ) );
 		$diff         = round( ( $date_utc->getTimestamp() - $end_time ) / 60 );
 		$remaining    = intval( 15 - $diff );
 
@@ -242,6 +242,7 @@ class Controller extends Base {
 					Utilities::timestamp_to_formatted_date( intval( $scan_result['ended_unix_time_utc'] ), true ) : '-',
 				'cooldown_remaining' => $remaining,
 				'scan_duration'      => isset( $scan_result['scan_duration'] ) ? Utilities::normalize_seconds_format( floatval( $scan_result['scan_duration'] ) ) : '',
+				'scan_duration_sec'  => isset( $scan_result['scan_duration'] ) ? floatval( $scan_result['scan_duration'] ) : '',
 			)
 		);
 
@@ -281,9 +282,9 @@ class Controller extends Base {
 		}
 
 		if ( ! (bool) self::site_connected() ||
-		     Settings::instance()->get( 'use_legacy_blc_version' ) ||
-		     ! class_exists( '\WPMUDEV_Dashboard' ) ||
-		     ! WPMUDEV_Dashboard::$api->has_key() ) {
+			Settings::instance()->get( 'use_legacy_blc_version' ) ||
+			! class_exists( '\WPMUDEV_Dashboard' ) ||
+			! WPMUDEV_Dashboard::$api->has_key() ) {
 			return new WP_Error(
 				'blc-api-request-failled',
 				esc_html__(

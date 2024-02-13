@@ -136,13 +136,13 @@ abstract class Block_Abstract {
 	 * the calls to output the wrap.
 	 *
 	 * @param false|array $instance - Contents of the block, before parsing.
-	 * @param \WP_Widget $widget   - Object representing a block based widget.
-	 * @param array      $args     - Widget area arguments.
+	 * @param \WP_Widget  $widget   - Object representing a block based widget.
+	 * @param array       $args     - Widget area arguments.
 	 *
 	 * @return false|array
 	 */
 	public function short_circuit_widget_blocks( $instance, $widget, array $args ) {
-		if ( ! \is_array( $instance ) || empty( $instance['content'] ) || false === strpos( $instance['content'], static::NAME ) ) {
+		if ( ! \is_array( $instance ) || empty( $instance['content'] ) || false === \strpos( $instance['content'], static::NAME ) ) {
 			return $instance;
 		}
 
@@ -329,11 +329,23 @@ abstract class Block_Abstract {
 			$wrap = 'section';
 		}
 
-		$wrapper_attributes = get_block_wrapper_attributes( [
+		/**
+		 * Filter the attributes used in the block wrapper.
+		 *
+		 * @since 9.4.2
+		 *
+		 * @param array<string, string> $attributes - Attributes to add to the wrapper.
+		 * @param array<string, mixed>  $attr       - Block attributes.
+		 * @param string                $classnames - CSS Class names to add to the wrapper.
+		 * @param Block_Abstract        $block      - Block instance.
+		 */
+		$attributes = apply_filters( 'advanced-sidebar-menu/block-wrapper-attributes/' . static::NAME, [
 			'class' => \trim( esc_attr( $classnames ) ),
-		] );
-		$this->widget_args['before_widget'] .= sprintf( '<%s %s>', $wrap, $wrapper_attributes );
-		$this->widget_args['after_widget'] = sprintf( '</%s>', $wrap ) . $this->widget_args['after_widget'];
+		], $attr, $classnames, $this );
+
+		$wrapper_attributes = get_block_wrapper_attributes( $attributes );
+		$this->widget_args['before_widget'] .= \sprintf( '<%s %s>', $wrap, $wrapper_attributes );
+		$this->widget_args['after_widget'] = \sprintf( '</%s>', $wrap ) . $this->widget_args['after_widget'];
 		// Passed via ServerSideRender, so we can enable accordions in Gutenberg editor.
 		if ( ! empty( $attr['clientId'] ) ) {
 			$this->widget_args['widget_id'] = $attr['clientId'];

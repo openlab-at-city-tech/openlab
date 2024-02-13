@@ -32,7 +32,7 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 		 */
 		public function register_configuration( $configurations, $wp_customize ) {
 			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'lifterlms' ) ) { 
+			if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'lifterlms' ) ) {
 				$section = 'section-lifterlms-general';
 			} else {
 				$section = 'section-lifterlms';
@@ -73,37 +73,22 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 				 * Option: Content Style Option.
 				 */
 				array(
-					'name'       => ASTRA_THEME_SETTINGS . '[lifterlms-content-style]',
-					'type'       => 'control',
-					'control'    => 'ast-selector',
-					'section'    => $section,
-					'default'    => astra_get_option( 'lifterlms-content-style', 'default' ),
-					'priority'   => 1,
-					'title'      => __( 'Container Style', 'astra' ),
-					'choices'    => array(
+					'name'        => ASTRA_THEME_SETTINGS . '[lifterlms-content-style]',
+					'type'        => 'control',
+					'control'     => 'ast-selector',
+					'section'     => $section,
+					'default'     => astra_get_option( 'lifterlms-content-style', 'default' ),
+					'priority'    => 1,
+					'title'       => __( 'Container Style', 'astra' ),
+					'description' => __( 'Container style will apply only when layout is set to either normal or narrow.', 'astra' ),
+					'choices'     => array(
 						'default' => 'Default',
 						'unboxed' => 'Unboxed',
 						'boxed'   => 'Boxed',
 					),
-					'renderAs'   => 'text',
-					'responsive' => false,
+					'renderAs'    => 'text',
+					'responsive'  => false,
 				),
-
-				/**
-				 * Help Text: LifterLMS Content Style.
-				 */
-				array(
-					'name'     => ASTRA_THEME_SETTINGS . '[lifterlms-content-style-description]',
-					'type'     => 'control',
-					'control'  => 'ast-description',
-					'section'  => $section,
-					'priority' => 1,
-					'title'    => '',
-					'help'     => __( 'Container style will apply only when layout is set to either normal or narrow.', 'astra' ),
-					'divider'  => array( 'ast_class' => 'ast-bottom-spacing' ),
-					'settings' => array(),
-				),
-
 			);
 
 			return array_merge( $configurations, $_configs );
@@ -113,5 +98,3 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 }
 
 new Astra_Lifter_Container_Configs();
-
-

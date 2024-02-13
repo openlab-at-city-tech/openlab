@@ -1,0 +1,233 @@
+/* Theme options panel custom css */
+
+.redux-container { max-width: 1000px; }
+
+#toplevel_page_sdw_theme_options .wp-first-item{
+	display: none;
+}
+.rtl .switch_wrap input[type="checkbox"]{
+	left: 0;
+}
+.redux-container-image_select .redux-image-select span{
+	max-width: 100px;
+}
+#redux-header .display_header{
+	width: 99%;
+}
+#redux-header .display_header h2{
+	float: left;
+}
+#redux-header .display_header span{
+	float: left;
+}
+
+#redux-header .display_header span.update-message{
+	background: #37D345;
+	color: #fff;
+	padding: 1px 8px;
+	border-radius: 4px;
+}
+
+#redux-header .display_header span.update-actions{
+	float: left;
+	display: block;
+	clear: both;
+	margin-top: 5px;
+}
+
+#redux-header .display_header span.update-actions a{
+	margin-right: 5px;
+}
+
+#redux-intro-text{
+	display: none;
+}
+.redux-container .redux-group-tab{
+	margin-top: 20px;
+}
+.redux-main #redux-sticky #info_bar{
+	height: 28px;
+}
+.redux-main #redux-sticky #info_bar{
+	height: 29px;
+}
+.redux-container #info_bar {
+  padding: 3px 10px 6px 0px;
+}
+.redux-container .redux-section-field h3,
+.redux-container .redux-section-field h2,
+.redux-group-tab > h3,
+.redux-group-tab > h2{
+	background: #ECECEC;
+	padding: 10px;
+	margin: 20px 0 0;
+	line-height: 2em;
+	border: none !important;
+}
+.redux_field_th span{
+	max-width: 250px;
+	line-height: 1.4em;
+}
+.redux_field_th{
+	max-width: 250px;
+}
+
+.redux-container .redux-group-tab .redux-section-desc{
+	background: #f2f2f2;
+	padding: 10px;
+	position: relative;
+}
+
+.redux-container-image_select ul.redux-image-select li{
+	vertical-align: top;
+}
+.redux-container-image_select .redux-image-select span span{
+	font-size: 80%;
+	display: block;
+}
+.redux-container .expand_options { display: none; }
+
+.form-table>tbody>tr>th {
+	width: 45%;
+}
+
+.redux-container #redux-header .display_header h2 {
+	width: 100%;
+	text-align: left;
+	margin-bottom: 15px;
+	font-size: 1.4em;
+}
+
+.redux-container #redux-header .display_header h2 a{
+	float: right;
+	font-size: 14px;
+	margin-right: 10px;
+	font-weight: 400;
+}
+
+
+.redux-container-image_select .redux-image-select span{
+	font-size: 13px;
+
+}
+.redux-container-image_select .redux-image-select label {
+	width: 110px;
+}
+
+.redux-container-image_select ul.redux-image-select li {
+	padding: 0 0 10px 0;
+    margin: 0 20px 10px 0 !important;
+}
+
+.redux-section-field h3 img{
+	vertical-align: middle;
+	margin-right: 10px;
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}
+
+.redux-container-slider .redux-slider-input {
+	vertical-align: bottom;
+}
+
+.select2-container { min-width: 300px; }
+
+.redux-container-sortable .checkbox-container .drag { cursor: move; }
+
+.redux-multi-text input {max-width: 200px;}
+
+.redux-sidebar .redux-group-menu li a:focus{
+	box-shadow: none;
+}
+
+.wbc_importer .theme-browser .theme{
+	width: 367px;
+	margin-right: 24px;
+}
+
+.wbc_importer .theme-browser .theme:nth-child(2n){
+	margin-right: 0;
+}
+/* Demo Importer button styling fix */
+.redux-field.wbc_importer .theme-browser .theme .theme-actions, 
+.redux-field.wbc_importer .theme-browser .theme.active .theme-actions {
+  top: auto;
+  bottom: 0;
+  transform: none;
+}
+
+.redux-container-radio ul.data-full,
+ul.redux-sortable {
+	margin: 0;
+}
+
+#redux-header h2 a{
+	color: #fff;
+}
+#redux-header h2 a:hover{
+	color: rgba(255,255,255, 0.7);
+}
+
+.redux-container-image_select .redux-image-select .tiles,
+.redux-container-image_select .redux-image-select img,
+.redux-container-image_select .redux-image-select-selected .tiles,
+.redux-container-image_select .redux-image-select-selected img{
+	border-width: 2px;
+}
+
+.redux-multi-text input {
+    max-width: 100%;
+}
+
+.redux-sidebar .redux-group-menu li a, .redux_field_th{
+	font-weight: 600;
+}
+.redux-save-warn.notice-yellow{
+	max-width: 749px;
+}
+
+.redux-main .sidgen .form-table>tbody>tr>th { display: none !important; }
+
+.redux-main .sidgen .redux-field-container {padding-top: 0;}
+
+.rtl .redux-sidebar .redux-group-tab-link-a i{right:5px;}
+.rtl .redux-sidebar .redux-group-tab-link-a i.el-chevron-down{left:10px; right:auto;}
+
+#info-home_setup_info { margin: 0 0 20px;}
+
+.redux-main .redux-typography-container .input_wrapper{
+	float: none;
+	margin-left: 0;
+	width: 35%;
+	max-width: 35%;
+}
+
+#redux-header .theme-version-label{
+	display: block;
+	margin-top: -15px;
+	color: #fff;
+}
+
+#redux-header .theme-version-label:hover {
+	color: rgba(255,255,255, 0.7);
+}
+
+.redux-dev-mode-notice {
+	display: none !important;
+}
+
+.redux-container .form-table>tbody>tr>th {
+	width: 45%;
+}
+
+.redux-main .redux-typography-container .select_wrapper{
+	width: 100% !important;
+	max-width: 100% !important;
+	min-width: 100% !important;
+}
+
+.sticky-footer-fixed{
+	left: auto !important;
+	right: auto !important;
+}

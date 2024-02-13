@@ -14,13 +14,13 @@ use Advanced_Sidebar_Menu\Widget\Page;
 class Core {
 	use Singleton;
 
-	const PLUGIN_FILE = 'advanced-sidebar-menu/advanced-sidebar-menu.php';
+	public const PLUGIN_FILE = 'advanced-sidebar-menu/advanced-sidebar-menu.php';
 
 
 	/**
 	 * Actions
 	 */
-	protected function hook() {
+	protected function hook(): void {
 		add_action( 'widgets_init', [ $this, 'register_widgets' ] );
 		add_action( 'advanced-sidebar-menu/widget/category/before-form', [ $this, 'transform_notice' ], 1 );
 		add_action( 'advanced-sidebar-menu/widget/page/before-form', [ $this, 'transform_notice' ], 1 );

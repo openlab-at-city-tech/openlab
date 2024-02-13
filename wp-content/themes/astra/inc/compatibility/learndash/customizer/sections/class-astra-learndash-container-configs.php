@@ -65,37 +65,23 @@ if ( ! class_exists( 'Astra_Learndash_Container_Configs' ) ) {
 				 * Option: LearnDash Content Style Option.
 				 */
 				array(
-					'name'       => ASTRA_THEME_SETTINGS . '[learndash-content-style]',
-					'type'       => 'control',
-					'control'    => 'ast-selector',
-					'section'    => 'section-leandash-general',
-					'default'    => astra_get_option( 'learndash-content-style', 'default' ),
-					'priority'   => 5,
-					'title'      => __( 'Container Style', 'astra' ),
-					'choices'    => array(
+					'name'        => ASTRA_THEME_SETTINGS . '[learndash-content-style]',
+					'type'        => 'control',
+					'control'     => 'ast-selector',
+					'section'     => 'section-leandash-general',
+					'default'     => astra_get_option( 'learndash-content-style', 'default' ),
+					'priority'    => 5,
+					'title'       => __( 'Container Style', 'astra' ),
+					'description' => __( 'Container style will apply only when layout is set to either normal or narrow.', 'astra' ),
+					'choices'     => array(
 						'default' => 'Default',
 						'unboxed' => 'Unboxed',
 						'boxed'   => 'Boxed',
 					),
-					'renderAs'   => 'text',
-					'responsive' => false,
-					'divider'    => array( 'ast_class' => 'ast-top-spacing' ),
+					'renderAs'    => 'text',
+					'responsive'  => false,
+					'divider'     => array( 'ast_class' => 'ast-top-dotted-divider' ),
 				),
-
-				/**
-				 * Help Text: LearnDash Content Style Option.
-				 */
-				array(
-					'name'     => ASTRA_THEME_SETTINGS . '[learndash-content-style-description]',
-					'type'     => 'control',
-					'control'  => 'ast-description',
-					'section'  => 'section-leandash-general',
-					'priority' => 5,
-					'title'    => '',
-					'help'     => __( 'Container style will apply only when layout is set to either normal or narrow.', 'astra' ),
-					'settings' => array(),
-				),
-
 			);
 
 			return array_merge( $configurations, $_configs );

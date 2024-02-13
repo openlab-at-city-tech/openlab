@@ -24,7 +24,30 @@ class Astra_Related_Posts_Markup {
 	 *  Constructor
 	 */
 	public function __construct() {
-		add_action( 'astra_entry_after', array( $this, 'astra_related_posts_markup' ), 10 );
+		add_action( 'astra_content_before', array( $this, 'initialize_related_posts' ) );
+	}
+
+	/**
+	 * Initialize related posts module in Astra.
+	 *
+	 * @since 4.6.0
+	 */
+	public function initialize_related_posts() {
+		$priority         = 10;
+		$location         = astra_get_option( 'related-posts-outside-location' );
+		$module_placement = astra_get_option( 'related-posts-box-placement' );
+		if ( 'outside' === $module_placement ) {
+			$action = 'astra_content_after';
+			if ( astra_get_option( 'enable-comments-area', true ) && 'outside' === astra_get_option( 'comments-box-placement' ) ) {
+				$priority = 'below' === $location ? 20 : 9;
+			}
+		} elseif ( 'inside' === $module_placement ) {
+			$action   = 'astra_entry_bottom';
+			$priority = 'below' === $location ? 20 : 10;
+		} else {
+			$action = 'astra_entry_after';
+		}
+		add_action( $action, array( $this, 'astra_related_posts_markup' ), $priority );
 	}
 
 	/**
@@ -53,6 +76,10 @@ class Astra_Related_Posts_Markup {
 		$related_post_structure    = astra_get_option_meta( 'related-posts-structure' );
 		$exclude_ids               = apply_filters( 'astra_related_posts_exclude_post_ids', array( $post_id ), $post_id );
 		$related_posts_total_count = absint( astra_get_option( 'related-posts-total-count', 2 ) );
+		$module_container_width    = astra_get_option( 'related-posts-container-width' );
+		$module_container_width    = 'inside' === astra_get_option( 'related-posts-box-placement' ) ? '' : 'ast-container--' . $module_container_width;
+		$related_category_style    = astra_get_option( 'related-posts-category-style' );
+		$related_tag_style         = astra_get_option( 'related-posts-tag-style' );
 
 		// Get related posts by WP_Query.
 		$query_posts = $this->astra_get_related_posts_by_query( $post_id );
@@ -87,13 +114,19 @@ class Astra_Related_Posts_Markup {
 			while ( $query_posts->have_posts() && $post_counter < $total_posts_count ) {
 				$query_posts->the_post();
 				$post_id    = get_the_ID();
-				$output_str = astra_get_post_meta( $related_post_meta );
+				$separator  = astra_get_option( 'related-metadata-separator', '/' );
+				$output_str = astra_get_post_meta( $related_post_meta, $separator, 'related-posts' );
 
 				if ( is_array( $exclude_ids ) && ! in_array( $post_id, $exclude_ids ) ) {
 
 					if ( false === $related_posts_section_loaded ) {
 
-						echo '<div class="ast-single-related-posts-container">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						if ( is_customize_preview() ) {
+							echo '<div class="customizer-item-block-preview customizer-navigate-on-focus ast-single-related-posts-container ' . esc_attr( $module_container_width ) . '" data-section="ast-sub-section-related-posts" data-type="section">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							Astra_Builder_UI_Controller::render_customizer_edit_button( 'row-editor-shortcut' );
+						} else {
+							echo '<div class="ast-single-related-posts-container ' . esc_attr( $module_container_width ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						}
 
 						do_action( 'astra_related_posts_title_before' );
 
@@ -102,7 +135,7 @@ class Astra_Related_Posts_Markup {
 								'astra_related_posts_title',
 								sprintf(
 									'<div class="ast-related-posts-title-section"> <%1$s class="ast-related-posts-title"> %2$s </%1$s> </div>',
-									'h2',
+									apply_filters( 'astra_related_posts_box_heading_tag', 'h2' ),
 									$related_posts_title
 								)
 							);
@@ -132,7 +165,7 @@ class Astra_Related_Posts_Markup {
 														<header class="entry-header related-entry-header">
 														<?php
 															$this->astra_get_related_post_title( $post_id );
-															echo apply_filters( 'astra_related_posts_meta_html', '<div class="entry-meta">' . $output_str . '</div>', $output_str ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+															echo apply_filters( 'astra_related_posts_meta_html', '<div class="entry-meta ast-related-cat-style--' . $related_category_style . ' ast-related-tag-style--' . $related_tag_style . '">' . $output_str . '</div>' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 														?>
 														</header>
 													<?php
@@ -186,7 +219,8 @@ class Astra_Related_Posts_Markup {
 
 		$cta_text = apply_filters( 'astra_related_post_read_more_text', astra_get_option( 'blog-read-more-text' ) );
 
-		$show_read_more_as_button = apply_filters( 'astra_related_post_read_more_as_button', astra_get_option( 'blog-read-more-as-button' ) );
+		$blog_read_more_as_button = astra_get_option( 'blog-read-more-as-button' );
+		$show_read_more_as_button = apply_filters( 'astra_related_post_read_more_as_button', $blog_read_more_as_button );
 
 		$class = '';
 
@@ -289,13 +323,20 @@ class Astra_Related_Posts_Markup {
 		if ( ! in_array( 'featured-image', $related_post_structure ) ) {
 			return;
 		}
+		$featured_image_size = astra_get_option( 'related-posts-image-size', 'large' );
+
+		$thumbnail_id = get_post_thumbnail_id( $current_post_id );
+		$alt_text     = $thumbnail_id ? get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true ) : '';
 
 		$post_thumb = apply_filters(
 			'astra_related_post_featured_image_markup',
 			get_the_post_thumbnail(
 				$current_post_id,
-				apply_filters( 'astra_related_posts_thumbnail_default_size', 'large' ),
-				apply_filters( 'astra_related_posts_thumbnail_itemprop', '' )
+				apply_filters( 'astra_related_posts_thumbnail_default_size', $featured_image_size ),
+				array(
+					'alt'      => $alt_text ? $alt_text : get_the_title( $current_post_id ),
+					'itemprop' => apply_filters( 'astra_related_posts_thumbnail_itemprop', '' ),
+				)
 			)
 		);
 

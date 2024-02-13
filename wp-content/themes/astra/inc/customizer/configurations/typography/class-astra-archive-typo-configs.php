@@ -46,31 +46,37 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'control'  => 'ast-upgrade',
 						'renderAs' => 'list',
 						'choices'  => array(
-							'one'   => array(
-								'title' => __( 'Archive blog layout', 'astra' ),
+							'one'    => array(
+								'title' => __( 'Posts Filter', 'astra' ),
 							),
-							'two'   => array(
+							'eleven' => array(
+								'title' => __( 'Posts Reveal Effect', 'astra' ),
+							),
+							'two'    => array(
 								'title' => __( 'Grid, Masonry layout', 'astra' ),
 							),
-							'three' => array(
+							'twelve' => array(
+								'title' => __( 'Extended Meta Style Options', 'astra' ),
+							),
+							'three'  => array(
 								'title' => __( 'Custom featured images size', 'astra' ),
 							),
-							'four'  => array(
+							'four'   => array(
 								'title' => __( 'Archive pagination options', 'astra' ),
 							),
-							'six'   => array(
+							'six'    => array(
 								'title' => __( 'Extended typography options', 'astra' ),
 							),
-							'seven' => array(
+							'seven'  => array(
 								'title' => __( 'Extended spacing options', 'astra' ),
 							),
-							'eight' => array(
+							'eight'  => array(
 								'title' => __( 'Archive read time', 'astra' ),
 							),
-							'nine'  => array(
+							'nine'   => array(
 								'title' => __( 'Archive excerpt options', 'astra' ),
 							),
-							'ten'   => array(
+							'ten'    => array(
 								'title' => __( 'Extended spacing options', 'astra' ),
 							),
 						),
@@ -78,7 +84,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'default'  => '',
 						'priority' => 999,
 						'context'  => array(),
-						'title'    => __( 'Take your blog to the next level with powerful design features', 'astra' ),
+						'title'    => __( 'Take your blog to the next level with powerful design features.', 'astra' ),
 						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 					),
 				);
@@ -99,26 +105,129 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'title'             => __( 'Post Title Font Size', 'astra' ),
 						'priority'          => 140,
 						'default'           => astra_get_option( 'font-size-page-title' ),
-						'suffix'            => array( 'px', 'em', 'vw' ),
+						'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
 						'input_attrs'       => array(
-							'px' => array(
+							'px'  => array(
 								'min'  => 0,
 								'step' => 1,
 								'max'  => 200,
 							),
-							'em' => array(
+							'em'  => array(
 								'min'  => 0,
 								'step' => 0.01,
 								'max'  => 20,
 							),
-							'vw' => array(
+							'vw'  => array(
 								'min'  => 0,
 								'step' => 0.1,
 								'max'  => 25,
 							),
+							'rem' => array(
+								'min'  => 0,
+								'step' => 0.1,
+								'max'  => 20,
+							),
 						),
 						'context'           => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ?
 							Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+						'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
+					),
+					array(
+						'name'              => ASTRA_THEME_SETTINGS . '[font-size-post-meta]',
+						'control'           => 'ast-responsive-slider',
+						'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+						'section'           => 'section-blog',
+						'type'              => 'control',
+						'transport'         => 'postMessage',
+						'title'             => __( 'Meta Font Size', 'astra' ),
+						'priority'          => 140,
+						'default'           => astra_get_option( 'font-size-post-meta' ),
+						'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
+						'input_attrs'       => array(
+							'px'  => array(
+								'min'  => 0,
+								'step' => 1,
+								'max'  => 200,
+							),
+							'em'  => array(
+								'min'  => 0,
+								'step' => 0.01,
+								'max'  => 20,
+							),
+							'vw'  => array(
+								'min'  => 0,
+								'step' => 0.1,
+								'max'  => 25,
+							),
+							'rem' => array(
+								'min'  => 0,
+								'step' => 0.1,
+								'max'  => 20,
+							),
+						),
+						'context'           => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ?
+							Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+						'divider'           => array( 'ast_class' => 'ast-section-spacing' ),
+					),
+					array(
+						'name'              => ASTRA_THEME_SETTINGS . '[font-size-post-tax]',
+						'control'           => 'ast-responsive-slider',
+						'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+						'section'           => 'section-blog',
+						'type'              => 'control',
+						'transport'         => 'postMessage',
+						'title'             => __( 'Taxonomy Font Size', 'astra' ),
+						'priority'          => 140,
+						'default'           => astra_get_option( 'font-size-post-tax' ),
+						'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
+						'input_attrs'       => array(
+							'px'  => array(
+								'min'  => 0,
+								'step' => 1,
+								'max'  => 200,
+							),
+							'em'  => array(
+								'min'  => 0,
+								'step' => 0.01,
+								'max'  => 20,
+							),
+							'vw'  => array(
+								'min'  => 0,
+								'step' => 0.1,
+								'max'  => 25,
+							),
+							'rem' => array(
+								'min'  => 0,
+								'step' => 0.1,
+								'max'  => 20,
+							),
+						),
+						'context'           => array(
+							Astra_Builder_Helper::$design_tab_config,
+							array(
+								'relation' => 'OR',
+								array(
+									'setting'  => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
+									'operator' => 'contains',
+									'value'    => 'category',
+								),
+								array(
+									'setting'  => ASTRA_THEME_SETTINGS . '[blog-post-structure]',
+									'operator' => 'contains',
+									'value'    => 'tag',
+								),
+								array(
+									'setting'  => ASTRA_THEME_SETTINGS . '[blog-meta]',
+									'operator' => 'contains',
+									'value'    => 'category',
+								),
+								array(
+									'setting'  => ASTRA_THEME_SETTINGS . '[blog-meta]',
+									'operator' => 'contains',
+									'value'    => 'tag',
+								),
+							),
+						),
 						'divider'           => array( 'ast_class' => 'ast-section-spacing' ),
 					),
 				);

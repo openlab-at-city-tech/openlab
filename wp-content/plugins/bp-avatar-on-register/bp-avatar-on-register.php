@@ -51,7 +51,7 @@ function bpar_avatar_upload() {
 				</div>
 
 				<div class="avatar-upload-actions">
-					<div>Upload an avatar to be used on your profile and throughout the site. Or, you can use the avatar shown here instead. You can change your avatar at any time from your profile.</div>
+					<div>Upload an avatar to be used on your profile and throughout the site. You don't have to use an image of yourself. Feel free to use something that represents you or your interests. Or, you can use the avatar shown here instead. You can change your avatar at any time from your profile.</div>
 
 					<?php bp_attachments_get_template_part( 'avatars/index' ); ?>
 				</div>

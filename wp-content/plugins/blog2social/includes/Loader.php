@@ -37,8 +37,8 @@ class B2S_Loader {
         define('B2S_PLUGIN_POSTPERPAGE', '25');
         define('B2S_PLUGIN_VERSION_TYPE', serialize(array(0 => 'Free', 1 => 'Smart', 2 => 'Pro', 3 => 'Business', 4 => 'Premium')));
         define('B2S_PLUGIN_NETWORK', serialize(array(1 => 'Facebook', 2 => 'Twitter', 3 => 'Linkedin', 4 => 'Tumblr', 6 => 'Pinterest', 7 => 'Flickr', 9 => 'Diigo', 11 => 'Medium', 12 => 'Instagram', 14 => 'Torial', 15 => 'Reddit', 16 => 'Bloglovin', 17 => 'VKontakte', 18 => 'Google Business Profile', 19 => 'Xing', 21 => 'Imgur', 24 => 'Telegram', 25 => 'Blogger', 26 => 'Ravelry', 27 => 'Instapaper', 32 => 'YouTube', 35 => 'Vimeo', 36 => 'TikTok', 37 => 'Skyrock', 38 => 'Mastodon', 39 => 'Discord')));
-        define('B2S_PLUGIN_SCHED_DEFAULT_TIMES', serialize(array(1 => array(8, 13), 2 => array(9, 14), 3 => array(10, 12), 4 => array(20, 22), 6 => array(12, 15), 7 => array(7, 9), 9 => array(16, 19), 11 => array(8, 10), 12 => array(10, 12), 13 => array(11, 13), 14 => array(6, 8), 15 => array(6, 8), 16 => array(16, 19), 17 => array(21, 24), 18 => array(13, 14), 19 => array(7, 10), 21 => array(8, 11), 24 => array(10, 12),32 => array(15, 21), 36 => array(14, 17))));
-        define('B2S_PLUGIN_SCHED_DEFAULT_TIMES_INFO', serialize(array(1 => array(0 => array(8, 13)), 2 => array(0 => array(9, 14)), 3 => array(0 => array(10, 12)), 4 => array(0 => array(20, 22)), 6 => array(0 => array(12, 15)), 7 => array(0 => array(7, 9), 1 => array(17, 19)), 9 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 11 => array(0 => array(8, 10)), 12 => array(0 => array(10, 12)), 14 => array(0 => array(6, 8)), 15 => array(0 => array(6, 8)), 16 => array(0 => array(16, 19)), 17 => array(0 => array(21, 1)), 18 => array(0 => array(13, 14)), 19 => array(0 => array(7, 10)), 24 => array(0 => array(10, 12), 1 => array(17, 19)),32 => array(0 => array(15, 21)), 36 => array(0 => array(14, 17)))));
+        define('B2S_PLUGIN_SCHED_DEFAULT_TIMES', serialize(array(1 => array(8, 13), 2 => array(9, 14), 3 => array(10, 12), 4 => array(20, 22), 6 => array(12, 15), 7 => array(7, 9), 9 => array(16, 19), 11 => array(8, 10), 12 => array(10, 12), 13 => array(11, 13), 14 => array(6, 8), 15 => array(6, 8), 16 => array(16, 19), 17 => array(21, 24), 18 => array(13, 14), 19 => array(7, 10), 21 => array(8, 11), 24 => array(10, 12), 32 => array(15, 21), 36 => array(14, 17))));
+        define('B2S_PLUGIN_SCHED_DEFAULT_TIMES_INFO', serialize(array(1 => array(0 => array(8, 13)), 2 => array(0 => array(9, 14)), 3 => array(0 => array(10, 12)), 4 => array(0 => array(20, 22)), 6 => array(0 => array(12, 15)), 7 => array(0 => array(7, 9), 1 => array(17, 19)), 9 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 11 => array(0 => array(8, 10)), 12 => array(0 => array(10, 12)), 14 => array(0 => array(6, 8)), 15 => array(0 => array(6, 8)), 16 => array(0 => array(16, 19)), 17 => array(0 => array(21, 1)), 18 => array(0 => array(13, 14)), 19 => array(0 => array(7, 10)), 24 => array(0 => array(10, 12), 1 => array(17, 19)), 32 => array(0 => array(15, 21)), 36 => array(0 => array(14, 17)))));
         define('B2S_PLUGIN_NETWORK_ALLOW_PROFILE', serialize(array(1, 2, 3, 4, 7, 9, 11, 14, 15, 16, 17, 18, 19, 21, 24, 25, 26, 27, 32, 35, 36, 37, 38, 39)));
         define('B2S_PLUGIN_NETWORK_ALLOW_PAGE', serialize(array(1, 3, 6, 12, 17, 19)));
         define('B2S_PLUGIN_NETWORK_ALLOW_GROUP', serialize(array(1, 11, 17)));
@@ -49,6 +49,9 @@ class B2S_Loader {
         define('B2S_PLUGIN_AUTO_POST_LIMIT', serialize(array(0 => 0, 1 => 25, 2 => 50, 3 => 100, 4 => 100)));
         define('B2S_PLUGIN_RE_POST_LIMIT', serialize(array(0 => 0, 1 => 25, 2 => 50, 3 => 100, 4 => 100)));
         define('B2S_PLUGIN_NETWORK_OAUTH', serialize(array(1, 2, 3, 4, 6, 7, 8, 11, 15, 17, 18, 21, 25, 32, 35, 36, 37, 38, 39)));
+        define('B2S_PLUGIN_USER_APP_NETWORKS', serialize(array(2)));
+        define('B2S_PLUGIN_DEFAULT_USER_APP_QUANTITY', serialize(array(0 => 1, 1 => 1, 2 => 3, 3 => 5)));
+
         define('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT', serialize(array(
             1 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 500), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0, 'addLink' => false),
                 1 => array('short_text' => array('active' => 0, 'range_min' => 200, 'range_max' => 400, 'excerpt_range_min' => 200, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => "{CONTENT}\n{KEYWORDS}", 'format' => 0, 'addLink' => false),
@@ -100,9 +103,6 @@ class B2S_Loader {
         define('B2S_PLUGIN_NETWORK_ANIMATE_GIF', json_encode(array(1 => array(0 => false, 1 => true), 2 => array(0 => false, 1 => true), 3 => array(0 => true, 1 => true), 4 => array(0 => true), 6 => array(0 => true), 7 => array(0 => false), 11 => array(0 => true), 12 => array(0 => false, 1 => false), 14 => array(0 => true), 15 => array(0 => false), 17 => array(0 => false), 19 => array(0 => true, 1 => true), 21 => array(0 => true), 24 => array(0 => true))));
         define('B2S_PLUGIN_NETWORK_META_TAGS', json_encode(array('og' => array(1, 3, 15, 19, 17), 'twitter' => array(2, 24))));
         define('B2S_PLUGIN_SHORTENER', serialize(array(0 => esc_html__('Bitly', 'blog2social'), 1 => esc_html__('Rebrandly', 'blog2social'), 2 => esc_html__('Sniply', 'blog2social'))));
-        define('B2S_PLUGIN_USER_APP_NETWORKS', serialize(array(2)));
-
-        define('B2S_PLUGIN_DEFAULT_USER_APP_QUANTITY', array(0 => 1, 1 => 1, 2 => 3, 3 => 5));
 
         add_filter('heartbeat_received', array(B2S_Heartbeat::getInstance(), 'init'), 10, 2);
         add_action('wp_logout', array($this, 'releaseLocks'));
@@ -1142,6 +1142,8 @@ class B2S_Loader {
             'SERVICE_LIMIT' => esc_html__("The post limit for your Twitter API App has been reached. Please check the settings of your API app in your developer account and consider an upgrade if necessary.", "blog2social"),
             'NETWORK_APP_ACCOUNT_PERMISSON' => esc_html__('An issue with your API App has been detected. Please check the settings for your API App on your developer account of the respective social platform.', 'blog2social'),
             'NETWORK_APP_RIGHT' => esc_html__('Your network app does not have permission for this action. Please check your network app settings in your network developer portal.', 'blog2social'),
+            'LICENCE_RATE_DAILY_LIMIT' => esc_html__('Your daily posting limit has been reached. Please try again tomorrow or upgrade your version.', 'blog2social'), //since 7.3.5
+            'LICENCE_RATE_LIMIT' => esc_html__('Your posting limit has been reached. Please upgrade your version or order an additional posting contingent for your premium version.', 'blog2social'), //since 7.3.5
         )));
     }
 
@@ -1351,7 +1353,7 @@ class B2S_Loader {
         if (B2S_Tools::showNotice() == false) {
             $showDashboard = true;
 
-            if(B2S_PLUGIN_USER_VERSION == 0){
+            if (B2S_PLUGIN_USER_VERSION == 0) {
                 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
                 $onboarding = $options->_getOption('onboarding_active'); //1=is_active;2=aborted
                 if (!$onboarding || (int) $onboarding == 1) {
@@ -1363,7 +1365,7 @@ class B2S_Loader {
                     }
                 }
             }
-            
+
 
             if ($showDashboard) {
                 wp_enqueue_script('B2SVALIDATEJS');

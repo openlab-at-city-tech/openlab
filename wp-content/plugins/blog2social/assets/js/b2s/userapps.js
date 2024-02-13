@@ -1,18 +1,20 @@
 jQuery.noConflict();
 
 jQuery(document).on('click', '.b2s-network-add-user-app-btn', function () {
-
-    if(jQuery('#b2s-user-app-count-current')[0].innerText < jQuery('#b2s-network-app-full-count')[0].innerText){
+    if (jQuery('#b2s-user-app-count-current')[0].innerText < jQuery('#b2s-network-app-full-count')[0].innerText) {
+        jQuery('#b2s-edit-user-app-id').val("");
+        jQuery('#b2s-edit-user-app-name').val("");
+        jQuery('#b2s-edit-user-app-key').val("");
+        jQuery('#b2s-edit-user-app-secret').val("");
         jQuery("#b2sAddUserAppModal").modal('show');
-    
-    } else if(jQuery("#b2s-user-license").val() == 1){
+
+    } else if (jQuery("#b2s-user-license").val() == 1) {
         jQuery("#b2sBuyAddonAppsModal").modal('show');
-    
+
     } else {
         jQuery('#b2sPreFeatureModal').modal('show');
 
     }
-
     jQuery('#b2s-add-user-app-network-id').val(jQuery(this).attr("data-network-id"));
 });
 
@@ -23,12 +25,12 @@ function wop(url, name) {
     window.open(url + '&location=' + location, name, "width=650,height=900,scrollbars=yes,toolbar=no,status=no,resizable=no,menubar=no,location=no,directories=no,top=20,left=20");
 }
 jQuery('#b2s-add-app-form').validate({
-
     ignore: "",
     errorPlacement: function () {
         return false;
     },
     submitHandler: function (form) {
+        jQuery('.b2s-user-app-alert').hide();
         var name = jQuery('#b2s-add-user-app-name').val();
         var network = jQuery('#b2s-add-user-app-network-id').val();
         var key = jQuery('#b2s-add-user-app-key').val();
@@ -49,7 +51,6 @@ jQuery('#b2s-add-app-form').validate({
             },
             error: function () {
                 jQuery("#b2sAddUserAppModal").modal('hide');
-
                 jQuery('.b2s-server-connection-fail').show();
                 return false;
             },
@@ -60,45 +61,32 @@ jQuery('#b2s-add-app-form').validate({
                 jQuery('.b2s-user-apps-generic-error').hide();
                 jQuery('.b2s-user-apps-success').hide();
 
-                if(data['result'] == true){
-
-                    html = '<li class="b2s-network-item-auth-list-li" data-network-id="'+data['network_id']+'" data-app-id="'+data['app_id']+'">';
-
+                if (data.result == true) {
+                    html = '<li class="b2s-network-item-auth-list-li" data-network-id="' + data.network_id + '" data-app-id="' + data.app_id + '">';
                     html += '<div class="pull-left">';
-                    html += '<span class="b2s-network-item-auth-user-name">'+data['app_name']+'</span>';
+                    html += '<span class="b2s-network-item-auth-user-name">' + data.app_name + '</span>';
                     html += '</div>';
-    
                     html += '<div class="pull-right">';
-                    html += '<a class="b2s-btn-delete-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="'+data['app_id']+'" data-app-name="'+data['app_name']+'" data-network-id="'+data['network_id']+'" href="#">';
+                    html += '<a class="b2s-btn-delete-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="' + data.app_id + '" data-app-name="' + data.app_name + '" data-network-id="' + data.network_id + '" href="#">';
                     html += '<span class="glyphicon glyphicon-trash glyphicon-grey"></span>';
                     html += '</a>';
-    
-                    html += '<a class="b2s-btn-edit-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="'+data['app_id']+'" data-app-name="'+data['app_name']+'" data-network-id="'+data['network_id']+'" href="#">';
+                    html += '<a class="b2s-btn-edit-app-button b2s-add-padding-network-delete pull-right" data-network-type="0" data-app-id="' + data.app_id + '" data-app-name="' + data.app_name + '" data-network-id="' + data.network_id + '" href="#">';
                     html += '<span class="glyphicon glyphicon-pencil glyphicon-grey"></span>';
                     html += '</a>';
-    
                     html += '</div>';
-    
                     html += '<div class="clearfix"></div>';
-    
                     html += '</li>';
 
-                    var anchor = jQuery('.b2s-network-item-auth-list[data-network-id="'+network+'"]');
-
+                    var anchor = jQuery('.b2s-network-item-auth-list[data-network-id="' + network + '"]');
                     jQuery(anchor).last().append(html);
-
-                    var counter = jQuery('.b2s-user-app-count-current[data-network-id="'+network+'"]').html();
-
-                    jQuery('.b2s-user-app-count-current[data-network-id="'+network+'"]').html(Number(counter)+1);
-                    
+                    var counter = jQuery('.b2s-user-app-count-current[data-network-id="' + network + '"]').html();
+                    jQuery('.b2s-user-app-count-current[data-network-id="' + network + '"]').html(Number(counter) + 1);
                     jQuery("#b2sAddUserAppModal").modal('hide');
                     jQuery('.b2s-user-apps-success').show();
 
-
                 } else {
-
-                    if(data['error_code'] == "APP_PAID"){
-                        if(jQuery("#b2s-user-license").val() == 1){
+                    if (data.error_code == "APP_PAID") {
+                        if (jQuery("#b2s-user-license").val() == 1) {
                             jQuery('.b2s-user-apps-permission-premium').show();
                         } else {
                             jQuery('.b2s-user-apps-permission-free').show();
@@ -108,8 +96,6 @@ jQuery('#b2s-add-app-form').validate({
                     }
 
                     jQuery("#b2sAddUserAppModal").modal('hide');
-
-
                 }
             }
         });
@@ -119,10 +105,6 @@ jQuery('#b2s-add-app-form').validate({
 
 jQuery(document).on('click', '.b2s-add-app-submit-btn', function () {
     var submit = true;
-    var name = jQuery('#b2s-add-user-app-name').val();
-    var network = jQuery('#b2s-add-user-app-network-id').val();
-    var key = jQuery('#b2s-add-user-app-key').val();
-    var secret = jQuery('#b2s-add-user-app-secret').val();
 
     if (jQuery('#b2s-add-user-app-name').val() == "") {
         submit = false;
@@ -148,7 +130,6 @@ jQuery(document).on('click', '.b2s-add-app-submit-btn', function () {
     if (submit) {
         jQuery('#b2s-add-app-form').submit();
     }
-
 });
 
 jQuery(document).on('click', '.b2s-btn-edit-app-button', function () {
@@ -156,23 +137,23 @@ jQuery(document).on('click', '.b2s-btn-edit-app-button', function () {
     var app_name = jQuery(this).attr("data-app-name");
     var app_key = jQuery(this).attr("data-app-key");
     var app_secret = jQuery(this).attr("data-app-secret");
-    if(jQuery(this).attr("disabled") == null){
+    if (jQuery(this).attr("disabled") == null) {
         jQuery('#b2s-edit-user-app-name').val(app_name);
         jQuery('#b2s-edit-user-app-id').val(app_id);
         jQuery('#b2s-edit-user-app-key').attr("placeholder", app_key);
         jQuery('#b2s-edit-user-app-secret').attr("placeholder", app_secret);
-        jQuery('#b2sEditUserAppModal').modal().show();
+        jQuery('#b2sEditUserAppModal').modal('show');
     }
 
 });
 
 
 jQuery(document).on('click', '.b2s-edit-app-submit-btn', function () {
+    jQuery('.b2s-user-app-alert').hide();
     var app_id = jQuery('#b2s-edit-user-app-id').val();
     var app_name = jQuery('#b2s-edit-user-app-name').val();
     var app_key = jQuery('#b2s-edit-user-app-key').val();
     var app_secret = jQuery('#b2s-edit-user-app-secret').val();
-
 
     var data = {
         'action': 'b2s_edit_user_app',
@@ -194,11 +175,11 @@ jQuery(document).on('click', '.b2s-edit-app-submit-btn', function () {
             return false;
         },
         success: function (data) {
-            if (data['app_name'] != "") {
-                jQuery('.b2s-user-app-name[data-app-id="' + data['app_id'] + '"]').html(data['app_name']);
+            if (data.result == true) {
+                jQuery('.b2s-user-app-name[data-app-id="' + data.app_id + '"]').html(data.app_name);
             }
             jQuery('.b2s-user-apps-edit-success').show();
-            jQuery('#b2sEditUserAppModal').modal().hide();
+            jQuery('#b2sEditUserAppModal').modal('hide');
         }
     });
 
@@ -206,6 +187,7 @@ jQuery(document).on('click', '.b2s-edit-app-submit-btn', function () {
 
 
 jQuery(document).on('click', '.b2s-btn-delete-app-button', function () {
+    jQuery('.b2s-user-app-alert').hide();
     var app_id = jQuery(this).attr("data-app-id");
     jQuery('#b2s-delete-user-app-id').val(app_id);
     jQuery('#b2sDeleteUserAppModal').modal('show');
@@ -215,6 +197,7 @@ jQuery(document).on('click', '.b2s-btn-delete-app-button', function () {
 
 jQuery(document).on('click', '.b2s-btn-network-delete-app-confirm-btn', function () {
     var app_id = jQuery('#b2s-delete-user-app-id').val();
+
     jQuery.ajax({
         url: ajaxurl,
         type: "POST",
@@ -227,16 +210,16 @@ jQuery(document).on('click', '.b2s-btn-network-delete-app-confirm-btn', function
         },
         error: function () {
             jQuery('.b2s-server-connection-fail').show();
-            jQuery('#b2sDeleteUserAppModal').modal().hide();
-
+            jQuery('#b2sDeleteUserAppModal').modal('hide');
             return false;
         },
         success: function (data) {
             var currentAppCount = Number(jQuery('#b2s-user-app-count-current')[0].innerText);
             jQuery('#b2s-user-app-count-current').text(currentAppCount - 1);
-            jQuery('#b2sDeleteUserAppModal').modal().hide();
+            jQuery('#b2sDeleteUserAppModal').modal('hide');
+            jQuery('.b2s-user-apps-delete-success').show();
             var app = jQuery('.b2s-network-item-auth-list-li[data-app-id="' + app_id + '"]');
-            app.hide();
+            app.remove();
         }
     });
 });

@@ -11,238 +11,6 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Check if we need to load icons as font or SVG.
- *
- * @since 3.3.0
- * @return void
- */
-function astra_icons_svg_compatibility() {
-
-	$theme_options = get_option( 'astra-settings' );
-
-	if ( ! isset( $theme_options['can-update-astra-icons-svg'] ) ) {
-		// Set a flag to check if we need to add icons as SVG.
-		$theme_options['can-update-astra-icons-svg'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Header Footer builder - Migration compatibility.
- *
- * @since 3.0.0
- *
- * @return void
- */
-function astra_header_builder_compatibility() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	// Set flag to not load button specific CSS.
-	if ( ! isset( $theme_options['is-header-footer-builder'] ) ) {
-		$theme_options['is-header-footer-builder'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-	if ( ! isset( $theme_options['header-footer-builder-notice'] ) ) {
-		$theme_options['header-footer-builder-notice'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Clears assets cache and regenerates new assets files.
- *
- * @since 3.0.1
- *
- * @return void
- */
-function astra_clear_assets_cache() {
-	if ( is_callable( 'Astra_Minify::refresh_assets' ) ) {
-		Astra_Minify::refresh_assets();
-	}
-}
-
-/**
- * Gutenberg pattern compatibility changes.
- *
- * @since 3.3.0
- *
- * @return void
- */
-function astra_gutenberg_pattern_compatibility() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['guntenberg-button-pattern-compat-css'] ) ) {
-		$theme_options['guntenberg-button-pattern-compat-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to provide backward compatibility of float based CSS for existing users.
- *
- * @since 3.3.0
- * @return void.
- */
-function astra_check_flex_based_css() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['is-flex-based-css'] ) ) {
-		$theme_options['is-flex-based-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Update the Cart Style, Icon color & Border radius if None style is selected.
- *
- * @since 3.4.0
- * @return void.
- */
-function astra_update_cart_style() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( isset( $theme_options['woo-header-cart-icon-style'] ) && 'none' === $theme_options['woo-header-cart-icon-style'] ) {
-		$theme_options['woo-header-cart-icon-style']  = 'outline';
-		$theme_options['header-woo-cart-icon-color']  = '';
-		$theme_options['woo-header-cart-icon-color']  = '';
-		$theme_options['woo-header-cart-icon-radius'] = '';
-	}
-
-	if ( isset( $theme_options['edd-header-cart-icon-style'] ) && 'none' === $theme_options['edd-header-cart-icon-style'] ) {
-		$theme_options['edd-header-cart-icon-style']  = 'outline';
-		$theme_options['edd-header-cart-icon-color']  = '';
-		$theme_options['edd-header-cart-icon-radius'] = '';
-	}
-
-	update_option( 'astra-settings', $theme_options );
-}
-
-/**
- * Update existing 'Grid Column Layout' option in responsive way in Related Posts.
- * Till this update 3.5.0 we have 'Grid Column Layout' only for singular option, but now we are improving it as responsive.
- *
- * @since 3.5.0
- * @return void.
- */
-function astra_update_related_posts_grid_layout() {
-
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['related-posts-grid-responsive'] ) && isset( $theme_options['related-posts-grid'] ) ) {
-
-		/**
-		 * Managed here switch case to reduce further conditions in dynamic-css to get CSS value based on grid-template-columns. Because there are following CSS props used.
-		 *
-		 * '1' = grid-template-columns: 1fr;
-		 * '2' = grid-template-columns: repeat(2,1fr);
-		 * '3' = grid-template-columns: repeat(3,1fr);
-		 * '4' = grid-template-columns: repeat(4,1fr);
-		 *
-		 * And we already have Astra_Builder_Helper::$grid_size_mapping (used for footer layouts) for getting CSS values based on grid layouts. So migrating old value of grid here to new grid value.
-		 */
-		switch ( $theme_options['related-posts-grid'] ) {
-			case '1':
-				$grid_layout = 'full';
-				break;
-
-			case '2':
-				$grid_layout = '2-equal';
-				break;
-
-			case '3':
-				$grid_layout = '3-equal';
-				break;
-
-			case '4':
-				$grid_layout = '4-equal';
-				break;
-		}
-
-		$theme_options['related-posts-grid-responsive'] = array(
-			'desktop' => $grid_layout,
-			'tablet'  => $grid_layout,
-			'mobile'  => 'full',
-		);
-
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Migrate Site Title & Site Tagline options to new responsive array.
- *
- * @since 3.5.0
- *
- * @return void
- */
-function astra_site_title_tagline_responsive_control_migration() {
-
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( false === get_option( 'display-site-title-responsive', false ) && isset( $theme_options['display-site-title'] ) ) {
-		$theme_options['display-site-title-responsive']['desktop'] = $theme_options['display-site-title'];
-		$theme_options['display-site-title-responsive']['tablet']  = $theme_options['display-site-title'];
-		$theme_options['display-site-title-responsive']['mobile']  = $theme_options['display-site-title'];
-	}
-
-	if ( false === get_option( 'display-site-tagline-responsive', false ) && isset( $theme_options['display-site-tagline'] ) ) {
-		$theme_options['display-site-tagline-responsive']['desktop'] = $theme_options['display-site-tagline'];
-		$theme_options['display-site-tagline-responsive']['tablet']  = $theme_options['display-site-tagline'];
-		$theme_options['display-site-tagline-responsive']['mobile']  = $theme_options['display-site-tagline'];
-	}
-
-	update_option( 'astra-settings', $theme_options );
-}
-
-/**
- * Do not apply new font-weight heading support CSS in editor/frontend directly.
- *
- * 1. Adding Font-weight support to widget titles.
- * 2. Customizer font CSS not supporting in editor.
- *
- * @since 3.6.0
- *
- * @return void
- */
-function astra_headings_font_support() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['can-support-widget-and-editor-fonts'] ) ) {
-		$theme_options['can-support-widget-and-editor-fonts'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * @since 3.6.0
- * @return void.
- */
-function astra_remove_logo_max_width() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['can-remove-logo-max-width-css'] ) ) {
-		$theme_options['can-remove-logo-max-width-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to maintain backward compatibility for existing users for Transparent Header border bottom default value i.e from '' to 0.
- *
- * @since 3.6.0
- * @return void.
- */
-function astra_transparent_header_default_value() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['transparent-header-default-border'] ) ) {
-		$theme_options['transparent-header-default-border'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
  * Clear Astra + Astra Pro assets cache.
  *
  * @since 3.6.1
@@ -257,453 +25,8 @@ function astra_clear_all_assets_cache() {
 	$astra_cache_base_instance->refresh_assets( 'astra' );
 
 	// Clear Astra Addon's static and dynamic CSS asset cache.
-	astra_clear_assets_cache();
 	$astra_addon_cache_base_instance = new Astra_Cache_Base( 'astra-addon' );
 	$astra_addon_cache_base_instance->refresh_assets( 'astra-addon' );
-}
-
-/**
- * Set flag for updated default values for buttons & add GB Buttons padding support.
- *
- * @since 3.6.3
- * @return void
- */
-function astra_button_default_values_updated() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['btn-default-padding-updated'] ) ) {
-		$theme_options['btn-default-padding-updated'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag for old users, to not directly apply underline to content links.
- *
- * @since 3.6.4
- * @return void
- */
-function astra_update_underline_link_setting() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['underline-content-links'] ) ) {
-		$theme_options['underline-content-links'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Add compatibility support for WP-5.8. as some of settings & blocks already their in WP-5.7 versions, that's why added backward here.
- *
- * @since 3.6.5
- * @return void
- */
-function astra_support_block_editor() {
-	$theme_options = get_option( 'astra-settings' );
-
-	// Set flag on existing user's site to not reflect changes directly.
-	if ( ! isset( $theme_options['support-block-editor'] ) ) {
-		$theme_options['support-block-editor'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to maintain backward compatibility for existing users.
- * Fixing the case where footer widget's right margin space not working.
- *
- * @since 3.6.7
- * @return void
- */
-function astra_fix_footer_widget_right_margin_case() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['support-footer-widget-right-margin'] ) ) {
-		$theme_options['support-footer-widget-right-margin'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * @since 3.6.7
- * @return void
- */
-function astra_remove_elementor_toc_margin() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['remove-elementor-toc-margin-css'] ) ) {
-		$theme_options['remove-elementor-toc-margin-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- * Use: Setting flag for removing widget specific design options when WordPress 5.8 & above activated on site.
- *
- * @since 3.6.8
- * @return void
- */
-function astra_set_removal_widget_design_options_flag() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['remove-widget-design-options'] ) ) {
-		$theme_options['remove-widget-design-options'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Apply zero font size for new users.
- *
- * @since 3.6.9
- * @return void
- */
-function astra_zero_font_size_comp() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['astra-zero-font-size-case-css'] ) ) {
-		$theme_options['astra-zero-font-size-case-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/** Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * @since 3.6.9
- * @return void
- */
-function astra_unset_builder_elements_underline() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['unset-builder-elements-underline'] ) ) {
-		$theme_options['unset-builder-elements-underline'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Migrating Builder > Account > transparent resonsive menu color options to single color options.
- * Because we do not show menu on resonsive devices, whereas we trigger login link on responsive devices instead of showing menu.
- *
- * @since 3.6.9
- *
- * @return void
- */
-function astra_remove_responsive_account_menu_colors_support() {
-
-	$theme_options = get_option( 'astra-settings', array() );
-
-	$account_menu_colors = array(
-		'transparent-account-menu-color',                // Menu color.
-		'transparent-account-menu-bg-obj',               // Menu background color.
-		'transparent-account-menu-h-color',              // Menu hover color.
-		'transparent-account-menu-h-bg-color',           // Menu background hover color.
-		'transparent-account-menu-a-color',              // Menu active color.
-		'transparent-account-menu-a-bg-color',           // Menu background active color.
-	);
-
-	foreach ( $account_menu_colors as $color_option ) {
-		if ( ! isset( $theme_options[ $color_option ] ) && isset( $theme_options[ $color_option . '-responsive' ]['desktop'] ) ) {
-			$theme_options[ $color_option ] = $theme_options[ $color_option . '-responsive' ]['desktop'];
-		}
-	}
-
-	update_option( 'astra-settings', $theme_options );
-}
-
-/**
- * Link default color compatibility.
- *
- * @since 3.7.0
- * @return void
- */
-function astra_global_color_compatibility() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['support-global-color-format'] ) ) {
-		$theme_options['support-global-color-format'] = false;
-	}
-
-	// Set Footer copyright text color for existing users to #3a3a3a.
-	if ( ! isset( $theme_options['footer-copyright-color'] ) ) {
-		$theme_options['footer-copyright-color'] = '#3a3a3a';
-	}
-
-	update_option( 'astra-settings', $theme_options );
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * @since 3.7.4
- * @return void
- */
-function astra_improve_gutenberg_editor_ui() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['improve-gb-editor-ui'] ) ) {
-		$theme_options['improve-gb-editor-ui'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * Starting supporting content-background color for Full Width Contained & Full Width Stretched layouts.
- *
- * @since 3.7.8
- * @return void
- */
-function astra_fullwidth_layouts_apply_content_background() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['apply-content-background-fullwidth-layouts'] ) ) {
-		$theme_options['apply-content-background-fullwidth-layouts'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Sets the default breadcrumb separator selector value if the current user is an exsisting user
- *
- * @since 3.7.8
- * @return void
- */
-function astra_set_default_breadcrumb_separator_option() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['breadcrumb-separator-selector'] ) ) {
-		$theme_options['breadcrumb-separator-selector'] = 'unicode';
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * Backward flag purpose - To initiate modern & updated UI of block editor & frontend.
- *
- * @since 3.8.0
- * @return void
- */
-function astra_apply_modern_block_editor_ui() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['wp-blocks-ui'] ) && ! version_compare( $theme_options['theme-auto-version'], '3.8.0', '==' ) ) {
-		$theme_options['blocks-legacy-setup'] = true;
-		$theme_options['wp-blocks-ui']        = 'legacy';
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * Backward flag purpose - To keep structure defaults updation by filter.
- *
- * @since 3.8.3
- * @return void
- */
-function astra_update_customizer_layout_defaults() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['customizer-default-layout-update'] ) ) {
-		$theme_options['customizer-default-layout-update'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
- *
- * Backward flag purpose - To initiate maintain modern, updated v2 experience of block editor & frontend.
- *
- * @since 3.8.3
- * @return void
- */
-function astra_apply_modern_block_editor_v2_ui() {
-	$theme_options  = get_option( 'astra-settings', array() );
-	$option_updated = false;
-	if ( ! isset( $theme_options['wp-blocks-v2-ui'] ) ) {
-		$theme_options['wp-blocks-v2-ui'] = false;
-		$option_updated                   = true;
-	}
-	if ( ! isset( $theme_options['wp-blocks-ui'] ) ) {
-		$theme_options['wp-blocks-ui'] = 'custom';
-		$option_updated                = true;
-	}
-	if ( $option_updated ) {
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Display Cart Total and Title compatibility.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_display_cart_total_title_compatibility() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['woo-header-cart-label-display'] ) ) {
-		// Set the Display Cart Label toggle values with shortcodes.
-		$cart_total_status = isset( $theme_options['woo-header-cart-total-display'] ) ? $theme_options['woo-header-cart-total-display'] : true;
-		$cart_label_status = isset( $theme_options['woo-header-cart-title-display'] ) ? $theme_options['woo-header-cart-title-display'] : true;
-
-		if ( $cart_total_status && $cart_label_status ) {
-			$theme_options['woo-header-cart-label-display'] = __( 'Cart', 'astra' ) . '/{cart_total_currency_symbol}';
-		} elseif ( $cart_total_status ) {
-			$theme_options['woo-header-cart-label-display'] = '{cart_total_currency_symbol}';
-		} elseif ( $cart_label_status ) {
-			$theme_options['woo-header-cart-label-display'] = __( 'Cart', 'astra' );
-		}
-
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * If old user then it keeps then default cart icon.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_update_woocommerce_cart_icons() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	if ( ! isset( $theme_options['astra-woocommerce-cart-icons-flag'] ) ) {
-		$theme_options['astra-woocommerce-cart-icons-flag'] = false;
-	}
-}
-
-/**
- * Set brder color to blank for old users for new users 'default' will take over.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_legacy_customizer_maintenance() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( ! isset( $theme_options['border-color'] ) ) {
-		$theme_options['border-color'] = '#dddddd';
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Enable single product breadcrumb to maintain backward compatibility for existing users.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_update_single_product_breadcrumb() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( isset( $theme_options['single-product-breadcrumb-disable'] ) ) {
-		$theme_options['single-product-breadcrumb-disable'] = ( true === $theme_options['single-product-breadcrumb-disable'] ) ? false : true;
-	} else {
-		$theme_options['single-product-breadcrumb-disable'] = true;
-	}
-	update_option( 'astra-settings', $theme_options );
-}
-
-/**
- * Restrict direct changes on users end so make it filterable.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_apply_modern_ecommerce_setup() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( ! isset( $theme_options['modern-ecommerce-setup'] ) ) {
-		$theme_options['modern-ecommerce-setup'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Migrate old user data to new responsive format layout for shop's summary box content alignment.
- *
- * @since 3.9.0
- * @return void
- */
-function astra_responsive_shop_content_alignment() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( ! isset( $theme_options['shop-product-align-responsive'] ) && isset( $theme_options['shop-product-align'] ) ) {
-		$theme_options['shop-product-align-responsive'] = array(
-			'desktop' => $theme_options['shop-product-align'],
-			'tablet'  => $theme_options['shop-product-align'],
-			'mobile'  => $theme_options['shop-product-align'],
-		);
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Change default layout to standard for old users.
- *
- * @since 3.9.2
- * @return void
- */
-function astra_shop_style_design_layout() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( ! isset( $theme_options['woo-shop-style-flag'] ) ) {
-		$theme_options['woo-shop-style-flag'] = true;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Apply css for show password icon on woocommerce account page.
- *
- * @since 3.9.2
- * @return void
- */
-function astra_apply_woocommerce_show_password_icon_css() {
-	$theme_options = get_option( 'astra-settings', array() );
-	if ( ! isset( $theme_options['woo-show-password-icon'] ) ) {
-		$theme_options['woo-show-password-icon'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-}
-
-/**
- * Handle backward compatibility on version 3.9.4
- *
- * @since 3.9.4
- * @return void
- */
-function astra_theme_background_updater_3_9_4() {
-	$theme_options = get_option( 'astra-settings', array() );
-
-	// Check if user is a old global sidebar user.
-	if ( ! isset( $theme_options['astra-old-global-sidebar-default'] ) ) {
-		$theme_options['astra-old-global-sidebar-default'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
-
-	// Slide in cart width responsive control backwards compatibility.
-	if ( isset( $theme_options['woo-desktop-cart-flyout-width'] ) && ! isset( $theme_options['woo-slide-in-cart-width'] ) ) {
-		$theme_options['woo-slide-in-cart-width'] = array(
-			'desktop'      => $theme_options['woo-desktop-cart-flyout-width'],
-			'tablet'       => '',
-			'mobile'       => '',
-			'desktop-unit' => 'px',
-			'tablet-unit'  => 'px',
-			'mobile-unit'  => 'px',
-		);
-		update_option( 'astra-settings', $theme_options );
-	}
-
-	// Astra Spectra Gutenberg Compatibility CSS.
-	if ( ! isset( $theme_options['spectra-gutenberg-compat-css'] ) ) {
-		$theme_options['spectra-gutenberg-compat-css'] = false;
-		update_option( 'astra-settings', $theme_options );
-	}
 }
 
 /**
@@ -1368,11 +691,11 @@ function astra_theme_background_updater_4_2_0() {
  * Migration cases for old users, old layouts -> new layouts.
  *
  * @since 4.2.0
- * @param mixed $old_layout
- * @param mixed $new_layout
- * @param mixed $content_style
- * @param mixed $sidebar_style
- * @param array $theme_options
+ * @param mixed $old_layout old_layout.
+ * @param mixed $new_layout new_layout.
+ * @param mixed $content_style content_style.
+ * @param mixed $sidebar_style sidebar_style.
+ * @param array $theme_options theme_options.
  * @return array $theme_options The updated theme options.
  */
 function astra_apply_layout_migration( $old_layout, $new_layout, $content_style, $sidebar_style, $theme_options ) {
@@ -1426,13 +749,14 @@ function astra_theme_background_updater_4_2_2() {
 }
 
 /**
- * Handle backward compatibility on version 4.4.0
+ * Handle backward compatibility on version 4.6.0
  *
  * @since 4.4.0
  * @return void
  */
 function astra_theme_background_updater_4_4_0() {
 	$theme_options = get_option( 'astra-settings', array() );
+
 	if ( ! isset( $theme_options['v4-4-0-backward-option'] ) ) {
 		$theme_options['v4-4-0-backward-option'] = false;
 
@@ -1510,6 +834,127 @@ function astra_theme_background_updater_4_5_2() {
 
 	if ( ! isset( $theme_options['scndry-btn-default-padding'] ) ) {
 		$theme_options['scndry-btn-default-padding'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility on version 4.6.0
+ *
+ * @since 4.6.0
+ * @return void
+ */
+function astra_theme_background_updater_4_6_0() {
+	$theme_options = get_option( 'astra-settings', array() );
+	if ( ! isset( $theme_options['v4-6-0-backward-option'] ) ) {
+		$theme_options['v4-6-0-backward-option'] = false;
+		/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$blog_post_structure = isset( $theme_options['blog-post-structure'] ) ? $theme_options['blog-post-structure'] : array( 'image', 'title-meta' );
+		/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$migrated_post_structure = array();
+
+		if ( ! empty( $blog_post_structure ) ) {
+			/** @psalm-suppress PossiblyInvalidIterator */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			foreach ( $blog_post_structure as $key ) {
+				/** @psalm-suppress PossiblyInvalidIterator */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				if ( 'title-meta' === $key ) {
+					$migrated_post_structure[] = 'title';
+					$migrated_post_structure[] = 'title-meta';
+				}
+				if ( 'image' === $key ) {
+					$migrated_post_structure[] = 'image';
+				}
+			}
+
+			$migrated_post_structure[] = 'excerpt';
+			$migrated_post_structure[] = 'read-more';
+
+			$theme_options['blog-post-structure'] = $migrated_post_structure;
+		}
+
+		if ( defined( 'ASTRA_EXT_VER' ) ) {
+			$theme_options['ast-sub-section-author-box-border-width']  = isset( $theme_options['author-box-border-width'] ) ? $theme_options['author-box-border-width'] : array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			);
+			$theme_options['ast-sub-section-author-box-border-radius'] = isset( $theme_options['author-box-border-radius'] ) ? $theme_options['author-box-border-radius'] : array(
+				'top'    => '',
+				'right'  => '',
+				'bottom' => '',
+				'left'   => '',
+			);
+			$theme_options['ast-sub-section-author-box-border-color']  = isset( $theme_options['author-box-border-color'] ) ? $theme_options['author-box-border-color'] : '';
+
+			if ( isset( $theme_options['single-post-inside-spacing'] ) ) {
+				$theme_options['ast-sub-section-author-box-padding'] = $theme_options['single-post-inside-spacing'];
+			}
+			if ( isset( $theme_options['font-family-post-meta'] ) ) {
+				$theme_options['font-family-post-read-more'] = $theme_options['font-family-post-meta'];
+			}
+			if ( isset( $theme_options['font-extras-post-meta'] ) ) {
+				$theme_options['font-extras-post-read-more'] = $theme_options['font-extras-post-meta'];
+			}
+		}
+
+		if ( isset( $theme_options['single-post-inside-spacing'] ) ) {
+			$theme_options['ast-sub-section-related-posts-padding'] = $theme_options['single-post-inside-spacing'];
+		}
+
+		$theme_options['single-content-images-shadow'] = false;
+		$theme_options['ast-font-style-update']        = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+	$docs_legacy_data = get_option( 'astra_docs_data', array() );
+	if ( ! empty( $docs_legacy_data ) ) {
+		delete_option( 'astra_docs_data' );
+	}
+}
+
+/**
+ * Handle backward compatibility on version 4.6.2.
+ *
+ * @since 4.6.2
+ * @return void
+ */
+function astra_theme_background_updater_4_6_2() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	// Unset "featured image" for pages structure.
+	if ( ! isset( $theme_options['v4-6-2-backward-option'] ) ) {
+		$theme_options['v4-6-2-backward-option'] = false;
+
+		$page_banner_layout      = isset( $theme_options['ast-dynamic-single-page-layout'] ) ? $theme_options['ast-dynamic-single-page-layout'] : 'layout-1';
+		$page_structure          = isset( $theme_options['ast-dynamic-single-page-structure'] ) ? $theme_options['ast-dynamic-single-page-structure'] : array( 'ast-dynamic-single-page-image', 'ast-dynamic-single-page-title' );
+		$layout_1_image_position = isset( $theme_options['ast-dynamic-single-page-article-featured-image-position-layout-1'] ) ? $theme_options['ast-dynamic-single-page-article-featured-image-position-layout-1'] : 'behind';
+
+		$migrated_page_structure = array();
+
+		if ( 'layout-1' === $page_banner_layout && 'none' === $layout_1_image_position && ! empty( $page_structure ) ) {
+			foreach ( $page_structure as $key ) {
+				if ( 'ast-dynamic-single-page-image' !== $key ) {
+					$migrated_page_structure[] = $key;
+				}
+			}
+			$theme_options['ast-dynamic-single-page-structure'] = $migrated_page_structure;
+		}
+
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility on version 4.6.4.
+ *
+ * @since 4.6.4
+ * @return void
+ */
+function astra_theme_background_updater_4_6_4() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['btn-stylings-upgrade'] ) ) {
+		$theme_options['btn-stylings-upgrade'] = false;
 		update_option( 'astra-settings', $theme_options );
 	}
 }

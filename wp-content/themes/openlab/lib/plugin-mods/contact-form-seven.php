@@ -103,20 +103,3 @@ HTML;
 }
 
 //add_action('wpcf7_contact_form_properties', 'openlab_wpcf7_contact_form_properties', 10, 2);
-
-add_filter( 'the_content', function( $content ) {
-	if ( ! bp_is_root_blog() ) {
-		return $content;
-	}
-
-	if ( 51 != get_queried_object_id() ) {
-		return $content;
-	}
-
-        ob_start();
-        include(locate_template('parts/plugin-mods/contact-form-seven-custom.php'));
-        $form = ob_get_clean();
-
-	return $form;
-
-} );

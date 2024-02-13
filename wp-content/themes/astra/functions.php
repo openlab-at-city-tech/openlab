@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'ASTRA_THEME_VERSION', '4.5.2' );
+define( 'ASTRA_THEME_VERSION', '4.6.4' );
 define( 'ASTRA_THEME_SETTINGS', 'astra-settings' );
 define( 'ASTRA_THEME_DIR', trailingslashit( get_template_directory() ) );
 define( 'ASTRA_THEME_URI', trailingslashit( esc_url( get_template_directory_uri() ) ) );
@@ -24,7 +24,7 @@ define( 'ASTRA_THEME_URI', trailingslashit( esc_url( get_template_directory_uri(
  * Minimum Version requirement of the Astra Pro addon.
  * This constant will be used to display the notice asking user to update the Astra addon to the version defined below.
  */
-define( 'ASTRA_EXT_MIN_VER', '4.5.0' );
+define( 'ASTRA_EXT_MIN_VER', '4.6.0' );
 
 /**
  * Setup helper functions of Astra.
@@ -52,6 +52,7 @@ if ( is_admin() ) {
 }
 
 require_once ASTRA_THEME_DIR . 'inc/lib/webfont/class-astra-webfont-loader.php';
+require_once ASTRA_THEME_DIR . 'inc/lib/docs/class-astra-docs-loader.php';
 require_once ASTRA_THEME_DIR . 'inc/customizer/class-astra-fonts.php';
 
 require_once ASTRA_THEME_DIR . 'inc/dynamic-css/custom-menu-old-header.php';

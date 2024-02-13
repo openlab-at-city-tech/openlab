@@ -166,7 +166,7 @@
                             <div class="col-md-6">
                                 <br>
                                 <b>2) <?php esc_html_e('Image Post', 'blog2social') ?></b><br>
-                                <?php esc_html_e('An image post will display the cover image of the linked website or post and add it to the library of the selected social media networks. Blog2Social will automatically include a link to the website in the text field of the social media post. You can customize the link for each network.', 'blog2social')."<br><br>".esc_html('Selecting an individual post format for your social media posts is only one of Blog2Social’s Premium features. Here are some more things you can do with Blog2Social Premium:', 'blog2social'); ?>
+                                <?php esc_html_e('An image post will display the cover image of the linked website or post and add it to the library of the selected social media networks. Blog2Social will automatically include a link to the website in the text field of the social media post. You can customize the link for each network.', 'blog2social') . "<br><br>" . esc_html('Selecting an individual post format for your social media posts is only one of Blog2Social’s Premium features. Here are some more things you can do with Blog2Social Premium:', 'blog2social'); ?>
                                 <br>
                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select frames or crop, flip and rotate images', 'blog2social') ?><br>
                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Create your own custom social media post templates', 'blog2social') ?><br>
@@ -181,13 +181,13 @@
                     </div>
                     <br>
                     <div class="row">
-                       
+
 
 
                         <?php if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
                             <div class="col-md-12"> 
-                               
+
                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART or above ', 'blog2social') ?></a>
                                 <br>
                                 <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
@@ -457,22 +457,22 @@
 
 
 <div class="modal fade" id="b2sInfoTwitterThreads" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTwitterThreads" aria-hidden="true" data-backdrop="false"  style="display:none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoTwitterThreads" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('Twitter Threads', 'blog2social') ?></h4>
-                </div>
-                <div class="modal-body">
-                    <?php esc_html_e('Use Twitter threads (now X posts) to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for Twitter.', 'blog2social') ?>
-                    <br>
-                </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoTwitterThreads" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Twitter Threads', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php esc_html_e('Use Twitter threads (now X posts) to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
+                <br>
+                <br>
+                <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for Twitter.', 'blog2social') ?>
+                <br>
             </div>
         </div>
     </div>
+</div>
 
 <div class="modal fade" id="b2s-info-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
     <div class="modal-dialog">
@@ -614,3 +614,35 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="b2sAiTextGeneratorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAiTextGeneratorModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAiTextGeneratorModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h3 class="b2s-text-xl">                           
+                            <?php esc_html_e('Welcome to Assistini - the smart AI text generator!', 'blog2social'); ?>             
+                        </h3>
+                        <p>
+                            <?php esc_html_e('Assistini is an intuitive AI text generator that helps you create high-quality texts. Whether blog posts, press releases, SEO texts or social media posts - Assistini helps you create them in the shortest possible time.', 'blog2Social'); ?></p>
+                        <br>
+                        <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Try Assistini for free', 'blog2Social'); ?></a>
+                        <?php esc_html_e('or', 'blog2social'); ?> <a class="btn-link b2s-text-underline" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('Visit Website', 'blog2Social'); ?></a>
+                        
+                        <p class="b2s-text-sm b2s-padding-top-20"><?php esc_html_e('Exciting News: The integration of Assistini into the Blog2Social Plugin is on its way!', 'blog2Social'); ?></p>
+                    </div>
+                    <div class="col-md-5">
+                        <img class="b2s-ass-img-welcome hidden-sm hidden-xs" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

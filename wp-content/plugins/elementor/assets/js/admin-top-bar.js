@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -83,6 +83,7 @@ var _environment = _interopRequireDefault(__webpack_require__(/*! elementor-comm
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function AdminTopBar() {
+  var _window, _window$elementorNoti, _elementorNotificatio;
   var actionButtonsRef = (0, _react.useRef)();
 
   // Handle Top Bar visibility on initiation: Indicate that the admin top bar is visible and the page content needs to push down below the admin top bar for visibility.
@@ -106,6 +107,7 @@ function AdminTopBar() {
   };
   var controlSign = _environment.default.mac ? "\u2318" : '^';
   var finderTooltipText = __('Search or do anything in Elementor', 'elementor') + " ".concat(controlSign, "+E");
+  var BarButtonNotification = (_window = window) === null || _window === void 0 ? void 0 : (_window$elementorNoti = _window.elementorNotificationCenter) === null || _window$elementorNoti === void 0 ? void 0 : _window$elementorNoti.BarButtonNotification;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-admin-top-bar"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -124,7 +126,9 @@ function AdminTopBar() {
     onClick: finderAction,
     dataInfo: finderTooltipText,
     icon: "eicon-search-bold"
-  }, __('Finder', 'elementor')) : '', window.elementorCloudAdmin ? window.elementorCloudAdmin() : ''), /*#__PURE__*/_react.default.createElement(_connectionButton.default, null)));
+  }, __('Finder', 'elementor')) : '', window.elementorCloudAdmin ? window.elementorCloudAdmin() : '', BarButtonNotification ? /*#__PURE__*/_react.default.createElement(BarButtonNotification, {
+    defaultIsRead: !((_elementorNotificatio = elementorNotifications) !== null && _elementorNotificatio !== void 0 && _elementorNotificatio.is_unread)
+  }, __('What\'s New', 'elementor')) : ''), /*#__PURE__*/_react.default.createElement(_connectionButton.default, null)));
 }
 
 /***/ }),

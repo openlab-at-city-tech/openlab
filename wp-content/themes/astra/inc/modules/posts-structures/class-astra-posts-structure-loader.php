@@ -209,6 +209,18 @@ class Astra_Posts_Structure_Loader {
 			$archive_title_font_weight = astra_get_option( $title_section . '-title-font-weight' );
 			Astra_Fonts::add_font( $archive_title_font_family, $archive_title_font_weight );
 		}
+
+		foreach ( self::get_special_page_types() as $index => $special_type ) {
+			$title_section = 'section-' . $special_type . '-page-title';
+
+			$instance_text_font_family = astra_get_option( $title_section . '-text-font-family' );
+			$instance_text_font_weight = astra_get_option( $title_section . '-text-font-weight' );
+			Astra_Fonts::add_font( $instance_text_font_family, $instance_text_font_weight );
+
+			$instance_title_font_family = astra_get_option( $title_section . '-title-font-family' );
+			$instance_title_font_weight = astra_get_option( $title_section . '-title-font-weight' );
+			Astra_Fonts::add_font( $instance_title_font_family, $instance_title_font_weight );
+		}
 	}
 
 	/**
@@ -227,6 +239,7 @@ class Astra_Posts_Structure_Loader {
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-structures-configs.php';
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-single-structures-configs.php';
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-archive-structures-configs.php';
+		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-special-archive-structures-configs.php';
 		// @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 	}
 
@@ -242,6 +255,20 @@ class Astra_Posts_Structure_Loader {
 		}
 
 		return apply_filters( 'astra_dynamic_post_structure_posttypes', self::$supported_post_types );
+	}
+
+	/**
+	 * Get special pages query.
+	 *
+	 * @since 4.6.0
+	 * @return array $special_pages
+	 */
+	public static function get_special_page_types() {
+		$special_pages = array(
+			'search',
+		);
+
+		return apply_filters( 'astra_dynamic_special_pages', $special_pages );
 	}
 
 	/**
@@ -266,6 +293,7 @@ class Astra_Posts_Structure_Loader {
 			'AstraPostStrcturesData',
 			array(
 				'post_types'           => self::get_supported_post_types(),
+				'special_pages'        => self::get_special_page_types(),
 				'tablet_break_point'   => astra_get_tablet_breakpoint(),
 				'mobile_break_point'   => astra_get_mobile_breakpoint(),
 				'enabled_related_post' => astra_get_option( 'enable-related-posts', false ),

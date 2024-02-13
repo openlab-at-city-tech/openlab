@@ -115,7 +115,7 @@
 		// Button Typo
 		astra_generate_outside_font_family_css( 'astra-settings[font-family-button]', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_font_family + woo_button_attr );
 		astra_generate_font_weight_css( 'astra-settings[font-family-button]', 'astra-settings[font-weight-button]', 'font-weight', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_font_weight + woo_button_attr );
-		astra_font_extras_css( 'font-extras-button', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_transform + woo_button_attr );
+		astra_font_extras_css( 'font-extras-button', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], body .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_transform + woo_button_attr + astraCustomizer.improved_button_selector );
 
 		astra_responsive_font_size( 'astra-settings[font-size-button]', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_font_size + woo_button_attr );
 		astra_css( 'astra-settings[theme-btn-line-height]', 'line-height', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_line_height + woo_button_attr );
@@ -132,7 +132,7 @@
 	}
 
 	// Secondary button typo.
-	let outline_btn_selector = '.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, .ast-outline-button';
+	let outline_btn_selector = 'body .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, body .ast-outline-button, body .wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button';
 	astra_generate_outside_font_family_css( 'astra-settings[secondary-font-family-button]', outline_btn_selector );
 	astra_generate_font_weight_css( 'astra-settings[secondary-font-family-button]', 'astra-settings[secondary-font-weight-button]', 'font-weight', outline_btn_selector );
 	astra_font_extras_css( 'secondary-font-extras-button', outline_btn_selector );

@@ -25,7 +25,6 @@
 		>
 			<?php
 				astra_entry_content_before();
-				astra_the_excerpt();
 				astra_entry_content_after();
 
 				wp_link_pages(

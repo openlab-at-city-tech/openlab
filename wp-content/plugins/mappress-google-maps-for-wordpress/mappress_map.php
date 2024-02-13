@@ -41,6 +41,11 @@ class Mappress_Map extends Mappress_Obj {
 
 		// Force left layout
 		$vars['layout'] = 'left';
+		
+		// Dims need to be parsed and sanitized
+		$dims = $this->get_dims();
+		$vars['width'] = $dims->width;
+		$vars['height'] = $dims->height;
 
 		$atts = Mappress::to_atts($vars);
 		$pois = join('', array_map(function($poi) { return $poi->to_html(); }, $this->pois));
@@ -50,7 +55,7 @@ class Mappress_Map extends Mappress_Obj {
 	function to_json() {
 		$json_pois = array();
 		foreach($this->pois as $poi)
-			$json_pois[] = $poi->to_json();
+			$json_pois[] = $poi->to_json(); 
 
 		return array(
 			'mapid' => $this->mapid,
@@ -64,7 +69,7 @@ class Mappress_Map extends Mappress_Obj {
 			'pois' => $json_pois,
 			'search' => $this->search,
 			'status' => $this->status,
-			'title' => $this->title,
+			'title' => sanitize_text_field($this->title),
 			'width' => $this->width,
 			'zoom' => $this->zoom
 		);
@@ -117,11 +122,11 @@ class Mappress_Map extends Mappress_Obj {
 				$count = 0;
 				foreach($maps as $map) {
 					$count++;
-					if ($count > 2) {
+					if ($count > 1) {
 						$links[] = sprintf(__('+%d more', 'mappress-google-maps-for-wordpress'), (count($maps) - $count + 1));
 						break;
 					}
-					$title = ($map->title) ? $map->title : __('Untitled', 'mappress-google-maps-for-wordpress');
+					$title = ($map->title) ? esc_html($map->title) : __('Untitled', 'mappress-google-maps-for-wordpress');
 					$links[] = sprintf('<a class="mapp-post-edit" data-oid="%d" data-mapid="%d" href="#" title="%s">%d %s</a>', $post_id, $map->mapid, __('Edit map', 'mappress-google-maps-for-wordpress'), $map->mapid, $title);
 				}
 				echo implode('<hr/>', $links);
@@ -137,11 +142,25 @@ class Mappress_Map extends Mappress_Obj {
 		check_ajax_referer('mappress', 'nonce');
 		ob_start();
 		$oid = (isset($_GET['oid'])) ? $_GET['oid']  : null;
+		
 		$post = get_post( $oid );
 
 		if (!$post)
 			die(sprintf(__('Post not found', 'mappress-google-maps-for-wordpress'), $oid));
 
+		// Check auths for logged in users and readers			
+		$available = false;
+		$userid = get_current_user_id();
+		if ($userid) {
+			if (current_user_can('read_post', $oid)) 
+				$available = true;
+		} else {
+			if ($post->post_status != 'private' && $post->post_status != 'draft' && !post_password_required($post))
+				$available = true;
+		}
+		if (!$available)
+			die(__('Post not available', 'mappress-google-maps-for-wordpress'));
+			
 		setup_postdata($post);
 		$html = Mappress_Template::get_template('mashup-modal');
 		die($html);
@@ -339,7 +358,7 @@ class Mappress_Map extends Mappress_Obj {
 			$layout_atts = Mappress::to_atts($atts);
 			
 			// Iframes don't size like divs, so require a wrapper div			
-			$wrapper_class = 'mapp-layout mapp-has-iframe' . $alignment_class;
+			$wrapper_class = 'mapp-layout mapp-has-iframe' . $alignment_class; 
 			return "<div id='{$this->name}' class='$wrapper_class' style='$style'>"
 				. "<iframe class='mapp-iframe ' src='$url' scrolling='no' loading='lazy'></iframe>"
 				. "</div>";
@@ -387,14 +406,16 @@ class Mappress_Map extends Mappress_Obj {
 	}
 
 	function get_dims() {
-		$suffix = function($dim) {
-			return (is_string($dim) && (stristr($dim, 'px') || stristr($dim, '%') || stristr($dim, 'vh') || stristr($dim, 'vw'))) ? $dim : ($dim . 'px');
+		$parse = function($dim) {
+			$suffix = 'px';
+			foreach(array('%', 'vh', 'vw') as $s)
+				$suffix = (is_string($dim) && stristr($dim, $s)) ? $s : $suffix;
+			return floatval($dim) . $suffix;
 		};
 		$defaultSize = (isset(Mappress::$options->sizes[Mappress::$options->size])) ? (object) Mappress::$options->sizes[Mappress::$options->size] : (object) Mappress::$options->sizes[0];
-		return (object) array(
-			'width' => ($this->width) ? $suffix($this->width) : $suffix($defaultSize->width),
-			'height' => ($this->height) ? $suffix($this->height) : $suffix($defaultSize->height)
-		);
+		$width = ($this->width) ? $this->width : $defaultSize->width;
+		$height = ($this->height) ? $this->height : $defaultSize->height;
+		return (object) array('width' => $parse($width), 'height' => $parse($height));
 	}
 
 	function get_layout($content = '') {
@@ -551,10 +572,6 @@ class Mappress_Map extends Mappress_Obj {
 		global $wpdb;
 		$maps_table = $wpdb->prefix . 'mapp_maps';
 
-		// Apply wpautop to POI bodies
-		foreach($this->pois as &$poi)
-			$poi->body = wpautop($poi->body);
-
 		// Filter out poi field data that is no longer present in settings
 		foreach($this->pois as &$poi) {
 			if (Mappress::$options->poiFields) {
@@ -567,17 +584,20 @@ class Mappress_Map extends Mappress_Obj {
 		}
 
 		$obj = json_encode($this->to_json());
+		
+		// Sanitize for db keys used in search, JSON object is done separately
+		$title = sanitize_text_field($this->title);
 
 		// Insert if no ID, else update
 		if (!$this->mapid) {
 			$sql = "INSERT INTO $maps_table (otype, oid, status, title, obj) VALUES(%s, %d, %s, %s, %s)";
-			$result = $wpdb->query($wpdb->prepare($sql, $this->otype, $this->oid, $this->status, $this->title, $obj));
+			$result = $wpdb->query($wpdb->prepare($sql, $this->otype, $this->oid, $this->status, $title, $obj));
 			$this->mapid = $wpdb->get_var("SELECT LAST_INSERT_ID()");
 		} else {
 			$sql = "INSERT INTO $maps_table (mapid, otype, oid, status, title, obj) VALUES(%d, %s, %d, %s, %s, %s) "
 				. " ON DUPLICATE KEY UPDATE mapid=%d, otype=%s, oid=%d, status=%s, title=%s, obj=%s ";
-			$result = $wpdb->query($wpdb->prepare($sql, $this->mapid, $this->otype, $this->oid, $this->status, $this->title, $obj,
-				$this->mapid, $this->otype, $this->oid, $this->status, $this->title, $obj));
+			$result = $wpdb->query($wpdb->prepare($sql, $this->mapid, $this->otype, $this->oid, $this->status, $title, $obj,
+				$this->mapid, $this->otype, $this->oid, $this->status, $title, $obj));
 		}
 
 		if ($result === false || !$this->mapid)

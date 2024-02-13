@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -926,7 +926,7 @@ BaseSettingsModel = Backbone.Model.extend({
       }
       var controlName = control.name;
       if ('object' === (0, _typeof2.default)(control.default)) {
-        defaults[controlName] = elementorCommon.helpers.cloneObject(control.default);
+        defaults[controlName] = structuredClone(control.default);
       } else {
         defaults[controlName] = control.default;
       }
@@ -995,7 +995,7 @@ BaseSettingsModel = Backbone.Model.extend({
   },
   getStyleControls: function getStyleControls(controls, attributes) {
     var self = this;
-    controls = elementorCommon.helpers.cloneObject(self.getActiveControls(controls, attributes));
+    controls = structuredClone(self.getActiveControls(controls, attributes));
     var styleControls = [];
     jQuery.each(controls, function () {
       var _control$dynamic;
@@ -1213,7 +1213,7 @@ BaseSettingsModel = Backbone.Model.extend({
     if (options.remove && -1 !== options.remove.indexOf('default')) {
       this.removeDataDefaults(data, this.controls);
     }
-    return elementorCommon.helpers.cloneObject(data);
+    return structuredClone(data);
   }
 });
 

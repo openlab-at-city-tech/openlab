@@ -32,7 +32,7 @@ function astra_live_search_css( $dynamic_css ) {
 			position: absolute;
 			width: 100%;
 			top: 60px;
-			padding: 4px 0;
+			padding: 4px 4px;
 			max-height: 400px;
 			height: auto;
 			overflow-x: hidden;

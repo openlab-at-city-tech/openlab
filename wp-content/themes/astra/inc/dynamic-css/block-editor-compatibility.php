@@ -23,9 +23,6 @@ if ( astra_block_based_legacy_setup() ) {
  */
 function astra_get_block_editor_required_css() {
 	return '
-		blockquote, cite {
-			font-style: initial;
-		}
 		.wp-block-file {
 			display: flex;
 			align-items: center;
@@ -302,7 +299,7 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 	}
 	blockquote {
 		margin: 1.5em;
-		border: none;
+		border-color: rgba(0,0,0,0.05);
 	}
 	.wp-block-quote:not(.has-text-align-right):not(.has-text-align-center) {
 		border-' . esc_attr( $ltr_left ) . ': 5px solid rgba(0, 0, 0, 0.05);
@@ -492,12 +489,15 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 		}
 	';
 
+	$direction     = is_rtl() ? 'right' : 'left';
+	$lists_padding = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? 'padding-' . $direction . ': 20px;' : '';
 	// Block editor experience improvements introduced with v4.0.0.
 	if ( $v4_block_editor_compat ) {
 		$dynamic_css .= '
 			.entry-content ul, .entry-content ol {
 				padding: revert;
 				margin: revert;
+				' . $lists_padding . '
 			}
 		';
 	}

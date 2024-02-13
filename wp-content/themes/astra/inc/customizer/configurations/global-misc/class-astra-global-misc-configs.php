@@ -40,6 +40,7 @@ class Astra_Global_Misc_Configs extends Astra_Customizer_Config_Base {
 				'control'  => 'ast-toggle-control',
 				'title'    => __( 'Enable Smooth Scroll to ID', 'astra' ),
 				'section'  => 'section-global-misc',
+				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
 				'priority' => 10,
 			),
 		);

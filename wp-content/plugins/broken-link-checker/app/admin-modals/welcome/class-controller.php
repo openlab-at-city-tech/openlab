@@ -136,7 +136,7 @@ class Controller extends Base {
 			'wp-is-shallow-equal',
 			'wp-polyfill',
 		);
-		$version      = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+		$version      = ! empty( $script_data['version'] ) ? WPMUDEV_BLC_SCIPTS_VERSION . '-' . $script_data['version'] : WPMUDEV_BLC_SCIPTS_VERSION;
 
 		return array(
 			'blc_welcome_modal' => array(
@@ -182,7 +182,7 @@ class Controller extends Base {
 
 		if ( is_null( $scripts_version ) ) {
 			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/welcome.asset.php';
-			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+			$scripts_version = ! empty( $script_data['version'] ) ? WPMUDEV_BLC_SCIPTS_VERSION . '-' . $script_data['version'] : WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
 		return $scripts_version;

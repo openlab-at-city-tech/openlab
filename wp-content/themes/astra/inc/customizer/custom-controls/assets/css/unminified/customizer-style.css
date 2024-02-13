@@ -108,6 +108,10 @@
   cursor: help;
 }
 
+.customize-control .ast-control-tooltip:hover {
+    color: var(--ast-customizer-color-1);
+}
+
 .customize-control.customize-control-ast-toggle-control .ast-control-tooltip {
   position: absolute;
   top: 50%;
@@ -125,6 +129,10 @@
   top: 55%;
   right: 40px;
   transform: translateY(0);
+}
+
+.customize-control-ast-selector.customize-control .ast-control-tooltip {
+    top: -3px;
 }
 
 .customize-control.customize-control-ast-toggle-control.ast-top-divider .ast-control-tooltip {
@@ -162,7 +170,8 @@
 	right: 30px;
 	top: 50%;
 }
-.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
+.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip,
+.ast-top-section-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
     top: 24px;
 }
 
@@ -292,6 +301,7 @@ input[type="text"].select2-search__field {
     height: 100%;
 	align-items: center;
     align-content: center;
+	max-height: 46px;
 }
 
 .ast-section-toggle label {
@@ -317,7 +327,7 @@ input[type="text"].select2-search__field {
 }
 
 .customize-control.customize-control-ast-section-toggle {
-    border: 1px dashed var(--ast-customizer-color-7);
+    border: 1px dashed var(--ast-customizer-color-1);
     background: var(--ast-customizer-color-11);
     cursor: pointer;
     box-shadow: none !important;
@@ -333,7 +343,9 @@ input[type="text"].select2-search__field {
     transition: all 0.2s;
     padding-top: 0;
     padding-bottom: 0;
+	margin-top: 24px;
 	margin-bottom: 9px;
+	margin-top: 24px;
 }
 .customize-control.customize-control-ast-section-toggle:hover {
     background: var(--ast-customizer-color-9);
@@ -349,8 +361,8 @@ input[type="text"].select2-search__field {
 }
 
 .ast-section-toggle-icon span {
-  font-size: 16px;
-  line-height: 20px;
+	font-size: 16px;
+	line-height: 16px;
 	width: 16px;
 	height: 16px;
 }
@@ -360,7 +372,13 @@ input[type="text"].select2-search__field {
   padding-bottom: 16px;
 }
 
+li#customize-control-astra-settings-related-posts-title {
+    margin-top: 32px;
+}
+
 li[ID*="accordion-section-ast-dynamic-single-"].control-section-ast_section,
-li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
+li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section,
+li#accordion-section-section-search-page-title.control-section-ast_section,
+li[ID*="accordion-section-ast-sub-section-"].control-section-ast_section {
   display: none !important;
 }

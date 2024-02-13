@@ -1,5 +1,13 @@
 <?php
 class Advanced_Excerpt {
+	
+	private $plugin_version;
+	private $plugin_file_path;
+	private $plugin_dir_path;
+	private $plugin_folder_name;
+	private $plugin_basename;
+	private $plugin_base;
+
 	public $options;
 
 	/*

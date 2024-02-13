@@ -22,6 +22,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 
 	$astra_options                              = Astra_Theme_Options::get_astra_options();
 	$astra_update_footer_row_vertical_alignment = Astra_Dynamic_CSS::astra_4_5_0_compatibility();
+	$blog_update                                = Astra_Dynamic_CSS::astra_4_6_0_compatibility();
 
 	/**
 	 * Update Astra default color and typography values. To not update directly on existing users site, added backwards.
@@ -541,8 +542,8 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'overlay-gradient'      => '',
 		),
 	);
-	$defaults['hbb-footer-top-border-color']  = $apply_new_default_color_typo_values ? 'var(--ast-global-color-6)' : '';
-	$defaults['hbb-footer-separator']         = $apply_new_default_color_typo_values ? 1 : '';
+	$defaults['hbb-footer-top-border-color']  = $blog_update ? '#eaeaea' : 'var(--ast-global-color-6)';
+	$defaults['hbb-footer-separator']         = 1;
 
 	/**
 	 * Header Margin defaults.
@@ -957,7 +958,13 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 	 * Global Color Palette.
 	 */
 	$update_colors_for_starter_library = Astra_Dynamic_CSS::astra_4_4_0_compatibility();
-	$defaults['global-color-palette']  = $apply_new_default_color_typo_values ? array(
+	$update_color_for_forms_ui         = Astra_Dynamic_CSS::astra_4_6_0_compatibility();
+	if ( $update_color_for_forms_ui ) {
+		$color_palette_7 = '#D1D5DB';
+	} else {
+		$color_palette_7 = $update_colors_for_starter_library ? '#ADB6BE' : '#e2e8f0';
+	}
+	$defaults['global-color-palette'] = $apply_new_default_color_typo_values ? array(
 		'palette' => array(
 			'#046bd2',
 			'#045cb4',
@@ -965,7 +972,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'#334155',
 			$update_colors_for_starter_library ? '#F0F5FA' : '#f9fafb',
 			'#FFFFFF',
-			$update_colors_for_starter_library ? '#ADB6BE' : '#e2e8f0',
+			$color_palette_7,
 			$update_colors_for_starter_library ? '#111111' : '#cbd5e1',
 			$update_colors_for_starter_library ? '#111111' : '#94a3b8',
 		),
@@ -1401,9 +1408,62 @@ function astra_prepare_button_defaults( $defaults, $index ) {
 
 	$defaults[ 'header-' . $_prefix . '-border-radius' ] = '';
 
-	$defaults[ 'section-hb-button-' . $index . '-padding' ]   = $apply_new_default_color_typo_values ? Astra_Builder_Helper::$default_button_responsive_spacing : Astra_Builder_Helper::$default_responsive_spacing;
-	$defaults[ 'section-hb-button-' . $index . '-margin' ]    = Astra_Builder_Helper::$default_responsive_spacing;
-	$defaults[ 'sticky-header-button' . $index . '-padding' ] = Astra_Builder_Helper::$default_responsive_spacing;
+	$astra_4_6_4_compatibility = Astra_Dynamic_CSS::astra_4_6_4_compatibility();
+	$legacy_hb_button_padding  = $apply_new_default_color_typo_values ? Astra_Builder_Helper::$default_button_responsive_spacing : Astra_Builder_Helper::$default_responsive_spacing;
+
+	$builder_button_top_padding    = isset( $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['top'] ) ? $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['top'] : $legacy_hb_button_padding['desktop']['top'];
+	$builder_button_right_padding  = isset( $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['right'] ) ? $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['right'] : $legacy_hb_button_padding['desktop']['right'];
+	$builder_button_bottom_padding = isset( $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['bottom'] ) ? $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['bottom'] : $legacy_hb_button_padding['desktop']['bottom'];
+	$builder_button_left_padding   = isset( $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['left'] ) ? $astra_options[ 'section-hb-button-' . $index . '-padding' ]['desktop']['left'] : $legacy_hb_button_padding['desktop']['left'];
+
+	$defaults[ 'section-hb-button-' . $index . '-padding' ]         = array(
+		'desktop'      => array(
+			'top'    => $astra_4_6_4_compatibility ? 15 : $builder_button_top_padding,
+			'right'  => $astra_4_6_4_compatibility ? 30 : $builder_button_right_padding,
+			'bottom' => $astra_4_6_4_compatibility ? 15 : $builder_button_bottom_padding,
+			'left'   => $astra_4_6_4_compatibility ? 30 : $builder_button_left_padding,
+		),
+		'tablet'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'mobile'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'desktop-unit' => 'px',
+		'tablet-unit'  => 'px',
+		'mobile-unit'  => 'px',
+	);
+	$defaults[ 'header-button' . $index . '-border-radius-fields' ] = array(
+		'desktop'      => array(
+			'top'    => $astra_4_6_4_compatibility ? 40 : '',
+			'right'  => $astra_4_6_4_compatibility ? 40 : '',
+			'bottom' => $astra_4_6_4_compatibility ? 40 : '',
+			'left'   => $astra_4_6_4_compatibility ? 40 : '',
+		),
+		'tablet'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'mobile'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'desktop-unit' => 'px',
+		'tablet-unit'  => 'px',
+		'mobile-unit'  => 'px',
+	);
+	$defaults[ 'section-hb-button-' . $index . '-margin' ]          = Astra_Builder_Helper::$default_responsive_spacing;
+	$defaults[ 'sticky-header-button' . $index . '-padding' ]       = Astra_Builder_Helper::$default_responsive_spacing;
 
 
 	$_prefix = 'button' . $index;
@@ -1510,8 +1570,59 @@ function astra_prepare_button_defaults( $defaults, $index ) {
 		'mobile'  => 'center',
 	);
 
-	$defaults[ 'section-fb-button-' . $index . '-padding' ] = Astra_Builder_Helper::$default_responsive_spacing;
-	$defaults[ 'section-fb-button-' . $index . '-margin' ]  = Astra_Builder_Helper::$default_responsive_spacing;
+	$legacy_fb_button_padding      = Astra_Builder_Helper::$default_responsive_spacing;
+	$builder_button_top_padding    = isset( $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['top'] ) ? $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['top'] : $legacy_fb_button_padding['desktop']['top'];
+	$builder_button_right_padding  = isset( $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['right'] ) ? $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['right'] : $legacy_fb_button_padding['desktop']['right'];
+	$builder_button_bottom_padding = isset( $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['bottom'] ) ? $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['bottom'] : $legacy_fb_button_padding['desktop']['bottom'];
+	$builder_button_left_padding   = isset( $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['left'] ) ? $astra_options[ 'section-fb-button-' . $index . '-padding' ]['desktop']['left'] : $legacy_fb_button_padding['desktop']['left'];
+
+	$defaults[ 'section-fb-button-' . $index . '-padding' ]         = array(
+		'desktop'      => array(
+			'top'    => $astra_4_6_4_compatibility ? 15 : $builder_button_top_padding,
+			'right'  => $astra_4_6_4_compatibility ? 30 : $builder_button_right_padding,
+			'bottom' => $astra_4_6_4_compatibility ? 15 : $builder_button_bottom_padding,
+			'left'   => $astra_4_6_4_compatibility ? 30 : $builder_button_left_padding,
+		),
+		'tablet'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'mobile'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'desktop-unit' => 'px',
+		'tablet-unit'  => 'px',
+		'mobile-unit'  => 'px',
+	);
+	$defaults[ 'section-fb-button-' . $index . '-margin' ]          = Astra_Builder_Helper::$default_responsive_spacing;
+	$defaults[ 'footer-button' . $index . '-border-radius-fields' ] = array(
+		'desktop'      => array(
+			'top'    => $astra_4_6_4_compatibility ? 40 : '',
+			'right'  => $astra_4_6_4_compatibility ? 40 : '',
+			'bottom' => $astra_4_6_4_compatibility ? 40 : '',
+			'left'   => $astra_4_6_4_compatibility ? 40 : '',
+		),
+		'tablet'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'mobile'       => array(
+			'top'    => '',
+			'right'  => '',
+			'bottom' => '',
+			'left'   => '',
+		),
+		'desktop-unit' => 'px',
+		'tablet-unit'  => 'px',
+		'mobile-unit'  => 'px',
+	);
 
 	return $defaults;
 }

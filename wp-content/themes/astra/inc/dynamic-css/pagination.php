@@ -24,8 +24,8 @@ function astra_pagination_css( $dynamic_css ) {
 
 	if ( astra_check_pagination_enabled() || false !== apply_filters( 'astra_enable_pagination_css', false ) ) {
 
-		$theme_color      = astra_get_option( 'theme-color' );
-		$link_color       = astra_get_option( 'link-color', $theme_color );
+		$text_color       = astra_get_option( 'text-color' );
+		$link_color       = astra_get_option( 'link-color' );
 		$link_hover_color = astra_get_option( 'link-h-color' );
 
 		$pagination_color_output = array(
@@ -33,8 +33,8 @@ function astra_pagination_css( $dynamic_css ) {
 				'display' => 'inherit',
 				'float'   => 'none',
 			),
-			'.ast-pagination a'                  => array(
-				'color' => esc_attr( $link_color ),
+			'.ast-pagination a, .nav-links a'    => array(
+				'color' => esc_attr( Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? $text_color : $link_color ),
 			),
 			'.ast-pagination a:hover, .ast-pagination a:focus, .ast-pagination > span:hover:not(.dots), .ast-pagination > span.current' => array(
 				'color' => esc_attr( $link_hover_color ),
@@ -49,6 +49,19 @@ function astra_pagination_css( $dynamic_css ) {
                 height: 2.33333em;
                 line-height: calc(2.33333em - 3px);
             }
+
+            .ast-pagination-default .ast-pagination .next.page-numbers {
+                padding-right: 0;
+            }
+
+            .ast-pagination-default .ast-pagination .prev.page-numbers {
+                padding-left: 0;
+            }
+
+            .ast-pagination-default .post-page-numbers.current .page-link, .ast-pagination-default .ast-pagination .page-numbers.current {
+                border-radius: 2px;
+            }
+
             .ast-pagination {
                 display: inline-block;
                 width: 100%;
@@ -62,7 +75,9 @@ function astra_pagination_css( $dynamic_css ) {
                 font-size: 16px;
                 font-size: 1.06666rem;
                 line-height: calc(2.33333em - 3px);
+                font-weight: 500;
             }
+
             .ast-pagination .nav-links {
                 display: inline-block;
                 width: 100%;
@@ -92,6 +107,22 @@ function astra_pagination_css( $dynamic_css ) {
                 display: inline-block;
                 width: auto;
             }
+
+            .ast-pagination .prev svg,
+            .ast-pagination .next svg{
+                height: 16px;
+                position: relative;
+                top: 0.2em;
+            }
+
+            .ast-pagination .prev svg {
+                margin-right: 0.3em;
+            }
+
+            .ast-pagination .next svg {
+                margin-left: 0.3em;
+            }
+
             .ast-page-builder-template .ast-pagination {
                 padding: 2em;
             }';
@@ -130,6 +161,23 @@ function astra_pagination_css( $dynamic_css ) {
 
 		if ( is_rtl() ) {
 			$pagination_static_css .= '
+
+            .ast-pagination-default .ast-pagination .next.page-numbers {
+                padding-left: 0;
+            }
+
+            .ast-pagination-default .ast-pagination .prev.page-numbers {
+                padding-right: 0;
+            }
+
+            .ast-pagination .prev svg {
+                margin-left: 0.3em;
+            }
+
+            .ast-pagination .next svg {
+                margin-right: 0.3em;
+            }
+
             @media (min-width: 993px) {
                 .ast-pagination {
                     padding-right: 3.33333em;
@@ -163,12 +211,7 @@ function astra_pagination_css( $dynamic_css ) {
 			}
 		} else {
 			$pagination_static_css .= '
-                @media (min-width: 993px) {
-                    .ast-pagination {
-                        padding-left: 3.33333em;
-                        padding-right: 3.33333em;
-                    }
-                }
+
 				.ast-pagination .prev.page-numbers {
 					float: left;
 				}

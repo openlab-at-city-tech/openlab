@@ -7107,6 +7107,12 @@ h4{
 .padding-left-15{
     padding-left: 15px;
 }
+.padding-left-16{
+    padding-left: 16px;
+}
+.padding-left-20{
+    padding-left: 20px;
+}
 .margin-right-15{
     margin-right: 15px;
 }
@@ -7619,6 +7625,8 @@ CSS CheckBOX
 
 .b2s-free-link {
     font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
 }
 
 .b2s-post-item-details-item-message-emoji-btn:active {
@@ -7965,4 +7973,149 @@ CSS CheckBOX
     padding: 6px 12px;
     text-align: center;
     vertical-align: middle;
+}
+
+/* Sidebar Calender */
+.row-striped:nth-of-type(even){
+    background-color: #efefef;
+    border-left: 4px #efefef solid;
+}
+
+.row-striped:nth-of-type(odd){
+    background-color: #ffffff;
+    border-left: 4px #efefef solid;
+}
+
+.row-striped:nth-child(1n){
+    border-left: 4px #79B232 solid !important;
+}
+
+.row-striped {
+    padding: 0 0 0 15px;
+}
+
+
+.b2s-cal-badge {
+    display: inline-block;
+    font-size: 85%;
+    font-weight: 600;
+    line-height: 1.1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+}
+
+.b2s-font-size-18{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.b2s-font-size-11{
+    font-size:11px;
+}
+
+.b2s-cal-padding-10{
+    padding: 10px;
+}
+.b2s-cal-hr{
+    border-top: 1px #ddd9d9 solid;
+    margin: 5px !important;
+}
+
+.b2s-margin-bottom-0{
+    margin-bottom:0px !important;
+}
+
+.b2s-margin-bottom-3{
+    margin-bottom:3px !important;
+}
+
+
+.b2s-cal-badge-today{
+    background-color: #79B232 !important;
+}
+
+.b2s-margin-left-5{
+    margin-left: 5px;
+}
+
+.b2s-margin-top-5{
+    margin-top: 5px !important;
+}
+
+.b2s-margin-right-10{
+    margin-right: 10px !important;
+}
+
+.b2s-stats-h3{
+    margin: 0px 0px 5px 0px !important;
+    
+}
+
+.b2s-h3{
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+.b2s-cal-h4{
+    font-size: 15px !important;
+}
+
+.b2s-modal-border-none{
+    border:none !important;
+}
+
+.b2s-ass-img-logo{
+    max-height: 4em; 
+}
+
+.b2s-ass-img-welcome{
+    max-width: 15em;
+
+}
+
+.b2s-ass-register-btn , .b2s-ass-regsiter-btn:hover {
+    background-color:#f5365c;
+    border-radius:18px;
+    border:1px solid #f5365c;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff !important;
+    font-size:14px !important;
+    font-weight:bold;
+    padding:5px 15px;
+    text-decoration:none !important;
+}
+
+.b2s-padding-15{
+    padding: 15px !important;
+}
+
+.b2s-padding-10{
+    padding: 10px !important;
+}
+
+.b2s-progress-height-10{
+    height: 10px !important;
+}
+
+.b2s-span-float-left{
+    float:left !important;
+}
+
+.b2s-span-float-right{
+    float:right !important;
+}
+
+.b2s-font-italic{
+    font-style: italic;
+}
+
+.b2s-padding-top-20{
+    padding-top:20px !important;
+}
+.b2s-text-sm{
+    margin-top: 5px;
+    font-size: 10px;
 }

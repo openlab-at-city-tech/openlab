@@ -35,33 +35,36 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
         return 'https://wpmet.com/doc/mailchimp-3/';
     }
 
-	public function __get_lists(){
-		$options = [ '' => 'Select List'];
-		$dataApi 	= Handler::get_data();
-		$token 		= isset($dataApi['token']) ? $dataApi['token'] : '';
-		
+	public function __get_lists() {
+		$options = ['' => 'Select List'];
+		$dataApi = Handler::get_data();
+		$token = isset($dataApi['token']) ? $dataApi['token'] : '';
+
 		$server = explode('-', $token);
 
-		if(!isset($server[1])){
+		if (!isset($server[1])) {
 			return $options;
 		}
 
-		$url = 'https://'.$server[1].'.api.mailchimp.com/3.0/lists?apikey='.$token;	
-		
-		$response = wp_remote_get($url, []);
+		$url = 'https://' . $server[1] . '.api.mailchimp.com/3.0/lists';
 
-		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-			$headers = $response['headers']; 
-			$body    = (array) json_decode( $response['body'] ); 
-			$listed = isset( $body['lists'] ) ? $body['lists'] : [];
-			
-			if( is_array($listed) && sizeof($listed) > 0):
-				foreach($listed as $v):
+		$response = wp_remote_get($url, [
+			'headers' => [
+				'Authorization' => 'apikey ' . $token,
+				'Content-Type' => 'application/json; charset=utf-8',
+			],
+		]);
+
+		if (is_array($response) && !is_wp_error($response)) {
+			$body = (array) json_decode($response['body']);
+			$listed = isset($body['lists']) ? $body['lists'] : [];
+			if (is_array($listed) && sizeof($listed) > 0) {
+				foreach ($listed as $v) {
 					$options[$v->id] = $v->name;
-				endforeach;
-			endif;
+				}
+			}
 		}
-		return  $options;
+		return $options;
 	}
 
     protected function register_controls() {

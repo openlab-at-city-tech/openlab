@@ -70,7 +70,7 @@ class Controller extends Admin_Notice {
 
 		if ( is_null( $scripts_version ) ) {
 			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local-features.asset.php';
-			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+			$scripts_version = ! empty( $script_data['version'] ) ? WPMUDEV_BLC_SCIPTS_VERSION . '-' . $script_data['version'] : WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
 		return $scripts_version;

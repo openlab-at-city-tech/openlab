@@ -12,14 +12,14 @@ use Advanced_Sidebar_Menu\Traits\Singleton;
 class Cache {
 	use Singleton;
 
-	const CACHE_GROUP     = 'advanced-sidebar-menu';
-	const CHILD_PAGES_KEY = 'child-pages';
+	public const CACHE_GROUP     = 'advanced-sidebar-menu';
+	public const CHILD_PAGES_KEY = 'child-pages';
 
 
 	/**
 	 * Actions.
 	 */
-	protected function hook() {
+	protected function hook(): void {
 		add_action( 'save_post', [ $this, 'clear_cache_group' ] );
 	}
 

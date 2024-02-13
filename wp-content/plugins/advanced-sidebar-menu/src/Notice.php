@@ -17,7 +17,7 @@ class Notice {
 	/**
 	 * Actions and filters.
 	 */
-	public function hook() {
+	public function hook(): void {
 		add_action( 'advanced-sidebar-menu/widget/page/before-columns', [ $this, 'preview' ], 1, 2 );
 		add_action( 'advanced-sidebar-menu/widget/category/before-columns', [ $this, 'preview' ], 1, 2 );
 		add_action( 'advanced-sidebar-menu/widget/category/right-column', [ $this, 'info_panel' ], 1, 2 );

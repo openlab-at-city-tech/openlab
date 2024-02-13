@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 :root {
   --e-a-color-white:	#ffffff;
   --e-a-color-black:	#000000;
@@ -52,9 +52,15 @@
   --e-a-btn-bg-accent:	#93003f;
   --e-a-btn-bg-accent-hover:	#8F1A4C;
   --e-a-btn-bg-accent-active:	#A93365;
+  --e-a-btn-bg-info:	#2563EB;
+  --e-a-btn-bg-info-hover:	#134cca;
+  --e-a-btn-bg-info-active:	#0e3b9c;
   --e-a-btn-bg-success:	#0A875A;
   --e-a-btn-bg-success-hover:	#06583a;
   --e-a-btn-bg-success-active:#03281b;
+  --e-a-btn-bg-warning:	#F59E0B;
+  --e-a-btn-bg-warning-hover:	#c57f08;
+  --e-a-btn-bg-warning-active:#945f06;
   --e-a-btn-bg-danger:	#DC2626;
   --e-a-btn-bg-danger-hover:	#b21d1d;
   --e-a-btn-bg-danger-active:	#861616;

@@ -24,6 +24,7 @@ function openlab_load_theme_fixes() {
 		case 'p2':
 		case 'pilcrow':
 		case 'sliding-door':
+		case 'typology':
 		case 'themorningafter':
 		case 'wu-wei':
 		case 'twentyseventeen':
@@ -60,6 +61,7 @@ add_action(
 			case 'koji':
 			case 'pilcrow':
 			case 'sliding-door':
+			case 'typology':
 			case 'twentynineteen':
 				$subdir = $t;
 				include __DIR__ . '/theme-fixes/' . $subdir . '/' . $t . '.php';

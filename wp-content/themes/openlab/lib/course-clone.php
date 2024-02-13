@@ -874,16 +874,26 @@ class Openlab_Clone_Course_Site {
 			'fileupload_url',
 			'oplb_gradebook_db_version', // This will force reinstallation of tables.
 			'duplicate_post_version', // Forces duplicate-post to initialize roles
-			'tec_ct1_events_table_schema_version', // Forces TEC to install tables.
-			'tec_ct1_occurrences_table_schema_version',
 		);
+
+		$preserve_prefix = [
+			'tec_', // Forces The Events Calendar to reinitialize.
+		];
 
 		// now write them all back
 		switch_to_blog( $this->site_id );
 		foreach ( $options as $key => $value ) {
-			if ( ! in_array( $key, $preserve_option ) ) {
-				update_option( $key, $value );
+			if ( in_array( $key, $preserve_option ) ) {
+				continue;
 			}
+
+			foreach ( $preserve_prefix as $prefix ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					continue 2;
+				}
+			}
+
+			update_option( $key, $value );
 		}
 
 		// If the-events-calendar is active, set a flag that will run on the first admin load.

@@ -14,7 +14,7 @@
 .dialog-close-button {
   cursor: pointer;
   position: absolute;
-  margin-top: 15px;
+  margin-block-start: 15px;
   left: 15px;
   color: var(--e-a-color-txt);
   font-size: 15px;
@@ -137,6 +137,10 @@
   background: transparent;
   color: var(--e-a-color-txt-disabled);
 }
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt-border,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt-border {
+  border: 1px solid var(--e-a-color-txt-muted);
+}
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success {
@@ -207,6 +211,18 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:active,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:active {
   background-color: var(--e-a-btn-bg-accent-active);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info {
+  background-color: var(--e-a-btn-bg-info);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:focus {
+  background-color: var(--e-a-btn-bg-info-hover);
 }
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning,
@@ -1832,6 +1848,8 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
   justify-content: var(--grid-justify-content);
   align-content: var(--grid-align-content);
   grid-auto-flow: var(--grid-auto-flow);
+  justify-items: var(--justify-items);
+  align-items: var(--align-items);
 }
 .e-con-boxed.e-flex {
   flex-direction: column;
@@ -3715,7 +3733,7 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span {
   height: var(--n-accordion-icon-size);
-  width: var(--n-accordion-icon-size);
+  width: fit-content;
   font-size: var(--n-accordion-icon-size);
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span > i {
@@ -3723,6 +3741,8 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span > svg {
   fill: var(--n-accordion-icon-normal-color);
+  height: auto;
+  width: inherit;
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title > span {
   cursor: pointer;

@@ -3699,3 +3699,44 @@ add_filter(
 	10,
 	2
 );
+
+/** GTranslate **********************************************************/
+
+/**
+ * Sets default 'widget_look' setting to 'dropdown'.
+ *
+ * The gtranslate plugin installs its default settings in an activation hook.
+ * It's not easy to intercept this, so instead we hook to the post-add_option hook
+ * and modify the just-saved options.
+ */
+function openlab_gtranslate_settings() {
+	$options = get_option( 'GTranslate' );
+	$options = is_array( $options ) ? $options : array();
+
+	$options['widget_look'] = 'dropdown';
+
+	update_option( 'GTranslate', $options );
+}
+add_filter( 'add_option_GTranslate', 'openlab_gtranslate_settings' );
+
+/**
+ * Set default options for Typology theme.
+ *
+ * Typology has a filter for default options but I can't make it work.
+ *
+ * Moreover, load issues mean it's not possible to run this in mu-plugins/theme-fixes.
+ */
+add_action(
+	'add_option_typology_settings',
+	function() {
+		$settings = get_option( 'typology_settings', [] );
+
+		$settings['color_content_meta'] = '#757575';
+		$settings['single_author']      = false;
+
+		$settings['layout_a_buttons']['rl']     = false;
+		$settings['layout_cover_buttons']['rl'] = false;
+
+		update_option( 'typology_settings', $settings );
+	}
+);

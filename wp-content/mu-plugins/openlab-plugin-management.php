@@ -26,6 +26,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bbpress/bbpress.php',
 		'blog2social/blog2social.php',
 		'bookly-responsive-appointment-booking-tool/main.php',
+		'bp-avatar-on-upload/bp-avatar-on-upload.php',
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',

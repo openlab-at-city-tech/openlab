@@ -31,29 +31,50 @@ wp.hooks.addFilter(
 	20
 );
 
-/**
- * Set "Inherit default layout" option enable by default for Group block.
- *
- * Also set "Full Width" layout by default on drag-drop for following blocks.
- */
-wp.blocks.registerBlockVariation(
-	'core/group',
-	{
-		isDefault: true,
-		attributes: {
-			layout: {
-				inherit: true,
-			},
-			align: 'full'
-		},
+// Get the block editor's data module.
+const { dispatch } = wp.data;
+
+// Create a function to set the default align attribute
+function setWooDefaultAlignments() {
+	const checkoutBlocks = wp.blocks.getBlockTypes().some(block => block.name === 'woocommerce/checkout');
+	const cartBlocks = wp.blocks.getBlockTypes().some(block => block.name === 'woocommerce/cart');
+
+	if ( checkoutBlocks ) {
+	const checkoutBlock = wp.data.select('core/block-editor').getBlocks().find(block => block.name === 'woocommerce/checkout');
+		if (checkoutBlock && checkoutBlock.attributes.align !== 'none') {
+			const checkoutClientId = checkoutBlock.clientId;
+			const checkoutLocalStorageKey = 'hasCheckoutBlockInserted';
+			const checkoutLocalStorageData = JSON.parse(localStorage.getItem(checkoutLocalStorageKey)) || {};
+
+			if ( ! checkoutLocalStorageData[checkoutClientId] ) {
+				const updatedCheckoutAttributes = { ...checkoutBlock.attributes, align: 'none' };
+				dispatch('core/block-editor').updateBlockAttributes(checkoutClientId, updatedCheckoutAttributes);
+
+				checkoutLocalStorageData[checkoutClientId] = true;
+				localStorage.setItem(checkoutLocalStorageKey, JSON.stringify(checkoutLocalStorageData));
+			}
+		}
 	}
-);
-wp.blocks.registerBlockVariation(
-	'core/cover',
-	{
-		isDefault: true,
-		attributes: {
-			align: 'full'
-		},
+
+	if ( cartBlocks ) {
+	const cartBlock = wp.data.select('core/block-editor').getBlocks().find(block => block.name === 'woocommerce/cart');
+		if (cartBlock && cartBlock.attributes.align !== 'none') {
+			const cartClientId = cartBlock.clientId;
+			const cartLocalStorageKey = 'hasCartBlockInserted';
+			const cartLocalStorageData = JSON.parse(localStorage.getItem(cartLocalStorageKey)) || {};
+
+			if ( ! cartLocalStorageData[cartClientId] ) {
+				const updatedCartAttributes = { ...cartBlock.attributes, align: 'none' };
+				dispatch('core/block-editor').updateBlockAttributes(cartBlock.clientId, updatedCartAttributes);
+
+				cartLocalStorageData[cartClientId] = true;
+				localStorage.setItem(cartLocalStorageKey, JSON.stringify(cartLocalStorageData));
+			}
+		}
 	}
-);
+}
+
+// Listen for the first insertion of a WooCommerce block
+wp.data.subscribe(() => {
+	setWooDefaultAlignments();
+});

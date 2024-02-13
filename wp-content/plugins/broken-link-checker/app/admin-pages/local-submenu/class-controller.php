@@ -28,18 +28,24 @@ use WPMUDEV_BLC\Core\Traits\Dashboard_API;
  */
 class Controller extends Admin_Page {
 	/**
-	 * Use the Escape and Dashboard_API Traits.
+	 * Use Dashboard_API Trait.
 	 *
 	 * @since 2.1.0
 	 */
-	use Escape, Dashboard_API;
+	use Escape;
+
+	/**
+	 * Use the Escape Trait.
+	 *
+	 * @since 2.1.0
+	 */
+	use Dashboard_API;
 
 	/**
 	 * The Admin Page's Menu Type.
 	 *
 	 * @since 2.1.0
 	 * @var bool $is_submenu Set to true if page uses submenu.
-	 *
 	 */
 	protected $is_submenu = true;
 
@@ -48,7 +54,6 @@ class Controller extends Admin_Page {
 	 *
 	 * @since 2.1.0
 	 * @var object $local_blc
-	 *
 	 */
 	protected $local_blc = null;
 
@@ -57,7 +62,6 @@ class Controller extends Admin_Page {
 	 *
 	 * @since 2.1.0
 	 * @var object $local_blc_path
-	 *
 	 */
 	protected $local_blc_path = null;
 
@@ -72,22 +76,25 @@ class Controller extends Admin_Page {
 		$page_caps         = 'manage_options';
 		$this->parent_slug = 'blc_dash';
 		$this->is_submenu  = true;
-		//$this->unique_id  = Utilities::get_unique_id();
-		$this->page_title = __( 'Local Broken Link Checker', 'broken-link-checker' );
-		$this->menu_title = __( 'Local [old]', 'broken-link-checker' );
-		$this->menu_slug  = 'blc_local';
-		$this->position   = 1;
+		$this->page_title  = __( 'Local Broken Link Checker', 'broken-link-checker' );
+		$this->menu_title  = __( 'Local [old]', 'broken-link-checker' );
+		$this->menu_slug   = 'blc_local';
+		$this->position    = 1;
 
 		if ( Settings::instance()->get( 'use_legacy_blc_version' ) && ! empty( $local_settings->dashboard_widget_capability ) ) {
-			if ( in_array( $local_settings->dashboard_widget_capability, array(
-				'edit_others_posts',
-				'manage_options'
-			) ) ) {
+			if ( in_array(
+				$local_settings->dashboard_widget_capability,
+				array(
+					'edit_others_posts',
+					'manage_options',
+				),
+				false
+			) ) {
 				$page_caps = $local_settings->dashboard_widget_capability;
 			}
 
 			if ( 'do_not_allow' === $local_settings->dashboard_widget_capability ) {
-				//$page_caps = 'unfiltered_html';
+				// $page_caps = 'unfiltered_html';
 				$page_caps = 'administrator';
 			}
 		}
@@ -97,16 +104,24 @@ class Controller extends Admin_Page {
 		add_action( 'admin_menu', array( $this, 'set_submenu_actions' ), 20 );
 	}
 
+	/**
+	 * Actions of local submenu.
+	 *
+	 * @return void
+	 */
 	public function set_submenu_actions() {
 		$local_blc = $this->get_local_blc();
 
 		if ( $local_blc instanceof \wsBrokenLinkChecker ) {
 			if ( $this->is_settings_tab() ) {
 				add_action( 'admin_print_styles-' . $this->hook_suffix, array( $local_blc, 'options_page_css' ) );
-				add_action( 'admin_print_scripts-' . $this->hook_suffix, array(
-					$local_blc,
-					'enqueue_settings_scripts'
-				) );
+				add_action(
+					'admin_print_scripts-' . $this->hook_suffix,
+					array(
+						$local_blc,
+						'enqueue_settings_scripts',
+					)
+				);
 
 				/*
 				 * // We don't really need another link to Local links. We have the tabs fo this.
@@ -121,14 +136,22 @@ class Controller extends Admin_Page {
 				*/
 			} else {
 				add_action( 'admin_print_styles-' . $this->hook_suffix, array( $local_blc, 'links_page_css' ) );
-				add_action( 'admin_print_scripts-' . $this->hook_suffix, array(
-					$local_blc,
-					'enqueue_link_page_scripts'
-				) );
+				add_action(
+					'admin_print_scripts-' . $this->hook_suffix,
+					array(
+						$local_blc,
+						'enqueue_link_page_scripts',
+					)
+				);
 			}
 		}
 	}
 
+	/**
+	 * Loads Local's wsBrokenLinkChecker object to class param local_blc.
+	 *
+	 * @return object|\wsBrokenLinkChecker
+	 */
 	public function get_local_blc() {
 		if ( ! $this->local_blc instanceof \wsBrokenLinkChecker ) {
 			global $blc_config_manager;
@@ -147,7 +170,12 @@ class Controller extends Admin_Page {
 		return $this->local_blc;
 	}
 
-	public function is_settings_tab() {
+	/**
+	 * Does a check if current page is settings tab or not in Local admin page.
+	 *
+	 * @return bool
+	 */
+	public function is_settings_tab(): bool {
 		return current_user_can( 'manage_options' ) && ! empty( $_GET['local-settings'] );
 	}
 
@@ -183,7 +211,7 @@ class Controller extends Admin_Page {
 	 */
 	public function set_admin_styles() {
 		return array(
-			'blc_sui' => array(
+			'blc_sui'       => array(
 				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
 				'ver' => $this->scripts_version(),
 			),
@@ -200,7 +228,7 @@ class Controller extends Admin_Page {
 
 		if ( is_null( $scripts_version ) ) {
 			$script_data     = include WPMUDEV_BLC_DIR . 'assets/dist/local-nav.asset.php';
-			$scripts_version = $script_data['version'] ?? WPMUDEV_BLC_SCIPTS_VERSION;
+			$scripts_version = ! empty( $script_data['version'] ) ? WPMUDEV_BLC_SCIPTS_VERSION . '-' . $script_data['version'] : WPMUDEV_BLC_SCIPTS_VERSION;
 		}
 
 		return $scripts_version;

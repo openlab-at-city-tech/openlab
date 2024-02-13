@@ -64,7 +64,7 @@ final class Astra_Builder_Base_Configuration {
 				'priority' => 210,
 				'settings' => array(),
 				'context'  => Astra_Builder_Helper::$design_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-top-section-spacing' ),
 			),
 
 			/**
@@ -162,22 +162,27 @@ final class Astra_Builder_Base_Configuration {
 					'priority'          => 15,
 					'title'             => __( 'Font Size', 'astra' ),
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
-					'suffix'            => array( 'px', 'em', 'vw' ),
+					'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
 					'input_attrs'       => array(
-						'px' => array(
+						'px'  => array(
 							'min'  => 0,
 							'step' => 1,
 							'max'  => 200,
 						),
-						'em' => array(
+						'em'  => array(
 							'min'  => 0,
 							'step' => 0.01,
 							'max'  => 20,
 						),
-						'vw' => array(
+						'vw'  => array(
 							'min'  => 0,
 							'step' => 0.1,
 							'max'  => 25,
+						),
+						'rem' => array(
+							'min'  => 0,
+							'step' => 0.1,
+							'max'  => 20,
 						),
 					),
 				),
@@ -202,22 +207,27 @@ final class Astra_Builder_Base_Configuration {
 					'title'             => __( 'Font Size', 'astra' ),
 					'context'           => empty( $required_condition ) ? Astra_Builder_Helper::$design_tab : $required_condition,
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
-					'suffix'            => array( 'px', 'em', 'vw' ),
+					'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
 					'input_attrs'       => array(
-						'px' => array(
+						'px'  => array(
 							'min'  => 0,
 							'step' => 1,
 							'max'  => 200,
 						),
-						'em' => array(
+						'em'  => array(
 							'min'  => 0,
 							'step' => 0.01,
 							'max'  => 20,
 						),
-						'vw' => array(
+						'vw'  => array(
 							'min'  => 0,
 							'step' => 0.1,
 							'max'  => 25,
+						),
+						'rem' => array(
+							'min'  => 0,
+							'step' => 0.1,
+							'max'  => 20,
 						),
 					),
 				),
@@ -265,6 +275,85 @@ final class Astra_Builder_Base_Configuration {
 				'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
 			),
 		);
+	}
+
+	/**
+	 * Prepare Spacing & Border options.
+	 *
+	 * @param string $section_id section id.
+	 * @param bool   $skip_border_divider Skip border control divider or not.
+	 *
+	 * @since 4.6.0
+	 * @return array
+	 */
+	public static function prepare_section_spacing_border_options( $section_id, $skip_border_divider = false ) {
+		$_configs        = array(
+			array(
+				'name'      => ASTRA_THEME_SETTINGS . '[' . $section_id . '-border-group]',
+				'default'   => astra_get_option( $section_id . '-border-group' ),
+				'type'      => 'control',
+				'control'   => 'ast-settings-group',
+				'title'     => __( 'Border', 'astra-addon' ),
+				'section'   => $section_id,
+				'transport' => 'postMessage',
+				'priority'  => 150,
+				'divider'   => true === $skip_border_divider ? array( 'ast_class' => 'ast-top-section-spacing' ) : array( 'ast_class' => 'ast-top-dotted-divider' ),
+				'context'   => Astra_Builder_Helper::$design_tab,
+			),
+			array(
+				'name'           => $section_id . '-border-width',
+				'default'        => astra_get_option( $section_id . '-border-width' ),
+				'parent'         => ASTRA_THEME_SETTINGS . '[' . $section_id . '-border-group]',
+				'type'           => 'sub-control',
+				'transport'      => 'postMessage',
+				'control'        => 'ast-border',
+				'title'          => __( 'Border Width', 'astra-addon' ),
+				'divider'        => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+				'section'        => $section_id,
+				'linked_choices' => true,
+				'priority'       => 1,
+				'choices'        => array(
+					'top'    => __( 'Top', 'astra-addon' ),
+					'right'  => __( 'Right', 'astra-addon' ),
+					'bottom' => __( 'Bottom', 'astra-addon' ),
+					'left'   => __( 'Left', 'astra-addon' ),
+				),
+			),
+			array(
+				'name'              => $section_id . '-border-color',
+				'default'           => astra_get_option( $section_id . '-border-color' ),
+				'type'              => 'sub-control',
+				'priority'          => 1,
+				'parent'            => ASTRA_THEME_SETTINGS . '[' . $section_id . '-border-group]',
+				'section'           => $section_id,
+				'control'           => 'ast-color',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_alpha_color' ),
+				'transport'         => 'postMessage',
+				'title'             => __( 'Color', 'astra-addon' ),
+				'divider'           => array( 'ast_class' => 'ast-top-spacing ast-bottom-spacing' ),
+			),
+			array(
+				'name'           => $section_id . '-border-radius',
+				'default'        => astra_get_option( $section_id . '-border-radius' ),
+				'parent'         => ASTRA_THEME_SETTINGS . '[' . $section_id . '-border-group]',
+				'type'           => 'sub-control',
+				'transport'      => 'postMessage',
+				'control'        => 'ast-border',
+				'title'          => __( 'Border Radius', 'astra-addon' ),
+				'divider'        => array( 'ast_class' => 'ast-top-dotted-divider' ),
+				'section'        => $section_id,
+				'linked_choices' => true,
+				'priority'       => 1,
+				'choices'        => array(
+					'top'    => __( 'Top', 'astra-addon' ),
+					'right'  => __( 'Right', 'astra-addon' ),
+					'bottom' => __( 'Bottom', 'astra-addon' ),
+					'left'   => __( 'Left', 'astra-addon' ),
+				),
+			),
+		);
+		$spacing_configs = self::prepare_advanced_tab( $section_id );
+		return array_merge( $_configs, $spacing_configs );
 	}
 
 	/**
@@ -460,22 +549,27 @@ final class Astra_Builder_Base_Configuration {
 							'type'        => 'sub-control',
 							'section'     => $_section,
 							'control'     => 'ast-responsive-slider',
-							'suffix'      => array( 'px', 'em', 'vw' ),
+							'suffix'      => array( 'px', 'em', 'vw', 'rem' ),
 							'input_attrs' => array(
-								'px' => array(
+								'px'  => array(
 									'min'  => 0,
 									'step' => 1,
 									'max'  => 200,
 								),
-								'em' => array(
+								'em'  => array(
 									'min'  => 0,
 									'step' => 0.01,
 									'max'  => 20,
 								),
-								'vw' => array(
+								'vw'  => array(
 									'min'  => 0,
 									'step' => 0.1,
 									'max'  => 25,
+								),
+								'rem' => array(
+									'min'  => 0,
+									'step' => 0.1,
+									'max'  => 20,
 								),
 							),
 							'priority'    => 2,
@@ -507,22 +601,27 @@ final class Astra_Builder_Base_Configuration {
 							'type'        => 'sub-control',
 							'section'     => $_section,
 							'control'     => 'ast-responsive-slider',
-							'suffix'      => array( 'px', 'em', 'vw' ),
+							'suffix'      => array( 'px', 'em', 'vw', 'rem' ),
 							'input_attrs' => array(
-								'px' => array(
+								'px'  => array(
 									'min'  => 0,
 									'step' => 1,
 									'max'  => 200,
 								),
-								'em' => array(
+								'em'  => array(
 									'min'  => 0,
 									'step' => 0.01,
 									'max'  => 20,
 								),
-								'vw' => array(
+								'vw'  => array(
 									'min'  => 0,
 									'step' => 0.1,
 									'max'  => 25,
+								),
+								'rem' => array(
+									'min'  => 0,
+									'step' => 0.1,
+									'max'  => 20,
 								),
 							),
 							'priority'    => 2,
@@ -542,22 +641,27 @@ final class Astra_Builder_Base_Configuration {
 							'type'        => 'control',
 							'section'     => $_section,
 							'control'     => 'ast-responsive-slider',
-							'suffix'      => array( 'px', 'em', 'vw' ),
+							'suffix'      => array( 'px', 'em', 'vw', 'rem' ),
 							'input_attrs' => array(
-								'px' => array(
+								'px'  => array(
 									'min'  => 0,
 									'step' => 1,
 									'max'  => 200,
 								),
-								'em' => array(
+								'em'  => array(
 									'min'  => 0,
 									'step' => 0.01,
 									'max'  => 20,
 								),
-								'vw' => array(
+								'vw'  => array(
 									'min'  => 0,
 									'step' => 0.1,
 									'max'  => 25,
+								),
+								'rem' => array(
+									'min'  => 0,
+									'step' => 0.1,
+									'max'  => 20,
 								),
 							),
 							'priority'    => 90,
@@ -574,22 +678,27 @@ final class Astra_Builder_Base_Configuration {
 							'type'        => 'control',
 							'section'     => $_section,
 							'control'     => 'ast-responsive-slider',
-							'suffix'      => array( 'px', 'em', 'vw' ),
+							'suffix'      => array( 'px', 'em', 'vw', 'rem' ),
 							'input_attrs' => array(
-								'px' => array(
+								'px'  => array(
 									'min'  => 0,
 									'step' => 1,
 									'max'  => 200,
 								),
-								'em' => array(
+								'em'  => array(
 									'min'  => 0,
 									'step' => 0.01,
 									'max'  => 20,
 								),
-								'vw' => array(
+								'vw'  => array(
 									'min'  => 0,
 									'step' => 0.1,
 									'max'  => 25,
+								),
+								'rem' => array(
+									'min'  => 0,
+									'step' => 0.1,
+									'max'  => 20,
 								),
 							),
 							'priority'    => 91,

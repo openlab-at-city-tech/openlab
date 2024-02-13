@@ -49,7 +49,7 @@ if ( ! class_exists( 'Astra_Single_Typo_Configs' ) ) {
 						'renderAs' => 'list',
 						'choices'  => array(
 							'one'   => array(
-								'title' => __( 'Author info', 'astra' ),
+								'title' => __( 'Author Box with Social Share', 'astra' ),
 							),
 							'two'   => array(
 								'title' => __( 'Auto load previous posts', 'astra' ),

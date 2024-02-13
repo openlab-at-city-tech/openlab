@@ -85,23 +85,8 @@ if ( ! class_exists( 'Astra_Lifter_Sidebar_Configs' ) ) {
 							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'right-sidebar', false ) : '',
 						),
 					),
+					'description'       => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
 					'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
-				),
-
-				/**
-				 * Help Text: LifterLMS Sidebar Layout.
-				 */
-				array(
-					'name'     => ASTRA_THEME_SETTINGS . '[lifterlms-sidebar-layout-description]',
-					'type'     => 'control',
-					'control'  => 'ast-description',
-					'section'  => $section_general,
-					'priority' => 1,
-					'title'    => '',
-					'help'     => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
-					'divider'  => array( 'ast_class' => 'ast-bottom-spacing' ),
-					'settings' => array(),
-					'hide'     => ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ),
 				),
 
 				/**
@@ -155,23 +140,8 @@ if ( ! class_exists( 'Astra_Lifter_Sidebar_Configs' ) ) {
 							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'right-sidebar', false ) : '',
 						),
 					),
+					'description'       => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
 					'divider'           => $lifter_lms_section_divider ? array( 'ast_class' => 'ast-section-spacing ast-top-section-divider' ) : array( 'ast_class' => 'ast-section-spacing' ),
-				),
-
-				/**
-				 * Help Text: Course/Lesson Sidebar Layout.
-				 */
-				array(
-					'name'     => ASTRA_THEME_SETTINGS . '[lifterlms-course-lesson-sidebar-layout-description]',
-					'type'     => 'control',
-					'control'  => 'ast-description',
-					'section'  => $section_courses,
-					'priority' => 1,
-					'title'    => '',
-					'help'     => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
-					'divider'  => array( 'ast_class' => 'ast-bottom-spacing' ),
-					'settings' => array(),
-					'hide'     => ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ),
 				),
 
 				/**

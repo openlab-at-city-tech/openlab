@@ -62,6 +62,16 @@ class Astra_WebFont_Loader {
 	protected $subfolder_name;
 
 	/**
+	 * Current blog id.
+	 *
+	 * @multisite
+	 * @access protected
+	 * @since 4.6.0
+	 * @var int
+	 */
+	protected $current_blog_id;
+
+	/**
 	 * The fonts folder.
 	 *
 	 * @access protected
@@ -602,6 +612,26 @@ class Astra_WebFont_Loader {
 	}
 
 	/**
+	 * Returns the current blog id if current WordPress setup is a multisite setup.
+	 *
+	 * @access public
+	 * @since 4.6.0
+	 * @return void|int Returns integer if current WP setup is multisite.
+	 */
+	public function get_current_blog_id() {
+
+		if ( ! is_multisite() ) {
+			return;
+		}
+
+		if ( ! $this->current_blog_id ) {
+			$this->current_blog_id = apply_filters( 'astra_local_fonts_current_blog_id', get_current_blog_id() );
+		}
+
+		return $this->current_blog_id;
+	}
+
+	/**
 	 * Get the folder for fonts.
 	 *
 	 * @access public
@@ -613,7 +643,33 @@ class Astra_WebFont_Loader {
 			if ( $this->get_subfolder_name() ) {
 				$this->fonts_folder .= '/' . $this->get_subfolder_name();
 			}
+
+			/**
+			 * Fix: Local google fonts issue in multisite.
+			 *
+			 * This block of code primarily does 3 things:
+			 * 1. Checks if we have blog id.
+			 * 2. If we have blog id, then checks if subfolder "$this->get_subfolder_name()" exists. If not, creates the subfolder.
+			 * 3. Then, finally, creates the child folders inside the subfolder by the current blog id.
+			 *
+			 * Ref: GH Issue: #5291, [AST-3438]
+			 * @since 4.6.0
+			 */
+			if ( $this->get_current_blog_id() ) {
+				if ( ! file_exists( $this->fonts_folder ) ) {
+					// Lets create subfolder first if it does not exists.
+					$this->get_filesystem()->mkdir( $this->get_fonts_folder(), FS_CHMOD_DIR );
+				}
+
+				/**
+				 * This helps us to isolate the google fonts files according to the sub sites.
+				 * Which will also helps in isolated flushing of local font files without effecting
+				 * the font files and generated css files of other sub sites.
+				 */
+				$this->fonts_folder .= '/' . $this->get_current_blog_id();
+			}
 		}
+
 		return $this->fonts_folder;
 	}
 

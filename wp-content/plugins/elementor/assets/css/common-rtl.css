@@ -1,4 +1,4 @@
-/*! elementor - v3.18.0 - 08-12-2023 */
+/*! elementor - v3.19.0 - 29-01-2024 */
 :root {
   --e-a-color-white:	#ffffff;
   --e-a-color-black:	#000000;
@@ -52,9 +52,15 @@
   --e-a-btn-bg-accent:	#93003f;
   --e-a-btn-bg-accent-hover:	#8F1A4C;
   --e-a-btn-bg-accent-active:	#A93365;
+  --e-a-btn-bg-info:	#2563EB;
+  --e-a-btn-bg-info-hover:	#134cca;
+  --e-a-btn-bg-info-active:	#0e3b9c;
   --e-a-btn-bg-success:	#0A875A;
   --e-a-btn-bg-success-hover:	#06583a;
   --e-a-btn-bg-success-active:#03281b;
+  --e-a-btn-bg-warning:	#F59E0B;
+  --e-a-btn-bg-warning-hover:	#c57f08;
+  --e-a-btn-bg-warning-active:#945f06;
   --e-a-btn-bg-danger:	#DC2626;
   --e-a-btn-bg-danger-hover:	#b21d1d;
   --e-a-btn-bg-danger-active:	#861616;
@@ -83,7 +89,7 @@
 .dialog-close-button {
   cursor: pointer;
   position: absolute;
-  margin-top: 15px;
+  margin-block-start: 15px;
   left: 15px;
   color: var(--e-a-color-txt);
   font-size: 15px;
@@ -208,6 +214,10 @@
   background: transparent;
   color: var(--e-a-color-txt-disabled);
 }
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt-border,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt-border {
+  border: 1px solid var(--e-a-color-txt-muted);
+}
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success {
@@ -278,6 +288,18 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:active,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:active {
   background-color: var(--e-a-btn-bg-accent-active);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info {
+  background-color: var(--e-a-btn-bg-info);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:focus {
+  background-color: var(--e-a-btn-bg-info-hover);
 }
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning,
@@ -646,7 +668,7 @@
 .elementor-finder__results__category__title {
   padding: 5px 25px;
   font-size: 10px;
-  border-bottom: var(--e-a-border);
+  border-block-end: var(--e-a-border);
 }
 .elementor-finder__results__category--dynamic .elementor-finder__results__category__items {
   min-height: 26px;

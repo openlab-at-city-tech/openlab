@@ -62,23 +62,8 @@ if ( ! class_exists( 'Astra_Woo_Shop_Sidebar_Configs' ) ) {
 							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'right-sidebar', false ) : '',
 						),
 					),
+					'description'       => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
 					'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
-				),
-
-				/**
-				 * Help Text: Woocommerce Sidebar Layout.
-				 */
-				array(
-					'name'     => ASTRA_THEME_SETTINGS . '[woocommerce-sidebar-layout-description]',
-					'type'     => 'control',
-					'control'  => 'ast-description',
-					'section'  => 'section-woo-general',
-					'priority' => 5,
-					'title'    => '',
-					'help'     => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
-					'divider'  => array( 'ast_class' => 'ast-bottom-spacing' ),
-					'settings' => array(),
-					'hide'     => ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ),
 				),
 
 				/**

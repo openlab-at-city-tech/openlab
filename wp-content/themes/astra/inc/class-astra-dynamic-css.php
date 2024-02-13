@@ -60,7 +60,13 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			/**
 			 * - Variable Declaration
 			 */
-			$is_site_rtl                = is_rtl();
+			$is_site_rtl = is_rtl();
+			$rtl_left    = 'left';
+			$rtl_right   = 'right';
+			if ( $is_site_rtl ) {
+				$rtl_left  = 'right';
+				$rtl_right = 'left';
+			}
 			$site_content_width         = astra_get_option( 'site-content-width', 1200 );
 			$narrow_container_max_width = astra_get_option( 'narrow-container-max-width', apply_filters( 'astra_narrow_container_width', 750 ) );
 			$header_logo_width          = astra_get_option( 'ast-header-responsive-logo-width' );
@@ -137,12 +143,17 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$site_tagline_font_size = astra_get_option( 'font-size-site-tagline' );
 
 			$archive_post_title_font_size = astra_get_option( 'font-size-page-title' );
-			$heading_h1_font_size         = astra_get_option( 'font-size-h1' );
-			$heading_h2_font_size         = astra_get_option( 'font-size-h2' );
-			$heading_h3_font_size         = astra_get_option( 'font-size-h3' );
-			$heading_h4_font_size         = astra_get_option( 'font-size-h4' );
-			$heading_h5_font_size         = astra_get_option( 'font-size-h5' );
-			$heading_h6_font_size         = astra_get_option( 'font-size-h6' );
+			$archive_post_meta_font_size  = astra_get_option( 'font-size-post-meta' );
+			$archive_post_tax_font_size   = astra_get_option( 'font-size-post-tax' );
+			$archive_cards_radius         = astra_get_option( 'post-card-border-radius' );
+			$archive_cards_overlay        = astra_get_option( 'post-card-featured-overlay' );
+
+			$heading_h1_font_size = astra_get_option( 'font-size-h1' );
+			$heading_h2_font_size = astra_get_option( 'font-size-h2' );
+			$heading_h3_font_size = astra_get_option( 'font-size-h3' );
+			$heading_h4_font_size = astra_get_option( 'font-size-h4' );
+			$heading_h5_font_size = astra_get_option( 'font-size-h5' );
+			$heading_h6_font_size = astra_get_option( 'font-size-h6' );
 
 			/**
 			 * Heading Typography - h1 - h3.
@@ -199,6 +210,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$font_weight_prop                    = ( $is_widget_title_support_font_weight ) ? 'inherit' : 'normal';
 
 			$update_customizer_strctural_defaults = astra_check_is_structural_setup();
+			$blog_layout                          = astra_get_blog_layout();
 
 			// Fallback for H1 - headings typography.
 			if ( 'inherit' == $h1_font_family ) {
@@ -312,8 +324,9 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$btn_border_radius_fields = astra_get_option( 'button-radius-fields' );
 			$theme_btn_padding        = astra_get_option( 'theme-button-padding' );
 			$highlight_theme_color    = astra_get_foreground_color( $theme_color );
+			$button_styling_improved  = self::astra_4_6_4_compatibility();
 
-			// Submenu Bordercolor.
+			// Submenu Border color.
 			$submenu_border               = astra_get_option( 'primary-submenu-border' );
 			$primary_submenu_item_border  = astra_get_option( 'primary-submenu-item-border' );
 			$primary_submenu_b_color      = astra_get_option( 'primary-submenu-b-color', $theme_color );
@@ -454,6 +467,14 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$blog_max_width                         = astra_get_option( 'blog-max-width' );
 			$mobile_header_toggle_btn_style_color   = astra_get_option( 'mobile-header-toggle-btn-style-color', $btn_bg_color );
 			$mobile_header_toggle_btn_border_radius = astra_get_option( 'mobile-header-toggle-btn-border-radius' );
+			$aspect_ratio_type                      = astra_get_option( 'blog-image-ratio-type' );
+			$predefined_scale                       = astra_get_option( 'blog-image-ratio-pre-scale' );
+			$custom_scale_width                     = astra_get_option( 'blog-image-custom-scale-width', 16 );
+			$custom_scale_height                    = astra_get_option( 'blog-image-custom-scale-height', 9 );
+			$aspect_ratio                           = astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height );
+			$with_aspect_img_width                  = 'predefined' === $aspect_ratio_type || 'custom' === $aspect_ratio_type ? '100%' : '';
+
+
 			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$btn_style_color = astra_get_option( 'mobile-header-toggle-btn-style-color', false );
 
@@ -531,19 +552,23 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			$link_selector                   = ( true === $update_customizer_strctural_defaults ) ? 'a' : 'a, .page-title';
 			$transparent_search_box_bg_color = astra_get_option( 'transparent-header-search-box-background-color', '#fff' );
-
-			$css_output = array(
+			$article_space                   = self::astra_4_6_0_compatibility() ? '2.5em' : '3em';
+			$css_output                      = array(
 
 				':root'                                  => array(
-					'--ast-container-default-xlg-padding' => ( true === $update_customizer_strctural_defaults ) ? '3em' : '6.67em',
-					'--ast-container-default-lg-padding'  => ( true === $update_customizer_strctural_defaults ) ? '3em' : '5.67em',
+					'--ast-container-default-xlg-padding' => ( true === $update_customizer_strctural_defaults ) ? $article_space : '6.67em',
+					'--ast-container-default-lg-padding'  => ( true === $update_customizer_strctural_defaults ) ? $article_space : '5.67em',
 					'--ast-container-default-slg-padding' => ( true === $update_customizer_strctural_defaults ) ? '2em' : '4.34em',
-					'--ast-container-default-md-padding'  => ( true === $update_customizer_strctural_defaults ) ? '3em' : '3.34em',
-					'--ast-container-default-sm-padding'  => ( true === $update_customizer_strctural_defaults ) ? '3em' : '6.67em',
+					'--ast-container-default-md-padding'  => ( true === $update_customizer_strctural_defaults ) ? $article_space : '3.34em',
+					'--ast-container-default-sm-padding'  => ( true === $update_customizer_strctural_defaults ) ? $article_space : '6.67em',
 					'--ast-container-default-xs-padding'  => ( true === $update_customizer_strctural_defaults ) ? '2.4em' : '2.4em',
 					'--ast-container-default-xxs-padding' => ( true === $update_customizer_strctural_defaults ) ? '1.8em' : '1.4em',
 					'--ast-code-block-background'         => ( true === self::astra_check_default_color_typo() ) ? '#ECEFF3' : '#EEEEEE',
 					'--ast-comment-inputs-background'     => ( true === self::astra_check_default_color_typo() ) ? '#F9FAFB' : '#FAFAFA',
+					'--ast-normal-container-width'        => $site_content_width . 'px',
+					'--ast-narrow-container-width'        => $narrow_container_max_width . 'px',
+					'--ast-blog-title-font-weight'        => self::astra_4_6_0_compatibility() ? '600' : 'normal',
+					'--ast-blog-meta-weight'              => self::astra_4_6_0_compatibility() ? '600' : 'inherit',
 				),
 
 				// HTML.
@@ -560,7 +585,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'font-family'     => astra_get_font_family( $body_font_family ),
 					'font-weight'     => esc_attr( $body_font_weight ),
 					'font-size'       => astra_responsive_font( $body_font_size, 'desktop' ),
-					'line-height'     => esc_attr( $body_line_height ),
+					'line-height'     => ! empty( $body_line_height ) ? 'var(--ast-body-line-height, ' . esc_attr( $body_line_height ) . ')' : '',
 					'text-transform'  => esc_attr( $body_text_transform ),
 					'text-decoration' => esc_attr( $body_text_decoration ),
 					'letter-spacing'  => esc_attr( $body_letter_spacing ),
@@ -605,7 +630,21 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.entry-title'                           => array(
 					'font-size' => astra_responsive_font( $archive_post_title_font_size, 'desktop' ),
 				),
-				// Conditionally select the css selectors with or without achors.
+				'.ast-blog-single-element.ast-taxonomy-container a' => array(
+					'font-size' => astra_responsive_font( $archive_post_tax_font_size, 'desktop' ),
+				),
+				'.ast-blog-meta-container'               => array(
+					'font-size' => astra_responsive_font( $archive_post_meta_font_size, 'desktop' ),
+				),
+				'blog-layout-5' === $blog_layout ? '.archive .ast-article-post, .blog .ast-article-post, .archive .ast-article-post:hover, .blog .ast-article-post:hover' : '.archive .ast-article-post .ast-article-inner, .blog .ast-article-post .ast-article-inner, .archive .ast-article-post .ast-article-inner:hover, .blog .ast-article-post .ast-article-inner:hover' => array(
+					'border-top-left-radius'     => astra_responsive_spacing( $archive_cards_radius, 'top', 'desktop' ),
+					'border-top-right-radius'    => astra_responsive_spacing( $archive_cards_radius, 'right', 'desktop' ),
+					'border-bottom-right-radius' => astra_responsive_spacing( $archive_cards_radius, 'bottom', 'desktop' ),
+					'border-bottom-left-radius'  => astra_responsive_spacing( $archive_cards_radius, 'left', 'desktop' ),
+					'overflow'                   => 'hidden',
+				),
+
+				// Conditionally select the css selectors with or without anchors.
 				self::conditional_headings_css_selectors(
 					'h1, .entry-content h1, .entry-content h1 a',
 					'h1, .entry-content h1'
@@ -710,8 +749,9 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.entry-meta, .entry-meta *'             => array(
 					'line-height' => '1.45',
 					'color'       => esc_attr( $link_color ),
+					'font-weight' => self::astra_4_6_0_compatibility() && ! defined( 'ASTRA_EXT_VER' ) ? '600' : '',
 				),
-				'.entry-meta a:hover, .entry-meta a:hover *, .entry-meta a:focus, .entry-meta a:focus *, .page-links > .page-link, .page-links .page-link:hover, .post-navigation a:hover' => array(
+				'.entry-meta a:not(.ast-button):hover, .entry-meta a:not(.ast-button):hover *, .entry-meta a:not(.ast-button):focus, .entry-meta a:not(.ast-button):focus *, .page-links > .page-link, .page-links .page-link:hover, .post-navigation a:hover' => array(
 					'color' => esc_attr( $link_hover_color ),
 				),
 
@@ -736,7 +776,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Pagination.
 				'.page-links .page-link, .single .post-navigation a' => array(
-					'color' => esc_attr( $link_color ),
+					'color' => esc_attr( self::astra_4_6_0_compatibility() ? $text_color : $link_color ),
 				),
 
 				// Menu Toggle Border Radius.
@@ -755,13 +795,25 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'width' => '0',
 				),
 				'.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-form, .ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-field:focus' => array(
-					'border-color' => 'var(--ast-global-color-0)',
 					'transition'   => 'all 0.2s',
+					'border-color' => astra_get_option( 'site-accessibility-highlight-input-color' ),
 				),
 				'.search-form input.search-field:focus'  => array(
 					'outline' => 'none', // Making highlight by border that's why making outline none.
 				),
 			);
+
+			if ( 'blog-layout-6' === $blog_layout ) {
+				$css_output['.ast-blog-layout-6-grid .ast-article-inner .post-thumb::after'] = array(
+					'content'    => '""',
+					'background' => $archive_cards_overlay,
+					'position'   => 'absolute',
+					'top'        => '0',
+					'right'      => '0',
+					'bottom'     => '0',
+					'left'       => '0',
+				);
+			}
 
 			if ( self::astra_4_4_0_compatibility() ) {
 				$css_output['.ast-search-menu-icon .search-form button.search-submit:focus, .ast-theme-transparent-header .ast-header-search .ast-dropdown-active .ast-icon, .ast-theme-transparent-header .ast-inline-search .search-field:focus .ast-icon'] = array(
@@ -847,8 +899,13 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				);
 
 				$reset_underline_from_anchors = self::unset_builder_elements_underline();
+				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
 
-				$excluding_anchor_selectors = $reset_underline_from_anchors ? '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, li.ast-post-filter-single, .ast-single-post .wp-block-button.is-style-outline .wp-block-button__link, div.ast-custom-button';
+				$excluding_anchor_selectors = $reset_underline_from_anchors ? $buttons_exclusion_selectors : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, li.ast-post-filter-single, .ast-single-post .wp-block-button.is-style-outline .wp-block-button__link, div.ast-custom-button, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
+
+				if ( class_exists( 'WooCommerce' ) ) {
+					$excluding_anchor_selectors .= ', .entry-content [CLASS*="wc-block"] .wc-block-components-button, .entry-content [CLASS*="wc-block"] .wc-block-components-totals-coupon-link, .entry-content [CLASS*="wc-block"] .wc-block-components-product-name';
+				}
 
 				$excluding_anchor_selectors = apply_filters( 'astra_remove_underline_anchor_links', $excluding_anchor_selectors );
 
@@ -859,8 +916,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Accessibility options.
 			$enable_site_accessibility        = astra_get_option( 'site-accessibility-toggle', false );
-			$html_selectors_focus_visible     = 'a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible';
-			$html_selectors_focus_only_inputs = 'input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="reset"]:focus, input[type="number"]:focus, textarea:focus, .wp-block-search__input:focus, [data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus, .ast-mobile-popup-drawer.active .menu-toggle-close:focus, .woocommerce-ordering select.orderby:focus, #ast-scroll-top:focus, #coupon_code:focus, .woocommerce-page #comment:focus, .woocommerce #reviews #respond input#submit:focus, .woocommerce a.add_to_cart_button:focus, .woocommerce .button.single_add_to_cart_button:focus, .woocommerce .woocommerce-cart-form button:focus, .woocommerce .woocommerce-cart-form__cart-item .quantity .qty:focus, .woocommerce .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce #order_comments:focus, .woocommerce #place_order:focus, .woocommerce .woocommerce-address-fields .woocommerce-address-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce .woocommerce-MyAccount-content form button:focus, .woocommerce .woocommerce-MyAccount-content .woocommerce-EditAccountForm .woocommerce-form-row .woocommerce-Input.input-text:focus, .woocommerce .ast-woocommerce-container .woocommerce-pagination ul.page-numbers li a:focus, body #content .woocommerce form .form-row .select2-container--default .select2-selection--single:focus, #ast-coupon-code:focus, .woocommerce.woocommerce-js .quantity input[type=number]:focus, .woocommerce-js .woocommerce-mini-cart-item .quantity input[type=number]:focus, .woocommerce p#ast-coupon-trigger:focus';
+			$html_selectors_focus_visible     = '.ast-search-menu-icon.slide-search a:focus-visible:focus-visible, .astra-search-icon:focus-visible, #close:focus-visible, a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible, #close:focus-visible, .button.search-submit:focus-visible, #search_submit:focus, .normal-search:focus-visible';
+			$html_selectors_focus_only_inputs = 'input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="reset"]:focus, input[type="search"]:focus, input[type="number"]:focus, textarea:focus, .wp-block-search__input:focus, [data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus, .ast-mobile-popup-drawer.active .menu-toggle-close:focus, .woocommerce-ordering select.orderby:focus, #ast-scroll-top:focus, #coupon_code:focus, .woocommerce-page #comment:focus, .woocommerce #reviews #respond input#submit:focus, .woocommerce a.add_to_cart_button:focus, .woocommerce .button.single_add_to_cart_button:focus, .woocommerce .woocommerce-cart-form button:focus, .woocommerce .woocommerce-cart-form__cart-item .quantity .qty:focus, .woocommerce .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce #order_comments:focus, .woocommerce #place_order:focus, .woocommerce .woocommerce-address-fields .woocommerce-address-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce .woocommerce-MyAccount-content form button:focus, .woocommerce .woocommerce-MyAccount-content .woocommerce-EditAccountForm .woocommerce-form-row .woocommerce-Input.input-text:focus, .woocommerce .ast-woocommerce-container .woocommerce-pagination ul.page-numbers li a:focus, body #content .woocommerce form .form-row .select2-container--default .select2-selection--single:focus, #ast-coupon-code:focus, .woocommerce.woocommerce-js .quantity input[type=number]:focus, .woocommerce-js .woocommerce-mini-cart-item .quantity input[type=number]:focus, .woocommerce p#ast-coupon-trigger:focus';
 
 			if ( $enable_site_accessibility ) {
 				$outline_style = astra_get_option( 'site-accessibility-highlight-type' );
@@ -895,11 +952,41 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$css_output['input'] = array(
 					'outline' => 'none',
 				);
+
+				if ( class_exists( 'WooCommerce' ) ) {
+					$css_output['.woocommerce-js input[type=text]:focus, .woocommerce-js input[type=email]:focus, .woocommerce-js textarea:focus, input[type=number]:focus, .comments-area textarea#comment:focus, .comments-area textarea#comment:active, .comments-area .ast-comment-formwrap input[type="text"]:focus, .comments-area .ast-comment-formwrap input[type="text"]:active'] = array(
+						'outline-style' => $outline_input_style ? $outline_input_style : 'inherit',
+						'outline-color' => $outline_input_color ? $outline_input_color : 'inherit',
+						'outline-width' => 'thin',
+						'border-color'  => astra_get_option( 'site-accessibility-highlight-input-color' ),
+					);
+				}
 			}
 
 			if ( false === $enable_site_accessibility ) {
 				$css_output[ $html_selectors_focus_only_inputs . ', ' . $html_selectors_focus_visible ] = array(
 					'outline-style' => 'none',
+				);
+
+				$css_output['.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-form, .ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-field:focus'] = array(
+					'border-color' => 'var(--ast-global-color-0)',
+				);
+			}
+
+			if ( self::astra_4_4_0_compatibility() ) {
+				$css_output['.ast-search-menu-icon .search-form button.search-submit:focus, .ast-theme-transparent-header .ast-header-search .ast-dropdown-active .ast-icon, .ast-theme-transparent-header .ast-inline-search .search-field:focus .ast-icon'] = array(
+					'color' => 'var(--ast-global-color-1)',
+				);
+
+				if ( false === $enable_site_accessibility ) {
+					$css_output['.ast-header-search .slide-search .search-form'] = array(
+						'border' => '2px solid var(--ast-global-color-0)',
+					);
+				}
+
+				// Reduced specificity so that it does not override customizer background color option.
+				$css_output['.ast-header-search .slide-search .search-field'] = array(
+					'background-color' => '#fff', // Referred by main.css.
 				);
 			}
 
@@ -1042,7 +1129,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			/* Parse CSS from array() */
 			$parse_css .= astra_parse_css( $css_output );
-			
+
 			if ( defined( 'BORLABS_COOKIE_VERSION' ) ) {
 				$oembed_wrapper = array(
 					'body .ast-oembed-container > *' => array(
@@ -1052,7 +1139,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'height'   => '100%',
 						( $is_site_rtl ? 'right' : 'left' ) => '0',
 					),
-				);                                       
+				);
 			} else {
 				$oembed_wrapper = array(
 					'body .ast-oembed-container *' => array(
@@ -1062,11 +1149,20 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'height'   => '100%',
 						( $is_site_rtl ? 'right' : 'left' ) => '0',
 					),
-				);         
+				);
 			}
 
-			$parse_css .= astra_parse_css( $oembed_wrapper );  
-			
+			/**
+			 * Special case handling for pocket casts embed url.
+			 *
+			 * @since 4.6.4
+			 */
+			$oembed_wrapper['body .wp-block-embed-pocket-casts .ast-oembed-container *'] = array(
+				'position' => 'unset',
+			);
+
+			$parse_css .= astra_parse_css( $oembed_wrapper );
+
 			if ( ! Astra_Builder_Helper::$is_header_footer_builder_active ) {
 
 				$old_header_mobile_toggle = array(
@@ -1101,6 +1197,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$parse_css .= self::astra_sticky_sidebar_css();
 			}
 
+			if ( self::astra_4_6_0_compatibility() ) {
+
+				// Forms default styling improvements.
+				$parse_css .= self::astra_default_forms_styling_dynamic_css();
+			}
+
 			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 
 				$parse_css .= astra_parse_css(
@@ -1130,8 +1232,11 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				require_once ASTRA_THEME_DIR . 'inc/dynamic-css/comments-flex.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			}
 
+			// Single post improvement.
+			require_once ASTRA_THEME_DIR . 'inc/dynamic-css/single-post.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+
 			$live_search_enabled = astra_get_option( 'live-search', false );
-			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && $live_search_enabled ) {
+			if ( ( true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_component_loaded( 'search', 'header' ) && $live_search_enabled ) || ( is_search() && true === astra_get_option( 'ast-search-live-search' ) ) ) {
 				// Live search CSS.
 				require_once ASTRA_THEME_DIR . 'inc/dynamic-css/live-search.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			}
@@ -1215,6 +1320,11 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			// Paginaiton CSS.
 			require_once ASTRA_THEME_DIR . 'inc/dynamic-css/pagination.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			// Related Posts Dynamic CSS.
+
+			// Navigation CSS.
+			if ( is_single() && self::astra_4_6_0_compatibility() ) {
+				require_once ASTRA_THEME_DIR . 'inc/dynamic-css/navigation.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+			}
 
 			/**
 			 *
@@ -1303,52 +1413,54 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			$single_post_outside_spacing = astra_get_option( 'single-post-outside-spacing' );
 
-			$single_post_outside_spacing_css_desktop = array(
-				'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'desktop' ),
-					'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'desktop' ),
-				),
-				'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'desktop' ),
-					'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'desktop' ),
-				),
-			);
+			if ( ! self::astra_4_6_0_compatibility() ) {
+				$single_post_outside_spacing_css_desktop = array(
+					'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'desktop' ),
+						'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'desktop' ),
+					),
+					'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'desktop' ),
+						'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'desktop' ),
+					),
+				);
 
-			$parse_css .= astra_parse_css( $single_post_outside_spacing_css_desktop );
+				$parse_css .= astra_parse_css( $single_post_outside_spacing_css_desktop );
 
-			$single_post_outside_spacing_css_tablet = array(
-				'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container #primary, .ast-narrow-container #primary' => array(
-					'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'tablet' ),
-					'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'tablet' ),
-				),
-				'.ast-left-sidebar #primary, .ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container #primary, .ast-narrow-container #primary' => array(
-					'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'tablet' ),
-					'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'tablet' ),
-				),
-				'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'tablet' ),
-					'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'tablet' ),
-				),
-				'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'tablet' ),
-					'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'tablet' ),
-				),
-			);
+				$single_post_outside_spacing_css_tablet = array(
+					'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container #primary, .ast-narrow-container #primary' => array(
+						'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'tablet' ),
+						'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'tablet' ),
+					),
+					'.ast-left-sidebar #primary, .ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container #primary, .ast-narrow-container #primary' => array(
+						'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'tablet' ),
+						'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'tablet' ),
+					),
+					'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'tablet' ),
+						'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'tablet' ),
+					),
+					'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'tablet' ),
+						'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'tablet' ),
+					),
+				);
 
-			$parse_css .= astra_parse_css( $single_post_outside_spacing_css_tablet, '', astra_get_tablet_breakpoint() );
+				$parse_css .= astra_parse_css( $single_post_outside_spacing_css_tablet, '', astra_get_tablet_breakpoint() );
 
-			$single_post_outside_spacing_css_mobile = array(
-				'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'mobile' ),
-					'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'mobile' ),
-				),
-				'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
-					'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'mobile' ),
-					'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'mobile' ),
-				),
-			);
+				$single_post_outside_spacing_css_mobile = array(
+					'.ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-plain-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'margin-top'    => astra_responsive_spacing( $single_post_outside_spacing, 'top', 'mobile' ),
+						'margin-bottom' => astra_responsive_spacing( $single_post_outside_spacing, 'bottom', 'mobile' ),
+					),
+					'.ast-left-sidebar.ast-single-post #primary, .ast-right-sidebar.ast-single-post #primary, .ast-separate-container.ast-single-post.ast-right-sidebar #primary, .ast-separate-container.ast-single-post.ast-left-sidebar #primary, .ast-separate-container.ast-single-post #primary, .ast-narrow-container.ast-single-post #primary' => array(
+						'padding-left'  => astra_responsive_spacing( $single_post_outside_spacing, 'left', 'mobile' ),
+						'padding-right' => astra_responsive_spacing( $single_post_outside_spacing, 'right', 'mobile' ),
+					),
+				);
 
-			$parse_css .= astra_parse_css( $single_post_outside_spacing_css_mobile, '', astra_get_mobile_breakpoint() );
+				$parse_css .= astra_parse_css( $single_post_outside_spacing_css_mobile, '', astra_get_mobile_breakpoint() );
+			}
 
 			/**
 			 * Single Post Outer spacing
@@ -1761,7 +1873,6 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'color'            => astra_get_foreground_color( $theme_color ),
 						'border-color'     => esc_attr( $theme_color ),
 						'background-color' => esc_attr( $theme_color ),
-						'border-radius'    => '2px',
 					),
 				);
 
@@ -1902,12 +2013,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$border_right_val        = $scndry_theme_btn_right_border;
 				$border_bottom_val       = $scndry_theme_btn_bottom_border;
 				$border_left_val         = $scndry_theme_btn_left_border;
-				$outline_button_selector = '.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, .ast-outline-button';
+				$outline_button_selector = '.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, .ast-outline-button, .wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button';
 			}
 
 			// Secondary button padding.
 			if ( $padding_top || $padding_right || $padding_bottom || $padding_left ) {
-				$outline_button_selector = '.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, .ast-outline-button';
+				$outline_button_selector = '.wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button, .ast-outline-button, .wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button';
 			}
 
 			// Secondary button preset compatibility.
@@ -1954,12 +2065,18 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color), .wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color), .ast-outline-button' => array(
 					'color' => esc_attr( $btn_color_val ),
 				),
-				'.wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:focus, .wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color):hover, .wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color):hover, .ast-outline-button:hover, .ast-outline-button:focus' => array(
+				'.wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link:focus, .wp-block-buttons .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color):hover, .wp-block-buttons .wp-block-button.wp-block-button__link.is-style-outline:not(.has-text-color):hover, .ast-outline-button:hover, .ast-outline-button:focus, .wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button:hover, .wp-block-uagb-buttons-child .uagb-buttons-repeater.ast-outline-button:focus' => array(
 					'color'            => empty( $scndry_btn_text_hover_color ) && $gutenberg_core_patterns_compat ? esc_attr( $btn_text_hover_color ) : esc_attr( $scndry_btn_text_hover_color ),
 					'background-color' => empty( $scndry_btn_bg_hover_color ) && $gutenberg_core_patterns_compat ? esc_attr( $btn_bg_hover_color ) : esc_attr( $scndry_btn_bg_hover_color ),
 					'border-color'     => esc_attr( $btn_border_h_color_val ),
 				),
 			);
+
+			if ( $content_links_underline && $button_styling_improved ) {
+				$outline_button_css_desktop['.ast-single-post .entry-content a.ast-outline-button, .ast-single-post .entry-content .is-style-outline>.wp-block-button__link'] = array(
+					'text-decoration' => '' === $scndry_theme_btn_text_decoration || 'initial' === $scndry_theme_btn_text_decoration ? 'none' : esc_attr( $scndry_theme_btn_text_decoration ),
+				);
+			}
 
 			$outline_button_css_tablet = array(
 				$outline_button_selector => array(
@@ -1991,7 +2108,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Secondary button background color.
 			if ( ! empty( $scndry_btn_bg_color ) ) {
-				$outline_button_css_desktop['.wp-block-button .wp-block-button__link.wp-element-button.is-style-outline:not(.has-background), .wp-block-button.is-style-outline>.wp-block-button__link.wp-element-button:not(.has-background)'] = array(
+				$outline_button_css_desktop['.wp-block-button .wp-block-button__link.wp-element-button.is-style-outline:not(.has-background), .wp-block-button.is-style-outline>.wp-block-button__link.wp-element-button:not(.has-background), .ast-outline-button'] = array(
 					'background-color' => empty( $scndry_btn_bg_color ) ? 'transparent' : esc_attr( $scndry_btn_bg_color ),
 				);
 			}
@@ -2001,12 +2118,17 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				if ( empty( $scndry_btn_text_color ) ) {
 					$scndry_btn_text_color = astra_get_foreground_color( $theme_color );
 				}
-				$outline_button_css_desktop['.wp-block-buttons .wp-block-button .wp-block-button__link.is-style-outline:not(.has-background), .wp-block-buttons .wp-block-button.is-style-outline>.wp-block-button__link:not(.has-background)'] = array(
+				$outline_button_css_desktop['.wp-block-buttons .wp-block-button .wp-block-button__link.is-style-outline:not(.has-background), .wp-block-buttons .wp-block-button.is-style-outline>.wp-block-button__link:not(.has-background), .ast-outline-button'] = array(
 					'background-color' => empty( $scndry_btn_bg_color ) ? esc_attr( $theme_color ) : esc_attr( $scndry_btn_bg_color ),
 					'color'            => esc_attr( $scndry_btn_text_color ),
 				);
 			}
 
+			if ( $button_styling_improved ) {
+				$outline_button_css_desktop['.uagb-buttons-repeater.ast-outline-button'] = array(
+					'border-radius' => '9999px',
+				);
+			}
 
 			/* Parse CSS from array() -> Desktop */
 			$parse_css .= astra_parse_css( $outline_button_css_desktop );
@@ -2104,8 +2226,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'#secondary h2'                   => array(
 						'font-size' => '1.7rem',
 					),
-					'.ast-separate-container .ast-article-post, .ast-separate-container .ast-article-single, .ast-separate-container .ast-comment-list li.depth-1, .ast-separate-container .comment-respond' => array(
-						'padding' => '3em',
+					'.ast-separate-container .ast-article-post, .ast-separate-container .ast-article-single, .ast-separate-container .comment-respond' => array(
+						'padding' => self::astra_4_6_0_compatibility() && is_single() ? '2.5em' : '3em',
 					),
 
 					'.ast-separate-container .ast-article-single .ast-article-single' => array(
@@ -2115,15 +2237,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'.ast-article-single .wp-block-post-template-is-layout-grid' => array(
 						'padding-' . $ltr_left => '0',
 					),
-
-					'.ast-separate-container .ast-comment-list li.depth-1, .hentry' => array(
-						'margin-bottom' => '2em',
-					),
-					'.ast-separate-container .ast-archive-description, .ast-separate-container .ast-author-box' => array(
-						'border-bottom' => '1px solid var(--ast-border-color)',
-					),
-					'.ast-separate-container .comments-title' => array(
-						'padding' => '2em 2em 0 2em',
+					'.ast-separate-container .comments-title, .ast-narrow-container .comments-title' => array(
+						'padding' => '1.5em 2em',
 					),
 					'.ast-page-builder-template .comment-form-textarea, .ast-comment-formwrap .ast-grid-common-col' => array(
 						'padding' => '0',
@@ -2147,7 +2262,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'width' => '100%',
 					),
 					'.entry-title'                    => array(
-						'margin-bottom' => '0.5em',
+						'margin-bottom' => self::astra_4_6_0_compatibility() ? '0.6em' : '0.5em',
 					),
 					'.ast-archive-description p'      => array(
 						'font-size'   => 'inherit',
@@ -2155,6 +2270,45 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'line-height' => 'inherit',
 					),
 				);
+				if ( ! self::astra_4_6_0_compatibility() ) {
+					$default_layout_update_css['.ast-separate-container .ast-comment-list li.depth-1, .hentry'] = array(
+						'margin-bottom' => '2em',
+					);
+				} else {
+					if ( is_single() && astra_get_option( 'single-content-images-shadow', false ) ) {
+						$default_layout_update_css['.ast-article-single img'] = array(
+							'box-shadow'         => '0 0 30px 0 rgba(0,0,0,.15)',
+							'-webkit-box-shadow' => '0 0 30px 0 rgba(0,0,0,.15)',
+							'-moz-box-shadow'    => '0 0 30px 0 rgba(0,0,0,.15)',
+						);
+					}
+					$default_layout_update_css['.ast-separate-container .ast-comment-list li.depth-1, .hentry'] = array(
+						'margin-bottom' => '1.5em',
+					);
+					$default_layout_update_css['.site-content section.ast-archive-description']                 = array(
+						'margin-bottom' => '2em',
+					);
+
+					// Search page.
+					if ( is_search() ) {
+						$default_layout_update_css['.no-results']                                       = array(
+							'text-align' => 'center',
+						);
+						$default_layout_update_css['.no-results .search-form']                          = array(
+							'max-width' => '370px',
+							'margin'    => '0 auto',
+						);
+						$default_layout_update_css['.no-results .search-field']                         = array(
+							'width' => '100%',
+						);
+						$default_layout_update_css['.search .site-main .no-results .ast-search-submit'] = array(
+							'display' => 'block',
+						);
+						$default_layout_update_css['.search .ast-live-search-results']                  = array(
+							'max-height' => '200px',
+						);
+					}
+				}
 				/* Parse CSS from array() -> Desktop CSS */
 				$parse_css .= astra_parse_css( $default_layout_update_css );
 
@@ -2200,7 +2354,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				$default_medium_layout_css = array(
 					'.ast-separate-container .ast-article-post, .ast-separate-container .ast-article-single, .ast-separate-container .ast-author-box, .ast-separate-container .ast-404-layout-1, .ast-separate-container .no-results' => array(
-						'padding' => '3em',
+						'padding' => self::astra_4_6_0_compatibility() && is_single() ? '2.5em' : '3em',
 					),
 				);
 
@@ -2462,8 +2616,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$file_block_button_selector             = ( ! $block_editor_legacy_setup || $improve_gb_ui ) ? ', body .wp-block-file .wp-block-file__button' : '';
 				$file_block_button_hover_selector       = ( ! $block_editor_legacy_setup || $improve_gb_ui ) ? ', body .wp-block-file .wp-block-file__button:hover, body .wp-block-file .wp-block-file__button:focus' : '';
 				$search_page_btn_selector               = ( true === $update_customizer_strctural_defaults ) ? ', .search .search-submit' : '';
-				$woo_btns_selector                      = ( true === self::astra_woo_support_global_settings() ) ? ', .woocommerce-js a.button, .woocommerce button.button, .woocommerce .woocommerce-message a.button, .woocommerce #respond input#submit.alt, .woocommerce input.button.alt, .woocommerce input.button,.woocommerce input.button:disabled, .woocommerce input.button:disabled[disabled], .woocommerce input.button:disabled:hover, .woocommerce input.button:disabled[disabled]:hover, .woocommerce #respond input#submit, .woocommerce button.button.alt.disabled, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link, .wc-block-grid__product-onsale, [CLASS*="wc-block"] button, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping), .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout, .woocommerce button.button.alt.disabled.wc-variation-selection-needed' : '';
-				$woo_btns_hover_selector                = ( true === self::astra_woo_support_global_settings() ) ? ', .woocommerce-js a.button:hover, .woocommerce button.button:hover, .woocommerce .woocommerce-message a.button:hover,.woocommerce #respond input#submit:hover,.woocommerce #respond input#submit.alt:hover, .woocommerce input.button.alt:hover, .woocommerce input.button:hover, .woocommerce button.button.alt.disabled:hover, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link:hover, [CLASS*="wc-block"] button:hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping):hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout:hover, .woocommerce button.button.alt.disabled.wc-variation-selection-needed:hover' : '';
+				$woo_btns_selector                      = ( true === self::astra_woo_support_global_settings() ) ? ', .woocommerce-js a.button, .woocommerce button.button, .woocommerce .woocommerce-message a.button, .woocommerce #respond input#submit.alt, .woocommerce input.button.alt, .woocommerce input.button,.woocommerce input.button:disabled, .woocommerce input.button:disabled[disabled], .woocommerce input.button:disabled:hover, .woocommerce input.button:disabled[disabled]:hover, .woocommerce #respond input#submit, .woocommerce button.button.alt.disabled, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link, .wc-block-grid__product-onsale, [CLASS*="wc-block"] button, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping), .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout, .woocommerce button.button.alt.disabled.wc-variation-selection-needed, [CLASS*="wc-block"] .wc-block-components-button' : '';
+				$woo_btns_hover_selector                = ( true === self::astra_woo_support_global_settings() ) ? ', .woocommerce-js a.button:hover, .woocommerce button.button:hover, .woocommerce .woocommerce-message a.button:hover,.woocommerce #respond input#submit:hover,.woocommerce #respond input#submit.alt:hover, .woocommerce input.button.alt:hover, .woocommerce input.button:hover, .woocommerce button.button.alt.disabled:hover, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link:hover, [CLASS*="wc-block"] button:hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping):hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout:hover, .woocommerce button.button.alt.disabled.wc-variation-selection-needed:hover, [CLASS*="wc-block"] .wc-block-components-button:hover, [CLASS*="wc-block"] .wc-block-components-button:focus' : '';
 				$v4_2_2_core_form_btns_styling_selector = ( true === self::astra_core_form_btns_styling() ) ? ', #comments .submit, .search .search-submit' : '';
 
 				/**
@@ -2775,6 +2929,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'padding-left'               => astra_responsive_spacing( $theme_btn_padding, 'left', 'desktop' ),
 					);
 
+					if ( $content_links_underline && $button_styling_improved ) {
+						$global_button_page_builder_desktop['.ast-single-post .entry-content .wp-block-button .wp-block-button__link, .ast-single-post .entry-content .wp-block-search .wp-block-search__button, body .entry-content .wp-block-file .wp-block-file__button'] = array(
+							'text-decoration' => '' === $theme_btn_text_decoration || 'initial' === $theme_btn_text_decoration ? 'none' : esc_attr( $theme_btn_text_decoration ),
+						);
+					}
+
 					$global_button_page_builder_tablet = array(
 						$selector => array(
 							'font-size'                  => astra_responsive_font( $theme_btn_font_size, 'tablet' ),
@@ -2927,19 +3087,22 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.ast-header-break-point.ast-header-custom-item-outside .ast-mobile-header-stack .main-header-bar .ast-search-icon' => array(
 					'margin' => '0',
 				),
-				'.ast-comment-avatar-wrap img'             => array(
+				'.ast-comment-avatar-wrap img' => array(
 					'max-width' => '2.5em',
 				),
-				'.ast-separate-container .ast-comment-list li.depth-1' => array(
-					'padding' => '1.5em 2.14em',
-				),
-				'.ast-separate-container .comment-respond' => array(
-					'padding' => '2em 2.14em',
-				),
-				'.ast-comment-meta'                        => array(
+				'.ast-comment-meta'            => array(
 					'padding' => '0 1.8888em 1.3333em',
 				),
 			);
+
+			if ( ! self::astra_4_6_0_compatibility() ) {
+				$global_button_tablet['.ast-separate-container .ast-comment-list li.depth-1'] = array(
+					'padding' => '1.5em 2.14em',
+				);
+				$global_button_tablet['.ast-separate-container .comment-respond']             = array(
+					'padding' => '2em 2.14em',
+				);
+			}
 
 			/* Parse CSS from array() -> max-width: (tablet-breakpoint) px CSS */
 			$parse_css .= astra_parse_css( $global_button_tablet, '', astra_get_tablet_breakpoint() );
@@ -2955,10 +3118,6 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'padding-left'  => '0.54em',
 					'padding-right' => '0.54em',
 				),
-				'.ast-separate-container .ast-comment-list li.depth-1' => array(
-					'padding'       => '1.5em 1em',
-					'margin-bottom' => '1.5em',
-				),
 				'.ast-separate-container .ast-comment-list .bypostauthor' => array(
 					'padding' => '.5em',
 				),
@@ -2969,6 +3128,13 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'font-size' => astra_get_font_css_value( $theme_btn_font_size['mobile'], $theme_btn_font_size['mobile-unit'] ),
 				),
 			);
+
+			if ( ! self::astra_4_6_0_compatibility() ) {
+				$global_button_tablet['.ast-separate-container .ast-comment-list li.depth-1'] = array(
+					'padding'       => '1.5em 1em',
+					'margin-bottom' => '1.5em',
+				);
+			}
 
 			if ( 'no-sidebar' !== astra_page_layout() ) {
 				$global_button_mobile['.ast-separate-container #secondary']                           = array(
@@ -3342,7 +3508,19 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'display'   => esc_attr( $tablet_tagline_visibility ),
 				),
 				'.entry-title'                   => array(
-					'font-size' => astra_responsive_font( $archive_post_title_font_size, 'tablet', 30 ),
+					'font-size' => astra_responsive_font( $archive_post_title_font_size, 'tablet' ),
+				),
+				'.ast-blog-single-element.ast-taxonomy-container a' => array(
+					'font-size' => astra_responsive_font( $archive_post_tax_font_size, 'tablet' ),
+				),
+				'.ast-blog-meta-container'       => array(
+					'font-size' => astra_responsive_font( $archive_post_meta_font_size, 'tablet' ),
+				),
+				'blog-layout-4' === $blog_layout ? '.archive .ast-article-post .ast-article-inner, .blog .ast-article-post .ast-article-inner' : '.archive .ast-article-post, .ast-article-post .post-thumb-img-content, .ast-blog-layout-6-grid .ast-article-inner .post-thumb::after, .blog .ast-article-post' => array(
+					'border-top-left-radius'     => astra_responsive_spacing( $archive_cards_radius, 'top', 'tablet' ),
+					'border-top-right-radius'    => astra_responsive_spacing( $archive_cards_radius, 'right', 'tablet' ),
+					'border-bottom-right-radius' => astra_responsive_spacing( $archive_cards_radius, 'bottom', 'tablet' ),
+					'border-bottom-left-radius'  => astra_responsive_spacing( $archive_cards_radius, 'left', 'tablet' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
@@ -3434,7 +3612,19 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'display'   => esc_attr( $mobile_tagline_visibility ),
 				),
 				'.entry-title'                   => array(
-					'font-size' => astra_responsive_font( $archive_post_title_font_size, 'mobile', 30 ),
+					'font-size' => astra_responsive_font( $archive_post_title_font_size, 'mobile' ),
+				),
+				'.ast-blog-single-element.ast-taxonomy-container a' => array(
+					'font-size' => astra_responsive_font( $archive_post_tax_font_size, 'mobile' ),
+				),
+				'.ast-blog-meta-container'       => array(
+					'font-size' => astra_responsive_font( $archive_post_meta_font_size, 'mobile' ),
+				),
+				'blog-layout-4' === $blog_layout ? '.archive .ast-article-post .ast-article-inner, .blog .ast-article-post .ast-article-inner' : '.archive .ast-article-post, .ast-article-post .post-thumb-img-content, .ast-blog-layout-6-grid .ast-article-inner .post-thumb::after, .blog .ast-article-post' => array(
+					'border-top-left-radius'     => astra_responsive_spacing( $archive_cards_radius, 'top', 'mobile' ),
+					'border-top-right-radius'    => astra_responsive_spacing( $archive_cards_radius, 'right', 'mobile' ),
+					'border-bottom-right-radius' => astra_responsive_spacing( $archive_cards_radius, 'bottom', 'mobile' ),
+					'border-bottom-left-radius'  => astra_responsive_spacing( $archive_cards_radius, 'left', 'mobile' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
@@ -3617,6 +3807,378 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				);
 				$parse_css      .= astra_parse_css( $single_blog_css, astra_get_tablet_breakpoint( '', 1 ) );
 			endif;
+
+			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$blog_addon_condition = defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' );
+			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
+			if ( is_search() || is_archive() || is_home() ) {
+				if ( ! ( $blog_addon_condition ) ) {
+					// If a old pro user has used blog-layout-1 to 3 and disabled astra addon then moved layout to 'blog-layout-4'.
+					if ( 'blog-layout-1' == $blog_layout || 'blog-layout-2' === $blog_layout || 'blog-layout-3' === $blog_layout ) {
+						$blog_layout = 'blog-layout-4';
+					}
+				}
+
+				$bl_selector = '.ast-' . esc_attr( $blog_layout ) . '-grid';
+				$blog_grid   = astra_get_option( 'blog-grid' );
+
+				$blog_layout_css = array();
+
+				if ( 'blog-layout-4' === $blog_layout || 'blog-layout-6' === $blog_layout ) {
+
+					$blog_layout_css = array(
+
+						$bl_selector . ' .ast-article-post' => array(
+							'border' => '0',
+						),
+
+						$bl_selector . ' .ast-article-inner .wp-post-image' => array(
+							'width' => '100%',
+						),
+					);
+
+					if ( $blog_addon_condition && 1 === $blog_grid ) {
+						$blog_layout_css['.ast-separate-container .ast-article-post'] = array(
+							'padding' => '1.5em',
+						);
+					}
+
+					/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( ! ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) || ( $blog_addon_condition && 1 !== $blog_grid ) ) {
+						/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						$blog_layout_css['.ast-article-inner'] = array(
+							'padding' => '1.5em',
+						);
+					}
+
+					$blog_layout_css[ $bl_selector . ' .ast-row' ] = array(
+						'display'     => 'flex',
+						'flex-wrap'   => 'wrap',
+						'flex-flow'   => 'row wrap',
+						'align-items' => 'stretch',
+					);
+				}
+				/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				if ( ! ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) ) {
+					/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( 'blog-layout-4' === $blog_layout || 'blog-layout-6' === $blog_layout ) {
+						$blog_layout_css[ $bl_selector . ' .ast-article-post' ] = array(
+							'width'            => '33.33%',
+							'margin-bottom'    => '2em',
+							'border-bottom'    => '0',
+							'background-color' => 'transparent',
+						);
+
+						$blog_layout_css[ '.ast-separate-container ' . $bl_selector . ' .ast-article-post' ]     = array(
+							'padding' => '0 1em 0',
+						);
+						$blog_layout_css['.ast-separate-container.ast-desktop .ast-blog-layout-4-grid .ast-row'] = array(
+							'margin-left'  => '-1em',
+							'margin-right' => '-1em',
+						);
+					}
+					$blog_layout_css[ $bl_selector . ' .ast-article-inner' ] = array(
+						'box-shadow' => '0px 6px 15px -2px rgba(16, 24, 40, 0.05)',
+					);
+
+					$blog_layout_css[ '.ast-separate-container ' . $bl_selector . ' .ast-article-inner, .ast-plain-container ' . $bl_selector . ' .ast-article-inner' ] = array(
+						'height' => '100%',
+					);
+				}
+
+				$parse_css .= astra_parse_css( $blog_layout_css );
+
+				if ( 'blog-layout-4' === $blog_layout ) {
+
+					$blog_layout_grid_css = array(
+
+						'.ast-row .blog-layout-4 .post-content, .blog-layout-4 .post-thumb' => array(
+							'padding-' . $rtl_left . ''  => '0',
+							'padding-' . $rtl_right . '' => '0',
+						),
+
+						'.ast-article-post.remove-featured-img-padding .blog-layout-4 .post-content .ast-blog-featured-section:first-child .post-thumb-img-content' => array(
+							'margin-top' => '-1.5em',
+						),
+
+						'.ast-article-post.remove-featured-img-padding .blog-layout-4 .post-content .ast-blog-featured-section .post-thumb-img-content' => array(
+							'margin-' . $rtl_left . ''  => '-1.5em',
+							'margin-' . $rtl_right . '' => '-1.5em',
+						),
+					);
+
+					$parse_css .= astra_parse_css( $blog_layout_grid_css );
+				}
+
+				if ( 'blog-layout-5' === $blog_layout ) {
+
+					$blog_layout_list_css = array(
+
+						$bl_selector . ' .ast-row'       => array(
+							'margin-' . $rtl_left . ''  => '0',
+							'margin-' . $rtl_right . '' => '0',
+						),
+
+						$bl_selector . ' .ast-article-inner' => array(
+							'width' => '100%',
+						),
+
+						$bl_selector . ' .blog-layout-5' => array(
+							'display'        => 'flex',
+							'flex-wrap'      => 'wrap',
+							'vertical-align' => 'middle',
+						),
+
+						$bl_selector . ' .ast-blog-featured-section' => array(
+							'width'         => '25%',
+							'margin-bottom' => '0',
+						),
+
+						$bl_selector . ' .post-thumb-img-content' => array(
+							'height' => '100%',
+						),
+
+						$bl_selector . ' .ast-blog-featured-section img' => array(
+							'width'      => '100%',
+							'height'     => '100%',
+							'object-fit' => 'cover',
+						),
+
+						$bl_selector . ' .post-content'  => array(
+							'width'                     => '75%',
+							'padding-' . $rtl_left . '' => '1.5em',
+						),
+
+						$bl_selector . ' .ast-no-thumb .ast-blog-featured-section' => array(
+							'width' => 'unset',
+						),
+
+						$bl_selector . ' .ast-no-thumb .post-content' => array(
+							'width' => '100%',
+						),
+
+						'.ast-separate-container ' . $bl_selector . ' .post-content' => array(
+							'padding-' . $rtl_right . '' => '1.5em',
+							'padding-top'                => '1.5em',
+							'padding-bottom'             => '1.5em',
+						),
+
+					);
+
+					/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( ! ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) ) {
+						/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						$blog_layout_list_css[ $bl_selector . ' .ast-article-post' ] = array(
+							'margin-bottom' => '2em',
+							'padding'       => '0',
+							'border-bottom' => '0',
+						);
+					} else {
+						$blog_layout_list_css[ $bl_selector . ' .ast-article-post' ] = array(
+							'padding'       => '0',
+							'border-bottom' => '0',
+						);
+					}
+
+					$parse_css .= astra_parse_css( $blog_layout_list_css );
+
+					$blog_layout_list_css_responsive = array();
+
+					$blog_layout_list_css_responsive[ '.ast-separate-container ' . $bl_selector . ' .post-content' ] = array(
+						'padding' => '0',
+					);
+
+					$blog_layout_list_css_responsive[ $bl_selector . ' .ast-blog-featured-section' ] = array(
+						'margin-bottom' => '1.5em',
+					);
+
+					$parse_css .= astra_parse_css( $blog_layout_list_css_responsive, '', astra_get_tablet_breakpoint() );
+				}
+
+				if ( 'blog-layout-6' === $blog_layout ) {
+
+					$blog_layout_cover_css = array(
+
+						$bl_selector . ' .blog-layout-6 .post-content' => array(
+							'position'      => 'static',
+							'padding-left'  => '0',
+							'padding-right' => '0',
+						),
+
+						$bl_selector . ' .blog-layout-6 .ast-blog-featured-section' => array(
+							'position' => 'absolute',
+							'top'      => '0',
+							'left'     => '0',
+							'right'    => '0',
+							'bottom'   => '0',
+							'left'     => '0',
+							'width'    => '100%',
+							'height'   => '100%',
+						),
+
+						$bl_selector . ' .blog-layout-6 .post-thumb-img-content,' . $bl_selector . ' .blog-layout-6 .post-thumb-img-content img' => array(
+							'width'  => '100%',
+							'height' => '100%',
+						),
+
+						$bl_selector . ' .blog-layout-6 .post-thumb-img-content img' => array(
+							'object-fit'    => 'cover',
+							'border-radius' => '4px',
+						),
+
+						$bl_selector . ' .blog-layout-6 .ast-blog-single-element:not(.ast-blog-featured-section)' => array(
+							'position' => 'relative',
+							'z-index'  => '1',
+						),
+
+						$bl_selector . ' .blog-layout-6 .ast-blog-single-element, ' . $bl_selector . ' .blog-layout-6 .ast-blog-single-element *, ' . $bl_selector . ' .blog-layout-6 .ast-blog-single-element *:hover' => array(
+							'color' => '#fff',
+						),
+
+						$bl_selector . ' .badge .ast-button,' . $bl_selector . ' .badge .ast-button:hover' => array(
+							'border'           => '1px solid #fff',
+							'background-color' => 'transparent',
+						),
+
+						$bl_selector . ' .blog-layout-6 .ast-blog-featured-section:before' => array(
+							'position'         => 'absolute',
+							'top'              => '0',
+							'left'             => '0',
+							'right'            => '0',
+							'bottom'           => '0',
+							'left'             => '0',
+							'width'            => '100%',
+							'height'           => '100%',
+							'background-color' => 'rgba(30, 41, 59, 0.65)',
+							'border-radius'    => '4px',
+						),
+					);
+
+					if ( ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) && ( 1 === astra_get_option( 'blog-grid' ) ) ) {
+						$blog_layout_cover_css[ $bl_selector . ' .ast-archive-post' ] = array(
+							'position' => 'relative',
+						);
+					} else {
+						$blog_layout_cover_css[ $bl_selector . ' .blog-layout-6' ] = array(
+							'position' => 'relative',
+						);
+					}
+
+					if ( 1 === $blog_grid ) {
+						$blog_layout_cover_css['.ast-plain-container .ast-article-post'] = array(
+							'padding' => '1.5em',
+						);
+					}
+
+					if ( 1 !== $blog_grid ) {
+						$blog_layout_cover_css['.ast-plain-container .ast-article-inner'] = array(
+							'padding' => '1.5em',
+						);
+					}
+
+					$parse_css .= astra_parse_css( $blog_layout_cover_css );
+				}
+
+				$blog_layout_css_responsive = array();
+
+				if ( 'blog-layout-4' === $blog_layout || 'blog-layout-6' === $blog_layout ) {
+					$blog_layout_css_responsive = array(
+						$bl_selector . ' .ast-article-post' => array(
+							'width' => '100%',
+						),
+					);
+				}
+
+				if ( 'blog-layout-5' === $blog_layout ) {
+					$blog_layout_css_responsive[ $bl_selector . ' .ast-blog-featured-section,' . $bl_selector . ' .post-content' ] = array(
+						'width' => '100%',
+					);
+				}
+
+				$parse_css .= astra_parse_css( $blog_layout_css_responsive, '', astra_get_tablet_breakpoint() );
+
+				$parse_css .= Astra_Enqueue_Scripts::trim_css( self::blog_layout_static_css() );
+
+				// Blog Archive Featured Image.
+				if ( $aspect_ratio && $with_aspect_img_width ) {
+						$blog_featured_image = array(
+							'.ast-article-post .post-thumb-img-content img' => array(
+								'aspect-ratio' => $aspect_ratio,
+								'width'        => $with_aspect_img_width,
+							),
+						);
+						$parse_css          .= astra_parse_css( $blog_featured_image );
+				}
+
+				$author_avatar = astra_get_option( 'blog-meta-author-avatar' );
+
+				if ( $author_avatar ) {
+					$blog_author_css = array(
+						'.ast-author-image' => array(
+							'aspect-ratio'              => '1/1',
+							'border-radius'             => '100%',
+							'margin-' . $rtl_right . '' => '.5em',
+						),
+					);
+					$parse_css      .= astra_parse_css( $blog_author_css );
+				}
+
+				$blog_archive_hover_effect = astra_get_option( 'blog-hover-effect' );
+
+				if ( 'none' !== $blog_archive_hover_effect ) {
+
+					$blog_archive_hover_effect_css = array(
+						'.ast-article-post .post-thumb-img-content' => array(
+							'overflow' => 'hidden',
+						),
+					);
+
+					if ( 'zoom-in' === $blog_archive_hover_effect ) {
+						$blog_archive_hover_effect_css['.ast-article-post .post-thumb-img-content img']       = array(
+							'transform'  => 'scale(1)',
+							'transition' => 'transform .5s ease',
+						);
+						$blog_archive_hover_effect_css['.ast-article-post:hover .post-thumb-img-content img'] = array(
+							'transform' => 'scale(1.1)',
+						);
+					}
+
+					if ( 'zoom-out' === $blog_archive_hover_effect ) {
+						$blog_archive_hover_effect_css['.ast-article-post .post-thumb-img-content img']       = array(
+							'transform'  => 'scale(1.1)',
+							'transition' => 'transform .5s ease',
+						);
+						$blog_archive_hover_effect_css['.ast-article-post:hover .post-thumb-img-content img'] = array(
+							'transform' => 'scale(1)',
+						);
+					}
+
+					$parse_css .= astra_parse_css( $blog_archive_hover_effect_css );
+				}
+
+				// Post elements.
+				$categories_styles      = astra_get_option( 'blog-category-style' );
+				$tag_styles             = astra_get_option( 'blog-tag-style' );
+				$categories_meta_styles = astra_get_option( 'blog-meta-category-style' );
+				$tag_meta_styles        = astra_get_option( 'blog-meta-tag-style' );
+
+				if ( $categories_styles || $tag_styles || $categories_meta_styles || $tag_meta_styles ) {
+					$post_tax_style  = '
+						.cat-links.badge a, .tags-links.badge a {
+							padding: 4px 8px;
+							border-radius: 3px;
+							font-weight: 400;
+						}
+					';
+					$post_tax_style .= '
+						.cat-links.underline a, .tags-links.underline a{
+							text-decoration: underline;
+						}
+					';
+					$parse_css      .= Astra_Enqueue_Scripts::trim_css( $post_tax_style );
+				}
+			}
 
 			// Primary Submenu Border Width & Color.
 			$submenu_border_style = array(
@@ -3940,6 +4502,32 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				}
 			}
 
+			if ( astra_get_option( 'enable-comments-area', true ) ) {
+				if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
+					$parse_css .= Astra_Builder_Base_Dynamic_CSS::prepare_inner_section_advanced_css( 'ast-sub-section-comments', '.site .comments-area' );
+				}
+
+				$comments_radius = astra_get_option(
+					'ast-sub-section-comments-border-radius',
+					array(
+						'top'    => '',
+						'right'  => '',
+						'bottom' => '',
+						'left'   => '',
+					)
+				);
+
+				$list_spacing_css = array(
+					'.comments-area .comments-title, .comments-area .comment-respond' => array(
+						'border-top-left-radius'     => ! empty( astra_get_css_value( $comments_radius['top'] ) ) ? astra_get_css_value( $comments_radius['top'], 'px' ) : '',
+						'border-bottom-right-radius' => ! empty( astra_get_css_value( $comments_radius['bottom'] ) ) ? astra_get_css_value( $comments_radius['bottom'], 'px' ) : '',
+						'border-bottom-left-radius'  => ! empty( astra_get_css_value( $comments_radius['left'] ) ) ? astra_get_css_value( $comments_radius['left'], 'px' ) : '',
+						'border-top-right-radius'    => ! empty( astra_get_css_value( $comments_radius['right'] ) ) ? astra_get_css_value( $comments_radius['right'], 'px' ) : '',
+					),
+				);
+				$parse_css       .= astra_parse_css( $list_spacing_css );
+			}
+
 			$parse_css .= $dynamic_css;
 			$custom_css = astra_get_option( 'custom-css' );
 
@@ -4254,6 +4842,16 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$parse_css .= astra_parse_css( $submenu_toggle );
 
 			$dynamic_css .= $parse_css;
+
+			$ltr_right    = is_rtl() ? esc_attr( 'left' ) : esc_attr( 'right' );
+			$dynamic_css .= astra_parse_css(
+				array(
+					'.ast-builder-menu .main-navigation > ul > li:last-child a' => array(
+						'margin-' . $ltr_right => '0',
+					),
+				),
+				astra_get_tablet_breakpoint( '', 1 )
+			);
 
 			return $dynamic_css;
 		}
@@ -5244,6 +5842,167 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 		}
 
 		/**
+		 * Dynamic CSS for default forms styling improvements.
+		 *
+		 * @return string Dynamic CSS.
+		 * @since 4.6.0
+		 */
+		public static function astra_default_forms_styling_dynamic_css() {
+			$css                       = '';
+			$enable_site_accessibility = astra_get_option( 'site-accessibility-toggle', false );
+			$forms_default_styling_css = array(
+				'input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type=reset], input[type=tel], input[type=date], select, textarea' => array(
+					'font-size'     => '16px',
+					'font-style'    => 'normal',
+					'font-weight'   => '400',
+					'line-height'   => '24px',
+					'width'         => '100%',
+					'padding'       => '12px 16px',
+					'border-radius' => '4px',
+					'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+					'color'         => 'var(--ast-form-input-text, #475569)',
+				),
+				'input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type=reset], input[type=tel], input[type=date], select' => array(
+					'height' => '40px',
+				),
+				'input[type="date"]'      => array(
+					'border-width' => '1px',
+					'border-style' => 'solid',
+					'border-color' => 'var(--ast-border-color)',
+				),
+				'input[type="text"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type=reset]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus, textarea:focus' => array(
+					'border-color' => 'var(--ast-global-color-0, #046BD2)',
+					'box-shadow'   => 'none',
+					'outline'      => 'none',
+					'color'        => 'var(--ast-form-input-focus-text, #475569)',
+				),
+				'label, legend'           => array(
+					'color'       => '#111827',
+					'font-size'   => '14px',
+					'font-style'  => 'normal',
+					'font-weight' => '500',
+					'line-height' => '20px',
+				),
+				'select'                  => array(
+					'padding' => '6px 10px',
+				),
+				'fieldset'                => array(
+					'padding'       => '30px',
+					'border-radius' => '4px',
+				),
+				'button, .ast-button, .button, input[type="button"], input[type="reset"], input[type="submit"]' => array(
+					'border-radius' => '4px',
+					'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+				),
+				':root'                   => array(
+					'--ast-comment-inputs-background' => '#FFF',
+				),
+				'::placeholder'           => array(
+					'color' => 'var(--ast-form-field-color, #9CA3AF)',
+				),
+				'::-ms-input-placeholder' => array( /* Edge 12-18 */
+					'color' => 'var(--ast-form-field-color, #9CA3AF)',
+				),
+			);
+
+			if ( defined( 'WPCF7_VERSION' ) ) {
+				$wpcf7_dynamic_css         = array(
+					'.wpcf7 input.wpcf7-form-control:not([type=submit]), .wpcf7 textarea.wpcf7-form-control' => array(
+						'padding' => '12px 16px',
+					),
+					'.wpcf7 select.wpcf7-form-control' => array(
+						'padding' => '6px 10px',
+					),
+					'.wpcf7 input.wpcf7-form-control:not([type=submit]):focus, .wpcf7 select.wpcf7-form-control:focus, .wpcf7 textarea.wpcf7-form-control:focus' => array(
+						'border-color' => 'var(--ast-global-color-0, #046BD2)',
+						'box-shadow'   => 'none',
+						'outline'      => 'none',
+						'color'        => 'var(--ast-form-input-focus-text, #475569)',
+					),
+					'.wpcf7 .wpcf7-not-valid-tip'      => array(
+						'color'       => '#DC2626',
+						'font-size'   => '14px',
+						'font-weight' => '400',
+						'line-height' => '20px',
+						'margin-top'  => '8px',
+					),
+					'.wpcf7 input[type=file].wpcf7-form-control' => array(
+						'font-size'     => '16px',
+						'font-style'    => 'normal',
+						'font-weight'   => '400',
+						'line-height'   => '24px',
+						'width'         => '100%',
+						'padding'       => '12px 16px',
+						'border-radius' => '4px',
+						'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+						'color'         => 'var(--ast-form-input-text, #475569)',
+					),
+				);
+				$forms_default_styling_css = array_merge( $forms_default_styling_css, $wpcf7_dynamic_css );
+			}
+
+			if ( class_exists( 'GFForms' ) ) {
+				$gravity_forms_dynamic_css = array(
+					'input[type="radio"].gfield-choice-input:checked, input[type="checkbox"].gfield-choice-input:checked, .ginput_container_consent input[type="checkbox"]:checked' => array(
+						'border-color'     => 'inherit',
+						'background-color' => 'inherit',
+					),
+					'input[type="radio"].gfield-choice-input:focus, input[type="checkbox"].gfield-choice-input:focus, .ginput_container_consent input[type="checkbox"]:focus' => array(
+						'border-color' => 'var(--ast-global-color-0, #046BD2)',
+						'box-shadow'   => 'none',
+						'outline'      => 'none',
+						'color'        => 'var(--ast-form-input-focus-text, #475569)',
+					),
+				);
+				$forms_default_styling_css = array_merge( $forms_default_styling_css, $gravity_forms_dynamic_css );
+			}
+
+			// Default form styling accessibility options compatibility.
+			if ( $enable_site_accessibility ) {
+				$outline_style          = astra_get_option( 'site-accessibility-highlight-type' );
+				$outline_color          = astra_get_option( 'site-accessibility-highlight-color' );
+				$outline_input_style    = astra_get_option( 'site-accessibility-highlight-input-type' );
+				$outline_input_color    = astra_get_option( 'site-accessibility-highlight-input-color' );
+				$input_highlight        = ( 'disable' !== $outline_input_style );
+				$selected_outline_style = $input_highlight ? $outline_input_style : $outline_style;
+				$selected_outline_color = $input_highlight ? $outline_input_color : $outline_color;
+				$forms_default_styling_css['input[type="text"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type=reset]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus, textarea:focus'] = array(
+					'border-color' => $selected_outline_color ? $selected_outline_color : '#046BD2',
+					'box-shadow'   => 'none',
+					'outline'      => 'none',
+					'color'        => 'var(--ast-form-input-focus-text, #475569)',
+				);
+
+				// Contact form 7 accessibility compatibility.
+				if ( defined( 'WPCF7_VERSION' ) ) {
+					$forms_default_styling_css['.wpcf7 input.wpcf7-form-control:not([type=submit]):focus, .wpcf7 select.wpcf7-form-control:focus, .wpcf7 textarea.wpcf7-form-control:focus'] = array(
+						'border-style' => $selected_outline_style ? $selected_outline_style : 'inherit',
+						'border-color' => $selected_outline_color ? $selected_outline_color : '#046BD2',
+						'border-width' => 'thin',
+						'box-shadow'   => 'none',
+						'outline'      => 'none',
+						'color'        => 'var(--ast-form-input-focus-text, #475569)',
+					);
+				}
+
+				// Gravity forms accessibility compatibility.
+				if ( class_exists( 'GFForms' ) ) {
+					$forms_default_styling_css['input[type="radio"].gfield-choice-input:focus, input[type="checkbox"].gfield-choice-input:focus, .ginput_container_consent input[type="checkbox"]:focus'] = array(
+						'border-style' => $selected_outline_style ? $selected_outline_style : 'inherit',
+						'border-color' => $selected_outline_color ? $selected_outline_color : '#046BD2',
+						'border-width' => 'thin',
+						'box-shadow'   => 'none',
+						'outline'      => 'none',
+						'color'        => 'var(--ast-form-input-focus-text, #475569)',
+					);
+				}
+			}
+
+			$css .= astra_parse_css( $forms_default_styling_css );
+			return $css;
+		}
+
+		/**
 		 * Check if fullwidth layout with sidebar is supported.
 		 * Old users - yes
 		 * New users - no
@@ -5252,7 +6011,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 		 * @since 4.2.0
 		 */
 		public static function astra_fullwidth_sidebar_support() {
-			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS, array() );
 			return apply_filters( 'astra_get_option_fullwidth_sidebar_support', isset( $astra_settings['fullwidth_sidebar_support'] ) ? false : true );
 		}
 
@@ -5265,8 +6024,26 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 		 * @since 4.2.2
 		 */
 		public static function astra_core_form_btns_styling() {
-			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS, array() );
 			return apply_filters( 'astra_core_form_btns_styling', isset( $astra_settings['v4-2-2-core-form-btns-styling'] ) ? false : true );
+		}
+
+		/**
+		 * Load Blog Layout static CSS when it is enabled.
+		 *
+		 * @since 4.6.0
+		 */
+		public static function blog_layout_static_css() {
+
+			$bl_selector = '.ast-blog-layout-6-grid';
+
+			$blog_layout_css = '
+			' . $bl_selector . ' .ast-blog-featured-section:before {
+				content: "";
+			}
+			';
+
+			return $blog_layout_css;
 		}
 
 		/**
@@ -5291,6 +6068,43 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$astra_settings                           = get_option( ASTRA_THEME_SETTINGS, array() );
 			$astra_settings['v4-5-0-backward-option'] = isset( $astra_settings['v4-5-0-backward-option'] ) ? false : true;
 			return apply_filters( 'astra_upgrade_color_styles', $astra_settings['v4-5-0-backward-option'] );
+		}
+
+		/**
+		 * In 4.6.0 version we are having new stylings.
+		 * 1. Comments area refined.
+		 * 2. Defaults improvement for single-blog layouts.
+		 * 3. Form default UI improved.
+		 *
+		 * @return bool true|false.
+		 * @since 4.6.0
+		 */
+		public static function astra_4_6_0_compatibility() {
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			return apply_filters( 'astra_get_option_v4-6-0-backward-option', isset( $astra_settings['v4-6-0-backward-option'] ) ? false : true );
+		}
+
+		/**
+		 * In 4.6.2 version we are having new stylings.
+		 * 1. Keeping meta featured image disable option useless for old users.
+		 *
+		 * @return bool true|false.
+		 * @since 4.6.2
+		 */
+		public static function astra_4_6_2_compatibility() {
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			return apply_filters( 'astra_get_option_v4-6-2-backward-option', isset( $astra_settings['v4-6-2-backward-option'] ) ? false : true );
+		}
+
+		/**
+		 * Upgrade Astra default button stylings & compatibility with Spectra buttons.
+		 *
+		 * @return bool true|false.
+		 * @since 4.6.4
+		 */
+		public static function astra_4_6_4_compatibility() {
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			return apply_filters( 'astra_get_option_btn-stylings-upgrade', isset( $astra_settings['btn-stylings-upgrade'] ) ? false : true );
 		}
 	}
 }
