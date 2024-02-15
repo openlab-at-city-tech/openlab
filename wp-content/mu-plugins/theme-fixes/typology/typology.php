@@ -16,6 +16,22 @@ add_action(
 );
 
 /**
+ * Remove Typology admin cruft.
+ */
+add_action(
+	'wp_dashboard_setup',
+	function() {
+		remove_meta_box( 'typology_dashboard_widget', 'dashboard', 'side' );
+
+		remove_submenu_page(
+			'themes.php',
+			'typology-importer'
+		);
+	},
+	20
+);
+
+/**
  * Ensure that Redux Framework is activated.
  */
 add_action(
