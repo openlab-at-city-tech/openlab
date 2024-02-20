@@ -1,0 +1,667 @@
+
+/* START OF SHORTCODE BUILDER CSS */
+
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder {
+    z-index: 100;
+    position: absolute;
+    top: calc(50% - 25vh);
+    left: calc(50% - 18vw);
+    width: 34vw;
+    height: auto;
+    max-height: 50vh;
+
+    background-color: #fff;
+    border: 1px solid #333;
+    filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.1));
+    overflow-y: auto;
+}
+.is-sidebar-opened #zp-ZotpressMetaBox.zp-ShortcodeBuilder {
+    left: calc(((100% - 280px) / 2) - 18vw);
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Inner {
+    padding: 6px 15px 15px 15px;
+}
+
+#zp-ShortcodeBuilder-Close {
+    display: none;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ShortcodeBuilder-Close {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    display: inline-block;
+}
+
+/* search autocomplete */
+
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder select#zp-ZotpressMetaBox-Acccount-Select {
+    border: none;
+    font-size: 0.9em;
+    width: auto;
+}
+
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Account,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Search-Inner,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-List,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Type,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Biblio-Options,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Biblio-Generate,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-InText-Options,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-InText-Generate,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-InTextBib-Options,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-InTextBib-Generate {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#zp-ZotpressMetaBox-Type {
+    border: none;
+    margin: 0 15px;
+    padding: 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder #zp-ZotpressMetaBox-Type {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+#zp-ZotpressMetaBox-Type h4 {
+    display: none;
+}
+#zp-ZotpressMetaBox-Type ul,
+#zp-ZotpressMetaBox-Type ul li {
+    margin: 0;
+    padding: 0;
+}
+#zp-ZotpressMetaBox-Type ul li.ui-tab a {
+    box-shadow: none !important;
+    color: #1e1e1e;
+    float: left;
+    padding: 8px 14px;
+    text-decoration: none;
+}
+#zp-ZotpressMetaBox-Type ul li.ui-tabs-active a {
+    border-bottom: 3px solid var(--wp-admin-theme-color);
+    padding-bottom: 5px;
+}
+
+/* options */
+
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder  #zp-ZotpressMetaBox-Biblio-Options-Inner,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder  #zp-ZotpressMetaBox-InText-Options-Inner,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder  #zp-ZotpressMetaBox-InTextBib-Options-Inner {
+    padding: 8px 0;
+}
+
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub {
+    margin: 0;
+    padding: 8px 12px;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub h4 {
+    margin: 0;
+    padding: 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub h4 span.toggle {
+    padding: 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub h4 span.toggle-button {
+    margin: 4px 0 0 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub-Inner {
+    padding: 10px 0 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub label {
+    display: block;
+    padding: 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub p.note {
+    margin: 0.5em 0 0.75em 14px;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub .zp-ZotpressMetaBox-Field-Radio label {
+    padding: 0 0 0 1em;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder .zp-ZotpressMetaBox-Sub .zp-ZotpressMetaBox-Field-Radio input {
+    margin: 0 4px;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder div.zp-ZotpressMetaBox-Sub hr {
+    margin: 5px 0;
+}
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder div#zp-ZotpressMetaBox-Biblio-Generate,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder div#zp-ZotpressMetaBox-InText-Generate,
+#zp-ZotpressMetaBox.zp-ShortcodeBuilder div#zp-ZotpressMetaBox-InTextBib-Generate {
+    margin-bottom: 0;
+}
+
+/* There's a CSS gap/bug where Dashicons aren't styled in the editor menu */
+
+#editor .components-dropdown-menu__menu .components-button.has-icon .dashicon {
+    margin-right: 12px;
+}
+
+/* END OF SHORTCODE BUILDER CSS */
+
+
+
+/*
+   THE BELOW IS POTENTIALLY LEGACY CODE
+   and should be incorporated above
+*/
+
+
+
+/* START OF AUTOCOMPLETE CSS */
+
+.ui-autocomplete.zp-autocomplete {
+    background: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    width: 253px !important;
+    overflow-y: auto;
+    overflow-x: hidden; /* prevent horizontal scrollbar */
+}
+.ui-autocomplete.zp-autocomplete-wide {
+    width: 775px !important;
+}
+
+.ui-autocomplete.zp-autocomplete li {
+    background: none;
+    border: none;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+}
+
+.ui-autocomplete.zp-autocomplete-wide li strong {
+    font-weight: 600;
+}
+
+.ui-autocomplete.zp-autocomplete li a {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    display: block;
+    color: #666;
+    margin: 0;
+    padding: 6px 10px 6px 10px;
+}
+.ui-autocomplete.zp-autocomplete li a.ui-state-focus,
+.ui-autocomplete.zp-autocomplete li a.ui-state-hover {
+    background: none;
+    background-color: #eee; /* 8ec5fb */
+    margin: 0;
+
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+}
+
+.ui-tabs .ui-tabs-nav li a,
+.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a {
+    outline: none;
+}
+
+/* END OF AUTOCOMPLETE CSS */
+
+
+
+/* START OF CREATOR BASICS */
+
+.zp-ZotpressMetaBox-Sub {
+    border: 1px solid #EEEEEE;
+    margin: 0 15px;
+    padding: 0 5px;
+}
+
+/* END OF CREATOR BASICS */
+
+
+
+/* START OF IN-TEXT CREATOR CSS */
+
+div#zp-ZotpressMetaBox-InText {
+    display: none;
+}
+
+
+/* START OF SEARCH CSS */
+
+div#zp-ZotpressMetaBox-Search {
+    margin-bottom: 10px;
+}
+div#zp-ZotpressMetaBox-Search-Inner {
+    border: 5px solid #E14D43;
+    margin: 5px 15px;
+
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+input#zp-ZotpressMetaBox-Search-Input {
+    border: none;
+    box-shadow: none !important;
+    background: #fff;
+    font-size: inherit;
+    margin: 0;
+    padding: 4px 10px;
+    width: calc(100% - 4px);
+    height: 22px;
+}
+input#zp-ZotpressMetaBox-Search-Input.ui-autocomplete-loading {
+    background: #fff url("../images/loading_default.gif") no-repeat right center;
+}
+/* input#zp-ZotpressMetaBox-Search-Input.help {
+    color: #aaa;
+} */
+
+
+/* Start of generate */
+
+div#zp-ZotpressMetaBox-Biblio-Generate,
+div#zp-ZotpressMetaBox-InText-Generate,
+div#zp-ZotpressMetaBox-InTextBib-Generate {
+    background: none;
+    margin: 15px;
+}
+div#zp-ZotpressMetaBox-Biblio-Generate-Inner,
+div#zp-ZotpressMetaBox-InText-Generate-Inner,
+div#zp-ZotpressMetaBox-InTextBib-Generate-Inner {
+    display: none;
+    margin: 15px 0 0 0;
+}
+
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-Biblio-Generate-Button,
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-InText-Generate-Button,
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-InTextBib-Generate-Button {
+    color: #fff;
+    height: auto;
+}
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-Biblio-Clear-Button,
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-InText-Clear-Button,
+#ZotpressMetaBox .ui-widget-content a#zp-ZotpressMetaBox-InTextBib-Clear-Button {
+    float: right;
+    height: auto;
+}
+
+div#zp-ZotpressMetaBox-Biblio-Generate hr.clear,
+div#zp-ZotpressMetaBox-InText-Generate hr.clear,
+div#zp-ZotpressMetaBox-InTextBib-Generate hr.clear {
+    border: none;
+    clear: both;
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+    height: 1px;
+}
+
+div#ZotpressMetaBox div#zp-ZotpressMetaBox-Biblio-Generate label,
+div#ZotpressMetaBox div#zp-ZotpressMetaBox-InText-Generate label,
+div#ZotpressMetaBox div#zp-ZotpressMetaBox-InTextBib-Generate label {
+    font-size: 13px;
+    display: block;
+    line-height: 1em;
+    margin-bottom: 0.5em;
+    padding: 0;
+}
+
+#zp-ZotpressMetaBox-Biblio-Generate-Text,
+#zp-ZotpressMetaBox-InText-Generate-Text,
+#zp-ZotpressMetaBox-InTextBib-Generate-Text {
+    font-size: 13px;
+    width: 100%;
+}
+
+/* Start of Visual Indicator Item CSS */
+
+div#zp-ZotpressMetaBox-List {
+    margin-bottom: 10px;
+    padding: 0 20px;
+}
+
+div#zp-ZotpressMetaBox-List div.item {
+    position: relative;
+    border-top: 1px solid #eee;
+    font-weight: 400;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    padding: 0.5rem 0;
+    width: 100%;
+}
+div#zp-ZotpressMetaBox-List div.item:first-child {
+    border-top: none;
+}
+
+div#zp-ZotpressMetaBox-List div.item .label {
+    display: block;
+    width: 90%;
+}
+
+div#zp-ZotpressMetaBox-List div.item .options {
+    margin: 0.5rem 0;
+    display: none;
+    width: 90%;
+}
+div#zp-ZotpressMetaBox-List.intext div.item .options {
+    display: block;
+}
+div#zp-ZotpressMetaBox-List div.item .options:before,
+div#zp-ZotpressMetaBox-List div.item .options:after {
+    content: "";
+    display: table;
+}
+div#zp-ZotpressMetaBox-List div.item .options:after {
+    clear: both;
+}
+div#zp-ZotpressMetaBox-List div.item .options label {
+    float: left;
+    line-height: 1.5;
+    margin-right: 0.2rem;
+}
+div#zp-ZotpressMetaBox-List div.item .options input {
+    text-transform: uppercase;
+    font-weight: 600;
+    float: left;
+    font-size: 0.7rem;
+    padding: 0 0.2rem;
+    width: 40%;
+}
+
+div#zp-ZotpressMetaBox-List div.item .item_key,
+div#zp-ZotpressMetaBox-List div.item .account {
+    display: block;
+    margin-top: 0.25rem;
+}
+div#zp-ZotpressMetaBox-List div.item .account {
+    margin-top: 0;
+}
+
+div#zp-ZotpressMetaBox-List div.item .delete {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    background-color: #e14d43;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.25em;
+    line-height: 1;
+    padding: 0.05em 0.35em 0.25em 0.35em;
+
+    border-radius: 1em;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+}
+
+div#zp-ZotpressMetaBox-List hr.clear {
+    background: none;
+    border: none;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+}
+
+
+/* Start of Account CSS */
+
+.edit-post-meta-boxes-area #poststuff div#ZotpressMetaBox h2.hndle {
+    color: #191e23; /* 555d66 */
+    font-size: inherit;
+    border-bottom: 0;
+}
+
+#zp-ZotpressMetaBox-Account {
+    margin: 0 15px;
+}
+#zp-ZotpressMetaBox-Account label {
+    display: none;
+}
+select#zp-ZotpressMetaBox-Acccount-Select {
+    /* width: calc(100% - 4px); */
+    width: calc(100% - 35px);
+    height: 22px;
+}
+
+
+/* START OF OPTIONS CSS */
+
+#zp-ZotpressMetaBox #zp-ZotpressMetaBox-Biblio-Options-Inner,
+#zp-ZotpressMetaBox #zp-ZotpressMetaBox-InText-Options-Inner,
+#zp-ZotpressMetaBox #zp-ZotpressMetaBox-InTextBib-Options-Inner {
+    display: none;
+    font-size: 0.9em;
+    line-height: 2;
+    padding: 5px;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub h4 {
+    color: #555d66;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Field {
+    font-size: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Field-Radio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Field-Radio label {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    margin: 0 4px 0 15px;
+    padding: 0;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub input,
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub select {
+    font-size: inherit;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub select {
+    height: auto;
+    min-height: 1em;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub .right {
+    float: right;
+    line-height: 1;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub h5 {
+    border-top: 1px solid #eee;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0.5em 0;
+    padding: 1em 0 0.25em;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub span.toggle {
+    cursor: pointer;
+    display: block;
+    font-size: 0.8em;
+    font-weight: normal;
+    line-height: 2;
+    padding: 5px;
+    text-transform: uppercase;
+    width: 100%;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub span.toggle-button {
+    content: "\f347";
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    font-size: 15px;
+    line-height: 15px;
+    margin: 4px 8px 0 0;
+    padding: 0;
+    text-align: right;
+    width: auto;
+    height: 16px;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub span.toggle-button.dashicons-arrow-up-alt2 {
+    content: "\f343";
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub hr {
+    border: none;
+    background-color: #fff;
+    clear: both;
+    margin: 10px 0 0;
+    padding: 0;
+    height: 1px;
+}
+div#ZotpressMetaBox div#zp-ZotpressMetaBox-Biblio-Options select#zp-ZotpressMetaBox-Biblio-Options-Style {
+    float: none;
+}
+
+input#zp-ZotpressMetaBox-Biblio-Options-Format,
+input#zp-ZotpressMetaBox-InText-Options-Format,
+input#zp-ZotpressMetaBox-InTextBib-Options-Format {
+    min-width: 185px;
+}
+
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub p.note {
+    color: #666;
+    font-size: 0.8em;
+    margin: 0.5em 1em 1em;
+}
+#zp-ZotpressMetaBox .zp-ZotpressMetaBox-Sub p.note code {
+    font-size: 1.1em;
+}
+
+/* END OF IN-TEXT CSS */
+
+
+
+/* START OF GENERIC METABOX CSS */
+
+div#zp-ZotpressMetaBox-Inner {
+    padding: 15px 0;
+}
+
+div#ZotpressMetaBox.postbox div.inside {
+    margin: 0;
+    padding: 0;
+}
+
+div#ZotpressMetaBox h3.hndle span {
+    background: transparent url('../images/icon.png') no-repeat left center;
+    padding-left: 22px;
+}
+
+div.zp-ZotpressMetaBox-Tabs {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 1px;
+    margin-bottom: 10px;
+}
+div.zp-ZotpressMetaBox-Tabs ul.ui-tabs-nav {
+    display: none;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    background-color: #f6f6f6;
+    padding: 3px;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+div.zp-ZotpressMetaBox-Tabs ul li,
+div.zp-ZotpressMetaBox-Tabs ul.ui-tabs-nav li {
+    margin: 0;
+    padding: 5px 5px 0;
+    float: left;
+    height: 13px;
+}
+div.zp-ZotpressMetaBox-Tabs ul.ui-tabs-nav li.ui-state-active {
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    background-color: #fff;
+    height: 13px;
+}
+div.zp-ZotpressMetaBox-Tabs ul.ui-tabs-nav li a {
+    /*font: 9px/10px 'Arial', sans-serif;*/
+    letter-spacing: 1px;
+    padding: 0 3px;
+    text-decoration: none;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+div.zp-ZotpressMetaBox-Tabs ul.ui-tabs-nav li.ui-state-active a {
+    color: #333;
+}
+div.zp-ZotpressMetaBox-Tabs input[type="radio"] {
+    vertical-align: text-top;
+}
+
+div#ZotpressMetaBox h4 {
+    margin: 0;
+    padding: 0;
+}
+
+div#ZotpressMetaBox div.zp-Tab label {
+    font-size: 12px;
+    display: block;
+    margin: 0;
+    padding: 0 0 5px 0;
+}
+div#ZotpressMetaBox div.zp-Tab select {
+    width: 100%;
+    height: 5em !important;
+}
+
+div.zp-Tab {
+    background-color: #fff;
+    padding: 0.6em !important;
+}
+p.zp-Note {
+    font-size: 9px !important;
+    font-style: italic !important;
+    color: #aaaaaa !important;
+    margin-top: 0 !important;
+}
+p.zp-Note {
+    font-size: 10px !important;
+    color: #888 !important;
+}
+div.zp-Tab span.label {
+    margin-top: 5px;
+    font-weight: bold;
+}
+div.zp-Tab span.label em {
+    font-style: normal;
+    text-decoration: underline;
+}
+
+.postbox div.zp-Tab input[type="text"],
+div.zp-Tab select {
+    margin-bottom: 10px;
+}
+
+/* MAIN */
+#normal-sortables .zp-ZotpressMetaBox-Tabs .sm {
+    display: none;
+}
+#normal-sortables .zp-ZotpressMetaBox-Tabs .wide {
+    display: block;
+}
+/* MAIN */
+
+/* SIDEBAR */
+#side-sortables .zp-ZotpressMetaBox-Tabs .sm {
+    display: block;
+}
+#side-sortables .zp-ZotpressMetaBox-Tabs .wide {
+    display: none;
+}
+/* SIDEBAR */

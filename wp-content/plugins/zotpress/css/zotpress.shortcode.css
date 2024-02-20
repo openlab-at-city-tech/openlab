@@ -1,0 +1,316 @@
+
+/* START OF BASIC SHORTCODES */
+
+div.zp-Zotpress {
+    /* Modified to fit with WP 2020 theme */
+    margin-top: 0;
+    margin-bottom: 1em;
+    /* margin: 0 0 1em; */
+}
+div.zp-Zotpress div.zp-List.loading {
+    background: transparent url('../images/loading_default.gif') no-repeat center bottom;
+    padding-bottom: 21px;
+    min-height: 2em;
+}
+
+/* Thanks to http://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ */
+div.zp-Zotpress a {
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+   -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+div.zp-Zotpress div.zp-Entry.zp-HasImage {
+    clear: both;
+}
+div.zp-Zotpress div.zp-Entry-Image {
+    float: right;
+}
+
+a.zp-CiteRIS,
+a.zp-DownloadURL {
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+a.zp-CiteRIS:before,
+a.zp-DownloadURL:before {
+    content: "(";
+}
+a.zp-CiteRIS:after,
+a.zp-DownloadURL:after {
+    content: ")";
+}
+
+.zp-List p.hide {
+    display: none;
+}
+
+.zp-Info {
+    background: #ffeaa7 url('../images/icon-64x64.png') no-repeat top 0.4em right 0.4em;
+    background-size: auto 2em;
+    border: 1px solid #fdcb6e;
+    padding: 0.5em;
+    padding-right: 3em;
+}
+
+
+/* In-Text Citations */
+
+.zp-ZotpressShortcode.cite .summary,
+.zp-ZotpressShortcode.bib .summary {
+    display: none;
+}
+
+.zp-InText-Citation.loading {
+    background: transparent url('../images/loading_default.gif') no-repeat center;
+    background-size: contain;
+    display: inline-block;
+    margin: 0 !important;
+    width: 1em;
+    height: 1em;
+}
+
+/* END OF BASIC SHORTCODES */
+
+
+
+/* START OF BROWSE LIB */
+
+.zp-Browse-Bar {
+    background-color: #fff;
+    border: 2px solid #000;
+}
+.zp-Browse-Bar:before,
+.zp-Browse-Bar:after {
+    content: "";
+    display: table;
+}
+.zp-Browse-Bar:after {
+    clear: both;
+}
+
+.zp-Browse-Collections,
+.zp-Browse-Tags {
+    float: left;
+    width: 50%;
+}
+
+.zp-Browse-Select {
+    overflow: hidden;
+    width: 100%;
+    /* height: 34px; */
+}
+.zp-Browse-Select select {
+    background: transparent;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 0;
+    padding: 0 0.5em;
+    width: 100%;
+    height: 34px;
+}
+.zp-Browse-Collections-Select {
+    border-right: 2px solid #000;
+}
+
+.zp-Collection-Title {
+    letter-spacing: 0.15em;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 3em 0 0 0;
+    padding: 0 0 2em;
+    text-transform: uppercase;
+}
+
+.zp-Entry-Image {
+    float: right;
+    margin: 0 0 1em 1em;
+}
+
+.zp-Zotpress-SearchBox .zp-SearchBy-Container {
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5em 0;
+}
+.zp-Zotpress-SearchBox .zpSearchFilterContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0 0.5em;
+}
+.zp-Zotpress-SearchBox input[type="radio"] {
+    cursor: pointer;
+    margin: 0 0.5em 0 0;
+    vertical-align: middle;
+}
+.zp-Zotpress-SearchBox label {
+    cursor: pointer;
+    margin: 0;
+}
+.zp-Zotpress-SearchBox .zp-SearchBy {
+    margin: 0 1.5em;
+}
+.zp-Zotpress-SearchBox label,
+.zp-Zotpress-SearchBox .zp-SearchBy {
+    font-size: 0.5em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.zpSearchLoading {
+    visibility: hidden;
+    display: block;
+    margin: 1em auto;
+}
+.zpSearchLoading.show {
+    visibility: visible;
+}
+
+.zpSearchResultsItem:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.zpSearchResultsItem .item_key {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 2em;
+}
+
+.zpSearchResultsItem.hidden {
+    display: none !important;
+}
+
+.zp-Zotpress-SearchBox-Input {
+    border: none;
+    width: 100%;
+}
+
+.zpSearchResultsPagingContainer {
+    display: none;
+    margin: 2rem 0;
+}
+
+.zpSearchResultsPagingContainer:before,
+.zpSearchResultsPagingContainer:after {
+    content: "";
+    display: table;
+}
+.zpSearchResultsPagingContainer:after {
+    clear: both;
+}
+.zpSearchResultsPagingContainerInner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.zpSearchResultsPagingContainer span.title {
+    /* display: block; */
+    /* float: left; */
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 2.6;
+    margin-right: 2rem;
+    /* margin: 2px; */
+    /* margin-left: 0; */
+    /* padding: 0 20px 0; */
+    text-transform: uppercase;
+}
+
+.zpSearchResultsPagingCrop {
+    position: relative;
+    /* float: left; */
+    overflow: hidden;
+    width: calc(3.5rem * 5);
+    /* width: 13em; */
+    height: 3.5rem;
+}
+
+.zpSearchResultsPaging {
+    /* z-index: 0; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* height: inherit; */
+    display: flex;
+}
+
+.zpSearchResultsPaging a,
+.zpSearchResultsPaging a:link {
+    display: block;
+    /* float: left; */
+    line-height: 0.9;
+    margin: 0;
+    text-align: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    /* width: 50px; */
+    width: 3.5rem;
+}
+.zpSearchResultsPaging a:focus {
+    box-shadow: none;
+    outline: none;
+}
+.zpSearchResultsPaging a span {
+    border: 2px solid transparent;
+    display: block;
+    padding: calc(1rem - 4px) calc(1.2rem - 4px);
+}
+.zpSearchResultsPaging a.selected span {
+    border-color: #000;
+}
+
+.zpSearchResultsPagingScroller {
+    /* float: left; */
+    /* background-color: #fff; */
+    margin-left: 2rem;
+    text-align: center;
+    /* width: 4.2em; */
+    /* height: 3rem; */
+}
+.zpSearchResultsPagingScroller span {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 3.5rem;
+    line-height: 0.8;
+    /* padding: 5px 10px; */
+    padding: 0 1rem;
+
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;
+}
+.zpSearchResultsPagingScroller span:active {
+    opacity: 0.2;
+}
+
+
+div.zp-List .zp_display_progress {
+    background: transparent url('../images/loading_default.gif') no-repeat center left;
+    font-size: 0.7em;
+    line-height: 2;
+    padding-left: 3em;
+    text-transform: uppercase;
+}
+div.zp-List .csl-left-margin {
+    text-align: left;
+    width: 2.5em !important;
+}
+div.zp-List .csl-right-inline {
+    margin-left: 2.75em !important;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+
+/* END OF BROWSE LIB */
