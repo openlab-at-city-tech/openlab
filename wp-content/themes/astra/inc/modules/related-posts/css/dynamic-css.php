@@ -258,9 +258,7 @@ function astra_related_posts_css( $dynamic_css ) {
 
 		$dynamic_css .= astra_parse_css( $css_max_mobile_output, '', astra_get_mobile_breakpoint() );
 
-		if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
-			$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_inner_section_advanced_css( 'ast-sub-section-related-posts', '.site .ast-single-related-posts-container' );
-		}
+		$dynamic_css .= Astra_Extended_Base_Dynamic_CSS::prepare_inner_section_advanced_css( 'ast-sub-section-related-posts', '.site .ast-single-related-posts-container' );
 
 		return $dynamic_css;
 	}

@@ -71,6 +71,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$narrow_container_max_width = astra_get_option( 'narrow-container-max-width', apply_filters( 'astra_narrow_container_width', 750 ) );
 			$header_logo_width          = astra_get_option( 'ast-header-responsive-logo-width' );
 			$container_layout           = astra_toggle_layout( 'ast-site-content-layout', 'global', false );
+			$render_comment_css         = ( comments_open() || get_comments_number() );
 			// Get the Global Container Layout based on Global Boxed and Global Sidebar Style.
 			if ( 'plain-container' === $container_layout ) {
 				$is_boxed         = ( 'boxed' === astra_get_option( 'site-content-style' ) );
@@ -209,6 +210,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$is_widget_title_support_font_weight = self::support_font_css_to_widget_and_in_editor();
 			$font_weight_prop                    = ( $is_widget_title_support_font_weight ) ? 'inherit' : 'normal';
 
+			// Elementor heading margin compatibility.
+			$elementor_heading_margin_style_comp = self::elementor_heading_margin_style_comp();
+
+			// Elementor Loop block padding compatibility.
+			$elementor_container_padding_style_comp = self::elementor_container_padding_style_comp();
+			
 			$update_customizer_strctural_defaults = astra_check_is_structural_setup();
 			$blog_layout                          = astra_get_blog_layout();
 
@@ -894,9 +901,15 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$content_links_underline = astra_get_option( 'underline-content-links' );
 
 			if ( $content_links_underline ) {
-				$css_output['.ast-single-post .entry-content a, .ast-comment-content a:not(.ast-comment-edit-reply-wrap a)'] = array(
-					'text-decoration' => 'underline',
-				);
+				if ( $render_comment_css ) {
+					$css_output['.ast-single-post .entry-content a, .ast-comment-content a:not(.ast-comment-edit-reply-wrap a)'] = array(
+						'text-decoration' => 'underline',
+					);
+				} else {
+					$css_output['.ast-single-post .entry-content a'] = array(
+						'text-decoration' => 'underline',
+					);
+				}
 
 				$reset_underline_from_anchors = self::unset_builder_elements_underline();
 				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
@@ -2187,6 +2200,17 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				),
 			);
 
+
+			// Handle backward compatibility for Elementor Pro heading's margin.
+			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $elementor_heading_margin_style_comp ) {
+				$elementor_base_css[' .content-area .elementor-widget-theme-post-content h1, .content-area .elementor-widget-theme-post-content h2, .content-area .elementor-widget-theme-post-content h3, .content-area .elementor-widget-theme-post-content h4, .content-area .elementor-widget-theme-post-content h5, .content-area .elementor-widget-theme-post-content h6'] = array(
+					'margin-top'    => '1.5em',
+					'margin-bottom' => 'calc(0.3em + 10px)',
+				);
+				$parse_css .= astra_parse_css( $elementor_base_css );
+
+			}
+
 			if ( true === $update_customizer_strctural_defaults ) {
 				$is_site_rtl               = is_rtl() ? true : false;
 				$ltr_left                  = $is_site_rtl ? esc_attr( 'right' ) : esc_attr( 'left' );
@@ -2304,7 +2328,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						$default_layout_update_css['.search .site-main .no-results .ast-search-submit'] = array(
 							'display' => 'block',
 						);
-						$default_layout_update_css['.search .ast-live-search-results']                  = array(
+						$default_layout_update_css['.search .site-main .no-results .ast-live-search-results'] = array(
 							'max-height' => '200px',
 						);
 					}
@@ -2402,6 +2426,26 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$static_layout_css['.ast-author-box img.avatar'] = array(
 					'margin' => '20px 0 0 0',
 				);
+			}
+
+			// Handle backward compatibility for Elementor Loop block post div container padding.
+			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $elementor_container_padding_style_comp ) {
+				$elementor_base_css['.elementor-loop-container .e-loop-item, .elementor-loop-container .ast-separate-container .ast-article-post, .elementor-loop-container .ast-separate-container .ast-article-single, .elementor-loop-container .ast-separate-container .comment-respond'] = array(
+					'padding' => '0px',
+				);
+				$parse_css .= astra_parse_css( $elementor_base_css );
+			}
+
+			/**
+			 * Beaver Builder themer sticky header compatibility.
+			 */
+			if ( class_exists( 'FLBuilderModel' ) ) {
+				$default_layout_css = array(
+					'body.fl-theme-builder-header.fl-theme-builder-part.fl-theme-builder-part-part #page' => array(
+						'display' => 'block',
+					),
+				);
+				$parse_css         .= astra_parse_css( $default_layout_css );
 			}
 
 			/* Parse CSS from array() -> max-width: (tablet-breakpoint)px CSS */
@@ -2803,25 +2847,33 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'background-color' => esc_attr( $btn_bg_hover_color ),
 						'border-color'     => empty( $btn_border_h_color ) ? esc_attr( $btn_bg_hover_color ) : esc_attr( $btn_border_h_color ),
 					),
-					'.elementor-widget-heading h1.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h1_line_height ),
-					),
-					'.elementor-widget-heading h2.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h2_line_height ),
-					),
-					'.elementor-widget-heading h3.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h3_line_height ),
-					),
-					'.elementor-widget-heading h4.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h4_line_height ),
-					),
-					'.elementor-widget-heading h5.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h5_line_height ),
-					),
-					'.elementor-widget-heading h6.elementor-heading-title' => array(
-						'line-height' => esc_attr( $h6_line_height ),
-					),
 				);
+
+				if ( defined( 'ELEMENTOR_VERSION' ) ) {
+					$global_button_page_builder_desktop = array_merge(
+						$global_button_page_builder_desktop,
+						array(
+							'.elementor-widget-heading h1.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h1_line_height ),
+							),
+							'.elementor-widget-heading h2.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h2_line_height ),
+							),
+							'.elementor-widget-heading h3.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h3_line_height ),
+							),
+							'.elementor-widget-heading h4.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h4_line_height ),
+							),
+							'.elementor-widget-heading h5.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h5_line_height ),
+							),
+							'.elementor-widget-heading h6.elementor-heading-title' => array(
+								'line-height' => esc_attr( $h6_line_height ),
+							),
+						)
+					);
+				}
 
 				if ( $block_editor_legacy_setup && self::gutenberg_core_patterns_compat() && ! astra_button_default_padding_updated() ) {
 					$theme_outline_gb_btn_top_border    = ( isset( $global_custom_button_border_size['top'] ) && ( '' !== $global_custom_button_border_size['top'] && '0' !== $global_custom_button_border_size['top'] ) ) ? astra_get_css_value( $global_custom_button_border_size['top'], 'px' ) : '2px';
@@ -3095,13 +3147,20 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				),
 			);
 
+			if ( ! $render_comment_css ) {
+				unset( $global_button_tablet['.ast-comment-meta'] );
+			}
+
 			if ( ! self::astra_4_6_0_compatibility() ) {
 				$global_button_tablet['.ast-separate-container .ast-comment-list li.depth-1'] = array(
 					'padding' => '1.5em 2.14em',
 				);
-				$global_button_tablet['.ast-separate-container .comment-respond']             = array(
-					'padding' => '2em 2.14em',
-				);
+
+				if ( $render_comment_css ) {
+					$global_button_tablet['.ast-separate-container .comment-respond'] = array(
+						'padding' => '2em 2.14em',
+					);
+				}
 			}
 
 			/* Parse CSS from array() -> max-width: (tablet-breakpoint) px CSS */
@@ -4255,10 +4314,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$social_bg_color       = astra_get_option( 'transparent-header-social-icons-bg-color' );
 				$social_bg_hover_color = astra_get_option( 'transparent-header-social-icons-bg-h-color' );
 
-				$button_color      = astra_get_option( 'transparent-header-button-text-color' );
-				$button_h_color    = astra_get_option( 'transparent-header-button-text-h-color' );
-				$button_bg_color   = astra_get_option( 'transparent-header-button-bg-color' );
-				$button_bg_h_color = astra_get_option( 'transparent-header-button-bg-h-color' );
+				$button_color          = astra_get_option( 'transparent-header-button-text-color' );
+				$button_h_color        = astra_get_option( 'transparent-header-button-text-h-color' );
+				$button_bg_color       = astra_get_option( 'transparent-header-button-bg-color' );
+				$button_bg_h_color     = astra_get_option( 'transparent-header-button-bg-h-color' );
+				$button_border_color   = astra_get_option( 'transparent-header-button-border-color' );
+				$button_h_border_color = astra_get_option( 'transparent-header-button-border-h-color' );
 
 				$divider_color                = astra_get_option( 'transparent-header-divider-color' );
 				$account_icon_color           = astra_get_option( 'transparent-account-icon-color' );
@@ -4310,12 +4371,14 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'color' => esc_attr( $social_hover_color['desktop'] ),
 					),
 					'.ast-theme-transparent-header [CLASS*="ast-header-button-"] .ast-custom-button' => array(
-						'color'      => esc_attr( $button_color ),
-						'background' => esc_attr( $button_bg_color ),
+						'color'        => esc_attr( $button_color ),
+						'background'   => esc_attr( $button_bg_color ),
+						'border-color' => esc_attr( $button_border_color ),
 					),
 					'.ast-theme-transparent-header [CLASS*="ast-header-button-"] .ast-custom-button:hover' => array(
-						'color'      => esc_attr( $button_h_color ),
-						'background' => esc_attr( $button_bg_h_color ),
+						'color'        => esc_attr( $button_h_color ),
+						'background'   => esc_attr( $button_bg_h_color ),
+						'border-color' => esc_attr( $button_h_border_color ),
 					),
 					'.ast-theme-transparent-header .ast-header-divider-element .ast-divider-wrapper'         => array(
 						'border-color' => esc_attr( $divider_color ),
@@ -4503,9 +4566,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			}
 
 			if ( astra_get_option( 'enable-comments-area', true ) ) {
-				if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
-					$parse_css .= Astra_Builder_Base_Dynamic_CSS::prepare_inner_section_advanced_css( 'ast-sub-section-comments', '.site .comments-area' );
-				}
+				$parse_css .= Astra_Extended_Base_Dynamic_CSS::prepare_inner_section_advanced_css( 'ast-sub-section-comments', '.site .comments-area' );
 
 				$comments_radius = astra_get_option(
 					'ast-sub-section-comments-border-radius',
@@ -4541,6 +4602,32 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			return apply_filters( 'astra_theme_dynamic_css', $parse_css );
 
 		}
+
+		/**
+		 * Astra update default font size and font weight.
+		 *
+		 * @since 4.6.5
+		 * @return boolean
+		 */
+		public static function elementor_heading_margin_style_comp() {
+			$astra_settings                             = get_option( ASTRA_THEME_SETTINGS, array() );
+			$astra_settings['elementor-headings-style'] = isset( $astra_settings['elementor-headings-style'] ) ? false : true;
+			return apply_filters( 'elementor_heading_margin', $astra_settings['elementor-headings-style'] );
+		}
+
+
+		/**
+		 * Added Elementor post loop block padding support .
+		 *
+		 * @since 4.6.6
+		 * @return boolean
+		 */
+		public static function elementor_container_padding_style_comp() {
+			$astra_settings                                      = get_option( ASTRA_THEME_SETTINGS, array() );
+			$astra_settings['elementor-container-padding-style'] = isset( $astra_settings['elementor-container-padding-style'] ) ? false : true;
+			return apply_filters( 'elementor_container_padding', $astra_settings['elementor-container-padding-style'] );
+		}
+
 
 		/**
 		 * Return post meta CSS

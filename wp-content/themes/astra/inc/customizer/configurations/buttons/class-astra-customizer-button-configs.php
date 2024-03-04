@@ -609,26 +609,23 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 				$_configs = array_merge( $_configs, $_tab_configs );
 			}
 
-			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
+			// Secondary tab.
+			$_configs[] = array(
+				'name'        => 'section-secondary-ast-context-tabs',
+				'section'     => 'section-buttons',
+				'type'        => 'control',
+				'control'     => 'ast-builder-header-control',
+				'priority'    => 0,
+				'description' => '',
+			);
 
-				// Secondary tab.
-				$_configs[] = array(
-					'name'        => 'section-secondary-ast-context-tabs',
-					'section'     => 'section-buttons',
-					'type'        => 'control',
-					'control'     => 'ast-builder-header-control',
-					'priority'    => 0,
-					'description' => '',
-				);
+			// Only add outline presets to secondary button presets.
+			$secondary_btn_preset_index = 13;
 
-				// Only add outline presets to secondary button presets.
-				$secondary_btn_preset_index = 13;
-
-				// Add context & priority dynamically to secondary tab options.
-				for ( $index = $secondary_btn_preset_index, $priority = 0; $index < count( $_configs ) - 1; $index++ ) {
-					$_configs[ $index ]['context']  = Astra_Builder_Helper::$design_tab;
-					$_configs[ $index ]['priority'] = ++$priority;
-				}
+			// Add context & priority dynamically to secondary tab options.
+			for ( $index = $secondary_btn_preset_index, $priority = 0; $index < count( $_configs ) - 1; $index++ ) {
+				$_configs[ $index ]['context']  = Astra_Builder_Helper::$design_tab;
+				$_configs[ $index ]['priority'] = ++$priority;
 			}
 
 			if ( false === Astra_Builder_Helper::$is_header_footer_builder_active ) {

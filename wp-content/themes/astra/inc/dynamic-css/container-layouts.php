@@ -244,7 +244,8 @@ function astra_container_layout_css() {
 					margin-left: 0;
 					margin-right: 0;
 				}
-				.single.ast-page-builder-template .entry-header + .entry-content {
+				.single.ast-page-builder-template .entry-header + .entry-content,
+				.single.ast-page-builder-template .ast-single-entry-banner + .site-content article .entry-content {
 					margin-bottom: 2em;
 				}
 				@media(min-width: ' . $tablet_breakpoint . 'px) {

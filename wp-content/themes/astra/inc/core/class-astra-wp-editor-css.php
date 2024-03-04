@@ -457,6 +457,9 @@ class Astra_WP_Editor_CSS {
 			'.block-editor-block-list__block'  => array(
 				'color' => esc_attr( $text_color ),
 			),
+			'.has-text-color .block-editor-block-list__block' => array(
+				'color' => 'inherit',
+			),
 			// Global selection CSS.
 			'.block-editor-block-list__layout .block-editor-block-list__block ::selection,.block-editor-block-list__layout .block-editor-block-list__block.is-multi-selected .editor-block-list__block-edit:before' => array(
 				'background-color' => esc_attr( $theme_color ),

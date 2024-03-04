@@ -797,7 +797,7 @@ if ( ! function_exists( 'astra_get_custom_html' ) ) {
 		$custom_html_content = astra_get_option( $option_name );
 
 		if ( ! empty( $custom_html_content ) ) {
-			$custom_html = '<div class="ast-custom-html">' . do_shortcode( $custom_html_content ) . '</div>';
+			$custom_html = '<div class="ast-custom-html">' . do_shortcode( wp_kses_post( $custom_html_content ) ) . '</div>';
 		} elseif ( current_user_can( 'edit_theme_options' ) ) {
 			$custom_html = '<a href="' . esc_url( admin_url( 'customize.php?autofocus[control]=' . ASTRA_THEME_SETTINGS . '[' . $option_name . ']' ) ) . '">' . __( 'Add Custom HTML', 'astra' ) . '</a>';
 		}
@@ -836,10 +836,10 @@ if ( ! function_exists( 'astra_get_custom_button' ) ) {
 		$outside_menu_item = apply_filters( 'astra_convert_link_to_button', $outside_menu );
 
 		if ( '1' == $outside_menu_item ) {
-			$custom_html = '<a class="ast-custom-button-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '><div class=' . esc_attr( $button_classes ) . '>' . esc_html( do_shortcode( $button_text ) ) . '</div></a>';
+			$custom_html = '<a class="ast-custom-button-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '><div class=' . esc_attr( $button_classes ) . '>' . esc_html( do_shortcode( wp_kses_post( $button_text ) ) ) . '</div></a>';
 		} else {
-			$custom_html  = '<a class="ast-custom-button-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '><div class=' . esc_attr( $button_classes ) . '>' . esc_html( do_shortcode( $button_text ) ) . '</div></a>';
-			$custom_html .= '<a class="menu-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '>' . esc_html( do_shortcode( $button_text ) ) . '</a>';
+			$custom_html  = '<a class="ast-custom-button-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '><div class=' . esc_attr( $button_classes ) . '>' . esc_html( do_shortcode( wp_kses_post( $button_text ) ) ) . '</div></a>';
+			$custom_html .= '<a class="menu-link" href="' . esc_url( do_shortcode( $header_button['url'] ) ) . '" ' . $new_tab . ' ' . $link_rel . '>' . esc_html( do_shortcode( wp_kses_post( $button_text ) ) ) . '</a>';
 		}
 
 		return $custom_html;
@@ -946,7 +946,7 @@ if ( ! function_exists( 'astra_get_small_footer_custom_text' ) ) {
 			$output = str_replace( '[theme_author]', '<a href="' . esc_url( $theme_author['theme_author_url'] ) . '">' . $theme_author['theme_name'] . '</a>', $output );
 		}
 
-		return do_shortcode( $output );
+		return do_shortcode( wp_kses_post( $output ) );
 	}
 }
 

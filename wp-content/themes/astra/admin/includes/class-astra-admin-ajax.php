@@ -88,9 +88,10 @@ class Astra_Admin_Ajax {
 		return apply_filters(
 			'astra_admin_settings_datatypes',
 			array(
-				'self_hosted_gfonts'    => 'bool',
-				'preload_local_fonts'   => 'bool',
-				'use_old_header_footer' => 'bool',
+				'enable_optimized_inline_css' => 'bool',
+				'self_hosted_gfonts'          => 'bool',
+				'preload_local_fonts'         => 'bool',
+				'use_old_header_footer'       => 'bool',
 			)
 		);
 	}

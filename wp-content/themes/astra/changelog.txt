@@ -1,3 +1,24 @@
+v4.6.6
+- New: Introducing "Optimize Inline CSS" option in "Astra Dashboard > Settings > Performance tab".
+- New: Introducing a new border color option for transparent header buttons.
+- Fix: Menu dropdown arrow icon is missing if Astra Pro is enabled & nav menu addon is disabled.
+- Fix: Elementor Archive template & Loop builder extra padding issue coming from the theme side.
+- Fix: Submenu dropdown arrow not visible for menu-3 to menu-10 when nav menu pro addon is activated.
+- Fix: Block editor - List block text color does not work in the editor.
+- Fix: Post Navigation - Next post navigation link not properly aligned to right when the previous post navigation link is absent.
+
+v4.6.5
+- Improved codebase for improved security.
+- Improvement: Live Search - Results dropdown UI improved for better user experience.
+- Improvement: Comments Area & Related Posts - New border & spacing options availed for old header-footer setup users.
+- Fix: Blog/Archive - Column layouts break the sizes of post structures which are built by Elementor flex modal with its post block.
+- Fix: Margin Issue for heading tags in Elementor single post template with WP Editor Content.
+- Fix: Beaver Builder themer sticky header option not working, when part section is added above the header.
+- Fix: Multiple select fields inner text cropped due to insufficient height.
+- Fix: Single Post - Social Sharing Astra Pro's design settings not visible for the old header-footer setup.
+- Fix: Theme footer is visible even Beaver Builder themer footer is set which cause double footer issue.
+- Fix: Starter Content - Having Line height UI issue with Starter Template's block patterns.
+
 v4.6.4
 - New: Introducing new "rem" unit support for font-size in customizer typography settings.
 - Improvement - Accessibility improvement for search form input fields.

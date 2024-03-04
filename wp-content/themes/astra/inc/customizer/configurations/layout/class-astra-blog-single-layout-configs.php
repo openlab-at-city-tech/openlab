@@ -31,7 +31,7 @@ if ( ! class_exists( 'Astra_Blog_Single_Layout_Configs' ) ) {
 		public function register_configuration( $configurations, $wp_customize ) {
 
 			/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			$tab_config = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab;
+			$tab_config = Astra_Builder_Helper::$design_tab;
 
 			$_configs = array(
 
@@ -163,16 +163,14 @@ if ( ! class_exists( 'Astra_Blog_Single_Layout_Configs' ) ) {
 				),
 			);
 
-			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
-				$_configs[] = array(
-					'name'        => 'section-blog-single-ast-context-tabs',
-					'section'     => 'section-blog-single',
-					'type'        => 'control',
-					'control'     => 'ast-builder-header-control',
-					'priority'    => 0,
-					'description' => '',
-				);
-			}
+			$_configs[] = array(
+				'name'        => 'section-blog-single-ast-context-tabs',
+				'section'     => 'section-blog-single',
+				'type'        => 'control',
+				'control'     => 'ast-builder-header-control',
+				'priority'    => 0,
+				'description' => '',
+			);
 
 			$configurations = array_merge( $configurations, $_configs );
 

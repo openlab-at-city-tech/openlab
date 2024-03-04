@@ -1469,7 +1469,7 @@ class Astra_Posts_Single_Structures_Configs extends Astra_Customizer_Config_Base
 			}
 
 			if ( 'post' !== $post_type && Astra_Builder_Helper::$is_header_footer_builder_active ) {
-				$_configs = array_merge( $_configs, Astra_Builder_Base_Configuration::prepare_advanced_tab( $parent_section ) );
+				$_configs = array_merge( $_configs, Astra_Extended_Base_Configuration::prepare_advanced_tab( $parent_section ) );
 			}
 
 			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort

@@ -95,6 +95,26 @@ function astra_navigation_css( $dynamic_css ) {
 		}
 	';
 
+	// rtl css for post navigation.
+	if ( is_rtl() ) {
+		$navigation_css .= '
+		@media( min-width: 320px ) {
+			.single .post-navigation .nav-previous a {
+					text-align: start;
+				}
+				.single .post-navigation .nav-next a {
+					text-align: end;
+				}
+			}
+			@media( max-width: ' . $mobile_breakpoint . 'px ) {
+				.single .post-navigation .nav-links {
+					padding-left: 0px;
+					padding-right: 0px;
+				}
+			}
+		';
+	}
+
 	$dynamic_css .= Astra_Enqueue_Scripts::trim_css( $navigation_css );
 
 	return $dynamic_css;

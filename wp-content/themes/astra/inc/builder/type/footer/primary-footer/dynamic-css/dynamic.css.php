@@ -34,7 +34,7 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 
 	$dynamic_css .= astra_parse_css( $css_output_desktop );
 	// Advanced CSS for Header Builder.
-	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( 'section-footer-builder-layout', '.ast-hfb-header .site-footer' );
+	$dynamic_css .= Astra_Extended_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( 'section-footer-builder-layout', '.ast-hfb-header .site-footer' );
 
 	$footer_css_output_tablet = array(
 		'.site-footer' => astra_get_responsive_background_obj( $global_footer_bg, 'tablet' ),
@@ -166,7 +166,7 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 
 	$dynamic_css .= $css_output;
 
-	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( $_section, $selector );
+	$dynamic_css .= Astra_Extended_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( $_section, $selector );
 
 	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_visibility_css( $_section, $selector, 'grid' );
 

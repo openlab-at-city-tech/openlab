@@ -685,6 +685,17 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 						'priority'  => 60,
 						'context'   => Astra_Builder_Helper::$design_tab,
 					),
+					array(
+						'name'      => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'default'   => astra_get_option( 'transparent-header-buttons-border-group' ),
+						'type'      => 'control',
+						'control'   => 'ast-color-group',
+						'title'     => __( 'Border Color', 'astra' ),
+						'section'   => 'section-transparent-header',
+						'transport' => 'postMessage',
+						'priority'  => 60,
+						'context'   => Astra_Builder_Helper::$design_tab,
+					),
 
 					/**
 					 * Option: Button Text Color
@@ -752,6 +763,38 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 						'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_alpha_color' ),
 						'priority'          => 11,
 						'title'             => __( 'Hover', 'astra' ),
+					),
+
+					/**
+					 * Option: Button Border Color
+					 */
+					array(
+						'name'      => 'transparent-header-button-border-color',
+						'transport' => 'postMessage',
+						'default'   => astra_get_option( 'transparent-header-button-border-color' ),
+						'type'      => 'sub-control',
+						'parent'    => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'section'   => 'section-transparent-header',
+						'tab'       => __( 'Normal', 'astra' ),
+						'control'   => 'ast-color',
+						'priority'  => 5,
+						'title'     => __( 'Normal', 'astra' ),
+					),
+
+					/**
+					 * Option: Button Border Hover Color
+					 */
+					array(
+						'name'      => 'transparent-header-button-border-h-color', 
+						'default'   => astra_get_option( 'transparent-header-button-border-h-color' ),
+						'transport' => 'postMessage',
+						'type'      => 'sub-control',
+						'parent'    => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'section'   => 'section-transparent-header',
+						'tab'       => __( 'Hover', 'astra' ),
+						'control'   => 'ast-color',
+						'priority'  => 7,
+						'title'     => __( 'Hover', 'astra' ),
 					),
 
 					array(
