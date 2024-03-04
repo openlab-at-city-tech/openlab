@@ -2260,7 +2260,7 @@ class CMTT_Free {
 			return;
 		}
 
-		wp_enqueue_script( 'cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.full.min.js', array( 'jquery' ) );
 		wp_enqueue_style( 'cmtt-select2-css', self::$filePath . 'settings/assets/css/select2.min.css' );
 		wp_enqueue_style( 'cm-tooltip-admin-css', self::$cssPath . 'tooltip-admin.css' );
 		wp_enqueue_script(
@@ -2299,7 +2299,7 @@ class CMTT_Free {
 			return;
 		}
 
-		wp_enqueue_script( 'cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'cmtt-select2-js', self::$filePath . 'settings/assets/js/select2.full.min.js', array( 'jquery' ) );
 		wp_enqueue_style( 'cmtt-select2-css', self::$filePath . 'settings/assets/css/select2.min.css' );
 		wp_enqueue_style( 'cm-tooltip-admin-css', self::$cssPath . 'tooltip-admin.css' );
 		wp_enqueue_script(

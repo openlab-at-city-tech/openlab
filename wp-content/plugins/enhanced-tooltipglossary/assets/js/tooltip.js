@@ -360,6 +360,7 @@ CM_Tooltip.gtooltip = function ( opts ) {
                 }
 
                 tooltipContainer.innerHTML = content;
+                jQuery( '#tt' ).removeAttr( 'aria-label');
 
                 if ( jQuery( tooltipContainer ).find( '.glossaryItemBody' ).length ) {
                     let tooltipBody = jQuery( tooltipContainer ).find( '.glossaryItemBody' );
