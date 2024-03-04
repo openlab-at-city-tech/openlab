@@ -3,8 +3,8 @@ Contributors: kprovance, dovyp, redux
 Tags: admin, admin interface, options, theme options, plugin options, options framework, settings, web fonts, google fonts, metaboxes, settings
 Requires at least: 5.0
 Requires PHP: 7.1
-Tested up to: 6.4
-Stable tag: 4.4.11
+Tested up to: 6.5
+Stable tag: 4.4.13
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -119,12 +119,32 @@ NOTE: Redux is not intended to be used on its own. It requires a config file pro
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Changelog ==
+= 4.4.13 =
+* Fixed: `color_scheme` crashing WordPress with 'critical error' for users still using PHP 7.1.
+* Added: Filter to disable Google Font updates: `"redux/{opt_name}/field/typography/google_font_update"`. Return `false` to disable.
+* Added: WordPress 6.5 compatibility.
+* Release date: February 13, 2024
+
+= 4.4.12 =
+* New: Color Schemes Extension [https://devs.redux.io/core-extensions/color-schemes.html](https://devs.redux.io/core-extensions/color-schemes.html)
+* Fixed: PHP Error when `color_scheme` data doesn't exist.
+* Fixed: `custom_fonts` not importing original font on conversion failure.
+* Fixed: Remove debug info from JS. FA version change.
+* Fixed: #3988 - Warning/error count displayed NaN on color field validation.
+* Fixed: Erroneous error in `color_scheme` when saved scheme array was blank (string).
+* Fixed: Color schemes would not switch via select box after saving a new scheme.
+* Fixed: `typography` sunset dropdown not rendering select2 styling.
+* Fixed: Efficiency for extension loading improved.
+* Removed: Redux Pro support. It's no longer required as all Pro features are now part of Redux.
+* Release date: February 12, 2024
+
 = 4.4.11 =
 * Fixed: Cosmetic `box_shadow` fix.
 * Fixed: Required not hiding linked fields in customizer.
 * Fixed: `tabbed` and `repeater` fields not resetting when using Section Reset.
 * Fixed: #3983 - Continued damage done by WP Filesystem PR
 * Updated: Font Awesome 6.5.1
+* Release date: December 18, 2023
 
 = 4.4.10 =
 * New: Tabbed Extension [https://devs.redux.io/core-extensions/tabbed.html](https://devs.redux.io/core-extensions/tabbed.html)
@@ -133,9 +153,11 @@ NOTE: Redux is not intended to be used on its own. It requires a config file pro
 * Fixed: Errant spaces in ACE Editor field.
 * Fixed: Array check in color validation to avoid errors. It works ONLY with the color field. Nothing else.
 * Improved: Filesystem killswitch logic.
+* Release date: December 05, 2023
 
 = 4.4.9 =
 * Modified: Rollback changes made to the filesystem class causing false file permission issue messages.
+* Release date: October 26, 2023
 
 = 4.4.8 =
 * Modified: Additional safeguards against read-only filesystems. Thanks @cezarpopa-cognita.
