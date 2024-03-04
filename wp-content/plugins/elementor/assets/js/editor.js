@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 29-01-2024 */
+/*! elementor - v3.19.0 - 28-02-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -13727,7 +13727,8 @@ ControlMediaItemView = ControlBaseDataView.extend({
     ui.clearGallery = '.elementor-control-gallery-clear';
     ui.galleryThumbnails = '.elementor-control-gallery-thumbnails';
     ui.status = '.elementor-control-gallery-status-title';
-    ui.warnings = '.elementor-control-media__warnings';
+    // eslint-disable-next-line capitalized-comments
+    // ui.warnings = '.elementor-control-media__warnings';
     ui.promotions = '.elementor-control-media__promotions';
     ui.promotions_dismiss = '.elementor-control-media__promotions .elementor-control-notice-dismiss';
     ui.promotions_action = '.elementor-control-media__promotions .elementor-control-notice-main-actions button';
@@ -13749,11 +13750,11 @@ ControlMediaItemView = ControlBaseDataView.extend({
   applySavedValue: function applySavedValue() {
     var _this = this;
     return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var images, imagesCount, hasImages, imagesWithoutAlt, imagesWithoutOptimization, promotionsAlwaysOn, hasPromotions, $galleryThumbnails, attachments;
+      var images, imagesCount, hasImages, imagesWithoutOptimization, promotionsAlwaysOn, hasPromotions, $galleryThumbnails, attachments;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            images = _this.getControlValue(), imagesCount = images.length, hasImages = !!imagesCount, imagesWithoutAlt = 0, imagesWithoutOptimization = 0, promotionsAlwaysOn = false;
+            images = _this.getControlValue(), imagesCount = images.length, hasImages = !!imagesCount, imagesWithoutOptimization = 0, promotionsAlwaysOn = false;
             hasPromotions = _this.ui.promotions.length && !elementor.config.user.dismissed_editor_notices.includes(_this.getDismissPromotionEventName());
             _this.$el.toggleClass('elementor-gallery-has-images', hasImages).toggleClass('elementor-gallery-empty', !hasImages);
             $galleryThumbnails = _this.ui.galleryThumbnails;
@@ -13782,8 +13783,10 @@ ControlMediaItemView = ControlBaseDataView.extend({
                 var hasAlt = _this.imageHasAlt(attachment);
                 if (!hasAlt) {
                   $thumbnail.addClass('unoptimized__image');
-                  imagesWithoutAlt += hasAlt ? 0 : 1;
+                  // eslint-disable-next-line capitalized-comments
+                  // imagesWithoutAlt += hasAlt ? 0 : 1;
                 }
+
                 if (hasPromotions && _this.imageNotOptimized(attachment)) {
                   imagesWithoutOptimization += 1;
                 }
@@ -13794,7 +13797,8 @@ ControlMediaItemView = ControlBaseDataView.extend({
             // Ensure all attachments are fetched before updating the warnings
             _context.next = 13;
             return Promise.all(attachments).then(function () {
-              _this.ui.warnings.toggle(!!imagesWithoutAlt);
+              // eslint-disable-next-line capitalized-comments
+              // this.ui.warnings.toggle( !! imagesWithoutAlt );
               if (hasPromotions) {
                 var showHints = promotionsAlwaysOn || !!imagesWithoutOptimization;
                 _this.ui.promotions.toggle(showHints);
@@ -13819,7 +13823,7 @@ ControlMediaItemView = ControlBaseDataView.extend({
     var checks = {
       height: 1080,
       width: 1920,
-      filesizeInBytes: 100000
+      filesizeInBytes: 200000
     };
     return Object.keys(checks).some(function (key) {
       var value = attachment[key] || false;
@@ -13970,7 +13974,10 @@ ControlMediaItemView = ControlBaseDataView.extend({
   clearGallery: function clearGallery() {
     this.setValue([]);
     this.applySavedValue();
-    this.ui.warnings.hide();
+
+    // eslint-disable-next-line capitalized-comments
+    // this.ui.warnings.hide();
+
     if (this.ui.promotions) {
       this.ui.promotions.hide();
     }
@@ -14614,7 +14621,8 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     ui.mediaVideo = '.elementor-control-media-video';
     ui.frameOpeners = '.elementor-control-preview-area';
     ui.removeButton = '.elementor-control-media__remove';
-    ui.warnings = '.elementor-control-media__warnings';
+    // eslint-disable-next-line capitalized-comments
+    // ui.warnings = '.elementor-control-media__warnings';
     ui.promotions = '.elementor-control-media__promotions';
     ui.promotions_dismiss = '.elementor-control-media__promotions .elementor-control-notice-dismiss';
     ui.promotions_action = '.elementor-control-media__promotions .elementor-control-notice-main-actions button';
@@ -14679,7 +14687,8 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
       if (attachmentId) {
         var dismissPromotionEventName = this.getDismissPromotionEventName();
         var handleHints = function handleHints(attachment) {
-          _this.ui.warnings.toggle(!_this.imageHasAlt(attachment));
+          // eslint-disable-next-line capitalized-comments
+          // this.ui.warnings.toggle( ! this.imageHasAlt( attachment ) );
           if (_this.ui.promotions.length && !elementor.config.user.dismissed_editor_notices.includes(dismissPromotionEventName)) {
             var alwaysOn = _this.ui.promotions.find('.elementor-control-notice').data('display') || false;
             var showHint = alwaysOn || _this.imageNotOptimized(attachment);
@@ -14688,7 +14697,10 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
         };
         wp.media.attachment(attachmentId).fetch().then(handleHints);
       } else {
-        this.ui.warnings.hide();
+        // eslint-disable-next-line capitalized-comments
+        // this.ui.warnings.hide();
+
+        // eslint-disable-next-line no-lonely-if
         if (this.ui.promotions.length) {
           this.ui.promotions.hide();
         }
@@ -14773,7 +14785,7 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     var checks = {
       height: 1080,
       width: 1920,
-      filesizeInBytes: 100000
+      filesizeInBytes: 200000
     };
     return Object.keys(checks).some(function (key) {
       var value = attachment[key] || false;
@@ -33303,6 +33315,7 @@ var WidgetView = _baseWidget.default.extend({
         shortcut: jQuery('<i>', {
           class: 'eicon-pro-icon'
         }),
+        promotionURL: 'https://go.elementor.com/go-pro-global-widget-context-menu/',
         isEnabled: function isEnabled() {
           return 'global' !== _this.options.model.get('widgetType') && !elementor.selection.isMultiple();
         }
@@ -36786,6 +36799,7 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
     });
     var categoriesCollection = new PanelElementsCategoriesCollection();
     _.each(elementor.config.document.panel.elements_categories, function (categoryConfig, categoryName) {
+      var _categoryConfig$promo;
       // Set defaults.
       if ('undefined' === typeof categoryConfig.active) {
         categoryConfig.active = true;
@@ -36800,7 +36814,8 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
         defaultActive: categoryConfig.active,
         sort: categoryConfig.sort,
         hideIfEmpty: undefined !== categoryConfig.hideIfEmpty ? categoryConfig.hideIfEmpty : true,
-        items: categories[categoryName]
+        items: categories[categoryName],
+        promotion: (_categoryConfig$promo = categoryConfig.promotion) !== null && _categoryConfig$promo !== void 0 ? _categoryConfig$promo : null
       });
     });
     this.categoriesCollection = categoriesCollection;
@@ -38534,7 +38549,8 @@ module.exports = elementorModules.Module.extend({
         iconShortcut: 'elementor-context-menu-list__item__icon',
         itemDisabled: 'elementor-context-menu-list__item--disabled',
         divider: 'elementor-context-menu-list__divider',
-        hidden: 'elementor-hidden'
+        hidden: 'elementor-hidden',
+        promotionLink: 'elementor-context-menu-list__item__shortcut--link-fullwidth'
       }
     };
   },
@@ -38607,7 +38623,17 @@ module.exports = elementorModules.Module.extend({
     action.$item.toggleClass(this.getSettings('classes.hidden'), !state);
   },
   toggleActionUsability: function toggleActionUsability(action, state) {
+    this.maybeAddPromotionLink(action);
     action.$item.toggleClass(this.getSettings('classes.itemDisabled'), !state);
+  },
+  maybeAddPromotionLink: function maybeAddPromotionLink(action) {
+    if (this.shouldAddPromotionLink(action)) {
+      var iconContainer = action.$item.find('div.elementor-context-menu-list__item__shortcut')[0];
+      iconContainer.insertAdjacentHTML('beforeend', "<a href='".concat(action.promotionURL, "' target=\"_blank\" class=\"").concat(this.getSettings('classes.promotionLink'), "\"></a>"));
+    }
+  },
+  shouldAddPromotionLink: function shouldAddPromotionLink(action) {
+    return !!(action.promotionURL && !action.$item.find('a.elementor-context-menu-list__item__shortcut--link-fullwidth')[0] && action.$item.find('i.eicon-pro-icon')[0]);
   },
   /**
    * Update the action title.
@@ -39258,7 +39284,8 @@ var FilesUploadHandler = /*#__PURE__*/function () {
   }, {
     key: "getUnfilteredFilesNotEnabledDialog",
     value: function getUnfilteredFilesNotEnabledDialog(callback) {
-      if (!elementor.config.user.is_administrator) {
+      var elementorInstance = window.elementorAdmin || window.elementor;
+      if (!elementorInstance.config.user.is_administrator) {
         return this.getUnfilteredFilesNonAdminDialog();
       }
       var onConfirm = function onConfirm() {
@@ -39266,12 +39293,12 @@ var FilesUploadHandler = /*#__PURE__*/function () {
         elementorCommon.config.filesUpload.unfilteredFiles = true;
         callback();
       };
-      return elementor.helpers.getSimpleDialog('e-enable-unfiltered-files-dialog', __('Enable Unfiltered File Uploads', 'elementor'), __('Before you enable unfiltered files upload, note that such files include a security risk. Elementor does run a process to remove possible malicious code, but there is still risk involved when using such files.', 'elementor'), __('Enable', 'elementor'), onConfirm);
+      return elementorInstance.helpers.getSimpleDialog('e-enable-unfiltered-files-dialog', __('Enable Unfiltered File Uploads', 'elementor'), __('Before you enable unfiltered files upload, note that such files include a security risk. Elementor does run a process to remove possible malicious code, but there is still risk involved when using such files.', 'elementor'), __('Enable', 'elementor'), onConfirm);
     }
   }, {
     key: "getUnfilteredFilesNotEnabledImportTemplateDialog",
     value: function getUnfilteredFilesNotEnabledImportTemplateDialog(callback) {
-      if (!elementor.config.user.is_administrator) {
+      if (!(window.elementorAdmin || window.elementor).config.user.is_administrator) {
         return this.getUnfilteredFilesNonAdminDialog();
       }
       return elementorCommon.dialogsManager.createWidget('confirm', {
@@ -50802,14 +50829,20 @@ var PromotionBehavior = /*#__PURE__*/function (_Marionette$Behavior) {
     key: "ui",
     value: function ui() {
       return {
-        displayConditionsButton: '.eicon-flow.e-control-display-conditions-promotion'
+        displayConditionsButton: '.eicon-flow.e-control-display-conditions-promotion',
+        scrollingEffectsButton: '.e-control-scrolling-effects-promotion',
+        mouseEffectsButton: '.e-control-mouse-effects-promotion',
+        stickyEffectsButton: '.e-control-sticky-effects-promotion'
       };
     }
   }, {
     key: "events",
     value: function events() {
       return {
-        'click @ui.displayConditionsButton': 'onClickControlButtonDisplayConditions'
+        'click @ui.displayConditionsButton': 'onClickControlButtonDisplayConditions',
+        'click @ui.scrollingEffectsButton': 'onClickControlButtonScrollingEffects',
+        'click @ui.mouseEffectsButton': 'onClickControlButtonMouseEffects',
+        'click @ui.stickyEffectsButton': 'onClickControlButtonStickyEffects'
       };
     }
   }, {
@@ -50822,6 +50855,51 @@ var PromotionBehavior = /*#__PURE__*/function (_Marionette$Behavior) {
         targetElement: this.el,
         actionButton: {
           url: 'https://go.elementor.com/go-pro-display-conditions/',
+          text: __('Upgrade Now', 'elementor')
+        }
+      };
+      elementor.promotion.showDialog(dialogOptions);
+    }
+  }, {
+    key: "onClickControlButtonScrollingEffects",
+    value: function onClickControlButtonScrollingEffects(event) {
+      event.stopPropagation();
+      var dialogOptions = {
+        title: __('Scrolling Effects', 'elementor'),
+        content: __('Get Scrolling Effects such as <br /> vertical/horizontal scroll, transparency,<br /> and more with Elementor Pro.', 'elementor'),
+        targetElement: this.el,
+        actionButton: {
+          url: 'https://go.elementor.com/go-pro-scrolling-effects-advanced/',
+          text: __('Upgrade Now', 'elementor')
+        }
+      };
+      elementor.promotion.showDialog(dialogOptions);
+    }
+  }, {
+    key: "onClickControlButtonMouseEffects",
+    value: function onClickControlButtonMouseEffects(event) {
+      event.stopPropagation();
+      var dialogOptions = {
+        title: __('Mouse Effects', 'elementor'),
+        content: __('Add a Mouse Track or 3d Tilt effect with<br />Elementor Pro.', 'elementor'),
+        targetElement: this.el,
+        actionButton: {
+          url: 'https://go.elementor.com/go-pro-motion-effects-advanced/',
+          text: __('Upgrade Now', 'elementor')
+        }
+      };
+      elementor.promotion.showDialog(dialogOptions);
+    }
+  }, {
+    key: "onClickControlButtonStickyEffects",
+    value: function onClickControlButtonStickyEffects(event) {
+      event.stopPropagation();
+      var dialogOptions = {
+        title: __('Sticky', 'elementor'),
+        content: __('Make any element on your page sticky and<br />keep them in sight at the top or bottom of<br />the screen.', 'elementor'),
+        targetElement: this.el,
+        actionButton: {
+          url: 'https://go.elementor.com/go-pro-sticky-element-advanced/',
           text: __('Upgrade Now', 'elementor')
         }
       };
@@ -50885,7 +50963,8 @@ var Module = /*#__PURE__*/function (_elementorModules$edi) {
   }, {
     key: "registerControlBehavior",
     value: function registerControlBehavior(behaviors, view) {
-      if ('display_conditions_pro' !== view.options.model.get('name')) {
+      var promotionsToSkip = ['display_conditions_pro', 'scrolling_effects_pro', 'mouse_effects_pro', 'sticky_pro'];
+      if (!promotionsToSkip.includes(view.options.model.get('name'))) {
         return behaviors;
       }
       if (!behaviors) {

@@ -3733,16 +3733,15 @@ ul.elementor-icon-list-items.elementor-inline-items .elementor-inline-item {
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span {
   height: var(--n-accordion-icon-size);
-  width: fit-content;
-  font-size: var(--n-accordion-icon-size);
+  width: auto;
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span > i {
   color: var(--n-accordion-icon-normal-color);
+  font-size: var(--n-accordion-icon-size);
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title-icon span > svg {
   fill: var(--n-accordion-icon-normal-color);
-  height: auto;
-  width: inherit;
+  height: var(--n-accordion-icon-size);
 }
 .elementor-widget-n-accordion .e-n-accordion-item-title > span {
   cursor: pointer;

@@ -98,35 +98,51 @@ class Control_Gallery extends Base_Data_Control {
 						</button>
 					</div>
 				</div>
+				<?php if ( ! Hints::should_display_hint( 'image-optimization-once' ) && ! Hints::should_display_hint( 'image-optimization' ) ) { ?>
 				<div class="elementor-control-media__warnings elementor-descriptor" role="alert" style="display: none;">
 					<?php
 						Hints::get_notice_template( [
 							'type' => 'warning',
-							'content' => __( 'Images marked in red don’t contain ALT text - which is necessary for accessibility and SEO.', 'elementor' ),
+							'content' => esc_html__( 'Images marked in red don’t contain ALT text - which is necessary for accessibility and SEO.', 'elementor' ),
 							'icon' => true,
 						] );
 					?>
 				</div>
+				<?php } ?>
 				<?php if ( Hints::should_display_hint( 'image-optimization-once' ) || Hints::should_display_hint( 'image-optimization' ) ) :
 					$once_dismissed = Hints::is_dismissed( 'image-optimization-once' );
-					$content = $once_dismissed ?
-						__( 'Oh! Some images exceed the recommended size.Try reducing them with the new Image Optimizer.', 'elementor' ) :
-						__( 'Get a performance boost and improved SEO results with the Image Optimizer.', 'elementor' );
+					if ( $once_dismissed ) {
+						if ( Hints::is_plugin_installed( 'image-optimization' ) ) {
+							$content = sprintf(
+								__( 'This image is large and may slow things down. %1$sActivate Image Optimizer%2$s to reduce size without losing quality.', 'elementor' ),
+								'<a href="' . Hints::get_plugin_action_url( 'image-optimization' ) . '" target="_blank">',
+								'</a>'
+							);
+						} else {
+							$content = sprintf(
+								__( 'This image is large and may slow things down. %1$sInstall Image Optimizer%2$s to reduce size without losing quality.', 'elementor' ),
+								'<a href="' . Hints::get_plugin_action_url( 'image-optimization' ) . '" target="_blank">',
+								'</a>'
+							);
+						}
+					} else {
+						$content = sprintf(
+							'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+							esc_html__( 'Don’t let unoptimized images be the downfall of your site’s performance.', 'elementor' ),
+							Hints::get_plugin_action_url( 'image-optimization' ),
+							Hints::is_plugin_installed( 'image-optimization' ) ? esc_html__( 'Activate Image Optimizer!', 'elementor' ) : esc_html__( 'Install Image Optimizer!', 'elementor' )
+						);
+					}
 					$dismissible = $once_dismissed ? 'image_optimizer_hint' : 'image-optimization-once';
 					?>
 					<div class="elementor-control-media__promotions elementor-descriptor" role="alert" style="display: none;">
 						<?php
 							Hints::get_notice_template( [
 								'display' => ! $once_dismissed,
-								'type' => 'info',
+								'type' => $once_dismissed ? 'warning' : 'info',
 								'content' => $content,
 								'icon' => true,
 								'dismissible' => $dismissible,
-								'button_text' => Hints::is_plugin_installed( 'image-optimization' ) ? __( 'Activate Now', 'elementor' ) : __( 'Install Now', 'elementor' ),
-								'button_event' => $dismissible,
-								'button_data' => [
-									'action_url' => Hints::get_plugin_action_url( 'image-optimization' ),
-								],
 							] );
 						?>
 					</div>

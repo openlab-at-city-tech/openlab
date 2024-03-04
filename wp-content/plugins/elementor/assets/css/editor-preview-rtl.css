@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 29-01-2024 */
+/*! elementor - v3.19.0 - 28-02-2024 */
 .dialog-widget-content {
   background-color: var(--e-a-bg-default);
   position: absolute;
@@ -780,6 +780,22 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-panel-heading-title {
   font-weight: bold;
+}
+.elementor-panel-heading-promotion {
+  margin-inline-start: auto;
+}
+.elementor-panel-heading-promotion a {
+  color: #93003f;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+}
+.elementor-panel-heading-promotion a i {
+  margin-inline-end: 4px;
+  font-size: 14px;
+}
+.elementor-panel-heading-promotion a:hover {
+  color: #93003f;
 }
 
 #elementor-controls .elementor-control-type-section:first-child .elementor-panel-heading {

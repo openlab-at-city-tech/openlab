@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 29-01-2024 */
+/*! elementor - v3.19.0 - 28-02-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -835,31 +835,27 @@ var getRemoteConfig = function getRemoteConfig() {
   return request('ai_get_remote_config');
 };
 exports.getRemoteConfig = getRemoteConfig;
-var getCompletionText = function getCompletionText(prompt) {
+var getCompletionText = function getCompletionText(payload) {
   return request('ai_get_completion_text', {
-    prompt: prompt
+    payload: payload
   });
 };
 exports.getCompletionText = getCompletionText;
-var getEditText = function getEditText(input, instruction) {
+var getEditText = function getEditText(payload) {
   return request('ai_get_edit_text', {
-    input: input,
-    instruction: instruction
+    payload: payload
   });
 };
 exports.getEditText = getEditText;
-var getCustomCode = function getCustomCode(prompt, language) {
+var getCustomCode = function getCustomCode(payload) {
   return request('ai_get_custom_code', {
-    prompt: prompt,
-    language: language
+    payload: payload
   });
 };
 exports.getCustomCode = getCustomCode;
-var getCustomCSS = function getCustomCSS(prompt, htmlMarkup, elementId) {
+var getCustomCSS = function getCustomCSS(payload) {
   return request('ai_get_custom_css', {
-    prompt: prompt,
-    html_markup: htmlMarkup,
-    element_id: elementId
+    payload: payload
   });
 };
 exports.getCustomCSS = getCustomCSS;
@@ -873,56 +869,45 @@ var setStatusFeedback = function setStatusFeedback(responseId) {
   });
 };
 exports.setStatusFeedback = setStatusFeedback;
-var getTextToImageGeneration = function getTextToImageGeneration(prompt, promptSettings) {
+var getTextToImageGeneration = function getTextToImageGeneration(payload) {
   return request('ai_get_text_to_image', {
-    prompt: prompt,
-    promptSettings: promptSettings
+    payload: payload
   });
 };
 exports.getTextToImageGeneration = getTextToImageGeneration;
-var getImageToImageGeneration = function getImageToImageGeneration(prompt, promptSettings, image) {
+var getImageToImageGeneration = function getImageToImageGeneration(payload) {
   return request('ai_get_image_to_image', {
-    prompt: prompt,
-    promptSettings: promptSettings,
-    image: image
+    payload: payload
   });
 };
 exports.getImageToImageGeneration = getImageToImageGeneration;
-var getImageToImageMaskGeneration = function getImageToImageMaskGeneration(prompt, promptSettings, image, mask) {
+var getImageToImageMaskGeneration = function getImageToImageMaskGeneration(payload) {
   return request('ai_get_image_to_image_mask', {
-    prompt: prompt,
-    promptSettings: promptSettings,
-    image: image,
-    mask: mask
+    payload: payload
   });
 };
 exports.getImageToImageMaskGeneration = getImageToImageMaskGeneration;
-var getImageToImageOutPainting = function getImageToImageOutPainting(prompt, promptSettings, image, mask) {
+var getImageToImageOutPainting = function getImageToImageOutPainting(payload) {
   return request('ai_get_image_to_image_outpainting', {
-    prompt: prompt,
-    promptSettings: promptSettings,
-    mask: mask
+    payload: payload
   });
 };
 exports.getImageToImageOutPainting = getImageToImageOutPainting;
-var getImageToImageUpscale = function getImageToImageUpscale(prompt, promptSettings, image) {
+var getImageToImageUpscale = function getImageToImageUpscale(payload) {
   return request('ai_get_image_to_image_upscale', {
-    prompt: prompt,
-    promptSettings: promptSettings,
-    image: image
+    payload: payload
   });
 };
 exports.getImageToImageUpscale = getImageToImageUpscale;
-var getImageToImageRemoveBackground = function getImageToImageRemoveBackground(image) {
+var getImageToImageRemoveBackground = function getImageToImageRemoveBackground(payload) {
   return request('ai_get_image_to_image_remove_background', {
-    image: image
+    payload: payload
   });
 };
 exports.getImageToImageRemoveBackground = getImageToImageRemoveBackground;
-var getImageToImageReplaceBackground = function getImageToImageReplaceBackground(prompt, image) {
+var getImageToImageReplaceBackground = function getImageToImageReplaceBackground(payload) {
   return request('ai_get_image_to_image_replace_background', {
-    prompt: prompt,
-    image: image
+    payload: payload
   });
 };
 exports.getImageToImageReplaceBackground = getImageToImageReplaceBackground;
@@ -1710,6 +1695,92 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/ai/assets/js/editor/context/requests-ids.js":
+/*!**************************************************************!*\
+  !*** ../modules/ai/assets/js/editor/context/requests-ids.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.RequestIdsProvider = void 0;
+exports.generateIds = generateIds;
+exports.useRequestIds = exports.getUniqueId = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var Context = (0, _react.createContext)({});
+var useRequestIds = function useRequestIds() {
+  var context = (0, _react.useContext)(Context);
+  if (!context) {
+    throw new Error('useRequestIds must be used within a RequestIdsProvider');
+  }
+  return context;
+};
+exports.useRequestIds = useRequestIds;
+var getUniqueId = function getUniqueId(prefix) {
+  return prefix + '-' + Math.random().toString(16).substr(2, 7);
+};
+exports.getUniqueId = getUniqueId;
+window.EDITOR_SESSION_ID = window.EDITOR_SESSION_ID || getUniqueId('editor-session');
+function generateIds(template) {
+  var _template$elements;
+  template.id = getUniqueId().toString();
+  if ((_template$elements = template.elements) !== null && _template$elements !== void 0 && _template$elements.length) {
+    template.elements.map(function (child) {
+      return generateIds(child);
+    });
+  }
+  return template;
+}
+var RequestIdsProvider = function RequestIdsProvider(props) {
+  var editorSessionId = (0, _react.useRef)(window.EDITOR_SESSION_ID);
+  var sessionId = (0, _react.useRef)('');
+  var generateId = (0, _react.useRef)('');
+  var batchId = (0, _react.useRef)('');
+  var requestId = (0, _react.useRef)('');
+  sessionId.current = getUniqueId('session');
+  var setGenerate = function setGenerate() {
+    generateId.current = getUniqueId('generate');
+    return generateId;
+  };
+  var setBatch = function setBatch() {
+    batchId.current = getUniqueId('batch');
+    return batchId;
+  };
+  var setRequest = function setRequest() {
+    requestId.current = getUniqueId('request');
+    return requestId;
+  };
+  return /*#__PURE__*/_react.default.createElement(Context.Provider, {
+    value: {
+      editorSessionId: editorSessionId,
+      sessionId: sessionId,
+      generateId: generateId,
+      batchId: batchId,
+      requestId: requestId,
+      setGenerate: setGenerate,
+      setBatch: setBatch,
+      setRequest: setRequest
+    }
+  }, props.children);
+};
+exports.RequestIdsProvider = RequestIdsProvider;
+RequestIdsProvider.propTypes = {
+  children: _propTypes.default.node.isRequired
+};
+var _default = Context;
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/ai/assets/js/editor/hooks/use-introduction.js":
 /*!****************************************************************!*\
   !*** ../modules/ai/assets/js/editor/hooks/use-introduction.js ***!
@@ -1841,6 +1912,7 @@ var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runt
 var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutProperties */ "../node_modules/@babel/runtime/helpers/objectWithoutProperties.js"));
 var _react = __webpack_require__(/*! react */ "react");
 var _api = __webpack_require__(/*! ../api */ "../modules/ai/assets/js/editor/api/index.js");
+var _requestsIds = __webpack_require__(/*! ../context/requests-ids */ "../modules/ai/assets/js/editor/context/requests-ids.js");
 var _excluded = ["text", "response_id", "usage", "images"];
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -1877,22 +1949,32 @@ var usePrompt = function usePrompt(fetchData, initialState) {
     _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
     data = _useState6[0],
     setData = _useState6[1];
+  var _useRequestIds = (0, _requestsIds.useRequestIds)(),
+    setRequest = _useRequestIds.setRequest,
+    editorSessionId = _useRequestIds.editorSessionId,
+    sessionId = _useRequestIds.sessionId,
+    generateId = _useRequestIds.generateId,
+    batchId = _useRequestIds.batchId;
   var send = /*#__PURE__*/function () {
-    var _ref2 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _len,
-        args,
-        _key,
-        _args = arguments;
+    var _ref2 = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(payload) {
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            for (_len = _args.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-              args[_key] = _args[_key];
-            }
             return _context.abrupt("return", new Promise(function (resolve, reject) {
               setError('');
               setIsLoading(true);
-              fetchData.apply(void 0, args).then(function (result) {
+              var requestId = setRequest();
+              var requestIds = {
+                editorSessionId: editorSessionId.current,
+                sessionId: sessionId.current,
+                generateId: generateId.current,
+                batchId: batchId.current,
+                requestId: requestId.current
+              };
+              payload = _objectSpread(_objectSpread({}, payload), {}, {
+                requestIds: requestIds
+              });
+              fetchData(payload).then(function (result) {
                 var normalizedData = normalizeResponse(result);
                 setData(normalizedData);
                 resolve(normalizedData);
@@ -1904,13 +1986,13 @@ var usePrompt = function usePrompt(fetchData, initialState) {
                 return setIsLoading(false);
               });
             }));
-          case 2:
+          case 1:
           case "end":
             return _context.stop();
         }
       }, _callee);
     }));
-    return function send() {
+    return function send(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -2600,11 +2682,11 @@ var _layoutContent = _interopRequireDefault(__webpack_require__(/*! ./layout-con
 var _attachment = __webpack_require__(/*! ./types/attachment */ "../modules/ai/assets/js/editor/types/attachment.js");
 var _config = __webpack_require__(/*! ./pages/form-layout/context/config */ "../modules/ai/assets/js/editor/pages/form-layout/context/config.js");
 var _remoteConfig = __webpack_require__(/*! ./pages/form-layout/context/remote-config */ "../modules/ai/assets/js/editor/pages/form-layout/context/remote-config.js");
-var _generateIds = __webpack_require__(/*! ./utils/generate-ids */ "../modules/ai/assets/js/editor/utils/generate-ids.js");
+var _requestsIds = __webpack_require__(/*! ./context/requests-ids */ "../modules/ai/assets/js/editor/context/requests-ids.js");
 var LayoutApp = function LayoutApp(props) {
   return /*#__PURE__*/_react.default.createElement(_remoteConfig.RemoteConfigProvider, {
     onError: props.onClose
-  }, /*#__PURE__*/_react.default.createElement(_config.ConfigProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_requestsIds.RequestIdsProvider, null, /*#__PURE__*/_react.default.createElement(_config.ConfigProvider, {
     mode: props.mode,
     attachmentsTypes: props.attachmentsTypes,
     onClose: props.onClose,
@@ -2614,12 +2696,10 @@ var LayoutApp = function LayoutApp(props) {
     onSelect: props.onSelect,
     onGenerate: props.onGenerate,
     currentContext: props.currentContext,
-    hasPro: props.hasPro,
-    sessionId: "session-".concat((0, _generateIds.getUniqueId)()),
-    editorSessionId: props.editorSessionId
+    hasPro: props.hasPro
   }, /*#__PURE__*/_react.default.createElement(_layoutContent.default, {
     attachments: props.attachments
-  })));
+  }))));
 };
 LayoutApp.propTypes = {
   mode: _propTypes.default.oneOf(_config.LAYOUT_APP_MODES).isRequired,
@@ -2632,9 +2712,7 @@ LayoutApp.propTypes = {
   onSelect: _propTypes.default.func.isRequired,
   onGenerate: _propTypes.default.func.isRequired,
   currentContext: _propTypes.default.object,
-  hasPro: _propTypes.default.bool,
-  sessionId: _propTypes.default.string,
-  editorSessionId: _propTypes.default.string
+  hasPro: _propTypes.default.bool
 };
 var _default = LayoutApp;
 exports["default"] = _default;
@@ -3037,54 +3115,6 @@ LibraryDialog.propTypes = {
 
 /***/ }),
 
-/***/ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments/menu-item.js":
-/*!********************************************************************************************!*\
-  !*** ../modules/ai/assets/js/editor/pages/form-layout/components/attachments/menu-item.js ***!
-  \********************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.MenuItem = void 0;
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
-var MenuItem = function MenuItem(props) {
-  var IconComponent = props.icon;
-  return /*#__PURE__*/_react.default.createElement(_ui.Stack, {
-    direction: "row",
-    spacing: 1,
-    sx: {
-      cursor: 'pointer',
-      alignItems: 'center',
-      p: 2
-    },
-    variant: "body2",
-    onClick: props.onClick
-  }, /*#__PURE__*/_react.default.createElement(_ui.Box, {
-    sx: {
-      height: 18
-    }
-  }, /*#__PURE__*/_react.default.createElement(IconComponent, {
-    sx: {
-      me: 1
-    }
-  })), /*#__PURE__*/_react.default.createElement(_ui.Typography, null, props.title));
-};
-exports.MenuItem = MenuItem;
-MenuItem.propTypes = {
-  title: _propTypes.default.string.isRequired,
-  onClick: _propTypes.default.func.isRequired,
-  icon: _propTypes.default.elementType
-};
-
-/***/ }),
-
 /***/ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments/menu.js":
 /*!***************************************************************************************!*\
   !*** ../modules/ai/assets/js/editor/pages/form-layout/components/attachments/menu.js ***!
@@ -3103,11 +3133,11 @@ exports.Menu = void 0;
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _menuItem = __webpack_require__(/*! ./menu-item */ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments/menu-item.js");
 var _xCircleIcon = _interopRequireDefault(__webpack_require__(/*! ../../../../icons/x-circle-icon */ "../modules/ai/assets/js/editor/icons/x-circle-icon.js"));
 var _plusCircleIcon = _interopRequireDefault(__webpack_require__(/*! ../../../../icons/plus-circle-icon */ "../modules/ai/assets/js/editor/icons/plus-circle-icon.js"));
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 var _attachDialog = __webpack_require__(/*! ./attach-dialog */ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments/attach-dialog.js");
+var _useIntroduction2 = _interopRequireDefault(__webpack_require__(/*! ../../../../hooks/use-introduction */ "../modules/ai/assets/js/editor/hooks/use-introduction.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var Menu = function Menu(props) {
@@ -3122,19 +3152,36 @@ var Menu = function Menu(props) {
   var _useTheme = (0, _ui.useTheme)(),
     direction = _useTheme.direction;
   var anchorRef = (0, _react.useRef)(null);
+  var _useIntroduction = (0, _useIntroduction2.default)('e-ai-attachment-badge'),
+    isViewed = _useIntroduction.isViewed,
+    markAsViewed = _useIntroduction.markAsViewed;
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ui.IconButton, {
     size: "small",
     ref: anchorRef,
     disabled: props.disabled,
     onClick: function onClick() {
-      return setIsOpen(true);
+      setIsOpen(true);
+      markAsViewed();
     },
     color: "secondary"
-  }, isOpen ? /*#__PURE__*/_react.default.createElement(_xCircleIcon.default, {
-    fontSize: "small"
-  }) : /*#__PURE__*/_react.default.createElement(_plusCircleIcon.default, {
-    fontSize: "small"
-  })), /*#__PURE__*/_react.default.createElement(_ui.Popover, {
+  }, function () {
+    if (isOpen) {
+      return /*#__PURE__*/_react.default.createElement(_xCircleIcon.default, {
+        fontSize: "small"
+      });
+    } else if (isViewed) {
+      return /*#__PURE__*/_react.default.createElement(_plusCircleIcon.default, {
+        fontSize: "small"
+      });
+    }
+    return /*#__PURE__*/_react.default.createElement(_ui.Badge, {
+      color: "primary",
+      badgeContent: " ",
+      variant: "dot"
+    }, /*#__PURE__*/_react.default.createElement(_plusCircleIcon.default, {
+      fontSize: "small"
+    }));
+  }()), /*#__PURE__*/_react.default.createElement(_ui.Popover, {
     open: isOpen,
     anchorEl: anchorRef.current,
     onClose: function onClose() {
@@ -3153,15 +3200,14 @@ var Menu = function Menu(props) {
       width: 440
     }
   }, props.items.map(function (item) {
-    return /*#__PURE__*/_react.default.createElement(_menuItem.MenuItem, {
+    var IconComponent = item.icon;
+    return /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
       key: item.type,
-      title: item.title,
-      icon: item.icon,
       onClick: function onClick() {
         setSelectedType(item.type);
         setIsOpen(false);
       }
-    });
+    }, /*#__PURE__*/_react.default.createElement(_ui.ListItemIcon, null, /*#__PURE__*/_react.default.createElement(IconComponent, null)), item.title);
   }))), /*#__PURE__*/_react.default.createElement(_attachDialog.AttachDialog, {
     type: selectedType,
     onAttach: props.onAttach,
@@ -4651,9 +4697,7 @@ var ConfigProvider = function ConfigProvider(props) {
       onSelect: props.onSelect,
       onGenerate: props.onGenerate,
       currentContext: props.currentContext,
-      hasPro: props.hasPro,
-      sessionId: props.sessionId,
-      editorSessionId: props.editorSessionId
+      hasPro: props.hasPro
     }
   }, props.children);
 };
@@ -4669,9 +4713,7 @@ ConfigProvider.propTypes = {
   onSelect: _propTypes.default.func.isRequired,
   onGenerate: _propTypes.default.func.isRequired,
   currentContext: _propTypes.default.object,
-  hasPro: _propTypes.default.bool,
-  sessionId: _propTypes.default.string,
-  editorSessionId: _propTypes.default.string
+  hasPro: _propTypes.default.bool
 };
 var _default = ConfigContext;
 exports["default"] = _default;
@@ -4965,7 +5007,7 @@ var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runt
 var _react = __webpack_require__(/*! react */ "react");
 var _useScreenshot = _interopRequireDefault(__webpack_require__(/*! ./use-screenshot */ "../modules/ai/assets/js/editor/pages/form-layout/hooks/use-screenshot.js"));
 var _config = __webpack_require__(/*! ../context/config */ "../modules/ai/assets/js/editor/pages/form-layout/context/config.js");
-var _generateIds = __webpack_require__(/*! ../../../utils/generate-ids */ "../modules/ai/assets/js/editor/utils/generate-ids.js");
+var _requestsIds = __webpack_require__(/*! ../../../context/requests-ids */ "../modules/ai/assets/js/editor/context/requests-ids.js");
 var PENDING_VALUE = {
   isPending: true
 };
@@ -4986,11 +5028,15 @@ var useScreenshots = function useScreenshots(_ref) {
    */
 
   var _useConfig = (0, _config.useConfig)(),
-    currentContext = _useConfig.currentContext,
-    sessionId = _useConfig.sessionId,
-    editorSessionId = _useConfig.editorSessionId;
+    currentContext = _useConfig.currentContext;
+  var _useRequestIds = (0, _requestsIds.useRequestIds)(),
+    editorSessionId = _useRequestIds.editorSessionId,
+    sessionId = _useRequestIds.sessionId,
+    setRequest = _useRequestIds.setRequest,
+    setBatch = _useRequestIds.setBatch,
+    setGenerate = _useRequestIds.setGenerate;
   var generateIdRef = (0, _react.useRef)('');
-  var batchId = "batch-".concat((0, _generateIds.getUniqueId)());
+  var batchId = setBatch();
   var screenshotsData = [(0, _useScreenshot.default)(0, onData), (0, _useScreenshot.default)(1, onData), (0, _useScreenshot.default)(2, onData)];
   var screenshotsGroupCount = screenshotsData.length;
   var error = screenshotsData.every(function (s) {
@@ -5041,11 +5087,11 @@ var useScreenshots = function useScreenshots(_ref) {
                 prevGeneratedIds: prevGeneratedIds,
                 currentContext: currentContext,
                 ids: {
-                  editorSessionId: editorSessionId,
-                  sessionId: sessionId,
+                  editorSessionId: editorSessionId.current,
+                  sessionId: sessionId.current,
                   generateId: generateIdRef.current,
-                  batchId: batchId,
-                  requestId: "request-".concat((0, _generateIds.getUniqueId)())
+                  batchId: batchId.current,
+                  requestId: setRequest().current
                 },
                 attachments: attachments.map(function (_ref4) {
                   var type = _ref4.type,
@@ -5089,7 +5135,7 @@ var useScreenshots = function useScreenshots(_ref) {
   }();
   var generate = function generate(prompt, attachments) {
     var placeholders = Array(screenshotsGroupCount).fill(PENDING_VALUE);
-    generateIdRef.current = "generate-".concat((0, _generateIds.getUniqueId)());
+    generateIdRef.current = setGenerate().current;
     setScreenshots(placeholders);
     createScreenshots(prompt, attachments);
   };
@@ -5823,8 +5869,8 @@ var _layoutApp = _interopRequireDefault(__webpack_require__(/*! ../layout-app */
 var _screenshot = __webpack_require__(/*! ./screenshot */ "../modules/ai/assets/js/editor/utils/screenshot.js");
 var _history = __webpack_require__(/*! ./history */ "../modules/ai/assets/js/editor/utils/history.js");
 var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-var _generateIds = __webpack_require__(/*! ./generate-ids */ "../modules/ai/assets/js/editor/utils/generate-ids.js");
 var _layoutAppWrapper = _interopRequireDefault(__webpack_require__(/*! ../layout-app-wrapper */ "../modules/ai/assets/js/editor/layout-app-wrapper.js"));
+var _requestsIds = __webpack_require__(/*! ../context/requests-ids */ "../modules/ai/assets/js/editor/context/requests-ids.js");
 var closePanel = function closePanel() {
   $e.run('panel/close');
   $e.components.get('panel').blockUserInteractions();
@@ -5871,7 +5917,6 @@ var VARIATIONS_PROMPTS = [{
   text: (0, _i18n.__)('Warm hues with comforting visuals about', 'elementor')
 }];
 var PROMPT_PLACEHOLDER = (0, _i18n.__)("Press '/' for suggestions or describe the changes you want to apply (optional)...", 'elementor');
-var EDITOR_SESSION_ID = "editor-session-".concat((0, _generateIds.getUniqueId)());
 var renderLayoutApp = function renderLayoutApp() {
   var _options$onRenderApp;
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
@@ -5985,8 +6030,7 @@ var renderLayoutApp = function renderLayoutApp() {
       previewContainer.setContent(template);
     },
     onInsert: options.onInsert,
-    hasPro: elementor.helpers.hasPro(),
-    editorSessionId: EDITOR_SESSION_ID
+    hasPro: elementor.helpers.hasPro()
   })), rootElement);
   (_options$onRenderApp = options.onRenderApp) === null || _options$onRenderApp === void 0 ? void 0 : _options$onRenderApp.call(options, {
     previewContainer: previewContainer
@@ -6011,7 +6055,7 @@ var importToEditor = function importToEditor(_ref2) {
   }
   $e.run('document/elements/create', {
     container: parentContainer,
-    model: (0, _generateIds.generateIds)(template),
+    model: (0, _requestsIds.generateIds)(template),
     options: {
       at: at,
       edit: true
@@ -6020,38 +6064,6 @@ var importToEditor = function importToEditor(_ref2) {
   endHistoryLog();
 };
 exports.importToEditor = importToEditor;
-
-/***/ }),
-
-/***/ "../modules/ai/assets/js/editor/utils/generate-ids.js":
-/*!************************************************************!*\
-  !*** ../modules/ai/assets/js/editor/utils/generate-ids.js ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.generateIds = generateIds;
-exports.getUniqueId = void 0;
-// Create missing IDs for the elements.
-var getUniqueId = function getUniqueId() {
-  return Math.random().toString(16).substr(2, 7);
-};
-exports.getUniqueId = getUniqueId;
-function generateIds(template) {
-  var _template$elements;
-  template.id = getUniqueId().toString();
-  if ((_template$elements = template.elements) !== null && _template$elements !== void 0 && _template$elements.length) {
-    template.elements.map(function (child) {
-      return generateIds(child);
-    });
-  }
-  return template;
-}
 
 /***/ }),
 
@@ -6249,7 +6261,7 @@ var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _htmlToImage = __webpack_require__(/*! html-to-image */ "../node_modules/html-to-image/es/index.js");
 var _history = __webpack_require__(/*! ./history */ "../modules/ai/assets/js/editor/utils/history.js");
-var _generateIds = __webpack_require__(/*! ./generate-ids */ "../modules/ai/assets/js/editor/utils/generate-ids.js");
+var _requestsIds = __webpack_require__(/*! ../context/requests-ids */ "../modules/ai/assets/js/editor/context/requests-ids.js");
 var takeScreenshot = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(template) {
     var hiddenWrapper, container, screenshot;
@@ -6351,7 +6363,7 @@ function createHiddenWrapper() {
   return wrapper;
 }
 function createContainer(template) {
-  var model = (0, _generateIds.generateIds)(template);
+  var model = (0, _requestsIds.generateIds)(template);
 
   // Set a custom ID, so it can be used later on in the backend.
   model.id = "e-ai-screenshot-container-".concat(model.id);
