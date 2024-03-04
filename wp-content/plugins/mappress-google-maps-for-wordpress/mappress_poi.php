@@ -30,14 +30,14 @@ class Mappress_Poi extends Mappress_Obj {
 	function to_json() {
 		return array(
 			'address' => $this->address,
-			'body' => wp_kses_post($this->body),
+			'body' => ($this->body) ? wp_kses_post($this->body) : $this->body,
 			'data' => $this->data,
 			'iconid' => $this->iconid,
 			'images' => $this->images,
 			'kml' => $this-> kml,
 			'point' => $this->point,
 			'poly' => $this->poly,
-			'title' => sanitize_text_field($this->title),
+			'title' => ($this->title) ? sanitize_text_field($this->title) : $this->title,
 			'type' => $this->type,
 			'viewport' => $this->viewport
 		);
