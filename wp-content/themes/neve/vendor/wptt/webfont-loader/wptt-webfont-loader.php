@@ -180,10 +180,16 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 		 */
 		public function get_styles() {
 
-			// If we already have the local file, return its contents.
-			$local_stylesheet_contents = $this->get_local_stylesheet_contents();
-			if ( $local_stylesheet_contents ) {
-				return $local_stylesheet_contents;
+			//If the content path changed delete local fonts
+			if ( get_site_option( 'wptt_neve_last_content_path' , false ) !== $this->get_base_path() ) {
+				delete_site_option( 'downloaded_font_files' );
+				$this->delete_fonts_folder();
+			} else {
+				// If we already have the local file, return its contents.
+				$local_stylesheet_contents = $this->get_local_stylesheet_contents();
+				if ( $local_stylesheet_contents ) {
+					return $local_stylesheet_contents;
+				}
 			}
 
 			// Get the remote URL contents.
@@ -373,6 +379,7 @@ if ( ! class_exists( 'WPTT_WebFont_Loader' ) ) {
 					}
 				}
 				update_site_option( 'downloaded_font_files', $stored );
+				update_site_option( 'wptt_neve_last_content_path', $this->get_base_path() );
 			}
 
 			return $stored;
