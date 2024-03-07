@@ -21,6 +21,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.eventValidation();
 			OpenLab.utility.refreshActivity();
 			OpenLab.utility.initMemberRoleDefinitions();
+			OpenLab.utility.loadWhatsHappeningAtCityTech()
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -598,6 +599,24 @@ OpenLab.utility = (function ($) {
 
 					$clicked.find( 'i' ).toggleClass( 'fa-caret-square-o-right' ).toggleClass( 'fa-caret-square-o-down' );
 					$clicked.closest( '.member-role-definition' ).toggleClass( 'show-definition-text' );
+				}
+			);
+		},
+		loadWhatsHappeningAtCityTech: function() {
+			const $whatsHappening = $( '#whats-happening-ct' );
+			if ( 0 === $whatsHappening.length ) {
+				return;
+			}
+
+			$.ajax(
+				'http://openlabdev.org/wp-json/openlab/v1/whats-happening-at-city-tech',
+				{
+					success: function( data, textStatus, XMLHttpRequest ) {
+						$whatsHappening.find( '.fade-wrapper' ).html( data ).fadeIn( 700 );
+					},
+					error: function( XMLHttpRequest, textStatus, errorThrown ) {
+						console.log( errorThrown );
+					}
 				}
 			);
 		},
