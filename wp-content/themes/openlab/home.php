@@ -33,14 +33,14 @@ get_header();
         </div>
 
         <div class="box-1 left-box">
-            <h2 class="title uppercase clearfix"><i id="refreshActivity" class="fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening At City Tech?</h2>
+            <h2 class="title uppercase clearfix"><i id="refresh-activity-ct" class="refresh-button fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening At City Tech?</h2>
             <div id="whats-happening-ct" class="left-block-content whats-happening-wrapper">
 				<div class="fade-wrapper" style="display: none;"></div>
             </div>
         </div>
 
         <div class="box-1 left-box">
-            <h2 class="title uppercase clearfix"><i id="refreshActivity" class="fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening On The OpenLab?</h2>
+            <h2 class="title uppercase clearfix"><i id="refreshActivity" class="refresh-button fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening On The OpenLab?</h2>
             <div id="whatsHappening" class="left-block-content whats-happening-wrapper">
                 <?php echo openlab_whats_happening(); ?>
             </div>

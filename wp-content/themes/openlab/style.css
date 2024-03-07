@@ -9290,7 +9290,7 @@ body form .checkbox-list-container {
     width: 100%;
   }
 }
-.home-page #refreshActivity {
+.home-page .refresh-button {
   color: #999999;
   cursor: pointer;
   margin-top: 3px;
