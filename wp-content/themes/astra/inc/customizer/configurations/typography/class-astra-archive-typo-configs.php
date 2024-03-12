@@ -102,7 +102,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'section'           => 'section-blog',
 						'type'              => 'control',
 						'transport'         => 'postMessage',
-						'title'             => __( 'Post Title Font Size', 'astra' ),
+						'title'             => __( 'Post Title Size', 'astra' ),
 						'priority'          => 140,
 						'default'           => astra_get_option( 'font-size-page-title' ),
 						'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
@@ -128,8 +128,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 								'max'  => 20,
 							),
 						),
-						'context'           => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ?
-							Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+						'context'           => Astra_Builder_Helper::$design_tab,
 						'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
 					),
 					array(
@@ -165,8 +164,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 								'max'  => 20,
 							),
 						),
-						'context'           => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ?
-							Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+						'context'           => Astra_Builder_Helper::$design_tab,
 						'divider'           => array( 'ast_class' => 'ast-section-spacing' ),
 					),
 					array(
@@ -176,7 +174,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'section'           => 'section-blog',
 						'type'              => 'control',
 						'transport'         => 'postMessage',
-						'title'             => __( 'Taxonomy Font Size', 'astra' ),
+						'title'             => __( 'Taxonomy Font', 'astra' ),
 						'priority'          => 140,
 						'default'           => astra_get_option( 'font-size-post-tax' ),
 						'suffix'            => array( 'px', 'em', 'vw', 'rem' ),

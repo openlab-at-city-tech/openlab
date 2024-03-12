@@ -464,7 +464,7 @@ class Astra_Button_Component_Configs {
 
 			$button_config[] = Astra_Builder_Base_Configuration::prepare_visibility_tab( $_section, $builder_type );
 
-			$button_config[] = Astra_Builder_Base_Configuration::prepare_advanced_tab( $_section );
+			$button_config[] = Astra_Extended_Base_Configuration::prepare_advanced_tab( $_section );
 
 		}
 

@@ -797,8 +797,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'transport' => 'postMessage',
 				'control'   => 'ast-settings-group',
 				'context'   => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -825,8 +824,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'priority'  => 16,
 				'control'   => 'ast-settings-group',
 				'context'   => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -853,8 +851,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'priority'  => 17,
 				'control'   => 'ast-settings-group',
 				'context'   => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -881,8 +878,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'priority'  => 18,
 				'control'   => 'ast-settings-group',
 				'context'   => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -909,8 +905,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'priority'  => 21,
 				'control'   => 'ast-settings-group',
 				'context'   => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -971,8 +966,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'transport'         => 'postMessage',
 				'priority'          => 14,
 				'context'           => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					'relation' => 'AND',
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
@@ -1002,8 +996,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'transport'         => 'postMessage',
 				'priority'          => 14,
 				'context'           => array(
-					true === Astra_Builder_Helper::$is_header_footer_builder_active ?
-					Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					Astra_Builder_Helper::$design_tab_config,
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[enable-related-posts]',
 						'operator' => '==',
@@ -1403,9 +1396,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 			),
 		);
 
-		if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
-			$_configs = array_merge( $_configs, Astra_Builder_Base_Configuration::prepare_section_spacing_border_options( 'ast-sub-section-related-posts' ) );
-		}
+		$_configs = array_merge( $_configs, Astra_Extended_Base_Configuration::prepare_section_spacing_border_options( 'ast-sub-section-related-posts' ) );
 
 		$configurations = array_merge( $configurations, $_configs );
 

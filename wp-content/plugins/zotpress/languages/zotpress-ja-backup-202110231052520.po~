@@ -1,0 +1,1030 @@
+# Translation of Plugins - Zotpress - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Zotpress - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2021-10-23 10:48+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Language: ja\n"
+"Project-Id-Version: Plugins - Zotpress - Stable (latest release)\n"
+"Language-Team: Japanese\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-23 10:41+0000\n"
+"Last-Translator: \n"
+"X-Loco-Version: 2.5.5; wp-5.8.1"
+
+#: lib/admin/admin.functions.php:67
+msgid "'s Library"
+msgstr "のライブラリー"
+
+#: lib/widget/widget.metabox.php:341
+msgid ", and"
+msgstr ", and"
+
+#: lib/admin/admin.help.php:36
+msgid ""
+"<a title=\"More of my plugins\" href=\"%s\">Zotpress</a> bridges <a "
+"title=\"Zotero\" href=\"%s\">Zotero</a> and WordPress by allowing you to "
+"display items from your Zotero library through shortcodes and widgets. It "
+"also extends the basic meta functionality offered by Zotero by allowing you "
+"to add images to and provide downloadable files associated with your "
+"citations."
+msgstr ""
+"<a title=\"私のプラグイン\" href=\"%s\">Zotpress</a> の実用は、WordPress "
+"のショートコードやウィジェットを通してあなたの<a title=\"Zotero\" href=\"%s\">Zotero</a> "
+"ライブラリーからアイテムの表示をできることです。また、Zotero "
+"が提供する基本的なメタ機能を拡張して、引用に関連する画像を追加したりダウンロード可能なファイルを提供したりできます。"
+
+#: zotpress.php:434
+msgid ""
+"<strong>Warning:</strong> Due to major updates in this version of Zotpress, "
+"you may need to clear the cache of each synced Zotero account."
+msgstr ""
+"<strong>ご注意:</strong> "
+"このバージョンのZotpressのメジャーアップデートにより、同期された各Zoteroアカウントのキャッシュをクリアする必要があるかもしれません。"
+
+#: lib/admin/admin.accounts.addform.php:60
+#| msgid ""
+#| "<strong>You can create a key using OAuth <u>after</u> you've added your "
+#| "account.</strong>"
+msgid ""
+"<strong>You can create a key using OAuth <u>after</u> you've added your "
+"account.</strong> "
+msgstr "<strong>アカウントを追加した <u>後に</u> OAuthを使用してキーを作成できます。</strong>"
+
+#: lib/admin/admin.accounts.addform.php:54
+#| msgid ""
+#| "A private key is required for Zotpress to make requests to Zotero from "
+#| "WordPress."
+msgid ""
+"A private key is required for Zotpress to make requests to Zotero from "
+"WordPress. "
+msgstr "ZoteroがWordPressからZoteroに要求を行うためには、秘密鍵が必要です。"
+
+#: lib/admin/admin.help.php:9
+msgid "About Zotpress"
+msgstr "Zotpress について"
+
+#: lib/widget/widget.metabox.php:218 lib/widget/widget.metabox.php:470
+msgid "Abstract"
+msgstr "アブスト"
+
+#: lib/widget/widget.php:168 lib/admin/admin.functions.php:51
+msgid "Account"
+msgstr "アカウント"
+
+#: lib/admin/admin.accounts.addform.php:9
+msgid "Account Type"
+msgstr "アカウントのタイプ"
+
+#: zotpress.php:225 lib/admin/admin.menu.php:25
+msgid "Accounts"
+msgstr "アカウント"
+
+#: lib/admin/admin.accounts.addform.php:1
+msgid "Add a Zotero Account"
+msgstr "Zoteroアカウントを追加する"
+
+#: lib/admin/admin.accounts.php:24
+msgid "Add Account"
+msgstr "アカウントを追加する"
+
+#: lib/admin/admin.options.form.php:95
+msgid "Add another style"
+msgstr "別のスタイルを追加"
+
+#: lib/widget/widget.metabox.php:149 lib/widget/widget.metabox.php:400
+msgid "Add more styles"
+msgstr "さらにスタイルを追加ところは"
+
+#: lib/admin/admin.options.form.php:99
+msgid "Add Style"
+msgstr "スタイルを追加"
+
+#: lib/widget/widget.metabox.php:337
+msgid "And"
+msgstr "連合"
+
+#: lib/widget/widget.metabox.php:340
+msgid "and"
+msgstr "と"
+
+#: lib/admin/admin.accounts.addform.php:17
+msgid "API User ID"
+msgstr "API のユーザー ID"
+
+#: zotpress.php:195
+msgid "Are you sure you want to clear the cache for this account?"
+msgstr "このアカウントのキャッシュをクリアしてもよろしいですか？"
+
+#: zotpress.php:194
+msgid "Are you sure you want to remove this account?"
+msgstr "このアカウントを削除してもよろしいですか？"
+
+#: zotpress.php:198
+msgid "Are you sure you want to reset Zotpress? This cannot be undone."
+msgstr "Zotpressをリセットしてもよろしいですか？ これは、元に戻すことはできません。"
+
+#: lib/widget/widget.sidebar.php:241 lib/widget/widget.metabox.php:168 
+#: lib/widget/widget.metabox.php:420
+msgid "Asc"
+msgstr "上昇"
+
+#: lib/widget/widget.sidebar.php:231 lib/widget/widget.metabox.php:157 
+#: lib/widget/widget.metabox.php:409
+msgid "Author"
+msgstr "投稿者"
+
+#: zotpress.php:366
+msgid "Back"
+msgstr "戻る"
+
+#: zotpress.php:418
+msgid "Be sure to clear the Zotpress cache for each account after updating!"
+msgstr "アップデート後は、必ず各アカウントのZotpressキャッシュをクリアしておきましょう！"
+
+#: lib/admin/admin.browse.php:125
+msgid "Before we get started, let's make sure your system can support Zotpress"
+msgstr "始める前に、システムが Zotpress をサポートできることを確認しましょう"
+
+#: lib/widget/widget.metabox.php:95
+msgid "Bib"
+msgstr "書誌"
+
+#: lib/widget/widget.metabox.php:305
+msgid "Brackets"
+msgstr "括弧"
+
+#. Description of the plugin
+msgid "Bringing Zotero and scholarly blogging to your WordPress website."
+msgstr "Zotero を使って学問的なブログを書くのを WordPress ウェブサイトでできるように。"
+
+#: zotpress.php:224 lib/admin/admin.menu.php:24
+msgid "Browse"
+msgstr "バロース"
+
+#: lib/admin/admin.accounts.php:35
+msgid "Cache"
+msgstr "キャッシュ"
+
+#: zotpress.php:196
+msgid "Cache cleared!"
+msgstr "キャッシュがクリアされました！"
+
+#: zotpress.php:360
+msgid "Change Image"
+msgstr "画像を変更する"
+
+#: lib/admin/admin.help.php:447
+msgid ""
+"Check out the answered questions below. If you can't find what you're "
+"looking for, feel free to post your question at the"
+msgstr "下記の質問をチェックしてください。答えを見つからない場合は、あそこに遠慮なく質問を投稿してください"
+
+#: lib/admin/admin.options.form.php:18
+msgid "Choose Account"
+msgstr "アカウントを選択"
+
+#: zotpress.php:192
+msgid "Choose Image"
+msgstr "画像の選択"
+
+#: lib/admin/admin.options.form.php:73
+msgid "Choose Style"
+msgstr "スタイルを選択"
+
+#: lib/widget/widget.sidebar.php:291 lib/widget/widget.metabox.php:244 
+#: lib/widget/widget.metabox.php:496
+msgid "Cite with RIS"
+msgstr "RIS で引用"
+
+#: lib/widget/widget.metabox.php:269 lib/widget/widget.metabox.php:352 
+#: lib/widget/widget.metabox.php:512
+msgid "Clear"
+msgstr "クリア"
+
+#: lib/admin/admin.accounts.php:88
+msgid "Clear Cache"
+msgstr "キャッシュの消去"
+
+#: lib/shortcode/shortcode.class.lib.php:364
+msgid "Collection items"
+msgstr "コレクションのアイテム"
+
+#: lib/shortcode/shortcode.class.lib.php:367
+msgid "Collection Key"
+msgstr "コレクションのキー"
+
+#: lib/widget/widget.sidebar.php:193
+msgid "Collections"
+msgstr "コレクション"
+
+#: lib/widget/widget.metabox.php:330
+msgid "Comma"
+msgstr "カンマ"
+
+#: lib/admin/admin.help.php:273
+msgid "Create and place in-text citations and auto-populate a bibliography"
+msgstr "本文中の引用を作成して配置し、参考文献を自動入力します"
+
+#: lib/widget/widget.sidebar.php:189
+msgid "Data Type"
+msgstr "データのタイプ"
+
+#: lib/widget/widget.sidebar.php:232 lib/widget/widget.metabox.php:158 
+#: lib/widget/widget.metabox.php:410
+msgid "Date"
+msgstr "日付"
+
+#: zotpress.php:199 lib/widget/widget.sidebar.php:230 
+#: lib/widget/widget.metabox.php:156 lib/widget/widget.metabox.php:307 
+#: lib/widget/widget.metabox.php:318 lib/widget/widget.metabox.php:408 
+#: lib/admin/admin.browse.php:87 lib/admin/admin.accounts.php:30
+msgid "Default"
+msgstr "デフォルト"
+
+#: lib/shortcode/shortcode.class.lib.php:268
+msgid "Default Collection"
+msgstr "デフォルトのコレクション"
+
+#: lib/shortcode/shortcode.class.lib.php:380
+msgid "Default Collection Items"
+msgstr "デフォルトのコレクション項目"
+
+#: lib/admin/admin.setup.php:13 lib/admin/admin.setup.php:54
+msgid "Default Options"
+msgstr "デフォルト設定"
+
+#: lib/widget/widget.sidebar.php:240 lib/widget/widget.metabox.php:171 
+#: lib/widget/widget.metabox.php:423
+msgid "Desc"
+msgstr "降順"
+
+#: lib/widget/widget.sidebar.php:10
+msgid "Display your citations on your sidebar"
+msgstr "サイドバーにあなたの引用を表示する"
+
+#: lib/admin/admin.help.php:13
+msgid "Donate through PayPal"
+msgstr "PayPalを通して寄付する"
+
+#: lib/admin/admin.help.php:13
+msgid "Donations always appreciated! Accepted through PayPal"
+msgstr "寄付はいつも感謝しています！ PayPalを通して受け入れた"
+
+#: lib/widget/widget.sidebar.php:267 lib/widget/widget.metabox.php:205 
+#: lib/widget/widget.metabox.php:457
+msgid "Downloadable"
+msgstr "ダウンロード"
+
+#: lib/admin/admin.help.php:254
+msgid "Editor"
+msgstr "エディター"
+
+#: lib/admin/admin.options.php:29
+msgid ""
+"Enable or disable the Zotpress Reference widget for specific post types."
+msgstr "特定の投稿タイプの参照ウィジェットを有効または無効にします。"
+
+#: lib/admin/admin.options.php:59 lib/admin/admin.options.php:80 
+#: lib/admin/admin.accounts.addform.php:114 
+#: lib/admin/admin.options.form.php:42 lib/admin/admin.options.form.php:106
+msgid "Errors"
+msgstr "エラー"
+
+#: lib/widget/widget.metabox.php:316
+msgid "Et al"
+msgstr "Et al"
+
+#: lib/admin/admin.browse.php:172
+msgid ""
+"Everything appears to check out. Let's continue setting up Zotpress by "
+"adding your Zotero account. Click \"Next.\""
+msgstr "すべてができたそうです。Zotero アカウントを追加して Zotpress の設定を続けましょう。「次へ」をクリックしてください。"
+
+#: zotpress.php:83
+msgid "Explore"
+msgstr "おすすめ"
+
+#: lib/admin/admin.help.php:87
+msgid "FAQ"
+msgstr "よくある質問"
+
+#: lib/widget/widget.metabox.php:116
+msgid "Filter by Author"
+msgstr "作者で絞り込む"
+
+#: lib/widget/widget.metabox.php:121
+msgid "Filter by Year"
+msgstr "年で絞り込む"
+
+#: lib/admin/admin.setup.php:66
+msgid "Finish"
+msgstr "終わり"
+
+#: lib/admin/admin.browse.php:182
+msgid ""
+"First, try reloading. If the error recurs, your system may not be set up to "
+"run Zotpress. Please contact your system administrator or website host and "
+"ask about allowing PHP scripts to access content like RSS feeds from "
+"external websites through cURL, fopen with Streams (PHP 5), or fsockopen"
+msgstr ""
+"まず、リロードしてみてください。エラーが再発する場合は、Zotpress "
+"を実行するようにシステムが設定されていない可能性があります。システム管理者または Web サイトのホストに連絡して、cURL、Streams を使用した "
+"fopen(PHP 5)、または fsockopen を使用して、外部の Web サイトから RSS フィードなどのコンテンツに PHP "
+"スクリプトがアクセスできるようにする"
+
+#: lib/widget/widget.metabox.php:297
+msgid "Format"
+msgstr "フォーマット"
+
+#: lib/admin/admin.help.php:257
+msgid "Front-End"
+msgstr "フロントエンド"
+
+#: lib/admin/admin.help.php:94
+msgid "Generate a bibliography wherever you can call shortcodes"
+msgstr "ショートコードを呼び出すことができるところはどこでも書誌を生成する"
+
+#: zotpress.php:130 lib/widget/widget.metabox.php:268 
+#: lib/widget/widget.metabox.php:351 lib/widget/widget.metabox.php:511
+msgid "Generate Shortcode"
+msgstr "ショートコードを生成"
+
+#: lib/admin/admin.accounts.addform.php:71
+#| msgid ""
+#| "Go to the <a href=\"%s\" target=\"_blank\">Zotero Settings > Keys</a> page "
+#| "and choose \"Create new private key.\"</strong>"
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Zotero Settings > Keys</a> page "
+"and choose \"Create new private key.\"</strong> "
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">Zotero設定 > キー</a> "
+"ページに移動し、「新しい秘密鍵を作成」を選択します。</strong>"
+
+#: lib/admin/admin.browse.php:169
+msgid "Great"
+msgstr "よかった"
+
+#: lib/admin/admin.help.php:68
+msgid ""
+"Have questions? First, check the <a title=\"FAQ\" class=\"zp-Tab-Link\" "
+"href=\"%s\">FAQ</a>. Then search the <a title=\"Zotpress Forums\" "
+"href=\"%s\">Zotpress Support Forums</a>. If you can't find an answer, feel "
+"free to post your question there."
+msgstr ""
+"聞きたいことがありますか？ まず、<a title=\"よくある質問\" class=\"zp-Tab-Link\" href=\"%s\">"
+"よくある質問</a>をチェックしてください。そして、<a title=\"Zotpress 掲示板\" href=\"%s\">Zotpress "
+"サポート掲示板</a>をチェックして、もし答えが見つからない場合は、質問を投稿してください。"
+
+#: zotpress.php:227 lib/admin/admin.menu.php:27
+msgid "Help"
+msgstr "ヘルプ"
+
+#: lib/widget/widget.metabox.php:149 lib/widget/widget.metabox.php:400
+msgid "here"
+msgstr "ここ"
+
+#. Author URI of the plugin
+msgid "http://katieseaborn.com"
+msgstr "http://katieseaborn.com"
+
+#. URI of the plugin
+msgid "http://katieseaborn.com/plugins"
+msgstr "http://katieseaborn.com/plugins"
+
+#: lib/admin/admin.browse.php:143
+msgid "Hurrah"
+msgstr "万歳"
+
+#: lib/admin/admin.help.php:18
+msgid ""
+"If you like Zotpress, let the world know with a <a class=\"zp-FiveStar\" "
+"title=\"Rate Zotpress\" rel=\"external\" href=\"%s\">rating</a>!"
+msgstr ""
+"Zotpressが好きなら、<a class=\"zp-FiveStar\" title=\"Zotpressを評価して\" "
+"rel=\"external\" href=\"%s\">評価</a>でを評価してください。"
+
+#: lib/admin/admin.accounts.addform.php:84
+#| msgid ""
+#| "If you've already created a key, you can find it on the <a href=\"%s\" "
+#| "target=\"_blank\">Zotero Settings > Keys</a> page. Make sure that <strong>"
+#| "\"Allow library access\"</strong> is checked. For groups, make sure the "
+#| "Default Group Permissions or Specific Group Permissions are set to \"<strong>"
+#| "Read Only</strong>\" or \"Read/Write.\""
+msgid ""
+"If you've already created a key, you can find it on the <a href=\"%s\" "
+"target=\"_blank\">Zotero Settings > Keys</a> page. Make sure that <strong>"
+"\"Allow library access\"</strong> is checked. For groups, make sure the "
+"Default Group Permissions or Specific Group Permissions are set to \"<strong>"
+"Read Only</strong>\" or \"Read/Write.\" "
+msgstr ""
+"すでにキーを作成している場合は、<a href=\"%s\" target=\"_blank\">Zotero設定 > キー</a> "
+"ページでキーを見つけることができます。<strong>「ライブラリーアクセスを許可する」</strong> がオンになっていることを確認します。 "
+"グループについては、既定のグループアクセス許可または特定のグループアクセス許可が <strong>「読み取り専用」</strong> "
+"または「読み取り・書き込み」に設定されていることを確認してください。"
+
+#: lib/widget/widget.metabox.php:179 lib/widget/widget.metabox.php:431
+msgid "Images"
+msgstr "画像"
+
+#: lib/admin/admin.help.php:283
+msgid "Important Note"
+msgstr "重要な注意点"
+
+#: lib/widget/widget.metabox.php:96
+msgid "In-Text"
+msgstr "本文引用"
+
+#: lib/widget/widget.metabox.php:97
+msgid "In-Text Bib"
+msgstr "本文引用の文献"
+
+#: lib/admin/admin.help.php:85
+msgid "In-Text Citations"
+msgstr "本文引用"
+
+#: lib/admin/admin.help.php:283
+msgid ""
+"In-text citations, unlike the bibliography, are not automatically styled. "
+"Use the \"format\" attribute to manually style in-text citations. Support "
+"for automatically styled in-text citations is in the works"
+msgstr ""
+"参考文献とは異なり、本文内引用は自動的にはスタイル設定されません。テキスト内引用を手動でスタイルするには、「format」属性を使用してください。自動スタイルの本文引用のサポートは現在進行中です"
+
+#: lib/widget/widget.sidebar.php:251
+msgid "Inclusive Filtering"
+msgstr "包括的なフィルター"
+
+#: zotpress.php:129
+msgid "Insert Shortcode"
+msgstr "ショートコードの挿入"
+
+#: zotpress.php:362 lib/widget/widget.php:167
+msgid "Item Key"
+msgstr "アイテムのキー"
+
+#: lib/widget/widget.sidebar.php:191
+msgid "Items"
+msgstr "アイテム"
+
+#: zotpress.php:358
+msgid "items"
+msgstr "項目"
+
+#. Author of the plugin
+msgid "Katie Seaborn"
+msgstr "ケイティー シーボーン "
+
+#: lib/admin/admin.help.php:86
+msgid "Library"
+msgstr "ライブラリ"
+
+#: lib/widget/widget.sidebar.php:246
+msgid "Limit"
+msgstr "制限"
+
+#: lib/widget/widget.metabox.php:257
+msgid "Limit By"
+msgstr "制限は"
+
+#: lib/widget/widget.sidebar.php:203
+msgid "Limit by Year"
+msgstr "年でで制限"
+
+#: lib/widget/widget.sidebar.php:198
+msgid "Limit to Author"
+msgstr "作者で制限"
+
+#: lib/widget/widget.sidebar.php:208
+msgid "Limit to Collection (ID)"
+msgstr "コレクションで制限"
+
+#: lib/widget/widget.sidebar.php:213
+msgid "Limit to Item (Key)"
+msgstr "アイテムでで制限（キー）"
+
+#: lib/widget/widget.sidebar.php:218
+msgid "Limit to Tag"
+msgstr "タッグでで制限"
+
+#: zotpress.php:357 lib/shortcode/shortcode.class.lib.php:262 
+#: lib/shortcode/shortcode.class.lib.php:277
+msgid "Loading"
+msgstr "読み込み中"
+
+#: lib/admin/admin.browse.php:206
+msgid "Next"
+msgstr "次へ"
+
+#: lib/admin/admin.accounts.php:34 lib/admin/admin.accounts.addform.php:99 
+#: lib/admin/admin.accounts.addform.php:99
+msgid "Nickname"
+msgstr "ニックネーム"
+
+#: lib/widget/widget.sidebar.php:254 lib/widget/widget.sidebar.php:261 
+#: lib/widget/widget.sidebar.php:269 lib/widget/widget.sidebar.php:277 
+#: lib/widget/widget.sidebar.php:285 lib/widget/widget.sidebar.php:293 
+#: lib/widget/widget.metabox.php:184 lib/widget/widget.metabox.php:197 
+#: lib/widget/widget.metabox.php:210 lib/widget/widget.metabox.php:223 
+#: lib/widget/widget.metabox.php:236 lib/widget/widget.metabox.php:249 
+#: lib/widget/widget.metabox.php:309 lib/widget/widget.metabox.php:320 
+#: lib/widget/widget.metabox.php:339 lib/widget/widget.metabox.php:436 
+#: lib/widget/widget.metabox.php:449 lib/widget/widget.metabox.php:462 
+#: lib/widget/widget.metabox.php:475 lib/widget/widget.metabox.php:488 
+#: lib/widget/widget.metabox.php:501
+msgid "No"
+msgstr "いいえ"
+
+#: zotpress.php:365 lib/shortcode/shortcode.class.lib.php:263
+msgid "No Collection Selected"
+msgstr "コレクションが選択されていない"
+
+#: zotpress.php:368
+msgid "No Tag Selected"
+msgstr "タグが選択されていない"
+
+#: zotpress.php:369
+msgid "No tags to display"
+msgstr "タッグがないらしい"
+
+#: lib/widget/widget.metabox.php:300
+msgid ""
+"Note: If you wish to use square brackets, do NOT type them here; instead, "
+"select \"Yes\" for the brackets attribute."
+msgstr "注: 角括弧を使用したい場合は、ここには入力しないでください。代わりに、括弧属性の「はい」を選択してください。"
+
+#: lib/admin/admin.options.form.php:14
+msgid "Note: Only applicable if you have multiple synced Zotero accounts."
+msgstr "注: 複数の Zotero アカウントを同期している場合にのみ適用されます。"
+
+#: lib/admin/admin.options.form.php:61
+msgid ""
+"Note: Styles must be listed <a title=\"Zotero Styles\" href=\"%s\">here</a>. "
+"Use the name found in the style's URL, e.g. modern-language-association."
+msgstr ""
+"注: スタイルは、<a title=\"Zotero Styles\" href=\"%s\">ここ</a> に記載されている必要があります。スタイルの "
+"URL にある名前を使用します（例: 現代言語協会）。"
+
+#: lib/admin/admin.options.php:73
+msgid ""
+"Note: This action will clear all database entries associated with Zotpress, "
+"including account information and citations&#8212;it <strong>cannot be "
+"undone</strong>. Proceed with caution."
+msgstr ""
+"注: この操作では、Zotpress に関連付けられているアカウント情報や引用を含むすべてのデータベースエントリが消去されます。<strong>"
+"元に戻すことはできません</strong>。慎重に進んでください。"
+
+#: lib/widget/widget.metabox.php:231 lib/widget/widget.metabox.php:483
+msgid "Notes"
+msgstr "メモ"
+
+#: lib/admin/admin.php:9
+msgid "Only logged-in editors can access this page."
+msgstr "ログインした編集者のみがこのページにアクセスできます。"
+
+#: zotpress.php:197
+msgid "Oops!"
+msgstr "おっと。"
+
+#: zotpress.php:226 lib/widget/widget.metabox.php:112 
+#: lib/widget/widget.metabox.php:293 lib/widget/widget.metabox.php:375 
+#: lib/admin/admin.menu.php:26 lib/admin/admin.options.php:15
+msgid "Options"
+msgstr "オプション"
+
+#: lib/widget/widget.php:166
+msgid "Page(s)"
+msgstr "ページ"
+
+#: lib/widget/widget.metabox.php:518
+msgid "Paste somewhere in the post"
+msgstr "投稿のどこかに貼り付けてください"
+
+#: lib/widget/widget.metabox.php:299
+msgid ""
+"Placeholders: <code>%a%</code> for author, <code>%d%</code> for date, <code>"
+"%p%</code> for page, <code>%num%</code> for list number.<br>"
+msgstr ""
+"プレースホルダー: 著者には<code>%a%</code>、日付には<code>%d%</code>、ページには<code>%p%</code>"
+"、リスト番号には<code>%num%</code> を使用してください。<br>"
+
+#: lib/admin/admin.accounts.php:33 lib/admin/admin.accounts.addform.php:50 
+#: lib/admin/admin.accounts.addform.php:50
+msgid "Private Key"
+msgstr "秘密鍵"
+
+#: lib/admin/admin.accounts.php:36 lib/admin/admin.accounts.php:93 
+#: lib/admin/admin.accounts.php:93
+msgid "Remove"
+msgstr "削除"
+
+#: lib/admin/admin.options.php:71 lib/admin/admin.options.php:77
+msgid "Reset Zotpress"
+msgstr "Zotpress をリセットする"
+
+#: lib/shortcode/shortcode.class.lib.php:291
+msgid "Search by"
+msgstr "探索"
+
+#: lib/admin/admin.help.php:103 lib/admin/admin.help.php:290 
+#: lib/admin/admin.help.php:362
+msgid "Search for an attribute using a keyword"
+msgstr "キーワードを使用して属性を検索する"
+
+#: lib/widget/widget.metabox.php:46
+msgid "Searching"
+msgstr "探索"
+
+#: lib/widget/widget.metabox.php:329
+msgid "Semicolon"
+msgstr "セミコロン"
+
+#: lib/widget/widget.metabox.php:327
+msgid "Separator"
+msgstr "区切り"
+
+#: lib/admin/admin.browse.php:87 lib/admin/admin.accounts.php:59 
+#: lib/admin/admin.accounts.php:59
+msgid "Set as Default"
+msgstr "デフォルトを設定する"
+
+#: lib/admin/admin.options.form.php:12 lib/admin/admin.options.form.php:39
+msgid "Set Default Account"
+msgstr "デフォルトアカウントを設定する"
+
+#: lib/admin/admin.options.form.php:56
+msgid "Set Default Citation Style for Importing"
+msgstr "インポート用の既定の引用スタイルを設定する"
+
+#: lib/admin/admin.setup.php:61
+msgid "Set Default Options"
+msgstr "デフォルトオプションの設定"
+
+#: lib/admin/admin.options.form.php:103
+msgid "Set Default Style"
+msgstr "デフォルトのスタイルを設定する"
+
+#: zotpress.php:361
+msgid "Set Image"
+msgstr "画像を設定する"
+
+#: lib/admin/admin.options.php:27 lib/admin/admin.options.php:56
+msgid "Set Reference Widget"
+msgstr "参照ウィジェットを設定する"
+
+#: lib/widget/widget.metabox.php:274 lib/widget/widget.metabox.php:357
+msgid "Shortcode"
+msgstr "ショートコード"
+
+#: lib/widget/widget.sidebar.php:259
+msgid "Show Image"
+msgstr "イメージをを表示"
+
+#: lib/widget/widget.sidebar.php:283
+msgid "Show Notes"
+msgstr "ノートを表示"
+
+#: lib/widget/widget.sidebar.php:275
+msgid "Show Title"
+msgstr "タイトルを表示"
+
+#: lib/admin/admin.browse.php:146
+msgid ""
+"Sometimes systems aren't configured to allow communication with external "
+"websites. Let's check by accessing WordPress.org"
+msgstr ""
+"システムが外部の Web サイトとの通信を許可するように構成されていない場合があります。 WordPress.org にアクセスして確認しましょう"
+
+#: lib/admin/admin.browse.php:180
+msgid "Sorry, but there's no details on the error"
+msgstr "申し訳ありませんが、エラーの詳細はありません"
+
+#: lib/admin/admin.options.php:96 lib/admin/admin.accounts.php:130 
+#: lib/admin/admin.options.form.php:121
+msgid "Sorry, you don't have permission to access this page."
+msgstr "申し訳ありませんが、このページにアクセスする権限がありません。"
+
+#: lib/widget/widget.sidebar.php:228 lib/widget/widget.metabox.php:154 
+#: lib/widget/widget.metabox.php:406
+msgid "Sort By"
+msgstr "並び替え"
+
+#: lib/widget/widget.sidebar.php:238 lib/widget/widget.metabox.php:166 
+#: lib/widget/widget.metabox.php:418
+msgid "Sort Order"
+msgstr "ソート順"
+
+#: lib/admin/admin.help.php:84
+msgid "Stand-Alone Bibliography"
+msgstr "スタンドアロン書誌"
+
+#: lib/admin/admin.accounts.php:76
+msgid "Start OAuth"
+msgstr "オアフを開始する"
+
+#: lib/widget/widget.sidebar.php:223 lib/widget/widget.metabox.php:126 
+#: lib/widget/widget.metabox.php:378
+msgid "Style"
+msgstr "スタイル"
+
+#: zotpress.php:359
+msgid "subcollections"
+msgstr "つのサブコレクション"
+
+#: zotpress.php:191 lib/admin/admin.options.php:58 
+#: lib/admin/admin.options.php:79 lib/admin/admin.accounts.addform.php:115 
+#: lib/admin/admin.options.form.php:41 lib/admin/admin.options.form.php:105
+msgid "Success"
+msgstr "成功しました"
+
+#: lib/admin/admin.help.php:13
+msgid "Support"
+msgstr "サポート"
+
+#: lib/admin/admin.accounts.php:23
+msgid "Synced Zotero Accounts"
+msgstr "同期された Zotero アカウント"
+
+#: lib/admin/admin.browse.php:113
+msgid "System Check"
+msgstr "システムチェック"
+
+#: lib/widget/widget.sidebar.php:192
+msgid "Tags"
+msgstr "タグ"
+
+#: lib/admin/admin.help.php:280
+msgid ""
+"The <code>[zotpressInTextBib]</code> shortcode takes the same attributes as "
+"the <code>[zotpress]</code> shortcode, minus the \"userid,\" \"nickname,\" "
+"and \"limit\" attributes"
+msgstr ""
+"<code>[zotpressInTextBib]</code>ショートコードは、<code>[zotpress]</code>"
+"ショートコードと同じ属性から、「userid」、「nickname」、および「limit」の各属性を除いたものを取ります"
+
+#: lib/admin/admin.accounts.addform.php:35
+msgid ""
+"The API User ID for <strong>Group</strong> accounts can be found on the <a "
+"href=\"%s\" target=\"_blank\">Zotero Group</a> page. Hover over the title of "
+"a group or click the title of the group to see the URL; the API User ID is "
+"the number in the URL."
+msgstr ""
+"<strong>Group</strong>と言うアカウントのAPIユーザーIDは、<a href=\"%s\" target=\"_blank\">"
+"Zotero Group</a>ページにあります。 グループのタイトルにカーソルを合わせるか、グループのタイトルをクリックしてURLを表示します。 "
+"APIのユーザーIDはURLにある番号です。"
+
+#: lib/admin/admin.accounts.addform.php:23
+#| msgid ""
+#| "The API User ID for <strong>User</strong> (individual, personal) accounts "
+#| "can be found on the <a href=\"%s\" target=\"_blank\">Zotero Settings > "
+#| "Keys</a> page, right above where you create a new key."
+msgid ""
+"The API User ID for <strong>User</strong> (individual, personal) accounts "
+"can be found on the <a href=\"%s\" target=\"_blank\">Zotero Settings > "
+"Keys</a> page, right above where you create a new key. "
+msgstr ""
+"<strong>User</strong>（個人）と言うアカウントのAPIユーザーIDは、上の<a href=\"%s\" "
+"target=\"_blank\"> Zotero設定>キー</a>ページにあります。あそこで新しい鍵を作成できます。"
+
+#: lib/admin/admin.help.php:95
+msgid "The basic shortcode is"
+msgstr "基本的なショートコードは"
+
+#: lib/admin/admin.help.php:277
+msgid ""
+"Then place the <strong>required</strong> <code>[zotpressInTextBib]</code> "
+"shortcode somewhere in your entry <strong>after</strong> the in-text "
+"citation shortcodes. It will then create the in-text shortcodes and auto-"
+"populate a bibliography where it's placed"
+msgstr ""
+"次に、<strong>必須</strong> <code>[zotpressInTextBib]</code>ショートコードをエントリの<strong>"
+"後</strong>にテキスト内引用ショートコードのどこかに配置します。 "
+"次に、テキスト内のショートコードを作成し、それが配置されている場所に参考文献を自動入力します"
+
+#: zotpress.php:363
+msgid "There are no citations to display."
+msgstr "引用がありません。"
+
+#: lib/widget/widget.sidebar.php:233 lib/widget/widget.metabox.php:159 
+#: lib/widget/widget.metabox.php:411
+msgid "Title"
+msgstr "タイトル"
+
+#: lib/widget/widget.metabox.php:192 lib/widget/widget.metabox.php:444
+msgid "Title by Year"
+msgstr "年でタイトル"
+
+#: lib/admin/admin.help.php:354
+msgid ""
+"To display your library on the front-end of your website so that visitors "
+"can browse it, use this shortcode on a post or page"
+msgstr "閲覧者が閲覧できるようにウェブサイトのフロントエンドにライブラリーを表示するには、投稿やページにこのショートコードを使用してください"
+
+#: zotpress.php:364 lib/shortcode/shortcode.class.lib.php:267
+msgid "Top Level"
+msgstr "トップレベル"
+
+#: lib/shortcode/shortcode.class.lib.php:378
+msgid "Top Level Items"
+msgstr "トップレベルのアイテム"
+
+#: lib/widget/widget.metabox.php:93 lib/admin/admin.accounts.php:31
+msgid "Type"
+msgstr "タイプ"
+
+#: zotpress.php:391 lib/widget/widget.metabox.php:80 lib/widget/widget.php:165 
+#: lib/shortcode/shortcode.class.lib.php:286
+msgid "Type to search"
+msgstr "タイプすると検索する"
+
+#: lib/admin/admin.browse.php:180
+msgid ""
+"Unfortunately, Zotpress ran into an error. Here's what WordPress has to say"
+msgstr "すみませんが、Zotpress には問題が起こったそうです。これが WordPress の言うことです"
+
+#: zotpress.php:367
+msgid "Unset Tag"
+msgstr "タグを解除"
+
+#: lib/admin/admin.help.php:97
+msgid "Use any of the attributes below to customize your bibliography"
+msgstr "参考文献をカスタマイズするには、以下のいずれかの属性を使用できます"
+
+#: lib/admin/admin.help.php:276
+msgid ""
+"Use one or more <code>[zotpressInText]</code> shortcodes in your post, page "
+"or what-have-you to create placeholders for in-text citations"
+msgstr ""
+"投稿、ページまたはなどなどところに1つ以上の<code>[zotpressInText]</code>"
+"のショートコードを使って、テキスト引用用のプレースホルダーを作成できます"
+
+#: lib/admin/admin.accounts.php:32
+msgid "User ID"
+msgstr "ユーザー ID"
+
+#: lib/admin/admin.accounts.addform.php:109
+msgid "Validate"
+msgstr "検証"
+
+#: lib/admin/admin.setup.php:12 lib/admin/admin.setup.php:53
+msgid "Validate Account"
+msgstr "アカウントの検証"
+
+#: lib/admin/admin.help.php:11
+msgid "Version"
+msgstr "バージョン"
+
+#: lib/shortcode/shortcode.class.lib.php:372
+msgid "Viewing items tagged"
+msgstr "このタッグからアイテム："
+
+#: lib/admin/admin.browse.php:137 lib/admin/admin.browse.php:177 
+#: lib/admin/admin.setup.php:28
+msgid "Warning"
+msgstr "警告"
+
+#: lib/admin/admin.browse.php:169
+msgid "We successfully connected to WordPress.org"
+msgstr "WordPress.org に接続しました"
+
+#: lib/admin/admin.help.php:12
+msgid "Website"
+msgstr "サイト"
+
+#: lib/admin/admin.browse.php:120
+msgid "Welcome to Zotpress"
+msgstr "Zotpress へようこそ"
+
+#: lib/admin/admin.accounts.php:110
+msgid "What is OAuth?"
+msgstr "OAuthとは何ですか？"
+
+#: lib/admin/admin.help.php:6
+msgid "What is Zotpress"
+msgstr "Zotpress とは"
+
+#: lib/widget/widget.sidebar.php:171
+msgid "Widget Title"
+msgstr "ウィジェットのタイトル"
+
+#: lib/widget/widget.sidebar.php:253 lib/widget/widget.sidebar.php:262 
+#: lib/widget/widget.sidebar.php:270 lib/widget/widget.sidebar.php:278 
+#: lib/widget/widget.sidebar.php:286 lib/widget/widget.sidebar.php:294 
+#: lib/widget/widget.metabox.php:181 lib/widget/widget.metabox.php:194 
+#: lib/widget/widget.metabox.php:207 lib/widget/widget.metabox.php:220 
+#: lib/widget/widget.metabox.php:233 lib/widget/widget.metabox.php:246 
+#: lib/widget/widget.metabox.php:308 lib/widget/widget.metabox.php:319 
+#: lib/widget/widget.metabox.php:433 lib/widget/widget.metabox.php:446 
+#: lib/widget/widget.metabox.php:459 lib/widget/widget.metabox.php:472 
+#: lib/widget/widget.metabox.php:485 lib/widget/widget.metabox.php:498
+msgid "Yes"
+msgstr "はい"
+
+#: lib/admin/admin.help.php:62
+msgid ""
+"You can build shortcodes and search for items in your library using the "
+"<strong>Zotpresss Reference</strong> widget on the post/page add/edit "
+"screens. Below, you can find attributes and options for each kind of "
+"Zotpress shortcode."
+msgstr ""
+"投稿・ページの追加・編集画面にある「<strong> Zotpressの参照</strong>"
+"」ウィジェットを使用して、ショートコードを作成してライブラリー内のアイテムを検索できます。 以下に、Zotpress "
+"の各ショートコードの属性とオプションを示します。"
+
+#: lib/admin/admin.browse.php:184
+msgid ""
+"You can still try to use Zotpress, but it may not work and/or you may "
+"encounter further errors"
+msgstr "引き続き Zotpress の使用を試みることはできますが、機能しない場合や追加エラーが発生する場合があります"
+
+#: lib/admin/admin.help.php:50
+msgid ""
+"You can use Zotpress by creating <a title=\"Stand-Alone Bibliography\" "
+"href=\"%s\" class=\"zp-Tab-Link\">stand-alone bibliography</a>, applying <a "
+"title=\"In-Text Citations\" class=\"zp-Tab-Link\" href=\"%s\">in-text "
+"citations</a>, displaying <a title=\"Library\" class=\"zp-Tab-Link\" "
+"href=\"%s\">your library</a>, or adding <a title=\"Widget\" href=\"%s\">a "
+"sidebar widget</a> to your theme."
+msgstr ""
+"Zotpressを使用することは、<a title=\"スタンドアロン書誌\" href=\"%s\" class=\"zp-Tab-Link\">"
+"スタンドアロン書誌</a>を作ったり、<a title=\"本文引用\" class=\"zp-Tab-Link\" href=\"%s\">"
+"本文引用</a> を使ったら、<a title=\"ライブラリー\" class=\"zp-Tab-Link\" href=\"%s\">"
+"ライブラリー</a>を見せたら、チームで<a title=\"ウィジェット\" href=\"%s\">サイドバーウィジェット</a>を使うことです。"
+
+#: lib/admin/admin.help.php:11
+msgid "You're using"
+msgstr "使っているバージョンは"
+
+#: lib/admin/admin.accounts.addform.php:103
+msgid ""
+"Your API User ID can be hard to remember. Make it easier for yourself by "
+"giving your account a nickname."
+msgstr "APIのユーザーIDは覚えにくい場合がありますね。 自分のアカウントにニックネームを付けることで、より簡単にできます。"
+
+#: lib/admin/admin.browse.php:75
+msgid "Your Library"
+msgstr "あなたのライブラリー"
+
+#: lib/admin/admin.browse.php:143
+msgid ""
+"Your system meets the requirements necessary for Zotpress to communicate "
+"with Zotero from WordPress"
+msgstr "システムは Zotpress が WordPress から Zotero と通信するのに必要な要件を満たします"
+
+#: zotpress.php:193
+msgid "Your Zotero account has been validated."
+msgstr "Zotero アカウントが有効になっています。"
+
+#: lib/admin/admin.browse.php:109
+msgid "Zotero + WordPress = Zotpress"
+msgstr "Zotero + WordPress = Zotpress"
+
+#. Name of the plugin
+msgid "Zotpress"
+msgstr "Zotpress"
+
+#: lib/widget/widget.php:21
+msgid "Zotpress Reference"
+msgstr "Zotpress の参照"
+
+#: lib/admin/admin.setup.php:28
+msgid ""
+"Zotpress requires at least one of the following to work: cURL, fopen with "
+"Streams (PHP 5), or fsockopen. You will not be able to use Zotpress until "
+"your administrator or tech support has set up one of these options. cURL is "
+"recommended."
+msgstr ""
+"Zotpress では、cURL、Streams（PHP 5）、または fsockopen で fopen "
+"を実行するには、少なくとも次のいずれかが必要です。管理者または技術サポートがこれらのオプションの1つを設定するまで、Zotpress "
+"を使用することはできません。cURL が推奨されます。"
+
+#: lib/admin/admin.browse.php:137
+msgid ""
+"Zotpress requires at least one of the following: <strong>cURL, fopen with "
+"Streams (PHP 5), or fsockopen</strong>. You will not be able to import items "
+"until your administrator or tech support has set up one of these options. "
+"cURL is recommended."
+msgstr ""
+"Zotpress には、少なくとも次のいずれかが必要です：<strong>cURL, fopen と Streams 付き（PHP 5）または "
+"fsockopen </strong>"
+"。管理者または技術サポートがこれらのオプションのいずれかを設定するまで、アイテムをインポートすることはできません。cURL をお勧めします。"
+
+#: lib/admin/admin.help.php:448
+msgid "Zotpress Support Forums"
+msgstr "Zotpress サポートフォーラム"
+
+#: lib/admin/admin.browse.php:177
+msgid "Zotpress was not able to connect to WordPress.org"
+msgstr "Zotpress は WordPress.org に接続できませんでした"
+
+#: lib/widget/widget.sidebar.php:11
+msgid "Zotpress Widget"
+msgstr "Zotpress ウィジェット"
+
+#: lib/admin/admin.php:9
+msgid "Zotpress: 403 Access Denied"
+msgstr "Zotpress: 403 アクセスが拒否されました"

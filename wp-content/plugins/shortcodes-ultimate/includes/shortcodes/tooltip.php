@@ -113,6 +113,8 @@ su_add_shortcode(
 
 function su_shortcode_tooltip( $atts = null, $content = null ) {
 
+	global $allowedposttags;
+
 	$atts = su_parse_shortcode_atts(
 		'tooltip',
 		$atts,
@@ -190,6 +192,14 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 	);
 
 	$atts['tabindex'] = 'yes' === $atts['tabindex'] ? ' tabindex="0"' : '';
+
+	if ( ! in_array(
+		$atts['reference_tag'],
+		array_keys( $allowedposttags ?: [] ),
+		true
+	) ) {
+		return su_error_message( 'Tooltip', __( 'invalid reference_tag', 'shortcodes-ultimate' ) );
+	}
 
 	$js_settings = array(
 		'position'  => sanitize_key( $atts['position'] ),

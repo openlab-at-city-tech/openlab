@@ -1456,6 +1456,11 @@ section.ast-palette-presets-inner-wrap:last-child {
     width: 100%;
 }
 
+/* Instead of updating above CSS, handled this control's edge case separately. */
+li#customize-control-astra-settings-transparent-content-section-text-color-responsive .ast-control-wrap .ast-responsive-btns {
+    top: 2px;
+}
+
 /* Global customizer color palette */
 
 :root {
@@ -4433,7 +4438,6 @@ span.customize-control-title.ast-group-section-title {
   left: 15px;
   font-size: 11px;
   line-height: normal;
-  border-left: 1px solid #ddd;
   padding-left: 5px;
   text-transform: uppercase;
   width: auto;

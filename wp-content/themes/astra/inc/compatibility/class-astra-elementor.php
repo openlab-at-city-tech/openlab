@@ -180,6 +180,15 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 				$dynamic_css .= $parse_css;
 			}
 
+			// To visible proper column structure with elementor flexbox model.
+			$elementor_posts_container_css = array(
+				'.elementor-posts-container [CLASS*="ast-width-"]' => array(
+					'width' => '100%',
+				),
+			);
+			
+			$dynamic_css .= astra_parse_css( $elementor_posts_container_css );
+
 			$elementor_archive_page_css = array(
 				'.elementor-template-full-width .ast-container' => array(
 					'display' => 'block',

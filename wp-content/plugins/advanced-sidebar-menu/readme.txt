@@ -3,10 +3,10 @@
 Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: block, widget, dynamic, hierarchy, menus, sidebar menu, category, pages, parent, child, automatic
-Requires at least: 6.0.0
-Tested up to: 6.4.2
+Requires at least: 6.1.0
+Tested up to: 6.4.3
 Requires PHP: 7.2.0
-Stable tag: 9.4.2
+Stable tag: 9.4.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,11 +14,11 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 <h3>Fully automatic sidebar menus.</h3>
 
-Uses the parent/child relationship of your pages or categories to generate menus based on the current section of your site. Assign a page or category to a parent and this will do the rest for you.
+Uses the parent/child relationship of your pages or categories to generate menus based on the current section of your site. Assign a page or category to a parent and Advanced Sidebar Menu will do the rest for you.
 
 Keeps the menu clean and usable. Only related items display, so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong.
 
-Widgets and blocks are available to display menus where you need them. Look for the "Advanced Sidebar - Pages" widget or block, or the "Advanced Sidebar - Categories" widget or block.
+Blocks are available to display menus where you need them. Look for the "Advanced Sidebar - Pages" block, or the "Advanced Sidebar - Categories" block. Widgets are also available for page builders or sites using classic widgets.
 
 <strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
 
@@ -165,6 +165,13 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+= 9.4.3 =
+* Updated all block's api version to 3.
+* Updated Node to version 20.
+* Updated Yarn to version 4.
+* Tested to WordPress Core 6.4.3.
+* Required PRO version 9.2.0+.
+
 = 9.4.2 =
 * Fixed translation loading in blocks.
 * Improved CSS and JS linting.

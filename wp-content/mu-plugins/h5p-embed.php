@@ -4,6 +4,7 @@ $h5p_hub_urls = [
 	'http://openlabdev.org/h5ptesting',
 	'https://openlab.citytech.cuny.edu/id-',
 	'https://openlab.citytech.cuny.edu/id-hub',
+	'https://openlab.citytech.cuny.edu/oer-h5p-hub/',
 ];
 
 add_action(

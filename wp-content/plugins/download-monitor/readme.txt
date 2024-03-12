@@ -3,7 +3,7 @@ Contributors: wpchill, silkalns, barrykooij, mikejolley
 Tags: download manager, document management, file manager, digital store, ecommerce, document management plugin,  download monitor, download counter, password protection, download protection, password, protect downloads, tracker
 Requires at least: 5.5
 Tested up to: 6.4
-Stable tag: 4.9.8
+Stable tag: 4.9.11
 License: GPLv3
 Text Domain: download-monitor
 Requires PHP: 5.6
@@ -120,6 +120,16 @@ More documentation can be found in our [Knowledge Base](https://www.download-mon
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 4.9.11 - 16.02.2024 =
+Changed: Removed Freemius
+Fixed: Slight UI fixes
+
+= 4.9.10 - 05.02.2024 =
+Fixed: Versions download link for the "Version list" template ( [#1422](https://github.com/WPChill/download-monitor/issues/1422) )
+
+= 4.9.9 - 30.01.2024 =
+Fixed: Performance issue fix
+
 = 4.9.8 - 25.01.2024 =
 Fixed: Products update problem ( [#1415](https://github.com/WPChill/download-monitor/issues/1415) )
 Fixed: PHP Warnings on non-defined Download templates ( [#1413](https://github.com/WPChill/download-monitor/issues/1413) )

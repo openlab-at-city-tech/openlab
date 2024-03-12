@@ -1,0 +1,907 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Zotpress\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-27 05:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.2.0; wp-5.0.2"
+
+#: zotpress.php:162 lib/admin/admin.options.php:58
+#: lib/admin/admin.options.php:79 lib/admin/admin.accounts.addform.php:115
+#: lib/admin/admin.options.form.php:41 lib/admin/admin.options.form.php:105
+msgid "Success"
+msgstr ""
+
+#: zotpress.php:163
+msgid "Choose Image"
+msgstr ""
+
+#: zotpress.php:164
+msgid "Your Zotero account has been validated."
+msgstr ""
+
+#: zotpress.php:165
+msgid "Are you sure you want to remove this account?"
+msgstr ""
+
+#: zotpress.php:166
+msgid "Are you sure you want to clear the cache for this account?"
+msgstr ""
+
+#: zotpress.php:167
+msgid "Cache cleared!"
+msgstr ""
+
+#: zotpress.php:168
+msgid "Oops!"
+msgstr ""
+
+#: zotpress.php:169
+msgid "Are you sure you want to reset Zotpress? This cannot be undone."
+msgstr ""
+
+#: zotpress.php:193 lib/admin/admin.menu.php:24
+msgid "Browse"
+msgstr ""
+
+#: zotpress.php:194 lib/admin/admin.menu.php:25
+msgid "Accounts"
+msgstr ""
+
+#: zotpress.php:195 lib/widget/widget.metabox.php:109
+#: lib/widget/widget.metabox.php:290 lib/widget/widget.metabox.php:294
+#: lib/widget/widget.metabox.php:332 lib/admin/admin.menu.php:26
+#: lib/admin/admin.options.php:15
+msgid "Options"
+msgstr ""
+
+#: zotpress.php:196 lib/admin/admin.menu.php:27
+msgid "Help"
+msgstr ""
+
+#: zotpress.php:321 lib/shortcode/shortcode.class.lib.php:229
+#: lib/shortcode/shortcode.class.lib.php:241
+msgid "Loading"
+msgstr ""
+
+#: zotpress.php:322
+msgid "items"
+msgstr ""
+
+#: zotpress.php:323
+msgid "subcollections"
+msgstr ""
+
+#: zotpress.php:324
+msgid "Change Image"
+msgstr ""
+
+#: zotpress.php:325
+msgid "Set Image"
+msgstr ""
+
+#: zotpress.php:326 lib/widget/widget.php:158
+msgid "Item Key"
+msgstr ""
+
+#: zotpress.php:327
+msgid "There are no citations to display."
+msgstr ""
+
+#: zotpress.php:328 lib/shortcode/shortcode.class.lib.php:231
+msgid "Top Level"
+msgstr ""
+
+#: zotpress.php:329 lib/shortcode/shortcode.class.lib.php:230
+msgid "No Collection Selected"
+msgstr ""
+
+#: zotpress.php:330
+msgid "Back to Top"
+msgstr ""
+
+#: zotpress.php:331
+msgid "No Tag Selected"
+msgstr ""
+
+#: zotpress.php:332
+msgid "No tags to display"
+msgstr ""
+
+#: zotpress.php:354 lib/widget/widget.metabox.php:79 lib/widget/widget.php:156
+#: lib/shortcode/shortcode.class.lib.php:250
+msgid "Type to search"
+msgstr ""
+
+#: zotpress.php:385
+msgid ""
+"Warning: Due to major updates in Zotpress 6.2, you may need to clear the "
+"cache of each synced Zotero account."
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:10
+msgid "Display your citations on your sidebar"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:11
+msgid "Zotpress Widget"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:171
+msgid "Widget Title"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:187
+msgid "Data Type"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:189
+msgid "Items"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:190
+msgid "Tags"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:191
+msgid "Collections"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:196
+msgid "Limit to Author"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:201
+msgid "Limit by Year"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:206
+msgid "Limit to Collection (ID)"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:211
+msgid "Limit to Item (Key)"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:216
+msgid "Limit to Tag"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:221 lib/widget/widget.metabox.php:123
+#: lib/widget/widget.metabox.php:334
+msgid "Style"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:226 lib/widget/widget.metabox.php:151
+#: lib/widget/widget.metabox.php:362
+msgid "Sort By"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:228 lib/widget/widget.metabox.php:153
+#: lib/widget/widget.metabox.php:305 lib/widget/widget.metabox.php:364
+#: lib/admin/admin.browse.php:88 lib/admin/admin.accounts.php:30
+msgid "Default"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:229 lib/widget/widget.metabox.php:154
+#: lib/widget/widget.metabox.php:365
+msgid "Author"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:230 lib/widget/widget.metabox.php:155
+#: lib/widget/widget.metabox.php:366
+msgid "Date"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:231 lib/widget/widget.metabox.php:156
+#: lib/widget/widget.metabox.php:367
+msgid "Title"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:236 lib/widget/widget.metabox.php:163
+#: lib/widget/widget.metabox.php:374
+msgid "Sort Order"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:238 lib/widget/widget.metabox.php:168
+#: lib/widget/widget.metabox.php:379
+msgid "Desc"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:239 lib/widget/widget.metabox.php:165
+#: lib/widget/widget.metabox.php:376
+msgid "Asc"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:244
+msgid "Limit"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:249
+msgid "Inclusive Filtering"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:251 lib/widget/widget.sidebar.php:260
+#: lib/widget/widget.sidebar.php:268 lib/widget/widget.sidebar.php:276
+#: lib/widget/widget.sidebar.php:284 lib/widget/widget.sidebar.php:292
+#: lib/widget/widget.metabox.php:178 lib/widget/widget.metabox.php:191
+#: lib/widget/widget.metabox.php:204 lib/widget/widget.metabox.php:217
+#: lib/widget/widget.metabox.php:230 lib/widget/widget.metabox.php:243
+#: lib/widget/widget.metabox.php:306 lib/widget/widget.metabox.php:389
+#: lib/widget/widget.metabox.php:402 lib/widget/widget.metabox.php:415
+#: lib/widget/widget.metabox.php:428 lib/widget/widget.metabox.php:441
+#: lib/widget/widget.metabox.php:454
+msgid "Yes"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:252 lib/widget/widget.sidebar.php:259
+#: lib/widget/widget.sidebar.php:267 lib/widget/widget.sidebar.php:275
+#: lib/widget/widget.sidebar.php:283 lib/widget/widget.sidebar.php:291
+#: lib/widget/widget.metabox.php:181 lib/widget/widget.metabox.php:194
+#: lib/widget/widget.metabox.php:207 lib/widget/widget.metabox.php:220
+#: lib/widget/widget.metabox.php:233 lib/widget/widget.metabox.php:246
+#: lib/widget/widget.metabox.php:307 lib/widget/widget.metabox.php:326
+#: lib/widget/widget.metabox.php:392 lib/widget/widget.metabox.php:405
+#: lib/widget/widget.metabox.php:418 lib/widget/widget.metabox.php:431
+#: lib/widget/widget.metabox.php:444 lib/widget/widget.metabox.php:457
+msgid "No"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:257
+msgid "Show Image"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:265 lib/widget/widget.metabox.php:202
+#: lib/widget/widget.metabox.php:413
+msgid "Downloadable"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:273
+msgid "Show Title"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:281
+msgid "Show Notes"
+msgstr ""
+
+#: lib/widget/widget.sidebar.php:289 lib/widget/widget.metabox.php:241
+#: lib/widget/widget.metabox.php:452
+msgid "Cite with RIS"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:45
+msgid "Searching"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:92 lib/admin/admin.accounts.php:31
+msgid "Type"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:94 lib/widget/widget.metabox.php:332
+#: lib/widget/widget.metabox.php:479
+msgid "Bibliography"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:95 lib/widget/widget.metabox.php:294
+msgid "In-Text"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:113
+msgid "Filter by Author"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:118
+msgid "Filter by Year"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:146 lib/widget/widget.metabox.php:356
+msgid "Add more styles"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:146 lib/widget/widget.metabox.php:356
+msgid "here"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:176 lib/widget/widget.metabox.php:387
+msgid "Images"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:189 lib/widget/widget.metabox.php:400
+msgid "Title by Year"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:215 lib/widget/widget.metabox.php:426
+msgid "Abstract"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:228 lib/widget/widget.metabox.php:439
+msgid "Notes"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:254
+msgid "Limit By"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:265 lib/widget/widget.metabox.php:469
+msgid "Generate Shortcode"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:266 lib/widget/widget.metabox.php:470
+msgid "Clear"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:271 lib/widget/widget.metabox.php:475
+msgid "Shortcode"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:296
+msgid "Format"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:298
+msgid ""
+"Use these placeholders: %a% for author, %d% for date, %p% for page, %num% "
+"for list number."
+msgstr ""
+
+#: lib/widget/widget.metabox.php:303
+msgid "Et al"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:314
+msgid "Separator"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:316
+msgid "Semicolon"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:317
+msgid "Comma"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:324
+msgid "And"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:327
+msgid "and"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:328
+msgid ", and"
+msgstr ""
+
+#: lib/widget/widget.metabox.php:479
+msgid "Paste somewhere in the post"
+msgstr ""
+
+#: lib/widget/widget.php:16
+msgid "Zotpress Reference"
+msgstr ""
+
+#: lib/widget/widget.php:157
+msgid "Page(s)"
+msgstr ""
+
+#: lib/widget/widget.php:159 lib/admin/admin.functions.php:51
+msgid "Account"
+msgstr ""
+
+#: lib/shortcode/shortcode.class.lib.php:255
+msgid "Search by"
+msgstr ""
+
+#: lib/shortcode/shortcode.class.lib.php:324
+msgid "Collection items"
+msgstr ""
+
+#: lib/shortcode/shortcode.class.lib.php:327
+msgid "Collection Key"
+msgstr ""
+
+#: lib/shortcode/shortcode.class.lib.php:332
+msgid "Viewing items tagged"
+msgstr ""
+
+#: lib/shortcode/shortcode.class.lib.php:336
+msgid "Top Level Items"
+msgstr ""
+
+#: lib/admin/admin.help.php:6
+msgid "What is Zotpress"
+msgstr ""
+
+#: lib/admin/admin.help.php:9
+msgid "About Zotpress"
+msgstr ""
+
+#: lib/admin/admin.help.php:11
+msgid "Version"
+msgstr ""
+
+#: lib/admin/admin.help.php:11
+msgid "You're using"
+msgstr ""
+
+#: lib/admin/admin.help.php:12
+msgid "Website"
+msgstr ""
+
+#: lib/admin/admin.help.php:13
+msgid "Support"
+msgstr ""
+
+#: lib/admin/admin.help.php:13
+msgid "Donations always appreciated! Accepted through PayPal"
+msgstr ""
+
+#: lib/admin/admin.help.php:13
+msgid "Donate through PayPal"
+msgstr ""
+
+#: lib/admin/admin.help.php:18
+#, php-format
+msgid ""
+"If you like Zotpress, let the world know with a <a class=\"zp-FiveStar\" "
+"title=\"Rate Zotpress\" rel=\"external\" href=\"%s\">rating</a>!"
+msgstr ""
+
+#: lib/admin/admin.help.php:36
+#, php-format
+msgid ""
+"<a title=\"More of my plugins\" href=\"%s\">Zotpress</a> bridges <a "
+"title=\"Zotero\" href=\"%s\">Zotero</a> and WordPress by allowing you to "
+"display items from your Zotero library through shortcodes and widgets. It "
+"also extends the basic meta functionality offered by Zotero by allowing you "
+"to add images to and provide downloadable files associated with your "
+"citations."
+msgstr ""
+
+#: lib/admin/admin.help.php:50
+#, php-format
+msgid ""
+"You can use Zotpress by creating <a title=\"Stand-Alone Bibliography\" "
+"href=\"%s\" class=\"zp-Tab-Link\">stand-alone bibliography</a>, applying <a "
+"title=\"In-Text Citations\" class=\"zp-Tab-Link\" href=\"%s\">in-text "
+"citations</a>, displaying <a title=\"Library\" class=\"zp-Tab-Link\" "
+"href=\"%s\">your library</a>, or adding <a title=\"Widget\" href=\"%s\">a "
+"sidebar widget</a> to your theme."
+msgstr ""
+
+#: lib/admin/admin.help.php:62
+msgid ""
+"You can build shortcodes and search for items in your library using the "
+"<strong>Zotpresss Reference</strong> widget on the post/page add/edit "
+"screens. Below, you can find attributes and options for each kind of "
+"Zotpress shortcode."
+msgstr ""
+
+#: lib/admin/admin.help.php:68
+#, php-format
+msgid ""
+"Have questions? First, check the <a title=\"FAQ\" class=\"zp-Tab-Link\" "
+"href=\"%s\">FAQ</a>. Then search the <a title=\"Zotpress Forums\" "
+"href=\"%s\">Zotpress Support Forums</a>. If you can't find an answer, feel "
+"free to post your question there."
+msgstr ""
+
+#: lib/admin/admin.help.php:84
+msgid "Stand-Alone Bibliography"
+msgstr ""
+
+#: lib/admin/admin.help.php:85
+msgid "In-Text Citations"
+msgstr ""
+
+#: lib/admin/admin.help.php:86
+msgid "Library"
+msgstr ""
+
+#: lib/admin/admin.help.php:87
+msgid "FAQ"
+msgstr ""
+
+#: lib/admin/admin.help.php:94
+msgid "Generate a bibliography wherever you can call shortcodes"
+msgstr ""
+
+#: lib/admin/admin.help.php:95
+msgid "The basic shortcode is"
+msgstr ""
+
+#: lib/admin/admin.help.php:97
+msgid "Use any of the attributes below to customize your bibliography"
+msgstr ""
+
+#: lib/admin/admin.help.php:103
+msgid "Search for an attribute using a keyword"
+msgstr ""
+
+#: lib/admin/admin.help.php:242
+msgid "Editor"
+msgstr ""
+
+#: lib/admin/admin.help.php:245
+msgid "Front-End"
+msgstr ""
+
+#: lib/admin/admin.help.php:261
+msgid "Create and place in-text citations and auto-populate a bibliography"
+msgstr ""
+
+#: lib/admin/admin.help.php:264
+msgid ""
+"Use one or more <code>[zotpressInText]</code> shortcodes in your post, page "
+"or what-have-you to create placeholders for in-text citations"
+msgstr ""
+
+#: lib/admin/admin.help.php:265
+msgid ""
+"Then place the <strong>required</strong> <code>[zotpressInTextBib]</code> "
+"shortcode somewhere in your entry <strong>after</strong> the in-text "
+"citation shortcodes. It will then create the in-text shortcodes and auto-"
+"populate a bibliography where it's placed"
+msgstr ""
+
+#: lib/admin/admin.help.php:268
+msgid ""
+"The <code>[zotpressInTextBib]</code> shortcode takes the same attributes as "
+"the <code>[zotpress]</code> shortcode, minus the \"userid,\" \"nickname,\" "
+"and \"limit\" attributes"
+msgstr ""
+
+#: lib/admin/admin.help.php:271
+msgid "Important Note"
+msgstr ""
+
+#: lib/admin/admin.help.php:271
+msgid ""
+"In-text citations, unlike the bibliography, are not automatically styled. "
+"Use the \"format\" attribute to manually style in-text citations. Support "
+"for automatically styled in-text citations is in the works"
+msgstr ""
+
+#: lib/admin/admin.options.php:27 lib/admin/admin.options.php:56
+msgid "Set Reference Widget"
+msgstr ""
+
+#: lib/admin/admin.options.php:29
+msgid ""
+"Enable or disable the Zotpress Reference widget for specific post types."
+msgstr ""
+
+#: lib/admin/admin.options.php:59 lib/admin/admin.options.php:80
+#: lib/admin/admin.accounts.addform.php:114 lib/admin/admin.options.form.php:42
+#: lib/admin/admin.options.form.php:106
+msgid "Errors"
+msgstr ""
+
+#: lib/admin/admin.options.php:71 lib/admin/admin.options.php:77
+msgid "Reset Zotpress"
+msgstr ""
+
+#: lib/admin/admin.options.php:73
+msgid ""
+"Note: This action will clear all database entries associated with Zotpress, "
+"including account information and citations&#8212;it <strong>cannot be "
+"undone</strong>. Proceed with caution."
+msgstr ""
+
+#: lib/admin/admin.options.php:96 lib/admin/admin.accounts.php:123
+#: lib/admin/admin.options.form.php:121
+msgid "Sorry, you don't have permission to access this page."
+msgstr ""
+
+#: lib/admin/admin.functions.php:67
+msgid "'s Library"
+msgstr ""
+
+#: lib/admin/admin.browse.php:76
+msgid "Your Library"
+msgstr ""
+
+#: lib/admin/admin.browse.php:88 lib/admin/admin.accounts.php:56
+#: lib/admin/admin.accounts.php:56
+msgid "Set as Default"
+msgstr ""
+
+#: lib/admin/admin.browse.php:110
+msgid "Zotero + WordPress = Zotpress"
+msgstr ""
+
+#: lib/admin/admin.browse.php:114
+msgid "System Check"
+msgstr ""
+
+#: lib/admin/admin.browse.php:121
+msgid "Welcome to Zotpress"
+msgstr ""
+
+#: lib/admin/admin.browse.php:126
+msgid "Before we get started, let's make sure your system can support Zotpress"
+msgstr ""
+
+#: lib/admin/admin.browse.php:138 lib/admin/admin.browse.php:178
+#: lib/admin/admin.setup.php:28
+msgid "Warning"
+msgstr ""
+
+#: lib/admin/admin.browse.php:138
+msgid ""
+"Zotpress requires at least one of the following: <strong>cURL, fopen with "
+"Streams (PHP 5), or fsockopen</strong>. You will not be able to import items "
+"until your administrator or tech support has set up one of these options. "
+"cURL is recommended."
+msgstr ""
+
+#: lib/admin/admin.browse.php:144
+msgid "Hurrah"
+msgstr ""
+
+#: lib/admin/admin.browse.php:144
+msgid ""
+"Your system meets the requirements necessary for Zotpress to communicate "
+"with Zotero from WordPress"
+msgstr ""
+
+#: lib/admin/admin.browse.php:147
+msgid ""
+"Sometimes systems aren't configured to allow communication with external "
+"websites. Let's check by accessing WordPress.org"
+msgstr ""
+
+#: lib/admin/admin.browse.php:170
+msgid "Great"
+msgstr ""
+
+#: lib/admin/admin.browse.php:170
+msgid "We successfully connected to WordPress.org"
+msgstr ""
+
+#: lib/admin/admin.browse.php:173
+msgid ""
+"Everything appears to check out. Let's continue setting up Zotpress by "
+"adding your Zotero account. Click \"Next.\""
+msgstr ""
+
+#: lib/admin/admin.browse.php:178
+msgid "Zotpress was not able to connect to WordPress.org"
+msgstr ""
+
+#: lib/admin/admin.browse.php:181
+msgid ""
+"Unfortunately, Zotpress ran into an error. Here's what WordPress has to say"
+msgstr ""
+
+#: lib/admin/admin.browse.php:181
+msgid "Sorry, but there's no details on the error"
+msgstr ""
+
+#: lib/admin/admin.browse.php:183
+msgid ""
+"First, try reloading. If the error recurs, your system may not be set up to "
+"run Zotpress. Please contact your system administrator or website host and "
+"ask about allowing PHP scripts to access content like RSS feeds from "
+"external websites through cURL, fopen with Streams (PHP 5), or fsockopen"
+msgstr ""
+
+#: lib/admin/admin.browse.php:185
+msgid ""
+"You can still try to use Zotpress, but it may not work and/or you may "
+"encounter further errors"
+msgstr ""
+
+#: lib/admin/admin.browse.php:207
+msgid "Next"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:23
+msgid "Synced Zotero Accounts"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:24
+msgid "Add Account"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:32
+msgid "User ID"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:33 lib/admin/admin.accounts.addform.php:50
+#: lib/admin/admin.accounts.addform.php:50
+msgid "Private Key"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:34 lib/admin/admin.accounts.addform.php:99
+#: lib/admin/admin.accounts.addform.php:99
+msgid "Nickname"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:35
+msgid "Actions"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:73
+msgid "Start OAuth"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:85
+msgid "Clear Cache"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:86
+msgid "Remove"
+msgstr ""
+
+#: lib/admin/admin.accounts.php:103
+msgid "What is OAuth?"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:1
+msgid "Add a Zotero Account"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:9
+msgid "Account Type"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:17
+msgid "API User ID"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:23
+#, php-format
+msgid ""
+"The API User ID for <strong>User</strong> (individual, personal) accounts "
+"can be found on the <a href=\"%s\" target=\"_blank\">Zotero Settings > "
+"Keys</a> page, right above where you create a new key."
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:35
+#, php-format
+msgid ""
+"The API User ID for <strong>Group</strong> accounts can be found on the <a "
+"href=\"%s\" target=\"_blank\">Zotero Group</a> page. Hover over the title of "
+"a group or click the title of the group to see the URL; the API User ID is "
+"the number in the URL."
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:54
+msgid ""
+"A private key is required for Zotpress to make requests to Zotero from "
+"WordPress."
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:60
+msgid ""
+"<strong>You can create a key using OAuth <u>after</u> you've added your "
+"account.</strong>"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:71
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Zotero Settings > Keys</a> page "
+"and choose \"Create new private key.\"</strong>"
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:84
+#, php-format
+msgid ""
+"If you've already created a key, you can find it on the <a href=\"%s\" "
+"target=\"_blank\">Zotero Settings > Keys</a> page. Make sure that <strong>"
+"\"Allow library access\"</strong> is checked. For groups, make sure the "
+"Default Group Permissions or Specific Group Permissions are set to \"<strong>"
+"Read Only</strong>\" or \"Read/Write.\""
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:103
+msgid ""
+"Your API User ID can be hard to remember. Make it easier for yourself by "
+"giving your account a nickname."
+msgstr ""
+
+#: lib/admin/admin.accounts.addform.php:109
+msgid "Validate"
+msgstr ""
+
+#: lib/admin/admin.php:9
+msgid "Only logged-in editors can access this page."
+msgstr ""
+
+#: lib/admin/admin.php:9
+msgid "Zotpress: 403 Access Denied"
+msgstr ""
+
+#: lib/admin/admin.setup.php:12 lib/admin/admin.setup.php:53
+msgid "Validate Account"
+msgstr ""
+
+#: lib/admin/admin.setup.php:13 lib/admin/admin.setup.php:54
+msgid "Default Options"
+msgstr ""
+
+#: lib/admin/admin.setup.php:28
+msgid ""
+"Zotpress requires at least one of the following to work: cURL, fopen with "
+"Streams (PHP 5), or fsockopen. You will not be able to use Zotpress until "
+"your administrator or tech support has set up one of these options. cURL is "
+"recommended."
+msgstr ""
+
+#: lib/admin/admin.setup.php:61
+msgid "Set Default Options"
+msgstr ""
+
+#: lib/admin/admin.setup.php:66
+msgid "Finish"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:12 lib/admin/admin.options.form.php:39
+msgid "Set Default Account"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:14
+msgid "Note: Only applicable if you have multiple synced Zotero accounts."
+msgstr ""
+
+#: lib/admin/admin.options.form.php:18
+msgid "Choose Account"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:56
+msgid "Set Default Citation Style for Importing"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:61
+#, php-format
+msgid ""
+"Note: Styles must be listed <a title=\"Zotero Styles\" href=\"%s\">here</a>. "
+"Use the name found in the style's URL, e.g. modern-language-association."
+msgstr ""
+
+#: lib/admin/admin.options.form.php:73
+msgid "Choose Style"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:95
+msgid "Add another style"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:99
+msgid "Add Style"
+msgstr ""
+
+#: lib/admin/admin.options.form.php:103
+msgid "Set Default Style"
+msgstr ""
+
+#. Name of the plugin
+msgid "Zotpress"
+msgstr ""
+
+#. Description of the plugin
+msgid "Bringing Zotero and scholarly blogging to your WordPress website."
+msgstr ""
+
+#. URI of the plugin
+msgid "http://katieseaborn.com/plugins"
+msgstr ""
+
+#. Author of the plugin
+msgid "Katie Seaborn"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://katieseaborn.com"
+msgstr ""

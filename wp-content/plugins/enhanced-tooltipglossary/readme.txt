@@ -1,67 +1,79 @@
-=== CM Tooltip Glossary  ===
+=== CM Tooltip Glossary - Powerful Glossary Plugin  ===
 Name: CM Tooltip Glossary
 Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
-Tags: WordPress glossary,WordPress tooltips,lexicon, dictionary, knowledgebase
+Tags: glossary, tooltip, lexicon, dictionary, knowledgebase
 Requires at least: 5.4.0
 Tested up to: 6.4
-Stable tag: 4.2.10
+Stable tag: 4.2.11
 
 Create a WordPress glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
 
-
 == Description ==
 
-[Product Page](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](https://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P) | [Demo](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#demo) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) | [Additional CM Plugins](https://www.cminds.com/wordpress-plugins-library)
+[Glossary Pro Plugin](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](https://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P) | [Demo](https://www.glossaryplugin.com/demo/) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) 
 
-Utilizing the Glossary plugin, you can establish an extensive glossary featuring terms with corresponding definitions. This powerful tool includes the tooltip plugin feature, allowing you to effortlessly present dynamic descriptions that activate when users hover over a term. This delivers a seamless and user-friendly method for users to swiftly access definitions. 
+## CM Tooltip Glossary - The #1 WordPress Glossary Plugin 
 
-The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to establish an extensive knowledgebase of terms and their definitions on your website. This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
+The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to **establish an extensive knowledgebase of terms and their definitions** on your website. 
 
-Upon hovering over the linked term, a tooltip instantly emerges, presenting users with a concise definition. Furthermore, the plugin generates an adaptable glossary index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
+Utilizing the Glossary plugin, you can easily establish an **extensive glossary featuring terms with corresponding definitions**. And we've been developing this since 2012!
+
+
+### Glossary Terms Pages, Links and Glosary Index
+
+This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
+
+Furthermore, the plugin generates an adaptable glossary index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
+
+### Glossary Tooltips
+
+This powerful tool also includes the tooltip plugin feature, allowing you to effortlessly **present dynamic a tooltip instantly emerges when users hover over the linked term**. 
+
+This delivers a seamless and user-friendly method for users to swiftly access definitions. 
+
+### Glossary Premium Editions
+
+The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) includes even more powerful features, such as: audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for  abbreviations and variations, synonyms, multiple glossaries support, multiple index templates and much more.
+
+### Glossary Plugin Introduction Video
 
 [youtube http://www.youtube.com/watch?v=WN3HLZ6ZuBM]
 
-
-The Pro editions include even more powerful features, such as: audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for  abbreviations and variations, multiple glossaries support, multiple index templates and much more.
-
-
-[youtube https://www.youtube.com/watch?v=drumP4tDL5Y]
-
 ==  Glossary Plugin Use-Cases ==
-(Some of these use cases might include pro features)
+(Some of these use cases might include pro plugin features)
 
-* Dictionary - Creates a dictionary of specifically used terms on your site.
-* Tooltip - Adds tooltip as an anchor to predefined terms that are contained in your site.
-* Knowledge base - Creates a knowledge base of useful terms and definitions.
-* Encyclopaedia -  Builds an internal Encyclopaedia for your site.
-* Synonyms -  Keeps and displays synonyms of terms that you are using
-* Lexicon - Builds a lexicon of terms.
-* Vocabulary - Builds a vocabulary of custom words and expressions.
-* Explanations  -  Explains the meanings of words in your posts or pages.
-* Translate  -  Translates terms and definitions into any defined language using Google Translate.
-* Wikipedia - Add Wikipedia content to your site.
-* YouTube - Show YouTube / Vimeo videos once hovering over a term
-* Music - Include mp3 voice or music file for each tooltip
-* Amazon - Enhance your site with Tooltips including Amazon product recommendation
+*  **Dictionary** - Creates a dictionary of specifically used terms on your site. Support multiple languages.
+*  **Tooltip** - Adds tooltip as an anchor to predefined terms that are contained in your site.
+* **Knowledge base** - Creates a knowledge base of useful terms and definitions which includes files and images.
+* **Synonyms** -  Keep and display synonyms of terms that you are using
+* **Lexicon** - Builds a lexicon of terms.
+* **Vocabulary** - Builds a vocabulary of custom words and expressions.
+* **Explanations**  -  Explains the meanings of words in your posts or pages.
+* **Translate**  -  Translates terms and definitions into any defined language using Google Translate.
+* **Wikipedia** - Add Wikipedia content to your site.
+* **YouTube** - Show YouTube / Vimeo videos once hovering over a term
+* **Music** - Include mp3 voice or music file for each tooltip
+* **Amazon** - Enhance your site with Tooltips including Amazon product recommendation
+* **ChatGPT** - Automatically add content for each term using ChatGPT
 
 == Free Glossary Plugin Features ==
 
-* Automatically generates a Glossary index of terms. [Example](http://www.cminds.com/glossary/)
-* Ability to show the A-Z Glossary index as a list or as tiles.
-* The Glossary index is limited by 500 terms.
-* Each glossary term has its own unique post. [Example](http://www.cminds.com/glossary/functional-requirements/)
-* The tooltip window can optionally appear when the term is hovered over by the cursor. [Example](http://www.cminds.com/glossary/)
-* Term pages can  be linked directly from posts or pages.
-* Several filters to optimize the Tooltip window and limit the length of description displayed.
-* Prevents the glossary from parsing text, when needed, by using a Shortcode [glossary_exclude]  text [/glossary_exclude].
-* Forces the glossary to parse text, when needed, by using a Shortcode [cm_tooltip_parse] text [/cm_tooltip_parse].
-* Support Excerpts (if they exist) as a hover-over text that appears in the Tooltip window.
-* Control the location and area where the Tooltip appears (pages, posts, homepage)
-* Control if the Tooltip should appear more than once.
-* Supports UTF-8
+*  Automatically generates a Glossary index of terms. 
+*  Ability to show the A-Z Glossary index as a list or as tiles.
+*  The Glossary index is limited by 500 terms.
+*  Each glossary term has its own unique post. 
+*  The tooltip window can optionally appear when the term is hovered over by the cursor. 
+*  Term pages can  be linked directly from posts or pages.
+*  Several filters to optimize the Tooltip window and limit the length of description displayed.
+*  Prevents the glossary from parsing text, when needed, by using a Shortcode [glossary_exclude]  text [/glossary_exclude].
+*  Forces the glossary to parse text, when needed, by using a Shortcode [cm_tooltip_parse] text [/cm_tooltip_parse].
+*  Support Excerpts (if they exist) as a hover-over text that appears in the Tooltip window.
+*  Control the location and area where the Tooltip appears (pages, posts, homepage)
+*  Control if the Tooltip should appear more than once.
+*  Supports UTF-8
 
-== Additional Features Available With the Glossary Pro Version ==
+== Additional Features Available With the Glossary Pro Edition Version ==
 
 > * Includes all features of the Free Version.
 > * The Glossary index can show unlimited number of glossary terms.
@@ -82,7 +94,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * (NEW) Allows to display glossary terms as footnotes instead of tooltips
 > * Over 130 configuration options in total!
 
-== List of Glossary Pro+ Features ==
+== List of Glossary Pro+ Edition Features ==
 
 > * Includes all features of the Free and Pro Versions.
 > * Allows to choose one from over 18 templates for the Glossary Index page
@@ -103,7 +115,7 @@ The Pro editions include even more powerful features, such as: audio and video t
 > * Includes a frontend turn tooltip on/off button.
 > * Over 240 configuration options in total!
 
-== List of the Glossary Ecommerce Features ==
+== List of the Glossary Ecommerce Edition Features ==
 
 > * Includes all features of the Free, Pro and Pro+ Versions.
 > * (NEW) Supports ChatGPT integration
@@ -145,6 +157,8 @@ The alphabetical index for the Glossary index is based on [jQuery ListNav Plugin
 [Blog](https://www.cminds.com/category/wordpress/) | [Twitter](http://twitter.com/cmplugins) | [LinkedIn](https://www.linkedin.com/company/creativeminds) | [YouTube](https://www.youtube.com/user/cmindschannel) | [Pinterest](http://www.pinterest.com/cmplugins/) | [Facebook](https://www.facebook.com/cmplugins/)
 
 == Suggested Plugins by CreativeMinds ==
+
+List of all [WordPress Plugins](https://www.cminds.com) by CreativeMinds
 
 * [CM Download Manager](https://www.downloadmanagerplugin.com/) - Allows users to upload, manage, track and support documents or files in a download directory listing database for others to contribute, use and comment upon.
 * [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!
@@ -213,6 +227,9 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 13. Import / Export
 
 == Glossary Plugin Changelog ==
+= 4.2.11 =
+* Fixed the issue with the missing aria-label for tooltip
+
 = 4.2.10 =
 Release Date: 25 December 2023
 * Update package info

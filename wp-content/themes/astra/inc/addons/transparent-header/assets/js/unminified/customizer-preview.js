@@ -8,7 +8,7 @@
  * @since  1.0.0
  */
 
- ( function( $ ) {
+( function( $ ) {
 
 	var isAstraHFBuilderActive    = AstraBuilderTransparentData.is_astra_hf_builder_active || false;
 
@@ -243,6 +243,8 @@
 	astra_css( 'astra-settings[transparent-header-button-bg-color]', 'background', '.ast-theme-transparent-header [CLASS*="ast-header-button-"] .ast-custom-button' );
 	astra_css( 'astra-settings[transparent-header-button-text-h-color]', 'color', '.ast-theme-transparent-header [CLASS*="ast-header-button-"] ..ast-custom-button:hover' );
 	astra_css( 'astra-settings[transparent-header-button-bg-h-color]', 'background', '.ast-theme-transparent-header [CLASS*="ast-header-button-"] .ast-custom-button:hover' );
+	astra_css( 'astra-settings[transparent-header-button-border-color]', 'border-color', '.ast-theme-transparent-header [CLASS*="ast-header-button-"] .ast-custom-button' );
+	astra_css( 'astra-settings[transparent-header-button-border-h-color]', 'border-color', '.ast-theme-transparent-header [CLASS*="ast-header-button-"] ..ast-custom-button:hover' );
 
 	/**
 	 * Transparent Header menu-toggle Dynamic CSS.

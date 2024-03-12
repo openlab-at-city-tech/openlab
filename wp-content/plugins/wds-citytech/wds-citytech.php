@@ -3732,10 +3732,14 @@ add_action(
 		$settings = get_option( 'typology_settings', [] );
 
 		$settings['color_content_meta'] = '#757575';
+		$settings['color_footer_acc']   = '#c62641';
+		$settings['color_footer_txt']   = '#5e5e5e';
 		$settings['single_author']      = false;
 
 		$settings['layout_a_buttons']['rl']     = false;
 		$settings['layout_cover_buttons']['rl'] = false;
+
+		$settings['tr_read_on'] = 'Continue';
 
 		update_option( 'typology_settings', $settings );
 	}

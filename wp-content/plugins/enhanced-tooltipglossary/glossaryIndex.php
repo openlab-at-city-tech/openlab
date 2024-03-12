@@ -2093,7 +2093,7 @@ class CMTT_Glossary_Index {
 		/*
 		 * Required for accessibility (for screen readers to see)
 		 */
-		echo '<div id="tt" role="tooltip" class="' . apply_filters( 'cmtt_tt_class', $addflipclass ) . '"></div>';
+		echo '<div id="tt" role="tooltip" aria-label="Tooltip content" class="' . apply_filters( 'cmtt_tt_class', $addflipclass ) . '"></div>';
 	}
 
 	/**

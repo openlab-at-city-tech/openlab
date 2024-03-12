@@ -248,34 +248,50 @@ class Control_Media extends Control_Base_Multiple {
 							#>
 						</div>
 					</div>
+					<?php if ( ! Hints::should_display_hint( 'image-optimization-once' ) && ! Hints::should_display_hint( 'image-optimization' ) ) { ?>
 					<div class="elementor-control-media__warnings elementor-descriptor" role="alert" style="display: none;">
 						<?php
 							Hints::get_notice_template( [
 								'type' => 'warning',
-								'content' => __( 'This image doesn’t contain ALT text - which is necessary for accessibility and SEO.', 'elementor' ),
+								'content' => esc_html__( 'This image doesn’t contain ALT text - which is necessary for accessibility and SEO.', 'elementor' ),
 								'icon' => true,
 							] );
 						?>
 					</div>
+					<?php } ?>
 					<?php if ( Hints::should_display_hint( 'image-optimization-once' ) || Hints::should_display_hint( 'image-optimization' ) ) { ?>
 						<div class="elementor-control-media__promotions elementor-descriptor" role="alert" style="display: none;">
 							<?php
 							$once_dismissed = Hints::is_dismissed( 'image-optimization-once' );
-							$content = $once_dismissed ?
-								__( 'Oh! That image exceeds the recommended size.Try reducing it with the new Image Optimizer.', 'elementor' ) :
-								__( 'Get a performance boost and improved SEO results with the Image Optimizer.', 'elementor' );
+							if ( $once_dismissed ) {
+								if ( Hints::is_plugin_installed( 'image-optimization' ) ) {
+									$content = sprintf(
+										__( 'This image is large and may slow things down. %1$sActivate Image Optimizer%2$s to reduce size without losing quality.', 'elementor' ),
+										'<a href="' . Hints::get_plugin_action_url( 'image-optimization' ) . '" target="_blank">',
+										'</a>'
+									);
+								} else {
+									$content = sprintf(
+										__( 'This image is large and may slow things down. %1$sInstall Image Optimizer%2$s to reduce size without losing quality.', 'elementor' ),
+										'<a href="' . Hints::get_plugin_action_url( 'image-optimization' ) . '" target="_blank">',
+										'</a>'
+									);
+								}
+							} else {
+								$content = sprintf(
+									'%1$s <a href="%2$s" target="_blank">%3$s</a>',
+									esc_html__( 'Don’t let unoptimized images be the downfall of your site’s performance.', 'elementor' ),
+									Hints::get_plugin_action_url( 'image-optimization' ),
+									Hints::is_plugin_installed( 'image-optimization' ) ? esc_html__( 'Activate Image Optimizer!', 'elementor' ) : esc_html__( 'Install Image Optimizer!', 'elementor' )
+								);
+							}
 							$dismissible = $once_dismissed ? 'image_optimizer_hint' : 'image-optimization-once';
 							Hints::get_notice_template( [
 								'display' => ! $once_dismissed,
-								'type' => 'info',
+								'type' => $once_dismissed ? 'warning' : 'info',
 								'content' => $content,
 								'icon' => true,
 								'dismissible' => $dismissible,
-								'button_text' => Hints::is_plugin_installed( 'image-optimization' ) ? __( 'Activate Now', 'elementor' ) : __( 'Install Now', 'elementor' ),
-								'button_event' => $dismissible,
-								'button_data' => [
-									'action_url' => Hints::get_plugin_action_url( 'image-optimization' ),
-								],
 							] ); ?>
 						</div>
 					<?php } ?>
@@ -413,7 +429,7 @@ class Control_Media extends Control_Base_Multiple {
 	public static function get_image_alt( $instance ) {
 		if ( empty( $instance['id'] ) ) {
 			// For `Insert From URL` images.
-			return isset( $instance['alt'] ) ? trim( strip_tags( $instance['alt'] ) ) : '';
+			return isset( $instance['alt'] ) ? trim( self::sanitise_text( $instance['alt'] ) ) : '';
 		}
 
 		$attachment_id = $instance['id'];
@@ -433,7 +449,7 @@ class Control_Media extends Control_Base_Multiple {
 				$alt = $attachment->post_title;
 			}
 		}
-		return trim( strip_tags( $alt ) );
+		return trim( self::sanitise_text( $alt ) );
 	}
 
 	public function get_style_value( $css_property, $control_value, array $control_data ) {
@@ -446,5 +462,9 @@ class Control_Media extends Control_Base_Multiple {
 		}
 
 		return wp_get_attachment_image_url( $control_value['id'], $control_value['size'] );
+	}
+
+	public static function sanitise_text( $string ) {
+		return esc_attr( strip_tags( $string ) );
 	}
 }

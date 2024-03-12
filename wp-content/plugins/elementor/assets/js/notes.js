@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 29-01-2024 */
+/*! elementor - v3.19.0 - 28-02-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -233,6 +233,7 @@ var NotesContextMenu = /*#__PURE__*/function (_elementorModules$edi) {
           name: 'open_notes',
           title: __('Notes', 'elementor'),
           shortcut: '<i class="eicon-pro-icon"></i>',
+          promotionURL: 'https://go.elementor.com/go-pro-notes-context-menu/',
           isEnabled: function isEnabled() {
             return false;
           },

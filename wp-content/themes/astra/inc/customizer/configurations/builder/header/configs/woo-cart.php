@@ -540,7 +540,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 	 * $_section: section-header-woo-cart.
 	 */
 	if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
-		$_configs = array_merge( $_configs, Astra_Builder_Base_Configuration::prepare_advanced_tab( $_section ) );
+		$_configs = array_merge( $_configs, Astra_Extended_Base_Configuration::prepare_advanced_tab( $_section ) );
 	}
 
 	$configurations                    = array_merge( $configurations, $_configs );

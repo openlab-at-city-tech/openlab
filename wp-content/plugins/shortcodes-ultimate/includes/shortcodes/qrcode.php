@@ -129,7 +129,7 @@ function su_shortcode_qrcode( $atts = null, $content = null ) {
 
 		$atts['link'] = sprintf(
 			' href="%s"',
-			esc_attr( su_do_attribute( $atts['link'] ) )
+			esc_url( su_do_attribute( $atts['link'] ) )
 		);
 
 		$atts['class'] .= ' su-qrcode-clickable';

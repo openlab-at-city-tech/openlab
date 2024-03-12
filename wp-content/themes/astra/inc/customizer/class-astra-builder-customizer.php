@@ -30,6 +30,8 @@ final class Astra_Builder_Customizer {
 		add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview_scripts' ) );
 		add_action( 'customize_register', array( $this, 'woo_header_configs' ), 2 );
 
+		$this->load_extended_components();
+
 		if ( false === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 			return;
 		}
@@ -246,6 +248,18 @@ final class Astra_Builder_Customizer {
 				'ajax_nonce' => wp_create_nonce( 'astra-builder-customizer-nonce' ),
 			)
 		);
+	}
+
+	/**
+	 * Register Some extended work for both old-new header footer layouts.
+	 *
+	 * @since 4.6.5
+	 */
+	public function load_extended_components() {
+		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+		require_once ASTRA_THEME_DIR . 'inc/customizer/class-astra-extended-base-configuration.php';
+		require_once ASTRA_THEME_DIR . 'inc/class-astra-extended-base-dynamic-css.php';
+		// @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 	}
 
 	/**

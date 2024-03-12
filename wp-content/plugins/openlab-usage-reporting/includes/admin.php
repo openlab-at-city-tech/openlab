@@ -139,7 +139,7 @@ function olur_batch_ajax_callback() {
 	$start_date = date( 'Y-m-d', strtotime( wp_unslash( $_POST['startDate'] ) ) );
 	$end_date   = date( 'Y-m-d', strtotime( wp_unslash( $_POST['endDate'] ) ) + ( 60 * 60 * 24 ) - 1 ); // Bump to remain inclusive
 
-	$file_name   = sprintf( 'openlab-usage-%s-through-%s.csv', $start_date, $end_date );
+	$file_name   = sprintf( 'openlab-usage-%s-through-%s-%s.csv', $start_date, $end_date, $report_id );
 	$report_dir  = olur_report_directory();
 	$report_path = $report_dir['dir'] . $file_name;
 

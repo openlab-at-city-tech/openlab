@@ -494,9 +494,12 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 
 			// Trim white space for faster page loading.
 			if ( ! empty( $css ) ) {
+				$extra_spaces = array( ' > ', ': ', ' (', '( ', ' )', ') ', ' {', ' :' );
+
 				$css = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css );
 				$css = str_replace( array( "\r\n", "\r", "\n", "\t", '  ', '    ', '    ' ), '', $css );
 				$css = str_replace( ', ', ',', $css );
+				$css = str_replace( $extra_spaces, array_map( 'trim', $extra_spaces ), $css );
 			}
 
 			return $css;

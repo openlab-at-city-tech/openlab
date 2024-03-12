@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 29-01-2024 */
+/*! elementor - v3.19.0 - 28-02-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -84,7 +84,8 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function AdminTopBar() {
   var _window, _window$elementorNoti, _elementorNotificatio;
-  var actionButtonsRef = (0, _react.useRef)();
+  var actionButtonsRef = (0, _react.useRef)(),
+    promotion = window.elementorAdminTopBarConfig.promotion;
 
   // Handle Top Bar visibility on initiation: Indicate that the admin top bar is visible and the page content needs to push down below the admin top bar for visibility.
   (0, _react.useEffect)(function () {
@@ -119,7 +120,13 @@ function AdminTopBar() {
     className: "e-admin-top-bar__secondary-area"
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "e-admin-top-bar__secondary-area-buttons"
-  }, /*#__PURE__*/_react.default.createElement(_barButton.default, {
+  }, !elementorAppConfig.hasPro && /*#__PURE__*/_react.default.createElement(_barButton.default, {
+    additionalClasses: "accent",
+    href: promotion.url,
+    target: "__blank",
+    icon: "eicon-upgrade-crown",
+    iconAdditionalClasses: "crown-icon"
+  }, promotion.text), /*#__PURE__*/_react.default.createElement(_barButton.default, {
     href: window.elementorAdminTopBarConfig.apps_url,
     icon: "eicon-integration"
   }, __('Apps', 'elementor')), window.elementorAdminTopBarConfig.is_administrator ? /*#__PURE__*/_react.default.createElement(_barButton.default, {
@@ -167,14 +174,14 @@ function BarButton(props) {
     }
   }, []);
   return /*#__PURE__*/_react.default.createElement("a", {
-    className: "e-admin-top-bar__bar-button",
+    className: "e-admin-top-bar__bar-button ".concat(props.additionalClasses),
     ref: props.buttonRef,
     onClick: props.onClick,
     "data-info": props.dataInfo,
     href: props.href,
     target: props.target
   }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "e-admin-top-bar__bar-button-icon ".concat(props.icon)
+    className: "e-admin-top-bar__bar-button-icon ".concat(props.icon, " ").concat(props.iconAdditionalClasses)
   }), /*#__PURE__*/_react.default.createElement("span", {
     className: "e-admin-top-bar__bar-button-title"
   }, props.children));
@@ -186,7 +193,9 @@ BarButton.propTypes = {
   onClick: PropTypes.func,
   buttonRef: PropTypes.object,
   href: PropTypes.string,
-  target: PropTypes.string
+  target: PropTypes.string,
+  additionalClasses: PropTypes.string,
+  iconAdditionalClasses: PropTypes.string
 };
 
 /***/ }),

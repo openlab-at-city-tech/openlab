@@ -32,7 +32,7 @@ function astra_live_search_css( $dynamic_css ) {
 			position: absolute;
 			width: 100%;
 			top: 60px;
-			padding: 4px 4px;
+			padding: 0px 4px 4px;
 			max-height: 400px;
 			height: auto;
 			overflow-x: hidden;
@@ -52,16 +52,16 @@ function astra_live_search_css( $dynamic_css ) {
 		}
 		label.ast-search--posttype-heading {
 			text-transform: capitalize;
-			padding: 8px 12px;
+			padding: 16px 16px 10px;
 			color: ' . esc_attr( $heading_base_color ) . ';
 			font-weight: 500;
 		}
 		label.ast-search--no-results-heading {
-			padding: 12px 20px;
+			padding: 14px 20px;
 		}
 		a.ast-search-item {
 			position: relative;
-			padding: 12px 20px;
+			padding: 14px 20px;
 			font-size: 0.9em;
 		}
 		a.ast-search-item:hover {
@@ -76,7 +76,6 @@ function astra_live_search_css( $dynamic_css ) {
 		.ast-search-item + .ast-search--posttype-heading {
 			border-top: 1px solid var(--ast-border-color);
 			margin-top: 10px;
-			padding-top: 12px;
 		}
 	';
 

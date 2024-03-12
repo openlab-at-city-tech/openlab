@@ -1562,7 +1562,12 @@ HTML;
 	public function openlab_custom_my_account_item( $wp_admin_bar ) {
 		$user_id      = get_current_user_id();
 		$current_user = wp_get_current_user();
-		$profile_url  = get_edit_profile_url( $user_id );
+
+		// Not using get_edit_profile_url(), which calls get_blogs_of_user() and is slow.
+		$profile_url = bp_members_get_user_url(
+			bp_loggedin_user_id(),
+			bp_members_get_path_chunks( array( bp_get_profile_slug(), 'edit' ) )
+		);
 
 		if ( ! $user_id ) {
 			return;
@@ -1829,3 +1834,31 @@ function openlab_wrap_adminbar_bottom() {
 	<?php
 }
 add_action( 'wp_after_admin_bar_render', 'openlab_wrap_adminbar_bottom' );
+
+/**
+ * Prevent get_blogs_of_user() from being invoked during admin bar initialization.
+ *
+ * get_blogs_of_user() can be very costly for accounts (mostly test accounts)
+ * that have large numbers of blogs.
+ *
+ * @param array $pre The value to return instead of the actual value.
+ * @return array
+ */
+function openlab_short_circuit_user_blog_queries( $pre ) {
+	$allow_query = true;
+
+	$backtrace = debug_backtrace();
+	foreach ( $backtrace as $trace ) {
+		if ( ! empty( $trace['class'] ) && 'WP_Admin_Bar' !== $trace['class'] && ! empty( $trace['function'] ) && 'initialize' !== $trace['function'] ) {
+			$allow_query = false;
+			break;
+		}
+	}
+
+	if ( ! $allow_query ) {
+		return [];
+	}
+
+	return $pre;
+}
+add_filter( 'pre_get_blogs_of_user', 'openlab_short_circuit_user_blog_queries' );

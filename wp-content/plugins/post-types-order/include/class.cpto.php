@@ -423,7 +423,7 @@
                     
                     global $wpdb, $userdata;
                     
-                    $post_type  =   filter_var ( $_POST['post_type'], FILTER_SANITIZE_STRING);
+                    $post_type  =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['post_type'] );
                     $paged      =   filter_var ( $_POST['paged'], FILTER_SANITIZE_NUMBER_INT);
                     $nonce      =   $_POST['archive_sort_nonce'];
                     
@@ -453,7 +453,10 @@
                         }
                     
                     global $userdata;
-                    $objects_per_page   =   get_user_meta($userdata->ID ,'edit_' .  $post_type  .'_per_page', TRUE);
+                    if ( $post_type == 'attachment' )
+                        $objects_per_page   =   get_user_meta( $userdata->ID , 'upload_per_page', TRUE );
+                        else
+                        $objects_per_page   =   get_user_meta( $userdata->ID ,'edit_' .  $post_type  .'_per_page', TRUE );
                     $objects_per_page   =   apply_filters( "edit_{$post_type}_per_page", $objects_per_page );
                     if(empty($objects_per_page))
                         $objects_per_page   =   20;
