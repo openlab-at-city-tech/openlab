@@ -2274,12 +2274,12 @@ body form{
             }
         }
     }
-    #refreshActivity{
+    .refresh-button {
         color: @40gray;
         cursor: pointer;
         margin-top: 3px;
     }
-    #whatsHappening{
+    .whats-happening-wrapper {
         padding: 12px 4%;
         height: 485px;
         overflow: auto;
@@ -2293,6 +2293,35 @@ body form{
             }
         }
     }
+	.whats-happening-subheader{
+		font-size: 18px;
+		&:first-child {
+			margin-top: 10px;
+		}
+	}
+	.whats-happening-date {
+		margin-bottom: 10px;
+		text-transform: uppercase;
+	}
+	.whats-happening-content {
+		h1, h2, h3, h4, h5 {
+			font-weight: normal;
+			font-size: 14px;
+			margin-top: 0;
+		}
+		p {
+			font-size: 14px;
+		}
+		strong {
+			font-weight: normal;
+		}
+
+		&.news-item-content {
+			a {
+				font-weight: bold;
+			}
+		}
+	}
     #stay-up-to-date{
         padding: 12px 4%;
         .sidebar-block{

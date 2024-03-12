@@ -188,3 +188,144 @@ function openlab_whats_happening() {
 
 	return $whats_happening_out;
 }
+
+/**
+ * Gets most recent 10 news feed items for What's Happening At City Tech.
+ *
+ * @return array
+ */
+function openlab_whats_happening_at_city_tech_news_feed_items() {
+	$items = [];
+
+	$news_feed_url = 'https://www.citytech.cuny.edu/news/dashboard/odata/News';
+
+	$news_feed_items = get_transient( 'whats_happening_at_city_tech_news' );
+	if ( false === $news_feed_items ) {
+		$news_request = wp_remote_get( $news_feed_url );
+		if ( 200 === wp_remote_retrieve_response_code( $news_request ) ) {
+			$news_feed_cached = wp_remote_retrieve_body( $news_request );
+			$news_feed_cached = json_decode( $news_feed_cached, true );
+			if ( $news_feed_cached && ! empty( $news_feed_cached['value'] ) ) {
+				$news_feed_items  = $news_feed_cached['value'];
+				set_transient( 'whats_happening_at_city_tech_news_items', $news_feed_items, 5 * 60 );
+			}
+		}
+	}
+
+	// Get the last 10 items.
+	for ( $i = count( $news_feed_items ) - 1; $i >= 0; $i-- ) {
+		$news_feed_item = $news_feed_items[ $i ];
+
+		$item_url = 'https://www.citytech.cuny.edu/news/?id=' . $news_feed_item['ID'];
+
+		$items[] = [
+			'content' => sprintf( '<a href="%s" target="_blank">%s</a>', $item_url, $news_feed_item['Title'] ),
+			'date'    => strtotime( $news_feed_item['post_date'] ),
+		];
+
+		if ( count( $items ) >= 10 ) {
+			break;
+		}
+	}
+
+	// Enforce a sort by date, newest to oldest.
+	usort(
+		$items,
+		function( $a, $b ) {
+			return $b['date'] - $a['date'];
+		}
+	);
+
+	return $items;
+}
+
+/**
+ * Gets a list of active alerts from the City Tech alerts feed.
+ *
+ * @return array
+ */
+function openlab_whats_happening_at_city_tech_alerts_feed_items() {
+	$alerts_feed_url = 'https://www.citytech.cuny.edu/alert/odata/alertAPI';
+
+	$items = get_transient( 'whats_happening_at_city_tech_alerts_items' );
+	if ( false === $items ) {
+		$alerts_request = wp_remote_get( $alerts_feed_url );
+		if ( 200 === wp_remote_retrieve_response_code( $alerts_request ) ) {
+			$alerts_feed_cached = wp_remote_retrieve_body( $alerts_request );
+			$alerts_feed_cached = json_decode( $alerts_feed_cached, true );
+			if ( $alerts_feed_cached && ! empty( $alerts_feed_cached['value'] ) ) {
+				$alerts_feed_items  = $alerts_feed_cached['value'];
+
+				// Get all items that are marked 'active' and for which we're between the startDate and endDate.
+				$now   = time();
+				$items = [];
+				for ( $i = count( $alerts_feed_items ) - 1; $i >= 0; $i-- ) {
+					$alerts_feed_item = $alerts_feed_items[ $i ];
+
+					if ( 'active' !== $alerts_feed_item['status'] ) {
+						continue;
+					}
+
+					$start_date = strtotime( $alerts_feed_item['startDate'] );
+					$end_date   = strtotime( $alerts_feed_item['endDate'] );
+
+					if ( $now < $start_date || $now > $end_date ) {
+						continue;
+					}
+
+					$message = wp_kses_post( bp_create_excerpt( $alerts_feed_item['message'], 300 ) );
+					$items[] = [
+						'content' => $message,
+						'date'    => strtotime( $alerts_feed_item['lastUpdated'] ),
+					];
+				}
+
+				// Enforce a sort by date, newest to oldest.
+				usort(
+					$items,
+					function( $a, $b ) {
+						return $b['date'] - $a['date'];
+					}
+				);
+
+				set_transient( 'whats_happening_at_city_tech_alerts_items', $items, 5 * 60 );
+			}
+		}
+	}
+
+	return $items;
+}
+
+/**
+ * Generates activity feed for City Tech feeds.
+ *
+ * @return string
+ */
+function openlab_whats_happening_at_city_tech() {
+	$cached = wp_cache_get( 'whats_happening_at_city_tech', 'openlab' );
+	if ( $cached ) {
+		return $cached;
+	}
+
+	$whats_happening_out = '';
+
+	ob_start();
+	get_template_part( 'parts/home/whats-happening-at-city-tech' );
+	$whats_happening_out = ob_get_clean();
+
+	wp_cache_set( 'whats_happening_at_city_tech', $whats_happening_out, 'openlab', 5 * 60 );
+
+	return $whats_happening_out;
+}
+
+add_action( 'rest_api_init', function () {
+    register_rest_route(
+		'openlab/v1',
+		'/whats-happening-at-city-tech/',
+		[
+			'methods' => 'GET',
+			'callback' => 'openlab_whats_happening_at_city_tech',
+			'permission_callback' => '__return_true',
+		]
+	);
+} );
