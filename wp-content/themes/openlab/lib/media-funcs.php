@@ -212,6 +212,10 @@ function openlab_whats_happening_at_city_tech_news_feed_items() {
 		}
 	}
 
+	if ( ! is_countable( $news_feed_items ) ) {
+		return $items;
+	}
+
 	// Get the last 10 items.
 	for ( $i = count( $news_feed_items ) - 1; $i >= 0; $i-- ) {
 		$news_feed_item = $news_feed_items[ $i ];
