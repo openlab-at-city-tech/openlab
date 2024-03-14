@@ -297,6 +297,9 @@ function openlab_whats_happening_at_city_tech_alerts_feed_items() {
 		}
 	}
 
+	// Only return the 5 most recent.
+	$items = array_slice( $items, 0, 5 );
+
 	return $items;
 }
 
