@@ -9311,6 +9311,7 @@ body form .checkbox-list-container {
 }
 .home-page .whats-happening-subsection {
   border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 12px;
 }
 .home-page .whats-happening-subsection article:last-of-type .sidebar-block:last-of-type {
   margin-bottom: 2px;
