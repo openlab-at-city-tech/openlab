@@ -26,7 +26,7 @@
 
     <?php $news_items = openlab_whats_happening_at_city_tech_news_feed_items(); ?>
     <?php if ( $news_items ) : ?>
-		<h3 class="whats-happening-subheader"><a href="https://www.citytech.cuny.edu/news/" target="_blank">City Tech News &amp; Events</a></h3>
+		<h3 class="whats-happening-subheader">City Tech News &amp; Events</h3>
 
         <?php foreach ( $news_items as $news_item ) : ?>
 			<article>
