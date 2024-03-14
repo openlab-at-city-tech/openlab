@@ -9309,6 +9309,12 @@ body form .checkbox-list-container {
   max-width: 90px;
   margin-right: 10px;
 }
+.home-page .whats-happening-subsection {
+  border-bottom: 1px solid #bbbbbb;
+}
+.home-page .whats-happening-subsection article:last-of-type .sidebar-block:last-of-type {
+  margin-bottom: 2px;
+}
 .home-page .whats-happening-subheader {
   font-size: 18px;
 }
