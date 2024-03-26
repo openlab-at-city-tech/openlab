@@ -260,6 +260,16 @@ function openlab_whats_happening_at_city_tech_alerts_feed_items() {
 			if ( $alerts_feed_cached && ! empty( $alerts_feed_cached['value'] ) ) {
 				$alerts_feed_items  = $alerts_feed_cached['value'];
 
+				$categories_to_exclude = [
+					// 100, // College open/closed; emergency maintenance on website.
+					101, // Low-priority IT announcements
+					104, // Maintenance for IT systems.
+					105, // Software vulnerabilities.
+					// 106, // President/CUNY announcements (COVID-19 policies, etc).
+					// 107, // Public safety alerts.
+					108, // Workshop announcements?
+				];
+
 				// Get all items that are marked 'active' and for which we're between the startDate and endDate.
 				$now   = time();
 				$items = [];
@@ -267,6 +277,10 @@ function openlab_whats_happening_at_city_tech_alerts_feed_items() {
 					$alerts_feed_item = $alerts_feed_items[ $i ];
 
 					if ( 'active' !== $alerts_feed_item['status'] ) {
+						continue;
+					}
+
+					if ( in_array( (int) $alerts_feed_item['categoryID'], $categories_to_exclude, true ) ) {
 						continue;
 					}
 
