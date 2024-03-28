@@ -8,25 +8,27 @@
 
 		<?php
 
-		if ($wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."zotpress;") > 1)
+		// If there's accounts ...
+		if ( $wpdb->get_var("SELECT COUNT(*) FROM ".$wpdb->prefix."zotpress;") > 1 )
 		{
 			// See if default exists
 			$zp_default_account = false;
-			if (get_option("Zotpress_DefaultAccount")) $zp_default_account = get_option("Zotpress_DefaultAccount");
+			if ( get_option("Zotpress_DefaultAccount") )
+				$zp_default_account = get_option("Zotpress_DefaultAccount");
 
-			if ($zp_default_account !== false)
+			if ( $zp_default_account !== false )
 			{
 				$zp_account = $wpdb->get_results(
 					$wpdb->prepare(
 						"
 						SELECT api_user_id, nickname FROM ".$wpdb->prefix."zotpress
-						WHERE api_user_id = %s
+						WHERE api_user_id = '%s'
 						",
 						$zp_default_account
 					)
 				);
 			}
-			else
+			else // Otherwise, assume one account
 			{
 				$zp_account = $wpdb->get_results(
 					"
@@ -35,9 +37,11 @@
 				);
 			}
 
-			if (!is_null($zp_account[0]->nickname) && $zp_account[0]->nickname != "")
+			if ( ! is_null($zp_account[0]->nickname) 
+					&& $zp_account[0]->nickname != "" )
 				$zp_default_account = $zp_account[0]->nickname . " (" . $zp_account[0]->api_user_id . ")";
 		?>
+
 		<!-- START OF ACCOUNT -->
 		<div id="zp-ZotpressMetaBox-Account" rel="<?php echo $zp_account[0]->api_user_id; ?>">
 
@@ -50,7 +54,7 @@
 
 		            $accounts = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."zotpress");
 
-		            foreach ($accounts as $num => $account)
+		            foreach ( $accounts as $num => $account )
 		            {
 		                $account_meta = array(
 		                    'id' => $account->id,

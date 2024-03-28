@@ -111,34 +111,44 @@ function Zotpress_process_accounts_AJAX()
 		}
 
         // ADD ACCOUNT
-        if ($errorCheck == false)
+        if ( $errorCheck == false )
         {
-				$query = "INSERT INTO ".$wpdb->prefix."zotpress (account_type, api_user_id, public_key";
-				if ($nickname) $query .= ", nickname";
-				$query .= ") ";
-				$query .= "VALUES ('$account_type', '$api_user_id', '$public_key'";
-				if ($nickname) $query .= ", '$nickname'";
-				$query .= ")";
+            $query = "INSERT INTO ".$wpdb->prefix."zotpress (account_type, api_user_id, public_key";
+            if ($nickname) $query .= ", nickname";
+            $query .= ") ";
+            $query .= " VALUES ('%s', '%s', '%s'";
+            // $query .= "VALUES ('$account_type', '$api_user_id', '$public_key'";
+            // if ($nickname) $query .= ", '$nickname'";
+            if ($nickname) $query .= ", '%s'";
+            $query .= ")";
 
-				// Insert new list item into the list:
-				$wpdb->query($query);
+            $temp_arr = array( $account_type, $api_user_id, $public_key);
+            if ($nickname) array_push($temp_arr, $nickname);
 
-				// Display success XML
-				$xml .= "<result success='true' api_user_id='".$api_user_id."' public_key='".$public_key."' />\n";
-			}
+            // Insert new list item into the list:
+            $wpdb->query(
+                $wpdb->prepare(
+                    $query,
+                    $temp_arr
+                )
+            );
 
-			// DISPLAY ERRORS
-			else
-			{
-				$xml .= "<result success='false' />\n";
-				$xml .= "<citation>\n";
-				$xml .= "<errors>\n";
-				foreach ($errors as $field => $error)
-					if ($error[0] == 1)
-						$xml .= $error[1]."\n";
-				$xml .= "</errors>\n";
-				$xml .= "</citation>\n";
-			}
+            // Display success XML
+            $xml .= "<result success='true' api_user_id='".$api_user_id."' public_key='".$public_key."' />\n";
+        }
+
+        // DISPLAY ERRORS
+        else
+        {
+            $xml .= "<result success='false' />\n";
+            $xml .= "<citation>\n";
+            $xml .= "<errors>\n";
+            foreach ($errors as $field => $error)
+                if ($error[0] == 1)
+                    $xml .= $error[1]."\n";
+            $xml .= "</errors>\n";
+            $xml .= "</citation>\n";
+        }
     }
 
 
@@ -150,31 +160,36 @@ function Zotpress_process_accounts_AJAX()
             && $_GET['action_type'] == "delete_account" )
     {
         if ( preg_match("/^\\d+\$/", $_GET['api_user_id']) )
-			{
-				$api_user_id = $_GET['api_user_id'];
+        {
+            $api_user_id = $_GET['api_user_id'];
 
-				// Delete account and items
-				$wpdb->query("DELETE FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$api_user_id."'");
-				zp_clear_cache_for_user ($wpdb, $api_user_id);
+            $wpdb->query(
+                $wpdb->prepare(
+                    "DELETE FROM ".$wpdb->prefix."zotpress 
+                    WHERE api_user_id='%s'",
+                    array($api_user_id)
+                )
+            );
+            zp_clear_cache_for_user ($wpdb, $api_user_id);
 
-				// Check if default account
-				if ( get_option("Zotpress_DefaultAccount") && get_option("Zotpress_DefaultAccount") == $api_user_id )
-					delete_option( "Zotpress_DefaultAccount" );
+            // Check if default account
+            if ( get_option("Zotpress_DefaultAccount") 
+                    && get_option("Zotpress_DefaultAccount") == $api_user_id )
+                delete_option( "Zotpress_DefaultAccount" );
 
-				$total_accounts = $wpdb->get_var( "SELECT COUNT(*) FROM ".$wpdb->prefix."zotpress;" );
+            $total_accounts = $wpdb->get_var( "SELECT COUNT(*) FROM ".$wpdb->prefix."zotpress;" );
 
-				// Display success XML
-				$xml .= "<result success='true' total_accounts='".$total_accounts."' />\n";
-				$xml .= "<account id='".$api_user_id."' type='delete' />\n";
+            // Display success XML
+            $xml .= "<result success='true' total_accounts='".$total_accounts."' />\n";
+            $xml .= "<account id='".$api_user_id."' type='delete' />\n";
 
-				$wpdb->flush();
-				unset($api_user_id);
-			}
-			else // die
-			{
-				exit();
-			}
-
+            $wpdb->flush();
+            unset($api_user_id);
+        }
+        else // die
+        {
+            exit();
+        }
     }
 
 
@@ -182,27 +197,27 @@ function Zotpress_process_accounts_AJAX()
     // | CLEAR CACHE |
     // +-------------+
 
-    elseif ( isset($_GET['action_type']) && $_GET['action_type'] == "clear_cache" )
+    elseif ( isset($_GET['action_type']) 
+            && $_GET['action_type'] == "clear_cache" )
     {
         if ( preg_match("/^\\d+\$/", $_GET['api_user_id']) )
-			{
-				$api_user_id = $_GET['api_user_id'];
+        {
+            $api_user_id = $_GET['api_user_id'];
 
-				// Clear the cache
-				zp_clear_cache_for_user ($wpdb, $api_user_id);
+            // Clear the cache
+            zp_clear_cache_for_user ($wpdb, $api_user_id);
 
-				// Display success XML
-				$xml .= "<result success='true' cache_cleared='true' />\n";
-				$xml .= "<account id='".$api_user_id."' type='cache' />\n";
+            // Display success XML
+            $xml .= "<result success='true' cache_cleared='true' />\n";
+            $xml .= "<account id='".$api_user_id."' type='cache' />\n";
 
-				$wpdb->flush();
-				unset($api_user_id);
-			}
-			else // die
-			{
-				exit();
-			}
-
+            $wpdb->flush();
+            unset($api_user_id);
+        }
+        else // die
+        {
+            exit();
+        }
     }
 
 
@@ -217,7 +232,7 @@ function Zotpress_process_accounts_AJAX()
 						"account_format"=>array(0,"<strong>Account</strong> was incorrectly formatted."));
 
         // Check the post variables and record errors
-        if (trim($_GET['api_user_id']) != '')
+        if ( trim($_GET['api_user_id']) != '' )
             if (preg_match('/^[\'0-9a-zA-Z -_]+$/', stripslashes($_GET['api_user_id'])) == 1)
                 $account = str_replace("'","",str_replace(" ","",trim(urldecode($_GET['api_user_id']))));
             else
@@ -227,8 +242,9 @@ function Zotpress_process_accounts_AJAX()
 
         // CHECK ERRORS
         $errorCheck = false;
-        foreach ($errors as $field => $error) {
-          if ($error[0] == 1) {
+
+        foreach ( $errors as $field => $error ) {
+          if ( $error[0] == 1 ) {
               $errorCheck = true;
               break;
           }
@@ -254,8 +270,8 @@ function Zotpress_process_accounts_AJAX()
 						"style_format"=>array(0,"<strong>Style</strong> was incorrectly formatted."));
 
         // Check the post variables and record errors
-        if (trim($_GET['style']) != '')
-          if (preg_match('/^[\'0-9a-zA-Z -_]+$/', stripslashes($_GET['style'])) == 1)
+        if ( trim($_GET['style']) != '' )
+          if ( preg_match('/^[\'0-9a-zA-Z -_]+$/', stripslashes($_GET['style'])) == 1 )
               $style = str_replace("'","",str_replace(" ","",trim(urldecode($_GET['style']))));
           else
               $errors['style_format'][0] = 1;
@@ -264,6 +280,7 @@ function Zotpress_process_accounts_AJAX()
 
         // CHECK ERRORS
         $errorCheck = false;
+
         foreach ($errors as $field => $error) {
           if ($error[0] == 1) {
               $errorCheck = true;
@@ -296,8 +313,8 @@ function Zotpress_process_accounts_AJAX()
 						"cpt_format"=>array(0,"<strong>Content Type</strong> was incorrectly formatted."));
 
         // Check the post variables and record errors
-        if (trim($_GET['cpt']) != '')
-          if (preg_match('/^[\'0-9a-zA-Z -_,]+$/', stripslashes($_GET['cpt'])) == 1)
+        if ( trim($_GET['cpt']) != '' )
+          if ( preg_match('/^[\'0-9a-zA-Z -_,]+$/', stripslashes($_GET['cpt'])) == 1 )
               $cpt = trim($_GET['cpt']);
           else
               $errors['cpt_format'][0] = 1;
@@ -306,8 +323,9 @@ function Zotpress_process_accounts_AJAX()
 
         // CHECK ERRORS
         $errorCheck = false;
-        foreach ($errors as $field => $error) {
-          if ($error[0] == 1) {
+
+        foreach ( $errors as $field => $error ) {
+          if ( $error[0] == 1 ) {
               $errorCheck = true;
               break;
           }
@@ -332,7 +350,7 @@ function Zotpress_process_accounts_AJAX()
         $errors = array("reset_empty"=>array(0,"<strong>Reset</strong> was left blank."));
 
         // Check the post variables and record errors
-        if (trim($_GET['reset']) == 'true')
+        if ( trim($_GET['reset']) == 'true' )
           $reset = $_GET['reset'];
         else
           $errors['reset_empty'][0] = 1;
@@ -340,8 +358,8 @@ function Zotpress_process_accounts_AJAX()
         // CHECK ERRORS
         $errorCheck = false;
 
-        foreach ($errors as $field => $error) {
-          if ($error[0] == 1) {
+        foreach ( $errors as $field => $error ) {
+          if ( $error[0] == 1 ) {
               $errorCheck = true;
               break;
           }
@@ -393,8 +411,8 @@ function Zotpress_process_accounts_AJAX()
     // | ADD IMAGE |
     // +-----------+
 
-    elseif (isset($_GET['action_type'])
-        && $_GET['action_type'] == "add_image")
+    elseif ( isset($_GET['action_type'])
+        && $_GET['action_type'] == "add_image" )
     {
         // Set up error array
         $errors = array(
@@ -405,36 +423,39 @@ function Zotpress_process_accounts_AJAX()
 
         // BASIC VARS
         $api_user_id = false;
-        if (preg_match("/^\\d+\$/", $_GET['api_user_id']))
+        if ( preg_match("/^\\d+\$/", $_GET['api_user_id']) )
         			$api_user_id = htmlentities(trim($_GET['api_user_id']));
         		else
         			$errors['api_user_id_blank'][0] = 1;
+        
         $item_key = false;
-        if (preg_match("/^[a-zA-Z0-9]+$/", $_GET['item_key']))
+        if ( preg_match("/^[a-zA-Z0-9]+$/", $_GET['item_key']) )
         			$item_key = htmlentities(trim($_GET['item_key']));
         		else
         			$errors['item_key_blank'][0] = 1;
+        
         $image_id = false;
-        if (preg_match("/^\\d+\$/", $_GET['image_id']))
+        if ( preg_match("/^\\d+\$/", $_GET['image_id']) )
         			$image_id = htmlentities(trim($_GET['image_id']));
         		else
         			$errors['image_id_blank'][0] = 1;
 
         // CHECK ERRORS
         $errorCheck = false;
-        foreach ($errors as $field => $error) {
-        	if ($error[0] == 1) {
+
+        foreach ( $errors as $field => $error ) {
+        	if ( $error[0] == 1 ) {
         		$errorCheck = true;
         		break;
         	}
         }
 
         // SET FEATURED IMAGE
-        if ($errorCheck == false)
+        if ( $errorCheck == false )
 		{
 			$wpdb->query(
 				$wpdb->prepare(
-					"
+                "
 				INSERT INTO ".$wpdb->prefix."zotpress_zoteroItemImages (api_user_id, item_key, image)
 				VALUES (%s, %s, %s)
 				ON DUPLICATE KEY UPDATE image=%s
@@ -446,16 +467,14 @@ function Zotpress_process_accounts_AJAX()
 			$xml .= "<result success='true' citation_id='".$item_key."' />\n";
 		}
 
-
 		// DISPLAY ERRORS
-
 		else
 		{
 			$xml .= "<result success='false' />\n";
 			$xml .= "<citation>\n";
 			$xml .= "<errors>\n";
-			foreach ($errors as $field => $error)
-				if ($error[0] == 1)
+			foreach ( $errors as $field => $error )
+				if ( $error[0] == 1 )
 					$xml .= $error[1]."\n";
 			$xml .= "</errors>\n";
 			$xml .= "</citation>\n";
@@ -478,13 +497,13 @@ function Zotpress_process_accounts_AJAX()
 
 		// BASIC VARS
 		$item_key = false;
-		if (preg_match("/^[A-Z0-9]+$/", $_GET['item_key']))
+		if ( preg_match("/^[A-Z0-9]+$/", $_GET['item_key']) )
 			$item_key = htmlentities(trim($_GET['item_key']));
 		else
 			$errors['item_key_blank'][0] = 1;
 
 		$api_user_id = false;
-		if (preg_match("/^[A-Z0-9]+$/", $_GET['api_user_id']))
+		if ( preg_match("/^[A-Z0-9]+$/", $_GET['api_user_id']) )
 			$api_user_id = htmlentities(trim($_GET['api_user_id']));
 		else
 			$errors['api_user_id_blank'][0] = 1;
@@ -524,8 +543,8 @@ function Zotpress_process_accounts_AJAX()
 			$xml .= "<result success='false' />\n";
 			$xml .= "<citation>\n";
 			$xml .= "<errors>\n";
-			foreach ($errors as $field => $error)
-				if ($error[0] == 1)
+			foreach ( $errors as $field => $error )
+				if ( $error[0] == 1 )
 					$xml .= $error[1]."\n";
 			$xml .= "</errors>\n";
 			$xml .= "</citation>\n";

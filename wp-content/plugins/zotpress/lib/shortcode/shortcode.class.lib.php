@@ -199,32 +199,44 @@ class zotpressLib
 		}
 
 		// API User ID
-
 		global $api_user_id;
 
 		if ( isset($_GET['page'])
 				&& $_GET['page'] == "Zotpress" // REVIEW: only include GET if admin?
 				&& isset($_GET['account_id'])
 				&& preg_match("/^\\d+\$/", $_GET['account_id']) )
-			$api_user_id = $wpdb->get_var("SELECT nickname FROM ".$wpdb->prefix."zotpress WHERE id='".$_GET['account_id']."'", OBJECT);
+		{
+			// $api_user_id = $wpdb->get_var("SELECT nickname FROM ".$wpdb->prefix."zotpress WHERE id='".$_GET['account_id']."'", OBJECT);
+			$api_user_id = $wpdb->get_var(
+                $wpdb->prepare(
+                    "
+					SELECT nickname FROM ".$wpdb->prefix."zotpress 
+					WHERE id='%s'
+					",
+                    array( $_GET['account_id'] )
+				), OBJECT
+            );
+		}
 		else
+		{
 			$api_user_id = $this->getAccount()->api_user_id;
+		}
 
 
 		// Collection ID
 		global $collection_id;
 
-		if (isset($_GET['page'])
+		if ( isset($_GET['page'])
 				&& $_GET['page'] == "Zotpress" // REVIEW: only include GET if admin?
 				&& isset($_GET['collection_id'])
-				&& preg_match("/^[0-9a-zA-Z]+$/", $_GET['collection_id']))
+				&& preg_match("/^[0-9a-zA-Z]+$/", $_GET['collection_id']) )
 		{
 			$collection_id = trim($_GET['collection_id']);
   		} 
-		elseif (isset($_GET['page'])
+		elseif ( isset($_GET['page'])
 				&& $_GET['page'] == "Zotpress" // REVIEW: only include GET if admin?
 				&& isset($_GET['subcollection_id'])
-				&& preg_match("/^[0-9a-zA-Z]+$/", $_GET['subcollection_id']))
+				&& preg_match("/^[0-9a-zA-Z]+$/", $_GET['subcollection_id']) )
 		{
      		$collection_id = trim($_GET['subcollection_id']);
   		}
@@ -274,7 +286,6 @@ class zotpressLib
 			$tag_id = urldecode(htmlentities(strip_tags(trim($_GET['lib_tag']))));
 		else
 			$tag_id = false;
-			// var_dump($tag_id);
 
 		// Remove default collection if tag selected
 		// REVIEW: But we want tags within collections ... I think?
@@ -286,9 +297,10 @@ class zotpressLib
 
 		// Browse instance ID
 		// REVIEW: Added post ID
-		if ( ! $post || ( $post && ! property_exists($post, "ID") ) ) {
+		if ( ! $post 
+				|| ( $post 
+						&& ! property_exists($post, "ID") ) )
 			$post = (object) array('ID' => 0);
-		}
 
 	    $instance_id = "zotpress-lib-"
 			.md5(
