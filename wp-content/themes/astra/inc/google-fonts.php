@@ -4606,6 +4606,12 @@ return array(
 		),
 	),
 	array(
+		'Madimi One' => array(
+			'variants' => array( 'regular' ),
+			'category' => 'sans-serif',
+		),
+	),
+	array(
 		'Magra' => array(
 			'variants' => array( 'regular', '700' ),
 			'category' => 'sans-serif',
@@ -6745,6 +6751,12 @@ return array(
 		'Oi' => array(
 			'variants' => array( 'regular' ),
 			'category' => 'display',
+		),
+	),
+	array(
+		'Ojuju' => array(
+			'variants' => array( '200', '300', 'regular', '500', '600', '700', '800' ),
+			'category' => 'sans-serif',
 		),
 	),
 	array(

@@ -395,7 +395,7 @@ function astra_post_author_name() {
 			$author_name = esc_attr( ! empty( $author_data ) ? $author_data->display_name : '' );
 		}
 	} else {
-		$author_name = get_the_author();
+		$author_name = esc_attr( get_the_author() );
 	}
 
 	return $author_name;
@@ -430,7 +430,7 @@ if ( ! function_exists( 'astra_post_author' ) ) {
 			);
 		echo '>';
 			// Translators: Author Name. ?>
-			<a title="<?php printf( esc_attr__( 'View all posts by %1$s', 'astra' ), get_the_author() ); ?>"
+			<a title="<?php printf( esc_attr__( 'View all posts by %1$s', 'astra' ), esc_attr( strval( get_the_author() ) ) ); ?>"
 				href="<?php echo esc_url( get_author_posts_url( $author_id ) ); ?>" rel="author"
 				<?php
 					echo astra_attr(

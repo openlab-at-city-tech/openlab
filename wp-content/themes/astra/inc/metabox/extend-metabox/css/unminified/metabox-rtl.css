@@ -265,7 +265,6 @@ td.ast-advanced-hook-row-heading {
 .components-button:focus:not(:disabled) {
     box-shadow: none;
     outline: 1.5px solid transparent;
-    border: 1px solid #ccc;
 }
 .ast-advanced-hook-row-content section {
     max-width: 250px;
@@ -2073,4 +2072,10 @@ a.ast-pro-upgrade-link {
 
 .components-base-control .components-base-control__field .components-input-control__backdrop {
   border-color: #D1D5DB !important;
+}
+
+@media (min-width: 782px) {
+    div#astra-theme-layout\:theme-meta-panel .components-panel__header+.interface-complementary-area-header {
+        margin-bottom: -2px;
+    }
 }
