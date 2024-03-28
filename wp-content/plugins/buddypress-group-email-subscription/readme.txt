@@ -5,7 +5,7 @@ Tags: buddypress, bp, activities, activity, groups, group, emails, email, notifi
 Requires at least: 3.2
 Requires PHP: 5.3
 Tested up to: 6.4
-Stable tag: 4.2.1
+Stable tag: 4.2.2
 
 == Description ==
 
@@ -92,6 +92,11 @@ For bug reports or to add patches or translation files, please visit the [GES Gi
 7. Admin Settings
 
 == Changelog ==
+
+= 4.2.2 =
+* Update BP 12.0 polyfills library for improved compatibility with older versions of BP and old forks.
+* Fix URL construction bug that caused the 'change all members' subscription level' link to be broken in some cases.
+* Improve encoding of characters in notification emails.
 
 = 4.2.1 =
 * Update BP 12.0 polyfills to fix some redirect issues.

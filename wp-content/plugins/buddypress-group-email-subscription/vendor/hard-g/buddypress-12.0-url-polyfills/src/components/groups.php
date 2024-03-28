@@ -43,6 +43,10 @@ if ( ! function_exists( 'bp_get_group_url' ) ) :
  * @return string The URL of the group.
  */
 function bp_get_group_url( $group = 0, $path_chunks = array() ) {
+	if ( ! ( $group instanceof BP_Groups_Group ) ) {
+		$group = groups_get_group( $group );
+	}
+
 	$group_url = bp_get_group_permalink( $group );
 
 	if ( ! empty( $path_chunks['single_item_action'] ) ) {
