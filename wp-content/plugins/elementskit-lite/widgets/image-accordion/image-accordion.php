@@ -951,157 +951,162 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
         echo '</div>';
     }
 
-    protected function render_raw( ) {
-        $settings = $this->get_settings_for_display();
-        extract($settings);
-        ?>
-        <div class="ekit-image-accordion elementskit-image-accordion-wraper">
-            <?php foreach ( $ekit_img_accordion_items as $key => $item ) :
-                // enabling wrap link
-                if(!Plugin::$instance->editor->is_edit_mode() && $item['ekit_img_accordion_enable_wrap_link'] == 'yes') {
-                    $this->add_render_attribute( 'wrap-link-' . $key, 'data-link', wp_json_encode($item['ekit_img_accordion_wrap_link_url']) );
-                    $this->add_render_attribute( 'wrap-link-' . $key, 'data-behavior', $active_behavior );
-                    $this->add_render_attribute( 'wrap-link-' . $key, 'data-active', $item['ekit_img_accordion_active'] );
-                }
+	protected function render_raw( ) {
+		$settings = $this->get_settings_for_display();
+		extract($settings);
+		?>
+		<div class="ekit-image-accordion elementskit-image-accordion-wraper">
+			<?php foreach ( $ekit_img_accordion_items as $key => $item ) :
+
+				$this->add_render_attribute( 'wrap-input-' . $key,[
+					'type' => 'radio',
+					'name' => 'ekit_ia_' . $this->get_id(),
+					'id' => 'ekit_ia_' . $this->get_id() .'_'. $key,
+					'class' => 'elementskit-single-image-accordion--input',
+				] );
+
+				if($item['ekit_img_accordion_active'] == 'yes') {
+					$this->add_render_attribute( 'wrap-input-' . $key, 'checked', 'checked' );
+				}
+
+				$this->add_render_attribute( 'wrap-link-' . $key, [
+					'for' => 'ekit_ia_' . $this->get_id() .'_'. $key,
+					'class' => 'elementskit-single-image-accordion ekit-image-accordion-item',
+					'style' => 'background-image: url('.esc_url($item['ekit_img_accordion_bg']['url']).')',
+				] );
+
+				// enabling wrap link
+				if(isset($item['ekit_img_accordion_enable_wrap_link']) && $item['ekit_img_accordion_enable_wrap_link'] == 'yes') {
+					$this->add_render_attribute( 'wrap-link-' . $key, 'data-link', wp_json_encode($item['ekit_img_accordion_wrap_link_url']) );
+					$this->add_render_attribute( 'wrap-link-' . $key, 'data-behavior', $active_behavior );
+					$this->add_render_attribute( 'wrap-link-' . $key, 'data-active', $item['ekit_img_accordion_active'] );
+				}
                 ?>
-                <input type="radio" name="ekit_ia_<?php echo esc_attr($this->get_id()); ?>" id="ekit_ia_<?php echo esc_attr($this->get_id()) .'_'. esc_attr($key); ?>" class="elementskit-single-image-accordion--input" <?php echo (($item['ekit_img_accordion_active'] == 'yes') ? 'checked' : '') ; ?> hidden>
-                <label for="ekit_ia_<?php echo esc_attr($this->get_id()) .'_'. esc_attr($key); ?>" class="elementskit-single-image-accordion ekit-image-accordion-item" style="background-image: url(<?php echo esc_url($item['ekit_img_accordion_bg']['url']); ?>)" <?php $this->print_render_attribute_string( 'wrap-link-' . $key ); ?>>
+                <input <?php $this->print_render_attribute_string( 'wrap-input-' . $key ); ?> hidden>
+                <label <?php $this->print_render_attribute_string( 'wrap-link-' . $key ); ?>>
                     <span class="elementskit-accordion-content">
-                    <?php if($item['ekit_img_accordion_enable_pupup'] == 'yes' || $item['ekit_img_accordion_enable_project_link'] == 'yes') {
-
-
-                        if (!empty($item['ekit_img_accordion_project_link']['url'])) {
-
-                            $this->add_render_attribute('projectlink', 'href', $item['ekit_img_accordion_project_link']['url']);
-
-                            if ($item['ekit_img_accordion_project_link']['is_external']) {
-                                $this->add_render_attribute('projectlink', 'target', '_blank');
-                            }
-
-                            if (!empty($item['ekit_img_accordion_project_link']['nofollow'])) {
-                                $this->add_render_attribute('projectlink', 'rel', 'nofollow');
-                            }
-                        }
-
-                        ?>
-                        <span class="elementskit-icon-wraper ekit-image-accordion-actions">
-                        <?php if($item['ekit_img_accordion_enable_pupup'] == 'yes') { 
-
-							$this->add_lightbox_data_attributes( 'link' . $key, 
-								$item['ekit_img_accordion_bg']['id'], 
-								$item['ekit_img_accordion_enable_pupup'], 
-								$this->get_id() 
-							);
-
-							$this->add_render_attribute( 'link' . $key, 
-								[
-									'href' =>  esc_url($item['ekit_img_accordion_bg']['url']),
-									'aria-label' => "pupup-button", 
-									'class' => "icon-outline circle",
-								]
-							);
+						<?php if($item['ekit_img_accordion_enable_pupup'] == 'yes' || $item['ekit_img_accordion_enable_project_link'] == 'yes') {
+							if (!empty($item['ekit_img_accordion_project_link']['url'])) {
+								$this->add_link_attributes( 'projectlink', $item['ekit_img_accordion_project_link'] );
+							}
 							?>
-                                <a <?php $this->print_render_attribute_string( 'link' . $key ); ?>>
-                                <?php 
-									$migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_pup_up_icons'] );
-                                    // Check if its a new widget without previously selected icon using the old Icon control
-                                    $is_new = empty( $item['ekit_img_accordion_pup_up_icon'] );
-                                    if ( $is_new || $migrated ) {
+							<span class="elementskit-icon-wraper ekit-image-accordion-actions">
+							<?php if($item['ekit_img_accordion_enable_pupup'] == 'yes') { 
 
-                                        // new icon
-                                        Icons_Manager::render_icon( $item['ekit_img_accordion_pup_up_icons'], [ 'aria-hidden' => 'true'] );
-                                    } else {
-                                        ?>
-                                        <i class="<?php echo esc_attr($item['ekit_img_accordion_pup_up_icon']); ?>" aria-hidden="true"></i>
-                                        <?php
-                                    }
-                                ?>
-                                </a>
-                        <?php } ?>
-                        <?php if($item['ekit_img_accordion_enable_project_link'] == 'yes') {
-                                if ( ! empty( $item['ekit_img_accordion_project_link']['url'] ) ) {
-                                    $this->add_link_attributes( 'button-2' . $key, $item['ekit_img_accordion_project_link'] );
-									$this->add_render_attribute( 'button-2' . $key, ['role' => "link", 'aria-label' => "button-link"] );
-                                }
-                            ?>
-                                <a <?php echo $this->get_render_attribute_string( 'button-2' . esc_attr($key) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?> class="icon-outline circle">
-                                <?php
-                                    $migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_project_link_icons'] );
-                                    // Check if its a new widget without previously selected icon using the old Icon control
-                                    $is_new = empty( $item['ekit_img_accordion_project_link_icon'] );
-                                    if ( $is_new || $migrated ) {
+								$this->add_lightbox_data_attributes( 'link' . $key, 
+									$item['ekit_img_accordion_bg']['id'], 
+									$item['ekit_img_accordion_enable_pupup'], 
+									$this->get_id() 
+								);
 
-                                        // new icon
-                                        Icons_Manager::render_icon( $item['ekit_img_accordion_project_link_icons'], [ 'aria-hidden' => 'true'] );
-                                    } else {
-                                        ?>
-                                        <i class="<?php echo esc_attr($item['ekit_img_accordion_project_link_icon']); ?>" aria-hidden="true"></i>
-                                        <?php
-                                    }
-                                ?>
-                                </a>
-                            <?php } ?>
-                        </span>
-                        <?php } ?>
-                        <span class="elementskit-accordion-title-wraper">
-                            <span class="elementskit-accordion-title <?php echo esc_attr($item['ekit_img_accordion_title_icons'] != '') ? 'icon-title' : ''?>">
-                            <?php if($item['ekit_img_accordion_enable_icon']  == 'yes'): ?>
-                            <?php if($item['ekit_img_accordion_title_icon_position'] == 'left'): ?>
-                                <!-- same-1 -->
-                                <?php
+								$this->add_render_attribute( 'link' . $key, 
+									[
+										'href' =>  esc_url($item['ekit_img_accordion_bg']['url']),
+										'aria-label' => "pupup-button", 
+										'class' => "icon-outline circle",
+									]
+								);
+								?>
+									<a <?php $this->print_render_attribute_string( 'link' . $key ); ?>>
+									<?php 
+										$migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_pup_up_icons'] );
+										// Check if its a new widget without previously selected icon using the old Icon control
+										$is_new = empty( $item['ekit_img_accordion_pup_up_icon'] );
+										if ( $is_new || $migrated ) {
 
-                                    $migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_title_icons'] );
-                                    // Check if its a new widget without previously selected icon using the old Icon control
-                                    $is_new = empty( $item['ekit_img_accordion_title_icon'] );
-                                    if ( $is_new || $migrated ) {
+											// new icon
+											Icons_Manager::render_icon( $item['ekit_img_accordion_pup_up_icons'], [ 'aria-hidden' => 'true'] );
+										} else {
+											?>
+											<i class="<?php echo esc_attr($item['ekit_img_accordion_pup_up_icon']); ?>" aria-hidden="true"></i>
+											<?php
+										}
+									?>
+									</a>
+							<?php } ?>
+							<?php if($item['ekit_img_accordion_enable_project_link'] == 'yes') {
+									if ( ! empty( $item['ekit_img_accordion_project_link']['url'] ) ) {
+										$this->add_link_attributes( 'button-2' . $key, $item['ekit_img_accordion_project_link'] );
+										$this->add_render_attribute( 'button-2' . $key, ['role' => "link", 'aria-label' => "button-link"] );
+									}
+								?>
+									<a <?php $this->print_render_attribute_string( 'button-2' . esc_attr($key) ); ?> class="icon-outline circle">
+									<?php
+										$migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_project_link_icons'] );
+										// Check if its a new widget without previously selected icon using the old Icon control
+										$is_new = empty( $item['ekit_img_accordion_project_link_icon'] );
+										if ( $is_new || $migrated ) {
 
-                                        // new icon
-                                        Icons_Manager::render_icon( $item['ekit_img_accordion_title_icons'], [ 'aria-hidden' => 'true'] );
-                                    } else {
-                                        ?>
-                                        <i class="<?php echo esc_attr($item['ekit_img_accordion_title_icon']); ?>" aria-hidden="true"></i>
-                                        <?php
-                                    }
-                                ?>
-                            <?php endif; ?>
-                            <?php endif; ?>
+											// new icon
+											Icons_Manager::render_icon( $item['ekit_img_accordion_project_link_icons'], [ 'aria-hidden' => 'true'] );
+										} else {
+											?>
+											<i class="<?php echo esc_attr($item['ekit_img_accordion_project_link_icon']); ?>" aria-hidden="true"></i>
+											<?php
+										}
+									?>
+									</a>
+								<?php } ?>
+							</span>
+							<?php } ?>
+							<span class="elementskit-accordion-title-wraper">
+								<span class="elementskit-accordion-title <?php echo esc_attr($item['ekit_img_accordion_title_icons'] != '') ? 'icon-title' : ''?>">
+								<?php if($item['ekit_img_accordion_enable_icon']  == 'yes'): ?>
+									<?php if($item['ekit_img_accordion_title_icon_position'] == 'left'): ?>
+										<!-- same-1 -->
+										<?php
 
-                            <?php echo esc_html($item['ekit_img_accordion_title']); ?>
+											$migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_title_icons'] );
+											// Check if its a new widget without previously selected icon using the old Icon control
+											$is_new = empty( $item['ekit_img_accordion_title_icon'] );
+											if ( $is_new || $migrated ) {
 
-                            <?php if($item['ekit_img_accordion_enable_icon']  == 'yes'): ?>
-                            <?php if($item['ekit_img_accordion_title_icon_position'] == 'right'): ?>
-                                <!-- same-1 -->
-                                <?php
+												// new icon
+												Icons_Manager::render_icon( $item['ekit_img_accordion_title_icons'], [ 'aria-hidden' => 'true'] );
+											} else {
+												?>
+												<i class="<?php echo esc_attr($item['ekit_img_accordion_title_icon']); ?>" aria-hidden="true"></i>
+												<?php
+											}
+										?>
+									<?php endif; ?>
+								<?php endif; ?>
 
-                                    $migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_title_icons'] );
-                                    // Check if its a new widget without previously selected icon using the old Icon control
-                                    $is_new = empty( $item['ekit_img_accordion_title_icon'] );
-                                    if ( $is_new || $migrated ) {
+								<?php echo esc_html($item['ekit_img_accordion_title']); ?>
 
-                                        // new icon
-                                        Icons_Manager::render_icon( $item['ekit_img_accordion_title_icons'], [ 'aria-hidden' => 'true'] );
-                                    } else {
-                                        ?>
-                                        <i class="<?php echo esc_attr($item['ekit_img_accordion_title_icon']); ?>" aria-hidden="true"></i>
-                                        <?php
-                                    }
-                                ?>
-                            <?php endif; ?>
-                            <?php endif; ?>
-                            </span>
-                        </span>
-                        <?php if($item['ekit_img_accordion_enable_button'] == 'yes'):
-                        
-                            if ( ! empty( $item['ekit_img_accordion_button_url']['url'] ) ) {
-                                $this->add_link_attributes( 'button-' . $key, $item['ekit_img_accordion_button_url'] );
-                            }    
-                        ?>
-                            <span class="elementskit-btn-wraper">
-                                <a class="ekit-image-accordion--btn elementskit-btn whitespace--normal" <?php echo $this->get_render_attribute_string( 'button-' . esc_attr($key) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>>
-                                    <?php echo esc_html($item['ekit_img_accordion_button_label']); ?>
-                                </a>
-                            </span>
-                        <?php endif; ?>
+								<?php if($item['ekit_img_accordion_enable_icon']  == 'yes'): ?>
+									<?php if($item['ekit_img_accordion_title_icon_position'] == 'right'): ?>
+										<!-- same-1 -->
+										<?php
+
+											$migrated = isset( $item['__fa4_migrated']['ekit_img_accordion_title_icons'] );
+											// Check if its a new widget without previously selected icon using the old Icon control
+											$is_new = empty( $item['ekit_img_accordion_title_icon'] );
+											if ( $is_new || $migrated ) {
+
+												// new icon
+												Icons_Manager::render_icon( $item['ekit_img_accordion_title_icons'], [ 'aria-hidden' => 'true'] );
+											} else {
+												?>
+												<i class="<?php echo esc_attr($item['ekit_img_accordion_title_icon']); ?>" aria-hidden="true"></i>
+												<?php
+											}
+										?>
+									<?php endif; ?>
+								<?php endif; ?>
+								</span>
+							</span>
+							<?php if($item['ekit_img_accordion_enable_button'] == 'yes') :
+							if ( ! empty( $item['ekit_img_accordion_button_url']['url'] ) ) {
+								$this->add_link_attributes( 'button-' . $key, $item['ekit_img_accordion_button_url'] );
+							}
+							?>
+							<span class="elementskit-btn-wraper">
+								<a class="ekit-image-accordion--btn elementskit-btn whitespace--normal" <?php $this->print_render_attribute_string( 'button-' . esc_attr($key) ); ?>>
+									<?php echo esc_html($item['ekit_img_accordion_button_label']); ?>
+								</a>
+							</span>
+						<?php endif; ?>
                     </span>
                 </label>
             <?php endforeach; ?>

@@ -2449,13 +2449,21 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			]
 		);
 		
-		$dir_common = Handler::get_dir() .'common/';
+		$dir_common = Handler::get_dir() . 'common/';
 
-        $testimonials = isset($ekit_testimonial_data) ? $ekit_testimonial_data : [];
-		$style = isset($ekit_testimonial_style) ? $ekit_testimonial_style : 'default';
+		$testimonials = isset($ekit_testimonial_data) ? $ekit_testimonial_data : [];
+		$style = isset($ekit_testimonial_style) ? sanitize_text_field($ekit_testimonial_style) : 'default';
+		$styles = [
+			'style1',
+			'style2',
+			'style3',
+			'style4',
+			'style5',
+			'style6',
+		];
 
-		if (is_array($testimonials) && !empty($testimonials)):
-			require Handler::get_dir() . 'style/'.$style.'.php';
-	 	endif; // end if check testimonila array
-    }
+		if (in_array($style, $styles) && is_array($testimonials) && !empty($testimonials)) {
+			require Handler::get_dir() . 'style/' . $style . '.php';
+		}
+	}
 }

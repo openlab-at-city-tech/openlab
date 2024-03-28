@@ -1,14 +1,14 @@
-# Copyright (C) 2023 Wpmet
+# Copyright (C) 2024 Wpmet
 # This file is distributed under the same license as the ElementsKit Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ElementsKit Lite 3.0.4\n"
+"Project-Id-Version: ElementsKit Lite 3.0.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/elementskit-lite\n"
-"POT-Creation-Date: 2023-12-18 10:33:48+00:00\n"
+"POT-Creation-Date: 2024-03-19 06:57:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2023-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 1.0.3\n"
@@ -981,12 +981,13 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-#: modules/controls/widget-area-utils.php:37
-msgid "Edit Content"
+#: modules/controls/widget-area-utils.php:28
+#: modules/controls/widget-area-utils.php:97
+msgid "Click on the Edit Content button to edit/add the content."
 msgstr ""
 
-#: modules/controls/widget-area-utils.php:75
-msgid "Click on the Edit Content button to edit/add the content."
+#: modules/controls/widget-area-utils.php:59
+msgid "Edit Content"
 msgstr ""
 
 #: modules/dynamic-content/cpt.php:19 modules/dynamic-content/cpt.php:20

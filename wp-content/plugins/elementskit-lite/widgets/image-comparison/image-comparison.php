@@ -636,37 +636,41 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
         echo '</div>';
     }
 
-    protected function render_raw( ) {
-        $settings = $this->get_settings();
-        if($settings['ekit_img_comparison_container_style'] == 'vertical'):
-            $this->add_render_attribute( 'image_comparison_wrapper', 'class', 'elementskit-image-comparison image-comparison-container-vertical');
-        else:
-            $this->add_render_attribute( 'image_comparison_wrapper', 'class', 'elementskit-image-comparison image-comparison-container');
-        endif;
+	protected function render_raw( ) {
+		$settings = $this->get_settings_for_display();
 
+		if($settings['ekit_img_comparison_container_style'] == 'vertical') :
+			$this->add_render_attribute( 'image_comparison_wrapper', 'class', 'elementskit-image-comparison image-comparison-container-vertical');
+		else :
+			$this->add_render_attribute( 'image_comparison_wrapper', 'class', 'elementskit-image-comparison image-comparison-container');
+		endif;
 
-        $image_html = '';
-        if ( ! empty( $settings['ekit_img_comparison_image_before']['url'] ) ) {
-            $image_html .= Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail', 'ekit_img_comparison_image_before' );
+		$this->add_render_attribute(
+			'image_comparison_wrapper',
+			[
+				'data-offset' => esc_attr($settings['ekit_img_comparison_offset']['size'] / 100),
+				'data-overlay' => esc_attr($settings['ekit_img_comparison_overlay']),
+				'data-label_after' => esc_attr($settings['ekit_img_comparison_label_after']),
+				'data-label_before' => esc_attr($settings['ekit_img_comparison_label_before']),
+				'data-move_slider_on_hover' => esc_attr($settings['ekit_img_comparison_move_slider_on_hover']),
+				'data-click_to_move' => esc_attr($settings['ekit_img_comparison_click_to_move']),
+			]
+		);
 
-        }
-        $image_before_html = '';
-        if ( ! empty( $settings['ekit_img_comparison_image_after']['url'] ) ) {
-            $image_html .= Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail', 'ekit_img_comparison_image_after' );
+		$image_html = '';
+		if ( ! empty( $settings['ekit_img_comparison_image_before']['url'] ) ) {
+			$image_html .= Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail', 'ekit_img_comparison_image_before' );
+		}
 
-        }
-        ?>
+		$image_before_html = '';
+		if ( ! empty( $settings['ekit_img_comparison_image_after']['url'] ) ) {
+			$image_html .= Group_Control_Image_Size::get_attachment_image_html( $settings, 'thumbnail', 'ekit_img_comparison_image_after' );
+		}
+		?>
 
-        <div <?php echo ($this->get_render_attribute_string( 'image_comparison_wrapper' )); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?> 
-	   data-offset= "<?php echo esc_attr($settings['ekit_img_comparison_offset']['size'] / 100); ?>" 
-	   data-overlay= "<?php echo esc_attr($settings['ekit_img_comparison_overlay']); ?>" 
-	   data-label_after= "<?php echo esc_attr($settings['ekit_img_comparison_label_after']); ?>" 
-	   data-label_before= "<?php echo esc_attr($settings['ekit_img_comparison_label_before']); ?>" 
-	   data-move_slider_on_hover= "<?php echo esc_attr($settings['ekit_img_comparison_move_slider_on_hover']); ?>" 
-	   data-click_to_move= "<?php echo esc_attr($settings['ekit_img_comparison_click_to_move']); ?>" 
-	   >
-            <?php echo  wp_kses($image_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
-        </div>
+		<div <?php $this->print_render_attribute_string( 'image_comparison_wrapper' ); ?>>
+			<?php echo wp_kses($image_html, \ElementsKit_Lite\Utils::get_kses_array()); ?>
+		</div>
 
-    <?php }
+	<?php }
 }
