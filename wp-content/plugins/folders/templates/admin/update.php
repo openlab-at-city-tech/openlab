@@ -9,6 +9,7 @@
 if (defined('ABSPATH') === false) {
     exit;
 }
+$email = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "playground.wordpress.net")?"":get_option('admin_email');
 ?>
 <style>
     body {
@@ -36,7 +37,7 @@ if (defined('ABSPATH') === false) {
                         </g>
                     </svg>
                 </div>
-                <input id="folder_update_status" autocomplete="off" value="<?php echo get_option('admin_email') ?>" placeholder="Email address">
+                <input id="folder_update_status" autocomplete="off" value="<?php echo esc_attr($email) ?>" placeholder="Email address">
                 <button href="javascript:;" class="button button-primary form-submit-btn yes befirst-btn"><?php esc_html_e('Sign Up', 'stars-testimonials'); ?></button>
             </div>
             <!--div class="update-form-skip-button">

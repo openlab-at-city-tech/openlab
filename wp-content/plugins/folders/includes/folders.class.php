@@ -261,7 +261,29 @@ class WCP_Folders
         // Remove Media Library for Dokan for frontend users
         add_filter("check_media_status_for_folders", [$this, "check_media_status_for_folders"]);
 
+        add_action("admin_init", [$this, "check_for_signup_status"]);
+
     }//end __construct()
+
+    function check_for_signup_status() {
+        if(!defined("DOING_AJAX")) {
+            $option = get_option("folder_redirect_status");
+            if ($option == 1) {
+                update_option("folder_redirect_status", 2);
+                wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
+                exit;
+            }
+
+            $page = isset($_GET['page']) ? $_GET['page'] : "";
+            if ($page == "recommended-folder-plugins" || $page == "folders-upgrade-to-pro") {
+                $is_shown = get_option("folder_update_message");
+                if ($is_shown === false) {
+                    wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
+                    exit;
+                }
+            }
+        }
+    }
 
 
     function check_media_status_for_folders($status) {
@@ -5814,7 +5836,10 @@ class WCP_Folders
             }
         }
 
-        update_option("folder_redirect_status", 1);
+        if(!defined("DOING_AJAX")) {
+            delete_option("folder_redirect_status");
+            add_option("folder_redirect_status", 1);
+        }
 
     }//end activate()
 
@@ -5887,14 +5912,6 @@ class WCP_Folders
                 }
             }
         }
-
-        $option = get_option("folder_redirect_status");
-        if ($option == 1) {
-            update_option("folder_redirect_status", 2);
-            wp_redirect(admin_url("admin.php?page=wcp_folders_settings"));
-            exit;
-        }
-
     }//end folders_register_settings()
 
 
