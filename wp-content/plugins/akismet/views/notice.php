@@ -152,15 +152,11 @@ $kses_allow_strong = array( 'strong' => true );
 <?php elseif ( $type === 'no-sub' ) : ?>
 <div class="akismet-alert is-bad">
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'You don&#8217;t have an Akismet plan.', 'akismet' ); ?></h3>
+	<p><?php echo esc_html__( 'Your API key must have an Akismet plan before it can protect your site from spam.', 'akismet' ); ?></p>
 	<p>
 		<?php
-		/* translators: the placeholder is a clickable URL to the Akismet account upgrade page. */
-		echo wp_kses( sprintf( __( 'In 2012, Akismet began using subscription plans for all accounts (even free ones). A plan has not been assigned to your account, and we&#8217;d appreciate it if you&#8217;d <a href="%s" target="_blank">sign into your account</a> and choose one.', 'akismet' ), esc_url( 'https://akismet.com/pricing' ) ), $kses_allow_link );
-		?>
-		<br /><br />
-		<?php
-		/* translators: The placeholder is a URL to the Akismet contact form. */
-		echo wp_kses( sprintf( __( 'Please <a href="%s" target="_blank">contact our support team</a> with any questions.', 'akismet' ), esc_url( 'https://akismet.com/contact/' ) ), $kses_allow_link );
+		/* translators: the placeholder is the URL to the Akismet pricing page. */
+		echo wp_kses( sprintf( __( 'Please <a href="%s" target="_blank">choose a plan</a> to get started with Akismet.', 'akismet' ), esc_url( 'https://akismet.com/pricing' ) ), $kses_allow_link );
 		?>
 	</p>
 </div>

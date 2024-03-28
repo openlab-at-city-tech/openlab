@@ -129,6 +129,16 @@ class Akismet_REST_API {
 				),
 			)
 		) );
+
+		register_rest_route(
+			'akismet/v1',
+			'/webhook',
+			array(
+				'methods' => WP_REST_Server::CREATABLE,
+				'callback' => array( 'Akismet_REST_API', 'receive_webhook' ),
+				'permission_callback' => array( 'Akismet_REST_API', 'remote_call_permission_callback' ),
+			)
+		);
 	}
 
 	/**
@@ -369,5 +379,174 @@ class Akismet_REST_API {
 
 	public static function sanitize_key( $key, $request, $param ) {
 		return trim( $key );
+	}
+
+	/**
+	 * Process a webhook request from the Akismet servers.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function receive_webhook( $request ) {
+		Akismet::log( array( 'Webhook request received', $request->get_body() ) );
+
+		/**
+		 * The request body should look like this:
+		 * array(
+		 *     'key' => '1234567890abcd',
+		 *     'endpoint' => '[comment-check|submit-ham|submit-spam]',
+		 *     'comments' => array(
+		 *         array(
+		 *             'guid' => '[...]',
+		 *             'result' => '[true|false]',
+		 *             'comment_author' => '[...]',
+		 *             [...]
+		 *         ),
+		 *         array(
+		 *             'guid' => '[...]',
+		 *             [...],
+		 *         ),
+		 *         [...]
+		 *     )
+		 * )
+		 *
+		 * Multiple comments can be included in each request, and the only truly required
+		 * field for each is the guid, although it would be friendly to include also
+		 * comment_post_ID, comment_parent, and comment_author_email, if possible to make
+		 * searching easier.
+		 */
+
+		// The response will include statuses for the result of each comment that was supplied.
+		$response = array(
+			'comments' => array(),
+		);
+
+		$endpoint = $request->get_param( 'endpoint' );
+
+		switch ( $endpoint ) {
+			case 'comment-check':
+				$webhook_comments = $request->get_param( 'comments' );
+
+				if ( ! is_array( $webhook_comments ) ) {
+					return rest_ensure_response( new WP_Error( 'malformed_request', __( 'The \'comments\' parameter must be an array.', 'akismet' ), array( 'status' => 400 ) ) );
+				}
+
+				foreach ( $webhook_comments as $webhook_comment ) {
+					$guid = $webhook_comment['guid'];
+
+					if ( ! $guid ) {
+						// Without the GUID, we can't be sure that we're matching the right comment.
+						// We'll make it a rule that any comment without a GUID is ignored intentionally.
+						continue;
+					}
+
+					// Search on the fields that are indexed in the comments table, plus the GUID.
+					// The GUID is the only thing we really need to search on, but comment_meta
+					// is not indexed in a useful way if there are many many comments. This
+					// should help narrow it down first.
+					$queryable_fields = array(
+						'comment_post_ID' => 'post_id',
+						'comment_parent' => 'parent',
+						'comment_author_email' => 'author_email',
+					);
+
+					$query_args = array();
+					$query_args['status'] = 'any';
+					$query_args['meta_key'] = 'akismet_guid';
+					$query_args['meta_value'] = $guid;
+
+					foreach ( $queryable_fields as $queryable_field => $wp_comment_query_field ) {
+						if ( isset( $webhook_comment[ $queryable_field ] ) ) {
+							$query_args[ $wp_comment_query_field ] = $webhook_comment[ $queryable_field ];
+						}
+					}
+
+					$comments_query = new WP_Comment_Query( $query_args );
+					$comments = $comments_query->comments;
+
+					if ( ! $comments ) {
+						// Unexpected, although the comment could have been deleted since being submitted.
+						Akismet::log( 'Webhook failed: no matching comment found.' );
+
+						$response['comments'][ $guid ] = array( 'status' => 'error', 'message' => __( 'Could not find matching comment.', 'akismet' ) );
+
+						continue;
+					} if ( count( $comments ) > 1 ) {
+						// Two comments shouldn't be able to match the same GUID.
+						Akismet::log( 'Webhook failed: multiple matching comments found.', $comments );
+
+						$response['comments'][ $guid ] = array( 'status' => 'error', 'message' => __( 'Multiple comments matched request.', 'akismet' ) );
+
+						continue;
+					} else {
+						// We have one single match, as hoped for.
+						Akismet::log( 'Found matching comment.', $comments );
+
+						$current_status = wp_get_comment_status( $comments[0] );
+
+						$result = $webhook_comment['result'];
+
+						if ( 'true' == $result ) {
+							Akismet::log( 'Comment should be spam' );
+
+							// The comment should be classified as spam.
+							if ( 'spam' != $current_status ) {
+								// The comment is not classified as spam. If Akismet was the one to act on it, move it to spam.
+								if ( Akismet::last_comment_status_change_came_from_akismet( $comments[0]->comment_ID ) ) {
+									Akismet::log( 'Comment is not spam; marking as spam.' );
+
+									wp_spam_comment( $comments[0] );
+									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-spam' );
+								} else {
+									Akismet::log( 'Comment is not spam, but it has already been manually handled by some other process.' );
+									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-spam-noaction' );
+								}
+							}
+						} else if ( 'false' == $result ) {
+							Akismet::log( 'Comment should be ham' );
+
+							// The comment should be classified as ham.
+							if ( 'spam' == $current_status ) {
+								Akismet::log( 'Comment is spam.' );
+
+								// The comment is classified as spam. If Akismet was the one to label it as spam, unspam it.
+								if ( Akismet::last_comment_status_change_came_from_akismet( $comments[0]->comment_ID ) ) {
+									Akismet::log( 'Akismet marked it as spam; unspamming.' );
+
+									wp_unspam_comment( $comments[0] );
+									akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-ham' );
+								} else {
+									Akismet::log( 'Comment is not spam, but it has already been manually handled by some other process.' );
+									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-ham-noaction' );
+								}
+							}
+						}
+
+						$response['comments'][ $guid ] = array( 'status' => 'success' );
+					}
+				}
+
+				break;
+			case 'submit-ham':
+			case 'submit-spam':
+				// Nothing to do for submit-ham or submit-spam.
+				break;
+			default:
+				// Unsupported endpoint.
+				break;
+		}
+
+		/**
+		 * Allow plugins to do things with a successfully processed webhook request, like logging.
+		 *
+		 * @since 5.3.2
+		 *
+		 * @param WP_REST_Request $request The REST request object.
+		 */
+		do_action( 'akismet_webhook_received', $request );
+
+		Akismet::log( 'Done processing webhook.' );
+
+		return rest_ensure_response( $response );
 	}
 }

@@ -642,7 +642,14 @@ class Akismet {
 		return 0;
 	}
 
-	// get the full comment history for a given comment, as an array in reverse chronological order
+	/**
+	 * Get the full comment history for a given comment, as an array in reverse chronological order.
+	 * Each entry will have an 'event', a 'time', and possible a 'message' member (if the entry is old enough).
+	 * Some entries will also have a 'user' or 'meta' member.
+	 *
+	 * @param int $comment_id The relevant comment ID.
+	 * @return array|bool An array of history events, or false if there is no history.
+	 */
 	public static function get_comment_history( $comment_id ) {
 		$history = get_comment_meta( $comment_id, 'akismet_history', false );
 		if ( empty( $history ) || empty( $history[ 0 ] ) ) {
@@ -681,6 +688,10 @@ class Akismet {
 		$history[] = array( 'time' => 445856425, 'event' => 'status-spam', 'user' => 'sam' );
 		$history[] = array( 'time' => 445856426, 'event' => 'status-hold', 'user' => 'sam' );
 		$history[] = array( 'time' => 445856427, 'event' => 'status-approve', 'user' => 'sam' );
+		$history[] = array( 'time' => 445856427, 'event' => 'webhook-spam' );
+		$history[] = array( 'time' => 445856427, 'event' => 'webhook-ham' );
+		$history[] = array( 'time' => 445856427, 'event' => 'webhook-spam-noaction' );
+		$history[] = array( 'time' => 445856427, 'event' => 'webhook-ham-noaction' );
 		*/
 		
 		usort( $history, array( 'Akismet', '_cmp_time' ) );
@@ -819,6 +830,17 @@ class Akismet {
 		if ( get_comment_meta( $comment->comment_ID, 'akismet_rechecking' ) )
 			return;
 		
+		if ( function_exists( 'getallheaders' ) ) {
+			$request_headers = getallheaders();
+
+			foreach ( $request_headers as $header => $value ) {
+				if ( strtolower( $header ) == 'x-akismet-webhook' ) {
+					// This change is due to a webhook request.
+					return;
+				}
+			}
+		}
+
 		// Assumption alert:
 		// We want to submit comments to Akismet only when a moderator explicitly spams or approves it - not if the status
 		// is changed automatically by another plugin.  Unfortunately WordPress doesn't provide an unambiguous way to
@@ -1583,7 +1605,7 @@ p {
 	public static function view( $name, array $args = array() ) {
 		$args = apply_filters( 'akismet_view_arguments', $args, $name );
 		
-		foreach ( $args AS $key => $val ) {
+		foreach ( $args as $key => $val ) {
 			$$key = $val;
 		}
 		
@@ -1870,5 +1892,44 @@ p {
 		}
 
 		return $return_value;
+	}
+
+	/**
+	 * Was the last entry in the comment history created by Akismet?
+	 *
+	 * @param int $comment_id The ID of the comment.
+	 * @return bool
+	 */
+	public static function last_comment_status_change_came_from_akismet( $comment_id ) {
+		$history = self::get_comment_history( $comment_id );
+
+		if ( empty( $history ) ) {
+			return false;
+		}
+
+		$most_recent_history_event = $history[0];
+
+		if ( ! isset( $most_recent_history_event['event'] ) ) {
+			return false;
+		}
+
+		$akismet_history_events = array(
+			'check-error',
+			'cron-retry-ham',
+			'cron-retry-spam',
+			'check-ham',
+			'check-spam',
+			'recheck-error',
+			'recheck-ham',
+			'recheck-spam',
+			'webhook-ham',
+			'webhook-spam',
+		);
+
+		if ( in_array( $most_recent_history_event['event'], $akismet_history_events ) ) {
+			return true;
+		}
+
+		return false;
 	}
 }
