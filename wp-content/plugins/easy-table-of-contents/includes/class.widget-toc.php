@@ -230,7 +230,11 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
 				 * @link https://wordpress.org/support/topic/inline-styling-triggers-html-validation-error/
 				 */
 
-				$title_font_size = $instance[ 'sidebar_title_size' ].$instance[ 'sidebar_title_size_unit' ];
+				if(isset($instance[ 'sidebar_title_size' ]) && isset($instance[ 'sidebar_title_size_unit' ])){
+					$title_font_size = $instance[ 'sidebar_title_size' ].$instance[ 'sidebar_title_size_unit' ];
+				}else{
+					$title_font_size = '120%';
+				}
 
 				if ( 0 < strlen( $title ) ) {
 
@@ -242,8 +246,10 @@ if ( ! class_exists( 'ezTOC_Widget' ) ) {
                                         <style>
                                     		#<?php echo $this->id ?> .ez-toc-title{
                                     		    font-size: <?php echo esc_attr ( $title_font_size ); ?>;
-    		                                    font-weight: <?php echo esc_attr ( $instance[ 'sidebar_title_weight' ] ); ?>;
-    		                                    color: <?php echo esc_attr ( $instance[ 'sidebar_title_color' ] ); ?>;
+												<?php if( isset($instance[ 'sidebar_title_weight' ]) ){ ?>
+    		                                    font-weight: <?php echo esc_attr ( $instance[ 'sidebar_title_weight' ] ); } ?>;
+												<?php if( isset($instance[ 'sidebar_title_color' ]) ){ ?>
+    		                                    color: <?php echo esc_attr ( $instance[ 'sidebar_title_color' ] ); }?>;
                                     		}
                                             #<?php echo $this->id ?> .ez-toc-widget-container ul.ez-toc-list li.active{
                                                     background-color: <?php echo esc_attr( $instance['highlight_color'] ); ?>;
