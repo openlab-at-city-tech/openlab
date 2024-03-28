@@ -124,7 +124,7 @@ if ( ! class_exists( 'Redux_Dimensions', false ) ) {
 
 			// This used to be unit field, but was giving the PHP index error when it was an array,
 			// so I changed it.
-			echo '<input type="hidden" class="field-units" value="' . esc_attr( $this->value['units'] ) . '">';
+			echo '<input type="hidden" id="' . esc_attr( $this->field['id'] ) . '-units" class="field-units" value="' . esc_attr( $this->value['units'] ) . '">';
 
 			/**
 			 * Width
@@ -140,15 +140,16 @@ if ( ! class_exists( 'Redux_Dimensions', false ) ) {
 				echo '<span class="add-on"><i class="el el-resize-horizontal icon-large"></i></span>';
 				echo '<input
 						type="text"
+						id="' . esc_attr( $this->field['id'] ) . '-width"
 						class="redux-dimensions-input redux-dimensions-width mini ' . esc_attr( $this->field['class'] ) . '"
 						placeholder="' . esc_html__( 'Width', 'redux-framework' ) . '"
-						rel="' . esc_attr( $this->field['id'] ) . '-width"
+						rel="' . esc_attr( $this->field['id'] ) . '-width-hidden"
 						value="' . esc_attr( filter_var( $this->value['width'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) ) . '">';
 
 				echo '<input
 						data-id="' . esc_attr( $this->field['id'] ) . '"
 						type="hidden"
-						id="' . esc_attr( $this->field['id'] ) . '-width"
+						id="' . esc_attr( $this->field['id'] ) . '-width-hidden"
 						name="' . esc_attr( $this->field['name'] . $this->field['name_suffix'] ) . '[width]"
 						value="' . esc_attr( $this->value['width'] ) . '">';
 
@@ -169,15 +170,16 @@ if ( ! class_exists( 'Redux_Dimensions', false ) ) {
 				echo '<span class="add-on"><i class="el el-resize-vertical icon-large"></i></span>';
 				echo '<input
 						type="text"
+						id="' . esc_attr( $this->field['id'] ) . '-height"
 						class="redux-dimensions-input redux-dimensions-height mini ' . esc_attr( $this->field['class'] ) . '"
 						placeholder="' . esc_html__( 'Height', 'redux-framework' ) . '"
-						rel="' . esc_attr( $this->field['id'] ) . '-height"
+						rel="' . esc_attr( $this->field['id'] ) . '-height-hidden"
 						value="' . esc_attr( filter_var( $this->value['height'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) ) . '">';
 
 				echo '<input
 						data-id="' . esc_attr( $this->field['id'] ) . '"
 						type="hidden"
-						id="' . esc_attr( $this->field['id'] ) . '-height"
+						id="' . esc_attr( $this->field['id'] ) . '-height-hidden"
 						name="' . esc_attr( $this->field['name'] . $this->field['name_suffix'] ) . '[height]"
 						value="' . esc_attr( $this->value['height'] ) . '">';
 						echo '</div>';
