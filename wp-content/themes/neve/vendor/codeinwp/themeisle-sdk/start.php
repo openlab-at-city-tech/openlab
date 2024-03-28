@@ -22,6 +22,7 @@ $files_to_load          = [
 	$themeisle_library_path . '/src/Common/Abstract_module.php',
 	$themeisle_library_path . '/src/Common/Module_factory.php',
 
+	$themeisle_library_path . '/src/Modules/Script_loader.php',
 	$themeisle_library_path . '/src/Modules/Dashboard_widget.php',
 	$themeisle_library_path . '/src/Modules/Rollback.php',
 	$themeisle_library_path . '/src/Modules/Uninstall_feedback.php',
@@ -36,6 +37,7 @@ $files_to_load          = [
 	$themeisle_library_path . '/src/Modules/Welcome.php',
 	$themeisle_library_path . '/src/Modules/Compatibilities.php',
 	$themeisle_library_path . '/src/Modules/About_us.php',
+	$themeisle_library_path . '/src/Modules/Announcements.php',
 ];
 
 $files_to_load = array_merge( $files_to_load, apply_filters( 'themeisle_sdk_required_files', [] ) );

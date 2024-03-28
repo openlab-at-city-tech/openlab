@@ -58,7 +58,7 @@
   .header--row .nv-nav-wrap .primary-menu-ul .neve-mega-menu > .sub-menu {
     right: 50% !important;
     left: unset !important;
-    transform: translateX(50%);
+    transform: translateX(50%) !important;
     position: absolute;
     padding: 20px 10px;
     top: auto;

@@ -1,3 +1,8 @@
+##### [Version 3.3.14](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.13...v3.3.14) (2024-02-27)
+
+- Add Announcement Module
+- Add Script Loader Module
+
 ##### [Version 3.3.13](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.12...v3.3.13) (2024-02-01)
 
 - Updated nonce check

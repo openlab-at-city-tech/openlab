@@ -46,6 +46,7 @@ final class Loader {
 	 * @var array The modules which SDK will be using.
 	 */
 	private static $available_modules = [
+		'script_loader',
 		'dashboard_widget',
 		'rollback',
 		'uninstall_feedback',
@@ -59,6 +60,7 @@ final class Loader {
 		'welcome',
 		'compatibilities',
 		'about_us',
+		'announcements',
 	];
 
 	/**
@@ -146,5 +148,4 @@ final class Loader {
 	public static function get_version() {
 		return self::$version;
 	}
-
 }

@@ -251,25 +251,19 @@ class Logger extends Abstract_Module {
 				return;
 			}
 
-			global $themeisle_sdk_max_path;
-			$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/tracking/tracking.asset.php';
 
-			wp_enqueue_script(
-				'themeisle_sdk_telemetry_script',
-				$this->get_sdk_uri() . 'assets/js/build/tracking/tracking.js',
-				$asset_file['dependencies'],
-				$asset_file['version'],
-				true
-			);
-			
-			wp_localize_script(
-				'themeisle_sdk_telemetry_script',
-				'tiTelemetry',
-				array(
-					'products' => $products_with_telemetry,
-					'endpoint' => self::TELEMETRY_ENDPOINT,
-				)
-			);
+			$tracking_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'tracking' );
+			if ( ! empty( $tracking_handler ) ) {
+				do_action( 'themeisle_sdk_dependency_enqueue_script', 'tracking' );
+				wp_localize_script(
+					$tracking_handler,
+					'tiTelemetry',
+					array(
+						'products' => $products_with_telemetry,
+						'endpoint' => self::TELEMETRY_ENDPOINT,
+					)
+				);
+			}
 		} catch ( \Exception $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 				error_log( $e->getMessage() ); // phpcs:ignore
