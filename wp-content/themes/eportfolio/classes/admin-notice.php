@@ -119,13 +119,8 @@ if ( !class_exists('ePortfolio_Dashboard_Notice') ):
         }
 
         public function eportfolio_notice_dismiss(){
-
-        	if ( isset( $_POST[ '_wpnonce' ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ '_wpnonce' ] ) ), 'eportfolio_ajax_nonce' ) ) {
-
-	        	update_option('eportfolio_admin_notice','hide');
-
-	        }
-
+            check_ajax_referer( 'eportfolio_ajax_nonce', 'security' );
+            update_option('eportfolio_admin_notice','hide');
             die();
 
         }

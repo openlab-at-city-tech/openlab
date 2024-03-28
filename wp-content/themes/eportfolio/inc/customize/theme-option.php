@@ -87,7 +87,7 @@ $wp_customize->add_setting( 'enable_archive_layout_switch',
 );
 $wp_customize->add_control( 'enable_archive_layout_switch',
 	array(
-		'label'    => esc_html__( 'Enable Switch/toggle Option on Arcvhives', 'eportfolio' ),
+		'label'    => esc_html__( 'Switch/Toggle Filter Icons on Archives', 'eportfolio' ),
 		'section'  => 'theme_archive_option_section_settings',
 		'type'     => 'checkbox',
 		'priority' => 20,
