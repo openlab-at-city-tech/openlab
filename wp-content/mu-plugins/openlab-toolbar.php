@@ -1688,9 +1688,6 @@ HTML;
 	public function enqueue_styles() {
 		global $wpdb;
 
-		// Getting the theme folder for the main site.
-		$main_site_theme = $wpdb->get_var( 'SELECT option_value FROM wp_options WHERE option_name = "template"' );
-
 		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all' );
 		wp_enqueue_style( 'google-open-sans' );
 	}

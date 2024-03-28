@@ -68,6 +68,8 @@ add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
 function cuny_site_wide_navi_styles() {
     global $blog_id;
+	global $wpdb;
+
     $sw_navi_styles = set_url_scheme(WPMU_PLUGIN_URL . '/css/sw-navi.css');
 
     if ($blog_id == 1)
@@ -86,6 +88,7 @@ function cuny_site_wide_navi_styles() {
 	 * Loaded here because they contain global footer styles, which must be loaded
 	 * even if the admin bar is disabled.
 	 */
+	$main_site_theme    = 'openlab';
 	$openlab_theme_link = get_site_url( 1, 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
 	$openlab_theme_link = set_url_scheme( $openlab_theme_link );
 
