@@ -71,6 +71,9 @@ function cuny_site_wide_navi_styles() {
 
     $sw_navi_styles = set_url_scheme(WPMU_PLUGIN_URL . '/css/sw-navi.css');
 
+	wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all' );
+	wp_enqueue_style( 'google-open-sans' );
+
     wp_register_style('SW_Navi_styles', $sw_navi_styles);
     wp_enqueue_style('SW_Navi_styles');
 

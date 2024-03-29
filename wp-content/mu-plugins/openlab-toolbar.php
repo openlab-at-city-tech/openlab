@@ -54,10 +54,6 @@ class OpenLab_Admin_Bar {
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
 
-		// Enqueue styles
-		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
-		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
-
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
 
@@ -1683,13 +1679,6 @@ HTML;
 		}
 
 		return $body_class;
-	}
-
-	public function enqueue_styles() {
-		global $wpdb;
-
-		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all' );
-		wp_enqueue_style( 'google-open-sans' );
 	}
 
 	public function adminbar_special_body_class( $classes ) {
