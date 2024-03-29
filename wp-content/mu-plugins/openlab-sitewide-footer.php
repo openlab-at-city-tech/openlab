@@ -67,13 +67,9 @@ add_action('login_footer', 'cuny_local_env_flag');
 add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
 
 function cuny_site_wide_navi_styles() {
-    global $blog_id;
 	global $wpdb;
 
     $sw_navi_styles = set_url_scheme(WPMU_PLUGIN_URL . '/css/sw-navi.css');
-
-    if ($blog_id == 1)
-        return;
 
     wp_register_style('SW_Navi_styles', $sw_navi_styles);
     wp_enqueue_style('SW_Navi_styles');
