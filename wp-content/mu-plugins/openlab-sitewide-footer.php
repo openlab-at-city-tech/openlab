@@ -64,8 +64,6 @@ add_action('wp_footer', 'cuny_local_env_flag');
 add_action('admin_footer', 'cuny_local_env_flag');
 add_action('login_footer', 'cuny_local_env_flag');
 
-add_action('wp_print_styles', 'cuny_site_wide_navi_styles');
-
 function cuny_site_wide_navi_styles() {
 	global $wpdb;
 
@@ -111,6 +109,8 @@ function cuny_site_wide_navi_styles() {
 	wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
 	wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), filemtime( WP_CONTENT_DIR . '/mu-plugins/css/openlab-toolbar.css' ) );
 }
+add_action( 'wp_print_styles', 'cuny_site_wide_navi_styles' );
+add_action( 'admin_print_styles', 'cuny_site_wide_navi_styles' );
 
 //add_action('wp_head', 'cuny_login_popup_script');
 function cuny_login_popup_script() {
