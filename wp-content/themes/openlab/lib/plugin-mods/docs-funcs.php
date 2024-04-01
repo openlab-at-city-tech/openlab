@@ -325,3 +325,55 @@ function openlab_bp_docs_map_meta_caps( $caps, $cap, $user_id, $args ) {
 	return $caps;
 }
 add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps', 100, 4 );
+
+/**
+ * Checks whether comments are allowed on a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return bool
+ */
+function openlab_comments_allowed_on_doc( $doc_id ) {
+	$allowed = true;
+
+	$doc = get_post( $doc_id );
+	if ( ! $doc || 'bp_doc' !== $doc->post_type ) {
+		return $allowed;
+	}
+
+	$disabled = get_post_meta( $doc_id, 'openlab_comments_disabled', true );
+	if ( 'yes' === $disabled ) {
+		$allowed = false;
+	}
+
+	return $allowed;
+}
+
+/**
+ * Saves our custom Doc-specific settings.
+ *
+ * @param int $doc_id Doc ID.
+ * @return void
+ */
+function openlab_save_custom_doc_settings( $doc_id ) {
+	if ( isset( $_POST['doc']['allow_comments'] ) ) {
+		$allow_comments = '1' === wp_unslash( $_POST['doc']['allow_comments'] );
+
+		if ( $allow_comments ) {
+			delete_post_meta( $doc_id, 'openlab_comments_disabled' );
+		} else {
+			update_post_meta( $doc_id, 'openlab_comments_disabled', 'yes' );
+		}
+	}
+}
+add_action( 'bp_docs_after_save', 'openlab_save_custom_doc_settings' );
+
+/**
+ * Custom implementation of comments_open for docs.
+ *
+ * Old Docs can have comments closed by default. We must respect
+ * openlab_comments_disabled meta and other doc-specific settings.
+ */
+function openlab_force_doc_comments_open( $open, $post_id ) {
+	return openlab_comments_allowed_on_doc( $post_id );
+}
+add_action( 'comments_open', 'openlab_force_doc_comments_open', 999, 2 );

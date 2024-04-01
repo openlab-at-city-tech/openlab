@@ -69,6 +69,25 @@ if ( $current_doc ) {
 						<div id="doc-meta">
 							<?php do_action( 'bp_docs_opening_meta_box', $doc_id ) ?>
 
+							<div id="doc-privacy" class="doc-meta-box">
+								<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'privacy-meta-box' ) ?>">
+									<p id="privacy-toggle-edit" class="toggle-switch">
+										<span class="hide-if-js toggle-link-no-js">Tags</span>
+										<a class="hide-if-no-js toggle-link" id="privacy-toggle-link" href="#">Doc and Comment Settings</a>
+									</p>
+
+									<div class="toggle-content">
+										<div class="desc-column">
+											<fieldset>
+												<legend>Allow comments on this Doc?</legend>
+												<label><input type="radio" name="doc[allow_comments]" value="1" <?php checked( openlab_comments_allowed_on_doc( $doc_id ) ) ?> /> Yes</label><br />
+												<label><input type="radio" name="doc[allow_comments]" value="0" <?php checked( ! openlab_comments_allowed_on_doc( $doc_id ) ) ?> /> No</label>
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
+
 							<div id="doc-tax" class="doc-meta-box">
 								<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'tags-meta-box' ) ?>">
 									<p id="tags-toggle-edit" class="toggle-switch">

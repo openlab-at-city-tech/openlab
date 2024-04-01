@@ -457,20 +457,6 @@ function openlab_remove_sitewide_notices() {
 add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
 
 /**
- * Force BP Docs to have comments open
- *
- * I guess old ones get closed automatically
- */
-function openlab_force_doc_comments_open( $open, $post_id ) {
-	$_post = get_post( $post_id );
-	if ( 'bp_doc' === $_post->post_type ) {
-		$open = true;
-	}
-	return $open;
-}
-add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
-
-/**
  * Markup for the 'A member has joined a public group for which you are an admin' setting.
  */
 function openlab_group_join_admin_notification_markup() {
