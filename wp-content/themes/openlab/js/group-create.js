@@ -657,7 +657,12 @@ jQuery( document ).ready(
 
 		// We must also run maybeShowSiteTemplates after a category change.
 		$( '.site-template-categories' ).on( 'change', function() {
-			setTimeout( maybeShowSiteTemplates, 1500 )
+			setTimeout( function() {
+				// After a category change, we never hide the picker, only show it.
+				if ( $('.panel-template-picker').hasClass( 'hidden' ) ) {
+					maybeShowSiteTemplates();
+				}
+			}, 1500 )
 		} );
 
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
