@@ -1811,7 +1811,7 @@ function openlab_short_circuit_user_blog_queries( $pre ) {
 
 	$backtrace = debug_backtrace();
 	foreach ( $backtrace as $trace ) {
-		if ( ! empty( $trace['class'] ) && 'WP_Admin_Bar' !== $trace['class'] && ! empty( $trace['function'] ) && 'initialize' !== $trace['function'] ) {
+		if ( ! empty( $trace['class'] ) && 'WP_Admin_Bar' === $trace['class'] && ! empty( $trace['function'] ) && 'initialize' === $trace['function'] ) {
 			$allow_query = false;
 			break;
 		}
