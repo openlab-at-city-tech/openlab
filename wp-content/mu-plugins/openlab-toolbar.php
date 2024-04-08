@@ -1536,6 +1536,7 @@ HTML;
 	public function remove_duplicate_post() {
 		global $wp_admin_bar;
 		$wp_admin_bar->remove_menu( 'duplicate-post' );
+		$wp_admin_bar->remove_menu( 'new-draft' );
 	}
 
 	/**
