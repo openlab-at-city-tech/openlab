@@ -1,0 +1,108 @@
+@import "_custom-properties.scss";
+
+.site-branding {
+	max-height: inherit;
+	a.brand {
+		display: flex;
+		gap: 1em;
+		flex-direction: row;
+		align-items: center;
+		text-decoration: none;
+		color: inherit;
+		max-height: inherit;
+		img {
+			display: block;
+			//width:auto;
+		}
+	}
+	.site-title {
+		margin:0;
+	}
+	.site-description {
+		margin: 0.4375em 0 0;
+		word-wrap: break-word;
+	}
+	&.branding-layout-standard-reverse a.brand {
+		flex-direction: row-reverse;
+	}
+	&.branding-layout-vertical {
+		&.site-title-top a.brand {
+			.site-title-wrap {
+				order:-1;
+			}
+			.site-description {
+				margin: 0;
+			}
+		}
+		a.brand {
+			flex-direction: column;
+		}
+	}
+	&.branding-layout-vertical-reverse a.brand {
+		flex-direction: column-reverse;
+	}
+}
+.site-header-section-center .site-branding {
+	&.branding-layout-vertical, &.branding-layout-vertical-reverse {
+		a.brand {
+			text-align: center;
+			img {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+	}
+}
+@media screen and ( max-width: $tablet-minus-query) {
+	.site-branding {
+		&.branding-tablet-layout-standard-reverse a.brand {
+			flex-direction: row-reverse;
+		}
+		&.branding-tablet-layout-vertical {
+			&.site-title-top a.brand {
+				.site-title-wrap {
+					order:-1;
+				}
+			}
+			a.brand {
+				flex-direction: column;
+			}
+		}
+		&.branding-tablet-layout-vertical-reverse a.brand {
+			flex-direction: column-reverse;
+		}
+	}
+}
+@media screen and ( max-width: $phone-minus-query) {
+	.site-branding {
+		&.branding-mobile-layout-standard:not(.site-brand-logo-only) a.brand {
+			flex-direction: row;
+		}
+		&.branding-mobile-layout-standard-reverse a.brand {
+			flex-direction: row-reverse;
+		}
+		&.branding-mobile-layout-vertical {
+			&.site-title-top a.brand {
+				.site-title-wrap {
+					order:-1;
+				}
+			}
+			a.brand {
+				flex-direction: column;
+			}
+		}
+		&.branding-mobile-layout-vertical-reverse a.brand {
+			flex-direction: column-reverse;
+		}
+	}
+}
+.site-header-row-center-column .brand:not(.has-logo-image) .site-title-wrap {
+    text-align: center;
+}
+.logo-icon {
+    display: flex;
+	.kadence-svg-iconset svg {
+		width: 100%;
+		height: auto;
+	}
+}
