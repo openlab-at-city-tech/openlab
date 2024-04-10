@@ -39,13 +39,6 @@ get_header();
             </div>
         </div>
 
-        <div class="box-1 left-box">
-            <h2 class="title uppercase clearfix"><i id="refreshActivity" class="refresh-button fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening On The OpenLab?</h2>
-            <div id="whatsHappening" class="left-block-content whats-happening-wrapper">
-                <?php echo openlab_whats_happening(); ?>
-            </div>
-        </div>
-
         <div class="box-1 left-box" id="whos-online">
             <h2 class="title uppercase">Who's Online?</h2>
             <?php cuny_whos_online(); ?>
