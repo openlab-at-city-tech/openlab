@@ -1,0 +1,59 @@
+{
+	"version": 2,
+	"settings": {
+		"custom": {
+			"featured-image": {
+				"placeholder": "post-placeholder-06.png"
+			}
+		},
+		"color": {
+			"palette": [
+				{
+					"slug": "bg",
+					"name": "Background",
+					"color": "#ffffff"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#f3d24f"
+				},
+				{
+					"slug": "accent-2",
+					"name": "Accent 2",
+					"color": "#f68887"
+				},
+				{
+					"slug": "accent-3",
+					"name": "Accent 3",
+					"color": "#91ccf4"
+				},
+				{
+					"slug": "dark-bg",
+					"name": "Dark background",
+					"color": "#ebebeb"
+				},
+				{
+					"slug": "medium-bg",
+					"name": "Medium background",
+					"color": "#b8b8b8"
+				},
+				{
+					"slug": "light-bg",
+					"name": "Light background",
+					"color": "#808080"
+				},
+				{
+					"slug": "very-light-bg",
+					"name": "Very light background",
+					"color": "#101010"
+				},
+				{
+					"slug": "fg",
+					"name": "Foreground",
+					"color": "#000000"
+				}
+			]
+		}
+	}
+}
