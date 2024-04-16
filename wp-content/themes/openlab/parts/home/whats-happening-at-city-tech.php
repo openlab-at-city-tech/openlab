@@ -35,10 +35,6 @@
 					<div class="sidebar-block activity-block">
 						<div class="activity-row clearfix">
 							<div class="activity-content overflow-hidden">
-								<div class="whats-happening-date news-item-date">
-									<?php echo esc_html( date( 'F j, Y', $news_item['date'] ) ); ?>
-								</div>
-
 								<div class="whats-happening-content news-item-content">
 									<p>
 										<?php echo wp_kses_post( $news_item['content'] ); ?>
