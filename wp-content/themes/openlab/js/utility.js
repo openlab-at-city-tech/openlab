@@ -688,7 +688,7 @@ OpenLab.utility = (function ($) {
 			$fadeWrapper.fadeOut( 700 );
 
 			$.ajax(
-				'http://openlabdev.org/wp-json/openlab/v1/whats-happening-at-city-tech',
+				localVars.whatsHappeningAtCityTechEndpoint,
 				{
 					success: function( data, textStatus, XMLHttpRequest ) {
 						$fadeWrapper.html( data ).fadeIn( 700 );

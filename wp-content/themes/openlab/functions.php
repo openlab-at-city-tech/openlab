@@ -91,6 +91,7 @@ function openlab_load_scripts() {
         wp_enqueue_script('utility');
         wp_localize_script('utility', 'localVars', array(
             'nonce' => wp_create_nonce('request-nonce'),
+			'whatsHappeningAtCityTechEndpoint' => home_url( 'wp-json/openlab/v1/whats-happening-at-city-tech' ),
         ));
 
         wp_register_script('parsley', $stylesheet_dir_uri . '/js/parsley.min.js', array('jquery'));
