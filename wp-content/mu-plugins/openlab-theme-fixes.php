@@ -85,6 +85,7 @@ add_action(
 			case 'hemingway' :
 			case 'koji' :
 			case 'lingonberry' :
+			case 'typology' :
 				$subdir = $t;
 				wp_enqueue_script(
 					$t,
