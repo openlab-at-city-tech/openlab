@@ -1,3 +1,8 @@
 a:focus, a:not([href]):not([tabindex]):focus, button:focus {
 	outline: auto;
 }
+
+/* Don't let Typology dictate width of toolbar buttons */
+#wpadminbar button {
+	min-width: unset;
+}
