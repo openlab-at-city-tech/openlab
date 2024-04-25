@@ -333,22 +333,6 @@ a#cuny-sw-logo {
 	padding: 0;
 }
 
-
-/* Forms
------------------------------------------------------------- */
-
-.wds-group-form-item label {
-	display:block;
-}
-
-.wds-group-form-item textarea, input[type="text"] {
-	width:100%;
-}
-
-.wds-group-form-item input[type="file"] {
-	margin-right:15px;
-}
-
 /* Footer Widgets
 ------------------------------------------------------------ */
 #cuny-sw-footer {
