@@ -35,7 +35,7 @@ function openlab_sitewide_header_to_admin_and_group_sites() {
 		return;
 	}
 
-	if ( ! cboxol_show_admin_bar_for_anonymous_users( get_current_blog_id() ) ) {
+	if ( ! cboxol_show_admin_bar_for_anonymous_users( get_current_blog_id() ) && ! is_user_logged_in() ) {
 		return;
 	}
 
