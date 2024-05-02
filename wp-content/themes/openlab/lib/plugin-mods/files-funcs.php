@@ -55,8 +55,51 @@ function openlab_bp_group_documents_display_content() {
 
 	global $bp;
 
-	//instanciating the template will do the heavy lifting with all the superglobal variables
+	// There are no hooks in buddypress-group-documents to filter the query.
+	$query_filter_callback = function( $query ) {
+		global $wpdb, $bp;
+
+		// We are filtering the query from get_list_by_group().
+		$matched = preg_match( '/SELECT \* FROM ' . $bp->group_documents->table_name . ' WHERE group_id = (\d+)/', $query, $matches );
+
+		if ( ! $matched ) {
+			return $query;
+		}
+
+		$group_id = (int) $matches[1];
+
+		$group_privacy = groups_get_groupmeta( $group_id, 'group_document_privacy_settings' );
+		if ( empty( $group_privacy ) ) {
+			return $query;
+		}
+
+		if ( groups_is_user_admin( bp_loggedin_user_id(), $group_id ) ) {
+			$exclude_levels = [];
+		} elseif ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			$exclude_levels = [ 'admins' ];
+		} else {
+			$exclude_levels = [ 'admins', 'members' ];
+		}
+
+		$exclude_ids = [];
+		foreach ( $group_privacy as $doc_id => $level ) {
+			if ( in_array( $level, $exclude_levels, true ) ) {
+				$exclude_ids[] = $doc_id;
+			}
+		}
+
+		if ( empty( $exclude_ids ) ) {
+			return $query;
+		}
+
+		$query = str_replace( 'WHERE', 'WHERE id NOT IN (' . implode( ',', $exclude_ids ) . ') AND', $query );
+
+		return $query;
+	};
+
+	add_filter( 'query', $query_filter_callback );
 	$template = new BP_Group_Documents_Template();
+	remove_filter( 'query', $query_filter_callback );
 
 	$folders = $template->get_group_categories( false );
 	$folders = bp_sort_by_key( $folders, 'name' );
@@ -350,6 +393,9 @@ function openlab_bp_group_documents_display_content() {
 											<label for="bp-group-documents-new-category-1" class="sr-only">Add new folder</label>
 											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-1" />
 										</fieldset>
+
+										<?php openlab_file_access_section_markup( $template->id ); ?>
+
 									</div>
 									<?php } ?>
 
@@ -399,6 +445,8 @@ function openlab_bp_group_documents_display_content() {
 												<label for="bp-group-documents-new-category-2" class="sr-only">Add new folder</label>
 												<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-2" />
 											</fieldset>
+
+											<?php openlab_file_access_section_markup( $template->id ); ?>
 										</div>
 									</div>
 									<?php } ?>
@@ -515,6 +563,33 @@ add_action(
 		}
 
 		return $result;
+	}
+);
+
+/**
+ * Save "File Access" settings.
+ */
+add_action(
+	'bp_group_documents_data_after_save',
+	function( $document ) {
+		if ( empty( $_POST['bp_group_documents_file_access_nonce'] ) || ! wp_verify_nonce( $_POST['bp_group_documents_file_access_nonce'], 'bp_group_documents_file_access' ) ) {
+			return;
+		}
+
+		$access = ! empty( $_POST['bp_group_documents_privacy'] ) ? sanitize_text_field( wp_unslash( $_POST['bp_group_documents_privacy'] ) ) : '';
+
+		if ( ! in_array( $access, array( 'everyone', 'members', 'admins' ), true ) ) {
+			return;
+		}
+
+		$group_document_privacy_settings = groups_get_groupmeta( $document->group_id, 'group_document_privacy_settings' );
+		if ( ! is_array( $group_document_privacy_settings ) ) {
+			$group_document_privacy_settings = [];
+		}
+
+		$group_document_privacy_settings[ $document->id ] = $access;
+
+		groups_update_groupmeta( $document->group_id, 'group_document_privacy_settings', $group_document_privacy_settings );
 	}
 );
 
@@ -702,4 +777,80 @@ function openlab_get_service_from_url( $host ) {
 		default;
 			return 'external';
 	}
+}
+
+/**
+ * Outputs the markup for the 'File Access' section of the edit/create form.
+ *
+ * @param int $file_id File ID.
+ * @return void
+ */
+function openlab_file_access_section_markup( $file_id ) {
+	$file_privacy = openlab_get_file_privacy_setting( $file_id );
+
+	$group_type_label = openlab_get_group_type_label(
+		[
+			'group_id' => bp_get_current_group_id(),
+			'case'     => 'upper',
+		]
+	);
+
+	?>
+
+	<fieldset class="group-documents-privacy">
+		<legend>File Access:</legend>
+
+		<div class="radios">
+			<div class="group-documents-privacy-option">
+				<label for="bp-group-documents-privacy-everyone"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-everyone" value="everyone" <?php checked( $file_privacy, 'everyone' ); ?> /> Everyone</label>
+
+				<p class="description">Everyone who can view this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
+			</div>
+
+			<div class="group-documents-privacy-option">
+				<label for="bp-group-documents-privacy-members"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-members" value="members" <?php checked( $file_privacy, 'members' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> members only</label>
+
+				<p class="description">Only logged-in members of this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
+			</div>
+
+			<div class="group-documents-privacy-option">
+				<label for="bp-group-documents-privacy-admins"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-admins" value="admins" <?php checked( $file_privacy, 'admins' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> admins only</label>
+
+				<p class="description">Only logged-in admins of this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
+			</div>
+		</div>
+
+		<?php wp_nonce_field( 'bp_group_documents_file_access', 'bp_group_documents_file_access_nonce' ); ?>
+	</fieldset>
+
+	<?php
+}
+
+/**
+ * Gets privacy setting for a file.
+ *
+ * @param int $file_id File ID.
+ * @return string
+ */
+function openlab_get_file_privacy_setting( $file_id ) {
+	$document = new BP_Group_Documents( $file_id );
+
+	$group_id = isset( $document->group_id ) ? $document->group_id : bp_get_current_group_id();
+
+	// We store as an array in groupmeta.
+	$group_document_privacy_settings = groups_get_groupmeta( $document->group_id, 'group_document_privacy_settings' );
+
+	if ( isset( $group_document_privacy_settings[ $file_id ] ) ) {
+		$setting = $group_document_privacy_settings[ $file_id ];
+	} else {
+		$group = groups_get_group( $group_id );
+
+		if ( $group && 'public' === $group->status ) {
+			$setting = 'everyone';
+		} else {
+			$setting = 'members';
+		}
+	}
+
+	return $setting;
 }

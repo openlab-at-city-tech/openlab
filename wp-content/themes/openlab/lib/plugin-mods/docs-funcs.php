@@ -325,3 +325,175 @@ function openlab_bp_docs_map_meta_caps( $caps, $cap, $user_id, $args ) {
 	return $caps;
 }
 add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps', 100, 4 );
+
+/**
+ * Checks whether comments are allowed on a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return bool
+ */
+function openlab_comments_allowed_on_doc( $doc_id ) {
+	$allowed = true;
+
+	$doc = get_post( $doc_id );
+	if ( ! $doc || 'bp_doc' !== $doc->post_type ) {
+		return $allowed;
+	}
+
+	$disabled = get_post_meta( $doc_id, 'openlab_comments_disabled', true );
+	if ( 'yes' === $disabled ) {
+		$allowed = false;
+	}
+
+	return $allowed;
+}
+
+/**
+ * Gets 'View' setting for a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return string
+ */
+function openlab_get_doc_view_setting( $doc_id ) {
+	$saved_setting = get_post_meta( $doc_id, 'openlab_view_setting', true );
+
+	if ( ! $saved_setting ) {
+		$group_id = bp_docs_get_associated_group_id( $doc_id );
+		$group    = groups_get_group( $group_id );
+
+		if ( $group && 'public' === $group->status ) {
+			$setting = 'everyone';
+		} else {
+			$setting = 'group-members';
+		}
+	} else {
+		$setting = $saved_setting;
+	}
+
+	return $setting;
+}
+
+/**
+ * Gets 'Edit' setting for a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return string
+ */
+function openlab_get_doc_edit_setting( $doc_id ) {
+	$saved_setting = get_post_meta( $doc_id, 'openlab_edit_setting', true );
+
+	if ( ! $saved_setting ) {
+		$setting = 'group-members';
+	} else {
+		$setting = $saved_setting;
+	}
+
+	return $setting;
+}
+
+/**
+ * Saves our custom Doc-specific settings.
+ *
+ * @param int $doc_id Doc ID.
+ * @return void
+ */
+function openlab_save_custom_doc_settings( $doc_id ) {
+	if ( isset( $_POST['doc']['allow_comments'] ) ) {
+		$allow_comments = '1' === wp_unslash( $_POST['doc']['allow_comments'] );
+
+		if ( $allow_comments ) {
+			delete_post_meta( $doc_id, 'openlab_comments_disabled' );
+		} else {
+			update_post_meta( $doc_id, 'openlab_comments_disabled', 'yes' );
+		}
+	}
+
+	if ( isset( $_POST['doc']['view_setting'] ) ) {
+		$view_setting = wp_unslash( $_POST['doc']['view_setting'] );
+
+		$allowed_settings = [ 'everyone', 'group-members', 'admins' ];
+		if ( in_array( $view_setting, $allowed_settings, true ) ) {
+			update_post_meta( $doc_id, 'openlab_view_setting', $view_setting );
+		}
+	}
+
+	if ( isset( $_POST['doc']['edit_setting'] ) ) {
+		$edit_setting = wp_unslash( $_POST['doc']['edit_setting'] );
+
+		$allowed_settings = [ 'group-members', 'admins' ];
+		if ( in_array( $edit_setting, $allowed_settings, true ) ) {
+			update_post_meta( $doc_id, 'openlab_edit_setting', $edit_setting );
+		}
+	}
+}
+add_action( 'bp_docs_after_save', 'openlab_save_custom_doc_settings' );
+
+/**
+ * Custom implementation of comments_open for docs.
+ *
+ * Old Docs can have comments closed by default. We must respect
+ * openlab_comments_disabled meta and other doc-specific settings.
+ */
+function openlab_force_doc_comments_open( $open, $post_id ) {
+	return openlab_comments_allowed_on_doc( $post_id );
+}
+add_action( 'comments_open', 'openlab_force_doc_comments_open', 999, 2 );
+
+/**
+ * Meta cap mapping for our custom doc settings.
+ *
+ * @param array  $caps    Capabilities.
+ * @param string $cap     Capability.
+ * @param int    $user_id User ID.
+ * @param array  $args    Args.
+ * @return array
+ */
+function openlab_bp_docs_map_meta_caps_for_custom_settings( $caps, $cap, $user_id, $args ) {
+	switch ( $cap ) {
+		case 'bp_docs_read':
+		case 'bp_docs_view_history':
+		case 'bp_docs_read_comments':
+		case 'bp_docs_edit':
+			$doc = bp_docs_get_doc_for_caps( $args );
+
+			if ( ! $doc ) {
+				return $caps;
+			}
+
+			$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+			if ( ! $group_id ) {
+				return $caps;
+			}
+
+			if ( 'bp_docs_edit' === $cap ) {
+				$setting = openlab_get_doc_edit_setting( $doc->ID );
+			} else {
+				$setting = openlab_get_doc_view_setting( $doc->ID );
+			}
+
+			$caps = [ 'do_not_allow' ];
+
+			switch ( $setting ) {
+				case 'everyone':
+					$caps = [ 'read' ];
+					break;
+
+				case 'group-members':
+					if ( groups_is_user_member( $user_id, $group_id ) ) {
+						$caps = [ 'read' ];
+					}
+					break;
+
+				case 'admins':
+					if ( groups_is_user_admin( $user_id, $group_id ) ) {
+						$caps = [ 'read' ];
+					}
+					break;
+			}
+
+			break;
+	}
+
+	return $caps;
+}
+add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps_for_custom_settings', 100, 4 );

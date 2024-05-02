@@ -4,6 +4,19 @@ $current_doc = bp_docs_get_current_doc();
 if ( $current_doc ) {
 	$doc_id = $current_doc->ID;
 }
+
+$group_type_label = '';
+$group            = null;
+if ( bp_is_group() ) {
+	$group = groups_get_current_group();
+
+	$group_type_label = openlab_get_group_type_label(
+		[
+			'group_id' => bp_get_current_group_id(),
+			'case'     => 'upper',
+		]
+	);
+}
 ?>
 
 <div class="<?php bp_docs_container_class(); ?>">
@@ -68,6 +81,47 @@ if ( $current_doc ) {
 
 						<div id="doc-meta">
 							<?php do_action( 'bp_docs_opening_meta_box', $doc_id ) ?>
+
+							<div id="doc-privacy" class="doc-meta-box">
+								<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'privacy-meta-box' ) ?>">
+									<p id="privacy-toggle-edit" class="toggle-switch">
+										<span class="hide-if-js toggle-link-no-js">Tags</span>
+										<a class="hide-if-no-js toggle-link" id="privacy-toggle-link" href="#">Doc and Comment Settings</a>
+									</p>
+
+									<div class="toggle-content">
+										<div class="desc-column">
+											<fieldset>
+												<legend>Allow comments on this Doc?</legend>
+												<label><input type="radio" name="doc[allow_comments]" value="1" <?php checked( openlab_comments_allowed_on_doc( $doc_id ) ) ?> /> Yes</label><br />
+												<label><input type="radio" name="doc[allow_comments]" value="0" <?php checked( ! openlab_comments_allowed_on_doc( $doc_id ) ) ?> /> No</label>
+											</fieldset>
+										</div>
+
+										<div class="desc-column">
+											<fieldset>
+												<legend>Who can view this Doc and its comments?</legend>
+												<?php if ( $group && 'public' === $group->status ) : ?>
+													<label><input type="radio" name="doc[view_setting]" value="everyone" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'everyone' ) ?> /> Everyone</label><br />
+												<?php endif; ?>
+
+												<label><input type="radio" name="doc[view_setting]" value="group-members" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'group-members' ) ?> /> <?php echo esc_html( $group_type_label ); ?> members only</label><br />
+												<label><input type="radio" name="doc[view_setting]" value="admins" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'admins' ) ?> /> <?php echo esc_html( $group_type_label ); ?> admins and Doc creator only</label><br />
+
+											</fieldset>
+										</div>
+
+										<div class="desc-column">
+											<fieldset>
+												<legend>Who can edit this Doc?</legend>
+												<label><input type="radio" name="doc[edit_setting]" value="group-members" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'group-members' ) ?> /> <?php echo esc_html( $group_type_label ); ?> members only</label><br />
+												<label><input type="radio" name="doc[edit_setting]" value="admins" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'admins' ) ?> /> <?php echo esc_html( $group_type_label ); ?> admins and Doc creator only</label><br />
+
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
 
 							<div id="doc-tax" class="doc-meta-box">
 								<div class="toggleable <?php bp_docs_toggleable_open_or_closed_class( 'tags-meta-box' ) ?>">

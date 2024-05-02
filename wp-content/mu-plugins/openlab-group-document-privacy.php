@@ -48,15 +48,35 @@ function cac_catch_group_doc_request() {
 			'redirect' => bp_get_root_domain(),
 		);
 	} else {
-		if ( 'public' !== $group->status ) {
+		$doc_filename = $file_deets[1];
+		$document     = new BP_Group_Documents();
+		$document->populate_by_file( $doc_filename );
+
+		$document_id = ! empty( $document->id ) ? $document->id : 0;
+
+		// First, check the file-specific privacy settings.
+		$group_privacy = groups_get_groupmeta( $group->id, 'group_document_privacy_settings' );
+		$doc_privacy   = isset( $group_privacy[ $document_id ] ) ? $group_privacy[ $document_id ] : 'public';
+
+		$user_can_download = true;
+
+		if ( 'admins' === $doc_privacy ) {
+			$user_can_download = groups_is_user_admin( bp_loggedin_user_id(), $group_id );
+		} elseif ( 'members' === $doc_privacy ) {
+			$user_can_download = groups_is_user_member( bp_loggedin_user_id(), $group_id );
+		} elseif ( 'public' !== $group->status ) {
 			// If the group is not public, then the user must be logged in and
 			// a member of the group to download the document
 			if ( ! is_user_logged_in() || ! groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
-				$error = array(
-					'message' => sprintf( 'You must be a logged-in member of the group %s to access this document. If you are a member of the group, please log into the site and try again.', $group->name ),
-					'redirect' => bp_get_group_permalink( $group ),
-				);
+				$user_can_download = false;
 			}
+		}
+
+		if ( ! $user_can_download ) {
+			$error = array(
+				'message' => sprintf( 'You must be a logged-in member of the group %s to access this document. If you are a member of the group, please log into the site and try again.', $group->name ),
+				'redirect' => bp_get_group_permalink( $group ),
+			);
 		}
 
 		// If we have gotten this far without an error, then the download can go through
