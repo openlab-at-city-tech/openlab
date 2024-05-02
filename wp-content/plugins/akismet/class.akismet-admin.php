@@ -667,6 +667,18 @@ class Akismet_Admin {
 								$message = esc_html( __( 'Akismet was unable to recheck this comment.', 'akismet' ) );
 							}
 							break;
+						case 'webhook-spam':
+							$message = esc_html( __( 'Akismet caught this comment as spam and updated its status via webhook.', 'akismet' ) );
+							break;
+						case 'webhook-ham':
+							$message = esc_html( __( 'Akismet cleared this comment and updated its status via webhook.', 'akismet' ) );
+							break;
+						case 'webhook-spam-noaction':
+							$message = esc_html( __( 'Akismet determined this comment was spam during a recheck. It did not update the comment status because it had already been modified by another user or plugin.', 'akismet' ) );
+							break;
+						case 'webhook-ham-noaction':
+							$message = esc_html( __( 'Akismet cleared this comment during a recheck. It did not update the comment status because it had already been modified by another user or plugin.', 'akismet' ) );
+							break;
 						default:
 							if ( preg_match( '/^status-changed/', $row['event'] ) ) {
 								// Half of these used to be saved without the dash after 'status-changed'.
@@ -1098,26 +1110,29 @@ class Akismet_Admin {
 		}
 
 		/*
-		// To see all variants when testing.
-		$notices[] = array( 'type' => 'active-notice', 'time_saved' => 'Cleaning up spam takes time. Akismet has saved you 1 minute!' );
-		$notices[] = array( 'type' => 'plugin' );
-		$notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
-		$notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
-		$notices[] = array( 'type' => 'missing-functions' );
-		$notices[] = array( 'type' => 'servers-be-down' );
-		$notices[] = array( 'type' => 'active-dunning' );
-		$notices[] = array( 'type' => 'cancelled' );
-		$notices[] = array( 'type' => 'suspended' );
-		$notices[] = array( 'type' => 'missing' );
-		$notices[] = array( 'type' => 'no-sub' );
-		$notices[] = array( 'type' => 'new-key-valid' );
-		$notices[] = array( 'type' => 'new-key-invalid' );
-		$notices[] = array( 'type' => 'existing-key-invalid' );
-		$notices[] = array( 'type' => 'new-key-failed' );
-		$notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_plan' => 'Enterprise', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10502 );
-		$notices[] = array( 'type' => 'spam-check-cron-disabled' );
-		$notices[] = array( 'type' => 'alert', 'code' => 123 );
+		 *  To see all variants when testing.
+		 *
+		 *  You may also want to comment out the akismet_view_arguments filter in Akismet::view()
+		 *  to ensure that you can see all of the notices (e.g. suspended, active-notice).
 		*/
+		// $notices[] = array( 'type' => 'active-notice', 'time_saved' => 'Cleaning up spam takes time. Akismet has saved you 1 minute!' );
+		// $notices[] = array( 'type' => 'plugin' );
+		// $notices[] = array( 'type' => 'spam-check', 'link_text' => 'Link text.' );
+		// $notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
+		// $notices[] = array( 'type' => 'missing-functions' );
+		// $notices[] = array( 'type' => 'servers-be-down' );
+		// $notices[] = array( 'type' => 'active-dunning' );
+		// $notices[] = array( 'type' => 'cancelled' );
+		// $notices[] = array( 'type' => 'suspended' );
+		// $notices[] = array( 'type' => 'missing' );
+		// $notices[] = array( 'type' => 'no-sub' );
+		// $notices[] = array( 'type' => 'new-key-valid' );
+		// $notices[] = array( 'type' => 'new-key-invalid' );
+		// $notices[] = array( 'type' => 'existing-key-invalid' );
+		// $notices[] = array( 'type' => 'new-key-failed' );
+		// $notices[] = array( 'type' => 'usage-limit', 'api_calls' => '15000', 'usage_limit' => '10000', 'upgrade_plan' => 'Enterprise', 'upgrade_url' => 'https://akismet.com/account/', 'code' => 10502 );
+		// $notices[] = array( 'type' => 'spam-check-cron-disabled' );
+		// $notices[] = array( 'type' => 'alert', 'code' => 123 );
 
 		Akismet::log( compact( 'stat_totals', 'akismet_user' ) );
 		Akismet::view( 'config', compact( 'api_key', 'akismet_user', 'stat_totals', 'notices' ) );

@@ -303,7 +303,7 @@ msgid "Enable Slider Text Background"
 msgstr ""
 
 #: inc/customize/theme-option.php:90
-msgid "Enable Switch/toggle Option on Arcvhives"
+msgid "Switch/Toggle Filter Icons on Archives"
 msgstr ""
 
 #: inc/customize/page-template.php:97

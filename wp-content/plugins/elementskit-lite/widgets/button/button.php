@@ -540,19 +540,19 @@ class ElementsKit_Widget_Button extends Widget_Base {
         echo '</div>';
     }
 
-    protected function render_raw( ) {
-        $settings = $this->get_settings_for_display();
+	protected function render_raw( ) {
+		$settings = $this->get_settings_for_display();
 
-        $btn_text = $settings['ekit_btn_text'];
-        $btn_class = ($settings['ekit_btn_class'] != '') ? $settings['ekit_btn_class'] : '';
-        $btn_id = ($settings['ekit_btn_id'] != '') ? 'id='.$settings['ekit_btn_id'] : '';
+		$btn_text = $settings['ekit_btn_text'];
+		$btn_class = ($settings['ekit_btn_class'] != '') ? $settings['ekit_btn_class'] : '';
+		$btn_id = ($settings['ekit_btn_id'] != '') ? $settings['ekit_btn_id'] : '';
 
 		$options_ekit_btn_icon_align = array_keys([
 			'left' => esc_html__( 'Before', 'elementskit-lite' ),
 			'right' => esc_html__( 'After', 'elementskit-lite' ),
 		]);
 
-        $icon_align = \ElementsKit_Lite\Utils::esc_options($settings['ekit_btn_icon_align'], $options_ekit_btn_icon_align, 'left');
+		$icon_align = \ElementsKit_Lite\Utils::esc_options($settings['ekit_btn_icon_align'], $options_ekit_btn_icon_align, 'left');
 
 		if ( ! empty( $settings['ekit_btn_url']['url'] ) ) {
 			$this->add_link_attributes( 'button', $settings['ekit_btn_url'] );
@@ -560,32 +560,18 @@ class ElementsKit_Widget_Button extends Widget_Base {
 		
 		// Reset Whitespace for this specific widget
 		$btn_class .= ' whitespace--normal';
+
+		$this->add_render_attribute('button', [
+			'class' => 'elementskit-btn ' . $btn_class,
+			'id' => $btn_id
+		]);
 		?>
 		<div class="ekit-btn-wraper">
 			<?php if($icon_align == 'right'): ?>
-				<a <?php echo $this->get_render_attribute_string( 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?> class="elementskit-btn <?php echo esc_attr( $btn_class ); ?>" <?php echo esc_attr($btn_id); ?>>
-					<?php echo esc_html( $btn_text ); ?>
-
+				<a <?php $this->print_render_attribute_string( 'button' ); ?>>
 					<?php
-						// new icon
-						$migrated = isset( $settings['__fa4_migrated']['ekit_btn_icons'] );
-						// Check if its a new widget without previously selected icon using the old Icon control
-						$is_new = empty( $settings['ekit_btn_icon'] );
-						if ( $is_new || $migrated ) {
-							// new icon
-							Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] );
-						} else {
-							?>
-							<i class="<?php echo esc_attr($settings['ekit_btn_icon']); ?>" aria-hidden="true"></i>
-							<?php
-						}
-					?>
-
-				</a>
-				<?php elseif ($icon_align == 'left') : ?>
-				<a <?php echo $this->get_render_attribute_string( 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?> class="elementskit-btn <?php echo esc_attr( $btn_class); ?>" <?php echo esc_attr($btn_id); ?>>
+						echo esc_html( $btn_text );
 					
-					<?php
 						// new icon
 						$migrated = isset( $settings['__fa4_migrated']['ekit_btn_icons'] );
 						// Check if its a new widget without previously selected icon using the old Icon control
@@ -599,11 +585,27 @@ class ElementsKit_Widget_Button extends Widget_Base {
 							<?php
 						}
 					?>
-
-					<?php echo esc_html( $btn_text ); ?>
 				</a>
-				<?php else : ?>
-				<a <?php echo $this->get_render_attribute_string( 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?> class="elementskit-btn <?php echo esc_attr( $btn_class); ?>" <?php echo esc_attr($btn_id); ?>>
+			<?php elseif ($icon_align == 'left') : ?>
+				<a <?php $this->print_render_attribute_string( 'button' ); ?>>
+					<?php
+					// new icon
+					$migrated = isset( $settings['__fa4_migrated']['ekit_btn_icons'] );
+					// Check if its a new widget without previously selected icon using the old Icon control
+					$is_new = empty( $settings['ekit_btn_icon'] );
+					if ( $is_new || $migrated ) {
+						// new icon
+						Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] );
+					} else {
+						?>
+						<i class="<?php echo esc_attr($settings['ekit_btn_icon']); ?>" aria-hidden="true"></i>
+						<?php
+					}
+
+					echo esc_html( $btn_text ); ?>
+				</a>
+			<?php else : ?>
+				<a <?php $this->print_render_attribute_string( 'button' ); ?>>
 					<?php echo esc_html( $btn_text ); ?>
 				</a>
 			<?php endif; ?>

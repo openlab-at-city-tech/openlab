@@ -1,0 +1,282 @@
+$color-primary: #007cba;
+$color-gray-200: #EDF2F7;
+$color-gray-300: #E2E8F0;
+$color-gray-400: #CBD5E0;
+$color-gray-500: #A0AEC0;
+$color-gray-600: #718096;
+$color-gray-700: #4A5568;
+$color-gray-800: #2D3748;
+.appearance_page_kadence #wpcontent {
+    padding: 0;
+}
+.kadence_theme_dash_head {
+    background: white;
+    padding: 10px;
+	height: 50px;
+	h1 {
+		color: $color-gray-800;
+		line-height: 50px;
+		padding:0;
+		height: 50px;
+		margin:0;
+		display: flex;
+    	align-items: center;
+	}
+	.subtext {
+		font-size: 16px;
+		color: $color-gray-600;
+		display: inline-block;
+		padding-left: 10px;
+	}
+	.kadence_theme_dash_head_container {
+		margin: 0 auto;
+		max-width: 1260px;
+		display: flex;
+		align-items: center;
+	}
+	.kadence_theme_dash_logo{
+		width: 50px;
+		height: 50px;
+		padding-right: 10px;
+		img {
+			width: 50px;
+		}
+	}
+	.kadence_theme_dash_version {
+		flex-grow: 1;
+		text-align: right;
+	}
+	.kadence_theme_dash_version span {
+		padding: 5px;
+		background: $color-gray-700;
+		color: white;
+	}
+}
+.wrap.kadence_theme_dash {
+    margin: 20px 20px 0;
+}
+.kadence_theme_dashboard {
+    margin: 0 auto;
+    max-width: 1260px;
+}
+.page-grid {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    grid-gap: 3em;
+}
+.sidebar-section .components-panel__body.is-opened {
+	padding: 20px;
+}
+.sidebar-section h2:first-child, .tab-section h2:first-child {
+    margin-top: 0;
+}
+.side-panel .components-panel+.components-panel {
+    margin-top: 1rem;
+}
+.tab-section .components-panel__body.is-opened {
+    padding: 25px;
+}
+.kadence-dashboard-tab-panel {
+	.components-tab-panel__tabs {
+		.components-button {
+			border: 1px solid transparent;
+			background: transparent;
+			border: none;
+			box-shadow: none;
+			border-radius: 0;
+			cursor: pointer;
+			height: 48px;
+			padding: 3px 16px;
+			margin-left: 0;
+			font-weight: 500;
+			&:hover {
+				box-shadow: none !important;
+			}
+			&:not(.active-tab):hover {
+				color: $color-primary !important;
+				background: transparent !important;;
+			}
+		}
+		.components-button.active-tab {
+			background: white;
+			border: 1px solid #e2e4e7;
+			border-bottom-color: transparent;
+		}
+	}
+	.components-tab-panel__tabs {
+		margin-bottom: -1px;
+	}
+}
+.two-col-grid {
+	display: grid;
+	grid-gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+h3.section-sub-head {
+    background: $color-gray-200;
+	padding: 10px;
+	color: $color-gray-700;
+	font-size: 14px;
+	text-transform: uppercase;
+	margin-bottom:1rem;
+	margin-top: 2rem;
+}
+.link-item {
+    border: 1px solid $color-gray-300;
+    padding: 20px;
+	border-radius: 4px;
+	display: flex;
+    flex-flow: column nowrap;
+}
+.link-item h4 {
+    margin: 0;
+}
+.dashboard-pro-settings {
+    margin-top: 2rem;
+}
+.link-item .link-item-foot {
+	margin-top: auto;
+	display: flex;
+	align-items: center;
+	.components-spinner {
+		margin-top: 0;
+	}
+	.components-toggle-control .components-base-control__field {
+		margin-bottom: 0;
+		.components-form-toggle {
+			margin-right: 0;
+		}
+	}
+}
+.link-item .link-item-foot > *:first-child {
+    flex-grow: 2;
+}
+.link-item a {
+    display: block;
+    background: transparent;
+	color: $color-gray-700;
+	&:hover {
+		color:$color-primary;
+	}
+}
+span.kt-license-status {
+    padding: 4px;
+    margin-left: 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+span.kt-license-status.k-inactive {
+    color: #c05621!important;
+    background: #fffaf0!important;
+}
+span.kt-license-status.k-active {
+    color: #2b6cb0!important;
+    background: #ebf8ff!important;
+}
+.license-section h2 {
+	display: flex;
+	margin-top: 0;
+    align-items: center;
+    justify-content: space-between;
+}
+.license-section table.form-table {
+    display: block;
+}
+.license-section table.form-table tbody {
+    display: block;
+}
+.license-section table.form-table td, .license-section table.form-table tr {
+    display: block;
+    padding: 0;
+    width: 100%;
+}
+.license-section .form-table th {
+    padding:0;
+    width: 100%;
+    margin-bottom: 4px;
+	display: block;
+	color: $color-gray-700;
+}
+.license-section p.submit {
+    padding: 0;
+    margin-top: 10px;
+}
+.license-section table.form-table input[type="text"] {
+    width:100%;
+}
+.kadence-desk-help-inner {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+.kadence_theme_dashboard_main .kadence-desk-button {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    display: inline-block;
+    padding: 10px 12px;
+    background: #005ab3;
+    border-radius: 3px;
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+	transition: all .2s ease;
+    border: 2px solid #005ab3;
+	height: auto;
+}
+
+.kadence_theme_dashboard_main .kadence-desk-button:hover {
+	background: #0073e6;
+	border-color: #0073e6;
+}
+.kadence_theme_dashboard_main .kadence-desk-button.kadence-desk-button-second {
+    margin-left: 30px;
+    border: 2px solid #005ab3;
+    color: #005ab3;
+    background: transparent;
+}
+.kadence_theme_dashboard_main .kadence-desk-button.kadence-desk-button-second:hover {
+    border: 2px solid#0073e6;
+    color: #0073e6;
+    background: transparent;
+}
+.kadence_theme_dashboard_main .kadence-desk-button .components-spinner {
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0 0 -2px 10px;
+}
+.kadence-desk-help-inner h2, .kadence-desk-starter-inner h2 {
+    font-size: 24px;
+}
+.kadence-desk-starter-inner p {
+	max-width: 600px;
+	margin: 1em auto;
+}
+.kadence-desk-help-inner .video-container {
+    margin-top: 2em;
+}
+.changelog-version {
+    padding: 2em;
+    margin-bottom: 2em;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.8;
+}
+.dashboard-pro-settings .link-item.locked-item {
+	background: #fbfdff;
+	position: relative;
+}
+.link-item.locked-item .lock-icon svg {
+    width: 100%;
+    height: auto;
+    fill: #acb4bf;
+}
+.link-item.locked-item .lock-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 25px;
+}
+.kadence-desk-help-inner .video-container img {
+    max-width: 100%;
+    height: auto;
+}

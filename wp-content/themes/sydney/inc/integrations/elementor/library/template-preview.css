@@ -1,0 +1,10 @@
+.elementor-add-new-section .elementor-add-sydney-button {
+    background-color: #ffdfdf;
+    position: relative;
+    top: 2px;
+    margin-left: 5px;
+}
+.elementor-add-new-section .elementor-add-sydney-button svg {
+    width: 16px;
+    height: 16px;
+}

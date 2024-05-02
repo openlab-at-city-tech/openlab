@@ -51,7 +51,7 @@
     {
         function zp_get_account ($wpdb, $api_user_id_incoming=false)
         {
-            if ($api_user_id_incoming !== false)
+            if ( $api_user_id_incoming !== false )
     		{
                 $zp_account = $wpdb->get_results(
                     $wpdb->prepare(
@@ -75,7 +75,13 @@
     {
         function zp_clear_cache_for_user ($wpdb, $api_user_id)
         {
-            $wpdb->query("DELETE FROM ".$wpdb->prefix."zotpress_cache WHERE api_user_id='".$api_user_id."'");
+            // $wpdb->query("DELETE FROM ".$wpdb->prefix."zotpress_cache WHERE api_user_id='".$api_user_id."'");
+            $wpdb->query(
+                $wpdb->prepare(
+                    "DELETE FROM ".$wpdb->prefix."zotpress_cache WHERE api_user_id='%s'",
+                    array( $api_user_id )
+                )
+            );
         }
     }
 

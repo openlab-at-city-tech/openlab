@@ -1,8 +1,0 @@
-/* FILE: content/loop/_media.scss */
-
-.site .posts .entry-media {
-	order: -10;
-	margin-top: calc( -1 * var(--posts_list_entry_padding_vertical) );
-	margin-left: calc( -1 * var(--posts_list_entry_padding_horizontal) );
-	margin-right: calc( -1 * var(--posts_list_entry_padding_horizontal) );
-}

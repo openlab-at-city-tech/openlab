@@ -12,7 +12,13 @@
 		if ( isset($_GET['api_user_id'])
                 && preg_match("/^\\d+\$/", $_GET['api_user_id']) )
         {
-            $zp_account_temp = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$_GET['api_user_id']."'", OBJECT);
+            $zp_account_temp = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT * FROM ".$wpdb->prefix."zotpress 
+                    WHERE api_user_id='%s'",
+                    array($_GET['api_user_id'])
+                ), OBJECT
+            );
 
             if ( (array)$zp_account_temp !== [] )
             {

@@ -32,7 +32,7 @@ function astra_heading_colors_section_dynamic_css( $dynamic_css, $dynamic_css_fi
 	$heading_base_color = astra_get_option( 'heading-base-color' );
 
 	if ( empty( $heading_base_color ) ) {
-		return;
+		return $dynamic_css;
 	}
 
 	/**

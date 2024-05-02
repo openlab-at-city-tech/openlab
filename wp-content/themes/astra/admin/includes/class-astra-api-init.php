@@ -122,11 +122,10 @@ class Astra_API_Init extends WP_REST_Controller {
 		$defaults = apply_filters(
 			'astra_dashboard_rest_options',
 			array(
-				'enable_optimized_inline_css' => self::get_admin_settings_option( 'enable_optimized_inline_css', false ),
-				'self_hosted_gfonts'          => self::get_admin_settings_option( 'self_hosted_gfonts', false ),
-				'preload_local_fonts'         => self::get_admin_settings_option( 'preload_local_fonts', false ),
-				'use_old_header_footer'       => astra_get_option( 'is-header-footer-builder', false ),
-				'use_upgrade_notices'         => astra_showcase_upgrade_notices(),
+				'self_hosted_gfonts'    => self::get_admin_settings_option( 'self_hosted_gfonts', false ),
+				'preload_local_fonts'   => self::get_admin_settings_option( 'preload_local_fonts', false ),
+				'use_old_header_footer' => astra_get_option( 'is-header-footer-builder', false ),
+				'use_upgrade_notices'   => astra_showcase_upgrade_notices(),
 			)
 		);
 

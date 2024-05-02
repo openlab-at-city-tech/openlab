@@ -820,11 +820,26 @@ function Zotpress_shortcode_request( $checkcache = false )
 			if ( $zpr["showimage"] )
 			{
 				// Get images for all item keys from zpdb, if they exist
+				// $zp_images = $wpdb->get_results(
+				// 	"
+				// 	SELECT * FROM ".$wpdb->prefix."zotpress_zoteroItemImages
+				// 	WHERE ".$wpdb->prefix."zotpress_zoteroItemImages.item_key IN ('".str_replace( " ", "', '", trim($zp_showimage_keys) )."')
+				// 	"
+				// );
+				// $zp_temp_img_keys = str_replace( " ", "', '", trim($zp_showimage_keys) );
+				$zp_temp_img_keys = explode(" ", trim($zp_showimage_keys) );
+				$zp_temp_img_keys_count = count($zp_temp_img_keys);
+				$zp_temp_img_ph = array_fill(0, $zp_temp_img_keys_count, "'%s'");
+				$zp_temp_img_ph = implode(",", $zp_temp_img_ph);
+
 				$zp_images = $wpdb->get_results(
-					"
-					SELECT * FROM ".$wpdb->prefix."zotpress_zoteroItemImages
-					WHERE ".$wpdb->prefix."zotpress_zoteroItemImages.item_key IN ('".str_replace( " ", "', '", trim($zp_showimage_keys) )."')
-					"
+					$wpdb->prepare(
+						"
+						SELECT * FROM ".$wpdb->prefix."zotpress_zoteroItemImages
+						WHERE ".$wpdb->prefix."zotpress_zoteroItemImages.item_key IN (".$zp_temp_img_ph.")
+						",
+						$zp_temp_img_keys
+					)
 				);
 
 				if ( count($zp_images) > 0 )

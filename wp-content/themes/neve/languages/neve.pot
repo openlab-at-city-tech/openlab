@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-22T13:39:00+00:00\n"
+"POT-Creation-Date: 2024-03-12T11:04:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: neve\n"
@@ -353,13 +353,13 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:80
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:5
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:5
 msgid "Desktop"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:81
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:5
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:5
 msgid "Mobile"
 msgstr ""
 
@@ -854,7 +854,7 @@ msgstr ""
 
 #. translators: %s is the header name
 #: neve/header-footer-grid/Core/Customizer.php:288
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:5
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:5
 msgid "Click on any empty space to add components, or existing components to adjust settings."
 msgstr ""
 
@@ -1347,7 +1347,7 @@ msgid "Sidebar"
 msgstr ""
 
 #: neve/inc/admin/metabox/main.php:75
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
 msgid "Components"
 msgstr ""
 
@@ -1790,7 +1790,7 @@ msgid "Text color"
 msgstr ""
 
 #: neve/inc/customizer/controls/upsell_control.php:95
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
 msgid "PRO"
 msgstr ""
 
@@ -2509,7 +2509,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: neve/inc/views/pluggable/pagination.php:273
-#: neve/inc/views/template_parts.php:491
+#: neve/inc/views/template_parts.php:523
 msgid "Pages:"
 msgstr ""
 
@@ -2525,7 +2525,7 @@ msgstr ""
 msgid "Out of stock"
 msgstr ""
 
-#: neve/inc/views/template_parts.php:429
+#: neve/inc/views/template_parts.php:461
 msgid "Read More"
 msgstr ""
 
@@ -2645,7 +2645,7 @@ msgid "No unit"
 msgstr ""
 
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
 msgid "Remove Item"
 msgstr ""
 
@@ -2654,42 +2654,8 @@ msgid "Available Components"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/7dfa03d13b56aa1f7030.js:1
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
 msgid "All available components are used inside the builder"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Item Settings"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Widget Settings"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Search for a component…"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Explore Neve PRO"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Row Setting"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:1
-msgid "Toggle Sidebar"
-msgstr ""
-
-#. translators: %1$s conditional header name (ie: Posts Header, Page Header, 404 Header)
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:3
-msgid "You are customizing the <Button>%1$s</Button> Header"
-msgstr ""
-
-#. translators: %1$s builder name (ie: Header)
-#: neve/assets/apps/customizer-controls/build/61c6f68350268ad78084.js:5
-msgid "%1$s Builder"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/a6f7963c7815fc4d9859.js:1
@@ -2703,6 +2669,40 @@ msgstr ""
 #: neve/assets/apps/customizer-controls/build/a6f7963c7815fc4d9859.js:1
 #: neve/assets/apps/dashboard/build/dashboard.js:3
 msgid "In Progress"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Item Settings"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Widget Settings"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Search for a component…"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Explore Neve PRO"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Row Setting"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:1
+msgid "Toggle Sidebar"
+msgstr ""
+
+#. translators: %1$s conditional header name (ie: Posts Header, Page Header, 404 Header)
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:3
+msgid "You are customizing the <Button>%1$s</Button> Header"
+msgstr ""
+
+#. translators: %1$s builder name (ie: Header)
+#: neve/assets/apps/customizer-controls/build/ca15adfa622d3d918edc.js:5
+msgid "%1$s Builder"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:1

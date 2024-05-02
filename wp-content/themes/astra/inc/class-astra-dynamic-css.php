@@ -71,7 +71,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$narrow_container_max_width = astra_get_option( 'narrow-container-max-width', apply_filters( 'astra_narrow_container_width', 750 ) );
 			$header_logo_width          = astra_get_option( 'ast-header-responsive-logo-width' );
 			$container_layout           = astra_toggle_layout( 'ast-site-content-layout', 'global', false );
-			$render_comment_css         = ( comments_open() || get_comments_number() );
+
 			// Get the Global Container Layout based on Global Boxed and Global Sidebar Style.
 			if ( 'plain-container' === $container_layout ) {
 				$is_boxed         = ( 'boxed' === astra_get_option( 'site-content-style' ) );
@@ -215,7 +215,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Elementor Loop block padding compatibility.
 			$elementor_container_padding_style_comp = self::elementor_container_padding_style_comp();
-			
+
 			$update_customizer_strctural_defaults = astra_check_is_structural_setup();
 			$blog_layout                          = astra_get_blog_layout();
 
@@ -901,15 +901,9 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$content_links_underline = astra_get_option( 'underline-content-links' );
 
 			if ( $content_links_underline ) {
-				if ( $render_comment_css ) {
-					$css_output['.ast-single-post .entry-content a, .ast-comment-content a:not(.ast-comment-edit-reply-wrap a)'] = array(
-						'text-decoration' => 'underline',
-					);
-				} else {
-					$css_output['.ast-single-post .entry-content a'] = array(
-						'text-decoration' => 'underline',
-					);
-				}
+				$css_output['.ast-single-post .entry-content a, .ast-comment-content a:not(.ast-comment-edit-reply-wrap a)'] = array(
+					'text-decoration' => 'underline',
+				);
 
 				$reset_underline_from_anchors = self::unset_builder_elements_underline();
 				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-button-wrapper .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
@@ -3147,20 +3141,13 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				),
 			);
 
-			if ( ! $render_comment_css ) {
-				unset( $global_button_tablet['.ast-comment-meta'] );
-			}
-
 			if ( ! self::astra_4_6_0_compatibility() ) {
 				$global_button_tablet['.ast-separate-container .ast-comment-list li.depth-1'] = array(
 					'padding' => '1.5em 2.14em',
 				);
-
-				if ( $render_comment_css ) {
-					$global_button_tablet['.ast-separate-container .comment-respond'] = array(
-						'padding' => '2em 2.14em',
-					);
-				}
+				$global_button_tablet['.ast-separate-container .comment-respond']             = array(
+					'padding' => '2em 2.14em',
+				);
 			}
 
 			/* Parse CSS from array() -> max-width: (tablet-breakpoint) px CSS */

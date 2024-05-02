@@ -20,7 +20,9 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.sliderFocusHandler();
 			OpenLab.utility.eventValidation();
 			OpenLab.utility.refreshActivity();
+			OpenLab.utility.refreshWhatsHappeningAtCityTech();
 			OpenLab.utility.initMemberRoleDefinitions();
+			OpenLab.utility.loadWhatsHappeningAtCityTech()
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -421,6 +423,77 @@ OpenLab.utility = (function ($) {
 			);
 
 		},
+		refreshActivity: function () {
+
+			var refreshActivity = $( '#refreshActivity' );
+
+			if ( ! refreshActivity.length) {
+				return;
+			}
+
+			var activityContainer = $( '#whatsHappening' );
+
+			//safety first
+			refreshActivity.off( 'click' );
+
+			refreshActivity.on(
+				'click',
+				function (e) {
+
+					e.preventDefault();
+					refreshActivity.addClass( 'fa-spin' );
+
+					$.ajax(
+						{
+							type: 'GET',
+							url: ajaxurl,
+							data:
+							{
+								action: 'openlab_ajax_return_latest_activity',
+								nonce: localVars.nonce
+							},
+							success: function (data, textStatus, XMLHttpRequest)
+						{
+								refreshActivity.removeClass( 'fa-spin' );
+								if (data === 'exit') {
+									//for right now, do nothing
+								} else {
+									activityContainer.html( data );
+								}
+							},
+							error: function (MLHttpRequest, textStatus, errorThrown) {
+								refreshActivity.removeClass( 'fa-spin' );
+								console.log( errorThrown );
+							}
+						}
+					);
+
+				}
+			);
+
+		},
+		refreshWhatsHappeningAtCityTech: function () {
+
+			var refreshActivity = $( '#refresh-activity-ct' );
+
+			if ( ! refreshActivity.length ) {
+				return;
+			}
+
+			var activityContainer = $( '#whats-happening-ct .fade-wrapper' );
+
+			//safety first
+			refreshActivity.off( 'click' );
+
+			refreshActivity.on(
+				'click',
+				function (e) {
+					e.preventDefault();
+					OpenLab.utility.loadWhatsHappeningAtCityTech();
+				}
+			);
+
+		},
 		customSelects: function (resize) {
 			select2args = {
 				minimumResultsForSearch: Infinity,
@@ -598,6 +671,33 @@ OpenLab.utility = (function ($) {
 
 					$clicked.find( 'i' ).toggleClass( 'fa-caret-square-o-right' ).toggleClass( 'fa-caret-square-o-down' );
 					$clicked.closest( '.member-role-definition' ).toggleClass( 'show-definition-text' );
+				}
+			);
+		},
+		loadWhatsHappeningAtCityTech: function() {
+			const $whatsHappening = $( '#whats-happening-ct' );
+			if ( 0 === $whatsHappening.length ) {
+				return;
+			}
+
+			const $fadeWrapper = $whatsHappening.find( '.fade-wrapper' );
+
+			const refreshButton = $whatsHappening.closest( '.left-box' ).find( '.fa-refresh' );
+
+			refreshButton.addClass( 'fa-spin' );
+			$fadeWrapper.fadeOut( 700 );
+
+			$.ajax(
+				localVars.whatsHappeningAtCityTechEndpoint,
+				{
+					success: function( data, textStatus, XMLHttpRequest ) {
+						$fadeWrapper.html( data ).fadeIn( 700 );
+						refreshButton.removeClass( 'fa-spin' );
+					},
+					error: function( XMLHttpRequest, textStatus, errorThrown ) {
+						console.log( errorThrown );
+						refreshButton.removeClass( 'fa-spin' );
+					}
 				}
 			);
 		},

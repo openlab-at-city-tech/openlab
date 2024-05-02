@@ -37,9 +37,9 @@ function Zotpress_zotpressInText ($atts)
 
 
     // PREPARE ATTRIBUTES
-    if ($items)
+    if ( $items )
         $items = zpStripQuotes( str_replace(" ", "", $items ));
-    elseif ($item)
+    elseif ( $item )
         $items = zpStripQuotes( str_replace(" ", "", $item ));
 
     $pages = zpStripQuotes( $pages );
@@ -73,21 +73,56 @@ function Zotpress_zotpressInText ($atts)
 
     $zp_account = false;
 
-    if ($nickname !== false) {
-        $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE nickname='".$nickname."'", OBJECT);
+    if ( $nickname !== false )
+    {
+        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE nickname='".$nickname."'", OBJECT);
+        $zp_account = $wpdb->get_row(
+            $wpdb->prepare(
+                "
+                SELECT * FROM ".$wpdb->prefix."zotpress 
+                WHERE nickname='%s'
+                ",
+                array( $nickname )
+            ), OBJECT
+        );
+
         if ( $zp_account !== null )
             $api_user_id = $zp_account->api_user_id;
-    } elseif ($api_user_id !== false) {
-        $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$api_user_id."'", OBJECT);
+    }
+    elseif ( $api_user_id !== false )
+    {
+        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$api_user_id."'", OBJECT);
+        $zp_account = $wpdb->get_row(
+            $wpdb->prepare(
+                "
+                SELECT * FROM ".$wpdb->prefix."zotpress 
+                WHERE api_user_id='%s'
+                ",
+                array( $api_user_id )
+            ), OBJECT
+        );
+
         if ( $zp_account !== null )
             $api_user_id = $zp_account->api_user_id;
-    } elseif ($api_user_id === false && $nickname === false) {
+    }
+    elseif ( $api_user_id === false 
+            && $nickname === false )
+    {
         if ( get_option("Zotpress_DefaultAccount") !== false )
         {
             $api_user_id = get_option("Zotpress_DefaultAccount");
-            $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id ='".$api_user_id."'", OBJECT);
+            // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id ='".$api_user_id."'", OBJECT);
+            $zp_account = $wpdb->get_row(
+                $wpdb->prepare(
+                    "
+                    SELECT * FROM ".$wpdb->prefix."zotpress 
+                    WHERE api_user_id ='%s'
+                    ",
+                    array( $api_user_id )
+                ), OBJECT
+            );
         }
-        else // When all else fails ...
+        else // When all else fails ... assume one account
         {
             $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
             $api_user_id = $zp_account->api_user_id;

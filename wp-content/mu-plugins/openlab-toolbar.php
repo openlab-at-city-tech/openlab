@@ -54,10 +54,6 @@ class OpenLab_Admin_Bar {
 		add_action( 'body_class', array( &$this, 'body_class' ), 999 );
 		add_action( 'admin_body_class', array( &$this, 'admin_body_class' ), 999 );
 
-		// Enqueue styles
-		add_action( 'wp_print_styles', array( &$this, 'enqueue_styles' ) );
-		add_action( 'admin_print_styles', array( &$this, 'enqueue_styles' ) );
-
 		// Removes the rude WP logo menu item
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
 
@@ -1539,7 +1535,8 @@ HTML;
 	 */
 	public function remove_duplicate_post() {
 		global $wp_admin_bar;
-		$wp_admin_bar->remove_menu( 'new_draft' );
+		$wp_admin_bar->remove_menu( 'duplicate-post' );
+		$wp_admin_bar->remove_menu( 'new-draft' );
 	}
 
 	/**
@@ -1685,40 +1682,6 @@ HTML;
 		return $body_class;
 	}
 
-	public function enqueue_styles() {
-		global $wpdb;
-
-		// Getting the theme folder for the main site.
-		$main_site_theme = $wpdb->get_var( 'SELECT option_value FROM wp_options WHERE option_name = "template"' );
-
-		wp_register_style( 'google-open-sans', 'https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic', array(), '2014', 'all' );
-		wp_enqueue_style( 'google-open-sans' );
-
-		$openlab_theme_link = get_site_url( 1, 'wp-content/themes/' ) . $main_site_theme . '/css/font-awesome.min.css';
-		$openlab_theme_link = set_url_scheme( $openlab_theme_link );
-
-		// Making sure dashicons fire up for front end.
-		if ( ! is_admin() ) {
-			wp_register_style( 'dashicons', '/wp-includes/css/dashicons.min.css' );
-			wp_enqueue_style( 'dashicons' );
-		}
-
-		// Registering font-awesome here so it can be used on the admin bar and on the main site.
-		// Plugins don't play nice.
-		wp_deregister_style( 'font-awesome' );
-		wp_register_style( 'font-awesome', $openlab_theme_link, array(), '20130604', 'all' );
-		wp_enqueue_style( 'font-awesome' );
-
-		// Custom admin bar styles.
-		$adminbar_custom_url = WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css';
-		$adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
-		$openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
-		$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
-
-		wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
-		wp_enqueue_style('openlab-toolbar', $openlab_toolbar_url, array('font-awesome'), filemtime(WP_CONTENT_DIR . '/mu-plugins/css/openlab-toolbar.css'));
-	}
-
 	public function adminbar_special_body_class( $classes ) {
 		$classes[] = 'adminbar-special';
 		return $classes;
@@ -1849,7 +1812,7 @@ function openlab_short_circuit_user_blog_queries( $pre ) {
 
 	$backtrace = debug_backtrace();
 	foreach ( $backtrace as $trace ) {
-		if ( ! empty( $trace['class'] ) && 'WP_Admin_Bar' !== $trace['class'] && ! empty( $trace['function'] ) && 'initialize' !== $trace['function'] ) {
+		if ( ! empty( $trace['class'] ) && 'WP_Admin_Bar' === $trace['class'] && ! empty( $trace['function'] ) && 'initialize' === $trace['function'] ) {
 			$allow_query = false;
 			break;
 		}

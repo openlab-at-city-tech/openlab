@@ -9290,24 +9290,64 @@ body form .checkbox-list-container {
     width: 100%;
   }
 }
-.home-page #refreshActivity {
+.home-page .refresh-button {
   color: #999999;
   cursor: pointer;
   margin-top: 3px;
 }
-.home-page #whatsHappening {
+.home-page .whats-happening-wrapper {
   padding: 12px 4%;
   height: 485px;
   overflow: auto;
 }
-.home-page #whatsHappening .sidebar-block {
+.home-page .whats-happening-wrapper .sidebar-block {
   margin-bottom: 12px;
   padding-bottom: 12px;
   border-bottom: 1px solid #bbbbbb;
 }
-.home-page #whatsHappening .sidebar-block .activity-avatar {
+.home-page .whats-happening-wrapper .sidebar-block .activity-avatar {
   max-width: 90px;
   margin-right: 10px;
+}
+.home-page .whats-happening-wrapper#whats-happening-ct article:first-of-type .sidebar-block {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #bbbbbb;
+}
+.home-page .whats-happening-subsection {
+  border-bottom: 1px solid #bbbbbb;
+  margin-bottom: 12px;
+}
+.home-page .whats-happening-subsection article:last-of-type .sidebar-block:last-of-type {
+  margin-bottom: 2px;
+}
+.home-page .whats-happening-subheader {
+  font-size: 18px;
+}
+.home-page .whats-happening-subheader:first-child {
+  margin-top: 10px;
+}
+.home-page .whats-happening-date {
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.home-page .whats-happening-content h1,
+.home-page .whats-happening-content h2,
+.home-page .whats-happening-content h3,
+.home-page .whats-happening-content h4,
+.home-page .whats-happening-content h5 {
+  font-weight: normal;
+  font-size: 14px;
+  margin-top: 0;
+}
+.home-page .whats-happening-content p {
+  font-size: 14px;
+}
+.home-page .whats-happening-content strong {
+  font-weight: normal;
+}
+.home-page .whats-happening-content.news-item-content a {
+  font-weight: bold;
 }
 .home-page #stay-up-to-date {
   padding: 12px 4%;

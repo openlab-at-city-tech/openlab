@@ -1,3 +1,16 @@
+v4.6.9
+- Improved codebase for improved security.
+- Fix: Editor - Block's inline toolbar elements like Bold, Italic creates jerk on focus.
+
+v4.6.8
+- Fix: Duplicate sub-menu dropdown arrows visible when Menu gets created using a page builder widget.
+- Fix: Single - Blog - Post title styles not working on the frontend after parsing dynamic CSS.
+- Fix: Cart - Table UI breaks due to missing of parsed dynamic CSS.
+
+v4.6.7
+- Fix: Responsive CSS gets break after last version with caching plugins enabled.
+- Fix: Dynamic CSS get break after the last version.
+
 v4.6.6
 - New: Introducing "Optimize Inline CSS" option in "Astra Dashboard > Settings > Performance tab".
 - New: Introducing a new border color option for transparent header buttons.

@@ -2,21 +2,15 @@
 
     var ajaxurl = eportfolio_admin.ajax_url;
     var eportfolioNonce = eportfolio_admin.ajax_nonce;
-    var custom_theme_file_frame;
 
     // Dismiss notice
-    $('.twp-custom-setup').click(function(){
-        
-        var data = {
-            'action': 'eportfolio_notice_dismiss',
-            '_wpnonce': eportfolioNonce,
-        };
- 
-        $.post(ajaxurl, data, function( response ) {
-
-            $('.twp-eportfolio-notice').hide();
-            
+    $('.twp-custom-setup').click(function(event){
+        event.preventDefault();
+        jQuery.post(ajaxurl, {
+            action: 'eportfolio_notice_dismiss',
+            security : eportfolioNonce,
         });
+        $('.twp-eportfolio-notice').hide();
 
     });
 

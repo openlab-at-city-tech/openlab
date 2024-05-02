@@ -1,9 +1,0 @@
-/* FILE: _extend/_accessibility.scss */
-
-%screen_reader--hide {
-	@include screen_reader( 'hide' );
-}
-
-%screen_reader--show {
-	@include screen_reader( 'show' );
-}

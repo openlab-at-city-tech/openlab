@@ -8,7 +8,7 @@ Description: ePortfolio is a free minimalist, SEO optimized multi-purpose WordPr
 Requires at least: 5.3
 Tested up to: 6.4
 Requires PHP: 5.6
-Version: 1.2.4
+Version: 1.2.5
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: eportfolio
@@ -344,9 +344,10 @@ input[type=datetime-local],
 input[type=color],
 textarea {
     color: #666;
-    border: 1px solid #ccc;
+    border: 1px solid #CFD8DC;
     border-radius: 3px;
     padding: 3px;
+    outline:none;
 }
 input[type=text]:focus,
 input[type=email]:focus,
@@ -365,6 +366,24 @@ input[type=datetime-local]:focus,
 input[type=color]:focus,
 textarea:focus {
     color: #111;
+}
+input[type=text]:focus-visible,
+input[type=email]:focus-visible,
+input[type=url]:focus-visible,
+input[type=password]:focus-visible,
+input[type=search]:focus-visible,
+input[type=number]:focus-visible,
+input[type=tel]:focus-visible,
+input[type=range]:focus-visible,
+input[type=date]:focus-visible,
+input[type=month]:focus-visible,
+input[type=week]:focus-visible,
+input[type=time]:focus-visible,
+input[type=datetime]:focus-visible,
+input[type=datetime-local]:focus-visible,
+input[type=color]:focus-visible,
+textarea:focus-visible {
+    border: 1px solid #FFAAA6;
 }
 select {
     border: 1px solid #ccc;
@@ -2132,6 +2151,11 @@ ul.twp-social-icons-rounded li a:before {
     -webkit-transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
 }
+ul.twp-social-icons li a[href*=twitter]{
+    vertical-align: middle;
+    height: 30px;
+    line-height: 30px;
+}
 ul.twp-social-icons li a[href*=twitter]:before,
 ul.twp-social-icons-rounded li a[href*=twitter]:before {
     -webkit-mask: url("data:image/svg+xml,%3Csvg class='svg-icon' aria-hidden='true' role='img' focusable='false' xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'%3E%3C/path%3E%3C/svg%3E");
@@ -3204,7 +3228,6 @@ ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     height: 45px;
     border-radius: 0;
     padding: 0 15px;
-    border-color: #CFD8DC;
 }
 .widget .search-form .search-submit,
 .twp-menubar-search .search-form .search-submit {
@@ -3702,9 +3725,6 @@ ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
 }
 .comment-form textarea, .comment-form input[type=text], .comment-form input[type=email], .comment-form input[type=url] {
     width: 100%;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #CFD8DC;
     padding: 10px 15px;
 }
 .comment-form input[type=submit] {
@@ -4047,7 +4067,7 @@ ul.twp-social-icons-rounded li a:focus[href*="t.me"] {
     margin: 0;
 }
 .twp-not-found .twp-icon {
-    font-size: 60px;
+    font-size: 160px;
 }
 .twp-not-found .twp-icon i {
     -webkit-animation: rotate-center 3s ease infinite both;

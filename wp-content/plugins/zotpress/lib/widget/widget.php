@@ -41,20 +41,43 @@ function Zotpress_widget_metabox_AJAX_search()
 	global $wpdb;
 
 	// Determine account based on passed account
-    if ($_GET['api_user_id'] && is_numeric($_GET['api_user_id'])) {
-        $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$_GET['api_user_id']."'", OBJECT);
+    if ( $_GET['api_user_id'] && is_numeric($_GET['api_user_id']))
+	{
+        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$_GET['api_user_id']."'", OBJECT);
+		$zp_account = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * FROM ".$wpdb->prefix."zotpress 
+				WHERE api_user_id='%s'
+				",
+				array( $_GET['api_user_id'] )
+			), OBJECT
+		);
         $zp_api_user_id = $zp_account->api_user_id;
         $zp_nickname = $zp_account->nickname;
-    } elseif (get_option("Zotpress_DefaultAccount")) {
+    } 
+	elseif ( get_option("Zotpress_DefaultAccount") )
+	{
         $zp_api_user_id = get_option("Zotpress_DefaultAccount");
-        $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$zp_api_user_id."'", OBJECT);
+        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$zp_api_user_id."'", OBJECT);
+		$zp_account = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * FROM ".$wpdb->prefix."zotpress 
+				WHERE api_user_id='%s'
+				",
+				array( $zp_api_user_id )
+			), OBJECT
+		);
         $zp_nickname = $zp_account->nickname;
-    } else
-  		{
-  			$zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
-  			$zp_api_user_id = $zp_account->api_user_id;
-              $zp_nickname = $zp_account->nickname;
-  		}
+    }
+	else // Assume one account
+	{
+		$zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
+		
+		$zp_api_user_id = $zp_account->api_user_id;
+			$zp_nickname = $zp_account->nickname;
+	}
 
 	$zpSearch = array();
 

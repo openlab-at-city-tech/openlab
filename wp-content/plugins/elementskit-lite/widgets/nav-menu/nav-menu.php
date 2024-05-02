@@ -1701,6 +1701,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 				'elementskit_line_arrow' => 'icon-down-arrow1',
 				'elementskit_plus_icon' => 'icon-plus',
 				'elementskit_fill_arrow' => 'icon-arrow-point-to-down',
+				'elementskit_none' => ''
 			];
 
 			$selected_arrow = $elementskit_style_tab_submenu_item_arrow;

@@ -145,15 +145,26 @@ if ( ! class_exists('ZotpressRequest') )
             global $wpdb;
 
             // First, check db to see if cached version exists
-            $zp_query =
+            // $zp_query =
+            //         "
+            //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
+            //         FROM ".$wpdb->prefix."zotpress_cache
+            //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
+            //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
+            //         ";
+            // $zp_results = $wpdb->get_results( $zp_query, OBJECT );
+            $zp_results = $wpdb->get_results(
+                $wpdb->prepare(
                     "
                     SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                     FROM ".$wpdb->prefix."zotpress_cache
-                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-                    ";
-            $zp_results = $wpdb->get_results( $zp_query, OBJECT );
-            unset($zp_query);
+                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
+                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                    ",
+                    array( md5($url), $this->api_user_id )
+                ), OBJECT
+            );
+            // unset($zp_query);
 
             $updateneeded = false;
 
@@ -162,9 +173,7 @@ if ( ! class_exists('ZotpressRequest') )
                 // Cache exists, but is it out of date? Check:
                 if ( isset($zp_results[0]->retrieved)
                         && $this->check_time($zp_results[0]->retrieved) )
-                {
                     $updateneeded = true;
-                }
 
                 // Use the cache:
                 $json = $this->zp_gzdecode( $zp_results[0]->json );
@@ -197,15 +206,27 @@ if ( ! class_exists('ZotpressRequest') )
             if ( $this->update === false )
             {
                 // First, check db to see if cached version exists
-                $zp_query =
+                // $zp_query =
+                //         "
+                //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
+                //         FROM ".$wpdb->prefix."zotpress_cache
+                //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
+                //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
+                //         ";
+                // $zp_results = $wpdb->get_results( $zp_query, OBJECT ); unset($zp_query);
+
+                $zp_results = $wpdb->get_results(
+                    $wpdb->prepare(
                         "
                         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                         FROM ".$wpdb->prefix."zotpress_cache
-                        WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-                        AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-                        ";
-                $zp_results = $wpdb->get_results( $zp_query, OBJECT ); unset($zp_query);
-
+                        WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
+                        AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                        ",
+                        array( md5($url), $this->api_user_id )
+                    ), OBJECT
+                );
+                
                 // Cache exists
                 if ( count($zp_results) > 0 )
                 {
@@ -244,14 +265,26 @@ if ( ! class_exists('ZotpressRequest') )
             global $wpdb;
 
             // First, check db to see if cached version exists
-            $zp_query =
+            // $zp_query =
+            //         "
+            //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
+            //         FROM ".$wpdb->prefix."zotpress_cache
+            //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
+            //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
+            //         ";
+            // $zp_results = $wpdb->get_results($zp_query, OBJECT); unset($zp_query);
+
+            $zp_results = $wpdb->get_results(
+                $wpdb->prepare(
                     "
                     SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                     FROM ".$wpdb->prefix."zotpress_cache
-                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-                    ";
-            $zp_results = $wpdb->get_results($zp_query, OBJECT); unset($zp_query);
+                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
+                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                    ",
+                    array( md5($url), $this->api_user_id )
+                ), OBJECT
+            );
 
             // Then, if no cached version, proceed and save one.
             // Or, if cached version exists, check to see if it's out of date,
@@ -403,17 +436,18 @@ if ( ! class_exists('ZotpressRequest') )
                             $json = json_encode($data);
                             $tags = json_encode($tags);
 
-                            $wpdb->query( $wpdb->prepare(
+                            $wpdb->query(
+                                $wpdb->prepare(
                                 "
-                                    INSERT INTO ".$wpdb->prefix."zotpress_cache
-                                    ( request_id, api_user_id, json, tags, headers, libver, retrieved )
-                                    VALUES ( %s, %s, %s, %s, %s, %d, %s )
-                                    ON DUPLICATE KEY UPDATE
-                                    json = VALUES(json),
-                                    tags = VALUES(tags),
-                                    headers = VALUES(headers),
-                                    libver = VALUES(libver),
-                                    retrieved = VALUES(retrieved)
+                                INSERT INTO ".$wpdb->prefix."zotpress_cache
+                                ( request_id, api_user_id, json, tags, headers, libver, retrieved )
+                                VALUES ( %s, %s, %s, %s, %s, %d, %s )
+                                ON DUPLICATE KEY UPDATE
+                                json = VALUES(json),
+                                tags = VALUES(tags),
+                                headers = VALUES(headers),
+                                libver = VALUES(libver),
+                                retrieved = VALUES(retrieved)
                                 ",
                                 array
                                 (
@@ -424,8 +458,8 @@ if ( ! class_exists('ZotpressRequest') )
                                     $headers,
                                     $response["headers"]["last-modified-version"],
                                     date('m/d/Y h:i:s a')
-                                )
-                            ) );
+                                ))
+                            );
                         }
 
                         else // assume 'ris'
@@ -451,21 +485,22 @@ if ( ! class_exists('ZotpressRequest') )
                 else
                 {
                     // Reset retrieved datetime:
-                    $wpdb->query( $wpdb->prepare(
+                    $wpdb->query(
+                        $wpdb->prepare(
                         "
-                            INSERT INTO ".$wpdb->prefix."zotpress_cache
-                            ( request_id, api_user_id, retrieved )
-                            VALUES ( %s, %s, %s )
-                            ON DUPLICATE KEY UPDATE
-                            retrieved = VALUES(retrieved)
+                        INSERT INTO ".$wpdb->prefix."zotpress_cache
+                        ( request_id, api_user_id, retrieved )
+                        VALUES ( %s, %s, %s )
+                        ON DUPLICATE KEY UPDATE
+                        retrieved = VALUES(retrieved)
                         ",
                         array
                         (
                             md5( $url ),
                             $this->api_user_id,
                             date('m/d/Y h:i:s a')
-                        )
-                    ) );
+                        ))
+                    );
 
                     $json = $this->zp_gzdecode($zp_results[0]->json);
                     $tags = $this->zp_gzdecode($zp_results[0]->tags);

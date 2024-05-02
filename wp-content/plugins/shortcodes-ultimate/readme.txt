@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://getshortcodes.com/pricing/
 Tags: posts, carousel, shortcode, toggle, columns
-Stable tag: 7.0.4
+Stable tag: 7.0.5
 Requires PHP: 5.4
 Requires at least: 5.0
-Tested up to: 6.4
+Tested up to: 6.5
 
 
 A comprehensive collection of visual components for your site
@@ -143,6 +143,11 @@ Upgrade normally
 == Changelog ==
 
 
+
+### 7.0.5
+
+- Tested compatibility with WordPress 6.5
+- Security improvements
 
 
 ### 7.0.4
