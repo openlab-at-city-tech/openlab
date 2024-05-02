@@ -287,7 +287,7 @@ function openlab_stay_up_to_date() {
  *
  */
 function cuny_home_square( $type ) {
-	global $wpdb, $bp;
+	global $wpdb, $bp, $groups_template;
 
 	$cached = get_transient( 'openlab_home_square_' . $type );
 	if ( $cached ) {
@@ -314,23 +314,9 @@ function cuny_home_square( $type ) {
 		],
 	);
 
-	if ( bp_has_groups( $groups_args ) ) :
-		?>
+	ob_start();
 
-		<?php
-		/* Let's save some queries and get the most recent activity in one fell swoop */
-
-		global $groups_template;
-
-		$group_ids = array();
-		foreach ( $groups_template->groups as $g ) {
-			$group_ids[] = $g->id;
-		}
-		$group_ids_sql = implode( ',', $group_ids );
-
-		ob_start();
-		?>
-
+	if ( bp_has_groups( $groups_args ) ) : ?>
 
 		<div class="col-sm-6 activity-list <?php echo esc_attr( $type ); ?>-list">
 			<div class="activity-wrapper">
@@ -345,7 +331,7 @@ function cuny_home_square( $type ) {
 					// Showing descriptions for now. http://openlab.citytech.cuny.edu/redmine/issues/291
 					// $activity = !empty( $group_activity_items[$group->id] ) ? $group_activity_items[$group->id] : stripslashes( $group->description );
 					$activity = stripslashes( $group->description );
-					echo '<div class="box-1 row-' . esc_attr( $i ) . ' activity-item type-' . esc_attr( $type ) . '">';
+					echo '<div class="clickable-card box-1 row-' . esc_attr( $i ) . ' activity-item type-' . esc_attr( $type ) . '">';
 					?>
 					<div class="item-avatar">
 						<?php
@@ -358,10 +344,10 @@ function cuny_home_square( $type ) {
 							)
 						);
 						?>
-						<a href="<?php bp_group_permalink(); ?>"><img class="img-responsive" src="<?php echo esc_attr( $avatar_url ); ?>" alt="<?php echo esc_attr( $group->name ); ?>"/></a>
+						<img class="img-responsive" src="<?php echo esc_attr( $avatar_url ); ?>" alt="<?php echo esc_attr( $group->name ); ?>"/>
 					</div>
 					<div class="item-content-wrapper">
-						<h3 class="group-title overflow-hidden">
+						<h3 class="item-title group-title overflow-hidden">
 							<a class="no-deco truncate-on-the-fly hyphenate" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>" data-basevalue="40" data-minvalue="15" data-basewidth="145"><?php echo esc_html( bp_get_group_name() ); ?></a>
 							<span class="original-copy hidden"><?php echo esc_html( bp_get_group_name() ); ?></span>
 						</h3>
@@ -379,7 +365,7 @@ function cuny_home_square( $type ) {
 							?>
 						</p>
 						<p class="see-more">
-							<a class="semibold" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>">See More<span class="sr-only"> <?php echo esc_html( bp_get_group_name() ); ?></span></a>
+							<span class="semibold" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>">See More<span class="sr-only"> <?php echo esc_html( bp_get_group_name() ); ?></span></span>
 						</p>
 					</div>
 				</div>

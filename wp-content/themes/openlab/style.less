@@ -151,6 +151,20 @@ blockquote {
 	position: relative;
 }
 
+.clickable-card {
+	&.card-is-hovered {
+		border-color: @40gray !important;
+	}
+
+	.see-more {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
 // Base class
 // --------------------------------------------------
 
@@ -2483,15 +2497,7 @@ body form{
                     }
                 }
                 .item-avatar{
-                    height: 0;
                     position: relative;
-                    padding-top: 100%;
-                    a{
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                    }
                     @media (max-width: @screen-xs-max){
                         height: 100%;
                         width: 100%;
