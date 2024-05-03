@@ -74,6 +74,7 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
 	wp_embed_register_handler( 'mathdot', '#https?://mathdev\.citytech\.cuny\.edu/DOT/([^/]*)/?#i', 'openlab_embed_handler_mathdot' );
+	wp_embed_register_handler( 'circuitverse', '#https?://circuitverse\.org/#i', 'openlab_embed_handler_circuitverse' );
 
 	$network_home_url = network_home_url(); // Network home URL
 	wp_embed_register_handler( 'openlab', "#{$network_home_url}#i", 'openlab_embed_local_uploaded_images' );
@@ -286,7 +287,7 @@ function openlab_embed_local_uploaded_images( $matches, $attr, $url ) {
 
 	// Get extension from the URL
 	$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
-	
+
 	// If URL doesn't end with supported image extension, return the URL
 	if( ! in_array( $ext, $supported_images ) ) {
 		return $url;
@@ -329,3 +330,78 @@ function openlab_padlet_shortcode( $attr = [] ) {
     );
 }
 add_shortcode( 'padlet', 'openlab_padlet_shortcode' );
+
+/**
+ * circuitverse shortcode.
+ */
+function openlab_circuitverse_shortcode( $attr = [] ) {
+	//	https://circuitverse.org/users/239052/projects/bbgtest-fe366a34-7590-4106-a4da-852191d9c601
+
+	$r = shortcode_atts(
+		[
+			'url'         => '',
+			'height'      => 500,
+			'width'       => 500,
+			'theme'       => 'default',
+			'clock_time'  => '1',
+			'zoom_in_out' => '1',
+		],
+		$attr
+	);
+
+	if ( empty( $r['url'] ) ) {
+		return '';
+	}
+
+	$domain = parse_url( $r['url'], PHP_URL_HOST );
+	if ( 'circuitverse.org' !== $domain ) {
+		return '';
+	}
+
+	// Try to get the project ID from the URL.
+	$project_id = '';
+
+	$path = parse_url( $r['url'], PHP_URL_PATH );
+
+	$user_project_regex = '/\/users\/(\d+)\/projects\/([a-z0-9-]+)/';
+	if ( preg_match( $user_project_regex, $path, $matches ) ) {
+		$project_id = $matches[2];
+	}
+
+	if ( ! $project_id ) {
+		return '';
+	}
+
+	$boolean_attributes = [ 'clock_time', 'zoom_in_out' ];
+	foreach ( $boolean_attributes as $attr ) {
+		$r[ $attr ] = filter_var( $r[ $attr ], FILTER_VALIDATE_BOOLEAN ) ? 'true' : 'false';
+	}
+
+	$embed_src = sprintf(
+		'https://circuitverse.org/simulator/embed/%s?theme=%s&display_title=%s&clock_time=true&fullscreen=true&zoom_in_out=%s',
+		$project_id,
+		$r['theme'],
+		$r['clock_time'],
+		$r['zoom_in_out']
+	);
+
+	$embed = sprintf(
+		'<iframe src="%s" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="500" width="500" allowFullScreen></iframe>',
+		esc_url( $embed_src )
+	);
+
+	return $embed;
+}
+add_shortcode( 'circuitverse', 'openlab_circuitverse_shortcode' );
+
+/**
+ * Circuitverse embed callback.
+ *
+ * @param array $matches Matches from embed URL regex.
+ * @param array $attr    Attributes from embed URL regex.
+ * @param string $url    URL.
+ * @return string
+ */
+function openlab_embed_handler_circuitverse( $matches, $attr, $url ) {
+	return openlab_circuitverse_shortcode( [ 'url' => $url ] );
+}
