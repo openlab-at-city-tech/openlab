@@ -943,6 +943,7 @@ class Openlab_Clone_Course_Site {
 			'posts',
 			'postmeta',
 			'terms',
+			'termmeta',
 			'term_taxonomy',
 			'term_relationships',
 		);
