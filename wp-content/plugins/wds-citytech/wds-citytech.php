@@ -3378,6 +3378,25 @@ add_action(
 );
 
 /**
+ * Register inline-comments customization assets.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'INCOM_VERSION' ) ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'openlab-inline-comments',
+			plugins_url( 'wds-citytech/assets/css/inline-comments.css' ),
+			null,
+			OL_VERSION
+		);
+	}
+);
+
+/**
  * Gravity Forms Quiz field width.
  */
 add_action(
