@@ -10,7 +10,7 @@
  *   d. build/site-templates-admin.js -> js/site-templates-admin.js
  *   e. build/site-templates-default-category.js -> js/site-templates-default-category.js
  *   f. views/site-template/ -> parts/site-template/
- *   g. classes/API/Sites.php -> lib/cbox-polyfills/class-cbox-sites-endpoint.php
+ *   g. classes/API/Sites.php -> wp-content/plugins/wds-citytech/includes/cbox-polyfills/class-cbox-sites-endpoint.php
  *
  * 2. Make the following changes:
  *   a. Change paths in cboxol_register_site_template_assets()
