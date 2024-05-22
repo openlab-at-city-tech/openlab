@@ -858,8 +858,9 @@ function cuny_member_profile_header() {
 					?>
 
 				<?php endif ?>
+
+				<?php do_action( 'openlab_member_under_avatar' ); ?>
 			</div><!--profile-action-wrapper-->
-					<!--<p>Some descriptive tags about the student...</p>-->
 		</div><!-- #item-header-avatar -->
 
 		<div id="member-header-content" class="col-sm-16 col-xs-24">
