@@ -1,0 +1,167 @@
+.cv-portfolio-blocks-appearence.about-wrap {
+	max-width: 100%;
+}
+.cv-portfolio-blocks-appearence .two-col {
+	margin: 20px 0;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.cv-portfolio-blocks-appearence.about-wrap h1 {
+	font-size: 28px;
+}
+.cv-portfolio-blocks-appearence.about-wrap h3 {
+	font-weight: 400;
+}
+.cv-portfolio-blocks-appearence.about-wrap .about-text {
+	margin: 0 !important;
+	font-size: 16px;
+    width: 63%;
+}
+.cv-portfolio-blocks-appearence .about-img {
+	margin: 0 !important;
+    width: 35%;
+}
+
+.cv-portfolio-blocks-appearence .four-col {
+	clear: both;
+}
+.cv-portfolio-blocks-appearence .four-col .col p {
+	padding-right: 10px;
+}
+
+.cv-portfolio-blocks-appearence .col .dashicons {
+	margin-top: 6px;
+	margin-right: 4px;
+}
+.cv-portfolio-blocks-appearence .four-col {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.cv-portfolio-blocks-appearence .four-col .col {
+    box-sizing: border-box;
+    box-shadow: 0px 0px 4px 0px #909394;
+    padding: 10px;
+}
+.wp-core-ui .button.green {
+    background-color: #2271b1;
+    border-color: #2271b1;
+}
+
+.wp-core-ui .button.green:hover,
+.wp-core-ui .button.green:focus {
+    background-color: #2271b1;
+    border-color: #2271b1;
+}
+
+.cv-portfolio-blocks-admin-notice-wrapper {
+    margin-bottom: 1em;
+}
+.head-btn{
+    display: flex;
+    justify-content: space-between;
+
+}
+.head-btn .demo-btn span a{
+    padding: 7px 30px !important;
+    margin-right: 10px !important;
+    margin-bottom: 6px !important;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none; 
+    border: none;
+}
+.head-btn .demo-btn:hover span a{
+    color: #fff;
+}
+.head-btn .demo-btn .button-pro{
+    background-color: #ef7213;
+    font-size: 15px;
+    font-size: .9375rem;
+    font-weight: 700;
+    color: #fff;
+    padding: 17px 25px;
+    border: 0;
+    display: inline-block;
+    border-radius: 0;
+    -webkit-backface-visibility: hidden;
+    z-index: 1;
+    position: relative;
+    text-transform: capitalize;
+    border-radius: 0;
+    background-image: -moz-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+    background-image: -webkit-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+    background-image: -ms-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+}
+.head-btn .demo-btn .button-demo{
+    background-color: #644eee;
+    font-size: 15px;
+    font-size: .9375rem;
+    font-weight: 700;
+    color: #fff;
+    padding: 17px 25px;
+    border: 0;
+    display: inline-block;
+    border-radius: 5px;
+    -webkit-backface-visibility: hidden;
+    z-index: 1;
+    position: relative;
+    text-transform: capitalize;
+    border-radius: 0;
+}
+.head-btn .demo-btn .button-doc{
+   background-color: #ef7213;
+    font-size: 15px;
+    font-size: .9375rem;
+    font-weight: 700;
+    color: #fff;
+    padding: 17px 25px;
+    border: 0;
+    display: inline-block;
+    border-radius: 0;
+    -webkit-backface-visibility: hidden;
+    z-index: 1;
+    position: relative;
+    text-transform: capitalize;
+    border-radius: 0;
+    background-image: -moz-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+    background-image: -webkit-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+    background-image: -ms-linear-gradient(0deg,#ef7213 0%,#ffa968 100%);
+}
+.cv-portfolio-blocks-appearence .col {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    margin: 5px;
+}
+.head-btn .demo-btn .button-doc:hover,
+.head-btn .demo-btn .button-pro:hover{
+    background-image: -moz-linear-gradient(0deg,#ffa968 0%,#ef7213 100%);
+    background-image: -webkit-linear-gradient(0deg,#ffa968 0%,#ef7213 100%);
+    background-image: -ms-linear-gradient(0deg,#ffa968 0%,#ef7213 100%);
+    color: #fff;
+}
+.head-btn .demo-btn .button-demo:hover{
+    background-color: #5440d4;
+    color: #fff;
+}
+@media screen and (max-width : 1024px){
+    .cv-portfolio-blocks-appearence.about-wrap .about-text, .cv-portfolio-blocks-appearence .about-img  {
+        width: 100%;
+        margin-bottom: 20px !important;
+    }
+    .cv-portfolio-blocks-appearence .two-col {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width : 768px){
+    .cv-portfolio-blocks-appearence .four-col {
+        flex-direction: column;
+    }
+}
