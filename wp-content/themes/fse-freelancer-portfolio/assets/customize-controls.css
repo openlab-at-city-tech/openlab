@@ -1,0 +1,35 @@
+/* ---------Customizer--------- */
+.control-section-fse-freelancer-portfolio h3.accordion-section-title {
+	color: #fff !important;
+	padding: 15px;
+	line-height: 2;
+    background: #c848f5 !important;
+}
+a.button.button-secondary.alignright {
+    color: #222;
+    box-shadow: none;
+    font-weight: bold;
+    padding: 0 10px;
+    background: transparent;
+    height: 31px;
+    background: #fff;
+    border: none;
+}
+span.customize-control-title, .customize-control-title {
+    background: #bbb;
+    letter-spacing: 2px;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 5px;
+    color: #fff;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+/* span.customize-control-title */
+.customize-control-toggle .toggle--wrapper span.customize-control-title{
+	background: none;
+	color: #50575e;
+	padding: 0px;
+	text-transform: none;
+}

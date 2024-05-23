@@ -1,0 +1,139 @@
+/*GET START CSS*/
+.appearance_page_fse_freelancer_portfolio_guide #wpwrap{
+    background: #fff;
+    color: #333;
+}
+.col-left{
+    width: 40%;
+    float: left;
+    padding: 0 20px;
+}
+.col-right{
+    width: 56%;
+    float: right;
+}
+.col-right img{
+    width: 100%;
+}
+.wrapper-info h3 {
+    color: #fa4612;
+    font-size: 25px;
+}
+.wrapper-info h4 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+}
+.wrapper-info a {
+    text-decoration: none;
+}
+#wpcontent, #wpfooter {
+    margin-right: 20px;
+}
+.centerbold a {
+    color: #fff;
+    padding: 9px 12px;
+    text-decoration: none;
+    font-size: 14px;
+    background: #fa4612;
+    transition: 0.3s;
+    display: inline-block;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+a.bg-color{
+    color: #fff;
+    padding: 9px 12px;
+    text-decoration: none;
+    font-size: 14px;
+    background: #6664e4;
+    transition: 0.3s;
+    display: inline-block;
+    font-weight: 500;
+    letter-spacing: 1px; 
+}
+.centerbold a:hover {
+    background: #2e2e2e;
+}
+.intro {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+.intro p {
+    font-size: 16px;
+    font-weight: 600;
+    align-self: flex-end;
+}
+.col-left p {
+    color: #2e2e2e;
+    font-size: 14px;
+    text-align: justify;
+}
+hr {
+    margin: 20px 0;
+}
+.col-left-inner img {
+    width: 100%;
+    margin-bottom: 15px;
+    border: solid 1px #ccc;
+}
+.started {
+    float: left;
+    width: 100%;
+}
+img.table-img {
+    width: 100%;
+}
+.col-left-inner {
+    width: 100%;
+    float: left;
+}
+.col-right-inner {
+    width: 100%;
+    float: right;
+}
+.feature{
+    float: left;
+    width: 100%;
+}
+.col-md-4 {
+    width: 33.33%;
+    float: left;
+}
+.started ul {
+    list-style: disc;
+    font-size: 15px;
+    margin-left: 30px;
+}
+.color_bg_blue {
+    background-color: #fa4612;
+    display: block;
+    float: left;
+    padding: 15px 0 35px 35px;
+    width: 95%;
+}
+.color_bg_blue p {
+    color: #fff;
+}
+.color_bg_blue h4 {
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+/* theme activation*/
+.welcome a{
+    font-size: 21px;
+    padding: 8px 17px 38px;
+}
+
+.notice p.dismiss-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 0;
+}
+.notice {
+    position: relative;
+}
