@@ -1,5 +1,9 @@
 /* Toolbar / Top Nav */
 
+:root {
+	--block-editor-breakpoint-tablet: 782px;
+}
+
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
 
 /**vendor**/
@@ -725,7 +729,7 @@
 				}
 			}
 			#wp-admin-bar-updates {
-				@media (max-width: 767px) {
+				@media (max-width: var(--block-editor-breakpoint-tablet)) {
 					display: none;
 				}
 			}
@@ -1269,7 +1273,7 @@ html {
 body {
 	&.adminbar-special {
 		padding-top: 50.5px;
-		@media (max-width: 767px) {
+		@media (max-width: var(--block-editor-breakpoint-tablet)) {
 			padding-top: 114px;
 		}
 	}
@@ -1427,6 +1431,17 @@ a.cc-widget-icon-link {
 	}
 }
 
-.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
-	top: 52px;
+@media screen and (min-width: 783px) {
+	.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
+	}
+
+	.block-editor-block-contextual-toolbar.is-fixed>.block-editor-block-toolbar {
+		top: 18px;
+	}
+}
+
+@media screen and (max-width: var(--block-editor-breakpoint-tablet)) {
+	.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
+		top: 52px;
+	}
 }
