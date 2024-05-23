@@ -2289,10 +2289,10 @@ function openlab_add_post_visibility_script_data() {
 		'openlab-blocks',
 		'const openlabBlocksPostVisibility = ' . wp_json_encode(
 			[
+				'blogPublic'                => $blog_public,
 				'currentGroupTypeLabel'     => $group_type_label,
 				'currentGroupTypeSiteLabel' => sprintf( '%s Site', $group_type_label ),
 				'shareOnlyWithGroup'        => sprintf( 'Only logged-in members of this %s can see this post.', $group_type_label ),
-				'siteIsPublic'              => $blog_public >= 0,
 			]
 		) . ';',
 	);

@@ -1,30 +1,57 @@
-import { RadioControl, VisuallyHidden } from '@wordpress/components'
+/* global openlabBlocksPostVisibility */
+
+import { VisuallyHidden } from '@wordpress/components'
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post'
 import { registerPlugin } from '@wordpress/plugins'
 import { useDispatch, useSelect } from '@wordpress/data'
 
 const PostSharingOptions = ({}) => {
-	const { currentGroupTypeSiteLabel, shareOnlyWithGroup, siteIsPublic } = openlabBlocksPostVisibility
-
-	if ( ! siteIsPublic ) {
-		return null
-	}
+	const { blogPublic, shareOnlyWithGroup } = openlabBlocksPostVisibility
 
 	const { editPost } = useDispatch( 'core/editor' )
+
+	const blogPublicInt = parseInt( blogPublic )
+
+	const { postVisibility } = useSelect( ( select ) => {
+		const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' )
+
+		const defaultVisibility = blogPublicInt >= 0 ? 'default' : 'members-only'
+
+		return {
+			postVisibility: postMeta.openlab_post_visibility || defaultVisibility
+		}
+	} )
+
+	if ( blogPublicInt < -1 ) {
+		return null
+	}
 
 	const onChange = ( value ) => {
 		editPost( { meta: { 'openlab_post_visibility': value } } )
 	}
 
-	const { postVisibility } = useSelect( ( select ) => {
-		const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' )
-
-		return {
-			postVisibility: postMeta['openlab_post_visibility'] || 'default'
-		}
-	} )
-
 	const publicOverrideString = 'This will override the Public visibility setting above.'
+
+	const visibilityOptions = [
+		{
+			value: 'group-members-only',
+			label: 'Site Members',
+			info: shareOnlyWithGroup + ' ' + publicOverrideString
+		},
+		{
+			value: 'members-only',
+			label: 'OpenLab members only',
+			info: 'Only logged-in OpenLab members can see this post. ' + publicOverrideString
+		}
+	]
+
+	if ( blogPublicInt >= 0 ) {
+		visibilityOptions.push( {
+			value: 'default',
+			label: 'Everyone',
+			info: 'Everyone who can view this site can see this post.'
+		} )
+	}
 
 	return (
 		<PluginDocumentSettingPanel
@@ -39,32 +66,17 @@ const PostSharingOptions = ({}) => {
 
 				<p>{ 'Control who can see this post.' }</p>
 
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="group-members-only"
-					label="Site Members"
-					info={ shareOnlyWithGroup + ' ' + publicOverrideString }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={ postVisibility === 'group-members-only' }
-				/>
-
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="members-only"
-					label="OpenLab members only"
-					info={ 'Only logged-in OpenLab members can see this post. ' + publicOverrideString }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={	postVisibility === 'members-only' }
-				/>
-
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="default"
-					label="Everyone"
-					info="Everyone who can view this site can see this post."
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={ postVisibility === 'default' }
-				/>
+				{ visibilityOptions.map( ( option ) => (
+					<PostSharingChoice
+						key={ option.value }
+						instanceId="post-sharing-options"
+						value={ option.value }
+						label={ option.label }
+						info={ option.info }
+						onChange={ ( event ) => onChange( event.target.value ) }
+						checked={ postVisibility === option.value }
+					/>
+				) ) }
 			</fieldset>
 		</PluginDocumentSettingPanel>
 	)
