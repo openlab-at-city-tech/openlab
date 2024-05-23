@@ -326,18 +326,22 @@ add_action(
 
 		// Credits widget.
 		$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-		$history  = openlab_get_group_clone_history( $group_id );
+		if ( openlab_is_portfolio( $group_id ) ) {
+			unregister_widget( 'OpenLab_Clone_Credits_Widget' );
+		} else {
+			$history = openlab_get_group_clone_history( $group_id );
 
-		$group_type_label = openlab_get_group_type_label(
-			array(
-				'group_id' => $group_id,
-				'case'     => 'upper',
-			)
-		);
+			$group_type_label = openlab_get_group_type_label(
+				array(
+					'group_id' => $group_id,
+					'case'     => 'upper',
+				)
+			);
 
-		foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
-			if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
-				$GLOBALS['wp_registered_widgets'][ $widget_id ]['description'] = 'Credits for your ' . $group_type_label . '.';
+			foreach ( $GLOBALS['wp_registered_widgets'] as $widget_id => $_ ) {
+				if ( 0 === strpos( $widget_id, 'openlab_clone_credits' ) ) {
+					$GLOBALS['wp_registered_widgets'][ $widget_id ]['description'] = 'Credits for your ' . $group_type_label . '.';
+				}
 			}
 		}
 	},

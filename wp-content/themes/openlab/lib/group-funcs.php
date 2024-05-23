@@ -747,7 +747,10 @@ function cuny_group_single() {
                     }
 
                     $group_terms = function_exists( 'bpcgc_get_group_selected_terms' ) ? bpcgc_get_group_selected_terms( $group_id, true ) : '';
-                    $acknowledgements = openlab_get_acknowledgements( $group_id );
+
+					// Never show Acknowledgements for Portfolio groups.
+					$acknowledgements = 'portfolio' !== $group_type ? openlab_get_acknowledgements( $group_id ) : [];
+
                 ?>
                 <div class="info-panel panel panel-default no-margin no-margin-top">
                     <div class="table-div">
