@@ -46,6 +46,7 @@ require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
 require_once( STYLESHEETPATH . '/lib/group-connections.php' );
+require_once( STYLESHEETPATH . '/lib/bp-auto-export-data.php' );
 
 require_once( STYLESHEETPATH . '/lib/site-template.php' );
 

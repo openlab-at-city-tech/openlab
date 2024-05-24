@@ -1,0 +1,35 @@
+button.export-personal-data-processing:before,
+button.export-personal-data-success:before,
+button.export-personal-data-failed:before {
+	margin: -3px 5px 0 -2px;
+	display: inline-block;
+	font: normal 20px/1 'dashicons';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	vertical-align: top;
+}
+
+button.export-personal-data-processing:before {
+	animation: rotation 2s infinite linear;
+	color: #f56e28;
+	content: "\f463";
+}
+
+button.export-personal-data-success:before {
+	color: #79ba49;
+	content: "\f147";
+}
+
+button.export-personal-data-failed:before {
+	color: #dc3232;
+	content: "\f534";
+}
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(359deg);
+	}
+}
