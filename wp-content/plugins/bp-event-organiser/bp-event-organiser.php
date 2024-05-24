@@ -76,6 +76,7 @@ BuddyPress_Event_Organiser Class
 */
 
 class BuddyPress_Event_Organiser {
+	public $group_oembed;
 
 	/**
 	 * properties

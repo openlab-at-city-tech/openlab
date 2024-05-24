@@ -30,6 +30,8 @@ if ( ! class_exists( 'BBP_Forums_Component' ) ) :
  * @subpackage BuddyPress
  */
 class BBP_Forums_Component extends BP_Component {
+	public $activity;
+	public $members;
 
 	/**
 	 * Start the forums component creation process

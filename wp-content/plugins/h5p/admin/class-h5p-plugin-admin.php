@@ -47,6 +47,8 @@ class H5P_Plugin_Admin {
    */
   private $library = NULL;
 
+  private $privacy = NULL;
+
   /**
    * Initialize the plugin by loading admin scripts & styles and adding a
    * settings page and menu.
