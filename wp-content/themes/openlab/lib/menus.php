@@ -400,6 +400,7 @@ function openlab_profile_settings_submenu() {
         $dud . 'profile/change-avatar' => 'Change Avatar',
         $settings_slug => 'Account Settings',
         $dud . 'settings/notifications' => 'Email Notifications',
+		$dud . 'settings/data' => 'Data Export',
         $dud . 'settings/delete-account' => 'Delete Account',
     );
     return openlab_submenu_gen($menu_list, true);
