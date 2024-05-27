@@ -398,6 +398,16 @@ function openlab_get_doc_edit_setting( $doc_id ) {
  * @return void
  */
 function openlab_save_custom_doc_settings( $doc_id ) {
+	if ( empty( $_POST['bp-docs-save-doc-privacy-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'bp-docs-save-doc-privacy', 'bp-docs-save-doc-privacy-nonce' );
+
+	if ( ! current_user_can( 'bp_docs_manage', $doc_id ) ) {
+		return;
+	}
+
 	if ( isset( $_POST['doc']['allow_comments'] ) ) {
 		$allow_comments = '1' === wp_unslash( $_POST['doc']['allow_comments'] );
 
