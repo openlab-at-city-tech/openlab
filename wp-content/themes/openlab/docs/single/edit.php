@@ -1,4 +1,7 @@
 <?php
+
+wp_enqueue_script( 'bp-docs-edit' );
+
 $doc_id = 0;
 $current_doc = bp_docs_get_current_doc();
 if ( $current_doc ) {
@@ -113,10 +116,10 @@ if ( bp_is_group() ) {
 											</div>
 
 											<div class="desc-column">
-												<fieldset>
+												<fieldset id="doc-edit-settings">
 													<legend>Who can edit this Doc?</legend>
-													<label><input type="radio" name="doc[edit_setting]" value="group-members" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'group-members' ) ?> /> <?php echo esc_html( $group_type_label ); ?> members only</label><br />
-													<label><input type="radio" name="doc[edit_setting]" value="admins" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'admins' ) ?> /> <?php echo esc_html( $group_type_label ); ?> admins and Doc creator only</label><br />
+													<label><input type="radio" name="doc[edit_setting]" id="doc-edit-setting-group-members" value="group-members" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'group-members' ) ?> /> <?php echo esc_html( $group_type_label ); ?> members only</label><br />
+													<label><input type="radio" name="doc[edit_setting]" id="doc-edit-setting-admins" value="admins" <?php checked( openlab_get_doc_edit_setting( $doc_id ), 'admins' ) ?> /> <?php echo esc_html( $group_type_label ); ?> admins and Doc creator only</label><br />
 
 												</fieldset>
 											</div>

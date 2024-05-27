@@ -136,6 +136,14 @@ function openlab_load_scripts() {
             'ajax_url'  => admin_url( 'admin-ajax.php' )
         ) );
     }
+
+	wp_register_script(
+		'bp-docs-edit',
+		$stylesheet_dir_uri . '/js/bp-docs-edit.js',
+		[],
+		OL_VERSION,
+		true
+	);
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
