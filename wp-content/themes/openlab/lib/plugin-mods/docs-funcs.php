@@ -513,3 +513,48 @@ function openlab_bp_docs_map_meta_caps_for_custom_settings( $caps, $cap, $user_i
 	return $caps;
 }
 add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps_for_custom_settings', 100, 4 );
+
+/**
+ * Exclude off-limits docs from group listings.
+ *
+ * @param array         $args       WP_Query args.
+ * @param BP_Docs_Query $docs_query Docs query object.
+ * @return array
+ */
+function openlab_exclude_off_limits_docs_from_group_listings( $args, $docs_query ) {
+	if ( empty( $docs_query->query_args['group_id'] ) ) {
+		return $args;
+	}
+
+	$group_id = $docs_query->query_args['group_id'];
+
+	// Group administrators see everything.
+	if ( current_user_can( 'bp_moderate' ) || groups_is_user_admin( bp_loggedin_user_id(), $group_id ) ) {
+		return $args;
+	}
+
+	$allowed_settings = [ 'everyone' ];
+	if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		$allowed_settings[] = 'group-members';
+	}
+
+	$meta_query = (array) $args['meta_query'];
+
+	$meta_query['privacy'] = [
+		'relation'         => 'OR',
+		'allowed_settings' => [
+			'key'     => 'openlab_view_setting',
+			'value'   => $allowed_settings,
+			'compare' => 'IN',
+		],
+		'null_setting'     => [
+			'key'     => 'openlab_view_setting',
+			'compare' => 'NOT EXISTS',
+		],
+	];
+
+	$args['meta_query'] = $meta_query;
+
+	return $args;
+}
+add_filter( 'bp_docs_pre_query_args', 'openlab_exclude_off_limits_docs_from_group_listings', 50, 2 );
