@@ -10812,6 +10812,9 @@ body.docs .notify-group-members-ui {
 #doc-meta .toggle-content .doc-meta-label em {
   font-weight: 400;
 }
+#doc-meta #doc-privacy .toggle-content label {
+  font-weight: 400;
+}
 #doc-meta #toggle-table-settings .desc-column {
   vertical-align: top;
 }
