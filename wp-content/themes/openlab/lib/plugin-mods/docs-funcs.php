@@ -359,7 +359,13 @@ function openlab_get_doc_view_setting( $doc_id ) {
 
 	if ( ! $saved_setting ) {
 		$group_id = bp_docs_get_associated_group_id( $doc_id );
-		$group    = groups_get_group( $group_id );
+
+		// During Doc creation.
+		if ( ! $group_id && bp_docs_is_doc_create() ) {
+			$group_id = bp_get_current_group_id();
+		}
+
+		$group = groups_get_group( $group_id );
 
 		if ( $group && 'public' === $group->status ) {
 			$setting = 'everyone';
