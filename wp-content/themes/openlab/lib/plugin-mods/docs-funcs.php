@@ -491,18 +491,18 @@ function openlab_bp_docs_map_meta_caps_for_custom_settings( $caps, $cap, $user_i
 
 			switch ( $setting ) {
 				case 'everyone':
-					$caps = [ 'read' ];
+					$caps = [ 'exist' ];
 					break;
 
 				case 'group-members':
 					if ( groups_is_user_member( $user_id, $group_id ) ) {
-						$caps = [ 'read' ];
+						$caps = [ 'exist' ];
 					}
 					break;
 
 				case 'admins':
 					if ( groups_is_user_admin( $user_id, $group_id ) ) {
-						$caps = [ 'read' ];
+						$caps = [ 'exist' ];
 					}
 					break;
 			}
