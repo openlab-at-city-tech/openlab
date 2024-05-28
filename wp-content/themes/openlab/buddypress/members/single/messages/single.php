@@ -53,53 +53,57 @@
 
 		<?php do_action( 'bp_after_message_thread_list' ) ?>
 
-		<?php do_action( 'bp_before_message_thread_reply' ) ?>
+		<?php if ( openlab_user_can_send_messages() ) : ?>
 
-		<form id="send-reply" action="<?php bp_messages_form_action() ?>" method="post" class="standard-form form-panel">
+			<?php do_action( 'bp_before_message_thread_reply' ) ?>
 
-			<div class="message-box panel panel-default">
+			<form id="send-reply" action="<?php bp_messages_form_action() ?>" method="post" class="standard-form form-panel">
 
-                            <div class="panel-heading semibold">
-				<div class="message-metadata">
+				<div class="message-box panel panel-default">
 
-					<?php do_action( 'bp_before_message_meta' ) ?>
+					<div class="panel-heading semibold">
+						<div class="message-metadata">
 
-					<div class="avatar-box">
-						<?php bp_loggedin_user_avatar( 'type=thumb&height=30&width=30' ) ?>
+							<?php do_action( 'bp_before_message_meta' ) ?>
 
-						<strong><?php _e( 'Send a Reply', 'buddypress' ) ?></strong>
+							<div class="avatar-box">
+								<?php bp_loggedin_user_avatar( 'type=thumb&height=30&width=30' ) ?>
+
+								<strong><?php _e( 'Send a Reply', 'buddypress' ) ?></strong>
+							</div>
+
+							<?php do_action( 'bp_after_message_meta' ) ?>
+
+						</div><!-- .message-metadata -->
 					</div>
 
-					<?php do_action( 'bp_after_message_meta' ) ?>
+					<div class="panel-body">
+						<div class="message-content">
 
-				</div><!-- .message-metadata -->
-                            </div>
+							<?php do_action( 'bp_before_message_reply_box' ) ?>
 
-                            <div class="panel-body">
-				<div class="message-content">
+							<textarea class="form-control bp-suggestions" name="content" id="message_content" rows="15" cols="40"></textarea>
 
-					<?php do_action( 'bp_before_message_reply_box' ) ?>
+							<?php do_action( 'bp_after_message_reply_box' ) ?>
 
-					<textarea class="form-control bp-suggestions" name="content" id="message_content" rows="15" cols="40"></textarea>
+							<div class="submit">
+								<input class="btn btn-primary" type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?> &rarr;" id="send_reply_button"/>
+								<span class="ajax-loader"></span>
+							</div>
 
-					<?php do_action( 'bp_after_message_reply_box' ) ?>
+							<input type="hidden" id="thread_id" name="thread_id" value="<?php bp_the_thread_id(); ?>" />
+							<?php wp_nonce_field( 'messages_send_message', 'send_message_nonce' ) ?>
 
-					<div class="submit">
-						<input class="btn btn-primary" type="submit" name="send" value="<?php _e( 'Send Reply', 'buddypress' ) ?> &rarr;" id="send_reply_button"/>
-						<span class="ajax-loader"></span>
+						</div><!-- .message-content -->
 					</div>
 
-					<input type="hidden" id="thread_id" name="thread_id" value="<?php bp_the_thread_id(); ?>" />
-					<?php wp_nonce_field( 'messages_send_message', 'send_message_nonce' ) ?>
+				</div><!-- .message-box -->
 
-				</div><!-- .message-content -->
-                            </div>
+			</form><!-- #send-reply -->
 
-			</div><!-- .message-box -->
+			<?php do_action( 'bp_after_message_thread_reply' ) ?>
 
-		</form><!-- #send-reply -->
-
-		<?php do_action( 'bp_after_message_thread_reply' ) ?>
+		<?php endif; ?>
 
 	<?php endif; ?>
 

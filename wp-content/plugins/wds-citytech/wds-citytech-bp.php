@@ -785,3 +785,25 @@ function openlab_get_group_link( $group_id ) {
 	$group = groups_get_group( $group_id );
 	return sprintf( '<a href="%s">%s</a>', esc_attr( bp_get_group_permalink( $group ) ), esc_html( $group->name ) );
 }
+
+/**
+ * Can the user send messages?
+ *
+ * @param int $user_id Optional. Defaults to the current user.
+ * @return bool
+ */
+function openlab_user_can_send_messages( $user_id = null ) {
+	if ( null === $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	$user_member_type = openlab_get_user_member_type( $user_id );
+
+	$allowed_types = [ 'faculty', 'staff' ];
+
+	return in_array( $user_member_type, $allowed_types, true );
+}

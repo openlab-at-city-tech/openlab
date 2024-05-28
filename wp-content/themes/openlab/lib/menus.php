@@ -536,10 +536,14 @@ function openlab_my_messages_submenu() {
     }
 
     $menu_list = array(
-        $dud . 'messages/inbox/' => 'Inbox',
+        $dud . 'messages/inbox/'   => 'Inbox',
         $dud . 'messages/sentbox/' => 'Sent',
-        $dud . 'messages/compose' => 'Compose',
     );
+
+	if ( openlab_user_can_send_messages() ) {
+		$menu_list[ $dud . 'messages/compose/' ] = 'Compose';
+	}
+
     return openlab_submenu_gen($menu_list);
 }
 

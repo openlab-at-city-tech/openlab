@@ -1,5 +1,9 @@
 <?php do_action( 'bp_before_member_messages_loop' ) ?>
 
+<p class="inappropriate-message-notice">
+	We are phasing out OpenLab messages. Please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">contact the OpenLab Team</a> if you have any questions or concerns.
+</p>
+
 <?php if ( bp_has_message_threads() ) : ?>
 
 	<?php do_action( 'bp_before_member_messages_threads' ) ?>

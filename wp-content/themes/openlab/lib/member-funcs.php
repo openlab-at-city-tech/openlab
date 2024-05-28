@@ -838,7 +838,7 @@ function cuny_member_profile_header() {
 						<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
 						<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
 					</div>
-				<?php elseif ( is_user_logged_in() && ! openlab_is_my_profile() ) : ?>
+				<?php elseif ( is_user_logged_in() && ! openlab_is_my_profile() && openlab_user_can_send_messages() ) : ?>
 					<?php bp_add_friend_button( openlab_fallback_user(), bp_loggedin_user_id() ); ?>
 
 					<?php
