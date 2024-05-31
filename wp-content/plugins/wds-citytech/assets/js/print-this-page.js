@@ -1,6 +1,6 @@
 (function($){
 	$(document).ready(function(){
-		$('#ol-print-this-page').click(function(e){
+		$('#ol-print-this-page').on( 'click', function(e){
 			e.preventDefault();
 			window.print();
 		});
