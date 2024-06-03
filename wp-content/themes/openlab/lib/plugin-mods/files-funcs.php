@@ -84,9 +84,19 @@ function openlab_bp_group_documents_display_content() {
 		$exclude_ids = [];
 		foreach ( $group_privacy as $doc_id => $level ) {
 			if ( in_array( $level, $exclude_levels, true ) ) {
-				$exclude_ids[] = $doc_id;
+				$exclude_ids[] = (int) $doc_id;
 			}
 		}
+
+		// Users should also be able to see any documents they uploaded.
+		$user_created_files = array_map( 'intval', $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->group_documents->table_name} WHERE group_id = %d AND user_id = %d", $group_id, bp_loggedin_user_id() ) ) );
+
+		$exclude_ids = array_filter(
+			$exclude_ids,
+			function( $doc_id ) use ( $user_created_files ) {
+				return ! in_array( $doc_id, $user_created_files, true );
+			}
+		);
 
 		if ( empty( $exclude_ids ) ) {
 			return $query;
@@ -835,7 +845,7 @@ function openlab_file_access_section_markup( $file_id, $type ) {
 			<div class="group-documents-privacy-option">
 				<label for="<?php echo esc_attr( $field_id_base ); ?>-admins"><input type="radio" name="bp_group_documents_privacy-<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $field_id_base ); ?>-admins" value="admins" <?php checked( $file_privacy, 'admins' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> admins only</label>
 
-				<p class="description">Only logged-in admins of this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
+				<p class="description">Only logged-in admins of this <?php echo esc_html_e( $group_type_label ); ?> and the member who added this file can access the file</p>
 			</div>
 		</div>
 
