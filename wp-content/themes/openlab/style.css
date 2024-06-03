@@ -10622,6 +10622,9 @@ body.membership-requests .group-list {
 .bp-group-documents-fields.show-upload #bp-group-documents-fields-for-file-type-link {
   display: none;
 }
+.group-documents-privacy {
+  margin: 2em 0;
+}
 /* BuddyPress Docs toggleable panels */
 .toggleable .plus-or-minus {
   background-image: none;
