@@ -394,7 +394,7 @@ function openlab_bp_group_documents_display_content() {
 											<input type="text" name="bp_group_documents_link_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-1" />
 										</fieldset>
 
-										<?php openlab_file_access_section_markup( $template->id ); ?>
+										<?php openlab_file_access_section_markup( $template->id, 'external-link' ); ?>
 
 									</div>
 									<?php } ?>
@@ -446,7 +446,7 @@ function openlab_bp_group_documents_display_content() {
 												<input type="text" name="bp_group_documents_new_category" class="bp-group-documents-new-folder form-control" placeholder="Add new folder" id="bp-group-documents-new-category-2" />
 											</fieldset>
 
-											<?php openlab_file_access_section_markup( $template->id ); ?>
+											<?php openlab_file_access_section_markup( $template->id, 'upload' ); ?>
 										</div>
 									</div>
 									<?php } ?>
@@ -572,11 +572,26 @@ add_action(
 add_action(
 	'bp_group_documents_data_after_save',
 	function( $document ) {
-		if ( empty( $_POST['bp_group_documents_file_access_nonce'] ) || ! wp_verify_nonce( $_POST['bp_group_documents_file_access_nonce'], 'bp_group_documents_file_access' ) ) {
+		// Two forms may appear on the page, so we need to check for the correct nonce.
+		if ( ! isset( $_POST['bp_group_documents_file_type'] ) ) {
 			return;
 		}
 
-		$access = ! empty( $_POST['bp_group_documents_privacy'] ) ? sanitize_text_field( wp_unslash( $_POST['bp_group_documents_privacy'] ) ) : '';
+		$file_type = 'link' === wp_unslash( $_POST['bp_group_documents_file_type'] ) ? 'external-link' : 'upload';
+
+		if ( ! $file_type ) {
+			return;
+		}
+
+		$nonce_key = 'bp_group_documents_file_access_nonce-' . $file_type;
+
+		if ( ! wp_verify_nonce( $_POST[ $nonce_key ], 'bp_group_documents_file_access' ) ) {
+			return;
+		}
+
+		$access_key = 'bp_group_documents_privacy-' . $file_type;
+
+		$access = ! empty( $_POST[ $access_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $access_key ] ) ) : '';
 
 		if ( ! in_array( $access, array( 'everyone', 'members', 'admins' ), true ) ) {
 			return;
@@ -782,10 +797,11 @@ function openlab_get_service_from_url( $host ) {
 /**
  * Outputs the markup for the 'File Access' section of the edit/create form.
  *
- * @param int $file_id File ID.
+ * @param int|string $file_id File ID.
+ * @param string     $type    Type of file.
  * @return void
  */
-function openlab_file_access_section_markup( $file_id ) {
+function openlab_file_access_section_markup( $file_id, $type ) {
 	$file_privacy = openlab_get_file_privacy_setting( $file_id );
 
 	$group_type_label = openlab_get_group_type_label(
@@ -795,6 +811,9 @@ function openlab_file_access_section_markup( $file_id ) {
 		]
 	);
 
+	$file_id_sanitized = $file_id ? absint( $file_id ) : 'new';
+	$field_id_base = 'bp-group-documents-privacy-' . $type . '-' . $file_id_sanitized;
+
 	?>
 
 	<fieldset class="group-documents-privacy">
@@ -802,25 +821,25 @@ function openlab_file_access_section_markup( $file_id ) {
 
 		<div class="radios">
 			<div class="group-documents-privacy-option">
-				<label for="bp-group-documents-privacy-everyone"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-everyone" value="everyone" <?php checked( $file_privacy, 'everyone' ); ?> /> Everyone</label>
+				<label for="<?php echo esc_attr( $field_id_base ); ?>-everyone"><input type="radio" name="bp_group_documents_privacy-<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $field_id_base ); ?>-everyone" value="everyone" <?php checked( $file_privacy, 'everyone' ); ?> /> Everyone</label>
 
 				<p class="description">Everyone who can view this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
 			</div>
 
 			<div class="group-documents-privacy-option">
-				<label for="bp-group-documents-privacy-members"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-members" value="members" <?php checked( $file_privacy, 'members' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> members only</label>
+				<label for="<?php echo esc_attr( $field_id_base ); ?>-members"><input type="radio" name="bp_group_documents_privacy-<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $field_id_base ); ?>-members" value="members" <?php checked( $file_privacy, 'members' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> members only</label>
 
 				<p class="description">Only logged-in members of this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
 			</div>
 
 			<div class="group-documents-privacy-option">
-				<label for="bp-group-documents-privacy-admins"><input type="radio" name="bp_group_documents_privacy" id="bp-group-documents-privacy-admins" value="admins" <?php checked( $file_privacy, 'admins' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> admins only</label>
+				<label for="<?php echo esc_attr( $field_id_base ); ?>-admins"><input type="radio" name="bp_group_documents_privacy-<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $field_id_base ); ?>-admins" value="admins" <?php checked( $file_privacy, 'admins' ); ?> /> <?php echo esc_html_e( $group_type_label ); ?> admins only</label>
 
 				<p class="description">Only logged-in admins of this <?php echo esc_html_e( $group_type_label ); ?> can access this file</p>
 			</div>
 		</div>
 
-		<?php wp_nonce_field( 'bp_group_documents_file_access', 'bp_group_documents_file_access_nonce' ); ?>
+		<?php wp_nonce_field( 'bp_group_documents_file_access', 'bp_group_documents_file_access_nonce-' . $type ); ?>
 	</fieldset>
 
 	<?php
