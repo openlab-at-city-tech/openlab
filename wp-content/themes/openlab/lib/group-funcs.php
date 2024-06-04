@@ -824,13 +824,6 @@ function cuny_group_single() {
 							</div>
 						<?php endif; ?>
 
-                        <?php if ( $group_type === 'portfolio' ) : ?>
-                        <div class="table-row row">
-                            <div class="bold col-sm-7">Member Profile</div>
-                            <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
-                        </div>
-                        <?php endif; ?>
-
                         <?php if ( $acknowledgements ) : ?>
                         <div class="table-row row">
                             <div class="col-xs-24 status-message group-acknowledgements">
