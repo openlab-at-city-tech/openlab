@@ -2253,23 +2253,27 @@ add_filter(
 /**
  * Checks whether a group is "open".
  *
+ * We define a group as "open" when EITHER the group is public OR the site has
+ * blog_public 1 or 0.
+ *
  * @param int $group_id Group ID.
  * @return bool
  */
 function openlab_group_is_open( $group_id ) {
 	$group = groups_get_group( $group_id );
 
-	$is_open = false;
 	if ( 'public' === $group->status ) {
-		$site_id = openlab_get_site_id_by_group_id( $group_id );
-		if ( $site_id ) {
-			// Avoid switch_to_blog().
-			$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
-			$is_open     = '0' === $blog_public || '1' === $blog_public;
-		} else {
-			$is_open = true;
-		}
+		return true;
 	}
+
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $site_id ) {
+		return false;
+	}
+
+	// Avoid switch_to_blog().
+	$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
+	$is_open     = '0' === $blog_public || '1' === $blog_public;
 
 	return $is_open;
 }
