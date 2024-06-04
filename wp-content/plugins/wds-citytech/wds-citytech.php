@@ -2281,12 +2281,18 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		// If the associated group is a course, display only to members.
+		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$group_type = openlab_get_group_type( $group_id );
+		if ( 'course' === $group_type && ! groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			return;
+		}
+
 		echo $args['before_widget'];
 
 		echo $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'];
 
 		$name_key   = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
-		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
 		// Hide private-member portfolios from non-members.
