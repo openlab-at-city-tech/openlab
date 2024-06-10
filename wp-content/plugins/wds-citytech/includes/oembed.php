@@ -335,16 +335,18 @@ add_shortcode( 'padlet', 'openlab_padlet_shortcode' );
  * circuitverse shortcode.
  */
 function openlab_circuitverse_shortcode( $attr = [] ) {
-	//	https://circuitverse.org/users/239052/projects/bbgtest-fe366a34-7590-4106-a4da-852191d9c601
+	static $counter = 0;
 
 	$r = shortcode_atts(
 		[
-			'url'         => '',
-			'height'      => 500,
-			'width'       => 500,
-			'theme'       => 'default',
-			'clock_time'  => '1',
-			'zoom_in_out' => '1',
+			'url'           => '',
+			'height'        => 500,
+			'width'         => 500,
+			'theme'         => 'default',
+			'clock_time'    => '1',
+			'zoom_in_out'   => '1',
+			'fullscreen'    => '1',
+			'display_title' => '1',
 		],
 		$attr
 	);
@@ -372,22 +374,30 @@ function openlab_circuitverse_shortcode( $attr = [] ) {
 		return '';
 	}
 
-	$boolean_attributes = [ 'clock_time', 'zoom_in_out' ];
+	$boolean_attributes = [ 'clock_time', 'display_title', 'fullscreen', 'zoom_in_out' ];
 	foreach ( $boolean_attributes as $attr ) {
 		$r[ $attr ] = filter_var( $r[ $attr ], FILTER_VALIDATE_BOOLEAN ) ? 'true' : 'false';
 	}
 
 	$embed_src = sprintf(
-		'https://circuitverse.org/simulator/embed/%s?theme=%s&display_title=%s&clock_time=true&fullscreen=true&zoom_in_out=%s',
+		'https://circuitverse.org/simulator/embed/%s?theme=%s&display_title=%s&clock_time=%s&fullscreen=%s&zoom_in_out=%s',
 		$project_id,
 		$r['theme'],
+		$r['display_title'],
 		$r['clock_time'],
+		$r['fullscreen'],
 		$r['zoom_in_out']
 	);
 
+	++$counter;
+
 	$embed = sprintf(
-		'<iframe src="%s" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="500" width="500" allowFullScreen></iframe>',
-		esc_url( $embed_src )
+		'<iframe id="circuitverse-embed-%s-%s" src="%s" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="%d" width="%d" allowFullScreen></iframe>',
+		esc_attr( $project_id ),
+		(int) $counter,
+		esc_url( $embed_src ),
+		(int) $r['height'],
+		(int) $r['width']
 	);
 
 	return $embed;
