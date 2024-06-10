@@ -1,13 +1,13 @@
 === BuddyPress ===
 Contributors:      johnjamesjacoby, DJPaul, boonebgorges, r-a-y, imath, mercime, tw2113, dcavins, hnla, karmatosed, slaFFik, dimensionmedia, henrywright, netweb, offereins, espellcaste, modemlooper, danbp, Venutius, apeatling, shanebp
 Donate link:       https://wordpressfoundation.org
-Tags:              profiles, groups, activity, direct messaging, notifications, friends, community, social networking
+Tags:              community, group, members, network, self-hosted
 License:           GNU General Public License v2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP:      5.6
 Requires at least: 5.8
-Tested up to:      6.4
-Stable tag:        12.0.0
+Tested up to:      6.5
+Stable tag:        12.5.1
 
 Get together safely, in your own way, in WordPress.
 
@@ -130,6 +130,27 @@ Try <a href="https://wordpress.org/plugins/bbpress/">bbPress</a>. It integrates 
 
 == Upgrade Notice ==
 
+= 12.5.1 =
+See: https://codex.buddypress.org/releases/version-12-5-1/
+
+= 12.5.0 =
+See: https://codex.buddypress.org/releases/version-12-5-0/
+
+= 12.4.1 =
+See: https://codex.buddypress.org/releases/version-12-4-1/
+
+= 12.4.0 =
+See: https://codex.buddypress.org/releases/version-12-4-0/
+
+= 12.3.0 =
+See: https://codex.buddypress.org/releases/version-12-3-0/
+
+= 12.2.0 =
+See: https://codex.buddypress.org/releases/version-12-2-0/
+
+= 12.1.1 =
+See: https://codex.buddypress.org/releases/version-12-1-1/
+
 = 12.0.0 =
 - See: https://codex.buddypress.org/releases/version-12-0-0/
 - Before upgrading to version 12.0.0 & if you are using one or more third party BuddyPress plugins that have not been updated lately, please make sure to download and activate the "BP Classic" backwards compatibility Add-on from your "Add New Plugin" Dashboard menu.
@@ -174,6 +195,29 @@ See: https://codex.buddypress.org/releases/version-10-1-0/
 See: https://codex.buddypress.org/releases/version-10-0-0/
 
 == Changelog ==
+
+= 12.5.1 =
+Security fix: The Members block was vulnerable to a Stored Cross-Site Scripting. Discovered by Wesley (wcraft) from the Wordfence organization.
+See: https://codex.buddypress.org/releases/version-12-5-1/
+
+= 12.5.0 =
+See: https://codex.buddypress.org/releases/version-12-5-0/
+
+= 12.4.1 =
+Security fix: The dynamic Members, dynamic Friends & dynamic Groups blocks were vulnerable to a Stored Cross-Site Scripting. Discovered by Wesley (wcraft) from the Wordfence organization.
+See: https://codex.buddypress.org/releases/version-12-4-1/
+
+= 12.4.0 =
+See: https://codex.buddypress.org/releases/version-12-4-0/
+
+= 12.3.0 =
+See: https://codex.buddypress.org/releases/version-12-3-0/
+
+= 12.2.0 =
+See: https://codex.buddypress.org/releases/version-12-2-0/
+
+= 12.1.1 =
+See: https://codex.buddypress.org/releases/version-12-1-1/
 
 = 12.0.0 =
 See: https://codex.buddypress.org/releases/version-12-0-0/

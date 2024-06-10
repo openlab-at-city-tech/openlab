@@ -104,6 +104,14 @@ function bp_core_register_common_styles() {
 	 */
 	$admin_bar_file = apply_filters( 'bp_core_admin_bar_css', "{$url}admin-bar{$min}.css" );
 
+	// Set default BP Tooltips styles.
+	$tooltips_uri      = "{$url}bp-tooltips{$min}.css";
+	$template_tooltips = bp_locate_template_asset( "css/bp-tooltips{$min}.css" );
+
+	if ( isset( $template_tooltips['uri'] ) && $template_tooltips['uri'] ) {
+		$tooltips_uri = $template_tooltips['uri'];
+	}
+
 	/**
 	 * Filters the BuddyPress Core stylesheet files to register.
 	 *
@@ -119,6 +127,10 @@ function bp_core_register_common_styles() {
 		'bp-avatar' => array(
 			'file'         => "{$url}avatar{$min}.css",
 			'dependencies' => array( 'jcrop' )
+		),
+		'bp-tooltips' => array(
+			'file'         => $tooltips_uri,
+			'dependencies' => array()
 		),
 	) );
 
@@ -315,7 +327,7 @@ function bp_core_add_cropper_inline_css() {
 
 	<style type="text/css">
 		.jcrop-holder { float: left; margin: 0 20px 20px 0; text-align: left; }
-		#avatar-crop-pane { width: <?php echo bp_core_avatar_full_width() ?>px; height: <?php echo bp_core_avatar_full_height() ?>px; overflow: hidden; }
+		#avatar-crop-pane { width: <?php echo intval( bp_core_avatar_full_width() ); ?>px; height: <?php echo intval( bp_core_avatar_full_height() ); ?>px; overflow: hidden; }
 		#avatar-crop-submit { margin: 20px 0; }
 		.jcrop-holder img,
 		#avatar-crop-pane img,
@@ -335,7 +347,7 @@ function bp_core_add_cropper_inline_css() {
 function bp_core_add_ajax_url_js() {
 ?>
 
-	<script type="text/javascript">var ajaxurl = '<?php echo bp_core_ajax_url(); ?>';</script>
+	<script type="text/javascript">var ajaxurl = '<?php echo esc_url( bp_core_ajax_url() ); ?>';</script>
 
 <?php
 }

@@ -414,6 +414,7 @@ function bp_buffer_template_part( $slug, $name = null, $echo = true, $args = arr
 
 	// Echo or return the output buffer contents.
 	if ( true === $echo ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput
 		echo $output;
 	} else {
 		return $output;
@@ -549,6 +550,10 @@ function bp_add_template_stack_locations( $stacks = array() ) {
  * @param WP_Query $posts_query WP_Query object.
  */
 function bp_parse_query( $posts_query ) {
+	// Only run on the root site or if multiblog mode is on.
+	if ( ! bp_is_root_blog() && ! bp_is_multiblog_mode() ) {
+		return;
+	}
 
 	// Bail if $posts_query is not the main loop.
 	if ( ! $posts_query->is_main_query() ) {
@@ -618,6 +623,13 @@ function bp_parse_ajax_referer_query( $referer_query ) {
 	if ( ! wp_doing_ajax() || 'rewrites' !== bp_core_get_query_parser() ) {
 		return;
 	}
+
+	if ( isset( $_POST['action'] ) && 'heartbeat' === $_POST['action'] && empty( $_POST['data']['bp_heartbeat'] ) ) {
+		return;
+	}
+
+	// Prevent doing this again.
+	remove_action( 'parse_query', 'bp_parse_ajax_referer_query', 2 );
 
 	/**
 	 * Fires at the end of the bp_parse_ajax_referer_query function.
