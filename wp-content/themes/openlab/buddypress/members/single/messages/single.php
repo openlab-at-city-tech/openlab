@@ -53,7 +53,7 @@
 
 		<?php do_action( 'bp_after_message_thread_list' ) ?>
 
-		<?php if ( openlab_user_can_send_messages() ) : ?>
+		<?php if ( openlab_user_can_send_messages() || openlab_message_thread_was_started_by_faculty_or_staff() ) : ?>
 
 			<?php do_action( 'bp_before_message_thread_reply' ) ?>
 

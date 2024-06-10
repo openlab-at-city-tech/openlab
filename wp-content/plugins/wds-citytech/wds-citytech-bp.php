@@ -807,3 +807,22 @@ function openlab_user_can_send_messages( $user_id = null ) {
 
 	return in_array( $user_member_type, $allowed_types, true );
 }
+
+/**
+ * Was the current thread started by a faculty or staff?
+ *
+ * @return bool
+ */
+function openlab_message_thread_was_started_by_faculty_or_staff() {
+	global $thread_template;
+
+	if ( ! isset( $thread_template->thread->thread_id ) ) {
+		return false;
+	}
+
+	$thread_sender = $thread_template->thread->messages[0]->sender_id;
+
+	$thread_sender_member_type = openlab_get_user_member_type( $thread_sender );
+
+	return in_array( $thread_sender_member_type, [ 'faculty', 'staff' ], true );
+}
