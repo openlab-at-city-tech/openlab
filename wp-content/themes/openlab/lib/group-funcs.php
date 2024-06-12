@@ -115,6 +115,17 @@ function openlab_group_privacy_settings($group_type) {
         </div>
     <?php endif ?>
 
+	<?php if ( bp_is_group_create() && 'portfolio' === $group_type ) : ?>
+		<div class="panel panel-default">
+			<div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Link on my OpenLab Profilo</div>
+			<div class="panel-body">
+				<p>You can choose to show a link to your Portfolio on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name but you want to use your real name on your Portfolio, you may wish to leave this unchecked.</p>
+
+				<input name="portfolio-profile-link" id="portfolio-profile-link-toggle" type="checkbox" name="portfolio-profile-link-toggle" value="1" /> <label for="portfolio-profile-link-toggle">Show link to my <?php echo esc_html( $group_type_name_uc ); ?> on my public OpenLab Profile</label>
+			</div>
+		</div>
+	<?php endif; ?>
+
     <?php if ($bp->current_action == 'admin'): ?>
     <?php elseif ($bp->current_action == 'create'): ?>
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
@@ -2047,6 +2058,27 @@ function openlab_group_add_to_portfolio_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
+
+/**
+ * Saves 'Portfolio profile link' setting on group edit.
+ *
+ * @param int $group_id ID of the group.
+ * @return void
+ */
+function openlab_group_save_portfolio_profile_link_setting_on_group_edit( $group_id ) {
+	if ( ! isset( $_POST['portfolio-profile-link-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'portfolio_profile_link', 'portfolio-profile-link-nonce' );
+
+	$enabled = ! empty( $_POST['portfolio-profile-link'] );
+
+	$portfolio_user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
+
+	openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, $enabled );
+}
+add_action( 'groups_group_details_edited', 'openlab_group_save_portfolio_profile_link_setting_on_group_edit' );
 
 /**
  * Saves 'Active' status.

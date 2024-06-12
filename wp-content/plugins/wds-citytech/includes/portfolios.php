@@ -96,6 +96,40 @@ function openlab_user_portfolio_site_is_local( $user_id = 0 ) {
 }
 
 /**
+ * Should the user's portfolio link be shown on the user's profile?
+ *
+ * @param int $user_id
+ * @return bool
+ */
+function openlab_show_portfolio_link_on_user_profile( $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = bp_displayed_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	$show = get_user_meta( $user_id, 'show_portfolio_link_on_user_profile', true );
+
+	return (bool) $show;
+}
+
+/**
+ * Save the setting of whether the user's portfolio link should be shown on the user's profile.
+ *
+ * @param int $user_id The user ID.
+ * @param bool $show Whether to show the portfolio link.
+ */
+function openlab_save_show_portfolio_link_on_user_profile( $user_id, $show ) {
+	if ( $show ) {
+		update_user_meta( $user_id, 'show_portfolio_link_on_user_profile', 1 );
+	} else {
+		delete_user_meta( $user_id, 'show_portfolio_link_on_user_profile' );
+	}
+}
+
+/**
  * Get the user id of a portfolio user from the portfolio group's id
  */
 function openlab_get_user_id_from_portfolio_group_id( $group_id = 0 ) {

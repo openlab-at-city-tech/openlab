@@ -1147,6 +1147,12 @@ function wds_bp_group_meta_save( $group ) {
 		}
 	}
 
+	// Portfolio profile link
+	if ( ! empty( $_POST['portfolio-profile-link'] ) ) {
+		$portfolio_user_id = openlab_get_user_id_from_portfolio_group_id( $group->id );
+		openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, true );
+	}
+
 	// Member roles.
 	if ( openlab_get_site_id_by_group_id( $group->id ) ) {
 		$role_map = [
