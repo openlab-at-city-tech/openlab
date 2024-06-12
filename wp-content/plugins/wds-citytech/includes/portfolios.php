@@ -110,7 +110,13 @@ function openlab_show_portfolio_link_on_user_profile( $user_id = 0 ) {
 		return false;
 	}
 
-	$show = get_user_meta( $user_id, 'show_portfolio_link_on_user_profile', true );
+	$show_raw = get_user_meta( $user_id, 'show_portfolio_link_on_user_profile', true );
+
+	if ( '' === $show_raw ) {
+		$show = true;
+	} else {
+		$show = '1' === $show_raw;
+	}
 
 	return (bool) $show;
 }
@@ -122,11 +128,9 @@ function openlab_show_portfolio_link_on_user_profile( $user_id = 0 ) {
  * @param bool $show Whether to show the portfolio link.
  */
 function openlab_save_show_portfolio_link_on_user_profile( $user_id, $show ) {
-	if ( $show ) {
-		update_user_meta( $user_id, 'show_portfolio_link_on_user_profile', 1 );
-	} else {
-		delete_user_meta( $user_id, 'show_portfolio_link_on_user_profile' );
-	}
+	$save_value = $show ? '1' : '0';
+
+	update_user_meta( $user_id, 'show_portfolio_link_on_user_profile', $save_value );
 }
 
 /**
