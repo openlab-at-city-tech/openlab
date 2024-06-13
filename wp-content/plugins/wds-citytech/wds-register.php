@@ -150,6 +150,13 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		openlab_get_xprofile_field_id( 'Email address (Student)' ),
 	);
 
+	// Legacy: Make sure we exclude all 'Google Scholar' fields.
+	global $wpdb;
+	$google_scholar_field_ids = $wpdb->get_col( "SELECT id FROM {$wpdb->prefix}bp_xprofile_fields WHERE name LIKE '%Google Scholar%'" );
+	if ( ! empty( $google_scholar_field_ids ) ) {
+		$exclude_fields = array_merge( $exclude_fields, $google_scholar_field_ids );
+	}
+
 	$exclude_fields = array_merge( $exclude_fields, wp_list_pluck( openlab_social_media_fields(), 'field_id' ) );
 
 	$has_profile_args = array(
@@ -263,7 +270,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						/>';
 
 				if ( bp_get_the_profile_field_name() == 'Name' ) {
-					$return .= '<p class="register-field-note">Choose a Display Name to identify yourself publicly on your member profile and whenever you post on the OpenLab. <strong>You don\'t need to use your real name.</strong> Your Display Name can be changed at any time by editing your profile.</p>';
+					$return .= '<p class="register-field-note">Please choose your Display Name. <strong>You don\'t need to use your real name or your full name.</strong> Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Your Display Name can be changed at any time by editing your profile.</p>';
 				}
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
@@ -358,6 +365,11 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				$return     .= '</div>';
 				endif;
 			$return .= '<p class="description">' . bp_get_the_profile_field_description() . '</p>';
+
+			ob_start();
+			$visibility_selector = openlab_xprofile_field_visibility_selector();
+			$return .= ob_get_clean();
+
 			$return .= '</div>';
 					endwhile;
 

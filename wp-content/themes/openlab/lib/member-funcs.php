@@ -1030,13 +1030,23 @@ function cuny_member_profile_header() {
 							</div>
 						<?php endif; // bp_has_profile() ?>
 
-						<?php /* Social fields are handled separately */ ?>
-						<?php $social_fields = openlab_social_media_fields(); ?>
+						<?php
+						// Social fields are handled separately
+						$social_fields = openlab_social_media_fields();
+
+						$hidden_fields_for_user = bp_xprofile_get_hidden_fields_for_user( bp_displayed_user_id() );
+						?>
+
 						<?php foreach ( $social_fields as $field_slug => $field_data ) : ?>
 							<?php
 
 							$field_value = openlab_get_social_media_field_for_user( bp_displayed_user_id(), $field_slug );
 							if ( ! $field_value ) {
+								continue;
+							}
+
+							// Visibility.
+							if ( in_array( $social_fields[ $field_slug ]['field_id'], $hidden_fields_for_user, true ) ) {
 								continue;
 							}
 
@@ -1986,6 +1996,10 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 								<div class="form-group social-link-fields-url">
 									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-url">URL or username</label> <input name="social-links[<?php echo esc_attr( $sfi ); ?>][url]" id="social-links-<?php echo esc_attr( $sfi ); ?>-url" class="form-control social-links-url" value="<?php echo esc_attr( $saved_social_field_value ); ?>" />
 								</div>
+
+								<div class="form-group social-link-fields-visibility">
+									<?php openlab_xprofile_field_visibility_selector( $social_fields[ $saved_social_field_slug ]['field_id'] ); ?>
+								</div>
 							</div>
 
 							<div class="link-actions">
@@ -2144,6 +2158,12 @@ function openlab_user_social_links_save( $user_id ) {
 		$url     = sanitize_text_field( wp_unslash( $social_link['url'] ) );
 
 		openlab_set_social_media_field_for_user( $user_id, $service, $url );
+	}
+
+	// Check for field_x_visibility and update visibility.
+	foreach ( $all_fields as $field_slug => $field_data ) {
+		$visibility = isset( $_POST[ 'field_' . $field_data['field_id'] . '_visibility' ] ) ? sanitize_text_field( $_POST[ 'field_' . $field_data['field_id'] . '_visibility' ] ) : 'public';
+		xprofile_set_field_visibility_level( $field_data['field_id'], $user_id, $visibility );
 	}
 }
 add_action( 'xprofile_updated_profile', 'openlab_user_social_links_save' );

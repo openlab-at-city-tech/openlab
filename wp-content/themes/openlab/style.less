@@ -570,12 +570,17 @@ input:disabled+label {
 	.social-link-fields-inner {
 		display: flex;
 		gap: 20px;
-		flex: 0 0 520px;
+		flex: 1;
 
         @media( max-width: @screen-xs-max ) {
 			display: block;
-			flex: 1;
 			order: 1;
+		}
+
+		.field-visibility-settings {
+			label {
+				font-weight: @bold;
+			}
 		}
 	}
 
@@ -1696,6 +1701,15 @@ body{
         }
 		label .label-gloss {
 			font-weight: normal;
+		}
+
+		.account-description-approval-fieldset {
+			margin-top: 20px;
+		}
+
+		.field-contains-last-name-error.error {
+			background: @aqua;
+			font-weight: @bold;
 		}
     }
     .panel-body{
@@ -4630,6 +4644,13 @@ body{
         background: @yellow;
         border-color: @yellow;
     }
+}
+.field-visibility-settings {
+	margin-bottom: 15px;
+	label {
+		font-weight: @normal;
+		padding-right: 8px;
+	}
 }
 #member-header{
     margin-top: 41px;

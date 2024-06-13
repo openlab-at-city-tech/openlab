@@ -341,10 +341,85 @@
 		$account_type_field.on('change', function () {
 			set_email_label( this.value );
 			set_email_helper( this.value );
+			load_account_type_description( this.value );
 			load_account_type_fields();
+			init_visible_metaboxes();
 		});
 
+		$( '[name="account-description-approval"]' ).on( 'change', function() {
+			init_visible_metaboxes();
+		} )
+
+		load_account_type_description( '' );
 		load_account_type_fields();
+		init_visible_metaboxes();
+
+		function containsLastName( text ) {
+			if ( text.length === 0 ) {
+				return false;
+			}
+
+			const userLastNameEmailMatch = document.getElementById( 'signup_email' ).value.match( /^[^\.@]+\.([a-zA-Z]+)[0-9]*@mail\.citytech\.cuny\.edu$/ );
+			const userLastNameEmail = userLastNameEmailMatch ? userLastNameEmailMatch[1] : '';
+
+			const userLastNameField = document.querySelector( '.last-name-field' )?.value;
+
+			return (
+				( userLastNameEmail.length > 0 && text.toLowerCase().includes( userLastNameEmail.toLowerCase() ) )
+				||
+				( userLastNameField.length > 0 && text.toLowerCase().includes( userLastNameField.toLowerCase() ) )
+			);
+		}
+
+		document.getElementById( 'signup_username' ).addEventListener( 'input', ( event ) => {
+			if ( 'student' !== $account_type_field.val() ) {
+				return;
+			}
+
+			const userName = event.target.value;
+
+			const userNameContainsLastName = containsLastName( userName );
+
+			if ( ! userNameContainsLastName ) {
+				toggleUsernameContainsLastNameError( false );
+				return;
+			}
+
+			toggleUsernameContainsLastNameError( true );
+		} )
+
+		function toggleUsernameContainsLastNameError( show ) {
+			$( '.username-contains-last-name-error' ).remove();
+
+			if ( show ) {
+				$( '#signup_username' ).after( '<div class="username-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your username. Are you sure?</div>' );
+			}
+		}
+
+		document.getElementById( 'field_1' ).addEventListener( 'input', ( event ) => {
+			if ( 'student' !== $account_type_field.val() ) {
+				return;
+			}
+
+			const displayName = event.target.value;
+
+			const displayNameContainsLastName = containsLastName( displayName );
+
+			if ( ! displayNameContainsLastName ) {
+				toggleDisplayNameContainsLastNameError( false );
+				return;
+			}
+
+			toggleDisplayNameContainsLastNameError( true );
+		} )
+
+		function toggleDisplayNameContainsLastNameError( show ) {
+			$( '.display-name-contains-last-name-error' ).remove();
+
+			if ( show ) {
+				$( '#field_1' ).after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
+			}
+		}
 
 		function validateEmail( field ) {
 			var emailValue = field.value;
@@ -427,6 +502,39 @@
 			 */
 			load_account_type_fields();
 			$account_type_field.parsley().validate();
+		}
+
+		/**
+		 * Load the account type description for the selected account type.
+		 */
+		function load_account_type_description( accountType ) {
+			$( '.account-type-description' ).hide();
+			$( '.account-description-approval-fieldset' ).hide();
+
+			if ( accountType.length > 0 ) {
+				$( '.account-type-description[data-account-type="' + accountType + '"]' ).show();
+				$( '.account-description-approval-fieldset' ).show();
+			}
+		}
+
+		/**
+		 * Initialize the visible metaboxes based on the selected account type.
+		 */
+		function init_visible_metaboxes() {
+			if ( ! $account_type_field.length ) {
+				return;
+			}
+
+			// All .panel except #panel-welcome.
+			var $panels = $( '.panel' ).not( '#panel-welcome' );
+
+			const showMetaboxes = $account_type_field.val().length > 0 && $('[name="account-description-approval"]:checked').val() === 'yes';
+
+			if ( showMetaboxes ) {
+				$panels.show();
+			} else {
+				$panels.hide();
+			}
 		}
 
 		//load register account type

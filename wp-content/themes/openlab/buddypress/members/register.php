@@ -39,6 +39,91 @@ $account_type_options = array_map(
 		<form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data" data-parsley-trigger="blur">
 
 			<?php if ( 'request-details' == bp_get_current_signup_step() ) : ?>
+				<div class="panel panel-default" id="panel-welcome">
+					<div class="panel-heading semibold">Welcome to the OpenLab!</div>
+
+					<div class="panel-body">
+						<div class="form-group">
+							<p>To get started, please select your <strong>Account Type</strong>: (required)</p>
+							<label class="screen-reader-text control-label" for="openlab-account-type">Account Type <span class="label-gloss">(required)</span></label>
+							<div id="openlab-account-type-error" class="error-container"></div>
+							<?php do_action( 'bp_field_account_type_errors' ); ?>
+							<select
+								class="form-control"
+								type="text"
+								name="openlab-account-type"
+								id="openlab-account-type"
+								data-parsley-required
+								data-parsley-required-message="Account type is required."
+								data-parsley-errors-container="#openlab-account-type-error"
+							/>
+								<option value="">----</option>
+								<?php foreach ( $account_type_options as $account_type_option ) : ?>
+									<option value="<?php echo esc_attr( $account_type_option['slug'] ); ?>" <?php selected( $account_type_submitted, $account_type_option['slug'] ); ?>><?php echo esc_html( $account_type_option['label'] ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+
+						<div id="account-type-description-and-approval">
+							<div class="account-type-description" data-account-type="faculty">
+								<h2>About the OpenLab (Faculty)</h2>
+
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
+								Proin nec nunc et lorem feugiat mattis porta id libero.
+								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
+								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
+								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+							</div>
+
+							<div class="account-type-description" data-account-type="staff">
+								<h2>About the OpenLab (Staff)</h2>
+
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
+								Proin nec nunc et lorem feugiat mattis porta id libero.
+								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
+								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
+								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+							</div>
+
+							<div class="account-type-description" data-account-type="student">
+								<h2>About the OpenLab (Student)</h2>
+
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
+								Proin nec nunc et lorem feugiat mattis porta id libero.
+								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
+								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
+								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+							</div>
+
+							<div class="account-type-description" data-account-type="alumni">
+								<h2>About the OpenLab (Alumni)</h2>
+
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
+								Proin nec nunc et lorem feugiat mattis porta id libero.
+								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
+								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
+								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+							</div>
+
+							<div class="account-type-description" data-account-type="non-city-tech">
+								<h2>About the OpenLab (non-city-tech)</h2>
+
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
+								Proin nec nunc et lorem feugiat mattis porta id libero.
+								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
+								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
+								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+							</div>
+						</div>
+
+						<div class="form-group">
+							<fieldset class="account-description-approval-fieldset">
+								<input type="radio" name="account-description-approval" id="account-description-approval-yes" value="yes" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." /> <label for="account-description-approval-yes">Yes, I understand</label><br />
+								<input type="radio" name="account-description-approval" id="account-description-approval-no" value="no" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." /> <label for="account-description-approval-no">No, <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">I have questions</a></label>
+							</fieldset>
+						</div>
+					</div><!-- .panel-body -->
+				</div>
 
 				<div class="panel panel-default">
 					<div class="panel-heading semibold">Account Details</div>
@@ -46,65 +131,13 @@ $account_type_options = array_map(
 
 						<?php do_action( 'template_notices' ); ?>
 
-						<p><?php esc_html_e( 'Registering for the City Tech OpenLab is easy. Just fill in the fields below and we\'ll get a new account set up for you in no time.', 'buddypress' ); ?></p>
-						<p>Because the OpenLab is a space for collaboration between members of the City Tech community, a City Tech email address is required to use the site.</p>
+						<p>For verification that you are a member of the City Tech community, please provide your City Tech email and full name. These are not displayed anywhere publicly on the site and are only visible to faculty and staff site administrators.</p>
+
 						<?php do_action( 'bp_before_account_details_fields' ); ?>
 
 						<div class="register-section" id="basic-details-section">
 
 							<?php /* Basic Account Details */ ?>
-
-							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>"><span class="label-text">First Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
-								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
-								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ); ?>
-								<input
-									class="form-control"
-									type="text"
-									name="field_<?php echo esc_attr( $first_name_field_id ); ?>"
-									id="field_<?php echo esc_attr( $first_name_field_id ); ?>"
-									data-parsley-required
-									data-parsley-required-message="First Name is required."
-									data-parsley-errors-container="#field_<?php echo esc_attr( $first_name_field_id ); ?>_error"
-									value="<?php echo esc_attr( $first_name_submitted ); ?>"
-								/>
-							</div>
-
-							<div class="form-group">
-								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>"><span class="label-text">Last Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
-								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container"></div>
-								<?php do_action( 'bp_field_' . $last_name_field_id . '_errors' ); ?>
-								<input
-									class="form-control"
-									type="text"
-									name="field_<?php echo esc_attr( $last_name_field_id ); ?>"
-									id="field_<?php echo esc_attr( $last_name_field_id ); ?>"
-									data-parsley-required
-									data-parsley-required-message="Last Name is required."
-									data-parsley-errors-container="#field_<?php echo esc_attr( $last_name_field_id ); ?>_error"
-									value="<?php echo esc_attr( $last_name_submitted ); ?>"
-								/>
-							</div>
-
-							<div class="form-group">
-								<label class="control-label" for="openlab-account-type">Account Type <span class="label-gloss">(required)</span></label>
-								<div id="openlab-account-type-error" class="error-container"></div>
-								<?php do_action( 'bp_field_account_type_errors' ); ?>
-								<select
-									class="form-control"
-									type="text"
-									name="openlab-account-type"
-									id="openlab-account-type"
-									data-parsley-required
-									data-parsley-required-message="Account type is required."
-									data-parsley-errors-container="#openlab-account-type-error"
-								/>
-									<option value="">----</option>
-									<?php foreach ( $account_type_options as $account_type_option ) : ?>
-										<option value="<?php echo esc_attr( $account_type_option['slug'] ); ?>" <?php selected( $account_type_submitted, $account_type_option['slug'] ); ?>><?php echo esc_html( $account_type_option['label'] ); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
 
 							<div class="form-group">
 								<label class="control-label" id="signup-email-label" for="signup_email"><span class="label-text">City Tech Email Address</span> <span class="label-gloss">(required, but not displayed on Public Profile) <div class="email-requirements"></div></span></label>
@@ -146,6 +179,40 @@ $account_type_options = array_map(
 							</div>
 
 							<div class="form-group">
+								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>"><span class="label-text">First Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
+								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
+								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ); ?>
+								<input
+									class="form-control"
+									type="text"
+									name="field_<?php echo esc_attr( $first_name_field_id ); ?>"
+									id="field_<?php echo esc_attr( $first_name_field_id ); ?>"
+									data-parsley-required
+									data-parsley-required-message="First Name is required."
+									data-parsley-errors-container="#field_<?php echo esc_attr( $first_name_field_id ); ?>_error"
+									value="<?php echo esc_attr( $first_name_submitted ); ?>"
+								/>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>"><span class="label-text">Last Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
+								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container"></div>
+								<?php do_action( 'bp_field_' . $last_name_field_id . '_errors' ); ?>
+								<input
+									class="form-control last-name-field"
+									type="text"
+									name="field_<?php echo esc_attr( $last_name_field_id ); ?>"
+									id="field_<?php echo esc_attr( $last_name_field_id ); ?>"
+									data-parsley-required
+									data-parsley-required-message="Last Name is required."
+									data-parsley-errors-container="#field_<?php echo esc_attr( $last_name_field_id ); ?>_error"
+									value="<?php echo esc_attr( $last_name_submitted ); ?>"
+								/>
+							</div>
+
+							<p>Please choose your username. <strong>You don't need to use your real name. We recommend that students do not use their full name.</strong> You will use your username to sign in, and it will also be visible in the URL of your member profile. You cannot change it after you sign up.</p>
+
+							<div class="form-group">
 								<label class="control-label" for="signup_username"><span class="label-text">Username</span> <span class="label-gloss">(required) (lowercase & no special characters)</span></label>
 								<div id="signup_username_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_username_errors' ); ?>
@@ -174,9 +241,7 @@ $account_type_options = array_map(
 									data-parsley-errors-container="#signup_username_error"
 									/>
 
-								<p class="register-field-note">IMPORTANT: <strong>You don't need to use your real name.</strong> Your username cannot be changed after you sign up. You need it to sign in, and it will be visible in the URL of your member profile. You can use your display name below to identify yourself publicly as you choose.
 							</div>
-
 
 							<div data-parsley-children-should-match class="form-group">
 								<label class="control-label" for="signup_password"><span class="label-text">Choose a Password</span> <span class="label-gloss">(required)</span></label>
@@ -238,7 +303,7 @@ $account_type_options = array_map(
 
 							<div class="register-section" id="profile-details-section">
 
-								<p>Your responses in the form fields below will be displayed on your profile page, which is open to the public. You can always add, edit, or remove information at a later date.</p>
+								<p>Your profile page is open to the public. You can edit or change who can see this information here and in your profile settings.</p>
 
 								<?php echo wds_get_register_fields( 'Base' ); // WPCS: XSS ok ?>
 
@@ -247,8 +312,6 @@ $account_type_options = array_map(
 							</div><!-- #profile-details-section -->
 						</div>
 					</div><!--.panel-->
-
-
 
 				<?php endif; ?>
 

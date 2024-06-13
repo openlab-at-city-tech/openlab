@@ -238,6 +238,8 @@ $social_fields = openlab_social_media_fields();
 
                             <?php do_action('bp_custom_profile_edit_fields') ?>
 
+							<?php openlab_xprofile_field_visibility_selector(); ?>
+
                             <p class="description"><?php bp_the_profile_field_description() ?></p>
                         </div>
                     <?php endwhile; ?>

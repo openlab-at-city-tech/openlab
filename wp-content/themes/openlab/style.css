@@ -7769,14 +7769,16 @@ input:disabled + label {
 .link-edit-items .social-link-fields-inner {
   display: flex;
   gap: 20px;
-  flex: 0 0 520px;
+  flex: 1;
 }
 @media (max-width: 767px) {
   .link-edit-items .social-link-fields-inner {
     display: block;
-    flex: 1;
     order: 1;
   }
+}
+.link-edit-items .social-link-fields-inner .field-visibility-settings label {
+  font-weight: 700;
 }
 .link-edit-items .social-link-fields-service {
   flex: 0 0 250px;
@@ -8725,6 +8727,13 @@ body #register-page .has-error .error .parsley-errors-list {
 }
 body #register-page label .label-gloss {
   font-weight: normal;
+}
+body #register-page .account-description-approval-fieldset {
+  margin-top: 20px;
+}
+body #register-page .field-contains-last-name-error.error {
+  background: #49cabe;
+  font-weight: 700;
 }
 body .panel-body .bp-template-notice {
   margin-top: 0;
@@ -11587,6 +11596,13 @@ body.single-event #content .eo-event-venue-map {
   margin-top: 5px;
   background: #f7e700;
   border-color: #f7e700;
+}
+.field-visibility-settings {
+  margin-bottom: 15px;
+}
+.field-visibility-settings label {
+  font-weight: 400;
+  padding-right: 8px;
 }
 #member-header {
   margin-top: 41px;
