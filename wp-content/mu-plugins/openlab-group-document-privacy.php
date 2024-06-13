@@ -60,10 +60,12 @@ function cac_catch_group_doc_request() {
 
 		$user_can_download = true;
 
+		$user_is_creator = (int) $document->user_id === (int) bp_loggedin_user_id();
+
 		if ( 'admins' === $doc_privacy ) {
-			$user_can_download = groups_is_user_admin( bp_loggedin_user_id(), $group_id );
+			$user_can_download = groups_is_user_admin( bp_loggedin_user_id(), $group_id ) || $user_is_creator;
 		} elseif ( 'members' === $doc_privacy ) {
-			$user_can_download = groups_is_user_member( bp_loggedin_user_id(), $group_id );
+			$user_can_download = groups_is_user_member( bp_loggedin_user_id(), $group_id ) || $user_is_creator;
 		} elseif ( 'public' !== $group->status ) {
 			// If the group is not public, then the user must be logged in and
 			// a member of the group to download the document
