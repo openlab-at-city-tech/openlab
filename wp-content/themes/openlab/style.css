@@ -8286,6 +8286,10 @@ a:hover .cyan-circle {
   color: #49cabe;
 }
 /**custom tags**/
+body .field-contains-last-name-error.error {
+  background: #49cabe !important;
+  font-weight: 700 !important;
+}
 body .no-gutter.no-gutter-right {
   padding-right: 0;
 }
@@ -8730,10 +8734,6 @@ body #register-page label .label-gloss {
 }
 body #register-page .account-description-approval-fieldset {
   margin-top: 20px;
-}
-body #register-page .field-contains-last-name-error.error {
-  background: #49cabe;
-  font-weight: 700;
 }
 body .panel-body .bp-template-notice {
   margin-top: 0;

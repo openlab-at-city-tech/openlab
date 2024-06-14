@@ -92,6 +92,15 @@ function openlab_enqueue_frontend_scripts() {
 
     if ( bp_is_user_profile_edit() ) {
         wp_enqueue_script( 'openlab-profile-edit', get_stylesheet_directory_uri() . '/js/profile-edit.js', [ 'jquery', 'parsley', 'openlab-validators' ] );
+
+		wp_add_inline_script(
+			'openlab-profile-edit',
+			'var olProfileEdit = ' . wp_json_encode( [
+				'userLastName' => get_user_meta( bp_displayed_user_id(), 'last_name', true ),
+				'userEmail'    => wp_get_current_user()->user_email,
+			] ) . ';',
+			'before'
+		);
     }
 }
 add_action( 'wp_enqueue_scripts', 'openlab_enqueue_frontend_scripts', 20 );

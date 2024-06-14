@@ -59,7 +59,9 @@ $social_fields = openlab_social_media_fields();
                     <div class="editfield field_1 field_name alt form-group">
                         <label for="field_1">Display Name (required)</label>
                         <input class="form-control" type="text" value="<?php echo $display_name; ?>" id="field_1" name="field_1">
-                        <p class="description"></p>
+                        <p class="description">
+							Please choose your Display Name. <strong>You don't need to use your real name or your full name.</strong> Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Your Display Name can be changed at any time by editing your profile.
+						</p>
                     </div>
                     <?php $display_name_shown = true ?>
                 <?php } ?>
