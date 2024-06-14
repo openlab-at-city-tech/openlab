@@ -441,6 +441,16 @@ function openlab_registration_errors_object() {
 
 	$error_json = json_encode( $errors );
 	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
+
+	$submitted_visibility_values = [];
+	foreach ( $_POST as $key => $value ) {
+		$matched = preg_match( '/^field_(\d+)_visibility$/', $key, $matches );
+		if ( $matched ) {
+			$submitted_visibility_values[ $matches[1] ] = $value;
+		}
+	}
+
+	echo '<script type="text/javascript">var OpenLab_Submitted_Visibility_Values = ' . json_encode( $submitted_visibility_values ) . '</script>';
 }
 add_action( 'wp_head', 'openlab_registration_errors_object' );
 
@@ -532,8 +542,14 @@ function openlab_process_social_links_at_activation( $user_id, $key, $data ) {
 		return;
 	}
 
+	$all_fields = openlab_social_media_fields();
+
 	foreach ( $data['meta']['social-links'] as $social_link ) {
 		openlab_set_social_media_field_for_user( $user_id, $social_link['service'], $social_link['url'] );
+
+		$field_id   = $all_fields[ $social_link['service'] ]['field_id'];
+		$visibility = isset( $social_link['visibility'] ) ? $social_link['visibility'] : 'public';
+		xprofile_set_field_visibility_level( $field_id, $user_id, $visibility );
 	}
 }
 add_action( 'bp_core_activated_user', 'openlab_process_social_links_at_activation', 10, 3 );

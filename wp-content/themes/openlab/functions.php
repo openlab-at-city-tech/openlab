@@ -395,15 +395,11 @@ function openlab_is_search_results_page() {
 }
 
 /**
- * Generates the markup for xprofile field visibility selector.
+ * Gets our custom visibility levels for xprofile fields.
  *
- * @param int $field_id The ID of the field.
+ * @return array
  */
-function openlab_xprofile_field_visibility_selector( $field_id = null ) {
-	if ( ! $field_id ) {
-		$field_id = bp_get_the_profile_field_id();
-	}
-
+function openlab_get_xprofile_visibility_levels() {
 	$visibility_levels = bp_xprofile_get_visibility_levels();
 
 	// Reorder: public, loggedin, friends, adminsonly
@@ -418,6 +414,21 @@ function openlab_xprofile_field_visibility_selector( $field_id = null ) {
 
 	$visibility_levels['loggedin']['label'] = 'OpenLab Members';
 	$visibility_levels['friends']['label']  = 'Friends';
+
+	return $visibility_levels;
+}
+
+/**
+ * Generates the markup for xprofile field visibility selector.
+ *
+ * @param int $field_id The ID of the field.
+ */
+function openlab_xprofile_field_visibility_selector( $field_id = null ) {
+	if ( ! $field_id ) {
+		$field_id = bp_get_the_profile_field_id();
+	}
+
+	$visibility_levels = openlab_get_xprofile_visibility_levels();
 
 	$selected_value = bp_is_register_page() ? '' : xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
 

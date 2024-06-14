@@ -350,9 +350,21 @@
 			init_visible_metaboxes();
 		} )
 
-		load_account_type_description( '' );
+		load_account_type_description( $account_type_field.val() );
 		load_account_type_fields();
 		init_visible_metaboxes();
+
+		if ( 'undefined' !== typeof OpenLab_Submitted_Visibility_Values ) {
+			setTimeout( () => {
+				for ( var key in OpenLab_Submitted_Visibility_Values ) {
+					var value = OpenLab_Submitted_Visibility_Values[ key ];
+
+					if ( 'undefined' !== typeof value ) {
+						$( '#field-visibility-settings-select-' + key ).val( value );
+					}
+				}
+			}, 3000 );
+		}
 
 		function containsLastName( text ) {
 			if ( text.length === 0 ) {
@@ -371,22 +383,25 @@
 			);
 		}
 
-		document.getElementById( 'signup_username' ).addEventListener( 'input', ( event ) => {
-			if ( 'student' !== $account_type_field.val() ) {
-				return;
-			}
+		const signupUsernameField = document.getElementById( 'signup_username' );
+		if ( signupUsernameField ) {
+			signupUsernameField.addEventListener( 'input', ( event ) => {
+				if ( 'student' !== $account_type_field.val() ) {
+					return;
+				}
 
-			const userName = event.target.value;
+				const userName = event.target.value;
 
-			const userNameContainsLastName = containsLastName( userName );
+				const userNameContainsLastName = containsLastName( userName );
 
-			if ( ! userNameContainsLastName ) {
-				toggleUsernameContainsLastNameError( false );
-				return;
-			}
+				if ( ! userNameContainsLastName ) {
+					toggleUsernameContainsLastNameError( false );
+					return;
+				}
 
-			toggleUsernameContainsLastNameError( true );
-		} )
+				toggleUsernameContainsLastNameError( true );
+			} )
+		}
 
 		function toggleUsernameContainsLastNameError( show ) {
 			$( '.username-contains-last-name-error' ).remove();
@@ -511,7 +526,7 @@
 			$( '.account-type-description' ).hide();
 			$( '.account-description-approval-fieldset' ).hide();
 
-			if ( accountType.length > 0 ) {
+			if ( accountType && accountType.length > 0 ) {
 				$( '.account-type-description[data-account-type="' + accountType + '"]' ).show();
 				$( '.account-description-approval-fieldset' ).show();
 			}

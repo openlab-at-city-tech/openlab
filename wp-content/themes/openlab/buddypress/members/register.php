@@ -13,6 +13,7 @@ $last_name_field_id    = openlab_get_xprofile_field_id( 'Last Name' );
 $first_name_submitted   = isset( $_POST[ 'field_' . $first_name_field_id ] ) ? $_POST[ 'field_' . $first_name_field_id ] : '';
 $last_name_submitted    = isset( $_POST[ 'field_' . $last_name_field_id ] ) ? $_POST[ 'field_' . $last_name_field_id ] : '';
 $account_type_submitted = isset( $_POST['openlab-account-type'] ) ? $_POST['openlab-account-type'] : '';
+$account_description_approval_submitted = isset( $_POST['account-description-approval'] ) ? $_POST['account-description-approval'] : '';
 
 $account_type_options = array_map(
 	function( $type ) {
@@ -39,6 +40,8 @@ $account_type_options = array_map(
 		<form action="" name="signup_form" id="signup_form" class="standard-form form-panel" method="post" enctype="multipart/form-data" data-parsley-trigger="blur">
 
 			<?php if ( 'request-details' == bp_get_current_signup_step() ) : ?>
+				<input type="hidden" id="has-signup-errors" value="<?php echo ! empty( buddypress()->signup->errors ) ? 'true' : 'false'; ?>" />
+
 				<div class="panel panel-default" id="panel-welcome">
 					<div class="panel-heading semibold">Welcome to the OpenLab!</div>
 
@@ -118,8 +121,8 @@ $account_type_options = array_map(
 
 						<div class="form-group">
 							<fieldset class="account-description-approval-fieldset">
-								<input type="radio" name="account-description-approval" id="account-description-approval-yes" value="yes" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." /> <label for="account-description-approval-yes">Yes, I understand</label><br />
-								<input type="radio" name="account-description-approval" id="account-description-approval-no" value="no" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." /> <label for="account-description-approval-no">No, <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">I have questions</a></label>
+								<input type="radio" name="account-description-approval" id="account-description-approval-yes" value="yes" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." <?php checked( $account_description_approval_submitted, 'yes' ); ?> /> <label for="account-description-approval-yes">Yes, I understand</label><br />
+								<input type="radio" name="account-description-approval" id="account-description-approval-no" value="no" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." <?php checked( $account_description_approval_submitted, 'no' ); ?> /> <label for="account-description-approval-no">No, <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">I have questions</a></label>
 							</fieldset>
 						</div>
 					</div><!-- .panel-body -->
