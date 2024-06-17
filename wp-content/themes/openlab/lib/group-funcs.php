@@ -117,7 +117,7 @@ function openlab_group_privacy_settings($group_type) {
 
 	<?php if ( bp_is_group_create() && 'portfolio' === $group_type ) : ?>
 		<div class="panel panel-default">
-			<div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Link on my OpenLab Profilo</div>
+			<div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Link on my OpenLab Profile</div>
 			<div class="panel-body">
 				<p>You can choose to show a link to your Portfolio on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name but you want to use your real name on your Portfolio, you may wish to leave this unchecked.</p>
 
