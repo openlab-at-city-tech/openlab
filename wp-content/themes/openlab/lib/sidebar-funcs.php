@@ -311,9 +311,9 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
 				<?php if ( openlab_is_my_profile() && openlab_user_has_portfolio( bp_displayed_user_id() ) && ! bp_is_group_create() ) : ?>
 					<li class="portfolio-profile-link-toggle-wrapper">
 						<input value="1" data-counter="<?php echo esc_attr( $counter ); ?>" type="checkbox" id="portfolio-profile-link-toggle-<?php echo esc_attr( $counter ); ?>" class="portfolio-profile-link-toggle-checkbox" <?php checked( openlab_show_portfolio_link_on_user_profile() ); ?> /> <label for="portfolio-profile-link-toggle-<?php echo esc_attr( $counter ); ?>">Show link to my <?php echo esc_html( $portfolio_label ); ?> on my public OpenLab profile</label>
-					</li>
 
-					<?php wp_nonce_field( 'openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_nonce_' . $counter, false ); ?>
+						<?php wp_nonce_field( 'openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_nonce_' . $counter, false ); ?>
+					</li>
 				<?php endif; ?>
 
             </ul>

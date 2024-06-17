@@ -9650,13 +9650,13 @@ body form .checkbox-list-container {
   display: flex;
   gap: 8px;
   margin-left: 5%;
-  margin-top: 20px;
 }
 .portfolio-profile-link-toggle-wrapper label {
   display: block;
   font-weight: normal;
   font-size: 12px;
   padding-top: 3px;
+  margin-bottom: 0;
 }
 .mobile-group-site-links {
   margin-top: 30px;
