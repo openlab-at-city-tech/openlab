@@ -14,7 +14,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 
 <div id="item-body" role="main">
 
-	<form class="standard-form form-panel">
+	<form class="standard-form form-panel" id="bp-data-export" method="post">
 		<div class="panel panel-default">
 			<div class="panel-heading"><?php _e( 'Data Export', 'buddypress' ); ?></div>
 
@@ -37,10 +37,8 @@ do_action( 'bp_before_member_settings_template' ); ?>
 							<p><?php esc_html_e( 'Your previous request for an export of personal data has expired.', 'buddypress' ); ?></p>
 							<p><?php esc_html_e( 'Please click on the button below to make a new request.', 'buddypress' ); ?></p>
 
-							<form id="bp-data-export" method="post">
-								<input type="hidden" name="bp-data-export-delete-request-nonce" value="<?php echo wp_create_nonce( 'bp-data-export-delete-request' ); ?>" />
-								<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>"><?php esc_html_e( 'Request new data export', 'buddypress' ); ?></button>
-							</form>
+							<input type="hidden" name="bp-data-export-delete-request-nonce" value="<?php echo wp_create_nonce( 'bp-data-export-delete-request' ); ?>" />
+							<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>"><?php esc_html_e( 'Request new data export', 'buddypress' ); ?></button>
 
 						<?php endif; ?>
 
@@ -49,9 +47,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 						<p>Your previous data request did not complete.</p>
 						<p><?php esc_html_e( 'Please click on the button below to make a new request.', 'buddypress' ); ?></p>
 
-						<form id="bp-data-export" method="post">
-							<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>">Generate personal data export</button>
-						</form>
+						<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>">Generate personal data export</button>
 
 					<?php endif; ?>
 
@@ -63,9 +59,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 
 					<p><?php esc_html_e( 'If you want to make a request, please click on the button below:', 'buddypress' ); ?></p>
 
-					<form id="bp-data-export" method="post">
-						<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>"><?php esc_html_e( 'Request personal data export', 'buddypress' ); ?></button>
-					</form>
+					<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>"><?php esc_html_e( 'Request personal data export', 'buddypress' ); ?></button>
 
 				<?php endif; ?>
 
