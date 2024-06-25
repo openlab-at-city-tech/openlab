@@ -195,7 +195,7 @@ function openlab_sites_exporter( $email_address, $page = 1 ) {
 
 			$data_to_export[] = array(
 				'group_id'    => 'openlab_site_' . $site_id,
-				'group_label' => sprintf( 'Site Data: %s (%s)', $site->blogname, $site->siteurl ),
+				'group_label' => sprintf( 'Site Posts: %s (%s)', $site->blogname, $site->siteurl ),
 				'item_id'     => 'openlab_sites_' . $site_id . '_post_' . $post->ID,
 				'data'        => $post_data,
 			);
