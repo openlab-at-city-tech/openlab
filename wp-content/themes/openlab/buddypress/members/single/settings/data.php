@@ -53,13 +53,26 @@ do_action( 'bp_before_member_settings_template' ); ?>
 
 				<?php else : ?>
 
-					<p><?php esc_html_e( 'You can request an export of your personal data, containing the following items if applicable:', 'buddypress' ); ?></p>
+					<p>You can request an export of your personal data, containing the following items if applicable:</p>
 
-					<?php bp_settings_data_exporter_items(); ?>
+					<ul>
+						<li>Profile and user information</li>
+						<li>Activity data, including comments, discussion forum posts, docs, and links to files and other media</li>
+						<li>Friend information</li>
+						<li>Group membership information</li>
+						<li>Messages</li>
+						<li>Notifications</li>
+						<li>Account settings</li>
+						<li>Site posts</li>
+					</ul>
 
-					<p><?php esc_html_e( 'If you want to make a request, please click on the button below:', 'buddypress' ); ?></p>
+					<p>Please click on the button below and wait for the export to finish to obtain a copy of your data. If you navigate away from this page, you will have to restart the export process again.</p>
 
-					<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>"><?php esc_html_e( 'Request personal data export', 'buddypress' ); ?></button>
+					<p>The export will be a zip file called "wp-personal-data-file" with some additional numbers and letters. When you unzip the file, you will see a folder containing an index.html file and export.json. Click on the html file to view the contents of the export.</p>
+
+					<p>The export contains text only; files, images, and other media are not included but you can download them separately by clicking on the links in the Activity data section of the index.html file.</p>
+
+					<button type="submit" name="bp-data-export-nonce" value="<?php echo wp_create_nonce( 'bp-data-export' ); ?>">Download data</button>
 
 				<?php endif; ?>
 
