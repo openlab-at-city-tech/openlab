@@ -797,7 +797,7 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
         } else if ($page_identify == 'my-groups') {
             //special case for my-<groups> pages
             if (isset($_GET['type'])) {
-                $type = $_GET['type'];
+                $type = sanitize_text_field( $_GET['type'] );
 				$type_title = '';
 				if ( in_array( $type, openlab_group_types(), 1 ) ) {
 					$type_title = esc_html( 'My ' . ucfirst( str_replace( '-', ' ', $type ) ) . 's' );

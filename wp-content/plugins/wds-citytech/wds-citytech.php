@@ -1650,6 +1650,8 @@ class Buddypress_Translation_Mangler {
 			return $translation;
 		}
 
+		$grouptype = esc_html( $grouptype );
+
 		$uc_grouptype = ucfirst( $grouptype );
 		$translations = get_translations_for_domain( 'buddypress' );
 

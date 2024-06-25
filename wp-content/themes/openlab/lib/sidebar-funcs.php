@@ -231,8 +231,10 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 
                 <?php endif; ?>
 
-                <?php /* Current page highlighting requires the GET param */ ?>
-                <?php $current_group_view = isset($_GET['type']) ? $_GET['type'] : ''; ?>
+                <?php
+				/* Current page highlighting requires the GET param */
+                $current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ): '';
+				?>
 
                 <li class="sq-bullet <?php if (bp_is_user_groups() && 'course' == $current_group_view) : ?>selected-page<?php endif ?> mol-courses"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a></li>
 

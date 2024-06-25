@@ -29,6 +29,8 @@ class bpass_Translation_Mangler {
 			$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
 		}
 
+		$grouptype = esc_html( $grouptype );
+
 		$uc_grouptype     = ucfirst( $grouptype );
 		$plural_grouptype = $grouptype . 's';
 		$translations     = get_translations_for_domain( 'bp-ass' );

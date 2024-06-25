@@ -1165,9 +1165,9 @@ HTML;
  *
  * @see http://openlab.citytech.cuny.edu/redmine/issues/397
  */
-function openlab_previous_step_type($url) {
-    if (!empty($_GET['type'])) {
-        $url = add_query_arg('type', $_GET['type'], $url);
+function openlab_previous_step_type( $url ) {
+    if ( ! empty( $_GET['type'] ) ) {
+        $url = add_query_arg( 'type', sanitize_text_field( $_GET['type'] ), $url );
     }
 
     return $url;
@@ -1942,7 +1942,7 @@ function openlab_add_badge_button_to_profile() {
 add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );
 
 add_action( 'bp_after_group_details_creation_step', function() {
-	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+	$group_type = ! empty( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : null;
 
 	if ( 'portfolio' === $group_type ) {
 		return;
@@ -1952,7 +1952,7 @@ add_action( 'bp_after_group_details_creation_step', function() {
 }, 4 );
 
 add_action( 'bp_after_group_details_creation_step', function() {
-	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+	$group_type = ! empty( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : null;
 
 	if ( 'portfolio' === $group_type ) {
 		// Necessary to ensure that the nulled collaboration tools settings are saved.

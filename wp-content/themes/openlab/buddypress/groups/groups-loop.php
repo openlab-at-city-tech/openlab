@@ -15,7 +15,7 @@ $user_id = bp_displayed_user_id();
 $filters = array();
 if ( bp_is_user_groups() ) {
 	if ( isset( $_GET['type'] ) && in_array( $_GET['type'], openlab_group_types(), true ) ) {
-		$group_type = wp_unslash( $_GET['type'] );
+		$group_type = sanitize_text_field( wp_unslash( $_GET['type'] ) );
 	} else {
 		$group_type = 'course';
 	}

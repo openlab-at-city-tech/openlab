@@ -62,7 +62,7 @@ function openlab_enqueue_frontend_scripts() {
 		if ( bp_is_group() ) {
 			$group_type_label = openlab_get_group_type_label( [ 'case' => 'upper'] );
 		} elseif ( bp_is_group_create() ) {
-			$group_type = isset( $_GET['type'] ) ? wp_unslash( $_GET['type'] ) : 'Group';
+			$group_type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : 'Group';
 			if ( 'portfolio' === $group_type ) {
 				$user_type = openlab_get_user_member_type( get_current_user_id() );
 				if ( 'student' === strtolower( $user_type ) ) {
