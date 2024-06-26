@@ -956,6 +956,22 @@ function openlab_filter_subnav_members($subnav_item) {
     return $new_item;
 }
 
+/**
+ * Only group members should have access to Portfolio 'members' nav item.
+ */
+function openlab_filter_subnav_portfolio_members() {
+	if ( ! openlab_is_portfolio( bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	bp_core_remove_subnav_item( groups_get_current_group()->slug, 'members', 'groups' );
+}
+add_action( 'bp_actions', 'openlab_filter_subnav_portfolio_members' );
+
 add_filter('bp_get_options_nav_nav-docs', 'openlab_filter_subnav_docs');
 
 function openlab_filter_subnav_docs($subnav_item) {
