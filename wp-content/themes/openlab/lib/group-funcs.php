@@ -2505,3 +2505,34 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Determines whether a group should have the noindex meta tag added to its pages.
+ *
+ * @param int $group_id ID of the group.
+ * @return bool
+ */
+function openlab_should_noindex_group_profile( $group_id ) {
+	$should_noindex = groups_get_groupmeta( $group_id, 'openlab_noindex_group_profile', true );
+
+	return (bool) $should_noindex;
+}
+
+/**
+ * Adds the noindex meta tag to a group profile.
+ */
+function openlab_add_noindex_to_group_profile() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	$group_id = bp_get_current_group_id();
+	if ( ! $group_id ) {
+		return;
+	}
+
+	if ( openlab_should_noindex_group_profile( $group_id ) ) {
+		echo '<meta name="robots" content="noindex" />' . "\n";
+	}
+}
+add_action( 'wp_head', 'openlab_add_noindex_to_group_profile', 0 );
