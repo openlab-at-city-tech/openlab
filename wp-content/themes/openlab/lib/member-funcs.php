@@ -2201,3 +2201,34 @@ function openlab_portfolio_link_visibility_ajax_cb() {
 	wp_send_json_success();
 }
 add_action( 'wp_ajax_openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_ajax_cb' );
+
+/**
+ * Determines whether a user's profile should have the noindex meta tag.
+ *
+ * @param int $user_id User ID.
+ * @return bool
+ */
+function openlab_should_noindex_user_profile( $user_id ) {
+	$noindex = get_user_meta( $user_id, 'openlab_noindex_user_profile', true );
+
+	return (bool) $noindex;
+}
+
+/**
+ * Adds the noindex meta tag to a user's profile.
+ */
+function openlab_add_noindex_to_user_profile() {
+	if ( ! bp_is_user() ) {
+		return;
+	}
+
+	$user_id = bp_displayed_user_id();
+	if ( ! $user_id ) {
+		return;
+	}
+
+	if ( openlab_should_noindex_user_profile( $user_id ) ) {
+		echo '<meta name="robots" content="noindex" />' . "\n";
+	}
+}
+add_action( 'wp_head', 'openlab_add_noindex_to_user_profile', 0 );
