@@ -1,6 +1,7 @@
 <?php
 
 $h5p_hub_urls = [
+	'http://openlabdev.org/h5p-hub',
 	'http://openlabdev.org/h5ptesting',
 	'https://openlab.citytech.cuny.edu/id-',
 	'https://openlab.citytech.cuny.edu/id-hub',
