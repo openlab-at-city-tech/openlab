@@ -208,11 +208,24 @@ function openlab_group_privacy_membership_save( $group ) {
 
 	switch ( $group->status ) {
 		case 'public' :
-			if ( empty( $_POST['allow-joining-public'] ) ) {
-				groups_update_groupmeta( $group->id, 'disable_public_group_joining', 1 );
+			$group_type = openlab_get_group_type( $group->id );
+
+			$allow_raw = ! empty( $_POST['allow-joining-public'] );
+
+			if ( openlab_is_portfolio( $group->id ) ) {
+				if ( $allow_raw ) {
+					groups_update_groupmeta( $group->id, 'enable_public_group_joining', 1 );
+				} else {
+					groups_delete_groupmeta( $group->id, 'enable_public_group_joining' );
+				}
 			} else {
-				groups_delete_groupmeta( $group->id, 'disable_public_group_joining' );
+				if ( $allow_raw ) {
+					groups_delete_groupmeta( $group->id, 'disable_public_group_joining' );
+				} else {
+					groups_update_groupmeta( $group->id, 'disable_public_group_joining', 1 );
+				}
 			}
+
 			break;
 
 		case 'private' :
@@ -342,7 +355,12 @@ add_action( 'bp_after_group_details_creation_step', 'openlab_add_to_my_portfolio
  * @return bool
  */
 function openlab_public_group_has_disabled_joining( $group_id ) {
-	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	// Portfolios default to 'disabled', so we store an 'enable' flag.
+	if ( openlab_is_portfolio( $group_id ) ) {
+		$disabled = empty( groups_get_groupmeta( $group_id, 'enable_public_group_joining', true ) );
+	} else {
+		$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	}
 
 	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
 		$disabled = true;
