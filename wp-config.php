@@ -63,6 +63,8 @@ define ( 'BP_FORUMS_SLUG', 'discussion' );
 define( 'BP_GROUP_DOCUMENTS_SLUG', 'files' );
 define( 'BP_USE_WP_ADMIN_BAR', true );
 
+define( 'CBOXOL_ASSET_VER', OL_VERSION );
+
 define( 'NGG_JQUERY_CONFLICT_DETECTION', false );
 
 // Don't let Neve show its onboarding panel.

@@ -2554,3 +2554,52 @@ function openlab_add_noindex_to_group_profile() {
 	}
 }
 add_action( 'wp_head', 'openlab_add_noindex_to_group_profile', 0 );
+
+/**
+ * Modifies site template REST requests to restrict based on academic_unit.
+ *
+ * @param array           $args    Query arguments.
+ * @param WP_REST_Request $request Request object.
+ * @return array
+ */
+add_filter(
+	'rest_cboxol_site_template_query',
+	function( $args, $request ) {
+		$academic_units_raw = $request->get_param( 'academic_units' );
+		if ( empty( $academic_units_raw ) ) {
+			return $args;
+		}
+
+		$academic_units = array_map( 'sanitize_text_field', explode( ',', $academic_units_raw ) );
+
+		// Identify the existing 'cboxol_limit_template_by_academic_unit' meta query.
+		$existing_meta_query = $args['meta_query'] ?? array();
+		foreach ( $existing_meta_query as &$meta_query ) {
+			if ( ! isset( $meta_query['all_types'] ) ) {
+				continue;
+			}
+
+			if ( 'cboxol_limit_template_by_academic_unit' !== $meta_query['all_types'][0]['key'] ) {
+				continue;
+			}
+
+			$meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_academic_unit',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_academic_unit',
+					'value' => $academic_units,
+				],
+			];
+		}
+
+		$args['meta_query'] = $existing_meta_query;
+
+		return $args;
+	},
+	50,
+	2
+);

@@ -34,7 +34,7 @@ class Sites extends WP_REST_Controller {
 		$q    = $params['search'];
 		$page = $params['page'];
 
-		$per_page = 25;
+		$per_page = 10;
 
 		// Filter to match blogname.
 		add_filter( 'sites_clauses', [ $this, 'filter_sites_clauses' ], 10, 2 );
@@ -49,7 +49,7 @@ class Sites extends WP_REST_Controller {
 			]
 		);
 
-		remove_filter( 'sites_clauses', [ $this, 'filter_sites_clauses' ], 10 );
+		remove_filter( 'sites_clauses', [ $this, 'filter_sites_clauses' ], 10, 2 );
 
 		$retval = [
 			'results' => [],

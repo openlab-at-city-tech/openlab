@@ -2,9 +2,14 @@
 
 class CBOX_Group_Type {
 	public $slug;
+	public $name;
 
 	public function get_slug() {
 		return $this->slug;
+	}
+
+	public function get_name() {
+		return $this->name;
 	}
 
 	public function get_label() {

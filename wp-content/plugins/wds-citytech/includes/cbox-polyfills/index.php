@@ -8,6 +8,10 @@
 
 
 require_once __DIR__ . '/class-cbox-group-type.php';
+require_once __DIR__ . '/class-cbox-member-type.php';
+require_once __DIR__ . '/class-cbox-academic-unit.php';
+require_once __DIR__ . '/class-cbox-academic-unit-type.php';
+
 require_once __DIR__ . '/class-cbox-sites-endpoint.php';
 
 function cbox_get_main_site_id() {
@@ -51,11 +55,50 @@ function cboxol_get_group_types() {
 	foreach ( $ol_types as $type_slug ) {
 		$type = new CBOX_Group_Type();
 		$type->slug = $type_slug;
+		$type->name = ucfirst( $type_slug );
 
 		$types[ $type_slug ] = $type;
 	}
 
 	return $types;
+}
+
+function cboxol_get_course_group_type() {
+	return cboxol_get_group_type( 'course' );
+}
+
+function cboxol_get_member_types() {
+	$ol_member_types = openlab_get_member_types();
+	$member_types = [];
+
+	foreach ( $ol_member_types as $type ) {
+		$member_type = new CBOX_Member_Type(
+			[
+				'slug' => $type->slug,
+				'name' => $type->name,
+				'can_create_courses' => in_array( $type->slug, [ 'faculty', 'staff' ], true ),
+			]
+		);
+
+		$member_types[ $type->slug ] = $member_type;
+	}
+
+	return $member_types;
+}
+
+function cboxol_get_member_type( $slug ) {
+	$member_types = cboxol_get_member_types();
+
+	if ( ! isset( $member_types[ $slug ] ) ) {
+		return null;
+	}
+
+	return $member_types[ $slug ];
+}
+
+function cboxol_get_user_member_type( $user_id ) {
+	$member_type = openlab_get_user_member_type( $user_id );
+	return cboxol_get_member_type( $member_type );
 }
 
 function cboxol_get_clone_source_group_id( $group_id ) {
@@ -283,3 +326,286 @@ add_action(
 		<?php
 	}
 );
+
+function cboxol_get_academic_unit_types() {
+	$group_types = openlab_group_types();
+
+	$type_data = [
+		'school' => [
+			'label' => 'Schools',
+			'parent' => '',
+			'group_types' => $group_types,
+		],
+		'department' => [
+			'label' => 'Departments',
+			'parent' => 'school',
+			'group_types' => $group_types,
+		],
+		'office' => [
+			'label' => 'Offices',
+			'parent' => '',
+			'group_types' => $group_types,
+		],
+	];
+
+	$types = [];
+	foreach ( $type_data as $slug => $data ) {
+		$type = new CBOX_Academic_Unit_Type(
+			[
+				'slug' => $slug,
+				'name' => $data['label'],
+				'parent' => $data['parent'],
+				'group_types' => $data['group_types'],
+			]
+		);
+
+		$types[ $slug ] = $type;
+	}
+
+	return $types;
+}
+
+function cboxol_get_academic_units( $args ) {
+	$type = $args['type'];
+
+	switch ( $type ) {
+		case 'school':
+		case 'office':
+			$schools = 'school' === $type ? openlab_get_school_list() : openlab_get_office_list();
+			$units = [];
+
+			foreach ( $schools as $slug => $name ) {
+				$unit = new CBOX_Academic_Unit(
+					[
+						'slug' => $slug,
+						'name' => $name,
+						'type' => $type,
+					]
+				);
+
+				$units[] = $unit;
+			}
+			break;
+
+		case 'department':
+			$departments = openlab_get_entity_departments();
+			$units = [];
+
+			foreach ( $departments as $parent_unit => $unit_departments ) {
+				foreach ( $unit_departments as $ud_slug => $ud_data ) {
+					$units[] = new CBOX_Academic_Unit(
+						[
+							'slug' => $ud_slug,
+							'name' => $ud_data['label'],
+							'parent' => $parent_unit,
+							'type' => $type,
+						]
+					);
+				}
+			}
+
+			break;
+
+		default:
+			$units = [];
+			break;
+	}
+
+	return $units;
+}
+
+/**
+ * Saves visibility data on template save.
+ *
+ * We have our own routine because academic units are not posts on the OpenLab,
+ * and so don't pass the validation routine in CBOX-OL.
+ *
+ * @param int      $post_id The site template ID.
+ * @param \WP_Post $post    The site template object.
+ * @return void
+ */
+function openlab_cboxol_save_template_visibility( $post_id, \WP_Post $post ) {
+	if ( ! current_user_can( 'manage_network_options' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['cboxol-template-visibility-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'cboxol-template-visibility', 'cboxol-template-visibility-nonce' );
+
+	$all_departments = openlab_get_entity_departments();
+
+	$selected_academic_units = isset( $_POST['template-visibility-limit-to-academic-unit'] ) ? array_map( 'sanitize_text_field', $_POST['template-visibility-limit-to-academic-unit'] ) : [];
+	$selected_academic_units = array_filter(
+		$selected_academic_units,
+		function( $unit_slug ) use ( $all_departments ) {
+			$unit_exists = false;
+
+			if ( isset( $all_departments[ $unit_slug ] ) ) {
+				$unit_exists = true;
+			}
+
+			if ( ! $unit_exists ) {
+				foreach ( $all_departments as $parent_unit => $unit_departments ) {
+					if ( isset( $unit_departments[ $unit_slug ] ) ) {
+						$unit_exists = true;
+						break;
+					}
+				}
+			}
+
+			return $unit_exists;
+		}
+	);
+
+	delete_post_meta( $post->ID, 'cboxol_template_academic_unit' );
+
+	foreach ( $selected_academic_units as $selected_academic_unit_slug ) {
+		add_post_meta( $post->ID, 'cboxol_template_academic_unit', $selected_academic_unit_slug );
+	}
+}
+add_action( 'save_post', 'openlab_cboxol_save_template_visibility', 20, 2 );
+
+/**
+ * cboxol_get_template_academic_units() relies on WP post IDs for academic units.
+ */
+add_filter(
+	'cboxol_get_template_academic_units',
+	function( $units, $template_id ) {
+		$selected_academic_units = (array) get_post_meta( $template_id, 'cboxol_template_academic_unit' );
+
+		$departments = openlab_get_entity_departments();
+		$schools = openlab_get_school_list();
+		$offices = openlab_get_office_list();
+
+		$new_units = [];
+		foreach ( $selected_academic_units as $selected_academic_unit_slug ) {
+			// Identify the type of the selected academic unit.
+			$type = '';
+			$name = '';
+			if ( isset( $schools[ $selected_academic_unit_slug ] ) ) {
+				$type = 'school';
+				$name = $schools[ $selected_academic_unit_slug ];
+			} elseif ( isset( $offices[ $selected_academic_unit_slug ] ) ) {
+				$type = 'office';
+				$name = $offices[ $selected_academic_unit_slug ];
+			} else {
+				foreach ( $departments as $parent_unit => $unit_departments ) {
+					if ( isset( $unit_departments[ $selected_academic_unit_slug ] ) ) {
+						$type = 'department';
+						$name = $unit_departments[ $selected_academic_unit_slug ]['label'];
+						break;
+					}
+				}
+			}
+
+			$new_units[] = new CBOX_Academic_Unit(
+				[
+					'slug' => $selected_academic_unit_slug,
+					'name' => $name,
+					'type' => 'department',
+				]
+			);
+		}
+
+		return $new_units;
+	},
+	10,
+	2
+);
+
+/**
+ * Modifies site template REST requests to restrict based on template visibility settings.
+ *
+ * Can't use the one from CBOX for a variety of reasons. For one, at the time of
+ * template selection, no group has yet been created.
+ *
+ * @param array            $args    Array of query arguments.
+ * @param \WP_REST_Request $request The request object.
+ * @return array
+ */
+function openlab_cboxol_site_templates_rest_api_restrict_visibility( $args, $request ) {
+	$member_type_meta_query = [
+		'relation'  => 'OR',
+		'all_types' => [
+			[
+				'key'     => 'cboxol_limit_template_by_member_type',
+				'compare' => 'NOT EXISTS',
+			],
+		],
+	];
+
+	$allowed_member_types = [ 0 ];
+	if ( is_user_logged_in() ) {
+		$current_member_type = cboxol_get_user_member_type( bp_loggedin_user_id() );
+
+		if ( $current_member_type ) {
+			$member_type_meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_member_type',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_member_type',
+					'value' => $current_member_type->get_slug(),
+				],
+			];
+		}
+	}
+
+	$academic_unit_meta_query = [
+		'relation'  => 'OR',
+		'all_types' => [
+			[
+				'key'     => 'cboxol_limit_template_by_academic_unit',
+				'compare' => 'NOT EXISTS',
+			],
+		],
+	];
+
+	$allowed_academic_units = [ 0 ];
+	$current_group_id       = $request->get_param( 'group_id' );
+	if ( $current_group_id ) {
+		// Get the group's academic units.
+		$group_units = cboxol_get_object_academic_units(
+			[
+				'object_type' => 'group',
+				'object_id'   => $current_group_id,
+			]
+		);
+
+		if ( $group_units ) {
+			$group_unit_ids = array_map(
+				function( $unit ) {
+					return $unit->get_wp_post_id();
+				},
+				$group_units
+			);
+
+			$academic_unit_meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_academic_unit',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_academic_unit',
+					'value' => $group_unit_ids,
+				],
+			];
+		}
+	}
+
+	$meta_query   = isset( $args['meta_query'] ) ? $args['meta_query'] : [];
+	$meta_query[] = $member_type_meta_query;
+	$meta_query[] = $academic_unit_meta_query;
+
+	$args['meta_query'] = $meta_query;
+
+	return $args;
+}
+add_filter( 'rest_cboxol_site_template_query', 'openlab_cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
+remove_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
