@@ -123,7 +123,7 @@ if (isset($customize_folders['folder_size']) && !empty($customize_folders['folde
 ?>
 </style>
 <?php if (!empty($font_family)) {
-    wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css?family='.urlencode($font_family), false);
+    wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css?family='.urlencode($font_family), false, WCP_FOLDER_VERSION);
 } ?>
 <div id="media-css">
 
@@ -299,10 +299,10 @@ if($hide_folder_color_pop_up != "yes" && WCP_FOLDER_VERSION == "3.0") {
                     e.stopImmediatePropagation();
                     jQuery("#color-pop-up-options").hide();
                     jQuery.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
+                        url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                         data: {
                             action: 'hide_folder_color_pop_up',
-                            nonce: '<?php echo wp_create_nonce('hide_folder_color_pop_up') ?>'
+                            nonce: '<?php echo esc_attr(wp_create_nonce('hide_folder_color_pop_up')) ?>'
                         },
                         type: 'post',
                         success: function(){

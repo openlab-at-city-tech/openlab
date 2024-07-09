@@ -236,11 +236,8 @@
 
                     });
                     this.uploader.bind('UploadComplete', function (up, files) {
-                        selectedFolderMediaId = -1;
-                    });
-                    this.uploader.bind('UploadComplete', function (up, files) {
                         var wp_media = window.wp;
-
+                        selectedFolderMediaId = -1;
                         $(".folder-meter").css("width", "100%");
                         setTimeout(function(){
                             $(".media-folder-loader").hide();
@@ -249,25 +246,18 @@
                             uploadedFileCount = 0;
                         }, 1250);
 
-                        resetDDCounter();
-                        if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
-                            folderSelectedAttachmentID = [];
-                            if($(".folder-modal ul.attachments li.selected").length) {
-                                $(".folder-modal ul.attachments li.selected").each(function(){
-                                    folderSelectedAttachmentID.push($(this).data("id"));
-                                });
-                                // folderSelectedAttachmentID = $(".folder-modal ul.attachments li.selected").data("id");
-                            }
-                            wp_media.media.frame.content.get().collection.props.set({ignore: (+ new Date())});
-                            wp_media.media.frame.content.get().options.selection.reset();
-                        } else {
-                            //wp_media.media.frame.library.props.set ({ignore: (+ new Date())});
-                            /*if($("#media-attachment-taxonomy-filter").length) {
-                                $(".attachment-filters").each(function(){
-                                    $(this).trigger("change");
-                                });
-                            }*/
-                        }
+                        resetMediaCounter();
+                        // if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
+                        //     folderSelectedAttachmentID = [];
+                        //     if($(".folder-modal ul.attachments li.selected").length) {
+                        //         $(".folder-modal ul.attachments li.selected").each(function(){
+                        //             folderSelectedAttachmentID.push($(this).data("id"));
+                        //         });
+                        //     } else {
+                        //         // wp_media.media.frame.content.get().collection.props.set({ignore: (+new Date())});
+                        //         // wp_media.media.frame.content.get().options.selection.reset();
+                        //     }
+                        // }
                     });
                 }
             }
@@ -395,18 +385,18 @@
         });
 
         $( document ).ajaxComplete(function( event, xhr, settings ) {
-            if(settings.data != undefined && settings.data != "" && typeof settings.data == "string" && settings.data.indexOf("action=query-attachments") != -1) {
-                setDragAndDropElements();
-            }
-            if(folderSelectedAttachmentID.length > 0) {
-                for(var i=0; i<folderSelectedAttachmentID.length; i++) {
-                    if (jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").length && !jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").hasClass("selected")) {
-                        var e = jQuery.Event("click");
-                        e.ctrlKey = true;
-                        jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").trigger(e);
-                    }
-                }
-            }
+            // if(settings.data != undefined && settings.data != "" && typeof settings.data == "string" && settings.data.indexOf("action=query-attachments") != -1) {
+            //     setDragAndDropElements();
+            // }
+            // if(folderSelectedAttachmentID.length > 0) {
+            //     for(var i=0; i<folderSelectedAttachmentID.length; i++) {
+            //         if (jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").length && !jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").hasClass("selected")) {
+            //             var e = jQuery.Event("click");
+            //             e.ctrlKey = true;
+            //             //jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").trigger(e);
+            //         }
+            //     }
+            // }
         });
 
         foldersArray = folders_media_options.terms;
@@ -596,6 +586,7 @@
         $(document).on("click", ".folder-actions span.folder-inline-edit", function(e){
             e.stopImmediatePropagation()
             e.stopPropagation();
+            e.preventDefault();
             if(folders_media_options.can_manage_folder == 0) {
                 return;
             }
@@ -655,6 +646,7 @@
             if((yPosition + $(".dynamic-menu").height()) > $(window).height()) {
                 $(".dynamic-menu").css("margin-top", $(window).height() - (yPosition + $(".dynamic-menu").height()));
             }
+            return false;
         });
 
         $(document).on("click", ".dynamic-menu", function(e){
@@ -1956,7 +1948,6 @@
             jQuery("#custom-scroll-menu").mCustomScrollbar("scrollTo", scrollTop+"px",{scrollInertia:0});
         }*/
         var contentHeight = $(window).height() - $("#wpadminbar").height() - $(".sticky-wcp-custom-form").height() - 70;
-        console.log(contentHeight);
         $("#custom-scroll-menu").height(contentHeight);
         $("#custom-scroll-menu").overlayScrollbars({
             resize : 'none',
@@ -2111,6 +2102,26 @@
         });
     }
 
+    function resetMediaCounter() {
+        resetMediaFlag = $.ajax({
+            url: folders_media_options.ajax_url,
+            data: "type=attachment&action=wcp_get_default_list&active_id=0",
+            method: 'post',
+            beforeSend: function() {
+                if(resetMediaFlag != null) {
+                    resetMediaFlag.abort();
+                }
+            },
+            success: function(res) {
+                var res = $.parseJSON(res);
+                foldersArray = res.taxonomies;
+                setFolderCountAndDD();
+                $(".all-posts .total-count").text(res.total_items);
+                $(".un-categorized-posts .total-count").text(res.empty_items);
+            }
+        });
+    }
+
     function setFolderCountAndDD() {
         if($("#media-attachment-taxonomy-filter").length) {
             $("#media-attachment-taxonomy-filter").each(function(){
@@ -2122,7 +2133,7 @@
                 for (var i = 0; i < foldersArray.length; i++) {
                     selectedDD.append("<option value='" + foldersArray[i].term_id + "'>" + foldersArray[i].name + " (" + foldersArray[i].trash_count + ")</option>");
                 }
-                selectedDD.val(currentDDVal).trigger("change");
+                selectedDD.val(currentDDVal);
             });
             if($("select.folder_for_media").length) {
                 var selectedVal = $("select.folder_for_media").val();

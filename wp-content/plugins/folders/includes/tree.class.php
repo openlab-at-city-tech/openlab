@@ -56,6 +56,7 @@ class WCP_Tree
     {
 
         $arg = [
+            'taxonomy'              => $postType,
             'hide_empty'            => false,
             'parent'                => $parent,
             'hierarchical'          => false,
@@ -75,7 +76,7 @@ class WCP_Tree
             ];
         }
 
-        $terms = get_terms($postType, $arg);
+        $terms = get_terms($arg);
 
         $string        = "";
         $sticky_string = "";
@@ -183,8 +184,8 @@ class WCP_Tree
     public static function get_folder_option_data($postType, $parent=0, $space="")
     {
         $terms = get_terms(
-            $postType,
             [
+                'taxonomy'     => $postType,
                 'hide_empty'   => false,
                 'parent'       => $parent,
                 'orderby'      => 'meta_value_num',

@@ -40,7 +40,7 @@ if (! defined('ABSPATH')) {
                                 <?php esc_html_e("Pro tip", "folders") ?>
                             </span>
                         <div class="pro-notice">
-                            <?php printf(esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
+                            <?php printf(esc_html__("%1\$sUpgrade to Pro%2\$s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                         </div>
                     </div>
                     <div class="folder-form-buttons">
@@ -226,7 +226,7 @@ if (! defined('ABSPATH')) {
                         <?php esc_html_e("Pro tip", "folders") ?>
                     </span>
                     <div class="pro-notice">
-                        <?php printf(esc_html__("%sUpgrade to Pro%s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
+                        <?php printf(esc_html__("%1\$sUpgrade to Pro%2\$s to create subfolders (with 20+ amazing features) & premium support 🎉", "folders"), '<a class="inline-button" target="_blank" href="'.esc_url($this->getFoldersUpgradeURL()).'">', "</a>"); ?>
                     </div>
                 </div>
             </div>
@@ -261,7 +261,7 @@ if (! defined('ABSPATH')) {
         <div class="folders-undo-body">
             <a href="javascript:;" class="close-undo-box"><span></span></a>
             <div class="folders-undo-header"><?php esc_html_e("Action performed successfully", "folders") ?></div>
-            <div class="folders-undo-body"><?php printf(esc_html__("Your action has been successfully completed. Click the %sUndo%s button to reverse the action", "folders"), "<b>", "</b>"); ?></div>
+            <div class="folders-undo-body"><?php printf(esc_html__("Your action has been successfully completed. Click the %1\$sUndo%2\$s button to reverse the action", "folders"), "<b>", "</b>"); ?></div>
             <div class="folders-undo-footer"><button class="undo-button" type="button"><?php esc_html_e("Undo", "folders") ?></button></div>
         </div>
     </div>

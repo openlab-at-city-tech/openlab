@@ -67,14 +67,14 @@ class Folders_Free_Review_Box
 
         $currentCount = get_option( $this->pluginSlug . "_show_review_box_after" );
         if ( $currentCount === false ) {
-            $date = date( "Y-m-d", strtotime( "+14 days" ) );
+            $date = gmdate( "Y-m-d", strtotime( "+14 days" ) );
             add_option( $this->pluginSlug . "_show_review_box_after", $date );
             $this->reviewStatus = false;
         }
 
         $dateToShow = get_option( $this->pluginSlug . "_show_review_box_after" );
         if ( $dateToShow !== false ) {
-            $currentDate = date( "Y-m-d" );
+            $currentDate = gmdate( "Y-m-d" );
             if ( $currentDate < $dateToShow ) {
                 $this->reviewStatus = false;
             }
@@ -99,7 +99,7 @@ class Folders_Free_Review_Box
     public function enqueue_scripts() {
         if (current_user_can('manage_options')) {
             wp_enqueue_style($this->pluginSlug."-star-rating-svg", plugins_url('../assets/css/star-rating-svg.css', __FILE__), [], WCP_FOLDER_VERSION);
-            wp_enqueue_script($this->pluginSlug."-star-rating-svg", plugins_url('../assets/js/jquery.star-rating-svg.min.js', __FILE__), ['jquery'], WCP_FOLDER_VERSION);
+            wp_enqueue_script($this->pluginSlug."-star-rating-svg", plugins_url('../assets/js/jquery.star-rating-svg.min.js', __FILE__), ['jquery'], WCP_FOLDER_VERSION, true);
             wp_localize_script(
                 $this->pluginSlug."-star-rating-svg",
                 'pr_rating_settings',
@@ -182,15 +182,15 @@ class Folders_Free_Review_Box
     public function form_review_box()
     {
         if (current_user_can('manage_options')) {
-            $nonce = filter_input(INPUT_POST, 'nonce');
-            $days  = filter_input(INPUT_POST, 'days');
+            $nonce = esc_attr(filter_input(INPUT_POST, 'nonce'));
+            $days  = esc_attr(filter_input(INPUT_POST, 'days'));
             if (!empty($nonce) && wp_verify_nonce($nonce, $this->pluginSlug."_review_box")) {
                 update_option("get_folders_page_views", 4);
                 if ($days == -1) {
                     add_option($this->pluginSlug."_hide_review_box", "1");
                     update_option("get_folders_page_views", -1);
                 } else {
-                    echo $date = date("Y-m-d", strtotime("+".$days." days"));
+                    $date = gmdate("Y-m-d", strtotime("+".$days." days"));
                     update_option($this->pluginSlug."_show_review_box_after", $date);
                 }
             }
@@ -474,7 +474,9 @@ class Folders_Free_Review_Box
                     <span class="dashicons dashicons-no-alt"></span>
                 </button>
 
-                <p><?php printf( esc_html__("Hi there, it seems like %s is bringing you some value, and that's pretty awesome! Can you please show us some love and rate %s on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word", 'folders'), "<b>".$this->pluginName."</b>", $this->pluginName);?></p>
+                <p><?php
+                    $message = esc_html__("Hi there, it seems like %1\$s is bringing you some value, and that's pretty awesome! Can you please show us some love and rate %2\$s on WordPress? It'll only take 2 minutes of your time, and will really help us spread the word", 'folders');
+                    printf(esc_attr($message), "<b>".esc_attr($this->pluginName)."</b>", esc_attr($this->pluginName));?></p>
 
                 <div class="<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box__default__co-founder">
                     <span>
@@ -541,181 +543,184 @@ class Folders_Free_Review_Box
 
         <script>
             (function($) {
-                function FoldersFreeReview() {
-                    this.prefix     = "<?php echo esc_attr($this->pluginSlug) ?>";
-                    this.reviewLink = "https://wordpress.org/support/plugin/<?php echo esc_attr($this->wpPluginSlug) ?>/reviews/?filter=5";
-                    this.rating     = 5;
 
-                    this.renderRating();
-                    this.bindEvents();
-                }
+                $(document).ready(function() {
+                    function FoldersFreeReview() {
+                        this.prefix = "<?php echo esc_attr($this->pluginSlug) ?>";
+                        this.reviewLink = "https://wordpress.org/support/plugin/<?php echo esc_attr($this->wpPluginSlug) ?>/reviews/?filter=5";
+                        this.rating = 5;
 
-                FoldersFreeReview.prototype.getSelectors = function() {
-                    return {
-                        body: 'body',
-                        rating: `.${this.prefix}-premio-review-box__default__rating`,
-                        reviewBox: `.${this.prefix}-premio-review-box`,
-                        feedbackForm: `.${this.prefix}-feedback-popup__form`,
-                        reminderPopup: `.${this.prefix}-review-box-popup`,
-                        feedbackPopup: `.${this.prefix}-feedback-popup`,
-                        reviewBoxDefault: `.${this.prefix}-premio-review-box__default`,
-                        reviewBoxThankYou: `.${this.prefix}-premio-review-box__thank-you`,
-                        defaultDismissBtn: `.${this.prefix}-review-box-default__dismiss-btn`,
-                        thankYouDismissBtn: `.${this.prefix}-premio-review-box__thank-you__dismiss-btn`,
-                        feedbackDismissBtn: `.${this.prefix}-feedback-popup__dismiss-btn`,
-                        reminderPopupOptions: `.${this.prefix}-review-box-popup__options a`,
-                        reminderPopupDismissBtn: `.${this.prefix}-review-box-popup__dismiss-btn`,
-                    }
-                }
-
-                FoldersFreeReview.prototype.getElements = function() {
-                    const selectors = this.getSelectors();
-                    return {
-                        $body: $(selectors.body),
-                        $rating: $(selectors.rating),
-                        $reviewBox: $(selectors.reviewBox),
-                        $feedbackForm: $(selectors.feedbackForm),
-                        $reminderPopup: $(selectors.reminderPopup),
-                        $feedbackPopup: $(selectors.feedbackPopup),
-                        $reviewBoxDefault: $(selectors.reviewBoxDefault),
-                        $reviewBoxThankYou: $(selectors.reviewBoxThankYou),
-                        $defaultDismissBtn: $(selectors.defaultDismissBtn),
-                        $thankYouDismissBtn: $(selectors.thankYouDismissBtn),
-                        $feedbackDismissBtn: $(selectors.feedbackDismissBtn),
-                        $reminderPopupOptions: $(selectors.reminderPopupOptions),
-                        $reminderPopupDismissBtn: $(selectors.reminderPopupDismissBtn)
-                    }
-                }
-
-                FoldersFreeReview.prototype.bindEvents = function() {
-                    const elements  = this.getElements();
-                    const selectors = this.getSelectors();
-
-                    elements.$body.addClass("has-premio-box");
-                    elements.$defaultDismissBtn.on('click', this.toggleReminderPopup.bind(elements));
-                    elements.$reminderPopupDismissBtn.on('click', this.toggleReminderPopup.bind(elements, false));
-                    elements.$reminderPopupOptions.on('click', this.reminderHandler.bind(this));
-                    elements.$thankYouDismissBtn.on('click', this.thankYouDismissHandler.bind(this));
-                    elements.$feedbackDismissBtn.on('click', this.feedbackToggle.bind(this, false));
-                    elements.$feedbackForm.on('submit', this.feedbackFormHandler.bind(this));
-
-                    //close reminder/feedback popup when click outside
-                    $(window).on('click', ev => {
-                        const $target = $(ev.target);
-                        if(
-                            elements.$reminderPopup.hasClass('open') &&
-                            $target.parents( selectors.reminderPopup ).length === 0
-                        ) {
-                            elements.$reminderPopupDismissBtn.trigger('click');
-                        }
-
-                        if(
-                            elements.$feedbackPopup.hasClass('open') &&
-                            $target.parents( selectors.feedbackPopup ).length === 0
-                        ) {
-                            elements.$feedbackDismissBtn.trigger('click');
-                        }
-                    })
-                }
-
-                FoldersFreeReview.prototype.feedbackFormHandler = function(ev) {
-                    ev.preventDefault();
-                    const elements  = this.getElements();
-                    const message   = elements.$feedbackForm.find('#message').val();
-                    const rating     = this.rating;
-
-                    $.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
-                        data: {
-                            action: "<?php echo esc_attr($this->pluginSlug) ?>_review_box_message",
-                            rating: rating,
-                            nonce: "<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_review_box_message")) ?>",
-                            message: message
-                        },
-                        type: "post",
-                    });
-                    elements.$feedbackDismissBtn.trigger('click');
-                    elements.$reviewBox.remove();
-                    elements.$reminderPopup.remove();
-                    // send hide request after submitting feedback form
-                    this.sendHideRequest( -1 );
-                }
-
-                FoldersFreeReview.prototype.thankYouDismissHandler = function() {
-                    const elements = this.getElements();
-                    elements.$reviewBox.remove();
-                    elements.$reminderPopup.remove();
-                    this.sendHideRequest( -1 );
-                }
-
-                FoldersFreeReview.prototype.reminderHandler = function(ev) {
-                    ev.preventDefault();
-                    const dataDays = $(ev.target).data("days");
-                    const elements = this.getElements();
-
-                    elements.$body.removeClass("has-premio-box");
-                    elements.$reminderPopupDismissBtn.trigger('click');
-                    elements.$reviewBox.remove();
-                    this.sendHideRequest( dataDays );
-                }
-
-                FoldersFreeReview.prototype.sendHideRequest = function( dataDays = -1 ) {
-                    $.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
-                        data: "action=<?php echo esc_attr($this->pluginSlug) ?>_review_box&days=" + dataDays + "&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_review_box")) ?>",
-                        type: "post",
-                    });
-                }
-
-                FoldersFreeReview.prototype.toggleReminderPopup = function( action = true ) {
-                    if( action ) {
-                        this.$reminderPopup.fadeIn(200, function(){
-                            $(this).addClass('open')
-                        });
-                    } else {
-                        this.$reminderPopup.fadeOut(200).removeClass('open');
-                    }
-                }
-
-                FoldersFreeReview.prototype.feedbackToggle = function( action = true ) {
-                    const elements = this.getElements();
-                    if( action ) {
-                        elements.$feedbackPopup.fadeIn(200, function(){
-                            $(this).addClass('open')
-                        });
-                    } else {
-                        elements.$rating.starRating('unload');
-                        elements.$reviewBoxDefault.append(`<div class="${this.prefix}-premio-review-box__default__rating"></div>`)
-                        elements.$feedbackPopup.fadeOut(200).removeClass('open');
                         this.renderRating();
+                        this.bindEvents();
                     }
-                }
 
-                FoldersFreeReview.prototype.renderRating = function() {
-                    const self      = this;
-                    const elements  = self.getElements();
-                    elements.$rating.starRating({
-                        initialRating   : self.rating,
-                        useFullStars    : true,
-                        strokeColor     : '#894A00',
-                        strokeWidth     : 10,
-                        minRating       : 1,
-                        starSize        : 25,
-                        callback( currentRate ) {
-                            if( currentRate !== 5 ) {
-                                self.rating = currentRate;
-                                self.feedbackToggle(true);
-                            } else {
-                                elements.$reviewBoxDefault.hide();
-                                elements.$reviewBoxThankYou.show();
-                                window.open( self.reviewLink , '_blank');
-                                self.sendHideRequest( -1 );
-                            }
+                    FoldersFreeReview.prototype.getSelectors = function () {
+                        return {
+                            body: 'body',
+                            rating: `.${this.prefix}-premio-review-box__default__rating`,
+                            reviewBox: `.${this.prefix}-premio-review-box`,
+                            feedbackForm: `.${this.prefix}-feedback-popup__form`,
+                            reminderPopup: `.${this.prefix}-review-box-popup`,
+                            feedbackPopup: `.${this.prefix}-feedback-popup`,
+                            reviewBoxDefault: `.${this.prefix}-premio-review-box__default`,
+                            reviewBoxThankYou: `.${this.prefix}-premio-review-box__thank-you`,
+                            defaultDismissBtn: `.${this.prefix}-review-box-default__dismiss-btn`,
+                            thankYouDismissBtn: `.${this.prefix}-premio-review-box__thank-you__dismiss-btn`,
+                            feedbackDismissBtn: `.${this.prefix}-feedback-popup__dismiss-btn`,
+                            reminderPopupOptions: `.${this.prefix}-review-box-popup__options a`,
+                            reminderPopupDismissBtn: `.${this.prefix}-review-box-popup__dismiss-btn`,
                         }
-                    })
-                }
+                    }
 
-                new FoldersFreeReview();
+                    FoldersFreeReview.prototype.getElements = function () {
+                        const selectors = this.getSelectors();
+                        return {
+                            $body: $(selectors.body),
+                            $rating: $(selectors.rating),
+                            $reviewBox: $(selectors.reviewBox),
+                            $feedbackForm: $(selectors.feedbackForm),
+                            $reminderPopup: $(selectors.reminderPopup),
+                            $feedbackPopup: $(selectors.feedbackPopup),
+                            $reviewBoxDefault: $(selectors.reviewBoxDefault),
+                            $reviewBoxThankYou: $(selectors.reviewBoxThankYou),
+                            $defaultDismissBtn: $(selectors.defaultDismissBtn),
+                            $thankYouDismissBtn: $(selectors.thankYouDismissBtn),
+                            $feedbackDismissBtn: $(selectors.feedbackDismissBtn),
+                            $reminderPopupOptions: $(selectors.reminderPopupOptions),
+                            $reminderPopupDismissBtn: $(selectors.reminderPopupDismissBtn)
+                        }
+                    }
+
+                    FoldersFreeReview.prototype.bindEvents = function () {
+                        const elements = this.getElements();
+                        const selectors = this.getSelectors();
+
+                        elements.$body.addClass("has-premio-box");
+                        elements.$defaultDismissBtn.on('click', this.toggleReminderPopup.bind(elements));
+                        elements.$reminderPopupDismissBtn.on('click', this.toggleReminderPopup.bind(elements, false));
+                        elements.$reminderPopupOptions.on('click', this.reminderHandler.bind(this));
+                        elements.$thankYouDismissBtn.on('click', this.thankYouDismissHandler.bind(this));
+                        elements.$feedbackDismissBtn.on('click', this.feedbackToggle.bind(this, false));
+                        elements.$feedbackForm.on('submit', this.feedbackFormHandler.bind(this));
+
+                        //close reminder/feedback popup when click outside
+                        $(window).on('click', ev => {
+                            const $target = $(ev.target);
+                            if (
+                                elements.$reminderPopup.hasClass('open') &&
+                                $target.parents(selectors.reminderPopup).length === 0
+                            ) {
+                                elements.$reminderPopupDismissBtn.trigger('click');
+                            }
+
+                            if (
+                                elements.$feedbackPopup.hasClass('open') &&
+                                $target.parents(selectors.feedbackPopup).length === 0
+                            ) {
+                                elements.$feedbackDismissBtn.trigger('click');
+                            }
+                        })
+                    }
+
+                    FoldersFreeReview.prototype.feedbackFormHandler = function (ev) {
+                        ev.preventDefault();
+                        const elements = this.getElements();
+                        const message = elements.$feedbackForm.find('#message').val();
+                        const rating = this.rating;
+
+                        $.ajax({
+                            url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
+                            data: {
+                                action: "<?php echo esc_attr($this->pluginSlug) ?>_review_box_message",
+                                rating: rating,
+                                nonce: "<?php echo esc_attr(wp_create_nonce($this->pluginSlug . "_review_box_message")) ?>",
+                                message: message
+                            },
+                            type: "post",
+                        });
+                        elements.$feedbackDismissBtn.trigger('click');
+                        elements.$reviewBox.remove();
+                        elements.$reminderPopup.remove();
+                        // send hide request after submitting feedback form
+                        this.sendHideRequest(-1);
+                    }
+
+                    FoldersFreeReview.prototype.thankYouDismissHandler = function () {
+                        const elements = this.getElements();
+                        elements.$reviewBox.remove();
+                        elements.$reminderPopup.remove();
+                        this.sendHideRequest(-1);
+                    }
+
+                    FoldersFreeReview.prototype.reminderHandler = function (ev) {
+                        ev.preventDefault();
+                        const dataDays = $(ev.target).data("days");
+                        const elements = this.getElements();
+
+                        elements.$body.removeClass("has-premio-box");
+                        elements.$reminderPopupDismissBtn.trigger('click');
+                        elements.$reviewBox.remove();
+                        this.sendHideRequest(dataDays);
+                    }
+
+                    FoldersFreeReview.prototype.sendHideRequest = function (dataDays = -1) {
+                        $.ajax({
+                            url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
+                            data: "action=<?php echo esc_attr($this->pluginSlug) ?>_review_box&days=" + dataDays + "&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug . "_review_box")) ?>",
+                            type: "post",
+                        });
+                    }
+
+                    FoldersFreeReview.prototype.toggleReminderPopup = function (action = true) {
+                        if (action) {
+                            this.$reminderPopup.fadeIn(200, function () {
+                                $(this).addClass('open')
+                            });
+                        } else {
+                            this.$reminderPopup.fadeOut(200).removeClass('open');
+                        }
+                    }
+
+                    FoldersFreeReview.prototype.feedbackToggle = function (action = true) {
+                        const elements = this.getElements();
+                        if (action) {
+                            elements.$feedbackPopup.fadeIn(200, function () {
+                                $(this).addClass('open')
+                            });
+                        } else {
+                            elements.$rating.starRating('unload');
+                            elements.$reviewBoxDefault.append(`<div class="${this.prefix}-premio-review-box__default__rating"></div>`)
+                            elements.$feedbackPopup.fadeOut(200).removeClass('open');
+                            this.renderRating();
+                        }
+                    }
+
+                    FoldersFreeReview.prototype.renderRating = function () {
+                        const self = this;
+                        const elements = self.getElements();
+                        elements.$rating.starRating({
+                            initialRating: self.rating,
+                            useFullStars: true,
+                            strokeColor: '#894A00',
+                            strokeWidth: 10,
+                            minRating: 1,
+                            starSize: 25,
+                            callback(currentRate) {
+                                if (currentRate !== 5) {
+                                    self.rating = currentRate;
+                                    self.feedbackToggle(true);
+                                } else {
+                                    elements.$reviewBoxDefault.hide();
+                                    elements.$reviewBoxThankYou.show();
+                                    window.open(self.reviewLink, '_blank');
+                                    self.sendHideRequest(-1);
+                                }
+                            }
+                        })
+                    }
+
+                    new FoldersFreeReview();
+                });
 
             })( jQuery )
         </script>

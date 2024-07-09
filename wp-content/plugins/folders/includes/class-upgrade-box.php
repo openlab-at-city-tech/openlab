@@ -64,7 +64,7 @@ class Folders_upgrade_box
             if ($days == -1) {
                 add_option($this->pluginSlug."_hide_upgrade_box", "1");
             } else {
-                $date = date("Y-m-d", strtotime("+".$days." days"));
+                $date = gmdate("Y-m-d", strtotime("+".$days." days"));
                 update_option($this->pluginSlug."_show_upgrade_box_after", $date);
             }
         }
@@ -90,7 +90,7 @@ class Folders_upgrade_box
 
         $currentCount = get_option($this->pluginSlug."_show_upgrade_box_after");
         if ($currentCount === false) {
-            $date = date("Y-m-d", strtotime("+15 days"));
+            $date = gmdate("Y-m-d", strtotime("+15 days"));
             add_option($this->pluginSlug."_show_upgrade_box_after", $date);
             return;
         } else if ($currentCount < 35) {
@@ -99,7 +99,7 @@ class Folders_upgrade_box
 
         $dateToShow = get_option($this->pluginSlug."_show_upgrade_box_after");
         if ($dateToShow !== false) {
-            $currentDate = date("Y-m-d");
+            $currentDate = gmdate("Y-m-d");
             if ($currentDate < $dateToShow) {
                 return;
             }
@@ -285,7 +285,10 @@ class Folders_upgrade_box
         <div class="notice notice-info premio-notice <?php echo esc_attr($this->pluginSlug) ?>-premio-upgrade-box <?php echo  esc_attr($this->pluginSlug) ?>-premio-upgrade-box">
             <div class="upgrade-box-default" id="default-upgrade-box-<?php echo esc_attr($this->pluginSlug) ?>">
                 <p>
-                    <?php printf(esc_html__("%s to experience more exclusive features like dynamic folders, subfolders, access restriction & more", 'folders'), "<b>".esc_html__("Upgrade to ", 'folders')." ".esc_attr($this->pluginName)." Pro</b>") ?>
+                    <?php
+                        $message = esc_html__("%1\$s to experience more exclusive features like dynamic folders, subfolders, access restriction & more", 'folders');
+                        printf(esc_attr($message), "<b>".esc_html__("Upgrade to ", 'folders')." ".esc_attr($this->pluginName)." Pro</b>")
+                    ?>
                     <span class="<?php echo esc_attr($this->pluginSlug) ?>-tab-integration-action">
                         <a class="upgradenow-box-btn" data-days="-1" href="<?php echo esc_url($upgradeURL); ?>" target="_blank" ><?php esc_html_e("Upgrade now", 'folders'); ?></a>
                     </span>                    
@@ -319,7 +322,7 @@ class Folders_upgrade_box
                     jQuery("body").removeClass("has-premio-box");
                     
                     jQuery.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
+                        url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                         data: "action=<?php echo esc_attr($this->pluginSlug) ?>_upgrade_box&days="+dataDays+"&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_upgrade_box")) ?>",
                         type: "post",
                         success: function() {
@@ -341,7 +344,7 @@ class Folders_upgrade_box
                     jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-premio-upgrade-box").remove();
                     jQuery("body").removeClass("has-premio-box");
                     jQuery.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
+                        url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                         data: "action=<?php echo esc_attr($this->pluginSlug) ?>_upgrade_hide_box&days="+dataDays+"&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_upgrade_box")) ?>",
                         type: "post",
                         success: function() {

@@ -157,6 +157,9 @@
                     resetMediaAndPosts();
                     triggerInlineUpdate();
                 }
+                if(actionName.length && actionName.indexOf("action=save-attachment&id=") == 0) {
+                    resetMediaData(0);
+                }
             }
         });
 
@@ -302,6 +305,7 @@
         $(document).on("click", "#js-tree-menu .folder-actions span.folder-inline-edit", function(e){
             e.stopImmediatePropagation()
             e.stopPropagation();
+            e.preventDefault();
             if(wcp_settings.can_manage_folder == 0) {
                 return;
             }
@@ -369,6 +373,7 @@
             if((yPosition + $(".dynamic-menu").height()) > $(window).height()) {
                 $(".dynamic-menu").css("margin-top", $(window).height() - (yPosition + $(".dynamic-menu").height()));
             }
+            return false;
         });
 
         $(document).on("click",".folder-color-option , .folder-color-default",function (e) {
@@ -1232,11 +1237,176 @@
                             thisID = thisID.replace("post-","");
                             inlineEditPost.revert(thisID);
                         });
+
+                        check_for_wc_inline_edit();
                     }
                 });
             }
         }
     }
+
+    function check_for_wc_inline_edit() {
+        if(wcp_settings.custom_type != "product_folder" || wcp_settings.post_type != 'product' || typeof(woocommerce_quick_edit) != "object") {
+            return;
+        }
+        $( '#the-list' ).on(
+            'click',
+            '.editinline',
+            function() {
+
+                var post_id = $( this ).closest( 'tr' ).attr( 'id' );
+
+                post_id = post_id.replace( 'post-', '' );
+
+                var $wwop_inline_data = jQuery( '#wholesale_prices_inline_' + post_id ),
+                    $base_currency = $wwop_inline_data.find( ".product_base_currency" );
+
+                $wwop_inline_data.find( ".whole_price" ).each( function( index ) {
+                    if ( $base_currency.length > 0 ) {
+                        if ( jQuery( this ).attr( 'data-currencyCode' ) == $base_currency.text() ) {
+                            var $wholesale_price_field = jQuery( 'input[name="' + jQuery( this ).attr( 'data-wholesalePriceKeyWithCurrency' ) + '"]' , '.inline-edit-row' );
+
+                            if ( $wholesale_price_field.length <= 0 ) // meaning we already modified the name, so we use the name with no currency instead
+                                $wholesale_price_field = jQuery( 'input[name="' + jQuery( this ).attr( 'id' ) + '"]' , '.inline-edit-row' );
+
+                            $wholesale_price_field.val( jQuery( this ).text() );
+
+                            $wholesale_price_field.attr( 'placeholder' , '' );
+
+                            $wholesale_price_field.siblings( '.title' ).html( $wholesale_price_field.siblings( '.title' ).html() + ' <em><b>Base Currency</b></em>' );
+
+                            $wholesale_price_field.attr( "name" , jQuery( this ).attr( 'id' ) );
+
+                            var $parent_section_container = $wholesale_price_field.closest( ".section-container" );
+                            $wholesale_price_field.closest( "label" ).detach().prependTo( $parent_section_container );
+                        } else
+                            jQuery( 'input[name="' + jQuery( this ).attr( 'id' ) + '"]' , '.inline-edit-row' ).val( jQuery( this ).text() );
+
+                    } else
+                        jQuery( 'input[name="' + jQuery( this ).attr( 'id' ) + '"]' , '.inline-edit-row' ).val( jQuery( this ).text() );
+
+                } );
+
+                var $wc_inline_data = $( '#woocommerce_inline_' + post_id );
+
+                var sku        = $wc_inline_data.find( '.sku' ).text(),
+                    regular_price  = $wc_inline_data.find( '.regular_price' ).text(),
+                    sale_price     = $wc_inline_data.find( '.sale_price ' ).text(),
+                    weight         = $wc_inline_data.find( '.weight' ).text(),
+                    length         = $wc_inline_data.find( '.length' ).text(),
+                    width          = $wc_inline_data.find( '.width' ).text(),
+                    height         = $wc_inline_data.find( '.height' ).text(),
+                    shipping_class = $wc_inline_data.find( '.shipping_class' ).text(),
+                    visibility     = $wc_inline_data.find( '.visibility' ).text(),
+                    stock_status   = $wc_inline_data.find( '.stock_status' ).text(),
+                    stock          = $wc_inline_data.find( '.stock' ).text(),
+                    featured       = $wc_inline_data.find( '.featured' ).text(),
+                    manage_stock   = $wc_inline_data.find( '.manage_stock' ).text(),
+                    menu_order     = $wc_inline_data.find( '.menu_order' ).text(),
+                    tax_status     = $wc_inline_data.find( '.tax_status' ).text(),
+                    tax_class      = $wc_inline_data.find( '.tax_class' ).text(),
+                    backorders     = $wc_inline_data.find( '.backorders' ).text(),
+                    product_type   = $wc_inline_data.find( '.product_type' ).text();
+
+                var formatted_regular_price = regular_price.replace( '.', woocommerce_admin.mon_decimal_point ),
+                    formatted_sale_price        = sale_price.replace( '.', woocommerce_admin.mon_decimal_point );
+
+                $( 'input[name="_sku"]', '.inline-edit-row' ).val( sku );
+                $( 'input[name="_regular_price"]', '.inline-edit-row' ).val( formatted_regular_price );
+                $( 'input[name="_sale_price"]', '.inline-edit-row' ).val( formatted_sale_price );
+                $( 'input[name="_weight"]', '.inline-edit-row' ).val( weight );
+                $( 'input[name="_length"]', '.inline-edit-row' ).val( length );
+                $( 'input[name="_width"]', '.inline-edit-row' ).val( width );
+                $( 'input[name="_height"]', '.inline-edit-row' ).val( height );
+
+                $( 'select[name="_shipping_class"] option:selected', '.inline-edit-row' ).attr( 'selected', false ).trigger( 'change' );
+                $( 'select[name="_shipping_class"] option[value="' + shipping_class + '"]' ).attr( 'selected', 'selected' )
+                    .trigger( 'change' );
+
+                $( 'input[name="_stock"]', '.inline-edit-row' ).val( stock );
+                $( 'input[name="menu_order"]', '.inline-edit-row' ).val( menu_order );
+
+                $(
+                    'select[name="_tax_status"] option, ' +
+                    'select[name="_tax_class"] option, ' +
+                    'select[name="_visibility"] option, ' +
+                    'select[name="_stock_status"] option, ' +
+                    'select[name="_backorders"] option'
+                ).prop( 'selected', false ).removeAttr( 'selected' );
+
+                var is_variable_product = 'variable' === product_type;
+                $( 'select[name="_stock_status"] ~ .wc-quick-edit-warning', '.inline-edit-row' ).toggle( is_variable_product );
+                $( 'select[name="_stock_status"] option[value="' + (is_variable_product ? '' : stock_status) + '"]', '.inline-edit-row' )
+                    .attr( 'selected', 'selected' );
+
+                $( 'select[name="_tax_status"] option[value="' + tax_status + '"]', '.inline-edit-row' ).attr( 'selected', 'selected' );
+                $( 'select[name="_tax_class"] option[value="' + tax_class + '"]', '.inline-edit-row' ).attr( 'selected', 'selected' );
+                $( 'select[name="_visibility"] option[value="' + visibility + '"]', '.inline-edit-row' ).attr( 'selected', 'selected' );
+                $( 'select[name="_backorders"] option[value="' + backorders + '"]', '.inline-edit-row' ).attr( 'selected', 'selected' );
+
+                if ( 'yes' === featured ) {
+                    $( 'input[name="_featured"]', '.inline-edit-row' ).prop( 'checked', true );
+                } else {
+                    $( 'input[name="_featured"]', '.inline-edit-row' ).prop( 'checked', false );
+                }
+
+                // Conditional display.
+                var product_is_virtual = $wc_inline_data.find( '.product_is_virtual' ).text();
+
+                var product_supports_stock_status = 'external' !== product_type;
+                var product_supports_stock_fields = 'external' !== product_type && 'grouped' !== product_type;
+
+                $( '.stock_fields, .manage_stock_field, .stock_status_field, .backorder_field' ).show();
+
+                if ( product_supports_stock_fields ) {
+                    if ( 'yes' === manage_stock ) {
+                        $( '.stock_qty_field, .backorder_field', '.inline-edit-row' ).show().removeAttr( 'style' );
+                        $( '.stock_status_field' ).hide();
+                        $( '.manage_stock_field input' ).prop( 'checked', true );
+                    } else {
+                        $( '.stock_qty_field, .backorder_field', '.inline-edit-row' ).hide();
+                        $( '.stock_status_field' ).show().removeAttr( 'style' );
+                        $( '.manage_stock_field input' ).prop( 'checked', false );
+                    }
+                } else if ( product_supports_stock_status ) {
+                    $( '.stock_fields, .manage_stock_field, .backorder_field' ).hide();
+                } else {
+                    $( '.stock_fields, .manage_stock_field, .stock_status_field, .backorder_field' ).hide();
+                }
+
+                if ( 'simple' === product_type || 'external' === product_type ) {
+                    $( '.price_fields', '.inline-edit-row' ).show().removeAttr( 'style' );
+                } else {
+                    $( '.price_fields', '.inline-edit-row' ).hide();
+                }
+
+                if ( 'yes' === product_is_virtual ) {
+                    $( '.dimension_fields', '.inline-edit-row' ).hide();
+                } else {
+                    $( '.dimension_fields', '.inline-edit-row' ).show().removeAttr( 'style' );
+                }
+
+                // Rename core strings.
+                $( 'input[name="comment_status"]' ).parent().find( '.checkbox-title' ).text( woocommerce_quick_edit.strings.allow_reviews );
+            }
+        );
+
+        $( '#the-list' ).on(
+            'change',
+            '.inline-edit-row input[name="_manage_stock"]',
+            function() {
+
+                if ( $( this ).is( ':checked' ) ) {
+                    $( '.stock_qty_field, .backorder_field', '.inline-edit-row' ).show().removeAttr( 'style' );
+                    $( '.stock_status_field' ).hide();
+                } else {
+                    $( '.stock_qty_field, .backorder_field', '.inline-edit-row' ).hide();
+                    $( '.stock_status_field' ).show().removeAttr( 'style' );
+                }
+            }
+        );
+    }
+
 
     function urlParam(name) {
         var results = new RegExp('[\?&]' + name + '=([^&#]*)')
@@ -1269,6 +1439,8 @@
                 thisID = thisID.replace("post-","");
                 inlineEditPost.revert(thisID);
             });
+
+            check_for_wc_inline_edit();
         }
 
         if(wcp_settings.post_type == "attachment") {
@@ -1416,6 +1588,9 @@
 
     /* add folder code */
     $(document).ready(function(){
+        $(window).bind('popstate', function() {
+            window.location.reload();
+        });
         $(document).on("click", "#add-new-folder", function(){
             if($("#js-tree-menu a.jstree-clicked").length) {
                 fileFolderID = $("#js-tree-menu a.jstree-clicked").closest("li.jstree-node").attr("id");

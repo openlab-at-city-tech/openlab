@@ -77,7 +77,7 @@ if (! defined('ABSPATH')) {
                             jQuery(".folder-help-content").html("<p class='success-p'><?php esc_html_e("Your message is sent successfully.", 'folders'); ?></p>");
                         },1000);
                     } else if(responseArray.status == 0) {
-                        jQuery(".folder-help-content").html("<p class='error-p'><?php printf(esc_html__("There is some problem in sending request. Please send us mail on %s", 'folders'), "<a href='mailto:contact@premio.io'>contact@premio.io</a>"); ?></p>");
+                        jQuery(".folder-help-content").html("<p class='error-p'><?php printf(esc_html__("There is some problem in sending request. Please send us mail on %1\$s", 'folders'), "<a href='mailto:contact@premio.io'>contact@premio.io</a>"); ?></p>");
                     }
                 }
             });
@@ -92,7 +92,7 @@ if (! defined('ABSPATH')) {
                 jQuery.ajax({
                     url: "<?php echo esc_url(admin_url('admin-ajax.php')) ?>",
                     data: {
-                        nonce: "<?php echo wp_create_nonce("hide_folders_cta") ?>",
+                        nonce: "<?php echo esc_attr(wp_create_nonce("hide_folders_cta")) ?>",
                         action: "hide_folders_cta"
                     },
                     type: "post",

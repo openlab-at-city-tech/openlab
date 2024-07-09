@@ -210,14 +210,6 @@ class folders_replace_media {
 
         add_action('wp_ajax_premio_folder_update_wp_config', array($this, 'update_wp_config'));
 
-        if(isset($customize_folders['enable_media_trash']) && $customize_folders['enable_media_trash'] == "on") {
-            add_action('admin_notices', array($this, 'admin_notices'));
-
-            add_action('admin_footer', array($this,  'admin_footer'));
-        } else {
-            add_action('admin_notices', array($this, 'enable_media_notices'));
-        }
-
         add_action('admin_notices', array($this, 'admin_premio_notices'));
 
         add_filter('wp_get_attachment_image_src', array($this, 'update_to_new_url'), 10, 4);
@@ -395,54 +387,6 @@ class folders_replace_media {
     }
 
     /**
-     * Show media details on hover
-     *
-     * @since 2.6.3
-     * @access public
-     *
-     */
-    public function admin_footer() { ?>
-        <script>
-            (function($) {
-                "use strict";
-                $(document).ready(function(){
-                    $("#menu-media ul").append("<li class='media-trash-menu'><a class='media-trash' href='upload.php?mode=list&attachment-filter=trash&media_folder='><?php esc_html_e("Trash","folders"); ?></a></li>");
-                    <?php if(isset($_REQUEST['attachment-filter']) && $_REQUEST['attachment-filter']=="trash") { ?>
-                    $("#menu-media .current").removeClass("current");
-                    $("#menu-media .media-trash-menu").addClass("current");
-                    $(".wp-filter .view-switch a").remove();
-                    $(".wp-filter .view-switch").css("height","28px").css("margin", "0");
-                    <?php } ?>
-                });
-            })(jQuery);
-        </script>
-    <?php }
-
-    /**
-     * Admin notice for to show media message
-     *
-     * @since 2.6.3
-     * @access public
-     *
-     */
-    public function enable_media_notices() {
-        $is_defined = defined( 'MEDIA_TRASH' );
-        if ( !($is_defined && MEDIA_TRASH )) {
-            if (isset($_REQUEST['page']) && $_REQUEST['page'] == "folders-media-cleaning") { ?>
-                <style>
-                    .media-trash-notice{padding:0!important;margin:15px 15px 0}.media-trash-notice-message{padding:10px;line-height: 30px}.media-trash-notice a{text-decoration:none}.media-trash-notice-footer{text-align:right;padding:10px 15px;background:#f1f1f1;margin:15px 0 0 0}.spinner.trash-spinner{display:none}.spinner.trash-spinner.animate{display:inline-block;opacity:.7;visibility:visible;margin-right:0}.float-right{float:right;}
-                </style>
-                <div class="notice notice-info premio-notice media-trash-notice">
-                    <div class="media-trash-notice-message">
-                        Enable move files to trash feature on Folders to temporarily delete files before deleting permanently
-                        <a class="button button-primary float-right" href="<?php echo admin_url("upload.php?page=folders-media-cleaning&enable_trash=".wp_create_nonce("folders_enable_media_trash")) ?>" >Enable</a>
-                    </div>
-                </div>
-            <?php }
-        }
-    }
-
-    /**
      * Admin notice for to show WP_TRASH functionality
      *
      * @since 2.6.3
@@ -518,10 +462,10 @@ class folders_replace_media {
                                 $(".trash-spinner").addClass("animate");
                                 e.preventDefault();
                                 $.ajax({
-                                    url: "<?php echo site_url("wp-admin/admin-ajax.php") ?>",
+                                    url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                                     data: {
                                         action: "premio_folder_update_wp_config",
-                                        nonce: "<?php echo wp_create_nonce("add_media_status_in_wp_config") ?>"
+                                        nonce: "<?php echo esc_attr(wp_create_nonce("add_media_status_in_wp_config")) ?>"
                                     },
                                     type: 'post',
                                     dataType: "json",
@@ -616,7 +560,7 @@ class folders_replace_media {
      */
     public function update_wp_config() {
         $errorCounter = 0;
-        $response = array();
+        $response = [];
         $response['status'] = 0;
         $response['message'] = "";
         $response['valid'] = 0;
@@ -636,7 +580,7 @@ class folders_replace_media {
 
             $is_defined = defined( 'MEDIA_TRASH' );
             if ( $is_defined && MEDIA_TRASH ) {
-                echo json_encode($response);
+                echo wp_json_encode($response);
                 die;
             }
 
@@ -645,13 +589,13 @@ class folders_replace_media {
                 $stream = fopen( $conf, 'r+' );
                 if ( $stream === false )  {
                     $response['status'] = -1;
-                    echo json_encode($response); die;
+                    echo wp_json_encode($response); die;
                 }
 
                 try {
                     if ( !flock( $stream, LOCK_EX ) ) {
                         $response['status'] = -1;
-                        echo json_encode($response); die;
+                        echo wp_json_encode($response); die;
                     }
                     $stat = fstat( $stream );
 
@@ -685,7 +629,7 @@ class folders_replace_media {
                     /* Check if the position is found */
                     if ( !$found ) {
                         $response['status'] = -1;
-                        echo json_encode($response); die;
+                        echo wp_json_encode($response); die;
                     }
 
                     /* Write the constant definition line */
@@ -697,7 +641,7 @@ class folders_replace_media {
                     /* All done */
                     if ( $written === false ) {
                         $response['status'] = -1;
-                        echo json_encode($response); die;
+                        echo wp_json_encode($response); die;
                     }
                     fclose( $stream );
                 }
@@ -705,17 +649,17 @@ class folders_replace_media {
                     fclose( $stream );
 
                     $response['status'] = -1;
-                    echo json_encode($response); die;
+                    echo wp_json_encode($response); die;
                 }
             }
             catch ( Exception $e ) {
                 $response['status'] = -1;
-                echo json_encode($response); die;
+                echo wp_json_encode($response); die;
             }
 
-            echo json_encode($response); die;
+            echo wp_json_encode($response); die;
         }
-        echo json_encode($response); die;
+        echo wp_json_encode($response); die;
     }
 
     /**
@@ -727,7 +671,7 @@ class folders_replace_media {
      */
     public function replace_name_with_title() {
         $errorCounter = 0;
-        $response = array();
+        $response = [];
         $response['status'] = 0;
         $response['message'] = "";
         $response['valid'] = 0;
@@ -779,7 +723,7 @@ class folders_replace_media {
                 $this->change_file_name_with_title($post_id);
             }
         }
-        echo json_encode($response);
+        echo wp_json_encode($response);
         exit;
     }
 
@@ -863,7 +807,7 @@ class folders_replace_media {
             }
         }
 
-        $upload_dir = array();
+        $upload_dir = [];
         $upload_dir['path'] = $base_path;
         $upload_dir['old_path'] = $base_path;
         $upload_dir['url'] = $baseurl;
@@ -896,7 +840,7 @@ class folders_replace_media {
 
                 update_attached_file($post->ID, $this->new_file_path);
 
-                $update_array = array();
+                $update_array = [];
                 $update_array['ID'] = $post->ID;
                 $update_array['post_title'] = sanitize_text_field($_REQUEST['post_title']);
                 $update_array['post_name'] = sanitize_title($post_slug);
@@ -962,13 +906,13 @@ class folders_replace_media {
      */
     public function folders_admin_css_and_js($page) {
         if($page == "media_page_folders-replace-media" || $page == "admin_page_folders-replace-media") {
-            wp_enqueue_style('folders-replace-media', plugin_dir_url(dirname(__FILE__)) . 'assets/css/replace-media.css', array(), WCP_FOLDER_VERSION);
+            wp_enqueue_style('folders-replace-media', plugin_dir_url(dirname(__FILE__)) . 'assets/css/replace-media.css', [], WCP_FOLDER_VERSION);
 
-            wp_enqueue_script('folders-simpledropit', plugin_dir_url(dirname(__FILE__)) . 'assets/js/simpledropit.min.js', array(), WCP_FOLDER_VERSION);
-            wp_enqueue_script('folders-replace-media', plugin_dir_url(dirname(__FILE__)) . 'assets/js/replace-media.js', array(), WCP_FOLDER_VERSION);
+            wp_enqueue_script('folders-simpledropit', plugin_dir_url(dirname(__FILE__)) . 'assets/js/simpledropit.min.js', [], WCP_FOLDER_VERSION, true);
+            wp_enqueue_script('folders-replace-media', plugin_dir_url(dirname(__FILE__)) . 'assets/js/replace-media.js', [], WCP_FOLDER_VERSION, true);
             $maxUploadSize = ini_get("upload_max_filesize");
             $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " TB", " PB"], $maxUploadSize);
-            $maxSize = sprintf(esc_html__("Maximum file size %s", "folders"), $maxUploadSize);
+            $maxSize = sprintf(esc_html__("Maximum file size %1\$s", "folders"), $maxUploadSize);
             wp_localize_script('folders-simpledropit','replace_settings', [
                 'max_size' => $maxSize,
                 'file_name' => esc_html__("File name", 'folders'),
@@ -1254,7 +1198,7 @@ class folders_replace_media {
                     return;
                 }
 
-                $replacement_option = isset($_REQUEST['replacement_option'])?sanitize_text_field($_REQUEST['replacement_option']):"replace_only_file";
+                $replacement_option = "replace_only_file";
 
                 $this->attachment_id = $attachment_id;
 
@@ -1270,7 +1214,11 @@ class folders_replace_media {
                     wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
                 }
 
-                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif'])) {
+                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif', 'svg'])) {
+                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                }
+
+                if(!in_array($file['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'])) {
                     wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
                 }
 
@@ -1308,20 +1256,14 @@ class folders_replace_media {
                         $old_url .= implode("/", $old_file_name);
                     }
 
-                    if($replacement_option == "replace_file_with_name" && isset($_REQUEST['new_folder_option']) && $_REQUEST['new_folder_option'] && isset($_REQUEST['new_folder_path']) && !empty($_REQUEST['new_folder_path'])) {
-                        $baseurl .= sanitize_text_field($_REQUEST['new_folder_path']);
-                        $base_path .= str_replace("/", DIRECTORY_SEPARATOR, $_REQUEST['new_folder_path']);
-
-                        $post_upload = sanitize_text_field($_REQUEST['new_folder_path']);
-                    } else if(count($old_file_name) > 0) {
+                    if(count($old_file_name) > 0) {
                         $baseurl .= implode(DIRECTORY_SEPARATOR, $old_file_name);
                         $base_path .= implode("/", $old_file_name);
-
                         $post_upload = implode("/", $old_file_name);
                     }
                 }
 
-                $upload_dir = array();
+                $upload_dir = [];
                 $upload_dir['path'] = $base_path;
                 $upload_dir['old_path'] = $old_path;
                 $upload_dir['url'] = $baseurl;
@@ -1340,6 +1282,7 @@ class folders_replace_media {
                     $file_array = explode(".", $file['name']);
                     $file_ext = array_pop($file_array);
                     $new_file_name = sanitize_title(implode(".", $file_array)).".".$file_ext;
+
                     if($replacement_option == "replace_only_file") {
                         $new_file_name = $db_file_name;
                     }
@@ -1359,34 +1302,20 @@ class folders_replace_media {
                         $new_file_path = str_replace(array("/",DIRECTORY_SEPARATOR), array("", ""), $this->new_file_path);
                         if($old_file_path != $new_file_path) {
                             if(file_exists($this->old_file_path)) {
-                                @unlink($this->old_file_path);
+                                @wp_delete_file($this->old_file_path);
                             }
                         }
 
                         update_attached_file($attachment->ID, $this->new_file_url);
 
-                        $update_array = array();
+                        $update_array = [];
                         $update_array['ID'] = $attachment->ID;
                         $update_array['guid'] = $this->new_file_url; //wp_get_attachment_url($this->post_id);
                         $update_array['post_mime_type'] = $file['type'];
 
                         $current_date = date("Y-m-d H:i:s");
                         $current_date_gmt = date_i18n("Y-m-d H:i:s", strtotime($current_date));
-                        if(isset($_REQUEST['date_options']) && !empty($_REQUEST['date_options'])) {
-                            if($_REQUEST['date_options'] == "replace_date") {
-                                $update_array['post_date'] = $current_date;
-                                $update_array['post_date_gmt'] = $current_date_gmt;
-                            } else if($_REQUEST['date_options'] == "custom_date") {
-                                $custom_date = sanitize_text_field($_POST['custom_date']);
-                                $custom_date = date("Y-m-d H:i:s", strtotime($custom_date));
-                                if($custom_date !== false && $this->validate_date($custom_date, "Y-m-d H:i:s")) {
-                                    $datetime  =  date("Y-m-d H:i:s", strtotime($custom_date));
-                                    $datetime_gmt = date_i18n("Y-m-d H:i:s", strtotime($datetime));
-                                    $update_array['post_date'] = $datetime;
-                                    $update_array['post_date_gmt'] = $datetime_gmt;
-                                }
-                            }
-                        }
+
                         $update_array['post_modified'] = $current_date;
                         $update_array['post_modified_gmt'] = $current_date_gmt;
                         $post_id = wp_update_post($update_array, true);
@@ -1443,7 +1372,7 @@ class folders_replace_media {
         return $this->checkForFileName($fileName, $filePath, ($postFix+1));
     }
 
-    public $replace_items = array();
+    public $replace_items = [];
 
     /**
      * Check and Remove Thumb image in wp-content
@@ -1457,7 +1386,7 @@ class folders_replace_media {
             $path = $this->upload_dir['old_path'].DIRECTORY_SEPARATOR;
             foreach ($this->old_image_meta['sizes'] as $image) {
                 if(file_exists($path.$image['file']) && (!isset($image['mime-type']) || $image['mime-type'] != 'image/svg+xml')) {
-                    @unlink($path . $image['file']);
+                    @wp_delete_file($path . $image['file']);
                 }
             }
         }
@@ -1513,7 +1442,7 @@ class folders_replace_media {
         }
 
         if(!empty($this->replace_items)) {
-            $replace_items = array();
+            $replace_items = [];
             foreach($this->replace_items as $args) {
                 if($args['search'] != $args['replace']) {
                     $replace_items[] = $args;
@@ -1703,7 +1632,7 @@ class folders_replace_media {
         }
 
         if ($isJson && $depth === false) {
-            $content = json_encode($content, JSON_UNESCAPED_SLASHES);
+            $content = wp_json_encode($content, JSON_UNESCAPED_SLASHES);
         }
         else if($depth === false && (is_array($content) || is_object($content))) {
             $content = maybe_serialize($content);
@@ -1722,7 +1651,7 @@ class folders_replace_media {
      */
     function changeArrayKey($array, $set) {
         if (is_array($array) && is_array($set)) {
-            $newArray = array();
+            $newArray = [];
             foreach ($array as $k => $v) {
                 $key = array_key_exists( $k, $set) ? $set[$k] : $k;
                 $newArray[$key] = is_array($v) ? $this->changeArrayKey($v, $set) : $v;

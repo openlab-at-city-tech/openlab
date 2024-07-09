@@ -214,7 +214,7 @@ $features = [
 <div class="pricing-top">
     <?php if(isset($hasBackButton)) { ?>
         <div class="back-button-box">
-            <a href="<?php echo admin_url("options-general.php?page=wcp_folders_settings") ?>" class="go-back-button"><?php esc_html_e("Back", "folders"); ?></a>
+            <a href="<?php echo esc_url(admin_url("options-general.php?page=wcp_folders_settings")) ?>" class="go-back-button"><?php esc_html_e("Back", "folders"); ?></a>
         </div>
     <?php } ?>
     <div class="price-container">
@@ -665,7 +665,7 @@ $features = [
 <div class="premio-customers">
     <div class="price-container">
         <div class="customer-title"><?php esc_html_e("TRUSTED BY LEADING COMPANIES WORLDWIDE", "folders") ?></div>
-        <img src="<?php echo WCP_FOLDER_URL."assets/images/companies.webp" ?>" alt="premio customers" />
+        <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/companies.webp") ?>" alt="premio customers" />
     </div>
 </div>
 <div class="premio-faqs">
@@ -730,7 +730,7 @@ $features = [
             factory(jQuery);
         }
     }(function ($, undefined) {
-        var pluginPlans = <?php echo json_encode($plans) ?>;
+        var pluginPlans = <?php echo wp_json_encode($plans) ?>;
         var selectedId = '1_year';
         $(document).ready(function(){
             $(".testimonial-list").slick({

@@ -6,7 +6,7 @@ if (!current_user_can('upload_files'))
 
 global $wpdb;
 
-$attachment_id = intval(sanitize_text_field($_GET['attachment_id']));
+$attachment_id = intval(sanitize_text_field(filter_input(INPUT_GET, 'attachment_id')));
 $attachment = get_post($attachment_id);
 
 $size = 0;
@@ -48,8 +48,8 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
         <div class="replace-media-page">
             <div class="replace-title"><?php esc_html_e("Replace Your File", "folders") ?></div>
             <p><?php esc_html_e("Upload a new file instead of the current one", "folders") ?></p>
-            <input type="hidden" name="attachment_id" value="<?php echo esc_attr__($attachment_id) ?>"/>
-            <input type="hidden" name="ext" id="file_ext" value="<?php echo esc_attr__($ext) ?>"/>
+            <input type="hidden" name="attachment_id" value="<?php echo esc_attr($attachment_id) ?>"/>
+            <input type="hidden" name="ext" id="file_ext" value="<?php echo esc_attr($ext) ?>"/>
             <div class="media-top-box">
                 <div class="current-image-box">
                     <div class="preview-box">
@@ -57,14 +57,6 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                             <?php if(!empty($url)) { ?>
                                 <img src="<?php echo esc_url($url) ?>" />
                                 <span class="file-dimension"><?php esc_html_e("Dimension: ", "folders"); ?><?php echo esc_attr($image_meta['width']." x ".$image_meta['height']) ?></span>
-                                <!--<div class="img-overlay default">
-                                    <span class="file-name"><?php /*esc_html_e("File name: ", "folders"); */?><?php /*echo esc_attr($file_name) */?></span>
-                                    <?php /*if($file_type) { */?>
-                                        <span class="file-size"><?php /*esc_html_e("Type: ", "folders"); */?><?php /*echo esc_attr($file_type) */?></span>
-                                    <?php /*} */?>
-                                    <span class="file-size"><?php /*esc_html_e("Dimension: ", "folders"); */?><?php /*echo esc_attr($image_meta['width']." x ".$image_meta['height']) */?></span>
-                                    <span class="file-date"><?php /*esc_html_e("Date: ", "folders"); */?><?php /*echo esc_attr($current_date) */?></span>
-                                </div>-->
                                 <div class="upgrade-link-btn">
                                     <a href="<?php echo esc_url($this->upgradeLink) ?>" target="_blank"><?php esc_html_e("Upgrade to Pro", "folders"); ?></a> to compare size
                                 </div>
@@ -89,7 +81,7 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                     <div class="preview-box">
                         <div class="container" >
                             <div class="container image-preview" id="image-preview"  >
-                                <input type="file" name="new_media_file" id="media_file">
+                                <input type="file" name="new_media_file" id="media_file" />
                                 <label class="sd-label">
                                     <div class="upload-overlay">
                                         <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M2 16.1667V17.6667C2 20.0599 3.9401 22 6.33333 22H21.6667C24.0599 22 26 20.0599 26 17.6667V16.1667M14 17.8333V2M14 2L20.8571 8.66667M14 2L7.14286 8.66667" stroke="#E6386C" stroke-width="2.16667" stroke-linejoin="round"></path> </svg>
@@ -144,7 +136,7 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                         <div class="inline-radio">
                             <input class="sr-only" type="hidden" name="date_options" value="keep_date" >
                             <input class="sr-only" type="radio" name="date_options" disabled value="replace_date" id="replace_date">
-                            <label for="replace_date"><?php printf(esc_html__("Use Today's Date (%s)", "folders"), date("m/d/Y")); ?></label>
+                            <label for="replace_date"><?php printf(esc_html__("Use Today's Date (%1\$s)", "folders"), esc_attr(gmdate("m/d/Y"))); ?></label>
                         </div>
                         <div class="inline-radio">
                             <input class="sr-only" type="radio" checked name="date_options" disabled value="keep_date" id="keep_date">
@@ -156,7 +148,7 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                         </div>
                         <div class="custom-date" id="custom-date">
                             <label for="custom_date"><?php esc_html_e("Custom date", "folders"); ?></label>
-                            <input type="text" class="media-date" name="custom_date" value="<?php echo date("m/d/Y H:i") ?>" id="custom_date">
+                            <input type="text" class="media-date" name="custom_date" value="<?php echo esc_attr(gmdate("m/d/Y H:i")) ?>" id="custom_date">
                             <label for="custom_date" class="cal-button">
                                 <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11 1H9V0H8V1H4V0H3V1H1C0.45 1 0 1.45 0 2V12C0 12.55 0.45 13 1 13H11C11.55 13 12 12.55 12 12V2C12 1.45 11.55 1 11 1ZM11 12H1V5H11V12ZM11 4H1V2H3V3H4V2H8V3H9V2H11V4Z" fill="#B6B6B6"/>
@@ -177,7 +169,7 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                                     <?php esc_html_e("Put new upload in updated folder", "folders"); ?>
                                 </label>
                             </div>
-                            <span class="inline"><input disabled type="text" class="media-date" name="new_folder_path" value="<?php echo date("Y/m") ?>" id="new_folder_path"></span>
+                            <span class="inline"><input disabled type="text" class="media-date" name="new_folder_path" value="<?php echo esc_attr(gmdate("Y/m")) ?>" id="new_folder_path"></span>
                         </div>
                     </div>
                 </div>
