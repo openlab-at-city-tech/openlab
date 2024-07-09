@@ -124,7 +124,7 @@ if ( isset( $_POST['subject'] ) ) {
 }
 
 echo '<p>' . esc_html__( 'Subject', 'subscribe2' ) . ': <input type="text" size="69" name="subject" value="' . esc_attr( $subject ) . '" /> <br><br>';
-echo '<textarea rows="12" cols="75" name="content">' . $body . '</textarea>';
+echo '<textarea rows="12" cols="75" name="content">' . esc_textarea( $body ) . '</textarea>';
 echo "<br><div id=\"upload_files\"><input type=\"file\" name=\"file[]\" onChange=\"remove_selected_image()\"></div>\r\n";
 echo '<input type="button" class="button-secondary" name="addmore" value="' . esc_attr( __( 'Add More Files', 'subscribe2' ) ) . "\" onClick=\"add_file_upload();\" />\r\n";
 echo "<br><br>\r\n";

@@ -213,7 +213,7 @@ echo '<h2 class="nav-tab-wrapper">';
 
 foreach ( $s2tabs as $tab_key => $tab_caption ) {
 	$active = ( $current_tab === $tab_key ) ? 'nav-tab-active' : '';
-	echo '<a class="nav-tab ' . esc_attr( $active ) . '" href="?page=s2_settings&amp;tab=' . $tab_key . '">' . $tab_caption . '</a>';
+	echo '<a class="nav-tab ' . esc_attr( $active ) . '" href="?page=s2_settings&amp;tab=' . esc_attr( $tab_key ) . '">' . esc_html( $tab_caption ) . '</a>';
 }
 
 echo '</h2>';
