@@ -13,24 +13,18 @@ class Cron extends Product
      * Activate Cron product
      *
      * @param integer $product_price
+     * @param integer $purchase_code
      *
      * @return boolean
      */
-    public function activate( $product_price )
+    public function activate( $product_price, $purchase_code = null )
     {
-        $data = $this->getActivatingData( $product_price );
-
-        $response = $this->api
-            ->setRequestTimeout( 90 )
-            ->sendPostRequest( self::ACTIVATE, $data );
-        if ( $response ) {
-            update_option( 'bookly_cloud_account_products', $response['products'] );
-            update_option( 'bookly_cloud_cron_api_key', $response['api-key'] );
-
-            return true;
+        $status = parent::activate( $product_price, null );
+        if ( $status ) {
+            update_option( 'bookly_cloud_cron_api_key', $this->response['api-key'] );
         }
 
-        return false;
+        return $status;
     }
 
     /**

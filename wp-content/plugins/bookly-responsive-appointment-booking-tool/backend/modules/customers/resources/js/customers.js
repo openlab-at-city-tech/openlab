@@ -1,4 +1,4 @@
-jQuery(function($) {
+jQuery(function ($) {
     'use strict';
     let
         $customersList = $('#bookly-customers-list'),
@@ -21,7 +21,7 @@ jQuery(function($) {
     for (var a in BooklyL10n.infoFields) {
         info_renders[BooklyL10n.infoFields[a].id] = $.fn.dataTable.render.text();
         if (BooklyL10n.infoFields[a].type === 'file') {
-            info_renders[BooklyL10n.infoFields[a].id] = function(data, type, row, meta) {
+            info_renders[BooklyL10n.infoFields[a].id] = function (data, type, row, meta) {
                 if (data != '') {
                     return '<button type="button" class="btn btn-link" data-download-file="' + data + '" title="' + BooklyL10n.download + '"><i class="fas fa-fw fa-paperclip"></i></button>';
                 }
@@ -33,7 +33,7 @@ jQuery(function($) {
     /**
      * Init table columns.
      */
-    $.each(BooklyL10n.datatables.customers.settings.columns, function(column, show) {
+    $.each(BooklyL10n.datatables.customers.settings.columns, function (column, show) {
         if (show) {
             switch (column) {
                 case 'id':
@@ -49,15 +49,39 @@ jQuery(function($) {
                 case 'facebook':
                     columns.push({
                         data: 'facebook_id',
-                        render: function(data, type, row, meta) {
+                        render: function (data, type, row, meta) {
                             return data ? '<a href="https://www.facebook.com/app_scoped_user_id/' + data + '/" target="_blank"><span class="dashicons dashicons-facebook"></span></a>' : '';
+                        }
+                    });
+                    break;
+                case 'tags':
+                    columns.push({
+                        data: 'tags',
+                        render: function (data, type, row, meta) {
+                            if (data) {
+                                let text = '';
+                                JSON.parse(data).forEach(function (tag) {
+                                    let color = '#000';
+                                    if (BooklyL10n.tagsData !== undefined) {
+                                        let _tag = BooklyL10n.tagsData.list.find(function (t) {
+                                            return t.tag.toLowerCase() === tag.toLowerCase()
+                                        });
+                                        if (_tag) {
+                                            color = BooklyL10n.tagsData.colors[_tag.color_id];
+                                        }
+                                    }
+                                    text += '<span class="badge p-2 mb-1 text-white" style="background-color: ' + color + '">' + $.fn.dataTable.render.text().display(tag) + '</span> ';
+                                });
+                                return text;
+                            }
+                            return '';
                         }
                     });
                     break;
                 case 'birthday': {
                     columns.push({
                         data: 'birthday',
-                        render: function(data, type, row, meta) {
+                        render: function (data, type, row, meta) {
                             return row.birthday_formatted;
                         }
                     });
@@ -79,8 +103,10 @@ jQuery(function($) {
     });
     columns[0].responsivePriority = 0;
 
-    $.each(BooklyL10n.datatables.customers.settings.order, function(_, value) {
-        const index = columns.findIndex(function(c) { return c.data === value.column; });
+    $.each(BooklyL10n.datatables.customers.settings.order, function (_, value) {
+        const index = columns.findIndex(function (c) {
+            return c.data === value.column;
+        });
         if (index !== -1) {
             order.push([index, value.order]);
         }
@@ -102,7 +128,7 @@ jQuery(function($) {
         ajax: {
             url: ajaxurl,
             type: 'POST',
-            data: function(d) {
+            data: function (d) {
                 return $.extend({}, d, {
                     action: 'bookly_get_customers',
                     csrf_token: BooklyL10nGlobal.csrf_token,
@@ -117,7 +143,7 @@ jQuery(function($) {
                 orderable: false,
                 searchable: false,
                 width: 120,
-                render: function(data, type, row, meta) {
+                render: function (data, type, row, meta) {
                     return '<button type="button" class="btn btn-default" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
                 }
             },
@@ -126,7 +152,7 @@ jQuery(function($) {
                 responsivePriority: 1,
                 orderable: false,
                 searchable: false,
-                render: function(data, type, row, meta) {
+                render: function (data, type, row, meta) {
                     return '<div class="custom-control custom-checkbox">' +
                         '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
                         '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
@@ -144,10 +170,13 @@ jQuery(function($) {
     /**
      * Add customer.
      */
-    $newCustomerBtn.on('click', function() {
+    $newCustomerBtn.on('click', function () {
         BooklyCustomerDialog.showDialog({
             action: 'create',
-            onDone: function(event) {
+            onDone: function (customer, result) {
+                if (result && result.new_tags.length) {
+                    BooklyL10n.tagsData.list = BooklyL10n.tagsData.list.concat(result.new_tags);
+                }
                 dt.ajax.reload(null, false);
             }
         })
@@ -156,23 +185,26 @@ jQuery(function($) {
     /**
      * Select all customers.
      */
-    $checkAllButton.on('change', function() {
+    $checkAllButton.on('change', function () {
         $customersList.find('tbody input:checkbox').prop('checked', this.checked);
     });
 
     $customersList
         // On customer select.
-        .on('change', 'tbody input:checkbox', function() {
+        .on('change', 'tbody input:checkbox', function () {
             $checkAllButton.prop('checked', $customersList.find('tbody input:not(:checked)').length == 0);
             $mergeWithButton.prop('disabled', $customersList.find('tbody input:checked').length != 1);
         })
         // Edit customer.
-        .on('click', '[data-action=edit]', function() {
+        .on('click', '[data-action=edit]', function () {
             BooklyCustomerDialog.showDialog({
                 action: 'load',
                 customerId: getDTRowData(this).id,
-                onDone: function(event) {
+                onDone: function (customer, result) {
                     dt.ajax.reload(null, false);
+                    if (result && result.new_tags.length) {
+                        BooklyL10n.tagsData.list = BooklyL10n.tagsData.list.concat(result.new_tags);
+                    }
                 }
             })
         })
@@ -205,7 +237,7 @@ jQuery(function($) {
                 responsivePriority: 1,
                 orderable: false,
                 searchable: false,
-                render: function(data, type, row, meta) {
+                render: function (data, type, row, meta) {
                     return '<button type="button" class="btn btn-default"><i class="fas fa-fw fa-times"></i></button>';
                 }
             }
@@ -218,11 +250,11 @@ jQuery(function($) {
     /**
      * Select for merge.
      */
-    $selectForMergeButton.on('click', function() {
+    $selectForMergeButton.on('click', function () {
         var $checkboxes = $customersList.find('tbody input:checked');
 
         if ($checkboxes.length) {
-            $checkboxes.each(function() {
+            $checkboxes.each(function () {
                 var data = getDTRowData(this);
                 if (mdt.rows().data().indexOf(data) < 0) {
                     mdt.row.add(data).draw();
@@ -238,12 +270,12 @@ jQuery(function($) {
     /**
      * Merge customers.
      */
-    $mergeButton.on('click', function(e) {
+    $mergeButton.on('click', function (e) {
         e.preventDefault();
         let ladda = Ladda.create(this),
             ids = [];
         ladda.start();
-        mdt.rows().every(function() {
+        mdt.rows().every(function () {
             ids.push(this.data().id);
         });
         $.ajax({
@@ -256,7 +288,7 @@ jQuery(function($) {
                 ids: ids
             },
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 ladda.stop();
                 $mergeDialog.booklyModal('hide');
                 if (response.success) {
@@ -274,7 +306,7 @@ jQuery(function($) {
     /**
      * Remove customer from merge list.
      */
-    $mergeList.on('click', 'button', function() {
+    $mergeList.on('click', 'button', function () {
         mdt.row($(this).closest('td')).remove().draw();
         var any = mdt.rows().any();
         $mergeWithButton.toggle(any);
@@ -282,15 +314,15 @@ jQuery(function($) {
     });
 
     $exportSelectAll
-        .on('click', function() {
+        .on('click', function () {
             let checked = this.checked;
-            $('.bookly-js-columns input', $exportDialog).each(function() {
+            $('.bookly-js-columns input', $exportDialog).each(function () {
                 $(this).prop('checked', checked);
             });
         });
 
     $('.bookly-js-columns input', $exportDialog)
-        .on('change', function() {
+        .on('change', function () {
             $exportSelectAll.prop('checked', $('.bookly-js-columns input:checked', $exportDialog).length == $('.bookly-js-columns input', $exportDialog).length);
         });
 

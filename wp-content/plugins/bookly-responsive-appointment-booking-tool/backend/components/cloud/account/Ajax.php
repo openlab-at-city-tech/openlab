@@ -102,7 +102,6 @@ class Ajax extends Lib\Base\Ajax
         }
     }
 
-
     /**
      * Dismiss confirm email modal.
      */

@@ -23,6 +23,7 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog;
                     <?php Config::waitingListActive() && Dialog::renderOption( Notification::TYPE_STAFF_WAITING_LIST, array( 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && Dialog::renderOption( Notification::TYPE_FREE_PLACE_WAITING_LIST, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Dialog::renderOption( Notification::TYPE_VERIFY_PHONE, array( 'customer' ) ) ?>
+                    <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) && Dialog::renderOption( Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN, array( 'staff', 'admin', 'custom' ) ) ?>
                 </optgroup>
                 <optgroup label="<?php esc_attr_e( 'Scheduled notifications (require cron setup)', 'bookly' ) ?>">
                     <?php Dialog::renderOption( Notification::TYPE_APPOINTMENT_REMINDER, array( 'customer', 'staff', 'admin', 'custom' ), 'bidirectional full' ) ?>

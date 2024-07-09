@@ -1,4 +1,4 @@
-jQuery(function($) {
+jQuery(function ($) {
 
     var
         $payments_list = $('#bookly-payments-list'),
@@ -27,7 +27,7 @@ jQuery(function($) {
     $('.bookly-js-select').val(null);
 
     if (urlParts.length > 1) {
-        urlParts[1].split('&').forEach(function(part) {
+        urlParts[1].split('&').forEach(function (part) {
             var params = part.split('=');
             if (params[0] == 'created-date') {
                 pickers.creationDate.startDate = moment(params['1'].substring(0, 10));
@@ -41,7 +41,7 @@ jQuery(function($) {
             }
         });
     } else {
-        $.each(BooklyL10n.datatables.payments.settings.filter, function(field, value) {
+        $.each(BooklyL10n.datatables.payments.settings.filter, function (field, value) {
             if (value != '') {
                 let $elem = $('#bookly-filter-' + field);
                 if ($elem.is(':checkbox')) {
@@ -66,11 +66,11 @@ jQuery(function($) {
         theme: 'bootstrap4',
         dropdownParent: '#bookly-tbs',
         language: {
-            noResults: function() {
+            noResults: function () {
                 return BooklyL10n.noResultFound;
             }
         },
-        matcher: function(params, data) {
+        matcher: function (params, data) {
             const term = $.trim(params.term).toLowerCase();
             if (term === '' || data.text.toLowerCase().indexOf(term) !== -1) {
                 return data;
@@ -79,7 +79,7 @@ jQuery(function($) {
             let result = null;
             const search = $(data.element).data('search');
             search &&
-            search.find(function(text) {
+            search.find(function (text) {
                 if (result === null && text.toLowerCase().indexOf(term) !== -1) {
                     result = data;
                 }
@@ -97,10 +97,10 @@ jQuery(function($) {
             allowClear: true,
             placeholder: '',
             language: {
-                noResults: function() {
+                noResults: function () {
                     return BooklyL10n.no_result_found;
                 },
-                searching: function() {
+                searching: function () {
                     return BooklyL10n.searching;
                 }
             },
@@ -108,7 +108,7 @@ jQuery(function($) {
                 url: ajaxurl,
                 dataType: 'json',
                 delay: 250,
-                data: function(params) {
+                data: function (params) {
                     params.page = params.page || 1;
                     return {
                         action: this.action === undefined ? $(this).data('ajax--action') : this.action,
@@ -123,30 +123,35 @@ jQuery(function($) {
     /**
      * Init Columns.
      */
-    $.each(BooklyL10n.datatables.payments.settings.columns, function(column, show) {
+    $.each(BooklyL10n.datatables.payments.settings.columns, function (column, show) {
         if (show) {
             switch (column) {
                 case 'created_at':
                     columns.push({
-                        data: column, render: function(data, type, row, meta) {
+                        data: column, render: function (data, type, row, meta) {
                             return type === 'sort' ? data : row.created_format;
                         }
                     });
                     break;
                 case 'start_date':
                     columns.push({
-                        data: column, render: function(data, type, row, meta) {
+                        data: column, render: function (data, type, row, meta) {
                             return type === 'sort' ? data : row.start_date_format;
                         }
                     });
                     break;
-                case 'customer':
-                    columns.push({data: column, render: $.fn.dataTable.render.text()});
+                case 'subtotal':
+                    columns.push({
+                        data: column,
+                        render: $.fn.dataTable.render.text(),
+                        orderable: false,
+                        searchable: false
+                    });
                     break;
                 case 'service':
                 case 'provider':
                     columns.push({
-                        data: column, render: function(data, type, row, meta) {
+                        data: column, render: function (data, type, row, meta) {
                             return $.fn.dataTable.render.text().display(data) + (row.multiple ? '<i class="fas fa-shopping-cart ml-1" title="' + BooklyL10n.multiple + '"></i>' : '');
                         }
                     });
@@ -163,7 +168,7 @@ jQuery(function($) {
         orderable: false,
         searchable: false,
         width: BooklyL10n.invoice.enabled ? 180 : 90,
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
             var buttons = '<div class="d-inline-flex">';
             if (BooklyL10n.invoice.enabled) {
                 buttons += '<button type="button" class="btn btn-default mr-1" data-action="view-invoice" data-payment_id="' + row.id + '"><i class="far fa-fw fa-file-pdf mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.invoice.button + '</span></button>';
@@ -176,7 +181,7 @@ jQuery(function($) {
         responsivePriority: 1,
         orderable: false,
         searchable: false,
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
             return '<div class="custom-control custom-checkbox">' +
                 '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
                 '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
@@ -186,12 +191,26 @@ jQuery(function($) {
 
     columns[0].responsivePriority = 0;
 
-    $.each(BooklyL10n.datatables.payments.settings.order, function(_, value) {
-        const index = columns.findIndex(function(c) { return c.data === value.column; });
+    $.each(BooklyL10n.datatables.payments.settings.order, function (_, value) {
+        const index = columns.findIndex(function (c) {
+            return c.data === value.column;
+        });
         if (index !== -1) {
             order.push([index, value.order]);
         }
     });
+
+    function getFilter() {
+        return {
+            id: $id_filter.val(),
+            created_at: $creationDateFilter.data('date'),
+            type: $type_filter.val(),
+            customer: $customer_filter.val(),
+            staff: $staff_filter.val(),
+            service: $service_filter.val(),
+            status: $status_filter.val()
+        }
+    }
 
     /**
      * Init DataTables.
@@ -210,22 +229,14 @@ jQuery(function($) {
         ajax: {
             url: ajaxurl,
             type: 'POST',
-            data: function(d) {
+            data: function (d) {
                 return $.extend({}, d, {
                     action: 'bookly_get_payments',
                     csrf_token: BooklyL10nGlobal.csrf_token,
-                    filter: {
-                        id: $id_filter.val(),
-                        created_at: $creationDateFilter.data('date'),
-                        type: $type_filter.val(),
-                        customer: $customer_filter.val(),
-                        staff: $staff_filter.val(),
-                        service: $service_filter.val(),
-                        status: $status_filter.val()
-                    }
+                    filter: getFilter()
                 });
             },
-            dataSrc: function(json) {
+            dataSrc: function (json) {
                 $payment_total.html(json.total);
 
                 return json.data;
@@ -237,9 +248,9 @@ jQuery(function($) {
             processing: BooklyL10n.processing
         }
     });
-    dt.on('order', function() {
+    dt.on('order', function () {
         let order = [];
-        dt.order().forEach(function(data) {
+        dt.order().forEach(function (data) {
             order.push({
                 column: columns[data[0]].data,
                 order: data[1]
@@ -261,24 +272,24 @@ jQuery(function($) {
     /**
      * Select all coupons.
      */
-    $check_all_button.on('change', function() {
+    $check_all_button.on('change', function () {
         $payments_list.find('tbody input:checkbox').prop('checked', this.checked);
     });
 
     $payments_list
         // On coupon select.
-        .on('change', 'tbody input:checkbox', function() {
+        .on('change', 'tbody input:checkbox', function () {
             $check_all_button.prop('checked', $payments_list.find('tbody input:not(:checked)').length == 0);
         })
         // Show invoice
-        .on('click', '[data-action=view-invoice]', function() {
+        .on('click', '[data-action=view-invoice]', function () {
             window.location = $download_invoice.data('action') + '&invoices=' + $(this).data('payment_id');
         })
         // show payment details
-        .on('click', '[data-action=show-payment]', function() {
+        .on('click', '[data-action=show-payment]', function () {
             BooklyPaymentDetailsDialog.showDialog({
                 payment_id: dt.row($(this).closest('td')).data().id,
-                done: function(event) {
+                done: function (event) {
                     dt.ajax.reload(null, false);
                 }
             });
@@ -307,7 +318,7 @@ jQuery(function($) {
             autoUpdateInput: false,
             locale: $.extend({}, BooklyL10n.dateRange, BooklyL10n.datePicker)
         },
-        function(start, end) {
+        function (start, end) {
             $creationDateFilter
                 .data('date', start.format(pickers.dateFormat) + ' - ' + end.format(pickers.dateFormat))
                 .find('span')
@@ -318,6 +329,7 @@ jQuery(function($) {
     function onChangeFilter() {
         dt.ajax.reload();
     }
+
     $id_filter.on('keyup', onChangeFilter);
     $creationDateFilter.on('apply.daterangepicker', onChangeFilter);
     $type_filter.on('change', onChangeFilter);
@@ -329,14 +341,14 @@ jQuery(function($) {
     /**
      * Delete payments.
      */
-    $delete_button.on('click', function() {
+    $delete_button.on('click', function () {
         if (confirm(BooklyL10n.areYouSure)) {
             var ladda = Ladda.create(this);
             ladda.start();
 
             var data = [];
             var $checkboxes = $payments_list.find('tbody input:checked');
-            $checkboxes.each(function() {
+            $checkboxes.each(function () {
                 data.push(this.value);
             });
 
@@ -349,7 +361,7 @@ jQuery(function($) {
                     data: data
                 },
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         dt.ajax.reload(null, false);
                     } else {
@@ -360,14 +372,31 @@ jQuery(function($) {
             });
         }
     });
-
-    $download_invoice.on('click', function() {
-        var invoices = [];
-        $payments_list.find('tbody input:checked').each(function() {
-            invoices.push(this.value);
-        });
-        if (invoices.length) {
-            window.location = $(this).data('action') + '&invoices=' + invoices.join(',');
+    $('li', $download_invoice).on('click', function () {
+        if ($(this).hasClass('bookly-js-download-all-invoices')) {
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'bookly_get_payment_ids',
+                    csrf_token: BooklyL10nGlobal.csrf_token,
+                    filter: getFilter()
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.data.ids.length) {
+                        window.location = $download_invoice.data('action') + '&invoices=' + response.data.ids.join(',');
+                    }
+                }
+            });
+        } else {
+            var invoices = [];
+            $payments_list.find('tbody input:checked').each(function () {
+                invoices.push(this.value);
+            });
+            if (invoices.length) {
+                window.location = $download_invoice.data('action') + '&invoices=' + invoices.join(',');
+            }
         }
     });
 });

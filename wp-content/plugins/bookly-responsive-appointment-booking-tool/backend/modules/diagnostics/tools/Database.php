@@ -13,6 +13,7 @@ class Database extends Tool
     protected $troubles;
     protected $fixable = false;
     protected $error = 0;
+    public $position = 20;
 
     public function __construct()
     {
@@ -48,6 +49,7 @@ class Database extends Tool
                     $success = $this->executeSql( QueryBuilder::getCreateTable( $table_name ) );
                     if ( $success === true ) {
                         $use_cache = false;
+                        Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, '', null, 'create table ' . $table_name );
                     } else {
                         $errors[] = sprintf( 'Can`t create table <b>%s</b>, Error:%s', $table_name, $success );
                     }
@@ -71,23 +73,27 @@ class Database extends Tool
                                 $success = $this->executeSql( $sql );
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t change column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
+                                } else {
+                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), JSON_PRETTY_PRINT ), 'change column ' . $table_name . '.' . $column );
                                 }
                             }
                         } else {
                             $queries++;
-                            $success = $this->executeSql( QueryBuilder::getAddColumn( $table_name, $column ) );
+                            $sql = QueryBuilder::getAddColumn( $table_name, $column );
+                            $success = $this->executeSql( $sql );
                             if ( $success !== true ) {
                                 if ( $this->error === 1118 ) {
                                     $queries++;
                                     if ( $this->executeSql( 'OPTIMIZE TABLE `' . $table_name . '`' ) ) {
                                         $queries++;
-                                        $success = $this->executeSql( QueryBuilder::getAddColumn( $table_name, $column ) );
+                                        $success = $this->executeSql( $sql );
                                     }
                                 }
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t add column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
                                 }
                             }
+                            Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, null, 'add column ' . $table_name . '.' . $column );
                         }
                     }
                 }
@@ -108,6 +114,8 @@ class Database extends Tool
                                 $success = $this->executeSql( $query );
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t add constraint <b>%s.%s</b> REFERENCES `%s` (`%s`), Error:%s', $table_name, $constraint['column_name'], $constraint['referenced_table_name'], $constraint['referenced_column_name'], $success );
+                                } else {
+                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $query, null, 'add constraint ' . $table_name . '.' . $constraint['column_name'] . ' -> ' . $constraint['referenced_table_name'] . '.' . $constraint['referenced_column_name'] );
                                 }
                             }
                         }
@@ -311,6 +319,14 @@ class Database extends Tool
                                                     $table_name, $value['data']['column'], $value['data']['column'], $value['data']['ref_column_name'], $value['data']['ref_table_name']
                                                 ) );
                                                 break;
+                                            case 'custom':
+                                                $rules = QueryBuilder::getConstraintRules( $table_name, $value['data']['column'], $value['data']['ref_table_name'], $value['data']['ref_column_name'] );
+                                                $method = $rules['fix']['method'];
+                                                try {
+                                                    $missing = $wpdb->get_col( sprintf( 'SELECT `%1$s` FROM `%2$s` WHERE `%1$s` NOT IN (SELECT `%3$s` FROM `%4$s`)', $value['data']['column'], $table_name, $value['data']['ref_column_name'], $value['data']['ref_table_name'] ) );
+                                                    $method( $table_name, $value['data']['column'], $value['data']['ref_table_name'], $value['data']['ref_column_name'], $wpdb, $missing );
+                                                } catch ( \Exception $e ) {}
+                                                break;
                                         }
                                     }
                                     $success = $this->executeSql( sprintf( 'ALTER TABLE `%s` ADD CONSTRAINT FOREIGN KEY (`%s`) REFERENCES `%s` (`%s`) ON DELETE %s ON UPDATE %s',
@@ -373,7 +389,6 @@ class Database extends Tool
         /** @var \mysqli $dd */
         $this->error = $wpdb->dbh->errno;
         ob_end_clean();
-
 
         return $result === false
             ? $wpdb->last_error

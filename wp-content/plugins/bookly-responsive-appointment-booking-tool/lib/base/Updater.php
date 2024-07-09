@@ -1,6 +1,8 @@
 <?php
 namespace Bookly\Lib\Base;
 
+use Bookly\Lib\PluginsUpdater;
+
 abstract class Updater extends Schema
 {
     protected $errors = array();
@@ -37,7 +39,7 @@ abstract class Updater extends Schema
                         set_transient( $transient_name, time() );
                         // Do update.
                         try {
-                            call_user_func( array( $this, $method ) );
+                            $this->$method();
                         } catch ( \Error $e ) {
                             $this->errors[] = array(
                                 'method' => get_class( $this ) . '::' . $method,
@@ -56,10 +58,10 @@ abstract class Updater extends Schema
                         update_option( $version_option_name, $version );
                     }
                 }
+                $logs_table = $this->getTableName( 'bookly_log' );
                 // Log errors.
                 if ( $this->errors ) {
                     try {
-                        $logs_table = $this->getTableName( 'bookly_log' );
                         foreach ( $this->errors as $error ) {
                             $wpdb->insert( $logs_table, array(
                                 'action' => 'error',
@@ -75,6 +77,30 @@ abstract class Updater extends Schema
                 }
                 // Make sure db_version is set to plugin version (even though there were no updates).
                 update_option( $version_option_name, $plugin_version );
+                $wpdb->insert( $logs_table, array(
+                    'action' => 'debug',
+                    'target' => $plugin_class::getTitle() . ' ' . $plugin_version,
+                    'author' => get_current_user_id(),
+                    'details' => $plugin_class::getSlug(),
+                    'comment' => 'Updated',
+                    'ref' => '',
+                    'created_at' => current_time( 'mysql' ),
+                ) );
+                try {
+                    if ( $plugin_class::getSlug() === 'bookly-responsive-appointment-booking-tool' && class_exists( 'BooklyPro\Lib\Plugin', false ) ) {
+                        PluginsUpdater::speedUpUpdate( array( 'bookly-addon-pro' ) );
+                    } elseif ( $plugin_class::getSlug() === 'bookly-addon-pro' ) {
+                        $slugs = array();
+                        foreach ( get_option( 'active_plugins' ) as $path ) {
+                            $dirname = dirname( $path );
+                            if ( $dirname !== 'bookly-addon-pro' && strpos( $dirname, 'bookly-addon-' ) === 0 ) {
+                                $slugs[] = $dirname;
+                            }
+                        }
+                        $slugs && PluginsUpdater::speedUpUpdate( $slugs );
+                    }
+                } catch ( \Exception $e ) {
+                }
             }
         }
     }

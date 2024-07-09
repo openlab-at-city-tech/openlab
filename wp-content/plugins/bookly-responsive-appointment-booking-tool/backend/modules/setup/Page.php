@@ -87,8 +87,8 @@ class Page extends Lib\Base\Component
                 ),
                 'done' => array(
                     'string_1' => __( 'Congratulations, the initial setup is complete!', 'bookly' ),
-                    'string_2' => sprintf( __( 'Shortcut of your form is %s', 'bookly' ), '<input type="text" class="form-control d-inline" value="[bookly-form]" readonly style="max-width: 124px;">' ),
-                    'string_3' => __( 'Open the page where you want to add the booking form in page edit mode and paste this shortcut in a free block.', 'bookly' ),
+                    'string_2' => sprintf( __( 'Shortcode of your form is %s', 'bookly' ), '<input type="text" class="form-control d-inline" value="[bookly-form]" readonly style="max-width: 124px;">' ),
+                    'string_3' => __( 'Open the page you want to add the booking form to in edit mode and paste this shortcode into a free block.', 'bookly' ),
                     'string_4' => sprintf( __( 'You can find more detailed instructions for publishing Bookly form in our %s', 'bookly' ), sprintf( '<a href="https://support.booking-wp-plugin.com/hc/en-us/articles/212800185">%s</a>', __( 'Help center', 'bookly' ) ) ),
                     'string_5' => sprintf( __( 'Bookly can boost your sales and scale together with your business. Get more features and remove the limits by upgrading to the paid version with the %s, which allows you to use a vast number of additional features and settings for online scheduling, install other add-ons for Bookly, and includes six months of customer support.', 'bookly' ), '<a href="https://codecanyon.net/item/bookly-booking-plugin-responsive-appointment-booking-and-scheduling/7226091">Bookly Pro (Add-on)</a>' ),
                 ),

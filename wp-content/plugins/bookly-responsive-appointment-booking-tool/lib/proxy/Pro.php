@@ -18,16 +18,18 @@ use Bookly\Lib;
  * @method static int    getMinimumTimePriorBooking( int|null $service_id ) Get minimum time ( in seconds ) prior to booking.
  * @method static int    getMinimumTimePriorCancel( int|null $service_id ) Get minimum time ( in seconds ) prior to cancel.
  * @method static array  getStaffCategoryName( int $category_id ) Get staff category name.
- * @method static array  getStaffDataForDropDown() Get staff grouped by categories for drop-down list.
+ * @method static array  getStaffDataForDropDown( array $exclude_visibility = null ) Get staff grouped by categories for drop-down list.
+ * @method static array  getTagsData() Get list of tags.
  * @method static array  getTimeZoneOffset( string $time_zone_value ) Get timezone offset from string.
  * @method static bool   graceExpired() Check whether grace period has expired or not.
  * @method static void   logEmail( string $to, string $subject, string $body, array $headers, array $attachments, int $type_id ) Log sent emails.
- * @method static string prepareNotificationMessage( \string $message, \string $recipient, \string $gateway ) Prepare notification for staff.
+ * @method static string prepareNotificationMessage( string $message, string $recipient, string $gateway ) Prepare notification for staff.
  * @method static Lib\Slots\RangeCollection prepareGeneratorRanges( Lib\Slots\RangeCollection $ranges, Lib\Slots\Staff $staff, int $duration ) Prepare range collection depends on staff hours limit.
  * @method static bool   getWorkingTimeLimitError( Lib\Entities\Staff $staff, string $start_date, string $end_date, int $duration, int $appointment_id ) Check if interval is suitable for staff's hours limit.
  * @method static void   revokeGoogleCalendarToken( Lib\Entities\Staff $staff ) Revoke Google Calendar token for given staff.
  * @method static bool   showFacebookLoginButton() Whether to show Facebook login button at the time step of booking form.
  * @method static void   syncGoogleCalendarEvent( Lib\Entities\Appointment $appointment ) Synchronize Google Calendar with appointment.
+ * @method static bool   isValidForCartItem( $default, Lib\CartItem $item, Lib\CartInfo $cart_info ) Check if gift card valid for current item
  */
 abstract class Pro extends Lib\Base\Proxy
 {

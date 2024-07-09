@@ -7,7 +7,7 @@ use Bookly\Lib\Proxy\Pro as ProProxy;
 class Generator implements \Iterator
 {
     const CONNECTION_CONSECUTIVE = 1;
-    const CONNECTION_PARALLEL    = 2;
+    const CONNECTION_PARALLEL = 2;
 
     /** @var Staff[] */
     protected $staff_members;
@@ -89,7 +89,8 @@ class Generator implements \Iterator
         $waiting_list_enabled,
         $next_generator,
         $next_connection
-    ) {
+    )
+    {
         $this->staff_members = array();
         $this->staff_schedule = array();
         $this->dp = $start_dp->modify( 'midnight' );
@@ -161,10 +162,12 @@ class Generator implements \Iterator
                     : $schedule->getRanges( $this->dp, $this->srv_id, $staff_id, $this->location_id, $staff->getTimeZone() );
 
                 // Initial solution that provides the possibility of booking at the junction of two work schedules.
+                $limit_dp = false;
                 if ( ! $this->srv_duration_days && $ranges->isNotEmpty() ) {
                     $next_dp = $this->dp->modify( '+1 day midnight' );
                     $key = $ranges->count() - 1;
                     $last_range = $ranges->get( $key );
+                    $limit_dp = $last_range->end();
                     // If the last range passes midnight, we check the next day.
                     if ( $last_range->end()->gte( $next_dp ) && ! $schedule->isDayOff( $next_dp ) ) {
                         $next_ranges = $schedule->getRanges( $next_dp, $this->srv_id, $staff_id, $this->location_id, $staff->getTimeZone() );
@@ -204,6 +207,10 @@ class Generator implements \Iterator
                     }
                     // Split range into slots.
                     foreach ( $range->split( $this->slot_length )->all() as $slot ) {
+                        if ( $limit_dp && $slot->start()->gte( $limit_dp ) ) {
+                            // Skip slots starts outside schedule
+                            continue;
+                        }
                         if ( $slot->length() < $this->slot_length ) {
                             // Skip slots with not enough length.
                             continue;
@@ -340,7 +347,7 @@ class Generator implements \Iterator
                         $booking_range = $booking->range();
                         foreach ( $removed->all() as $range ) {
                             // Find range which contains booking start point.
-                            if ( ( $max_waiting_list_capacity === null || ( $booking->nop() <= $max_capacity + $max_waiting_list_capacity - $this->nop ) ) && $range->contains( $booking_range->start() ) ) {
+                            if ( ( $max_waiting_list_capacity === null || ( $booking->onWaitingList() + $this->nop <= $max_waiting_list_capacity ) ) && $range->contains( $booking_range->start() ) ) {
                                 $data = $range->data()->replaceState( Range::WAITING_LIST_STARTED )->replaceNop( $booking->nop() );
                                 if ( $booking->onWaitingList() ) {
                                     $data = $data->replaceOnWaitingList( $booking->onWaitingList() );
@@ -466,7 +473,7 @@ class Generator implements \Iterator
         if ( $past_slot->notPartiallyBooked() && $past_slot->noWaitingListStarted() ) {
             // Check if there are enough valid days for service duration in the past.
             $day = $slot->start();
-            for ( $d = 0; $d < $this->srv_duration_days; ++ $d ) {
+            for ( $d = 0; $d < $this->srv_duration_days; ++$d ) {
                 $timestamp = $day->value()->getTimestamp();
                 $day_slot = $this->past_slots[ $slot->staffId() ]->get( $timestamp );
                 if ( ! $day_slot || $day_slot->fullyBooked() && $past_slot->notFullyBooked() ) {

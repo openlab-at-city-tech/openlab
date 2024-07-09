@@ -1,7 +1,6 @@
 jQuery(function($) {
     let container = {
             $calendar: $('#bookly_settings_calendar'),
-            $log: $('#bookly_settings_logs')
         },
         $helpBtn = $('#bookly-help-btn'),
         $businessHours = $('#business-hours'),
@@ -22,11 +21,6 @@ jQuery(function($) {
         $ocFullSyncTitles = $('#bookly_oc_full_sync_titles'),
         $currency = $('#bookly_pmt_currency'),
         $formats = $('#bookly_pmt_price_format'),
-        $logsDateFilter = $('#bookly-logs-date-filter', container.$log),
-        $logsTable = $('#bookly-logs-table', container.$log),
-        $logsSearch = $('#bookly-log-search', container.$log),
-        $logsAction = $('#bookly-filter-logs-action', container.$log),
-        $logsTarget = $('#bookly-filter-logs-target-id', container.$log),
         $calOneParticipant = $('[name="bookly_cal_one_participant"]'),
         $calManyParticipants = $('[name="bookly_cal_many_participants"]'),
         $woocommerceInfo = $('[name="bookly_l10n_wc_cart_info_value"]'),
@@ -206,8 +200,8 @@ jQuery(function($) {
         handle: '.bookly-js-draghandle',
         onChange: function() {
             let order = [];
-            $('#bookly_settings_payments .card[data-slug]').each(function() {
-                order.push($(this).data('slug'));
+            $('#bookly_settings_payments .card[data-gateway]').each(function() {
+                order.push($(this).data('gateway'));
             });
             $('#bookly_settings_payments [name="bookly_pmt_order"]').val(order.join(','));
         },
@@ -337,151 +331,6 @@ jQuery(function($) {
     $('#bookly-sidebar a[data-toggle="bookly-pill"]').on('shown.bs.tab', function(e) {
         $helpBtn.attr('href', help_link + e.target.getAttribute('href').substring(1).replace(/_/g, '-'));
     });
-
-    // Logs
-
-    $logsAction.booklyDropdown().booklyDropdown('selectAll');
-
-    $('#bookly-delete-logs').on('click', function() {
-        if (confirm(BooklyL10n.are_you_sure)) {
-            var ladda = Ladda.create(this);
-            ladda.start();
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'bookly_delete_logs',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                },
-                dataType: 'json',
-                success: function() {
-                    ladda.stop();
-                    dt.ajax.reload(null, false);
-                }
-            });
-        }
-    });
-
-    let pickers = {
-        dateFormat: 'YYYY-MM-DD',
-        creationDate: {
-            startDate: moment().subtract(30, 'days'),
-            endDate: moment(),
-        },
-    };
-    var picker_ranges = {};
-    picker_ranges[BooklyL10n.dateRange.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-    picker_ranges[BooklyL10n.dateRange.today] = [moment(), moment()];
-    picker_ranges[BooklyL10n.dateRange.last_7] = [moment().subtract(7, 'days'), moment()];
-    picker_ranges[BooklyL10n.dateRange.last_30] = [moment().subtract(30, 'days'), moment()];
-    picker_ranges[BooklyL10n.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
-    picker_ranges[BooklyL10n.dateRange.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-
-    $logsDateFilter.daterangepicker({
-            parentEl: $logsDateFilter.closest('.card-body'),
-            startDate: pickers.creationDate.startDate,
-            endDate: pickers.creationDate.endDate,
-            ranges: picker_ranges,
-            showDropdowns: true,
-            linkedCalendars: false,
-            autoUpdateInput: false,
-            locale: $.extend({}, BooklyL10n.dateRange, BooklyL10n.datePicker)
-        },
-        function(start, end) {
-            $logsDateFilter
-                .data('date', start.format(pickers.dateFormat) + ' - ' + end.format(pickers.dateFormat))
-                .find('span')
-                .html(start.format(BooklyL10n.dateRange.format) + ' - ' + end.format(BooklyL10n.dateRange.format));
-        }
-    );
-
-    var dt = $logsTable.DataTable({
-        order: [0],
-        info: false,
-        paging: true,
-        searching: false,
-        lengthChange: false,
-        processing: true,
-        responsive: true,
-        pageLength: 25,
-        pagingType: 'numbers',
-        serverSide: true,
-        ajax: {
-            url: ajaxurl,
-            type: 'POST',
-            data: function(d) {
-                return $.extend({action: 'bookly_get_logs', csrf_token: BooklyL10nGlobal.csrf_token}, {
-                    filter: {
-                        created_at: $logsDateFilter.data('date'),
-                        search: $logsSearch.val(),
-                        action: $logsAction.booklyDropdown('getSelected'),
-                        target: $logsTarget.val()
-                    }
-                }, d);
-            }
-        },
-        columns: [
-            {data: 'created_at', responsivePriority: 0},
-            {
-                data: 'action', responsivePriority: 0,
-                render: function(data, type, row, meta) {
-                    return data === 'error' && row.target.indexOf('bookly-') !== -1
-                        ? '<span class="text-danger">ERROR</span>'
-                        : data;
-                },
-            },
-            {
-                data: 'target', responsivePriority: 2,
-                render: function(data, type, row, meta) {
-                    const isBooklyError = data.indexOf('bookly-') !== -1;
-                    return $('<div>', {dir: 'rtl', class: 'text-truncate', text: isBooklyError ? data.slice(data.indexOf('bookly-')) : data}).prop('outerHTML');
-                },
-            },
-            {data: 'target_id', responsivePriority: 1},
-            {data: 'author', responsivePriority: 1},
-            {
-                data: 'details',
-                render: function(data, type, row, meta) {
-                    try {
-                        return JSON.stringify(JSON.parse(data), null, 2).replace(/\n/g, '<br/>');
-                    } catch (e) {
-                        return data;
-                    }
-                },
-                className: 'none',
-                responsivePriority: 2
-            },
-            {data: 'comment', responsivePriority: 2},
-            {data: 'ref', className: 'none', responsivePriority: 1,
-                render: function(data, type, row, meta) {
-                    return data && data.replace(/\n/g,"<br>");
-                }
-            },
-        ],
-        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing
-        }
-    });
-    $('#bookly-sidebar a[data-toggle="bookly-pill"][href="#bookly_settings_logs"]').on('shown.bs.tab', function(e) {
-        dt.columns.adjust().responsive.recalc();
-    });
-
-    function onChangeFilter() {
-        dt.ajax.reload();
-    }
-
-    $logsDateFilter.on('apply.daterangepicker', onChangeFilter);
-    $logsTarget.on('keyup', onChangeFilter);
-    $logsAction.on('change', onChangeFilter);
-    $logsSearch.on('keyup', onChangeFilter)
-        .on('keydown', function(e) {
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                return false;
-            }
-        });
 
     // Tab calendar
     $coloringMode

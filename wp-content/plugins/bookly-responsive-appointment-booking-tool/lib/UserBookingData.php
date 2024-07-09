@@ -124,6 +124,7 @@ class UserBookingData
         'email_confirm',
         'phone',
         'birthday',
+        'full_address',
         'additional_address',
         'country',
         'state',
@@ -187,8 +188,8 @@ class UserBookingData
                     $date = explode( '-', $customer->getBirthday() );
                     $this->setBirthday( array(
                         'year' => $date[0],
-                        'month' => isset( $date[1] ) ? (int)$date[1] : 0,
-                        'day' => isset( $date[2] ) ? (int)$date[2] : 0,
+                        'month' => isset( $date[1] ) ? (int) $date[1] : 0,
+                        'day' => isset( $date[2] ) ? (int) $date[2] : 0,
                     ) );
                 }
                 $this
@@ -214,51 +215,52 @@ class UserBookingData
                     ->setEmail( $current_user->user_email )
                     ->setEmailConfirm( $current_user->user_email );
             }
-        } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) && isset( $_COOKIE['bookly-cst-full-name'] ) ) {
-            $this
-                ->setFullName( $_COOKIE['bookly-cst-full-name'] );
-                Proxy\CustomerInformation::setFromCookies( $this );
-            if ( isset( $_COOKIE['bookly-cst-birthday'] ) ) {
-                $date = explode( '-', $_COOKIE['bookly-cst-birthday'] );
+        } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
+            if ( isset( $_COOKIE['bookly-customer-full-name'] ) ) {
+                $this->setFullName( $_COOKIE['bookly-customer-full-name'] );
+            }
+            Proxy\CustomerInformation::setFromCookies( $this );
+            if ( isset( $_COOKIE['bookly-customer-birthday'] ) ) {
+                $date = explode( '-', $_COOKIE['bookly-customer-birthday'] );
                 $birthday = array(
                     'year' => $date[0],
-                    'month' => isset( $date[1] ) ? (int)$date[1] : 0,
-                    'day' => isset( $date[2] ) ? (int)$date[2] : 0,
+                    'month' => isset( $date[1] ) ? (int) $date[1] : 0,
+                    'day' => isset( $date[2] ) ? (int) $date[2] : 0,
                 );
                 $this->setBirthday( $birthday );
             }
-            if ( isset( $_COOKIE['bookly-cst-email'] ) ) {
-                $this->setEmail( $_COOKIE['bookly-cst-email'] )->setEmailConfirm( $_COOKIE['bookly-cst-email'] );
+            if ( isset( $_COOKIE['bookly-customer-email'] ) ) {
+                $this->setEmail( $_COOKIE['bookly-customer-email'] )->setEmailConfirm( $_COOKIE['bookly-customer-email'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-phone'] ) ) {
-                $this->setPhone( $_COOKIE['bookly-cst-phone'] );
+            if ( isset( $_COOKIE['bookly-customer-phone'] ) ) {
+                $this->setPhone( $_COOKIE['bookly-customer-phone'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-first-name'] ) ) {
-                $this->setFirstName( $_COOKIE['bookly-cst-first-name'] );
+            if ( isset( $_COOKIE['bookly-customer-first-name'] ) ) {
+                $this->setFirstName( $_COOKIE['bookly-customer-first-name'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-last-name'] ) ) {
-                $this->setLastName( $_COOKIE['bookly-cst-last-name'] );
+            if ( isset( $_COOKIE['bookly-customer-last-name'] ) ) {
+                $this->setLastName( $_COOKIE['bookly-customer-last-name'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-country'] ) ) {
-                $this->setCountry( $_COOKIE['bookly-cst-country'] );
+            if ( isset( $_COOKIE['bookly-customer-country'] ) ) {
+                $this->setCountry( $_COOKIE['bookly-customer-country'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-state'] ) ) {
-                $this->setState( $_COOKIE['bookly-cst-state'] );
+            if ( isset( $_COOKIE['bookly-customer-state'] ) ) {
+                $this->setState( $_COOKIE['bookly-customer-state'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-postcode'] ) ) {
-                $this->setPostcode( $_COOKIE['bookly-cst-postcode'] );
+            if ( isset( $_COOKIE['bookly-customer-postcode'] ) ) {
+                $this->setPostcode( $_COOKIE['bookly-customer-postcode'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-city'] ) ) {
-                $this->setCity( $_COOKIE['bookly-cst-city'] );
+            if ( isset( $_COOKIE['bookly-customer-city'] ) ) {
+                $this->setCity( $_COOKIE['bookly-customer-city'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-street'] ) ) {
-                $this->setStreet( $_COOKIE['bookly-cst-street'] );
+            if ( isset( $_COOKIE['bookly-customer-street'] ) ) {
+                $this->setStreet( $_COOKIE['bookly-customer-street'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-street-number'] ) ) {
-                $this->setStreetNumber( $_COOKIE['bookly-cst-street-number'] );
+            if ( isset( $_COOKIE['bookly-customer-street-number'] ) ) {
+                $this->setStreetNumber( $_COOKIE['bookly-customer-street-number'] );
             }
-            if ( isset( $_COOKIE['bookly-cst-additional-address'] ) ) {
-                $this->setAdditionalAddress( $_COOKIE['bookly-cst-additional-address'] );
+            if ( isset( $_COOKIE['bookly-customer-additional-address'] ) ) {
+                $this->setAdditionalAddress( $_COOKIE['bookly-customer-additional-address'] );
             }
         }
     }
@@ -680,21 +682,21 @@ class UserBookingData
 
             $expire = time() + YEAR_IN_SECONDS;
 
-            setcookie( 'bookly-cst-full-name', $customer->getFullName(), $expire );
-            setcookie( 'bookly-cst-first-name', $customer->getFirstName(), $expire );
-            setcookie( 'bookly-cst-last-name', $customer->getLastName(), $expire );
-            setcookie( 'bookly-cst-phone', $customer->getPhone(), $expire );
-            setcookie( 'bookly-cst-email', $customer->getEmail(), $expire );
-            setcookie( 'bookly-cst-birthday', $customer->getBirthday() ?: '', $expire );
-            setcookie( 'bookly-cst-country', $customer->getCountry(), $expire );
-            setcookie( 'bookly-cst-state', $customer->getState(), $expire );
-            setcookie( 'bookly-cst-postcode', $customer->getPostcode(), $expire );
-            setcookie( 'bookly-cst-city', $customer->getCity(), $expire );
-            setcookie( 'bookly-cst-street', $customer->getStreet(), $expire );
-            setcookie( 'bookly-cst-street-number', $customer->getStreetNumber(), $expire );
-            setcookie( 'bookly-cst-additional-address', $customer->getAdditionalAddress(), $expire );
+            setcookie( 'bookly-customer-full-name', $customer->getFullName(), $expire, '/' );
+            setcookie( 'bookly-customer-first-name', $customer->getFirstName(), $expire, '/' );
+            setcookie( 'bookly-customer-last-name', $customer->getLastName(), $expire, '/' );
+            setcookie( 'bookly-customer-phone', $customer->getPhone(), $expire, '/' );
+            setcookie( 'bookly-customer-email', $customer->getEmail(), $expire, '/' );
+            setcookie( 'bookly-customer-birthday', $customer->getBirthday() ?: '', $expire, '/' );
+            setcookie( 'bookly-customer-country', $customer->getCountry(), $expire, '/' );
+            setcookie( 'bookly-customer-state', $customer->getState(), $expire, '/' );
+            setcookie( 'bookly-customer-postcode', $customer->getPostcode(), $expire, '/' );
+            setcookie( 'bookly-customer-city', $customer->getCity(), $expire, '/' );
+            setcookie( 'bookly-customer-street', $customer->getStreet(), $expire, '/' );
+            setcookie( 'bookly-customer-street-number', $customer->getStreetNumber(), $expire, '/' );
+            setcookie( 'bookly-customer-additional-address', $customer->getAdditionalAddress(), $expire, '/' );
             if ( Config::customerInformationActive() ) {
-                setcookie( 'bookly-cst-info-fields', $customer->getInfoFields(), $expire );
+                setcookie( 'bookly-customer-info-fields', $customer->getInfoFields(), $expire, '/' );
             }
         }
 
@@ -809,11 +811,29 @@ class UserBookingData
                 } else if ( $customer_data['phone'] && ! $this->customer->loadBy( array( 'phone' => $customer_data['phone'] ) ) ) {
                     $this->customer->loadBy( array( 'email' => $customer_data['email'] ) );
                 }
+            } else {
+                $this->customer->loadBy( array( 'email' => $customer_data['email'], 'phone' => $customer_data['phone'] ) );
             }
 
             foreach ( $customer_fields as $field ) {
                 $this->fillData( array( $field => $customer_data[ $field ] ?: '' ) );
                 $this->customer->setFields( array( $field => $customer_data[ $field ] ?: '' ) );
+            }
+            if ( isset( $customer_data['customer_information'] ) && Config::customerInformationActive() ) {
+                $customer_information = array();
+                foreach ( $customer_data['customer_information'] as $id => $value ) {
+                    $customer_information[] = array( 'id' => $id, 'value' => $value );
+                }
+                $this->setInfoFields( $customer_information );
+            }
+            if ( isset( $customer_data['time_zone'] ) && $customer_data['time_zone'] !== '' ) {
+                $this->setTimeZone( $customer_data['time_zone'] );
+            }
+            if ( isset( $customer_data['time_zone_offset'] ) && $customer_data['time_zone_offset'] !== '' ) {
+                $this->setTimeZoneOffset( $customer_data['time_zone_offset'] );
+            }
+            if ( isset( $customer_data['full_address'] ) && $customer_data['full_address'] !== '' ) {
+                $this->setFullAddress( $customer_data['full_address'] );
             }
         }
 

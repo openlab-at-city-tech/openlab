@@ -99,6 +99,7 @@ jQuery(function($) {
          */
         var dt = $notificationList.DataTable({
             paging: false,
+            searching: true,
             info: false,
             processing: true,
             responsive: true,
@@ -113,7 +114,7 @@ jQuery(function($) {
             },
             order: order,
             columns: columns,
-            dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
+            dom: "<'row'<'col-sm-12'tr>>",
             language: {
                 zeroRecords: BooklyL10n.noResults,
                 processing: BooklyL10n.processing

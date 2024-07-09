@@ -61,8 +61,8 @@ class Page extends Lib\Base\Component
                     ),
                 )
             );
-
-            self::renderTemplate( 'index', compact( 'datatables' ) );
+            $whatsapp = \Bookly\Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP );
+            self::renderTemplate( 'index', compact( 'datatables', 'whatsapp' ) );
         } else {
             Lib\Utils\Common::redirect( add_query_arg(
                 array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),

@@ -117,6 +117,9 @@ abstract class Plugin
 
             // Init.
             $plugin_class::init();
+            if ( defined( 'DOING_AJAX' ) ) {
+                $plugin_class::registerAjax();
+            }
 
             add_action( 'init', function() use ( $plugin_class ) {
                 // Updater.
@@ -418,7 +421,7 @@ abstract class Plugin
     }
 
     /**
-     * Check if add-on is embedded.
+     * Check is product.
      *
      * @return bool
      */
@@ -460,13 +463,18 @@ abstract class Plugin
     protected static function init() {}
 
     /**
+     * Init ajax.
+     */
+    protected static function registerAjax() {}
+
+    /**
      * Init update checker.
      */
     protected static function initUpdateChecker()
     {
         /** @var static $plugin_class */
         $plugin_class = get_called_class();
-        if ( $plugin_class != 'Bookly\Lib\Plugin' && Lib\Config::proActive() ) {
+        if ( $plugin_class != 'Bookly\Lib\Plugin' && Lib\Config::proActive() && $plugin_class::getPurchaseCode() ) {
             PluginPro::initPluginUpdateChecker( $plugin_class );
         }
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Lib;
 
+use Bookly\Lib\Cloud\Account;
 use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Lib\Utils\Codes;
 use Bookly\Lib\Utils\Common;
@@ -74,7 +75,7 @@ abstract class Config
 
         // Services.
         $query = Entities\Service::query( 's' )
-            ->select( 's.id, s.category_id, s.title, s.position, s.duration, s.price, s.type, s.info, s.attachment_id, s.recurrence_enabled' )
+            ->select( 's.id, s.category_id, s.title, s.position, s.duration, s.price, s.type, s.info, s.attachment_id, s.recurrence_enabled, s.recurrence_frequencies' )
             ->addSelect( sprintf( '%s AS min_capacity, %s AS max_capacity',
                 Proxy\Shared::prepareStatement( 1, 'MIN(ss.capacity_min)', 'StaffService' ),
                 Proxy\Shared::prepareStatement( 1, 'MAX(ss.capacity_max)', 'StaffService' )
@@ -111,6 +112,7 @@ abstract class Config
                 'type' => $row['type'],
                 'pos' => (int) $row['position'],
                 'recurrence_enabled' => (int) $row['recurrence_enabled'],
+                'recurrence_frequencies' => $row['recurrence_frequencies'],
                 'min_time_prior_booking' => array( (int) $min_time_prior_booking->format( 'Y' ), (int) $min_time_prior_booking->format( 'n' ) - 1, (int) $min_time_prior_booking->format( 'j' ), ),
             );
 
@@ -160,7 +162,9 @@ abstract class Config
             ->leftJoin( 'Service', 's', 's.id = ss.service_id' )
             ->where( 'st.visibility', 'public' )
             ->where( 's.type', Entities\Service::TYPE_SIMPLE );
-
+        if ( self::depositPaymentsActive() ) {
+            $query->addSelect( 'ss.deposit' );
+        }
         $query = Proxy\Shared::prepareCaSeStQuery( $query );
 
         if ( ! Proxy\Locations::servicesPerLocationAllowed() ) {
@@ -199,6 +203,9 @@ abstract class Config
                 'max_capacity' => (int) $row['capacity_max'],
                 'price' => Utils\Price::format( $row['price'] ),
             );
+            if ( self::depositPaymentsActive() ) {
+                $location_data['deposit'] = $row['deposit'];
+            }
             $location_data = Proxy\Shared::prepareCategoryServiceStaffLocation( $location_data, $row );
 
             $result['staff'][ $row['id'] ]['services'][ $row['service_id'] ]['locations'][ (int) $row['location_id'] ] = $location_data;
@@ -289,7 +296,7 @@ abstract class Config
         $week_days = array_values( $wp_locale->weekday_abbrev );
 
         // Sort days considering start_of_week;
-        uksort( $days, function ( $a, $b ) use ( $start_of_week ) {
+        uksort( $days, function( $a, $b ) use ( $start_of_week ) {
             $a -= $start_of_week;
             $b -= $start_of_week;
             if ( $a < 1 ) {
@@ -327,12 +334,12 @@ abstract class Config
     }
 
     /**
-     * Get array with bounding days for Pickadate.
+     * Get array with date limits.
      *
      * @param Chain $chain
      * @return array
      */
-    public static function getBoundingDaysForPickadate( $chain = null )
+    public static function getDateLimits( $chain = null )
     {
         $result = array();
 
@@ -817,7 +824,6 @@ abstract class Config
     public static function __callStatic( $name, array $arguments )
     {
         // <add-on>Active
-        // <add-on>Enabled
         if ( preg_match( '/^(\w+)Active/', $name, $match ) ) {
             // Check if Pro Active
             /** @var \BooklyPro\Lib\Plugin $pro_class */
@@ -904,18 +910,32 @@ abstract class Config
      */
     public static function syncCalendars()
     {
-        $result = array(
-            0 => false, // sync
-            1 => false, // Google Calendar
-            2 => false, // Outlook Calendar
-        );
+        static $sync;
 
-        if ( self::proActive() ) {
-            $result[1] = (bool) ( get_option( 'bookly_gc_client_id' ) && get_option( 'bookly_gc_client_secret' ) );
-            $result[2] = (bool) ( self::outlookCalendarActive() && get_option( 'bookly_oc_app_id' ) && get_option( 'bookly_oc_app_secret' ) );
-            $result[0] = max( $result[1], $result[2] );
+        if ( $sync === null ) {
+            $sync = array(
+                0 => false, // sync
+                1 => false, // Google Calendar
+                2 => false, // Outlook Calendar
+            );
+
+            if ( self::proActive() ) {
+                $sync[1] = (bool) ( get_option( 'bookly_gc_client_id' ) && get_option( 'bookly_gc_client_secret' ) );
+                $sync[2] = (bool) ( self::outlookCalendarActive() && get_option( 'bookly_oc_app_id' ) && get_option( 'bookly_oc_app_secret' ) );
+                $sync[0] = max( $sync[1], $sync[2] );
+            }
         }
 
-        return $result;
+        return $sync;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getProductsX()
+    {
+        return array(
+            Account::PRODUCT_SERVICE_EXTRAS => 'bookly-addon-service-extras',
+        );
     }
 }

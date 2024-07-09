@@ -1,6 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Controls\Inputs;
+
 ?>
 <div id=bookly-test-email-notifications-modal class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
     <div class="modal-dialog">
@@ -15,7 +16,7 @@ use Bookly\Backend\Components\Controls\Inputs;
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="bookly_test_to_email"><?php esc_html_e( 'To email', 'bookly' ) ?></label>
-                                <input id="bookly_test_to_email" class="form-control" type="text" name="to_email" value="admin@bookly.local.com"/>
+                                <input id="bookly_test_to_email" class="form-control" type="text" name="to_email" value="<?php echo esc_attr( get_option( 'bookly_co_email', '' ) ) ?>"/>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,8 @@
 <?php
 namespace Bookly\Lib;
 
-use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\DataHolders\Notification\Settings;
+use Bookly\Lib\Entities\Notification;
 
 class Installer extends Base\Installer
 {
@@ -220,6 +220,25 @@ class Installer extends Base\Installer
             'to_customer' => 1,
             'settings' => '[]',
         );
+        $this->notifications[] = array(
+            'gateway' => 'email',
+            'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
+            'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
+            'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
+            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'active' => 1,
+            'to_staff' => 1,
+            'settings' => '[]',
+        );
+        $this->notifications[] = array(
+            'gateway' => 'sms',
+            'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
+            'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
+            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'active' => 1,
+            'to_staff' => 1,
+            'settings' => '[]',
+        );
 
         /*
          * Options.
@@ -250,6 +269,7 @@ class Installer extends Base\Installer
             'bookly_app_show_terms' => '0',
             'bookly_app_show_download_ics' => '0',
             'bookly_app_show_add_to_calendar' => '0',
+            'bookly_app_datepicker_inverted' => '0',
             'bookly_l10n_button_apply' => __( 'Apply', 'bookly' ),
             'bookly_l10n_button_back' => __( 'Back', 'bookly' ),
             'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly' ),
@@ -307,6 +327,8 @@ class Installer extends Base\Installer
             'bookly_l10n_step_service_category_info' => '{category_info}',
             'bookly_l10n_step_service_service_info' => '{service_info}',
             'bookly_l10n_step_service_staff_info' => '{staff_info}',
+            'bookly_l10n_incorrect_phone_verification_code' => __( 'Incorrect verification code', 'bookly' ),
+            'bookly_l10n_incorrect_email_verification_code' => __( 'Incorrect verification code', 'bookly' ),
             // Button Next.
             'bookly_l10n_step_service_button_next' => __( 'Next', 'bookly' ),
             'bookly_l10n_step_service_mobile_button_next' => __( 'Next', 'bookly' ),
@@ -428,7 +450,7 @@ class Installer extends Base\Installer
             'bookly_ntf_processing_interval' => '2', // hours
             'bookly_сa_count' => '0',
             // Logs
-            'bookly_logs_enabled' => '0',
+            'bookly_logs_expire' => '30',
             // Status colors
             'bookly_appointment_status_pending_color' => '#1e73be',
             'bookly_appointment_status_approved_color' => '#81d742',
@@ -541,7 +563,8 @@ class Installer extends Base\Installer
                 `icalendar_days_before` INT NOT NULL DEFAULT 365,
                 `icalendar_days_after`  INT NOT NULL DEFAULT 365,
                 `color`                 VARCHAR(255) NOT NULL DEFAULT "#dddddd",
-                `gateways`              VARCHAR(255) DEFAULT NULL
+                `gateways`              VARCHAR(255) DEFAULT NULL,
+                `cloud_msc_token`       VARCHAR(32) DEFAULT NULL
             ) ENGINE = INNODB
             ' . $charset_collate
         );
@@ -734,7 +757,10 @@ class Installer extends Base\Installer
                 `full_address`       VARCHAR(255) DEFAULT NULL,
                 `notes`              TEXT NOT NULL,
                 `info_fields`        TEXT DEFAULT NULL,
-                `stripe_account`     VARCHAR(255) DEFAULT NULL,
+                `tags`               TEXT DEFAULT NULL,
+                `stripe_account`     VARCHAR(36) DEFAULT NULL,
+                `stripe_cloud_account` VARCHAR(36) DEFAULT NULL,
+                `attachment_id`      INT UNSIGNED DEFAULT NULL,
                 `created_at`         DATETIME NOT NULL
             ) ENGINE = INNODB
             ' . $charset_collate
@@ -814,7 +840,6 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Payment::getTableName() . '` (
                 `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `target`       ENUM("appointments","packages","gift_cards") NOT NULL DEFAULT "appointments",
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
                 `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square") NOT NULL DEFAULT "local",
@@ -969,7 +994,7 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Log::getTableName() . '` (
                 `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `action`      ENUM("create","update","delete","error") DEFAULT NULL,
+                `action`      ENUM("create","update","delete","error","debug") DEFAULT NULL,
                 `target`      VARCHAR(255) DEFAULT NULL,
                 `target_id`   INT UNSIGNED DEFAULT NULL,
                 `author`      VARCHAR(255) DEFAULT NULL,
@@ -1093,11 +1118,11 @@ class Installer extends Base\Installer
     {
         global $wpdb;
         $wpml_strings_table = $wpdb->prefix . 'icl_strings';
-        $result = $wpdb->query( "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '$wpml_strings_table' AND TABLE_SCHEMA=SCHEMA()" );
+        $result = $wpdb->query( 'SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = \'' . $wpml_strings_table . '\' AND TABLE_SCHEMA=SCHEMA()' );
         if ( $result == 1 ) {
-            @$wpdb->query( "DELETE FROM {$wpdb->prefix}icl_string_translations WHERE string_id IN (SELECT id FROM $wpml_strings_table WHERE context='bookly')" );
-            @$wpdb->query( "DELETE FROM {$wpdb->prefix}icl_string_positions WHERE string_id IN (SELECT id FROM $wpml_strings_table WHERE context='bookly')" );
-            @$wpdb->query( "DELETE FROM {$wpml_strings_table} WHERE context='bookly'" );
+            @$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . 'icl_string_translations WHERE string_id IN (SELECT id FROM ' . $wpml_strings_table . ' WHERE context=\'bookly\')' );
+            @$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . 'icl_string_positions WHERE string_id IN (SELECT id FROM ' . $wpml_strings_table . ' WHERE context=\'bookly\')' );
+            @$wpdb->query( 'DELETE FROM ' . $wpml_strings_table . ' WHERE context=\'bookly\'' );
         }
     }
 }

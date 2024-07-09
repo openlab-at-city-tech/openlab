@@ -37,9 +37,8 @@ class Panel extends Lib\Base\Component
         ) );
 
         wp_localize_script( 'bookly-cloud-auth.js', 'BooklyCloudAuthL10n', array(
-            'csrfToken'           => Lib\Utils\Common::getCsrfToken(),
             'passwords_not_match' => __( 'Passwords don\'t match', 'bookly' ),
-            'noResults'           => __( 'No records.', 'bookly' ),
+            'noResults' => __( 'No records.', 'bookly' ),
         ) );
 
         $promotions = get_option( 'bookly_cloud_promotions', array() );

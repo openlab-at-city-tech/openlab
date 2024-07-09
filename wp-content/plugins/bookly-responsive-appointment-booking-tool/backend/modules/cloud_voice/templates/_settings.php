@@ -1,9 +1,9 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Settings\Selects;
-$voice = \Bookly\Lib\Cloud\API::getInstance()->voice;
 /**
  * @var \Bookly\Backend\Modules\CloudVoice\Page $self
+ * @var \Bookly\Lib\Cloud\Voice $voice
  */
 ?>
 <div class="form-row">

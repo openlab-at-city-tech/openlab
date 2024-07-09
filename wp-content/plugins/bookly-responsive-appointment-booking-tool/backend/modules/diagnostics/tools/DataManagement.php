@@ -5,6 +5,7 @@ class DataManagement extends Tool
 {
     protected $slug = 'data-management';
     protected $hidden = true;
+    public $position = 10;
 
     public function __construct()
     {

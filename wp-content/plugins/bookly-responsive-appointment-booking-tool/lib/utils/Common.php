@@ -186,7 +186,7 @@ abstract class Common extends Lib\Base\Cache
     private static function hasBooklyShortCode( $blocks, $short_code )
     {
         foreach ( $blocks as $block ) {
-            if ( isset( $block['innerBlocks'] ) && ! empty( $block['innerBlocks'] ) ) {
+            if ( ! empty( $block['innerBlocks'] ) ) {
                 return self::hasBooklyShortCode( $block['innerBlocks'], $short_code );
             }
 
@@ -539,19 +539,16 @@ abstract class Common extends Lib\Base\Cache
     {
         $gateways = array();
         if ( Lib\Config::payLocallyEnabled() ) {
-            $gateways[ Lib\Entities\Payment::TYPE_LOCAL ] = array(
-                'title' => __( 'Local', 'bookly' ),
-            );
+            $gateways[ Lib\Entities\Payment::TYPE_LOCAL ] = Lib\Entities\Payment::typeToString( Lib\Entities\Payment::TYPE_LOCAL );
         }
 
         if ( Lib\Config::stripeCloudEnabled() ) {
-            $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
-                'title' => 'Stripe Cloud',
-            );
+            $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = Lib\Entities\Payment::typeToString( Lib\Entities\Payment::TYPE_CLOUD_STRIPE );
         }
-        $gateways = array_map( function ( $gateway ) {
-            return $gateway['title'];
-        }, \Bookly\Backend\Modules\Appearance\Proxy\Shared::paymentGateways( $gateways ) );
+
+        foreach ( \Bookly\Backend\Modules\Appearance\Proxy\Shared::paymentGateways( array() ) as $type => $gateway ) {
+            $gateways[ $type ] = $gateway['title'];
+        }
 
         $order = Lib\Config::getGatewaysPreference();
         $payment_systems = array();
@@ -815,5 +812,18 @@ abstract class Common extends Lib\Base\Cache
             http_response_code( $response_code );
         }
         exit;
+    }
+
+    /**
+     * @param Lib\Entities\Appointment $appointment
+     * @return void
+     */
+    public static function syncWithCalendars( Lib\Entities\Appointment $appointment )
+    {
+        list( $sync, $gc, $oc ) = Lib\Config::syncCalendars();
+        if ( $sync && $appointment->getStartDate() ) {
+            $gc && Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
+            $oc && Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+        }
     }
 }

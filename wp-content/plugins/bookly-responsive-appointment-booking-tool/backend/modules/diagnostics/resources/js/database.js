@@ -19,6 +19,9 @@ jQuery(function ($) {
                 } else {
                     booklyAlert({error: [response.data.message]});
                 }
+            },
+            error: function(XHR) {
+                booklyAlert({error: ['Status code: ' + XHR.status]});
             }
         });
     }
@@ -81,7 +84,7 @@ jQuery(function ($) {
             query = '   ALTER TABLE `' + table + '`\nADD CONSTRAINT\n   FOREIGN KEY (`' + data.column + '`)\n    REFERENCES `' + data.ref_table_name + '` (`' + data.ref_column_name + '`)\n     ON DELETE ' + data.rules.DELETE_RULE + '\n     ON UPDATE ' + data.rules.UPDATE_RULE
         ;
 
-        booklyModal('Add constraint', $('<pre>').html(query), 'Cancel', 'Add')
+        let $modal = booklyModal('Add constraint', $('<pre>').html(query), 'Close', 'Add')
             .on('bs.click.main.button', function (event, modal, mainButton) {
                 let ladda = Ladda.create(mainButton);
                 ladda.start();
@@ -91,17 +94,41 @@ jQuery(function ($) {
                         hideDatabaseItem($li);
                     } else {
                         let $updateBtn =  $(mainButton).text('UPDATE…').attr( 'title', 'UPDATE ' + table + ' SET ' + data.column + ' = NULL' ),
-                            $deleteBtn = jQuery('<button>', {class: 'btn ladda-button btn-danger', type: 'button', title: 'DELETE FROM ' + table, 'data-spinner-size': 40, 'data-style': 'zoom-in'})
+                            $deleteBtn = jQuery('<button>', {class: 'btn ladda-button btn-default', type: 'button', title: 'DELETE FROM ' + table, 'data-spinner-size': 40, 'data-style': 'zoom-in'})
                                 .append('<span>', {class: 'ladda-label'}).text('DELETE…');
-                        $deleteBtn.on('click', function (e) {
-                            e.stopPropagation();
-                            modal.trigger('bs.click.delete.button', [modal, $deleteBtn.get(0)]);
-                        });
-                        $updateBtn.off().on('click', function (e) {
-                            e.stopPropagation();
-                            modal.trigger('bs.click.update.button', [modal, $updateBtn.get(0)]);
-                        });
+
+                        $deleteBtn
+                            .on('click', function(e) {
+                                e.stopPropagation();
+                                modal.trigger('bs.click.delete.button', [modal, $deleteBtn.get(0)]);
+                            });
+
+                        $updateBtn
+                            .off()
+                            .on('click', function(e) {
+                                e.stopPropagation();
+                                modal.trigger('bs.click.update.button', [modal, $updateBtn.get(0)]);
+                            }).removeClass('btn-success').addClass('btn-default');
+
                         $deleteBtn.insertBefore($updateBtn);
+
+                        if (data.rules.hasOwnProperty('fix')) {
+                            if (data.rules.fix.action === 'METHOD') {
+                                let $customBtn = jQuery('<button>', {class: 'btn ladda-button btn-success', type: 'button', title: data.rules.fix.description, 'data-spinner-size': 40, 'data-style': 'zoom-in'})
+                                    .append('<span>', {class: 'ladda-label'}).text(data.rules.fix.button);
+                                $customBtn
+                                    .on('click', function(e) {
+                                        e.stopPropagation();
+                                        modal.trigger('bs.click.custom.button', [modal, $customBtn.get(0)]);
+                                    });
+                                $customBtn.insertBefore($deleteBtn);
+                            }
+                        }
+                        if (data.rules['DELETE_RULE'] === 'CASCADE') {
+                            $deleteBtn.removeClass('btn-default').addClass('btn-success');
+                        } else {
+                            $updateBtn.removeClass('btn-default').addClass('btn-success');
+                        }
                     }
                 }).always(function () {
                     ladda.stop();
@@ -142,7 +169,25 @@ jQuery(function ($) {
                             ladda.stop();
                         });
                     });
+            })
+            .on('bs.click.custom.button', function (event, modal, mainButton) {
+                modal.booklyModal('hide');
+                booklyModal('Custom action', data.rules.fix.description, 'Cancel', 'Execute')
+                    .on('bs.click.main.button', function (event, modal, mainButton) {
+                        let ladda = Ladda.create(mainButton);
+                        ladda.start();
+                        executeDatabaseJob(job + '~custom').then(function (response) {
+                            if (response.success) {
+                                modal.booklyModal('hide');
+                                hideDatabaseItem($li);
+                            }
+                        }).always(function () {
+                            ladda.stop();
+                        });
+                    });
             });
+
+        $('.modal-dialog', $modal).addClass('modal-lg');
     });
 
     $('[data-action=fix-charset_collate-table]')

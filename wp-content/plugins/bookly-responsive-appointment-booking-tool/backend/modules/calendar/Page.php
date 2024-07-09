@@ -20,10 +20,8 @@ class Page extends Lib\Base\Ajax
             'module' => array( 'css/event-calendar.min.css' => array( 'bookly-backend-globals' ) ),
         ) );
 
-        $id = Lib\Entities\Appointment::query( 'a' )
-            ->select( 'MAX(id) as max_id' )
-            ->fetchRow();
-        update_option( 'bookly_cal_last_seen_appointment', $id['max_id'] );
+        $id = Lib\Entities\Appointment::query()->fetchVar( 'MAX(id)' );
+        update_option( 'bookly_cal_last_seen_appointment', $id ?: 0 );
 
         if ( Config::proActive() ) {
             if ( Common::isCurrentUserSupervisor() ) {
@@ -102,72 +100,25 @@ class Page extends Lib\Base\Ajax
     }
 
     /**
-     * Build appointments for Event Calendar.
-     *
      * @param Lib\Query $query
-     * @param string $display_tz
      * @return array
      */
-    public static function buildAppointmentsForCalendar( Lib\Query $query, $display_tz )
+    public static function getAppointmentsForCalendar( Lib\Query $query )
     {
-        $one_participant = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_one_participant' ) ) . '</div>' );
-        $many_participants = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_many_participants' ) ) . '</div>' );
-        $tooltip = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{participant.nop}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{appointment_time} - {appointment_end_time}</span>' );
-        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{participant.nop}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{description}</span>' );
-        $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
-        $coloring_mode = get_option( 'bookly_cal_coloring_mode' );
-        $default_codes = array(
-            'amount_due' => '',
-            'amount_paid' => '',
-            'appointment_date' => '',
-            'appointment_notes' => '',
-            'appointment_time' => '',
-            'booking_number' => '',
-            'category_name' => '',
-            'client_address' => '',
-            'client_email' => '',
-            'client_name' => '',
-            'client_first_name' => '',
-            'client_last_name' => '',
-            'client_phone' => '',
-            'client_birthday' => '',
-            'client_full_birthday' => '',
-            'client_note' => '',
-            'company_address' => get_option( 'bookly_co_address' ),
-            'company_name' => get_option( 'bookly_co_name' ),
-            'company_phone' => get_option( 'bookly_co_phone' ),
-            'company_website' => get_option( 'bookly_co_website' ),
-            'custom_fields' => '',
-            'extras' => '',
-            'extras_total_price' => 0,
-            'internal_note' => '',
-            'location_name' => '',
-            'location_info' => '',
-            'number_of_persons' => '',
-            'on_waiting_list' => '',
-            'payment_status' => '',
-            'payment_type' => '',
-            'service_capacity' => '',
-            'service_duration' => '',
-            'service_info' => '',
-            'service_name' => '',
-            'service_price' => '',
-            'signed_up' => '',
-            'staff_email' => '',
-            'staff_info' => '',
-            'staff_name' => '',
-            'staff_phone' => '',
-            'status' => '',
-            'total_price' => '',
-        );
+        $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
+            Lib\Entities\CustomerAppointment::STATUS_PENDING,
+            Lib\Entities\CustomerAppointment::STATUS_APPROVED,
+        ) );
+        $busy_statuses_list = "'" . implode( "', '", $busy_statuses ) . "'";
         $query
-            ->select(
+            ->addSelect(
                 'a.id, ca.id as ca_id, ca.series_id, a.staff_any, a.location_id, a.internal_note, a.start_date, DATE_ADD(a.end_date, INTERVAL a.extras_duration SECOND) AS end_date,
                 COALESCE(s.title,a.custom_service_name) AS service_name, COALESCE(s.color,"silver") AS service_color, s.info AS service_info,
                 COALESCE(ss.price,s.price,a.custom_service_price) AS service_price,
                 st.id AS staff_id,
                 st.full_name AS staff_name, st.email AS staff_email, st.info AS staff_info, st.phone AS staff_phone, st.color AS staff_color,
                 (SELECT SUM(ca.number_of_persons) FROM ' . CustomerAppointment::getTableName() . ' ca WHERE ca.appointment_id = a.id) AS total_number_of_persons,
+                (SELECT SUM(ca.number_of_persons) FROM ' . CustomerAppointment::getTableName() . ' ca WHERE ca.appointment_id = a.id AND ca.status IN (' . $busy_statuses_list . ')) AS signed_up,
                 s.duration,
                 s.start_time_info,
                 s.end_time_info,
@@ -192,7 +143,11 @@ class Page extends Lib\Base\Ajax
             ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
             ->whereNot( 'a.start_date', null )
             // Custom service without customers have not ca.id
-            ->groupBy( 'COALESCE(ca.id,CONCAT(\'appointment-\',a.id))' );
+            ->groupBy( 'COALESCE(ca.id,CONCAT(\'appointment-\',a.id))' )
+            ->sortBy( 'a.start_date' );
+
+        $query = Proxy\Shared::prepareCalendarQuery( $query );
+
         if ( Lib\Proxy\Locations::servicesPerLocationAllowed() ) {
             $query = Proxy\Locations::prepareCalendarQuery( $query );
         } else {
@@ -205,17 +160,80 @@ class Page extends Lib\Base\Ajax
             $query->addSelect( '1 AS service_capacity' );
         }
 
-        if ( Config::proActive() ) {
-            $query->addSelect( 'c.country, c.state, c.postcode, c.city, c.street, c.street_number, c.additional_address, c.info_fields' );
+        if ( ! Config::couponsActive() ) {
+            $query->addSelect( '\'\' AS coupon_code' );
         }
 
-        // Fetch appointments,
-        // and shift the dates to appropriate time zone if needed
+        return $query->fetchArray();
+    }
+
+    /**
+     * Build appointments for Event Calendar.
+     *
+     * @param Lib\Query $query
+     * @param string $display_tz
+     * @return array
+     */
+    public static function buildAppointmentsForCalendar( Lib\Query $query, $display_tz )
+    {
+        $one_participant = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_one_participant' ) ) . '</div>' );
+        $many_participants = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_many_participants' ) ) . '</div>' );
+        $tooltip = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{appointment_time} - {appointment_end_time}</span>' );
+        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{description}</span>' );
+        $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
+        $coloring_mode = get_option( 'bookly_cal_coloring_mode' );
+        $default_codes = array(
+            'amount_due' => '',
+            'amount_paid' => '',
+            'appointment_date' => '',
+            'appointment_notes' => '',
+            'appointment_time' => '',
+            'booking_number' => '',
+            'category_name' => '',
+            'client_address' => '',
+            'client_email' => '',
+            'client_name' => '',
+            'client_first_name' => '',
+            'client_last_name' => '',
+            'client_phone' => '',
+            'client_birthday' => '',
+            'client_full_birthday' => '',
+            'client_note' => '',
+            'company_address' => get_option( 'bookly_co_address' ),
+            'company_name' => get_option( 'bookly_co_name' ),
+            'company_phone' => get_option( 'bookly_co_phone' ),
+            'company_website' => get_option( 'bookly_co_website' ),
+            'custom_fields' => '',
+            'info_fields' => '',
+            'extras' => '',
+            'extras_total_price' => 0,
+            'internal_note' => '',
+            'location_name' => '',
+            'location_info' => '',
+            'number_of_persons' => '',
+            'on_waiting_list' => '',
+            'payment_status' => '',
+            'payment_type' => '',
+            'service_capacity' => '',
+            'service_duration' => '',
+            'service_info' => '',
+            'service_name' => '',
+            'service_price' => '',
+            'signed_up' => '',
+            'staff_email' => '',
+            'staff_info' => '',
+            'staff_name' => '',
+            'staff_phone' => '',
+            'status' => '',
+            'total_price' => '',
+            'coupon' => '',
+        );
+
+        $records = self::getAppointmentsForCalendar( $query );
         $appointments = array();
         $wp_tz = Config::getWPTimeZone();
         $convert_tz = $display_tz !== $wp_tz;
-
-        foreach ( $query->fetchArray() as $appointment ) {
+        foreach ( $records as $appointment ) {
             if ( ! isset ( $appointments[ $appointment['id'] ] ) ) {
                 if ( $convert_tz ) {
                     $appointment['start_date'] = DateTime::convertTimeZone( $appointment['start_date'], $wp_tz, $display_tz );
@@ -238,6 +256,7 @@ class Page extends Lib\Base\Ajax
                 'payment_status' => Lib\Entities\Payment::statusToString( $appointment['payment_status'] ),
                 'payment_type' => Lib\Entities\Payment::typeToString( $appointment['payment_gateway'] ),
                 'status' => $appointment['status'],
+                'coupon' => $appointment['coupon_code'],
                 '_info_fields' => isset( $appointment['info_fields'] ) ? json_decode( $appointment['info_fields'], true ) : array(),
                 '_custom_fields' => isset( $appointment['custom_fields'] ) ? json_decode( $appointment['custom_fields'], true ) : array(),
             );
@@ -272,13 +291,13 @@ class Page extends Lib\Base\Ajax
             $codes['appointment_id'] = $appointment['id'];
             $codes['appointment_date'] = DateTime::formatDate( $appointment['start_date'] );
             $codes['appointment_time'] = $appointment['duration'] >= DAY_IN_SECONDS && $appointment['start_time_info'] ? $appointment['start_time_info'] : Lib\Utils\DateTime::formatTime( $appointment['start_date'] );
-            $codes['booking_number'] = $appointment['id'];
+            $codes['booking_number'] = Config::groupBookingActive() ? $appointment['id'] . '-' . $appointment['ca_id'] : $appointment['ca_id'];
             $codes['internal_note'] = esc_html( $appointment['internal_note'] );
             $codes['on_waiting_list'] = $appointment['on_waiting_list'];
             $codes['service_name'] = $appointment['service_name'] ? esc_html( $appointment['service_name'] ) : __( 'Untitled', 'bookly' );
             $codes['service_price'] = Price::format( $appointment['service_price'] * $appointment['units'] );
             $codes['service_duration'] = DateTime::secondsToInterval( $appointment['duration'] * $appointment['units'] );
-            $codes['signed_up'] = $appointment['total_number_of_persons'];
+            $codes['signed_up'] = (int) $appointment['signed_up'];
             foreach ( array( 'staff_name', 'staff_phone', 'staff_info', 'staff_email', 'service_info', 'service_capacity', 'category_name', 'client_note' ) as $field ) {
                 $codes[ $field ] = esc_html( $appointment[ $field ] );
             }
@@ -310,13 +329,8 @@ class Page extends Lib\Base\Ajax
                         $overall_status = '';
                     }
                 }
-                if ( $customer['number_of_persons'] > 1 ) {
-                    $number_of_persons = '<span class="badge badge-info mr-1"><i class="far fa-fw fa-user"></i>×' . $customer['number_of_persons'] . '</span>';
-                } else {
-                    $number_of_persons = '';
-                }
                 $customer['status_color'] = $status_color;
-                $customer['nop'] = $number_of_persons;
+                $customer['nop'] = $customer['number_of_persons'] > 1 ? $customer['number_of_persons'] : '';
                 $customer['status'] = CustomerAppointment::statusToString( $customer['status'] );
                 $codes['participants'][] = $customer;
             }
@@ -344,14 +358,14 @@ class Page extends Lib\Base\Ajax
                 $participants = 'many';
                 $template = $many_participants;
             }
-            $codes['appointment_color'] = $appointment['service_color'];
+            $codes['appointment_color'] = esc_attr( $appointment['service_color'] );
             $codes['appointment_end_time'] = ( $appointment['duration'] * $appointment['units'] >= DAY_IN_SECONDS && $appointment['start_time_info'] ? $appointment['end_time_info'] : DateTime::formatTime( $appointment['end_date'] ) );
 
             $codes = Proxy\Shared::prepareAppointmentCodesData( $codes, $appointment, $participants );
 
             switch ( $coloring_mode ) {
                 case 'status';
-                    $color = $colors[ $event_status ?: 'mixed' ];
+                    $color = isset( $colors[ $event_status ] ) ? $colors[ $event_status ] : $colors['mixed'];
                     break;
                 case 'staff':
                     $color = $appointment['staff_color'];
@@ -366,7 +380,7 @@ class Page extends Lib\Base\Ajax
                 'start' => $appointment['start_date'],
                 'end' => $appointment['end_date'],
                 'title' => ' ',
-                'color' => $color,
+                'color' => esc_attr( $color ),
                 'resourceId' => $appointment['staff_id'],
                 'allDay' => $appointment['duration'] >= DAY_IN_SECONDS,
                 'extendedProps' => array(
@@ -380,7 +394,7 @@ class Page extends Lib\Base\Ajax
                     'overall_status' => $overall_status,
                 ),
             );
-            if ( $appointment['duration'] * $appointment['units'] >= DAY_IN_SECONDS && $appointment['start_time_info'] ) {
+            if ( $appointment['duration'] * max( 1, $appointment['units'] ) >= DAY_IN_SECONDS && $appointment['start_time_info'] ) {
                 $appointments[ $key ]['extendedProps']['header_text'] = sprintf( '%s - %s', $appointment['start_time_info'], $appointment['end_time_info'] );
             }
         }
@@ -410,10 +424,10 @@ class Page extends Lib\Base\Ajax
         $calendar = __( 'Calendar', 'bookly' );
         if ( $calendar_badge ) {
             add_submenu_page( 'bookly-menu', $calendar, sprintf( '%s <span class="update-plugins count-%d"><span class="update-count">%d</span></span>', $calendar, $calendar_badge, $calendar_badge ), 'read',
-                self::pageSlug(), function () { Page::render(); } );
+                self::pageSlug(), function() { Page::render(); } );
         } else {
             add_submenu_page( 'bookly-menu', $calendar, $calendar, 'read',
-                self::pageSlug(), function () { Page::render(); } );
+                self::pageSlug(), function() { Page::render(); } );
         }
     }
 }

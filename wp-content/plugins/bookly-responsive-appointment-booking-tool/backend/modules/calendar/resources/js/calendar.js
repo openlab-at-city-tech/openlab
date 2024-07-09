@@ -296,18 +296,23 @@ jQuery(function($) {
     $gcSyncButton.on('click', function() {
         var ladda = Ladda.create(this);
         ladda.start();
-        $.post(
-            ajaxurl,
-            {action: 'bookly_advanced_google_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
-            function(response) {
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {action: 'bookly_advanced_google_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
+            dataType: 'json',
+            success: function(response) {
                 if (response.success) {
                     calendar.ec.refetchEvents();
                 }
                 booklyAlert(response.data.alert);
                 ladda.stop();
             },
-            'json'
-        );
+            error: function(XHR) {
+                booklyAlert({error: ['Status code: ' + XHR.status]});
+                ladda.stop();
+            }
+        });
     });
 
     /**
@@ -316,17 +321,22 @@ jQuery(function($) {
     $ocSyncButton.on('click', function() {
         var ladda = Ladda.create(this);
         ladda.start();
-        $.post(
-            ajaxurl,
-            {action: 'bookly_outlook_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
-            function(response) {
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {action: 'bookly_outlook_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
+            dataType: 'json',
+            success: function(response) {
                 if (response.success) {
                     calendar.ec.refetchEvents();
                 }
                 booklyAlert(response.data.alert);
                 ladda.stop();
             },
-            'json'
-        );
+            error: function(XHR) {
+                booklyAlert({error: ['Server status: ' + XHR.status]});
+                ladda.stop();
+            }
+        });
     });
 });

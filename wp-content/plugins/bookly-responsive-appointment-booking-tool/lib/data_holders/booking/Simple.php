@@ -147,14 +147,18 @@ class Simple extends Item
                     ) );
             }
 
-            return (float) Lib\Proxy\SpecialHours::adjustPrice(
-                $this->staff_service->getPrice() * $this->getCA()->getUnits(),
-                $this->getStaff()->getId(),
-                $this->getService()->getId(),
-                Lib\Proxy\Locations::prepareStaffLocationId( $this->appointment->getLocationId(), $this->getStaff()->getId() ) ?: null,
-                substr( $this->getAppointment()->getStartDate(), 11 ),  // start time
-                date( 'w', strtotime( $this->getAppointment()->getStartDate() ) ) + 1
-            );
+            $price = $this->staff_service->getPrice() * $this->getCA()->getUnits();
+
+            return $this->getAppointment()->getStartDate()
+                ? (float) Lib\Proxy\SpecialHours::adjustPrice(
+                    $price,
+                    $this->getStaff()->getId(),
+                    $this->getService()->getId(),
+                    Lib\Proxy\Locations::prepareStaffLocationId( $this->appointment->getLocationId(), $this->getStaff()->getId() ) ?: null,
+                    substr( $this->getAppointment()->getStartDate(), 11 ),  // start time
+                    date( 'w', strtotime( $this->getAppointment()->getStartDate() ) ) + 1
+                )
+                : $price;
         } else {
             return (float) $this->getAppointment()->getCustomServicePrice();
         }
@@ -223,8 +227,9 @@ class Simple extends Item
      */
     public function getTotalEnd()
     {
-        return Lib\Slots\DatePoint::fromStr( $this->getAppointment()->getEndDate() )
-            ->modify( $this->getAppointment()->getExtrasDuration() );
+        return $this->getAppointment()->getEndDate()
+            ? Lib\Slots\DatePoint::fromStr( $this->getAppointment()->getEndDate() )->modify( $this->getAppointment()->getExtrasDuration() )
+            : null;
     }
 
     /**

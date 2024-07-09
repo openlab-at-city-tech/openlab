@@ -25,7 +25,7 @@ use Bookly\Backend\Modules\Appearance\Proxy;
                     <div id="bookly-day-multi-columns" class="bookly-time-screen" style="display: <?php echo get_option( 'bookly_app_show_day_one_column' ) == 1 ? ' none' : 'block' ?>">
                         <div class="bookly-input-wrap bookly-slot-calendar bookly-js-slot-calendar">
                         <span class="bookly-date-wrap">
-                            <input style="display: none" class="bookly-js-selected-date bookly-form-element" type="text" data-value="<?php echo date( 'Y-m-d' ) ?>"/>
+                            <?php include '_calendar.php' ?>
                         </span>
                         </div>
                         <div class="bookly-column col1">
@@ -169,7 +169,7 @@ use Bookly\Backend\Modules\Appearance\Proxy;
                     <div id="bookly-day-one-column" class="bookly-time-screen" style="display: <?php echo get_option( 'bookly_app_show_day_one_column' ) == 1 ? ' block' : 'none' ?>">
                         <div class="bookly-input-wrap bookly-slot-calendar bookly-js-slot-calendar">
                         <span class="bookly-date-wrap">
-                            <input style="display: none" class="bookly-js-selected-date bookly-form-element" type="text" data-value="<?php echo date( 'Y-m-d' ) ?>"/>
+                            <?php include '_calendar.php' ?>
                         </span>
                         </div>
                         <?php for ( $i = 1; $i <= 7; ++$i ) : ?>

@@ -421,7 +421,7 @@ abstract class Routine
 
                                 // Extras
                                 $extras = '';
-                                $_extras = (array) Lib\Proxy\ServiceExtras::getInfo( json_decode( $appointment->extras, true ), false );
+                                $_extras = Lib\Proxy\ServiceExtras::getInfo( json_decode( $appointment->extras, true ), false ) ?: array();
                                 if ( ! empty ( $_extras ) ) {
                                     foreach ( $_extras as $extra ) {
                                         if ( $is_html ) {
@@ -441,7 +441,7 @@ abstract class Routine
                                     $ca = new CustomerAppointment();
                                     $ca->load( $appointment->ca_id );
                                     $custom_filed_str = '';
-                                    foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( $ca ) as $custom_field ) {
+                                    foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( $ca ) ?: array() as $custom_field ) {
                                         if ( $is_html ) {
                                             $custom_filed_str .= sprintf( '%s: %s<br/>', $custom_field['label'], $custom_field['value'] );
                                         } else {

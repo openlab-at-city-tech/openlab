@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Settings\Selects;
 use Bookly\Backend\Components\Controls\Inputs;
-use Bookly\Backend\Modules\Notifications;
 use Bookly\Lib\Utils;
 
 foreach ( range( 1, 23 ) as $hours ) {
@@ -15,6 +14,5 @@ foreach ( range( 1, 23 ) as $hours ) {
             <?php Selects::renderSingle( 'bookly_ntf_processing_interval', __( 'Scheduled notifications retry period', 'bookly' ), __( 'Set period of time when system will attempt to deliver notification to user. Notification will be discarded after period expiration.', 'bookly' ), $bookly_ntf_processing_interval_values ) ?>
         </div>
     </div>
-    <?php Notifications\Proxy\Pro::renderLogsSettings() ?>
     <?php Inputs::renderCsrf() ?>
 </form>

@@ -68,7 +68,7 @@ class WhatsApp extends Product
         if ( $this->api->getToken() && $this->api->account->productActive( Account::PRODUCT_WHATSAPP ) ) {
             $data = array(
                 'template' => $message,
-                'phone' => \Bookly\Lib\Cloud\SMS::normalizePhoneNumber( $phone_number ),
+                'phone' => SMS::normalizePhoneNumber( $phone_number ),
             );
             if ( $data['phone'] != '' ) {
                 $response = $this->api->sendPostRequest( self::MESSAGE, $data );

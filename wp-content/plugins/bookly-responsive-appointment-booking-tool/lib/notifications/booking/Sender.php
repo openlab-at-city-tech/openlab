@@ -10,18 +10,19 @@ use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Cart\Proxy;
+use Bookly\Backend\Components\Dialogs\Queue\NotificationList;
 
 abstract class Sender extends BaseSender
 {
     /**
      * Send notifications.
      *
-     * @param Item       $item
-     * @param array      $codes_data
-     * @param bool       $force_new_booking
-     * @param bool|array $queue
+     * @param Item $item
+     * @param array $codes_data
+     * @param bool $force_new_booking
+     * @param NotificationList|null $queue
      */
-    public static function send( Item $item, $codes_data = array(), $force_new_booking = false, &$queue = false )
+    public static function send( Item $item, $codes_data = array(), $force_new_booking = false, $queue = null )
     {
         static::sendForOrder( Order::createFromItem( $item ), $codes_data, $force_new_booking, $queue );
     }
@@ -30,12 +31,12 @@ abstract class Sender extends BaseSender
      * Send notifications for customer_appointment record.
      *
      * @param CustomerAppointment $ca
-     * @param Appointment         $appointment
-     * @param array               $codes_data
-     * @param bool                $force_new_booking
-     * @param bool|array          $queue
+     * @param Appointment $appointment
+     * @param array $codes_data
+     * @param bool $force_new_booking
+     * @param NotificationList|null $queue
      */
-    public static function sendForCA( CustomerAppointment $ca, Appointment $appointment = null, $codes_data = array(), $force_new_booking = false, &$queue = false )
+    public static function sendForCA( CustomerAppointment $ca, Appointment $appointment = null, $codes_data = array(), $force_new_booking = false, $queue = null )
     {
         $simple = Simple::create( $ca );
         if ( $appointment ) {
@@ -48,15 +49,15 @@ abstract class Sender extends BaseSender
     /**
      * Send notifications for order.
      *
-     * @param Order      $order
-     * @param array      $codes_data
-     * @param bool       $force_new_booking
-     * @param bool|array $queue
+     * @param Order $order
+     * @param array $codes_data
+     * @param bool $force_new_booking
+     * @param NotificationList|null $queue
      */
-    public static function sendForOrder( Order $order, $codes_data = array(), $force_new_booking = false, &$queue = false )
+    public static function sendForOrder( Order $order, $codes_data = array(), $force_new_booking = false, $queue = null )
     {
         if ( Config::proActive() ) {
-            $queue = Proxy\Pro::sendCombinedToClient( $queue, $order );
+            Proxy\Pro::sendCombinedToClient( $order, $queue );
         }
 
         $codes = new Codes( $order );

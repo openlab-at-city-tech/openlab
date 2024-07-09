@@ -34,6 +34,7 @@ abstract class Price
         'DOP' => array( 'symbol' => 'RD$', 'format' => '{symbol}{price|2}' ),
         'DZD' => array( 'symbol' => 'DA', 'format' => '{price|2} {symbol}' ),
         'EGP' => array( 'symbol' => 'EGP', 'format' => '{symbol} {price|2}' ),
+        'ETB' => array( 'symbol' => 'ብር', 'format' => '{price|2} {symbol}' ),
         'EUR' => array( 'symbol' => '€', 'format' => '{symbol}{price|2}' ),
         'FJD' => array( 'symbol' => 'F$', 'format' => '{symbol}{price|2}' ),
         'GBP' => array( 'symbol' => '£', 'format' => '{symbol}{price|2}' ),
@@ -80,11 +81,13 @@ abstract class Price
         'RON' => array( 'symbol' => 'lei', 'format' => '{price|2} {symbol}' ),
         'RSD' => array( 'symbol' => 'din.', 'format' => '{symbol}{price|0}' ),
         'RUB' => array( 'symbol' => 'руб.', 'format' => '{price|2} {symbol}' ),
+        'RWF' => array( 'symbol' => 'FRw', 'format' => '{price|2} {symbol}' ),
         'SAR' => array( 'symbol' => 'SAR', 'format' => '{price|2} {symbol}' ),
         'SCR' => array( 'symbol' => '₨', 'format' => '{symbol} {price|2}' ),
         'SEK' => array( 'symbol' => 'kr', 'format' => '{price|2} {symbol}' ),
         'SGD' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
         'THB' => array( 'symbol' => '฿', 'format' => '{price|2} {symbol}' ),
+        'TJS' => array( 'symbol' => 'SM', 'format' => '{price|2} {symbol}' ),
         'TND' => array( 'symbol' => 'TD', 'format' => '{price|2} {symbol}' ),
         'TRY' => array( 'symbol' => 'TL', 'format' => '{price|2} {symbol}' ),
         'TTD' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
@@ -93,6 +96,7 @@ abstract class Price
         'UAH' => array( 'symbol' => '₴', 'format' => '{price|2} {symbol}' ),
         'UGX' => array( 'symbol' => 'UGX', 'format' => '{symbol} {price|0}' ),
         'USD' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
+        'UZS' => array( 'symbol' => 'so’m', 'format' => '{price|2} {symbol}' ),
         'VND' => array( 'symbol' => 'VNĐ', 'format' => '{price|0} {symbol}' ),
         'XAF' => array( 'symbol' => 'FCFA', 'format' => '{price|0} {symbol}' ),
         'XOF' => array( 'symbol' => 'CFA', 'format' => '{symbol} {price|2}' ),
@@ -145,7 +149,7 @@ abstract class Price
             return strtr( $format, array(
                 '{sign}' => $price < 0 ? '-' : '',
                 '{symbol}' => $symbol,
-                "{price|{$match[1]}}" => html_entity_decode( number_format_i18n( abs( $price ), $match[1] ) )
+                '{price|' . $match[1] . '}' => html_entity_decode( number_format_i18n( abs( $price ), $match[1] ) ),
             ) );
         }
 

@@ -9,6 +9,7 @@ use Bookly\Lib\Notifications\Assets\Item\Attachments;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Base;
 use Bookly\Lib\Notifications\WPML;
+use Bookly\Backend\Components\Dialogs\Queue\NotificationList;
 
 abstract class BaseSender extends Base\Sender
 {
@@ -16,12 +17,12 @@ abstract class BaseSender extends Base\Sender
      * Notify client.
      *
      * @param Notification[] $notifications
-     * @param Item           $item
-     * @param Order          $order
-     * @param Codes          $codes
-     * @param bool|array     $queue
+     * @param Item $item
+     * @param Order $order
+     * @param Codes $codes
+     * @param NotificationList|null $queue
      */
-    protected static function notifyClient( array $notifications, Item $item, Order $order, Codes $codes, &$queue = false )
+    protected static function notifyClient( array $notifications, Item $item, Order $order, Codes $codes, $queue = null )
     {
         if ( $item->getCA()->getLocale() ) {
             WPML::switchLang( $item->getCA()->getLocale() );
@@ -38,7 +39,7 @@ abstract class BaseSender extends Base\Sender
             }
         }
 
-        if ( $queue === false ) {
+        if ( $queue === null ) {
             $attachments->clear();
         }
 
@@ -49,12 +50,12 @@ abstract class BaseSender extends Base\Sender
      * Notify staff and/or administrators.
      *
      * @param Notification[] $notifications
-     * @param Item           $item
-     * @param Order          $order
-     * @param Codes          $codes
-     * @param array|bool     $queue
+     * @param Item $item
+     * @param Order $order
+     * @param Codes $codes
+     * @param NotificationList|null $queue
      */
-    protected static function notifyStaffAndAdmins( array $notifications, Item $item, Order $order, Codes $codes, &$queue = false )
+    protected static function notifyStaffAndAdmins( array $notifications, Item $item, Order $order, Codes $codes, $queue = null )
     {
         WPML::switchToDefaultLang();
 
@@ -89,7 +90,7 @@ abstract class BaseSender extends Base\Sender
                     static::sendToCustom( $notification, $codes, $attachments, $reply_to, $queue );
                 }
             }
-            if ( $queue === false ) {
+            if ( $queue === null ) {
                 $attachments->clear();
             }
         }

@@ -136,20 +136,45 @@ function requiredBooklyPro() {
 (function ($) {
     window.booklySerialize = {
         form: function($form) {
-            let data = {};
-
-            $.map($form.serializeArray(), function(n) {
+            let data = {},
+                serialized = $form.serializeArray();
+            $('input[type=radio]:not(:checked)', $form).each(function() {
+                if (this.name) {
+                    let find = false,
+                        that = this;
+                    serialized.forEach(function(item) {
+                        if (!find && item.name === that.name) {
+                            find = true;
+                        }
+                    });
+                    if (!find) {
+                        serialized.push({name: this.name, value: null});
+                    }
+                }
+            });
+            $('input[type=checkbox]:not(:checked)', $form).each(function() {
+                if (this.name) {
+                    serialized.push({name: this.name, value: null});
+                }
+            });
+            $.map(serialized, function(n) {
                 const keys = n.name.match(/[a-zA-Z0-9_-]+|(?=\[\])/g);
                 if (keys.length > 1) {
-                    let tmp = data, pop = keys.pop();
+                    let tmp = data, key = keys.pop();
                     for (let i = 0; i < keys.length, j = keys[i]; i++) {
-                        tmp[j] = (!tmp[j] ? (pop == '') ? [] : {} : tmp[j]); tmp = tmp[j];
+                        tmp[j] = (!tmp[j]
+                            ? (key == '' && i == keys.length - 1) ? [] : {}
+                            : tmp[j]
+                        );
+                        tmp = tmp[j];
                     }
-                    if (pop == '') {
-                        tmp = (!Array.isArray(tmp) ? [] : tmp);
-                        tmp.push(n.value);
+                    if (n.value !== null) {
+                        if (Array.isArray(tmp)) {
+                            tmp.push(n.value);
+                        } else {
+                            tmp[key] = n.value;
+                        }
                     }
-                    else tmp[pop] = n.value;
                 } else data[keys.pop()] = n.value;
             });
 

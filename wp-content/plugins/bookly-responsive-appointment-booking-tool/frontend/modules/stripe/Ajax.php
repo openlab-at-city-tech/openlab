@@ -34,7 +34,7 @@ class Ajax extends Lib\Base\Ajax
      */
     private static function notify()
     {
-        $event = Lib\Cloud\API::getInstance()->stripe->retrieveEvent( $_POST['event_id'] );
+        $event = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->retrieveEvent( $_POST['event_id'] );
         switch ( $event['type'] ) {
             case 'checkout.session.completed':
                 self::processCheckoutSessionCompleted( $event );

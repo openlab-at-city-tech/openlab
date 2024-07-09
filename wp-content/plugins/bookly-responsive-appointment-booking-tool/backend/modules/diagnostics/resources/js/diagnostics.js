@@ -1,4 +1,34 @@
 jQuery(function ($) {
+    'use strict';
+
+    // Common
+    let url_params = {};
+    try {
+        let queryString = window.location.search[0] === '?'
+            ? window.location.search.slice(1)
+            : window.location.search;
+        let queries = queryString.split('&');
+
+        queries.forEach(function(query) {
+            let pair = query.split('='),
+                key = decodeURIComponent(pair[0]);
+
+            url_params[key] = decodeURIComponent(pair[1] || '');
+        });
+    } catch (e) { }
+
+    function setCookie(name, value) {
+        let expires = new Date();
+        expires.setTime(expires.getTime() + 86400000000); // 1000 days
+        document.cookie = name + '=' + (value || '') + ';expires=' + expires.toUTCString() + ';path=/';
+    }
+
+    function getCookie(name) {
+        let keyValue = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return keyValue ? keyValue[2] : null;
+    }
+
+    // All tests
     $('.bookly-js-reload-test').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -18,7 +48,7 @@ jQuery(function ($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'bookly_diagnostics_test_run',
+                action: 'bookly_run_diagnostics_test',
                 test: $test.data('class'),
                 csrf_token: BooklyL10nGlobal.csrf_token
             },
@@ -27,7 +57,7 @@ jQuery(function ($) {
                 $loading.hide();
                 $reload.show();
                 $failed.show();
-            },
+            }
         }).then(function (response) {
             if ($test.data('test') !== 'check-sessions') {
                 $loading.hide();
@@ -83,8 +113,35 @@ jQuery(function ($) {
         });
     });
 
-    $('.bookly-js-tests .bookly-js-reload-test').each(function () {
-        $(this).trigger('click');
+    function runAllTests() {
+        $('.bookly-js-tests .bookly-js-reload-test').each(function() {
+            $(this).trigger('click');
+        });
+    }
+
+    let $autorun_tests = $('.bookly-js-autorun-all-tests'),
+        autorun = getCookie('bookly_diagnostic_autorun_tests');
+    if (autorun === '0') {
+        $autorun_tests.removeClass('bookly-js-active');
+        $('i', $autorun_tests).addClass('fa-square');
+        $('.bookly-js-tests').each(function() {
+            $('.bookly-js-loading-test', $(this)).hide();
+            $('.bookly-js-reload-test', $(this)).show();
+        });
+    } else {
+        $autorun_tests.addClass('bookly-js-active');
+        $('i', $autorun_tests).removeClass('fa-square');
+        runAllTests();
+    }
+
+    $autorun_tests.on('click', function() {
+        let active = $(this).hasClass('bookly-js-active');
+        setCookie('bookly_diagnostic_autorun_tests', active ? '0' : '1');
+        $(this).toggleClass('bookly-js-active');
+        $('i', $autorun_tests).toggleClass('fa-square');
+        if (!active) {
+            runAllTests();
+        }
     });
 
     // Tools
@@ -100,13 +157,17 @@ jQuery(function ($) {
             const formData = new FormData();
             formData.append('action', 'bookly_import_data');
             formData.append('csrf_token', BooklyL10nGlobal.csrf_token);
-            formData.append('safe', $(this).closest('.input-group').prop('checked') ? '1' : '0');
+            formData.append('safe', $('[name=safe]', $(this).closest('.input-group')).prop('checked') ? '1' : '0');
             formData.append('import', e.target.files[0]);
             fetch(ajaxurl, {method: 'POST', body: formData})
-                .then(function(response) {
-                    return response.json();
+                .then(function (response) {
+                    if (response.status == 200) {
+                        return response.json();
+                    }
+                    $spinner.hide();
+                    throw new Error(response.statusText + ' (' + response.status + ')');
                 })
-                .then(function(result) {
+                .then(function (result) {
                     if (result.success) {
                         booklyAlert({success: [result.data.message]});
                     } else {
@@ -117,12 +178,15 @@ jQuery(function ($) {
                         .on('bs.click.main.button', function (event, modal, mainButton) {
                             location.reload();
                         });
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.modal-footer .btn-success', $modal).focus();
                     }, 500);
-                });
+                }).catch(function (error) {
+                booklyAlert({error: ['Request failed: ' + error]});
+            });
         }
     });
+
     // Forms Data
     $('#forms-data button[data-action="copy"]').on('click', function () {
         let $button = $(this),
@@ -168,6 +232,7 @@ jQuery(function ($) {
             }
         });
     });
+
     // External plugins
     $('#external-plugins button').on('click', function () {
         let $plugin = $(this).closest('.list-group-item-action'),
@@ -205,6 +270,7 @@ jQuery(function ($) {
             }
         });
     });
+
     // Shortcodes
     $('#bookly-find-shortcode-and-open').on('click', function () {
         let ladda = Ladda.create(this);
@@ -228,6 +294,286 @@ jQuery(function ($) {
             }
         });
     });
+
+    // Advanced options
+    $('#advanced-options').on('click', 'button[data-action="set-default-option"]', function () {
+        let ladda = Ladda.create(this);
+        let $that = $(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'bookly_diagnostics_ajax',
+                tool: 'AdvancedOptions',
+                ajax: 'setDefault',
+                option: $that.data('option'),
+                csrf_token: BooklyL10nGlobal.csrf_token
+            },
+            dataType: 'json',
+            success: function () {
+                ladda.stop();
+                $that.closest('.bookly-js-advanced-option-card').hide();
+            }
+        });
+    }).on('click', '.bookly-js-advanced-options-option-name button', function () {
+        let ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'bookly_diagnostics_ajax',
+                tool: 'AdvancedOptions',
+                ajax: 'getOption',
+                option: $('#bookly-advanced-options-option-name').val(),
+                csrf_token: BooklyL10nGlobal.csrf_token
+            },
+            dataType: 'json',
+            success: function (response) {
+                ladda.stop();
+                if (response.success) {
+                    $('#bookly-advanced-options-option-current-value').val(response.data.current);
+                    $('#bookly-advanced-options-option-default-value').val(response.data.default);
+                    $('#bookly-advanced-options-option-value').val(response.data.current);
+                    $('.bookly-js-advanced-options-set-option').show();
+                } else {
+                    $('#bookly-advanced-options-option-current-value').val('');
+                    $('#bookly-advanced-options-option-default-value').val('');
+                    $('#bookly-advanced-options-option-value').val('');
+                    $('.bookly-js-advanced-options-set-option').hide();
+                    booklyAlert({error: ['Failed']});
+                }
+            }
+        });
+    }).on('click', '.bookly-js-advanced-options-set-option button', function () {
+        let ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'bookly_diagnostics_ajax',
+                tool: 'AdvancedOptions',
+                ajax: 'setOption',
+                option: $('#bookly-advanced-options-option-name').val(),
+                value: $('#bookly-advanced-options-option-value').val(),
+                csrf_token: BooklyL10nGlobal.csrf_token
+            },
+            dataType: 'json',
+            success: function () {
+                ladda.stop();
+                $('#bookly-advanced-options-option-current-value').val($('#bookly-advanced-options-option-value').val());
+            }
+        });
+    });
+
+    // Optional logs
+    $('.bookly-js-enable-optional-logs').on('click', function () {
+        let $that = $(this),
+            ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'bookly_diagnostics_ajax',
+                tool: 'Logs',
+                ajax: 'enableLogs',
+                option: $that.closest('.bookly-js-optional-logs-entry').data('option'),
+                period: $that.data('period'),
+                csrf_token: BooklyL10nGlobal.csrf_token
+            },
+            dataType: 'json',
+            success: function (response) {
+                ladda.stop();
+                if (response.data.until) {
+                    $that.closest('.bookly-js-optional-logs-entry').find('.bookly-js-optional-logs-until').text(response.data.until);
+                    $that.closest('.bookly-js-optional-logs-entry').find('.bookly-js-optional-logs-active').show();
+                } else {
+                    $that.closest('.bookly-js-optional-logs-entry').find('.bookly-js-optional-logs-active').hide();
+                }
+            }
+        });
+    });
+
+    // Logs
+    $('#bookly_logs_expire').change(function (e) {
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'bookly_set_logs_expire',
+                expire: $(this).val(),
+                csrf_token: BooklyL10nGlobal.csrf_token,
+            },
+            dataType: 'json'
+        });
+    });
+    let $container = $('#logs'),
+        $logsDateFilter = $('#bookly-logs-date-filter', $container),
+        $logsTable = $('#bookly-logs-table', $container),
+        $logsSearch = $('#bookly-log-search', $container),
+        $logsAction = $('#bookly-filter-logs-action', $container).booklyDropdown(),
+        $logsTarget = $('#bookly-filter-logs-target-id', $container);
+
+    if (url_params.hasOwnProperty('debug')) {
+        $logsAction.booklyDropdown('setSelected', ['error', 'debug']);
+    } else {
+        $logsAction.booklyDropdown('selectAll');
+    }
+
+    $('#bookly-delete-logs').on('click', function () {
+        if (confirm(BooklyL10nGlobal.l10n.areYouSure)) {
+            var ladda = Ladda.create(this);
+            ladda.start();
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'bookly_delete_logs',
+                    csrf_token: BooklyL10nGlobal.csrf_token,
+                },
+                dataType: 'json',
+                success: function () {
+                    ladda.stop();
+                    dt.ajax.reload(null, false);
+                }
+            });
+        }
+    });
+
+    let pickers = {
+        dateFormat: 'YYYY-MM-DD',
+        creationDate: {
+            startDate: moment().subtract(30, 'days'),
+            endDate: moment(),
+        },
+    };
+    let picker_ranges = {};
+    picker_ranges[BooklyL10nGlobal.dateRange.anyTime] = [moment().subtract(100, 'years'), moment().add(100, 'years')];
+    picker_ranges[BooklyL10nGlobal.dateRange.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
+    picker_ranges[BooklyL10nGlobal.dateRange.today] = [moment(), moment()];
+    picker_ranges[BooklyL10nGlobal.dateRange.last_7] = [moment().subtract(7, 'days'), moment()];
+    picker_ranges[BooklyL10nGlobal.dateRange.last_30] = [moment().subtract(30, 'days'), moment()];
+    picker_ranges[BooklyL10nGlobal.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
+    picker_ranges[BooklyL10nGlobal.dateRange.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+
+    $logsDateFilter.daterangepicker({
+            parentEl: $('.bookly-js-tests'),
+            startDate: pickers.creationDate.startDate,
+            endDate: pickers.creationDate.endDate,
+            ranges: picker_ranges,
+            showDropdowns: true,
+            linkedCalendars: false,
+            autoUpdateInput: false,
+        },
+        function (start, end, label) {
+            switch (label) {
+                case BooklyL10nGlobal.dateRange.anyTime:
+                    $logsDateFilter
+                        .data('date', 'any')
+                        .find('span')
+                        .html(BooklyL10nGlobal.dateRange.anyTime);
+                    break;
+                default:
+                    $logsDateFilter
+                        .data('date', start.format(pickers.dateFormat) + ' - ' + end.format(pickers.dateFormat))
+                        .find('span')
+                        .html(start.format(BooklyL10nGlobal.dateRange.format) + ' - ' + end.format(BooklyL10nGlobal.dateRange.format));
+            }
+
+        }
+    );
+
+    let dt = $logsTable.DataTable({
+        order: [[0, 'desc']],
+        info: false,
+        paging: true,
+        searching: false,
+        lengthChange: false,
+        processing: true,
+        responsive: true,
+        pageLength: 25,
+        pagingType: 'numbers',
+        serverSide: true,
+        ajax: {
+            url: ajaxurl,
+            type: 'POST',
+            data: function (d) {
+                return $.extend({action: 'bookly_get_logs', csrf_token: BooklyL10nGlobal.csrf_token}, {
+                    filter: {
+                        created_at: $logsDateFilter.data('date'),
+                        search: $logsSearch.val(),
+                        action: $logsAction.booklyDropdown('getSelected'),
+                        target: $logsTarget.val()
+                    }
+                }, d);
+            }
+        },
+        columns: [
+            {data: 'id', width: 40, responsivePriority: 0},
+            {data: 'created_at', responsivePriority: 0},
+            {
+                data: 'action', responsivePriority: 0,
+                render: function (data, type, row, meta) {
+                    return data === 'error' && row.target.indexOf('bookly-') !== -1
+                        ? '<span class="text-danger">ERROR</span>'
+                        : data;
+                },
+            },
+            {
+                data: 'target', responsivePriority: 2,
+                render: function (data, type, row, meta) {
+                    const isBooklyError = data && (data.indexOf('bookly-') !== -1);
+                    return $('<div>', {
+                        dir: 'rtl',
+                        class: 'text-truncate',
+                        text: isBooklyError ? data.slice(data.indexOf('bookly-')) : data
+                    }).prop('outerHTML');
+                },
+            },
+            {data: 'target_id', responsivePriority: 1},
+            {data: 'author', responsivePriority: 1},
+            {
+                data: 'details',
+                render: function (data, type, row, meta) {
+                    try {
+                        return JSON.stringify(JSON.parse(data), null, 2).replace(/\n/g, '<br/>');
+                    } catch (e) {
+                        return data;
+                    }
+                },
+                className: 'none',
+                responsivePriority: 2
+            },
+            {data: 'comment', responsivePriority: 2},
+            {
+                data: 'ref', className: 'none', responsivePriority: 1,
+                render: function (data, type, row, meta) {
+                    return data && data.replace(/\n/g, "<br>");
+                }
+            },
+        ],
+        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>"
+    });
+
+    function onChangeFilter() {
+        dt.ajax.reload();
+    }
+
+    $logsDateFilter.on('apply.daterangepicker', onChangeFilter);
+    $logsTarget.on('keyup', onChangeFilter);
+    $logsAction.on('change', function() {
+        setTimeout(onChangeFilter, 0);
+    });
+    $logsSearch.on('keyup', onChangeFilter)
+        .on('keydown', function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
 
     $('[data-tool]').on('click', function (e) {
         e.preventDefault();

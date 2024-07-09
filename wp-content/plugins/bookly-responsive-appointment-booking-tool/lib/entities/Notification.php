@@ -26,6 +26,7 @@ class Notification extends Lib\Base\Entity
     const TYPE_FREE_PLACE_WAITING_LIST                       = 'free_place_waiting_list';
     const TYPE_MAILING                                       = 'mailing';
     const TYPE_NEW_GIFT_CARD                                 = 'new_gift_card';
+    const TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN                  = 'mobile_sc_grant_access_token';
 
     /** @var array Human readable notification titles */
     public static $titles;
@@ -170,6 +171,12 @@ class Notification extends Lib\Base\Entity
             $types[] = self::TYPE_VERIFY_PHONE;
         }
 
+        if ( get_option( 'bookly_cloud_token' ) != ''
+            && Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET )
+        ) {
+            $types[] = self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN;
+        }
+
         return Lib\Proxy\Shared::prepareNotificationTypes( $types, $gateway );
     }
 
@@ -217,6 +224,7 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_VERIFY_EMAIL                        => __( 'Verify customer\'s email', 'bookly' ),
                 self::TYPE_VERIFY_PHONE                        => __( 'Verify customer\'s phone', 'bookly' ),
                 self::TYPE_MAILING                             => __( 'Mailing message', 'bookly' ),
+                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN        => __( 'New staff member\'s Staff Cabinet mobile app access token details', 'bookly' ),
                 /** @see \Bookly\Backend\Modules\CloudSms\Ajax::sendTestSms */
                 'test_message'                                 => __( 'Test message', 'bookly' ),
             );
@@ -255,6 +263,7 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_NEW_GIFT_CARD                       => 70,
                 self::TYPE_NEW_PACKAGE                         => 81,
                 self::TYPE_PACKAGE_DELETED                     => 83,
+                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN        => 90,
             );
         }
     }
@@ -284,6 +293,7 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_VERIFY_EMAIL                                  => 'fas fa-address-card',
                 self::TYPE_VERIFY_PHONE                                  => 'fas fa-address-card',
                 self::TYPE_NEW_GIFT_CARD                                 => 'fas fa-gifts',
+                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN                  => 'fas fa-key',
             );
         }
     }

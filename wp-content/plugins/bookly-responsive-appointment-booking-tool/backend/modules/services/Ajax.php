@@ -73,7 +73,7 @@ class Ajax extends Page
                 'title' => $service['title'],
                 'position' => sprintf( '%05d-%05d', $service['position'], $service['id'] ),
                 'category_name' => $service['category_name'],
-                'color' => $service['color'],
+                'color' => esc_attr( $service['color'] ),
                 'type' => ucfirst( $service['type'] ),
                 'type_icon' => isset( $type_icons[ $service['type'] ] ) ? $type_icons[ $service['type'] ] : 'far fa-question-circle',
                 'disabled' => ! isset( $type_icons[ $service['type'] ] ),
@@ -87,7 +87,7 @@ class Ajax extends Page
 
         unset( $filter['search'] );
 
-        Lib\Utils\Tables::updateSettings( 'services', $columns, $order, $filter );
+        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::SERVICES, $columns, $order, $filter );
 
         wp_send_json( array(
             'draw' => ( int ) self::parameter( 'draw' ),

@@ -266,9 +266,8 @@ class Ajax extends Lib\Base\Ajax
         }
         $schedule_item_break
             ->setStartTime( $start_time )
-            ->setEndTime( $end_time )
-            ->save();
-        if ( $schedule_item_break ) {
+            ->setEndTime( $end_time );
+        if ( $schedule_item_break->save() ) {
             $break = new BreakItem( $schedule_item_break->getId(), $schedule_item_break->getStartTime(), $schedule_item_break->getEndTime() );
             wp_send_json_success( array(
                 'html' => $break->render( false ),

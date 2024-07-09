@@ -5,16 +5,10 @@ use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib;
 use Bookly\Lib\Entities;
 use Bookly\Lib\CartItem;
-use Bookly\Lib\Payment;
 use BooklyPro\Backend\Modules\Appearance;
 
 class Request extends Lib\Base\Component
 {
-    const BOOKING_STATUS_COMPLETED = 'completed';
-    const BOOKING_STATUS_GROUP_SKIP_PAYMENT = 'group_skip_payment';
-    const BOOKING_STATUS_PAYMENT_IMPOSSIBLE = 'payment_impossible';
-    const BOOKING_STATUS_APPOINTMENTS_LIMIT_REACHED = 'appointments_limit_reached';
-
     /** @var array */
     protected $customer = array();
     /** @var Lib\UserBookingData */
@@ -99,7 +93,7 @@ class Request extends Lib\Base\Component
      */
     public function isBookingForm()
     {
-        return ( $this->get( 'form_slug' ) === 'booking-form' ) || $this->get( 'bookly_fid' );
+        return ! $this->get( 'modern_booking_form' ) || $this->get( 'bookly_fid' );
     }
 
     /**
@@ -113,24 +107,14 @@ class Request extends Lib\Base\Component
                 $this->userData->load();
             } else {
                 $this->userData = new Lib\UserBookingData( null );
-                $customer = $this->get( 'customer' );
+                $customer = $this->get( 'customer', array() );
                 if ( $customer ) {
-                    $service_id = $this->getServiceId();
-                    $staff_id = $this->getStaffId();
-                    $location_id = $this->getLocationId() ?: null;
-                    $nop = self::parameter( 'nop' );
-                    $units = self::parameter( 'units', 1 );
-                    $extras = self::parameter( 'extras', array() );
                     $coupon = self::parameter( 'coupon' );
                     $gift_card = self::parameter( 'gift_card' );
-                    foreach ( array_keys( $extras, 0, false ) as $key ) {
-                        unset( $extras[ $key ] );
-                    }
 
                     $this->userData
                         ->setCouponCode( $coupon )
                         ->setGiftCode( $gift_card )
-                        ->setFullAddress( isset( $customer['full_address'] ) && $customer['full_address'] !== '' ? $customer['full_address'] : null )
                         ->setModernFormCustomer( $customer );
 
                     $client_fields = array();
@@ -149,40 +133,58 @@ class Request extends Lib\Base\Component
                         }
                     }
 
-                    $cart_item = new CartItem();
-                    $cart_item->setType( $this->get( 'type' ) );
-
-                    switch ( $cart_item->getType() ) {
-                        case CartItem::TYPE_APPOINTMENT:
-                        case CartItem::TYPE_PACKAGE:
-                            $slot = $this->get( 'type' ) === CartItem::TYPE_APPOINTMENT
-                                ? self::parameter( 'slot' )
-                                : array( 'value' => sprintf( '[[%d,%d,null,%s]]', $service_id, $staff_id, $location_id ?: 'null' ) );
-                            $slots = json_decode( $slot['value'], true );
-
-                            // Validate ?
-                            /** @todo */
-                            $custom_fields = array_map( function ( $id, $value ) {
-                                return compact( 'id', 'value' );
-                            }, array_keys( self::parameter( 'custom_fields', array() ) ), self::parameter( 'custom_fields', array() ) );
-
-                            $cart_item
-                                ->setStaffIds( array( $staff_id ) )
-                                ->setServiceId( $service_id )
-                                ->setNumberOfPersons( $nop )
-                                ->setLocationId( $location_id )
-                                ->setUnits( $units )
-                                ->setExtras( $extras )
-                                ->setCustomFields( $custom_fields )
-                                ->setSlots( $slots );
-                            break;
-                        default:
-                            $cart_item = Payment\Proxy\Shared::prepareCartItem( $cart_item, $this );
-                            break;
+                    // Deposit
+                    if ( Lib\Config::depositPaymentsActive() && get_option( 'bookly_deposit_allow_full_payment', '0' ) !== '0' ) {
+                        $this->userData->setDepositFull( ! self::parameter( 'deposit' ) );
                     }
 
-                    $this->userData->setSlots( $cart_item->getSlots() );
-                    $this->userData->cart->add( $cart_item );
+                    $slots = array();
+                    foreach ( self::parameter( 'cart' ) as $item ) {
+                        $service_id = $item['service_id'];
+                        $staff_id = $item['staff_id'];
+                        $location_id = $item['location_id'];
+                        $nop = isset( $item['nop'] ) ? $item['nop'] : 1;
+                        $units = isset( $item['units'] ) ? $item['units'] : 1;
+                        $extras = isset( $item['extras'] ) ? $item['extras'] : array();
+                        foreach ( array_keys( $extras, 0, false ) as $key ) {
+                            unset( $extras[ $key ] );
+                        }
+
+                        $cart_item = new CartItem();
+                        $cart_item->setType( $item['type'] );
+
+                        switch ( $cart_item->getType() ) {
+                            case CartItem::TYPE_APPOINTMENT:
+                            case CartItem::TYPE_PACKAGE:
+                                $slot = $item['type'] === CartItem::TYPE_APPOINTMENT
+                                    ? $item['slot']['slot']
+                                    : array( array( $service_id, $staff_id, null, $location_id ?: null ) );
+                                $slots[] = $slot;
+
+                                $custom_fields = isset( $item['custom_fields'] ) ? $item['custom_fields'] : array();
+                                $custom_fields = array_map( function( $id, $value ) {
+                                    return compact( 'id', 'value' );
+                                }, array_keys( $custom_fields ), $custom_fields );
+
+                                $cart_item
+                                    ->setStaffIds( array( $staff_id ) )
+                                    ->setServiceId( $service_id )
+                                    ->setNumberOfPersons( $nop )
+                                    ->setLocationId( $location_id )
+                                    ->setUnits( $units )
+                                    ->setExtras( $extras )
+                                    ->setCustomFields( $custom_fields )
+                                    ->setSeriesUniqueId( isset( $item['seriesId'] ) ? $item['seriesId'] : 0 )
+                                    ->setSlots( $slot );
+                                break;
+                            default:
+                                $cart_item->setCartTypeId( $item['gift_card_type'] );
+                                break;
+                        }
+
+                        $this->userData->cart->add( $cart_item );
+                    }
+                    $this->userData->setSlots( $slots );
                 }
             }
         }
@@ -198,7 +200,7 @@ class Request extends Lib\Base\Component
     {
         if ( $this->gateway === null ) {
             if ( Lib\Config::paymentStepDisabled() || BookingProxy\CustomerGroups::getSkipPayment( $this->getUserData()->getCustomer() ) ) {
-                $this->gateway = new Payment\NullGateway( $this );
+                $this->gateway = new Lib\Payment\NullGateway( $this );
             } else {
                 $gateway = $this->getGatewayName();
                 if ( $gateway === null ) {
@@ -214,15 +216,23 @@ class Request extends Lib\Base\Component
                         $this->gateway = $this->getGatewayByName( $payment->getType() );
                         $this->gateway->setPayment( $payment );
                     } else {
-                        $this->gateway = new Payment\ZeroGateway( $this );
+                        $this->gateway = new Lib\Payment\ZeroGateway( $this );
                         if ( $this->getCartInfo()->getPayNow() > 0 ) {
                             throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
                         }
                     }
                 } else {
                     $this->gateway = $this->getGatewayByName( $gateway );
-                    if ( ( $this->gateway->getType() === Entities\Payment::TYPE_FREE ) && $this->getCartInfo()->getPayNow() > 0 ) {
-                        throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
+                    $ci = $this->getCartInfo();
+                    if ( $ci->getPayNow() > 0 ) {
+                        if ( $this->gateway->getType() === Entities\Payment::TYPE_FREE ) {
+                            throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
+                        }
+                    } elseif ( ( $ci->getSubtotal() + $ci->getDiscount() ) > 0 ) {
+                        $this->gateway = new Lib\Payment\LocalGateway( $this );
+                    } else {
+                        // Coupon, Gift Card or Discounts make free service
+                        $this->gateway = new Lib\Payment\ZeroGateway( $this );
                     }
                 }
             }
@@ -298,13 +308,13 @@ class Request extends Lib\Base\Component
     {
         switch ( $gateway ) {
             case Entities\Payment::TYPE_CLOUD_STRIPE:
-                return new Payment\StripeCloudGateway( $this );
+                return new Lib\Payment\StripeCloudGateway( $this );
             case Entities\Payment::TYPE_LOCAL:
-                return new Payment\LocalGateway( $this );
+                return new Lib\Payment\LocalGateway( $this );
             case Entities\Payment::TYPE_FREE:
-                return new Payment\ZeroGateway( $this );
+                return new Lib\Payment\ZeroGateway( $this );
             default:
-                return Payment\Proxy\Shared::getGatewayByName( $gateway, $this );
+                return Lib\Payment\Proxy\Shared::getGatewayByName( $gateway, $this );
         }
     }
 }

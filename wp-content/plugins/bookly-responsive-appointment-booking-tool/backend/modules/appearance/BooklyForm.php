@@ -15,13 +15,9 @@ class BooklyForm extends Lib\Base\Component
 
         self::enqueueStyles( array(
             'frontend' => array_merge(
-                ( get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
+                get_option( 'bookly_cst_phone_default_country' ) === 'disabled'
                     ? array()
-                    : array( 'css/intlTelInput.css' ) ),
-                array(
-                    'css/picker.classic.css',
-                    'css/picker.classic.date.css',
-                ),
+                    : array( 'css/intlTelInput.css' ),
                 is_rtl()
                     ? array( 'css/bookly-rtl.css', 'css/bookly-main.css', )
                     : array( 'css/bookly-main.css', )
@@ -31,31 +27,20 @@ class BooklyForm extends Lib\Base\Component
         ) );
 
         self::enqueueScripts( array(
-            'frontend' => array_merge(
-                array(
-                    'js/picker.js' => array( 'bookly-backend-globals' ),
-                    'js/picker.date.js' => array( 'bookly-picker.js' ),
-                ),
-                get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
-                    ? array()
-                    : array( 'js/intlTelInput.min.js' => array( 'jquery' ) )
-            ),
+            'frontend' => get_option( 'bookly_cst_phone_default_country' ) === 'disabled'
+                ? array()
+                : array( 'js/intlTelInput.min.js' => array( 'jquery' ) ),
             'wp' => array( 'wp-color-picker' ),
             'module' => array(
-                'js/appearance.js' => array( 'bookly-picker.date.js' ),
+                'js/appearance.js' => array(),
             ),
         ) );
 
         wp_localize_script( 'bookly-appearance.js', 'BooklyL10n', array(
             'nop_format' => get_option( 'bookly_group_booking_nop_format' ),
-            'today' => __( 'Today', 'bookly' ),
             'months' => array_values( $wp_locale->month ),
             'daysFull' => array_values( $wp_locale->weekday ),
             'days' => array_values( $wp_locale->weekday_abbrev ),
-            'nextMonth' => __( 'Next month', 'bookly' ),
-            'prevMonth' => __( 'Previous month', 'bookly' ),
-            'date_format' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_PICKADATE ),
-            'firstDay' => (int) get_option( 'start_of_week' ),
             'saved' => __( 'Settings saved.', 'bookly' ),
             'intlTelInput' => array(
                 'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
@@ -108,13 +93,9 @@ class BooklyForm extends Lib\Base\Component
             );
         }
 
-        $gateways = array_map( function( $gateway ) {
-            if ( $gateway['logo_url'] === 'default' ) {
-                $gateway['logo_url'] = plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() );
-            }
-
-            return $gateway;
-        }, Proxy\Shared::paymentGateways( $gateways ) );
+        foreach ( Proxy\Shared::paymentGateways( array() ) as $type => $gateway ) {
+            $gateways[ $type ] = $gateway;
+        }
 
         $order = Lib\Config::getGatewaysPreference();
         $payment_options = array();
@@ -128,6 +109,12 @@ class BooklyForm extends Lib\Base\Component
             }
         }
         $payment_options = array_merge( $payment_options, $gateways );
+
+        foreach ( $payment_options as &$gateway ) {
+            if ( $gateway['logo_url'] === 'default' ) {
+                $gateway['logo_url'] = plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() );
+            }
+        }
 
         // Render general layout.
         self::renderTemplate( 'index', compact( 'steps', 'custom_css', 'payment_options' ) );

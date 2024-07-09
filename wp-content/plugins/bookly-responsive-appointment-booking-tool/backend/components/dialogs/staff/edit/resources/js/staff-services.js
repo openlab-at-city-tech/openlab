@@ -86,7 +86,7 @@
                 $.ajax({
                     type: 'POST',
                     url: ajaxurl,
-                    data: booklySerialize.buildRequestDataFromForm('bookly_update_staff_services',$services_form),
+                    data: booklySerialize.buildRequestDataFromForm('bookly_update_staff_services', $services_form),
                     dataType: 'json',
                     xhrFields: {withCredentials: true},
                     crossDomain: 'withCredentials' in new XMLHttpRequest(),

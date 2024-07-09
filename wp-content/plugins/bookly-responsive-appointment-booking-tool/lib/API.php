@@ -351,7 +351,7 @@ abstract class API
                 'size' => get_option( 'bookly_co_size' ),
                 'email' => get_option( 'bookly_co_email' ),
                 'completed_payments' => $completed_payments,
-                'custom_fields_count' => count( (array) Proxy\CustomFields::getAll() ),
+                'custom_fields_count' => count( Proxy\CustomFields::getAll( array() ) ?: array() ),
                 'description' => get_bloginfo( 'description' ),
                 'extras_quantity' => $extras_quantity,
                 'cart_enabled' => $cart_enabled,

@@ -13,7 +13,7 @@ class Ajax extends Lib\Base\Ajax
     public static function cloudVoiceSaveSettings()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $cloud->voice->setSettings( self::parameter( 'language' ) )
+        $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->setSettings( self::parameter( 'language' ) )
             ? wp_send_json_success()
             : wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
     }
@@ -27,7 +27,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $cloud = Lib\Cloud\API::getInstance();
         $phone_number = self::parameter( 'phone_number' );
-        $cloud->voice->call( $phone_number, 'Hello, this is a test call from Bookly', 'Hello, this is a test call from Bookly' )
+        $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->call( $phone_number, 'Hello, this is a test call from Bookly', 'Hello, this is a test call from Bookly' )
             ? wp_send_json_success( array( 'message' => sprintf( __( 'Calling %s', 'bookly' ), $phone_number ) . ' …' ) )
             : wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ?: __( 'Failed', 'bookly' ) ) );
     }
@@ -43,7 +43,7 @@ class Ajax extends Lib\Base\Ajax
         $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
         $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
 
-        wp_send_json( Lib\Cloud\API::getInstance()->voice->getCallsList( $start, $end ) );
+        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->getCallsList( $start, $end ) );
     }
 
     /**
@@ -51,6 +51,6 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getVoicePriceList()
     {
-        wp_send_json( Lib\Cloud\API::getInstance()->voice->getPriceList() );
+        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->getPriceList() );
     }
 }

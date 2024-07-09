@@ -68,66 +68,6 @@ class Ajax extends Page
         wp_send_json_success( self::_getHolidays() );
     }
 
-    /**
-     * Get logs.
-     */
-    public static function getLogs()
-    {
-        global $wpdb;
-
-        $filter = self::parameter( 'filter' );
-        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::LOGS );
-        $order = self::parameter( 'order', array() );
-
-        $query = Lib\Entities\Log::query();
-
-        // Filters.
-        list ( $start, $end ) = explode( ' - ', $filter['created_at'], 2 );
-        $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
-
-        $query->whereBetween( 'created_at', $start, $end );
-        if ( isset( $filter['search'] ) && $filter['search'] !== '' ) {
-            $query->whereRaw( 'target LIKE "%%%s%" OR details LIKE "%%%s%" OR ref LIKE "%%%s%" OR comment LIKE "%%%s%" OR author LIKE "%%%s%"', array_fill( 0, 5, $wpdb->esc_like( $filter['search'] ) ) );
-        }
-        if ( isset( $filter['target'] ) && $filter['target'] !== '' ) {
-            $query->where( 'target_id', $filter['target'] );
-        }
-        if ( isset( $filter['action'] ) && $filter['action'] && count( $filter['action'] ) < 3 ) {
-            $query->whereIn( 'action', $filter['action'] );
-        }
-
-        $filtered = $query->count();
-
-        if ( self::parameter( 'length' ) ) {
-            $query->limit( self::parameter( 'length' ) )->offset( self::parameter( 'start' ) );
-        }
-
-        foreach ( $order as $sort_by ) {
-            $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
-                ->order( isset( $sort_by['dir'] ) && $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
-        }
-
-        $logs = $query->fetchArray();
-
-        wp_send_json( array(
-            'draw' => ( int ) self::parameter( 'draw' ),
-            'recordsTotal' => count( $logs ),
-            'recordsFiltered' => $filtered,
-            'data' => $logs,
-        ) );
-    }
-
-    /**
-     * Delete all logs
-     */
-    public static function deleteLogs()
-    {
-        Lib\Entities\Log::query()
-            ->delete()
-            ->execute();
-
-        wp_send_json_success();
-    }
 
     public static function sendSmtpTest()
     {

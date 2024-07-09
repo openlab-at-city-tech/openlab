@@ -22,6 +22,8 @@ class CartInfo
     protected $group_discount = 0;
     /** @var float  amount of discount for applied coupon */
     protected $coupon_discount = 0;
+    /** @var float  amount of discount for applied coupon */
+    protected $gift_card_discount = 0;
     /** @var float  cost of services including coupon and group discount */
     protected $total = 0;
     /** @var array [['rate' =>float, 'deposit' => float, 'total' => float, 'allow_coupon' => bool]]
@@ -74,7 +76,9 @@ class CartInfo
         $this->pay_full = $userData->getDepositFull();
 
         $coupon_total = 0;
-        foreach ( $userData->cart->getItems() as $key => $item ) {
+        $gift_card_total = 0;
+
+        foreach ( $userData->cart->getItems() as $item ) {
             if (
                 $item->getSeriesUniqueId()
                 && get_option( 'bookly_recurring_appointments_payment' ) === 'first'
@@ -102,6 +106,10 @@ class CartInfo
                             $this->deposit += Proxy\DepositPayments::prepareAmount( $item_price, $item->getDeposit(), $item->getNumberOfPersons() );
                             $this->amounts_taxable = Proxy\Taxes::prepareTaxRateAmounts( $this->amounts_taxable, $item, $allow_coupon );
                         }
+
+                        if ( $this->gift_card && Proxy\Pro::isValidForCartItem( false, $item, $this ) ) {
+                            $gift_card_total += $item_price;
+                        }
                     }
                     break;
                 default:
@@ -114,13 +122,18 @@ class CartInfo
 
         // Discounts order
         // 1.Coupon
-        // 2.Addon Discounts
-        // 3.Group Discounts
-        // 4.Payment System
+        // 2.Gift card
+        // 3.Addon Discounts
+        // 4.Group Discounts
+        // 5.Payment System
 
         if ( $this->coupon ) {
             $this->coupon_discount = $this->coupon->apply( $coupon_total ) - $coupon_total;
             $this->total += $this->coupon_discount;
+        }
+
+        if ( $this->gift_card ) {
+            $this->gift_card_discount = min( $gift_card_total, $this->gift_card->getBalance() );
         }
 
         $total_without_discount = $this->total;
@@ -362,30 +375,10 @@ class CartInfo
         return $this->userData;
     }
 
-    public function getTarget()
-    {
-        $items = $this->userData->cart->getItems();
-        /** @var CartItem $item */
-        $item = reset( $items );
-        switch ( $item->getType() ) {
-            case CartItem::TYPE_PACKAGE:
-                return Payment::TARGET_PACKAGES;
-            case CartItem::TYPE_GIFT_CARD:
-                return Payment::TARGET_GIFT_CARDS;
-            case CartItem::TYPE_APPOINTMENT:
-            default:
-                return Payment::TARGET_APPOINTMENTS;
-        }
-    }
-
-    /**************************************************************************
-     * Private                                                                *
-     **************************************************************************/
-
     /**
      * @return float
      */
-    private function getDiscount()
+    public function getDiscount()
     {
         return $this->coupon_discount + $this->group_discount + $this->price_correction + $this->addon_discount;
     }
@@ -411,9 +404,9 @@ class CartInfo
      *
      * @return float
      */
-    public function getGiftCardAmount()
+    public function getGiftCardDiscount()
     {
-        return $this->gift_card ? ( $this->userData->getGiftCardAmount() ?: min( $this->getPayNowWithoutGiftCard(), $this->gift_card->getBalance() ) ) : 0;
+        return $this->gift_card ? ( $this->userData->getGiftCardAmount() ?: min( $this->getPayNowWithoutGiftCard(), $this->gift_card_discount ) ) : 0;
     }
 
     /**
@@ -423,7 +416,7 @@ class CartInfo
      */
     public function getPayNow()
     {
-        return $this->getPayNowWithoutGiftCard() - $this->getGiftCardAmount();
+        return $this->getPayNowWithoutGiftCard() - $this->getGiftCardDiscount();
     }
 
     /**
@@ -439,6 +432,14 @@ class CartInfo
     }
 
     /**
+     * @return bool
+     */
+    public function getPayFull()
+    {
+        return $this->pay_full;
+    }
+
+    /**
      * Get total price.
      *
      * @return float
@@ -451,7 +452,7 @@ class CartInfo
             $total = $this->subtotal + $this->getDiscount() + $this->userData->getTips() + $this->getTotalTax();
         }
 
-        return $with_gift_card && $this->gift_card ? max( 0, $total - $this->getGiftCardAmount() ) : $total;
+        return $with_gift_card && $this->gift_card ? max( 0, $total - $this->getGiftCardDiscount() ) : $total;
     }
 
     /**
@@ -482,7 +483,7 @@ class CartInfo
                 'without_coupon' => 0,
             );
             $coupon_total = 0;
-            array_walk( $this->amounts_taxable, function ( $amount ) use ( &$taxes, &$coupon_total ) {
+            array_walk( $this->amounts_taxable, function( $amount ) use ( &$taxes, &$coupon_total ) {
                 if ( $amount['allow_coupon'] ) {
                     $taxes['allow_coupon'] += Proxy\Taxes::calculateTax( $amount['total'], $amount['rate'] );
                     $coupon_total += $amount['total'];
@@ -525,7 +526,7 @@ class CartInfo
             $deposit = min( $this->deposit + $this->getDepositTax(), $this->total + $this->getTotalTax() ) + $this->price_correction + $this->userData->getTips();
         }
 
-        return $with_gift_card && $this->gift_card ? max( 0, $deposit - $this->getGiftCardAmount() ) : $deposit;
+        return $with_gift_card && $this->gift_card ? max( 0, $deposit - $this->getGiftCardDiscount() ) : $deposit;
     }
 
     /**

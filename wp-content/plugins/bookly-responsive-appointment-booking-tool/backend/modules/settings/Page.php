@@ -157,10 +157,6 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_co_email', self::parameter( 'bookly_co_email' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
-                case 'logs':  // Logs form.
-                    update_option( 'bookly_logs_enabled', self::parameter( 'bookly_logs_enabled' ) );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly' );
-                    break;
             }
 
             // Let Add-ons save their settings.
@@ -169,7 +165,6 @@ class Page extends Lib\Base\Ajax
 
         Proxy\Shared::enqueueAssets();
 
-        $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::LOGS );
         wp_localize_script( 'bookly-settings.js', 'BooklyL10n', array(
             'alert' => $alert,
             'current_tab' => $current_tab,
@@ -186,7 +181,6 @@ class Page extends Lib\Base\Ajax
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
-            'datatables' => $datatables,
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
             'processing' => __( 'Processing...', 'bookly' ),
@@ -216,7 +210,7 @@ class Page extends Lib\Base\Ajax
         $payments = self::_getPayments();
         $business_hours = self::_getBusinessHours();
 
-        self::renderTemplate( 'index', compact( 'values', 'payments', 'business_hours', 'datatables' ) );
+        self::renderTemplate( 'index', compact( 'values', 'payments', 'business_hours' ) );
     }
 
     /**
@@ -275,11 +269,13 @@ class Page extends Lib\Base\Ajax
     protected static function _getPayments()
     {
         $payments = array();
+        $local = Lib\Entities\Payment::TYPE_LOCAL;
         $payment_data = array(
-            'local' => self::renderTemplate( '_payment_local', array(), false ),
+            $local => self::renderTemplate( '_payment_local', array( 'type' => $local ), false ),
         );
         if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
-            $payment_data[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = self::renderTemplate( '_cloud_stripe_settings', array(), false );
+            $stripe = Lib\Entities\Payment::TYPE_CLOUD_STRIPE;
+            $payment_data[ $stripe ] = self::renderTemplate( '_cloud_stripe_settings', array( 'type' => $stripe ), false );
         }
 
         $payment_data = Proxy\Shared::preparePaymentGatewaySettings( $payment_data );

@@ -37,7 +37,7 @@ class Voice extends Product
             $data = array(
                 'message' => $message,
                 'impersonal_message' => $impersonal_message,
-                'phone' => \Bookly\Lib\Cloud\SMS::normalizePhoneNumber( $phone_number ),
+                'phone' => SMS::normalizePhoneNumber( $phone_number ),
             );
             if ( $data['phone'] != '' ) {
                 $response = $this->api->sendPostRequest( self::CALL, $data );
@@ -69,10 +69,10 @@ class Voice extends Product
             if ( $response ) {
                 array_walk( $response['list'], function( &$item ) {
                     $date_time = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
-                    $item['date']    = Utils\DateTime::formatDate( $date_time );
-                    $item['time']    = Utils\DateTime::formatTime( $date_time );
+                    $item['date'] = Utils\DateTime::formatDate( $date_time );
+                    $item['time'] = Utils\DateTime::formatTime( $date_time );
                     $item['message'] = nl2br( preg_replace( '/([^\s]{50})+/U', '$1 ', htmlspecialchars( $item['message'] ) ) );
-                    $item['phone']   = '+' . $item['phone'];
+                    $item['phone'] = '+' . $item['phone'];
                     switch ( $item['status'] ) {
                         case 'completed':
                             $item['charge'] = '$' . $item['charge'];

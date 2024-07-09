@@ -22,44 +22,45 @@ class Ajax extends Lib\Base\Ajax
             'errors' => array(),
         );
 
-        $params = self::parameters();
-
+        $request = self::getRequest();
         // Check for errors.
         if ( get_option( 'bookly_cst_first_last_name' ) ) {
-            if ( $params['first_name'] == '' ) {
+            if ( $request->get( 'first_name' ) == '' ) {
                 $response['errors']['first_name'] = array( 'required' );
             }
-            if ( $params['last_name'] == '' ) {
+            if ( $request->get( 'last_name' ) == '' ) {
                 $response['errors']['last_name'] = array( 'required' );
             }
-        } elseif ( $params['full_name'] == '' ) {
+        } elseif ( $request->get( 'full_name' ) == '' ) {
             $response['errors']['full_name'] = array( 'required' );
         }
-
         if ( count( $response['errors'] ) === 0 ) {
-            if ( ! $params['wp_user_id'] ) {
-                $params['wp_user_id'] = null;
+            $customer = new Lib\Entities\Customer();
+            if ( $request->get( 'id' ) ) {
+                $customer->load( $request->get( 'id' ) );
             }
-            if ( ! $params['birthday'] ) {
-                $params['birthday'] = null;
-            }
-            if ( ! $params['group_id'] ) {
-                $params['group_id'] = null;
-            }
-            $params = Proxy\CustomerInformation::prepareCustomerFormData( $params );
-            if ( isset( $params['info_fields'] ) ) {
-                $params['info_fields'] = json_encode( $params['info_fields'] );
-            }
-            $form = new Forms\Customer();
-            $form->bind( $params );
-            $customer = new Lib\Entities\Customer( $form->getData() );
-            $response = Proxy\Shared::prepareSaveCustomer( $response, $params, $customer );
+            $customer->setWpUserId( $request->get( 'wp_user_id' ) );
+            $response = Proxy\Shared::prepareSaveCustomer( $response, $request, $customer );
             if ( count( $response['errors'] ) === 0 ) {
-                if ( $params['wp_user_id'] === 'create' && isset( $response['wp_user'] ) ) {
-                    $customer->setWpUserId( $response['wp_user']['ID'] );
-                }
+                $customer
+                    ->setBirthday( $request->get( 'birthday' ) )
+                    ->setGroupId( $request->get( 'group_id' ) )
+                    ->setFirstName( $request->get( 'first_name' ) )
+                    ->setLastName( $request->get( 'last_name' ) )
+                    ->setFullName( $request->get( 'full_name' ) )
+                    ->setPhone( $request->get( 'phone' ) ?: '' )
+                    ->setEmail( $request->get( 'email' ) ?: '' )
+                    ->setCountry( $request->get( 'country' ) )
+                    ->setState( $request->get( 'state' ) )
+                    ->setPostcode( $request->get( 'postcode' ) )
+                    ->setCity( $request->get( 'city' ) )
+                    ->setStreet( $request->get( 'street' ) )
+                    ->setStreetNumber( $request->get( 'street_number' ) )
+                    ->setAdditionalAddress( $request->get( 'additional_address' ) )
+                    ->setNotes( $request->get( 'notes' ) ?: '' )
+                    ->setAttachmentId( $request->get( 'attachment_id' ) )
+                    ->save();
 
-                $customer->save();
                 $response['success'] = true;
                 $response['customer'] = array(
                     'id' => (int) $customer->getId(),
@@ -96,15 +97,26 @@ class Ajax extends Lib\Base\Ajax
 
         if ( $customer ) {
             $customer['id'] = (int) $customer['id'];
-            $files = Lib\Proxy\Files::getFileNamesForCustomerInformationFields( json_decode( $customer['info_fields'], true ) ) ?: array();
-            if ( isset( $customer['info_fields'] ) && $customer['info_fields'] ) {
-                $customer['info_fields'] = array_map( function( $item ) { return array( 'id' => (int) $item['id'], 'value' => $item['value'] ); }, json_decode( $customer['info_fields'], true ) );
+            $info_fields = json_decode( $customer['info_fields'], true ) ?: array();
+            $files = $info_fields
+                ? ( Lib\Proxy\Files::getFileNamesForCustomerInformationFields( $info_fields ) ?: array() )
+                : array();
+            $customer['info_fields'] = array();
+            if ( $info_fields ) {
+                foreach ( $info_fields as $field ) {
+                    $customer['info_fields'][] = array(
+                        'id' => (int) $field['id'],
+                        'value' => $field['value'],
+                    );
+                }
             }
 
             $wp_user = $customer['wp_user_id']
                 ? $wpdb->get_row( Dialog::getWPUsersQuery() . ( is_multisite() ? ' AND ' : ' WHERE ' ) . ' ID = ' . (int) $customer['wp_user_id'] )
                 : null;
-            wp_send_json_success( compact( 'customer', 'wp_user', 'files' ) );
+            $thumb = Lib\Utils\Common::getAttachmentUrl( $customer['attachment_id'], 'thumbnail' ) ?: null;
+
+            wp_send_json_success( compact( 'customer', 'wp_user', 'files', 'thumb' ) );
         } else {
             wp_send_json_error();
         }

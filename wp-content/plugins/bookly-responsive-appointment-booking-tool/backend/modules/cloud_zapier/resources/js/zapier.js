@@ -11,7 +11,7 @@ jQuery(function($) {
                 type: 'POST',
                 data: {
                     action: 'bookly_cloud_zapier_generate_new_api_key',
-                    csrf_token: BooklyL10n.csrfToken,
+                    csrf_token: BooklyL10nGlobal.csrf_token,
                 },
                 dataType: 'json',
                 success: function (response) {

@@ -23,7 +23,7 @@ class Order extends Lib\Base\Entity
     public function getCaItems()
     {
         $records = CustomerAppointment::query( 'ca' )
-            ->select( 's.id AS service_id, MIN(a.start_date) AS start_date, MAX(a.end_date) AS end_date, a.custom_service_name, a.location_id, s.title AS service_title, ca.id as ca_id' )
+            ->select( 's.id AS service_id, MIN(a.start_date) AS start_date, MAX(a.end_date) AS end_date, a.custom_service_name, a.location_id, s.title AS service_title, ca.id AS ca_id' )
             ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
             ->leftJoin( 'Service', 's', 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)' )
             ->leftJoin( 'Order', 'o', 'o.id = ca.order_id', '\Bookly\Lib\Entities' )

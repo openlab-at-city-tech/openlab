@@ -30,7 +30,7 @@ class Ajax extends Lib\Base\Ajax
         $length = self::parameter( 'length' );
         $start = self::parameter( 'start' );
 
-        $data = Lib\Cloud\API::getInstance()->sms->getSmsList( $start, $length, $filter );
+        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getSmsList( $start, $length, $filter );
         $data['draw'] = (int) self::parameter( 'draw' );
 
         wp_send_json( $data );
@@ -41,7 +41,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getPriceList()
     {
-        wp_send_json( Lib\Cloud\API::getInstance()->sms->getPriceList() );
+        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getPriceList() );
     }
 
     /**
@@ -51,7 +51,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $cloud = Lib\Cloud\API::getInstance();
         $response = array(
-            'success' => $cloud->sms->sendSms(
+            'success' => $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms(
                 self::parameter( 'phone_number' ),
                 'Bookly test SMS.',
                 'Bookly test SMS.',
@@ -73,7 +73,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getSenderIdsList()
     {
-        wp_send_json( Lib\Cloud\API::getInstance()->sms->getSenderIdsList() );
+        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getSenderIdsList() );
     }
 
     /**
@@ -82,7 +82,7 @@ class Ajax extends Lib\Base\Ajax
     public static function requestSenderId()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->sms->requestSenderId( self::parameter( 'sender_id' ) );
+        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->requestSenderId( self::parameter( 'sender_id' ) );
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
         } else {
@@ -96,7 +96,7 @@ class Ajax extends Lib\Base\Ajax
     public static function cancelSenderId()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->sms->cancelSenderId();
+        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->cancelSenderId();
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
         } else {
@@ -110,7 +110,7 @@ class Ajax extends Lib\Base\Ajax
     public static function resetSenderId()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->sms->resetSenderId();
+        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->resetSenderId();
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
         } else {
@@ -202,13 +202,13 @@ class Ajax extends Lib\Base\Ajax
                         $notification = $queue_data[ $type ][ $queue_id ];
                         $gateway = $notification['gateway'];
                         if ( $gateway === 'sms' ) {
-                            $cloud->sms->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
                         } elseif ( $gateway === 'email' ) {
                             Lib\Utils\Mail::send( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array(), $notification['type_id'] );
                         } elseif ( $gateway === 'voice' ) {
-                            $cloud->voice->call( $notification['address'], $notification['message'], $notification['impersonal'] );
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->call( $notification['address'], $notification['message'], $notification['impersonal'] );
                         } elseif ( $gateway === 'whatsapp' ) {
-                            $cloud->whatsapp->send( $notification['address'], $notification['message'] );
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->send( $notification['address'], $notification['message'] );
                         }
                     }
                 }

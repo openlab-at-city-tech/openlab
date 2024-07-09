@@ -4,6 +4,7 @@ use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Payments\Proxy;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Controls;
+
 /** @var array $datatables */
 ?>
 <div id="bookly-tbs" class="wrap">
@@ -19,7 +20,7 @@ use Bookly\Backend\Components\Controls;
             <div class="form-row">
                 <div class="col-md-1">
                     <div class="form-group">
-                        <input class="form-control" type="text" id="bookly-filter-id" placeholder="<?php esc_attr_e( 'No.', 'bookly' ) ?>" />
+                        <input class="form-control" type="text" id="bookly-filter-id" placeholder="<?php esc_attr_e( 'No.', 'bookly' ) ?>"/>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-5 mb-3 mb-md-0">
@@ -99,7 +100,7 @@ use Bookly\Backend\Components\Controls;
                     <tr>
                         <?php $columns = array_filter( $datatables['payments']['settings']['columns'] ) ?>
                         <?php $index = array_search( 'paid', array_keys( $columns ) ) ?>
-                        <?php for ( $column = 0; $column < count( $columns ) + 2; $column ++ ) : ?>
+                        <?php for ( $column = 0; $column < count( $columns ) + 2; $column++ ) : ?>
                             <?php if ( $column == $index - 1 ) : ?>
                                 <th>
                                     <div class="pull-right"><?php esc_html_e( 'Total', 'bookly' ) ?>:</div>
@@ -114,9 +115,9 @@ use Bookly\Backend\Components\Controls;
                     </tfoot>
                 <?php endif ?>
             </table>
-            <div class="text-right mt-3">
-                <?php Proxy\Invoices::renderDownloadButton() ?>
+            <div class="d-flex flex-row-reverse mt-3">
                 <?php Controls\Buttons::renderDelete() ?>
+                <?php Proxy\Invoices::renderDownloadButton() ?>
             </div>
         </div>
 

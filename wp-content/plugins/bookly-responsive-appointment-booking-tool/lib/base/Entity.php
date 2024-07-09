@@ -331,7 +331,7 @@ abstract class Entity extends Cache
                 if ( array_key_exists( 'required', $options['reference'] ) ) {
                     $addon = str_replace( ' ', '', ucwords( str_replace( array( 'bookly-addon-', '-' ), array( '', ' ' ), $options['reference']['required'] ) ) );
                     // Check if required addon is active
-                    $add_reference = call_user_func( array( '\Bookly\Lib\Config', lcfirst( $addon . 'Active' ) ) );
+                    $add_reference = Lib\Config::{lcfirst( $addon . 'Active' )}();
                 } else {
                     $add_reference = true;
                 }

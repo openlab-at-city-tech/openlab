@@ -14,7 +14,7 @@ class Page extends Lib\Base\Component
         $cloud = Lib\Cloud\API::getInstance();
         if ( ! $cloud->account->loadProfile() ) {
             Components\Cloud\LoginRequired\Page::render( 'Zapier', self::pageSlug() );
-        } elseif ( $cloud->account->productActive( 'zapier' ) ) {
+        } elseif ( $cloud->account->productActive( Lib\Cloud\Account::PRODUCT_ZAPIER ) ) {
             self::enqueueStyles( array(
                 'alias' => array( 'bookly-backend-globals', ),
             ) );
@@ -24,7 +24,6 @@ class Page extends Lib\Base\Component
             ) );
 
             wp_localize_script( 'bookly-zapier.js', 'BooklyL10n', array(
-                'csrfToken'  => Lib\Utils\Common::getCsrfToken(),
                 'areYouSure' => __( 'Are you sure?', 'bookly' ),
             ) );
 

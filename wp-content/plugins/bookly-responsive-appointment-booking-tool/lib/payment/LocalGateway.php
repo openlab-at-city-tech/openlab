@@ -2,11 +2,10 @@
 namespace Bookly\Lib\Payment;
 
 use Bookly\Lib;
-use Bookly\Lib\Entities\Payment;
 
 class LocalGateway extends Lib\Base\Gateway
 {
-    protected $type = Payment::TYPE_LOCAL;
+    protected $type = Lib\Entities\Payment::TYPE_LOCAL;
     protected $on_site = true;
 
     /**

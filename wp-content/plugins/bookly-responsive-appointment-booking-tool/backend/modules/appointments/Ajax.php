@@ -2,6 +2,7 @@
 namespace Bookly\Backend\Modules\Appointments;
 
 use Bookly\Lib;
+use Bookly\Backend\Components\Dialogs\Queue\NotificationList;
 
 class Ajax extends Lib\Base\Ajax
 {
@@ -56,7 +57,7 @@ class Ajax extends Lib\Base\Ajax
                 $ca_list[] = $ca_data['ca_id'];
             }
         }
-        $queue = array();
+        $queue = new NotificationList();
         /** @var Lib\Entities\CustomerAppointment $ca */
         foreach ( Lib\Entities\CustomerAppointment::query()->whereIn( 'id', $ca_list )->find() as $ca ) {
             if ( self::parameter( 'notify' ) ) {
@@ -69,7 +70,7 @@ class Ajax extends Lib\Base\Ajax
                         $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_CANCELLED );
                         break;
                     default:
-                        $busy_statuses = (array) Lib\Proxy\CustomStatuses::prepareBusyStatuses( array() );
+                        $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array() );
                         if ( in_array( $ca->getStatus(), $busy_statuses ) ) {
                             $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_CANCELLED );
                         }
@@ -93,13 +94,14 @@ class Ajax extends Lib\Base\Ajax
             }
         }
         $response = array();
-        if ( $queue ) {
+        $list = $queue->getList();
+        if ( $list ) {
             $db_queue = new Lib\Entities\NotificationQueue();
             $db_queue
-                ->setData( json_encode( array( 'all' => $queue ) ) )
+                ->setData( json_encode( array( 'all' => $list ) ) )
                 ->save();
 
-            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue );
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $list );
         }
         wp_send_json_success( $response );
     }
@@ -132,6 +134,7 @@ class Ajax extends Lib\Base\Ajax
                 a.staff_any,
                 a.online_meeting_provider,
                 a.online_meeting_id,
+                a.online_meeting_data,
                 a.internal_note,
                 c.full_name  AS customer_full_name,
                 c.phone      AS customer_phone,
@@ -236,7 +239,7 @@ class Ajax extends Lib\Base\Ajax
         }
 
         $custom_fields = array();
-        $fields_data = (array) Lib\Proxy\CustomFields::getWhichHaveData();
+        $fields_data = Lib\Proxy\CustomFields::getWhichHaveData() ?: array();
         foreach ( $fields_data as $field_data ) {
             $custom_fields[ $field_data->id ] = '';
         }
@@ -281,22 +284,11 @@ class Ajax extends Lib\Base\Ajax
             // Custom fields
             $customer_appointment = new Lib\Entities\CustomerAppointment();
             $customer_appointment->load( $row['ca_id'] );
-            foreach ( (array) Lib\Proxy\CustomFields::getForCustomerAppointment( $customer_appointment, false, null, false ) as $custom_field ) {
-                if ( $custom_field['value'] != '' ) {
-                    switch ( $custom_field['type'] ) {
-                        case 'time':
-                            $custom_fields[ $custom_field['id'] ] = Lib\Utils\DateTime::formatTime( $custom_field['value'] );
-                            break;
-                        case 'date':
-                            $custom_fields[ $custom_field['id'] ] = Lib\Utils\DateTime::formatDate( $custom_field['value'] );
-                            break;
-                        default:
-                            $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
-                    }
-                }
+            foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( $customer_appointment ) ?: array() as $custom_field ) {
+                $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
             }
             if ( $row['ca_id'] !== null ) {
-                $extras = (array) Lib\Proxy\ServiceExtras::getInfo( json_decode( $row['extras'], true ) ?: array(), false );
+                $extras = Lib\Proxy\ServiceExtras::getInfo( json_decode( $row['extras'], true ) ?: array(), false ) ?: array();
                 if ( $row['extras_multiply_nop'] && $row['number_of_persons'] > 1 ) {
                     foreach ( $extras as $index => $extra ) {
                         $extras[ $index ]['title'] = '<i class="far fa-user"></i>&nbsp;' . $row['number_of_persons'] . '&nbsp;&times;&nbsp;' . $extra['title'];
@@ -304,6 +296,16 @@ class Ajax extends Lib\Base\Ajax
                 }
             } else {
                 $extras = array();
+            }
+
+            if ( $row['online_meeting_provider'] === 'bbb' ) {
+                $appointment = new Lib\Entities\Appointment();
+                $appointment->setOnlineMeetingData( $row['online_meeting_data'] )
+                    ->setOnlineMeetingProvider( $row['online_meeting_provider'] )
+                    ->setOnlineMeetingId( $row['online_meeting_id'] );
+                $online_meeting_start_url = Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $appointment );
+            } else {
+                $online_meeting_start_url = $row['online_meeting_id'];
             }
 
             $data[] = array(
@@ -348,7 +350,7 @@ class Ajax extends Lib\Base\Ajax
                 'payment_id' => $row['payment_id'],
                 'internal_note' => $row['internal_note'],
                 'online_meeting_provider' => $row['online_meeting_provider'],
-                'online_meeting_id' => $row['online_meeting_id'],
+                'online_meeting_start_url' => $online_meeting_start_url,
                 'created_date' => Lib\Utils\DateTime::formatDateTime( $row['created_date'] ),
             );
 

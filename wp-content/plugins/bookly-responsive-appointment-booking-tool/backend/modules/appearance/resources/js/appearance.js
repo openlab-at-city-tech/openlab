@@ -13,6 +13,7 @@ jQuery(function ($) {
         $color_picker = $('.bookly-js-color-picker'),
         $editableElements = $('.bookly-js-editable'),
         $show_progress_tracker = $('#bookly-show-progress-tracker'),
+        $invert_datepicker_colors = $('#bookly-invert-datepicker-colors'),
         $align_buttons_left = $('#bookly-align-buttons-left'),
         $step_settings = $('#bookly-step-settings'),
         $bookly_show_step_extras = $('#bookly-show-step-extras'),
@@ -120,17 +121,12 @@ jQuery(function ($) {
         $('.bookly-label-error').css('color', color);
         $('.bookly-js-actions > a').css('background-color', color);
         $('.bookly-js-mobile-next-step').css('background', color);
-        $('.bookly-js-week-days label').css('background-color', color);
-        $('.picker__frame').attr('style', 'background: ' + color_important);
-        $('.picker__header').attr('style', 'border-bottom: ' + '1px solid ' + color_important);
-        $('.picker__day').off().mouseenter(function () {
-            $(this).attr('style', 'color: ' + color_important);
-        }).mouseleave(function () {
-            $(this).attr('style', $(this).hasClass('picker__day--selected') ? 'color: ' + color_important : '')
-        });
-        $('.picker__day--selected').attr('style', 'color: ' + color_important);
-        $('.picker__button--clear').attr('style', 'color: ' + color_important);
-        $('.picker__button--today').attr('style', 'color: ' + color_important);
+        $('.bookly-form label').css('color', color),
+            $('.bookly-week-days input[type=\'checkbox\']').css({
+                'background-color': color,
+                'border-color': color
+            }),
+            $('.text-color-bookly').attr('style', 'color: ' + color_important);
         $('.bookly-extra-step .bookly-extras-thumb.bookly-extras-selected').css('border-color', color);
         $('.bookly-columnizer .bookly-day, .bookly-schedule-date,.bookly-pagination li.active').css({
             'background': color,
@@ -168,13 +164,13 @@ jQuery(function ($) {
         $('.bookly-card-form label').css('color', color);
         $('.bookly-nav-tabs .ladda-button, .bookly-nav-steps .ladda-button, .bookly-btn, .bookly-round, .bookly-square').css('background-color', color);
         $('.bookly-triangle').css('border-bottom-color', color);
-        $('#bookly-pickadate-style').html('.picker__nav--next:before { border-left: 6px solid ' + color_important + ' } .picker__nav--prev:before { border-right: 6px solid ' + color_important + ' }');
     };
 
     // Init color picker.
     $color_picker.wpColorPicker({
         change: applyColor
     });
+    applyColor();
 
     // Init editable elements.
     $editableElements.booklyEditable();
@@ -191,6 +187,12 @@ jQuery(function ($) {
         } else {
             $('.bookly-nav-steps > div.bookly-left').removeClass('bookly-left mr-2').addClass('bookly-right ml-2');
         }
+    });
+
+    // Invert datepicker colors.
+    $invert_datepicker_colors.on('change', function () {
+        $('.bookly-js-datepicker-calendar-mode[data-mode="' + (+this.checked) + '"]').show();
+        $('.bookly-js-datepicker-calendar-mode[data-mode="' + (+!this.checked) + '"]').hide();
     });
 
     $extras_show.on('change', function () {
@@ -267,23 +269,6 @@ jQuery(function ($) {
     /**
      * Step Service
      */
-
-    // Init calendar.
-    $('.bookly-js-date-from').pickadate({
-        formatSubmit: 'yyyy-mm-dd',
-        format: BooklyL10n.date_format,
-        min: true,
-        clear: false,
-        close: false,
-        today: BooklyL10n.today,
-        weekdaysFull: BooklyL10n.daysFull,
-        weekdaysShort: BooklyL10n.days,
-        monthsFull: BooklyL10n.months,
-        labelMonthNext: BooklyL10n.nextMonth,
-        labelMonthPrev: BooklyL10n.prevMonth,
-        onRender: applyColor,
-        firstDay: BooklyL10n.startOfWeek == 1
-    });
 
     // Show price next to staff member name.
     $staff_name_with_price.on('change', function () {
@@ -406,31 +391,6 @@ jQuery(function ($) {
     /**
      * Step Time
      */
-
-    // Init calendar.
-    $time_step_calendar.pickadate({
-        formatSubmit: 'yyyy-mm-dd',
-        format: BooklyL10n.date_format,
-        min: true,
-        weekdaysFull: BooklyL10n.daysFull,
-        weekdaysShort: BooklyL10n.days,
-        monthsFull: BooklyL10n.months,
-        labelMonthNext: BooklyL10n.nextMonth,
-        labelMonthPrev: BooklyL10n.prevMonth,
-        close: false,
-        clear: false,
-        today: false,
-        closeOnSelect: false,
-        onRender: applyColor,
-        firstDay: BooklyL10n.startOfWeek == 1,
-        klass: {
-            picker: 'picker picker--opened picker--focused'
-        },
-        onClose: function () {
-            this.open(false);
-        }
-    });
-    $time_step_calendar_wrap.find('.picker__holder').css({top: '0px', left: '0px'});
 
     // Show calendar.
     $show_calendar.on('change', function () {
@@ -617,22 +577,6 @@ jQuery(function ($) {
      * Step repeat.
      */
 
-    // Init calendar.
-    $repeat_step_calendar.pickadate({
-        formatSubmit: 'yyyy-mm-dd',
-        format: BooklyL10n.date_format,
-        min: true,
-        clear: false,
-        close: false,
-        today: BooklyL10n.today,
-        weekdaysFull: BooklyL10n.daysFull,
-        weekdaysShort: BooklyL10n.days,
-        monthsFull: BooklyL10n.months,
-        labelMonthNext: BooklyL10n.nextMonth,
-        labelMonthPrev: BooklyL10n.prevMonth,
-        onRender: applyColor,
-        firstDay: BooklyL10n.startOfWeek == 1
-    });
     $repeat_variant.on('change', function () {
         $repeat_variants.hide();
         $('.bookly-js-variant-' + this.value).show()
@@ -683,7 +627,8 @@ jQuery(function ($) {
             preferredCountries: [BooklyL10n.intlTelInput.country],
             initialCountry: BooklyL10n.intlTelInput.country,
             geoIpLookup: function (callback) {
-                $.get('https://ipinfo.io', function () {}, 'jsonp').always(function (resp) {
+                $.get('https://ipinfo.io', function () {
+                }, 'jsonp').always(function (resp) {
                     var countryCode = (resp && resp.country) ? resp.country : '';
                     callback(countryCode);
                 });
@@ -986,6 +931,7 @@ jQuery(function ($) {
                 'bookly_app_show_birthday': Number($show_birthday_fields.prop('checked')),
                 'bookly_app_show_address': Number($show_address_fields.prop('checked')),
                 'bookly_app_show_progress_tracker': Number($show_progress_tracker.prop('checked')),
+                'bookly_app_datepicker_inverted': Number($invert_datepicker_colors.prop('checked')),
                 'bookly_app_align_buttons_left': Number($align_buttons_left.prop('checked')),
                 'bookly_app_staff_name_with_price': Number($staff_name_with_price.prop('checked')),
                 'bookly_app_service_duration_with_price': Number($service_duration_with_price.prop('checked')),

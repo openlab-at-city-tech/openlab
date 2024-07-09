@@ -27,7 +27,7 @@ use Bookly\Lib\Utils\Tables;
             <div class="tab-content mt-3">
                 <div class="tab-pane active" id="notifications"><?php self::renderTemplate( '_notifications', array( 'datatable' => $datatables[ Tables::WHATSAPP_NOTIFICATIONS ] ) ) ?></div>
                 <div class="tab-pane" id="details"><?php self::renderTemplate( '_messages_details', array( 'datatable' => $datatables[ Tables::WHATSAPP_DETAILS ] ) ) ?></div>
-                <div class="tab-pane" id="settings"><?php self::renderTemplate( '_settings' ) ?></div>
+                <div class="tab-pane" id="settings"><?php self::renderTemplate( '_settings', compact( 'whatsapp' ) ) ?></div>
             </div>
         </div>
     </div>

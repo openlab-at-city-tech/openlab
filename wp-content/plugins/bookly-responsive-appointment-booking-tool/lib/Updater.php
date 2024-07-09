@@ -3,6 +3,132 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_23_7()
+    {
+        add_option( 'bookly_app_datepicker_inverted', '0' );
+
+        $this->alterTables( array(
+            'bookly_customers' => array(
+                'ALTER TABLE `%s` ADD COLUMN `tags` TEXT DEFAULT NULL AFTER `info_fields`',
+            ),
+        ) );
+    }
+
+    function update_23_2()
+    {
+        $this->addL10nOptions( array(
+            'bookly_l10n_incorrect_phone_verification_code' => __( 'Incorrect verification code', 'bookly' ),
+            'bookly_l10n_incorrect_email_verification_code' => __( 'Incorrect verification code', 'bookly' ),
+        ) );
+
+        $this->alterTables( array(
+            'bookly_customers' => array(
+                'ALTER TABLE `%s` CHANGE `stripe_account` `stripe_account` VARCHAR(36) DEFAULT NULL',
+                'ALTER TABLE `%s` ADD COLUMN `stripe_cloud_account` VARCHAR(36) DEFAULT NULL AFTER `stripe_account`',
+            ),
+        ) );
+    }
+
+    function update_23_1()
+    {
+        $this->alterTables( array(
+            'bookly_customers' => array(
+                'ALTER TABLE `%s` ADD COLUMN `attachment_id` INT UNSIGNED DEFAULT NULL AFTER `info_fields`',
+            ),
+        ) );
+    }
+
+    function update_22_8()
+    {
+        $this->alterTables( array(
+            'bookly_staff' => array(
+                'ALTER TABLE `%s` ADD COLUMN `cloud_msc_token` VARCHAR(32) DEFAULT NULL',
+            ),
+        ) );
+
+        $this->addNotifications( array(
+            array(
+                'gateway' => 'email',
+                'type' => 'mobile_sc_grant_access_token',
+                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
+                'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
+                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'to_staff' => 1,
+                'active' => 1,
+                'settings' => '[]'
+            ),
+            array(
+                'gateway' => 'sms',
+                'type' => 'mobile_sc_grant_access_token',
+                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
+                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'to_staff' => 1,
+                'active' => 1,
+                'settings' => '[]'
+            ),
+        ) );
+    }
+
+    function update_22_7()
+    {
+        if ( get_option( 'bookly_logs_expire' ) === false ) {
+            delete_option( 'bookly_logs_enabled' );
+            $this->alterTables( array(
+                'bookly_log' => array(
+                    'ALTER TABLE `%s` CHANGE `action` `action` ENUM("create","update","delete","error","debug") DEFAULT NULL',
+                ),
+            ) );
+            add_option( 'bookly_logs_expire', '30' );
+        }
+
+        if ( $this->existsColumn( 'bookly_payments', 'target' ) ) {
+            if ( ! $this->existsColumn( 'bookly_payments', 'target_processed' ) ) {
+                $this->alterTables( array(
+                    'bookly_payments' => array(
+                        'ALTER TABLE `%s` ADD `target_processed` TINYINT(1) DEFAULT 0',
+                    ),
+                ) );
+            }
+
+            $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-target', function( $self ) {
+                /** @global \wpdb $wpdb */
+                global $wpdb;
+
+                $payments_table = $self->getTableName( 'bookly_payments' );
+
+                $update = 'UPDATE `' . $payments_table . '` SET `details` = %s, `target_processed` = 1 WHERE id = %d';
+                do {
+                    $records = $wpdb->get_results( 'SELECT id, `target`, `details` FROM `' . $payments_table . '` WHERE `target_processed` = 0 AND `details` IS NOT NULL LIMIT 100', ARRAY_A );
+                    foreach ( $records as $record ) {
+                        try {
+                            $details = json_decode( $record['details'], true );
+                            if ( ! isset( $details['items'] ) || ! is_array( $details['items'] ) ) {
+                                throw new \Exception();
+                            }
+                            foreach ( $details['items'] as &$item ) {
+                                if ( ! isset( $item['type'] ) ) {
+                                    $item['type'] = rtrim( $record['target'], 's' );
+                                }
+                            }
+                            unset( $item );
+                            $wpdb->query( $wpdb->prepare( $update, json_encode( $details ), $record['id'] ) );
+                        } catch ( \Exception $e ) {
+                            $wpdb->query( $wpdb->prepare( 'UPDATE `' . $payments_table . '` SET `target_processed` = 1 WHERE id = %d', $record['id'] ) );
+                        }
+                    }
+                } while ( count( $records ) > 0 );
+
+                $self->dropTableColumns(
+                    $payments_table, array( 'target_processed', 'target' )
+                );
+            } );
+
+            foreach ( $disposable_options as $option_name ) {
+                delete_option( $option_name );
+            }
+        }
+    }
+
     function update_22_6()
     {
         $this->alterTables( array(
@@ -14,7 +140,7 @@ class Updater extends Base\Updater
 
     function update_22_5()
     {
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter-staff', function ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter-staff', function( $self ) {
             $self->alterTables( array(
                 'bookly_staff' => array(
                     'UPDATE `%s` SET `zoom_authentication` = \'default\' WHERE `zoom_authentication` = \'jwt\'',
@@ -28,7 +154,7 @@ class Updater extends Base\Updater
             );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter-customer', function ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter-customer', function( $self ) {
             $self->alterTables( array(
                 'bookly_customers' => array(
                     'ALTER TABLE `%s` CHANGE `full_name` `full_name` VARCHAR(128) NOT NULL DEFAULT ""',
@@ -416,7 +542,7 @@ class Updater extends Base\Updater
     {
         $self = $this;
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function() use ( $self ) {
             $self->alterTables( array(
                 'bookly_staff' => array(
                     'ALTER TABLE `%s` ADD COLUMN `gateways` VARCHAR(255) DEFAULT NULL',
@@ -440,7 +566,7 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function() use ( $self ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -723,7 +849,7 @@ class Updater extends Base\Updater
 
         $self = $this;
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-change-schema', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-change-schema', function() use ( $self ) {
             $self->alterTables( array(
                 'bookly_appointments' => array(
                     'ALTER TABLE `%s` ADD COLUMN `updated_at` DATETIME DEFAULT NULL',
@@ -737,12 +863,12 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-set-updated_at', function () use ( $self, $wpdb ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-set-updated_at', function() use ( $self, $wpdb ) {
             foreach ( array( 'bookly_appointments', 'bookly_customer_appointments', 'bookly_payments' ) as $table ) {
                 $wpdb->query( 'UPDATE `' . $self->getTableName( $table ) . '` SET `updated_at` = `created` WHERE `updated_at` IS null' );
             }
         } );
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-rename', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-rename', function() use ( $self ) {
             $self->alterTables( array(
                 'bookly_appointments' => array(
                     'ALTER TABLE `%s` CHANGE COLUMN `updated_at` `updated_at` DATETIME NOT NULL',
@@ -832,7 +958,7 @@ class Updater extends Base\Updater
     function update_18_3()
     {
         $self = $this;
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-1', function() use ( $self ) {
             $self->alterTables( array(
                 'bookly_payments' => array(
                     'ALTER TABLE `%s` ADD COLUMN `token` VARCHAR(255) DEFAULT NULL AFTER `status`',
@@ -840,7 +966,7 @@ class Updater extends Base\Updater
             ) );
         } );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function () use ( $self ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-tokens-2', function() use ( $self ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -936,7 +1062,7 @@ class Updater extends Base\Updater
 
         $payments_table = $this->getTableName( 'bookly_payments' );
 
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-gateway', function () use ( $payments_table ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-gateway', function() use ( $payments_table ) {
             /** @global \wpdb $wpdb */
             global $wpdb;
 
@@ -1035,7 +1161,7 @@ class Updater extends Base\Updater
         );
 
         // Changes in schema
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-1', function () use ( $self, $wpdb, $notifications_table, $notifications, $default_settings ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-1', function() use ( $self, $wpdb, $notifications_table, $notifications, $default_settings ) {
             $wpdb->query( 'UPDATE `' . $wpdb->usermeta . '` SET meta_key = \'bookly_dismiss_feature_requests_description\' WHERE meta_key = \'bookly_feature_requests_rules_hide\'' );
             if ( ! $self->existsColumn( 'bookly_notifications', 'name' ) ) {
                 $self->alterTables( array(
@@ -1126,7 +1252,7 @@ class Updater extends Base\Updater
         } );
 
         // WPML
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-2', function () use ( $self, $wpdb, $notifications_table, $notifications ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-2', function() use ( $self, $wpdb, $notifications_table, $notifications ) {
             $records = $wpdb->get_results( $wpdb->prepare( 'SELECT id, `type`, `gateway` FROM `' . $notifications_table . '` WHERE COALESCE( `settings`, \'[]\' ) = \'[]\' AND `type` IN (' . implode( ', ', array_fill( 0, count( $notifications ), '%s' ) ) . ')', array_keys( $notifications ) ), ARRAY_A );
             $strings = array();
             foreach ( $records as $record ) {
@@ -1144,7 +1270,7 @@ class Updater extends Base\Updater
         } );
 
         // Add settings for notifications
-        $disposable_options[] = $this->disposable( __FUNCTION__ . '-3', function () use ( $wpdb, $notifications_table, $notifications, $default_settings ) {
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-3', function() use ( $wpdb, $notifications_table, $notifications, $default_settings ) {
             $combined_notifications = get_option( 'bookly_cst_combined_notifications', 'missing' );
             if ( $combined_notifications === 'missing' ) {
                 $combined_notifications = (bool) $wpdb->query( 'SELECT 1 FROM `' . $notifications_table . '` WHERE `type` = \'new_booking_combined\' AND `active` = 1 LIMIT 1' );

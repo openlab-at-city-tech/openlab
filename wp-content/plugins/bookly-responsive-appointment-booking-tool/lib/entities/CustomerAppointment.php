@@ -193,7 +193,7 @@ class CustomerAppointment extends Lib\Base\Entity
                 $allow_cancel = false;
             }
         }
-        if ( $this->getStatus() == Lib\Entities\CustomerAppointment::STATUS_DONE ) {
+        if ( $this->getStatus() == self::STATUS_DONE ) {
             $allow_cancel = false;
         }
 

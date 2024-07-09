@@ -221,7 +221,6 @@ class Appointment extends Lib\Base\Entity
             if ( $customer_appointment->getPaymentId() != $ca_data[ $id ]['payment_id'] ) {
                 $customer_appointment->setPaymentId( $ca_data[ $id ]['payment_id'] );
             }
-            Lib\Proxy\Files::attachCFFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             $customer_appointment
                 ->setNumberOfPersons( $ca_data[ $id ]['number_of_persons'] )
                 ->setNotes( $ca_data[ $id ]['notes'] )
@@ -269,7 +268,7 @@ class Appointment extends Lib\Base\Entity
     {
         $duration = 0;
         // Calculate extras duration for appointments with duration < 1 day.
-        if ( Lib\Proxy\ServiceExtras::considerDuration( false ) && ( strtotime( $this->getEndDate() ) - strtotime( $this->getStartDate() ) < DAY_IN_SECONDS ) ) {
+        if ( Lib\Proxy\ServiceExtras::considerDuration( false ) && ( ( $this->getStartDate() === null ) || strtotime( $this->getEndDate() ) - strtotime( $this->getStartDate() ) < DAY_IN_SECONDS ) ) {
             $records = CustomerAppointment::query()
                 ->where( 'appointment_id', $this->getId() )
                 ->whereNot( 'extras', '[]' )

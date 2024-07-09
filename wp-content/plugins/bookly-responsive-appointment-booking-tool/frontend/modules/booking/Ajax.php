@@ -54,7 +54,7 @@ class Ajax extends Lib\Base\Ajax
                 // Check all available days.
                 $days_checked = array_keys( $days_times['days'] );
             }
-            $bounding = Lib\Config::getBoundingDaysForPickadate();
+            $bounding = Lib\Config::getDateLimits();
 
             $casest = Lib\Config::getCaSeSt();
 
@@ -83,15 +83,15 @@ class Ajax extends Lib\Base\Ajax
                 'locations' => $locasest,
                 'services' => $casest['services'],
                 'staff' => $casest['staff'],
-                'show_category_info' => (bool)get_option( 'bookly_app_show_category_info' ),
-                'show_service_info' => (bool)get_option( 'bookly_app_show_service_info' ),
-                'show_staff_info' => (bool)get_option( 'bookly_app_show_staff_info' ),
-                'show_ratings' => (bool)get_option( 'bookly_ratings_app_show_on_frontend' ),
-                'service_name_with_duration' => (bool)get_option( 'bookly_app_service_name_with_duration' ),
-                'staff_name_with_price' => (bool)get_option( 'bookly_app_staff_name_with_price' ),
-                'collaborative_hide_staff' => (bool)get_option( 'bookly_collaborative_hide_staff' ),
+                'show_category_info' => (bool) get_option( 'bookly_app_show_category_info' ),
+                'show_service_info' => (bool) get_option( 'bookly_app_show_service_info' ),
+                'show_staff_info' => (bool) get_option( 'bookly_app_show_staff_info' ),
+                'show_ratings' => (bool) get_option( 'bookly_ratings_app_show_on_frontend' ),
+                'service_name_with_duration' => (bool) get_option( 'bookly_app_service_name_with_duration' ),
+                'staff_name_with_price' => (bool) get_option( 'bookly_app_staff_name_with_price' ),
+                'collaborative_hide_staff' => (bool) get_option( 'bookly_collaborative_hide_staff' ),
                 'required' => array(
-                    'staff' => (int)get_option( 'bookly_app_required_employee' ),
+                    'staff' => (int) get_option( 'bookly_app_required_employee' ),
                 ),
                 'l10n' => array(
                     'category_label' => Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_label_category' ),
@@ -197,20 +197,19 @@ class Ajax extends Lib\Base\Ajax
                     ->setChainFromCartItem( $cart_key );
             }
 
-            $find_first_free_slot = true;
             $progress_tracker = self::_prepareProgressTracker( Steps::TIME, $userData );
             $info_text = InfoText::prepare( Steps::TIME, Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_info_time_step' ), $userData );
             $last_date = new Lib\Slots\DatePoint( date_create( 'today' ) );
             if ( Lib\Config::showCalendar() ) {
                 $last_date = $last_date->modify( Lib\Config::getMaximumAvailableDaysForBooking() . ' days' );
-                // If the customer has selected a date on the time step,
-                // there is no need to search the first date with a free slot
-                $find_first_free_slot = ! self::hasParameter( 'selected_date' );
             }
 
             $show_blocked_slots = Lib\Config::showBlockedTimeSlots();
             $finder = new Lib\Slots\Finder( $userData, null, null, null, array(), null, Lib\Config::showSingleTimeSlotPerDay() );
-            $finder->setSelectedDate( Lib\Config::showSingleTimeSlot() ? null : self::parameter( 'selected_date', $userData->getDateFrom() ) );
+            $slots = $userData->getSlots();
+            $selected_date = isset ( $slots[0][2] ) ? $slots[0][2] : $userData->getDateFrom();
+
+            $finder->setSelectedDate( Lib\Config::showSingleTimeSlot() ? null : self::parameter( 'selected_date', $selected_date ) );
             $slots_data = array();
             $block_time_slots = false;
             while ( true ) {
@@ -218,13 +217,13 @@ class Ajax extends Lib\Base\Ajax
                 foreach ( $finder->getSlots() as $group => $group_slots ) {
                     /** @var Lib\Slots\Range[] $group_slots */
                     $slots_data[ $group ] = array(
-                        'title' => date_i18n( ( $finder->isServiceDurationInDays() ? 'M' : 'D, M d' ), strtotime( $group ) ),
+                        'title' => date_i18n( ( $finder->isServiceDurationInDays() ? 'M' : ( get_option( 'bookly_advanced_slot_date_format' ) ?: 'D, M d' ) ), strtotime( $group ) ),
                         'slots' => array(),
                     );
                     foreach ( $group_slots as $slot ) {
                         $slots_data[ $group ]['slots'][] = array(
                             'data' => $slot->buildSlotData(),
-                            'time_text' => $slot->start()->toClientTz()->formatI18n( $finder->isServiceDurationInDays() ? 'D, M d' : get_option( 'time_format' ) ),
+                            'time_text' => $slot->start()->toClientTz()->formatI18n( $finder->isServiceDurationInDays() ? ( get_option( 'bookly_advanced_slot_date_format' ) ?: 'D, M d' ) : get_option( 'time_format' ) ),
                             'status' => $block_time_slots ? 'booked' : ( $slot->waitingListEverStarted() ? 'waiting-list' : ( $slot->fullyBooked() ? 'booked' : '' ) ),
                             'additional_text' => $slot->waitingListEverStarted() ? '(' . $slot->maxOnWaitingList() . ')' : ( Lib\Config::groupBookingActive() ? Proxy\GroupBooking::getTimeSlotText( $slot ) : '' ),
                             'slot' => $slot,
@@ -237,7 +236,7 @@ class Ajax extends Lib\Base\Ajax
                         }
                     }
                 }
-                if ( Lib\Config::showCalendar() && $find_first_free_slot ) {
+                if ( Lib\Config::showCalendar() ) {
                     $select_next_month = empty( $slots_data ) || ( Lib\Config::showSingleTimeSlot() && ! $block_time_slots );
                     if ( ! $select_next_month && $show_blocked_slots ) {
                         foreach ( $slots_data as $group => $data ) {
@@ -274,7 +273,7 @@ class Ajax extends Lib\Base\Ajax
 
             $slots_data = Proxy\Shared::prepareSlotsData( $slots_data );
 
-            $slots_data = array_map( function ( $slot_data ) {
+            $slots_data = array_map( function( $slot_data ) {
                 unset ( $slot_data['slot'] );
 
                 return $slot_data;
@@ -289,13 +288,14 @@ class Ajax extends Lib\Base\Ajax
                 'day_one_column' => Lib\Config::showDayPerColumn(),
                 'slots_data' => $slots_data,
                 'selected_date' => $selected_date,
+                'current_date' => self::parameter( 'selected_date' ),
                 'time_slots_wide' => Lib\Config::showWideTimeSlots(),
                 'show_calendar' => Lib\Config::showCalendar(),
                 'is_rtl' => is_rtl(),
                 'html' => self::renderTemplate( '3_time', array(
                     'progress_tracker' => $progress_tracker,
                     'info_text' => $info_text,
-                    'date' => Lib\Config::showCalendar() ? $finder->getSelectedDateForPickadate() : null,
+                    'date' => Lib\Config::showCalendar() ? $finder->getSelectedDateForCalendar() : null,
                     'has_slots' => ! empty ( $slots_data ),
                     'show_cart_btn' => self::_showCartButton( $userData ),
                     'userData' => $userData,
@@ -319,10 +319,12 @@ class Ajax extends Lib\Base\Ajax
                         $response['date_min'] = $date_with_slot;
                     }
                 } else {
-                    $bounding = Lib\Config::getBoundingDaysForPickadate( $userData->chain );
+                    $bounding = Lib\Config::getDateLimits( $userData->chain );
                     $response['date_max'] = $bounding['date_max'];
                     $response['date_min'] = $bounding['date_min'];
-                    $response['disabled_days'] = $finder->getDisabledDaysForPickadate();
+                    $disabled_days = $finder->getMonthDisabledDays();
+                    $response['disabled_days'] = $disabled_days['holidays'];
+                    $response['first_available_date'] = $disabled_days['first_available_date'];
                 }
             }
             $userData->sessionSave();
@@ -354,13 +356,13 @@ class Ajax extends Lib\Base\Ajax
             foreach ( $finder->getSlots() as $group => $group_slots ) {
                 /** @var Lib\Slots\Range[] $group_slots */
                 $slots_data[ $group ] = array(
-                    'title' => date_i18n( ( $finder->isServiceDurationInDays() ? 'M' : 'D, M d' ), strtotime( $group ) ),
+                    'title' => date_i18n( ( $finder->isServiceDurationInDays() ? 'M' : ( get_option( 'bookly_advanced_slot_date_format' ) ?: 'D, M d' ) ), strtotime( $group ) ),
                     'slots' => array(),
                 );
                 foreach ( $group_slots as $slot ) {
                     $slots_data[ $group ]['slots'][] = array(
                         'data' => $slot->buildSlotData(),
-                        'time_text' => $slot->start()->toClientTz()->formatI18n( $finder->isServiceDurationInDays() ? 'D, M d' : get_option( 'time_format' ) ),
+                        'time_text' => $slot->start()->toClientTz()->formatI18n( $finder->isServiceDurationInDays() ? ( get_option( 'bookly_advanced_slot_date_format' ) ?: 'D, M d' ) : get_option( 'time_format' ) ),
                         'status' => $slot->waitingListEverStarted() ? 'waiting-list' : ( $slot->fullyBooked() ? 'booked' : '' ),
                         'additional_text' => $slot->waitingListEverStarted() ? '(' . $slot->maxOnWaitingList() . ')' : ( Lib\Config::groupBookingActive() ? Proxy\GroupBooking::getTimeSlotText( $slot ) : '' ),
                         'slot' => $slot,
@@ -370,7 +372,7 @@ class Ajax extends Lib\Base\Ajax
 
             $slots_data = Proxy\Shared::prepareSlotsData( $slots_data );
 
-            $slots_data = array_map( function ( $slot_data ) {
+            $slots_data = array_map( function( $slot_data ) {
                 unset ( $slot_data['slot'] );
 
                 return $slot_data;
@@ -462,7 +464,8 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function renderDetails()
     {
-        $userData = new Lib\UserBookingData( self::parameter( 'form_id' ) );
+        $form_id = self::parameter( 'form_id' );
+        $userData = new Lib\UserBookingData( $form_id );
         $loaded = ! self::parameter( 'reset_form' ) && $userData->load();
         if ( ! $loaded ) {
             // all previous steps are skipped
@@ -489,6 +492,7 @@ class Ajax extends Lib\Base\Ajax
                 'info_text_guest' => InfoText::prepare( Steps::DETAILS, $info_text_guest, $userData ),
                 'userData' => $userData,
                 'show_back_btn' => $userData->getFirstStep() != Steps::DETAILS,
+                'form_id' => $form_id
             ), false );
 
             // Render additional templates.
@@ -509,7 +513,7 @@ class Ajax extends Lib\Base\Ajax
             $response = Proxy\Shared::stepOptions( array(
                 'success' => true,
                 'html' => $html,
-                'update_details_dialog' => (int)get_option( 'bookly_cst_show_update_details_dialog' ),
+                'update_details_dialog' => (int) get_option( 'bookly_cst_show_update_details_dialog' ),
                 'intlTelInput' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ? array(
                     'enabled' => 1,
                     'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
@@ -556,8 +560,8 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $cart_info = $userData->cart->getInfo();
-            $balance = $cart_info->getGiftCard() ? $cart_info->getGiftCard()->getBalance() : 0;
-            if ( $cart_info->getPayNowWithoutGiftCard() <= $balance ) {
+            $gift_card_discount = $cart_info->getGiftCard() ? $cart_info->getGiftCardDiscount() : 0;
+            if ( $cart_info->getPayNowWithoutGiftCard() <= $gift_card_discount ) {
                 $payment_step = $cart_info->hasDiscount() ? 'show-100%-discount' : 'skip';
             }
 
@@ -734,7 +738,7 @@ class Ajax extends Lib\Base\Ajax
                         $parameters['captcha_ids'] = json_decode( $parameters['captcha_ids'], true );
                         foreach ( $parameters['cart'] as &$service ) {
                             // Remove captcha from custom fields.
-                            $custom_fields = array_filter( json_decode( $service['custom_fields'], true ), function ( $field ) use ( $parameters ) {
+                            $custom_fields = array_filter( json_decode( $service['custom_fields'], true ), function( $field ) use ( $parameters ) {
                                 return ! in_array( $field['id'], $parameters['captcha_ids'] );
                             } );
                             // Index the array numerically.
@@ -745,9 +749,11 @@ class Ajax extends Lib\Base\Ajax
                         $cf_per_service = Lib\Config::customFieldsPerService();
                         $merge_cf = Lib\Config::customFieldsMergeRepeating();
                         foreach ( $userData->cart->getItems() as $cart_key => $_cart_item ) {
-                            $cart[ $cart_key ] = $cf_per_service
-                                ? $parameters['cart'][ $merge_cf ? $_cart_item->getService()->getId() : $cart_key ]
-                                : $parameters['cart'][0];
+                            if ( ( $cf_per_service && isset( $parameters['cart'][ $merge_cf ? $_cart_item->getService()->getId() : $cart_key ] ) ) || ( ! $cf_per_service && isset( $parameters['cart'][0] ) ) ) {
+                                $cart[ $cart_key ] = $cf_per_service
+                                    ? $parameters['cart'][ $merge_cf ? $_cart_item->getService()->getId() : $cart_key ]
+                                    : $parameters['cart'][0];
+                            }
                         }
                         $parameters['cart'] = $cart;
                     }
@@ -984,7 +990,7 @@ class Ajax extends Lib\Base\Ajax
         $userData = new Lib\UserBookingData( self::parameter( 'form_id' ) );
 
         if ( $userData->load() ) {
-            add_action( 'set_logged_in_cookie', function ( $logged_in_cookie ) {
+            add_action( 'set_logged_in_cookie', function( $logged_in_cookie ) {
                 $_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
             } );
             /** @var \WP_User $user */
@@ -1039,40 +1045,44 @@ class Ajax extends Lib\Base\Ajax
         $order = new Lib\Entities\Order();
         if ( $order->loadBy( array( 'token' => self::parameter( 'bookly_order' ) ) ) ) {
             $calendar = self::parameter( 'calendar' );
-            $link = 'https://calendar.google.com/calendar/u/0/r/eventedit?dates=%s/%s&text=%s&location=%s&details=%s';
-            switch ( $calendar ) {
-                case 'google':
-                case 'outlook':
-                    if ( $calendar === 'outlook' ) {
-                        $link = 'https://outlook.live.com/calendar/action/compose/?rru=addevent&startdt=%s&enddt=%s&subject=%s&location=%s&body=%s&authRedirect=true&state=0';
-                    }
-                case 'yahoo':
-                    if ( $calendar === 'yahoo' ) {
+            if ( $calendar === 'ics' ) {
+                self::renderIcs( $order );
+            } else {
+                $format = 'Ymd\THis\Z';
+                switch ( $calendar ) {
+                    case 'outlook':
+                        $link = 'https://outlook.live.com/calendar/action/compose?rru=addevent&startdt=%s&enddt=%s&subject=%s&location=%s&body=%s&authRedirect=true&state=0';
+                        $format = 'Y-m-d\TH:i:s\Z';
+                        break;
+                    case 'yahoo':
                         $link = 'https://calendar.yahoo.com/?v=60&st=%s&et=%s&title=%s&in_loc=%s&desc=%s';
-                    }
-                    $list = $order->getCaItems();
-                    if ( count( $list ) > 1 ) {
-                        self::renderIcs( $order );
-                    } elseif ( count( $list ) === 1 ) {
-                        $staff = Lib\Entities\Staff::find( $list[0]['item']->getAppointment()->getStaffId() );
-                        $location_id = $list[0]['item']->getAppointment()->getLocationId();
-                        $location = $location_id
-                            ? Lib\Proxy\Locations::findById( $location_id )
-                            : null;
-                        $redirect_url = sprintf(
-                            $link,
-                            date( 'Ymd\THis', strtotime( $list[0]['item']->getAppointment()->getStartDate() ) ),
-                            date( 'Ymd\THis', strtotime( $list[0]['item']->getAppointment()->getEndDate() ) ),
-                            urlencode( $list[0]['title'] ),
-                            $location ? $location->getTranslatedName() : '',
-                            urlencode( sprintf( "%s<br>%s", $list[0]['title'], $staff ? $staff->getTranslatedName() : '' ) )
-                        );
-                        Lib\Utils\Common::redirect( $redirect_url );
-                    }
-                    break;
-                case 'ics':
+                        break;
+                    case 'google':
+                    default:
+                        $link = 'https://calendar.google.com/calendar/u/0/r/eventedit?dates=%s/%s&text=%s&location=%s&details=%s';
+                        break;
+                }
+                $list = $order->getCaItems();
+                if ( count( $list ) > 1 ) {
                     self::renderIcs( $order );
-                    break;
+                } elseif ( count( $list ) === 1 ) {
+                    $staff = Lib\Entities\Staff::find( $list[0]['item']->getAppointment()->getStaffId() );
+                    $location_id = $list[0]['item']->getAppointment()->getLocationId();
+                    $location = $location_id
+                        ? Lib\Proxy\Locations::findById( $location_id )
+                        : null;
+                    $start = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getStartDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
+                    $end = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getEndDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
+                    $redirect_url = sprintf(
+                        $link,
+                        $start->format( $format ),
+                        $end->format( $format ),
+                        urlencode( $list[0]['title'] ),
+                        $location ? $location->getTranslatedName() : '',
+                        urlencode( sprintf( "%s<br>%s", $list[0]['title'], $staff ? $staff->getTranslatedName() : '' ) )
+                    );
+                    Lib\Utils\Common::redirect( $redirect_url );
+                }
             }
         }
 

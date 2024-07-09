@@ -8,6 +8,7 @@ class Ajax extends Lib\Base\Ajax
     /** @var array */
     protected static $tables = array(
         Lib\Utils\Tables::APPOINTMENTS,
+        Lib\Utils\Tables::CLOUD_MOBILE_STAFF_CABINET,
         Lib\Utils\Tables::CLOUD_PURCHASES,
         Lib\Utils\Tables::COUPONS,
         Lib\Utils\Tables::CUSTOMERS,

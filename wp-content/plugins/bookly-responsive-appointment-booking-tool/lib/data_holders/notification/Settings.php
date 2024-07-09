@@ -53,7 +53,10 @@ class Settings
             case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING:
             case Notification::TYPE_NEW_BOOKING:
             case Notification::TYPE_NEW_BOOKING_RECURRING:
-                $this->status   = $this->settings['status'];
+            case Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN:
+                if ( isset( $this->settings['status'] ) ) {
+                    $this->status = $this->settings['status'];
+                }
                 $this->instant  = 1;
                 $this->services = $this->_handleService( $this->settings );
                 break;
@@ -230,7 +233,7 @@ class Settings
             Service::TYPE_PACKAGE => array()
         );
         // value "any" or an array of service_ids
-        if ( $settings['services']['any'] == 'selected' ) {
+        if ( $settings && $settings['services']['any'] == 'selected' ) {
             if ( array_key_exists( 'ids', $settings['services'] ) ) {
                 /* Example: We have 1 notification with checked service1 and service4
                  *

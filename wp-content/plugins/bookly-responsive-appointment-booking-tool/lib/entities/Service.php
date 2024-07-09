@@ -247,7 +247,7 @@ class Service extends Lib\Base\Entity
     public function getExtras()
     {
         if ( $this->extras === null ) {
-            $this->extras = (array) Lib\Proxy\ServiceExtras::findByServiceId( $this->getId() );
+            $this->extras = Lib\Proxy\ServiceExtras::findByServiceId( $this->getId() ) ?: array();
         }
 
         return $this->extras;

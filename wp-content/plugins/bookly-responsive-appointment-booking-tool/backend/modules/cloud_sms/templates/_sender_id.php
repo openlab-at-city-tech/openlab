@@ -2,7 +2,7 @@
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Controls\Buttons;
 /**
- * @var Bookly\Lib\Cloud\API $cloud
+ * @var Bookly\Lib\Cloud\SMS $sms
  * @var $datatables
  */
 ?>
@@ -10,7 +10,7 @@ use Bookly\Backend\Components\Controls\Buttons;
 
 <div class="row justify-content-between">
     <div class="col-md-8">
-        <label class="control-label" for="bookly-sender-id-input"><?php esc_html_e( 'Request Sender ID', 'bookly' ) ?> <?php if ( $cloud->sms->getSenderIdApprovalDate() ) : ?> <span><?php _e( 'or', 'bookly' ) ?> <a href="#" id="bookly-reset-sender_id"><?php esc_html_e( 'Reset to default', 'bookly' ) ?></a></span><?php endif ?></label>
+        <label class="control-label" for="bookly-sender-id-input"><?php esc_html_e( 'Request Sender ID', 'bookly' ) ?> <?php if ( $sms->getSenderIdApprovalDate() ) : ?> <span><?php _e( 'or', 'bookly' ) ?> <a href="#" id="bookly-reset-sender_id"><?php esc_html_e( 'Reset to default', 'bookly' ) ?></a></span><?php endif ?></label>
         <form class="form-row">
             <div class="col-lg-2 col-md-4">
                 <input id="bookly-sender-id-input" class="form-control" type="text" maxlength="11" required="required" minlength="1" value="" />

@@ -3,6 +3,7 @@ use Bookly\Backend\Components\Editable\Elements;
 use Bookly\Backend\Modules\Appearance\Codes;
 use Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Lib\Config;
+
 /** @var array $userData */
 ?>
 <div class="bookly-form">
@@ -26,13 +27,13 @@ use Bookly\Lib\Config;
             <div class="bookly-form-group">
                 <?php Elements::renderLabel( array( 'bookly_l10n_label_first_name', 'bookly_l10n_required_first_name', ) ) ?>
                 <div>
-                    <input type="text" value="" maxlength="60" />
+                    <input type="text" value="" maxlength="60"/>
                 </div>
             </div>
             <div class="bookly-form-group">
                 <?php Elements::renderLabel( array( 'bookly_l10n_label_last_name', 'bookly_l10n_required_last_name', ) ) ?>
                 <div>
-                    <input type="text" value="" maxlength="60" />
+                    <input type="text" value="" maxlength="60"/>
                 </div>
             </div>
         </div>
@@ -41,40 +42,40 @@ use Bookly\Lib\Config;
             <div class="bookly-form-group bookly-js-details-full-name<?php echo get_option( 'bookly_cst_first_last_name' ) ? ' bookly-collapse' : '' ?>">
                 <?php Elements::renderLabel( array( 'bookly_l10n_label_name', 'bookly_l10n_required_name', ) ) ?>
                 <div>
-                    <input type="text" value="" maxlength="60" />
+                    <input type="text" value="" maxlength="60"/>
                 </div>
             </div>
             <div class="bookly-form-group bookly-js-details-phone">
-                <?php Elements::renderLabel( array( 'bookly_l10n_label_phone', 'bookly_l10n_required_phone', ) ) ?>
+                <?php Elements::renderLabel( array( 'bookly_l10n_label_phone', 'bookly_l10n_required_phone', 'bookly_l10n_incorrect_phone_verification_code' ) ) ?>
                 <div>
-                    <input type="text" class="bookly-animate<?php if ( get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ) : ?> bookly-user-phone<?php endif ?>" value="" />
+                    <input type="text" class="bookly-animate<?php if ( get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ) : ?> bookly-user-phone<?php endif ?>" value=""/>
                 </div>
             </div>
             <div class="bookly-form-group bookly-js-details-email<?php echo ! get_option( 'bookly_cst_first_last_name' ) && get_option( 'bookly_app_show_email_confirm' ) ? ' bookly-collapse' : '' ?>">
-                <?php Elements::renderLabel( array( 'bookly_l10n_label_email', 'bookly_l10n_required_email', 'bookly_l10n_email_in_use' ) ) ?>
+                <?php Elements::renderLabel( array( 'bookly_l10n_label_email', 'bookly_l10n_required_email', 'bookly_l10n_email_in_use', 'bookly_l10n_incorrect_email_verification_code' ) ) ?>
                 <div>
-                    <input class="bookly-animate" maxlength="40" type="text" value="" />
+                    <input class="bookly-animate" maxlength="40" type="text" value=""/>
                 </div>
             </div>
             <div class="bookly-form-group bookly-js-details-confirm<?php echo ! get_option( 'bookly_cst_first_last_name' ) || ! get_option( 'bookly_app_show_email_confirm' ) ? ' bookly-collapse' : '' ?>">
                 <?php Elements::renderLabel( array( 'bookly_l10n_label_email_confirm', 'bookly_l10n_email_confirm_not_match' ) ) ?>
                 <div>
-                    <input maxlength="40" type="text" value="" />
+                    <input maxlength="40" type="text" value=""/>
                 </div>
             </div>
         </div>
 
         <div class="bookly-box bookly-table bookly-js-details-email-confirm<?php echo get_option( 'bookly_cst_first_last_name' ) || ! get_option( 'bookly_app_show_email_confirm' ) ? ' bookly-collapse' : '' ?>">
             <div class="bookly-form-group">
-                <?php Elements::renderLabel( array( 'bookly_l10n_label_email', 'bookly_l10n_required_email' ) ) ?>
+                <?php Elements::renderLabel( array( 'bookly_l10n_label_email', 'bookly_l10n_required_email', 'bookly_l10n_email_in_use', 'bookly_l10n_incorrect_email_verification_code' ) ) ?>
                 <div>
-                    <input maxlength="40" type="text" value="" />
+                    <input maxlength="40" type="text" value=""/>
                 </div>
             </div>
             <div class="bookly-form-group">
                 <?php Elements::renderLabel( array( 'bookly_l10n_label_email_confirm', 'bookly_l10n_email_confirm_not_match' ) ) ?>
                 <div>
-                    <input maxlength="40" type="text" value="" />
+                    <input maxlength="40" type="text" value=""/>
                 </div>
             </div>
         </div>

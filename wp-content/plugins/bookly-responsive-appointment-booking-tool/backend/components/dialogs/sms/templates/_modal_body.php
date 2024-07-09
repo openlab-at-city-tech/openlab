@@ -29,13 +29,9 @@ use Bookly\Backend\Components\Controls\Inputs;
         <div class="col-md-12">
             <div class="form-group">
                 <label><?php esc_attr_e( 'Recipients', 'bookly' ) ?></label>
-                <input type="hidden" name="notification[to_customer]" value="0">
                 <?php Inputs::renderCheckBox( __( 'Client', 'bookly' ), 1, null, array( 'name' => 'notification[to_customer]' ) ) ?>
-                <input type="hidden" name="notification[to_staff]" value="0">
                 <?php Inputs::renderCheckBox( __( 'Staff', 'bookly' ), 1, null, array( 'name' => 'notification[to_staff]' ) ) ?>
-                <input type="hidden" name="notification[to_admin]" value="0">
                 <?php Inputs::renderCheckBox( __( 'Administrators', 'bookly' ), 1, null, array( 'name' => 'notification[to_admin]' ) ) ?>
-                <input type="hidden" name="notification[to_custom]" value="0">
                 <?php Inputs::renderCheckBox( __( 'Custom', 'bookly' ), 1, null, array( 'name' => 'notification[to_custom]' ) ) ?>
                 <div class="bookly-js-custom-recipients">
                     <textarea name="notification[custom_recipients]" rows="2" class="form-control"></textarea>

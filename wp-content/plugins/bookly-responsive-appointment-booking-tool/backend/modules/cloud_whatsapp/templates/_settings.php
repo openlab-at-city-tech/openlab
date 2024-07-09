@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Settings\Inputs;
-$whatsapp = \Bookly\Lib\Cloud\API::getInstance()->whatsapp;
+/** @var \Bookly\Lib\Cloud\WhatsApp $whatsapp */
 ?>
 <div class="form-row">
     <div class="col-lg-6 col-xs-12">

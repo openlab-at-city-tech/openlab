@@ -191,7 +191,7 @@ class Order
     public static function createFromOrderId( $order_id )
     {
         if ( $order_id ) {
-            $ca_list = Lib\Entities\CustomerAppointment::query()->where( 'order_id', $order_id )->find();
+            $ca_list = CustomerAppointment::query()->where( 'order_id', $order_id )->find();
             if ( $ca_list ) {
                 return self::createOrderByCaList( $ca_list );
             }
@@ -205,18 +205,7 @@ class Order
     }
 
     /**
-     * Create Order from payment.
-     *
-     * @param Lib\Entities\Payment $payment
-     * @return Order|null
-     */
-    public static function createFromPayment( Lib\Entities\Payment $payment )
-    {
-        return self::createOrderByCaList( Lib\Entities\CustomerAppointment::query()->where( 'payment_id', $payment->getId() )->find() );
-    }
-
-    /**
-     * @param Lib\Entities\CustomerAppointment[] $ca_list
+     * @param CustomerAppointment[] $ca_list
      * @return static|null
      */
     private static function createOrderByCaList( $ca_list )
@@ -227,7 +216,7 @@ class Order
             if ( $series_id ) {
                 // Make a list of customer appointments from series.
                 // Possibly customer paid only for first appointment in series of recurring appointments.
-                $ca_list = Lib\Entities\CustomerAppointment::query()->where( 'series_id', $series_id )->find();
+                $ca_list = CustomerAppointment::query()->where( 'series_id', $series_id )->find();
             }
 
             $item_key = 0;

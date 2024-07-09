@@ -23,22 +23,21 @@ class Payment extends Lib\Base\Entity
 
     const STATUS_COMPLETED = 'completed';
     const STATUS_PENDING = 'pending';
-    const STATUS_REJECTED  = 'rejected';
-    const STATUS_REFUNDED  = 'refunded';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_REFUNDED = 'refunded';
 
     const PAY_DEPOSIT = 'deposit';
     const PAY_IN_FULL = 'in_full';
 
-    const TARGET_APPOINTMENTS = 'appointments';
-    const TARGET_PACKAGES = 'packages';
-    const TARGET_GIFT_CARDS = 'gift_cards';
+    const ITEM_APPOINTMENT = 'appointment';
+    const ITEM_PACKAGE = 'package';
+    const ITEM_GIFT_CARD = 'gift_card';
+    const ITEM_ADJUSTMENT = 'adjustment';
 
     /** @var int */
     protected $coupon_id;
     /** @var int */
     protected $gift_card_id;
-    /** @var string */
-    protected $target = self::TARGET_APPOINTMENTS;
     /** @var string */
     protected $type;
     /** @var float */
@@ -77,7 +76,6 @@ class Payment extends Lib\Base\Entity
         'id' => array( 'format' => '%d' ),
         'coupon_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Coupon', 'namespace' => '\BooklyCoupons\Lib\Entities', 'required' => 'bookly-addon-coupons' ) ),
         'gift_card_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'GiftCard', 'namespace' => '\BooklyPro\Lib\Entities', 'required' => 'bookly-addon-pro' ) ),
-        'target' => array( 'format' => '%s' ),
         'type' => array( 'format' => '%s' ),
         'total' => array( 'format' => '%f' ),
         'tax' => array( 'format' => '%f' ),
@@ -260,25 +258,23 @@ class Payment extends Lib\Base\Entity
         $details = $this->getDetailsData();
         $data = $details->getData();
 
-        if ( $this->target === self::TARGET_APPOINTMENTS ) {
-            foreach ( $data['items'] as &$item ) {
-                if ( isset( $item['ca_id'] ) ) {
-                    $record = CustomerAppointment::query( 'ca' )
-                        ->select( 'COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id) AS service_id, a.staff_id, s.title, st.full_name' )
-                        ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
-                        ->leftJoin( 'Service', 's', 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)' )
-                        ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
-                        ->where( 'ca.id', $item['ca_id'] )
-                        ->fetchRow();
-                    if ( $record ) {
-                        if ( $record['service_id'] ) {
-                            $service = new Service( array( 'id' => $record['service_id'], 'title' => $record['title'] ) );
-                            $item['service_name'] = $service->getTranslatedTitle();
-                        }
-                        if ( $record['staff_id'] ) {
-                            $staff = new Staff( array( 'id' => $record['staff_id'], 'full_name' => $record['full_name'] ) );
-                            $item['staff_name'] = $staff->getTranslatedName();
-                        }
+        foreach ( $data['items'] as &$item ) {
+            if ( $item['type'] === self::ITEM_APPOINTMENT && isset( $item['ca_id'] ) ) {
+                $record = CustomerAppointment::query( 'ca' )
+                    ->select( 'COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id) AS service_id, a.staff_id, s.title, st.full_name' )
+                    ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+                    ->leftJoin( 'Service', 's', 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)' )
+                    ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
+                    ->where( 'ca.id', $item['ca_id'] )
+                    ->fetchRow();
+                if ( $record ) {
+                    if ( $record['service_id'] ) {
+                        $service = new Service( array( 'id' => $record['service_id'], 'title' => $record['title'] ) );
+                        $item['service_name'] = $service->getTranslatedTitle();
+                    }
+                    if ( $record['staff_id'] ) {
+                        $staff = new Staff( array( 'id' => $record['staff_id'], 'full_name' => $record['full_name'] ) );
+                        $item['staff_name'] = $staff->getTranslatedName();
                     }
                 }
             }
@@ -287,7 +283,6 @@ class Payment extends Lib\Base\Entity
         return array(
             'payment' => array(
                 'id' => (int) $this->id,
-                'target' => $this->target,
                 'status' => $this->status,
                 'type' => $this->type,
                 'created_at' => $this->created_at,
@@ -382,29 +377,6 @@ class Payment extends Lib\Base\Entity
     public function setGiftCardId( $gift_card_id )
     {
         $this->gift_card_id = $gift_card_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets target
-     *
-     * @return string
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * Sets target
-     *
-     * @param string $target
-     * @return $this
-     */
-    public function setTarget( $target )
-    {
-        $this->target = $target;
 
         return $this;
     }
@@ -667,13 +639,25 @@ class Payment extends Lib\Base\Entity
         $pay_now = $cart_info->getGateway() === self::TYPE_LOCAL
             ? 0
             : $cart_info->getPayNow();
+
+        if ( $pay_now > 0 ) {
+            $type = $cart_info->getGateway();
+        } else {
+            $type = $cart_info->getSubtotal() + $cart_info->getDiscount() > 0
+                ? self::TYPE_LOCAL
+                : self::TYPE_FREE;
+        }
+
         $this
-            ->setType( $cart_info->getPayNow() > 0 ? $cart_info->getGateway() : self::TYPE_FREE )
+            ->setType( $type )
             ->setStatus( self::STATUS_PENDING )
             ->setTotal( $cart_info->getTotal() )
             ->setPaid( $pay_now )
             ->setGatewayPriceCorrection( $cart_info->getPriceCorrection() )
-            ->setPaidType( $cart_info->getTotal() == $pay_now ? self::PAY_IN_FULL : self::PAY_DEPOSIT )
+            ->setPaidType( ( $cart_info->getPayFull() || $cart_info->getTotal() == $pay_now )
+                ? self::PAY_IN_FULL
+                : self::PAY_DEPOSIT
+            )
             ->setTax( $cart_info->getTotalTax() );
 
         return $this;

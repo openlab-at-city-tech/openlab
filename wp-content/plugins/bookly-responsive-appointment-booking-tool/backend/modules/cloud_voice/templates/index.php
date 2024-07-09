@@ -29,7 +29,7 @@ use Bookly\Lib\Utils\Tables;
                 <div class="tab-pane active" id="notifications"><?php self::renderTemplate( '_notifications', array( 'datatable' => $datatables[ Tables::VOICE_NOTIFICATIONS ] ) ) ?></div>
                 <div class="tab-pane" id="details"><?php self::renderTemplate( '_calls_details', array( 'datatable' => $datatables[ Tables::VOICE_DETAILS ] ) ) ?></div>
                 <div class="tab-pane" id="price_list"><?php self::renderTemplate( '_price', array( 'datatable' => $datatables[ Tables::VOICE_PRICES ] ) ) ?></div>
-                <div class="tab-pane" id="settings"><?php self::renderTemplate( '_settings' ) ?></div>
+                <div class="tab-pane" id="settings"><?php self::renderTemplate( '_settings', compact( 'voice' ) ) ?></div>
             </div>
         </div>
     </div>

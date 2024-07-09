@@ -28,18 +28,17 @@ class Page extends Lib\Base\Component
             $invoice_data = Lib\Cloud\API::getInstance()->account->getInvoiceData();
 
             wp_localize_script( 'bookly-cloud-billing.js', 'BooklyL10n', array(
-                'csrfToken'   => Lib\Utils\Common::getCsrfToken(),
                 'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-                'processing'  => __( 'Processing...', 'bookly' ),
-                'datePicker'  => Lib\Utils\DateTime::datePickerOptions(),
-                'dateRange'   => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
-                'invoice'     => array(
+                'processing' => __( 'Processing...', 'bookly' ),
+                'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
+                'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
+                'invoice' => array(
                     'button' => __( 'Invoice', 'bookly' ),
-                    'alert'  => __( 'To generate an invoice you should fill in company information in Bookly Cloud settings -> Invoice', 'bookly' ),
-                    'link'   => $cloud->account->getInvoiceLink(),
-                    'valid'  => isset ( $invoice_data['company_name'], $invoice_data['company_address'] ) && $invoice_data['company_name'] != '' && $invoice_data['company_address'] != '',
+                    'alert' => __( 'To generate an invoice you should fill in company information in Bookly Cloud settings -> Invoice', 'bookly' ),
+                    'link' => $cloud->account->getInvoiceLink(),
+                    'valid' => isset ( $invoice_data['company_name'], $invoice_data['company_address'] ) && $invoice_data['company_name'] != '' && $invoice_data['company_address'] != '',
                 ),
-                'datatables'  => $datatables,
+                'datatables' => $datatables,
             ) );
 
             self::renderTemplate( 'index', compact( 'datatables' ) );

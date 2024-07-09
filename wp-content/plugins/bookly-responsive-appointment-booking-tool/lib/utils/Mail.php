@@ -19,7 +19,6 @@ abstract class Mail
      */
     public static function send( $to, $subject, $message, $headers = array(), $attachments = array(), $type = '-1' )
     {
-
         $headers = array_merge( array(
             'is_html' => Config::sendEmailAsHtml(),
             'from' => array(

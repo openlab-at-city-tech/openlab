@@ -12,20 +12,14 @@ class Ajax extends Lib\Base\Ajax
         return array( 'diagnosticsAjax' => 'anonymous' );
     }
 
-    /**
-     * Export database data.
-     */
-    public static function diagnosticsTestRun()
+    public static function runDiagnosticsTest()
     {
-        $test_name = self::parameter( 'test' );
-        $class = '\Bookly\Backend\Modules\Diagnostics\Tests\\' . $test_name;
-        if ( class_exists( $class ) ) {
-            /** @var Test $test */
-            $test = new $class();
-            if ( $test->execute() ) {
+        $class = self::getClassInstance( self::parameter( 'test' ), '\Bookly\Backend\Modules\Diagnostics\Tests\\' );
+        if ( $class instanceof Test ) {
+            if ( $class->execute() ) {
                 wp_send_json_success();
             } else {
-                wp_send_json_error( array( 'test' => $test->getSlug(), 'errors' => $test->getErrors() ) );
+                wp_send_json_error( array( 'test' => $class->getSlug(), 'errors' => $class->getErrors() ) );
             }
         }
     }
@@ -35,27 +29,19 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function diagnosticsAjax()
     {
-        $ajax = self::parameter( 'ajax' );
-        if ( $test_name = self::parameter( 'test' ) ) {
-            $class = '\Bookly\Backend\Modules\Diagnostics\Tests\\' . $test_name;
-            if ( class_exists( $class ) ) {
-                /** @var Test $test */
-                $test = new $class();
-                if ( is_callable( array( $test, $ajax ) ) && method_exists( $test, $ajax ) && ! in_array( $ajax, array( 'execute', 'run' ) ) ) {
-                    if ( in_array( $ajax, $test->ignore_csrf, false ) || parent::csrfTokenValid( __FUNCTION__ ) ) {
-                        $test->$ajax( self::parameters() );
-                    }
+        $method = self::parameter( 'ajax' );
+        $class = self::getClassInstance( self::parameter( 'test' ), '\Bookly\Backend\Modules\Diagnostics\Tests\\' );
+        if ( $class instanceof Test ) {
+            if ( is_callable( array( $class, $method ) ) && ! in_array( $method, array( 'execute', 'run' ) ) ) {
+                if ( in_array( $method, $class->ignore_csrf, false ) || parent::csrfTokenValid( __FUNCTION__ ) ) {
+                    $class->$method( self::parameters() );
                 }
             }
         } elseif ( ( $tool_name = self::parameter( 'tool' ) ) && Lib\Utils\Common::isCurrentUserAdmin() ) {
-            $class = '\Bookly\Backend\Modules\Diagnostics\Tools\\' . $tool_name;
-            if ( class_exists( $class ) ) {
-                /** @var Tool $tool */
-                $tool = new $class();
-                if ( $ajax !== 'render' && is_callable( array( $tool, $ajax ) ) && method_exists( $tool, $ajax ) ) {
-                    if ( parent::csrfTokenValid( __FUNCTION__ ) ) {
-                        $tool->$ajax( self::parameters() );
-                    }
+            $class = self::getClassInstance( $tool_name, '\Bookly\Backend\Modules\Diagnostics\Tools\\' );
+            if ( $class instanceof Tool ) {
+                if ( $method !== 'render' && method_exists( $class, $method ) && parent::csrfTokenValid( __FUNCTION__ ) ) {
+                    $class->$method( self::parameters() );
                 }
             }
         }
@@ -152,24 +138,25 @@ class Ajax extends Lib\Base\Ajax
         if ( $_FILES['import']['name'] ) {
             $json = $fs->get_contents( $_FILES['import']['tmp_name'] );
             if ( $json !== false ) {
-                $wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
 
-                $data = json_decode( $json, true );
+                $json_data = json_decode( $json, true );
                 if ( self::parameter( 'safe', false ) ) {
-                    $data = self::makeSafe( $data );
+                    $json_data = self::makeSafe( $json_data );
                 }
                 /** @var Lib\Base\Plugin[] $bookly_plugins */
                 $bookly_plugins = apply_filters( 'bookly_plugins', array() );
                 /** @since Bookly 17.7 */
-                if ( isset( $data['plugins'] ) ) {
-                    foreach ( $bookly_plugins as $plugin ) {
-                        if ( array_key_exists( $plugin::getBasename(), $data['plugins'] ) ) {
-                            $info[] = $plugin::getTitle() . ' v' . $data['plugins'][ $plugin::getBasename() ] . ( version_compare( $plugin::getVersion(), $data['plugins'][ $plugin::getBasename() ], '==' ) ? '' : ' ⚠️' );
+                if ( isset( $json_data['plugins'] ) ) {
+                    foreach ( $bookly_plugins as $slug => $plugin ) {
+                        if ( array_key_exists( $plugin::getBasename(), $json_data['plugins'] ) ) {
+                            $info[] = $plugin::getTitle() . ' v' . $json_data['plugins'][ $plugin::getBasename() ] . ( version_compare( $plugin::getVersion(), $json_data['plugins'][ $plugin::getBasename() ], '==' ) ? '' : ' ⚠️ code v' . $plugin::getVersion() );
                         } else {
                             deactivate_plugins( $plugin::getBasename(), true, is_network_admin() );
+                            unset( $bookly_plugins[ $slug ] );
                         }
                     }
                 }
+                $pi = array();
                 foreach ( array_merge( array( 'bookly-responsive-appointment-booking-tool', 'bookly-addon-pro' ), array_keys( $bookly_plugins ) ) as $slug ) {
                     if ( ! array_key_exists( $slug, $bookly_plugins ) ) {
                         continue;
@@ -178,29 +165,44 @@ class Ajax extends Lib\Base\Ajax
                     $plugin = $bookly_plugins[ $slug ];
                     unset( $bookly_plugins[ $slug ] );
                     $installer_class = $plugin::getRootNamespace() . '\Lib\Installer';
-                    /** @var Lib\Base\Installer $installer */
-                    $installer = new $installer_class();
 
                     // Updater has been blocked for 30 seconds.
                     set_transient( $plugin::getPrefix() . 'updating_db', time(), 30 );
 
+                    /** @var Lib\Base\Installer $installer */
+                    $installer = new $installer_class();
                     // Drop all data and options.
                     $installer->removeData();
                     $installer->dropTables();
-                    $installer->createTables();
+
+                    $pi[] = array(
+                        'plugin_class' => $plugin,
+                        'installer' => $installer,
+                    );
+                }
+                $wpdb->query( 'SET FOREIGN_KEY_CHECKS = 0' );
+                foreach ( $pi as $objects ) {
+                    $objects['installer']->createTables();
+                }
+
+                foreach ( $pi as $objects ) {
+                    $plugin = $objects['plugin_class'];
+                    $installer = $objects['installer'];
                     // Insert tables data.
                     foreach ( $plugin::getEntityClasses() as $entity_class ) {
-                        if ( isset ( $data['entities'][ $entity_class ]['values'][0] ) ) {
+                        if ( isset ( $json_data['entities'][ $entity_class ]['values'][0] ) ) {
                             $table_name = $entity_class::getTableName();
+
                             $unknown_values = array();
-                            $query = self::getQuery( $table_name, $data['entities'][ $entity_class ]['fields'], $unknown_values );
+                            $query = self::getQuery( $table_name, $json_data['entities'][ $entity_class ]['fields'], $unknown_values );
                             if ( $unknown_values ) {
                                 $errors[] = 'The dump for `' . $table_name . '` contains unknown columns: ' . implode( ', ', $unknown_values );
                             }
                             $placeholders = array();
                             $values = array();
                             $counter = 0;
-                            foreach ( $data['entities'][ $entity_class ]['values'] as $row ) {
+
+                            foreach ( $json_data['entities'][ $entity_class ]['values'] as $row ) {
                                 $params = array();
                                 if ( $unknown_values ) {
                                     foreach ( $row as $id => $value ) {
@@ -240,16 +242,34 @@ class Ajax extends Lib\Base\Ajax
 
                     // Insert options data.
                     foreach ( $installer->getOptions() as $option_name => $option_value ) {
-                        add_option( $option_name, $data['options'][ $option_name ] );
+                        if ( array_key_exists( $option_name, $json_data['options'] ) ) {
+                            add_option( $option_name, $json_data['options'][ $option_name ] );
+                        }
                     }
 
                     $plugin_prefix = $plugin::getPrefix();
-                    $options_postfix = array( 'data_loaded', 'grace_start', 'db_version' );
+                    $options_postfix = array( 'data_loaded', 'grace_start' );
                     foreach ( $options_postfix as $option ) {
                         $option_name = $plugin_prefix . $option;
-                        add_option( $option_name, $data['options'][ $option_name ] );
+                        add_option( $option_name, $json_data['options'][ $option_name ] );
                     }
+
+                    $option_name = $plugin_prefix . 'db_version';
+                    $min_version = version_compare( $json_data['options'][ $option_name ], $plugin::getVersion(), '>' )
+                        ? $plugin::getVersion()
+                        : $json_data['options'][ $option_name ];
+                    add_option( $option_name, $min_version );
                 }
+
+                $wpdb->insert( $wpdb->prefix . 'bookly_log', array(
+                    'action' => 'debug',
+                    'target' => 'bookly-restore',
+                    'author' => get_current_user_id(),
+                    'details' => json_encode( $info ),
+                    'comment' => 'Restore from ' . $_FILES['import']['name'],
+                    'ref' => $_SERVER['REMOTE_ADDR'],
+                    'created_at' => current_time( 'mysql' ),
+                ) );
             }
         }
 
@@ -290,7 +310,9 @@ class Ajax extends Lib\Base\Ajax
         );
 
         foreach ( $unsafe_options as $option ) {
-            unset( $data['options'][ $option ] );
+            if ( array_key_exists( $option, $data['options'] ) ) {
+                $data['options'][ $option ] = '';
+            }
         }
 
         $data['options']['bookly_email_gateway'] = 'wp';
@@ -309,6 +331,82 @@ class Ajax extends Lib\Base\Ajax
         }
 
         return $data;
+    }
+
+    /**
+     * Get logs.
+     */
+    public static function getLogs()
+    {
+        global $wpdb;
+
+        $filter = self::parameter( 'filter' );
+        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::LOGS );
+        $order = self::parameter( 'order', array() );
+
+        $query = Lib\Entities\Log::query();
+
+        // Filters.
+        list ( $start, $end ) = explode( ' - ', $filter['created_at'], 2 );
+        if ( $start !== 'any' ) {
+            $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
+            $query->whereBetween( 'created_at', $start, $end );
+        }
+        if ( isset( $filter['search'] ) && $filter['search'] !== '' ) {
+            $query->whereRaw( 'target LIKE "%%%s%" OR details LIKE "%%%s%" OR target_id LIKE "%%%s%" OR ref LIKE "%%%s%" OR comment LIKE "%%%s%" OR author LIKE "%%%s%" OR id LIKE "%%%s%"', array_fill( 0, 7, $wpdb->esc_like( $filter['search'] ) ) );
+        }
+        if ( isset( $filter['target'] ) && $filter['target'] !== '' ) {
+            $query->where( 'target_id', $filter['target'] );
+        }
+        if ( isset( $filter['action'] ) && $filter['action'] ) {
+            $query->whereIn( 'action', $filter['action'] );
+        }
+
+        $filtered = $query->count();
+
+        if ( self::parameter( 'length' ) ) {
+            $query->limit( self::parameter( 'length' ) )->offset( self::parameter( 'start' ) );
+        }
+
+        foreach ( $order as $sort_by ) {
+            $field = str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] );
+            $field = $field === 'created_at'
+                ? 'id'
+                : $field;
+            $query->sortBy( $field )
+                ->order( isset( $sort_by['dir'] ) && $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+        }
+
+        $logs = $query->fetchArray();
+
+        wp_send_json( array(
+            'draw' => ( int ) self::parameter( 'draw' ),
+            'recordsTotal' => count( $logs ),
+            'recordsFiltered' => $filtered,
+            'data' => $logs,
+        ) );
+    }
+
+    /**
+     * Delete all logs
+     */
+    public static function deleteLogs()
+    {
+        Lib\Entities\Log::query()
+            ->delete()
+            ->execute();
+
+        wp_send_json_success();
+    }
+
+    /**
+     * Set logs expire
+     */
+    public static function setLogsExpire()
+    {
+        update_option( 'bookly_logs_expire', self::parameter( 'expire', 30 ) );
+
+        wp_send_json_success();
     }
 
     protected static function csrfTokenValid( $action = null )
@@ -339,5 +437,15 @@ class Ajax extends Lib\Base\Ajax
             $table_name,
             implode( '`,`', $exist_fields )
         );
+    }
+
+    private static function getClassInstance( $class_name, $namespace )
+    {
+        $class = $namespace . $class_name;
+        if ( class_exists( $class ) ) {
+            return new $class();
+        }
+
+        return null;
     }
 }

@@ -17,6 +17,9 @@ class Ajax extends Lib\Base\Ajax
             unset( $data['id'] );
         }
         $data['message'] = html_entity_decode( $data['message'] );
+        foreach ( array( 'to_customer', 'to_staff', 'to_admin', 'to_custom', 'attach_ics', 'attach_invoice' ) as $field ) {
+            $data[ $field ] = isset( $data[ $field ] ) ? $data[ $field ] : '0';
+        }
         $notification->setFields( $data )->save();
 
         wp_send_json_success();

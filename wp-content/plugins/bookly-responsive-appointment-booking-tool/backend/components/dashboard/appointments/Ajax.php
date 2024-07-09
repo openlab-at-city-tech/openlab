@@ -46,7 +46,7 @@ class Ajax extends Lib\Base\Ajax
             ->groupBy( 'DATE(ca.created_at), p.id, ca.status' )
             ->fetchArray();
 
-        $custom_statuses = (array) Lib\Proxy\CustomStatuses::getAll();
+        $custom_statuses = Lib\Proxy\CustomStatuses::getAll() ?: array();
         // Consider payment for all appointments only 1 time
         $payment_ids = array();
         foreach ( $records as $record ) {

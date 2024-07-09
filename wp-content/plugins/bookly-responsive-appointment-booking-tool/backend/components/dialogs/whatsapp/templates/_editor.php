@@ -5,7 +5,7 @@
             <select class="form-control custom-select" name="notification[message]" id="bookly-js-templates"></select>
         </div>
         <div class="form-group"><label for="bookly-js-notification-subject"><?php esc_html_e( 'Header', 'bookly' ) ?></label>
-            <input class="form-control" id="bookly-js-notification-subject" readonly></input>
+            <input class="form-control" id="bookly-js-notification-subject" readonly>
         </div>
     </div>
 </div>

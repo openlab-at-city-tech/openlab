@@ -15,15 +15,16 @@ class ShortCode extends Lib\Base\ShortCode
     {
         $styles = array(
             'bookly' => array(
-                'frontend/resources/css/picker.classic.css' => array( 'bookly-frontend-globals' ),
-                'frontend/resources/css/picker.classic.date.css',
+                'frontend/resources/css/tailwindreset.css' => array( 'bookly-frontend-globals' ),
+                'frontend/resources/css/tailwind.css' => array( 'bookly-frontend-globals' ),
+                'frontend/resources/css/bootstrap-icons.min.css' => array( 'bookly-frontend-globals' )
             ),
         );
         if ( get_option( 'bookly_cst_phone_default_country' ) === 'disabled' ) {
-            $styles['bookly']['frontend/resources/css/bookly-main.css'] = array( 'bookly-picker.classic.date.css' );
+            $styles['bookly']['frontend/resources/css/bookly-main.css'] = array( 'bookly-tailwind.css' );
         } else {
             $styles['bookly']['frontend/resources/css/intlTelInput.css'] = array();
-            $styles['bookly']['frontend/resources/css/bookly-main.css'] = array( 'bookly-intlTelInput.css', 'bookly-picker.classic.date.css' );
+            $styles['bookly']['frontend/resources/css/bookly-main.css'] = array( 'bookly-intlTelInput.css', 'bookly-tailwind.css' );
         }
         if ( is_rtl() ) {
             $styles['bookly']['frontend/resources/css/bookly-rtl.css'] = array();
@@ -51,9 +52,8 @@ class ShortCode extends Lib\Base\ShortCode
             'bookly' => array(
                 'frontend/resources/js/hammer.min.js' => array( 'bookly-frontend-globals' ),
                 'frontend/resources/js/jquery.hammer.min.js' => array( 'jquery' ),
-                'frontend/resources/js/picker.js' => array( 'jquery' ),
-                'frontend/resources/js/picker.date.js' => array( 'bookly-picker.js' ),
-                'frontend/resources/js/bookly.min.js' => Proxy\Shared::enqueueBookingScripts( array( 'bookly-hammer.min.js', 'bookly-picker.date.js' ) ),
+                'frontend/resources/js/qrcode.js' => array(),
+                'frontend/resources/js/bookly.min.js' => Proxy\Shared::enqueueBookingScripts( array( 'bookly-hammer.min.js', 'bookly-qrcode.js' ) ),
             ),
         ) );
         if ( get_option( 'bookly_cst_phone_default_country' ) !== 'disabled' ) {
@@ -73,13 +73,10 @@ class ShortCode extends Lib\Base\ShortCode
         wp_localize_script( 'bookly-bookly.min.js', 'BooklyL10n', array(
             'ajaxurl' => $ajaxurl,
             'csrf_token' => Lib\Utils\Common::getCsrfToken(),
-            'today' => __( 'Today', 'bookly' ),
             'months' => array_values( $wp_locale->month ),
             'days' => array_values( $wp_locale->weekday ),
             'daysShort' => array_values( $wp_locale->weekday_abbrev ),
             'monthsShort' => array_values( $wp_locale->month_abbrev ),
-            'nextMonth' => __( 'Next month', 'bookly' ),
-            'prevMonth' => __( 'Previous month', 'bookly' ),
             'show_more' => __( 'Show more', 'bookly' ),
             'sessionHasExpired' => __( 'Your session has expired. Please press "Ok" to refresh the page', 'bookly' ),
         ) );
@@ -232,9 +229,8 @@ class ShortCode extends Lib\Base\ShortCode
             'errors' => $errors,
             'form_attributes' => $form_attributes,
             'use_client_time_zone' => (int) Lib\Config::useClientTimeZone(),
-            'firstDay' => (int) get_option( 'start_of_week' ),
-            'date_format' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_PICKADATE ),
             'defaults' => compact( 'service_id', 'staff_id', 'location_id', 'category_id' ),
+            'datepicker_mode' => get_option( 'bookly_app_datepicker_inverted' ) ? 'bg-accent' : 'text-accent',
         );
 
         $bookly_options = Proxy\Shared::booklyFormOptions( $bookly_options );
