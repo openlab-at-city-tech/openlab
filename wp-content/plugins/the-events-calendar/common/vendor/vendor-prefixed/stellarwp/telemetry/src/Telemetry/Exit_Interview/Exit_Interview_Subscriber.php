@@ -15,7 +15,6 @@ namespace TEC\Common\StellarWP\Telemetry\Exit_Interview;
 
 use TEC\Common\StellarWP\Telemetry\Contracts\Abstract_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Config;
-use TEC\Common\StellarWP\Telemetry\Core;
 use TEC\Common\StellarWP\Telemetry\Opt_In\Status;
 use TEC\Common\StellarWP\Telemetry\Telemetry\Telemetry;
 
@@ -165,5 +164,4 @@ class Exit_Interview_Subscriber extends Abstract_Subscriber {
 
 		return array_merge( $before_deactivate, $after_deactivate );
 	}
-
 }

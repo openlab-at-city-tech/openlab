@@ -21,6 +21,7 @@ use TEC\Common\StellarWP\Telemetry\Data_Providers\Debug_Data;
 use TEC\Common\StellarWP\Telemetry\Events\Event_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Exit_Interview\Exit_Interview_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Exit_Interview\Template;
+use TEC\Common\StellarWP\Telemetry\Last_Send\Last_Send;
 use TEC\Common\StellarWP\Telemetry\Last_Send\Last_Send_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Opt_In\Opt_In_Subscriber;
 use TEC\Common\StellarWP\Telemetry\Opt_In\Opt_In_Template;
@@ -144,6 +145,8 @@ class Core {
 		$container->bind( self::PLUGIN_FILE, $plugin_path );
 		$container->bind( self::SITE_PLUGIN_DIR, dirname( plugin_dir_path( $plugin_path ) ) );
 		$container->bind( Data_Provider::class, Debug_Data::class );
+		$container->bind( Status::class, Status::class );
+		$container->bind( Last_Send::class, Last_Send::class );
 		$container->bind(
 			Opt_In_Template::class,
 			static function () use ( $container ) {

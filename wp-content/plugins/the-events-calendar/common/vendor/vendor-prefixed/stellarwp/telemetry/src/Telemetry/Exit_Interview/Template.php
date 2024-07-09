@@ -17,7 +17,6 @@ use TEC\Common\StellarWP\ContainerContract\ContainerInterface;
 use TEC\Common\StellarWP\Telemetry\Admin\Resources;
 use TEC\Common\StellarWP\Telemetry\Config;
 use TEC\Common\StellarWP\Telemetry\Contracts\Template_Interface;
-use TEC\Common\StellarWP\Telemetry\Core;
 
 /**
  * The primary class for rendering the "Exit Interview" modal on plugin deactivation.

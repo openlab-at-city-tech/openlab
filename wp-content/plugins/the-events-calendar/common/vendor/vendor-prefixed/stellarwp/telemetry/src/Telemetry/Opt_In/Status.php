@@ -77,7 +77,7 @@ class Status {
 
 		$status  = self::STATUS_INACTIVE;
 		$option  = $this->get_option();
-		$plugins = isset( $option['plugins'] ) ? $option['plugins'] : [];
+		$plugins = $option['plugins'] ?? [];
 
 		if ( count( $plugins ) === 0 ) {
 			$status = self::STATUS_INACTIVE;

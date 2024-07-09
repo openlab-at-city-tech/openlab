@@ -134,5 +134,4 @@ class Resources {
 	public static function get_asset_path(): string {
 		return plugin_dir_url( dirname( __DIR__ ) );
 	}
-
 }
