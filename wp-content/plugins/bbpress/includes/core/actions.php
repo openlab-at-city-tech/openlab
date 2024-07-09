@@ -129,6 +129,10 @@ add_action( 'bbp_register', 'bbp_register_meta',           12 );
 add_action( 'bbp_init', 'bbp_reply_content_autoembed', 8 );
 add_action( 'bbp_init', 'bbp_topic_content_autoembed', 8 );
 
+// <body> class swap from "bbp-no-js" to "bbp-js"
+add_action( 'wp_body_open', 'bbp_swap_no_js_body_class' );
+add_action( 'bbp_footer',   'bbp_swap_no_js_body_class' );
+
 /**
  * bbp_ready - attached to end 'bbp_init' above
  *
@@ -137,7 +141,9 @@ add_action( 'bbp_init', 'bbp_topic_content_autoembed', 8 );
  *                                                v---Load order
  */
 add_action( 'bbp_ready',  'bbp_setup_akismet',    2  ); // Spam prevention for topics and replies
-add_action( 'bp_loaded',  'bbp_setup_buddypress', 1 ); // Social network integration
+
+// Setup BuddyPress using its own hook
+add_action( 'bp_include', 'bbp_setup_buddypress', 10 ); // Social network integration
 
 // Try to load the bbpress-functions.php file from the active themes
 add_action( 'bbp_after_setup_theme', 'bbp_load_theme_functions', 10 );

@@ -68,15 +68,9 @@ function bbp_setup_buddypress() {
 		return;
 	}
 
-	add_action(
-		'bp_setup_components',
-		function() {
-			// Include the BuddyPress Component
-			require_once bbpress()->includes_dir . 'extend/buddypress/loader.php';
+	// Include the BuddyPress Component
+	require_once bbpress()->includes_dir . 'extend/buddypress/loader.php';
 
-			// Instantiate BuddyPress for bbPress
-			bbpress()->extend->buddypress = new BBP_Forums_Component();
-		},
-		7
-	);
+	// Instantiate BuddyPress for bbPress
+	bbpress()->extend->buddypress = new BBP_Forums_Component();
 }

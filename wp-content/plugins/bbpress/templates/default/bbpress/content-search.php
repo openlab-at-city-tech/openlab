@@ -14,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
 
 <div id="bbpress-forums" class="bbpress-wrapper">
 
+	<?php bbp_get_template_part( 'form', 'search' ); ?>
+
 	<?php bbp_breadcrumb(); ?>
 
 	<?php bbp_set_query_name( bbp_get_search_rewrite_id() ); ?>
@@ -28,13 +30,9 @@ defined( 'ABSPATH' ) || exit;
 
 		<?php bbp_get_template_part( 'pagination', 'search' ); ?>
 
-	<?php elseif ( bbp_get_search_terms() ) : ?>
-
-		<?php bbp_get_template_part( 'feedback',   'no-search' ); ?>
-
 	<?php else : ?>
 
-		<?php bbp_get_template_part( 'form', 'search' ); ?>
+		<?php bbp_get_template_part( 'feedback',   'no-search' ); ?>
 
 	<?php endif; ?>
 

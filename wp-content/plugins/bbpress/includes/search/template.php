@@ -46,24 +46,21 @@ function bbp_has_search_results( $args = array() ) {
 		$default['s'] = $default_search_terms;
 	}
 
-	// What are the default allowed statuses (based on user caps)
-	if ( bbp_get_view_all() ) {
+	// Default public statuses (topics coincidentally cover all post types)
+	$post_statuses = array_keys( bbp_get_public_topic_statuses() );
 
-		// Default view=all statuses
-		$post_statuses = array_keys( bbp_get_topic_statuses() );
-
-		// Add support for private status
-		if ( current_user_can( 'read_private_topics' ) ) {
-			$post_statuses[] = bbp_get_private_status_id();
-		}
-
-		// Join post statuses together
-		$default['post_status'] = $post_statuses;
-
-	// Lean on the 'perm' query var value of 'readable' to provide statuses
-	} else {
-		$default['perm'] = 'readable';
+	// Add support for private status
+	if ( current_user_can( 'read_private_topics' ) ) {
+		$post_statuses[] = bbp_get_private_status_id();
 	}
+
+	// Add support for hidden status
+	if ( current_user_can( 'read_hidden_topics' ) ) {
+		$post_statuses[] = bbp_get_hidden_status_id();
+	}
+
+	// Join post statuses together
+	$default['post_status'] = $post_statuses;
 
 	/** Setup *****************************************************************/
 

@@ -30,7 +30,6 @@ class BBP_Converter_DB extends wpdb {
 	 * @param string $dbhost     MySQL database host
 	 */
 	public function __construct( $dbuser, $dbpassword, $dbname, $dbhost ) {
-		register_shutdown_function( array( $this, '__destruct' ) );
 
 		if ( WP_DEBUG && WP_DEBUG_DISPLAY ) {
 			$this->show_errors();

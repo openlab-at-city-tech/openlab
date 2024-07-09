@@ -579,14 +579,14 @@ function bbp_edit_topic_handler( $action = '' ) {
 	$topic_status = $topic->post_status;
 
 	// Maybe force into pending
-	if ( bbp_is_topic_public( $topic->ID ) && ! bbp_check_for_moderation( $anonymous_data, $topic_author, $topic_title, $topic_content ) ) {
+	if ( bbp_is_topic_public( $topic_id ) && ! bbp_check_for_moderation( $anonymous_data, $topic_author, $topic_title, $topic_content ) ) {
 		$topic_status = bbp_get_pending_status_id();
 
 	// Check for possible posted topic status
 	} elseif ( ! empty( $_POST['bbp_topic_status'] ) && in_array( $_POST['bbp_topic_status'], array_keys( $topic_statuses ), true ) ) {
 
 		// Allow capable users to explicitly override the status
-		if ( current_user_can( 'moderate', $forum_id ) ) {
+		if ( current_user_can( 'moderate', $topic_id ) ) {
 			$topic_status = sanitize_key( $_POST['bbp_topic_status'] );
 
 		// Not capable
