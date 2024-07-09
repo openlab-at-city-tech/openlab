@@ -1,188 +1,204 @@
 
 # Changelog
 
+## 2.3.8 | June 26, 2024
+
+- Fixed issue where the plugin updater API response for perks included the changelog property, which could prevent plugin updates from showing up in some situations.
+
+## 2.3.7 | May 15, 2024
+
+- Fixed a potential PHP warning.
+
+## 2.3.6
+
+- Fixed issue where the plugin updater API response for perks included extra properties, such as the changelog, which could prevent plugin updates from showing up in some situations.
+
+## 2.3.5
+
+- Fixed issue where "Enable auto-updates" would only show on perks if there was an available update.
+
 ## 2.3.4
 
-	- Updated strings in the Perks tab to be internationalized.
+- Updated strings in the Perks tab to be internationalized.
 
 ## 2.3.3
 
-	- Fixed an issue where Gravity Perks' licensing would replace variables in the updater URLs for GS Product Configurator and prevent updates from downloading successfully.
-	- Added German translations. Credit: Florian Rinnhofer of sportunion.at
+- Fixed an issue where Gravity Perks' licensing would replace variables in the updater URLs for GS Product Configurator and prevent updates from downloading successfully.
+- Added German translations. Credit: Florian Rinnhofer of sportunion.at
 
 ## 2.3.2
 
-	- Fixed an issue where certain security restrictions may block admin access to managing Perks.
+- Fixed an issue where certain security restrictions may block admin access to managing Perks.
 
 ## 2.3.1
 
-	- Fixed deprecation notices in PHP 8.2.
-	- Fixed an issue where multiple requests could be sent to the Gravity Wiz API when checking for updates.
+- Fixed deprecation notices in PHP 8.2.
+- Fixed an issue where multiple requests could be sent to the Gravity Wiz API when checking for updates.
 
 ## 2.3
 
-	- Added support for legacy version channels.
-	- Fixed a typo in an error message.
+- Added support for legacy version channels.
+- Fixed a typo in an error message.
 
 ## 2.2.9
 
-	- Improved performance by decreasing the number of calls to `get_plugins()`.
+- Improved performance by decreasing the number of calls to `get_plugins()`.
 
 ## 2.2.8
 
-	- Fixed issue where a license validation function was being called on every request.
-	- Improved permission handling of Gravity Wiz licenses and perk registration on subsites for users who are not network admins.
-	- Improved license API performance on WordPress multisite.
-	- Fixed issue where license data would become cached which would cause some actions such as refreshing, registering perks, and deregistering perks to not always show the correct information.
-	- Added "Update URI" to plugin header to improve security.
+- Fixed issue where a license validation function was being called on every request.
+- Improved permission handling of Gravity Wiz licenses and perk registration on subsites for users who are not network admins.
+- Improved license API performance on WordPress multisite.
+- Fixed issue where license data would become cached which would cause some actions such as refreshing, registering perks, and deregistering perks to not always show the correct information.
+- Added "Update URI" to plugin header to improve security.
 
 ## 2.2.7
 
-	- Fixed positional tooltip issues introduced in Gravity Forms 2.5.6.
-	- Added `gperks_tooltips_initialized` jQuery event to be used by Perks adding tooltips after initial load.
+- Fixed positional tooltip issues introduced in Gravity Forms 2.5.6.
+- Added `gperks_tooltips_initialized` jQuery event to be used by Perks adding tooltips after initial load.
 
 ## 2.2.6
 
-	- Fixed a potential issue where some perks may display settings in the wrong tab.
-	- Updated field setting group label styles.
+- Fixed a potential issue where some perks may display settings in the wrong tab.
+- Updated field setting group label styles.
 
 ## 2.2.5
 
-	- Added ASM Select so perks no longer need to include this individually.
+- Added ASM Select so perks no longer need to include this individually.
 
 ## 2.2.4
 
-	- Added additional helper styles for Gravity Forms 2.5 field settings.
-	- Fixed issue where some perks relied on a script file that was loaded in footer.
-	- Fixed issue where Perk minimum requirements would not be enforced in some situations.
+- Added additional helper styles for Gravity Forms 2.5 field settings.
+- Fixed issue where some perks relied on a script file that was loaded in footer.
+- Fixed issue where Perk minimum requirements would not be enforced in some situations.
 
 ## 2.2.3
 
-	- Added support for customizing Gravity Forms tooltips.
-	- Updated admin scripts to be output to the footer.
-	- Added default styles for new `.gp-tooltip-right`. Used by tooltips that are close to the right side of the screen (particularly in the field settings).
-	- Added new styles for child settings in Gravity Forms 2.5.
-	- Fixed issue where Perk minimum requirements would not be enforced in some situations.
+- Added support for customizing Gravity Forms tooltips.
+- Updated admin scripts to be output to the footer.
+- Added default styles for new `.gp-tooltip-right`. Used by tooltips that are close to the right side of the screen (particularly in the field settings).
+- Added new styles for child settings in Gravity Forms 2.5.
+- Fixed issue where Perk minimum requirements would not be enforced in some situations.
 
 ## 2.2.2
 
-	- Fixed issue where minimum requirement admin notices were not displayed in WordPress dashboard. Gravity Forms 2.5 no longer shows notices on their settings pages.
-	- Fixed issue where double notices were displayed on plugin row.
-	- Fixed issue where perks' init was not correctly halted when min requirements were not met in Gravity Forms 2.5.
+- Fixed issue where minimum requirement admin notices were not displayed in WordPress dashboard. Gravity Forms 2.5 no longer shows notices on their settings pages.
+- Fixed issue where double notices were displayed on plugin row.
+- Fixed issue where perks' init was not correctly halted when min requirements were not met in Gravity Forms 2.5.
 
 ## 2.2.1
 
-	- Fixed issue where request URL was not logged accurately.
-	- Updated affiliate URL.
-	- Added support for Gravity Forms 2.5. (#9)
-	- Added support for disabling animation when toggling settings.
-	- Added styles for Select2 with .gp-selectwoo selector.
-	- Added support for enabling import/export of feeds for a given Gravity Perk by using the gravityperks_export_feeds_PLUGIN-SLUG filter.
-	- Fixed styling of plugin row notices and disable auto-updater if license is not registered.
+- Fixed issue where request URL was not logged accurately.
+- Updated affiliate URL.
+- Added support for Gravity Forms 2.5. (#9)
+- Added support for disabling animation when toggling settings.
+- Added styles for Select2 with .gp-selectwoo selector.
+- Added support for enabling import/export of feeds for a given Gravity Perk by using the gravityperks_export_feeds_PLUGIN-SLUG filter.
+- Fixed styling of plugin row notices and disable auto-updater if license is not registered.
 
 ## 2.2
 
-	- Added full support for Gravity Forms 2.5!
-	- Added gf-legacy-ui body class on admin pages to allow perks to target specific styles to versions of Gravity Forms prior to 2.5.
-	- Added support for a Perks tab for field settings in the GF 2.5 form editor.
-	- Added helper functions for determining if a given version of GF is active.
-	- Added default styling for GF 2.5's implementation of SelectWoo.
-	- Fixed tooltips on Manage Perks page to work with GF 2.5.
-	- Fixed issue where license setting did not have autocomplete disabled.
+- Added full support for Gravity Forms 2.5!
+- Added gf-legacy-ui body class on admin pages to allow perks to target specific styles to versions of Gravity Forms prior to 2.5.
+- Added support for a Perks tab for field settings in the GF 2.5 form editor.
+- Added helper functions for determining if a given version of GF is active.
+- Added default styling for GF 2.5's implementation of SelectWoo.
+- Fixed tooltips on Manage Perks page to work with GF 2.5.
+- Fixed issue where license setting did not have autocomplete disabled.
 
 ## 2.1.11
 
-	- Fixed issue where extraneous HTTP requests checking for announcements would be sent from the WordPress admin dashboard when used in conjunction with W3 Total Cache's Object Caching.
+- Fixed issue where extraneous HTTP requests checking for announcements would be sent from the WordPress admin dashboard when used in conjunction with W3 Total Cache's Object Caching.
 
 ## 2.1.10
 
-	- Fixed issue where checking for add-on-specific requirement would create infinite recursion.
+- Fixed issue where checking for add-on-specific requirement would create infinite recursion.
 
 ## 2.1.9
 
-	- Removed deprecated Markdown library.
-	- Added security enhancements.
+- Removed deprecated Markdown library.
+- Added security enhancements.
 
 ## 2.1.8
 
-	- Fixed potential warning if the Gravity Perks updater isn’t provided the optimal data format.
+- Fixed potential warning if the Gravity Perks updater isn’t provided the optimal data format.
 
 ## 2.1.7
 
-	- Updated perk settings view to require "manage_options" capability instead of "update_plugins".
+- Updated perk settings view to require "manage_options" capability instead of "update_plugins".
 
 ## 2.1.6
 
-	- Fixed an issue where certain API calls going to Gravity Wiz (such as checking for announcements) weren’t being cached.
+- Fixed an issue where certain API calls going to Gravity Wiz (such as checking for announcements) weren’t being cached.
 
 ## 2.1.5
 
-	- Added security enhancements to perk settings API.
+- Added security enhancements to perk settings API.
 
 ## 2.1.4
 
-	- Fixed fatal error introduced in 2.1.3.
+- Fixed fatal error introduced in 2.1.3.
 
 ## 2.1.3
 
-	- Fixed security issue.
-	- Fixed notice generated when fetching available perks and no license key is specified.
+- Fixed security issue.
+- Fixed notice generated when fetching available perks and no license key is specified.
 
 ## 2.1.2
 
-	- Fixed several fatal errors that occurred when running older versions of Gravity Forms.
-	- Fixed issue where unmet minimum requirements did not prevent GP_Plugin-based perks from initializing.
-	- Updated minimum required version of Gravity Forms to fix fatal errors where GFAddon::meets_minimum_requirements() did not exist.
+- Fixed several fatal errors that occurred when running older versions of Gravity Forms.
+- Fixed issue where unmet minimum requirements did not prevent GP_Plugin-based perks from initializing.
+- Updated minimum required version of Gravity Forms to fix fatal errors where GFAddon::meets_minimum_requirements() did not exist.
 
 ## 2.1.1
 
-	- Fixed issue where Gravity Wiz API wouldn't have its cache cleared
+- Fixed issue where Gravity Wiz API wouldn't have its cache cleared
 
 ## 2.1
 
-	- Updated licensing and updates API for significant performance improvements.
+- Updated licensing and updates API for significant performance improvements.
 
 ## 2.0.12
 
-	- Fixed issue with usage of WP_CONTENT_DIR; replaced with WP_PLUGIN_DIR
+- Fixed issue with usage of WP_CONTENT_DIR; replaced with WP_PLUGIN_DIR
 
 ## 2.0.11
 
-	- Added GP_Late_Static_Binding::Perk_value_pass_through() method.
+- Added GP_Late_Static_Binding::Perk_value_pass_through() method.
 
 ## 2.0.10
 
-	- Added support to disable API SSL verification with “edd_sl_api_request_verify_ssl” filter
+- Added support to disable API SSL verification with “edd_sl_api_request_verify_ssl” filter
 
 ## 2.0.9
 
-	- Fixed fatal error that could occur when Gravity Forms was not loaded.
+- Fixed fatal error that could occur when Gravity Forms was not loaded.
 
 ## 2.0.8
 
-	- Fixed notice that could occur when Gravity Forms was deactivated.
-	- Improved Perk installation experience by reducing the number of calls to GravityWiz.com
-	- Updated API to use HTTPS
+- Fixed notice that could occur when Gravity Forms was deactivated.
+- Improved Perk installation experience by reducing the number of calls to GravityWiz.com
+- Updated API to use HTTPS
 
 ## 2.0.7
 
-	- Fixed fatal error that occurred when fetching announcements when Gravity Forms was not loaded and announcements were not cached.
+- Fixed fatal error that occurred when fetching announcements when Gravity Forms was not loaded and announcements were not cached.
 
 ## 2.0.6
 
-	- Fixed fatal error that occurred when attempting to log when Gravity Forms was not loaded.
+- Fixed fatal error that occurred when attempting to log when Gravity Forms was not loaded.
 
 ## 2.0.5
 
-	- Fixed fatal error that could occur when register_scripts() was called when Gravity Forms was not loaded.
+- Fixed fatal error that could occur when register_scripts() was called when Gravity Forms was not loaded.
 
 ## 2.0.4
 
-	- Fixed notices generated by deprecated functions in PHP 7.2.
+- Fixed notices generated by deprecated functions in PHP 7.2.
 
 ## 2.0.3
 
-	- Added support for enforcing minimum requirements for GP_Plugin/GP_Feed_Plugin-based perks.
+- Added support for enforcing minimum requirements for GP_Plugin/GP_Feed_Plugin-based perks.
 
 ## 2.0.2
 
@@ -192,12 +208,12 @@
 
 ## 2.0.1
 
-	- Fixed issue where incorrect URL was used to check, activate and deactivate licenses.
-	- Fixed issue where announcements did not show up for non-English sites.
+- Fixed issue where incorrect URL was used to check, activate and deactivate licenses.
+- Fixed issue where announcements did not show up for non-English sites.
 
 ## 2.0
 
-	- Added GP_Plugin and GP_Feed_Plugin to integrate with Gravity Forms Add-on Framework.
+- Added GP_Plugin and GP_Feed_Plugin to integrate with Gravity Forms Add-on Framework.
     - Added support for announcements; short banner messages with news and updates about Gravity Perks.
     - Added support for new license types (Basic, Advanced, Pro).
     - Added license toolbar on Manager Perks page.
@@ -208,25 +224,25 @@
 
 ## 1.2.26
 
-	- Added GRAVITY_PERKS_VERSION constant.
-	- Added support for GW_STORE_URL for easier local development.
+- Added GRAVITY_PERKS_VERSION constant.
+- Added support for GW_STORE_URL for easier local development.
 
 ## 1.2.25
 
-	- Replaced Markdown library to resolve several PHP errors.
+- Replaced Markdown library to resolve several PHP errors.
 
 ## 1.2.24
 
-	- Fixed fatal error when Gravity Forms was deactivated before Gravity Perks.
+- Fixed fatal error when Gravity Forms was deactivated before Gravity Perks.
 
 ## 1.2.23
 
-	- Fixed fatal error w/ older versions of PHP and the usage of namespaces.
+- Fixed fatal error w/ older versions of PHP and the usage of namespaces.
 
 ## 1.2.22
 
-	- Fixed error on multisite installs where Gravity Perks prevented any plugin from being networked activated if GP was activated but not network activated.
-	- Improved styling on plugin table.
+- Fixed error on multisite installs where Gravity Perks prevented any plugin from being networked activated if GP was activated but not network activated.
+- Improved styling on plugin table.
 
 ## 1.2.21
 
@@ -236,8 +252,8 @@
 
 ## 1.2.19
 
-	- Replaced Markdown library to resolve on-going conflicts with newer versions of PHP (7+).
-	- Fixed issue where Gravity Perks updates were not displaying correctly do to an encoding issue in the API request.
+- Replaced Markdown library to resolve on-going conflicts with newer versions of PHP (7+).
+- Fixed issue where Gravity Perks updates were not displaying correctly do to an encoding issue in the API request.
 
 ## 1.2.18.7
 

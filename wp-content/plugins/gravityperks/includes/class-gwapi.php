@@ -21,7 +21,11 @@ class GWAPI {
 	private $product;
 	private $author;
 
-	private $_product_update_data = null;
+	private $_product_update_data = array(
+		'loaded'    => false,
+		'response'  => array(),
+		'no_update' => array(),
+	);
 
 	/**
 	 * @var string The slug of the plugin sending the request.
@@ -299,8 +303,15 @@ class GWAPI {
 		}
 
 		// check if our run-time cache is populated, save a little hassle of having to loop through this over and over
-		if ( is_array( $this->_product_update_data ) && ! $force_check ) {
-			$_transient_data->response = array_merge( $_transient_data->response, $this->_product_update_data );
+		if ( $this->_product_update_data['loaded'] && ! $force_check ) {
+			$_transient_data->response  = array_merge( (array) $_transient_data->response, $this->_product_update_data['response'] );
+
+			if ( ! isset( $_transient_data->no_update ) ) {
+				$_transient_data->no_update = array();
+			}
+
+			$_transient_data->no_update = array_merge( (array) $_transient_data->no_update, $this->_product_update_data['no_update'] );
+
 			GravityPerks::log_debug( 'Cached update data available.' );
 			GravityPerks::log_debug( 'pre_set_site_transient_update_plugins_filter() end. Returning cached update data.' );
 
@@ -334,18 +345,62 @@ class GWAPI {
 				if ( isset( $remote_product->sections['legacy_changelog'] ) ) {
 					$remote_product->sections['changelog'] = $remote_product->sections['legacy_changelog'];
 				}
+			}
+
+			/*
+			 * Unset needed keys from the product update data. Keys like changelog will be fetched using the
+			 * `plugins_api` filter.
+			 */
+			$keys_to_remove = array(
+				'sections',
+				'download_link',
+				'categories',
+				'documentation',
+				'changelog',
+				'legacy_version',
+				'legacy_changelog',
+				'legacy_version_requirement',
+				'version',
+				'author',
+				'last_updated',
+			);
+
+			foreach ( $keys_to_remove as $key ) {
+				if ( isset( $remote_product->$key ) ) {
+					unset( $remote_product->$key );
+				}
+			}
+
+			// Change the 'homepage' key to 'url' to match the format of the WP.org API response.
+			if (
+				isset( $remote_product->homepage )
+				&& ! isset( $remote_product->url )
+			) {
+				$remote_product->url = $remote_product->homepage;
+				unset( $remote_product->homepage );
+			}
+
+			if ( $local_product_version ) {
+				GravityPerks::log_debug( 'Product update found. Adding to local product update data.' . print_r( $remote_product, true ) );
 
 				if ( version_compare( $local_product_version, $remote_product->new_version, '<' ) ) {
-					$product_update_data[ $remote_product_file ] = $remote_product;
+					$this->_product_update_data['response'][ $remote_product_file ] = $remote_product;
+				} else {
+					$this->_product_update_data['no_update'][ $remote_product_file ] = $remote_product;
 				}
-			} elseif ( $local_product_version && version_compare( $local_product_version, $remote_product->new_version, '<' ) ) {
-				GravityPerks::log_debug( 'Product update found. Adding to local product update data.' . print_r( $remote_product, true ) );
-				$product_update_data[ $remote_product_file ] = $remote_product;
 			}
 		}
 
-		$_transient_data->response  = array_merge( (array) $_transient_data->response, $product_update_data );
-		$this->_product_update_data = $product_update_data;
+		$_transient_data->response  = array_merge( (array) $_transient_data->response, $this->_product_update_data['response'] );
+
+		if ( ! isset( $_transient_data->no_update ) ) {
+			$_transient_data->no_update = array();
+		}
+
+		// https://make.wordpress.org/core/2020/07/30/recommended-usage-of-the-updates-api-to-support-the-auto-updates-ui-for-plugins-and-themes-in-wordpress-5-5/
+		$_transient_data->no_update = array_merge( (array) $_transient_data->no_update, $this->_product_update_data['no_update'] );
+
+		$this->_product_update_data['loaded'] = true;
 
 		GravityPerks::log_debug( 'pre_set_site_transient_update_plugins_filter() end. Returning update data.' . print_r( $_transient_data, true ) );
 
@@ -420,7 +475,9 @@ class GWAPI {
 			$product->version = $product->legacy_version;
 		}
 
-		$product->sections['changelog'] = GWPerks::format_changelog( $product->sections['changelog'], $product );
+		if ( rgar( $product->sections, 'changelog' ) ) {
+			$product->sections['changelog'] = GWPerks::format_changelog( $product->sections['changelog'], $product );
+		}
 
 		GravityPerks::log_debug( 'Ok! Everything looks good. Let\'s build the response needed for WordPress.' );
 
