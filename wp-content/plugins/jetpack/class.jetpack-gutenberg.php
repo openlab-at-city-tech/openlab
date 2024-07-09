@@ -12,29 +12,11 @@ use Automattic\Jetpack\Connection\Initial_State as Connection_Initial_State;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\Current_Plan as Jetpack_Plan;
+use Automattic\Jetpack\Publicize\Jetpack_Social_Settings\Dismissed_Notices;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 
 // phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- TODO: Move the functions and such to some other file.
-
-/**
- * Wrapper function to safely register a gutenberg block type
- *
- * @deprecated 9.1.0 Use Automattic\\Jetpack\\Blocks::jetpack_register_block instead
- *
- * @see register_block_type
- *
- * @since 6.7.0
- *
- * @param string $slug Slug of the block.
- * @param array  $args Arguments that are passed into register_block_type.
- *
- * @return WP_Block_Type|false The registered block type on success, or false on failure.
- */
-function jetpack_register_block( $slug, $args = array() ) {
-	_deprecated_function( __METHOD__, '9.1.0', 'Automattic\\Jetpack\\Blocks::jetpack_register_block' );
-	return Blocks::jetpack_register_block( $slug, $args );
-}
 
 /**
  * General Gutenberg editor specific functionality
@@ -464,6 +446,30 @@ class Jetpack_Gutenberg {
 	}
 
 	/**
+	 * Queue a script to set `Jetpack_Block_Assets_Base_Url`.
+	 *
+	 * In certain cases Webpack needs to know a base to load additional assets from.
+	 * Normally it can determine that itself, but when JS concatenation is involved that tends to confuse it.
+	 * We work around that by explicitly outputting a variable with the correct URL.
+	 * We set that as its own "script" so we can reliably only output it once.
+	 */
+	private static function register_blocks_assets_base_url() {
+		if ( ! wp_script_is( 'jetpack-blocks-assets-base-url', 'registered' ) ) {
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- No actual script, so no version needed.
+			wp_register_script( 'jetpack-blocks-assets-base-url', false, array(), null, array( 'in_footer' => false ) );
+			$json_encode_flags = JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP;
+			if ( get_option( 'blog_charset' ) === 'UTF-8' ) {
+				$json_encode_flags |= JSON_UNESCAPED_UNICODE;
+			}
+			wp_add_inline_script(
+				'jetpack-blocks-assets-base-url',
+				'var Jetpack_Block_Assets_Base_Url=' . wp_json_encode( plugins_url( self::get_blocks_directory(), JETPACK__PLUGIN_FILE ), $json_encode_flags ) . ';',
+				'before'
+			);
+		}
+	}
+
+	/**
 	 * Only enqueue block assets when needed.
 	 *
 	 * @param string $type Slug of the block or absolute path to the block source code directory.
@@ -544,10 +550,13 @@ class Jetpack_Gutenberg {
 			return;
 		}
 
+		self::register_blocks_assets_base_url();
+
 		// Enqueue script.
 		$script_relative_path  = self::get_blocks_directory() . $type . '/view.js';
 		$script_deps_path      = JETPACK__PLUGIN_DIR . self::get_blocks_directory() . $type . '/view.asset.php';
 		$script_dependencies[] = 'wp-polyfill';
+		$script_dependencies[] = 'jetpack-blocks-assets-base-url';
 		if ( file_exists( $script_deps_path ) ) {
 			$asset_manifest      = include $script_deps_path;
 			$script_dependencies = array_unique( array_merge( $script_dependencies, $asset_manifest['dependencies'] ) );
@@ -576,14 +585,6 @@ class Jetpack_Gutenberg {
 				}
 			}
 		}
-
-		wp_localize_script(
-			'jetpack-block-' . $type,
-			'Jetpack_Block_Assets_Base_Url',
-			array(
-				'url' => plugins_url( self::get_blocks_directory(), JETPACK__PLUGIN_FILE ),
-			)
-		);
 	}
 
 	/**
@@ -650,11 +651,16 @@ class Jetpack_Gutenberg {
 			$blocks_env = '';
 		}
 
+		self::register_blocks_assets_base_url();
+
 		Assets::register_script(
 			'jetpack-blocks-editor',
 			"{$blocks_dir}editor{$blocks_env}.js",
 			JETPACK__PLUGIN_FILE,
-			array( 'textdomain' => 'jetpack' )
+			array(
+				'textdomain'   => 'jetpack',
+				'dependencies' => array( 'jetpack-blocks-assets-base-url' ),
+			)
 		);
 
 		// Hack around #20357 (specifically, that the editor bundle depends on
@@ -664,14 +670,6 @@ class Jetpack_Gutenberg {
 		wp_styles()->query( 'jetpack-blocks-editor', 'registered' )->deps = array();
 
 		Assets::enqueue_script( 'jetpack-blocks-editor' );
-
-		wp_localize_script(
-			'jetpack-blocks-editor',
-			'Jetpack_Block_Assets_Base_Url',
-			array(
-				'url' => plugins_url( $blocks_dir . '/', JETPACK__PLUGIN_FILE ),
-			)
-		);
 
 		if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
 			$user                      = wp_get_current_user();
@@ -688,10 +686,12 @@ class Jetpack_Gutenberg {
 			$is_current_user_connected = ( new Connection_Manager( 'jetpack' ) )->is_user_connected();
 		}
 
+		if ( $blocks_variation === 'beta' && $is_current_user_connected ) {
+			wp_enqueue_style( 'recoleta-font', '//s1.wp.com/i/fonts/recoleta/css/400.min.css', array(), Constants::get_constant( 'JETPACK__VERSION' ) );
+		}
 		// AI Assistant
 		$ai_assistant_state = array(
-			'is-enabled'            => apply_filters( 'jetpack_ai_enabled', true ),
-			'is-playground-visible' => Constants::is_true( 'JETPACK_AI_ASSISTANT_PLAYGROUND' ),
+			'is-enabled' => apply_filters( 'jetpack_ai_enabled', true ),
 		);
 
 		$screen_base = null;
@@ -699,8 +699,16 @@ class Jetpack_Gutenberg {
 			$screen_base = get_current_screen()->base;
 		}
 
+		$modules = array();
+		if ( class_exists( 'Jetpack_Core_API_Module_List_Endpoint' ) ) {
+			$module_list_endpoint = new Jetpack_Core_API_Module_List_Endpoint();
+			$modules              = $module_list_endpoint->get_modules();
+		}
+
 		$initial_state = array(
 			'available_blocks' => self::get_availability(),
+			'blocks_variation' => $blocks_variation,
+			'modules'          => $modules,
 			'jetpack'          => array(
 				'is_active'                     => Jetpack::is_connection_ready(),
 				'is_current_user_connected'     => $is_current_user_connected,
@@ -721,11 +729,6 @@ class Jetpack_Gutenberg {
 				 * @param bool true Enable the RePublicize UI in the block editor context. Defaults to true.
 				 */
 				'republicize_enabled'           => apply_filters( 'jetpack_block_editor_republicize_feature', true ),
-				/**
-				 * Prevent the registration of the blocks from extensions/blocks/contact-form
-				 * if the Forms package is enabled.
-				 */
-				'is_form_package_enabled'       => apply_filters( 'jetpack_contact_form_use_package', true ),
 			),
 			'siteFragment'     => $status->get_site_suffix(),
 			'adminUrl'         => esc_url( admin_url() ),
@@ -735,27 +738,35 @@ class Jetpack_Gutenberg {
 			'siteLocale'       => str_replace( '_', '-', get_locale() ),
 			'ai-assistant'     => $ai_assistant_state,
 			'screenBase'       => $screen_base,
+			'pluginBasePath'   => plugins_url( '', Constants::get_constant( 'JETPACK__PLUGIN_FILE' ) ),
 		);
 
 		if ( Jetpack::is_module_active( 'publicize' ) && function_exists( 'publicize_init' ) ) {
-			$publicize                = publicize_init();
-			$sig_settings             = new Automattic\Jetpack\Publicize\Social_Image_Generator\Settings();
-			$auto_conversion_settings = new Automattic\Jetpack\Publicize\Auto_Conversion\Settings();
+			$publicize               = publicize_init();
+			$jetpack_social_settings = new Automattic\Jetpack\Publicize\Jetpack_Social_Settings\Settings();
+			$social_initial_state    = $jetpack_social_settings->get_initial_state();
 
 			$initial_state['social'] = array(
 				'sharesData'                      => $publicize->get_publicize_shares_info( $blog_id ),
 				'hasPaidPlan'                     => $publicize->has_paid_plan(),
+				'hasPaidFeatures'                 => $publicize->has_paid_features(),
 				'isEnhancedPublishingEnabled'     => $publicize->has_enhanced_publishing_feature(),
-				'isSocialImageGeneratorAvailable' => $sig_settings->is_available(),
-				'isSocialImageGeneratorEnabled'   => $sig_settings->is_enabled(),
-				'dismissedNotices'                => $publicize->get_dismissed_notices(),
+				'isSocialImageGeneratorAvailable' => $social_initial_state['socialImageGeneratorSettings']['available'],
+				'isSocialImageGeneratorEnabled'   => $social_initial_state['socialImageGeneratorSettings']['enabled'],
+				'dismissedNotices'                => Dismissed_Notices::get_dismissed_notices(),
 				'supportedAdditionalConnections'  => $publicize->get_supported_additional_connections(),
-				'autoConversionSettings'          => array(
-					'available' => $auto_conversion_settings->is_available( 'image' ),
-					'image'     => $auto_conversion_settings->is_enabled( 'image' ),
-				),
+				'autoConversionSettings'          => $social_initial_state['autoConversionSettings'],
 				'jetpackSharingSettingsUrl'       => esc_url_raw( admin_url( 'admin.php?page=jetpack#/sharing' ) ),
+				'userConnectionUrl'               => esc_url_raw( admin_url( 'admin.php?page=my-jetpack#/connection' ) ),
+				'useAdminUiV1'                    => $social_initial_state['useAdminUiV1'],
 			);
+
+			// Add connectionData if we are using the new Connection UI.
+			if ( $social_initial_state['useAdminUiV1'] ) {
+				$initial_state['social']['connectionData'] = $social_initial_state['connectionData'];
+
+				$initial_state['social']['connectionRefreshPath'] = $social_initial_state['connectionRefreshPath'];
+			}
 		}
 
 		wp_localize_script(
@@ -825,22 +836,6 @@ class Jetpack_Gutenberg {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Get CSS classes for a block.
-	 *
-	 * @since 7.7.0
-	 *
-	 * @param string $slug  Block slug.
-	 * @param array  $attr  Block attributes.
-	 * @param array  $extra Potential extra classes you may want to provide.
-	 *
-	 * @return string $classes List of CSS classes for a block.
-	 */
-	public static function block_classes( $slug, $attr, $extra = array() ) {
-		_deprecated_function( __METHOD__, '9.0.0', 'Automattic\\Jetpack\\Blocks::classes' );
-		return Blocks::classes( $slug, $attr, $extra );
 	}
 
 	/**
@@ -941,7 +936,7 @@ class Jetpack_Gutenberg {
 	 *
 	 * @since 8.1.0
 	 *
-	 * @param obj    $preset_extensions_manifest List of extensions available in Jetpack.
+	 * @param object $preset_extensions_manifest List of extensions available in Jetpack.
 	 * @param string $blocks_variation           Subset of blocks. production|beta|experimental.
 	 *
 	 * @return array $preset_extensions Array of extensions for that variation

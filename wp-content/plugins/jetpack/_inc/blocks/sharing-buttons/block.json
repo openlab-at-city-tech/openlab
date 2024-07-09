@@ -2,17 +2,19 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "jetpack/sharing-buttons",
-    "title": "Sharing buttons",
+    "title": "Sharing Buttons",
     "description": "Give your readers the ability to easily share your content with X, Facebook, Tumblr, LinkedIn, and a host of other services to help spread your message across the web.",
     "keywords": [
         "sharing",
         "social",
+        "bluesky",
         "twitter",
         "x",
         "linkedin",
         "facebook",
         "mastodon",
         "tumblr",
+        "threads",
         "whatsapp",
         "telegram",
         "pinterest",
@@ -36,10 +38,42 @@
                 "text",
                 "official"
             ]
+        },
+        "size": {
+            "type": "string",
+            "default": "has-normal-icon-size",
+            "validValues": [
+                "has-small-icon-size",
+                "has-normal-icon-size",
+                "has-large-icon-size",
+                "has-huge-icon-size"
+            ]
+        },
+        "iconColor": {
+            "type": "string"
+        },
+        "customIconColor": {
+            "type": "string"
+        },
+        "iconColorValue": {
+            "type": "string"
+        },
+        "iconBackgroundColor": {
+            "type": "string"
+        },
+        "customIconBackgroundColor": {
+            "type": "string"
+        },
+        "iconBackgroundColorValue": {
+            "type": "string"
         }
     },
     "providesContext": {
-        "styleType": "styleType"
+        "styleType": "styleType",
+        "iconColor": "iconColor",
+        "iconColorValue": "iconColorValue",
+        "iconBackgroundColor": "iconBackgroundColor",
+        "iconBackgroundColorValue": "iconBackgroundColorValue"
     },
     "supports": {
         "align": [
@@ -58,9 +92,10 @@
             }
         },
         "color": {
-            "enableContrastChecker": false,
+            "enableContrastChecker": true,
             "background": true,
             "gradients": true,
+            "customGradient": true,
             "text": false,
             "__experimentalDefaultControls": {
                 "background": false
@@ -109,5 +144,7 @@
             }
         ]
     },
+    "viewScript": "file:./view.js",
+    "style": "file:./view.css",
     "editorScript": "jetpack-blocks-editor"
 }

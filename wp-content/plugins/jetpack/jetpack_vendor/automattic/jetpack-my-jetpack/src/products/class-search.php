@@ -48,6 +48,20 @@ class Search extends Hybrid_Product {
 	public static $has_standalone_plugin = true;
 
 	/**
+	 * Whether this product has a free offering
+	 *
+	 * @var bool
+	 */
+	public static $has_free_offering = true;
+
+	/**
+	 * Whether this product requires a plan to work at all
+	 *
+	 * @var bool
+	 */
+	public static $requires_plan = true;
+
+	/**
 	 * The filename (id) of the plugin associated with this product.
 	 *
 	 * @var string
@@ -63,24 +77,24 @@ class Search extends Hybrid_Product {
 	 *
 	 * @var boolean
 	 */
-	public static $requires_user_connection = false;
+	public static $requires_user_connection = true;
 
 	/**
-	 * Get the internationalized product name
+	 * Get the product name
 	 *
 	 * @return string
 	 */
 	public static function get_name() {
-		return __( 'Search', 'jetpack-my-jetpack' );
+		return 'Search';
 	}
 
 	/**
-	 * Get the internationalized product title
+	 * Get the product title
 	 *
 	 * @return string
 	 */
 	public static function get_title() {
-		return __( 'Jetpack Search', 'jetpack-my-jetpack' );
+		return 'Jetpack Search';
 	}
 
 	/**
@@ -89,7 +103,7 @@ class Search extends Hybrid_Product {
 	 * @return string
 	 */
 	public static function get_description() {
-		return __( 'Help them find what they need', 'jetpack-my-jetpack' );
+		return __( 'Custom instant site search', 'jetpack-my-jetpack' );
 	}
 
 	/**
@@ -142,6 +156,15 @@ class Search extends Hybrid_Product {
 		$pricing['estimated_record_count'] = $record_count;
 
 		return array_merge( $pricing, $search_pricing );
+	}
+
+	/**
+	 * Get the URL the user is taken after purchasing the product through the checkout
+	 *
+	 * @return ?string
+	 */
+	public static function get_post_checkout_url() {
+		return self::get_manage_url();
 	}
 
 	/**
@@ -277,17 +300,46 @@ class Search extends Hybrid_Product {
 	}
 
 	/**
-	 * Checks whether the current plan of the site already supports the product
+	 * Checks if the site purchases contain a paid search plan
 	 *
-	 * Returns true if it supports. Return false if a purchase is still required.
-	 *
-	 * Free products will always return true.
-	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	public static function has_required_plan() {
-		$search_state = static::get_state_from_wpcom();
-		return ! empty( $search_state->supports_search ) || ! empty( $search_state->supports_instant_search );
+	public static function has_paid_plan_for_product() {
+		$purchases_data = Wpcom_Products::get_site_current_purchases();
+		if ( is_wp_error( $purchases_data ) ) {
+			return false;
+		}
+		if ( is_array( $purchases_data ) && ! empty( $purchases_data ) ) {
+			foreach ( $purchases_data as $purchase ) {
+				// Search is available as standalone product and as part of the Complete plan.
+				if (
+					( str_contains( $purchase->product_slug, 'jetpack_search' ) && ! str_contains( $purchase->product_slug, 'jetpack_search_free' ) ) ||
+					str_starts_with( $purchase->product_slug, 'jetpack_complete' ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the site purchases contain a free search plan
+	 *
+	 * @return bool
+	 */
+	public static function has_free_plan_for_product() {
+		$purchases_data = Wpcom_Products::get_site_current_purchases();
+		if ( is_wp_error( $purchases_data ) ) {
+			return false;
+		}
+		if ( is_array( $purchases_data ) && ! empty( $purchases_data ) ) {
+			foreach ( $purchases_data as $purchase ) {
+				if ( str_contains( $purchase->product_slug, 'jetpack_search_free' ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

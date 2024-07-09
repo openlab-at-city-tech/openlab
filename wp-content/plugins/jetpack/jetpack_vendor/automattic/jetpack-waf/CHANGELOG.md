@@ -5,6 +5,90 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.10] - 2024-06-26
+### Changed
+- Internal updates.
+
+## [0.16.9] - 2024-06-03
+### Changed
+- Phab baseline file update. [#36968]
+
+## [0.16.8] - 2024-05-20
+### Changed
+- Internal updates.
+
+## [0.16.7] - 2024-05-06
+### Changed
+- Internal updates.
+
+## [0.16.6] - 2024-04-29
+### Changed
+- Internal updates.
+
+## [0.16.5] - 2024-04-25
+### Changed
+- Internal updates.
+
+## [0.16.4] - 2024-04-22
+### Changed
+- Internal updates.
+
+## [0.16.3] - 2024-04-15
+### Security
+- Improves handling of REQUEST_URI. [#36833]
+
+## [0.16.2] - 2024-04-08
+### Changed
+- Internal updates.
+
+## [0.16.1] - 2024-03-25
+### Changed
+- Internal updates.
+
+## [0.16.0] - 2024-03-22
+### Added
+- Add data to WAF logs and add toggle for users to opt-in to share more data with us if needed. [#36377]
+
+## [0.15.2] - 2024-03-18
+### Changed
+- Internal updates.
+
+## [0.15.1] - 2024-03-14
+### Changed
+- Internal updates.
+
+## [0.15.0] - 2024-03-12
+### Added
+- Add JSON parameter support to the Web Application Firewall. [#36169]
+
+## [0.14.2] - 2024-03-04
+### Fixed
+- Fixed base64 transforms to better conform with the modsecurity runtime [#35693]
+
+## [0.14.1] - 2024-02-27
+### Changed
+- Internal updates.
+
+## [0.14.0] - 2024-02-12
+### Added
+- Add standalone mode status to WAF config [#34840]
+
+## [0.13.0] - 2024-02-05
+### Added
+- Run the WAF on JN environments [#35341]
+
+## [0.12.4] - 2024-01-18
+### Fixed
+- Optimize how the web application firewall checks for updates on admin screens. [#34820]
+
+## [0.12.3] - 2024-01-02
+### Changed
+- Internal updates.
+
+## [0.12.2] - 2023-12-25
+### Changed
+- Improve top-level WP-CLI command description [#34745]
+
 ## [0.12.1] - 2023-11-21
 
 ## [0.12.0] - 2023-11-20
@@ -245,6 +329,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Core: do not ship .phpcs.dir.xml in production builds.
 
+[0.16.10]: https://github.com/Automattic/jetpack-waf/compare/v0.16.9...v0.16.10
+[0.16.9]: https://github.com/Automattic/jetpack-waf/compare/v0.16.8...v0.16.9
+[0.16.8]: https://github.com/Automattic/jetpack-waf/compare/v0.16.7...v0.16.8
+[0.16.7]: https://github.com/Automattic/jetpack-waf/compare/v0.16.6...v0.16.7
+[0.16.6]: https://github.com/Automattic/jetpack-waf/compare/v0.16.5...v0.16.6
+[0.16.5]: https://github.com/Automattic/jetpack-waf/compare/v0.16.4...v0.16.5
+[0.16.4]: https://github.com/Automattic/jetpack-waf/compare/v0.16.3...v0.16.4
+[0.16.3]: https://github.com/Automattic/jetpack-waf/compare/v0.16.2...v0.16.3
+[0.16.2]: https://github.com/Automattic/jetpack-waf/compare/v0.16.1...v0.16.2
+[0.16.1]: https://github.com/Automattic/jetpack-waf/compare/v0.16.0...v0.16.1
+[0.16.0]: https://github.com/Automattic/jetpack-waf/compare/v0.15.1...v0.16.0
+[0.15.2]: https://github.com/Automattic/jetpack-waf/compare/v0.15.1...v0.15.2
+[0.15.1]: https://github.com/Automattic/jetpack-waf/compare/v0.15.0...v0.15.1
+[0.15.0]: https://github.com/Automattic/jetpack-waf/compare/v0.14.2...v0.15.0
+[0.14.2]: https://github.com/Automattic/jetpack-waf/compare/v0.14.1...v0.14.2
+[0.14.1]: https://github.com/Automattic/jetpack-waf/compare/v0.14.0...v0.14.1
+[0.14.0]: https://github.com/Automattic/jetpack-waf/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/Automattic/jetpack-waf/compare/v0.12.4...v0.13.0
+[0.12.4]: https://github.com/Automattic/jetpack-waf/compare/v0.12.3...v0.12.4
+[0.12.3]: https://github.com/Automattic/jetpack-waf/compare/v0.12.2...v0.12.3
+[0.12.2]: https://github.com/Automattic/jetpack-waf/compare/v0.12.1...v0.12.2
 [0.12.1]: https://github.com/Automattic/jetpack-waf/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/Automattic/jetpack-waf/compare/v0.11.15...v0.12.0
 [0.11.15]: https://github.com/Automattic/jetpack-waf/compare/v0.11.14...v0.11.15

@@ -9,6 +9,7 @@ namespace Automattic\Jetpack\Waf;
 
 use Automattic\Jetpack\Waf\Brute_Force_Protection\Brute_Force_Protection;
 use WP_Error;
+use WP_Upgrader;
 
 /**
  * Initializes the module
@@ -155,7 +156,7 @@ class Waf_Initializer {
 			return;
 		}
 
-		update_option( self::NEEDS_UPDATE_OPTION_NAME, 1 );
+		update_option( self::NEEDS_UPDATE_OPTION_NAME, true );
 	}
 
 	/**
@@ -197,9 +198,10 @@ class Waf_Initializer {
 				// just migrate the IP allow list used by brute force protection.
 				Waf_Compatibility::migrate_brute_force_protection_ip_allow_list();
 			}
+
+			update_option( self::NEEDS_UPDATE_OPTION_NAME, false );
 		}
 
-		update_option( self::NEEDS_UPDATE_OPTION_NAME, 0 );
 		return true;
 	}
 

@@ -11,6 +11,8 @@ use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Extensions\Contact_Form\Contact_Form_Block;
 use Automattic\Jetpack\Forms\Jetpack_Forms;
 use Automattic\Jetpack\Forms\Service\Post_To_Url;
+use Jetpack_Options;
+use WP_Error;
 
 /**
  * Sets up various actions, filters, post types, post statuses, shortcodes.
@@ -129,7 +131,7 @@ class Contact_Form_Plugin {
 	}
 
 	/**
-	 * Class uses singleton pattern; use Grunion_Contact_Form_Plugin::init() to initialize.
+	 * Class uses singleton pattern; use Contact_Form_Plugin::init() to initialize.
 	 */
 	protected function __construct() {
 		$this->add_shortcode();
@@ -251,28 +253,18 @@ class Contact_Form_Plugin {
 		 *  }
 		 *  add_action('wp_print_styles', 'remove_grunion_style');
 		 */
-		wp_register_style( 'grunion.css', Jetpack_Forms::plugin_url() . 'contact-form/css/grunion.css', array(), \JETPACK__VERSION );
+		wp_register_style( 'grunion.css', Jetpack_Forms::plugin_url() . '../dist/contact-form/css/grunion.css', array(), \JETPACK__VERSION );
 		wp_style_add_data( 'grunion.css', 'rtl', 'replace' );
 
 		Assets::register_script(
 			'accessible-form',
-			'./js/accessible-form.js',
+			'../../dist/contact-form/js/accessible-form.js',
 			__FILE__,
 			array(
-				'async' => true,
-			)
-		);
-
-		wp_localize_script(
-			'accessible-form',
-			'jetpackContactForm',
-			array(
-				/* translators: text read by a screen reader when a warning icon is displayed in front of an error message. */
-				'warning'              => __( 'Warning.', 'jetpack-forms' ),
-				/* translators: error message shown when one or more fields of the form are invalid. */
-				'invalidForm'          => __( 'Please make sure all fields are valid.', 'jetpack-forms' ),
-				/* translators: error message shown when a multiple choice field requires at least one option to be selected. */
-				'checkboxMissingValue' => __( 'Please select at least one option.', 'jetpack-forms' ),
+				'strategy'     => 'defer',
+				'textdomain'   => 'jetpack-forms',
+				'version'      => \JETPACK__VERSION,
+				'dependencies' => array( 'wp-i18n' ),
 			)
 		);
 
@@ -622,7 +614,7 @@ class Contact_Form_Plugin {
 				);
 				// This is lamer - no API for outputting a given widget by ID
 				ob_start();
-				// Process the widget to populate Grunion_Contact_Form::$last
+				// Process the widget to populate Contact_Form::$last
 				call_user_func( $widget['callback'], $widget_args, $widget['params'][0] );
 				ob_end_clean();
 			}
@@ -677,13 +669,13 @@ class Contact_Form_Plugin {
 			// Ensure 'block_template' attribute is added to any shortcodes in the template.
 			$template = Util::grunion_contact_form_set_block_template_attribute( $template );
 
-			// Process the block template to populate Grunion_Contact_Form::$last
+			// Process the block template to populate Contact_Form::$last
 			get_the_block_template_html();
 		} elseif ( $is_block_template_part ) {
 			$block_template_part_id   = str_replace( 'block-template-part-', '', $id );
 			$bits                     = explode( '//', $block_template_part_id );
 			$block_template_part_slug = array_pop( $bits );
-			// Process the block part template to populate Grunion_Contact_Form::$last
+			// Process the block part template to populate Contact_Form::$last
 			$attributes = array(
 				'theme'   => wp_get_theme()->get_stylesheet(),
 				'slug'    => $block_template_part_slug,
@@ -694,7 +686,7 @@ class Contact_Form_Plugin {
 			// It's a form embedded in a post
 			$post = get_post( $id );
 
-			// Process the content to populate Grunion_Contact_Form::$last
+			// Process the content to populate Contact_Form::$last
 			if ( $post ) {
 				/** This filter is already documented in core. wp-includes/post-template.php */
 				apply_filters( 'the_content', $post->post_content );
@@ -746,6 +738,8 @@ class Contact_Form_Plugin {
 
 	/**
 	 * Handle the ajax request.
+	 *
+	 * @return never
 	 */
 	public function ajax_request() {
 		$submission_result = self::process_form_submission();
@@ -778,7 +772,7 @@ class Contact_Form_Plugin {
 	 * Ensure the post author is always zero for contact-form feedbacks
 	 * Attached to `wp_insert_post_data`
 	 *
-	 * @see Grunion_Contact_Form::process_submission()
+	 * @see Contact_Form::process_submission()
 	 *
 	 * @param array $data the data to insert.
 	 * @param array $postarr the data sent to wp_insert_post().
@@ -1003,7 +997,7 @@ class Contact_Form_Plugin {
 
 	/**
 	 * Submit contact-form data to Akismet to check for spam.
-	 * If you're accepting a new item via $_POST, run it Grunion_Contact_Form_Plugin::prepare_for_akismet() first
+	 * If you're accepting a new item via $_POST, run it Contact_Form_Plugin::prepare_for_akismet() first
 	 * Attached to `jetpack_contact_form_is_spam`
 	 *
 	 * @param bool  $is_spam - if the submission is spam.
@@ -1041,7 +1035,7 @@ class Contact_Form_Plugin {
 		$result = false;
 
 		if ( isset( $response[0]['x-akismet-pro-tip'] ) && 'discard' === trim( $response[0]['x-akismet-pro-tip'] ) && get_option( 'akismet_strictness' ) === '1' ) {
-			$result = new \WP_Error( 'feedback-discarded', __( 'Feedback discarded.', 'jetpack-forms' ) );
+			$result = new WP_Error( 'feedback-discarded', __( 'Feedback discarded.', 'jetpack-forms' ) );
 		} elseif ( isset( $response[1] ) && 'true' === trim( $response[1] ) ) { // 'true' is spam
 			$result = true;
 		}
@@ -1378,6 +1372,8 @@ class Contact_Form_Plugin {
 		$post_ids     = $this->personal_data_post_ids_by_email( $email, $per_page, $page, $last_post_id );
 
 		foreach ( $post_ids as $post_id ) {
+			$last_post_id = $post_id;
+
 			/**
 			 * Filters whether to erase a particular Feedback post.
 			 *
@@ -1422,7 +1418,7 @@ class Contact_Form_Plugin {
 		if ( $done ) {
 			delete_option( $option_name );
 		} else {
-			update_option( $option_name, (int) $post_id );
+			update_option( $option_name, (int) $last_post_id );
 		}
 
 		return array(
@@ -1482,7 +1478,7 @@ class Contact_Form_Plugin {
 	 *
 	 * @param  string $search SQL where clause.
 	 *
-	 * @return array          Filtered SQL where clause.
+	 * @return string         Filtered SQL where clause.
 	 */
 	public function personal_data_search_filter( $search ) {
 		global $wpdb;
@@ -1492,7 +1488,7 @@ class Contact_Form_Plugin {
 		 * author's email address whenever it's on a line by itself.
 		 */
 		if ( $this->pde_email_address && str_contains( $search, '..PDE..AUTHOR EMAIL:..PDE..' ) ) {
-			$search = $wpdb->prepare(
+			$search = (string) $wpdb->prepare(
 				" AND (
 					{$wpdb->posts}.post_content LIKE %s
 					OR {$wpdb->posts}.post_content LIKE %s

@@ -245,10 +245,10 @@ class WPcom_Admin_Menu extends Admin_Menu {
 				'content'                      => $message->content['message'],
 				'cta'                          => $message->CTA['message'], // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				'link'                         => $message->CTA['link'], // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-				'tracks_impression_event_name' => $message->tracks['display']['name'],
-				'tracks_impression_cta_name'   => $message->tracks['display']['props']['cta_name'],
-				'tracks_click_event_name'      => $message->tracks['click']['name'],
-				'tracks_click_cta_name'        => $message->tracks['click']['props']['cta_name'],
+				'tracks_impression_event_name' => $message->tracks['display']['name'] ?? null,
+				'tracks_impression_cta_name'   => $message->tracks['display']['props']['cta_name'] ?? null,
+				'tracks_click_event_name'      => $message->tracks['click']['name'] ?? null,
+				'tracks_click_cta_name'        => $message->tracks['click']['props']['cta_name'] ?? null,
 				'dismissible'                  => $message->is_dismissible,
 				'feature_class'                => $message->feature_class,
 				'id'                           => $message->id,
@@ -396,27 +396,9 @@ class WPcom_Admin_Menu extends Admin_Menu {
 	}
 
 	/**
-	 * Adds Plugins menu.
-	 */
-	public function add_plugins_menu() {
-		// TODO: Remove wpcom_menu (/wp-content/admin-plugins/wpcom-misc.php).
-		$count = '';
-		if ( ! is_multisite() && current_user_can( 'update_plugins' ) ) {
-			$update_data = wp_get_update_data();
-			$count       = sprintf(
-				'<span class="update-plugins count-%s"><span class="plugin-count">%s</span></span>',
-				$update_data['counts']['plugins'],
-				number_format_i18n( $update_data['counts']['plugins'] )
-			);
-		}
-		/* translators: %s: Number of pending plugin updates. */
-		add_menu_page( esc_attr__( 'Plugins', 'jetpack' ), sprintf( __( 'Plugins %s', 'jetpack' ), $count ), 'activate_plugins', 'plugins.php', null, 'dashicons-admin-plugins', 65 );
-
-		parent::add_plugins_menu();
-	}
-
-	/**
 	 * Saves the sidebar state ( expanded / collapsed ) via an ajax request.
+	 *
+	 * @return never
 	 */
 	public function ajax_sidebar_state() {
 		$expanded    = isset( $_REQUEST['expanded'] ) ? filter_var( wp_unslash( $_REQUEST['expanded'] ), FILTER_VALIDATE_BOOLEAN ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended

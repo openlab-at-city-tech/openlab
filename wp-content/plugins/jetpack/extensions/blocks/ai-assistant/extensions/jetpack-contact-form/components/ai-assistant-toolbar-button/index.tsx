@@ -4,14 +4,14 @@
 import { aiAssistantIcon, useAiContext } from '@automattic/jetpack-ai-client';
 import { KeyboardShortcuts, ToolbarButton } from '@wordpress/components';
 import { useViewportMatch } from '@wordpress/compose';
-import { useContext, useRef, useCallback } from '@wordpress/element';
+import { useEffect, useContext, useRef, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import React, { useEffect } from 'react';
 /*
  * Internal dependencies
  */
 import { AiAssistantUiContext } from '../../ui-handler/context';
 import { selectFormBlock } from '../../ui-handler/with-ui-handler-data-provider';
+import type { ReactElement } from 'react';
 
 const AI_ASSISTANT_BAR_SLOT_CLASS = 'jetpack-ai-assistant-bar__slot';
 
@@ -22,13 +22,13 @@ const AI_ASSISTANT_BAR_SLOT_CLASS = 'jetpack-ai-assistant-bar__slot';
  *
  * @param {object} props - The component props.
  * @param {string} props.jetpackFormClientId - The Jetpack Form block client ID.
- * @returns {React.ReactElement}               The toolbar button.
+ * @returns {ReactElement}               The toolbar button.
  */
 export default function AiAssistantToolbarButton( {
 	jetpackFormClientId,
 }: {
 	jetpackFormClientId?: string;
-} ): React.ReactElement {
+} ): ReactElement {
 	const { isVisible, toggle, setAnchor, assistantAnchor } = useContext( AiAssistantUiContext );
 	const { requestingState } = useAiContext();
 
@@ -69,7 +69,10 @@ export default function AiAssistantToolbarButton( {
 		let slot = toolbar.parentElement?.querySelector(
 			`.${ AI_ASSISTANT_BAR_SLOT_CLASS }`
 		) as HTMLElement;
+
 		if ( slot ) {
+			// always move the slot right after the toolbar.
+			toolbar.after( slot );
 			return setAnchor( slot );
 		}
 
@@ -81,11 +84,11 @@ export default function AiAssistantToolbarButton( {
 		slot.setAttribute( 'aria-label', __( 'AI Assistant', 'jetpack' ) );
 		slot.setAttribute( 'aria-orientation', 'horizontal' );
 		slot.className = AI_ASSISTANT_BAR_SLOT_CLASS;
-		toolbar.after( slot );
 
 		// Set the top position based on the toolbar height.
 		const toolbarHeight = toolbar.offsetHeight;
 		slot.style.top = `${ toolbarHeight }px`;
+		toolbar.after( slot );
 
 		// Set the anchor where the Assistant Bar will be rendered.
 		setAnchor( slot );

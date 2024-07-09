@@ -24,7 +24,7 @@ class Jetpack_Google_Font_Face {
 	public function __construct() {
 		// Turns off hooks to print fonts
 		add_action( 'wp_loaded', array( $this, 'wp_loaded' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ), 10 );
+		add_action( 'current_screen', array( $this, 'current_screen' ), 10 );
 
 		// Collect and print fonts in use
 		add_action( 'wp_head', array( $this, 'print_font_faces' ), 50 );
@@ -40,25 +40,37 @@ class Jetpack_Google_Font_Face {
 	}
 
 	/**
-	 * Turn off hooks to print fonts on wp-admin
+	 * Turn off hooks to print fonts on wp-admin, except for GB editor pages.
 	 */
-	public function admin_init() {
+	public function current_screen() {
 		remove_action( 'admin_print_styles', 'wp_print_fonts', 50 );
-		remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
+
+		if ( ! $this->is_block_editor() ) {
+			remove_action( 'admin_print_styles', 'wp_print_font_faces', 50 );
+		}
 	}
 
 	/**
 	 * Print fonts that are used in global styles or block-level settings.
 	 */
 	public function print_font_faces() {
-		$fonts          = $this->get_fonts();
-		$fonts_to_print = array();
+		$fonts             = WP_Font_Face_Resolver::get_fonts_from_theme_json();
+		$font_slug_aliases = $this->get_font_slug_aliases();
+		$fonts_to_print    = array();
 
 		$this->collect_global_styles_fonts();
-		$this->fonts_in_use = array_values( array_unique( $this->fonts_in_use, SORT_STRING ) );
-		foreach ( $fonts as $font_family => $font_faces ) {
-			if ( in_array( _wp_to_kebab_case( $font_family ), $this->fonts_in_use, true ) ) {
-				$fonts_to_print[ $font_family ] = $font_faces;
+		$fonts_in_use = array_values( array_unique( $this->fonts_in_use, SORT_STRING ) );
+		$fonts_in_use = array_map(
+			function ( $font_slug ) use ( $font_slug_aliases ) {
+				return $font_slug_aliases[ $font_slug ] ?? $font_slug;
+			},
+			$this->fonts_in_use
+		);
+
+		foreach ( $fonts as $font_faces ) {
+			$font_family = $font_faces[0]['font-family'] ?? '';
+			if ( in_array( $this->format_font( $font_family ), $fonts_in_use, true ) ) {
+				$fonts_to_print[] = $font_faces;
 			}
 		}
 
@@ -122,30 +134,43 @@ class Jetpack_Google_Font_Face {
 	 * @param string $font_slug The font slug.
 	 */
 	public function add_font( $font_slug ) {
-		$this->fonts_in_use[] = _wp_to_kebab_case( $font_slug );
+		$this->fonts_in_use[] = $this->format_font( $font_slug );
 	}
 
 	/**
-	 * Get all font definitions from theme json.
+	 * Format the given font slug.
+	 *
+	 * @example "ABeeZee" formats to "abeezee"
+	 * @example "ADLaM Display" formats to "adlam-display"
+	 * @param string $font_slug The font slug.
+	 * @return string The formatted font slug.
 	 */
-	public function get_fonts() {
-		$fonts = WP_Font_Face_Resolver::get_fonts_from_theme_json();
+	public function format_font( $font_slug ) {
+		return _wp_to_kebab_case( strtolower( $font_slug ) );
+	}
 
-		// The font definition might define an alias slug name, so we have to add the map from the slug name to font faces.
-		// See https://github.com/WordPress/twentytwentyfour/blob/df92472089ede6fae5924c124a93c843b84e8cbd/theme.json#L215.
+	/**
+	 * Get the font slug aliases that maps the font slug to the font family if they are different.
+	 *
+	 * The font definition may define an alias slug name, so we have to add the map from the slug name to the font family.
+	 * See https://github.com/WordPress/twentytwentyfour/blob/df92472089ede6fae5924c124a93c843b84e8cbd/theme.json#L215.
+	 */
+	public function get_font_slug_aliases() {
+		$font_slug_aliases = array();
+
 		$theme_json = WP_Theme_JSON_Resolver::get_theme_data();
 		$raw_data   = $theme_json->get_data();
 		if ( ! empty( $raw_data['settings']['typography']['fontFamilies'] ) ) {
 			foreach ( $raw_data['settings']['typography']['fontFamilies'] as $font ) {
-				$font_family_name = $this->get_font_family_name( $font );
-				$font_slug        = isset( $font['slug'] ) ? $font['slug'] : '';
-				if ( $font_slug && ! array_key_exists( $font_slug, $fonts ) && array_key_exists( $font_family_name, $fonts ) ) {
-					$fonts[ $font_slug ] = $fonts[ $font_family_name ];
+				$font_family_name = $this->format_font( $this->get_font_family_name( $font ) );
+				$font_slug        = $font['slug'] ?? '';
+				if ( $font_slug && $font_slug !== $font_family_name && ! array_key_exists( $font_slug, $font_slug_aliases ) ) {
+					$font_slug_aliases[ $font_slug ] = $font_family_name;
 				}
 			}
 		}
 
-		return $fonts;
+		return $font_slug_aliases;
 	}
 
 	/**
@@ -153,7 +178,7 @@ class Jetpack_Google_Font_Face {
 	 *
 	 * @param array $font The font definition object.
 	 */
-	public function get_font_family_name( $font ) {
+	public static function get_font_family_name( $font ) {
 		$font_family = $font['fontFamily'];
 		if ( str_contains( $font_family, ',' ) ) {
 			$font_family = explode( ',', $font_family )[0];
@@ -176,6 +201,13 @@ class Jetpack_Google_Font_Face {
 
 		$font_family = $setting['typography']['fontFamily'];
 
+		// The font family may be a reference to a path to the value stored at that location,
+		// e.g.: { "ref": "styles.elements.heading.typography.fontFamily" }.
+		// Ignore it as we also get the value stored at that location from the setting.
+		if ( ! is_string( $font_family ) ) {
+			return null;
+		}
+
 		// Full string: var(--wp--preset--font-family--slug).
 		// We do not care about the origin of the font, only its slug.
 		preg_match( '/font-family--(?P<slug>.+)\)$/', $font_family, $matches );
@@ -193,5 +225,21 @@ class Jetpack_Google_Font_Face {
 		}
 
 		return $font_family;
+	}
+
+	/**
+	 * Check if the current screen is the block editor.
+	 *
+	 * @return bool
+	 */
+	public function is_block_editor() {
+		if ( function_exists( 'get_current_screen' ) ) {
+			$current_screen = get_current_screen();
+			if ( ! empty( $current_screen ) && method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor() ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

@@ -181,19 +181,6 @@ class Jetpack_React_Page extends Jetpack_Admin_Page {
 	}
 
 	/**
-	 * Custom menu order.
-	 *
-	 * @deprecated since 9.2.0
-	 * @param array $menu_order Menu order.
-	 * @return array
-	 */
-	public function jetpack_menu_order( $menu_order ) {
-		_deprecated_function( __METHOD__, 'jetpack-9.2' );
-
-		return $menu_order;
-	}
-
-	/**
 	 * Add action to render page specific HTML.
 	 *
 	 * @return void
@@ -273,6 +260,14 @@ class Jetpack_React_Page extends Jetpack_Admin_Page {
 			$version             = $asset_manifest['version'];
 		}
 
+		$blog_id_prop = '';
+		if ( ! defined( 'IS_WPCOM' ) || ! IS_WPCOM ) {
+			$blog_id = Connection_Manager::get_site_id( true );
+			if ( $blog_id ) {
+				$blog_id_prop = ', currentBlogID: "' . (int) $blog_id . '"';
+			}
+		}
+
 		wp_enqueue_script(
 			'react-plugin',
 			plugins_url( '_inc/build/admin.js', JETPACK__PLUGIN_FILE ),
@@ -293,7 +288,7 @@ class Jetpack_React_Page extends Jetpack_Admin_Page {
 		wp_add_inline_script( 'react-plugin', 'var Initial_State=JSON.parse(decodeURIComponent("' . rawurlencode( wp_json_encode( Jetpack_Redux_State_Helper::get_initial_state() ) ) . '"));', 'before' );
 
 		// This will set the default URL of the jp_redirects lib.
-		wp_add_inline_script( 'react-plugin', 'var jetpack_redirects = { currentSiteRawUrl: "' . $site_suffix . '" };', 'before' );
+		wp_add_inline_script( 'react-plugin', 'var jetpack_redirects = { currentSiteRawUrl: "' . $site_suffix . '"' . $blog_id_prop . ' };', 'before' );
 
 		// Adds Connection package initial state.
 		Connection_Initial_State::render_script( 'react-plugin' );

@@ -5,6 +5,208 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.32.2] - 2024-06-24
+### Changed
+- Update dependencies. [#37979]
+
+## [0.32.1] - 2024-06-17
+### Changed
+- Updated package dependencies. [#37796]
+
+## [0.32.0] - 2024-06-10
+### Changed
+- Change codebase to use clsx instead of classnames. [#37708]
+- Updated package dependencies. [#37669] [#37706]
+
+### Fixed
+- Allow users to add multiple options to a dropdown field [#37739]
+- Avoid PHP notice when form is submitted to the wrong URL [#37672]
+
+## [0.31.4] - 2024-05-27
+### Changed
+- Update dependencies. [#37356]
+
+## [0.31.3] - 2024-05-20
+### Changed
+- Forms: Ensure non-minified JS file location is also an option when loading the tiny-mce-plugin-form-button script file. [#37351]
+- Updated package dependencies. [#37379] [#37380] [#37382]
+
+## [0.31.2] - 2024-05-13
+### Changed
+- Update dependencies. [#37280]
+
+## [0.31.1] - 2024-05-07
+### Fixed
+- Contact Form: Prevent an editor error when using the Classic Editor and contact forms are enabled. [#37270]
+
+## [0.31.0] - 2024-05-06
+### Added
+- Add missing package dependencies. [#37141]
+
+### Changed
+- Updated package dependencies. [#37147]
+
+### Removed
+- Contact Form: Removing code and renaming relevant references to ensure we use the package version of the contact form. [#37157]
+
+### Fixed
+- Fix reference to `Jetpack_Options` class in `Contact_Form_Plugin::record_tracks_event()`. [#37201]
+
+## [0.30.18] - 2024-04-29
+### Changed
+- General: Use wp_admin_notice function introduced in WP 6.4 to display notices. [#37051]
+
+## [0.30.17] - 2024-04-25
+### Fixed
+- Set correct `textdomain` in `block.json`. [#37057]
+
+## [0.30.16] - 2024-04-22
+### Changed
+- Internal updates.
+
+## [0.30.15] - 2024-04-15
+### Changed
+- Update dependencies. [#36848]
+
+## [0.30.14] - 2024-04-08
+### Changed
+- Updated package dependencies. [#36760]
+- Update to the most recent version of Color Studio, 2.6.0. [#36751]
+
+## [0.30.13] - 2024-03-27
+### Changed
+- Updated package dependencies. [#36585]
+
+### Fixed
+- Enable undoing adding a contact form [#36485]
+
+## [0.30.12] - 2024-03-25
+### Changed
+- Made some Contact_Form methods publicly available [#36137]
+
+## [0.30.11] - 2024-03-18
+### Fixed
+- Dashboard: add missing Connection state to the page. [#36406]
+- Dashboard: avoid JS errors when content disposition is not set. [#36406]
+
+## [0.30.10] - 2024-03-12
+### Changed
+- Update code references in docs and comments [#36234]
+- Updated package dependencies. [#36325]
+
+## [0.30.9] - 2024-03-12
+### Fixed
+- Performance: avoid querying for posts on all pages of the dashboard, and only do so on Feedback admin pages. [#36230]
+
+## [0.30.8] - 2024-03-04
+### Changed
+- Updated package dependencies.
+
+### Fixed
+- Contact Form: make constrained inputs full-width on mobile [#36000]
+
+## [0.30.7] - 2024-02-27
+### Changed
+- Update dependencies.
+
+## [0.30.6] - 2024-02-26
+### Deprecated
+- Deprecate the temporary tmp_grunion_allow_editor_view filter. [#35584]
+
+## [0.30.5] - 2024-02-13
+### Changed
+- Updated package dependencies. [#35608]
+
+## [0.30.4] - 2024-02-12
+### Fixed
+- Dashboard: improve the display of the dashboard to non-admins. [#35571]
+- Forms: fix multiple and single choice fields button style [#35456]
+
+## [0.30.3] - 2024-02-05
+### Changed
+- Asset enqueuing: switch to enqueuing strategy introduced in WordPress 6.3. [#34072]
+- Updated package dependencies.
+
+### Fixed
+- Center submit button content horizontally [#35319]
+
+## [0.30.2] - 2024-01-29
+### Changed
+- Update dependencies.
+
+## [0.30.1] - 2024-01-22
+### Added
+- Contact Form: test setup for front end script [#35074]
+
+## [0.30.0] - 2024-01-08
+### Changed
+- Updated useModuleStatus hook to use module_status redux store. [#34845]
+- Use useModuleStatus hook instead of direct call of store selectors. [#34856]
+
+### Fixed
+- Avoid PHP warnings when post is not set. [#34886]
+
+## [0.29.2] - 2024-01-04
+### Changed
+- Updated package dependencies. [#34815]
+
+## [0.29.1] - 2024-01-02
+### Changed
+- Made module updates more precise in the modules store. [#34801]
+
+## [0.29.0] - 2023-12-25
+### Added
+- Contact Form: add accessible name to form [#34667]
+- Contact Form: add date format to date picker [#34743]
+
+### Fixed
+- Contact Form: suppress PHP warning [#34756]
+
+## [0.28.0] - 2023-12-20
+### Added
+- Contact Form: add extra field settings to base field. [#34704]
+
+### Changed
+- Contact Form: minify stylesheets in prod. [#34672]
+
+## [0.27.0] - 2023-12-15
+### Added
+- Contact Form: improve form error message [#34629]
+
+### Changed
+- Form block: hide 'lead capture' variation for WP.com Atomic sites [#34615]
+
+### Fixed
+- Contact Form: add missing Required toolbar button to Checkbox field [#34630]
+- Contact Form: align half-width fields on same row [#34632]
+
+## [0.26.0] - 2023-12-14
+### Added
+- Contact Form: build JS assets [#34622]
+
+### Fixed
+- Avoid PHP warnings when methods are called too early. [#34576]
+
+## [0.25.0] - 2023-12-11
+### Added
+- Contact Form: Added submitting state. [#34367]
+- Contact Form: Improved form error message. [#34520]
+- Contact Form: Added revalidation for fields on focus out. [#34401]
+- Contact Form: Added revalidation for missing value as the user types. [#34518]
+
+### Changed
+- Contact Form: Aligned checkbox and radio button baselines. [#34429]
+- Contact Form: Refactored accessible-form.js. [#34400]
+- Updated package dependencies. [#34416]
+
+### Fixed
+- Contact Form: Added margin below global error message. [#34447]
+- Contact Form: Ensured warning icons are visible. [#34455]
+- Contact Form: Fixed checkbox field layout in editor. [#34405]
+- Contact Form: Replaced jQuery UI select by native element. [#34441]
+- Contact Form: Specified version for accessible-form script. [#34457]
+- Fixed potential undefined variable access in Contact_Form_Plugin. [#34500]
+
 ## [0.24.2] - 2023-12-03
 ### Added
 - Made forms a screen reader region. [#34344]
@@ -396,6 +598,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a new jetpack/forms package [#28409]
 - Added a public load_contact_form method for initializing the contact form module. [#28416]
 
+[0.32.2]: https://github.com/automattic/jetpack-forms/compare/v0.32.1...v0.32.2
+[0.32.1]: https://github.com/automattic/jetpack-forms/compare/v0.32.0...v0.32.1
+[0.32.0]: https://github.com/automattic/jetpack-forms/compare/v0.31.4...v0.32.0
+[0.31.4]: https://github.com/automattic/jetpack-forms/compare/v0.31.3...v0.31.4
+[0.31.3]: https://github.com/automattic/jetpack-forms/compare/v0.31.2...v0.31.3
+[0.31.2]: https://github.com/automattic/jetpack-forms/compare/v0.31.1...v0.31.2
+[0.31.1]: https://github.com/automattic/jetpack-forms/compare/v0.31.0...v0.31.1
+[0.31.0]: https://github.com/automattic/jetpack-forms/compare/v0.30.18...v0.31.0
+[0.30.18]: https://github.com/automattic/jetpack-forms/compare/v0.30.17...v0.30.18
+[0.30.17]: https://github.com/automattic/jetpack-forms/compare/v0.30.16...v0.30.17
+[0.30.16]: https://github.com/automattic/jetpack-forms/compare/v0.30.15...v0.30.16
+[0.30.15]: https://github.com/automattic/jetpack-forms/compare/v0.30.14...v0.30.15
+[0.30.14]: https://github.com/automattic/jetpack-forms/compare/v0.30.13...v0.30.14
+[0.30.13]: https://github.com/automattic/jetpack-forms/compare/v0.30.12...v0.30.13
+[0.30.12]: https://github.com/automattic/jetpack-forms/compare/v0.30.11...v0.30.12
+[0.30.11]: https://github.com/automattic/jetpack-forms/compare/v0.30.10...v0.30.11
+[0.30.10]: https://github.com/automattic/jetpack-forms/compare/v0.30.9...v0.30.10
+[0.30.9]: https://github.com/automattic/jetpack-forms/compare/v0.30.8...v0.30.9
+[0.30.8]: https://github.com/automattic/jetpack-forms/compare/v0.30.7...v0.30.8
+[0.30.7]: https://github.com/automattic/jetpack-forms/compare/v0.30.6...v0.30.7
+[0.30.6]: https://github.com/automattic/jetpack-forms/compare/v0.30.5...v0.30.6
+[0.30.5]: https://github.com/automattic/jetpack-forms/compare/v0.30.4...v0.30.5
+[0.30.4]: https://github.com/automattic/jetpack-forms/compare/v0.30.3...v0.30.4
+[0.30.3]: https://github.com/automattic/jetpack-forms/compare/v0.30.2...v0.30.3
+[0.30.2]: https://github.com/automattic/jetpack-forms/compare/v0.30.1...v0.30.2
+[0.30.1]: https://github.com/automattic/jetpack-forms/compare/v0.30.0...v0.30.1
+[0.30.0]: https://github.com/automattic/jetpack-forms/compare/v0.29.2...v0.30.0
+[0.29.2]: https://github.com/automattic/jetpack-forms/compare/v0.29.1...v0.29.2
+[0.29.1]: https://github.com/automattic/jetpack-forms/compare/v0.29.0...v0.29.1
+[0.29.0]: https://github.com/automattic/jetpack-forms/compare/v0.28.0...v0.29.0
+[0.28.0]: https://github.com/automattic/jetpack-forms/compare/v0.27.0...v0.28.0
+[0.27.0]: https://github.com/automattic/jetpack-forms/compare/v0.26.0...v0.27.0
+[0.26.0]: https://github.com/automattic/jetpack-forms/compare/v0.25.0...v0.26.0
+[0.25.0]: https://github.com/automattic/jetpack-forms/compare/v0.24.2...v0.25.0
 [0.24.2]: https://github.com/automattic/jetpack-forms/compare/v0.24.1...v0.24.2
 [0.24.1]: https://github.com/automattic/jetpack-forms/compare/v0.24.0...v0.24.1
 [0.24.0]: https://github.com/automattic/jetpack-forms/compare/v0.23.1...v0.24.0

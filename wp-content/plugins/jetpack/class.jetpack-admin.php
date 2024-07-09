@@ -82,7 +82,7 @@ class Jetpack_Admin {
 			$site_products         = array_column( Jetpack_Plan::get_products(), 'product_slug' );
 			$has_anti_spam_product = count( array_intersect( array( 'jetpack_anti_spam', 'jetpack_anti_spam_monthly' ), $site_products ) ) > 0;
 
-			if ( Jetpack_Plan::supports( 'antispam' ) || $has_anti_spam_product ) {
+			if ( Jetpack_Plan::supports( 'akismet' ) || Jetpack_Plan::supports( 'antispam' ) || $has_anti_spam_product ) {
 				// Prevent Akismet from adding a menu item.
 				add_action(
 					'admin_menu',
@@ -139,7 +139,12 @@ class Jetpack_Admin {
 		// See https://github.com/Automattic/jetpack/pull/19965 for more on how this menu item is dealt with on WoA sites.
 		if ( ( new Host() )->is_woa_site() && ! ( in_array( 'custom-css', Jetpack::get_available_modules(), true ) ) ) {
 			return;
-		} elseif ( class_exists( 'Jetpack' ) && Jetpack::is_module_active( 'custom-css' ) ) { // If the Custom CSS module is enabled, add the Additional CSS menu item and link to the Customizer.
+		} elseif (
+			class_exists( 'Jetpack' ) && (
+				Jetpack::is_module_active( 'custom-css' ) || // If the Custom CSS module is enabled, add the Additional CSS menu item and link to the Customizer.
+				( wp_is_block_theme() && ! empty( wp_get_custom_css() ) ) // Do the same if the theme is block-based but has existing custom CSS.
+			)
+		) {
 			// Add in our legacy page to support old bookmarks and such.
 			add_submenu_page( '', __( 'CSS', 'jetpack' ), __( 'Additional CSS', 'jetpack' ), 'edit_theme_options', 'editcss', array( __CLASS__, 'customizer_redirect' ) );
 
@@ -163,6 +168,8 @@ class Jetpack_Admin {
 	 * There is a core patch in trac that would make this unnecessary.
 	 *
 	 * @link https://core.trac.wordpress.org/ticket/39050
+	 *
+	 * @return never
 	 */
 	public static function customizer_redirect() {
 		wp_safe_redirect(
@@ -179,6 +186,8 @@ class Jetpack_Admin {
 	 * Handle the Additional CSS redirect to the Jetpack settings Theme Enhancements section.
 	 *
 	 * @since 11.0
+	 *
+	 * @return never
 	 */
 	public static function theme_enhancements_redirect() {
 		wp_safe_redirect(
@@ -596,22 +605,6 @@ class Jetpack_Admin {
 			),
 			true
 		) ) {
-			return false;
-		}
-
-		// Disable all JITMs on pages where the recommendations banner is displaying.
-		if (
-			in_array(
-				$screen_id,
-				array(
-					'dashboard',
-					'plugins',
-					'jetpack_page_stats',
-				),
-				true
-			)
-			&& \Jetpack_Recommendations_Banner::can_be_displayed()
-		) {
 			return false;
 		}
 
