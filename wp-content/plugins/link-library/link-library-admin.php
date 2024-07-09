@@ -204,6 +204,7 @@ class link_library_plugin_admin {
 		$csstidy->set_cfg( 'template', 'low' );
 		$csstidy->set_cfg( 'discard_invalid_properties', false );
 		$csstidy->set_cfg( 'remove_last_;', false );
+		$csstidy->set_cfg( 'preserve_css', true );
 		$csstidy->parse( $css );
 
 		return $csstidy->print->plain();
@@ -233,7 +234,9 @@ class link_library_plugin_admin {
 		wp_enqueue_script( 'linklibrary-shortcodes-embed', plugins_url( "js/linklibrary-shortcode-embed.js", __FILE__ ), array( 'jquery' ), '', true );
 		wp_enqueue_style( 'linklibraryadminstyle', plugins_url( 'adminstyle.css', __FILE__ ) );
 
-		if ( 'edit.php' === $hook && isset( $_GET['post_type'] ) && 'link_library_links' === $_GET['post_type'] ) {
+		if ( 'post-new.php' === $hook || 'post.php' == $hook ) {
+			wp_enqueue_script( 'll_open_tags', plugins_url('js/ll_open_tags.js', __FILE__), false, null, true );
+		} elseif ( 'edit.php' === $hook && isset( $_GET['post_type'] ) && 'link_library_links' === $_GET['post_type'] ) {
 			wp_enqueue_script( 'll_quick_edit', plugins_url('js/ll_admin_edit.js', __FILE__), false, null, true );
 		} elseif ( 'post.php' === $hook ) {
 			wp_enqueue_style( 'll_general_css', site_url( '/?link_library_css=1' ) );
@@ -552,6 +555,8 @@ class link_library_plugin_admin {
 		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 		extract( $genoptions );
 
+		add_action( 'admin_notices', array( $this, 'll_admin_notices' ) );
+
 		if ( isset($_GET['page']) && $_GET['page'] == 'link-library-faq' ) {
 			wp_redirect( 'https://github.com/ylefebvre/link-library/wiki' );
 			exit();
@@ -598,51 +603,65 @@ class link_library_plugin_admin {
 		add_action( 'admin_post_save_link_library_stylesheet', array( $this, 'on_save_changes_stylesheet' ) );
 		add_action( 'admin_post_save_link_library_reciprocal', array( $this, 'on_save_changes_reciprocal' ) );
 
-		$catnames = get_terms( $genoptions['cattaxonomy'], array( 'hide_empty' => false ) );
-
-		if ( empty( $catnames ) ) {
-			add_action( 'admin_notices', array( $this, 'll_missing_categories' ) );
-		}
-
-		if ( !empty( $genoptions ) ) {
-			if ( empty( $numberstylesets ) ) {
-				$numberofsets = 1;
-			} else {
-				$numberofsets = $numberstylesets;
-			}
-
-			$thumbshotsactive = false;
-
-			for ( $counter = 1; $counter <= $numberofsets; $counter ++ ) {
-				$tempoptionname = "LinkLibraryPP" . $counter;
-				$tempoptions    = get_option( $tempoptionname );
-				$tempoptions = wp_parse_args( $tempoptions, ll_reset_options( 1, 'list', 'return' ) );
-				if ( $tempoptions['usethumbshotsforimages'] ) {
-					$thumbshotsactive = true;
-				}
-			}
-
-			if ( $thumbshotsactive && empty( $genoptions['thumbshotscid'] ) && $genoptions['thumbnailgenerator'] == 'thumbshots' ) {
-				add_action( 'admin_notices', array( $this, 'll_thumbshots_warning' ) );
-			}
-
-			if ( $thumbshotsactive && empty( $genoptions['shrinkthewebaccesskey'] ) && $genoptions['thumbnailgenerator'] == 'shrinktheweb' ) {
-				add_action( 'admin_notices', array( $this, 'll_shrinktheweb_warning' ) );
-			}
-
-			if ( isset( $_GET['dismissll70update'] ) ) {
-				$genoptions['dismissll70update'] = true;
-				update_option( 'LinkLibraryGeneral', $genoptions );
-			} elseif ( !isset( $genoptions['dismissll70update'] ) && ( !isset( $genoptions['hidedonation'] ) || ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) ) ) {
-				add_action( 'admin_notices', array( $this, 'll70update' ) );
-			}
-		}
-
 		global $typenow;
 
-		if ($typenow === 'link_library_links') {
-			add_filter('posts_search', 'll_expand_posts_search', 10, 2);
+		if ( $typenow === 'link_library_links' ) {
+			add_filter( 'posts_search', 'll_expand_posts_search', 10, 2 );
 		}
+	}
+
+	function ll_admin_notices() {
+
+		global $pagenow;
+		
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
+		extract( $genoptions );
+
+		if ( ( $pagenow == 'post-new.php' && $_GET['post_type'] == 'link_library_links' ) ||
+			 ( $pagenow == 'edit-tags.php' && $_GET['post_type'] == 'link_library_links' && $_GET['taxonomy'] == 'link_library_category' ) ||
+			 ( $pagenow == 'edit-tags.php' && $_GET['post_type'] == 'link_library_links' && $_GET['taxonomy'] == 'link_library_tags' ) ||
+			 ( $pagenow == 'edit.php' && $_GET['post_type'] == 'link_library_links' ) ) {
+			$catnames = get_terms( $genoptions['cattaxonomy'], array( 'hide_empty' => false ) );
+
+			if ( empty( $catnames ) ) {
+				$this->ll_missing_categories();
+			}			
+
+			if ( !empty( $genoptions ) ) {
+				if ( empty( $numberstylesets ) ) {
+					$numberofsets = 1;
+				} else {
+					$numberofsets = $numberstylesets;
+				}
+
+				$thumbshotsactive = false;
+
+				for ( $counter = 1; $counter <= $numberofsets; $counter ++ ) {
+					$tempoptionname = "LinkLibraryPP" . $counter;
+					$tempoptions    = get_option( $tempoptionname );
+					$tempoptions = wp_parse_args( $tempoptions, ll_reset_options( 1, 'list', 'return' ) );
+					if ( $tempoptions['usethumbshotsforimages'] ) {
+						$thumbshotsactive = true;
+					}
+				}
+
+				if ( $thumbshotsactive && empty( $genoptions['thumbshotscid'] ) && $genoptions['thumbnailgenerator'] == 'thumbshots' ) {
+					$this->ll_thumbshots_warning();
+				}
+
+				if ( $thumbshotsactive && empty( $genoptions['shrinkthewebaccesskey'] ) && $genoptions['thumbnailgenerator'] == 'shrinktheweb' ) {
+					$this->ll_shrinktheweb_warning();
+				}
+
+				if ( isset( $_GET['dismissll70update'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'dismissll70update' ) ) {
+					$genoptions['dismissll70update'] = true;
+					update_option( 'LinkLibraryGeneral', $genoptions );
+				} elseif ( !isset( $genoptions['dismissll70update'] ) && ( !isset( $genoptions['hidedonation'] ) || ( isset( $genoptions['hidedonation'] ) && !$genoptions['hidedonation'] ) ) ) {
+					$this->ll70update();
+				}
+			}
+		}		
 	}
 
 	function ll_add_category_id( $content, $column_name, $term_id ){
@@ -705,7 +724,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 	}
 
 	function ll70update() {
-		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 7.0: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such as Link Library blocks in the WordPress Block Editor, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>the ability to re-order fields and add custom fields in user-submission forms</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-globalsearchresultslayout', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>customization of link output in Global site search results</a>, an <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-stylesheet'), admin_url( 'edit.php' )) . "'>updated stylesheet editor with syntax highlighting and error checking</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'dismissll70update' => 'true' ), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
+		echo "<div id='ll-warning' class='updated fade'><span style='float: left; margin-right: 20px; margin-top: 40px; margin-bottom: 40px'><img src='" . plugins_url( 'icons/new_icon.png', __FILE__ ) . "' /></span><p><strong>Link Library 7.0: Recent new features and supporting your humble developer</strong></p> <p>You may not have noticed, but Link Library keeps adding a steady stream of new features, along with bug fixes, with each new version. In recent months, new capabilities such as Link Library blocks in the WordPress Block Editor, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-userform', 'page' => 'link-library-settingssets'), admin_url( 'edit.php' )) . "'>the ability to re-order fields and add custom fields in user-submission forms</a>, <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'currenttab' => 'll-globalsearchresultslayout', 'page' => 'link-library-general-options'), admin_url( 'edit.php' )) . "'>customization of link output in Global site search results</a>, an <a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'page' => 'link-library-stylesheet'), admin_url( 'edit.php' )) . "'>updated stylesheet editor with syntax highlighting and error checking</a> and many more have been added to Link Library. If you have ideas for new features, drop me a line in the <a href='https://wordpress.org/support/plugin/link-library/'>support forum</a>. I can't promise I'll put them all in, but all ideas are considered.<br /><br />If you use the plugin as a regular feature of your site and have never contributed to Link Library's development, <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>please consider a donation</a>. Repeat donations are just as welcome :) Answering support questions and implementing new features for this free plugin takes time and effort and your support helps with this work and its associated costs. Thanks in advance!<br /><br /><a href='" . add_query_arg( array( 'post_type' => 'link_library_links', 'dismissll70update' => 'true', '_wpnonce' => wp_create_nonce( 'dismissll70update' ) ), admin_url( 'edit.php' )) . "'>Dismiss</a></p></div>";
 	}
 
 	function filter_mce_buttons( $buttons ) {
@@ -1787,6 +1806,73 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			} else {
 				$message = '3';
 			}
+		} elseif ( isset( $_POST['exportalllinksopml'] ) ) {
+			$upload_dir = wp_upload_dir();
+
+			if ( is_writable( $upload_dir['path'] ) ) {
+				$myFile = $upload_dir['path'] . "/LinksExport.opml";
+				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
+
+				$link_categories_query_args = array( );
+				$link_categories_query_args['hide_empty'] = true;
+
+				add_filter( 'get_terms', 'link_library_get_terms_filter_only_publish', 10, 3 );
+
+				$link_categories = get_terms( 'link_library_category', $link_categories_query_args );
+				
+				fwrite( $fh, '<?xml version="1.0"?' . ">\n" );
+				fwrite(	$fh, '<opml version="1.0">' . "\n" );
+				fwrite( $fh, '<head>' . "\n" );
+				fwrite( $fh, "\t" . '<title>' . sprintf( __( 'Links for %s' ), esc_attr( get_bloginfo( 'name', 'display' ) ) ) . '</title>' . "\n" );
+				fwrite( $fh, "\t" . '<dateCreated>' . gmdate( 'D, d M Y H:i:s' ) . ' GMT</dateCreated>' . "\n" );
+				fwrite( $fh, '</head>' . "\n" );
+				fwrite( $fh, '<body>' . "\n" );
+				
+				foreach ( (array) $link_categories as $link_category ) {
+					fwrite( $fh, "\t" . '<outline type="category" title="' . $link_category->name . '">' . "\n" );
+					
+					$link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => 'publish' );
+					$link_query_args['orderby']['title'] = 'ASC';
+
+					$link_query_args['tax_query'][] =
+						array(
+							'taxonomy' => 'link_library_category',
+							'field'    => 'term_id',
+							'terms'    => $link_category->term_id,
+							'include_children' => false
+						);
+	
+					$the_link_query = new WP_Query( $link_query_args );
+
+					if ( $the_link_query->have_posts() ) {
+						while ( $the_link_query->have_posts() ) {
+							$the_link_query->the_post();
+							$link_url = get_post_meta( get_the_ID(), 'link_url', true );
+							$link_rss = get_post_meta( get_the_ID(), 'link_rss', true );
+							$link_updated = get_post_meta( get_the_ID(), 'link_updated', true );
+
+							fwrite( $fh, "\t\t" . '<outline text="' . get_the_title() . '" type="link" xmlUrl="' . $link_rss . '" htmlUrl="' . $link_url . '">' . "\n" );
+						}
+					}
+					fwrite( $fh, "\t" . '</outline>' . "\n" );
+				}
+				fwrite( $fh, '</body>' . "\n" );
+				fwrite( $fh, '</opml>' . "\n" );
+
+				fclose( $fh );
+
+				if ( file_exists( $myFile ) ) {
+					header( 'Content-Description: File Transfer' );
+					header( 'Content-Type: application/octet-stream' );
+					header( 'Content-Disposition: attachment; filename=' . basename( $myFile ) );
+					header( 'Expires: 0' );
+					header( 'Cache-Control: must-revalidate' );
+					header( 'Pragma: public' );
+					header( 'Content-Length: ' . filesize( $myFile ) );
+					readfile( $myFile );
+					exit;
+				}
+			}		
 		} elseif ( isset( $_POST['exportallcategories'] ) ) {
 			$upload_dir = wp_upload_dir();
 
@@ -2320,7 +2406,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 			foreach ( array ( 'stylesheet' ) as $option_name ) {
 				if ( isset( $_POST[$option_name] ) ) {
-					$options[$option_name] = $this->validate_css( $_POST[$option_name] );
+					$options[$option_name] = $this->validate_css( sanitize_text_field( $_POST[$option_name] ) );
 				}
 			}
 
@@ -2367,7 +2453,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 
 			foreach (
 				array(
-					'columnheaderoverride','linktarget', 'settingssetname', 'loadingicon',
+					'columnheaderoverride','linktarget', 'settingssetname', 'loadingicon', 'urltextfilter',
 					'direction', 'linkdirection', 'linkorder', 'addnewlinkmsg', 'linknamelabel', 'linkaddrlabel', 'linkrsslabel',
 					'linkcatlabel', 'linkdesclabel', 'linknoteslabel', 'addlinkbtnlabel', 'newlinkmsg', 'moderatemsg', 'imagepos',
 					'imageclass', 'rssfeedtitle', 'rssfeeddescription', 'showonecatmode', 'linkcustomcatlabel', 'linkcustomcatlistentry',
@@ -2679,7 +2765,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			$genoptions = get_option( 'LinkLibraryGeneral' );
 			$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
-			$genoptions['fullstylesheet'] = $this->validate_css( $_POST['fullstylesheet'] );
+			$genoptions['fullstylesheet'] = $this->validate_css( sanitize_text_field( $_POST['fullstylesheet'] ) );
 
 			update_option( 'LinkLibraryGeneral', $genoptions );
 			$message = 1;
@@ -3608,6 +3694,12 @@ function general_custom_fields_meta_box( $data ) {
 					</td>
 				</tr>
 				<tr>
+					<td><?php _e( 'Export all links in OPML format', 'link-library' ); ?></td>
+					<td>
+						<input class="button" type="submit" id="exportalllinksopml" name="exportalllinksopml" value="<?php _e( 'Export All Links in OPML format', 'link-library' ); ?>" />
+					</td>
+				</tr>
+				<tr>
 					<td><?php _e( 'Export all categories to a CSV file', 'link-library' ); ?></td>
 					<td>
 						<input class="button" type="submit" id="exportallcategories" name="exportallcategories" value="<?php _e( 'Export All Categories', 'link-library' ); ?>" />
@@ -3913,7 +4005,7 @@ function general_custom_fields_meta_box( $data ) {
 		<?php _e( 'If the stylesheet editor is empty after upgrading, reset to the default stylesheet using the button below or copy/paste your backup stylesheet into the editor.', 'link-library' ); ?>
 		<br /><br />
 
-		<textarea name='fullstylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $genoptions['fullstylesheet'] ); ?></textarea>
+		<textarea name='fullstylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( sanitize_text_field( $genoptions['fullstylesheet'] ) ); ?></textarea>
 		<div>
 			<input type="submit" class="button button-primary submitstyle" name="submitstyle" value="<?php _e( 'Submit', 'link-library' ); ?>" /><span style='padding-left: 650px'><input type="submit" class="button button-primary resetstyle" name="resetstyle" value="<?php _e( 'Reset to default', 'link-library' ); ?>" /></span>
 		</div>
@@ -4217,6 +4309,12 @@ function general_custom_fields_meta_box( $data ) {
 
 						</td>
 					<?php } ?>
+				</tr>
+				<tr>
+					<td class="lltooltip" title="<?php _e( 'Only show links with URLs that include the filter text', 'link-library' ); ?>"><?php _e( 'URL Filter', 'link-library' ); ?></td>
+					<td class="lltooltip" title="<?php _e( 'Only show links with URLs that include the filter text', 'link-library' ); ?>">
+						<input type="text" id="urltextfilter" name="urltextfilter" size="40" value="<?php echo strval( $options['urltextfilter'] ); ?>" />
+					</td>
 				</tr>
 				<tr>
 					<td class="lltooltip" title="<?php _e( 'Leave Empty to see all tags', 'link-library' ); ?><br /><br /><?php _e( 'Enter list of comma-separated', 'link-library' ); ?><br /><?php _e( 'numeric tag IDs', 'link-library' ); ?><br /><br /><?php _e( 'To find the IDs, go to the Link Categories admin page. For example', 'link-library' ); ?>: 2,4,56">
@@ -5982,7 +6080,7 @@ function general_custom_fields_meta_box( $data ) {
 		?>
 
 		<div style='padding-top:15px' id="ll-style" class="content-section">
-			<textarea name='stylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( $options['stylesheet'] ); ?></textarea>
+			<textarea name='stylesheet' id='fancy-textarea' style='font-family:Courier' rows="30" cols="100"><?php echo stripslashes( sanitize_text_field( $options['stylesheet'] ) ); ?></textarea>
 		</div>
 
 	<?php }
@@ -7115,17 +7213,17 @@ function general_custom_fields_meta_box( $data ) {
 		<table style="width:100%">
 			<tr>
 				<td style="width:20%"><?php _e( 'Web Address', 'link-library' ); ?></td>
-				<td><input type="text" style="width:70%" id="link_url" type="link_url" name="link_url" value="<?php echo $link_url; ?>" tabindex="1">
+				<td><input type="text" style="width:70%" id="link_url" type="link_url" name="link_url" value="<?php echo esc_url( $link_url ); ?>" tabindex="1">
 				<input type="button" class="upload_link_item_button" value="<?php _e( 'Assign link from media item', 'link-library' ); ?>"></td>
 
 			</tr>
 			<tr>
 				<td style="width:20%"><?php _e( 'Description', 'link-library' ); ?></td>
-				<td><input type="text" id="link_description" type="link_description" name="link_description" value="<?php echo $link_description; ?>" tabindex="2"></td>
+				<td><input type="text" id="link_description" type="link_description" name="link_description" value="<?php echo esc_attr( $link_description ); ?>" tabindex="2"></td>
 			</tr>
 			<tr>
 				<td><?php _e( 'Notes', 'link-library' ); ?></td>
-				<td><textarea style="width:100%" name="link_notes" id="link_notes" rows="5"><?php echo $link_notes; ?></textarea></td>
+				<td><textarea style="width:100%" name="link_notes" id="link_notes" rows="5"><?php echo esc_attr( $link_notes ); ?></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2"><?php _e( 'Large Description', 'link-library' ); ?></td>
@@ -7137,12 +7235,12 @@ function general_custom_fields_meta_box( $data ) {
 									'textarea_name' => 'link_textfield',
 									'wpautop' => false );
 
-		wp_editor( isset( $link_textfield ) ? stripslashes( $link_textfield ) : '', 'link_textfield', $editorsettings ); ?>
+		wp_editor( isset( $link_textfield ) ? wp_kses_post( $link_textfield ) : '', 'link_textfield', $editorsettings ); ?>
 
 		<table style="width:100%">
 			<tr>
 				<td><?php _e( 'RSS Address', 'link-library' ); ?></td>
-				<td><input type="text" style="width:100%" id="link_rss" type="link_rss" name="link_rss" value="<?php echo $link_rss; ?>"></td>
+				<td><input type="text" style="width:100%" id="link_rss" type="link_rss" name="link_rss" value="<?php echo esc_url( $link_rss ); ?>"></td>
 			</tr>
 			<tr>
 				<td><?php _e( 'Target', 'link-library' ); ?></td>

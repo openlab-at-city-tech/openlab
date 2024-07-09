@@ -727,7 +727,7 @@ function RenderLinkLibraryAddLinkForm( $LLPluginClass, $generaloptions, $library
 				
 							$output .= 'data-validation="length' . $requiredtext . '" data-validation-length="max1024" data-validation-error-msg-required="' . __( 'Required field, 1-1024 chars', 'link-library' ) . '" ';
 				
-							$output .= 'type="text" name="ll_reciprocal" id="ll_reciprocal" value="' . ( isset( $captureddata['ll_reciprocal'] ) ? esc_html(stripslashes($captureddata['ll_reciprocal']), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
+							$output .= 'type="text" name="ll_reciprocal" id="ll_reciprocal" value="' . ( isset( $captureddata['ll_reciprocal'] ) ? esc_attr(stripslashes($captureddata['ll_reciprocal']), '1') : $linkaddrdefvalue ) . "\" /></td></tr>\n";
 						}
 					break;
 					case 12: 	//------------------ Secondary Address --------------------  

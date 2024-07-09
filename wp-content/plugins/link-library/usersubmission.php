@@ -23,42 +23,59 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	$message = "";
 
 	$captureddata                           = array();
-	$captureddata['link_category']          = ( isset( $_POST['link_category'] ) ? $_POST['link_category'] : '' );
-	$captureddata['link_user_category']     = ( isset( $_POST['link_user_category'] ) ? $_POST['link_user_category'] : '' );
-	$captureddata['link_tags']              = ( isset( $_POST['link_tags'] ) ? $_POST['link_tags'] : '' );
-	$captureddata['link_user_tags']         = ( isset( $_POST['link_user_tags'] ) ? $_POST['link_user_tags'] : '' );
-	$captureddata['link_description']       = ( isset( $_POST['link_description'] ) ? $_POST['link_description'] : '' );
-	$captureddata['link_textfield']         = ( isset( $_POST['link_textfield'] ) ? $_POST['link_textfield'] : '' );
-	$captureddata['link_name']              = ( isset( $_POST['link_name'] ) ? $_POST['link_name'] : '' );
-	$captureddata['link_url']               = ( isset( $_POST['link_url'] ) ? $_POST['link_url'] : '' );
-	$captureddata['link_rss']               = ( isset( $_POST['link_rss'] ) ? $_POST['link_rss'] : '' );
-	$captureddata['link_notes']             = ( isset( $_POST['link_notes'] ) ? $_POST['link_notes'] : '' );
-	$captureddata['ll_secondwebaddr']       = ( isset( $_POST['ll_secondwebaddr'] ) ? $_POST['ll_secondwebaddr'] : '' );
-	$captureddata['ll_telephone']           = ( isset( $_POST['ll_telephone'] ) ? $_POST['ll_telephone'] : '' );
-	$captureddata['ll_email']               = ( isset( $_POST['ll_email'] ) ? $_POST['ll_email'] : '' );
-	$captureddata['ll_reciprocal']          = ( isset( $_POST['ll_reciprocal'] ) ? $_POST['ll_reciprocal'] : '' );
-	$captureddata['ll_submittername']       = ( isset( $_POST['ll_submittername'] ) ? $_POST['ll_submittername'] : '' );
-	$captureddata['ll_submitteremail']      = ( isset( $_POST['ll_submitteremail'] ) ? $_POST['ll_submitteremail'] : '' );
-	$captureddata['ll_submittercomment']    = ( isset( $_POST['ll_submittercomment'] ) ? $_POST['ll_submittercomment'] : '' );
-	$captureddata['ll_customcaptchaanswer'] = ( isset( $_POST['ll_customcaptchaanswer'] ) ? $_POST['ll_customcaptchaanswer'] : '' );
-	$captureddata['link_category']          = ( isset( $_POST['link_category'] ) ? $_POST['link_category'] : '' );
-	$captureddata['link_tags']              = ( isset( $_POST['link_tags'] ) ? $_POST['link_tags'] : '' );
-	$captureddata['ll_linkreference']		= ( isset( $_POST['ll_linkreference'] ) ? $_POST['ll_linkreference'] : '' );
-	$captureddata['ll_customurl1']			= ( isset( $_POST['ll_customurl1'] ) ? $_POST['ll_customurl1'] : '' );
-	$captureddata['ll_customurl2']			= ( isset( $_POST['ll_customurl2'] ) ? $_POST['ll_customurl2'] : '' );
-	$captureddata['ll_customurl3']			= ( isset( $_POST['ll_customurl3'] ) ? $_POST['ll_customurl3'] : '' );
-	$captureddata['ll_customurl4']			= ( isset( $_POST['ll_customurl4'] ) ? $_POST['ll_customurl4'] : '' );
-	$captureddata['ll_customurl5']			= ( isset( $_POST['ll_customurl5'] ) ? $_POST['ll_customurl5'] : '' );
-	$captureddata['ll_customtext1']			= ( isset( $_POST['ll_customtext1'] ) ? $_POST['ll_customtext1'] : '' );
-	$captureddata['ll_customtext2']			= ( isset( $_POST['ll_customtext2'] ) ? $_POST['ll_customtext2'] : '' );
-	$captureddata['ll_customtext3']			= ( isset( $_POST['ll_customtext3'] ) ? $_POST['ll_customtext3'] : '' );
-	$captureddata['ll_customtext4']			= ( isset( $_POST['ll_customtext4'] ) ? $_POST['ll_customtext4'] : '' );
-	$captureddata['ll_customtext5']			= ( isset( $_POST['ll_customtext5'] ) ? $_POST['ll_customtext5'] : '' );
-	$captureddata['ll_customlist1']			= ( isset( $_POST['ll_customlist1'] ) ? $_POST['ll_customlist1'] : '' );
-	$captureddata['ll_customlist2']			= ( isset( $_POST['ll_customlist2'] ) ? $_POST['ll_customlist2'] : '' );
-	$captureddata['ll_customlist3']			= ( isset( $_POST['ll_customlist3'] ) ? $_POST['ll_customlist3'] : '' );
-	$captureddata['ll_customlist4']			= ( isset( $_POST['ll_customlist4'] ) ? $_POST['ll_customlist4'] : '' );
-	$captureddata['ll_customlist5']			= ( isset( $_POST['ll_customlist5'] ) ? $_POST['ll_customlist5'] : '' );	
+	if ( isset( $_POST['link_category'] ) ) {
+		$cleancatarray = array();
+		foreach( $_POST['link_category'] as $capturedcat ) {
+			$cleancatarray[] = intval( $capturedcat );
+		}
+		$captureddata['link_category'] = $cleancatarray;
+	} else {
+		$captureddata['link_category'] = array();
+	}
+
+	$captureddata['link_user_category']     = ( isset( $_POST['link_user_category'] ) ? sanitize_text_field( $_POST['link_user_category'] ) : '' );
+
+	if ( isset( $_POST['link_tags'] ) ) {
+		$cleantagarray = array();
+		foreach( $_POST['link_tags'] as $capturedtag ) {
+			$cleantagarray[] = intval( $capturedtag );
+		}
+		$captureddata['link_tags'] = $cleantagarray;
+	} else {
+		$captureddata['link_tags'] = array();
+	}
+
+	$captureddata['link_user_tags']         = ( isset( $_POST['link_user_tags'] ) ? sanitize_text_field( $_POST['link_user_tags'] ) : '' );
+	$captureddata['link_description']       = ( isset( $_POST['link_description'] ) ? sanitize_text_field( $_POST['link_description'] ) : '' );
+	$captureddata['link_textfield']         = ( isset( $_POST['link_textfield'] ) ? sanitize_text_field( $_POST['link_textfield'] ) : '' );
+	$captureddata['link_name']              = ( isset( $_POST['link_name'] ) ? sanitize_text_field( $_POST['link_name'] ) : '' );
+	$captureddata['link_url']               = ( isset( $_POST['link_url'] ) ? sanitize_url( $_POST['link_url'] ) : '' );
+	$captureddata['link_rss']               = ( isset( $_POST['link_rss'] ) ? sanitize_url( $_POST['link_rss'] ) : '' );
+	$captureddata['link_notes']             = ( isset( $_POST['link_notes'] ) ? sanitize_text_field( $_POST['link_notes'] ) : '' );
+	$captureddata['ll_secondwebaddr']       = ( isset( $_POST['ll_secondwebaddr'] ) ? sanitize_url( $_POST['ll_secondwebaddr'] ) : '' );
+	$captureddata['ll_telephone']           = ( isset( $_POST['ll_telephone'] ) ? sanitize_text_field( $_POST['ll_telephone'] ) : '' );
+	$captureddata['ll_email']               = ( isset( $_POST['ll_email'] ) ? sanitize_email( $_POST['ll_email'] ) : '' );
+	$captureddata['ll_reciprocal']          = ( isset( $_POST['ll_reciprocal'] ) ? sanitize_url( $_POST['ll_reciprocal'] ) : '' );
+	$captureddata['ll_submittername']       = ( isset( $_POST['ll_submittername'] ) ? sanitize_text_field( $_POST['ll_submittername'] ) : '' );
+	$captureddata['ll_submitteremail']      = ( isset( $_POST['ll_submitteremail'] ) ? sanitize_email( $_POST['ll_submitteremail'] ) : '' );
+	$captureddata['ll_submittercomment']    = ( isset( $_POST['ll_submittercomment'] ) ? sanitize_text_field( $_POST['ll_submittercomment'] ) : '' );
+	$captureddata['ll_customcaptchaanswer'] = ( isset( $_POST['ll_customcaptchaanswer'] ) ? sanitize_text_field( $_POST['ll_customcaptchaanswer'] ) : '' );
+	$captureddata['ll_linkreference']		= ( isset( $_POST['ll_linkreference'] ) ? sanitize_url( $_POST['ll_linkreference'] ) : '' );
+	$captureddata['ll_customurl1']			= ( isset( $_POST['ll_customurl1'] ) ? sanitize_url( $_POST['ll_customurl1'] ) : '' );
+	$captureddata['ll_customurl2']			= ( isset( $_POST['ll_customurl2'] ) ? sanitize_url( $_POST['ll_customurl2'] ) : '' );
+	$captureddata['ll_customurl3']			= ( isset( $_POST['ll_customurl3'] ) ? sanitize_url( $_POST['ll_customurl3'] ) : '' );
+	$captureddata['ll_customurl4']			= ( isset( $_POST['ll_customurl4'] ) ? sanitize_url( $_POST['ll_customurl4'] ) : '' );
+	$captureddata['ll_customurl5']			= ( isset( $_POST['ll_customurl5'] ) ? sanitize_url( $_POST['ll_customurl5'] ) : '' );
+	$captureddata['ll_customtext1']			= ( isset( $_POST['ll_customtext1'] ) ? sanitize_text_field( $_POST['ll_customtext1'] ) : '' );
+	$captureddata['ll_customtext2']			= ( isset( $_POST['ll_customtext2'] ) ? sanitize_text_field( $_POST['ll_customtext2'] ) : '' );
+	$captureddata['ll_customtext3']			= ( isset( $_POST['ll_customtext3'] ) ? sanitize_text_field( $_POST['ll_customtext3'] ) : '' );
+	$captureddata['ll_customtext4']			= ( isset( $_POST['ll_customtext4'] ) ? sanitize_text_field( $_POST['ll_customtext4'] ) : '' );
+	$captureddata['ll_customtext5']			= ( isset( $_POST['ll_customtext5'] ) ? sanitize_text_field( $_POST['ll_customtext5'] ) : '' );
+	$captureddata['ll_customlist1']			= ( isset( $_POST['ll_customlist1'] ) ? sanitize_text_field( $_POST['ll_customlist1'] ) : '' );
+	$captureddata['ll_customlist2']			= ( isset( $_POST['ll_customlist2'] ) ? sanitize_text_field( $_POST['ll_customlist2'] ) : '' );
+	$captureddata['ll_customlist3']			= ( isset( $_POST['ll_customlist3'] ) ? sanitize_text_field( $_POST['ll_customlist3'] ) : '' );
+	$captureddata['ll_customlist4']			= ( isset( $_POST['ll_customlist4'] ) ? sanitize_text_field( $_POST['ll_customlist4'] ) : '' );
+	$captureddata['ll_customlist5']			= ( isset( $_POST['ll_customlist5'] ) ? sanitize_text_field( $_POST['ll_customlist5'] ) : '' );	
 
 	$uploads = wp_upload_dir();
 
