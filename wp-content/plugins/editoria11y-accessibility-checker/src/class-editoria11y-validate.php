@@ -1,8 +1,12 @@
 <?php  // phpcs:ignore
 /**
- * Validates
+ * Validation functions.
  *
  * @package         Editoria11y
+ */
+
+/**
+ * Validate API results.
  */
 class Editoria11y_Validate {
 
@@ -46,6 +50,9 @@ class Editoria11y_Validate {
 			'created',
 			'display_name',
 			'dismissal_status',
+			'post_modified',
+			'post_status',
+			'post_author',
 		);
 		return in_array( $user_input, $valid, true );
 	}

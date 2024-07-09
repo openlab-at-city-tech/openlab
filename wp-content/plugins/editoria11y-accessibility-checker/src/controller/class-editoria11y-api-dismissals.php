@@ -1,4 +1,5 @@
 <?php //phpcs:ignore
+
 /**
  * Stores tests results
  * Reference https://developer.wordpress.org/rest-api/extending-the-rest-api/controller-classes/
@@ -77,15 +78,9 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 		$results = $params['data'];
 		$now     = gmdate( 'Y-m-d H:i:s' );
 		global $wpdb;
-		$pid = $wpdb->get_var( // phpcs:ignore
-			$wpdb->prepare(
-				"SELECT pid FROM {$wpdb->prefix}ed11y_urls
-				WHERE page_url=%s;",
-				array(
-					$results['page_url'],
-				)
-			)
-		);
+
+		// Get Page ID so we can avoid complex joins in subsequent queries.
+		$pid = $this->get_pid( $results['page_url'], $results['post_id'] );
 
 		if ( 'reset' === $results['dismissal_status'] ) {
 
@@ -93,7 +88,9 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 			$response = $wpdb->query( // phpcs:ignore
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->prefix}ed11y_dismissals 
-					WHERE pid = %d 
+					WHERE pid = %d
+					AND result_key = %s
+					AND element_ID = %s  
 					AND (
 						dismissal_status = 'ok'
 						OR
@@ -105,6 +102,8 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 					);",
 					array(
 						$pid,
+						$results['result_key'],
+						$results['element_id'],
 						wp_get_current_user()->ID,
 					)
 				)
@@ -163,6 +162,7 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 		$order_by    = ! empty( $params['sort'] ) && $validate->sort( $params['sort'] ) ? $params['sort'] : false;
 		$entity_type = ! empty( $params['entity_type'] ) && $validate->entity_type( $params['entity_type'] ) ? $params['entity_type'] : false;
 		$result_key  = ! empty( $params['result_key'] ) && 'false' !== $params['result_key'] ? esc_sql( $params['result_key'] ) : false;
+		$dismissor   = is_numeric( $params['dismissor'] ) ? intval( $params['dismissor'] ) : false;
 		$utable      = $wpdb->prefix . 'ed11y_urls';
 		$dtable      = $wpdb->prefix . 'ed11y_dismissals';
 
@@ -183,10 +183,14 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 			$where = $where . "{$utable}.entity_type = '{$entity_type}'";
 		}
 
+		if ( 0 < $dismissor ) {
+			// Filtering by author ID number, which has been cast to integer.
+			$where = empty( $where ) ? 'WHERE ' : $where . 'AND ';
+			$where = $where . "{$dtable}.user = '{$dismissor}'";
+		}
+
 		if ( 'page_title' === $order_by ) {
 			$order_by = "{$utable}.{$order_by}";
-		} elseif ( 'display_name' === $order_by ) {
-			$order_by = "{$wpdb->users}.{$order_by}";
 		} else {
 			$order_by = "{$dtable}.{$order_by}";
 		}
@@ -198,21 +202,20 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 					{$utable}.page_url,
 					{$utable}.page_title,
 					{$utable}.entity_type,
-					{$wpdb->users}.display_name,
+					{$dtable}.user,
 					{$dtable}.result_key,
 					{$dtable}.dismissal_status,
 					MAX({$dtable}.created) AS created,
 					{$dtable}.stale
 					FROM {$dtable}
-					INNER JOIN {$utable} ON ({$dtable}.pid={$utable}.pid)
-					LEFT JOIN {$wpdb->users} ON ({$wpdb->users}.ID={$dtable}.user)
+					LEFT JOIN {$utable} ON ({$dtable}.pid={$utable}.pid)
 					{$where}
 					GROUP BY
 					{$utable}.pid,
 					{$utable}.page_url,
 					{$utable}.page_title,
 					{$utable}.entity_type,
-					{$wpdb->users}.display_name,
+					{$dtable}.user,
 					{$dtable}.result_key,
 					{$dtable}.dismissal_status,
 					{$dtable}.stale
@@ -239,8 +242,60 @@ class Editoria11y_Api_Dismissals extends WP_REST_Controller {
 		);
 		$rowcount   = $wpdb->num_rows;
 
+		// Get user display names.
+		$user_ids = [];
+		foreach ( $data as $value ) {
+			if ( $value->user && !in_array($value->user, $user_ids ) )
+				$user_ids[] = $value->user;
+		}
+		$user_query = new WP_User_Query(
+			array(
+				'include' => $user_ids,
+				'fields'  => array(
+					'ID',
+					'display_name',
+				),
+			)
+		);
+		$users = $user_query->get_results();
+
 		// phpcs:enable
-		return new WP_REST_Response( array( $data, $rowcount ), 200 );
+		return new WP_REST_Response( array( $data, $rowcount, $users ), 200 );
+	}
+
+	/**
+	 * Returns the pid from the URL table.
+	 *
+	 * @param string $url of the post.
+	 * @param string $post_id the WP post ID number.
+	 */
+	public function get_pid( string $url, string $post_id ): ?string {
+		global $wpdb;
+		if ( $post_id > 0 ) {
+			$pid = $wpdb->get_var( // phpcs:ignore
+				$wpdb->prepare(
+					"SELECT pid FROM {$wpdb->prefix}ed11y_urls
+				WHERE post_id=%s;",
+					array(
+						$post_id,
+					)
+				)
+			);
+		}
+		// Not found by post ID, or post ID not provided.
+		if ( empty( $pid ) ) {
+			global $wpdb;
+			return $wpdb->get_var( // phpcs:ignore
+				$wpdb->prepare(
+					"SELECT pid FROM {$wpdb->prefix}ed11y_urls
+				WHERE page_url=%s;",
+					array(
+						$url,
+					)
+				)
+			);
+		}
+		return $pid;
 	}
 
 	/**

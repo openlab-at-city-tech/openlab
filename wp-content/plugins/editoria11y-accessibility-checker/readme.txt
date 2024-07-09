@@ -1,8 +1,8 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 1.0.13
-Tested up to: 6.4
+Stable tag: 1.0.18
+Tested up to: 6.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,7 +71,7 @@ Note that all this runs locally within your site. This plugin is the WordPress a
 
 = How is this different from other checkers? =
 
-Editoria11y is meant to supplement, not replace, these tools. 
+Editoria11y is meant to supplement, not replace, these tools.
 
 Editoria11y is...spellcheck: a seamless, automatic and intuitive integration for content authoring. It:
 
@@ -97,7 +97,7 @@ The look, feel and features outside of the core test suite are a bit different. 
 
 = Is this an overlay? =
 
-Overlays are tools that modify your site's public pages according to automated attempts to modify its code and design, claiming these machine-generated changes to your site will better meet the accessibility needs of your users. 
+Overlays are tools that modify your site's public pages according to automated attempts to modify its code and design, claiming these machine-generated changes to your site will better meet the accessibility needs of your users.
 
 Overlays may override your font sizes or colors, or modify its heading tags and buttons. You should familiarize yourself with the [assistive technology compatibility problems overlays may introduce](https://overlayfactsheet.com/) before assuming these changes will be helpful.
 
@@ -105,7 +105,7 @@ Overlays may override your font sizes or colors, or modify its heading tags and 
 
 ## Installation
 
-Editoria11y's default settings will work great for most sites. 
+Editoria11y's default settings will work great for most sites.
 
 Your first task after installation should be clicking through a representative sampling of the main pages of your site. This will start to populate your dashboard report, and give you a chance to look for issues to fix or dismiss.
 
@@ -115,7 +115,7 @@ If you notice anything amiss, experiment with these settings:
 2. If the checker is flagging issues that are not relevant to content editors, either use "Check content in these containers" to constrain checks to the parts of the page with editable content, or "Exclude these elements from checks" to skip over certain elements, regions or widgets.
 3. Editoria11y also provides a minimalist "as-you-type" issue highlighter that works inside the Block Editor/Gutenberg. If you find this feature annoying rather than helpful, change "Highlight issues while editing content" to "Only definite errors" or "None."
 4. If you do not want PDF or other document types flagged for manual checks, provide a shorter selector list or set "Document types that need manual review" to `false`
-5. If your theme has done something very unusual with its layout, such as setting the height of the content container to 0px, you may see confusing alerts when opening Editoria11y tips saying that the highlighted element may be off-screen or invisible. If that happens, disable "Check if elements are visible when using panel navigation buttons." This is disabled by defaults on any WordPress themes we have noticed this on, so if you find a theme 
+5. If your theme has done something very unusual with its layout, such as setting the height of the content container to 0px, you may see confusing alerts when opening Editoria11y tips saying that the highlighted element may be off-screen or invisible. If that happens, disable "Check if elements are visible when using panel navigation buttons." This is disabled by defaults on any WordPress themes we have noticed this on, so if you find a theme
 
 If you are a theme developer, note that the library dispatches JavaScript events at several key moments (scan finishes, panel opens, tooltip opens or shuts), allowing you to attach custom functionality. JavaScript on sites running Editoria11y can use these events to do things like [automatically opening accordion widgets](https://editoria11y.princeton.edu/configuration/#hidden-content) if they contain hidden alerts, disabling "sticky" site menus if the panel is open, inserting [custom results](https://editoria11y.princeton.edu/configuration/#customtests), or syncing results to third-party dashboards.
 
@@ -140,13 +140,37 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 
 == Changelog ==
 
+= 1.0.18 =
+* Fix for [table constraints failing in MySQL 8 multisites](https://github.com/itmaybejj/editoria11y-wp/issues/32).
+
+= 1.0.17 =
+* Fix for table structure updates failing in MariaDB
+* [ Display author name in CSV export ](https://github.com/itmaybejj/editoria11y-wp/issues/29) when user data is not stored in the default table.
+
+= 1.0.16 =
+* [ Display author name on dashboard ](https://github.com/itmaybejj/editoria11y-wp/issues/29) when user data is not stored in the default table.
+
+= 1.0.15 =
+* [Begins recording post ID](https://github.com/itmaybejj/editoria11y-wp/issues/18) with results, which allows for filtering the dashboard by author and published status, and sorting pages by modified date.
+* [Adds author, publish status and edit URL](https://github.com/itmaybejj/editoria11y-wp/issues/17) to the results export CSV.
+* [Fix for tables not provisioning on network activation](https://github.com/itmaybejj/editoria11y-wp/issues/22) for multi-site installs.
+* [Fix for false positives on links](https://github.com/itmaybejj/editoria11y-wp/issues/28) titled only "Download," "Tab" or "Window."
+* [Auto-opens detail/summary elements](https://github.com/itmaybejj/editoria11y-wp/issues/27) when jumping to a hidden alert, and improves alert positioning on hidden elements.
+* [Adds alert for WordPress button blocks](https://github.com/itmaybejj/editoria11y-wp/issues/28) that are not yet linked.
+* [Basic support for inline highlighting in the Site Editor](https://github.com/itmaybejj/editoria11y-wp/issues/4).
+* [Backwards compatibility for Firefox 115 ESR](https://www.drupal.org/project/editoria11y/issues/3444920).
+
+= 1.0.14 =
+* Page URLs now have a slightly shorter limit for [Pantheon compatibility](https://docs.pantheon.io/guides/wordpressvip/troubleshooting#maximum-index-size)
+* Update library to [2.1.2](https://github.com/itmaybejj/editoria11y/releases/tag/2.1.2)
+
 = 1.0.13 =
 * Themes and plugins can now provide [custom results](https://editoria11y.princeton.edu/configuration/#customtests).
 * Old results will clear from the dashboard when clicking through to a page with checking disabled.
 * More accurate accessible name calculation for complex situations involving CSS generated content, nested SVG or aria-labelledby references.
 * Headings are now clickable in the outline panel.
 * Experimental inline checker now highlights specific links with issues within a block.
-* Bugfix: Experimental inline checker was not appearing for 
+* Bugfix: Experimental inline checker was not appearing in some contexts.
 * Bugfix: two consecutive paragraphs starting with "A " could throw a false positive on the possible link test.
 
 = 1.0.12 =

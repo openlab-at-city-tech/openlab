@@ -5,10 +5,10 @@
  *
  * Plugin Name:       Editoria11y Accessibility Checker
  * Plugin URI:        https://wordpress.org/plugins/editoria11y-accessibility-checker/
- * Version:           1.0.13
+ * Version:           1.0.18
  * Requires PHP:      7.2
  * Requires at least: 6.0
- * Tested up to:      6.4
+ * Tested up to:      6.5
  * Author:            Princeton University, WDS
  * Author URI:        https://wds.princeton.edu/team
  * License:           GPL v2 or later
@@ -20,7 +20,7 @@
  * @package         Editoria11y
  * @link            https://wordpress.org/plugins/editoria11y-accessibility-checker/
  * @author          John Jameson, Princeton University
- * @copyright       2023 The Trustees of Princeton University
+ * @copyright       2024 The Trustees of Princeton University
  * @license         GPL v2 or later
  */
 
@@ -30,7 +30,8 @@
  * @package Editoria11y
  */
 class Editoria11y {
-	const ED11Y_VERSION = '1.0.13';
+	// Library version; used as cache buster.
+	const ED11Y_VERSION = '2.2.3';
 
 	/**
 	 * Attachs functions to loop.
@@ -112,11 +113,7 @@ class Editoria11y {
 	/**
 	 * Provides DB table schema.
 	 */
-	public static function activate() {
-		if ( ! current_user_can( 'activate_plugins' ) ) {
-			return;
-		}
-
+	public static function create_database(): void {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
@@ -125,24 +122,28 @@ class Editoria11y {
 		$table_results    = $wpdb->prefix . 'ed11y_results';
 		$table_dismissals = $wpdb->prefix . 'ed11y_dismissals';
 
+		// Initial table creation
+
 		$sql_urls = "CREATE TABLE $table_urls (
 			pid int(9) unsigned AUTO_INCREMENT NOT NULL,
-			page_url varchar(225) NOT NULL,
+			post_id int(9) unsigned NOT NULL default '0',
+			page_url varchar(190) NOT NULL,
 			entity_type varchar(255) NOT NULL,
 			page_title varchar(1024) NOT NULL,
 			page_total smallint(4) unsigned NOT NULL,
-			PRIMARY KEY page_url (page_url),
-			KEY pid (pid)
+			PRIMARY KEY pid (pid),
+			KEY page_url (page_url),
+			KEY post_id (post_id)
 			) $charset_collate;";
 
 		$sql_results = "CREATE TABLE $table_results (
 			pid int(9) unsigned NOT NULL,
 			result_key varchar(32) NOT NULL,
 			result_count smallint(4) NOT NULL,
-			created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-			updated datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-			CONSTRAINT result PRIMARY KEY (pid, result_key),
-			FOREIGN KEY (pid) REFERENCES $table_urls (pid) ON DELETE CASCADE
+			created datetime DEFAULT current_timestamp NOT NULL,
+			updated datetime DEFAULT current_timestamp NOT NULL,
+			PRIMARY KEY (pid, result_key),
+			FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE
 			) $charset_collate;";
 
 		$sql_dismissals = "CREATE TABLE $table_dismissals (
@@ -152,39 +153,183 @@ class Editoria11y {
 			user smallint(6) unsigned NOT NULL,
 			element_id varchar(2048)  NOT NULL,
 			dismissal_status varchar(64) NOT NULL,
-			created datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-			updated datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+			created datetime DEFAULT current_timestamp NOT NULL,
+			updated datetime DEFAULT current_timestamp NOT NULL,
 			stale tinyint(1) NOT NULL default '0',
 			PRIMARY KEY (id),
 			KEY page_url (pid),
 			KEY user (user),
 			KEY dismissal_status (dismissal_status),
-			FOREIGN KEY (pid) REFERENCES $table_urls (pid) ON DELETE CASCADE
+			FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE
 			) $charset_collate;";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		maybe_create_table( $table_urls, $sql_urls );
 		maybe_create_table( $table_results, $sql_results );
 		maybe_create_table( $table_dismissals, $sql_dismissals );
+
+		// Add post_id column for db versions < 1.0
+		$url_columns = $wpdb->get_results( "DESC $table_urls" );
+		if( count($url_columns) !== 6) {
+			$wpdb->query("ALTER TABLE $table_urls
+	        ADD post_id int(9) unsigned NOT NULL default 0,
+	        DROP PRIMARY KEY, ADD PRIMARY KEY pid ( pid ),
+	        ADD KEY post_id (post_id)
+	      ;");
+		}
+
+		// Add foreign keys not reliably handled by maybe_create_table
+		$results_constraint = $wpdb->prefix . 'ed11y_results_pid';
+		$dismissal_constraint = $wpdb->prefix . 'ed11y_dismissal_pid';
+		$result_foreign_key = $wpdb->get_var( // phpcs:ignore
+			$wpdb->prepare( "SELECT b.constraint_name
+	          FROM information_schema.table_constraints a
+	          JOIN information_schema.key_column_usage b
+	          ON a.table_schema = b.table_schema AND a.constraint_name = b.constraint_name
+	          WHERE a.table_schema=database() AND a.constraint_type='FOREIGN KEY' AND b.table_name = %s;",
+				array( $table_results )
+			)
+		);
+		if ( $result_foreign_key ) {
+			try {
+				// MySQL syntax
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_results
+        		DROP FOREIGN KEY %1s;", array( $result_foreign_key ) )
+				);
+			} catch (Exception $e) {
+				// MariaDB syntax
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_results
+        		DROP CONSTRAINT %1s;", array( $result_foreign_key ) )
+				);
+			} finally {
+				// Add replacement constraint
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_results
+        		ADD CONSTRAINT %1s FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE", $results_constraint)
+				);
+			}
+		} else {
+			// Add new constraint
+			$wpdb->get_var( // phpcs:ignore
+				$wpdb->prepare( "ALTER TABLE $table_results
+        		ADD CONSTRAINT %1s FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE", $results_constraint)
+			);
+		}
+
+		$dismissal_key = $wpdb->get_var( // phpcs:ignore
+			$wpdb->prepare( "SELECT b.constraint_name
+	          FROM information_schema.table_constraints a
+	          JOIN information_schema.key_column_usage b
+	          ON a.table_schema = b.table_schema AND a.constraint_name = b.constraint_name
+	          WHERE a.table_schema=database() AND a.constraint_type='FOREIGN KEY' AND b.table_name = %s;",
+				array( $table_dismissals )
+			)
+		);
+		if ( $dismissal_key ) {
+			try {
+				// MySQL syntax
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_dismissals
+					DROP FOREIGN KEY %1s;", array( $dismissal_key ) )
+				);
+			} catch (Exception $e) {
+				// MariaDB syntax
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_dismissals
+					DROP CONSTRAINT %1s;", array( $dismissal_key ) )
+				);
+			} finally {
+				// Add new constraint
+				$wpdb->get_var( // phpcs:ignore
+					$wpdb->prepare( "ALTER TABLE $table_dismissals
+        			ADD CONSTRAINT %1s FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE", $dismissal_constraint)
+				);
+			}
+		} else {
+			$wpdb->get_var( // phpcs:ignore
+				$wpdb->prepare( "ALTER TABLE $table_dismissals
+        			ADD CONSTRAINT %1s FOREIGN KEY(pid) REFERENCES $table_urls (pid) ON DELETE CASCADE", $dismissal_constraint)
+			);
+		}
+
+	}
+
+	/**
+	 * Make sure tables are in place and up to date.
+	 */
+	public static function check_tables(): bool {
+		// Lazy DB creation
+
+		$tableCheck = get_option( "editoria11y_db_version" );
+		if ( $tableCheck === '1.1-failed' ) {
+			// Tables are broken, don't try again until next release
+			return false;
+		} else if ( $tableCheck !== '1.1' ) {
+			// Create DB and set option based on success
+			update_option( "editoria11y_db_version", '1.1-failed' );
+			self::create_database();
+			update_option( "editoria11y_db_version", '1.1' );
+		}
+		return true;
+
+	}
+
+	/**
+	 * Plugin Activation
+	 */
+	public static function activate( $network = false ) {
+		// No action needed.
 	}
 
 	/**
 	 * Remove DB tables on uninstall
 	 */
-	public static function uninstall() {
+	public static function uninstall( $network = false ) {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
 
 		global $wpdb;
 
-		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_dismissals" ); // phpcs:ignore
-		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_results" ); // phpcs:ignore
-		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_urls" ); // phpcs:ignore
+		if ( $network ) {
 
-		delete_option( 'ed11y_plugin_settings' );
-		delete_site_option( 'ed11y_plugin_settings' );
-		delete_site_transient( 'editoria11y_settings' );
+			$sites = get_sites(
+				array(
+					'number'     => 10000,
+					'fields'     =>'ids',
+					'network_id' => get_current_network_id(),
+				)
+			);
+
+			foreach ( $sites as $siteid ) {
+
+				switch_to_blog( $siteid );
+
+				$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_dismissals" ); // phpcs:ignore
+				$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_results" ); // phpcs:ignore
+				$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_urls" ); // phpcs:ignore
+
+				delete_option( 'ed11y_plugin_settings' );
+				delete_option( 'editoria11y_db_version' );
+				delete_site_transient( 'editoria11y_settings' );
+
+				restore_current_blog();
+
+			}
+
+		} else {
+
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_dismissals" ); // phpcs:ignore
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_results" ); // phpcs:ignore
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ed11y_urls" ); // phpcs:ignore
+
+			delete_option( 'ed11y_plugin_settings' );
+			delete_option( 'editoria11y_db_version' );
+			delete_site_transient( 'editoria11y_settings' );
+
+		}
 
 	}
 
@@ -197,7 +342,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Manage DB tables.
 register_activation_hook( __FILE__, array( 'Editoria11y', 'activate' ) );
-
+register_deactivation_hook( __FILE__, array( 'Editoria11y', 'uninstall' ) );
 register_uninstall_hook( __FILE__, array( 'Editoria11y', 'uninstall' ) );
 
 new Editoria11y();

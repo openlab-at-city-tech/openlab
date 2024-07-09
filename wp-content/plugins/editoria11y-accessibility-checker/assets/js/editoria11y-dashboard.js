@@ -7,6 +7,9 @@ class Ed1 {
              * buildRequest assembles values into API call.
              */
     Ed1.params = function () {
+      // Custom test names
+      ed11yLang.en.emptyWpButton = {title: 'Empty Wordpress Button'};
+
       let queryString = window.location.search;
       let urlParams = new URLSearchParams(queryString);
       Ed1.url = '//' + window.location.host + window.location.pathname + '?';
@@ -21,26 +24,35 @@ class Ed1 {
       resultOffset = !isNaN(resultOffset) ? +resultOffset : 0;
       let pageOffset = urlParams.get('poff');
       pageOffset = !isNaN(pageOffset) ? +pageOffset : 0;
+      let recentOffset = urlParams.get('recentoff');
+      recentOffset = !isNaN(recentOffset) ? +recentOffset : 0;
 
       // Allow list for sorts.
       let validSorts = [
         'page_title',
         'page_total',
+        'result_count',
         'page_url',
         'entity_type',
         'created',
         'count',
         'result_key',
         'dismissal_status',
-        'display_name',
-        'stale'
+        //'display_name',
+        'stale',
+        'post_status',
+        'post_modified',
+        //'post_author',
       ];
       let resultSort = urlParams.get('rsort');
       resultSort = !!resultSort && validSorts.includes(resultSort) ? resultSort : 'count';
+
       let pageSort = urlParams.get('psort');
       pageSort = !!pageSort && validSorts.includes(pageSort) ? pageSort : 'page_total';
       let dismissSort = urlParams.get('dsort');
       dismissSort = !!dismissSort && validSorts.includes(dismissSort) ? dismissSort : 'created';
+      let recentSort = urlParams.get('recentsort');
+      recentSort = !!recentSort && validSorts.includes(recentSort) ? recentSort : 'created';
 
       // Validate sort direction
       let resultDir = urlParams.get('rdir');
@@ -49,6 +61,8 @@ class Ed1 {
       pageDir = pageDir === 'DESC' || pageDir === 'ASC' ? pageDir : 'DESC';
       let dismissDir = urlParams.get('ddir');
       dismissDir = dismissDir === 'DESC' || dismissDir === 'ASC' ? dismissDir : 'DESC';
+      let recentDir = urlParams.get('recentdir');
+      recentDir = recentDir === 'DESC' || recentDir === 'ASC' ? recentDir : 'DESC';
 
       // Test name to filter by; will be validated.
       Ed1.resultKey = urlParams.get('rkey');
@@ -56,8 +70,12 @@ class Ed1 {
 
       // Page type to filter by; will be validated.
       Ed1.type = urlParams.get('type');
+      Ed1.author = urlParams.get('author');
+      Ed1.dismissor = urlParams.get('dismissor');
 
-      Ed1.openDetails = !!Ed1.resultKey || !!Ed1.type;
+      Ed1.post_status = urlParams.get('post_status') || false;
+
+      Ed1.openDetails = !!Ed1.resultKey || !!Ed1.type || !!Ed1.author || !!Ed1.post_status;
 
       // Key arrays to be assembled into URLs on request.
       Ed1.requests = {};
@@ -70,6 +88,20 @@ class Ed1 {
         direction: pageDir,
         result_key: Ed1.resultKey,
         entity_type: Ed1.type,
+        post_status: Ed1.post_status,
+        author: Ed1.author,
+      };
+      Ed1.requests['ed1recent'] = {
+        base: 'dashboard',
+        view: 'recent',
+        count: 25,
+        offset: recentOffset,
+        sort: recentSort,
+        direction: recentDir,
+        result_key: Ed1.resultKey,
+        entity_type: Ed1.type,
+        post_status: Ed1.post_status,
+        author: Ed1.author,
       };
       Ed1.requests['ed1result'] = {
         base: 'dashboard',
@@ -80,6 +112,8 @@ class Ed1 {
         direction: resultDir,
         result_key: Ed1.resultKey,
         entity_type: Ed1.type,
+        post_status: Ed1.post_status,
+        author: Ed1.author,
       };
       Ed1.requests['ed1dismiss'] = {
         base: 'dismiss',
@@ -90,23 +124,37 @@ class Ed1 {
         direction: dismissDir,
         result_key: Ed1.resultKey,
         entity_type: Ed1.type,
+        post_status: Ed1.post_status,
+        author: Ed1.author,
+        dismissor: Ed1.dismissor,
       };
     };
 
     /**
-             * Assemble request array into API call.
-             * @param {*} request 
-             * @returns string 
-             */
+     * Make nicename for page status.
+     */
+    const prettyStatus = function( page_status ) {
+      if ( !page_status || page_status.length < 2) {
+        return page_status;
+      }
+      page_status = page_status[0].toUpperCase() + page_status.slice(1);
+      return page_status?.replace( 'Publish', 'Published' );
+    };
+
+    /**
+     * Assemble request array into API call.
+     * @param {*} request
+     * @returns string
+     */
     Ed1.buildRequest = function (request) {
       let q = Ed1.requests[request];
-      let req = `${q.base}?view=${q.view}&count=${q.count}&offset=${q.offset}&sort=${q.sort}&direction=${q.direction}&result_key=${q.result_key}&entity_type=${q.entity_type}&nocache=${Date.now()}`;
+      let req = `${q.base}?view=${q.view}&count=${q.count}&offset=${q.offset}&sort=${q.sort}&direction=${q.direction}&result_key=${q.result_key}&author=${q.author}&entity_type=${q.entity_type}&post_status=${q.post_status}&dismissor=${q.dismissor}&nocache=${Date.now()}`;
       return req;
     };
 
     /**
-             * Gather GET requests and make API calls.
-             */
+     * Gather GET requests and make API calls.
+     */
     Ed1.init = async function () {
       // Get results with default params
 
@@ -114,18 +162,27 @@ class Ed1 {
       Ed1.tables = {};
       Ed1.wrapper = document.getElementById('ed1');
       Ed1.wrapPage = Ed1.wrapper.querySelector('#ed1-page-wrapper');
+      Ed1.wrapRecent = Ed1.wrapper.querySelector('#ed1-recent-wrapper');
       Ed1.wrapResults = Ed1.wrapper.querySelector('#ed1-results-wrapper');
       Ed1.wrapDismiss = Ed1.wrapper.querySelector('#ed1-dismissals-wrapper');
       Ed1.render.tableHeaders();
 
       // Only build result table if there is no result or type filter.
-      if (!!Ed1.resultKey || !!Ed1.type) {
-        let h1 = Ed1.wrapper.querySelector('#ed1 h1');
+      if (!!Ed1.resultKey || !!Ed1.type || !!Ed1.post_status || !! Ed1.author || !! Ed1.dismissor ) {
+        Ed1.h1 = Ed1.wrapper.querySelector('#ed1 h1');
         let resetType = 'View all issues';
         if (Ed1.resultKey) {
-          h1.textContent = 'Issue report: "' + ed11yLang.en[Ed1.resultKey].title + '"';
-        } else {
-          h1.textContent = 'Issues on pages of type "' + Ed1.type + '"';
+          Ed1.h1.textContent = 'Issue report: "' + ed11yLang.en[Ed1.resultKey].title + '"';
+        } else if ( Ed1.type ) {
+          Ed1.h1.textContent = 'Issues on pages of type "' + Ed1.type + '"';
+          resetType = 'View issues on all pages';
+        } else if ( Ed1.author ) {
+          Ed1.h1.textContent = 'Issues on pages created by author';
+        } else if ( Ed1.dismissor ) {
+          Ed1.h1.textContent = 'Issues dismissed by';
+        }
+        else {
+          Ed1.h1.textContent = prettyStatus( Ed1.post_status ) + ' pages';
           resetType = 'View issues on all pages';
         }
         let reset = Ed1.render.a(resetType, false, Ed1.url);
@@ -134,19 +191,25 @@ class Ed1 {
         leftArrow.textContent = '< ';
         leftArrow.setAttribute('aria-hidden', 'true');
         reset.insertAdjacentElement('afterbegin', leftArrow);
-        h1.insertAdjacentElement('afterend', reset);
+        Ed1.h1.insertAdjacentElement('afterend', reset);
         Ed1.wrapResults.style.display = 'none';
       } else {
         // Possible todo: we could wait until the Details is open to do this.
         window.setTimeout(function () { Ed1.get.ed1result(Ed1.buildRequest('ed1result'), false); }, 500);
       }
 
+      let ed1Lag = Ed1.openDetails ? 0 : 500;
+
       // Always build page table.
-      Ed1.get.ed1page(Ed1.buildRequest('ed1page'), false);
+      if ( !Ed1.dismissor ) {
+        Ed1.get.ed1recent(Ed1.buildRequest('ed1recent'), false);
+        Ed1.get.ed1page(Ed1.buildRequest('ed1page'), false);
+      }
 
       // Possible todo: we could wait until the Details is open to do this.
-      let ed1Lag = Ed1.openDetails ? 0 : 500;
-      window.setTimeout(function () { Ed1.get.ed1dismiss(Ed1.buildRequest('ed1dismiss'), false); }, ed1Lag);
+      window.setTimeout(function () {
+        Ed1.get.ed1dismiss(Ed1.buildRequest('ed1dismiss'), false);
+        }, ed1Lag);
 
       // Show whatever is drawn after one second.
       window.setTimeout(function () { Ed1.show(); }, 500);
@@ -159,7 +222,13 @@ class Ed1 {
     };
 
     Ed1.show = function () {
+      if ( Ed1.dismissor ) {
+        Ed1.wrapRecent.setAttribute('hidden', '');
+        Ed1.wrapPage.setAttribute( 'hidden', '' );
+        Ed1.wrapDismiss.querySelector('details').setAttribute('open', '');
+      }
       Ed1.wrapper.classList.add('show');
+
     };
 
     Ed1.announce = function (string) {
@@ -176,11 +245,11 @@ class Ed1 {
     };
 
     /**
-             * 
+             *
              * Builder functions to quickly assemble HTML elements.
-             * @param {*} text 
-             * @param {*} hash 
-             * @param {*} sorted 
+             * @param {*} text
+             * @param {*} hash
+             * @param {*} sorted
              * @returns th
              */
     Ed1.render = {};
@@ -260,12 +329,12 @@ class Ed1 {
     };
     /**
              * Hat tip to https://webdesign.tutsplus.com/tutorials/pagination-with-vanilla-javascript--cms-41896
-             * @param {*} after 
-             * @param {*} rows 
-             * @param {*} perPage 
-             * @param {*} offset 
-             * @param {*} labelId 
-             * @returns 
+             * @param {*} after
+             * @param {*} rows
+             * @param {*} perPage
+             * @param {*} offset
+             * @param {*} labelId
+             * @returns
              */
     Ed1.render.pagination = function (after, rows, perPage, offset, labelId = false) {
       if (rows <= perPage) {
@@ -397,8 +466,10 @@ class Ed1 {
       head.insertAdjacentElement('beforeend', Ed1.render.th('Issues', 'page_total', 'DESC'));
       head.insertAdjacentElement('beforeend', Ed1.render.th('Page', 'page_title'));
       head.insertAdjacentElement('beforeend', Ed1.render.th('Path', 'page_url'));
-      head.insertAdjacentElement('beforeend', Ed1.render.th('Page type', 'entity_type'));
-      head.insertAdjacentElement('beforeend', Ed1.render.th('Detected', 'created'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Type', 'entity_type'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Status', 'post_status'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Updated', 'post_modified'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Author'));
       Ed1.tables['ed1page'].insertAdjacentElement('beforeend', head);
 
       loading.setAttribute('colspan', '6');
@@ -410,6 +481,32 @@ class Ed1 {
         el.addEventListener('click', function () {
           Ed1.reSort();
           Ed1.get.ed1page(Ed1.buildRequest('ed1page'));
+        });
+      });
+
+      // Recent table
+      Ed1.tables['ed1recent'] = document.createElement('table');
+      Ed1.tables['ed1recent'].setAttribute('id', 'ed1recent');
+
+      head = document.createElement('tr');
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Detected', 'detected', 'DESC'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Page', 'page_title'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Path', 'page_url'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Issue', 'result_key'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Count', 'result_count'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Type', 'entity_type'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Status', 'post_status'));
+      Ed1.tables['ed1recent'].insertAdjacentElement('beforeend', head);
+
+      loading.setAttribute('colspan', '6');
+      Ed1.tables['ed1recent'].append(loadWrap.cloneNode('deep'));
+      let recentDetails = Ed1.render.details('Recent issues', 'ed1page-title', true);
+      Ed1.wrapRecent.append(recentDetails);
+      recentDetails.append(Ed1.tables['ed1recent']);
+      Ed1.tables['ed1recent'].querySelectorAll('button').forEach((el) => {
+        el.addEventListener('click', function () {
+          Ed1.reSort();
+          Ed1.get.ed1recent(Ed1.buildRequest('ed1recent'));
         });
       });
 
@@ -438,12 +535,13 @@ class Ed1 {
       Ed1.tables['ed1dismiss'] = document.createElement('table');
       Ed1.tables['ed1dismiss'].setAttribute('id', 'ed1dismiss');
       head = document.createElement('tr');
-      head.insertAdjacentElement('beforeend', Ed1.render.th('Marked', 'dismissal_status'));
-      head.insertAdjacentElement('beforeend', Ed1.render.th('Page', 'page_title'));
-      head.insertAdjacentElement('beforeend', Ed1.render.th('Dismissed alert', 'result_key'));
-      head.insertAdjacentElement('beforeend', Ed1.render.th('By', 'display_name'));
       head.insertAdjacentElement('beforeend', Ed1.render.th('On', 'created', 'DESC'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Page', 'page_title'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Path', 'page_url'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Dismissed alert', 'result_key'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('Marked', 'dismissal_status'));
       head.insertAdjacentElement('beforeend', Ed1.render.th('Current', 'stale'));
+      head.insertAdjacentElement('beforeend', Ed1.render.th('By'));
       Ed1.tables['ed1dismiss'].insertAdjacentElement('beforeend', head);
 
       loading.setAttribute('colspan', '6');
@@ -464,11 +562,11 @@ class Ed1 {
     };
 
     /**
-             * Renderer for viewing results by test name.
-             * 
-             * @param {*} post 
-             * @param {*} count 
-             */
+     * Renderer for viewing results by test name.
+     *
+     * @param {*} post
+     * @param {*} count
+     */
     Ed1.render.ed1result = function (post, count, announce) {
 
       Ed1.tables['ed1result'].querySelectorAll('tr + tr').forEach(el => {
@@ -487,6 +585,7 @@ class Ed1 {
           row.insertAdjacentElement('beforeend', pageCount);
 
           let keyName = ed11yLang.en[result['result_key']] ? ed11yLang.en[result['result_key']].title : result['result_key'];
+
           // URL sanitized on build...
           let key = Ed1.render.td(keyName, false, Ed1.url + 'rkey=' + result['result_key'], false, 'rkey');
           row.insertAdjacentElement('beforeend', key);
@@ -509,12 +608,79 @@ class Ed1 {
 
     };
 
+    Ed1.authorList = {};
+    Ed1.matchAuthors = function( author_query ) {
+      author_query?.forEach( ( author ) => {
+        Ed1.authorList[author.ID] = author.display_name;
+      });
+    };
+
     /**
-             * Renderer for viewing results by page.
-             * 
-             * @param {*} post 
-             * @param {*} count 
-             */
+     * Renderer for viewing recent issues.
+     *
+     * @param {*} post
+     * @param {*} count
+     */
+    Ed1.render.ed1recent = function (post, count, announce) {
+
+      Ed1.tables['ed1recent'].querySelectorAll('tr + tr').forEach(el => {
+        el.remove();
+      });
+
+      if (post) {
+        if (!Ed1.wrapRecent.querySelector('nav')) {
+          Ed1.render.pagination('ed1recent', count, Ed1.requests['ed1recent']['count'], 0, 'ed1recent-title');
+        }
+
+        post.forEach((result) => {
+          let row = document.createElement('tr');
+
+          let cleanDate = result['created']?.split(' ')[0].replace(/[^\-0-9]/g, '');
+          let date = Ed1.render.td(cleanDate, false, '');
+          row.insertAdjacentElement('beforeend', date);
+
+          let pageLink = Ed1.render.td(result['page_title'], false, result['page_url'], result['pid']);
+          row.insertAdjacentElement('beforeend', pageLink);
+
+          let path = result['page_url'].replace(window.location.protocol + '//' + window.location.host, '');
+          path = Ed1.render.td( path ? path : '/' );
+          row.insertAdjacentElement('beforeend', path);
+
+          // need to sanitize URL in response?
+          let keyName = ed11yLang.en[result['result_key']].title;
+          let key = Ed1.render.td(keyName, false, Ed1.url + 'rkey=' + result['result_key'], false, 'rkey');
+          row.insertAdjacentElement('beforeend', key);
+
+          let pageCount = Ed1.render.td(result['result_count']);
+          row.insertAdjacentElement('beforeend', pageCount);
+
+          let type = Ed1.render.td(result['entity_type'], false, `${Ed1.url}type=${result['entity_type']}`);
+          row.insertAdjacentElement('beforeend', type);
+
+          let post_status = result['post_status'] ?
+              Ed1.render.td( prettyStatus( result['post_status'] ), false, `${Ed1.url}post_status=${result['post_status']}` )
+              : Ed1.render.td('Published', false, `${Ed1.url}post_status=publish`);
+          row.insertAdjacentElement('beforeend', post_status);
+
+
+          Ed1.tables['ed1recent'].insertAdjacentElement('beforeend', row);
+        });
+      }
+
+      if (announce) {
+        Ed1.announce(post.length + ' results');
+      }
+
+      Ed1.show();
+
+    };
+
+    /**
+     * Renderer for viewing results by page.
+     *
+     * @param {*} post
+     * @param {*} count
+     */
     Ed1.render.ed1page = function (post, count, announce) {
 
       Ed1.tables['ed1page'].querySelectorAll('tr + tr').forEach(el => {
@@ -536,18 +702,41 @@ class Ed1 {
           row.insertAdjacentElement('beforeend', pageLink);
 
           let path = result['page_url'].replace(window.location.protocol + '//' + window.location.host, '');
-          path = Ed1.render.td(path);
+          path = Ed1.render.td( path ? path : '/' );
           row.insertAdjacentElement('beforeend', path);
 
           let type = Ed1.render.td(result['entity_type'], false, `${Ed1.url}type=${result['entity_type']}`);
           row.insertAdjacentElement('beforeend', type);
 
-          let cleanDate = result['created'].split(' ')[0].replace(/[^\-0-9]/g, '');
+          let post_status = result['post_status'] ?
+              Ed1.render.td( prettyStatus( result['post_status'] ), false, `${Ed1.url}post_status=${result['post_status']}` )
+              : Ed1.render.td('Published', false, `${Ed1.url}post_status=publish`);
+          row.insertAdjacentElement('beforeend', post_status);
 
-          let date = Ed1.render.td(cleanDate, false, '');
+          let date = result['post_modified'] ?
+              Ed1.render.td( result['post_modified'].split(' ')[0].replace(/[^\-0-9]/g, '') )
+              : Ed1.render.td('n/a', false, false, false, 'muted' );
+
           row.insertAdjacentElement('beforeend', date);
 
+          if ( result['post_author'] ) {
+            row.insertAdjacentElement(
+                'beforeend',
+                Ed1.render.td(
+                    Ed1.authorList[ result['post_author'] ] || result['post_author'],
+                    false,
+                    `${Ed1.url}author=${result['post_author']}`,
+                ),
+            );
+          } else {
+            row.insertAdjacentElement(
+                'beforeend',
+                Ed1.render.td('n/a', false, false, false, 'muted'),
+            );
+          }
+
           Ed1.tables['ed1page'].insertAdjacentElement('beforeend', row);
+
         });
       }
 
@@ -560,10 +749,10 @@ class Ed1 {
     };
 
     /**
-             * Renderer for viewing dismissed alerts.
-             * @param {*} post 
-             * @param {*} count 
-             */
+     * Renderer for viewing dismissed alerts.
+     * @param {*} post
+     * @param {*} count
+     */
     Ed1.render.ed1dismiss = function (post, count, announce) {
 
       Ed1.tables['ed1dismiss'].querySelectorAll('tr + tr').forEach(el => {
@@ -582,28 +771,35 @@ class Ed1 {
           post.forEach((result) => {
             let row = document.createElement('tr');
 
-            let marked = Ed1.render.td(result['dismissal_status']);
-            row.insertAdjacentElement('beforeend', marked);
+            let cleanDate = result['created'].split(' ')[0].replace(/[^\-0-9]/g, '');
+            let on = Ed1.render.td(cleanDate);
+            row.insertAdjacentElement('beforeend', on);
 
             let pageLink = Ed1.render.td(result['page_title'], false, result['page_url'], result['pid']);
             row.insertAdjacentElement('beforeend', pageLink);
+
+            let path = result['page_url'].replace(window.location.protocol + '//' + window.location.host, '');
+            path = Ed1.render.td( path ? path : '/' );
+            row.insertAdjacentElement('beforeend', path);
 
             // need to sanitize URL in response?
             let keyName = ed11yLang.en[result['result_key']].title;
             let key = Ed1.render.td(keyName, false, Ed1.url + 'rkey=' + result['result_key'], false, 'rkey');
             row.insertAdjacentElement('beforeend', key);
 
-            let by = Ed1.render.td(result['display_name']);
-            row.insertAdjacentElement('beforeend', by);
+            let marked = Ed1.render.td(result['dismissal_status']);
+            row.insertAdjacentElement('beforeend', marked);
 
-            let cleanDate = result['created'].split(' ')[0].replace(/[^\-0-9]/g, '');
-
-            let on = Ed1.render.td(cleanDate);
-            row.insertAdjacentElement('beforeend', on);
-
-            // old 
+            // Still on page?
             let stale = Ed1.render.td(!result['stale'] ? 'No' : 'Yes');
             row.insertAdjacentElement('beforeend', stale);
+
+            let dismissor;
+            if ( Ed1.dismissor && !dismissor) {
+              Ed1.h1.textContent = 'Issues dismissed by ' + Ed1.authorList[ Ed1.dismissor ];
+            }
+            let by = Ed1.render.td( Ed1.authorList[ result['user'] ] || result['user'] , false, Ed1.url + 'dismissor=' + result['user']);
+            row.insertAdjacentElement('beforeend', by);
 
             Ed1.tables['ed1dismiss'].insertAdjacentElement('beforeend', row);
           });
@@ -642,7 +838,23 @@ class Ed1 {
         if (post?.data?.status === 500) {
           console.error(post.data.status + ': ' + post.message);
         } else {
+          Ed1.matchAuthors( post[2] );
+          if ( Ed1.author && Ed1.authorList[ Ed1.author ]) {
+            Ed1.h1.textContent = 'Issues on pages created by ' + Ed1.authorList[ Ed1.author ];
+          }
           Ed1.render.ed1page(post[0], post[1], announce);
+        }
+      });
+    };
+    Ed1.get.ed1recent = async function (action, announce = false) {
+      fetch(wpApiSettings.root + 'ed11y/v1/' + action, Ed1.api,
+      ).then(function (response) {
+        return response.json();
+      }).then(function (post) {
+        if (post?.data?.status === 500) {
+          console.error(post.data.status + ': ' + post.message);
+        } else {
+          Ed1.render.ed1recent(post[0], post[1], announce);
         }
       });
     };
@@ -666,11 +878,12 @@ class Ed1 {
         if (post?.data?.status === 500) {
           console.error(post.data.status + ': ' + post.message);
         } else {
+          Ed1.matchAuthors( post[2] );
           Ed1.render.ed1dismiss(post[0], post[1], announce);
         }
       });
     };
-	
+
 
     /**
 	 * User Interactions.

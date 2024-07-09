@@ -291,12 +291,12 @@ function ed11y_check_roots_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_checkRoots' );
 	$default  = ed11y_get_default_options( 'ed11y_checkRoots' );
 	?>
-	<input autocomplete="off" 
-		name="ed11y_plugin_settings[ed11y_checkRoots]" 
-		type="text" 
-		id="ed11y_checkRoots" 
+	<input autocomplete="off"
+		name="ed11y_plugin_settings[ed11y_checkRoots]"
+		type="text"
+		id="ed11y_checkRoots"
 		placeholder="<?php echo esc_attr( $default ); ?>"
-		value="<?php echo esc_attr( $settings ); ?>" 
+		value="<?php echo esc_attr( $settings ); ?>"
 		aria-describedby="target_description" />
 	<p id="target_description">
 		<?php
@@ -315,7 +315,6 @@ function ed11y_check_roots_field() {
 		<?php
 			echo wp_kses( __( 'The default is <code>main</code> or <code>body</code>, depending on theme.', 'editoria11y' ), ed11y_allowed_html() );
 		?>
-		</p>
 	</p>
 	<?php
 }
@@ -328,9 +327,9 @@ function ed11y_ignore_elements_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_ignore_elements' );
 	$default  = ed11y_get_default_options( 'ed11y_ignore_elements' );
 	?>
-	<textarea autocomplete="off" 
-	class="regular-text" id="ed11y_ignore_elements" 
-	aria-describedby="exclusions_description" 
+	<textarea autocomplete="off"
+	class="regular-text" id="ed11y_ignore_elements"
+	aria-describedby="exclusions_description"
 	name="ed11y_plugin_settings[ed11y_ignore_elements]"
 	rows="3" cols="45"><?php echo esc_attr( $settings ); ?></textarea>
 	<p id="exclusions_description">
@@ -345,8 +344,8 @@ function ed11y_ignore_elements_field() {
 		?>
 	</p>
 	<p>
-		If you are new at this, start by <a href="https://developer.chrome.com/docs/devtools/open/">opening 
-			your browser's developer tools</a>, inspecting the element you do not want flagged, 
+		If you are new at this, start by <a href="https://developer.chrome.com/docs/devtools/open/">opening
+			your browser's developer tools</a>, inspecting the element you do not want flagged,
 			and looking for unique-looking <a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics#different_types_of_selectors">CSS selectors</a>.
 	</p>
 	<p>Default: <code><?php echo esc_attr( $default ); ?></code></p>
@@ -360,8 +359,8 @@ function ed11y_video_content_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_videoContent' );
 	$default  = ed11y_get_default_options( 'ed11y_videoContent' );
 	?>
-	<textarea id="ed11y_videoContent" 
-		name="ed11y_plugin_settings[ed11y_videoContent]" 
+	<textarea id="ed11y_videoContent"
+		name="ed11y_plugin_settings[ed11y_videoContent]"
 		cols="45" rows="3"><?php echo esc_html( $settings ); ?></textarea>
 		<p>Default: <code><?php echo esc_attr( $default ); ?></code></p>
 	<?php
@@ -374,7 +373,7 @@ function ed11y_audio_content_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_audioContent' );
 	$default  = ed11y_get_default_options( 'ed11y_audioContent' );
 	?>
-	<textarea id="ed11y_audioContent" name="ed11y_plugin_settings[ed11y_audioContent]" 
+	<textarea id="ed11y_audioContent" name="ed11y_plugin_settings[ed11y_audioContent]"
 	cols="45" rows="3"><?php echo esc_html( $settings ); ?></textarea>
 	<p>Default: <code><?php echo esc_attr( $default ); ?></code></p>
 	<?php
@@ -387,11 +386,11 @@ function ed11y_document_content_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_documentContent' );
 	$default  = ed11y_get_default_options( 'ed11y_documentContent' );
 	?>
-	<textarea id="ed11y_documentContent" name="ed11y_plugin_settings[ed11y_documentContent]" 
+	<textarea id="ed11y_documentContent" name="ed11y_plugin_settings[ed11y_documentContent]"
 	cols="45" rows="3"
 	><?php echo esc_html( $settings ); ?></textarea>
 	<p>By default, Editoria11y will flag links to these document types: <code><?php echo esc_attr( $default ); ?></code></p>
-	<p>If you would like to override this to flag more or fewer document types, copy and paste that list into this field and adjust to your liking. 
+	<p>If you would like to override this to flag more or fewer document types, copy and paste that list into this field and adjust to your liking.
 		If you do not want any document links flagged, set this field to <code>false</code></p>
 	<?php
 }
@@ -403,7 +402,7 @@ function ed11y_dataviz_content_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_datavizContent' );
 	$default  = ed11y_get_default_options( 'ed11y_datavizContent' );
 	?>
-	<textarea id="ed11y_datavizContent" name="ed11y_plugin_settings[ed11y_datavizContent]" 
+	<textarea id="ed11y_datavizContent" name="ed11y_plugin_settings[ed11y_datavizContent]"
 	cols="45" rows="3"><?php echo esc_html( $settings ); ?></textarea>
 	<p>Default: <code><?php echo esc_attr( $default ); ?></code></p>
 	<?php
@@ -421,8 +420,8 @@ function ed11y_checkvisibility_field() {
 		<option <?php echo 'false' === $settings ? 'selected="true"' : ''; ?>value="false">Disable visibility checking</option>
 	</select>
 
-	<p id="checkvisibility-description">Set if your theme throws "this element may be hidden" alerts 
-		when using the next/previous buttons on the main panel. 
+	<p id="checkvisibility-description">Set if your theme throws "this element may be hidden" alerts
+		when using the next/previous buttons on the main panel.
 		See the main library documentation for <a href="https://editoria11y.princeton.edu/configuration/#js-events">JS events</a> and <a href="https://editoria11y.princeton.edu/configuration/#hidden-content">developer tips for revealing hidden content on demand</a>.</p>
 		<p><em>And please tell us if this happens with a common theme so we can add it to the defaults!</em></p>
 	<?php
@@ -435,13 +434,13 @@ function ed11y_link_ignore_strings_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_link_ignore_strings' );
 	$default  = ed11y_get_default_options( 'ed11y_link_ignore_strings' );
 	?>
-	   
-	<input autocomplete="off" class="regular-text" 
-	id="ed11y_link_ignore_strings" 
-	aria-describedby="link_description" 
-	type="text" 
-	name="ed11y_plugin_settings[ed11y_link_ignore_strings]" 
-	placeholder="<?php echo esc_attr( $default ); ?>" 
+
+	<input autocomplete="off" class="regular-text"
+	id="ed11y_link_ignore_strings"
+	aria-describedby="link_description"
+	type="text"
+	name="ed11y_plugin_settings[ed11y_link_ignore_strings]"
+	placeholder="<?php echo esc_attr( $default ); ?>"
 	value="<?php echo esc_attr( $settings ); ?>"/>
 	<p id="link_span_description">
 		<?php
@@ -458,11 +457,11 @@ function ed11y_custom_tests_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_custom_tests' );
 	$default  = ed11y_get_default_options( 'ed11y_custom_tests' );
 	?>
-	<input autocomplete="off" 
-	class="regular-text" id="ed11y_custom_tests" 
-	aria-describedby="ed11y_custom_tests_description" 
-	type="number" min="0" max="99" name="ed11y_plugin_settings[ed11y_custom_tests]" 
-	placeholder="<?php echo esc_attr( $default ); ?>" 
+	<input autocomplete="off"
+	class="regular-text" id="ed11y_custom_tests"
+	aria-describedby="ed11y_custom_tests_description"
+	type="number" min="0" max="99" name="ed11y_plugin_settings[ed11y_custom_tests]"
+	placeholder="<?php echo esc_attr( $default ); ?>"
 	value="<?php echo esc_attr( $settings ); ?>" pattern="[^<>\\\x27;|@&]+"/>
 	<p id="ed11y_custom_tests_description">
 		<?php
@@ -480,11 +479,11 @@ function ed11y_no_run_field() {
 	$settings = ed11y_get_plugin_settings( 'ed11y_no_run' );
 	$default  = ed11y_get_default_options( 'ed11y_no_run' );
 	?>
-	<input autocomplete="off" 
-	class="regular-text" id="ed11y_no_run" 
-	aria-describedby="ed11y_no_run_description" 
-	type="text" name="ed11y_plugin_settings[ed11y_no_run]" 
-	placeholder="<?php echo esc_attr( $default ); ?>" 
+	<input autocomplete="off"
+	class="regular-text" id="ed11y_no_run"
+	aria-describedby="ed11y_no_run_description"
+	type="text" name="ed11y_plugin_settings[ed11y_no_run]"
+	placeholder="<?php echo esc_attr( $default ); ?>"
 	value="<?php echo esc_attr( $settings ); ?>" pattern="[^<>\\\x27;|@&]+"/>
 	<p id="ed11y_no_run_description">
 		<?php
@@ -525,14 +524,14 @@ function ed11y_plugin_settings_render_page() {
 					<h2 class="postbox-heading">
 						Getting started
 					</h2>
-					<p>Editoria11y should work out of the box in most themes (view a 
-						<a href="https://jjameson.mycpanel.princeton.edu/editoria11y/">demo of the authoring experience</a>). 
+					<p>Editoria11y should work out of the box in most themes (view a
+						<a href="https://jjameson.mycpanel.princeton.edu/editoria11y/">demo of the authoring experience</a>).
 						<ol>
 							<li>If authors do not see the checker toggle, check your <a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console" class="ext" data-extlink="">browser console</a> for errors, and make sure the theme is not hiding <code>ed11y-element-panel</code>.</li>
 							<li>If the checker toggle is <strong>present</strong> but not finding much: make sure your content areas are listed in "Check content in these containers". It is not uncommon for themes to insert editable content outside the <code>main</code> element.</li></ol>
 					</p>
 
-						<h2 class="postbox-heading">Getting help</h3>
+						<h2 class="postbox-heading">Getting help</h2>
 						<ul>
 							<li><a href="https://wordpress.org/plugins/editoria11y-accessibility-checker/">Editoria11y WordPress Plugin Documentation</a></li>
 							<li>
@@ -654,14 +653,27 @@ function ed11y_plugin_settings_validate( $settings ) {
 
 /**
  * Render the plugin settings page.
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function editoria11y_dashboard() {
+
+	// Lazy-create DB if network activation failed.
+	if ( ! Editoria11y::check_tables() ) {
+		echo '<div class="notice notice-error notice-alt notice-large"><p><strong>Error:</strong> Editoria11y database tables are missing.</p>
+        <p>Try deactivating and reactivating the plugin to reset config and recreate the tables, or <a href="https://github.com/itmaybejj/editoria11y-wp/issues">post a bug report</a>  with the information from the WordPress, Server and Database sections on your <a href="' . esc_attr( get_admin_url() . 'site-health.php?tab=debug' ) . '">site health page</a>.</p></div>';
+		return false;
+	}
+
 	wp_enqueue_script( 'editoria11y-js', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js', array( 'wp-api' ), true, Editoria11y::ED11Y_VERSION, false );
 	wp_enqueue_script( 'editoria11y-js-dash', trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-dashboard.js', array( 'wp-api' ), true, Editoria11y::ED11Y_VERSION, false );
+	wp_enqueue_style( 'editoria11y-lib-css', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css', null, Editoria11y::ED11Y_VERSION );
 	wp_enqueue_style( 'editoria11y-css', trailingslashit( ED11Y_ASSETS ) . 'css/editoria11y-dashboard.css', null, Editoria11y::ED11Y_VERSION );
 	$nonce = wp_create_nonce( 'ed1ref' );
+
 	echo '<div id="ed1">
 			<h1>Editoria11y accessibility checker</h1>
+			<div id="ed1-recent-wrapper"></div>
 			<div id="ed1-page-wrapper"></div>
 			<div id="ed1-results-wrapper"></div>
 			<div id="ed1-dismissals-wrapper"></div>
@@ -702,6 +714,7 @@ function ed11y_test_nice_names() {
 	$tests['altLong']                     = __( 'Manual check: very long alternative text', 'editoria11y' );
 	$tests['altLongLinked']               = __( 'Manual check: very long alternative text in linked image', 'editoria11y' );
 	$tests['altPartOfLinkWithText']       = __( 'Manual check: link contains both text and an image', 'editoria11y' );
+	$tests['altMeaningless']              = __( 'Alt text is meaningless', 'editoria11y' );
 	$tests['linkNoText']                  = __( 'Link with no accessible text', 'editoria11y' );
 	$tests['linkTextIsURL']               = __( 'Manual check: is this link text a URL?', 'editoria11y' );
 	$tests['linkTextIsGeneric']           = __( 'Manual check: is this link meaningful and concise?', 'editoria11y' );
@@ -718,68 +731,124 @@ function ed11y_test_nice_names() {
 	$tests['embedVisualization']          = __( 'Manual check: is this visualization accessible?', 'editoria11y' );
 	$tests['embedTwitter']                = __( 'Manual check: is this embed a keyboard trap?', 'editoria11y' );
 	$tests['embedCustom']                 = __( 'Manual check: is this embedded content accessible?', 'editoria11y' );
+	$tests['emptyWpButton']               = __( 'Empty WordPress Button', 'editoria11y' );
 	return $tests;
 }
 
 /**
  * Returns a CSV download of site results.
+ *
+ * @SuppressWarnings(PHPMD.MissingImport)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function ed11y_export_results_csv() {
-	if ( isset( $_GET['ed11y_export_results_csv'] ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'ed1ref' ) ) { // phpcs:ignore
-		$setting    = ed11y_get_plugin_settings( 'ed11y_report_restrict' );
-		$capability = '1' === $setting ? 'manage_options' : 'edit_others_posts';
-		if ( ! current_user_can( $capability ) ) {
-			return;
-		}
-		$test_name = ed11y_test_nice_names();
 
-		header( 'Content-type: text/csv' );
-		header( 'Content-Disposition: attachment; filename="wp-posts.csv"' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
-
-		$file = fopen( 'php://output', 'w' );
-
-		global $wpdb;
-		$utable = $wpdb->prefix . 'ed11y_urls';
-		$rtable = $wpdb->prefix . 'ed11y_results';
-
-		/*
-		Complex counts and joins required a direct DB call.
-		Variables are all validated or sanitized.
-		*/
-		// phpcs:disable
-		$data = $wpdb->get_results(
-			"SELECT
-				{$utable}.pid,
-				{$utable}.page_url,
-				{$utable}.page_title,
-				{$utable}.entity_type,
-				{$utable}.page_total,
-				SUM({$rtable}.result_count) AS count,
-				{$rtable}.result_key,
-			MAX({$rtable}.created) as created
-			FROM {$rtable}
-			INNER JOIN {$utable} ON {$rtable}.pid={$utable}.pid
-			GROUP BY {$utable}.pid,
-				{$utable}.page_url,
-				{$utable}.page_title,
-				{$utable}.entity_type,
-				{$utable}.page_total,
-				{$rtable}.created
-			ORDER BY count DESC;"
-		);
-		// phpcs:enable
-
-		fputcsv( $file, array( 'Count', 'Issue', 'URL', 'Page', 'Type', 'Detected on' ) );
-
-		foreach ( $data as $result ) {
-			fputcsv( $file, array( $result->count, $test_name[ $result->result_key ], $result->page_url, $result->page_title, $result->entity_type, $result->created ) );
-		}
-
-		exit();
-
+	$setting    = ed11y_get_plugin_settings( 'ed11y_report_restrict' );
+	$capability = '1' === $setting ? 'manage_options' : 'edit_others_posts';
+	if ( ! ( isset( $_GET['ed11y_export_results_csv'] ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'ed1ref' ) && current_user_can( $capability ) ) ) { // phpcs:ignore
+		// Incorrect referrer, nonce or user role.
+		return;
 	}
+
+	$test_name = ed11y_test_nice_names();
+
+	header( 'Content-type: text/csv' );
+	header( 'Content-Disposition: attachment; filename="Recent_accessibility_issues.csv"' );
+	header( 'Pragma: no-cache' );
+	header( 'Expires: 0' );
+
+	$file = fopen( 'php://output', 'w' );
+
+	global $wpdb;
+	$utable     = $wpdb->prefix . 'ed11y_urls';
+	$rtable     = $wpdb->prefix . 'ed11y_results';
+	$post_table = $wpdb->prefix . 'posts';
+
+	/*
+	Complex counts and joins required a direct DB call.
+	Variables are all validated or sanitized.
+	*/
+	// phpcs:disable
+	$data = $wpdb->get_results(
+		"SELECT
+		{$rtable}.result_key,
+		{$rtable}.result_count,
+		{$utable}.pid,
+		{$utable}.page_url,
+		{$utable}.page_title,
+		{$utable}.entity_type,
+		{$utable}.page_total,
+		{$utable}.post_id,
+		{$post_table}.post_author,
+		{$post_table}.post_status,
+		{$rtable}.created as created
+		FROM {$rtable}
+		LEFT JOIN {$utable} ON {$utable}.pid={$rtable}.pid
+		LEFT JOIN {$post_table} ON {$utable}.post_id={$post_table}.ID
+		ORDER BY page_url ASC;"
+	);
+
+	// Get user display names.
+	$user_ids = [];
+	foreach ( $data as $value ) {
+		if ( $value->post_author && !in_array($value->post_author, $user_ids ) )
+			$user_ids[] = $value->post_author;
+	}
+	$user_query = new WP_User_Query(
+		array(
+			'include' => $user_ids,
+			'fields'  => array(
+				'ID',
+				'display_name',
+			),
+		)
+	);
+	$users = $user_query->get_results();
+	$authors = [];
+	foreach ( $users as $value ) {
+		$authors[ $value->ID ] = $value->display_name;
+	}
+
+	// phpcs:enable
+
+	fputcsv(
+		$file,
+		array(
+			'Page',
+			'URL',
+			'Issue',
+			'Count',
+			'Author',
+			'Page Type',
+			'Detected on',
+			'Status',
+			'Edit',
+		)
+	);
+
+	$admin = get_admin_url();
+
+	foreach ( $data as $result ) {
+
+		fputcsv(
+			$file,
+			array(
+				$result->page_title,
+				$result->page_url,
+				$test_name[ $result->result_key ] ?? '',
+				$result->result_count,
+				$result->author ?? $authors[ $result->post_author ] ?? '',
+				$result->entity_type,
+				$result->created,
+				$result->post_status ?? 'publish',
+				0 < $result->post_status ?
+					$admin . 'post.php?post=' . $result->post_id . '&action=edit'
+					: $result->page_url,
+			)
+		);
+	}
+
+	exit(); // @SuppressWarnings(ExitExpression)
 }
 
 add_action( 'admin_init', 'ed11y_export_results_csv' );
