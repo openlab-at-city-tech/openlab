@@ -542,13 +542,16 @@
 
 			// All .panel except #panel-welcome.
 			var $panels = $( '.panel' ).not( '#panel-welcome' );
+			var $signUpActions = $( '#sign-up-actions' );
 
 			const showMetaboxes = $account_type_field.val().length > 0 && $('[name="account-description-approval"]:checked').val() === 'yes';
 
 			if ( showMetaboxes ) {
 				$panels.show();
+				$signUpActions.show();
 			} else {
 				$panels.hide();
+				$signUpActions.hide();
 			}
 		}
 

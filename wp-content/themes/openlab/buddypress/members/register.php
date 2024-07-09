@@ -320,14 +320,16 @@ $account_type_options = array_map(
 
 				<?php do_action( 'bp_before_registration_submit_buttons' ); ?>
 
-				<p class="sign-up-terms">
-					By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo esc_attr( home_url( 'about/terms-of-service' ) ); ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
-				</p>
+				<div id="sign-up-actions">
+					<p class="sign-up-terms">
+						By clicking "Complete Sign Up", I agree to the <a class="underline" href="<?php echo esc_attr( home_url( 'about/terms-of-service' ) ); ?>" target="_blank">OpenLab Terms of Use</a> and <a class="underline" href="http://cuny.edu/website/privacy.html" target="_blank">Privacy Policy</a>.
+					</p>
 
-				<p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
+					<p id="submitSrMessage" class="sr-only submit-alert" aria-live="polite"></p>
 
-				<div class="submit">
-					<input type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary btn-disabled" value="<?php esc_html_e( 'Please Complete Required Fields', 'buddypress' ); ?>" />
+					<div class="submit">
+						<input type="submit" name="signup_submit" id="signup_submit" class="btn btn-primary btn-disabled" value="<?php esc_html_e( 'Please Complete Required Fields', 'buddypress' ); ?>" />
+					</div>
 				</div>
 
 				<?php do_action( 'bp_after_registration_submit_buttons' ); ?>
