@@ -8,6 +8,8 @@
 /**
  * Renders the `core/archives` block on server.
  *
+ * @since 5.0.0
+ *
  * @see WP_Widget_Archives
  *
  * @param array $attributes The block attributes.
@@ -106,6 +108,8 @@ function gutenberg_render_block_core_archives( $attributes ) {
 
 /**
  * Register archives block.
+ *
+ * @since 5.0.0
  */
 function gutenberg_register_block_core_archives() {
 	register_block_type_from_metadata(

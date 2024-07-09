@@ -1,48 +1,46 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   autop: function() { return /* binding */ autop; },
-/* harmony export */   removep: function() { return /* binding */ removep; }
+/* harmony export */   autop: () => (/* binding */ autop),
+/* harmony export */   removep: () => (/* binding */ removep)
 /* harmony export */ });
 /**
  * The regular expression for an HTML element.
- *
- * @type {RegExp}
  */
 const htmlSplitRegex = (() => {
   /* eslint-disable no-multi-spaces */
@@ -97,9 +95,9 @@ const htmlSplitRegex = (() => {
 /**
  * Separate HTML elements and comments from the text.
  *
- * @param {string} input The text which has to be formatted.
+ * @param input The text which has to be formatted.
  *
- * @return {string[]} The formatted text.
+ * @return The formatted text.
  */
 function htmlSplit(input) {
   const parts = [];
@@ -110,7 +108,7 @@ function htmlSplit(input) {
     // If the `g` flag is omitted, `index` is included.
     // `htmlSplitRegex` does not have the `g` flag so we can assert it will have an index number.
     // Assert `match.index` is a number.
-    const index = /** @type {number} */match.index;
+    const index = match.index;
     parts.push(workingInput.slice(0, index));
     parts.push(match[0]);
     workingInput = workingInput.slice(index + match[0].length);
@@ -124,10 +122,10 @@ function htmlSplit(input) {
 /**
  * Replace characters or phrases within HTML elements only.
  *
- * @param {string}                haystack     The text which has to be formatted.
- * @param {Record<string,string>} replacePairs In the form {from: 'to', …}.
+ * @param haystack     The text which has to be formatted.
+ * @param replacePairs In the form {from: 'to', …}.
  *
- * @return {string} The formatted text.
+ * @return The formatted text.
  */
 function replaceInHtmlTags(haystack, replacePairs) {
   // Find all elements.
@@ -162,9 +160,9 @@ function replaceInHtmlTags(haystack, replacePairs) {
  * replace double line-breaks with HTML paragraph tags. The remaining line-
  * breaks after conversion become `<br />` tags, unless br is set to 'false'.
  *
- * @param {string}  text The text which has to be formatted.
- * @param {boolean} br   Optional. If set, will convert all remaining line-
- *                       breaks after paragraphing. Default true.
+ * @param text The text which has to be formatted.
+ * @param br   Optional. If set, will convert all remaining line-
+ *             breaks after paragraphing. Default true.
  *
  * @example
  *```js
@@ -172,7 +170,7 @@ function replaceInHtmlTags(haystack, replacePairs) {
  * autop( 'my text' ); // "<p>my text</p>"
  * ```
  *
- * @return {string} Text which has been converted into paragraph tags.
+ * @return Text which has been converted into paragraph tags.
  */
 function autop(text, br = true) {
   const preTags = [];
@@ -333,7 +331,7 @@ function autop(text, br = true) {
  * Replaces `<p>` tags with two line breaks except where the `<p>` has attributes.
  * Unifies whitespace. Indents `<li>`, `<dt>` and `<dd>` for better readability.
  *
- * @param {string} html The content from the editor.
+ * @param html The content from the editor.
  *
  * @example
  * ```js
@@ -341,13 +339,12 @@ function autop(text, br = true) {
  * removep( '<p>my text</p>' ); // "my text"
  * ```
  *
- * @return {string} The content with stripped paragraph tags.
+ * @return The content with stripped paragraph tags.
  */
 function removep(html) {
   const blocklist = 'blockquote|ul|ol|li|dl|dt|dd|table|thead|tbody|tfoot|tr|th|td|h[1-6]|fieldset|figure';
   const blocklist1 = blocklist + '|div|p';
   const blocklist2 = blocklist + '|pre';
-  /** @type {string[]} */
   const preserve = [];
   let preserveLinebreaks = false;
   let preserveBr = false;
@@ -458,8 +455,7 @@ function removep(html) {
   // Restore preserved tags.
   if (preserve.length) {
     html = html.replace(/<wp-preserve>/g, () => {
-      return (/** @type {string} */preserve.shift()
-      );
+      return preserve.shift();
     });
   }
   return html;

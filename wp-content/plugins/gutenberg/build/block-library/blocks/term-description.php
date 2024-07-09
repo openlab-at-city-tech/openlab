@@ -8,6 +8,8 @@
 /**
  * Renders the `core/term-description` block on the server.
  *
+ * @since 5.9.0
+ *
  * @param array $attributes Block attributes.
  *
  * @return string Returns the description of the current taxonomy term, if available
@@ -37,6 +39,8 @@ function gutenberg_render_block_core_term_description( $attributes ) {
 
 /**
  * Registers the `core/term-description` block on the server.
+ *
+ * @since 5.9.0
  */
 function gutenberg_register_block_core_term_description() {
 	register_block_type_from_metadata(

@@ -3,9 +3,9 @@
  * Plugin Name: Gutenberg
  * Plugin URI: https://github.com/WordPress/gutenberg
  * Description: Printing since 1440. This is the development plugin for the block editor, site editor, and other future WordPress core functionality.
- * Requires at least: 6.3
- * Requires PHP: 7.0
- * Version: 17.2.1
+ * Requires at least: 6.4
+ * Requires PHP: 7.2
+ * Version: 18.7.1
  * Author: Gutenberg Team
  * Text Domain: gutenberg
  *
@@ -13,8 +13,8 @@
  */
 
 ### BEGIN AUTO-GENERATED DEFINES
-define( 'GUTENBERG_VERSION', '17.2.1' );
-define( 'GUTENBERG_GIT_COMMIT', '7b176c948c4e9e7e51f5d5aec6731c1ba301e2c0' );
+define( 'GUTENBERG_VERSION', '18.7.1' );
+define( 'GUTENBERG_GIT_COMMIT', 'abddf2faab6fa9414dcc51000808e8be9af0d090' );
 ### END AUTO-GENERATED DEFINES
 
 gutenberg_pre_init();
@@ -48,6 +48,9 @@ function gutenberg_build_files_notice() {
  * Verify that we can initialize the Gutenberg editor , then load it.
  *
  * @since 1.5.0
+ *
+ * @global string $wp_version             The WordPress version string.
+ *
  */
 function gutenberg_pre_init() {
 	global $wp_version;

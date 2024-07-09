@@ -92,6 +92,8 @@ function gutenberg_block_core_comment_template_render_comments( $comments, $bloc
 /**
  * Renders the `core/comment-template` block on the server.
  *
+ * @since 6.0.0
+ *
  * @param array    $attributes Block attributes.
  * @param string   $content    Block default content.
  * @param WP_Block $block      Block instance.
@@ -136,6 +138,8 @@ function gutenberg_render_block_core_comment_template( $attributes, $content, $b
 
 /**
  * Registers the `core/comment-template` block on the server.
+ *
+ * @since 6.0.0
  */
 function gutenberg_register_block_core_comment_template() {
 	register_block_type_from_metadata(

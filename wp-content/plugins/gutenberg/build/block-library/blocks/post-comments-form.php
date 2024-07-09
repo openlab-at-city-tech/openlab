@@ -8,6 +8,8 @@
 /**
  * Renders the `core/post-comments-form` block on the server.
  *
+ * @since 6.0.0
+ *
  * @param array    $attributes Block attributes.
  * @param string   $content    Block default content.
  * @param WP_Block $block      Block instance.
@@ -54,6 +56,8 @@ function gutenberg_render_block_core_post_comments_form( $attributes, $content, 
 
 /**
  * Registers the `core/post-comments-form` block on the server.
+ *
+ * @since 6.0.0
  */
 function gutenberg_register_block_core_post_comments_form() {
 	register_block_type_from_metadata(
@@ -67,6 +71,8 @@ add_action( 'init', 'gutenberg_register_block_core_post_comments_form', 20 );
 
 /**
  * Use the button block classes for the form-submit button.
+ *
+ * @since 6.0.0
  *
  * @param array $fields The default comment form arguments.
  *

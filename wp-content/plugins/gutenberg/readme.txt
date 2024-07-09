@@ -1,11 +1,11 @@
 === Gutenberg ===
 Contributors: matveb, joen, karmatosed
-Tested up to: 6.4
-Stable tag: 17.2.1
+Tested up to: 6.5
+Stable tag: 18.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Gutenberg plugin provides editing, customization, and site building features to WordPress. This beta plugin allows you to test bleeding-edge features before they land in future WordPress releases.
+The Gutenberg plugin adds editing, customization, and site building to WordPress. Use it to test beta features before their official release.
 
 == Description ==
 
