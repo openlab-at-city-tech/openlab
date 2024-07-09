@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once( 'class-wp-oauth.php' );
+require_once 'class-wp-oauth.php';
 
 if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 
@@ -77,7 +77,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return access token endpoint.
 		 */
-		function access_token_url() {
+		protected function access_token_url() {
 			return 'https://api.twitter.com/oauth/access_token';
 		}
 
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return authentication endpoint.
 		 */
-		function authenticate_url() {
+		protected function authenticate_url() {
 			return 'https://api.twitter.com/oauth/authenticate';
 		}
 
@@ -95,7 +95,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return authorization endpoint.
 		 */
-		function authorize_url() {
+		protected function authorize_url() {
 			return 'https://api.twitter.com/oauth/authorize';
 		}
 
@@ -104,7 +104,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return request token ednpoint.
 		 */
-		function request_token_url() {
+		protected function request_token_url() {
 			return 'https://api.twitter.com/oauth/request_token';
 		}
 
@@ -113,7 +113,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return last query's http code response.
 		 */
-		function last_status_code() {
+		public function last_status_code() {
 			return $this->http_code;
 		}
 
@@ -122,7 +122,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return last query API call.
 		 */
-		function last_api_call() {
+		public function last_api_call() {
 			return $this->last_api_call;
 		}
 
@@ -134,7 +134,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 * @param string $wp_oauth_token Token.
 		 * @param string $wp_oauth_token_secret Token secret.
 		 */
-		function __construct( $consumer_key, $consumer_secret, $wp_oauth_token = null, $wp_oauth_token_secret = null ) {
+		public function __construct( $consumer_key, $consumer_secret, $wp_oauth_token = null, $wp_oauth_token_secret = null ) {
 			$this->sha1_method = new WPOAuthSignatureMethod_HMAC_SHA1();
 			$this->consumer    = new WPOAuthConsumer( $consumer_key, $consumer_secret );
 			if ( ! empty( $wp_oauth_token ) && ! empty( $wp_oauth_token_secret ) ) {
@@ -150,7 +150,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @returns a key/value array containing WPOAuth_token and WPOAuth_token_secret
 		 */
-		function get_request_token() {
+		public function get_request_token() {
 			$r           = $this->wp_oauth_request( $this->request_token_url() );
 			$token       = $this->wp_oauth_parse_response( $r );
 			$this->token = new WPOAuthConsumer( $token['WPOAuth_token'], $token['WPOAuth_token_secret'] );
@@ -165,7 +165,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return a key/value array
 		 */
-		function wp_oauth_parse_response( $response_string ) {
+		public function wp_oauth_parse_response( $response_string ) {
 			$r = array();
 			foreach ( explode( '&', $response_string ) as $param ) {
 				$pair = explode( '=', $param, 2 );
@@ -185,7 +185,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @returns a string
 		 */
-		function getauthorize_url( $token ) {
+		public function getauthorize_url( $token ) {
 			if ( is_array( $token ) ) {
 				$token = $token['WPOAuth_token'];
 			}
@@ -201,7 +201,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @returns a string
 		 */
-		function getauthenticate_url( $token ) {
+		public function getauthenticate_url( $token ) {
 			if ( is_array( $token ) ) {
 				$token = $token['WPOAuth_token'];
 			}
@@ -216,7 +216,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @returns array("WPOAuth_token" => the access token, "WPOAuth_token_secret" => the access secret)
 		 */
-		function get_access_token( $token = null ) {
+		public function get_access_token( $token = null ) {
 			$r           = $this->wp_oauth_request( $this->access_token_url() );
 			$token       = $this->wp_oauth_parse_response( $r );
 			$this->token = new WPOAuthConsumer( $token['WPOAuth_token'], $token['WPOAuth_token_secret'] );
@@ -232,7 +232,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return decoded response.
 		 */
-		function post( $url, $parameters = array() ) {
+		public function post( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'POST' );
 			if ( 'json' === $this->format && $this->decode_json ) {
 				return json_decode( $response );
@@ -249,7 +249,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return decoded response.
 		 */
-		function media( $url, $parameters = array() ) {
+		public function media( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'MEDIA' );
 			if ( 'json' === $this->format && $this->decode_json ) {
 				return json_decode( $response );
@@ -266,7 +266,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return decoded response.
 		 */
-		function get( $url, $parameters = array() ) {
+		public function get( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'GET' );
 			if ( 'json' === $this->format && $this->decode_json ) {
 				return json_decode( $response );
@@ -283,11 +283,11 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return boolean
 		 */
-		function handle_media_request( $url, $args = array() ) {
+		public function handle_media_request( $url, $args = array() ) {
 			// Load tmhOAuth for Media uploads only when needed: https://github.com/themattharris/tmhOAuth.
 			// It's not possible to upload media using WP_HTTP, so this needs to use cURL.
 			if ( ! class_exists( 'tmhOAuth' ) ) {
-				require_once( plugin_dir_path( __FILE__ ) . 'class-tmhoauth.php' );
+				require_once plugin_dir_path( __FILE__ ) . 'class-tmhoauth.php';
 			}
 			$auth = $args['auth'];
 			if ( ! $auth ) {
@@ -312,10 +312,17 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 			$media_id   = $args['media'];
 			$attachment = $args['attachment'];
 
-			/**
-			 * Add alt attributes to uploaded Twitter images.
-			 */
 			$alt_text = get_post_meta( $attachment, '_wp_attachment_image_alt', true );
+			/**
+			 * Add alt attributes to uploaded images.
+			 *
+			 * @hook wpt_uploaded_image_alt
+			 *
+			 * @param {string} $alt_text Text stored in media library as alt.
+			 * @param {int}    $attachment Attachment ID.
+			 *
+			 * @return {string}
+			 */
 			$alt_text = apply_filters( 'wpt_uploaded_image_alt', $alt_text, $attachment );
 			if ( '' !== $alt_text ) {
 				$image_alt = json_encode(
@@ -350,7 +357,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @return Request.
 		 */
-		function wp_oauth_request( $url, $args = array(), $method = null ) {
+		public function wp_oauth_request( $url, $args = array(), $method = null ) {
 			// Handle media requests using tmhOAuth library.
 			if ( 'MEDIA' === $method ) {
 				return $this->handle_media_request( $url, $args );

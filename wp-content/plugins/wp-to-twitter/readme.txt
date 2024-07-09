@@ -1,27 +1,30 @@
-=== XPoster - Share to Twitter/X from WordPress ===
+=== XPoster - Share to X and Mastodon ===
 Contributors: joedolson
 Donate link: https://xposterpro.com
-Tags: twitter, microblogging, bitly, yourls, redirect, shortener, post, links, social, sharing, media, tweet
+Tags: twitter, post, social, sharing, tweet
 Requires at least: 6.0
-Tested up to: 6.4
+Tested up to: 6.5
 Requires PHP: 7.4
 License: GPLv2 or later
 Text Domain: wp-to-twitter
-Stable tag: 4.1.2
+Stable tag: 4.2.4
 
 Posts to X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
 == Description ==
 
-= Post Tweets from WordPress to X.com. =
+= Post Updates from WordPress to X.com and Mastodon. =
+
+*New in version 4.2: Mastodon support.*
 
 XPoster, formerly known as WP to Twitter, is a time-saving tool for keeping your X.com accounts up to date with news and posts from your site.
 
-XPoster uses a customizable Tweet template for Tweets sent when updating or editing posts and pages or custom post types. You can customize your Tweet for each post, using custom template tags to generate the Tweet. 
+XPoster uses customizable status templates for updates sent when updating or editing posts, pages, or custom post types. You can customize your messages for each post, using custom template tags to generate the status update. 
 
 = Free Features =
 
-* Use post tags as X.com hashtags
+* Support for X.com and Mastodon.
+* Use post tags as hashtags
 * Use alternate URLs in place of post permalinks
 * Support for Google Analytics
 * Support for XMLRPC remote clients
@@ -29,18 +32,19 @@ XPoster uses a customizable Tweet template for Tweets sent when updating or edit
 * Rate limiting: make sure you don't exceed X.com's API rate limits. 
 
 = Premium Features in [XPoster Pro](https://xposterpro.com) =
-* Authors can set up their own X.com accounts in their profiles
-* Time delayed Tweeting
-* Scheduled Tweet management
-* Simultaneously Tweet to site and author X.com accounts
-* Preview and Tweet comments
-* Filter Tweets by taxonomy (categories, tags, or custom taxonomies)
+
+* Authors can set up their own accounts in their profiles
+* Time delayed status updates
+* Scheduled update management
+* Simultaneously post updates to site and author accounts
+* Preview and send status updates for comments
+* Filter updates by taxonomy (categories, tags, or custom taxonomies)
 * Upload images to X.com with alt attributes
 * Integrated X.com Card support
 * Support for Player Cards with integrated captions
-* Automatically schedule Tweets of old posts
+* Automatically schedule updates from old posts
 
-Want to stay up to date on XPoster? [Follow me on X.com!](https://twitter.com/joedolson)
+Want to stay up to date on XPoster? [Follow me on X.com!](https://twitter.com/joedolson) or [Follow me on Mastodon!](https://toot.io/@joedolson)
 
 = Translations =
 
@@ -53,6 +57,53 @@ Translating my plug-ins is always appreciated. Work on XPoster translations at <
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 4.2.4 =
+
+* Bug fix: Debugging timestamps saved as microtime but read as time.
+* Bug fix: Add selected shortener to debugging info.
+* Bug fix: Verify that last status is an array & return unrecognized error message if not identifiable.
+* Change: Add $get_url parameter to `wpt_shorten_url` to explicitly determine whether existing short URLs are fetched.
+* Feature: Status update template tag buttons in editor.
+
+= 4.2.3 =
+
+* Bug fix: Update deprecated JS.
+* Bug fix: Handle case if connection response is not valid JSON.
+* Bug fix: Minor improvements to CSS & JS.
+* Update tested to & copyrights.
+
+= 4.2.2 =
+
+* Bug fix: Last Tweet notice improperly called array. Props @mattyrob, @pyro-code01.
+* Bug fix: Only show upgrade notice if it's populated in the readme.
+* Change: Change scripts to register separately from enqueuing.
+* Change: Change Pro filters to a filter instead of a direct function call.
+* Tooling: Update to PHPCS 3.
+
+= 4.2.1 =
+
+* Bug fix: All notices used error class, regardless of actual status.
+* Bug fix: Add a notice when a request exception occurs.
+* Bug fix: Misnamed variable in Mastodon authentication process.
+* Mention Mastodon in plugin name.
+
+= 4.2.0 =
+
+* Add support for posting to Mastodon instances.
+* Bug fix: If category and category description not defined, PHP warning thrown.
+* Bug fix: Make tabbed navigation use a `nav` element for improved accessibility.
+* Bug fix: Media heading could show in meta box when no media options are enabled.
+* Bug fix: Should not show bearer token message on profile page if user settings not enabled.
+* Text changes: Change references to "Twitter" and "Tweet".
+* Docs: Improve and add some additional hook documentation.
+* 
+
+= 4.1.2 =
+
+* Bug fix: Checkbox marked as checked in plugin settings if parent array exists.
+* Bug fix: Fix PHP notice when link manager not enabled.
+* Change: Use wp_rand to generate random integer instead of mt_rand.
 
 = 4.1.1 =
 

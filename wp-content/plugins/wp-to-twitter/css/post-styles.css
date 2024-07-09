@@ -1,6 +1,6 @@
 #wp2t .jtw {
     position: relative;
-    padding-bottom: 1.4em;
+	padding-bottom: 1rem;
 }
 
 #wp2t .jtw textarea {
@@ -10,10 +10,10 @@
 
 #wp2t .counter {
     position: absolute;
-    right: 4%;
-    bottom: 2px;
+    right: 0;
+    bottom: 0;
     font-size: 1.1em;
-    font-weight: 700;
+    font-weight: 600;
     color: #666;
 }
 
@@ -57,11 +57,6 @@
 #wp2t code span {
     border-bottom: 1px dashed !important;
     cursor: pointer;
-}
-
-#wp2t .jtw {
-    margin-right: 33%;
-    width: 66.666666%;
 }
 
 #wp2t p.disabled {
@@ -188,30 +183,43 @@ button.time div {
 .wpt-options .tabs a.active {
     background: #fefefe;
 	color: #444;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 .wptab .inline-list {
 	display: flex;
 	flex-wrap: wrap;
+	gap: 2px;
+}
+
+.wptab .inline-list li {
+	margin: 0;
+}
+
+.wptab .inline-list li .button-secondary {
+	padding: 0 4px;
+	line-height: 1.82;
+	min-height: auto;
+}
+
+.wptab .inline-list button[aria-pressed="true"] {
+	border: 1px solid #6e6e6e;
+	color: #434343;
+	background-color: #e6e6e7;
 }
 
 .wpt_log, #wpt_set_tweet_time {
-	padding: .5em;
+	padding: .5rem 0;
 }
 
 #wpt_set_tweet_time {
-	background: #f6f6f6;
-	color: #333;
+	display: flex;
 }
 
-.tweet-buttons {
-	display: grid;
-	grid-template-columns: 48% 34% 18%;
-	column-gap: 2px;
-	padding: .75em 12px;
-	margin: -6px -14px 0;
-	background: #f3f3f3;
+.tweet-buttons .wpt-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 3px;
 }
 
 .wpt-wrap {
@@ -227,12 +235,6 @@ button.time div {
 .wpt-wrap button {
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
-}
-
-.wp-to-twitter .wpt-template {
-	margin: 0;
-	padding: .5em;
-	background: rgba( 0, 0, 0, .05 );
 }
 
 .toggle-btn-group {
@@ -271,7 +273,7 @@ button.time div {
 	outline: 1px solid #00a0d2;
 	text-decoration: none;
     cursor: text;
-	font-weight: 700;
+	font-weight: 600;
 	color: #fff;
 }
 
@@ -297,14 +299,14 @@ button.time div {
 
 .link-highlight {
 	text-align: center;
-	margin: 1rem;
+	margin: 2.5rem 1rem 1rem;
 }
 
 .link-highlight a {
 	padding: .5rem 1rem;
 	font-size: 1.2rem;
 	background: #555;
-	font-weight: 700;
+	font-weight: 600;
 	text-decoration: none;
 	color: #fff;
 	box-shadow: 3px 3px 0 #fcb000;

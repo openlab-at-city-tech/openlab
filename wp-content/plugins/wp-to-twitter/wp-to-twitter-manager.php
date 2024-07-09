@@ -27,13 +27,20 @@ function wpt_updated_settings() {
 	if ( ! wp_verify_nonce( $nonce, 'wp-to-twitter-nonce' ) ) {
 		wp_die( 'XPoster: Security check failed' );
 	}
+	// Connect to Twitter.
 	if ( isset( $_POST['oauth_settings'] ) ) {
 		$post          = map_deep( $_POST, 'sanitize_text_field' );
 		$oauth_message = wpt_update_oauth_settings( false, $post );
 	} else {
 		$oauth_message = '';
 	}
-
+	// Connect to Mastodon.
+	if ( isset( $_POST['mastodon_settings'] ) ) {
+		$post             = map_deep( $_POST, 'sanitize_text_field' );
+		$mastodon_message = wpt_update_mastodon_settings( false, $post );
+	} else {
+		$mastodon_message = '';
+	}
 	$message = '';
 
 	// notifications from oauth connection.
@@ -43,7 +50,7 @@ function wpt_updated_settings() {
 
 			print( '
 				<div id="message" class="updated fade">
-					<p>' . __( 'XPoster is now connected with X.com.', 'wp-to-twitter' ) . " <a href='$admin_url'>" . __( 'Configure your Tweet templates', 'wp-to-twitter' ) . '</a></p>
+					<p>' . __( 'XPoster is now connected with X.com.', 'wp-to-twitter' ) . " <a href='$admin_url'>" . __( 'Configure your status update templates', 'wp-to-twitter' ) . '</a></p>
 				</div>
 			' );
 		} elseif ( 'failed' === $oauth_message ) {
@@ -74,6 +81,43 @@ function wpt_updated_settings() {
 			print( '
 				<div id="message" class="error fade">
 					<p>' . __( 'OAuth Authentication response not understood.', 'wp-to-twitter' ) . '</p>
+				</div>
+			' );
+		}
+	}
+
+	// notifications from Mastodon connection.
+	if ( isset( $_POST['mastodon_settings'] ) ) {
+		if ( 'success' === $mastodon_message ) {
+			$admin_url = admin_url( 'admin.php?page=wp-tweets-pro?tab=basic' );
+
+			print( '
+				<div id="message" class="updated fade">
+					<p>' . __( 'XPoster is now connected to your Mastodon instance.', 'wp-to-twitter' ) . " <a href='$admin_url'>" . __( 'Configure your status update templates', 'wp-to-twitter' ) . '</a></p>
+				</div>
+			' );
+		} elseif ( 'failed' === $mastodon_message ) {
+			print( '
+				<div id="message" class="error fade">
+					<p>' . __( 'XPoster failed to connect with your Mastodon instance.', 'wp-to-twitter' ) . ' <strong>' . __( 'Error:', 'wp-to-twitter' ) . '</strong> ' . get_option( 'wpt_error' ) . '</p>
+				</div>
+			' );
+		} elseif ( 'cleared' === $mastodon_message ) {
+			print( '
+				<div id="message" class="updated fade">
+					<p>' . __( 'Mastodon authentication data cleared.', 'wp-to-twitter' ) . '</p>
+				</div>
+			' );
+		} elseif ( 'noconnection' === $mastodon_message ) {
+			print( '
+				<div id="message" class="error fade">
+					<p>' . __( 'Mastodon authentication Failed. XPoster was unable to complete a connection with those credentials.', 'wp-to-twitter' ) . '</p>
+				</div>
+			' );
+		} else {
+			print( '
+				<div id="message" class="error fade">
+					<p>' . __( 'Mastodon authentication response not understood.', 'wp-to-twitter' ) . '</p>
 				</div>
 			' );
 		}
@@ -191,12 +235,43 @@ function wpt_updated_settings() {
 
 	// Check whether the server has supported for needed functions.
 	if ( isset( $_POST['submit-type'] ) && 'check-support' === $_POST['submit-type'] ) {
-		$message = wpt_check_functions();
+		$service = ( isset( $_POST['mastodon'] ) ) ? 'mastodon' : 'xcom';
+		$message = wpt_check_functions( $service );
 	}
 
 	if ( $message ) {
 		echo '<div id="message" class="updated is-dismissible"><p>' . $message . '</p></div>';
 	}
+}
+
+/**
+ * Build array of post types eligible for XPoster to send updates for.
+ *
+ * @return array
+ */
+function wpt_possible_post_types() {
+	$post_types = get_post_types( array(), 'objects' );
+	$exclusions = array( 'wp_navigation', 'wp_block', 'attachment', 'nav_menu_item', 'revision' );
+	/**
+	 * Exclude post types from the list of available types to post to X.com.
+	 *
+	 * @hook wpt_exclude_post_types
+	 *
+	 * @param {array} $exclusions Array of post type name slugs to exclude.
+	 *
+	 * @return {array}
+	 */
+	$excluded = apply_filters( 'wpt_exclude_post_types', $exclusions );
+	$return   = array();
+	foreach ( $post_types as $type ) {
+		// If post type is both private & has no UI, don't show.
+		if ( false === $type->public && false === $type->show_ui || in_array( $type->name, $excluded, true ) ) {
+			continue;
+		}
+		$return[] = $type;
+	}
+
+	return $return;
 }
 
 /**
@@ -207,7 +282,7 @@ function wpt_update_settings() {
 	<div class="wrap" id="wp-to-twitter">
 	<?php
 	if ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) {
-		echo "<div class='updated notice'><p>" . __( 'XPoster is in staging mode. Tweets will be reported as if successfully sent to X.com but will not be sent.', 'wp-to-twitter' ) . '</p></div>';
+		echo "<div class='updated notice'><p>" . __( 'XPoster is in staging mode. Status updates will be reported as if successfully sent, but will not be posted.', 'wp-to-twitter' ) . '</p></div>';
 	}
 	wpt_updated_settings();
 	wpt_show_last_tweet();
@@ -217,7 +292,7 @@ function wpt_update_settings() {
 	<aside class="xposter-sales"><p class="link-highlight">
 		<?php
 			// Translators: URL to purchase.
-			printf( __( 'Why not try a license for XPoster Pro? <a href="%s">Buy Now</a>', 'wp-to-twitter' ), 'https://xposterpro.com/awesome/xposter-pro/' );
+			printf( __( 'Buy <strong>XPoster Pro</strong> &mdash; supercharge your social media! <a href="%s">Buy Now</a>', 'wp-to-twitter' ), 'https://xposterpro.com/awesome/xposter-pro/' );
 		?>
 		</p></aside>
 		<?php
@@ -227,9 +302,10 @@ function wpt_update_settings() {
 
 	<?php wpt_max_length(); ?>
 
-	<div class='nav-tab-wrapper'>
+	<nav class='nav-tab-wrapper' aria-labelledby="wpt-nav">
+		<h2 id="wpt-nav" class="screen-reader-text"><?php _e( 'XPoster Settings', 'wp-to-twitter' ); ?></h2>
 		<?php wpt_settings_tabs(); ?>
-	</div>
+	</nav>
 	<div id="wpt_settings_page" class="postbox-container jcd-wide">
 	<div class="metabox-holder">
 
@@ -239,6 +315,11 @@ function wpt_update_settings() {
 	if ( 'connection' === $current ) {
 		if ( function_exists( 'wtt_connect_oauth' ) ) {
 			wtt_connect_oauth();
+		}
+	}
+	if ( 'mastodon' === $current ) {
+		if ( function_exists( 'wtt_connect_mastodon' ) ) {
+			wtt_connect_mastodon();
 		}
 	}
 	if ( 'pro' === $current ) {
@@ -256,11 +337,11 @@ function wpt_update_settings() {
 							<h3><strong><?php _e( 'XPoster Pro', 'wp-to-twitter' ); ?></strong></h3>
 							<p class="xposter-highlight">WP to Twitter is now XPoster</p>
 							<p>
-								Are you wasting time switching between X.com and WordPress to promote your posts? Do you have to delete Tweets because you accidentally published a post? Do you want to be able to schedule your post to Tweet next week, directly from your post editor? XPoster Pro will help you out!
+								Are you wasting time switching between social media and WordPress to promote your posts? Do you have to delete updates because you accidentally published a post? Do you want to be able to schedule your post to send next week, directly from your post editor? XPoster Pro will help you out!
 							</p>
 							<h3>What will XPoster PRO do for you?</h3>
 							<p>
-								It takes the great Tweeting automation from XPoster and turns it up to eleven: publish to unique X accounts for each site author; schedule up to 3 re-posts of Tweets at an interval of your choice; and, with a delay between publishing and Tweeting, check your tweets before they’re shared with your followers.
+								It takes the great automation from XPoster and turns it up to eleven: publish to unique accounts for each site author; schedule up to 3 re-posts at an interval of your choice; and, with a delay between publishing and your status updates, check your status before it's shared with your followers.
 							</p>
 							<p class="link-highlight">
 								<a href="https://xposterpro.com/awesome/xposter-pro/">Upgrade to XPoster Pro</a>
@@ -289,31 +370,13 @@ function wpt_update_settings() {
 						echo apply_filters( 'wpt_tweet_length', '' );
 						echo apply_filters( 'wpt_auto_tweet', '' );
 						echo apply_filters( 'wpt_pick_shortener', '' );
-						$post_types   = get_post_types( array(), 'objects' );
+						$post_types   = wpt_possible_post_types();
 						$wpt_settings = get_option( 'wpt_post_types' );
 						$tabs         = "<ul class='tabs' role='tablist'>";
-						$exclusions   = array( 'wp_navigation', 'wp_block' );
-						/**
-						 * Exclude post types from the list of available types to post to X.com.
-						 *
-						 * @hook wpt_exclude_post_types
-						 *
-						 * @param {array} $exclusions Array of post type name slugs to exclude.
-						 *
-						 * @return {array}
-						 */
-						$excluded = apply_filters( 'wpt_exclude_post_types', $exclusions );
 						foreach ( $post_types as $type ) {
-							// If post type is both private & has no UI, don't show.
-							if ( false === $type->public && false === $type->show_ui || in_array( $type->name, $excluded, true ) ) {
-								continue;
-							}
-							$name = $type->labels->name;
-							$slug = $type->name;
-							if ( 'attachment' === $slug || 'nav_menu_item' === $slug || 'revision' === $slug ) {
-							} else {
-								$tabs .= "<li><a href='#wpt_$slug' role='tab' id='tab_wpt_$slug' aria-controls='wpt_$slug'>$name</a></li>";
-							}
+							$name  = $type->labels->name;
+							$slug  = $type->name;
+							$tabs .= "<li><a href='#wpt_$slug' role='tab' id='tab_wpt_$slug' aria-controls='wpt_$slug'>$name</a></li>";
 						}
 						if ( '1' === get_option( 'link_manager_enabled' ) || true === apply_filters( 'pre_option_link_manager_enabled', false ) ) {
 							$tabs .= "<li><a href='#wpt_links' id='tab_wpt_links' aria-controls='wpt_links'>" . __( 'Links', 'wp-to-twitter' ) . '</a></li>';
@@ -321,58 +384,51 @@ function wpt_update_settings() {
 						$tabs .= '</ul>';
 						echo $tabs;
 						foreach ( $post_types as $type ) {
-							if ( false === $type->public && false === $type->show_ui ) {
-								continue;
-							}
 							$name = $type->labels->name;
 							$slug = $type->name;
-							if ( 'attachment' === $slug || 'nav_menu_item' === $slug || 'revision' === $slug ) {
-								continue;
-							} else {
-								?>
-								<div class='wptab wpt_types wpt_<?php echo esc_attr( $slug ); ?>' aria-labelledby='tab_wpt_<?php echo esc_attr( $slug ); ?>' role="tabpanel" id='wpt_<?php echo esc_attr( $slug ); ?>'>
-								<fieldset>
-									<legend class="screen-reader-text"><?php _e( 'Tweet Templates', 'wp-to-twitter' ); ?></legend>
-									<p>
-										<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-update]" id="<?php echo esc_attr( $slug ); ?>-post-published-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-published-update' ); ?> />
-										<label for="<?php echo esc_attr( $slug ); ?>-post-published-update"><strong>
-										<?php
-										// Translators: post type.
-										printf( __( 'Update when %s are published', 'wp-to-twitter' ), $name );
-										?>
-										</strong></label>
-										<label for="<?php echo $slug; ?>-post-published-text"><br/>
-										<?php
-										// Translators: post type.
-										printf( __( 'Template for new %s', 'wp-to-twitter' ), $name );
-										?>
-										</label><br/>
-										<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-text]" id="<?php echo esc_attr( $slug ); ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
-									</p>
-									<p>
-										<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-update]" id="<?php echo esc_attr( $slug ); ?>-post-edited-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-edited-update' ); ?> />
-										<label for="<?php echo esc_attr( $slug ); ?>-post-edited-update"><strong>
-										<?php
-										// Translators: post type name.
-										printf( __( 'Update when %s are edited', 'wp-to-twitter' ), $name );
-										?>
-										</strong></label><br/><label for="<?php echo esc_attr( $slug ); ?>-post-edited-text">
-										<?php
-										// Translators: post type name.
-										printf( __( 'Template for %1$s edits', 'wp-to-twitter' ), $name );
-										?>
-										</label><br/>
-										<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-text]" id="<?php echo esc_attr( $slug ); ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
-									</p>
-								</fieldset>
-								<?php
-								if ( function_exists( 'wpt_list_terms' ) ) {
-									wpt_list_terms( $slug, $name );
-								}
-								?>
-								</div>
-								<?php
+							?>
+							<div class='wptab wpt_types wpt_<?php echo esc_attr( $slug ); ?>' aria-labelledby='tab_wpt_<?php echo esc_attr( $slug ); ?>' role="tabpanel" id='wpt_<?php echo esc_attr( $slug ); ?>'>
+							<fieldset>
+								<legend class="screen-reader-text"><?php _e( 'Status Templates', 'wp-to-twitter' ); ?></legend>
+								<p>
+									<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-update]" id="<?php echo esc_attr( $slug ); ?>-post-published-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-published-update' ); ?> />
+									<label for="<?php echo esc_attr( $slug ); ?>-post-published-update"><strong>
+									<?php
+									// Translators: post type.
+									printf( __( 'Update when %s are published', 'wp-to-twitter' ), $name );
+									?>
+									</strong></label>
+									<label for="<?php echo $slug; ?>-post-published-text"><br/>
+									<?php
+									// Translators: post type.
+									printf( __( 'Template for new %s', 'wp-to-twitter' ), $name );
+									?>
+									</label><br/>
+									<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-published-text]" id="<?php echo esc_attr( $slug ); ?>-post-published-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-published-text'] ) ) : ''; ?></textarea>
+								</p>
+								<p>
+									<input type="checkbox" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-update]" id="<?php echo esc_attr( $slug ); ?>-post-edited-update" value="1" <?php echo wpt_checkbox( 'wpt_post_types', $slug, 'post-edited-update' ); ?> />
+									<label for="<?php echo esc_attr( $slug ); ?>-post-edited-update"><strong>
+									<?php
+									// Translators: post type name.
+									printf( __( 'Update when %s are edited', 'wp-to-twitter' ), $name );
+									?>
+									</strong></label><br/><label for="<?php echo esc_attr( $slug ); ?>-post-edited-text">
+									<?php
+									// Translators: post type name.
+									printf( __( 'Template for %1$s edits', 'wp-to-twitter' ), $name );
+									?>
+									</label><br/>
+									<textarea class="wpt-template widefat" name="wpt_post_types[<?php echo esc_attr( $slug ); ?>][post-edited-text]" id="<?php echo esc_attr( $slug ); ?>-post-edited-text" cols="60" rows="3"><?php echo ( isset( $wpt_settings[ $slug ] ) ) ? esc_attr( stripslashes( $wpt_settings[ $slug ]['post-edited-text'] ) ) : ''; ?></textarea>
+								</p>
+							</fieldset>
+							<?php
+							if ( function_exists( 'wpt_list_terms' ) ) {
+								wpt_list_terms( $slug, $name );
 							}
+							?>
+							</div>
+							<?php
 						}
 						if ( '1' === get_option( 'link_manager_enabled' ) || true === apply_filters( 'pre_option_link_manager_enabled', false ) ) {
 							?>
@@ -402,7 +458,7 @@ function wpt_update_settings() {
 
 	<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h3><span><?php _e( 'Tweet Template Tags', 'wp-to-twitter' ); ?></span></h3>
+				<h3><span><?php _e( 'Status Template Tags', 'wp-to-twitter' ); ?></span></h3>
 				<div class="inside">
 					<ul>
 						<li><?php _e( '<code>#title#</code>: the title of your blog post', 'wp-to-twitter' ); ?></li>
@@ -501,39 +557,33 @@ function wpt_update_settings() {
 						<fieldset>
 							<legend class='screen-reader-text'><?php _e( 'Template Settings', 'wp-to-twitter' ); ?></legend>
 							<p>
-								<label for="jd_post_excerpt"><?php _e( 'Post excerpt (#post#) in characters:', 'wp-to-twitter' ); ?></label>
-								<input type="text" name="jd_post_excerpt" id="jd_post_excerpt" size="3" maxlength="3" value="<?php echo( esc_attr( get_option( 'jd_post_excerpt' ) ) ); ?>"/>
+								<label for="jd_post_excerpt"><?php _e( 'Post excerpt length in characters', 'wp-to-twitter' ); ?></label><br />
+								<input type="text" name="jd_post_excerpt" id="jd_post_excerpt" size="3" maxlength="3" value="<?php echo( esc_attr( get_option( 'jd_post_excerpt' ) ) ); ?>" />
 							</p>
 							<?php
 							if ( '' === get_option( 'jd_date_format', '' ) ) {
-								$format = ( esc_attr( stripslashes( get_option( 'date_format' ) ) ) );
+								$format = stripslashes( get_option( 'date_format' ) );
 							} else {
-								$format = ( esc_attr( get_option( 'jd_date_format' ) ) );
+								$format = get_option( 'jd_date_format' );
 							}
 							?>
 							<p>
-								<label for="jd_date_format"><?php _e( 'Date Format (#date#):', 'wp-to-twitter' ); ?></label>
-								<input type="text" aria-describedby="date_format_label" name="jd_date_format" id="jd_date_format" size="12" maxlength="12" value="<?php echo trim( $format ); ?>" />
-								<?php
-								if ( '' !== get_option( 'jd_date_format', '' ) ) {
-									echo date_i18n( get_option( 'jd_date_format' ) );
-								} else {
-									echo '<em>' . date_i18n( get_option( 'date_format' ) ) . '</em>';
-								}
-								?>
-								(<em id="date_format_label"><a href='https://wordpress.org/support/article/formatting-date-and-time/'><?php _e( 'Date Formatting', 'wp-to-twitter' ); ?></a></em>)
+								<label for="jd_date_format"><?php _e( 'Date Format:', 'wp-to-twitter' ); ?></label><br />
+								<input type="text" aria-describedby="date_format_label" name="jd_date_format" id="jd_date_format" size="12" maxlength="12" value="<?php echo trim( esc_attr( $format ) ); ?>" />
+								<span id="date_format_label"><?php _e( 'Currently:', 'wp-to-twitter' ); ?> <?php echo date_i18n( $format ); ?> <a href='https://wordpress.org/support/article/formatting-date-and-time/'><?php _e( 'Date Formatting', 'wp-to-twitter' ); ?></a>
+								</span>
 							</p>
 
 							<p>
-								<label for="jd_twit_prepend"><?php _e( 'Custom text before Tweets:', 'wp-to-twitter' ); ?></label>
+								<label for="jd_twit_prepend"><?php _e( 'Custom text before status:', 'wp-to-twitter' ); ?></label><br />
 								<input type="text" name="jd_twit_prepend" id="jd_twit_prepend" size="20" value="<?php echo esc_attr( stripslashes( get_option( 'jd_twit_prepend' ) ) ); ?>"/>
 							</p>
 							<p>
-								<label for="jd_twit_append"><?php _e( 'Custom text after Tweets:', 'wp-to-twitter' ); ?></label>
+								<label for="jd_twit_append"><?php _e( 'Custom text after status:', 'wp-to-twitter' ); ?></label><br />
 								<input type="text" name="jd_twit_append" id="jd_twit_append" size="20" value="<?php echo esc_attr( stripslashes( get_option( 'jd_twit_append' ) ) ); ?>"/>
 							</p>
 							<p>
-								<label for="jd_twit_custom_url"><?php _e( 'Custom field for alternate post URL:', 'wp-to-twitter' ); ?></label>
+								<label for="jd_twit_custom_url"><?php _e( 'Custom field for alternate post URL:', 'wp-to-twitter' ); ?></label><br />
 								<input type="text" name="jd_twit_custom_url" id="jd_twit_custom_url" size="30" maxlength="120" value="<?php echo esc_attr( stripslashes( get_option( 'jd_twit_custom_url' ) ) ); ?>"/>
 							</p>
 						</fieldset>
@@ -542,18 +592,18 @@ function wpt_update_settings() {
 			</div>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
-					<h3><span><?php _e( 'Special Cases', 'wp-to-twitter' ); ?></span></h3>
+					<h3><span><?php _e( 'Status update controls', 'wp-to-twitter' ); ?></span></h3>
 					<div class="inside">
 						<fieldset>
 							<legend id="special_cases" class='screen-reader-text'><?php _e( 'Special Cases', 'wp-to-twitter' ); ?></legend>
 							<ul>
 								<li>
 									<input type="checkbox" name="jd_tweet_default" id="jd_tweet_default" value="1" <?php echo wpt_checkbox( 'jd_tweet_default' ); ?> />
-									<label for="jd_tweet_default"><?php _e( 'Do not post Tweets by default', 'wp-to-twitter' ); ?></label>
+									<label for="jd_tweet_default"><?php _e( 'Do not post statuses by default', 'wp-to-twitter' ); ?></label>
 								</li>
 								<li>
 									<input type="checkbox" name="jd_tweet_default_edit" id="jd_tweet_default_edit" value="1" <?php echo wpt_checkbox( 'jd_tweet_default_edit' ); ?> />
-									<label for="jd_tweet_default_edit"><?php _e( 'Do not post Tweets by default (editing only)', 'wp-to-twitter' ); ?></label>
+									<label for="jd_tweet_default_edit"><?php _e( 'Do not post statuses by default when editing', 'wp-to-twitter' ); ?></label>
 								</li>
 								<li>
 									<input type="checkbox" name="wpt_inline_edits" id="wpt_inline_edits" value="1" <?php echo wpt_checkbox( 'wpt_inline_edits' ); ?> />
@@ -618,11 +668,11 @@ function wpt_update_settings() {
 								global $wp_roles;
 								$roles          = $wp_roles->get_names();
 								$caps           = array(
-									'wpt_can_tweet'      => __( 'Can send Tweets', 'wp-to-twitter' ),
-									'wpt_twitter_custom' => __( 'See Custom Tweet Field when creating a Post', 'wp-to-twitter' ),
-									'wpt_twitter_switch' => __( 'Toggle the Tweet/Don\'t Tweet option', 'wp-to-twitter' ),
-									'wpt_tweet_now'      => __( 'Can see Tweet Now button', 'wp-to-twitter' ),
-									'wpt_twitter_oauth'  => __( 'Allow user to authenticate with X.com', 'wp-to-twitter' ),
+									'wpt_can_tweet'      => __( 'Can send Status updates', 'wp-to-twitter' ),
+									'wpt_twitter_custom' => __( 'See Custom Status Update Field when creating a Post', 'wp-to-twitter' ),
+									'wpt_twitter_switch' => __( 'Toggle the Update/Don\'t Update option', 'wp-to-twitter' ),
+									'wpt_tweet_now'      => __( 'Can see Update Now button', 'wp-to-twitter' ),
+									'wpt_twitter_oauth'  => __( 'Allow user to authenticate with services', 'wp-to-twitter' ),
 								);
 								$role_tabs      = '';
 								$role_container = '';
@@ -650,26 +700,30 @@ function wpt_update_settings() {
 					</div>
 				</div>
 			</div>
+			<?php
+			$default_order   = array(
+				'excerpt'  => 0,
+				'title'    => 1,
+				'date'     => 2,
+				'category' => 3,
+				'blogname' => 4,
+				'author'   => 5,
+				'account'  => 6,
+				'tags'     => 7,
+				'modified' => 8,
+				'@'        => 9,
+				'cat_desc' => 10,
+			);
+			$preferred_order = get_option( 'wpt_truncation_order', false );
+			$preferred_order = map_deep( $preferred_order, 'absint' );
+			if ( $preferred_order && $preferred_order !== $default_order ) {
+				?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h3><span><?php _e( 'Template tag priority order', 'wp-to-twitter' ); ?></span></h3>
 					<div class="inside">
 						<?php
-						$inputs          = '';
-						$default_order   = array(
-							'excerpt'  => 0,
-							'title'    => 1,
-							'date'     => 2,
-							'category' => 3,
-							'blogname' => 4,
-							'author'   => 5,
-							'account'  => 6,
-							'tags'     => 7,
-							'modified' => 8,
-							'@'        => 9,
-							'cat_desc' => 10,
-						);
-						$preferred_order = get_option( 'wpt_truncation_order' );
+						$inputs = '';
 						if ( ! $preferred_order ) {
 							$preferred_order = array();
 						}
@@ -693,7 +747,7 @@ function wpt_update_settings() {
 							<legend class='screen-reader-text'><?php _e( 'Template tag priority order', 'wp-to-twitter' ); ?></legend>
 							<p>
 							<?php
-							_e( 'The order in which items will be abbreviated or removed from your Tweet if the Tweet is too long to send to X.com.', 'wp-to-twitter' );
+							_e( 'The order in which items will be abbreviated or removed from your status if the status is too long to send.', 'wp-to-twitter' );
 							_e( 'Tags with lower values will be modified first.', 'wp-to-twitter' );
 							?>
 							</p>
@@ -704,6 +758,9 @@ function wpt_update_settings() {
 					</div>
 				</div>
 			</div>
+				<?php
+			}
+			?>
 			<div class="ui-sortable meta-box-sortables">
 				<div class="postbox">
 					<h3><span><?php _e( 'Miscellaneous Settings', 'wp-to-twitter' ); ?></span></h3>
@@ -772,21 +829,18 @@ function wpt_sidebar() {
 				}
 				?>
 				<div class="inside resources">
+					<?php
+					if ( 'free' === $context ) {
+						?>
 					<p class="link-highlight">
 						<a href="https://xposterpro.com/awesome/xposter-pro/">Buy XPoster Pro</a>
 					</p>
+						<?php
+					}
+					?>
 					<div>
 					<p>
-						<a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow @joedolson</a>
-						<script>!function (d, s, id) {
-								var js, fjs = d.getElementsByTagName(s)[0];
-								if (!d.getElementById(id)) {
-									js = d.createElement(s);
-									js.id = id;
-									js.src = "https://platform.twitter.com/widgets.js";
-									fjs.parentNode.insertBefore(js, fjs);
-								}
-							}(document, "script", "twitter-wjs");</script>
+						<a href="https://toot.io/@joedolson" class="mastodon-follow-button">Follow toot.io/@joedolson</a>
 					</p>
 					<?php
 					if ( 'premium' === $context ) {
@@ -819,20 +873,20 @@ function wpt_sidebar() {
 
 		<div class="ui-sortable meta-box-sortables">
 			<div class="postbox">
-				<h3><?php _e( 'Test XPoster', 'wp-to-twitter' ); ?></h3>
+				<h3><?php _e( 'Test Status Updates', 'wp-to-twitter' ); ?></h3>
 
 				<div class="inside test">
 				<p>
-				<?php _e( 'Check whether XPoster is set up for X.com and your URL Shortener. The test sends a status update to X.com and shortens a URL.', 'wp-to-twitter' ); ?>
+				<?php _e( 'Check whether XPoster is set up for your connected services and URL Shortener. The test sends a status update to each connected service and shortens a URL.', 'wp-to-twitter' ); ?>
 				</p>
 				<form method="post" action="">
-					<input type="hidden" name="submit-type" value="check-support"/>
+					<input type="hidden" name="submit-type" value="check-support" />
 					<?php
 					$nonce = wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, false ) . wp_referer_field( false );
 					echo "<div>$nonce</div>";
 					?>
 					<p>
-						<input type="submit" name="submit" value="<?php esc_attr_e( 'Test XPoster', 'wp-to-twitter' ); ?>" class="button-secondary" />
+						<input type="submit" name="status-update" value="<?php esc_attr_e( 'Test Updates', 'wp-to-twitter' ); ?>" class="button-secondary" />
 					</p>
 				</form>
 				</div>
@@ -928,7 +982,7 @@ function wpt_do_server_check( $test = false ) {
 
 add_filter( 'wpt_tweet_length', 'wpt_tweet_length' );
 /**
- * Add control to set maximum length for a Tweet.
+ * Add control to set maximum length for a status update.
  *
  * @return string HTML control.
  */
@@ -951,9 +1005,9 @@ function wpt_tweet_length() {
 	}
 	$tweet_length = intval( ( get_option( 'wpt_tweet_length' ) ) ? get_option( 'wpt_tweet_length' ) : $default );
 	$control      = "<p class='tweet_length_control'>
-					<label for='wpt_tweet_length'>" . __( 'Maximum Tweet Length', 'wp-to-twitter' ) . "</label>
+					<label for='wpt_tweet_length'>" . __( 'Maximum Status Length', 'wp-to-twitter' ) . "</label>
 					<input type='number' min='0' max='25000' step='1' value='$tweet_length' id='wpt_tweet_length' aria-describedby='maxlengthwarning' name='wpt_tweet_length' />
-					<span id='maxlengthwarning'>" . __( 'Tweets longer than 280 characters require an <a href="https://help.twitter.com/en/using-twitter/twitter-blue">X Premium</a> subscription.', 'wp-to-twitter' ) . '</span>
+					<span id='maxlengthwarning'>" . __( 'X.com Statuses longer than 280 characters require an <a href="https://help.twitter.com/en/using-x/x-premium">X Premium</a> subscription.', 'wp-to-twitter' ) . ' ' . __( 'Most Mastodon servers have a 500 character limit.', 'wp-to-twitter' ) . '</span>
 				</p>';
 
 	return $control;
@@ -961,7 +1015,7 @@ function wpt_tweet_length() {
 
 add_filter( 'wpt_settings', 'wpt_set_tweet_length' );
 /**
- * Set the maximum length for a Tweet.
+ * Set the maximum length for a status update.
  */
 function wpt_set_tweet_length() {
 	if ( isset( $_POST['wpt_tweet_length'] ) ) {
@@ -972,7 +1026,7 @@ function wpt_set_tweet_length() {
 
 add_filter( 'wpt_auto_tweet', 'wpt_auto_tweet' );
 /**
- * Add control to set maximum length for a Tweet.
+ * Add control to allow auto status updates on imported posts.
  *
  * @return string HTML control.
  */
@@ -980,7 +1034,7 @@ function wpt_auto_tweet() {
 	$allow   = ( '0' === get_option( 'wpt_auto_tweet_allowed', '0' ) ) ? false : true;
 	$note    = ( $allow ) ? '<strong id="auto_tweet_note">(' . __( 'When publishing manually, you will need to save drafts prior to publishing to support XPoster metabox options.', 'wp-to-twitter' ) . ')</strong>' : '';
 	$control = "<p class='wpt_auto_tweet_allowed'>
-					<input type='checkbox' value='1' " . checked( $allow, true, false ) . "id='wpt_auto_tweet_allowed' name='wpt_auto_tweet_allowed' aria-describedby='auto_tweet_note' /> <label for='wpt_auto_tweet_allowed'>" . __( 'Allow Tweets from Post Importers', 'wp-to-twitter' ) . "</label> $note
+					<input type='checkbox' value='1' " . checked( $allow, true, false ) . "id='wpt_auto_tweet_allowed' name='wpt_auto_tweet_allowed' aria-describedby='auto_tweet_note' /> <label for='wpt_auto_tweet_allowed'>" . __( 'Allow status updates from Post Importers', 'wp-to-twitter' ) . "</label> $note
 				</p>";
 
 	return $control;
@@ -988,7 +1042,7 @@ function wpt_auto_tweet() {
 
 add_filter( 'wpt_settings', 'wpt_set_auto_tweet_allowed' );
 /**
- * Set the automatic Tweet allowed parameter..
+ * Set the automatic status update allowed parameter..
  */
 function wpt_set_auto_tweet_allowed() {
 	if ( isset( $_POST['wpt_auto_tweet_allowed'] ) ) {

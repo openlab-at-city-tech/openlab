@@ -20,18 +20,18 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 	/**
 	 * Given a URL, shorten it.
 	 *
-	 * @param string               $url URL.
-	 * @param string               $post_title Post Title.
-	 * @param int                  $post_ID Post ID.
-	 * @param mixed string/boolean $testmode Testing function.
-	 * @param boolean              $store_urls Whether to store URL after creating.
+	 * @param string      $url URL.
+	 * @param string      $post_title Post Title.
+	 * @param int         $post_ID Post ID.
+	 * @param string|bool $testmode Testing function.
+	 * @param bool        $store_urls Whether to store URL after creating.
+	 * @param bool        $get_urls Whether to fetch a stored URL from the post.
 	 *
-	 * @return shortened URL.
+	 * @return string shortened URL.
 	 */
-	function wpt_shorten_url( $url, $post_title, $post_ID, $testmode = false, $store_urls = true ) {
-		wpt_mail( 'Shortener running: initial link', "Url: $url, Title: $post_title, Post ID: $post_ID, Test mode: $testmode", $post_ID ); // DEBUG.
-		// filter link before sending to shortener or adding analytics.
+	function wpt_shorten_url( $url, $post_title, $post_ID, $testmode = false, $store_urls = true, $get_urls = true ) {
 		$shortener = (string) get_option( 'jd_shortener' );
+		wpt_mail( 'Shortener running: initial link', "Url: $url, Title: $post_title, Post ID: $post_ID, Test mode: $testmode, Shortener: $shortener", $post_ID ); // DEBUG.
 		// if the URL already exists & a shortener is enabled, return it without processing.
 		if ( '3' === $shortener && wpt_short_url( $post_ID ) && $store_urls ) {
 			$shrink = wpt_short_url( $post_ID );
@@ -120,7 +120,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 				case 2: // updated to v3 3/31/2010.
 					// Bitly supported via https://wordpress.org/plugins/codehaveli-bitly-url-shortener/.
 					$bitlyurl = get_post_meta( $post_ID, '_wbitly_shorturl', true );
-					if ( ! empty( $bitlyurl ) ) {
+					if ( ! empty( $bitlyurl ) && $get_urls ) {
 						$shrink = $bitlyurl;
 					} else {
 						if ( function_exists( 'wbitly_generate_shorten_url' ) ) {
@@ -147,7 +147,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 					$opath = get_option( 'yourlspath' );
 					$ypath = str_replace( 'user', 'includes', $opath );
 					if ( file_exists( dirname( $ypath ) . '/load-yourls.php' ) ) { // YOURLS 1.4+.
-						require_once( dirname( $ypath ) . '/load-yourls.php' );
+						require_once dirname( $ypath ) . '/load-yourls.php';
 						global $ydb;
 						if ( function_exists( 'yourls_add_new_link' ) ) {
 							$yourls_result = yourls_add_new_link( $url, $keyword_format, $post_title );
@@ -255,7 +255,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 						$shrink = $url;
 					} else {
 						if ( class_exists( 'Hum' ) && method_exists( 'Hum', 'get_shortlink' ) ) {
-							$hum    = new Hum;
+							$hum    = new Hum();
 							$shrink = $hum->get_shortlink( $url, $post_ID, 'post', true );
 
 						} else {
@@ -297,7 +297,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 		$store_urls = apply_filters( 'wpt_store_urls', true, $post_ID, $url );
 		if ( function_exists( 'wpt_shorten_url' ) && $store_urls ) {
 			$shortener = get_option( 'jd_shortener' );
-			// Don't store URLs if the not shortening is selected.
+			// Don't store URLs if not shortening is selected.
 			if ( '3' === $shortener ) {
 				return;
 			}
@@ -357,7 +357,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 			define( 'YOURLS_FLOOD_DELAY_SECONDS', 0 ); // Disable flood check.
 			if ( file_exists( dirname( get_option( 'yourlspath' ) ) . '/load-yourls.php' ) ) { // YOURLS 1.4+.
 				global $ydb;
-				require_once( dirname( get_option( 'yourlspath' ) ) . '/load-yourls.php' );
+				require_once dirname( get_option( 'yourlspath' ) ) . '/load-yourls.php';
 				$yourls_result = yourls_api_expand( $short_url );
 			}
 			if ( $yourls_result ) {
@@ -640,7 +640,7 @@ if ( ! function_exists( 'wpt_shorten_url' ) ) {
 	 * Form to select your shortener.
 	 */
 	function wpt_pick_shortener() {
-		$shortener = (string) get_option( 'jd_shortener' );
+		$shortener = (string) get_option( 'jd_shortener', false );
 		if ( '2' === $shortener && ! function_exists( 'wbitly_shorten_url' ) ) {
 			$install_bitly = admin_url( 'plugin-install.php?s=codehaveli+bitly+url+shortener&tab=search&type=term' );
 			// Translators: search URL to find Bit.ly plug-in.
