@@ -4,7 +4,7 @@
     
     function to_plugin_options()
         {
-            $options = tto_get_settings();
+            $options = TTO_functions::get_settings();
             
             if (isset($_POST['to_form_submit']) &&  wp_verify_nonce($_POST['to_form_nonce'],'to_form_submit') )
                 {
@@ -24,7 +24,7 @@
                             
                                 <h2><?php _e( "General Settings", 'taxonomy-terms-order' ) ?></h2>
                                 
-                                <?php tto_info_box() ?>
+                                <?php TTO_functions::info_box() ?>
                                
                                 <form id="form_data" name="form" method="post">   
                                     <br />
