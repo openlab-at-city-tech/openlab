@@ -20,6 +20,10 @@
   height: 35px;
   width: 35px
 }
+.preview__placeholder__HI svg {
+  height: 30px;
+  width: 30px
+}
 .preview__placeholder__HI .components-placeholder__fieldset {
   /* stylelint-disable-line */
   text-align: center

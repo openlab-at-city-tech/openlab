@@ -643,7 +643,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers */ 976);
 /* harmony import */ var _preview_pcss__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./preview.pcss */ 820);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ 816);
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ 232);
 
 
 
@@ -657,6 +656,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+/**
+ * Same as the Dashicons `welcome-widgets-menus` icon but available inside
+ * iframe editors which don't enqueue the Dashicons font.
+ */
+const ICON = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 20 20",
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("rect", {
+    x: "0",
+    fill: "none",
+    width: "20",
+    height: "20"
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("g", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("path", {
+      d: "M19 16V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v13c0 .55.45 1 1 1h15c.55 0 1-.45 1-1zM4 4h13v4H4V4zm1 1v2h3V5H5zm4 0v2h3V5H9zm4 0v2h3V5h-3zm-8.5 5c.28 0 .5.22.5.5s-.22.5-.5.5-.5-.22-.5-.5.22-.5.5-.5zM6 10h4v1H6v-1zm6 0h5v5h-5v-5zm-7.5 2c.28 0 .5.22.5.5s-.22.5-.5.5-.5-.22-.5-.5.22-.5.5-.5zM6 12h4v1H6v-1zm7 0v2h3v-2h-3zm-8.5 2c.28 0 .5.22.5.5s-.22.5-.5.5-.5-.22-.5-.5.22-.5.5-.5zM6 14h4v1H6v-1z"
+    })
+  })]
+});
 
 /**
  * Sanitize a client id for use as an HTML id.
@@ -695,19 +713,19 @@ const getSidebarId = clientId => {
  */
 const Page = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
   className: _preview_pcss__WEBPACK_IMPORTED_MODULE_10__["default"].placeholder,
-  icon: 'welcome-widgets-menus',
+  icon: ICON,
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Advanced Sidebar - Pages', 'advanced-sidebar-menu'),
   instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('No preview available', 'advanced-sidebar-menu')
 });
 const Category = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
   className: _preview_pcss__WEBPACK_IMPORTED_MODULE_10__["default"].placeholder,
-  icon: 'welcome-widgets-menus',
+  icon: ICON,
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Advanced Sidebar - Categories', 'advanced-sidebar-menu'),
   instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('No preview available', 'advanced-sidebar-menu')
 });
 const Navigation = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
   className: _preview_pcss__WEBPACK_IMPORTED_MODULE_10__["default"].placeholder,
-  icon: 'welcome-widgets-menus',
+  icon: ICON,
   label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('Advanced Sidebar - Navigation', 'advanced-sidebar-menu'),
   instructions: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__.__)('No preview available', 'advanced-sidebar-menu')
 });
@@ -735,7 +753,7 @@ const placeholder = block => {
  * an action when the loading component is unmounted to allow
  * components to hook into when ServerSideRender has finished loading.
  *
- * @notice Using a constant to prevent reload on every content change.
+ * @notice Using a constant to prevent a reload on every content change.
  *
  */
 const TriggerWhenLoadingFinished = ({
@@ -749,7 +767,6 @@ const TriggerWhenLoadingFinished = ({
     return () => {
       // Give the preview a chance to load on WP 5.8.
       setTimeout(() => {
-        $('[data-preview="' + `${attributes.clientId}` + '"]').on('click', 'a', ev => ev.preventDefault());
         (0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_6__.doAction)('advanced-sidebar-menu.blocks.preview.loading-finished', {
           values: attributes,
           clientId: attributes.clientId
@@ -796,23 +813,32 @@ const Preview = ({
 
   // Prevent styles from doubling up as they are already added via render in PHP.
   delete blockProps.style;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
-    ...blockProps,
-    "data-preview": sanitizedClientId,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
-      EmptyResponsePlaceholder: placeholder(block),
-      LoadingResponsePlaceholder: TriggerWhenLoadingFinished,
-      attributes: {
-        ...attributes,
-        // Send custom attribute to determine server side renders.
-        isServerSideRenderRequest: true,
-        clientId: sanitizedClientId,
-        sidebarId: getSidebarId(clientId)
+  return (
+    /*#__PURE__*/
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      ...blockProps,
+      onClick: ev => {
+        const element = ev.target;
+        if ('A' === element.nodeName) {
+          ev.preventDefault();
+        }
       },
-      block: block,
-      httpMethod: 'POST'
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_2___default()), {
+        EmptyResponsePlaceholder: placeholder(block),
+        LoadingResponsePlaceholder: TriggerWhenLoadingFinished,
+        attributes: {
+          ...attributes,
+          // Send custom attribute to determine server side renders.
+          isServerSideRenderRequest: true,
+          clientId: sanitizedClientId,
+          sidebarId: getSidebarId(clientId)
+        },
+        block: block,
+        httpMethod: 'POST'
+      })
     })
-  });
+  );
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Preview);
 

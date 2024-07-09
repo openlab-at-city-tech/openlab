@@ -4,14 +4,31 @@ namespace Advanced_Sidebar_Menu\Menus;
 
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\List_Pages;
+use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
 
 /**
  * Page menu.
  *
  * @author OnPoint Plugins
+ *
+ * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ *
+ * @phpstan-type PAGE_SETTINGS array{
+ *      exclude: string,
+ *      order_by: 'menu_order'|'post_title'|'post_date',
+ *      title?: string,
+ *      display_all?: ''|'checked',
+ *      include_childless_parent?: ''|'checked',
+ *      include_parent?: ''|'checked',
+ *      levels?: numeric-string|int,
+ *      post_type?: string,
+ * }
+ *
+ * @extends Menu_Abstract<PAGE_SETTINGS>
+ * @implements Menu<PAGE_SETTINGS, Page>
  */
-class Page extends Menu_Abstract {
-	const WIDGET = 'page';
+class Page extends Menu_Abstract implements Menu {
+	public const WIDGET = 'page';
 
 	/**
 	 * The current post
@@ -19,6 +36,13 @@ class Page extends Menu_Abstract {
 	 * @var null|\WP_Post
 	 */
 	protected $post;
+
+	/**
+	 * Store current menu instance.
+	 *
+	 * @var ?Page
+	 */
+	protected static $current_menu;
 
 
 	/**
@@ -58,10 +82,12 @@ class Page extends Menu_Abstract {
 	/**
 	 * Get key to order the menu items by.
 	 *
+	 * @notice Must be a string because it is also used by `wp_list_pages`.
+	 *
 	 * @return string
 	 */
-	public function get_order_by() {
-		return apply_filters( 'advanced-sidebar-menu/menus/page/order-by', $this->instance[ static::ORDER_BY ], $this->get_current_post(), $this->args, $this->instance, $this );
+	public function get_order_by(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/page/order-by', $this->instance[ static::ORDER_BY ], $this->get_current_post(), $this->args, $this->instance, $this );
 	}
 
 
@@ -70,8 +96,8 @@ class Page extends Menu_Abstract {
 	 *
 	 * @return string
 	 */
-	public function get_order() {
-		return apply_filters( 'advanced-sidebar-menu/menus/page/order', 'ASC', $this->get_current_post(), $this->args, $this->instance, $this );
+	public function get_order(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/page/order', 'ASC', $this->get_current_post(), $this->args, $this->instance, $this );
 	}
 
 
@@ -83,7 +109,7 @@ class Page extends Menu_Abstract {
 	 *
 	 * @return int
 	 */
-	public function get_top_parent_id() {
+	public function get_top_parent_id(): int {
 		$top_id = - 1;
 		$post = $this->get_current_post();
 		if ( null !== $post ) {
@@ -95,7 +121,7 @@ class Page extends Menu_Abstract {
 			}
 		}
 
-		return apply_filters( 'advanced-sidebar-menu/menus/page/top-parent', $top_id, $this->args, $this->instance, $this );
+		return (int) apply_filters( 'advanced-sidebar-menu/menus/page/top-parent', $top_id, $this->args, $this->instance, $this );
 	}
 
 
@@ -126,6 +152,20 @@ class Page extends Menu_Abstract {
 
 
 	/**
+	 * Is this page excluded from this menu?
+	 *
+	 * @param int|string $id ID of the object.
+	 *
+	 * @return bool
+	 */
+	public function is_excluded( $id ): bool {
+		$excluded = \in_array( (int) $id, $this->get_excluded_ids(), true );
+
+		return (bool) apply_filters( 'advanced-sidebar-menu/menus/page/is-excluded', $excluded, $id, $this->get_widget_args(), $this->get_widget_instance(), $this );
+	}
+
+
+	/**
 	 * Do we have child pages at all on this menu?
 	 *
 	 * Return false if all we have is the top parent page
@@ -133,7 +173,7 @@ class Page extends Menu_Abstract {
 	 *
 	 * @return bool
 	 */
-	public function has_pages() {
+	public function has_pages(): bool {
 		$list_pages = List_Pages::factory( $this );
 		$children = $list_pages->get_child_pages( $this->get_top_parent_id(), true );
 
@@ -146,13 +186,13 @@ class Page extends Menu_Abstract {
 	 *
 	 * @return int
 	 */
-	public function get_levels_to_display() {
+	public function get_levels_to_display(): int {
 		$levels = 100;
 		if ( $this->display_all() ) {
 			// Subtract 1 level to account for the first level children.
-			$levels = $this->instance[ static::LEVELS ] - 1;
+			$levels = ( (int) $this->instance[ static::LEVELS ] ) - 1;
 		}
-		return apply_filters( 'advanced-sidebar-menu/menus/page/levels', $levels, $this->args, $this->instance, $this );
+		return (int) apply_filters( 'advanced-sidebar-menu/menus/page/levels', $levels, $this->args, $this->instance, $this );
 	}
 
 
@@ -161,8 +201,8 @@ class Page extends Menu_Abstract {
 	 *
 	 * @return string
 	 */
-	public function get_post_type() {
-		return apply_filters( 'advanced-sidebar-menu/menus/page/post-type', 'page', $this->args, $this->instance, $this );
+	public function get_post_type(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/page/post-type', 'page', $this->args, $this->instance, $this );
 	}
 
 
@@ -198,5 +238,34 @@ class Page extends Menu_Abstract {
 
 		echo $this->args['after_widget'];
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+
+	/**
+	 * Get current menu instance.
+	 *
+	 * @return Page|null
+	 */
+	public static function get_current() {
+		return static::$current_menu;
+	}
+
+
+	/**
+	 * Constructs a new instance of this class.
+	 *
+	 * @phpstan-param PAGE_SETTINGS $widget_instance
+	 * @phpstan-param WIDGET_ARGS   $widget_args
+	 *
+	 * @param array                 $widget_instance - Widget settings.
+	 * @param array                 $widget_args     - Widget registration args.
+	 *
+	 * @return Page
+	 */
+	public static function factory( array $widget_instance, array $widget_args ): Page {
+		$menu = new static( $widget_instance, $widget_args );
+		static::$current_menu = $menu;
+
+		return $menu;
 	}
 }

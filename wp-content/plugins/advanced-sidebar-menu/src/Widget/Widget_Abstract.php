@@ -7,32 +7,56 @@ use Advanced_Sidebar_Menu\Utils;
  * Base class for this plugin's widgets.
  *
  * @author OnPoint Plugins
+ * @phpstan-type WIDGET_ARGS array{
+ *      name?:          string,
+ *      id?:            string,
+ *      id_increment?:  string,
+ *      description?:   string,
+ *      class?:         string,
+ *      before_widget:  string,
+ *      after_widget:   string,
+ *      before_title:   string,
+ *      after_title:    string,
+ *      before_sidebar?:string,
+ *      after_sidebar?: string,
+ *      show_in_rest?:  boolean,
+ *      widget_id?:     string,
+ *      widget_name?:   string,
+ * }
+ *
+ * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
+ *
+ * @phpstan-method SETTINGS set_instance( SETTINGS $instance, array $defaults )
+ * @extends \WP_Widget<SETTINGS>
  */
 abstract class Widget_Abstract extends \WP_Widget {
 	/**
 	 * The current widget instance
 	 *
-	 * @var array
+	 * @var SETTINGS
 	 */
 	protected $widget_settings;
 
 
 	/**
-	 * Store the instance to this class.
-	 * We do this manually because filters hit the instance before we
-	 * get to self::form() and self::widget()
+	 * Support legacy method which has been moved to the Instance_Trait
+	 * while we wait for the required basic version to be 9.5.0.
 	 *
-	 * @see   \WP_Widget::form_callback()
+	 * @todo                     Remove this method once the required basic version is 9.5.0.
 	 *
-	 * @param array $instance - widget settings.
-	 * @param array $defaults - defaults for all widgets.
+	 * @param string                    $name      - Name of method.
+	 * @param array{SETTINGS, SETTINGS} $arguments - Arguments passed to method.
 	 *
-	 * @return array
+	 * @throws \BadMethodCallException -- If method does not exist.
+	 * @phpstan-ignore-next-line
 	 */
-	public function set_instance( array $instance, array $defaults ) {
-		$this->widget_settings = wp_parse_args( $instance, $defaults );
+	public function __call( string $name, array $arguments ): array {
+		if ( 'set_instance' === $name ) {
+			$this->widget_settings = wp_parse_args( $arguments[0], $arguments[1] );
 
-		return $this->widget_settings;
+			return $this->widget_settings;
+		}
+		throw new \BadMethodCallException( esc_html( 'Method ' . $name . ' does not exist' ) );
 	}
 
 
@@ -45,7 +69,7 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 *
 	 * @return bool
 	 */
-	public function checked( $name ) {
+	public function checked( $name ): bool {
 		return Utils::instance()->is_checked( $name, $this->widget_settings );
 	}
 
@@ -61,7 +85,7 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 *
 	 * @return void
 	 */
-	public function hide_element( $controlling_checkbox, $element_key = null, $reverse = false ) {
+	public function hide_element( $controlling_checkbox, $element_key = null, $reverse = false ): void {
 		$hide = false;
 		if ( ( $reverse && $this->checked( $controlling_checkbox ) ) || ( ! $reverse && ! $this->checked( $controlling_checkbox ) ) ) {
 			$hide = true;
@@ -90,9 +114,9 @@ abstract class Widget_Abstract extends \WP_Widget {
 	 *
 	 * @return void
 	 */
-	public function checkbox( $name, $element_to_reveal = null ) {
+	public function checkbox( $name, $element_to_reveal = null ): void {
 		if ( ! \array_key_exists( $name, $this->widget_settings ) ) {
-			$this->widget_settings[ $name ] = null;
+			$this->widget_settings[ $name ] = '';
 		}
 
 		?>

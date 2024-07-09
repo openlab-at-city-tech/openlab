@@ -15,11 +15,23 @@ use Advanced_Sidebar_Menu\Widget\Page;
  * variable including information about a page's widgets.
  *
  * @author OnPoint Plugins
+ *
+ * @phpstan-type DEBUG_INFO array{
+ *      basic: string,
+ *      classicWidgets: bool,
+ *      excludedCategories?: int[],
+ *      excluded_pages?: int[],
+ *      php: string,
+ *      pro: string|false,
+ *      scriptDebug: bool,
+ *      WordPress: string,
+ *      pro?: string
+ *  }
  */
 class Debug {
 	use Singleton;
 
-	const DEBUG_PARAM = 'asm_debug';
+	public const DEBUG_PARAM = 'asm_debug';
 
 
 	/**
@@ -32,7 +44,7 @@ class Debug {
 			add_action( 'advanced-sidebar-menu/widget/before-render', [ $this, 'print_instance' ], 1, 2 );
 
 			if ( \is_array( $_GET[ static::DEBUG_PARAM ] ) ) {
-				add_filter( 'advanced-sidebar-menu/menus/widget-instance', [ $this, 'adjust_widget_settings' ] );
+				add_filter( 'advanced-sidebar-menu/menus/widget-instance', [ $this, 'adjust_widget_settings' ], 100 );
 			}
 		}
 	}
@@ -61,6 +73,18 @@ class Debug {
 				unset( $overrides['post_type'] );
 			}
 		}
+		// Adjust global excluded categories.
+		if ( isset( $overrides['excludedCategories'] ) ) {
+			add_filter( 'advanced-sidebar-menu/meta/category-meta/excluded-term-ids', function() use ( $overrides ) {
+				return $overrides['excludedCategories'];
+			}, 100 );
+		}
+		// Adjust global excluded pages.
+		if ( isset( $overrides['excluded_pages'] ) ) {
+			add_filter( 'advanced-sidebar-menu/meta/page-meta/excluded-page-ids', function() use ( $overrides ) {
+				return $overrides['excluded_pages'];
+			}, 100 );
+		}
 
 		return wp_parse_args( $overrides, $instance );
 	}
@@ -78,17 +102,36 @@ class Debug {
 	 *
 	 * @since 9.0.2
 	 *
+	 * @phpstan-return array{
+	 *     basic: string,
+	 *     classicWidgets: bool,
+	 *     php: string,
+	 *     pro: string|false,
+	 *     scriptDebug: bool,
+	 *     WordPress: string,
+	 *     pro?: string
+	 * }
+	 *
 	 * @return array
 	 */
 	public function get_site_info(): array {
+		if ( ! \function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 		$data = [
 			'basic'          => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
 			'classicWidgets' => is_plugin_active( 'classic-widgets/classic-widgets.php' ),
 			'php'            => PHP_VERSION,
 			'pro'            => false,
 			'scriptDebug'    => Scripts::instance()->is_script_debug_enabled(),
-			'wordpress'      => get_bloginfo( 'version' ),
+			'WordPress'      => get_bloginfo( 'version' ),
 		];
+
+		$current_post = get_queried_object();
+		if ( $current_post instanceof \WP_Post ) {
+			$data['classicEditor'] = ! use_block_editor_for_post( $current_post );
+		}
+
 		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
 			$data['pro'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;
 		}
@@ -100,8 +143,8 @@ class Debug {
 	/**
 	 * Print the widget settings as a JS variable.
 	 *
-	 * @param Menu_Abstract $menu   - Menu class.
-	 * @param Page|Category $widget - Widget class.
+	 * @param Menu_Abstract<array<string,string>> $menu   - Menu class.
+	 * @param Page|Category                       $widget - Widget class.
 	 *
 	 * @return void
 	 */
@@ -113,7 +156,7 @@ class Debug {
 			<?php
 			echo esc_attr( static::DEBUG_PARAM );
 			?>
-			[ '<?php echo esc_js( $menu->args['widget_id'] ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
+			[ '<?php echo esc_js( $menu->args['widget_id'] ?? '' ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
 		</script>
 		<?php
 	}

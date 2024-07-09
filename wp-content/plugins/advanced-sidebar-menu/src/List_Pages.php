@@ -1,5 +1,4 @@
 <?php
-//phpcs:disable Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound -- Not a constructor.
 
 namespace Advanced_Sidebar_Menu;
 
@@ -49,21 +48,22 @@ class List_Pages {
 	protected $args = [];
 
 	/**
-	 * Used exclusively for caching
-	 * Holds the value of the latest parent we
-	 * retrieve children for so Cache can distinguish
-	 * between calls.
-	 *
-	 * @var int
-	 */
-	protected $current_children_parent = 0;
-
-	/**
 	 * Menu class
 	 *
 	 * @var Page
 	 */
 	protected $menu;
+
+	/**
+	 * Used exclusively to differentiate the cache based on changes
+	 * to internal properties.
+	 *
+	 * @var array{excluded: bool, parent: int}
+	 */
+	protected $cache = [
+		'excluded' => false,
+		'parent'   => 0,
+	];
 
 
 	/**
@@ -180,9 +180,21 @@ class List_Pages {
 	/**
 	 * Generate the arguments shared by `walk_page_tree` and `get_posts`.
 	 *
-	 * @return array
+	 * @return array{
+	 *    echo: int,
+	 *    exclude: string,
+	 *    item_spacing: 'preserve'|'discard',
+	 *    levels: int,
+	 *    order: 'ASC'|'DESC',
+	 *    orderby: string,
+	 *    post_type: string,
+	 *    posts_per_page: int,
+	 *    suppress_filters: bool,
+	 *    title_li: string,
+	 *    walker: Page_Walker
+	 * }
 	 */
-	protected function parse_args() {
+	protected function parse_args(): array {
 		$args = [
 			'echo'             => 0,
 			'exclude'          => $this->menu->get_excluded_ids(),
@@ -191,15 +203,16 @@ class List_Pages {
 			'order'            => $this->menu->get_order(),
 			'orderby'          => $this->menu->get_order_by(),
 			'post_type'        => $this->menu->get_post_type(),
-			// phpcs:ignore -- Several cases of menu items higher than 100.
+			// phpcs:ignore WordPress.WP.PostsPerPage -- Several cases of menu items higher than 100.
 			'posts_per_page'   => 200,
 			'suppress_filters' => false,
 			'title_li'         => '',
 			'walker'           => new Page_Walker(),
 		];
 
-		//phpcs:ignore -- Using WP core filter for `wp_list_pages` compatibility.
+		//phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- WP core filter for `wp_list_pages` compatibility.
 		$args['exclude'] = apply_filters( 'wp_list_pages_excludes', wp_parse_id_list( $args['exclude'] ) );
+		// Must be string when used with `wp_list_pages`.
 		$args['exclude'] = \implode( ',', $args['exclude'] );
 
 		return apply_filters( 'advanced-sidebar-menu/list-pages/parse-args', $args, $this );
@@ -233,14 +246,8 @@ class List_Pages {
 			$this->output .= '</li>' . "\n";
 		}
 
-		//phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-		$this->output = apply_filters( 'wp_list_pages', $this->output, $this->args, $pages );
-		if ( ! $this->args['echo'] ) {
-			return $this->output;
-		}
-
-		echo $this->output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		return '';
+		//phpcs:ignore WordPress.NamingConventions -- WP core filter for `wp_list_pages` compatibility.
+		return apply_filters( 'wp_list_pages', $this->output, $this->args, $pages );
 	}
 
 
@@ -287,22 +294,28 @@ class List_Pages {
 	 * @return \WP_Post[]
 	 */
 	public function get_child_pages( $parent_page_id, $is_first_level = false ): array {
-		// Holds a unique key so cache can distinguish calls.
-		$this->current_children_parent = $parent_page_id;
-
-		$cache = Cache::instance();
-		$child_pages = $cache->get_child_pages( $this );
+		$excluded = $this->menu->is_excluded( $parent_page_id ) || $this->menu->is_excluded( $this->top_parent_id );
+		$this->cache = [
+			'parent'   => $parent_page_id,
+			'excluded' => $excluded,
+		];
+		$child_pages = Cache::instance()->get_child_pages( $this );
 		if ( false === $child_pages ) {
-			$args = $this->args;
-			$args['post_parent'] = $parent_page_id;
-			$args['fields'] = 'ids';
-			$args['suppress_filters'] = false;
-			$child_pages = get_posts( $args );
-
-			$cache->add_child_pages( $this, $child_pages );
+			if ( $excluded ) {
+				$child_pages = [];
+			} else {
+				$args = $this->args;
+				$args['post_parent'] = $parent_page_id;
+				$args['fields'] = 'ids';
+				$args['suppress_filters'] = false;
+				$child_pages = get_posts( $args );
+			}
+			Cache::instance()->add_child_pages( $this, $child_pages );
 		}
 
-		$child_pages = \array_map( 'get_post', $child_pages );
+		$child_pages = \array_map( 'get_post', \array_filter( $child_pages, function( $post_id ) {
+			return ! $this->menu->is_excluded( $post_id );
+		} ) );
 
 		if ( $is_first_level ) {
 			return (array) apply_filters( 'advanced-sidebar-menu/list-pages/first-level-child-pages', $child_pages, $this, $this->menu );

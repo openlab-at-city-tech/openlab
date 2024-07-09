@@ -20,7 +20,32 @@ class Cache {
 	 * Actions.
 	 */
 	protected function hook(): void {
-		add_action( 'save_post', [ $this, 'clear_cache_group' ] );
+		add_action( 'save_post', [ $this, 'clear_on_post_save' ], 10, 2 );
+	}
+
+
+	/**
+	 * Clear all items in this cache group when a supported post type is saved.
+	 *
+	 * The basic version only supports the `page` post type, however filters could
+	 * be used to add additional post types, so we flush any hierarchical post type.
+	 *
+	 * @param int      $post_id - ID of the updated posts.
+	 * @param \WP_Post $post    - Full post object, so we can use the post_type.
+	 *
+	 * @return void
+	 */
+	public function clear_on_post_save( $post_id, \WP_Post $post ): void {
+		$types = \apply_filters( 'advanced-sidebar-menu/utils/supported-post-types', false, [ 'page' ] );
+		if ( false === $types ) {
+			$types = get_post_types( [
+				'hierarchical' => true,
+				'public'       => true,
+			] );
+		}
+		if ( \array_key_exists( $post->post_type, $types ) ) {
+			$this->clear_cache_group();
+		}
 	}
 
 

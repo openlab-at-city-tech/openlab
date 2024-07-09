@@ -2,39 +2,51 @@
 
 namespace Advanced_Sidebar_Menu\Menus;
 
+use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+
 /**
  * Base for Menu classes.
  *
  * @author OnPoint Plugins
+ *
+ * @phpstan-import-type PAGE_SETTINGS from Page
+ * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ *
+ * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
+ * @implements Menu<SETTINGS, self<SETTINGS>>
  */
-abstract class Menu_Abstract {
-	const WIDGET = 'menu-abstract';
+abstract class Menu_Abstract implements Menu {
+	public const WIDGET = 'menu-abstract';
 
 	// Options shared between menus.
-	const DISPLAY_ALL              = 'display_all';
-	const EXCLUDE                  = 'exclude';
-	const INCLUDE_CHILDLESS_PARENT = 'include_childless_parent';
-	const INCLUDE_PARENT           = 'include_parent';
-	const LEVELS                   = 'levels';
-	const ORDER                    = 'order';
-	const ORDER_BY                 = 'order_by';
-	const TITLE                    = 'title';
+	public const DISPLAY_ALL              = 'display_all';
+	public const EXCLUDE                  = 'exclude';
+	public const INCLUDE_CHILDLESS_PARENT = 'include_childless_parent';
+	public const INCLUDE_PARENT           = 'include_parent';
+	public const LEVELS                   = 'levels';
+	public const ORDER                    = 'order';
+	public const ORDER_BY                 = 'order_by';
+	public const TITLE                    = 'title';
 
 	// Possible level values.
-	const LEVEL_CHILD       = 'child';
-	const LEVEL_DISPLAY_ALL = 'display-all';
-	const LEVEL_GRANDCHILD  = 'grandchild';
-	const LEVEL_PARENT      = 'parent';
+	public const LEVEL_CHILD       = 'child';
+	public const LEVEL_DISPLAY_ALL = 'display-all';
+	public const LEVEL_GRANDCHILD  = 'grandchild';
+	public const LEVEL_PARENT      = 'parent';
 
 	/**
 	 * Widget Args
 	 *
+	 * @phpstan-var WIDGET_ARGS
+	 *
 	 * @var array
 	 */
-	public $args = [];
+	public $args;
 
 	/**
 	 * Widget instance
+	 *
+	 * @phpstan-var SETTINGS
 	 *
 	 * @var array
 	 */
@@ -53,65 +65,20 @@ abstract class Menu_Abstract {
 
 
 	/**
-	 * Construct a new instance of this widget.
+	 * Constructs a new instance of this widget.
+	 *
+	 * @phpstan-param SETTINGS    $instance
+	 * @phpstan-param WIDGET_ARGS $args
 	 *
 	 * @param array $instance - Widget settings.
 	 * @param array $args     - Widget registration arguments.
 	 */
-	public function __construct( array $instance, array $args ) {
+	final public function __construct( array $instance, array $args ) {
 		$this->instance = apply_filters( 'advanced-sidebar-menu/menus/widget-instance', $instance, $args, $this );
 		$this->args = $args;
 
 		$this->increment_widget_id();
 	}
-
-
-	/**
-	 * Get id of the highest level parent item.
-	 *
-	 * @return ?int
-	 */
-	abstract public function get_top_parent_id();
-
-
-	/**
-	 * Get key to order the menu items by.
-	 *
-	 * @return string
-	 */
-	abstract public function get_order_by();
-
-
-	/**
-	 * Get order of the menu (ASC|DESC).
-	 *
-	 * @return string
-	 */
-	abstract public function get_order();
-
-
-	/**
-	 * Should this widget be displayed.
-	 *
-	 * @return bool
-	 */
-	abstract public function is_displayed();
-
-
-	/**
-	 * How many levels should be displayed.
-	 *
-	 * @return int
-	 */
-	abstract public function get_levels_to_display();
-
-
-	/**
-	 * Render the widget
-	 *
-	 * @return void
-	 */
-	abstract public function render();
 
 
 	/**
@@ -131,9 +98,9 @@ abstract class Menu_Abstract {
 		// Block widgets loaded via the REST API don't have full widget args.
 		if ( ! isset( $this->args['widget_id'] ) ) {
 			// Prefix any leading digits or hyphens with '_'.
-			$this->args['widget_id'] = \preg_replace( '/^([\d-])/', '_$1', wp_hash( (string) wp_json_encode( $this->instance ) ) );
-			//phpcs:ignore -- Not actually using the value of $_POST.
-		} elseif ( ! empty( $_POST['action'] ) && 'elementor_ajax' === $_POST['action'] ) {
+			$this->args['widget_id'] = (string) \preg_replace( '/^([\d-])/', '_$1', wp_hash( (string) wp_json_encode( $this->instance ) ) );
+			//phpcs:ignore WordPress.Security.NonceVerification -- Not actually using the value of $_POST.
+		} elseif ( isset( $_POST['action'] ) && 'elementor_ajax' === $_POST['action'] ) {
 			/**
 			 * Elementor sends widgets one at a time with the same id during the preview.
 			 * Since we can't increment nor is there a unique id, we always
@@ -159,9 +126,10 @@ abstract class Menu_Abstract {
 	/**
 	 * The instance arguments from the current widget.
 	 *
+	 * @phpstan-return SETTINGS
 	 * @return array
 	 */
-	public function get_widget_instance() {
+	public function get_widget_instance(): array {
 		return $this->instance;
 	}
 
@@ -169,17 +137,18 @@ abstract class Menu_Abstract {
 	/**
 	 * The widget arguments from the current widget.
 	 *
+	 * @phpstan-return WIDGET_ARGS
 	 * @return array
 	 */
-	public function get_widget_args() {
+	public function get_widget_args(): array {
 		return $this->args;
 	}
 
 
 	/**
-	 * Checks if a widget's checkbox is checked.
+	 * Is a widget's checkbox is checked?
 	 *
-	 * Checks first for a value then verifies the value = checked
+	 * Checks first for a value then verifies the value = 'checked'.
 	 *
 	 * @param string $name - Name of checkbox.
 	 *
@@ -211,25 +180,12 @@ abstract class Menu_Abstract {
 
 
 	/**
-	 * Is this id excluded from this menu?
-	 *
-	 * @param int|string $id ID of the object.
-	 *
-	 * @return bool
-	 */
-	public function is_excluded( $id ) {
-		$excluded = \in_array( (int) $id, $this->get_excluded_ids(), true );
-		return apply_filters( 'advanced-sidebar-menu/menus/' . static::WIDGET . '/is-excluded', $excluded, $id, $this->get_widget_args(), $this->get_widget_instance(), $this );
-	}
-
-
-	/**
 	 * Retrieve the excluded items' ids.
 	 *
 	 * @return array<int>
 	 */
-	public function get_excluded_ids() {
-		if ( ! \array_key_exists( static::EXCLUDE, $this->instance ) ) {
+	public function get_excluded_ids(): array {
+		if ( ! \array_key_exists( static::EXCLUDE, $this->instance ) || ! \is_string( $this->instance[ static::EXCLUDE ] ) ) {
 			return [];
 		}
 		return \array_map( '\intval', \array_filter( \explode( ',', $this->instance[ static::EXCLUDE ] ), 'is_numeric' ) );
@@ -241,8 +197,8 @@ abstract class Menu_Abstract {
 	 *
 	 * @return void
 	 */
-	public function title() {
-		if ( ! \array_key_exists( static::TITLE, $this->instance ) || '' === (string) $this->instance[ static::TITLE ] ) {
+	public function title(): void {
+		if ( ! \array_key_exists( static::TITLE, $this->instance ) || '' === $this->instance[ static::TITLE ] ) {
 			return;
 		}
 		$title = apply_filters( 'widget_title', $this->instance[ static::TITLE ], $this->args, $this->instance );
@@ -252,22 +208,16 @@ abstract class Menu_Abstract {
 	}
 
 
+	//phpcs:disable
 	/**
-	 * Store current menu instance.
-	 *
-	 * @static
-	 *
-	 * @var Page|Category|null
+	 * @deprecated No longer used.
 	 */
+	// @phpstan-ignore-next-line
 	protected static $current;
 
 
 	/**
-	 * Get current menu instance.
-	 *
-	 * @static
-	 *
-	 * @return Page|Category|null
+	 * @deprecated In favor of using factory on the specific class.
 	 */
 	public static function get_current() {
 		return static::$current;
@@ -275,21 +225,12 @@ abstract class Menu_Abstract {
 
 
 	/**
-	 * Constructs a new instance of this class.
-	 *
-	 * @param array $widget_instance - Widget settings.
-	 * @param array $widget_args     - Widget registration args.
-	 *
-	 * @static
-	 *
-	 * @return static
+	 * @deprecated In favor of using factory on the specific class.
 	 */
 	public static function factory( array $widget_instance, array $widget_args ) {
-		/* @phpstan-ignore-next-line */
 		$menu = new static( $widget_instance, $widget_args );
-		/* @phpstan-ignore-next-line */
 		static::$current = $menu;
-
 		return $menu;
 	}
+	//phpcs:enable
 }

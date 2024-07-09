@@ -9,6 +9,35 @@ use Advanced_Sidebar_Menu\Widget\Page;
 
 /**
  * Scripts and styles.
+ *
+ * @phpstan-type JS_CONFIG array{
+ *     categories: array{
+ *          displayEach: array<string, string>
+ *     },
+ *     currentScreen: string,
+ *     docs: array{
+ *          page: string,
+ *          category: string
+ *     },
+ *     error: string,
+ *     features: array<string, bool>,
+ *     isPostEdit: bool,
+ *     isPro: bool,
+ *     isWidgets: bool,
+ *     pages: array{
+ *          orderBy: array<string, string>
+ *     },
+ *     siteInfo: array{
+ *          basic: string,
+ *          classicWidgets: bool,
+ *          php: string,
+ *          pro: string|false,
+ *          scriptDebug: bool,
+ *          WordPress: string,
+ *          pro?: string
+ *     },
+ *     support: string
+ * }
  */
 class Scripts {
 	use Singleton;
@@ -191,9 +220,9 @@ class Scripts {
 	/**
 	 * Configuration passed from PHP to JavaScript.
 	 *
-	 * @return array
+	 * @return JS_CONFIG
 	 */
-	public function js_config() {
+	public function js_config(): array {
 		return apply_filters( 'advanced-sidebar-menu/scripts/js-config', [
 			'categories'    => [
 				'displayEach' => Category::get_display_each_options(),
@@ -205,9 +234,9 @@ class Scripts {
 			],
 			'error'         => apply_filters( 'advanced-sidebar-menu/scripts/js-config/error', '' ),
 			'features'      => Notice::instance()->get_features(),
-			'isPostEdit'    => ! empty( $GLOBALS['pagenow'] ) && 'post.php' === $GLOBALS['pagenow'],
+			'isPostEdit' => isset( $GLOBALS['pagenow'] ) && 'post.php' === $GLOBALS['pagenow'],
 			'isPro'         => false,
-			'isWidgets'     => ! empty( $GLOBALS['pagenow'] ) && 'widgets.php' === $GLOBALS['pagenow'],
+			'isWidgets'  => isset( $GLOBALS['pagenow'] ) && 'widgets.php' === $GLOBALS['pagenow'],
 			'pages'         => [
 				'orderBy' => Page::get_order_by_options(),
 			],
