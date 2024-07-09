@@ -260,13 +260,13 @@ ul.b2s-network-item-auth-list li:last-child{
 
 
 .b2s-edit-template-content-post-item {
-  appearance:button;
-  -moz-appearance:button; 
-  -webkit-appearance:button;
-  display: inline-block;
-  padding: 2px 5px;
-  cursor: pointer;
-  margin-right: 5px !important;
+    appearance:button;
+    -moz-appearance:button; 
+    -webkit-appearance:button;
+    display: inline-block;
+    padding: 2px 5px;
+    cursor: pointer;
+    margin-right: 5px !important;
 }
 
 .b2s-edit-template-preview-profile-img-1 {
@@ -325,7 +325,7 @@ ul.b2s-network-item-auth-list li:last-child{
     width: 36px;
 }
 
-.b2s-edit-template-preview-profile-img-2 {
+.b2s-edit-template-preview-profile-img-2 , .b2s-edit-template-preview-profile-img-43 {
     border: 1px solid lightgray;
     border-radius: 25px;
     padding: 1px;
@@ -380,7 +380,7 @@ ul.b2s-network-item-auth-list li:last-child{
     font-weight: 600;
 }
 
-.b2s-edit-template-preview-profile-name-2 {
+.b2s-edit-template-preview-profile-name-2, .b2s-edit-template-preview-profile-name-43 {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -401,7 +401,7 @@ ul.b2s-network-item-auth-list li:last-child{
     margin-right: 5px;
 }
 
-.b2s-edit-template-preview-profile-handle-2 {
+.b2s-edit-template-preview-profile-handle-2, .b2s-edit-template-preview-profile-handle-43 {
     font-size: 14px;
     color: gray;
 }
@@ -418,7 +418,7 @@ ul.b2s-network-item-auth-list li:last-child{
     margin-left: -20px;
 }
 
-.b2s-edit-template-preview-image-image-2 {
+.b2s-edit-template-preview-image-image-2, .b2s-edit-template-preview-image-image-43 {
     border-radius: 10px;
     border: 1px solid lightgrey;
     margin-top: 10px;
@@ -501,7 +501,7 @@ ul.b2s-network-item-auth-list li:last-child{
     border-left-width: 3px;
 }
 
-.b2s-edit-template-preview-link-image-2 {
+.b2s-edit-template-preview-link-image-2, .b2s-edit-template-preview-link-image-43 {
     width: auto !important;
     height: 85px;
 }
@@ -614,7 +614,7 @@ ul.b2s-network-item-auth-list li:last-child{
     padding-top: 5px;
 }
 
-.b2s-edit-template-preview-link-meta-box-2 {
+.b2s-edit-template-preview-link-meta-box-2, .b2s-edit-template-preview-link-meta-box-43 {
     border: 1px solid lightgray;
     border-radius: 14px;
     margin-left: 0px !important;
@@ -622,7 +622,7 @@ ul.b2s-network-item-auth-list li:last-child{
     background-color: white;
 }
 
-.b2s-edit-template-preview-link-meta-box-image-2 {
+.b2s-edit-template-preview-link-meta-box-image-2, .b2s-edit-template-preview-link-meta-box-image-43  {
     overflow: hidden;
     height: 85px;
     display: flex;
@@ -633,28 +633,28 @@ ul.b2s-network-item-auth-list li:last-child{
     border-right: 1px solid lightgray;
 }
 
-.b2s-edit-template-preview-link-meta-box-image-2-big {
+.b2s-edit-template-preview-link-meta-box-image-2-big, .b2s-edit-template-preview-link-meta-box-image-43-big {
     padding: 0px !important;
     border-top-right-radius: 14px; 
     border-top-left-radius: 14px; 
 }
 
-.b2s-edit-template-preview-link-image-2-big {
+.b2s-edit-template-preview-link-image-2-big, .b2s-edit-template-preview-link-image-43-big {
     width: 100%;
     border-top-right-radius: 14px; 
     border-top-left-radius: 14px; 
 }
 
-.b2s-edit-template-preview-border-2 {
+.b2s-edit-template-preview-border-2, .b2s-edit-template-preview-border-43 {
     padding-top: 5px;
     background-color: #f8fafb;
 }
 
-.b2s-edit-template-preview-link-meta-box-desc-2 {
+.b2s-edit-template-preview-link-meta-box-desc-2, .b2s-edit-template-preview-link-meta-box-desc-43 {
     color: gray;
 }
 
-.b2s-edit-template-preview-link-meta-box-domain-2 {
+.b2s-edit-template-preview-link-meta-box-domain-2, .b2s-edit-template-preview-link-meta-box-domain-43 {
     color: gray;
 }
 
@@ -724,7 +724,7 @@ ul.b2s-network-item-auth-list li:last-child{
     margin: 5px 0px;
 }
 
-.b2s-edit-template-preview-like-icons-2 {
+.b2s-edit-template-preview-like-icons-2, .b2s-edit-template-preview-like-icons-43  {
     width: 100%;
     margin-top: 5px;
 }
@@ -834,7 +834,7 @@ ul.b2s-network-item-auth-list li:last-child{
     margin: 0px !important;
     background-color: #2b2d31;
     color: #e0e1e5;
-    
+
 }
 
 .b2s-edit-template-preview-title-39 {
@@ -1038,9 +1038,9 @@ ul.b2s-network-item-auth-list li:last-child{
 }
 
 .b2s-disabled {
-  opacity: 0.3;
-  pointer-events: none;
-  cursor: default;
+    opacity: 0.3;
+    pointer-events: none;
+    cursor: default;
 }
 
 .b2s-user-app-link {
@@ -1049,8 +1049,9 @@ ul.b2s-network-item-auth-list li:last-child{
 
 #b2s-onboarding-toastee {
     position: fixed; 
-    top: 30px; 
-    right: 20px;
+    top: 20px; 
+    right: 15px;
+    z-index: 100001;
 }
 
 #b2s-onboarding-toastee-inner {
@@ -1085,7 +1086,7 @@ ul.b2s-network-item-auth-list li:last-child{
     padding-left:10px;
     padding-right:10px;
     padding-top:5px;
-    padding-bottom:10px;
+    padding-bottom:5px;
     color: #fff;
 }
 
@@ -1099,7 +1100,8 @@ ul.b2s-network-item-auth-list li:last-child{
 
 .b2s-onboarding-p {
     padding: 20px; 
-    color: #fff
+    color: #fff;
+    word-wrap: break-word;
 }
 
 .toggle {

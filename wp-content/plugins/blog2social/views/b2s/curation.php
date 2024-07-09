@@ -7,8 +7,7 @@ $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
 $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
 $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d H:i:s", (strtotime(sanitize_text_field(wp_unslash($_GET['schedDate'])) . ' ' . gmdate('H:i:s')))) : "";    //routing from calendar
-$isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-success">'. esc_html__('Pro', 'blog2social') .'</span>' : '';
-
+$isImagePro = (B2S_PLUGIN_USER_VERSION < 2) ? ' <span class="label label-success">' . esc_html__('Pro', 'blog2social') . '</span>' : '';
 ?>
 <div class="b2s-container">
     <div class="b2s-inbox">
@@ -101,8 +100,8 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-succes
                                                     </div>
                                                     <div class="col-xs-12 col-sm-7 col-lg-9">
                                                         <div class="b2s-post-item-details-item-message-area">
-                                                    		<input class="form-control" name="b2s-instant-sharing-input-title_image" id="b2s-instant-sharing-input-title_image" value="" placeholder="<?php esc_html_e('Enter title (optional)', 'blog2social'); ?>">
-                                                    		<br>
+                                                            <input class="form-control" name="b2s-instant-sharing-input-title_image" id="b2s-instant-sharing-input-title_image" value="" placeholder="<?php esc_html_e('Enter title (optional)', 'blog2social'); ?>">
+                                                            <br>
 
                                                             <textarea id="b2s-post-curation-comment-image" class="form-control b2s-post-item-details-item-message-input" name="comment_image" placeholder="<?php esc_html_e('Write something...', 'blog2social'); ?>"></textarea>
                                                             <button type="button" class="btn btn-sm b2s-post-item-details-item-message-emoji-btn"><img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>"/></button>
@@ -132,6 +131,8 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-succes
                                         <input type="hidden" id="b2s-draft-id" value="" name="b2s-draft-id">
                                         <textarea id="b2s-post-curation-comment-dummy" style="display:none;"></textarea>
                                     </form>
+                                    <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>" />
+                        
                                     <div class="row b2s-curation-post-list-area">
                                         <div class="b2s-curation-post-list"></div>
                                         <div class="col-md-12">
@@ -146,6 +147,8 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-succes
                                     <input type="hidden" id="b2sJsTextPublish" value="<?php esc_attr_e('published', 'blog2social') ?>">
                                     <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
                                     <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
+                                    <input type="hidden" id="b2sMaxSchedDate" value="<?php echo date('Y-m-d', strtotime("+ 3 years")) ?>">
+
                                 </div>
                                 <div class="col-sm-4">
                                     <div id="b2s-curation-preview" class="b2s-curation-preview">
@@ -203,6 +206,24 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-succes
     </div>
 </div>
 
+<div class="modal fade b2s-licence-condition-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-licence-condition-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-licence-condition-modal">&times;</button>
+                <h4 class="modal-title licence-condition-daily-modal-title"><?php esc_html_e("You've reached your daily posting limit!", "blog2social") ?></h4>
+                <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
+                    <h4 class="modal-title licence-condition-sched-modal-title b2s-info-display-none"><?php esc_html_e("You've reached your posting limit!", "blog2social") ?></h4> 
+                <?php } ?>
+            </div>
+            <div class="modal-body">
+                <p><?php esc_html_e('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') ?></p>
+                <br>
+                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade', 'blog2social') ?></a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">

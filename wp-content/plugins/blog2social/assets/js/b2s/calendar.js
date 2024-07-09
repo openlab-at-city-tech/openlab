@@ -70,33 +70,42 @@ jQuery(document).ready(function () {
                 } else {
                     sel_element = jQuery('.fc-basicWeek-view').find('th[data-date="' + date + '"]');
                 }
-                $header = jQuery("<a>").html("+ <span class=\"hidden-sm hidden-xs\">" + jQuery("#b2sJSTextAddPost").val() + "</span>").addClass("b2s-calendar-sched-new-post-btn").attr('href', '#');
-                sel_element.append($header);
+
+                //Max Sched Date
+                if (Date.parse(jQuery('#b2sMaxSchedDateAddBtn').val()) >= Date.parse(date)) {
+                    $header = jQuery("<a>").html("+ <span class=\"hidden-sm hidden-xs\">" + jQuery("#b2sJSTextAddPost").val() + "</span>").addClass("b2s-calendar-sched-new-post-btn").attr('href', '#');
+                    sel_element.append($header);
+                }
             }
 
         },
         eventDrop: function (event, delta, revertFunc) {
-            jQuery.ajax({
-                url: ajaxurl,
-                type: "POST",
-                dataType: "json",
-                cache: false,
-                data: {
-                    'action': 'b2s_calendar_move_post',
-                    'b2s_id': event.b2s_id,
-                    'user_timezone': event.user_timezone,
-                    'sched_date': event.start.format(),
-                    'post_for_relay': event.post_for_relay,
-                    'post_for_approve': event.post_for_approve,
-                    'network_type': event.network_type,
-                    'nework_id': event.network_id,
-                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
-                },
-                success: function (data) {
-                    refreshCalender();
-                    wp.heartbeat.connectNow();
-                }
-            });
+            //Max Sched Date
+            if (Date.parse(jQuery('#b2sMaxSchedDateAddBtn').val()) >= Date.parse(event.start.format())) {
+                jQuery.ajax({
+                    url: ajaxurl,
+                    type: "POST",
+                    dataType: "json",
+                    cache: false,
+                    data: {
+                        'action': 'b2s_calendar_move_post',
+                        'b2s_id': event.b2s_id,
+                        'user_timezone': event.user_timezone,
+                        'sched_date': event.start.format(),
+                        'post_for_relay': event.post_for_relay,
+                        'post_for_approve': event.post_for_approve,
+                        'network_type': event.network_type,
+                        'nework_id': event.network_id,
+                        'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                    },
+                    success: function (data) {
+                        refreshCalender();
+                        wp.heartbeat.connectNow();
+                    }
+                });
+            } else {
+                revertFunc();
+            }
         },
         eventAllow: function (dropLocation, draggedEvent) {
             return dropLocation.start.isAfter(b2s_calendar_date) && draggedEvent.start.isAfter(b2s_calendar_datetime);
@@ -108,7 +117,7 @@ jQuery(document).ready(function () {
                 if (calEvent.publish_link != "") {
                     window.open(calEvent.publish_link, '_blank');
                 } else {
-                    if(calEvent.errorText != null && calEvent.errorText != "") {
+                    if (calEvent.errorText != null && calEvent.errorText != "") {
                         jQuery('.b2s-error-text').html(calEvent.errorText);
                         jQuery('#b2s-show-error-modal').modal('show');
                     }
@@ -238,6 +247,10 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
         showMeridian = false;
     }
 
+    //MaxSchedDate
+    var maxDate = new Date();
+    maxDate.setTime(jQuery('#b2sMaxSchedDate').val());
+
     jQuery(".b2s-post-item-details-release-input-date").datepicker({
         format: dateFormat,
         language: language,
@@ -245,7 +258,8 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
         todayHighlight: true,
         startDate: today,
         calendarWeeks: true,
-        autoclose: true
+        autoclose: true,
+        endDate: maxDate
     });
     jQuery('.b2s-post-item-details-release-input-time').timepicker({
         minuteStep: 15,
@@ -576,6 +590,12 @@ jQuery(document).on("click", ".b2s-edit-post-delete", function () {
         },
         success: function (data) {
             jQuery('#b2s-edit-event-modal-' + id).modal('hide');
+            if (data.result == true) {
+                //Licence Condition
+                if (jQuery('#user_version').val() > 0) {
+                    jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
+                }
+            }
             refreshCalender();
             wp.heartbeat.connectNow();
         }
@@ -925,7 +945,7 @@ jQuery(document).on('click', '.b2s-get-settings-sched-time-user', function () {
     return false;
 });
 
-jQuery(document).on('click', '.b2s-add-multi-image', function() {
+jQuery(document).on('click', '.b2s-add-multi-image', function () {
     jQuery('.b2s-network-select-image-content').html("");
     jQuery.ajax({
         url: ajaxurl,

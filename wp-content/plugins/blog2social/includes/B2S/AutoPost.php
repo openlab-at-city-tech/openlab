@@ -38,12 +38,11 @@ class B2S_AutoPost {
         $this->keywords = $keywords;
         $this->optionPostFormat = $optionPostFormat;
         $this->allowHashTag = $allowHashTag;
-        $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000), 1 => array(6 => 300, 17 => 442, 19 => 239), 2 => array(17 => 442, 19 => 239), 20 => 300);
-        $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000), 1 => array(6 => 400, 19 => 400), 2 => array(19 => 9000));
+        $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(6 => 300, 17 => 442, 19 => 239, 42 => 1000), 2 => array(17 => 442, 19 => 239), 20 => 300);
+        $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000, 42 => 1000), 1 => array(6 => 400, 19 => 400, 42 => 1000), 2 => array(19 => 9000));
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
         $this->echo = $echo;
         $this->delay = $delay;
-
     }
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0, $networkKind = 0) {
@@ -56,12 +55,12 @@ class B2S_AutoPost {
             } else {
                 $tempOptionPostFormat = $this->optionPostFormat;
             }
-            
+
             //V6.5.5 - Xing Pages => Two diferend kinds
-            if($networkId == 19 && $networkType == 1) {
-                if(!isset($tempOptionPostFormat[$networkId][$networkType]['short_text'][0]['limit'])) {
-                    if(isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) {
-                        if(isset($this->default_template[$networkId][$networkType]['short_text'][4])) {
+            if ($networkId == 19 && $networkType == 1) {
+                if (!isset($tempOptionPostFormat[$networkId][$networkType]['short_text'][0]['limit'])) {
+                    if (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) {
+                        if (isset($this->default_template[$networkId][$networkType]['short_text'][4])) {
                             $tempOptionPostFormat[$networkId][$networkType]['short_text'] = array(0 => $tempOptionPostFormat[$networkId][$networkType]['short_text'], 4 => $this->default_template[$networkId][$networkType]['short_text'][4]);
                         }
                     } else {
@@ -88,7 +87,7 @@ class B2S_AutoPost {
             }
 
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24))) {
+            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43))) {
                 //Get: client settings
                 if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && ((int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 0 || (int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 1)) {
                     $postData['post_format'] = (int) $tempOptionPostFormat[$networkId][$networkType]['format'];
@@ -103,7 +102,7 @@ class B2S_AutoPost {
                     return false;
                 }
                 $hook_filter = new B2S_Hook_Filter();
-                
+
                 $postData['content'] = $tempOptionPostFormat[$networkId][$networkType]['content'];
 
                 $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $content_min, (int) $content_max), "\\$");
@@ -111,15 +110,15 @@ class B2S_AutoPost {
 
                 $title = sanitize_text_field($this->title);
                 $postData['content'] = preg_replace("/\{TITLE\}/", addcslashes($title, "\\$"), $postData['content']);
-                
+
                 $excerpt = (isset($this->excerpt) && !empty($this->excerpt)) ? addcslashes(B2S_Util::getExcerpt($this->excerpt, (int) $excerpt_min, (int) $excerpt_max), "\\$") : '';
 
                 $postData['content'] = preg_replace("/\{EXCERPT\}/", $excerpt, $postData['content']);
 
                 $hashtagcount = substr_count($postData['content'], '#');
                 if (strpos($postData['content'], "{KEYWORDS}") !== false) {
-                    if($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
-                        $postData['content'] = preg_replace("/\{KEYWORDS\}/",'', $postData['content']);
+                    if ($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
+                        $postData['content'] = preg_replace("/\{KEYWORDS\}/", '', $postData['content']);
                     } else {
                         $hashtags = ($this->allowHashTag) ? $this->getHashTagsString("", (($networkId == 12) ? 30 - $hashtagcount : -1), ((isset($tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags']) && $tempOptionPostFormat[$networkId][$networkType]['shuffleHashtags'] == true) ? true : false)) : '';
                         $postData['content'] = preg_replace("/\{KEYWORDS\}/", addcslashes($hashtags, "\\$"), $postData['content']);
@@ -131,24 +130,24 @@ class B2S_AutoPost {
                     $author_name = $hook_filter->get_wp_user_post_author_display_name((int) $authorId);
                     $postData['content'] = stripslashes(preg_replace("/\{AUTHOR\}/", addcslashes($author_name, "\\$"), $postData['content']));
                 } else {
-                    $postData['content'] = preg_replace("/\{AUTHOR\}/","", $postData['content']);
+                    $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
                 }
-                
+
                 if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
                     $wc_product = wc_get_product($this->postId);
-                    if($wc_product != false) {
+                    if ($wc_product != false) {
                         $price = $wc_product->get_price();
-                        if($price != false && !empty($price)) {
+                        if ($price != false && !empty($price)) {
                             $postData['content'] = stripslashes(preg_replace("/\{PRICE\}/", addcslashes($price, "\\$"), $postData['content']));
                         }
                     }
                 }
-                $postData['content'] = preg_replace("/\{PRICE\}/","", $postData['content']);
-                
+                $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
+
                 $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
-                if(is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
+                if (is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
                     foreach ($taxonomieReplacements as $taxonomie => $replacement) {
-                        $postData['content'] = preg_replace("/\{".$taxonomie."\}/", $replacement, $postData['content']);
+                        $postData['content'] = preg_replace("/\{" . $taxonomie . "\}/", $replacement, $postData['content']);
                     }
                 }
 
@@ -162,11 +161,14 @@ class B2S_AutoPost {
                 }
 
                 if (isset($limit) && (int) $limit > 0) {
-                    if(!empty($this->url) && $networkId == 2) {
+                    if (!empty($this->url) && $networkId == 2) {
                         $limit = 254;
                     }
                     if (!empty($this->url) && $networkId == 38) {
-                        $limit = 500-strlen($this->url);
+                        $limit = 500 - strlen($this->url);
+                    }
+                    if (!empty($this->url) && $networkId == 43 && $postData['post_format'] == 1) {
+                        $limit = 300 - B2S_Util::getNetwork43UrlLength($this->url);
                     }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }
@@ -260,12 +262,7 @@ class B2S_AutoPost {
                     }
                 }
 
-                if ($networkId == 38) {
-                    $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
-                    $postData['custom_title'] = strip_tags($this->title);
-                }
-
-                if ($networkId == 39) {
+                if ($networkId == 38 || $networkId == 39) {
                     $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
                     $postData['custom_title'] = strip_tags($this->title);
                 }
@@ -318,7 +315,7 @@ class B2S_AutoPost {
                 }
             }
         }
-        
+
         if (isset($shareData['image_url']) && !empty($shareData['image_url']) && function_exists('wp_check_filetype') && defined('B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF')) {
             $image_data = wp_check_filetype($shareData['image_url']);
             $not_allow_gif = json_decode(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF, true);
@@ -331,7 +328,7 @@ class B2S_AutoPost {
         $sched_date = $this->blogPostData['sched_date'];
         $sched_date_utc = $this->blogPostData['sched_date_utc'];
 
-        if($this->delay > 0){
+        if ($this->delay > 0) {
             $time = "+ " . $this->delay . " minutes";
             $sched_date = date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date)));
             $sched_date_utc = date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date_utc)));
@@ -396,42 +393,41 @@ class B2S_AutoPost {
                 'network_auth_id' => (int) $network_auth_id,
                 'network_display_name' => $network_display_name,
                 'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID),
-                array('%d', '%d', '%d', '%s', '%d'));
+                    array('%d', '%d', '%d', '%s', '%d'));
             $networkDetailsId = $wpdb->insert_id;
         }
 
         //after 24 hours
         $echoDates = array();
-        if($this->echo == 1){
-            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date)));
-            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date_utc)));
+        if ($this->echo == 1) {
+            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)));
 
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
 
-        //after 48 hours
-        } else if($this->echo == 2){
-            $date = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date)));
-            $date_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date_utc)));
+            //after 48 hours
+        } else if ($this->echo == 2) {
+            $date = date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)));
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
 
+            //both  
+        } else if ($this->echo == 3) {
+            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)));
+            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)));
 
-        //both  
-        } else if($this->echo == 3){
-            $date = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date)));
-            $date_utc = date('Y-m-d H:i:s', strtotime("+1 day", strtotime( $sched_date_utc)));
-
-            $date2 = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date)));
-            $date2_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime( $sched_date_utc)));
+            $date2 = date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)));
+            $date2_utc = date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)));
 
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
             $echoDates[] = array("date" => $date2, "date_utc" => $date2_utc);
         }
 
-        if(($sched_type == 3) && $this->delay == 0){
+        if (($sched_type == 3) && $this->delay == 0) {
             $publishDate = $sched_date;
         } else {
             $publishDate = "0000-00-00 00:00:00";
-        }   
+        }
 
         if ($networkDetailsId > 0) {
             //DeprecatedNetwork-8 31 march
@@ -444,7 +440,7 @@ class B2S_AutoPost {
                     'publish_error_code' => 'DEPRECATED_NETWORK_8',
                     'network_details_id' => $networkDetailsId), array('%d', '%d', '%s', '%s', '%s', '%d'));
             } else {
-       
+
                 $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
                 $schedDetailsId = $wpdb->insert_id;
                 $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
@@ -464,9 +460,8 @@ class B2S_AutoPost {
                 $insertId = $wpdb->insert_id;
                 B2S_Rating::trigger();
 
-
-                if(is_array($echoDates) && !empty($echoDates)){
-                    foreach($echoDates as $date){
+                if (is_array($echoDates) && !empty($echoDates)) {
+                    foreach ($echoDates as $date) {
                         $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
                         $schedDetailsId = $wpdb->insert_id;
                         $wpdb->insert($wpdb->prefix . 'b2s_posts', array(

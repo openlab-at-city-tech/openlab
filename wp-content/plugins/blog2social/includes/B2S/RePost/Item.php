@@ -7,6 +7,8 @@ class B2S_RePost_Item {
     private $postCategoriesData;
     private $postAuthorData;
     private $postTagsData;
+    private $authData;
+    private $schedLimit = null;
 
     public function __construct() {
         $this->options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
@@ -16,13 +18,38 @@ class B2S_RePost_Item {
         $this->postTagsData = get_tags(array('hide_empty' => false));
     }
 
+    public function getAuthData() {
+        $currentDate = new DateTime("now", wp_timezone());
+        $this->authData = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
+
+        
+        if (isset($this->authData->licence_condition)) {
+            //update
+            $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+            if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $this->authData->licence_condition;
+                update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+
+                if (isset($this->authData->licence_condition->open_sched_post_quota) && B2S_PLUGIN_USER_VERSION > 0) {
+                    if ((int) $this->authData->licence_condition->open_sched_post_quota > 0) {
+                        $this->schedLimit = (int) $this->authData->licence_condition->open_sched_post_quota;
+                    } else {
+                        $this->schedLimit = 0;
+                    }
+                }
+            }
+        }
+    }
+
     public function getRePostOptionsHtml() {
 
         $isPremium = (B2S_PLUGIN_USER_VERSION == 0) ? false : true;
+        $showSchedLimitInfo = ($isPremium && $this->schedLimit <= 0) ? "" : "b2s-info-display-none";
         $limit = unserialize(B2S_PLUGIN_RE_POST_LIMIT);
 
         $content = '';
         $content .= '<h3 class="b2s-re-post-h3">' . esc_html__('Re-share your blog content automatically on your social media channels.', 'blog2social') . ((!$isPremium) ? ' <span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') . '</h3>';
+        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
         $content .= '<div class="col-md-12 b2s-re-post-settings-header">';
         $content .= '<i class="glyphicon glyphicon-cog b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Settings', 'blog2social') . '</span><span class="b2s-re-post-headline"><i class="glyphicon glyphicon-chevron-up b2s-re-post-settings-toggle b2s-icon-size"></i></span>';
         $content .= '</div>';
@@ -112,7 +139,7 @@ class B2S_RePost_Item {
         //Network Settings
         $content .= '<h4>' . esc_html__('Where should your content be shared?', 'blog2social') . '</h4>';
         $content .= $this->getMandantSelect();
-        $content .= '<input type="button" class="btn btn-primary pull-right ' . ((!$isPremium) ? 'b2s-re-post-submit-premium' : 'b2s-re-post-submit-btn') . '" value="' . esc_html__('Add to queue', 'blog2social') . '">';
+        $content .= '<input type="button" class="btn btn-primary pull-right ' . ((!$isPremium) ? 'b2s-re-post-submit-premium' : (($this->schedLimit <= 0) ? '':'b2s-re-post-submit-btn')) . '" '.(($isPremium && $this->schedLimit <= 0) ? 'disabled= "disabled "': '').'  value="' . esc_html__('Add to queue', 'blog2social') . '">';
         $content .= '</div>';
         $content .= '</div>';
         $content .= '<input type="hidden" id="b2sUserLang" name="b2s-user-lang" value="' . esc_attr(strtolower(substr(get_locale(), 0, 2))) . '">';
@@ -155,34 +182,34 @@ class B2S_RePost_Item {
     }
 
     private function getMandantSelect($mandantId = 0, $twitterId = 0) {
-        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
-		if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
+        if (isset($this->authData) && !empty($this->authData) && isset($this->authData->result) && (int) $this->authData->result == 1 && isset($this->authData->data) && !empty($this->authData->data) && isset($this->authData->data->mandant) && isset($this->authData->data->auth) && !empty($this->authData->data->mandant) && !empty($this->authData->data->auth)) {
+
             /*
-                 * since V7.0 Remove Video Networks
-                 */
-                if (!empty($result->data->auth)) {
-                    $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
-                    foreach ($result->data->auth as $a => $auth) {
-                        foreach ($auth as $u => $item) {
-                            if (in_array($item->networkId, $isVideoNetwork)) {
-                                if (!in_array($item->networkId, array(1, 2, 3, 6, 12, 38, 39))) {
-                                    if (isset($a[$u])) {
-                                        unset($result->data->auth->{$a[$u]});
-                                    }
+             * since V7.0 Remove Video Networks
+             */
+            if (!empty($this->authData->data->auth)) {
+                $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
+                foreach ($this->authData->data->auth as $a => $auth) {
+                    foreach ($auth as $u => $item) {
+                        if (in_array($item->networkId, $isVideoNetwork)) {
+                            if (!in_array($item->networkId, array(1, 2, 3, 6, 12, 38, 39))) {
+                                if (isset($a[$u])) {
+                                    unset($this->authData->data->auth->{$a[$u]});
                                 }
                             }
                         }
                     }
                 }
-            $mandant = $result->data->mandant;
-            $auth = $result->data->auth;
+            }
+            $mandant = $this->authData->data->mandant;
+            $auth = $this->authData->data->auth;
             $authContent = '';
             $content = '<div class="row"><div class="col-md-6 b2s-re-post-profile"><label for="b2s-re-post-profil-dropdown">' . esc_html__('Select network collection:', 'blog2social') . '</label><a class="b2s-network-info-modal-btn pull-right" href="#">' . esc_html__('Info', 'blog2social') . '</a>
                 <select class="b2s-w-100" id="b2s-re-post-profil-dropdown" name="b2s-re-post-profil-dropdown">';
-            
-			foreach ($mandant as $k => $m) {
+
+            foreach ($mandant as $k => $m) {
                 $content .= '<option value="' . esc_attr($m->id) . '" ' . (((int) $m->id == (int) $mandantId) ? 'selected' : '') . '>' . esc_html((($m->id == 0) ? __($m->name, 'blog2social') : $m->name)) . '</option>';
-            	$profilData = (isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0])) ? json_encode($auth->{$m->id}) : '';
+                $profilData = (isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0])) ? json_encode($auth->{$m->id}) : '';
                 $authContent .= "<input type='hidden' name='b2s-re-post-profil-data-" . esc_attr($m->id) . "' id='b2s-re-post-profil-data-" . esc_attr($m->id) . "' value='" . base64_encode($profilData) . "'/>";
             }
             $content .= '</select><div class="pull-right hidden-sm hidden-xs"><a href="' . esc_url(get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-network') . '" target="_blank">' . esc_html__('Network settings', 'blog2social') . '</a></div></div>';

@@ -96,6 +96,8 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                             <input type="hidden" id="b2sJsTextPublish" value="<?php esc_html_e('published', 'blog2social') ?>">
                             <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
                             <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
+                            <input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(date('Y-m-d', strtotime("+ 3 years"))); ?>">
+
                         </div>
                     </div>
                 </div>
@@ -104,7 +106,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                     <div class="panel-body">
                         <div class="clearfix"></div>
                         <div class="b2s-video-upload-drag-drop" >
-                            <h3><?php esc_html_e("Upload a video or select a video from your media library to share to your networks.", 'blog2social') ?> <span class="label label-success"><?php esc_html_e("ADDON", "blog2social"); ?></h3>                                            
+                            <h3><?php esc_html_e("Upload a video or select a video from your media library to share to your networks.", 'blog2social') ?> <span class="label label-success"><?php esc_html_e("ADDON", "blog2social"); ?></span></h3>                                            
                             <div id="b2s-video-upload-success" class="alert alert-success b2s-video-upload-success">
                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your video file has successfully been added to the media library!', 'blog2social'); ?>
                             </div>                          
@@ -126,32 +128,63 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                 <div class="pull-right hidden-xs">
                                     <a class="btn btn-success b2s-video-upload-feedback-btn"><?php esc_html_e("Feedback", "blog2social"); ?></a>
                                 </div>
-                                <?php if (!defined('B2S_PLUGIN_ADDON_VIDEO_TRIAL_END_DATE')) { ?>
-                                    <h4><?php esc_html_e("Try the new video post function for free now (limited time only)", 'blog2social') ?></h4>                                            
-                                    <?php esc_html_e("Publish and share your videos on video platforms and social media networks with Blog2Social!", "blog2social"); ?>
-                                    <br><br>
-                                    <span class="b2s-text-bold"><?php esc_html_e("What's included in the video-post trial?", "blog2social"); ?></span>
-                                    <ul class="list-group">
-                                        <li class="list-group-item b2s-video-premium-benefits">
-                                            - <?php esc_html_e("Publish and share your video files on: YouTube, TikTok, Vimeo, Instagram, Pinterest, Facebook, and Twitter", "blog2social"); ?>
-                                        </li>
-                                        <li class="list-group-item b2s-video-premium-benefits">
-                                            - <?php esc_html_e("Upload 1 video of up to 250 MB per day", "blog2social"); ?>
-                                        </li>
-                                        <li class="list-group-item b2s-video-premium-benefits">
-                                            - <?php esc_html_e("Upload and share up to 2,5 GB of video content during your 30 days trial period", "blog2social"); ?>
-                                        </li>
-                                    </ul>
-                                    <br>
-                                    <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
-                                        <a class="btn btn-success" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_video_trial')); ?>" target="_blank"><?php esc_html_e('Start your 30-day free Premium trial with Video-Addon', 'blog2social') ?></a>
-                                    <?php } else { ?>
-                                        <button class="btn btn-success b2s-video-upload-btn-trial" data-loading-text="<?php echo esc_attr(esc_html_e('Activate, please wait...', 'blog2social')) ?>"><?php esc_html_e('Activate your free video-trial now', 'blog2social') ?></button>
-                                    <?php } ?>
 
+                                <?php if ($canUseVideoAddon) { ?> 
+                                    <h4 class="b2s-video-upload-data-volume-title"><?php esc_html_e("Data Volume", 'blog2social') ?></h4>                                                                         
+                                    <div class="row">
+                                        <?php if (isset(B2S_PLUGIN_ADDON_VIDEO['volume_open']) && isset(B2S_PLUGIN_ADDON_VIDEO['volume_total'])) { ?>
+                                            <div class="col-md-3">                                     
+                                                <div class="b2s-progress-bar" 
+                                                     data-percent="<?php echo esc_attr(B2S_Util::getUsedPercentOfXy(B2S_PLUGIN_ADDON_VIDEO['volume_open'], B2S_PLUGIN_ADDON_VIDEO['volume_total'])); ?>" 
+                                                     data-custom-text="<?php echo esc_attr(sprintf(__('You still have<br><b>%s</b><br>of %s left', 'blog2social'), B2S_Util::getRemainingVideoVolume(B2S_PLUGIN_ADDON_VIDEO['volume_open']), B2S_Util::convertKbToGb(B2S_PLUGIN_ADDON_VIDEO['volume_total']))) ?>" 
+                                                     data-duration="2000">
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                        <div class="col-md-9">
+                                            <?php if (isset(B2S_PLUGIN_ADDON_VIDEO['is_trial']) && (int) B2S_PLUGIN_ADDON_VIDEO['is_trial'] == 1) { ?>
+                                                <h4><?php esc_html_e("Your free trial for the Video-Addon is valid until", 'blog2social') ?> <?php echo B2S_Util::getCustomDateFormat(B2S_PLUGIN_ADDON_VIDEO['trial_end_date'] . ' 00:00:00', substr(B2S_LANGUAGE, 0, 2), false) ?></h4>                                            
+                                            <?php } else { ?>
+                                                <h4><?php esc_html_e("You used the Video-Addon", 'blog2social') ?></h4>                                            
+                                            <?php } ?>
+                                            <?php esc_html_e("You can always upgrade your current data volume.", "blog2social"); ?>
+                                            <br>
+                                            <br>
+                                            <?php if (B2S_PLUGIN_USER_VERSION != 0) { ?>
+                                                <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_video')); ?>" target="_blank"><?php esc_html_e('Top-up your current data volume now!', 'blog2social') ?></a>
+                                            <?php } else { ?>
+                                                <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank"><?php esc_html_e('Get your Premium license and Video-Addon now!', 'blog2social') ?></a>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
                                 <?php } else { ?>
-                                    <h4 class="b2s-video-upload-data-volume-title"><?php esc_html_e("Data Volume", 'blog2social') ?></h4>                                            
-                                    <?php if (!$canUseVideoAddon) { ?>
+                                    <?php if (!defined('B2S_PLUGIN_ADDON_VIDEO_TRIAL_END_DATE')) {
+                                        ?>
+                                        <h4><?php esc_html_e("Try the new video post function for free now (limited time only)", 'blog2social') ?></h4>                                            
+                                        <?php esc_html_e("Publish and share your videos on video platforms and social media networks with Blog2Social!", "blog2social"); ?>
+                                        <br><br>
+                                        <span class="b2s-text-bold"><?php esc_html_e("What's included in the video-post trial?", "blog2social"); ?></span>
+                                        <ul class="list-group">
+                                            <li class="list-group-item b2s-video-premium-benefits">
+                                                - <?php esc_html_e("Publish and share your video files on: YouTube, TikTok, Vimeo, Instagram, Pinterest, Facebook, and Twitter", "blog2social"); ?>
+                                            </li>
+                                            <li class="list-group-item b2s-video-premium-benefits">
+                                                - <?php esc_html_e("Upload 1 video of up to 250 MB per day", "blog2social"); ?>
+                                            </li>
+                                            <li class="list-group-item b2s-video-premium-benefits">
+                                                - <?php esc_html_e("Upload and share up to 2,5 GB of video content during your 30 days trial period", "blog2social"); ?>
+                                            </li>
+                                        </ul>
+                                        <br>
+                                        <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
+                                            <a class="btn btn-success" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_video_trial')); ?>" target="_blank"><?php esc_html_e('Start your 30-day free Premium trial with Video-Addon', 'blog2social') ?></a>
+                                        <?php } else { ?>
+                                            <button class="btn btn-success b2s-video-upload-btn-trial" data-loading-text="<?php echo esc_attr(esc_html_e('Activate, please wait...', 'blog2social')) ?>"><?php esc_html_e('Activate your free video-trial now', 'blog2social') ?></button>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <h4 class="b2s-video-upload-data-volume-title"><?php esc_html_e("Data Volume", 'blog2social') ?></h4>                                            
                                         <div class="row">
                                             <div class="col-md-3">                                     
                                                 <div class="b2s-progress-bar" data-percent="0" data-custom-text="<?php esc_attr_e("You have 0GB <br>of 0GB left", "blog2social") ?>" data-duration="2000"></div>
@@ -162,51 +195,24 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                                 <br>
                                                 <br>
                                                 <?php if (B2S_PLUGIN_USER_VERSION != 0) { ?>
-                                                    <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank"><?php esc_html_e('Get the Video-Addon now!', 'blog2social') ?></a>
+                                                    <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_video')); ?>" target="_blank"><?php esc_html_e('Get the Video-Addon now!', 'blog2social') ?></a>
                                                 <?php } else { ?>
                                                     <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank"><?php esc_html_e('Get your Premium license and Video-Addon now!', 'blog2social') ?></a>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
-
-                                    <?php } else { ?>
-                                        <div class="row">
-                                            <?php if (isset(B2S_PLUGIN_ADDON_VIDEO['volume_open']) && isset(B2S_PLUGIN_ADDON_VIDEO['volume_total'])) { ?>
-                                                <div class="col-md-3">                                     
-                                                    <div class="b2s-progress-bar" 
-                                                         data-percent="<?php echo esc_attr(B2S_Util::getUsedPercentOfXy(B2S_PLUGIN_ADDON_VIDEO['volume_open'], B2S_PLUGIN_ADDON_VIDEO['volume_total'])); ?>" 
-                                                         data-custom-text="<?php echo esc_attr(sprintf(__('You still have<br><b>%s</b><br>of %s left', 'blog2social'), B2S_Util::getRemainingVideoVolume(B2S_PLUGIN_ADDON_VIDEO['volume_open']), B2S_Util::convertKbToGb(B2S_PLUGIN_ADDON_VIDEO['volume_total']))) ?>" 
-                                                         data-duration="2000">
-                                                    </div>
-                                                </div>
                                             <?php } ?>
-                                            <div class="col-md-9">
-                                                <?php if (isset(B2S_PLUGIN_ADDON_VIDEO['is_trial']) && (int) B2S_PLUGIN_ADDON_VIDEO['is_trial'] == 1) { ?>
-                                                    <h4><?php esc_html_e("Your free trial for the Video-Addon is valid until", 'blog2social') ?> <?php echo B2S_Util::getCustomDateFormat(B2S_PLUGIN_ADDON_VIDEO['trial_end_date'] . ' 00:00:00', substr(B2S_LANGUAGE, 0, 2), false) ?></h4>                                            
-                                                <?php } else { ?>
-                                                    <h4><?php esc_html_e("You used the Video-Addon", 'blog2social') ?></h4>                                            
-                                                <?php } ?>
-                                                <?php esc_html_e("You can always upgrade your current data volume.", "blog2social"); ?>
-                                                <br>
-                                                <br>
-                                                <?php if (B2S_PLUGIN_USER_VERSION != 0) { ?>
-                                                    <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank"><?php esc_html_e('Top-up your current data volume now!', 'blog2social') ?></a>
-                                                <?php } else { ?>
-                                                    <a class="btn btn-success" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank"><?php esc_html_e('Get your Premium license and Video-Addon now!', 'blog2social') ?></a>
-                                                <?php } ?>
                                             </div>
                                         </div>
                                     <?php } ?>
 
                                 <?php } ?>
+
                             </div> 
                             <div class="b2s-video-upload-file-container">
-                                <?php if (current_user_can('upload_files')) { ?>
+                                    <?php if (current_user_can('upload_files')) { ?>
                                     <input type="file" name="file" id="b2s-video-upload-file">
                                     <div class="b2s-video-upload-file-area"  id="b2s-video-upload-file-area">
                                         <h4 class="b2s-video-upload-title"><?php esc_html_e("Drop your video file here or click to select it from your device.", 'blog2social') ?></h4>
                                     </div>
-                                <?php } else { ?>
+                                    <?php } else { ?>
                                     <div id="b2s-video-upload-user-permission" class="alert alert-danger">
                                         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The video upload failed. Please check your video file!', 'blog2social'); ?>
                                     </div>
@@ -289,7 +295,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                     </div>
                                 </div> 
                             </div>
-                            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php'); ?> 
+<?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php'); ?> 
                         </div>
                     </div>
                 </div>
@@ -354,7 +360,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                 <br>
                 <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
                     <hr>
-                    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
+    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
                     <br>
                     <br>
                     <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
@@ -371,7 +377,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                     <br>
                     <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
-                <?php } ?>
+<?php } ?>
             </div>
         </div>
     </div>

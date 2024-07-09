@@ -134,12 +134,12 @@ class B2S_Notice {
     public static function getPostStats($openPosts = 0, $maxPosts = 0) {
         $x = 100;
         if ($openPosts > 0) {
-            $x = (int) ($x - (($openPosts / $maxPosts) * $x));
+            $x = (int) ((($openPosts / $maxPosts) * $x));
         }
 
         $state = 'success';
-        if ($x >= 60) {
-            if ($x <= 90) {
+        if ($x <= 50) {
+            if ($x >= 25) {
                 $state = 'warning';
             } else {
                 $state = 'danger';
@@ -149,11 +149,6 @@ class B2S_Notice {
         $output = '
           <div class="progress b2s-margin-bottom-3 b2s-progress-height-10">
           <div class="progress-bar progress-bar-' . $state . '" style="width: ' . $x . '%;"></div>
-          </div>
-          <div class="media-body">
-          <span class="b2s-span-float-left"><a href="#">' . esc_html__("Need more?", "blog2social") . '</a></span>
-          <span class="b2s-span-float-right">' . $openPosts . ' / ' . $maxPosts . '</span>
-          <div class="clearfix"></div>
           </div>';
 
         return $output;

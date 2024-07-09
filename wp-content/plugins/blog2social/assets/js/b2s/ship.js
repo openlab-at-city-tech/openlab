@@ -11,7 +11,12 @@ jQuery(document).on('heartbeat-send', function (e, data) {
 jQuery.xhrPool = [];
 
 jQuery(window).on("load", function () {
-    
+
+    //Onboarding
+    if (typeof jQuery('#b2s-toastee-paused').val() != "undefined") {
+        jQuery('.b2s-container').css('margin-top', "40px");
+    }
+
     init(true);
     imageSize();
     if (jQuery('.toggelbutton').is(':visible') && !jQuery("#b2s-wrapper").hasClass("toggled")) {
@@ -22,6 +27,7 @@ jQuery(window).on("load", function () {
     }
 
 });
+
 
 //Stop duplicate posts by page refreshing during the post process
 jQuery(document).on('keydown', '#b2sNetworkSent', function (event) {
@@ -670,6 +676,16 @@ jQuery(document).on("click", ".b2s-post-ship-item-full-text", function () {
     });
     return false;
 });
+
+jQuery(document).on("click", ".b2s-post-item-option-share-as-story", function () {
+    if (jQuery(this).prop('checked')) {
+        jQuery('.b2s-post-item-details-item-message-input[data-network-count="' + jQuery(this).attr('data-network-count') + '"][data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
+    } else {
+        jQuery('.b2s-post-item-details-item-message-input[data-network-count="' + jQuery(this).attr('data-network-count') + '"][data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').show();
+    }
+    return true;
+});
+
 jQuery(document).on("click", ".b2s-post-ship-item-message-delete", function () {
     var networkAuthId = jQuery(this).attr('data-network-auth-id');
     var networkCountId = jQuery(this).attr('data-network-count');
@@ -695,7 +711,7 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
     var networkId = jQuery(this).attr('data-network-id');
     var networkType = jQuery(this).attr('data-network-type');
     var metaType = jQuery(this).attr('data-meta-type');
-    var schedulerDays = jQuery(this).attr('scheduler-days');
+    var maxSchedDate = jQuery(this).attr('data-max-sched-date');
 
     //doppelklick Schutz
     if (!jQuery(this).hasClass('b2s-network-select-btn-deactivate')) {
@@ -924,11 +940,10 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                     today.setTime(jQuery('#b2sBlogPostSchedDate').val());
                                 }
 
-                                if(schedulerDays == 30 || schedulerDays == 365){
-                                    var end = "+"+schedulerDays+"d";
-                                } else {
-                                    var end = "";
-                                }
+                                //MaxSchedDate
+                                var maxDate = new Date();
+                                maxDate.setTime(maxSchedDate);
+
                                 jQuery(".b2s-post-item-details-release-input-date").datepicker({
                                     format: dateFormat,
                                     language: language,
@@ -937,10 +952,10 @@ jQuery(document).on("click", ".b2s-network-select-btn", function () {
                                     startDate: today,
                                     calendarWeeks: true,
                                     autoclose: true,
-                                    endDate: end
+                                    endDate: maxDate
                                 });
 
-                                
+
                                 jQuery('.b2s-post-item-details-release-input-time').timepicker({
                                     minuteStep: 15,
                                     appendWidgetTo: 'body',
@@ -1550,14 +1565,14 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-interval-sel
     releaseChooseInterval(interval, selectorInput, dataCount);
     return false;
 });
+
 //select shipping mode
 jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select', function () {
     var dataNetworkCount = 0;
     if (jQuery(this).val() == 0) {
         //TOS Twitter 032018 - none multiple accounts post same content to same time
-        
         jQuery('.b2s-twitter-thread-container[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').show();
-           
+
         if (jQuery(this).attr('data-network-id') == 2) {
             jQuery('.b2s-network-tos-sched-warning[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
         }
@@ -1570,9 +1585,8 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select'
             jQuery('#b2s-sched-post-modal').modal('show');
             return false;
         } else {
-            
             jQuery('.b2s-twitter-thread-container[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
-                
+
             //TOS Twitter 032018 - none multiple accounts post same content to same time
             if (jQuery(this).attr('data-network-id') == 2) {
                 jQuery('.b2s-network-tos-sched-warning[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').show();
@@ -1604,9 +1618,8 @@ jQuery(document).on('change', '.b2s-post-item-details-release-input-date-select'
             jQuery('#b2s-sched-post-modal').modal('show');
             return false;
         } else {
-            
             jQuery('.b2s-twitter-thread-container[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
-               
+
             //TOS Twitter 032018 - none multiple accounts post same content to same time
             if (jQuery(this).attr('data-network-id') == 2) {
                 jQuery('.b2s-network-tos-sched-warning[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]').hide();
@@ -1776,7 +1789,7 @@ jQuery(document).on("keyup", ".complete_network_url", function () {
     jQuery(this).removeClass("error");
     if (url.length != "0") {
         if (url.indexOf("http://") == -1 && url.indexOf("https://") == -1) {
-            url = "http://" + url;
+            url = "https://" + url;
             jQuery(this).val(url);
         }
     } else if (jQuery(this).hasClass("required_network_url")) {
@@ -2284,7 +2297,7 @@ jQuery(document).on('click', '.b2s-upload-image', function () {
             var content = '<div class="b2s-image-item">' +
                     '<div class="b2s-image-item-thumb">' +
                     '<label for="b2s-image-count-' + count + '">' +
-                    '<img class="img-thumbnail networkImage" alt="'+attachment.alt+'" src="' + attachment.url + '">' +
+                    '<img class="img-thumbnail networkImage" alt="' + attachment.alt + '" src="' + attachment.url + '">' +
                     '</label>' +
                     '</div>' +
                     '<div class="b2s-image-item-caption text-center">' +
@@ -2457,6 +2470,10 @@ jQuery("#b2sNetworkSent").validate({
         return false;
     },
     submitHandler: function (form) {
+        //Licence Condition
+        if (checkLicenceCondition() == false) {
+            return false;
+        }
         if (checkNetworkSelected() == false) {
             return false;
         }
@@ -2494,8 +2511,26 @@ jQuery("#b2sNetworkSent").validate({
                     jQuery('.b2s-nonce-check-fail').show();
                     return false;
                 }
-                var content = data.content;
                 jQuery(".b2s-loading-area").hide();
+
+                //Onboarding
+                if (typeof jQuery('#b2s-toastee-paused').val() != "undefined") {
+                    jQuery('.b2s-onboarding-share-step-1').hide();
+                    jQuery('.b2s-onboarding-share-step-2').show();
+                }
+
+                //Licence Condition
+                if (data.result == true) {
+                    jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
+                    jQuery('#current_licence_open_daily_post_quota').val(data.currentOpenDailyLimit);
+
+                    if (data.currenOpenDailyLimit <= 0) {
+                        jQuery('.b2s-current-licence-open-daily-post-quota-sidebar-info').show();
+                    }
+                }
+
+
+                var content = data.content;
                 for (var i = 0; i < content.length; i++) {
                     jQuery('.b2s-post-item-details-message-info[data-network-auth-id="' + content[i]['networkAuthId'] + '"]').hide();
                     jQuery('.b2s-post-item-details-edit-area[data-network-auth-id="' + content[i]['networkAuthId'] + '"]').hide();
@@ -2763,15 +2798,18 @@ function init(firstrun) {
     if (jQuery('#b2sBlogPostSchedDate').length > 0) {
         today.setTime(jQuery('#b2sBlogPostSchedDate').val());
     }
+
     jQuery(".b2s-post-item-details-release-input-date").datepicker({
         format: dateFormat,
         language: language,
         maxViewMode: 2,
         todayHighlight: true,
         startDate: today,
+        endDate: today,
         calendarWeeks: true,
         autoclose: true
     });
+
     jQuery('.b2s-post-item-details-release-input-time').timepicker({
         minuteStep: 15,
         appendWidgetTo: 'body',
@@ -2923,6 +2961,53 @@ function activatePortal(networkAuthId, check) {
     submitArea();
 }
 
+
+function checkLicenceCondition() {
+
+    //Licence Condition 
+    if (typeof jQuery('#current_licence_open_daily_post_quota') != "undefined" && typeof jQuery('#current_licence_open_sched_post_quota') != "undefined") {
+        var dailyLimit = jQuery('#current_licence_open_daily_post_quota').val();
+        var schedLimit = jQuery('#current_licence_open_sched_post_quota').html();
+        jQuery('.licence-condition-daily-modal-title').hide();
+        jQuery('.licence-condition-sched-modal-title').hide();
+
+        var isDirectPost = 0;
+        var isSchedPost = 0;
+
+        if (jQuery('#user_version').val() > 0) {
+            jQuery('.b2s-post-item-details-release-input-date-select').each(function () {
+                if (jQuery(this).is(":visible")) {
+                    if (jQuery(this).val() > 0) {
+                        isSchedPost = 1;
+                    } else {
+                        isDirectPost = 1;
+                    }
+                }
+            });
+
+            if (isSchedPost == 1 && schedLimit <= 0) {
+                jQuery('.licence-condition-sched-modal-title').show();
+                jQuery('.b2s-licence-condition-modal').modal('show');
+                return false;
+            }
+            //direct share
+            if (isDirectPost == 1 && dailyLimit <= 0) {
+                jQuery('.licence-condition-daily-modal-title').show();
+                jQuery('.b2s-licence-condition-modal').modal('show');
+                return false;
+            }
+        } else {
+            //direct share
+            if (dailyLimit <= 0) {
+                jQuery('.licence-condition-daily-modal-title').show();
+                jQuery('.b2s-licence-condition-modal').modal('show');
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 function checkNetworkSelected(postType = 'text') {
 //überprüfen ob mindestens ein PostItem vorhanden und sichtbar ist
     var visible = false;
@@ -2984,9 +3069,8 @@ function checkImageByImageNetworks() {
                         jQuery('#b2s-network-select-image').modal('show');
                         imageSize();
                         window.scrollTo(0, (jQuery(this).offset().top - 45));
-                        return false;
+                        result = false;
                     }
-                    result = false;
                 }
             });
         }
@@ -3326,20 +3410,20 @@ jQuery(document).on('change', '.b2s-twitter-thread', function () {
     var checkbox = jQuery(this);
     var networkAuthId = jQuery(this).attr("data-network-auth-id");
     var networkCountId = jQuery(this).attr('data-network-count');
-    var twitterLimit = 280;   
+    var twitterLimit = 280;
     var textField = jQuery(".b2s-post-item-details-item-message-input[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']");
 
-    if(checkbox.is(':checked')){
+    if (checkbox.is(':checked')) {
         jQuery(".b2s-insert-tweet-break-button").attr("disabled", false);
-        var networkCountText= "networkCount('" + networkAuthId +"');";
+        var networkCountText = "networkCount('" + networkAuthId + "');";
         textField.attr("onkeyup", networkCountText)
-        
+
     } else {
         jQuery(".b2s-insert-tweet-break-button").attr("disabled", true);
         var networkId = jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id');
-        var networkLimitAllText= "networkLimitAll('" + networkAuthId + "','" + networkId + "','" + twitterLimit + "');";
+        var networkLimitAllText = "networkLimitAll('" + networkAuthId + "','" + networkId + "','" + twitterLimit + "');";
         textField.attr("onkeyup", networkLimitAllText);
-        textField.val(textField.val().replaceAll("{new tweet}",""));
+        textField.val(textField.val().replaceAll("{new tweet}", ""));
         networkLimitAll(networkAuthId, networkId, twitterLimit);
         jQuery(".b2s-post-item-show-thread-count[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").hide();
 
@@ -3351,13 +3435,13 @@ jQuery(document).on('click', '.b2s-insert-tweet-break-button', function () {
     var networkAuthId = jQuery(this).attr("data-network-auth-id");
     var networkCountId = jQuery(this).attr('data-network-count');
     var checkbox = jQuery(".b2s-twitter-thread[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']");
-    if(checkbox.is(':checked')){
+    if (checkbox.is(':checked')) {
         var input = jQuery(".b2s-post-item-details-item-message-input[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']");
         var cursorPosition = input.prop("selectionStart");
         var text = input.val();
         text = text.substring(0, cursorPosition)
                 + "{new tweet}"
-                + text.substring(cursorPosition+1, text.length);
+                + text.substring(cursorPosition + 1, text.length);
         input.val(text);
     }
 
@@ -3369,21 +3453,21 @@ jQuery(document).on('change', '.b2s-twitter-thread-sched', function () {
     var checkbox = jQuery(this);
     var networkAuthId = jQuery(this).attr("data-network-auth-id");
     var networkCountId = jQuery(this).attr('data-network-count');
-    var twitterLimit = 280;   
+    var twitterLimit = 280;
     var textField = jQuery(".b2s-post-item-sched-customize-text[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']")
 
 
-    if(checkbox.is(':checked')){
+    if (checkbox.is(':checked')) {
         jQuery(".b2s-insert-tweet-break-button-sched").attr("disabled", false);
-        var networkCountText= "networkCount('" + networkAuthId +"');";
+        var networkCountText = "networkCount('" + networkAuthId + "');";
         textField.attr("onkeyup", networkCountText)
-    
+
     } else {
         jQuery(".b2s-insert-tweet-break-button-sched").attr("disabled", true);
         var networkId = jQuery(".b2s-post-item-sched-customize-text[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id');
-        var networkLimitAllText= "networkLimitAll('" + networkAuthId + "','" + networkId + "','" + twitterLimit + "');";
+        var networkLimitAllText = "networkLimitAll('" + networkAuthId + "','" + networkId + "','" + twitterLimit + "');";
         textField.attr("onkeyup", networkLimitAllText)
-        textField.val(textField.val().replaceAll("{new tweet}",""));
+        textField.val(textField.val().replaceAll("{new tweet}", ""));
         networkLimitAll(networkAuthId, networkId, twitterLimit);
         jQuery(".b2s-post-item-show-thread-count[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").hide();
 
@@ -3394,14 +3478,14 @@ jQuery(document).on('click', '.b2s-insert-tweet-break-button-sched', function ()
     var networkAuthId = jQuery(this).attr("data-network-auth-id");
     var networkCountId = jQuery(this).attr('data-network-count');
     var checkbox = jQuery(".b2s-twitter-thread-sched[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']");
-    
-    if(checkbox.is(':checked')){
+
+    if (checkbox.is(':checked')) {
         var input = jQuery(".b2s-post-item-sched-customize-text[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']");
         var cursorPosition = input.prop("selectionStart");
         var text = input.val();
         text = text.substring(0, cursorPosition)
                 + "{new tweet}"
-                + text.substring(cursorPosition+1, text.length);
+                + text.substring(cursorPosition + 1, text.length);
         input.val(input.val() + "{new tweet}");
 
     }
@@ -3409,8 +3493,8 @@ jQuery(document).on('click', '.b2s-insert-tweet-break-button-sched', function ()
 });
 
 
-function removeTweetBreaks(text, textField){
-    textField.val(textField.val().replaceAll("{new tweet}",""));
+function removeTweetBreaks(text, textField) {
+    textField.val(textField.val().replaceAll("{new tweet}", ""));
 }
 
 function networkLimitAll(networkAuthId, networkId, limit) {
@@ -3430,7 +3514,7 @@ function networkLimitAll(networkAuthId, networkId, limit) {
     if (typeof url !== typeof undefined && url !== false) {
         if (url.length != "0") {
             if (url.indexOf("http://") == -1 && url.indexOf("https://") == -1) {
-                url = "http://" + url;
+                url = "https://" + url;
                 jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").val(url);
             }
         } else if (jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").hasClass("required_network_url")) {
@@ -3442,7 +3526,6 @@ function networkLimitAll(networkAuthId, networkId, limit) {
     }
 
     if (typeof text !== typeof undefined && text !== false) {
-
 
         var textLength = text.length;
         var newText = text;
@@ -3478,6 +3561,12 @@ function networkLimitAll(networkAuthId, networkId, limit) {
                 limit = limit - url.length;
             }
         }
+        if (networkId == "43" && jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val() == 1) { //bluesky
+            if (url.length != "0") {
+                limit = limit - getNetwork43UrlLength(url);
+            }
+        }
+
 
         if (textLength >= limit) {
             newText = text.substring(0, limit);
@@ -3488,18 +3577,45 @@ function networkLimitAll(networkAuthId, networkId, limit) {
             var textLength = text.length;
         }
         if (networkId == "38") { //mastodon
-            jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(textLength+ " + "+url.length);
-
+            var mastodonLength = textLength + url.length;
+            jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(mastodonLength);
+        } else if (networkId == "43" && jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + networkAuthId + '"]').val() == 1) { //bluesky
+            var blueskyLength = textLength + getNetwork43UrlLength(url);
+            jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(blueskyLength);
         } else {
             jQuery(".b2s-post-item-countChar[data-network-count='" + networkCountId + "'][data-network-auth-id='" + networkAuthId + "']").html(textLength);
         }
     }
 }
 
+//BlueSky cuts urls after 16 chars into the path
+function getNetwork43UrlLength(url = "") {
+    if (url != "") {
+        var hostLength = 0;
+        var pathLength = 0;
+        var parsedUrl = new URL(url);
+        if (parsedUrl.hostname) {
+            hostLength = parsedUrl.hostname.length;
+        }
+        if (parsedUrl.pathname) {
+            // Exclude the trailing slash if it's the only character in the path
+            if (parsedUrl.pathname === "/") {
+                parsedUrl.pathname = "";
+            }
+            pathLength = parsedUrl.pathname.length;
+            if (pathLength > 16) {
+                pathLength = 16;
+            }
+        }
+        return hostLength + pathLength + 1; // +1 /n
+    }
+    return 0;
+
+}
+
 function networkCount(networkAuthId) {
 
     var twitterLimit = 280;
-    var mastodonLimit = 500;
     var networkCountId = -1; //default;
     if (jQuery(':focus').length > 0) {
         var attr = jQuery(':focus').attr('data-network-count');
@@ -3514,14 +3630,11 @@ function networkCount(networkAuthId) {
     if (typeof url !== typeof undefined && url !== false) {
         if (url.length != "0") {
             if (url.indexOf("http://") == -1 && url.indexOf("https://") == -1) {
-                url = "http://" + url;
+                url = "https://" + url;
                 jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").val(url);
             }
             if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "2") { //twitter
                 twitterLimit = twitterLimit - 26;
-            }
-            if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "38") { //mastodon
-                mastodonLimit = mastodonLimit - url.length;
             }
         } else if (jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").hasClass("required_network_url")) {
             if (!((jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 1 || jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 3 || jQuery(".b2s-post-item-details-item-url-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == 19) && jQuery('.b2s-post-item-details-post-format[data-network-auth-id=' + networkAuthId + ']').val() == 1)) { //Facebook & Linkedin Imagepost don't require Link
@@ -3533,7 +3646,7 @@ function networkCount(networkAuthId) {
 
     if (typeof text !== 'undefined' && jQuery('.b2s-post-item-details-item-message-input-allow-html[data-network-auth-id="' + networkAuthId + '"]').length == 0) {
         var textLength = text.length;
-        if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "2"){
+        if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "2") {
             var textStripped = text.replaceAll("{new tweet}", "");
             textLength = textStripped.length;
         }
@@ -3543,13 +3656,13 @@ function networkCount(networkAuthId) {
             var threadCount = Math.ceil(textLength / twitterLimit);
 
             var splitText = text.split("{new tweet}");
-            if(splitText.length > 1){
+            if (splitText.length > 1) {
                 var baseCount = 0;
-                for(var i = 0; i < splitText.length; i++){
+                for (var i = 0; i < splitText.length; i++) {
 
                     var tempCount = Math.ceil(splitText[i].length / twitterLimit);
                     baseCount += tempCount;
-            
+
                 }
                 threadCount = baseCount;
             }
@@ -3565,7 +3678,7 @@ function networkCount(networkAuthId) {
 
             }
         }
-     
+
     }
     if (jQuery(".b2s-post-item-details-item-message-input[data-network-auth-id='" + networkAuthId + "']").attr('data-network-id') == "12") { //instagram
         var matches = text.match(/(#[^# ]{1,})/g);
@@ -4623,8 +4736,8 @@ jQuery(document).on('click', '.b2s-draft-delete-confirm-btn', function () {
 
 
 jQuery(document).on('click', '.b2s-tiktok-promotion-radio', function () {
-    var options = jQuery('.b2s-tiktok-promotion-options[data-network-auth-id="'+jQuery(this).attr('data-network-auth-id')+'"]');
-    if(jQuery(this).attr("value") == 1){
+    var options = jQuery('.b2s-tiktok-promotion-options[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]');
+    if (jQuery(this).attr("value") == 1) {
         options.show()
     } else {
         options.hide()
@@ -4636,7 +4749,7 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
     var onboardingPaused = jQuery("#b2s-toastee-paused").val()
 
     if (jQuery(this).is(':checked')) {
-        if(onboardingPaused == 1){
+        if (onboardingPaused == 1) {
             jQuery.ajax({
                 url: ajaxurl,
                 type: "POST",
@@ -4658,7 +4771,7 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
         }
         jQuery('.b2s-onboarding-toastee-body').show();
     } else {
-        if(onboardingPaused == 0){
+        if (onboardingPaused == 0) {
             jQuery.ajax({
                 url: ajaxurl,
                 type: "POST",
@@ -4690,7 +4803,7 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
     var onboardingPaused = jQuery("#b2s-toastee-paused").val()
 
     if (jQuery(this).is(':checked')) {
-        if(onboardingPaused == 1){
+        if (onboardingPaused == 1) {
             jQuery.ajax({
                 url: ajaxurl,
                 type: "POST",
@@ -4712,7 +4825,7 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
         }
         jQuery('.b2s-onboarding-toastee-body').show();
     } else {
-        if(onboardingPaused == 0){
+        if (onboardingPaused == 0) {
             jQuery.ajax({
                 url: ajaxurl,
                 type: "POST",
@@ -4736,6 +4849,7 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
         jQuery('.b2s-onboarding-toastee-body').hide();
 
     }
-});
+}
+);
 
 

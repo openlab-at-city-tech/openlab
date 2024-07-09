@@ -61,8 +61,9 @@
 
 #b2s-onboarding-toastee {
     position: fixed; 
-    top: 30px; 
-    right: 20px;
+    top: 20px; 
+    right: 15px;
+    z-index: 100001;
 }
 
 #b2s-onboarding-toastee-inner {
@@ -97,7 +98,7 @@
     padding-left:10px;
     padding-right:10px;
     padding-top:5px;
-    padding-bottom:10px;
+    padding-bottom:5px;
     color: #fff;
 }
 
@@ -111,7 +112,8 @@
 
 .b2s-onboarding-p {
     padding: 20px; 
-    color: #fff
+    color: #fff;
+    word-wrap: break-word;
 }
 
 .toggle {

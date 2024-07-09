@@ -261,6 +261,7 @@ class Ajax_Post {
                                 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Save.php');
                                 $b2sShipSend = new B2S_Ship_Save();
                                 $content = array();
+                                $countPost = 0;
                                 foreach ($networkData as $k => $value) {
                                     if (isset($value->networkAuthId) && (int) $value->networkAuthId > 0 && isset($value->networkId) && (int) $value->networkId > 0 && isset($value->networkType)) {
                                         //TOS Twitter 032018 - none multiple Accounts - User select once
@@ -349,6 +350,7 @@ class Ajax_Post {
                                                     //TYPE direct share
                                                     $b2sShipSend->savePublishDetails($shareData, array(), true);
                                                 }
+                                                $countPost++;
                                             }
                                         }
                                     }
@@ -363,9 +365,27 @@ class Ajax_Post {
                                 }
                                 //Render Ouput
                                 if (is_array($content) && !empty($content)) {
+                                    //Licence Condition
+                                    $currentOpenDailyLimit = 0;
+                                    $currentOpenSchedLimit = 0;
+                                    $tokenInfo = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                                    if ($tokenInfo !== false && is_array($tokenInfo) && !empty($tokenInfo)) {
+                                        if (isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']) && isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota']) && isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                                            if (B2S_PLUGIN_USER_VERSION > 0) {
+                                                $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) - (int) $countPost;
+                                            }
+                                            //Type direct Post
+                                            if (isset($_POST['ship_type']) && (int) $_POST['ship_type'] == 0) {
+                                                $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota'] = ($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota']) - (int) $countPost;
+                                            }
+                                            $currentOpenDailyLimit = (int) $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota'];
+                                            $currentOpenSchedLimit = (B2S_PLUGIN_USER_VERSION > 0) ? (int) $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] : $currentOpenDailyLimit;
+                                            update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $tokenInfo, false);
+                                        }
+                                    }
                                     require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/View.php');
                                     $view = new B2S_Curation_View();
-                                    echo json_encode(array('result' => true, 'content' => $view->getResultListHtml($content)));
+                                    echo json_encode(array('result' => true, 'currentOpenDailyLimit' => $currentOpenDailyLimit, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'content' => $view->getResultListHtml($content)));
                                     wp_die();
                                 }
                             }
@@ -596,7 +616,6 @@ class Ajax_Post {
 
     public function saveShipData() {
 
-
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Save.php');
             $post = $_POST;
@@ -615,6 +634,7 @@ class Ajax_Post {
 
             $content = array();
             $schedResult = array();
+            $countDirectPost = 0;
             $defaultPostData = array('token' => B2S_PLUGIN_TOKEN,
                 'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
                 'post_id' => (int) $post['post_id'],
@@ -792,7 +812,7 @@ class Ajax_Post {
                     $schedData = array();
                     if (isset($data['releaseSelect']) && (int) $data['releaseSelect'] == 0) {
                         $b2sShipSend->savePublishDetails(array_merge($defaultPostData, $sendData), $relayData);
-
+                        $countDirectPost++;
                         //mode: schedule custom once
                     } else if (isset($data['releaseSelect']) && (int) $data['releaseSelect'] == 1 && isset($data['date'][0]) && isset($data['time'][0])) {
                         $schedData = array(
@@ -814,7 +834,7 @@ class Ajax_Post {
                             'user_timezone' => isset($post['user_timezone']) ? sanitize_text_field(wp_unslash($post['user_timezone'])) : 0,
                             'saveSetting' => isset($data['saveSchedSetting']) ? true : false
                         );
-                        $schedResult [] = $b2sShipSend->saveSchedDetails(array_merge($defaultPostData, $sendData), $schedData, $relayData);
+                        $schedResult[] = $b2sShipSend->saveSchedDetails(array_merge($defaultPostData, $sendData), $schedData, $relayData);
                         $content = array_merge($content, $schedResult);
 
                         //mode: recurrently schedule
@@ -839,7 +859,7 @@ class Ajax_Post {
                             'user_timezone' => isset($post['user_timezone']) ? sanitize_text_field(wp_unslash($post['user_timezone'])) : 0,
                             'saveSetting' => isset($data['saveSchedSetting']) ? true : false
                         );
-                        $schedResult [] = $b2sShipSend->saveSchedDetails(array_merge($defaultPostData, $sendData), $schedData, $relayData);
+                        $schedResult[] = $b2sShipSend->saveSchedDetails(array_merge($defaultPostData, $sendData), $schedData, $relayData);
                         $content = array_merge($content, $schedResult);
                     }
                 }
@@ -856,7 +876,30 @@ class Ajax_Post {
                 $content = array_merge($content, $sendResult);
             }
 
-            echo json_encode(array('result' => true, 'content' => $content));
+            //Licence Condition
+            $currentOpenDailyLimit = 0;
+            $currentOpenSchedLimit = 0;
+            if (!isset($post['is_video']) || ((isset($post['is_video']) && (int) $post['is_video'] == 0))) {
+                $tokenInfo = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                if ($tokenInfo !== false && is_array($tokenInfo) && !empty($tokenInfo)) {
+                    if (isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']) && isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota']) && isset($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                        if (B2S_PLUGIN_USER_VERSION > 0 && !empty($schedResult)) {
+                            $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) - count($schedResult);
+                        }
+                        //Type direct Post
+                        if ($countDirectPost > 0) {
+                            if (B2S_PLUGIN_USER_VERSION > 0) {
+                                $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) - $countDirectPost;
+                            }
+                            $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota'] = ($tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota']) - $countDirectPost;
+                        }
+                        $currentOpenDailyLimit = (int) $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_daily_post_quota'];
+                        $currentOpenSchedLimit = (B2S_PLUGIN_USER_VERSION > 0) ? (int) $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] : $currentOpenDailyLimit;
+                        update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $tokenInfo, false);
+                    }
+                }
+            }
+            echo json_encode(array('result' => true, 'currentOpenDailyLimit' => $currentOpenDailyLimit, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'content' => $content));
             wp_die();
         } else {
             echo json_encode(array('result' => false, 'error' => 'nonce'));
@@ -1105,12 +1148,14 @@ class Ajax_Post {
                     }
                 }
             }
+
+            $getProfileUserAuth = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
+
             foreach ($assignUser as $k => $userId) {
                 if (!isset($oldOptions['assignUser']) || !in_array($userId, $oldOptions['assignUser'])) {
                     //assign Networkollektion and Networks
                     $assignProfile = 0;
                     $assignTwitter = 0;
-                    $getProfileUserAuth = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
                     if (isset($getProfileUserAuth->result) && (int) $getProfileUserAuth->result == 1 && isset($getProfileUserAuth->data) && !empty($getProfileUserAuth->data) && isset($getProfileUserAuth->data->mandant) && isset($getProfileUserAuth->data->auth) && !empty($getProfileUserAuth->data->mandant) && !empty($getProfileUserAuth->data->auth)) {
                         $mandant = $getProfileUserAuth->data->mandant;
                         $auth = $getProfileUserAuth->data->auth;
@@ -1355,9 +1400,12 @@ class Ajax_Post {
                     $user_token = B2S_PLUGIN_TOKEN;
                 }
                 if ($user_token != false) {
+                    $currentDate = new DateTime("now", wp_timezone());
+
                     $post = array('token' => $user_token,
                         'action' => 'updateUserVersion',
                         'version' => B2S_PLUGIN_VERSION,
+                        'current_date' => $currentDate->format('Y-m-d'),
                         'key' => sanitize_text_field($_POST['key']));
                     $keyResult = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $post));
                     if (isset($keyResult->result) && $keyResult->result == true) {
@@ -1366,12 +1414,20 @@ class Ajax_Post {
                             $option['B2S_PLUGIN_USER_VERSION'] = $keyResult->version;
                             if (isset($keyResult->trail) && $keyResult->trail == true && isset($keyResult->trailEndDate) && $keyResult->trailEndDate != "") {
                                 $option['B2S_PLUGIN_TRAIL_END'] = $keyResult->trailEndDate;
+                            } else {
+                                if (isset($option['B2S_PLUGIN_TRAIL_END'])) {
+                                    unset($option['B2S_PLUGIN_TRAIL_END']);
+                                }
                             }
                             //has addon
                             if (isset($keyResult->addon->video)) {
                                 $option['B2S_PLUGIN_ADDON_VIDEO'] = (array) $keyResult->addon->video;
+                            } else {
+                                if (isset($option['B2S_PLUGIN_ADDON_VIDEO'])) {
+                                    unset($option['B2S_PLUGIN_ADDON_VIDEO']);
+                                }
                             }
- 
+
                             if (isset($keyResult->addon->app)) {
                                 $appQuantity = unserialize(B2S_PLUGIN_DEFAULT_USER_APP_QUANTITY);
                                 $quantity = isset($appQuantity[$keyResult->version]) ? $appQuantity[$keyResult->version] : 1;
@@ -1391,6 +1447,15 @@ class Ajax_Post {
                                     }
                                 }
                                 $option['B2S_PLUGIN_ALLOWED_USER_APPS'] = serialize($network_quantities);
+                            } else {
+                                if (isset($option['B2S_PLUGIN_ALLOWED_USER_APPS'])) {
+                                    unset($option['B2S_PLUGIN_ALLOWED_USER_APPS']);
+                                }
+                            }
+
+
+                            if (isset($keyResult->licence_condition)) {
+                                $option['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $keyResult->licence_condition;
                             }
 
                             update_option('B2S_PLUGIN_USER_VERSION_' . $user_id, $option, false);
@@ -1402,10 +1467,18 @@ class Ajax_Post {
                             $tokenInfo['B2S_PLUGIN_VERSION'] = B2S_PLUGIN_VERSION;
                             if (isset($keyResult->trail) && $keyResult->trail == true && isset($keyResult->trailEndDate) && $keyResult->trailEndDate != "") {
                                 $tokenInfo['B2S_PLUGIN_TRAIL_END'] = $keyResult->trailEndDate;
+                            } else {
+                                if (isset($option['B2S_PLUGIN_TRAIL_END'])) {
+                                    unset($option['B2S_PLUGIN_TRAIL_END']);
+                                }
                             }
                             //has addon
                             if (isset($keyResult->addon->video)) {
                                 $tokenInfo['B2S_PLUGIN_ADDON_VIDEO'] = (array) $keyResult->addon->video;
+                            } else {
+                                if (isset($option['B2S_PLUGIN_ADDON_VIDEO'])) {
+                                    unset($option['B2S_PLUGIN_ADDON_VIDEO']);
+                                }
                             }
 
                             if (isset($keyResult->addon->app)) {
@@ -1427,8 +1500,15 @@ class Ajax_Post {
                                     }
                                 }
                                 $tokenInfo['B2S_PLUGIN_ALLOWED_USER_APPS'] = serialize($network_quantities);
+                            } else {
+                                if (isset($option['B2S_PLUGIN_ALLOWED_USER_APPS'])) {
+                                    unset($option['B2S_PLUGIN_ALLOWED_USER_APPS']);
+                                }
                             }
 
+                            if (isset($keyResult->licence_condition)) {
+                                $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $keyResult->licence_condition;
+                            }
 
                             if (!isset($keyResult->version)) {
                                 define('B2S_PLUGIN_NOTICE', 'CONNECTION');
@@ -1743,8 +1823,25 @@ class Ajax_Post {
             if (isset($_POST['postId']) && !empty($_POST['postId'])) {
                 $postIds = explode(',', sanitize_text_field(wp_unslash($_POST['postId'])));
                 if (is_array($postIds) && !empty($postIds)) {
-                    echo json_encode(B2S_Post_Tools::deleteUserSchedPost($postIds));
-                    wp_die();
+                    $delete = B2S_Post_Tools::deleteUserSchedPost($postIds);
+                    if ($delete['result'] == true) {
+                        //Licence Condition
+                        $currentOpenSchedLimit = 0;
+                        if ((int) $delete['postCount'] > 0) {
+                            $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                            if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                                if (isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']) && isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                                    if ((int) $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] > 0) {
+                                        $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) + $delete['postCount'];
+                                        update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                                        $currentOpenSchedLimit = $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'];
+                                    }
+                                }
+                            }
+                        }
+                        echo json_encode(array('result' => true, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'postId' => $delete['postId'], 'postCount' => $delete['postCount'], 'blogPostId' => $delete['blogPostId']));
+                        wp_die();
+                    }
                 }
             }
             echo json_encode(array('result' => false));
@@ -1762,11 +1859,29 @@ class Ajax_Post {
             if (isset($_POST['b2s_id']) && !empty($_POST['b2s_id']) && isset($_POST['post_id']) && !empty($_POST['post_id'])) {
                 $postIds = array(sanitize_text_field(wp_unslash($_POST['b2s_id'])));
                 if (is_array($postIds) && !empty($postIds)) {
-                    echo json_encode(B2S_Post_Tools::deleteUserSchedPost($postIds));
+                    $delete = B2S_Post_Tools::deleteUserSchedPost($postIds);
                     delete_option("B2S_PLUGIN_CALENDAR_BLOCKED_" . (int) $_POST['b2s_id']);
                     delete_option('B2S_PLUGIN_POST_META_TAGES_TWITTER_' . (int) $_POST['post_id']);
                     delete_option('B2S_PLUGIN_POST_META_TAGES_OG_' . (int) $_POST['post_id']);
-                    wp_die();
+
+                    if ($delete['result'] == true) {
+                        //Licence Condition
+                        $currentOpenSchedLimit = 0;
+                        if ((int) $delete['postCount'] > 0) {
+                            $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                            if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                                if (isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']) && isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                                    if ((int) $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] > 0) {
+                                        $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) + $delete['postCount'];
+                                        update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                                        $currentOpenSchedLimit = $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'];
+                                    }
+                                }
+                            }
+                        }
+                        echo json_encode(array('result' => true, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'postId' => $delete['postId'], 'postCount' => $delete['postCount'], 'blogPostId' => $delete['blogPostId']));
+                        wp_die();
+                    }
                 }
             }
             echo json_encode(array('result' => false));
@@ -2243,7 +2358,7 @@ class Ajax_Post {
                         if ((int) $_POST['networkId'] == 2) {
                             $new_template[$type]['twitterThreads'] = ((isset($data['twitterThreads']) && $data['twitterThreads'] == 'false') ? false : true);
                         }
-                        if ((int) $_POST['networkId'] == 24 || (int) $_POST['networkId'] == 12 || (int) $_POST['networkId'] == 1 || (int) $_POST['networkId'] == 2) {
+                        if ((int) $_POST['networkId'] == 43 || (int) $_POST['networkId'] == 24 || (int) $_POST['networkId'] == 12 || (int) $_POST['networkId'] == 1 || (int) $_POST['networkId'] == 2) {
                             $new_template[$type]['addLink'] = ((isset($data['addLink']) && $data['addLink'] == 'false') ? false : true);
                         }
                         if ((int) $_POST['networkId'] == 12) {
@@ -2442,6 +2557,8 @@ class Ajax_Post {
                 $networkData = json_decode(base64_decode(sanitize_text_field($_POST['b2s-re-post-profil-data-' . sanitize_text_field($_POST['b2s-re-post-profil-dropdown'])])));
                 if ($networkData !== false && is_array($networkData) && !empty($networkData)) {
 
+                    $countSchedPosts = 0;
+
                     //Select Posts for Queue
                     $limit = 5;
                     $versionLimit = unserialize(B2S_PLUGIN_RE_POST_LIMIT);
@@ -2551,6 +2668,7 @@ class Ajax_Post {
                                 }
                             }
                         }
+
                         if (empty($postIds)) {
                             echo json_encode(array('result' => false, 'error' => 'content_in_queue'));
                             wp_die();
@@ -2594,7 +2712,6 @@ class Ajax_Post {
                                 $date = new DateTime();
                                 $optionPostFormat = $options->_getOption('post_template');
                                 $rePost = new B2S_RePost_Save(B2S_PLUGIN_BLOG_USER_ID, $userLang, $userTimeZoneOffset, $optionPostFormat, true, $bestTimes);
-                                $countPosts = 0;
                                 foreach ($postIds as $k => $postId) {
                                     //get Postdata
                                     $postData = get_post((int) $postId);
@@ -2634,10 +2751,10 @@ class Ajax_Post {
                                     }
                                     $nextPosibleDate = $rePost->getPostDateTime($startDate, $settings);
                                     $date->setDate(substr($nextPosibleDate, 0, 4), substr($nextPosibleDate, 5, 2), substr($nextPosibleDate, 8, 2));
-                                    $rePost->generatePosts($startDate, $settings, $networkData, $selectedTwitterProfile);
-                                    $countPosts++;
+                                    $count = $rePost->generatePosts($startDate, $settings, $networkData, $selectedTwitterProfile);
+                                    $countSchedPosts = $countSchedPosts + $count;
                                 }
-                                if ($countPosts == 0) {
+                                if ($countSchedPosts == 0) {
                                     echo json_encode(array('result' => false, 'error' => 'no_content'));
                                     wp_die();
                                 }
@@ -2646,10 +2763,25 @@ class Ajax_Post {
                         }
                     }
 
+                    //Licence Condition
+                    $currentOpenSchedLimit = 0;
+                    if (B2S_PLUGIN_USER_VERSION > 0 && $countSchedPosts > 0) {
+                        $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                        if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                            if (isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']) && isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                                if ((int) $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] > 0) {
+                                    $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) - $countSchedPosts;
+                                    update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                                    $currentOpenSchedLimit = $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'];
+                                }
+                            }
+                        }
+                    }
+
                     require_once(B2S_PLUGIN_DIR . 'includes/B2S/RePost/Item.php');
                     $rePostItem = new B2S_RePost_Item();
                     $queue = $rePostItem->getRePostQueueHtml();
-                    echo json_encode(array('result' => true, 'queue' => $queue));
+                    echo json_encode(array('result' => true, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'queue' => $queue));
                     wp_die();
                 }
             }
@@ -2680,7 +2812,22 @@ class Ajax_Post {
                         require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
                         $delete = B2S_Post_Tools::deleteUserSchedPost($b2sPostIds);
                         if ($delete['result'] == true) {
-                            echo json_encode(array('result' => true, 'postIds' => $postIds));
+
+                            //Licence Condition
+                            $currentOpenSchedLimit = 0;
+                            if ((int) $delete['postCount'] > 0) {
+                                $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                                if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                                    if (isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']) && isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                                        if ((int) $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] > 0) {
+                                            $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'] = ($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota']) + $delete['postCount'];
+                                            update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                                            $currentOpenSchedLimit = $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'];
+                                        }
+                                    }
+                                }
+                            }
+                            echo json_encode(array('result' => true, 'currentOpenSchedLimit' => $currentOpenSchedLimit, 'postIds' => $postIds));
                             wp_die();
                         }
                     }

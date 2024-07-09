@@ -66,7 +66,7 @@ class B2S_Post_Item {
         $leftJoinWhere = "";
 
         if (!empty($this->searchPostTitle)) {
-            $addSearchPostTitle = $wpdb->prepare(' AND posts.`post_title` LIKE %s', '%' . trim($this->searchPostTitle) . '%');
+            $addSearchPostTitle = $wpdb->prepare(' AND posts.`post_title` LIKE %s', '%' . trim(esc_sql($wpdb->esc_like($this->searchPostTitle))) . '%');
         }
         if ($this->searchAuthorId > 0) {
             $addSearchAuthorId = $wpdb->prepare(' AND posts.`post_author` = %d', $this->searchAuthorId);
@@ -154,7 +154,7 @@ class B2S_Post_Item {
 
             $postTypes = " ";
             if (!empty($this->searchPostType)) {
-                $postTypes .= " posts.`post_type` LIKE '%" . $this->searchPostType . "%' ";
+                $postTypes .= $wpdb->prepare(' posts.`post_type` LIKE %s', '%' . esc_sql($wpdb->esc_like($this->searchPostType)) . '%');
             } else {
                 $post_types = get_post_types(array('public' => true));
                 if (is_array($post_types) && !empty($post_types)) {
@@ -468,7 +468,7 @@ class B2S_Post_Item {
         }
         foreach ($this->postData as $var) {
             $postType = 'post';
-            if(isset($var->post_type)){
+            if (isset($var->post_type)) {
                 if (strpos(strtolower($var->post_type), 'event') !== false) {
                     $postType = 'event';
                 }
@@ -509,12 +509,12 @@ class B2S_Post_Item {
                     $isPublished = false;
                 }
                 $url = get_permalink($var->ID);
-                if($permalinkSetting){
+                if ($permalinkSetting) {
                     $post = get_post((int) $var->ID);
-                    if ( isset( $post->post_status ) && ( 'future' === $post->post_status ) ) {
+                    if (isset($post->post_status) && ( 'future' === $post->post_status )) {
                         // set the post status to publish to get the 'publish' permalink
                         $post->post_status = 'publish';
-                        $url = get_permalink( $post);
+                        $url = get_permalink($post);
                     }
                 }
                 $this->postItem .= '<li class="list-group-item">
@@ -629,9 +629,9 @@ class B2S_Post_Item {
                                                 </div>
                                          </div>
                                     </li>';
-            } 
+            }
 
-            if($this->type == 'notice'){
+            if ($this->type == 'notice') {
                 $countPublish = $this->getPostCount($var->ID);
                 $lastPublish = $this->getLastPost($var->ID);
                 $userInfoName = get_the_author_meta('display_name', $lastPublish['user']);
@@ -673,12 +673,12 @@ class B2S_Post_Item {
                 $userInfoName = get_the_author_meta('display_name', $nextSched['user']);
 
                 $url = get_permalink($var->ID);
-                if($permalinkSetting){
+                if ($permalinkSetting) {
                     $post = get_post((int) $var->ID);
-                    if ( isset( $post->post_status ) && ( 'future' === $post->post_status ) ) {
+                    if (isset($post->post_status) && ( 'future' === $post->post_status )) {
                         // set the post status to publish to get the 'publish' permalink
                         $post->post_status = 'publish';
-                        $url = get_permalink( $post);
+                        $url = get_permalink($post);
                     }
                 }
                 $this->postItem .= '<li class="list-group-item">
@@ -742,7 +742,7 @@ class B2S_Post_Item {
                         )
                         . '</span>
                                             <span class="pull-right">
-                                                <button class="btn btn-default btn-sm deleteCcDraftBtn" data-blog-post-id="' . esc_attr($var->ID) . '"><span class="glyphicon glyphicon glyphicon-trash "></span> ' . esc_html__('delete', 'blog2social') . '</button>
+                                                <button class="btn btn-default btn-sm deleteCcDraftBtn" data-blog-post-id="' . esc_attr($var->ID) . '"><span class="glyphicon glyphicon glyphicon-trash "></span> ' . esc_html__('Delete', 'blog2social') . '</button>
                                             </span>
                                             <p class="info hidden-xs">#' . esc_html($var->ID . ' | ' . __('Author', 'blog2social')) . ' <a href="' . esc_url(get_author_posts_url($var->post_author)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a> | ' . esc_html__('saved', 'blog2social') . ': ' . esc_html(B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2)) . $lastPublish) . '</p>
                                         </div>
@@ -753,12 +753,12 @@ class B2S_Post_Item {
             if ($this->type == 'draft-post') {
                 $userInfoName = get_the_author_meta('display_name', $var->post_author);
                 $url = get_permalink($var->ID);
-                if($permalinkSetting){
+                if ($permalinkSetting) {
                     $post = get_post((int) $var->ID);
-                    if ( isset( $post->post_status ) && ( 'future' === $post->post_status ) ) {
+                    if (isset($post->post_status) && ( 'future' === $post->post_status )) {
                         // set the post status to publish to get the 'publish' permalink
                         $post->post_status = 'publish';
-                        $url = get_permalink( $post);
+                        $url = get_permalink($post);
                     }
                 }
                 $this->postItem .= '<li class="list-group-item b2s-draft-list-entry" data-b2s-draft-id="' . esc_attr($var->draft_id) . '">
@@ -767,10 +767,10 @@ class B2S_Post_Item {
                                     <div class="media-body">
                                             <strong><a target="_blank" href="' . esc_url($url) . '">' . esc_html($postTitle) . '</a></strong>
                                         <span class="pull-right b2s-publish-btn">
-                                            <a class="btn btn-primary btn-sm publishPostBtn" href="admin.php?page=blog2social-ship' . (($postType == 'video') ? '&isVideo=1' : '') . '&postId=' . esc_attr($var->ID) . '&type=draft">' . esc_html__('Share on Social Media', 'blog2social') . '</a>
+                                            <a class="btn btn-primary btn-sm publishPostBtn" href="admin.php?page=blog2social-ship' . (($postType == 'video') ? '&isVideo=1' : '') . '&postId=' . esc_attr($var->ID) . '&type=draft">' . esc_html__('Edit draft', 'blog2social') . '</a>
                                         </span>
                                         <span class="pull-right">
-                                            <a class="btn btn-default btn-sm deleteDraftBtn" data-b2s-draft-id="' . esc_attr($var->draft_id) . '">' . esc_html__('delete', 'blog2social') . '</a>
+                                            <a class="btn btn-default btn-sm deleteDraftBtn" data-b2s-draft-id="' . esc_attr($var->draft_id) . '">' . esc_html__('Delete', 'blog2social') . '</a>
                                         </span>
                                         <p class="info hidden-xs">#' . esc_html($var->ID . ' | ' . __('Author', 'blog2social')) . ' <a href="' . esc_url(get_author_posts_url($var->post_author)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a> | ' . esc_html__('last saved', 'blog2social') . ': ' . esc_html(B2S_Util::getCustomDateFormat($var->last_save_date, substr(B2S_LANGUAGE, 0, 2))) . '</p>
                                     </div>
@@ -783,12 +783,12 @@ class B2S_Post_Item {
                 $lastPublish = $this->getLastPublish($var->ID);
                 $lastPublish = ($lastPublish != false) ? ' | ' . __('last shared on social media', 'blog2social') . ' ' . B2S_Util::getCustomDateFormat($lastPublish, substr(B2S_LANGUAGE, 0, 2)) : '';
                 $url = get_permalink($var->ID);
-                if($permalinkSetting){
+                if ($permalinkSetting) {
                     $post = get_post((int) $var->ID);
-                    if ( isset( $post->post_status ) && ( 'future' === $post->post_status ) ) {
+                    if (isset($post->post_status) && ( 'future' === $post->post_status )) {
                         // set the post status to publish to get the 'publish' permalink
                         $post->post_status = 'publish';
-                        $url = get_permalink( $post);
+                        $url = get_permalink($post);
                     }
                 }
                 $this->postItem .= '<li class="list-group-item b2s-favorite-list-entry" data-post-id="' . esc_attr($var->ID) . '">
@@ -802,7 +802,7 @@ class B2S_Post_Item {
                                         </span>' .
                         ((isset($var->draft_blog_user_id) && $var->draft_blog_user_id != NULL && $var->draft_blog_user_id == B2S_PLUGIN_BLOG_USER_ID) ?
                         '<span class="pull-right b2s-publish-btn">
-                                            <a class="btn btn-default btn-sm loadDraftBtn" href="admin.php?page=blog2social-ship&postId=' . esc_attr($var->ID) . (!empty($selectSchedDate) ? '&schedDate=' . $selectSchedDate : '') . '&type=draft">' . esc_html__('load Draft', 'blog2social') . '</a>
+                                            <a class="btn btn-default btn-sm loadDraftBtn" href="admin.php?page=blog2social-ship&postId=' . esc_attr($var->ID) . (!empty($selectSchedDate) ? '&schedDate=' . $selectSchedDate : '') . '&type=draft">' . esc_html__('Load draft', 'blog2social') . '</a>
                                         </span>' : '')
                         . '<p class="info hidden-xs">#' . esc_html($var->ID . ' | ' . __('Author', 'blog2social')) . ' <a href="' . esc_url(get_author_posts_url($var->post_author)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a> | ' . esc_html($postStatus[trim(strtolower($var->post_status))] . ' ' . __('on blog', 'blog2social')) . ': ' . esc_html(B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2)) . $lastPublish) . '</p>
                                     </div>
@@ -815,12 +815,12 @@ class B2S_Post_Item {
                 $nextSched = $this->getLastPost($var->ID);
                 $userInfoName = get_the_author_meta('display_name', $nextSched['user']);
                 $url = get_permalink($var->ID);
-                if($permalinkSetting){
+                if ($permalinkSetting) {
                     $post = get_post((int) $var->ID);
-                    if ( isset( $post->post_status ) && ( 'future' === $post->post_status ) ) {
+                    if (isset($post->post_status) && ( 'future' === $post->post_status )) {
                         // set the post status to publish to get the 'publish' permalink
                         $post->post_status = 'publish';
-                        $url = get_permalink( $post);
+                        $url = get_permalink($post);
                     }
                 }
                 $this->postItem .= '<li class="list-group-item" data-type="post">
@@ -1116,7 +1116,7 @@ class B2S_Post_Item {
 
                     if ((int) $var->hook_action == 0) {
                         $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
-                        $content .= esc_html__('delete from reporting', 'blog2social') . '</a> ';
+                        $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                     }
 
                     if (!empty($error)) {
@@ -1130,7 +1130,7 @@ class B2S_Post_Item {
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
                 $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-publish-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
-                $content .= esc_html__('delete from reporting', 'blog2social') . '</a></label></li>';
+                $content .= esc_html__('Delete from reporting', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
             }
@@ -1192,7 +1192,7 @@ class B2S_Post_Item {
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
                 $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-approve-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_html__('You want to delete your Social Media post?', 'blog2social') . '">';
-                $content .= esc_html__('delete', 'blog2social') . '</a></label></li>';
+                $content .= esc_html__('Delete', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
             }
@@ -1284,7 +1284,7 @@ class B2S_Post_Item {
                             $content = ' <a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">';
                         }
                     }
-                    $content .= '<a href="#" class="b2s-post-sched-area-drop-btn" data-post-id="' . esc_attr($var->id) . '"> ' . esc_html__('delete', 'blog2social') . '</a> ';
+                    $content .= '<a href="#" class="b2s-post-sched-area-drop-btn" data-post-id="' . esc_attr($var->id) . '"> ' . esc_html__('Delete', 'blog2social') . '</a> ';
 
                     $content .= '</p>
                                             </div>
@@ -1293,7 +1293,7 @@ class B2S_Post_Item {
                 }
                 if ($this->type != 'repost') {
                     $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-                    $content .= '<a class="checkbox-post-sched-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#"> ' . esc_html__('delete scheduling', 'blog2social');
+                    $content .= '<a class="checkbox-post-sched-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#"> ' . esc_html__('Delete scheduling', 'blog2social');
                     $content .= '</a></label></li>';
                 }
                 $content .= '</ul></div></div>';
@@ -1303,7 +1303,6 @@ class B2S_Post_Item {
         return false;
     }
 
-    
     public function getAllPostsDataHtml($post_id = 0, $showByDate = '', $showByNetwork = 0, $userAuthId = 0, $sharedByUser = 0, $sharedOnNetwork = 0) {
         if ($post_id > 0) {
             global $wpdb;
@@ -1385,18 +1384,6 @@ class B2S_Post_Item {
                                                     <strong>' . esc_html($networkName[$var->network_id]) . $schedInProcess . '</strong>
                                                     <p class="info">' . esc_html($networkType[$var->network_type] . $name) . ' | ' . sprintf(esc_html__('scheduled by %s', 'blog2social'), ' <a href="' . esc_url(get_author_posts_url($var->blog_user_id)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . ' <span class="b2s-post-sched-area-sched-time" data-post-id="' . esc_attr($var->id) . '">' . $lastEdit . esc_html(B2S_Util::getCustomDateFormat($var->sched_date, substr(B2S_LANGUAGE, 0, 2))) . '</span> ' . $specialPosting . '</p>
                                                     <p class="info">';
-
-                        if ((int) $var->v2_id == 0 && empty($schedInProcess)) {
-                            if ((B2S_PLUGIN_USER_VERSION > 0) && $var->post_format != 2) {
-                                $content .= ((B2S_PLUGIN_USER_VERSION > 0) ? ' <a href="#" class="b2s-post-edit-sched-btn" data-network-auth-id="' . esc_attr($var->network_auth_id) . '" data-network-type="' . esc_attr($var->network_type) . '" data-network-id="' . esc_attr($var->network_id) . '" data-post-id="' . esc_attr($var->post_id) . '" data-b2s-id="' . esc_attr($var->id) . '" data-relay-primary-post-id="' . esc_attr($var->relay_primary_post_id) . '" >' : ' <a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">');
-                                $content .= esc_html__('edit', 'blog2social') . '</a> ';
-                                $content .= '|';
-                            } else if (B2S_PLUGIN_USER_VERSION == 0) {
-                                $content = ' <a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">';
-                            }
-                        }
-                        $content .= '<a href="#" class="b2s-post-sched-area-drop-btn" data-post-id="' . esc_attr($var->id) . '"> ' . esc_html__('delete', 'blog2social') . '</a> ';
-
                         $content .= '</p>
                                                 </div>
                                         </div>
@@ -1481,7 +1468,7 @@ class B2S_Post_Item {
 
                         if ((int) $var->hook_action == 0) {
                             $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
-                            $content .= esc_html__('delete from reporting', 'blog2social') . '</a> ';
+                            $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                         }
                         if (!empty($error)) {
                             $content .= '| <a href="admin.php?page=blog2social-ship&postId=' . esc_attr($post_id) . '&network_auth_id=' . esc_attr($var->network_auth_id) . $isVideo . '">' . esc_html__('re-share', 'blog2social') . '</a>';

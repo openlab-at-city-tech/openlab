@@ -726,3 +726,65 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
         </div>
     </div>
 <?php } ?>
+
+<div class="modal fade" id="b2sAiTextGeneratorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAiTextGeneratorModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAiTextGeneratorModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h3 class="b2s-text-xl">                           
+                            <?php esc_html_e('Welcome to Assistini - the smart AI text generator!', 'blog2social'); ?>             
+                        </h3>
+                        <p>
+                            <?php esc_html_e('Assistini is an intuitive AI text generator that helps you create high-quality texts. Whether blog posts, press releases, SEO texts or social media posts - Assistini helps you create them in the shortest possible time.', 'blog2Social'); ?></p>
+                        <br>
+                        <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Try Assistini for free', 'blog2Social'); ?></a>
+                        <?php esc_html_e('or', 'blog2social'); ?> <a class="btn-link b2s-text-underline" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('Visit Website', 'blog2Social'); ?></a>
+                        
+                        <p class="b2s-text-sm b2s-padding-top-20"><?php esc_html_e('Exciting News: The integration of Assistini into the Blog2Social Plugin is on its way!', 'blog2Social'); ?></p>
+                    </div>
+                    <div class="col-md-5">
+                        <img class="b2s-ass-img-welcome hidden-sm hidden-xs" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="b2sKiAssistiniAuthModal" tabindex="-1" role="dialog" aria-labelledby="b2sKiAssistiniAuthModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sKiAssistiniAuthModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h3 class="b2s-text-xl">                           
+                            <?php esc_html_e('Welcome to Assistini - the smart AI text generator!', 'blog2social'); ?>             
+                        </h3>
+                        <p>
+                            <?php esc_html_e('Assistini is an intuitive AI text generator that helps you create high-quality texts. Whether blog posts, press releases, SEO texts or social media posts - Assistini helps you create them in the shortest possible time.', 'blog2Social'); ?></p>
+                        <br>
+                        <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Try Assistini for free', 'blog2Social'); ?></a>
+                        <?php esc_html_e('or', 'blog2social'); ?> <a class="btn-link b2s-text-underline" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('Visit Website', 'blog2Social'); ?></a>
+                        
+                        <p class="b2s-text-sm b2s-padding-top-20"><?php esc_html_e('Exciting News: The integration of Assistini into the Blog2Social Plugin is on its way!', 'blog2Social'); ?></p>
+                    </div>
+                    <div class="col-md-5">
+                        <img class="b2s-ass-img-welcome hidden-sm hidden-xs" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

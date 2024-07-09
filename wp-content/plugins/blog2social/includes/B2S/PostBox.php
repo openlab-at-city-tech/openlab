@@ -22,6 +22,7 @@ class B2S_PostBox {
         $bestTimesDefault = false;
         $lastPostDate = '---';
         $shareCount = 0;
+        $schedLimit = null;
         $optionAutoPost = $this->userOption->_getOption('auto_post');
         $assigned = false;
         if (isset($optionAutoPost['assignBy']) && (int) $optionAutoPost['assignBy'] > 0 && isset($optionAutoPost['assignProfile']) && (int) $optionAutoPost['assignProfile'] > 0) {
@@ -74,9 +75,26 @@ class B2S_PostBox {
                 }
             }
 
-            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
+            $currentDate = new DateTime("now", wp_timezone());
+            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
             if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant)) {
 
+                if (isset($result->licence_condition)) {
+                    //update
+                    $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                    if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                        $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $result->licence_condition;
+                        update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+
+                        if (isset($result->licence_condition->open_sched_post_quota) && B2S_PLUGIN_USER_VERSION > 0) {
+                            if ((int) $result->licence_condition->open_sched_post_quota > 0) {
+                                $schedLimit = (int) $result->licence_condition->open_sched_post_quota;
+                            } else {
+                                $schedLimit = 0;
+                            }
+                        }
+                    }
+                }
 
                 /*
                  * since V7.0 Remove Video Networks
@@ -160,6 +178,7 @@ class B2S_PostBox {
         }
 
         $content = '<div class="b2s-post-meta-box">
+                    <div id="b2s-licence-condition" class="b2s-info-error b2s-info-display-none"><span class="b2s-text-bold">' . esc_html__("You've reached your posting volume!", "blog2social") . '</span><br>' . esc_html__('To increase your volume and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>
                     <div id="b2s-server-connection-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-server-connection-fail" title="close notice"></button>' . esc_html__('The connection to the server failed. Please try again! You can find more information and solutions in the', 'blog2social') . '<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('connection_guide')) . '"> ' . esc_html__('guide for server connection', 'blog2social') . '</a>.</div>
                     <div id="b2s-heartbeat-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-heartbeat-fail" title="close notice"></button>' . esc_html__('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social!', 'blog2social') . $b2sHeartbeatFaqLink . ' </div>
                     <div id="b2s-post-meta-box-state-no-publish-future-customize" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future-customize" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
@@ -175,8 +194,11 @@ class B2S_PostBox {
                     <input type="hidden" id="b2sPluginUrl" name="b2s-post-lang" value="' . esc_attr(B2S_PLUGIN_URL) . '">    
                     <input type="hidden" id="b2sBlogUserId" name="b2s-blog-user-id" value="' . esc_attr(B2S_PLUGIN_BLOG_USER_ID) . '">              
                     <input type="hidden" id="b2s-user-timezone" name="b2s-user-timezone" value="' . esc_attr($userTimeZoneOffset) . '"/>
-                    <input type="hidden" id="b2s-post-status" name="b2s-post-status" value="' . esc_attr(trim(strtolower($postStatus))) . '"/>
-                    <input type="hidden" id="b2s-post-meta-box-version" name="b2s-post-meta-box-version" value="' . esc_attr(B2S_PLUGIN_USER_VERSION) . '"/>
+                    <input type="hidden" id="b2s-post-status" name="b2s-post-status" value="' . esc_attr(trim(strtolower($postStatus))) . '"/>';
+        if (!is_null($schedLimit) && B2S_PLUGIN_USER_VERSION > 0) {
+            $content .= '<input type="hidden" id="b2s-post-meta-box-licence-condition-sched-limit" name="b2s-post-meta-box-licence-condition-sched-limit" value="' . esc_attr($schedLimit) . '"/>';
+        }
+        $content .= '<input type="hidden" id="b2s-post-meta-box-version" name="b2s-post-meta-box-version" value="' . esc_attr(B2S_PLUGIN_USER_VERSION) . '"/>
                     <input type="hidden" id="isOgMetaChecked" name="isOgMetaChecked" value="' . esc_attr((isset($metaSettings['og_active']) ? (int) $metaSettings['og_active'] : 0)) . '">
                     <input type="hidden" id="isCardMetaChecked" name="isCardMetaChecked" value="' . esc_attr((isset($metaSettings['card_active']) ? (int) $metaSettings['card_active'] : 0)) . '">
                     <input type="hidden" id="b2sAutoPostImportIsActive" name="autoPostImportIsActive" value="' . (($autoPostImport) ? 1 : 0) . '">
@@ -408,6 +430,7 @@ class B2S_PostBox {
         $autoPostActive = false;
         $lastPostDate = '---';
         $shareCount = 0;
+        $schedLimit = '';
         if ((int) $postId > 0) {
             $optionAutoPost = $this->userOption->_getOption('auto_post');
             $postStatus = get_post_status($postId);
@@ -434,9 +457,17 @@ class B2S_PostBox {
                     $shareCount = (int) $posts[0]->shareCount;
                 }
             }
+
+            //Licence Condition
+            $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+            if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                if (isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']) && isset($versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'])) {
+                    $schedLimit = (int) $versionDetails['B2S_PLUGIN_LICENCE_CONDITION']['open_sched_post_quota'];
+                }
+            }
         }
 
-        return array('active' => $autoPostActive, 'lastPostDate' => $lastPostDate, 'shareCount' => $shareCount);
+        return array('active' => $autoPostActive, 'lastPostDate' => $lastPostDate, 'schedLimit' => $schedLimit, 'shareCount' => $shareCount);
     }
 
 }
