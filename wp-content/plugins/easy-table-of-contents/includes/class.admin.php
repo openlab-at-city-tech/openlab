@@ -400,26 +400,13 @@ inlineAdminInitialView;
 			$initial_view  = get_post_meta( $post->ID, '_ez-toc-visibility_hide_by_default', true );
 			$hide_counter  = get_post_meta( $post->ID, '_ez-toc-hide_counter', true );
 
-			$position  = get_post_meta( $post->ID, '_ez-toc-position-specific', true );
-			if (empty($position)) {
-				$position = ezTOC_Option::get( 'position' );
-			}
+			$position  = get_post_meta( $post->ID, '_ez-toc-position-specific', true );			
 
-			$custom_para_number  = get_post_meta( $post->ID, '_ez-toc-s_custom_para_number', true );
-			if (empty($custom_para_number)) {
-				$custom_para_number = ezTOC_Option::get( 'custom_para_number' );
-			}
+			$custom_para_number  = get_post_meta( $post->ID, '_ez-toc-s_custom_para_number', true );		
 
-			$blockqoute_checkbox  = get_post_meta( $post->ID, '_ez-toc-s_blockqoute_checkbox', true );
-			if ($blockqoute_checkbox) {
-				$blockqoute_checkbox = ezTOC_Option::get( 'blockqoute_checkbox' );
-			}
+			$blockqoute_checkbox  = get_post_meta( $post->ID, '_ez-toc-s_blockqoute_checkbox', true );		
 
 			$custom_img_number  = get_post_meta( $post->ID, '_ez-toc-s_custom_img_number', true );
-			if (empty($custom_img_number)) {
-				$custom_img_number = ezTOC_Option::get( 'custom_img_number' );
-			}
-			
 
 			if ( ! is_array( $headings ) ) {
 
@@ -487,6 +474,7 @@ inlineAdminInitialView;
 								'id' => 'position-specific',
 								'desc' => __( 'Choose where where you want to display the table of contents.', 'easy-table-of-contents' ), 
 								'options' => array(
+									'' => __( 'Select Position', 'easy-table-of-contents' ),
 									'before' => __( 'Before first heading (default)', 'easy-table-of-contents' ),
 									'after' => __( 'After first heading', 'easy-table-of-contents' ),
 									'afterpara' => __( 'After first paragraph', 'easy-table-of-contents' ),
@@ -664,6 +652,9 @@ inlineAdminInitialView;
                         ?>
                     </td>
                 </tr>
+
+				<?php   do_action('eztoc_pro_single_post_settings' , $post->ID); ?>
+
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Alternate Headings', 'easy-table-of-contents' ); ?></th>
 					<td>
@@ -882,6 +873,7 @@ inlineAdminInitialView;
 
 				if ( isset( $_REQUEST['ez-toc-settings']['position-specific'] ) ) {
 				    $align_values = array(
+						'',
 						'before',
 						'after',
 						'afterpara',
@@ -895,21 +887,32 @@ inlineAdminInitialView;
 				        update_post_meta( $post_id, '_ez-toc-position-specific', $position );
 				    }
 
-				    $s_blockqoute_checkbox = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_blockqoute_checkbox'] );					
-				    if($position == 'aftercustompara' ||  $position == 'afterpara') {
-				        update_post_meta( $post_id, '_ez-toc-s_blockqoute_checkbox', $s_blockqoute_checkbox );
-				    }
+					
+					if($position == 'aftercustompara' ||  $position == 'afterpara') {
+						if (isset($_REQUEST['ez-toc-settings']['s_blockqoute_checkbox'])) {
+							$s_blockqoute_checkbox = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_blockqoute_checkbox'] );					
+							update_post_meta( $post_id, '_ez-toc-s_blockqoute_checkbox', 1 );
+						}else{
+							update_post_meta( $post_id, '_ez-toc-s_blockqoute_checkbox', 0 );
+						}
+					}
 
-				    $s_custom_para_number = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_custom_para_number'] );			
-				    if($position == 'aftercustompara' ) {		
+				    if($position == 'aftercustompara' ) {	
+						if (isset($_REQUEST['ez-toc-settings']['s_custom_para_number'])) {	
+						$s_custom_para_number = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_custom_para_number'] );			
 				        update_post_meta( $post_id, '_ez-toc-s_custom_para_number', $s_custom_para_number );
+						}
 				    }
 
-				    $s_custom_img_number = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_custom_img_number'] );					
 				    if($position == 'aftercustomimg' ) {
+						if (isset($_REQUEST['ez-toc-settings']['s_custom_img_number'])) {	
+						$s_custom_img_number = sanitize_text_field( $_REQUEST['ez-toc-settings']['s_custom_img_number'] );					
 				        update_post_meta( $post_id, '_ez-toc-s_custom_img_number', $s_custom_img_number );
+						}
 				    }
 				}
+
+				do_action('eztoc_pro_single_post_save_settings' , $post_id , $_REQUEST);
 
 			}
 

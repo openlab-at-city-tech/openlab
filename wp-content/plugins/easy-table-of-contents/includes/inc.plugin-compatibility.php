@@ -648,26 +648,6 @@ if ( in_array( 'lasso/affiliate-plugin.php', apply_filters( 'active_plugins', ge
 }
 
 /**
- * Avada Theme with Fusion Core/Builder Plugin Compatibility
- * remove duplicate eztoc containers
- * in footer sections
- * @since 2.0.49
- */
-if ( ('Avada Child' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) || 'Avada' == apply_filters( 'current_theme', get_option( 'current_theme' ) )) && in_array( 'fusion-builder/fusion-builder.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-
-    add_action( 'awb_remove_third_party_the_content_changes', 'ez_toc_remove_the_footer_content', 1 );
-    function ez_toc_remove_the_footer_content() {
-        remove_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
-    }
-    add_action( 'awb_readd_third_party_the_content_changes', 'ez_toc_remove_the_footer_content_after', 1 );
-    function ez_toc_remove_the_footer_content_after() {
-        add_filter( 'the_content', array( 'ezTOC', 'the_content' ), 100 );
-    }
-    
-}
-
-
-/**
  * Grow, Social Pro by Mediavine plugin compatibility
  * Anchors were not being generated for special char like inverted comma.
  * @since 2.0.52
@@ -1127,4 +1107,60 @@ function ez_toc_press_books_theme_compatibility($status){
     }
   }
   return $status;
+}
+
+
+/**
+ * Divi Builder Compatibility
+ * @since 2.0.64
+ */
+add_filter(
+	'ez_toc_strip_shortcodes_with_inner_content',
+	function( $tags_to_remove ) {
+		$shortcodes = array (
+			'et_pb_text'
+		);
+		$tags_to_remove = array_merge( $tags_to_remove, $shortcodes );
+		return $tags_to_remove;
+	}
+
+);
+
+
+add_filter('ez_toc_modify_process_page_content', 'ez_toc_fix_avada_post_card_loop_issue',10,1);
+
+/**
+ * Fix for Avada Post Card Loop Issue
+ * @since 2.0.67
+ * @param string $content The current post content.
+ * @return string The updated post content.
+ * @url https://github.com/ahmedkaludi/Easy-Table-of-Contents/issues/757
+ */
+function ez_toc_fix_avada_post_card_loop_issue($content){
+	
+	if (class_exists('FusionBuilder')){
+		$main_post_id = get_transient('eztoc_original_post_id');
+		$current_post_id = get_the_ID();
+		   if($main_post_id && ($main_post_id != $current_post_id)){
+			   return ''; 
+		   }
+	}
+
+  return $content;
+}
+
+add_action('the_post', 'ez_toc_store_original_post_id', 10 ,1);
+
+/**
+ * Store the original post ID for Avada Post Card Loop Issue
+ * @since 2.0.67
+ * @param WP_Post $post The current post object.
+ * @return void
+ * @url https://github.com/ahmedkaludi/Easy-Table-of-Contents/issues/757
+ */
+function ez_toc_store_original_post_id($post) {
+    // Check if the original post ID is already stored
+    if (class_exists('FusionBuilder') && false === get_transient('eztoc_original_post_id')) {
+        set_transient('eztoc_original_post_id', $post->ID);
+    }
 }

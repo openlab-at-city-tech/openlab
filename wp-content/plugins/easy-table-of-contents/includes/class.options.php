@@ -819,6 +819,13 @@ text
 							'type' => 'checkbox',
 							'default' => false,
 						),
+						'enable_memory_fix' => array(
+							'id' => 'enable_memory_fix',
+							'name' => __( 'Fix Out of Memory / 500 Error', 'easy-table-of-contents' ),
+							'desc' => __( 'To solve memory / 500 error on the page where toc shortcode is added through pagebuilder such as DIVI.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
 						'prsrv_line_brk' => array(
 							'id' => 'prsrv_line_brk',
 							'name' => __( 'Preserve Line Breaks', 'easy-table-of-contents' ),
@@ -832,7 +839,22 @@ text
 							'desc' => __( 'Makes toggle (js method) work for Infinite Scroll – Ajax Loaded contents/posts.', 'easy-table-of-contents' ),
 							'type' => 'checkbox',
 							'default' => false,
-						)
+						),
+						'no_heading_text' => array(
+							'id' => 'no_heading_text',
+							'name' => __( 'Display no heading text', 'easy-table-of-contents' ),
+							'desc' => __( 'Display text when heading not available.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => false,
+						),
+						'no_heading_text_value' => array(
+							'id' => 'no_heading_text_value',
+							'name' => __( 'No heading text value', 'easy-table-of-contents' ),
+							'desc' => '<br/>' . __( 'This text will display when no heading found on page/post', 'easy-table-of-contents' ),
+							'type' => 'text',
+							'default' => 'No heading found',
+							'class'=>'js_v'
+						),
 					)
 				),
                 'shortcode' => apply_filters(
@@ -877,7 +899,7 @@ text
                             'id'   => 'shortcode-second-paragraph',
                             'name' => __( 'Supported Attributes', 'easy-table-of-contents' ),
                             'desc' => sprintf(
-                            		__( '<p><code>[header_label="Title"]</code> – title for the table of contents</p><p><code>[display_header_label="no"]</code> – no title for the table of contents</p><p><code>[toggle_view="no"]</code> – no toggle for the table of contents</p><p><code>[initial_view="hide"]</code> – initially hide the table of contents</p><p><code>[display_counter="no"]</code> – no counter for the table of contents</p><p><code>[post_types="post,page"]</code> – post types seperated by ,(comma)</p><p><code>[post_in="1,2"]</code> – ID’s of the posts|pages seperated by ,(comma)</p><p><code>[device_target="desktop"]</code> – mobile or desktop device support for the table of contents</p><p><code>[view_more="5"]</code> – 5, is the number of headings loads on first view, before user interaction (PRO)</p>', 'easy-table-of-contents' )
+                            		__( '<p><code>[header_label="Title"]</code> – title for the table of contents</p><p><code>[display_header_label="no"]</code> – no title for the table of contents</p><p><code>[toggle_view="no"]</code> – no toggle for the table of contents</p><p><code>[initial_view="hide"]</code> – initially hide the table of contents</p><p><code>[initial_view="show"]</code> – initially show the table of contents</p><p><code>[display_counter="no"]</code> – no counter for the table of contents</p><p><code>[post_types="post,page"]</code> – post types seperated by ,(comma)</p><p><code>[post_in="1,2"]</code> – ID’s of the posts|pages seperated by ,(comma)</p><p><code>[device_target="desktop"]</code> – mobile or desktop device support for the table of contents</p><p><code>[view_more="5"]</code> – 5, is the number of headings loads on first view, before user interaction (PRO)</p>', 'easy-table-of-contents' )
                             		),
                             'type' => 'descriptive_text',
                         ),
@@ -1323,6 +1345,7 @@ text
 				'sticky_include_product_category'     => true,
 				'sticky_include_custom_tax'           => false,
 				'generate_toc_link_ids'               => false,
+				'enable_memory_fix'					  => false,
 			);
 
 			return apply_filters( 'ez_toc_get_default_options', $defaults );
@@ -1572,8 +1595,8 @@ HR_TAG;
 
 			$readonly = isset( $args['readonly'] ) && $args['readonly'] === true ? ' readonly="readonly"' : '';
 			$size     = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
-
-			$html = '<input type="text" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . ' placeholder="' .
+			$value = $value ? stripslashes($value) : '';
+			$html = '<input type="text" class="' . $size . '-text" id="ez-toc-settings[' . $args['id'] . ']"' . $name . ' value="' . esc_attr( $value ) . '"' . $readonly . ' placeholder="' .
 			        $placeholder . '" />';
 
 
