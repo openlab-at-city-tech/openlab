@@ -475,7 +475,7 @@ class Renderer {
 			$pro_album_types = [
 				'photocrati-nextgen_pro_albums',
 				'photocrati-nextgen_pro_grid_album',
-				'photocrati-nextgen_pro_list_album'
+				'photocrati-nextgen_pro_list_album',
 			];
 
 			if ( in_array( $displayed_gallery->display_type, $pro_album_types ) ) {

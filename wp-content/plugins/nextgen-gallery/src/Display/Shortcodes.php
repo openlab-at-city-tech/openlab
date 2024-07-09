@@ -65,6 +65,10 @@ class Shortcodes {
 		return $this->_shortcodes;
 	}
 
+	public function is_disabled(): bool {
+		return defined( 'NGG_DISABLE_SHORTCODE_MANAGER' ) && NGG_DISABLE_SHORTCODE_MANAGER;
+	}
+
 	/**
 	 * Removes a previously added shortcode
 	 *
@@ -76,6 +80,10 @@ class Shortcodes {
 	}
 
 	public function register_hooks() {
+		if ( $this->is_disabled() ) {
+			return;
+		}
+
 		// For theme & plugin compatibility and to prevent the output of our shortcodes from being
 		// altered we substitute our shortcodes with placeholders at the start of the the_content() filter
 		// queue and then at the end of the the_content() queue, we substitute the placeholders with our
@@ -180,6 +188,11 @@ class Shortcodes {
 		$regex = \str_replace( '%d', '(\d+)', $this->_placeholder_text );
 
 		if ( $this->is_rest_request() ) {
+			// Return early if we're in the REST API and shortcodes are disabled.
+			// Allows other plugins to disable shortcodes in the REST API.
+			if ( \apply_filters( 'ngg_disable_shortcodes_in_request_api', true ) ) {
+				return $content;
+			}
 			\ob_start();
 		}
 
@@ -230,7 +243,18 @@ class Shortcodes {
 			'callback'    => $callback,
 			'transformer' => $transformer,
 		];
-		\add_shortcode( $name, [ $this, $name . '____wrapper' ] );
+
+		if ( $this->is_disabled() ) {
+			// Because render_shortcode() is a wrapper to several shortcodes it requires the $name parameter and can't be passed directly to add_shortcode()
+			add_shortcode(
+				$name,
+				function ( $params, $inner_content ) use ( $name ) {
+					return $this->render_shortcode( $name, $params, $inner_content );
+				}
+			);
+		} else {
+			\add_shortcode( $name, [ $this, $name . '____wrapper' ] );
+		}
 	}
 
 	/**

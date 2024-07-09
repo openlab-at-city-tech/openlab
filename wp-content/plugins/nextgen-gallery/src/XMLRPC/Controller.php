@@ -114,12 +114,13 @@ class Controller {
 				if ( ( $gallery = $gallery_mapper->find( $image->galleryid ) ) ) {
 					// Does the user have sufficient capabilities?
 					if ( $this->_can_manage_gallery( $gallery ) ) {
-						$storage          = StorageManager::get_instance();
-						$image->imageURL  = $storage->get_image_url( $image, 'full', true );
-						$image->thumbURL  = $storage->get_image_url( $image, 'thumb' );;
+						$storage         = StorageManager::get_instance();
+						$image->imageURL = $storage->get_image_url( $image, 'full', true );
+						$image->thumbURL = $storage->get_image_url( $image, 'thumb' );
+
 						$image->imagePath = $storage->get_image_abspath( $image );
 						$image->thumbPath = $storage->get_thumb_abspath( $image );
-						$retval           = $return_model ? $image : $image->get_entity();
+						$retval           = $image;
 					} else {
 						$retval = new \IXR_Error( 403, "You don't have permission to manage gallery #{$image->galleryid}" );
 					}
@@ -423,7 +424,7 @@ class Controller {
 			if ( ( $gallery = $mapper->find( $gallery_id, true ) ) ) {
 				if ( $this->_can_manage_gallery( $gallery ) ) {
 					$this->_add_gallery_properties( $gallery );
-					$retval = $return_model ? $gallery : $gallery->get_entity();
+					$retval = $gallery;
 				} else {
 					$retval = new \IXR_Error( 403, "Sorry, but you don't have permission to manage gallery #{$gallery->gid}" );
 				}
@@ -556,7 +557,7 @@ class Controller {
 					$album->id        = (string) $album->id;
 					$album->galleries = $album->sortorder;
 
-					$retval = $return_model ? $album : $album->get_entity();
+					$retval = $album;
 				} else {
 					$retval = false;
 				}

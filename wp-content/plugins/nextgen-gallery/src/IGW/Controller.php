@@ -777,7 +777,12 @@ class Controller {
 			$form->enqueue_static_resources();
 
 			// Determine which classes to use for the form's "class" attribute.
-			$model     = $form->get_model();
+			$model = $form->get_model();
+
+			if ( null === $model ) {
+				continue;
+			}
+
 			$current   = $this->is_displayed_gallery_using_display_type( $model->name );
 			$css_class = $current ? 'display_settings_form' : 'display_settings_form hidden';
 			$defaults  = $model->settings;

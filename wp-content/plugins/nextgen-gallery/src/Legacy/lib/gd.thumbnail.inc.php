@@ -864,6 +864,10 @@ class ngg_Thumbnail {
 	 * @param int    $wmOpaque
 	 */
 	function watermarkCreateText( $color, $wmFont, $wmSize = 10, $wmOpaque = 90 ) {
+		if ( empty( $this->watermarkText ) ) {
+			return;
+		}
+
 		if (!$color) {
 			$color = '000000';
 		}

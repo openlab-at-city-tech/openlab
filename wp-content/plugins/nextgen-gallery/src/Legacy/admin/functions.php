@@ -509,7 +509,7 @@ class nggAdmin {
 		// Look for existing image list.
 		$old_imageslist = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT `filename` FROM {$wpdb->nggpictures} WHERE `galleryid` = %s'",
+				"SELECT `filename` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d",
 				[
 					$gallery_id,
 				]

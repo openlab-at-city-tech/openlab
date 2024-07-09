@@ -2,8 +2,10 @@
 
 namespace Imagely\NGG\DataMappers;
 
-use Imagely\NGG\DataMapper\TableDriver;
+use Imagely\NGG\DataTypes\Gallery as GalleryType;
 use Imagely\NGG\DataTypes\Image as ImageType;
+
+use Imagely\NGG\DataMapper\TableDriver;
 use Imagely\NGG\Display\I18N;
 use Imagely\NGG\Util\Transient;
 
@@ -64,11 +66,12 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param ImageType $gallery
-	 * @param bool      $model
+	 * @param GalleryType $gallery
+	 * @param bool        $model
+	 *
 	 * @return ImageType[]
 	 */
-	public function find_all_for_gallery( $gallery, $model = false ) {
+	public function find_all_for_gallery( $gallery, $model = true ) {
 		$retval     = [];
 		$gallery_id = 0;
 
@@ -220,5 +223,16 @@ class Image extends TableDriver {
 				$entity->alttext = I18N::translate( $entity->alttext, 'pic_' . $entity->{$entity->id_field} . '_alttext' );
 			}
 		}
+	}
+
+	/**
+	 * @param string $value
+	 * @return mixed|null
+	 * @throws \Exception
+	 * @deprecated
+	 * @todo Remove this when the minimum Pro API level is 4.0 or higher.
+	 */
+	public function unserialize( string $value ) {
+		return \Imagely\NGG\Util\Serializable::unserialize( $value );
 	}
 }

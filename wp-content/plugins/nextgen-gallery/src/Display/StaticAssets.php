@@ -67,7 +67,7 @@ class StaticAssets {
 			}
 		}
 
-		if ( is_string ( $retval ) ) {
+		if ( is_string( $retval ) ) {
 			// Adjust for windows paths.
 			return \wp_normalize_path( $retval );
 		} else {

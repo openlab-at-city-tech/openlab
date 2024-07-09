@@ -44,8 +44,7 @@ class C_Form extends C_MVC_Controller
     public static function &get_instance($context)
     {
         if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
+            self::$_instances[$context] = new C_Form($context);
         }
         return self::$_instances[$context];
     }
@@ -193,8 +192,7 @@ class C_Mailchimp_OptIn_Notice
     public static function get_instance()
     {
         if (!self::$_instance) {
-            $klass = get_class();
-            self::$_instance = new $klass();
+            self::$_instance = new C_Mailchimp_OptIn_Notice();
         }
         return self::$_instance;
     }
@@ -273,8 +271,7 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
     public static function get_instance($context = false)
     {
         if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
+            self::$_instances[$context] = new C_NextGen_Admin_Page_Controller($context);
         }
         return self::$_instances[$context];
     }
@@ -539,8 +536,7 @@ class C_NextGen_Admin_Page_Manager extends C_Component
     public static function &get_instance($context = false)
     {
         if (is_null(self::$_instance)) {
-            $klass = get_class();
-            self::$_instance = new $klass($context);
+            self::$_instance = new C_NextGen_Admin_Page_Manager($context);
         }
         return self::$_instance;
     }
@@ -789,8 +785,7 @@ EOT;
     public static function get_instance()
     {
         if (!isset(self::$_instance)) {
-            $klass = get_class();
-            self::$_instance = new $klass();
+            self::$_instance = new C_NextGen_First_Run_Notification_Wizard();
         }
         return self::$_instance;
     }

@@ -1,17 +1,31 @@
 <?php
+/**
+ * REST API for the NextGEN Gallery Block
+ *
+ * @package NextGEN Gallery
+ */
 
 namespace Imagely\NGG\REST\Admin;
 
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
 
+/**
+ * Class Block represents the REST API for the NextGEN Gallery Block
+ */
 class Block extends \WP_REST_Controller {
 
+	/**
+	 * Block constructor.
+	 */
 	public function __construct() {
 		$this->namespace = 'ngg/v1';
 		$this->rest_base = 'admin/block/image';
 	}
 
+	/**
+	 * Register the routes for the objects of the controller.
+	 */
 	public function register_routes() {
 		\register_rest_route(
 			$this->namespace,
@@ -27,14 +41,27 @@ class Block extends \WP_REST_Controller {
 				[
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_item' ],
-					'permission_callback' => '__return_true',
+					'permission_callback' => [ $this, 'get_item_permissions_check' ],
 				],
 			]
 		);
 	}
 
 	/**
-	 * @param \WP_REST_Request $request
+	 * Check if a given request has access to get information about a specific item.
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return bool
+	 */
+	public function get_item_permissions_check( $request ): bool {
+		global $post;
+		return current_user_can( 'edit_post', $post->ID );
+	}
+
+	/** Get the specific image.
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
 	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function get_item( $request ) {

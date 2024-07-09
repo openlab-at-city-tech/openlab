@@ -4,7 +4,6 @@
  * @var \Imagely\NGG\DataStorage\Manager $storage
  * @var array $images
  * @var bool $show_thumbnail_link
- * @var int $aspect_ratio
  * @var int $current_page
  * @var int $gallery_height
  * @var int $gallery_width

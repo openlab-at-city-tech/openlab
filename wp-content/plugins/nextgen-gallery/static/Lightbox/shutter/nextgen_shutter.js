@@ -2,6 +2,7 @@ jQuery(function($) {
 
     var callback = function() {
         var selector = nextgen_lightbox_filter_selector($, $([]));
+
         selector.addClass('shutterset');
         window.shutterSettings = {
             imageCount: true,
@@ -12,7 +13,7 @@ jQuery(function($) {
     };
 
 
-    $(document).on('refreshed', callback);
+    $(window).on('refreshed', callback);
 
     var flag = 'shutter';
 

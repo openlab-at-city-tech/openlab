@@ -585,15 +585,18 @@ class Router {
 	/**
 	 * This code was originally added to correct a bug in Pro 1.0.10 and was meant to be temporary. However now the
 	 * albums' pagination relies on this to function correctly, and fixing it properly would require more time than
-	 * its worth.
+	 * it is worth.
 	 */
 	public function fix_page_parameter() {
 		global $post;
 
-		if ( $post and is_string( $post->content ) and ( strpos( $post->content, '<!--nextpage-->' ) === false ) and ( strpos( $_SERVER['REQUEST_URI'], '/page/' ) !== false ) ) {
-			if ( preg_match( '#/page/(\\d+)#', $_SERVER['REQUEST_URI'], $match ) ) {
-				$_REQUEST['page'] = $match[1];
-			}
+		if ( $post
+			&& is_object( $post )
+			&& is_string( $post->content )
+			&& ( strpos( $post->content, '<!--nextpage-->' ) === false )
+			&& ( strpos( $_SERVER['REQUEST_URI'], '/page/' ) !== false )
+			&& preg_match( '#/page/(\\d+)#', $_SERVER['REQUEST_URI'], $match ) ) {
+			$_REQUEST['page'] = $match[1];
 		}
 	}
 

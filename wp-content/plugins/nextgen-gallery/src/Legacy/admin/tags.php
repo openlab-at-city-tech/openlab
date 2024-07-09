@@ -4,6 +4,8 @@
  * http://code.google.com/p/simple-tags/
  */
 
+use Imagely\NGG\Util\Transient;
+
 $action_status = [
 	'message' => '',
 	'status'  => 'ok',
@@ -17,14 +19,17 @@ if ( isset( $_POST['tag_action'] ) ) {
 		$oldtag        = ( isset( $_POST['renametag_old'] ) ) ? $_POST['renametag_old'] : '';
 		$newtag        = ( isset( $_POST['renametag_new'] ) ) ? $_POST['renametag_new'] : '';
 		$action_status = nggTags::rename_tags( $oldtag, $newtag );
+		Transient::flush( 'displayed_gallery_rendering' );
 	} elseif ( $_POST['tag_action'] == 'deletetag' ) {
 		$todelete      = ( isset( $_POST['deletetag_name'] ) ) ? $_POST['deletetag_name'] : '';
 		$action_status = nggTags::delete_tags( $todelete );
+		Transient::flush( 'displayed_gallery_rendering' );
 	} elseif ( $_POST['tag_action'] == 'editslug' ) {
 		$matchtag      = esc_html( ( isset( $_POST['tagname_match'] ) ) ? $_POST['tagname_match'] : '' );
 		$newslug       = ( isset( $_POST['tagslug_new'] ) ) ? $_POST['tagslug_new'] : '';
 		$newslug       = esc_html( \Imagely\NGG\DataStorage\Sanitizer::strip_html( $newslug ) );
 		$action_status = nggTags::edit_tag_slug( $matchtag, $newslug );
+		Transient::flush( 'displayed_gallery_rendering' );
 	}
 }
 

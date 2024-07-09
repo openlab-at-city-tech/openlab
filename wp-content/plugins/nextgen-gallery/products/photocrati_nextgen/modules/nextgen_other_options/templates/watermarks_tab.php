@@ -119,7 +119,7 @@
 				<?php echo $preview_label; ?>
 			</td>
 			<td>
-				<img src='<?php echo $thumbnail_url; ?>'/>
+				<img src='<?php echo esc_url( $thumbnail_url . '?' .time() ); ?>'/>
 				<button id='nextgen_settings_preview_refresh' class="button-primary" data-refresh-url='<?php echo $refresh_url; ?>'><?php echo $refresh_label; ?></button>
 			</td>
 		</tr>

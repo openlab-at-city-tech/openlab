@@ -17,7 +17,7 @@ class M_Marketing extends C_Base_Module {
 		parent::define(
 			'photocrati-marketing',
 			'Marketing',
-			'Provides resources for encouraging users to upgrade to NextGen Plus/Pro',
+			'Provides resources for encouraging users to upgrade to NextGEN Plus/Pro',
 			'3.3.21',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
@@ -139,7 +139,14 @@ class M_Marketing extends C_Base_Module {
 					$forms->add_form( NGG_DISPLAY_SETTINGS_SLUG, "photocrati-marketing_display_settings_{$block}" );
 				}
 
+				$forms->add_form( NGG_OTHER_OPTIONS_SLUG, 'marketing_image_animation' );
 				$forms->add_form( NGG_OTHER_OPTIONS_SLUG, 'marketing_image_protection' );
+
+				$forms->move_form_to_follow_other_form(
+					NGG_OTHER_OPTIONS_SLUG,
+					'marketing_image_animation',
+					'lightbox_effects'
+				);
 			}
 		);
 	}
@@ -152,6 +159,7 @@ class M_Marketing extends C_Base_Module {
 			$registry->add_adapter( 'I_MVC_View', 'A_Marketing_Lightbox_Options_MVC', 'lightbox_effects' );
 			$registry->add_adapter( 'I_MVC_View', 'A_Marketing_AddGallery_MVC', 'ngg_addgallery' );
 			$registry->add_adapter( 'I_Form', 'A_Marketing_Other_Options_Form', 'marketing_image_protection' );
+			$registry->add_adapter( 'I_Form', 'A_Marketing_Animations_Form', 'marketing_image_animation' );
 
 			// If we call find_all() before init/admin_init an exception is thrown due to is_user_logged_in() being
 			// called too early. Don't remove this action hook.
@@ -404,7 +412,7 @@ class M_Marketing extends C_Base_Module {
 		if ( is_nextgen_admin_page() ) {
 			$url = 'https://wordpress.org/plugins/nextgen-gallery/reviews/?filter=5#new-post';
 			/* translators: %s: url */
-			$text = sprintf( __( 'Please rate <strong>Nextgen Gallery by Imagely</strong> <a href="%1$s" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%2$s" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the NextGEN Gallery team!', 'nggallery' ), $url, $url );
+			$text = sprintf( __( 'Please rate <strong>NextGEN Gallery by Imagely</strong> <a href="%1$s" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%2$s" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the NextGEN Gallery team!', 'nggallery' ), $url, $url );
 		}
 		return $text;
 	}
@@ -579,6 +587,7 @@ class M_Marketing extends C_Base_Module {
 	public function get_type_list() {
 		return [
 			'A_Marketing_AddGallery_MVC'             => 'adapter.addgallery_mvc.php',
+			'A_Marketing_Animations_Form'            => 'adapter.animations_form.php',
 			'A_Marketing_Display_Settings_Form'      => 'adapter.display_settings_form.php',
 			'A_Marketing_Display_Type_Settings_Form' => 'adapter.display_type_settings_form.php',
 			'A_Marketing_Lightbox_Options_MVC'       => 'adapter.lightbox_options_mvc.php',

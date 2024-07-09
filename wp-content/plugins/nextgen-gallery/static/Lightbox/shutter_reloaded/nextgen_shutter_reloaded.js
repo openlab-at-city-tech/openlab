@@ -7,12 +7,15 @@ jQuery(function($){
         }
         shutterReloaded.Init();
     };
-    $(this).on('refreshed', callback);
+
+    $(window).on('refreshed', callback);
 
     var flag = 'shutterReloaded';
-    if (typeof($(window).data(flag)) == 'undefined')
+    if (typeof($(window).data(flag)) == 'undefined') {
         $(window).data(flag, true);
-    else return;
+    } else {
+        return;
+    }
 
     callback();
 });

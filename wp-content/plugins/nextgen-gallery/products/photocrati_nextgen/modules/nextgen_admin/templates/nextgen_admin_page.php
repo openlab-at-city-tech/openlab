@@ -74,6 +74,7 @@ if ( $success && empty( $errors ) ) { ?>
 						class="button-primary ngg_save_settings_button">
 					<?php _e( 'Save Options', 'nggallery' ); ?>
 				</button>
+				<input type="hidden" name="ngg_errors_in_tab" id="ngg_errors_in_tab">
 			</p>
 		<?php } ?>
 	</form>

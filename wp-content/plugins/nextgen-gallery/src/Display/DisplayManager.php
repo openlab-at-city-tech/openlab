@@ -110,6 +110,9 @@ class DisplayManager {
 			}
 
 			self::enqueue_frontend_resources_for_displayed_gallery( $displayed_gallery, $controller );
+
+			// Prevent $controller from persisting through this loop
+			unset( $controller );
 		}
 	}
 
@@ -456,7 +459,7 @@ class DisplayManager {
 		$dirs = [];
 
 		if ( ControllerFactory::has_controller( $display_type->name ) ) {
-			$controller = ControllerFactory::get_controller( $display_type->name );
+			$controller      = ControllerFactory::get_controller( $display_type->name );
 			$dirs['default'] = $controller->get_template_directory_abspath();
 		}
 

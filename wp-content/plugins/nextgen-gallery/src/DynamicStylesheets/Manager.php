@@ -60,6 +60,11 @@ class Manager {
 				);
 				wp_add_inline_style( 'ngg_dyncss', $css );
 			} else {
+				// Prevent albums with many children from creating GET URL that exceed the RFC limits.
+				if ( isset( $data->original_album_entities ) ) {
+					unset( $data->original_album_entities );
+				}
+
 				$slug         = Settings::get_instance()->get( 'dynamic_stylesheet_slug' );
 				$encoded_data = $this->encode( $data );
 				\wp_enqueue_style(

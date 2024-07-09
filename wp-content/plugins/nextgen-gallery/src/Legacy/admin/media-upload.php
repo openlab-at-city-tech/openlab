@@ -42,7 +42,7 @@ function media_upload_nextgen() {
 
 		// Build output.
 		if ( $image['size'] == 'thumbnail' ) {
-			$html = "<img src='{$image['thumb']}' alt='{$alttext}' class='{$class}' />";
+			$html = "<img src='{$image['url']}' alt='{$alttext}' class='{$class}' />";
 		} else {
 			$html = '';
 		}

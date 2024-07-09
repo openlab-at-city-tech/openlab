@@ -340,7 +340,8 @@ class Thumbnails extends ParentController {
 					'nextgen_basic_thumbnails',
 					'photocrati-nextgen_basic_thumbnails',
 				],
-			]
+			],
+			$reset
 		);
 	}
 }

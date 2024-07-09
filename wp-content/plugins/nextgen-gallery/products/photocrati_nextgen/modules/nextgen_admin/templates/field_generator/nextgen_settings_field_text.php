@@ -9,10 +9,15 @@
 				if ( ! empty( $text ) ) {
 					?>
 					class='tooltip'<?php } ?>>
-			<?php print $label; ?>
+			<?php print wp_kses_post( $label ); ?>
 		</label>
 	</td>
 	<td>
+		<?php
+		if ( is_array( $value ) ) {
+			$value = empty( $value ) || ! is_string( reset( $value ) ) ? '' : reset( $value );
+		}
+		?>
 		<input type='text'
 				id='<?php print esc_attr( "{$display_type_name}_{$name}" ); ?>'
 				name='<?php print esc_attr( "{$display_type_name}[{$name}]" ); ?>'

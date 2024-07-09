@@ -40,7 +40,9 @@ class StaticPopeAssets extends StaticAssets {
 
 		// Find the POPE modules root.
 		$module_dir = \C_NextGEN_Bootstrap::get_legacy_module_directory( $legacy_module_id );
-		$module_dir = \wp_normalize_path( $module_dir );
+		if ( ! empty( $module_dir ) ) { // To avoid PHP deprecated warnings.
+			$module_dir = \wp_normalize_path( $module_dir );
+		}
 
 		// In case NextGen is in a symlink we make $mod_dir relative to the NGG parent root and then rebuild it
 		// using WP_PLUGIN_DIR; without this NGG-in-symlink creates URL that reference the file abspath.
@@ -49,12 +51,16 @@ class StaticPopeAssets extends StaticAssets {
 			$module_dir = \path_join( WP_PLUGIN_DIR, $module_dir );
 		}
 
-		$retval = \path_join(
-			\path_join( $module_dir, $static_dir ),
-			$filename
-		);
+		if ( ! empty( $module_dir ) ) { // To avoid PHP deprecated warnings.
+			$retval = \path_join(
+				\path_join( $module_dir, $static_dir ),
+				$filename
+			);
+		} else {
+			$retval = '';
+		}
 
-		if ( ! is_null ( $retval ) ) {
+		if ( ! is_null( $retval ) ) {
 			// Adjust for windows paths.
 			return \wp_normalize_path( $retval );
 		} else {

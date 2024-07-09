@@ -55,11 +55,11 @@ class MediaRSS extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance                     = $old_instance;
-		$instance['title']            = \strip_tags( $new_instance['title'] );
+		$instance['title']            = esc_attr( $new_instance['title'] );
 		$instance['show_global_mrss'] = $new_instance['show_global_mrss'];
 		$instance['show_icon']        = $new_instance['show_icon'];
-		$instance['mrss_text']        = $new_instance['mrss_text'];
-		$instance['mrss_title']       = $new_instance['mrss_title'];
+		$instance['mrss_text']        = esc_attr( $new_instance['mrss_text'] );
+		$instance['mrss_title']       = esc_attr( $new_instance['mrss_title'] );
 
 		return $instance;
 	}
@@ -111,14 +111,14 @@ class MediaRSS extends \WP_Widget {
 
 		if ( $show_icon ) {
 			$icon_url = NGGALLERY_URLPATH . 'images/mrss-icon.gif';
-			$out     .= "<a href='{$mrss_url}' title='{$title}' class='ngg-media-rss-link'>";
-			$out     .= "<img src='{$icon_url}' alt='MediaRSS Icon' title='" . $title . "' class='ngg-media-rss-icon' />";
+			$out     .= "<a href='". \esc_url( $mrss_url ) ."' title='" . \esc_attr( $title ) . "' class='ngg-media-rss-link'>";
+			$out     .= "<img src='". \esc_url( $icon_url ) ."' alt='MediaRSS Icon' title='" . \esc_attr( $title ) . "' class='ngg-media-rss-icon' />";
 			$out     .= '</a> ';
 		}
 
 		if ( '' !== $text ) {
-			$out .= "<a href='{$mrss_url}' title='{$title}' class='ngg-media-rss-link'>";
-			$out .= $text;
+			$out .= "<a href='". \esc_url( $mrss_url ) ."' title='" . \esc_attr( $title ) . "' class='ngg-media-rss-link'>";
+			$out .= \esc_attr( $text );
 			$out .= '</a>';
 		}
 

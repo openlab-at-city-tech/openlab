@@ -62,3 +62,11 @@
 .jquery-modal {
     font-family: "Lato", sans-serif;
 }
+
+#ngg_page_content div[data-id="marketing_image_animation"] ul li {
+    margin-left: 16px;
+}
+
+#ngg_page_content div[data-id="marketing_image_animation"] p svg {
+    height: 1em;
+}

@@ -121,3 +121,38 @@ function nggShowAlbum( $albumID, $template = 'extend', $gallery_template = '' ) 
 
 	return apply_filters( 'ngg_show_album_content', $retval, $albumID );
 }
+
+/**
+ * This class is used by some 3rd party plugins. For compatibility this class exists to accept the stdClass passed to
+ * the register() method and cast it to a NGG Lightbox data type before registration.
+ *
+ * @depecated
+ */
+class C_Lightbox_Library_Manager {
+	public static $instance = null;
+
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new C_Lightbox_Library_Manager();
+		}
+
+		return self::$instance;
+	}
+
+	public function __call( $method, $args ) {
+		$manager = \Imagely\NGG\Display\LightboxManager::get_instance();
+		return $manager->$method( ...$args );
+	}
+
+	public function register( string $name, $lightbox ) {
+		$manager = \Imagely\NGG\Display\LightboxManager::get_instance();
+
+		// Clone a new Lightbox class using the attributes in a regular stdClass.
+		$new_lightbox = new \Imagely\NGG\DataTypes\Lightbox( $name );
+		foreach ( get_object_vars( $lightbox ) as $key => $value ) {
+			$new_lightbox->$key = $value;
+		}
+
+		$manager->register( $name, $new_lightbox );
+	}
+}
