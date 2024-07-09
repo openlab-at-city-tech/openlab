@@ -1,15 +1,15 @@
 === WP Lightbox 2 ===
-Contributors: smub, griffinjt, csskevin, chuck1982
-Plugin Site: http://www.wpbeginner.com/
-Donate link: http://www.wpbeginner.com/
-Tags: lightbox, image, gallery, photo gallery, lightbox popup, responsive lightbox, wordpress lightbox, lightbox gallery, gallery lightbox, wordpress image lightbox, image lightbox, popup lightbox, wordpress slideshow lightbox, lightbox image, popup images, popup image, wordpress video gallery lightbox,  google map lightbox popup, swipe, google map lightbox, popup bar, popup block
+Contributors:      smub, griffinjt, csskevin, chuck1982
+Plugin Site:       https://www.wpbeginner.com/
+Donate link:       https://www.wpbeginner.com/
+Tags:              lightbox, image, gallery, photo gallery, lightbox popup
 Requires at least: 3.0
-Tested up to: 5.6
-Stable tag: trunk
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Tested up to:      6.5
+Stable tag:        3.0.6.7
+License:           GPLv2 or later
+License URI:       http://www.gnu.org/licenses/gpl-3.0.html
 
-WP Lightbox 2 is awesome tool for adding responsive lightbox effect for images and also create lightbox for photo album/gallery on your WordPress blog. WordPress Lightbox is one of the most useful plugins for your website.
+WP Lightbox 2 adds stunning lightbox effects to images and galleries on your WordPress site.
 
 == Description ==
 
@@ -40,7 +40,7 @@ WP Lightbox 2 have a lot of useful features. WP Lightbox 2 features:
 *   **User friendly back-end for WP Lightbox 2 plugin**
 *   **Tested on popular WordPress themes**
 
-This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="https://thomasgriffin.com" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="https://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="https://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
 
 == Installation ==
 
@@ -95,6 +95,12 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 
 == Changelog ==
 
+= 3.0.6.7 =
+* Fix: Improved sanitization of plugin settings.
+
+= 3.0.6.6 =
+* Fix: Improved sanitization of plugin settings.
+
 = 3.0.6.5 =
 * Compatible Lightbox with wordpress 5.6.
 * Fix: Fit to screen bug has been resolved
@@ -103,7 +109,7 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 = 3.0.6.4 =
 * Fix: Library was broken, if a user had a select box on their website.
 
-= 3.0.6.3 = 
+= 3.0.6.3 =
 * Code Rewrite
 * Added NodeJs and Babel for minifiying the script to reduce script size
 * Fix: Wordpress 5.5 compatibility
@@ -111,7 +117,7 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 = 3.0.6.2 =
 * Add checks for images without rel tags and fix all the things.
 
-= 3.0.6.1 = 
+= 3.0.6.1 =
 * Prevent double quotes on automatic rel attributes
 
 = 3.0.6 =

@@ -618,13 +618,13 @@ class Lightbox {
                         }
                         let s = '';
                         if (title != '') {
-                            s = '<span id="titleText">' + title + '</span>';
+                            s = '<span id="titleText">' + title.replace(/<[^>]*>/g, '') + '</span>';
                         }
                         if (caption != '') {
                             if (title != '') {
                                 s += '<br />';
                             }
-                            s += '<span id="captionText">' + caption + '</span>';
+                            s += '<span id="captionText">' + caption.replace(/<[^>]*>/g, '') + '</span>';
                         }
                         this.config.imageArray.push([
                             a.href,
