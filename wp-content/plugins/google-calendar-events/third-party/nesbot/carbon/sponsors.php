@@ -13,14 +13,30 @@ namespace SimpleCalendar\plugin_deps;
 use SimpleCalendar\plugin_deps\Carbon\CarbonImmutable;
 require_once __DIR__ . '/vendor/autoload.php';
 /** @internal */
+function getMaxHistoryMonthsByAmount($amount) : int
+{
+    if ($amount >= 50) {
+        return 6;
+    }
+    if ($amount >= 20) {
+        return 4;
+    }
+    return 2;
+}
+/** @internal */
+function getHtmlAttribute($rawValue) : string
+{
+    return \str_replace(['​', "\r"], '', \trim(\htmlspecialchars((string) $rawValue), "  \n\r\t\v\x00"));
+}
+/** @internal */
 function getOpenCollectiveSponsors() : string
 {
+    $customSponsorImages = [];
     $members = \json_decode(\file_get_contents('https://opencollective.com/carbon/members/all.json'), \true);
-    $sixMonthsAgo = CarbonImmutable::parse('now - 6 months')->format('Y-m-d h:i');
-    $list = \array_filter($members, static function ($member) use($sixMonthsAgo) {
-        return ($member['lastTransactionAmount'] > 3 || $member['isActive']) && $member['role'] === 'BACKER' && $member['type'] !== 'USER' && ($member['totalAmountDonated'] > 100 || $member['lastTransactionAt'] > $sixMonthsAgo || $member['isActive'] && $member['lastTransactionAmount'] >= 30);
+    $list = \array_filter($members, static function ($member) : bool {
+        return ($member['lastTransactionAmount'] > 3 || $member['isActive']) && $member['role'] === 'BACKER' && $member['type'] !== 'USER' && ($member['totalAmountDonated'] > 100 || $member['lastTransactionAt'] > CarbonImmutable::now()->subMonthsNoOverflow(getMaxHistoryMonthsByAmount($member['lastTransactionAmount']))->format('Y-m-d h:i') || $member['isActive'] && $member['lastTransactionAmount'] >= 30);
     });
-    $list = \array_map(static function (array $member) {
+    $list = \array_map(static function (array $member) : array {
         $createdAt = CarbonImmutable::parse($member['createdAt']);
         $lastTransactionAt = CarbonImmutable::parse($member['lastTransactionAt']);
         if ($createdAt->format('d H:i:s.u') > $lastTransactionAt->format('d H:i:s.u')) {
@@ -34,30 +50,30 @@ function getOpenCollectiveSponsors() : string
         $status = null;
         if ($monthlyContribution > 29) {
             $status = 'sponsor';
-        } elseif ($monthlyContribution > 3 || $yearlyContribution > 20) {
+        } elseif ($monthlyContribution > 4.5 || $yearlyContribution > 29) {
             $status = 'backer';
         } elseif ($member['totalAmountDonated'] > 0) {
             $status = 'helper';
         }
         return \array_merge($member, ['star' => $monthlyContribution > 98 || $yearlyContribution > 500, 'status' => $status, 'monthlyContribution' => $monthlyContribution, 'yearlyContribution' => $yearlyContribution]);
     }, $list);
-    \usort($list, static function (array $a, array $b) {
+    \usort($list, static function (array $a, array $b) : int {
         return $b['monthlyContribution'] <=> $a['monthlyContribution'] ?: $b['totalAmountDonated'] <=> $a['totalAmountDonated'];
     });
-    return \implode('', \array_map(static function (array $member) {
+    return \implode('', \array_map(static function (array $member) use($customSponsorImages) : string {
         $href = \htmlspecialchars($member['website'] ?? $member['profile']);
-        $src = $member['image'] ?? \strtr($member['profile'], ['https://opencollective.com/' => 'https://images.opencollective.com/']) . '/avatar/256.png';
+        $src = $customSponsorImages[$member['MemberId'] ?? ''] ?? $member['image'] ?? \strtr($member['profile'], ['https://opencollective.com/' => 'https://images.opencollective.com/']) . '/avatar/256.png';
         [$x, $y] = @\getimagesize($src) ?: [0, 0];
         $validImage = $x && $y;
         $src = $validImage ? \htmlspecialchars($src) : 'https://opencollective.com/static/images/default-guest-logo.svg';
-        $height = 64;
-        $width = $validImage ? \round($x * $height / $y) : $height;
+        $height = $member['status'] === 'sponsor' ? 64 : 42;
+        $width = \min($height * 2, $validImage ? \round($x * $height / $y) : $height);
         $href .= (\strpos($href, '?') === \false ? '?' : '&amp;') . 'utm_source=opencollective&amp;utm_medium=github&amp;utm_campaign=Carbon';
-        $title = \htmlspecialchars($member['description'] ?? null ?: $member['name']);
-        $alt = \htmlspecialchars($member['name']);
-        return "\n" . '<a title="' . $title . '" href="' . $href . '" target="_blank" rel="sponsored">' . '<img alt="' . $alt . '" src="' . $src . '" width="' . $width . '" height="' . $height . '">' . '</a>';
+        $title = getHtmlAttribute($member['description'] ?? null ?: $member['name']);
+        $alt = getHtmlAttribute($member['name']);
+        return "\n" . '<a title="' . $title . '" href="' . $href . '" target="_blank">' . '<img alt="' . $alt . '" src="' . $src . '" width="' . $width . '" height="' . $height . '">' . '</a>';
     }, $list)) . "\n";
 }
-\file_put_contents('readme.md', \preg_replace_callback('/(<!-- <open-collective-sponsors> -->)[\\s\\S]+(<!-- <\\/open-collective-sponsors> -->)/', static function (array $match) {
+\file_put_contents('readme.md', \preg_replace_callback('/(<!-- <open-collective-sponsors> -->)[\\s\\S]+(<!-- <\\/open-collective-sponsors> -->)/', static function (array $match) : string {
     return $match[1] . getOpenCollectiveSponsors() . $match[2];
 }, \file_get_contents('readme.md')));

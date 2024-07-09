@@ -75,7 +75,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * @throws InvalidArgumentException If a locale contains invalid characters
      */
-    public function __construct(string $locale, MessageFormatterInterface $formatter = null, string $cacheDir = null, bool $debug = \false, array $cacheVary = [])
+    public function __construct(string $locale, ?MessageFormatterInterface $formatter = null, ?string $cacheDir = null, bool $debug = \false, array $cacheVary = [])
     {
         $this->setLocale($locale);
         if (null === $formatter) {
@@ -108,7 +108,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
      *
      * @throws InvalidArgumentException If the locale contains invalid characters
      */
-    public function addResource(string $format, $resource, string $locale, string $domain = null)
+    public function addResource(string $format, $resource, string $locale, ?string $domain = null)
     {
         if (null === $domain) {
             $domain = 'messages';
@@ -165,7 +165,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null)
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
     {
         if (null === $id || '' === $id) {
             return '';
@@ -192,7 +192,7 @@ class Translator implements TranslatorInterface, TranslatorBagInterface, LocaleA
     /**
      * {@inheritdoc}
      */
-    public function getCatalogue(string $locale = null)
+    public function getCatalogue(?string $locale = null)
     {
         if (!$locale) {
             $locale = $this->getLocale();

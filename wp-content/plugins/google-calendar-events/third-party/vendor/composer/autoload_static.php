@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c8325511a7e5d722c00d9245b800c55
+class ComposerStaticInit9c742ef103a1492378b77cea3cfd1fd2
 {
     public static $files = array (
         '4b1964b006cd3cb15789beb45368cd67' => __DIR__ . '/../..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -24,13 +24,6 @@ class ComposerStaticInit3c8325511a7e5d722c00d9245b800c55
         'SimpleCalendar\\plugin_deps\\Carbon\\CarbonPeriodImmutable' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/CarbonPeriodImmutable.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\CarbonTimeZone' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/CarbonTimeZone.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Cli\\Invoker' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Cli/Invoker.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\CarbonDoctrineType' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/CarbonDoctrineType.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\CarbonImmutableType' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/CarbonImmutableType.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\CarbonType' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/CarbonType.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\CarbonTypeConverter' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/CarbonTypeConverter.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\DateTimeDefaultPrecision' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/DateTimeDefaultPrecision.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\DateTimeImmutableType' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/DateTimeImmutableType.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\Doctrine\\DateTimeType' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Doctrine/DateTimeType.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Exceptions\\BadComparisonUnitException' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Exceptions/BadComparisonUnitException.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Exceptions\\BadFluentConstructorException' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Exceptions/BadFluentConstructorException.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Exceptions\\BadFluentSetterException' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Exceptions/BadFluentSetterException.php',
@@ -64,12 +57,12 @@ class ComposerStaticInit3c8325511a7e5d722c00d9245b800c55
         'SimpleCalendar\\plugin_deps\\Carbon\\FactoryImmutable' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/FactoryImmutable.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Language' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Language.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\Laravel\\ServiceProvider' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\LazyTranslator' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/TranslatorStrongType.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\LazyMessageFormatter' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php',
+        'SimpleCalendar\\plugin_deps\\Carbon\\LazyTranslator' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/TranslatorWeakType.php',
+        'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\LazyMessageFormatter' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\MessageFormatterMapper' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/MessageFormatter/MessageFormatterMapper.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\AbstractMacro' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/PHPStan/AbstractMacro.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\AbstractReflectionMacro' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/PHPStan/AbstractMacroBuiltin.php',
-        'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\LazyMacro' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/PHPStan/MacroStrongType.php',
+        'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\LazyMacro' => __DIR__ . '/../..' . '/nesbot/carbon/lazy/Carbon/PHPStan/MacroWeakType.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\Macro' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/PHPStan/Macro.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\MacroExtension' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/PHPStan/MacroExtension.php',
         'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\MacroScanner' => __DIR__ . '/../..' . '/nesbot/carbon/src/Carbon/PHPStan/MacroScanner.php',
@@ -640,7 +633,7 @@ class ComposerStaticInit3c8325511a7e5d722c00d9245b800c55
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit3c8325511a7e5d722c00d9245b800c55::$classMap;
+            $loader->classMap = ComposerStaticInit9c742ef103a1492378b77cea3cfd1fd2::$classMap;
 
         }, null, ClassLoader::class);
     }
