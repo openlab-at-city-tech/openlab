@@ -12,50 +12,43 @@ class Column
 {
 	/**
 	 * Table Column Index.
-	 *
 	 * @var string
 	 */
-	private $columnIndex = '';
+	private $columnIndex;
 
 	/**
 	 * Show Filter Button.
-	 *
 	 * @var bool
 	 */
 	private $showFilterButton = true;
 
 	/**
 	 * Total Row Label.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $totalsRowLabel;
 
 	/**
 	 * Total Row Function.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $totalsRowFunction;
 
 	/**
 	 * Total Row Formula.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $totalsRowFormula;
 
 	/**
 	 * Column Formula.
-	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $columnFormula;
 
 	/**
 	 * Table.
-	 *
-	 * @var null|Table
+	 * @var \TablePress\PhpOffice\PhpSpreadsheet\Worksheet\Table|null
 	 */
 	private $table;
 
@@ -63,9 +56,9 @@ class Column
 	 * Create a new Column.
 	 *
 	 * @param string $column Column (e.g. A)
-	 * @param Table $table Table for this column
+	 * @param ?Table $table Table for this column
 	 */
-	public function __construct($column, ?Table $table = null)
+	public function __construct(string $column, ?Table $table = null)
 	{
 		$this->columnIndex = $column;
 		$this->table = $table;
@@ -84,7 +77,7 @@ class Column
 	 *
 	 * @param string $column Column (e.g. A)
 	 */
-	public function setColumnIndex($column): self
+	public function setColumnIndex(string $column): self
 	{
 		// Uppercase coordinate
 		$column = strtoupper($column);
@@ -230,7 +223,7 @@ class Column
 		foreach ($worksheet->getCoordinates(false) as $coordinate) {
 			$cell = $worksheet->getCell($coordinate);
 			if ($cell->getDataType() === DataType::TYPE_FORMULA) {
-				$formula = $cell->getValue();
+				$formula = $cell->getValueString();
 				if (preg_match($pattern, $formula) === 1) {
 					$formula = preg_replace($pattern, "[$1{$newTitle}]", $formula);
 					$cell->setValueExplicit($formula, DataType::TYPE_FORMULA);
@@ -246,8 +239,8 @@ class Column
 		foreach ($spreadsheet->getNamedFormulae() as $namedFormula) {
 			$formula = $namedFormula->getValue();
 			if (preg_match($pattern, $formula) === 1) {
-				$formula = preg_replace($pattern, "[$1{$newTitle}]", $formula);
-				$namedFormula->setValue($formula); // @phpstan-ignore-line
+				$formula = preg_replace($pattern, "[$1{$newTitle}]", $formula) ?? '';
+				$namedFormula->setValue($formula);
 			}
 		}
 	}

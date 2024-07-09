@@ -221,10 +221,16 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 		foreach ( $table_ids as $table_id ) {
 			// Load table, without table data, options, and visibility settings.
 			$table = TablePress::$model_table->load( $table_id, false, false );
-			if ( '' === trim( $table['name'] ) ) { // @phpstan-ignore-line
-				$table['name'] = __( '(no name)', 'tablepress' ); // @phpstan-ignore-line
+
+			// Skip tables that could not be loaded.
+			if ( is_wp_error( $table ) ) {
+				continue;
 			}
-			$tables[ $table_id ] = esc_html( $table['name'] ); // @phpstan-ignore-line
+
+			if ( '' === trim( $table['name'] ) ) {
+				$table['name'] = __( '(no name)', 'tablepress' );
+			}
+			$tables[ $table_id ] = esc_html( $table['name'] );
 		}
 
 		/**
@@ -434,7 +440,7 @@ JS;
 		}
 
 		// Check if action is a supported action, and whether the user is allowed to access this screen.
-		if ( ! isset( $this->view_actions[ $action ] ) || ! current_user_can( $this->view_actions[ $action ]['required_cap'] ) ) { // @phpstan-ignore-line
+		if ( ! isset( $this->view_actions[ $action ] ) || ! current_user_can( $this->view_actions[ $action ]['required_cap'] ) ) { // @phpstan-ignore-line (The array value for the capability is always a string.)
 			wp_die( __( 'Sorry, you are not allowed to access this page.', 'default' ), 403 );
 		}
 
@@ -475,8 +481,6 @@ JS;
 				break;
 			case 'about':
 				$data['first_activation'] = TablePress::$model_options->get( 'first_activation' );
-				$exporter = TablePress::load_class( 'TablePress_Export', 'class-export.php', 'classes' );
-				$data['zip_support_available'] = $exporter->zip_support_available;
 				break;
 			case 'options':
 				/*
@@ -533,7 +537,13 @@ JS;
 					}
 					// Load table, without table data, options, and visibility settings.
 					$table = TablePress::$model_table->load( $table_id, false, false );
-					$data['tables'][ $table['id'] ] = $table['name']; // @phpstan-ignore-line
+
+					// Skip tables that could not be loaded.
+					if ( is_wp_error( $table ) ) {
+						continue;
+					}
+
+					$data['tables'][ $table['id'] ] = $table['name'];
 				}
 				$data['tables_count'] = TablePress::$model_table->count_tables();
 				$data['export_ids'] = ( ! empty( $_GET['table_id'] ) ) ? explode( ',', $_GET['table_id'] ) : array();
@@ -554,12 +564,17 @@ JS;
 					}
 					// Load table, without table data, options, and visibility settings.
 					$table = TablePress::$model_table->load( $table_id, false, false );
-					$data['tables'][ $table['id'] ] = $table['name']; // @phpstan-ignore-line
+
+					// Skip tables that could not be loaded.
+					if ( is_wp_error( $table ) ) {
+						continue;
+					}
+
+					$data['tables'][ $table['id'] ] = $table['name'];
 				}
-				$data['table_ids'] = $table_ids; // Backwards compatibility for the retired "Table Auto Update" Extension, which still relies on this variable name.
+				$data['table_ids'] = $table_ids; // Backward compatibility for the retired "Table Auto Update" Extension, which still relies on this variable name.
 				$data['tables_count'] = TablePress::$model_table->count_tables();
 				$importer = TablePress::load_class( 'TablePress_Import', 'class-import.php', 'classes' );
-				$data['zip_support_available'] = $importer->zip_support_available;
 				$data['import_type'] = ( ! empty( $_GET['import_type'] ) ) ? $_GET['import_type'] : 'add';
 				$data['import_existing_table'] = ( ! empty( $_GET['import_existing_table'] ) ) ? $_GET['import_existing_table'] : '';
 				$data['import_source'] = ( ! empty( $_GET['import_source'] ) ) ? $_GET['import_source'] : 'file-upload';
@@ -1095,6 +1110,13 @@ JS;
 			}
 		}
 
+		// For security reasons, the "url" source is only available admins and editors via a custom capability.
+		if ( 'url' === $import_config['source'] ) {
+			if ( ! current_user_can( 'tablepress_import_tables_url' ) ) {
+				TablePress::redirect( array( 'action' => 'import', 'message' => 'error_import', 'error_details' => 'You do not have the required access rights.' ) );
+			}
+		}
+
 		// Move file upload data to the main import configuration.
 		$import_config['file-upload'] = $_FILES['import_file_upload'] ?? null;
 
@@ -1133,7 +1155,7 @@ JS;
 			} elseif ( 0 < count( $import['errors'] ) ) {
 				$wp_error_strings = array();
 				foreach ( $import['errors'] as $file ) {
-					$wp_error_strings[] = TablePress::get_wp_error_string( $file['error'] );
+					$wp_error_strings[] = TablePress::get_wp_error_string( $file->error );
 				}
 				$redirect_parameters['error_details'] = implode( ', ', $wp_error_strings );
 			}
@@ -1299,7 +1321,7 @@ JS;
 		$view_data = array(
 			'table_id'               => $table_id,
 			'head_html'              => $_render->get_preview_css(),
-			'body_html'              => $_render->get_output(),
+			'body_html'              => $_render->get_output( 'html' ),
 			'site_uses_block_editor' => TablePress::site_uses_block_editor(),
 		);
 
