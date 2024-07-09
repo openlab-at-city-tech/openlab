@@ -8735,6 +8735,12 @@ body #register-page label .label-gloss {
 body #register-page .account-description-approval-fieldset {
   margin-top: 20px;
 }
+body #register-page .registration-continue-button {
+  margin-top: 20px;
+}
+body #register-page .registration-continue-button a {
+  text-decoration: none;
+}
 body .panel-body .bp-template-notice {
   margin-top: 0;
   margin-bottom: 17px;
