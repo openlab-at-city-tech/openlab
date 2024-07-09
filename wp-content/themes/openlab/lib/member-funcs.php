@@ -2000,7 +2000,7 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 								</div>
 
 								<div class="form-group social-link-fields-visibility">
-									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-visibility">Visibility</label>
+									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-visibility">Who can see this?</label>
 									<select name="social-links[<?php echo esc_attr( $sfi ); ?>][visibility]" id="social-links-<?php echo esc_attr( $sfi ); ?>-visibility">
 										<?php if ( bp_is_register_page() ) : ?>
 											<option value="">-</option>
