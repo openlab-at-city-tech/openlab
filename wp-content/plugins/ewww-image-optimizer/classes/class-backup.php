@@ -185,8 +185,13 @@ class Backup extends Base {
 				$record = \ewww_image_optimizer_find_already_optimized( $file );
 			}
 			if ( $record && $this->is_iterable( $record ) && ! empty( $record['backup'] ) && ! empty( $record['updated'] ) ) {
-				$updated_time = \strtotime( $record['updated'] );
+				$updated_time = $record['updated'];
+				if ( ! is_numeric( $record['updated'] ) ) {
+					$updated_time = \strtotime( $record['updated'] );
+				}
+				$this->debug_message( "checking if $updated_time (from {$record['updated']}) is too far gone" );
 				if ( DAY_IN_SECONDS * 30 + $updated_time > \time() ) {
+					$this->debug_message( 'backup still good!' );
 					return true;
 				}
 			}
@@ -351,15 +356,18 @@ class Backup extends Base {
 		$this->debug_message( "restoring $file from $backup_file" );
 		copy( $backup_file, $file );
 		if ( $this->filesize( $file ) === $this->filesize( $backup_file ) ) {
+			$this->debug_message( 'restore success, checking for .webp variant and resetting db record' );
 			if ( $this->is_file( $file . '.webp' ) && \is_writable( $file . '.webp' ) ) {
+				$this->debug_message( "removing $file.webp" );
 				$this->delete_file( $file . '.webp' );
 			}
 			/* $this->delete_file( $backup_file ); */
 			global $wpdb;
 			// Reset the image record.
-			$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->ewwwio_images SET results = '', image_size = 0, updates = 0, updated=updated, level = 0 WHERE id = %d", $image['id'] ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->ewwwio_images SET results = '', image_size = 0, updates = 0, updated=updated, level = 0, resized_width = 0, resized_height = 0, resize_error = 0, webp_size = 0, webp_error = 0 WHERE id = %d", $image['id'] ) );
 			return true;
 		}
+		$this->debug_message( 'restore not confirmed, filesize does not match: ' . $this->filesize( $file ) . ' vs. ' . $this->filesize( $backup_file ) );
 		/* translators: %s: An image filename */
 		$this->error_message = \sprintf( \__( 'Restore attempted for %s, but could not be confirmed.', 'ewww-image-optimizer' ), $file );
 		return false;
@@ -463,7 +471,13 @@ class Backup extends Base {
 			$this->ob_clean();
 			\wp_die( \wp_json_encode( array( 'error' => \esc_html__( 'No image ID was provided.', 'ewww-image-optimizer' ) ) ) );
 		}
-		if ( empty( $_REQUEST['ewww_wpnonce'] ) || ! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-tools' ) ) {
+		if (
+			empty( $_REQUEST['ewww_wpnonce'] ) ||
+			(
+				! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-tools' ) &&
+				! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-settings' )
+			)
+		) {
 			$this->ob_clean();
 			\wp_die( \wp_json_encode( array( 'error' => \esc_html__( 'Access token has expired, please reload the page.', 'ewww-image-optimizer' ) ) ) );
 		}
