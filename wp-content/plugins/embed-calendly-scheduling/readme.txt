@@ -3,8 +3,8 @@ Contributors: turn2honey
 Donate link: https://embedcalendly.com/pricing
 Tags: appointment, appointment booking, appointment scheduling, booking calendar, calendly, embed calendly
 Requires at least: 4.0
-Tested up to: 6.3.1
-Stable tag: 3.7
+Tested up to: 6.4.3
+Stable tag: 3.8
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -114,6 +114,10 @@ function emcs_show_promotions() {
 `
 
 == Changelog ==
+
+= 3.8 - 21-03-2024 =
+
+- Fixed customizer plugin conflicts.
 
 = 3.7 - 12-10-2023 =
 
