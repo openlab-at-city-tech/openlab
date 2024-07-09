@@ -11,10 +11,10 @@ jQuery(document).ready(function($) {
 				return true;
 			}
 
-			const userLastNameEmailMatch = text.match( /^[^\.@]+\.([a-zA-Z]+)[0-9]*@mail\.citytech\.cuny\.edu$/ );
+			const userLastNameEmailMatch = userEmail.match( /^[^\.@]+\.([a-zA-Z]+)[0-9]*@mail\.citytech\.cuny\.edu$/ );
 			const userLastNameEmail = userLastNameEmailMatch ? userLastNameEmailMatch[1] : null;
 
-			if ( userLastNameEmail && userLastNameEmail.toLowerCase() === userLastName ) {
+			if ( userLastNameEmail && text.toLowerCase().includes( userLastNameEmail ) ) {
 				return true;
 			}
 
