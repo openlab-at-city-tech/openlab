@@ -7,8 +7,8 @@ Tags: zotero, zotpress, citation manager, citations, citation, cite, citing, bib
 Author URI: http://katieseaborn.com/
 Author: Katie Seaborn
 Requires at least: 3.5
-Tested up to: 6.4.3
-Stable tag: 7.3.8
+Tested up to: 6.5.2
+Stable tag: 7.3.10
 License: Apache2.0
 
 Zotpress displays your Zotero citations on WordPress.
@@ -26,7 +26,7 @@ Zotpress displays your Zotero citations on WordPress.
 
 Compatible with Firefox, Safari, Chrome, and IE9. Made with jQuery, jQuery UI, jQuery doTimeout, Live Query, OAuth, and [Open Library](https://openlibrary.org/ "Open Library").
 
-Special thanks to Joe Alberts for substantial contributions to the code, comprehensive testing, and design ideation. Thanks also to contributors Christopher Cheung, Jason S., Chris Wentzloff, Karljürgen Feuerherm (@feuerherm), and Mark Dingemanse (@codeispoetry) for their code contributions, testing, and guidance. Finally, my sincere gratitude goes out to all who have donated in support of this plugin.
+Special thanks to Joe Alberts for substantial contributions to the code, comprehensive testing, and design ideation. Thanks also to contributors Christopher Cheung, Jason S., Chris Wentzloff, Karljürgen Feuerherm (@feuerherm), Mark Dingemanse (@codeispoetry), Jörg Mechnich (jmechnich@github), Tomas Risberg, and @ericcorbett2 for their code contributions, testing, and guidance. Finally, my sincere gratitude goes out to all who have donated in support of this plugin.
 
 Please note that this plugin is on semi-hiatus, with updates expected about 1-3 times a year.
 
@@ -71,6 +71,20 @@ The F.A.Q. can be found on the "Help" page of every Zotpress installation. If yo
 6. Allow visitors to search your library by item metadata or tag, or both.
 
 == Changelog ==
+
+= 7.3.10 =
+
+* Fixed shortcode security issues.
+* Refined shortcode attribute processing code.
+* Fixed request limit bug.
+* Various code refinements.
+
+= 7.3.9 = 
+
+* Fixed security issue.
+* Fixed search bar bugs.
+* Added direct access prevention (thanks to jmechnich@github).
+* Added fix for countable issue (thanks to Tomas Risberg and @ericcorbett2).
 
 = 7.3.8 =
 

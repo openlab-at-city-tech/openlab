@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Handles the Zotpress in-text shortcode.
+ * 7.3.10: Refined to use $_GET and Zotpress_prep_ajax_request_vars() for processing.
+ *
+ * Used by: Shortcodes, zotpress.php
+ *
+ * @param arr $atts The shortcode attributes.
+ *
+ * @return str $zp_output The in-text shortcode HTML.
+ */
 function Zotpress_zotpressInTextBib ($atts)
 {
     /*
@@ -39,69 +49,122 @@ function Zotpress_zotpressInTextBib ($atts)
 
     ), $atts));
 
+    // array_push($_GET, shortcode_atts(array(
+    //     'style' => false,
+    //     'sortby' => "default",
+    //     'sort' => false,
+    //     'order' => false,
+
+    //     'image' => false,
+    //     'images' => false,
+    //     'showimage' => "no",
+    //     'showtags' => "no",
+
+    //     'title' => "no",
+
+    //     'download' => "no",
+    //     'downloadable' => false,
+    //     'notes' => false,
+    //     'abstract' => false,
+    //     'abstracts' => false,
+    //     'cite' => false,
+    //     'citeable' => false,
+
+    //     'target' => false,
+	// 	'urlwrap' => false,
+
+	// 	'highlight' => false,
+    //     'forcenumber' => false,
+    //     'forcenumbers' => false
+
+    // ), $atts));
+
 
     global $post;
 
 
-    // FORMAT PARAMETERS
-    $style = str_replace('"','',html_entity_decode($style));
-    $sortby = str_replace('"','',html_entity_decode($sortby));
+    // +---------------------------+
+    // | FORMAT & CLEAN PARAMETERS |
+    // +---------------------------+
 
-    if ($order) {
-        $order = str_replace('"','',html_entity_decode($order));
-    } elseif ($sort) {
-        $order = str_replace('"','',html_entity_decode($sort));
-    } else $order = "asc";
-    $order = strtolower($order);
+    // 3.9.10: Use the Zotpress_prep_ajax_request_vars() function on bib, lib
+    $zpr = Zotpress_prep_ajax_request_vars($atts);
+
+    // FORMAT PARAMETERS
+    // $style = str_replace('"','',html_entity_decode($zpr['style']));
+    // $sortby = str_replace('"','',html_entity_decode($zpr['sortby']));
+    $style = $zpr['style'];
+    $sortby = strtolower($zpr['sortby']);
+
+    // if ($order) {
+    //     $order = str_replace('"','',html_entity_decode($zpr['order']));
+    // } elseif ($sort) {
+    //     $order = str_replace('"','',html_entity_decode($zpr['sort']));
+    // } else $order = "asc";
+    $order = strtolower($zpr['order']);
 
     // Show image
-    if ($showimage) $showimage = str_replace('"','',html_entity_decode($showimage));
-    if ($image) $showimage = str_replace('"','',html_entity_decode($image));
-    if ($images) $showimage = str_replace('"','',html_entity_decode($images));
+    // if ($showimage) $showimage = str_replace('"','',html_entity_decode($zpr['showimage']));
+    // if ($image) $showimage = str_replace('"','',html_entity_decode($zpr['image']));
+    // if ($images) $showimage = str_replace('"','',html_entity_decode($zpr['images']));
 
-    if ($showimage == "yes" || $showimage == "true" || $showimage === true) {
-        $showimage = true;
-    } elseif ($showimage === "openlib") {
-        $showimage = "openlib";
-    } else $showimage = false;
+    // if ($showimage == "yes" || $showimage == "true" || $showimage === true) {
+    //     $showimage = true;
+    // } elseif ($showimage === "openlib") {
+    //     $showimage = "openlib";
+    // } else $showimage = false;
+    $showimage = $zpr['showimage'];
 
     // Show tags
-    $showtags = $showtags == "yes" || $showtags == "true" || $showtags === true;
+    // $showtags = $showtags == "yes" || $showtags == "true" || $showtags === true;
+    $showtags = $zpr["showtags"];
 
-    $title = str_replace('"','',html_entity_decode($title));
+    // $title = str_replace('"','',html_entity_decode($zpr['title']));
+    $title = $zpr['title'];
 
-    if ($download) {
-        $download = str_replace('"','',html_entity_decode($download));
-    } elseif ($downloadable) {
-        $download = str_replace('"','',html_entity_decode($downloadable));
-    }
-    $download = $download == "yes" || $download == "true" || $download === true;
+    // if ($download) {
+    //     $download = str_replace('"','',html_entity_decode($zpr['download']));
+    // } elseif ($downloadable) {
+    //     $download = str_replace('"','',html_entity_decode($zpr['downloadable']));
+    // }
+    // if ($downloadable) {
+        // $downloadable = str_replace('"','',html_entity_decode($zpr['downloadable']));
+    // }
+    // $download = $download == "yes" || $download == "true" || $download === true;
+    $downloadable = $zpr['downloadable'];
 
-    $shownotes = str_replace('"','',html_entity_decode($notes));
+    // $shownotes = str_replace('"','',html_entity_decode($zpr['shownotes']));
+    $shownotes = $zpr['shownotes'];
 
-    if ($abstracts) {
-        $abstracts = str_replace('"','',html_entity_decode($abstracts));
-    } elseif ($abstract) {
-        $abstracts = str_replace('"','',html_entity_decode($abstract));
-    }
+    // if ($abstracts) {
+    //     $abstracts = str_replace('"','',html_entity_decode($zpr['abstracts']));
+    // } elseif ($abstract) {
+    //     $abstracts = str_replace('"','',html_entity_decode($zpr['abstract']));
+    // }
+    $abstracts = $zpr['showabstracts'];
 
-    if ($citeable) {
-        $citeable = str_replace('"','',html_entity_decode($citeable));
-    } elseif ($cite) {
-        $citeable = str_replace('"','',html_entity_decode($cite));
-    }
+    // if ($citeable) {
+    //     $citeable = str_replace('"','',html_entity_decode($zpr['citeable']));
+    // } elseif ($cite) {
+    //     $citeable = str_replace('"','',html_entity_decode($zpr['cite']));
+    // }
+    $citeable = $zpr["citeable"];
 
-    if ($target == "new" || $target == "yes" || $target == "_blank" || $target == "true" || $target === true) $target = true;
-    else $target = false;
+    // if ($target == "new" || $target == "yes" || $target == "_blank" || $target == "true" || $target === true) $target = true;
+    // else $target = false;
+    $target = $zpr["target"];
 
-    $urlwrap = $urlwrap == "title" || $urlwrap == "image" ? str_replace('"','',html_entity_decode($urlwrap)) : false;
+    // $urlwrap = $urlwrap == "title" || $urlwrap == "image" ? str_replace('"','',html_entity_decode($zpr['urlwrap'])) : false;
+    $urlwrap = $zpr['urlwrap'];
 
-    $highlight = $highlight ? str_replace('"','',html_entity_decode($highlight)) : false;
+    // $highlight = $highlight ? str_replace('"','',html_entity_decode($zpr['highlight'])) : false;
+    $highlight = $zpr["highlight"];
 
-    if ($forcenumber == "yes" || $forcenumber == "true" || $forcenumber === true)
-        $forcenumber = true;
-    if ($forcenumbers == "yes" || $forcenumbers == "true" || $forcenumbers === true)
-        $forcenumber = true;
+    // if ($forcenumber == "yes" || $forcenumber == "true" || $forcenumber === true)
+    //     $forcenumber = true;
+    // if ($forcenumbers == "yes" || $forcenumbers == "true" || $forcenumbers === true)
+    //     $forcenumber = true;
+    $forcenumber = $zpr["request_start"];
 
     // Set up request vars
     $request_start = 0;
@@ -112,12 +175,11 @@ function Zotpress_zotpressInTextBib ($atts)
     // Set up item key
 	$item_key = "";
 
-
 	// Get in-text items
-	if ( isset( $GLOBALS['zp_shortcode_instances'][$post->ID] ) )
-	{
+	if ( isset( $GLOBALS['zp_shortcode_instances'][$post->ID] ) ) {
+
         // Handle the possible formats of item/s for in-text
-    	//
+    	
     	// IN-TEXT FORMATS:
     	// [zotpressInText item="NCXAA92F"]
     	// [zotpressInText item="{NCXAA92F}"]
@@ -126,13 +188,14 @@ function Zotpress_zotpressInTextBib ($atts)
     	// [zotpressInText items="{000001:NCXAA92F,10-15},{000003:3ITTIXHP}"]
     	// So no multiples without curlies or non-curlies in multiples
 
-		foreach ( $GLOBALS['zp_shortcode_instances'][$post->ID] as $intextitem )
-		{
+		foreach ( $GLOBALS['zp_shortcode_instances'][$post->ID] as $intextitem ) {
+
             // REVIEW: Actually, let's just remove pages
             $intextitem["items"] = preg_replace( "/(((,))+([\w\d-]+(})+))++/", "}", $intextitem["items"] );
 
             // Add separator if not the start
-			if ( $item_key != "" ) $item_key .= ";";
+			if ( $item_key != "" )
+                $item_key .= ";";
 
             // Add to the item key
 			$item_key .= $intextitem["items"];
@@ -140,9 +203,7 @@ function Zotpress_zotpressInTextBib ($atts)
 	}
 
     // Generate instance id for shortcode
-    // REVIEW: Added Post ID and newish attributes
-    $instance_id = "zotpress-".md5($item_key.$style.$sortby.$order.$title.$showimage.$showtags.$download.$shownotes.$abstracts.$citeable.$target.$urlwrap.$forcenumber.$highlight.$post->ID);
-
+    $instance_id = "zotpress-".md5($item_key.$style.$sortby.$order.$title.$showimage.$showtags.$downloadable.$shownotes.$abstracts.$citeable.$target.$urlwrap.$forcenumber.$highlight.$post->ID);
 
     // GENERATE IN-TEXT BIB STRUCTURE
 	$zp_output = "\n<div id='zp-InTextBib-".$instance_id."'";
@@ -157,7 +218,7 @@ function Zotpress_zotpressInTextBib ($atts)
 		<span class="ZP_TITLE" style="display: none;">'.$title.'</span>
 		<span class="ZP_SHOWIMAGE" style="display: none;">'.$showimage.'</span>
 		<span class="ZP_SHOWTAGS" style="display: none;">'.$showtags.'</span>
-		<span class="ZP_DOWNLOADABLE" style="display: none;">'.$download.'</span>
+		<span class="ZP_DOWNLOADABLE" style="display: none;">'.$downloadable.'</span>
 		<span class="ZP_NOTES" style="display: none;">'.$shownotes.'</span>
 		<span class="ZP_ABSTRACT" style="display: none;">'.$abstracts.'</span>
 		<span class="ZP_CITEABLE" style="display: none;">'.$citeable.'</span>
@@ -182,21 +243,21 @@ function Zotpress_zotpressInTextBib ($atts)
     // $_GET['year'] = $year;
     // $_GET['item_type'] = $item_type;
     // $_GET['inclusive'] = $inclusive;
-    $_GET['style'] = $style;
-    // $_GET['limit'] = $limit;
-    $_GET['sortby'] = $sortby;
-    $_GET['order'] = $order;
-    $_GET['title'] = $title;
-    $_GET['showimage'] = $showimage;
-    $_GET['showtags'] = $showtags;
-    $_GET['downloadable'] = $downloadable;
-    $_GET['shownotes'] = $shownotes;
-    $_GET['abstracts'] = $abstracts;
-    $_GET['citeable'] = $citeable;
-    $_GET['target'] = $target;
-    $_GET['urlwrap'] = $urlwrap;
-    $_GET['forcenumber'] = $forcenumber;
-    $_GET['highlight'] = $highlight;
+    // $_GET['style'] = $style;
+    // // $_GET['limit'] = $limit;
+    // $_GET['sortby'] = $sortby;
+    // $_GET['order'] = $order;
+    // $_GET['title'] = $title;
+    // $_GET['showimage'] = $showimage;
+    // $_GET['showtags'] = $showtags;
+    // $_GET['downloadable'] = $downloadable;
+    // $_GET['shownotes'] = $shownotes;
+    // $_GET['abstracts'] = $abstracts;
+    // $_GET['citeable'] = $citeable;
+    // $_GET['target'] = $target;
+    // $_GET['urlwrap'] = $urlwrap;
+    // $_GET['forcenumber'] = $forcenumber;
+    // $_GET['highlight'] = $highlight;
 
     $_GET['request_start'] = $request_start;
     $_GET['request_last'] = $request_last;
@@ -212,10 +273,12 @@ function Zotpress_zotpressInTextBib ($atts)
     $zp_output .= Zotpress_shortcode_request( true ); // Check catche first
     $zp_output .= "</div><!-- .zp-zp-SEO-Content -->\n";
 
+    $zp_output .= "</div><!-- .zp-List --></div><!--.zp-Zotpress-->\n\n";
+
 	// Show theme scripts
 	$GLOBALS['zp_is_shortcode_displayed'] = true;
 
-	return $zp_output . "</div><!-- .zp-List --></div><!--.zp-Zotpress-->\n\n";
+	return $zp_output;
 }
 
 ?>
