@@ -12,12 +12,16 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			return isset( $_GET['et_fb'] ) && $_GET['et_fb'] === '1';
 		}
 
+		static function is_beaver_builder() {
+			return isset( $_GET['fl_builder'] );
+		}
+
 		static function is_cornerstone_builder() {
 			return isset( $_GET['cs-render'] ) && $_GET['cs-render'] === '1';
 		}
 
 		static function is_pagebuilder_request() {
-			return self::is_divi_builder() || self::is_cornerstone_builder();
+			return self::is_divi_builder() || self::is_cornerstone_builder() || self::is_beaver_builder();
 		}
 
 		static function is_asynchronous_request() {
@@ -113,7 +117,7 @@ if ( !class_exists( 'MeowCommon_Helpers' ) ) {
 			if ( $wp_rewrite === null ) { 
 				$wp_rewrite = new WP_Rewrite();
 			}
-			$rest_url = wp_parse_url( trailingslashit( rest_url() ) );
+			$rest_url = wp_parse_url( trailingslashit( get_rest_url() ) );
 			$current_url = wp_parse_url( add_query_arg( array() ) );
 			if ( !$rest_url || !$current_url )
 				return false;

@@ -508,27 +508,90 @@ class Meow_WPMC_Core {
 		}
 	}
 
-	function logs_directory_check() {
-		if ( !file_exists( WPMC_PATH . '/logs/' ) ) {
-			mkdir( WPMC_PATH . '/logs/', 0777 );
-		}
-	}
+	#region LOGS
 
 	function log( $data = null, $force = false ) {
 		if ( !$this->debug_logs && !$force )
 			return;
-		$this->logs_directory_check();
-		$fh = @fopen( WPMC_PATH . '/logs/media-cleaner.log', 'a' );
-		if ( !$fh )
-			return false;
-		$date = current_datetime()->format( 'Y-m-d H:i:s' );
-		if ( is_null( $data ) )
+
+		$php_logs = $this->get_option( 'php_error_logs' );
+		$log_file_path = $this->get_logs_path();
+
+		$fh = @fopen( $log_file_path, 'a' );
+		if ( !$fh ) { return false; }
+		$date = date( "Y-m-d H:i:s" );
+		if ( is_null( $data ) ) {
 			fwrite( $fh, "\n" );
-		else
+		}
+		else {
 			fwrite( $fh, "$date: {$data}\n" );
+			if ( $php_logs ) {
+				error_log( "[MEDIA CLEANER] " . $data );
+			}
+		}
 		fclose( $fh );
 		return true;
 	}
+
+	//WPMC_PREFIX
+
+	function get_logs_path() {
+		$uploads_dir = wp_upload_dir();
+		$uploads_dir_path = trailingslashit( $uploads_dir['basedir'] );
+
+		$path = $this->get_option( 'logs_path' );
+
+		if ( $path && file_exists( $path ) ) {
+			// make sure the path is legal (within the uploads directory with the WPMC_PREFIX prefix and log extension)
+			if ( strpos( $path, $uploads_dir_path ) !== 0 || strpos( $path, WPMC_PREFIX ) === false || substr( $path, -4 ) !== '.log' ) {
+				$path = null;
+			} else {
+				return $path;
+			}
+		}
+
+		if ( !$path ) {
+			$path = $uploads_dir_path . WPMC_PREFIX . "_" . $this->random_ascii_chars() . ".log";
+			if ( !file_exists( $path ) ) {
+				touch( $path );
+			}
+			
+			$options = $this->get_all_options();
+			$options['logs_path'] = $path;
+			$this->update_options( $options );
+		}
+
+		return $path;
+	}
+	
+
+	function get_logs() {
+		$log_file_path = $this->get_logs_path();
+
+		if ( !file_exists( $log_file_path ) ) {
+			return "No logs found.";
+		}
+
+		$content = file_get_contents( $log_file_path );
+		$lines = explode( "\n", $content );
+		$lines = array_filter( $lines );
+		$lines = array_reverse( $lines );
+		$content = implode( "\n", $lines );
+		return $content;
+	}
+
+	function clear_logs() {
+		$logPath = $this->get_logs_path();
+		if ( file_exists( $logPath ) ) {
+			unlink( $logPath );
+		}
+
+		$options = $this->get_all_options();
+		$options['logs_path'] = null;
+		$this->update_options( $options );
+	}
+
+	#endregion
 
 	/**
 	 *
@@ -536,12 +599,42 @@ class Meow_WPMC_Core {
 	 *
 	 */
 
+	private function random_ascii_chars($length = 8)
+	{
+		$characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
+		$characters_length = count($characters);
+		$random_string = '';
+
+		for ($i = 0; $i < $length; $i++) {
+			$random_string .= $characters[rand(0, $characters_length - 1)];
+		}
+
+		return $random_string;
+	}
+
 	function get_trashdir() {
 		return trailingslashit( $this->upload_path ) . 'wpmc-trash';
 	}
 
 	function get_trashurl() {
 		return trailingslashit( $this->upload_url ) . 'wpmc-trash';
+	}
+
+	function clean_ob(){
+		$disabled = $this->get_option( 'output_buffer_cleaning_disabled' );
+		$ob_content = ob_get_contents();
+		if ( !empty( trim( $ob_content ) ) ) {
+
+			if ( $disabled ) {
+				$this->log( "🚨 If the server's response was broken, try to let Output Buffer Cleaning enabled." );
+				return;
+			}
+
+			$this->log( "🧹 The response is broken due to output buffering, it will be cleaned." );
+			$this->log( "📄 Output buffer content: " . $ob_content );
+
+			ob_end_clean();
+		}
 	}
 
 	/**
@@ -706,6 +799,7 @@ class Meow_WPMC_Core {
 			'post_content'   => '',
 			'post_status'    => 'inherit'
 		);
+
 		$attach_id = wp_insert_attachment( $attachment, $full_path );
 
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
@@ -1341,7 +1435,7 @@ class Meow_WPMC_Core {
 		$paths = array();
 		$fullpath = get_attached_file( $attachmentId );
 		if ( empty( $fullpath ) ) {
-			error_log( 'Media Cleaner: Could not find attached file for Media ID ' . $attachmentId );
+			$this->log( 'Could not find attached file for Media ID ' . $attachmentId );
 			return array();
 		}
 		$mainfile = $this->clean_uploaded_filename( $fullpath );
@@ -1499,23 +1593,26 @@ class Meow_WPMC_Core {
 
 	function get_uploads_directory_hierarchy() {
 		$uploads_dir = wp_upload_dir();
-		$base_dir = $uploads_dir['basedir'];
+		$base_dir = wp_normalize_path( $uploads_dir['basedir'] );
 		$root = '/' . wp_basename( $base_dir );
 		$directories = array();
-
+	
 		// Get all subdirectories of the base directory
-		$dir_iterator = new RecursiveDirectoryIterator( $base_dir, FilesystemIterator::KEY_AS_PATHNAME|FilesystemIterator::CURRENT_AS_FILEINFO|FilesystemIterator::SKIP_DOTS );
+		$dir_iterator = new RecursiveDirectoryIterator( $base_dir, FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS );
 		$iterator = new RecursiveIteratorIterator( $dir_iterator, RecursiveIteratorIterator::SELF_FIRST );
+	
 		foreach ( $iterator as $file ) {
 			if ( $file->isDir() ) {
+				// Normalize path for consistency
+				$file_path = wp_normalize_path( $file->getPathname() );
 				// Remove base_dir from path
-				$directory = str_replace( $base_dir, '', $file->getPathname() );
+				$directory = str_replace( $base_dir, '', $file_path );
 				if ( $directory ) {
 					$directories[] = $root . $directory;
 				}
 			}
 		}
-
+	
 		// Return the hierarchy as a JSON file
 		return json_encode( $directories );
 	}
@@ -1557,10 +1654,13 @@ class Meow_WPMC_Core {
 			'file_op_buffer' => 20,
 			'delay' => 100,
 			'shortcodes_disabled' => false,
+			'output_buffer_cleaning_disabled' => false,
+			'php_error_logs' => false,
 			'posts_per_page' => 10,
 			'clean_uninstall' => false,
 			'repair_mode' => false,
 			'expert_mode' => false,
+			'logs_path' => null,
 		);
 	}
 
