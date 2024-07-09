@@ -1,0 +1,186 @@
+= 4.8.2 =
+* Fixed: PDF files containing the text in certain languages (like Korean or Japanese) were not rendered properly due to a bug in PDF.js library incorrectly handling passed options.
+
+= 4.8.1 =
+* Fixed: Make sure that when `width` and `height` shortcode/option values have an incorrect value, the plugin does not generate a fatal error.
+
+= 4.8.0 =
+* Changed: Compatibility with WordPress 6.5.
+* Changed: Make the PDF Embedder block extensible.
+* Changed: Improved the look and feel of the PDF Embedder block inside the Block Editor.
+* Changed: Removed some unnecessary files from the released version to decrease the zip size.
+* Fixed: Improved performance for the majority of sites by not loading an internal Action Scheduler library (which was also updated to v3.7.4) when it is not used.
+* Fixed: Hide the Toolbar Hover options in the block if the "No Toolbar" option is chosen.
+* Fixed: Security fixes in the way certain PDF files are rendered to prevent arbitrary scripts execution.
+
+= 4.7.1 =
+* Changed: The logic for displaying notices was adjusted.
+* Fixed: Improved handling of incorrect URLs supplied to the shortcode - PDF viewer won't even try to render it.
+
+= 4.7.0 =
+* IMPORTANT: The minimum WordPress version has been raised to WordPress v5.8.
+* IMPORTANT: The minimum PHP version has been raised to PHP v7.0.
+* IMPORTANT: If you are using a caching plugin and added PDF Embedder JS files to the exclusion list, you will need to do that again due to changed file names.
+* Added: New option for the toolbar location called "No Toolbar" is now available. It allows you to hide the toolbar completely.
+* Changed: Plugin admin area interface has been refreshed.
+* Changed: The plugin has been tested with the latest version of WordPress.
+* Changed: Block was rewritten from scratch, and now it looks better in the Block Editor, and also syncs its default settings with global plugin options.
+* Fixed: A lot of strings in the plugin have been fixed to make them translatable and accurate.
+* Fixed: Several security related improvements have been introduced (data sanitization and escaping).
+* Fixed: Text in PDF files in certain languages (like, Japanese and Korean) was not rendered correctly.
+
+= 4.6.4 =
+* Resolved Javascript errors in minified JS.
+
+= 4.6.3 =
+* Added About tab.
+* Updated core PDF.js functionality.
+* Addressed mobile issue in Safari iOS.
+
+= 4.6.2 =
+* Added support for Italian language.
+* Security & Bug fixes.
+* Updated compatibility for WordPress 5.7.
+
+= 4.6.1 =
+* PDF Zoom increase upto 800%.
+* Added compatibility for WordPress 5.7.
+
+= 4.6.0 =
+* Fix language compatibility issue in viewer.
+* Fixes js and css files cache issue.
+* Added compatibility for WordPress 5.3.2.
+
+= 4.5.0 =
+* Added compatibility for WordPress 5.3.
+* Fixes multiple PDF rendering issues in viewer.
+
+= 4.4.0 =
+* Fixed code for policy compatibility.
+
+= 4.3.0 =
+* Fixed Scrollbar issues with Firefox and iOS devices. Improved compatibility.
+
+= 4.2.0 =
+* Fixed script problem on some Gutenberg editor installations. Improved compatibility.
+
+= 4.1.0 =
+* Added compatibility for WordPress 5.2.1.
+
+= 4.0.0 =
+* Fixed general bug & added compatibility.
+
+= 3.2.1 =
+* Added compatibility for WordPress 5.2.1.
+
+= 3.2.0 =
+* Added compatibility with Gutenberg Editor.
+
+= 3.1.8 =
+* Updated version of underlying pdf.js library, fixes some rendering bugs.
+* Recalculates fresh viewer size more often in response to resize events. Previous versions attempted to increase performance by only recalculating viewer size when it had changed, but this missed some required resizing after Javascript-based tabs are clicked.
+* Fixed some issues with zoom appearance.
+* Mouse scroll wheel is now more consistent across all browsers (in terms of scroll speed).
+* When scrollbars are always visible, no longer cuts off edge of PDF underneath.
+
+= 3.1.2 =
+* Ready for compatibility with WordPress 4.8.
+* New mouse wheel scrolling in Firefox wasn't working with some themes.
+* Latest version of pdf.js library, and newest code bringing the free version into line with the premium versions.
+* Mouse wheel scrolling in Firefox no longer also scrolls the window unless at very top or bottom of page.
+
+= 3.0.1 =
+* Latest version of pdf.js library, and newest code bringing the free version into line with the premium versions.
+* Improved responsiveness and redraw of pages.
+* Plugin now respects the SCRIPT_DEBUG flag in wp-config.php and displays non-minified versions of the JS files if this is set to true. Helps debugging any issues.
+
+= 2.8.2 =
+* Latest version of pdf.js library to include recent rendering developments/fixes by the team.
+
+= 2.8.0 =
+* Internal code refactoring. Added note that 'page turning arrows' are now available in the premium versions.
+
+= 2.7.5 =
+* Fix for a small number of PDFs rendering as smaller than expected on some high resolution screens.
+
+= 2.7.3 =
+* IMPORTANT: Please clear browser and any WordPress cache if you experience any problems following this upgrade.
+* Better support for high resolution screens.
+* Improved SEO for embedded PDFs (which are now links initially before Javascript converts them into the interactive view).
+* This also ensures the PDFs are accessible to users even if Javascript problems cause your site to break.
+* Compatible with WordPress 4.6.
+* Added a filter named `my_pdfemb_override_send_to_editor` that means the shortcode generation can be turned off if desired.
+* Uses latest version of pdf.js library for rendering PDFs.
+* Toolbar buttons have type="button" attribute to avoid conflicts with some other plugins.
+* Spanish translation contributed by Armando Landois.
+* Added `pdfemb_filter_shortcode_attrs` filter so developers can change default shortcode parameters through code.
+
+= 2.5.5 =
+* Fixes for right-to-left languages.
+
+= 2.5.4 =
+* Added French translation thanks to Thierry Gaillou of JDFitForme.
+* Uses newer version of pdf.js library for rendering PDFs.
+
+= 2.5.0 =
+* Uses latest version of pdf.js library for rendering PDFs.
+* Options page tidied up.
+
+= 2.4.7 =
+* Some settings were difficult to change on multisite installations.
+
+= 2.4.3 =
+* Code placeholders for opening links - available only in premium versions.
+* Updated languages.
+
+= 2.4.1 =
+* Code placeholders for tracking views/downloaders - available only in premium versions.
+* Updated languages.
+
+= 2.4.0 =
+* Now translation-ready! Your language contributions are welcome.
+* Compatibility with WordPress 4.4.
+* Contains information about new features in Premium version: Functioning hyperlinks, Jump to page number.
+
+= 2.2.5 =
+* Better explanation of some error messages (e.g. attempt to access PDF on a different domain).
+* Forced white background by default - some Theme's CSS would override.
+
+= 2.2.4 =
+* 'Download PDF' button added to options, but function is only available in Premium versions.
+
+= 2.2.2 =
+* Redesigned toolbar buttons
+
+= 2.2.0 =
+* New version of PDF.js, fixes some PDF rendering bugs.
+
+= 2.1.4 =
+* Obtains PDF over same transport (https/http) as host page, regardless of that specified in the shortcode url parameter. This avoids conflicts and failure to display PDF if the two don't match.
+
+= 2.1.0 =
+* Settings -> PDF Embedder page so you can now set site-wide defaults for width, height, and toolbar location/appearance.
+
+= 2.0.0 =
+* Added zoom feature. Toolbars can be fixed instead of appearing on hover.
+
+= 1.2.1 =
+* Fixed 'scrollbars' in IE.
+
+= 1.2.0 =
+* Fixed 'scrollbar' issues.
+* Displays page number on toolbar ("Page 1/10").
+* Added 'Loading...' indicator.
+* Improved display of many PDFs (Added 'cmaps' to the distribution).
+
+= 1.0.4 =
+* Added compatibility.js to support some minor browsers, e.g. Safari which did not allow ranged downloads.
+
+= 1.0.2 =
+* Minified Javascript code. Default width/height (now "max") expands to fill parent container width regardless of the natural size of the document. Use width="auto" to obtain the old behavior.
+
+= 1.0.1 =
+* Added usage instructions within the settings page.
+
+= 1.0.0 =
+* First version

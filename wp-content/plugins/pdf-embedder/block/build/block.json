@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "pdfemb/pdf-embedder-viewer",
+  "version": "4.8.0",
+  "title": "PDF Embedder",
+  "category": "embed",
+  "icon": "pdf",
+  "description": "Embed PDF files straight into your content.",
+  "keywords": [
+    "pdf",
+    "pdf embed",
+    "pdfs"
+  ],
+  "example": {},
+  "supports": {
+    "html": false,
+    "align": false
+  },
+  "textdomain": "pdf-embedder",
+  "editorScript": [
+    "file:./index.js"
+  ],
+  "editorStyle": [
+    "file:./index.css"
+  ],
+  "style": [
+    "file:./style-index.css"
+  ]
+}
