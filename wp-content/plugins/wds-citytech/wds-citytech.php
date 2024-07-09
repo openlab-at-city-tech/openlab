@@ -1818,6 +1818,27 @@ add_filter(
 );
 
 /**
+ * Show 'Account Deleted' for the user name of deleted comment authors.
+ *
+ * @param string $author The comment author.
+ * @param int	$comment_ID The comment ID.
+ * @param WP_Comment $comment The comment object.
+ * @return string
+ */
+function openlab_deleted_comment_author_name( $author, $comment_ID, $comment ) {
+	if ( ! $comment || ! $comment->user_id ) {
+		return $author;
+	}
+
+	$user = get_userdata( $comment->user_id );
+	if ( $user && ! $user->deleted ) {
+		return $author;
+	}
+
+	return 'Account Deleted';
+}
+
+/**
  * Adds the URL of the user profile to the New User Registration admin emails
  *
  * See http://openlab.citytech.cuny.edu/redmine/issues/334
