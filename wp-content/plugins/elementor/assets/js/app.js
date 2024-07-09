@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -11611,49 +11611,49 @@ function PluginsTable(_ref) {
     initialSelected = _ref.initialSelected,
     initialDisabled = _ref.initialDisabled;
   var CellText = function CellText(cellTextProps) {
-      return /*#__PURE__*/_react.default.createElement(_text.default, {
-        className: "e-app-import-export-plugins-table__cell-content"
-      }, cellTextProps.text);
-    },
-    CellLink = function CellLink(cellLinkProps) {
-      return /*#__PURE__*/_react.default.createElement(_inlineLink.default, {
-        url: cellLinkProps.url,
-        underline: "none"
-      }, "".concat(__('Version'), " ").concat(cellLinkProps.text), " ", /*#__PURE__*/_react.default.createElement(_icon.default, {
-        className: "eicon-editor-external-link"
+    return /*#__PURE__*/_react.default.createElement(_text.default, {
+      className: "e-app-import-export-plugins-table__cell-content"
+    }, cellTextProps.text);
+  };
+  var CellLink = function CellLink(cellLinkProps) {
+    return /*#__PURE__*/_react.default.createElement(_inlineLink.default, {
+      url: cellLinkProps.url,
+      underline: "none"
+    }, "".concat(__('Version'), " ").concat(cellLinkProps.text), " ", /*#__PURE__*/_react.default.createElement(_icon.default, {
+      className: "eicon-editor-external-link"
+    }));
+  };
+  var getHeaders = function getHeaders() {
+    if (!withHeader) {
+      return [];
+    }
+    var headers = ['Plugin Name', 'Version'];
+    if (withStatus) {
+      headers.splice(1, 0, 'Status');
+    }
+    return headers;
+  };
+  var rows = plugins.map(function (_ref2) {
+    var name = _ref2.name,
+      status = _ref2.status,
+      version = _ref2.version,
+      pluginUrl = _ref2.plugin_uri;
+    var row = [/*#__PURE__*/_react.default.createElement(CellText, {
+      text: name,
+      key: name
+    }), /*#__PURE__*/_react.default.createElement(CellLink, {
+      text: version,
+      url: pluginUrl,
+      key: name
+    })];
+    if (withStatus) {
+      row.splice(1, 0, /*#__PURE__*/_react.default.createElement(CellText, {
+        text: status,
+        key: name
       }));
-    },
-    getHeaders = function getHeaders() {
-      if (!withHeader) {
-        return [];
-      }
-      var headers = ['Plugin Name', 'Version'];
-      if (withStatus) {
-        headers.splice(1, 0, 'Status');
-      }
-      return headers;
-    },
-    rows = plugins.map(function (_ref2) {
-      var name = _ref2.name,
-        status = _ref2.status,
-        version = _ref2.version,
-        pluginUrl = _ref2.plugin_uri;
-      var row = [/*#__PURE__*/_react.default.createElement(CellText, {
-        text: name,
-        key: name
-      }), /*#__PURE__*/_react.default.createElement(CellLink, {
-        text: version,
-        url: pluginUrl,
-        key: name
-      })];
-      if (withStatus) {
-        row.splice(1, 0, /*#__PURE__*/_react.default.createElement(CellText, {
-          text: status,
-          key: name
-        }));
-      }
-      return row;
-    });
+    }
+    return row;
+  });
   return /*#__PURE__*/_react.default.createElement(_dataTable.default, {
     selection: true,
     headers: getHeaders(),
@@ -12698,6 +12698,61 @@ var Onboarding = /*#__PURE__*/(0, _createClass2.default)(function Onboarding() {
   });
 });
 exports["default"] = Onboarding;
+
+/***/ }),
+
+/***/ "../assets/dev/js/utils/react.js":
+/*!***************************************!*\
+  !*** ../assets/dev/js/utils/react.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var React = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var ReactDOM = _interopRequireWildcard(__webpack_require__(/*! react-dom */ "react-dom"));
+var _client = __webpack_require__(/*! react-dom/client */ "../node_modules/react-dom/client.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/**
+ * Support conditional rendering of a React App to the DOM, based on the React version.
+ * We use `createRoot` when available, but fallback to `ReactDOM.render` for older versions.
+ *
+ * @param { React.ReactElement } app        The app to render.
+ * @param { HTMLElement }        domElement The DOM element to render the app into.
+ *
+ * @return {{ unmount: () => void }} The unmount function.
+ */
+function render(app, domElement) {
+  var unmountFunction;
+  try {
+    var root = (0, _client.createRoot)(domElement);
+    root.render(app);
+    unmountFunction = function unmountFunction() {
+      root.unmount();
+    };
+  } catch (e) {
+    // eslint-disable-next-line react/no-deprecated
+    ReactDOM.render(app, domElement);
+    unmountFunction = function unmountFunction() {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.unmountComponentAtNode(domElement);
+    };
+  }
+  return {
+    unmount: unmountFunction
+  };
+}
+var _default = {
+  render: render
+};
+exports["default"] = _default;
 
 /***/ }),
 
@@ -14524,6 +14579,39 @@ let createHashSource = (initialPathname = '/') => {
 
 /***/ }),
 
+/***/ "../node_modules/react-dom/client.js":
+/*!*******************************************!*\
+  !*** ../node_modules/react-dom/client.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var m = __webpack_require__(/*! react-dom */ "react-dom");
+if (false) {} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+}
+
+
+/***/ }),
+
 /***/ "../node_modules/react-is/cjs/react-is.development.js":
 /*!************************************************************!*\
   !*** ../node_modules/react-is/cjs/react-is.development.js ***!
@@ -16018,17 +16106,17 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-function _toPrimitive(input, hint) {
-  if (_typeof(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (_typeof(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
-module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -16040,11 +16128,11 @@ module.exports = _toPrimitive, module.exports.__esModule = true, module.exports[
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
 var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
-function _toPropertyKey(arg) {
-  var key = toPrimitive(arg, "string");
-  return _typeof(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : String(i);
 }
-module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -16184,8 +16272,8 @@ try {
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
 /******/ 			if (chunkId === "vendors-node_modules_react-query_devtools_index_js") return "a730ee9caa710006b307.bundle.js";
-/******/ 			if (chunkId === "kit-library") return "" + chunkId + ".f07b34b5f8e5950b1f5f.bundle.js";
-/******/ 			if (chunkId === "onboarding") return "" + chunkId + ".f2f8af9f7327abc100f1.bundle.js";
+/******/ 			if (chunkId === "kit-library") return "" + chunkId + ".ac1a4cd5deae5526ce49.bundle.js";
+/******/ 			if (chunkId === "onboarding") return "" + chunkId + ".d6ea272a04bd56212e9d.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -16391,11 +16479,11 @@ var __webpack_exports__ = {};
 /*!*********************************!*\
   !*** ../app/assets/js/index.js ***!
   \*********************************/
-/* provided dependency */ var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _react2 = _interopRequireDefault(__webpack_require__(/*! elementor-utils/react */ "../assets/dev/js/utils/react.js"));
 var _app = _interopRequireDefault(__webpack_require__(/*! ./app */ "../app/assets/js/app.js"));
 var _module = _interopRequireDefault(__webpack_require__(/*! ../../modules/import-export/assets/js/module */ "../app/modules/import-export/assets/js/module.js"));
 var _module2 = _interopRequireDefault(__webpack_require__(/*! ../../modules/kit-library/assets/js/module */ "../app/modules/kit-library/assets/js/module.js"));
@@ -16407,7 +16495,7 @@ new _module2.default();
 new _siteEditor.Module();
 new _module3.default();
 var AppWrapper = _react.default.Fragment;
-ReactDOM.render( /*#__PURE__*/_react.default.createElement(AppWrapper, null, /*#__PURE__*/_react.default.createElement(_appContext.default, null, /*#__PURE__*/_react.default.createElement(_app.default, null))), document.getElementById('e-app'));
+_react2.default.render( /*#__PURE__*/_react.default.createElement(AppWrapper, null, /*#__PURE__*/_react.default.createElement(_appContext.default, null, /*#__PURE__*/_react.default.createElement(_app.default, null))), document.getElementById('e-app'));
 })();
 
 /******/ })()

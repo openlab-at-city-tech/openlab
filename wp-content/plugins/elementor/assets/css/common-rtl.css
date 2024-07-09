@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 :root {
   --e-a-color-white:	#ffffff;
   --e-a-color-black:	#000000;
@@ -12,6 +12,7 @@
   --e-a-color-warning:	#F59E0B;
   --e-a-color-accent:	#93003f;
   --e-a-color-global:	#1DDDBF;
+  --e-a-color-accent-promotion:	#93003f;
   --e-a-bg-default:	#ffffff;
   --e-a-bg-invert:	#0C0D0E;
   --e-a-bg-hover:	#F1F2F3;
@@ -573,7 +574,7 @@
   font-weight: 500;
   line-height: 1.2;
   padding: 8px 16px;
-  margin-left: 10px;
+  margin-inline-end: 10px;
   color: var(--e-a-dark-color-txt);
   border-radius: var(--e-a-border-radius);
   transition: var(--e-a-transition-hover);
@@ -584,7 +585,7 @@
   color: var(--e-a-color-txt-hover);
 }
 #elementor-toast .dialog-button:last-child {
-  margin-left: 0;
+  margin-inline-end: 0;
 }
 
 /* Will select next element after last '.elementor-general-section' */
@@ -622,7 +623,7 @@
   height: initial;
   min-height: 0;
   padding: 0;
-  text-align: right;
+  text-align: start;
 }
 #elementor-finder__search {
   padding: 15px;

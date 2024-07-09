@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -75,32 +75,26 @@ var __webpack_exports__ = {};
         self.cache.$gutenberg.find('.edit-post-header-toolbar').append(self.cache.$switchMode);
       }
       if (this.hasIframe()) {
-        this.hideIframeContent();
+        this.handleIframe();
       }
       if (!$('#elementor-editor').length) {
         self.cache.$editorPanel = $($('#elementor-gutenberg-panel').html());
-        self.cache.$gurenbergBlockList = self.cache.$gutenberg.find('.is-desktop-preview');
+        var editorButtonParent = self.cache.$gutenberg.find('.block-editor-writing-flow');
+        if (!editorButtonParent.length) {
+          editorButtonParent = self.cache.$gutenberg.find('.is-desktop-preview');
+        }
+        self.cache.$gurenbergBlockList = editorButtonParent;
         self.cache.$gurenbergBlockList.append(self.cache.$editorPanel);
         self.cache.$editorPanelButton = self.cache.$editorPanel.find('#elementor-go-to-edit-page-link');
         self.cache.$editorPanelButton.on('click', function (event) {
           event.preventDefault();
-          self.animateLoader();
-
-          // A new post is initialized as an 'auto-draft'.
-          // if the post is not a new post it should not save it to avoid some saving conflict between elementor and gutenberg.
-          var isNewPost = 'auto-draft' === wp.data.select('core/editor').getCurrentPost().status;
-          if (isNewPost) {
-            var documentTitle = wp.data.select('core/editor').getEditedPostAttribute('title');
-            if (!documentTitle) {
-              wp.data.dispatch('core/editor').editPost({
-                title: 'Elementor #' + $('#post_ID').val()
-              });
-            }
-            wp.data.dispatch('core/editor').savePost();
-          }
-          self.redirectWhenSave();
+          self.handleEditButtonClick();
         });
       }
+    },
+    handleIframe: function handleIframe() {
+      this.hideIframeContent();
+      this.buildPanelTopBar();
     },
     // Sometimes Gutenberg uses iframe instead of div.
     hasIframe: function hasIframe() {
@@ -112,6 +106,38 @@ var __webpack_exports__ = {};
       }
       var style = "<style>\n\t\t\t\t.editor-post-text-editor,\n\t\t\t\t.block-editor-block-list__layout {\n\t\t\t\t\tdisplay: none;\n\t\t\t\t}\n\n\t\t\t\tbody {\n\t\t\t\t\tpadding: 0 !important;\n\t\t\t\t}\n\t\t\t</style>";
       this.cache.$gutenberg.find('iframe[name="editor-canvas"]').contents().find('body').append(style);
+    },
+    buildPanelTopBar: function buildPanelTopBar() {
+      var self = this;
+      if (!$('#elementor-edit-mode-button').length && this.isElementorMode) {
+        self.cache.$editorBtnTop = $($('#elementor-gutenberg-button-tmpl').html());
+        self.cache.$gutenberg.find('.edit-post-header-toolbar').append(self.cache.$editorBtnTop);
+        $('#elementor-edit-mode-button').on('click', function (event) {
+          event.preventDefault();
+          self.handleEditButtonClick(false);
+        });
+      }
+    },
+    handleEditButtonClick: function handleEditButtonClick() {
+      var withAnimation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var self = this;
+      if (withAnimation) {
+        self.animateLoader();
+      }
+
+      // A new post is initialized as an 'auto-draft'.
+      // if the post is not a new post it should not save it to avoid some saving conflict between elementor and gutenberg.
+      var isNewPost = 'auto-draft' === wp.data.select('core/editor').getCurrentPost().status;
+      if (isNewPost) {
+        var documentTitle = wp.data.select('core/editor').getEditedPostAttribute('title');
+        if (!documentTitle) {
+          wp.data.dispatch('core/editor').editPost({
+            title: 'Elementor #' + $('#post_ID').val()
+          });
+        }
+        wp.data.dispatch('core/editor').savePost();
+      }
+      self.redirectWhenSave();
     },
     bindEvents: function bindEvents() {
       var self = this;

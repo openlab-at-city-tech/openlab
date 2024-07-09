@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["wp-audio"],{
 

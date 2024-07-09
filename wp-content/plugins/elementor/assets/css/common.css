@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 .dialog-widget-content {
   background-color: var(--e-a-bg-default);
   position: absolute;
@@ -499,7 +499,7 @@
   font-weight: 500;
   line-height: 1.2;
   padding: 8px 16px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   color: var(--e-a-dark-color-txt);
   border-radius: var(--e-a-border-radius);
   transition: var(--e-a-transition-hover);
@@ -510,7 +510,7 @@
   color: var(--e-a-color-txt-hover);
 }
 #elementor-toast .dialog-button:last-child {
-  margin-right: 0;
+  margin-inline-end: 0;
 }
 
 /* Will select next element after last '.elementor-general-section' */
@@ -548,7 +548,7 @@
   height: initial;
   min-height: 0;
   padding: 0;
-  text-align: left;
+  text-align: start;
 }
 #elementor-finder__search {
   padding: 15px;

@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -687,6 +687,61 @@ function stylis_min (W) {
 
 /***/ }),
 
+/***/ "../assets/dev/js/utils/react.js":
+/*!***************************************!*\
+  !*** ../assets/dev/js/utils/react.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var React = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var ReactDOM = _interopRequireWildcard(__webpack_require__(/*! react-dom */ "react-dom"));
+var _client = __webpack_require__(/*! react-dom/client */ "../node_modules/react-dom/client.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/**
+ * Support conditional rendering of a React App to the DOM, based on the React version.
+ * We use `createRoot` when available, but fallback to `ReactDOM.render` for older versions.
+ *
+ * @param { React.ReactElement } app        The app to render.
+ * @param { HTMLElement }        domElement The DOM element to render the app into.
+ *
+ * @return {{ unmount: () => void }} The unmount function.
+ */
+function render(app, domElement) {
+  var unmountFunction;
+  try {
+    var root = (0, _client.createRoot)(domElement);
+    root.render(app);
+    unmountFunction = function unmountFunction() {
+      root.unmount();
+    };
+  } catch (e) {
+    // eslint-disable-next-line react/no-deprecated
+    ReactDOM.render(app, domElement);
+    unmountFunction = function unmountFunction() {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.unmountComponentAtNode(domElement);
+    };
+  }
+  return {
+    unmount: unmountFunction
+  };
+}
+var _default = {
+  render: render
+};
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/ai/assets/js/editor/ai-layout-behavior.js":
 /*!************************************************************!*\
   !*** ../modules/ai/assets/js/editor/ai-layout-behavior.js ***!
@@ -745,6 +800,7 @@ var AiLayoutBehavior = /*#__PURE__*/function (_Marionette$Behavior) {
     key: "onAiButtonClick",
     value: function onAiButtonClick(e) {
       e.stopPropagation();
+      window.elementorAiCurrentContext = this.getOption('context');
       (0, _editorIntegration.renderLayoutApp)({
         parentContainer: elementor.getPreviewContainer(),
         mode: _config.MODE_LAYOUT,
@@ -805,7 +861,7 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.uploadImage = exports.toggleFavoriteHistoryItem = exports.setStatusFeedback = exports.setGetStarted = exports.getUserInformation = exports.getTextToImageGeneration = exports.getRemoteConfig = exports.getLayoutPromptEnhanced = exports.getImageToImageUpscale = exports.getImageToImageReplaceBackground = exports.getImageToImageRemoveText = exports.getImageToImageRemoveBackground = exports.getImageToImageOutPainting = exports.getImageToImageMaskGeneration = exports.getImageToImageGeneration = exports.getImagePromptEnhanced = exports.getHistory = exports.getEditText = exports.getCustomCode = exports.getCustomCSS = exports.getCompletionText = exports.generateLayout = exports.deleteHistoryItem = void 0;
+exports.uploadImage = exports.toggleFavoriteHistoryItem = exports.setStatusFeedback = exports.setGetStarted = exports.getUserInformation = exports.getTextToImageGeneration = exports.getRemoteConfig = exports.getLayoutPromptEnhanced = exports.getImageToImageUpscale = exports.getImageToImageReplaceBackground = exports.getImageToImageRemoveText = exports.getImageToImageRemoveBackground = exports.getImageToImageOutPainting = exports.getImageToImageMaskGeneration = exports.getImageToImageGeneration = exports.getImagePromptEnhanced = exports.getHistory = exports.getExcerpt = exports.getEditText = exports.getCustomCode = exports.getCustomCSS = exports.getCompletionText = exports.generateLayout = exports.deleteHistoryItem = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -827,8 +883,8 @@ var request = function request(endpoint) {
     }
   });
 };
-var getUserInformation = function getUserInformation() {
-  return request('ai_get_user_information');
+var getUserInformation = function getUserInformation(immediately) {
+  return request('ai_get_user_information', undefined, immediately);
 };
 exports.getUserInformation = getUserInformation;
 var getRemoteConfig = function getRemoteConfig() {
@@ -841,6 +897,12 @@ var getCompletionText = function getCompletionText(payload) {
   });
 };
 exports.getCompletionText = getCompletionText;
+var getExcerpt = function getExcerpt(payload) {
+  return request('ai_get_excerpt', {
+    payload: payload
+  });
+};
+exports.getExcerpt = getExcerpt;
 var getEditText = function getEditText(payload) {
   return request('ai_get_edit_text', {
     payload: payload
@@ -1309,6 +1371,7 @@ exports["default"] = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var sprintf = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["sprintf"];
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -1330,65 +1393,107 @@ var PromptErrorMessage = function PromptErrorMessage(_ref) {
     _ref$actionPosition = _ref.actionPosition,
     actionPosition = _ref$actionPosition === void 0 ? 'default' : _ref$actionPosition,
     props = (0, _objectWithoutProperties2.default)(_ref, _excluded);
-  var messages = {
-    default: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Unknown error. Please try again later.', 'elementor')),
-      description: (0, _i18n.__)('Error code:', 'elementor') + ' ' + error,
-      buttonText: (0, _i18n.__)('Try Again', 'elementor'),
-      buttonAction: onRetry
-    },
-    service_outage_internal: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Elementor AI is temporarily unavailable', 'elementor')),
-      description: (0, _i18n.__)('Seems like we are experiencing technical difficulty. We should be up and running shortly.', 'elementor'),
-      buttonText: (0, _i18n.__)('Try Again', 'elementor'),
-      buttonAction: onRetry
-    },
-    invalid_connect_data: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Reconnect your account', 'elementor')),
-      description: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (0, _i18n.__)('We couldn\'t connect to your account due to technical difficulties on our end. Reconnect your account to continue.', 'elementor'), ' ', /*#__PURE__*/_react.default.createElement("a", {
-        href: "https://elementor.com/help/disconnecting-reconnecting-your-elementor-account/",
-        target: "_blank",
-        rel: "noreferrer"
-      }, (0, _i18n.__)('Show me how', 'elementor'))),
-      buttonText: (0, _i18n.__)('Reconnect', 'elementor'),
-      buttonAction: function buttonAction() {
-        return window.open(window.ElementorAiConfig.connect_url);
-      }
-    },
-    not_connected: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('You aren\'t connected to Elementor AI.', 'elementor')),
-      description: (0, _i18n.__)('Elementor AI is just a few clicks away. Connect your account to instantly create texts and custom code.', 'elementor'),
-      buttonText: (0, _i18n.__)('Connect', 'elementor'),
-      buttonAction: function buttonAction() {
-        return window.open(window.ElementorAiConfig.connect_url);
-      }
-    },
-    quota_reached_trail: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('It\'s time to upgrade.', 'elementor')),
-      description: (0, _i18n.__)('Enjoy the free trial? Upgrade now for unlimited access to built-in image, text and custom code generators.', 'elementor'),
-      buttonText: (0, _i18n.__)('Upgrade', 'elementor'),
-      buttonAction: function buttonAction() {
-        return window.open('https://go.elementor.com/ai-popup-purchase-limit-reached/', '_blank');
-      }
-    },
-    quota_reached_subscription: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('It\'s time to upgrade.', 'elementor')),
-      description: (0, _i18n.__)('Love Elementor AI? Upgrade to continue creating with built-in image, text and custom code generators.', 'elementor'),
-      buttonText: (0, _i18n.__)('Upgrade', 'elementor'),
-      buttonAction: function buttonAction() {
-        return window.open('https://go.elementor.com/ai-popup-purchase-limit-reached/', '_blank');
-      }
-    },
-    rate_limit_network: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Whoa! Slow down there.', 'elementor')),
-      description: (0, _i18n.__)('We can’t process that many requests so fast. Try again in 15 minutes.', 'elementor')
-    },
-    invalid_prompts: {
-      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('We were unable to generate that prompt.', 'elementor')),
-      description: (0, _i18n.__)('Seems like the prompt contains words that could generate harmful content. Write a different prompt to continue.', 'elementor')
+  function getQuotaReachedTrailMessage(featureName) {
+    if (!featureName) {
+      return {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('It\'s time to upgrade.', 'elementor')),
+        description: (0, _i18n.__)('Enjoy the free trial? Upgrade now for unlimited access to built-in image, text and custom code generators.', 'elementor'),
+        buttonText: (0, _i18n.__)('Upgrade', 'elementor'),
+        buttonAction: function buttonAction() {
+          return window.open('https://go.elementor.com/ai-popup-purchase-limit-reached/', '_blank');
+        }
+      };
     }
-  };
-  var message = messages[error] || messages.default;
+    return {
+      // Translators: %s is the feature name.
+      text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, sprintf((0, _i18n.__)('You\'ve used all AI credits for %s.', 'elementor'), featureName.toLowerCase())),
+      description: (0, _i18n.__)('Upgrade now to keep using this feature. You still have credits for other AI features (Text, Code, Images, Containers, etc.)', 'elementor'),
+      buttonText: (0, _i18n.__)('Upgrade now', 'elementor'),
+      buttonAction: function buttonAction() {
+        return window.open('https://go.elementor.com/ai-popup-purchase-limit-reached/', '_blank');
+      }
+    };
+  }
+  function getErrorMessage() {
+    var _error$extra_data;
+    var errMsg = error.message || error;
+    var featureName = (_error$extra_data = error.extra_data) === null || _error$extra_data === void 0 ? void 0 : _error$extra_data.featureName;
+    var messages = {
+      default: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('There was a glitch.', 'elementor')),
+        description: (0, _i18n.__)('Wait a moment and give it another go, or try tweaking the prompt.', 'elementor'),
+        buttonText: (0, _i18n.__)('Try again', 'elementor'),
+        buttonAction: onRetry
+      },
+      service_outage_internal: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('There was a glitch.', 'elementor')),
+        description: (0, _i18n.__)('Wait a moment and give it another go.', 'elementor'),
+        buttonText: (0, _i18n.__)('Try again', 'elementor'),
+        buttonAction: onRetry
+      },
+      invalid_connect_data: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('There was a glitch.', 'elementor')),
+        description: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (0, _i18n.__)('Try exiting Elementor and sign in again.', 'elementor'), ' ', /*#__PURE__*/_react.default.createElement("a", {
+          href: "https://elementor.com/help/disconnecting-reconnecting-your-elementor-account/",
+          target: "_blank",
+          rel: "noreferrer"
+        }, (0, _i18n.__)('Show me how', 'elementor'))),
+        buttonText: (0, _i18n.__)('Reconnect', 'elementor'),
+        buttonAction: function buttonAction() {
+          return window.open(window.ElementorAiConfig.connect_url);
+        }
+      },
+      not_connected: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('You aren\'t connected to Elementor AI.', 'elementor')),
+        description: (0, _i18n.__)('Elementor AI is just a few clicks away. Connect your account to instantly create texts and custom code.', 'elementor'),
+        buttonText: (0, _i18n.__)('Connect', 'elementor'),
+        buttonAction: function buttonAction() {
+          return window.open(window.ElementorAiConfig.connect_url);
+        }
+      },
+      quota_reached_trail: getQuotaReachedTrailMessage(featureName),
+      quota_reached_subscription: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Looks like you\'re out of credits.', 'elementor')),
+        description: (0, _i18n.__)('Ready to take it to the next level?', 'elementor'),
+        buttonText: (0, _i18n.__)('Upgrade now', 'elementor'),
+        buttonAction: function buttonAction() {
+          return window.open('https://go.elementor.com/ai-popup-purchase-limit-reached/', '_blank');
+        }
+      },
+      rate_limit_network: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Whoa! Slow down there.', 'elementor')),
+        description: (0, _i18n.__)('We can’t process that many requests so fast. Try again in 15 minutes.', 'elementor')
+      },
+      invalid_prompts: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('We were unable to generate that prompt.', 'elementor')),
+        description: (0, _i18n.__)('Seems like the prompt contains words that could generate harmful content. Write a different prompt to continue.', 'elementor')
+      },
+      service_unavailable: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('There was a glitch.', 'elementor')),
+        description: (0, _i18n.__)('Wait a moment and give it another go, or try tweaking the prompt.', 'elementor'),
+        buttonText: (0, _i18n.__)('Try again', 'elementor'),
+        buttonAction: onRetry
+      },
+      request_timeout_error: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('There was a glitch.', 'elementor')),
+        description: (0, _i18n.__)('Wait a moment and give it another go, or try tweaking the prompt.', 'elementor'),
+        buttonText: (0, _i18n.__)('Try again', 'elementor'),
+        buttonAction: onRetry
+      },
+      invalid_token: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('Try again', 'elementor')),
+        description: (0, _i18n.__)('Try exiting Elementor and sign in again.', 'elementor'),
+        buttonText: (0, _i18n.__)('Reconnect', 'elementor'),
+        buttonAction: onRetry
+      },
+      file_too_large: {
+        text: /*#__PURE__*/_react.default.createElement(_ui.AlertTitle, null, (0, _i18n.__)('The file is too large.', 'elementor')),
+        description: (0, _i18n.__)('Please upload a file that is less than 4MB.', 'elementor')
+      }
+    };
+    return messages[errMsg] || messages.default;
+  }
+  var message = getErrorMessage();
   var action = (message === null || message === void 0 ? void 0 : message.buttonText) && /*#__PURE__*/_react.default.createElement(_ui.Button, {
     color: "inherit",
     size: "small",
@@ -1405,7 +1510,7 @@ var PromptErrorMessage = function PromptErrorMessage(_ref) {
   }, action));
 };
 PromptErrorMessage.propTypes = {
-  error: _propTypes.default.string,
+  error: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.string]),
   onRetry: _propTypes.default.func,
   actionPosition: _propTypes.default.oneOf(['default', 'bottom'])
 };
@@ -1436,7 +1541,7 @@ var PromptLibraryLink = function PromptLibraryLink(props) {
   return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
     variant: "body2",
     color: "text.secondary"
-  }, (0, _i18n.__)('For more inspiration, try experimenting with proven prompts from our'), ' ', /*#__PURE__*/_react.default.createElement(_ui.Link, {
+  }, (0, _i18n.__)('For more suggestions, explore our'), ' ', /*#__PURE__*/_react.default.createElement(_ui.Link, {
     href: props.libraryLink,
     className: "elementor-clickable",
     target: "_blank"
@@ -1521,7 +1626,7 @@ var StyledArrow = (0, _ui.styled)(_ui.Box)(function (_ref2) {
     }
   };
 });
-var upgradeBullets = [(0, _i18n.__)('Let AI build your container layouts and content with ease and radically transform the way you create websites.', 'elementor'), (0, _i18n.__)('Generate your website\'s text or create custom code without having to write a single line yourself.', 'elementor'), (0, _i18n.__)('Effortlessly create or enhance stunning images and bring your ideas to life.', 'elementor'), (0, _i18n.__)('Access 30-days of AI History with the AI Starter plan and 90-days with the Power plan.', 'elementor')];
+var upgradeBullets = [(0, _i18n.__)('Get spot-on suggestions from AI Copilot and AI Context with appropriate designs, layouts, and content for your business.', 'elementor'), (0, _i18n.__)('Generate professional texts about any topic, in any tone.', 'elementor'), (0, _i18n.__)('Effortlessly create or enhance stunning images and bring your ideas to life.', 'elementor'), (0, _i18n.__)('Unleash infinite possibilities with the custom code generator.', 'elementor'), (0, _i18n.__)('Access 30-days of AI History with the AI Starter plan and 90-days with the Power plan.', 'elementor')];
 var Chip = (0, _ui.styled)(_ui.Chip)(function () {
   return {
     '& .MuiChip-label': {
@@ -1564,7 +1669,7 @@ var UpgradeChip = function UpgradeChip(_ref3) {
     display: "flex",
     alignItems: "center"
   }, /*#__PURE__*/_react.default.createElement(Chip, {
-    color: "accent",
+    color: "promotion",
     label: (0, _i18n.__)('Upgrade', 'elementor'),
     icon: /*#__PURE__*/_react.default.createElement(_icons.AIIcon, null),
     size: "small"
@@ -1587,7 +1692,7 @@ var UpgradeChip = function UpgradeChip(_ref3) {
   }), /*#__PURE__*/_react.default.createElement(_ui.Typography, {
     variant: "h5",
     color: "text.primary"
-  }, (0, _i18n.__)('Maximize Your Access to Elementor AI', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.List, {
+  }, (0, _i18n.__)('Unlimited access to Elementor AI', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.List, {
     sx: {
       mb: 1
     }
@@ -1607,14 +1712,14 @@ var UpgradeChip = function UpgradeChip(_ref3) {
     }, bullet)));
   })), /*#__PURE__*/_react.default.createElement(_ui.Button, {
     variant: "contained",
-    color: "accent",
+    color: "promotion",
     size: "small",
     href: actionUrl,
     target: "_blank",
     startIcon: /*#__PURE__*/_react.default.createElement(_icons.AIIcon, null),
     sx: {
       '&:hover': {
-        color: 'accent.contrastText'
+        color: 'promotion.contrastText'
       }
     }
   }, actionLabel))));
@@ -1625,6 +1730,72 @@ UpgradeChip.propTypes = {
   hasSubscription: _propTypes.default.bool,
   usagePercentage: _propTypes.default.number
 };
+
+/***/ }),
+
+/***/ "../modules/ai/assets/js/editor/components/voice-promotion-alert.js":
+/*!**************************************************************************!*\
+  !*** ../modules/ai/assets/js/editor/components/voice-promotion-alert.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.VoicePromotionAlert = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _bulbIcon = _interopRequireDefault(__webpack_require__(/*! ../icons/bulb-icon */ "../modules/ai/assets/js/editor/icons/bulb-icon.js"));
+var _useIntroduction2 = _interopRequireDefault(__webpack_require__(/*! ../hooks/use-introduction */ "../modules/ai/assets/js/editor/hooks/use-introduction.js"));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+var VoicePromotionAlert = function VoicePromotionAlert(props) {
+  var _useIntroduction = (0, _useIntroduction2.default)(props.introductionKey),
+    isViewed = _useIntroduction.isViewed,
+    markAsViewed = _useIntroduction.markAsViewed;
+  if (isViewed) {
+    return null;
+  }
+  return /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    sx: _objectSpread({
+      mt: 2
+    }, props.sx),
+    alignItems: "top"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Alert, {
+    severity: "info",
+    variant: "standard",
+    icon: /*#__PURE__*/_react.default.createElement(_bulbIcon.default, {
+      sx: {
+        alignSelf: 'flex-start'
+      }
+    }),
+    onClose: markAsViewed
+  }, __('Get improved results from AI by adding personal context.', 'elementor'), /*#__PURE__*/_react.default.createElement(_ui.Link, {
+    onClick: function onClick() {
+      return $e.route('panel/global/menu');
+    },
+    className: "elementor-clickable",
+    style: {
+      textDecoration: 'none'
+    },
+    color: "info.main",
+    href: "#"
+  }, __('Let’s do it', 'elementor'))));
+};
+exports.VoicePromotionAlert = VoicePromotionAlert;
+VoicePromotionAlert.propTypes = {
+  sx: PropTypes.object,
+  introductionKey: PropTypes.string
+};
+var _default = VoicePromotionAlert;
+exports["default"] = _default;
 
 /***/ }),
 
@@ -2096,9 +2267,11 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _react = __webpack_require__(/*! react */ "react");
 var _api = __webpack_require__(/*! ../api */ "../modules/ai/assets/js/editor/api/index.js");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var useUserInfo = function useUserInfo() {
+  var immediately = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   var _useState = (0, _react.useState)(false),
     _useState2 = (0, _slicedToArray2.default)(_useState, 2),
     isLoaded = _useState2[0],
@@ -2130,7 +2303,7 @@ var useUserInfo = function useUserInfo() {
           case 0:
             setIsLoading(true);
             _context.next = 3;
-            return (0, _api.getUserInformation)();
+            return (0, _api.getUserInformation)(immediately);
           case 3:
             userInfoResult = _context.sent;
             setUserInfo(function (prevState) {
@@ -2163,6 +2336,9 @@ var useUserInfo = function useUserInfo() {
     usagePercentage: Math.round(usagePercentage),
     fetchData: fetchData
   };
+};
+useUserInfo.propTypes = {
+  immediately: _propTypes.default.bool
 };
 var _default = useUserInfo;
 exports["default"] = _default;
@@ -2198,6 +2374,65 @@ var ArrowLeftIcon = _react.default.forwardRef(function (props, ref) {
   }));
 });
 var _default = ArrowLeftIcon;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "../modules/ai/assets/js/editor/icons/bulb-icon.js":
+/*!*********************************************************!*\
+  !*** ../modules/ai/assets/js/editor/icons/bulb-icon.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var BulbIcon = _react.default.forwardRef(function (props, ref) {
+  return /*#__PURE__*/_react.default.createElement(_ui.SvgIcon, (0, _extends2.default)({}, props, {
+    ref: ref
+  }), /*#__PURE__*/_react.default.createElement("svg", {
+    width: "22",
+    height: "22",
+    viewBox: "0 0 22 22",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/_react.default.createElement("g", {
+    clipPath: "url(#clip0_10743_8902)"
+  }, /*#__PURE__*/_react.default.createElement("path", {
+    d: "M2.75 10.0833H3.66667M11 2.75V3.66667M18.3333 10.0833H19.25M5.13333 5.13333L5.775 5.775M16.8667 5.13333L16.225 5.775",
+    stroke: "#2563EB",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }), /*#__PURE__*/_react.default.createElement("path", {
+    d: "M9.16675 16.041C8.70841 15.1243 6.91205 13.2842 6.62523 12.366C6.3384 11.4477 6.34775 10.4626 6.65195 9.54997C6.95615 8.63738 7.53978 7.84362 8.32016 7.28116C9.10054 6.71869 10.0381 6.41602 11.0001 6.41602C11.962 6.41602 12.8996 6.71869 13.68 7.28116C14.4604 7.84362 15.044 8.63738 15.3482 9.54997C15.6524 10.4626 15.6618 11.4477 15.3749 12.366C15.0881 13.2842 13.2917 15.1243 12.8334 16.041C12.8334 16.041 12.7597 17.3762 12.8334 17.8743C12.8334 18.3606 12.6403 18.8269 12.2964 19.1707C11.9526 19.5145 11.4863 19.7077 11.0001 19.7077C10.5139 19.7077 10.0475 19.5145 9.70372 19.1707C9.3599 18.8269 9.16675 18.3606 9.16675 17.8743C9.2405 17.3762 9.16675 16.041 9.16675 16.041Z",
+    stroke: "#2563EB",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }), /*#__PURE__*/_react.default.createElement("path", {
+    d: "M10.0833 16.5H11.9166",
+    stroke: "#2563EB",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  })), /*#__PURE__*/_react.default.createElement("defs", null, /*#__PURE__*/_react.default.createElement("clipPath", {
+    id: "clip0_10743_8902"
+  }, /*#__PURE__*/_react.default.createElement("rect", {
+    width: "22",
+    height: "22",
+    fill: "white"
+  })))));
+});
+var _default = BulbIcon;
 exports["default"] = _default;
 
 /***/ }),
@@ -3161,7 +3396,9 @@ var Menu = function Menu(props) {
     disabled: props.disabled,
     onClick: function onClick() {
       setIsOpen(true);
-      markAsViewed();
+      if (!isViewed) {
+        markAsViewed();
+      }
     },
     color: "secondary"
   }, function () {
@@ -3934,7 +4171,7 @@ var ProTemplateIndicator = function ProTemplateIndicator() {
     alignItems: "start",
     spacing: 2
   }, /*#__PURE__*/_react.default.createElement(_ui.Chip, {
-    color: "accent",
+    color: "promotion",
     variant: "outlined",
     size: "small",
     label: (0, _i18n.__)('Pro', 'elementor'),
@@ -3943,7 +4180,7 @@ var ProTemplateIndicator = function ProTemplateIndicator() {
     variant: "body2"
   }, (0, _i18n.__)("This result includes an Elementor Pro widget that's not available with your current plan. Upgrade to use all the widgets in this result.", 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.Button, {
     variant: "contained",
-    color: "accent",
+    color: "promotion",
     size: "small",
     href: actionUrl,
     target: "_blank",
@@ -3991,7 +4228,7 @@ var ProWidgetsNotice = function ProWidgetsNotice() {
   }, /*#__PURE__*/_react.default.createElement(_ui.Alert, {
     severity: "info",
     variant: "filled",
-    color: "accent",
+    color: "promotion",
     onClose: function onClose() {
       return markAsViewed();
     },
@@ -4204,27 +4441,31 @@ var _excluded = ["tooltip"];
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var PROMPT_SUGGESTIONS = Object.freeze([{
-  text: (0, _i18n.__)('Services section with list layout, icons, and service descriptions for [topic]', 'elementor')
+  text: (0, _i18n.__)('Hero section on [topic] with heading, text, buttons on the right, and an image on the left', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Accordion-style FAQ block with clickable questions about [topic]', 'elementor')
+  text: (0, _i18n.__)('About Us section on [topic] with heading, text, and big image below', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Hero section with image, heading, subheading, and CTA button about [topic]', 'elementor')
+  text: (0, _i18n.__)('Team section with four image boxes showcasing team members', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Full-width call-to-action with background image and overlay text about [topic]', 'elementor')
+  text: (0, _i18n.__)('FAQ section with a toggle widget showcasing FAQs about [topic]', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Carousel testimonial block with user images, names, and feedback about [topic]', 'elementor')
+  text: (0, _i18n.__)('Gallery section with a carousel displaying three images at once', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Features block showcasing feature title and brief description about [topic]', 'elementor')
+  text: (0, _i18n.__)('Contact section with a form for [topic]', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Multi-column minimalistic About Us section with icons for [topic]', 'elementor')
+  text: (0, _i18n.__)('Client section featuring companies\' logos', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Section with contact form and social media icons for [topic]', 'elementor')
+  text: (0, _i18n.__)('Testimonial section with testimonials, each featuring a star rating and an image', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Statistics display in a 3-column layout with numbers and icons for [topic]', 'elementor')
+  text: (0, _i18n.__)('Service section about [topic], showcasing four services with buttons', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('Pricing table section with highlighted option for [topic]', 'elementor')
+  text: (0, _i18n.__)('Stats section with counters displaying data about [topic]', 'elementor.com')
 }, {
-  text: (0, _i18n.__)('About Us section combining company history and values for [topic]', 'elementor')
+  text: (0, _i18n.__)('Quote section with colored background, featuring a centered quote', 'elementor.com')
+}, {
+  text: (0, _i18n.__)('Pricing section for [topic] with a pricing list', 'elementor.com')
+}, {
+  text: (0, _i18n.__)('Subscribe section featuring a simple email form, inviting users to stay informed on [topic]', 'elementor.com')
 }]);
 var IconButtonWithTooltip = function IconButtonWithTooltip(_ref) {
   var tooltip = _ref.tooltip,
@@ -4969,7 +5210,7 @@ var useScreenshot = function useScreenshot(type, onData) {
         return _ref.apply(this, arguments);
       };
     }()).catch(function (err) {
-      setError(err.message || err);
+      setError(err.extra_data ? err : err.message || err);
       throw err;
     }).finally(function () {
       return setIsLoading(false);
@@ -5257,6 +5498,7 @@ var _proWidgetsNotice = __webpack_require__(/*! ./components/pro-widgets-notice 
 var _attachments = __webpack_require__(/*! ./components/attachments */ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments.js");
 var _attachDialog = _interopRequireDefault(__webpack_require__(/*! ./components/attachments/attach-dialog */ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments/attach-dialog.js"));
 var _isURL = _interopRequireDefault(__webpack_require__(/*! validator/lib/isURL */ "../node_modules/validator/lib/isURL.js"));
+var _voicePromotionAlert = __webpack_require__(/*! ../../components/voice-promotion-alert */ "../modules/ai/assets/js/editor/components/voice-promotion-alert.js");
 var _excluded = ["children"];
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -5565,7 +5807,9 @@ var FormLayout = function FormLayout(_ref) {
         flex: "0 0 ".concat(slideWidthPercentage, "%")
       }
     });
-  })))), screenshots.length > 0 && /*#__PURE__*/_react.default.createElement(_ui.Box, {
+  }))), /*#__PURE__*/_react.default.createElement(_voicePromotionAlert.VoicePromotionAlert, {
+    introductionKey: "ai-context-layout-promotion"
+  })), screenshots.length > 0 && /*#__PURE__*/_react.default.createElement(_ui.Box, {
     sx: {
       pt: 0,
       px: 2,
@@ -5767,10 +6011,8 @@ var GetStarted = function GetStarted(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_ui.Checkbox, {
     id: "e-ai-terms-approval",
     color: "secondary",
-    sx: {
-      p: 0
-    },
-    onChange: function onChange() {
+    checked: isTermsChecked,
+    onClick: function onClick() {
       return setIsTermsChecked(function (prevState) {
         return !prevState;
       });
@@ -5853,7 +6095,6 @@ exports.AttachmentsTypesPropType = AttachmentsTypesPropType;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-/* provided dependency */ var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -5864,6 +6105,7 @@ exports.renderLayoutApp = exports.openPanel = exports.onConnect = exports.import
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
+var _react2 = _interopRequireDefault(__webpack_require__(/*! elementor-utils/react */ "../assets/dev/js/utils/react.js"));
 var _previewContainer = __webpack_require__(/*! ./preview-container */ "../modules/ai/assets/js/editor/utils/preview-container.js");
 var _layoutApp = _interopRequireDefault(__webpack_require__(/*! ../layout-app */ "../modules/ai/assets/js/editor/layout-app.js"));
 var _screenshot = __webpack_require__(/*! ./screenshot */ "../modules/ai/assets/js/editor/utils/screenshot.js");
@@ -5898,23 +6140,17 @@ var getUiConfig = function getUiConfig() {
 };
 exports.getUiConfig = getUiConfig;
 var VARIATIONS_PROMPTS = [{
-  text: (0, _i18n.__)('Minimalist design with bold typography about', 'elementor')
+  text: (0, _i18n.__)('Change the content to be about [topic]', 'elementor')
 }, {
-  text: (0, _i18n.__)('Elegant style with serif fonts discussing', 'elementor')
+  text: (0, _i18n.__)('Generate lorem ipsum placeholder text for all paragraphs', 'elementor')
 }, {
-  text: (0, _i18n.__)('Retro vibe with muted colors and classic fonts about', 'elementor')
+  text: (0, _i18n.__)('Revise the content to focus on [topic] and then translate it into Spanish', 'elementor')
 }, {
-  text: (0, _i18n.__)('Futuristic design with neon accents about', 'elementor')
+  text: (0, _i18n.__)('Shift the focus of the content to [topic] in order to showcase our company\'s mission and values', 'elementor')
 }, {
-  text: (0, _i18n.__)('Professional look with clean lines for', 'elementor')
+  text: (0, _i18n.__)('Alter the content to provide helpful tips related to [topic]', 'elementor')
 }, {
-  text: (0, _i18n.__)('Earthy tones and organic shapes featuring', 'elementor')
-}, {
-  text: (0, _i18n.__)('Luxurious theme with rich colors discussing', 'elementor')
-}, {
-  text: (0, _i18n.__)('Tech-inspired style with modern fonts about', 'elementor')
-}, {
-  text: (0, _i18n.__)('Warm hues with comforting visuals about', 'elementor')
+  text: (0, _i18n.__)('Adjust the content to include FAQs and answers for common inquiries about [topic]', 'elementor')
 }];
 var PROMPT_PLACEHOLDER = (0, _i18n.__)("Press '/' for suggestions or describe the changes you want to apply (optional)...", 'elementor');
 var renderLayoutApp = function renderLayoutApp() {
@@ -5941,97 +6177,98 @@ var renderLayoutApp = function renderLayoutApp() {
   var rootElement = document.createElement('div');
   document.body.append(rootElement);
   var bodyStyle = window.elementorFrontend.elements.$window[0].getComputedStyle(window.elementorFrontend.elements.$body[0]);
-  ReactDOM.render( /*#__PURE__*/_react.default.createElement(_layoutAppWrapper.default, {
-    isRTL: isRTL,
-    colorScheme: colorScheme
-  }, /*#__PURE__*/_react.default.createElement(_layoutApp.default, {
-    mode: options.mode,
-    currentContext: {
-      body: {
-        backgroundColor: bodyStyle.backgroundColor,
-        backgroundImage: bodyStyle.backgroundImage
-      }
-    },
-    attachmentsTypes: {
-      json: {
-        promptSuggestions: VARIATIONS_PROMPTS,
-        promptPlaceholder: PROMPT_PLACEHOLDER,
-        previewGenerator: function () {
-          var _previewGenerator = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(json) {
-            var screenshot;
-            return _regenerator.default.wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return (0, _screenshot.takeScreenshot)(json);
-                case 2:
-                  screenshot = _context.sent;
-                  return _context.abrupt("return", "<img src=\"".concat(screenshot, "\" />"));
-                case 4:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee);
-          }));
-          function previewGenerator(_x) {
-            return _previewGenerator.apply(this, arguments);
-          }
-          return previewGenerator;
-        }()
+  var _ReactUtils$render = _react2.default.render( /*#__PURE__*/_react.default.createElement(_layoutAppWrapper.default, {
+      isRTL: isRTL,
+      colorScheme: colorScheme
+    }, /*#__PURE__*/_react.default.createElement(_layoutApp.default, {
+      mode: options.mode,
+      currentContext: {
+        body: {
+          backgroundColor: bodyStyle.backgroundColor,
+          backgroundImage: bodyStyle.backgroundImage
+        }
       },
-      url: {
-        promptPlaceholder: PROMPT_PLACEHOLDER,
-        promptSuggestions: VARIATIONS_PROMPTS
-      }
-    },
-    attachments: options.attachments || [],
-    onClose: function onClose() {
-      var _options$onClose;
-      previewContainer.destroy();
-      (_options$onClose = options.onClose) === null || _options$onClose === void 0 ? void 0 : _options$onClose.call(options);
-      ReactDOM.unmountComponentAtNode(rootElement);
-      rootElement.remove();
-      openPanel();
-    },
-    onConnect: onConnect,
-    onGenerate: function onGenerate() {
-      var _options$onGenerate;
-      (_options$onGenerate = options.onGenerate) === null || _options$onGenerate === void 0 ? void 0 : _options$onGenerate.call(options, {
-        previewContainer: previewContainer
-      });
-    },
-    onData: /*#__PURE__*/function () {
-      var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(template) {
-        var screenshot;
-        return _regenerator.default.wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return (0, _screenshot.takeScreenshot)(template);
-            case 2:
-              screenshot = _context2.sent;
-              return _context2.abrupt("return", {
-                screenshot: screenshot,
-                template: template
-              });
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2);
-      }));
-      return function (_x2) {
-        return _ref.apply(this, arguments);
-      };
-    }(),
-    onSelect: function onSelect(template) {
-      var _options$onSelect;
-      (_options$onSelect = options.onSelect) === null || _options$onSelect === void 0 ? void 0 : _options$onSelect.call(options);
-      previewContainer.setContent(template);
-    },
-    onInsert: options.onInsert,
-    hasPro: elementor.helpers.hasPro()
-  })), rootElement);
+      attachmentsTypes: {
+        json: {
+          promptSuggestions: VARIATIONS_PROMPTS,
+          promptPlaceholder: PROMPT_PLACEHOLDER,
+          previewGenerator: function () {
+            var _previewGenerator = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(json) {
+              var screenshot;
+              return _regenerator.default.wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    _context.next = 2;
+                    return (0, _screenshot.takeScreenshot)(json);
+                  case 2:
+                    screenshot = _context.sent;
+                    return _context.abrupt("return", "<img src=\"".concat(screenshot, "\" />"));
+                  case 4:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            function previewGenerator(_x) {
+              return _previewGenerator.apply(this, arguments);
+            }
+            return previewGenerator;
+          }()
+        },
+        url: {
+          promptPlaceholder: PROMPT_PLACEHOLDER,
+          promptSuggestions: VARIATIONS_PROMPTS
+        }
+      },
+      attachments: options.attachments || [],
+      onClose: function onClose() {
+        var _options$onClose;
+        previewContainer.destroy();
+        (_options$onClose = options.onClose) === null || _options$onClose === void 0 ? void 0 : _options$onClose.call(options);
+        unmount();
+        rootElement.remove();
+        openPanel();
+      },
+      onConnect: onConnect,
+      onGenerate: function onGenerate() {
+        var _options$onGenerate;
+        (_options$onGenerate = options.onGenerate) === null || _options$onGenerate === void 0 ? void 0 : _options$onGenerate.call(options, {
+          previewContainer: previewContainer
+        });
+      },
+      onData: /*#__PURE__*/function () {
+        var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(template) {
+          var screenshot;
+          return _regenerator.default.wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return (0, _screenshot.takeScreenshot)(template);
+              case 2:
+                screenshot = _context2.sent;
+                return _context2.abrupt("return", {
+                  screenshot: screenshot,
+                  template: template
+                });
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }, _callee2);
+        }));
+        return function (_x2) {
+          return _ref.apply(this, arguments);
+        };
+      }(),
+      onSelect: function onSelect(template) {
+        var _options$onSelect;
+        (_options$onSelect = options.onSelect) === null || _options$onSelect === void 0 ? void 0 : _options$onSelect.call(options);
+        previewContainer.setContent(template);
+      },
+      onInsert: options.onInsert,
+      hasPro: elementor.helpers.hasPro()
+    })), rootElement),
+    unmount = _ReactUtils$render.unmount;
   (_options$onRenderApp = options.onRenderApp) === null || _options$onRenderApp === void 0 ? void 0 : _options$onRenderApp.call(options, {
     previewContainer: previewContainer
   });
@@ -8949,6 +9186,39 @@ exports.typeOf = typeOf;
 
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js");
+}
+
+
+/***/ }),
+
+/***/ "../node_modules/react-dom/client.js":
+/*!*******************************************!*\
+  !*** ../node_modules/react-dom/client.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var m = __webpack_require__(/*! react-dom */ "react-dom");
+if (false) {} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
 }
 
 
@@ -12508,17 +12778,17 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-function _toPrimitive(input, hint) {
-  if (_typeof(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (_typeof(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
-module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -12530,11 +12800,11 @@ module.exports = _toPrimitive, module.exports.__esModule = true, module.exports[
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
 var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
-function _toPropertyKey(arg) {
-  var key = toPrimitive(arg, "string");
-  return _typeof(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : String(i);
 }
-module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -12835,7 +13105,10 @@ var Module = /*#__PURE__*/function (_elementorModules$edi) {
     key: "registerAiLayoutBehavior",
     value: function registerAiLayoutBehavior(behaviors) {
       behaviors.ai = {
-        behaviorClass: _aiLayoutBehavior.default
+        behaviorClass: _aiLayoutBehavior.default,
+        context: {
+          documentType: window.elementor.documents.getCurrent().config.type
+        }
       };
       return behaviors;
     }

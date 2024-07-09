@@ -13,6 +13,7 @@ use Elementor\Plugin;
 use Elementor\Settings;
 use Elementor\User;
 use Elementor\Utils;
+use Elementor\Core\Utils\Hints;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -149,6 +150,8 @@ class Admin extends App {
 		wp_enqueue_script( 'elementor-admin' );
 
 		wp_set_script_translations( 'elementor-admin', 'elementor' );
+
+		$this->maybe_enqueue_hints();
 
 		$this->print_config();
 	}
@@ -342,7 +345,12 @@ class Admin extends App {
 
 		array_unshift( $links, $settings_link );
 
-		$links['go_pro'] = sprintf( '<a href="%1$s" target="_blank" class="elementor-plugins-gopro">%2$s</a>', 'https://go.elementor.com/go-pro-wp-plugins/', esc_html__( 'Get Elementor Pro', 'elementor' ) );
+		$go_pro_text = esc_html__( 'Get Elementor Pro', 'elementor' );
+		if ( Utils::is_sale_time() ) {
+			$go_pro_text = esc_html__( 'Discounted Upgrades Now!', 'elementor' );
+		}
+
+		$links['go_pro'] = sprintf( '<a href="%1$s" target="_blank" class="elementor-plugins-gopro">%2$s</a>', 'https://go.elementor.com/go-pro-wp-plugins/', $go_pro_text );
 
 		return $links;
 	}
@@ -397,7 +405,7 @@ class Admin extends App {
 
 		if ( $is_elementor_screen ) {
 			$footer_text = sprintf(
-			/* translators: 1: Elementor, 2: Link to plugin review */
+				/* translators: 1: Elementor, 2: Link to plugin review */
 				__( 'Enjoyed %1$s? Please leave us a %2$s rating. We really appreciate your support!', 'elementor' ),
 				'<strong>' . esc_html__( 'Elementor', 'elementor' ) . '</strong>',
 				'<a href="https://go.elementor.com/admin-review/" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
@@ -806,7 +814,7 @@ class Admin extends App {
 				<div class="e-major-update-warning__message">
 					<?php
 					printf(
-					/* translators: %1$s Link open tag, %2$s: Link close tag. */
+						/* translators: %1$s Link open tag, %2$s: Link close tag. */
 						esc_html__( 'The latest update includes some substantial changes across different areas of the plugin. We highly recommend you %1$sbackup your site before upgrading%2$s, and make sure you first update in a staging environment', 'elementor' ),
 						'<a href="https://go.elementor.com/wp-dash-update-backup/">',
 						'</a>'
@@ -841,10 +849,6 @@ class Admin extends App {
 
 		$this->add_component( 'feedback', new Feedback() );
 		$this->add_component( 'admin-notices', new Admin_Notices() );
-
-		if ( Plugin::$instance->experiments->is_feature_active( 'admin_menu_rearrangement' ) ) {
-			$this->register_menu();
-		}
 
 		add_action( 'admin_init', [ $this, 'maybe_redirect_to_getting_started' ] );
 
@@ -943,7 +947,44 @@ class Admin extends App {
 			} )->all();
 	}
 
-	private function register_menu() {
-		$this->menus['main'] = new MainMenu();
+	private function maybe_enqueue_hints() {
+		if ( ! Hints::should_display_hint( 'image-optimization' ) ) {
+			return;
+		}
+
+		wp_register_script(
+			'media-hints',
+			$this->get_js_assets_url( 'media-hints' ),
+			[],
+			ELEMENTOR_VERSION,
+			true
+		);
+
+		$content = sprintf("%1\$s <a class='e-btn-1' href='%2\$s' target='_blank'>%3\$s</a>!",
+			__( 'Optimize your images to enhance site performance by using Image Optimizer.', 'elementor' ),
+			Hints::get_plugin_action_url( 'image-optimization' ),
+			( Hints::is_plugin_installed( 'image-optimization' ) ? __( 'Activate', 'elementor' ) : __( 'Install', 'elementor' ) ) . ' ' . __( 'Image Optimizer', 'elementor' )
+		);
+
+		$dismissible = 'image_optimizer_hint';
+
+		wp_localize_script( 'media-hints', 'elementorAdminHints', [
+			'mediaHint' => [
+				'display' => true,
+				'type' => 'info',
+				'content' => $content,
+				'icon' => true,
+				'dismissible' => $dismissible,
+				'dismiss' => __( 'Dismiss this notice.', 'elementor' ),
+				'button_event' => $dismissible,
+				'button_data' => base64_encode(
+					json_encode( [
+						'action_url' => Hints::get_plugin_action_url( 'image-optimization' ),
+					] ),
+				),
+			],
+		] );
+
+		wp_enqueue_script( 'media-hints' );
 	}
 }

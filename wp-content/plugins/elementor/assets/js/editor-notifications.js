@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -34,6 +34,7 @@ __export(src_exports, {
   QueryClient: () => import_react_query2.QueryClient,
   QueryClientProvider: () => import_react_query2.QueryClientProvider,
   createQueryClient: () => createQueryClient,
+  useInfiniteQuery: () => import_react_query2.useInfiniteQuery,
   useMutation: () => import_react_query2.useMutation,
   useQuery: () => import_react_query2.useQuery,
   useQueryClient: () => import_react_query2.useQueryClient
@@ -54,6 +55,61 @@ function createQueryClient() {
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../assets/dev/js/utils/react.js":
+/*!***************************************!*\
+  !*** ../assets/dev/js/utils/react.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var React = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var ReactDOM = _interopRequireWildcard(__webpack_require__(/*! react-dom */ "react-dom"));
+var _client = __webpack_require__(/*! react-dom/client */ "../node_modules/react-dom/client.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+/**
+ * Support conditional rendering of a React App to the DOM, based on the React version.
+ * We use `createRoot` when available, but fallback to `ReactDOM.render` for older versions.
+ *
+ * @param { React.ReactElement } app        The app to render.
+ * @param { HTMLElement }        domElement The DOM element to render the app into.
+ *
+ * @return {{ unmount: () => void }} The unmount function.
+ */
+function render(app, domElement) {
+  var unmountFunction;
+  try {
+    var root = (0, _client.createRoot)(domElement);
+    root.render(app);
+    unmountFunction = function unmountFunction() {
+      root.unmount();
+    };
+  } catch (e) {
+    // eslint-disable-next-line react/no-deprecated
+    ReactDOM.render(app, domElement);
+    unmountFunction = function unmountFunction() {
+      // eslint-disable-next-line react/no-deprecated
+      ReactDOM.unmountComponentAtNode(domElement);
+    };
+  }
+  return {
+    unmount: unmountFunction
+  };
+}
+var _default = {
+  render: render
+};
+exports["default"] = _default;
 
 /***/ }),
 
@@ -87,13 +143,14 @@ exports.getNotifications = getNotifications;
 
 /***/ }),
 
-/***/ "../modules/notifications/assets/js/components/editor-v1.js":
-/*!******************************************************************!*\
-  !*** ../modules/notifications/assets/js/components/editor-v1.js ***!
-  \******************************************************************/
+/***/ "../modules/notifications/assets/js/components/editor-drawer.js":
+/*!**********************************************************************!*\
+  !*** ../modules/notifications/assets/js/components/editor-drawer.js ***!
+  \**********************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -101,37 +158,175 @@ var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.EditorV1 = void 0;
+exports.EditorDrawer = void 0;
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _whatsNew = __webpack_require__(/*! ./whats-new */ "../modules/notifications/assets/js/components/whats-new.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-var EditorV1 = function EditorV1() {
+var EditorDrawer = function EditorDrawer(_ref) {
+  var _ref$anchorPosition = _ref.anchorPosition,
+    anchorPosition = _ref$anchorPosition === void 0 ? 'left' : _ref$anchorPosition;
   var _useState = (0, _react.useState)(true),
     _useState2 = (0, _slicedToArray2.default)(_useState, 2),
     isOpen = _useState2[0],
     setIsOpen = _useState2[1];
-  var _useState3 = (0, _react.useState)(false),
-    _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
-    isRead = _useState4[0],
-    setIsRead = _useState4[1];
   (0, _react.useEffect)(function () {
     elementor.on('elementor/editor/panel/whats-new/clicked', function () {
       return setIsOpen(true);
     });
   }, []);
-  (0, _react.useEffect)(function () {
-    document.body.classList.remove('e-has-notification');
-  }, [isRead]);
   return /*#__PURE__*/_react.default.createElement(_whatsNew.WhatsNew, {
     isOpen: isOpen,
     setIsOpen: setIsOpen,
-    setIsRead: setIsRead,
-    anchorPosition: "left"
+    setIsRead: function setIsRead() {
+      return document.body.classList.remove('e-has-notification');
+    },
+    anchorPosition: anchorPosition
   });
 };
-exports.EditorV1 = EditorV1;
+exports.EditorDrawer = EditorDrawer;
+EditorDrawer.propTypes = {
+  anchorPosition: PropTypes.oneOf(['left', 'top', 'right', 'bottom'])
+};
+
+/***/ }),
+
+/***/ "../modules/notifications/assets/js/components/editor-on-button-clicked.js":
+/*!*********************************************************************************!*\
+  !*** ../modules/notifications/assets/js/components/editor-on-button-clicked.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.editorOnButtonClicked = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _react2 = _interopRequireDefault(__webpack_require__(/*! elementor-utils/react */ "../assets/dev/js/utils/react.js"));
+var _editorDrawer = __webpack_require__(/*! ./editor-drawer */ "../modules/notifications/assets/js/components/editor-drawer.js");
+var isRendered = false;
+var editorOnButtonClicked = function editorOnButtonClicked() {
+  var anchorPosition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'left';
+  if (!isRendered) {
+    isRendered = true;
+    var container = document.createElement('div');
+    document.body.append(container);
+    _react2.default.render( /*#__PURE__*/_react.default.createElement(_editorDrawer.EditorDrawer, {
+      anchorPosition: anchorPosition
+    }), container);
+    return;
+  }
+  elementor.trigger('elementor/editor/panel/whats-new/clicked');
+};
+exports.editorOnButtonClicked = editorOnButtonClicked;
+
+/***/ }),
+
+/***/ "../modules/notifications/assets/js/components/editor-v1.js":
+/*!******************************************************************!*\
+  !*** ../modules/notifications/assets/js/components/editor-v1.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.editorV1 = void 0;
+var _editorOnButtonClicked = __webpack_require__(/*! ./editor-on-button-clicked */ "../modules/notifications/assets/js/components/editor-on-button-clicked.js");
+var editorV1 = function editorV1() {
+  elementor.on('panel:init', function () {
+    if (elementorNotifications.is_unread) {
+      document.body.classList.add('e-has-notification');
+    }
+    elementor.getPanelView().getPages('menu').view.addItem({
+      name: 'notification-center',
+      icon: 'eicon-notification',
+      title: __('What\'s New', 'elementor'),
+      callback: _editorOnButtonClicked.editorOnButtonClicked
+    }, 'navigate_from_page', 'view-page');
+  });
+};
+exports.editorV1 = editorV1;
+
+/***/ }),
+
+/***/ "../modules/notifications/assets/js/components/editor-v2.js":
+/*!******************************************************************!*\
+  !*** ../modules/notifications/assets/js/components/editor-v2.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.editorV2 = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _giftIcon = __webpack_require__(/*! ../icons/gift-icon */ "../modules/notifications/assets/js/icons/gift-icon.js");
+var _editorOnButtonClicked = __webpack_require__(/*! ./editor-on-button-clicked */ "../modules/notifications/assets/js/components/editor-on-button-clicked.js");
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var IconWithBadge = function IconWithBadge(_ref) {
+  var invisible = _ref.invisible;
+  return /*#__PURE__*/_react.default.createElement(_ui.Badge, {
+    color: "primary",
+    variant: "dot",
+    invisible: invisible
+  }, /*#__PURE__*/_react.default.createElement(_giftIcon.GiftIcon, null));
+};
+IconWithBadge.propTypes = {
+  invisible: PropTypes.bool
+};
+var editorV2 = function editorV2() {
+  var utilitiesMenu = window.elementorV2.editorAppBar.utilitiesMenu;
+  utilitiesMenu.registerLink({
+    id: 'app-bar-menu-item-whats-new',
+    priority: 25,
+    useProps: function useProps() {
+      var _useState = (0, _react.useState)(!elementorNotifications.is_unread),
+        _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+        isRead = _useState2[0],
+        setIsRead = _useState2[1];
+      return {
+        title: (0, _i18n.__)("What's New", 'elementor'),
+        icon: function icon() {
+          return /*#__PURE__*/_react.default.createElement(IconWithBadge, {
+            invisible: isRead
+          });
+        },
+        onClick: function onClick() {
+          elementor.editorEvents.dispatchEvent(elementor.editorEvents.config.names.topBar.whatsNew, {
+            location: elementor.editorEvents.config.locations.topBar,
+            secondaryLocation: elementor.editorEvents.config.secondaryLocations['whats-new'],
+            trigger: elementor.editorEvents.config.triggers.click,
+            element: elementor.editorEvents.config.elements.buttonIcon
+          });
+          setIsRead(true);
+          elementorNotifications.is_unread = false;
+          (0, _editorOnButtonClicked.editorOnButtonClicked)('right');
+        }
+      };
+    }
+  });
+};
+exports.editorV2 = editorV2;
 
 /***/ }),
 
@@ -500,6 +695,7 @@ var queryClient = new _query.QueryClient({
 });
 
 var WhatsNew = function WhatsNew(props) {
+  var _window$elementor, _window$elementor$get;
   var isOpen = props.isOpen,
     setIsOpen = props.setIsOpen,
     setIsRead = props.setIsRead,
@@ -513,8 +709,10 @@ var WhatsNew = function WhatsNew(props) {
   }, [isOpen, setIsRead]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_query.QueryClientProvider, {
     client: queryClient
+  }, /*#__PURE__*/_react.default.createElement(_ui.DirectionProvider, {
+    rtl: elementorCommon.config.isRTL
   }, /*#__PURE__*/_react.default.createElement(_ui.ThemeProvider, {
-    colorScheme: "auto"
+    colorScheme: ((_window$elementor = window.elementor) === null || _window$elementor === void 0 ? void 0 : (_window$elementor$get = _window$elementor.getPreferences) === null || _window$elementor$get === void 0 ? void 0 : _window$elementor$get.call(_window$elementor, 'ui_theme')) || 'auto'
   }, /*#__PURE__*/_react.default.createElement(_ui.Drawer, {
     anchor: anchorPosition,
     open: isOpen,
@@ -539,7 +737,7 @@ var WhatsNew = function WhatsNew(props) {
     sx: {
       padding: '16px'
     }
-  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, null)))))));
+  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, null))))))));
 };
 exports.WhatsNew = WhatsNew;
 WhatsNew.propTypes = {
@@ -591,6 +789,41 @@ WrapperWithLink.propTypes = {
   link: PropTypes.string,
   children: PropTypes.any.isRequired
 };
+
+/***/ }),
+
+/***/ "../modules/notifications/assets/js/icons/gift-icon.js":
+/*!*************************************************************!*\
+  !*** ../modules/notifications/assets/js/icons/gift-icon.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.GiftIcon = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var GiftIcon = (0, _react.forwardRef)(function (props, ref) {
+  return /*#__PURE__*/_react.default.createElement(_ui.SvgIcon, (0, _extends2.default)({
+    viewBox: "0 0 24 24"
+  }, props, {
+    ref: ref
+  }), /*#__PURE__*/_react.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M9.65527 4.84484C8.95951 4.07178 8.20923 3.73771 7.51306 3.74984L7.5 3.75007C7.03587 3.75007 6.59075 3.93433 6.26256 4.26252C5.93437 4.59071 5.75 5.03583 5.75 5.49995C5.75 5.96408 5.93437 6.4092 6.26256 6.73739C6.59075 7.06558 7.03587 7.24995 7.5 7.24995C7.50295 7.24995 7.5059 7.24997 7.50884 7.25001H11.0002C10.6592 6.26394 10.1939 5.44328 9.65527 4.84484ZM11.25 8.75001V11.25H4C3.86193 11.25 3.75 11.1381 3.75 11V9.00001C3.75 8.86193 3.86193 8.75001 4 8.75001H11.25ZM4.25 12.75H4C3.0335 12.75 2.25 11.9665 2.25 11V9.00001C2.25 8.03351 3.0335 7.25001 4 7.25001H4.76141C4.43004 6.73144 4.25 6.12498 4.25 5.49995C4.25 4.638 4.59241 3.81135 5.2019 3.20186C5.80984 2.59392 6.63384 2.2517 7.49342 2.24996C8.72414 2.23069 9.86213 2.83242 10.7702 3.84139C11.2484 4.37275 11.6608 5.01284 12 5.73103C12.3392 5.01284 12.7516 4.37275 13.2298 3.84139C14.1379 2.83242 15.2759 2.23069 16.5066 2.24996C17.3662 2.2517 18.1902 2.59392 18.7981 3.20186C19.4076 3.81135 19.75 4.638 19.75 5.49995C19.75 6.12498 19.57 6.73144 19.2386 7.25001H20C20.9665 7.25001 21.75 8.03351 21.75 9.00001V11C21.75 11.9665 20.9665 12.75 20 12.75H19.75V19C19.75 19.7294 19.4603 20.4288 18.9445 20.9445C18.4288 21.4603 17.7293 21.75 17 21.75H7C6.27065 21.75 5.57118 21.4603 5.05546 20.9445C4.53973 20.4288 4.25 19.7294 4.25 19V12.75ZM11.25 20.25H7C6.66848 20.25 6.35054 20.1183 6.11612 19.8839C5.8817 19.6495 5.75 19.3315 5.75 19V12.75H11.25V20.25ZM12.75 20.25H17C17.3315 20.25 17.6495 20.1183 17.8839 19.8839C18.1183 19.6495 18.25 19.3315 18.25 19V12.75H12.75V20.25ZM12.75 11.25V8.75001H20C20.1381 8.75001 20.25 8.86193 20.25 9.00001V11C20.25 11.1381 20.1381 11.25 20 11.25H12.75ZM16.4912 7.25001C16.4941 7.24997 16.497 7.24995 16.5 7.24995C16.9641 7.24995 17.4092 7.06558 17.7374 6.73739C18.0656 6.4092 18.25 5.96408 18.25 5.49995C18.25 5.03583 18.0656 4.59071 17.7374 4.26252C17.4092 3.93433 16.9641 3.74995 16.5 3.74995H16.4869C15.7908 3.73783 15.0405 4.07178 14.3447 4.84484C13.8061 5.44328 13.3408 6.26394 12.9998 7.25001H16.4912Z"
+  }));
+});
+exports.GiftIcon = GiftIcon;
 
 /***/ }),
 
@@ -1731,6 +1964,39 @@ exports.typeOf = typeOf;
 
 if (false) {} else {
   module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js");
+}
+
+
+/***/ }),
+
+/***/ "../node_modules/react-dom/client.js":
+/*!*******************************************!*\
+  !*** ../node_modules/react-dom/client.js ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var m = __webpack_require__(/*! react-dom */ "react-dom");
+if (false) {} else {
+  var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+  exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.createRoot(c, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
+  exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+      return m.hydrateRoot(c, h, o);
+    } finally {
+      i.usingClientEntryPoint = false;
+    }
+  };
 }
 
 
@@ -6714,35 +6980,16 @@ var __webpack_exports__ = {};
 /*!****************************************************!*\
   !*** ../modules/notifications/assets/js/editor.js ***!
   \****************************************************/
-/* provided dependency */ var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
-/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _editorV = __webpack_require__(/*! ./components/editor-v1 */ "../modules/notifications/assets/js/components/editor-v1.js");
-var isRendered = false;
-var onButtonClicked = function onButtonClicked() {
-  if (!isRendered) {
-    isRendered = true;
-    var container = document.createElement('div');
-    document.body.append(container);
-    ReactDOM.render( /*#__PURE__*/_react.default.createElement(_editorV.EditorV1, null), container);
-    return;
-  }
-  elementor.trigger('elementor/editor/panel/whats-new/clicked');
-};
-elementor.on('panel:init', function () {
-  if (elementorNotifications.is_unread) {
-    document.body.classList.add('e-has-notification');
-  }
-  elementor.getPanelView().getPages('menu').view.addItem({
-    name: 'notification-center',
-    icon: 'eicon-notification',
-    title: __('What\'s New', 'elementor'),
-    callback: onButtonClicked
-  }, 'navigate_from_page', 'view-page');
-});
+var _editorV2 = __webpack_require__(/*! ./components/editor-v2 */ "../modules/notifications/assets/js/components/editor-v2.js");
+var _window, _window$elementorV;
+if ((_window = window) !== null && _window !== void 0 && (_window$elementorV = _window.elementorV2) !== null && _window$elementorV !== void 0 && _window$elementorV.editorAppBar) {
+  (0, _editorV2.editorV2)();
+} else {
+  (0, _editorV.editorV1)();
+}
 })();
 
 /******/ })()
