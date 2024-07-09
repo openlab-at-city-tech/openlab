@@ -1,14 +1,12 @@
 <?php
-
 ob_start();
 include plugin_dir_path(__FILE__) . 'views/plugin_compare_table.php';
 $plugin_compare_table = ob_get_contents();
 ob_end_clean();
-
 $cminds_plugin_config = array(
 	'plugin-is-pro'                 => false,
 	'plugin-has-addons'             => true,
-	'plugin-version'                => '4.2.11',
+	'plugin-version'                => '4.3.7',
 	'plugin-abbrev'                 => 'cmtt',
 	'plugin-affiliate'              => '',
 	'plugin-redirect-after-install' => admin_url( 'admin.php?page=cmtt_settings' ),
@@ -68,5 +66,4 @@ $cminds_plugin_config = array(
 	'plugin-changelog-url'          => CMTT_RELEASE_NOTES,
 	'plugin-licensing-aliases'      => array( CMTT_LICENSE_NAME ),
 	'plugin-compare-table'          => $plugin_compare_table,
-
 );

@@ -2939,6 +2939,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <h2><?php __('System Information', 'cminds-package'); ?></h2><br/>
                 <form action="<?php echo esc_url(admin_url('admin.php?page=cmtt_licensing')); ?>" method="post" dir="ltr">
                     <p class="submit">
+						<?php wp_nonce_field( 'system_information_download_form_nonce', 'system_information_download_form_nonce' ); ?>
                         <input type="hidden" name="cminds_action" value="download_sysinfo" />
                         <?php submit_button('Download system information file', 'primary', 'cminds-download-sysinfo', false); ?>
                     </p>
@@ -3121,6 +3122,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
          * @return void
          */
         public function cminds_generate_sysinfo_download() {
+			if ( wp_verify_nonce( $_POST['system_information_download_form_nonce'], 'system_information_download_form_nonce' ) ) {
             nocache_headers();
 
             header("Content-type: text/plain");
@@ -3128,6 +3130,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
 
             echo wp_strip_all_tags($_POST['cminds-sysinfo']);
             die();
+			}
         }
 
         public function getOption($key, $default = NULL) {

@@ -519,6 +519,7 @@ class CMTT_Free {
 			return $content;
 		}
 
+
 		self::log( 'runParser = true' );
 		self::log( '$force = ' . $force );
 		/*
@@ -2269,7 +2270,6 @@ class CMTT_Free {
 			array(
 				'jquery',
 				'wp-color-picker',
-				'inline-edit-post',
 				'cmtt-select2-js',
 			)
 		);
@@ -2308,7 +2308,6 @@ class CMTT_Free {
 			array(
 				'jquery',
 				'wp-color-picker',
-				'inline-edit-post',
 				'cmtt-select2-js',
 			)
 		);

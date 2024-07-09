@@ -115,6 +115,7 @@ abstract class Settings {
 
             update_option(static::abbrev('_options'), $all_options, false);
             do_action(static::abbrev('_save_options_after_on_save'), $post, array(&$messages));
+
         }
 
         do_action(static::abbrev('_save_options_after'), $post, array(&$messages));
@@ -218,7 +219,7 @@ abstract class Settings {
         $optionType = static::getConfig($optionName)['type'] ?? '';
 
         if (!is_array($pre_sanitized_value) && $optionType != 'textarea' && $optionType != 'rich_text') {
-            $sanitized_value = esc_attr($pre_sanitized_value);
+            $sanitized_value = esc_attr(sanitize_text_field($pre_sanitized_value));
         } else {
             $sanitized_value = $pre_sanitized_value;
         }

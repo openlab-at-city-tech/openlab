@@ -1,11 +1,15 @@
-=== CM Tooltip Glossary - Powerful Glossary Plugin  ===
+=== CM Tooltip Glossary  ===
 Name: CM Tooltip Glossary
 Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
-Tags: glossary, tooltip, lexicon, dictionary, knowledgebase
+Tags: glossary, vocabulary, dictionary, tooltip, lexicon
 Requires at least: 5.4.0
-Tested up to: 6.4
-Stable tag: 4.2.11
+Tested up to: 6.6
+Stable tag: 4.3.7
+Requires PHP: 5.2.4
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
 
 Create a WordPress glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
 
@@ -15,12 +19,12 @@ Create a WordPress glossary, encyclopedia, or dictionary of terms and display re
 
 ## CM Tooltip Glossary - The #1 WordPress Glossary Plugin 
 
-The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to **establish an extensive knowledgebase of terms and their definitions** on your website. 
+The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to **establish an extensive knowledge-base of terms and their definitions** on your website. 
 
 Utilizing the Glossary plugin, you can easily establish an **extensive glossary featuring terms with corresponding definitions**. And we've been developing this since 2012!
 
 
-### Glossary Terms Pages, Links and Glosary Index
+### Glossary Terms Pages, Links and Glossary Index
 
 This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
 
@@ -226,7 +230,32 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 12. Wikipedia Embedded Content
 13. Import / Export
 
-== Glossary Plugin Changelog ==
+== Changelog ==
+
+= 4.3.7 =
+* Fixed the compatibility with Elementor
+
+= 4.3.6 =
+* Improved deprecated code
+
+= 4.3.5 =
+* Fixed security issues
+
+= 4.3.4 =
+* Fixed vulnerability issue
+
+= 4.3.3 =
+* Fixed vulnerability issue
+
+= 4.3.2 =
+* Return to version 4.3.0
+
+= 4.3.1 =
+* Fixed bug with bulk selection in the backend
+
+= 4.3.0 =
+* Security improvement
+
 = 4.2.11 =
 * Fixed the issue with the missing aria-label for tooltip
 
