@@ -7,6 +7,7 @@ class Mappress_Poi extends Mappress_Obj {
 		$iconid,
 		$images,
 		$kml,
+		$log,
 		$name,
 		$oid,
 		$otype,
@@ -23,30 +24,35 @@ class Mappress_Poi extends Mappress_Obj {
 		$vars->point = (isset($this->point)) ? ((object)$this->point)->lat . ',' . ((object)$this->point)->lng : '';  // Point can be object or array
 		$vars->viewport = (isset($this->viewport)) ? sprintf("%s,%s,%s,%s", $this->viewport->sw->lat, $this->viewport->sw->lng, $this->viewport->ne->lat, $this->viewport->ne->lng) : '';
 		$atts = Mappress::to_atts($vars);
-		$body = str_replace(array("\r", "\n"), '', $this->body);
+		$body = ($this->body) ? str_replace(array("\r", "\n"), '', $this->body) : $this->body;
 		return (($body) ? "\r\n\t<poi $atts>\r\n\t\t$body\r\n\t</poi>" : "\r\n\t<poi $atts></poi>");
 	}
 
 	function to_json() {
 		return array(
 			'address' => $this->address,
-			'body' => ($this->body) ? wp_kses_post($this->body) : $this->body,
+			'body' => $this->body,
 			'data' => $this->data,
 			'iconid' => $this->iconid,
 			'images' => $this->images,
 			'kml' => $this-> kml,
 			'point' => $this->point,
 			'poly' => $this->poly,
-			'title' => ($this->title) ? sanitize_text_field($this->title) : $this->title,
+			'title' => $this->title,
 			'type' => $this->type,
 			'viewport' => $this->viewport
 		);
 	}
 
+	function sanitize() {
+		$this->body = ($this->body) ? wp_kses_post($this->body) : $this->body;
+		$this->title = ($this->title) ? wp_kses_post($this->title) : $this->title;
+	}
+		
+
 	function __construct($atts = '') {
 		parent::__construct($atts);
-		$this->body = ($this->body) ? wp_kses_post($this->body) : null;
-		$this->title = ($this->title) ? sanitize_text_field($this->title) : null;
+		$this->sanitize();
 	}
 
 	/**

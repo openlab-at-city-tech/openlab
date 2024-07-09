@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.88.19
+Version: 2.90.6
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.88.19';
+	const VERSION = '2.90.6';
 
 	static
 		$api,
@@ -649,6 +649,8 @@ class Mappress {
 			return true;
 		if (is_admin())
 			return true;
+		if (self::$options->webComponent)   // WC needs to load after dom render
+			return true;
 		return self::$options->footer;
 	}
 
@@ -676,6 +678,7 @@ class Mappress {
 	static function l10n() {
 		global $post, $is_IE;
 
+		$screen = is_admin() ? get_current_screen() : null;
 		$l10n = array('delete_prompt' => __('Are you sure you want to delete?', 'mappress-google-maps-for-wordpress'));
 
 		// Globals
@@ -687,9 +690,11 @@ class Mappress {
 			'baseurl' => self::$baseurl,
 			'blockCategory' => self::$block_category,
 			'debug' => self::$debug,
+			'dev' => self::is_dev(),
 			'editurl' => admin_url('post.php'),
 			'filterParams' => (class_exists('Mappress_Filter')) ? Mappress_Filter::get_url_params() : array(),
 			'iconsUrl' => (self::$pro) ? Mappress_Icons::$icons_url : null,    
+			'isEditor' => ($post && $post->ID) || ($screen && $screen->base == 'site-editor'),
 			'isIE' => $is_IE,
 			'language' => self::get_language(),
 			'liq' => self::get_api_keys()->liq,
@@ -747,12 +752,23 @@ class Mappress {
 		}
 		$l10n['options']['standardStyles'] = $styles;
 
+		// Send filters with labels (but no values)
+		if (self::$pro) {
+			foreach(self::$options->filters as $type => $filters) {
+				foreach($filters as $atts) {
+					$filter = new Mappress_Filter($atts);
+					$filter->values = null;
+					$l10n['options']['filters'][$type][] = $filter;
+				}
+			}
+		}
+
 		// Global settings
-		$options = array('alignment', 'betaPoiFields', 'clustering', 'clusteringOptions', 'country', 'defaultIcon', 'directions', 'directionsList',
-		'directionsPopup', 'directionsServer', 'engine', 'filters', 'filtersPos', 'geocoder', 'geolocate',
+		$options = array('alignment', 'clustering', 'clusteringOptions', 'country', 'defaultIcon', 'directions', 'directionsList',
+		'directionsPopup', 'directionsServer', 'engine', 'filtersOpen', 'filtersPos', 'geocoder', 'geolocate',
 		'highlight', 'highlightIcon', 'iconScale', 'initialOpenInfo', 'layout', 'lines', 'lineOpts',
-		'mashupClick', 'mini', 'poiFields', 'poiList', 'poiListOpen', 'poiListPageSize', 'poiListViewport', 'poiZoom', 'radius', 'scrollWheel', 'search',
-		'searchBox', 'searchParam', 'searchPlaceholder', 'size', 'sizes', 'sort', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 
+		'mashupClick', 'menuControl', 'mini', 'poiFields', 'poiList', 'poiListKml', 'poiListOpen', 'poiListPageSize', 'poiListViewport', 'poiZoom', 'radius', 'scrollWheel', 'search',
+		'searchBox', 'searchParam', 'searchPlaceholder', 'size', 'sizes', 'sort', 'streetViewControl', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 
 		'tooltips', 'units', 'userLocation', 'webComponent');
 
 		foreach($options as $option) {
@@ -800,11 +816,8 @@ class Mappress {
 
 	static function script_loader_tag($tag, $handle, $src) {
 		// Deregister
-		if (self::$options->engine == 'google' && self::$options->deregister && self::$loaded && ($handle != 'mappress-google' && (stripos($src, 'maps.googleapis.com') !== false || stripos($src, 'maps.google.com'))))
+		if (self::$options->engine == 'google' && self::$options->deregister && self::$loaded && (stripos($src, 'maps.googleapis.com') !== false || stripos($src, 'maps.google.com')))
 			return '';
-		// Re-register
-		else if ($handle == 'mappress-google' && empty($tag))
-			return sprintf("<script src='%s' id='mappress-google-js-fixed'></script>\n", self::scripts_google_tag());
 		else
 			return $tag;
 	}
@@ -858,18 +871,16 @@ class Mappress {
 		$deps = array('react', 'react-dom', 'wp-i18n');
 		if (self::$options->engine == 'leaflet')
 			$deps = array_merge(array('mappress-leaflet', 'mappress-leaflet-omnivore'), $deps);
-		if (self::$options->engine != 'leaflet' || self::$options->geocoder == 'google')
-			$deps[] = 'mappress-google';
+
+		// Clustering ( https://github.com/googlemaps/js-markerclusterer | https://github.com/Leaflet/Leaflet.markercluster )
 		if (self::$options->clustering)
 			$deps[] = (self::$options->engine == 'leaflet') ? 'mappress-leaflet-markercluster' : 'mappress-markerclusterer';
 		$admin_deps = array('mappress', 'wp-blocks', 'wp-components', 'wp-compose', 'wp-core-data', 'wp-element', 'wp-media-utils', 'wp-i18n', 'wp-notices', 'wp-url');
 
-		// Clustering ( https://github.com/googlemaps/js-markerclusterer | https://github.com/Leaflet/Leaflet.markercluster )
 		$register = array(
 			array("mappress-leaflet", $lib . '/leaflet/leaflet.js', null, null, $footer),
 			array("mappress-leaflet-omnivore", $lib . '/leaflet/leaflet-omnivore.min.js', null, null, $footer),
-			array("mappress-google", self::scripts_google_tag(), null, null, $footer),
-			array('mappress-markerclusterer', self::unpkg('markerclusterer', 'index.min.js'), null, null, $footer),
+			array('mappress-markerclusterer', 'https://unpkg.com/@googlemaps/markerclusterer@2.5.3/dist/index.min.js', null, null, $footer),
 			array('mappress-leaflet-markercluster', $lib . '/leaflet/leaflet.markercluster.js', null, null, $footer),
 			array('mappress', $js . "/index_mappress.js", $deps, self::$version, $footer),
 			array('mappress_admin', $js . "/index_mappress_admin.js", $admin_deps, self::$version, $footer)
@@ -892,16 +903,6 @@ class Mappress {
 				wp_set_script_translations('mappress_admin', 'mappress-google-maps-for-wordpress', self::$basedir . '/languages');
 			}
 		}
-	}
-
-	static function scripts_google_tag() {
-		$dev = self::is_dev();
-		$language = self::get_language();
-		$language = ($language) ? "&language=$language" : '';
-		$apiversion = ($dev) ? '&v=beta' : '&v=3';
-		$apikey = "&key=" . self::get_api_keys()->browser;
-		$libs = '&libraries=places,drawing';
-		return "https://maps.googleapis.com/maps/api/js?callback=Function.prototype{$apiversion}{$language}{$libs}{$apikey}";
 	}
 
 	/**
@@ -1167,22 +1168,9 @@ class Mappress {
 			if (is_object($value) || is_array($value))
 				$results[] = sprintf("%s='%s'", $lcname, json_encode($value, JSON_HEX_APOS));
 			else
-				$results[] = "$lcname='" . str_replace('&quot;', '"', $value) . "'";
+				$results[] = "$lcname='" . str_replace(array("'", '"'), array('&apos;', '&quot;'), $value) . "'";
 		}
 		return join(' ', $results);
-	}
-
-	static function unpkg($package, $filename) {
-		$urls = array(
-			'markerclusterer' => 'https://unpkg.com/@googlemaps/markerclusterer@%s/dist',
-		);
-		$versions = array(
-			'markerclusterer' => '2.0.11',
-		);
-
-		$url = $urls[$package];
-		$version = $versions[$package];
-		return apply_filters('mappress_unpkg', sprintf($url, $version) . "/$filename", $package, $filename);
 	}
 
 	/**

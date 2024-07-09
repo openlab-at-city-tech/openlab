@@ -5,7 +5,7 @@ Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map
 Requires at least: 5.9.5
 Requires PHP: 7.0
 Tested up to: 6.4
-Stable tag: 2.88.19
+Stable tag: 2.90.6
 
 == Description ==
 MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
@@ -89,6 +89,89 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.90.6 =
+* Fixed: Pro build reverted to free version due to new host server 
+* Fixed: magnifying glass icon missing from search box
+
+= 2.90.5 =
+* Fixed: map/list toggle buttons not showing on initial load
+* Fixed: console warning when multiple maps on same page
+* Fixed: travel lines not removed when all POIs are filtered 
+* Changed: search button moved inside search box, icon can now be controlled through CSS
+
+= 2.90.4 =
+* Added: menu hamburger control is suppressed when street view is active so it doesn't overlay streetview 'back' control
+* Changed: switch to OSM if mapbox style is used but mapbox token isn't present
+* Fixed: enabled filters for POI data
+* Fixed: minimap toggle not working due to error in layout resizeobserver
+
+= 2.90.3 =
+* Added: option to suppress KML POIs in POI list
+* Added: option to switch between terrain/satellite and regular map (Google only)
+* Changed: POI modal dialog now sizes to content instead of filling screen (size can be changed with class .mapp-dialog.mapp-modal)
+* Changed: updated directions form and POI swap icon
+
+= 2.90.2 =
+* Fixed: warnings in PHP 8.2 when importing
+* Fixed: error when downgrading to free version with filters defined
+
+= 2.90.1 = 
+* Added: new setting 'filtersOpen' to show filters initially opened
+* Added: support for latest site editor 
+* Added: support for latest site editor sidebar (when WP implements PluginDocumentSettingPanel for site editor) 
+* Changed: filters code refactored
+* Fixed: error when changing KML icon
+* Fixed: error when using POI connecting lines
+
+= 2.89.11 = 
+* Fixed: warning in PHP 8.1 from bug in WP urlencode_deep function
+
+= 2.89.10 =
+* Fixed: incorrect urlencoding in iframe
+
+= 2.89.9 =
+* Fixed: better popup handling for markers inside KML files
+* Fixed: marker scale was not considered in popup positioning
+* Fixed: single quotes inside address attributes
+* Fixed: prevent re-rendering of web components in some themes
+* Fixed: allow parameters, such as ?lang= to pass to iframes
+* Fiexd: name warning in gutenberg document panel
+
+= 2.89.8 =
+* Changed: better popup positioning
+* Fixed: map zooming to KML viewport on load
+
+= 2.89.7 =
+* Fixed: iframe not rendering
+
+= 2.89.6 =
+* Fixed: web component not displaying POI content when map inside phrasing tag
+
+= 2.89.5 =
+* Fixed: web component not displaying POIs when loading scripts in header
+
+= 2.89.4 =
+* Fixed: map center ignored when saved as string
+
+= 2.89.3 =
+* Fixed: map not recentering when first displayed in hidden tab
+
+= 2.89.2 = 
+* Fixed: CSS typo
+* Fixed: Error if using Leaflet with Google geocoder
+
+= 2.89.1 =
+* Fixed: icon popup not displaying in Safari
+
+= 2.89 =
+* Added: map picker UI redesigned with hover actions
+* Added: map picker now includes bulk delete/restore operations
+* Changed: inline POI list option removed for new installs
+* Changed: web components enabled by default
+* Fixed: POI title not allowing html links
+* Fixed: wrong zoom in some cases when using web components
+* Fixed: initial layers in shortcode not honored, e.g. [mappress layers="traffic"]
 
 = 2.88.19 =
 * Fixed: workaround for WP internal bug with wp_kses and PHP 8.1+

@@ -10,7 +10,6 @@ class Mappress_Options extends Mappress_Obj {
 		$apiKey,
 		$apiKeyServer,
 		$autodisplay,
-		$betaPoiFields,
 		$betas = false,
 		$clustering = false,
 		$clusteringOptions,
@@ -24,6 +23,7 @@ class Mappress_Options extends Mappress_Obj {
 		$engine = 'leaflet',
 		$filter,					// deprecated
 		$filters = array('poi' => array(), 'post' => array(), 'user' => array()),
+		$filtersOpen = false,
 		$filtersPos = 'top',
 		$footer = true,
 		$geocoder = 'nominatim',
@@ -39,6 +39,7 @@ class Mappress_Options extends Mappress_Obj {
 		$lines,
 		$lineOpts = array('color' => 'blue', 'weight' => 3, 'opacity' => 1.0),
 		$liq, 
+		$menuControl = true,
 		$mapbox,
 		$mapboxStyles = array(),	// deprecated
 		$mashupBody = 'poi',
@@ -50,6 +51,7 @@ class Mappress_Options extends Mappress_Obj {
 		$mini = 500,
 		$poiFields,
 		$poiList = true,
+		$poiListKml = true,
 		$poiListOpen = true,
 		$poiListPageSize = 20,
 		$poiListViewport = false,
@@ -83,7 +85,7 @@ class Mappress_Options extends Mappress_Obj {
 		$tooltips = false,
 		$units = 'metric',
 		$userLocation = false,
-		$webComponent = null,
+		$webComponent = true,
 		$wpml = true
 		;
 
@@ -96,11 +98,15 @@ class Mappress_Options extends Mappress_Obj {
 		$options = get_option('mappress_options');
 
 		// Force web component
-		if (isset($_REQUEST['mapp-wc']))
-			$options['webComponent'] = true;
+		if (isset($_REQUEST['mp_wc']))
+			$options['webComponent'] = ($_REQUEST['mp_wc']) ? true : false;
+	
 		// Force iframes
 		else if (Mappress_Settings::iframes_required())
 			$options['iframes'] = true;
+
+		if (isset($_REQUEST['mp_iframes']))
+			$options['iframes'] = ($_REQUEST['mp_iframes']) ? true : false;
 
 		return new Mappress_Options($options);
 	}

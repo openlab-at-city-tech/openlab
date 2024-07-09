@@ -1,0 +1,9 @@
+<svg width="24px" height="24px" viewBox="-11 2 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs></defs>
+    <g id="Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-11.000000, 2.000000)">
+        <circle id="Oval" fill="#4285f4" cx="16" cy="16" r="12"></circle>
+        <circle id="Oval" fill="#fff" cx="16" cy="16" r="10"></circle>
+        <circle id="Oval" fill="#4285f4" cx="16" cy="16" r="8"></circle>
+        
+    </g>
+</svg>

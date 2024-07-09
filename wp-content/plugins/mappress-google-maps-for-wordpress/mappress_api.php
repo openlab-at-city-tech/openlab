@@ -72,6 +72,14 @@ class Mappress_Api extends WP_REST_Controller {
 			return new WP_Error('map_clone', 'Internal error when copying');
 	}
 
+	public function empty_trash($request) {
+		ob_start();
+		$result = Mappress_Map::empty_trash();
+		if (!$result)
+			return new WP_Error('empty_trash', 'Internal error when emptying trash, your data was not saved!');
+		return $this->rest_response('OK');
+	}
+	
 	public function get_counts($request) {
 		ob_start();
 		$otype = $request->get_param('otype');
@@ -309,6 +317,7 @@ class Mappress_Api extends WP_REST_Controller {
 			)
 		);
 
+		// Individual map ops - note for future bulk use  '/maps/op/(?P<mapid>\d+(,\d+)*)',
 		register_rest_route(
 			$this->namespace,
 			'/maps/(?P<mapid>\d+)',
@@ -346,6 +355,7 @@ class Mappress_Api extends WP_REST_Controller {
 			)
 		);
 
+		// Clone 
 		register_rest_route(
 			$this->namespace,
 			'/maps/clone/(?P<mapid>\d+)',
@@ -359,6 +369,7 @@ class Mappress_Api extends WP_REST_Controller {
 			)
 		);
 
+		// Get counts	 
 		register_rest_route(
 			$this->namespace,
 			'/maps/counts/',
@@ -376,6 +387,20 @@ class Mappress_Api extends WP_REST_Controller {
 			)
 		);
 
+		// Empty trash
+		register_rest_route(
+			$this->namespace,
+			'/trash/empty',
+			array(
+				'methods' => 'POST',
+				'callback' => array($this, 'empty_trash'),
+				'permission_callback' => function() {
+					return current_user_can('edit_posts');
+				}
+			)
+		);
+		
+		// Import
 		register_rest_route(
 			$this->namespace,
 			'/maps/import/',

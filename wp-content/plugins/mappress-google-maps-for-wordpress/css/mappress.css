@@ -17,10 +17,10 @@ mappress-map poi {
 	min-width: 200px;
 	opacity: 1 !important;			/* Some themes set to 0 */
 	padding: 0px !important;		/* Some themes set */
-}
+}        
 
 mappress-map.mapp-layout {
-	display: flex;
+	display: flex !important;       /* Some themse override */
 	flex-direction: column;
 	position: relative;             /* Needed for filters with web component */
 }
@@ -30,6 +30,41 @@ mappress-map.mapp-layout {
 	color: black;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 13px;
+}
+
+/* Theme interference */
+.mapp-layout input[type="text"], .mapp-layout input[type="search"], .mapp-layout input[type="checkbox"], .mapp-layout input[type="radio"], .mapp-layout select {	
+	background: #fff;
+	border: 1px solid #bbb;
+	border-radius: 0;
+	box-shadow: none;
+	box-sizing: border-box;
+	color: black;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	height: auto;
+	letter-spacing: normal;
+	margin: initial;
+	max-width: none;
+	outline: none;
+	padding: initial;    
+	width: auto;
+}
+
+.mapp-layout input[type="text"]:focus, .mapp-layout input[type="search"]:focus, .mapp-layout input[type="checkbox"]:focus, .mapp-layout input[type="radio"]:focus, .mapp-layout select:focus {    
+	border: 1px solid black;
+	outline: none;  /* 2020 */
+}
+
+/* Theme interference */
+.mapp-layout label {
+	font-weight: normal;
+	margin: 0;
+}
+
+/* WP block editor interferes */
+.mapp-layout p {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 /* GT .aligncenter interferes w/all text */
@@ -101,8 +136,8 @@ mappress-map.mapp-layout {
 	visibility: inherit !important;
 }
 
-.leaflet-container .leaflet-control-attribution * {
-	font-size: 8px;
+.leaflet-control-container .leaflet-control-attribution * {
+	font-size: 8px !important;
 }
 
 /* Prevent theme interference with leaflet */
@@ -405,7 +440,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 /* Frontend buttons are divs to prevent theme interference w/styling */
 .mapp-paginate-button {
-	align-items: center;
+	align-items: baseline;
 	background-color: #eee;
 	border: 1px solid lightgray;
 	border-radius: 5px;
@@ -435,12 +470,15 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	-----------------------------------------------------------------------------------
 */
 .mapp-header {
-	align-items: center;
+	align-items: stretch;
 	background-color: white;
 	border-bottom: 1px solid lightgray;
 	display: flex;
+	flex-wrap: wrap;
 	gap: 5px;
-	min-height: 45px;
+	justify-content: right;     /* Right align filter button where no search box present */
+	min-height: 50px;           /* Keep height stable while map initializes */
+	padding: 5px;
 }
 
 /*
@@ -451,7 +489,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 .mapp-search-container {
 	display: flex;
 	flex: 1;
-	padding: 5px;
+	min-width: 325px;
 	position: relative;
 }
 
@@ -462,12 +500,13 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 */
 
 .mapp-autocomplete {
-	align-items: center;
+	align-items: stretch;
 	display: flex;
 	flex: 1;
 }
 
 .mapp-autocomplete-wrapper {
+	align-items: center;
 	display: flex;
 	flex: 1;
 	position: relative;
@@ -480,16 +519,28 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	box-shadow: none ;
 	color: black ;
 	flex: 1;
+	height: 100%;
 	line-height: 25px;
 	margin: 0 ;
 	padding: 5px 10px;
 }
 
-/* Set button height to match input */
-.mapp-autocomplete .mapp-submit-button {
-	height: 100%;                                                         
-	padding: 0 10px;
-}
+.mapp-autocomplete-button {
+	background: url('../images/search_black.png') no-repeat center;
+	background-size: contain;
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	width: 20px;  
+	height: 100%;
+	background-size: contain;
+}		
+
+.mapp-autocomplete-button:hover {
+	background: url('../images/search_blue.png') no-repeat center;
+	background-size: contain;
+}    
+
 
 /* Themes like to set img padding/margin */
 .mapp-autocomplete .mapp-submit-button img {
@@ -537,22 +588,25 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 /*
 	-----------------------------------------------------------------------------------
 	Filters
-	mapp-filters
-			mapp-filter
-				mapp-filter-button
-				mapp-filter-dropdown-position
-					mapp-filter-content
-						mapp-filter-values
-						mapp-filters-toolbar
+	mapp-dropdown mapp-filter
+		mapp-dropdown-toggle
+		mapp-dropdown-content
+			mapp-filter-wrapper 
+				mapp-filter-[name]
+			mapp-filter-toolbar
 	-----------------------------------------------------------------------------------
 */
 
-
-.mapp-filters {
+.mapp-filter {
 	display: flex;
+	gap: 5px;
 }
 
-.mapp-filters-spinner {
+.mapp-filter .mapp-button {
+	text-transform: uppercase;
+}
+
+.mapp-filter-spinner {
 	background: transparent url(../images/spinner-2x.gif) no-repeat center center;
 	height: 24px;
 	width: 24px;
@@ -560,10 +614,12 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	margin-right: 10px;
 }
 
-.mapp-filter {
+.mapp-filter-wrapper {
 	display: flex;
+	flex: 1;
 	flex-direction: column;
-	/* position: relative; -- individual */
+	overflow: auto;
+	padding: 5px;
 }
 
 .mapp-filter-button {
@@ -572,20 +628,9 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	justify-content: center;
 }
 
-.mapp-filter-dropdown {
-	background-color: white;
-	display: none;
-	flex-direction: column;
-}
-
-.mapp-filter-open .mapp-filter-dropdown {
-	display: flex;
-}
-
 .mapp-filter-values {
 	line-height: normal;
 	min-width: 100%;
-	overflow: auto;
 	padding: 5px 10px;
 }
 
@@ -611,9 +656,9 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	white-space: nowrap;
 }
 
-.mapp-filter-values .mapp-filter-label {
+.mapp-filter-label {
 	font-weight: bold;
-	padding: 10px 0;
+	padding: 5px;
 	text-transform: capitalize;
 	white-space: nowrap;
 }
@@ -633,7 +678,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 /* Many selectors, to override styles from GT editor, theme */
-.mapp-content .mapp-filters .mapp-filter-values input[type="text"] {
+.mapp-content .mapp-filter .mapp-filter-values input[type="text"] {
 	border: 1px solid gray;
 	border-radius: 0;
 	box-shadow: none;
@@ -644,7 +689,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	padding: 5px;
 }
 
-.mapp-content .mapp-filters .mapp-filter-values input[type="radio"], .mapp-filter-values input[type="checkbox"] {
+.mapp-content .mapp-filter .mapp-filter-values input[type="radio"], .mapp-filter-values input[type="checkbox"] {
 	border-radius: 0;
 	box-shadow: none;
 	line-height: 1;
@@ -653,7 +698,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	outline: none;
 }
 
-.mapp-content .mapp-filters .mapp-filter-values select {
+.mapp-content .mapp-filter .mapp-filter-values select {
 	border: 1px solid gray;
 	border-radius: 0;
 	box-shadow: none;
@@ -667,23 +712,13 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 /*
 	Filters in header/sidebar
-	------------------
 */
 
-.mapp-header .mapp-filter {
-	margin-right: 5px;
+.mapp-header .mapp-filter .mapp-dropdown-content {
+	top: 45px;
 }
 
-.mapp-header .mapp-filter .mapp-filter-dropdown {
-	background-color: white;
-	border: 1px solid lightgray;
-	max-height: calc(100% - 45px);
-	position: absolute;
-	top: 45px; right: 0;
-	z-index: 10000;
-}
-
-.mapp-sidebar .mapp-filters {
+.mapp-sidebar .mapp-filter {
 	border-bottom: 1px solid lightgray;
 	flex-direction: column;
 	overflow: hidden;
@@ -695,14 +730,9 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	border-bottom: 1px solid lightgray;
 }
 
-.mapp-sidebar .mapp-filter-dropdown {
-	border-bottom: 1px solid lightgray;
-}
-
-.mapp-sidebar .mapp-filter-all .mapp-filter-dropdown {
+.mapp-sidebar .mapp-filter .mapp-dropdown-content {
+	border: none;
 	line-height: normal;
-	padding: 5px;
-	position: absolute;
 	top: 35px; bottom: 0; right: 0; left: 0;
 	z-index: 10000;
 }
@@ -1070,6 +1100,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	align-items: center;
 	border: none;
 	justify-content: center;
+	text-transform: uppercase;    
 }
 
 .mapp-view-list img, .mapp-view-map img {
@@ -1153,7 +1184,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 */
 
 .mapp-directions {
-	padding: 10px;
+	padding: 20px 10px 10px 10px;
 }
 
 .mapp-directions input {
@@ -1161,32 +1192,40 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	padding: 3px;
 }
 
+.mapp-dir-content {
+	align-items: center;
+	display: flex;
+}
 
-.mapp-directions .mapp-dir-toolbar {
+.mapp-dir-toolbar {
 	margin-top: 10px;
 }
 
-.mapp-directions .mapp-dir-from, .mapp-directions .mapp-dir-to {
-	width: 80% ;
+.mapp-dir-from-to {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.mapp-dir-from, .mapp-dir-top {
 	line-height: normal ;
+	width: 100%;
 }
 
-.mapp-directions .mapp-dir-from {
-	margin-bottom: 10px;
-}
-
-.mapp-directions .mapp-dir-arrows {
-	background: transparent url('../images/directions.png') no-repeat center center;
-	background-position: -10px -489px;
+.mapp-dir-arrows {
+	background: transparent url('../images/swapvert.svg') no-repeat center center;
 	cursor: pointer;
-	display: inline-block;
-	height: 12px;
-	margin: 0;
-	padding: 0;
-	position: relative;
-	top: 10px; left: 5px;
-	vertical-align: middle;
-	width: 10px;
+	height: 30px;
+	margin-left: 5px;
+	opacity: 0.6;
+	width: 30px;
+}
+
+.mapp-dir-arrows:hover {
+	background-color: rgba(0,0,0,0.05);
+	border-radius: 30px;
+	opacity: 1;
 }
 
 /*
@@ -1273,6 +1312,11 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	padding: 0;
 }
 
+/* Used to prevent scrolling on underlying body */
+.mapp-dialog-noscroll {
+	overflow: hidden;
+}    
+
 /* Must wait until open, otherwise flash of content */
 .mapp-dialog[open] {
 	display: flex;
@@ -1303,7 +1347,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	flex-direction: column;
 	flex: 1;
 	overflow: hidden;
-	padding: 15px;
+	padding: 0 15px;
 }
 
 .mapp-dialog-toolbar {
@@ -1347,10 +1391,12 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 */
 
 .mapp-dialog.mapp-modal {
-	height: 80vh;
-	max-height: 900px;
-	max-width: 1024px;
-	width: 80vw;
+	max-height: 80vh;
+	max-width: 80vw;
+}
+
+.mapp-dialog.mapp-modal .mapp-dialog-content {
+	padding-left: 0;
 }
 
 .mapp-modal-title {
@@ -1578,8 +1624,12 @@ div.mapp-control {
 	display: inline-flex;
 }
 
-.mapp-control > label > span {
-	margin: 0 5px;
+.mapp-label-left {
+	margin-right: 5px;
+}
+
+.mapp-label-right {
+	margin-left: 5px;
 }
 
 .mapp-label-top {
@@ -1693,7 +1743,6 @@ img.mapp-icon, .mapp-icon img {
 	justify-content: center;
 	line-height: normal;
 	padding: 10px;
-	text-transform: uppercase;
 	white-space: nowrap;
 }
 
@@ -1704,6 +1753,7 @@ img.mapp-icon, .mapp-icon img {
 .mapp-button {
 	background-color: white;
 	border: 1px solid lightgray;
+	user-select: none;    
 }
 
 .mapp-button:hover {
@@ -1721,7 +1771,8 @@ img.mapp-icon, .mapp-icon img {
 }
 
 .mapp-button-disabled  {
-	color: #aaa
+	color: #aaa;
+	pointer-events: none;
 }
 
 .mapp-button-busy:after {
@@ -1746,4 +1797,16 @@ img.mapp-icon, .mapp-icon img {
 
 .mapp-button-disabled.mapp-button-caret:after {
 	border-top: 5px solid #aaa;
+}
+
+.mapp-dropdown-content {
+	background-color: white;
+	border: 1px solid lightgray;
+	display: flex;
+	flex-direction: column;   
+	margin-top: 6px;
+	overflow: hidden;
+	position: absolute;
+	top: 100%;
+	z-index: 10000;
 }
