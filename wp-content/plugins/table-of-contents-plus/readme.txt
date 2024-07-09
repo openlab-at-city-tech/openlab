@@ -2,8 +2,8 @@
 Contributors: conjur3r
 Tags: table of contents, indexes, toc, sitemap, cms, options, list, page listing, category listing
 Requires at least: 3.2
-Tested up to: 6.4
-Stable tag: 2311
+Tested up to: 6.5.4
+Stable tag: 2406
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ A powerful yet user friendly plugin that automatically creates a context specifi
 
 Built from the ground up and with Wikipedia in mind, the table of contents by default appears before the first heading on a page.  This allows the author to insert lead-in content that may summarise or introduce the rest of the page.  It also uses a unique numbering scheme that doesn't get lost through CSS differences across themes.
 
-This plugin is a great companion for content rich sites such as content management system oriented configurations.  That said, bloggers also have the same benefits when writing long structured articles.  [Discover how Google](http://dublue.com/2012/05/12/another-benefit-to-structure-your-web-pages/) uses this index to provide 'Jump To' links to your content.
+This plugin is a great companion for content rich sites such as content management system oriented configurations.  That said, bloggers also have the same benefits when writing long structured articles.
 
 Includes an administration options panel where you can customise settings like display position, define the minimum number of headings before an index is displayed, other appearance, and more.  For power users, expand the advanced options to further tweak its behaviour - eg: exclude undesired heading levels like h5 and h6 from being included; disable the output of the included CSS file; adjust the top offset and more.  Using shortcodes, you can override default behaviour such as special exclusions on a specific page or even to hide the table of contents altogether.
 
@@ -24,7 +24,7 @@ Prefer to include the index in the sidebar?  Go to Appearance > Widgets and drag
 
 Custom post types are supported, however, auto insertion works only when the_content() has been used by the custom post type.  Each post type will appear in the options panel, so enable the ones you want.
 
-Collaborate, participate, fork this plugin on [Github](https://github.com/zedzedzed/table-of-contents-plus/).  Reach out on Github or place them at [http://dublue.com/plugins/toc/](http://dublue.com/plugins/toc/)
+Collaborate, participate, fork this plugin on [Github](https://github.com/zedzedzed/table-of-contents-plus/).
 
 
 == Screenshots ==
@@ -104,6 +104,23 @@ I will never ask for any form of reward or compensation.  Helping others achieve
 
 
 == Changelog ==
+= 2406 =
+* Released: 16 June 2024
+* Revert 'Do not output CSS/JS on pages not eligible' introduced in 2402 as it broke some clever edge cases
+* Fixed XSS issue requiring editor or higher privileges for show/hide text (thanks to wpscan)
+
+= 2402.1 =
+* Released: 22 February 2024
+* Fixed check for shortcode use (#164)
+
+= 2402 =
+* Released: 21 February 2024
+* Added option to generate TOC in REST requests, disabled by default (props ballpumpe)
+* Composer improvements (props mohjak)
+* Do not output CSS/JS on pages not eligible
+* Update POT translation file
+* Update links to help
+
 = 2311 =
 * Released: 7 November 2023
 * Bump tested WordPress version to 6.4
@@ -358,11 +375,6 @@ I will never ask for any form of reward or compensation.  Helping others achieve
 = 1107 =
 * Released: 1 July 2011
 * First world release (functional & feature packed)
-
-
-== Frequently Asked Questions ==
-
-Check out the FAQs / Scenarios at [http://dublue.com/plugins/toc/#Scenarios_FAQs](http://dublue.com/plugins/toc/#Scenarios_FAQs)
 
 
 == Upgrade Notice ==
