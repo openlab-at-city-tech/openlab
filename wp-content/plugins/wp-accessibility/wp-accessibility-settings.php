@@ -371,7 +371,7 @@ function wpa_admin_settings() {
 											<?php
 										} else {
 											?>
-											<li><?php _e( '<strong>Three disabled features:</strong> Site language, continue reading text and standard form labels are defined in your <code>accessibility-ready</code> theme.', 'wp-accessibility' ); ?></li>
+											<li><div class="notice notice-info"><p><?php _e( '<strong>Three disabled features:</strong> Site language, continue reading text and standard form labels are provided in your <code>accessibility-ready</code> theme.', 'wp-accessibility' ); ?></p></div></li>
 											<?php
 										}
 										?>
@@ -397,7 +397,7 @@ function wpa_admin_settings() {
 										</li>
 										<li>
 											<label for="wpa_focus_color"><?php _e( 'Outline color (hexadecimal, optional)', 'wp-accessibility' ); ?></label><br />
-											<input type="text" id="wpa_focus_color" name="wpa_focus_color" value="#<?php echo esc_attr( get_option( 'wpa_focus_color' ) ); ?>"/>
+											<input type="text" id="wpa_focus_color" name="wpa_focus_color" value="#<?php echo esc_attr( str_replace( '#', '', get_option( 'wpa_focus_color' ) ) ); ?>"/>
 										</li>
 									</ul>
 									<p>
@@ -783,7 +783,7 @@ function wpa_edac_promotion( $type = 'large' ) {
 // Use Codemirror for Skiplink style fields.
 add_action(
 	'admin_enqueue_scripts',
-	function() {
+	function () {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			return;
 		}

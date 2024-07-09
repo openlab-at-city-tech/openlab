@@ -12,7 +12,7 @@
 /**
  * Toolbar class.
  */
-require_once( dirname( __FILE__ ) . '/class-wp-accessibility-toolbar.php' );
+require_once __DIR__ . '/class-wp-accessibility-toolbar.php';
 
 add_action( 'widgets_init', 'wpa_register_toolbar_widget' );
 /**
@@ -54,7 +54,7 @@ function wpa_toolbar_enqueue_scripts() {
 		$plugin_path = get_stylesheet_directory_uri() . '/a11y-contrast.css';
 	}
 	$plugin_path = array(
-		'path' => $plugin_path,
+		'path' => add_query_arg( 'version', $wpa_version, $plugin_path ),
 	);
 	wp_localize_script( 'ui-a11y', 'wpa11y', $plugin_path );
 
@@ -87,6 +87,12 @@ function wpa_toolbar_enqueue_scripts() {
 	 */
 	$fontsize = apply_filters( 'wpa_fontsize_css', plugins_url( 'toolbar/css/' . $fontsize_stylesheet . '.css', __FILE__ ) );
 	wp_register_style( 'ui-fontsize.css', $fontsize, array(), $wpa_version );
+	if ( 'on' === get_option( 'wpa_alternate_fontsize' ) ) {
+		$vars = 'html { --wpa-font-size: 150%; }';
+	} else {
+		$vars = 'html { --wpa-font-size: clamp( 24px, 1.5rem, 36px ); --wpa-h1-size : clamp( 48px, 3rem, 72px ); --wpa-h2-size : clamp( 40px, 2.5rem, 60px ); --wpa-h3-size : clamp( 32px, 2rem, 48px ); --wpa-h4-size : clamp( 28px, 1.75rem, 42px ); --wpa-sub-list-size: 1.1em; --wpa-sub-sub-list-size: 1em; } ';
+	}
+	wp_add_inline_style( 'ui-fontsize.css', $vars );
 
 	// Control toolbar font size.
 	$toolbar_size = get_option( 'wpa_toolbar_size' );
