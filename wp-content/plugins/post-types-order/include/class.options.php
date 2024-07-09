@@ -72,6 +72,9 @@
                                         <tr valign="top">
                                             <th scope="row" style="text-align: right;"><label><?php esc_html_e('Show / Hide re-order interface', 'post-types-order') ?></label></th>
                                             <td>
+                                                <p><?php esc_html_e("Display the ReOrder interface for the specified post types.", 'post-types-order') ?></p>
+                                                <br />
+                                                <div class="pt-list">
                                                 <?php
                                                 
                                                     $post_types = get_post_types();
@@ -95,13 +98,14 @@
                                                             if($post_type_data->show_ui === FALSE)
                                                                 continue;
                                                 ?>
-                                                <p><label>
+                                                <p class="pt-item"><label>
                                                     <select name="show_reorder_interfaces[<?php echo esc_attr($post_type_name) ?>]">
                                                         <option value="show" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] == 'show') {echo ' selected="selected"';} ?>><?php esc_html_e( "Show", 'post-types-order' ) ?></option>
                                                         <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] == 'hide') {echo ' selected="selected"';} ?>><?php esc_html_e( "Hide", 'post-types-order' ) ?></option>
                                                     </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
                                                 </label><br />&nbsp;</p>
                                                 <?php  } ?>
+                                                </div>
                                             </td>
                                              
                                         </tr>
@@ -153,8 +157,12 @@
                                             <th scope="row" style="text-align: right;"><label for="archive_drag_drop"><?php esc_html_e('Archive Drag&Drop ', 'post-types-order') ?></label></th>
                                             <td>
                                                 <p>
-                                                <?php esc_html_e("Allow sortable drag & drop functionality within default WordPress post type archive. Admin Sort need to be active.", 'post-types-order') ?></p>
+                                                <?php esc_html_e("Enable sortable drag-and-drop functionality within the default WordPress post type archive. An " ); ?><span style="transform: rotate(-90deg);" class='dashicons dashicons-editor-code'></span><?php  esc_html_e(" icon will be displayed on the items, allowing for customization of the order.", 'post-types-order') ?>
                                                 <br />
+                                                <?php  esc_html_e("Admin Sort feature must be activated for this functionality.", 'post-types-order') ?>
+                                                </p>
+                                                <br />
+                                                <div class="pt-list">
                                                 <?php
                                                 
                                                     $post_types = get_post_types();
@@ -176,14 +184,14 @@
                                                             if($post_type_data->show_ui === FALSE)
                                                                 continue;
                                                 ?>
-                                                <p><label>
+                                                <p class="pt-item"><label>
                                                     <select name="allow_reorder_default_interfaces[<?php echo esc_attr($post_type_name) ?>]">
-                                                        <option value="no" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'no') {echo ' selected="selected"';} ?>><?php esc_html_e( "No", 'post-types-order' ) ?></option>
                                                         <option value="yes" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'yes') {echo ' selected="selected"';} ?>><?php esc_html_e( "Yes", 'post-types-order' ) ?></option>
+                                                        <option value="no" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'no') {echo ' selected="selected"';} ?>><?php esc_html_e( "No", 'post-types-order' ) ?></option>
                                                     </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
                                                 </label><br />&nbsp;</p>
                                                 <?php  } ?>
-                                                
+                                                </div>
                                             </td>
                                             
                                         </tr>

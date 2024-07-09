@@ -110,7 +110,7 @@
                     
                     //if auto sort    
                     if ($options['autosort'] == "1")
-                        {
+                        {                                    
                             //remove the supresed filters;
                             if (isset($query->query['suppress_filters']))
                                 $query->query['suppress_filters'] = FALSE;    
@@ -277,15 +277,7 @@
                         
                     if ( wp_is_mobile() )
                         return;
-                    
-                    //check if post type is sortable
-                    if(isset($options['show_reorder_interfaces'][$screen->post_type]) && $options['show_reorder_interfaces'][ $screen->post_type ] != 'show')
-                        return;
-                        
-                    //not for hierarhical
-                    //if ( is_post_type_hierarchical( $screen->post_type ) )
-                        //return; 
-                    
+                                                                
                     //if is taxonomy term filter return
                     if(is_category()    ||  is_tax())
                         return;
@@ -334,11 +326,7 @@
                                 {
                                     wp_die('Invalid post type');
                                 }
-                        }
-                        
-                    //add compatibility filters and code
-                    include_once(CPTPATH . '/compatibility/LiteSpeed_Cache.php');
-                    
+                        }                    
                 }
             
             
@@ -408,7 +396,7 @@
                     //trigger action completed
                     do_action('PTO/order_update_complete');
                     
-                    wp_cache_flush();
+                    CptoFunctions::site_cache_clear();
                 }
                 
                 
@@ -492,7 +480,7 @@
                     //trigger action completed
                     do_action('PTO/order_update_complete');
                     
-                    wp_cache_flush();                
+                    CptoFunctions::site_cache_clear();                
                 }
             
 

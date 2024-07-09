@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name: Post Types Order
-Plugin URI: http://www.nsp-code.com
-Description: Posts Order and Post Types Objects Order using a Drag and Drop Sortable javascript capability
-Author: Nsp Code
-Author URI: http://www.nsp-code.com 
-Version: 2.1.8
-Text Domain: post-types-order
-Domain Path: /languages/
+* Plugin Name: Post Types Order
+* Plugin URI: http://www.nsp-code.com
+* Description: Posts Order and Post Types Objects Order using a Drag and Drop Sortable javascript capability
+* Author: Nsp Code
+* Author URI: http://www.nsp-code.com 
+* Version: 2.2.3
+* Text Domain: post-types-order
+* Domain Path: /languages/
 */
 
     define('CPTPATH',   plugin_dir_path(__FILE__));
