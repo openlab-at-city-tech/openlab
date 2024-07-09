@@ -45,7 +45,8 @@ class TRP_Translation_Render{
             mb_http_output("UTF-8");
             if ( $TRP_LANGUAGE == $this->settings['default-language'] && !trp_is_translation_editor() ) {
                 // on default language when we are not in editor we just need to clear any trp tags that could still be present and handle links for special situation
-                $chunk_size = ($this->handle_custom_links_for_default_language() ) ? null : 4096;
+                $chunk_size = ($this->handle_custom_links_for_default_language() ) ? 0 : 4096;
+                $chunk_size = apply_filters("trp_output_buffer_chunk_size", $chunk_size);
                 ob_start(array( $this, 'render_default_language' ), $chunk_size);
                 $trp_output_buffer_started = true;
             } else {
@@ -152,6 +153,18 @@ class TRP_Translation_Render{
                     'attribute'     => 'name',
                     'value'         => 'description',
                     'description'   => esc_html__( 'Description', 'translatepress-multilingual' )
+                ),
+                array(
+                    'type'          => 'meta_desc',
+                    'attribute'     => 'property',
+                    'value'         => 'article:section',
+                    'description'   => esc_html__( 'Article Section', 'translatepress-multilingual' )
+                ),
+                array(
+                    'type'          => 'meta_desc',
+                    'attribute'     => 'property',
+                    'value'         => 'article:tag',
+                    'description'   => esc_html__( 'Article Tag', 'translatepress-multilingual' )
                 ),
                 array(
                     'type'          => 'meta_desc',
@@ -699,7 +712,8 @@ class TRP_Translation_Render{
                 && strpos($row->outertext,'[vc_') === false
                 && !$this->trp_is_numeric($trimmed_string)
                 && !preg_match('/^\d+%$/',$trimmed_string)
-                && $row->find_ancestor_tag( 'script' ) === null // sometimes the script has an html tree that gets detected, so script is not a direct parent
+                && $row->find_ancestor_tag( 'script' ) === null // sometimes the script/style has an html tree that gets detected, so script/style is not a direct parent
+                && $row->find_ancestor_tag( 'style' ) === null
                 && !$this->has_ancestor_attribute( $row, $no_translate_attribute ) )
             {
                 $string_count = array_push( $translateable_strings, $trimmed_string );
@@ -724,7 +738,8 @@ class TRP_Translation_Render{
                 && !preg_match('/^\d+%$/',$trimmed_string)
                 && !$this->has_ancestor_attribute( $row, $no_translate_attribute )
                 && !$this->has_ancestor_class( $row, 'translation-block')
-                && $row->find_ancestor_tag( 'script' ) === null // sometimes the script has an html tree that gets detected, so script is not a direct parent
+                && $row->find_ancestor_tag( 'script' ) === null // sometimes the script/style has an html tree that gets detected, so script/style is not a direct parent
+                && $row->find_ancestor_tag( 'style' ) === null
                 && ( !$ignore_cdata || ( strpos($trimmed_string, '<![CDATA[') !== 0 && strpos($trimmed_string, '&lt;![CDATA[') !== 0  ) )
                 && (strpos($trimmed_string, 'BEGIN:VCALENDAR') !== 0)
                 && !$this->contains_substrings($trimmed_string, $skip_strings_containing_key_terms ) )
@@ -996,9 +1011,11 @@ class TRP_Translation_Render{
         // pass the current language in forms where the action does not contain the language
         // based on this we're filtering wp_redirect to include the proper URL when returning to the current page.
         foreach ( $html->find('form') as $k => $row ){
-            $form_action    = $row->action;
+            $form_action      = $row->action;
             $is_admin_link    = $this->is_admin_link( $form_action, $admin_url, $wp_login_url );
-            if(!$is_admin_link) {
+            $skip_this_action = apply_filters( 'trp_skip_form_action', false, $form_action );
+
+            if( !$is_admin_link && !$skip_this_action ) {
                 $row->setAttribute( 'data-trp-original-action', $row->action );
                 $row->innertext .= apply_filters( 'trp_form_inputs', '<input type="hidden" name="trp-form-language" value="' . $this->settings['url-slugs'][ $TRP_LANGUAGE ] . '"/>', $TRP_LANGUAGE, $this->settings['url-slugs'][ $TRP_LANGUAGE ], $row );
 
@@ -1862,7 +1879,7 @@ class TRP_Translation_Render{
     public function force_form_language_on_url_in_ajax( $output ){
         if ( TRP_Gettext_Manager::is_ajax_on_frontend() && isset( $_REQUEST[ 'trp-form-language' ] ) && !empty( $_REQUEST[ 'trp-form-language' ] ) ) {
             $result = json_decode($output, TRUE);
-            if ( json_last_error() === JSON_ERROR_NONE) {
+            if ( is_array( $result ) && json_last_error() === JSON_ERROR_NONE) {
                 array_walk_recursive($result, array($this, 'callback_add_language_to_url'));
                 $output = trp_safe_json_encode($result);
             } //endif

@@ -309,14 +309,31 @@ jQuery( function() {
     jQuery('#trp-default-language').on("select2:selecting", function(e) {
         jQuery("#trp-options .warning").show('fast');
     });
+    /*
+     * Automatic Translation Page
+     */
 
-    var trpGoogleTranslateKey = TRP_Field_Toggler();
-        trpGoogleTranslateKey.init('.trp-translation-engine', '#trp-g-translate-key', 'google_translate_v2' );
+    // Hide API Fields Based on Selected Translation Engine
+    jQuery('#trp-translation-engines').on('change', function (){
+        jQuery('.trp-engine').hide();
 
-    var deeplUpsell = TRP_Field_Toggler();
-        deeplUpsell.init('.trp-translation-engine', '#trp-upsell-deepl', 'deepl_upsell' );
+        // backwards compatibility for when Paid version not updated. Deepl missing .trp-engine and #deepl selectors in html
+        jQuery("#trp-deepl-api-type-pro").closest('tr').hide();
+        jQuery("#trp-deepl-key").closest('tr').hide();
 
-    jQuery(document).trigger( 'trpInitFieldToggler' );
+        jQuery( '#trp-test-api-key' ).show(); // initiate the default so we can hide for deepl_upsell
+        if (jQuery(this).val() == 'deepl_upsell'){
+            jQuery( '#trp-test-api-key' ).hide()
+        }
+
+        if ( jQuery("#" + this.value).length > 0 ){
+            jQuery("#" + this.value).show();
+        }else{
+            // backwards compatibility for when Paid version not updated. Deepl missing .trp-engine and #deepl selectors in html
+            jQuery("#trp-deepl-api-type-pro").closest('tr').show();
+            jQuery("#trp-deepl-key").closest('tr').show();
+        }
+    })
 
     // Used for the main machine translation toggle to show/hide all options below it
     function TRP_show_hide_machine_translation_options(){
@@ -329,25 +346,58 @@ jQuery( function() {
             jQuery('.trp-translation-engine:checked').trigger('change')
     }
 
-    // Hide this row when DeepL upsell is showing
-    function TRP_hide_test_api_key(){
-        if( jQuery( '.trp-translation-engine:checked' ).val() == 'deepl_upsell' )
-            jQuery( '#trp-test-api-key' ).hide()
-        else {
-            if( jQuery('#trp-machine-translation-enabled').val() != 'no' )
-                jQuery( '#trp-test-api-key' ).show()
-        }
-    }
-
     TRP_show_hide_machine_translation_options()
     jQuery('#trp-machine-translation-enabled').on( 'change', function(){
         TRP_show_hide_machine_translation_options()
     })
 
-    TRP_hide_test_api_key()
-    jQuery('.trp-translation-engine').on( 'change', function(){
-        TRP_hide_test_api_key()
+    // check quota for site on TP AI
+    function TRP_TP_AI_Recheck(){
+        jQuery( '#trp-refresh-tpai-text-recheck').hide()
+        jQuery( '#trp-refresh-tpai-text-rechecking').show()
+        jQuery.ajax({
+            url: trp_url_slugs_info['admin-ajax'],
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'trp_ai_recheck_quota',
+                nonce: trp_url_slugs_info['trp-tpai-recheck-nonce']
+            },
+            success: function (response) {
+                if( response.hasOwnProperty('quota') ){
+                    jQuery( '#trp-ai-quota-number').text( Number(response.quota).toLocaleString('en-US') )
+                    if ( !response.quota ){
+                        jQuery( '#trp-refresh-tpai-text-recheck').finish().delay(1700).fadeIn("fast")
+                    }else{
+                        jQuery( '#trp-refresh-tpai').finish().delay(1100).fadeOut("slow")
+                    }
+                }
+                jQuery( '#trp-refresh-tpai-text-done').finish().fadeIn("fast").delay(1000).fadeOut("slow")
+                jQuery( '#trp-refresh-tpai-text-recheck').hide()
+                jQuery( '#trp-refresh-tpai-text-rechecking').hide()
+
+                trp_ai_recheck_in_progress = false
+            },
+            error: function (response) {
+                jQuery( '#trp-refresh-tpai-text-done').finish().fadeIn("fast").delay(1000).fadeOut("slow");
+                jQuery( '#trp-refresh-tpai-text-rechecking').hide()
+                jQuery( '#trp-refresh-tpai-text-recheck').finish().delay(1700).fadeIn("fast")
+                trp_ai_recheck_in_progress = false
+            }
+        })
+    }
+
+    trp_ai_recheck_in_progress = false
+    jQuery("#trp-refresh-tpai").on('click', function(){
+        if ( !trp_ai_recheck_in_progress ){
+            trp_ai_recheck_in_progress = true
+            TRP_TP_AI_Recheck()
+        }
     })
+
+    /*
+    * END Automatic Translation Page
+    */
 
     // Options of type List adding, from Advanced Settings page
     var trpListOptions = document.querySelectorAll( '.trp-adst-list-option' );
@@ -356,44 +406,6 @@ jQuery( function() {
     }
 
 });
-
-function TRP_Field_Toggler (){
-    var _$setting_toggled, _$trigger_field, _trigger_field_value_for_show, _trigger_field_value
-
-    function show_hide_based_on_value( value ) {
-        if ( value === _trigger_field_value_for_show )
-            _$setting_toggled.show()
-        else
-            _$setting_toggled.hide()
-    }
-
-    function add_event_on_change() {
-
-        _$trigger_field.on('change', function () {
-            show_hide_based_on_value( this.value )
-        })
-
-    }
-
-    function init( trigger_select_id, setting_id, value_for_show ){
-        _trigger_field_value_for_show = value_for_show
-        _$trigger_field               = jQuery( trigger_select_id )
-        _$setting_toggled             = jQuery( setting_id ).parents('tr')
-
-        if( _$trigger_field.hasClass( 'trp-radio') )
-            _trigger_field_value = jQuery( trigger_select_id + ':checked' ).val()
-        else
-            _trigger_field_value = _$trigger_field.val()
-
-        show_hide_based_on_value( _trigger_field_value )
-        add_event_on_change()
-    }
-
-    return {
-        init: init
-    }
-}
-
 
 //Advanced Settings Tabs
 function TRP_Advanced_Settings_Tabs() {
@@ -626,6 +638,8 @@ jQuery(document).ready(function (e) {
 
         jQuery( '.trp-email-course .trp-email-course__error' ).removeClass( 'visible' )
 
+        jQuery('.trp-email-course input[type="submit"]').addClass( 'disabled' )
+
         var email = jQuery( '.trp-email-course input[name="trp_email_course_email"]').val()
 
         if ( !trp_validateEmail( email ) ){
@@ -675,40 +689,11 @@ jQuery(document).ready(function (e) {
         }
 
     })
-
-    jQuery('.trp-email-course .trp-email-course__close').on('click', function (e) {
-
-        trp_dimiss_email_course()
-
-        jQuery( '.trp-email-course' ).remove()
-
-    })
 })
 
 function trp_validateEmail(email) {
 
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
-
-}
-
-function trp_dimiss_email_course(){
-
-    let newData = new FormData()
-    newData.append('action', 'trp_dismiss_email_course')
-
-    jQuery.ajax({
-        url: ajaxurl,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        data: newData,
-        success: function (response) {
-
-        },
-        error: function (response) {
-
-        }
-    })
 
 }

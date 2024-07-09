@@ -483,6 +483,18 @@ body.admin-bar #trp-floater-ls.trp-top-left{
     width: auto;
 }
 
+#trp-floater-ls .trp-language-wrap.trp-language-wrap-top{
+    padding:10px;
+}
+
+#trp-floater-ls .trp-language-wrap.trp-language-wrap-bottom{
+    padding:11px;
+}
+
+#trp-floater-ls.only-flags div.trp-language-wrap{
+    padding:11px 0;
+}
+
 #trp-floater-ls.trp-top-right.trp-poweredby.trp-color-dark #trp-floater-ls-language-list #trp-floater-poweredby,
 #trp-floater-ls.trp-top-left.trp-poweredby.trp-color-dark #trp-floater-ls-language-list #trp-floater-poweredby{
     border-top: none;
@@ -646,7 +658,7 @@ body.admin-bar #trp-floater-ls.trp-top-left{
 .trp-color-dark #trp-floater-ls-language-list a,
 .trp-with-flags.trp-color-light #trp-floater-ls-current-language a,
 .trp-color-light #trp-floater-ls-language-list a,
-.trp-color-light #trp-floater-ls-current-language a, 
+.trp-color-light #trp-floater-ls-current-language a,
 .trp-color-dark #trp-floater-ls-language-list a {
     display: block;
     width: auto;

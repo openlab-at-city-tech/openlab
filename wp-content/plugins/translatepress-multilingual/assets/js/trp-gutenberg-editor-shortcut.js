@@ -9,9 +9,14 @@ jQuery( function () {
 
         var unsubscribe = wp.data.subscribe( function () {
             if ( !document.getElementById( "trp-link-id" ) ){
-                var toolbalEl = editorEl.querySelector( '.edit-post-header-toolbar__left' )
-                if ( toolbalEl instanceof HTMLElement ){
-                    toolbalEl.insertAdjacentHTML( "afterend", trp_url_tp_editor[ 0 ] )
+                // Support the changes in UI in WordPress 6.5
+                var toolbarLeftEl = editorEl.querySelector('.editor-document-tools__left')
+                if ( !toolbarLeftEl ) { // Fallback to the legacy toolbar class for compatibility with older versions
+                    toolbarLeftEl = editorEl.querySelector('.edit-post-header-toolbar__left')
+                }
+
+                if ( toolbarLeftEl instanceof HTMLElement ){
+                    toolbarLeftEl.insertAdjacentHTML( "afterend", trp_url_tp_editor[ 0 ] )
                 }
             }
         } )

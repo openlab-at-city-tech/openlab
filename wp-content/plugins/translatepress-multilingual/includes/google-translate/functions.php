@@ -6,8 +6,8 @@ function trp_gt_add_engine( $engines ){
 
     return $engines;
 }
-
 add_action( 'trp_machine_translation_extra_settings_middle', 'trp_gt_add_settings' );
+
 function trp_gt_add_settings( $mt_settings ){
     $trp                = TRP_Translate_Press::get_trp_instance();
     $machine_translator = $trp->get_component( 'machine_translator' );
@@ -37,7 +37,7 @@ function trp_gt_add_settings( $mt_settings ){
     }
     ?>
 
-    <tr>
+    <tr class="trp-engine" id="google_translate_v2">
         <th scope="row"><?php esc_html_e( 'Google Translate API Key', 'translatepress-multilingual' ); ?> </th>
         <td>
             <?php

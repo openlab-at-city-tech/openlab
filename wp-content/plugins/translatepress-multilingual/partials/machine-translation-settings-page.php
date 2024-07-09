@@ -23,27 +23,8 @@
                 </td>
             </tr>
 
-            <tr>
-                <th scope="row"><?php esc_html_e( 'Translation Engine', 'translatepress-multilingual' ); ?> </th>
-                <td>
-                    <?php $translation_engines = apply_filters( 'trp_machine_translation_engines', array() ); ?>
-
-                    <?php foreach( $translation_engines as $engine ) : ?>
-                        <label for="trp-translation-engine-<?= esc_attr( $engine['value'] ) ?>" style="margin-right:10px;">
-                             <input type="radio" class="trp-translation-engine trp-radio" id="trp-translation-engine-<?= esc_attr( $engine['value'] ) ?>" name="trp_machine_translation_settings[translation-engine]" value="<?= esc_attr( $engine['value'] ) ?>" <?php checked( $this->settings['trp_machine_translation_settings']['translation-engine'], $engine['value'] ); ?>>
-                             <?php echo esc_html( $engine['label'] ) ?>
-                        </label>
-                    <?php endforeach; ?>
-
-                    <p class="description">
-                        <?php esc_html_e( 'Choose which engine you want to use in order to automatically translate your website.', 'translatepress-multilingual' ) ?>
-                    </p>
-                </td>
-            </tr>
-
-
             <?php if( !class_exists( 'TRP_DeepL' ) && !class_exists( 'TRP_IN_DeepL' ) ) : ?>
-                <tr style="display:none;">
+                    <tr class="trp-engine" id="deepl_upsell">
                     <th scope="row"></th>
                     <td>
                         <p class="trp-upsell-multiple-languages" id="trp-upsell-deepl">
@@ -111,7 +92,46 @@
                 </tr>
             <?php endif; ?>
 
-            <tr style="border-bottom: 1px solid #ccc;"></tr>
+
+            <tr style="border-bottom: 1px solid #ccc; padding-top: 1rem;"></tr>
+
+            <tr id="alternative-engines">
+                <th scope="row"><?php esc_html_e( 'Alternative Engines', 'translatepress-multilingual' ); ?> </th>
+                <td>
+                    <?php
+                        // empty array, since all translations engines are added through this filter.
+                        $translation_engines = apply_filters( 'trp_machine_translation_engines', array() );
+                    ?>
+	                <?php if($this->settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi'): ?>
+		                <details>
+                            <summary> <?php esc_html_e("More info", "translatepress-multilingual"); ?> </summary>
+
+                    <?php else: ?>
+	                    <div class='tp-ai-upsell'>
+                            <p>
+                                <strong><img src="<?php echo esc_url( TRP_PLUGIN_URL.'assets/images/'); ?>ai-icon.svg" width="24" height="24"/> <?php esc_html_e("Switch to TranslatePress AI", "translatepress-multilingual"); ?></strong>
+                                <a class="button" style="margin-left: 20px;" href="https://translatepress.com/ai/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettingsAT&utm_campaign=tp-ai" target="_blank"><?php esc_html_e("Learn More!", "translatepress-multilingual"); ?></a>
+                            </p>
+		                    <p>
+                                <?php esc_html_e("Integrate machine translation directly with your WordPress website.", "translatepress-multilingual"); ?>
+                                <img src="<?php echo esc_url( TRP_PLUGIN_URL.'assets/images/'); ?>curved-arrow-icon.svg" width="60" height="60" style="position: absolute; transform: rotate(50deg); opacity: 0.3; margin-top: 7px;"/>
+                            </p>
+		                </div>
+	                <?php endif; ?>
+
+                        <select id="trp-translation-engines" class="trp-select" name="trp_machine_translation_settings[translation-engine]">
+                            <?php foreach( $translation_engines as $engine ) : ?>
+                                <option class="trp-translation-engine" id="trp-translation-engine-<?= esc_attr( $engine['value'] ) ?>" name="trp_machine_translation_settings[translation-engine]" value="<?= esc_attr( $engine['value'] ) ?>" <?php selected( $this->settings['trp_machine_translation_settings']['translation-engine'], $engine['value'] ); ?>> <?php echo esc_html($engine['label']); ?> </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="description">
+                            <?php esc_html_e( 'Choose which engine you want to use in order to automatically translate your website.', 'translatepress-multilingual' ) ?>
+                        </p>
+                    <?php if($this->settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi'): ?>
+                        </details>
+                    <?php endif; ?>
+                </td>
+            </tr>
 
             <tr>
                 <th scope=row><?php esc_html_e( 'Block Crawlers', 'translatepress-multilingual' ); ?></th>
@@ -179,7 +199,10 @@
             <tr>
                 <th scope="row"><?php esc_html_e( 'Today\'s character count:', 'translatepress-multilingual' ); ?></th>
                 <td>
-                    <strong><?php echo isset( $this->settings['trp_machine_translation_settings']['machine_translation_counter'] ) ? esc_html( $this->settings['trp_machine_translation_settings']['machine_translation_counter'] ) : 0; ?></strong>
+                    <strong><?php
+                        $trp = TRP_Translate_Press::get_trp_instance();
+                        $machine_translator_logger = $trp->get_component('machine_translator_logger');
+                        echo esc_html( $machine_translator_logger->get_todays_character_count() ); ?></strong>
                     (<?php echo isset( $this->settings['trp_machine_translation_settings']['machine_translation_counter_date'] ) ? esc_html( $this->settings['trp_machine_translation_settings']['machine_translation_counter_date'] ) : esc_html( date('Y-m-d') ); ?>)
                 </td>
             </tr>

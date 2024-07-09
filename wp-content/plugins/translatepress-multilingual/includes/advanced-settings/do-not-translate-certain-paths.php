@@ -141,7 +141,13 @@ function trp_exclude_include_paths_to_run_on(){
         return true;
 
     $paths        = trp_dntcp_get_paths();
+    $site_url_components = parse_url( get_home_url() );
     $current_slug = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( $_SERVER['REQUEST_URI'] ) : '';
+
+    if ( isset( $site_url_components['path'] ) ) {
+        // remove site_url path from $current_slug being taken into account for subdirectories like http://localhost/wordpress
+        $current_slug = str_replace( trim( $site_url_components['path'] ), '', $current_slug );
+    }
 
     $replace = '/';
 

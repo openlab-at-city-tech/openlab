@@ -16,7 +16,7 @@
             </p>
 
             <div class="trp-optin-page__bottom">
-                <a class="button-primary" href="<?php echo esc_attr(wp_nonce_url( add_query_arg( [] ), 'trp_enable_plugin_optin' )); ?>"><?php esc_html_e( 'Allow & Continue', 'translatepress-multilingual' ); ?></a>
+                <a class="button-primary" href="<?php echo esc_attr(wp_nonce_url( add_query_arg( [] ), 'trp_enable_plugin_optin' )); ?>" onclick="this.classList.add('disabled')" ><?php esc_html_e( 'Allow & Continue', 'translatepress-multilingual' ); ?></a>
 
                 <a class="button-secondary" href="<?php echo esc_attr(wp_nonce_url( add_query_arg( [] ), 'trp_disable_plugin_optin' )); ?>"><?php esc_html_e( 'Skip', 'translatepress-multilingual' ); ?></a>
             </div>

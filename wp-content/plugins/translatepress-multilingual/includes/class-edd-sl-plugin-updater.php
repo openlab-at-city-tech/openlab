@@ -606,6 +606,10 @@ class TRP_Plugin_Updater{
                         'url'        => home_url()
                     );
 
+                    if( !empty( $license ) || get_option( 'trp_plugin_optin' ) == 'yes' ){
+                        $api_params['machine_translated_strings_data'] = json_encode( get_option( 'trp_machine_translated_characters', array() ), JSON_HEX_QUOT );
+                    }
+
                     // Call the custom API.
                     $response = wp_remote_post($this->store_url, array('timeout' => 15, 'sslverify' => false, 'body' => $api_params));
 
@@ -691,6 +695,10 @@ class TRP_Plugin_Updater{
                         'url'        => home_url()
                     );
 
+                    if( !empty( $license ) || get_option( 'trp_plugin_optin' ) == 'yes' ){
+                        $api_params['machine_translated_strings_data'] = json_encode( get_option( 'trp_machine_translated_characters', array() ), JSON_HEX_QUOT );
+                    }
+
                     // Call the custom API.
                     $response = wp_remote_post( $this->store_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
@@ -739,6 +747,7 @@ class TRP_Plugin_Updater{
                         }
                         else{
                             $license_information_for_all_addons['valid'][] =  $license_data;
+                            trp_mtapi_sync_license_call( $license );
                         }
 
                     }
@@ -761,6 +770,7 @@ class TRP_Plugin_Updater{
             // $license_data->license will be either "valid" or "invalid"
 
             $this->update_option( 'trp_license_status', $license_data->license );
+
             wp_redirect( add_query_arg( array( 'trp_sl_activation' => 'true', 'message' => urlencode( __( 'You have successfully activated your license', 'translatepress-multilingual' ) ) ), $this->license_page_url() ) );
             exit();
         }

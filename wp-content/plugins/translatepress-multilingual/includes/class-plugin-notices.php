@@ -404,21 +404,33 @@ class TRP_Trigger_Plugin_Notifications{
 //	    $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
 
 
-	    /* String translation */
-	    $notification_id = 'trp_new_feature_string_translation';
+//	    /* String translation */
+//	    $notification_id = 'trp_new_feature_string_translation';
+//
+//	    $message = '<p style="padding-right:30px;">' . __('NEW: Translate Emails and other plugin texts using String Translation. Find out <a href="https://translatepress.com/docs/translation-editor/string-translation/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TRP" >how to search for a specific text to translate</a>.' , 'translatepress-multilingual' ) . '</p>';
+//	    //make sure to use the trp_dismiss_admin_notification arg
+//	    $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . __('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
+//
+//	    $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
 
-	    $message = '<p style="padding-right:30px;">' . __('NEW: Translate Emails and other plugin texts using String Translation. Find out <a href="https://translatepress.com/docs/translation-editor/string-translation/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TRP" >how to search for a specific text to translate</a>.' , 'translatepress-multilingual' ) . '</p>';
-	    //make sure to use the trp_dismiss_admin_notification arg
-	    $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . __('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
 
-	    $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
+        /* TP AI notice */
+        $notification_id = 'trp_new_feature_tp_ai';
 
+        $message = '<p style="padding-right:30px;">';
+        $message .= sprintf(wp_kses(__('NEW: Try TranslatePress AI for Instant Accurate Website Translations. <a href="%s" title="Learn more!" target="_blank" >Learn more!</a>' , 'translatepress-multilingual' ), array( 'a' => array( 'href' => array(), 'title' => array(), 'target' => array() ) ) ) , esc_url('https://translatepress.com/ai/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings_notice&utm_campaign=tp-ai') );
+        $message .= '</p>';
 
-	    /*
-		 *
-		 *  Machine translation enabled and  quota is met.
-		 *
-		 */
+        //make sure to use the trp_dismiss_admin_notification arg
+        $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . __('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
+
+        $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
+
+        /*
+         *
+         *  Machine translation enabled and  quota is met.
+         *
+         */
         $trp = TRP_Translate_Press::get_trp_instance();
         if ( ! $this->settings_obj )
             $this->settings_obj = $trp->get_component( 'settings' );

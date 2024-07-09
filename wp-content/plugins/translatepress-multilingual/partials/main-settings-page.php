@@ -125,7 +125,7 @@
             <?php
             $email_course_dismissed = get_user_meta( get_current_user_id(), 'trp_email_course_dismissed', true );
 
-            if( empty( $email_course_dismissed ) || $email_course_dismissed != '1' ) : ?>
+            if( ( empty( $email_course_dismissed ) || $email_course_dismissed != '1' ) && false ) : ?>
                 <div class="trp-email-course">
                     <div class="trp-email-course__content">
                         <h2>
@@ -151,11 +151,10 @@
                             <?php esc_html_e( 'Sign up with your email address and receive a 5-part email guide to help you maximize the power of TranslatePress.', 'translatepress-multilingual' ); ?>
                         </p>
 
-                        <a class="trp-email-course__close" href="#dismiss-email-course" title="<?php esc_html_e( 'Dismiss email course notification', 'translatepress-multilingual') ?>"></a>
+                        <!-- <a class="trp-email-course__close" href="#dismiss-email-course" title="<?php esc_html_e( 'Dismiss email course notification', 'translatepress-multilingual') ?>"></a> -->
                     </div>
                 </div>
             <?php endif; ?>
-
         </div>
 
         <p class="submit"><input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'translatepress-multilingual' ); ?>" /></p>

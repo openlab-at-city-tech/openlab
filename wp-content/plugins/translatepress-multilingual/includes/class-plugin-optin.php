@@ -213,7 +213,7 @@ class TRP_Plugin_Optin {
 
     }
 
-    public function process_plugin_optin_advanced_setting( $settings ){
+    public function process_plugin_optin_advanced_setting( $settings, $submitted_settings, $previous_settings ){
 
         if( !isset( $settings['plugin_optin_setting'] ) || $settings['plugin_optin_setting'] == 'no' ){
 
@@ -233,7 +233,7 @@ class TRP_Plugin_Optin {
 
             $request = wp_remote_post( self::$base_url . 'pluginOptinArchiveSubscriber/', $args );
             
-        } else {
+        } else if ( $settings['plugin_optin_setting'] == 'yes' && ( !isset( $previous_settings['plugin_optin_setting'] ) || $settings['plugin_optin_setting'] != $previous_settings['plugin_optin_setting'] ) ){
             
             update_option( 'trp_plugin_optin', 'yes' );
             update_option( 'trp_plugin_optin_email', get_option( 'admin_email' ) );

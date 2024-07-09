@@ -4,9 +4,9 @@ class TRP_Machine_Translator_Logger {
     protected $settings;
     protected $query;
     protected $url_converter;
-    protected $counter;
     protected $counter_date;
     protected $limit;
+    protected $error_manager;
 
     /**
      * TRP_Machine_Translator_Logger constructor.
@@ -15,11 +15,19 @@ class TRP_Machine_Translator_Logger {
      */
     public function __construct( $settings ){
         $this->settings     = $settings;
-        $this->counter      = intval( $this->get_mt_option('machine_translation_counter', 0) );
         $this->counter_date = $this->get_mt_option('machine_translation_counter_date', date ("Y-m-d" ));
         $this->limit        = intval( $this->get_mt_option('machine_translation_limit', 1000000) );
         // if a new day has passed, update the counter and date
         $this->maybe_reset_counter_date();
+    }
+
+    public function get_todays_character_count() {
+
+        if ( $this->quota_exceeded() ) {
+            return $this->limit;
+        } else {
+            return $this->get_current_counter();
+        }
     }
 
     public function log( $args = array() ){
@@ -77,16 +85,133 @@ class TRP_Machine_Translator_Logger {
     }
 
     public function count_towards_quota($strings){
-        $this->counter += $this->count($strings);
 
-        $this->update_options( array( array( 'name' => 'machine_translation_counter', 'value' => $this->counter ) ) );
+        $count = $this->count($strings);
 
-        return $this->counter;
+        $this->count_machine_translated_characters( $count );
+
+        return $this->increase_counter_with_value( $count );
+        
     }
 
+    /**
+     * Increase existing counter with the provided value.
+     * It does NOT replace the existing counter with the provided value. It adds to it.
+     *
+     * Uses a query that locks read on specific table row to avoid concurrency issues
+     *
+     * Returns the new character count after update
+     *
+     * @param $number_of_characters
+     * @return int
+     */
+    public function increase_counter_with_value( $number_of_characters ){
+        global $wpdb;
+
+        $set_transient = false;
+
+        // Start transaction
+        $wpdb->query( 'START TRANSACTION;' );
+
+        // Query to select the option value
+        $select_query               = "
+            SELECT option_value
+            FROM {$wpdb->options}
+            WHERE option_name = 'trp_machine_translation_counter'
+            LIMIT 1
+            FOR UPDATE;
+        ";
+        $pre_update_character_count = $wpdb->get_var( $select_query );
+
+
+        if ( $pre_update_character_count === null ) {
+            // option not set yet
+            $insert_query = $wpdb->prepare( "
+                INSERT
+                INTO {$wpdb->options}
+                (option_name, option_value)
+                VALUES ('trp_machine_translation_counter', %d );
+            ", $number_of_characters );
+            $wpdb->query( $insert_query );
+            $pre_update_character_count = 0;
+            $set_transient = true;
+        } else {
+
+            // Query to update the option value
+            $update_query = $wpdb->prepare( "
+                UPDATE {$wpdb->options}
+                SET option_value = %d
+                WHERE option_name = 'trp_machine_translation_counter';
+            ", $pre_update_character_count + $number_of_characters );
+            $wpdb->query( $update_query );
+        }
+        // Commit the transaction
+        $wpdb->query( 'COMMIT;' );
+
+        if ( $set_transient === true ){
+            $transient = get_transient('trp_machine_translation_counter_safety_reset');
+            if ( $transient ){
+                $wpdb->last_error = 'Machine translation counter was reset twice in a day. Unless an intentional action was performed on the DB that would affect trp_machine_translation_counter option from wp_options, please check for automatic translation character counting issues.';
+            }else{
+                set_transient('trp_machine_translation_counter_safety_reset', true, 12 * HOUR_IN_SECONDS);
+            }
+        }
+        if ( !empty( $wpdb->last_error ) ) {
+            if ( !$this->error_manager ) {
+                $trp                 = TRP_Translate_Press::get_trp_instance();
+                $this->error_manager = $trp->get_component( 'error_manager' );
+            }
+            $this->error_manager->record_error( array( 'last_error_updating_character_count' => $wpdb->last_error, 'disable_automatic_translations' => true ) );
+            delete_transient('trp_machine_translation_counter_safety_reset');
+            if ( !is_numeric( $pre_update_character_count ) ) {
+                $pre_update_character_count = 0;
+            }
+        }
+
+        return $pre_update_character_count + $number_of_characters;
+    }
+
+    /**
+     * Use only if really needed. It always performs a query that is never cached.
+     *
+     * Used instead of get_option() to bypass caching
+     *
+     * @return void
+     */
+    public function get_current_counter() {
+        global $wpdb;
+        $select_query    = "
+            SELECT option_value
+            FROM {$wpdb->options}
+            WHERE option_name = 'trp_machine_translation_counter' 
+            LIMIT 1
+        ";
+        $character_count = $wpdb->get_var( $select_query );
+
+        // option not set yet
+        if ( $character_count === null ){
+            $character_count = 0;
+        }
+
+        if ( !empty( $wpdb->last_error ) ) {
+            if ( !$this->error_manager ) {
+                $trp                 = TRP_Translate_Press::get_trp_instance();
+                $this->error_manager = $trp->get_component( 'error_manager' );
+            }
+            $this->error_manager->record_error( array( 'last_error_selecting_character_count' => $wpdb->last_error, 'disable_automatic_translations' => true ) );
+            $character_count = null;
+        }
+        return $character_count;
+    }
+
+    /**
+     * Use only if really needed. It always performs a query that is never cached.
+     *
+     * @return bool
+     */
     public function quota_exceeded(){
-        if ( $this->limit  >=  $this->counter )
-        {
+        $counter = $this->get_current_counter();
+        if ( $counter !== null && $this->limit >= $counter ) {
             // quota NOT exceeded
             // for some reason this condition is hard to comprehend by my brain
             // thus the unneeded comment.
@@ -111,11 +236,6 @@ class TRP_Machine_Translator_Logger {
                 'name'  => 'machine_translation_counter_date',
                 'value' => date( "Y-m-d" ),
             ),
-            // clear the counter
-            array(
-                'name'  => 'machine_translation_counter',
-                'value' => 0,
-            ),
             // clear the notification
             array(
                 'name'  => 'machine_translation_trigger_quota_notification',
@@ -124,6 +244,9 @@ class TRP_Machine_Translator_Logger {
         );
 
         $this->update_options( $options );
+
+        // clear the counter
+        update_option('trp_machine_translation_counter', 0);
 
         return true;
 
@@ -150,9 +273,6 @@ class TRP_Machine_Translator_Logger {
     public function sanitize_settings($mt_settings ){
         $machine_translation_settings = $this->settings['trp_machine_translation_settings'];
 
-        if( isset( $machine_translation_settings['machine_translation_counter'] ) )
-            $mt_settings['machine_translation_counter'] = $machine_translation_settings['machine_translation_counter'];
-
         if( isset( $machine_translation_settings['machine_translation_counter_date'] ) )
             $mt_settings['machine_translation_counter_date'] = $machine_translation_settings['machine_translation_counter_date'];
 
@@ -164,4 +284,20 @@ class TRP_Machine_Translator_Logger {
 
         return $mt_settings;
     }
+
+    public function count_machine_translated_characters( $count ){
+
+        $machine_translated_characters = get_option( 'trp_machine_translated_characters', array() );
+
+        $current_month = date( 'm-Y' );
+
+        if( isset( $machine_translated_characters[ $current_month ] ) )
+            $machine_translated_characters[ $current_month ] = $machine_translated_characters[ $current_month ] + $count;
+        else
+            $machine_translated_characters[ $current_month ] = $count;
+
+        update_option( 'trp_machine_translated_characters', $machine_translated_characters, false );
+
+    }
+
 }

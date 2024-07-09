@@ -25,6 +25,8 @@ class TRP_Error_Manager{
     'disable_automatic_translations' => bool
      */
     public function record_error( $error_details ){
+        global $wpdb;
+
         if ( $this->is_error_manager_disabled() ){
             return;
         }
@@ -42,6 +44,8 @@ class TRP_Error_Manager{
             // only record the last few errors to avoid huge db options
             array_shift($option['errors'] );
         }
+
+        $error_details['last_query'] = $wpdb->last_query;
         $error_details['date_time'] = date('Y-m-d H:i:s');
         $error_details['timestamp'] = time();
 

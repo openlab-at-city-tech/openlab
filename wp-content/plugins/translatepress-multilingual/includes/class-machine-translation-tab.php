@@ -75,9 +75,6 @@ class TRP_Machine_Translation_Tab {
         }
         if( !empty( $settings['machine-translation'] ) ) {
             $settings['machine-translation'] = sanitize_text_field( $settings['machine-translation'] );
-            if ( $settings['machine-translation'] === 'yes') {
-                $machine_translator->check_languages_availability( $this->settings['translation-languages'], true );
-            }
         }else
             $settings['machine-translation'] = 'no';
 
@@ -108,6 +105,10 @@ class TRP_Machine_Translation_Tab {
                 $settings['automatically-translate-slug'] = 'no';
         }
 
+        $db_stored_data = get_option('trp_db_stored_data', array() );
+        unset( $db_stored_data['trp_mt_supported_languages'][ $settings['translation-engine'] ]['last-checked'] );
+        update_option( 'trp_db_stored_data', $db_stored_data );
+
         return apply_filters( 'trp_machine_translation_sanitize_settings', $settings, $mt_settings );
     }
 
@@ -133,19 +134,23 @@ class TRP_Machine_Translation_Tab {
     }
 
     public function load_engines(){
+	    include_once TRP_PLUGIN_DIR . 'includes/mtapi/functions.php';
+	    include_once TRP_PLUGIN_DIR . 'includes/mtapi/class-mtapi-machine-translator.php';
+
         include_once TRP_PLUGIN_DIR . 'includes/google-translate/functions.php';
         include_once TRP_PLUGIN_DIR . 'includes/google-translate/class-google-translate-v2-machine-translator.php';
     }
 
     public function get_active_engine( ){
         // This $default is just a fail safe. Should never be used. The real default is set in TRP_Settings->set_options function
-        $default = 'TRP_Google_Translate_V2_Machine_Translator';
+        $default = 'TRP_MTAPI_Machine_Translator';
 
         if( empty( $this->settings['trp_machine_translation_settings']['translation-engine'] ) )
             $value = $default;
         else {
             $deepl_class_name = class_exists('TRP_IN_Deepl_Machine_Translator' ) ? 'TRP_IN_Deepl_Machine_Translator' : 'TRP_Deepl_Machine_Translator';
             $existing_engines = apply_filters('trp_automatic_translation_engines_classes', array(
+                'mtapi' => 'TRP_MTAPI_Machine_Translator',
                 'google_translate_v2' => 'TRP_Google_Translate_V2_Machine_Translator',
                 'deepl'               => $deepl_class_name
             ));

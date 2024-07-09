@@ -530,7 +530,7 @@ class TRP_Url_Converter {
                     $url_lang_slug = trailingslashit($this->get_url_slug($language));
                 }
 
-                $new_url_obj->setPath(trailingslashit(trailingslashit($abs_home_url_obj->getPath()) . $url_lang_slug . ltrim($no_lang_orig_path, '/')));
+                $new_url_obj->setPath(trailingslashit(trailingslashit($abs_home_url_obj->getPath() !== null ? $abs_home_url_obj->getPath() : '') . $url_lang_slug . ltrim($no_lang_orig_path, '/')));
                 $new_url = $new_url_obj->getUri();
 
                 trp_bulk_debug($debug, array('url' => $url, 'new url' => $new_url, 'lang' => $language, 'url type' => 'custom url with language', 'abs home path' => $abs_home_url_obj->getPath()));
