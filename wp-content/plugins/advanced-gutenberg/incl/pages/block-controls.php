@@ -34,11 +34,11 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
     <?php
     $tabs = [
         [
-            'title' => __( 'Controls', 'advanced-gutenberg' ),
+            'title' => esc_html__( 'Controls', 'advanced-gutenberg' ),
             'slug' => 'controls'
         ],
         [
-            'title' => __( 'Blocks', 'advanced-gutenberg' ),
+            'title' => esc_html__( 'Blocks', 'advanced-gutenberg' ),
             'slug' => 'blocks'
         ]
     ];

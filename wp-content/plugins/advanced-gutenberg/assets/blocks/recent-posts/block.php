@@ -1126,7 +1126,7 @@ function advgbGetSeriesOrder( $post ) {
         // Get the terms array from a post so later we can get the term id
         $terms = wp_get_post_terms( $post['id'], 'series' );
 
-        if( count( $terms ) && $terms[0]->term_id ) {
+        if( is_array( $terms ) && count( $terms ) && $terms[0]->term_id ) {
             return (int) get_post_meta( $post['id'], '_series_part_' . $terms[0]->term_id, true );
         }
     } else {
