@@ -2,7 +2,10 @@
 die('No direct access.');
 } ?>
 <div class="row has-right-field">
-    <label><?php esc_html_e("Crop Position", "ml-slider"); ?></label>
+    <label>
+        <?php esc_html_e("Crop Position", "ml-slider"); ?>
+        <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('Choose how images are cropped if their size doesn\'t exactly match the size of your slideshow. This works if "Smart Crop" is selected in the "Image Crop" settings.', 'ml-slider') ?>" style="line-height: 1.2em;"></span>
+    </label>
     <select class="crop_position" name="attachment[<?php echo esc_attr($slide_id); ?>][crop_position]">
         <option value="left-top" <?php echo selected($crop_position, 'left-top', false); ?>> <?php esc_html_e("Top Left", "ml-slider"); ?></option>
         <option value="center-top" <?php echo selected($crop_position, 'center-top', false); ?>> <?php esc_html_e("Top Center", "ml-slider"); ?></option>

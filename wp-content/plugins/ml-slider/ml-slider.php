@@ -5,11 +5,11 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: MetaSlider gives you the power to create a beautiful slideshow, carousel, or gallery on your WordPress site.
- * Version:     3.60.1
+ * Version:     3.90.0
  * Author:      MetaSlider
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
- * Copyright:   2023 - MetaSlider LLC
+ * Copyright:   2024 - MetaSlider LLC
  *
  * Text Domain: ml-slider
  * Domain Path: /languages
@@ -42,7 +42,7 @@ if (! class_exists('MetaSliderPlugin')) {
          *
          * @var string
          */
-        public $version = '3.60.1';
+        public $version = '3.90.0';
 
         /**
          * Pro installed version number
@@ -156,7 +156,72 @@ if (! class_exists('MetaSliderPlugin')) {
             }
 
             // require_once(METASLIDER_PATH . 'admin/lib/temporary.php');
-            // require_once(METASLIDER_PATH . 'admin/lib/callout.php');
+        }
+
+        /**
+         * Filter admin notices added through 'admin_notices' hook in MetaSlider screens
+         * https://wordpress.stackexchange.com/questions/316151/alter-admin-notices-to-remove-message-that-contain-a-certain-string
+         * 
+         * @since 3.90
+         */
+        public function filter_admin_notices() {
+            global $wp_filter;
+
+            // Only in MetaSlider pages - /wp-admin/admin.php?page=metaslider
+            $page = isset( $_GET['page'] ) ? sanitize_key( $_GET['page'] ) : '';
+            if ( 'metaslider' === $page ) {
+
+                // Allowed notice that contains these strings
+                $allowed_message_strings = [
+                    'MetaSlider'
+                ];
+
+                $allowed_callbacks = [];
+
+                // Loop each admin_notice callbacks
+                if ( isset( $wp_filter['admin_notices']->callbacks ) 
+                    && is_array( $wp_filter['admin_notices']->callbacks ) 
+                ) {
+                    
+                    foreach ( $wp_filter['admin_notices']->callbacks as $weight => $callbacks ) {
+                        foreach ( $callbacks as $name => $details ) {
+
+                            // Output buffer and call the callback
+                            ob_start();
+                            call_user_func( $details['function'] );
+                            $message = ob_get_clean();
+            
+                            // Check if this notice any of our allowed strings
+                            $allowed = false;
+                            foreach ( $allowed_message_strings as $allowed_string ) {
+                                if ( strpos( $message, $allowed_string) !== false ) {
+                                    $allowed = true;
+                                    break;
+                                }
+                            }
+            
+                            // If it contains an allowed string, store the callback
+                            if ( $allowed ) {
+                                // Ensure the weight is initialized as an array if not already
+                                if ( !isset( $allowed_callbacks[$weight] ) ) {
+                                    $allowed_callbacks[$weight] = [];
+                                }
+                                $allowed_callbacks[$weight][$name] = $details;
+                            }
+                        }
+                    }
+            
+                    // Replace the original callbacks with the allowed ones
+                    // Preserve other weights even if they have no allowed callbacks
+                    foreach ( $wp_filter['admin_notices']->callbacks as $weight => $callbacks ) {
+                        if ( ! isset( $allowed_callbacks[$weight] ) ) {
+                            $allowed_callbacks[$weight] = [];
+                        }
+                    }
+            
+                    $wp_filter['admin_notices']->callbacks = $allowed_callbacks;
+                }
+            }
         }
 
         /**
@@ -291,15 +356,16 @@ if (! class_exists('MetaSliderPlugin')) {
          */
         private function setup_actions()
         {
+            add_action( 'in_admin_header', array( $this, 'filter_admin_notices' ) );
+
             add_action('admin_menu', array($this, 'register_admin_pages'), 9553);
             add_action('admin_bar_menu', array($this, 'add_edit_links'), 100);
             add_action('init', array($this, 'register_post_types'));
             add_action('init', array($this, 'register_taxonomy'));
             add_action('init', array($this, 'load_plugin_textdomain'));
-            add_action('init', array($this, 'redirect_on_activate'));
+            add_action('admin_init', array($this, 'redirect_on_activate'));
             add_action('admin_footer', array($this, 'admin_footer'), 11);
             add_action('admin_footer', array($this, 'quickstart_params'), 11);
-            add_action('widgets_init', array($this, 'register_metaslider_widget'));
             
             add_action('admin_post_metaslider_switch_view', array($this, 'switch_view'));
             add_action('admin_post_metaslider_delete_slide', array($this, 'delete_slide'));
@@ -326,9 +392,16 @@ if (! class_exists('MetaSliderPlugin')) {
                 update_option('ms_was_installed_on', time());
             }
 
-            // New install (for legacy library)
+            // New install (for legacy library/widget)
+            // disable widget on new installs
             if (get_option('metaslider_new_user') == false) {
                 add_option('metaslider_new_user', 'new');
+            } else {
+                $global_settings = $this->get_global_settings();
+                if (!isset($global_settings['legacyWidget']) 
+                || ( isset($global_settings['legacyWidget'] ) && false == $global_settings['legacyWidget'])) {
+                    add_action('widgets_init', array($this, 'register_metaslider_widget'));
+                }
             }
         }
 
@@ -546,6 +619,13 @@ if (! class_exists('MetaSliderPlugin')) {
                 'metaslider'
             );
 
+            // Sanitize id attribute
+            foreach ( $atts as $key => $value ) {
+                if ( $key == 'id' ) {
+                    // Make sure id is a number
+                    $atts[$key] = (int) $value;
+                }
+            }
 
             // If no id and no title, exit here
             if (! $atts['id'] && ! $atts['title']) {
@@ -795,7 +875,7 @@ if (! class_exists('MetaSliderPlugin')) {
             if (! current_user_can($capability)) {
                 wp_send_json_error(
                     [
-                        'message' => __('Access denied', 'ml-slider')
+                        'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                     ],
                     403
                 );
@@ -877,7 +957,7 @@ if (! class_exists('MetaSliderPlugin')) {
             if (! current_user_can($capability)) {
                 wp_send_json_error(
                     [
-                        'message' => __('Access denied', 'ml-slider')
+                        'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                     ],
                     403
                 );
@@ -989,7 +1069,7 @@ if (! class_exists('MetaSliderPlugin')) {
             if (! current_user_can($capability)) {
                 wp_send_json_error(
                     [
-                        'message' => __('Access denied', 'ml-slider')
+                        'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                     ],
                     403
                 );
@@ -1076,48 +1156,126 @@ if (! class_exists('MetaSliderPlugin')) {
 
             $id = MetaSlider_Slideshows::create();
 
-            if (isset($_GET['metaslider_add_sample_slides'])) {
-                $slideInstance = new MetaSlider_Slideshows();
-                $sampleType = sanitize_key($_GET['metaslider_add_sample_slides']);
-                if ($sampleType == 'carousel') {
-                    $settings = array(
-                        'type' => 'flex',
-                        'printCss' => 'on',
-                        'printJs' => 'on',
-                        'width' => 1200,
-                        'height' => 600,
-                        'center' => 'on',
-                        'carouselMode' => 'on',
-                        'autoPlay' => 'on',
-                        'fullWidth' => 'on',
-                        'noConflict' => 'on'
-                    );
-                    $sampleId = $slideInstance->save($id, $settings);
-                } elseif ($sampleType == 'withcaption') {
-                    $settings = array(
-                        'type' => 'flex',
-                        'printCss' => 'on',
-                        'printJs' => 'on',
-                        'width' => 400,
-                        'height' => 400,
-                        'center' => 'on',
-                        'carouselMode' => 'on',
-                        'autoPlay' => 'on',
-                        'fullWidth' => 'on',
-                        'noConflict' => 'on'
-                    );
-                    $sampleId = $slideInstance->save($id, $settings);
+            if ( isset( $_GET['metaslider_add_sample_slides'] ) ) {
+                $slideInstance  = new MetaSlider_Slideshows();
+                $sampleType     = sanitize_key( $_GET['metaslider_add_sample_slides'] );
 
-                    $themeInstance = new MetaSlider_Themes();
-                    $outlineTheme = $themeInstance->get_theme_object($id,'outline');
-                    $setTheme = $themeInstance->set($id, $outlineTheme);
+                // Get slugs from Free slides to import sample content
+                $quickstart_free_slugs = array(
+                    'carousel',
+                    'withcaption'
+                );
+
+                // Get slugs from Pro slides to import sample content
+                $quickstart_pro_slugs = $this->quickstart_slugs();
+
+                if ( in_array( $sampleType, $quickstart_pro_slugs ) ) {
+                    // Pro quickstart demos
+
+                    if ( ! metaslider_pro_is_active() || count( $quickstart_pro_slugs ) === 0 ) {
+                        // @TODO - Maybe display an error?
+                        wp_redirect( esc_url_raw( admin_url( "admin.php?page=metaslider-start&error=pro-version" ) ) );
+                        exit;
+                    }
+
+                    // Get slideshow settings
+                    if ( ! class_exists( 'MetaSliderPro_Quickstart' ) ) {
+                        // @TODO - Maybe display an error?
+                        wp_redirect( esc_url_raw( admin_url( "admin.php?page=metaslider-start&error=quickstart-class" ) ) );
+                        exit;
+                    }
+
+                    $msQuickstartPro = new MetaSliderPro_Quickstart();
+
+                    // Get settings
+                    $settings = $msQuickstartPro->set_slideshow_settings( $sampleType );
+
+                    // Save settings
+                    $sampleId = $slideInstance->save( $id, $settings );
+
+                    // The cases match with MetaSliderPro->quickstart_options() each array 'slug' values
+                    switch ( $sampleType ) {
+
+                        case 'youtube':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'simply-dark' );
+                            break;
+
+                        case 'youtube-shorts':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'outline' );
+                            break;
+
+                        case 'vimeo':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'outline' );
+                            break;
+
+                        case 'html_overlay':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'radix' );
+                            break;
+
+                        case 'post_feed':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'highway' );
+                            break;
+
+                        case 'external':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'bubble' );
+                            break;
+
+                        case 'external_video':
+                            $msQuickstartPro->set_slideshow_theme( $id, 'blend' );
+                            break;
+                    }
+
+                } elseif ( in_array( $sampleType, $quickstart_free_slugs ) ) {
+                    // Free quickstart demos
+
+                    if ($sampleType == 'carousel') {
+                        $settings = array(
+                            'type' => 'flex',
+                            'printCss' => 'on',
+                            'printJs' => 'on',
+                            'width' => 400,
+                            'height' => 400,
+                            'center' => 'on',
+                            'carouselMode' => 'on',
+                            'fullWidth' => 'on',
+                            'noConflict' => 'on',
+                            'effect' => 'slide'
+                        );
+                        $sampleId = $slideInstance->save($id, $settings);
+                    } elseif ($sampleType == 'withcaption') {
+                        $settings = array(
+                            'type' => 'flex',
+                            'printCss' => 'on',
+                            'printJs' => 'on',
+                            'width' => 400,
+                            'height' => 400,
+                            'center' => 'on',
+                            'carouselMode' => 'on',
+                            'fullWidth' => 'on',
+                            'noConflict' => 'on',
+                            'effect' => 'slide'
+                        );
+                        $sampleId = $slideInstance->save($id, $settings);
+    
+                        $themeInstance = new MetaSlider_Themes();
+                        $outlineTheme = $themeInstance->get_theme_object($id,'outline');
+                        $setTheme = $themeInstance->set($id, $outlineTheme);
+                    } else {
+                        $sampleId = $id;
+                        $sampleType = "";
+                    }
+                    
                 } else {
+                    // @TODO - Do we really need an else?
                     $sampleId = $id;
                     $sampleType = "";
                 }
 
+                
+
                 wp_redirect(esc_url_raw(admin_url("admin.php?page=metaslider&id={$sampleId}&metaslider_add_sample_slides={$sampleType}")));
                 exit;
+                
             } else {
                 wp_redirect(esc_url_raw(admin_url("admin.php?page=metaslider&id={$id}")));
                 exit;
@@ -1289,17 +1447,17 @@ if (! class_exists('MetaSliderPlugin')) {
                     case 'highlight':
 
                         if ( isset( $row["topspacing"] ) && $row["topspacing"] ) {
-                            $output .= '<tr class="empty-row-spacing">
+                            $output .= '<tr class="empty-row-spacing ' . esc_attr($id) . '">
                                 <td colspan="2"></td>
                             </tr>';
                         }
 
                         $output .= '<tr class="' . esc_attr(
                             $row["type"]
-                        ) . '"><td colspan="2">' . esc_html(
+                        ) . ' ' . esc_attr($id) . '"><td colspan="2">' . esc_html(
                                 $row["value"]
                             ) . $after . '</td></tr>';
-                        $output .= '<tr class="empty-row-spacing">
+                        $output .= '<tr class="empty-row-spacing ' . esc_attr($id) . '">
                             <td colspan="2"></td>
                         </tr>';
                         break;
@@ -1441,6 +1599,21 @@ if (! class_exists('MetaSliderPlugin')) {
                             ) . '" type="text" autocomplete="off" data-lpignore="true" name="' . esc_attr(
                                 $id
                             ) . '" value="' . esc_attr($row["value"]) . '" />';
+                        $output .= $after;
+                        $output .= '</td></tr>';
+                        break;
+
+                    //mobile settings icons
+                    case 'mobile':
+                        $output .= '<tr class="' . esc_attr($row["type"]) .'">
+                            <td class="tipsy-tooltip" title="' . esc_attr($helptext) . '">' . esc_html( $row["label"]) . '</td>
+                            <td>';
+                        foreach ($row['options'] as $option_name => $option_value) {
+                            $output .= '<span class="mobile-checkbox-wrap">';
+                            $output .= '<input type="checkbox" name="settings[' . esc_attr($id) . '_' . esc_attr($option_name) . ']" ' . esc_attr($option_value["checked"]) . ' class="mobile-checkbox tipsy-tooltip-top" title="' . esc_attr($option_value["helptext"]) . '" />';
+                            $output .= '<span class="dashicons ' . esc_attr( 'dashicons-' . $option_name ) . '"></span>';
+                            $output .= '</span>';
+                        }
                         $output .= $after;
                         $output .= '</td></tr>';
                         break;
@@ -1613,10 +1786,10 @@ if (! class_exists('MetaSliderPlugin')) {
                          class="metaslider-inner wp-clearfix">
                          <?php
                             if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'permanent') {
-                                echo '<div class="updated below-h2" id="message"><p>' . esc_html( 'Slide permanently deleted.', 'ml-slider'). '</p></div>';
+                                echo '<div class="updated below-h2" id="message"><p>' . esc_html__( 'Slide permanently deleted.', 'ml-slider'). '</p></div>';
                             }
                             if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'restore') {
-                                echo '<div class="updated below-h2" id="message"><p>' . esc_html( 'Slide restored.', 'ml-slider'). '</p></div>';
+                                echo '<div class="updated below-h2" id="message"><p>' . esc_html__( 'Slide restored.', 'ml-slider'). '</p></div>';
                             }
                          ?>
                         <div class="my-6">
@@ -1652,6 +1825,14 @@ if (! class_exists('MetaSliderPlugin')) {
 
                                     <?php
                                     do_action("metaslider_admin_table_before", $this->slider->id); ?>
+
+                                    <?php if ( isset( $_GET['metaslider_add_sample_slides'] ) ) : ?>
+                                        <p id="loading-add-sample-slides-notice" style="display: none;">
+                                            <span style="background-image: url(<?php echo esc_url(admin_url( '/images/loading.gif' )); ?>);">
+                                                <?php _e( 'Loading... Please wait!', 'ml-slider' ) ?>
+                                            </span>
+                                        </p>
+                                    <?php endif; ?>
 
                                     <table id="metaslider-slides-list"
                                            class="widefat sortable metaslider-slides-container table-fixed">
@@ -1773,11 +1954,10 @@ if (! class_exists('MetaSliderPlugin')) {
 
             printf(
                 '
-                <a href="#TB_inline?&inlineId=choose-meta-slider" class="thickbox button" title="%s">
+                <a href="#TB_inline?&width=783&inlineId=choose-meta-slider" class="thickbox button">
                     <span class="wp-media-buttons-icon"
-                        style="background:url(%s/metaslider/matchalabs.png);background-repeat:no-repeat;background-position:left bottom;position: relative;top:-2px;right:-2px"></span>%s</a>',
-                esc_html__("Select slideshow to insert into post", "ml-slider"),
-                esc_url(METASLIDER_ASSETS_URL),
+                        style="background:url(%simages/metaslider_logo.png);background-repeat:no-repeat;background-position:left -2px;background-size: 20px;position: relative;margin-left:0;"></span>%s</a>',
+                esc_url(METASLIDER_ADMIN_URL),
                 esc_html__("Add slideshow", "ml-slider")
             );
         }
@@ -1807,12 +1987,13 @@ if (! class_exists('MetaSliderPlugin')) {
                     <div class="wrap">
                         <?php
                         if (count($sliders)) {
-                            echo "<h3 style='margin-bottom: 20px;'>" . esc_html_x(
-                                    "Insert MetaSlider",
+                            echo "<img src='" . esc_url(METASLIDER_ADMIN_URL .'images/metaslider_logo3.png' ) . "' style='width: 200px;display: block;margin: 0 auto;'>";
+                            echo "<p style='color:#29375b; font-size: 16px;text-align: center;'>" . esc_html_x(
+                                    "Select slideshow to insert into post",
                                     'Keep the plugin name "MetaSlider" when possible',
                                     "ml-slider"
-                                ) . "</h3>";
-                            echo "<select id='metaslider-select'>";
+                                ) . "</p>";
+                            echo "<div style='margin:0 15%;width:70%;'><select id='metaslider-select' style='width:70%; height: 35px;'>";
                             echo "<option disabled=disabled>" . esc_html__(
                                     "Choose slideshow",
                                     "ml-slider"
@@ -1823,10 +2004,10 @@ if (! class_exists('MetaSliderPlugin')) {
                                     ) . '</option>';
                             }
                             echo "</select>";
-                            echo '<button class="button primary" id="insertMetaSlider">' . esc_html__(
+                            echo '<button class="button button-primary button-large" id="insertMetaSlider" style="height: 35px;">' . esc_html__(
                                     "Insert slideshow",
                                     "ml-slider"
-                                ) . '</button>';
+                                ) . '</button></div>';
                         } else {
                             esc_html_e("No slideshows found", "ml-slider");
                         } ?>
@@ -2333,7 +2514,7 @@ if (! class_exists('MetaSliderPlugin')) {
             if (! current_user_can($capability)) {
                 wp_send_json_error(
                     [
-                        'message' => __('Access denied', 'ml-slider')
+                        'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                     ],
                     403
                 );
@@ -2374,7 +2555,7 @@ if (! class_exists('MetaSliderPlugin')) {
             if (! current_user_can($capability)) {
                 wp_send_json_error(
                     [
-                        'message' => __('Access denied', 'ml-slider')
+                        'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                     ],
                     403
                 );
@@ -2435,31 +2616,32 @@ if (! class_exists('MetaSliderPlugin')) {
             wp_send_json($attach_id);
             wp_die(); 
         }
+
+        /**
+         * Extract 'slug' values on each array from 'metaslider_quickstart_options' filter
+         * We use this to allow t create demo sldieshows through Quick start screen
+         * 
+         * @since 3.70
+         * 
+         * @return array
+         */
+        public function quickstart_slugs()
+        {
+            $slugs          = array();
+            $demo_options   = apply_filters( 'metaslider_quickstart_options', array() );
+
+            if ( count( $demo_options ) > 0 ) {
+                foreach ( $demo_options as $item ) {
+                    $slugs[] = $item['slug'];
+                }
+            }
+
+            return $slugs;
+        }
     }
 
     if (! class_exists('MetaSlider_Settings')) {
         require_once __DIR__ . '/admin/support/Settings.php';
-    }
-
-    // Load in MetaGallery unless the user wants to use the dev version
-    if (! defined('METAGALLERY_ENABLE_DEV')) {
-        define('METAGALLERY_ENABLE_DEV', false);
-    }
-
-    $global_settings = get_option( 'metaslider_global_settings' );
-
-    if ( file_exists(__DIR__ . '/metagallery/metagallery.php') 
-        && ! METAGALLERY_ENABLE_DEV 
-        && isset( $global_settings['gallery'] )
-        && (bool) $global_settings['gallery']
-    ) {
-        if (! defined('METAGALLERY_TEXTDOMAIN')) {
-            define('METAGALLERY_SIDELOAD_FROM', 'metaslider');
-            define('METAGALLERY_TEXTDOMAIN', 'ml-slider');
-            define('METAGALLERY_PATH', plugin_dir_path(__FILE__) . 'metagallery/');
-            define('METAGALLERY_BASE_URL', plugin_dir_url(__FILE__) . 'metagallery/');
-            require plugin_dir_path(__FILE__) . 'metagallery/metagallery.php';
-        }
     }
 }
 

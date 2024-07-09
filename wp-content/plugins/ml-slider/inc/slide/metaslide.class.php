@@ -146,7 +146,7 @@ class MetaSlide
         if (! current_user_can($capability)) {
             wp_send_json_error(
                 [
-                    'message' => __('Access denied', 'ml-slider')
+                    'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                 ],
                 403
             );
@@ -174,7 +174,6 @@ class MetaSlide
         }
         wp_send_json_success($result, 200);
     }
-
 
     /**
      * Return the correct slide HTML based on whether we're viewing the slides in the
@@ -430,6 +429,18 @@ class MetaSlide
     }
 
     /**
+     * Generates the HTML for the duplicate slide button
+     *
+     * @return string The html for the duplicate button
+     */
+    public function get_duplicate_slide_button_html()
+    {
+        $attachment_id = $this->get_attachment_id();
+        $slide_type = get_post_meta($this->slide->ID, 'ml-slider_type', true);
+        return "<button class='toolbar-button duplicate-slide duplicate-slide-" . $slide_type . " alignright tipsy-tooltip-top' data-slide-type='" . esc_attr($slide_type) . "' data-button-text='" . esc_attr__("Duplicate slide", "ml-slider") . "' title='" . esc_attr__("Duplicate slide", "ml-slider") . "' data-slide-id='" . esc_attr($this->slide->ID) . "' data-attachment-id='" . esc_attr($attachment_id) . "'><i><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-copy'><rect x='9' y='9' width='13' height='13' rx='2' ry='2'></rect><path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'></path></svg></i></button>";
+    }
+
+    /**
      * Generate the HTML for the tab content
      */
     public function get_admin_slide_tab_contents_html()
@@ -603,7 +614,7 @@ class MetaSlide
     {
         /* If the post type is 'attachment', we return get_thumb() 
          * for possible backward compatibility */
-        if ( get_post_type( $this->slide->ID ) == 'attachment' ) {
+        if ( isset( $this->slide->ID ) && get_post_type( $this->slide->ID ) == 'attachment' ) {
             return $this->get_thumb();
         }
 
@@ -674,7 +685,7 @@ class MetaSlide
             esc_attr( $this->slide->ID ) . '" data-attachment-id="' . 
             esc_attr( $attachment_id ) . '">
                 <div class="thumb">
-                    <img style="display:none" src="' . 
+                    <img src="' . 
                     esc_url( $thumb_small ) . '" srcset="' . 
                     esc_url( $thumb_large ) . ' 1024w, ' . 
                     esc_url( $thumb_medium ) . ' 768w, ' . 
@@ -769,4 +780,37 @@ class MetaSlide
         }
     }
 
+    /**
+     * Get mobile CSS on al slide types
+     */
+    public function get_mobile_css_class($slide_id)
+    {
+        $device = array('smartphone', 'tablet', 'laptop', 'desktop');
+        $mobile_class = '';
+        foreach ($device as $value) {
+            $hidden_slide = get_post_meta( $slide_id , 'ml-slider_hide_slide_' . $value, true );
+            if(!empty($hidden_slide)) {
+              $mobile_class .= 'hidden_' . $value . ' ';
+            }
+        }
+        return $mobile_class;
+    }
+
+    /**
+     * Sanitize HTML and avoid rgb() color being stripped by wp_filter_post_kses
+     * 
+     * @since 3.62
+     * 
+     * @param html $content
+     * 
+     * @return html
+     */
+    public function cleanup_content_kses( $content ) {
+        
+        // Remove any script tag instance
+        $content = preg_replace( '/<script[^>]*>.*?<\/script>/', '', $content );
+    
+        return $content;
+    }
+    
 }

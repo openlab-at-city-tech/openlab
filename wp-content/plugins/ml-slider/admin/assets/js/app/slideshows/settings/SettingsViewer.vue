@@ -34,12 +34,12 @@ export default {
          * @since 3.60
          * 
          * @param {object} el           The element to monitor changes
-         * @param {string|array} val    The value(s) of the element
-         * @param {string} target       The setting to show/hide its <tr> wrapper
+         * @param {string|array} show   The element to show or hide
+         * @param {string} target       The setting to show/hide its <tr> wrapper or direct ID
          * 
          * @return void
          **/ 
-         var toggleSomeRow = function (el, show, when) {
+        var toggleSomeRow = function (el, show, when) {
             var type = el.is('input[type="checkbox"]') ? 'checkbox' : 'select';
 
             /* If is a checkbox input and match with the when value 
@@ -58,11 +58,51 @@ export default {
                                 || (Array.isArray(when) && when.indexOf(el.val()) !== -1))
                             ? true : false;
 
+            // Show or hide slideshow settings or slide settings, whatever match the find()
             if (checbox_rule || select_rule) {
-                $('.ms-settings-table').find(`[name="settings[${show}]"]`).closest('tr').show();
+                if (show.charAt(0) === '#' || show.charAt(0) === '.') { // ID or class
+                    // ID match
+                    $('#metaslider-slides-list').find(show).show(); 
+                } else {
+                    // Form element's <tr> match
+                    $('.ms-settings-table').find(`[name="settings[${show}]"]`).closest('tr').show();
+                }
             } else {
-                $('.ms-settings-table').find(`[name="settings[${show}]"]`).closest('tr').hide();
+                if (show.charAt(0) === '#' || show.charAt(0) === '.') { // ID or class
+                    // ID match
+                    $('#metaslider-slides-list').find(show).hide();
+                } else {
+                    // Form element's <tr> match
+                    $('.ms-settings-table').find(`[name="settings[${show}]"]`).closest('tr').hide();
+                }
             }
+        }
+
+        /* Show/hide settings based on the value of other settings 
+             * by checking data-dependencies attribute */
+        /**
+         * Initialize toggleSomeRow()
+         * 
+         * @since 3.70
+         * 
+         * @param {string} selector CSS selector must ends with '[data-dependencies]'
+         * 
+         * @return void
+         */
+        var initToggle = function (selector) {
+            $(selector).each(function() {
+                var el = $(this);
+                var data = JSON.parse($(this).attr('data-dependencies'));
+
+                // Loop through the array of objects
+                data.forEach(function(item) {
+                    toggleSomeRow(el, item.show, item.when);
+
+                    $(document).on('change', '.metaslider-ui', el, function() {
+                        toggleSomeRow(el, item.show, item.when);
+                    });
+                });
+            });
         }
 
 		// Enable the correct options for this slider type
@@ -85,21 +125,8 @@ export default {
                 $('.theme option:enabled:first').attr('selected', 'selected');
             }
 
-            /* Show/hide settings based on the value of other settings 
-             * by checking data-dependencies attribute */
-            $('.ms-settings-table [data-dependencies]').each(function() {
-                var el = $(this);
-                var data = JSON.parse($(this).attr('data-dependencies'));
-
-                // Loop through the array of objects
-                data.forEach(function(item) {
-                    toggleSomeRow(el, item.show, item.when);
-
-                    $('.metaslider-ui').on('change', el, function() {
-                        toggleSomeRow(el, item.show, item.when);
-                    });
-                });
-            });
+            // Add dynamic display of settings based on checkbox and select values
+            initToggle('.ms-settings-table [data-dependencies], #metaslider-slides-list [data-dependencies]');
 
             if (slider == 'flex') {
                 $('.flex-setting').show();
@@ -108,6 +135,10 @@ export default {
             }
         };
     
+        EventManager.$on(['metaslider/app-loaded', 'metaslider/slides-created', 'metaslider/slide-duplicated'], () => { 
+            initToggle('#metaslider-slides-list [data-dependencies]');
+        })
+
         // enable the correct options on page load
         switchType($(".metaslider .select-slider:checked").attr("rel"));
     

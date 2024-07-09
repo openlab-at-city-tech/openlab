@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
             }
 
             if (isset($_REQUEST['delete_all'])) {
-                echo '<div class="updated below-h2" id="message"><p>' . esc_html('Slideshows permanently deleted.', 'ml-slider') .'</p></div>';
+                echo '<div class="updated below-h2" id="message"><p>' . esc_html__('Slideshows permanently deleted.', 'ml-slider') .'</p></div>';
             }
         ?>
         <hr class="wp-header-end">

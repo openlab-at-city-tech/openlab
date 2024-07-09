@@ -363,7 +363,7 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
         if (! current_user_can($capability)) {
             wp_send_json_error(
                 [
-                    'message' => __('Access denied', 'ml-slider')
+                    'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
                 ],
                 403
             );

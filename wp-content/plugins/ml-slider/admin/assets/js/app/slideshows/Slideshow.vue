@@ -75,7 +75,8 @@ export default {
 		})
 		EventManager.$on([
 			'metaslider/slides-created', 'metaslider/slide-create-failed',
-			'metaslider/slide-updated', 'metaslider/slide-update-failed'
+			'metaslider/slide-updated', 'metaslider/slide-update-failed', 
+			'metaslider/slide-duplicated', 'metaslider/slide-duplicate-failed'
 		], () => {
 			this.$store.commit('slideshows/setLocked', false)
 		})

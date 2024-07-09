@@ -76,18 +76,22 @@ class MetaSlider_Themes
             (isset($new_install)  && 'new' == $new_install)
         ) {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
-            $manifest_file = 'manifest.php';
         } else {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest-legacy.php');
-            $manifest_file = 'manifest-legacy.php';
+        }
+
+        // If is not Pro, let's include some Premium themes with upgrade link
+        if (! metaslider_pro_is_active()) {
+            $premium_themes = (include METASLIDER_THEMES_PATH . 'manifest-premium.php');
+            $themes = array_merge($themes, $premium_themes);
         }
         
         // Let theme developers or others define a folder to check for themes
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
             // Make sure there is a manifest
-            if (file_exists(trailingslashit($location) . $manifest_file)) {
-                $manifest = include(trailingslashit($location) . $manifest_file);
+            if (file_exists(trailingslashit($location) . 'manifest.php')) {
+                $manifest = include(trailingslashit($location) . 'manifest.php');
 
                 // Make sure each theme has an existing folder, title, description
                 foreach ($manifest as $data) {
@@ -99,9 +103,12 @@ class MetaSlider_Themes
                     ) {
                         // Identify this as an external theme
                         $data['type'] = 'external';
+                        
+                        // Add a key to the theme array
+                        $data = array( $data['folder'] => $data );
 
-                        // Add theirs to the top
-                        array_unshift($themes, $data);
+                        // Merge and set new theme to the top
+                        $themes = array_merge($themes, $data);
                     }
                 }
             }
@@ -303,6 +310,7 @@ return $theme;
         // If the theme isn't set, then they attempted to remove the theme
         if (!isset($theme['folder']) || is_wp_error($theme)) {
             $settings['theme'] = 'none';
+            //$settings['theme_customize'] = array();
             update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
             return update_post_meta($slideshow_id, 'metaslider_slideshow_theme', 'none');
         }
@@ -317,6 +325,9 @@ return $theme;
             // unset($settings['theme']); // ! Pro requires this to be set
             $settings['theme'] = '';
             update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
+
+            // Save the customizations defaults
+            //$this->save_theme_customizations( $slideshow_id, $theme );
         }
 
         // This will return false if the data is the same, unfortunately

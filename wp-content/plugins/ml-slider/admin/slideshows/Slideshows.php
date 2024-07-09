@@ -88,6 +88,26 @@ class MetaSlider_Slideshows
 
         $overrides = get_option('metaslider_default_settings');
         $last_modified_settings = is_array($overrides) ? array_merge($last_modified_settings, $overrides) : $last_modified_settings;
+
+        $last_modified_settings['keyboard'] = true;
+
+        // Force these always by default - @since 3.70
+        $last_modified_settings['printJs'] = true;
+        $last_modified_settings['printCss'] = true;
+        $last_modified_settings['noConflict'] = true;
+        $last_modified_settings['effect'] = 'slide';
+        $last_modified_settings['autoPlay'] = false;
+
+        
+        /* Make sure we set a default theme if available - Pro set '_theme_default' 
+         * to bypass $last_modified_settings['theme'] that takes the last saved theme configuration 
+         * 
+         * @since 3.62 */
+        $default_theme = apply_filters( 'metaslider_default_theme', '' );
+        if ( $default_theme ) {
+            $last_modified_settings['theme'] = $default_theme;
+        }
+        
         add_post_meta($new_id, 'ml-slider_settings', $last_modified_settings, true);
 
         // TODO: next branch, refactor to slideshow object and extract controller type methods.
@@ -96,9 +116,9 @@ class MetaSlider_Slideshows
         $theme = get_post_meta($last_modified, 'metaslider_slideshow_theme', true);
 
         // Lets users set their own default theme
-        if (apply_filters('metaslider_default_theme', '')) {
+        if ( $default_theme ) {
             $themes = MetaSlider_Themes::get_instance();
-            $theme = $themes->get_theme_object(null, apply_filters('metaslider_default_theme', ''));
+            $theme = $themes->get_theme_object( null, $default_theme );
         }
 
         // Set the theme if we found something
@@ -127,7 +147,7 @@ class MetaSlider_Slideshows
         $old_settings = get_post_meta($slideshow_id, 'ml-slider_settings', true);
 
         // convert submitted checkbox values from 'on' or 'off' to boolean values
-        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'links', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs'));
+        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'links', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs', 'keyboard', 'touch', 'infiniteLoop',  'mobileArrows_smartphone', 'mobileArrows_tablet','mobileArrows_laptop', 'mobileArrows_desktop', 'mobileNavigation_smartphone', 'mobileNavigation_tablet', 'mobileNavigation_laptop', 'mobileNavigation_desktop', 'ariaLive', 'tabIndex', 'pausePlay','ariaCurrent'));
 
         foreach ($checkboxes as $checkbox) {
             $new_settings[$checkbox] = (isset($new_settings[$checkbox]) && 'on' == $new_settings[$checkbox]) ? 'true' : 'false';
@@ -863,7 +883,7 @@ class MetaSlider_Slideshows
             }
             #preview-container {
                 min-height: 100%;
-                max-width: <?php echo (int) $settings->get_single('width'); ?>px;
+                max-width: <?php echo (int) $settings->get_single('width') > 0 ? (int) $settings->get_single('width') : 700; ?>px;
                 margin: 0 auto;
                 display: -webkit-box;
                 display: -ms-flexbox;

@@ -31,6 +31,20 @@ class MetaSlider_Theme_Base
     public static $themes = array();
 
     /**
+     * Parameters
+     *
+     * @var string
+     */
+    public $slider_parameters = array();
+
+    /**
+     * Theme Version
+     *
+     * @var string
+     */
+    public $version;
+
+    /**
      * Construct - set private for singleton pattern.
      *
      * @param int   $id      ID
@@ -217,10 +231,14 @@ return $options;
             $type = get_post_meta($slide->ID, 'ml-slider_type', true);
             $type = $type ? $type : 'image'; // Default ot image
 
-            // If this filter exists, that means the slide type is available (i.e. pro slides)
-            if (has_filter("metaslider_get_{$type}_slide")) {
-                array_push($available_slides, $slide);
+            $is_hidden = get_post_meta($slide->ID, '_meta_slider_slide_is_hidden', true);
+            if($is_hidden != true){
+                // If this filter exists, that means the slide type is available (i.e. pro slides)
+                if (has_filter("metaslider_get_{$type}_slide")) {
+                    array_push($available_slides, $slide);
+                }
             }
+            
         }
         return $available_slides;
     }

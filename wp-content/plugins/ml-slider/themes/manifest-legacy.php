@@ -6,6 +6,38 @@
  * The type should be free, premium, or bonus
  */
 return array(
+    'bitono' => array(
+        'folder' => 'bitono',
+        'title' => 'Bitono',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array(),
+        'description' => __('Bitono is a minimalist theme with a 2-color scheme. Recommended for Image, External Image and Post feed slides.', 'ml-slider')
+    ),
+    'clarity' => array(
+        'folder' => 'clarity',
+        'title' => 'Clarity',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array(),
+        'description' => __('Clarity is focused on accessibility. It has easy-to-read fonts, and a straightforward, distraction-free interface.', 'ml-slider')
+    ),
+    'databold' => array(
+        'folder' => 'databold',
+        'title' => 'Databold',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array(),
+        'description' => __('Databold is a minimalist theme recommended for Image, External Image and Post feed slides.', 'ml-slider')
+    ),
+    'draxler' => array(
+        'folder' => 'draxler',
+        'title' => 'Draxler',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array(),
+        'description' => __('Draxler is a minimalist theme.', 'ml-slider')
+    ),
     'cubic' => array(
         'folder' => 'cubic',
         'title' => 'Cubic',
@@ -147,7 +179,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo'),
         'tags' => array('light', 'minimalist'),
-        'description' => __('A minimalist theme that gets out of the way so you can showcasing your beautiful pictures.', 'ml-slider'),
+        'description' => __('A minimalist theme that gets out of the way so you can showcasing your beautiful pictures. Best used with Image Slides.', 'ml-slider'),
         'images' => array('danny-howe-361436-unsplash.jpg', 'etienne-beauregard-riverin-48305-unsplash.jpg', 'luca-bravo-198062-unsplash.jpg', 'fabio-mangione-236846-unsplash.jpg', 'olav-ahrens-rotne-1087667-unsplash.jpg')
     ),
     'nivo-light' => array(

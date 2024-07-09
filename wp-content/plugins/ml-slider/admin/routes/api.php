@@ -81,6 +81,7 @@ class MetaSlider_Api
 
         // Slides
         add_action('wp_ajax_ms_import_images', array(self::$instance, 'import_images'));
+        add_action( 'wp_ajax_ms_import_others', array( self::$instance, 'import_others' ) );
 
         // Settings
         add_action('wp_ajax_ms_update_user_setting', array(self::$instance, 'save_user_setting'));
@@ -99,6 +100,12 @@ class MetaSlider_Api
         // Other
         add_action('wp_ajax_set_tour_status', array(self::$instance, 'set_tour_status'));
         add_action('wp_ajax_ms_get_image_ids_from_filenames', array(self::$instance, 'get_image_ids_from_file_name'));
+
+        /* Pro settings
+         * @since 3.62
+         */
+        add_action('wp_ajax_ms_get_pro_settings', array(self::$instance, 'get_pro_settings'));
+        add_action('wp_ajax_ms_update_pro_settings', array(self::$instance, 'save_pro_settings'));
     }
 
     /**
@@ -129,7 +136,7 @@ class MetaSlider_Api
     public function deny_access()
     {
         wp_send_json_error(array(
-            'message' => __('You do not have access to this resource.', 'ml-slider')
+            'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
         ), 401);
     }
 
@@ -612,7 +619,7 @@ class MetaSlider_Api
         }
 
         if (isset($fields['post_excerpt'])) {
-            $fields['post_excerpt'] = wp_filter_post_kses($fields['post_excerpt']);
+            $fields['post_excerpt'] = $this->cleanup_content_kses( $fields['post_excerpt'] );
         }
 
         if (isset($fields['url'])) {
@@ -633,6 +640,10 @@ class MetaSlider_Api
 
         if (isset($fields['alt'])) {
             $fields['alt'] = sanitize_text_field($fields['alt']);
+        }
+
+        if (isset($fields['link-alt'])) {
+            $fields['link-alt'] = sanitize_text_field($fields['link-alt']);
         }
 
         if (isset($fields['crop_position'])) {
@@ -684,6 +695,23 @@ class MetaSlider_Api
         }
         
         return $fields;
+    }
+
+    /**
+     * Sanitize HTML and avoid rgb() color being stripped by wp_filter_post_kses
+     * 
+     * @since 3.62
+     * 
+     * @param html $content
+     * 
+     * @return html
+     */
+    public function cleanup_content_kses( $content ) {
+
+        // Remove any script tag instance
+        $content = preg_replace( '/<script[^>]*>.*?<\/script>/', '', $content );
+    
+        return $content;
     }
 
     /**
@@ -853,6 +881,10 @@ class MetaSlider_Api
             if ($value === '') {
                 wp_send_json_error(array('message' => sprintf(__('The field (%s) cannot be empty', 'ml-slider'), $key)), 422);
             }
+            //convert mobile setting to integer
+            if ($key == 'smartphone' || $key == 'tablet' || $key == 'laptop' || $key == 'desktop') {
+                $settings[$key] = (int)$value;
+            }
         }
 
         // This will not provide a useful return
@@ -985,6 +1017,68 @@ class MetaSlider_Api
     }
 
     /**
+     * Get pro settings whether multisite or not
+     * 
+     * @since 3.62
+     */
+    public function get_pro_settings()
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        if (is_multisite() && $settings = get_site_option('metaslider_pro_settings')) {
+            return wp_send_json_success($settings, 200);
+        }
+
+        if ($settings = get_option('metaslider_pro_settings')) {
+            return wp_send_json_success($settings, 200);
+        }
+
+        wp_send_json_success(array(), 200);
+    }
+
+    /**
+     * Save pro settings whether multisite or other
+     *
+     * @since 3.62
+     * 
+     * @param object $request The request
+     */
+    public function save_pro_settings($request)
+    {
+        if ( ! $this->can_access() ) {
+            $this->deny_access();
+        }
+
+        $data = $this->get_request_data( $request, array( 'settings' ) );
+        $settings = json_decode( $data['settings'], true );
+
+        // Supported types: 'number' (int), 'text' (string)
+        $fields_label = array(
+            'postFeedFields' => __( 'Maximum Number of Custom Field in Post Feed Sliders', 'ml-slider' )
+        );
+
+        // These settings should not be empty and be the type defined in $fields_check
+        foreach ($settings as $key => $value) {
+
+            if ( $value === '' ) {
+                wp_send_json_error(
+                    array(
+                        'message' => sprintf(
+                        __( 'The field (%s) cannot be empty', 'ml-slider' ), 
+                        $fields_label[$key]  
+                    )
+                ), 422 );
+            }
+        }
+
+        update_option('metaslider_pro_settings', $settings, true);
+
+        wp_send_json_success($settings, 200);
+    }
+
+    /**
      * Import theme images
      *
      * @param object $request The request
@@ -1043,6 +1137,56 @@ class MetaSlider_Api
         }
 
         wp_send_json_success(wp_get_attachment_thumb_url($slide->slide_data['id']), 200);
+    }
+
+    /**
+     * Import others (aka Local videos, YouTube videos, Vimeo videos, etc.)
+     *
+     * @since 3.70
+     * 
+     * @param object $request The request
+     */
+    public function import_others( $request )
+    {
+        if ( ! $this->can_access() ) {
+            $this->deny_access();
+        }
+
+        $data = $this->get_request_data(
+            $request, 
+            array( 
+                'slideshow_id',
+                'slug'
+            )
+        );
+
+        if ( empty( $data['slug'] ) || empty( $data['slideshow_id'] ) ) {
+            wp_send_json_error( 
+                array( 'message' => __('Import slug not found', 'ml-slider') ), 
+                404 
+            );
+        }
+
+        $slider_id  = intval( $data['slideshow_id'] );
+        $slug       = (string) $data['slug'];
+        $new_slides = array();
+
+        if ( class_exists( 'MetaSliderPro_Quickstart' ) ) {
+            $quickstart = new MetaSliderPro_Quickstart();
+            $new_slides = $quickstart->import_slides( $slug, $slider_id );
+        }
+
+        if ( ! count( $new_slides ) ) {
+            wp_send_json_error( 
+                array( 'message' => __('Import data could not be processed', 'ml-slider') ), 
+                404 
+            );
+        }
+
+        wp_send_json_success(
+            $data, 
+            200
+        );
     }
 
     /**
@@ -1205,6 +1349,14 @@ if (class_exists('WP_REST_Controller')) :
                 'permission_callback' => array($this->api, 'can_access')
             )));
 
+            register_rest_route($this->namespace, '/import/others', array(
+                array(
+                    'methods' => 'POST',
+                    'callback' => array($this->api, 'import_others'),
+                    'permission_callback' => array($this->api, 'can_access')
+                )
+            ));
+
             register_rest_route($this->namespace, '/tour/status', array(array(
                 'methods' => 'POST',
                 'callback' => array($this->api, 'set_tour_status'),
@@ -1274,6 +1426,19 @@ if (class_exists('WP_REST_Controller')) :
             register_rest_route($this->namespace, '/images/ids-from-filenames', array(array(
                 'methods' => 'POST',
                 'callback' => array($this->api, 'get_image_ids_from_file_name'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+
+            // Pro
+            register_rest_route($this->namespace, '/settings/pro', array(array(
+                'methods' => 'GET',
+                'callback' => array($this->api, 'get_pro_settings'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+
+            register_rest_route($this->namespace, '/settings/pro/save', array(array(
+                'methods' => 'POST',
+                'callback' => array($this->api, 'save_pro_settings'),
                 'permission_callback' => array($this->api, 'can_access')
             )));
         }

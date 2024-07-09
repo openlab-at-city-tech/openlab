@@ -40,12 +40,13 @@ export default {
     created() {
         this.$parent.classes = 'w-full max-w-lg rounded-lg'
         this.$parent.forceOpen = () => {
-            this.opt('dismiss')
+            this.opt('no')
             this.$parent.forceOpen = false  
         }
         Settings.getUserSetting().then(({data}) => {
 			this.optinEmail = data.data
 		})
+        Settings.saveUserSetting('analytics_onboarding_status', 'no')
     },
     mounted() {
         this.notifyInfo('metaslider/add-slide-css-manager-notice-opened', this.__('Analytics notice opened', 'ml-slider'))

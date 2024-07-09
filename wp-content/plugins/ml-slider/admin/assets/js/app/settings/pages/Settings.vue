@@ -2,7 +2,7 @@
 <div>
 	<split-layout :loading="loading">
 		<template slot="header">{{ __('Slideshow Defaults', 'ml-slider') }}</template>
-		<template slot="description">{{ __('Update default settings used when creating a new slideshow.', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the default settings used when creating new slideshows.', 'ml-slider') }}</template>
 		<template slot="fields">
 			<text-single-input v-model="slideshowDefaults.title" name="default-slideshow-title" @click="saveSlideshowDefaultSettings()">
 				<template slot="header">{{ __('Default Slideshow Title', 'ml-slider') }}</template>
@@ -39,10 +39,9 @@
 			</switch-single-input>
 		</template>
 	</split-layout>
-    <!-- Hey, for now this is hiden for pro users because we haven't integrated a license system yet! -->
     <split-layout :loading="loading" class="lg:mt-6">
 		<template slot="header">{{ __('Global Settings', 'ml-slider') }}</template>
-		<template slot="description">{{ __('Here you will find general account settings and options related to your account', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the settings used for all the slideshows on your site.', 'ml-slider') }}</template>
 		<template slot="fields">
 			<text-single-input v-model="globalSettings.license" name="ms-license" class="hidden" @click="saveGlobalSettings()">
 				<template slot="header">{{ __('License Key', 'ml-slider') }}</template>
@@ -58,12 +57,8 @@
                     <small v-if="Object.prototype.hasOwnProperty.call(optinInfo, 'id')" class="italic">Activated by user id #{{ optinInfo.id }} ({{ optinInfo.email }}) on {{ new Date(optinInfo.time * 1000).toLocaleDateString() }}</small>
                 </template>
 			</switch-single-input>
-			<switch-single-input v-model="globalSettings.gallery" @change="saveGlobalSettings()">
-				<template slot="header">{{ __('Enable Gallery (Beta)', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Fast, SEO-focused, fully WCAG accessible and easy to use galleries.', 'ml-slider') }}</template>
-			</switch-single-input>
 			<switch-single-input v-model="globalSettings.mobileSettings" @change="saveGlobalSettings()">
-				<template slot="header">{{ __('Enable Mobile Settings (Beta)', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Enable Mobile Settings', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Add option to hide slides and captions per screen size.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<template v-if="globalSettings.mobileSettings">
@@ -101,7 +96,7 @@
 				</div>
 			</template>
 			<switch-single-input v-model="globalSettings.legacy" @change="saveGlobalSettings()" v-bind:class="{ 'disableSwitch': legacySlideshows !== 0}">
-				<template slot="header">{{ __('Disable Legacy Libraries (Beta)', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Disable Legacy Libraries', 'ml-slider') }}</template>
 				<template slot="description">{{ __('This setting allows you to disable the legacy slideshow libraries: Nivo Slider, Coin Slider, and Responsive Slides', 'ml-slider') }}</template>
 				<template slot="legacy-notices" v-if="legacySlideshows === 0">
 					<div class="notice notice-success ml-legacy-notice">
@@ -134,6 +129,28 @@
 				<template slot="header">{{ __('New slides order', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Select the position for new added slides.', 'ml-slider') }}</template>
 			</select-field-input>
+			<switch-single-input v-model="globalSettings.legacyWidget" @change="saveGlobalSettings()">
+				<template slot="header">{{ __('Disable Legacy Widget', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to disable the legacy MetaSlider widget.', 'ml-slider') }}</template>
+			</switch-single-input>
+		</template>
+	</split-layout>
+	<!-- Pro settings -->
+	<split-layout :loading="loading" class="lg:mt-6" v-if="isPro()">
+		<template slot="header">{{ __('Pro Settings', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the MetaSlider Pro settings.', 'ml-slider') }}</template>
+		<template slot="fields">
+			<text-single-input 
+				v-model="proSettings.postFeedFields" 
+				name="default-slideshow-width" 
+				wrapper-class="w-24" 
+				@click="saveProSettings()">
+				<template slot="header">{{ __('Maximum Number of Custom Field in Post Feed Sliders', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Select how many custom fields will display in the dropdown menu when you are inserting tags.', 'ml-slider') }}</template>
+				<template slot="input-label">
+					{{ __('Change the maximum custom fields for Post Feed', 'ml-slider') }}
+				</template>
+			</text-single-input>
 		</template>
 	</split-layout>
 </div>
@@ -175,12 +192,15 @@ export default {
             globalSettings: {
 				license: '',
 				optIn: false,
-				gallery: false,
 				adminBar: true,
 				editLink: false,
 				legacy: true,
 				newSlideOrder: 'last',
-				mobileSettings: false,
+				mobileSettings: true,
+				legacyWidget: true
+			},
+			proSettings: {
+				postFeedFields: 30,
 			},
 			legacySlideshows: {}
 
@@ -230,6 +250,16 @@ export default {
 		}).catch(error => {
 			this.notifyError('metaslider/settings-load-error', error.response, true)
         })
+		Settings.getProSettings().then(({data}) => {
+			Object.keys(data.data).forEach(key => {
+				if (this.proSettings.hasOwnProperty(key)) {
+					this.proSettings[key] = data.data[key]
+				}
+			})
+			this.loading = false
+		}).catch(error => {
+			this.notifyError('metaslider/settings-load-error', error.response, true)
+		})
 		Settings.get('optin_user_extras').then(({data}) => {
 			this.optinInfo = data.data
 		})
@@ -266,7 +296,23 @@ export default {
 			}).catch(error => {
 				this.notifyError('metaslider/settings-save-error', error.response, true)
 			})
-		}
+		},
+		// @TODO - Maybe move this to metaslider-pro/v1 ?
+		saveProSettings() {
+			const settings = JSON.stringify(this.proSettings)
+			Settings.saveProSettings(settings).then(({data}) => {
+				this.notifyInfo(
+					'metaslider/settings-page-slideshow-settings-saved',
+					this.__('Pro settings saved', 'ml-slider'),
+					true
+				)
+			}).catch(error => {
+				this.notifyError('metaslider/settings-save-error', error.response, true)
+			})
+		},
+		isPro() {
+			return metaslider_api.proUser !== 'undefined' && Number(metaslider_api.proUser) === 1;
+		},
 	}
 }
 </script>

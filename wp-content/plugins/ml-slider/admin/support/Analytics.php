@@ -167,16 +167,13 @@ class MetaSlider_Analytics
             $date_activated->setTimestamp((int) get_option('ms_hide_all_ads_until'));
             $date_activated->modify('-2 week');
             $date_activated = $date_activated->getTimeStamp();
-            $metagallery = new WP_Query(array('post_type' => 'metagallery', 'posts_per_page' => -1));
             $data = array(
                 'has_pro_installed' => metaslider_pro_is_installed() ? metaslider_pro_version() : 'false',
                 'cancelled_tour_on' => get_option('metaslider_tour_cancelled_on'),
                 'optin_user_info' => get_option('metaslider_optin_user_extras'),
                 'optin_via' => get_option('metaslider_optin_via'),
                 'slider_count' => $sliders_count ? $sliders_count->found_posts : 0,
-                'first_activated_on' => $date_activated > 0 ? $date_activated : 0,
-                'metagallery_opened' => (int) get_option('metagallery_opened'),
-                'metagallery_count' => (int) $metagallery->post_count
+                'first_activated_on' => $date_activated > 0 ? $date_activated : 0
             );
 
             return $data;

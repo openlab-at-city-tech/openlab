@@ -1,0 +1,126 @@
+.metaslider.ms-theme-bitono {
+
+	&:not(.has-carousel-mode) .flexslider {
+
+		// Animation fade out
+		.caption-wrap .caption,
+		.youtube .play_button,
+		.vjs-big-play-button {
+			animation-name: bitono_fadeOut;
+			animation-delay: 0.5s;
+			animation-duration: 0.5s;
+			animation-fill-mode: both;
+		}
+
+		// Animation fade in
+		.flex-active-slide {
+
+			.caption-wrap .caption,
+			.youtube .play_button,
+			.vjs-big-play-button {
+				animation-name: bitono_fadeIn;
+			}
+		}
+	}
+
+	.flexslider {
+
+		.caption-wrap {
+			background:  linear-gradient(to bottom, rgba(0,0,0,0), #016fb9);
+			opacity: 1;
+			height: 100%;
+
+			.caption {
+				padding: 20px 70px;
+				text-align: center;
+				top: 50%;
+				transform: translateY(-50%);
+				position: absolute;
+				width: 100%;
+				text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+				box-sizing: border-box;
+
+				p {
+					margin: 0 0 15px;
+				}
+				
+				a {
+					color: #f3ea28;
+					text-decoration: underline;
+
+					&:hover,
+					&:focus {
+						color: #faf461;
+						background: none;
+					}
+				}
+			}
+		}
+
+		.flex-direction-nav li a {
+			//opacity: 1;
+			height: 38px;
+			width: 38px;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color:  #dd6923;
+			background-size: 18px auto;
+			box-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+			border-radius: 4px;
+			
+			&:focus {
+				background-color: #dd6923;
+				outline: none;
+			}
+
+			&.flex-prev {
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z' fill='%23fff'/%3E%3C/svg%3E");
+    			left: 20px;
+			}
+
+			&.flex-next {
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z' fill='%23fff'/%3E%3C/svg%3E");
+    			right: 20px;
+			}
+		}
+
+		.flex-control-nav {
+			bottom: 20px;
+	
+			li a {
+				box-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+				background: #dd6923;
+				margin: 0 5px;
+				border-radius: 2px;
+				opacity: 0.8;
+
+				&:hover,
+				&:focus {
+					opacity: 1;
+				}
+
+				&.flex-active {
+					background: #fff;
+				}
+			}
+		}
+	}
+}
+
+@keyframes bitono_fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes bitono_fadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

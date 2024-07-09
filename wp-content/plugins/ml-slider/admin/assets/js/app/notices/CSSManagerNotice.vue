@@ -1,14 +1,14 @@
 <template>
-	<div class="flex flex-col-reverse lg:flex-row">
-		<div class="lg:w-2/3">
+	<div class="css-manager-ad-container flex flex-col-reverse lg:flex-row">
+		<div class="lg:w-1/2">
 			<img
 				:alt="__('CSS manager module', 'ml-silder')"
 				:src="asset('images/css-manager.gif')"
-				class="w-full block">
+				class="block">
 		</div>
-		<div class="p-8 lg:w-1/3 lg:border-l-4 border-gray-lighter bg-gray-lightest">
-			<h1 class="text-xl">{{ __('CSS Manager', 'ml-slider') }}</h1>
-			<p>{{ __('Easily add custom CSS to your slideshows to customize and fit your theme perfectly.', 'ml-slider') }}</p>
+		<div class="p-8 lg:w-1/2">
+			<h1>{{ __('CSS Manager', 'ml-slider') }}</h1>
+			<p>{{ __('Easily add custom CSS to your slideshows to create the perfect design for your sites.', 'ml-slider') }}</p>
 			<ul>
 				<li class="mb-1">
                     <svg class="inline text-orange w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -31,29 +31,8 @@
 			</ul>
 			<a
 				:href="hoplink"
-				class="bg-blue-dark text-white no-underline my-4 inline-block rounded px-3 py-2"
-				target="_blank">{{ __('Upgrade to pro now', 'ml-slider') }}</a>
-			<p class="hidden lg:block">{{ __('Upgrading also includes:', 'ml-slider') }}</p>
-			<ul class="hidden lg:block">
-				<li class="mb-1">
-                    <svg class="inline text-orange w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    {{ __('Layer, video and post type slides.', 'ml-slider') }}
-                </li>
-				<li class="mb-1">
-                    <svg class="inline text-orange w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    {{ __('Slide scheduling - decide when slides appear.', 'ml-slider') }}
-                </li>
-				<li class="mb-1">
-                    <svg class="inline text-orange w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    {{ __('Premium support - ask us anyting!', 'ml-slider') }}
-                </li>
-			</ul>
+				class="probutton button button-primary button-hero"
+				target="_blank">{{ __('Find out more about MetaSlider Pro', 'ml-slider') }} <span class="dashicons dashicons-external"></span></a>
 		</div>
 	</div>
 </template>

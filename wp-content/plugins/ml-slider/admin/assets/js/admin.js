@@ -1,6 +1,7 @@
 window.jQuery(function ($) {
 
     const APP = window.metaslider.app ? window.metaslider.app.MetaSlider : null
+
     /**
      * Event listening to media library edits
      */
@@ -106,14 +107,14 @@ window.jQuery(function ($) {
             url: metaslider.ajaxurl,
             data: data,
             type: 'POST',
-            error: function (error) {
-                APP && APP.notifyError('metaslider/slide-create-failed', error, true)
+            error: function (xhr, status, error) {
+                var err = JSON.parse(xhr.responseText);
+                APP && APP.notifyError('metaslider/slide-create-failed', err.data.messages[1]['errors']['create_failed'][0], true)
             },
             success: function (response) {
                 if(window.location.href.indexOf('metaslider-start') > -1) {
                     window.location.href = 'admin.php?page=metaslider&id=' + response.data;
                 } else {
-                    console.log(response.data);
                     // Mount and render each new slide
                     response.data.forEach(function (slide) {
                         // TODO: Eventually move the creation to the slideshow or slide vue component
@@ -132,10 +133,6 @@ window.jQuery(function ($) {
                         } else {
                             $('#metaslider-slides-list > tbody').prepend(cont_);
                         }
-
-                        // Display image (is hidden by default)
-                        var thumb = $("#slide-"+slide.slide_id).find('.update-image .thumb img');
-                        fit_one_thumb(thumb);
                     })
 
                     /* Get the last added slide to avoid multiple scrollTo calls 
@@ -174,6 +171,11 @@ window.jQuery(function ($) {
         }
     })
 
+    create_slides.on('content:activate', function () {
+        // Remove filters to don't allow to insert other media type different to images
+        $('#media-attachment-filters').remove();
+    })
+
     /**
      * Fire events when the modal is opened
      * Available events: create_slides.on('all', function (e) { console.log(e) })
@@ -188,6 +190,9 @@ window.jQuery(function ($) {
         unwanted_media_menu_items.forEach(function (item) {
             $('#menu-item-' + item.id).remove();
         })
+
+        // Remove filters to don't allow to insert other media type different to images
+        $('#media-attachment-filters').remove();
     })
     APP && create_slides.on('open', function () {
         APP.notifyInfo('metaslider/add-slide-opening-ui', APP.__('Opening add slide UI...', 'ml-slider'))
@@ -303,14 +308,15 @@ window.jQuery(function ($) {
                 data: data,
                 type: 'POST',
                 error: function (error) {
-                    APP && APP.notifyError('metaslider/slide-update-failed', error, true)
+                    var err = JSON.parse(error.responseText);
+                    APP && APP.notifyError('metaslider/slide-update-failed', err.data.message, true)
                 },
                 success: function (response) {
                     /**
                      * Updates the image on success
                      */
                     var new_image = $('#slide-' + $this.data('slideId') + ' .thumb').find('img');
-                    new_image.attr(
+                    new_image.attr( 
                         'srcset',
                         `${response.data.thumbnail_url_large} 1024w, ${response.data.thumbnail_url_medium} 768w, ${response.data.thumbnail_url_small} 240w`
                     );
@@ -364,7 +370,130 @@ window.jQuery(function ($) {
                     .addClass('button-primary');
             }
         });
-    })
+    });
+
+    /**
+     * Handles duplicating slides
+     */
+    $('.metaslider').on('click', '.duplicate-slide-image', function (event) {
+        event.preventDefault();
+        var $this = $(this);
+        var data = {
+            action: 'duplicate_slide',
+            _wpnonce: metaslider.duplicate_slide_nonce,
+            slide_id: $this.data('slide-id'),
+            slider_id: window.parent.metaslider_slider_id
+        };
+
+        $.ajax({
+            url: metaslider.ajaxurl,
+            data: data,
+            type: 'POST',
+            error: function (error) {
+                APP && APP.notifyError('metaslider/slide-duplicate-failed', error, true)
+            },
+            success: function (response) {
+
+                var res = window.metaslider.app.Vue.compile(response.data.html)
+
+                // Mount the slide to the beginning or end of the list
+                const cont_ = (new window.metaslider.app.Vue({
+                    render: res.render,
+                    staticRenderFns: res.staticRenderFns
+                }).$mount()).$el;
+
+                if (metaslider.newSlideOrder === 'last') {
+                    $('#metaslider-slides-list > tbody').append(cont_);
+                } else {
+                    $('#metaslider-slides-list > tbody').prepend(cont_);
+                }
+
+                //Icon for mobile settings
+                show_mobile_icon('slide-' + response.data.slide_id);
+
+                //scroll to new slide
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: metaslider.newSlideOrder === 'last' ? $("#slide-"+response.data.slide_id).offset().top : 0
+                }, 2000);
+
+                // Add timeouts to give some breating room to the notice animations
+                setTimeout(function () {
+                    setTimeout(function () {
+                        APP && APP.triggerEvent('metaslider/save')
+                    }, 1000);
+                }, 1000);
+            }
+        });
+        
+    });
+
+    /**
+     * When Carousel mode or Loop continuously changes
+     * 
+     * @since 3.90
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[autoPlay]"], .ms-settings-table input[name="settings[carouselMode]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
+        showHideAutoPlay();
+    });
+
+    /**
+     * Show/hide Auto play and Play / pause if Carousel mode and Loop continuously are both enabled
+     * 
+     * @since 3.90
+     */
+    var showHideAutoPlay = function () {
+        var carouselMode = $('.ms-settings-table input[name="settings[carouselMode]"]');
+        var infiniteLoop = $('.ms-settings-table input[name="settings[infiniteLoop]"]');
+        var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
+        var pausePlay = $('.ms-settings-table input[name="settings[pausePlay]"]');
+
+        if (carouselMode.is(':checked') && infiniteLoop.is(':checked')) {
+            // Hide "Auto play" and "Play / pause" if "Carousel mode" AND "Loop carousel continuously" are enabled
+            autoPlay.parents('tr').hide();
+            pausePlay.parents('tr').hide();
+        } else {
+            // Show "Auto play" if "Carousel mode" OR "Loop carousel continuously" are disabled
+            autoPlay.parents('tr').show();
+
+            if (autoPlay.is(':checked')) {
+                // Show "Play / pause" if "Auto play" is enabled
+                pausePlay.parents('tr').show();
+            } else {
+                pausePlay.parents('tr').hide();
+            }
+        }
+    }
+    showHideAutoPlay();
+
+    /**
+     * When Auto play or Loop changes
+     * 
+     * @since 3.90
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[autoPlay]"], .ms-settings-table select[name="settings[loop]"]', function () {
+        adjustLoop();
+    });
+
+    /**
+     * Add/remove 'Stop on first slide' option for Loop setting
+     * 
+     * @since 3.90
+     */
+    var adjustLoop = function () {
+        var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
+        var loop = $('.ms-settings-table select[name="settings[loop]"]');
+
+        if (autoPlay.is(':checked')) {
+            // Add 'Stop on first slide' option if doesn't exists
+            if (loop.find('option[value="stopOnFirst"]').length === 0) {
+                loop.append(`<option value="stopOnFirst">${APP.__('Stop on first slide', 'ml-slider')}</option>`);
+            }
+        } else {
+            // Remove 'Stop on first slide' option
+            loop.find('option[value="stopOnFirst"]').remove();
+        }
+    }
+    adjustLoop();
 
     /**
      * Add all the image APIs. Add events everytime the modal is open
@@ -722,11 +851,41 @@ window.jQuery(function ($) {
         });
     });
 
+    /**
+     * Hide 'Click the "Add Slide" button to create your slideshow' notice
+     * 
+     * @since 3.80
+     */
+    var hideNoSlidesNotice = function () {
+        $('#add-first-slide-notice').hide();
+    }
+
     // helptext tooltips
-    $('.tipsy-tooltip').tipsy({className: 'msTipsy', live: false, delayIn: 500, html: true, gravity: 'e'})
-    $('.tipsy-tooltip-top').tipsy({live: false, delayIn: 500, html: true, gravity: 's'})
-    $('.tipsy-tooltip-bottom').tipsy({live: false, delayIn: 500, html: true, gravity: 'n'})
-    $('.tipsy-tooltip-bottom-toolbar').tipsy({live: false, delayIn: 500, html: true, gravity: 'n', offset: 2})
+    var addTooltips = function () {
+        $('.tipsy-tooltip').tipsy({className: 'msTipsy', live: false, delayIn: 500, html: true, gravity: 'e'});
+        $('.tipsy-tooltip-top').tipsy({live: false, delayIn: 500, html: true, gravity: 's'});
+        $('.tipsy-tooltip-bottom').tipsy({live: false, delayIn: 500, html: true, gravity: 'n'});
+        $('.tipsy-tooltip-bottom-toolbar').tipsy({live: false, delayIn: 500, html: true, gravity: 'n', offset: 2});
+    }
+    addTooltips();
+
+    // Add tooltips when a new slide (<tr>) is added (to <table>)
+    const slidesTable = $('#metaslider-slides-list');
+    if (slidesTable.length) {
+        const observer = new MutationObserver(
+            function (mutationsList, observer) {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        addTooltips();
+                        hideNoSlidesNotice();
+                    }
+                }
+            }
+        );
+    
+        const observerConfig = { childList: true, subtree: true };
+        observer.observe(slidesTable[0], observerConfig);
+    }
 
     // welcome screen dropdown
     $('#sampleslider-btn').on('click', function () {
@@ -807,96 +966,6 @@ window.jQuery(function ($) {
         $(this).next('.copy-message').fadeIn().delay(1000).fadeOut();
     });
 
-    var fitThumbsTimer;
-    
-    /**
-     * Resize all slide thumbnails to fill its container
-     * 
-     * @return void
-     */ 
-    var fit_all_thumbs = function() {
-        $('.update-image .thumb img').each(function() {
-            fit_one_thumb($(this));
-            fit_one_thumb_on_change($(this));
-        });
-    }
-
-    /**
-     * Resize a single slide thumbnails to fill its container
-     * 
-     * @param {object} img <img> element
-     * 
-     * @return void
-     */
-    var fit_one_thumb = window.metaslider.fit_one_thumb = function (img) {
-        var wrapper = img.parent();
-
-        if(typeof img === 'undefined' || typeof wrapper === 'undefined') {
-            console.error('MetaSlider: Image and wrapper thumbnails are not defined!');
-            return;
-        }
-
-        // Image Aspect Ratio is bigger than its container?
-        var imgBiggerAR = img[0].naturalWidth / img[0].naturalHeight > wrapper.width() / wrapper.height();
-        
-        if(imgBiggerAR && (!img[0].style.width.length || img[0].style.width === '100%')) {
-            img.fadeOut(300, function() {
-                img.css({ width: 'auto', height: '100%' }).fadeIn(300);
-            });
-        } else if(!imgBiggerAR && (!img[0].style.width.length || img[0].style.width === 'auto')) {
-            img.fadeOut(300, function() {
-                img.css({ width: '100%', height: 'auto' }).fadeIn(300);
-            });
-        } else {
-            // Default to be sure thumbnail is at least visible
-            if (imgBiggerAR) {
-                img.css({ width: 'auto', height: '100%' });
-            } else {
-                img.css({ width: '100%', height: 'auto' });
-            }
-            img.show();
-        }
-    }
-
-    /**
-     * Detect when src attribute for a thumbnail changes 
-     * and adapt to its parent if needed through fit_one_thumb()
-     * 
-     * @param {object} img <img> element
-     * 
-     * @retun void
-     */
-    var fit_one_thumb_on_change = function (img) {
-        var currentSrc = img.attr('src');
-        setInterval( function() {
-            if (img.attr('src') !== currentSrc) {
-                img.trigger('change'); 
-                currentSrc = img.attr('src');
-                window.metaslider.fit_one_thumb(img);
-            }
-        }, 300);
-    }
-
-    /**
-     * Make sure fit_all_thumbs() is not triggered multiple times at once
-     * 
-     * @return void
-     */
-    var debounce_fit_all_thumbs = function () {
-        clearTimeout(fitThumbsTimer);
-        fitThumbsTimer = setTimeout(function() {
-            fit_all_thumbs();
-        }, 100);
-    }
-
-    /* Resize thumbnails on load */
-    fit_all_thumbs();
-
-    /* Resize thumbnails on screen resize */
-    $(window).resize( function() {
-        debounce_fit_all_thumbs();
-    });
-
     /**
      * Fallback after adding a new slide
      * 
@@ -914,13 +983,6 @@ window.jQuery(function ($) {
             table.append(data.html);
         } else {
             table.prepend(data.html);
-        }
-
-        // Display image (is hidden by default)
-        var thumb = $("#slide-"+data.slide_id).find('.update-image .thumb img');
-
-        if (thumb.length) {
-            window.metaslider.fit_one_thumb(thumb);
         }
 
         $('html, body').animate({
@@ -950,7 +1012,7 @@ window.jQuery(function ($) {
     /* Add mobile icon for slides with existing mobile setting */
     var show_mobile_icon = function (slide_id) {
         var mobile_checkboxes = $('#metaslider-slides-list #'+ slide_id +' .mobile-checkbox:checked');
-        var icon = '<span class="mobile_setting_enabled float-left"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
+        var icon = '<span class="mobile_setting_enabled float-left tipsy-tooltip-top" title="Mobile options enabled for this slide"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
         var mobile_enabled = $('#metaslider-slides-list #'+ slide_id +' .slide-details .mobile_setting_enabled');
         if (mobile_checkboxes.length > 0) {
             if(mobile_enabled.length == 0) {
@@ -971,6 +1033,43 @@ window.jQuery(function ($) {
         show_mobile_icon('slide-'+slider_id);
     });
 
+    /* Hide the Mobile Options section when all options are hidden */
+    function mobileSectionChecker(){
+        if (!$('[name="settings[links]"]').is(':checked') && $('[name="settings[navigation]"]').val() == 'false') {
+            $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').hide();
+        } else {
+            $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').show();
+        }
+    }
+    $('[name="settings[navigation]"], [name="settings[links]"]').on('change', function(){
+        mobileSectionChecker();
+    });
+    mobileSectionChecker();
+
+    //thumbnail animation on dashboard page
+    $(".slidethumb").each(function() {
+        var count = 1; 
+        var container = $(this); 
+        setInterval(function() {
+            count = container.find(":nth-child(" + count + ")").fadeOut().next().length ? count + 1 : 1;
+            container.find(":nth-child(" + count + ")").fadeIn();
+            console.log(container.find(":nth-child(" + count + ")"));
+        }, 2000);
+    });
+
+    /**
+     * Trigger slideshow save after a quickstart has been created
+     * 
+     * @since 3.90
+     */
+    var sampleSlidesWereAdded = function () {
+        if (window.location.href.indexOf('metaslider_add_sample_slides_after') !== -1) {
+            setTimeout(function () {
+                APP && APP.triggerEvent('metaslider/save')
+            }, 1000);
+        }
+    }
+    sampleSlidesWereAdded();
 });
 
 /**
