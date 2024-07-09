@@ -1484,3 +1484,7 @@ body#error-page #qm-fatal {
   margin: 0 !important;
   border: none !important;
 }
+
+#qm-logger tr pre {
+  user-select: all;
+}
