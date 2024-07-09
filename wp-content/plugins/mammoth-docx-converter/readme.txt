@@ -3,8 +3,8 @@ Contributors: michaelwilliamson
 Donate link: https://liberapay.com/mwilliamson/donate
 Tags: docx, html, word, office, paste
 Requires at least: 4.0
-Tested up to: 6.0.0
-Stable tag: 1.20.0
+Tested up to: 6.4.3
+Stable tag: 1.21.0
 License: BSD 2-clause
 License URI: http://opensource.org/licenses/BSD-2-Clause
 
@@ -50,7 +50,7 @@ Mammoth can be configured by writing a separate plugin. For instance, [this exam
 
 As a WordPress plugin, Mammoth uses the JavaScript library mammoth.js to convert documents. Mammoth will use the JavaScript global `MAMMOTH_OPTIONS` whenever calling mammoth.js, which allows for some customisation. `MAMMOTH_OPTIONS` should be defined as a function that returns an options object. This options object will then be passed in as the `options` argument to `convertToHtml`. The [mammoth.js docs](https://github.com/mwilliamson/mammoth.js) describe the various options available.
 
-`MAMMOTH_OPTIONS` will be called with `mammoth` as the first argument. This can be useful if you need to use a function from mammoth.js, such as `mammoth.transforms.getDescendantsOfType`.
+The global `MAMMOTH_OPTIONS` will be called with `mammoth` as the first argument. This can be useful if you need to use a function from mammoth.js, such as `mammoth.transforms.getDescendantsOfType`.
 
 = FAQs =
 
@@ -61,6 +61,10 @@ As a WordPress plugin, Mammoth uses the JavaScript library mammoth.js to convert
 Install the plugin in the usual way, and you should be able to use the Mammoth .docx converter when adding a post. If you can't see the meta box, make sure that it's selected by taking a look at the "Screen Options" for adding a post.
 
 == Changelog ==
+
+= 1.21.0 =
+
+* Update mammoth.js to 1.7.0. This includes support for documents in the strict format.
 
 = 1.20.0 =
 
