@@ -346,9 +346,21 @@
 			init_visible_metaboxes();
 		});
 
-		$( '[name="account-description-approval"]' ).on( 'change', function() {
-			init_visible_metaboxes();
+		$( '[name="account-description-approval"]' ).on( 'change', function( e ) {
+			$( '.registration-continue-button' ).hide();
+
+			if ( 'yes' === e.target.value ) {
+				$( '#registration-continue-button-yes' ).show();
+			} else {
+				$( '#registration-continue-button-no' ).show();
+				init_visible_metaboxes();
+			}
 		} )
+
+		$( '#registration-continue-button-yes' ).on( 'click', function( e ) {
+			e.preventDefault();
+			init_visible_metaboxes();
+		} );
 
 		load_account_type_description( $account_type_field.val() );
 		load_account_type_fields();
@@ -525,6 +537,7 @@
 		function load_account_type_description( accountType ) {
 			$( '.account-type-description' ).hide();
 			$( '.account-description-approval-fieldset' ).hide();
+			$( '.registration-continue-button' ).hide();
 
 			if ( accountType && accountType.length > 0 ) {
 				$( '.account-type-description[data-account-type="' + accountType + '"]' ).show();
