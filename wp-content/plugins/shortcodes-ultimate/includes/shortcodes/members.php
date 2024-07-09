@@ -80,6 +80,6 @@ function su_shortcode_members( $atts = null, $content = null ) {
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-members' . su_get_css_class( $atts ) . '" style="background-color:' . su_adjust_brightness( $atts['color'], 50 ) . ';border-color:' . su_adjust_brightness( $atts['color'], -20 ) . ';color:' . su_adjust_brightness( $atts['color'], -60 ) . '">' . str_replace( '%login%', $login, su_do_attribute( $atts['message'] ) ) . '</div>';
+	return '<div class="su-members' . su_get_css_class( $atts ) . '" style="' . esc_attr( 'background-color:' . su_adjust_brightness( $atts['color'], 50 ) . ';border-color:' . su_adjust_brightness( $atts['color'], -20 ) . ';color:' . su_adjust_brightness( $atts['color'], -60 ) ) . '">' . str_replace( '%login%', $login, su_do_attribute( $atts['message'] ) ) . '</div>';
 
 }

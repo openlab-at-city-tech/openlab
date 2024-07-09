@@ -63,6 +63,8 @@ function su_shortcode_service( $atts = null, $content = null ) {
 		'service'
 	);
 
+	$atts['size'] = intval( $atts['size'] );
+
 	// RTL
 	$rtl = is_rtl()
 		? 'right'
@@ -73,7 +75,7 @@ function su_shortcode_service( $atts = null, $content = null ) {
 		$atts['icon'] = sprintf(
 			'<i class="sui sui-%s" style="font-size:%spx;color:%s"></i>',
 			esc_attr( trim( str_replace( 'icon:', '', $atts['icon'] ) ) ),
-			intval( $atts['size'] ),
+			$atts['size'],
 			esc_attr( $atts['icon_color'] )
 		);
 
@@ -83,13 +85,13 @@ function su_shortcode_service( $atts = null, $content = null ) {
 		$atts['icon'] = sprintf(
 			'<img src="%1$s" width="%2$s" height="%2$s" alt="%3$s" style="width:%2$spx;height:%2$spx" />',
 			esc_attr( $atts['icon'] ),
-			intval( $atts['size'] ),
+			$atts['size'],
 			esc_attr( $atts['title'] )
 		);
 	}
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-service' . su_get_css_class( $atts ) . '"><div class="su-service-title" style="padding-' . $rtl . ':' . round( intval( $atts['size'] ) + 14 ) . 'px;min-height:' . esc_attr( $atts['size'] ) . 'px;line-height:' . esc_attr( $atts['size'] ) . 'px">' . $atts['icon'] . ' ' . su_do_attribute( $atts['title'] ) . '</div><div class="su-service-content su-u-clearfix su-u-trim" style="padding-' . $rtl . ':' . round( intval( $atts['size'] ) + 14 ) . 'px">' . do_shortcode( $content ) . '</div></div>';
+	return '<div class="su-service' . su_get_css_class( $atts ) . '"><div class="su-service-title" style="padding-' . $rtl . ':' . round( $atts['size'] + 14 ) . 'px;min-height:' . $atts['size'] . 'px;line-height:' . $atts['size'] . 'px">' . $atts['icon'] . ' ' . su_do_attribute( $atts['title'], true ) . '</div><div class="su-service-content su-u-clearfix su-u-trim" style="padding-' . $rtl . ':' . round( $atts['size'] + 14 ) . 'px">' . do_shortcode( $content ) . '</div></div>';
 
 }

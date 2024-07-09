@@ -45,28 +45,27 @@ function su_shortcode_quote( $atts = null, $content = null ) {
 	$atts = shortcode_atts(
 		array(
 			'style' => 'default',
-			'cite'  => false,
-			'url'   => false,
+			'cite'  => '',
+			'url'   => '',
 			'class' => '',
 		),
 		$atts,
 		'quote'
 	);
 
-	$cite_link = $atts['url'] && $atts['cite']
-		? '<a href="' . esc_attr( $atts['url'] ) . '" target="_blank">' . $atts['cite'] . '</a>'
-		: $atts['cite'];
+	$atts['cite'] = su_do_attribute($atts['cite'], true);
 
-	$cite = $atts['cite']
-		? '<span class="su-quote-cite">' . $cite_link . '</span>'
-		: '';
+	if ($atts['cite'] && $atts['url']) {
+		$atts['cite'] = '<a href="' . esc_url( $atts['url'] ) . '" target="_blank">' . $atts['cite'] . '</a>';
+	}
 
-	$cite_class = $atts['cite']
-		? ' su-quote-has-cite'
-		: '';
+	if ($atts['cite']) {
+		$atts['cite'] = '<span class="su-quote-cite">' . $atts['cite'] . '</span>';
+		$atts['class'] .= ' su-quote-has-cite';
+	}
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
-	return '<div class="su-quote su-quote-style-' . esc_attr( $atts['style'] ) . $cite_class . su_get_css_class( $atts ) . '"><div class="su-quote-inner su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'quote' ) . su_do_attribute( $cite ) . '</div></div>';
+	return '<div class="su-quote su-quote-style-' . esc_attr( $atts['style'] ) . su_get_css_class( $atts ) . '"><div class="su-quote-inner su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'quote' ) . $atts['cite'] . '</div></div>';
 
 }

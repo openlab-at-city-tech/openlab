@@ -8,27 +8,24 @@
  * @package      Shortcodes_Ultimate
  * @subpackage   Shortcodes_Ultimate/admin
  */
-final class Shortcodes_Ultimate_Notice_Rate extends Shortcodes_Ultimate_Notice
-{
+final class Shortcodes_Ultimate_Notice_Rate extends Shortcodes_Ultimate_Notice {
     /**
      * Initialize the class and set its properties.
      *
      * @since  5.0.0
      */
-    public function __construct( $notice_id, $template_file )
-    {
+    public function __construct( $notice_id, $template_file ) {
         parent::__construct( $notice_id, $template_file );
         $this->defer_delay = 3 * DAY_IN_SECONDS;
         $this->first_time_delay = 7 * DAY_IN_SECONDS;
     }
-    
+
     /**
      * Display the notice.
      *
      * @since  5.0.0
      */
-    public function display_notice()
-    {
+    public function display_notice() {
         // Make sure this is the Plugins screen
         if ( $this->get_current_screen_id() !== 'plugins' ) {
             return;
