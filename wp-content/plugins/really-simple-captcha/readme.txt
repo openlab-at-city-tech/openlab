@@ -2,9 +2,9 @@
 Contributors: takayukister
 Donate link: https://contactform7.com/donate/
 Tags: captcha
-Requires at least: 6.1
-Tested up to: 6.2
-Stable tag: trunk
+Requires at least: 6.4
+Tested up to: 6.5
+Stable tag: 2.3
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -46,7 +46,7 @@ Generate a random word for CAPTCHA.
 
 Generate an image file and a corresponding text file in the temporary directory.
 
-    $prefix = mt_rand();
+    $prefix = wp_rand();
     $captcha_instance->generate_image( $prefix, $word );
 
 Then, show the image and get an answer from respondent.
@@ -92,13 +92,13 @@ If you have any further questions, please submit them [to the support forum](htt
 
 == Changelog ==
 
+= 2.3 =
+
+* Bumps up the minimum required WordPress version to 6.4.
+
 = 2.2 =
 
 * Bumps up the minimum required WordPress version to 6.1.
 * Bumps up the minimum required PHP version to 7.4.
 * Replaces `ReallySimpleCaptcha::normalize_path()` with `wp_normalize_path()`.
 * Updates Apache directives.
-
-= 2.1 =
-
-* Uses `hash_equals()` to compare strings.
