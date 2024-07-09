@@ -1,17 +1,24 @@
-=== Plugin Name ===
-Contributors: timmmmyboy, BigBlueHat, JakeHartnell, greatislander
+=== Hypothesis ===
+Contributors: timmmmyboy, BigBlueHat, JakeHartnell, greatislander, acelaya
 Tags: hypothesis, annotation, comments
-Requires at least: 3.0.1
-Tested up to: 5.2.2
-Stable tag: 0.6.0
-License: BSD
-License URI: http://opensource.org/licenses/BSD-2-Clause
+Requires at least: 6.2
+Tested up to: 6.4.2
+Stable tag: 0.7.3
+License: BSD-3-Clause
+License URI: http://opensource.org/licenses/BSD-3-Clause
 
 An open platform for the collaborative evaluation of knowledge.
 
 == Description ==
 
 Hypothesis is a web annotation tool that allows users to provide commentary, references, and insight on top of news, blogs, scientific articles, books, terms of service, ballot initiatives, legislation and regulations, software code and more. You can find out more at [http://hypothes.is/](http://hypothes.is/)
+
+This plugin will allow you to automatically embed Hypothesis in your site.
+
+Without this plugin, you would have to follow [these steps](https://web.hypothes.is/help/embedding-hypothesis-in-websites-and-platforms/), but with this plugin you only need to check some checkboxes, and you will be good to go.
+
+* [Terms of Service](https://web.hypothes.is/terms-of-service/)
+* [Privacy Policy](https://web.hypothes.is/privacy/)
 
 == Installation ==
 
@@ -20,6 +27,21 @@ Hypothesis is a web annotation tool that allows users to provide commentary, ref
 3. You're done! The frontend of your site should now be enabled to use Hypothesis.
 
 == Changelog ==
+
+= 0.7.3 =
+* Add new banner and logo
+
+= 0.7.2 =
+* Migrate to BSD-3-Clause license
+* Document third party integration
+* Use `Hypothesis` namespace in PHP code
+
+= 0.7.1 =
+* Do not include wp-cli.phar on releases
+
+= 0.7.0 =
+* Add support for WordPress v6
+* Update to WordPress coding standard v3
 
 = 0.6.0 =
 * Fix PDF links in multisite and other customized installations (props @boonbgorges).
