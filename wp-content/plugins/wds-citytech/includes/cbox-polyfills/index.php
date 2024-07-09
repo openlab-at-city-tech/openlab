@@ -407,8 +407,98 @@ function cboxol_get_academic_units( $args ) {
 			break;
 
 		default:
-			$units = [];
+			$units = cboxol_get_academic_units( [ 'type' => 'school' ] );
+			$units = array_merge( $units, cboxol_get_academic_units( [ 'type' => 'department' ] ) );
+			$units = array_merge( $units, cboxol_get_academic_units( [ 'type' => 'office' ] ) );
 			break;
+	}
+
+	return $units;
+}
+
+/**
+ * Get a specific academic unit.
+ *
+ * Assumes unique slugs.
+ *
+ * @param string Unit slug.
+ * @return \WP_Error|\CBOX\OL\AcademicUnit
+ */
+function cboxol_get_academic_unit( $slug ) {
+	if ( $slug ) {
+		$units = cboxol_get_academic_units( [] );
+		foreach ( $units as $unit ) {
+			if ( $unit->get_slug() === $slug ) {
+				return $unit;
+			}
+		}
+	}
+
+	return new WP_Error( 'no_academic_unit_found', __( 'No academic unit found.', 'commons-in-a-box' ) );
+}
+
+function cboxol_get_object_academic_units( $args ) {
+	$r = array_merge(
+		array(
+			'object_id'   => null,
+			'object_type' => null,
+		),
+		$args
+	);
+
+	if ( ! $r['object_id'] || ! $r['object_type'] ) {
+		return false;
+	}
+
+	$taxonomy = '';
+	switch ( $r['object_type'] ) {
+		case 'user':
+			$taxonomy = 'cboxol_member_in_acadunit';
+			break;
+
+		case 'group':
+			$taxonomy = 'cboxol_group_in_acadunit';
+			break;
+	}
+
+	if ( ! $taxonomy ) {
+		return false;
+	}
+
+	$terms = wp_get_object_terms( $r['object_id'], $taxonomy );
+
+	$units = array();
+	foreach ( $terms as $term ) {
+		$unit_slug = substr( $term->name, 10 );
+
+		// Pretty elegant.
+		$unit_post = get_post( $unit_slug );
+
+		if ( $unit_post ) {
+			$unit = cboxol_get_academic_unit( $unit_post->post_name );
+			if ( ! is_wp_error( $unit ) ) {
+				$units[ $unit->get_slug() ] = $unit;
+			}
+		}
+	}
+
+	if ( $units ) {
+		uasort(
+			$units,
+			function( $a, $b ) {
+				$a_order = $a->get_order();
+				$b_order = $b->get_order();
+
+				if ( $a_order === $b_order ) {
+					$a_name = $a->get_name();
+					$b_name = $b->get_name();
+
+					return strcasecmp( $a_name, $b_name );
+				} else {
+					return $a_order > $b_order ? 1 : -1;
+				}
+			}
+		);
 	}
 
 	return $units;
@@ -608,4 +698,4 @@ function openlab_cboxol_site_templates_rest_api_restrict_visibility( $args, $req
 	return $args;
 }
 add_filter( 'rest_cboxol_site_template_query', 'openlab_cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
-remove_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
+remove_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility' );

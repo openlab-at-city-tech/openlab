@@ -49,7 +49,7 @@ class Sites extends WP_REST_Controller {
 			]
 		);
 
-		remove_filter( 'sites_clauses', [ $this, 'filter_sites_clauses' ], 10, 2 );
+		remove_filter( 'sites_clauses', [ $this, 'filter_sites_clauses' ] );
 
 		$retval = [
 			'results' => [],
