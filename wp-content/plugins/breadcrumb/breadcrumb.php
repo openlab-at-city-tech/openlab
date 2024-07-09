@@ -3,7 +3,7 @@
 Plugin Name: Breadcrumb
 Plugin URI: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/
 Description: Awesome Breadcrumb for wordpress.
-Version: 1.5.43
+Version: 1.5.44
 WC requires at least: 3.0.0
 WC tested up to: 7.2
 Author: PickPlugins
@@ -25,7 +25,7 @@ class BreadcrumbMain
 		define('breadcrumb_plugin_url', plugins_url('/', __FILE__));
 		define('breadcrumb_plugin_dir', plugin_dir_path(__FILE__));
 		define('breadcrumb_plugin_name', 'Breadcrumb');
-		define('breadcrumb_plugin_version', '1.5.43');
+		define('breadcrumb_plugin_version', '1.5.44');
 
 
 		require_once(breadcrumb_plugin_dir . 'includes/class-settings-tabs.php');
