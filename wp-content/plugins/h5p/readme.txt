@@ -1,10 +1,10 @@
 ﻿=== Interactive Content – H5P ===
-Contributors: icc0rz, fnoks, falcon28
+Contributors: icc0rz, fnoks, falcon28, underhaug
 Donate link: http://h5p.org
 Tags: editor, video, quiz, slider, education
 Requires at least: 3.8.1
-Tested up to: 6.4.2
-Stable tag: 1.15.7
+Tested up to: 6.4.4
+Stable tag: 1.15.8
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -487,3 +487,6 @@ Improved narrow data views. Thanks Otacke.
 Fix potential memory issue. Thanks Otacke.
 Fix not storing empty content state (resume) for some content types.
 Updated translations
+
+= 1.15.8 =
+Improve file upload

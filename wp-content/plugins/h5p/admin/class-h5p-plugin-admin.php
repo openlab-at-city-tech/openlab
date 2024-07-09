@@ -47,8 +47,6 @@ class H5P_Plugin_Admin {
    */
   private $library = NULL;
 
-  private $privacy = NULL;
-
   /**
    * Initialize the plugin by loading admin scripts & styles and adding a
    * settings page and menu.
@@ -898,6 +896,7 @@ class H5P_Plugin_Admin {
     if ($user_id === NULL) {
       $extra_fields .= " hr.user_id,";
       $append_user_name = true;
+      $joins .= " LEFT JOIN {$wpdb->prefix}users u ON hr.user_id = u.ID";
     }
 
     // Add filters
