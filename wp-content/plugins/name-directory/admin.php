@@ -758,7 +758,7 @@ function name_directory_names()
                     }
                     ?>
                     <small><strong><?php echo __('Please be careful!', 'name-directory'); ?></strong>
-                        <?php echo __('HTML markup is allowed and will we printed on your website and in the WordPress admin.', 'name-directory'); ?></small></td>
+                        <?php echo __('HTML markup is allowed here, but please be aware it may affect the way Name Directory or a name is displayed. Also, features like "Read more" may behave differently if you use i.e. images or tables in the description of an image.', 'name-directory'); ?></small></td>
             </tr>
             <tr id="add_published">
                 <td><?php echo __('Published', 'name-directory'); ?></td>

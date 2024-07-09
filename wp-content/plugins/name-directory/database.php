@@ -74,10 +74,10 @@ function name_directory_db_post_update_actions()
     global $name_directory_table_directory;
     global $name_directory_table_directory_name;
 
-    $convert_dirs = "ALTER TABLE $name_directory_table_directory CONVERT TO CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci';";
+    $convert_dirs = "ALTER TABLE $name_directory_table_directory CONVERT TO CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';";
     $wpdb->query($convert_dirs);
 
-    $convert_names = "ALTER TABLE $name_directory_table_directory_name CONVERT TO CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci';";
+    $convert_names = "ALTER TABLE $name_directory_table_directory_name CONVERT TO CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';";
     $wpdb->query($convert_names);
 
     $convert_opt = "UPDATE $name_directory_table_directory SET `show_all_names_on_index`=1 WHERE `show_all_names_on_index` IS NULL;";

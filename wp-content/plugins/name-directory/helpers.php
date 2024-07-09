@@ -410,7 +410,7 @@ function name_directory_notify_admin_of_new_submission($directory, $input)
  * Get the first X words of the description
  * @param $description
  * @param int $words
- * @return string•••••••••••••
+ * @return string
  */
 function name_directory_get_words($description, $words = 10)
 {
