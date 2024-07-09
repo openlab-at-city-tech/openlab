@@ -121,10 +121,19 @@ function bp_classic_register_template_pack_widget_styles() {
 
 	$template_pack_file = sprintf( trailingslashit( $bpc->inc_dir ) . 'templates/css/widgets-%s.css', $tp );
 	if ( file_exists( $template_pack_file ) ) {
+		if ( ! wp_style_is( 'bp-tooltips', 'registered' ) ) {
+			wp_register_style(
+				'bp-tooltips',
+				sprintf( trailingslashit( $bpc->inc_url ) . 'templates/css/tooltips-%s.css', $tp ),
+				array(),
+				$bpc->version
+			);
+		}
+
 		wp_register_style(
 			'bp-classic-widget-styles',
 			sprintf( trailingslashit( $bpc->inc_url ) . 'templates/css/widgets-%s.css', $tp ),
-			array(),
+			array( 'bp-tooltips' ),
 			$bpc->version
 		);
 	}

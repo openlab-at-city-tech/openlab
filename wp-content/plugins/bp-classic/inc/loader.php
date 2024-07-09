@@ -85,9 +85,19 @@ function bp_classic_template_pack_includes() {
 		return;
 	}
 
-	$template_pack_file = sprintf( trailingslashit( plugin_dir_path( __FILE__ ) ) . 'templates/%s.php', bp_get_theme_package_id() );
-	if ( file_exists( $template_pack_file ) ) {
-		require $template_pack_file;
+	// Do make sure BP Nouveau is the active BP Template Pack.
+	if ( 'nouveau' === bp_get_theme_package_id() && function_exists( 'bp_nouveau' ) ) {
+		require trailingslashit( plugin_dir_path( __FILE__ ) ) . 'templates/nouveau.php';
 	}
 }
 add_action( 'bp_after_setup_theme', 'bp_classic_template_pack_includes', 1 );
+
+/**
+ * Specific compatibility functions for bbPress.
+ *
+ * @since 1.4.0
+ */
+function bp_classic_forums_includes() {
+	require trailingslashit( plugin_dir_path( __FILE__ ) ) . 'forums/functions.php';
+}
+add_action( 'bbp_buddypress_loaded', 'bp_classic_forums_includes' );

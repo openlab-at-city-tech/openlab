@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $post_type The name of the post type to use for directory pages.
  */
 function bp_classic_switch_directory_post_type( $post_type = '' ) {
+	$needs_switch = is_multisite() && ! bp_is_root_blog();
+	if ( $needs_switch ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
 	$directory_page_ids = bp_core_get_directory_page_ids( 'all' );
 	$nav_menu_item_ids  = array();
 	$old_post_type      = 'buddypress';
@@ -95,6 +100,10 @@ function bp_classic_switch_directory_post_type( $post_type = '' ) {
 				)
 			);
 		}
+	}
+
+	if ( $needs_switch ) {
+		restore_current_blog();
 	}
 }
 
