@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
 			$( '.display-name-contains-last-name-error' ).remove();
 
 			if ( show ) {
-				$displayNameField.after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your username. Are you sure?</div>' );
+				$displayNameField.after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
 			}
 		}
 
