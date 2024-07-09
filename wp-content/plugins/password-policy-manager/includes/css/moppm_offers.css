@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,300&display=swap');
+
+.moppm-black-friday{
+    position: relative;
+      height:110px;
+      text-align: left;
+      color: white;
+      width: 99%;
+      margin-top: 10px;
+      font-family: "Poppins";
+      background-color: #000;
+      border-radius:3px;
+      padding-left:0px;
+      display: flex;
+      align-items: center;
+      
+  }
+  
+  .moppm-bf-support-btn{
+    flex:2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-image: url('../images/moppm-snowfall.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  
+  .moppm-bf-support-btn button{
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px 1px rgba(0.2, 0.2, 0.2, 0.2);
+  }
+  
+  .moppm-bf-support-content{
+    color:white; 
+    flex:4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background-image: url('../images/moppm-snowfall.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .moppm-bf-support-content a{
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .moppm-bf-support-content strong{
+    font-size:23px;
+  }
+  
+  .moppm-offer-logo{
+    flex:2;
+    background-image: url('../images/bf-logo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+  }
+  
+  .moppm-countdown{
+    flex:3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/moppm-snowfall.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .moppm-bf-days{
+    background-color:#ffffff4f;
+    padding: 10px;
+    margin:0 10px;
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    height: 50px;
+    font-size: smaller;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .moppm-bf-time{
+    font-weight: bold;
+    font-size: medium;
+  }
+  
+  .moppm-bf-logo{
+    background-image: url('../images/miniorange-logo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+    height: 60px;
+    width: 60px;
+    padding: 10px;
+  }
+  
+  .moppm_dismiss_bf{
+    position: absolute;
+    top:5px;
+    right: 5px;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .moppm_dismiss_bf_bg{
+    background-color: #ffffff4f;
+    padding: 0 5px;
+    border-radius: 10px;
+    margin: 1px;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
