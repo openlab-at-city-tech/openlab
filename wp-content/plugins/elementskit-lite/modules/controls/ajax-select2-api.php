@@ -9,7 +9,6 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		$this->prefix = 'ajaxselect2';
 	}
 
-
 	public function get_post_list() {
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
@@ -208,6 +207,42 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		endif;
 
 		return array( 'results' => $options );
+	}
+
+	public function get_elementor_template_list(){
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
+		$query_args = array(
+			'post_type'      => 'elementor_library',
+			'post_status'    => 'publish',
+			'posts_per_page' => 15,
+		);
+	
+		if ( isset( $this->request['ids'] ) ) {
+			$ids                    = explode( ',', $this->request['ids'] );
+			$query_args['post__in'] = $ids;
+		}
+
+		if ( isset( $this->request['s'] ) ) {
+			$query_args['s'] = $this->request['s'];
+		}
+	
+		$query   = new \WP_Query( $query_args );
+		$options = array();
+		if ( $query->have_posts() ) :
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$options[] = array(
+					'id'   => get_the_ID(),
+					'text' => get_the_title(),
+				);
+			}
+		endif;
+	
+		return array( 'results' => $options );
+		wp_reset_postdata();
 	}
 }
 

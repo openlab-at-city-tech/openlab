@@ -90,9 +90,14 @@ class Widget_Area_Utils {
 								$builder_post_id = apply_filters( 'wpml_object_id', $builder_post_id, 'elementskit_content', true, $language_details['language_code'] );
 							}
 						}
+						
+						$builder_content = $elementor->frontend->get_builder_content_for_display($builder_post_id);
+						$rendered_tab_content = \ElementsKit_Lite\Utils::render_tab_content($builder_content, $builder_post_id);
+						// Remove '#elementor' from the rendered content, except when it's part of 'href="#elementor"'
+						$final_content = preg_replace('/(?<!href=")#elementor/', '', $rendered_tab_content);
 
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
-						echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $builder_post_id ), $builder_post_id ) );
+						echo $final_content;
 					} else {
                         echo esc_html__( 'Click on the Edit Content button to edit/add the content.', 'elementskit-lite' );
 					}

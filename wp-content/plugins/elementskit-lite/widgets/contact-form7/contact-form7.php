@@ -474,7 +474,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
             [
                 'name' => 'ekit_contact_form_input_typography',
                 'label' => esc_html__( 'Typography', 'elementskit-lite' ),
-                'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]), .wpcf7-form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]), .wpcf7-form textarea, .ekit-wid-con .ekit-form form textarea, {{WRAPPER}} .ekit-form form select',
+                'selector' => '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]), .wpcf7-form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]), {{WRAPPER}} .wpcf7-form textarea, {{WRAPPER}} .ekit-wid-con .ekit-form form textarea, {{WRAPPER}} .ekit-form form select',
             ]
         );
 
@@ -487,7 +487,7 @@ class ElementsKit_Widget_Contact_Form7 extends Widget_Base {
                 'selectors' => [
                     '{{WRAPPER}} .ekit-form form input:not([type="submit"]):not([type="checkbox"]):not([type="radio"]), {{WRAPPER}} .ekit-form form select' => 'color: {{VALUE}}',
                     '{{WRAPPER}} .wpcf7-form textarea' => 'color: {{VALUE}}',
-                    '{{WRAPPER}} ..ekit-wid-con .ekit-form form textarea' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} .ekit-wid-con .ekit-form form textarea' => 'color: {{VALUE}}',
                 ],
             ]
         );

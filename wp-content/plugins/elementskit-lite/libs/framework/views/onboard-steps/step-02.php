@@ -8,7 +8,7 @@
 			<label for="signup"><i class="icon icon-email"></i></label>
 			<input name="settings[newsletter_email]" id="signup" type="email" placeholder="Enter your email address">
 		</div>
-		<p class="ekit-onboard-signup--helptext"><?php echo esc_html__( 'We never spam.', 'elementskit-lite' ); ?> <span><?php echo esc_html( 'Promise!', 'elementskit-lite' ); ?></span></p>
+		<p class="ekit-onboard-signup--helptext"><?php echo esc_html__( 'We never spam.', 'elementskit-lite' ); ?> <span><?php echo esc_html__( 'Promise!', 'elementskit-lite' ); ?></span></p>
 	</div>
 
 

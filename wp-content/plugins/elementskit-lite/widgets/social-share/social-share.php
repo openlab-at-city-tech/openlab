@@ -256,8 +256,8 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#222222',
 				'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}} > a' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} {{CURRENT_ITEM}} > a svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} > div' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} > div svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
@@ -269,7 +269,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 				'label' =>esc_html__( 'Background Color', 'elementskit-lite' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}} > a' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}} > div' => 'background-color: {{VALUE}};',
 				],
 			]
         );
@@ -279,7 +279,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 			[
 				'name' => 'ekit_socialshare_border',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > a',
+				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > div',
 			]
 		);
 
@@ -288,14 +288,14 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 			[
 				'name' => 'ekit_socialshare_icon_normal_text_shadow',
 				'label' => esc_html__( 'Text Shadow', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > a',
+				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > div',
 			]
         );
 
         $socialshare->add_group_control(
             Group_Control_Box_Shadow::get_type(), [
                 'name'       => 'ekit_socialshare_list_box_shadow',
-                'selector'   => '{{WRAPPER}} {{CURRENT_ITEM}} > a',
+                'selector'   => '{{WRAPPER}} {{CURRENT_ITEM}} > div',
             ]
         );
 
@@ -317,8 +317,8 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 				'label' =>esc_html__( 'Color', 'elementskit-lite' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}} > a:hover' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} {{CURRENT_ITEM}} > a:hover svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};'
+                    '{{WRAPPER}} {{CURRENT_ITEM}} > div:hover' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} > div:hover svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};'
 				],
 			]
 		);
@@ -331,7 +331,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#3b5998',
 				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}} > a:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}} > div:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -342,14 +342,14 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 			[
 				'name' => 'ekit_socialshare_icon_hover_text_shadow',
 				'label' => esc_html__( 'Text Shadow', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > a:hover',
+				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > div:hover',
 			]
         );
 
         $socialshare->add_group_control(
             Group_Control_Box_Shadow::get_type(), [
                 'name'       => 'ekit_socialshare_list_box_shadow_hover',
-                'selector'   => '{{WRAPPER}} {{CURRENT_ITEM}} > a:hover',
+                'selector'   => '{{WRAPPER}} {{CURRENT_ITEM}} > div:hover',
             ]
         );
 
@@ -358,7 +358,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 			[
 				'name' => 'ekit_socialshare_border_hover',
 				'label' => esc_html__( 'Border', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > a:hover',
+				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} > div:hover',
 			]
 		);
 
@@ -442,7 +442,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                 'default' => 'center',
                 'toggle' => true,
 				'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li > a' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div' => 'text-align: {{VALUE}};',
                 ],
             ]
         );
@@ -478,7 +478,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                     'line-through' => esc_html__( 'Line Through', 'elementskit-lite' ),
 
                 ],
-                'selectors' => ['{{WRAPPER}} .ekit_socialshare > li > a' => 'text-decoration: {{VALUE}};'],
+                'selectors' => ['{{WRAPPER}} .ekit_socialshare > li > div' => 'text-decoration: {{VALUE}};'],
             ]
         );
 
@@ -497,7 +497,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 					'unit' => '%',
 				],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li > a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -531,7 +531,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 					],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li > a' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div' => 'width: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'ekit_socialshare_list_style_use_height_and_width'  => 'yes',
@@ -557,7 +557,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 					],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li > a' => 'height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div' => 'height: {{SIZE}}{{UNIT}}; cursor: pointer;',
                 ],
                 'condition' => [
                     'ekit_socialshare_list_style_use_height_and_width'  => 'yes',
@@ -588,7 +588,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 					'size' => 40,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit_socialshare > li > a' => 'line-height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .ekit_socialshare > li > div' => 'line-height: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'ekit_socialshare_list_style_use_height_and_width' => 'yes'
@@ -614,8 +614,8 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li > a i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .ekit_socialshare > li > a svg' => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li > div svg' => 'max-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -625,7 +625,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
 			[
 				'name' => 'ekit_socialshare_list_typography',
 				'label' => esc_html__( 'Typography', 'elementskit-lite' ),
-				'selector' => '{{WRAPPER}} .ekit_socialshare > li > a',
+				'selector' => '{{WRAPPER}} .ekit_socialshare > li > div',
 			]
 		);
 
@@ -657,7 +657,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                 'type'          => Controls_Manager::DIMENSIONS,
                 'size_units'    => ['px', 'em'],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_socialshare > li a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_socialshare > li div' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -686,7 +686,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                 
                 if($icon['ekit_socialshare_icons'] != ''): ?>
                 <li class="elementor-repeater-item-<?php echo esc_attr( $icon[ '_id' ] ); ?>" data-social="<?php echo esc_attr((preg_replace('/[#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\ ]/', '', strtolower($icon['ekit_socialshare_label_text']))))?>">
-                    <a class="<?php echo esc_attr((preg_replace('/[#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\ ]/', '', strtolower($icon['ekit_socialshare_label_text']))))?>">
+                    <div class="<?php echo esc_attr((preg_replace('/[#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\ ]/', '', strtolower($icon['ekit_socialshare_label_text']))))?>">
                         <?php if($settings['ekit_socialshare_style'] != 'text' && $settings['ekit_socialshare_style_icon_position'] == 'before'): ?>
 
                         <?php
@@ -728,7 +728,7 @@ class ElementsKit_Widget_Social_Share extends Widget_Base {
                             }
                         ?>
                         <?php endif; ?>
-                    </a>
+                    </div>
                 </li>
                 <?php endif; ?>
             <?php endforeach; ?>

@@ -1,6 +1,6 @@
 <div class="ekit-onboard-main-header">
 	<?php
-		$step5_title = __( 'Upgrade within the next </br> <strong>2 hours</strong> and get a <strong>40% Discount.</strong>', 'elementskit-lite' );
+		$step5_title = __( 'Upgrade within the next </br> <strong>2 hours</strong> and get a <strong>20% Discount.</strong>', 'elementskit-lite' );
 	?>
 	<h1 class="ekit-onboard-main-header--title"><?php echo wp_kses( $step5_title, \ElementsKit_Lite\Utils::get_kses_array() ); ?></h1>
 </div>
