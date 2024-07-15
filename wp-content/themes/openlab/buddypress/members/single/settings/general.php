@@ -75,6 +75,16 @@ do_action('bp_before_member_settings_template');
 
             </div>
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Two-factor Authentication</div>
+
+			<div class="panel-body">
+				<?php openlab_2fa_settings(); ?>
+			</div>
+		</div>
+
+
         <?php do_action('bp_core_general_settings_before_submit'); ?>
 
         <div class="submit">
