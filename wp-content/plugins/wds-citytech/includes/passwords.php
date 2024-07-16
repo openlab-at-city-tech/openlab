@@ -7,6 +7,15 @@
 namespace OpenLab\Passwords;
 
 /**
+ * Gets the password expiration interval.
+ *
+ * @return int The interval in seconds.
+ */
+function get_password_expiration_interval() {
+	return 180 * DAY_IN_SECONDS;
+}
+
+/**
  * Sets a user's password expiration date.
  *
  * @param int $user_id The user ID.
@@ -194,3 +203,15 @@ function password_expired_message( $message ) {
 	return $message;
 }
 add_filter( 'login_message', __NAMESPACE__ . '\password_expired_message' );
+
+/**
+ * Sets the user's password expiration date when they reset their password.
+ *
+ * @param \WP_User $user The user object.
+ * @return void
+ */
+function set_password_expiration_on_password_reset( $user ) {
+	$expiration = time() + get_password_expiration_interval();
+	set_password_expiration( $user->ID, $expiration );
+}
+add_action( 'after_password_reset', __NAMESPACE__ . '\set_password_expiration_on_password_reset' );
