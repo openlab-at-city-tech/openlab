@@ -240,3 +240,15 @@ function set_password_expiration_on_password_change( $user_id, $old_user_data, $
 	set_password_expiration( $user_id, $expiration );
 }
 add_action( 'profile_update', __NAMESPACE__ . '\set_password_expiration_on_password_change', 10, 3 );
+
+/**
+ * Set password expiration for newly activated users.
+ *
+ * @param int $user_id The user ID.
+ * @return void
+ */
+function set_password_expiration_on_user_activation( $user_id ) {
+	$expiration = time() + get_password_expiration_interval();
+	set_password_expiration( $user_id, $expiration );
+}
+add_action( 'user_register', __NAMESPACE__ . '\set_password_expiration_on_user_activation' );
