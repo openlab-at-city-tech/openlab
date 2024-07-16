@@ -215,3 +215,28 @@ function set_password_expiration_on_password_reset( $user ) {
 	set_password_expiration( $user->ID, $expiration );
 }
 add_action( 'after_password_reset', __NAMESPACE__ . '\set_password_expiration_on_password_reset' );
+
+/**
+ * Sets the user's password expiration date when they change their password via Dashboard > Users > Profile.
+ *
+ * This is necessary because the 'after_password_reset' hook does not fire when
+ * a user changes their password via the Dashboard.
+ *
+ * @param int      $user_id       The user ID.
+ * @param \WP_User $old_user_data The old user data.
+ * @param array    $userdata      The new user data.
+ * @return void
+ */
+function set_password_expiration_on_password_change( $user_id, $old_user_data, $userdata ) {
+	if ( ! isset( $userdata['user_pass'] ) ) {
+		return;
+	}
+
+	if ( $userdata['user_pass'] === $old_user_data->user_pass ) {
+		return;
+	}
+
+	$expiration = time() + get_password_expiration_interval();
+	set_password_expiration( $user_id, $expiration );
+}
+add_action( 'profile_update', __NAMESPACE__ . '\set_password_expiration_on_password_change', 10, 3 );
