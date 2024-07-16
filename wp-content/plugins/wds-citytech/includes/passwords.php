@@ -252,3 +252,23 @@ function set_password_expiration_on_user_activation( $user_id ) {
 	set_password_expiration( $user_id, $expiration );
 }
 add_action( 'user_register', __NAMESPACE__ . '\set_password_expiration_on_user_activation' );
+
+/**
+ * Hide the 'Confirm weak password' link on the password reset dialog.
+ *
+ * This forces users to choose a strong password.
+
+ */
+function hide_weak_password() {
+  // remove the 'confirm weak password' link from the password reset dialog ?>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var elements = document.getElementsByClassName('pw-weak');
+      var requiredElement = elements[0];
+      if(requiredElement){
+        requiredElement.remove();
+      }
+    });
+</script>
+<?php }
+add_action( 'login_enqueue_scripts', __NAMESPACE__ . '\hide_weak_password' );
