@@ -1268,9 +1268,50 @@ html {
 	position: relative;
 }
 
+.password-expiration-warning-notice {
+	align-items: center;
+	background: #63DFD2;
+	color: #333;
+	display: flex;
+	height: 40px;
+	padding: 10px 20px;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+
+	@media (max-width: 600px) {
+		height: auto;
+	}
+
+	a {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	button.notice-dismiss {
+		background: transparent;
+		border: none;
+		position: absolute;
+		right: 30px;
+		font: normal normal normal 14px/1 FontAwesome;
+	}
+}
+
 /**for content placement on group sites and admin**/
 
 body {
+	&.has-password-expiration-warning-notice {
+		.oplb-bs.navbar-default {
+			padding-bottom: 40px;
+
+			@media (max-width: 600px) {
+				padding-bottom: 80px;
+			}
+		}
+	}
 	&.adminbar-special {
 		padding-top: 50.5px;
 		@media (max-width: var(--block-editor-breakpoint-tablet)) {

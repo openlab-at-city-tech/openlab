@@ -16,6 +16,15 @@ function get_password_expiration_interval() {
 }
 
 /**
+ * Gets the warning interval for password expiration.
+ *
+ * @return int The interval in seconds.
+ */
+function get_password_expiration_warning_interval() {
+	return 14 * DAY_IN_SECONDS;
+}
+
+/**
  * Sets a user's password expiration date.
  *
  * @param int $user_id The user ID.
@@ -257,7 +266,6 @@ add_action( 'user_register', __NAMESPACE__ . '\set_password_expiration_on_user_a
  * Hide the 'Confirm weak password' link on the password reset dialog.
  *
  * This forces users to choose a strong password.
-
  */
 function hide_weak_password() {
   // remove the 'confirm weak password' link from the password reset dialog ?>
@@ -272,3 +280,84 @@ function hide_weak_password() {
 </script>
 <?php }
 add_action( 'login_enqueue_scripts', __NAMESPACE__ . '\hide_weak_password' );
+
+/**
+ * Enqueues the JS for generating the expiration warning notice.
+ */
+function enqueue_expiration_warning_notice_js() {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$user_expiration = get_password_expiration( get_current_user_id() );
+	if ( ! $user_expiration || $user_expiration < time() ) {
+		return;
+	}
+
+	if ( time() + get_password_expiration_warning_interval() < $user_expiration ) {
+		return;
+	}
+
+	// Check whether the user has dismissed this notice.
+	$user_dismissed_notices = get_user_meta( get_current_user_id(), 'password_expiration_warning_dismissed', true );
+	if ( is_array( $user_dismissed_notices ) && in_array( $user_expiration, $user_dismissed_notices, true ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'password-expiration-warning-notice',
+		plugins_url() . '/wds-citytech/assets/js/password-expiration-warning-notice.js',
+		array( 'jquery' ),
+		null,
+		true
+	);
+
+	wp_localize_script(
+		'password-expiration-warning-notice',
+		'passwordExpirationWarningNotice',
+		[
+			'dismissUrl' => wp_nonce_url( admin_url( 'admin-ajax.php?action=dismiss_password_expiration_warning_notice' ), 'dismiss_password_expiration_warning_notice' ),
+			'expiration' => $user_expiration,
+			'resetUrl'   => add_query_arg(
+				[
+					'action'           => 'lostpassword',
+					'password_expired' => 'warning',
+					'user_login'       => wp_get_current_user()->user_login,
+				],
+				wp_login_url()
+			),
+		]
+	);
+}
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_expiration_warning_notice_js' );
+
+/**
+ * AJAX handler for dismissing the password expiration warning notice.
+ */
+function dismiss_password_expiration_warning_notice() {
+	check_ajax_referer( 'dismiss_password_expiration_warning_notice' );
+
+	$user_expiration = get_password_expiration( get_current_user_id() );
+
+	$user_dismissed_notices = get_user_meta( get_current_user_id(), 'password_expiration_warning_dismissed', true );
+
+	if ( ! is_array( $user_dismissed_notices ) ) {
+		$user_dismissed_notices = [];
+	}
+
+	$user_dismissed_notices[] = $user_expiration;
+
+	update_user_meta( get_current_user_id(), 'password_expiration_warning_dismissed', $user_dismissed_notices );
+}
+add_action( 'wp_ajax_dismiss_password_expiration_warning_notice', __NAMESPACE__ . '\dismiss_password_expiration_warning_notice' );
+
+/**
+ * When logging in, delete all instances of 'password_expiration_warning_dismissed_' usermeta.
+ *
+ * @param string  $user_login The user's login.
+ * @param WP_User $user       The user object.
+ */
+function delete_password_expiration_warning_dismissed_usermeta( $user_login, $user ) {
+	delete_user_meta( $user->ID, 'password_expiration_warning_dismissed' );
+}
+add_action( 'wp_login', __NAMESPACE__ . '\delete_password_expiration_warning_dismissed_usermeta', 10, 2 );
