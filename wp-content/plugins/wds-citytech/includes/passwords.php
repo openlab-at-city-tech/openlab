@@ -361,3 +361,10 @@ function delete_password_expiration_warning_dismissed_usermeta( $user_login, $us
 	delete_user_meta( $user->ID, 'password_expiration_warning_dismissed' );
 }
 add_action( 'wp_login', __NAMESPACE__ . '\delete_password_expiration_warning_dismissed_usermeta', 10, 2 );
+
+/**
+ * Don't show password reset fields on Dashboard > Profile.
+ */
+add_filter( 'show_password_fields', function() {
+	return is_super_admin();
+} );
