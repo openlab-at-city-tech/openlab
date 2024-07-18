@@ -45,16 +45,6 @@ do_action('bp_before_member_settings_template');
             <p class="description">Required to change<?php echo $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
         </div>
 
-        <div class="form-group settings-section change-pw-section">
-            <label for="pass1">Change Password</label>
-            <input class="form-control" type="password" name="pass1" id="pass1" size="16" value="" class="settings-input small" />
-
-            <label for="pass2">Confirm Change Password</label>
-            <input class="form-control" type="password" name="pass2" id="pass2" size="16" value="" class="settings-input small" />
-
-            <p class="description">Leave blank for no change</p>
-        </div>
-
         <div class="form-group settings-section name-section">
             <label for="fname">First Name (required)</label>
             <input class="form-control" type="text" name="fname" id="fname" value="<?php echo bp_get_profile_field_data(array('field' => 'First Name')) ?>" />
@@ -72,6 +62,12 @@ do_action('bp_before_member_settings_template');
                 </select>
             </div>
         <?php endif ?>
+
+        <div class="form-group settings-section change-pw-section">
+            <label for="pass1">Change Password</label>
+
+			<p>To change your password, visit the <a href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>">Reset Password</a> page.</p>
+        </div>
 
             </div>
         </div>
