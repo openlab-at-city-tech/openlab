@@ -122,7 +122,7 @@ add_action( 'edit_user_profile_update', __NAMESPACE__ . '\save_user' );
 /**
  * Hook into the login process to check for password expiration.
  *
- * @param WP_User|WP_Error $user The WP_User object or WP_Error.
+ * @param \WP_User|\WP_Error $user The WP_User object or WP_Error.
  * @param string $username The username.
  * @param string $password The password.
  * @return WP_User|WP_Error The WP_User object or WP_Error.
