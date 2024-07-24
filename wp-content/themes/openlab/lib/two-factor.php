@@ -48,7 +48,7 @@ function openlab_2fa_settings() {
 
 	// Heading and description. Can be removed by wiping out the hook.
 	add_action( 'bp_2fa_before_settings_output', function() {
-		printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' ) );
+		printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in.', 'bp-two-factor' ) );
 	} );
 
 	/**
