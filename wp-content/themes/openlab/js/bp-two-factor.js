@@ -19,5 +19,8 @@
 			});
 		}
 
+		$('.two-factor-methods-table thead th.col-enabled').html('Enable');
+		$('.two-factor-methods-table thead th.col-name').html('');
+
 	});
 })(jQuery);

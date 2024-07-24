@@ -31,6 +31,14 @@ add_filter(
 );
 
 function openlab_2fa_settings() {
+	wp_enqueue_script(
+		'openlab-bp-two-factor',
+		get_stylesheet_directory_uri() . '/js/bp-two-factor.js',
+		[],
+		OL_VERSION,
+		true
+	);
+
 	require CAC\BP2FA\DIR . '/pluggable.php';
 
 	// Modify user admin settings URL to use BP user settings page.

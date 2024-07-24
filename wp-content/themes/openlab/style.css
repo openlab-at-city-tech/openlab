@@ -12489,3 +12489,6 @@ p.private-membership-indicator {
 .group-validate-form #site-options .error-container {
   margin-bottom: 15px;
 }
+.two-factor-methods-table .col-primary {
+  display: none;
+}
