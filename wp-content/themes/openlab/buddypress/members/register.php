@@ -130,7 +130,7 @@ $account_type_options = array_map(
 							</div>
 
 							<div class="registration-continue-button" id="registration-continue-button-no">
-								<a class="btn btn-primary" target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">Get Help</a>
+								<a class="btn btn-primary" target="_blank" href="https://openlab.citytech.cuny.edu/blog/help/openlab-help/">Get Help</a>
 							</div>
 						</div>
 					</div><!-- .panel-body -->
