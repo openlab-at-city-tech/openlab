@@ -1838,6 +1838,7 @@ function openlab_deleted_comment_author_name( $author, $comment_ID, $comment ) {
 
 	return 'Account Deleted';
 }
+add_filter( 'get_comment_author', 'openlab_deleted_comment_author_name', 10, 3 );
 
 /**
  * Adds the URL of the user profile to the New User Registration admin emails
