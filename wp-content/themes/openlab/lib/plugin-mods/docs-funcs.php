@@ -487,6 +487,11 @@ function openlab_bp_docs_map_meta_caps_for_custom_settings( $caps, $cap, $user_i
 				$setting = openlab_get_doc_view_setting( $doc->ID );
 			}
 
+			if ( (int) $doc->post_author === (int) $user_id ) {
+				$caps = [ 'exist' ];
+				break;
+			}
+
 			$caps = [ 'do_not_allow' ];
 
 			switch ( $setting ) {
@@ -538,23 +543,59 @@ function openlab_exclude_off_limits_docs_from_group_listings( $args, $docs_query
 		$allowed_settings[] = 'group-members';
 	}
 
-	$meta_query = (array) $args['meta_query'];
-
-	$meta_query['privacy'] = [
-		'relation'         => 'OR',
-		'allowed_settings' => [
-			'key'     => 'openlab_view_setting',
-			'value'   => $allowed_settings,
-			'compare' => 'IN',
-		],
-		'null_setting'     => [
-			'key'     => 'openlab_view_setting',
-			'compare' => 'NOT EXISTS',
-		],
-	];
-
-	$args['meta_query'] = $meta_query;
+	$args['post__not_in'] = openlab_get_off_limits_doc_ids_for_user_group( bp_loggedin_user_id(), $group_id );
 
 	return $args;
 }
 add_filter( 'bp_docs_pre_query_args', 'openlab_exclude_off_limits_docs_from_group_listings', 50, 2 );
+
+/**
+ * Gets a list of IDs belonging to off-limits docs for a user-group combination.
+ *
+ * @param int $user_id  User ID.
+ * @param int $group_id Group ID.
+ * @return array
+ */
+function openlab_get_off_limits_doc_ids_for_user_group( $user_id, $group_id ) {
+	if ( user_can( $user_id, 'bp_moderate' ) || groups_is_user_admin( $user_id, $group_id ) ) {
+		return [];
+	}
+
+	$forbidden_settings = [ 'admins' ];
+	if ( ! groups_is_user_member( $user_id, $group_id ) ) {
+		$forbidden_settings[] = 'group-members';
+	}
+
+	$meta_query = [
+		'relation'         => 'AND',
+		'forbidden_settings' => [
+			'key'     => 'openlab_view_setting',
+			'value'   => $forbidden_settings,
+			'compare' => 'IN',
+		],
+	];
+
+	$tax_query = BP_Docs_Groups_Integration::tax_query_arg_for_groups( [ $group_id ] );
+
+	$docs = get_posts(
+		[
+			'post_type'      => bp_docs_get_post_type_name(),
+			'posts_per_page' => -1,
+			'meta_query'     => $meta_query,
+			'tax_query'      => [ $tax_query ],
+		]
+	);
+
+	// Users can always see their own docs.
+	$doc_ids = [];
+	foreach ( $docs as $doc ) {
+		if ( (int) $user_id === (int) $doc->post_author ) {
+			continue;
+		}
+
+		$doc_ids[] = $doc->ID;
+	}
+
+	return $doc_ids;
+}
+
