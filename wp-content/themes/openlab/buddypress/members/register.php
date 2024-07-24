@@ -122,7 +122,7 @@ $account_type_options = array_map(
 						<div class="form-group">
 							<fieldset class="account-description-approval-fieldset">
 								<input type="radio" name="account-description-approval" id="account-description-approval-yes" value="yes" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." <?php checked( $account_description_approval_submitted, 'yes' ); ?> /> <label for="account-description-approval-yes">Yes, I understand</label><br />
-								<input type="radio" name="account-description-approval" id="account-description-approval-no" value="no" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." <?php checked( $account_description_approval_submitted, 'no' ); ?> /> <label for="account-description-approval-no">No, <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">I have questions</a></label>
+								<input type="radio" name="account-description-approval" id="account-description-approval-no" value="no" data-parsley-required data-parsley-required-message="Please confirm that you have read the description of the account type." <?php checked( $account_description_approval_submitted, 'no' ); ?> /> <label for="account-description-approval-no">No, I have questions</label>
 							</fieldset>
 
 							<div class="registration-continue-button" id="registration-continue-button-yes">
