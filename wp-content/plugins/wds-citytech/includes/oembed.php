@@ -54,7 +54,7 @@ add_shortcode( 'openprocessing', 'openlab_openprocessing_shortcode' );
  * Register auto-embed handlers.
  */
 function openlab_register_embed_handlers() {
-	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/#i', 'openlab_embed_handler_screencast' );
+	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/([^/?]+)#i', 'openlab_embed_handler_screencast' );
 
 	wp_embed_register_handler(
 		'pinterest',
@@ -88,21 +88,27 @@ add_action( 'init', 'openlab_register_embed_handlers' );
  * screencast.com embed callback.
  */
 function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
-	$cached = wp_cache_get( 'screencast_embed_url_v2_' . $url );
-	if ( false === $cached ) {
-		// This is the worst thing in the whole world.
-		$r = wp_remote_get( $url );
-		$b = wp_remote_retrieve_body( $r );
-		$b = htmlspecialchars_decode( $b );
-
-		$embed_url = '';
-		if ( preg_match( '|<iframe[^>]+src="([^"]+screencast\.com[^"]+)"|', $b, $url_matches ) ) {
-			$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
-		}
-
-		wp_cache_set( 'screencast_embed_url_v2_' . $url, $embed_url );
+	if ( 'app' === $matches[1] ) {
+		// "Modern" Screencast.
+		$embed_url = $matches[0] . '/e';
 	} else {
-		$embed_url = $cached;
+		// "Classic" Screencast.
+		$cached = wp_cache_get( 'screencast_embed_url_v2_' . $url );
+		if ( false === $cached ) {
+			// This is the worst thing in the whole world.
+			$r = wp_remote_get( $url );
+			$b = wp_remote_retrieve_body( $r );
+			$b = htmlspecialchars_decode( $b );
+
+			$embed_url = '';
+			if ( preg_match( '|<iframe[^>]+src="([^"]+screencast\.com[^"]+)"|', $b, $url_matches ) ) {
+				$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
+			}
+
+			wp_cache_set( 'screencast_embed_url_v2_' . $url, $embed_url );
+		} else {
+			$embed_url = $cached;
+		}
 	}
 
 	// Get height/width from URL params, if available.
