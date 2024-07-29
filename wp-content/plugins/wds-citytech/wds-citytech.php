@@ -3830,5 +3830,26 @@ function openlab_delete_user_files_on_account_deletion( $user_id ) {
 			$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->group_documents->table_name} WHERE id = %d", $user_file_id ) );
 		}
 	}
+
+	// Site media.
+	$user_blogs = get_blogs_of_user( $user_id );
+	foreach ( $user_blogs as $user_blog ) {
+		switch_to_blog( $user_blog->userblog_id );
+
+		$media_query = new WP_Query(
+			[
+				'post_type'      => 'attachment',
+				'posts_per_page' => -1,
+				'author'         => $user_id,
+				'post_status'    => 'any',
+			]
+		);
+
+		foreach ( $media_query->posts as $media_post ) {
+			wp_delete_attachment( $media_post->ID, true );
+		}
+
+		restore_current_blog();
+	}
 }
 add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_files_on_account_deletion' );
