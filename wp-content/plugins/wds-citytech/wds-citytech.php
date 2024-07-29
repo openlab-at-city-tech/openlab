@@ -3801,3 +3801,34 @@ add_action(
 		update_option( 'typology_settings', $settings );
 	}
 );
+
+/**
+ * Delete a user's BP Files and WP media items on account deletion.
+ *
+ * @param int $user_id The ID of the user being deleted.
+ * @return void
+ */
+function openlab_delete_user_files_on_account_deletion( $user_id ) {
+	global $wpdb;
+
+	// bp-group-documents.
+	if ( class_exists( 'BP_Group_Documents' ) ) {
+		$bp = buddypress();
+
+		$user_file_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->group_documents->table_name} WHERE user_id = %d", $user_id ) );
+		foreach ( $user_file_ids as $user_file_id ) {
+			$document = new BP_Group_Documents( $user_file_id );
+
+			// The `delete()` method has a cap check built in, which we want to skip.
+			if ( $document->file ) {
+				$document_file_path = $document->get_path( 1 );
+				if ( file_exists( $document_file_path ) ) {
+					wp_delete_file( $document_file_path );
+				}
+			}
+
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->group_documents->table_name} WHERE id = %d", $user_file_id ) );
+		}
+	}
+}
+add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_files_on_account_deletion' );
