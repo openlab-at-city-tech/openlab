@@ -1474,6 +1474,36 @@ function openlab_get_user_private_membership( $user_id ) {
 }
 
 /**
+ * Filters buddypress-docs queries to exclude private group members.
+ *
+ * @since 1.6.0
+ *
+ * @param array         $args       Query arguments.
+ * @param BP_Docs_Query $docs_query BP_Docs_Query object.
+ * @return array
+ */
+function openlab_filter_docs_query_to_exclude_private_group_members( $args, $docs_query ) {
+	if ( empty( $docs_query->query_args['group_id'] ) ) {
+		return $args;
+	}
+
+	$group_id = $docs_query->query_args['group_id'];
+
+	if ( bp_current_user_can( 'view_private_members_of_group', $group_id ) ) {
+		return $args;
+	}
+
+	$private_members = openlab_get_private_members_of_group( $group_id );
+	if ( empty( $private_members ) ) {
+		return $args;
+	}
+
+	$args['author__not_in'] = $private_members;
+	return $args;
+}
+add_filter( 'bp_docs_pre_query_args', 'openlab_filter_docs_query_to_exclude_private_group_members', 100, 2 );
+
+/**
  * Filters 'map_meta_cap' to add support for 'view_private_members_of_group' capability.
  *
  * @since 1.6.0
