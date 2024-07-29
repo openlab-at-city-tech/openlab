@@ -26,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const PostSharingOptions = ({}) => {
+const PostSharingOptions = () => {
   const {
     blogPublic,
     shareOnlyWithGroup
@@ -43,7 +43,7 @@ const PostSharingOptions = ({}) => {
     return {
       postVisibility: postMeta.openlab_post_visibility || defaultVisibility
     };
-  });
+  }, [blogPublicInt]);
   if (blogPublicInt < -1) {
     return null;
   }
@@ -79,7 +79,7 @@ const PostSharingOptions = ({}) => {
     className: "editor-post-visibility__fieldset"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.VisuallyHidden, {
     as: "legend"
-  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Control who can see this post.'), visibilityOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Control who can see this post."), visibilityOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
     key: option.value,
     instanceId: "post-sharing-options",
     value: option.value,
@@ -116,13 +116,13 @@ function PostSharingChoice({
 }
 const registerPostVisibility = () => {
   const post = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.select)('core/editor').getCurrentPost();
-  if (post) {
+  if (post && post.id) {
     (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
       render: PostSharingOptions
     });
   }
 };
-registerPostVisibility();
+wp.domReady(registerPostVisibility);
 
 /***/ }),
 
