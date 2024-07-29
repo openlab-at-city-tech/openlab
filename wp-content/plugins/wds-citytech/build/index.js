@@ -44,6 +44,7 @@ const PostSharingOptions = () => {
       postVisibility: postMeta.openlab_post_visibility || defaultVisibility
     };
   }, [blogPublicInt]);
+  console.log(postVisibility, blogPublicInt);
   if (blogPublicInt < -1) {
     return null;
   }
@@ -114,13 +115,18 @@ function PostSharingChoice({
     className: "editor-post-visibility__info"
   }, info));
 }
+const OpenlabPostVisibilityPlugin = () => {
+  const isSiteEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
+    const editSite = select('core/edit-site');
+    return !!editSite;
+  }, []);
+  return !isSiteEditor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingOptions, null);
+};
 const registerPostVisibility = () => {
-  const post = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.select)('core/editor').getCurrentPost();
-  if (post && post.id) {
-    (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
-      render: PostSharingOptions
-    });
-  }
+  (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
+    render: OpenlabPostVisibilityPlugin,
+    icon: 'visibility'
+  });
 };
 wp.domReady(registerPostVisibility);
 
