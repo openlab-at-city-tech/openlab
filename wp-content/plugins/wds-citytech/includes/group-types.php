@@ -1472,3 +1472,34 @@ function openlab_get_user_private_membership( $user_id ) {
 
 	return $private_groups;
 }
+
+/**
+ * Filters 'map_meta_cap' to add support for 'view_private_members_of_group' capability.
+ *
+ * @since 1.6.0
+ *
+ * @param array  $caps    Capabilities for meta capability.
+ * @param string $cap     Meta capability name.
+ * @param int    $user_id User ID.
+ * @param array  $args    Arguments for the capability check.
+ * @return array
+ */
+function openlab_filter_map_meta_cap_for_private_group_members( $caps, $cap, $user_id, $args ) {
+	if ( 'view_private_members_of_group' !== $cap ) {
+		return $caps;
+	}
+
+	$group_id = isset( $args[0] ) ? intval( $args[0] ) : bp_get_current_group_id();
+	if ( ! $group_id ) {
+		return $caps;
+	}
+
+	if ( bp_current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		$caps = [ 'exist' ];
+	} else {
+		$caps = [ 'do_not_allow' ];
+	}
+
+	return $caps;
+}
+add_filter( 'map_meta_cap', 'openlab_filter_map_meta_cap_for_private_group_members', 10, 4 );
