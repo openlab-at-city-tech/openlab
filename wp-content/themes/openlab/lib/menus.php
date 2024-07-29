@@ -942,7 +942,7 @@ function openlab_filter_subnav_members($subnav_item) {
 
     //get total member count
     $total_mem = (int) bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
-    if( ! current_user_can( 'bp_moderate' ) ) {
+    if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
         $private_users = openlab_get_group_private_users( bp_get_current_group_id() );
         $total_mem -= count( $private_users );
     }
