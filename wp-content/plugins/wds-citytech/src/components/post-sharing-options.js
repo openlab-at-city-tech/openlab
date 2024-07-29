@@ -3,7 +3,7 @@
 import { VisuallyHidden } from '@wordpress/components';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { registerPlugin } from '@wordpress/plugins';
-import { select, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 const PostSharingOptions = () => {
   const { blogPublic, shareOnlyWithGroup } = openlabBlocksPostVisibility;
@@ -106,14 +106,20 @@ function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
   );
 }
 
+const OpenlabPostVisibilityPlugin = () => {
+  const isSiteEditor = useSelect( ( select ) => {
+    const editSite = select( 'core/edit-site' );
+    return !!editSite;
+  }, [] );
+
+  return !isSiteEditor && <PostSharingOptions />;
+};
+
 const registerPostVisibility = () => {
-  const post = select( 'core/editor' ).getCurrentPost();
-  if ( post && post.id ) {
-    registerPlugin(
-      'post-sharing-options',
-      { render: PostSharingOptions }
-    );
-  }
+  registerPlugin( 'post-sharing-options', {
+    render: OpenlabPostVisibilityPlugin,
+    icon: 'visibility',
+  } );
 };
 
 wp.domReady( registerPostVisibility );
