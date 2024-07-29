@@ -4,6 +4,9 @@
  *
  * */
 do_action('bp_before_member_settings_template');
+
+$account_type = openlab_get_user_member_type( bp_displayed_user_id() );
+
 ?>
 
 <?php echo openlab_submenu_markup(); ?>
