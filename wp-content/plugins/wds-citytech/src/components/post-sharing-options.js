@@ -3,7 +3,7 @@
 import { VisuallyHidden } from '@wordpress/components'
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post'
 import { registerPlugin } from '@wordpress/plugins'
-import { useDispatch, useSelect } from '@wordpress/data'
+import { select, useDispatch, useSelect } from '@wordpress/data'
 
 const PostSharingOptions = ({}) => {
 	const { blogPublic, shareOnlyWithGroup } = openlabBlocksPostVisibility
@@ -12,8 +12,8 @@ const PostSharingOptions = ({}) => {
 
 	const blogPublicInt = parseInt( blogPublic )
 
-	const { postVisibility } = useSelect( ( select ) => {
-		const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' )
+	const { postVisibility } = useSelect( ( selectObj ) => {
+		const postMeta = selectObj( 'core/editor' ).getEditedPostAttribute( 'meta' )
 
 		const defaultVisibility = blogPublicInt >= 0 ? 'default' : 'members-only'
 
@@ -110,7 +110,13 @@ function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
 	);
 }
 
-registerPlugin(
-	'post-sharing-options',
-	{ render: PostSharingOptions }
-)
+const registerPostVisibility = () => {
+  const post = select( 'core/editor' ).getCurrentPost();
+	if ( post ) {
+		registerPlugin(
+			'post-sharing-options',
+			{ render: PostSharingOptions }
+		)
+	}
+};
+registerPostVisibility();
