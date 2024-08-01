@@ -421,7 +421,7 @@ endif;
 function openlab_get_profile_field_helper_text( $field_name ) {
 	switch ( $field_name ) {
 		case 'username' :
-			return "Please choose your username. You will use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. <strong>Because the username is public, we recommend that students do not use their full name.</strong> You don't need to use your real name. You cannot change your username after you sign up.</p>";
+			return "Please choose your username. You will use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. <strong>Because the username is public, we recommend that students do not use their full name. You don't need to use your real name.</strong> You cannot change your username after you sign up.</p>";
 
 		case 'display_name' :
 			return "Please choose your Display Name. Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. <strong>Because your Display Name is public, you don't need to use your real name or your full name.</strong> Your Display Name can be changed at any time by editing your profile.";
