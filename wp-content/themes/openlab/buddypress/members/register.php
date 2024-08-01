@@ -74,10 +74,10 @@ $account_type_options = array_map(
 								<p>Some things to know about the OpenLab:</p>
 
 								<ul>
-									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you can share your work with others at City Tech and beyond. You can also keep your work private: learn about privacy on the OpenLab.</li>
-									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the Community Guidelines.</li>
-									<li><strong>It's useful:</strong> The OpenLab runs on WordPress, which powers over 40% of sites on the web. You can easily create websites and learn valuable digital and communication skills.</li>
-									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students, so you can choose how to use it and have a voice in how it works.</li>
+									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you can share your work with others at City Tech and beyond. You can also keep your work private: learn about <a href="https://openlab.citytech.cuny.edu/blog/help/privacy-on-the-openlab/">privacy on the OpenLab</a>.</li>
+									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the <a href="https://openlab.citytech.cuny.edu/blog/help/community-guidelines/">Community Guidelines</a>.</li>
+									<li><strong>It's useful:</strong> The OpenLab runs on <a href="https://wordpress.org/about/">WordPress</a>, which powers over 40% of sites on the web. You can easily create websites and learn valuable digital and communication skills.</li>
+									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students, so you can choose how to use it and <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">have a voice</a> in how it works.</li>
 								</ul>
 
 								<p>Please confirm below to continue with sign-up.</p>
@@ -89,10 +89,10 @@ $account_type_options = array_map(
 								<p>Some things to know about the OpenLab:</p>
 
 								<ul>
-									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you and your students can share your work with others at City Tech and beyond. You and your students can also keep your work private: learn about privacy on the OpenLab. Please also follow best practices for accessibility and copyright.</li>
-									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the Community Guidelines.</li>
-									<li><strong>It's useful:</strong> The OpenLab runs on WordPress, which powers over 40% of sites on the web. You and your students can easily create websites and learn valuable digital and communication skills.</li>
-									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students using free and open source software, so you can choose how to use it and have a voice in how it works.</li>
+									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you and your students can share your work with others at City Tech and beyond. You and your students can also keep your work private: learn about <a href="https://openlab.citytech.cuny.edu/blog/help/privacy-on-the-openlab/">privacy on the OpenLab</a>. Please also follow best practices for <a href="https://openlab.citytech.cuny.edu/blog/help/help-category/accessibility-on-the-openlab/">accessibility</a> and <a href="https://openlab.citytech.cuny.edu/blog/help/copyright-and-fair-use-2/">copyright</a>.</li>
+									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the <a href="https://openlab.citytech.cuny.edu/blog/help/community-guidelines/">Community Guidelines</a>.</li>
+									<li><strong>It's useful:</strong> The OpenLab runs on <a href="https://wordpress.org/about/">WordPress</a>, which powers over 40% of sites on the web. You and your students can easily create websites and learn valuable digital and communication skills.</li>
+									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students using free and open source software, so you can choose how to use it and <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us">have a voice</a> in how it works.</li>
 								</ul>
 
 								<p>Please confirm below to continue with sign-up.</p>
