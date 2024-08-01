@@ -26,7 +26,7 @@ $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
         <div class="form-group settings-section username-section">
             <label for="username">Username</label>
             <input class="form-control" type="text" id="username" disabled="disabled" value="<?php bp_displayed_user_username() ?>" />
-            <p class="description">Your username cannot be changed.</p>
+            <p class="description">Your username cannot be changed. If you need to change your username, contact us for assistance.</p>
         </div>
 
         <div class="form-group settings-section email-section">
