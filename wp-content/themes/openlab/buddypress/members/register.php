@@ -68,54 +68,34 @@ $account_type_options = array_map(
 						</div>
 
 						<div id="account-type-description-and-approval">
-							<div class="account-type-description" data-account-type="faculty">
-								<h2>About the OpenLab (Faculty)</h2>
-
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
-								Proin nec nunc et lorem feugiat mattis porta id libero.
-								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
-								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
-								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
-							</div>
-
-							<div class="account-type-description" data-account-type="staff">
-								<h2>About the OpenLab (Staff)</h2>
-
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
-								Proin nec nunc et lorem feugiat mattis porta id libero.
-								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
-								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
-								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
-							</div>
-
 							<div class="account-type-description" data-account-type="student">
-								<h2>About the OpenLab (Student)</h2>
+								<p>Welcome to the OpenLab, City Tech’s open platform for learning, collaboration, and community! Everyone at the college can use the OpenLab for courses, projects, clubs, and portfolios.</p>
 
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
-								Proin nec nunc et lorem feugiat mattis porta id libero.
-								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
-								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
-								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+								<p>Some things to know about the OpenLab:</p>
+
+								<ul>
+									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you can share your work with others at City Tech and beyond. You can also keep your work private: learn about privacy on the OpenLab.</li>
+									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the Community Guidelines.</li>
+									<li><strong>It's useful:</strong> The OpenLab runs on WordPress, which powers over 40% of sites on the web. You can easily create websites and learn valuable digital and communication skills.</li>
+									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students, so you can choose how to use it and have a voice in how it works.</li>
+								</ul>
+
+								<p>Please confirm below to continue with sign-up.</p>
 							</div>
 
-							<div class="account-type-description" data-account-type="alumni">
-								<h2>About the OpenLab (Alumni)</h2>
+							<div class="account-type-description" data-account-type="faculty">
+								<p>Welcome to the OpenLab, City Tech’s open platform for open education, collaboration, and community! Everyone at the college can use the OpenLab for courses, projects, clubs, portfolios, and open educational resources.</p>
 
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
-								Proin nec nunc et lorem feugiat mattis porta id libero.
-								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
-								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
-								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
-							</div>
+								<p>Some things to know about the OpenLab:</p>
 
-							<div class="account-type-description" data-account-type="non-city-tech">
-								<h2>About the OpenLab (non-city-tech)</h2>
+								<ul>
+									<li><strong>It's open:</strong> The OpenLab is visible to the public, so you and your students can share your work with others at City Tech and beyond. You and your students can also keep your work private: learn about privacy on the OpenLab. Please also follow best practices for accessibility and copyright.</li>
+									<li><strong>It's a community:</strong> The OpenLab helps you connect with and learn from other members of the City Tech community. Please follow the Community Guidelines.</li>
+									<li><strong>It's useful:</strong> The OpenLab runs on WordPress, which powers over 40% of sites on the web. You and your students can easily create websites and learn valuable digital and communication skills.</li>
+									<li><strong>It's yours:</strong> The OpenLab is built by and for City Tech faculty, staff, and students using free and open source software, so you can choose how to use it and have a voice in how it works.</li>
+								</ul>
 
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est est, tincidunt id dignissim sed, luctus in metus. Sed suscipit pellentesque lorem, at vehicula risus rhoncus in. Mauris non porttitor dolor. Praesent facilisis eu arcu vel posuere. Ut viverra felis mi. Duis mollis sapien a tortor bibendum, a ultricies nunc aliquam. Cras purus augue, tincidunt at enim non, mollis congue diam. Cras quis nibh velit. Nullam bibendum nisi et libero efficitur pretium.
-								Proin nec nunc et lorem feugiat mattis porta id libero.
-								Mauris turpis est, porta at odio at, fringilla fermentum risus. Sed in urna non est tempus egestas eu nec leo. In et tortor elit.
-								Donec sodales feugiat faucibus. Nullam nec magna vel neque commodo egestas vitae at dolor.
-								Fusce ullamcorper felis felis, at ultrices neque scelerisque nec.
+								<p>Please confirm below to continue with sign-up.</p>
 							</div>
 						</div>
 

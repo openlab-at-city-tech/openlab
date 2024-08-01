@@ -540,7 +540,8 @@
 			$( '.registration-continue-button' ).hide();
 
 			if ( accountType && accountType.length > 0 ) {
-				$( '.account-type-description[data-account-type="' + accountType + '"]' ).show();
+				const accountTypeAttrValue = 'faculty' === accountType || 'staff' === accountType ? 'faculty' : 'student';
+				$( '.account-type-description[data-account-type="' + accountTypeAttrValue + '"]' ).show();
 				$( '.account-description-approval-fieldset' ).show();
 			}
 		}
