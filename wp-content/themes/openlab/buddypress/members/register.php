@@ -122,7 +122,7 @@ $account_type_options = array_map(
 
 						<?php do_action( 'template_notices' ); ?>
 
-						<p>For verification that you are a member of the City Tech community, please provide your City Tech email and full name. These are not displayed anywhere publicly on the site and are only visible to faculty and staff site administrators.</p>
+						<p>Please provide your City Tech email and full name. These are required to confirm that you are a member of the City Tech community. They are not displayed publicly on the OpenLab and are only visible to faculty and staff site administrators.</p>
 
 						<?php do_action( 'bp_before_account_details_fields' ); ?>
 
@@ -201,7 +201,7 @@ $account_type_options = array_map(
 								/>
 							</div>
 
-							<p>Please choose your username. <strong>You don't need to use your real name. We recommend that students do not use their full name.</strong> You will use your username to sign in, and it will also be visible in the URL of your member profile. You cannot change it after you sign up.</p>
+							<p id="username-help-text"><?php echo openlab_get_profile_field_helper_text( 'username' ); ?></p>
 
 							<div class="form-group">
 								<label class="control-label" for="signup_username"><span class="label-text">Username</span> <span class="label-gloss">(required) (lowercase & no special characters)</span></label>
@@ -294,7 +294,7 @@ $account_type_options = array_map(
 
 							<div class="register-section" id="profile-details-section">
 
-								<p>Your profile page is open to the public. You can edit or change who can see this information here and in your profile settings.</p>
+								<p>Your OpenLab member profile page is open to the public. You can change the information displayed on your public profile at any time by going to your profile settings.</p>
 
 								<?php echo wds_get_register_fields( 'Base' ); // WPCS: XSS ok ?>
 

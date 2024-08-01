@@ -8729,6 +8729,7 @@ body #register-page .has-error .error {
 body #register-page .has-error .error .parsley-errors-list {
   padding: 15px;
 }
+body #register-page legend .label-gloss,
 body #register-page label .label-gloss {
   font-weight: normal;
 }

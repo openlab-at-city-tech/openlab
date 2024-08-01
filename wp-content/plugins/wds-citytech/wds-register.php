@@ -170,7 +170,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		if ( 'staff' === $account_type || 'faculty' === $account_type ) :
 			?>
 			<div class="editfield field_name alt form-group">
-				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required)</span></label>
+				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required; public)</span></label>
 				<?php
 				$selector_args = [
 					'required' => true,
@@ -191,7 +191,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			?>
 			<div class="form-group editfield field_name alt">
 				<div class="error-container" id="academic-unit-selector-error"></div>
-				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required)</span></label>
+				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"
 				  class="form-control"
@@ -213,6 +213,8 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		$return .= ob_get_clean();
 
 if ( bp_has_profile( $has_profile_args ) ) :
+	$return .= '<p>The information below is optional and you can choose who is able to see it.</p>';
+
 	while ( bp_profile_groups() ) :
 		bp_the_profile_group();
 		while ( bp_profile_fields() ) :
@@ -230,9 +232,14 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				} else {
 					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				}
+
 				if ( bp_get_the_profile_field_is_required() ) {
+					$public_required_textbox_fields = [ 'Name' ];
+
 					if ( bp_get_the_profile_field_name() == 'First Name' || bp_get_the_profile_field_name() == 'Last Name' ) {
 						$return .= ' <span class="label-gloss">(required, but not displayed on Public Profile)</span>';
+					} elseif ( in_array( bp_get_the_profile_field_name(), $public_required_textbox_fields, true ) ) {
+						$return .= ' <span class="label-gloss">(required; public)</span>';
 					} else {
 						$return .= ' <span class="label-gloss">(required)</span>';
 					}
@@ -270,7 +277,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						/>';
 
 				if ( bp_get_the_profile_field_name() == 'Name' ) {
-					$return .= '<p class="register-field-note">Please choose your Display Name. <strong>You don\'t need to use your real name or your full name.</strong> Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Your Display Name can be changed at any time by editing your profile.</p>';
+					$return .= '<p class="register-field-note" id="display-name-help-text">' . openlab_get_profile_field_helper_text( 'display_name' ) . '</p>';
 				}
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
@@ -400,6 +407,28 @@ endif;
 endif;
 
 		return $return;
+}
+
+/**
+ * Gets the helper text for a given registration/profile field.
+ *
+ * Centralized here because we build the markup in two different places. This
+ * allows us to have a single copy of each string.
+ *
+ * @param string $field_name
+ * @return string
+ */
+function openlab_get_profile_field_helper_text( $field_name ) {
+	switch ( $field_name ) {
+		case 'username' :
+			return "Please choose your username. You will use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. <strong>Because the username is public, we recommend that students do not use their full name.</strong> You don't need to use your real name. You cannot change your username after you sign up.</p>";
+
+		case 'display_name' :
+			return "Please choose your Display Name. Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. <strong>Because your Display Name is public, you don't need to use your real name or your full name.</strong> Your Display Name can be changed at any time by editing your profile.";
+
+		default :
+			return '';
+	}
 }
 
 /**

@@ -34,7 +34,7 @@ function bpar_avatar_upload() {
 	<div class="editfield avatar-upload register-avatar-upload" id="register-avatar-upload" style="display:none;">
 
 		<fieldset>
-			<legend>Profile Picture</legend>
+			<legend>Profile Picture <span class="label-gloss">(optional; public)</span></legend>
 
 			<?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
 
@@ -51,7 +51,7 @@ function bpar_avatar_upload() {
 				</div>
 
 				<div class="avatar-upload-actions">
-					<div>Upload an avatar to be used on your profile and throughout the site. You don't have to use an image of yourself. Feel free to use something that represents you or your interests. Or, you can use the avatar shown here instead. You can change your avatar at any time from your profile.</div>
+					<div>Upload an avatar (picture) to be used on your profile and throughout the site. Your avatar is displayed publicly. Because your avatar is public, you don't have to use a picture of yourself. You can use something that represents you or your interests, or just use the avatar shown here instead. You can change your avatar at any time by going to your profile settings.</div>
 
 					<?php bp_attachments_get_template_part( 'avatars/index' ); ?>
 				</div>

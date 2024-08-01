@@ -476,7 +476,7 @@
 			if ( 'student' === accountType ) {
 				helper = 'Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
 			} else if ( 'faculty' === accountType ) {
-				helper = 'Example: jdoe@citytech.cuny.edu.';
+				helper = 'Example: first.lastname12@citytech.cuny.edu.';
 			}
 
 			$('.email-requirements').fadeOut( function() {
