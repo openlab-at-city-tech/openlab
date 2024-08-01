@@ -426,6 +426,16 @@ function openlab_get_profile_field_helper_text( $field_name ) {
 		case 'display_name' :
 			return "Please choose your Display Name. Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. <strong>Because your Display Name is public, you don't need to use your real name or your full name.</strong> Your Display Name can be changed at any time by editing your profile.";
 
+		case 'portfolio_name' :
+			$group_type_label = openlab_get_portfolio_label( [ 'case' => 'upper' ] );
+
+			return sprintf(
+				'Depending on the privacy settings you choose, your %s name may be publicly visible, so you may not wish to include your full name. We recommend keeping your %s name under 50 characters. You can change your %s name at any time.',
+				$group_type_label,
+				$group_type_label,
+				$group_type_label
+			);
+
 		default :
 			return '';
 	}

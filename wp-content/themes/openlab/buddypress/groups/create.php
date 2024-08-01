@@ -148,9 +148,7 @@
                                     <li>ARCH3522 NYC Arch, FA2013</li>
                                 </ul>
 							<?php elseif ( 'portfolio' === $group_type ) : ?>
-								<?php $group_type_label = openlab_get_portfolio_label( 'case=upper&user_id=' . bp_loggedin_user_id() ); ?>
-                                <p class="ol-tooltip">Depending on the privacy settings you choose, your <?php echo esc_html( $group_type_label ); ?> may be publicly visible, so you may not wish to include your full name. We recommend keeping your  <?php echo esc_html( $group_type_label ) ?> name under 50 characters. You can change your <?php echo esc_html( $group_type_label ); ?> name at any time.</p>
-
+								<p class="ol-tooltip"><?php echo esc_html( openlab_get_profile_field_helper_text( 'portfolio_name' ) ); ?></p>
                             <?php else : ?>
                                 <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                             <?php endif; ?>

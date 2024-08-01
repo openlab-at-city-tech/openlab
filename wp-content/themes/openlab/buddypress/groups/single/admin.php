@@ -48,6 +48,10 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 					<?php do_action( 'bp_before_group_details_admin' ); ?>
 
+					<?php if ( 'portfolio' === $group_type ) : ?>
+						<p><?php echo esc_html( openlab_get_profile_field_helper_text( 'portfolio_name' ) ); ?></p>
+					<?php endif; ?>
+
 					<label for="group-name"><?php echo $group_label_uc . ' Name'; ?> (required)</label>
 					<input class="form-control" type="text" name="group-name" id="group-name" value="<?php bp_group_name(); ?>" />
 
