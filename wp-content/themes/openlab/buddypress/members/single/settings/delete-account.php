@@ -16,7 +16,7 @@
 
 			<p>You may wish to export your work before deleting it so you can save a copy for future use. Find out more about <a href="https://openlab.citytech.cuny.edu/blog/help/exporting-your-work">exporting your work</a>.</p>
 
-			<p>When you delete your account, the following will be deleted:</p>
+			<p><strong>When you delete your account, the following will be deleted:</strong></p>
 
 			<ul>
 				<li>Your OpenLab profile and account information</li>
