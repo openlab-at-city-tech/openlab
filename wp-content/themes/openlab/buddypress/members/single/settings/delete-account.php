@@ -35,7 +35,7 @@
 			<p><strong>Questions?</strong> <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">Contact us.</a> We're happy to help!</p>
 
             <div class="bp-template-notice error margin-bottom">
-                <p><?php _e('WARNING: Deleting your account will completely remove ALL content associated with it. There is no way back, please be careful with this option.', 'buddypress'); ?></p>
+				<p>WARNING: Deleting your account will remove the information described above. There is no way back, please be careful with this option.</p>
             </div>
 
             <div class="checkbox no-margin no-margin-bottom">
