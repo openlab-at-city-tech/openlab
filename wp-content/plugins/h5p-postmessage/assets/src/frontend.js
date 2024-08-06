@@ -58,6 +58,12 @@
 			return;
 		}
 
+		const { allowedDomains } = window.h5pPostMessageData;
+
+		if ( ! allowedDomains.includes( window.parent.origin ) ) {
+			return;
+		}
+
 		window.parent.postMessage( postMessageData, '*' );
 	});
 })();

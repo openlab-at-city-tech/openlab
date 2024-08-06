@@ -31,6 +31,19 @@ add_action(
 			plugin_dir_url( __FILE__ ) . 'build/frontend.js'
 		);
 
+		// Default to the current domain only.
+		$url_parts       = wp_parse_url( get_site_url() );
+		$allowed_domains = [ $url_parts['scheme'] . '://' . $url_parts['host'] ];
+
+		$data = [
+			'allowedDomains' => apply_filters( 'h5p_postmessage_allowed_domains', $allowed_domains ),
+		];
+
+		$tags[] = sprintf(
+			'<script>var h5pPostMessageData = %s;</script>',
+			wp_json_encode( $data )
+		);
+
 		return $tags;
 	}
 );
