@@ -3435,6 +3435,20 @@ add_action(
 );
 
 /**
+ * Force Gravity Forms key.
+ */
+add_filter(
+	'option_rg_gforms_key',
+	function( $value ) {
+		if ( defined( 'GF_LICENSE_KEY' ) ) {
+			$value = GF_LICENSE_KEY;
+		}
+
+		return $value;
+	}
+);
+
+/**
  * Gravity Forms Quiz field width.
  */
 add_action(
