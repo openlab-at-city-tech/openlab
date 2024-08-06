@@ -29,6 +29,22 @@ class GFImageChoices extends GFAddOn {
 	protected $_supported_input_types = ['radio', 'checkbox'];
 	protected $_standard_merge_tags = ['all_fields', 'pricing_fields'];//'all_quiz_results'
 
+
+    public function get_license_key($init = false) {
+	    $key = ( defined('GF_IMAGE_CHOICES_LICENSE') ) ? GF_IMAGE_CHOICES_LICENSE : $this->get_plugin_setting( 'gf_image_choices_license_key' );
+	    if ( $init && false === get_transient('gf_image_choices_license_check') ) {
+		    $settings = $this->get_plugin_settings();
+		    if ( false === $settings ) {
+			    $settings = array();
+		    }
+		    $settings['gf_image_choices_license_key'] = $key;
+		    $this->update_plugin_settings($settings);
+		    $this->license_validation( null, $key );
+		    set_transient('gf_image_choices_license_check', '1', DAY_IN_SECONDS);
+	    }
+        return $key;
+    }
+
 	/**
 	 * Gets the supported field types and wraps them in a filter.
 	 *
@@ -107,45 +123,17 @@ class GFImageChoices extends GFAddOn {
 		return $has_ic;
 	}
 
-	public function add_inline_options_label_lookup( $form_string, $form, $current_page ) {
-
-        /*
-        if ( GFCommon::is_legacy_markup_enabled( $form ) ) {
-            return $form_string;
-        }
-        */
-
-		$option_labels_lookup = [];
-		foreach( $form['fields'] as $field ) {
-			if ( !is_object($field) ) {
-				continue;
-			}
-			if ( property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages && $field->type == "option" && ( $field->get_input_type() == "radio" || $field->get_input_type() == "checkbox" ) ) {
-				$key = "field_" . $field->id;
-				if ( !isset($option_labels_lookup[$key]) ) {
-					$option_labels_lookup[$key] = [];
-				}
-				foreach( $field->choices as $i => $choice ) {
-					$option_labels_lookup[$key][] = $choice['text'];
-				}
-			}
-		}
-		$form_string .= "<script type=\"text/javascript\"> window.imageChoicesOptionLabels = window.imageChoicesOptionLabels || {}; window.imageChoicesOptionLabels[".$form['id']."] = " . json_encode($option_labels_lookup) . ";  </script>";
-
-		return $form_string;
-	}
-
 
 	/**
 	 * Handles hooks and loading of language files.
 	 */
 	public function init() {
 
+		$this->get_license_key(true);
+
 		// add a special class to relevant fields so we can identify them later
 		add_action( 'gform_field_css_class', array( $this, 'add_custom_class' ), 10, 3 );
 		add_filter( 'gform_field_choice_markup_pre_render', array( $this, 'add_image_options_markup' ), 10, 4 );
-
-		add_filter( 'gform_footer_init_scripts_filter', array( $this, 'add_inline_options_label_lookup' ), 10, 3 );
 
 		// display on entry detail
 		add_filter( 'gform_entry_field_value', array( $this, 'custom_entry_field_value' ), 20, 4 );
@@ -163,6 +151,11 @@ class GFImageChoices extends GFAddOn {
 
 		parent::init();
 
+	}
+
+    // legacy compat with Gravity Wiz GPPA
+	public function add_inline_options_label_lookup( $form_string, $form, $current_page ) {
+        return $form_string;
 	}
 
 
@@ -275,7 +268,8 @@ class GFImageChoices extends GFAddOn {
 	        'deps'     => array( 'jquery' ),
 	        'enqueue' => array(
 		        array( 'admin_page' => array( 'entry_detail', 'entry_edit' ) ),
-		        array( 'field_types' => $this->get_supported_field_types() ),
+		        //array( 'field_types' => $this->get_supported_field_types() ),
+		        array( $this, 'maybe_enqueue_main_scripts_styles' )
 	        ),
         );
 
@@ -287,7 +281,8 @@ class GFImageChoices extends GFAddOn {
 	        'callback' => array( $this, 'localize_scripts' ),
 	        'enqueue' => array(
 		        array( 'admin_page' => array( 'form_editor', 'entry_view', 'entry_detail', 'entry_edit' ) ),
-		        array( 'field_types' => $this->get_supported_field_types() ),
+		        //array( 'field_types' => $this->get_supported_field_types() ),
+		        array( $this, 'maybe_enqueue_main_scripts_styles' )
 	        ),
         );
 
@@ -296,7 +291,8 @@ class GFImageChoices extends GFAddOn {
 	        'src'     => $this->get_base_url() . '/js/jetsloth-match-height.js',
 	        'version' => $this->_version,
 	        'enqueue' => array(
-		        array( 'field_types' => $this->get_supported_field_types() ),
+		        //array( 'field_types' => $this->get_supported_field_types() ),
+		        array( $this, 'maybe_enqueue_main_scripts_styles' )
 	        ),
         );
 
@@ -350,7 +346,10 @@ class GFImageChoices extends GFAddOn {
 			'src'     => $use_new_features ? $this->get_base_url() . '/css/gf_image_choices.css' : $this->get_base_url() . '/css/gf_image_choices_legacy.css',
 			'version' => $this->_version,
 			'media'   => 'screen',
-			'enqueue' => array( 'field_types' => $this->get_supported_field_types() ),
+			'enqueue' => array(
+				//array( 'field_types' => $this->get_supported_field_types() ),
+		        array( $this, 'maybe_enqueue_main_scripts_styles' )
+            ),
 		);
 
         if ( is_admin() ) {
@@ -362,6 +361,10 @@ class GFImageChoices extends GFAddOn {
         }
 
 		return array_merge( parent::styles(), $styles );
+	}
+
+	public function maybe_enqueue_main_scripts_styles( $form ) {
+		return( !empty($form) && $this->form_contains_image_choices_fields($form) );
 	}
 
 
@@ -552,7 +555,7 @@ class GFImageChoices extends GFAddOn {
 		        $form_color = $this->get_form_settings_value("gf_image_choices_feature_color_custom", false, $form, $form_settings);
 		        if ( !empty($form_color) ) {
 			        ?>
-                    #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                    #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                         --ic-feature-color: <?php echo $form_color; ?>;
                     }
 			        <?php
@@ -564,7 +567,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_columns_width = $this->get_form_settings_value( "gf_image_choices_columns_width", "", $form, $form_settings );
 	        if ( $form_setting_columns == "fixed" && !empty($form_setting_columns_width) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-width: <?php echo $form_setting_columns_width; ?>px;
                 }
 		        <?php
@@ -573,7 +576,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_medium_columns_width = $this->get_form_settings_value( "gf_image_choices_columns_width_medium", "", $form, $form_settings );
 	        if ( $form_setting_medium_columns == "fixed" && !empty($form_setting_medium_columns_width) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-width-medium: <?php echo $form_setting_medium_columns_width; ?>px;
                 }
 		        <?php
@@ -582,7 +585,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_small_columns_width = $this->get_form_settings_value( "gf_image_choices_columns_width_small", "", $form, $form_settings );
 	        if ( $form_setting_small_columns == "fixed" && !empty($form_setting_small_columns_width) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-width-small: <?php echo $form_setting_small_columns_width; ?>px;
                 }
 		        <?php
@@ -592,7 +595,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_height = $this->get_form_settings_value( "gf_image_choices_height", "", $form, $form_settings );
 	        if ( !empty($form_setting_height) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-height: <?php echo $form_setting_height; ?>px;
                 }
 		        <?php
@@ -600,7 +603,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_medium_height = $this->get_form_settings_value( "gf_image_choices_height_medium", "", $form, $form_settings );
 	        if ( !empty($form_setting_medium_height) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-height-medium: <?php echo $form_setting_medium_height; ?>px;
                 }
 		        <?php
@@ -608,7 +611,7 @@ class GFImageChoices extends GFAddOn {
 	        $form_setting_small_height = $this->get_form_settings_value( "gf_image_choices_height_small", "", $form, $form_settings );
 	        if ( !empty($form_setting_small_height) ) {
 		        ?>
-                #gform_fields_<?php echo $form_id; ?> .image-choices-field[class*="ic-theme--"] {
+                #gform_<?php echo $form_id; ?> .gform_fields .image-choices-field[class*="ic-theme--"] {
                     --ic-height-small: <?php echo $form_setting_small_height; ?>px;
                 }
 		        <?php
@@ -826,7 +829,8 @@ class GFImageChoices extends GFAddOn {
         $plugin_settings = $this->get_plugin_settings();
         $use_new_features = $this->use_new_features();
 
-		$license = $this->get_plugin_settings_value('gf_image_choices_license_key', "", $plugin_settings);
+		//$license = $this->get_plugin_settings_value('gf_image_choices_license_key', "", $plugin_settings);
+        $license = $this->get_license_key();
 		$status = get_option('gf_image_choices_license_status');
 
 		$license_field = array(
@@ -836,15 +840,17 @@ class GFImageChoices extends GFAddOn {
 			'type' => 'text',
 			'input_type' => 'password',
 			'class' => 'medium',
-			'default_value' => '',
+			'default_value' => ( defined('GF_IMAGE_CHOICES_LICENSE') ) ? GF_IMAGE_CHOICES_LICENSE : '',
 			'validation_callback' => array($this, 'license_validation'),
 			'feedback_callback' => array($this, 'license_feedback'),
 			'error_message' => esc_html__( 'Invalid license', 'gf_image_choices' ),
 		);
 
+        /*
 		if (!empty($license) && !empty($status)) {
 			$license_field['after_input'] = ($status == 'valid') ? ' License is valid' : ' Invalid or expired license';
 		}
+        */
 
 		$license_section = array(
 			'type' => 'section',
@@ -1491,12 +1497,14 @@ class GFImageChoices extends GFAddOn {
 	    $forms = GFAPI::get_forms();
 	    foreach( $forms as $form ) {
 		    foreach( $form['fields'] as $field ) {
+                /*
 			    if ( !rgobj($field, "imageChoices_enableImages") ) {
                     continue;
 			    }
+                */
 			    $found_in_field = false;
 			    foreach( $field->choices as &$choice ) {
-				    if ( strpos( rgar($choice, "imageChoices_image"), $old_url ) !== FALSE ) {
+				    if ( strpos( rgar($choice, "imageChoices_image", ""), $old_url ) !== FALSE || strpos( rgar($choice, "imageChoices_largeImage", ""), $old_url ) !== FALSE ) {
 					    $found_in_field = true;
 					    break;
 				    }
@@ -1549,11 +1557,20 @@ class GFImageChoices extends GFAddOn {
 		    }
 
 		    foreach( $field->choices as &$choice ) {
-			    $image_url = ( isset($choice['imageChoices_image']) ) ? $choice['imageChoices_image'] : "'";
+			    $image_url = ( isset($choice['imageChoices_image']) ) ? $choice['imageChoices_image'] : "";
+			    $large_image_url = ( isset($choice['imageChoices_largeImage']) ) ? $choice['imageChoices_largeImage'] : "";
+                $replaced = false;
 			    if ( !empty($image_url) && strpos($image_url, $old_url) !== FALSE ) {
 				    $choice['imageChoices_image'] = str_replace($old_url, $new_url, $image_url);
-				    $replacements++;
+				    $replaced = true;
 			    }
+			    if ( !empty($large_image_url) && strpos($large_image_url, $old_url) !== FALSE ) {
+				    $choice['imageChoices_largeImage'] = str_replace($old_url, $new_url, $large_image_url);
+				    $replaced = true;
+			    }
+                if ( $replaced ) {
+	                $replacements++;
+                }
 		    }
 
 	    }
@@ -1592,13 +1609,9 @@ class GFImageChoices extends GFAddOn {
 	}
 
 
-    public function get_forms_with_image_choices() {
-
-    }
-
     private function get_tools_url_replacement_tab_html( $forms = array() ) {
 	    if ( empty($forms) ) {
-		    $forms = $this->get_forms_with_image_choices();
+		    $forms = $this->get_image_choices_form_ids( true );
 	    }
         ob_start();
         ?>
@@ -1617,9 +1630,9 @@ class GFImageChoices extends GFAddOn {
                         <div class="gform-settings-input__container">
                             <select id="image_choices_url_replacement_form_select" name="image_choices_url_replacement_form" class="jetbase-form__input jetbase-form__input--select medium">
                                 <option value="all" selected><?php _e('All forms', 'gf_image_choices'); ?></option>
-                                <?php foreach( $forms as $form ): ?>
+                                <?php if (!empty($forms)): foreach( $forms as $form ): ?>
                                     <option value="<?php echo $form['id']; ?>"><?php echo $form['title']; ?></option>
-                                <?php endforeach; ?>
+                                <?php endforeach; endif; ?>
                             </select>
                         </div>
                     </div>
@@ -1677,9 +1690,9 @@ class GFImageChoices extends GFAddOn {
                         <div class="gform-settings-input__container">
                             <select id="image_choices_image_replacement_form_select" name="image_choices_image_replacement_form" class="jetbase-form__input jetbase-form__input--select medium">
                                 <option value="all" selected><?php _e('All forms', 'gf_image_choices'); ?></option>
-				                <?php foreach( $forms as $form ): ?>
+                                <?php if (!empty($forms)): foreach( $forms as $form ): ?>
                                     <option value="<?php echo $form['id']; ?>"><?php echo $form['title']; ?></option>
-				                <?php endforeach; ?>
+				                <?php endforeach; endif; ?>
                             </select>
                         </div>
                     </div>
@@ -2895,6 +2908,10 @@ class GFImageChoices extends GFAddOn {
 			return $text;
 		}
 
+		if ( !$this->form_contains_image_choices_fields($form) ) {
+			return $text;
+		}
+
 		if ( strpos($text, "gquiz-container") === false || strpos($text, "gquiz-image-choices-choice") !== false ) {
 			// if it's not yet the quiz results markup, or the image choices markup already done
 			return $text;
@@ -2915,10 +2932,11 @@ class GFImageChoices extends GFAddOn {
 
 		$image_choices_fields = array();
 		foreach($form['fields'] as &$field) {
-			if ( is_object( $field ) && property_exists($field, 'imageChoices_enableImages') && !empty($field->imageChoices_enableImages)) {
+			if ( $this->field_has_image_choices_enabled( $field ) ) {
 				$image_choices_fields[$field->id] = $field;
 			}
 		}
+
 
 		$results = gf_quiz()->get_quiz_results( $form, $entry );
 		$fields = $results['fields'];
@@ -2942,12 +2960,14 @@ class GFImageChoices extends GFAddOn {
 			//$is_correct = $results_field['is_correct'];
 
 			$choices_data = array();
-			foreach ($field->choices as $choice) {
+			foreach ($field->choices as $i => $choice) {
 				array_push($choices_data, array(
 					'text' => $choice['text'],
 					'value' => $choice['value'],
+					'index' => $i,
 					'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
-					'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : ''
+					'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
+					'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
 				));
 			}
 
@@ -2982,7 +3002,7 @@ class GFImageChoices extends GFAddOn {
 			}
 
 			$li_elems = $dom->getElementsByTagName('li');
-			foreach($li_elems as $li) {
+			foreach($li_elems as $i => $li) {
 				$cls = '';
 				if ($li->hasAttribute('class')) {
 					$cls = $li->getAttribute('class') . ' ';
@@ -2991,50 +3011,34 @@ class GFImageChoices extends GFAddOn {
 				$li->setAttribute('class', $cls);
 				$li->setAttribute('style', 'display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: center; position: relative; text-align: center;');// inline styles for notification email
 
-				$trimmed_value = $li->nodeValue;
-				$trimmed_value = preg_replace("/[\r\n]+/", "\n", $trimmed_value);
-				$trimmed_value = preg_replace("/\s+/", ' ', $trimmed_value);
-				$trimmed_value = trim($trimmed_value);
+				$choice = $choices_data[$i];
 
-				foreach ($choices_data as $choice) {
-
-					$trimmed_choice_text = $choice['text'];
-					$trimmed_choice_text = preg_replace("/[\r\n]+/", "\n", $trimmed_choice_text);
-					$trimmed_choice_text = preg_replace("/\s+/", ' ', $trimmed_choice_text);
-					$trimmed_choice_text = trim($trimmed_choice_text);
-
-					if ($trimmed_value != $trimmed_choice_text) {
-						continue;
+				if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price' || $field_entry_value_type == 'image_price' || $field_entry_value_type == 'image_value') {
+					$img = $dom->createElement('span');
+					$img->setAttribute('class', 'gquiz-image-choices-choice-image');
+					$img->setAttribute('style', 'background-image:url('.$choice['image'].'); display: inline-block; width: 80px; height: 80px; background-size: cover; background-repeat: no-repeat; background-position: 50%;');// inline styles for notification email
+					if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price' || $field_entry_value_type == 'image_price') {
+						$txt = $dom->createElement('span');
+						$txt->setAttribute('class', 'gquiz-image-choices-choice-text');
+						$txt->setAttribute('style', 'display: block; font-size: 12px;');// inline styles for notification email
+						$txt->nodeValue = $choice['text'];
+						$img->appendChild($txt);
 					}
 
-					if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price' || $field_entry_value_type == 'image_price' || $field_entry_value_type == 'image_value') {
-						$img = $dom->createElement('span');
-						$img->setAttribute('class', 'gquiz-image-choices-choice-image');
-						$img->setAttribute('style', 'background-image:url('.$choice['image'].'); display: inline-block; width: 80px; height: 80px; background-size: cover; background-repeat: no-repeat; background-position: 50%;');// inline styles for notification email
-						if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price' || $field_entry_value_type == 'image_price') {
-							$txt = $dom->createElement('span');
-							$txt->setAttribute('class', 'gquiz-image-choices-choice-text');
-							$txt->setAttribute('style', 'display: block; font-size: 12px;');// inline styles for notification email
-							$txt->nodeValue = $choice['text'];
-							$img->appendChild($txt);
-						}
-
-						$icons = $li->getElementsByTagName('img');
-						$icon_src = '';
-						foreach($icons as $icon) {
-							$icon_src = $icon->getAttribute('src');
-						}
-						$icon = $dom->createElement('img');
-						$icon->setAttribute('src', $icon_src);
-						$icon->setAttribute('class', 'gquiz-image-choices-choice-icon');
-						$icon->setAttribute('style', 'display: block; margin: 0 auto;');
-
-						$li->nodeValue = "";
-
-						$li->appendChild($img);
-						$li->appendChild($icon);
-
+					$icons = $li->getElementsByTagName('img');
+					$icon_src = '';
+					foreach($icons as $icon) {
+						$icon_src = $icon->getAttribute('src');
 					}
+					$icon = $dom->createElement('img');
+					$icon->setAttribute('src', $icon_src);
+					$icon->setAttribute('class', 'gquiz-image-choices-choice-icon');
+					$icon->setAttribute('style', 'display: block; margin: 0 auto;');
+
+					$li->nodeValue = "";
+
+					$li->appendChild($img);
+					$li->appendChild($icon);
 
 				}
 
@@ -3273,7 +3277,8 @@ class GFImageChoices extends GFAddOn {
 							'text' => $choice['text'],
 							'value' => $choice['value'],
 							'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
-							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : ''
+							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
+							'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
 						));
 					}
 
@@ -3324,7 +3329,8 @@ class GFImageChoices extends GFAddOn {
 							'text' => $choice['text'],
 							'value' => $choice['value'],
 							'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
-							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : ''
+							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
+							'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
 						));
 					}
 
@@ -4228,10 +4234,14 @@ class GFImageChoices extends GFAddOn {
 			$other_imgID_form = apply_filters("gfic_other_choice_imageID_{$field->formId}", $other_imgID_global, $choice, $field, $value);
 			$img = apply_filters("gfic_other_choice_image_{$field->formId}_{$field->id}", $other_img_form, $choice, $field, $value);
 			$imgID = apply_filters("gfic_other_choice_imageID_{$field->formId}_{$field->id}", $other_imgID_form, $choice, $field, $value);
+
+			$large_img = apply_filters("gfic_other_choice_large_image_{$field->formId}_{$field->id}", "", $choice, $field, $value);
 		}
 		else {
 			$img = (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '';
 			$imgID = (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '';
+
+            $large_img = (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : '';
 		}
 
 		if ( empty($img) ) {
@@ -4253,15 +4263,32 @@ class GFImageChoices extends GFAddOn {
 		$form_lazy_load_value = $this->get_form_settings_value('gf_image_choices_lazy_load', 'global_setting', $form, $form_settings);
 		$lazy_load = $this->get_field_setting_fallback_value( null, $form_lazy_load_value, $global_lazy_load_value );
 
-		$img_alt = get_post_meta( $imgID, '_wp_attachment_image_alt', true );
+		$global_theme_setting = $this->get_plugin_settings_value("gf_image_choices_global_theme", $this->_defaultTheme, $plugin_settings);
+		$form_theme_setting = $this->get_form_settings_value("gf_image_choices_theme", "global_setting", $form, $form_settings);
+		$field_theme_setting = $this->get_field_settings_value("theme", "form_setting", $field);
+		$field_theme = $this->get_field_setting_fallback_value( $field_theme_setting, $form_theme_setting, $global_theme_setting );
 
-		$lightboxImg = ( !empty($imgID) ) ? wp_get_attachment_image_src($imgID, $lightbox_size) : '';
-		if ( !empty($lightboxImg) ) {
-			$lightboxImg = $lightboxImg[0];
-			$lightboxImg = str_replace('$', '\$', $lightboxImg);
+		$global_image_style_setting = $this->get_plugin_settings_value("gf_image_choices_global_image_style", $this->_defaultImageDisplay, $plugin_settings);
+		$form_image_style_setting = $this->get_form_settings_value("gf_image_choices_image_style", "global_setting", $form, $form_settings);
+		$field_image_style_setting = $this->get_field_settings_value("imageStyle", "form_setting", $field);
+		$field_image_style = $this->get_field_setting_fallback_value( $field_image_style_setting, $form_image_style_setting, $global_image_style_setting );
+
+		$img_alt = ( !empty($imgID) ) ? get_post_meta( $imgID, '_wp_attachment_image_alt', true ) : '';
+
+		// new option to define large image url
+		if ( !empty($large_img) ) {
+			$lightboxImg = $large_img;
 		}
+        else {
+	        $lightboxImg = ( !empty($imgID) ) ? wp_get_attachment_image_src($imgID, $lightbox_size) : '';
+	        if ( !empty($lightboxImg) ) {
+		        $lightboxImg = $lightboxImg[0];
+	        }
+        }
 
-		$field_css_classes = property_exists($field, 'cssClass') ? explode(" ", $field['cssClass']) : [];
+        // make lightcase safe
+		$lightboxImg = str_replace('$', '\$', $lightboxImg);
+
 		$jmh_id = $field['formId'] . "_" . $field['id'];
 
 		if ( empty($img) ) {
@@ -4287,25 +4314,25 @@ class GFImageChoices extends GFAddOn {
 		}
 
 
-		if ($field->type == 'product' && !GFCommon::is_form_editor() && $this->get_field_settings_value("showPrices", false, $field) ) {
+		if ($field->type == 'product' && $this->get_field_settings_value("showPrices", false, $field) ) {
 			$choice_price = str_replace('$', '\$', $choice['price']);
 
-			if ( in_array("ic-theme--polaroid", $field_css_classes) || in_array("ic-theme--float-card", $field_css_classes) ) {
-				$choice_markup = preg_replace('#<label\b([^>]*)>(.*?)</label\b[^>]*>#s', implode("", array(
-					'<label ${1} >',
-					$img_markup,
-					'<span class="image-choices-choice-price"><span class="ginput_price"> '.$choice_price.'</span></span>',
-					'<span class="image-choices-choice-text">${2}</span>',
-					'</label>'
-				)), $choice_markup);
-			}
+            if ( !GFCommon::is_form_editor() && ( $field_theme == "polaroid" || $field_theme == "float-card" ) ) {
+	            $choice_markup = preg_replace('#<label\b([^>]*)>(.*?)</label\b[^>]*>#s', implode("", array(
+		            '<label ${1} >',
+		            $img_markup,
+		            '<span class="image-choices-choice-price"><span class="ginput_price"> '.$choice_price.'</span></span>',
+		            '<span class="image-choices-choice-text">${2}</span>',
+		            '</label>',
+	            )), $choice_markup);
+            }
 			else {
 				$choice_markup = preg_replace('#<label\b([^>]*)>(.*?)</label\b[^>]*>#s', implode("", array(
 					'<label ${1} >',
 					$img_markup,
 					'<span class="image-choices-choice-text">${2}</span>',
 					'<span class="image-choices-choice-price"><span class="ginput_price"> '.$choice_price.'</span></span>',
-					'</label>'
+					'</label>',
 				)), $choice_markup);
 			}
 
@@ -4316,13 +4343,13 @@ class GFImageChoices extends GFAddOn {
 				'<label ${1} >',
 				$img_markup,
 				'<span class="image-choices-choice-text">${2}</span>',
-				'</label>'
+				'</label>',
 			)), $choice_markup);
 
 		}
 		else {
 			// OPTION FIELD
-			$choice_markup = str_replace('<label', '<label data-img="'.$img.'" data-lightbox-src="'.$lightboxImg.'"', $choice_markup);
+			$choice_markup = str_replace('<label', '<label data-img="'.$img.'" data-lightbox-src="'.$lightboxImg.'" data-text="'.esc_attr($choice['text']).'"', $choice_markup);
 		}
 
 		$re = '/class=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/is';
@@ -4339,10 +4366,10 @@ class GFImageChoices extends GFAddOn {
 
         if ( $this->use_new_features() ) {
 
-	        if ( in_array("ic-theme--float-card", $field_css_classes) || in_array("ic-theme--polaroid", $field_css_classes) ) {
+	        if ( $field_theme == "polaroid" || $field_theme == "float-card" ) {
 		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$jmh_id}' ", $choice_markup );
 	        }
-	        if ( in_array("ic-theme--cover-tile", $field_css_classes) && in_array("ic-image--natural", $field_css_classes) ) {
+	        if ( $field_theme == "cover-tile" && $field_image_style == "natural" ) {
 		        $choice_id = $jmh_id;
 		        foreach( $choice_classes as $cls ) {
 			        if ( strpos($cls, "gchoice_") !== FALSE ) {
@@ -4602,7 +4629,7 @@ class GFImageChoices extends GFAddOn {
 
 	public function gf_plugin_row($plugin_file='', $plugin_data=array(), $status='') {
 		$row = "";
-		$license_key = trim($this->get_plugin_setting('gf_image_choices_license_key'));
+		$license_key = $this->get_license_key();
 		$license_status = get_option('gf_image_choices_license_status', '');
 		if ( empty($license_key) || empty($license_status) ) {
 			ob_start();
@@ -4682,7 +4709,7 @@ class GFImageChoices extends GFAddOn {
 	 *
 	 * @return bool|null
 	 */
-	public function license_feedback( $value, $field ) {
+	public function license_feedback( $value, $field = null ) {
 		if ( empty( $value ) ) {
 			return null;
 		}
@@ -4713,7 +4740,8 @@ class GFImageChoices extends GFAddOn {
 	 * @param string $field_setting The submitted value of the license_key field.
 	 */
 	public function license_validation( $field, $field_setting ) {
-		$old_license = $this->get_plugin_setting( 'gf_image_choices_license_key' );
+		//$old_license = $this->get_plugin_setting( 'gf_image_choices_license_key' );
+		$old_license = $this->get_license_key();
 
 		if ( $old_license && $field_setting != $old_license ) {
 			// Send the remote request to deactivate the old license

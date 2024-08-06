@@ -4,9 +4,9 @@ Plugin Name: Gravity Forms Image Choices
 Plugin URI: https://jetsloth.com/gravity-forms-image-choices/
 Description: Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
 Author: JetSloth
-Version: 1.4.1
+Version: 1.4.26
 Requires at least: 3.5
-Tested up to: 6.2
+Tested up to: 6.5.2
 Author URI: https://jetsloth.com
 License: GPL2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -30,7 +30,7 @@ Text Domain: gf_image_choices
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define('GFIC_VERSION', '1.4.1');
+define('GFIC_VERSION', '1.4.26');
 define('GFIC_HOME', 'https://jetsloth.com');
 define('GFIC_NAME', 'Gravity Forms Image Choices');
 define('GFIC_SLUG', 'gf-image-choices');
@@ -73,19 +73,21 @@ function gf_image_choices_plugin_updater() {
 		return;
 	}
 
-	if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) {
+	if ( ! class_exists( 'Image_Choices_Plugin_Updater' ) ) {
 		// load our custom updater if it doesn't already exist
-		include_once( dirname( __FILE__ ) . '/inc/EDD_SL_Plugin_Updater.php' );
+		include_once( dirname( __FILE__ ) . '/inc/Image_Choices_Plugin_Updater.php' );
 	}
 
 	// retrieve the license key
-	$license_key = trim( gf_image_choices()->get_plugin_setting( 'gf_image_choices_license_key' ) );
+	//$key = gf_image_choices()->get_plugin_setting( 'gf_image_choices_license_key' );
+	$key = gf_image_choices()->get_license_key();
+	$license_key = ( !empty($key) ) ? trim( $key ) : "";
 
 	// Disable SSL verification in order to prevent download update failures
 	add_filter('edd_sl_api_request_verify_ssl', '__return_false');
 
 	// setup the updater
-	$edd_updater = new EDD_SL_Plugin_Updater( GFIC_HOME, __FILE__, array(
+	$edd_updater = new Image_Choices_Plugin_Updater( GFIC_HOME, __FILE__, array(
 			'version'   => GFIC_VERSION,
 			'license'   => $license_key,
 			'item_name' => GFIC_NAME,
