@@ -79,12 +79,13 @@ class GF_Template_Library_Config extends GF_Config {
 	 */
 	public function data() {
 		$license_info = $this->license_api->check_license();
+		$bypassTemplateLibrary = apply_filters('gform_bypass_template_library', false);
 
 		return array(
 			'components' => array(
 				'template_library' => array(
-					'endpoints' => $this->get_endpoints(),
-					'i18n'      => array(
+					'endpoints' 			=> $this->get_endpoints(),
+					'i18n'      			=> array(
 						'description'                => __( 'Form Description', 'gravityforms' ),
 						'title'                      => __( 'Form Title', 'gravityforms' ),
 						'titlePlaceholder'           => __( 'Enter the form title', 'gravityforms' ),
@@ -110,25 +111,33 @@ class GF_Template_Library_Config extends GF_Config {
 						'heading'                    => __( 'Explore Form Templates', 'gravityforms' ),
 						'subheading'                 => __( 'Quickly create an amazing form by using a pre-made template, or start from scratch to tailor your form to your specific needs.', 'gravityforms' ),
 						'upgradeTag'                 => __( 'Upgrade', 'gravityforms' ),
-						/* translators: %1$s is anchor opening tag, %2$s is anchor closing tag */
-						'upgradeAlert'               => sprintf( __( 'This template uses Add-ons not included in your current license plan. %1$sUpgrade%2$s'), '<a href="' . $license_info->get_upgrade_link() . '" target="_blank" rel="noopener noreferrer">', '</a>' ),
+						'upgradeAlert'               => array(
+							/* translators: %1$s is anchor opening tag, %2$s is anchor closing tag */
+							'value' => sprintf( __( 'This template uses Add-ons not included in your current license plan. %1$sUpgrade%2$s'), '<a href="' . $license_info->get_upgrade_link() . '" target="_blank" rel="noopener noreferrer">', '</a>' ),
+							'default' => 'This template uses Add-ons not included in your current license plan. Upgrade.',
+						),
 					),
-					'data'      => array(
+					'data'      			=> array(
 						'thumbnail_url' => \GFCommon::get_image_url( 'template-library/' ),
 						'layout'        => 'full-screen',
-						'templates'     => array_values( $this->get_templates() ),
+						'templates'     => $bypassTemplateLibrary ? array() : array_values( $this->get_templates() ),
 						'licenseType'   => $license_info->get_data_value( 'product_code' ),
 						'defaults'      => array(
 							'isLibraryOpen'             => rgget( 'page' ) === 'gf_new_form',
-							'flyoutOpen'                => false,
-							'flyoutFooterButtonLabel'   => '',
+							'flyoutOpen'                => (bool)$bypassTemplateLibrary,
+							'flyoutFooterButtonLabel'   => $bypassTemplateLibrary ? __( 'Create Form', 'gravityforms' ) : '',
 							'flyoutTitleValue'          => '',
 							'flyoutDescriptionValue'    => '',
-							'selectedTemplate'          => '',
+							'selectedTemplate'          => array(
+								'title' 	  => __( 'New Form', 'gravityforms' ),
+								'description' => __( 'A new form', 'gravityforms' ),
+								'id' 		  => 'blank',
+							),
 							'flyoutTitleErrorState'     => false,
 							'flyoutTitleErrorMessage'   => '',
 							'importError'               => false,
 							'flyoutPrimaryLoadingState' => false,
+							'bypassTemplateLibrary' => $bypassTemplateLibrary,
 						),
 					),
 				),
