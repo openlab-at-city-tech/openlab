@@ -8468,6 +8468,9 @@ body.has-password-expiration-warning-notice .oplb-bs.navbar-default {
 body.adminbar-special {
   padding-top: 50.5px;
 }
+body.adminbar-special.has-password-expiration-warning-notice {
+  padding-top: 90px;
+}
 @media screen and (max-width: 782px) {
   body.adminbar-special {
     padding-top: 114px;
