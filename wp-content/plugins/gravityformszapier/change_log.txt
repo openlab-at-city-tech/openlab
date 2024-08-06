@@ -1,5 +1,6 @@
-### 4.2.1
+### 4.3.0 | 2024-03-06
 - Added support for async (background) feed processing to improve form submission performance.
+- Fixed an issue which causes entries from translated sites to fail.
 
 ### 4.2 | 2022-02-10
 - Added support for Zapier Transfer.
