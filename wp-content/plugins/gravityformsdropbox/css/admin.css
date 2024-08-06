@@ -4,11 +4,11 @@
 	width: 0;
 }
 
-.gdropbox.ginput-container {
+.gdropbox.ginput_container {
 	margin-bottom: 0;
 }
 
-.ginput-container .gform-dropbox-upload-button {
+.ginput_container .gform-dropbox-upload-button {
 	margin-top: 0.25rem;
 	margin-bottom: 1rem;
 }
@@ -19,16 +19,16 @@
 }
 
 /* this style can go away when the status indicator component has a non-hover variant in core */
-.gform-dropbox-settings-description .gform-status-indicator:hover {
+.gform-dropbox-settings-description .gform-status-indicator:not(:has(span.gform-status-indicator-status)):hover {
 	box-shadow: none;
 	border-color: rgba(87, 192, 145, 0.24);
 }
 
 /* These two styles can be removed and this can be replaced with the component without the active icon once that's available in core */
-.gform-dropbox-settings-description .gform-status-indicator {
+.gform-dropbox-settings-description .gform-status-indicator:not(:has(span.gform-status-indicator-status)) {
 	padding: 0.375rem 0.5rem 0.375rem 0.5rem;
 }
 
-.gform-dropbox-settings-description .gform-status-indicator svg {
+.gform-dropbox-settings-description .gform-status-indicator:not(:has(span.gform-status-indicator-status)) svg {
 	display: none;
 }
