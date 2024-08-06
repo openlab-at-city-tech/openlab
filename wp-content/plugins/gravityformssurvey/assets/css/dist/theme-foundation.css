@@ -10,7 +10,7 @@ Survey Add-On.
 https://www.gravityforms.com
 
 Gravity Forms is a Rocketgenius project
-copyright 2008-2022 Rocketgenius Inc.
+copyright 2008-2023 Rocketgenius Inc.
 https://www.rocketgenius.com
 this may not be re-distributed without the
 express written permission of the author.
@@ -23,6 +23,17 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 */
 
 /* Fields */
+
+/*
+NOTE:
+Within the var() functions below, when two custom properties are specified, the first
+value is the updated Theme Framework CSS API property and the second value is the
+deprecated CSS API property.
+
+Deprecated version (core): 2.8
+End of support version (core): 2.9
+Deprecated version (survey): 3.8.1
+*/
 
 .gform-theme--foundation table.gsurvey-likert {
 		inline-size: 100%;
@@ -41,6 +52,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gform-theme--foundation table.gsurvey-likert .gsurvey-likert-row-label {
 			-webkit-padding-start: var(--gform-theme-padding-inline);
 			        padding-inline-start: var(--gform-theme-padding-inline);
+			-webkit-padding-start: var(--gf-padding-x, var(--gform-theme-padding-inline));
+			        padding-inline-start: var(--gf-padding-x, var(--gform-theme-padding-inline));
 			text-align: start;
 		}
 
@@ -68,6 +81,17 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		}
 	}
 
+/*
+NOTE:
+Within the var() functions below, when two custom properties are specified, the first
+value is the updated Theme Framework CSS API property and the second value is the
+deprecated CSS API property.
+
+Deprecated version (core): 2.8
+End of support version (core): 2.9
+Deprecated version (survey): 3.8.1
+*/
+
 .gform-theme--foundation .gsurvey-rank {
 		display: inline-block;
 		inline-size: auto;
@@ -78,11 +102,33 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			inline-size: auto;
 			margin-inline: 0;
 			padding-block: calc(var(--gform-theme-field-choice-meta-spacing) / 2);
+			padding-block: calc(var(--gf-field-choice-meta-space, var(--gform-theme-field-choice-meta-spacing)) / 2);
 		}
 
 .gform-theme--foundation .gsurvey-rating {
 		float: left;
 	}
+
+.gform-theme--foundation .gsurvey-rating > label span {
+
+			border: 0;
+
+			clip: rect(0, 0, 0, 0);
+
+			height: 1px;
+
+			margin: -1px;
+
+			overflow: hidden;
+
+			padding: 0;
+
+			position: absolute;
+
+			white-space: nowrap;
+
+			width: 1px;
+		}
 
 .gform-theme--foundation .gsurvey-rating:not(:checked) > input {
 				clip: rect(0, 0, 0, 0);

@@ -31,12 +31,12 @@ class GF_Field_Rank extends GF_Field {
 	}
 
 	/**
-	 * Conditional logic not currently supported.
+	 * Conditional logic is supported.
 	 *
 	 * @return bool
 	 */
 	public function is_conditional_logic_supported() {
-		return false;
+		return true;
 	}
 
 	/**

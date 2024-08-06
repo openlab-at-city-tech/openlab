@@ -33,14 +33,11 @@ class GF_Field_Likert extends GF_Field {
 	}
 
 	/**
-	 * Conditional logic not currently supported.
-	 *
-	 * @todo Review once the GF advancedconditionallogic branch is merged with trunk.
-	 *
+	 * Conditional logic is supported.
 	 * @return bool
 	 */
 	public function is_conditional_logic_supported() {
-		return false;
+		return true;
 	}
 
 	/**
@@ -97,6 +94,11 @@ class GF_Field_Likert extends GF_Field {
 
 		$choice_id = 1;
 		foreach ( $this->choices as $choice ) {
+			//hack to skip numbers ending in 0. so that 5.1 doesn't conflict with 5.10
+			if ( $choice_id % 10 == 0 ) {
+				$choice_id ++;
+			}
+
 			$role     = $multiple_rows ? '' : "role='presentation'";
 			$head_id  = $choice_id . '_' . $form_id . '_' . $this->id;
 			$content .= sprintf( "<th id='likert_col_%s' scope='col' %s class='gsurvey-likert-choice-label'>%s</th>", esc_attr( $head_id ), $role, $choice['text'] );
