@@ -1,3 +1,11 @@
+### 4.2.0 | 2024-07-29
+- Updated the feedback icons to be visible on all background colors.
+- Fixed PHP deprecation notices when using PHP 8+.
+- Fixed wrong text domain strings.
+- Fixed horizontal spacing on Quiz-specific choices options in the form editor.
+- Fixed an issue where the form would return a fatal error when using the 'Randomize order of choices' setting and HTML elements within a field.
+
+
 ### 4.1 | 2023-05-11
 - Added additional html classes to quiz confirmation wrapper to standardize styling across themes.
 - Fixed deprecation notices on quiz fields with randomized choices in PHP 8+.

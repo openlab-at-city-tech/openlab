@@ -1,17 +1,17 @@
-# Copyright (C) 2023 Gravity Forms
+# Copyright (C) 2024 Gravity Forms
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Quiz Add-On 4.1\n"
+"Project-Id-Version: Gravity Forms Quiz Add-On 4.2.0\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-11T17:30:38+00:00\n"
+"POT-Creation-Date: 2024-07-29T17:48:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: gravityformsquiz\n"
 
 #. Plugin Name of the plugin
@@ -31,484 +31,508 @@ msgstr ""
 msgid "Gravity Forms"
 msgstr ""
 
-#: class-gf-quiz.php:405
-#: class-gf-quiz.php:450
-msgid "Drag to re-order"
+#: class-gf-quiz.php:402
+msgid "Mark an answer as correct by using the checkmark icon to the left of the answer."
 msgstr ""
 
-#: class-gf-quiz.php:406
-#: class-gf-quiz.php:451
-msgid "add another grade"
+#: class-gf-quiz.php:403
+msgid "Mark an answer as correct by using the checkmark icon to the right of the answer."
 msgstr ""
 
 #: class-gf-quiz.php:407
 #: class-gf-quiz.php:452
-msgid "remove this grade"
+msgid "Drag to re-order"
 msgstr ""
 
 #: class-gf-quiz.php:408
-msgid "First Choice"
+#: class-gf-quiz.php:453
+msgid "add another grade"
 msgstr ""
 
 #: class-gf-quiz.php:409
-msgid "Second Choice"
+#: class-gf-quiz.php:454
+msgid "remove this grade"
 msgstr ""
 
 #: class-gf-quiz.php:410
-msgid "Third Choice"
+msgid "First Choice"
 msgstr ""
 
 #: class-gf-quiz.php:411
-msgid "Click to toggle as correct/incorrect"
+msgid "Second Choice"
 msgstr ""
 
 #: class-gf-quiz.php:412
-msgid "Click to define as correct"
+msgid "Third Choice"
+msgstr ""
+
+#: class-gf-quiz.php:413
+msgid "Click to toggle as correct/incorrect"
 msgstr ""
 
 #: class-gf-quiz.php:414
+msgid "Click to define as correct"
+msgstr ""
+
+#: class-gf-quiz.php:416
 msgid "Click to define as incorrect"
 msgstr ""
 
-#: class-gf-quiz.php:477
+#: class-gf-quiz.php:480
 msgid "Correct response"
 msgstr ""
 
-#: class-gf-quiz.php:478
+#: class-gf-quiz.php:481
 msgid "Incorrect response"
 msgstr ""
 
-#: class-gf-quiz.php:510
-#: class-gf-quiz.php:1926
-#: class-gf-quiz.php:1944
-#: class-gf-quiz.php:3007
+#: class-gf-quiz.php:513
+#: class-gf-quiz.php:1933
+#: class-gf-quiz.php:1951
+#: class-gf-quiz.php:3041
 msgid "Quiz Results"
 msgstr ""
 
-#: class-gf-quiz.php:675
-#: class-gf-quiz.php:712
+#: class-gf-quiz.php:678
+#: class-gf-quiz.php:715
 msgid "Total Entries"
 msgstr ""
 
-#: class-gf-quiz.php:679
-#: class-gf-quiz.php:713
+#: class-gf-quiz.php:682
+#: class-gf-quiz.php:716
 msgid "Average Score"
 msgstr ""
 
-#: class-gf-quiz.php:683
-#: class-gf-quiz.php:714
+#: class-gf-quiz.php:686
+#: class-gf-quiz.php:717
 msgid "Average Percentage"
 msgstr ""
 
-#: class-gf-quiz.php:690
-#: class-gf-quiz.php:717
+#: class-gf-quiz.php:693
+#: class-gf-quiz.php:720
 msgid "Pass Rate"
 msgstr ""
 
-#: class-gf-quiz.php:735
+#: class-gf-quiz.php:738
 msgid "Score Frequencies"
 msgstr ""
 
-#: class-gf-quiz.php:739
+#: class-gf-quiz.php:742
 msgid "Grade Frequencies"
 msgstr ""
 
-#: class-gf-quiz.php:773
+#: class-gf-quiz.php:776
 msgid "Response"
 msgstr ""
 
-#: class-gf-quiz.php:773
+#: class-gf-quiz.php:776
 msgid "Count"
 msgstr ""
 
-#: class-gf-quiz.php:774
+#: class-gf-quiz.php:777
 msgid "Correct"
 msgstr ""
 
-#: class-gf-quiz.php:775
+#: class-gf-quiz.php:778
 msgid "Incorrect"
 msgstr ""
 
-#: class-gf-quiz.php:802
+#: class-gf-quiz.php:805
 msgid "Correct:"
 msgstr ""
 
-#: class-gf-quiz.php:806
+#: class-gf-quiz.php:809
 msgid "Incorrect:"
 msgstr ""
 
-#: class-gf-quiz.php:834
+#: class-gf-quiz.php:837
 msgid "No entries for this field"
 msgstr ""
 
-#: class-gf-quiz.php:842
+#: class-gf-quiz.php:845
 msgid "Choice"
 msgstr ""
 
-#: class-gf-quiz.php:843
-#: class-gf-quiz.php:890
-#: class-gf-quiz.php:966
-#: class-gf-quiz.php:1013
-#: class-gf-quiz.php:1030
+#: class-gf-quiz.php:846
+#: class-gf-quiz.php:893
+#: class-gf-quiz.php:969
+#: class-gf-quiz.php:1016
+#: class-gf-quiz.php:1033
 msgid "Frequency"
 msgstr ""
 
-#: class-gf-quiz.php:844
+#: class-gf-quiz.php:847
 msgid "Frequency (Correct)"
 msgstr ""
 
-#: class-gf-quiz.php:966
-#: class-gf-quiz.php:1027
-#: class-gf-quiz.php:1975
-#: class-gf-quiz.php:2892
+#: class-gf-quiz.php:969
+#: class-gf-quiz.php:1030
+#: class-gf-quiz.php:1982
+#: class-gf-quiz.php:2926
 msgid "Score"
 msgstr ""
 
-#: class-gf-quiz.php:1013
-#: class-gf-quiz.php:1981
-#: class-gf-quiz.php:2898
+#: class-gf-quiz.php:1016
+#: class-gf-quiz.php:1988
+#: class-gf-quiz.php:2932
 msgid "Grade"
 msgstr ""
 
-#: class-gf-quiz.php:1093
+#: class-gf-quiz.php:1096
 msgid "Quiz Results: "
 msgstr ""
 
-#: class-gf-quiz.php:1098
+#: class-gf-quiz.php:1101
 msgid "Quiz Score: "
 msgstr ""
 
-#: class-gf-quiz.php:1105
+#: class-gf-quiz.php:1108
 msgid "All Quiz Results"
 msgstr ""
 
-#: class-gf-quiz.php:1110
-#: class-gf-quiz.php:1608
+#: class-gf-quiz.php:1113
+#: class-gf-quiz.php:1615
 msgid "Quiz Score Total"
 msgstr ""
 
-#: class-gf-quiz.php:1115
+#: class-gf-quiz.php:1118
 msgid "Quiz Score Percentage"
 msgstr ""
 
-#: class-gf-quiz.php:1120
-#: class-gf-quiz.php:1626
+#: class-gf-quiz.php:1123
+#: class-gf-quiz.php:1633
 msgid "Quiz Grade"
 msgstr ""
 
-#: class-gf-quiz.php:1125
-#: class-gf-quiz.php:1635
+#: class-gf-quiz.php:1128
+#: class-gf-quiz.php:1642
 msgid "Quiz Pass/Fail"
 msgstr ""
 
-#: class-gf-quiz.php:1164
-#: class-gf-quiz.php:1726
-#: class-gf-quiz.php:1979
-#: class-gf-quiz.php:2915
+#: class-gf-quiz.php:1167
+#: class-gf-quiz.php:1733
+#: class-gf-quiz.php:1986
+#: class-gf-quiz.php:2949
 msgid "Pass"
 msgstr ""
 
-#: class-gf-quiz.php:1164
-#: class-gf-quiz.php:1726
-#: class-gf-quiz.php:1979
-#: class-gf-quiz.php:2915
+#: class-gf-quiz.php:1167
+#: class-gf-quiz.php:1733
+#: class-gf-quiz.php:1986
+#: class-gf-quiz.php:2949
 msgid "Fail"
 msgstr ""
 
-#: class-gf-quiz.php:1286
+#: class-gf-quiz.php:1289
 msgid "Select one"
 msgstr ""
 
-#: class-gf-quiz.php:1617
+#: class-gf-quiz.php:1624
 msgid "Quiz Percentage"
 msgstr ""
 
-#: class-gf-quiz.php:1975
-#: class-gf-quiz.php:2327
+#: class-gf-quiz.php:1982
+#: class-gf-quiz.php:2334
 msgid "Percentage"
 msgstr ""
 
-#: class-gf-quiz.php:1979
-#: class-gf-quiz.php:2085
-#: class-gf-quiz.php:2895
+#: class-gf-quiz.php:1986
+#: class-gf-quiz.php:2092
+#: class-gf-quiz.php:2929
 msgid "Pass/Fail"
 msgstr ""
 
-#: class-gf-quiz.php:2015
+#: class-gf-quiz.php:2022
 #: includes/class-gf-field-quiz.php:19
 msgid "Quiz"
 msgstr ""
 
-#: class-gf-quiz.php:2032
+#: class-gf-quiz.php:2039
 msgid "Disable Auto-Formatting"
 msgstr ""
 
-#: class-gf-quiz.php:2032
+#: class-gf-quiz.php:2039
 msgid "When enabled, auto-formatting will insert paragraph breaks automatically. Disable auto-formatting when using HTML to create the confirmation content."
 msgstr ""
 
-#: class-gf-quiz.php:2044
+#: class-gf-quiz.php:2051
 msgid "Quiz Settings"
 msgstr ""
 
-#: class-gf-quiz.php:2052
+#: class-gf-quiz.php:2055
+msgid "General"
+msgstr ""
+
+#: class-gf-quiz.php:2059
 msgid "Shuffle quiz fields"
 msgstr ""
 
-#: class-gf-quiz.php:2055
+#: class-gf-quiz.php:2062
 msgid "Shuffle Fields"
 msgstr ""
 
-#: class-gf-quiz.php:2055
+#: class-gf-quiz.php:2062
 msgid "Display the quiz fields in a random order. This doesn't affect the position of the other fields on the form."
 msgstr ""
 
-#: class-gf-quiz.php:2058
+#: class-gf-quiz.php:2065
 msgid "Instant feedback"
 msgstr ""
 
-#: class-gf-quiz.php:2061
+#: class-gf-quiz.php:2068
 msgid "Instant Feedback"
 msgstr ""
 
-#: class-gf-quiz.php:2061
+#: class-gf-quiz.php:2068
 msgid "Display the correct answers plus explanations immediately after selecting an answer. Once an answer has been selected it can't be changed unless the form is reloaded. This setting only applies to radio button quiz fields and it is intended for training applications and trivial quizzes. It should not be considered a secure option for testing."
 msgstr ""
 
-#: class-gf-quiz.php:2068
+#: class-gf-quiz.php:2075
 msgid "Grading Settings"
 msgstr ""
 
-#: class-gf-quiz.php:2080
+#: class-gf-quiz.php:2087
 msgid "None"
 msgstr ""
 
-#: class-gf-quiz.php:2081
+#: class-gf-quiz.php:2088
 msgid "No Grading"
 msgstr ""
 
-#: class-gf-quiz.php:2081
+#: class-gf-quiz.php:2088
 msgid "Grading will not be used for this form."
 msgstr ""
 
-#: class-gf-quiz.php:2086
+#: class-gf-quiz.php:2093
 msgid "Enable Pass/Fail Grading"
 msgstr ""
 
-#: class-gf-quiz.php:2086
+#: class-gf-quiz.php:2093
 msgid "Select this option to enable the pass/fail grading system for this form."
 msgstr ""
 
-#: class-gf-quiz.php:2090
+#: class-gf-quiz.php:2097
 msgid "Letter"
 msgstr ""
 
-#: class-gf-quiz.php:2091
+#: class-gf-quiz.php:2098
 msgid "Enable Letter Grading"
 msgstr ""
 
-#: class-gf-quiz.php:2091
+#: class-gf-quiz.php:2098
 msgid "Select this option to enable the letter grading system for this form."
 msgstr ""
 
-#: class-gf-quiz.php:2098
+#: class-gf-quiz.php:2105
 msgid "Pass/Fail Grading Options"
 msgstr ""
 
-#: class-gf-quiz.php:2117
-#: class-gf-quiz.php:2119
+#: class-gf-quiz.php:2124
+#: class-gf-quiz.php:2126
 msgid "Pass Percentage"
 msgstr ""
 
-#: class-gf-quiz.php:2119
+#: class-gf-quiz.php:2126
 msgid "Define the minimum percentage required to pass the quiz."
 msgstr ""
 
-#: class-gf-quiz.php:2131
-#: class-gf-quiz.php:2240
+#: class-gf-quiz.php:2138
+#: class-gf-quiz.php:2247
 msgid "Display quiz confirmation"
 msgstr ""
 
-#: class-gf-quiz.php:2132
-#: class-gf-quiz.php:2241
+#: class-gf-quiz.php:2139
+#: class-gf-quiz.php:2248
 msgid "Display Confirmation"
 msgstr ""
 
-#: class-gf-quiz.php:2132
-#: class-gf-quiz.php:2241
+#: class-gf-quiz.php:2139
+#: class-gf-quiz.php:2248
 msgid "Activate this setting to configure a confirmation message to be displayed after submitting the quiz. The message will appear below the confirmation configured on the Confirmations tab. When this setting is activated any page redirects configured on the Confirmations tab will be ignored."
 msgstr ""
 
-#: class-gf-quiz.php:2140
-#: class-gf-quiz.php:2250
+#: class-gf-quiz.php:2147
+#: class-gf-quiz.php:2257
 msgid "Quiz Confirmation"
 msgstr ""
 
-#: class-gf-quiz.php:2169
-#: class-gf-quiz.php:2207
-#: class-gf-quiz.php:2278
+#: class-gf-quiz.php:2176
+#: class-gf-quiz.php:2214
+#: class-gf-quiz.php:2285
 msgid "Disable Auto-formatting"
 msgstr ""
 
-#: class-gf-quiz.php:2178
+#: class-gf-quiz.php:2185
 msgid "Quiz Fail Confirmation"
 msgstr ""
 
-#: class-gf-quiz.php:2216
+#: class-gf-quiz.php:2223
 msgid "Letter Grading Options"
 msgstr ""
 
-#: class-gf-quiz.php:2230
-#: class-gf-quiz.php:2231
-#: class-gf-quiz.php:2374
+#: class-gf-quiz.php:2237
+#: class-gf-quiz.php:2238
+#: class-gf-quiz.php:2381
 msgid "Letter Grades"
 msgstr ""
 
-#: class-gf-quiz.php:2231
-#: class-gf-quiz.php:2374
+#: class-gf-quiz.php:2238
+#: class-gf-quiz.php:2381
 msgid "Define the minimum percentage required for each grade."
 msgstr ""
 
-#: class-gf-quiz.php:2326
+#: class-gf-quiz.php:2333
 msgid "Label"
 msgstr ""
 
-#: class-gf-quiz.php:2378
+#: class-gf-quiz.php:2384
+msgid "Enter the answers for the quiz question. You can mark each choice as correct by using the checkmark icon on the left."
+msgstr ""
+
+#: class-gf-quiz.php:2385
 msgid "Enter the answers for the quiz question. You can mark each choice as correct by using the radio/checkbox fields on the right."
 msgstr ""
 
-#: class-gf-quiz.php:2381
-#: class-gf-quiz.php:2410
+#: class-gf-quiz.php:2388
+#: class-gf-quiz.php:2417
 msgid "Quiz Question"
 msgstr ""
 
-#: class-gf-quiz.php:2381
+#: class-gf-quiz.php:2388
 msgid "Enter the question you would like to ask the user. The user can then answer the question by selecting from the available choices."
 msgstr ""
 
-#: class-gf-quiz.php:2382
+#: class-gf-quiz.php:2389
 msgid "Quiz Type"
 msgstr ""
 
-#: class-gf-quiz.php:2382
+#: class-gf-quiz.php:2389
 msgid "Select the field type you'd like to use for the quiz. Choose radio buttons or drop down if question only has one correct answer. Choose checkboxes if your question requires more than one correct choice."
 msgstr ""
 
-#: class-gf-quiz.php:2383
+#: class-gf-quiz.php:2390
 msgid "Randomize Quiz Answers"
 msgstr ""
 
-#: class-gf-quiz.php:2383
+#: class-gf-quiz.php:2390
 msgid "Check the box to randomize the order in which the answers are displayed to the user. This setting affects only the quiz front-end. It will not affect the order of the results."
 msgstr ""
 
-#: class-gf-quiz.php:2384
+#: class-gf-quiz.php:2391
 msgid "Enable Answer Explanation"
 msgstr ""
 
-#: class-gf-quiz.php:2384
+#: class-gf-quiz.php:2391
 msgid "When displaying quiz results on your form's confirmations or notifications via merge tags (i.e. {quiz:id=1} or {all_quiz_results}), this option enables you to provide an explanation of the answer. Activate this option to enter an explanation."
 msgstr ""
 
-#: class-gf-quiz.php:2385
+#: class-gf-quiz.php:2392
 msgid "Quiz Answer Explanation"
 msgstr ""
 
-#: class-gf-quiz.php:2385
+#: class-gf-quiz.php:2392
 msgid "Enter the explanation for the correct answer and/or incorrect answers. This text will appear below the results for this field."
 msgstr ""
 
-#: class-gf-quiz.php:2386
-#: class-gf-quiz.php:2438
+#: class-gf-quiz.php:2393
+#: class-gf-quiz.php:2445
 msgid "Quiz Answers"
 msgstr ""
 
-#: class-gf-quiz.php:2387
+#: class-gf-quiz.php:2394
 msgid "Weighted Score"
 msgstr ""
 
-#: class-gf-quiz.php:2387
+#: class-gf-quiz.php:2394
 msgid "Weighted scores allow complex scoring systems in which each choice is awarded a different score. Weighted scores are awarded regardless of whether the response is correct or incorrect so be sure to allocate higher scores to correct answers. If this setting is disabled then the response will be awarded a score of 1 if correct and 0 if incorrect."
 msgstr ""
 
-#: class-gf-quiz.php:2424
+#: class-gf-quiz.php:2431
 msgid "Quiz Field Type"
 msgstr ""
 
-#: class-gf-quiz.php:2428
+#: class-gf-quiz.php:2435
 msgid "Drop Down"
 msgstr ""
 
-#: class-gf-quiz.php:2429
+#: class-gf-quiz.php:2436
 msgid "Radio Buttons"
 msgstr ""
 
-#: class-gf-quiz.php:2430
+#: class-gf-quiz.php:2437
 msgid "Checkboxes"
 msgstr ""
 
-#: class-gf-quiz.php:2446
+#: class-gf-quiz.php:2452
 msgid "Weighted score"
 msgstr ""
 
-#: class-gf-quiz.php:2454
+#: class-gf-quiz.php:2459
 msgid "Show values"
 msgstr ""
 
-#: class-gf-quiz.php:2472
+#: class-gf-quiz.php:2471
+msgid "Options"
+msgstr ""
+
+#: class-gf-quiz.php:2476
+msgid "Add Bulk Choices"
+msgstr ""
+
+#: class-gf-quiz.php:2477
 msgid "Bulk Add / Predefined Choices"
 msgstr ""
 
-#: class-gf-quiz.php:2490
+#: class-gf-quiz.php:2494
 msgid "Randomize order of choices"
 msgstr ""
 
-#: class-gf-quiz.php:2500
+#: class-gf-quiz.php:2501
 msgid "Enable answer explanation"
 msgstr ""
 
-#: class-gf-quiz.php:2507
+#: class-gf-quiz.php:2506
 msgid "Quiz answer explanation"
 msgstr ""
 
-#: class-gf-quiz.php:2564
+#: class-gf-quiz.php:2563
 msgid ""
 "<strong>Quiz Results:</strong> You Failed!\n"
 "<strong>Score:</strong> {quiz_score}\n"
 "<strong>Percentage:</strong> {quiz_percent}%"
 msgstr ""
 
-#: class-gf-quiz.php:2567
+#: class-gf-quiz.php:2566
 msgid ""
 "<strong>Quiz Results:</strong> You Passed!\n"
 "<strong>Score:</strong> {quiz_score}\n"
 "<strong>Percentage:</strong> {quiz_percent}%"
 msgstr ""
 
-#: class-gf-quiz.php:2570
+#: class-gf-quiz.php:2569
 msgid ""
 "<strong>Quiz Grade:</strong> {quiz_grade}\n"
 "<strong>Score:</strong> {quiz_score}\n"
 "<strong>Percentage:</strong> {quiz_percent}%"
 msgstr ""
 
-#: class-gf-quiz.php:2850
-#: class-gf-quiz.php:2878
+#: class-gf-quiz.php:2884
+#: class-gf-quiz.php:2912
 msgid "Quiz Entries"
 msgstr ""
 
-#: class-gf-quiz.php:2875
+#: class-gf-quiz.php:2909
 msgid "This contact has not submitted any quiz entries yet."
 msgstr ""
 
-#: class-gf-quiz.php:2883
+#: class-gf-quiz.php:2917
 msgid "Entry ID"
 msgstr ""
 
-#: class-gf-quiz.php:2886
+#: class-gf-quiz.php:2920
 msgid "Date"
 msgstr ""
 
-#: class-gf-quiz.php:2889
+#: class-gf-quiz.php:2923
 msgid "Form"
 msgstr ""
