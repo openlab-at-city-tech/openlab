@@ -1,7 +1,0 @@
-default:
-  suites:
-    default:
-      contexts:
-        - Automattic\CoAuthorsPlus\Tests\Behat\FeatureContext
-      paths:
-        - features
